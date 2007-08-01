@@ -8,6 +8,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -21,7 +22,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
  * @author vijay_pande
  * 
  */
-public class PathologyReportReviewParameterBizLogic extends IntegrationBizLogic
+public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
 {
 	/**
 	 * Saves the Pathology Report Review Parameter object in the database.

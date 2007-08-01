@@ -1,13 +1,11 @@
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
-import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -17,7 +15,7 @@ import edu.wustl.common.util.dbManager.DAOException;
  * This class is used add, update and retrieve report loader queue  
  * information using Hibernate.
  */
-public class ReportLoaderQueueBizLogic extends IntegrationBizLogic
+public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 {
 
 	/**

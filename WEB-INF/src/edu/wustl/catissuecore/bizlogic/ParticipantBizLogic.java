@@ -29,14 +29,13 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.integration.IntegrationManager;
-import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
@@ -58,7 +57,7 @@ import edu.wustl.common.util.logger.Logger;
  * ParticipantHDAO is used to to add Participant's information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
-public class ParticipantBizLogic extends IntegrationBizLogic
+public class ParticipantBizLogic extends DefaultBizLogic
 {
 
 	/**
@@ -472,60 +471,6 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		}
 
 		return true;
-	}
-
-	/**
-	 * This method fetches linked data from integrated application i.e. CAE/caTies.
-	 */
-	public List getLinkedAppData(Long id, String applicationID)
-	{
-		Logger.out.debug("In getIntegrationData() of ParticipantBizLogic ");
-
-		Logger.out.debug("ApplicationName in getIntegrationData() of ParticipantBizLogic==>" + applicationID);
-
-		long identifiedPatientId = 0;
-
-		try
-		{
-			//JDBC call to get matching identifier from database
-			Class.forName("org.gjt.mm.mysql.Driver");
-
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/catissuecore", "catissue_core", "catissue_core");
-
-			Statement stmt = connection.createStatement();
-
-			String identifiedPatientIdQuery = "select IDENTIFIER from CATISSUE_IDENTIFIED_PATIENT where PARTICIPANT_ID=" + id;
-
-			ResultSet identifiedPatientResultSet = stmt.executeQuery(identifiedPatientIdQuery);
-
-			while (identifiedPatientResultSet.next())
-			{
-				identifiedPatientId = identifiedPatientResultSet.getLong(1);
-				break;
-			}
-			Logger.out.debug("IdentifiedPatientId==>" + identifiedPatientId);
-			identifiedPatientResultSet.close();
-			if (identifiedPatientId == 0)
-			{
-				List exception = new ArrayList();
-				exception.add(new NameValueBean("IdentifiedPatientId is not available for linked Participant",
-						"IdentifiedPatientId is not available for linked Participant"));
-				return exception;
-			}
-
-			stmt.close();
-
-			connection.close();
-
-		}
-		catch (Exception e)
-		{
-			Logger.out.debug("JDBC Exception==>" + e.getMessage());
-		}
-
-		IntegrationManager integrationManager = IntegrationManagerFactory.getIntegrationManager(applicationID);
-
-		return integrationManager.getLinkedAppData(new Participant(), new Long(identifiedPatientId));
 	}
 
 	/**

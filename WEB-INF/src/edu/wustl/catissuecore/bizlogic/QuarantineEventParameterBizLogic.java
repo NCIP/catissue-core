@@ -9,6 +9,7 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -22,7 +23,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author vijay_pande
  * 
  */
-public class QuarantineEventParameterBizLogic extends IntegrationBizLogic
+public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 {
 	/**
 	 * Saves the Pathology Report Quarantine Event Parameter object in the database.

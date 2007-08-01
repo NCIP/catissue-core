@@ -48,8 +48,6 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.integration.IntegrationManager;
-import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -57,6 +55,7 @@ import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
@@ -76,7 +75,7 @@ import edu.wustl.common.util.logger.Logger;
  * NewSpecimenHDAO is used to add new specimen information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
-public class NewSpecimenBizLogic extends IntegrationBizLogic
+public class NewSpecimenBizLogic extends DefaultBizLogic
 {
 
 	/**
@@ -2090,96 +2089,6 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			return false;
 		}
 
-	}
-
-	/**
-	 * This method fetches linked data from integrated application i.e. CAE/caTies.
-	 */
-	public List getLinkedAppData(Long id, String applicationID)
-	{
-		Logger.out.debug("In getIntegrationData() of SpecimenBizLogic ");
-
-		Logger.out.debug("ApplicationName in getIntegrationData() of SCGBizLogic==>" + applicationID);
-
-		long identifiedPathologyReportId = 0;
-
-		try
-		{
-			//JDBC call to get matching identifier from database
-			Class.forName("org.gjt.mm.mysql.Driver");
-
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/catissuecore", "catissue_core", "catissue_core");
-
-			Statement stmt = connection.createStatement();
-
-			String specimenCollectionGroupQuery = "select SPECIMEN_COLLECTION_GROUP_ID from CATISSUE_SPECIMEN where IDENTIFIER=" + id;
-
-			ResultSet specimenCollectionGroupResultSet = stmt.executeQuery(specimenCollectionGroupQuery);
-
-			long specimenCollectionGroupId = 0;
-			while (specimenCollectionGroupResultSet.next())
-			{
-				specimenCollectionGroupId = specimenCollectionGroupResultSet.getLong(1);
-				break;
-			}
-			Logger.out.debug("SpecimenCollectionGroupId==>" + specimenCollectionGroupId);
-			if (specimenCollectionGroupId == 0)
-			{
-				List exception = new ArrayList();
-				exception.add("SpecimenCollectionGroupId is not available for Specimen");
-				return exception;
-			}
-
-			String clinicalReportQuery = "select CLINICAL_REPORT_ID from CATISSUE_SPECIMEN_COLL_GROUP where IDENTIFIER=" + specimenCollectionGroupId;
-
-			ResultSet clinicalReportResultSet = stmt.executeQuery(clinicalReportQuery);
-
-			long clinicalReportId = 0;
-			while (clinicalReportResultSet.next())
-			{
-				clinicalReportId = clinicalReportResultSet.getLong(1);
-				break;
-			}
-			Logger.out.debug("ClinicalReportId==>" + clinicalReportId);
-			clinicalReportResultSet.close();
-			if (clinicalReportId == 0)
-			{
-				List exception = new ArrayList();
-				exception.add("ClinicalReportId is not available for SpecimenCollectionGroup");
-				return exception;
-			}
-
-			String identifiedPathologyReportIdQuery = "select IDENTIFIER from CATISSUE_IDENTIFIED_PATHOLOGY_REPORT where CLINICAL_REPORT_ID="
-					+ clinicalReportId;
-
-			ResultSet identifiedPathologyReportResultSet = stmt.executeQuery(identifiedPathologyReportIdQuery);
-
-			while (identifiedPathologyReportResultSet.next())
-			{
-				identifiedPathologyReportId = identifiedPathologyReportResultSet.getLong(1);
-				break;
-			}
-			Logger.out.debug("IdentifiedPathologyReportId==>" + identifiedPathologyReportId);
-			identifiedPathologyReportResultSet.close();
-			if (identifiedPathologyReportId == 0)
-			{
-				List exception = new ArrayList();
-				exception.add("IdentifiedPathologyReportId is not available for linked ClinicalReportId");
-				return exception;
-			}
-
-			stmt.close();
-
-			connection.close();
-		}
-		catch (Exception e)
-		{
-			Logger.out.debug("JDBC Exception==>" + e.getMessage());
-		}
-
-		IntegrationManager integrationManager = IntegrationManagerFactory.getIntegrationManager(applicationID);
-
-		return integrationManager.getLinkedAppData(new Specimen(), new Long(identifiedPathologyReportId));
 	}
 
 	public String getPageToShow()
