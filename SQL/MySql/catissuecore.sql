@@ -847,6 +847,7 @@ drop table if exists CATISSUE_REVIEW_PARAMS;
 drop table if exists CATISSUE_REPORT_BICONTENT;
 drop table if exists CATISSUE_REPORT_SECTION;
 drop table if exists CATISSUE_DEIDENTIFIED_REPORT;
+drop table if exists CATISSUE_QUARANTINE_PARAMS;
 drop table if exists CATISSUE_PATHOLOGY_REPORT;
 drop table if exists CATISSUE_REPORT_XMLCONTENT;
 drop table if exists CATISSUE_REPORT_QUEUE;
