@@ -27,8 +27,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.querysuite.EntityManagerMock;
-import edu.wustl.common.querysuite.QueryGeneratorMock;
+
 import edu.wustl.common.querysuite.exceptions.DuplicateChildException;
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.metadata.associations.IIntraModelAssociation;
@@ -93,34 +92,34 @@ public class QueryOutputSpreadsheetBizLogicTest extends BaseTestCase
 	 * Gets dummy tree. And returns the parent node.
 	 * @return IOutputTreeNode
 	 */
-	IOutputTreeNode getDummyTreeNodes()
-	{
-		EntityManagerMock entityManager = new EntityManagerMock();
-		IOutputTreeNode participantNode = null;
-		try
-		{
-			EntityInterface participantEntity = entityManager.getEntityByName(EntityManagerMock.PARTICIPANT_NAME);
-			participantNode = QueryObjectFactory.createOutputTreeNode(QueryGeneratorMock.createParticipantOutputEntity(participantEntity));
-			AssociationInterface participanCPRegAssociation = QueryGeneratorMock.getAssociationFrom(entityManager.getAssociation(
-					EntityManagerMock.PARTICIPANT_NAME, "participant"), EntityManagerMock.COLLECTION_PROTOCOL_REGISTRATION_NAME);
-			IIntraModelAssociation iParticipanCPRegAssociation = QueryObjectFactory.createIntraModelAssociation(participanCPRegAssociation);
-			EntityInterface cprEntity = entityManager.getEntityByName(EntityManagerMock.COLLECTION_PROTOCOL_REGISTRATION_NAME);
-			participantNode.addChild(iParticipanCPRegAssociation, QueryGeneratorMock.createCollProtoRegOutputEntity(cprEntity));
-		}
-		catch (DynamicExtensionsSystemException e)
-		{
-			e.printStackTrace();
-		}
-		catch (DynamicExtensionsApplicationException e)
-		{
-			e.printStackTrace();
-		}
-		catch (DuplicateChildException e)
-		{
-			e.printStackTrace();
-		}
-		return participantNode;
-	}
+//	IOutputTreeNode getDummyTreeNodes()
+//	{
+//		EntityManagerMock entityManager = new EntityManagerMock();
+//		IOutputTreeNode participantNode = null;
+//		try
+//		{
+//			EntityInterface participantEntity = entityManager.getEntityByName(EntityManagerMock.PARTICIPANT_NAME);
+//			participantNode = QueryObjectFactory.createOutputTreeNode(QueryGeneratorMock.createParticipantOutputEntity(participantEntity));
+//			AssociationInterface participanCPRegAssociation = QueryGeneratorMock.getAssociationFrom(entityManager.getAssociation(
+//					EntityManagerMock.PARTICIPANT_NAME, "participant"), EntityManagerMock.COLLECTION_PROTOCOL_REGISTRATION_NAME);
+//			IIntraModelAssociation iParticipanCPRegAssociation = QueryObjectFactory.createIntraModelAssociation(participanCPRegAssociation);
+//			EntityInterface cprEntity = entityManager.getEntityByName(EntityManagerMock.COLLECTION_PROTOCOL_REGISTRATION_NAME);
+//			participantNode.addChild(iParticipanCPRegAssociation, QueryGeneratorMock.createCollProtoRegOutputEntity(cprEntity));
+//		}
+//		catch (DynamicExtensionsSystemException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		catch (DynamicExtensionsApplicationException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		catch (DuplicateChildException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		return participantNode;
+//	}
 
 	/**
 	 * Test for executeQuery
@@ -201,7 +200,7 @@ public class QueryOutputSpreadsheetBizLogicTest extends BaseTestCase
 	/**
 	 * Returns the map for each node with its attribute and column names mapped.
 	 * @return Map<Long, Map<AttributeInterface, String>> NodeAttributeColumnNameMap
-	 */
+	 *//*
 	Map<Long, Map<AttributeInterface, String>> getNodeAttributeColumnNameMap()
 	{
 		EntityManagerMock entityManager = new EntityManagerMock();
@@ -231,5 +230,5 @@ public class QueryOutputSpreadsheetBizLogicTest extends BaseTestCase
 		attrColumnNameMap.put(attr, "Column10");
 		nodeAttributeColumnNameMap.put(new Long(10), attrColumnNameMap);
 		return nodeAttributeColumnNameMap;
-	}
+	}*/
 }

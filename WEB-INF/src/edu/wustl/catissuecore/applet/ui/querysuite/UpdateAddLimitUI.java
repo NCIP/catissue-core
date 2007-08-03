@@ -38,7 +38,7 @@ public class UpdateAddLimitUI implements IUpdateAddLimitUIInterface
 	 * This method is called when user clicks on clear limits option.
 	 * @param IExpression expression to be changed
 	 */
-	public void clearAddLimitUI(IExpression expression)
+	public void clearAddLimitUI()
 	{
 	}
 

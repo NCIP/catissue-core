@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
 import edu.common.dynamicextensions.domain.Attribute;
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
@@ -47,10 +48,10 @@ public class CreateQueryObjectBizLogic
 		Map conditionsMap = createConditionsMap(strToCreateQueryObject);
 		if (entity != null)
 		{
-			Collection attrCollection = entity.getAttributeCollection();
+			Collection<AttributeInterface> attrCollection = entity.getAttributeCollection();
 			if (conditionsMap != null && !conditionsMap.isEmpty() && attrCollection != null && !attrCollection.isEmpty())
 			{
-				List<Attribute> attributes = new ArrayList<Attribute>();
+				List<AttributeInterface> attributes = new ArrayList<AttributeInterface>();
 				List<String> attributeOperators = new ArrayList<String>();
 				List<String> firstAttributeValues = new ArrayList<String>();
 				List<String> secondAttributeValues = new ArrayList<String>();
@@ -59,7 +60,7 @@ public class CreateQueryObjectBizLogic
 				Iterator iterAttributes = (Iterator) attrCollection.iterator();
 				while (iterAttributes.hasNext())
 				{
-					Attribute attr = (Attribute) iterAttributes.next();
+					AttributeInterface attr = (AttributeInterface) iterAttributes.next();
 					String componentId = attr.getName() + attr.getId().toString();
 					String[] params = (String[]) conditionsMap.get(componentId);
 					if (params != null)
@@ -110,7 +111,7 @@ public class CreateQueryObjectBizLogic
 	 * @param attrvalues List<String>
 	 * @return String message
 	 */
-	private String validateAttributeValues(Attribute attr, List<String> attrvalues)
+	private String validateAttributeValues(AttributeInterface attr, List<String> attrvalues)
 	{
 		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();

@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -96,11 +97,11 @@ public class GenerateHtmlForAddLimitsBizLogic
 		generatedHTML.append(generateHTMLForButton(nameOfTheEntity, getAttributesString(attributeCollection), isEditLimits,isTopButton));
 		if (!attributeCollection.isEmpty())
 		{
-			Object[] attributes = attributeCollection.toArray();
-			Arrays.sort(attributes, new AttributeInterfaceComparator());
-			for(int i=0;i<attributes.length;i++)
+			List attributes = new ArrayList(attributeCollection);
+			Collections.sort(attributes, new AttributeInterfaceComparator());
+			for(int i=0;i<attributes.size();i++)
 			{
-				AttributeInterface attribute = (AttributeInterface) attributes[i];
+				AttributeInterface attribute = (AttributeInterface) attributes.get(i);
 				String attrName = attribute.getName();
 				String attrLabel = QueryModuleUtil.getAttributeLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
@@ -267,7 +268,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	private List<String> getConditionsList(AttributeInterface attributeInterface)
 	{
 		List<String> operatorsList = new ArrayList<String>();
-		Object[] strObj = null;
+		List strObj = null;
 		if (attributeInterface != null)
 		{
 			String dataType = attributeInterface.getDataType();
@@ -310,13 +311,13 @@ public class GenerateHtmlForAddLimitsBizLogic
 					operatorsList = parseFile.getNonEnumConditionList("date");
 				}
 			}
-			strObj = operatorsList.toArray();
+			strObj = new ArrayList(operatorsList);;
 			operatorsList = new ArrayList<String>();
-			Arrays.sort(strObj);
-			for (int i = 0; i < strObj.length; i++)
+			Collections.sort(strObj);
+			for (int i = 0; i < strObj.size(); i++)
 			{
-				if (strObj[i] != null)
-					operatorsList.add((String) strObj[i]);
+				if (strObj.get(i) != null)
+					operatorsList.add((String) strObj.get(i));
 			}
 		}
 		return operatorsList;
@@ -541,11 +542,11 @@ public class GenerateHtmlForAddLimitsBizLogic
 			html.append("\n<td width='1%' valign='top' class=\"PermissibleValuesQuery\" >");
 			html.append("\n<select style=\"width:150px; display:block;\" MULTIPLE styleId='country' size ='2' name=\"" + componentId
 					+ "_enumeratedvaluescombobox\"\">");
-			Object[] values = permissibleValues.toArray();
-			Arrays.sort(values, new PermissibleValueComparator());
-			for(int i=0; i<values.length; i++)
+			List values = new ArrayList(permissibleValues);
+			Collections.sort(values, new PermissibleValueComparator());
+			for(int i=0; i<values.size(); i++)
 			{
-				PermissibleValueInterface perValue = (PermissibleValueInterface)values[i];
+				PermissibleValueInterface perValue = (PermissibleValueInterface)values.get(i);
 				String value = perValue.getValueAsObject().toString();
 				if (editLimitPermissibleValues != null && editLimitPermissibleValues.contains(value))
 				{
@@ -572,11 +573,11 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String attributesList = "";
 		if (!attributeCollection.isEmpty())
 		{
-			Object[] attributes = attributeCollection.toArray();
-			Arrays.sort(attributes, new AttributeInterfaceComparator());
-			for(int i=0;i<attributes.length;i++)
+			List attributes = new ArrayList(attributeCollection);
+			Collections.sort(attributes, new AttributeInterfaceComparator());
+			for(int i=0;i<attributes.size();i++)
 			{
-				AttributeInterface attribute = (AttributeInterface) attributes[i];
+				AttributeInterface attribute = (AttributeInterface) attributes.get(i);
 				String attrName = attribute.getName();
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;

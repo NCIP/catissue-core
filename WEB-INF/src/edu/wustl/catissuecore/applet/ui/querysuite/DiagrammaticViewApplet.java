@@ -13,12 +13,12 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.cab2b.client.ui.dag.MainDagPanel;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IPathFinder;
-import edu.wustl.cab2b.client.ui.util.CommonUtils;
-import edu.wustl.cab2b.client.ui.util.CommonUtils.DagImageConstants;
+import edu.wustl.cab2b.client.ui.util.CommonUtils.DagImages;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
@@ -80,7 +80,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 		{
 			queryObject.setQuery(query);
 		}
-		Map<DagImageConstants, Image> imagePathsMap = getImagePathsMap();
+		Map<DagImages, Image> imagePathsMap = getImagePathsMap();
 		UpdateAddLimitUI updateAddLimitUI = new UpdateAddLimitUI(this);
 		IPathFinder pathFinder = new PathFinderAppletServerCommunicator(serverURL);
 		boolean isForView = false;
@@ -98,7 +98,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 	protected void postInit() {
 		//Initializing frame reference to parent frame. 
 		//This reference is used for showing ambiguity resolver
-		CommonUtils.FrameReference =  findParentFrame();
+		//CommonUtils.FrameReference =  findParentFrame();
 		panel.updateGraph();
 		System.out.println();
 	}
@@ -190,9 +190,9 @@ public class DiagrammaticViewApplet extends BaseApplet
 		else
 		{
 			Map outputMap = callAddToLimiteSetAction(strToCreateQueryObject, entityName);
-			List attributes = (List) outputMap.get(AppletConstants.ATTRIBUTES);
-			List attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
-			ArrayList<ArrayList<String>> conditionValues = (ArrayList<ArrayList<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
+			List<AttributeInterface> attributes = (List) outputMap.get(AppletConstants.ATTRIBUTES);
+			List<String> attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
+			List<List<String>> conditionValues = (List<List<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
 			errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
 			if(errorMessage != null && errorMessage.equalsIgnoreCase(""))
 			{
@@ -234,9 +234,9 @@ public class DiagrammaticViewApplet extends BaseApplet
 		else
 		{
 			Map outputMap = callAddToLimiteSetAction(strToCreateQueryObject, entityName);
-			List attributes = (List) outputMap.get(AppletConstants.ATTRIBUTES);
-			List attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
-			ArrayList<ArrayList<String>> conditionValues = (ArrayList<ArrayList<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
+			List<AttributeInterface> attributes = (List) outputMap.get(AppletConstants.ATTRIBUTES);
+			List<String> attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
+			List<List<String>> conditionValues = (List<List<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
 			errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
 			if(!errorMessage.equalsIgnoreCase(""))
 			{
@@ -291,27 +291,27 @@ public class DiagrammaticViewApplet extends BaseApplet
 
 	/**
 	 * This method returns the map of all the required imgaes with its path.
-	 * @return Map<DagImageConstants, Image> map of images
+	 * @return Map<DagImages, Image> map of images
 	 */
-	private Map<DagImageConstants, Image> getImagePathsMap()
+	private Map<DagImages, Image> getImagePathsMap()
 	{
-		HashMap<DagImageConstants, Image> imagePathsMap = new HashMap<DagImageConstants, Image>();
+		HashMap<DagImages, Image> imagePathsMap = new HashMap<DagImages, Image>();
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("images/arrow_icon_mo.gif"));
-		imagePathsMap.put(DagImageConstants.ArrowSelectMOIcon, icon.getImage());
+		imagePathsMap.put(DagImages.ArrowSelectMOIcon, icon.getImage());
 		icon = new ImageIcon(getClass().getClassLoader().getResource("images/arrow_icon.gif"));
-		imagePathsMap.put(DagImageConstants.ArrowSelectIcon, icon.getImage());
+		imagePathsMap.put(DagImages.ArrowSelectIcon, icon.getImage());
 		icon = new ImageIcon(getClass().getClassLoader().getResource("images/paper_grid.png"));
-		imagePathsMap.put(DagImageConstants.DocumentPaperIcon, icon.getImage());
+		imagePathsMap.put(DagImages.DocumentPaperIcon, icon.getImage());
 		icon = new ImageIcon(getClass().getClassLoader().getResource("images/port.gif"));
-		imagePathsMap.put(DagImageConstants.PortImageIcon, icon.getImage());
+		imagePathsMap.put(DagImages.PortImageIcon, icon.getImage());
 		icon = new ImageIcon(getClass().getClassLoader().getResource("images/select_icon_mo.gif"));
-		imagePathsMap.put(DagImageConstants.selectMOIcon, icon.getImage());
+		imagePathsMap.put(DagImages.selectMOIcon, icon.getImage());
 		icon = new ImageIcon(getClass().getClassLoader().getResource("images/select_icon.gif"));
-		imagePathsMap.put(DagImageConstants.SelectIcon, icon.getImage());
+		imagePathsMap.put(DagImages.SelectIcon, icon.getImage());
 		icon = new ImageIcon(getClass().getClassLoader().getResource("images/parenthesis_icon_mo.gif"));
-		imagePathsMap.put(DagImageConstants.ParenthesisMOIcon, icon.getImage());
+		imagePathsMap.put(DagImages.ParenthesisMOIcon, icon.getImage());
 		icon = new ImageIcon(getClass().getClassLoader().getResource("images/parenthesis_icon.gif"));
-		imagePathsMap.put(DagImageConstants.ParenthesisIcon, icon.getImage());
+		imagePathsMap.put(DagImages.ParenthesisIcon, icon.getImage());
 		return imagePathsMap;
 	}
 	/**

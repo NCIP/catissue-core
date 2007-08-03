@@ -516,3 +516,18 @@ update catissue_collection_protocol set  CONSENTS_WAIVED='0' where  CONSENTS_WAI
 #------------------------New Column Entry For Participant ---------- Sachin : 13-Mar-07 -------------start
 alter table CATISSUE_PARTICIPANT add column MARITAL_STATUS varchar(50);
 #------------------------New Column Entry For Participant ---------- Sachin : 13-Mar-07 -------------end
+
+
+create table CURATED_PATH (
+	curated_path_Id BIGINT,
+	entity_ids VARCHAR(1000),
+	selected boolean,
+	primary key (curated_path_Id)
+);
+
+/*This is mapping table for many-to-many relationship between tables PATH and CURATED_PATH */
+create table CURATED_PATH_TO_PATH (
+	curated_path_Id BIGINT references CURATED_PATH (curated_path_Id),
+	path_id BIGINT  references PATH (path_id),
+	primary key (curated_path_Id,path_id)
+);

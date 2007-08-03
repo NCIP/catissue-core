@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action.querysuite;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,10 +20,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.wustl.cab2b.client.metadatasearch.MetadataSearch;
 import edu.wustl.cab2b.common.beans.MatchedClass;
 import edu.wustl.cab2b.common.util.Constants;
 import edu.wustl.cab2b.common.util.EntityInterfaceComparator;
-import edu.wustl.cab2b.server.advancedsearch.AdvancedSearch;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
@@ -71,22 +72,22 @@ public class CategorySearchAction extends BaseAction
 			searchString = prepareSearchString(textfieldValue);
 			String entitiesString = "";
 			EntityCache cache = EntityCacheFactory.getInstance();
-			AdvancedSearch advancedSearch = new AdvancedSearch(cache);
+			MetadataSearch advancedSearch = new MetadataSearch(cache);
 			MatchedClass matchedClass = advancedSearch.search(searchTarget, searchString, basedOn);
 			entityCollection = matchedClass.getEntityCollection();
-			Object[] resultArray = entityCollection.toArray();
-			Arrays.sort(resultArray, new EntityInterfaceComparator());
+			List resultList = new ArrayList(entityCollection);
+			Collections.sort(resultList, new EntityInterfaceComparator());
 			if(currentPage != null && currentPage.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.DEFINE_RESULTS_VIEW))
 			{
-				entitiesString = generateHTMLToDisplayList(resultArray,searchedEntitiesMap);
+				entitiesString = generateHTMLToDisplayList(resultList,searchedEntitiesMap);
 			}
 			else if(currentPage != null)
 			{
 				if(currentPage.equalsIgnoreCase("") || currentPage.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.ADD_LIMITS))
 				{
-					for (int i = 0; i < resultArray.length; i++)
+					for (int i = 0; i < resultList.size(); i++)
 					{
-						EntityInterface entity = (EntityInterface) resultArray[i];
+						EntityInterface entity = (EntityInterface) resultList.get(i);
 						String fullyQualifiedEntityName = entity.getName();
 						String description = entity.getDescription();
 						entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|" + description;
@@ -108,17 +109,17 @@ public class CategorySearchAction extends BaseAction
 	 * @param searchedEntitiesMap map to store the entities found for given criteria
 	 * @return String representing html for a listbox 
 	 */
-	String generateHTMLToDisplayList(Object[] resultArray,Map<String, EntityInterface> searchedEntitiesMap)
+	String generateHTMLToDisplayList(List resultList,Map<String, EntityInterface> searchedEntitiesMap)
 	{
 		String selectTagName =edu.wustl.catissuecore.util.global.Constants.SEARCH_CATEGORY_LIST_SELECT_TAG_NAME;				
 		StringBuffer html = new StringBuffer();		
-		int size = resultArray.length;
+		int size = resultList.size();
 		if ( size != 0)
 		{
 			html.append("\n<select id='"+selectTagName+"' name='"+ selectTagName + "' MULTIPLE size = '"+size+"'>");
 			for(int i=0;i<size;i++)
 			{
-				EntityInterface entity = (EntityInterface)resultArray[i];
+				EntityInterface entity = (EntityInterface)resultList.get(i);
 				String fullyQualifiedEntityName = entity.getName();
 				int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
 				String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);				

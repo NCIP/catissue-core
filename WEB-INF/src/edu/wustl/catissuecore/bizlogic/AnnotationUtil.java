@@ -19,6 +19,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
@@ -40,6 +44,8 @@ import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
+import edu.wustl.common.dao.JDBCDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.Constants;
 
@@ -151,7 +157,29 @@ public class AnnotationUtil
         }        
         //EntityInterface cachedStaticEntityInterfaceEntityCache.getInstance().getEntityById(staticEntityId);
         
-        PathFinder.getInstance().refreshCache();
+        JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		Connection connection = null;
+		try
+		{
+			dao.openSession(null);
+			InitialContext context = new InitialContext();
+ 			DataSource dataSource =  (DataSource) context.lookup("java:/catissuecore");
+ 			connection = dataSource.getConnection();
+ 			PathFinder.getInstance().refreshCache(connection);
+		}
+		catch (DAOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (NamingException e)
+		{
+			e.printStackTrace();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+       
         end = new Long(System.currentTimeMillis());
         System.out.println("Time required to refresh cache is "
                 + (end - start) / 1000 + "seconds");
@@ -248,7 +276,7 @@ public class AnnotationUtil
             String associationQuery = "insert into ASSOCIATION (ASSOCIATION_ID, ASSOCIATION_TYPE) values ("
                     + intraModelAssociationId
                     + ","
-                    + PathConstants.INTRA_MODEL_ASSOCIATION_TYPE + ")";
+                    + PathConstants.AssociationType.INTRA_MODEL_ASSOCIATION + ")";
             String intraModelQuery = "insert into INTRA_MODEL_ASSOCIATION (ASSOCIATION_ID, DE_ASSOCIATION_ID) values ("
                     + intraModelAssociationId + "," + deAssociationID + ")";
             String directPathQuery = "insert into PATH (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values ("

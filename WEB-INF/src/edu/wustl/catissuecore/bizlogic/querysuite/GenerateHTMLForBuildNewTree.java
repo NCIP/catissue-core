@@ -1,7 +1,10 @@
 
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
@@ -20,8 +23,8 @@ public class GenerateHTMLForBuildNewTree {
 		
 		if (!entityCollection.isEmpty())
 		{
-			Object[] resultArray = entityCollection.toArray();
-			Arrays.sort(resultArray, new EntityInterfaceComparator());
+			List resultList = new ArrayList(entityCollection);
+			Collections.sort(resultList, new EntityInterfaceComparator());
 			//html.append("\n<td height=\"100%\" width=\"100%\">");			
 			
 			//html.append("\n<select name='"+ selectTagName + "' multiple ='true' size='10' onblur='" + Constants.SEARCH_CATEGORY_LIST_FUNCTION_NAME + "()' >");
@@ -29,7 +32,7 @@ public class GenerateHTMLForBuildNewTree {
 			
 			for(int i=0;i<size;i++)
 			{
-				EntityInterface entity = (EntityInterface)resultArray[i];
+				EntityInterface entity = (EntityInterface)resultList.get(i);
 				int lastIndex = entity.getName().lastIndexOf(".");
 				String entityName = entity.getName().substring(lastIndex + 1);				
 				html.append("\n<option class=\"dropdownQuery\" value=\"" + entity.getName() + "\">" + entityName + "</option>");
