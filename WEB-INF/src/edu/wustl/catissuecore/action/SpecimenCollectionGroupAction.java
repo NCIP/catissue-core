@@ -161,8 +161,18 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				radioButtonSelectedForType=Constants.PARTICIPANT_PROTOCOL_ID;
 			}
 		}
-		//Get CollectionprotocolRegistration Object
-		CollectionProtocolRegistration collectionProtocolRegistration=getcollectionProtocolRegistrationObj(selectedParticipantOrPPIdentifier_id,selectedCollectionProtocol_id,radioButtonSelectedForType);
+		CollectionProtocolRegistration collectionProtocolRegistration=null;
+		if(selectedParticipantOrPPIdentifier_id!=null && !(selectedParticipantOrPPIdentifier_id.equalsIgnoreCase("0")))
+		{
+			//Get CollectionprotocolRegistration Object
+			collectionProtocolRegistration=getcollectionProtocolRegistrationObj(selectedParticipantOrPPIdentifier_id,selectedCollectionProtocol_id,radioButtonSelectedForType);
+		}
+		else if(specimenCollectionGroupForm.getId()!=0)
+		{
+			//Get CollectionprotocolRegistration Object
+			SpecimenCollectionGroupBizLogic specimenCollectiongroupBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);			
+			collectionProtocolRegistration=(CollectionProtocolRegistration)specimenCollectiongroupBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollectionGroupForm.getId(),"collectionProtocolRegistration");
+		}
 		User witness = null;
 		if(collectionProtocolRegistration.getId()!= null)
 		{
