@@ -10,202 +10,100 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.domain.pathology.ConceptReferent"%>
 <%@ page import="edu.wustl.catissuecore.domain.pathology.Concept"%>
+<%@ page import="edu.wustl.catissuecore.bean.ConceptHighLightingBean"%>
+<%@ page import="java.util.regex.Matcher"%>
+<%@ page import="java.util.regex.Pattern"%>
 
 <script src="jss/ajax.js"></script>
-<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/viewSPR.js"></script>
 <LINK href="css/styleSheet.css" type=text/css rel=stylesheet>
-<script language="JavaScript">
-
-function finishReview()
-{
-	if(confirmSubmit())
-	{
-		document.forms[0].submittedFor.value='review';
-		document.forms[0].forwardTo.value='success';
-		var action="SurgicalPathologyReportEventParam.do?operation=edit&requestFor=REVIEW"
-		document.forms[0].action=action;
-		document.forms[0].submit();
-	}
-}
-
-function submitAcceptComments()
-{
-	if(confirmSubmit())
-	{
-		document.forms[0].submittedFor.value='quarantine';
-		document.forms[0].forwardTo.value='success';
-		var action="SurgicalPathologyReportEventParam.do?operation=edit&requestFor=ACCEPT"
-		document.forms[0].acceptReject.value=1;
-		document.forms[0].action=action;
-		document.forms[0].submit();
-	}
-}
-//<!--function to submit quarantine comments-->
-function submitRejectComments()
-{
-	if(confirmSubmit())
-	{
-		document.forms[0].submittedFor.value='quarantine';
-		document.forms[0].forwardTo.value='success';
-		var action="SurgicalPathologyReportEventParam.do?operation=edit&requestFor=REJECT"
-		document.forms[0].acceptReject.value=2;
-		document.forms[0].action=action;
-		document.forms[0].submit();
-		
-	}
-}
-
-function replaceNewLine(str)
-{
-	var tempStr=str = str.replace(/\r+/gim, "$");
-	return tempStr;
-}
-//Added by Ashish
-function selectByOffset(checkbox,start,end,colour,conceptName)
-{
-	var innerHtml = document.getElementById("deidentifiedReportText").innerHTML;
-	var i = ReplaceTags(innerHtml);
-	var tempStr = replaceNewLine(i);
-
-	var startArr = start.split(",");
-	var endArr = end.split(",");
-	var conceptNameArr = conceptName.split(",");
-	var newtext = "";
-	var count = 0;
-	for(var x=0;x<startArr.length;x++)
+<%
+	Map mapPMI = null;
+	int noOfRowsPMI=0;
+	ViewSurgicalPathologyReportForm formSPR=null;
+	Object objAbsForm=null;
+	String deidText=null;
+	if(operation.equals("viewSPR"))
 	{		
-		var startOff=startArr[x]-1;
-		startOff=startOff;
-		var endOff=endArr[x]-1;
-		endOff=endOff;
-		var subStr = tempStr.substring(startOff,endOff);
-		
-		var textBeforeString = i.substring(0,startArr[x]);
-		var textAfterString = i.substring(endArr[x]);
-		
-		if(checkbox.checked==false)
+		objAbsForm = request.getAttribute("viewSurgicalPathologyReportForm");
+   		
+		if(objAbsForm != null && objAbsForm instanceof ViewSurgicalPathologyReportForm)
 		{
-			//background color is set to default 'light-gray' color. Refer stylesheet.jss
-			colour='#F4F4F5';
-			//conceptName="";
-		}
-		var text = "<span title="+conceptNameArr[x]+" style='background-color:"+colour+"'>"+subStr+"</span>";
-			
-		if(count == 0)
-		{
-			newtext = innerHtml.replace(subStr,text);
-			count++;
-		}
-		else
-		{
-			newtext = newtext.replace(subStr,text);
-		}	
-		
-		//newtext = 	textBeforeString + text + textAfterString;
-	}
-	document.getElementById("deidentifiedReportText").innerHTML=newtext;
-}
-var regExp = /<\/?[^>]+>/gi;
-function ReplaceTags(xStr)
-{
-  xStr = xStr.replace(regExp,"");
-  return xStr;
-}
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>> AJAX code start
-	var url,request;
-	function getReport()
-	{
-		var identifier=document.getElementById('reportId').value;
-		url="FetchReport.do?reportId="+identifier;
-		sendRequestForReportInfo();
-	}
-// function to send request to server	
-	function sendRequestForReportInfo()
-	{
-		request = newXMLHTTPReq();
-		if(request)
-		{  					
-			request.onreadystatechange = setReport; 	
-			try
-			{		
-				request.open("GET", url, true);
-				request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-				request.send();
-			}
-			catch(e)
-			{}			
+			formName=Constants.VIEW_SPR_ACTION;
+			formSPR=(ViewSurgicalPathologyReportForm)objAbsForm;
+			mapPMI = formSPR.getValues();
+			noOfRowsPMI = formSPR.getCounter();
+			deidText=formSPR.getDeIdentifiedReportTextContent();
 		}
 	}
-//To set the values of form that are fetched using AJAX call
-	function setReport()
+	List conceptClassificationList1 = (List)request.getAttribute(Constants.CONCEPT_BEAN_LIST);
+	String[] onClickMethod = null;
+	String[] colours = Constants.CATEGORY_HIGHLIGHTING_COLOURS;
+	String[] conceptName = null;
+	String[] startOff = null;
+	String[] endOff = null;	
+	if(conceptClassificationList1!=null)
 	{
-		if(request.readyState==4 && request.status == 200)
+		onClickMethod=new String[conceptClassificationList1.size()];
+		conceptName = new String[conceptClassificationList1.size()];
+		startOff = new String[conceptClassificationList1.size()];
+		endOff = new String[conceptClassificationList1.size()];	
+		for(int i=0;i<conceptClassificationList1.size();i++)
 		{
-			/* Response contains required output.
-			 * Get the response from server.
-			 */				
-			var responseString = request.responseText;
-			
-			if(responseString != null && responseString != "")
-			{	
-				var xmlDocument = getDocumentElementForXML(responseString); 
-				
-				var reportAccessionNumber = xmlDocument.getElementsByTagName('IdentifiedReportAccessionNumber')[0].firstChild.nodeValue;	
-				var reportSite = xmlDocument.getElementsByTagName('IdentifiedReportSite')[0].firstChild.nodeValue;			
-				var identifierReportText = xmlDocument.getElementsByTagName('IdentifiedReportTextContent')[0].firstChild.nodeValue;
-				var deIdentifierReportText = xmlDocument.getElementsByTagName('DeIdentifiedReportTextContent')[0].firstChild.nodeValue;
-				
-				if(reportAccessionNumber!=null)
-				{
-					document.getElementById("identifiedReportAccessionNumber").value = reportAccessionNumber;
-					document.getElementById("identifiedReportSite").value = reportSite;
-					document.getElementById("identifiedReportText").value = identifierReportText;
-					document.getElementById("deidentifiedReportText").value = deIdentifierReportText;
-				}
-				
-			}
+			ConceptHighLightingBean referentClassificationObj=(ConceptHighLightingBean) conceptClassificationList1.get(i);
+			conceptName[i] = referentClassificationObj.getConceptName();
+			startOff[i] = referentClassificationObj.getStartOffsets();
+			endOff[i] = referentClassificationObj.getEndOffsets();	
+			Pattern p = Pattern.compile("['\"]");
+			Matcher m = p.matcher(conceptName[i]);
+			conceptName[i] = m.replaceAll("");
 		}
 	}
-	
-	function getDocumentElementForXML(xmlString)
-	{
-	    var document = null;
-	    if (window.ActiveXObject) // code for IE
-	    {
-	                document = new ActiveXObject("Microsoft.XMLDOM");
-	                document.async="false";
-	                document.loadXML(xmlString);
-	    }
-	    else // code for Mozilla, Firefox, Opera, etc.
-	    {
-	                var parser = new DOMParser();
-	                document = parser.parseFromString(xmlString,"text/xml");
-	    }           
-		return document;
-	}	
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>AJAX code end
-
-</script>
+%>
 
 <head>
-<style>
-pre {
- white-space: pre-wrap;       /* css-3 */
- white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
- white-space: -pre-wrap;      /* Opera 4-6 */
- white-space: -o-pre-wrap;    /* Opera 7 */
- word-wrap: break-word;       /* Internet Explorer 5.5+ */
-}
-</style>
+	<script>
+	<%for(int i=0;i<colours.length;i++)
+	{
+	%>
+		colours[<%=i%>]='<%=colours[i]%>';
+	<%
+	}
+	%>
+	<%for(int i=0;i<conceptName.length;i++)
+	{
+	%>
+		conceptName[<%=i%>]='<%=conceptName[i]%>';
+		startOff[<%=i%>]='<%=startOff[i]%>';
+		endOff[<%=i%>]='<%=endOff[i]%>';
+	<%
+	}
+	%>
+
+	function checkBoxClicked()
+	{
+		document.getElementById("deidentifiedReportText").innerHTML="<PRE>"+document.getElementById("deidText").innerHTML+"</PRE>";
+		for(i=0;i<conceptName.length;i++)
+		{	
+			selectByOffset(document.getElementById("select"+i),startOff[i],endOff[i],colours[i],conceptName[i]);	
+		}		
+	}
+	</script>
+	<style>
+	pre {
+	 white-space: pre-wrap;       /* css-3 */
+	 white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	 white-space: -pre-wrap;      /* Opera 4-6 */
+	 white-space: -o-pre-wrap;    /* Opera 7 */
+	 word-wrap: break-word;       /* Internet Explorer 5.5+ */
+	}
+	</style>
 </head>
-
-
 <html:form action="ViewSurgicalPathologyReport">
 <!-- Main table start -->
 <table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  style="table-layout:fixed" width="750" >
 	 <tr>
-		<td>
+		<td>		
 			<html:hidden property="id" />
 			<html:hidden property="identifiedReportId" />
 			<html:hidden property="deIdentifiedReportId" />
@@ -213,11 +111,13 @@ pre {
 			<html:hidden property="forwardTo"/>
 			<html:hidden property="pageOf"/>
 			<html:hidden property="acceptReject"/>
+			
 		</td>
 	</tr>
-<!-- if pageOf is pageOfParticipant then display drop down list of report accession number -->
-<logic:equal name="viewSurgicalPathologyReportForm" property="pageOf" value='<%=Constants.PAGEOF_PARTICIPANT%>'>
-
+<!-- if pageOf is pageOfParticipant then display drop down list of surgical pathology number -->
+<% if(pageOf.equals(Constants.PAGEOF_PARTICIPANT) || pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+{
+%>
 	<tr>
 		<td class="formFieldNoBordersSimple">
 			<b>
@@ -225,17 +125,19 @@ pre {
 			</b>
 			<logic:notEmpty name="viewSurgicalPathologyReportForm" property="reportIdList" >
 			
-						<c:set var="reportIdElt" value="${viewSurgicalPathologyReportForm.reportIdList}"/>
-						<jsp:useBean id="reportIdElt" type="java.util.List"/>
-				     	<html:select property="reportId" styleClass="formFieldSized" styleId="reportId" size="1"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="getReport()">
-							<html:options collection="reportIdElt" labelProperty="name" property="value"/>
-						</html:select>
+				<c:set var="reportIdElt" value="${viewSurgicalPathologyReportForm.reportIdList}"/>
+				<jsp:useBean id="reportIdElt" type="java.util.List"/>
+				<html:select property="reportId" styleClass="formFieldSized" styleId="reportId" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="sendRequestForReportInfo()">
+					<html:options collection="reportIdElt" labelProperty="name" property="value"/>
+				</html:select>
 
 			</logic:notEmpty>
 		</td>
 	</tr>
-</logic:equal>
+<%
+}
+%>
 	<tr>
 		<td>
 		<!-- block to diaply default links -->
@@ -243,15 +145,15 @@ pre {
 				<tr>
 					<td class="formFieldNoBordersBold" width="60%" nowrap>
 						<a href="javascript:clickOnLinkReport()">
-							<bean:message key="viewSPR.report" />
+							<bean:message key="viewSPR.link.report" />
 						</a>&nbsp;&nbsp;|&nbsp;&nbsp;
 				
 						<a href="javascript:clickOnLinkCompareReport()">
-							<bean:message key="viewSPR.compareReports" />
+							<bean:message key="viewSPR.link.compareReports" />
 						</a>&nbsp;&nbsp;|&nbsp;&nbsp;
 				
 						<a href="javascript:clickOnLinkMyRequests()">
-							<bean:message key="viewSPR.myRequests" />
+							<bean:message key="viewSPR.link.myRequests" />
 						</a>
 					</td>
 					<td class="formFieldNoBordersBold"  align="right" width="40%">
@@ -269,7 +171,7 @@ pre {
 						<% if(formSPR.getUserName()!=null||requestFor!=null)
 							{
 						%>
-								<%=formSPR.getUserName()%> <bean:message key="requestdetails.header.label.Comments"/>
+								<%=formSPR.getUserName()%> <bean:message key="viewSPR.label.comment"/>
 						<%
 							}
 						%>
@@ -291,7 +193,7 @@ pre {
 			<table border="0" cellpadding="0" width="100%" cellspacing="0" id="categoryHighlighter" >
 				<tr>
 					<td class="formTitle" height="20"  nowrap>
-						<bean:message key="viewSurgicalPathologyReport.categoryHighlighter.title"/>
+						<bean:message key="viewSPR.categoryHighlighter.title"/>
 					</td>
 				</tr>
 				<!-- tr>
@@ -309,24 +211,12 @@ pre {
 				  <tr>
 				  <td>
 				  <table border="0" cellpadding="5" width="100%" cellspacing="0">
-				  <tr>
+				  <tr id="classificationNames">
 				<logic:iterate id="referentClassificationObj" collection="<%= conceptClassificationList %>" type="edu.wustl.catissuecore.bean.ConceptHighLightingBean">
-				
-				<%				
-					String conceptName = referentClassificationObj.getConceptName();
-					String startOff = referentClassificationObj.getStartOffsets();
-					String endOff = referentClassificationObj.getEndOffsets();				
-					String[] colours = Constants.CATEGORY_HIGHLIGHTING_COLOURS;
-				%>
-				
-					<td class="formFieldWithNoTopBorder">
-						<% String chkBoxId = "select"+chkBoxNo; 
-						   String onClickArgument = "selectByOffset(this,'"+startOff+"','"+endOff+"','"+colours[chkBoxNo]+"','"+conceptName+"')";	
-						%>
-						<input type="checkbox" id="<%=chkBoxId %>" onclick="<%=onClickArgument %>" />
-					</td>
-					<td class="formRequiredLabel">
-					<% String spanStyle = "background-color:"+colours[chkBoxNo];%>
+					<td class="formRequiredLabelWithAllBorder">
+						<% String chkBoxId = "select"+chkBoxNo; %>
+						<input type="checkbox" id="<%=chkBoxId %>" onclick="checkBoxClicked()" />
+						<% String spanStyle = "background-color:"+colours[chkBoxNo];%>
 						<span id="classificationName" style="<%=spanStyle %>">
 							<%=referentClassificationObj.getClassificationName() %>	
 						</span>		
@@ -349,7 +239,7 @@ pre {
 		<table border="0" cellpadding="0" cellspacing="0"   width="100%" id="table2" >
 			<tr>
 				<td class="formTitle" height="20">
-					<bean:message key="viewSurgicalPathologyReport.participantInformation.title"/>						
+					<bean:message key="viewSPR.participantInformation.title"/>						
 				</td>
 				
 				<td class="formFieldAllBorders" align="right" width="1%">
@@ -409,30 +299,9 @@ pre {
 							<b>
 								<bean:message key="participant.race" /> : 
 							</b>
-<%
-String race;
-int count=5;
-if (formSPR.getRace() != null)
-{
-			Collection raceCollection=formSPR.getRace();
-			Iterator it = raceCollection.iterator();
-			StringBuffer tempRace=new StringBuffer();
-			
-			while (it.hasNext())
-			{
-				race=new String("that");
-			    tempRace=tempRace.append((String)it.next());
-				tempRace=tempRace.append(",");
-				count=5;
-			}
-			race=tempRace.toString();
-			if(race.length()>0)
-			{
-				race=race.substring(0,race.length()-1);
-			}
-%>
-									<%=race%>
-<%}%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="race" >
+									<%=formSPR.getRace()%>
+							</logic:notEmpty>
 					     </td>
 					</tr>
 					<tr>
@@ -483,7 +352,7 @@ if (formSPR.getRace() != null)
 				 </tr>	 
 				 <tbody id="addMore">
 				<%
-				for(int i=1;i<=noOfRows;i++)
+				for(int i=1;i<=noOfRowsPMI;i++)
 				{
 					String siteName = "ParticipantMedicalIdentifier:"+i+"_Site_id";
 					String medicalRecordNumber = "ParticipantMedicalIdentifier:"+i+"_medicalRecordNumber";
@@ -522,7 +391,7 @@ if (formSPR.getRace() != null)
 		<table border="0" cellpadding="5" cellspacing="0" width="100%" id="identifiedReportInfo" >
 			<tr>
 				<td colspan="3" class="formTitle" height="20">
-					<bean:message key="viewSurgicalPathologyReport.identifiedReportInformation.title"/>
+					<bean:message key="viewSPR.identifiedReportInformation.title"/>
 				</td>
 			</tr>
 			<tr>
@@ -538,9 +407,9 @@ if (formSPR.getRace() != null)
 					<b>
 						<bean:message key="viewSPR.reportInfo.spn" /> : 
 					</b>
-						<span id="identifiedReportAccessionNumber">
-						<logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportAccessionNumber" >
-				     		<%=formSPR.getIdentifiedReportAccessionNumber()%>
+						<span id="surgicalPathologyNumber">
+						<logic:notEmpty name="viewSurgicalPathologyReportForm" property="surgicalPathologyNumber" >
+				     		<%=formSPR.getSurgicalPathologyNumber()%>
 						</logic:notEmpty>
 						</span>
 				</td>
@@ -558,7 +427,7 @@ if (formSPR.getRace() != null)
 			<tr>
 				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
 				
-				<div id="identifiedReportText" style="overflow:auto;height:200px;width:730"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty></PRE>
+				<div id="identifiedReportText" style="overflow:auto;height:200px;width:728"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty></PRE>
 				</div>
 				</td>
 			</tr>
@@ -570,7 +439,7 @@ if (formSPR.getRace() != null)
 		<table border="0" cellpadding="5" cellspacing="0" width="100%" id="deidReportInfo" style='display:none'>
 			<tr>
 				<td colspan="3" class="formTitle" height="20">
-					<bean:message key="viewSurgicalPathologyReport.deIdentifiedReportInformation.title"/>
+					<bean:message key="viewSPR.deIdentifiedReportInformation.title"/>
 				</td>
 			</tr>
 		<!--	<tr>
@@ -584,10 +453,10 @@ if (formSPR.getRace() != null)
 				</td>
 				<td class="formField"  height="20" >
 					<b>
-						<bean:message key="viewSPR.reportInfo.accessionNumber" /> : 
+						<bean:message key="viewSPR.reportInfo.spn" /> : 
 					</b>
-						<% if(formSPR.getDeIdentifiedReportAccessionNumber()!=null) {%>
-				     		<%=formSPR.getDeIdentifiedReportAccessionNumber()%>
+						<% if(formSPR.getSurgicalPathologyNumber()!=null) {%>
+				     		<%=formSPR.getSurgicalPathologyNumber()%>
 						<%}%>
 				</td>
 				<td class="formField"  height="20">
@@ -602,7 +471,7 @@ if (formSPR.getRace() != null)
 			<tr>
 				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
 				
-				<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:730"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
+				<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:728"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
 				</div>
 				</td>
 			</tr>
@@ -614,7 +483,7 @@ if (formSPR.getRace() != null)
 		<table id="commentsTable" style="table-layout:fixed" width="100%">
 			<tr>
 				<td width="80%" colspan="2" class="formTitle" height="20">
-					<bean:message key="requestdetails.header.label.Comments"/>
+					<bean:message key="viewSPR.label.comment"/>
 				</td>
 			</tr>
 			<tr>
@@ -653,43 +522,36 @@ if (formSPR.getRace() != null)
 	String consentTier =(String)request.getParameter("consentTierCounter");
 	String submitReviewComments = "submitReviewComments('"+ consentTier+"')";
 	String submitQuarantineComments = "submitQuarantineComments('"+ consentTier+"')";
-	if(!(formSPR.getIdentifiedReportId().equals("") || formSPR.getDeIdentifiedReportId()!=0)) 
-{%>
-					<html:button property="action1" styleClass="actionButton" onclick="<%=submitReviewComments%>" disabled="true">
-						<bean:message key="viewSPR.requestForReview.button.cation" />
+	Boolean isReviewDisabled=true;
+	Boolean isQuarantineDisabled=true;
+	if((!(formSPR.getIdentifiedReportId().equals("")) || formSPR.getDeIdentifiedReportId()!=0)) 
+	{
+		isReviewDisabled=false;
+	}
+	if(formSPR.getDeIdentifiedReportId()!=0)
+	{
+		isQuarantineDisabled=false;
+	}
+%>
+					<html:button property="action1" styleClass="actionButton" onclick="<%=submitReviewComments%>" disabled="<%=isReviewDisabled%>" >
+						<bean:message key="viewSPR.button.requestForReview" />
 					</html:button>
-<%}
-else 
-{%>
-					<html:button property="action1" styleClass="actionButton" onclick="<%=submitReviewComments%>" >
-					<bean:message key="viewSPR.requestForReview.button.cation" />
-					</html:button>
-<%}%>
-						
 
-<%if(formSPR.getDeIdentifiedReportId()!=0)
-{%>
-					<html:button property="action2" styleClass="actionButton" onclick="<%=submitQuarantineComments%>" >
-						<bean:message key="viewSPR.requestForQuarantine.button.cation" />
+					<html:button property="action2" styleClass="actionButton" onclick="<%=submitQuarantineComments%>" disabled="<%=isQuarantineDisabled%>" >
+						<bean:message key="viewSPR.button.requestForQuarantine" />
 					</html:button>
-<%}
-else 
-{%>
-					<html:button property="action2" styleClass="actionButton" onclick="<%=submitQuarantineComments%>" disabled="true">
-						<bean:message key="viewSPR.requestForQuarantine.button.cation" />
-					</html:button>
-<%}%>
-
-				
 <%
 	}
 %>
-
-
 				</td>
 			</tr>	
 		</table>
 	</td>
 	</tr>
-</table>
+	<tr>
+		<td>
+			<span id="deidText" style="display:none"><PRE><%=deidText%></PRE></span>
+		</td>
+	</tr>
+</table>	
 </html:form>
