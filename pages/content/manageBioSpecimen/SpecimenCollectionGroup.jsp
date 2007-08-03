@@ -78,7 +78,11 @@
 			}
 			readOnlyValue=false;
 		}
-		long idToTree = form.getId();
+		long idToTree =0;
+		if(form!=null)
+		{
+			idToTree = form.getId();
+		}
 		
 
           /**
@@ -365,13 +369,16 @@
 				
 		function initializeSCGForm()
 		{
-			var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
-			//bug id: 4333
-			var valueForCheckbox = '<%=form.getRestrictSCGCheckbox()%>';
-			if(valueForCheckbox!=null && valueForCheckbox == 'true')
-			{
-				disableButtonsOnCheck(restrictCheckbox);
-			}
+			<%if(form!=null)
+			{%>
+				var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
+				//bug id: 4333
+				var valueForCheckbox = '<%=form.getRestrictSCGCheckbox()%>';
+				if(valueForCheckbox!=null && valueForCheckbox == 'true')
+				{
+					disableButtonsOnCheck(restrictCheckbox);
+				}
+			<%}%>
 		}
 		//Patch ID: Bug#4227_4
 		//Description: This method sets the value of button id to the buttonType hidden variable.
@@ -460,7 +467,7 @@
 		function checkForConsents()
 		{
 			<%
-				if(form.getConsentTierCounter()>0)			
+				if(form!=null && form.getConsentTierCounter()>0)			
 				{
 				%>
 					switchToTab("consentTab");
@@ -489,6 +496,27 @@
 	  }
 // Consent Tracking Module Virender mehta	
 		
+
+		//View SPR Vijay pande
+		 function viewSPR()
+        {
+			var tempId=document.forms[0].id.value;
+        	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+tempId;
+			document.forms[0].action=action;
+			document.forms[0].submit();
+        }
+        function editSCG()
+		{
+			var tempId='<%=request.getParameter("id")%>';
+			var action="SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+tempId;
+			if('<%=pageOf%>'=='<%=Constants.PAGE_OF_SCG_CP_QUERY%>')
+			{
+				action="QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&operation=search&id="+tempId;
+			}
+			document.forms[0].action=action;
+			document.forms[0].submit();
+		}
+		
  </script>
 </head>
 			<!-- 
@@ -504,8 +532,14 @@
 <!--
 	Patch ID: Bug#3184_12
 -->
-<body onload="disablebuttons();initializeSCGForm();showConsents();">
-<html:errors />
+<%
+	if(pageView != null && !pageView.equals("viewAnnotations") && !pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
+	{
+%>
+	<body onload="disablebuttons();initializeSCGForm();showConsents();">
+<%}else{%> 
+	<body>
+ <%}%><html:errors />
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
@@ -569,10 +603,9 @@
 					<bean:message key="specimenCollectionGroupPage.edit.title"/>
 				</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()()">
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
-								
 				
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
 					<bean:message key="edit.tab.clinicalannotation"/>
@@ -591,6 +624,43 @@
 	%>
 	
 	<%
+	if(pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
+	{
+	%>
+		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="650">
+			<tr>
+				<td height="20" class="tabMenuItem"  id="specimenCollectionGroupTab"  onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="editSCG()">
+					<bean:message key="specimenCollectionGroupPage.edit.title"/>
+				</td>
+
+				<td height="20" class="tabMenuItemSelected"   onClick="">
+					<bean:message key="edit.tab.surgicalpathologyreport"/>
+				</td>
+								
+				
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<bean:message key="edit.tab.clinicalannotation"/>
+				</td>
+
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
+					<bean:message key="consents.consents"/>            
+				</td>
+				<td width="300" class="tabMenuSeparator" colspan="1" >&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td class="tabField" colspan="6">
+				<%@   include file="ViewSurgicalPathologyReport.jsp" %>
+				</td>
+			</tr>
+		</table>
+	<%
+	}
+	%>
+	
+	<%
+	if(!pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
+	{
 /**
  			* Name : Ashish Gupta
  			* Reviewer Name : Sachin Lale 
@@ -1070,9 +1140,11 @@
 	%>
 			</td>
 		</tr>
-	<table>
+	</table>
 	<%
 	}
+	}
 	%>
+	</table>
 </html:form>
 </body>

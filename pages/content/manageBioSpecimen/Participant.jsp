@@ -323,6 +323,26 @@ tr#hiddenCombo
 				document.forms[0].deathDate.disabled = true;
 			}
 		}		 
+		
+		//View SPR Vijay pande
+		function viewSPR()
+        {
+			var tempId=document.forms[0].id.value;
+        	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+tempId;
+			document.forms[0].action=action;
+			document.forms[0].submit();
+        }
+        function editParticipant()
+		{
+			var tempId=document.forms[0].id.value;
+			var action="SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+tempId;
+			if('<%=pageOf%>'=='<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>')
+			{
+				action="QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=search&id="+tempId;
+			}
+			document.forms[0].action=action;
+			document.forms[0].submit();
+		}	 
 	</script>
 </head>
 
@@ -340,7 +360,32 @@ tr#hiddenCombo
 			<tr>
 				<td height="20" class="tabMenuItemSelected">Edit</td>
 
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
+					<bean:message key="edit.tab.surgicalpathologyreport"/>
+				</td>
+								
+				
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<bean:message key="edit.tab.clinicalannotation"/>
+				</td>
+
+				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td class="tabField" colspan="6">			
+	<%
+	}
+	%>
+	<%
+	if(pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
+	{
+	%>
+		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
+			<tr>
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="editParticipant()">Edit</td>
+
+				<td height="20" class="tabMenuItemSelected"   onClick="">
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 								
@@ -354,8 +399,17 @@ tr#hiddenCombo
 
 			<tr>
 				<td class="tabField" colspan="6">
+				<%@   include file="ViewSurgicalPathologyReport.jsp" %>
+				</td>
+			</tr>
+		</table>
 	<%
 	}
+	%>
+	
+	<%
+	if(!pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
+	{
 	%>
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	   		   
@@ -975,7 +1029,10 @@ tr#hiddenCombo
 			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
 	</script>
 
-	<%}%>
+	<%
+	}
+	}
+	%>
 	
 	
 	 </html:form>
