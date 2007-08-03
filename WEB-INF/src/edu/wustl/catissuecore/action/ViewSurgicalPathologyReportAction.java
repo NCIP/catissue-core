@@ -19,7 +19,9 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
 import edu.wustl.catissuecore.bean.ConceptHighLightingBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -39,6 +41,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -89,6 +92,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         request.setAttribute(Constants.REQ_PATH, "");
         request.setAttribute(Constants.SUBMITTED_FOR, submittedFor);
         request.setAttribute(Constants.FORWARD_TO, forwardTo);
+        System.out.println("*****************"+pageOf+"**************");
         if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN))
         {
         	request.setAttribute(Constants.ID,id.toString());
@@ -96,72 +100,23 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         return mapping.findForward(pageOf);
         
 	}
-	/**
-	 * @param request
-	 * @param deidentifiedSurgicalPathologyReport
-	 */
-	private void prepareCategoryPage(HttpServletRequest request,DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)//DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport
-	{		
-		if(deidentifiedSurgicalPathologyReport != null)
-		{
-			Collection conceptReferentColl = deidentifiedSurgicalPathologyReport.getConceptReferentCollection();
-			//temporary map to make a list of concept referent classification objects
-			Map tempMap = new HashMap();
-			if(conceptReferentColl != null)
-			{
-				Iterator iter = conceptReferentColl.iterator();
-				while(iter.hasNext())
-				{
-					ConceptReferent conceptReferent = (ConceptReferent)iter.next();
-					ConceptReferentClassification conceptReferentClassification = conceptReferent.getConceptReferentClassification();
-					ConceptHighLightingBean conceptHighLightingBean = null;
-					if(tempMap.get(conceptReferentClassification.getName().toUpperCase()) == null)
-					{	// if concept classification obj is not present in the list						
-						conceptHighLightingBean = new ConceptHighLightingBean();
-						conceptHighLightingBean.setClassificationName(conceptReferentClassification.getName());
-						conceptHighLightingBean.setConceptName(conceptReferent.getConcept().getName());
-						conceptHighLightingBean.setStartOffsets(conceptReferent.getStartOffset().toString());
-						conceptHighLightingBean.setEndOffsets(conceptReferent.getEndOffset().toString());
-						
-						tempMap.put(conceptReferentClassification.getName().toUpperCase(), conceptHighLightingBean);
-					}
-					else
-					{
-						conceptHighLightingBean =(ConceptHighLightingBean) tempMap.get(conceptReferentClassification.getName().toUpperCase());
-						
-						conceptHighLightingBean.setConceptName(conceptHighLightingBean.getConceptName() + "," + conceptReferent.getConcept().getName());
-						conceptHighLightingBean.setStartOffsets(conceptHighLightingBean.getStartOffsets() + "," + conceptReferent.getStartOffset());
-						conceptHighLightingBean.setEndOffsets(conceptHighLightingBean.getEndOffsets() + "," + conceptReferent.getEndOffset());
-						
-						tempMap.put(conceptReferentClassification.getName().toUpperCase(), conceptHighLightingBean);
-					}
-				}
-				
-				Set keySet = tempMap.keySet();
-				Iterator keySetIter = keySet.iterator();
-				List conceptBeanList = new ArrayList();
-				while(keySetIter.hasNext())
-				{
-					conceptBeanList.add(tempMap.get(keySetIter.next()));
-				}
-				request.setAttribute(Constants.CONCEPT_BEAN_LIST, conceptBeanList);
-			}
-		}		
-	}
+	
 	
 	/**
+	 * This method retrives the appropriate SurgicalPathologyReport object and set values of ViewSurgicalPathologyReportForm object
 	 * @param pageOf pageOf variable to find out domain object 
 	 * @param id Identifier of the domain object
 	 * @param request HttpServletRequest object
 	 * @throws DAOException exception occured while DB handling
-	 * This method retrives the appropriate SurgicalPathologyReport object and set values of ViewSurgicalPathologyReportForm object
+	 * @throws BizLogicException
 	 */
-	private void retrieveAndSetObject(String pageOf,long id,boolean isAuthorized, HttpServletRequest request) throws DAOException
+	private void retrieveAndSetObject(String pageOf,long id,boolean isAuthorized, HttpServletRequest request) throws DAOException, BizLogicException
 	{
 		String className;
 		String colName=new String(Constants.SYSTEM_IDENTIFIER);
 		long colValue=id;	
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();		
+		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+		SpecimenCollectionGroup specimenCollectionGroup=null;
 		
 		//For PHI
 		//SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
@@ -169,7 +124,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		//String userName = Utility.toString(sessionDataBean.getUserName());		
 		
 		//if page is of Specimen Collection group then the domain object is SpecimenCollectionGroup
-		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN_COLLECTION_GROUP))
+		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN_COLLECTION_GROUP)|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_SCG_CP_QUERY))
 		{
 			className=SpecimenCollectionGroup.class.getName();
 			List scgList=defaultBizLogic.retrieve(className, colName, colValue);
@@ -185,19 +140,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			//	Logger.out.debug(""+e);
 			//}
 			//SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgObjList.get(0);
-			SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgList.get(0);
-			if(isAuthorized)
-			{
-				viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
-				viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
-				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
-			}
-			else
-			{
-				viewSPR.setIdentifiedReportTextContent("You are not authorized to view this report");
-				viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
-				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
-			}
+			specimenCollectionGroup=(SpecimenCollectionGroup)scgList.get(0);
+			
 			//IdentifiedSurgicalPathologyReport identifiedReport = scg.getIdentifiedSurgicalPathologyReport();			
 			//if(identifiedReport.getId() == null)
 			//{
@@ -210,10 +154,10 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			//viewSPR.setAllValues(identifiedReport);
 						
 			// For Category HighLighter
-			  prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());
+	//		  prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());
 		}
 		//if page is of Specimen then the domain object is Specimen
-		else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN))
+		else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN) || pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 		{
 			className=Specimen.class.getName();
 			List specimenList=defaultBizLogic.retrieve(className, colName, colValue);
@@ -230,19 +174,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			
 			//Specimen specimen=(Specimen)specimenObjList.get(0);
 			Specimen specimen=(Specimen)specimenList.get(0);
-			SpecimenCollectionGroup scg=specimen.getSpecimenCollectionGroup();
-			viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
-			if(isAuthorized)
-			{
-				viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
-				viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
-				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
-			}
-			else
-			{
-				viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
-				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
-			}			
+			specimenCollectionGroup=specimen.getSpecimenCollectionGroup();
+			
 			//IdentifiedSurgicalPathologyReport identifiedReport = scg.getIdentifiedSurgicalPathologyReport();			
 			//if(identifiedReport.getId() == null)
 			//{
@@ -255,18 +188,17 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			//viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 			
 //			 For Category HighLighter
-			  prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());			
+//			  prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());			
 		}
 		// if page is of Participant then the domain object is Participant
 		// Also needs to retrieve a list of SurgicalPathologyReport objects (One-to-Many relationship)
-		else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT))
+		else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT) || pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 		{
 			className=Participant.class.getName();
 			List participantList=defaultBizLogic.retrieve(className, colName, colValue);
 			Participant participant=(Participant)participantList.get(0);
-			viewSPR.setParticipant(participant);
+//			viewSPR.setParticipant(participant);
 			List scgList=ReportLoaderUtil.getSCGList(participant);
-			
 			//For PHI
 			//List scgObjList = new ArrayList();
 			//try
@@ -281,18 +213,11 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 //			if(scgObjList.size()>0)
 //			{
 //				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgObjList.get(0);
-			if(scgList.size()>0)
+			if(scgList!=null && scgList.size()>0)
 			{
-				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgList.get(0);
-				if(isAuthorized)
-				{
-					viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
-				}
-				else
-				{
-					viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
-					viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
-				}				
+				specimenCollectionGroup=(SpecimenCollectionGroup)scgList.get(0);
+			}
+			
 				//IdentifiedSurgicalPathologyReport identifiedReport = scg.getIdentifiedSurgicalPathologyReport();				
 				//if(identifiedReport.getId() == null)
 				//{
@@ -305,55 +230,62 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				//viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 				
 //				 For Category HighLighter
-				  prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());
-				
-			}
-			else
-			{
-				viewSPR.setIdentifiedReport(new IdentifiedSurgicalPathologyReport());
-				viewSPR.setDeIdentifiedReport(new DeidentifiedSurgicalPathologyReport());
-			}
+//			prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());
 			viewSPR.setReportIdList(getReportIdList(scgList));
 		}
-		else
+//		else
+//		{
+//			String requestFor=(String)request.getParameter(Constants.REQUEST_FOR);
+//			IBizLogic bizLogic=null;
+//			List objectList=null;
+//			String witnessFullName=null;
+//			colName = new String(Constants.SYSTEM_IDENTIFIER);
+//			if(requestFor!=null &&requestFor.equals(Constants.REVIEW))
+//			{
+//				bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID);
+//				objectList= bizLogic.retrieve(PathologyReportReviewParameter.class.getName(), colName,id);
+//				PathologyReportReviewParameter pathologyReportReviewParameter = (PathologyReportReviewParameter)objectList.get(0);
+//				viewSPR.setUserComments(pathologyReportReviewParameter.getComments());
+//				witnessFullName = pathologyReportReviewParameter.getUser().getFirstName()+", "+pathologyReportReviewParameter.getUser().getLastName()+"'s";
+//				viewSPR.setUserName(witnessFullName);
+//				SurgicalPathologyReport surgicalPathologyReport = pathologyReportReviewParameter.getSurgicalPathologyReport();
+//				try
+//				{
+//					DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)surgicalPathologyReport;
+//					viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
+//				}
+//				catch(ClassCastException e) 
+//				{
+//					IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport =(IdentifiedSurgicalPathologyReport)surgicalPathologyReport;
+//					viewSPR.setAllValues(identifiedSurgicalPathologyReport);
+//				}
+//			}
+//			else
+//			{
+//				bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID);
+//				objectList  = bizLogic.retrieve(QuarantineEventParameter.class.getName(), colName, id);
+//				QuarantineEventParameter quarantineEventParameter =(QuarantineEventParameter)objectList.get(0);
+//				viewSPR.setUserComments(quarantineEventParameter.getComments());
+//				witnessFullName = quarantineEventParameter.getUser().getLastName()+", "+quarantineEventParameter.getUser().getFirstName();
+//				viewSPR.setUserName(witnessFullName);
+//				DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =quarantineEventParameter.getDeidentifiedSurgicalPathologyReport();
+//				viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
+//			}
+		if(specimenCollectionGroup!=null)
 		{
-			String requestFor=(String)request.getParameter(Constants.REQUEST_FOR);
-			IBizLogic bizLogic=null;
-			List objectList=null;
-			String witnessFullName=null;
-			colName = new String(Constants.SYSTEM_IDENTIFIER);
-			if(requestFor!=null &&requestFor.equals(Constants.REVIEW))
+			try
 			{
-				bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID);
-				objectList= bizLogic.retrieve(PathologyReportReviewParameter.class.getName(), colName,id);
-				PathologyReportReviewParameter pathologyReportReviewParameter = (PathologyReportReviewParameter)objectList.get(0);
-				viewSPR.setUserComments(pathologyReportReviewParameter.getComments());
-				witnessFullName = pathologyReportReviewParameter.getUser().getFirstName()+", "+pathologyReportReviewParameter.getUser().getLastName()+"'s";
-				viewSPR.setUserName(witnessFullName);
-				SurgicalPathologyReport surgicalPathologyReport = pathologyReportReviewParameter.getSurgicalPathologyReport();
-				try
-				{
-					DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)surgicalPathologyReport;
-					viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
-				}
-				catch(ClassCastException e) 
-				{
-					IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport =(IdentifiedSurgicalPathologyReport)surgicalPathologyReport;
-					viewSPR.setAllValues(identifiedSurgicalPathologyReport);
-				}
+				defaultBizLogic.populateUIBean(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(), viewSPR);
+				DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(), "deIdentifiedSurgicalPathologyReport");
+				List conceptBeanList=ViewSPRUtil.getConceptBeanList(request,deidReport);
+				request.setAttribute(Constants.CONCEPT_BEAN_LIST, conceptBeanList);
 			}
-			else
+			catch(Exception ex)
 			{
-				bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID);
-				objectList  = bizLogic.retrieve(QuarantineEventParameter.class.getName(), colName, id);
-				QuarantineEventParameter quarantineEventParameter =(QuarantineEventParameter)objectList.get(0);
-				viewSPR.setUserComments(quarantineEventParameter.getComments());
-				witnessFullName = quarantineEventParameter.getUser().getLastName()+", "+quarantineEventParameter.getUser().getFirstName();
-				viewSPR.setUserName(witnessFullName);
-				DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =quarantineEventParameter.getDeidentifiedSurgicalPathologyReport();
-				viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
+				Logger.out.error(ex);
 			}
 		}
+		
 			
 	}
 	
@@ -362,22 +294,17 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 * @return List of SurgicalPathologyReport Id
 	 * @throws DAOException Exception occured while handling DB
 	 */
-	private List getReportIdList(List scgCollection)throws DAOException
+	private List getReportIdList(List scgList)throws DAOException
 	{
-		
-		List reportIDList=new ArrayList();		
-		if(scgCollection!=null)
+		List reportIDList=new ArrayList();
+		SpecimenCollectionGroup scg;
+		for(int i=0;i<scgList.size();i++)
 		{
-			Iterator iter=scgCollection.iterator();
-			SpecimenCollectionGroup scg;
-			while(iter.hasNext())
+			scg=(SpecimenCollectionGroup)scgList.get(i);
+			if(scg.getIdentifiedSurgicalPathologyReport()!=null)
 			{
-				scg=(SpecimenCollectionGroup)iter.next();
-				if(scg.getIdentifiedSurgicalPathologyReport()!=null)
-				{
-					NameValueBean nb=new NameValueBean(scg.getSurgicalPathologyNumber(),scg.getIdentifiedSurgicalPathologyReport().getId().toString());
-					reportIDList.add(nb);
-				}
+				NameValueBean nb=new NameValueBean(scg.getSurgicalPathologyNumber(),scg.getIdentifiedSurgicalPathologyReport().getId().toString());
+				reportIDList.add(nb);
 			}		
 		}
 		return reportIDList;
