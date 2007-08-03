@@ -7,9 +7,12 @@ Description : This is the common jsp which will show tooltip for collection prot
 <%
 	String tempIDTitleArray = ""; 
 	Map<Long, String> cpIDTitleMap = (Map<Long, String>)request.getAttribute(Constants.CP_ID_TITLE_MAP);
-	for(Long key : cpIDTitleMap.keySet())
+	if(cpIDTitleMap!=null)
 	{
-		tempIDTitleArray += "[" + "\"" + key + "\""  + "," + "\""  + cpIDTitleMap.get(key) + "\"" + "]," ; 
+		for(Long key : cpIDTitleMap.keySet())
+		{
+			tempIDTitleArray += "[" + "\"" + key + "\""  + "," + "\""  + cpIDTitleMap.get(key) + "\"" + "]," ; 
+		}
 	}
 	if(tempIDTitleArray != null && tempIDTitleArray.length() != 0)
 		tempIDTitleArray = tempIDTitleArray.substring(0, tempIDTitleArray.length() -1);
