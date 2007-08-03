@@ -80,7 +80,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * A physical location associated with biospecimen collection, 
      * storage, processing, or utilization.
      */
-	protected Site site;
+	protected Site specimenCollectionSite;
 
     /**
      * A required specimen collection event associated with a Collection Protocol.
@@ -328,11 +328,11 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * class="edu.wustl.catissuecore.domain.Site" constrained="true"
      * @return the physical location associated with biospecimen collection, 
      * storage, processing, or utilization.
-     * @see #setSite(Site)
+     * @see #setSpecimenCollectionSite(Site)
      */
-    public Site getSite()
+    public Site getSpecimenCollectionSite()
     {
-        return site;
+        return specimenCollectionSite;
     }
 
     /**
@@ -340,11 +340,11 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * storage, processing, or utilization.
      * @param site physical location associated with biospecimen collection, 
      * storage, processing, or utilization.
-     * @see #getSite()
+     * @see #getSpecimenCollectionSite()
      */
-    public void setSite(Site site)
+    public void setSpecimenCollectionSite(Site specimenCollectionSite)
     {
-        this.site = site;
+        this.specimenCollectionSite = specimenCollectionSite;
     }
 
     /**
@@ -434,8 +434,8 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	        this.setClinicalStatus(form.getClinicalStatus());
 	        this.setActivityStatus(form.getActivityStatus());
 			this.setName(form.getName());
-			site = new Site();
-			site.setId(new Long(form.getSiteId()));
+			specimenCollectionSite = new Site();
+			specimenCollectionSite.setId(new Long(form.getSiteId()));
 			
 			/**
              * Name: Sachin Lale

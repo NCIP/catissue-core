@@ -77,8 +77,8 @@ public class DistributionReportForm extends AbstractActionForm
 
 		Distribution distribution = (Distribution)abstractDomainObject;
 		this.distributionProtocolTitle = String.valueOf(distribution.getDistributionProtocol().getTitle());
-		String lName = (String)distribution.getUser().getLastName();
- 		String fName = (String)distribution.getUser().getFirstName();
+		String lName = (String)distribution.getDistributedBy().getLastName();
+ 		String fName = (String)distribution.getDistributedBy().getFirstName();
  		Logger.out.debug("User's name"+lName+" "+fName );
  		this.userName = lName + ", " + fName;
  		Calendar calender = Calendar.getInstance();
@@ -89,7 +89,7 @@ public class DistributionReportForm extends AbstractActionForm
  		this.id = distribution.getId().longValue() ;
 		//this.fromSite = String.valueOf(distribution.getFromSite().getName());
 		this.toSite = String.valueOf(distribution.getToSite().getName());
-		this.comments  = Utility.toString(distribution.getComments());
+		this.comments  = Utility.toString(distribution.getComment());
 		distributionId = distribution.getId();
 	}
 	

@@ -78,15 +78,15 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	/**
 	 * User who performs the event.
 	 */
-	protected User user;
+	protected User distributedBy;
 	/**
 	 * Date and time of the event.
 	 */
 	protected Date timestamp;
 	/**
-	 * Text comments on event.
+	 * Text comment on event.
 	 */
-	protected String comments;
+	protected String comment;
 
 	/**
 	 * @return the orderDetails
@@ -261,33 +261,33 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	/**
 	 * @return Returns the user.
 	 */
-	public User getUser()
+	public User getDistributedBy()
 	{
-		return user;
+		return distributedBy;
 	}
 
 	/**
 	 * @param user The user to set.
 	 */
-	public void setUser(User user)
+	public void setDistributedBy(User distributedBy)
 	{
-		this.user = user;
+		this.distributedBy = distributedBy;
 	}
 
 	/**
-	 * @return Returns the comments.
+	 * @return Returns the comment.
 	 */
-	public String getComments()
+	public String getComment()
 	{
-		return comments;
+		return comment;
 	}
 
 	/**
-	 * @param comments The comments to set.
+	 * @param comment The comments to set.
 	 */
-	public void setComments(String comments)
+	public void setComment(String comment)
 	{
-		this.comments = comments;
+		this.comment = comment;
 	}
 
 	/**
@@ -316,9 +316,9 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 			DistributionForm form = (DistributionForm) abstractForm;
 			try
 			{
-				if (SearchUtil.isNullobject(user))
+				if (SearchUtil.isNullobject(distributedBy))
 				{
-					user = new User();
+					distributedBy = new User();
 				}
 				// Change for API Search   --- Ashwin 04/10/2006
 				if (SearchUtil.isNullobject(timestamp))
@@ -326,9 +326,9 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 					timestamp = Calendar.getInstance().getTime();
 				}
 
-				this.comments = form.getComments();
+				this.comment = form.getComments();
 
-				user.setId(new Long(form.getUserId()));
+				distributedBy.setId(new Long(form.getUserId()));
 
 				if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length() != 0)
 				{
@@ -447,24 +447,24 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 			distributionProtocol = new DistributionProtocol();
 		}
 		String message = this.distributionProtocol.title + " ";
-		if (this.user != null)
+		if (this.distributedBy != null)
 		{
-			if (this.user.lastName != null && !this.user.lastName.equals("") && this.user.firstName != null && !this.user.firstName.equals(""))
+			if (this.distributedBy.lastName != null && !this.distributedBy.lastName.equals("") && this.distributedBy.firstName != null && !this.distributedBy.firstName.equals(""))
 			{
-				message = message + this.user.lastName + "," + this.user.firstName;
+				message = message + this.distributedBy.lastName + "," + this.distributedBy.firstName;
 			}
-			else if (this.user.lastName != null && !this.user.lastName.equals(""))
+			else if (this.distributedBy.lastName != null && !this.distributedBy.lastName.equals(""))
 			{
-				message = message + this.user.lastName;
+				message = message + this.distributedBy.lastName;
 			}
-			else if (this.user.firstName != null && !this.user.firstName.equals(""))
+			else if (this.distributedBy.firstName != null && !this.distributedBy.firstName.equals(""))
 			{
-				message = message + this.user.firstName;
+				message = message + this.distributedBy.firstName;
 			}
 		}
-		else if (this.user != null)
+		else if (this.distributedBy != null)
 		{
-			message = message + this.user;
+			message = message + this.distributedBy;
 		}
 		return message;
 	}

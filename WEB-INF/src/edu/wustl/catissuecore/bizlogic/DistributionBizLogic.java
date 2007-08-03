@@ -384,7 +384,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			}
 		}
 
-		if (distribution.getUser() == null || distribution.getUser().getId() == null)
+		if (distribution.getDistributedBy() == null || distribution.getDistributedBy().getId() == null)
 		{
 			message = ApplicationProperties.getValue("distribution.distributedBy");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));

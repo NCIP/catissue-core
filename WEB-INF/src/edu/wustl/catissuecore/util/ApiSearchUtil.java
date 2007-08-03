@@ -212,9 +212,9 @@ public class ApiSearchUtil
     		distribution.setDistributionProtocol(new DistributionProtocol());
     	}
     	
-    	if (SearchUtil.isNullobject(distribution.getUser()))
+    	if (SearchUtil.isNullobject(distribution.getDistributedBy()))
     	{
-    		distribution.setUser(new User());
+    		distribution.setDistributedBy(new User());
     	}
         
     	if (SearchUtil.isNullobject(distribution.getTimestamp()))

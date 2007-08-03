@@ -312,7 +312,7 @@ public class ReportLoaderUtil
 					existingSCG=scgIterator.next();
 					if((surgicalPathologyNumber.equals(existingSCG.getSurgicalPathologyNumber()) 
 							|| existingSCG.getSurgicalPathologyNumber().equalsIgnoreCase(null))							
-							&& (site.getName()).equals(existingSCG.getSite().getName()))
+							&& (site.getName()).equals(existingSCG.getSpecimenCollectionSite().getName()))
 					{
 						return existingSCG;
 					}

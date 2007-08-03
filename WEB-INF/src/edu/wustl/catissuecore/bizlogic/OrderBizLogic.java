@@ -396,7 +396,7 @@ public class OrderBizLogic extends DefaultBizLogic
 									//Setting the user for distribution.
 									User user = new User();
 									user.setId(sessionDataBean.getUserId());
-									distribution.setUser(user);	
+									distribution.setDistributedBy(user);	
 									//Setting activity status
 									distribution.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 									//Setting Event Timestamp

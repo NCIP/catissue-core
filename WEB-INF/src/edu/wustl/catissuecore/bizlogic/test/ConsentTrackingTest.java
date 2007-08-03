@@ -1011,7 +1011,7 @@ public class ConsentTrackingTest extends BaseTestCase
 
 		Site site = new Site();
 		site.setId(new Long(1));
-		specimenCollectionGroup.setSite(site);
+		specimenCollectionGroup.setSpecimenCollectionSite(site);
 
 		specimenCollectionGroup.setClinicalDiagnosis("Abdominal fibromatosis");
 		specimenCollectionGroup.setClinicalStatus("Operative");

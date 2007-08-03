@@ -349,7 +349,7 @@ public class CaCoreAppServicesDelegator
 	{
 	    SpecimenCollectionGroup specimenCollGrp = (SpecimenCollectionGroup) object;
 	    Logger.out.info("specimenCollGrp getClinicalDiagnosis : " + specimenCollGrp.getClinicalDiagnosis());
-	    Site site = specimenCollGrp.getSite();
+	    Site site = specimenCollGrp.getSpecimenCollectionSite();
 	    Logger.out.info("specimenCollGrp getClinicalDiagnosis : " + site.getName());
 //	    ClinicalReport clinicalReport = specimenCollGrp.getClinicalReport();
 //	    if (clinicalReport != null)

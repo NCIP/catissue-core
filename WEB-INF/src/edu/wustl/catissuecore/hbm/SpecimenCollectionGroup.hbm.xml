@@ -116,7 +116,7 @@
             length="50"
         />
         <many-to-one
-            name="site"
+            name="specimenCollectionSite"
             class="edu.wustl.catissuecore.domain.Site"
             cascade="none"
             outer-join="auto"

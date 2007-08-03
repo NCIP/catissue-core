@@ -118,7 +118,7 @@
         />
 
         <many-to-one
-            name="user"
+            name="distributedBy"
             class="edu.wustl.catissuecore.domain.User"
             cascade="none"
             outer-join="auto"
@@ -128,7 +128,7 @@
         />
 
         <property
-            name="comments"
+            name="comment"
             type="string"
             update="true"
             insert="true"

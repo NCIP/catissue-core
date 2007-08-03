@@ -473,7 +473,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		Logger.out.debug("participantId.................................."+participantId);
 		Logger.out.debug("protocolParticipantIdentifier........................."+protocolParticipantIdentifier);
 		Logger.out.debug("SCgForm --------- checkButton : -- " + radioButtonForParticipant );
-		siteId = specimenCollectionGroup.getSite().getId().longValue();
+		siteId = specimenCollectionGroup.getSpecimenCollectionSite().getId().longValue();
 		
         /**
 	  	 * For Consent tracking setting UI attributes

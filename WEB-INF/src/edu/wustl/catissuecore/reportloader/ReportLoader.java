@@ -166,7 +166,7 @@ public class ReportLoader
 //		scg.setParticipant(this.participant);
 		scg.setClinicalDiagnosis(Constants.NOT_SPECIFIED);
 		scg.setClinicalStatus(Constants.NOT_SPECIFIED);
-		scg.setSite(site); 
+		scg.setSpecimenCollectionSite(site); 
 		scg.setSurgicalPathologyNumber(surgicalPathologyNumber);
 		scg.setIdentifiedSurgicalPathologyReport(identifiedReport);
 		identifiedReport.setSpecimenCollectionGroup(scg);

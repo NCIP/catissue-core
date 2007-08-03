@@ -67,13 +67,13 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 
-		Object siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSite().getId());
+		Object siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSpecimenCollectionSite().getId());
 		if (siteObj != null)
 		{
 			// check for closed Site
-			checkStatus(dao, specimenCollectionGroup.getSite(), "Site");
+			checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
 
-			specimenCollectionGroup.setSite((Site) siteObj);
+			specimenCollectionGroup.setSpecimenCollectionSite((Site) siteObj);
 		}
 
 		Object collectionProtocolEventObj = dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup
@@ -144,9 +144,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			setDefaultEvents(specimenCollectionGroup,sessionDataBean);
 		}
 		// Check for different closed site
-		if (!specimenCollectionGroup.getSite().getId().equals(oldspecimenCollectionGroup.getSite().getId()))
+		if (!specimenCollectionGroup.getSpecimenCollectionSite().getId().equals(oldspecimenCollectionGroup.getSpecimenCollectionSite().getId()))
 		{
-			checkStatus(dao, specimenCollectionGroup.getSite(), "Site");
+			checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
 		}
 		//site check complete
 
@@ -486,7 +486,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.collectionprotocolregistration.atleast"));
 		}
 
-		if (group.getSite() == null || group.getSite().getId() == null || group.getSite().getId() == 0)
+		if (group.getSpecimenCollectionSite() == null || group.getSpecimenCollectionSite().getId() == null || group.getSpecimenCollectionSite().getId() == 0)
 		{
 			message = ApplicationProperties.getValue("specimenCollectionGroup.site");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.invalid", message));
