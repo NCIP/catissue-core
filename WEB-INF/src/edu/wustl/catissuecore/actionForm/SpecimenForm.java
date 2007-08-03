@@ -664,7 +664,7 @@ public class SpecimenForm extends AbstractActionForm
 		
 		if(!Utility.isQuantityDouble(className,type))
 		{
-			Double doubleQuantity = specimen.getQuantity().getValue();
+			Double doubleQuantity = specimen.getInitialQuantity().getValue();
 			if (doubleQuantity.toString().contains("E"))
 	    	{    		
 				this.quantity = doubleQuantity.toString();
@@ -697,7 +697,7 @@ public class SpecimenForm extends AbstractActionForm
 		}
 		else
 		{
-			this.quantity = specimen.getQuantity().toString();
+			this.quantity = specimen.getInitialQuantity().toString();
 			this.availableQuantity = specimen.getAvailableQuantity().toString();
 		}
 		

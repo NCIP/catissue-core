@@ -137,7 +137,7 @@
         />
         
         <many-to-one
-            name="orderId"
+            name="orderDetails"
             class="edu.wustl.catissuecore.domain.OrderDetails"
             cascade="none"
             outer-join="auto"

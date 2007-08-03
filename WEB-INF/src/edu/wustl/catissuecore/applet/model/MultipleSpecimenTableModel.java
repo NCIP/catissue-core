@@ -38,7 +38,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
      * attributes of the specimen for which user can specify the values. 
      */
     String[] specimenAttribute = {"","SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
-            "SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "createdOn","Quantity_value",
+            "SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "createdOn","InitialQuantity_value",
             "concentrationInMicrogramPerMicroliter", "comments", "specimenEventCollection", "externalIdentifierCollection",
             "biohazardCollection", "derive"};
 

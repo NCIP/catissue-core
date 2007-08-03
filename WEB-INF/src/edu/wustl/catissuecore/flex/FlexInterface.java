@@ -262,7 +262,7 @@ public class FlexInterface
 		sp.setAvailable(true);
 		Quantity qt = new Quantity();
 		qt.setValue(spBean.quantity);
-		sp.setQuantity(qt);
+		sp.setInitialQuantity(qt);
 		sp.setAvailableQuantity(qt);
 		sp.setBarcode(spBean.specimenBarcode);
 		sp.setBiohazardCollection(new HashSet<Biohazard>());

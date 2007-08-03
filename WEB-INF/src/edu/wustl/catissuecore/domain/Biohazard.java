@@ -42,9 +42,9 @@ public class Biohazard extends AbstractDomainObject implements Serializable
     protected String name;
 
     /**
-     * Comments about the biohazard.
+     * Comment about the biohazard.
      */
-    protected String comments;
+    protected String comment;
 
     /**
      * Type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
@@ -117,24 +117,24 @@ public class Biohazard extends AbstractDomainObject implements Serializable
 
     /**
      * Returns the comments about the biohazard.
-     * @hibernate.property name="comments" type="string" 
+     * @hibernate.property name="comment" type="string" 
      * column="COMMENTS" length="500"
      * @return the comments about the biohazard.
      * @see #setComments(String)
      */
-    public String getComments()
+    public String getComment()
     {
-        return comments;
+        return comment;
     }
 
     /**
-     * Sets the comments about the biohazard.
+     * Sets the comment about the biohazard.
      * @param comments the comments about the biohazard.
-     * @see #getComments()
+     * @see #getComment()
      */
-    public void setComments(String comments)
+    public void setComment(String comment)
     {
-        this.comments = comments;
+        this.comment = comment;
     }
 
     /**
@@ -192,7 +192,7 @@ public class Biohazard extends AbstractDomainObject implements Serializable
         try
         {
             BiohazardForm form 	= (BiohazardForm) abstractForm;
-            this.comments = form.getComments();
+            this.comment = form.getComments();
             this.name = form.getName().trim() ;
             this.type = form.getType();
         }

@@ -287,7 +287,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		}
 		
 		//Populating the user-id array
-		Collection userCollection = cProtocol.getUserCollection();
+		Collection userCollection = cProtocol.getCoordinatorCollection();
 		
 		if(userCollection != null)
 		{

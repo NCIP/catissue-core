@@ -729,9 +729,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			TissueSpecimen tissueSpecimenObj = (TissueSpecimen) obj;
 			Specimen tissueSpecimenOldObj = (Specimen) oldObj;
 			// get new qunatity modifed by user
-			double newQty = Double.parseDouble(tissueSpecimenObj.getQuantity().toString());//tissueSpecimenObj.getQuantityInGram().doubleValue();
+			double newQty = Double.parseDouble(tissueSpecimenObj.getInitialQuantity().toString());//tissueSpecimenObj.getQuantityInGram().doubleValue();
 			// get old qunatity from database
-			double oldQty = Double.parseDouble(tissueSpecimenOldObj.getQuantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
+			double oldQty = Double.parseDouble(tissueSpecimenOldObj.getInitialQuantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
 			double oldAvailableQty = Double.parseDouble(tissueSpecimenOldObj.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
@@ -762,9 +762,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			MolecularSpecimen molecularSpecimenObj = (MolecularSpecimen) obj;
 			Specimen molecularSpecimenOldObj = (Specimen) oldObj;
 			// get new qunatity modifed by user
-			double newQty = Double.parseDouble(molecularSpecimenObj.getQuantity().toString());//molecularSpecimenObj.getQuantityInMicrogram().doubleValue();
+			double newQty = Double.parseDouble(molecularSpecimenObj.getInitialQuantity().toString());//molecularSpecimenObj.getQuantityInMicrogram().doubleValue();
 			// get old qunatity from database
-			double oldQty = Double.parseDouble(molecularSpecimenOldObj.getQuantity().toString());//molecularSpecimenOldObj.getQuantityInMicrogram().doubleValue();
+			double oldQty = Double.parseDouble(molecularSpecimenOldObj.getInitialQuantity().toString());//molecularSpecimenOldObj.getQuantityInMicrogram().doubleValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
 			double oldAvailableQty = Double.parseDouble(molecularSpecimenOldObj.getAvailableQuantity().toString());//molecularSpecimenOldObj.getAvailableQuantityInMicrogram().doubleValue();
@@ -794,9 +794,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			CellSpecimen cellSpecimenObj = (CellSpecimen) obj;
 			Specimen cellSpecimenOldObj = (Specimen) oldObj;
 			// get new qunatity modifed by user
-			long newQty = (long) Double.parseDouble(cellSpecimenObj.getQuantity().toString());//cellSpecimenObj.getQuantityInCellCount().intValue();
+			long newQty = (long) Double.parseDouble(cellSpecimenObj.getInitialQuantity().toString());//cellSpecimenObj.getQuantityInCellCount().intValue();
 			// get old qunatity from database
-			long oldQty = (long) Double.parseDouble(cellSpecimenOldObj.getQuantity().toString());//cellSpecimenOldObj.getQuantityInCellCount().intValue();
+			long oldQty = (long) Double.parseDouble(cellSpecimenOldObj.getInitialQuantity().toString());//cellSpecimenOldObj.getQuantityInCellCount().intValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
 			long oldAvailableQty = (long) Double.parseDouble(cellSpecimenOldObj.getAvailableQuantity().toString());//cellSpecimenOldObj.getAvailableQuantityInCellCount().intValue();
@@ -826,9 +826,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			FluidSpecimen fluidSpecimenObj = (FluidSpecimen) obj;
 			Specimen fluidSpecimenOldObj = (Specimen) oldObj;
 			// get new qunatity modifed by user
-			double newQty = Double.parseDouble(fluidSpecimenObj.getQuantity().toString());//fluidSpecimenObj.getQuantityInMilliliter().doubleValue();
+			double newQty = Double.parseDouble(fluidSpecimenObj.getInitialQuantity().toString());//fluidSpecimenObj.getQuantityInMilliliter().doubleValue();
 			// get old qunatity from database
-			double oldQty = Double.parseDouble(fluidSpecimenOldObj.getQuantity().toString());//fluidSpecimenOldObj.getQuantityInMilliliter().doubleValue();
+			double oldQty = Double.parseDouble(fluidSpecimenOldObj.getInitialQuantity().toString());//fluidSpecimenOldObj.getQuantityInMilliliter().doubleValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
 			double oldAvailableQty = Double.parseDouble(fluidSpecimenOldObj.getAvailableQuantity().toString());//fluidSpecimenOldObj.getAvailableQuantityInMilliliter().doubleValue();
@@ -922,11 +922,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 		// get old qunatity from database			
 		double oldAvailableQty = Double.parseDouble(specimenOld.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
-		double oldQty = Double.parseDouble(specimenOld.getQuantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
+		double oldQty = Double.parseDouble(specimenOld.getInitialQuantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
 		
 		//get new qunatity modifed by user
 		double newAvailableQty = Double.parseDouble(specimen.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
-		double newQty = Double.parseDouble(specimen.getQuantity().toString());//tissueSpecimenObj.getQuantityInGram().doubleValue();
+		double newQty = Double.parseDouble(specimen.getInitialQuantity().toString());//tissueSpecimenObj.getQuantityInGram().doubleValue();
 
 		if((oldAvailableQty - newAvailableQty)!= 0)
 		{
@@ -1685,7 +1685,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
 		}
 
-		if (specimen.getQuantity() == null || specimen.getQuantity().getValue() == null)
+		if (specimen.getInitialQuantity() == null || specimen.getInitialQuantity().getValue() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));

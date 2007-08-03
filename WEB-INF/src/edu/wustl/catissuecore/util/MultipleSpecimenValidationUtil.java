@@ -460,7 +460,7 @@ public final class MultipleSpecimenValidationUtil
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
 		}
 
-		if (specimen.getQuantity() == null || specimen.getQuantity().getValue() == null)
+		if (specimen.getInitialQuantity() == null || specimen.getInitialQuantity().getValue() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));

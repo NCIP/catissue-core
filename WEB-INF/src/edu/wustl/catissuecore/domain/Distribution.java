@@ -10,7 +10,9 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,7 +22,10 @@ import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -28,10 +33,11 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class table="CATISSUE_DISTRIBUTION"
  * @author Mandar Deshmukh
  */
-public class Distribution extends SpecimenEventParameters implements java.io.Serializable
+public class Distribution extends AbstractDomainObject implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 
+	protected Long id;
 	// Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * New location(site) of the item.
@@ -67,23 +73,36 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	/**
 	 * OrderDetails associated with the order_item.
 	 */
-	protected OrderDetails orderId;
+	protected OrderDetails orderDetails;
+	protected Specimen specimen;
+	/**
+	 * User who performs the event.
+	 */
+	protected User user;
+	/**
+	 * Date and time of the event.
+	 */
+	protected Date timestamp;
+	/**
+	 * Text comments on event.
+	 */
+	protected String comments;
 
 	/**
-	 * @return the orderId
+	 * @return the orderDetails
 	 * @hibernate.many-to-one column="ORDER_ID" class="edu.wustl.catissuecore.domain.OrderDetails" constrained="true"
 	 */
-	public OrderDetails getOrderId()
+	public OrderDetails getOrderDetails()
 	{
-		return orderId;
+		return orderDetails;
 	}
 
 	/**
-	 * @param orderId the orderId to set
+	 * @param orderDetails the orderId to set
 	 */
-	public void setOrderId(OrderDetails orderId)
+	public void setOrderDetails(OrderDetails orderDetails)
 	{
-		this.orderId = orderId;
+		this.orderDetails = orderDetails;
 	}
 
 	//Default Constructor
@@ -102,6 +121,15 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	public Long getId()
 	{
 		return id;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
+	 */
+	public void setId(Long id)
+	{
+		this.id = id;
 	}
 
 	public Distribution(AbstractActionForm form)
@@ -213,13 +241,117 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 		this.distributedItemCollection = distributedItemCollection;
 	}
 
+	
+	/**
+	 * @return Returns the specimen.
+	 */
+	public Specimen getSpecimen()
+	{
+		return specimen;
+	}
+
+	/**
+	 * @param specimen The specimen to set.
+	 */
+	public void setSpecimen(Specimen specimen)
+	{
+		this.specimen = specimen;
+	}
+
+	/**
+	 * @return Returns the user.
+	 */
+	public User getUser()
+	{
+		return user;
+	}
+
+	/**
+	 * @param user The user to set.
+	 */
+	public void setUser(User user)
+	{
+		this.user = user;
+	}
+
+	/**
+	 * @return Returns the comments.
+	 */
+	public String getComments()
+	{
+		return comments;
+	}
+
+	/**
+	 * @param comments The comments to set.
+	 */
+	public void setComments(String comments)
+	{
+		this.comments = comments;
+	}
+
+	/**
+	 * @return Returns the timestamp.
+	 */
+	public Date getTimestamp()
+	{
+		return timestamp;
+	}
+
+	/**
+	 * @param timestamp The timestamp to set.
+	 */
+	public void setTimestamp(Date timestamp)
+	{
+		this.timestamp = timestamp;
+	}
+
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			super.setAllValues(abstractForm);
-			super.specimen = null;
+			//super.setAllValues(abstractForm);
+			this.specimen = null;
 			// Change for API Search   --- Ashwin 04/10/2006
+			DistributionForm form = (DistributionForm) abstractForm;
+			try
+			{
+				if (SearchUtil.isNullobject(user))
+				{
+					user = new User();
+				}
+				// Change for API Search   --- Ashwin 04/10/2006
+				if (SearchUtil.isNullobject(timestamp))
+				{
+					timestamp = Calendar.getInstance().getTime();
+				}
+
+				this.comments = form.getComments();
+
+				user.setId(new Long(form.getUserId()));
+
+				if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length() != 0)
+				{
+					Calendar calendar = Calendar.getInstance();
+
+					Date date = Utility.parseDate(form.getDateOfEvent(), Utility.datePattern(form.getDateOfEvent()));
+					calendar.setTime(date);
+					this.timestamp = calendar.getTime();
+					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(form.getTimeInHours()));
+					calendar.set(Calendar.MINUTE, Integer.parseInt(form.getTimeInMinutes()));
+					this.timestamp = calendar.getTime();
+					//  this.timestamp is added twice, if there is some exception in Integer.parseInt(form.getTimeInHours()) or Integer.parseInt(form.getTimeInMinutes())
+					//	current timestamp will be set
+
+				}
+			}
+			catch (Exception excp)
+			{
+				// use of logger as per bug 79
+				Logger.out.error(excp.getMessage(), excp);
+				throw new AssignDataException();
+			}
+
 			if (SearchUtil.isNullobject(toSite))
 			{
 				toSite = new Site();
@@ -231,7 +363,6 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 				distributionProtocol = new DistributionProtocol();
 			}
 
-			DistributionForm form = (DistributionForm) abstractForm;
 			toSite.setId(new Long(form.getToSite()));
 			//fromSite.setId(new Long(form.getFromSite()));
 			distributionProtocol.setId(new Long(form.getDistributionProtocolId()));

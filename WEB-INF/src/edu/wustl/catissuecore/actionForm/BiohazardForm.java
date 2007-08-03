@@ -66,7 +66,7 @@ public class BiohazardForm extends AbstractActionForm
         this.id = hazard.getId().longValue();
         this.name = hazard.getName();
         this.type = hazard.getType();
-        this.comments = hazard.getComments();
+        this.comments = hazard.getComment();
     }
     
     /**

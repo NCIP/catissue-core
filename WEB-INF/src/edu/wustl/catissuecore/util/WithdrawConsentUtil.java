@@ -160,7 +160,7 @@ public class WithdrawConsentUtil
 			specimen.setPositionDimensionTwo(null);
 			specimen.setStorageContainer(null);
 			specimen.setAvailableQuantity(null);
-			specimen.setQuantity(null);
+			specimen.setInitialQuantity(null);
 		}
 	}
 	

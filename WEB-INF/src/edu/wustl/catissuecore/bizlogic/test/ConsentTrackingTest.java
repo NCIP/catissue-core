@@ -895,7 +895,7 @@ public class ConsentTrackingTest extends BaseTestCase
 		User user = new User();
 		user.setId(new Long(1));
 		userCollection.add(user);
-		collectionProtocol.setUserCollection(userCollection);
+		collectionProtocol.setCoordinatorCollection(userCollection);
 				
 		try
 		{
@@ -1090,7 +1090,7 @@ public class ConsentTrackingTest extends BaseTestCase
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		molecularSpecimen.setQuantity(quantity);
+		molecularSpecimen.setInitialQuantity(quantity);
 
 		molecularSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
 		molecularSpecimen.setComments("");

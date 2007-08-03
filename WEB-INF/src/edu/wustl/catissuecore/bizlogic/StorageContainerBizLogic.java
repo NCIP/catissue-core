@@ -683,8 +683,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Collection spClassCollNew = newContainer.getHoldsSpecimenClassCollection();
 		Collection spClassCollOld = oldContainer.getHoldsSpecimenClassCollection();
 
-		Collection spArrayTypeCollNew = newContainer.getHoldsSpArrayTypeCollection();
-		Collection spArrayTypeCollOld = oldContainer.getHoldsSpArrayTypeCollection();
+		Collection spArrayTypeCollNew = newContainer.getHoldsSpecimenArrayTypeCollection();
+		Collection spArrayTypeCollOld = oldContainer.getHoldsSpecimenArrayTypeCollection();
 
 		/*	if (cpCollNew.size() != cpCollOld.size())
 		 return true;*/
@@ -3237,7 +3237,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		
 		boolean canHold = true;
-		Collection specimenArrayTypes = (Collection)retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "elements(holdsSpArrayTypeCollection)");//storageContainer.getHoldsSpArrayTypeCollection();
+		Collection specimenArrayTypes = (Collection)retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "elements(holdsSpecimenArrayTypeCollection)");//storageContainer.getHoldsSpArrayTypeCollection();
 //		if (!specimenArrayTypes.isEmpty())
 		{
 			Iterator itr = specimenArrayTypes.iterator();

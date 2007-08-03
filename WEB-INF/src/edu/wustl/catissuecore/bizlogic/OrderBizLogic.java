@@ -392,7 +392,7 @@ public class OrderBizLogic extends DefaultBizLogic
 								{
 									Distribution distribution = (Distribution)iter.next();
 									//Populating Distribution Object.
-									distribution.setOrderId(orderOld);
+									distribution.setOrderDetails(orderOld);
 									//Setting the user for distribution.
 									User user = new User();
 									user.setId(sessionDataBean.getUserId());
@@ -528,7 +528,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	private void calculateOrderStatus(OrderItem oldOrderItem)
 	{
 		//Order id is null for specimen orderItems associated with NewSpecimenArrayOrderItem
-		if(oldOrderItem.getOrder() != null)
+		if(oldOrderItem.getOrderDetails() != null)
 		{
 //			For order status
 			if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW))

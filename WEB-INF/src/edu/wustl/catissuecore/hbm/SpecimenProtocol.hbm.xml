@@ -177,7 +177,7 @@
         </set>
 
         <set
-            name="userCollection"
+            name="coordinatorCollection"
             table="CATISSUE_COLL_COORDINATORS"
             lazy="true"
             inverse="false"

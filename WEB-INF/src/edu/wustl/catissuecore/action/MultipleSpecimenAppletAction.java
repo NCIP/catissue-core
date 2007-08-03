@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGeneratorFactory;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -65,8 +66,6 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGeneratorFactory;
-import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGenerator;
 
 /**
  * This action contains methods that are called by MultipleSpecimenApplet
@@ -171,7 +170,6 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		try
 		{
 			Map specimenMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
-
 			Logger.out.debug("Submitting the specimen : " + specimenMap);
 			String pageOf = request.getParameter("pageOf"); 
 			
@@ -356,7 +354,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		{
 			Specimen specimen = (Specimen) specimenCollectionIterator.next();
 			specimen.setAvailable(new Boolean(true));
-			specimen.setAvailableQuantity(specimen.getQuantity());
+			specimen.setAvailableQuantity(specimen.getInitialQuantity());
 
 			List derivedFormBeans = null;
 			//Associate derived specimens.
@@ -900,7 +898,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	{
 		// attributes of the specimen.
 		String[] specimenAttribute = {"","SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
-				"SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "createdOn","Quantity_value",
+				"SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "createdOn","InitialQuantity_value",
 				"concentrationInMicrogramPerMicroliter", "StorageContainer_temp", "comments", "specimenEventCollection",
 				"externalIdentifierCollection", "biohazardCollection", "derive"};
 		String key = AppletConstants.SPECIMEN_PREFIX + col + "_" + specimenAttribute[row];

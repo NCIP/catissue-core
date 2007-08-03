@@ -13,11 +13,10 @@ package edu.wustl.catissuecore.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
@@ -50,7 +49,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 * Collection of users associated with the CollectionProtocol.
 	 */
-	protected Collection userCollection = new LinkedHashSet();
+	protected Collection coordinatorCollection = new LinkedHashSet();
 	
 	/**
 	 * Collection of CollectionProtocolEvents associated with the CollectionProtocol.
@@ -161,23 +160,23 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 
 	/**
 	 * Returns the collection of Users(ProtocolCoordinators) for this Protocol.
-	 * @hibernate.set name="userCollection" table="CATISSUE_COLL_COORDINATORS" 
+	 * @hibernate.set name="coordinatorCollection" table="CATISSUE_COLL_COORDINATORS" 
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
 	 * @return The collection of Users(ProtocolCoordinators) for this Protocol.
 	 */
-	public Collection getUserCollection()
+	public Collection getCoordinatorCollection()
 	{
-		return userCollection;
+		return coordinatorCollection;
 	}
 
 	/**
-	 * @param userCollection The userCollection to set.
+	 * @param coordinatorCollection The coordinatorCollection to set.
 	 */
-	public void setUserCollection(Collection userCollection)
+	public void setCoordinatorCollection(Collection coordinatorCollection)
 	{
-		this.userCollection = userCollection;
+		this.coordinatorCollection = coordinatorCollection;
 	}
 
 
@@ -260,7 +259,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	
         	CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
         	
-        	userCollection.clear();
+        	coordinatorCollection.clear();
         	this.collectionProtocolEventCollection.clear();
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
         	if(coordinatorsArr!=null)
@@ -271,7 +270,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        		{
 		        		User coordinator = new User();
 		        		coordinator.setId(new Long(coordinatorsArr[i]));
-		        		userCollection.add(coordinator);
+		        		coordinatorCollection.add(coordinator);
 	        		}
 				}
         	}

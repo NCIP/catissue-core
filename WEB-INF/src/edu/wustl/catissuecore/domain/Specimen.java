@@ -158,7 +158,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	/**
 	 * The quantity of a specimen.
 	 */
-	protected Quantity quantity;
+	protected Quantity initialQuantity;
 
 	//Change for API Search   --- Ashwin 04/10/2006
 	/**
@@ -643,9 +643,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
-		if (SearchUtil.isNullobject(quantity))
+		if (SearchUtil.isNullobject(initialQuantity))
 		{
-			quantity = new Quantity();
+			initialQuantity = new Quantity();
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
@@ -691,14 +691,14 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		{
 			String qty = ((SpecimenForm) abstractForm).getQuantity();
 			if(qty != null && qty.trim().length() > 0   )
-				this.quantity = new Quantity(((SpecimenForm) abstractForm).getQuantity());
+				this.initialQuantity = new Quantity(((SpecimenForm) abstractForm).getQuantity());
 			else
-				this.quantity = new Quantity("0");
+				this.initialQuantity = new Quantity("0");
 			this.label = ((SpecimenForm) abstractForm).getLabel();
 
 			if (abstractForm.isAddOperation())
 			{
-				this.availableQuantity = new Quantity(this.quantity);
+				this.availableQuantity = new Quantity(this.initialQuantity);
 			}
 			else
 			{
@@ -1147,21 +1147,21 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 * Returns the quantity of a specimen.
 	 * @return The quantity of a specimen.
 	 * @hibernate.component class="edu.wustl.catissuecore.domain.Quantity"
-	 * @see #setQuantity(Quantity)
+	 * @see #setinitialQuantity(Quantity)
 	 */
-	public Quantity getQuantity()
+	public Quantity getInitialQuantity()
 	{
-		return quantity;
+		return initialQuantity;
 	}
 
 	/**
 	 * Sets the quantity of a specimen.
 	 * @param quantity The quantity of a specimen.
-	 * @see #getQuantity()
+	 * @see #getInitialQuantity()
 	 */
-	public void setQuantity(Quantity quantity)
+	public void setInitialQuantity(Quantity initialQuantity)
 	{
-		this.quantity = quantity;
+		this.initialQuantity = initialQuantity;
 	}
 
 	/**

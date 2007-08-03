@@ -46,7 +46,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	/**
 	 * OrderDetails associated with the order_item.
 	 */
-	protected OrderDetails order;
+	protected OrderDetails orderDetails;
 	/**
 	 * The distributed Item associated with this OrderItem.
 	 */
@@ -151,20 +151,20 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	/**
 	 * The order id associated with the order item.
 	 * @hibernate.many-to-one column="ORDER_ID" class="edu.wustl.catissuecore.domain.OrderDetails" constrained="true"
-	 * @return the order
+	 * @return the orderDetails
 	 */
-	public OrderDetails getOrder()
+	public OrderDetails getOrderDetails()
 	{
-		return order;
+		return orderDetails;
 	}
 
 	
 	/**
 	 * @param order the orderId to set
 	 */
-	public void setOrder(OrderDetails order)
+	public void setOrderDetails(OrderDetails orderDetails)
 	{
-		this.order = order;
+		this.orderDetails = orderDetails;
 	}
 
 	

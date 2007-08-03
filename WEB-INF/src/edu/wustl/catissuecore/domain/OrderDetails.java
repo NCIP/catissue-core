@@ -826,7 +826,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		orderItem.setStatus(requestDetailsBean.getAssignedStatus());
 		orderItem.setDescription(requestDetailsBean.getDescription());			
 		//Setting the order id 
-		orderItem.setOrder(order);	
+		orderItem.setOrderDetails(order);	
 		
 		//For Distribution.
 		if(requestDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && requestDetailsBean.getDistributedItemId().equals(""))
@@ -892,7 +892,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		orderItem.setStatus(definedArrayDetailsBean.getAssignedStatus());
 		orderItem.setDescription(definedArrayDetailsBean.getDescription());			
 		//Setting the order id 
-		orderItem.setOrder(order);
+		orderItem.setOrderDetails(order);
 //		For READY FOR ARRAY PREPARATION
 		if(definedArrayDetailsBean.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
 		{					
@@ -944,7 +944,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		orderItem.setId(new Long(definedArrayRequestBean.getOrderItemId()));
 		orderItem.setStatus(definedArrayRequestBean.getAssignedStatus());						
 		//Setting the order id 
-		orderItem.setOrder(order);	
+		orderItem.setOrderDetails(order);	
 		
 		//For Distribution.
 		if(definedArrayRequestBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && definedArrayRequestBean.getDistributedItemId().equals(""))
@@ -990,7 +990,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		orderItem.setStatus(existingArrayDetailsBean.getAssignedStatus());
 		orderItem.setDescription(existingArrayDetailsBean.getAddDescription());			
 		//Setting the order id 
-		orderItem.setOrder(order);			
+		orderItem.setOrderDetails(order);			
 		//For Distribution.
 		if(existingArrayDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && existingArrayDetailsBean.getDistributedItemId().equals(""))
 		{	

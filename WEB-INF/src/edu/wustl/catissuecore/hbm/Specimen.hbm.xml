@@ -260,7 +260,7 @@
         </component>
 
         <component
-            name="quantity"
+            name="initialQuantity"
             class="edu.wustl.catissuecore.domain.Quantity"
         >
 

@@ -367,7 +367,7 @@ public class StorageContainerAction extends SecureAction
 					{
 						storageContainerForm.setSpecimenOrArrayType("Specimen");
 					}
-					Collection holdsSpArrayTypeCollection = (Collection)bizLogic.retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsSpArrayTypeCollection)");
+					Collection holdsSpArrayTypeCollection = (Collection)bizLogic.retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsSpecimenArrayTypeCollection)");
 					if (holdsSpArrayTypeCollection.size() > 0)
 					{
 						storageContainerForm.setSpecimenOrArrayType("SpecimenArray");

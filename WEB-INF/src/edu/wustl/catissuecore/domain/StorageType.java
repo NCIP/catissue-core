@@ -35,7 +35,7 @@ public class StorageType extends ContainerType
 
 	protected Collection holdsSpecimenClassCollection = new HashSet();
 
-	protected Collection holdsSpArrayTypeCollection = new HashSet();
+	protected Collection holdsSpecimenArrayTypeCollection = new HashSet();
 
 	public StorageType()
 	{
@@ -106,24 +106,24 @@ public class StorageType extends ContainerType
 	}
 
 	/**
-	 * @return Returns the holdsSpArrayTypeCollection.
+	 * @return Returns the holdsSpecimenArrayTypeCollection.
 	 * Returns the collection of specimen array types associated with type 
-	 * @hibernate.set name="holdsSpArrayTypeCollection" table="CATISSUE_STORTY_HOLDS_SPARRTY"
+	 * @hibernate.set name="holdsSpecimenArrayTypeCollection" table="CATISSUE_STORTY_HOLDS_SPARRTY"
 	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_TYPE_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayType" column="SPECIMEN_ARRAY_TYPE_ID"
 	 */
-	public Collection getHoldsSpArrayTypeCollection()
+	public Collection getHoldsSpecimenArrayTypeCollection()
 	{
-		return holdsSpArrayTypeCollection;
+		return holdsSpecimenArrayTypeCollection;
 	}
 
 	/**
-	 * @param holdsSpArratTypeCollection The holdsSpArrayTypeCollection to set.
+	 * @param holdsSpArratTypeCollection The holdsSpecimenArrayTypeCollection to set.
 	 */
-	public void setHoldsSpArrayTypeCollection(Collection holdsSpArrayTypeCollection)
+	public void setHoldsSpecimenArrayTypeCollection(Collection holdsSpecimenArrayTypeCollection)
 	{
-		this.holdsSpArrayTypeCollection = holdsSpArrayTypeCollection;
+		this.holdsSpecimenArrayTypeCollection = holdsSpecimenArrayTypeCollection;
 	}
 
 	/* (non-Javadoc)
@@ -198,7 +198,7 @@ public class StorageType extends ContainerType
 				}
 			}
 //			holdsSpArrayTypeCollection.clear();
-			holdsSpArrayTypeCollection = new HashSet();
+			holdsSpecimenArrayTypeCollection = new HashSet();
 			if (storageTypeForm.getSpecimenOrArrayType().equals("SpecimenArray"))
 			{
 				long[] specimenArrayTypeArr = storageTypeForm.getHoldsSpecimenArrTypeIds();
@@ -211,7 +211,7 @@ public class StorageType extends ContainerType
 						{
 							SpecimenArrayType spArrayType = new SpecimenArrayType();
 							spArrayType.setId(new Long(specimenArrayTypeArr[i]));
-							holdsSpArrayTypeCollection.add(spArrayType);
+							holdsSpecimenArrayTypeCollection.add(spArrayType);
 						}
 					}
 				}

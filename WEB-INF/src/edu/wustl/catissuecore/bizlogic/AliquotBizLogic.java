@@ -219,7 +219,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			}
 
 			//Setting quantities & barcode values
-			aliquotSpecimen.setQuantity(new Quantity(quantity));
+			aliquotSpecimen.setInitialQuantity(new Quantity(quantity));
 			aliquotSpecimen.setAvailableQuantity(new Quantity(quantity));
 
 			//Explicity set barcode to null if it is empty as its a unique key in the database

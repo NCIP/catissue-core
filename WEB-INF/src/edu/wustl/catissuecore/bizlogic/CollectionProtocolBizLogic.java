@@ -140,7 +140,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			checkStatus(dao, collectionProtocol.getPrincipalInvestigator(),
 			"Principal Investigator");
 
-		Iterator it = collectionProtocol.getUserCollection().iterator();
+		Iterator it = collectionProtocol.getCoordinatorCollection().iterator();
 		while (it.hasNext())
 		{
 			User coordinator = (User) it.next();
@@ -250,7 +250,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(
 				Constants.USER_FORM_ID);
-		Iterator iterator = collectionProtocol.getUserCollection().iterator();
+		Iterator iterator = collectionProtocol.getCoordinatorCollection().iterator();
 		while (iterator.hasNext())
 		{
 			User user = (User) iterator.next();
@@ -335,7 +335,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		authorizationData.add(userGroupRoleProtectionGroupBean);
 
 		// Protection group of coordinators
-		Collection coordinators = collectionProtocol.getUserCollection();
+		Collection coordinators = collectionProtocol.getCoordinatorCollection();
 		group = new HashSet();
 		for (Iterator it = coordinators.iterator(); it.hasNext();)
 		{
@@ -417,10 +417,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	throws DAOException
 	{
 		Long piID = collectionProtocol.getPrincipalInvestigator().getId();
-		Logger.out.debug("Coordinator Size " + collectionProtocol.getUserCollection().size());
+		Logger.out.debug("Coordinator Size " + collectionProtocol.getCoordinatorCollection().size());
 		Collection coordinatorColl = new HashSet();
 
-		Iterator it = collectionProtocol.getUserCollection().iterator();
+		Iterator it = collectionProtocol.getCoordinatorCollection().iterator();
 		while (it.hasNext())
 		{
 			User aUser = (User) it.next();
@@ -439,7 +439,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				}
 			}
 		}
-		collectionProtocol.setUserCollection(coordinatorColl);
+		collectionProtocol.setCoordinatorCollection(coordinatorColl);
 	}
 
 	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds,
@@ -455,7 +455,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 	private boolean hasCoordinator(User coordinator, CollectionProtocol collectionProtocol)
 	{
-		Iterator it = collectionProtocol.getUserCollection().iterator();
+		Iterator it = collectionProtocol.getCoordinatorCollection().iterator();
 		while (it.hasNext())
 		{
 			User coordinatorOld = (User) it.next();
@@ -663,7 +663,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required","Principal Investigator"));	
 		}
 
-		Collection protocolCoordinatorCollection = protocol.getUserCollection();
+		Collection protocolCoordinatorCollection = protocol.getCoordinatorCollection();
 //		if(protocolCoordinatorCollection == null || protocolCoordinatorCollection.isEmpty())
 //		{
 //		//message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
