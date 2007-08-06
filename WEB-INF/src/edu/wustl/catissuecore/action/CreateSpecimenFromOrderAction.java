@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on Feb 05,2007
  */
+
 package edu.wustl.catissuecore.action;
 
 import java.util.Map;
@@ -21,6 +22,8 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
@@ -33,55 +36,63 @@ public class CreateSpecimenFromOrderAction extends BaseAction
 	 * @param response object
 	 * @return ActionForward object
 	 * @throws Exception object
-	 */	
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	 */
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
 		HttpSession session = request.getSession();
-		RequestDetailsForm requestDetailsForm = (RequestDetailsForm)session.getAttribute("REQUEST_DETAILS_FORM");		
+		RequestDetailsForm requestDetailsForm = (RequestDetailsForm) session.getAttribute("REQUEST_DETAILS_FORM");
 		String rowNumber = request.getParameter("rowNumber");
-		
-		String beanName = request.getParameter("bean");		
+
+		String beanName = request.getParameter("bean");
 		//Keys
-		
+
 		String requestedClassKey = "";
 		String requestedTypeKey = "";
 		String requestedQtyKey = "";
 		String specimenCollGrpIdKey = "";
 		//whether request is from request details page or defined array page 
-		if(beanName != null && !beanName.equals(""))
+		if (beanName != null && !beanName.equals(""))
 		{
-			requestedClassKey = "DefinedArrayDetailsBean:"+rowNumber+"_className";
-			requestedTypeKey = "DefinedArrayDetailsBean:"+rowNumber+"_type";
-			requestedQtyKey = "DefinedArrayDetailsBean:"+rowNumber+"_requestedQuantity";
-			specimenCollGrpIdKey = "DefinedArrayDetailsBean:"+rowNumber+"_specimenCollGroupId";
+			requestedClassKey = "DefinedArrayDetailsBean:" + rowNumber + "_className";
+			requestedTypeKey = "DefinedArrayDetailsBean:" + rowNumber + "_type";
+			requestedQtyKey = "DefinedArrayDetailsBean:" + rowNumber + "_requestedQuantity";
+			specimenCollGrpIdKey = "DefinedArrayDetailsBean:" + rowNumber + "_specimenCollGroupId";
 		}
 		else
 		{
-			requestedClassKey = "RequestDetailsBean:"+rowNumber+"_className";
-			requestedTypeKey = "RequestDetailsBean:"+rowNumber+"_type";
-			requestedQtyKey = "RequestDetailsBean:"+rowNumber+"_requestedQty";
-			specimenCollGrpIdKey = "RequestDetailsBean:"+rowNumber+"_specimenCollGroupId";
+			requestedClassKey = "RequestDetailsBean:" + rowNumber + "_className";
+			requestedTypeKey = "RequestDetailsBean:" + rowNumber + "_type";
+			requestedQtyKey = "RequestDetailsBean:" + rowNumber + "_requestedQty";
+			specimenCollGrpIdKey = "RequestDetailsBean:" + rowNumber + "_specimenCollGroupId";
 		}
-		
-		Map valuesMap = requestDetailsForm.getValues();	
+
+		Map valuesMap = requestDetailsForm.getValues();
 		//getting the values
-		String requestedClass = (String)valuesMap.get(requestedClassKey);
-		String requestedType = (String)valuesMap.get(requestedTypeKey);
-		String requestedQty = ((String)valuesMap.get(requestedQtyKey)).toString();
-		String specimenCollGrpId = ((String)valuesMap.get(specimenCollGrpIdKey)).toString();
-		
-//		New Specimen Form to populate.
-		NewSpecimenForm newSpecimenForm = (NewSpecimenForm)form;
+		String requestedClass = (String) valuesMap.get(requestedClassKey);
+		String requestedType = (String) valuesMap.get(requestedTypeKey);
+		String requestedQty = ((String) valuesMap.get(requestedQtyKey)).toString();
+		String specimenCollGrpId = ((String) valuesMap.get(specimenCollGrpIdKey)).toString();
+
+		//		New Specimen Form to populate.
+		NewSpecimenForm newSpecimenForm = (NewSpecimenForm) form;
 		//Setting the values in CreateSpecimenForm
 		newSpecimenForm.setSpecimenCollectionGroupId(specimenCollGrpId);
-		
+
 		newSpecimenForm.setClassName(requestedClass);
 		newSpecimenForm.setType(requestedType);
 		newSpecimenForm.setQuantity(requestedQty);
-		
-		newSpecimenForm.setOperation(Constants.EDIT);		
+
+		newSpecimenForm.setOperation(Constants.EDIT);
 		newSpecimenForm.setForwardTo("orderDetails");
-		
+
+		if (specimenCollGrpId != null)
+		{
+			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+			String scgName = bizLogic.retriveSCGNameFromSCGId(specimenCollGrpId);
+			newSpecimenForm.setSpecimenCollectionGroupName(scgName);
+		}
 		return mapping.findForward("pathological");
 	}
 }

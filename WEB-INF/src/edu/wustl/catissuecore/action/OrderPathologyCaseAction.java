@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -38,7 +40,7 @@ import edu.wustl.common.util.dbManager.DAOException;
  * @author deepti_phadnis
  * 
  */
-public class OrderPathologyCaseAction extends BaseAction 
+public class OrderPathologyCaseAction extends BaseAction
 {
 
 	/**
@@ -49,10 +51,9 @@ public class OrderPathologyCaseAction extends BaseAction
 	 * @return ActionForward object 
 	 * @throws Exception object
 	 */
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception 
-			{
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
+	{
 		OrderPathologyCaseForm pathology = (OrderPathologyCaseForm) form;
 		HttpSession session = request.getSession();
 		pathology.setTypeOfCase("derivative");
@@ -61,7 +62,7 @@ public class OrderPathologyCaseAction extends BaseAction
 		{
 			OrderForm orderForm = (OrderForm) session.getAttribute("OrderForm");
 			pathology.setOrderForm(orderForm);
-			if (orderForm.getDistributionProtocol() != null) 
+			if (orderForm.getDistributionProtocol() != null)
 			{
 				getProtocolName(request, pathology, orderForm);
 			}
@@ -75,30 +76,25 @@ public class OrderPathologyCaseAction extends BaseAction
 			List orderToListArrayCollection = new ArrayList();
 			orderToListArrayCollection.add(new NameValueBean("None", "None"));
 
-			if (session.getAttribute("DefineArrayFormObjects") != null) 
+			if (session.getAttribute("DefineArrayFormObjects") != null)
 			{
-				List arrayList = (ArrayList) session
-						.getAttribute("DefineArrayFormObjects");
+				List arrayList = (ArrayList) session.getAttribute("DefineArrayFormObjects");
 				Iterator arrayListItr = arrayList.iterator();
-				while (arrayListItr.hasNext()) 
+				while (arrayListItr.hasNext())
 				{
-					DefineArrayForm defineArrayFormObj = (DefineArrayForm) arrayListItr
-							.next();
-					orderToListArrayCollection.add(new NameValueBean(
-							defineArrayFormObj.getArrayName(),
-							defineArrayFormObj.getArrayName()));
+					DefineArrayForm defineArrayFormObj = (DefineArrayForm) arrayListItr.next();
+					orderToListArrayCollection.add(new NameValueBean(defineArrayFormObj.getArrayName(), defineArrayFormObj.getArrayName()));
 				}
 			}
 			// Add the collection in request scope to be used in the
 			// OrderItem.jsp
-			request.setAttribute(Constants.ORDERTO_LIST_ARRAY,
-					orderToListArrayCollection);
+			request.setAttribute(Constants.ORDERTO_LIST_ARRAY, orderToListArrayCollection);
 
 			request.setAttribute("typeOf", "pathologyCase");
 			request.setAttribute("OrderPathologyCaseForm", pathology);
 			return mapping.findForward("success");
-		} 
-		else 
+		}
+		else
 		{
 			return mapping.findForward("failure");
 		}
@@ -111,21 +107,16 @@ public class OrderPathologyCaseAction extends BaseAction
 	private void setClassAndTypeInList(HttpServletRequest request)
 	{
 		// Setting specimen class list
-		List specimenClassList = CDEManager.getCDEManager()
-				.getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,
-						null);
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
 
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 		// Setting the specimen type list
-		List specimenTypeList = CDEManager
-				.getCDEManager()
-				.getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE, null);
+		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
 		// Get the Specimen class and type from the cde
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
-				Constants.CDE_NAME_SPECIMEN_CLASS);
+		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
 		Set setPV = specimenClassCDE.getPermissibleValues();
 		Iterator itr = setPV.iterator();
 
@@ -169,23 +160,18 @@ public class OrderPathologyCaseAction extends BaseAction
 	 * @param request HttpServletRequest object
 	 * @param pathology OrderPathologyCaseForm object
 	 */
-	private void setSiteAndStatus(HttpServletRequest request,
-			OrderPathologyCaseForm pathology) 
+	private void setSiteAndStatus(HttpServletRequest request, OrderPathologyCaseForm pathology)
 	{
 
 		NameValueBean bean = null;
 		// Setting tissue site list
-		List tissueSiteList = CDEManager.getCDEManager()
-				.getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
+		List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
 		request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 
 		// Setting pathological status list
-		List pathologicalStatusList = CDEManager.getCDEManager()
-				.getPermissibleValueList(
-						Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+		List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 
-		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST,
-				pathologicalStatusList);
+		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
 	}
 
 	/**
@@ -194,19 +180,15 @@ public class OrderPathologyCaseAction extends BaseAction
 	 * @param orderForm OrderForm object
 	 * @throws Exception object
 	 */
-	private void getProtocolName(HttpServletRequest request,
-			OrderPathologyCaseForm pathology, OrderForm orderForm)
-			throws Exception 
-			{
+	private void getProtocolName(HttpServletRequest request, OrderPathologyCaseForm pathology, OrderForm orderForm) throws Exception
+	{
 		// to get the distribution protocol name
-		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 
 		String sourceObjectName = DistributionProtocol.class.getName();
-		String[] displayName = { "title" };
+		String[] displayName = {"title"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
-		List protocolList = dao.getList(sourceObjectName, displayName,
-				valueField, true);
+		List protocolList = dao.getList(sourceObjectName, displayName, valueField, true);
 
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
 
@@ -214,7 +196,7 @@ public class OrderPathologyCaseAction extends BaseAction
 		{
 			NameValueBean obj = (NameValueBean) protocolList.get(i);
 
-			if (orderForm.getDistributionProtocol().equals(obj.getValue())) 
+			if (orderForm.getDistributionProtocol().equals(obj.getValue()))
 			{
 				pathology.setDistrbutionProtocol(obj.getName());
 			}
@@ -229,26 +211,45 @@ public class OrderPathologyCaseAction extends BaseAction
 	{
 		// to get data from database when specimen id is given
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_PATHOLOGY_FORM_ID);
-		
-//		List pathologicalCaseList = new ArrayList();
-//		//retriving the id list from session.
-//		if(request.getSession().getAttribute("pathologicalIdList") != null)
-//		{
-//			List idList = (List)request.getSession().getAttribute("pathologicalIdList");
-//	    	
-//			for(int i=0;i<idList.size();i++)
-//			{
-//				List pathologicalListFromDb = bizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), "id", (String)idList.get(i));
-//				IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport)pathologicalListFromDb.get(0);
-//				pathologicalCaseList.add(identifiedSurgicalPathologyReport);
-//			}
-//		}
-//		return pathologicalCaseList;
-				
-			String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 
-			List pathologyCaseList = bizLogic.retrieve(sourceObjectName);
-			return pathologyCaseList;
+		//		List pathologicalCaseList = new ArrayList();
+		//		//retriving the id list from session.
+		//		if(request.getSession().getAttribute("pathologicalIdList") != null)
+		//		{
+		//			List idList = (List)request.getSession().getAttribute("pathologicalIdList");
+		//	    	
+		//			for(int i=0;i<idList.size();i++)
+		//			{
+		//				List pathologicalListFromDb = bizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), "id", (String)idList.get(i));
+		//				IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport)pathologicalListFromDb.get(0);
+		//				pathologicalCaseList.add(identifiedSurgicalPathologyReport);
+		//			}
+		//		}
+		//		return pathologicalCaseList;
+
+		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
+
+		List pathologyCaseList = bizLogic.retrieve(sourceObjectName);
+		if (pathologyCaseList != null && !pathologyCaseList.isEmpty())
+		{
+			Iterator itr = pathologyCaseList.iterator();
+			while (itr.hasNext())
+			{
+				IdentifiedSurgicalPathologyReport identifiedSurPathReport = (IdentifiedSurgicalPathologyReport) itr.next();
+				String[] selectColName = {"specimenCollectionGroup"};
+				String[] whereColName = {Constants.SYSTEM_IDENTIFIER};
+				String[] whereColCond = {"="};
+				Object[] whereColVal = {identifiedSurPathReport.getId()};
+				List specimenCollList = bizLogic.retrieve(sourceObjectName,selectColName,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION);
+				if(specimenCollList != null && !specimenCollList.isEmpty())
+				{
+					SpecimenCollectionGroup specimenColGroup = (SpecimenCollectionGroup) specimenCollList.get(0);
+					identifiedSurPathReport.setSpecimenCollectionGroup(specimenColGroup);
+				}
+			}
+
+		}
+		return pathologyCaseList;
 
 	}
 }

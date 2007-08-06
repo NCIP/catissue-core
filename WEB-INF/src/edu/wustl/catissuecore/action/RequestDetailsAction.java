@@ -310,6 +310,24 @@ public class RequestDetailsAction extends BaseAction
 						List scgList = getSpecimenCollGrpFromDB(specimenCollGrpId);
 						// Fetching the SCG from db
 						SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) scgList.get(0);
+						
+						/* code for getting specimen list and there child specimens for particular Specimen Collection Group */
+						OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+						Collection specimenList = (Collection)orderBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroup.getId(),"elements(specimenCollection)");
+						if(specimenList != null)
+						{
+							specimenCollectionGroup.setSpecimenCollection(specimenList);
+							if(specimenList != null)
+							{
+								Iterator itr = specimenList.iterator();
+								while(itr.hasNext())
+								{
+									Specimen specimen = (Specimen)itr.next();
+									getChildrenSpecimen(specimen);
+								}
+							}
+						}
+						/* chnages finsh */
 						PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) orderItem;
 						List totalChildrenSpecimenColl = OrderingSystemUtil.getRequestForListForPathologicalCases(specimenCollectionGroup,
 								pathologicalCaseOrderItem);
@@ -740,6 +758,7 @@ public class RequestDetailsAction extends BaseAction
 		SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance()
 				.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		List specimenCollGrpListFromDB = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "id", id);
+		
 		return specimenCollGrpListFromDB;
 	}
 
@@ -1100,6 +1119,33 @@ public class RequestDetailsAction extends BaseAction
 				}
 				System.out.println("SpecimenArrayList:"+specimenArrayList);
 				
+			}
+			else if(orderItem instanceof PathologicalCaseOrderItem)
+			{
+				PathologicalCaseOrderItem pathCaseOrderItem =  (PathologicalCaseOrderItem) orderItem;
+				String[] selectColumnName1 = {"specimenCollectionGroup"};
+				Object[] whereColumnValue1 = {orderItem.getId()};
+				List specimenColGroupList = orderBizLogic.retrieve(PathologicalCaseOrderItem.class.getName(), selectColumnName1, whereColumnName, whereColumnCond,
+						whereColumnValue1, Constants.AND_JOIN_CONDITION);
+				if(specimenColGroupList != null && specimenColGroupList.size()>0)
+				{
+					SpecimenCollectionGroup specimenColGroup = (SpecimenCollectionGroup)specimenColGroupList.get(0);
+					pathCaseOrderItem.setSpecimenCollectionGroup(specimenColGroup);
+					Collection specimenList = (Collection)orderBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenColGroup.getId(),"elements(specimenCollection)");
+					if(specimenList != null)
+					{
+						specimenColGroup.setSpecimenCollection(specimenList);
+						if(specimenList != null)
+						{
+							Iterator itr = specimenList.iterator();
+							while(itr.hasNext())
+							{
+								Specimen specimen = (Specimen)itr.next();
+								getChildrenSpecimen(specimen);
+							}
+						}
+					}
+				}
 			}
 		}
 
