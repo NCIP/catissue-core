@@ -737,7 +737,14 @@
 							<td>
 								<html:hidden property="operation" value="<%=operation%>"/>
 								<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+								<%						
+								if(form.getForwardTo().equalsIgnoreCase("orderDetails"))
+								{%>
+								 	<html:hidden property="forwardTo" value="orderDetails"/>								
+						 	  <%}else
+						    	{ %>
 								<html:hidden property="forwardTo" value=""/>
+							  <%} %>
 								<html:hidden property="virtuallyLocated"/>
 								<html:hidden property="containerId" styleId="containerId"/>
 								<html:hidden property="withdrawlButtonStatus"/>
