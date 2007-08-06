@@ -41,6 +41,7 @@ import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
+import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -136,12 +137,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
-		
+
 		//Adding default events if they are null from API
 		Collection spEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
-		if(spEventColl == null || spEventColl.isEmpty())
+		if (spEventColl == null || spEventColl.isEmpty())
 		{
-			setDefaultEvents(specimenCollectionGroup,sessionDataBean);
+			setDefaultEvents(specimenCollectionGroup, sessionDataBean);
 		}
 		// Check for different closed site
 		if (!specimenCollectionGroup.getSpecimenCollectionSite().getId().equals(oldspecimenCollectionGroup.getSpecimenCollectionSite().getId()))
@@ -167,15 +168,15 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, oldspecimenCollectionGroup);
 
 		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) start		
-		if(!specimenCollectionGroup.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION   ) )
+		if (!specimenCollectionGroup.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
 		{
-			verifyAndUpdateConsentWithdrawn(specimenCollectionGroup, oldspecimenCollectionGroup, dao,  sessionDataBean);
+			verifyAndUpdateConsentWithdrawn(specimenCollectionGroup, oldspecimenCollectionGroup, dao, sessionDataBean);
 		}
 		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) end
 		//Mandar 24-Jan-07 To update consents accordingly in SCG and Specimen(s) start
-		else if(!specimenCollectionGroup.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE ) )
+		else if (!specimenCollectionGroup.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
 		{
-			WithdrawConsentUtil.updateSpecimenStatusInSCG(specimenCollectionGroup, oldspecimenCollectionGroup,dao);
+			WithdrawConsentUtil.updateSpecimenStatusInSCG(specimenCollectionGroup, oldspecimenCollectionGroup, dao);
 		}
 		//Mandar 24-Jan-07 To update consents accordingly in SCG and Specimen(s) end
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
@@ -186,10 +187,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		 * Patch ID: 2741_6	 
 		 * Description: Method to update events in all specimens related to this scg
 		 */
-//		Populating Events in all specimens
-		if(specimenCollectionGroup.isApplyEventsToSpecimens())
+		//		Populating Events in all specimens
+		if (specimenCollectionGroup.isApplyEventsToSpecimens())
 		{
-			updateEvents(specimenCollectionGroup,oldspecimenCollectionGroup,dao,sessionDataBean);
+			updateEvents(specimenCollectionGroup, oldspecimenCollectionGroup, dao, sessionDataBean);
 		}
 		//Audit.
 		dao.audit(obj, oldObj, sessionDataBean, true);
@@ -206,13 +207,14 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao, specimenCollectionGroupIDArr);
 		}
 
-	}	
+	}
+
 	/**
 	 * @param specimenCollectionGroup
 	 * @param sessionDataBean
 	 * Sets the default events if they are not specified
 	 */
-	private void setDefaultEvents(SpecimenCollectionGroup specimenCollectionGroup,SessionDataBean sessionDataBean)
+	private void setDefaultEvents(SpecimenCollectionGroup specimenCollectionGroup, SessionDataBean sessionDataBean)
 	{
 		Collection specimenEventColl = new HashSet();
 		User user = new User();
@@ -220,13 +222,14 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		CollectionEventParameters collectionEventParameters = EventsUtil.populateCollectionEventParameters(user);
 		collectionEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
 		specimenEventColl.add(collectionEventParameters);
-		
-		ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);	
+
+		ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);
 		receivedEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
 		specimenEventColl.add(receivedEventParameters);
-		
+
 		specimenCollectionGroup.setSpecimenEventParametersCollection(specimenEventColl);
 	}
+
 	/**
 	 * @param specimenCollectionGroup
 	 * @param oldspecimenCollectionGroup
@@ -235,75 +238,80 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException
 	 * @throws DAOException
 	 */
-	private void updateEvents(SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldspecimenCollectionGroup,DAO dao,SessionDataBean sessionDataBean) throws UserNotAuthorizedException,DAOException
-	{			
+	private void updateEvents(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldspecimenCollectionGroup, DAO dao,
+			SessionDataBean sessionDataBean) throws UserNotAuthorizedException, DAOException
+	{
 		CollectionEventParameters scgCollectionEventParameters = null;
 		ReceivedEventParameters scgReceivedEventParameters = null;
 		Collection newEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
-		if(newEventColl != null && !newEventColl.isEmpty())
+		if (newEventColl != null && !newEventColl.isEmpty())
 		{
 			Iterator newEventCollIter = newEventColl.iterator();
-			while(newEventCollIter.hasNext())
+			while (newEventCollIter.hasNext())
 			{
 				Object newEventCollObj = newEventCollIter.next();
-				if(newEventCollObj instanceof CollectionEventParameters)
+				if (newEventCollObj instanceof CollectionEventParameters)
 				{
-					scgCollectionEventParameters = (CollectionEventParameters)newEventCollObj;
+					scgCollectionEventParameters = (CollectionEventParameters) newEventCollObj;
 					continue;
 				}
-				else if(newEventCollObj instanceof ReceivedEventParameters)
+				else if (newEventCollObj instanceof ReceivedEventParameters)
 				{
-					scgReceivedEventParameters = (ReceivedEventParameters)newEventCollObj;						
+					scgReceivedEventParameters = (ReceivedEventParameters) newEventCollObj;
 				}
 			}
-		}			
+		}
 		//populateEventsInSpecimens(oldspecimenCollectionGroup,)
 		Collection specimenColl = oldspecimenCollectionGroup.getSpecimenCollection();
-		if(specimenColl != null && !specimenColl.isEmpty())
+		if (specimenColl != null && !specimenColl.isEmpty())
 		{
-			SpecimenEventParametersBizLogic specimenEventParametersBizLogic = (SpecimenEventParametersBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID);
+			SpecimenEventParametersBizLogic specimenEventParametersBizLogic = (SpecimenEventParametersBizLogic) BizLogicFactory.getInstance()
+					.getBizLogic(Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID);
 			Iterator iter = specimenColl.iterator();
-			while(iter.hasNext())
+			while (iter.hasNext())
 			{
-				Specimen specimen = (Specimen)iter.next();
+				Specimen specimen = (Specimen) iter.next();
 				Collection eventColl = specimen.getSpecimenEventCollection();
-				if(eventColl != null && !eventColl.isEmpty())
+				if (eventColl != null && !eventColl.isEmpty())
 				{
 					Iterator eventIter = eventColl.iterator();
-					while(eventIter.hasNext())
+					while (eventIter.hasNext())
 					{
 						Object eventObj = eventIter.next();
-						if(eventObj instanceof CollectionEventParameters)
-						{			
-							CollectionEventParameters collectionEventParameters = (CollectionEventParameters)eventObj;
-							CollectionEventParameters newcollectionEventParameters =populateCollectionEventParameters(eventObj,scgCollectionEventParameters,collectionEventParameters);
+						if (eventObj instanceof CollectionEventParameters)
+						{
+							CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObj;
+							CollectionEventParameters newcollectionEventParameters = populateCollectionEventParameters(eventObj,
+									scgCollectionEventParameters, collectionEventParameters);
 							specimenEventParametersBizLogic.update(dao, newcollectionEventParameters, collectionEventParameters, sessionDataBean);
 							continue;
 						}
-						else if(eventObj instanceof ReceivedEventParameters)
+						else if (eventObj instanceof ReceivedEventParameters)
 						{
-							ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)eventObj;
-							ReceivedEventParameters newReceivedEventParameters = populateReceivedEventParameters(receivedEventParameters,scgReceivedEventParameters);						
+							ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObj;
+							ReceivedEventParameters newReceivedEventParameters = populateReceivedEventParameters(receivedEventParameters,
+									scgReceivedEventParameters);
 							specimenEventParametersBizLogic.update(dao, newReceivedEventParameters, receivedEventParameters, sessionDataBean);
 						}
 					}
 				}
 			}
-		}		
+		}
 	}
 
 	/**
 	 * @param eventObj
 	 * @param scgCollectionEventParameters
 	 */
-	private CollectionEventParameters populateCollectionEventParameters(Object eventObj,CollectionEventParameters scgCollectionEventParameters,CollectionEventParameters collectionEventParameters)
-	{		
+	private CollectionEventParameters populateCollectionEventParameters(Object eventObj, CollectionEventParameters scgCollectionEventParameters,
+			CollectionEventParameters collectionEventParameters)
+	{
 		//CollectionEventParameters newcollectionEventParameters = collectionEventParameters;
-		CollectionEventParameters newcollectionEventParameters = new CollectionEventParameters(); 
+		CollectionEventParameters newcollectionEventParameters = new CollectionEventParameters();
 		newcollectionEventParameters.setCollectionProcedure(scgCollectionEventParameters.getCollectionProcedure());
 		newcollectionEventParameters.setContainer(scgCollectionEventParameters.getContainer());
 		newcollectionEventParameters.setTimestamp(scgCollectionEventParameters.getTimestamp());
-		newcollectionEventParameters.setUser(scgCollectionEventParameters.getUser());		
+		newcollectionEventParameters.setUser(scgCollectionEventParameters.getUser());
 
 		newcollectionEventParameters.setComments(scgCollectionEventParameters.getComments());
 		newcollectionEventParameters.setSpecimen(collectionEventParameters.getSpecimen());
@@ -312,29 +320,31 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		return newcollectionEventParameters;
 	}
+
 	/**
 	 * @param receivedEventParameters
 	 * @param scgReceivedEventParameters
 	 * @return
 	 */
-	private ReceivedEventParameters populateReceivedEventParameters(ReceivedEventParameters receivedEventParameters,ReceivedEventParameters scgReceivedEventParameters)
+	private ReceivedEventParameters populateReceivedEventParameters(ReceivedEventParameters receivedEventParameters,
+			ReceivedEventParameters scgReceivedEventParameters)
 	{
 		//ReceivedEventParameters newReceivedEventParameters = receivedEventParameters;
 		ReceivedEventParameters newReceivedEventParameters = new ReceivedEventParameters();
 		newReceivedEventParameters.setReceivedQuality(scgReceivedEventParameters.getReceivedQuality());
 		newReceivedEventParameters.setTimestamp(scgReceivedEventParameters.getTimestamp());
-		newReceivedEventParameters.setUser(scgReceivedEventParameters.getUser());	
+		newReceivedEventParameters.setUser(scgReceivedEventParameters.getUser());
 
-		newReceivedEventParameters.setId(receivedEventParameters.getId());								
+		newReceivedEventParameters.setId(receivedEventParameters.getId());
 		newReceivedEventParameters.setComments(scgReceivedEventParameters.getComments());
 		newReceivedEventParameters.setSpecimen(receivedEventParameters.getSpecimen());
 		newReceivedEventParameters.setSpecimenCollectionGroup(receivedEventParameters.getSpecimenCollectionGroup());
-		return newReceivedEventParameters;		
+		return newReceivedEventParameters;
 	}
 
 	private void setCollectionProtocolRegistration(DAO dao, SpecimenCollectionGroup specimenCollectionGroup,
 			SpecimenCollectionGroup oldSpecimenCollectionGroup) throws DAOException
-			{
+	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
 		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
 		String[] whereColumnName = new String[2];
@@ -400,7 +410,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 			specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 		}
-			}
+	}
 
 	public void disableRelatedObjects(DAO dao, Long collProtRegIDArr[]) throws DAOException
 	{
@@ -425,7 +435,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 */
 	public void assignPrivilegeToRelatedObjects(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser,
 			boolean assignOperation) throws SMException, DAOException
-			{
+	{
 		List listOfSubElement = super.getRelatedObjects(dao, SpecimenCollectionGroup.class, "collectionProtocolRegistration", objectIds);
 		if (!listOfSubElement.isEmpty())
 		{
@@ -436,26 +446,26 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					assignOperation);
 		}
 
-			}
+	}
 
 	/**
 	 * @see edu.wustl.common.bizlogic.IBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
 	 */
 	protected void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser,
 			boolean assignOperation) throws SMException, DAOException
-			{
+	{
 		super.setPrivilege(dao, privilegeName, objectType, objectIds, userId, roleId, assignToUser, assignOperation);
 
 		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		bizLogic.assignPrivilegeToRelatedObjectsForSCG(dao, privilegeName, objectIds, userId, roleId, assignToUser, assignOperation);
-			}
+	}
 
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
-		SpecimenCollectionGroup group = (SpecimenCollectionGroup) obj; 
+		SpecimenCollectionGroup group = (SpecimenCollectionGroup) obj;
 
 		//Added by Ashish	
 
@@ -486,7 +496,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.collectionprotocolregistration.atleast"));
 		}
 
-		if (group.getSpecimenCollectionSite() == null || group.getSpecimenCollectionSite().getId() == null || group.getSpecimenCollectionSite().getId() == 0)
+		if (group.getSpecimenCollectionSite() == null || group.getSpecimenCollectionSite().getId() == null
+				|| group.getSpecimenCollectionSite().getId() == 0)
 		{
 			message = ApplicationProperties.getValue("specimenCollectionGroup.site");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.invalid", message));
@@ -571,17 +582,17 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			}
 		}
 		/* Bug ID: 4165
-	 	 * Patch ID: 4165_11	 
-	 	 * Description: Validation added to check incorrect events added through API
+		 * Patch ID: 4165_11	 
+		 * Description: Validation added to check incorrect events added through API
 		 */
-//		Events Validation
+		//		Events Validation
 		if (group.getSpecimenEventParametersCollection() != null && !group.getSpecimenEventParametersCollection().isEmpty())
 		{
 			Iterator specimenEventCollectionIterator = group.getSpecimenEventParametersCollection().iterator();
 			while (specimenEventCollectionIterator.hasNext())
-			{				
+			{
 				Object eventObject = specimenEventCollectionIterator.next();
-				EventsUtil.validateEventsObject(eventObject,validator);
+				EventsUtil.validateEventsObject(eventObject, validator);
 			}
 		}
 		else
@@ -630,91 +641,93 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		return 1;
 	}
+
 	/**
 	 * This function gets the specimen coll group and specimens under that SCG.
 	 * @param cpId 
 	 * @param participantId
 	 * @return
 	 * @throws Exception
-	 *//*
-	public Vector getSCGandSpecimens(Long cpId, Long participantId) throws Exception
-	{
-		String hql = null;
-		if (participantId.longValue() == -1)
-		{
-			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id ,scg.activityStatus,sp.activityStatus from " + Specimen.class.getName()
-					+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
-					+ cpId.toString() + " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
+	 */
+	/*
+	 public Vector getSCGandSpecimens(Long cpId, Long participantId) throws Exception
+	 {
+	 String hql = null;
+	 if (participantId.longValue() == -1)
+	 {
+	 hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id ,scg.activityStatus,sp.activityStatus from " + Specimen.class.getName()
+	 + " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
+	 + cpId.toString() + " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
 
-		}
-		else
-		{
-			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id,scg.activityStatus,sp.activityStatus from " + Specimen.class.getName()
-					+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
-					+ cpId.toString() + " and scg.collectionProtocolRegistration.participant.id= " + participantId.toString()
-					+ " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
+	 }
+	 else
+	 {
+	 hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id,scg.activityStatus,sp.activityStatus from " + Specimen.class.getName()
+	 + " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
+	 + cpId.toString() + " and scg.collectionProtocolRegistration.participant.id= " + participantId.toString()
+	 + " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
 
-		}
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
+	 }
+	 HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+	 dao.openSession(null);
 
-		List list = dao.executeQuery(hql, null, false, null);
-		Logger.out.info("list size -----------:" + list.size());
-		dao.closeSession();
-		//Map map1 = new TreeMap();
-		Vector treeData = new Vector();
-		if (list != null)
-		{
-			for (int i = 0; i < list.size(); i++)
-			{
-				//Getitng participants for a particular CP.
-				Object[] obj = (Object[]) list.get(i);
-				Long scgId = (Long) obj[0];
-				String scgName = (String) obj[1];
-				String scgActivityStatus = (String) obj[5];
+	 List list = dao.executeQuery(hql, null, false, null);
+	 Logger.out.info("list size -----------:" + list.size());
+	 dao.closeSession();
+	 //Map map1 = new TreeMap();
+	 Vector treeData = new Vector();
+	 if (list != null)
+	 {
+	 for (int i = 0; i < list.size(); i++)
+	 {
+	 //Getitng participants for a particular CP.
+	 Object[] obj = (Object[]) list.get(i);
+	 Long scgId = (Long) obj[0];
+	 String scgName = (String) obj[1];
+	 String scgActivityStatus = (String) obj[5];
 
-				setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, scgName, "0", null, null, null, scgActivityStatus, treeData);
+	 setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, scgName, "0", null, null, null, scgActivityStatus, treeData);
 
-				for (int j = i; j < list.size(); j++, i++)
-				{
-					Object[] obj1 = (Object[]) list.get(j);
-					Long scgId1 = (Long) obj1[0];
+	 for (int j = i; j < list.size(); j++, i++)
+	 {
+	 Object[] obj1 = (Object[]) list.get(j);
+	 Long scgId1 = (Long) obj1[0];
 
-					if (scgId.longValue() == scgId1.longValue())
-					{
-						Long spId1 = (Long) obj1[2];
-						String spLabel1 = (String) obj1[3];
-						Long parentSpecimenId = (Long) obj1[4];
-						String spActivityStatus = (String) obj1[6];
+	 if (scgId.longValue() == scgId1.longValue())
+	 {
+	 Long spId1 = (Long) obj1[2];
+	 String spLabel1 = (String) obj1[3];
+	 Long parentSpecimenId = (Long) obj1[4];
+	 String spActivityStatus = (String) obj1[6];
 
-						if (spId1 != null)
-						{
-							if (parentSpecimenId != null)
-							{
-								setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, parentSpecimenId.toString(), Constants.SPECIMEN,
-										null, null, spActivityStatus, treeData);
+	 if (spId1 != null)
+	 {
+	 if (parentSpecimenId != null)
+	 {
+	 setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, parentSpecimenId.toString(), Constants.SPECIMEN,
+	 null, null, spActivityStatus, treeData);
 
-							}
-							else
-							{
-								setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, scgId1.toString(),
-										Constants.SPECIMEN_COLLECTION_GROUP, null, null, spActivityStatus, treeData);
+	 }
+	 else
+	 {
+	 setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, scgId1.toString(),
+	 Constants.SPECIMEN_COLLECTION_GROUP, null, null, spActivityStatus, treeData);
 
-							}
-						}
-					}
-					else
-					{
-						i--;
-						break;
-					}
-				}
+	 }
+	 }
+	 }
+	 else
+	 {
+	 i--;
+	 break;
+	 }
+	 }
 
-			}
-		}
+	 }
+	 }
 
-		return treeData;
-	}*/
+	 return treeData;
+	 }*/
 	/**
 	 * Patch Id : FutureSCG_8
 	 * Description : method to get SCGTree ForCPBasedView
@@ -732,20 +745,21 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws DAOException daoException
 	 * @throws ClassNotFoundException classNotFoundException
 	 */
-	public Vector getSCGTreeForCPBasedView(Long cpId, Long participantId) throws DAOException, ClassNotFoundException {
+	public Vector getSCGTreeForCPBasedView(Long cpId, Long participantId) throws DAOException, ClassNotFoundException
+	{
 		Logger.out.debug("Start of getSCGTreeForCPBasedView");
 		Vector treeData = new Vector();
 		String hql = "select  cpe.id, cpe.studyCalendarEventPoint,cpe.collectionPointLabel from " + CollectionProtocolEvent.class.getName()
-		+ " as cpe where cpe.collectionProtocol.id= "+ cpId.toString() +" order by cpe.studyCalendarEventPoint";
+				+ " as cpe where cpe.collectionProtocol.id= " + cpId.toString() + " order by cpe.studyCalendarEventPoint";
 		List cpeList = executeQuery(hql);
 		Logger.out.debug("After executeQuery");
-		for(int count = 0; count < cpeList.size() ; count++)
+		for (int count = 0; count < cpeList.size(); count++)
 		{
 			Object[] obj = (Object[]) cpeList.get(count);
-			Long eventId = (Long)obj[0];
+			Long eventId = (Long) obj[0];
 			Double eventPoint = (Double) obj[1];
-			String collectionPointLabel = (String)obj[2];
-			List scgList = getSCGsForCPRAndEventId(eventId, cpId,participantId);
+			String collectionPointLabel = (String) obj[2];
+			List scgList = getSCGsForCPRAndEventId(eventId, cpId, participantId);
 			if (scgList != null && !scgList.isEmpty())
 			{
 				createTreeNodeForExistingSCG(treeData, eventPoint, collectionPointLabel, scgList);
@@ -757,33 +771,36 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 		return treeData;
 	}
+
 	/**
 	 * Name : Deepti Shelar
 	 * Bug id : 4268
 	 * Patch id : 4268_1
-	 *//*
-	*//**
+	 */
+	/*
+	 *//**
 	 * Gets all scgs under given cp for all participants.
 	 * @param eventId studycalendareventpoint
 	 * @param cpId collection protocol id
 	 * @return List of scgs
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
-	 *//*
-	private List getSCGsForTechnicians(Long eventId, Long cpId) throws DAOException, ClassNotFoundException 
-	{
-		String hql = "select scg.id,scg.name,scg.activityStatus from "
-			+ SpecimenCollectionGroup.class.getName()
-			+ " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from "
-			+ CollectionProtocolRegistration.class.getName() +" as cpr where cpr.collectionProtocol.id = "
-			+ cpId + ") and scg.collectionProtocolEvent.id = "+eventId ;
-		
-		String hql = "select scg.id,scg.name,scg.activityStatus from "
-			+ SpecimenCollectionGroup.class.getName()
-			+ " as scg where scg.collectionProtocolEvent.id = "+eventId ;
-		List list = executeQuery(hql);
-		return list;
-	}*/
+	 */
+	/*
+	 private List getSCGsForTechnicians(Long eventId, Long cpId) throws DAOException, ClassNotFoundException 
+	 {
+	 String hql = "select scg.id,scg.name,scg.activityStatus from "
+	 + SpecimenCollectionGroup.class.getName()
+	 + " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from "
+	 + CollectionProtocolRegistration.class.getName() +" as cpr where cpr.collectionProtocol.id = "
+	 + cpId + ") and scg.collectionProtocolEvent.id = "+eventId ;
+	 
+	 String hql = "select scg.id,scg.name,scg.activityStatus from "
+	 + SpecimenCollectionGroup.class.getName()
+	 + " as scg where scg.collectionProtocolEvent.id = "+eventId ;
+	 List list = executeQuery(hql);
+	 return list;
+	 }*/
 
 	/**
 	 * Patch Id : FutureSCG_9
@@ -796,15 +813,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param eventPoint event point in no of days
 	 * @param collectionPointLabel String label of collection event point
 	 */
-	private void createTreeNodeForFutureSCG(Vector treeData, Long eventId, Double eventPoint, String collectionPointLabel) 
+	private void createTreeNodeForFutureSCG(Vector treeData, Long eventId, Double eventPoint, String collectionPointLabel)
 	{
 		Long futureSCGId = new Long(0);
-		String futureSCGName = "T"+eventPoint + ": " +collectionPointLabel;
+		String futureSCGName = "T" + eventPoint + ": " + collectionPointLabel;
 		String scgActivityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 		String toolTipText = futureSCGName;//getToolTipText(eventPoint.toString(),collectionPointLabel,null);
-		String nodeId = futureSCGId.toString()+":"+eventId.toString()+":"+Constants.FUTURE_SCG;
-		setQueryTreeNode(nodeId, Constants.SPECIMEN_COLLECTION_GROUP, futureSCGName, "0", null, null, null, scgActivityStatus, toolTipText,treeData);
+		String nodeId = futureSCGId.toString() + ":" + eventId.toString() + ":" + Constants.FUTURE_SCG;
+		setQueryTreeNode(nodeId, Constants.SPECIMEN_COLLECTION_GROUP, futureSCGName, "0", null, null, null, scgActivityStatus, toolTipText, treeData);
 	}
+
 	/**
 	 * Patch Id : FutureSCG_10
 	 * Description : method to create TreeNode For ExistingSCG
@@ -818,58 +836,59 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	private void createTreeNodeForExistingSCG(Vector treeData, Double eventPoint, String collectionPointLabel, List scgList) throws DAOException, ClassNotFoundException 
+	private void createTreeNodeForExistingSCG(Vector treeData, Double eventPoint, String collectionPointLabel, List scgList) throws DAOException,
+			ClassNotFoundException
 	{
 		for (int i = 0; i < scgList.size(); i++)
 		{
 			Object[] obj1 = (Object[]) scgList.get(i);
 			Long scgId = (Long) obj1[0];
-			 
+
 			String scgNodeLabel = "";
 			String scgActivityStatus = (String) obj1[2];
-			
+
 			/**
 			 * Name: Vijay Pande
 			 * Reviewer Name: Aarti Sharma
 			 * recievedEvent related to scg is trieved from db and, proper receivedDate and scgNodeLabel are set to set toolTip of the node
 			 */
 			String receivedDate = "";
-			if(scgId != null  && scgId>0)
+			if (scgId != null && scgId > 0)
 			{
-				String sourceObjName=ReceivedEventParameters.class.getName();
-				String columnName=Constants.COLUMN_NAME_SCG_ID;
-				Long ColumnValue=scgId;
-				Collection eventsColl=retrieve(sourceObjName, columnName, ColumnValue);
-//				Collection eventsColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
-				if(eventsColl != null && !eventsColl.isEmpty())
+				String sourceObjName = ReceivedEventParameters.class.getName();
+				String columnName = Constants.COLUMN_NAME_SCG_ID;
+				Long ColumnValue = scgId;
+				Collection eventsColl = retrieve(sourceObjName, columnName, ColumnValue);
+				//				Collection eventsColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
+				if (eventsColl != null && !eventsColl.isEmpty())
 				{
 					receivedDate = "";
 					Iterator iter = eventsColl.iterator();
-					while(iter.hasNext())
+					while (iter.hasNext())
 					{
-						ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)iter.next();
-						receivedDate = Utility.parseDateToString(receivedEventParameters.getTimestamp(),"yyyy-MM-dd");
-						scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate; 
+						ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) iter.next();
+						receivedDate = Utility.parseDateToString(receivedEventParameters.getTimestamp(), "yyyy-MM-dd");
+						scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
 						break;
 					}
 				}
-				if(scgNodeLabel.equalsIgnoreCase("")&&receivedDate.equalsIgnoreCase(""))
+				if (scgNodeLabel.equalsIgnoreCase("") && receivedDate.equalsIgnoreCase(""))
 				{
-					receivedDate = Utility.parseDateToString(new Date(System.currentTimeMillis()),"yyyy-MM-dd");
+					receivedDate = Utility.parseDateToString(new Date(System.currentTimeMillis()), "yyyy-MM-dd");
 					//String toolTipText = scgNodeLabel+ ": "+scgName;//
-					scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate;
+					scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
 				}
 			}
-			String toolTipText=getToolTipText(eventPoint.toString(),collectionPointLabel,receivedDate);
-//			String receivedDate = Utility.parseDateToString(new Date(System.currentTimeMillis()),"yyyy-MM-dd");
-//			scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate;
-			setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, 
-			   		scgNodeLabel, "0", null, null, null, scgActivityStatus, 
-			   		toolTipText,treeData);
-				addSpecimenNodesToSCGTree(treeData,scgId);
-			
+			String toolTipText = getToolTipText(eventPoint.toString(), collectionPointLabel, receivedDate);
+			//			String receivedDate = Utility.parseDateToString(new Date(System.currentTimeMillis()),"yyyy-MM-dd");
+			//			scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate;
+			setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, scgNodeLabel, "0", null, null, null, scgActivityStatus,
+					toolTipText, treeData);
+			addSpecimenNodesToSCGTree(treeData, scgId);
+
 		}
 	}
+
 	/**
 	 * Patch Id : FutureSCG_11
 	 * Description : method to get SCGs For CPR And EventId
@@ -885,15 +904,14 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 */
 	private List getSCGsForCPRAndEventId(Long eventId, Long cpId, Long participantId) throws DAOException, ClassNotFoundException
 	{
-		String hql = "select scg.id,scg.name,scg.activityStatus from "
-			+ SpecimenCollectionGroup.class.getName()
-			+ " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from "
-			+ CollectionProtocolRegistration.class.getName() +" as cpr where cpr.collectionProtocol.id = "
-			+ cpId + " and cpr.participant.id = "+participantId 
-			+") and scg.collectionProtocolEvent.id = "+eventId ;
+		String hql = "select scg.id,scg.name,scg.activityStatus from " + SpecimenCollectionGroup.class.getName()
+				+ " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from " + CollectionProtocolRegistration.class.getName()
+				+ " as cpr where cpr.collectionProtocol.id = " + cpId + " and cpr.participant.id = " + participantId
+				+ ") and scg.collectionProtocolEvent.id = " + eventId;
 		List list = executeQuery(hql);
 		return list;
 	}
+
 	/**
 	 * Patch Id : FutureSCG_12
 	 * Description : method to add SpecimenNodes To SCGTree
@@ -903,58 +921,56 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param treeData vector to store tree data
 	 * @param scgId id of specimen collection group
 	 */
-	private void addSpecimenNodesToSCGTree( Vector treeData, Long scgId) throws DAOException, ClassNotFoundException
+	private void addSpecimenNodesToSCGTree(Vector treeData, Long scgId) throws DAOException, ClassNotFoundException
 	{
-		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.type from "
-			+ Specimen.class.getName()
-			+ " as sp where sp.specimenCollectionGroup.id = "+scgId +" order by sp.id";
+		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.type from " + Specimen.class.getName()
+				+ " as sp where sp.specimenCollectionGroup.id = " + scgId + " order by sp.id";
 		List specimenList = executeQuery(hql);
 		for (int j = 0; j < specimenList.size(); j++)
 		{
-			Object[] obj = (Object[])specimenList.get(j);
+			Object[] obj = (Object[]) specimenList.get(j);
 			Long spId1 = (Long) obj[0];
 			//String spLabel1 = (String) obj[1];
 			String spLabel1 = (String) obj[1];
 			Long parentSpecimenId = (Long) obj[2];
 			String spActivityStatus = (String) obj[3];
-			String type = (String)obj[4];
-			
-			
-			 /**
-	         * Name : Abhishek Mehta
-	         * Reviewer Name : Poornima
-	         * Bug ID: SpecimenCollection_Tooltip
-	         * Description: To get tool tip text with added information like label, type and container.
-	         */
-			
+			String type = (String) obj[4];
+
+			/**
+			 * Name : Abhishek Mehta
+			 * Reviewer Name : Poornima
+			 * Bug ID: SpecimenCollection_Tooltip
+			 * Description: To get tool tip text with added information like label, type and container.
+			 */
+
 			String toolTipText = "Label : " + spLabel1 + "\\n Type : " + type;
-			
+
 			String hqlCon = "select colEveParam.container from " + CollectionEventParameters.class.getName()
-				+" as colEveParam where colEveParam.specimen.id = "+spId1;
-			
+					+ " as colEveParam where colEveParam.specimen.id = " + spId1;
+
 			List container = executeQuery(hqlCon);
 			for (int i = 0; i < container.size(); i++)
 			{
-				String con = (String)container.get(i);
-				toolTipText += "\\n Container : "+con;
+				String con = (String) container.get(i);
+				toolTipText += "\\n Container : " + con;
 			}
-			
-			
+
 			if (spId1 != null)
 			{
 				if (parentSpecimenId != null)
 				{
-					setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, parentSpecimenId.toString(), Constants.SPECIMEN,
-							null, null, spActivityStatus,toolTipText, treeData);
+					setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, parentSpecimenId.toString(), Constants.SPECIMEN, null, null,
+							spActivityStatus, toolTipText, treeData);
 				}
 				else
 				{
-					setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, scgId.toString(),
-							Constants.SPECIMEN_COLLECTION_GROUP, null, null, spActivityStatus,toolTipText, treeData);
+					setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, null,
+							null, spActivityStatus, toolTipText, treeData);
 				}
 			}
 		}
 	}
+
 	/**
 	 * Patch Id : FutureSCG_13
 	 * Description : method to executeQuery
@@ -965,13 +981,15 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	private List executeQuery(String hql) throws DAOException, ClassNotFoundException {
+	private List executeQuery(String hql) throws DAOException, ClassNotFoundException
+	{
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
 		List list = dao.executeQuery(hql, null, false, null);
 		dao.closeSession();
 		return list;
 	}
+
 	/**
 	 * This function sets the data in QuertTreeNodeData object adds in a list of these nodes.
 	 * @param identifier
@@ -985,7 +1003,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param vector
 	 */
 	private void setQueryTreeNode(String identifier, String objectName, String displayName, String parentIdentifier, String parentObjectName,
-			String combinedParentIdentifier, String combinedParentObjectName, String activityStatus, String toolTipText ,Vector vector)
+			String combinedParentIdentifier, String combinedParentObjectName, String activityStatus, String toolTipText, Vector vector)
 	{
 		if (!activityStatus.equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
@@ -1001,6 +1019,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			vector.add(treeNode);
 		}
 	}
+
 	/**
 	 * Patch Id : FutureSCG_14
 	 * Description : method to getToolTipText
@@ -1014,37 +1033,61 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 */
 	private static String getToolTipText(String eventDays, String collectionPointLabel, String receivedDate)
 	{
-		StringBuffer toolTipText= new StringBuffer();
+		StringBuffer toolTipText = new StringBuffer();
 		toolTipText.append("Event point : ");
 		toolTipText.append(eventDays);
 		toolTipText.append("\\n  Collection point label : ");
 		toolTipText.append(collectionPointLabel);
-		if(receivedDate != null)
+		if (receivedDate != null)
 		{
 			toolTipText.append("\\n  Received date : ");
 			toolTipText.append(receivedDate);
 		}
 		return toolTipText.toString();
 	}
-//Mandar : 15-Jan-07 For Consent Tracking Withdrawal -------- start
+
+	//Mandar : 15-Jan-07 For Consent Tracking Withdrawal -------- start
 	/*
 	 * This method verifies and updates SCG and child elements for withdrawn consents
 	 */
-	private void verifyAndUpdateConsentWithdrawn(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldspecimenCollectionGroup, DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	private void verifyAndUpdateConsentWithdrawn(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldspecimenCollectionGroup,
+			DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
-		Collection newConsentTierStatusCollection =  specimenCollectionGroup.getConsentTierStatusCollection();
-		Iterator itr = newConsentTierStatusCollection.iterator() ;
-		while(itr.hasNext() )
+		Collection newConsentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
+		Iterator itr = newConsentTierStatusCollection.iterator();
+		while (itr.hasNext())
 		{
-			ConsentTierStatus consentTierStatus = (ConsentTierStatus)itr.next();
-			if(consentTierStatus.getStatus().equalsIgnoreCase(Constants.WITHDRAWN ) )	
+			ConsentTierStatus consentTierStatus = (ConsentTierStatus) itr.next();
+			if (consentTierStatus.getStatus().equalsIgnoreCase(Constants.WITHDRAWN))
 			{
 				long consentTierID = consentTierStatus.getConsentTier().getId().longValue();
 				String cprWithdrawOption = specimenCollectionGroup.getConsentWithdrawalOption();
-				WithdrawConsentUtil.updateSCG(specimenCollectionGroup, oldspecimenCollectionGroup, consentTierID, cprWithdrawOption, dao, sessionDataBean);
+				WithdrawConsentUtil.updateSCG(specimenCollectionGroup, oldspecimenCollectionGroup, consentTierID, cprWithdrawOption, dao,
+						sessionDataBean);
 				//break;
 			}
 		}
+	}
+
+	public String retriveSCGNameFromSCGId(String id) throws DAOException
+	{
+		String scgName = "";
+		String[] selectColumnName = {"name"};
+		String[] whereColumnName = {"id"};
+		String[] whereColumnCondition = {"="};
+		Object[] whereColumnValue = {id};
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(null);
+		List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
+				whereColumnValue, null);
+		if (scgList != null && !scgList.isEmpty())
+		{
+			
+			scgName=(String) scgList.get(0);
+		}
+		
+		dao.closeSession();
+		return scgName;
 	}
 
 }
