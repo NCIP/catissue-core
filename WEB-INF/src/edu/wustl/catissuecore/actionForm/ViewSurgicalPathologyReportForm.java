@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.actionForm;
 
+import java.sql.Clob;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -420,10 +421,11 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		try
 		{
 			this.deIdentifiedReportId=deidentifiedSurgicalPathologyReport.getId();
-			this.deIdentifiedReportTextContent=deidentifiedSurgicalPathologyReport.getTextContent().getData();
-			this.deIdentifiedReportSite=deidentifiedSurgicalPathologyReport.getSource().getName();
+			Clob tempClob=deidentifiedSurgicalPathologyReport.getTextContent().getData();
+			this.deIdentifiedReportTextContent=tempClob.getSubString(1,(int)tempClob.length());
+			this.deIdentifiedReportSite=deidentifiedSurgicalPathologyReport.getReportSource().getName();
 		}
-		catch(NullPointerException ex)
+		catch(Exception ex)
 		{
 			Logger.out.error("viewSPR:De-identified Report information is null");
 			if(this.deIdentifiedReportTextContent==null)
@@ -445,10 +447,11 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		try
 		{
 			this.identifiedReportId=ispr.getId().toString();
-			this.identifiedReportTextContent=ispr.getTextContent().getData();	
-			this.identifiedReportSite=ispr.getSource().getName();
+			Clob tempClob=ispr.getTextContent().getData();
+			this.identifiedReportTextContent=tempClob.getSubString(1,(int)tempClob.length());
+			this.identifiedReportSite=ispr.getReportSource().getName();
 		}
-		catch(NullPointerException ex)
+		catch(Exception ex)
 		{
 			Logger.out.error("viewSPR:Identified Report information is null");
 			if(this.identifiedReportTextContent==null)
