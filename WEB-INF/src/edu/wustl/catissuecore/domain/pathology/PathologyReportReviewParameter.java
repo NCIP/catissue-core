@@ -111,7 +111,7 @@ public class PathologyReportReviewParameter extends EventParameters
     	
 		try
 		{
-			this.setComments(form.getComments());
+			this.setComment(form.getComments());
 			this.setTimestamp(new Date());
 			this.setStatus(Constants.COMMENT_STATUS_RENDING);
 			

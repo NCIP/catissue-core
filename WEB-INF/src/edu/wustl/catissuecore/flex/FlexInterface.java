@@ -267,7 +267,7 @@ public class FlexInterface
 		sp.setBarcode(spBean.specimenBarcode);
 		sp.setBiohazardCollection(new HashSet<Biohazard>());
 		sp.setChildrenSpecimen(new HashSet<Specimen>());
-		sp.setComments("");
+		sp.setComment("");
 		sp.setCreatedOn(new Date());
 		sp.setExternalIdentifierCollection(new HashSet<ExternalIdentifier>());
 		sp.setLabel(spBean.specimenLabel);
@@ -318,7 +318,7 @@ public class FlexInterface
 	
 	private void setCommomParam(EventParameters event)
 	{
-		event.setComments("");
+		event.setComment("");
 		event.setTimestamp(new Date());
 		User user = new User();
 		user.setId(1L);

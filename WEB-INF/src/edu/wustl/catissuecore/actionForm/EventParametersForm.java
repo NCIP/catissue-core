@@ -207,7 +207,7 @@ public abstract class EventParametersForm extends AbstractActionForm
  	public void setAllValues(AbstractDomainObject abstractDomain)
  	{
  	   EventParameters eventParametersObject = (EventParameters)abstractDomain;
- 	   this.comments  = Utility.toString(eventParametersObject.getComments());
+ 	   this.comments  = Utility.toString(eventParametersObject.getComment());
  	   this.id = eventParametersObject.getId().longValue() ;
 		
  	   Calendar calender = Calendar.getInstance();

@@ -71,7 +71,7 @@
         />
 
         <property
-            name="comments"
+            name="comment"
             type="string"
             update="true"
             insert="true"

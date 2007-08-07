@@ -219,7 +219,7 @@
 
 
 		<property
-            name="aliqoutInSameContainer"
+            name="aliquotInSameContainer"
             type="boolean"
             update="true"
             insert="true"

@@ -302,9 +302,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				i++;
 			}
 		}
-		if(cProtocol.getAliqoutInSameContainer()!= null) 
+		if(cProtocol.getAliquotInSameContainer()!= null) 
 		{
-			aliqoutInSameContainer = cProtocol.getAliqoutInSameContainer().booleanValue();
+			aliqoutInSameContainer = cProtocol.getAliquotInSameContainer().booleanValue();
 		}
 		
 		//For Consent Tracking 

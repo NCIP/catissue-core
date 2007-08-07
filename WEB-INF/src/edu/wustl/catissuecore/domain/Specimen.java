@@ -79,9 +79,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	protected String barcode;
 
 	/**
-	 * Comments on specimen.
+	 * Comment on specimen.
 	 */
-	protected String comments;
+	protected String comment;
 
 	/**
 	 * Defines whether this Specimen record can be queried (Active) 
@@ -372,23 +372,23 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 	/**
 	 * Returns the comments on the specimen.
-	 * @hibernate.property name="comments" type="string" column="COMMENTS" length="2000"
+	 * @hibernate.property name="comment" type="string" column="COMMENTS" length="2000"
 	 * @return the comments on the specimen.
-	 * @see #setComments(String)
+	 * @see #setComment(String)
 	 */
-	public String getComments()
+	public String getComment()
 	{
-		return comments;
+		return comment;
 	}
 
 	/**
-	 * Sets the comments on the specimen.
+	 * Sets the comment on the specimen.
 	 * @param comments The comments to set.
-	 * @see #getComments()
+	 * @see #getComment()
 	 */
-	public void setComments(String comments)
+	public void setComment(String comment)
 	{
-		this.comments = comments;
+		this.comment = comment;
 	}
 
 	/**
@@ -723,7 +723,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					else
 						this.barcode = null;
 
-					this.comments = form.getComments();
+					this.comment = form.getComments();
 					this.type = form.getType();
 
 					if (form.isAddOperation())
@@ -938,7 +938,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					else
 						this.barcode = null;
 
-					this.comments = form.getComments();
+					this.comment = form.getComments();
 					//this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 					//this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
 					this.type = form.getType();

@@ -313,7 +313,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		newcollectionEventParameters.setTimestamp(scgCollectionEventParameters.getTimestamp());
 		newcollectionEventParameters.setUser(scgCollectionEventParameters.getUser());
 
-		newcollectionEventParameters.setComments(scgCollectionEventParameters.getComments());
+		newcollectionEventParameters.setComment(scgCollectionEventParameters.getComment());
 		newcollectionEventParameters.setSpecimen(collectionEventParameters.getSpecimen());
 		newcollectionEventParameters.setSpecimenCollectionGroup(collectionEventParameters.getSpecimenCollectionGroup());
 		newcollectionEventParameters.setId(collectionEventParameters.getId());
@@ -336,7 +336,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		newReceivedEventParameters.setUser(scgReceivedEventParameters.getUser());
 
 		newReceivedEventParameters.setId(receivedEventParameters.getId());
-		newReceivedEventParameters.setComments(scgReceivedEventParameters.getComments());
+		newReceivedEventParameters.setComment(scgReceivedEventParameters.getComment());
 		newReceivedEventParameters.setSpecimen(receivedEventParameters.getSpecimen());
 		newReceivedEventParameters.setSpecimenCollectionGroup(receivedEventParameters.getSpecimenCollectionGroup());
 		return newReceivedEventParameters;

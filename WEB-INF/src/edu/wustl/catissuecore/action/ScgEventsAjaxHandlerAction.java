@@ -147,7 +147,7 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		/* Bug Id: 4134
 		 Patch ID: 4134_2			
 		 Description: Added Utility.toString()		*/
-		xmlData.append(Utility.toString(collectionEventParameters.getComments()));
+		xmlData.append(Utility.toString(collectionEventParameters.getComment()));
 		xmlData.append("</CollectionComments>");	
 		
 		return xmlData;
@@ -190,7 +190,7 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 	 	Patch ID: 4134_1			
 	 	Description: Added Utility.toString()		
 		*/
-		xmlData.append(Utility.toString(receivedEventParameters.getComments()));
+		xmlData.append(Utility.toString(receivedEventParameters.getComment()));
 		xmlData.append("</ReceivedComments>");	
 		
 		return xmlData;

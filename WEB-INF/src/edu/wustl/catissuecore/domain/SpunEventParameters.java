@@ -27,7 +27,7 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	/**
      * Rotational force applied to specimen.
      */
-	protected Double gForce;
+	protected Double gravityForce;
 	
 	/**
      * Duration for which specimen is spun.
@@ -37,23 +37,23 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	/**
      * Returns the rotational force applied to specimen. 
      * @return The rotational force applied to specimen.
-     * @see #setGForce(Double)
-     * @hibernate.property name="gForce" type="double" 
+     * @see #setGravityForce(Double)
+     * @hibernate.property name="gravityForce" type="double" 
      * column="GFORCE" length="30"
      */
-	public Double getGForce()
+	public Double getGravityForce()
 	{
-		return gForce;
+		return gravityForce;
 	}
 
 	/**
      * Sets the rotational force applied to specimen.
      * @param gForce the rotational force applied to specimen.
-     * @see #getGForce()
+     * @see #getGravityForce()
      */
-	public void setGForce(Double gForce)
+	public void setGravityForce(Double gravityForce)
 	{
-		this.gForce = gForce;
+		this.gravityForce = gravityForce;
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
         {
         	SpunEventParametersForm form = (SpunEventParametersForm) abstractForm;
         	
-        	this.gForce = new Double(form.getGravityForce() );
+        	this.gravityForce = new Double(form.getGravityForce() );
         	this.durationInMinutes = new Integer(form.getDurationInMinutes() );
 
         	super.setAllValues(form);

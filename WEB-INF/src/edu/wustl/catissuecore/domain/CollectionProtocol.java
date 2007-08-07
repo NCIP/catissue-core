@@ -59,7 +59,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 * whether Aliquote in same container
 	 */
-	protected Boolean aliqoutInSameContainer;
+	protected Boolean aliquotInSameContainer;
 	
 	//protected Collection storageContainerCollection=new HashSet();
 	
@@ -274,7 +274,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        		}
 				}
         	}
-        	aliqoutInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
+        	aliquotInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
 	        Map map = cpForm.getValues();
 	        
 	        /**
@@ -433,20 +433,20 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 
 
 	/**
-	 * @return Returns the aliqoutInSameContainer.
-	 * @hibernate.property name="aliqoutInSameContainer" type="boolean" column="ALIQUOT_IN_SAME_CONTAINER"
+	 * @return Returns the aliquotInSameContainer.
+	 * @hibernate.property name="aliquotInSameContainer" type="boolean" column="ALIQUOT_IN_SAME_CONTAINER"
 	 */
-	public Boolean getAliqoutInSameContainer() 
+	public Boolean getAliquotInSameContainer() 
 	{
-		return aliqoutInSameContainer;
+		return aliquotInSameContainer;
 	}
 
 	/**
-	 * @param aliqoutInSameContainer The aliqoutInSameContainer to set.
+	 * @param aliquotInSameContainer The aliquotInSameContainer to set.
 	 */
-	public void setAliqoutInSameContainer(Boolean aliqoutInSameContainer) 
+	public void setAliquotInSameContainer(Boolean aliquotInSameContainer) 
 	{
-		this.aliqoutInSameContainer = aliqoutInSameContainer;
+		this.aliquotInSameContainer = aliquotInSameContainer;
 	}
 
 	//-Mandar : 25-Jan-07 ---------- start

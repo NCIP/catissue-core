@@ -231,7 +231,7 @@ public class EventsUtil
 		collectionEventParameters.setUser(user);
 		collectionEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
 		collectionEventParameters.setCollectionProcedure(Constants.NOT_SPECIFIED);
-		collectionEventParameters.setComments("");
+		collectionEventParameters.setComment("");
 		collectionEventParameters.setContainer(Constants.NOT_SPECIFIED);
 		return collectionEventParameters;
 	}
@@ -245,7 +245,7 @@ public class EventsUtil
 	{
 //		Received Events
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
-		receivedEventParameters.setComments("");
+		receivedEventParameters.setComment("");
 		receivedEventParameters.setReceivedQuality(Constants.NOT_SPECIFIED);
 		
 		receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));

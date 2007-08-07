@@ -565,7 +565,7 @@ public class SpecimenForm extends AbstractActionForm
 		this.id = specimen.getId().longValue();
 		this.type = specimen.getType();
 		this.concentration = "";
-		this.comments = specimen.getComments();
+		this.comments = specimen.getComment();
 		this.activityStatus = specimen.getActivityStatus();
           
         /**

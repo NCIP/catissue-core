@@ -39,7 +39,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
      */
     String[] specimenAttribute = {"","SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
             "SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "createdOn","InitialQuantity_value",
-            "concentrationInMicrogramPerMicroliter", "comments", "specimenEventCollection", "externalIdentifierCollection",
+            "concentrationInMicrogramPerMicroliter", "comment", "specimenEventCollection", "externalIdentifierCollection",
             "biohazardCollection", "derive"};
 
 /**

@@ -861,7 +861,7 @@ public class ConsentTrackingTest extends BaseTestCase
 		
 		//Setting the unsigned doc url
 		collectionProtocol.setUnsignedConsentDocumentURL("http://abc");		
-		collectionProtocol.setAliqoutInSameContainer(true);
+		collectionProtocol.setAliquotInSameContainer(true);
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active");
 		try
@@ -1093,7 +1093,7 @@ public class ConsentTrackingTest extends BaseTestCase
 		molecularSpecimen.setInitialQuantity(quantity);
 
 		molecularSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
-		molecularSpecimen.setComments("");
+		molecularSpecimen.setComment("");
 		// Is virtually located
 		molecularSpecimen.setStorageContainer(null);
 		molecularSpecimen.setPositionDimensionOne(null);
@@ -1108,7 +1108,7 @@ public class ConsentTrackingTest extends BaseTestCase
 		molecularSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
 
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
-		collectionEventParameters.setComments("");
+		collectionEventParameters.setComment("");
 		User user = new User();
 		user.setId(new Long(1));
 	//	collectionEventParameters.setId(new Long(0));
@@ -1138,7 +1138,7 @@ public class ConsentTrackingTest extends BaseTestCase
 			e.printStackTrace();
 		}
 		receivedEventParameters.setReceivedQuality("acceptable");
-		receivedEventParameters.setComments("");
+		receivedEventParameters.setComment("");
 		receivedEventParameters.setReceivedQuality("Cauterized");
 		
 		Collection specimenEventCollection = new HashSet();

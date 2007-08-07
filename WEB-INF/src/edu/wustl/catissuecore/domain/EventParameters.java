@@ -48,9 +48,9 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 	protected User user;
 	
 	/**
-     * Text comments on event.
+     * Text comment on event.
      */
-	protected String comments;
+	protected String comment;
 	
 	/**
      * Returns System generated unique id.
@@ -119,23 +119,23 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 	/**
      * Returns text comments on this event. 
      * @return Text comments on this event.
-     * @see #setComments(String)
-     * @hibernate.property name="comments" type="string" 
+     * @see #setComment(String)
+     * @hibernate.property name="comment" type="string" 
      * column="COMMENTS" length="500"
      */
-	public String getComments()
+	public String getComment()
 	{
-		return comments;
+		return comment;
 	}
 
 	/**
      * Sets text comments on this event.
      * @param comments text comments on this event.
-     * @see #getComments()
+     * @see #getComment()
      */
-	public void setComments(String comments)
+	public void setComment(String comment)
 	{
-		this.comments = comments;
+		this.comment = comment;
 	}
 	
 	/* (non-Javadoc)
@@ -157,7 +157,7 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 	    		timestamp = Calendar.getInstance().getTime();
 	    	}
 	    	
-			this.comments = form.getComments();
+			this.comment = form.getComments();
 			
 			user.setId(new Long(form.getUserId()));
 

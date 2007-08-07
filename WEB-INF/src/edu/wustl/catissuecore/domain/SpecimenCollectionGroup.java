@@ -629,7 +629,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	private void setEventParameters(CollectionEventParameters collectionEventParameters,ReceivedEventParameters receivedEventParameters,SpecimenCollectionGroupForm form)
 	{
 		collectionEventParameters.setCollectionProcedure(form.getCollectionEventCollectionProcedure());
-		collectionEventParameters.setComments(form.getCollectionEventComments());
+		collectionEventParameters.setComment(form.getCollectionEventComments());
 		collectionEventParameters.setContainer(form.getCollectionEventContainer());		
 		Date timestamp = EventsUtil.setTimeStamp(form.getCollectionEventdateOfEvent(),form.getCollectionEventTimeInHours(),form.getCollectionEventTimeInMinutes());
 		collectionEventParameters.setTimestamp(timestamp);
@@ -639,7 +639,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 		collectionEventParameters.setSpecimenCollectionGroup(this);	
 		
 		//Received Events		
-		receivedEventParameters.setComments(form.getReceivedEventComments());
+		receivedEventParameters.setComment(form.getReceivedEventComments());
 		User receivedUser = new User();
 		receivedUser.setId(new Long(form.getReceivedEventUserId()));
 		receivedEventParameters.setUser(receivedUser);

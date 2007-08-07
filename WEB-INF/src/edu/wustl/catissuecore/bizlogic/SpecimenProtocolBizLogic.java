@@ -13,12 +13,9 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;

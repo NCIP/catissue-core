@@ -525,7 +525,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 					this.collectionEventTimeInMinutes  = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 					this.collectionEventCollectionProcedure = collectionEventParameters.getCollectionProcedure();
 					this.collectionEventContainer = collectionEventParameters.getContainer();
-					this.collectionEventComments = Utility.toString(collectionEventParameters.getComments());
+					this.collectionEventComments = Utility.toString(collectionEventParameters.getComment());
 				}
 				else if(tempObj instanceof ReceivedEventParameters)
 				{
@@ -539,7 +539,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 					this.receivedEventTimeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
 					this.receivedEventTimeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 					this.receivedEventReceivedQuality = receivedEventParameters.getReceivedQuality();
-					this.receivedEventComments = Utility.toString(receivedEventParameters.getComments());
+					this.receivedEventComments = Utility.toString(receivedEventParameters.getComment());
 				}
 			}
 		}
