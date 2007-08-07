@@ -1,12 +1,16 @@
 package edu.wustl.catissuecore.conceptcode;
 
 import java.io.ByteArrayInputStream;
+import java.sql.Clob;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+
+import net.sf.hibernate.Hibernate;
 
 import org.jdom.CDATA;
 import org.jdom.Document;
@@ -32,10 +36,11 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ConceptCoder 
 {
-	public ConceptCoder(DeidentifiedSurgicalPathologyReport deidReport, CaTIES_ExporterPR exporterPR, TiesPipe tiesPipe)
+	public ConceptCoder(DeidentifiedSurgicalPathologyReport deidReport, CaTIES_ExporterPR exporterPR, TiesPipe tiesPipe)throws SQLException
 	{
 		this.deidPathologyReport=deidReport;
-		this.currentReportText= this.deidPathologyReport.getTextContent().getData();
+		Clob tempClob=this.deidPathologyReport.getTextContent().getData();
+		this.currentReportText= tempClob.getSubString(1,(int)tempClob.length());
 		this.exporterPR=exporterPR;
 		this.tiesPipe=tiesPipe;
 	}
@@ -104,12 +109,12 @@ public class ConceptCoder
 		 try 
 		 {
 			 BinaryContent binaryContent=new BinaryContent();
-			 binaryContent.setData(this.gateXML);
+			 binaryContent.setData(Hibernate.createClob(this.gateXML));
 			 binaryContent.setSurgicalPathologyReport(this.deidPathologyReport);
 			 this.deidPathologyReport.setBinaryContent(binaryContent);
 			 
 			 XMLContent xmlContent=new XMLContent();
-			 xmlContent.setData(this.chirpsXML);
+			 xmlContent.setData(Hibernate.createClob(this.chirpsXML));
 			 xmlContent.setSurgicalPathologyReport(this.deidPathologyReport);
 			 this.deidPathologyReport.setXmlContent(xmlContent);
 			 

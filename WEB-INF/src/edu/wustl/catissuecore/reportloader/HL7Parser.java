@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.reportloader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Clob;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+
+import net.sf.hibernate.Hibernate;
 
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
@@ -38,7 +41,7 @@ public class HL7Parser implements Parser
 {
 
 	/**
-	 * source information for pathology report 
+	 * reportSource information for pathology report 
 	 */
 	private Site site=null;
 	private String status=null;
@@ -337,7 +340,7 @@ public class HL7Parser implements Parser
 		Logger.out.info("Adding report to queue");
 		try
 		{
-			ReportLoaderQueue queue= new ReportLoaderQueue(reportText);
+			ReportLoaderQueue queue= new ReportLoaderQueue(Hibernate.createClob(reportText));
 			// if no any error status is set means it should be set to NEW
 			if(this.status==null)
 			{
@@ -705,7 +708,7 @@ public class HL7Parser implements Parser
 				section.setDocumentFragment(text);
 				if (isFINText)
 				{	
-					textContent.setData(text);
+					textContent.setData(Hibernate.createClob(text));
 				}	
 			}
 

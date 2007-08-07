@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.reportloader;
 
+import java.sql.Clob;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,7 +24,6 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -106,7 +106,7 @@ public class ReportLoader
 		
 		Logger.out.debug("Processing Report ");
 		identifiedReport.setReportStatus(CaTIESConstants.PENDING_FOR_DEID);
-		identifiedReport.setSource(this.site);
+		identifiedReport.setReportSource(this.site);
 		try
 		{	
 			// check for existing specimen collection group(scg)
@@ -144,7 +144,7 @@ public class ReportLoader
 		catch(Exception ex)
 		{
 			Logger.out.error("Failed to process report "+ex);
-			throw new Exception(ex.getMessage());
+			throw ex;
 		}
 	}
 
@@ -294,12 +294,13 @@ public class ReportLoader
 	 * @param report identified surgical pathology report
 	 * @return boolean value which indicates text content is present or not
 	 */
-	private boolean checkForTextContent(IdentifiedSurgicalPathologyReport report)
+	private boolean checkForTextContent(IdentifiedSurgicalPathologyReport report)throws Exception
 	{
 		Logger.out.info("Inside checkForTextContent function");
-		TextContent content=report.getTextContent();
+		Clob tempClob=report.getTextContent().getData();
+		String textContent=tempClob.getSubString(1,(int) tempClob.length());
 		// check for null report text content
-		if(content !=null && content.getData()!=null && content.getData().length()>0)
+		if(textContent!=null && textContent.length()>0)
 		{
 			return true;
 		}

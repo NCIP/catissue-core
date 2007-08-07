@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.reportloader;
 
+import java.sql.Clob;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -62,7 +63,9 @@ public class ReportLoaderQueueProcessor extends Thread
 								{
 									// parse report text 
 									Participant participant=(Participant)it.next();
-									parser.parseString(participant,reportLoaderQueue.getReportText(), reportLoaderQueue.getSpecimenCollectionGroup());
+									Clob tempClob=reportLoaderQueue.getReportText();
+									String reportText=tempClob.getSubString(1,(int)tempClob.length());
+									parser.parseString(participant, reportText, reportLoaderQueue.getSpecimenCollectionGroup());
 									// delete record from queue
 									ReportLoaderUtil.deleteObject(reportLoaderQueue);
 									CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ");
