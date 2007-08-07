@@ -124,7 +124,7 @@ public class PathologyReportReviewParameter extends EventParameters
 			}
 			else if(form.getDeIdentifiedReportId()!=0)
 			{
-				DeidentifiedSurgicalPathologyReport deidReport = new DeidentifiedSurgicalPathologyReport();
+				DeIdentifiedSurgicalPathologyReport deidReport = new DeIdentifiedSurgicalPathologyReport();
 				deidReport.setId(new Long(form.getDeIdentifiedReportId()));
 				this.setSurgicalPathologyReport(deidReport);
 			}

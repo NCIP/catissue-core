@@ -28,7 +28,7 @@ import edu.wustl.catissuecore.domain.pathology.BinaryContent;
 import edu.wustl.catissuecore.domain.pathology.Concept;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
-import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SemanticType;
 import edu.wustl.catissuecore.domain.pathology.XMLContent;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
@@ -36,7 +36,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ConceptCoder 
 {
-	public ConceptCoder(DeidentifiedSurgicalPathologyReport deidReport, CaTIES_ExporterPR exporterPR, TiesPipe tiesPipe)throws SQLException
+	public ConceptCoder(DeIdentifiedSurgicalPathologyReport deidReport, CaTIES_ExporterPR exporterPR, TiesPipe tiesPipe)throws SQLException
 	{
 		this.deidPathologyReport=deidReport;
 		Clob tempClob=this.deidPathologyReport.getTextContent().getData();
@@ -217,7 +217,7 @@ public class ConceptCoder
 	//			conceptReferentToAdd.setDocumentFragment(conceptReferentElement.getAttributeValue("documentFragment"));
 			    conceptReferentToAdd.setIsModifier(new Boolean(conceptReferentElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISMODIFIER)));  //"isModifier")));
 			    conceptReferentToAdd.setIsNegated(new Boolean(conceptReferentElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISNEGATED)));  //"isNegated")));
-			    conceptReferentToAdd.setDeidentifiedSurgicalPathologyReport(this.deidPathologyReport);
+			    conceptReferentToAdd.setDeIdentifiedSurgicalPathologyReport(this.deidPathologyReport);
 			    
 			    // Concept
 			    Element conceptElement = (Element) indexedConceptElement.getChild(CaTIESConstants.TAG_CONCEPT);  //"Concept");
@@ -300,5 +300,5 @@ public class ConceptCoder
 	 */
 	private CaTIES_ExporterPR exporterPR = null;
 
-	private DeidentifiedSurgicalPathologyReport deidPathologyReport;
+	private DeIdentifiedSurgicalPathologyReport deidPathologyReport;
 }

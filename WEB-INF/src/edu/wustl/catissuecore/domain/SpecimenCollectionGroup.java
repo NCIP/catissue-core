@@ -18,7 +18,7 @@ import java.util.Iterator;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
-import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -147,7 +147,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
     * current specimen collection group  
     */
    
-	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
+	protected DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 	/**
 	 * @return the consentTierStatusCollection
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus" lazy="true" cascade="save-update"
@@ -741,10 +741,10 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	/**
 	 * Returns deidentified surgical pathology report of the current specimen collection group
 	 * @hibernate.one-to-one  name="deIdentifiedSurgicalPathologyReport"
-	 * class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+	 * class="edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport"
 	 * property-ref="specimenCollectionGroup" not-null="false" cascade="save-update"
 	 */
-    public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport() 
+    public DeIdentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport() 
     {
 		return deIdentifiedSurgicalPathologyReport;
 	}
@@ -753,7 +753,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * Sets the deidentified surgical pathology report associated with the specimen collection group
      * @param deIdentifiedSurgicalPathologyReport deidentified report object
      */
-	public void setDeIdentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport) 
+	public void setDeIdentifiedSurgicalPathologyReport(DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport) 
 	{
 		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
 	}	

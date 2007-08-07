@@ -29,7 +29,7 @@ public class QuarantineEventParameter extends EventParameters
 	/**
 	 * de-identified surgical pthology report.
 	 */
-	protected DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport;
+	protected DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 	
 	/**
 	 * Quarantine comment status of de-identified surgical pthology report.
@@ -60,22 +60,22 @@ public class QuarantineEventParameter extends EventParameters
 	
 	/**
 	 *  @return deidentified pathology report.
-	 * 	@hibernate.many-to-one 	name="deidentifiedSurgicalPathologyReport"
-	 * 	class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+	 * 	@hibernate.many-to-one 	name="deIdentifiedSurgicalPathologyReport"
+	 * 	class="edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport"
 	 * 	column="DEID_REPORT_ID" not-null="false"
 	 */
-	public DeidentifiedSurgicalPathologyReport getDeidentifiedSurgicalPathologyReport()
+	public DeIdentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
-		return deidentifiedSurgicalPathologyReport;
+		return deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**
-	 * @param deidentifiedSurgicalPathologyReport sets deidentified pathology report.
+	 * @param deIdentifiedSurgicalPathologyReport sets deidentified pathology report.
 	 */
-	public void setDeidentifiedSurgicalPathologyReport(
-			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
+	public void setDeIdentifiedSurgicalPathologyReport(
+			DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport)
 	{
-		this.deidentifiedSurgicalPathologyReport = deidentifiedSurgicalPathologyReport;
+		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
 	}
 
 	 /**
@@ -123,9 +123,9 @@ public class QuarantineEventParameter extends EventParameters
 			}
 			if(form.getDeIdentifiedReportId()!=0)
 			{
-				DeidentifiedSurgicalPathologyReport deidReport = new DeidentifiedSurgicalPathologyReport();
+				DeIdentifiedSurgicalPathologyReport deidReport = new DeIdentifiedSurgicalPathologyReport();
 				deidReport.setId(new Long(form.getDeIdentifiedReportId()));
-				this.setDeidentifiedSurgicalPathologyReport(deidReport);
+				this.setDeIdentifiedSurgicalPathologyReport(deidReport);
 				this.setQuarantineStatus(false);
 			}
 		}

@@ -21,7 +21,7 @@ import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
@@ -100,7 +100,7 @@ public class DeidReportThread extends Thread
 	        deidCollectionDate=DeidUtils.extractDate(deidText);	
 	        Logger.out.info("Creating deidentified report for identified report id="+identifiedReport.getId().toString());
 	        // Create object of deidentified report
-	        DeidentifiedSurgicalPathologyReport pathologyReport = createDeidPathologyReport(identifiedReport, deidText, deidCollectionDate);
+	        DeIdentifiedSurgicalPathologyReport pathologyReport = createDeidPathologyReport(identifiedReport, deidText, deidCollectionDate);
 	        Logger.out.info("De-identification process finished for "+identifiedReport.getId().toString());
 	    	try
 	    	{
@@ -112,7 +112,7 @@ public class DeidReportThread extends Thread
 	    		// update status of identified report
 	        	identifiedReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
 	        	// set deidentified report to identified report
-	        	identifiedReport.setDeidentifiedSurgicalPathologyReport(pathologyReport);
+	        	identifiedReport.setDeIdentifiedSurgicalPathologyReport(pathologyReport);
 	        	Logger.out.debug("Updating identified report report id="+identifiedReport.getId().toString());
 	        	// update object of identified report
 	        	ReportLoaderUtil.updateObject(identifiedReport);
@@ -143,19 +143,19 @@ public class DeidReportThread extends Thread
 	}
 	
 	/**
-	 * Method to create and initialize object of DeidentifiedSurgicalPathologyReport
+	 * Method to create and initialize object of DeIdentifiedSurgicalPathologyReport
 	 * @param identifiedReport identified surgical pathology report
 	 * @param deidText de-intified text
 	 * @param deidCollectedDate collection date and time of report
-	 * @return DeidentifiedSurgicalPathologyReport
+	 * @return DeIdentifiedSurgicalPathologyReport
 	 * @throws Exception a generic exception oocured while creating de-identified report instance.
 	 */
-	private DeidentifiedSurgicalPathologyReport createDeidPathologyReport(IdentifiedSurgicalPathologyReport ispr, String deidText,
+	private DeIdentifiedSurgicalPathologyReport createDeidPathologyReport(IdentifiedSurgicalPathologyReport ispr, String deidText,
             Date deidCollectedDate) throws Exception
 	{
 		Logger.out.info("Creating deid report for identifiedReport id="+ispr.getId());
 		// instnatiate deidentified report
-		DeidentifiedSurgicalPathologyReport deidReport=new DeidentifiedSurgicalPathologyReport();
+		DeIdentifiedSurgicalPathologyReport deidReport=new DeIdentifiedSurgicalPathologyReport();
 		
 		if (ispr.getCollectionDateTime() != null) 
 		{

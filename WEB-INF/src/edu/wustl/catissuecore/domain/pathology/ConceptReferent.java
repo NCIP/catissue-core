@@ -60,7 +60,7 @@ public class ConceptReferent extends AbstractDomainObject
 	/**
 	 * Deidentified report of the current concept referent.
 	 */
-	protected DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport;
+	protected DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 
 	/**
 	 * Constructor
@@ -108,22 +108,22 @@ public class ConceptReferent extends AbstractDomainObject
 	
 	/**	
 	 * @return deidentified report associated with the concept referent. 
-	 * @hibernate.many-to-one  name="deidentifiedSurgicalPathologyReport"
-	 * class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+	 * @hibernate.many-to-one  name="deIdentifiedSurgicalPathologyReport"
+	 * class="edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport"
 	 * column="DEIDENTIFIED_REPORT_ID" not-null="false"
 	 */
-	public DeidentifiedSurgicalPathologyReport getDeidentifiedSurgicalPathologyReport()
+	public DeIdentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
-		return deidentifiedSurgicalPathologyReport;
+		return deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**
-	 * @param deidentifiedSurgicalPathologyReport sets the deidentified report.
+	 * @param deIdentifiedSurgicalPathologyReport sets the deidentified report.
 	 */
-	public void setDeidentifiedSurgicalPathologyReport(
-			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
+	public void setDeIdentifiedSurgicalPathologyReport(
+			DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport)
 	{
-		this.deidentifiedSurgicalPathologyReport = deidentifiedSurgicalPathologyReport;
+		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**
