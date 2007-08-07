@@ -205,7 +205,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     			break;
     			//	View Surgical Pathology Report
     		case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
-    			bizLogic=new DeidentifiedSurgicalPathologyReportBizLogic();
+    			bizLogic=new DeIdentifiedSurgicalPathologyReportBizLogic();
     			break;	
     		case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
     			bizLogic=new PathologyReportReviewParameterBizLogic();
@@ -341,9 +341,9 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	{
     		bizLogic = new TextReportContentBizLogic();
     	}
-    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"))
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport"))
     	{
-    		bizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
+    		bizLogic = new DeIdentifiedSurgicalPathologyReportBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"))
     	{
