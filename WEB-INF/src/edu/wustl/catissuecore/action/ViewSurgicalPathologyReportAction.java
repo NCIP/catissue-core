@@ -370,7 +370,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID);
 			objectList= bizLogic.retrieve(PathologyReportReviewParameter.class.getName(), colName, identifier);
 			PathologyReportReviewParameter pathologyReportReviewParameter = (PathologyReportReviewParameter)objectList.get(0);
-			viewSPR.setUserComments(pathologyReportReviewParameter.getComments());
+			viewSPR.setUserComments(pathologyReportReviewParameter.getComment());
 			witnessFullName = pathologyReportReviewParameter.getUser().getFirstName()+", "+pathologyReportReviewParameter.getUser().getLastName()+"'s";
 			viewSPR.setUserName(witnessFullName);
 			SurgicalPathologyReport surgicalPathologyReport = pathologyReportReviewParameter.getSurgicalPathologyReport();
@@ -390,7 +390,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID);
 			objectList  = bizLogic.retrieve(QuarantineEventParameter.class.getName(), colName, identifier);
 			QuarantineEventParameter quarantineEventParameter =(QuarantineEventParameter)objectList.get(0);
-			viewSPR.setUserComments(quarantineEventParameter.getComments());
+			viewSPR.setUserComments(quarantineEventParameter.getComment());
 			witnessFullName = quarantineEventParameter.getUser().getLastName()+", "+quarantineEventParameter.getUser().getFirstName();
 			viewSPR.setUserName(witnessFullName);
 			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =quarantineEventParameter.getDeIdentifiedSurgicalPathologyReport();
