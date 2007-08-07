@@ -28,7 +28,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.Concept;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
-import edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
@@ -251,8 +251,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 //				SurgicalPathologyReport surgicalPathologyReport = pathologyReportReviewParameter.getSurgicalPathologyReport();
 //				try
 //				{
-//					DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport =(DeIdentifiedSurgicalPathologyReport)surgicalPathologyReport;
-//					viewSPR.setAllValues(deIdentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
+//					DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)surgicalPathologyReport;
+//					viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
 //				}
 //				catch(ClassCastException e) 
 //				{
@@ -268,15 +268,15 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 //				viewSPR.setUserComments(quarantineEventParameter.getComments());
 //				witnessFullName = quarantineEventParameter.getUser().getLastName()+", "+quarantineEventParameter.getUser().getFirstName();
 //				viewSPR.setUserName(witnessFullName);
-//				DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport =quarantineEventParameter.getDeIdentifiedSurgicalPathologyReport();
-//				viewSPR.setAllValues(deIdentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
+//				DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =quarantineEventParameter.getDeIdentifiedSurgicalPathologyReport();
+//				viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
 //			}
 		if(specimenCollectionGroup!=null)
 		{
 			try
 			{
 				defaultBizLogic.populateUIBean(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(), viewSPR);
-				DeIdentifiedSurgicalPathologyReport deidReport=(DeIdentifiedSurgicalPathologyReport)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(), "deIdentifiedSurgicalPathologyReport");
+				DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(), "deidentifiedSurgicalPathologyReport");
 				List conceptBeanList=ViewSPRUtil.getConceptBeanList(request,deidReport);
 				request.setAttribute(Constants.CONCEPT_BEAN_LIST, conceptBeanList);
 			}
@@ -370,14 +370,14 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID);
 			objectList= bizLogic.retrieve(PathologyReportReviewParameter.class.getName(), colName, identifier);
 			PathologyReportReviewParameter pathologyReportReviewParameter = (PathologyReportReviewParameter)objectList.get(0);
-			viewSPR.setUserComments(pathologyReportReviewParameter.getComment());
+			viewSPR.setUserComments(pathologyReportReviewParameter.getComments());
 			witnessFullName = pathologyReportReviewParameter.getUser().getFirstName()+", "+pathologyReportReviewParameter.getUser().getLastName()+"'s";
 			viewSPR.setUserName(witnessFullName);
 			SurgicalPathologyReport surgicalPathologyReport = pathologyReportReviewParameter.getSurgicalPathologyReport();
 			try
 			{
-				DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport =(DeIdentifiedSurgicalPathologyReport)surgicalPathologyReport;
-				viewSPR.setAllValues(deIdentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
+				DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)surgicalPathologyReport;
+				viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
 			}
 			catch(ClassCastException e) 
 			{
@@ -390,15 +390,14 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID);
 			objectList  = bizLogic.retrieve(QuarantineEventParameter.class.getName(), colName, identifier);
 			QuarantineEventParameter quarantineEventParameter =(QuarantineEventParameter)objectList.get(0);
-			viewSPR.setUserComments(quarantineEventParameter.getComment());
+			viewSPR.setUserComments(quarantineEventParameter.getComments());
 			witnessFullName = quarantineEventParameter.getUser().getLastName()+", "+quarantineEventParameter.getUser().getFirstName();
 			viewSPR.setUserName(witnessFullName);
-			DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport =quarantineEventParameter.getDeIdentifiedSurgicalPathologyReport();
-			viewSPR.setAllValues(deIdentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
+			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =quarantineEventParameter.getDeIdentifiedSurgicalPathologyReport();
+			viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
 		}
 	}
 }
-
 
 
 

@@ -13,7 +13,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -414,16 +414,16 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * set values of De-Identified report related variables
-	 * @param deIdentifiedSurgicalPathologyReport DeIdentifiedSurgicalPathologyReport Object
+	 * @param deidentifiedSurgicalPathologyReport DeidentifiedSurgicalPathologyReport Object
 	 */
-	public void setDeIdentifiedReport(final DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport)
+	public void setDeIdentifiedReport(final DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
 	{
 		try
 		{
-			this.deIdentifiedReportId=deIdentifiedSurgicalPathologyReport.getId();
-			Clob tempClob=deIdentifiedSurgicalPathologyReport.getTextContent().getData();
+			this.deIdentifiedReportId=deidentifiedSurgicalPathologyReport.getId();
+			Clob tempClob=deidentifiedSurgicalPathologyReport.getTextContent().getData();
 			this.deIdentifiedReportTextContent=tempClob.getSubString(1,(int)tempClob.length());
-			this.deIdentifiedReportSite=deIdentifiedSurgicalPathologyReport.getReportSource().getName();
+			this.deIdentifiedReportSite=deidentifiedSurgicalPathologyReport.getReportSource().getName();
 		}
 		catch(Exception ex)
 		{
