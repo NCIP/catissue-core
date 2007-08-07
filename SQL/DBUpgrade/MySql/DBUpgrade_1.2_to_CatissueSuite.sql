@@ -157,7 +157,7 @@ INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,44,(select PROTECTION_ELEMENT_ID fr
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),'2007-01-04' from CSM_PG_PE;
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),'2007-01-04' from CSM_PG_PE;
 
-insert into csm_user_group_role_pg(USER_GROUP_ROLE_PG_ID,GROUP_ID,ROLE_ID,PROTECTION_GROUP_ID) values (102,4,11,44);
+insert into csm_user_group_role_pg(USER_GROUP_ROLE_PG_ID,GROUP_ID,ROLE_ID,PROTECTION_GROUP_ID) values (102,4,12,44);
 
 INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.action.RequestListAction','edu.wustl.catissuecore.action.RequestListAction','edu.wustl.catissuecore.action.RequestListAction',NULL,NULL,1,'2007-01-04' from CSM_PROTECTION_ELEMENT;
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.RequestListAction'),'2007-01-04' from CSM_PG_PE;
