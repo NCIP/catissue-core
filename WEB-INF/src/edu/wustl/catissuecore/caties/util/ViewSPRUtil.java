@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import edu.wustl.catissuecore.bean.ConceptHighLightingBean;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
-import edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -22,15 +22,15 @@ public class ViewSPRUtil
 {
 	/**
 	 * @param request
-	 * @param deIdentifiedSurgicalPathologyReport
+	 * @param deidentifiedSurgicalPathologyReport
 	 */
-	public static List getConceptBeanList(HttpServletRequest request,DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport) throws DAOException
+	public static List getConceptBeanList(HttpServletRequest request,DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport) throws DAOException
 	{		
 		List conceptBeanList = new ArrayList();
-		if(deIdentifiedSurgicalPathologyReport != null)
+		if(deidentifiedSurgicalPathologyReport != null)
 		{
 			DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-			Collection conceptReferentColl =(Set)defaultBizLogic.retrieveAttribute(DeIdentifiedSurgicalPathologyReport.class.getName(), deIdentifiedSurgicalPathologyReport.getId(), Constants.COLUMN_NAME_CONCEPT_REF_COLL);
+			Collection conceptReferentColl =(Set)defaultBizLogic.retrieveAttribute(DeidentifiedSurgicalPathologyReport.class.getName(), deidentifiedSurgicalPathologyReport.getId(), Constants.COLUMN_NAME_CONCEPT_REF_COLL);
 			//temporary map to make a list of concept referent classification objects
 			Map tempMap = new HashMap();
 			if(conceptReferentColl != null)

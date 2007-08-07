@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -35,9 +35,9 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		QuarantineEventParameter quarantineParam = (QuarantineEventParameter) obj;
-		DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport =(DeIdentifiedSurgicalPathologyReport)dao.retrieve(DeIdentifiedSurgicalPathologyReport.class.getName(), quarantineParam.getDeIdentifiedSurgicalPathologyReport().getId()); 
-		deIdentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE_REQUEST);	
-		dao.update(deIdentifiedSurgicalPathologyReport, sessionDataBean, true, false, false);
+		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)dao.retrieve(DeidentifiedSurgicalPathologyReport.class.getName(), quarantineParam.getDeIdentifiedSurgicalPathologyReport().getId()); 
+		deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE_REQUEST);	
+		dao.update(deidentifiedSurgicalPathologyReport, sessionDataBean, true, false, false);
 		String className;
 		String colName=new String(Constants.SYSTEM_IDENTIFIER);
 		className=User.class.getName();
@@ -71,17 +71,17 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 			if(newquarantineParam.getUser().getId()==null){
 				dao.insert(newquarantineParam.getUser(), sessionDataBean, false, false);	
 			}
-			DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport = oldquarantineParam.getDeIdentifiedSurgicalPathologyReport();
+			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = oldquarantineParam.getDeIdentifiedSurgicalPathologyReport();
 			oldquarantineParam.setStatus(newquarantineParam.getStatus());
 			if(oldquarantineParam.getStatus().equalsIgnoreCase(Constants.COMMENT_STATUS_QUARANTINED))
 			{
-				deIdentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE);
+				deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE);
 			}
 			else
 			{
-				deIdentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.ACTIVITY_STATUS_ACTIVE);
+				deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.ACTIVITY_STATUS_ACTIVE);
 			}
-			dao.update(deIdentifiedSurgicalPathologyReport, sessionDataBean, true, false, false);
+			dao.update(deidentifiedSurgicalPathologyReport, sessionDataBean, true, false, false);
 			dao.update(oldquarantineParam, sessionDataBean, true, false, false);
 			newquarantineParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
 			dao.insert(newquarantineParam, sessionDataBean, false, false);

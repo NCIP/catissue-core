@@ -28,7 +28,7 @@ import edu.wustl.catissuecore.domain.pathology.BinaryContent;
 import edu.wustl.catissuecore.domain.pathology.Concept;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
-import edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SemanticType;
 import edu.wustl.catissuecore.domain.pathology.XMLContent;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
@@ -36,7 +36,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ConceptCoder 
 {
-	public ConceptCoder(DeIdentifiedSurgicalPathologyReport deidReport, CaTIES_ExporterPR exporterPR, TiesPipe tiesPipe)throws SQLException
+	public ConceptCoder(DeidentifiedSurgicalPathologyReport deidReport, CaTIES_ExporterPR exporterPR, TiesPipe tiesPipe)throws SQLException
 	{
 		this.deidPathologyReport=deidReport;
 		Clob tempClob=this.deidPathologyReport.getTextContent().getData();
@@ -300,5 +300,5 @@ public class ConceptCoder
 	 */
 	private CaTIES_ExporterPR exporterPR = null;
 
-	private DeIdentifiedSurgicalPathologyReport deidPathologyReport;
+	private DeidentifiedSurgicalPathologyReport deidPathologyReport;
 }
