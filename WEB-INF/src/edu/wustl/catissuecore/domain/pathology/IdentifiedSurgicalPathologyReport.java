@@ -15,7 +15,7 @@ public class IdentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	/**
 	 * Deidentified surgical pathology report.
 	 */
-	protected DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
+	protected DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport;
 	
 	/**
 	 * Specimen collection group of the report 
@@ -33,23 +33,23 @@ public class IdentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	
 	/**
 	 * @return deidentified report.	
-	 * @hibernate.many-to-one  name="deIdentifiedSurgicalPathologyReport"
-	 * class="edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport"
+	 * @hibernate.many-to-one  name="deidentifiedSurgicalPathologyReport"
+	 * class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
 	 * column="DEID_REPORT"  not-null="false"
 	 */
 	
-	public DeIdentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport() 
+	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport() 
 	{
-		return deIdentifiedSurgicalPathologyReport;
+		return deidentifiedSurgicalPathologyReport;
 	}
 
 	/**
-	 * @param deIdentifiedSurgicalPathologyReport sets deidentified report.
+	 * @param deidentifiedSurgicalPathologyReport sets deidentified report.
 	 */
 	public void setDeIdentifiedSurgicalPathologyReport(
-			DeIdentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport)
+			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
 	{
-		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
+		this.deidentifiedSurgicalPathologyReport = deidentifiedSurgicalPathologyReport;
 	}
 
 	/**	
