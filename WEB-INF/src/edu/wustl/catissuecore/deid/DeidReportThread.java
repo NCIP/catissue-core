@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.hibernate.Hibernate;
+
 import org.jdom.Element;
 import org.jdom.output.Format;
 
@@ -70,13 +72,14 @@ public class DeidReportThread extends Thread
 			// get textcontent
 			TextContent textContent=(TextContent)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_TEXT_CONTENT);
 			// synthesize the text content od identified report
-			textContent.setData(synthesizeSPRText(identifiedReport));
+			textContent.setData(Hibernate.createClob( synthesizeSPRText(identifiedReport)));
 			Logger.out.info("ReportText is synthesized for report "+identifiedReport.getId().toString());
 			// set synthesized text content back to identified report
 			identifiedReport.setTextContent(textContent);
 			
+			String textContentData=textContent.getData().getSubString(1,(int) textContent.getData().length());
 			// build report element using report text
-			Element reportElement = DeidUtils.buildReportElement(participant, identifiedReport, identifiedReport.getTextContent().getData());
+			Element reportElement = DeidUtils.buildReportElement(participant, identifiedReport, textContentData);
 			// add report element to root of the document
 			currentRequestDocument.getRootElement().addContent(reportElement);
 	        
@@ -167,12 +170,12 @@ public class DeidReportThread extends Thread
         deidReport.setSpecimenCollectionGroup(ispr.getSpecimenCollectionGroup());
         TextContent tc=new TextContent();
         // set deidentified text to text content
-        tc.setData(deidText);
+        tc.setData(Hibernate.createClob(deidText));
         // set identified report to deidentified report
         tc.setSurgicalPathologyReport(deidReport);
         
-        // set source for deidentified report
-        deidReport.setSource(ispr.getSource());
+        // set reportSource for deidentified report
+        deidReport.setReportSource(ispr.getReportSource());
         // set text content which contains deidentified text to deidentified report 
         deidReport.setTextContent(tc);
         // set default value for flag for review
