@@ -23,7 +23,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	/**
 	 * Collection of the quarantine event parameters of the current report.
 	 */
-	protected Set quarantinEventParameterSetCollection;
+	protected Set quarantinEventParameterCollection;
 	
 	/**
 	 * collection of concept referents.
@@ -94,18 +94,18 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	* @hibernate.collection-one-to-many
 	* class="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter"
 	*/
-	public Set getQuarantinEventParameterSetCollection()
+	public Set getQuarantinEventParameterCollection()
 	{
-		return quarantinEventParameterSetCollection;
+		return quarantinEventParameterCollection;
 	}
 
 	/**
-	 * @param quarantinEventParameterSetCollection sets quarantine event parameter set.
+	 * @param quarantinEventParameterCollection sets quarantine event parameter set.
 	 */
-	public void setQuarantinEventParameterSetCollection(
-			Set quarantinEventParameterSetCollection)
+	public void setQuarantinEventParameterCollection(
+			Set quarantinEventParameterCollection)
 	{
-		this.quarantinEventParameterSetCollection = quarantinEventParameterSetCollection;
+		this.quarantinEventParameterCollection = quarantinEventParameterCollection;
 	}
 	
 	/**		

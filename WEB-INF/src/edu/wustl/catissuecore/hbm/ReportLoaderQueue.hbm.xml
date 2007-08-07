@@ -56,11 +56,10 @@
 
         <property
             name="reportText"
-            type="string"
+            type="java.sql.Clob"
             update="true"
             insert="true"
             column="REPORT_TEXT"
-            length="4000"
         />
 
         <many-to-one

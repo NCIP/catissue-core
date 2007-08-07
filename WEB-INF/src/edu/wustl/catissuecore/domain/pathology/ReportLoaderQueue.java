@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.domain.pathology;
 
 
+import java.sql.Clob;
 import java.util.Collection;
 
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -18,7 +19,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 {
 
 	protected Long id;
-	protected String reportText;
+	protected Clob reportText;
 	protected Collection participantCollection;
 	protected String status;
 	protected SpecimenCollectionGroup specimenCollectionGroup;
@@ -57,7 +58,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 * @param text report text
 	 * 
 	 */
-	public ReportLoaderQueue(String text)
+	public ReportLoaderQueue(Clob text)
 	{
 		//this.id=new Long(4);
 		this.reportText=text;
@@ -108,10 +109,10 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	/**
 	 * @return reportText information. 
      * @hibernate.property name="reportText"
-     * type="string" column="REPORT_TEXT" 
+     * type="java.sql.Clob" column="REPORT_TEXT" 
      * length="4000"
      */	
-	public String getReportText()
+	public Clob getReportText()
 	{
 		return reportText;
 	}
@@ -120,7 +121,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 * Set report text
 	 * @param reportText report text 
 	 */
-	public void setReportText(String reportText)
+	public void setReportText(Clob reportText)
 	{
 		this.reportText = reportText;
 	}

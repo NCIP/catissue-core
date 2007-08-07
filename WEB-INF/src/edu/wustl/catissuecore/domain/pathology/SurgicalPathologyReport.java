@@ -46,7 +46,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	/**
 	 * Collection of review items for current pathology report.
 	 */
-	protected Set pathologyReportReviewParameterSetCollection;
+	protected Set pathologyReportReviewParameterCollection;
 	
 	/**
 	 * XML content of the pathology report.
@@ -66,7 +66,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	/**
 	 * Soure (site) of the pathology report.
 	 */
-	protected Site source;
+	protected Site reportSource;
 
 	
 	/**
@@ -164,39 +164,39 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	* @hibernate.collection-key column="REPORT_ID"
 	* @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"
 	*/
-	public Set getPathologyReportReviewParameterSetCollection()
+	public Set getPathologyReportReviewParameterCollection()
 	{
-		return pathologyReportReviewParameterSetCollection;
+		return pathologyReportReviewParameterCollection;
 	}
 	
 	/**
 	 * Sets a collection of pathology report review parameter
-	 * @param pathologyReportReviewParameterSetCollection sets collection of pathology report review parameters.
+	 * @param pathologyReportReviewParameterCollection sets collection of pathology report review parameters.
 	 */
-	public void setPathologyReportReviewParameterSetCollection(
-			Set pathologyReportReviewParameterSetCollection)
+	public void setPathologyReportReviewParameterCollection(
+			Set pathologyReportReviewParameterCollection)
 	{
-		this.pathologyReportReviewParameterSetCollection = pathologyReportReviewParameterSetCollection;
+		this.pathologyReportReviewParameterCollection = pathologyReportReviewParameterCollection;
 	}
 
 	/**
-	 * @return source associated with pathology report.
-	 * @hibernate.many-to-one name="source"
+	 * @return reportSource associated with pathology report.
+	 * @hibernate.many-to-one name="reportSource"
 	 * class="edu.wustl.catissuecore.domain.Site"
 	 * column="SOURCE_ID" not-null="false"
 	 */
-	public Site getSource()
+	public Site getReportSource()
 	{
-		return source;
+		return reportSource;
 	}
 
 	/**
-	 * Sets source of the report
-	 * @param source sets source of the pathology report.
+	 * Sets reportSource of the report
+	 * @param reportSource sets reportSource of the pathology report.
 	 */
-	public void setSource(Site source)
+	public void setReportSource(Site reportSource)
 	{
-		this.source = source;
+		this.reportSource = reportSource;
 	}
 	
 	/**

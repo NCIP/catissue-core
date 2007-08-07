@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.domain.pathology;
 
+import java.sql.Clob;
+
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -16,7 +18,7 @@ public class ReportContent extends AbstractDomainObject
 	/**
 	* Data content of surgical pathology report.
 	*/
- 	protected String data;
+ 	protected Clob data;
 
  	/**
      * System generated unique id.
@@ -44,10 +46,10 @@ public class ReportContent extends AbstractDomainObject
 
 	/**
 	 * @return report content data.
-     * @hibernate.property name="data" type="string"
+     * @hibernate.property name="data" type="java.sql.Clob"
      * column="REPORT_DATA" length="4000"
      */
-	public String getData()
+	public Clob getData()
 	{
 		return data;
 	}
@@ -55,7 +57,7 @@ public class ReportContent extends AbstractDomainObject
 	/**
 	 * @param data Report Data to set.
 	 */
-	public void setData(String data)
+	public void setData(Clob data)
 	{
 		this.data = data;
 	}
