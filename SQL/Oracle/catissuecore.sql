@@ -29,7 +29,6 @@ drop table  CATISSUE_QUANTITY cascade constraints;
 drop table  CATISSUE_SPUN_EVENT_PARAMETERS cascade constraints;
 drop table  CATISSUE_RECEIVED_EVENT_PARAM cascade constraints;
 drop table  CATISSUE_RACE cascade constraints;
-drop table  CATISSUE_CLINICAL_REPORT cascade constraints;
 drop table  CATISSUE_COLL_SPECIMEN_REQ cascade constraints;
 drop table  CATISSUE_SPECI_ARRAY_CONTENT cascade constraints;
 drop table  CATISSUE_ADDRESS cascade constraints;
@@ -95,7 +94,6 @@ drop   sequence CATISSUE_COLL_PROT_EVENT_SEQ;
 drop   sequence CATISSUE_BIOHAZARD_SEQ;
 drop   sequence CATISSUE_INSTITUTION_SEQ;
 drop   sequence CATISSUE_SPECIMEN_REQ_SEQ;
-drop   sequence CATISSUE_CLINICAL_REPORT_SEQ;
 drop   sequence CATISSUE_SPECIMEN_COLL_GRP_SEQ;
 drop   sequence CATISSUE_SPECIMEN_SEQ;
 drop   sequence CATISSUE_PERMISSIBLE_VALUE_SEQ;
@@ -348,12 +346,6 @@ create table CATISSUE_RECEIVED_EVENT_PARAM (
 create table CATISSUE_RACE (
    PARTICIPANT_ID number(19,0) not null,
    RACE_NAME varchar(50)
-);
-create table CATISSUE_CLINICAL_REPORT (
-   IDENTIFIER number(19,0) not null ,
-   SURGICAL_PATHOLOGICAL_NUMBER varchar(50),
-   PARTICIPENT_MEDI_IDENTIFIER_ID number(19,0),
-   primary key (IDENTIFIER)
 );
 create table CATISSUE_COLL_SPECIMEN_REQ (
    COLLECTION_PROTOCOL_EVENT_ID number(19,0) not null,
@@ -618,8 +610,8 @@ create table CATISSUE_SPECIMEN_COLL_GROUP (
    SITE_ID number(19,0),
    COMMENTS varchar2(2000),
    COLLECTION_PROTOCOL_EVENT_ID number(19,0),
-   CLINICAL_REPORT_ID number(19,0),
    COLLECTION_PROTOCOL_REG_ID number(19,0),
+   SURGICAL_PATHOLOGY_NUMBER varchar(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_TYPE (
@@ -673,7 +665,6 @@ alter table CATISSUE_FLUID_SPE_EVENT_PARAM  add constraint FK70565D20BC7298A9 fo
 alter table CATISSUE_SPUN_EVENT_PARAMETERS  add constraint FK312D77BCBC7298A9 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM  ;
 alter table CATISSUE_RECEIVED_EVENT_PARAM  add constraint FKA7139D06BC7298A9 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM  ;
 alter table CATISSUE_RACE  add constraint FKB0242ECD87E5ADC7 foreign key (PARTICIPANT_ID) references CATISSUE_PARTICIPANT  ;
-alter table CATISSUE_CLINICAL_REPORT  add constraint FK54A4264515246F7 foreign key (PARTICIPENT_MEDI_IDENTIFIER_ID) references CATISSUE_PART_MEDICAL_ID  ;
 alter table CATISSUE_COLL_SPECIMEN_REQ  add constraint FK860E6ABEBE10F0CE foreign key (SPECIMEN_REQUIREMENT_ID) references CATISSUE_SPECIMEN_REQUIREMENT  ;
 alter table CATISSUE_COLL_SPECIMEN_REQ  add constraint FK860E6ABE53B01F66 foreign key (COLLECTION_PROTOCOL_EVENT_ID) references CATISSUE_COLL_PROT_EVENT  ;
 alter table CATISSUE_SPECI_ARRAY_CONTENT  add constraint FKBEA9D458C4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY  ;
@@ -723,7 +714,6 @@ alter table CATISSUE_TIS_SPE_EVENT_PARAM  add constraint FKBB9648F4BC7298A9 fore
 alter table CATISSUE_ST_CONT_COLL_PROT_REL  add constraint FK3AE9FCA7B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER  ;
 alter table CATISSUE_ST_CONT_COLL_PROT_REL  add constraint FK3AE9FCA748304401 foreign key (COLLECTION_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL  ;
 alter table CATISSUE_SPECIMEN_COLL_GROUP  add constraint FKDEBAF167A7F77D13 foreign key (SITE_ID) references CATISSUE_SITE  ;
-alter table CATISSUE_SPECIMEN_COLL_GROUP  add constraint FKDEBAF1674CE21DDA foreign key (CLINICAL_REPORT_ID) references CATISSUE_CLINICAL_REPORT  ;
 alter table CATISSUE_SPECIMEN_COLL_GROUP  add constraint FKDEBAF16753B01F66 foreign key (COLLECTION_PROTOCOL_EVENT_ID) references CATISSUE_COLL_PROT_EVENT  ;
 alter table CATISSUE_SPECIMEN_COLL_GROUP  add constraint FKDEBAF1677E07C4AC foreign key (COLLECTION_PROTOCOL_REG_ID) references CATISSUE_COLL_PROT_REG  ;
 alter table CATISSUE_SPECIMEN_TYPE  add constraint FKFF69C195ECE89343 foreign key (SPECIMEN_ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE  ;
@@ -763,7 +753,6 @@ create sequence CATISSUE_COLL_PROT_EVENT_SEQ;
 create sequence CATISSUE_BIOHAZARD_SEQ;
 create sequence CATISSUE_INSTITUTION_SEQ;
 create sequence CATISSUE_SPECIMEN_REQ_SEQ;
-create sequence CATISSUE_CLINICAL_REPORT_SEQ;
 create sequence CATISSUE_SPECIMEN_COLL_GRP_SEQ;
 create sequence CATISSUE_SPECIMEN_SEQ;
 create sequence CATISSUE_PERMISSIBLE_VALUE_SEQ;
@@ -916,6 +905,182 @@ create table CATISSUE_SPECIMEN_LABEL_COUNT (
 );
 INSERT INTO CATISSUE_SPECIMEN_LABEL_COUNT (LABEL_COUNT) VALUES ('0');
 
+/****caTIES Realated Tables - start**********/
 
+drop table CATISSUE_REPORT_TEXTCONTENT cascade constraints;
+drop table CATISSUE_IDENTIFIED_REPORT cascade constraints;
+drop table CATISSUE_CONCEPT_REFERENT cascade constraints;
+drop table CATISSUE_REPORT_CONTENT cascade constraints;
+drop table CATISSUE_REVIEW_PARAMS cascade constraints;
+drop table CATISSUE_REPORT_BICONTENT cascade constraints;
+drop table CATISSUE_REPORT_SECTION cascade constraints;
+drop table CATISSUE_DEIDENTIFIED_REPORT cascade constraints;
+drop table CATISSUE_QUARANTINE_PARAMS cascade constraints;
+drop table CATISSUE_PATHOLOGY_REPORT cascade constraints;
+drop table CATISSUE_REPORT_XMLCONTENT cascade constraints;
+drop table CATISSUE_REPORT_QUEUE cascade constraints;
+drop table CATISSUE_REPORT_PARTICIP_REL cascade constraints;
+drop table CATISSUE_CONCEPT cascade constraints;
+drop table CATISSUE_SEMANTIC_TYPE cascade constraints;
+drop table CATISSUE_CONCEPT_CLASSIFICATN cascade constraints;
+
+drop sequence CATISSUE_CONCEPT_REFERENT_SEQ;
+drop sequence CATISSUE_PATHOLOGY_REPORT_SEQ;
+drop sequence CATISSUE_QUARANTINE_PARAMS_SEQ;
+drop sequence CATISSUE_REPORT_SECTION_SEQ;
+drop sequence CATISSUE_REVIEW_PARAMS_SEQ;
+drop sequence CATISSUE_REPORT_CONTENT_SEQ;
+drop sequence CATISSUE_REPORT_QUEUE_SEQ;
+drop sequence CATISSUE_SEMANTIC_TYPE_SEQ;
+drop sequence CATISSUE_CONCEPT_SEQ;
+drop sequence CATISSUE_CONCEPT_CLASSFCTN_SEQ;
+
+create table CATISSUE_REPORT_TEXTCONTENT (
+   IDENTIFIER number(19,0) not null,
+   REPORT_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_IDENTIFIED_REPORT (
+   IDENTIFIER number(19,0) not null,
+   DEID_REPORT number(19,0),
+   SCG_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_CONCEPT_REFERENT (
+   IDENTIFIER number(19,0) not null,
+   CONCEPT_ID number(19,0),
+   CONCEPT_CLASSIFICATION_ID number(19,0),
+   DEIDENTIFIED_REPORT_ID number(19,0),
+   END_OFFSET number(19,0),
+   IS_MODIFIER number(1,0),
+   IS_NEGATED number(1,0),
+   START_OFFSET number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_REPORT_CONTENT (
+   IDENTIFIER number(19,0) not null,
+   REPORT_DATA clob,
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_REVIEW_PARAMS (
+   IDENTIFIER number(19,0) not null,
+   REVIEWER_ROLE varchar(100),
+   REPORT_ID number(19,0),
+   EVENT_TIMESTAMP timestamp,
+   USER_ID number(19,0),
+   COMMENTS varchar2(4000),
+   STATUS varchar(100),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_REPORT_BICONTENT (
+   IDENTIFIER number(19,0) not null,
+   REPORT_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_REPORT_SECTION (
+   IDENTIFIER number(19,0) not null,
+   DOCUMENT_FRAGMENT varchar2(4000),
+   END_OFFSET integer,
+   NAME varchar(100),
+   START_OFFSET integer,
+   TEXT_CONTENT_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_DEIDENTIFIED_REPORT (
+   IDENTIFIER number(19,0) not null,
+   STATUS varchar(100),
+   SCG_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_QUARANTINE_PARAMS (
+   IDENTIFIER number(19,0) not null,
+   DEID_REPORT_ID number(19,0),
+   IS_QUARANTINED number(1),
+   EVENT_TIMESTAMP timestamp,
+   USER_ID number(19,0),
+   COMMENTS varchar2(4000),
+   STATUS varchar(100),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_PATHOLOGY_REPORT (
+   IDENTIFIER number(19,0) not null,
+   ACTIVITY_STATUS varchar(100),
+   REVIEW_FLAG number(1),
+   SOURCE_ID number(19,0),
+   REPORT_STATUS varchar(100),
+   COLLECTION_DATE_TIME date,
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_REPORT_XMLCONTENT (
+   IDENTIFIER number(19,0) not null,
+   REPORT_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_REPORT_QUEUE (
+   IDENTIFIER number(19,0) not null,
+   STATUS varchar(50),
+   REPORT_TEXT clob,
+   SPECIMEN_COLL_GRP_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_REPORT_PARTICIP_REL(
+   PARTICIPANT_ID number(19,0),
+   REPORT_ID number(19,0)
+);
+create table CATISSUE_CONCEPT (
+   IDENTIFIER number(19,0) not null,
+   CONCEPT_UNIQUE_ID varchar(30),
+   NAME varchar2(500),
+   SEMANTIC_TYPE_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_SEMANTIC_TYPE (
+   IDENTIFIER number(19,0) not null,
+   LABEL varchar2(500),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_CONCEPT_CLASSIFICATN (
+   IDENTIFIER number(19,0) not null,
+   NAME varchar2(500),
+   primary key (IDENTIFIER)
+);
+
+
+alter table CATISSUE_REPORT_TEXTCONTENT add constraint FKD74882FD91092806 foreign key (REPORT_ID) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
+alter table CATISSUE_REPORT_TEXTCONTENT add constraint FKD74882FDBC7298A9 foreign key (IDENTIFIER) references CATISSUE_REPORT_CONTENT (IDENTIFIER);
+alter table CATISSUE_IDENTIFIED_REPORT add constraint FK6A2246DCBC7298A9 foreign key (IDENTIFIER) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
+alter table CATISSUE_IDENTIFIED_REPORT add constraint FK6A2246DC752DD177 foreign key (DEID_REPORT) references CATISSUE_DEIDENTIFIED_REPORT (IDENTIFIER);
+alter table CATISSUE_IDENTIFIED_REPORT add constraint FK6A2246DC91741663 foreign key (SCG_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
+alter table CATISSUE_CONCEPT_REFERENT add constraint FK799CCA7E9F96B363 foreign key (DEIDENTIFIED_REPORT_ID) references CATISSUE_DEIDENTIFIED_REPORT (IDENTIFIER);
+alter table CATISSUE_REVIEW_PARAMS add constraint FK5311FFF62206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
+alter table CATISSUE_REVIEW_PARAMS add constraint FK5311FFF691092806 foreign key (REPORT_ID) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
+alter table CATISSUE_REPORT_BICONTENT add constraint FK8A9A4EE391092806 foreign key (REPORT_ID) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
+alter table CATISSUE_REPORT_BICONTENT add constraint FK8A9A4EE3BC7298A9 foreign key (IDENTIFIER) references CATISSUE_REPORT_CONTENT (IDENTIFIER);
+alter table CATISSUE_DEIDENTIFIED_REPORT add constraint FKCDD0DF7BBC7298A9 foreign key (IDENTIFIER) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
+alter table CATISSUE_DEIDENTIFIED_REPORT add constraint FKCDD0DF7B91741663 foreign key (SCG_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
+alter table CATISSUE_QUARANTINE_PARAMS add constraint FK3C12AE3B2206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
+alter table CATISSUE_QUARANTINE_PARAMS add constraint FK3C12AE3B3EEC14E3 foreign key (DEID_REPORT_ID) references CATISSUE_DEIDENTIFIED_REPORT (IDENTIFIER);
+alter table CATISSUE_PATHOLOGY_REPORT add constraint FK904EC9F040DCD7BF foreign key (SOURCE_ID) references CATISSUE_SITE (IDENTIFIER);
+alter table CATISSUE_REPORT_XMLCONTENT add constraint FK4597C9F1BC7298A9 foreign key (IDENTIFIER) references CATISSUE_REPORT_CONTENT (IDENTIFIER);
+alter table CATISSUE_REPORT_XMLCONTENT add constraint FK4597C9F191092806 foreign key (REPORT_ID) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
+alter table CATISSUE_REPORT_QUEUE add constraint FK214246228CA560D1 foreign key (SPECIMEN_COLL_GRP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
+alter table CATISSUE_CONCEPT add constraint FKC1A3C8CC7F0C2C7 foreign key (SEMANTIC_TYPE_ID) references CATISSUE_SEMANTIC_TYPE (IDENTIFIER);
+alter table CATISSUE_CONCEPT_REFERENT add constraint FK799CCA7EA9816272 foreign key (CONCEPT_ID) references CATISSUE_CONCEPT (IDENTIFIER);
+alter table CATISSUE_CONCEPT_REFERENT add constraint FK799CCA7E72C371DD foreign key (CONCEPT_CLASSIFICATION_ID) references CATISSUE_CONCEPT_CLASSIFICATN (IDENTIFIER);
+
+create sequence CATISSUE_CONCEPT_REFERENT_SEQ;
+create sequence CATISSUE_PATHOLOGY_REPORT_SEQ;
+create sequence CATISSUE_QUARANTINE_PARAMS_SEQ;
+create sequence CATISSUE_REPORT_SECTION_SEQ;
+create sequence CATISSUE_REVIEW_PARAMS_SEQ;
+create sequence CATISSUE_REPORT_CONTENT_SEQ;
+create sequence CATISSUE_REPORT_QUEUE_SEQ;
+create sequence CATISSUE_SEMANTIC_TYPE_SEQ;
+create sequence CATISSUE_CONCEPT_SEQ;
+create sequence CATISSUE_CONCEPT_CLASSFCTN_SEQ;
+
+/****caTIES Realated Tables - end**********/
 commit;
 
