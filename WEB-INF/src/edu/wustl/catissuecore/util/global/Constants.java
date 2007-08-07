@@ -1706,7 +1706,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLUMN_COLL_PROT_EVENT_COLL="elements(collectionProtocolEventCollection)";
 	public static final String COLUMN_NAME_CONCEPT_REF_COLL="elements(conceptReferentCollection)";
 	public static final String COLUMN_NAME_DEID_REPORT="deidentifiedSurgicalPathologyReport";
-	public static final String COLUMN_NAME_SOURCE="source";
+	public static final String COLUMN_NAME_REPORT_SOURCE="reportSource";
 	public static final String COLUMN_NAME_TEXT_CONTENT="textContent";
 	public static final String COLUMN_NAME_TITLE="title";
 	public static final String COLUMN_NAME_PARTICIPANT_ID = "participant.id";
