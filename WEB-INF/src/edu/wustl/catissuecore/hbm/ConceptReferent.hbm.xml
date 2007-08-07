@@ -45,8 +45,8 @@
         />
 
         <many-to-one
-            name="deidentifiedSurgicalPathologyReport"
-            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+            name="deIdentifiedSurgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport"
             cascade="none"
             outer-join="auto"
             update="true"
