@@ -59,7 +59,8 @@
 	
 	<!-- stop Report Loader Server  -->
 		<target name="stop_report_loader_server">
-			<java classname="edu.wustl.catissuecore.reportloader.StopReportLoaderServer">
+			<java classname="edu.wustl.catissuecore.caties.util.StopServerThread">
+				<arg value="filePollerPort" />
 				<classpath>
 					<pathelement location="caties.jar"/>
 				</classpath>
@@ -72,7 +73,22 @@
 	
 	<!-- stop DeIDPipelineManager  -->
 	<target name="stop_deid_server">
-		<java classname="edu.wustl.catissuecore.deid.StopDeidServer">
+		<java classname="edu.wustl.catissuecore.caties.util.StopServerThread">
+			<arg value="deidPort" />
+			<classpath>
+				<pathelement location="caties.jar"/>
+			</classpath>
+			<classpath>
+				<pathelement location="${base.dir}/caTIES_conf" />
+			</classpath>
+			<classpath refid="cp"/>
+		</java>
+	</target>
+	
+	<!-- stop ConceptCodeManager  -->
+	<target name="stop_concept_code_server">
+		<java classname="edu.wustl.catissuecore.caties.util.StopServerThread">
+			<arg value="conceptCoderPort" />
 			<classpath>
 				<pathelement location="caties.jar"/>
 			</classpath>
