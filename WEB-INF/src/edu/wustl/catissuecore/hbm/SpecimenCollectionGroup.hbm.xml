@@ -167,7 +167,7 @@
         
         <one-to-one
             name="deIdentifiedSurgicalPathologyReport"
-            class="edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
             cascade="save-update"
             outer-join="auto"
             constrained="false"

@@ -124,7 +124,7 @@
         -->
 
         <joined-subclass
-            name="edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport"
+            name="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
             table="CATISSUE_DEIDENTIFIED_REPORT"
             dynamic-update="false"
             dynamic-insert="false"
@@ -203,7 +203,7 @@
 
         <many-to-one
             name="deIdentifiedSurgicalPathologyReport"
-            class="edu.wustl.catissuecore.domain.pathology.DeIdentifiedSurgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
             cascade="none"
             outer-join="auto"
             update="true"
