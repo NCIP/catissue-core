@@ -203,7 +203,6 @@
 
 				<exclude name="**/WEB-INF/src*/**" />
 				<exclude name="**/*servlet.jar*" />
-				<exclude name="**/*log4j-1.2.9.jar*" />
 				<exclude name="**/*hibernate2.jar*" />
 				<exclude name="**/*jta.jar*" />
 				<exclude name="**/CVS*" />
