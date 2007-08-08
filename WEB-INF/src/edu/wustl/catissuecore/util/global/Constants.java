@@ -637,7 +637,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Approve User Constants
 	public static final int ZERO = 0;
 	public static final int START_PAGE = 1;
-	public static final int NUMBER_RESULTS_PER_PAGE = 5;
+	public static final int NUMBER_RESULTS_PER_PAGE = 20;
 	public static final int NUMBER_RESULTS_PER_PAGE_SEARCH = 15;
 	public static final String PAGE_NUMBER = "pageNum";
 	public static final String RESULTS_PER_PAGE = "numResultsPerPage"; 
