@@ -161,7 +161,7 @@
         />
 
         <set
-            name="quarantinEventParameterCollection"
+            name="quarantineEventParameterCollection"
             table="CATISSUE_QUARANTINE_PARAMS"
             lazy="false"
             inverse="false"
