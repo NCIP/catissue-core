@@ -20,6 +20,9 @@
 			<classpath>
 				<pathelement location="caties.jar"/>
 			</classpath>
+			<classpath>
+				<pathelement location="${base.dir}/caTIES_conf" />
+			</classpath>
 			<classpath refid="cp"/>
 		</java>
 	</target>
@@ -30,15 +33,38 @@
 			<classpath>
 				<pathelement location="caties.jar"/>
 			</classpath>
+			<classpath>
+				<pathelement location="${base.dir}/caTIES_conf" />
+			</classpath>
 			<classpath refid="cp"/>
 		</java>
 	</target>
+	
+	<!-- run ConceptCodeManager java file -->
+		<target name="run_concept_code_server">
+			<java classname="edu.wustl.catissuecore.conceptcode.ConceptCodeManager" fork="yes">
+				<classpath>
+					<pathelement location="caties.jar"/>
+				</classpath>
+				<classpath refid="cp"/>
+				<classpath>
+					<pathelement location="${base.dir}/caTIES_conf" />
+				</classpath>
+				<jvmarg value="-Dgate.plugins.home=E:/gate_3_1/gate_3_1/application/plugins" /> 
+				<jvmarg value="-DproxyHost=ptproxy.persistent.co.in" />
+				<jvmarg value="-DproxyPort=8080" />
+				<jvmarg value="-D64 -ms300m -mx900m"/>
+			</java>
+		</target>
 	
 	<!-- stop Report Loader Server  -->
 		<target name="stop_report_loader_server">
 			<java classname="edu.wustl.catissuecore.reportloader.StopReportLoaderServer">
 				<classpath>
 					<pathelement location="caties.jar"/>
+				</classpath>
+				<classpath>
+					<pathelement location="${base.dir}/caTIES_conf" />
 				</classpath>
 				<classpath refid="cp"/>
 			</java>
@@ -49,6 +75,9 @@
 		<java classname="edu.wustl.catissuecore.deid.StopDeidServer">
 			<classpath>
 				<pathelement location="caties.jar"/>
+			</classpath>
+			<classpath>
+				<pathelement location="${base.dir}/caTIES_conf" />
 			</classpath>
 			<classpath refid="cp"/>
 		</java>
