@@ -92,7 +92,6 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         request.setAttribute(Constants.REQ_PATH, "");
         request.setAttribute(Constants.SUBMITTED_FOR, submittedFor);
         request.setAttribute(Constants.FORWARD_TO, forwardTo);
-        System.out.println("*****************"+pageOf+"**************");
         if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN))
         {
         	request.setAttribute(Constants.ID,id.toString());
