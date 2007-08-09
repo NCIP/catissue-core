@@ -276,7 +276,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			try
 			{
 				defaultBizLogic.populateUIBean(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(), viewSPR);
-				DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(), "deidentifiedSurgicalPathologyReport");
+				DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(), Constants.COLUMN_NAME_DEID_REPORT);
 				List conceptBeanList=ViewSPRUtil.getConceptBeanList(request,deidReport);
 				request.setAttribute(Constants.CONCEPT_BEAN_LIST, conceptBeanList);
 			}
