@@ -160,7 +160,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		List specimensDetails = new ArrayList();
 		List gridInfo = new ArrayList();
 		int dimensionOne = array.getCapacity().getOneDimensionCapacity().intValue();
-		int dimensionTwo = array.getCapacity().getOneDimensionCapacity().intValue();
+		int dimensionTwo = array.getCapacity().getTwoDimensionCapacity().intValue();
 
 		for (int i = 0; i < dimensionOne; i++)
 		{

@@ -650,8 +650,8 @@ public class SpecimenForm extends AbstractActionForm
 		else if (specimen instanceof MolecularSpecimen)
 		{
 			this.className = Constants.MOLECULAR;
-			this.concentration = String.valueOf(((MolecularSpecimen) specimen)
-					.getConcentrationInMicrogramPerMicroliter());
+			this.concentration = Utility.toString(String.valueOf(((MolecularSpecimen) specimen)
+					.getConcentrationInMicrogramPerMicroliter()));
 		}
 		else if (specimen instanceof TissueSpecimen)
 		{
