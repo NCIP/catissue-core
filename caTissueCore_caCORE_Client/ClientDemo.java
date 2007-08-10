@@ -137,7 +137,7 @@ public class ClientDemo
 				writeHeaderContentsToReport();
 				reportContents = new StringBuffer();
 				testClient.createObjects();
-				testClient.serachObject();
+				testClient.searchObject();
 				testClient.updateObjects();
 				writeFooterContentsToReport();
 				reportWriter.closeFile();
@@ -1274,7 +1274,7 @@ public class ClientDemo
 	 	
 ////////////////////////////////  End Add operation /////////////////	 	
     
-    private void serachObject()
+    private void searchObject()
     {
 		reportContents.append(newLine);
     	api = new APIDemo();
@@ -1546,11 +1546,12 @@ public class ClientDemo
     }
     private void testSearchInstitution()
     {
-    	Institution cachedObject = (Institution)dataModelObjectMap.get("Institution");
+    	//Institution cachedObject = (Institution)dataModelObjectMap.get("Institution");
     	Institution institution = new Institution();
     	setLogger(institution);
     	Logger.out.info(" searching domain object");
-    	institution.setId(cachedObject.getId());//institution.setId(new Long(1));
+    	//institution.setId(cachedObject.getId());
+    	institution.setId(new Long(1));
          try {
         	 List resultList = appService.search(Institution.class,institution);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
