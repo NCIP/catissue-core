@@ -12,6 +12,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,6 +31,7 @@ import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -41,6 +43,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -52,7 +55,7 @@ import edu.wustl.common.util.logger.Logger;
  * This class initializes the fields in the  Distribution Add/Edit webpage.
  * @author aniruddha_phadnis
  */
-public class DistributionAction extends SpecimenEventParametersAction
+public class DistributionAction extends SecureAction
 {
 
     //This counter will keep track of the no of consentTiers 
@@ -118,9 +121,44 @@ public class DistributionAction extends SpecimenEventParametersAction
         ActionForm form, HttpServletRequest request,
         HttpServletResponse response) throws Exception 
     {
-        super.executeSecureAction(mapping, form, request, response);
+	      DistributionForm dForm = (DistributionForm) form;
+		setCommonRequestParameters(request);
 
-        DistributionForm dForm = (DistributionForm) form;
+    	//EventParametersForm eventParametersForm = (EventParametersForm)form;
+    	
+    	//	 if operation is add
+    	if(dForm.isAddOperation())
+    	{
+    		if(dForm.getUserId()==0)
+    		{
+    			SessionDataBean sessionData = getSessionData(request);
+    			if(sessionData!=null && sessionData.getUserId()!=null)
+    			{
+    				long userId = sessionData.getUserId().longValue();
+    				dForm.setUserId(userId);
+    			}
+    		}
+    		// set the current Date and Time for the event.
+			Calendar cal = Calendar.getInstance();
+			if(dForm.getDateOfEvent()==null)
+			{
+				dForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+			}
+			if(dForm.getTimeInHours()==null)
+			{
+				dForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+			}
+			if(dForm.getTimeInMinutes()==null)
+			{
+				dForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+			}
+	
+    	}
+    	
+
+//        super.executeSecureAction(mapping, form, request, response);
+
+  
 
 
         //Populate Distributed Items data in the Distribution page if specimen ID is changed. 
@@ -541,4 +579,39 @@ public class DistributionAction extends SpecimenEventParametersAction
 		return specimen;
 	}
     //Consent Tracking Virender Mehta
+    
+    /**
+	 * This method sets all the common parameters for the SpecimenEventParameter pages
+	 * @param request HttpServletRequest instance in which the data will be set. 
+	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
+	 */
+	private void setCommonRequestParameters(HttpServletRequest request) throws Exception
+	{
+        //Gets the value of the operation parameter.
+        String operation = request.getParameter(Constants.OPERATION);
+
+        //Sets the operation attribute to be used in the Add/Edit FrozenEventParameters Page. 
+        request.setAttribute(Constants.OPERATION, operation);
+        
+        //Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
+        request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
+
+        //Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
+        request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
+         
+        //The id of specimen of this event.
+        String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
+        request.setAttribute(Constants.SPECIMEN_ID, specimenId);
+        Logger.out.debug("\t\t SpecimenEventParametersAction************************************ : "+specimenId );
+        
+       	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+    	Collection userCollection =  userBizLogic.getUsers(operation);
+    	
+    	request.setAttribute(Constants.USERLIST, userCollection);
+    	
+    	// This method will be overridden by the sub classes
+    	setRequestParameters( request);
+        	
+	}
+
 }

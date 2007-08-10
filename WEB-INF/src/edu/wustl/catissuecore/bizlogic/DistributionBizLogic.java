@@ -93,7 +93,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 
 	public boolean isSpecimenArrayDistributed(Long specimenArrayId) throws DAOException
 	{
-		boolean distributed = true;
+		boolean distributed = false;
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List list = null;
 		//String queryStr = "select array.distribution_id from catissue_specimen_array array where array.identifier =" + specimenArrayId;
@@ -102,11 +102,11 @@ public class DistributionBizLogic extends DefaultBizLogic
 		{
 			dao.openSession(null);
 			list = dao.executeQuery(queryStr, null, false, null);
-			String distributionId = (String) ((List) list.get(0)).get(0);
-			if (distributionId.equals(""))
+			if (list != null && !list.isEmpty())
 			{
-				distributed = false;
+				distributed = true;
 			}
+
 			dao.closeSession();
 		}
 		catch (Exception ex)
