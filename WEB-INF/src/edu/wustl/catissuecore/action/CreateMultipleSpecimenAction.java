@@ -33,6 +33,8 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGenerator;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGeneratorFactory;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -72,6 +74,12 @@ public class CreateMultipleSpecimenAction extends BaseAction
 			else
 			{
 				createForm = new CreateSpecimenForm();
+				HashMap inputMap = new HashMap();
+				inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, request.getParameter("specimenLabel"));
+
+				SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
+				createForm.setLabel(abstractSpecimenGenerator.getNextAvailableDeriveSpecimenlabel(inputMap));
+				
 				createForm.setClassName(request.getParameter("derivedSpecimenClass"));
 				createForm.setType(request.getParameter("derivedSpecimenType"));
 			}
