@@ -149,7 +149,7 @@ public class OrderingSystemUtil
 		while(childrenSpecimenListIterator.hasNext())
 		{
 			Specimen childrenSpecimen = (Specimen)childrenSpecimenListIterator.next();
-			if(childrenSpecimen.getClassName().trim().equalsIgnoreCase(className) && childrenSpecimen.getType().trim().equalsIgnoreCase(type))
+			if(childrenSpecimen.getClassName().trim().equalsIgnoreCase(className) && childrenSpecimen.getType().trim().equalsIgnoreCase(type) && childrenSpecimen.getAvailableQuantity().getValue() > 0)
 			{
 				finalChildrenSpecimenList.add(childrenSpecimen);
 			}
