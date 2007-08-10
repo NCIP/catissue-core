@@ -1764,7 +1764,7 @@ public class ClientDemo
             for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
                 Specimen returnedspecimen = (Specimen) resultsIterator.next();
                 System.out.println("Label: "+returnedspecimen.getLabel() + "Type: " + returnedspecimen.getType() + " ");
-                System.out.println("\tQuantity: " + returnedspecimen.getQuantity().getValue() + " " );
+                System.out.println("\tQuantity: " + returnedspecimen.getInitialQuantity().getValue() + " " );
                 System.out.println("\tEventColl: " + returnedspecimen.getSpecimenEventCollection() + " " );
                 System.out.println("\tBiohazard: " + returnedspecimen.getBiohazardCollection() + " " );
                 System.out.println("\tExternal: " + returnedspecimen.getExternalIdentifierCollection() + " " );
@@ -1954,7 +1954,7 @@ public class ClientDemo
         		 Specimen returnedspecimen = (Specimen) resultsIterator.next();
         		 
         		 System.out.println("Label: "+returnedspecimen.getLabel() + "Type: " + returnedspecimen.getType() + " ");
-                 System.out.println("\tQuantity: " + returnedspecimen.getQuantity().getValue() + " " );
+                 System.out.println("\tQuantity: " + returnedspecimen.getInitialQuantity().getValue() + " " );
                  System.out.println("\tEventColl: " + returnedspecimen.getSpecimenEventCollection() + " " );
                  System.out.println("\tBiohazard: " + returnedspecimen.getBiohazardCollection() + " " );
                  System.out.println("\tExternal: " + returnedspecimen.getExternalIdentifierCollection() + " " );

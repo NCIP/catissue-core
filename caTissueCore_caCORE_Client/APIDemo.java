@@ -9,7 +9,6 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -165,7 +164,7 @@ public class APIDemo
 	public Biohazard initBioHazard()
 	{
 		Biohazard bioHazard = new Biohazard();
-		bioHazard.setComments("NueroToxicProtein");
+		bioHazard.setComment("NueroToxicProtein");
 		bioHazard.setName("bh" + UniqueKeyGeneratorUtil.getUniqueKey());
 		bioHazard.setType("Toxic");
 		return bioHazard;
@@ -229,7 +228,7 @@ public class APIDemo
 		userObj.setCancerResearchGroup(cancerResearchGroup);
 
 		//userObj.setRoleId("1");
-		//userObj.setComments("");
+		//userObj.setComment("");
 		userObj.setPageOf(Constants.PAGEOF_SIGNUP);
 		//userObj.setActivityStatus("Active");
 		//userObj.setCsmUserId(new Long(1));
@@ -273,7 +272,7 @@ public class APIDemo
 
 		userObj.setRoleId("1");
 		userObj.setActivityStatus("Active");
-		//userObj.setComments("");
+		//userObj.setComment("");
 		userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);		
 		//userObj.setCsmUserId(new Long(1));
 		//userObj.setFirstTimeLogin(Boolean.valueOf(false));
@@ -439,7 +438,7 @@ public class APIDemo
 		SpecimenArrayType specimenArrayType = (SpecimenArrayType) ClientDemo.dataModelObjectMap.get("SpecimenArrayType");
 		Collection holdsSpecimenArrayTypeCollection = new HashSet();		
 		holdsSpecimenArrayTypeCollection.add(specimenArrayType);
-		storageContainer.setHoldsSpArrayTypeCollection(holdsSpecimenArrayTypeCollection);
+		storageContainer.setHoldsSpecimenArrayTypeCollection(holdsSpecimenArrayTypeCollection);
 
 		storageContainer.setPositionDimensionOne(new Integer(1));
 		storageContainer.setPositionDimensionTwo(new Integer(2));
@@ -564,7 +563,7 @@ public class APIDemo
 		
 		collectionProtocol.setConsentTierCollection(consentTierColl);
 		
-		collectionProtocol.setAliqoutInSameContainer(new Boolean(false));
+		collectionProtocol.setAliquotInSameContainer(new Boolean(false));
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active");
 		collectionProtocol.setEndDate(null);
@@ -623,7 +622,7 @@ public class APIDemo
 		User protocolCordinator = (User)ClientDemo.dataModelObjectMap.get("User1");
 		Collection protocolCordinatorCollection = new HashSet();
 		protocolCordinatorCollection.add(protocolCordinator);
-		collectionProtocol.setUserCollection(protocolCordinatorCollection);		
+		collectionProtocol.setCoordinatorCollection(protocolCordinatorCollection);		
 		return collectionProtocol;
 	}
 
@@ -675,10 +674,10 @@ public class APIDemo
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		molecularSpecimen.setQuantity(quantity);
+		molecularSpecimen.setInitialQuantity(quantity);
 		molecularSpecimen.setAvailableQuantity(quantity);
 		molecularSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
-		molecularSpecimen.setComments("");
+		molecularSpecimen.setComment("");
 		molecularSpecimen.setLineage("Aliquot");
 		// Is virtually located
 		molecularSpecimen.setStorageContainer(null); 
@@ -694,7 +693,7 @@ public class APIDemo
 		externalIdentifierCollection.add(externalIdentifier);
 		molecularSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
-		collectionEventParameters.setComments("");
+		collectionEventParameters.setComment("");
 		collectionEventParameters.setSpecimen(molecularSpecimen);
 
 		User user = (User)ClientDemo.dataModelObjectMap.get("User");	
@@ -730,7 +729,7 @@ public class APIDemo
 		}
 		
 		receivedEventParameters.setReceivedQuality("Acceptable");
-		receivedEventParameters.setComments("");
+		receivedEventParameters.setComment("");
 		receivedEventParameters.setSpecimen(molecularSpecimen);
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
@@ -773,10 +772,10 @@ public class APIDemo
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		tissueSpecimen.setQuantity(quantity);
+		tissueSpecimen.setInitialQuantity(quantity);
 		tissueSpecimen.setAvailableQuantity(quantity);
 		
-		tissueSpecimen.setComments("");
+		tissueSpecimen.setComment("");
 		tissueSpecimen.setLineage("Aliquot");
 		// Is virtually located
 		
@@ -795,7 +794,7 @@ public class APIDemo
 		externalIdentifierCollection.add(externalIdentifier);
 		tissueSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
-		collectionEventParameters.setComments("");
+		collectionEventParameters.setComment("");
 		collectionEventParameters.setSpecimen(tissueSpecimen);
 
 		User user = (User)ClientDemo.dataModelObjectMap.get("User");	
@@ -831,7 +830,7 @@ public class APIDemo
 		}
 		
 		receivedEventParameters.setReceivedQuality("Acceptable");
-		receivedEventParameters.setComments("");
+		receivedEventParameters.setComment("");
 		receivedEventParameters.setSpecimen(tissueSpecimen);
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
@@ -875,10 +874,10 @@ public class APIDemo
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		fluidSpecimen.setQuantity(quantity);
+		fluidSpecimen.setInitialQuantity(quantity);
 		fluidSpecimen.setAvailableQuantity(quantity);
 		
-		fluidSpecimen.setComments("");
+		fluidSpecimen.setComment("");
 		fluidSpecimen.setLineage("Aliquot");
 		// Is virtually located
 		
@@ -897,7 +896,7 @@ public class APIDemo
 		externalIdentifierCollection.add(externalIdentifier);
 		fluidSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
-		collectionEventParameters.setComments("");
+		collectionEventParameters.setComment("");
 		collectionEventParameters.setSpecimen(fluidSpecimen);
 
 		User user = (User)ClientDemo.dataModelObjectMap.get("User");	
@@ -933,7 +932,7 @@ public class APIDemo
 		}
 		
 		receivedEventParameters.setReceivedQuality("Acceptable");
-		receivedEventParameters.setComments("");
+		receivedEventParameters.setComment("");
 		receivedEventParameters.setSpecimen(fluidSpecimen);
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
@@ -975,9 +974,9 @@ public class APIDemo
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		cellSpecimen.setQuantity(quantity);
+		cellSpecimen.setInitialQuantity(quantity);
 		cellSpecimen.setAvailableQuantity(quantity);
-		cellSpecimen.setComments("");
+		cellSpecimen.setComment("");
 		cellSpecimen.setLineage("Aliquot");
 		// Is virtually located
 		
@@ -996,7 +995,7 @@ public class APIDemo
 		externalIdentifierCollection.add(externalIdentifier);
 		cellSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
-		collectionEventParameters.setComments("");
+		collectionEventParameters.setComment("");
 		collectionEventParameters.setSpecimen(cellSpecimen);
 
 		User user = (User)ClientDemo.dataModelObjectMap.get("User");	
@@ -1032,7 +1031,7 @@ public class APIDemo
 		}
 		
 		receivedEventParameters.setReceivedQuality("Acceptable");
-		receivedEventParameters.setComments("");
+		receivedEventParameters.setComment("");
 		receivedEventParameters.setSpecimen(cellSpecimen);
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
@@ -1061,7 +1060,7 @@ public class APIDemo
 //		Site site = new Site();
 //		site.setId(new Long(1));
 		Site site = (Site)ClientDemo.dataModelObjectMap.get("Site");
-		specimenCollectionGroup.setSite(site);
+		specimenCollectionGroup.setSpecimenCollectionSite(site);
 
 		specimenCollectionGroup.setClinicalDiagnosis("Abdominal fibromatosis");
 		specimenCollectionGroup.setClinicalStatus("Operative");
@@ -1121,15 +1120,14 @@ public class APIDemo
 		
 		specimenCollectionGroup.setConsentTierStatusCollection(consentTierStatusCollection);
 
-		ClinicalReport clinicalReport = new ClinicalReport();
-		clinicalReport.setSurgicalPathologyNumber("");
-		//clinicalReport.setId(new Long(1));
-		specimenCollectionGroup.setClinicalReport(clinicalReport);
+		
+		specimenCollectionGroup.setSurgicalPathologyNumber("");
+		
 
 		//Adding Events
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setCollectionProcedure("Not Specified");
-		collectionEventParameters.setComments("Default Comment");
+		collectionEventParameters.setComment("Default Comment");
 		collectionEventParameters.setContainer("Not Specified");
 		collectionEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
 		//Setting default system date and time
@@ -1144,7 +1142,7 @@ public class APIDemo
 		collectionEventParameters.setUser(user);
 		
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
-		receivedEventParameters.setComments("Default Comment");
+		receivedEventParameters.setComment("Default Comment");
 		receivedEventParameters.setReceivedQuality("Not Specified");
 		receivedEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
 		receivedEventParameters.setTimestamp(EventsUtil.setTimeStamp(dateOfEvent, timeInHrs, timeInMinutes));
@@ -1211,14 +1209,14 @@ public class APIDemo
 			e.printStackTrace();
 		}
 		*/
-		distribution.setComments("");
+		distribution.setComment("");
 
 		User user = (User) ClientDemo.dataModelObjectMap.get("User");	
 		/*	
 		new User();
 		user.setId(new Long(1));
 		*/
-		distribution.setUser(user);
+		distribution.setDistributedBy(user);
 	 
 		return distribution;
 	}
@@ -1243,10 +1241,10 @@ public class APIDemo
 		
 		Site toSite = (Site) ClientDemo.dataModelObjectMap.get("Site");		
 		distribution.setToSite(toSite);	
-		distribution.setComments("");
+		distribution.setComment("");
 
 		User user = (User) ClientDemo.dataModelObjectMap.get("User");
-		distribution.setUser(user);
+		distribution.setDistributedBy(user);
 		return distribution;
 	}
 	
@@ -1512,7 +1510,7 @@ public class APIDemo
 	
 	public void updateBiohazard(Biohazard bioHazard)
 	{
-		bioHazard.setComments("Radioactive");
+		bioHazard.setComment("Radioactive");
 		bioHazard.setName("bh" + UniqueKeyGeneratorUtil.getUniqueKey());
 		bioHazard.setType("Radioactive"); //Toxic
 	}
@@ -1547,7 +1545,7 @@ public class APIDemo
 	public void updateSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
 		Site site = (Site)ClientDemo.dataModelObjectMap.get("Site");
-		specimenCollectionGroup.setSite(site);
+		specimenCollectionGroup.setSpecimenCollectionSite(site);
 		specimenCollectionGroup.setClinicalDiagnosis("Dentinoma");//Abdominal fibromatosis
 		specimenCollectionGroup.setClinicalStatus("New Diagnosis"); //Operative
 		specimenCollectionGroup.setActivityStatus("Active");
@@ -1561,9 +1559,7 @@ public class APIDemo
 
 		specimenCollectionGroup.setName("scg" + UniqueKeyGeneratorUtil.getUniqueKey());
 		
-		//clinicalReport = new ClinicalReport();
-		//clinicalReport.setSurgicalPathologyNumber("123");
-		specimenCollectionGroup.getClinicalReport().setSurgicalPathologyNumber("1234");
+		specimenCollectionGroup.setSurgicalPathologyNumber("1234");
 		
 		//Uncomment to set these collection and received events for all specimens associated with this scg.
 		//specimenCollectionGroup.isApplyEventsToSpecimens(true);
@@ -1665,7 +1661,7 @@ public class APIDemo
 	
 	public void updateCollectionProtocol(CollectionProtocol collectionProtocol)
 	{
-		collectionProtocol.setAliqoutInSameContainer(new Boolean(false)); //true
+		collectionProtocol.setAliquotInSameContainer(new Boolean(false)); //true
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active"); //Active
 		collectionProtocol.setEndDate(null);
@@ -1723,7 +1719,7 @@ public class APIDemo
 		User protocolCordinator = (User)ClientDemo.dataModelObjectMap.get("User1");		
 		Collection protocolCordinatorCollection = new HashSet();
 		protocolCordinatorCollection.add(protocolCordinator);
-		collectionProtocol.setUserCollection(protocolCordinatorCollection);
+		collectionProtocol.setCoordinatorCollection(protocolCordinatorCollection);
 		
 	}
 	public void updateSpecimen(Specimen updateSpecimen)
@@ -1744,7 +1740,7 @@ public class APIDemo
 		
 		//updateSpecimen.setAvailableQuantity(quantity);
 		//updateSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
-		updateSpecimen.setComments("");
+		updateSpecimen.setComment("");
 		
 		updateSpecimen.setStorageContainer(null); 
 		updateSpecimen.setPositionDimensionOne(null);
@@ -1759,7 +1755,7 @@ public class APIDemo
 		externalIdentifierCollection.add(externalIdentifier);
 		updateSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
-		collectionEventParameters.setComments("");
+		collectionEventParameters.setComment("");
 		
 		User user = (User)ClientDemo.dataModelObjectMap.get("User");	
 		collectionEventParameters.setUser(user);
@@ -1794,7 +1790,7 @@ public class APIDemo
 		}
 		
 		receivedEventParameters.setReceivedQuality("Clotted"); //Acceptable
-		receivedEventParameters.setComments("");
+		receivedEventParameters.setComment("");
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
 		specimenEventCollection.add(receivedEventParameters);
@@ -2001,7 +1997,7 @@ public class APIDemo
             ExistingSpecimenOrderItem existingOrderItem =(ExistingSpecimenOrderItem) orderObj.getOrderItemCollection().iterator().next();
             existingOrderItem.setDescription("Updated OrderDetails Item 1 of Order_Id ");
             existingOrderItem.setStatus("Pending - Protocol Review");          
-            existingOrderItem.setOrder(orderObj);
+            existingOrderItem.setOrderDetails(orderObj);
            
             
             return orderObj;
