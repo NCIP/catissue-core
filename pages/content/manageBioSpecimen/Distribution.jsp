@@ -698,7 +698,7 @@
 					<td class="formField" style="border-top:1px solid #5C5C5C"  colspan="5"><logic:iterate id="nvb"
 						name="<%=Constants.DISTRIBUTION_BASED_ON%>" >
 						<%NameValueBean distributionBasedOn = (NameValueBean) nvb;%>
-						<html:radio property="distributionBasedOn" disabled="<%=flag%>"
+						<html:radio property="distributionBasedOn" 
 							value="<%=distributionBasedOn.getValue()%>">
 							<%=distributionBasedOn.getName()%> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</html:radio>
