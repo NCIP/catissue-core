@@ -381,13 +381,16 @@
 		{
 			strSelectElementId = strElement + counter;
 			selectElementId = document.getElementById(strSelectElementId);
-			optionStringArray = responseStringArray[counter].split('||');
+			if(selectElementId != null)
+			{
+				optionStringArray = responseStringArray[counter].split('||');
 				
-			for(var x=0;x<optionStringArray.length-1;x++)
-			{										
-				optionStrings = optionStringArray[x].split('|');
-				//Set the text/value pair in options.
-				selectElementId.options[x] = new Option(optionStrings[0],optionStrings[1]);
+				for(var x=0;x<optionStringArray.length-1;x++)
+				{										
+					optionStrings = optionStringArray[x].split('|');
+					//Set the text/value pair in options.
+					selectElementId.options[x] = new Option(optionStrings[0],optionStrings[1]);
+				}
 			}
 		}
 	}
