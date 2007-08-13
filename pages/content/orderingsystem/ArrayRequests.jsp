@@ -197,7 +197,7 @@
 							String specimenCollGrpId = "value(DefinedArrayDetailsBean:"+rowNumber+"_specimenCollGroupId)";
 							String actualSpecimenType = "value(DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenType)";
 							String actualSpecimenClass = "value(DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenClass)";
-						
+												
 							boolean disableArrayOrderItemRow = false;
 
 							if(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)) 								
@@ -537,6 +537,7 @@
 							//To assign id to select element
 							String existingArraySelectId = "existingArray_" + rowCounter;
 							boolean disableExistingArrayOrderItem = false;
+							String specimenArrayClickFunction = "showSpecimenArrayDetails("+existingArrayRequestObj.getArrayId()+")";
 					%>
 					
 					<!-- Block to display Existing Array Data -->
@@ -554,7 +555,9 @@
 					 		
 					 		<td class="dataCellText" width="20%" nowrap style="border-left:1px solid #5C5C5C;">
 					 			<!-- bean:write name="existingArrayRequestObj" property="bioSpecimenArrayName" /-->
-					 			<bean:write name="requestDetailsForm" property="<%=requestedItem %>" />
+								<html:link href="#" styleId="label" onclick="<%=specimenArrayClickFunction%>">
+									<bean:write name="requestDetailsForm" property="<%=requestedItem %>" />
+								</html:link>
 	 				 		</td>
 							
 							<td class="dataCellText" nowrap width="10%">

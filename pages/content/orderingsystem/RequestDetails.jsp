@@ -70,6 +70,10 @@ function showSpecimenDetails(id)
 {
 	showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id=' + id );
 }
+function showSpecimenArrayDetails(id)
+{
+	showNewPage('SearchObject.do?pageOf=pageOfSpecimenArray&operation=search&id=' + id );
+}
 function showNewPage(action)
 {
    	if(newWindow!=null)
