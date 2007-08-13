@@ -785,10 +785,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
      * @return String object
      */
 	public String getMessageLabel()
-	{
+	{ 
 		if(operationAdd)
 		{
-			return "";
+			return this.name ;
 		}
 		else
 		{

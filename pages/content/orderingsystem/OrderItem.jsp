@@ -28,7 +28,7 @@
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>	
 <script language="JavaScript">
-
+var newWindow;
 // To change unit based on class and subtype
 function onChangeUnit()
 {
@@ -251,6 +251,22 @@ function onCheck()
 		document.OrderSpecimen.orderButton.disabled=true;
 }
 
+function showSpecimenDetails(id)
+{
+	showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id=' + id );
+}
+function showNewPage(action)
+{
+   	if(newWindow!=null)
+	{
+	   newWindow.close();
+	}
+     newWindow = window.open(action,'','scrollbars=yes,status=yes,resizable=yes,width=860, height=600');
+     newWindow.focus(); 
+	
+}
+	
+
 </script>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <%
@@ -323,12 +339,12 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 						</td>
 						
 						
-						<td width="30%" class="formRequiredLabelWithoutBorder" align="left" height="30">
+						<td width="30%" class="formLabelWithoutBorder" align="left" height="30">
 							<INPUT TYPE="radio" NAME="existingSpecimen" value="existingSpecimen" onclick="showDerived('showdropdown',this.value)">
 							<bean:message key="orderingsystem.label.existingSpecimen" />
 						</td>
 							
-						<td width="30%" class="formRequiredLabelWithoutBorder" align="left" height="30">
+						<td width="30%" class="formLabelWithoutBorder" align="left" height="30">
 							<INPUT TYPE="radio" NAME="derivedSpecimen" value="derivedSpecimen" onclick="showDerived('showdropdown',this.value)">
 							<bean:message key="orderingsystem.label.derivedSpecimen" />
 						</td>
@@ -481,6 +497,8 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 								String typeOfItem="value(OrderSpecimenBean:"+i+"_typeOfItem)";
 								String specimenClass="value(OrderSpecimenBean:"+i+"_specimenClass)";
 								String specimenType="value(OrderSpecimenBean:"+i+"_specimenType)";
+								
+								String specimenClickFunction = "showSpecimenDetails("+obj.getId().toString()+")";
 							%>
 							<tr class="dataRowLight" width="100%">
 	
@@ -489,7 +507,10 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 								</td> <!--for chk box -->
 
 								<td class="dataCellText" width="25%">
+								
+								<html:link href="#" styleId="label" onclick="<%=specimenClickFunction%>">
 									<%=obj.getLabel()%>
+								</html:link>	
 									<html:hidden property="<%=specimenName%>" value="<%=obj.getLabel()%>"/>
 									<html:hidden property="<%=specimenId%>" value="<%=obj.getId().toString()%>"/>
 									<html:hidden property="<%=typeOfItem%>" value="specimen"/>
@@ -497,6 +518,11 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 
 								<td class="dataCellText" width="18%">
 									<%=obj.getAvailableQuantity()%>&nbsp;
+									<script>
+										var v= getUnit('<%=obj.getClassName() %>','<%=obj.getType() %>');
+										document.write(v);
+									</script>
+
 									<html:hidden property="<%=availableQuantity%>" value="<%=obj.getId().toString()%>"/>
 									<span id="availableQuantity">		
 										<script>

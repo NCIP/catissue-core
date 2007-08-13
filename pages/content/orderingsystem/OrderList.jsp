@@ -408,7 +408,7 @@ String enable="false";
 									<tr colspan="2">
 										<td height="30" align="left" width="100%" nowrap colspan="2">
 											<label for="arrayName">
-												<%=defineArrayFormObj.getArrayName() + " Array"%> 
+												Array Name :<%=defineArrayFormObj.getArrayName()%> 
 											</label>
 										</td>
 									</tr>

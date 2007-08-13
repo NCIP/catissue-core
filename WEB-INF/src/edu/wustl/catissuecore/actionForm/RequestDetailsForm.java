@@ -286,7 +286,7 @@ public class RequestDetailsForm extends AbstractActionForm
 					actualSpecimenClass = "RequestDetailsBean:"+requestDetailsBeanCounter+"_actualSpecimenClass";
 					actualSpecimenType = "RequestDetailsBean:"+requestDetailsBeanCounter+"_actualSpecimenType";
 					
-					populateValuesMap(orderItem,requestedItem,availableQty,specimenClass,specimenType,requestFor,specimenId,assignQty,instanceOf,specimenList,specimenCollGrpId,totalSpecimenListInRequestForDropDown,actualSpecimenClass,actualSpecimenType);
+					populateValuesMap(orderItem,requestedItem,availableQty,specimenClass,specimenType,requestFor,specimenId,assignQty,instanceOf,specimenList,specimenCollGrpId,totalSpecimenListInRequestForDropDown,actualSpecimenClass,actualSpecimenType,assignStatus);
 					requestDetailsBeanCounter++;
 				}				
 				else
@@ -443,7 +443,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		String actualSpecimenClass = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_actualSpecimenClass";
 		String actualSpecimenType = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_actualSpecimenType";
 		
-		populateValuesMap(specimenOrderItem,requestedItem,availableQty,specimenClass,specimenType,requestFor,specimenId,assignQty,instanceOf,specimenList,specimenCollGrpId,totalSpecimenListInRequestForDropDown,actualSpecimenClass,actualSpecimenType);
+		populateValuesMap(specimenOrderItem,requestedItem,availableQty,specimenClass,specimenType,requestFor,specimenId,assignQty,instanceOf,specimenList,specimenCollGrpId,totalSpecimenListInRequestForDropDown,actualSpecimenClass,actualSpecimenType,assignStatus);
 		putCommonValuesInValuesMap(specimenOrderItem,assignStatus,description,requestedQty,assignQty,orderItemId,"");
 	}
 	/**
@@ -456,7 +456,8 @@ public class RequestDetailsForm extends AbstractActionForm
 	 */
 	private void putCommonValuesInValuesMap(OrderItem orderItem,String assignStatus,String description,String requestedQty,String assignQty,String orderItemId,String distributedItemId)
 	{
-		values.put(assignStatus,orderItem.getStatus());
+		if(values.get(assignStatus) == null)
+			values.put(assignStatus,orderItem.getStatus());
 		values.put(description, orderItem.getDescription());	
 		if(orderItem.getRequestedQuantity() != null)
 		{//condition is for define array
@@ -484,7 +485,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param specimenClass
 	 * @param specimenType
 	 */
-	private void populateValuesMap(OrderItem orderItem,String requestedItem,String availableQty,String specimenClass,String specimenType,String requestFor,String specimenId,String assignQty,String instanceOf,String specimenList,String specimenCollGrpId,List totalSpecimenListInRequestForDropDown,String actualSpecimenClass,String actualSpecimenType)
+	private void populateValuesMap(OrderItem orderItem,String requestedItem,String availableQty,String specimenClass,String specimenType,String requestFor,String specimenId,String assignQty,String instanceOf,String specimenList,String specimenCollGrpId,List totalSpecimenListInRequestForDropDown,String actualSpecimenClass,String actualSpecimenType,String assignStatus)
 	{ 
 		if(orderItem instanceof ExistingSpecimenOrderItem)
 		{
@@ -503,6 +504,8 @@ public class RequestDetailsForm extends AbstractActionForm
 		  	}
 			values.put(actualSpecimenClass,existingSpecimenOrderItem.getSpecimen().getClassName());
 			values.put(actualSpecimenType, existingSpecimenOrderItem.getSpecimen().getType());
+			if(orderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_NEW))
+				values.put(assignStatus,Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
 		}
 		else if(orderItem instanceof DerivedSpecimenOrderItem)
 		{
@@ -519,10 +522,13 @@ public class RequestDetailsForm extends AbstractActionForm
 			if(childrenSpecimenListToDisplay.size() != 0)
 		  	{
 				values.put(availableQty, (((Specimen)finalChildrenSpecimenList.get(0)).getAvailableQuantity().getValue().toString()));
+				if(orderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_NEW))
+					values.put(assignStatus,Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
 			}
 		  	else
 		  	{
-		  		values.put(availableQty, "NA");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()	  		
+		  		values.put(availableQty, "NA");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()
+		  		
 		  	}			
 			values.put(specimenClass, derivedSpecimenOrderItem.getSpecimenClass());
 			values.put(specimenType, derivedSpecimenOrderItem.getSpecimenType());			

@@ -223,7 +223,40 @@
 				}
 			}
 		}
-	
+	function getUnit(classname,type)
+{
+	if(classname == "Tissue")
+	{
+		if(type == "<%=Constants.FROZEN_TISSUE_SLIDE%>" || type =="<%=Constants.FIXED_TISSUE_BLOCK%>" || type == "<%=Constants.FROZEN_TISSUE_BLOCK%>" || type == "<%=Constants.NOT_SPECIFIED%>" || type == "<%=Constants.FIXED_TISSUE_SLIDE%>")
+		{
+			return("<%=Constants.UNIT_CN%>");
+		}	
+		else 
+		{
+			if(type == "<%=Constants.MICRODISSECTED%>")
+			{
+				return("<%=Constants.UNIT_CL%>");
+			}
+			else
+			{
+				return("<%=Constants.UNIT_GM%>");
+			}
+		}	
+	}
+	else if(classname == "Fluid")
+	{
+		return("<%=Constants.UNIT_ML%>");
+	}
+	else if(classname == "Cell")
+	{
+		return("<%=Constants.UNIT_CC%>");
+	}
+	else if(classname == "Molecular")
+	{
+		return("<%=Constants.UNIT_MG%>");
+	}
+}
+
 
 
 </script>

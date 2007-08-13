@@ -19,7 +19,7 @@ String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=Forw
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/OrderingSystem.js"></script>
 <script language="javascript">
-
+var newWindow;
 function tabToDisplay()
 {
 	var tabIndex = document.getElementById("tabIndexId").value;
@@ -66,6 +66,20 @@ function tabToDisplay()
 			}
 
 		}
+function showSpecimenDetails(id)
+{
+	showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id=' + id );
+}
+function showNewPage(action)
+{
+   	if(newWindow!=null)
+	{
+	   newWindow.close();
+	}
+     newWindow = window.open(action,'','scrollbars=yes,status=yes,resizable=yes,width=860, height=600');
+     newWindow.focus(); 
+	
+}		
  </script>
 </head>  
 <body onload="tabToDisplay()">
@@ -89,22 +103,22 @@ function tabToDisplay()
 						<bean:message key="requiredfield.message"/>  
 					</td>
 				</tr>
+				
 				<tr>
-					<td class="formRequiredLabel" width="30%" style="border-left:1px solid #5C5C5C;border-top:1px solid #5C5C5C"><bean:message key='requestdetails.header.label.RequestorName'/> : <a href='mailto:<bean:write name='<%=  Constants.REQUEST_HEADER_OBJECT  %>' property='email' scope='request'/>' ><bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT %>" property="requestedBy" scope="request"/> <a/></td>
-									 
-					<td class="formRequiredLabel" width="30%" style="border-top:1px solid #5C5C5C"><bean:message key='requestlist.dataTabel.label.RequestDate'/> : <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="requestedDate" scope="request"/> </td>
-					
-					<td class="formRequiredLabel" width="40%" style="border-top:1px solid #5C5C5C"><bean:message key='requestlist.dataTabel.DistributionProtocol.label'/> : <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="distributionProtocol" scope="request"/></td>
-					
+					<td colspan="5" width="100%">
+						<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">				
+							<tr>
+								<td class="formFieldNoBordersBold"><bean:message key='requestdetails.header.label.RequestorName'/> : <a href='mailto:<bean:write name='<%=  Constants.REQUEST_HEADER_OBJECT  %>' property='email' scope='request'/>' ><bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT %>" property="requestedBy" scope="request"/> </a>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<bean:message key='requestlist.dataTabel.label.RequestDate'/> : <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="requestedDate" scope="request"/> 
+								</td>
+							</tr>
+							<tr><td colspan="2" class="formFieldNoBordersBold"><bean:message key='requestlist.dataTabel.DistributionProtocol.label'/> : <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="distributionProtocol" scope="request"/></td></tr>
+							<tr><td colspan="2" class="formFieldNoBordersBold"><bean:message key='requestdetails.header.label.Comments'/> : <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>"  property="comments"  scope="request" /> </td><tr>
+						</table>
+					</td>
 					
 				</tr>
-				<tr>
-					<div>
-						<td class="formRequiredLabel" colspan="3" style="border-left:1px solid #5C5C5C" width="100%"><bean:message key='requestdetails.header.label.Comments'/> : <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>"  property="comments"  scope="request" /> 
-					</div>
-					
-				</tr>
-				</table>
+			</table>	
 			    <!-- Order Request Header Ends -->
 		     </td>
 	    </tr>
@@ -135,8 +149,8 @@ function tabToDisplay()
 							<td>
 						 	<table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
 								 <tr>
-								 	<th class="dataTableHeader" scope="col" align="center"  colspan='5'>
-								 	Requested
+								 	<th class="dataTableHeader2" scope="col" align="center"  colspan='5'>
+								 	Requested specimen details
 								 	</th>
 								 	<th class="dataTableHeader" scope="col" align="left" width="10%" colspan="2" rowspan="2" scope="col">
 										<bean:message key='requestdetails.datatable.label.AvailableQty'/>
@@ -207,6 +221,8 @@ function tabToDisplay()
 									String actualSpecimenType = "value(RequestDetailsBean:"+i+"_actualSpecimenType)";
 									String actualSpecimenClass = "value(RequestDetailsBean:"+i+"_actualSpecimenClass)";
 									
+									String specimenClickFunction = "showSpecimenDetails("+requestDetailsBeanObj.getSpecimenId()+")";
+									
 									boolean disableRow = false;
 									if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 										&& (!((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals("")))
@@ -266,7 +282,9 @@ function tabToDisplay()
 											<img src="images\Participant.GIF" border="0"/>
 										<%}String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType"))); %>
 									 		<span title="<%= toolTipTypeClass %>">
-									 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />									 	
+											<html:link href="#" styleId="label" onclick="<%=specimenClickFunction%>">
+										 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />									 	
+											</html:link>
 									 		</span>
 									 	</td>
 									 	<%
@@ -417,7 +435,7 @@ function tabToDisplay()
 									   			</td-->
 									   			<td width="10%" nowrap>
 									   				<label for="LabelDescription">
-									    				<bean:message key="orderingSystem.requestdetails.label.description" />
+									    				<bean:message key="requestdetails.header.label.Comments" />
 									   				</label> : 				
 									   			</td>
 												<td rowspan='2' nowrap>												 
@@ -464,16 +482,16 @@ function tabToDisplay()
 		
 		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="100%" id="table4_pageFooter">
 			<tr>
- 				<td class="formLabel" width="10%" style="border-right:0px;border-bottom:0px ">
+ 				<td class="formLabelNoBackGroundWithSize6" width="10%" style="border-right:0px;border-bottom:0px ">
  					<bean:message key="requestdetails.header.label.Comments" />
  				</td>
  				<td class="formField" style="border-right:0px;border-bottom:0px ">
  					<html:textarea name="requestDetailsForm" styleClass="formFieldSized" cols="300" rows="2" property="administratorComments"  />
 		 		</td>
-				<td class="formLabel" width="10%" style="border-right:0px;border-bottom:0px " nowrap>
- 					*<bean:message key='requestlist.dataTabel.label.Site'/> : 
+				<td class="formRequiredLabelWithoutBackgrnd" width="10%" style="border-right:0px;border-bottom:0px " nowrap>
+ 					&nbsp;&nbsp;&nbsp;*<bean:message key='requestlist.dataTabel.label.Site'/> : 
  				</td>
-				<td class="formRequiredLabel" align="right" width="30%" style="border-right:0px;border-bottom:0px">
+				<td class="formRequiredLabelWithoutBackgrnd" align="right" width="30%" style="border-right:0px;border-bottom:0px">
 						
 						<html:select property="site" name="requestDetailsForm" styleClass="formFieldSized10" styleId="siteId" size="1" 
 						 			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
