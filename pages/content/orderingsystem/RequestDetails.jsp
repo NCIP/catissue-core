@@ -108,12 +108,12 @@ function showNewPage(action)
 					<td colspan="5" width="100%">
 						<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">				
 							<tr>
-								<td class="formFieldNoBordersBold"><bean:message key='requestdetails.header.label.RequestorName'/> : <a href='mailto:<bean:write name='<%=  Constants.REQUEST_HEADER_OBJECT  %>' property='email' scope='request'/>' ><bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT %>" property="requestedBy" scope="request"/> </a>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<bean:message key='requestlist.dataTabel.label.RequestDate'/> : <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="requestedDate" scope="request"/> 
+								<td class="formFieldNoBordersSimple"><b><bean:message key='requestdetails.header.label.RequestorName'/> :</b><a href='mailto:<bean:write name='<%=  Constants.REQUEST_HEADER_OBJECT  %>' property='email' scope='request'/>' ><bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT %>" property="requestedBy" scope="request"/> </a>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><bean:message key='requestlist.dataTabel.label.RequestDate'/> :</b><bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="requestedDate" scope="request"/> 
 								</td>
 							</tr>
-							<tr><td colspan="2" class="formFieldNoBordersBold"><bean:message key='requestlist.dataTabel.DistributionProtocol.label'/> : <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="distributionProtocol" scope="request"/></td></tr>
-							<tr><td colspan="2" class="formFieldNoBordersBold"><bean:message key='requestdetails.header.label.Comments'/> : <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>"  property="comments"  scope="request" /> </td><tr>
+							<tr><td colspan="2" class="formFieldNoBordersSimple"><b><bean:message key='requestlist.dataTabel.DistributionProtocol.label'/> :</b> <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="distributionProtocol" scope="request"/></td></tr>
+							<tr><td colspan="2" class="formFieldNoBordersSimple"><b><bean:message key='requestdetails.header.label.Comments'/> :</b> <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>"  property="comments"  scope="request" /> </td><tr>
 						</table>
 					</td>
 					
@@ -149,7 +149,7 @@ function showNewPage(action)
 							<td>
 						 	<table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
 								 <tr>
-								 	<th class="dataTableHeader2" scope="col" align="center"  colspan='5'>
+								 	<th class="dataTableHeader" scope="col" align="center"  colspan='5'>
 								 	Requested specimen details
 								 	</th>
 								 	<th class="dataTableHeader" scope="col" align="left" width="10%" colspan="2" rowspan="2" scope="col">
@@ -163,27 +163,27 @@ function showNewPage(action)
 									<th class="dataTableHeader" scope="col" align="left" width="20%" rowspan="2" scope="col">
 										<bean:message key='requestdetails.datatable.label.AssignStatus'/>
 										<html:select property="status" name="requestDetailsForm" styleClass="formFieldSized15" styleId="nextStatusId" size="1" 
-						 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="updateAllStatus()">
 											<html:options collection="<%= Constants.REQUESTED_ITEMS_STATUS_LIST %>" labelProperty="name" property="value"/>		
 										</html:select> 
-										<html:button value="All" property="changeStatusButton" styleClass="actionButton" onclick="updateAllStatus()" 
+										<!--<html:button value="All" property="changeStatusButton" styleClass="actionButton" onclick="updateAllStatus()" 
 										title="<%= ApplicationProperties.getValue("requestdetails.tooltip.updateAllRequestStatus") %>">
-										</html:button>
+										</html:button>-->
 									</th>		
 								 </tr>
 								 <tr>	
-									<th class="dataTableHeader" scope="col" align="left" width="20%" colspan='2'>
+									<th class="dataTableHeader2" scope="col" align="left" width="20%" colspan='2'>
 										<bean:message key='requestdetails.datatable.label.RequestItem'/>
 									</th>
 								
-									<th class="dataTableHeader" scope="col" align="left" width="20%">
+									<th class="dataTableHeader2" scope="col" align="left" width="20%">
 										<bean:message key='requestdetails.datatable.label.RequestFor'/>
 									</th>
-									<th class="dataTableHeader" scope="col" align="left" width="15%">
-										Class, Type
+									<th class="dataTableHeader2" scope="col" align="left" width="15%">
+										Type
 									</th>
 								
-									<th class="dataTableHeader" scope="col" align="left" width="5%">
+									<th class="dataTableHeader2" scope="col" align="left" width="5%">
 										<bean:message key='requestdetails.datatable.label.RequestedQty'/>
 									</th>
 								
@@ -293,7 +293,7 @@ function showNewPage(action)
 									 			disableRow=true;
 									 		}%>
 									 	<!-- Added By Ramya for Tree View -->
-									 	<td class="formField" width="20%" style="border-right:1px solid #5C5C5C;border-bottom:1px solid #5C5C5C">
+									 	<td class="dataCellText" width="20%" style="border-right:1px solid #5C5C5C;border-bottom:1px solid #5C5C5C">
 									 	<%if(!((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
 									 			{%>
 									 		<html:select property="<%= requestFor %>" name="requestDetailsForm" styleClass="formFieldSized10" styleId="<%= requestForId %>" 					 								
@@ -359,7 +359,7 @@ function showNewPage(action)
 										      <%}%> 
 									 	</td>
 									 	<td class="dataCellText" width="15%">
-											<bean:write name="requestDetailsForm" property="<%= spClass %>" />, <bean:write name="requestDetailsForm" property="<%= spType %>" />
+											<bean:write name="requestDetailsForm" property="<%= spType %>" />
 									 	</td>
 									 	<%
 									 	if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing")
