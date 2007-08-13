@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,9 +26,7 @@ import edu.wustl.catissuecore.actionForm.RequestListFilterationForm;
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
-import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.OrderDetails;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -54,7 +51,7 @@ public class RequestListAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		Validator validator = new Validator();
-		List requestList = null, showList = null;		
+		List requestList = null, requestListFromDB = null,showList = null;		
 		RequestListFilterationForm requestListForm = (RequestListFilterationForm) form;
 		
 		//For Pagenation	
@@ -76,7 +73,9 @@ public class RequestListAction extends SecureAction
         	// Request List to display
     		if (requestListForm.getRequestStatusSelected() != null && !requestListForm.getRequestStatusSelected().trim().equalsIgnoreCase(""))
     		{
-    			requestList = getRequestList(requestListForm.getRequestStatusSelected());
+    			OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+    			requestListFromDB = orderBizLogic.getRequestList(requestListForm.getRequestStatusSelected());
+    			requestList = populateRequestViewBeanList(requestListFromDB);
     			int totalResults = requestList.size();
     			Iterator iter = requestList.iterator();
     			int serialNo = 1;
@@ -125,61 +124,7 @@ public class RequestListAction extends SecureAction
 		return mapping.findForward("success");
 	}
 
-	// Populates a List of RequestViewBean objects to display the request list on RequestListAdministratorView.jsp
-	/**
-	 * @param requestStatusSelected object
-	 * @return requestList List
-	 * @throws DAOException object
-	 */
-	private List getRequestList(String requestStatusSelected) throws DAOException
-	{
-		
-		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		String[] colName = {"status"};
-		
-		List orderListFromDB = null;
-		List orderList = new ArrayList();
-		String[] selectColumnName = {"id","status","distributionProtocol","distributionProtocol.principalInvestigator","name","requestedDate"};
-		if(!requestStatusSelected.trim().equalsIgnoreCase("All"))
-		{		
-			Object[] whereColumnValue = {requestStatusSelected};
-			String[] whereColumnCond = {"="};
-			orderListFromDB = orderBizLogic.retrieve(OrderDetails.class.getName(), selectColumnName,colName, whereColumnCond,whereColumnValue,Constants.AND_JOIN_CONDITION);
-			
-		}
-		else
-		{
-			String[] whereColumnName = {"status","status"};
-			String[] whereColumnCondition = {"=","="};
-			String[] whereColumnValue = {"Pending","New"};			
-			
-			orderListFromDB = orderBizLogic.retrieve(OrderDetails.class.getName(), selectColumnName,whereColumnName, whereColumnCondition, whereColumnValue, Constants.OR_JOIN_CONDITION);
-		}
-		Iterator itr = orderListFromDB.iterator();
-		while(itr.hasNext())
-		{
-			Object[] obj = (Object[]) itr.next();
-			Long id = (Long) obj[0];
-			String status = (String) obj[1];
-			DistributionProtocol dp = (DistributionProtocol)obj[2];
-			User user = (User)obj[3];
-			String name = (String) obj[4];
-			Date requestedDate = (Date) obj[5];
-			
-			dp.setPrincipalInvestigator(user);
-			
-			OrderDetails orderDetails = new OrderDetails();
-			orderDetails.setId(id);
-			orderDetails.setStatus(status);
-			orderDetails.setDistributionProtocol(dp);
-			orderDetails.setName(name);
-			orderDetails.setRequestedDate(requestedDate);
-			orderList.add(orderDetails);
-		}
-		List requestList = populateRequestViewBeanList(orderList);
-		
-		return requestList;
-	}
+	
 	/**
 	 * @param orderListFromDB object 
 	 * @return List object
@@ -212,7 +157,10 @@ public class RequestListAction extends SecureAction
 	private void setNumberOfNewAndPendingRequests(RequestListFilterationForm requestListFilterationForm) throws DAOException
 	{
 		int newStatus = 0, pendingStatus = 0;
-		List orderList = getRequestList("All");
+		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		List orderListFromDB = orderBizLogic.getRequestList("All");
+		List orderList = populateRequestViewBeanList(orderListFromDB);
+		
 		if(orderList != null)
 		{
 			Iterator iter = orderList.iterator();
