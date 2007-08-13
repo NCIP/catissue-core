@@ -166,17 +166,17 @@ String enable="false";
 	OrderPathologyCaseForm pathology=(OrderPathologyCaseForm)request.getAttribute("OrderPathologyCaseForm");
 %>
     <tr>
-		<td height="30" class="formTitle" colspan="3" align="left" nowrap>
+		<td height="30" class="formTitleWithoutBold" colspan="3" align="left" nowrap>
 		    <label for="orderListTitle">
-				<bean:message key="orderingsystem.label.orderRequestName"/>:
+				<b><bean:message key="orderingsystem.label.orderRequestName"/>:</b>
 				<%=pathology.getOrderForm().getOrderRequestName()%>
 	    	</label>
 		</td>
 	</tr>
 	<tr>
-		<td height="30" class="formTitle" colspan="3" align="left">
+		<td height="30" class="formTitleWithoutBold" colspan="3" align="left">
 			<label for="orderListTitle">
-				<bean:message key="distribution.protocol"/>:
+				<b><bean:message key="distribution.protocol"/>:</b>
 				<%=pathology.getDistrbutionProtocol()%>
 			</label>
 	  	</td>
@@ -189,17 +189,17 @@ String enable="false";
 	OrderBiospecimenArrayForm form=(OrderBiospecimenArrayForm)request.getAttribute("OrderBiospecimenArrayForm");
 %>
     <tr>
-		<td height="30" class="formTitle" colspan="3">
+		<td height="30" class="formTitleWithoutBold" colspan="3">
 		    <label for="orderListTitle">
-				<bean:message key="orderingsystem.label.orderRequestName"/>:
+				<b><bean:message key="orderingsystem.label.orderRequestName"/>:</b>
 				<%=form.getOrderForm().getOrderRequestName()%>
 	    	</label>
 		</td>
 	</tr>
 	<tr>
-		<td height="30" class="formTitle" colspan="3">
+		<td height="30" class="formTitleWithoutBold" colspan="3">
 			<label for="orderListTitle">
-				<bean:message key="distribution.protocol"/>:
+				<b><bean:message key="distribution.protocol"/>:</b>
 				<%=form.getDistrbutionProtocol()%>
 			</label>
 	  	</td>
@@ -211,17 +211,17 @@ String enable="false";
 	OrderSpecimenForm orderSpecimenForm=(OrderSpecimenForm)request.getAttribute("OrderSpecimenForm");
 %>
 	<tr>
-		<td height="30" class="formTitle" colspan="3">
+		<td height="30" class="formTitleWithoutBold" colspan="3">
 		    <label for="orderListTitle">
-				<bean:message key="orderingSystem.header.label.orderRequestName"/>:
+				<b><bean:message key="orderingSystem.header.label.orderRequestName"/>:</b>
 				<%=orderSpecimenForm.getOrderForm().getOrderRequestName()%>
 			</label>
 		</td>
 	</tr>
 	<tr>
-		<td height="30" class="formTitle" colspan="3">
+		<td height="30" class="formTitleWithoutBold" colspan="3">
 			<label for="orderListTitle">
-				<bean:message key="distribution.protocol"/>:
+				<b><bean:message key="distribution.protocol"/>:</b>
 				<%=orderSpecimenForm.getDistrbutionProtocol()%>
 			</label>
     	</td>

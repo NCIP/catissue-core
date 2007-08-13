@@ -403,6 +403,16 @@ FORM BEGINS
   border-left:1px solid #5C5C5C; /* constant: dark gray */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
 }
+.formTitleWithoutBold{ /* for header cells (top) of forms */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  padding-left:0.8em;
+  background-color:#5C5C5C; /* constant: dark gray */
+  color:#FFFFFF; /* constant: white */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  }
 .formSubTableTitle{ /* for subtitles in the table */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.8em;
@@ -770,6 +780,14 @@ DATA TABLE BEGINS
   color:#000000; /* constant: Black */
   font-weight:bold;
   font-size:0.8em;
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+}
+.dataTableHeader2{ /* for the horizontal column headers */
+  font-family:arial,helvetica,verdana,sans-serif;
+  background-color:#DDDDDD; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  font-weight:bold;
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
 }
@@ -1379,7 +1397,6 @@ textarea.formFieldSized20{ /* Used by Mandar for the comments used in autoevents
 
 /*   *** Used in RequestDetails.jsp(Ordering System) *** */
 .rowExpansionTable{
-	background-color:#CCCCCC;
 	border-right:1px solid #5C5C5C;
 	border-bottom:1px solid #5C5C5C;
 	font-family:arial,helvetica,verdana,sans-serif;
