@@ -2,8 +2,6 @@ package edu.wustl.catissuecore.reportloader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -12,20 +10,15 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
-import edu.wustl.catissuecore.caties.util.CaTIESProperties;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.lookup.DefaultLookupResult;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -42,10 +35,7 @@ public class ReportLoaderUtil
 	public static Set<Participant> checkForParticipant(Participant participant)throws Exception
 	{
 		Set<Participant> result=null;
-		List participantList=null;
-		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
-		ParticipantBizLogic bizLogic =(ParticipantBizLogic) bizLogicFactory.getBizLogic(Participant.class.getName());
-		participantList = bizLogic.getListOfMatchingParticipants(participant);
+		List participantList=(List)CaCoreAPIService.getAppServiceInstance().getParticipantMatchingObects(participant);
 		// check for matching participant list
    		if(participantList!=null && participantList.size()>0)
 		{
@@ -58,77 +48,6 @@ public class ReportLoaderUtil
 			}
 		}
 		return result;
-	}
-	
-	/**
-	 * @param obj object
-	 * @throws Exception
-	 * updates the object in datastore
-	 */
-	public static void updateObject(Object obj)throws Exception
-	{
-		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
-		IBizLogic bizLogic = bizLogicFactory.getBizLogic(obj.getClass().getName());
-		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setUserName(CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA));
-		if(obj instanceof Participant)
-		{
-			bizLogic.update(obj,obj,Constants.HIBERNATE_DAO,sessionDataBean);
-		}	
-		else
-		{
-			bizLogic.update(obj,null,Constants.HIBERNATE_DAO,sessionDataBean);
-		}	
-	}
-	
-	/**
-	 * Saves object tothe datastore
-	 * @param obj object
-	 * @throws Exception throws exception  
-	 */
-	public static void saveObject(Object obj)throws Exception
-	{
-		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
-		IBizLogic bizLogic = bizLogicFactory.getBizLogic(obj.getClass().getName());
-		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setUserName(CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA));
-		bizLogic.insert(obj,sessionDataBean,Constants.HIBERNATE_DAO);
-	}
-
-	/**
-	 * Delete object tothe datastore
-	 * @param obj object
-	 * @throws Exception throws exception  
-	 */
-	public static void deleteObject(Object obj)throws Exception
-	{
-		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
-		IBizLogic bizLogic = bizLogicFactory.getBizLogic(obj.getClass().getName());
-		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setUserName(CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA));
-		bizLogic.delete(obj,Constants.HIBERNATE_DAO);
-	}
-
-	
-	/**
-	 * Gets object data grom datastore 
-	 * @param objName object name
-	 * @param property property of the object 
-	 * @param val value for the property
-	 * @return list of requested object from the datastore 
-	 * @throws Exception throws exception
-	 */
-	public static List getObject(String objName,String property,String val) throws DAOException
-	{
-		List l=null;
-		
-			BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
-			IBizLogic bizLogic = bizLogicFactory.getBizLogic(objName);
-			SessionDataBean sessionDataBean = new SessionDataBean();
-			sessionDataBean.setUserName(CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA));
-			l = bizLogic.retrieve(objName,property,val);
-		
-		return l;
 	}
 	
 	/**
@@ -191,42 +110,6 @@ public class ReportLoaderUtil
     	return validSSN;
     }
     
-    /**
-     * This method returns the list of all the SCGs associated with the given participant
-     * @param participant Participant object
-     * @return scgList SpecimenCollectionGroup list
-     */
-    public static List<SpecimenCollectionGroup> getSCGList(Participant participant)throws DAOException
-    {
-    	// FIRE ONLY ONE QUERY
-    	
-    	List<SpecimenCollectionGroup> scgList=new ArrayList<SpecimenCollectionGroup>();
-    	DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-    	// get all CollectionProtocolRegistration for participant
-    	String sourceObjectName=CollectionProtocolRegistration.class.getName();
-		String[] selectColumnName=new String[]{Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnName=new String[]{Constants.COLUMN_NAME_PARTICIPANT_ID};
-		String[] whereColumnValue=new String[]{participant.getId().toString()};
-		String[] whereColumnCondition=new String[]{"="};
-		String joinCondition="";
-    	Collection cprCollection=(List)defaultBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);	
-		Long cprID;
-		Iterator cprIter=cprCollection.iterator();
-		// iterate on all colletionProtocolRegistration for participant
-		while(cprIter.hasNext())
-		{
-			cprID=(Long)cprIter.next();
-			Collection tempSCGCollection=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(), cprID, Constants.COLUMN_NAME_SCG_COLL);
-			Iterator scgIter=tempSCGCollection.iterator();
-			// add all the scg associated with cpr to scgList
-			while(scgIter.hasNext())
-			{
-				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgIter.next();
-				scgList.add(scg);
-			}
-		}
-    	return scgList;
-    } 
     /**
 	 * @param reportText
 	 * @return
@@ -298,11 +181,14 @@ public class ReportLoaderUtil
 	{
 		List<SpecimenCollectionGroup> scgSet=null;
 		SpecimenCollectionGroup existingSCG=null;
+		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+		Site existingSCGSite=null;
+		
 		Iterator<SpecimenCollectionGroup> scgIterator=null;
 		try
 		{
 			// het list of all the scg associated with participant
-			scgSet=ReportLoaderUtil.getSCGList(participant);
+			scgSet=Utility.getSCGList(participant);
 			if(scgSet!=null && scgSet.size()>0)
 			{
 				scgIterator=scgSet.iterator();
@@ -310,9 +196,10 @@ public class ReportLoaderUtil
 				{
 					// check for mathcing scg
 					existingSCG=scgIterator.next();
+					existingSCGSite=(Site)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), existingSCG.getId(), Constants.COLUMN_NAME_SCG_SITE);
 					if((surgicalPathologyNumber.equals(existingSCG.getSurgicalPathologyNumber()) 
 							|| existingSCG.getSurgicalPathologyNumber().equalsIgnoreCase(null))							
-							&& (site.getName()).equals(existingSCG.getSpecimenCollectionSite().getName()))
+							&& (site.getName()).equals(existingSCGSite.getName()))
 					{
 						return existingSCG;
 					}
