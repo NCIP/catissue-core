@@ -10,8 +10,8 @@ import edu.wustl.catissuecore.bizlogic.DeidentifiedSurgicalPathologyReportBizLog
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
-import edu.wustl.catissuecore.caties.util.InitUtility;
 import edu.wustl.catissuecore.caties.util.StopServer;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -91,7 +91,7 @@ public class ConceptCodeManager
 	 */
 	private void initCoder() throws Exception
 	{
-		InitUtility.init();
+		Utility.init();
 		// Configuring CSV logger
 		CSVLogger.configure(CaTIESConstants.LOGGER_CONCEPT_CODER);
 		setAll();

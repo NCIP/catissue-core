@@ -24,6 +24,7 @@ import edu.upmc.opi.caBIG.caTIES.server.CaTIES_ExporterPR;
 import edu.upmc.opi.caBIG.caTIES.services.caTIES_TiesPipe.TiesPipe;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.pathology.BinaryContent;
 import edu.wustl.catissuecore.domain.pathology.Concept;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
@@ -31,7 +32,6 @@ import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SemanticType;
 import edu.wustl.catissuecore.domain.pathology.XMLContent;
-import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.common.util.logger.Logger;
 
 public class ConceptCoder 
@@ -54,13 +54,13 @@ public class ConceptCoder
 			Logger.out.info("Report is Concept coded by caties");
 			Logger.out.info("Updating Report");
 			updateReport();
-			ReportLoaderUtil.updateObject(this.deidPathologyReport);
+			Utility.updateObject(this.deidPathologyReport);
 		}
 		catch (Throwable ex) 
 		{
 			Logger.out.error("Concept coding process failed for report id:"+this.deidPathologyReport.getId()+" "+ex.getMessage());
 			this.deidPathologyReport.setReportStatus(CaTIESConstants.CC_PROCESS_FAILED);
-			ReportLoaderUtil.updateObject(this.deidPathologyReport);
+			Utility.updateObject(this.deidPathologyReport);
 			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CC_PROCESS_FAILED+","+ex.getMessage());
 		}
 		if(!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(CaTIESConstants.CC_PROCESS_FAILED))

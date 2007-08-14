@@ -11,8 +11,10 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -115,7 +117,7 @@ public class ReportLoader
 				// if scg is null create new scg
 				Logger.out.debug("Null SCG found in ReportLoader, Creating New SCG");
 				this.scg=createNewSpecimenCollectionGroup();
-				ReportLoaderUtil.saveObject(this.scg);
+				Utility.saveObject(this.scg);
 			}
 			else
 			{
@@ -137,7 +139,7 @@ public class ReportLoader
 				{
 					this.scg.setSurgicalPathologyNumber(this.surgicalPathologyNumber);
 				}
-				ReportLoaderUtil.updateObject(identifiedReport);
+				Utility.updateObject(identifiedReport);
 			}	
 			Logger.out.info("Processing finished for Report ");
 		}
@@ -231,7 +233,7 @@ public class ReportLoader
 //				participant.setCollectionProtocolRegistrationCollection(collProtocolRegList);
 				try
 				{
-					ReportLoaderUtil.saveObject(collProtocolReg);
+					CaCoreAPIService.getAppServiceInstance().createObject(collProtocolReg);
 				}
 				catch(Exception ex)
 				{

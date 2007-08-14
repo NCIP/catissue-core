@@ -18,6 +18,7 @@ import org.jdom.output.Format;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -25,7 +26,6 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
-import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -107,7 +107,7 @@ public class DeidReportThread extends Thread
 	    		Logger.out.info("Saving deidentified report for identified report id="+identifiedReport.getId().toString());
 	    		// save deidentified report
 //	    		pathologyReport.setConceptReferentCollection(new HashSet());
-	    		ReportLoaderUtil.saveObject(pathologyReport);
+	    		Utility.saveObject(pathologyReport);
 	    		Logger.out.info("deidentified report saved for identified report id="+identifiedReport.getId().toString());
 	    		// update status of identified report
 	        	identifiedReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
@@ -115,7 +115,7 @@ public class DeidReportThread extends Thread
 	        	identifiedReport.setDeIdentifiedSurgicalPathologyReport(pathologyReport);
 	        	Logger.out.debug("Updating identified report report id="+identifiedReport.getId().toString());
 	        	// update object of identified report
-	        	ReportLoaderUtil.updateObject(identifiedReport);
+	        	Utility.updateObject(identifiedReport);
 	        	CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.DEIDENTIFIED+","+"Report De-identified successfully");
 	    	}
 	    	catch(DAOException daoEx)
@@ -132,7 +132,7 @@ public class DeidReportThread extends Thread
 				CSVLogger.error(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.FAILURE+","+ex.getMessage());
 				// if any exception occures then update the status of the identified report to failed
 				identifiedReport.setReportStatus(CaTIESConstants.DEID_PROCESS_FAILED);
-				ReportLoaderUtil.updateObject(identifiedReport);
+				Utility.updateObject(identifiedReport);
 			}
 			catch(Exception e)
 			{

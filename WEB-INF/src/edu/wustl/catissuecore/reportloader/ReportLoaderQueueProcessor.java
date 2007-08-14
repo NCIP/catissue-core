@@ -10,6 +10,7 @@ import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.common.util.logger.Logger;
@@ -37,7 +38,7 @@ public class ReportLoaderQueueProcessor extends Thread
 			try
 			{
 				// retrieve records from report queue for processing
-				queue=ReportLoaderUtil.getObject(ReportLoaderQueue.class.getName(),"status" ,CaTIESConstants.NEW);
+				queue=Utility.getObject(ReportLoaderQueue.class.getName(),"status" ,CaTIESConstants.NEW);
 				Logger.out.info("Processing report Queue: Total "+queue.size()+" Reports found in queue");
 				//	CONSTANT
 				CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,"Processing report Queue: Total "+queue.size()+" Reports found in queue");
@@ -67,7 +68,7 @@ public class ReportLoaderQueueProcessor extends Thread
 									String reportText=tempClob.getSubString(1,(int)tempClob.length());
 									parser.parseString(participant, reportText, reportLoaderQueue.getSpecimenCollectionGroup());
 									// delete record from queue
-									ReportLoaderUtil.deleteObject(reportLoaderQueue);
+									Utility.deleteObject(reportLoaderQueue);
 									CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ");
 									Logger.out.info("Processed report from Queue with serial no="+reportLoaderQueue.getId());
 								}
@@ -75,7 +76,7 @@ public class ReportLoaderQueueProcessor extends Thread
 								{
 									CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+","+"FAILED"+","+ex.getMessage());
 									reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
-									ReportLoaderUtil.updateObject(reportLoaderQueue);
+									Utility.updateObject(reportLoaderQueue);
 								}
 							}
 						}

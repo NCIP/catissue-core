@@ -4,7 +4,6 @@ package edu.wustl.catissuecore.reportloader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Clob;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -17,10 +16,11 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import net.sf.hibernate.Hibernate;
-
 import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
@@ -226,7 +226,7 @@ public class HL7Parser implements Parser
 											// Exactly one matching found, use this participant
 											Iterator<Participant> iter=participantList.iterator();
 											Participant aParticipant=iter.next();
-											List scgList=ReportLoaderUtil.getSCGList(aParticipant);
+											List scgList=Utility.getSCGList(aParticipant);
 											if(scgList!=null && scgList.size()>0)
 											{
 												Logger.out.info("Checking for Matching SCG");
@@ -254,7 +254,7 @@ public class HL7Parser implements Parser
 										Logger.out.debug("No conflicts found. Creating new Participant "+counter);
 										// this.setSiteToParticipant(participant, site);
 										Logger.out.debug("Creating new Participant");
-										ReportLoaderUtil.saveObject(participant);
+										participant=(Participant)CaCoreAPIService.getAppServiceInstance().createObject(participant);
 										Logger.out.info("New Participant Created");
 										participantList= new HashSet<Participant>();
 										participantList.add(participant);
@@ -268,7 +268,7 @@ public class HL7Parser implements Parser
 								catch(Exception ex)
 								{
 									this.status=CaTIESConstants.INVALID_REPORT_SECTION;
-									Logger.out.error("Report section under process is not valid");
+									Logger.out.error("Report section under process is not valid"+ex);
 								}
 							}
 							else
@@ -349,7 +349,7 @@ public class HL7Parser implements Parser
 			queue.setStatus(this.status);
 			queue.setParticipantCollection(set);
 			queue.setSpecimenCollectionGroup(scg);
-			ReportLoaderUtil.saveObject(queue);
+			Utility.saveObject(queue);
 		}
 		catch(Exception ex)
 		{
@@ -640,7 +640,7 @@ public class HL7Parser implements Parser
 				if(siteName!=null)
 				{
 					// check for site in DB
-					siteList=ReportLoaderUtil.getObject(Site.class.getName(), "name", siteName);
+					siteList=Utility.getObject(Site.class.getName(), "name", siteName);
 					if(siteList!=null && siteList.size()>0)
 					{
 						siteObj=(Site)siteList.get(0);
