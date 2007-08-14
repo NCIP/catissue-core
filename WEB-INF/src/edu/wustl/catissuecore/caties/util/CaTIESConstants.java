@@ -124,6 +124,8 @@ public abstract class CaTIESConstants
 	public static final String SITE_INFO_FILENAME="siteInfoFilename";
 	public static final String FILE_POLLER_PORT="filePollerPort";
 	public static final String COLLECTION_PROTOCOL_TITLE="collectionProtocolTitle";
+	public static final String USER_NAME="userName";
+	public static final String PASSWORD="password";
 	
 	public static final String DEID_HOME="deidHome";
 	public static final String DEID_DCTIONARY_FOLDER="deidDnyFolder";
