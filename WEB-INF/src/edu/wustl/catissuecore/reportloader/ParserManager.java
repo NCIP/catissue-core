@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.reportloader;
 
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
-import edu.wustl.catissuecore.caties.util.InitUtility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -32,17 +31,8 @@ public final class ParserManager
 		if(parserManager==null)
 		{
 			parserManager=new ParserManager();
-			parserManager.initialize();
 		}
 		return parserManager;
-	}
-	
-	/**
-	 * initializes the parsser manager
-	 */
-	private void initialize()
-	{
-		InitUtility.initializeParticipantCache();
 	}
 	
 	/**
