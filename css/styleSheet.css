@@ -1261,6 +1261,56 @@ td.tabMenuItem{ /* for the off state of the tab menu (top) cells */
   white-space: nowrap;
 }
 
+td.queryTabMenuItem{ /* for the off state of the tab menu (top) cells */
+  font-family:arial;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#A0CFFF; /*#9FA2BA;  constant: light purple ;C4E2FF : for light purple*/
+  padding-left:1em;
+  padding-right:1em;
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+
+  color:#000000;  /* constant: white */
+  text-decoration:none;
+  white-space: nowrap;
+}
+
+td.queryTabMenuItemSelected{ /* for the selected tab menu (top) cells */
+  font-family:arial;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#FFFFFF; /*#797C9C;  darker */
+  padding-left:1em;
+  padding-right:1em;
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  
+  color:#000000;  /* constant: white */
+  text-decoration:none;
+  white-space: nowrap;
+}
+
+td.queryTabMenuItemOver{ /* for the over state of the tab menu (top) cells */
+  font-family:arial;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#FFFFFF; /*#797C9C;  darker */
+  padding-left:1em;
+  padding-right:1em;
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+
+  color:#000000;  /* constant: white */
+  text-decoration:none;
+  white-space: nowrap;
+}
+
 td.tabMenuItemOver{ /* for the over state of the tab menu (top) cells */
   font-family:arial;
   font-size:0.6em;

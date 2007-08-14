@@ -52,5 +52,17 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 		{
 			Logger.out.error("Could not delete the Advance Search temporary table."+ex.getMessage(),ex);
 		}
+		String tempTableNameForQuery = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
+		try
+		{
+			JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+			jdbcDao.openSession(sessionData);
+			jdbcDao.delete(tempTableNameForQuery);
+			jdbcDao.closeSession();
+		}
+		catch(DAOException ex)
+		{
+			Logger.out.error("Could not delete the Query Module Search temporary table."+ex.getMessage(),ex);
+		}
     }
 }

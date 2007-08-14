@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.8 $
+ * $Name: 1.41.2.9 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -15,6 +15,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
@@ -324,7 +325,18 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			Logger.out.debug("Exception occured while creating instance of CatissueCoreCacheManager");
 			e.printStackTrace();
 		}
-		
+
+//		 Initialising Entity cache
+		try
+		{
+            EntityCache entityCache = EntityCache.getInstance();
+            Logger.out.debug("Entity Cache is initialised");
+		}
+		catch (Exception e)
+		{
+			Logger.out.debug("Exception occured while initialising entity cache");
+		}
+				
 		/*
 		//initialise TiTLi index
 		//create the index if it does not exist

@@ -523,3 +523,16 @@ alter table CATISSUE_SPECIMEN_COLL_GROUP drop column CLINICAL_REPORT_ID;
 alter table CATISSUE_SPECIMEN_COLL_GROUP add column SURGICAL_PATHOLOGY_NUMBER varchar(50);
 
 /****caTIES Realated Tables - end**********/
+/*--------Query Wizard start---------------*/
+insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction','edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction','edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction',1);
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction'));
+
+insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction','edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction','edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction',1);
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction'));
+
+insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.PathFinderAction','edu.wustl.catissuecore.action.querysuite.PathFinderAction','edu.wustl.catissuecore.action.querysuite.PathFinderAction',1);
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.PathFinderAction'));
+
+insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction','edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction','edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction',1);
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select MAX(PROTECTION_ELEMENT_ID) from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction'));
+/*--------Query Wizard End---------------*/

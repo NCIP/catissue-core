@@ -69,11 +69,11 @@ public class ShowGridAction extends BaseAction
 		int pageNum = Constants.START_PAGE;
 		request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
 		List<List<String>> dataList = (List<List<String>>) spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
-		session.setAttribute(Constants.SPREADSHEET_DATA_LIST,dataList);
-		session.setAttribute(Constants.PAGINATION_DATA_LIST,dataList);
+		request.setAttribute(Constants.SPREADSHEET_DATA_LIST,dataList);
+		request.setAttribute(Constants.PAGINATION_DATA_LIST,dataList);
 		List columnsList = (List) spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST);
 		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnsList);
-		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(dataList.size()).toString());	  
+		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(dataList.size()));	  
 		String pageOf = (String)request.getParameter(Constants.PAGEOF);
 		request.setAttribute(Constants.PAGEOF,pageOf);
 	}

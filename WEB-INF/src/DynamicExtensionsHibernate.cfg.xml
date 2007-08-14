@@ -27,7 +27,7 @@
 
         <!-- List of all Mapping files -->
         
- 		<mapping resource="edu/common/dynamicextensions/hbm/AbstractMetadata.hbm.xml"/>
+		<mapping resource="edu/common/dynamicextensions/hbm/AbstractMetadata.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/PermissibleValue.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/Role.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/SemanticProperty.hbm.xml"/>
@@ -39,14 +39,17 @@
 	    <mapping resource="edu/common/dynamicextensions/hbm/CollectionAttributeRecordValue.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/FileAttributeRecordValue.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/FileExtension.hbm.xml"/>
+        <mapping resource="edu/common/dynamicextensions/hbm/ObjectAttributeRecordValue.hbm.xml"/>        
         <mapping resource="edu/common/dynamicextensions/hbm/AssociationDisplayAttribute.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/databaseproperties/DatabaseProperties.hbm.xml"/>
+        <mapping resource="edu/common/dynamicextensions/hbm/CaDSRValueDomainInfo.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/userinterface/DEContainer.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/userinterface/Control.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/userinterface/View.hbm.xml"/>
                         
         <mapping resource="edu/common/dynamicextensions/hbm/validationrules/Rule.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/validationrules/RuleParameter.hbm.xml"/>
+        
     </session-factory>
     
 </hibernate-configuration>

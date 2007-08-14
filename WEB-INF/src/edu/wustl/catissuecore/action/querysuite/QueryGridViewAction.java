@@ -31,7 +31,7 @@ public class QueryGridViewAction extends BaseAction
 		session.setAttribute(Constants.PAGINATION_DATA_LIST,dataList);
 		List<String> columnsList = (List<String>)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnsList);
-		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(dataList.size()).toString());	  
+		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(dataList.size()));	  
 		int numResultsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
 		session.setAttribute(Constants.RESULTS_PER_PAGE,new Integer(numResultsPerPage).toString());
 		String pageOf = (String)request.getParameter(Constants.PAGEOF);

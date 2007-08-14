@@ -445,6 +445,7 @@
 			<transaction  src="${common.sql.dir}/createUser.sql"/>
 			<transaction  src="${common.sql.dir}/insert_default_data.sql"/>
 			<transaction  src="${common.sql.dir}/indexes.sql"/>
+			<transaction  src="${mysql.sql.dir}/SuiteQueryMetadataInsertScript.sql"/>	
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -482,6 +483,7 @@
 			onerror="continue">
 			<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.1_to_1.2.sql"/>
 			<transaction  src="${dbupgrade.sql.dir}/Common/initDB_Common.sql"/>
+			<transaction  src="${mysql.sql.dir}/SuiteQueryMetadataInsertScript.sql"/>	
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">

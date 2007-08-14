@@ -365,4 +365,10 @@
 		<value>edu.wustl.catissuecore.util.global.namegenerator.DefaultSpecimenLableGenerator</value>
 	</property>
 
+	<!-- property for DynamicUI xml file -->
+	<property>
+		<name>xmlfile.dynamicUI</name>
+		<value>dynamicUI.xml</value>
+	</property>
+
 </properties>

@@ -73,6 +73,11 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />	
 		
+		<!--List of classes required for Query module-->
+		<mapping resource="edu/wustl/common/hbm/CategorialAttribute.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/CategorialClass.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/Category.hbm.xml"/>
+
     </session-factory>
     
 </hibernate-configuration>

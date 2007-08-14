@@ -19,12 +19,6 @@ PUBLIC
 		<form-bean name="baseOrderItemForm" type="edu.wustl.catissuecore.actionForm.BaseOrderItemForm"/>
 		<form-bean name="viewSurgicalPathologyReportForm" type="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"/>
 
-
-
-
-
-
-
         <form-bean name="userForm" type="edu.wustl.catissuecore.actionForm.UserForm"/>
 		<form-bean name="reportedProblemForm" type="edu.wustl.catissuecore.actionForm.ReportedProblemForm"/>
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>		
@@ -467,7 +461,107 @@ PUBLIC
 		
 		
 	<!--Added by Deepti -define array end-->
+	<!-- Action code : Query Module Starts : 06/11/06 -->
+		<action path="/QueryWizard"
+			type="edu.wustl.catissuecore.action.querysuite.QueryWizardAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.searchCategory"/>
+		</action>
+		<action path="/SearchCategory"
+			type="edu.wustl.catissuecore.action.querysuite.CategorySearchAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.searchCategory"/>
+		</action>
+		<action path="/loadDefineSearchRules"
+			type="edu.wustl.catissuecore.action.querysuite.LoadDefineSearchRulesAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.searchCategory"/>
+		</action>
+		<action path="/ViewSearchResultsJSPAction"
+			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsJSPAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.viewSearchResults"/>
+			<forward name="failure" path=".catissuecore.errorPageDef"/>
 	
+		</action>
+		<action path="/DefineSearchResultsView"
+			type="edu.wustl.catissuecore.action.querysuite.DefineSearchResultsViewAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.defineSearchResultsView"/>
+			<forward name="BuildNewTree" path=".catissuecore.defineSearchResultsViewBNT"/>
+		</action>
+		
+		<action path="/BuildCustomizeTree"
+			type="edu.wustl.catissuecore.action.querysuite.BuildCustomizeTreeAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
+		</action>
+		<action path="/BuildQueryOutputTree"
+			type="edu.wustl.catissuecore.action.querysuite.BuildQueryOutputTreeAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
+		</action>
+		<action path="/ShowGrid"
+			type="edu.wustl.catissuecore.action.querysuite.ShowGridAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef" />
+		</action>
+		<action path="/BuildQueryOutputSpreadsheet"
+			type="edu.wustl.catissuecore.action.querysuite.BuildQueryOutputSpreadsheetAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
+		</action>
+		<!-- Applet Action mapping for query Module -->
+		<action path="/ViewSearchResultsAction" 
+			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction" 
+			parameter="method">
+		<forward name="success" path=".catissuecore.viewSearchResults"/>
+		</action>
+		<action path="/addToLimitSet" 
+			type="edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction" 
+			parameter="method">
+		</action>
+		<action path="/PathFinderAction" 
+			type="edu.wustl.catissuecore.action.querysuite.PathFinderAction" 
+			parameter="method">
+		</action>
+		<action path="/getDagViewDataAction" 
+			type="edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction" 
+			parameter="method">
+		</action>
+		
+		<!-- Action code : Query Module changes for pagination starts : 20/07/2007 -->
+		
+		<action path="/QueryTreeView"
+			type="edu.wustl.catissuecore.action.querysuite.QueryTreeViewAction">
+			<forward name="success" path=".catissuecore.queryTreeViewDef" />
+		</action>
+		
+		<action path="/QueryGridView"
+			type="edu.wustl.catissuecore.action.querysuite.QueryGridViewAction">
+			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef" />
+		</action>
+		<!-- Action code : Query Module changes for pagination ends : 20/07/2007 -->		
+		
+		<!-- Action code : Query Module Ends : 06/11/06 -->	
 		<!-- caTIES start-->
 		<action path="/ViewSurgicalPathologyReport"
 			type="edu.wustl.catissuecore.action.ViewSurgicalPathologyReportAction"

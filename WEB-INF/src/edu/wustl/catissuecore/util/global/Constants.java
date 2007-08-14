@@ -131,6 +131,62 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION= "cast(label as signed)";
 	public static final String ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION = "catissue_label_to_num(label)";
 	
+	// Query Module Interface UI constants
+	public static final String ViewSearchResultsAction = "ViewSearchResultsAction.do";
+	public static final String categorySearchForm = "categorySearchForm";
+	public static final String SearchCategory = "SearchCategory.do";
+	public static final String DefineSearchResultsViewAction = "DefineSearchResultsView.do";
+	public static final String DefineSearchResultsViewJSPAction = "ViewSearchResultsJSPAction.do";
+	public static final String QUERY_DAG_VIEW_APPLET = "edu/wustl/catissuecore/applet/ui/querysuite/DiagrammaticViewApplet.class";
+	public static final String QUERY_DAG_VIEW_APPLET_NAME = "Dag View Applet";
+	public static final String APP_DYNAMIC_UI_XML = "xmlfile.dynamicUI";
+	public static final String QUERY_CONDITION_DELIMITER = "@#condition#@";
+	public static final String QUERY_OPERATOR_DELIMITER = "!*=*!";
+	public static final String SEARCHED_ENTITIES_MAP = "searchedEntitiesMap";
+	public static final String SUCCESS = "success";
+	public static final String LIST_OF_ENTITIES_IN_QUERY = "ListOfEntitiesInQuery";
+	public static final String DYNAMIC_UI_XML = "dynamicUI.xml";
+	public static final String TREE_DATA = "treeData";
+	public static final String ZERO_ID	= "0";
+	public static final String TEMP_OUPUT_TREE_TABLE_NAME = "temp_OutputTree";
+	public static final String CREATE_TABLE = "Create table "; 
+	public static final String AS = "as";
+	public static final String UNDERSCORE = "_";
+	public static final String ID_NODES_MAP = "idNodesMap";
+	public static final String ID_COLUMNS_MAP = "idColumnsMap";
+	public static final String COLUMN_NAME = "Column";
+	public static final String[] ATTRIBUTE_NAMES_FOR_TREENODE_LABEL = {
+		"firstName",
+		"lastName",
+		"title",
+		"name",
+		"label"
+	};
+	public static final String MISSING_TWO_VALUES = "missingTwoValues";
+	public static final String DATE = "date";
+	public static final String DEFINE_RESULTS_VIEW = "DefineResultsView";
+	public static final String CURRENT_PAGE = "currentPage"; 
+	public static final String ADD_LIMITS = "AddLimits";
+	public static final String LABEL_TREE_NODE = "Label";
+	public static final String ENTITY_NAME = "Entity Name";
+	public static final String COUNT = "Count";
+	public static final String TREE_NODE_FONT = "<font color='#FF9BFF' face='Verdana'><i>";  
+	public static final String TREE_NODE_FONT_CLOSE = "</i></font>";  
+	public static final String NULL_ID = "NULL";
+	public static final String NODE_SEPARATOR = "::";
+	public static final String DEFINE_SEARCH_RULES = "Define Search Rules For";
+	public static final String DATE_FORMAT = "MM-dd-yyyy";
+	public static final String OUTPUT_TREE_MAP = "outputTreeMap";
+	// Query Module Interface UI constants---ends here
+	//	 Frame names in Query Module Results page.
+	public static final String GRID_DATA_VIEW_FRAME = "gridFrame";
+	public static final String TREE_VIEW_FRAME = "treeViewFrame";
+    public static final String QUERY_TREE_VIEW_ACTION = "QueryTreeView.do";
+    public static final String QUERY_GRID_VIEW_ACTION = "QueryGridView.do";
+    public static final String NO_OF_TREES = "noOfTrees";
+    public static final String PAGEOF_QUERY_MODULE = "pageOfQueryModule";
+    public static final String TREE_ROOTS = "treeRoots";
+    //	 Frame names in Query Module Results page.--ends here
 	public static final String MAX_IDENTIFIER = "maxIdentifier";
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";
@@ -1498,7 +1554,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MULTIPLE_SPECIMEN_SPECIMEN_ORDER_LIST= "specimenOrderList";
 	public static final String MULTIPLE_SPECIMEN_DELETELAST_SPECIMEN_ID = "SpecimenId";
 	public static final String MULTIPLE_SPECIMEN_PARENT_COLLECTION_GROUP = "ParentSpecimenCollectionGroup";
-	
+
+	public static final String NO_OF_RECORDS_PER_PAGE="resultView.noOfRecordsPerPage";
+
 	/**
 	 * Name: Prafull
 	 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.

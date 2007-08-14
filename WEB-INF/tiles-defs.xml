@@ -1023,5 +1023,31 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenViewSPR.jsp" />
 	</definition>
 	
+	 <!-- Definition code : Mandar Shidhore : 06/11/06 -->
+	<definition name=".catissuecore.searchCategory" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/querysuite/AddLimits.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.viewSearchResults" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/querysuite/ViewResults.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.defineSearchResultsView" extends=".catissuecore.searchHomeDef">
+		<put name="content" value=".catissuecore.defineSearchResultsWizard" />
+	</definition>
+
+	<definition name=".catissuecore.defineSearchResultsWizard" path="/pages/content/search/querysuite/DefineSearchResultsView.jsp">
+		<put name="content" value="/pages/content/search/querysuite/DefineSearchResultsViewDefineTree.jsp"/>
+	</definition>	
+	
+	<definition name=".catissuecore.defineSearchResultsViewBNT" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/querysuite/DefineSearchResultsViewBuildNewTree.jsp" />
+	</definition>
+	 <!-- Definition code : Deepti Shelar : For pagination : 20/07/2007 -->
+	<definition name=".catissuecore.queryTreeViewDef" path="/pages/content/search/querysuite/QueryTreeView.jsp">
+	</definition>
+<!--	<definition name=".catissuecore.defineSearchResultsView" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/querysuite/DefineSearchResultsView.jsp" />
+	</definition> -->
 </tiles-definitions>
 

@@ -109,6 +109,12 @@ tr#hiddenCombo
 			document.forms[0].target = "_parent";
 			document.forms[0].submit();
 		}
+		function onRedefineDAGQuery()
+		{
+			document.forms[0].action='SearchCategory.do';
+			document.forms[0].target = "_parent";
+			document.forms[0].submit();
+		}
 		var selected;
 
 		function addCheckBoxValuesToArray(checkBoxName)
@@ -143,6 +149,10 @@ tr#hiddenCombo
 		{
 			configAction = "onSimpleConfigure()";
 			redefineQueryAction = "onRedefineSimpleQuery()";
+		}
+		else if(pageOf.equals("pageOfQueryModule"))
+		{
+			redefineQueryAction = "onRedefineDAGQuery()";
 		}
 		else
 		{

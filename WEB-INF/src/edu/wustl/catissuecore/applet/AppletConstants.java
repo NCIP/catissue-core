@@ -115,6 +115,40 @@ public interface AppletConstants
 	String SPECIMEN_ARRAY_APPLET_ACTION = "/SpecimenArrayAppletAction.do";
 
 	/**
+	 * Specify the ADD_TO_LIMIT_ACTION field 
+	 */
+	String ADD_TO_LIMIT_ACTION = "/addToLimitSet.do";
+	/**
+	 * Specify the GET_SEARCH_RESULTS field 
+	 */
+	String GET_SEARCH_RESULTS = "/ViewSearchResultsAction.do";
+	/**
+	 * Specify the PATH_FINDER field 
+	 */
+	String PATH_FINDER = "/PathFinderAction.do";
+	/**
+	 * Specify the ADD_TO_LIMIT_ACTION field 
+	 */
+	String GET_DAG_VIEW_DATA = "/getDagViewDataAction.do";
+	/**
+	 * 
+	 */
+	public static final String RESOURCE_BUNDLE_PATH = "dagViewApplet.jar/ApplicationResources.properties"; 
+	public static final String DefineSearchResultsViewAction = "/DefineSearchResultsView.do";
+	/**
+	 * Specify the ADD_TO_LIMIT_ACTION field 
+	 */
+	String DAG_VIEW_DATA = "dagViewData";
+	/**
+	 * Specify the ADD_TO_LIMIT_ACTION field 
+	 */
+	String ENTITY_MAP = "entity_map";
+	/**
+	 * Specify the ADD_TO_LIMIT_ACTION field 
+	 */
+	String ENTITY_STR = "entity_str";
+
+	/**
 	 * Specimen Attributes Row Nos
 	 * */
 	short SPECIMEN_CHECKBOX_ROW_NO = 0;		//	FOR CHECKBOXES
@@ -197,4 +231,33 @@ public interface AppletConstants
 	public static final char MULTIPLE_SPECIMEN_DELETE_LAST_ACCESSKEY='D';
 
 	public static final String MULTIPLE_SPECIMEN_CHECKBOX_LABEL="Specimen ";
+	
+	// Dagviewapplet constants
+	public static final String QUERY_OBJECT = "queryObject";
+	public static final String SESSION_ID = "session_id";
+	public static final String STR_TO_CREATE_QUERY_OBJ = "strToCreateQueryObject";
+	public static final String ENTITY_NAME = "entityName";
+	public static final String INIT_DATA = "initData";
+	public static final String ATTRIBUTES = "Attributes";
+	public static final String ATTRIBUTE_OPERATORS = "AttributeOperators";
+	public static final String FIRST_ATTR_VALUES = "FirstAttributeValues";
+	public static final String SECOND_ATTR_VALUES = "SecondAttributeValues";
+	public static final String SHOW_ENTITY_INFO = "showEntityInformation";
+	public static final String SRC_ENTITY = "srcEntity";
+	public static final String PATHS = "paths";
+	public static final String DEST_ENTITY = "destEntity";
+	public static final String ERROR_MESSAGE = "errorMessage";
+	public static final String SHOW_VALIDATION_MESSAGES = "showValidationMessages";
+	public static final String SHOW_RESULTS_PAGE = "showViewSearchResultsJsp";
+	public static final String ATTR_VALUES = "AttributeValues";
+	public static final String SHOW_ERROR_PAGE = "showErrorPage";
+	public static final String GET_DATA = "getData";
+	public static final String SET_DATA = "setData";
+	public static final String EMPTY_LIMIT_ERROR_MESSAGE = "<li><font color='red'>Please enter at least one condition to add a limit to limit set.</font></li>";
+	public static final String EMPTY_DAG_ERROR_MESSAGE = "<li><font color='red'>Limit set should contain at least one limit.</font></li>";
+	public static final String MULTIPLE_ROOTS_EXCEPTION = "<li><font color='red'>Expression graph should be a connected graph.</font></li>";
+	public static final String EDIT_LIMITS = "<li><font color='blue'>Limit succesfully edited.</font></li>";
+	
+	//public static final String ATTRIBUTES = "Attributes";
+	
 }

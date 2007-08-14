@@ -18,6 +18,7 @@
 	<property name="target.dir" value="${base.dir}/WEB-INF/classes" />
 	<property name="lib.dir" value="${base.dir}/WEB-INF/lib" />
 	<property name="applet.dir" value="${base.dir}/Applet" />
+	<property name="dagviewapplet.dir" value="${applet.dir}/DagViewApplet" />	
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm" />
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib" />
 	<property name="generateforce" value="true" />
@@ -123,6 +124,17 @@
 			<fileset dir="${applet.dir}">
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />
+				<exclude name="**/cab2bStandAlone.jar" />
+				<exclude name="**/commonpackage.jar" />
+				<exclude name="**/org-netbeans-graph.jar" />
+				<exclude name="**/org-netbeans-graph-vmd.jar" />
+				<exclude name="**/org-openide-util.jar" />
+				<exclude name="**/DynamicExtensions.jar" />		
+				<include name="**/swingx-2006_10_08.jar" />								
+				<include name="**/struts.jar" />								
+				<include name="**/hibernate2.1.7c.jar" />								
+				<include name="**/odmg.jar"/>	
+				<exclude name="**/dagViewApplet.jar" />		
 			</fileset>
 		</delete>
 
@@ -174,12 +186,12 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,common_build_war,build_client_jar">
+	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,build_dagViewApplet_jar,common_build_war,build_client_jar">
 	</target>
 	<!-- Create war file for installable zip file.Please us this target when creating installable zip. 
 		Note: database type is not replaced 
 	-->
-	<target name="installable_build_war" depends="init, compile, unpack_cacore_war,common_build_war,build_client_jar">
+	<target name="installable_build_war" depends="init, compile, unpack_cacore_war,build_dagViewApplet_jar,common_build_war,build_client_jar">
 	</target>
 	
 	<!-- build catissuecore war file which is common to above both targets -->
@@ -203,10 +215,12 @@
 
 				<exclude name="**/WEB-INF/src*/**" />
 				<exclude name="**/*servlet.jar*" />
+				
 				<exclude name="**/*hibernate2.jar*" />
 				<exclude name="**/*jta.jar*" />
 				<exclude name="**/CVS*" />
 				<!--exclude name="**/*build*"/>
+				<exclude name="**/*log4j-1.2.9.jar*" />
 				<exclude name="**/*WEB-INF*"/>
 				<exclude name="**/.*"/>
 				<exclude name="**/*.sql"/>
@@ -584,5 +598,93 @@
 	        </mail>
 	 </target>
 	
+	<!-- Create the Applet JAR Begins-->
+		<target name="build_dagViewApplet_jar" depends="compile">
+			<delete dir="${dagviewapplet.dir}" />
+			<mkdir dir="${dagviewapplet.dir}" />
+			<copy todir="${applet.dir}">
+				<fileset dir="${lib.dir}">
+					<include name="**/cab2bStandAlone.jar" />
+					<include name="**/commonpackage.jar" />
+					<include name="**/org-netbeans-graph.jar" />
+					<include name="**/org-netbeans-graph-vmd.jar" />
+					<include name="**/org-openide-util.jar" />
+					<include name="**/DynamicExtensions.jar" />		
+					<include name="**/swingx-2006_10_08.jar" />								
+					<include name="**/struts.jar" />								
+					<include name="**/hibernate2.1.7c.jar" />								
+					<include name="**/odmg.jar"/>
+					<include name="**/log4j-1.2.9.jar"/>
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/images">	
+	    		<fileset dir="${base.dir}/images/dagViewImages">
+		    	    <include name="**/*"/>
+	    		</fileset>
+	    	 </copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet/ui/querysuite">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet/ui/querysuite">
+					<include name="**/*.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet/ui">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet/ui">
+					<include name="**/BaseApplet.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet/model">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet/model">
+					<include name="**/BaseAppletModel.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet/model">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet/model">
+					<include name="**/AppletModelInterface.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet">
+					<include name="**/AppletServerCommunicator.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/bizlogic/querysuite">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/bizlogic/querysuite">
+					<include name="**/GenerateHtmlForAddLimitsBizLogic.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet/util">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet/util">
+					<include name="**/CommonAppletUtil.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/util/querysuite">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/util/querysuite">
+					<include name="**/QueryModuleUtil.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}">
+				<fileset dir="${target.dir}">
+					<include name="**/dynamicUI.xml" />
+				</fileset>
+			</copy>
+			<jar taskname="buildJar" jarfile="${applet.dir}/dagViewApplet.jar">
+				<fileset dir="${dagviewapplet.dir}">
+					<include name="**/**" />
+				</fileset>
+			</jar>
+			<delete dir="${dagviewapplet.dir}" />
+		</target>
+		<!-- Create the Applet JAR Ends-->
+
+	<target name="build_DomainObject_jar" depends="compile" description="To create jar which contains domain object along with its hbm file. This is required for Query Metedata loading.">
+		<jar taskname="buildJar" jarfile="${base.dir}/catissueDomain.jar">
+			<fileset dir="${target.dir}">
+				<include name="**/*.hbm.xml" />
+				<include name="**/edu/wustl/catissuecore/domain/**" />
+				<include name="**/edu/wustl/catissuecore/actionForm/**" />
+				<include name="**/edu/wustl/catissuecore/bean/**" />
+			</fileset>
+		</jar>
+	</target>
 	
 </project>
