@@ -38,7 +38,7 @@
             table="CATISSUE_REPORT_PARTICIP_REL"
             lazy="false"
             inverse="false"
-            cascade="save-update"
+            cascade="none"
             sort="unsorted"
         >
 
