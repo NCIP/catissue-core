@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import net.sf.hibernate.Session;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
@@ -601,5 +602,25 @@ public class CaCoreAppServicesDelegator
     	    return validUser;
     	}
         return null;
+    }
+    
+    /**
+     * Find out the matching participant list based on the participant object provided
+     * @param userName
+     * @param domainObject
+     * @return
+     * @throws Exception
+     */
+    public List delegateGetParticipantMatchingObects(String userName, Object domainObject)throws Exception
+    {
+    	List matchingObjects = new ArrayList();
+		checkNullObject(domainObject,"Domain Object");
+		String className = domainObject.getClass().getName();
+		ParticipantBizLogic bizLogic =(ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(className);
+		AbstractDomainObject abstractDomainObject = (AbstractDomainObject) domainObject;
+		// not null check for Id
+		//checkNullObject(abstractDomainObject.getId(),"Identifier");
+		matchingObjects = bizLogic.getListOfMatchingParticipants((Participant)domainObject);
+		return matchingObjects;
     }
 }
