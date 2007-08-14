@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
 import edu.wustl.catissuecore.bean.ConceptHighLightingBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -35,7 +36,6 @@ import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -197,7 +197,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			List participantList=defaultBizLogic.retrieve(className, colName, colValue);
 			Participant participant=(Participant)participantList.get(0);
 //			viewSPR.setParticipant(participant);
-			List scgList=ReportLoaderUtil.getSCGList(participant);
+			List scgList=Utility.getSCGList(participant);
 			//For PHI
 			//List scgObjList = new ArrayList();
 			//try
