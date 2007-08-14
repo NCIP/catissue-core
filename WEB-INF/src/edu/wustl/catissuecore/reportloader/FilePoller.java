@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.IOException;
 
 import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
-import edu.wustl.catissuecore.caties.util.InitUtility;
 import edu.wustl.catissuecore.caties.util.StopServer;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.util.logger.Logger;
-
 /**
  * Represents a poller which picks up the report files
  * and then pass them to the appropriate parser which parsers those files and import the data into datastore. 
@@ -19,7 +19,6 @@ import edu.wustl.common.util.logger.Logger;
 public class FilePoller implements Observable
 {
 	private Observer obr;
-	
 	/**
 	 * Main method for FilePoller
 	 * @param args commandline arguments
@@ -34,11 +33,13 @@ public class FilePoller implements Observable
 		{
 			poller = new FilePoller();
 			// Initializing file poller
-			InitUtility.init();
+			Utility.init();
 			// Configuring CSV logger
 			CSVLogger.configure(CaTIESConstants.LOGGER_FILE_POLLER);
 			// Initializing default value manager
 			DefaultValueManager.validateAndInitDefaultValueMap();
+			//Initializing caCoreAPI instance
+			CaCoreAPIService.initialize();
 			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_FILENAME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_REPORTQUEUE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE);
 			// for empty row after heading
 			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,"");
