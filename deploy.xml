@@ -768,7 +768,6 @@ Thanking You,
 		
 		
 	<target name="deploy_caties_internal" >
-		<antcall target="assertforcaties"/>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 		<copy todir="${caties.installation.dir}/classes">
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/classes" />
@@ -813,6 +812,7 @@ Thanking You,
 		<copy todir="${caties.installation.dir}/lib">
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
 		</copy>
+		<copy file="${basedir}/caTissueCore_caCORE_Client/lib/catissuecore-client.jar" todir="${caties.installation.dir}/lib" /> 
 		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>	
 		<copy file="${temp.dir}/catissuecore/CDEConfig.xml" todir="${caties.installation.dir}" overwrite="true"/>
 		<copy file="Dataset.dtd" todir="${caties.installation.dir}" overwrite="true"/>
@@ -822,6 +822,7 @@ Thanking You,
 		<copy file="${basedir}/caTIES_conf/deid.cfg" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>
 		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>	
 		<copy file="${basedir}/caTIES_conf/SectionHeaderConfig.txt" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>
+		<copy file="${base.dir}/caTissueCore_caCORE_Client/conf/remoteService.xml" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>
 		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${caties.installation.dir}" overwrite="true"/>
 	</target>
 	
