@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.9 $
+ * $Name: 1.41.2.10 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -15,6 +15,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
+import edu.wustl.catissuecore.annotations.AnnotationUtil;
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
@@ -330,7 +332,21 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		try
 		{
             EntityCache entityCache = EntityCache.getInstance();
+            Logger.out.debug("Entity Cache is initialised");           
+            CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
             Logger.out.debug("Entity Cache is initialised");
+            //Stores the list of system entities into the cache.-- Vishvesh.
+            AnnotationUtil.getSystemEntityList();
+            //Stores the ids in the cache
+            Long participantId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
+            catissueCoreCacheManager.addObjectToCache("participantEntityId",participantId);
+            Long scgId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
+            catissueCoreCacheManager.addObjectToCache("scgEntityId",scgId);
+            Long specimenEntityId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+            catissueCoreCacheManager.addObjectToCache("specimenEntityId",specimenEntityId);
+            Long cpEntityId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_COLLECTION_PROTOCOL);
+            catissueCoreCacheManager.addObjectToCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID,cpEntityId);
+           
 		}
 		catch (Exception e)
 		{
