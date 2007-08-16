@@ -1554,6 +1554,19 @@ td.queryModuleTabMenuItem{ /* for the off state of the tab menu (top) cells */
   white-space: nowrap;
   border-right:1px solid #5C5C5C; /* constant: dark gray */
  }
+ .rowBGGreyColor1
+ {
+	 background-color:#F4F4F5; /*#9FA2BA;  constant: light purple ;C4E2FF : for light purple*/	 
+ }
+ .rowBGWhiteColor
+ {
+	 background-color:#EAEAEF; /*#9FA2BA;  constant: light purple ;C4E2FF : for light purple*/	 
+ }
+/* .standardTextQueryWithBackColor{ /* for stand-alone text not affected by any cascading text styles 
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  color:#000000; /* constant: black 
+}*/
  .standardTextQuery{ /* for stand-alone text not affected by any cascading text styles */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.8em;
@@ -1623,6 +1636,18 @@ queryLink{ /* for the text links in the Search category page */
  font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.9em;
   color:#000000; /* constant: black */
+}
+.tdWithoutBottomBorder{ /* for block table with border 1 */
+  border-top:1px  solid #000000;/* constant: dark gray */
+  border-left:1px solid #000000; /* constant: dark gray */
+  border-right:1px solid #000000; /* constant: dark gray */
+
+}
+.tdWithoutTopBorder{ /* for block table with border 1 */
+  border-bottom:1px  solid #000000;/* constant: dark gray */
+  border-left:1px solid #000000; /* constant: dark gray */
+  border-right:1px solid #000000; /* constant: dark gray */
+
 }
 
 

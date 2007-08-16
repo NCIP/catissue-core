@@ -177,15 +177,31 @@ public class CategorySearchAction extends BaseAction
 		String classCheckBoxChecked = searchForm.getClassChecked();
 		String attributeCheckBoxChecked = searchForm.getAttributeChecked();
 		String permissiblevaluesCheckBoxChecked = searchForm.getPermissibleValuesChecked();
+		String includeDescriptionChecked = searchForm.getIncludeDescriptionChecked();
 		List<Integer> target = new ArrayList<Integer>();
+		System.out.println();
 
 		if (classCheckBoxChecked != null && (classCheckBoxChecked.equalsIgnoreCase("on") || classCheckBoxChecked.equalsIgnoreCase("true")))
 		{
-			target.add(new Integer(Constants.CLASS));
+			if(includeDescriptionChecked !=null && (includeDescriptionChecked.equalsIgnoreCase("on")|| includeDescriptionChecked.equalsIgnoreCase("true")))
+			{
+				target.add(new Integer(Constants.CLASS_WITH_DESCRIPTION));
+			}
+			else
+			{
+				target.add(new Integer(Constants.CLASS));
+			}
 		}
 		if (attributeCheckBoxChecked != null && (attributeCheckBoxChecked.equalsIgnoreCase("on") || attributeCheckBoxChecked.equalsIgnoreCase("true")))
 		{
-			target.add(new Integer(Constants.ATTRIBUTE));
+			if(includeDescriptionChecked !=null && (includeDescriptionChecked.equalsIgnoreCase("on")|| includeDescriptionChecked.equalsIgnoreCase("true")))
+			{
+				target.add(new Integer(Constants.ATTRIBUTE_WITH_DESCRIPTION));
+			}
+			else
+			{
+				target.add(new Integer(Constants.ATTRIBUTE));
+			}
 		}
 		if (permissiblevaluesCheckBoxChecked != null && (permissiblevaluesCheckBoxChecked.equalsIgnoreCase("on") || permissiblevaluesCheckBoxChecked.equalsIgnoreCase("true")))
 		{

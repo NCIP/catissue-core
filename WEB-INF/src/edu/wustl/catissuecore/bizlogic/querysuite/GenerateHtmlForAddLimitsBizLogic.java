@@ -82,7 +82,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String header = Constants.DEFINE_SEARCH_RULES;
 		//ApplicationProperties.getValue("query.defineSearchRulesFor");//"\nDefine Search Rules For";//
 		String attributesList = "";
-		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"1\" cellpadding=\"1\">");
+		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\">");
 		generatedHTML.append("\n<tr>");
 		generatedHTML
 		.append("<td valign='top' height=\"4%\" colspan=\"8\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
@@ -94,10 +94,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 			isEditLimits = true;
 		}
 		boolean isTopButton = true;
+		boolean isBGColor = false;
 		generatedHTML.append(generateHTMLForButton(nameOfTheEntity, getAttributesString(attributeCollection), isEditLimits,isTopButton));
 		if (!attributeCollection.isEmpty())
 		{
 			List attributes = new ArrayList(attributeCollection);
+			String styleSheetClass = "rowBGWhiteColor";
 			Collections.sort(attributes, new AttributeInterfaceComparator());
 			for(int i=0;i<attributes.size();i++)
 			{
@@ -106,14 +108,24 @@ public class GenerateHtmlForAddLimitsBizLogic
 				String attrLabel = QueryModuleUtil.getAttributeLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;
-				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"6%\">\n<td valign='top' class=\"standardTextQuery\" nowrap='nowrap' width=\"5%\">");
+				if(isBGColor)
+				{
+					styleSheetClass = "rowBGGreyColor1";
+				}
+				else
+				{
+					styleSheetClass = "rowBGWhiteColor";
+				}
+				isBGColor = !isBGColor;
+				generatedHTML.append("\n<tr class='"+styleSheetClass+"' id=\"" + componentId + "\" height=\"6%\">\n" +
+						"<td valign='top' class='standardTextQuery' nowrap='nowrap' width=\"5%\">");
 				generatedHTML.append(attrLabel+" ");
 				if(attribute.getDataType().equalsIgnoreCase(Constants.DATE))
 				{
 					String dateFormat = Constants.DATE_FORMAT;//ApplicationProperties.getValue("query.date.format");
 					generatedHTML.append("\n("+dateFormat+")");
 				}
-				generatedHTML.append("</td>\n");
+				generatedHTML.append(":</td>\n");
 				List<String> operatorsList = getConditionsList(attribute);
 				boolean isBetween = false;
 				if (!operatorsList.isEmpty() && operatorsList.get(0).equalsIgnoreCase(RelationalOperator.Between.toString()))
@@ -539,8 +551,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 		if (permissibleValues != null && permissibleValues.size() != 0)
 		{
 
-			html.append("\n<td width='1%' valign='top' class=\"PermissibleValuesQuery\" >");
-			html.append("\n<select style=\"width:150px; display:block;\" MULTIPLE styleId='country' size ='2' name=\"" + componentId
+			html.append("\n<td width='1%' valign='centre' class=\"PermissibleValuesQuery\" >");
+			html.append("\n<select style=\"width:150px; display:block;\" MULTIPLE styleId='country' size ='3' name=\"" + componentId
 					+ "_enumeratedvaluescombobox\"\">");
 			List values = new ArrayList(permissibleValues);
 			Collections.sort(values, new PermissibleValueComparator());
@@ -559,6 +571,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 				}
 			}
 			html.append("\n</select>");
+			html.append("\n</td>");
+			html.append("\n<td>");
+			html.append("\n</td>");
+			html.append("\n<td>");
+			html.append("\n</td>");
+			html.append("\n<td>");
 			html.append("\n</td>");
 		}
 		return html.toString();
@@ -592,7 +610,6 @@ public class GenerateHtmlForAddLimitsBizLogic
 		
 		String componentId = attributeName + attribute.getId().toString()+"_radioButton";
 		String componentName = componentId+"_booleanAttribute";
-		System.out.println(componentName);
 		html.append("\n<td>");
 		if(values == null)
 		{
@@ -613,7 +630,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 			}
 		}
 		html.append("\n</td>");
-		System.out.println(html.toString());
+		html.append("\n<td>");
+		html.append("\n</td>");
+		html.append("\n<td>");
+		html.append("\n</td>");
+		html.append("\n<td>");
+		html.append("\n</td>");
 		return html.toString();
 	}
 }

@@ -30,19 +30,19 @@
 		<td>
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table2" >		
 		<tr  height="5%" class="trStyle">
-			<td width="25%" height="5%" class="queryTabMenuItemSelected" >
+			<td width="15%" height="5%" class="queryTabMenuItemSelected" >
 				<bean:message key="query.addLimits"/>
 			</td>
 
-			<td width="25%" height="5%" class="queryModuleTabMenuItem" >
+			<td width="15%" height="5%" class="queryModuleTabMenuItem" >
 				<bean:message key="query.defineSearchResultsViews"/>
 			</td>
 
-			<td width="25%" height="5%" class="queryModuleTabMenuItem">
+			<td width="15%" height="5%" class="queryModuleTabMenuItem">
 				<bean:message key="query.viewSearchResults"/>
 			</td>
 
-			<td width="25%" height="5%" class="queryModuleTabMenuItem">
+			<td width="15%" height="5%" class="queryModuleTabMenuItem">
 				<bean:message key="query.dataList"/>
 			</td>			
 		</tr>

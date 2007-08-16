@@ -280,6 +280,10 @@ public abstract class QueryModuleUtil
 		{
 			actionForm.setPermissibleValuesChecked("off");
 		}
+		if (actionForm.getIncludeDescriptionChecked() == null)
+		{
+			actionForm.setIncludeDescriptionChecked("off");
+		}
 		//TODO check if null and then set the value of seleted.
 		actionForm.setSelected("text_radioButton");
 		return actionForm;

@@ -177,14 +177,23 @@
 	{			
 		switchObj = document.getElementById('image');
 		dataObj = document.getElementById('collapsableTable');
+        var td1 = document.getElementById('td1');
+		var td2 = document.getElementById('td3');
 		resultSetDivObj = document.getElementById('resultSetDiv');
-		if(dataObj.style.display != 'none') //Clicked on - image
+	    //var advancedSearchHeaderTd = document.forms[0].elements['advancedSearchHeaderTd'];
+		var advancedSearchHeaderTd = document.getElementById('advancedSearchHeaderTd');
+		var imageContainer = document.getElementById('imageContainer');
+        
+		 	   
+	   if(dataObj.style.display != 'none') //Clicked on - image
 		{
+			advancedSearchHeaderTd.style.borderBottom = "1px solid #000000";
+            imageContainer.style.borderBottom = "1px solid #000000";
 			dataObj.style.display = 'none';				
 			switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0"/>';
 			if(navigator.appName == "Microsoft Internet Explorer")
 			{					
-				resultSetDivObj.height = "400";
+				resultSetDivObj.height = "420";
 			}
 			else
 			{
@@ -193,15 +202,21 @@
 		}
 		else  							   //Clicked on + image
 		{
+            advancedSearchHeaderTd.style.borderBottom = "0";
+			imageContainer.style.borderBottom = "0";
 			if(navigator.appName == "Microsoft Internet Explorer")
 			{					
 				dataObj.style.display = 'block';
+				td1.style.display = 'block';
+				td2.style.display = 'block';
 				resultSetDivObj.height = "320";
 			}
 			else
 			{
 				dataObj.style.display = 'table-row';
 				dataObj.style.display = 'block';
+				td1.style.display = 'block';
+				td2.style.display = 'block';
 				resultSetDivObj.height = "320";
 			}
 			switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
@@ -361,25 +376,28 @@
 	}
 	function retriveSearchedEntities(url,nameOfFormToPost,currentPage) 
 	{
+		
 		var request = newXMLHTTPReq();		
 		var textFieldValue = document.forms[0].textField.value;
 		var classCheckStatus = document.forms[0].classChecked.checked;
 		var attributeCheckStatus = document.forms[0].attributeChecked.checked;
 		var permissibleValuesCheckStatus = document.forms[0].permissibleValuesChecked.checked;
+		var includeDescriptionCheckedStatus = document.forms[0].includeDescriptionChecked.checked;
+		
 		var radioCheckStatus;
 		var actionURL;
 		if(document.forms[0].selected[0].checked)
-			radioCheckStatus = "rb1";
+			radioCheckStatus = "text_radioButton";
 		else if(document.forms[0].selected[1].checked)
-			radioCheckStatus = "rb2";
+			radioCheckStatus = "conceptCode_radioButton";
 		if(currentPage == 'null')
 		{
 			var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
-			actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&selected=" + radioCheckStatus+"&currentPage=AddLimits";
+			actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&includeDescriptionChecked="+includeDescriptionCheckedStatus+ "&selected=" + radioCheckStatus+"&currentPage=AddLimits";
 		}
 		else
 		{
-			actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&selected=" + radioCheckStatus +"&currentPage=DefineResultsView";
+			actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&includeDescriptionChecked="+includeDescriptionCheckedStatus+ "&selected=" + radioCheckStatus +"&currentPage=DefineResultsView";
 			var handlerFunction = getReadyStateHandler(request,showEntityList,true);
 		}
 		request.onreadystatechange = handlerFunction;
@@ -411,8 +429,10 @@
 	{
 		if(text == "")
 		{
-			alert("Zero Entitites found.");
+			//alert("Zero Entitites found.");
+			
 		}
+		
 		var element = document.getElementById('resultSet');
 		var row ='<table width="100%" height="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
 		row = row + '<tr>' + text + '</tr>';
@@ -422,17 +442,24 @@
 	
 	function onResponseUpdate(text)
 	{
+		var element = document.getElementById('resultSet');
 		if(text == "")
 		{
-			alert("Zero Entitites found.");
-		}
+			//alert("Zero Entitites found.");
+//			var row1 ="abcd";
+            text = '<font face="Arial" size="2" >No result found.</font>'
+			element.innerHTML =text;
+		} 
+		else
+		{
+		
 		if(text.indexOf("##") != -1)
 		{
 			var currentPageText = text.split("##");
 			var currentPage = currentPageText[0];
 			text = currentPageText[1];
 		}
-		var element = document.getElementById('resultSet');
+		
 		var listOfEntities = text.split(";");
 		var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
 	
@@ -455,7 +482,9 @@
 			}
 		}			
 		row = row+'</table>';		
+		
 		element.innerHTML =row;
+		}
 	}
 	function retriveEntityInformation(url,nameOfFormToPost,entityName) 
 	{	
@@ -706,4 +735,19 @@
 		document.forms['categorySearchForm'].action='SearchCategory.do';
 		document.forms['categorySearchForm'].currentPage.value = "prevToAddLimits";
 		document.forms['categorySearchForm'].submit();
+	}
+	function setIncludeDescriptionValue()
+	{
+      var isClassChecked = document.forms[0].classChecked.checked;
+	  var isArrtibuteChecked = document.forms[0].attributeChecked.checked;
+
+	  if(isClassChecked==true || isArrtibuteChecked==true)
+		{
+          document.forms[0].includeDescriptionChecked.disabled = false;
+		}
+	  else
+		{
+          document.forms[0].includeDescriptionChecked.disabled = true;
+		}
+
 	}

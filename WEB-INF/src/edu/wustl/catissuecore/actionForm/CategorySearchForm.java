@@ -32,6 +32,10 @@ public class CategorySearchForm extends ActionForm
 	 */
 	private String permissibleValuesChecked = null;
 	/**
+	 * String to store the the IncludeDescription checkbox's value.
+	 */
+	private String includeDescriptionChecked = null;
+	/**
 	 * String to store the radio button selected value.
 	 */
 	private String selected = null;
@@ -249,5 +253,13 @@ public class CategorySearchForm extends ActionForm
 	public void setBooleanAttribute(String booleanAttribute)
 	{
 		this.booleanAttribute = booleanAttribute;
+	}
+	public String getIncludeDescriptionChecked() 
+	{
+		return includeDescriptionChecked;
+	}
+	public void setIncludeDescriptionChecked(String includeDescriptionChecked) 
+	{
+		this.includeDescriptionChecked = includeDescriptionChecked;
 	}
 }

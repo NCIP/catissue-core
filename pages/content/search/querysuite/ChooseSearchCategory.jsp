@@ -12,7 +12,6 @@
 <%
 String height = "";
 String currentPage = (String)request.getAttribute(Constants.CURRENT_PAGE);
-
 System.out.println("currentPage         "+currentPage);
 %>
 	if(navigator.appName == "Microsoft Internet Explorer")
@@ -24,7 +23,7 @@ System.out.println("currentPage         "+currentPage);
 		else
 		{
 			<%
-				height ="400" ;
+				height ="440" ;
 			%>
 		}
 
@@ -38,60 +37,58 @@ System.out.println("currentPage         "+currentPage);
 %>
 <html:form method="GET" action="SearchCategory.do">
 <html:hidden property="currentPage" value=""/>
-	<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" id="table11">
+	<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" id="table11">
 		<tr>
 			<td valign="top"> 
 				<table border="0" width="100%" valign="top" cellspacing="0" height="100%">
-					<tr valign="top" valign="top" bgcolor="#EAEAEA" width="100%">
+					<!--<tr valign="top" valign="top"  width="100%">
 						<th height="5%"  valign="top" colspan="4">
 							<b><font face="Arial" size="2"><bean:message key="query.categorySearchHeader"/></font></b>									
 						</th>
 						<!--th valign="top" height="5%" width="20%" colspan="2">
 							<a id="imageCategorySearch" style="display:block"><img src="images/nolines_plus.gif" /></a>
-						</th-->
-					</tr>
-					<tr>
-						<td height="10px"></td>
-					</tr>
-					<tr bordercolorlight="#000000">
+						</th>
+					</tr>-->
+					
+					<tr bordercolorlight="#000000" height="5%">
 						<td>&nbsp;</td>
 						<td width="75%" valign="top" ><html:text property="textField" onkeydown="setFocusOnSearchButton(event)"/></td>
 						<td width="25%" valign="top">
 					
-							<input type="button" value="Search" name="searchButton" id="searchButton" onclick="retriveSearchedEntities('<%= SearchCategory %>','<%=formName%>','<%=currentPage%>');"/>
-					
-						</td>
-						<td valign="top">&nbsp;</td>
+							<input type="button"  value="      Go       " name="searchButton" id="searchButton" onclick="retriveSearchedEntities('<%= SearchCategory %>','<%=formName%>','<%=currentPage%>');"/>
+					    </td>
 					</tr>
 					<tr>
-						<td height="10px" valign="top"></td>
+					    <td>&nbsp;</td>
+						<td height="10px" align="left" valign="top" colspan="3"><font face="Arial" size="2">(E.g. Participant,Spcimen,Collection Protocol)</font></td>
 					</tr>
-					<tr id="collapsableHeader" valign="top" class="row" width="98%">
+					<tr id="collapsableHeader" valign="top" class="row" width="97%">
 						<td valign="top">&nbsp;</td>
-						<td height="5%" valign="top" bgcolor="#EAEAEA" style="border-left:solid 1px;border-top:solid 1px;border-bottom:solid 1px;bordercolorlight:#EAEAEA">
+						<td id="advancedSearchHeaderTd" height="5%" valign="top" bgcolor="#EAEAEA" style="border-left:solid 1px;border-top:solid 1px;border-bottom:solid 1px;bordercolorlight:#EAEAEA">
 							<b><font face="Arial" size="2"><bean:message key="query.advancedSearchHeader"/></font></b>									
 						</td>
-						<th valign="top" height="5%" bgcolor="#EAEAEA" style="border-top:solid 1px;border-bottom:solid 1px;border-right:solid 1px;bordercolorlight:#EAEAEA">
+						<th id="imageContainer" valign="top" align="right" height="5%" bgcolor="#EAEAEA" style="border-top:solid 1px;border-bottom:solid 1px;border-right:solid 1px;bordercolorlight:#EAEAEA">
 							<a id="image" onClick="expand()" style="display:block"><img src="images/nolines_plus.gif" /></a>
 						</th>
 						<td>&nbsp;</td>
 					</tr>
-					<tr valign="top">
-						<td valign="top">&nbsp;</td>
-						<td colspan="2" valign="top">
+					<tr valign="top" >
+						<td valign="top"  style="display:none" id="td1">&nbsp;</td>
+						<td colspan="2" valign="top" height="1px" >
 							<table valign="top" class="collapsableTable" style="display:none" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" id="collapsableTable">
 								<tr id="class_view">
-									<td class="standardTextQuery"><html:checkbox property="classChecked" value="on"> <bean:message key="query.class"/></html:checkbox></td>
+									<td class="standardTextQuery"><html:checkbox  property="classChecked" onclick="setIncludeDescriptionValue()" value="on"> <bean:message key="query.class"/></html:checkbox></td>
 								</tr>
 								<tr id="attribute_view" >
-									<td class="standardTextQuery"><html:checkbox property="attributeChecked" value="on" > <bean:message key="query.attribute"/></html:checkbox></td>
+									<td class="standardTextQuery"><html:checkbox  property="attributeChecked" onclick="setIncludeDescriptionValue()" value="on" > <bean:message key="query.attribute"/></html:checkbox></td>
 								</tr>
 								<tr id="permissible_view" >
 									<td class="standardTextQuery"><html:checkbox property="permissibleValuesChecked" value="on" > <bean:message key="query.permissibleValues"/></html:checkbox></td>
 								</tr>
-								<tr id="blank_view" >
-									<td>&nbsp;</td>
+								<tr id="description_view" >
+									<td class="standardTextQuery"><html:checkbox  property="includeDescriptionChecked" value="off" ><bean:message key="query.includeDescription"/> </html:checkbox></td>
 								</tr>
+								<tr><td>&nbsp;</td></tr>
 								<tr id="radio_view" >
 									<td class="standardTextQuery">
 										<html:radio property="selected" value="text_radioButton" /><bean:message key="query.text"/>
@@ -100,28 +97,26 @@ System.out.println("currentPage         "+currentPage);
 								</tr>											
 							</table>
 						</td>
-						<td valign="top">&nbsp;</td>
+						<td valign="top" style="display:none" id="td3">&nbsp;</td>
 					</tr>							 	
 					<tr>
 						<td height="5px"></td>
-					</tr>
-					<tr valign="top" class="row" width="98%">
+				 	</tr>
+					<tr valign="top" class="row" width="98%"  height="5%">
 						<td>&nbsp;</td>
-						<td colspan="2" height="5%" valign="top" bgcolor="#EAEAEA" style="border:solid 1px;bordercolorlight:#EAEAEA">
-							<b><font face="Arial" size="2"><bean:message key="query.searchResults"/></font>	</b>									
+						<td colspan="2" height="5%" valign="top" bgcolor="#EAEAEA"  class="tdWithoutBottomBorder">
+							<b><font face="Arial" size="2"><bean:message key="query.searchResults"/></font>	</b>				
 						</td>
 						<td>&nbsp;</td>
 					</tr>
 					<tr valign="top" class="row" width="100%">
 						<td width="100%">&nbsp;</td>
-						<td height=<%=height%>  width="100%" colspan="2" id='resultSetDiv'  style="border:solid 1px;bordercolorlight:#EAEAEA">
+						<td height=<%=height%> width="100%" colspan="2" id='resultSetDiv' class="tdWithoutTopBorder">
 							<div id="resultSet" style="overflow:auto;height:100%;width:100%"></div>
 						</td>
 						<td>&nbsp;</td>
 					</tr>
-					<tr valign="top" class="row" width="100%" height="1">						
-						<td height="3" colspan="4"></td>								
-					</tr>
+					
 			</table>
 		</td>
 	</tr>														
