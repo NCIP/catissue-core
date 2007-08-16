@@ -1,8 +1,10 @@
-/*
- * Created on Jan 5, 2007
- * @author
- *
- */
+/**
+ *<p>Title: </p>
+ *<p>Description:  </p>
+ *<p>Copyright:TODO</p>
+ *@author 
+ *@version 1.0
+ */ 
 package edu.wustl.catissuecore.actionForm;
 
 import java.io.Serializable;
@@ -20,19 +22,19 @@ import edu.wustl.common.domain.AbstractDomainObject;
 public class AnnotationForm extends AbstractActionForm implements Serializable
 {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	private String annotationGroupsXML;
-	private String annotationEntitiesXML;
-	private List systemEntitiesList;
-	private String selectedStaticEntityId;
+    private String annotationGroupsXML;
+    private String annotationEntitiesXML;
+    private List systemEntitiesList;
+    private String selectedStaticEntityId;
     private List  conditionalInstancesList;
     private String[] conditionVal;
-	
-	
+    
+    
     public String[] getConditionVal()
     {
         return conditionVal;
@@ -43,37 +45,37 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
         this.conditionVal = conditionVal;
     }
     public String getSelectedStaticEntityId()
-	{
-		return this.selectedStaticEntityId;
-	}
-	public void setSelectedStaticEntityId(String selectedStaticEntityId)
-	{
-		this.selectedStaticEntityId = selectedStaticEntityId;
-	}
-	public List getSystemEntitiesList()
-	{
-		return this.systemEntitiesList;
-	}
-	public void setSystemEntitiesList(List systemEntitiesList)
-	{
-		this.systemEntitiesList = systemEntitiesList;
-	}
-	public String getAnnotationEntitiesXML()
-	{
-		return this.annotationEntitiesXML;
-	}
-	public void setAnnotationEntitiesXML(String annotationEntitiesXML)
-	{
-		this.annotationEntitiesXML = annotationEntitiesXML;
-	}
-	public String getAnnotationGroupsXML()
-	{
-		return this.annotationGroupsXML;
-	}
-	public void setAnnotationGroupsXML(String annotationGroupsXML)
-	{
-		this.annotationGroupsXML = annotationGroupsXML;
-	}
+    {
+        return this.selectedStaticEntityId;
+    }
+    public void setSelectedStaticEntityId(String selectedStaticEntityId)
+    {
+        this.selectedStaticEntityId = selectedStaticEntityId;
+    }
+    public List getSystemEntitiesList()
+    {
+        return this.systemEntitiesList;
+    }
+    public void setSystemEntitiesList(List systemEntitiesList)
+    {
+        this.systemEntitiesList = systemEntitiesList;
+    }
+    public String getAnnotationEntitiesXML()
+    {
+        return this.annotationEntitiesXML;
+    }
+    public void setAnnotationEntitiesXML(String annotationEntitiesXML)
+    {
+        this.annotationEntitiesXML = annotationEntitiesXML;
+    }
+    public String getAnnotationGroupsXML()
+    {
+        return this.annotationGroupsXML;
+    }
+    public void setAnnotationGroupsXML(String annotationGroupsXML)
+    {
+        this.annotationGroupsXML = annotationGroupsXML;
+    }
 
     public int getFormId()
     {
