@@ -47,6 +47,7 @@ public class SpreadsheetExportAction  extends BaseAction
     	AdvanceSearchForm searchForm = (AdvanceSearchForm)form;
     	HttpSession session = request.getSession();
     	String fileName = Variables.applicationHome + System.getProperty("file.separator") + session.getId() + ".csv";
+    	String isCheckAllAcrossAllChecked = (String)request.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
     	
     	//Extracting map from formbean which gives the serial numbers of selected rows
     	Map map = searchForm.getValues();
@@ -72,7 +73,12 @@ public class SpreadsheetExportAction  extends BaseAction
     	    }
 	    	int recordsPerPage = new Integer(recordsPerPageStr);
 			int pageNum = new Integer(pageNo);
-
+			if(isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equalsIgnoreCase("true"))
+	    	{
+				Integer totalRecords = (Integer)session.getAttribute(Constants.TOTAL_RESULTS);
+				recordsPerPage = totalRecords;
+				pageNum = 1;
+	    	}
     		QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
             dataList = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
     	}
@@ -132,14 +138,11 @@ public class SpreadsheetExportAction  extends BaseAction
     	
     	//Adding first row(column names) to exportData
     	exportList.add(columnList);
-    	
-    	//Adding the selected rows to exportData
-    	for(int i=0;i<obj.length;i++)
+    	for(int i=0;i<dataList.size();i++)
     	{
-    		int indexOf = obj[i].toString().indexOf("_") + 1;
-    		int index = Integer.parseInt(obj[i].toString().substring(indexOf));
-    		exportList.add((List)dataList.get(index));
+    		exportList.add(dataList.get(i));
     	}
+    	
     	String delimiter = Constants.DELIMETER;
     	//Exporting the data to the given file & sending it to user
     	ExportReport report = new ExportReport(fileName);

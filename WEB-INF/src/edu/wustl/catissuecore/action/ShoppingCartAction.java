@@ -68,7 +68,7 @@ public class ShoppingCartAction  extends BaseAction
         ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SHOPPING_CART_FORM_ID);
         //ShoppingCartForm shopForm = (ShoppingCartForm)form;
         AdvanceSearchForm advForm = (AdvanceSearchForm)form;
-     
+    	String isCheckAllAcrossAllChecked = (String)request.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
         if(cart == null)
         {
         	cart = new ShoppingCart();
@@ -116,11 +116,15 @@ public class ShoppingCartAction  extends BaseAction
         		int pageNum = new Integer(pageNo);
 	        	
         		QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
+        		if(isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equals("true"))
+        		{
+        			Integer totalRecords = (Integer)session.getAttribute(Constants.TOTAL_RESULTS);
+    				recordsPerPage = totalRecords;
+    				pageNum = 1;
+        		}
         		paginationDataList = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
 	        
 	        	request.setAttribute(Constants.PAGINATION_DATA_LIST,paginationDataList);
-        		//Get the current spreasheet data to retrieve the specimen id data
-//        		List spreadsheetData = (List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
         		
         		Logger.out.debug("column ids map in shopping cart"+columnIdsMap);
         		
@@ -132,9 +136,12 @@ public class ShoppingCartAction  extends BaseAction
         		for(int k=0;k<selectedColumns.length;k++)
         		{
         			if(selectedColumns[k].equals(Constants.COLUMN+specimenColumnId))
+        			{
         				spreadsheetSpecimenIndex=k;
+        				break;
+        			}
         		}
-        		
+        		Object []selectedSpecimenIds = null;
         		boolean isError = false;
                 //Bug#2003: For having unique records in result view
         		if(spreadsheetSpecimenIndex == -1)
@@ -147,10 +154,23 @@ public class ShoppingCartAction  extends BaseAction
                     target = new String(Constants.DUPLICATE_SPECIMEN);
                     isError = true;
         		}
+        		else if(isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equals("true"))
+             	{
+        			int listSize = paginationDataList.size();
+        			selectedSpecimenIds = new Object[listSize];
+        			for(int index=0;index<listSize;index++)
+        			{
+	        			List selectedRow = (List)paginationDataList.get(index);
+			        	Logger.out.debug("index selected :"+index);
+			        	selectedSpecimenIds[index]=selectedRow.get(spreadsheetSpecimenIndex);
+			        	Logger.out.debug("specimen id to be added to cart :"+selectedSpecimenIds[index]);
+        			}
+        			System.out.println("selectedSpecimenIds  "+selectedSpecimenIds);
+             	}
         		else
         		{
 				//Add to cart the selected specified Ids.  
-				Object []selectedSpecimenIds = new Object[obj.length];
+				selectedSpecimenIds = new Object[obj.length];
 				for(int j=0;j<obj.length;j++)
 				{
 					String str = obj[j].toString();
@@ -163,7 +183,7 @@ public class ShoppingCartAction  extends BaseAction
 		        	Logger.out.debug("specimen id to be added to cart :"+selectedSpecimenIds[j]);
 				}	
         		//Mandar 27-Apr-06 : bug 1129
-				
+        		}
 				try
 				{
         			bizLogic.add(cart,selectedSpecimenIds);
@@ -178,8 +198,6 @@ public class ShoppingCartAction  extends BaseAction
                     target = new String(Constants.DUPLICATE_SPECIMEN);
                     isError = true;
 				}
-        		}
-        		
         		session.setAttribute(Constants.SHOPPING_CART,cart);
        			//List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
         		List columnList = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);

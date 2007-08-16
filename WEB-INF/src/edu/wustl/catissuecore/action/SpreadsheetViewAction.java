@@ -43,7 +43,7 @@ public class SpreadsheetViewAction extends BaseAction
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
+	{ 
 		/**
 		 * Name: Deepti
 		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
@@ -52,6 +52,25 @@ public class SpreadsheetViewAction extends BaseAction
 		 *  Here, extending this class from BaseAction  
 		 */
 		HttpSession session = request.getSession();
+    	//changes are done for check all 
+    	String checkAllPages ="";
+    	String ch = (String)request.getParameter(Constants.CHECK_ALL_PAGES);
+     	if(ch == null || ch.equals(""))
+    	{
+    		checkAllPages = (String)session.getAttribute(Constants.CHECK_ALL_PAGES);
+    	}
+    	else
+    	{
+    		checkAllPages = ch;
+    	}
+    	session.setAttribute(Constants.CHECK_ALL_PAGES, checkAllPages);
+     	String isAjax = (String)request.getParameter("isAjax");
+     	if(isAjax != null && isAjax.equals("true"))
+     	{
+     		response.setContentType("text/html");
+			response.getWriter().write(checkAllPages);
+			return null;
+     	}
 		QuerySessionData querySessionData = (QuerySessionData) session
 				.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
 
