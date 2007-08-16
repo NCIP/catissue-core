@@ -258,3 +258,22 @@
 		</div>
 	</td>
 </tr>
+
+<!-- menu id : 12 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 12, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
+<tr>
+	<%=strMouseOut%>
+		<div>
+
+			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->
+				<b><bean:message key="app.localExtn" /></b>
+		</div>
+		<div>
+			<a class="subMenuPrimary" href="DefineAnnotations.do">
+					<bean:message key="anno.define" />
+			</a>
+		</div>
+	</td>
+</tr>
