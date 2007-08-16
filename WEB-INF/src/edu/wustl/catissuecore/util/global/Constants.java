@@ -174,9 +174,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String TREE_NODE_FONT_CLOSE = "</i></font>";  
 	public static final String NULL_ID = "NULL";
 	public static final String NODE_SEPARATOR = "::";
-	public static final String DEFINE_SEARCH_RULES = "Define Search Rules For";
+	public static final String DEFINE_SEARCH_RULES = "Define Limits For";
 	public static final String DATE_FORMAT = "MM-dd-yyyy";
 	public static final String OUTPUT_TREE_MAP = "outputTreeMap";
+	public static final String CHECK_ALL_PAGES = "checkAllPages";
+	public static final String CHECK_ALL_ACROSS_ALL_PAGES = "isCheckAllAcrossAllChecked";
 	// Query Module Interface UI constants---ends here
 	//	 Frame names in Query Module Results page.
 	public static final String GRID_DATA_VIEW_FRAME = "gridFrame";

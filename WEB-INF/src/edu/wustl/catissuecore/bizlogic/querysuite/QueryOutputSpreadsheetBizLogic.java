@@ -3,15 +3,16 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.dao.QuerySessionData;
+import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
@@ -39,10 +40,10 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @throws DAOException  DAOException 
 	 */
 	public Map<String, List<String>> createSpreadsheetData(String treeNo,OutputTreeDataNode node,
-			 SessionDataBean sessionData,String parentData) throws DAOException,
+			 SessionDataBean sessionData,String parentData,int recordsPerPage) throws DAOException,
 			ClassNotFoundException
 			{
-		Map spreadSheetDataMap = updateSpreadsheetData(sessionData, parentData,  node);
+		Map spreadSheetDataMap = updateSpreadsheetData(sessionData, parentData,  node,recordsPerPage);
 		return spreadSheetDataMap;
 			}
 	/**
@@ -51,17 +52,19 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param tableName
 	 * @param spreadSheetDataMap
 	 * @param node
+	 * @param recordsPerPage 
 	 * @throws ClassNotFoundException
 	 * @throws DAOException
 	 */
-	private Map updateSpreadsheetData(SessionDataBean sessionData, String parentData, OutputTreeDataNode node) throws ClassNotFoundException, DAOException
+	private Map updateSpreadsheetData(SessionDataBean sessionData, String parentData, OutputTreeDataNode node, int recordsPerPage) throws ClassNotFoundException, DAOException
 	{
-		Map<String, List<List<String>>> spreadSheetDataMap = new HashMap<String, List<List<String>>>();
+		Map spreadSheetDataMap = new HashMap();
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
 		String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(node);
 		String selectSql = createSQL(parentData, tableName, spreadSheetDataMap, parentIdColumnName, node);
-		List<List<String>> spreadsheetDataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
-		spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, spreadsheetDataList);
+		int startIndex = 0;
+		QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql);
+		spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
 		return spreadSheetDataMap;
 	}
 	
@@ -153,16 +156,17 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param idColumnMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @param parentNodeId String id of parent
 	 * @param sessionData Session data bean
+	 * @param recordsPerPage 
 	 * @return Map<String, List<String>> Map for columns and data list
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 * @throws DAOException DAOException
 	 */
 	private Map<String, List<String>> updateSpreadsheet(String treeNo,OutputTreeDataNode node,List<OutputTreeDataNode> rootOutputTreeNodeList,
-			SessionDataBean sessionData,String parentData) throws ClassNotFoundException, DAOException
+			SessionDataBean sessionData,String parentData, int recordsPerPage) throws ClassNotFoundException, DAOException
 			{
 		OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(rootOutputTreeNodeList,treeNo);
 		String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(node);
-		return createSpreadsheetDataMap(root,node, parentIdColumnName, parentData, sessionData);				
+		return createSpreadsheetDataMap(root,node, parentIdColumnName, parentData, sessionData,recordsPerPage);				
 			}
 	/**
 	 * Creates columns list for spreadsheet.
@@ -183,29 +187,31 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param parentNodeId String id of parent
 	 * @param idColumnMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @param sessionData Session data bean
+	 * @param recordsPerPage 
 	 * @return Map<String, List<String>> Map for columns and data list
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 * @throws DAOException DAOException
 	 */
 	private Map createSpreadsheetDataMap(OutputTreeDataNode root,OutputTreeDataNode node,String parentIdColumnName,
-			String parentData,SessionDataBean sessionData) throws ClassNotFoundException, DAOException
+			String parentData,SessionDataBean sessionData, int recordsPerPage) throws ClassNotFoundException, DAOException
 			{
-		Map<String,List<List<String>>> spreadSheetDataMap = new HashMap<String,List<List<String>>>();
+		Map spreadSheetDataMap = new HashMap();
 		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, createColumnHeadersList());
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
 		List<List<String>> spreadsheetDataList = new ArrayList<List<String>>();
 		List<OutputTreeDataNode> children = node.getChildren();
 		for (OutputTreeDataNode childNode : children)
 		{
-			//Map<AttributeInterface, String> columnsMap = outputTreeMap.get(root).get(childNode.getId());
 			String selectSql = getSql(parentIdColumnName, parentData, tableName, childNode);
+			int startIndex = 0;
+			QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql);
+		
 			List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 			int size = dataList.size();
 			String sizeStr = new Integer(size).toString();
 			if(size == 0)
 			{
-				//columnsMap = outputTreeMap.get(root).get(node.getId());
-				spreadSheetDataMap = updateSpreadsheetData(sessionData, parentData,  node);
+				spreadSheetDataMap = updateSpreadsheetData(sessionData, parentData,  node,recordsPerPage);
 			} 
 			else
 			{
@@ -216,22 +222,61 @@ public class QueryOutputSpreadsheetBizLogic
 				data.add(sizeStr);
 				spreadsheetDataList.add(data);
 				spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, spreadsheetDataList);
+				querySessionData.setTotalNumberOfRecords(spreadsheetDataList.size());
 			}
+			spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
 		}
 		return spreadSheetDataMap;
 			}
+	/**
+	 * @param sessionData
+	 * @param recordsPerPage
+	 * @param startIndex 
+	 * @param spreadSheetDataMap
+	 * @param selectSql
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws DAOException
+	 */
+	private QuerySessionData getQuerySessionData(SessionDataBean sessionData, int recordsPerPage, int startIndex, Map spreadSheetDataMap, String selectSql) throws ClassNotFoundException, DAOException
+	{
+		QuerySessionData querySessionData = new QuerySessionData();
+		querySessionData.setSql(selectSql);
+		querySessionData.setQueryResultObjectDataMap(null);
+		querySessionData.setSecureExecute(false);
+		querySessionData.setHasConditionOnIdentifiedField(false);
+		querySessionData.setRecordsPerPage(recordsPerPage);
+		QueryBizLogic qBizLogic = new QueryBizLogic(); 
+		PagenatedResultData pagenatedResultData = qBizLogic.execute( sessionData, querySessionData, startIndex);
+	//	PagenatedResultData pagenatedResultData = QueryModuleUtil.getPaginationResultData(selectSql, sessionData,startIndex,recordsPerPage);
+		spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, pagenatedResultData.getResult());
+		/**
+		 * Name: Prafull
+		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+		 * object of class QuerySessionData will be saved session, which will contain the required information for query execution while navigating through query result pages.
+		 * 
+		 *  saving required query data in Session so that can be used later on while navigating through result pages using pagination.  
+		 */
+		querySessionData.setTotalNumberOfRecords(pagenatedResultData.getTotalRecords());
+		return querySessionData;
+	}
 	/**
 	 * Processes spreadsheet data for label node which user has clicked.
 	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
 	 * @param columnMap map for column names for attributes for each node in query
 	 * @param sessionData session data bean
+	 * @param recordsPerPage 
 	 * @param actualParentNodeId string id of parent
 	 * @param nodeIds string array of node ids
 	 * @return Map of spreadsheet data 
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	public Map processSpreadsheetForLabelNode(Map<String, OutputTreeDataNode> idNodesMap,List<OutputTreeDataNode> rootOutputTreeNodeList, Map<Long, Map<AttributeInterface, String>> columnMap, SessionDataBean sessionData, String idOfClickedNode) throws DAOException, ClassNotFoundException
+	public Map processSpreadsheetForLabelNode(Map<String, OutputTreeDataNode> idNodesMap,
+			List<OutputTreeDataNode> rootOutputTreeNodeList, 
+			Map<Long, Map<AttributeInterface, String>> columnMap, 
+			SessionDataBean sessionData, String idOfClickedNode, int recordsPerPage)
+	throws DAOException, ClassNotFoundException
 	{
 		Map spreadSheetDataMap = new HashMap();
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
@@ -244,13 +289,12 @@ public class QueryOutputSpreadsheetBizLogic
 		if(parentNode.contains("NULL"))
 		{
 			OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(rootOutputTreeNodeList,treeNo);
-			spreadSheetDataMap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,root, sessionData,null);
+			spreadSheetDataMap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage);
 		} else
 		{
 			String parentData = spiltParentNodeId[2];
 			String uniqueParentNodeId = treeNo+"_"+parentNodeId;
 			OutputTreeDataNode parentTreeNode = idNodesMap.get(uniqueParentNodeId);
-			OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(rootOutputTreeNodeList,treeNo);
 			String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(parentTreeNode);
 			String currentNode = nodeIds[1];//label
 			String[] spiltCurrentNodeId = currentNode.split(Constants.UNDERSCORE);
@@ -258,8 +302,9 @@ public class QueryOutputSpreadsheetBizLogic
 			String uniqueCurrentNodeId = treeNo+"_"+currentNodeId;
 			OutputTreeDataNode currentTreeNode = idNodesMap.get(uniqueCurrentNodeId);
 			String selectSql = createSQL(spreadSheetDataMap, currentTreeNode,parentIdColumnName,parentData,tableName);
-			List spreadsheetDataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
-			spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, spreadsheetDataList);
+			int startIndex = 0;
+			QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql);
+			spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
 		}
 		return spreadSheetDataMap;
 	}
@@ -269,17 +314,18 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param columnMap map for column names for attributes for each node in query
 	 * @param sessionData session data bean
 	 * @param actualParentNodeId string id of parent
+	 * @param recordsPerPage 
 	 * @return Map of spreadsheet data 
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
 	public Map processSpreadsheetForDataNode(Map<String, OutputTreeDataNode> idNodesMap,
-			List<OutputTreeDataNode> rootOutputTreeNodeList, SessionDataBean sessionData, String actualParentNodeId)
+			List<OutputTreeDataNode> rootOutputTreeNodeList, SessionDataBean sessionData, String actualParentNodeId,
+			int recordsPerPage)
 	throws DAOException, ClassNotFoundException
 	{
 		Map spreadSheetDatamap = null;
 		String[] nodeIds;
-		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
 		String treeNo = nodeIds[0];
 		String parentId = nodeIds[1];
@@ -288,11 +334,11 @@ public class QueryOutputSpreadsheetBizLogic
 		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
 		if (parentNode.getChildren().isEmpty())
 		{
-			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData);
+			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
 		}
 		else
 		{
-			spreadSheetDatamap = updateSpreadsheet(treeNo,parentNode, rootOutputTreeNodeList, sessionData,parentData);
+			spreadSheetDatamap = updateSpreadsheet(treeNo,parentNode, rootOutputTreeNodeList, sessionData,parentData,recordsPerPage);
 		}
 		return spreadSheetDatamap;
 	}
