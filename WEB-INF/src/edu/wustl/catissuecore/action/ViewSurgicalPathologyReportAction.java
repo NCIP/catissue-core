@@ -156,7 +156,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	//		  prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());
 		}
 		//if page is of Specimen then the domain object is Specimen
-		else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN) || pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+		else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN) || pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY)
+				|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS) ||pageOf.equalsIgnoreCase(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
 		{
 			className=Specimen.class.getName();
 			List specimenList=defaultBizLogic.retrieve(className, colName, colValue);
