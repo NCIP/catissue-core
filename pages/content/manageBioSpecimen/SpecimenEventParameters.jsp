@@ -8,7 +8,8 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-
+<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
+<%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 
 
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
@@ -40,6 +41,17 @@
 	if(specimenIdentifier == null || specimenIdentifier.equals("0"))
 		specimenIdentifier = (String)request.getParameter(Constants.SPECIMEN_ID);
 
+	if(specimenIdentifier != null && !specimenIdentifier.equals("0"))
+	           session.setAttribute(Constants.SPECIMEN_ID,specimenIdentifier);
+
+	if(specimenIdentifier == null || specimenIdentifier.equals("0"))
+	{
+ 		specimenIdentifier= (String)session.getAttribute(Constants.SPECIMEN_ID);//,specimenIdentifier);
+ 	//	session.removeAttribute(Constants.SPECIMEN_ID); 		
+	}
+	String staticEntityName=null;
+	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN;
+	
 
 	//------------- Mandar 04-july-06 QuickEvents
 	String eventSelected = (String)request.getAttribute(Constants.EVENT_SELECTED);
@@ -61,6 +73,8 @@
 		}
 //		System.out.println("iframeSrc : "+ iframeSrc);
 	//------------- Mandar 04-july-06 QuickEvents
+	Long specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+
 
 %>
 
@@ -157,8 +171,8 @@
 					<%=Constants.SURGICAL_PATHOLOGY_REPORT %>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
-					<%=Constants.CLINICAL_ANNOTATIONS %>
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,'','<%=staticEntityName%>','<%=pageOf%>')">
+						<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 				</td>
 				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="addNewAction(<%= consentTab %>)" id="consentTab">
