@@ -23,6 +23,9 @@
 <%
 	String title = null;
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	if(pageOf == null)
+	    pageOf =(String)request.getParameter(Constants.PAGEOF);
+	    
 	String consentTierCounter =(String)request.getParameter("consentTierCounter");
 	Integer identifierFieldIndex = new Integer(0);
 	String specimenIdentifier = (String)request.getAttribute(Constants.ID);
@@ -44,13 +47,14 @@
 
 		String iframeSrc="";
 		String formAction = Constants.SPECIMEN_ADD_ACTION;
-		String specimenPath ="'NewSpecimenSearch.do?operation=search&tab=specimen&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
-		String consentTab="'NewSpecimenSearch.do?operation=search&tab=consent&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
-		
+		String specimenPath ="'NewSpecimenSearch.do?operation=search&tab=specimen&pageOf="+pageOf+"&id="+specimenIdentifier+"'" ;
+		String consentTab="'NewSpecimenSearch.do?operation=search&tab=consent&pageOf="+pageOf+"&id="+specimenIdentifier+"'" ;
+				
 		if(pageOf != null && pageOf.equals(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
 		{
 			specimenPath ="'QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
-		}		
+			consentTab="'QuerySpecimenSearch.do?operation=search&tab=consent&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
+		}	
 		//System.out.println("iframeSrcanno : "+ specimenIdentifier +":"+request.getParameter(Constants.ID));
 	//------------- Mandar 04-july-06 QuickEvents
 
@@ -58,12 +62,7 @@
 
 
 <script>
-function viewSPR(specimenId)
-{
-	var action="<%=Constants.SPR_VIEW_ACTION%>?operation=viewSPR&pageOf=pageOfNewSpecimen&id="+specimenId+"&consentTierCounter=<%=consentTierCounter%>";
-	document.forms[0].action=action;
-	document.forms[0].submit();
-}
+
 function showConsents()
 {
 	<%
@@ -86,7 +85,8 @@ function showEvent()
 		var id = <%=specimenIdentifier%>;
 		
 				<%
-				String formNameAction = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters";
+				String formNameAction = "ListSpecimenEventParameters.do?pageOf="+pageOf;
+				    //pageOfListSpecimenEventParameters";
 				if(pageOf != null && pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 				{
 					formNameAction = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery";
@@ -103,7 +103,7 @@ function showEvent()
 
 <html:form action="<%=formAction%>">
 <!-- Mandar 05-July-06 Code for tabs start -->
-	 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="400" class="tabPage" width="87%">  
+	 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="450" class="tabPage" width="87%">  
 			<tr>
 				<td height="20" class="tabMenuItem"  onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction(<%= specimenPath %>)">
 					<bean:message key="tab.specimen.details"/>
@@ -113,7 +113,7 @@ function showEvent()
 					<bean:message key="tab.specimen.eventparameters"/>
 				</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR(<%=specimenIdentifier%>)">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				

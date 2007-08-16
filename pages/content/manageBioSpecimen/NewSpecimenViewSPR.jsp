@@ -3,9 +3,12 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 
+<%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
+<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
+<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 
+<script src="jss/javaScript.js" type="text/javascript"></script>
 <head>
 <style>
 .active-column-1 {width:200px}
@@ -26,7 +29,11 @@
 	{
  		specimenIdentifier= (String) session.getAttribute(Constants.SPECIMEN_ID);//,specimenIdentifier);
 	}
-
+	Long specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+	String consentTierCounter =(String)request.getParameter("consentTierCounter");
+	String staticEntityName=null;
+	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN;
+	
 		String iframeSrc="";
 		String formAction = Constants.VIEW_SPR_ACTION;
 		String specimenPath ="'NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
@@ -36,6 +43,7 @@
 			specimenPath ="'QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
 			consentTab="'QuerySpecimenSearch.do?operation=search&tab=consent&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
 		}		
+		
 		
 %>
 <script>
@@ -54,9 +62,12 @@ function showEvent()
 				document.forms[0].action=formName;
 				document.forms[0].submit();
 }
+
+
 </script>
 
 <html:form action="<%=formAction%>">
+
 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">  
 			<tr>
 				<td height="20" class="tabMenuItem"  onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction(<%= specimenPath %>)">
@@ -71,8 +82,8 @@ function showEvent()
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
-					<%=Constants.CLINICAL_ANNOTATIONS %>
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,<%=consentTierCounter%>,'<%=staticEntityName%>','<%=pageOf%>')">
+					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 				</td>
 				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="addNewAction(<%= consentTab %>)" id="consentTab">
@@ -87,4 +98,5 @@ function showEvent()
 			</td>
 		</tr>
 	</table>
+	
 </html:form>

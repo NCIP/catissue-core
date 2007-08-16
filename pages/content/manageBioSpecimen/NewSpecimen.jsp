@@ -10,7 +10,11 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
+
+<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
+<%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
+
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
@@ -35,6 +39,20 @@
 	String appendingPath = "/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
 	String currentReceivedDate = "";
 	String currentCollectionDate = "";
+
+	String staticEntityName=null;
+	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN;	
+	Long specimenEntityId = null;
+	if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
+	{
+		specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
+	}
+	else
+	{
+		specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+		CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
+	}	
+	
 	if (form != null) 
 	{
 		currentReceivedDate = form.getReceivedEventDateOfEvent();
@@ -791,7 +809,7 @@
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,'','<%=staticEntityName%>','<%=pageOf%>')">
 					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">

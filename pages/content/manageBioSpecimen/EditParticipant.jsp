@@ -64,7 +64,7 @@
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value="<%=forwardTo%>"/>
 					</td>
-					<td><html:hidden property="counter"/></td>
+					<td><html:hidden property="valueCounter"/></td>					
 					<td><html:hidden property="onSubmit" /></td>
 					<td><html:hidden property="id" /><html:hidden property="redirectTo"/></td>
 					<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
@@ -359,7 +359,7 @@
 						</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','Participant.do?operation=<%=operation%>&pageOf=pageOfParticipant&status=true',document.forms[0].counter,'chk_',false)"  disabled="true">
+						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true',document.forms[0].valueCounter,'chk_',false)"  disabled="true">
 							<bean:message key="buttons.delete"/>
 						</html:button>
 					</td>
@@ -413,7 +413,7 @@
 
 						%>
 						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')">		
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].valueCounter,'chk_')">		
 						</td>
 				    
 				 </tr>
@@ -452,7 +452,24 @@
 						var pid = cl.getValue();
 						//alert(pid);
 						//------------
-						window.location.href = 'ParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+pid
+						//window.location.href = 'ParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+pid
+						
+						/* 
+							 Resolved bug# 4240
+	                    	 Name: Virender Mehta
+	                    	 Reviewer: Sachin Lale
+	                    	 Description: removed URL On  onclick
+	                     */
+						 document.forms[0].submittedFor.value = "AddNew";
+						 var pageOf = "<%=pageOf%>";
+						if(pageOf == "<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>")
+						{
+							window.location.href = 'CPQueryParticipantSelect.do?submittedFor=AddNew&operation=add&participantId='+pid
+						}
+						else
+						{
+							window.location.href = 'ParticipantLookup.do?submittedFor=AddNew&operation=add&participantId='+pid
+						}	
 					} 				
 
 					/* 
