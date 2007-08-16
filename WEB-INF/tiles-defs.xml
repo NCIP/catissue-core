@@ -326,6 +326,9 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenEventParameters.jsp" />
 	</definition>
 
+	<definition name=".catissuecore.newSpecimenEventParametersCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenEventParameters.jsp" />
+	</definition>
 
 	<!-- NEW SPECIMEN EVENT PARAMETERS -->
 	
@@ -1049,5 +1052,29 @@
 <!--	<definition name=".catissuecore.defineSearchResultsView" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/querysuite/DefineSearchResultsView.jsp" />
 	</definition> -->
+
+	<!--Annotation defs-->
+	<definition name=".catissuecore.annotationDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/DefineAnnotations.jsp" />
+	</definition>
+	<definition name=".catissuecore.dynamicFormDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/DynamicExtensionsHome.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.viewSpecimenAnnotationCPQuery" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenAnnotation.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.viewSpecimenAnnotation" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenAnnotation.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.specimenCollectionGroupViewSPRDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SCGViewSPR.jsp" />
+	</definition>	
+	<definition name=".catissuecore.specimenCollectionGroupEditViewSPRDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SCGViewSPR.jsp" />
+	</definition>
+	<!--Annotation defs End-->
 </tiles-definitions>
 

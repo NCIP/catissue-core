@@ -4,47 +4,34 @@
  *<p>Copyright:TODO</p>
  *@author 
  *@version 1.0
- */
+ */ 
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.hibernate.Session;
-import edu.common.dynamicextensions.domain.DomainObjectFactory;
+import net.sf.ehcache.CacheException;
+
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
-import edu.common.dynamicextensions.domaininterface.RoleInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
-import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.common.dynamicextensions.util.global.Constants.AssociationDirection;
-import edu.common.dynamicextensions.util.global.Constants.AssociationType;
-import edu.common.dynamicextensions.util.global.Constants.Cardinality;
 import edu.wustl.cab2b.server.cache.EntityCache;
-import edu.wustl.cab2b.server.path.PathConstants;
-import edu.wustl.cab2b.server.path.PathFinder;
-import edu.wustl.catissuecore.domain.EntityMap;
-import edu.wustl.catissuecore.domain.EntityMapCondition;
-import edu.wustl.catissuecore.domain.EntityMapRecord;
-import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.common.dynamicextensions.domain.integration.EntityMap;
+import edu.common.dynamicextensions.domain.integration.FormContext;
+import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
+import edu.common.dynamicextensions.domain.integration.EntityMapRecord;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Constants;
 
 /**
@@ -117,42 +104,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
         return dynamicList;
     }
 
-    /**
-     * 
-     * @param staticEntityId
-     * @param typeId
-     * @param staticRecordId
-     * @return List of all Entity Map Objects from a given static entity based on its protocol linkage
-     * eg: returns all Entity Map Objects from a Participant,Specimen etc which is linked to Protocol 1, Protocol 2 etc
-     */
-    public List getListOfDynamicEntities(long staticEntityId, long typeId,
-            long staticRecordId)
-    {
-        List dynamicList = new ArrayList();
-
-        String[] selectColumnName = null;
-        String[] whereColumnName = {"staticEntityId", "typeId",
-                "staticRecordId"};
-        ;
-        String[] whereColumnCondition = {"=", "=", "="};
-        Object[] whereColumnValue = {new Long(staticEntityId),
-                new Long(typeId), new Long(staticRecordId)};
-        String joinCondition = Constants.AND_JOIN_CONDITION;
-
-        try
-        {
-            dynamicList = retrieve(EntityMap.class.getName(), selectColumnName,
-                    whereColumnName, whereColumnCondition, whereColumnValue,
-                    joinCondition);
-        }
-        catch (DAOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return dynamicList;
-    }
+   
 
     /**
      * 
@@ -226,7 +178,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
         try
         {
             insert(entityRecord, Constants.HIBERNATE_DAO);
-            Long entityMapId = entityRecord.getEntityMapId();
+            Long entityMapId = entityRecord.getFormContext().getEntityMap().getId();
             Long staticEntityRecordId = entityRecord.getStaticEntityRecordId();
             Long dynExtRecordId = entityRecord.getDynamicEntityRecordId();
             associateRecords(entityMapId,new Long (staticEntityRecordId), new Long(dynExtRecordId));
@@ -288,8 +240,9 @@ public class AnnotationBizLogic extends DefaultBizLogic
     {
 
         try
-        {
-            update(entityMap, Constants.HIBERNATE_DAO);
+        { 
+            update(entityMap,Constants.HIBERNATE_DAO);
+            //update(entityMap,null, Constants.HIBERNATE_DAO,null);
         }
         catch (BizLogicException e)
         {
@@ -324,8 +277,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
         }
        
     }
-
-    
+  
         /**
      * 
      * @param dynamicEntityContainerId
@@ -410,8 +362,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
         List dynamicList = new ArrayList();
 
         String[] selectColumnName = null;
-        String[] whereColumnName = {"staticEntityRecordId", "entityMapId"};
-        ;
+        String[] whereColumnName = {"staticEntityRecordId", "formContext.entityMap.id"};
         String[] whereColumnCondition = {"=", "="};
         String joinCondition = Constants.AND_JOIN_CONDITION;
 
@@ -452,7 +403,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
         List dynamicList = new ArrayList();
 
         String[] selectColumnName = null;
-        String[] whereColumnName = {"entityMapId", "dynamicEntityRecordId"};
+        String[] whereColumnName = {"formContext.entityMap.id", "dynamicEntityRecordId"};
         ;
         String[] whereColumnCondition = {"=", "="};
         Object[] whereColumnValue = {new Long(entityMapId),
@@ -471,11 +422,12 @@ public class AnnotationBizLogic extends DefaultBizLogic
             e.printStackTrace();
         }
 
-        if (dynamicList != null)
+        if (dynamicList != null && !dynamicList.isEmpty())
         {
-            EntityMapRecord entityRecord = (EntityMapRecord) dynamicList.get(0);
+           
             try
             {
+                EntityMapRecord entityRecord = (EntityMapRecord) dynamicList.get(0);
                 entityRecord.setLinkStatus(Constants.ACTIVITY_STATUS_DISABLED);
                 update(entityRecord, Constants.HIBERNATE_DAO);
             }
@@ -491,7 +443,12 @@ public class AnnotationBizLogic extends DefaultBizLogic
             }
         }
     }
-
+/**
+ * 
+ * @param containerId
+ * @param recordIdList
+ * @throws BizLogicException
+ */
     public void deleteAnnotationRecords(Long containerId,
             List<Long> recordIdList) throws BizLogicException
     {
@@ -503,8 +460,9 @@ public class AnnotationBizLogic extends DefaultBizLogic
         }
         catch (Exception e)
         {
-            throw new BizLogicException(ApplicationProperties
-                    .getValue("app.annotatations.errors.deleteRecord"), e);
+            e.printStackTrace();
+         /*   throw new BizLogicException(ApplicationProperties
+                    .getValue("app.annotatations.errors.deleteRecord"), e);*/
         }
     }
 
@@ -535,17 +493,25 @@ public class AnnotationBizLogic extends DefaultBizLogic
             while (dynEntitiesIterator.hasNext())
             {
                 EntityMap entityMap = (EntityMap) dynEntitiesIterator.next();
-                if (entityMap.getEntityMapConditionCollection() != null
-                        && !entityMap.getEntityMapConditionCollection()
-                                .isEmpty())
+                Iterator  formIterator= entityMap.getFormContextCollection().iterator();
+                while(formIterator.hasNext())
                 {
-                    boolean check = checkStaticRecId(entityMap
-                            .getEntityMapConditionCollection(), cpIdList);
-                    if (check)
-                        dynEntitiesIdList.add(entityMap.getContainerId());
+                    FormContext formContext = (FormContext) formIterator.next();
+                    if((formContext.getNoOfEntries() == null || formContext.getNoOfEntries().equals(""))&&(formContext.getStudyFormLabel() == null || formContext.getStudyFormLabel().equals("")))    
+                    {
+                        if (formContext.getEntityMapConditionCollection() != null
+                        && !formContext.getEntityMapConditionCollection()
+                                .isEmpty())
+                        {
+                            boolean check = checkStaticRecId(formContext
+                                    .getEntityMapConditionCollection(), cpIdList);
+                            if (check)
+                                dynEntitiesIdList.add(entityMap.getContainerId());
+                        }
+                        else
+                            dynEntitiesIdList.add(entityMap.getContainerId());
+                    }
                 }
-                else
-                    dynEntitiesIdList.add(entityMap.getContainerId());
             }
         }
         return dynEntitiesIdList;
@@ -555,23 +521,68 @@ public class AnnotationBizLogic extends DefaultBizLogic
      * @param entityMapConditionCollection
      * @param cpIdList
      * @return
+     * @throws CacheException 
      */
     private boolean checkStaticRecId(Collection entityMapConditionCollection,
-            List cpIdList)
+            List cpIdList) 
     {
         Iterator entityMapCondIterator = entityMapConditionCollection
                 .iterator();
-
-        if (cpIdList != null && !cpIdList.isEmpty())
-            while (entityMapCondIterator.hasNext())
-            {
-                EntityMapCondition entityMapCond = (EntityMapCondition) entityMapCondIterator
-                        .next();
-                if (cpIdList.contains(entityMapCond.getStaticRecordId()))
-                    return true;
-            }
-
+        try
+        {
+            CatissueCoreCacheManager cache = CatissueCoreCacheManager.getInstance();    
+            if (cpIdList != null && !cpIdList.isEmpty())
+                while (entityMapCondIterator.hasNext())
+                {
+                    EntityMapCondition entityMapCond = (EntityMapCondition) entityMapCondIterator
+                            .next();                
+                    if (entityMapCond.getTypeId().toString().equals(cache.getObjectFromCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID).toString()) && cpIdList.contains(entityMapCond.getStaticRecordId()))
+                        return true;
+                }
+        }
+        catch(Exception e){}
         return false;
     }
+    
+    /**
+     * 
+     * @param entityMapId
+     * @return EntityMap object for its given id
+     */
+    public List getEntityMapOnContainer(long containerId)
+    {
+        List dynamicList = new ArrayList();
 
+        try
+        {
+            dynamicList = retrieve(EntityMap.class.getName(), "containerId", new Long(
+                    containerId));
+        }
+        catch (DAOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return dynamicList;
+    }
+    /**
+     * 
+     * @param entityMapCondition
+     */
+    public void insertEntityMapCondition(EntityMapCondition entityMapCondition)
+    {
+        try
+        {
+            insert(entityMapCondition, Constants.HIBERNATE_DAO);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }    
+    
+    }
+
+  
 }

@@ -4,8 +4,7 @@
  *<p>Copyright:TODO</p>
  *@author 
  *@version 1.0
- */
-
+ */ 
 package edu.wustl.catissuecore.annotations;
 
 import java.io.InputStream;
@@ -18,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.ehcache.CacheException;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -27,8 +28,9 @@ import edu.common.dynamicextensions.exception.DataTypeFactoryInitializationExcep
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
-import edu.wustl.catissuecore.domain.EntityMap;
-import edu.wustl.catissuecore.domain.EntityMapCondition;
+import edu.common.dynamicextensions.domain.integration.EntityMap;
+import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
+import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
@@ -102,7 +104,7 @@ public class AnnotationUtil
 
         return list;
     }
-    
+    /*
     public Collection getEntityMapConditionsCollection(String[] conditions,
             EntityMap entityMapObj)
     {
@@ -126,9 +128,46 @@ public class AnnotationUtil
         }
         return entityMapConditionCollection;
 
+    }*/
+    
+    public Collection getFormContextCollection(String[] conditions,
+            EntityMap entityMapObj) throws CacheException
+    {
+        CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+        Collection formContextCollection = new HashSet();
+        FormContext formContext = new FormContext();
+        Collection entityMapConditionCollection = new HashSet();
+        if(conditions!=null)    
+        for (int i = 0; i < conditions.length; i++)
+        {
+            
+            /*Here every time new formcontext can be created for each condition 
+             *though form is one , just to make different formcontext as "noOfEntries" attribute
+             *for form Context can change or can be assigned in future */
+            formContext.setEntityMap(entityMapObj);
+           boolean check = checkForAll(conditions);
+           if(!check)
+            if (!conditions[i]
+                    .equals(new Integer(Constants.SELECT_OPTION_VALUE)
+                            .toString())
+                    && !conditions[i].equals(Constants.ALL))
+            {
+                EntityMapCondition entityMapCondition = new EntityMapCondition();
+                entityMapCondition.setFormContext(formContext);
+                entityMapCondition.setStaticRecordId(new Long(conditions[i]));
+                entityMapCondition.setTypeId(new Long(catissueCoreCacheManager.getObjectFromCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID).toString()));
+                entityMapConditionCollection.add(entityMapCondition);
+                formContext.setEntityMapConditionCollection(entityMapConditionCollection);
+                
+            }
+           
+        }
+        formContextCollection.add(formContext);
+        return formContextCollection;
+
     }
     
-    private boolean checkForAll(String[] conditions)
+    public boolean checkForAll(String[] conditions)
     {
         if(conditions!=null)    
             for (int i = 0; i < conditions.length; i++)
@@ -143,10 +182,11 @@ public class AnnotationUtil
      * @param annotationForm 
      * @throws DynamicExtensionsApplicationException 
      * @throws DynamicExtensionsSystemException 
+     * @throws CacheException 
      * 
      */
     public static List getSystemEntityList() throws DynamicExtensionsSystemException,
-            DynamicExtensionsApplicationException
+            DynamicExtensionsApplicationException, CacheException
     {
         List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
         AnnotationUtil util = new AnnotationUtil();
@@ -167,7 +207,7 @@ public class AnnotationUtil
                     NameValueBean nameValueBean = (NameValueBean) listIterator
                             .next();
                     systemEntityList.add(new NameValueBean(nameValueBean
-                            .getName(), Utility.getEntityId(nameValueBean
+                            .getName(), edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(nameValueBean
                             .getValue())));
                 }
             }

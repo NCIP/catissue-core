@@ -13,6 +13,7 @@
 		<property name="transaction.manager_lookup_class">net.sf.hibernate.transaction.JBossTransactionManagerLookup</property>
     	<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
 		<property name="hibernate.jdbc.batch_size">0</property>    	
+		<property name="hibernate.query.substitutions">true 1,false 0</property>        
 
 <!--MySQL c3p properties start-->        
 		<property name="hibernate.c3p0.max_size">2</property>
@@ -49,6 +50,12 @@
                         
         <mapping resource="edu/common/dynamicextensions/hbm/validationrules/Rule.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/validationrules/RuleParameter.hbm.xml"/>
+
+		<mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMap.hbm.xml"/>
+        <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMapCondition.hbm.xml"/>
+        <mapping resource="edu/common/dynamicextensions/hbm/integration/FormContext.hbm.xml"/>
+        <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMapRecord.hbm.xml"/>
+   
         
     </session-factory>
     

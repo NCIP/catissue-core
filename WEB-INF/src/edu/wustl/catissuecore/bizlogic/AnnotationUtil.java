@@ -4,9 +4,9 @@
  *<p>Copyright:TODO</p>
  *@author 
  *@version 1.0
- */
-
+ */ 
 package edu.wustl.catissuecore.bizlogic;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,9 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import net.sf.hibernate.HibernateException;
 
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
@@ -44,10 +42,9 @@ import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author vishvesh_mulay
@@ -62,10 +59,11 @@ public class AnnotationUtil
      * @return
      * @throws DynamicExtensionsSystemException
      * @throws DynamicExtensionsApplicationException
+     * @throws DynamicExtensionsSystemException 
      */
     public static synchronized Long addAssociation(Long staticEntityId, Long dynamicEntityId)
-            throws DynamicExtensionsSystemException,
-            DynamicExtensionsApplicationException
+            throws //DynamicExtensionsSystemException,
+            DynamicExtensionsApplicationException, DynamicExtensionsSystemException
     {
         //Get instance of entity manager.
         EntityManagerInterface entityManager = EntityManager.getInstance();
@@ -114,8 +112,15 @@ public class AnnotationUtil
         //Add association to the static entity and save it. 
         staticEntity.addAssociation(association);
         Long start = new Long(System.currentTimeMillis());
+     try
+        {
         staticEntity = EntityManager.getInstance().persistEntityMetadata(
                 staticEntity, true);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         Long end = new Long(System.currentTimeMillis());
         System.out.println("Time required to persist one entity is "
                 + (end - start) / 1000 + "seconds");
@@ -156,34 +161,24 @@ public class AnnotationUtil
         EntityCache.getInstance().addEntityToCache(entity);
         }        
         //EntityInterface cachedStaticEntityInterfaceEntityCache.getInstance().getEntityById(staticEntityId);
+        Connection conn = null;
+        try
+        {
+            conn = DBUtil.getConnection();
+            PathFinder.getInstance().refreshCache(conn);
+        }
+        catch (HibernateException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+              
         
-        JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-		Connection connection = null;
-		try
-		{
-			dao.openSession(null);
-			InitialContext context = new InitialContext();
- 			DataSource dataSource =  (DataSource) context.lookup("java:/catissuecore");
- 			connection = dataSource.getConnection();
- 			PathFinder.getInstance().refreshCache(connection);
-		}
-		catch (DAOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (NamingException e)
-		{
-			e.printStackTrace();
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-       
         end = new Long(System.currentTimeMillis());
         System.out.println("Time required to refresh cache is "
                 + (end - start) / 1000 + "seconds");
         return association.getId();
+   
     }
 
     /**
@@ -276,7 +271,8 @@ public class AnnotationUtil
             String associationQuery = "insert into ASSOCIATION (ASSOCIATION_ID, ASSOCIATION_TYPE) values ("
                     + intraModelAssociationId
                     + ","
-                    + PathConstants.AssociationType.INTRA_MODEL_ASSOCIATION + ")";
+                   // +PathConstants.AssociationType.
+                    + Constants.INTRA_MODEL_ASSOCIATION_TYPE + ")";
             String intraModelQuery = "insert into INTRA_MODEL_ASSOCIATION (ASSOCIATION_ID, DE_ASSOCIATION_ID) values ("
                     + intraModelAssociationId + "," + deAssociationID + ")";
             String directPathQuery = "insert into PATH (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values ("
@@ -397,6 +393,26 @@ public class AnnotationUtil
             e.printStackTrace();
         }
         return null;
+    }
+    /**
+     * @param entity_name_participant
+     * @return
+     * @throws DynamicExtensionsApplicationException 
+     * @throws DynamicExtensionsSystemException 
+     */
+    public static Long getEntityId(String entityName) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+    {
+        if(entityName!=null)
+        {
+            EntityManagerInterface entityManager = EntityManager.getInstance();
+            EntityInterface entity;
+            entity = entityManager.getEntityByName(entityName);
+            if(entity!=null)
+            {
+                return entity.getId();
+            }
+        }
+        return new Long(0);
     }
 
 }

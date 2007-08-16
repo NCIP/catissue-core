@@ -10,9 +10,8 @@ package edu.wustl.catissuecore.annotations;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -21,6 +20,9 @@ import edu.wustl.common.util.dbManager.DAOException;
 public class SpecimenAnnotationCondition implements ICPCondition
 {
     
+    /**
+     *Returns the list Of collection protocol with which the given specimen is registerd 
+     */
     public  List  getCollectionProtocolList(Long entityInstanceId) 
     {
         List<Long> annotationsList = new ArrayList<Long>();
@@ -29,8 +31,12 @@ public class SpecimenAnnotationCondition implements ICPCondition
         try
         {
             if(entityInstanceId!=null || !entityInstanceId.equals(""))
-                objectList = bizLogic.retrieve(Specimen.class.getName(),"id",entityInstanceId);
-            if(objectList!=null && !objectList.isEmpty())
+            {
+                CollectionProtocol  collectionProtocol=(CollectionProtocol) bizLogic.retrieveAttribute(Specimen.class.getName(),entityInstanceId,"specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol");
+                if(collectionProtocol != null && collectionProtocol.getId() != null)
+                annotationsList.add(collectionProtocol.getId());
+            }
+        /*    if(objectList!=null && !objectList.isEmpty())
             {
                 Specimen specimen = (Specimen) objectList.get(0);
                 if(specimen.getSpecimenCollectionGroup()!=null)
@@ -43,7 +49,7 @@ public class SpecimenAnnotationCondition implements ICPCondition
                             annotationsList.add(cpReg.getCollectionProtocol().getId());
                     }
                 }
-            }
+            }*/
         }
         catch(DAOException e){}
         

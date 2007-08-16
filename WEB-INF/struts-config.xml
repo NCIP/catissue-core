@@ -82,6 +82,10 @@ PUBLIC
 		<form-bean name="multipleSpecimenStorageLocationForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenStorageLocationForm"/>
 		<form-bean name="cpSearchForm" type="edu.wustl.catissuecore.actionForm.CPSearchForm"/>
 		<form-bean name="titliSearchForm" type="edu.wustl.common.actionForm.TitliSearchForm"/>
+		
+		<form-bean name="annotationForm" type="edu.wustl.catissuecore.actionForm.AnnotationForm"/>
+		<form-bean name="annotationDataEntryForm" type="edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm"/>
+		
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -570,8 +574,8 @@ PUBLIC
 			scope="request">
 			<forward name="reviewSPR" path=".catissuecore.ViewSPR" />
 			<forward name="quarantineSPR" path=".catissuecore.ViewSPR" />
-			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
-			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.specimenCollectionGroupEditDef" />
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupViewSPRDef" />
+			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.specimenCollectionGroupEditViewSPRDef" />
 			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenViewSPRDef" />
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.newSpecimenEditViewSPRDef" />
 			<forward name="pageOfParticipant" path=".catissuecore.participantDef" />
@@ -758,6 +762,7 @@ PUBLIC
 			validate="false"
 			input="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
 			scope="request">
+			<forward name="pageOfParticipantCPQuery" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery"/>
 			<forward name="pageOfParticipant" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"/>
 			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"/>
 		</action>
@@ -1280,8 +1285,9 @@ PUBLIC
 			validate="false"
 			input="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"
 			scope="request">
-			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"/>
+			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"/>			
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"/>
+			<forward name="pageOfSpecimenCollectionGroupCPQuery" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14&amp;showConsents=yes"/>			
 		</action>
 		
 		<action path="/ViewSpecimenCollectionGroupSPR"
@@ -1331,6 +1337,9 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.ListSpecimenEventParametersAction"
 			name="listSpecimenEventParametersForm"
 			scope="request">
+			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenEventParametersDef" />			
+			<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.newSpecimenEventParametersCPQueryDef" />
+			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.newSpecimenEventParametersDef" />			
 			<forward name="pageOfListSpecimenEventParameters" path=".catissuecore.newSpecimenEventParametersDef" />
 			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
@@ -1346,6 +1355,7 @@ PUBLIC
 			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenDef" />
 			<forward name="query" path=".catissuecore.specimenEditDef" />
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.specimenEditDef" />
+			<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.specimenEditDef" />
 			<forward name="failure" path=".catissuecore.newSpecimenDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -1391,9 +1401,11 @@ PUBLIC
 			validate="false"
 			input="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15"
 			scope="request">
-			<forward name="pageOfNewSpecimen" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable"/>
+			<forward name="pageOfNewSpecimen" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable"/>		
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable"/>
+			<forward name="pageOfNewSpecimenCPQuery" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable"/>			
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
+			<forward name="pageOfListSpecimenEventParametersCPQuery" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15&amp;showConsents=yes"/>
 		</action>
 
 		<action path="/ViewNewSpecimenSPR"
@@ -2652,6 +2664,8 @@ PUBLIC
 			<forward name="pageOfArrayDistribution" path="/DistributionSearchFromMenu.do"/>
 			<forward name="pageOfSpecimenArrayType" path="/SpecimenArrayTypeSearch.do"/>
 			<forward name="pageOfSpecimenArray" path="/SpecimenArraySearch.do"/>
+			<forward name="pageOfParticipantCPQuery" path="/ParticipantSearch.do"/>
+			<forward name="pageOfSpecimenCollectionGroupCPQuery" path="/SpecimenCollectionGroupSearch.do"/>			
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
 		
@@ -2766,6 +2780,7 @@ PUBLIC
 			validate="true"
 			input="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=query"
 			scope="request">
+			<forward name="pageOfSpecimenCollectionGroupCPQuery" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 			<forward name="query" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupQuery&amp;menuSelected=12" />
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=12" />
 		</action>
@@ -4005,6 +4020,78 @@ PUBLIC
 			 <forward name="success" path=".catissuecore.bioBlankDef" /> 
 		</action>
 <!--P.G. - End -->
+
+
+	<!-- Annotation actions start -->
+		<action path="/DefineAnnotations"
+			type="edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction"
+			name="annotationForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.annotationDef"></forward>
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
+		</action>
+		<action path="/BuildDynamicEntity"
+			type="edu.wustl.catissuecore.action.annotations.LoadDynamicExtensionsAction"
+			name="annotationForm"
+			validate="false"
+			scope="request">
+			<forward name="success" redirect="true" path=".catissuecore.dynamicFormDef"></forward>		
+		</action>
+		
+		<action path="/EditAnnotationConditions"
+			type="edu.wustl.catissuecore.action.annotations.EditAnnotationConditionsAction"
+			name="annotationForm"
+			validate="false"
+			scope="request">
+			<forward name="success" redirect="true" path=".catissuecore.annotationDef"></forward>			
+		</action>	
+		
+		<action path="/SaveAnnotationsConditions"
+			type="edu.wustl.catissuecore.action.annotations.SaveAnnotationsConditionsAction"
+			name="annotationForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/DefineAnnotations.do"></forward>			
+		</action>	
+			
+			<!-- Annotation add -->
+		<action path="/DisplayAnnotationDataEntryPage"
+			type="edu.wustl.catissuecore.action.annotations.DisplayAnnotationDataEntryPageAction"
+			name="annotationDataEntryForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfParticipantCPQuery" path="/Participant.do?operation=viewAnnotations"/>			
+			<forward name="success" path="/pages/content/manageBioSpecimen/DisplayAnnotationDataEntryPage.jsp"/>
+			<forward name="pageOfParticipant" path="/Participant.do?operation=viewAnnotations"/>
+			<forward name="pageOfNewSpecimen" path=".catissuecore.viewSpecimenAnnotation"/>
+			<forward name="pageOfListSpecimenEventParameters" path=".catissuecore.viewSpecimenAnnotation"/>
+			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.viewSpecimenAnnotationCPQuery"/>	
+			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=viewAnnotations"/>
+			<forward name="pageOfSpecimenCollectionGroupCPQuery" path="/SpecimenCollectionGroup.do?operation=viewAnnotations"/>
+			<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.viewSpecimenAnnotationCPQuery"/>	
+		</action>
+		
+		<action path="/LoadAnnotationDataEntryPage"
+			type="edu.wustl.catissuecore.action.annotations.LoadAnnotationDataEntryPageAction"
+			name="annotationDataEntryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/pages/content/manageBioSpecimen/AnnotationDataEntryPage.jsp"/>
+			<forward name="pageOfParticipant" path="/Participant.do?operation=viewAnnotations"/>
+			<forward name="pageOfNewSpecimen" path="/NewSpecimen.do?operation=viewAnnotations"/>
+	
+		</action>
+		<action path="/LoadDynamicExtentionsDataEntryPage"
+			type="edu.wustl.catissuecore.action.annotations.LoadDynamicExtentionsDataEntryPageAction"
+			name="annotationDataEntryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/pages/content/manageBioSpecimen/DynamicExtenstionsDataEntryPage.jsp"/>
+		</action>
+		
+		<!-- Annotation actions end -->		
+
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
