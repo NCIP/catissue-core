@@ -1626,6 +1626,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_QUERY_CONFIGURE_DISTRIBUTION_ACTION = "CPQueryConfigureDistribution.do";
 	public static final String CP_QUERY_DISTRIBUTION_REPORT_ACTION = "CPQueryDistributionReport.do";
 	public static final String PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY = "pageOfListSpecimenEventParametersCPQuery";
+	public static final String PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS = "pageOfListSpecimenEventParameters";
 	public static final String PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY = "pageOfCollectionProtocolRegistrationCPQuery";
 	public static final String PAGE_OF_MULTIPLE_SPECIMEN_CP_QUERY = "pageOfMultipleSpecimenCPQuery";
 	public static final String CP_QUERY_NEW_MULTIPLE_SPECIMEN_ACTION = "CPQueryNewMultipleSpecimenAction.do";
