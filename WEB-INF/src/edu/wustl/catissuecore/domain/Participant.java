@@ -115,6 +115,28 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
      * A collection of registration of a Participant to a Collection Protocol. 
      * */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
+    
+    protected Collection clinicalStudyRegistrationCollection = new HashSet();
+    
+
+    /**
+   * Returns collection registrations of this participant.
+   * @return collection of registrations of this participant.
+   * @hibernate.set name="clinicalStudyRegistrationCollection" table="CATISSUE_CLINICAL_STUDY_REG"
+   * @hibernate.collection-key column="PARTICIPANT_ID" lazy="true"
+   * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ClinicalStudyRegistration"
+   * @see setRegistrationCollection(Collection)
+   */
+  public Collection getClinicalStudyRegistrationCollection()
+  {
+      return clinicalStudyRegistrationCollection;
+  }
+
+  
+  public void setClinicalStudyRegistrationCollection(Collection clinicalStudyRegistrationCollection)
+  {
+      this.clinicalStudyRegistrationCollection = clinicalStudyRegistrationCollection;
+  }
 	
 	//Default Constructor
 	public Participant()
