@@ -580,6 +580,8 @@ PUBLIC
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.newSpecimenEditViewSPRDef" />
 			<forward name="pageOfParticipant" path=".catissuecore.participantDef" />
 			<forward name="pageOfParticipantCPQuery" path=".catissuecore.participantEditDef" />
+			<forward name="pageOfListSpecimenEventParameters" path=".catissuecore.newSpecimenViewSPRDef"/>
+			<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.newSpecimenEditViewSPRDef"/>
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
 		
