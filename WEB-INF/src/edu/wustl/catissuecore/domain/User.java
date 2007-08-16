@@ -124,7 +124,8 @@ public class User extends AbstractDomainObject implements Serializable
      */
     protected Collection collectionProtocolCollection = new HashSet();
     
-      
+    protected Collection clinicalStudyCollection = new HashSet();
+    
     protected String pageOf;
     
     /**
@@ -753,4 +754,25 @@ public class User extends AbstractDomainObject implements Serializable
 	{
 		this.firstTimeLogin = firstTimeLogin;
 	}
+    
+    /**
+     * @return Returns the clinicalStudyCollection.
+     * @hibernate.set name="clinicalStudyCollection" table="CATISSUE_CLINICAL_STUDY_COORDINATORS" 
+     * cascade="save-update" inverse="true" lazy="true"
+     * @hibernate.collection-key column="USER_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.ClinicalStudy" column="CLINICAL_STUDY_ID"
+     */
+    public Collection getClinicalStudyCollection()
+    {
+        return clinicalStudyCollection;
+    }
+
+    /**
+     * @param collectionProtocolCollection The collectionProtocolCollection to set.
+     */
+    public void setClinicalStudyCollection(
+            Collection clinicalStudyCollection)
+    {
+        this.clinicalStudyCollection = clinicalStudyCollection;
+    }
 }
