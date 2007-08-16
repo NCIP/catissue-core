@@ -2531,6 +2531,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchResultsDef" />
 			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsSpreadsheetViewDef" />	
+			<forward name="pageOfQueryModule" path=".catissuecore.queryResultsSpreadsheetViewDef" />	
 			<forward name="pageOfInstitution" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfDepartment" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchResultsDef"/>
