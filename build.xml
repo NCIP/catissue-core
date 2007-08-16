@@ -261,6 +261,7 @@
 			<!--antcall target="cleanserver" /-->
 			<!-- Not required to copy csm war file -->
 			 <copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
+			 <copy file="dynamicextensions.war" todir="${jboss.home.dir}/server/default/deploy" />
 			 <sleep seconds="2" />
 	</target>				
 	
@@ -321,6 +322,7 @@
 		<mkdir dir="${zip.dir}" />
 
 		<copy file="catissuecore.war" todir="${zip.dir}" overwrite="true" />
+		<copy file="dynamicExtensions.war" todir="${zip.dir}" overwrite="true" />
 		<!-- only single war file is being used so comment it -->
 		<!-- <copy file="catissuecorecsm.war" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="catissuecore-ds.xml" todir="${zip.dir}" overwrite="true" />
@@ -686,5 +688,31 @@
 			</fileset>
 		</jar>
 	</target>
+	
+	<target name="build_jar_for_clinportal">
+		<mkdir dir="${base.dir}/caTissueCore_Jar/temp"/>
+		<copy  todir="${base.dir}/caTissueCore_Jar/temp">
+		  <fileset dir="${target.dir}">
+			<include name="**/edu/wustl/catissuecore/domain/**"/>
+			<include name="**/edu/wustl/catissuecore/actionForm/**"/>
+			<include name="**/edu/wustl/catissuecore/util/**"/>
+			<include name="**/edu/wustl/catissuecore/hbm/**"/>				
+			<include name="**/edu/wustl/catissuecore/action/**"/>				
+			<include name="**/edu/wustl/catissuecore/bizLogic/**"/>											
+		  </fileset>
+			</copy>
+		
+		<delete >
+			<fileset dir="${base.dir}/caTissueCore_Jar/temp">
+			    <include name="**/edu/wustl/catissuecore/action/annotations/**"/>
+			</fileset>
+		</delete>
+
+		<jar taskname="buildJar" jarfile="${base.dir}/caTissueCore_Jar/catissuecore.jar">
+			<fileset dir="${base.dir}/caTissueCore_Jar/temp"/>
+		</jar>
+		<delete dir="${base.dir}/caTissueCore_Jar/temp"/>
+		
+</target>
 	
 </project>

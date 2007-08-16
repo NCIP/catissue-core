@@ -113,6 +113,7 @@
 		<echo message="Initializing installation..."/>
 
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<unwar src="${base.dir}/dynamicExtensions.war" dest="${temp.dir}/dynamicExtensions"/>
 		
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
@@ -204,6 +205,9 @@
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}"/>
 		</replace>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
+			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}"/>
+		</replace>
 	</target>
 	
 	<!--Modify Configuration For Oracle-->
@@ -260,10 +264,16 @@
 				token="${mysql.dialect.string}" 
 			  	value="${oracle.dialect.string}"/>
 		</replace>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
+			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}"/>
+	        <replacefilter token="&lt;!--MySQL c3p properties start-->" value="&lt;!--MySQL c3p properties start"/>
+	        <replacefilter token="&lt;!--MySQL c3p properties end-->" value="MySQL c3p properties end-->"/>
+		</replace>
 	</target>
 	<!--Server clean-up-->
 	<target name="clean_server" description="deletes the WAR file and cache from server ">		
 		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war" />
+		<delete file="${jboss.home.dir}/server/default/deploy/dynamicExtensions.war" />		
 		<delete includeemptydirs="true">
 			<fileset dir="${jboss.home.dir}/server/default/work">
 				<include name="**/*" />					
@@ -280,6 +290,7 @@
 	<target name="build_war">
 		<echo message="Creating New Web Application Archieve File..."/>
 		<delete file="${temp.dir}/catissuecore.war"/>
+		<delete file="${temp.dir}/dynamicExtensions.war"/>		
 		<war destfile="${temp.dir}/catissuecore.war" webxml="${temp.dir}/catissuecore/WEB-INF/web.xml">
 			<fileset dir="${temp.dir}/catissuecore">
 				<exclude name="**/*build*"/>
@@ -293,6 +304,15 @@
 				<exclude name="**/CVS*"/>	
 			</fileset>
 		</war>
+		
+		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true"/>
+		
+		<war destfile="${temp.dir}/dynamicExtensions.war" webxml="${temp.dir}/dynamicExtensions/WEB-INF/web.xml">
+			<fileset dir="${temp.dir}/dynamicExtensions">
+				<include name="**/**/**.*"/>
+			</fileset>
+		</war>
+		
 		<!-- change because using one war only -->
 		<!--
 		<delete file="${temp.dir}/catissuecorecsm.war"/>
@@ -316,6 +336,7 @@
   				<include name="catissuecore.war"/>
   				<include name="catissuecore-ds.xml"/>
   				<include name="catissuecorecsm.war"/>
+				<include name="dynamicExtensions.war"/>   			  				
    			</fileset>
   		</copy>
 		<replace dir="${jboss.home.dir}/server/default/catissuecore-properties"> 
@@ -348,9 +369,10 @@
 	  		<include name="properties-service.xml"/>
 			<replacefilter token="@@app-security-file@@" 
 				  	value="${jboss.home.dir}/server/default/catissuecore-properties/ApplicationSecurityConfig.xml"/>
-		<replacefilter token="@@app-properties-file@@" 
+			<replacefilter token="@@app-properties-file@@" 
 				  	value="${jboss.home.dir}/server/default/catissuecore-properties/caTissueCore_Properties.xml"/>
-
+			<replacefilter token="@@app-dynamicuixml-file@@" 
+				  	value="${jboss.home.dir}/server/default/catissuecore-properties/dynamicUI.xml"/>
 		</replace>
 
 
@@ -445,6 +467,8 @@
 			<transaction  src="${common.sql.dir}/createUser.sql"/>
 			<transaction  src="${common.sql.dir}/insert_default_data.sql"/>
 			<transaction  src="${common.sql.dir}/indexes.sql"/>
+			<transaction  src="${mysql.sql.dir}/caB2B Table Generation Script.sql"/>			
+			<transaction  src="${mysql.sql.dir}/dynamicextension.sql"/>
 			<transaction  src="${mysql.sql.dir}/SuiteQueryMetadataInsertScript.sql"/>	
 			<transaction>commit;</transaction>
 			<classpath>
@@ -532,62 +556,93 @@
 	<target name="db_initialize_oracle">
 		<echo message="Initializing Oracle Database for caTISSUECore Application..."/>
 		<sql 
-			driver="${oracle.driver.string}"
-		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-    		onerror="continue"
-    		rdbms="oracle">
-		  <transaction  src="${oracle.sql.dir}/catissuecore.sql"/>
-		  <transaction  src="${oracle.sql.dir}/InitDB_CreateTable.sql"/>
-		  <transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
-		  <transaction  src="${oracle.sql.dir}/AlterTable.sql"/>
-		  <transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
-		  <transaction  src="${oracle.sql.dir}/CSM_Create_Oracle.sql"/>
-		  <transaction  src="${oracle.sql.dir}/createUser.sql"/>
-	      <transaction  src="${oracle.sql.dir}/insert_default_data.sql"/>	
-	      <transaction  src="${common.sql.dir}/indexes.sql"/>
-		  <transaction>commit;</transaction>	
-    	  <classpath>
-            <fileset dir="${lib.dir}">
-                  <include name="*.jar"/>
-              </fileset>
-            </classpath> 
-		</sql>
+					driver="${oracle.driver.string}"
+				    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+				    userid="${database.username}"
+				    password="${database.password}" 
+		    		onerror="continue"			
+		    		rdbms="oracle">	
+					  <transaction  src="${oracle.sql.dir}/catissuecore.sql"/>
+					  <transaction  src="${oracle.sql.dir}/InitDB_CreateTable.sql"/>
+					  <transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
+					  <transaction  src="${oracle.sql.dir}/AlterTable.sql"/>
+					  <transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
+					  <transaction  src="${oracle.sql.dir}/CSM_Create_Oracle.sql"/>
+					  <transaction  src="${oracle.sql.dir}/createUser.sql"/>
+				      <transaction  src="${oracle.sql.dir}/insert_default_data.sql"/>	
+				      <transaction  src="${common.sql.dir}/indexes.sql"/>
+				   	  <transaction  src="${oracle.sql.dir}/cab2b_CreateTable.sql"/>	
+					  <transaction  src="${oracle.sql.dir}/dynamicextension_CreateTable.sql"/>	
+					  <transaction  src="${oracle.sql.dir}/SuiteQueryMetadataInsertScript.sql"/>	
+					  <transaction  src="${oracle.sql.dir}/cab2b_AddConstraints.sql"/>
+					<transaction  src="${oracle.sql.dir}/dynamicextension_AddConstraints.sql"/>	
+				  <transaction>commit;</transaction>	
+		    	  <classpath >
+		            <fileset dir="${lib.dir}">
+		                  <include name="*.jar"/>
+		              </fileset>
+		            </classpath> 
+				</sql>	
+
+		
+		
 		<sql
-			driver="${oracle.driver.string}"
-		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-    		onerror="continue"
-    		rdbms="oracle" 
-			delimiter="/"
-		    delimitertype="row">
-		  <transaction  src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql"/>
-		  <transaction  src="${oracle.sql.dir}/DBUtility.sql"/>
-		  <classpath>
-            <fileset dir="${lib.dir}">
-                  <include name="*.jar"/>
-              </fileset>
-            </classpath> 
-		</sql>
+				driver="${oracle.driver.string}"
+			    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+			    userid="${database.username}"
+			    password="${database.password}" 
+				onerror="continue"				
+				rdbms="oracle" 		
+			    classpathref="classpath"
+				delimiter="/"
+			    delimitertype="row"
+			 keepformat="yes">
+
+			<transaction  src="${oracle.sql.dir}/DESeqChangeForDataDump.sql"/>				
+			  <classpath id="classpath">
+		        <fileset dir="${lib.dir}">
+		              <include name="*.jar"/>
+		          </fileset>
+		        </classpath> 
+		</sql>		
+		
 		<sql
-			driver="${oracle.driver.string}"
-		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-    		onerror="continue"
-    		rdbms="oracle">
-		  <transaction  src="${oracle.sql.dir}/CSM_InsertData_Oracle.sql"/>	
-   		  <transaction  src="${oracle.sql.dir}/CSM_AddConstraints_Oracle.sql"/>
-   		  <transaction  src="${oracle.sql.dir}/createUser.sql"/>
-		  <transaction>commit;</transaction>	
-		  <classpath>
-            <fileset dir="${lib.dir}">
-                  <include name="*.jar"/>
-              </fileset>
-            </classpath> 
-		</sql>
+				driver="${oracle.driver.string}"
+			    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+			    userid="${database.username}"
+			    password="${database.password}" 
+				onerror="continue"
+				rdbms="oracle" 
+				delimiter="/"
+			    delimitertype="row">
+			  <transaction  src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql"/>
+			  <transaction  src="${oracle.sql.dir}/DBUtility.sql"/>
+			  <classpath>
+		        <fileset dir="${lib.dir}">
+		              <include name="*.jar"/>
+		          </fileset>
+		        </classpath> 
+			</sql>
+			<sql
+				driver="${oracle.driver.string}"
+			    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+			    userid="${database.username}"
+			    password="${database.password}" 
+				onerror="continue"
+				rdbms="oracle">
+			  <transaction  src="${oracle.sql.dir}/CSM_InsertData_Oracle.sql"/>	
+				  <transaction  src="${oracle.sql.dir}/CSM_AddConstraints_Oracle.sql"/>
+				  <transaction  src="${oracle.sql.dir}/createUser.sql"/>
+			  <transaction>commit;</transaction>	
+			  <classpath>
+		        <fileset dir="${lib.dir}">
+		              <include name="*.jar"/>
+		          </fileset>
+		        </classpath> 
+			</sql>
+
+	  	
+	
 	</target>
 	
 	<target name="send_mail">

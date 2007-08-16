@@ -1911,4 +1911,18 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String IDENTIFIED_REPORT_NOT_FOUND_MSG="Indentified Report Not Found!";
 	public static final String DEID_REPORT_NOT_FOUND_MSG="De-Indentified Report Not Found!";
 
+//  Local extensions constants
+    public static final String LOCAL_EXT="localExt";
+    public static final String LINK="link";
+    public static final String LOAD_INTEGRATION_PAGE="loadIntegrationPage";
+    public static final String DEFINE_ENTITY = "defineEntity";
+    public static final String SELECTED_ENTITY_ID="selectedStaticEntityId";
+    public static final String CONTAINER_NAME="containerName"; 
+    public static final String STATIC_ENTITY_NAME = "staticEntityName";
+    
+   
+    //clinportal constants
+    public static final int CLINICALSTUDY_FORM_ID = 65;
+    public static final int CLINICAL_STUDY_REGISTRATION_FORM_ID=66;
+    
 }

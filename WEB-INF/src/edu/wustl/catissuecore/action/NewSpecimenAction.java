@@ -180,7 +180,7 @@ public class NewSpecimenAction extends SecureAction
 			String initialSignedConsentDateValue="";
 			//Lazy - specimenCollectionGroup.getCollectionProtocolRegistration()
 			CollectionProtocolRegistration collectionProtocolRegistration = getCPRObj(scg_id);
-			if(collectionProtocolRegistration.getSignedConsentDocumentURL()==null)
+			if(collectionProtocolRegistration ==null  || collectionProtocolRegistration.getSignedConsentDocumentURL()==null)
 			{
 				initialURLValue=Constants.NULL;
 			}
