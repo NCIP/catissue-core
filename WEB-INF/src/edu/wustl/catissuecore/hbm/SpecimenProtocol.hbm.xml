@@ -291,6 +291,73 @@
 
         </joined-subclass>
 
+		    <joined-subclass
+            name="edu.wustl.catissuecore.domain.ClinicalStudy"
+            table="CATISSUE_CLINICAL_STUDY"
+            lazy="true"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+
+        <set
+            name="coordinatorCollection"
+            table="CATISSUE_CLINICAL_STUDY_COORDINATORS"
+            lazy="true"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="CLINICAL_STUDY_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.User"
+                  column="USER_ID"
+                  outer-join="auto"
+              />
+
+        </set>
+	<set
+            name="clinicalStudyEventCollection"
+            table="CATISSUE_CLINICAL_STUDY_EVENT"
+            lazy="true"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="CLINICAL_STUDY_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.ClinicalStudyEvent"
+              />
+        </set>
+
+ 	  <set
+            name="clinicalStudyRegistrationCollection"
+            table="CATISSUE_CLINICAL_STUDY_REG"
+            lazy="true"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="CLINICAL_STUDY_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.ClinicalStudyRegistration"
+              />
+        </set>
+
+        </joined-subclass>
+
     </class>
 
 </hibernate-mapping>
