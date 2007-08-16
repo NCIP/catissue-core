@@ -97,6 +97,14 @@ function showEvent()
 				document.forms[0].submit();
 }
 
+//View SPR Vijay pande
+		function viewSPR()
+        {
+			var tempId=document.forms[0].id.value;
+        	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+tempId;
+			document.forms[0].action=action;
+			document.forms[0].submit();
+        }
 
 
 </script>
@@ -113,7 +121,7 @@ function showEvent()
 					<bean:message key="tab.specimen.eventparameters"/>
 				</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
