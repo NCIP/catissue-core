@@ -33,7 +33,7 @@
 		columnList.add(columnList1[i]);
 	}
 	//columnList.add(0," ");
-
+String checkAllPages = (String)session.getAttribute("checkAllPages");
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 %>
@@ -105,7 +105,18 @@
 			        selected[j++]=theForm[i].value;
 			}
 		}
-		
+function checkAll(element)
+{
+	mygrid.setEditable(true);
+	var state=element.checked;
+	rowCount = mygrid.getRowsNum();
+	for(i=1;i<=rowCount;i++)
+	{
+		var cl = mygrid.cells(i,0);
+		if(cl.isCheckbox())
+		cl.setChecked(state);
+	}
+}
 	</script>
 </head>
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">

@@ -10,7 +10,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
 <script src="jss/script.js"></script>
-
+<script type="text/javascript" src="jss/ajax.js"></script> 
 <style>
 .active-column-0 {width:30px}
 tr#hiddenCombo
@@ -25,7 +25,7 @@ tr#hiddenCombo
 	int totalResults = (Integer)session.getAttribute(Constants.TOTAL_RESULTS);
 	int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
 	String pageName = "SpreadsheetView.do";	
-	
+	String checkAllPages = (String)session.getAttribute("checkAllPages");
 	AdvanceSearchForm form = (AdvanceSearchForm)session.getAttribute("advanceSearchForm");
 	List columnList = (List) session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	if(columnList==null)
@@ -49,11 +49,12 @@ tr#hiddenCombo
 		function onAddToCart()
 		{
 			var isChecked = updateHiddenFields();
-
+			var chkBox = document.getElementById('checkAll');
+			var isCheckAllAcrossAllChecked = chkBox.checked;
 		    if(isChecked == "true")
 		    {
 			    var pageNum = "<%=pageNum%>";
-				var action = "ShoppingCart.do?operation=add&pageNum="+pageNum;
+				var action = "ShoppingCart.do?operation=add&pageNum="+pageNum+"&isCheckAllAcrossAllChecked="+isCheckAllAcrossAllChecked ;
 			
 				document.forms[0].operation.value="add";
 				document.forms[0].action = action;
@@ -65,10 +66,12 @@ tr#hiddenCombo
 		function onExport()
 		{
 			var isChecked = updateHiddenFields();
-			var pageNum = "<%=pageNum%>";
+			  var pageNum = "<%=pageNum%>";
+			var chkBox = document.getElementById('checkAll');
+			var isCheckAllAcrossAllChecked = chkBox.checked;
 		    if(isChecked == "true")
 		    {
-				var action = "SpreadsheetExport.do?pageNum="+pageNum;
+				var action = "SpreadsheetExport.do?pageNum="+pageNum+"&isCheckAllAcrossAllChecked="+isCheckAllAcrossAllChecked ;
 				document.forms[0].operation.value="export";
 				document.forms[0].action = action;
 				//document.forms[0].target = "_blank";
@@ -141,6 +144,29 @@ tr#hiddenCombo
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
+		function setCheckBoxState()
+		{
+			var chkBox = document.getElementById('checkAll');
+			var isCheckAllAcrossAllChecked = chkBox.checked;
+		<%	if(checkAllPages != null && checkAllPages.equals("true"))
+			{ %>
+			chkBox.checked = true;
+				rowCount = mygrid.getRowsNum();
+				for(i=1;i<=rowCount;i++)
+				{
+					var cl = mygrid.cells(i,0);
+					if(cl.isCheckbox())
+					cl.setChecked(true);
+				}
+		<%	} %>
+		}
+//this function is called after executing ajax call from checkAllOnThisPage function.
+function checkAllOnThisPageResponse()
+{
+}
+
+//document.forms[0].checkAllPages.value = true;
+
 	</script>
 	<%
 		String configAction = new String();
@@ -163,7 +189,7 @@ tr#hiddenCombo
 	<!-- Mandar : 434 : for tooltip -->
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
-
+<body onload="setCheckBoxState()">
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
 <tr>
 	<td>
@@ -171,6 +197,7 @@ tr#hiddenCombo
 	</td>
 </tr>
 <html:form action="<%=Constants.SPREADSHEET_EXPORT_ACTION%>">
+<html:hidden property="checkAllPages" value=""/>	
 	<%
 		if(dataList == null && pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
 		{
@@ -245,7 +272,10 @@ tr#hiddenCombo
 			<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
 			<tr>
 					<td width="5%" nowrap>
-						<input type='checkbox' name='checkAll2' id='checkAll2' onClick='checkAll(this)'><span class="formLabelNoBackGroundWithSize6"><bean:message key="buttons.checkAll" /></span>&nbsp;
+						<input type='checkbox' name='checkAll2' id='checkAll2' onClick='checkAllOnThisPage(this)'>
+						<span class="formLabelNoBackGround"><bean:message key="buttons.checkAllOnThisPage" /></span>
+						<input type='checkbox' name='checkAll' id='checkAll' onClick='checkAllAcrossAllPages(this)'>
+						<span class="formLabelNoBackGround"><bean:message key="buttons.checkAll" /></span>
 					</td>
 					<%
 						Object obj = session.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
@@ -253,7 +283,8 @@ tr#hiddenCombo
 					%>
 					<td nowrap width="5%">
 					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
-						<input type='checkbox' <%if (isDefaultView){%>checked='checked' <%}%>name='checkDefaultSpecimenView' id='checkDefaultSpecimenView' onClick='setDefaultView(this)'><span class="formLabelNoBackGroundWithSize6"><bean:message key="buttons.defaultSpecimenView" /></span>&nbsp;
+						<input type='checkbox' <%if (isDefaultView){%>checked='checked' <%}%>name='checkDefaultSpecimenView' id='checkDefaultSpecimenView' onClick='setDefaultView(this)'>
+						<span class="formLabelNoBackGroundWithSize6"><bean:message key="buttons.defaultSpecimenView" /></span>&nbsp;
 					<%}else{%>
 						&nbsp;
 					<%}%>

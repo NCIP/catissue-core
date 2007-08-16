@@ -5,20 +5,68 @@
 <script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>	
 <%@ page import="java.util.HashMap,java.util.Map,edu.wustl.common.beans.QueryResultObjectData"%>
 <script>
-	// --------------------  FUNCTION SECTION
-	//checks or unchecks all the check boxes in the grid.
-	function checkAll(element)
+// --------------------  FUNCTION SECTION
+//checks or unchecks all the check boxes in the grid.
+var isCheckAllPagesChecked ;
+function checkAllAcrossAllPages(element)
+{
+	var state=element.checked;
+	isCheckAllPagesChecked = state;
+	rowCount = mygrid.getRowsNum();
+	for(i=1;i<=rowCount;i++)
 	{
-		var state=element.checked;
-		rowCount = mygrid.getRowsNum();
-		//alert("rowCount : "+ rowCount);
-		for(i=1;i<=rowCount;i++)
-		{
-			var cl = mygrid.cells(i,0);
-			if(cl.isCheckbox())
-			cl.setChecked(state);
-		}
+		var cl = mygrid.cells(i,0);
+		if(cl.isCheckbox())
+		cl.setChecked(state);
 	}
+	var chkBox = document.getElementById('checkAll2');
+	chkBox.checked = false;
+	var request = newXMLHTTPReq();			
+	var actionURL;
+	var handlerFunction = getReadyStateHandler(request,setEditableChkbox,true);	
+	request.onreadystatechange = handlerFunction;				
+	actionURL = "checkAllPages=" + state;			
+	var url = "SpreadsheetView.do?isAjax=true&amp;isPaging=true&amp;checkAllPages=" + state;				
+	<!-- Open connection to servlet -->
+	request.open("POST",url,true);	
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+	request.send(actionURL);	
+}
+function checkAllOnThisPage(element)
+{
+	mygrid.setEditable(true);
+	var state=element.checked;
+	rowCount = mygrid.getRowsNum();
+	for(i=1;i<=rowCount;i++)
+	{
+		var cl = mygrid.cells(i,0);
+		if(cl.isCheckbox())
+		cl.setChecked(state);
+	}
+	var chkBox = document.getElementById('checkAll');
+	chkBox.checked = false;
+	var request = newXMLHTTPReq();			
+	var actionURL;
+	var handlerFunction = getReadyStateHandler(request,checkAllOnThisPageResponse,true);	
+	request.onreadystatechange = handlerFunction;				
+	actionURL = "checkAllPages=false&isPaging=true";
+	var url = "SpreadsheetView.do?isAjax=true&amp;isPaging=true&amp;checkAllPages=false";
+	<!-- Open connection to servlet -->
+	request.open("POST",url,true);	
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+	request.send(actionURL);	
+}
+function setEditableChkbox(checkAllPages)
+{
+	if(checkAllPages == 'true')
+	{
+			mygrid.setEditable(false);
+	}
+	else
+	{
+			mygrid.setEditable(true);
+	}
+}
 
 	//function to update hidden fields as per check box selections.
 	function updateHiddenFields()
@@ -169,6 +217,11 @@
 	//mygrid.setColAlign("left,left")
 	mygrid.setColSorting(colTypes);
 	//mygrid.enableMultiselect(true)
+    mygrid.setEditable(true);
+	<% if(checkAllPages != null && checkAllPages.equals("true")){ %>
+			mygrid.setEditable(false);
+	<% 
+	} %>
 	mygrid.init();
 
 	/*
