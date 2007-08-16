@@ -12,6 +12,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.ehcache.CacheException;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -26,8 +28,8 @@ import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.wustl.catissuecore.domain.EntityMap;
-import edu.wustl.catissuecore.domain.EntityMapRecord;
+import edu.common.dynamicextensions.domain.integration.EntityMap;
+import  edu.common.dynamicextensions.domain.integration.EntityMapRecord;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
@@ -63,8 +65,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 
 	/**
 	 * @param request
+	 * @throws CacheException 
 	 */
-	private void updateCache(HttpServletRequest request)
+	private void updateCache(HttpServletRequest request) throws CacheException
 	{
 		String parentEntityId = request.getParameter(AnnotationConstants.REQST_PARAM_ENTITY_ID);
 		String parentEntityRecordId = request.getParameter(AnnotationConstants.REQST_PARAM_ENTITY_RECORD_ID);
@@ -84,8 +87,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	/**
 	 * @param selected_static_entityid
 	 * @return
+	 * @throws CacheException 
 	 */
-	private Object getObjectFromCache(String key)
+	private Object getObjectFromCache(String key) throws CacheException
 	{
 		if(key!=null)
 		{
@@ -100,8 +104,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 
 	/**
 	 * @param request
+	 * @throws CacheException 
 	 */
-	private void processResponseFromDynamicExtensions(HttpServletRequest request)
+	private void processResponseFromDynamicExtensions(HttpServletRequest request) throws CacheException
 	{
 		System.out.println("Request query string = " + request.getQueryString());
 		String operationStatus = request.getParameter(WebUIManager.getOperationStatusParameterName());
@@ -116,8 +121,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	/**
 	 * @param request 
 	 * @param dynExtRecordId
+	 * @throws CacheException 
 	 */
-	private void insertEntityMapRecord(HttpServletRequest request, String dynExtRecordId)
+	private void insertEntityMapRecord(HttpServletRequest request, String dynExtRecordId) throws CacheException
 	{
 		EntityMapRecord entityMapRecord = getEntityMapRecord(request,dynExtRecordId);
 		if(entityMapRecord!=null)
@@ -139,8 +145,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	 * @param request 
 	 * @param dynExtRecordId
 	 * @return
+	 * @throws CacheException 
 	 */
-	private EntityMapRecord getEntityMapRecord(HttpServletRequest request, String dynExtRecordId)
+	private EntityMapRecord getEntityMapRecord(HttpServletRequest request, String dynExtRecordId) throws CacheException
 	{
 		EntityMapRecord entityMapRecord = null;
 		String staticEntityRecordId = (String)getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
@@ -148,7 +155,7 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		if((entityMapId!=null)&&(staticEntityRecordId!=null)&&(dynExtRecordId!=null))
 		{
 			entityMapRecord = new EntityMapRecord();
-			entityMapRecord.setEntityMapId(entityMapId);
+			entityMapRecord.getFormContext().getEntityMap().setId(entityMapId);
 			entityMapRecord.setStaticEntityRecordId(Utility.toLong(staticEntityRecordId));
 			entityMapRecord.setDynamicEntityRecordId(Utility.toLong(dynExtRecordId));
 			SessionDataBean sessionDataBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
@@ -231,7 +238,7 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		StringBuffer entityMapRecordXML = new StringBuffer();
 		if(entityMapRecord!=null)
 		{
-			NameValueBean dynamicEntity = getDynamicEntity(entityMapRecord.getEntityMapId());
+			NameValueBean dynamicEntity = getDynamicEntity(entityMapRecord.getFormContext().getEntityMap().getId());
 			if(dynamicEntity!=null)
 			{
 				String strURLForEditRecord = getURLForEditEntityMapRecord(request,dynamicEntity.getName(),entityMapRecord.getDynamicEntityRecordId());
@@ -344,7 +351,7 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		}
 		else
 		{
-			dynEntitiesList = annotationBizLogic.getListOfDynamicEntitiesIds(Utility.toLong(entityId), Utility.toLong(entityIdForCondition), Utility.toLong(entityRecordIdForCondition));
+			dynEntitiesList = annotationBizLogic.getListOfDynamicEntitiesIds(Utility.toLong(entityId),Utility.toLong(entityIdForCondition),Utility.toLong(entityRecordIdForCondition));
 		}
 		if(dynEntitiesList!=null)
 		{

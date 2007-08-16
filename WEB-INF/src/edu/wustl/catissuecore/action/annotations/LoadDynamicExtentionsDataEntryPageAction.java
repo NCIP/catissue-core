@@ -12,6 +12,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.ehcache.CacheException;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -20,7 +22,7 @@ import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.wustl.catissuecore.domain.EntityMap;
+import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
@@ -55,8 +57,9 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	/**
 	 * @param request
 	 * @param annotationDataEntryForm 
+	 * @throws CacheException 
 	 */
-	private void updateCache(HttpServletRequest request, AnnotationDataEntryForm annotationDataEntryForm)
+	private void updateCache(HttpServletRequest request, AnnotationDataEntryForm annotationDataEntryForm) throws CacheException
 	{
 		String staticEntityId = annotationDataEntryForm.getParentEntityId();
 		String dynEntContainerId = annotationDataEntryForm.getSelectedAnnotation();
@@ -65,7 +68,8 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
 		if (cacheManager != null)
 		{
-			Long entityMapId = getEntityMapId(Utility.toLong(staticEntityId), Utility.toLong(dynEntContainerId));
+            
+			Long entityMapId = getEntityMapId(Utility.toLong(staticEntityId),Utility.toLong(dynEntContainerId));
 			cacheManager.addObjectToCache(AnnotationConstants.SELECTED_ENTITY_MAP_ID, entityMapId);
             cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITYID,annotationDataEntryForm.getSelectedStaticEntityId());
             cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID,annotationDataEntryForm.getSelectedStaticEntityRecordId());
