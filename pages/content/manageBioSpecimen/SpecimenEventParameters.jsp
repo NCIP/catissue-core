@@ -145,6 +145,14 @@
 			//addNew.target="_parent";
 		}
 	}
+	//View SPR Vijay pande
+	function viewSPR()
+    {
+		var tempId=document.forms[0].id.value;
+    	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+'<%=specimenIdentifier%>';
+		document.forms[0].action=action;
+		document.forms[0].submit();
+    }
 </script>
 <!-- Mandar : 434 : for tooltip -->
 
@@ -167,7 +175,7 @@
 					<bean:message key="tab.specimen.eventparameters"/>
 				</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
 					<%=Constants.SURGICAL_PATHOLOGY_REPORT %>
 				</td>
 				
