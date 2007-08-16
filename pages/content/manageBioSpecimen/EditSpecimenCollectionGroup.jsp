@@ -1,41 +1,79 @@
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="java.util.*"%>
-<%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
-
-
-
-<script src="jss/script.js" type="text/javascript"></script>
-
-
-
+	<%			
+/**
+ 			* Name : Ashish Gupta
+ 			* Reviewer Name : Sachin Lale 
+ 			* Bug ID: 2741
+ 			* Patch ID: 2741_18 			
+ 			* Description: Adding check for changes function
+			*/
+	String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
+	String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
+	String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";									
+	String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+	/**
+		* Name : Ashish Gupta
+		* Reviewer Name : Sachin Lale 
+		* Bug ID: Multiple Specimen Bug
+		* Patch ID: Multiple Specimen Bug_2 
+		* See also: 1-8
+		* Description: passing "button=multipleSpecimen"with the url so that validation is done only on click of "Add Multiple Specimen" button
+	*/
+	String confirmDisableFuncNameForMultipleSpecimen = "";
+	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+	{
+		// In case of CP based view query, formName variable already has 
+		// some parameter appended to the url. hence appending the button parameter by "&"
+		confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"&button=multipleSpecimen',document.forms[0].activityStatus)";
+	}
+	else
+	{
+		confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
+	}
+	String normalSubmit = "";
+	String forwardToSubmit = "";
+	String forwardToSubmitForMultipleSpecimen = "";
+	if(operation.equals(Constants.EDIT))
+	{
+		confirmDisableFuncName = "confirmDisableForSCG('" + formName +"',document.forms[0].activityStatus)";
+		normalSubmit = "checkForChanges(),"+normalSubmitFunctionName + ","+confirmDisableFuncName;
+		forwardToSubmit = "checkForChanges(),"+ forwardToSubmitFuctionName + ","+confirmDisableFuncName;
 		
-	<%
-			String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
-			String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
-			String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";									
-			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
-			String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
-			String forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncName;
+		if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+		{
+			// In case of CP based view query, formName variable already has 
+			// some parameter appended to the url. hence appending the button parameter by "&"
+			confirmDisableFuncNameForMultipleSpecimen =  "confirmDisableForSCG('" + formName +"&button=multipleSpecimen',document.forms[0].activityStatus)";
+		}
+		else
+		{
+			confirmDisableFuncNameForMultipleSpecimen =  "confirmDisableForSCG('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
+		}
+		
+		forwardToSubmitForMultipleSpecimen = "checkForChanges(),"+forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
+	}
+	else
+	{			
+		normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+		forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;			
+		forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
+	}
 	%>
 		
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="650" >
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
 		
 	    <tr><td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="scgTable">
 				 <tr>
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value=""/>
+						<html:hidden property="participantId" />
 						<html:hidden property="stringOfResponseKeys"/>
 						<html:hidden property="applyChangesTo"/>
+						<html:hidden property="consentTierCounter"/>
+						
 					</td>
 				 </tr>
 				 
@@ -45,11 +83,14 @@
 					<td><html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
 				 </tr>
 				 <tr>
-				 	<td class="formMessage" colspan="4">* indicates a required field</td>
+				 	<td class="formMessage" colspan="6">
+						<html:hidden property="withdrawlButtonStatus"/>
+						<bean:message key="requiredfield.message"/>  
+					</td>
 				 </tr>
 				 
 				<tr>
-					<td class="formTitle" height="20" colspan="4">
+					<td class="formTitle" height="20" colspan="5">
 						<%String title = "specimenCollectionGroup."+pageView+".title";%>
 							<bean:message key="<%=title%>"/>						
 					</td>
@@ -58,8 +99,7 @@
 				 
 				 <!--Collection Protocol -->
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">*</td>
-			     	<html:hidden property="withdrawlButtonStatus"/>
+			     	<td class="formRequiredNotice" colspan="2" width="5">*</td>
 				    <td class="formRequiredLabel">
 						<label for="collectionProtocolId">
 							<bean:message key="specimenCollectionGroup.protocolTitle"/>
@@ -68,19 +108,20 @@
 					
 					<td class="formField">
 <!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>"
-				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onChange(this)">
+				     	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>" onchange="onChangeEvent(this)"
+				     	 onmouseover="showToolTip(this)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
-						&nbsp;
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
 						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=specimenCollectionGroup&addNewFor=collectionProtocol')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
+						</logic:notEqual>
 		        	</td>
 				 </tr>
 
 				 <tr>
- 			     	<td class="formRequiredNotice" width="5">*</td>
+ 			     	<td class="formRequiredNotice" colspan="2" width="5">*</td>
 				    <td class="formRequiredLabel">
 						<label for="siteId">
 							<bean:message key="specimenCollectionGroup.site"/>
@@ -88,23 +129,28 @@
 					</td>
 					
 					<td class="formField">
- <autocomplete:AutoCompleteTag property="siteId"
+					 <autocomplete:AutoCompleteTag property="siteId"
 										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
 										  initialValue="<%=form.getSiteId()%>"
 										  styleClass="formFieldSized"
 										  staticField="false"
 										 
 									    />
+					
+
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
 						&nbsp;
 						<html:link href="#" styleId="newSite" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=site&forwardTo=specimenCollectionGroup&addNewFor=site')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
+						</logic:notEqual>
 		        	</td>
 				 </tr>
 				 
 				 <tr>
-				 	<td class="formRequiredNoticeNoBottom">
-				     	<html:radio styleClass=""  property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
+					 <td class="formRequiredNoticeNoBottom">*</td>
+					 <td class="formRequiredNoticeWithoutBorder">
+				     	<html:radio styleClass=""  property="radioButtonForParticipant" value="1" onclick="onRadioButtonClick(this)">
   				     	    <label for="participantId">
 								<%--<bean:message key="specimenCollectionGroup.collectedByParticipant" />--%>
 							</label>
@@ -116,34 +162,37 @@
 						</label>
   					</td>
   					<td class="formField">
-  						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
+  						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">
 <!-- Mandar : 434 : for tooltip --> 						
-				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent('ParticipantId')"
-				     	      onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
-                         	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
-  						     </html:select>
+				     	    <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="participantName" property="participantName" />
   						</logic:equal>     
-						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">
+						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">
 <!-- Mandar : 434 : for tooltip -->						
-				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent('ParticipantId')" disabled="true"
-				     	      onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-                         	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
-  						     </html:select>
+				     	     <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="participantName" property="participantName" disabled="true"/>
   						</logic:equal>
 						
 						&nbsp;
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=participant')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
+						</logic:notEqual>
+						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
+						<html:link href="#" styleId="newParticipant" onclick="addNewAction('CPQuerySpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=participant')">
+							<bean:message key="buttons.addNew" />
+						</html:link>
+						</logic:equal>
+						
  						</logic:notEqual>
 					</td>
   					
 				 </tr>
 				 
 				 <tr>
-				    <td class="formRequiredNotice">
-				       	<html:radio styleClass="" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
+				    <td class="formRequiredNotice" align="right">&nbsp;</td>
+					<td class="formRequiredNoticeWithoutLeftBorder">
+					<html:radio styleClass="" property="radioButtonForParticipant" value="2" onclick="onRadioButtonClick(this)">
   				       	    <label for="protocolParticipantIdentifier">
 								<%--<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />--%>
 							</label>
@@ -157,48 +206,54 @@
 					
   			        <td class="formField">
   					<%-- LOGIC TAG FOR PARTICPANT NUMBER --%> 												
-                        <logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">						
+                        <logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">						
 <!-- Mandar : 434 : for tooltip -->
-   						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" disabled="true"
-   						 	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onChangeEvent('protocolParticipantIdentifier')">
-                         		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
-							</html:select>
+   						 	<html:text property="protocolParticipantIdentifier" maxlength="255" size="30"  styleClass="formFieldSized" styleId="protocolParticipantIdentifier" disabled="true">
+							</html:text>
  						</logic:equal>
  						
- 						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">						
+ 						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">						
 <!-- Mandar : 434 : for tooltip -->
-   						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" 
-   						 	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onChangeEvent('protocolParticipantIdentifier')">
-                         		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
-							</html:select>
+   						 	<html:text property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" maxlength="255" size="30" >
+							</html:text>
  						</logic:equal>
 					
 						&nbsp;
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
  						<html:link href="#" styleId="newParticipant" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=protocolParticipantIdentifier')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
+						</logic:notEqual>
+						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
+						<html:link href="#" styleId="newParticipant" onclick="addNewAction('CPQuerySpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=protocolParticipantIdentifier')">
+							<bean:message key="buttons.addNew" />
+						</html:link>
+						</logic:equal>
 	 					</logic:notEqual>
 		        	</td>
 				 </tr>
 				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredNotice" colspan="2" width="5">*</td>
 					<td class="formRequiredLabel" >
 						<label for="name">
 							<bean:message key="specimenCollectionGroup.groupName" />
 						</label>
 					</td>
 					<td class="formField">
-						<html:text styleClass="formFieldSized" size="30"  maxlength="50" styleId="name" property="name" />
+						<html:text styleClass="formFieldSized" size="30"  maxlength="255" styleId="name" property="name" />
 						&nbsp;
-						<%String resetAction = "changeAction('SpecimenCollectionGroup.do?operation="+operation+"&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&resetName=Yes')"; %>
+						<%String resetAction = "changeAction('SpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroup&resetName=Yes')"; 
+						if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY)){
+							resetAction = "changeAction('QuerySpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroupCPQuery&resetName=Yes')"; 
+						}%>
 						<html:link href="#" styleId="resetName" onclick="<%=resetAction%>">
 							<bean:message key="link.resetName" />
 						</html:link>
 					</td>
 				</tr>
 				 <tr>
-				 	<td class="formRequiredNotice" width="5">*</td>
+				 	<td class="formRequiredNotice" colspan="2" width="5">*</td>
 				    
 				    <td class="formRequiredLabel">
 						<label for="collectionProtocolEventId">
@@ -207,7 +262,7 @@
 					</td>
 				    <td class="formField">
 <!-- Mandar : 434 : for tooltip -->				    
-				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent('collectionProtocolEventId')"  
+				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)" 
 				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          	<html:options collection="<%=Constants.STUDY_CALENDAR_EVENT_POINT_LIST%>" labelProperty="name" property="value"/>				     					     					     	
 						</html:select>&nbsp;
@@ -216,7 +271,7 @@
 				 </tr>
 				 
 				 <tr>
-				     <td class="formRequiredNotice" width="5">*</td>
+				     <td class="formRequiredNotice" colspan="2" width="5">*</td>
 				     <td class="formRequiredLabel">
 						<label for="clinicalDiagnosis">
 							<bean:message key="specimenCollectionGroup.clinicalDiagnosis"/>
@@ -233,14 +288,15 @@
 						<%
 						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";			
 						%>
-						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
+						<!-- // Patch ID: Bug#3090_22 -->
+						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22" title='CLinical Diagnosis Selector'>
 					</a>
 		        	 </td>
 				 </tr>
 				 
 				 <tr>
-				     <td class="formRequiredNotice" width="5">*</td>
+				     <td class="formRequiredNotice" colspan="2" width="5">*</td>
 				     <td class="formRequiredLabel">
 						<label for="clinicalStatus">
 							<bean:message key="specimenCollectionGroup.clinicalStatus"/>
@@ -260,21 +316,21 @@
 				 </tr>
 				 
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
+			     	<td class="formRequiredNotice" colspan="2" width="5">&nbsp;</td>
 				    <td class="formLabel">
 						<label for="participantsMedicalIdentifierId">
 							<bean:message key="specimenCollectionGroup.medicalRecordNumber"/>
 						</label>
 					</td>
                     <td class="formField">
-   						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
+   						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">
 <!-- Mandar : 434 : for tooltip -->   						
 				     		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>"
 				     		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          		<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</logic:equal>
-						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">
+						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">
 <!-- Mandar : 434 : for tooltip -->					     	
 					     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="true"
 					     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -285,7 +341,7 @@
 				 </tr>
 				 
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formRequiredNotice" colspan="2" width="5">&nbsp;</td>
 					<td class="formLabel">
 						<label for="surgicalPathologyNumber">
 							<bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/>
@@ -302,11 +358,31 @@
 				    </td>
 				
 				 </tr>
+				 <!--comments -->
+				 <!-- 
+				 * Name: Shital Lawhale
+			     * Bug ID: 3052
+			     * Patch ID: 3052_1_1
+			     * See also: 1_1 to 1_5
+				 * Description : Added <TR> for comment field .				 
+				-->	 
+				 <tr>
+					<td class="formRequiredNotice" colspan="2" width="5">&nbsp;</td>
+					<td class="formLabel">
+						<label for="comments">
+							<bean:message key="app.comments"/>
+						</label>
+					</td>					
+				   <td class="formField" colspan="4">
+				    		<html:textarea styleClass="formFieldSized" rows="3"  property="comment"/>
+			    	</td>
+				 </tr>
+				 
 
 				<!-- activitystatus -->	
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredNotice" colspan="2" width="5">*</td>
 					<td class="formRequiredLabel" >
 						<label for="activityStatus">
 							<bean:message key="site.activityStatus" />
@@ -331,30 +407,91 @@
 				  		</td>
 				 	</tr>
 			</table>
-			<table>
-				<tr><td></td></tr><tr><td></td></tr>
-			</table>
-
-<!--  Consent Tracking Module Virender mehta	 -->
-
-	<%
-		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");						 	
-		if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
-		{
+		</td></tr>
+		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
+	</table>
+ 
 			
+	<!--  Consent Tracking Module Virender mehta	 -->
+	<%
+		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");					if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
+		{
 	%>
-	
-	<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
-	
+	    	<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
 	<%
 		}
 	%>
-<!--  Consent Tracking Module Virender mehta -->	
+	<!--  Consent Tracking Module Virender mehta -->	
 
-	</td>
-	</tr>
-		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
+	<table summary="" cellpadding="0" cellspacing="0" border="0"
+		class="contentPage" width="650">
+		<tr>
+			<td>
+				<%@ include file="CollAndRecEvents.jsp" %>
+			</td>
+		</tr>
 	</table>
-		
-	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
+	<!--
+ * Name : Ashish Gupta
+ * Reviewer Name : Sachin Lale 
+ * Bug ID: Multiple Specimen Bug
+ * Patch ID: Multiple Specimen Bug_1 
+ * See also: 1-8
+ * Description: Table to display number of specimens text field
+	-->
 
+	<!-- For Multiple Specimen-----Ashish -->
+		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="650" id="multiplespecimenTable">
+		<tr>
+			<td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0"
+				width="100%">
+				
+				<tr>
+					<td class="formTitle" " colspan="6" height="20">
+						<bean:message key="multipleSpecimen.mainTitle" />
+					</td>
+				</tr>
+				<tr>
+					
+					<td class="formLabel" colspan="2" style="border-left:1px solid #5C5C5C;">
+						<bean:message key="multipleSpecimen.numberOfSpecimen" />
+					</td>
+					<td class="formField" colspan="3">
+						<!-- html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimen"  /-->
+						<html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" onkeyup="disablebuttons()"/>
+					</td>
+				</tr>			
+			</table>
+			</td>
+			<!-- Hidden fields for events 
+			/**
+ 			* Name : Ashish Gupta
+ 			* Reviewer Name : Sachin Lale 
+ 			* Bug ID: 2741
+ 			* Patch ID: 2741_19 			
+ 			* Description: Hidden fields for events
+			*/-->
+			<input type="hidden" id="collectionEventdateOfEventForm" value="<%=currentCollectionDate%>"  />
+			<input type="hidden" id="collectionEventUserIdForm" value="<%=form.getCollectionEventUserId()%>"  />
+			<input type="hidden" id="collectionEventTimeInHoursForm" value="<%=form.getCollectionEventTimeInHours()%>"  />
+			<input type="hidden" id="collectionEventTimeInMinutesForm" value="<%=form.getCollectionEventTimeInMinutes()%>"  />
+			<input type="hidden" id="collectionEventCollectionProcedureForm" value="<%=form.getCollectionEventCollectionProcedure()%>"  />
+			<input type="hidden" id="collectionEventContainerForm" value="<%=form.getCollectionEventContainer()%>"  />
+			<input type="hidden" id="collectionEventCommentsForm" value="<%=form.getCollectionEventComments()%>"  />
+			<html:hidden property="collectionEventId"/>
+			
+			<input type="hidden" id="receivedEventUserIdForm" value="<%=form.getReceivedEventUserId()%>"  />
+			<input type="hidden" id="currentReceivedDateForm" value="<%=currentReceivedDate%>"  />
+			<input type="hidden" id="receivedEventTimeInHoursForm" value="<%=form.getReceivedEventTimeInHours()%>"  />
+			<input type="hidden" id="receivedEventTimeInMinutesForm" value="<%=form.getReceivedEventTimeInMinutes()%>"  />
+			<input type="hidden" id="receivedEventReceivedQualityForm" value="<%=form.getReceivedEventReceivedQuality()%>"  />
+			<input type="hidden" id="receivedEventCommentsForm" value="<%=form.getReceivedEventComments()%>"  />
+			<html:hidden property="receivedEventId"/>
+			<!-- Patch ID: Bug#4227_4 -->
+			<html:hidden styleId="buttonType" property="buttonType"/>
+			
+		</tr>
+	</table>
+	
+	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
