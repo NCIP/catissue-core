@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 
 /**
@@ -46,15 +47,17 @@ public class ShowGridAction extends BaseAction
 		SessionDataBean sessionData = getSessionData(request);
 		String idOfClickedNode = request.getParameter("nodeId");
 		Map spreadSheetDatamap = null;
+		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
+		int recordsPerPage = new Integer(recordsPerPageStr);
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		String actualParentNodeId = idOfClickedNode.substring(idOfClickedNode.lastIndexOf(Constants.NODE_SEPARATOR) + 2, idOfClickedNode.length());
 		if (idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
 		{
-			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode);
+			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode,recordsPerPage);
 		}
 		else
 		{
-			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId);
+			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,recordsPerPage);
 		}
 		setGridData(request, session, spreadSheetDatamap);
 		return mapping.findForward(Constants.SUCCESS);
@@ -68,12 +71,15 @@ public class ShowGridAction extends BaseAction
 	{
 		int pageNum = Constants.START_PAGE;
 		request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
+		QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap.get(Constants.QUERY_SESSION_DATA);
+		int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
 		List<List<String>> dataList = (List<List<String>>) spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
 		request.setAttribute(Constants.SPREADSHEET_DATA_LIST,dataList);
 		request.setAttribute(Constants.PAGINATION_DATA_LIST,dataList);
 		List columnsList = (List) spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST);
 		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnsList);
-		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(dataList.size()));	  
+		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(totalNumberOfRecords));	
+		session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
 		String pageOf = (String)request.getParameter(Constants.PAGEOF);
 		request.setAttribute(Constants.PAGEOF,pageOf);
 	}

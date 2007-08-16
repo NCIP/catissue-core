@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
 import edu.wustl.common.querysuite.exceptions.SqlException;
 import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
@@ -31,6 +32,7 @@ import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
@@ -115,6 +117,16 @@ public class ViewSearchResultsAction extends BaseAppletAction
 	private void setResultData(HttpServletRequest request, IQuery query) throws MultipleRootsException, SqlException, DAOException, ClassNotFoundException
 	{
 		HttpSession session = request.getSession();
+		int recordsPerPage; 
+		String recordsPerPageSessionValue = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);
+		if (recordsPerPageSessionValue==null)
+		{
+				recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(Constants.RECORDS_PER_PAGE_PROPERTY_NAME));
+				session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage+"");
+		}
+		else
+			recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
+		
 		session.setAttribute(AppletConstants.QUERY_OBJECT, query);
 		Map<Long, Map<AttributeInterface, String>> columnMap = null;
 		String selectSql = "";
@@ -142,8 +154,13 @@ public class ViewSearchResultsAction extends BaseAppletAction
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		String parentNodeId = null;
 		String treeNo = "0";
-		Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,node, sessionData,parentNodeId);
-		session.setAttribute(Constants.SPREADSHEET_DATA_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST));
+		Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,node, sessionData,parentNodeId,recordsPerPage);
+		QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap.get(Constants.QUERY_SESSION_DATA);
+		int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
+		session.setAttribute(Constants.QUERY_SESSION_DATA,querySessionData);
+		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(totalNumberOfRecords));	
+		List list= (List)spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
+		session.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
 		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
 	}
 
