@@ -164,8 +164,7 @@ public class AssignPrivilegePageAction extends BaseAction
             String [] privilegeName = {privilegesForm.getPrivilege()};
             String [] objects =null;
             
-            try 
-            {
+        
                 Logger.out.debug("Object Type.............."+privilegesForm.getObjectType());
                 Set recordIds = new HashSet();
                 List recordNames = new ArrayList();              
@@ -189,12 +188,7 @@ public class AssignPrivilegePageAction extends BaseAction
 					recordNames = assignPrivilegePageBizLogic.getRecordNames(recordIds,privilegesForm);
             	}
             	request.setAttribute(Constants.RECORD_IDS, recordNames);
-			}
-            catch (ClassNotFoundException e1) 
-			{
-				Logger.out.debug("Exception:"+e1.getMessage(),e1);
-				objects = new String[]{privilegesForm.getObjectType()};
-			}
+	
             
             //request.setAttribute(Constants.ATTRIBUTES,attributes);
 		}
