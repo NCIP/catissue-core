@@ -5,6 +5,9 @@
 <script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>	
 <%@ page import="java.util.HashMap,java.util.Map,edu.wustl.common.beans.QueryResultObjectData"%>
 <script>
+<%
+String checkAllPagesSession = (String)session.getAttribute("checkAllPages");
+%>
 // --------------------  FUNCTION SECTION
 //checks or unchecks all the check boxes in the grid.
 var isCheckAllPagesChecked ;
@@ -218,7 +221,7 @@ function setEditableChkbox(checkAllPages)
 	mygrid.setColSorting(colTypes);
 	//mygrid.enableMultiselect(true)
     mygrid.setEditable(true);
-	<% if(checkAllPages != null && checkAllPages.equals("true")){ %>
+	<% if(checkAllPagesSession != null && checkAllPagesSession.equals("true")){ %>
 			mygrid.setEditable(false);
 	<% 
 	} %>
