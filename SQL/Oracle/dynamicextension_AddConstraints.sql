@@ -82,35 +82,23 @@ create sequence DYEXTN_SEMANTIC_PROPERTY_SEQ;
 create sequence DYEXTN_PERMISSIBLEVAL_SEQ;
 create sequence DYEXTN_ATTRIBUTE_TYPE_INFO_SEQ;
 create sequence DYEXTN_RULE_PARAMETER_SEQ;
-create sequence DE_FILE_ATTR_REC_VALUES_SEQ;
 create sequence DE_OBJECT_ATTR_REC_VALUES_SEQ;
+create sequence DE_FILE_ATTR_REC_VALUES_SEQ;
 create sequence DYEXTN_ABSTRACT_METADATA_SEQ;
 create sequence DYEXTN_VIEW_SEQ;
 create sequence DYEXTN_CONTROL_SEQ;
 create sequence DYEXTN_RULE_SEQ;
 create sequence DYEXTN_FORM_CONTEXT_SEQ;
-create sequence DYEXTN_VALUE_DOMAIN_SEQ;
 create sequence DYEXTN_DATA_ELEMENT_SEQ;
+create sequence DYEXTN_VALUE_DOMAIN_SEQ;
 create sequence DYEXTN_ENTITY_MAP_SEQ;
 create sequence DE_ATTR_REC_SEQ;
-create sequence DYEXTN_ENTITY_MAP_CONDN_SEQ;
 create sequence DYEXTN_CONTAINER_SEQ;
+create sequence DYEXTN_ENTITY_MAP_CONDN_SEQ;
 create sequence DYEXTN_FILE_EXTN_SEQ;
-create sequence DYEXTN_DATABASE_PROPERTIES_SEQ;
 create sequence DYEXTN_ASSO_DISPLAY_ATTR_SEQ;
+create sequence DYEXTN_DATABASE_PROPERTIES_SEQ;
 create sequence DYEXTN_ROLE_SEQ;
 create sequence DYEXTN_TAGGED_VALUE_SEQ;
 create sequence DYEXTN_ENTITY_RECORD_SEQ;
 create sequence DE_COLL_ATTR_REC_VALUES_SEQ;
-
-drop sequence DYEXTN_PERMISSIBLEVAL_SEQ ;
-drop sequence DYEXTN_DATABASE_PROPERTIES_SEQ ;
-drop sequence DYEXTN_ATTRIBUTE_TYPE_INFO_SEQ;
-drop sequence DYEXTN_ABSTRACT_METADATA_SEQ ;
-drop sequence DYEXTN_SEMANTIC_PROPERTY_SEQ;
-drop sequence DYEXTN_ROLE_SEQ;
-drop sequence DYEXTN_TAGGED_VALUE_SEQ;
-drop sequence DYEXTN_DATA_ELEMENT_SEQ;
-
-
-

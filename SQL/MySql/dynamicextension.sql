@@ -217,11 +217,11 @@ create table DE_FILE_ATTR_RECORD_VALUES (
 );
 create table DYEXTN_ABSTRACT_METADATA (
    IDENTIFIER bigint not null auto_increment,
-   PUBLIC_ID varchar(255),
    CREATED_DATE date,
    DESCRIPTION text,
    LAST_UPDATED date,
-   NAME text,   
+   NAME text,
+   PUBLIC_ID varchar(255),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_STRING_TYPE_INFO (
@@ -459,6 +459,7 @@ create table DYEXTN_LONG_CONCEPT_VALUE (
 );
 create table DYEXTN_FORM_CONTEXT (
    IDENTIFIER bigint not null auto_increment,
+   IS_INFINITE_ENTRY bit,
    ENTITY_MAP_ID bigint,
    STUDY_FORM_LABEL varchar(255),
    NO_OF_ENTRIES integer,
@@ -552,6 +553,7 @@ create table DYEXTN_DATEPICKER (
    IDENTIFIER bigint not null,
    primary key (IDENTIFIER)
 );
+
 alter table DYEXTN_OBJECT_TYPE_INFO add index FK74819FB0BC7298A9 (IDENTIFIER), add constraint FK74819FB0BC7298A9 foreign key (IDENTIFIER) references DYEXTN_ATTRIBUTE_TYPE_INFO (IDENTIFIER);
 alter table DYEXTN_COLUMN_PROPERTIES add index FK8FCE2B3FBC7298A9 (IDENTIFIER), add constraint FK8FCE2B3FBC7298A9 foreign key (IDENTIFIER) references DYEXTN_DATABASE_PROPERTIES (IDENTIFIER);
 alter table DYEXTN_COLUMN_PROPERTIES add index FK8FCE2B3FB4C15A36 (PRIMITIVE_ATTRIBUTE_ID), add constraint FK8FCE2B3FB4C15A36 foreign key (PRIMITIVE_ATTRIBUTE_ID) references DYEXTN_PRIMITIVE_ATTRIBUTE (IDENTIFIER);

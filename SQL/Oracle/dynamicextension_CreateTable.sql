@@ -1,4 +1,4 @@
-alter table DYEXTN_OBJECT_TYPE_INFO drop constraint FK74819FB0BC7298A9;
+xalter table DYEXTN_OBJECT_TYPE_INFO drop constraint FK74819FB0BC7298A9;
 alter table DYEXTN_COLUMN_PROPERTIES drop constraint FK8FCE2B3FBC7298A9;
 alter table DYEXTN_COLUMN_PROPERTIES drop constraint FK8FCE2B3FB4C15A36;
 alter table DYEXTN_USERDEFINED_DE drop constraint FK630761FFBC7298A9;
@@ -149,22 +149,22 @@ drop sequence DYEXTN_SEMANTIC_PROPERTY_SEQ;
 drop sequence DYEXTN_PERMISSIBLEVAL_SEQ;
 drop sequence DYEXTN_ATTRIBUTE_TYPE_INFO_SEQ;
 drop sequence DYEXTN_RULE_PARAMETER_SEQ;
-drop sequence DE_FILE_ATTR_REC_VALUES_SEQ;
 drop sequence DE_OBJECT_ATTR_REC_VALUES_SEQ;
+drop sequence DE_FILE_ATTR_REC_VALUES_SEQ;
 drop sequence DYEXTN_ABSTRACT_METADATA_SEQ;
 drop sequence DYEXTN_VIEW_SEQ;
 drop sequence DYEXTN_CONTROL_SEQ;
 drop sequence DYEXTN_RULE_SEQ;
 drop sequence DYEXTN_FORM_CONTEXT_SEQ;
-drop sequence DYEXTN_VALUE_DOMAIN_SEQ;
 drop sequence DYEXTN_DATA_ELEMENT_SEQ;
+drop sequence DYEXTN_VALUE_DOMAIN_SEQ;
 drop sequence DYEXTN_ENTITY_MAP_SEQ;
 drop sequence DE_ATTR_REC_SEQ;
-drop sequence DYEXTN_ENTITY_MAP_CONDN_SEQ;
 drop sequence DYEXTN_CONTAINER_SEQ;
+drop sequence DYEXTN_ENTITY_MAP_CONDN_SEQ;
 drop sequence DYEXTN_FILE_EXTN_SEQ;
-drop sequence DYEXTN_DATABASE_PROPERTIES_SEQ;
 drop sequence DYEXTN_ASSO_DISPLAY_ATTR_SEQ;
+drop sequence DYEXTN_DATABASE_PROPERTIES_SEQ;
 drop sequence DYEXTN_ROLE_SEQ;
 drop sequence DYEXTN_TAGGED_VALUE_SEQ;
 drop sequence DYEXTN_ENTITY_RECORD_SEQ;
@@ -430,7 +430,7 @@ create table DYEXTN_ASSO_DISPLAY_ATTR (
    DISPLAY_ATTRIBUTE_ID number(19,0),
    SELECT_CONTROL_ID number(19,0),
    primary key (IDENTIFIER)
-);
+);;
 create table DYEXTN_TEXTAREA (
    IDENTIFIER number(19,0) not null,
    TEXTAREA_COLUMNS number(10,0),
@@ -483,7 +483,8 @@ create table DYEXTN_LONG_CONCEPT_VALUE (
    primary key (IDENTIFIER)
 );
 create table DYEXTN_FORM_CONTEXT (
-   IDENTIFIER number(19,0) not null,  
+   IDENTIFIER number(19,0) not null,
+   IS_INFINITE_ENTRY number(1,0),
    ENTITY_MAP_ID number(19,0),
    STUDY_FORM_LABEL varchar2(255),
    NO_OF_ENTRIES number(10,0),
