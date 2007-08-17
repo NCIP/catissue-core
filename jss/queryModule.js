@@ -473,8 +473,9 @@
 			var entityName = name.substring(lastIndex + 1);
 			if(currentPage != "DefineResultsView")
 			{
-				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+name+"')";					
-				row = row+'<tr><td><a class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+name+"')";		
+				entityName = "<font color=#6E97EE>"+entityName +"</font>";
+				row = row+'<tr><td><a  class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
 			}
 			else
 			{
@@ -740,14 +741,60 @@
 	{
       var isClassChecked = document.forms[0].classChecked.checked;
 	  var isArrtibuteChecked = document.forms[0].attributeChecked.checked;
-
+	  var permissibleValuesChecked = document.forms[0].permissibleValuesChecked.checked;
+	  var conceptCodeSelected =  document.forms[0].selected[1].checked;
 	  if(isClassChecked==true || isArrtibuteChecked==true)
 		{
-          document.forms[0].includeDescriptionChecked.disabled = false;
+		  if(permissibleValuesChecked == true || conceptCodeSelected == true )
+			{
+			   document.forms[0].includeDescriptionChecked.checked = false;
+		      document.forms[0].includeDescriptionChecked.disabled = true;
+			} else
+			{
+		          document.forms[0].includeDescriptionChecked.disabled = false;
+			}
 		}
-	  else
+	   else
 		{
-          document.forms[0].includeDescriptionChecked.disabled = true;
+	       document.forms[0].includeDescriptionChecked.checked = false;
+           document.forms[0].includeDescriptionChecked.disabled = true;
 		}
 
 	}
+	function radioButtonSelected(element)
+	{
+		if(element.value == 'conceptCode_radioButton')
+		{
+		  document.forms[0].includeDescriptionChecked.checked = false;
+		  document.forms[0].includeDescriptionChecked.disabled = true;
+		} else
+		{
+			 var permissibleValuesChecked = document.forms[0].permissibleValuesChecked.checked;
+			 if(permissibleValuesChecked == true)
+				{
+			  	    document.forms[0].includeDescriptionChecked.checked = false;
+					document.forms[0].includeDescriptionChecked.disabled = true;
+				}
+				else		
+					  document.forms[0].includeDescriptionChecked.disabled = false;
+		}
+	}
+function permissibleValuesSelected(element)
+{
+	var conceptCodeSelected =  document.forms[0].selected[1].checked;
+	if(element.checked == true)
+		{
+		   document.forms[0].includeDescriptionChecked.checked = false;
+		   document.forms[0].includeDescriptionChecked.disabled = true;
+		} else
+		{
+			if(conceptCodeSelected == true)
+			{
+		  document.forms[0].includeDescriptionChecked.disabled = true;
+			}
+			else
+			{
+		  document.forms[0].includeDescriptionChecked.disabled = false;
+			}
+		}
+  }

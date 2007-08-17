@@ -1629,6 +1629,7 @@ queryLink{ /* for the text links in the Search category page */
 	text-decoration:underline;	
     white-space: nowrap;
 	width:20;
+	height:20;
 	display:block;
 }
 .validationMessageCss

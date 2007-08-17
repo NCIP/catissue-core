@@ -83,7 +83,7 @@ System.out.println("currentPage         "+currentPage);
 									<td class="standardTextQuery"><html:checkbox  property="attributeChecked" onclick="setIncludeDescriptionValue()" value="on" > <bean:message key="query.attribute"/></html:checkbox></td>
 								</tr>
 								<tr id="permissible_view" >
-									<td class="standardTextQuery"><html:checkbox property="permissibleValuesChecked" value="on" > <bean:message key="query.permissibleValues"/></html:checkbox></td>
+									<td class="standardTextQuery"><html:checkbox property="permissibleValuesChecked" onclick="permissibleValuesSelected(this)" value="on" > <bean:message key="query.permissibleValues"/></html:checkbox></td>
 								</tr>
 								<tr id="description_view" >
 									<td class="standardTextQuery"><html:checkbox  property="includeDescriptionChecked" value="off" ><bean:message key="query.includeDescription"/> </html:checkbox></td>
@@ -91,8 +91,8 @@ System.out.println("currentPage         "+currentPage);
 								<tr><td>&nbsp;</td></tr>
 								<tr id="radio_view" >
 									<td class="standardTextQuery">
-										<html:radio property="selected" value="text_radioButton" /><bean:message key="query.text"/>
-										<html:radio property="selected" value="conceptCode_radioButton"/><bean:message key="query.conceptCode"/>
+										<html:radio property="selected" value="text_radioButton" onclick="radioButtonSelected(this)"/><bean:message key="query.text"/>
+										<html:radio property="selected" value="conceptCode_radioButton" onclick="radioButtonSelected(this)"/><bean:message key="query.conceptCode"/>
 									</td>
 								</tr>											
 							</table>
