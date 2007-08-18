@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.springframework.remoting.RemoteAccessException;
+
 import net.sf.hibernate.Hibernate;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
@@ -234,8 +236,9 @@ public class HL7Parser implements Parser
 												String pidLine=this.getReportDataFromReportMap(reportMap, CaTIESConstants.PID);
 												String obrLine=this.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
 												scg=ReportLoaderUtil.checkForSpecimenCollectionGroup(aParticipant, parseSiteInformation(pidLine), ReportLoaderUtil.getSurgicalPathologyNumber(obrLine));
-												if(scg!=null && scg.getSurgicalPathologyNumber().equalsIgnoreCase(null))
+												if(scg!=null && scg.getSurgicalPathologyNumber().trim().length()==0)
 												{
+													Logger.out.debug("SCG conflict found");
 													this.status=CaTIESConstants.STATUS_CONFLICT;
 												}
 											}
@@ -260,15 +263,20 @@ public class HL7Parser implements Parser
 										participantList.add(participant);
 									}
 								}
+								catch (RemoteAccessException re) 
+								{
+									this.status=CaTIESConstants.API_ERROR;
+									Logger.out.error("Either JBoss is down or authentication information is invalid",re);
+								}
 								catch(BizLogicException ex)
 								{
 									this.status=CaTIESConstants.DB_ERROR;
-									Logger.out.error("Error in database transaction: "+ex);
+									Logger.out.error("Error in database transaction: ",ex);
 								}
 								catch(Exception ex)
 								{
 									this.status=CaTIESConstants.INVALID_REPORT_SECTION;
-									Logger.out.error("Report section under process is not valid"+ex);
+									Logger.out.error("Report section under process is not valid ",ex);
 								}
 							}
 							else

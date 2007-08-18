@@ -122,13 +122,17 @@ public class ReportLoader
 			else
 			{
 				// use existing scg
-				if(this.scg.getIdentifiedSurgicalPathologyReport()!=null)
+				DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+				List scgList=(List)defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), Constants.SYSTEM_IDENTIFIER, this.scg.getId());
+				this.scg=(SpecimenCollectionGroup)scgList.get(0);
+				IdentifiedSurgicalPathologyReport existingReport=(IdentifiedSurgicalPathologyReport)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), "identifiedSurgicalPathologyReport");
+				if(existingReport!=null)
 				{
-					boolean isReportExists = checkForTextContent(this.scg.getIdentifiedSurgicalPathologyReport());
+					boolean isReportExists = checkForTextContent(existingReport);
 					if(!isReportExists)
 					{
 						// if report text is null then set report text
-						this.scg.getIdentifiedSurgicalPathologyReport().setTextContent(this.identifiedReport.getTextContent());
+						existingReport.setTextContent(this.identifiedReport.getTextContent());
 					}	
 				}
 				else
@@ -139,7 +143,7 @@ public class ReportLoader
 				{
 					this.scg.setSurgicalPathologyNumber(this.surgicalPathologyNumber);
 				}
-				Utility.updateObject(identifiedReport);
+				Utility.updateObject(this.scg);
 			}	
 			Logger.out.info("Processing finished for Report ");
 		}
@@ -190,7 +194,7 @@ public class ReportLoader
 		}
 		else
 		{
-			throw new Exception("CP not found with specified Titile in DB");
+			throw new Exception(CaTIESConstants.CP_NOT_FOUND_ERROR_MSG);
 		}
 		
 		//Autogeneration of SCG name

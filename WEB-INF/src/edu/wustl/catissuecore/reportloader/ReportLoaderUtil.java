@@ -198,7 +198,7 @@ public class ReportLoaderUtil
 					existingSCG=scgIterator.next();
 					existingSCGSite=(Site)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), existingSCG.getId(), Constants.COLUMN_NAME_SCG_SITE);
 					if((surgicalPathologyNumber.equals(existingSCG.getSurgicalPathologyNumber()) 
-							|| existingSCG.getSurgicalPathologyNumber().equalsIgnoreCase(null))							
+							|| existingSCG.getSurgicalPathologyNumber().trim().length()==0)							
 							&& (site.getName()).equals(existingSCGSite.getName()))
 					{
 						return existingSCG;

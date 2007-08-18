@@ -74,8 +74,12 @@ public class ReportLoaderQueueProcessor extends Thread
 								}
 								catch(Exception ex)
 								{
-									CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+","+"FAILED"+","+ex.getMessage());
 									reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
+									if(ex.getMessage().equalsIgnoreCase(CaTIESConstants.CP_NOT_FOUND_ERROR_MSG))
+									{
+										reportLoaderQueue.setStatus(CaTIESConstants.CP_NOT_FOUND);
+									}
+									CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+reportLoaderQueue.getStatus()+","+ex.getMessage());
 									Utility.updateObject(reportLoaderQueue);
 								}
 							}
