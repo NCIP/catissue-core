@@ -386,7 +386,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
 		activityStatus = Utility.toString(specimenCollectionGroup.getActivityStatus());
-        
+		surgicalPathologyNumber = Utility.toString(specimenCollectionGroup.getSurgicalPathologyNumber());
          /**
          * Name: Shital Lawhale
          * Reviewer Name : Sachin Lale 
