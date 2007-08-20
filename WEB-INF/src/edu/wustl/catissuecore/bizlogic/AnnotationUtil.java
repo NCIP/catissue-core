@@ -165,7 +165,7 @@ public class AnnotationUtil
         try
         {
             conn = DBUtil.getConnection();
-            PathFinder.getInstance().refreshCache(conn);
+            PathFinder.getInstance(conn).refreshCache(conn);
         }
         catch (HibernateException e)
         {
@@ -270,8 +270,8 @@ public class AnnotationUtil
 
             String associationQuery = "insert into ASSOCIATION (ASSOCIATION_ID, ASSOCIATION_TYPE) values ("
                     + intraModelAssociationId
-                    + ","
-                   +PathConstants.AssociationType.INTRA_MODEL_ASSOCIATION + ")";
+                    + ","                   
+                   +PathConstants.AssociationType.INTRA_MODEL_ASSOCIATION.getValue() + ")";                
             String intraModelQuery = "insert into INTRA_MODEL_ASSOCIATION (ASSOCIATION_ID, DE_ASSOCIATION_ID) values ("
                     + intraModelAssociationId + "," + deAssociationID + ")";
             String directPathQuery = "insert into PATH (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values ("
