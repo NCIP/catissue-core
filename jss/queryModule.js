@@ -504,7 +504,13 @@
 		row.innerHTML = "";	
 		row.style.display = 'none';		
 		var element = document.getElementById('addLimits');
-		element.innerHTML =text;
+		var addLimitsButtonElement = document.getElementById('AddLimitsButtonRow');
+		var htmlArray = text.split('####');
+		addLimitsButtonElement.style.display = 'block';
+		//addLimitsButtonElement.height = "30";
+		//alert(htmlArray[0]);
+		addLimitsButtonElement.innerHTML = htmlArray[0];
+		element.innerHTML =htmlArray[1];
 	}
 	
 	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
@@ -759,6 +765,14 @@
 	       document.forms[0].includeDescriptionChecked.checked = false;
            document.forms[0].includeDescriptionChecked.disabled = true;
 		}
+
+	}
+	var radio="";
+	function resetOptionButton(id,currentObj)
+	{ 
+		if(currentObj.checked == true && id==radio)
+            currentObj.checked = false;
+		radio = id;
 
 	}
 	function radioButtonSelected(element)

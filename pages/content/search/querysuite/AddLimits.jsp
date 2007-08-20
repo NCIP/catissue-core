@@ -30,19 +30,19 @@
 		<td>
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table2" >		
 		<tr  height="5%" class="trStyle">
-			<td width="15%" height="5%" class="queryTabMenuItemSelected" >
+			<td width="23%" height="5%" class="queryTabMenuItemSelected" >
 				<bean:message key="query.addLimits"/>
 			</td>
 
-			<td width="15%" height="5%" class="queryModuleTabMenuItem" >
+			<td width="23%" height="5%" class="queryModuleTabMenuItem" >
 				<bean:message key="query.defineSearchResultsViews"/>
 			</td>
 
-			<td width="15%" height="5%" class="queryModuleTabMenuItem">
+			<td width="23%" height="5%" class="queryModuleTabMenuItem">
 				<bean:message key="query.viewSearchResults"/>
 			</td>
 
-			<td width="15%" height="5%" class="queryModuleTabMenuItem">
+			<td width="23%"  height="5%" class="queryModuleTabMenuItem">
 				<bean:message key="query.dataList"/>
 			</td>			
 		</tr>
@@ -66,6 +66,12 @@
 												<tr  id="rowMsg">
 													<td id="validationMessagesSection"  class='validationMessageCss'>
 														<div id="validationMessagesRow"   class='validationMessageCss' style="overflow:auto; width:820; height:50;display:none"></div>
+													</td>
+												</tr>
+												
+												<tr id="AddLimitsButtonMsg" style="color:#000000" border="0">
+													<td id="AddLimitsButtonSection" height="30" >
+														<div id="AddLimitsButtonRow"  border="0" style=" width:900; height:25;color:#000000;display:none"></div>
 													</td>
 												</tr>
 									

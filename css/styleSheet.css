@@ -1564,12 +1564,12 @@ td.queryModuleTabMenuItem{ /* for the off state of the tab menu (top) cells */
  }
 /* .standardTextQueryWithBackColor{ /* for stand-alone text not affected by any cascading text styles 
   font-family:arial,helvetica,verdana,sans-serif;
-  font-size:0.8em;
+  font-size:0.6em;
   color:#000000; /* constant: black 
 }*/
  .standardTextQuery{ /* for stand-alone text not affected by any cascading text styles */
   font-family:arial,helvetica,verdana,sans-serif;
-  font-size:0.8em;
+  font-size:0.75em;
   color:#000000; /* constant: black */
 }
 .dropdownQuery{ /* for stand-alone text not affected by any cascading text styles */

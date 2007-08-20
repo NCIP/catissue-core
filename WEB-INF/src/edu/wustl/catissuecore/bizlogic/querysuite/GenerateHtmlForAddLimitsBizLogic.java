@@ -73,7 +73,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @return String html generated for Add Limits section.
 	 */
 	public String generateHTML(EntityInterface entity, List<ICondition> conditions)
-	{
+	{     
+		StringBuffer generatedPreHTML = new StringBuffer();
 		StringBuffer generatedHTML = new StringBuffer();
 		String nameOfTheEntity = entity.getName();
 		String entityName = Utility.parseClassName(nameOfTheEntity);//nameOfTheEntity.substring(nameOfTheEntity.lastIndexOf(".")+1,nameOfTheEntity.length());
@@ -82,22 +83,39 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String header = Constants.DEFINE_SEARCH_RULES;
 		//ApplicationProperties.getValue("query.defineSearchRulesFor");//"\nDefine Search Rules For";//
 		String attributesList = "";
-		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\">");
-		generatedHTML.append("\n<tr>");
-		generatedHTML
-		.append("<td valign='top' height=\"4%\" colspan=\"8\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
-		generatedHTML.append(header + " '" + entityName + "'</b></font>");
-		generatedHTML.append("\n</td></tr>");
-		//generatedHTML.append("\n<tr><td valign='top' height=\"3%\" colspan=\"8\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
+		generatedPreHTML.append("<table border=\"0\" width=\"100%\" height=\"30%\" callspacing=\"0\" cellpadding=\"0\">");
+		generatedPreHTML.append("\n<tr height=\"2%\"> ");
+		generatedPreHTML.append("<td valign='top' height=\"2%\" colspan=\"8\" bgcolor=\"#EAEAEA\" ><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
+		generatedPreHTML.append(header + " '" + entityName + "'</b></font>");
+		generatedPreHTML.append("\n</td>");
+		
+		boolean isTopButton = true;
 		if(conditions != null)
-		{
+		{ 
 			isEditLimits = true;
 		}
-		boolean isTopButton = true;
+		generatedPreHTML.append(generateHTMLForButton(nameOfTheEntity, getAttributesString(attributeCollection), isEditLimits,isTopButton));
+		generatedPreHTML.append("\n</tr></table>");
+		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\">");
+		//generatedHTML.append("\n<tr>");
+//		generatedHTML
+//		.append("<td valign='top' height=\"4%\" colspan=\"8\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
+//		generatedHTML.append(header + " '" + entityName + "'</b></font>");
+//		generatedHTML.append("\n</td></tr>");
+		//generatedHTML.append("\n<tr><td valign='top' height=\"3%\" colspan=\"8\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
+//		if(conditions != null)
+//		{ 
+//			isEditLimits = true;
+//		}
+		
 		boolean isBGColor = false;
-		generatedHTML.append(generateHTMLForButton(nameOfTheEntity, getAttributesString(attributeCollection), isEditLimits,isTopButton));
+		generatedHTML.append("\n<tr>");
+		generatedHTML.append("\n<td valign=\"top\">");
+		generatedHTML.append("\n</td>");
+		generatedHTML.append("\n</tr>");
+		//generatedHTML.append(generateHTMLForButton(nameOfTheEntity, getAttributesString(attributeCollection), isEditLimits,isTopButton));
 		if (!attributeCollection.isEmpty())
-		{
+		{ 
 			List attributes = new ArrayList(attributeCollection);
 			String styleSheetClass = "rowBGWhiteColor";
 			Collections.sort(attributes, new AttributeInterfaceComparator());
@@ -118,14 +136,14 @@ public class GenerateHtmlForAddLimitsBizLogic
 				}
 				isBGColor = !isBGColor;
 				generatedHTML.append("\n<tr class='"+styleSheetClass+"' id=\"" + componentId + "\" height=\"6%\">\n" +
-						"<td valign='top' class='standardTextQuery' nowrap='nowrap' width=\"5%\">");
+						"<td valign='top' align='right' class='standardTextQuery' nowrap='nowrap' width=\"15%\"><b>");
 				generatedHTML.append(attrLabel+" ");
 				if(attribute.getDataType().equalsIgnoreCase(Constants.DATE))
 				{
 					String dateFormat = Constants.DATE_FORMAT;//ApplicationProperties.getValue("query.date.format");
 					generatedHTML.append("\n("+dateFormat+")");
 				}
-				generatedHTML.append(":</td>\n");
+				generatedHTML.append(":&nbsp;&nbsp;&nbsp;&nbsp;</b></td>\n");
 				List<String> operatorsList = getConditionsList(attribute);
 				boolean isBetween = false;
 				if (!operatorsList.isEmpty() && operatorsList.get(0).equalsIgnoreCase(RelationalOperator.Between.toString()))
@@ -210,9 +228,13 @@ public class GenerateHtmlForAddLimitsBizLogic
 			}
 		}
 		isTopButton = false;
-		generatedHTML.append(generateHTMLForButton(nameOfTheEntity, attributesList, isEditLimits,isTopButton));
+		generatedHTML.append("\n<tr>");
+		generatedHTML.append("\n<td valign=\"top\">");
+		generatedHTML.append("\n</td>");
+		generatedHTML.append("\n</tr>");
+		//generatedHTML.append(generateHTMLForButton(nameOfTheEntity, attributesList, isEditLimits,isTopButton));
 		generatedHTML.append("</table>");
-		return generatedHTML.toString();
+		return generatedPreHTML.toString()+"####"+generatedHTML.toString();
 	}
 
 	/**
@@ -348,7 +370,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String componentId = attributeName + attribute.getId().toString();
 		if (operatorsList != null && operatorsList.size() != 0)
 		{
-			html.append("\n<td width='1%' class=\"dropdownQuery\" valign='top' >");
+			html.append("\n<td width='15%' class=\"dropdownQuery\" valign='top' >");
 			AttributeTypeInformationInterface attrTypeInfo = attribute.getAttributeTypeInformation();
 			if (attrTypeInfo instanceof DateAttributeTypeInformation)
 			{
@@ -392,7 +414,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String textBoxId1 = componentId + "_textBox1";
 		String dataType = attributeInterface.getDataType();
 		StringBuffer html = new StringBuffer();
-		html.append("<td width='1%' valign='top' class=\"standardTextQuery\">\n");
+		html.append("<td width='15%' valign='top' class=\"standardTextQuery\">\n");
 		if (values == null || values.isEmpty())
 		{
 			html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\">");
@@ -423,7 +445,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			html.append("\n<td valign='top' />");
 			//	html.append("\n<td valign='top' />");
 		}
-		html.append("<td width='1%'  valign='top' class=\"standardTextQuery\">\n");
+		html.append("<td width='15%'  valign='top' class=\"standardTextQuery\">\n");
 		if (isBetween)
 		{
 			if (values == null || values.isEmpty())
@@ -472,11 +494,11 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String buttonName = "addLimit";
 		String buttonId = "";
 		StringBuffer html = new StringBuffer();
-		html.append("\n<tr>");
+		//html.append("\n<tr>");
 		if(isTopButton)
 		{
 			buttonId = "TopAddLimitButton";
-			html.append("\n<td valign=\"top\">");
+			html.append("\n<td bgcolor=\"#EAEAEA\" colspan=\"2\" height=\"2%\"valign=\"top\">");
 		}
 		else
 		{
@@ -491,7 +513,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		html.append("\n<input id=\""+buttonId+"\" type=\"button\" name=\"" + buttonName + "\" onClick=\"produceQuery('"+buttonId+"', 'addToLimitSet.do', 'categorySearchForm', '"
 				+ entityName + "','" + attributesStr + "')\" value=\"" + buttonCaption + "\"></input>");
 		html.append("\n</td>");
-		html.append("\n</tr>");
+		//html.append("\n</tr>");
 		return html.toString();
 	}
 
@@ -551,7 +573,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		if (permissibleValues != null && permissibleValues.size() != 0)
 		{
 
-			html.append("\n<td width='1%' valign='centre' class=\"PermissibleValuesQuery\" >");
+			html.append("\n<td width='15%' valign='centre' class=\"PermissibleValuesQuery\" >");
 			html.append("\n<select style=\"width:150px; display:block;\" MULTIPLE styleId='country' size ='3' name=\"" + componentId
 					+ "_enumeratedvaluescombobox\"\">");
 			List values = new ArrayList(permissibleValues);
@@ -610,11 +632,14 @@ public class GenerateHtmlForAddLimitsBizLogic
 		
 		String componentId = attributeName + attribute.getId().toString()+"_radioButton";
 		String componentName = componentId+"_booleanAttribute";
+	    String radioButtonTrueId = componentId+"_true";
+	    String radioButtonFalseId = componentId+"_false";
 		html.append("\n<td>");
 		if(values == null)
 		{
-			html.append("\n<input type='radio' id = '"+componentId+"_true' value='true' name='"+componentName+"'><font class='standardTextQuery'>True</font>");
-			html.append("\n<input type='radio' id = '"+componentId+"_false' value='false' name='"+componentName+"'><font class='standardTextQuery'>False</font>");
+			//html.append("\n<select class=\"dropdownQuery\" style=\"width:150px; display:block;\" name=\"" + componentId + "_combobox\" onChange=\"operatorChanged('" + componentId + "','true')\">");
+			html.append("\n<input type='radio' id = '"+componentId+"_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId + "',this)\" name='"+componentName+"'><font class='standardTextQuery'>True</font>");
+			html.append("\n<input type='radio' id = '"+componentId+"_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId + "',this)\" name='"+componentName+"'><font class='standardTextQuery'>False</font>");
 		}
 		else
 		{
