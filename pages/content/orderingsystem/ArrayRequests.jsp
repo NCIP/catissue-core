@@ -432,7 +432,7 @@
 										<% if((((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_createArrayButtonDisabled"))).equals("false")))
 											{
 										 %>
-											<input type="button" id="btnCreateArray" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>')" />
+											<input type="button" id="btnCreateArray" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>','<%= rowNumber-noOfItems %>')" />
 										<%  }else{
 										%>
 											<input type="button" id="btnCreateArray" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>')" disabled="disabled"/>

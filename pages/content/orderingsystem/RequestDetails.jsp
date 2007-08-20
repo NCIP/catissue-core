@@ -83,7 +83,12 @@ function showNewPage(action)
      newWindow = window.open(action,'','scrollbars=yes,status=yes,resizable=yes,width=860, height=600');
      newWindow.focus(); 
 	
-}		
+}	
+function submitAndNotify()
+{
+	document.getElementById("mailNotification").value= "true";
+	document.forms[0].submit();
+}	
  </script>
 </head>  
 <body onload="tabToDisplay()">
@@ -484,12 +489,12 @@ function showNewPage(action)
 		<%-- Include ArrayRequest page for ArrayRequests tab --%>
 				<%@ include file="/pages/content/orderingsystem/ArrayRequests.jsp" %>
 		
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="100%" id="table4_pageFooter">
+		<table summary="" border="0" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="100%" id="table4_pageFooter">
 			<tr>
  				<td class="formLabelNoBackGroundWithSize6" width="10%" style="border-right:0px;border-bottom:0px ">
  					<bean:message key="requestdetails.header.label.Comments" />
  				</td>
- 				<td class="formField" style="border-right:0px;border-bottom:0px ">
+ 				<td class="formFieldWithoutBackground" style="border-right:0px;border-bottom:0px ">
  					<html:textarea name="requestDetailsForm" styleClass="formFieldSized" cols="300" rows="2" property="administratorComments"  />
 		 		</td>
 				<td class="formRequiredLabelWithoutBackgrnd" width="10%" style="border-right:0px;border-bottom:0px " nowrap>
@@ -502,8 +507,9 @@ function showNewPage(action)
 							<html:options collection="<%= Constants.SITE_LIST_OBJECT  %>" labelProperty="name" property="value"/>		
 						</html:select> 						
 				</td>
+				
 		 		<td class="" align="right" >
-					<input type="button" value="Done" onclick="submitPage()"/>
+			
 				</td>	
 					<html:hidden name="requestDetailsForm" property="id" />
 					<%							
@@ -513,9 +519,20 @@ function showNewPage(action)
 					<html:hidden name="requestDetailsForm" property="operation" value="<%= operationUpdate %>"/>
 					<html:hidden name="requestDetailsForm" property="distributionProtocolId" value="<%= distributionProtocol %>"/>							
 					<html:hidden name="requestDetailsForm" property="tabIndex" styleId="tabIndexId"/>							
+					<html:hidden name="requestDetailsForm" property="mailNotification" styleId="mailNotification"/>							
 				
 			</tr>
-			<tr></tr>
+			<tr width="100%">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td class="" align="right" >
+					<input type="button" value="Submit" onclick="submitPage()">
+				</td>
+				<td>	
+					<input type="button" value="Submit And Notify" onclick="submitAndNotify()">
+				</td>	
+				
+			</tr>
 			<tr></tr>
 			<tr></tr>
 			<tr></tr>
