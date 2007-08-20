@@ -290,6 +290,14 @@ PUBLIC
 		</action>
 
 		<!--  Added action to create specimen array from ArrayRequests.jsp -->
+		<action path="/InitCreateDefineArray"
+			type="edu.wustl.catissuecore.action.GetSpecimenForArrayAction"
+			name="requestDetailsForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/CreateDefinedArray.do"/>
+		</action>
+			
 		<action path="/CreateDefinedArray"
 			type="edu.wustl.catissuecore.action.CreateArrayInitAction"
 			name="specimenArrayForm"

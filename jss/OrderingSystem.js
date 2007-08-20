@@ -9,12 +9,12 @@
 	/**
 	 * This funciton is called on click of 'Create Array' button in the ArrayRequests.jsp.It redirects to SpecimenArray.jsp
 	 */		
-	function gotoCreateArrayPage(arrayRowCounter)
+	function gotoCreateArrayPage(arrayRowCounter,rowCounter)
 	{
 		var id  = "defineArrayName_" + arrayRowCounter;
 		var arrayName = document.getElementById(id).value;
-		var queryString = "?array=" + arrayName + "&operation=add&id=";
-		var action = "CreateDefinedArray.do" + queryString;
+		var queryString = "?array=" + arrayName + "&operation=add&id="+"&arrayRowCounter="+arrayRowCounter+"&rowCounter="+rowCounter;
+		var action = "InitCreateDefineArray.do" + queryString;
 		document.forms[0].action = action ;		
 	    document.forms[0].submit(); 
 	}
