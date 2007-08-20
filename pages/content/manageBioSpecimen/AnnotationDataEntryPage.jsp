@@ -16,10 +16,10 @@
 	<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXGrid.css"/>
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 
-	<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXCommon.js"></script>
-	<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXGrid.js"></script>
-	<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXGridCell.js"></script>
-	<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXGrid_excell_link.js"></script>
+	<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXCommon.js"></script>
+	<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGrid.js"></script>
+	<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGridCell.js"></script>
+	<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGrid_excell_link.js"></script>
 
 	<script src="<%=request.getContextPath()%>/jss/javaScript.js" type="text/javascript"></script>
 	<script src="<%=request.getContextPath()%>/jss/script.js" type="text/javascript"></script>

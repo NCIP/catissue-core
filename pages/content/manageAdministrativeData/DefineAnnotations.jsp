@@ -35,15 +35,14 @@ System.out.println("containerId:"+containerId);
 		<link rel="STYLESHEET" type="text/css" href="<%=request.getContextPath()%>/dhtml_comp/css/dhtmlXGrid.css"/>
 		<script src="<%=request.getContextPath()%>/jss/javaScript.js" type="text/javascript"></script>
 		<script src="<%=request.getContextPath()%>/jss/ajax.js" type="text/javascript"></script>
-		<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXCommon.js"></script>
-		<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXGrid.js"></script>
-		<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXGridCell.js"></script>
-	<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXGrid_excell_link.js"></script>
+		<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXCommon.js"></script>
+		<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGrid.js"></script>
+		<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGridCell.js"></script>
+	<script  src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXGrid_excell_link.js"></script>
 
 	<link rel="STYLESHEET" type="text/css" href="<%=request.getContextPath()%>/dhtml_comp/css/dhtmlXMenu.css">
-		<script language="JavaScript" src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXProtobar.js"></script>
-		<script language="JavaScript" src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXMenuBar.js"></script>
-
+		<script language="JavaScript" src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXProtobar.js"></script>
+		<script language="JavaScript" src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXMenuBar.js"></script>
 		<script>
 			function initializeAnnotationsForm()
 			{
