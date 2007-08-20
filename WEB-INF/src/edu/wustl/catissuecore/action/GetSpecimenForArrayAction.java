@@ -61,7 +61,7 @@ public class GetSpecimenForArrayAction extends BaseAction
 			for (int i = rowCounter; i < rowCounter + noOfItems; i++)
 			{
 				String statusKey = "DefinedArrayDetailsBean:" + i + "_assignedStatus";
-				if (!values.get(statusKey).equals(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE))
+				if (!(values.get(statusKey).equals(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE) || values.get(statusKey).equals(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST) || values.get(statusKey).equals(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE)))
 				{
 					String instanceOfKey = "DefinedArrayDetailsBean:" + i + "_instanceOf";
 
