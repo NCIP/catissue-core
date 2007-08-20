@@ -812,6 +812,12 @@ Thanking You,
 				<fail message="The property 'caties.installation.dir' can not be empty"/>
 			</then>
 		</if>
+		<if>
+			<equals arg1="" arg2="${collectionProtocol.title}"/>
+			<then>
+				<fail message="The property 'collectionProtocol.title' can not be empty"/>
+			</then>
+		</if>
 	</target>
 
 	<!--Target call for Deployment of caTIES -->
@@ -819,6 +825,13 @@ Thanking You,
 		<antcall target="assertforcaties"/>
 		<antcall target="deploy_caties_internal"/>
 		<delete dir="${temp.dir}" />
+	</target>
+	
+	<target name="deploy_caties_with_cp" >
+		<antcall target="assertforcaties"/>
+		<antcall target="deploy_caties_internal"/>
+		<delete dir="${temp.dir}" />
+		<antcall target="insert_default_CP"/>
 	</target>
 		
 		
@@ -879,6 +892,70 @@ Thanking You,
 		<copy file="${basedir}/caTIES_conf/SectionHeaderConfig.txt" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>
 		<copy file="${base.dir}/caTissueCore_caCORE_Client/conf/remoteService.xml" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>
 		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${caties.installation.dir}" overwrite="true"/>
+		<replace file="${caties.installation.dir}/caTIES_conf/caTIES.properties"> 
+			<replacefilter token="@@COLL_PROT_TITLE@@" value="${collectionProtocol.title}"/>
+			<replacefilter token="@@ADMIN_EMAIL@@" value="${first.admin.emailAddress}"/>
+			<replacefilter token="@@ADMIN_PASSWORD@@" value="${first.admin.password}"/>
+		</replace>
 	</target>
 	
+	<target name="insert_default_CP">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>
+			<then>
+				<replace file="${mysql.sql.dir}/insertCP_mysql.sql"> 
+					<replacefilter token="@@COLL_PROT_TITLE@@" 
+					  	value="${collectionProtocol.title}"/>
+				</replace>
+				<antcall target="insertCP_mysql"/>
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}"/>
+				<then>
+					<replace file="${oracle.sql.dir}/insertCP_oracle.sql"> 
+						<replacefilter token="@@COLL_PROT_TITLE@@" 
+						  	value="${collectionProtocol.title}"/>
+					</replace>
+					<antcall target="insertCP_oracle"/>
+				</then>
+			</elseif>
+		</if>
+	</target>
+	
+	<target name="insertCP_mysql">
+		<echo message="Inserting default CP in MySQL Database for caTIES"/>
+		<sql
+			driver="${mysql.driver.string}"
+			url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
+			userid="${database.username}"
+			password="${database.password}" 
+			onerror="continue">
+			<transaction  src="${mysql.sql.dir}/insertCP_mysql.sql"/>
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath> 
+		</sql>
+	</target>
+	
+	<target name="insertCP_oracle">
+		<echo message="Inserting default CP in ORACLE Database for caTIES"/>
+		<sql 
+			driver="${oracle.driver.string}"
+			url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+			userid="${database.username}"
+			password="${database.password}" 
+			onerror="continue"			
+			rdbms="oracle">	
+			<transaction  src="${oracle.sql.dir}/insertCP_oracle.sql"/>
+			<transaction>commit;</transaction>	
+			<classpath >
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath> 
+		</sql>	
+	</target>
 </project>
