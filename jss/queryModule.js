@@ -474,7 +474,7 @@
 			if(currentPage != "DefineResultsView")
 			{
 				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+name+"')";		
-				entityName = "<font color=#6E97EE>"+entityName +"</font>";
+				entityName = "<font color=#6E97F0>"+entityName +"</font>";
 				row = row+'<tr><td><a  class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
 			}
 			else
