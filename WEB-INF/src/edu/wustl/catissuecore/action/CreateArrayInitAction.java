@@ -30,15 +30,12 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
-import edu.wustl.catissuecore.bean.DefinedArrayDetailsBean;
 import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -67,14 +64,17 @@ public class CreateArrayInitAction extends BaseAction
 	 * @throws Exception object
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
+	{ 
 		//Obtain session object from request.
 		HttpSession session = request.getSession();
-		
+		  
 		//Retrieve from query string
-		String arrayName = request.getParameter("array");
-		String operation = request.getParameter("operation");
+		//String arrayName = request.getParameter("array");
+		//String operation = request.getParameter("operation");
 		
+		String arrayName = (String)request.getAttribute(Constants.ARRAY_NAME);
+		String operation = (String)request.getAttribute(Constants.OPERATION);
+
 		String exceedingMaxLimit = "false";
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		
@@ -121,8 +121,9 @@ public class CreateArrayInitAction extends BaseAction
 				List definedArrayDetailsBeanList = (ArrayList)defineArrayMap.get(definedArrayRequestBean);
 				
 				List specimensObjList = new ArrayList();
-				specimensObjList = constructSpecimenObjList(definedArrayDetailsBeanList);
-				
+				List specimenIdList = (ArrayList)request.getAttribute(Constants.SPECIMEN_ID_LIST);
+				//specimensObjList = constructSpecimenObjList(definedArrayDetailsBeanList);
+				specimensObjList = constructSpecimenObjList(specimenIdList);
 				//Populate arraycontentmap and set it in request scope.
 				Map arrayContentMap = new HashMap(); 
 				arrayContentMap = populateArrayContentMap(definedArrayRequestBean,specimensObjList);
@@ -235,15 +236,16 @@ public class CreateArrayInitAction extends BaseAction
 	 * @throws NumberFormatException
 	 * @throws DAOException
 	 */
-	private List constructSpecimenObjList(List definedArrayDetailsBeanList) throws NumberFormatException, DAOException
+	private List constructSpecimenObjList(List specimenIdList) throws NumberFormatException, DAOException
 	{
 		List specimensObjList = new ArrayList();
 		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_DETAILS_FORM_ID);
-		Iterator definedArrayDetailsBeanListItr = definedArrayDetailsBeanList.iterator();
-		while(definedArrayDetailsBeanListItr.hasNext())
+		Iterator itr = specimenIdList.iterator();
+		while(itr.hasNext())
 		{
-			DefinedArrayDetailsBean definedArrayDetailsBean = (DefinedArrayDetailsBean)definedArrayDetailsBeanListItr.next();
-			List specimenListFromDb=orderBizLogic.retrieve(Specimen.class.getName(),"id",new Long(definedArrayDetailsBean.getSpecimenId()));
+			//DefinedArrayDetailsBean definedArrayDetailsBean = (DefinedArrayDetailsBean)definedArrayDetailsBeanListItr.next();
+			Long specimenId = (Long) itr.next();
+			List specimenListFromDb=orderBizLogic.retrieve(Specimen.class.getName(),"id",specimenId);
 			//Set the specimen domain instances in the specimens object list.
 			specimensObjList.add(specimenListFromDb.get(0));
 		}

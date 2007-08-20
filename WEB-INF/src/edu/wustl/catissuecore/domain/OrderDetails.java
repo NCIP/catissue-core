@@ -90,6 +90,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * The distributions associated with the order.
 	 */
 	protected Collection distributionCollection;
+	
+	protected Boolean mailNotification= new Boolean(false);
 	/**
 	 * Default constructor.
 	 */
@@ -150,6 +152,25 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	{
 		this.comment = comment;
 	}
+	
+	
+	
+	/**
+	 * @return Returns the mailNotification.
+	 */
+	public Boolean getMailNotification()
+	{
+		return mailNotification;
+	}
+
+	/**
+	 * @param mailNotification The mailNotification to set.
+	 */
+	public void setMailNotification(Boolean mailNotification)
+	{
+		this.mailNotification = mailNotification;
+	}
+
 	/**
 	 * The distribution protocol associated with the order.
 	 * @hibernate.many-to-one column="DISTRIBUTION_PROTOCOL_ID" class="edu.wustl.catissuecore.domain.DistributionProtocol"
@@ -675,6 +696,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	private void updateOrderDetails(AbstractActionForm abstractActionForm)
 	{
 		RequestDetailsForm requestDetailsForm = (RequestDetailsForm)abstractActionForm;
+		if(requestDetailsForm.getMailNotification() != null && requestDetailsForm.getMailNotification().booleanValue() == true){
+			this.mailNotification = requestDetailsForm.getMailNotification();
+		}
 		//Setting Comments in Order Domain Obj.
 		this.setComment(requestDetailsForm.getAdministratorComments());
 		//Setting the order Id.

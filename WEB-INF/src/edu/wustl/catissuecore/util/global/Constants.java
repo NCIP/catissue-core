@@ -1928,4 +1928,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final int CLINICALSTUDY_FORM_ID = 65;
     public static final int CLINICAL_STUDY_REGISTRATION_FORM_ID=66;
     
+    
+    
+    //Ordering constants
+    public static final String ARRAY_NAME = "array";
+    
 }

@@ -67,7 +67,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	{
 		OrderDetails order = (OrderDetails) obj;
 		dao.insert(order, sessionDataBean, true, true);
-		mailOnSuccessfulSave(sessionDataBean, order, dao);
+		//	mailOnSuccessfulSave(sessionDataBean, order, dao);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class OrderBizLogic extends DefaultBizLogic
 
 		dao.update(orderNew, sessionDataBean, true, true, false);
 		//Sending Email only if atleast one order item is updated.
-		if (numberItemsUpdated > 0)
+		if (numberItemsUpdated > 0 && orderNew.getMailNotification())
 		{
 			sendEmailOnOrderUpdate(orderNew, sessionDataBean);
 		}
@@ -692,7 +692,6 @@ public class OrderBizLogic extends DefaultBizLogic
 			{
 				hql = hql + " where orderDetails.status ='" + requestStatusSelected + "' order by orderDetails.requestedDate desc";
 				orderListFromDB = dao.executeQuery(hql, null, false, null);
-				
 
 			}
 			else

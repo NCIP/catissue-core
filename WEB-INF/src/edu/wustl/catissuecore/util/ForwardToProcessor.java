@@ -19,6 +19,8 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.DistributedItem;
+import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.Participant;
@@ -132,45 +134,42 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		//Checking weather any of order item is distributed. If order item distributed then forward to distribition report page
 		else if (domainObject instanceof OrderDetails)
 		{
-			boolean isItemDistributed = false;
+			
 			int specimenDistributedCnt = 0;
 			int specimenArrayDistributedCnt = 0;
-			Long distributionId = null;
 			OrderDetails order = (OrderDetails) domainObject;
-			Collection orderItemCollection = order.getOrderItemCollection();
-			if (orderItemCollection != null)
+			Collection distributionColl = order.getDistributionCollection();
+			if (distributionColl != null && distributionColl.size() > 0)
 			{
-				Iterator itr = orderItemCollection.iterator();
-				while (itr.hasNext())
+				Iterator itr1 = distributionColl.iterator();
+				while (itr1.hasNext())
 				{
-					OrderItem orderItem = (OrderItem) itr.next();
-					if (orderItem.getDistributedItem() != null)
+					Distribution distribution = (Distribution) itr1.next();
+					Collection distributedItemColl = distribution.getDistributedItemCollection();
+					Iterator itr2 = distributedItemColl.iterator();
+					while (itr2.hasNext())
 					{
-						isItemDistributed = true;
-						if (orderItem.getDistributedItem().getSpecimen() != null)
+						DistributedItem distributedItem = (DistributedItem) itr2.next();
+						if (distributedItem.getSpecimen() != null)
 							specimenDistributedCnt++;
-						else if (orderItem.getDistributedItem().getSpecimenArray() != null)
+						else if (distributedItem.getSpecimenArray() != null)
 							specimenArrayDistributedCnt++;
-						//actionForm.setForwardTo("distributionReport");
 
-						forwardToHashMap.put("distributionId", orderItem.getDistributedItem().getDistribution().getId());
-						//break;
+					}
+					forwardToHashMap.put("distributionId", distribution.getId());
+					if (specimenDistributedCnt > 0 && specimenArrayDistributedCnt == 0)
+					{
+						actionForm.setForwardTo("specimenDistributionReport");
+					}
+					if (specimenArrayDistributedCnt > 0 && specimenDistributedCnt == 0)
+					{
+						actionForm.setForwardTo("specimenArrayDistributionReport");
 					}
 				}
-				if (isItemDistributed && specimenDistributedCnt > 0 && specimenArrayDistributedCnt == 0)
-				{
-					actionForm.setForwardTo("specimenDistributionReport");
-
-				}
-				if (isItemDistributed && specimenArrayDistributedCnt > 0 && specimenDistributedCnt == 0)
-				{
-					actionForm.setForwardTo("specimenArrayDistributionReport");
-				}
-
-				if (!isItemDistributed)
-				{
-					actionForm.setForwardTo("success");
-				}
+			}
+			else
+			{
+				actionForm.setForwardTo("success");
 			}
 		}
 

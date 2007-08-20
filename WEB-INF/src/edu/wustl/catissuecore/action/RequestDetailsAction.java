@@ -275,6 +275,7 @@ public class RequestDetailsAction extends BaseAction
 					//Fetching the specimen object from db.
 					List specimenList = getSpecimenFromDB(specimenId);
 					Specimen specimen = (Specimen) specimenList.get(0);
+					getChildrenSpecimen(specimen);
 					Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(specimen, specimen.getChildrenSpecimen());
 
 					if (orderItem instanceof DerivedSpecimenOrderItem)
