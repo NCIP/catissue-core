@@ -13,11 +13,11 @@ package valueobjects
 	[RemoteClass(alias="edu.wustl.catissuecore.flex.SpecimenBean")]
 	public class SpecimenData implements IExternalizable
 	{
-		public var specimenTypePVList:ArrayCollection;
-		
+		public var specimenTypePVList:ArrayCollection;	
 		public var isSelected:Boolean;		
 		public var specimenParent:String;
 		
+		public var spID:Number = -3;
 		public var scgName:String = '';
 		public var parentSpecimenName:String = '';
 		
@@ -44,17 +44,17 @@ package valueobjects
 		{
 			this.specimenParent = 'SCG';
 			
-			this.scgName = 'scg2';
-			this.parentSpecimenName = 'sp2'
+			this.scgName = '';
+			this.parentSpecimenName = ''
 			
 			this.specimenLabel = specimenLabel;
 			this.specimenBarcode = specimenBarcode;
 			
 			this.specimenClass = 'Fluid';
-			this.specimenType = 'Whole Blood';
+			this.specimenType = 'Not Specified';
 			
-			this.tissueSite = 'BRAIN'
-			this.tissueSide = 'Left';
+			this.tissueSite = 'Not Specified'
+			this.tissueSide = 'Not Specified';
 			this.pathologicalStatus = 'Not Specified';
 			
 			this.creationDate =  new Date();
@@ -71,7 +71,6 @@ package valueobjects
 		public function copy(spData:SpecimenData):void
 		{
 			this.specimenTypePVList = spData.specimenTypePVList;
-			
 			this.specimenParent = spData.specimenParent;
 			
 			this.scgName = spData.scgName;
@@ -107,12 +106,13 @@ package valueobjects
 				exIdBean.copy(exIdBeanCopy);
 				
 				this.exIdColl.addItem(exIdBean);
-			}			
+			}
 		}
 		
 		public function writeExternal(output:IDataOutput) :void 
 		{
 			Alert.show("CLIENT IN writeExternal");
+			output.writeInt(spID);
 			output.writeUTF(scgName);
 			output.writeUTF(parentSpecimenName);
 			output.writeUTF(specimenLabel);
@@ -122,18 +122,18 @@ package valueobjects
 			output.writeUTF(tissueSite);
 			output.writeUTF(tissueSide);
 			output.writeUTF(pathologicalStatus);
-			//output.writeDate(scgName);
+			output.writeObject(creationDate);
 			output.writeDouble(quantity);
 			output.writeDouble(concentration);
-			
 			output.writeUTF(comment);
-			
+			output.writeObject(exIdColl);								
     	}
         
     	public function readExternal(input:IDataInput):void
     	{
-    		Alert.show("CLIENT IN readExternal");
+    		//Alert.show("CLIENT IN readExternal");
     		
+			spID = input.readInt();
 			scgName = input.readUTF();
 			parentSpecimenName = input.readUTF();
 			specimenLabel = input.readUTF();
@@ -143,19 +143,18 @@ package valueobjects
 			tissueSite = input.readUTF();
 			tissueSide = input.readUTF();
 			pathologicalStatus = input.readUTF();
-			//output.writeDate(scgName);
+			creationDate = input.readObject() as Date;
 			quantity = input.readDouble();
 			concentration = input.readDouble();
-			
 			comment = input.readUTF();
+			exIdColl = input.readObject() as ArrayCollection;
        }
        
-		public function calcUnit():String 
+		public function calcUnit() : void 
        	{
-       		//var unit:String = '';
        		if (specimenClass == null || specimenType == null)
 			{
-				return "";
+				return;
 			}		
 			
 			if (specimenClass==Constants.CELL)
@@ -189,7 +188,6 @@ package valueobjects
 					unit = Constants.UNIT_GM;
 				}
 			}
-			return unit;	
 		}
 	}
 }

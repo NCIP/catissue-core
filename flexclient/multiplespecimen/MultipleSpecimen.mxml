@@ -2,6 +2,8 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" horizontalAlign="left" xmlns:local="*" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*" backgroundColor="white">
 <mx:Script>
 	<![CDATA[
+		import util.MSPParameter;
+		import util.MSPParameterReader;
 		import util.MetadataManager;
 		import mx.events.DragEvent;
 		import flash.utils.setInterval;
@@ -20,26 +22,75 @@
 		import mx.rpc.events.ResultEvent;
 		
 		private var counter:int = 1;
-
+		private var mspParameter:MSPParameter ;
+		
 		[Bindable]
 		public var specimenColl:ArrayCollection = new ArrayCollection();
 		
 		private var copyFromIndex:int = -1;
 		
+		public var metadataManager:MetadataManager = new MetadataManager();
+		
 		private function preInit():void
 		{
-			var metadataManager:MetadataManager = new MetadataManager();
-			metadataManager.init();
-			metadataManager.addEventListener("initCompleteEvent",addMoreSpecimen);
-			
-			//PopUpManager.createPopUp(this,ProgressBarPanel,true);
+			mspParameter = MSPParameterReader.processParam(Application.application.parameters);
 			
 			specimenColl = new ArrayCollection();
+						
+			metadataManager.init(mspParameter.mode);
+			metadataManager.addEventListener("initCompleteEvent",init);
+			
+			//PopUpManager.createPopUp(this,ProgressBarPanel,true);
+			//flash.
+			//var spCount:String = Application.application.parameters.spCount;
+			//Alert.show("firstParam "+spCount);
+			
 		}
 		
 		private function init(event:Event):void
 		{
-			Alert.show("Init of multipl sepcimen");
+			if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_ADD)
+			{
+				specimenColl = new ArrayCollection();
+				var spCounts:int = int(mspParameter.spCount);
+				
+				//Alert.show("spCounts "+spCounts);
+				for(var i:int=0; i<spCounts; i++)
+				{
+					
+					var spData:SpecimenData = initSpecimenData();
+					specimenColl.addItem(spData);
+				}
+			}
+			else
+			{
+				//TODO
+				//Alert.show("Init of multipl sepcimen");
+				specimenColl = metadataManager.spDataList;
+				if(specimenColl==null)
+				{
+					specimenColl = new ArrayCollection();
+					addMoreSpecimen(null);
+				}
+			}		
+		}
+		
+		private function initSpecimenData(): SpecimenData
+		{
+			var spData:SpecimenData = new SpecimenData("Label"+counter,"Barcode"+counter,"Left");	
+			counter++;
+			
+			if(mspParameter.parentType==MSPParameter.PARENT_TYPE_PARAM_VAL_SCG)
+			{
+				spData.specimenParent = "SCG";
+				spData.scgName = mspParameter.parentName;
+			}
+			else
+			{
+				spData.specimenParent = "Specimen";
+				spData.parentSpecimenName = mspParameter.parentName;				
+			}
+			return spData;
 		}
 		
 		private function creationComp():void
@@ -50,9 +101,8 @@
 
 		private function addMoreSpecimen(event:Event):void
 		{
-			var spData:SpecimenData = new SpecimenData("Label"+counter,"Barcode"+counter,"Left");
-			specimenColl.addItem(spData);
-			counter++;
+			var spData:SpecimenData = initSpecimenData();
+			specimenColl.addItem(spData);			
 		}
 		
 		private function deleteLastSpecimen(event:Event):void

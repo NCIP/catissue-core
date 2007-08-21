@@ -7,15 +7,24 @@ package util
 	import mx.controls.Alert;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import valueobjects.SpecimenData;
 	
 	[Event(name="initCompleteEvent", type="flash.events.Event")]
 	public class MetadataManager extends EventDispatcher
 	{
 		private var remoteObj:RemoteObject = new RemoteObject("cdeService");
 		private var counter:int = 0;
+		private var counterEndVal:int = 8;
 		
-		public function init():void
+		public var spDataList:ArrayCollection;
+		public function init(mode:String):void
 		{
+			if(mode==MSPParameter.MODE_PARAM_VAL_EDIT)
+			{
+				counterEndVal = 9;
+				loadData("readSpecimenList",handleReadSpecimenResult);
+			}
+			
 			loadData("getTissueSidePVList",handleTissueSideResult);
 			loadData("getTissueSitePVList",handleTissueSiteResult);
 			loadData("getPathologicalStatusPVList",handlePathologicalStatusResult);
@@ -29,13 +38,18 @@ package util
 		private function updateCounter():void
 		{
 			counter++;
-			if(counter == 8)
+			if(counter == counterEndVal)
 			{
 				var event:Event = new Event("initCompleteEvent");
 				dispatchEvent(event);
 			}
 		}
-			
+		
+		private function handleReadSpecimenResult(event:ResultEvent):void 
+		{
+			spDataList = event.result as ArrayCollection;
+			updateCounter();
+		}
 		private function loadData(remoteFuncName:String ,handlerFunction:Function):void
 		{
 			var operation:AbstractOperation = remoteObj.getOperation(remoteFuncName);

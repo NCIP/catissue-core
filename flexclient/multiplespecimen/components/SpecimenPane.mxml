@@ -30,10 +30,10 @@
 			Utility.bindData(spParent, "selectedValue", spData, "specimenParent"); 
 			
 			//SCG Name
-			Utility.bindData(spSCGName, "selectedItem", spData, "scgName");
+			Utility.bindData(spSCGName, "text", spData, "scgName");
 			
 			//Parent Specimen
-			Utility.bindData(spParentName, "selectedItem", spData, "parentSpecimenName");
+			Utility.bindData(spParentName, "text", spData, "parentSpecimenName");
 			
 			//Label
 			Utility.bindData(spLabel, "text", spData,"specimenLabel");
@@ -132,11 +132,11 @@
 	</components:MyCanvas>
 
 	<components:MyCanvas>
-		<adobe:AutoComplete id="spSCGName" enabled="{isSpSCGName.selected}" dataProvider="{MetadataModel.getInstance().scgNameArray}" lookAhead="true"/>
+		<mx:TextInput id="spSCGName" enabled="{isSpSCGName.selected}" />
 	</components:MyCanvas>
 
 	<components:MyCanvas>
-		<adobe:AutoComplete id="spParentName" enabled="{isSpParentName.selected}" dataProvider="{MetadataModel.getInstance().spNameArray}"/>
+		<mx:TextInput id="spParentName" enabled="{isSpParentName.selected}" />
 	</components:MyCanvas>
 	
 	<components:MyCanvas>

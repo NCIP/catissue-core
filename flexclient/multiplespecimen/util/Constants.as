@@ -24,6 +24,6 @@ package util
 		public static const UNIT_CL:String  = "cells";		
 		public static const UNIT_CONCENTRATION:String = "µg/µl";
 		
-		public static const DATE_FORMAT:String = "MM-DD-YYYY";
+		public static const DATE_FORMAT:String = "MM-DD-YYYY";		
 	}
 }

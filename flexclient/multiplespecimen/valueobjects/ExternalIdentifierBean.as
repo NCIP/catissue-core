@@ -1,13 +1,13 @@
 package valueobjects
 {
-	import flash.utils.IDataOutput;
 	import flash.utils.IDataInput;
+	import flash.utils.IDataOutput;
 	import flash.utils.IExternalizable;
+	
 	import mx.controls.Alert;
 	
-	/*[Bindable]
-	[RemoteClass(alias="edu.wustl.common.beans.SpecimenBean")]
-	*/
+	[Bindable]
+	[RemoteClass(alias="edu.wustl.catissuecore.domain.ExternalIdentifier")]	
 	public class ExternalIdentifierBean implements IExternalizable
 	{
 		public var isSelected:Boolean;
@@ -36,40 +36,20 @@ package valueobjects
 		
 		public function writeExternal(output:IDataOutput) :void 
 		{
-			/*Alert.show("CLIENT IN writeExternal");
-			output.writeUTF(scgName);
-			output.writeUTF(parentSpecimenName);
-			output.writeUTF(specimenLabel);
-			output.writeUTF(specimenBarcode);
-			output.writeUTF(specimenClass);
-			output.writeUTF(specimenType);
-			output.writeUTF(tissueSite);
-			output.writeUTF(tissueSide);
-			output.writeUTF(pathologicalStatus);
-			//output.writeDate(scgName);
-			output.writeDouble(quantity);
-			output.writeDouble(concentration);
-			*/
+			//Alert.show("CLIENT IN writeExternal of ExternalIdentifierBean");
+			
+			output.writeInt(id);
+			output.writeUTF(identifierName);
+			output.writeUTF(identifierValue);
     	}
         
     	public function readExternal(input:IDataInput):void
     	{
-    		/*
-    		Alert.show("CLIENT IN readExternal");
+    		//Alert.show("CLIENT IN readExternal of ExternalIdentifierBean");
     		
-			scgName = input.readUTF();
-			parentSpecimenName = input.readUTF();
-			specimenLabel = input.readUTF();
-			specimenBarcode = input.readUTF();
-			specimenClass = input.readUTF();
-			specimenType = input.readUTF();
-			tissueSite = input.readUTF();
-			tissueSide = input.readUTF();
-			pathologicalStatus = input.readUTF();
-			//output.writeDate(scgName);
-			quantity = input.readDouble();
-			concentration = input.readDouble();
-			*/
+			id = input.readInt();
+			identifierName = input.readUTF();
+			identifierValue = input.readUTF();
        }
 	}
 }
