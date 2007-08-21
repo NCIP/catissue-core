@@ -1268,7 +1268,8 @@ PUBLIC
  * Patch ID: Multiple Specimen Bug_7  
 	-->
 			<!-- forward name="createMultipleSpecimen" path="/InitMultipleSpecimen.do?operation=add&amp;menuSelected=15" /-->			
-			<forward name="createMultipleSpecimen" path="/NewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
+			<!--forward name="createMultipleSpecimen" path="/NewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" /-->
+			<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do" />			
 		</action>
 
 		<action path="/SpecimenCollectionGroupEdit"
@@ -1286,7 +1287,8 @@ PUBLIC
  * Patch ID: Multiple Specimen Bug_8  
 	-->
 			<!-- forward name="createMultipleSpecimen" path="/InitMultipleSpecimen.do?operation=add&amp;menuSelected=15" /-->			
-			<forward name="createMultipleSpecimen" path="/NewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
+			<!--forward name="createMultipleSpecimen" path="/NewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" /-->			
+			<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do"/>
 		</action>
 
 		<action path="/SpecimenCollectionGroupSearch"
@@ -3420,9 +3422,13 @@ PUBLIC
 	<action path="/MultipleSpecimenCopyPasteAction" type="edu.wustl.catissuecore.action.MultipleSpecimenCopyPasteAction" parameter="method">
 	</action>
 	
-	<action path="/MultipleSpecimenFlexInitAction"
+	<!--action path="/MultipleSpecimenFlexInitAction"
                     type="org.apache.struts.actions.ForwardAction"
-                    parameter=".catissuecore.multipleSpecimenFlexDef"/>
+                    parameter=".catissuecore.multipleSpecimenFlexDef"/-->
+                    
+  	<action path="/MultipleSpecimenFlexInitAction" type="edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction" scope="request">
+			<forward name="success" path=".catissuecore.multipleSpecimenFlexDef" />  
+    </action>                        
 	
 	<action path="/MultipleSpecimenAppletAction" type="edu.wustl.catissuecore.action.MultipleSpecimenAppletAction" parameter="method">
 			<forward name="success" path=".catissuecore.multipleSpecimenAddSuccessDef" />

@@ -1,5 +1,12 @@
 <!-- saved from url=(0014)about:internet -->
 
+<%
+	String MODE = (String)request.getAttribute("MODE");
+	String PARENT_TYPE = (String)request.getAttribute("PARENT_TYPE");
+	String PARENT_NAME = (String)request.getAttribute("PARENT_NAME");
+	String SP_COUNT = (String)request.getAttribute("SP_COUNT");
+%>
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title></title>
@@ -63,7 +70,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// if we've detected an acceptable version
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
-			"src", "flexclient/multiplespecimen/MultipleSpecimen",
+			"src", "flexclient/multiplespecimen/MultipleSpecimen?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>",
 			"width", "100%",
 			"height", "100%",
 			"align", "middle",
@@ -88,11 +95,11 @@ if ( hasProductInstall && !hasRequestedVersion ) {
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="MultipleSpecimen" width="100%" height="100%"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-			<param name="movie" value="flexclient/multiplespecimen/MultipleSpecimen.swf" />
+			<param name="movie" value="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=ADD&PARENT_TYPE=SCG&PARENT_NAME=AA&SP_COUNT=2" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#ffffff" />
 			<param name="allowScriptAccess" value="sameDomain" />
-			<embed src="flexclient/multiplespecimen/MultipleSpecimen.swf" quality="high" bgcolor="#ffffff"
+			<embed src="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=ADD&PARENT_TYPE=SCG&PARENT_NAME=AA&SP_COUNT=2" quality="high" bgcolor="#ffffff"
 				width="100%" height="100%" name="MultipleSpecimen" align="middle"
 				play="true"
 				loop="false"
