@@ -49,6 +49,7 @@ function onChangeUnit()
 
 function showDerivative(objectenabled,objectdisabled,element)
 {
+	<% int size=pathologyCase.size();%>
 	var unitRequestedQuantity;
 	if(element=="derivative")
 	{
@@ -58,6 +59,20 @@ function showDerivative(objectenabled,objectdisabled,element)
 		showenabled.display="block";
 		var showdisabled=document.getElementById('showdisabled').style;
 		showdisabled.display="none";
+		
+		for(var i = 0; i < <%=size%>; i++)
+		{
+			var requestQtyId = "requestedQuantity"+i;
+			document.getElementById(requestQtyId).value="";
+			document.getElementById(requestQtyId).disabled=false;
+		}
+		
+		span_tags = document.all.tags("span");
+		for(var counter = 0; counter < span_tags.length; counter++)
+		{
+			var current_object = span_tags[counter+1];
+			current_object.innerHTML="";
+		}
 		
 	}
 	if(element=="block")
@@ -69,6 +84,14 @@ function showDerivative(objectenabled,objectdisabled,element)
 		var showdisabled=document.getElementById('showdisabled').style;
 		showdisabled.display="block";
 		
+		
+		for(var i = 0; i < <%=size%>; i++)
+		{
+			var requestQtyId = "requestedQuantity"+i;
+			document.getElementById(requestQtyId).value="1";
+			document.getElementById(requestQtyId).disabled=true;
+		}
+			
 		var unitreq=document.getElementById("unitSpan");
 		unitreq.innerHTML="count";
 		
@@ -78,6 +101,8 @@ function showDerivative(objectenabled,objectdisabled,element)
 			var current_object = span_tags[counter+1];
 			current_object.innerHTML=unitreq.innerHTML;
 		}
+		
+		
 	}
 }
 
@@ -524,6 +549,7 @@ function onCheck()
 								String specimenName = "value(OrderSpecimenBean:"+i+"_specimenName)";
 								String availableQuantity = "value(OrderSpecimenBean:"+i+"_availableQuantity)";
 								String requestedQuantity = "value(OrderSpecimenBean:"+i+"_requestedQuantity)";
+								String requestedQuantityId = "requestedQuantity"+i;
 								String description = "value(OrderSpecimenBean:"+i+"_description)";
 								String isDerived="value(OrderSpecimenBean:"+i+"_isDerived)";
 								String specimenId="value(OrderSpecimenBean:"+i+"_specimenId)";
@@ -548,7 +574,7 @@ function onCheck()
 									</td>
 
 									<td class="dataCellText" width="25%">
-										<html:text styleClass="formFieldSized3" maxlength="8"  size="5"  styleId="requestedQuantity" property="<%=requestedQuantity%>"/>
+										<html:text styleClass="formFieldSized3" maxlength="8"  size="5"  styleId="<%=requestedQuantityId%>" property="<%=requestedQuantity%>"/>
 										&nbsp;
 										<span id="requnitSpan"></span>		
 										<html:hidden property="<%=unitRequestedQuantity%>" value="" styleId="unitRequestedQuantity"/>
