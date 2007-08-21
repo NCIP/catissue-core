@@ -831,7 +831,7 @@ Thanking You,
 		<antcall target="assertforcaties"/>
 		<antcall target="deploy_caties_internal"/>
 		<delete dir="${temp.dir}" />
-		<antcall target="insert_default_CP"/>
+		<antcall target="insert_default_cp"/>
 	</target>
 		
 		
@@ -899,7 +899,7 @@ Thanking You,
 		</replace>
 	</target>
 	
-	<target name="insert_default_CP">
+	<target name="insert_default_cp">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>
 			<then>
