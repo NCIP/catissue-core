@@ -39,14 +39,12 @@ public class CaCoreAPIService
 			} 
 			catch (Exception ex) 
 			{ 
-				System.out.println(ex.getMessage()); 
-				ex.printStackTrace();
+				Logger.out.error("Error in initializing CaCoreAPIService "+ex); 
 				return;
 			}
 		}
 		catch(Exception ex)
 		{
-			ex.printStackTrace();
 			Logger.out.error("Test client throws Exception = "+ ex);
 		}
 	}
