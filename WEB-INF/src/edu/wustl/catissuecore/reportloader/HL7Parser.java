@@ -1,4 +1,3 @@
-
 package edu.wustl.catissuecore.reportloader;
 
 import java.io.BufferedReader;
@@ -15,11 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.springframework.remoting.RemoteAccessException;
-
 import net.sf.hibernate.Hibernate;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
-import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.catissuecore.caties.util.Utility;
@@ -28,10 +24,8 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -43,15 +37,9 @@ public class HL7Parser implements Parser
 {
 
 	/**
-	 * reportSource information for pathology report 
-	 */
-	private Site site=null;
-	private String status=null;
-	
-	/**
 	 * This method processes the map structure of a report in a HL7 file.
 	 * It gets different sections in the map and creates different report sections from it. 
-	 * @param p Object of participant
+	 * @param participant Object of participant
 	 * @param reportMap a report map containing sections to be processed
 	 * @param scg object of SpecimenCollectionGroup
 	 * @throws Exception generic exception
@@ -68,18 +56,19 @@ public class HL7Parser implements Parser
 		Set reportSet=null;
 		Iterator reportIterator=null;
 		String spn=null;
+		Site site=null;
 		
 		try
 		{
 			String line = "";
-			line=this.getReportDataFromReportMap(reportMap, CaTIESConstants.PID);
+			line=HL7ParserUtil.getReportDataFromReportMap(reportMap, CaTIESConstants.PID);
 			//participant = parserParticipantInformation(line);
-			this.site=parseSiteInformation(line);
-			line=this.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
+			site=parseSiteInformation(line);
+			line=HL7ParserUtil.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
 			Logger.out.debug("Creating report");
 			report = extractOBRSegment(line);
 			Logger.out.debug("Report Created Successfully");
-			spn=ReportLoaderUtil.getSurgicalPathologyNumber(this.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR));
+			spn=ReportLoaderUtil.getSurgicalPathologyNumber(HL7ParserUtil.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR));
 			Logger.out.debug("Creating report section from report text");
 			reportSet = this.getReportSectionDataFromReportMap(reportMap, CaTIESConstants.OBX);
 			textContent=new TextContent();
@@ -99,7 +88,7 @@ public class HL7Parser implements Parser
 				}		
 			}	
 			Logger.out.debug("Associating report sections to report");
-			if (participant != null && report != null)
+			if (report != null)
 			{
 				// set textContent to report
 				report.setTextContent(textContent);
@@ -109,16 +98,16 @@ public class HL7Parser implements Parser
 					report.getTextContent().setReportSectionCollection(reportSectionSet);
 					
 				}
-				if(this.site!=null)
+				if(site!=null)
 				{
 					// create instance of ReportLoader to load report into the DB
 					Logger.out.debug("Instantiating report loader to load report");
-					reportLoader = new ReportLoader(participant, report,this.site, scg, spn);
+					reportLoader = new ReportLoader(participant, report,site, scg, spn);
 				}
 				else
 				{
-//					Update report queue with appropriate status
-//					reportLoader = new ReportLoader(participant, report,createNewSite(), scg);
+					// Update report queue with appropriate status
+					//	reportLoader = new ReportLoader(participant, report,createNewSite(), scg);
 					throw new Exception("Site not found!");
 				}
 				// initiate reportLoader to load report
@@ -142,28 +131,19 @@ public class HL7Parser implements Parser
 	public void parseString(Participant participant , String reportText, SpecimenCollectionGroup scg)throws Exception
 	{
 		Logger.out.debug("Inside parseString method");
-		String[] lines=null;
-		StringTokenizer st=null;
-		String token = null;
 		Map<String, Set> reportMap=null;
 		try
 		{
-			lines=reportText.split("\n");
-			String line = "";
-			reportMap = new HashMap<String, Set>();
-			//create reportMap using reportText
-			for (int i=0;i<lines.length;i++)
+			reportMap=this.getReportMap(reportText);
+			if(participant!=null)
 			{
-				line=lines[i];
-				st = new StringTokenizer(line, "|");
-				if (st.hasMoreTokens())
-				{
-					token = st.nextToken();
-					addToReportMap(reportMap,token,line);
-				}
-			}	
-			// function call to process the reportMap 
-			process(participant,reportMap, scg);
+				process(participant,reportMap, scg);
+			}
+			else
+			{
+				String status=HL7ParserUtil.validateAndSaveReportMap(reportMap);
+				CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,new Date().toString()+",,,"+status);
+			}
 		}
 		catch(Exception ex)
 		{
@@ -183,12 +163,11 @@ public class HL7Parser implements Parser
 		StringTokenizer st = null;
 		String token = null;
 		Map<String, Set> reportMap=null;
-		Set<Participant> participantList=null;
-		String reportText=null;
+		String status=null;
 		FileReader fr=null;
 		BufferedReader br=null;
 		int counter=0;
-		SpecimenCollectionGroup scg=null;
+		
 		
 		try
 		{
@@ -205,105 +184,28 @@ public class HL7Parser implements Parser
 				{
 					token = st.nextToken();
 					// MSH or FTS are the starting point of individual report
-					if (token.equals(CaTIESConstants.MSH)|| token.equals(CaTIESConstants.FTS))
+					if(token.equals(CaTIESConstants.PID) || token.equals(CaTIESConstants.OBR) || token.equals(CaTIESConstants.OBX))
+					{	
+						this.addToReportMap(reportMap,token,line);
+					}
+					else if (token.equals(CaTIESConstants.MSH)|| token.equals(CaTIESConstants.FTS))
 					{
 						// save parsed report
 						if (reportMap != null && reportMap.size()>0)
 						{
-							// validation before saving
-							if(validateReportMap(reportMap))
-							{
-								try
-								{
-									// Creating participant object from report text
-									Participant participant = parserParticipantInformation(getReportDataFromReportMap(reportMap, CaTIESConstants.PID));
-									// check for matching participant
-									participantList=ReportLoaderUtil.checkForParticipant(participant);
-									if((participantList!=null)&& participantList.size()>0)
-									{
-										// matching participant found 
-										Logger.out.info("Matching Participant found "+participantList.size());
-										if(participantList.size()==1)
-										{
-											// Exactly one matching found, use this participant
-											Iterator<Participant> iter=participantList.iterator();
-											Participant aParticipant=iter.next();
-											List scgList=Utility.getSCGList(aParticipant);
-											if(scgList!=null && scgList.size()>0)
-											{
-												Logger.out.info("Checking for Matching SCG");
-												//	check for matching scg here
-												String pidLine=this.getReportDataFromReportMap(reportMap, CaTIESConstants.PID);
-												String obrLine=this.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
-												scg=ReportLoaderUtil.checkForSpecimenCollectionGroup(aParticipant, parseSiteInformation(pidLine), ReportLoaderUtil.getSurgicalPathologyNumber(obrLine));
-												if(scg!=null && scg.getSurgicalPathologyNumber().trim().length()==0)
-												{
-													Logger.out.debug("SCG conflict found");
-													this.status=CaTIESConstants.STATUS_CONFLICT;
-												}
-											}
-										}
-										else if (participantList.size()>1)
-										{
-											// Multiple matching participant found, this is STATUS_CONFLICT state
-											Logger.out.info("Conflict found for Participant "+ counter);
-											this.status=CaTIESConstants.STATUS_CONFLICT;
-										}
-										
-									}
-									else
-									{
-										// No matching participant found Create new participant
-										Logger.out.debug("No conflicts found. Creating new Participant "+counter);
-										// this.setSiteToParticipant(participant, site);
-										Logger.out.debug("Creating new Participant");
-										participant=(Participant)CaCoreAPIService.getAppServiceInstance().createObject(participant);
-										Logger.out.info("New Participant Created");
-										participantList= new HashSet<Participant>();
-										participantList.add(participant);
-									}
-								}
-								catch (RemoteAccessException re) 
-								{
-									this.status=CaTIESConstants.API_ERROR;
-									Logger.out.error("Either JBoss is down or authentication information is invalid",re);
-								}
-								catch(BizLogicException ex)
-								{
-									this.status=CaTIESConstants.DB_ERROR;
-									Logger.out.error("Error in database transaction: ",ex);
-								}
-								catch(Exception ex)
-								{
-									this.status=CaTIESConstants.INVALID_REPORT_SECTION;
-									Logger.out.error("Report section under process is not valid ",ex);
-								}
-							}
-							else
-							{
-								Logger.out.error("Report section under process is not valid");
-							}
-							// Save report to report queue 
-							reportText=this.getReportText(reportMap);
-							addReportToQueue(participantList,reportText,scg);
+							status=HL7ParserUtil.validateAndSaveReportMap(reportMap);
 							counter++;
-							CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,new Date().toString()+","+fileName+","+counter+","+this.status);
+							CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,new Date().toString()+","+fileName+","+counter+","+status);
 							Logger.out.info("Report is added to queue. Current Count is="+counter);
 							// reinitialize variables to null to process next report
-							scg=null;
-							reportText=null;
 							reportMap.clear();
 							reportMap=null;
 						} 
 						// if start of report found then initialize report map and set queue status to NEW
 						reportMap = new HashMap<String, Set>();
-						this.status=CaTIESConstants.NEW;
 					}
 					// add PID, OBR, OBX section from report text to report map
-					else if(token.equals(CaTIESConstants.PID) || token.equals(CaTIESConstants.OBR) || token.equals(CaTIESConstants.OBX))
-					{	
-						addToReportMap(reportMap,token,line);
-					}
+					
 				}	
 			}
 			Logger.out.info("Parsing File "+fileName+": Finished at "+new Date().toString());
@@ -336,101 +238,6 @@ public class HL7Parser implements Parser
 		}
 	}
 	
-	/**
-	 * This method processes the map structure of a report in a HL7 file.
-	 * It gets different sections in the map and creates different report sections from it. 
-	 * @param set a set of section
-	 * @param reportText plain text format report
-	 * @param scg object of SpecimenCollectionGroup
-	 */
-	private void addReportToQueue(Set<Participant> set,String reportText, SpecimenCollectionGroup scg)
-	{
-		Logger.out.info("Adding report to queue");
-		try
-		{
-			ReportLoaderQueue queue= new ReportLoaderQueue(Hibernate.createClob(reportText));
-			// if no any error status is set means it should be set to NEW
-			if(this.status==null)
-			{
-				this.status=CaTIESConstants.NEW;
-			}
-			queue.setStatus(this.status);
-			queue.setParticipantCollection(set);
-			queue.setSpecimenCollectionGroup(scg);
-			Utility.saveObject(queue);
-		}
-		catch(Exception ex)
-		{
-			Logger.out.error("Error while creating queue",ex);
-		}
-	}	
-	 
-   /**
-    * Method to create report text from reportMap
-	* @param reportMap report map representing map of different pathology reports 
-	* @return String represents report text
-	*/
-  private String getReportText(Map<String, Set> reportMap)
-  {
-	  StringBuffer reportTxt=new StringBuffer();
-	  Collection<Set> collection=null;
-	  collection = reportMap.values();
-	  Iterator itr=null;
-	  Iterator<Set> it = collection.iterator();
-	  while(it.hasNext())
-	  {
-		  itr = it.next().iterator();
-		  while(itr.hasNext())
-		  {
-			  reportTxt.append((String)itr.next());
-			  reportTxt.append("\n");
-		  } 
-	  }
-	  return reportTxt.toString();
-  }
-  
-   /**
-    * Method to add report section to report map
-    * @param tempMap temporary map
-    * @param key key of the map
-    * @param value value
-    */
-   private void addToReportMap(Map<String, Set> tempMap,String key,String value)
-   {
-	   Set<String> tempSet=null;
-	   if(key !=null && value!=null)
-	   {
-		   if(tempMap.containsKey(key))
-		   {
-			   tempSet = tempMap.get(key);
-			   tempSet.add(value);
-		   }
-		   else
-		   {
-			   tempSet = new HashSet<String>();
-			   tempSet.add(value);
-			   tempMap.put(key, tempSet);
-		   }
-	   }
-   }
-
-   /**
-    * Method to retrieve report data from report map
-    * @param reportMap report map
-    * @param key key of the report map
-    * @return raport data information from the report map
-    */
-   private String getReportDataFromReportMap(Map<String, Set> reportMap , String key)
-   {
-	  Set tempSet = reportMap.get(key);
-	  if(tempSet!=null && tempSet.size()>0)
-	  {
-		  Iterator it=tempSet.iterator();
-		  return (String)it.next();
-	  }  
-	  return null;
-   }
-	
    /**
     * Method to retrieve specific report section from reportMap
     * @param reportMap report map
@@ -449,7 +256,7 @@ public class HL7Parser implements Parser
      * @return Participant from the participant information text
      * @throws Exception exception while parsing the participant information 
      */
-	private Participant parserParticipantInformation(String pidLine)throws Exception
+	protected Participant parserParticipantInformation(String pidLine)throws Exception
 	{
 		Logger.out.info("Parsing participant information");
 		Participant participant = new Participant();
@@ -596,7 +403,7 @@ public class HL7Parser implements Parser
 	 * @return Site object
 	 * @throws Exception generic exception
 	 */
-	private Site parseSiteInformation(String pidLine)throws Exception
+	protected Site parseSiteInformation(String pidLine)throws Exception
 	{
 		Logger.out.info("Parsing Site Information");
 		StringTokenizer st=null;
@@ -724,49 +531,7 @@ public class HL7Parser implements Parser
 		return section;
 	}
 		
-	/**
-	 * Method to validate report map
-	 * @param reportMap report map representing map of different pathology reports 
-	 * @return boolean represents report is valid or not
-	 * @throws Exception generic exception
-	 */
-   public boolean validateReportMap(Map<String, Set> reportMap)throws Exception
-   {
-	   boolean isValid=false;
-	 //  Set set=null;
-	 //  Iterator it=null;
-	   if(reportMap.containsKey(CaTIESConstants.PID) && reportMap.get(CaTIESConstants.PID)!=null)
-	   {
-		   String line = "";
-		   line=this.getReportDataFromReportMap(reportMap, CaTIESConstants.PID);
-		   // parse site information
-		   this.site = parseSiteInformation(line);
-		   if(this.site!=null)
-		   {   
-			   // if site is not null then check for section
-			   if(reportMap.containsKey(CaTIESConstants.OBR) && reportMap.get(CaTIESConstants.OBR)!=null)
-			   {
-				   if(reportMap.containsKey(CaTIESConstants.OBX) && reportMap.get(CaTIESConstants.OBX)!=null)
-				   {
-					   this.status=CaTIESConstants.NEW;
-					   isValid=true;
-				   }
-			   }
-			   else
-			   {
-				   // if any one section is not found then invalid report
-				   this.status=CaTIESConstants.INVALID_REPORT_SECTION;
-			   }
-		   }
-		   else
-		   {
-			   // if site not found 
-			   this.status=CaTIESConstants.SITE_NOT_FOUND;
-		   } 
-	   }
-	   Logger.out.info("Validate report map returning "+isValid+" for report");
-	   return isValid;
-   }
+	
    /**
     * Method to extract information from OBR segment
 	* @param obrLine report information text
@@ -829,4 +594,59 @@ public class HL7Parser implements Parser
 		}
 		return report;
 	}
+	
+	/**
+	 * This method creats a report map using reportText
+	 * @param reportText plain text report
+	 * @return Map report map
+	 */
+	private Map<String, Set> getReportMap(String reportText)
+	{
+		Logger.out.debug("Inside parseString method");
+		String[] lines=null;
+		StringTokenizer st=null;
+		String token = null;
+		Map<String, Set> reportMap=null;
+		
+		lines=reportText.split("\n");
+		String line = "";
+		reportMap = new HashMap<String, Set>();
+		//create reportMap using reportText
+		for (int i=0;i<lines.length;i++)
+		{
+			line=lines[i];
+			st = new StringTokenizer(line, "|");
+			if (st.hasMoreTokens())
+			{
+				token = st.nextToken();
+				addToReportMap(reportMap,token,line);
+			}
+		}	
+		return reportMap;	
+	}
+	
+	 /**
+	    * Method to add report section to report map
+	    * @param tempMap temporary map
+	    * @param key key of the map
+	    * @param value value
+	    */
+	   private void addToReportMap(Map<String, Set> tempMap,String key,String value)
+	   {
+		   Set<String> tempSet=null;
+		   if(key !=null && value!=null)
+		   {
+			   if(tempMap.containsKey(key))
+			   {
+				   tempSet = tempMap.get(key);
+				   tempSet.add(value);
+			   }
+			   else
+			   {
+				   tempSet = new HashSet<String>();
+				   tempSet.add(value);
+				   tempMap.put(key, tempSet);
+			   }
+		   }
+	   }
 }

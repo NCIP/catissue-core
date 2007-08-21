@@ -38,7 +38,7 @@ public class ReportLoaderQueueProcessor extends Thread
 			try
 			{
 				// retrieve records from report queue for processing
-				queue=Utility.getObject(ReportLoaderQueue.class.getName(),"status" ,CaTIESConstants.NEW);
+				queue=getQueueObjects();
 				Logger.out.info("Processing report Queue: Total "+queue.size()+" Reports found in queue");
 				//	CONSTANT
 				CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,"Processing report Queue: Total "+queue.size()+" Reports found in queue");
@@ -55,34 +55,37 @@ public class ReportLoaderQueueProcessor extends Thread
 							Logger.out.debug("Processing report from Queue with serial no="+reportLoaderQueue.getId());
 							participantSet=(Set)reportLoaderQueue.getParticipantCollection();
 							Iterator it = participantSet.iterator();
-							if(it.hasNext())
+							
+							// get instance  of parser
+							parser= (HL7Parser)ParserManager.getInstance().getParser();
+							
+							try
 							{
-								// get instance  of parser
-								parser= (HL7Parser)ParserManager.getInstance().getParser();
-								
-								try
+								Participant participant=null;
+								// parse report text
+								if(it.hasNext())
 								{
-									// parse report text 
-									Participant participant=(Participant)it.next();
-									Clob tempClob=reportLoaderQueue.getReportText();
-									String reportText=tempClob.getSubString(1,(int)tempClob.length());
-									parser.parseString(participant, reportText, reportLoaderQueue.getSpecimenCollectionGroup());
-									// delete record from queue
-									Utility.deleteObject(reportLoaderQueue);
-									CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ");
-									Logger.out.info("Processed report from Queue with serial no="+reportLoaderQueue.getId());
+									participant=(Participant)it.next();
 								}
-								catch(Exception ex)
-								{
-									reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
-									if(ex.getMessage().equalsIgnoreCase(CaTIESConstants.CP_NOT_FOUND_ERROR_MSG))
-									{
-										reportLoaderQueue.setStatus(CaTIESConstants.CP_NOT_FOUND);
-									}
-									CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+reportLoaderQueue.getStatus()+","+ex.getMessage());
-									Utility.updateObject(reportLoaderQueue);
-								}
+								Clob tempClob=reportLoaderQueue.getReportText();
+								String reportText=tempClob.getSubString(1,(int)tempClob.length());
+								parser.parseString(participant, reportText, reportLoaderQueue.getSpecimenCollectionGroup());
+								// delete record from queue
+								Utility.deleteObject(reportLoaderQueue);
+								CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ");
+								Logger.out.info("Processed report from Queue with serial no="+reportLoaderQueue.getId());
 							}
+							catch(Exception ex)
+							{
+								reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
+								if(ex.getMessage().equalsIgnoreCase(CaTIESConstants.CP_NOT_FOUND_ERROR_MSG))
+								{
+									reportLoaderQueue.setStatus(CaTIESConstants.CP_NOT_FOUND);
+								}
+								CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+reportLoaderQueue.getStatus()+","+ex.getMessage());
+								Utility.updateObject(reportLoaderQueue);
+							}
+							
 						}
 						catch(Exception ex)
 						{
@@ -99,5 +102,19 @@ public class ReportLoaderQueueProcessor extends Thread
 				Logger.out.error("Error while adding report data",ex);
 			}			
 		}	
-	}	
+	}
+	
+	/**
+	 * Method to retrieve list of all objects from report queue
+	 * @return list List of objects in report queue
+	 * @throws Exception Generic exception
+	 */
+	private List getQueueObjects() throws Exception
+	{
+		List queue=null;
+		queue=Utility.getObject(ReportLoaderQueue.class.getName(),"status" ,CaTIESConstants.NEW);
+		queue.addAll(Utility.getObject(ReportLoaderQueue.class.getName(),"status" ,CaTIESConstants.SITE_NOT_FOUND));
+		queue.addAll(Utility.getObject(ReportLoaderQueue.class.getName(),"status" ,CaTIESConstants.CP_NOT_FOUND));
+		return queue;
+	}
 }
