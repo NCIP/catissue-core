@@ -10,6 +10,11 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -20,7 +25,7 @@ import edu.wustl.common.exception.AssignDataException;
  * @hibernate.class table="CATISSUE_EXTERNAL_IDENTIFIER"
  * @author gautam_shetty
  */
-public class ExternalIdentifier extends AbstractDomainObject implements java.io.Serializable
+public class ExternalIdentifier extends AbstractDomainObject implements Externalizable
 {
     private static final long serialVersionUID = 1234567890L;
 
@@ -134,4 +139,41 @@ public class ExternalIdentifier extends AbstractDomainObject implements java.io.
 		
 	}
 	
+	public void writeExternal(ObjectOutput out) throws IOException 
+	{
+		System.out.println("SERVER IN writeExternal ExternalIdentifier START");
+        // Write out the client properties from the server representation
+		if(id!=null)
+		{
+			out.writeInt(id.intValue());
+		}
+		else
+		{
+			out.writeInt(-1);
+		}
+			
+		out.writeUTF(name);
+        out.writeUTF(value);
+        System.out.println("SERVER IN writeExternal ExternalIdentifier DONE");
+    }
+    
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+	{
+		System.out.println("SERVER IN readExternal ExternalIdentifier");
+		
+		id = new Long(in.readInt());
+		name = in.readUTF();
+		value = in.readUTF();
+		
+		System.out.println(toString());
+	}
+	
+	public String toString()
+	{
+		return "EI{"+
+				"id "+id+"\t"+
+				"Name "+name+"\t"+
+				"Value "+value+
+				"}";
+	}	
 }

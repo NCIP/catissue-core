@@ -41,12 +41,12 @@ public class FlexInterface
 {
 	public FlexInterface() throws Exception
 	{
-//		Variables.applicationHome = System.getProperty("user.dir");
-//		Logger.out = org.apache.log4j.Logger.getLogger("");
-//		PropertyConfigurator.configure(Variables.applicationHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
-//		
-//		Logger.out.debug("here");
-//		CDEManager.init();
+		Variables.applicationHome = System.getProperty("user.dir");
+		Logger.out = org.apache.log4j.Logger.getLogger("");
+		PropertyConfigurator.configure(Variables.applicationHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
+		
+		Logger.out.debug("here");
+		CDEManager.init();
 	}
 	public SpecimenBean say(String str)
 	{
@@ -223,6 +223,17 @@ public class FlexInterface
 		Logger.out.debug("SERVER readSpecimen");
 		SpecimenBean sb = new SpecimenBean();
 		return sb;
+	}
+	
+	public List<SpecimenBean> readSpecimenList()
+	{
+		List<SpecimenBean> list = new ArrayList<SpecimenBean>();
+		
+		list.add(readSpecimen());
+		list.add(readSpecimen());
+		list.add(readSpecimen());
+		
+		return list;
 	}
 	
 	private Specimen getSpecimenInstance(String specimenClass)
