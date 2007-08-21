@@ -188,24 +188,23 @@ public class QueryOutputTreeBizLogic
 		String outputTreeStr = "";
 		for (OutputTreeDataNode childNode : children)
 		{
-			String selectSql = getSql(parentNodeId, tableName, parentIdColumnName, childNode);
+ 			String selectSql = getSql(parentNodeId, tableName, parentIdColumnName, childNode);
 			String name = childNode.getOutputEntity().getDynamicExtensionsEntity().getName();
 			name = Utility.parseClassName(name);
 			List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 			int size = dataList.size();
-			if(size == 0)
+			if(size != 0)
 			{
-				return outputTreeStr;
+				String parId = id.substring(id.lastIndexOf(Constants.NODE_SEPARATOR) + 2, id.length());
+				String childNodeId = childNode.getUniqueNodeId() + Constants.UNDERSCORE + Constants.LABEL_TREE_NODE;
+				String nodeId = parId + Constants.NODE_SEPARATOR + childNodeId;
+				String displayName = name + " (" + size + ")";
+				displayName = Constants.TREE_NODE_FONT + displayName + Constants.TREE_NODE_FONT_CLOSE;
+				String objectName = name;
+				String fullName = node.getOutputEntity().getDynamicExtensionsEntity().getName();
+				String parentObjectName = Utility.parseClassName(fullName);
+				outputTreeStr = outputTreeStr + "|" + nodeId + "," + displayName + "," + objectName + "," + id + "," + parentObjectName;
 			}
-			String parId = id.substring(id.lastIndexOf(Constants.NODE_SEPARATOR) + 2, id.length());
-			String childNodeId = childNode.getUniqueNodeId() + Constants.UNDERSCORE + Constants.LABEL_TREE_NODE;
-			String nodeId = parId + Constants.NODE_SEPARATOR + childNodeId;
-			String displayName = name + " (" + size + ")";
-			displayName = Constants.TREE_NODE_FONT + displayName + Constants.TREE_NODE_FONT_CLOSE;
-			String objectName = name;
-			String fullName = node.getOutputEntity().getDynamicExtensionsEntity().getName();
-			String parentObjectName = Utility.parseClassName(fullName);
-			outputTreeStr = outputTreeStr + "|" + nodeId + "," + displayName + "," + objectName + "," + id + "," + parentObjectName;
 		}
 		return outputTreeStr;
 			}

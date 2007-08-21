@@ -209,21 +209,14 @@ public class QueryOutputSpreadsheetBizLogic
 			List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 			int size = dataList.size();
 			String sizeStr = new Integer(size).toString();
-			if(size == 0)
-			{
-				spreadSheetDataMap = updateSpreadsheetData(sessionData, parentData,  node,recordsPerPage);
-			} 
-			else
-			{
-				String name = childNode.getOutputEntity().getDynamicExtensionsEntity().getName();
-				name = Utility.parseClassName(name);
-				List<String> data = new ArrayList<String>();
-				data.add(name);
-				data.add(sizeStr);
-				spreadsheetDataList.add(data);
-				spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, spreadsheetDataList);
-				querySessionData.setTotalNumberOfRecords(spreadsheetDataList.size());
-			}
+			String name = childNode.getOutputEntity().getDynamicExtensionsEntity().getName();
+			name = Utility.parseClassName(name);
+			List<String> data = new ArrayList<String>();
+			data.add(name);
+			data.add(sizeStr);
+			spreadsheetDataList.add(data);
+			spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, spreadsheetDataList);
+			querySessionData.setTotalNumberOfRecords(spreadsheetDataList.size());
 			spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
 		}
 		return spreadSheetDataMap;
