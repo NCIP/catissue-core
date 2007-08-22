@@ -139,6 +139,14 @@
 		<value>20</value>
 	</property>
 	<property>
+		<name>PMIExact</name>
+		<value>30</value>
+	</property>
+	<property>
+		<name>PMIPartial</name>
+		<value>10</value>
+	</property>
+	<property>
 		<name>DOBExact</name>
 		<value>20</value>
 	</property>
