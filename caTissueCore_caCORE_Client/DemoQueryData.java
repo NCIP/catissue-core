@@ -451,7 +451,7 @@ public class DemoQueryData
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		specimen.setInitialquantity(quantity);
+		specimen.setInitialQuantity(quantity);
 		specimen.setAvailableQuantity(quantity);
 		specimen.setComment("");
 //		specimen.setLineage("Aliquot");
@@ -499,7 +499,7 @@ public class DemoQueryData
 		externalIdentifierCollection.add(externalIdentifier);
 		specimen.setExternalIdentifierCollection(externalIdentifierCollection);
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
-		collectionEventParameters.setComments("");
+		collectionEventParameters.setComment("");
 //		User user = new User();
 //		user.setId(new Long(1));
 	 //	collectionEventParameters.setId(new Long(0));
@@ -538,7 +538,7 @@ public class DemoQueryData
 //		}
 		receivedEventParameters.setTimestamp(new Date());
 		receivedEventParameters.setReceivedQuality("Acceptable");
-		receivedEventParameters.setComments("");
+		receivedEventParameters.setComment("");
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
 		specimenEventCollection.add(receivedEventParameters);
@@ -727,7 +727,7 @@ public class DemoQueryData
 		
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
 
-		collectionProtocol.setAliqoutInSameContainer(new Boolean(true));
+		collectionProtocol.setAliquotInSameContainer(new Boolean(true));
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active");
 		collectionProtocol.setEndDate(null);
