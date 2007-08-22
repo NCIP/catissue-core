@@ -956,6 +956,17 @@
 	<definition name=".catissuecore.bioBlankDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/blank.jsp" />
 	</definition>
+	<!-- Added for Specimen disposal bug #5013	-->
+	<definition name=".catissuecore.homeDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Home.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.managehomedef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Home.jsp" />
+	</definition>
+	
+	
+	
 	<!--P.G. - End -->	
 <!--Orderering System-->
 	<!--Added By Deepti request order page -->

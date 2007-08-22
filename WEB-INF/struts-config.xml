@@ -4036,6 +4036,21 @@ PUBLIC
 			 scope="request">	
 			 <forward name="success" path=".catissuecore.bioBlankDef" /> 
 		</action>
+	<!-- Added for Specimen disposal bug #5013	-->
+	<action path="/homeAction"
+			 type="edu.wustl.catissuecore.action.ForwardAction"		 
+			 scope="request">	
+			 <forward name="success" path=".catissuecore.homeDef" /> 
+		</action>	
+		
+	<action path="/manageBioSpecimenHomeAction"
+			 type="edu.wustl.catissuecore.action.ForwardAction"		 
+			 scope="request">	
+			 <forward name="success" path=".catissuecore.managehomedef" /> 
+			 
+	</action>
+	
+
 <!--P.G. - End -->
 
 

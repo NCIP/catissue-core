@@ -56,8 +56,7 @@
 		{
 			if(confirm("Are you sure you want to disable the specimen ?"))
 			{
-				form.action="<%=formName%>";
-				form.target="_top";
+				form.action="<%=formName%>?disposal=true";
 				form.submit();
 			}
 			else
@@ -65,7 +64,7 @@
 				return false;
 			}
 		}
-		if(form.activityStatus.value == "<%=Constants.ACTIVITY_STATUS_CLOSED%>")
+		else if(form.activityStatus.value == "<%=Constants.ACTIVITY_STATUS_CLOSED%>")
 		{
 			if(confirm("Are you sure you want to close the specimen ?"))
 			{
@@ -78,11 +77,7 @@
 			}
 		
 		}
-		else
-		{
-			form.action="<%=formName%>";
-			form.submit();
-		}
+		
 	}
 </script>	
 </head>
