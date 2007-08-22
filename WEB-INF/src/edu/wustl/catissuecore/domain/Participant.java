@@ -149,7 +149,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	}
 	
 	
-	public Participant(Long id2, String lastName2, String firstName2, String middleName2, Date birthDate2, String gender2, String sexGenotype2, Collection raceCollection2, String ethnicity2, String socialSecurityNumber2, String activityStatus2, Date deathDate2, String vitalStatus2)
+	public Participant(Long id2, String lastName2, String firstName2, String middleName2, Date birthDate2, String gender2, String sexGenotype2, Collection raceCollection2, String ethnicity2, String socialSecurityNumber2, String activityStatus2, Date deathDate2, String vitalStatus2, Collection participantMedicalIdentifierCollection)
 	{
 		this.id = id2;
 		this.lastName = lastName2;
@@ -164,7 +164,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		this.activityStatus = activityStatus2;
 		this.deathDate = deathDate2;
 		this.vitalStatus = vitalStatus2;
-		
+		this.participantMedicalIdentifierCollection = participantMedicalIdentifierCollection; 
 	}
 
 	/**

@@ -1263,9 +1263,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_ETHINICITY="ETHINICITY";
 	public static final String PARTICIPANT_SOCIAL_SECURITY_NUMBER="SOCIAL_SECURITY_NUMBER";
 	public static final String PARTICIPANT_PROBABLITY_MATCH="Probability";
-	
+	public static final String PARTICIPANT_MEDICAL_RECORD_NO="MEDICAL_RECORD_NUMBER";
 	public static final String PARTICIPANT_SSN_EXACT="SSNExact";
 	public static final String PARTICIPANT_SSN_PARTIAL="SSNPartial";
+	public static final String PARTICIPANT_PMI_EXACT="PMIExact";
+	public static final String PARTICIPANT_PMI_PARTIAL="PMIPartial";
 	public static final String PARTICIPANT_DOB_EXACT="DOBExact";
 	public static final String PARTICIPANT_DOB_PARTIAL="DOBPartial";
 	public static final String PARTICIPANT_LAST_NAME_EXACT="LastNameExact";

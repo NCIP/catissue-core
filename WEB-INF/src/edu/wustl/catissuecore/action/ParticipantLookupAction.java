@@ -123,7 +123,7 @@ public class ParticipantLookupAction extends BaseAction
 	private List getColumnHeadingList(ParticipantBizLogic bizlogic) throws Exception
 	{
 		//Creating the column list which is used in Data grid to display column headings
-		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_VITAL_STATUS,Constants.PARTICIPANT_GENDER,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER};
+		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_VITAL_STATUS,Constants.PARTICIPANT_GENDER,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER,Constants.PARTICIPANT_MEDICAL_RECORD_NO};
 		List columnList = new ArrayList();
 		Logger.out.info("column List header size ;"+columnHeaderList.length);	
 		for (int i = 0; i < columnHeaderList.length; i++)
@@ -145,6 +145,8 @@ public class ParticipantLookupAction extends BaseAction
 	{
 		List participantDisplayList=new ArrayList();
 		Iterator itr=participantList.iterator();
+		String medicalRecordNo="";
+		String siteId = "";
 		while(itr.hasNext())
 		{
 			DefaultLookupResult result=(DefaultLookupResult)itr.next();
@@ -160,7 +162,16 @@ public class ParticipantLookupAction extends BaseAction
 			participantInfo.add(Utility.toString(participant.getVitalStatus()));
 			participantInfo.add(Utility.toString(participant.getGender()));						
 			participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
-			participantInfo.add(participant.getId());
+			if(participant.getParticipantMedicalIdentifierCollection()!=null)
+			{
+				Iterator participantMedicalIdentifierItr = participant.getParticipantMedicalIdentifierCollection().iterator();
+				while(participantMedicalIdentifierItr.hasNext())
+				{
+					medicalRecordNo = (String)participantMedicalIdentifierItr.next();
+					siteId = (String)participantMedicalIdentifierItr.next();
+				}
+			}
+			participantInfo.add(Utility.toString(medicalRecordNo));
 			participantDisplayList.add(participantInfo);
 			
 		}

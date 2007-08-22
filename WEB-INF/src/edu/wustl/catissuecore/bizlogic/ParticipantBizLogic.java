@@ -10,10 +10,6 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -33,7 +29,6 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -91,7 +86,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it.next();	        
 			pmIdentifier.setParticipant(participant);
-			dao.insert(pmIdentifier, sessionDataBean, true, true);
+			//dao.insert(pmIdentifier, sessionDataBean, true, true);
 		}
 
 		Set protectionObjects = new HashSet();
@@ -134,7 +129,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		   updateCache(currentObj);
 	}
 	/**
-	 *  This method updates the cache for MAP_OF_PARTICIPANTS, shold be called in postInsert/postUpdate 
+	 *  This method updates the cache for MAP_OF_PARTICIPANTS, should be called in postInsert/postUpdate 
 	 * @param obj - participant object
 	 */
 	private synchronized void updateCache(Object obj)
@@ -142,16 +137,42 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		Participant participant = (Participant) obj;
        //  getting instance of catissueCoreCacheManager and getting participantMap from cache
 		CatissueCoreCacheManager catissueCoreCacheManager = null;
+		Map mapOfParticipantMedicalIdentifierCollection = new HashMap();
 		try
 		{
 			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-			HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
+			HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);	
 			if(participant.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
 			{
 				participantMap.remove(participant.getId());
 			}
 			else
 			{
+				//Added retrival of Participant Medical Identifier
+				//(Virender Mehta)
+				Collection participantMedicalIdentifier = participant.getParticipantMedicalIdentifierCollection();
+				Iterator participantMedicalIdentifierItr = participantMedicalIdentifier.iterator();
+				while(participantMedicalIdentifierItr.hasNext())
+				{
+					ParticipantMedicalIdentifier participantIdentifier = (ParticipantMedicalIdentifier) participantMedicalIdentifierItr.next();
+					if(participantIdentifier.getMedicalRecordNumber()==null)
+					{
+						participant.setParticipantMedicalIdentifierCollection(null);
+					}
+					else
+					{
+						String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();	
+						String siteId = participantIdentifier.getSite().getId().toString();
+						Long participantId = participantIdentifier.getParticipant().getId();
+						if(mapOfParticipantMedicalIdentifierCollection.get(participantId)==null)
+						{
+							mapOfParticipantMedicalIdentifierCollection.put(participantId, new ArrayList());
+						}
+						((ArrayList)mapOfParticipantMedicalIdentifierCollection.get(participantId)).add(medicalRecordNo);
+						((ArrayList)mapOfParticipantMedicalIdentifierCollection.get(participantId)).add(siteId);
+						participant.setParticipantMedicalIdentifierCollection((Collection)mapOfParticipantMedicalIdentifierCollection.get(participantId));
+					}
+				}
 			    participantMap.put(participant.getId(), participant);
 			}
     	}
@@ -202,7 +223,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	        //End:-  Change for API Search 
 	        
 			pmIdentifier.setParticipant(participant);
-			dao.update(pmIdentifier, sessionDataBean, true, true, false);
+			//dao.update(pmIdentifier, sessionDataBean, true, true, false);
 
 			//Audit of ParticipantMedicalIdentifier.
 			ParticipantMedicalIdentifier oldPmIdentifier = (ParticipantMedicalIdentifier) getCorrespondingOldObject(
@@ -529,11 +550,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		dao.openSession(null);
 
 		String queryStr = "SELECT * FROM CATISSUE_RACE WHERE PARTICIPANT_ID IN (SELECT PARTICIPANT_ID FROM CATISSUE_PARTICIPANT WHERE ACTIVITY_STATUS!='DISABLED')";
+		String participantMedicalIdentifierStr = "(SELECT * FROM catissue_part_medical_id WHERE (PARTICIPANT_ID IN (SELECT PARTICIPANT_ID FROM CATISSUE_PARTICIPANT WHERE ACTIVITY_STATUS!='DISABLED')) AND MEDICAL_RECORD_NUMBER!='NULL')";
 		List listOfRaceObjects = new ArrayList();
-
+		List listOfParticipantMedicalIdentifier = new ArrayList();
 		try
 		{
 			listOfRaceObjects = dao.executeQuery(queryStr, null, false, null);
+			listOfParticipantMedicalIdentifier = dao.executeQuery(participantMedicalIdentifierStr, null, false, null);
 		}
 		catch (Exception ex)
 		{
@@ -552,9 +575,22 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			}
 			((HashSet)mapOfRaceCollection.get(participantId)).add(race);	
     	}
-		
-		
-		
+		//Added retrival of Participant Medical Identifier
+		//(Virender Mehta)
+		Map mapOfParticipantMedicalIdentifierCollection = new HashMap();
+		for (int i = 0; i < listOfParticipantMedicalIdentifier.size(); i++)
+		{
+			List objectArray = (ArrayList) listOfParticipantMedicalIdentifier.get(i);
+			Long participantId = (new Long(objectArray.get(3).toString()));
+			String participantMedicalIdentifier = (String) objectArray.get(1);
+			String participantMedicalIdentifierSite = (String) objectArray.get(2);
+			if(mapOfParticipantMedicalIdentifierCollection.get(participantId)==null)
+			{
+				mapOfParticipantMedicalIdentifierCollection.put(participantId, new ArrayList());
+			}
+			((ArrayList)mapOfParticipantMedicalIdentifierCollection.get(participantId)).add(participantMedicalIdentifier);	
+			((ArrayList)mapOfParticipantMedicalIdentifierCollection.get(participantId)).add(participantMedicalIdentifierSite);
+    	}
 		Map mapOfParticipants = new HashMap();
 		for (int i = 0; i < listOfParticipants.size(); i++)
 		{
@@ -573,7 +609,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			Date deathDate = (Date) obj[10];
 			String vitalStatus = (String) obj[11];
 					
-			Participant participant = new Participant(id,lastName,firstName,middleName,birthDate,gender,sexGenotype,(Collection)mapOfRaceCollection.get(id),ethnicity,socialSecurityNumber,activityStatus,deathDate,vitalStatus);
+			Participant participant = new Participant(id,lastName,firstName,middleName,birthDate,gender,sexGenotype,(Collection)mapOfRaceCollection.get(id),ethnicity,socialSecurityNumber,activityStatus,deathDate,vitalStatus,(Collection)mapOfParticipantMedicalIdentifierCollection.get(id));
 			mapOfParticipants.put(participant.getId(), participant);
 		}
 		return mapOfParticipants;
