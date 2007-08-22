@@ -273,7 +273,6 @@ function ReplaceTags(xStr)
 				var reportSite = xmlDocument.getElementsByTagName('IdentifiedReportSite')[0].firstChild.nodeValue;			
 				var identifierReportText = xmlDocument.getElementsByTagName('IdentifiedReportTextContent')[0].firstChild.nodeValue;
 				var deIdentifierReportText = xmlDocument.getElementsByTagName('DeIdentifiedReportTextContent')[0].firstChild.nodeValue;
-				var scriptFunction = xmlDocument.getElementsByTagName('JavaScriptFunction')[0].firstChild.nodeValue;
 				
 				document.getElementById("surgicalPathologyNumber").innerHTML = surgicalPathologyNumber;
 				document.getElementById("identifiedReportSite").innerHTML = reportSite;
@@ -285,6 +284,18 @@ function ReplaceTags(xStr)
 				startOff=new Array();
 				endOff=new Array();
 				var spanText="";
+				
+				var table = document.getElementById('classificationNames');
+				alert(table);
+				if(table!=null)
+				{
+					if(document.getElementById('classificationNamesRow')!=null)
+					{
+						table.deleteRow(0);
+					}
+				}
+				var row =document.getElementById('classificationNames').insertRow(0);
+				row.setAttribute('id', 'classificationNamesRow');
 				for(i=0;i<xmlDocument.getElementsByTagName('ConceptBean').length;i++)
 				{
 					var conceptBeans = xmlDocument.getElementsByTagName('ConceptBean')[i];
@@ -293,13 +304,19 @@ function ReplaceTags(xStr)
 					startOff[i] = conceptBeans.getElementsByTagName('StartOff')[0].firstChild.nodeValue;
 					endOff[i] = conceptBeans.getElementsByTagName('EndOff')[0].firstChild.nodeValue;
 					
-					spanText += "<td class=\"formRequiredLabelWithAllBorder\">";
+					spanText="";
+	//				spanText += "<td class=\"formRequiredLabelWithAllBorder\">";
 					spanText += "<input type=\"checkbox\" id=select"+i+" onclick=\"checkBoxClicked()\" />";
 					spanText += "<span id=\"classificationName\" style="+"background-color:"+colours[i]+">";
 					spanText += classificationName + "</span>";	
-					spanText += "</td>";
+	//				spanText += "</td>";
+					var cell = document.createElement("TD");
+					var inputTag=document.createElement('input');
+					
+					cell.className="formRequiredLabelWithAllBorder";
+					cell.innerHTML=spanText;
+					row.appendChild(cell);
 				}
-				document.getElementById("classificationNames").innerHTML = spanText;
 			}
 		}
 	}

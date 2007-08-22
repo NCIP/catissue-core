@@ -202,16 +202,16 @@
 						<bean:message key="app.selectAll" />
 					</td>
 				</tr-->		
-				
+				 <tr>
+				  <td>
+				  <table id="classificationNames" border="0"  cellpadding="5" width="100%" cellspacing="0">
 				<%
 				  List conceptClassificationList = (List)request.getAttribute(Constants.CONCEPT_BEAN_LIST);
 				  int chkBoxNo = 0;			  
 				  if(conceptClassificationList != null && conceptClassificationList.size() > 0)
 				  {%>
-				  <tr>
-				  <td>
-				  <table border="0" cellpadding="5" width="100%" cellspacing="0">
-				  <tr id="classificationNames">
+				 
+				  <tr id="classificationNamesRow">
 				<logic:iterate id="referentClassificationObj" collection="<%= conceptClassificationList %>" type="edu.wustl.catissuecore.bean.ConceptHighLightingBean">
 					<td class="formRequiredLabelWithAllBorder">
 						<% String chkBoxId = "select"+chkBoxNo; %>
@@ -225,11 +225,11 @@
 				<% chkBoxNo++;%>
 				</logic:iterate>
 				</tr>
-				</table>
+				
+			<%} %>
+			</table>
 				</td>
 			</tr>
-			<%} %>
-			
 			</table>
 		</td>
 	</tr>
