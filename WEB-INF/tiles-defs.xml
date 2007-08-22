@@ -952,11 +952,13 @@
 	<definition name=".catissuecore.specimenCollectionGroupTechDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CPQuerySCGForTechnician.jsp" />
 	</definition>
-	<!--P.G. - Start 24May07:Bug 4291-->
+<!--P.G. - Start 24May07:Bug 4291-->
 	<definition name=".catissuecore.bioBlankDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/blank.jsp" />
 	</definition>
-	<!-- Added for Specimen disposal bug #5013	-->
+<!--P.G. - End -->	
+
+<!-- Added for Specimen disposal bug #5013	-->
 	<definition name=".catissuecore.homeDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Home.jsp" />
 	</definition>
@@ -964,10 +966,8 @@
 	<definition name=".catissuecore.managehomedef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Home.jsp" />
 	</definition>
+<!--bug #5013. - End -->
 	
-	
-	
-	<!--P.G. - End -->	
 <!--Orderering System-->
 	<!--Added By Deepti request order page -->
 	<definition name=".catissuecore.orderDef" extends=".catissuecore.searchHomeDef">
