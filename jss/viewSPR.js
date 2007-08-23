@@ -286,7 +286,6 @@ function ReplaceTags(xStr)
 				var spanText="";
 				
 				var table = document.getElementById('classificationNames');
-				alert(table);
 				if(table!=null)
 				{
 					if(document.getElementById('classificationNamesRow')!=null)
