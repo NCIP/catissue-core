@@ -93,6 +93,7 @@ public abstract class CaTIESConstants
 	public static final String CSVLOGGER_REPORTQUEUE=" Report Loder Queue ID ";
 	public static final String CSVLOGGER_IDENTIFIED_REPORT=" Identified Report ID";
 	public static final String CSVLOGGER_DEIDENTIFIED_REPORT=" Deidentified Report ID";
+	public static final String CSVLOGGER_PROCESSING_TIME="Processing Time (ms)";
 	
 	//constants for concept coding
 	public static final String ERROR_GATE="ERROR_FAILED_GATE_PIPE";
