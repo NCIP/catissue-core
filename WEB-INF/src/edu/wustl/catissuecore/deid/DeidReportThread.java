@@ -57,6 +57,7 @@ public class DeidReportThread extends Thread
 	 */
 	public void run()
 	{
+		Long startTime = new Date().getTime();
 		try
 		{
 			DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
@@ -116,11 +117,13 @@ public class DeidReportThread extends Thread
 	        	Logger.out.debug("Updating identified report report id="+identifiedReport.getId().toString());
 	        	// update object of identified report
 	        	Utility.updateObject(identifiedReport);
-	        	CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.DEIDENTIFIED+","+"Report De-identified successfully");
+	        	Long endTime = new Date().getTime();
+	        	CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.DEIDENTIFIED+","+"Report De-identified successfully,"+(endTime-startTime));
 	    	}
 	    	catch(DAOException daoEx)
 	    	{
-	    		CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.FAILURE+","+daoEx.getMessage());
+	    		Long endTime = new Date().getTime();
+	    		CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.FAILURE+","+daoEx.getMessage()+",,"+(endTime-startTime));
 	    		Logger.out.error("Error while saving//updating Deidentified//Identified report ",daoEx);
 	    	} 
 		}
@@ -129,7 +132,8 @@ public class DeidReportThread extends Thread
     		Logger.out.error("Deidentification process is failed:",ex);
 			try
 			{
-				CSVLogger.error(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.FAILURE+","+ex.getMessage());
+				Long endTime = new Date().getTime();
+				CSVLogger.error(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.FAILURE+","+ex.getMessage()+",,"+(endTime-startTime));
 				// if any exception occures then update the status of the identified report to failed
 				identifiedReport.setReportStatus(CaTIESConstants.DEID_PROCESS_FAILED);
 				Utility.updateObject(identifiedReport);

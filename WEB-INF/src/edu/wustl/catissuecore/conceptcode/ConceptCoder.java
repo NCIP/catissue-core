@@ -47,6 +47,7 @@ public class ConceptCoder
 	
 	public void process() throws Exception  // change name to process if this class need not to be a thread, then do not catch exception here, throw it upward 
 	{
+		Long startTime=new Date().getTime();
 		try
 		{
 			Logger.out.info("Inside Concept coder");
@@ -58,15 +59,17 @@ public class ConceptCoder
 		}
 		catch (Throwable ex) 
 		{
+			Long endTime=new Date().getTime();
 			Logger.out.error("Concept coding process failed for report id:"+this.deidPathologyReport.getId()+" "+ex.getMessage());
 			this.deidPathologyReport.setReportStatus(CaTIESConstants.CC_PROCESS_FAILED);
 			Utility.updateObject(this.deidPathologyReport);
-			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CC_PROCESS_FAILED+","+ex.getMessage());
+			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CC_PROCESS_FAILED+","+ex.getMessage()+","+(endTime-startTime));
 		}
 		if(!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(CaTIESConstants.CC_PROCESS_FAILED))
 		{
+			Long endTime=new Date().getTime();
 			Logger.out.info("Report is updated");
-			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CONCEPT_CODED+","+"Report Concept Coded successfully");
+			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CONCEPT_CODED+","+"Report Concept Coded successfully,"+(endTime-startTime));
 		}
 		
 		Logger.out.info("Report is updated");
