@@ -439,6 +439,14 @@ public class FlexInterface
 			e.printStackTrace();
 		}
 	}
+	
+	public void setLogicalOperator(DAGNode node,int operandIndex,String operator)
+	{
+		int parentExpId = node.getExpressionId();
+		System.out.println("parentExpId =="+parentExpId+"==operandIndex=="+operandIndex+"==operator=="+operator );
+		dagPanel.updateLogicalOperator(parentExpId, operandIndex, operator);
+		
+	}
 
 	public void initFlexInterface()
 	{
