@@ -1727,7 +1727,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGE_OF_INSTITUTE = "pageOfInstitution";
 	public static final String PAGE_OF_PARTICIPANT = "pageOfParticipant";
 	public static final String PAGE_OF_SITE = "pageOfSite";
-	public static final String PAGE_OF_SPECIMEN = "pageOfNewSpecimen";
+	public static final String PAGE_OF_SPECIMEN = "pageOfSpecimen";
 	public static final String PAGE_OF_SPECIMEN_ARRAY = "pageOfSpecimenArray";
 	public static final String PAGE_OF_SPECIMEN_ARRAY_TYPE = "pageOfSpecimenArrayType";
 	public static final String PAGE_OF_SPECIMEN_COLLECTION_GROUP = "pageOfSpecimenCollectionGroup";
