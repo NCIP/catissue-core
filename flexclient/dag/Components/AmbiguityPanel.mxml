@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="450" height="500" creationComplete="init()">
+<mx:Script>
+	<![CDATA[
+		import mx.controls.CheckBox;
+		import mx.binding.utils.BindingUtils;
+		import mx.collections.ArrayCollection;
+		import mx.managers.PopUpManager;
+	    import mx.events.CollectionEvent;
+	    import Components.IDAGPath;
+	    import mx.controls.Alert;
+		import mx.managers.PopUpManager;
+		import mx.rpc.events.ResultEvent;
+
+	    [Bindable]
+		public var pathList:ArrayCollection;
+	    [Bindable]
+		public var selectedList:ArrayCollection;
+								
+		public var dagPath: IDAGPath;
+		
+	private function init():void
+        {
+        	
+                pathList.addEventListener(CollectionEvent.COLLECTION_CHANGE, handleDataProviderChange);
+        }
+       
+		public  function closePopUp(event:MouseEvent):void {
+
+			    PopUpManager.removePopUp(this);
+				this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,this.parentApplication.getPathHandler,false);
+				this.parentApplication.rpcService.addEventListener("result",this.parentApplication.linkNodesHandler);
+				this.parentApplication.rpcService.linkNodes(selectedList);
+				
+			
+		}
+
+	private function handleDataProviderChange(event:CollectionEvent):void
+        {
+		selectedList = new ArrayCollection()
+		var len:int = pathList.length;
+
+				for (var i:int=0;i<len;i++)
+				{
+					if (pathList.getItemAt(i).isSelected)
+					{
+						dagPath = pathList.getItemAt(i) as IDAGPath;
+						selectedList.addItem(dagPath);
+					}
+				}
+             
+         }
+		
+	]]>
+</mx:Script>
+	<mx:DataGrid name="pathGrid" x="0" y="0" width="100%" height="100%" dataProvider="{pathList}">
+		<mx:columns>
+			<mx:DataGridColumn headerText="Paths" dataField="name" dataTipField="name" showDataTips="true" />
+			<mx:DataGridColumn headerText="Select" dataField="isSelected">
+			   <mx:itemRenderer>
+			      <mx:Component>
+				         <mx:CheckBox name="checkBox" click="data.isSelected=!data.isSelected"   selected="{data.isSelected}"/>			      	
+			      </mx:Component>
+      		   </mx:itemRenderer>
+			</mx:DataGridColumn>			
+		</mx:columns>
+	</mx:DataGrid>
+	<mx:ControlBar name="controlBar">
+		<mx:Spacer width="100%"/>
+		<mx:Button name="okButton" label="OK" click="closePopUp(event)"/>
+		<mx:Button name="cancelButton" label="Cancel" click="closePopUp(event)"/>
+	</mx:ControlBar>
+
+</mx:Panel>

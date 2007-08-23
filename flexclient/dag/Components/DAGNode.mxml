@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:Box backgroundColor="white" borderStyle="solid" direction="vertical"  
+	xmlns:mx="http://www.adobe.com/2006/mxml"  verticalGap="0"
+		implements="flash.utils.IExternalizable">
+<mx:Script>
+	<![CDATA[
+		import mx.rpc.events.ResultEvent;
+		import DAG;
+		import mx.events.MenuEvent;
+		import mx.controls.Alert;
+		import mx.skins.halo.BrokenImageBorderSkin;
+		import mx.collections.ArrayCollection;
+		import mx.rpc.events.FaultEvent;
+		import flash.utils.IDataInput;
+		import flash.utils.IDataOutput;
+		import mx.controls.Alert;
+			
+		[Bindable]
+		public var accSelectedIndx:Number = 0;
+		[Bindable]
+		public var nodeName:String = "Node";
+		[Bindable]
+		public var expressionId:int;
+		[Bindable]
+		public var nodeNumber:String = "1";
+		[Bindable]
+		public var operatorBetweenAttrAndAssociation:String="And"; 
+		[Bindable]
+		public var operatorArray:Array = ["AND","OR"];
+			
+		public var outAssociations:ArrayCollection = new ArrayCollection();		
+		[Bindable]
+		public function addOutAssociation(node:String,link:String):void{
+			var ass:Association = new Association(node,link);
+			outAssociations.addItem(ass);
+		}
+		[Bindable]
+		public function removeOutAssociation(node:String,link:String):void{
+			var ass:Association;
+			for(var i:int=0;i<outAssociations.length;i++)
+			{
+				ass = Association(outAssociations.getItemAt(i));
+				if(ass.associatedLink == link && ass.associatedNode == node)
+				{
+					outAssociations.removeItemAt(i);
+					break;
+				}
+			}
+		}
+		
+		[Bindable]
+		public function getOutAssociations():ArrayCollection{
+			return outAssociations;
+		}
+		
+		[Bindable]
+		public function getOutAssociation(node:String):Association{
+			var ass:Association;
+			for(var i:int=0;i<outAssociations.length;i++)
+			{
+				ass = Association(outAssociations.getItemAt(i));
+				if(ass.associatedNode == node)
+				{
+					return ass;
+				}
+			}
+			return null;
+		}
+		
+		//For incoming association
+		public var inAssociations:ArrayCollection = new ArrayCollection();
+		[Bindable]
+		public function addInAssociation(node:String,link:String):void{
+			var ass:Association = new Association(node,link);
+			inAssociations.addItem(ass);
+		}
+		[Bindable]
+		public function removeInAssociation(node:String,link:String):void{
+			var ass:Association;
+			for(var i:int=0;i<inAssociations.length;i++)
+			{
+				ass = Association(inAssociations.getItemAt(i));
+				if(ass.associatedLink == link && ass.associatedNode == node)
+				{
+					inAssociations.removeItemAt(i);
+					break;
+				}
+			}
+		}
+		[Bindable]
+		public function getInAssociations():ArrayCollection{
+			return inAssociations;
+		}
+		//-------------
+		public function readExternal(input:IDataInput):void {
+			
+			//Alert.show("--------Start Read External---------");
+			nodeName = input.readUTF();
+			toolTip=input.readUTF();
+			expressionId=input.readInt();
+			operatorBetweenAttrAndAssociation = input.readUTF();
+			//	Alert.show("--------Stop Read External---------");
+		}
+
+		public function writeExternal(out:IDataOutput):void {
+
+			//Alert.show("--------Start Write External---------");
+			out.writeUTF(nodeName);
+			out.writeUTF(toolTip);
+			out.writeInt(expressionId);
+			out.writeUTF(operatorBetweenAttrAndAssociation);
+			//Alert.show("--------Stop Write External---------");
+				
+		}
+		//---
+		
+		public function select():void
+		{
+			this.setStyle("borderColor","blue");
+			this.setStyle("borderThickness","2");
+		}
+		
+		public function unSelect():void
+		{
+			this.setStyle("borderColor","gray");
+			this.setStyle("borderThickness","1");
+		}
+		
+		private function selectionEffect():void{
+			this.setStyle("color","blue");
+		}
+		
+		import mx.controls.Menu;
+		// Method to create an Array-based menu.
+		private function createAndShow(event:MouseEvent):void {
+			var myMenu:Menu = Menu.createMenu(this, menuData, true);
+			myMenu.show(event.stageX,event.stageY);
+			myMenu.addEventListener(MenuEvent.ITEM_CLICK,handleMenuEvent);
+		}
+		
+		private function handleMenuEvent(event:MenuEvent):void
+		{
+			if(event.label == "Delete")
+			{
+				var ass:Association;
+				for(var i:int=0;i<inAssociations.length;i++)
+				{
+					ass = Association(inAssociations.getItemAt(i));
+					this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
+					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeOutAssociation(this.name,ass.associatedLink);
+				}
+				for(var j:int=0;j<outAssociations.length;j++)
+				{
+					ass = Association(outAssociations.getItemAt(j));
+					this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
+					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeInAssociation(this.name,ass.associatedLink);
+				}
+				Alert.show(this.name);
+				this.parent.removeChild(this.parent.getChildByName(this.name));
+				
+				var dag:DAG = new DAG();
+				//this.parentApplication.rpcService.destination="cdeService";
+				this.parentApplication.rpcService.deleteNode(this.nodeName);
+				this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,deleteHandler);
+				this.parentApplication.rpcService.addEventListener("fault", faultHandler);
+				
+			}
+		}
+		
+		public function deleteHandler(event:ResultEvent)
+		{
+			Alert.show("Delete Success");
+			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteHandler,false);
+		}
+		public function faultHandler (event:FaultEvent):void {
+				// Deal with event.fault.faultString, etc.
+			Alert.show(event.fault.faultString, 'Error');
+			}
+		// The Array data provider
+		[Bindable]
+		public var menuData:Array = [	
+		{label: "Edit", type: "radio", toggled: false},
+		{label: "Delete", type: "radio", toggled: false}
+		
+		];
+		private var operators:Array = ["AND","OR"];
+		private function updateSelectIndex():void{
+//			accSelectedIndx = detailsAcc.selectedIndex;
+		}
+		
+	]]>
+</mx:Script>
+	<mx:HBox backgroundColor="0xFFFFAA" borderStyle="solid" width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+		<mx:Canvas backgroundColor="0xF5F5F5"  borderStyle="solid">
+			<mx:Label text="{nodeNumber}" />
+		</mx:Canvas>
+		<mx:Label styleName="Arial"  text="{nodeName}" color="blue" />
+		
+		<mx:Button label=">" click="createAndShow(event);" />
+	</mx:HBox>
+		<mx:VBox id="assVbox" name="Association" label="Associations" width="100%" verticalGap="0" visible="false">
+		
+			<mx:Repeater id="assRep" dataProvider="{outAssociations}">
+				<mx:HBox id="hbox" width="100%" borderStyle="solid">
+				<mx:Canvas backgroundColor="0xF5F5F5"  borderStyle="solid">
+					<mx:Label text="{assRep.currentItem.associatedNode}" />
+				</mx:Canvas>
+				<mx:ComboBox dataProvider="{operatorArray}"/>
+			</mx:HBox>
+			</mx:Repeater>
+		</mx:VBox>
+</mx:Box>
