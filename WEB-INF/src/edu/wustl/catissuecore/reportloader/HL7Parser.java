@@ -141,8 +141,10 @@ public class HL7Parser implements Parser
 			}
 			else
 			{
+				Long startTime=new Date().getTime();
 				String status=HL7ParserUtil.validateAndSaveReportMap(reportMap);
-				CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,new Date().toString()+",,,"+status);
+				Long endTime=new Date().getTime();
+				CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,new Date().toString()+",,,"+status+","+(endTime-startTime));
 			}
 		}
 		catch(Exception ex)
