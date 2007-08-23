@@ -64,6 +64,7 @@ import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.ExpressionId;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
@@ -322,6 +323,15 @@ public class DAGPanel {
 	{
 		String message=null;
 		try {
+			int recordsPerPage; 
+			String recordsPerPageSessionValue = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);
+			if (recordsPerPageSessionValue==null)
+			{
+					recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(Constants.RECORDS_PER_PAGE_PROPERTY_NAME));
+					session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage+"");
+			}
+			else
+				recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
 			boolean isRulePresentInDag = false;
 			IQuery query = m_queryObject.getQuery();
 			IConstraints constraints = query.getConstraints();
@@ -370,7 +380,7 @@ public class DAGPanel {
 					QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 					String parentNodeId = null;
 					String treeNo = "0";
-					Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,node, sessionData,parentNodeId);
+					Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,node, sessionData,parentNodeId,recordsPerPage);
 					session.setAttribute(Constants.SPREADSHEET_DATA_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST));
 					session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
 					message ="SUCCESS";
