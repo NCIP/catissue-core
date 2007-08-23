@@ -92,7 +92,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         request.setAttribute(Constants.REQ_PATH, "");
         request.setAttribute(Constants.SUBMITTED_FOR, submittedFor);
         request.setAttribute(Constants.FORWARD_TO, forwardTo);
-        if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN))
+        if(pageOf.equalsIgnoreCase(Constants.PAGEOF_NEW_SPECIMEN))
         {
         	request.setAttribute(Constants.ID,id.toString());
         }
@@ -156,7 +156,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	//		  prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());
 		}
 		//if page is of Specimen then the domain object is Specimen
-		else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN) || pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY)
+		else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_NEW_SPECIMEN) || pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY)
 				|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS) ||pageOf.equalsIgnoreCase(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
 		{
 			className=Specimen.class.getName();
