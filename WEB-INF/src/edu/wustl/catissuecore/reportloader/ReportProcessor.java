@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.wustl.catissuecore.caties.util.CSVLogger;
@@ -78,8 +79,10 @@ public class ReportProcessor implements Observer
 						// Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
 						SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
 						// calling parser to parse file
+						Long startTime=new Date().getTime();
 						parser.parse(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
-						Logger.out.info("parsing of file "+files[i]+" finished");
+						Long endTime=new Date().getTime();
+						Logger.out.info("parsing of file "+files[i]+" finished. Time required:"+(endTime-startTime));
 					}
 					else
 					{

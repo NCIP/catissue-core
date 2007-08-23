@@ -167,6 +167,10 @@ public class HL7Parser implements Parser
 		FileReader fr=null;
 		BufferedReader br=null;
 		int counter=0;
+		Long startTime=null;
+		Long endTime=null;
+		Long fileParseStartTime=null;
+		Long fileParseEndTime=null;
 		
 		
 		try
@@ -176,6 +180,7 @@ public class HL7Parser implements Parser
 			String line = "";
 			counter=0;
 			Logger.out.info("Parsing File "+fileName+": Started at "+new Date().toString());
+			fileParseStartTime=new Date().getTime();
 			// loop while !EOF
 			while ((line = br.readLine()) != null)
 			{
@@ -194,22 +199,25 @@ public class HL7Parser implements Parser
 						if (reportMap != null && reportMap.size()>0)
 						{
 							status=HL7ParserUtil.validateAndSaveReportMap(reportMap);
+							endTime=new Date().getTime();
 							counter++;
-							CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,new Date().toString()+","+fileName+","+counter+","+status);
+							CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,new Date().toString()+","+fileName+","+counter+","+status+",,"+(endTime-startTime));
 							Logger.out.info("Report is added to queue. Current Count is="+counter);
 							// reinitialize variables to null to process next report
 							reportMap.clear();
 							reportMap=null;
 						} 
 						// if start of report found then initialize report map and set queue status to NEW
+						startTime=new Date().getTime();
 						reportMap = new HashMap<String, Set>();
 					}
 					// add PID, OBR, OBX section from report text to report map
 					
 				}	
 			}
+			fileParseEndTime=new Date().getTime();
 			Logger.out.info("Parsing File "+fileName+": Finished at "+new Date().toString());
-			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,"Total "+counter+" reports are added to report queue from file "+fileName);
+			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,"Total "+counter+" reports are added to report queue from file "+fileName+" Time reuired for parsing:"+(fileParseEndTime-fileParseStartTime));
 		}
 		catch(Exception ex)
 		{
