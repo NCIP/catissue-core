@@ -9,8 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.PropertyConfigurator;
+import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.PropertyConfigurator;
+import edu.wustl.common.querysuite.metadata.path.IPath;
+import edu.wustl.common.querysuite.metadata.path.Path;
+import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
+import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
+import edu.wustl.cab2b.client.ui.query.IPathFinder;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -28,6 +34,10 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.flex.dag.DAGNode;
+import edu.wustl.catissuecore.flex.dag.DAGPanel;
+import edu.wustl.catissuecore.flex.dag.DAGPath;
+import edu.wustl.catissuecore.flex.dag.DAGPathFinder;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
@@ -335,4 +345,116 @@ public class FlexInterface
 		user.setId(1L);
 		event.setUser(user);
 	}
+	//--------------DAG-----------------------------
+	
+	public String getSearchResult()
+	{
+		HttpSession session= flex.messaging.FlexContext.getHttpRequest().getSession();
+		return dagPanel.search(session);
+	}
+	/**
+	 * Set i/p from flex
+	 * @param strToCreateQueryObject
+	 * @param entityName
+	 */
+	public void setNode(String strToCreateQueryObject,String entityName)
+    {
+	//TODO Write code to refresh node list when new http request arrives.
+//		 Add  node each time  and Append it list of node to keep track of nodes
+		// Delete node should remove node from list required to idenetify node uniquely 
+		// Should remove any assocation
+		
+		HttpSession session= flex.messaging.FlexContext.getHttpRequest().getSession();
+		Map queryDataMap =dagPanel.createQueryObject(strToCreateQueryObject, entityName, session,queryObject);
+		DAGNode dagNode = (DAGNode)queryDataMap.get("DAGNODE");
+		nodeList.add(dagNode);
+				
+	}
+	
+	/**
+	 * GetLastNode
+	 * @return
+	 */
+	public DAGNode getLastNode()
+	{
+		int lastIndex =0;
+		if(!nodeList.isEmpty())
+		{
+			lastIndex= (nodeList.size()-1);
+		}
+		return nodeList.get(lastIndex);
+	}
+	
+	public void deleteNode(String nodeName)
+	{
+		for(int i=0;i<nodeList.size();i++)
+		{
+			DAGNode dagNode = nodeList.get(i);
+			if(dagNode.getNodeName().equals(nodeName));
+			{
+				nodeList.remove(i);
+				break;
+			}
+		}
+	}
+	
+	public List getpaths(List<DAGNode> linkedNodeList)
+	{
+		sourceNode = linkedNodeList.get(0);
+		destinationNode = linkedNodeList.get(1);
+		pathsList=dagPanel.getPaths(sourceNode, destinationNode);
+		List<DAGPath> pathsListStr = new ArrayList<DAGPath>();
+		for(int i=0;i<pathsList.size();i++)
+		{
+			Path p =(Path) pathsList.get(i);
+			DAGPath path = new DAGPath();
+			path.setName(DAGPanel.getPathDisplayString(pathsList.get(i)));
+			path.setId(new Long(p.getPathId()));
+			pathsListStr.add(path);
+		}
+		return pathsListStr;
+	}
+	
+	public void linkNodes(List<DAGPath> selectedPaths)
+	{
+		try {
+			List<IPath> selectedList = new ArrayList<IPath>();
+			for(int j=0;j<selectedPaths.size();j++)
+			{
+				for(int i=0; i<pathsList.size();i++)
+				{
+					Path path =(Path) pathsList.get(i);
+					long pathId = selectedPaths.get(j).getId().longValue();
+					if(path.getPathId()==pathId)
+					{
+						selectedList.add(path);
+						break;
+					}
+					
+				}
+			}
+			dagPanel.linkNode(sourceNode,destinationNode,selectedList);
+		} catch (RuntimeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void initFlexInterface()
+	{
+		nodeList = new ArrayList<DAGNode>();
+		queryObject = new ClientQueryBuilder();
+		IPathFinder pathFinder = new DAGPathFinder();
+		dagPanel = new DAGPanel(pathFinder);
+		dagPanel.setQueryObject(queryObject);
+	}
+	private DAGNode sourceNode= null;
+	private DAGNode destinationNode = null; 
+	private	IClientQueryBuilderInterface queryObject;
+	private List<DAGNode> nodeList;
+	private List<IPath> pathsList;
+	private DAGPanel dagPanel;
+	
+	
+	
 }
