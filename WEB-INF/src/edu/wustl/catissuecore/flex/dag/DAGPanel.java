@@ -49,6 +49,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.querysuite.exceptions.CyclicException;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
 import edu.wustl.common.querysuite.exceptions.SqlException;
+import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
 import edu.wustl.common.querysuite.metadata.associations.IAssociation;
 import edu.wustl.common.querysuite.metadata.path.IPath;
@@ -236,7 +237,6 @@ public class DAGPanel {
 
 	private void updateQueryObject(PathLink link, DAGNode sourceNode, DAGNode destNode) {
 		IExpressionId sourceexpressionId = new ExpressionId(sourceNode
-
 				.getExpressionId());
 		IExpressionId destexpressionId = new ExpressionId(destNode
 				.getExpressionId());
@@ -332,6 +332,7 @@ public class DAGPanel {
 			}
 			else
 				recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
+			
 			boolean isRulePresentInDag = false;
 			IQuery query = m_queryObject.getQuery();
 			IConstraints constraints = query.getConstraints();
@@ -408,6 +409,18 @@ public class DAGPanel {
 			e.printStackTrace();
 		}				
 		return message;
+	}
+	
+	public void updateLogicalOperator(int parentExpId,int parentIndex,String operator )
+	{
+		IExpressionId parentExpressionId = new ExpressionId(parentExpId);
+		IQuery query = m_queryObject.getQuery();
+		IExpression parentExpression = query.getConstraints().getExpression(parentExpressionId);
+		LogicalOperator logicOperator = edu.wustl.cab2b.client.ui.query.Utility.getLogicalOperator(operator);
+		int childIndex = parentIndex +1;
+		parentExpression.setLogicalConnector(parentIndex, childIndex,QueryObjectFactory.createLogicalConnector(logicOperator));
+		m_queryObject.setQuery(query);
+		
 	}
 
 }
