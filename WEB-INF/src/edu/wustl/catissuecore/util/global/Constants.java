@@ -1901,7 +1901,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String VIEW_SURGICAL_PATHOLOGY_REPORT="viewSPR";
 	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP="pageOfSpecimenCollectionGroup";
 	public static final String PAGEOF_PARTICIPANT="pageOfParticipant";
-	public static final String PAGEOF_SPECIMEN="pageOfNewSpecimen";
+	public static final String PAGEOF_NEW_SPECIMEN="pageOfNewSpecimen";
 	public static final String REVIEW="REVIEW";
 	public static final String QUARANTINE="QUARANTINE";
 	public static final String COMMENT_STATUS_RENDING="PENDING";
