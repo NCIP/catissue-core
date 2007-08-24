@@ -1,12 +1,15 @@
 package edu.wustl.catissuecore.flex.dag;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
+import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConstraintEntity;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
+import edu.wustl.common.querysuite.queryobject.impl.Rule;
 
 public class DAGNodeBuilder {
 	
@@ -30,7 +33,7 @@ public class DAGNodeBuilder {
 		return dagNode;
         		
 	}
-	
+
 	 public void setQueryObject(IClientQueryBuilderInterface queryObject) {
 	        m_queryObject = queryObject;
 	    }

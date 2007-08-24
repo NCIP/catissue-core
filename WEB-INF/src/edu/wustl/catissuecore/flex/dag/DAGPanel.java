@@ -40,7 +40,9 @@ import edu.wustl.cab2b.common.util.EntityInterfaceComparator;
 import edu.wustl.cab2b.common.util.Utility;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
+import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -54,6 +56,7 @@ import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
 import edu.wustl.common.querysuite.metadata.associations.IAssociation;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
+import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConstraintEntity;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
@@ -64,6 +67,7 @@ import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.ExpressionId;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
+import edu.wustl.common.querysuite.queryobject.impl.Rule;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -82,16 +86,19 @@ public class DAGPanel {
 
 	private IClientQueryBuilderInterface m_queryObject;
 	private IPathFinder m_pathFinder;
+	private IExpression expression;
 
 	public DAGPanel(IPathFinder pathFinder)
 	{
 		m_pathFinder =pathFinder;
 	}
 
-	public Map createQueryObject(String strToCreateQueryObject,String entityName,HttpSession session,IClientQueryBuilderInterface queryObject) 
+	public DAGNode createQueryObject(String strToCreateQueryObject,String entityName,HttpSession session,IClientQueryBuilderInterface queryObject,String mode) 
 	{
 		Map ruleDetailsMap = null;
-		Map<String,Object> queryDataMap = (HashMap) new HashMap();
+		IExpressionId expressionId = null;
+		DAGNode node = null;
+	//	Map<String,Object> queryDataMap = (HashMap) new HashMap();
 		try {
 			//-----------Init Code  from Digramatical Applet view 
 			//IQuery query = getQueryObjectFromServer(); Get exiting Query object from server
@@ -111,9 +118,25 @@ public class DAGPanel {
 				List<AttributeInterface> attributes = (List<AttributeInterface>) ruleDetailsMap.get(AppletConstants.ATTRIBUTES);
 				List<String> attributeOperators = (List<String>) ruleDetailsMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
 				List<List<String>> conditionValues = (List<List<String>>) ruleDetailsMap.get(AppletConstants.ATTR_VALUES);
-				IExpressionId expressionId = queryObject.addRule(attributes, attributeOperators, conditionValues);
-				DAGNode node = nodeBuilder.createNode(expressionId,queryObject);
-				queryDataMap.put("DAGNODE",node);
+				
+				if(mode.equals("Edit"))
+				{
+					Rule rule = ((Rule) (expression.getOperand(0)));
+					rule.removeAllConditions();
+					List<ICondition> conditionsList = ((ClientQueryBuilder)queryObject).getConditions(attributes, attributeOperators,conditionValues);
+					for (ICondition condition : conditionsList)
+					{
+						rule.addCondition(condition);
+					}
+					expressionId = expression.getExpressionId();
+					node = nodeBuilder.createNode(expressionId,queryObject);
+				}
+				else
+				{
+					expressionId = queryObject.addRule(attributes, attributeOperators, conditionValues);
+					node = nodeBuilder.createNode(expressionId,queryObject);
+					//queryDataMap.put("DAGNODE",node);
+				}
 
 			}
 		} catch (DynamicExtensionsSystemException e) {
@@ -123,9 +146,10 @@ public class DAGPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return queryDataMap;
+		return node;
 	}
 
+	
 	public void setQueryObject(IClientQueryBuilderInterface queryObject) {
 		m_queryObject = queryObject;
 	}
@@ -421,6 +445,27 @@ public class DAGPanel {
 		parentExpression.setLogicalConnector(parentIndex, childIndex,QueryObjectFactory.createLogicalConnector(logicOperator));
 		m_queryObject.setQuery(query);
 		
+	}
+	public Map editAddLimitUI(int expId)
+	{
+		Map<String, Object> map = new HashMap<String,Object>();
+		IExpressionId expressionId = new ExpressionId(expId);
+		IExpression expression = m_queryObject.getQuery().getConstraints().getExpression(expressionId);
+		EntityInterface entity = expression.getConstraintEntity().getDynamicExtensionsEntity();
+		System.out.println("entity============"+entity);
+		GenerateHtmlForAddLimitsBizLogic generateHTMLBizLogic = new GenerateHtmlForAddLimitsBizLogic();
+		Rule rule = ((Rule) (expression.getOperand(0)));
+		List<ICondition> conditions = rule.getConditions();
+		System.out.println("conditions ===="+conditions);
+		String html = generateHTMLBizLogic.generateHTML(entity, conditions);
+		map.put("HTMLSTR", html);
+		map.put("EXPRESSION", expression);
+		return map;
+	}
+	
+	public void setExpression(IExpression expression)
+	{
+		this.expression = expression;
 	}
 
 }
