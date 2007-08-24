@@ -12,13 +12,21 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.PropertyConfigurator;
+
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.metadata.path.Path;
+import edu.wustl.common.querysuite.queryobject.ICondition;
+import edu.wustl.common.querysuite.queryobject.IExpression;
+import edu.wustl.common.querysuite.queryobject.impl.Rule;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
 import edu.wustl.cab2b.client.ui.query.IPathFinder;
+import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -349,7 +357,7 @@ public class FlexInterface
 	
 	public String getSearchResult()
 	{
-		HttpSession session= flex.messaging.FlexContext.getHttpRequest().getSession();
+	
 		return dagPanel.search(session);
 	}
 	/**
@@ -363,12 +371,45 @@ public class FlexInterface
 //		 Add  node each time  and Append it list of node to keep track of nodes
 		// Delete node should remove node from list required to idenetify node uniquely 
 		// Should remove any assocation
-		
-		HttpSession session= flex.messaging.FlexContext.getHttpRequest().getSession();
-		Map queryDataMap =dagPanel.createQueryObject(strToCreateQueryObject, entityName, session,queryObject);
-		DAGNode dagNode = (DAGNode)queryDataMap.get("DAGNODE");
+		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName, session,queryObject,"Add");
 		nodeList.add(dagNode);
-				
+		
+	}
+	
+	public String getLimitUI(int expressionId)
+	{
+		
+		Map map =dagPanel.editAddLimitUI(expressionId);
+		String htmlStr = (String)map.get("HTMLSTR");
+		IExpression expression = (IExpression)map.get("EXPRESSION");
+		dagPanel.setExpression(expression);
+		System.out.println("[ " +htmlStr +" ]");
+		return htmlStr;
+	}
+	
+	public String editNode(String strToCreateQueryObject,String entityName)
+	{
+		String conditionStr	= null;
+		System.out.println("strToCreateQueryObject ==>"+strToCreateQueryObject);
+		System.out.println("entityName====>"+entityName);
+		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName, session,queryObject,"Edit");
+		System.out.println("dagnode  id "+dagNode.getExpressionId());
+		for(int i=0;i<nodeList.size();i++)
+		{
+			DAGNode node  = nodeList.get(i);
+			System.out.println("node  id====> "+node.getExpressionId());
+			if(node.equals(dagNode))
+			{
+				nodeList.remove(i);
+				nodeList.add(i,dagNode);
+				break;
+			}
+		}
+		for  (int i=0;i<5;i++)
+			System.out.println(i);
+		conditionStr = dagNode.getToolTip();
+		System.out.println("conditionStr==="+conditionStr);
+		return conditionStr;
 	}
 	
 	/**
@@ -455,6 +496,7 @@ public class FlexInterface
 		IPathFinder pathFinder = new DAGPathFinder();
 		dagPanel = new DAGPanel(pathFinder);
 		dagPanel.setQueryObject(queryObject);
+		session= flex.messaging.FlexContext.getHttpRequest().getSession();
 	}
 	private DAGNode sourceNode= null;
 	private DAGNode destinationNode = null; 
@@ -462,6 +504,7 @@ public class FlexInterface
 	private List<DAGNode> nodeList;
 	private List<IPath> pathsList;
 	private DAGPanel dagPanel;
+	private HttpSession session = null;
 	
 	
 	
