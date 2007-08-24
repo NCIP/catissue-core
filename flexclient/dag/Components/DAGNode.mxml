@@ -2,9 +2,12 @@
 
 <mx:Box backgroundColor="white" borderStyle="solid" direction="vertical"  
 	xmlns:mx="http://www.adobe.com/2006/mxml"  verticalGap="0"
-		implements="flash.utils.IExternalizable">
+		implements="flash.utils.IExternalizable" creationComplete="init()">
 <mx:Script>
 	<![CDATA[
+		import mx.controls.ComboBox;
+		import mx.controls.HScrollBar;
+		import mx.containers.HBox;
 		import mx.rpc.events.ResultEvent;
 		import DAG;
 		import mx.events.MenuEvent;
@@ -15,7 +18,9 @@
 		import flash.utils.IDataInput;
 		import flash.utils.IDataOutput;
 		import mx.controls.Alert;
+		import mx.core.Repeater;
 			
+		private var editedNode:DAGNode;	
 		[Bindable]
 		public var accSelectedIndx:Number = 0;
 		[Bindable]
@@ -93,6 +98,11 @@
 			return inAssociations;
 		}
 		//-------------
+		
+		public function init():void
+		{
+		
+		}
 		public function readExternal(input:IDataInput):void {
 			
 			//Alert.show("--------Start Read External---------");
@@ -164,7 +174,12 @@
 				this.parentApplication.rpcService.deleteNode(this.nodeName);
 				this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,deleteHandler);
 				this.parentApplication.rpcService.addEventListener("fault", faultHandler);
-				
+			}
+			if(event.label =="Edit")
+			{
+				//Alert.show(this.expressionId.toString());
+				this.parentApplication.editNode(this);
+
 			}
 		}
 		
@@ -177,6 +192,8 @@
 				// Deal with event.fault.faultString, etc.
 			Alert.show(event.fault.faultString, 'Error');
 			}
+			
+	
 		// The Array data provider
 		[Bindable]
 		public var menuData:Array = [	
@@ -184,10 +201,24 @@
 		{label: "Delete", type: "radio", toggled: false}
 		
 		];
-		private var operators:Array = ["AND","OR"];
-		private function updateSelectIndex():void{
-//			accSelectedIndx = detailsAcc.selectedIndex;
+		
+		public function setOperatorHandler(event:ResultEvent):void
+		{
+			Alert.show("Changed");
+			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,setOperatorHandler,false);
+			
 		}
+		
+		public function operatorChange(event:Event):void
+		{
+		 var cb:ComboBox=event.currentTarget as ComboBox;
+		 var index:int = cb.name as int;
+	     Alert.show(cb.selectedLabel.toString());
+	  	 Alert.show(cb.name);
+		 this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,setOperatorHandler);
+		 this.parentApplication.rpcService.setLogicalOperator(this,index,cb.selectedLabel);
+		}
+	
 		
 	]]>
 </mx:Script>
@@ -201,12 +232,14 @@
 	</mx:HBox>
 		<mx:VBox id="assVbox" name="Association" label="Associations" width="100%" verticalGap="0" visible="false">
 		
-			<mx:Repeater id="assRep" dataProvider="{outAssociations}">
-				<mx:HBox id="hbox" width="100%" borderStyle="solid">
+			<mx:Repeater id="assRep" name="Repeater" dataProvider="{outAssociations}">
+				<mx:HBox name="hbox" width="100%" borderStyle="solid">
 				<mx:Canvas backgroundColor="0xF5F5F5"  borderStyle="solid">
 					<mx:Label text="{assRep.currentItem.associatedNode}" />
 				</mx:Canvas>
-				<mx:ComboBox dataProvider="{operatorArray}"/>
+				
+				<mx:ComboBox id="operatorCombo" name="{assRep.currentIndex.toString()}"  dataProvider="{operatorArray}" change="operatorChange(event)" />
+		
 			</mx:HBox>
 			</mx:Repeater>
 		</mx:VBox>
