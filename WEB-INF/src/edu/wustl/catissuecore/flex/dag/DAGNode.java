@@ -4,6 +4,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Comparator;
 import java.util.List;
 
 import edu.wustl.cab2b.client.ui.util.ClientConstants;
@@ -14,7 +15,7 @@ import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IRule;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 
-public class DAGNode implements Externalizable {
+public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	private String nodeName;
 	private int expressionId;
 	private String toolTip;
@@ -130,6 +131,26 @@ public class DAGNode implements Externalizable {
 		out.writeInt(expressionId);
 		out.writeUTF(operatorBetweenAttrAndAssociation);
 	}
+
+
+	public int compareTo(DAGNode node) {
+		// TODO Auto-generated method stub
+		
+		return 0;
+	}
+
+	public boolean equals(Object obj) {
+	    DAGNode node = (DAGNode) obj;
+	    System.out.println("equals-----------");
+	    boolean equal =false;
+	    if(this.expressionId==node.expressionId)
+	    {
+	    	System.out.println("true ...............");
+	    	equal = true;
+	    }
+	     return equal;
+	  }
+
 
 
 	
