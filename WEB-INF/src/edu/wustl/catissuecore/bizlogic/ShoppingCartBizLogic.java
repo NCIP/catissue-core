@@ -122,6 +122,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 					
 					rowList.add(specimen.getSpecimenCharacteristics().getTissueSite());
 					rowList.add(specimen.getSpecimenCharacteristics().getTissueSide());
+					rowList.add(specimen.getPathologicalStatus());
 //					rowList.add(specimen.getSpecimenCharacteristics().getPathologicalStatus());
 					
 					shoppingCartList.add(rowList);
