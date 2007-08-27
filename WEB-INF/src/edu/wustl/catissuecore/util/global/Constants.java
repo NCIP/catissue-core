@@ -1038,8 +1038,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DISTRIBUTION_REPORT_SAVE_ACTION="DistributionReportSave.do";
 	public static final String ARRAY_DISTRIBUTION_REPORT_SAVE_ACTION="ArrayDistributionReportSave.do";
 	
-	public static final String SELECTED_COLUMNS[] = {"Specimen.LABEL.Lable : Specimen",
-													"Specimen.TYPE.Type : Specimen",
+	//bug#4981 :kalpana
+	public static final String SELECTED_COLUMNS[] = {"Specimen.LABEL.Label : Specimen",
+												    "Specimen.TYPE.Type : Specimen",
 													"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",
 													"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side : Specimen",
 													"Specimen.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
