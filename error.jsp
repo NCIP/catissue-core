@@ -82,7 +82,7 @@
 					  
                       <!-- link 4 begins -->
                       <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageBioSpecimen.do'">
-                        <a class="mainMenuLink" href="ManageBioSpecimen.do">BIO-SPECIMEN</a>
+                        <a class="mainMenuLink" href="ManageBioSpecimen.do">BIOSPECIMEN</a>
                       </td>
                      <!-- link 4 ends -->
                       <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
