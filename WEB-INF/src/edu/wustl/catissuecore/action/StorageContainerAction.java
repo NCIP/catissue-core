@@ -280,12 +280,25 @@ public class StorageContainerAction extends SecureAction
 		String valueField = "id";
 		List list = bizLogic.getList(Site.class.getName(), siteDisplayField, valueField, true);
 		request.setAttribute(Constants.SITELIST, list);
-
-		//populating collection protocol list.
-		List list1 = bizLogic.retrieve(CollectionProtocol.class.getName());
-		List collectionProtocolList = Utility.getCollectionProtocolList(list1);
+/*
+ * Bug #4564
+ * for tooltips
+ * kalpana
+ * 
+ */
+		String sourceObjectName = CollectionProtocol.class.getName();
+		//Smita changes start
+		String[] displayNameFields = {"shortTitle"};
+		//Smita changes end
+		List collectionProtocolList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
+		//List collectionProtocolList = Utility.getCollectionProtocolList(list1);
 		request.setAttribute(Constants.PROTOCOL_LIST, collectionProtocolList);
-
+		Map<Long, String> cpIDTitleMap = Utility.getCPIDTitleMap();
+		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
+/*
+ * End :kalpana
+ */
+		
 		//Gets the Storage Type List and sets it in request 
 		List list2 = bizLogic.retrieve(StorageType.class.getName());
 		List storageTypeListWithAny = Utility.getStorageTypeList(list2, true);
