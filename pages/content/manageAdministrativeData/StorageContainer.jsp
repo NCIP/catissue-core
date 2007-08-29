@@ -9,6 +9,7 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
+<%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
 
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <%
@@ -894,8 +895,9 @@ function onEditChange()
 						</td>
 						<td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
+<!-- kalpana : Bug #4564 : for tooltip -->
 							<html:select property="collectionIds" styleClass="formFieldSized" styleId="collectionIds" size="4"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true" >
+							 onmouseover="showToolTip(this)" onmouseout="hideTip(this.id)" multiple="true" >
 								<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
