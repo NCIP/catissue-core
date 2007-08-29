@@ -50,6 +50,8 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
+import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtility;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -1399,8 +1401,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if (obj instanceof Map)
 		{
 			//validation on multiple specimens are performed in MultipleSpecimenValidationUtil, so dont require to perform the bizlogic validations.
-			return true;
+			//return true;
 			//result = validateMultipleSpecimen((Map) obj, dao, operation);
+			return MultipleSpecimenValidationUtil.validateMultipleSpecimen
+			((Map)obj,this, Constants.ADD);
+
 		}
 		else
 		{
