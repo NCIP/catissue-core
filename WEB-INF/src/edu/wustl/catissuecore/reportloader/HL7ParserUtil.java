@@ -141,7 +141,7 @@ public class HL7ParserUtil
 	 * @return boolean represents report is valid or not
 	 * @throws Exception generic exception
 	 */
-   private static boolean validateReportMap(Map<String, Set> reportMap)throws Exception
+   public static boolean validateReportMap(Map<String, Set> reportMap)throws Exception
    {
 	   boolean isValid=false;
 	
@@ -156,7 +156,6 @@ public class HL7ParserUtil
 			   }
 		   }
 	   }
-	   Logger.out.info("Validate report map returning "+isValid+" for report");
 	   return isValid;
    }
    
