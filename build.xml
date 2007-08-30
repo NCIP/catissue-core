@@ -27,6 +27,8 @@
 	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
 	<property name="report.dir" value="${base.dir}/WEB-INF" />
 	<property name="catissue.applet.dir" value="${base.dir}/Applet/catissue" />
+	<property name="test.src.dir" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/bizlogic/test" />
+	<property name="test.class.dir" value="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/bizlogic/test" />
 
 	<!-- csm related properties -->
 	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
@@ -417,6 +419,64 @@
 				<include name="TEST-*.xml" />
 			</fileset>
 			<report todir="${report.dir}/reports/junit" />
+		</junitreport>
+	</target>
+	
+	
+	<!-- =================================================================== -->
+	<!-- Junit TestCases for Nightly Build  -->
+	<!-- =================================================================== -->
+	
+		<target name="compile_junit_TestCases">
+	        <javac destdir="${test.src.dir}" includes="**/*TestCases.java" includeAntRuntime="false">
+	            <src path="${src.dir}"/>
+	            <classpath>
+	       		  <fileset dir="${lib.dir}">
+	        			<include name="**/*.jar"/>
+	        	  </fileset>
+	            </classpath>
+	        </javac>
+	</target>
+
+
+	<target name="runJunitTestCases" depends="compile_junit_TestCases">
+        <mkdir dir="${report.dir}/Nightly_Build_Report" />
+		<mkdir dir="${report.dir}/Nightly_Build_Report/Html_reports" />
+
+		<junit printsummary="yes" fork="yes" haltonfailure="no">
+			<formatter type="xml" />
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.dir}/coverage.ser" />
+			<classpath>				
+				<pathelement path="${base.dir}/caTissueCore_caCORE_Client/conf" />
+				<fileset dir="./caTissueCore_caCORE_Client/lib">
+				<include name="*.jar" />
+				</fileset>
+			</classpath>
+
+			<classpath>
+				<pathelement path="${cobertura.dir}" />
+				<pathelement path="${target.dir}" />
+				<pathelement path= "${test.class.dir}" />
+			</classpath>
+			
+			<classpath refid="junit.classpath" />
+
+			<batchtest todir="${report.dir}/Nightly_Build_Report">
+				<fileset dir="${src.dir}">
+					<include name="**/CaTissueTestSuite.java" />
+				</fileset>				
+			</batchtest>
+		</junit>
+	</target>
+	
+
+  <target name="runNightlyBuild" depends="runJunitTestCases">
+		
+		<junitreport todir="${report.dir}/Nightly_Build_Report">
+			<fileset dir="${report.dir}/Nightly_Build_Report">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${report.dir}/Nightly_Build_Report/Html_reports" />
 		</junitreport>
 	</target>
 	
