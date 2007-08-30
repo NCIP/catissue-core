@@ -19,16 +19,20 @@ import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.test.BaseTestCase;
 import edu.wustl.common.util.global.Constants;
 
-public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
+/**
+ * @author vijay_pande
+ * JUnit test case class for DeidentifiedSurgicalPathologyReportBizLogic
+ */
+public class DeIdentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
 {
 	Mock hibDAO;
 	Mock jdbcDAO;
 
 		/**
-		 * Constructor for DeidentifiedSurgicalPathologyReportBizLogicTest.
+		 * Constructor for DeIdentifiedSurgicalPathologyReportBizLogicTest.
 		 * @param arg0 Name of the test case
 		 */
-		public DeidentifiedSurgicalPathologyReportBizLogicTest(String name)
+		public DeIdentifiedSurgicalPathologyReportBizLogicTest(String name)
 		{
 			super(name);
 
@@ -59,10 +63,10 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 		public void testDeidBizLogicNullInputParametersInInsert()
 		{
 			hibDAO.expect("closeSession");
-			DeidentifiedSurgicalPathologyReportBizLogic deidentifiedSurgicalPathologyReportBizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
+			DeidentifiedSurgicalPathologyReportBizLogic deIdentifiedSurgicalPathologyReportBizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
 			try
 			{
-				deidentifiedSurgicalPathologyReportBizLogic.insert(new DeidentifiedSurgicalPathologyReport(),null,Constants.HIBERNATE_DAO);
+				deIdentifiedSurgicalPathologyReportBizLogic.insert(new DeidentifiedSurgicalPathologyReport(),null,Constants.HIBERNATE_DAO);
 				fail("When null sessiondataBean is passes, it should throw NullPointerException");
 			}
 			catch(NullPointerException e)
@@ -88,7 +92,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 			
 			try
 			{
-				deidentifiedSurgicalPathologyReportBizLogic.insert(null,new SessionDataBean(),Constants.HIBERNATE_DAO);
+				deIdentifiedSurgicalPathologyReportBizLogic.insert(null,new SessionDataBean(),Constants.HIBERNATE_DAO);
 				fail("When null sessiondataBean is passes, it should throw NullPointerException");
 			}
 			catch(NullPointerException e)
@@ -190,10 +194,10 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 		public void testDeidBizLogicNullInputParametersInUpdate()
 		{
 			hibDAO.expect("closeSession");
-			DeidentifiedSurgicalPathologyReportBizLogic deidentifiedSurgicalPathologyReportBizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
+			DeidentifiedSurgicalPathologyReportBizLogic deIdentifiedSurgicalPathologyReportBizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
 			try
 			{
-				deidentifiedSurgicalPathologyReportBizLogic.update(new TextContent(),null,Constants.HIBERNATE_DAO,null);
+				deIdentifiedSurgicalPathologyReportBizLogic.update(new TextContent(),null,Constants.HIBERNATE_DAO,null);
 				fail("When null sessiondataBean is passes, it should throw NullPointerException");
 			}
 			catch(NullPointerException e)
@@ -217,7 +221,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 			
 			try
 			{
-				deidentifiedSurgicalPathologyReportBizLogic.insert(null,new SessionDataBean(),Constants.HIBERNATE_DAO);
+				deIdentifiedSurgicalPathologyReportBizLogic.insert(null,new SessionDataBean(),Constants.HIBERNATE_DAO);
 				fail("When null sessiondataBean is passes, it should throw NullPointerException");
 			}
 			catch(NullPointerException e)
