@@ -64,7 +64,7 @@ public class DeidUtils
 
 			// create report header
 			Element reportHeaderElement = new Element(CaTIESConstants.REPORT_HEADER);
-			reportHeaderElement.addContent(buildHeaderPersonElement(CaTIESConstants.PARTICIPANT_NAME, participant.getLastName(), CaTIESConstants.PARTICIPANT_ROLE));
+			reportHeaderElement.addContent(buildHeaderPersonElement(CaTIESConstants.PARTICIPANT_NAME, participant.getLastName()+","+participant.getFirstName(), CaTIESConstants.PARTICIPANT_ROLE));
 			// get participant medical identifier collection
 			Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection=(Set)defaultBizLogic.retrieveAttribute(Participant.class.getName(), participant.getId(), Constants.COLUMN_NAME_PART_MEDICAL_ID_COLL);
 			//iterate over participant medical identifier collection

@@ -68,14 +68,14 @@ public abstract class CaTIESConstants
 	public static final String REPORT_HEADER="Report_Header";
 	public static final String REPORT_ID="Report_ID";
 	public static final String PATIENT_ID="Patient_ID";
-	public static final String PARTICIPANT_NAME="participant_name";
-	public static final String PARTICIPANT_ROLE="participant";
+	public static final String PARTICIPANT_NAME="Patient Name";
+	public static final String PARTICIPANT_ROLE="patient";
 	public static final String PARTICIPANT_MRN="participant_mrn";
 	public static final String REPORT_TEXT="Report_Text";
 	public static final String HEADER_PERSON="Header_Person";
 	public static final String HEADER_DATA="Header_Data";
-	public static final String VARIABLE="Header_Variable";
-	public static final String VALUE="Header_Value";
+	public static final String VARIABLE="Variable";
+	public static final String VALUE="Value";
 	public static final String ROLE="role";
 	public static final String REPORT_TYPE_VALUE="SP";
 	
