@@ -1,46 +1,39 @@
+-- Ordering system  related alter table script*/
 
-# ----------------------ordering changes  - vaishali 
-/* catissuecore.sql */
-#ordering
-
-#---- Ordering system  related alter table script
+-- create sequence CATISSUE_ORDER_SEQ;
+-- create sequence CATISSUE_ORDER_ITEM_SEQ;
 
 
-/* ordering */
-create sequence CATISSUE_ORDER_SEQ;
-create sequence CATISSUE_ORDER_ITEM_SEQ;
-/* ordering finish */
-
-alter table CATISSUE_EXISTING_SP_ORD_ITEM drop constraint FKF8B855EEBC7298A9;
-alter table CATISSUE_EXISTING_SP_ORD_ITEM drop constraint FKF8B855EE60773DB2;
-alter table CATISSUE_PATH_CASE_ORDER_ITEM drop constraint FKBD5029D5F69249F7;
-alter table CATISSUE_PATH_CASE_ORDER_ITEM drop constraint FKBD5029D5BC7298A9;
-alter table CATISSUE_ORDER_ITEM drop constraint FKB501E88060975C0B;
-alter table CATISSUE_ORDER_ITEM drop constraint FKB501E880783867CC;
-alter table CATISSUE_DERIEVED_SP_ORD_ITEM drop constraint FK3742152BBC7298A9;
-alter table CATISSUE_DERIEVED_SP_ORD_ITEM drop constraint FK3742152B60773DB2;
-alter table CATISSUE_ORDER drop constraint FK543F22B26B1F36E7;
-alter table CATISSUE_DISTRIBUTION drop constraint FK54276680783867CC;
-alter table CATISSUE_SP_ARRAY_ORDER_ITEM drop constraint FKE3823170BC7298A9;
-alter table CATISSUE_SP_ARRAY_ORDER_ITEM drop constraint FKE3823170C4A3C438;
-alter table CATISSUE_SPECIMEN_ORDER_ITEM drop constraint FK48C3B39FBC7298A9;
-alter table CATISSUE_SPECIMEN_ORDER_ITEM drop constraint FK48C3B39F83505A30;
-alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBCE5FBC3A;
-alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBBC7298A9;
+--alter table CATISSUE_EXISTING_SP_ORD_ITEM drop constraint FKF8B855EEBC7298A9;
+--alter table CATISSUE_EXISTING_SP_ORD_ITEM drop constraint FKF8B855EE60773DB2;
+--alter table CATISSUE_PATH_CASE_ORDER_ITEM drop constraint FKBD5029D5F69249F7;
+--alter table CATISSUE_PATH_CASE_ORDER_ITEM drop constraint FKBD5029D5BC7298A9;
+--alter table CATISSUE_ORDER_ITEM drop constraint FKB501E88060975C0B;
+--alter table CATISSUE_ORDER_ITEM drop constraint FKB501E880783867CC;
+-- alter table CATISSUE_DERIEVED_SP_ORD_ITEM drop constraint FK3742152BBC7298A9; 
+--  alter table CATISSUE_DERIEVED_SP_ORD_ITEM drop constraint FK3742152B60773DB2; 
+--  alter table CATISSUE_ORDER drop constraint FK543F22B26B1F36E7; 
+-- alter table CATISSUE_DISTRIBUTION drop constraint FK54276680783867CC; 
+-- alter table CATISSUE_SP_ARRAY_ORDER_ITEM drop constraint FKE3823170BC7298A9;
+-- alter table CATISSUE_SP_ARRAY_ORDER_ITEM drop constraint FKE3823170C4A3C438;
+-- alter table CATISSUE_SPECIMEN_ORDER_ITEM drop constraint FK48C3B39FBC7298A9;
+-- alter table CATISSUE_SPECIMEN_ORDER_ITEM drop constraint FK48C3B39F83505A30;
+-- alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBCE5FBC3A;
+-- alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBBC7298A9;
 
 
 
 
-#------- ordering system relate tables----
+-- ordering system relate tables*/
 
-drop table CATISSUE_EXISTING_SP_ORD_ITEM cascade constraints;
-drop table CATISSUE_PATH_CASE_ORDER_ITEM cascade constraints;
-drop table CATISSUE_ORDER_ITEM cascade constraints;
-drop table CATISSUE_DERIEVED_SP_ORD_ITEM cascade constraints;
-drop table CATISSUE_ORDER cascade constraints;
-drop table CATISSUE_SP_ARRAY_ORDER_ITEM cascade constraints;
-drop table CATISSUE_SPECIMEN_ORDER_ITEM cascade constraints;
-drop table CATISSUE_NEW_SP_AR_ORDER_ITEM cascade constraints;
+--drop table CATISSUE_EXISTING_SP_ORD_ITEM cascade constraints;
+-- drop table CATISSUE_PATH_CASE_ORDER_ITEM cascade constraints;
+-- drop table CATISSUE_ORDER_ITEM cascade constraints;
+-- drop table CATISSUE_DERIEVED_SP_ORD_ITEM cascade constraints;
+-- drop table CATISSUE_ORDER cascade constraints;
+-- drop table CATISSUE_SP_ARRAY_ORDER_ITEM cascade constraints;
+-- drop table CATISSUE_SPECIMEN_ORDER_ITEM cascade constraints;
+-- drop table CATISSUE_NEW_SP_AR_ORDER_ITEM cascade constraints;
 
 create table CATISSUE_EXISTING_SP_ORD_ITEM (
    IDENTIFIER number(19,0) not null,
@@ -102,13 +95,19 @@ create table CATISSUE_NEW_SP_AR_ORDER_ITEM (
    SPECIMEN_ARRAY_ID number(19,0),
    primary key (IDENTIFIER)
 );
+-- extra for catissue_distribution */
+ alter table catissue_distribution add ORDER_ID number(19,0);
+  alter table catissue_distributed_item add  SPECIMEN_ARRAY_ID number(19,0);  
+  alter table CATISSUE_DISTRIBUTION add constraint FK54276680783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
+  alter table CATISSUE_DISTRIBUTED_ITEM add constraint FKA7C3ED4BC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY;
+  
+-- extra finished */
 alter table CATISSUE_EXISTING_SP_ORD_ITEM add constraint FKF8B855EEBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
 alter table CATISSUE_EXISTING_SP_ORD_ITEM add constraint FKF8B855EE60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
 alter table CATISSUE_PATH_CASE_ORDER_ITEM add constraint FKBD5029D5F69249F7 foreign key (SPECIMEN_COLL_GROUP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
 alter table CATISSUE_PATH_CASE_ORDER_ITEM add constraint FKBD5029D5BC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
 alter table CATISSUE_ORDER_ITEM add constraint FKB501E88060975C0B foreign key (DISTRIBUTED_ITEM_ID) references CATISSUE_DISTRIBUTED_ITEM (IDENTIFIER);
 alter table CATISSUE_ORDER_ITEM add constraint FKB501E880783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
-alter table CATISSUE_DISTRIBUTION add constraint FK54276680783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
 alter table CATISSUE_DERIEVED_SP_ORD_ITEM add constraint FK3742152BBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
 alter table CATISSUE_DERIEVED_SP_ORD_ITEM add constraint FK3742152B60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
 alter table CATISSUE_ORDER add constraint FK543F22B26B1F36E7 foreign key (DISTRIBUTION_PROTOCOL_ID) references CATISSUE_DISTRIBUTION_PROTOCOL (IDENTIFIER);
@@ -121,18 +120,18 @@ alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBBC7298A9 fore
 alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
 
 
-/* csm_inserData_Oracle.sql */
-/*-----Ordering System------*/
-INSERT into CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Order','Order Object','edu.wustl.catissuecore.domain.OrderDetails',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd'));
-INSERT into CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'OrderItem','OrderItem Object','edu.wustl.catissuecore.domain.OrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd'));
-INSERT into CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Derived Specimen Order Item','Derived Specimen Order Item Object','edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd'));
-INSERT into CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Existing Specimen Array Order Item','Existing Specimen Array Order Item Object','edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd'));
-INSERT into CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Existing Specimen Order Item','Existing Specimen Order Item Object','edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd'));
-INSERT into CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'New Specimen Array Order Item','New Specimen Array Order Item Object','edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd'));
-INSERT into CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'New Specimen Order Item','New Specimen Order Item Object','edu.wustl.catissuecore.domain.NewSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd'));
-INSERT into CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Pathological Case Order Item','Pathological Case Order Item Object','edu.wustl.catissuecore.domain.PathologicalCaseOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd'));
-INSERT into CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Specimen Array Order Item','Specimen Array Order Item Object','edu.wustl.catissuecore.domain.SpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd'));
-INSERT into CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Specimen Order Item','Specimen Order Item Object','edu.wustl.catissuecore.domain.SpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd'));
+-- csm_inserData_Oracle.sql */
+-------Ordering System------*/
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Order','Order Object','edu.wustl.catissuecore.domain.OrderDetails',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'OrderItem','OrderItem Object','edu.wustl.catissuecore.domain.OrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Derived Specimen Order Item','Derived Specimen Order Item Object','edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Existing Specimen Array Order Item','Existing Specimen Array Order Item Object','edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Existing Specimen Order Item','Existing Specimen Order Item Object','edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'New Specimen Array Order Item','New Specimen Array Order Item Object','edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'New Specimen Order Item','New Specimen Order Item Object','edu.wustl.catissuecore.domain.NewSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Pathological Case Order Item','Pathological Case Order Item Object','edu.wustl.catissuecore.domain.PathologicalCaseOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Specimen Array Order Item','Specimen Array Order Item Object','edu.wustl.catissuecore.domain.SpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Specimen Order Item','Specimen Order Item Object','edu.wustl.catissuecore.domain.SpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
 
 
 INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.action.RequestListAction','edu.wustl.catissuecore.action.RequestListAction','edu.wustl.catissuecore.action.RequestListAction',NULL,NULL,1,to_date('2007-01-04','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
@@ -140,28 +139,28 @@ INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.RequestListAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.RequestListAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
 
-/* giving create priviledge to scientist for order -start*/
-INSERT INTO CSM_ROLE (ROLE_ID,ROLE_NAME,ROLE_DESCRIPTION,APPLICATION_ID,ACTIVE_FLAG,UPDATE_DATE) VALUES (12,'CREATE_ONLY','Create only role',1,0,to_date('0001-01-01','yyyy-mm-dd'));
-INSERT INTO CSM_ROLE_PRIVILEGE (ROLE_PRIVILEGE_ID,ROLE_ID,PRIVILEGE_ID,UPDATE_DATE) VALUES (30,12,1,to_date('0001-01-01','yyyy-mm-dd'));
-INSERT INTO CSM_PROTECTION_GROUP (PROTECTION_GROUP_ID,PROTECTION_GROUP_NAME,PROTECTION_GROUP_DESCRIPTION,APPLICATION_ID,LARGE_ELEMENT_COUNT_FLAG,UPDATE_DATE,PARENT_PROTECTION_GROUP_ID) VALUES (44,'SCIENTIST_PROTECTION_GROUP',NULL,1,0,to_date('0001-01-01','yyyy-mm-dd'),NULL);
+-- giving create priviledge to scientist for order -start*/
+INSERT INTO CSM_ROLE select max(ROLE_ID)+1,'CREATE_ONLY','Create only role',1,0,to_date('0001-01-01','yyyy-mm-dd') from CSM_ROLE;
+INSERT INTO CSM_ROLE_PRIVILEGE select max(a.ROLE_PRIVILEGE_ID)+1,max(b.ROLE_ID) ,1,to_date('0001-01-01','yyyy-mm-dd') from CSM_ROLE_PRIVILEGE a,CSM_ROLE b;
+INSERT INTO CSM_PROTECTION_GROUP select max(PROTECTION_GROUP_ID)+1,'SCIENTIST_PROTECTION_GROUP',NULL,1,0,to_date('0001-01-01','yyyy-mm-dd'),NULL from CSM_PROTECTION_GROUP;
 
 
-INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2007-01-04','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='OrderItem'),to_date('2007-01-04','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Derived Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Array Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Array Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Pathological Case Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,(select max(PROTECTION_GROUP_ID) from CSM_PROTECTION_GROUP),(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,(select max(PROTECTION_GROUP_ID) from CSM_PROTECTION_GROUP),(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='OrderItem'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,(select max(PROTECTION_GROUP_ID) from CSM_PROTECTION_GROUP),(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Derived Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,(select max(PROTECTION_GROUP_ID) from CSM_PROTECTION_GROUP),(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Array Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,(select max(PROTECTION_GROUP_ID) from CSM_PROTECTION_GROUP),(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,(select max(PROTECTION_GROUP_ID) from CSM_PROTECTION_GROUP),(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Array Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,(select max(PROTECTION_GROUP_ID) from CSM_PROTECTION_GROUP),(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,(select max(PROTECTION_GROUP_ID) from CSM_PROTECTION_GROUP),(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Pathological Case Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,(select max(PROTECTION_GROUP_ID) from CSM_PROTECTION_GROUP),(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,(select max(PROTECTION_GROUP_ID) from CSM_PROTECTION_GROUP),(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
 
-INSERT INTO CSM_USER_GROUP_ROLE_PG (USER_GROUP_ROLE_PG_ID,USER_ID,GROUP_ID,ROLE_ID,PROTECTION_GROUP_ID,UPDATE_DATE) VALUES (102,NULL,4,12,44,to_date('0001-01-01','yyyy-mm-dd'));
-/* giving create priviledge to scientist for order -finish*/
+INSERT INTO CSM_USER_GROUP_ROLE_PG select max(USER_GROUP_ROLE_PG_ID)+1,NULL,4,max(c.ROLE_ID),max(b.protection_group_id),to_date('0001-01-01','yyyy-mm-dd') from CSM_USER_GROUP_ROLE_PG a,CSM_PROTECTION_GROUP b ,CSM_ROLE c;
+-- giving create priviledge to scientist for order -finish*/
 
 
-	/*-------Ordering System---------*/	
+	---------Ordering System---------*/	
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2006-11-27','yyyy-mm-dd') from dual;
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2006-11-27','yyyy-mm-dd') from dual;
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2006-11-27','yyyy-mm-dd') from dual;
@@ -194,10 +193,10 @@ INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
 
 
-/* cde_dummydata_common.sql */
+-- cde_dummydata_common.sql */
 
 
-/*******Ordering System******/
+--******Ordering System******/
 INSERT INTO CATISSUE_CDE VALUES ( '4284','Request Status','Statuses for the ordered requests',1.0,null);
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(5000,'All',NULL,'4284');
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(5001,'New',NULL,'4284');
@@ -214,27 +213,21 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PU
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(5011,'Rejected - Unable to Create',NULL,'4285');
 
 
-/* initDB_inser_Common.sql */
-/*Ordering System*/
-insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 76, 'CATISSUE_ORDER', 'Order', 'OrderDetails', 2);
-/* order system finish */
-
-/* extra for catissue_distribution */
- alter table catissue_distribution add ORDER_ID number(19,0);
-  alter table catissue_distributed_item add  SPECIMEN_ARRAY_ID number(19,0);  
-  alter table CATISSUE_DISTRIBUTION add constraint FK54276680783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
-  alter table CATISSUE_DISTRIBUTED_ITEM add constraint FKA7C3ED4BC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY;
-  
-/* extra finished */
-------------------------ordering changes finish
+-- initDB_inser_Common.sql */
+--Ordering System*/
+insert into CATISSUE_QUERY_TABLE_DATA  select max(TABLE_ID)+1, 'CATISSUE_ORDER', 'Order', 'OrderDetails', 2,NULL from CATISSUE_QUERY_TABLE_DATA ;
+-- order system finish */
 
 
-/*--------Consent Tracking-------*/
+-- ordering changes finish */
+
+
+----------Consent Tracking-------*/
 INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier','ConsentTier Object','edu.wustl.catissuecore.domain.ConsentTier',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
 INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier Response','Consent Tier Response Object','edu.wustl.catissuecore.domain.ConsentTierResponse',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
 INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier Status','Consent Tier Status Object','edu.wustl.catissuecore.domain.ConsentTierStatus',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
 	
-/*--------Consent Tracking-------*/
+----------Consent Tracking-------*/
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),to_date('2006-11-27','yyyy-mm-dd') from dual;
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),to_date('2006-11-27','yyyy-mm-dd') from dual;
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),to_date('2006-11-27','yyyy-mm-dd') from dual;
@@ -245,7 +238,7 @@ INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),to_date('2006-11-27','yyyy-mm-dd') from dual;
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),to_date('2006-11-27','yyyy-mm-dd') from dual;
 
-/*Consent Tracking related drop, create and add foreign key scripts.*/
+--Consent Tracking related drop, create and add foreign key scripts.*/
 drop table CATISSUE_CONSENT_TIER_RESPONSE;
 drop table CATISSUE_CONSENT_TIER_STATUS;
 drop table CATISSUE_CONSENT_TIER;
@@ -282,19 +275,18 @@ alter table CATISSUE_CONSENT_TIER  add constraint FK51725303E36A4B4F foreign key
 create sequence CATISSUE_CONSENT_TIER_RES_SEQ;
 create sequence CATISSUE_CONSENT_TIER_STAT_SEQ;
 create sequence CATISSUE_CONSENT_TIER_SEQ;
-create sequence CATISSUE_ORDER_SEQ;
-create sequence CATISSUE_ORDER_ITEM_SEQ;
 
-/*----caTissue tables changed for and consent tracking----- */
+
+------caTissue tables changed for and consent tracking----- */
 alter table CATISSUE_COLL_PROT_REG drop constraint FK5EB25F13A0FF79D4;
 alter table CATISSUE_COLLECTION_PROTOCOL add  UNSIGNED_CONSENT_DOC_URL varchar2(500);
 alter table CATISSUE_COLL_PROT_REG add  (CONSENT_SIGN_DATE date,CONSENT_DOC_URL varchar2(500),CONSENT_WITNESS number(19,0));
 alter table CATISSUE_COLL_PROT_REG add constraint FK5EB25F13A0FF79D4 foreign key (CONSENT_WITNESS) references CATISSUE_USER (IDENTIFIER);
 
 
-/* ------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------start */
-insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID, FOR_SQI) values ( 79, 'CATISSUE_RETURN_EVENT_PARAM', 'Return Event Parameters', 'ReturnEventParameters',2,2);
-insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 328, 79, 'IDENTIFIER', 'bigint');
+-- ------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------start */
+insert into CATISSUE_QUERY_TABLE_DATA  select max(TABLE_ID)+1, 'CATISSUE_RETURN_EVENT_PARAM', 'Return Event Parameters', 'ReturnEventParameters',2,2 from CATISSUE_QUERY_TABLE_DATA;
+insert into CATISSUE_INTERFACE_COLUMN_DATA select max(IDENTIFIER)+1, max(b.table_id), 'IDENTIFIER', 'bigint' from CATISSUE_INTERFACE_COLUMN_DATA a,CATISSUE_QUERY_TABLE_DATA b;
 
 create table CATISSUE_RETURN_EVENT_PARAM (
    IDENTIFIER number(19,0) not null,
@@ -306,18 +298,18 @@ alter table CATISSUE_RETURN_EVENT_PARAM add constraint FKD8890A48BC7298A91 forei
 INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'ReturnEventParameters','ReturnEventParameters Class','edu.wustl.catissuecore.domain.ReturnEventParameters',NULL,NULL,1,to_date('2007-01-18','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ReturnEventParameters'),to_date('2006-01-18','yyyy-mm-dd') from dual;
 
-/* ------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------end	 */
+-- ------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------end	 */
 
-#------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------start
+--------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------start */
 alter table CATISSUE_COLLECTION_PROTOCOL add CONSENTS_WAIVED number(1,0);
 update CATISSUE_COLLECTION_PROTOCOL set CONSENTS_WAIVED=0 where CONSENTS_WAIVED is null;
-#------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------end
+--------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------end */
 
-/****Participant add column- start**********/
+--***Participant add column- start**********/
 alter table CATISSUE_PARTICIPANT add  MARITAL_STATUS varchar2(50);
-/****Participant add column- end**********/
+--***Participant add column- end**********/
 
-/****caTIES Realated Tables - start**********/
+--***caTIES Realated Tables - start**********/
 
 drop table CATISSUE_REPORT_TEXTCONTENT cascade constraints;
 drop table CATISSUE_IDENTIFIED_REPORT cascade constraints;
@@ -336,16 +328,16 @@ drop table CATISSUE_CONCEPT cascade constraints;
 drop table CATISSUE_SEMANTIC_TYPE cascade constraints;
 drop table CATISSUE_CONCEPT_CLASSIFICATN cascade constraints;
 
-drop sequence CATISSUE_CONCEPT_REFERENT_SEQ;
-drop sequence CATISSUE_PATHOLOGY_REPORT_SEQ;
-drop sequence CATISSUE_QUARANTINE_PARAMS_SEQ;
-drop sequence CATISSUE_REPORT_SECTION_SEQ;
-drop sequence CATISSUE_REVIEW_PARAMS_SEQ;
-drop sequence CATISSUE_REPORT_CONTENT_SEQ;
-drop sequence CATISSUE_REPORT_QUEUE_SEQ;
-drop sequence CATISSUE_SEMANTIC_TYPE_SEQ;
-drop sequence CATISSUE_CONCEPT_SEQ;
-drop sequence CATISSUE_CONCEPT_CLASSFCTN_SEQ;
+-- drop sequence CATISSUE_CONCEPT_REFERENT_SEQ;
+--drop sequence CATISSUE_PATHOLOGY_REPORT_SEQ;
+--drop sequence CATISSUE_QUARANTINE_PARAMS_SEQ;
+--drop sequence CATISSUE_REPORT_SECTION_SEQ;
+--drop sequence CATISSUE_REVIEW_PARAMS_SEQ;
+--drop sequence CATISSUE_REPORT_CONTENT_SEQ;
+--drop sequence CATISSUE_REPORT_QUEUE_SEQ;
+--drop sequence CATISSUE_SEMANTIC_TYPE_SEQ;
+--drop sequence CATISSUE_CONCEPT_SEQ;
+--drop sequence CATISSUE_CONCEPT_CLASSFCTN_SEQ;
 
 create table CATISSUE_REPORT_TEXTCONTENT (
    IDENTIFIER number(19,0) not null,
@@ -493,11 +485,11 @@ create sequence CATISSUE_SEMANTIC_TYPE_SEQ;
 create sequence CATISSUE_CONCEPT_SEQ;
 create sequence CATISSUE_CONCEPT_CLASSFCTN_SEQ;
 
-INSERT INTO CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'IdentifiedSurgicalPathologyReport','IdentifiedSurgicalPathologyReport Object','edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd'));
-INSERT INTO CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'DeidentifiedSurgicalPathologyReport','DeidentifiedSurgicalPathologyReport Object','edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd'));
-INSERT INTO CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'ReportLoaderQueue','ReportLoaderQueue Object','edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd'));
-INSERT INTO CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Review Comments','PathologyReportReviewParameter Object','edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd'));
-INSERT INTO CSM_PROTECTION_ELEMENT values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Quarantine Comments','QuarantineEventParameter Object','edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd'));
+INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL ,'IdentifiedSurgicalPathologyReport','IdentifiedSurgicalPathologyReport Object','edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL ,'DeidentifiedSurgicalPathologyReport','DeidentifiedSurgicalPathologyReport Object','edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL ,'ReportLoaderQueue','ReportLoaderQueue Object','edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL ,'Review Comments','PathologyReportReviewParameter Object','edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL ,'Quarantine Comments','QuarantineEventParameter Object','edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
 
 INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE PROTECTION_ELEMENT_NAME='IdentifiedSurgicalPathologyReport'),TO_DATE('2006-11-27','yyyy-mm-dd') FROM dual;
 INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE PROTECTION_ELEMENT_NAME='IdentifiedSurgicalPathologyReport'),TO_DATE('2006-11-27','yyyy-mm-dd') FROM dual;
@@ -530,4 +522,4 @@ drop table CATISSUE_CLINICAL_REPORT;
 alter table CATISSUE_SPECIMEN_COLL_GROUP drop column CLINICAL_REPORT_ID;
 alter table CATISSUE_SPECIMEN_COLL_GROUP add SURGICAL_PATHOLOGY_NUMBER varchar(50);
 
-/****caTIES Realated Tables - end**********/
+-- caTIES Realated Tables - end */
