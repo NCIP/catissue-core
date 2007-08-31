@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.naming.ldap.HasControls;
 import javax.servlet.http.HttpSession;
 import javax.swing.JOptionPane;
 
@@ -61,8 +62,10 @@ import edu.wustl.common.querysuite.queryobject.IConstraintEntity;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
+import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
 import edu.wustl.common.querysuite.queryobject.ILogicalConnector;
 import edu.wustl.common.querysuite.queryobject.IQuery;
+import edu.wustl.common.querysuite.queryobject.IRule;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.ExpressionId;
@@ -87,6 +90,7 @@ public class DAGPanel {
 	private IClientQueryBuilderInterface m_queryObject;
 	private IPathFinder m_pathFinder;
 	private IExpression expression;
+	private List<DAGNode> dagNodeList = new ArrayList<DAGNode>();
 
 	public DAGPanel(IPathFinder pathFinder)
 	{
@@ -98,14 +102,18 @@ public class DAGPanel {
 		Map ruleDetailsMap = null;
 		IExpressionId expressionId = null;
 		DAGNode node = null;
+		//IQuery query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
+		IQuery query = queryObject.getQuery();
+		System.out.println("query=======>"+query);
+		session.setAttribute(AppletConstants.QUERY_OBJECT, query);
 	//	Map<String,Object> queryDataMap = (HashMap) new HashMap();
 		try {
 			//-----------Init Code  from Digramatical Applet view 
 			//IQuery query = getQueryObjectFromServer(); Get exiting Query object from server
-			/*if(query != null)
-			{
-				queryObject.setQuery(query);
-			}*/
+//			if(query != null)
+//			{
+//				queryObject.setQuery(query);
+//			}
 			DAGNodeBuilder nodeBuilder  = new DAGNodeBuilder();
 			//--
 
@@ -359,6 +367,13 @@ public class DAGPanel {
 			
 			boolean isRulePresentInDag = false;
 			IQuery query = m_queryObject.getQuery();
+			SqlGenerator sql = new SqlGenerator();
+	           try {
+				System.out.println("Query: [ " + sql.generateSQL(query)+" ]");
+			} catch (SqlException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			IConstraints constraints = query.getConstraints();
 			Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
 			while(expressionIds.hasMoreElements())
@@ -373,7 +388,6 @@ public class DAGPanel {
 			if(isRulePresentInDag)
 			{
 				session.setAttribute(AppletConstants.QUERY_OBJECT, query);
-				Map<Long, Map<AttributeInterface, String>> columnMap = null;
 				String selectSql = "";
 
 				SqlGenerator sqlGenerator = (SqlGenerator)SqlGeneratorFactory.getInstance();
@@ -383,7 +397,6 @@ public class DAGPanel {
 				if (obj != null)
 				{
 					SessionDataBean sessionData = (SessionDataBean) obj;
-
 
 					outputTreeBizLogic.createOutputTreeTable(selectSql, sessionData);
 					//Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap = sqlGenerator.getOutputTreeMap();
@@ -434,6 +447,96 @@ public class DAGPanel {
 		}				
 		return message;
 	}
+	
+	public List<DAGNode> repaintCreateDAG(HttpSession session)
+	{
+			List<DAGNode> nodeList = new ArrayList<DAGNode>();
+			IQuery query =(IQuery)session.getAttribute("queryObject");
+			System.out.println("query======"+query);
+			IConstraints constraints = query.getConstraints();
+			
+			HashSet<IExpressionId> visibleExpression = new HashSet<IExpressionId>();
+			
+			Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
+			while(expressionIds.hasMoreElements())
+			{
+				IExpressionId id = expressionIds.nextElement();
+				IExpression expression  = constraints.getExpression(id);
+				if(expression.isVisible())
+				{
+					System.out.println("Visible Id "+id.getInt());
+					visibleExpression.add(id);
+				}
+			}
+			for(IExpressionId expressionId:visibleExpression){
+				
+				IExpression exp = constraints.getExpression(expressionId);
+				
+				IConstraintEntity constraintEntity = exp.getConstraintEntity();
+				String nodeDisplayName = edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()); 
+    			DAGNode dagNode = new DAGNode();
+       			dagNode.setExpressionId(exp.getExpressionId().getInt());
+       			dagNode.setNodeName(nodeDisplayName);
+       			dagNode.setToolTip(exp);
+       			System.out.println("Out Path " + nodeDisplayName);
+				nodeform(expressionId,dagNode,constraints,nodeDisplayName);
+				System.out.println("--------------------------");
+				int numOperands = exp.numberOfOperands();
+	            int numOperator = numOperands-1;
+	            for(int i=0;i<numOperator;i++)
+	            {
+	            	String operator  = exp.getLogicalConnector(i, i+1).getLogicalOperator().toString();
+	            	System.out.println("OP ==> "+operator);
+	            	dagNode.setOperatorList(operator.toUpperCase());
+	            }
+				nodeList.add(dagNode);
+				
+				List<DAGNode> list  = dagNode.getAssociationList();
+				 	for(DAGNode n:list)
+				 	{
+				 		System.out.println("n name ==>"+n.getNodeName());
+				 		System.out.println("n id ==>"+n.getExpressionId());
+				 	}
+			}
+			//processingExpression(constraints, constraints.getRootExpressionId(), null);
+		 return nodeList;
+						
+	}
+	
+	 private void nodeform(IExpressionId expressionId,DAGNode node,IConstraints constraints,String path)
+	    {
+	    	
+	    	List childList = constraints.getJoinGraph().getChildrenList(expressionId);
+	    	for(int i=0;i<childList.size();i++)
+	    	{
+	    		String nodeDisplayName = "";
+	    		IExpressionId newId = (IExpressionId)childList.get(i);
+	    		IExpression exp = constraints.getExpression(newId);
+	    		IConstraintEntity constraintEntity = exp.getConstraintEntity();
+	    		if(exp.isVisible())
+	    		{
+	    			nodeDisplayName =edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity());
+	    			path = path + "->"+nodeDisplayName;
+	    			DAGNode dagNode = new DAGNode();
+	       			dagNode.setExpressionId(exp.getExpressionId().getInt());
+	       			dagNode.setNodeName(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()));
+	       			dagNode.setToolTip(exp);
+	       			System.out.println("Name :"+dagNode.getNodeName());
+	    			System.out.println(" Id " +dagNode.getExpressionId());
+	    			node.setAssociationList(dagNode);
+	    			System.out.println("path =="+path);
+	    			node.setPathList(path);
+	    			   		
+	    		}
+	    		else
+	    		{
+	    			nodeDisplayName =edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity());
+	    			path = path + "->"+nodeDisplayName;	
+	    			nodeform(newId,node,constraints,path);
+	    		}
+	    	}
+	    }
+	    	
 	
 	public void updateLogicalOperator(int parentExpId,int parentIndex,String operator )
 	{
