@@ -355,6 +355,10 @@ public class FlexInterface
 	}
 	//--------------DAG-----------------------------
 	
+	public List<DAGNode> repaintCreateDAG()
+	{
+		return dagPanel.repaintCreateDAG(session);
+	}
 	public String getSearchResult()
 	{
 	

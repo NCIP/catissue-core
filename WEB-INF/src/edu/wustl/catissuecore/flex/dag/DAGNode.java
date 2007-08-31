@@ -4,6 +4,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -20,6 +21,9 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	private int expressionId;
 	private String toolTip;
 	private String operatorBetweenAttrAndAssociation;
+	private List<DAGNode> associationList  = new ArrayList<DAGNode>();
+	private List<String> operatorList  = new ArrayList<String>();
+	private List<String> pathList  = new ArrayList<String>();
 	
 	public DAGNode()
 	{
@@ -122,6 +126,9 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 		toolTip = in.readUTF();
 		expressionId=in.readInt();
 		operatorBetweenAttrAndAssociation=in.readUTF();
+		associationList = (List<DAGNode>) in.readObject();
+		operatorList = (List<String>) in.readObject();
+		pathList = (List<String>) in.readObject();
 	}
 
 	public void writeExternal(ObjectOutput out) throws IOException {
@@ -130,8 +137,20 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 		out.writeUTF(toolTip);
 		out.writeInt(expressionId);
 		out.writeUTF(operatorBetweenAttrAndAssociation);
+		out.writeObject(associationList);
+		out.writeObject(operatorList);
+		out.writeObject(pathList);
 	}
 
+	public String toString()
+	{
+		StringBuffer buff = new StringBuffer("");
+		
+		buff.append("\n nodeName: ").append(nodeName).append("\n toolTip: ").append(toolTip).
+		append("\n expressionId: ").append(expressionId).append("\n operatorBetweenAttrAndAssociation:").
+		append(operatorBetweenAttrAndAssociation);
+		return buff.toString();
+	}
 
 	public int compareTo(DAGNode node) {
 		// TODO Auto-generated method stub
@@ -150,6 +169,36 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	    }
 	     return equal;
 	  }
+
+
+	public List<DAGNode> getAssociationList() {
+		return associationList;
+	}
+
+
+	public void setAssociationList(DAGNode node) {
+		this.associationList.add(node);
+	}
+
+
+	public List<String> getOperatorList() {
+		return operatorList;
+	}
+
+
+	public void setOperatorList(String operator) {
+		this.operatorList.add(operator);
+	}
+
+
+	public List<String> getPathList() {
+		return pathList;
+	}
+
+
+	public void setPathList(String path) {
+		this.pathList.add(path);
+	}
 
 
 

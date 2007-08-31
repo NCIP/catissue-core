@@ -6,6 +6,7 @@
 	creationComplete="initApp()"  width="100%" height="100%">
 	<mx:Script>
 	<![CDATA[
+		import mx.controls.ComboBox;
 	    import mx.controls.ToolTip;
 	    import mx.managers.ToolTipManager;
 		import mx.containers.VBox;
@@ -57,8 +58,50 @@
 	    private var secondNode:String;
 	    private var linkCount:int =0;
 	    private var path:IDAGPath;
+		private var pathStr:String
 		public var rpcService: RemoteObject;
+
 		
+		private function repaintHandler(event: ResultEvent):void
+		{
+			Alert.show("Repaint");
+			var nodeList:ArrayCollection = event.result  as ArrayCollection;
+			var xpos:int =0;
+			var ypos:int =0;
+			for(var i:int=0;i<nodeList.length;i++)
+			{
+				var node:DAGNode = nodeList.getItemAt(i) as DAGNode;
+				node.x = node.x + (xpos + 50);
+				node.y = node.y + (100);
+							
+				node.name =  node.expressionId+"";
+				node.nodeNumber = node.expressionId+"";
+				node.addEventListener(MouseEvent.MOUSE_MOVE,doDrag);
+				node.addEventListener(MouseEvent.CLICK,updateNodeSelection);
+				panel1.addChild(node);
+				
+			}
+			for(var i:int=0;i<nodeList.length;i++)
+			{
+
+				var sourceNode:DAGNode = nodeList.getItemAt(i) as DAGNode;	
+				var associationList:ArrayCollection = sourceNode.associationList;
+				var pathList:ArrayCollection  = sourceNode.pathList;
+				var operatorList:ArrayCollection = sourceNode.operatorList;
+
+				 for(var j:int=0;j<associationList.length;j++)
+				 {
+				    var targetNode:DAGNode = associationList.getItemAt(j) as DAGNode;	
+					pathStr= pathList.getItemAt(j).toString() as String;
+				    var operator:String = operatorList.getItemAt(j) as String;
+				    sourceNode.operatorArray[0] = operator;
+	                sourceNode.enable=false;
+					linkNodes(sourceNode.expressionId.toString(),targetNode.expressionId.toString());
+				 	
+				 }
+			}
+			
+		}
 		
 		private function initFlexInterfaceHandler(event: ResultEvent):void
 		{
@@ -67,29 +110,43 @@
 		
 		private function initApp():void
 		{
+			registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
 			rpcService= new RemoteObject();
 			rpcService.destination="cdeService";
-			rpcService.initFlexInterface();
-			rpcService.addEventListener("result",initFlexInterfaceHandler);
-			rpcService.addEventListener("fault", faultHandler);
-	
-			registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
-			if (isContainerReady())
+			//Alert.show(Application.application.parameters.view);
+			var view:String = Application.application.parameters.view;
+			if(view=="AddLimit")
 			{
-				// If the container is ready, register the SWF’s functions.
-				setUpCall();
-			}
-			else
-			{
-				/* If the container is not ready, set up a Timer to call the
-				container at 100ms intervals. Once the container responds that
-				is ready, the timer will be stopped. */
-				readyTimer = new Timer(100);
-				readyTimer.addEventListener(TimerEvent.TIMER, timerHandler);
-				readyTimer.start();
-			}
-	       panel = new  AmbiguityPanel();
-	       panel.title="Ambiguity resolver";
+				
+				rpcService.initFlexInterface();
+				rpcService.addEventListener("result",initFlexInterfaceHandler);
+				rpcService.addEventListener("fault", faultHandler);
+		
+				
+				if (isContainerReady())
+				{
+					// If the container is ready, register the SWF’s functions.
+					setUpCall();
+				}
+				else
+				{
+					/* If the container is not ready, set up a Timer to call the
+					container at 100ms intervals. Once the container responds that
+					is ready, the timer will be stopped. */
+					readyTimer = new Timer(100);
+					readyTimer.addEventListener(TimerEvent.TIMER, timerHandler);
+					readyTimer.start();
+				}
+		       panel = new  AmbiguityPanel();
+		       panel.title="Ambiguity resolver";
+		 }
+		 else
+		 {
+		 	
+		 //	Alert.show("Other");
+		 	rpcService.addEventListener("result",repaintHandler);
+		 	rpcService.repaintCreateDAG();
+		 }
 		}
 		
 		public function timerHandler():void
@@ -352,10 +409,9 @@
 		}
 
 		public function linkNodes(firstNode:String,secondNode:String):void{
-					
-					var dagNode1:DAGNode = DAGNode(panel1.getChildByName(firstNode));
-					var dagNode2:DAGNode = DAGNode(panel1.getChildByName(secondNode));
-					var fromX:int = dagNode1.x+dagNode1.width;
+			var dagNode1:DAGNode = DAGNode(panel1.getChildByName(firstNode));
+			var dagNode2:DAGNode = DAGNode(panel1.getChildByName(secondNode));
+			var fromX:int = dagNode1.x+dagNode1.width;
 					var fromY:int = dagNode1.y+(linkCount*10);
 					var toX:int = dagNode2.x;
 					var toY:int = dagNode2.y+(linkCount*15);
@@ -374,15 +430,22 @@
 					var vBox:VBox = dagNode1.getChildByName("Association") as VBox;
 					vBox.visible=true;
 					
+					
 					//line.graphics.lineTo(200,200);
 					var c:UIComponent = new UIComponent();
 					c.id="line"+linkNum++;
 					c.name="line"+linkNum++;
 					c.addChild(line);
-					c.toolTip=path.name;
+					if(path!=null)			
+					{
+						c.toolTip=path.name;
+					}
+					else
+					{
+						c.toolTip=pathStr;
+					}
+
 					panel1.addChild(c);
-												
-					
 					//removing selections
 					dagNode1.unSelect();
 					dagNode2.unSelect();
@@ -391,7 +454,13 @@
 					node1="";
 					node2="";
 					selectedNodeList.removeAll();
+			
+		}
 
+		private function drawUILine(dagNode1:DAGNode,dagNode2:DAGNode)
+		{
+				
+			
 		}
 								
 		private function moveLine():void{
@@ -476,7 +545,7 @@
 			
 		}
 		
-		public function limitUIHandler(event:ResultEvent)
+		public function limitUIHandler(event:ResultEvent):void
 		{
 			var htmlStr:String = event.result as String;
 			
@@ -516,8 +585,6 @@
 		</mx:Panel>
 		<mx:Label text="Current Expression"  fontFamily="Courier New" fontSize="11" fontWeight="bold"/>
 		</mx:VBox>	
-
-	
 		
 </mx:Application>
 	
