@@ -1,4 +1,4 @@
-xalter table DYEXTN_OBJECT_TYPE_INFO drop constraint FK74819FB0BC7298A9;
+alter table DYEXTN_OBJECT_TYPE_INFO drop constraint FK74819FB0BC7298A9;
 alter table DYEXTN_COLUMN_PROPERTIES drop constraint FK8FCE2B3FBC7298A9;
 alter table DYEXTN_COLUMN_PROPERTIES drop constraint FK8FCE2B3FB4C15A36;
 alter table DYEXTN_USERDEFINED_DE drop constraint FK630761FFBC7298A9;
@@ -430,7 +430,7 @@ create table DYEXTN_ASSO_DISPLAY_ATTR (
    DISPLAY_ATTRIBUTE_ID number(19,0),
    SELECT_CONTROL_ID number(19,0),
    primary key (IDENTIFIER)
-);;
+);
 create table DYEXTN_TEXTAREA (
    IDENTIFIER number(19,0) not null,
    TEXTAREA_COLUMNS number(10,0),

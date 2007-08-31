@@ -485,11 +485,18 @@ create sequence CATISSUE_SEMANTIC_TYPE_SEQ;
 create sequence CATISSUE_CONCEPT_SEQ;
 create sequence CATISSUE_CONCEPT_CLASSFCTN_SEQ;
 
-INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL ,'IdentifiedSurgicalPathologyReport','IdentifiedSurgicalPathologyReport Object','edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL ,'DeidentifiedSurgicalPathologyReport','DeidentifiedSurgicalPathologyReport Object','edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL ,'ReportLoaderQueue','ReportLoaderQueue Object','edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL ,'Review Comments','PathologyReportReviewParameter Object','edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
-INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL ,'Quarantine Comments','QuarantineEventParameter Object','edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PROTECTION_ELEMENT select max( PROTECTION_ELEMENT_ID)+1 ,'IdentifiedSurgicalPathologyReport','IdentifiedSurgicalPathologyReport Object','edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PROTECTION_ELEMENT select max( PROTECTION_ELEMENT_ID)+1 ,'DeidentifiedSurgicalPathologyReport','DeidentifiedSurgicalPathologyReport Object','edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PROTECTION_ELEMENT select max( PROTECTION_ELEMENT_ID)+1 ,'ReportLoaderQueue','ReportLoaderQueue Object','edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PROTECTION_ELEMENT select max( PROTECTION_ELEMENT_ID)+1 ,'Review Comments','PathologyReportReviewParameter Object','edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PROTECTION_ELEMENT select max( PROTECTION_ELEMENT_ID)+1 ,'Quarantine Comments','QuarantineEventParameter Object','edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+
+-- reseting sequence for CSM_PROTECTION_ELEMENT table to correct position
+select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL from dual;
+select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL from dual;
+select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL from dual;
+select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL from dual;
+select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL from dual;
 
 INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE PROTECTION_ELEMENT_NAME='IdentifiedSurgicalPathologyReport'),TO_DATE('2006-11-27','yyyy-mm-dd') FROM dual;
 INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE PROTECTION_ELEMENT_NAME='IdentifiedSurgicalPathologyReport'),TO_DATE('2006-11-27','yyyy-mm-dd') FROM dual;

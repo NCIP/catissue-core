@@ -1,30 +1,30 @@
-
 declare
-    i number; j number;k number;l number;
+    i number :=1; j number :=1;k number :=1;l number :=1;
+    sql_stmt varchar2(50);
 begin
-    select max(identifier)+1 into i from dyextn_permissible_value;
-    execute immediate 'create sequence DYEXTN_PERMISSIBLEVAL_SEQ start with ' || i ;
+    select nvl(max(identifier)+1,1) into i from dyextn_permissible_value;
+    sql_stmt :='create sequence DYEXTN_PERMISSIBLEVAL_SEQ start with ' || i ;
+    execute immediate sql_stmt;
 	
-	 select max(identifier)+1 into j from DYEXTN_DATABASE_PROPERTIES ;
+	 select nvl(max(identifier)+1,1) into j from DYEXTN_DATABASE_PROPERTIES ;
     execute immediate 'create sequence DYEXTN_DATABASE_PROPERTIES_SEQ  start with ' || j ; 
 	
-	 select max(identifier)+1 into k from DYEXTN_ATTRIBUTE_TYPE_INFO;
+	 select nvl(max(identifier)+1,1) into k from DYEXTN_ATTRIBUTE_TYPE_INFO;
     execute immediate 'create sequence DYEXTN_ATTRIBUTE_TYPE_INFO_SEQ start with ' || k ; 
 	
-	 select max(identifier)+1 into l  from DYEXTN_ABSTRACT_METADATA;
+	 select nvl(max(identifier)+1,1) into l  from DYEXTN_ABSTRACT_METADATA;
     execute immediate 'create sequence DYEXTN_ABSTRACT_METADATA_SEQ start with ' || l ; 
 	
-	 select max(identifier)+1 into i from DYEXTN_SEMANTIC_PROPERTY;
+	 select nvl(max(identifier)+1,1) into i from DYEXTN_SEMANTIC_PROPERTY;
     execute immediate 'create sequence DYEXTN_SEMANTIC_PROPERTY_SEQ start with ' || i ;
 	
-	select max(identifier)+1 into j from DYEXTN_ROLE;
+	select nvl(max(identifier)+1,1) into j from DYEXTN_ROLE;
     execute immediate 'create sequence DYEXTN_ROLE_SEQ start with ' || j ;    
    
-	select max(identifier)+1 into k from DYEXTN_DATA_ELEMENT;
+	select nvl(max(identifier)+1,1) into k from DYEXTN_DATA_ELEMENT;
     execute immediate 'create sequence DYEXTN_DATA_ELEMENT_SEQ start with ' || k ;    
    
-	select max(identifier)+1 into l from DYEXTN_TAGGED_VALUE;
+	select nvl(max(identifier)+1,1) into l from DYEXTN_TAGGED_VALUE;
     execute immediate 'create sequence DYEXTN_TAGGED_VALUE_SEQ start with ' || l ;
    
 	end;
-	
