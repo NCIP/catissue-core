@@ -506,7 +506,8 @@
 		    password="${database.password}" 
 			onerror="continue">
 			<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql"/>
-			<transaction  src="${mysql.sql.dir}/SuiteQueryMetadataInsertScript.sql"/>	
+			<transaction  src="${mysql.sql.dir}/dynamicextension.sql"/>
+			<transaction  src="${mysql.sql.dir}/SuiteQueryMetadataInsertScript.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -526,6 +527,8 @@
     		onerror="continue"
     		rdbms="oracle">
 			<transaction  src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql"/>
+			<transaction  src="${oracle.sql.dir}/dynamicextension_CreateTable.sql"/>	
+			<transaction  src="${oracle.sql.dir}/dynamicextension_AddConstraints.sql"/>	
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -543,6 +546,7 @@
 			delimiter="/"
 		    delimitertype="row">
 		    <transaction  src="${oracle.sql.dir}/DBUtility.sql"/>
+			<transaction  src="${oracle.sql.dir}/DESeqChangeForDataDump.sql"/>
 		  	<classpath>
 	            <fileset dir="${lib.dir}">
 	                  <include name="*.jar"/>
@@ -573,8 +577,8 @@
 					  <transaction  src="${oracle.sql.dir}/dynamicextension_CreateTable.sql"/>	
 					  <transaction  src="${oracle.sql.dir}/SuiteQueryMetadataInsertScript.sql"/>	
 					  <transaction  src="${oracle.sql.dir}/cab2b_AddConstraints.sql"/>
-					<transaction  src="${oracle.sql.dir}/dynamicextension_AddConstraints.sql"/>	
-				  <transaction>commit;</transaction>	
+					  <transaction  src="${oracle.sql.dir}/dynamicextension_AddConstraints.sql"/>	
+				  	  <transaction>commit;</transaction>	
 		    	  <classpath >
 		            <fileset dir="${lib.dir}">
 		                  <include name="*.jar"/>
