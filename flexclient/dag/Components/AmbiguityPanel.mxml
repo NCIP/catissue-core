@@ -14,9 +14,9 @@
 		import mx.rpc.events.ResultEvent;
 
 	    [Bindable]
-		public var pathList:ArrayCollection;
+		public var pathList:ArrayCollection = new ArrayCollection();
 	    [Bindable]
-		public var selectedList:ArrayCollection;
+		public var selectedList:ArrayCollection= null;
 								
 		public var dagPath: IDAGPath;
 		
