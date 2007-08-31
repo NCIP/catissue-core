@@ -33,6 +33,11 @@
 		public var operatorBetweenAttrAndAssociation:String="And"; 
 		[Bindable]
 		public var operatorArray:Array = ["AND","OR"];
+		[Bindable]
+		public var enable:Boolean=true;
+		public var associationList:ArrayCollection;
+		public var operatorList:ArrayCollection;
+		public var pathList:ArrayCollection;
 			
 		public var outAssociations:ArrayCollection = new ArrayCollection();		
 		[Bindable]
@@ -110,6 +115,10 @@
 			toolTip=input.readUTF();
 			expressionId=input.readInt();
 			operatorBetweenAttrAndAssociation = input.readUTF();
+			associationList = input.readObject();
+			operatorList = input.readObject();
+			pathList = input.readObject();
+			
 			//	Alert.show("--------Stop Read External---------");
 		}
 
@@ -120,6 +129,10 @@
 			out.writeUTF(toolTip);
 			out.writeInt(expressionId);
 			out.writeUTF(operatorBetweenAttrAndAssociation);
+			out.writeObject(associationList);
+			out.writeObject(operatorList);
+			out.writeObject(pathList);
+			
 			//Alert.show("--------Stop Write External---------");
 				
 		}
@@ -238,7 +251,7 @@
 					<mx:Label text="{assRep.currentItem.associatedNode}" />
 				</mx:Canvas>
 				
-				<mx:ComboBox id="operatorCombo" name="{assRep.currentIndex.toString()}"  dataProvider="{operatorArray}" change="operatorChange(event)" />
+				<mx:ComboBox id="operatorCombo" name="{assRep.currentIndex.toString()}"  dataProvider="{operatorArray}" change="operatorChange(event)" enabled="{enable}"/>
 		
 			</mx:HBox>
 			</mx:Repeater>
