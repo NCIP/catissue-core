@@ -14,11 +14,11 @@ import edu.wustl.common.querysuite.queryobject.impl.Rule;
 public class DAGNodeBuilder {
 	
 	 private IClientQueryBuilderInterface m_queryObject;
-	 private Map<String, Object> queryDataMap = (HashMap) new HashMap();
+	 
 	/**
 	 * @param expressionId
 	 */
-	public DAGNode createNode(IExpressionId expressionId,IClientQueryBuilderInterface queryObject)
+	public DAGNode createNode(IExpressionId expressionId,IClientQueryBuilderInterface queryObject,boolean isOutputView)
 	{
 		// TODO required to create m_queryObject object b4 this call
 		setQueryObject(queryObject);
@@ -27,7 +27,8 @@ public class DAGNodeBuilder {
         DAGNode dagNode = new DAGNode();
 		dagNode.setNodeName(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()));
 		dagNode.setExpressionId(expression.getExpressionId().getInt());
-		dagNode.setToolTip(expression);
+		if(!isOutputView)			
+			dagNode.setToolTip(expression);
 
 		//m_queryObject.addExressionIdToVisibleList(expressionId); //Requiref or assocaiation
 		return dagNode;
