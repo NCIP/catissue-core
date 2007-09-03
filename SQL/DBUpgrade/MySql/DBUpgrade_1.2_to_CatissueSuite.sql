@@ -536,3 +536,9 @@ insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(se
 insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction','edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction','edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction',1);
 insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select MAX(PROTECTION_ELEMENT_ID) from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction'));
 /*--------Query Wizard End---------------*/
+/* Local Extension  */
+INSERT INTO `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'Local Extensions','Local Extensions class','edu.common.dynamicextensions.domain.integration.EntityMap',NULL,NULL,1,'2007-01-17' from CSM_PROTECTION_ELEMENT;
+INSERT INTO `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction','edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction','edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction',NULL,NULL,1,'2007-01-17' from CSM_PROTECTION_ELEMENT;
+/* Local Extension  */
+INSERT INTO `CSM_PG_PE` select max(PG_PE_ID)+1,17,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.common.dynamicextensions.domain.integration.EntityMap'),'0000-00-00' from CSM_PG_PE;
+INSERT INTO `CSM_PG_PE` select max(PG_PE_ID)+1,17,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction'),'0000-00-00'  from CSM_PG_PE;

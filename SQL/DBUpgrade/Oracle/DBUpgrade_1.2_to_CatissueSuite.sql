@@ -530,3 +530,11 @@ alter table CATISSUE_SPECIMEN_COLL_GROUP drop column CLINICAL_REPORT_ID;
 alter table CATISSUE_SPECIMEN_COLL_GROUP add SURGICAL_PATHOLOGY_NUMBER varchar(50);
 
 -- caTIES Realated Tables - end */
+
+/* Local Extension  */
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'Local Extensions','Local Extensions class','edu.common.dynamicextensions.domain.integration.EntityMap',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT into CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction','edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction','edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from dual;
+
+/* Local Extension  */
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,17,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.common.dynamicextensions.domain.integration.EntityMap'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,17,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
