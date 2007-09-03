@@ -151,29 +151,32 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				//Added retrival of Participant Medical Identifier
 				//(Virender Mehta)
 				Collection participantMedicalIdentifier = participant.getParticipantMedicalIdentifierCollection();
-				Iterator participantMedicalIdentifierItr = participantMedicalIdentifier.iterator();
-				while(participantMedicalIdentifierItr.hasNext())
+				if(participantMedicalIdentifier!=null)
 				{
-					ParticipantMedicalIdentifier participantIdentifier = (ParticipantMedicalIdentifier) participantMedicalIdentifierItr.next();
-					if(participantIdentifier.getMedicalRecordNumber()==null)
+					Iterator participantMedicalIdentifierItr = participantMedicalIdentifier.iterator();
+					while(participantMedicalIdentifierItr.hasNext())
 					{
-						participant.setParticipantMedicalIdentifierCollection(null);
-					}
-					else
-					{
-						String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();	
-						String siteId = participantIdentifier.getSite().getId().toString();
-						Long participantId = participantIdentifier.getParticipant().getId();
-						if(mapOfParticipantMedicalIdentifierCollection.get(participantId)==null)
+						ParticipantMedicalIdentifier participantIdentifier = (ParticipantMedicalIdentifier) participantMedicalIdentifierItr.next();
+						if(participantIdentifier.getMedicalRecordNumber()==null)
 						{
-							mapOfParticipantMedicalIdentifierCollection.put(participantId, new ArrayList());
+							participant.setParticipantMedicalIdentifierCollection(null);
 						}
-						((ArrayList)mapOfParticipantMedicalIdentifierCollection.get(participantId)).add(medicalRecordNo);
-						((ArrayList)mapOfParticipantMedicalIdentifierCollection.get(participantId)).add(siteId);
-						participant.setParticipantMedicalIdentifierCollection((Collection)mapOfParticipantMedicalIdentifierCollection.get(participantId));
+						else
+						{
+							String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();	
+							String siteId = participantIdentifier.getSite().getId().toString();
+							Long participantId = participantIdentifier.getParticipant().getId();
+							if(mapOfParticipantMedicalIdentifierCollection.get(participantId)==null)
+							{
+								mapOfParticipantMedicalIdentifierCollection.put(participantId, new ArrayList());
+							}
+							((ArrayList)mapOfParticipantMedicalIdentifierCollection.get(participantId)).add(medicalRecordNo);
+							((ArrayList)mapOfParticipantMedicalIdentifierCollection.get(participantId)).add(siteId);
+							participant.setParticipantMedicalIdentifierCollection((Collection)mapOfParticipantMedicalIdentifierCollection.get(participantId));
+						}
 					}
-				}
-			    participantMap.put(participant.getId(), participant);
+				}   
+				participantMap.put(participant.getId(), participant);
 			}
     	}
 		catch (CacheException e)
