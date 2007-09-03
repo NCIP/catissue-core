@@ -1879,7 +1879,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SCG_ID_TO_ASSOCIATE = "scgIdToAssociate";
 	public static final String CONCEPT_REFERENT_CLASSIFICATION_LIST = "conceptRefernetClassificationList";
 	public static final String CONCEPT_LIST = "conceptList";
-	public static final String[] CATEGORY_HIGHLIGHTING_COLOURS = {"yellow","green","red","pink","blue"};
+	public static final String[] CATEGORY_HIGHLIGHTING_COLOURS = {"#ff6d5f","#db9fe5","#2dcc00","#69bbf7","#f8e754"};
 	public static final String CONCEPT_BEAN_LIST = "conceptBeanList";
  
     //Admin View
