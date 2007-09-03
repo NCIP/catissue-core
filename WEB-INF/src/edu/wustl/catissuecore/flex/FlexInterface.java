@@ -354,14 +354,31 @@ public class FlexInterface
 		event.setUser(user);
 	}
 	//--------------DAG-----------------------------
+	public void restoreQueryObject()
+	{
+		dagPanel.restoreQueryObject(session, queryObject);
+		
+	}
+	
+	public DAGNode addNodeToView(String nodesStr)
+	{
+		System.out.println("nodesStr ==>"+nodesStr);
+		System.out.println("NodeList  ===>"+ nodeList);
+		System.out.println("queryObject ==>"+queryObject);
+		DAGNode dagNode = dagPanel. addNodeToOutPutView(nodesStr,session,queryObject);
+		System.out.println("dagNode ==> "+dagNode);
+		nodeList.add(dagNode);
+		return dagNode;
+	}
 	
 	public List<DAGNode> repaintCreateDAG()
 	{
+	//	restoreQueryObject();
 		return dagPanel.repaintCreateDAG(session);
 	}
+	
 	public String getSearchResult()
 	{
-	
 		return dagPanel.search(session);
 	}
 	/**
@@ -378,6 +395,20 @@ public class FlexInterface
 		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName, session,queryObject,"Add");
 		nodeList.add(dagNode);
 		
+	}
+	
+	/**
+	 * GetLastNode
+	 * @return
+	 */
+	public DAGNode getLastNode()
+	{
+		int lastIndex =0;
+		if(!nodeList.isEmpty())
+		{
+			lastIndex= (nodeList.size()-1);
+		}
+		return nodeList.get(lastIndex);
 	}
 	
 	public String getLimitUI(int expressionId)
@@ -416,19 +447,7 @@ public class FlexInterface
 		return conditionStr;
 	}
 	
-	/**
-	 * GetLastNode
-	 * @return
-	 */
-	public DAGNode getLastNode()
-	{
-		int lastIndex =0;
-		if(!nodeList.isEmpty())
-		{
-			lastIndex= (nodeList.size()-1);
-		}
-		return nodeList.get(lastIndex);
-	}
+	
 	
 	public void deleteNode(String nodeName)
 	{
