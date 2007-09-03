@@ -17,10 +17,10 @@ import edu.wustl.common.querysuite.queryobject.IRule;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 
 public class DAGNode implements Externalizable,Comparable<DAGNode>{
-	private String nodeName;
-	private int expressionId;
-	private String toolTip;
-	private String operatorBetweenAttrAndAssociation;
+	private String nodeName="";
+	private int expressionId=0;
+	private String toolTip="";
+	private String operatorBetweenAttrAndAssociation="";
 	private List<DAGNode> associationList  = new ArrayList<DAGNode>();
 	private List<String> operatorList  = new ArrayList<String>();
 	private List<String> pathList  = new ArrayList<String>();
