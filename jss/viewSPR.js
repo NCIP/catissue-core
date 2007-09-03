@@ -32,20 +32,9 @@ function hide(obj)
 //<!--function to display deidentified report table on UI -->
 function clickOnLinkShowDeidReport()
 {
-
-	if(document.getElementById('showDeReportChkbox').checked==true)
-	{
-		hide('identifiedReportInfo');
-		switchStyle('hide');
-		show('deidReportInfo');
-
-	}
-	else
-	{
-		hide('deidReportInfo');
-		show('identifiedReportInfo');
-		switchStyle('show');
-	}
+	hide('identifiedReportInfo');
+	switchStyle('hide');
+	show('deidReportInfo');
 }
 //<!--function to display default view  -->
 function clickOnLinkReport()
