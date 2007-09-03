@@ -69,6 +69,7 @@ import edu.wustl.common.querysuite.queryobject.IRule;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.ExpressionId;
+import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
@@ -106,7 +107,7 @@ public class DAGPanel {
 		IQuery query = queryObject.getQuery();
 		System.out.println("query=======>"+query);
 		session.setAttribute(AppletConstants.QUERY_OBJECT, query);
-	//	Map<String,Object> queryDataMap = (HashMap) new HashMap();
+		
 		try {
 			//-----------Init Code  from Digramatical Applet view 
 			//IQuery query = getQueryObjectFromServer(); Get exiting Query object from server
@@ -137,12 +138,12 @@ public class DAGPanel {
 						rule.addCondition(condition);
 					}
 					expressionId = expression.getExpressionId();
-					node = nodeBuilder.createNode(expressionId,queryObject);
+					node = nodeBuilder.createNode(expressionId,queryObject,false);
 				}
 				else
 				{
 					expressionId = queryObject.addRule(attributes, attributeOperators, conditionValues);
-					node = nodeBuilder.createNode(expressionId,queryObject);
+					node = nodeBuilder.createNode(expressionId,queryObject,false);
 					//queryDataMap.put("DAGNODE",node);
 				}
 
@@ -566,6 +567,43 @@ public class DAGPanel {
 		return map;
 	}
 	
+	public DAGNode addNodeToOutPutView(String nodesStr,HttpSession session,IClientQueryBuilderInterface queryObject)
+	{
+		DAGNode node = null;
+		if (!nodesStr.equalsIgnoreCase(""))
+		{
+			if(nodesStr.indexOf("~")!= -1)
+			{
+				String[] entityArr =  nodesStr.split("~");
+				Map entityMap = (Map)session.getAttribute(Constants.SEARCHED_ENTITIES_MAP);
+			
+				for(int i=0;i<entityArr.length; i++)
+				{
+					String entityName = entityArr[i];
+					System.out.println("entityName =="+entityName);
+					EntityInterface entity = (EntityInterface)entityMap.get(entityName);
+					IExpressionId expressionId = ((ClientQueryBuilder)queryObject).addExpression(entity);
+					DAGNodeBuilder nodeBuilder  = new DAGNodeBuilder();
+					node = nodeBuilder.createNode(expressionId,queryObject,true);
+				}
+			}
+		}
+		return node;
+	}
+	public void restoreQueryObject(HttpSession session,IClientQueryBuilderInterface queryObject)
+	{
+		IQuery query =queryObject.getQuery();
+		int roots = ((JoinGraph)(query.getConstraints().getJoinGraph())).getAllRoots().size();
+		if(roots > 1)
+		{
+			//errorMessage = AppletConstants.MULTIPLE_ROOTS_EXCEPTION;
+		//	showValidationMessagesToUser(errorMessage);
+		}
+		else
+		{
+			session.setAttribute(AppletConstants.QUERY_OBJECT, query);
+		}
+	}
 	public void setExpression(IExpression expression)
 	{
 		this.expression = expression;
