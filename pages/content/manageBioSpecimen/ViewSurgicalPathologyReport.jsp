@@ -101,7 +101,7 @@
 </head>
 <html:form action="ViewSurgicalPathologyReport">
 <!-- Main table start -->
-<table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  style="table-layout:fixed" width="750" >
+<table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  style="table-layout:fixed" width="650" >
 	 <tr>
 		<td>		
 			<html:hidden property="id" />
@@ -141,24 +141,30 @@
 	<tr>
 		<td>
 		<!-- block to diaply default links -->
-			<table width="100%">
+			<table width="100%" >
 				<tr>
-					<td class="formFieldNoBordersBold" width="60%" nowrap>
-						<a href="javascript:clickOnLinkReport()">
-							<bean:message key="viewSPR.link.report" />
-						</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-				
-						<a href="javascript:clickOnLinkCompareReport()">
-							<bean:message key="viewSPR.link.compareReports" />
-						</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-				
-						<a href="javascript:clickOnLinkMyRequests()">
-							<bean:message key="viewSPR.link.myRequests" />
-						</a>
+					<td class="formTitle" height="20" colspan="2">
+						<bean:message key="viewSPR.view.title" />
 					</td>
-					<td class="formFieldNoBordersBold"  align="right" width="40%">
-						<input type="checkbox" id="showDeReportChkbox" selected="false" onclick="clickOnLinkShowDeidReport()">
-						<bean:message key="viewSPR.showDeIdenfiedReport" />
+				</tr>
+				<tr>
+					<td class="formFieldNoBordersBold" >
+						<input type=radio name="review" value="abc1" checked="checked" onClick="clickOnLinkReport()" />
+							<bean:message key="viewSPR.identifiedReport" />
+					</td>
+					<td class="formFieldNoBordersBold" >
+						<input type=radio name="review" value="abc2" onClick="clickOnLinkShowDeidReport()" />
+							<bean:message key="viewSPR.deIdenfiedReport" />
+					</td>
+				</tr>
+				<tr>
+					<td class="formFieldNoBordersBold" >
+						<input type=radio name="review" value="abc3" onClick="clickOnLinkCompareReport()" />
+							<bean:message key="viewSPR.compareReports" />
+					</td>
+					<td class="formFieldNoBordersBold" >
+						<input type=radio name="review" value="abc4" onClick="" />
+							<bean:message key="viewSPR.myRequests" />						
 					</td>
 				</tr>
 				<%
@@ -190,47 +196,7 @@
 	</tr>
 	<tr>
 		<td valign="top" >
-			<table border="0" cellpadding="0" width="100%" cellspacing="0" id="categoryHighlighter" >
-				<tr>
-					<td class="formTitle" height="20"  nowrap>
-						<bean:message key="viewSPR.categoryHighlighter.title"/>
-					</td>
-				</tr>
-				<!-- tr>
-					<td class="formLeftSubTableTitle" width="20%"><input type="checkbox" id="selectAll" selected="false"></td>
-					<td class="formRightSubTableTitle">
-						<bean:message key="app.selectAll" />
-					</td>
-				</tr-->		
-				 <tr>
-				  <td>
-				  <table id="classificationNames" border="0"  cellpadding="5" width="100%" cellspacing="0">
-				<%
-				  List conceptClassificationList = (List)request.getAttribute(Constants.CONCEPT_BEAN_LIST);
-				  int chkBoxNo = 0;			  
-				  if(conceptClassificationList != null && conceptClassificationList.size() > 0)
-				  {%>
-				 
-				  <tr id="classificationNamesRow">
-				<logic:iterate id="referentClassificationObj" collection="<%= conceptClassificationList %>" type="edu.wustl.catissuecore.bean.ConceptHighLightingBean">
-					<td class="formRequiredLabelWithAllBorder">
-						<% String chkBoxId = "select"+chkBoxNo; %>
-						<input type="checkbox" id="<%=chkBoxId %>" onclick="checkBoxClicked()" />
-						<% String spanStyle = "background-color:"+colours[chkBoxNo];%>
-						<span id="classificationName" style="<%=spanStyle %>">
-							<%=referentClassificationObj.getClassificationName() %>	
-						</span>		
-					</td>
-				
-				<% chkBoxNo++;%>
-				</logic:iterate>
-				</tr>
-				
-			<%} %>
-			</table>
-				</td>
-			</tr>
-			</table>
+			
 		</td>
 	</tr>
 	<tr>
@@ -427,7 +393,7 @@
 			<tr>
 				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
 				
-				<div id="identifiedReportText" style="overflow:auto;height:200px;width:728"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty></PRE>
+				<div id="identifiedReportText" style="overflow:auto;height:200px;width:628"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty></PRE>
 				</div>
 				</td>
 			</tr>
@@ -442,36 +408,49 @@
 					<bean:message key="viewSPR.deIdentifiedReportInformation.title"/>
 				</td>
 			</tr>
-		<!--	<tr>
-				<td class="formFieldWithNoTopBorder"  height="20" >
-					<b>
-						<bean:message key="viewSPR.reportInfo.reportId"/> : 
-					</b>
-				    	<% if(formSPR.getDeIdentifiedReportId()!=0) {%>
-				     		<%=formSPR.getDeIdentifiedReportId()%>
-						<%}%>
+			<tr>
+				<td colspan="3" class="formField">
+					<table border="0" cellpadding="0" width="100%" cellspacing="0" id="categoryHighlighter" >
+						<tr>
+							<td class="formSubTitle" height="20"  nowrap>
+								<bean:message key="viewSPR.categoryHighlighter.title"/>
+							</td>
+						</tr>
+						 <tr>
+						  <td>
+						  <table id="classificationNames" border="0"  cellpadding="5" width="100%" cellspacing="0">
+						<%
+						  List conceptClassificationList = (List)request.getAttribute(Constants.CONCEPT_BEAN_LIST);
+						  int chkBoxNo = 0;			  
+						  if(conceptClassificationList != null && conceptClassificationList.size() > 0)
+						  {%>
+						 
+						  <tr id="classificationNamesRow">
+						<logic:iterate id="referentClassificationObj" collection="<%= conceptClassificationList %>" type="edu.wustl.catissuecore.bean.ConceptHighLightingBean">
+							<td class="formFieldNoBordersBold">
+								<% String chkBoxId = "select"+chkBoxNo; %>
+								<input type="checkbox" id="<%=chkBoxId %>" onclick="checkBoxClicked()" />
+								<% String spanStyle = "background-color:"+colours[chkBoxNo];%>
+								<span id="classificationName" style="<%=spanStyle %>">
+									<%=referentClassificationObj.getClassificationName() %>	
+								</span>		
+							</td>
+						
+						<% chkBoxNo++;%>
+						</logic:iterate>
+						</tr>
+						
+					<%} %>
+					</table>
+						</td>
+					</tr>
+					</table>
 				</td>
-				<td class="formField"  height="20" >
-					<b>
-						<bean:message key="viewSPR.reportInfo.spn" /> : 
-					</b>
-						<% if(formSPR.getSurgicalPathologyNumber()!=null) {%>
-				     		<%=formSPR.getSurgicalPathologyNumber()%>
-						<%}%>
-				</td>
-				<td class="formField"  height="20">
-					<b>
-						<bean:message key="specimenCollectionGroup.site"/> : 
-					</b>
-						<% if(formSPR.getDeIdentifiedReportSite()!=null) {%>
-				     		<%=formSPR.getDeIdentifiedReportSite()%>
-						<%}%>
-				</td>
-			</tr>  -->
+			</tr>
 			<tr>
 				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
 				
-				<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:728"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
+				<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:628"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
 				</div>
 				</td>
 			</tr>
@@ -488,7 +467,7 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<html:textarea property="comments" rows="3" cols="89"/>
+					<html:textarea property="comments" rows="3" cols="76"/>
 				</td>
 			</tr>
 			
