@@ -35,16 +35,20 @@
 		public var operatorArray:Array = ["AND","OR"];
 		[Bindable]
 		public var enable:Boolean=true;
+		[Bindable]
+		public var nodeColor:int =0xFFFFAA;
+		
 		public var associationList:ArrayCollection;
 		public var operatorList:ArrayCollection;
 		public var pathList:ArrayCollection;
 			
 		public var outAssociations:ArrayCollection = new ArrayCollection();		
+
 		[Bindable]
 		public function addOutAssociation(node:String,link:String):void{
 			var ass:Association = new Association(node,link);
 			outAssociations.addItem(ass);
-		}
+			}
 		[Bindable]
 		public function removeOutAssociation(node:String,link:String):void{
 			var ass:Association;
@@ -198,7 +202,7 @@
 		
 		public function deleteHandler(event:ResultEvent)
 		{
-			Alert.show("Delete Success");
+	//		Alert.show("Delete Success");
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteHandler,false);
 		}
 		public function faultHandler (event:FaultEvent):void {
@@ -226,8 +230,8 @@
 		{
 		 var cb:ComboBox=event.currentTarget as ComboBox;
 		 var index:int = cb.name as int;
-	     Alert.show(cb.selectedLabel.toString());
-	  	 Alert.show(cb.name);
+//	     Alert.show(cb.selectedLabel.toString());
+//	  	 Alert.show(cb.name);
 		 this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,setOperatorHandler);
 		 this.parentApplication.rpcService.setLogicalOperator(this,index,cb.selectedLabel);
 		}
@@ -235,7 +239,7 @@
 		
 	]]>
 </mx:Script>
-	<mx:HBox backgroundColor="0xFFFFAA" borderStyle="solid" width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+	<mx:HBox name="Node" backgroundColor="{nodeColor}" borderStyle="solid" width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" borderColor="#ff8080">
 		<mx:Canvas backgroundColor="0xF5F5F5"  borderStyle="solid">
 			<mx:Label text="{nodeNumber}" />
 		</mx:Canvas>
@@ -246,11 +250,11 @@
 		<mx:VBox id="assVbox" name="Association" label="Associations" width="100%" verticalGap="0" visible="false">
 		
 			<mx:Repeater id="assRep" name="Repeater" dataProvider="{outAssociations}">
+			
 				<mx:HBox name="hbox" width="100%" borderStyle="solid">
 				<mx:Canvas backgroundColor="0xF5F5F5"  borderStyle="solid">
 					<mx:Label text="{assRep.currentItem.associatedNode}" />
 				</mx:Canvas>
-				
 				<mx:ComboBox id="operatorCombo" name="{assRep.currentIndex.toString()}"  dataProvider="{operatorArray}" change="operatorChange(event)" enabled="{enable}"/>
 		
 			</mx:HBox>
