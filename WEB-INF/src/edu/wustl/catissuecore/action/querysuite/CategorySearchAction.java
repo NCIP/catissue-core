@@ -51,6 +51,16 @@ public class CategorySearchAction extends BaseAction
 	throws Exception
 	{
 		HttpSession session = request.getSession();
+		String isQuery =(String) request.getParameter("isQuery");
+		System.out.println("isQuery ====>"+isQuery);
+		if(isQuery!=null)
+		{
+			request.setAttribute("isQuery", isQuery);
+		}
+		else
+		{
+			request.setAttribute("isQuery", "false");
+		}
 		CategorySearchForm searchForm = (CategorySearchForm) form;
 		String currentPage = searchForm.getCurrentPage();
 		String textfieldValue = searchForm.getTextField();
