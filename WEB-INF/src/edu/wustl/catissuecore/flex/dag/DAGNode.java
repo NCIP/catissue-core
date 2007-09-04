@@ -21,9 +21,11 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	private int expressionId=0;
 	private String toolTip="";
 	private String operatorBetweenAttrAndAssociation="";
+	private String nodeType =DAGConstant.CONSTRAINT_VIEW_NODE;
 	private List<DAGNode> associationList  = new ArrayList<DAGNode>();
 	private List<String> operatorList  = new ArrayList<String>();
 	private List<String> pathList  = new ArrayList<String>();
+	
 	
 	public DAGNode()
 	{
@@ -126,9 +128,11 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 		toolTip = in.readUTF();
 		expressionId=in.readInt();
 		operatorBetweenAttrAndAssociation=in.readUTF();
+		nodeType =in.readUTF();
 		associationList = (List<DAGNode>) in.readObject();
 		operatorList = (List<String>) in.readObject();
 		pathList = (List<String>) in.readObject();
+		
 	}
 
 	public void writeExternal(ObjectOutput out) throws IOException {
@@ -137,6 +141,7 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 		out.writeUTF(toolTip);
 		out.writeInt(expressionId);
 		out.writeUTF(operatorBetweenAttrAndAssociation);
+		out.writeUTF(nodeType);
 		out.writeObject(associationList);
 		out.writeObject(operatorList);
 		out.writeObject(pathList);
@@ -198,6 +203,16 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 
 	public void setPathList(String path) {
 		this.pathList.add(path);
+	}
+
+
+	public String getNodeType() {
+		return nodeType;
+	}
+
+
+	public void setNodeType(String nodeType) {
+		this.nodeType = nodeType;
 	}
 
 
