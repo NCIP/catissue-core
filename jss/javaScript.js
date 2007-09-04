@@ -1031,34 +1031,12 @@ function isNumeric(strString)
 
    	//Added by Preeti for DE Integration
 
-function initializeGridForGroups(groupsXML)
-{
-	//alert('ho2:'+groupsXML);
-	gridForGroups= new dhtmlXGridObject('divForGroups');
-	gridForGroups.setImagePath("dhtml_comp/imgs/");
-	gridForGroups.enableAutoHeigth(true);
-	gridForGroups.setHeader("Group");
-	gridForGroups.setInitWidthsP("100");
-	gridForGroups.setColAlign("left");
-	gridForGroups.setColTypes("ro");
-	//gridForGroups.enableMultiselect(true);
-	gridForGroups.setOnRowSelectHandler(groupSelected);
-	gridForGroups.init();
-	//gridForGroups.setStyle(formTitleStyle);
-	gridForGroups.loadXMLString(groupsXML);
-	if(gridForGroups.getRowsNum()>0)
-	{
-		gridForGroups.selectRow(0,true,false);	
-	}
-}
-
 
 function initializeGridForSelectedEntities(groupsXML)
 {
-//	alert('ho1:'+groupsXML);
 	gridForEntities= new dhtmlXGridObject('gridForEnities');
 	gridForEntities.setImagePath("dhtml_comp/imgs/");
-	gridForEntities.enableAutoHeigth(true);
+	gridForEntities.enableAutoHeigth(false);
 	gridForEntities.setHeader("#,Form Title,Entity,Date,Created By,Conditions");
 	gridForEntities.setInitWidthsP("5,23,17,12,15,15,13");
 	gridForEntities.setColAlign("left,left,left,left,left,left,left")
@@ -1076,12 +1054,11 @@ function initializeGridForSelectedEntities(groupsXML)
 }
 
 
-
 function initializeGridForEntities()
 {
 	gridForEntities= new dhtmlXGridObject('gridForEnities');
 	gridForEntities.setImagePath("dhtml_comp/imgs/");
-	gridForEntities.enableAutoHeigth(true);
+	gridForEntities.enableAutoHeigth(false);
 	gridForEntities.setHeader("Form Title,Entity,Date,Created By,Conditions");
 	gridForEntities.setInitWidthsP("27,18,15,18,22");
 	gridForEntities.setColAlign("left,left,left,left,left")
@@ -1090,6 +1067,15 @@ function initializeGridForEntities()
 	gridForEntities.init();
 }
 
+function groupChangedResponse(entitiesXML)
+{	
+	gridForEntities.clearAll(false);
+	var entities	= entitiesXML.split("@");
+	for(var row=0;row<entities.length-1;row=row+1)
+	{
+   	  gridForEntities.addRow(row+1,entities[row],row+1);
+	}
+}
 
 function groupSelected(groupid)
 {
@@ -1103,16 +1089,10 @@ function groupSelected(groupid)
 	//Open connection to servlet
 	request.open("POST","DefineAnnotations.do",true);
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	//alert('groupid:'+groupid.trim()+':');
 	request.send("&operation=selectGroup&groupId="+groupid);
 }
-function groupChangedResponse(entitiesXML)
-{
-	gridForEntities.clearAll(false);
-	if(entitiesXML!=null)
-	{
-		gridForEntities.loadXMLString(entitiesXML);
-	}	
-}
+
 
 function onButtonClick(itemId,itemValue)
 {
@@ -1129,18 +1109,7 @@ function onButtonClick(itemId,itemValue)
 	}
 }
 
-function initAnnotationGrid()
-{
-	annotationsGrid = new dhtmlXGridObject('definedAnnotationsGrid');
-	annotationsGrid.setImagePath("dhtml_comp/imgs/");
-	annotationsGrid.setHeader("#,Annotation,Last Updated,Updated By");
-	annotationsGrid.setInitWidthsP("5,32,31,32")
-	annotationsGrid.setColAlign("center,left,left,left,left")
-	annotationsGrid.setColTypes("ch,link,ro,ro");
-	annotationsGrid.init();
-	var annotationXMLFld = document.getElementById('definedAnnotationsDataXML');
-	annotationsGrid.loadXMLString(annotationXMLFld.value);
-}
+
 function displayAnnotationsPage()
 {
 	var form = document.forms[0];

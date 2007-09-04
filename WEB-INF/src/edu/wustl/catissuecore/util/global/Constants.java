@@ -1937,8 +1937,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String SELECTED_ENTITY_ID="selectedStaticEntityId";
     public static final String CONTAINER_NAME="containerName"; 
     public static final String STATIC_ENTITY_NAME = "staticEntityName";
+    public static final String SPREADSHEET_DATA_GROUP="spreadsheetDataGroup"; 
+    public static final String SPREADSHEET_DATA_ENTITY="spreadsheetDataEntity";
+    public static final String SPREADSHEET_DATA_RECORD="spreadsheetDataRecord";
     
-   
+       
     //clinportal constants
     public static final int CLINICALSTUDY_FORM_ID = 65;
     public static final int CLINICAL_STUDY_REGISTRATION_FORM_ID=66;

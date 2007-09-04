@@ -26,6 +26,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.domain.integration.EntityMap;
+import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
+import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
@@ -35,11 +38,9 @@ import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.common.dynamicextensions.domain.integration.EntityMap;
-import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
-import edu.common.dynamicextensions.domain.integration.FormContext;
-import edu.wustl.catissuecore.domain.SpecimenProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -48,7 +49,6 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -90,14 +90,14 @@ public class LoadAnnotationDefinitionAction extends SecureAction
             {
                 //Return from dynamic extensions
                 processResponseFromDynamicExtensions(request);
-                loadAnnotations(annotationForm);
+                loadAnnotations(annotationForm,request);
                 request.setAttribute(Constants.OPERATION,
                         Constants.LOAD_INTEGRATION_PAGE);
                 actionfwd = mapping.findForward(Constants.SUCCESS);
             }
             else
             {
-                loadAnnotations(annotationForm);
+                loadAnnotations(annotationForm,request);
                 actionfwd = mapping.findForward(Constants.SUCCESS);
             }
            
@@ -342,9 +342,40 @@ public class LoadAnnotationDefinitionAction extends SecureAction
         {
             String groupId = request
                     .getParameter(AnnotationConstants.AJAX_OPERATION_SELECTED_GROUPID);
-            String entitiesXML = getEntitiesForGroupAsXML(groupId);
-            sendResponse(entitiesXML, response);
+            String entitiesXML = getEntitiesForGroupAsXML(groupId,request);
+            getResponseString(request,response);
+            
+            
+           // sendResponse(entitiesXML, response);
         }
+    }
+    /**
+     * Response string modidied as LoadXML creates problem in MAC safari
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    private void getResponseString(HttpServletRequest request,HttpServletResponse response) throws IOException
+    {        
+        List entityList=(List)request.getSession().getAttribute(Constants.SPREADSHEET_DATA_ENTITY);
+        Iterator entityIt=  entityList.iterator();
+        //String responseString="";
+        StringBuilder responseString=new StringBuilder();
+        while(entityIt.hasNext())
+        {
+            List innerList =(List)entityIt.next();
+            if(innerList!=null && !innerList.isEmpty())
+            {
+                for(int i=0;i<innerList.size();i++)
+                {
+                     responseString.append(innerList.get(i));
+                     if((i+1)<innerList.size())
+                     responseString.append(",");
+                }                
+            }
+            responseString.append("@");
+        }
+        sendResponse(responseString.toString(),response);
     }
 
     /**
@@ -355,7 +386,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
     {
         //TODO change ths with new api
         String dynamicExtensionsEditEntityURL = "BuildDynamicEntity.do?containerId="
-                + containerId + "^_self";
+                + containerId;// + "^_self";
         return dynamicExtensionsEditEntityURL;
     }
 
@@ -366,8 +397,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
         String dynamicExtensionsEditEntityURL = "DefineAnnotations.do?link=editCondn&amp;containerId="
                 + containerId
                 + "&amp;selectedStaticEntityId="
-                + staticEntityId
-                + "^_self";
+                + staticEntityId;
+               // + "^_self";
         return dynamicExtensionsEditEntityURL;
     }
 
@@ -379,10 +410,12 @@ public class LoadAnnotationDefinitionAction extends SecureAction
      * @throws DAOException 
      * @throws CacheException 
      */
-    private String getEntitiesForGroupAsXML(String groupId)
+    private String getEntitiesForGroupAsXML(String groupId,HttpServletRequest request)
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException, DAOException, CacheException
     {
+        List dataList = new ArrayList();
+       
         StringBuffer entitiesXML = new StringBuffer();
         entitiesXML.append("<?xml version='1.0' encoding='UTF-8'?>");
         if (groupId != null)
@@ -399,13 +432,17 @@ public class LoadAnnotationDefinitionAction extends SecureAction
                 int entityIndex = 1;
                 while (containerCollnIter.hasNext())
                 {
+                    List innerList = new ArrayList();
                     NameValueBean container = containerCollnIter.next();
                     entitiesXML.append(getEntityXMLString(container,
-                            entityIndex));
+                            entityIndex,innerList));
                     entityIndex++;
+                    dataList.add(innerList);
                 }
                 entitiesXML.append("</rows>");
             }
+            request.getSession().setAttribute(Constants.SPREADSHEET_DATA_ENTITY,dataList);  
+            
         }
         return entitiesXML.toString();
     }
@@ -419,7 +456,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
      * @throws DynamicExtensionsApplicationException 
      * @throws CacheException 
      */
-    private String getEntityXMLString(NameValueBean container, int entityIndex)
+    private String getEntityXMLString(NameValueBean container, int entityIndex,List innerList)
             throws DAOException, DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException, CacheException
     {
@@ -445,7 +482,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 
                     entityXML.append(getXMLForEntityMap(container.getName(),
                             entityMapObj, entityIndex + index,
-                            editDynExtEntityURL, editDynExtCondnURL));
+                            editDynExtEntityURL, editDynExtCondnURL,innerList));
                     index++;
                 }
             }
@@ -465,34 +502,56 @@ public class LoadAnnotationDefinitionAction extends SecureAction
      */
     private StringBuffer getXMLForEntityMap(String containercaption,
             EntityMap entityMapObj, int rowId,
-            String dynExtentionsEditEntityURL, String editDynExtCondnURL)
+            String dynExtentionsEditEntityURL, String editDynExtCondnURL,List innerList)
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException, CacheException
-    {
+    {      
         StringBuffer entityMapXML = new StringBuffer();
         entityMapXML.append("<row id='" + rowId + "'>");
         //entityMapXML.append("<cell>0</cell>");
+       // innerList.add(rowId);
         entityMapXML.append("<cell>" + containercaption + "^"
                 + dynExtentionsEditEntityURL + "</cell>");
+        String url=makeURL(containercaption,dynExtentionsEditEntityURL);
+        innerList.add(url);
         if (entityMapObj != null)
         {
             String staticEntityName = getEntityName(entityMapObj
                     .getStaticEntityId());
             entityMapXML.append("<cell>" + staticEntityName + "</cell>");
+            innerList.add(staticEntityName);
             entityMapXML.append("<cell>"
                     + Utility.parseDateToString(entityMapObj.getCreatedDate(),
                             Constants.DATE_PATTERN_MM_DD_YYYY) + "</cell>");
+            innerList.add(Utility.parseDateToString(entityMapObj.getCreatedDate(),
+                            Constants.DATE_PATTERN_MM_DD_YYYY));
             entityMapXML.append("<cell>" + entityMapObj.getCreatedBy()
-                    + "</cell>");
+                    + "</cell>");           
+            String name=entityMapObj.getCreatedBy();
+            if(name.contains(","))
+            {
+                name=name.replace(',',' ');
+                innerList.add(name);
+            }
+            else
+                innerList.add(entityMapObj.getCreatedBy());
             /* entityMapXML.append("<cell>" + entityMapObj.getLinkStatus()
              + "</cell>");*/
         }
         entityMapXML.append("<cell>"
                 + edu.wustl.catissuecore.util.global.Constants.EDIT_CONDN + "^"
                 + editDynExtCondnURL + "</cell>");
-
+        url=makeURL(edu.wustl.catissuecore.util.global.Constants.EDIT_CONDN,editDynExtCondnURL);
+        innerList.add(url);
         entityMapXML.append("</row>");
         return entityMapXML;
+    }
+    
+    private String makeURL(String containercaption, String dynExtentionsEditEntityURL)
+    {
+        String url="";
+        url="<a href="+"'"+dynExtentionsEditEntityURL+"'>"+containercaption+"</a>";
+        return url;
     }
 
     /**
@@ -584,6 +643,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
     {
         PrintWriter out = response.getWriter();
        out.write(responseXML);
+       
        // out.print(responseXML);
     }
 
@@ -593,7 +653,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
      * @throws DynamicExtensionsSystemException 
      * @throws CacheException 
      */
-    private void loadAnnotations(AnnotationForm annotationForm)
+    private void loadAnnotations(AnnotationForm annotationForm,HttpServletRequest request)
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException, CacheException
     {
@@ -603,8 +663,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
             List systemEntitiesList = AnnotationUtil.getSystemEntityList();
             annotationForm.setSystemEntitiesList(systemEntitiesList);
             //Load list of groups
-            loadGroupList(annotationForm);
-
+            loadGroupList(annotationForm,request);
+            
             List conditionalInstancesList = populateConditionalInstanceList();
             annotationForm
                     .setConditionalInstancesList(conditionalInstancesList);
@@ -624,7 +684,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
         {
             DefaultBizLogic bizLogic = new DefaultBizLogic();
             String[] displayNames = {"shortTitle", "title"};
-            conditionalInstancesList = bizLogic.getList(SpecimenProtocol.class
+            conditionalInstancesList = bizLogic.getList(CollectionProtocol.class
                     .getName(), displayNames, "id", true);
             conditionalInstancesList = modifyName(conditionalInstancesList);
             conditionalInstancesList.remove(0);
@@ -670,13 +730,13 @@ public class LoadAnnotationDefinitionAction extends SecureAction
      * @throws DynamicExtensionsSystemException 
      * 
      */
-    private void loadGroupList(AnnotationForm annotationForm)
+    private void loadGroupList(AnnotationForm annotationForm,HttpServletRequest request)
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException
     {
         //List of groups
         Collection<NameValueBean> annotationGroupsList = getAnnotationGroups();
-        String groupsXML = getGroupsXML(annotationGroupsList);
+        String groupsXML = getGroupsXML(annotationGroupsList,request);
         annotationForm.setAnnotationGroupsXML(groupsXML);
     }
 
@@ -684,9 +744,10 @@ public class LoadAnnotationDefinitionAction extends SecureAction
      * @param annotationGroupsList
      * @return
      */
-    private String getGroupsXML(Collection<NameValueBean> annotationGroupsList)
+    private String getGroupsXML(Collection<NameValueBean> annotationGroupsList,HttpServletRequest request)
     {
         StringBuffer groupsXML = new StringBuffer();
+        List dataList = new ArrayList();        
         if (annotationGroupsList != null)
         {
             groupsXML.append("<?xml version='1.0' encoding='UTF-8'?>");
@@ -696,18 +757,23 @@ public class LoadAnnotationDefinitionAction extends SecureAction
             while (iterator.hasNext())
             {
                 groupBean = iterator.next();
+                List innerList = new ArrayList();
                 if (groupBean != null)
                 {
                     groupsXML
                             .append("<row id='" + groupBean.getValue() + "' >");
-                    //groupsXML.append("<cell>0</cell>");
+                    //groupsXML.append("<cell>0</cell>");                 
                     groupsXML
                             .append("<cell>" + groupBean.getName() + "</cell>");
+                    innerList.add(groupBean.getValue());
+                    innerList.add(groupBean.getName());
                     groupsXML.append("</row>");
+                    dataList.add(innerList);
                 }
             }
             groupsXML.append("</rows>");
         }
+        request.setAttribute(Constants.SPREADSHEET_DATA_GROUP,dataList);       
         return groupsXML.toString();
     }
 

@@ -167,7 +167,7 @@ public class AnnotationUtil
             conn = DBUtil.getConnection();
             PathFinder.getInstance(conn).refreshCache(conn);
         }
-        catch (HibernateException e)
+        catch (Exception e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();

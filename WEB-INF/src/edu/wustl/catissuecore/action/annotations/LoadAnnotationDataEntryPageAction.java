@@ -21,6 +21,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapRecord;
 import edu.common.dynamicextensions.domain.integration.FormContext;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DataTypeFactoryInitializationException;
@@ -397,6 +399,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         StringBuffer definedAnnotationsXML = new StringBuffer();
         //"<?xml version='1.0' encoding='UTF-8'?><rows><row id='1' class='formField'><cell>0</cell><cell>001</cell><cell>Preeti</cell><cell>12-2-1990</cell><cell>Preeti</cell></row></rows>";
         definedAnnotationsXML.append("<?xml version='1.0' encoding='UTF-8'?>");
+        List dataList = new ArrayList();
         if (staticEntityId != null)
         {
             List<EntityMapRecord> entityMapRecords = getEntityMapRecords(
@@ -410,12 +413,15 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                 int index = 1;
                 while (iterator.hasNext())
                 {
+                    List innerList = new ArrayList();
                     entityMapRecord = iterator.next();
                     definedAnnotationsXML.append(getXMLForEntityMapRecord(
-                            request, entityMapRecord, index++));
+                            request, entityMapRecord, index++,innerList));
+                    dataList.add(innerList);
                 }
                 definedAnnotationsXML.append("</rows>");
             }
+            request.setAttribute(edu.wustl.catissuecore.util.global.Constants.SPREADSHEET_DATA_RECORD,dataList);
         }
         return definedAnnotationsXML.toString();
     }
@@ -429,10 +435,11 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
      * @throws DynamicExtensionsSystemException 
      */
     private String getXMLForEntityMapRecord(HttpServletRequest request,
-            EntityMapRecord entityMapRecord, int index)
+            EntityMapRecord entityMapRecord, int index,List innerList)
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException
     {
+        
         StringBuffer entityMapRecordXML = new StringBuffer();
         if (entityMapRecord != null)
         {
@@ -446,21 +453,35 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                 entityMapRecordXML.append("<row id='"
                         + entityMapRecord.getId().toString() + "' >");
                 entityMapRecordXML.append("<cell>" + "0" + "</cell>");
+                innerList.add("0");
                 //entityMapRecordXML.append("<cell>" + entityMapRecord.getId() +  "</cell>");
                 entityMapRecordXML.append("<cell>" + dynamicEntity.getValue()
                         + "^" + strURLForEditRecord + "</cell>");
+                innerList.add(makeURL(dynamicEntity.getValue(),strURLForEditRecord));
                 entityMapRecordXML.append("<cell>"
                         + Utility.parseDateToString(entityMapRecord
                                 .getCreatedDate(),
                                 Constants.DATE_PATTERN_MM_DD_YYYY) + "</cell>");
+                innerList.add(Utility.parseDateToString(entityMapRecord
+                        .getCreatedDate(),
+                        Constants.DATE_PATTERN_MM_DD_YYYY));
                 entityMapRecordXML.append("<cell>"
                         + entityMapRecord.getCreatedBy() + "</cell>");
+                innerList.add(entityMapRecord.getCreatedBy());
                 entityMapRecordXML.append("<cell>" + "Edit" + "^"
                         + strURLForEditRecord + "</cell>");
+                innerList.add(entityMapRecord.getId().toString());
                 entityMapRecordXML.append("</row>");
             }
         }
         return entityMapRecordXML.toString();
+    }
+    
+    private String makeURL(String containercaption, String dynExtentionsEditEntityURL)
+    {
+        String url="";
+        url="<a  href="+"'"+dynExtentionsEditEntityURL+"'>"+containercaption+"</a>";
+        return url;
     }
 
     /**
@@ -480,7 +501,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         urlForEditRecord = request.getContextPath()
                 + "/LoadDynamicExtentionsDataEntryPage.do?selectedAnnotation="
                 + containerId + "&amp;recordId=" + entityMapRecord.getDynamicEntityRecordId()+"&amp;selectedStaticEntityId="+ entityMap.getStaticEntityId()+
-                "&amp;selectedStaticEntityRecordId="+entityMapRecord.getStaticEntityRecordId() + "^_self";
+                "&amp;selectedStaticEntityRecordId="+entityMapRecord.getStaticEntityRecordId() ;//+"_self";//"^_self";
         }
         catch (DAOException e)
         {
@@ -593,6 +614,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         {
             dynEntitiesList = annotationBizLogic.getListOfDynamicEntities(Utility.toLong(entityId));
             dynEntitiesList = annotationBizLogic.getAnnotationIdsBasedOnCondition(dynEntitiesList,cpIdList);
+    //       dynEntitiesList = checkForAbstractEntity(dynEntitiesList);
         }       
       //  getConditionalDEId(dynEntitiesList,cpIdList);
         if (dynEntitiesList != null)
@@ -611,6 +633,37 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         }   
         return annotationsList;
     }
+    
+   /**
+    * 
+    * @param dynEntitiesList
+ * @throws DynamicExtensionsApplicationException 
+ * @throws DynamicExtensionsSystemException 
+    */ 
+/*    private List checkForAbstractEntity(List dynEntitiesList)
+            throws DynamicExtensionsSystemException,
+            DynamicExtensionsApplicationException
+    {
+        /*
+         * select  entity.isAbstract from edu.common.dynamicextensions.domain.Entity entity where
+         * entity = container.entity where container in (select container where container.id = ? ) 
+         *  
+         */
+    /*    List entitesList = new ArrayList();
+        if (dynEntitiesList != null)
+        {
+            Iterator<Long> dynEntitiesIterator = dynEntitiesList.iterator();
+            EntityManagerInterface entityManager = EntityManager.getInstance();
+            while (dynEntitiesIterator.hasNext())
+            {
+                Long deContainerId=dynEntitiesIterator.next();
+                deContainerId =entityManager.getContainedIdBasedOnAbstarctEntity(deContainerId,false);
+                if(deContainerId != null)
+                      entitesList.add(deContainerId);                
+            }
+        }
+        return entitesList;
+    }*/
 
     /**
      * @param long1
@@ -645,8 +698,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         if (deContainerId != null)
         {
             EntityManagerInterface entityManager = EntityManager.getInstance();
-            containerName = entityManager.getContainerCaption(deContainerId);
-
+            containerName = entityManager.getContainerCaption(deContainerId);           
         }
         return containerName;
     }

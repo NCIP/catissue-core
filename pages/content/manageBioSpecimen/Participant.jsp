@@ -464,7 +464,7 @@ tr#hiddenCombo
 	if(pageView.equals("viewAnnotations"))
 	{
 		%>
-			<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%" class="tabPage" width="600">
+			<table summary="" cellpadding="0" cellspacing="0" border="0" height="500" class="tabPage" width="600">
 				<tr>
 					<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="setTarget();editParticipant()">Edit</td>
 

@@ -10,8 +10,10 @@
 	page language="java" contentType="text/html"
 	import="java.util.List"
 	import="edu.wustl.common.beans.NameValueBean"
+	
 %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.Iterator"%>
 <html>
 <c:set var="groupsXML" value="${annotationForm.annotationGroupsXML}"/>
@@ -27,7 +29,9 @@
 String link = request.getParameter("link");
 String containerId = request.getParameter("containerId");
 String selectedStaticEntityId=request.getParameter("selectedStaticEntityId");
-System.out.println("containerId:"+containerId);
+
+List groupList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_GROUP);
+
 %>
 	<head>
 		<%-- Stylesheet --%>
@@ -43,6 +47,24 @@ System.out.println("containerId:"+containerId);
 	<link rel="STYLESHEET" type="text/css" href="<%=request.getContextPath()%>/dhtml_comp/css/dhtmlXMenu.css">
 		<script language="JavaScript" src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXProtobar.js"></script>
 		<script language="JavaScript" src="<%=request.getContextPath()%>/dhtml_comp/js/dhtmlXMenuBar.js"></script>
+		<script>
+			<% if (groupList != null && groupList.size() != 0)
+{ %>
+var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
+<%
+	List row = (List)groupList.get(i);
+  	int j;
+%>
+<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=row.get(j)%>,<%}%><%=row.get(j)%><%="\""%>,<%}%>
+<%
+	List row = (List)groupList.get(i);
+  	int j;
+%>
+<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=row.get(j)%>,<%}%><%=row.get(j)%><%="\""%>
+];
+	<% } %>
+		
+		</script>
 		<script>
 			function initializeAnnotationsForm()
 			{
@@ -86,6 +108,37 @@ System.out.println("containerId:"+containerId);
 
 			}
 			
+		function initializeGridForGroups(groupsXML)
+        {	
+			gridForGroups= new dhtmlXGridObject('divForGroups');
+			gridForGroups.setImagePath("dhtml_comp/imgs/");
+			gridForGroups.enableAutoHeigth(false);
+			gridForGroups.setHeader("Group");
+			gridForGroups.setInitWidthsP("100");
+			gridForGroups.setColAlign("left");
+			gridForGroups.setColTypes("ro");	
+			gridForGroups.setOnRowSelectHandler(groupSelected);
+			gridForGroups.init();
+		
+	        <% if (groupList != null && groupList.size() != 0){ %>
+		    for(var row=0;row<myData.length;row=row+1)
+			{
+				var data = myData[row];		
+		        var	dataArr=data.split(",");
+				gridForGroups.addRow(dataArr[0],dataArr[1],row+1);
+			}
+			<%}%>
+			//fix for grid display on IE for first time.
+			gridForGroups.setSizes();
+		
+			if(gridForGroups.getRowsNum()>0)
+			{
+				gridForGroups.selectRow(0,true,false);	
+			}
+       }
+		
+			
+
 
 		</script>
 	</head>

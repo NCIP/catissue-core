@@ -3,6 +3,8 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="java.util.List"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 
 
 <html>
@@ -23,14 +25,80 @@
 
 	<script src="<%=request.getContextPath()%>/jss/javaScript.js" type="text/javascript"></script>
 	<script src="<%=request.getContextPath()%>/jss/script.js" type="text/javascript"></script>
+	
+	<%
+	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_RECORD);
+	%>
+	
 	<script>
+			<% if (dataList != null && dataList.size() != 0)
+{ %>
+var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
+<%
+	List row = (List)dataList.get(i);
+  	int j;
+%>
+<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=row.get(j)%>,<%}%><%=row.get(j)%><%="\""%>,<%}%>
+<%
+	List row = (List)dataList.get(i);
+  	int j;
+%>
+<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=row.get(j)%>,<%}%><%=row.get(j)%><%="\""%>
+];
+	<% } %>
+		
+		</script>
+	
+	
+	<script>
+	
+	
+	function initAnnotationGrid()
+{
+	annotationsGrid = new dhtmlXGridObject('definedAnnotationsGrid');
+	annotationsGrid.setImagePath("dhtml_comp/imgs/");
+	annotationsGrid.setHeader("#,Annotation,Last Updated,Updated By");
+	annotationsGrid.setInitWidthsP("5,32,31,32")
+	annotationsGrid.setColAlign("center,left,left,left,left")
+	annotationsGrid.setColTypes("ch,link,ro,ro");
+	annotationsGrid.init();
+	//var annotationXMLFld = document.getElementById('definedAnnotationsDataXML');
+	//annotationsGrid.loadXMLString(annotationXMLFld.value);
+	<% if (dataList != null && dataList.size() != 0)
+{ %>
+	 for(var row=0;row<myData.length;row=row+1)
+	{
+		var data = myData[row];		        
+		annotationsGrid.addRow(row+1,data,row+1);
+	}
+	
+	<% } %>
+}
+	
+	
 	function deleteSelectedRecords()
 	{
-	 var selectedRows =	annotationsGrid.getCheckedRows(0);
+	 var selectedRows =	annotationsGrid.getCheckedRows(0);	 
+	
+     if(selectedRows.length > 0){
+  	  var recordArray = selectedRows.split(",");
+	  var rows="";
+	  for(var i=0;i<recordArray.length;i++)
+	  {
+		 if(myData[recordArray[i]-1] != null)
+		  {
+			 var str=  myData[recordArray[i]-1];
+			 var str1 = str.split(",");	
+			 if(str1[str1.length-1]!=null)// && (i+1) < recordArray.length)
+				rows=rows+str1[str1.length-1]+"," ;
+		  }
+	  }
+	 
 	 document.getElementById('operation').value = "deleteRecords";
-	 document.getElementById('selectedRecords').value = selectedRows;
+	 document.getElementById('selectedRecords').value = rows;
 	 document.forms[0].action = "LoadAnnotationDataEntryPage.do";
 	 document.forms[0].submit();
+	 }
 	}
 	</script>
 	
@@ -45,7 +113,7 @@
 <html:hidden property = "selectedStaticEntityRecordId"></html:hidden>
 
 <html:hidden property = "operation" styleId = "operation"></html:hidden>
-<html:hidden property = "definedAnnotationsDataXML"></html:hidden>
+<html:hidden styleId = "definedAnnotationsDataXML" property = "definedAnnotationsDataXML"></html:hidden>
 <input type= "hidden" name = "selectedRecords" id = "selectedRecords"/>
 <html:hidden property="id" /><html:hidden property="pageOf"/>
 	<!-- Actual HTML Code Start -->
@@ -55,7 +123,7 @@
 		<tr>
 		    <td width="1%"></td>
 		<td>
-			<table class="tbBordersAllbordersBlack"  height="100%" summary="" cellpadding="3" cellspacing="0" >
+			<table  width="100%" class="tbBordersAllbordersBlack"  height="100%" summary="" cellpadding="3" cellspacing="0" >
 
 				<tr valign="top">
 					<td align="left" class="formTitle">
