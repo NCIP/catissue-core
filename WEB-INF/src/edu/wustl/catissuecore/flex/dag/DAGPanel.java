@@ -479,8 +479,14 @@ public class DAGPanel {
        			dagNode.setExpressionId(exp.getExpressionId().getInt());
        			dagNode.setNodeName(nodeDisplayName);
        			dagNode.setToolTip(exp);
+       		   if(!exp.containsRule())
+	            {
+	            	dagNode.setNodeType(DAGConstant.VIEW_ONLY_NODE);
+	            }
+       		//if(exp.isInView()
        			System.out.println("Out Path " + nodeDisplayName);
 				nodeform(expressionId,dagNode,constraints,nodeDisplayName);
+				
 				System.out.println("--------------------------");
 				int numOperands = exp.numberOfOperands();
 	            int numOperator = numOperands-1;
@@ -490,6 +496,7 @@ public class DAGPanel {
 	            	System.out.println("OP ==> "+operator);
 	            	dagNode.setOperatorList(operator.toUpperCase());
 	            }
+	         
 				nodeList.add(dagNode);
 				
 				List<DAGNode> list  = dagNode.getAssociationList();
@@ -522,6 +529,7 @@ public class DAGPanel {
 	       			dagNode.setExpressionId(exp.getExpressionId().getInt());
 	       			dagNode.setNodeName(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()));
 	       			dagNode.setToolTip(exp);
+	       		
 	       			System.out.println("Name :"+dagNode.getNodeName());
 	    			System.out.println(" Id " +dagNode.getExpressionId());
 	    			node.setAssociationList(dagNode);
@@ -562,8 +570,8 @@ public class DAGPanel {
 		List<ICondition> conditions = rule.getConditions();
 		System.out.println("conditions ===="+conditions);
 		String html = generateHTMLBizLogic.generateHTML(entity, conditions);
-		map.put("HTMLSTR", html);
-		map.put("EXPRESSION", expression);
+		map.put(DAGConstant.HTML_STR, html);
+		map.put(DAGConstant.EXPRESSION, expression);
 		return map;
 	}
 	
@@ -585,6 +593,7 @@ public class DAGPanel {
 					IExpressionId expressionId = ((ClientQueryBuilder)queryObject).addExpression(entity);
 					DAGNodeBuilder nodeBuilder  = new DAGNodeBuilder();
 					node = nodeBuilder.createNode(expressionId,queryObject,true);
+					
 				}
 			}
 		}

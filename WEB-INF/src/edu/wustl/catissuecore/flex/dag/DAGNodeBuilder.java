@@ -27,8 +27,14 @@ public class DAGNodeBuilder {
         DAGNode dagNode = new DAGNode();
 		dagNode.setNodeName(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()));
 		dagNode.setExpressionId(expression.getExpressionId().getInt());
-		if(!isOutputView)			
+		if(isOutputView)
+		{
+			dagNode.setNodeType(DAGConstant.VIEW_ONLY_NODE);
+		}
+		else
+		{
 			dagNode.setToolTip(expression);
+		}
 
 		//m_queryObject.addExressionIdToVisibleList(expressionId); //Requiref or assocaiation
 		return dagNode;
