@@ -444,6 +444,10 @@ create table CATISSUE_REPORT_XMLCONTENT (
 create table CATISSUE_REPORT_QUEUE (
    IDENTIFIER bigint not null auto_increment,
    STATUS varchar(50),
+   SURGICAL_PATHOLOGY_NUMBER varchar(50),
+   PARTICIPANT_NAME varchar(255),
+   SITE_NAME varchar(255),
+   REPORT_LOADED_DATE date,
    REPORT_TEXT text,
    SPECIMEN_COLL_GRP_ID bigint,
    primary key (IDENTIFIER)
