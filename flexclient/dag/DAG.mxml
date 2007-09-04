@@ -60,7 +60,7 @@ creationComplete="initApp()"  width="100%" height="100%">
     private var linkCount:int =0;
     private var path:IDAGPath;
 	private var pathStr:String
-	private	var isQueryObject:Boolean = false;
+	private	var isQuery:String = "false";
 	public var isOutputView:Boolean=false;
 	public var rpcService: RemoteObject;
 	
@@ -82,7 +82,18 @@ creationComplete="initApp()"  width="100%" height="100%">
 			node.nodeNumber = node.expressionId+"";
 			node.addEventListener(MouseEvent.MOUSE_MOVE,doDrag);
 			node.addEventListener(MouseEvent.CLICK,updateNodeSelection);
-			panel1.addChild(node);
+		//	Alert.show("nodeName =>"+node.nodeName+"nodeType=>"+node.nodeType)
+			if(isQuery == "true")
+			{
+				if(node.nodeType=="ConstraintViewNode")
+				{
+					panel1.addChild(node);
+				}
+			}
+			else
+			{
+				panel1.addChild(node);
+			}
 			
 		}
 		for(var i:int=0;i<nodeList.length;i++)
@@ -110,6 +121,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 	private function initFlexInterfaceHandler(event: ResultEvent):void
 	{
 		//Alert.show("Intialized .....")
+		//isQueryObject=event.result as Boolean;
 	}
 	
 	private function initApp():void
@@ -117,7 +129,8 @@ creationComplete="initApp()"  width="100%" height="100%">
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
 		rpcService= new RemoteObject();
 		rpcService.destination="cdeService";
-		//Alert.show(Application.application.parameters.view);
+	//	Alert.show(" ==>" +Application.application.parameters.isQuery);
+		isQuery =Application.application.parameters.isQuery;
 		var view:String = Application.application.parameters.view;
 		if (isContainerReady())
 			{
@@ -134,21 +147,23 @@ creationComplete="initApp()"  width="100%" height="100%">
 				readyTimer.start();
 			}
 
+		
 		if(view=="AddLimit")
 		{
-			Alert.show("is query "+isQueryObjectPresent().toString());
-			if(isQueryObjectPresent())
+			//Alert.show("1 in if" +isQuery);
+			if(isQuery=="true")
 			{
 				rpcService.addEventListener("result",repaintHandler);
 			 	rpcService.repaintCreateDAG();
 			}
 			else
 			{
-			rpcService.initFlexInterface();
-			rpcService.addEventListener("result",initFlexInterfaceHandler);
-			rpcService.addEventListener("fault", faultHandler);
+				rpcService.initFlexInterface();
+				rpcService.addEventListener("result",initFlexInterfaceHandler);
+				rpcService.addEventListener("fault", faultHandler);
+			//	Alert.show("is query "+isQueryObject.toString());
 			}
-			
+						
 	    
 		}
 		 else
@@ -194,11 +209,11 @@ creationComplete="initApp()"  width="100%" height="100%">
 		Alert.show(event.fault.faultString, 'Error');
 	}
 	
-	private function isQueryObjectPresent():Boolean
+/*	private function isQueryObjectPresent():Boolean
 	{
 		var result:Boolean = ExternalInterface.call("isQuery");
 		return result;
-	}
+	}*/
 	
 	public function restoreQueryObject():void
 	{
@@ -208,7 +223,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 	}		
 	private function restoreQueryObjectHandler(event: ResultEvent):void 		
 	{
-		Alert.show("Query restore");
+	//	Alert.show("Query restore");
 		rpcService.removeEventListener("result",restoreQueryObjectHandler,false);
 	}
 	public function addNodeToView(nodesStr:String):void
@@ -397,6 +412,8 @@ creationComplete="initApp()"  width="100%" height="100%">
 	{
 		var newNode:DAGNode = new DAGNode();
 		newNode.nodeName = textData.nodeName;
+	//	Alert.show("	textData.nodeType ==>"+	textData.nodeType);
+		newNode.nodeType =	textData.nodeType;
 		newNode.nodeNumber = textData.expressionId+"";
 		newNode.expressionId=textData.expressionId;
 		newNode.name = textData.expressionId+"";
