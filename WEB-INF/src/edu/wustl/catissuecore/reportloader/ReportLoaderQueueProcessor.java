@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
@@ -13,6 +15,8 @@ import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -41,19 +45,31 @@ public class ReportLoaderQueueProcessor extends Thread
 			{
 				// retrieve records from report queue for processing
 				queue=getQueueObjects();
-				Logger.out.info("Processing report Queue: Total "+queue.size()+" Reports found in queue");
+				Logger.out.info("Processing report Queue: Total "+(queue.size()-1)+" Reports found in queue");
 				//	CONSTANT
 				CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,"Processing report Queue: Total "+queue.size()+" Reports found in queue");
 				CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_REPORTQUEUE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
-				if(queue!=null && queue.size()>0)
+				if(queue!=null && queue.size()>1)
 				{
 					//	Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
 					SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
-					for(int i=0;i<queue.size();i++)
+					String id;
+					NameValueBean nb;
+					BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
+					ReportLoaderQueueBizLogic bizLogic =(ReportLoaderQueueBizLogic) bizLogicFactory.getBizLogic(ReportLoaderQueue.class.getName());
+					
+					for(int i=1;i<queue.size();i++)
 					{
+						Logger.out.info("Processing report serial no:"+i);
+						// list contains name value bean, get name value bean from list
+						nb=(NameValueBean)queue.get(i);
+						// get value which is an id of the identified report
+						id=nb.getValue();
+						Logger.out.info("Got report id="+id);
+						// retrive the identified report using its id
+						reportLoaderQueue=(ReportLoaderQueue)bizLogic.getReportLoaderQueueById(Long.parseLong(id));
 						try
 						{
-							reportLoaderQueue=(ReportLoaderQueue)queue.get(i);
 							Logger.out.debug("Processing report from Queue with serial no="+reportLoaderQueue.getId());
 							participantSet=(Set)reportLoaderQueue.getParticipantCollection();
 							Iterator it = participantSet.iterator();
@@ -95,7 +111,7 @@ public class ReportLoaderQueueProcessor extends Thread
 						catch(Exception ex)
 						{
 							reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
-							Logger.out.error("Error in parsing queue "+i);
+							Logger.out.error("Error in parsing queue "+i+ex);
 						}
 					}
 				}
@@ -117,9 +133,21 @@ public class ReportLoaderQueueProcessor extends Thread
 	private List getQueueObjects() throws Exception
 	{
 		List queue=null;
-		queue=Utility.getObject(ReportLoaderQueue.class.getName(),"status" ,CaTIESConstants.NEW);
-		queue.addAll(Utility.getObject(ReportLoaderQueue.class.getName(),"status" ,CaTIESConstants.SITE_NOT_FOUND));
-		queue.addAll(Utility.getObject(ReportLoaderQueue.class.getName(),"status" ,CaTIESConstants.CP_NOT_FOUND));
+		
+		String sourceObjectName=ReportLoaderQueue.class.getName();
+		String[] displayNameFields=new String[] {Constants.SYSTEM_IDENTIFIER};
+		String valueField=new String(Constants.SYSTEM_IDENTIFIER);
+		String[] whereColumnName = new String[]{Constants.COLUMN_NAME_STATUS,Constants.COLUMN_NAME_STATUS,Constants.COLUMN_NAME_STATUS};
+		String[] whereColumnCondition = new String[]{"=","=","="};
+		Object[] whereColumnValue = new String[]{CaTIESConstants.NEW,CaTIESConstants.SITE_NOT_FOUND,CaTIESConstants.CP_NOT_FOUND};
+		String joinCondition = Constants.OR_JOIN_CONDITION;
+		String separatorBetweenFields = ", ";	
+		
+		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
+		ReportLoaderQueueBizLogic bizLogic =(ReportLoaderQueueBizLogic) bizLogicFactory.getBizLogic(ReportLoaderQueue.class.getName());
+		Logger.out.info("Firing query to retriev ids of ReportLoaderQueue ");
+		
+		queue = bizLogic.getList(sourceObjectName, displayNameFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
 		return queue;
 	}
 }
