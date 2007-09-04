@@ -32,6 +32,8 @@
 		[Bindable]
 		public var operatorBetweenAttrAndAssociation:String="And"; 
 		[Bindable]
+		public var nodeType:String="";
+		[Bindable]
 		public var operatorArray:Array = ["AND","OR"];
 		[Bindable]
 		public var enable:Boolean=true;
@@ -41,6 +43,7 @@
 		public var associationList:ArrayCollection;
 		public var operatorList:ArrayCollection;
 		public var pathList:ArrayCollection;
+		
 			
 		public var outAssociations:ArrayCollection = new ArrayCollection();		
 
@@ -119,6 +122,7 @@
 			toolTip=input.readUTF();
 			expressionId=input.readInt();
 			operatorBetweenAttrAndAssociation = input.readUTF();
+			nodeType = input.readUTF();
 			associationList = input.readObject();
 			operatorList = input.readObject();
 			pathList = input.readObject();
@@ -133,6 +137,7 @@
 			out.writeUTF(toolTip);
 			out.writeInt(expressionId);
 			out.writeUTF(operatorBetweenAttrAndAssociation);
+			out.writeUTF(nodeType);
 			out.writeObject(associationList);
 			out.writeObject(operatorList);
 			out.writeObject(pathList);
