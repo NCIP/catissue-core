@@ -353,6 +353,10 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	{
     		bizLogic = new QuarantineEventParameterBizLogic();
     	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue"))
+    	{
+    		bizLogic = new ReportLoaderQueueBizLogic();
+    	}
     	// caTIES END
     	else
     	{
