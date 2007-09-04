@@ -150,7 +150,7 @@ public class Utility
 		IBizLogic bizLogic = bizLogicFactory.getBizLogic(obj.getClass().getName());
 		SessionDataBean sessionDataBean = new SessionDataBean();
 		sessionDataBean.setUserName(CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA));
-		if(obj instanceof Participant)
+		if(obj instanceof Participant || obj instanceof SpecimenCollectionGroup)
 		{
 			bizLogic.update(obj,obj,Constants.HIBERNATE_DAO,sessionDataBean);
 		}	
