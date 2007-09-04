@@ -33,6 +33,41 @@
             length="10"
         />
 
+		<property
+            name="surgicalPathologyNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="SURGICAL_PATHOLOGY_NUMBER"
+            length="255"
+        />
+        
+        <property
+            name="participantName"
+            type="string"
+            update="true"
+            insert="true"
+            column="PARTICIPANT_NAME"
+            length="255"
+        />
+        
+        <property
+            name="siteName"
+            type="string"
+            update="true"
+            insert="true"
+            column="SITE_NAME"
+            length="255"
+        />
+        
+         <property
+	    	name="reportLoadedDate"
+	    	type="date"
+	    	update="true"
+	    	insert="true"
+	    	column="REPORT_LOADED_DATE"
+        />
+        
         <set
             name="participantCollection"
             table="CATISSUE_REPORT_PARTICIP_REL"

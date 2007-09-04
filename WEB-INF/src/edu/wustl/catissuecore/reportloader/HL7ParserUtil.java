@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.reportloader;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +42,9 @@ public class HL7ParserUtil
 		SpecimenCollectionGroup scg=null;
 		HL7Parser parser=new HL7Parser();
 		String status=null;
+		String siteName="";
+		String participantName="";
+		String surgicalPathologyNumber="";
 		// validation before saving
 		String line = "";
 		line=getReportDataFromReportMap(reportMap, CaTIESConstants.PID);
@@ -48,6 +52,7 @@ public class HL7ParserUtil
 		Site site = parser.parseSiteInformation(line);
 		if(site!=null)
 		{
+			siteName=site.getName();
 			if(validateReportMap(reportMap))
 			{
 				status=CaTIESConstants.NEW;
@@ -55,6 +60,7 @@ public class HL7ParserUtil
 				{
 					// Creating participant object from report text
 					Participant participant = parser.parserParticipantInformation(getReportDataFromReportMap(reportMap, CaTIESConstants.PID));
+					participantName=participant.getLastName()+","+participant.getFirstName();
 					// check for matching participant
 					participantList=ReportLoaderUtil.checkForParticipant(participant);
 					if((participantList!=null)&& participantList.size()>0)
@@ -77,7 +83,7 @@ public class HL7ParserUtil
 								if(scg!=null && scg.getSurgicalPathologyNumber().trim().length()==0)
 								{
 									Logger.out.debug("SCG conflict found");
-									status=CaTIESConstants.STATUS_CONFLICT;
+									status=CaTIESConstants.STATUS_SCG_CONFLICT;
 								}
 							}
 						}
@@ -85,7 +91,7 @@ public class HL7ParserUtil
 						{
 							// Multiple matching participant found, this is STATUS_CONFLICT state
 							Logger.out.info("Conflict found for Participant ");
-							status=CaTIESConstants.STATUS_CONFLICT;
+							status=CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
 						}
 						
 					}
@@ -125,11 +131,13 @@ public class HL7ParserUtil
 		}
 		else
 		{
-		status=CaTIESConstants.SITE_NOT_FOUND;
+			status=CaTIESConstants.SITE_NOT_FOUND;
 		}
+		String obrLine=getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
+		surgicalPathologyNumber=ReportLoaderUtil.getSurgicalPathologyNumber(obrLine);
 		// Save report to report queue 
 		reportText=getReportText(reportMap);
-		addReportToQueue(participantList,reportText,scg, status);
+		addReportToQueue(participantList,reportText,scg, status, siteName,participantName,surgicalPathologyNumber);
 		return status;
 	}
 	
@@ -207,7 +215,7 @@ public class HL7ParserUtil
 	 * @param reportText plain text format report
 	 * @param scg object of SpecimenCollectionGroup
 	 */
-	private static void addReportToQueue(Set<Participant> set,String reportText, SpecimenCollectionGroup scg, String status)
+	private static void addReportToQueue(Set<Participant> set,String reportText, SpecimenCollectionGroup scg, String status, String siteName, String participantName, String surgicalPathologyNumber)
 	{
 		Logger.out.info("Adding report to queue");
 		try
@@ -221,6 +229,10 @@ public class HL7ParserUtil
 			queue.setStatus(status);
 			queue.setParticipantCollection(set);
 			queue.setSpecimenCollectionGroup(scg);
+			queue.setSiteName(siteName);
+			queue.setParticipantName(participantName);
+			queue.setSurgicalPathologyNumber(surgicalPathologyNumber);
+			queue.setReportLoadedDate(new Date());
 			Utility.saveObject(queue);
 		}
 		catch(Exception ex)

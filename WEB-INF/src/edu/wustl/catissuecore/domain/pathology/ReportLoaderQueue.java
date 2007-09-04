@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.domain.pathology;
 
 import java.sql.Clob;
 import java.util.Collection;
+import java.util.Date;
 
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.actionForm.IValueObject;
@@ -23,6 +24,10 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	protected Collection participantCollection;
 	protected String status;
 	protected SpecimenCollectionGroup specimenCollectionGroup;
+	protected String surgicalPathologyNumber;
+	protected String participantName;
+	protected Date reportLoadedDate;
+	protected String siteName;
 	
 	/**
 	 * @return status information. 
@@ -147,5 +152,84 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
 		this.specimenCollectionGroup = specimenCollectionGroup;
+	}
+	
+	/**
+	 * @return surgical pathology number  
+     * @hibernate.property name="surgicalPathologyNumber"
+     * type="string" column="SURGICAL_PATHOLOGY_NUMBER" 
+     * length="255"
+     */
+	public String getSurgicalPathologyNumber() 
+	{
+		return surgicalPathologyNumber;
+	}
+
+
+	/**
+	 * @param surgicalPathologyNumber
+	 */
+	public void setSurgicalPathologyNumber(String accessionNumber) 
+	{
+		this.surgicalPathologyNumber = accessionNumber;
+	}
+
+
+	/**
+	 * @return participant name 
+     * @hibernate.property name="participantName"
+     * type="string" column="PARTICIPANT_NAME" 
+     * length="255"
+     */
+	public String getParticipantName() 
+	{
+		return participantName;
+	}
+
+	/**
+	 * @param participantName
+	 */
+	public void setParticipantName(String participantName) 
+	{
+		this.participantName = participantName;
+	}
+
+
+	/**
+	 * @return report Loaded Date 
+     * @hibernate.property name="reportLoadedDate"
+     * type="date" column="REPORT_LOADED_DATE" 
+     */
+	public Date getReportLoadedDate() 
+	{
+		return reportLoadedDate;
+	}
+
+
+	/**
+	 * @param reportLoadedDate
+	 */
+	public void setReportLoadedDate(Date reportLoadedDate) 
+	{
+		this.reportLoadedDate = reportLoadedDate;
+	}
+
+	/**
+	 * @return site name 
+     * @hibernate.property name="siteName"
+     * type="string" column="SITE_NAME" 
+     * length="255"
+     */
+	public String getSiteName() 
+	{
+		return siteName;
+	}
+
+	/**
+	 * @param siteName
+	 */
+	public void setSiteName(String siteName) 
+	{
+		this.siteName = siteName;
 	}
 }
