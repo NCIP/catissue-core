@@ -125,20 +125,13 @@ public class ReportLoader
 				DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 				List scgList=(List)defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), Constants.SYSTEM_IDENTIFIER, this.scg.getId());
 				this.scg=(SpecimenCollectionGroup)scgList.get(0);
-				IdentifiedSurgicalPathologyReport existingReport=(IdentifiedSurgicalPathologyReport)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), "identifiedSurgicalPathologyReport");
-				if(existingReport!=null)
-				{
-					boolean isReportExists = checkForTextContent(existingReport);
-					if(!isReportExists)
-					{
-						// if report text is null then set report text
-						existingReport.setTextContent(this.identifiedReport.getTextContent());
-					}	
-				}
-				else
-				{
-					this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport); 
-				}
+				CollectionProtocolRegistration cpr=(CollectionProtocolRegistration)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), "collectionProtocolRegistration");
+				this.scg.setCollectionProtocolRegistration(cpr);
+				Site scgSite=(Site)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), "specimenCollectionSite");
+				this.scg.setSpecimenCollectionSite(scgSite);
+				CollectionProtocolEvent collectionProtocolEvent=(CollectionProtocolEvent)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), "collectionProtocolEvent");
+				this.scg.setCollectionProtocolEvent(collectionProtocolEvent);
+				this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport); 
 				if(this.scg.getSurgicalPathologyNumber()==null)
 				{
 					this.scg.setSurgicalPathologyNumber(this.surgicalPathologyNumber);

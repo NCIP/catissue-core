@@ -128,51 +128,6 @@ public class ReportLoaderUtil
 		return "";
 	}
 	
-	  /**
-	 * @param obrLine report information text
-	 * @return String for Surgical Pathology Number
-	 * @throws Exception while parsing the report text information
-	 */
-	public static String getSurgicalPathologyNumber(String obrLine)
-	{
-		try
-		{
-	        String newObrLine = obrLine.replace('|', '~');
-	        newObrLine = newObrLine.replaceAll("~", "|~~");
-	        
-	        StringTokenizer st = new StringTokenizer(newObrLine, "|");
-
-	        for (int x = 0; st.hasMoreTokens(); x++)
-	        {
-
-	            String field = st.nextToken();
-
-	            if (field.equals("~~"))
-	            {
-	                continue;
-	            }
-
-	            else
-	            {
-	                field = field.replaceAll("~~", "");
-	            } 
-	            //	Accession number is now called as Surgical Pathology Number
-	            if (x == CaTIESConstants.REPORT_ACCESSIONNUMBER_INDEX) 
-	            {
-	                StringTokenizer st2 = new StringTokenizer(field, "^");
-	                String accNum = st2.nextToken();
-
-	                return accNum;
-	            }           
-	        }
-		}
-		catch(Exception e)
-		{
-			Logger.out.error("Error while parsing the report map",e);
-		}
-		return null;
-	}
-	
 	/**
 	 * @return specimen collection group
 	 * @throws Exception throws exception
@@ -181,6 +136,7 @@ public class ReportLoaderUtil
 	{
 		List<SpecimenCollectionGroup> scgSet=null;
 		SpecimenCollectionGroup existingSCG=null;
+		SpecimenCollectionGroup partialMatchingSCG=null;
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 		Site existingSCGSite=null;
 		
@@ -197,11 +153,16 @@ public class ReportLoaderUtil
 					// check for mathcing scg
 					existingSCG=scgIterator.next();
 					existingSCGSite=(Site)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), existingSCG.getId(), Constants.COLUMN_NAME_SCG_SITE);
-					if((surgicalPathologyNumber.equals(existingSCG.getSurgicalPathologyNumber()) 
-							|| existingSCG.getSurgicalPathologyNumber().trim().length()==0)							
-							&& (site.getName()).equals(existingSCGSite.getName()))
+					if(site.getName().equals(existingSCGSite.getName()))
 					{
-						return existingSCG;
+						if(surgicalPathologyNumber.equals(existingSCG.getSurgicalPathologyNumber()))
+						{
+							return existingSCG;
+						}
+						else
+						{
+							partialMatchingSCG=existingSCG;
+						}
 					}
 				}
 			}
@@ -211,6 +172,6 @@ public class ReportLoaderUtil
 			Logger.out.error("Error while checking specimen collection group ",ex);
 			throw ex;
 		}
-		return null;
+		return partialMatchingSCG;
 	}
 }

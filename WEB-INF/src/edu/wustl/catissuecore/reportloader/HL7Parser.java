@@ -68,7 +68,7 @@ public class HL7Parser implements Parser
 			Logger.out.debug("Creating report");
 			report = extractOBRSegment(line);
 			Logger.out.debug("Report Created Successfully");
-			spn=ReportLoaderUtil.getSurgicalPathologyNumber(HL7ParserUtil.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR));
+			spn=HL7ParserUtil.getSurgicalPathologyNumber(HL7ParserUtil.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR));
 			Logger.out.debug("Creating report section from report text");
 			reportSet = this.getReportSectionDataFromReportMap(reportMap, CaTIESConstants.OBX);
 			textContent=new TextContent();

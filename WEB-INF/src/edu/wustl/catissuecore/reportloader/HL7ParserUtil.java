@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import net.sf.hibernate.Hibernate;
 
@@ -79,11 +80,23 @@ public class HL7ParserUtil
 								//	check for matching scg here
 								String pidLine=getReportDataFromReportMap(reportMap, CaTIESConstants.PID);
 								String obrLine=getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
-								scg=ReportLoaderUtil.checkForSpecimenCollectionGroup(aParticipant, parser.parseSiteInformation(pidLine), ReportLoaderUtil.getSurgicalPathologyNumber(obrLine));
-								if(scg!=null && scg.getSurgicalPathologyNumber().trim().length()==0)
+								scg=ReportLoaderUtil.checkForSpecimenCollectionGroup(aParticipant, parser.parseSiteInformation(pidLine), getSurgicalPathologyNumber(obrLine));
+								if(scg!=null)
 								{
-									Logger.out.debug("SCG conflict found");
-									status=CaTIESConstants.STATUS_SCG_CONFLICT;
+									if(scg.getSurgicalPathologyNumber().trim().length()!=0)
+									{
+										if(scg.getIdentifiedSurgicalPathologyReport()!=null)
+										{
+											Logger.out.info("SCG conflict found with exact match");
+											status=CaTIESConstants.STATUS_SCG_CONFLICT;
+										}
+									}
+									else
+									{
+										Logger.out.info("SCG conflict found with partial match");
+										scg=null;
+										status=CaTIESConstants.STATUS_SCG_PARTIAL_CONFLICT;
+									}
 								}
 							}
 						}
@@ -134,7 +147,7 @@ public class HL7ParserUtil
 			status=CaTIESConstants.SITE_NOT_FOUND;
 		}
 		String obrLine=getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
-		surgicalPathologyNumber=ReportLoaderUtil.getSurgicalPathologyNumber(obrLine);
+		surgicalPathologyNumber=getSurgicalPathologyNumber(obrLine);
 		// Save report to report queue 
 		reportText=getReportText(reportMap);
 		addReportToQueue(participantList,reportText,scg, status, siteName,participantName,surgicalPathologyNumber);
@@ -239,5 +252,50 @@ public class HL7ParserUtil
 		{
 			Logger.out.error("Error while creating queue",ex);
 		}
-	}	
+	}
+	
+	  /**
+	 * @param obrLine report information text
+	 * @return String for Surgical Pathology Number
+	 * @throws Exception while parsing the report text information
+	 */
+	public static String getSurgicalPathologyNumber(String obrLine)
+	{
+		try
+		{
+	        String newObrLine = obrLine.replace('|', '~');
+	        newObrLine = newObrLine.replaceAll("~", "|~~");
+	        
+	        StringTokenizer st = new StringTokenizer(newObrLine, "|");
+
+	        for (int x = 0; st.hasMoreTokens(); x++)
+	        {
+
+	            String field = st.nextToken();
+
+	            if (field.equals("~~"))
+	            {
+	                continue;
+	            }
+
+	            else
+	            {
+	                field = field.replaceAll("~~", "");
+	            } 
+	            //	Accession number is now called as Surgical Pathology Number
+	            if (x == CaTIESConstants.REPORT_ACCESSIONNUMBER_INDEX) 
+	            {
+	                StringTokenizer st2 = new StringTokenizer(field, "^");
+	                String accNum = st2.nextToken();
+
+	                return accNum;
+	            }           
+	        }
+		}
+		catch(Exception e)
+		{
+			Logger.out.error("Error while parsing the report map",e);
+		}
+		return null;
+	}
 }
