@@ -505,12 +505,20 @@
 		row.style.display = 'none';		
 		var element = document.getElementById('addLimits');
 		var addLimitsButtonElement = document.getElementById('AddLimitsButtonRow');
-		var htmlArray = text.split('####');
-		addLimitsButtonElement.style.display = 'block';
-		//addLimitsButtonElement.height = "30";
-		//alert(htmlArray[0]);
-		addLimitsButtonElement.innerHTML = htmlArray[0];
-		element.innerHTML =htmlArray[1];
+		if(text != "")
+		{
+			var htmlArray = text.split('####');
+			addLimitsButtonElement.style.display = 'block';
+			//addLimitsButtonElement.height = "30";
+			//alert(htmlArray[0]);
+			addLimitsButtonElement.innerHTML = htmlArray[0];
+			element.innerHTML =htmlArray[1];
+		} else
+		{
+			element.innerHTML = text;
+			addLimitsButtonElement.innerHTML = "";
+		    addLimitsButtonElement.style.display = 'none';
+		}
 	}
 	
 	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
