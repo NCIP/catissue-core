@@ -365,7 +365,7 @@ public class FlexInterface
 		System.out.println("nodesStr ==>"+nodesStr);
 		System.out.println("NodeList  ===>"+ nodeList);
 		System.out.println("queryObject ==>"+queryObject);
-		DAGNode dagNode = dagPanel. addNodeToOutPutView(nodesStr,session,queryObject);
+		DAGNode dagNode = dagPanel.addNodeToOutPutView(nodesStr,session,queryObject);
 		System.out.println("dagNode ==> "+dagNode);
 		nodeList.add(dagNode);
 		return dagNode;
@@ -520,10 +520,11 @@ public class FlexInterface
 		dagPanel = new DAGPanel(pathFinder);
 		dagPanel.setQueryObject(queryObject);
 		session= flex.messaging.FlexContext.getHttpRequest().getSession();
+		
 	}
 	private DAGNode sourceNode= null;
 	private DAGNode destinationNode = null; 
-	private	IClientQueryBuilderInterface queryObject;
+	private	IClientQueryBuilderInterface queryObject=null;
 	private List<DAGNode> nodeList;
 	private List<IPath> pathsList;
 	private DAGPanel dagPanel;
