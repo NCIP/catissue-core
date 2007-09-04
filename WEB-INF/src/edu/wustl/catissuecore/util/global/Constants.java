@@ -179,6 +179,17 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String OUTPUT_TREE_MAP = "outputTreeMap";
 	public static final String CHECK_ALL_PAGES = "checkAllPages";
 	public static final String CHECK_ALL_ACROSS_ALL_PAGES = "isCheckAllAcrossAllChecked";
+	public static final String CLASSES_PRESENT_IN_QUERY = "Classes Present In Query";
+	public static final String DEFINE_QUERY_RESULTS_VIEW_ACTION = "DefineQueryResultsView.do";
+	public static final String CONFIGURE_GRID_VIEW_ACTION = "ConfigureGridView.do";
+	public static String ATTRIBUTE_MAP = "attributeMap";
+	public static final String 	CLASS = "class";
+	public static final String ATTRIBUTE = "attribute";
+	public static final String SELECT_DISTINCT = "select distinct ";
+	public static final String FROM = " from ";
+	public static final String WHERE = " where ";
+	public static final String DEFINED_COLUMN_NAMES = "definedColumnNames";
+	
 	// Query Module Interface UI constants---ends here
 	//	 Frame names in Query Module Results page.
 	public static final String GRID_DATA_VIEW_FRAME = "gridFrame";
