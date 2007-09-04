@@ -6,7 +6,6 @@ import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -60,17 +59,8 @@ public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 	 */
 	public ReportLoaderQueue getReportLoaderQueueById(Long identifier) throws Exception
 	{
-		// Initialising instance of IBizLogic
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String sourceObjectName = ReportLoaderQueue.class.getName();
-
-		// getting all the participants from the database 
-		List reportLoaderQueueList = bizLogic.retrieve(sourceObjectName, Constants.ID, identifier);
+		List reportLoaderQueueList = retrieve(ReportLoaderQueue.class.getName(), Constants.ID, identifier);
 		ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) reportLoaderQueueList.get(0);
 		return reportLoaderQueue;
-
 	}
-	
-	
-	
 }
