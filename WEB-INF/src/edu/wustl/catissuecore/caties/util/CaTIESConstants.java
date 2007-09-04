@@ -50,7 +50,8 @@ public abstract class CaTIESConstants
 	public static final String PENDING="PENDING";
 	public static final String NEW="ADDED_TO_QUEUE";
 	public static final String FAILURE="FAILURE";
-	public static final String STATUS_CONFLICT = "CONFLICT";
+	public static final String STATUS_PARTICIPANT_CONFLICT = "PARTICIPANT_CONFLICT";
+	public static final String STATUS_SCG_CONFLICT="SCG_CONFLICT";
 	public static final String SITE_NOT_FOUND="SITE_NOT_FOUND";
 	public static final String INVALID_REPORT_SECTION="INVALID_REPORT_SECTION";
 	public static final String DB_ERROR="DB_ERROR";
