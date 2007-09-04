@@ -43,7 +43,7 @@ public class UpdateAddLimitUI implements IUpdateAddLimitUIInterface
 		/*GenerateHtmlForAddLimitsBizLogic generateHTMLBizLogic = new GenerateHtmlForAddLimitsBizLogic();
 		EntityInterface entity = dagApplet.getExpression().getConstraintEntity().getDynamicExtensionsEntity();
 		String html = generateHTMLBizLogic.generateHTML(entity, null);*/
-		String html = "";
+		String html = AppletConstants.DELETE_LIMITS;
 		Object[] paramArray = {html};
 		CommonAppletUtil.callJavaScriptFunction(dagApplet, AppletConstants.SHOW_ENTITY_INFO, paramArray);
 	}

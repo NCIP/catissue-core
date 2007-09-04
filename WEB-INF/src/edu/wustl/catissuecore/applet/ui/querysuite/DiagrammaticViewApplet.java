@@ -252,7 +252,6 @@ public class DiagrammaticViewApplet extends BaseApplet
 					rule.addCondition(condition);
 				}
 				errorMessage = AppletConstants.EDIT_LIMITS;
-				System.out.println(errorMessage);
 				showValidationMessagesToUser(errorMessage);
 			}
 		}
