@@ -142,13 +142,7 @@ public class ClientDemo
 				writeFooterContentsToReport();
 				reportWriter.closeFile();
 				//testClient.sendMail();
-/*				testClient.testAddInstitution();
-				testClient.testAddDepartment();
-				testClient.testAddCancerResearchGroup();
-				testClient.testAddBioHazard();
-				testClient.testAddUser();
-				
-*/			}
+			}
 			catch (RuntimeException e2) 
 			{
 				e2.printStackTrace();
@@ -196,11 +190,10 @@ public class ClientDemo
 			testAddMolecularSpecimen();
 			testAddTissueSpecimen();
 			testAddFluidSpecimen();
-			testAddCellSpecimen();
+			testAddCellSpecimen(); 
 			testAddSpecimenArray();
 			testAddDistribution();
-			testAddOrderWithData();
-			
+			testAddOrderWithData();			
 			testAddInstitutionWithWrongData();
 			testAddDepartmentWithWrongData();
 			testAddCancerResearchGroupWithWrongData();
@@ -231,7 +224,9 @@ public class ClientDemo
 			testAddCollectionProtocolWithWrongCollectionPointLabel();
 			testAddCollectionProtocolWithDuplicateCollectionPointLabel();
 			
-			//testAddOrderWithWrongData();		
+			testAddOrderWithWrongData();		
+			
+			
 			
 		}
 		catch(Exception ex)
@@ -685,6 +680,7 @@ public class ClientDemo
 			collectionProtocolObj =  (CollectionProtocol) appService.createObject(collectionProtocolObj);
 			dataModelObjectMap.put("CollectionProtocol",collectionProtocolObj);
 			writeSuccessfullOperationToReport(collectionProtocolObj,insertOperation+"testAddCollectionProtocol");
+			
 			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + collectionProtocolObj.getId().toString());
 		}
 		catch(Exception e)
@@ -1301,6 +1297,8 @@ public class ClientDemo
     	testSearchSpecimenAndGetCollections();
     	testQuerySpecimenEventParameters();
     	testQueryGetCollectionProtocolRegistrationFromCollectionProtocol();
+    	
+    	
     
     	
 /*    	Department department = api.initDepartment();
@@ -1591,15 +1589,18 @@ public class ClientDemo
     }
     private void testSearchDistribution()
     {
-    	Distribution cachedDistribution =(Distribution)dataModelObjectMap.get("Distribution");
-    	Distribution distribution = new Distribution();
-    	setLogger(distribution);
-    	Logger.out.info(" searching Distribution object id-----------" + cachedDistribution.getId());
-    	distribution.setId(cachedDistribution.getId());
-         try {
+    	 try 
+    	 {
+	    	Distribution cachedDistribution =(Distribution)dataModelObjectMap.get("Distribution");
+	    	Distribution distribution = new Distribution();
+	    	setLogger(distribution);
+	    	Logger.out.info(" searching Distribution object id-----------" + cachedDistribution.getId());
+	    	distribution.setId(cachedDistribution.getId());
+	        
         	 List resultList = appService.search(Distribution.class,distribution);
         	 Logger.out.info(" Domain Object is successfully Found size ---->  :: " + resultList.size());
-        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+        	 {
         		 Distribution returneddistribution = (Distribution) resultsIterator.next();        		 
         		 writeSuccessfullOperationToReport(returneddistribution,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returneddistribution.getId());        		 
@@ -1607,12 +1608,13 @@ public class ClientDemo
         		 break;
              }
           } 
-          catch (Exception e) {
+          catch (Exception e) 
+          {
         	writeFailureOperationsToReport("Distribution",searchOperation);    
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-          }
-
+          }	
+	 		
     }
     private void testSearchDistributionProtocol()
     {
@@ -1660,12 +1662,14 @@ public class ClientDemo
     }
     private void testSearchCollectionProtocolRegistration()
     {
-    	CollectionProtocolRegistration cachedcollectionProtocolRegistration =(CollectionProtocolRegistration)dataModelObjectMap.get("CollectionProtocolRegistration");
-    	CollectionProtocolRegistration collectionProtocolRegistration  =new CollectionProtocolRegistration();
-    	setLogger(collectionProtocolRegistration);
-    	Logger.out.info(" searching domain object");
-	    collectionProtocolRegistration.setId(cachedcollectionProtocolRegistration.getId());
-         try {
+    	
+    	try {
+			CollectionProtocolRegistration cachedcollectionProtocolRegistration =(CollectionProtocolRegistration)dataModelObjectMap.get("CollectionProtocolRegistration");
+			CollectionProtocolRegistration collectionProtocolRegistration  =new CollectionProtocolRegistration();
+			setLogger(collectionProtocolRegistration);
+			Logger.out.info(" searching domain object");
+		    collectionProtocolRegistration.setId(cachedcollectionProtocolRegistration.getId());
+         
         	 List resultList = appService.search(CollectionProtocolRegistration.class,collectionProtocolRegistration);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 CollectionProtocolRegistration returnedcollectionprotocolregistration = (CollectionProtocolRegistration) resultsIterator.next();
@@ -1724,12 +1728,13 @@ public class ClientDemo
     }
     private void testSearchSpecimen()
     {
-    	Specimen cachedspecimen =(Specimen)dataModelObjectMap.get("Specimen");
-    	Specimen specimen = new Specimen();
-     	setLogger(specimen);
-    	Logger.out.info(" searching domain object");
-    	specimen.setId(cachedspecimen.getId());
-         try {
+    	try {
+	    	Specimen cachedspecimen =(Specimen)dataModelObjectMap.get("Specimen");
+	    	Specimen specimen = new Specimen();
+	     	setLogger(specimen);
+	    	Logger.out.info(" searching domain object");
+	    	specimen.setId(cachedspecimen.getId());
+         
         	 List resultList = appService.search(Specimen.class,specimen);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 Specimen returnedspecimen = (Specimen) resultsIterator.next();
@@ -2006,14 +2011,15 @@ public class ClientDemo
     }
     private void testSearchSpecimenArray()
     {
-    	SpecimenArray cachedspecimenArray = (SpecimenArray) dataModelObjectMap.get("SpecimenArray");
-    	SpecimenArray specimenArray = new SpecimenArray();
-     	setLogger(specimenArray);
-    	Logger.out.info(" searching domain object");
-    	
-		specimenArray.setId(cachedspecimenArray.getId());
-		
-         try {
+    	try {
+	    	SpecimenArray cachedspecimenArray = (SpecimenArray) dataModelObjectMap.get("SpecimenArray");
+	    	SpecimenArray specimenArray = new SpecimenArray();
+	     	setLogger(specimenArray);
+	    	Logger.out.info(" searching domain object");
+	    	
+			specimenArray.setId(cachedspecimenArray.getId());
+			
+         
         	 List resultList = appService.search(SpecimenArray.class,specimenArray);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 SpecimenArray returnedspecimenarray = (SpecimenArray) resultsIterator.next();
@@ -2030,14 +2036,15 @@ public class ClientDemo
     }
     private void testSearchSpecimenCollectionGroup()
     {
-    	SpecimenCollectionGroup cachedspecimenCollectionGroup = (SpecimenCollectionGroup)dataModelObjectMap.get("SpecimenCollectionGroup");
-    	SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
-     	setLogger(specimenCollectionGroup);
-    	Logger.out.info(" searching domain object");
+    	try {
+	    	SpecimenCollectionGroup cachedspecimenCollectionGroup = (SpecimenCollectionGroup)dataModelObjectMap.get("SpecimenCollectionGroup");
+	    	SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+	     	setLogger(specimenCollectionGroup);
+	    	Logger.out.info(" searching domain object");
+	    	
+	    	specimenCollectionGroup.setId(cachedspecimenCollectionGroup.getId());
     	
-    	specimenCollectionGroup.setId(cachedspecimenCollectionGroup.getId());
-    	
-         try {
+         
         	 List resultList = appService.search(SpecimenCollectionGroup.class,specimenCollectionGroup);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 SpecimenCollectionGroup returnedspecimencollectiongroup = (SpecimenCollectionGroup) resultsIterator.next();
@@ -2113,7 +2120,7 @@ public class ClientDemo
 				testUpdateParticipantWithWrongData();				
 				testUpdateCollectionProtocolRegistrationWithWrongData();
 				testUpdateSpecimenCollectionGroupWithWrongData();						
-				testUpdateSpecimenWithWrongData();
+			    testUpdateSpecimenWithWrongData();
 				
 				/*Object obj = api.initCancerResearchGroup();
 				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
@@ -2417,7 +2424,8 @@ public class ClientDemo
 	    	writeSuccessfullOperationToReport(updatedCollectionProtocol,updateOperation+"testUpdateCollectionProtocol");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 	    } 
-	    catch (Exception e) {
+	    catch (Exception e)
+	    {
 	    	writeFailureOperationsToReport("CollectionProtocol",updateOperation+"testUpdateCollectionProtocol");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
@@ -2488,11 +2496,12 @@ public class ClientDemo
 	
 	private void testUpdateParticipant()
 	{
-		Participant participant = (Participant) dataModelObjectMap.get("Participant");
-		setLogger(participant);
-    	Logger.out.info("updating domain object------->"+participant);
-	    try 
+		try 
 		{
+			Participant participant = (Participant) dataModelObjectMap.get("Participant");
+			setLogger(participant);
+	    	Logger.out.info("updating domain object------->"+participant);
+	    
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateParticipant(participant);
 	    	Participant updatedParticipant = (Participant) appService.updateObject(participant);
@@ -2508,11 +2517,12 @@ public class ClientDemo
 	
 	private void testUpdateParticipantWithWrongData()
 	{
-		Participant participant = (Participant) dataModelObjectMap.get("Participant");
-		setLogger(participant);
-    	Logger.out.info("updating domain object------->"+participant);
-	    try 
-		{
+		 try 
+		 {
+			Participant participant = (Participant) dataModelObjectMap.get("Participant");
+			setLogger(participant);
+	    	Logger.out.info("updating domain object------->"+participant);
+	   
 	    	APIDemo apiDemo = new APIDemo();
 	    	participant.setGender("wrongData");
 	    	//apiDemo.updateParticipant(participant);
@@ -2521,7 +2531,7 @@ public class ClientDemo
 	     	//Logger.out.info("Domain object successfully updated ---->"+updatedParticipant);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(participant,updateValidateOperation + " testUpdateParticipantWithWrongData");
+	    	writeSuccessfullOperationToReport("Participant",updateValidateOperation + " testUpdateParticipantWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2529,11 +2539,12 @@ public class ClientDemo
 	
 	private void testUpdateSpecimenCollectionGroup()
 	{
+		try 
+		{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) dataModelObjectMap.get("SpecimenCollectionGroup");
 		setLogger(specimenCollectionGroup);
 		Logger.out.info("updating domain object------->"+specimenCollectionGroup);
-		try 
-		{
+		
 			APIDemo apiDemo = new APIDemo();
 			apiDemo.updateSpecimenCollectionGroup(specimenCollectionGroup);
 			SpecimenCollectionGroup updatedSpecimenCollectionGroup = (SpecimenCollectionGroup) appService.updateObject(specimenCollectionGroup);
@@ -2549,11 +2560,12 @@ public class ClientDemo
 	
 	private void testUpdateSpecimenCollectionGroupWithWrongData()
 	{
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) dataModelObjectMap.get("SpecimenCollectionGroup");
-		setLogger(specimenCollectionGroup);
-		Logger.out.info("updating domain object------->"+specimenCollectionGroup);
 		try 
 		{
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) dataModelObjectMap.get("SpecimenCollectionGroup");
+			setLogger(specimenCollectionGroup);
+			Logger.out.info("updating domain object------->"+specimenCollectionGroup);
+		
 			APIDemo apiDemo = new APIDemo();
 			specimenCollectionGroup.setClinicalStatus("wrongData");
 			//apiDemo.updateSpecimenCollectionGroup(specimenCollectionGroup);
@@ -2562,7 +2574,7 @@ public class ClientDemo
 			//Logger.out.info("Domain object successfully updated ---->"+updatedSpecimenCollectionGroup);
 		} 
 		catch (Exception e) {
-			writeSuccessfullOperationToReport(specimenCollectionGroup,updateValidateOperation + " testUpdateSpecimenCollectionGroupWithWrongData");
+			writeSuccessfullOperationToReport("specimenCollectionGroup",updateValidateOperation + " testUpdateSpecimenCollectionGroupWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 		}
@@ -2570,11 +2582,12 @@ public class ClientDemo
 	
 	private void testUpdateCollectionProtocolRegistration()
 	{		
-		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) dataModelObjectMap.get("CollectionProtocolRegistration");
-		setLogger(collectionProtocolRegistration);
-		Logger.out.info("updating domain object------->"+collectionProtocolRegistration);
 		try 
-		{
+		{			
+			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) dataModelObjectMap.get("CollectionProtocolRegistration");
+			setLogger(collectionProtocolRegistration);
+			Logger.out.info("updating domain object------->"+collectionProtocolRegistration);
+		
 			APIDemo apiDemo = new APIDemo();
 			apiDemo.updateCollectionProtocolRegistration(collectionProtocolRegistration);
 			CollectionProtocolRegistration updatedCollectionProtocolRegistration = (CollectionProtocolRegistration) appService.updateObject(collectionProtocolRegistration);
@@ -2590,11 +2603,12 @@ public class ClientDemo
 	
 	private void testUpdateCollectionProtocolRegistrationWithWrongData()
 	{		
-		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) dataModelObjectMap.get("CollectionProtocolRegistration");
-		setLogger(collectionProtocolRegistration);
-		Logger.out.info("updating domain object------->"+collectionProtocolRegistration);
 		try 
 		{
+			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) dataModelObjectMap.get("CollectionProtocolRegistration");
+			setLogger(collectionProtocolRegistration);
+			Logger.out.info("updating domain object------->"+collectionProtocolRegistration);
+		
 			APIDemo apiDemo = new APIDemo();	
 			
 			collectionProtocolRegistration.setParticipant(null);
@@ -2606,7 +2620,7 @@ public class ClientDemo
 			//Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocolRegistration);
 		} 
 		catch (Exception e) {
-			writeSuccessfullOperationToReport(collectionProtocolRegistration,updateValidateOperation + " testUpdateCollectionProtocolRegistrationWithWrongData");
+			writeSuccessfullOperationToReport("collectionProtocolRegistration",updateValidateOperation + " testUpdateCollectionProtocolRegistrationWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 		}
@@ -2614,11 +2628,12 @@ public class ClientDemo
 	
 	private void testUpdateSpecimen()
 	{
-		Specimen specimen = (Specimen)dataModelObjectMap.get("Specimen");
-    	setLogger(specimen);
-    	Logger.out.info("updating domain object------->"+specimen);
-	    try 
-		{
+		try 
+		{		
+			Specimen specimen = (Specimen)dataModelObjectMap.get("Specimen");
+	    	setLogger(specimen);
+	    	Logger.out.info("updating domain object------->"+specimen);
+	    
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateSpecimen(specimen);
 	    	Specimen updatedSpecimen = (Specimen) appService.updateObject(specimen);
@@ -2634,11 +2649,12 @@ public class ClientDemo
 	
 	private void testUpdateSpecimenWithWrongData()
 	{
-		Specimen specimen = (Specimen)dataModelObjectMap.get("Specimen");
-    	setLogger(specimen);
-    	Logger.out.info("updating domain object------->"+specimen);
-	    try 
+		try 
 		{
+			Specimen specimen = (Specimen)dataModelObjectMap.get("Specimen");
+	    	setLogger(specimen);
+	    	Logger.out.info("updating domain object------->"+specimen);
+	    
 	    	APIDemo apiDemo = new APIDemo();	    	
 	    	specimen.setPathologicalStatus("wrongData");
 	    	
@@ -2648,7 +2664,7 @@ public class ClientDemo
 	    	//Logger.out.info("Domain object successfully updated ---->"+updatedSpecimen);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(specimen,updateValidateOperation + " testUpdateSpecimenWithWrongData");
+	    	writeSuccessfullOperationToReport("Specimen",updateValidateOperation + " testUpdateSpecimenWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2657,11 +2673,12 @@ public class ClientDemo
 	
 	private void testUpdateStorageType()
 	{
-		StorageType storageType = (StorageType)dataModelObjectMap.get("StorageType");
-    	setLogger(storageType);
-    	Logger.out.info("updating domain object------->"+storageType);
-	    try 
+		try 
 		{
+			StorageType storageType = (StorageType)dataModelObjectMap.get("StorageType");
+	    	setLogger(storageType);
+	    	Logger.out.info("updating domain object------->"+storageType);
+	    
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateStorageType(storageType);
 	    	StorageType updatedStorageType = (StorageType) appService.updateObject(storageType);
@@ -2677,12 +2694,14 @@ public class ClientDemo
 	
 	private void testUpdateStorageContainer()
 	{
-		StorageContainer storageContainer = (StorageContainer)dataModelObjectMap.get("StorageContainer");
-    	setLogger(storageContainer);
-    	Logger.out.info("updating domain object------->"+storageContainer);
-    	Logger.out.info("updating domain object Storage Container ******* ------->"+storageContainer.getCapacity().getId());
-	    try 
+		
+		try 
 		{
+			StorageContainer storageContainer = (StorageContainer)dataModelObjectMap.get("StorageContainer");
+	    	setLogger(storageContainer);
+	    	Logger.out.info("updating domain object------->"+storageContainer);
+	    	Logger.out.info("updating domain object Storage Container ******* ------->"+storageContainer.getCapacity().getId());
+	    
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateStorageContainer(storageContainer);
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
@@ -2698,11 +2717,12 @@ public class ClientDemo
 	
 	private void testUpdateSpecimenArrayType()
 	{
-		SpecimenArrayType specimenArrayType = (SpecimenArrayType)dataModelObjectMap.get("SpecimenArrayType");
-    	setLogger(specimenArrayType);
-    	Logger.out.info("updating domain object------->"+specimenArrayType);
-	    try 
+		try 
 		{
+			SpecimenArrayType specimenArrayType = (SpecimenArrayType)dataModelObjectMap.get("SpecimenArrayType");
+	    	setLogger(specimenArrayType);
+	    	Logger.out.info("updating domain object------->"+specimenArrayType);
+		    
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateSpecimenArrayType(specimenArrayType);
 	    	SpecimenArrayType updatedSpecimenArrayType = (SpecimenArrayType) appService.updateObject(specimenArrayType);
@@ -2718,11 +2738,12 @@ public class ClientDemo
 	
 	private void testUpdateSpecimenArray()
 	{
-		SpecimenArray specimenArray = (SpecimenArray)dataModelObjectMap.get("SpecimenArray");
-    	setLogger(specimenArray);
-    	Logger.out.info("updating domain object------->"+specimenArray);
-	    try 
+		try 
 		{
+			SpecimenArray specimenArray = (SpecimenArray)dataModelObjectMap.get("SpecimenArray");
+	    	setLogger(specimenArray);
+	    	Logger.out.info("updating domain object------->"+specimenArray);
+	    
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateSpecimenArray(specimenArray);
 	    	SpecimenArray updatedSpecimenArray = (SpecimenArray) appService.updateObject(specimenArray);
@@ -3010,9 +3031,10 @@ public class ClientDemo
 	 
 		private void testAddOrderWithWrongData()
 		{
-			OrderDetails orderObj = null;
 			try
 			{
+				OrderDetails orderObj = null;
+			
 				orderObj = (OrderDetails)api.initOrder();
 				orderObj.setName(null);
 				setLogger(orderObj);
@@ -3024,7 +3046,7 @@ public class ClientDemo
 			}
 			catch(Exception e)
 			{
-				writeSuccessfullOperationToReport(orderObj,insertValidateOperation+" testAddOrderWIthWrongData");
+				writeSuccessfullOperationToReport("Order",insertValidateOperation+" testAddOrderWIthWrongData");
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 				/*if(orderObj != null)
@@ -3043,5 +3065,4 @@ public class ClientDemo
 	
 
 }
-
 
