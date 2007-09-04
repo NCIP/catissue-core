@@ -55,7 +55,7 @@ public class SpreadsheetExportAction  extends BaseAction
     	
     	//Getting column data & grid data from session
     	List columnList = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-    	List dataList = (List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+    	//List dataList = (List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
     	/**
 		 * Name: Deepti
 		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
@@ -63,25 +63,22 @@ public class SpreadsheetExportAction  extends BaseAction
 		 * 
 		 * Here, as results are not stored in session, the sql is fired again to form the shopping cart list.  
 		 */
-    	if(dataList == null)
+    	String pageNo = (String)request.getParameter(Constants.PAGE_NUMBER);
+	    String recordsPerPageStr = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);//Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
+	    if(pageNo != null)
+	    {
+	    	request.setAttribute(Constants.PAGE_NUMBER,pageNo);
+	    }
+    	int recordsPerPage = new Integer(recordsPerPageStr);
+		int pageNum = new Integer(pageNo);
+		if(isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equalsIgnoreCase("true"))
     	{
-    		String pageNo = (String)request.getParameter(Constants.PAGE_NUMBER);
-    	    String recordsPerPageStr = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);//Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
-    	    if(pageNo != null)
-    	    {
-    	    	request.setAttribute(Constants.PAGE_NUMBER,pageNo);
-    	    }
-	    	int recordsPerPage = new Integer(recordsPerPageStr);
-			int pageNum = new Integer(pageNo);
-			if(isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equalsIgnoreCase("true"))
-	    	{
-				Integer totalRecords = (Integer)session.getAttribute(Constants.TOTAL_RESULTS);
-				recordsPerPage = totalRecords;
-				pageNum = 1;
-	    	}
-    		QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
-            dataList = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
+			Integer totalRecords = (Integer)session.getAttribute(Constants.TOTAL_RESULTS);
+			recordsPerPage = totalRecords;
+			pageNum = 1;
     	}
+		QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
+        List dataList = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
     	//Mandar 06-Apr-06 Bugid:1165 : Extra ID columns displayed.  start
     	
     	Logger.out.debug("---------------------------------------------------------------------------------");
@@ -138,11 +135,22 @@ public class SpreadsheetExportAction  extends BaseAction
     	
     	//Adding first row(column names) to exportData
     	exportList.add(columnList);
-    	for(int i=0;i<dataList.size();i++)
+    	if(isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equalsIgnoreCase("true"))
     	{
-    		exportList.add(dataList.get(i));
+    		for(int i=0;i<dataList.size();i++)
+        	{
+        		exportList.add(dataList.get(i));
+        	}
     	}
-    	
+    	else
+    	{
+	    	for(int i=0;i<obj.length;i++)
+	    	{
+	    		int indexOf = obj[i].toString().indexOf("_") + 1;
+	    		int index = Integer.parseInt(obj[i].toString().substring(indexOf));
+	    		exportList.add((List)dataList.get(index));
+	    	}
+    	}
     	String delimiter = Constants.DELIMETER;
     	//Exporting the data to the given file & sending it to user
     	ExportReport report = new ExportReport(fileName);
