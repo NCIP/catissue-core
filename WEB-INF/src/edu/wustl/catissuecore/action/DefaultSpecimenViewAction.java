@@ -111,7 +111,7 @@ public class DefaultSpecimenViewAction extends BaseAction
 			{
 	        	List list = jdbcDAO.retrieve(tableName, selectColumnNames, true);
 				request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
-				session.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
+			//	session.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
 				session.setAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE, defaultViewAttribute);
 				request.setAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE, defaultViewAttribute);
 			}
