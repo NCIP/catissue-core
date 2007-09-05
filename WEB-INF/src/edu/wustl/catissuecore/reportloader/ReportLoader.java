@@ -125,11 +125,11 @@ public class ReportLoader
 				DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 				List scgList=(List)defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), Constants.SYSTEM_IDENTIFIER, this.scg.getId());
 				this.scg=(SpecimenCollectionGroup)scgList.get(0);
-				CollectionProtocolRegistration cpr=(CollectionProtocolRegistration)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), "collectionProtocolRegistration");
+				CollectionProtocolRegistration cpr=(CollectionProtocolRegistration)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), Constants.COLUMN_NAME_CPR);
 				this.scg.setCollectionProtocolRegistration(cpr);
-				Site scgSite=(Site)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), "specimenCollectionSite");
+				Site scgSite=(Site)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(),Constants.COLUMN_NAME_SCG_SITE);
 				this.scg.setSpecimenCollectionSite(scgSite);
-				CollectionProtocolEvent collectionProtocolEvent=(CollectionProtocolEvent)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), "collectionProtocolEvent");
+				CollectionProtocolEvent collectionProtocolEvent=(CollectionProtocolEvent)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), Constants.COLUMN_NAME_COLL_PROT_EVENT);
 				this.scg.setCollectionProtocolEvent(collectionProtocolEvent);
 				this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport); 
 				if(this.scg.getSurgicalPathologyNumber()==null)
@@ -206,7 +206,7 @@ public class ReportLoader
 		
 		// retrieve collection protocol event list
 		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		Collection collProtocolEventList=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), cpID, Constants.COLUMN_COLL_PROT_EVENT_COLL);
+		Collection collProtocolEventList=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), cpID, Constants.COLUMN_NAME_COLL_PROT_EVENT_COLL);
 		Iterator cpEventIterator=collProtocolEventList.iterator();
 		
 		if(cpEventIterator.hasNext())
