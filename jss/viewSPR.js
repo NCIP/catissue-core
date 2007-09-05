@@ -33,7 +33,7 @@ function hide(obj)
 function clickOnLinkShowDeidReport()
 {
 	hide('identifiedReportInfo');
-	switchStyle('hide');
+	hide('participantTable');
 	show('deidReportInfo');
 }
 //<!--function to display default view  -->
@@ -43,12 +43,13 @@ function clickOnLinkReport()
 	show('reportTable');
 	show('categoryHighlighter');
 	show('identifiedReportInfo');
+	show('participantTable');
 	switchStyle('show');
 }
 //<!--function to display identified and de-identified report compare view  -->
 function clickOnLinkCompareReport()
 {
-	switchStyle('hide')
+	hide('participantTable');
 	show('reportTable');
 	show('identifiedReportInfo');
 	show('deidReportInfo');
