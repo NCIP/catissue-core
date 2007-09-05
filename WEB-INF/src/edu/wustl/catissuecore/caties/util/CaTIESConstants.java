@@ -59,6 +59,7 @@ public abstract class CaTIESConstants
 	public static final String API_ERROR="API_ERROR";
 	public static final String CP_NOT_FOUND="CP_NOT_FOUND";
 	public static final String CP_NOT_FOUND_ERROR_MSG="CP not found with specified Titile in DB";
+	public static final String PARTICIPANT_CREATION_ERROR="PARTICIPANT_CREATION_ERROR";
 	
 	//constants for Site info
 	public static final String SITE_NAME="SITE_NAME";
