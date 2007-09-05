@@ -1778,7 +1778,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLUMN_NAME_PART_RACE_COLL="elements(raceCollection)";
 	public static final String COLUMN_NAME_CPR_COLL="elements(collectionProtocolRegistrationCollection)";
 	public static final String COLUMN_NAME_SCG_COLL="elements(specimenCollectionGroupCollection)";
-	public static final String COLUMN_COLL_PROT_EVENT_COLL="elements(collectionProtocolEventCollection)";
+	public static final String COLUMN_NAME_COLL_PROT_EVENT_COLL="elements(collectionProtocolEventCollection)";
 	public static final String COLUMN_NAME_CONCEPT_REF_COLL="elements(conceptReferentCollection)";
 	public static final String COLUMN_NAME_DEID_REPORT="deIdentifiedSurgicalPathologyReport";
 	public static final String COLUMN_NAME_REPORT_SOURCE="reportSource";
@@ -1788,6 +1788,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLUMN_NAME_REPORT_SECTION_COLL="elements(reportSectionCollection)";
 	public static final String COLUMN_NAME_SCG_SITE="specimenCollectionSite";
 	public static final String COLUMN_NAME_STATUS="status";
+	public static final String COLUMN_NAME_CPR="collectionProtocolRegistration";
+	public static final String COLUMN_NAME_COLL_PROT_EVENT="collectionProtocolEvent";
 	
 	//Bug 2833. Field for the length of CP Title
 	public static final int COLLECTION_PROTOCOL_TITLE_LENGTH=30; 
