@@ -59,9 +59,9 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EAEAEA" height="100%" bordercolorlight="#000000" >
 		<tr height="35" valign="center">
 		 <td width="2%" valign="center">&nbsp;</td>
-		 <td valign="center" width="75%"><html:button property="Button"><bean:message key="query.saveButton"/></html:button></td>
+		 <td valign="center" width="75%"><html:button property="Button" disabled="true"><bean:message key="query.saveButton"/></html:button></td>
 	   	 <td align="right" valign="center"><html:button property="Button" onclick="defineSearchResultsView()"><bean:message key="query.previousButton" /></html:button></td>
-		 <td align="right" valign="center"><html:button property="Button" onclick=""><bean:message key="query.nextButton"/></html:button>
+		 <td align="right" valign="center"><html:button property="Button" onclick="" disabled="true"><bean:message key="query.nextButton"/></html:button>
 		 </td>
 		 <td width="2%">&nbsp;</td>
 </tr>
