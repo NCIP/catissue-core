@@ -132,8 +132,8 @@ public class HL7ParserUtil
 				}
 				catch(Exception ex)
 				{
-					status=CaTIESConstants.INVALID_REPORT_SECTION;
-					Logger.out.error("Report section under process is not valid ",ex);
+					status=CaTIESConstants.PARTICIPANT_CREATION_ERROR;
+					Logger.out.error("Error while either creating participant or matching conflict ",ex);
 				}
 			}
 			else
