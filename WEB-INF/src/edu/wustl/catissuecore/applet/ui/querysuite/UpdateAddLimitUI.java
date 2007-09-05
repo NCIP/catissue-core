@@ -55,7 +55,7 @@ public class UpdateAddLimitUI implements IUpdateAddLimitUIInterface
 	public void editAddLimitUI(IExpression expression)
 	{
 		dagApplet.setExpression(expression);
-		EntityInterface entity = expression.getConstraintEntity().getDynamicExtensionsEntity();
+		EntityInterface entity = expression.getQueryEntity().getDynamicExtensionsEntity();
 		GenerateHtmlForAddLimitsBizLogic generateHTMLBizLogic = new GenerateHtmlForAddLimitsBizLogic();
 		Rule rule = ((Rule) (expression.getOperand(0)));
 		List<ICondition> conditions = rule.getConditions();

@@ -5,7 +5,6 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Image;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +14,7 @@ import javax.swing.ImageIcon;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.wustl.cab2b.client.ui.dag.DisplayNameInterafce;
 import edu.wustl.cab2b.client.ui.dag.MainDagPanel;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IPathFinder;
@@ -34,6 +34,7 @@ import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -89,7 +90,11 @@ public class DiagrammaticViewApplet extends BaseApplet
 		{
 			isForView = true;
 		}
-		panel = new MainDagPanel(updateAddLimitUI, imagePathsMap, pathFinder,isForView);
+		panel = new MainDagPanel(updateAddLimitUI, imagePathsMap, pathFinder,isForView,new DisplayNameInterafce() {
+            public String getEntityDisplayName(EntityInterface entity) {
+                return Utility.parseClassName(entity.getName());
+            }
+        });
 		panel.setQueryObject(queryObject);
 		this.getContentPane().add(panel);
 		this.setSize(3500, 2000);

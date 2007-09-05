@@ -1,53 +1,32 @@
 package edu.wustl.catissuecore.flex.dag;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.naming.ldap.HasControls;
 import javax.servlet.http.HttpSession;
-import javax.swing.JOptionPane;
-
-import org.netbeans.graph.api.model.GraphEvent;
-import org.netbeans.graph.api.model.builtin.GraphPort;
 
 import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-
-import edu.wustl.cab2b.client.metadatasearch.MetadataSearch;
-import edu.wustl.cab2b.client.ui.dag.ClassNode;
-import edu.wustl.cab2b.client.ui.dag.MainDagPanel;
 import edu.wustl.cab2b.client.ui.dag.PathLink;
-import edu.wustl.catissuecore.flex.dag.DAGResolveAmbiguity;
 import edu.wustl.cab2b.client.ui.dag.ambiguityresolver.AmbiguityObject;
-import edu.wustl.cab2b.client.ui.dag.ambiguityresolver.ResolveAmbiguity;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
 import edu.wustl.cab2b.client.ui.query.IPathFinder;
-import edu.wustl.cab2b.client.ui.util.ClientConstants;
-import edu.wustl.cab2b.common.beans.MatchedClass;
-import edu.wustl.cab2b.common.exception.CheckedException;
-import edu.wustl.cab2b.common.util.EntityInterfaceComparator;
 import edu.wustl.cab2b.common.util.Utility;
-import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.applet.AppletConstants;
-import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.querysuite.exceptions.CyclicException;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
@@ -58,14 +37,11 @@ import edu.wustl.common.querysuite.metadata.associations.IAssociation;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.ICondition;
-import edu.wustl.common.querysuite.queryobject.IConstraintEntity;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
-import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
-import edu.wustl.common.querysuite.queryobject.ILogicalConnector;
 import edu.wustl.common.querysuite.queryobject.IQuery;
-import edu.wustl.common.querysuite.queryobject.IRule;
+import edu.wustl.common.querysuite.queryobject.IQueryEntity;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.ExpressionId;
@@ -75,7 +51,6 @@ import edu.wustl.common.querysuite.queryobject.impl.Rule;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -206,12 +181,12 @@ public class DAGPanel {
 			 */
 			IExpression expression = constraints
 			.getExpression(expressionId);
-			IConstraintEntity sourceEntity = expression
-			.getConstraintEntity();
+			IQueryEntity sourceEntity = expression
+			.getQueryEntity();
 			expressionId = new ExpressionId(destNode.getExpressionId());
 			expression = constraints.getExpression(expressionId);
-			IConstraintEntity destinationEntity = expression
-			.getConstraintEntity();
+			IQueryEntity destinationEntity = expression
+			.getQueryEntity();
 
 			ambiguityObject = new AmbiguityObject(
 					sourceEntity.getDynamicExtensionsEntity(),
@@ -473,7 +448,7 @@ public class DAGPanel {
 				
 				IExpression exp = constraints.getExpression(expressionId);
 				
-				IConstraintEntity constraintEntity = exp.getConstraintEntity();
+				IQueryEntity constraintEntity = exp.getQueryEntity();
 				String nodeDisplayName = edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()); 
     			DAGNode dagNode = new DAGNode();
        			dagNode.setExpressionId(exp.getExpressionId().getInt());
@@ -520,7 +495,7 @@ public class DAGPanel {
 	    		String nodeDisplayName = "";
 	    		IExpressionId newId = (IExpressionId)childList.get(i);
 	    		IExpression exp = constraints.getExpression(newId);
-	    		IConstraintEntity constraintEntity = exp.getConstraintEntity();
+	    		IQueryEntity constraintEntity = exp.getQueryEntity();
 	    		if(exp.isVisible())
 	    		{
 	    			nodeDisplayName =edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity());
@@ -563,7 +538,7 @@ public class DAGPanel {
 		Map<String, Object> map = new HashMap<String,Object>();
 		IExpressionId expressionId = new ExpressionId(expId);
 		IExpression expression = m_queryObject.getQuery().getConstraints().getExpression(expressionId);
-		EntityInterface entity = expression.getConstraintEntity().getDynamicExtensionsEntity();
+		EntityInterface entity = expression.getQueryEntity().getDynamicExtensionsEntity();
 		System.out.println("entity============"+entity);
 		GenerateHtmlForAddLimitsBizLogic generateHTMLBizLogic = new GenerateHtmlForAddLimitsBizLogic();
 		Rule rule = ((Rule) (expression.getOperand(0)));

@@ -1,15 +1,9 @@
 package edu.wustl.catissuecore.flex.dag;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
-import edu.wustl.common.querysuite.queryobject.ICondition;
-import edu.wustl.common.querysuite.queryobject.IConstraintEntity;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
-import edu.wustl.common.querysuite.queryobject.impl.Rule;
+import edu.wustl.common.querysuite.queryobject.IQueryEntity;
 
 public class DAGNodeBuilder {
 	
@@ -23,7 +17,7 @@ public class DAGNodeBuilder {
 		// TODO required to create m_queryObject object b4 this call
 		setQueryObject(queryObject);
 		IExpression expression = m_queryObject.getQuery().getConstraints().getExpression(expressionId);
-        IConstraintEntity constraintEntity = expression.getConstraintEntity();
+        IQueryEntity constraintEntity = expression.getQueryEntity();
         DAGNode dagNode = new DAGNode();
 		dagNode.setNodeName(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()));
 		dagNode.setExpressionId(expression.getExpressionId().getInt());
