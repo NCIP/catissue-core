@@ -47,6 +47,14 @@ public class FilePoller implements Observable
 			Observer obr=new ReportProcessor();
 			// registering poller to the object obr
 			poller.register(obr);
+		}
+		catch (Exception ex) 
+		{
+			Logger.out.error("Error occured while inializing File Poller "+ex);
+			return;
+		}
+		try
+		{
 			// Create new directories if does not exists
 			ReportLoaderUtil.createDir(CaTIESProperties.getValue(CaTIESConstants.PROCESSED_FILE_DIR));
 			ReportLoaderUtil.createDir(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR));

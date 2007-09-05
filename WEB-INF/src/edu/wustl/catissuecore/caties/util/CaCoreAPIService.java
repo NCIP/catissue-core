@@ -27,7 +27,7 @@ public class CaCoreAPIService
 		return appService;
 	}
 	
-	public static void initialize()
+	public static void initialize() throws Exception
 	{
 		try
 		{
@@ -40,12 +40,13 @@ public class CaCoreAPIService
 			catch (Exception ex) 
 			{ 
 				Logger.out.error("Error in initializing CaCoreAPIService "+ex); 
-				return;
+				throw ex;
 			}
 		}
 		catch(Exception ex)
 		{
 			Logger.out.error("Test client throws Exception = "+ ex);
+			throw ex;
 		}
 	}
 }
