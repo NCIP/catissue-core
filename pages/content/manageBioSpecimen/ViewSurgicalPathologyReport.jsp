@@ -163,7 +163,7 @@
 							<bean:message key="viewSPR.compareReports" />
 					</td>
 					<td class="formFieldNoBordersBold" >
-						<input type=radio name="review" value="abc4" onClick="" />
+						<input type=radio name="review" value="abc4" onClick="" disabled="true" />
 							<bean:message key="viewSPR.myRequests" />						
 					</td>
 				</tr>
@@ -202,40 +202,39 @@
 	<tr>
 		<td>
 		
-		<table border="0" cellpadding="0" cellspacing="0"   width="100%" id="table2" >
+		<table id="participantTable" border="0" cellpadding="0" cellspacing="0"   width="100%" id="table2" >
 			<tr>
-				<td class="formTitle" height="20">
-					<bean:message key="viewSPR.participantInformation.title"/>						
-				</td>
-				
 				<td class="formFieldAllBorders" align="right" width="1%">
 					<a id="image" style="text-decoration:none" href="javascript:switchStyle('hide');">  
 					<img src="images/nolines_minus.gif" border="0" width="18" height="18"/>
 				</td> 
+				<td class="formTitle" height="20">
+					<bean:message key="viewSPR.participantInformation.title"/>						
+				</td>
 			</tr>
 			<tr>
 				<td colspan="2" >
 				<table border="0" cellpadding="5" cellspacing="0" width="100%" id="paricipantInformation" >
 					<tr>
-						<td class="formFieldWithNoTopBorder" width="365"  height="20" colspan="2">
+						<td class="formFieldNoBordersSimple" width="365"  height="20" colspan="2">
 							<b>  
-								<bean:message key="user.lastName" /> : 
+								<bean:message key="participant.name" /> : 
 							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="lastName" >
-								<%=formSPR.getLastName()%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="participantName" >
+								<%=formSPR.getParticipantName()%>
 							</logic:notEmpty>
 					     </td>
-						<td class="formField" width="365" height="20" colspan="2">
+						<td class="formFieldNoBordersSimple" width="365" height="20" colspan="2">
 							<b>
-								<bean:message key="user.firstName" /> : 
+								<bean:message key="participant.vitalStatus" /> : 
 							</b>
-							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="firstName" >
-				     			<%=formSPR.getFirstName()%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="vitalStatus" >
+				     			<%=formSPR.getVitalStatus()%>
 							</logic:notEmpty>
 					     </td>
 					</tr>
 					<tr>
-						<td class="formFieldWithNoTopBorder" width="50%" height="20" colspan="2">
+						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
 							<b>
 								<bean:message key="participant.birthDate" /> : 
 							</b>
@@ -243,7 +242,7 @@
 				     			<%=formSPR.getBirthDate()%>
 							</logic:notEmpty>
 					     </td>
-						<td class="formField" width="50%" height="20" colspan="2">
+						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
 							<b>
 								<bean:message key="participant.deathDate" /> : 
 							</b>
@@ -253,7 +252,7 @@
 					     </td>
 					</tr>
 					<tr>
-						<td class="formFieldWithNoTopBorder" width="50%" height="20" colspan="2">
+						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
 							<b>
 								<bean:message key="participant.ethnicity" /> : 
 							</b>
@@ -261,7 +260,7 @@
 				     			<%=formSPR.getEthinicity()%>
 							</logic:notEmpty>
 					     </td>
-						<td class="formField" width="50%" height="20" colspan="2">
+						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
 							<b>
 								<bean:message key="participant.race" /> : 
 							</b>
@@ -271,7 +270,7 @@
 					     </td>
 					</tr>
 					<tr>
-						<td class="formFieldWithNoTopBorder" width="50%" height="20" colspan="2">
+						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
 							<b>
 								<bean:message key="participant.gender" /> : 
 							</b>
@@ -279,7 +278,7 @@
 				     			<%=formSPR.getGender()%>
 							</logic:notEmpty>
 					     </td>
-						<td class="formField" width="50%" height="20" colspan="2">
+						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="2">
 							<b>
 								<bean:message key="participant.genotype" /> : 
 							</b>
@@ -289,7 +288,7 @@
 					     </td>
 					</tr>
 					<tr>
-						<td class="formFieldWithNoTopBorder" width="50%" height="20" colspan="4">
+						<td class="formFieldNoBordersSimple" width="50%" height="20" colspan="4">
 							<b>
 								<bean:message key="participant.socialSecurityNumber" /> : 
 							</b>
@@ -301,18 +300,18 @@
 
 					<!-- Medical Identifiers Begin here -->
 				 <tr>
-				     <td class="formTitle" height="20" colspan="4">
-				     	<bean:message key="participant.medicalIdentifier"/>
+				     <td class="formSubTitle" height="20" colspan="4">
+				     	<bean:message key="viewSPR.participantInformation.medicalIdentifiers"/>
 				     </td>
 				  </tr>
 				 <tr>
-				 	<td class="formSerialNumberLabel" width="5">
+				 	<td class="formLabelBorderlessLeftAndBold" width="5">
 				     	#
 				    </td>
-				    <td class="formLeftSubTableTitle">
+				    <td class="formLabelBorderlessLeftAndBold">
 						<bean:message key="medicalrecord.source"/>
 					</td>
-				    <td class="formRightSubTableTitle">
+				    <td class="formLabelBorderlessLeftAndBold">
 						<bean:message key="medicalrecord.number"/>
 					</td>
 				 </tr>	 
@@ -326,14 +325,14 @@
 					{
 				%>
 				 <tr>
-				 	<td class="formFieldWithNoTopBorder" width="5"><%=i%>.
+				 	<td class="formFieldNoBordersSimple" width="5"><%=i%>.
 				 		
 				 	</td>
-				      <td class="formField">
+				      <td class="formFieldNoBordersSimple">
 				     	<%=formSPR.getValue(siteName)%>
 
 				    </td>
-				    <td  class="formField" colspan="2">
+				    <td  class="formFieldNoBordersSimple" colspan="2">
 						<%=formSPR.getValue(medicalRecordNumber)%>
 				    </td>
 				 </tr>
@@ -409,7 +408,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="3" class="formField">
+				<td colspan="3" class="formLabelAllBorder">
 					<table border="0" cellpadding="0" width="100%" cellspacing="0" id="categoryHighlighter" >
 						<tr>
 							<td class="formSubTitle" height="20"  nowrap>

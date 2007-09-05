@@ -35,11 +35,11 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/**
 	 * String for first name of participant
 	 */
-	protected String firstName;
+	protected String participantName;
 	/**
-	 * String for last name of participant
+	 * String for vital status of participant
 	 */
-	protected String lastName;
+	protected String vitalStatus;
 	/**
 	 * String for birth date of participant
 	 */
@@ -197,21 +197,21 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	}
 	
 	/**
-	 * This is the method to get first name of particicpant
+	 * This is the method to get name of particicpant
 	 * @return firstName First name of participant
 	 */
-	public String getFirstName()
+	public String getParticipantName()
 	{
-		return firstName;
+		return participantName;
 	}
 	
 	/**
-	 * This is the method to set first name of particicpant
+	 * This is the method to set name of particicpant
 	 * @param firstName First name of participant
 	 */
-	public void setFirstName(String firstName)
+	public void setParticipantName(String firstName)
 	{
-		this.firstName = firstName;
+		this.participantName = firstName;
 	}
 	
 	/**
@@ -233,21 +233,21 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	}
 	
 	/**
-	 * This is the method to get last name of particicpant
+	 * This is the method to get vital status of particicpant
 	 * @return lastName Last name of participant
 	 */
-	public String getLastName()
+	public String getVitalStatus()
 	{
-		return lastName;
+		return vitalStatus;
 	}
 	
 	/**
-	 * This is the method to set last name of particicpant
+	 * This is the method to set vital status of particicpant
 	 * @param lastName Last name of participant
 	 */
-	public void setLastName(String lastName)
+	public void setVitalStatus(String vitalStatus)
 	{
-		this.lastName = lastName;
+		this.vitalStatus = vitalStatus;
 	}
 	
 	/**
@@ -477,8 +477,8 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	{
 		try
 		{
-			this.firstName=participant.getFirstName();
-			this.lastName=participant.getLastName();
+			this.participantName=participant.getLastName()+","+participant.getFirstName();
+			this.vitalStatus=participant.getVitalStatus();
 			if(participant.getBirthDate()!=null)
 			{
 				this.birthDate=Utility.parseDateToString(participant.getBirthDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
