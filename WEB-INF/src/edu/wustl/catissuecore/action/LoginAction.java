@@ -100,6 +100,8 @@ public class LoginAction extends Action
 	                	
 	                String result = userBizLogic.checkFirstLoginAndExpiry(validUser);
 													
+					setSecurityParamsInSessionData(validUser, sessionData);
+
 					if(!result.equals(Constants.SUCCESS)) 
 					{
 	                	  ActionErrors errors = new ActionErrors();
@@ -110,15 +112,7 @@ public class LoginAction extends Action
 	                      request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_CHANGE_PASSWORD);
 	                      return mapping.findForward(Constants.ACCESS_DENIED);
 	                }
-					String userRole = SecurityManager.getInstance(LoginAction.class).getUserGroup(validUser.getCsmUserId());
-					if(userRole.equals(Roles.ADMINISTRATOR) || userRole.equals(Roles.SUPERVISOR))
-		            {
-						sessionData.setSecurityRequired(false);
-		            }
-		            else
-		            {
-		            	sessionData.setSecurityRequired(true);
-		            }
+					
 					//Determining Role Name- Start
 	                /**
 	                 * Name : Virender Mehta
@@ -157,6 +151,26 @@ public class LoginAction extends Action
             return (mapping.findForward(Constants.FAILURE));
         }
     }
+    /**
+     * To set the Security Parameters in the given SessionDataBean object depending upon the role of the user.
+     * @param validUser reference to the User.
+     * @param sessionData The reference to the SessionDataBean object.
+     * @throws SMException
+     */
+	private void setSecurityParamsInSessionData(User validUser, SessionDataBean sessionData)
+			throws SMException
+	{
+		String userRole = SecurityManager.getInstance(LoginAction.class).getUserGroup(
+				validUser.getCsmUserId());
+		if (userRole.equals(Roles.ADMINISTRATOR) || userRole.equals(Roles.SUPERVISOR))
+		{
+			sessionData.setSecurityRequired(false);
+		}
+		else
+		{
+			sessionData.setSecurityRequired(true);
+		}
+	}
     /**
      * Patch ID: 3842_2
      * This function will take LoginID for user and return the appropriate default page.
