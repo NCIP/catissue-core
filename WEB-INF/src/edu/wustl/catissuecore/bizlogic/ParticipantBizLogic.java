@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,8 +28,8 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -42,6 +43,7 @@ import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -61,15 +63,18 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Participant participant = (Participant) obj;
+		
 		dao.insert(participant, sessionDataBean, true, true);
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
-
+		
+		
 		if(participantMedicalIdentifierCollection == null ) 
 		{
-			participantMedicalIdentifierCollection = new HashSet();
+			participantMedicalIdentifierCollection = new LinkedHashSet();
 		}
 		if (participantMedicalIdentifierCollection.isEmpty())
 		{
@@ -89,6 +94,25 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			//dao.insert(pmIdentifier, sessionDataBean, true, true);
 		}
 
+		//Inserting collection Protocol Registration info in the database after setting the participant associated.
+		//Abhishek Mehta
+		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+		
+		if(collectionProtocolRegistrationCollection == null ) 
+		{
+			collectionProtocolRegistrationCollection = new LinkedHashSet();
+		}
+		
+		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
+		while (itCollectionProtocolRegistrationCollection.hasNext())
+		{
+			CollectionProtocolRegistration collectionProtocolRegistrationIdentifier = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();	        
+			collectionProtocolRegistrationIdentifier.setParticipant(participant);
+			collectionProtocolRegistrationIdentifier.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			cprBizLogic.insert(collectionProtocolRegistrationIdentifier, dao, sessionDataBean);
+		}
+		
 		Set protectionObjects = new HashSet();
 		protectionObjects.add(participant);
 		try
@@ -100,7 +124,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			throw handleSMException(e);
 		}
 	}
-
+	
 	/**
 	 * This method gets called after insert method. Any logic after insertnig object in database can be included here.
 	 * @param obj The inserted object.
@@ -112,6 +136,16 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 			updateCache(obj);
+			Participant participant = (Participant) obj;
+			Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+			Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
+			ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
+			while (itCollectionProtocolRegistrationCollection.hasNext())
+			{
+				CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();
+				participantRegCacheManager.registerParticipant(collectionProtocolRegistration.getCollectionProtocol().getId(), collectionProtocolRegistration
+						.getParticipant().getId(), collectionProtocolRegistration.getProtocolParticipantIdentifier());
+			}
 	}
 	
 	/**
@@ -126,7 +160,77 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	protected void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException,
 			UserNotAuthorizedException
 	{
-		   updateCache(currentObj);
+		
+		updateCache(currentObj);
+		
+		//Added updation of Collection Protocol Registration
+		//(Abhishek Mehta)
+		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+		
+		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
+	    
+		Participant participant = (Participant) currentObj;
+		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
+		
+		Participant oldparticipant = (Participant) oldObj;
+		Collection oldcollectionProtocolRegistrationCollection = oldparticipant.getCollectionProtocolRegistrationCollection();
+		
+		Long cpId , participantId;
+		String protocolParticipantId;
+		
+		CollectionProtocolRegistration oldCollectionProtocolRegistration;
+		CollectionProtocolRegistration collectionProtocolRegistration;
+		while(itCollectionProtocolRegistrationCollection.hasNext())
+		{
+			collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();
+			cpId = collectionProtocolRegistration.getCollectionProtocol().getId();
+			
+			//getting Old cpr
+			oldCollectionProtocolRegistration = getCollectionProtocolRegistrationOld(cpId,oldcollectionProtocolRegistrationCollection);
+			if(oldCollectionProtocolRegistration == null)
+			{
+				participantId = collectionProtocolRegistration.getParticipant().getId();
+				protocolParticipantId = collectionProtocolRegistration.getProtocolParticipantIdentifier();
+	
+				if (protocolParticipantId == null)
+					protocolParticipantId = "";
+	
+				if (collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+				{
+					participantRegCacheManager.deRegisterParticipant(cpId, participantId, protocolParticipantId);
+				}
+				else
+				{
+					participantRegCacheManager.registerParticipant(cpId, participantId, protocolParticipantId);
+				}
+			}
+			else
+			{
+				cprBizLogic.postUpdate(dao, collectionProtocolRegistration, oldCollectionProtocolRegistration, sessionDataBean);
+			}
+		}
+	
+	}
+	/**
+	 * Returns CollectionProtocolRegistration object if it exist in collection
+	 * @param collectionProtocolId
+	 * @param collectionProtocolRegistrationCollection
+	 * @return
+	 */
+	private CollectionProtocolRegistration getCollectionProtocolRegistrationOld(long collectionProtocolId, Collection collectionProtocolRegistrationCollection)
+	{
+		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
+		while(itCollectionProtocolRegistrationCollection.hasNext())
+		{
+			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();
+			long cpId = collectionProtocolRegistration.getCollectionProtocol().getId();
+			if(cpId == collectionProtocolId)
+			{
+				return collectionProtocolRegistration;
+			}
+		}
+		return null;
 	}
 	/**
 	 *  This method updates the cache for MAP_OF_PARTICIPANTS, should be called in postInsert/postUpdate 
@@ -135,7 +239,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	private synchronized void updateCache(Object obj)
 	{
 		Participant participant = (Participant) obj;
-       //  getting instance of catissueCoreCacheManager and getting participantMap from cache
+        //getting instance of catissueCoreCacheManager and getting participantMap from cache
 		CatissueCoreCacheManager catissueCoreCacheManager = null;
 		Map mapOfParticipantMedicalIdentifierCollection = new HashMap();
 		try
@@ -178,7 +282,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				}   
 				participantMap.put(participant.getId(), participant);
 			}
-    	}
+		}
 		catch (CacheException e)
 		{
 			Logger.out.debug("Exception occured while getting instance of cachemanager");
@@ -204,7 +308,6 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		dao.audit(obj, oldObj, sessionDataBean, true);
 
 		Collection oldParticipantMedicalIdentifierCollection = (Collection) oldParticipant.getParticipantMedicalIdentifierCollection();
-
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 		Iterator it = participantMedicalIdentifierCollection.iterator();
 
@@ -235,6 +338,37 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			dao.audit(pmIdentifier, oldPmIdentifier, sessionDataBean, true);
 		}
 
+		//Updating the Collection Protocol Registration of the participant
+		//(Abhishek Mehta)
+		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+		
+		Collection oldCollectionProtocolRegistrationCollection = oldParticipant.getCollectionProtocolRegistrationCollection();
+		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+		
+		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
+		while (itCollectionProtocolRegistrationCollection.hasNext())
+		{
+			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();
+			
+			ApiSearchUtil.setCollectionProtocolRegistrationDefault(collectionProtocolRegistration);
+	        
+	        collectionProtocolRegistration.setParticipant(participant);
+	        
+	        if(collectionProtocolRegistration.getId() == null) // If Collection Protocol Registration is not happened for given participant
+			{
+	        	collectionProtocolRegistration.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+	        	cprBizLogic.insert(collectionProtocolRegistration, dao, sessionDataBean);
+	        	continue;
+			}
+	        
+	       
+			//Audit of CollectionProtocolRegistration.
+			CollectionProtocolRegistration oldcollectionProtocolRegistration = (CollectionProtocolRegistration) getCorrespondingOldObject(
+					oldCollectionProtocolRegistrationCollection, collectionProtocolRegistration.getId());
+			
+			cprBizLogic.update(dao, collectionProtocolRegistration, oldcollectionProtocolRegistration, sessionDataBean);
+		}
+		
 		//Disable the associate collection protocol registration
 		Logger.out.debug("participant.getActivityStatus() " + participant.getActivityStatus());
 		if (participant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
@@ -255,7 +389,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			boolean assignOperation) throws SMException, DAOException
 	{
 		Logger.out.debug(" privilegeName:" + privilegeName + " objectType:" + objectType + " objectIds:"
-				+ edu.wustl.common.util.Utility.getArrayString(objectIds) + " userId:" + userId + " roleId:" + roleId + " assignToUser:"
+				+ Utility.getArrayString(objectIds) + " userId:" + userId + " roleId:" + roleId + " assignToUser:"
 				+ assignToUser);
 		super.setPrivilege(dao, privilegeName, objectType, objectIds, userId, roleId, assignToUser, assignOperation);
 
@@ -281,7 +415,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		List listOfSubElement = super.getRelatedObjects(dao, CollectionProtocolRegistration.class,
 				new String[]{Constants.PARTICIPANT_IDENTIFIER_IN_CPR + "." + Constants.SYSTEM_IDENTIFIER}, new String[]{Constants.SYSTEM_IDENTIFIER},
 				objectIds);
-		Logger.out.debug(" CPR Ids:" + edu.wustl.common.util.Utility.getArrayString(objectIds) + " Related Participant Ids:" + listOfSubElement);
+		Logger.out.debug(" CPR Ids:" + Utility.getArrayString(objectIds) + " Related Participant Ids:" + listOfSubElement);
 		if (!listOfSubElement.isEmpty())
 		{
 			super.setPrivilege(dao, privilegeName, Participant.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
@@ -289,6 +423,47 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		}
 	}
 
+	/**
+	 * This method check for duplicate collection protocol registration for given participant
+	 * @param collectionProtocolRegistrationCollection
+	 * @return
+	 */
+	private boolean isDuplicateCollectionProtocol(Collection collectionProtocolRegistrationCollection)
+	{
+		Collection newCollectionProtocolRegistrationCollection = new LinkedHashSet();
+		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
+		while (itCollectionProtocolRegistrationCollection.hasNext())
+		{
+			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();	        
+			long collectionProtocolId = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
+			if(isCollectionProtocolExist(newCollectionProtocolRegistrationCollection,collectionProtocolId))
+			{
+				return true; 
+			}
+			else
+			{
+				newCollectionProtocolRegistrationCollection.add(collectionProtocolRegistration);
+			}
+		}
+		return false;
+	}
+
+	private boolean isCollectionProtocolExist(Collection collectionProtocolRegistrationCollection , long collectinProtocolId){
+		boolean isCollectionProtocolExist = false;
+		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
+		while (itCollectionProtocolRegistrationCollection.hasNext())
+		{
+			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();	        
+			long cpId = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
+			if(cpId == collectinProtocolId){
+				isCollectionProtocolExist = true;
+				return isCollectionProtocolExist;
+			}
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
@@ -373,6 +548,29 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		 		}
 			}
 		}
+		
+		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+		if(collectionProtocolRegistrationCollection != null && !collectionProtocolRegistrationCollection.isEmpty())
+		{
+			Iterator itrCollectionProtocolRegistration = collectionProtocolRegistrationCollection.iterator();
+			while(itrCollectionProtocolRegistration.hasNext())
+			{
+				CollectionProtocolRegistration collectionProtocolRegistrationIdentifier = (CollectionProtocolRegistration) itrCollectionProtocolRegistration.next();
+				long collectionProtocolTitle = collectionProtocolRegistrationIdentifier.getCollectionProtocol().getId().longValue();
+				String collectionProtocolRegistrationDate = Utility.parseDateToString(collectionProtocolRegistrationIdentifier.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+				String errorKey = validator.validateDate(collectionProtocolRegistrationDate, true);
+				if(collectionProtocolTitle <=0 || errorKey.trim().length() > 0)
+		 		{		 			
+					throw new DAOException(ApplicationProperties.getValue("errors.participant.collectionProtocolRegistration.missing"));	
+		 		}
+			}
+		}
+		
+		boolean isDuplicateCollectionProtocol = isDuplicateCollectionProtocol(collectionProtocolRegistrationCollection);
+		if(isDuplicateCollectionProtocol){
+			throw new DAOException(ApplicationProperties.getValue("errors.participant.duplicate.collectionProtocol"));	
+	 	}
+		
 		//Validation for Blank Participant 
 //		if (validator.isEmpty(participant.getLastName())
 //				&& validator.isEmpty(participant.getFirstName())
@@ -689,5 +887,4 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	{
 		return new ArrayList();
 	}
-		
 }

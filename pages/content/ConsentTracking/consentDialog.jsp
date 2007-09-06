@@ -64,6 +64,10 @@ function getButtonStatus(element)
 			}
 		}
 		parent.opener.document.forms[0].submit();
+		if(parent.opener.document.forms[0].name == "consentForm")
+		{
+			parent.opener.self.close();
+		}
 		self.close();
 	}
 
@@ -97,6 +101,10 @@ function getStatus(element)
 			parent.opener.document.forms[0].action="<%=Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION%>";
 		}
 		parent.opener.document.forms[0].submit();
+		if(parent.opener.document.forms[0].name == "consentForm")
+		{
+			parent.opener.self.close();
+		}
 		self.close();
 	}
 }

@@ -77,20 +77,19 @@ public class ParticipantSelectAction extends BaseAction
 		Participant participant=(Participant)abstractDomain;
 		
 		Logger.out.info("Last name in ParticipantSelectAction:"+participant.getLastName());
-	/**
-	 * Name: Vijay Pande
-	 * Reviewer Name: Aarti Sharma
-	 * Instead of setAllValues() method retrieveFroEditMode() method is called to bypass lazy loading error in domain object
-	 */	
+		/**
+		 * Name: Vijay Pande
+		 * Reviewer Name: Aarti Sharma
+		 * Instead of setAllValues() method retrieveFroEditMode() method is called to bypass lazy loading error in domain object
+		 */	
 		//participantForm.setAllValues(participant);
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		defaultBizLogic.populateUIBean(Participant.class.getName(),participant.getId(), abstractForm);
+		defaultBizLogic.populateUIBean(Participant.class.getName(),participant.getId(), participantForm);
 		
 		//Setting the ParticipantForm in request for storing selected participant's data.
 		//ParticipantSelect attribute is used for deciding in next action weather that action is called after ParticipantSelectAction or not
 		request.setAttribute("participantForm1",participantForm);
 		request.setAttribute("participantSelect","yes");
-		
 		        
 		//Attributes to decide AddNew action
         String submittedFor = (String)request.getParameter(Constants.SUBMITTED_FOR);
@@ -232,5 +231,4 @@ public class ParticipantSelectAction extends BaseAction
 
         return forwardToHashMap;
     }
-
 }

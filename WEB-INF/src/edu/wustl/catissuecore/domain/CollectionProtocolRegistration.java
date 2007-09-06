@@ -96,7 +96,9 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 */
 	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
 	
-
+	//Abhishek Mehta
+	//Consent Availability for collection protocol
+	protected String isConsentAvailable;
 	
 	/**
 	 * @return the consentSignatureDate
@@ -503,6 +505,14 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 
 	public void setConsentWithdrawalOption(String consentWithdrawalOption) {
 		this.consentWithdrawalOption = consentWithdrawalOption;
+	}
+
+	public String getIsConsentAvailable() {
+		return isConsentAvailable;
+	}
+
+	public void setIsConsentAvailable(String isConsentAvailable) {
+		this.isConsentAvailable = isConsentAvailable;
 	}
 	
 }

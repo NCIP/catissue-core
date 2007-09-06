@@ -16,7 +16,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -47,6 +46,7 @@ public class ParticipantLookupAction extends BaseAction
 	 * @throws Exception generic exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception 
@@ -67,10 +67,14 @@ public class ParticipantLookupAction extends BaseAction
 		ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
 		Logger.out.debug("Participant Id :"+request.getParameter("participantId"));
 		//checks weather participant is selected from the list and so forwarding to next action instead of participant lookup.
-		if(request.getParameter("participantId")!=null &&!request.getParameter("participantId").equals("null")&&!request.getParameter("participantId").equals("")&&!request.getParameter("participantId").equals("0"))
+		//Abhishek Mehta
+		if(request.getAttribute("continueLookup") == null)
 		{
-			Logger.out.info("inside the participant mapping");
-			return mapping.findForward("participantSelect");
+			if(request.getParameter("participantId")!=null &&!request.getParameter("participantId").equals("null")&&!request.getParameter("participantId").equals("")&&!request.getParameter("participantId").equals("0"))
+			{
+				Logger.out.info("inside the participant mapping");
+				return mapping.findForward("participantSelect");
+			}
 		}
 		List matchingParticipantList = bizlogic.getListOfMatchingParticipants(participant);
 		
@@ -78,7 +82,7 @@ public class ParticipantLookupAction extends BaseAction
 		if (matchingParticipantList!=null && matchingParticipantList.size() > 0)
 		{
 			messages=new ActionMessages();
-			messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("participant.lookup.success","Submit was not successful because some matching participants found."));
+			messages.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("participant.lookup.success","Submit was not successful because some matching participants found."));
    			//Creating the column headings for Data Grid
 			List columnList = getColumnHeadingList(bizlogic);
 			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
@@ -107,10 +111,13 @@ public class ParticipantLookupAction extends BaseAction
 		}
 		
 		request.setAttribute("participantId","");
-		if (messages != null)
-        {
-            saveMessages(request,messages);
-        }
+		if(request.getAttribute("continueLookup") == null)
+		{
+			if (messages != null)
+	        {
+	            saveMessages(request,messages);
+	        }
+		}
 		Logger.out.debug("target:"+target);
 		return (mapping.findForward(target));
 	}
@@ -172,6 +179,7 @@ public class ParticipantLookupAction extends BaseAction
 				}
 			}
 			participantInfo.add(Utility.toString(medicalRecordNo));
+			participantInfo.add(participant.getId());
 			participantDisplayList.add(participantInfo);
 			
 		}

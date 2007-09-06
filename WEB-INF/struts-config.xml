@@ -18,7 +18,7 @@ PUBLIC
 		<form-bean name="categorySearchForm" type="edu.wustl.catissuecore.actionForm.CategorySearchForm"/>
 		<form-bean name="baseOrderItemForm" type="edu.wustl.catissuecore.actionForm.BaseOrderItemForm"/>
 		<form-bean name="viewSurgicalPathologyReportForm" type="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"/>
-
+		<form-bean name="consentForm" type="edu.wustl.catissuecore.actionForm.ConsentResponseForm"/>
         <form-bean name="userForm" type="edu.wustl.catissuecore.actionForm.UserForm"/>
 		<form-bean name="reportedProblemForm" type="edu.wustl.catissuecore.actionForm.ReportedProblemForm"/>
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>		
@@ -733,7 +733,7 @@ PUBLIC
 			<forward name="success" path="/Participant.do?pageOf=pageOfParticipant" />
 			<forward name="participantAdd" path="/ParticipantAdd.do"/>
 			<forward name="createParticipantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
-			<forward name="participantSelect" path="/ParticipantSelect.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />			
+			<forward name="participantSelect" path="/ParticipantSelect.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="redirectTo" path="" />
 		</action>
@@ -743,13 +743,24 @@ PUBLIC
 			name="participantForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
+			<forward name="success" path="/ParticipantSearch.do?operation=edit&amp;pageOf=pageOfSelectedParticipant&amp;menuSelected=12"/>
 <!--			<forward name="pageOfSCGParticipant" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />-->
 			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 <!--			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />-->
 <!--			<forward name="redirectTo" path="" />-->
 			<forward name="createParticipantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
-			<forward name="participantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;showConsents=yes" />		
+			<forward name="participantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;showConsents=yes" />
+			<forward name="editParticipant" path="/ParticipantRegistrationSelect.do?operation=edit"/>	
+		</action>
+		
+		<action path="/ParticipantRegistrationSelect"
+			type="edu.wustl.catissuecore.action.ParticipantRegistrationSelectAction"
+			name="participantForm"
+			validate="true"
+			scope="request">
+			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12&amp;fromSubmitAction=true" />
+			<forward name="pageOfParticipant" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12&amp;fromSubmitAction=true" />
+			<forward name="failure" path="/ParticipantLookup.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 		</action>
 		
 		<action path="/ParticipantEdit"
@@ -758,12 +769,14 @@ PUBLIC
 			validate="true"
 			input="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
 			scope="request">
-			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
+			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12&amp;fromSubmitAction=true" />
 			<forward name="query" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12" />
-			<forward name="pageOfParticipantCPQuery" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12" />			
+			<forward name="pageOfParticipantCPQuery" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12&amp;fromSubmitAction=true" />
 			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="redirectTo" path="" />
+			<forward name="blankPage" path="/manageBioSpecimenHomeAction.do" />
 			<forward name="createParticipantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 		</action>
 	
 	   <action path="/ParticipantSearch"
@@ -772,8 +785,9 @@ PUBLIC
 			validate="false"
 			input="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
 			scope="request">
-			<forward name="pageOfParticipantCPQuery" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery"/>
+			<forward name="pageOfParticipantCPQuery" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="pageOfParticipant" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"/>
+			<forward name="pageOfSelectedParticipant" path="/ParticipantEdit.do?operation=edit"/>
 			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"/>
 		</action>
 
@@ -784,6 +798,20 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.viewParticipantSurgicalPathologyReportDef"/>
 		</action>
+		
+		<action path="/ConsentDisplay"
+			type="edu.wustl.catissuecore.action.ConsentResponseDisplayAction"
+			name="consentForm"
+			scope="request">
+			<forward name="pageOfConsent" path=".catissuecore.participantConsentsDef"/>
+		</action>
+		
+		<action path="/ConsentSubmit"
+			type="edu.wustl.catissuecore.action.ConsentResponseSubmitAction"
+			name="consentForm"
+			scope="request">
+		</action>
+		
 		<!-- Participant Actions Ends -->
 		
 		<!-- Collection Protocol Registration Actions Begins -->
@@ -1297,7 +1325,7 @@ PUBLIC
 			validate="false"
 			input="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"
 			scope="request">
-			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"/>			
+			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"/>
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"/>
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14&amp;showConsents=yes"/>			
 		</action>
@@ -1413,7 +1441,7 @@ PUBLIC
 			validate="false"
 			input="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15"
 			scope="request">
-			<forward name="pageOfNewSpecimen" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable"/>		
+			<forward name="pageOfNewSpecimen" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable"/>
 			<forward name="failure" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable"/>
 			<forward name="pageOfNewSpecimenCPQuery" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;showConsents=yes&amp;tableId4=disable"/>			
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
@@ -3693,7 +3721,8 @@ PUBLIC
 		<forward name="success" path="/QueryParticipant.do?pageOf=pageOfParticipantCPQuery" />
 		<forward name="participantAdd" path="/CPQueryParticipantAdd.do"/>
 		<forward name="createParticipantRegistration" path="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
-		<forward name="participantSelect" path="/CPQueryParticipantSelect.do?operation=add&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />			
+		<forward name="participantSelect" path="/CPQueryParticipantSelect.do?operation=add&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
+		<forward name="specimenCollectionGroup" path="/CPQueryParticipantSelect.do?operation=add&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />			
 		<forward name="failure" path="/QueryParticipant.do?operation=add&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
 		<forward name="redirectTo" path="" />
 	</action>
@@ -3703,17 +3732,30 @@ PUBLIC
 			name="participantForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
+			<forward name="success" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantSelectCPQuery&amp;menuSelected=12" />
 			<forward name="failure" path="/QueryParticipant.do?operation=add&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
+			<forward name="pageOfParticipantCPQuery" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
+			<forward name="specimenCollectionGroup" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
 			<forward name="createParticipantRegistration" path="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
 			<forward name="participantRegistration" path="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery" />		
 		</action>
-		
+	
+	<action path="/CPQueryParticipantRegistrationSelect"
+		type="edu.wustl.catissuecore.action.ParticipantRegistrationSelectAction"
+		name="participantForm"
+		validate="true"
+		scope="request">
+		<forward name="success" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12&amp;fromSubmitAction=true" />
+		<forward name="pageOfParticipantCPQuery" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12&amp;fromSubmitAction=true" />
+		<forward name="failure" path="/CPQueryParticipantLookup.do?operation=add&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
+	</action>
+			
 	<action path="/QueryParticipantSearch"
 	    type="edu.wustl.common.action.CommonSearchAction"
 		name="participantForm"
 		validate="false"
 		scope="request">
+		<forward name="pageOfParticipantSelectCPQuery" path="/QueryParticipantEdit.do?operation=edit"/>
 		<forward name="pageOfParticipantQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=query"/>
 		<forward name="pageOfParticipantCPQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery"/>
 		<forward name="failure" path="/QueryParticipant.do?pageOf=query"/>
@@ -3727,9 +3769,10 @@ PUBLIC
 		<forward name="success" path="/QueryParticipantSearch.do?pageOf=pageOfParticipantCPQuery" />
 		<forward name="pageOfSCGParticipant" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />
 		<forward name="failure" path="/QueryParticipant.do?operation=add&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
-		<forward name="specimenCollectionGroup" path="/CPQuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />
+		<forward name="specimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />
 		<forward name="redirectTo" path="" />
 		<forward name="createParticipantRegistration" path="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
+		<forward name="pageOfParticipantCPQuery" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12&amp;fromSubmitAction=true" />
 		<forward name="participantRegistration" path="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery" />
 	</action>
 		
@@ -3740,8 +3783,9 @@ PUBLIC
 		input="/QueryParticipant.do?operation=edit&amp;pageOf=query"
 		scope="request">
 		<forward name="query" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12" />
-		<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />			
+		<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12&amp;fromSubmitAction=true" />			
 		<forward name="specimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=13" />
+		<forward name="blankPage" path="/blankScreenAction.do?pageOf=pageOfParticipantCPQuery" />
 		<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 	</action>
 
@@ -3761,10 +3805,13 @@ PUBLIC
 		validate="true"
 		input="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery"
 		scope="request">
-		<forward name="success" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />			
+		<forward name="success" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12&amp;fromSubmitAction=true" />			
 		<forward name="specimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=13" />
+		<forward name="pageOfParticipantCPQuery" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12&amp;fromSubmitAction=true" />
+		<forward name="blankPage" path="/blankScreenAction.do?pageOf=pageOfParticipantCPQuery" />
 		<forward name="failure" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
 	</action>
+	
 	<action path="/CPQueryParticipantRegistrationAddNew"
 			type="edu.wustl.common.action.AddNewAction"
 			name="collectionProtocolRegistrationForm"

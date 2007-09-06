@@ -468,6 +468,13 @@ td.formField{ /* for the cell that contains the form elements */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   background-color:#F4F4F5; /* constant: light gray */
 }
+td.formFieldWithoutBorder{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  background-color:#F4F4F5; /* constant: light gray */
+}
+
 td.formFieldBottom{ /* for the cell with only bottom border needed */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
@@ -542,6 +549,13 @@ td.formSerialNumberField{ /* for the cell that contains the Serial Number */
   text-align:left;
 }
 
+.formLabelBorderlessCenter{ /* for the non-required form labels */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  background-color:#F4F4F5; /* constant: light gray */
+  color:#000000; /* constant: black */
+  text-align:center;
+}
 
 .formLabelLeft{ /* for the non-required form labels */
   font-family:arial,helvetica,verdana,sans-serif;
@@ -1064,6 +1078,15 @@ td.formFieldAddMore{ /* for the cell that contains the form elements */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+
+.formSubTitleWithoutBorder{ /* for specimen requirements in participant page */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+  background-color:#CCCCCC; /* constant: medium gray */
+  color:#000000; /* constant: black */
   text-align:left;
 }
 

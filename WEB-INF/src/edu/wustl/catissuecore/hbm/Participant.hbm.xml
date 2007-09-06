@@ -161,7 +161,7 @@
             name="collectionProtocolRegistrationCollection"
             table="CATISSUE_COLL_PROT_REG"
             lazy="true"
-            inverse="false"
+            inverse="true"
             cascade="none"
             sort="unsorted"
         >

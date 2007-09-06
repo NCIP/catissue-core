@@ -13,25 +13,36 @@ package edu.wustl.catissuecore.actionForm;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bean.ConsentBean;
+import edu.wustl.catissuecore.bean.ConsentResponseBean;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -42,7 +53,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author gautam_shetty
  */
 
-public class ParticipantForm extends AbstractActionForm implements Serializable
+public class ParticipantForm extends AbstractActionForm implements Serializable 
 {
     
     private static final long serialVersionUID = 1234567890L;
@@ -115,12 +126,37 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     /**
 	 * Map to handle values of all the Participant Medical Identifiers
 	 */
-	protected Map values = new HashMap();
+	protected Map values = new LinkedHashMap();
     
+	
 	/**
-	 * Counter that contains number of rows in the 'Add More' functionality.
+ 	 * Abhishek Mehta
+ 	 */
+	/**
+	 * Map to handle values of registration of a Participant to a Collection Protocol. 
+	 */
+	protected Map collectionProtocolRegistrationValues = new LinkedHashMap();
+	
+	/**
+	 * Consent Response Collection for given collection protocols 
+	 */
+	protected Collection <ConsentResponseBean> consentResponseBeanCollection;
+	
+	/**
+	 * Consent Response hashtable entered by the user.
+	 */
+	protected Hashtable consentResponseHashTable;
+	
+	
+	/**
+	 * Counter that contains number of rows in the 'Add More' functionality for medical identifier.
 	 */
 	private int valueCounter;
+	
+	/**
+	 * Counter that contains number of rows in the 'Add More' functionality for registration of a Participant to a Collection Protocol.
+	 */
+	private int collectionProtocolRegistrationValueCounter;
 	
 	
 	private long cpId = -1; 
@@ -129,7 +165,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      */
     public ParticipantForm()
     {
-        
+    	
     }
 	/**
 	 * @param ssnString Setting SSN number
@@ -197,7 +233,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         
         if(medicalIdentifierCollection != null)
         {
-        	values = new HashMap();
+        	values = new LinkedHashMap();
         	int i = 1;
         	
         	Iterator it = medicalIdentifierCollection.iterator();
@@ -228,14 +264,145 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         	valueCounter = medicalIdentifierCollection.size();
         }
         
-        //At least one row should be displayed in ADD MORE therefore
-		if(valueCounter == 0)
-		{
-			valueCounter = 1;
-		}
-   }
+        
+        
+        //Populating the map with the registrations of a Participant to a Collection Protocol. 
+        //(Abhishek Mehta)
+        Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+        
+        if(collectionProtocolRegistrationCollection != null)
+        {
+        	collectionProtocolRegistrationValues = new LinkedHashMap();
+        	if(consentResponseHashTable ==null)
+        	{
+        		consentResponseHashTable = new Hashtable();
+        	}
+        	consentResponseBeanCollection = new LinkedHashSet<ConsentResponseBean>();
+        	int i = 1;
+        	
+        	Iterator it = collectionProtocolRegistrationCollection.iterator();
+        	while(it.hasNext())
+        	{
+        		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)it.next();
+        		if(collectionProtocolRegistration.getActivityStatus() !=null && !collectionProtocolRegistration.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
+        		{
+	        		String collectionProtocolTitle = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_id";
+					String collectionProtocolParticipantId = "CollectionProtocolRegistration:"+i+"_protocolParticipantIdentifier";
+					String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:" + i +"_registrationDate";
+					String collectionProtocolIdentifier = "CollectionProtocolRegistration:" + i +"_id";
+					String isConsentAvailable = "CollectionProtocolRegistration:" + i +"_isConsentAvailable";
+					String isActive = "CollectionProtocolRegistration:" + i +"_activityStatus";
+					
+					Collection consentTierCollection = collectionProtocolRegistration.getCollectionProtocol().getConsentTierCollection();
+					if(consentTierCollection!=null && consentTierCollection.isEmpty())
+					{
+						collectionProtocolRegistrationValues.put(isConsentAvailable,Constants.NO_CONSENTS_DEFINED);
+					}
+					else if(consentTierCollection!=null && !consentTierCollection.isEmpty())
+					{
+						collectionProtocolRegistrationValues.put(isConsentAvailable,Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
+					}
+					
+					String date = Utility.parseDateToString(collectionProtocolRegistration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+					
+					collectionProtocolRegistrationValues.put(collectionProtocolTitle,Utility.toString(collectionProtocolRegistration.getCollectionProtocol().getId()));
+					collectionProtocolRegistrationValues.put(collectionProtocolParticipantId,Utility.toString(collectionProtocolRegistration.getProtocolParticipantIdentifier()));
+					collectionProtocolRegistrationValues.put(collectionProtocolRegistrationDate,date);
+					collectionProtocolRegistrationValues.put(collectionProtocolIdentifier,Utility.toString(collectionProtocolRegistration.getId()));
+					collectionProtocolRegistrationValues.put(isActive,Utility.toString(collectionProtocolRegistration.getActivityStatus()));
+					
+					getConsentResponse(collectionProtocolRegistration);
+					
+					i++;
+        		}	
+        	}
+        	collectionProtocolRegistrationValueCounter = (i-1);
+        }
+        
+        if(valueCounter == 0)
+        {
+        	valueCounter = 1;
+        }
+    }
+   
+    /*
+    * Get the consent Response from the database.
+    * (Abhishek Mehta)
+    */
+    private void getConsentResponse(CollectionProtocolRegistration collectionProtocolRegistration){
+    	try{
+    		
+   		 	long collectionProtocolID = collectionProtocolRegistration.getCollectionProtocol().getId();
+			String signedConsentURL = collectionProtocolRegistration.getSignedConsentDocumentURL();
+	    	User consentWitness = collectionProtocolRegistration.getConsentWitness();
+	    	long witnessId = -1;
+	    	if(consentWitness != null){
+	    		witnessId = consentWitness.getId();
+	    	}
+	    	
+	    	String consentSignatureDate = Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+	    	Collection consentResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
+	    	Collection consentResponse;
+	    	
+	    	if(consentResponseCollection == null || consentResponseCollection.isEmpty())
+			{
+	    		consentResponseCollection = collectionProtocolRegistration.getCollectionProtocol().getConsentTierCollection();
+	    		consentResponse = getConsentResponseCollection(consentResponseCollection , false);
+			}
+	    	else
+	    	{
+	    		consentResponse = getConsentResponseCollection(consentResponseCollection , true);
+	    	}
+	    	
+	    	
+	    	ConsentResponseBean consentResponseBean = new ConsentResponseBean(collectionProtocolID, signedConsentURL ,witnessId , consentSignatureDate , consentResponse, Constants.WITHDRAW_RESPONSE_NOACTION);
+			
+	    	String consentResponseKey = Constants.CONSENT_RESPONSE_KEY+collectionProtocolID;
+	    	if(consentResponseHashTable.containsKey(consentResponseKey))
+	    	{
+	    		throw new DAOException(ApplicationProperties.getValue("errors.participant.duplicate.collectionProtocol"));	
+	    	}
+			consentResponseHashTable.put(consentResponseKey, consentResponseBean);
+			consentResponseBeanCollection.add(consentResponseBean);
+		}catch(Exception e){
+    		Logger.out.debug(e.getMessage(), e);
+    	}
+    }
     
-    /**
+    
+    /*
+     * Returns the consentBean collection from consent tier response for given protocol collection id
+     * (Abhishek Mehta)
+     */
+    private Collection getConsentResponseCollection(Collection consentResponse , boolean isResponseExist){
+    	Collection<ConsentBean> consentBeanCollection = new HashSet<ConsentBean>();
+		if(consentResponse != null){
+			Iterator consentResponseIter = consentResponse.iterator();
+			while(consentResponseIter.hasNext())
+			{
+				ConsentBean consentBean = new ConsentBean();
+				if(isResponseExist){
+					ConsentTierResponse consentTierResponse=(ConsentTierResponse)consentResponseIter.next();
+					ConsentTier consentTier = consentTierResponse.getConsentTier();
+					consentBean.setConsentTierID(Utility.toString(consentTier.getId()));
+					consentBean.setStatement(consentTier.getStatement());
+					consentBean.setParticipantResponse(consentTierResponse.getResponse());
+					consentBean.setParticipantResponseID(Utility.toString(consentTierResponse.getId()));
+				}
+				else
+				{
+					ConsentTier consentTier=(ConsentTier)consentResponseIter.next();
+					consentBean.setConsentTierID(Utility.toString(consentTier.getId()));
+					consentBean.setStatement(consentTier.getStatement());
+					consentBean.setParticipantResponse("");
+					consentBean.setParticipantResponseID("");
+				}
+				consentBeanCollection.add(consentBean);
+			}
+		}
+		return consentBeanCollection;
+	}
+   /**
      * Returns the last name of the Participant. 
      * @return String the last name of the Participant.
      * @see #setFirstName(String)
@@ -401,7 +568,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      * Returns the id assigned to form bean.
      * @return the id assigned to form bean.
      */
-    public int getFormId()
+   public int getFormId()
     {
         return Constants.PARTICIPANT_FORM_ID;
     }
@@ -409,7 +576,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     /**
      * Resets the values of all the fields.
      */
-    protected void reset()
+	protected void reset()
     {
 //        this.id = -1;
 //        this.lastName = null;
@@ -433,6 +600,10 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      {
          ActionErrors errors = new ActionErrors();
          Validator validator = new Validator();
+         //Abhishek Mehta 
+         // To get the consent response from session.
+         HttpSession session =request.getSession();
+       
          try
          {
          	setRedirectValue(validator);
@@ -514,12 +685,114 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				}
 				index++;
 			}
+			
+			
+			//validation for add more block for collection protocol registration
+			//(Abhishek Mehta)
+			String collectionProtocolClassName = "CollectionProtocolRegistration:";
+			String collectionProtocolTitle = "_CollectionProtocol_id";
+			String collectionProtocolParticipantId = "_protocolParticipantIdentifier";
+			String collectionProtocolRegistrationDate = "_registrationDate";
+			String collectionProtocolIdentifier = "_id";
+			String isConsentAvailable = "_isConsentAvailable";
+			String isActive = "_activityStatus";
+			
+			index = 1;
+			int count = 0;
+			while(true)
+			{
+				String keyOne = collectionProtocolClassName + index + collectionProtocolTitle;
+				String keyTwo = collectionProtocolClassName + index + collectionProtocolParticipantId;
+				String keyThree = collectionProtocolClassName + index + collectionProtocolRegistrationDate;
+				String keyFour = collectionProtocolClassName + index + collectionProtocolIdentifier;
+				String keyFive = collectionProtocolClassName + index + isConsentAvailable;
+				String keySix = collectionProtocolClassName + index + isActive;
+				
+				String value1 = (String)collectionProtocolRegistrationValues.get(keyOne);
+				String value2 = (String)collectionProtocolRegistrationValues.get(keyTwo);
+				String value3 = (String)collectionProtocolRegistrationValues.get(keyThree);
+				String value6 = (String)collectionProtocolRegistrationValues.get(keySix);
+				
+				if(value6 == null)
+				{
+					value6 = Constants.ACTIVITY_STATUS_ACTIVE;
+				}
+				if(value6.equalsIgnoreCase(Constants.DISABLED))
+				{
+					forwardTo="blankPage";
+					request.setAttribute(Constants.PAGEOF, pageOf);
+					request.setAttribute("participantId", new Long(id).toString());
+					request.setAttribute("cpId", value1);
+				}
+				
+				String errorKey = validator.validateDate(value3, true);
+				if(value1 == null)
+				{
+					break;
+				}
+				else if(!validator.isValidOption(value1))
+				{
+					collectionProtocolRegistrationValues.remove(keyOne);
+					collectionProtocolRegistrationValues.remove(keyTwo);
+					collectionProtocolRegistrationValues.remove(keyThree);
+					collectionProtocolRegistrationValues.remove(keyFour);
+					collectionProtocolRegistrationValues.remove(keyFive);
+					collectionProtocolRegistrationValues.remove(keySix);
+					count++;
+				}
+				
+				else if((validator.isValidOption(value1) && !validator.isValidOption(value6)) || (!validator.isValidOption(value1) && !validator.isValidOption(value6)))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.participantRegistration.missing",ApplicationProperties.getValue("participant.msg")));
+					break;
+				}
+				
+				if(errorKey.trim().length() >0)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("participant.cpr.msg")));
+					break;
+				}
+				
+				index++;
+			}
+			
+			collectionProtocolRegistrationValueCounter = collectionProtocolRegistrationValueCounter-count;
+			
+			//Getting ConsentRegistrationBean from the  session and creating consent response map.
+			setConsentResponse(session); 
+			
 		}
 		catch(Exception excp)
 		{
 			Logger.out.error(excp.getMessage());
 		}
-        return errors;
+		
+		return errors;
+     }
+     
+     /*
+      * This method will get the consent response from session and creates ConsentResponseBean Collection
+      *  Abhishek Mehta 
+      */
+     private void setConsentResponse(HttpSession session){
+    	 
+    	 Hashtable consentResponsesHashTable = (Hashtable)session.getAttribute(Constants.CONSENT_RESPONSE);
+    	 if(consentResponsesHashTable != null){
+    		 int size = consentResponsesHashTable.size();
+    		 if(this.consentResponseBeanCollection == null){
+    			 this.consentResponseBeanCollection = new LinkedHashSet<ConsentResponseBean>();
+    		 }
+    		 
+    		 for(int i = 1 ; i <= size ; i++){
+	    		 String collectionProtocolID = (String)collectionProtocolRegistrationValues.get("CollectionProtocolRegistration:"+i+"_CollectionProtocol_id");
+	    		 String consentResponseKey = Constants.CONSENT_RESPONSE_KEY+collectionProtocolID;
+	    		 ConsentResponseBean consentResponseBean = (ConsentResponseBean)consentResponsesHashTable.get(consentResponseKey);
+	    		 
+	    		 if(consentResponseBean != null){
+	    			 this.consentResponseBeanCollection.add(consentResponseBean);
+	    		 }
+	    	 }
+    	 }
      }
      
      /**
@@ -570,6 +843,52 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
  		return this.values;
  	}
  	
+ 	//Collection Protocol Registration Map
+	//Abhishek Mehta
+ 	/**
+     * Associates the specified object with the specified key in the map.
+     * @param key the key to which the object is mapped.
+     * @param value the object which is mapped.
+     */
+    public void setCollectionProtocolRegistrationValue(String key, Object value) 
+    {
+   	 if (isMutable())
+   	 {
+   		collectionProtocolRegistrationValues.put(key, value);
+   	 }
+    }
+    
+    public void setDefaultCollectionProtocolRegistrationValue(String key, Object value) 
+    {
+   		collectionProtocolRegistrationValues.put(key, value);
+    }
+
+    /**
+     * Returns the object to which this map maps the specified key.
+     * @param key the required key.
+     * @return the object to which this map maps the specified key.
+     */
+    public Object getCollectionProtocolRegistrationValue(String key) 
+    {
+        return collectionProtocolRegistrationValues.get(key);
+    }
+    
+	/**
+	 * @return Returns the values.
+	 */
+	public Collection getAllCollectionProtocolRegistrationValues() 
+	{
+		return collectionProtocolRegistrationValues.values();
+	}
+	
+	public Map getCollectionProtocolRegistrationValues() {
+		return collectionProtocolRegistrationValues;
+	}
+	
+ 	public void setCollectionProtocolRegistrationValues(Map collectionProtocolRegistrationValues) {
+		this.collectionProtocolRegistrationValues = collectionProtocolRegistrationValues;
+	}
+	
  	/**
      * Returns the counter.
      * @return int the counter.
@@ -588,6 +907,27 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	public void setValueCounter(int counter)
 	{
 		this.valueCounter = counter;
+	}
+	
+	//Collection Protocol Registration Counter
+	//Abhishek Mehta
+	/**
+     * Returns the counter.
+     * @return int the counter.
+     * @see #setCounter(int)
+     */
+	public int getCollectionProtocolRegistrationValueCounter() {
+		return collectionProtocolRegistrationValueCounter;
+	}
+	
+	/**
+     * Sets the counter.
+     * @param counter The counter.
+     * @see #getCounter()
+     */
+	public void setCollectionProtocolRegistrationValueCounter(
+			int collectionProtocolRegistrationValueCounter) {
+		this.collectionProtocolRegistrationValueCounter = collectionProtocolRegistrationValueCounter;
 	}
 	
 	/**
@@ -699,4 +1039,28 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	{
 		this.cpId = cpId;
 	}
+	
+	/**
+	 * Returns the Consent Response HashTable entered by the user. 
+	 * @return
+	 */
+	public Hashtable getConsentResponseHashTable() {
+		return consentResponseHashTable;
+	}
+	
+	/**
+	 * Returns the Consent Response Collection entered by the user. 
+	 * @return
+	 */
+	public Collection<ConsentResponseBean> getConsentResponseBeanCollection() {
+		return consentResponseBeanCollection;
+	}
+	public void setConsentResponseBeanCollection(
+			Collection<ConsentResponseBean> consentResponseBeanCollection) {
+		this.consentResponseBeanCollection = consentResponseBeanCollection;
+	}
+	public void setConsentResponseHashTable(Hashtable consentResponseHashTable) {
+		this.consentResponseHashTable = consentResponseHashTable;
+	}
+	
 }

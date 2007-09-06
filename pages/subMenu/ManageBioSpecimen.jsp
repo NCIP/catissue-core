@@ -34,47 +34,10 @@
 				<b> <bean:message key="app.participant" /> </b>
 		</div>		
 		<div>
-			<a class="subMenuPrimary" href="Participant.do?operation=add&pageOf=pageOfParticipant&menuSelected=12"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="Participant.do?operation=add&pageOf=pageOfParticipant&menuSelected=12&clearConsentSession=true"><bean:message key="app.add" /></a> | 
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfParticipant&aliasName=Participant&menuSelected=12" >
 				<bean:message key="app.edit" />
 			</a>
-		</div>
-	</td>
-</tr>
-<!-- menu id : 13 -->
-<%
-	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 13, normalMenuClass , selectedMenuClass , hoverMenuClass);
-%>
-<tr>
-	<%=strMouseOut%>
-		<div>
-			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-				<b> <bean:message key="app.participantregister" /> </b>
-		</div>
-		<div>
-			<a class="subMenuPrimary" href="CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration&menuSelected=13"><bean:message key="app.add" /></a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfCollectionProtocolRegistration&aliasName=CollectionProtReg&menuSelected=13" >
-				<bean:message key="app.edit" />
-			</a>
-		</div>
-	</td>
-</tr>
-</tr>
-<!-- menu id : 14 -->
-<%
-	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 14, normalMenuClass , selectedMenuClass , hoverMenuClass);
-%>
-<tr>
-	<%=strMouseOut%>
-		<div>
-			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-				<b> <bean:message key="app.specimencollectiongroup" /></b>
-		</div>
-		<div>
-		<a class="subMenuPrimary" href="SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&menuSelected=14"><bean:message key="app.add" /></a> | 
-		<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSpecimenCollectionGroup&aliasName=SpecimenCollectionGroup&menuSelected=14" >
-			<bean:message key="app.edit" />
-		</a>
 		</div>
 	</td>
 </tr>
@@ -88,26 +51,10 @@
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b><bean:message key="app.newSpecimen" /> </b>
 		</div>
-		<div> Add: 
-			<a class="subMenuPrimary" href="NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&menuSelected=15&virtualLocated=true">
-				<bean:message key="specimen.menu.singleAdd" />
-			</a> | 
-<!--
- * Name : Ashish Gupta
- * Reviewer Name : Sachin Lale 
- * Bug ID: Multiple Specimen Bug
- * Patch ID: Multiple Specimen Bug_6 
- * See also: 1-8
- * Description: going directly to newmultiplespecimenaction class.
-	-->
-			<a class="subMenuPrimary" href="NewMultipleSpecimenAction.do?method=showMultipleSpecimen&menuSelected=15">
-				<bean:message key="specimen.menu.multipleAdd" />			
-			</a> |
+		<div>  
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen&menuSelected=15" >
 				<bean:message key="app.edit" />
-			</a>			
-		</div>
-		<div>
+			</a> |			
 			<a class="subMenuPrimary" href="CreateSpecimen.do?operation=add&amp;pageOf=&menuSelected=15&virtualLocated=true">
 				<bean:message key="app.createSpecimen" />
 			</a> | 

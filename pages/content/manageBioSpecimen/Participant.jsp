@@ -1,5 +1,4 @@
-
-							<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
@@ -8,6 +7,7 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
@@ -17,9 +17,13 @@
 
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
+
+<script src="jss/ajax.js"></script>	  	
 <script src="jss/script.js"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes --> 
+<script src="jss/calendar.js"></script>
 <script src="jss/calendarComponent.js"></script>
+<script src="jss/titli.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
@@ -38,18 +42,20 @@ tr#hiddenCombo
 		String parentUrl = null;
 		String cpId = null;
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
-
+		List collectionProtocolList = (List)request.getAttribute(Constants.PROTOCOL_LIST);
+		
 		String participantId=(String)request.getAttribute("participantId");
-
+		
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);		
 		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);		
 		boolean isRegisterButton = false;
 		boolean isAddNew = false;
+		boolean isSpecimenRegistration = true;
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-		
+				
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT;
 		
@@ -76,7 +82,6 @@ tr#hiddenCombo
 				formName = Constants.QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
 			if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 			{
-			
 				formName = Constants.CP_QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
 			}
 		}
@@ -94,17 +99,37 @@ tr#hiddenCombo
 
 		Object obj = request.getAttribute("participantForm");
 		int noOfRows=0;
+		int noOrRowsCollectionProtocolRegistration = 0;
 		Map map = null;
+		Map mapCollectionProtocolRegistration = null;
 		String currentBirthDate = "";
 		String currentDeathDate = "";
+		int regID = 0;
 		if(obj != null && obj instanceof ParticipantForm)
 		{
 			ParticipantForm form = (ParticipantForm)obj;
 			map = form.getValues();
+			mapCollectionProtocolRegistration = form.getCollectionProtocolRegistrationValues();
 			noOfRows = form.getValueCounter();
+			noOrRowsCollectionProtocolRegistration = form.getCollectionProtocolRegistrationValueCounter();
 			currentBirthDate = form.getBirthDate(); 
-			currentDeathDate = form.getDeathDate(); 
+			currentDeathDate = form.getDeathDate();
 		}
+	
+		if(noOfRows == 0)
+		{
+			noOfRows =1;
+		}
+		
+		if(operation.equals(Constants.ADD))
+		{
+			if(noOrRowsCollectionProtocolRegistration == 0)
+			{
+				noOrRowsCollectionProtocolRegistration =1;
+			}
+		}
+		
+		String[] activityStatusList = (String[])request.getAttribute(Constants.ACTIVITYSTATUSLIST);
 %>
 
 <head>
@@ -141,21 +166,16 @@ tr#hiddenCombo
 			var x=document.getElementById(subdivtag).insertRow(q);
 			
 			// First Cell
-			var spreqno=x.insertCell(0);
-			spreqno.className="formSerialNumberField";
-			sname=(q+1);
-			var identifier = "value(ParticipantMedicalIdentifier:" + (q+1) +"_id)";
-			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-			spreqno.innerHTML="" + sname;
 
 			//Second Cell
-			var spreqtype=x.insertCell(1);
-			spreqtype.className="formField";
+			var spreqtype=x.insertCell(0);
+			spreqtype.className="formFieldWithoutBorder";
 			sname="";
-
+			var identifier = "value(ParticipantMedicalIdentifier:" + (q+1) +"_id)";
+			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 			var name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_Site_id)";
 // Mandar : 434 : for tooltip 
-			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
+			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized10' id='" + name + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 			<%
 				if(siteList!=null)
 				{
@@ -171,24 +191,228 @@ tr#hiddenCombo
 			sname = sname + "</select>";
 			spreqtype.innerHTML="" + sname;
 		
-			//Third Cellvalue(ParticipantMedicalIdentifier:1_medicalRecordNumber)
-			var spreqsubtype=x.insertCell(2);
-			spreqsubtype.className="formField";
+			//Second Cellvalue(ParticipantMedicalIdentifier:1_medicalRecordNumber)
+			var spreqsubtype=x.insertCell(1);
+			spreqsubtype.className="formFieldWithoutBorder";
+			spreqsubtype.colSpan=3;
 			sname="";
 		
 			name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_medicalRecordNumber)";
 			sname= "";
-			sname="<input type='text' name='" + name + "' size='30' maxlength='50'  class='formFieldSized15' id='" + name + "'>";
+			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized10' id='" + name + "'>";
 			spreqsubtype.innerHTML="" + sname;
 			
-			//Fourth Cell
-			var checkb=x.insertCell(3);
-			checkb.className="formField";
-			checkb.colSpan=2;
+			//Third Cell
+			var checkb=x.insertCell(2);
+			checkb.className="formFieldWithoutBorder";
+			checkb.colSpan=3;
 			sname="";
+			
+			var identifier = "value(ParticipantMedicalIdentifier:" + (q+1) +"_id)";
+			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
+
 			var name = "chk_"+(q+1);
-			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteValue,document.forms[0].valueCounter,'chk_')\">";
+			sname = sname +"<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteMedicalIdentifierValue,document.forms[0].valueCounter,'chk_')\">";
 			checkb.innerHTML=""+sname;
+		}
+		
+		
+		function participantRegRow(subdivtag)
+		{
+			var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
+			collectionProtocolRegistrationVal = collectionProtocolRegistrationVal + 1;
+			document.forms[0].collectionProtocolRegistrationValueCounter.value = collectionProtocolRegistrationVal;
+			
+			var rows = new Array(); 
+			rows = document.getElementById(subdivtag).rows;
+			var cprSize = rows.length;
+			var row = document.getElementById(subdivtag).insertRow(cprSize);
+			
+			// First Cell
+			var cprTitle=row.insertCell(0);
+			cprTitle.className="formFieldWithoutBorder";
+			sname="";
+			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_id)";
+			var keyValue = name;
+			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
+			<%
+				if(collectionProtocolList!=null)
+				{
+					Iterator iterator = collectionProtocolList.iterator();
+					while(iterator.hasNext())
+					{
+						NameValueBean bean = (NameValueBean)iterator.next();
+			%>
+						sname = sname + "<option value='<%=bean.getValue()%>'><%=bean.getName()%></option>";
+			<%		}
+				}
+			%>
+			sname = sname + "</select>";
+			cprTitle.innerHTML="" + sname;
+			
+			//Second Cell
+			var cprParticipantId=row.insertCell(1);
+			cprParticipantId.className="formFieldWithoutBorder";
+			sname="";
+			name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_protocolParticipantIdentifier)";
+			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized10' id='" + name + "'>";
+			cprParticipantId.innerHTML="" + sname;
+			
+			<%
+				String registrationDate = Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY);
+    		%>
+    		
+			//Third Cell
+			var cprRegistrationDate=row.insertCell(2);
+			cprRegistrationDate.className="formFieldWithoutBorder";
+			cprRegistrationDate.colSpan=2;
+			sname="";
+			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_registrationDate)";
+			//sname = "<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "' value = 'MM-DD-YYYY or MM/DD/YYYY' onclick = \"this.value = ''\" onblur = \"if(this.value=='') {this.value = 'MM-DD-YYYY or MM/DD/YYYY';}\" onkeypress=\"return titliOnEnter(event, this, document.getElementById('" + name + "'))\">";
+			sname = "<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "' value = '<%=registrationDate%>'>";
+			cprRegistrationDate.innerHTML=sname;
+			
+			//Fourth Cell
+			var cprActivityStatus=row.insertCell(3);
+			cprActivityStatus.className="formFieldWithoutBorder";
+			sname="";
+			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_activityStatus)";
+			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized10' id='" + name + "' disabled='disabled' onmouseover=showTip(this.id) onmouseout=hideTip(this.id) >";
+			<%
+				for(int i=0 ; i<activityStatusList.length; i++)
+				{
+					String selected= "";
+					if(i==1)
+					{
+						selected="selected='selected'";
+					}
+			%>
+					sname = sname + "<option value='<%=activityStatusList[i]%>' <%=selected%> ><%=activityStatusList[i]%></option>";
+			<%	
+				}
+			%>
+			sname = sname + "</select>";
+			cprActivityStatus.innerHTML=sname;
+											
+			//Fifth Cell
+			var consent=row.insertCell(4);
+			consent.className="formFieldWithoutBorder";
+			sname="";
+			
+			var spanTag=document.createElement("span");
+			var consentCheckStatus="consentCheckStatus_"+(cprSize+1);
+			spanTag.setAttribute("id",consentCheckStatus);
+				
+			var name = "CollectionProtocolConsentChk_"+ (cprSize+1);
+			var anchorTagKey = "ConsentCheck_"+ (cprSize+1);
+			var collectionProtocolValue = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_id)";
+			var anchorTag = document.createElement("a");
+			anchorTag.setAttribute("id",anchorTagKey);
+			spanTag.innerHTML="<%=Constants.NO_CONSENTS_DEFINED%>"+"<input type='hidden' name='" + name + "' value='Consent' id='" + name + "'>";
+			spanTag.appendChild(anchorTag);
+			consent.appendChild(spanTag);
+			document.getElementById(keyValue).onchange=function(){getConsent(name,collectionProtocolValue,(cprSize+1),anchorTagKey,consentCheckStatus)};
+			
+			
+			//sixth Cell
+			var cprCheckb=row.insertCell(5);
+			cprCheckb.className="formFieldWithoutBorder";
+			sname="";
+			
+			var identifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_id)";
+			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
+			
+			var name = "CollectionProtocolRegistrationChk_"+(cprSize+1);
+			sname = sname +"<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteParticipantRegistrationValue,document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_')\">";
+			cprCheckb.innerHTML=""+sname;
+		}
+		
+		function getConsent(identifier,collectionProtocolId,index,anchorTagKey,consentCheckStatus)
+		{
+			var collectionProtocolIdValue;
+			collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
+			var dataToSend="showConsents=yes&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue;
+			ajaxCall(dataToSend, collectionProtocolId, identifier, anchorTagKey, index,consentCheckStatus);
+		}
+		
+		function openConsentPage(collectionProtocolId,index,responseString){
+			
+			if(responseString == "<%=Constants.NO_CONSENTS_DEFINED%>")
+			{
+				return;
+			}
+			
+			var collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
+			if(collectionProtocolIdValue=="-1")
+			{
+				alert("Please select collection protocol");
+				return;
+			}
+			
+			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue;
+			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
+		}
+		
+		var flag=false;
+		//Ajax Code Start
+		function ajaxCall(dataToSend, collectionProtocolId, identifier,anchorTagKey,index,consentCheckStatus)
+		{
+			if(flag==true)
+			{
+				return;
+			}
+			flag=true;
+			var request = newXMLHTTPReq();
+			request.onreadystatechange=function(){checkForConsents(request, collectionProtocolId, identifier,anchorTagKey,index,consentCheckStatus)};
+			//send data to ActionServlet
+			//Open connection to servlet
+			request.open("POST","CheckConsents.do",true);
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			request.send(dataToSend);
+		}
+
+		function checkForConsents(request, collectionProtocolId,  verificationKey, anchorTagKey,index,consentCheckStatus)
+		{
+			
+			if(request.readyState == 4)
+			{  
+				//Response is ready
+				if(request.status == 200)
+				{
+					var responseString = request.responseText;
+					validateBarcodeLable=responseString;
+					var anchorTag = document.getElementById(anchorTagKey);
+					var spanTag = document.getElementById(consentCheckStatus);
+					var consentResponseKey = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + index +"_isConsentAvailable)";;
+					if(responseString=="<%=Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE%>")
+					{
+						<%
+						if(operation.equals(Constants.EDIT))
+						{
+						%>
+							responseString = "<%=Constants.PARTICIPANT_CONSENT_EDIT_RESPONSE%>";
+						<%
+						}
+						%>
+						spanTag.innerHTML="";
+						if(anchorTag == null)
+						{
+							anchorTag = document.createElement("a");
+						}
+						anchorTag.setAttribute("id",anchorTagKey);
+						anchorTag.setAttribute("href", "javascript:openConsentPage('"+collectionProtocolId+"','"+index+"','"+responseString+"')");
+						anchorTag.innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent' id='" + verificationKey + "'/> <input type='hidden' name='" + consentResponseKey+ "' value='" +responseString+ "' id='" + consentResponseKey+ "'/>";
+						spanTag.appendChild(anchorTag);
+					}
+					else //No Consent
+					{
+						spanTag.innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent' id='" + verificationKey + "'/> <input type='hidden' name='" + consentResponseKey+ "' value='" +responseString+ "' id='" + consentResponseKey+ "'/>";
+					}
+					
+					
+					flag=false;
+				}
+			}
 		}
 		
 		function textLimit(field) 
@@ -223,10 +447,20 @@ tr#hiddenCombo
 			//document.forms[0].participantId.value=participant_id;
 			document.forms[0].participantId.value=pid;
 			document.forms[0].id.value=pid;
-			document.forms[0].submitPage.disabled=true;
-			document.forms[0].registratioPage.disabled=false;
-		
-		
+			document.forms[0].forwardTo.value="pageOfParticipant";
+			document.forms[0].action="ParticipantRegistrationSelect.do?operation=edit&pageOf=pageOfParticipant";
+			
+			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+			{%>
+					document.forms[0].forwardTo.value="pageOfParticipantCPQuery";
+					document.forms[0].action="CPQueryParticipantRegistrationSelect.do?operation=edit&pageOf=pageOfParticipantCPQuery";
+			<%
+			}
+			%>
+			
+			//window.location.href="ParticipantSelect.do?operation=&pageOf=pageOfParticipantRegistration&keepParticipantForm=true&forwardTo=editParticipant&id="+pid;
+			document.forms[0].submit();
+			
 		}
 		//This Function is called when user clicks on 'Add New Participant' Button
 		function AddParticipant()
@@ -259,40 +493,25 @@ tr#hiddenCombo
 		
 		function CreateNewClick()
 		{
-			document.forms[0].submitPage.disabled=false;
-			document.forms[0].registratioPage.disabled=false;
-			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
-				document.forms[0].submitPage.disabled=true;
-			<%}%>
-			
 			document.forms[0].radioValue.value="Add";
-			
 			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
 			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 			{%>
-			document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
+				document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
 			<%}%>
-			
-			
 		}
 	
 		function LookupAgain()
 		{
-			
-			document.forms[0].submitPage.disabled=false;
-			document.forms[0].registratioPage.disabled=true;
-			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
-				document.forms[0].submitPage.disabled=true;
-				document.forms[0].registratioPage.disabled=false;
-			<%}%>
 			document.forms[0].radioValue.value="Lookup";
 		}
 		
+		
 		function setSubmittedForParticipant(submittedFor,forwardTo)
 		{
-
 			document.forms[0].submittedFor.value = submittedFor;
 			document.forms[0].forwardTo.value    = forwardTo;
+			
 			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
 				document.forms[0].submittedFor.value = "AddNew";
 			<%}%>			
@@ -301,10 +520,23 @@ tr#hiddenCombo
 				if(document.forms[0].radioValue.value=="Add")
 				{
 					document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
-					<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
-					{%>
-					document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
-					<%}%>
+					<%
+					if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+					{
+							if(operation.equals(Constants.ADD))
+							{
+						%>
+							document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
+						<%
+							}
+						else
+							{ 
+						%>
+							document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_EDIT_ACTION%>";
+						<%
+							}
+					}
+					%>
 				}
 				else
 				{
@@ -313,7 +545,7 @@ tr#hiddenCombo
 						document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>";
 						<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 						{%>
-						document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_LOOKUP_ACTION%>";
+							document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_LOOKUP_ACTION%>";
 						<%}%>												
 						document.forms[0].submit();
 					}
@@ -333,7 +565,7 @@ tr#hiddenCombo
 			document.forms[0].submit();		
 	}
 }
-		
+
 		function onVitalStatusRadioButtonClick(element)
 		{
 		
@@ -355,7 +587,7 @@ tr#hiddenCombo
 			document.forms[0].action=action;
 			document.forms[0].submit();
         }
-		function editParticipant()
+        function editParticipant()
 		{
 			var tempId=document.forms[0].id.value;
 			var action="SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+tempId;
@@ -365,7 +597,7 @@ tr#hiddenCombo
 			}
 			document.forms[0].action=action;
 			document.forms[0].submit();
-		}
+		}	 
 		function showAnnotations()
 		{
 			var fwdPage="<%=pageOf%>";				
@@ -494,7 +726,12 @@ tr#hiddenCombo
 			var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
 			document.getElementById("cpId").value=cpId;
 			var participantId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("participantId").value;
-			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
+			<%if(participantId != null){%>
+			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId+"&participantId=<%=participantId%>";
+			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=<%=participantId%>";
+			<%} else{%>
+			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId;
+			<%}%>
 	</script>
 
 	<%}%>

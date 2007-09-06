@@ -99,6 +99,16 @@ function popupWindow(nofConsentTiers)
 	else if(iCount==nofConsentTiers)
 	{	
 		
+		<%
+			if(pageOf.equals("pageOfConsent"))
+			{
+		%>
+			document.forms[0].submit();
+			self.close();
+		<%
+			}
+		%>
+		
 		if(changeInStatus==false)
 		{
 			<%
@@ -165,6 +175,12 @@ function popupWindow(nofConsentTiers)
 			width="100%";
 			innerWidth="100%";
 		}
+		if(pageOf.equals("pageOfConsent"))
+		{
+			width="100%";
+			innerWidth="100%";
+			collection="responseList";
+		}
 	}
 	// Patch_Id: Improve_Space_Usability_On_Specimen_Page_2
 	// variable to get the current display style of collect recieve event table
@@ -202,7 +218,7 @@ function popupWindow(nofConsentTiers)
 		<tr>
 			<%-- If page of Collection Protocol Registration --%>						
 			<%
-			if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery"))
+			if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery") || pageOf.equals("pageOfConsent"))
 			{
 			%>
 			<tr>
@@ -236,32 +252,65 @@ function popupWindow(nofConsentTiers)
 							</td>	
 							<td class="formField">
 							<%
-							if(signedConsentDate.trim().length() > 0)
+							if(pageOf.equals("pageOfConsent"))
 							{
-								Integer consentYear = new Integer(Utility.getYear(signedConsentDate ));
-								Integer consentMonth = new Integer(Utility.getMonth(signedConsentDate ));
-								Integer consentDay = new Integer(Utility.getDay(signedConsentDate ));
-							%>
-							<ncombo:DateTimeComponent name="consentDate"
-								id="consentDate"
-								formName="collectionProtocolRegistrationForm"	
-								month= "<%=consentMonth %>"
-								year= "<%=consentYear %>"
-								day= "<%= consentDay %>" 
-								value="<%=signedConsentDate %>"
-								styleClass="formDateSized10"
-							/>		
-							<% 
+								if(signedConsentDate.trim().length() > 0)
+								{
+									Integer consentYear = new Integer(Utility.getYear(signedConsentDate ));
+									Integer consentMonth = new Integer(Utility.getMonth(signedConsentDate ));
+									Integer consentDay = new Integer(Utility.getDay(signedConsentDate ));
+								%>
+								<ncombo:DateTimeComponent name="consentDate"
+									id="consentDate"
+									formName="consentForm"	
+									month= "<%=consentMonth %>"
+									year= "<%=consentYear %>"
+									day= "<%= consentDay %>" 
+									value="<%=signedConsentDate %>"
+									styleClass="formDateSized10"
+								/>		
+								<% 
+								}
+								else
+								{  
+								%>
+								<ncombo:DateTimeComponent name="consentDate"
+									id="consentDate"
+									formName="consentForm"	
+									styleClass="formDateSized10" 
+								/>		
+								<%
+								}
 							}
 							else
-							{  
-							%>
-							<ncombo:DateTimeComponent name="consentDate"
-								id="consentDate"
-								formName="collectionProtocolRegistrationForm"	
-								styleClass="formDateSized10" 
-							/>		
-							<%
+							{
+								if(signedConsentDate.trim().length() > 0)
+								{
+									Integer consentYear = new Integer(Utility.getYear(signedConsentDate ));
+									Integer consentMonth = new Integer(Utility.getMonth(signedConsentDate ));
+									Integer consentDay = new Integer(Utility.getDay(signedConsentDate ));
+								%>
+								<ncombo:DateTimeComponent name="consentDate"
+									id="consentDate"
+									formName="collectionProtocolRegistrationForm"	
+									month= "<%=consentMonth %>"
+									year= "<%=consentYear %>"
+									day= "<%= consentDay %>" 
+									value="<%=signedConsentDate %>"
+									styleClass="formDateSized10"
+								/>		
+								<% 
+								}
+								else
+								{  
+								%>
+								<ncombo:DateTimeComponent name="consentDate"
+									id="consentDate"
+									formName="collectionProtocolRegistrationForm"	
+									styleClass="formDateSized10" 
+								/>		
+								<%
+								}
 							}
 							%>
 							<bean:message key="page.dateFormat" />&nbsp;
@@ -461,6 +510,7 @@ function popupWindow(nofConsentTiers)
 								}
 								else if(formObject instanceof CollectionProtocolRegistrationForm)
 								{
+									
 									consentResponseDisplay=(String)((CollectionProtocolRegistrationForm)formObject).getConsentResponseValue(consentStatementKey);
 									responseDisplay=(String)((CollectionProtocolRegistrationForm)formObject).getConsentResponseValue(participantKey);
 								}
@@ -481,6 +531,12 @@ function popupWindow(nofConsentTiers)
 									responseDisplay=(String)((DistributionForm)formObject).getConsentResponseForDistributionValue(participantKey);
 									specimenResponseDisplay=(String)((DistributionForm)formObject).getConsentResponseForDistributionValue(specimenKey);
 								}
+								else if(formObject instanceof ConsentResponseForm)
+								{
+									
+									consentResponseDisplay=(String)((ConsentResponseForm)formObject).getConsentResponseValue(consentStatementKey);
+									responseDisplay=(String)((ConsentResponseForm)formObject).getConsentResponseValue(participantKey);
+								}
 															
 						%>		
 						<%-- Serial No # --%>										
@@ -496,12 +552,13 @@ function popupWindow(nofConsentTiers)
 							</td>
 							<%-- If Page of Collection Protocol Reg then show drop down --%>										
 							<%
-							if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery"))
+							if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery")  || pageOf.equals("pageOfConsent"))
 							{
 								if(operation.equals(Constants.EDIT)&&responseDisplay.equals(Constants.WITHDRAWN))
 								{
 							%>
 								<td align="left" class="formField">
+								<html:hidden property="<%=participantResponseIDKey%>"/>
 								<html:select property="<%=participantResponseKey%>" styleClass="formFieldSized10" styleId="<%=participantResponseKey%>" size="1"
 											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 									<html:option value="Withdrawn"><bean:message key="consent.withdrawn" /></html:option>
@@ -661,6 +718,17 @@ function popupWindow(nofConsentTiers)
 								<input type="button" name="doneButton" style="actionButton" value="Done" onclick="submitAllResponses()"/>
 							</td>
 						</tr>
+						<% 
+						}
+						if(pageOf.equals("pageOfConsent"))
+						{
+						%>
+							<%-- action button --%>																
+							<tr>
+								<td class="tabrightmostcell" align="right" colspan="4">
+									<input type="button" name="doneConsentButton" style="actionButton" value="Done" onclick="submitConsentResponses()"/>
+								</td>
+							</tr>
 						<% 
 						}
 						%>

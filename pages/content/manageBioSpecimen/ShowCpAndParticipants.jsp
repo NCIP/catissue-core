@@ -53,7 +53,7 @@
 			}
 			else
 			{
-				window.parent.frames[2].location = "CPQueryCollectionProtocolRegistration.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value+"&operation=add&pageOf=<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>";
+				window.parent.frames[2].location = "QueryParticipant.do?operation=add&pageOf=<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>&clearConsentSession=true&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value;
 			}
 		}	
 

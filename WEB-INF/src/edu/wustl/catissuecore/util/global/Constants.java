@@ -72,6 +72,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	LABLE_DISTRIBUTION="2";
 	public static final String 	CONSENT_WAIVED="Consent Waived";
 	public static final String 	NO_CONSENTS="No Consents";
+	public static final String 	NO_CONSENTS_DEFINED="None Defined";
 	public static final String 	INVALID="Invalid";
 	public static final String 	VALID="valid";
 	public static final String 	FALSE="false";
@@ -96,13 +97,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	WITHDRAW="withdraw";
 	public static final String 	VIRTUALLY_LOCATED="Virtually Located";
 	public static final String 	LABLE="Lable";
-	public static final String 	STORAGE_CONTAINER_LOCATION="Storage Container Location";
-	public static final String 	CLASS_NAME="Class Name";
-	public static final String 	SPECIMEN_LIST="specimenDetails";
-	public static final String 	COLUMNLIST="columnList";
+	public static final String  STORAGE_CONTAINER_LOCATION="Storage Container Location";
+	public static final String  CLASS_NAME="Class Name";
+	public static final String  SPECIMEN_LIST="specimenDetails";
+	public static final String  COLUMNLIST="columnList";
+	public static final String  CONSENT_RESPONSE_KEY="CR_";
+	public static final String  CONSENT_RESPONSE="ConsentResponse";
 
 	public static final String [][] defaultValueKeys= {
-		{Constants.DEFAULT_TISSUE_SITE, Constants.CDE_NAME_TISSUE_SITE},
+		{Constants.DEFAULT_TISSUE_SITE, edu.wustl.common.util.global.Constants.CDE_NAME_TISSUE_SITE},
 		{Constants.DEFAULT_CLINICAL_STATUS, Constants.CDE_NAME_CLINICAL_STATUS},
 		{Constants.DEFAULT_GENDER, Constants.CDE_NAME_GENDER},
 		{Constants.DEFAULT_GENOTYPE, Constants.CDE_NAME_GENOTYPE},
@@ -402,7 +405,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_ADD_ACTION = "ParticipantAdd.do";
 	public static final String PARTICIPANT_EDIT_ACTION = "ParticipantEdit.do";
 	public static final String PARTICIPANT_LOOKUP_ACTION= "ParticipantLookup.do";
-	
+	public static final String PARTICIPANT_CONSENT_ENTER_RESPONSE= "Enter Response";
+	public static final String PARTICIPANT_CONSENT_EDIT_RESPONSE= "Edit Response";
 	
 	//Constants required in Institution.jsp Page
 	public static final String INSTITUTION_SEARCH_ACTION = "InstitutionSearch.do";
@@ -686,6 +690,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID=60;
 	public static final int PATHOLOGY_REPORT_REVIEW_FORM_ID=61;
 	public static final int QUARANTINE_EVENT_PARAMETER_FORM_ID=62;
+	public static final int CONSENT_FORM_ID=63;
 	//Misc
 	public static final String SEPARATOR = " : ";
 	
@@ -1151,8 +1156,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 
 	public static final String [][] PARTICIPANT_FORWARD_TO_LIST = {
 			{"Submit",					"success"},
-			{"Register to Protocol",	"createParticipantRegistration"},
-			{"Specimen Collection Group", "specimenCollectionGroup"}
+			{"Submit",	"createParticipantRegistration"},
+			{"Specimen Collection Group", "specimenCollectionGroup"},
+			{"Submit", "pageOfParticipantCPQuery"}
+			
 	};
 	
 	public static final String [][] STORAGE_TYPE_FORWARD_TO_LIST = {
@@ -1738,6 +1745,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGE_OF_DISTRIBUTION_ARRAY = "pageOfArrayDistribution";
 	public static final String PAGE_OF_INSTITUTE = "pageOfInstitution";
 	public static final String PAGE_OF_PARTICIPANT = "pageOfParticipant";
+	
 	public static final String PAGE_OF_SITE = "pageOfSite";
 	public static final String PAGE_OF_SPECIMEN = "pageOfSpecimen";
 	public static final String PAGE_OF_SPECIMEN_ARRAY = "pageOfSpecimenArray";

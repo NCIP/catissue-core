@@ -200,7 +200,7 @@ function setEditableChkbox(checkAllPages)
 		columns=","+columns+",";
 		colWidth = colWidth+",100,0";
 		mygrid.setOnCheckHandler(onParticipantClick);
-		mygrid.setOnRowDblClickedHandler(useFunction);
+		//mygrid.setOnRowDblClickedHandler(useFunction);
 		
 		/*
 		document.write("<hr>myData[0] : "+myData[0]+"<hr>");

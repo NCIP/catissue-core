@@ -1,4 +1,4 @@
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	   		   
 			
 		<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
@@ -8,7 +8,7 @@
 			  <br/>	
   	    	  <tr>
     		    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
+			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" >
 			 	 
 				  <tr>
 				     <td class="formTitle" height="20" colspan="3">
@@ -64,7 +64,8 @@
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value="<%=forwardTo%>"/>
 					</td>
-					<td><html:hidden property="valueCounter"/></td>					
+					<td><html:hidden property="valueCounter"/></td>
+					<td><html:hidden property="collectionProtocolRegistrationValueCounter"/></td>
 					<td><html:hidden property="onSubmit" /></td>
 					<td><html:hidden property="id" /><html:hidden property="redirectTo"/></td>
 					<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
@@ -76,7 +77,7 @@
 				 		</tr>
 
 				 <%--<tr>
-				     <td class="formTitle" height="20" colspan="4">
+				     <td class="formTitle" height="20" colspan="6">
 				     <%title = "participant."+pageView+".title";%>
 				     <bean:message key="participant.add.title"/>
 					<%
@@ -89,8 +90,10 @@
 					%>
 				     </td>
 				 </tr>--%>
+				 
+				 
 				 <tr>
-				 	<td class="formTitle" height="20" colspan="4"">
+				 	<td class="formTitle" height="20" colspan="7">
 					 <logic:equal name="operation" value="<%=Constants.ADD%>">
 						<bean:message key="participant.add.title"/>
 					</logic:equal>
@@ -98,49 +101,83 @@
 						<bean:message key="participant.edit.title"/>
 					</logic:equal>
 					</td>
-				</tr>	
+				</tr>
+				
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
-				     	<label for="lastName">
-				     		<bean:message key="user.lastName"/>
+					 <td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
+					 <td class="formLabelBorderless">
+				     	<label for="socialSecurityNumber">
+				     		<bean:message key="participant.socialSecurityNumber"/>
 				     	</label>
 				     </td>
-				     <td class="formField" colspan="2">
-				     <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="lastName" name="participantForm" property="lastName" readonly="<%=readOnlyForAll%>"/>
+				     <td class="formFieldWithoutBorder" colspan="5">
+				     	<html:text styleClass="formFieldSized2" maxlength="3" styleId="socialSecurityNumberPartA" property="socialSecurityNumberPartA" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartB');"/>
+				     	-
+				     	<html:text styleClass="formFieldSized1" maxlength="2" styleId="socialSecurityNumberPartB" property="socialSecurityNumberPartB" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartC');"/>
+				     	-
+				     	<html:text styleClass="formFieldSized3" maxlength="4" styleId="socialSecurityNumberPartC" property="socialSecurityNumberPartC" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);"/>
 				     </td>
 				 </tr>
-				  <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
-				     	<label for="firstName">
-				     		<bean:message key="user.firstName"/>
-				     	</label>
-				     </td>
-				     <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="firstName" property="firstName" readonly="<%=readOnlyForAll%>"/>
-				     </td>
-				 </tr>
+				 	
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
-				     	<label for="middleName">
-				     		<bean:message key="participant.middleName"/>
-				     	</label>
-				     </td>
-				     <td class="formField" colspan="2">
-				     <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/>
-				     </td>
+					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
+					<td class="formFieldWithoutBorder" align="right">
+						<table summary="" cellpadding="3" cellspacing="0" border="0">
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td class="formLabelBorderless">
+									<label for="Name">
+										<bean:message key="participant.Name"/>
+									</label>
+								</td>
+							</tr>
+						 </table>
+					 </td>
+				    <td class="formFieldWithoutBorder" colspan="5">
+					 <table summary="" cellpadding="3" cellspacing="0" border="0">
+						<tr>
+							<td class="formLabelBorderlessLeft">
+								<label for="lastName">
+									<bean:message key="participant.lastName"/>
+								</label>
+							 </td>
+							 <td class="formLabelBorderlessLeft">
+								<label for="firstName">
+									<bean:message key="participant.firstName"/>
+								</label>
+							  </td>
+							<td class="formLabelBorderlessLeft">
+								<label for="middleName">
+									<bean:message key="participant.middleName"/>
+								</label>
+							 </td>
+						</tr>
+					 	<tr>
+							 <td class="formFieldWithoutBorder">
+								<html:text styleClass="formFieldSized10" maxlength="255" styleId="lastName" name="participantForm" property="lastName" readonly="<%=readOnlyForAll%>" onkeyup="moveToNext(this,this.value,'firstName')"/>
+							 </td>
+					     	 <td class="formFieldWithoutBorder">
+					     		<html:text styleClass="formFieldSized10" maxlength="255" styleId="firstName" property="firstName" readonly="<%=readOnlyForAll%>" onkeyup="moveToNext(this,this.value,'middleName')"/>
+							</td>
+					     	 <td class="formFieldWithoutBorder">
+					     		<html:text styleClass="formFieldSized10" maxlength="255" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/>
+							</td>
+						</tr>
+					 </table>
+				    </td>
 				 </tr>
+				 
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
+					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
+					<td class="formLabelBorderless">
 						<label for="birthDate">
 							<bean:message key="participant.birthDate"/>
 						</label>
 					</td>
 					 
-					 <td class="formField" colspan="2">
+					 <td class="formFieldWithoutBorder" colspan="5">
 <%
 	 if(currentBirthDate.trim().length() > 0)
 	{
@@ -173,17 +210,15 @@
 <bean:message key="page.dateFormat" />&nbsp;
 					 </td>
 				 </tr>			
-
-			 
 				 
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
+					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
+					<td class="formLabelBorderless">
 				     	<label for="vitalStatus">
 				     		<bean:message key="participant.vitalStatus"/>
 				     	</label>
 				     </td>
-				     <td class="formField" colspan="2">
+				     <td class="formFieldWithoutBorder" colspan="5">
 <!-- Mandar : 434 : for tooltip -->
 						<%--
 				     	<html:select property="vitalStatus" styleClass="formFieldSized" styleId="vitalStatus" size="1" disabled="<%=readOnlyForAll%>"
@@ -201,13 +236,13 @@
 				
 				<%-- added by chetan for death date --%>
  <tr>
-	<td class="formRequiredNotice" width="5">&nbsp;</td>
-	<td class="formLabel">
+	<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
+	<td class="formLabelBorderless">
 		<label for="deathDate">
 			<bean:message key="participant.deathDate"/>
 		</label>
 	</td>	 
-	<td class="formField" colspan="2">
+	<td class="formFieldWithoutBorder" colspan="5">
 <%
 
 	ParticipantForm form = (ParticipantForm) request.getAttribute("participantForm");
@@ -251,11 +286,11 @@
 </tr> 
 				 
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
+					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
+					<td class="formLabelBorderless">
 				     	<label for="gender"><bean:message key="participant.gender"/></label>
 				     </td>
-				     <td class="formField" colspan="2">
+				     <td class="formFieldWithoutBorder" colspan="5">
 <!-- Mandar : 434 : for tooltip -->
 				     	<%--<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -269,11 +304,11 @@
 		        	  </td>
 				 </tr>
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
+					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
+					<td class="formLabelBorderless">
 						<label for="genotype"><bean:message key="participant.genotype"/></label>
 					</td>
-				     <td class="formField" colspan="2">
+				     <td class="formFieldWithoutBorder" colspan="5">
 					 
 					  <autocomplete:AutoCompleteTag property="genotype"
 										  optionsList = "<%=request.getAttribute(Constants.GENOTYPE_LIST)%>"
@@ -284,11 +319,11 @@
 		        	  </td>
 				 </tr>
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
+					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
+					<td class="formLabelBorderless">
 					     <label for="race"><bean:message key="participant.race"/></label>
 				     </td>
-				     <td class="formField" colspan="2">
+				     <td class="formFieldWithoutBorder" colspan="5">
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="raceTypes" styleClass="formFieldSized" styleId="race" size="4" multiple="true" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -297,13 +332,13 @@
 		        	  </td>
 				 </tr>
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
+					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
+					<td class="formLabelBorderless">
 				     	<label for="ethnicity">
 				     		<bean:message key="participant.ethnicity"/>
 				     	</label>
 				     </td>
-				     <td class="formField" colspan="2">
+				     <td class="formFieldWithoutBorder" colspan="5">
 					 
 					   <autocomplete:AutoCompleteTag property="ethnicity"
 										  optionsList = "<%=request.getAttribute(Constants.ETHNICITY_LIST)%>"
@@ -313,32 +348,17 @@
 
 		        	  </td>
 				 </tr>
-				 <tr>
-					 <td class="formRequiredNotice" width="5">&nbsp;</td>
-				     <td class="formLabel">
-				     	<label for="socialSecurityNumber">
-				     		<bean:message key="participant.socialSecurityNumber"/>
-				     	</label>
-				     </td>
-				     <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized2" maxlength="3" styleId="socialSecurityNumberPartA" property="socialSecurityNumberPartA" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartB');"/>
-				     	-
-				     	<html:text styleClass="formFieldSized1" maxlength="2" styleId="socialSecurityNumberPartB" property="socialSecurityNumberPartB" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartC');"/>
-				     	-
-				     	<html:text styleClass="formFieldSized3" maxlength="4" styleId="socialSecurityNumberPartC" property="socialSecurityNumberPartC" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);"/>
-				     </td>
-				 </tr>
 				 
 				 <!-- activitystatus -->	
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel" >
+					<td class="formRequiredNoticeWithoutBorder" width="5">*</td>
+					<td class="formLabelBorderless" >
 						<label for="activityStatus">
 							<bean:message key="participant.activityStatus" />
 						</label>
 					</td>
-					<td class="formField" colspan="2">
+					<td class="formFieldWithoutBorder" colspan="5">
 <!-- Mandar : 434 : for tooltip -->
 						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -349,8 +369,11 @@
 				</logic:equal>
 				
 				 <!-- Medical Identifiers Begin here -->
+				   <tr>
+				 	<td align="left" colspan="7" valign="top">
+					<table summary="" cellpadding="3" cellspacing="0" border="0">
 				 <tr>
-				     <td class="formTitle" height="20" colspan="2">
+				     <td class="formTitle" height="20" colspan="5">
 				     	<bean:message key="participant.medicalIdentifier"/>
 				     </td>
 				     <td class="formButtonField">
@@ -359,27 +382,25 @@
 						</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true',document.forms[0].valueCounter,'chk_',false)"  disabled="true">
+						<html:button property="deleteMedicalIdentifierValue" styleClass="actionButton" onclick="deleteChecked('addMore','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true',document.forms[0].valueCounter,'chk_',false)"  disabled="true">
 							<bean:message key="buttons.delete"/>
 						</html:button>
 					</td>
 				  </tr>
 				 <tr>
-				 	<td class="formSerialNumberLabel" width="5">
-				     	#
-				    </td>
-				    <td class="formLeftSubTableTitle">
+					<td class="formSubTitleWithoutBorder">
 						<bean:message key="medicalrecord.source"/>
 					</td>
-				    <td class="formRightSubTableTitle">
+				    <td class="formSubTitleWithoutBorder" colspan="3">
 						<bean:message key="medicalrecord.number"/>
 					</td>
-					<td class="formRightSubTableTitle">
+					<td class="formSubTitleWithoutBorder" colspan="3">
 							<label for="delete" align="center">
 								<bean:message key="addMore.delete" />
 							</label>
 						</td>
 				 </tr>
+				 <script> document.forms[0].valueCounter.value = <%=noOfRows%> </script>
 				 
 				 <tbody id="addMore">
 				<%
@@ -391,20 +412,17 @@
 					String check = "chk_"+i;
 				%>
 				 <tr>
-				 	<td class="formSerialNumberField" width="5"><%=i%>.
-				 		<html:hidden property="<%=identifier%>" />
-				 	</td>
-				    <td class="formField">
+					<td class="formFieldWithoutBorder">
 <!-- Mandar : 434 : for tooltip -->
-						<html:select property="<%=siteName%>" styleClass="formFieldSized15" styleId="<%=siteName%>" size="1" disabled="<%=readOnlyForAll%>"
+						<html:select property="<%=siteName%>" styleClass="formFieldSized10" styleId="<%=siteName%>" size="1" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>		
 						</html:select>
 					</td>
-				    <td class="formField">
-				     	<html:text styleClass="formFieldSized15" maxlength="50" size="30" styleId="<%=medicalRecordNumber%>" property="<%=medicalRecordNumber%>" readonly="<%=readOnlyForAll%>"/>
+				    <td class="formFieldWithoutBorder" colspan="3">
+				     	<html:text styleClass="formFieldSized10" maxlength="50" size="30" styleId="<%=medicalRecordNumber%>" property="<%=medicalRecordNumber%>" readonly="<%=readOnlyForAll%>"/>
 				    </td>
-				    <%
+				    	<%
 							String key = "ParticipantMedicalIdentifier:" + i +"_id";
 							boolean bool = Utility.isPersistedValue(map,key);
 							String condition = "";
@@ -412,8 +430,9 @@
 								condition = "disabled='disabled'";
 
 						%>
-						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].valueCounter,'chk_')">		
+						<td class="formFieldWithoutBorder" width="5" colspan="3">
+							<html:hidden property="<%=identifier%>" />
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteMedicalIdentifierValue,document.forms[0].valueCounter,'chk_')">		
 						</td>
 				    
 				 </tr>
@@ -421,10 +440,157 @@
 				}
 				%>
 				 </tbody>
-								
 				  					
-				  <!-- Medical Identifiers End here -->
-				  <tr><td colspan=4>&nbsp;</td></tr>
+<!-- Medical Identifiers End here -->
+				 
+				 
+				 
+<!-- Participant Registration Begin here -->
+				
+				   <tr>
+				     <td class="formTitle" height="20" colspan="5">
+				     	<bean:message key="participant.collectionProtocolReg"/>
+				     </td>
+				     <td class="formButtonField">
+						<html:button property="addKeyValue" styleClass="actionButton" onclick="participantRegRow('addMoreParticipantRegistration')">
+						<bean:message key="buttons.addMore"/>
+						</html:button>
+				    </td>
+				    <td class="formTitle" align="Right">
+						<html:button property="deleteParticipantRegistrationValue" styleClass="actionButton" onclick="deleteChecked('addMoreParticipantRegistration','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true&deleteRegistration=true',document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_',false)"  disabled="true">
+							<bean:message key="buttons.delete"/>
+						</html:button>
+					</td>
+				  </tr>
+				 <tr>
+					<td class="formSubTitleWithoutBorder">
+						<bean:message key="participant.collectionProtocolReg.protocolTitle"/>
+					</td>
+				    <td class="formSubTitleWithoutBorder">
+						<bean:message key="participant.collectionProtocolReg.participantProtocolID"/>
+					</td>
+					<td class="formSubTitleWithoutBorder" colspan="2">
+						<bean:message key="participant.collectionProtocolReg.participantRegistrationDate"/>
+					</td>
+					<td class="formSubTitleWithoutBorder">
+						<bean:message key="participant.activityStatus" />
+					</td>
+					<td class="formSubTitleWithoutBorder">
+						<bean:message key="participant.collectionProtocolReg.consent"/>
+					</td>
+					<td class="formSubTitleWithoutBorder">
+							<label for="delete" align="center">
+								<bean:message key="addMore.delete" />
+							</label>
+					</td>
+				 </tr>
+				<script> document.forms[0].collectionProtocolRegistrationValueCounter.value = <%=noOrRowsCollectionProtocolRegistration%> </script>
+				 
+				<tbody id="addMoreParticipantRegistration">
+				<%
+				for(int i=1;i<=noOrRowsCollectionProtocolRegistration;i++)
+				{
+					String collectionProtocolTitle = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"+i+"_CollectionProtocol_id)";
+					String collectionProtocolParticipantId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"+i+"_protocolParticipantIdentifier)";
+					String collectionProtocolRegistrationDate = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_registrationDate)";
+					String collectionProtocolIdentifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_id)";
+					String collectionProtocolRegistrationActivityStatus = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_activityStatus)";
+					String collectionProtocolCheck = "CollectionProtocolRegistrationChk_"+i;
+					String key = "CollectionProtocolRegistration:" + i +"_id";
+					String collectionProtocolConsentCheck = "CollectionProtocolConsentChk_"+i;
+					String anchorTagKey = "ConsentCheck_"+i;
+					String consentCheckStatus="consentCheckStatus_"+i;
+					
+					String consentResponseDisplay = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_isConsentAvailable)";
+					String consentResponseDisplayKey = "CollectionProtocolRegistration:" + i +"_isConsentAvailable";
+					String consentResponseDisplayValue = (String)form.getCollectionProtocolRegistrationValue(consentResponseDisplayKey);
+					
+					
+					if(consentResponseDisplayValue ==null)
+					{
+						consentResponseDisplayValue = Constants.NO_CONSENTS_DEFINED;
+					}
+					boolean CollectionProtocolRegConditionBoolean = Utility.isPersistedValue(mapCollectionProtocolRegistration,key);
+					boolean activityStatusCondition=false;
+					if(!CollectionProtocolRegConditionBoolean)
+						activityStatusCondition = true;
+					
+					String onChangeFun ="getConsent('"+collectionProtocolConsentCheck+"', '"+collectionProtocolTitle+"','"+i+"','"+anchorTagKey+"','"+consentCheckStatus+"')";
+
+				%>
+					
+				 <tr>
+					<td class="formFieldWithoutBorder" width="40">
+				 		<html:select property="<%=collectionProtocolTitle%>" styleClass="formFieldSized15" styleId="<%=collectionProtocolTitle%>" size="1" 
+				 		onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=onChangeFun%>">
+						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
+					    </html:select>
+					</td>
+				    <td class="formFieldWithoutBorder">
+						<html:text styleClass="formFieldSized10" maxlength="50"  styleId="<%=collectionProtocolParticipantId%>" property="<%=collectionProtocolParticipantId%>" />
+					</td>
+				    <td class="formFieldWithoutBorder" colspan="2">
+				    	<!-- <html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=collectionProtocolRegistrationDate%>" property="<%=collectionProtocolRegistrationDate%>" onclick = "this.value = ''" onblur = "if(this.value=='') {this.value = 'MM-DD-YYYY or MM/DD/YYYY';}" onkeypress="return titliOnEnter(event, this, document.getElementById('<%=collectionProtocolRegistrationDate%>'))"/> -->
+				    	<html:text styleClass="formFieldSized10" maxlength="50"  styleId="<%=collectionProtocolRegistrationDate%>" property="<%=collectionProtocolRegistrationDate%>" />
+				    </td>
+					<td class="formFieldWithoutBorder">
+						<html:select property="<%=collectionProtocolRegistrationActivityStatus%>" styleClass="formFieldSized10" styleId="<%=collectionProtocolRegistrationActivityStatus%>" size="1" disabled='<%=activityStatusCondition%>' onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
+						</html:select>
+					</td>
+				    <td class="formFieldWithoutBorder">
+				    	<span id="<%=consentCheckStatus%>">
+						<%
+							
+							if(!consentResponseDisplayValue.equals(Constants.NO_CONSENTS_DEFINED))
+							{
+								if(operation.equals(Constants.EDIT))
+								{
+									consentResponseDisplayValue = Constants.PARTICIPANT_CONSENT_EDIT_RESPONSE;
+								}
+						%>
+								<a id="<%=anchorTagKey%>" href="javascript:openConsentPage('<%=collectionProtocolTitle%>','<%=i%>','<%=consentResponseDisplayValue%>')">
+								<%=consentResponseDisplayValue%><br>
+								<input type='hidden' name="<%=collectionProtocolConsentCheck%>" value='Consent' id="<%=collectionProtocolConsentCheck%>" >
+								<input type='hidden' name="<%=consentResponseDisplay%>" value="<%=consentResponseDisplayValue%>" id="<%=consentResponseDisplay%>" >
+								</a>
+						<%
+							}
+							else
+							{
+						%>
+								<%=consentResponseDisplayValue%>
+								<input type='hidden' name="<%=collectionProtocolConsentCheck%>" value='Consent' id="<%=collectionProtocolConsentCheck%>" >
+								<input type='hidden' name="<%=consentResponseDisplay%>" value="<%=consentResponseDisplayValue%>" id="<%=consentResponseDisplay%>" >
+							
+						<%
+							}
+						%>
+						</span>
+					</td>
+				       <%
+							String CollectionProtocolRegCondition = "";
+							if(CollectionProtocolRegConditionBoolean)
+								CollectionProtocolRegCondition = "disabled='disabled'";
+						%>
+					<td class="formFieldWithoutBorder" width="5">
+						<html:hidden property="<%=collectionProtocolIdentifier%>" />
+						<input type=checkbox name="<%=collectionProtocolCheck %>" id="<%=collectionProtocolCheck %>" <%=CollectionProtocolRegCondition%> onClick="javascript:enableButton(document.forms[0].deleteParticipantRegistrationValue,document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_')"> 		
+					</td>
+				 </tr>
+				 <%
+				}
+				%>
+				 </tbody>
+				 </table>
+				</td>
+			 	</tr>
+				 
+				 
+				  
+<!-- Participant Registration End here -->
+				  
+				  <tr><td colspan=7>&nbsp;</td></tr>
 				  
 				  <!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
 				<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){
@@ -434,7 +600,7 @@
 					}%>	
 				
 			
-				<tr><td colspan="4"><table summary="" cellpadding="0" cellspacing="0" border="0" width="600">
+				<tr><td colspan="7"><table summary="" cellpadding="0" cellspacing="0" border="0">
 				<tr>
 				     <td class="formTitle" height="25">
 				     	<bean:message key="participant.lookup"/>
@@ -451,9 +617,6 @@
 						var cl = mygrid.cells(id,mygrid.getColumnCount()-1);
 						var pid = cl.getValue();
 						//alert(pid);
-						//------------
-						//window.location.href = 'ParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+pid
-						
 						/* 
 							 Resolved bug# 4240
 	                    	 Name: Virender Mehta
@@ -469,7 +632,7 @@
 						else
 						{
 							window.location.href = 'ParticipantLookup.do?submittedFor=AddNew&operation=add&participantId='+pid
-						}	
+						}						
 					} 				
 
 					/* 
@@ -486,7 +649,7 @@
 					</td>
 				  </tr>
 				  <tr>
-				 	<td align="center" colspan="4" class="formFieldWithNoTopBorder">
+				 	<td align="center" colspan="7" class="formFieldWithNoTopBorder">
 						<INPUT TYPE='RADIO' NAME='chkName' value="Add" onclick="CreateNewClick()"><font size="2">Ignore matches and create new participant </font></INPUT>&nbsp;&nbsp;
 						<INPUT TYPE='RADIO' NAME='chkName' value="Lookup" onclick="LookupAgain()" checked=true><font size="2">Lookup again </font></INPUT>
 					</td>
@@ -496,7 +659,7 @@
 				<!--Participant Lookup end-->				
 								 <!-----action buttons-->
 				 <tr>
-				 	<td align="center" colspan="4" valign="top">
+				 	<td align="right" colspan="7" valign="top">
 						<%
 							String changeAction = "setFormAction('"+formName+"')";
 						%>
@@ -520,66 +683,50 @@
 								<%
 								    
 									String normalSubmitFunctionName = "setSubmittedForParticipant('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
-									String forwardToSubmitFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
-									String forwardToSCGFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[2][1]+"')";									
+									String forwardToSubmitFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[3][1]+"')";
+									String forwardToSCGFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[2][1]+"')";
 									String normalSubmit = normalSubmitFunctionName ;
 									String forwardToSubmit = forwardToSubmitFunctionName ;
 									String forwardToSCG = forwardToSCGFunctionName ;
+
 								%>
 																
 								<!-- PUT YOUR COMMENT HERE -->
 
 								
-								<td nowrap class="formFieldNoBorders">
-								<html:button styleClass="actionButton"
-										property="submitPage" 
-										title="Submit Only"
-										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>" 
-										disabled="<%=isAddNew%>"
-										onclick="<%=normalSubmit%>"> 
-								</html:button>
-								</td>
-									
-								
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 								<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">								
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
-											title="Submit and Register to protocol"
-											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>" 
-											disabled="<%=isRegisterButton%>"
-					  						onclick="<%=forwardToSubmit%>">
+											title="Submit Only"
+											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>"
+											onclick="<%=forwardToSubmit%>">
 									</html:button>
 								</td>
 								</logic:equal>
-								</logic:equal>
+								
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
-											title="Submit and Register to protocol"
-											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>" 
-											disabled="<%=isRegisterButton%>"
-					  						onclick="<%=forwardToSubmit%>">
+											title="Submit Only"
+											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>"
+											onclick="<%=normalSubmit%>">
 									</html:button>
 								</td>
-								</logic:notEqual>	
 								</logic:notEqual>
 								
-							<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">								
+								<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
-											title="Submit and Register to protocol"
-											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>" 
-					  						onclick="<%=forwardToSCG%>">
+											title="Submit and register Specimen Collection Group"
+											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>"
+											onclick="<%=forwardToSCG%>">
 									</html:button>
 								</td>
-						    </logic:equal>						
-						    </logic:equal>						
+								</logic:equal>
+							
 								
 								<%--<td>
 									<html:submit styleClass="actionButton" disabled="true">

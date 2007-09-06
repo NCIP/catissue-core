@@ -1060,6 +1060,10 @@
 	 <!-- Definition code : Deepti Shelar : For pagination : 20/07/2007 -->
 	<definition name=".catissuecore.queryTreeViewDef" path="/pages/content/search/querysuite/QueryTreeView.jsp">
 	</definition>
+	
+	<definition name=".catissuecore.participantConsentsDef" path="/pages/content/ConsentTracking/ParticipantConsentTracking.jsp"> 
+	</definition>
+	
 <!--	<definition name=".catissuecore.defineSearchResultsView" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/querysuite/DefineSearchResultsView.jsp" />
 	</definition> -->
