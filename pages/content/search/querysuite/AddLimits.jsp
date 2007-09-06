@@ -60,7 +60,7 @@
 							<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
 								
 							<tr>
-							<td height="60%">
+							<td height="50%">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
 							
 												<tr  id="rowMsg">
@@ -86,7 +86,7 @@
 								</td>
 								</tr>
 							<tr>
-							<td  height="40%" valign="top">
+							<td  height="50%" valign="top">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
 									<tr>																						
 										<td height="4%" bgcolor="#EAEAEA" style="border:solid 1px"><font face="Arial" size="2" color="#000000"><b><bean:message 	key="query.limitSetHeader"/></b></font></td>
