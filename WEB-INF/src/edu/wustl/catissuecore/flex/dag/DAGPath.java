@@ -7,18 +7,11 @@ import java.io.ObjectOutput;
 
 public class DAGPath implements Externalizable {
 	private String name =null;
-	private Long id= null;
-	private boolean isSelected;
+	private String id= null;
+	private boolean isSelected = false;
 		
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -38,7 +31,7 @@ public class DAGPath implements Externalizable {
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method stub
 		name = in.readUTF();
-		id =  in.readLong();
+		id =   in.readUTF();
 		isSelected = in.readBoolean();
 		
 	}
@@ -46,9 +39,17 @@ public class DAGPath implements Externalizable {
 	public void writeExternal(ObjectOutput out) throws IOException {
 		// TODO Auto-generated method stub
 		out.writeUTF(name);
-		out.writeLong(id);
+		out.writeUTF(id);
 		out.writeBoolean(isSelected);
 		
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	
