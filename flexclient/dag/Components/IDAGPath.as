@@ -3,6 +3,7 @@
 	import flash.utils.IExternalizable;
 	import flash.utils.IDataInput;
 	import flash.utils.IDataOutput;
+	import mx.controls.Alert;
 	
    [Bindable]
    [RemoteClass(alias="edu.wustl.catissuecore.flex.dag.DAGPath")]
@@ -10,18 +11,18 @@
 	{
 		
 		public var name:String;
-		public var id:Number;
+		public var id:String;
 		public var isSelected:Boolean=false;
 		
 		public function readExternal(input:IDataInput):void {
 			name = input.readUTF();
-			id = input.readDouble();
+			id = input.readUTF();
 			isSelected = input.readBoolean();
 		}
 		
 		public function writeExternal(out:IDataOutput):void {
 			out.writeUTF(name);
-			out.writeDouble(id);
+			out.writeUTF(id);
 			out.writeBoolean(isSelected);
 		}
 	}
