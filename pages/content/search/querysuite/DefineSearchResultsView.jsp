@@ -89,6 +89,7 @@
 		</td>
 	</tr>
 </table>
+<input type="hidden" name="isQuery" value="true">
 </html:form>
 </body>
 </html> 
