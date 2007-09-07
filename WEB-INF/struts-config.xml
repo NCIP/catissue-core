@@ -141,12 +141,12 @@ PUBLIC
 		
 		<action path="/Home"
 					type="edu.wustl.catissuecore.action.ForwardAction">
-		 			<forward name="success" path=".catissuecore.homePageDef" /> 
+		 			<forward name="success" path=".catissuecore.mainTitlePageDef" /> 
 		</action>
 		
 		<action path="/RedirectHome"
 					type="org.apache.struts.actions.ForwardAction"
-					parameter=".catissuecore.homePageDef" />
+					parameter=".catissuecore.mainTitlePageDef" />
 		
 		<action path="/ManageBioSpecimen"
 					type="edu.wustl.catissuecore.action.RoleBasedForwardAction">
@@ -658,7 +658,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.LoginAction"
 			name="loginForm"
 			validate="true"
-			input=".catissuecore.homePageDef"
+			input=".catissuecore.mainTitlePageDef"
 			scope="request">
 			<forward name="success" path="/Home.do" />
 			<forward name="pageOfAdministrator" path="/ManageAdministrativeData.do" />
@@ -667,7 +667,7 @@ PUBLIC
 			<forward name="pageOfTechnician" path="/SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&amp;aliasName=Specimen&amp;menuSelected=15"/>
 			<forward name="pageOfScientist" path="/AdvanceQueryInterfaceDefaultPage.do?pageOf=pageOfAdvanceQueryInterface&amp;menuSelected=17" />
 			<forward name="access_denied" path=".catissuecore.changePasswordDef"/>
-			<forward name="failure" path=".catissuecore.homePageDef" />
+			<forward name="failure" path=".catissuecore.mainTitlePageDef" />
 		</action>
         
         <action path="/SignUp"

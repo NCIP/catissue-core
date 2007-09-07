@@ -7,7 +7,7 @@
 <tiles-definitions>
 
 	<!-- Home tab pages definitions start -->
-	<definition name=".catissuecore.homePageDef" path="/pages/Layout.jsp">
+	<definition name=".catissuecore.mainTitlePageDef" path="/pages/Layout.jsp">
 		<put name="title" value="caTissue Core v 1.2" />
 		<put name="header" value="/pages/MainHeader.jsp" />
 		<put name="applicationheader" value="/pages/ApplicationHeader.jsp" />
@@ -17,6 +17,19 @@
 		<put name="content" value="/pages/content/home/Home.jsp" />
 		<put name="applicationfooter" value="/pages/ApplicationFooter.jsp" />
 		<put name="mainfooter" value="/pages/MainFooter.jsp" />
+	</definition>
+
+	<!-- Home tab pages definitions start -->
+	<definition name=".catissuecore.homePageDef" path="/pages/Layout.jsp">
+		<put name="title" value="caTissue Core v 1.2" />
+		<put name="header" value="/pages/blank.jsp" />
+		<put name="applicationheader" value="/pages/blank.jsp" /> 
+		<put name="commonmenu" value="/pages/subMenu/Common.jsp" />
+		<put name="submenu" value="/pages/subMenu/Home.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/Home.jsp" />
+		<put name="content" value="/pages/content/home/Home.jsp" />
+		<put name="applicationfooter" value="/pages/ApplicationFooter.jsp" />
+		<put name="mainfooter" value="/pages/blank.jsp" />
 	</definition>
 	
 	
@@ -1092,4 +1105,3 @@
 	</definition>
 	<!--Annotation defs End-->
 </tiles-definitions>
-
