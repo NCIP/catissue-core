@@ -46,13 +46,11 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	 *            Expression to set
 	 */
 	public void setExpressionId(int expressionId) {
-//		this.expression = expression;
 		this.expressionId = expressionId;
 	
 	}
 	
 	public int getExpressionId() {
-		//this.expressionId = expression.getExpressionId();
 		return expressionId;
 	}
 	
@@ -165,12 +163,10 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 
 	public boolean equals(Object obj) {
 	    DAGNode node = (DAGNode) obj;
-	    System.out.println("equals-----------");
 	    boolean equal =false;
 	    if(this.expressionId==node.expressionId)
 	    {
-	    	System.out.println("true ...............");
-	    	equal = true;
+	      	equal = true;
 	    }
 	     return equal;
 	  }
