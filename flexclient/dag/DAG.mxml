@@ -6,6 +6,7 @@ xmlns:Components="Components.*" xmlns:display="flash.display.*"
 creationComplete="initApp()"  width="100%" height="100%">
 <mx:Script>
 <![CDATA[
+	import Components.DAGConstants;
 	import mx.containers.HBox;
 	import mx.controls.ComboBox;
     import mx.controls.ToolTip;
@@ -50,7 +51,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 	
 	//------------------------
 	private var textData:Object = null;
-    private  var panel:AmbiguityPanel; 
+    private var panel:AmbiguityPanel; 
     private var title:String  = new String();
     private var selectedNodeList:ArrayCollection = new ArrayCollection();
     private var count:int = 0;
@@ -63,118 +64,8 @@ creationComplete="initApp()"  width="100%" height="100%">
 	private	var isQuery:String = "false";
 	public var isOutputView:Boolean=false;
 	public var rpcService: RemoteObject;
+	public var view:String ="";
 	
-
-	
-	private function repaintHandler(event: ResultEvent):void
-	{
-		//Alert.show("Repaint");
-		var nodeList:ArrayCollection = event.result  as ArrayCollection;
-		var xpos:int =0;
-		var ypos:int =0;
-		for(var i:int=0;i<nodeList.length;i++)
-		{
-			var node:DAGNode = nodeList.getItemAt(i) as DAGNode;
-			node.x = node.x + (xpos + 50);
-			node.y = node.y + (100);
-						
-			node.name =  node.expressionId+"";
-			node.nodeNumber = node.expressionId+"";
-			node.addEventListener(MouseEvent.MOUSE_MOVE,doDrag);
-			node.addEventListener(MouseEvent.CLICK,updateNodeSelection);
-		//	Alert.show("nodeName =>"+node.nodeName+"nodeType=>"+node.nodeType)
-			if(isQuery == "true")
-			{
-				if(node.nodeType=="ConstraintViewNode")
-				{
-					panel1.addChild(node);
-				}
-			}
-			else
-			{
-				panel1.addChild(node);
-			}
-			
-		}
-		for(var i:int=0;i<nodeList.length;i++)
-		{
-
-			var sourceNode:DAGNode = nodeList.getItemAt(i) as DAGNode;	
-			var associationList:ArrayCollection = sourceNode.associationList;
-			var pathList:ArrayCollection  = sourceNode.pathList;
-			var operatorList:ArrayCollection = sourceNode.operatorList;
-
-			 for(var j:int=0;j<associationList.length;j++)
-			 {
-			    var targetNode:DAGNode = associationList.getItemAt(j) as DAGNode;	
-				pathStr= pathList.getItemAt(j).toString() as String;
-			    var operator:String = operatorList.getItemAt(j) as String;
-			    sourceNode.operatorArray[0] = operator;
-                sourceNode.enable=false;
-				linkNodes(sourceNode.expressionId.toString(),targetNode.expressionId.toString());
-			 	
-			 }
-		}
-		
-	}
-	
-	private function initFlexInterfaceHandler(event: ResultEvent):void
-	{
-		//Alert.show("Intialized .....")
-		//isQueryObject=event.result as Boolean;
-	}
-	
-	private function initApp():void
-	{
-		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
-		rpcService= new RemoteObject();
-		rpcService.destination="cdeService";
-	//	Alert.show(" ==>" +Application.application.parameters.isQuery);
-		isQuery =Application.application.parameters.isQuery;
-		var view:String = Application.application.parameters.view;
-		if (isContainerReady())
-			{
-				// If the container is ready, register the SWF’s functions.
-				setUpCall();
-			}
-			else
-			{
-				/* If the container is not ready, set up a Timer to call the
-				container at 100ms intervals. Once the container responds that
-				is ready, the timer will be stopped. */
-				readyTimer = new Timer(100);
-				readyTimer.addEventListener(TimerEvent.TIMER, timerHandler);
-				readyTimer.start();
-			}
-
-		
-		if(view=="AddLimit")
-		{
-			//Alert.show("1 in if" +isQuery);
-			if(isQuery=="true")
-			{
-				rpcService.addEventListener("result",repaintHandler);
-			 	rpcService.repaintCreateDAG();
-			}
-			else
-			{
-				rpcService.initFlexInterface();
-				rpcService.addEventListener("result",initFlexInterfaceHandler);
-				rpcService.addEventListener("fault", faultHandler);
-			//	Alert.show("is query "+isQueryObject.toString());
-			}
-						
-	    
-		}
-		 else
-	 	{
-	 		//rpcService.removeEventListener(ResultEvent.RESULT,addNodeToViewHandler,false);
-		 	rpcService.addEventListener("result",repaintHandler);
-		 	rpcService.repaintCreateDAG();
-	    }
-	    panel = new  AmbiguityPanel();
-	    panel.title="Ambiguity resolver";
-	}
 	
 	public function timerHandler():void
 	{
@@ -192,7 +83,6 @@ creationComplete="initApp()"  width="100%" height="100%">
 		ExternalInterface.addCallback("editLimit",editLimit);	
 		ExternalInterface.addCallback("searchResult",searchResult);	
 		ExternalInterface.addCallback("addNodeToView",addNodeToView);
-		ExternalInterface.addCallback("restoreQueryObject",restoreQueryObject);
 	}
 	
 	//setup the callback function so that HTML can call flex methods
@@ -209,33 +99,245 @@ creationComplete="initApp()"  width="100%" height="100%">
 		Alert.show(event.fault.faultString, 'Error');
 	}
 	
-/*	private function isQueryObjectPresent():Boolean
+		//-----------------
+	private function doDrag(event:MouseEvent):void
 	{
-		var result:Boolean = ExternalInterface.call("isQuery");
-		return result;
-	}*/
-	
-	public function restoreQueryObject():void
-	{
-	///	isQueryObject=true;
-		//rpcService.addEventListener("result",restoreQueryObjectHandler);
-	//	rpcService.restoreQueryObject();
-	}		
-	private function restoreQueryObjectHandler(event: ResultEvent):void 		
-	{
-	//	Alert.show("Query restore");
-		rpcService.removeEventListener("result",restoreQueryObjectHandler,false);
+		var dragInitiator:DAGNode = DAGNode(event.currentTarget);
+		var ds:DragSource = new DragSource();
+		
+		var canvasProxy:DAGNode = new DAGNode();
+		canvasProxy.nodeNumber = dragInitiator.nodeNumber;
+		canvasProxy.nodeName =dragInitiator.nodeName;
+		
+		
+		var pointOffSet:Point = new Point(dragInitiator.mouseX,dragInitiator.mouseY);
+		ds.addData(pointOffSet,"point");
+		
+		DragManager.doDrag(dragInitiator,ds,event,canvasProxy,0,0);
 	}
+	
+	private function doDragEnter(event:DragEvent):void{
+		DragManager.acceptDragDrop(event.currentTarget as IUIComponent)
+	}
+	
+	private function onDragDrop(event:DragEvent):void{
+		var dagNode:DAGNode = DAGNode(event.dragInitiator) ;
+		var pointOffSet:Point = Point(event.dragSource.dataForFormat("point") );
+		
+		var pt:Point = new Point(event.stageX-pointOffSet.x, event.stageY-pointOffSet.y);
+		pt = panel1.globalToContent(pt);
+		
+		dagNode.x = pt.x;
+		dagNode.y = pt.y;
+		
+		//positioning line
+		var ass:Association;
+		var inAssociations:ArrayCollection;
+		var inAsslength:int;
+		var outAssociations:ArrayCollection;
+		var outAsslength:int;
+		var displayoutAssociations:ArrayCollection=dagNode.displayoutAssociations;
+		var displaylength:int=displayoutAssociations.length
+		//Outgoing associations
+		outAssociations = dagNode.outAssociations;
+		outAsslength = outAssociations.length;
+		for(var i:int=0;i<outAsslength;i++)
+		{
+			ass = Association(outAssociations.getItemAt(i));
+			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
+			if(panel1.getChildByName(dagNode.name) == null || panel1.getChildByName(ass.associatedNode) == null)
+			{
+				Alert.show("Please select two nodes to link");
+			}
+			else
+			{
+				DAGNode(panel1.getChildByName(ass.associatedNode)).removeInAssociation(dagNode.name,ass.associatedLink);
+				linkNodes(dagNode.name,ass.associatedNode);
+			}
+		}
+		for(var j:int=0;j<outAsslength;)
+		{
+			outAssociations.removeItemAt(j);
+			outAsslength--;
+			
+		}
+		for(var j:int=0;j<displaylength;)
+		{
+			displayoutAssociations.removeItemAt(j);
+			displaylength--;
+			
+		}
+		
+		//Incoming associations
+		inAssociations = dagNode.inAssociations;
+		inAsslength = inAssociations.length;
+		for(var k:int=0;k<inAsslength;k++)
+		{
+			ass = Association(inAssociations.getItemAt(k));
+			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
+			if(panel1.getChildByName(dagNode.name) == null || panel1.getChildByName(ass.associatedNode) == null)
+			{
+				Alert.show("Please select two nodes to link");
+			}
+			else
+			{
+				DAGNode(panel1.getChildByName(ass.associatedNode)).removeDisplayOutAssociation(dagNode.name,ass.associatedLink);
+				DAGNode(panel1.getChildByName(ass.associatedNode)).removeOutAssociation(dagNode.name,ass.associatedLink);
+				linkNodes(ass.associatedNode,dagNode.name);
+			}
+			
+		}
+		for(var l:int=0;l<inAsslength;)
+		{
+			
+			inAssociations.removeItemAt(l);
+			inAsslength--;
+		}
+	}
+			
+	private function initFlexInterfaceHandler(event: ResultEvent):void
+	{
+		//Alert.show("Intialized .....")
+	}
+	
+	private function initApp():void
+	{
+		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
+		rpcService= new RemoteObject();
+		rpcService.destination="cdeService";
+		isQuery =Application.application.parameters.isQuery;
+		view= Application.application.parameters.view;
+		if (isContainerReady())
+			{
+			// If the container is ready, register the SWF’s functions.
+				setUpCall();
+			}
+			else
+			{
+				/* If the container is not ready, set up a Timer to call the
+				container at 100ms intervals. Once the container responds that
+				is ready, the timer will be stopped. */
+				readyTimer = new Timer(100);
+				readyTimer.addEventListener(TimerEvent.TIMER, timerHandler);
+				readyTimer.start();
+			}
+		
+			if(view==DAGConstants.ADD_LIMIT_VIEW)
+			{
+				if(isQuery=="true")
+				{
+					rpcService.addEventListener(ResultEvent.RESULT,repaintHandler);
+				 	rpcService.repaintDAG();
+				}
+				else
+				{
+					rpcService.initFlexInterface();
+					rpcService.addEventListener(ResultEvent.RESULT,initFlexInterfaceHandler);
+					rpcService.addEventListener(FaultEvent.FAULT, faultHandler);
+				}
+		    
+			}
+			else
+		 	{
+		 	 	rpcService.addEventListener("result",repaintHandler);
+			 	rpcService.repaintDAG();
+		    }
+		    panel = new  AmbiguityPanel();
+		    panel.title="Ambiguity resolver";
+	}
+	
+	private function repaintHandler(event: ResultEvent):void
+	{
+		var nodeList:ArrayCollection = event.result  as ArrayCollection;
+		var xpos:int =0;
+		var ypos:int =0;
+		for(var i:int=0;i<nodeList.length;i++)
+		{
+			var node:DAGNode = nodeList.getItemAt(i) as DAGNode;
+			node.x = node.x + (xpos + 50);
+			node.y = node.y + (100);
+						
+			node.name =  node.expressionId+"";
+			node.nodeNumber = node.expressionId+"";
+			node.addEventListener(MouseEvent.MOUSE_MOVE,doDrag);
+			node.addEventListener(MouseEvent.CLICK,updateNodeSelection);
+
+			if(isQuery == "true")
+			{
+				if(node.nodeType==DAGConstants.CONSTRAINT_ONLY_NODE)
+				{
+					node.nodeColor=0xffb693;
+					panel1.addChild(node);
+				}
+				if(node.nodeType==DAGConstants.CONSTRAINT_VIEW_NODE)
+				{
+					panel1.addChild(node);
+				}
+			}
+			else
+			{
+				if(node.nodeType==DAGConstants.CONSTRAINT_ONLY_NODE)
+				{
+					node.nodeColor=0xffb693;
+
+				}
+				if(node.nodeType==DAGConstants.VIEW_ONLY_NODE)
+				{
+					node.nodeColor =0xff8080;
+				}
+				panel1.addChild(node);
+			}
+			
+		}
+		for(var i:int=0;i<nodeList.length;i++)
+		{
+
+			var sourceNode:DAGNode = nodeList.getItemAt(i) as DAGNode;	
+			var associationList:ArrayCollection = sourceNode.associationList;
+			var pathList:ArrayCollection  = sourceNode.pathList;
+			var operatorList:ArrayCollection = sourceNode.operatorList;
+
+			 for(var j:int=0;j<associationList.length;j++)
+			 {
+			    var targetNode:DAGNode = associationList.getItemAt(j) as DAGNode;	
+				pathStr= pathList.getItemAt(j).toString() as String;
+			    var operator:String = operatorList.getItemAt(0) as String;
+				if(sourceNode.operatorArray[0]!=operator)
+				{
+						sourceNode.operatorArray[1]  = 	sourceNode.operatorArray[0];
+						sourceNode.operatorArray[0] = operator;
+				}
+				if(isQuery == "true")
+				{
+	                sourceNode.enable=true;
+				}
+				else
+				 {
+	                sourceNode.enable=false;
+				 }
+                try
+                {
+					linkNodes(sourceNode.expressionId.toString(),targetNode.expressionId.toString());
+                }catch(error:TypeError)
+                {
+                	Alert.show("Error=>"+error.getStackTrace());	
+                }
+			 	
+			 }
+		}
+		rpcService.removeEventListener(ResultEvent.RESULT,repaintHandler,false)
+	}
+	
+
 	public function addNodeToView(nodesStr:String):void
 	{
-		rpcService.removeEventListener("result",repaintHandler);
-		rpcService.addEventListener("result",addNodeToViewHandler);
+		rpcService.removeEventListener(ResultEvent.RESULT,repaintHandler);
+		rpcService.addEventListener(ResultEvent.RESULT,addNodeToViewHandler);
 		rpcService.addNodeToView(nodesStr);
 	}	
 		
 	private function addNodeToViewHandler(event: ResultEvent):void 		
 	{
-	//	Alert.show("Node Added"+event.result);
 		textData = event.result;
 		if(textData!=null)
 		{
@@ -248,14 +350,14 @@ creationComplete="initApp()"  width="100%" height="100%">
 	public function searchResult():void
 	{
 		rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
-		rpcService.addEventListener("result",searchResultHandler);
+		rpcService.addEventListener(ResultEvent.RESULT,searchResultHandler);
 		rpcService.getSearchResult();
 	}
 	
 	private function searchResultHandler(event: ResultEvent):void 
 	{
 		resultStr =event.result.toString();
-		if(resultStr=="SUCCESS")// chnage it to SUCCESS
+		if(resultStr=="SUCCESS")
 		{
 			ExternalInterface.call("showViewSearchResultsJsp");
 		}else
@@ -269,9 +371,8 @@ creationComplete="initApp()"  width="100%" height="100%">
 	{
 		rpcService.removeEventListener(ResultEvent.RESULT,initFlexInterfaceHandler,false);
 		rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
-		rpcService.addEventListener("result",getNodeResultHandler);
-		rpcService.setNode(strToCreateQueyObject,entityName);
-		rpcService.getLastNode();
+		rpcService.addEventListener(ResultEvent.RESULT,getNodeResultHandler);
+		rpcService.createNode(strToCreateQueyObject,entityName);
 	}
 	
 	public function linkNodesHandler(event: ResultEvent):void
@@ -319,100 +420,12 @@ creationComplete="initApp()"  width="100%" height="100%">
 	    PopUpManager.centerPopUp(panel);  
 	    }
 	
-	//-----------------
-	private function doDrag(event:MouseEvent):void
-	{
-		var dragInitiator:DAGNode = DAGNode(event.currentTarget);
-		var ds:DragSource = new DragSource();
-		
-		var canvasProxy:DAGNode = new DAGNode();
-		canvasProxy.nodeNumber = dragInitiator.nodeNumber;
-		canvasProxy.nodeName =dragInitiator.nodeName;
-		
-		
-		var pointOffSet:Point = new Point(dragInitiator.mouseX,dragInitiator.mouseY);
-		ds.addData(pointOffSet,"point");
-		
-		DragManager.doDrag(dragInitiator,ds,event,canvasProxy,0,0);
-	}
-	
-	private function doDragEnter(event:DragEvent):void{
-		DragManager.acceptDragDrop(event.currentTarget as IUIComponent)
-	}
-	
-	private function onDragDrop(event:DragEvent):void{
-		var dagNode:DAGNode = DAGNode(event.dragInitiator) ;
-		var pointOffSet:Point = Point(event.dragSource.dataForFormat("point") );
-		
-		var pt:Point = new Point(event.stageX-pointOffSet.x, event.stageY-pointOffSet.y);
-		pt = panel1.globalToContent(pt);
-		
-		dagNode.x = pt.x;
-		dagNode.y = pt.y;
-		
-		//positioning line
-		var ass:Association;
-		var inAssociations:ArrayCollection;
-		var inAsslength:int;
-		var outAssociations:ArrayCollection;
-		var outAsslength:int;
-		
-		//Outgoing associations
-		outAssociations = dagNode.outAssociations;
-		outAsslength = outAssociations.length;
-		for(var i:int=0;i<outAsslength;i++)
-		{
-			ass = Association(outAssociations.getItemAt(i));
-			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
-			if(panel1.getChildByName(dagNode.name) == null || panel1.getChildByName(ass.associatedNode) == null)
-			{
-				Alert.show("Please select two nodes to link");
-			}
-			else
-			{
-				DAGNode(panel1.getChildByName(ass.associatedNode)).removeInAssociation(dagNode.name,ass.associatedLink);
-				linkNodes(dagNode.name,ass.associatedNode);
-			}
-		}
-		for(var j:int=0;j<outAsslength;)
-		{
-			outAssociations.removeItemAt(j);
-			outAsslength--;
-			
-		}
-		
-		//Incoming associations
-		inAssociations = dagNode.inAssociations;
-		inAsslength = inAssociations.length;
-		for(var k:int=0;k<inAsslength;k++)
-		{
-			ass = Association(inAssociations.getItemAt(k));
-			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
-			if(panel1.getChildByName(dagNode.name) == null || panel1.getChildByName(ass.associatedNode) == null)
-			{
-				Alert.show("Please select two nodes to link");
-			}
-			else
-			{
-				DAGNode(panel1.getChildByName(ass.associatedNode)).removeOutAssociation(dagNode.name,ass.associatedLink);
-				linkNodes(ass.associatedNode,dagNode.name);
-			}
-			
-		}
-		for(var l:int=0;l<inAsslength;)
-		{
-			
-			inAssociations.removeItemAt(l);
-			inAsslength--;
-		}
-	}
-	
 
 	private function addNode():void
 	{
 		var newNode:DAGNode = new DAGNode();
 		newNode.nodeName = textData.nodeName;
-	//	Alert.show("	textData.nodeType ==>"+	textData.nodeType);
+
 		newNode.nodeType =	textData.nodeType;
 		newNode.nodeNumber = textData.expressionId+"";
 		newNode.expressionId=textData.expressionId;
@@ -461,16 +474,18 @@ creationComplete="initApp()"  width="100%" height="100%">
 	{
 		var dagpath:IDAGPath = new IDAGPath();
 		panel.pathList= event.result as ArrayCollection;
+		
 	
 		if(panel.pathList.length>1)
 		{
 			createPopUp();
+			panel.nodeList=selectedNodeList;
 		}
 		else
 		{
 			rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
 			rpcService.addEventListener("result",linkNodesHandler);
-			rpcService.linkNodes(panel.pathList);
+			rpcService.linkNodes(selectedNodeList,panel.pathList);
 		}
 		count=0;
 
@@ -489,49 +504,63 @@ creationComplete="initApp()"  width="100%" height="100%">
 	{
 			var dagNode1:DAGNode = DAGNode(panel1.getChildByName(firstNode));
 			var dagNode2:DAGNode = DAGNode(panel1.getChildByName(secondNode));
-			var fromX:int = dagNode1.x+dagNode1.width;
-			var fromY:int = dagNode1.y+(linkCount*10);
-			var toX:int = dagNode2.x;
-			var toY:int = dagNode2.y+(linkCount*15);
-			var line:Sprite = new Sprite();
-			
-			var graphics:Graphics = line.graphics;
-			graphics.clear();
-			graphics.moveTo(fromX,fromY);
-			graphics.beginFill(0xFFCC00);
-			graphics.lineTo(toX,toY);
-			graphics.lineStyle(2,0xFFCC00);
-			graphics.drawCircle(toX,toY,3);
-			graphics.endFill();
-			
-		
-			var vBox:VBox = dagNode1.getChildByName("Association") as VBox;
-			vBox.visible=true;
-			
-			
-			//line.graphics.lineTo(200,200);
-			var c:UIComponent = new UIComponent();
-			c.id="line"+linkNum++;
-			c.name="line"+linkNum++;
-			c.addChild(line);
-			if(path!=null)			
+			if(dagNode2!=null)	
 			{
-				c.toolTip=path.name;
+				var fromX:int = dagNode1.x+dagNode1.width;
+				var fromY:int = dagNode1.y+(linkCount*10);
+				var toX:int = dagNode2.x;
+				var toY:int = dagNode2.y+(linkCount*15);
+				var line:Sprite = new Sprite();
+				
+				var graphics:Graphics = line.graphics;
+				graphics.clear();
+				graphics.moveTo(fromX,fromY);
+				graphics.beginFill(0xFFCC00);
+				graphics.lineTo(toX,toY);
+				graphics.lineStyle(2,0xFFCC00);
+				graphics.drawCircle(toX,toY,3);
+				graphics.endFill();
+				
+			
+				var vBox:VBox = dagNode1.getChildByName("Association") as VBox;
+				vBox.visible=true;
+				
+				var c:UIComponent = new UIComponent();
+				c.id="line"+linkNum++;
+//			c.name="line"+linkNum++;
+				
+				c.addChild(line);
+				if(path!=null)			
+				{
+					c.toolTip=path.name;
+					c.name = path.id;
+					
+				}
+				else
+				{
+					c.toolTip=pathStr;
+					c.name ="line"+linkNum++;	
+				}
+	
+				panel1.addChild(c);
+				//removing selections
+				dagNode1.unSelect();
+				dagNode2.unSelect();
+				if(dagNode2.nodeType==DAGConstants.VIEW_ONLY_NODE)
+				{
+					dagNode1.addOutAssociation(secondNode,c.name);
+					dagNode2.addInAssociation(firstNode,c.name);
+				}
+				else
+				{
+					dagNode1.addDisplayOutAssociation(secondNode,c.name);
+					dagNode1.addOutAssociation(secondNode,c.name);
+					dagNode2.addInAssociation(firstNode,c.name);
+				}
+				node1="";
+				node2="";
+				selectedNodeList.removeAll();
 			}
-			else
-			{
-				c.toolTip=pathStr;
-			}
-
-			panel1.addChild(c);
-			//removing selections
-			dagNode1.unSelect();
-			dagNode2.unSelect();
-			dagNode1.addOutAssociation(secondNode,c.name);
-			dagNode2.addInAssociation(firstNode,c.name);
-			node1="";
-			node2="";
-			selectedNodeList.removeAll();
 		
 	}
 							
@@ -541,6 +570,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 	}
 	
 	private function updateNodeSelection(event:MouseEvent):void {
+	
 		if(event.ctrlKey)
 		{
 			var dagNode:DAGNode = DAGNode(panel1.getChildByName(event.currentTarget.name));
@@ -548,11 +578,27 @@ creationComplete="initApp()"  width="100%" height="100%">
 			{
 				if(dagNode.name == node1 )
 				{
+					if(selectedNodeList!=null)
+					{
+						var index:int =node1 as int;
+						selectedNodeList.removeItemAt(0);
+						selectedNodeList.addItemAt(selectedNodeList.getItemIndex(1),0)
+						selectedNodeList.removeItemAt(1);
+						count--;
+					
+					}
 					dagNode.unSelect();
 					node1 = "";
 				}
 				else if(dagNode.name == node2)
 				{
+					if(selectedNodeList!=null)
+					{
+						Alert.show("2");
+						var index:int =node2 as int;
+						selectedNodeList.removeItemAt(1);
+						count--;
+					}
 					dagNode.unSelect();
 					node2 = "";
 				}
@@ -579,6 +625,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 							
 					if(count<2)
 					{
+						var index:int = dagNode.name as int;
 						selectedNodeList.addItem(dagNode);
 					}
 					count++;
@@ -596,17 +643,34 @@ creationComplete="initApp()"  width="100%" height="100%">
 		if(ass != null)
 		{
 			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
-			dagNode1.removeOutAssociation(node2,ass.associatedLink);
+			if(dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)
+			{
+				dagNode1.removeOutAssociation(node2,ass.associatedLink);
+			}
+			else
+			{
+				dagNode1.removeDisplayOutAssociation(node2,ass.associatedLink);
+				dagNode1.removeOutAssociation(node2,ass.associatedLink);
+			}
 			dagNode2.removeInAssociation(node1,ass.associatedLink);
 			dagNode1.unSelect();
 			dagNode2.unSelect();
+			rpcService.addEventListener(ResultEvent.RESULT,deleteLinkHandler);
+			var nodeList:ArrayCollection = new ArrayCollection();
+			nodeList.addItemAt(dagNode1,0);
+			nodeList.addItemAt(dagNode2,1);
+			rpcService.deleteLink(nodeList,ass.associatedLink)
 		}
 		else
 		{
 			Alert.show("Selected nodes do not have any association");
 		}
 	}
-			
+	public function deleteLinkHandler(event:ResultEvent):void
+	{
+		Alert.show("Link deleted");		
+		rpcService.removeEventListener(ResultEvent.RESULT,deleteLinkHandler,false);
+	}
 	public function editNode(node:DAGNode):void
 	{
 		eNode=node;
@@ -615,7 +679,6 @@ creationComplete="initApp()"  width="100%" height="100%">
 		rpcService.addEventListener(ResultEvent.RESULT,limitUIHandler);
 		
 	}
-	
 	public function limitUIHandler(event:ResultEvent):void
 	{
 		var htmlStr:String = event.result as String;
@@ -634,7 +697,6 @@ creationComplete="initApp()"  width="100%" height="100%">
 		var tooltip:String = event.result as String;
 		eNode.toolTip = tooltip;
 		rpcService.removeEventListener(ResultEvent.RESULT,editNodeHandler);
-		
 	}
 	
 	private var eNode:DAGNode;
