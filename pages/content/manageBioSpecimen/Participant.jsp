@@ -562,10 +562,37 @@ tr#hiddenCombo
 	} 
 	else
 	{
-			document.forms[0].submit();		
+			checkActivityStatusForCPR();	
 	}
 }
 
+		function checkActivityStatusForCPR()
+		{
+			var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
+			var isAllActive = true;
+			for(i = 1 ; i <= collectionProtocolRegistrationVal ; i++)
+			{
+				var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_activityStatus)";
+				if((document.getElementById(name) != undefined) && document.getElementById(name).value=="Disabled")
+				{
+					isAllActive = false;
+					var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
+					if (go==true)
+					{
+						document.forms[0].submit();
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			
+			if (isAllActive==true)
+			{
+				document.forms[0].submit();
+			}
+		}
 		function onVitalStatusRadioButtonClick(element)
 		{
 		

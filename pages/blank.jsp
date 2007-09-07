@@ -22,7 +22,7 @@
 				{
 			%>
 			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId=<%=cpId%>&participantId=<%=participantId%>";
-			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>=<%=cpId%>&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=<%=participantId%>";
+			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location="showTree.do";
 			
 			<%
 				}
