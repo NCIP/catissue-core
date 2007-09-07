@@ -14,38 +14,36 @@
 		import mx.rpc.events.ResultEvent;
 
 	    [Bindable]
-		public var pathList:ArrayCollection = new ArrayCollection();
+		public var pathList:ArrayCollection = null;
 	    [Bindable]
 		public var selectedList:ArrayCollection= null;
-								
+		
+		public var nodeList:ArrayCollection =null;						
 		public var dagPath: IDAGPath;
 		
-	private function init():void
+		private function init():void
         {
-        	
-                pathList.addEventListener(CollectionEvent.COLLECTION_CHANGE, handleDataProviderChange);
+        	selectedList = new ArrayCollection()
+            pathList.addEventListener(CollectionEvent.COLLECTION_CHANGE, handleDataProviderChange);
         }
        
 		public  function closePopUp(event:MouseEvent):void {
-
 			    PopUpManager.removePopUp(this);
 				this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,this.parentApplication.getPathHandler,false);
 				this.parentApplication.rpcService.addEventListener("result",this.parentApplication.linkNodesHandler);
-				this.parentApplication.rpcService.linkNodes(selectedList);
-				
-			
+				this.parentApplication.rpcService.linkNodes(nodeList,selectedList);
 		}
 
 	private function handleDataProviderChange(event:CollectionEvent):void
         {
-		selectedList = new ArrayCollection()
+		
 		var len:int = pathList.length;
 
 				for (var i:int=0;i<len;i++)
 				{
-					if (pathList.getItemAt(i).isSelected)
+					dagPath = pathList.getItemAt(i) as IDAGPath;
+					if (dagPath.isSelected)
 					{
-						dagPath = pathList.getItemAt(i) as IDAGPath;
 						selectedList.addItem(dagPath);
 					}
 				}
