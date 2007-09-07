@@ -402,7 +402,15 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 
 		if(forwardToHashMap !=null)
 		{
+			
+			/**
+			 * Name: Falguni Sachde
+			 * Reviewer Name: 
+			 * Attribute  collectionProtocolName added to show Collection ProtocolName in Add mode only.
+			 */
+			
 			Long collectionProtocolId = (Long)forwardToHashMap.get("collectionProtocolId");
+			String collectionProtocolName =(String) request.getSession().getAttribute("cpTitle");
 			if(collectionProtocolId == null && request.getParameter("cpId") != null && !request.getParameter("cpId").equals("null"))
 			{
 				collectionProtocolId = new Long(request.getParameter("cpId"));
@@ -412,6 +420,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			String participantProtocolId = (String) forwardToHashMap.get("participantProtocolId");
 
 			specimenCollectionGroupForm.setCollectionProtocolId(collectionProtocolId.longValue());
+			specimenCollectionGroupForm.setCollectionProtocolName(collectionProtocolName);
+			
 			/**
 			 * Name : Deepti Shelar
 			 * Bug id : 4216

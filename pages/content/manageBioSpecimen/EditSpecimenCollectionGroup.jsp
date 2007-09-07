@@ -73,6 +73,11 @@
 						<html:hidden property="stringOfResponseKeys"/>
 						<html:hidden property="applyChangesTo"/>
 						<html:hidden property="consentTierCounter"/>
+						<html:hidden property="collectionProtocolId"/>
+						<html:hidden property="participantNameWithProtocolId"/>
+						<html:hidden property="participantName"/>
+						<html:hidden property="collectionProtocolName"/>
+						<html:hidden property="protocolParticipantIdentifier"/>
 						
 					</td>
 				 </tr>
@@ -102,21 +107,42 @@
 			     	<td class="formRequiredNotice" colspan="2" width="5">*</td>
 				    <td class="formRequiredLabel">
 						<label for="collectionProtocolId">
-							<bean:message key="specimenCollectionGroup.protocolTitle"/>
+							<bean:message key="specimenCollectionGroup.protocolTitle"/> 
 						</label>
-					</td>
+					</td> 
 					
 					<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>" onchange="onChangeEvent(this)"
+				<%	
+					if(pageView.equals("add"))
+					{					
+				%>
+						<label for="collectionProtocolIdValue">
+							 <b><%=form.getCollectionProtocolName()%> </b>
+						</label>
+	
+						<input type="hidden" id="collectionProtocolId" value="<%=form.getCollectionProtocolId()%>" />
+						<input type="hidden" id="collectionProtocolName" value="<%=form.getCollectionProtocolName()%>" />
+					
+				<% 
+					}
+					else
+					 {
+				%>
+						<!-- Mandar : 434 : for tooltip -->
+				
+				      	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>" onchange="onChangeEvent(this)"
 				     	 onmouseover="showToolTip(this)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
+
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
 						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=specimenCollectionGroup&addNewFor=collectionProtocol')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
 						</logic:notEqual>
+       				<% 
+						}
+					%>
 		        	</td>
 				 </tr>
 
@@ -146,7 +172,30 @@
 						</logic:notEqual>
 		        	</td>
 				 </tr>
-				 
+				 <%	if(pageView.equals("add"))
+					{				
+				%>
+				<tr>
+					<td class="formRequiredNotice" colspan="2" width="5">*</td>
+					<td class="formRequiredLabel" >
+						<label for="participantName">
+							 ParticipantName With ProtocolId
+						</label>
+					</td>
+					<td class="formField">
+						<label for="participantName">
+						<b>	<%=form.getParticipantNameWithProtocolId()%></b>
+						</label>
+						
+					</td>
+					<html:hidden property="participantName"/>
+					<html:hidden property="protocolParticipantIdentifier"/>
+				</tr>
+				<% }else {
+				%>
+				<html:hidden property="participantName"/>
+				<html:hidden property="protocolParticipantIdentifier"/>
+
 				 <tr>
 					 <td class="formRequiredNoticeNoBottom">*</td>
 					 <td class="formRequiredNoticeWithoutBorder">
@@ -188,7 +237,7 @@
 					</td>
   					
 				 </tr>
-				 
+				 	
 				 <tr>
 				    <td class="formRequiredNotice" align="right">&nbsp;</td>
 					<td class="formRequiredNoticeWithoutLeftBorder">
@@ -233,6 +282,7 @@
 	 					</logic:notEqual>
 		        	</td>
 				 </tr>
+				<% }%>
 				<tr>
 					<td class="formRequiredNotice" colspan="2" width="5">*</td>
 					<td class="formRequiredLabel" >

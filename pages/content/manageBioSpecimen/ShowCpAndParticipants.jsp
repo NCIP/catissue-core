@@ -19,14 +19,21 @@
 
 		function onCpChange(element)
 		{
+
 			var cpId = document.getElementById("cpId");
+			var selIdx = document.getElementById("cpId").selectedIndex;
+			var cpName = document.getElementById("cpId").options[selIdx].text;
+			
+
 			var participantId = document.getElementById("participantId");
 			 <%if(access != null && access.equals("Denied"))
+
 			{%>
-				window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=-1&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value;			
+				window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=-1&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value+"&cpTitle="+cpName;			
 			<%} else {%>
-			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location = "showTree.do";							
-			var action = "showCpAndParticipants.do?cpChange=true";
+			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location = "showTree.do?cpTitle="+cpName;							
+			var action = "showCpAndParticipants.do?cpChange=true&cpTitle="+cpName;
+
 			document.forms[0].action = action;
 			
 			document.forms[0].submit();
@@ -78,7 +85,6 @@
 		</td>
 	</tr>		
 	<tr valign='top'>
-
 		<td class="formField" nowrap valign='top' width="150">
 			<html:select property="cpId" styleClass="formFieldSized22" styleId="cpId" size="1" onchange="onCpChange(this)"
 			  onmouseover="showToolTip(this)" onmouseout="hideTip(this.id)">

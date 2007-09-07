@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -62,6 +63,24 @@ public class ShowTreeAction extends BaseAction
 		request.setAttribute("treeData", treeData);
 		request.setAttribute(Constants.CP_SEARCH_CP_ID, cpId);
 		request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, participantId);
+		/**
+		 * Name : Falguni Sachde
+		 * Reviewer's Name : Sachin Lale
+		 * 
+		 * 
+		 * Description : getting parameters Name of Collection Protocol Name from request and setting it as attribute
+		 *  
+		 */
+		
+		String cpTitle = request.getParameter("cpTitle");
+		
+		if(cpTitle!=null)
+		{
+			HttpSession session = request.getSession();
+			session.setAttribute("cpTitle",cpTitle);
+		}
+		
+		
 		return mapping.findForward("success");
 	}
 }

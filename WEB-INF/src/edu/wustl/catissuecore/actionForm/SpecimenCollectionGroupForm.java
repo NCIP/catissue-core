@@ -173,8 +173,23 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	 * Description: Attribute to set events in specimens associated with this scg
 	*/
 	private boolean applyEventsToSpecimens = false;
-    
-    
+	/**
+	 * Name : Falguni Sachde
+	 *  
+	 * 
+	 * 	 
+	 * Description: Attribute to set Collection Protocol Short name to associated with this scg
+	*/
+    private String collectionProtocolName;
+    /**
+	 * Name : Falguni Sachde
+	 *  
+	 * 
+	 * 	 
+	 * Description: Attribute to set Participant Name concatenated with Participant Identifier.
+	*/
+    private String participantNameWithProtocolId;
+	
     /**
      * Comments given by user.
      */
@@ -681,13 +696,17 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 			 * Validation for participant name and participantProtocolIdentifier added
 			 */
 			// Check what user has selected Participant Name / Participant Number
+
 			if(this.radioButtonForParticipant == 1)
 			{   
 				//if participant name field is checked.
 				/**For Migration Start**/	
 				if(this.participantName==null || validator.isEmpty(this.participantName))  // || Utility.this.participantName.trim().equals(""))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant")));
+					if(this.participantNameWithProtocolId==null||validator.isEmpty(this.participantNameWithProtocolId))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant")));
+					}	
 				}
 			/**For Migration End**/	
 			}
@@ -1367,6 +1386,39 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	public void setParticipantName(String participantName) 
 	{
 		this.participantName = participantName;
+	}
+
+
+
+	public String getCollectionProtocolName() {
+		return collectionProtocolName;
+	}
+
+
+
+	public void setCollectionProtocolName(String collectionProtocolName) {
+		this.collectionProtocolName = collectionProtocolName;
+	}
+
+	public String getParticipantNameWithProtocolId() {
+		participantNameWithProtocolId = "";
+		if(participantName!=null)
+			participantNameWithProtocolId = participantName;
+		else
+			participantNameWithProtocolId ="N/A";  
+			
+		if(protocolParticipantIdentifier!=null && protocolParticipantIdentifier.length() > 0)	
+			participantNameWithProtocolId = participantNameWithProtocolId + '('+ protocolParticipantIdentifier + ')';
+		else
+			participantNameWithProtocolId = participantNameWithProtocolId+'('+"N/A" + ')';
+			
+		return participantNameWithProtocolId;
+	}
+
+
+
+	public void setParticipantNameWithProtocolId(String participantNameProtocolId) {
+		this.participantNameWithProtocolId = participantNameProtocolId;
 	}
 
 }
