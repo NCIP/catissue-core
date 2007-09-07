@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.flex.dag.DAGConstant;
 import edu.wustl.catissuecore.flex.dag.DAGNode;
 import edu.wustl.catissuecore.flex.dag.DAGPanel;
 import edu.wustl.catissuecore.flex.dag.DAGPath;
@@ -356,45 +357,43 @@ public class FlexInterface
 	//--------------DAG-----------------------------
 	public void restoreQueryObject()
 	{
-		dagPanel.restoreQueryObject(session, queryObject);
-		
+		dagPanel.restoreQueryObject();
 	}
-	
+	/**
+	 * Add Nodes in define Result view
+	 * @param nodesStr
+	 * @return
+	 */
 	public DAGNode addNodeToView(String nodesStr)
 	{
-		System.out.println("nodesStr ==>"+nodesStr);
-		System.out.println("NodeList  ===>"+ nodeList);
-		System.out.println("queryObject ==>"+queryObject);
-		DAGNode dagNode = dagPanel.addNodeToOutPutView(nodesStr,session,queryObject);
-		System.out.println("dagNode ==> "+dagNode);
+		DAGNode dagNode = dagPanel.addNodeToOutPutView(nodesStr);
 		nodeList.add(dagNode);
 		return dagNode;
 	}
-	
-	public List<DAGNode> repaintCreateDAG()
+	/**
+	 * Repaints DAG
+	 * @return
+	 */
+	public List<DAGNode> repaintDAG()
 	{
 	//	restoreQueryObject();
-		return dagPanel.repaintCreateDAG(session);
+		return dagPanel.repaintDAG();
 	}
 	
 	public String getSearchResult()
 	{
-		return dagPanel.search(session);
+		return dagPanel.search();
 	}
 	/**
-	 * Set i/p from flex
+	 * create DAG Node
 	 * @param strToCreateQueryObject
 	 * @param entityName
 	 */
-	public void setNode(String strToCreateQueryObject,String entityName)
+	public DAGNode createNode(String strToCreateQueryObject,String entityName)
     {
-	//TODO Write code to refresh node list when new http request arrives.
-//		 Add  node each time  and Append it list of node to keep track of nodes
-		// Delete node should remove node from list required to idenetify node uniquely 
-		// Should remove any assocation
-		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName, session,queryObject,"Add");
+		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName,"Add");
 		nodeList.add(dagNode);
-		
+		return dagNode;
 	}
 	
 	/**
@@ -410,29 +409,32 @@ public class FlexInterface
 		}
 		return nodeList.get(lastIndex);
 	}
-	
+	/**
+	 * 
+	 * @param expressionId
+	 * @return
+	 */
 	public String getLimitUI(int expressionId)
 	{
-		
 		Map map =dagPanel.editAddLimitUI(expressionId);
-		String htmlStr = (String)map.get("HTMLSTR");
-		IExpression expression = (IExpression)map.get("EXPRESSION");
+		String htmlStr = (String)map.get(DAGConstant.HTML_STR);
+		IExpression expression = (IExpression)map.get(DAGConstant.EXPRESSION);
 		dagPanel.setExpression(expression);
-		System.out.println("[ " +htmlStr +" ]");
 		return htmlStr;
 	}
-	
+	/**
+	 * Edit Node
+	 * @param strToCreateQueryObject
+	 * @param entityName
+	 * @return
+	 */
 	public String editNode(String strToCreateQueryObject,String entityName)
 	{
 		String conditionStr	= null;
-		System.out.println("strToCreateQueryObject ==>"+strToCreateQueryObject);
-		System.out.println("entityName====>"+entityName);
-		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName, session,queryObject,"Edit");
-		System.out.println("dagnode  id "+dagNode.getExpressionId());
+		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName,"Edit");
 		for(int i=0;i<nodeList.size();i++)
 		{
 			DAGNode node  = nodeList.get(i);
-			System.out.println("node  id====> "+node.getExpressionId());
 			if(node.equals(dagNode))
 			{
 				nodeList.remove(i);
@@ -440,56 +442,94 @@ public class FlexInterface
 				break;
 			}
 		}
-		for  (int i=0;i<5;i++)
-			System.out.println(i);
 		conditionStr = dagNode.getToolTip();
-		System.out.println("conditionStr==="+conditionStr);
 		return conditionStr;
 	}
-	
-	
-	
-	public void deleteNode(String nodeName)
+	/**
+	 * Deletes node from output view
+	 * @param expId
+	 */
+	public void deleteFromView(int expId)
+	{
+		dagPanel.deleteExpressionFormView(expId); 
+	}
+	/**
+	 * Adds node to output view
+	 * @param expId
+	 */
+	public void addToView(int expId)
+	{
+		dagPanel.addExpressionToView(expId); 
+	}
+	/**
+	 * Deletes node from DAG
+	 * @param expId
+	 */
+	public void deleteNode(int expId)
 	{
 		for(int i=0;i<nodeList.size();i++)
 		{
 			DAGNode dagNode = nodeList.get(i);
-			if(dagNode.getNodeName().equals(nodeName));
+			if(dagNode.getExpressionId()==expId)
 			{
+				dagPanel.deleteExpression(dagNode.getExpressionId());//delete Expression 
 				nodeList.remove(i);
 				break;
 			}
 		}
 	}
-	
+	/**
+	 * Gets path List between nodes
+	 * @param linkedNodeList
+	 * @return
+	 */
+	private List<IPath> getPathList(List<DAGNode> linkedNodeList) {
+		DAGNode sourceNode = linkedNodeList.get(0);
+		DAGNode destinationNode = linkedNodeList.get(1);
+		List<IPath> pathsList=dagPanel.getPaths(sourceNode, destinationNode);
+		return pathsList;
+	}
+	/**
+	 * Gets association(path) between 2 nodes
+	 * @param linkedNodeList
+	 * @return
+	 */
 	public List getpaths(List<DAGNode> linkedNodeList)
 	{
-		sourceNode = linkedNodeList.get(0);
-		destinationNode = linkedNodeList.get(1);
-		pathsList=dagPanel.getPaths(sourceNode, destinationNode);
+		List<IPath> pathsList=getPathList(linkedNodeList);
 		List<DAGPath> pathsListStr = new ArrayList<DAGPath>();
 		for(int i=0;i<pathsList.size();i++)
 		{
 			Path p =(Path) pathsList.get(i);
 			DAGPath path = new DAGPath();
 			path.setName(DAGPanel.getPathDisplayString(pathsList.get(i)));
-			path.setId(new Long(p.getPathId()));
+			path.setId(new Long(p.getPathId()).toString());
 			pathsListStr.add(path);
 		}
 		return pathsListStr;
 	}
 	
-	public void linkNodes(List<DAGPath> selectedPaths)
+	/**
+	 * Links 2 nodes
+	 * @param linkedNodeList
+	 * @param selectedPaths
+	 */
+	
+	public void linkNodes(List<DAGNode>linkedNodeList,List<DAGPath> selectedPaths)
 	{
 		try {
+			DAGNode sourceNode = linkedNodeList.get(0);
+			DAGNode destinationNode = linkedNodeList.get(1);
+			List<IPath> pathsList=getPathList(linkedNodeList);
 			List<IPath> selectedList = new ArrayList<IPath>();
 			for(int j=0;j<selectedPaths.size();j++)
 			{
 				for(int i=0; i<pathsList.size();i++)
 				{
 					Path path =(Path) pathsList.get(i);
-					long pathId = selectedPaths.get(j).getId().longValue();
-					if(path.getPathId()==pathId)
+					String pathStr = new Long(path.getPathId()).toString();
+					String pathId = selectedPaths.get(j).getId();
+					if(pathStr.equals(pathId))
 					{
 						selectedList.add(path);
 						break;
@@ -503,15 +543,42 @@ public class FlexInterface
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Deletes associaton between 2 nodes
+	 * @param linkedNodeList
+	 * @param linkName
+	 */
+	public void deleteLink(List<DAGNode> linkedNodeList,String linkName)
+	{
+		List<IPath> pathsList=getPathList(linkedNodeList);
+		System.out.println("linkName=="+linkName);
+		for(int i=0; i<pathsList.size();i++)
+		{
+			Path path =(Path) pathsList.get(i);
+			String pathId = new Long(path.getPathId()).toString();
+			System.out.println("pathId ==>"+pathId);			
+			if(pathId.equals(linkName))
+			{
+				dagPanel.deletePath(path,linkedNodeList);
+				break;
+			}
+		}
+	}
+	/**
+	 * Sets logical operator set from UI
+	 * @param node
+	 * @param operandIndex
+	 * @param operator
+	 */
 	public void setLogicalOperator(DAGNode node,int operandIndex,String operator)
 	{
 		int parentExpId = node.getExpressionId();
-		System.out.println("parentExpId =="+parentExpId+"==operandIndex=="+operandIndex+"==operator=="+operator );
 		dagPanel.updateLogicalOperator(parentExpId, operandIndex, operator);
-		
 	}
-
+	/**
+	 *Initalises DAG 
+	 *
+	 */
 	public void initFlexInterface()
 	{
 		nodeList = new ArrayList<DAGNode>();
@@ -520,13 +587,13 @@ public class FlexInterface
 		dagPanel = new DAGPanel(pathFinder);
 		dagPanel.setQueryObject(queryObject);
 		session= flex.messaging.FlexContext.getHttpRequest().getSession();
+		dagPanel.setSession(session);
 		
 	}
-	private DAGNode sourceNode= null;
-	private DAGNode destinationNode = null; 
+	
 	private	IClientQueryBuilderInterface queryObject=null;
 	private List<DAGNode> nodeList;
-	private List<IPath> pathsList;
+	
 	private DAGPanel dagPanel;
 	private HttpSession session = null;
 	
