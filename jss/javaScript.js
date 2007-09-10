@@ -849,10 +849,13 @@ function onRadioButtonGroupClick(element)
     	//This function gets called whenever a specimen/ scg gets added in system.
     	function refreshTree(cpAndParticipantsFrame, treeFrame,cpSearchCpId,cpSearchParticipantId,nodeId)
     	{
-    		var cpId = window.parent.frames[cpAndParticipantsFrame].document.getElementById("cpId").value;
-			var participantId = window.parent.frames[cpAndParticipantsFrame].document.getElementById("participantId").value;
-			window.parent.frames[treeFrame].location="showTree.do?"+cpSearchCpId+"="+cpId+"&"+cpSearchParticipantId+"="+participantId+"&nodeId="+nodeId;
+    		//var cpId = window.parent.frames[cpAndParticipantsFrame].document.getElementById("cpId").value;
+			//var participantId = window.parent.frames[cpAndParticipantsFrame].document.getElementById("participantId").value;
+			//window.parent.frames[treeFrame].location="showTree.do?"+cpSearchCpId+"="+cpId+"&"+cpSearchParticipantId+"="+participantId+"&nodeId="+nodeId;
    		
+   		     //Changes made related to flex ....By Baljeet 
+   		    
+   		     top.frames["cpAndParticipantView"].pageInit(nodeId); 
     	}
 		
 		function trim(inputString) {
