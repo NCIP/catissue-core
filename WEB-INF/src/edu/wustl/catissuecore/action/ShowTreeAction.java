@@ -58,7 +58,9 @@ public class ShowTreeAction extends BaseAction
 			 * Patch Id : FutureSCG_2
 			 * Description : Calling method to create tree for future scgs
 			 */
-			treeData = bizLogic.getSCGTreeForCPBasedView(new Long(cpId), new Long(participantId)); 
+			
+			//Commented out by Baljeet as not required after Flex realted changes
+			//treeData = bizLogic.getSCGTreeForCPBasedView(new Long(cpId), new Long(participantId)); 
 		}
 		request.setAttribute("treeData", treeData);
 		request.setAttribute(Constants.CP_SEARCH_CP_ID, cpId);
