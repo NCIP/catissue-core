@@ -1245,5 +1245,27 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			}
 		}
 	}
+	
+	public String retriveSCGNameFromSCGId(String id) throws DAOException
+	{
+		String scgName = "";
+		String[] selectColumnName = {"name"};
+		String[] whereColumnName = {"id"};
+		String[] whereColumnCondition = {"="};
+		Object[] whereColumnValue = {id};
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(null);
+		List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
+				whereColumnValue, null);
+		if (scgList != null && !scgList.isEmpty())
+		{
+			
+			scgName=(String) scgList.get(0);
+		}
+		
+		dao.closeSession();
+		return scgName;
+	}
+
 
 }
