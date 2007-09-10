@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.metadata.path.Path;
 import edu.wustl.common.querysuite.queryobject.ICondition;
@@ -47,6 +48,7 @@ import edu.wustl.catissuecore.flex.dag.DAGNode;
 import edu.wustl.catissuecore.flex.dag.DAGPanel;
 import edu.wustl.catissuecore.flex.dag.DAGPath;
 import edu.wustl.catissuecore.flex.dag.DAGPathFinder;
+import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
@@ -55,7 +57,9 @@ import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
-
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import java.util.Collection;
+import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 public class FlexInterface
 {
 	public FlexInterface() throws Exception
@@ -596,6 +600,100 @@ public class FlexInterface
 	
 	private DAGPanel dagPanel;
 	private HttpSession session = null;
+	
+	
+//	Methods added by Baljeet
+	/**
+	 * This method retrieves the List if all Collection Protocols
+	 * @return The cp List.
+	 */
+	public List getCpList()
+	{
+		
+		List<CpAndParticipentsBean>cpList = new ArrayList<CpAndParticipentsBean>();
+       
+		//Getting the instance of participantRegistrationCacheManager
+		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
+       
+		//Getting the CP List 
+		List cpColl = participantRegCacheManager.getCPDetailCollection();
+		Collections.sort(cpColl);
+		
+       //Converting From NameValueBean to CpAndParticipentsBean
+		Iterator itr = cpColl.iterator();
+		while(itr.hasNext())
+		{
+			CpAndParticipentsBean cpBean = new CpAndParticipentsBean();
+			NameValueBean bean = (NameValueBean)itr.next();
+			cpBean.setName(bean.getName());
+			cpBean.setValue(bean.getValue());
+			
+			//Adding CpAndParticipentsBean to cpList
+			cpList.add(cpBean);
+		}
+		return cpList;
+	}
+	
+	/**
+	 * This method retrieves the List of participants associated with a cp
+	 * @param cpId :Collection protocol Id
+	 * @return the list of Participants
+	 */
+	public List getParticipantsList(String cpId)
+	{
+		List<CpAndParticipentsBean>participantsList = new ArrayList<CpAndParticipentsBean>();
+        
+        //Getting the instance of participantRegistrationCacheManager
+		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
+
+        //getting the list of participants from cache for particular CP.
+		List participantNamesWithId = participantRegCacheManager.getParticipantNames(Long.parseLong(cpId));
+        
+        //Values in participantNamesWithID will be in format (ID:lastName firstName) 
+		//tokenize the value and create nameValueBean with name as (lastName firstName) and value as participantId 
+		//and store in the list
+		
+		//List participantColl = new ArrayList();
+		if(participantNamesWithId != null && participantNamesWithId.size()>0) 
+		{
+			Iterator itr = participantNamesWithId.iterator();
+			while (itr.hasNext())
+			{
+				String participantIdAndName = (String) itr.next();
+				int index = participantIdAndName.indexOf(":");
+				Long Id = null;
+				String name="";
+				Id = new Long(participantIdAndName.substring(0, index));
+				name = participantIdAndName.substring(index + 1);
+			
+				participantsList.add(new CpAndParticipentsBean(name,Id.toString()));
+				//participantColl.add(new NameValueBean(name, Id));
+			}
+		}
+		else
+		{
+			System.out.println("The participants list is empty");
+		}
+        //Sorting the participants
+		//Collections.sort(participantsList);
+	    return participantsList;
+	}
+	
+    /**
+     * This mehtod returns the XML String for generating tree 
+     * @param cpId : Selcted Collection Protocol ID
+     * @param pId : Selected Participant Id
+     * @return : The XML String for tree data 
+     * @throws Exception
+     */
+	public String getTreeData(String cpId, String pId)throws Exception
+    {
+    	//System.out.println("In get tree data method & cpID is:"+cpId);
+    	SpecimenCollectionGroupBizLogic bizlogic = new SpecimenCollectionGroupBizLogic();
+        String str = bizlogic.getSCGTreeForCPBasedView(Long.parseLong(cpId),Long.parseLong(pId)); 
+    	return str;
+    }
+
 	
 	
 	
