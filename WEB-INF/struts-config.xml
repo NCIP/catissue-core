@@ -3531,8 +3531,8 @@ PUBLIC
 		type="edu.wustl.catissuecore.action.ShowCPAndParticipantsAction"
 		name="cpSearchForm"
 		scope="request">
-		<forward name="success" path="/pages/content/manageBioSpecimen/ShowCpAndParticipants.jsp"/>
-		<forward name="failure" path="/pages/content/manageBioSpecimen/ShowCpAndParticipants.jsp"/>
+	    <forward name="success" path="/pages/content/manageBioSpecimen/ShowCpAndParticipantsFlex.jsp"/>
+		<forward name="failure" path="/pages/content/manageBioSpecimen/ShowCpAndParticipantsFlex.jsp"/>
 	</action>
 
 	<action path="/showTree"
