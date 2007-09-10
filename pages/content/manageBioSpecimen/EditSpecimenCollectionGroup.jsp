@@ -179,7 +179,7 @@
 					<td class="formRequiredNotice" colspan="2" width="5">*</td>
 					<td class="formRequiredLabel" >
 						<label for="participantName">
-							 ParticipantName With ProtocolId
+							 <bean:message key="specimenCollectionGroup.participantNameWitProtocolId" />
 						</label>
 					</td>
 					<td class="formField">
