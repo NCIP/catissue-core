@@ -12,6 +12,7 @@
 	String frame1Ysize = "100%";
 	String frame2Ysize = "100%";
 	String frame3Ysize = "100%";
+	
 	String cpAndParticipantViewFrameHeight="50%";
 	if(access != null && access.equals("Denied"))
 	{
@@ -37,7 +38,7 @@
 <table border="0" height="100%" width="100%" cellpadding="0" cellspacing="0">
 	<tr height="100%">
 		<td width="22%" valign="top">
-			<table border="0" width="220" height="100%">
+			<table border="0" width="312" height="100%">
 				<tr height="<%=cpAndParticipantViewFrameHeight%>">
 					<td>				
 					<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>" scrolling="no" frameborder="0" width="100%" height="<%=frame1Ysize%>" marginheight=0 marginwidth=0>
@@ -46,7 +47,7 @@
 
 					</td>
 				</tr>	
-				<tr>
+				<!--<tr>
 					<td align="left" valign="top">		
 
 					<iframe id="<%=Constants.CP_TREE_VIEW%>" name="<%=Constants.CP_TREE_VIEW%>" src="<%=Constants.CP_TREE_VIEW_ACTION%>" scrolling="no" frameborder="0" width="100%" height="<%=frame2Ysize%>" marginheight=0 marginwidth=0 valign="top">
@@ -54,7 +55,7 @@
 					</iframe>
 
 					</td>
-				</tr>	
+				</tr> -->	
 			</table>	
 		</td>
 		<!--P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen-->
