@@ -217,6 +217,7 @@
 					actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
 
 					}%>
+					
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 				else
@@ -235,6 +236,7 @@
 					actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
 
 					}%>
+					
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 			}
@@ -256,6 +258,7 @@
 					actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
 
 					}%>
+					
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 				else
@@ -274,6 +277,7 @@
 					actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
 
 					}%>
+					
 					
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
@@ -549,6 +553,7 @@
 				formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15&consentTierCounter="+consentTier;
 			}			
 
+			 
 			confirmDisable(formName,document.forms[0].activityStatus);
 		}
         
