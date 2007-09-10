@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
+import java.util.Stack;
 
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -745,40 +746,44 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws DAOException daoException
 	 * @throws ClassNotFoundException classNotFoundException
 	 */
-	public Vector getSCGTreeForCPBasedView(Long cpId, Long participantId) throws DAOException, ClassNotFoundException
-	{
+	public String getSCGTreeForCPBasedView(Long cpId, Long participantId) throws DAOException, ClassNotFoundException {
 		Logger.out.debug("Start of getSCGTreeForCPBasedView");
-		Vector treeData = new Vector();
+		
+	    //creating XML String rep of SCGs,specimens & child specimens ::Addded by baljeet 
+		StringBuffer xmlString = new StringBuffer();
+		
+		xmlString.append("<node>");
+
 		String hql = "select  cpe.id, cpe.studyCalendarEventPoint,cpe.collectionPointLabel from " + CollectionProtocolEvent.class.getName()
-				+ " as cpe where cpe.collectionProtocol.id= " + cpId.toString() + " order by cpe.studyCalendarEventPoint";
+		+ " as cpe where cpe.collectionProtocol.id= "+ cpId.toString() +" order by cpe.studyCalendarEventPoint";
 		List cpeList = executeQuery(hql);
 		Logger.out.debug("After executeQuery");
-		for (int count = 0; count < cpeList.size(); count++)
+		for(int count = 0; count < cpeList.size() ; count++)
 		{
 			Object[] obj = (Object[]) cpeList.get(count);
-			Long eventId = (Long) obj[0];
+			Long eventId = (Long)obj[0];
 			Double eventPoint = (Double) obj[1];
-			String collectionPointLabel = (String) obj[2];
-			List scgList = getSCGsForCPRAndEventId(eventId, cpId, participantId);
+			String collectionPointLabel = (String)obj[2];
+			List scgList = getSCGsForCPRAndEventId(eventId, cpId,participantId);
 			if (scgList != null && !scgList.isEmpty())
 			{
-				createTreeNodeForExistingSCG(treeData, eventPoint, collectionPointLabel, scgList);
+			     createTreeNodeForExistingSCG(xmlString, eventPoint, collectionPointLabel, scgList); 
 			}
 			else
 			{
-				createTreeNodeForFutureSCG(treeData, eventId, eventPoint, collectionPointLabel);
+				 createTreeNodeForFutureSCG(xmlString, eventId, eventPoint, collectionPointLabel);
 			}
+			
 		}
-		return treeData;
+		xmlString.append("</node>");
+		return xmlString.toString();
 	}
-
 	/**
 	 * Name : Deepti Shelar
 	 * Bug id : 4268
 	 * Patch id : 4268_1
-	 */
-	/*
-	 *//**
+	 *//*
+	*//**
 	 * Gets all scgs under given cp for all participants.
 	 * @param eventId studycalendareventpoint
 	 * @param cpId collection protocol id
@@ -813,82 +818,81 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param eventPoint event point in no of days
 	 * @param collectionPointLabel String label of collection event point
 	 */
-	private void createTreeNodeForFutureSCG(Vector treeData, Long eventId, Double eventPoint, String collectionPointLabel)
+	private void createTreeNodeForFutureSCG(StringBuffer xmlString, Long eventId, Double eventPoint, String collectionPointLabel) 
 	{
 		Long futureSCGId = new Long(0);
-		String futureSCGName = "T" + eventPoint + ": " + collectionPointLabel;
-		String scgActivityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+		String futureSCGName = "T"+eventPoint + ": " +collectionPointLabel;
 		String toolTipText = futureSCGName;//getToolTipText(eventPoint.toString(),collectionPointLabel,null);
-		String nodeId = futureSCGId.toString() + ":" + eventId.toString() + ":" + Constants.FUTURE_SCG;
-		setQueryTreeNode(nodeId, Constants.SPECIMEN_COLLECTION_GROUP, futureSCGName, "0", null, null, null, scgActivityStatus, toolTipText, treeData);
+		String nodeId = futureSCGId.toString()+":"+eventId.toString()+":"+Constants.FUTURE_SCG;
+		
+		xmlString.append("<node id=\""+Constants.SPECIMEN_COLLECTION_GROUP+"_"+nodeId+"\" "+"name=\""+futureSCGName+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+Constants.SPECIMEN_COLLECTION_GROUP+"\"></node>");
 	}
-
 	/**
 	 * Patch Id : FutureSCG_10
 	 * Description : method to create TreeNode For ExistingSCG
 	 */
 	/**
 	 * Creates a tree node for existing SCgs
-	 * @param treeData data structure for storing tree data
+	 * @param xmlString data structure for storing tree data
 	 * @param eventPoint event point in no of days
 	 * @param collectionPointLabel String label of collection event point
 	 * @param scgList list of scgs
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	private void createTreeNodeForExistingSCG(Vector treeData, Double eventPoint, String collectionPointLabel, List scgList) throws DAOException,
-			ClassNotFoundException
+	private void createTreeNodeForExistingSCG(StringBuffer xmlString, Double eventPoint, String collectionPointLabel, List scgList) throws DAOException, ClassNotFoundException 
 	{
 		for (int i = 0; i < scgList.size(); i++)
 		{
 			Object[] obj1 = (Object[]) scgList.get(i);
 			Long scgId = (Long) obj1[0];
-
+			 
 			String scgNodeLabel = "";
-			String scgActivityStatus = (String) obj1[2];
-
+			//String scgActivityStatus = (String) obj1[2];
+			
 			/**
 			 * Name: Vijay Pande
 			 * Reviewer Name: Aarti Sharma
 			 * recievedEvent related to scg is trieved from db and, proper receivedDate and scgNodeLabel are set to set toolTip of the node
 			 */
 			String receivedDate = "";
-			if (scgId != null && scgId > 0)
+			if(scgId != null  && scgId>0)
 			{
-				String sourceObjName = ReceivedEventParameters.class.getName();
-				String columnName = Constants.COLUMN_NAME_SCG_ID;
-				Long ColumnValue = scgId;
-				Collection eventsColl = retrieve(sourceObjName, columnName, ColumnValue);
-				//				Collection eventsColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
-				if (eventsColl != null && !eventsColl.isEmpty())
+				String sourceObjName=ReceivedEventParameters.class.getName();
+				String columnName=Constants.COLUMN_NAME_SCG_ID;
+				Long ColumnValue=scgId;
+				Collection eventsColl=retrieve(sourceObjName, columnName, ColumnValue);
+                
+				//Collection eventsColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
+				if(eventsColl != null && !eventsColl.isEmpty())
 				{
 					receivedDate = "";
 					Iterator iter = eventsColl.iterator();
-					while (iter.hasNext())
+					while(iter.hasNext())
 					{
-						ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) iter.next();
-						receivedDate = Utility.parseDateToString(receivedEventParameters.getTimestamp(), "yyyy-MM-dd");
-						scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
+						ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)iter.next();
+						receivedDate = Utility.parseDateToString(receivedEventParameters.getTimestamp(),"yyyy-MM-dd");
+						scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate; 
 						break;
 					}
 				}
-				if (scgNodeLabel.equalsIgnoreCase("") && receivedDate.equalsIgnoreCase(""))
+				if(scgNodeLabel.equalsIgnoreCase("")&&receivedDate.equalsIgnoreCase(""))
 				{
-					receivedDate = Utility.parseDateToString(new Date(System.currentTimeMillis()), "yyyy-MM-dd");
+					receivedDate = Utility.parseDateToString(new Date(System.currentTimeMillis()),"yyyy-MM-dd");
 					//String toolTipText = scgNodeLabel+ ": "+scgName;//
-					scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
+					scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate;
 				}
 			}
-			String toolTipText = getToolTipText(eventPoint.toString(), collectionPointLabel, receivedDate);
-			//			String receivedDate = Utility.parseDateToString(new Date(System.currentTimeMillis()),"yyyy-MM-dd");
-			//			scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate;
-			setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, scgNodeLabel, "0", null, null, null, scgActivityStatus,
-					toolTipText, treeData);
-			addSpecimenNodesToSCGTree(treeData, scgId);
+			String toolTipText=getToolTipText(eventPoint.toString(),collectionPointLabel,receivedDate);
 
+			//creating SCG node
+			xmlString.append("<node id= \""+Constants.SPECIMEN_COLLECTION_GROUP+"_"+scgId.toString()+ "\" "+"name=\""+ scgNodeLabel+"\" "+ "toolTip=\""+toolTipText+"\" " +"type=\""+ Constants.SPECIMEN_COLLECTION_GROUP+"\">");
+			
+			//Adding specimen Nodes to SCG tree
+			addSpecimenNodesToSCGTree(xmlString,scgId);
+			xmlString.append("</node>");
 		}
 	}
-
 	/**
 	 * Patch Id : FutureSCG_11
 	 * Description : method to get SCGs For CPR And EventId
@@ -904,73 +908,246 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 */
 	private List getSCGsForCPRAndEventId(Long eventId, Long cpId, Long participantId) throws DAOException, ClassNotFoundException
 	{
-		String hql = "select scg.id,scg.name,scg.activityStatus from " + SpecimenCollectionGroup.class.getName()
-				+ " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from " + CollectionProtocolRegistration.class.getName()
-				+ " as cpr where cpr.collectionProtocol.id = " + cpId + " and cpr.participant.id = " + participantId
-				+ ") and scg.collectionProtocolEvent.id = " + eventId;
+		String hql = "select scg.id,scg.name,scg.activityStatus from "
+			+ SpecimenCollectionGroup.class.getName()
+			+ " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from "
+			+ CollectionProtocolRegistration.class.getName() +" as cpr where cpr.collectionProtocol.id = "
+			+ cpId + " and cpr.participant.id = "+participantId 
+			+") and scg.collectionProtocolEvent.id = "+eventId ;
 		List list = executeQuery(hql);
 		return list;
 	}
-
 	/**
 	 * Patch Id : FutureSCG_12
 	 * Description : method to add SpecimenNodes To SCGTree
 	 */
 	/**
 	 * Adds specimen nodes to SCG node
-	 * @param treeData vector to store tree data
+	 * @param xmlString vector to store XML rep of tree data
 	 * @param scgId id of specimen collection group
 	 */
-	private void addSpecimenNodesToSCGTree(Vector treeData, Long scgId) throws DAOException, ClassNotFoundException
+	private void addSpecimenNodesToSCGTree(StringBuffer xmlString, Long scgId) throws DAOException, ClassNotFoundException
 	{
-		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.type from " + Specimen.class.getName()
-				+ " as sp where sp.specimenCollectionGroup.id = " + scgId + " order by sp.id";
+		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.type from "
+			+ Specimen.class.getName()
+			+ " as sp where sp.specimenCollectionGroup.id = "+scgId +" order by sp.id";
 		List specimenList = executeQuery(hql);
-		for (int j = 0; j < specimenList.size(); j++)
+		
+	    //here we have two Lists to separate out Specimens and child Specimens
+		List <Object[]>finalList = new ArrayList<Object[]>();
+		List <Object[]>childrenList = new ArrayList<Object[]>();
+		
+		//Stack
+		Stack <Object[]>spStack = new Stack<Object[]>();
+		
+		//Here iterate over specimenList to separate out Specimens and child Specimens
+		for(int i = 0; i < specimenList.size(); i++)
 		{
-			Object[] obj = (Object[]) specimenList.get(j);
-			Long spId1 = (Long) obj[0];
-			//String spLabel1 = (String) obj[1];
-			String spLabel1 = (String) obj[1];
+			Object[] obj = (Object[])specimenList.get(i);
+			Long spId = (Long) obj[0];
 			Long parentSpecimenId = (Long) obj[2];
-			String spActivityStatus = (String) obj[3];
-			String type = (String) obj[4];
-
-			/**
-			 * Name : Abhishek Mehta
-			 * Reviewer Name : Poornima
-			 * Bug ID: SpecimenCollection_Tooltip
-			 * Description: To get tool tip text with added information like label, type and container.
-			 */
-
-			String toolTipText = "Label : " + spLabel1 + "\\n Type : " + type;
-
-			String hqlCon = "select colEveParam.container from " + CollectionEventParameters.class.getName()
-					+ " as colEveParam where colEveParam.specimen.id = " + spId1;
-
-			List container = executeQuery(hqlCon);
-			for (int i = 0; i < container.size(); i++)
+			
+			
+			//Long peekSpecimenId = null;
+			if(spId != null)	
 			{
-				String con = (String) container.get(i);
-				toolTipText += "\\n Container : " + con;
-			}
-
-			if (spId1 != null)
-			{
-				if (parentSpecimenId != null)
+				if(parentSpecimenId == null)
 				{
-					setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, parentSpecimenId.toString(), Constants.SPECIMEN, null, null,
-							spActivityStatus, toolTipText, treeData);
+					//if parentSpecimenId is null then it's going to be parent specimen
+					finalList.add((Object[])specimenList.get(i));
 				}
 				else
 				{
-					setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, null,
-							null, spActivityStatus, toolTipText, treeData);
+					childrenList.add((Object[])specimenList.get(i));
 				}
 			}
 		}
+		
+		//Now iterate over childrenList to place children specimens just after their parent specimen  
+		for(int i=0;i<childrenList.size();i++)
+		{
+			Object[] obj = (Object[])childrenList.get(i);
+			Long parentSpecimenId = (Long)obj[2];
+			
+			
+			for(int j=0; j< finalList.size(); j++)
+			{
+				Object[] obj1 = (Object[])finalList.get(j);
+				Long spId = (Long)obj1[0];
+				
+				//This if statement is not working.......convert Long objects to long values 
+				if(parentSpecimenId.longValue() == spId.longValue())
+				{
+					finalList.add(j+1, childrenList.get(i));
+					break;
+					//Here break is important ....once parent is found
+				}
+			}
+		}
+		
+		//Here create XML String  rep. of parent/child specimen tree from finalList 
+		for(int i=0; i<finalList.size();i++)
+		{
+		     	Object[] specimens = (Object[])finalList.get(i);
+		     	Long spId = (Long)specimens[0];
+		     	Long parentId = (Long)specimens[2];
+		     	String spLabel1 = (String) specimens[1];
+		     	//String spActivityStatus = (String) specimens[3];
+		     	String type = (String)specimens[4];
+		     	
+		     	//Added later for toolTip text for specimens
+		        String toolTipText = "Label : " + spLabel1 + " ; Type : " + type;
+				
+				String hqlCon = "select colEveParam.container from " + CollectionEventParameters.class.getName()
+					+" as colEveParam where colEveParam.specimen.id = "+spId;
+				
+				List container = executeQuery(hqlCon);
+				for (int k = 0; k < container.size(); k++)
+				{
+					String con = (String)container.get(k);
+					toolTipText += " ; Container : "+con;
+				}
+		     	
+		     	//If parent id is null, then it's going to be a new specimens
+		     	if(parentId == null)
+		     	{
+		     		while(!spStack.isEmpty()) //closes all specimens node when a new specimens starts 
+		     		{
+		     			spStack.pop();
+		     			xmlString.append("</node>");
+		     		}
+		     	    
+		     		if(i == finalList.size()-1) //If last element & parent specimen
+		     		{
+		     			xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+Constants.SPECIMEN+"\">");
+		     		    xmlString.append("</node>");
+		     		}
+		     		else //If not the last element and parent specimen
+		     		{
+		     		    xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+Constants.SPECIMEN+"\">");
+		     		    spStack.push((Object[])finalList.get(i));
+		     		}
+		     	}
+		         
+		     	else
+		     	{
+		     		Object[] previousSp = (Object[])finalList.get(i-1);
+		     		Long previousSpId = (Long)previousSp[0];
+		     		
+		     		//If immediate prevoius node is parent of current node 
+		     		if(parentId.longValue() == previousSpId.longValue())
+		     		{
+		     			if(i != finalList.size()-1) //if not the last element in specimen list
+		     			{
+		     				Object[]nextSp = (Object[])finalList.get(i+1); //Getting next sp
+		     			    Long nextSpPid = (Long)nextSp[2];
+		     			    
+		     			    if(nextSpPid != null)
+		     			    {
+		     			    	//Check if current specimen have children specimens
+			     			    if(spId.longValue() == nextSpPid.longValue())
+			     			    {
+			     			    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\">");
+			     			        spStack.push((Object[])finalList.get(i)); 
+			     			    }
+			     			    else //if current specimen doesn't have children specimens
+			     			    {
+			     			    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+			     			    }
+		     			    }
+		     			    else
+		     			    {
+		     			    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+		     			    }
+		     			} 
+		     			
+		     			else //last element in specimen List
+		     			{
+		     			   xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+		     			    while(!spStack.isEmpty())
+		     			    {
+		     			    	spStack.pop();
+		     			    	xmlString.append("</node>");
+		     			    }
+		     			}
+		     		}
+		     		else //current node has parent but not the immediate prevoius node. Parent may be on the stack
+		     		{
+		     			Long peekSpecimenId2 = null;
+		     			do
+		     			{
+		     				Object[] peekSp = (Object[])spStack.peek(); //Retrieving the peek element at stack 
+		     				Long peekSpId = (Long)peekSp[0]; 
+		     				if(parentId.longValue() == peekSpId.longValue())//If current node has parent as peek (last) element at stack 
+		     				{
+		     					if(i!=finalList.size()-1) //if not the last element
+		     					{
+		     						Object[] nextSp = (Object[])finalList.get(i+1);
+		     					    Long nextSpPid = (Long)nextSp[2];
+		     					    
+		     					    //Here nextSpPid may be null
+		     					    if(nextSpPid != null)
+		     					    {
+		     					    	//If it has children
+			     					    if(spId.longValue() == nextSpPid.longValue())
+			     					    {
+			     					    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\">");
+					     			        spStack.push((Object[])finalList.get(i)); 
+			     					    }
+			     					    else //if it doesn't has children
+			     					    {
+			     					    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+			     					        break; //Note this break is imp
+			     					    }
+		     					    	
+		     					    }
+		     					    else // next node parent id is null then , then it's parent specimen
+		     					    {
+		     					    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+		     					        break;
+		     					    }
+		     					    
+		     					}
+		     					else //If last element
+		     					{
+		     						xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+				     			    while(!spStack.isEmpty())
+				     			    {
+				     			    	spStack.pop();
+				     			    	xmlString.append("</node>");
+				     			    }
+				     			    
+				     			    break; //If last element,& stack is empty, simply break
+		     					}
+		     					
+		     				}
+		     				else //If node has parent but at peek element of stack
+		     				{
+		     					//So iterate till, node has parent element at stack 
+		     					Long peekSpecimenId1 = null;
+		     					do 
+		     					{
+		     						spStack.pop();
+		     						xmlString.append("</node>");
+		     						
+		     						Object[] peekSp1 = (Object[])spStack.peek(); //Retrieving the peek element at stack 
+				     				peekSpecimenId1 = (Long)peekSp1[0];
+		     					
+		     					}while(parentId.longValue() != peekSpecimenId1.longValue() && !spStack.isEmpty());
+		     				}
+		     				
+		     				if(!spStack.empty())
+		     				{
+		     					Object[] peekSp2 = (Object[])spStack.peek(); //Retrieving the peek element at stack 
+			     				peekSpecimenId2 = (Long)peekSp2[0]; 
+		     				}
+		     		  }while(parentId.longValue() == peekSpecimenId2.longValue() && !spStack.empty());
+		     				
+		     		}
+		     		
+		     	}
+		    }
 	}
-
 	/**
 	 * Patch Id : FutureSCG_13
 	 * Description : method to executeQuery
@@ -989,7 +1166,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		dao.closeSession();
 		return list;
 	}
-
 	/**
 	 * This function sets the data in QuertTreeNodeData object adds in a list of these nodes.
 	 * @param identifier
@@ -1002,9 +1178,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param activityStatus
 	 * @param vector
 	 */
-	private void setQueryTreeNode(String identifier, String objectName, String displayName, String parentIdentifier, String parentObjectName,
+	
+	//Commented out as it is not required after  Flex related chages
+	/*private void setQueryTreeNode(String identifier, String objectName, String displayName, String parentIdentifier, String parentObjectName,
 			String combinedParentIdentifier, String combinedParentObjectName, String activityStatus, String toolTipText, Vector vector)
-	{
+	  {
 		if (!activityStatus.equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
 			QueryTreeNodeData treeNode = new QueryTreeNodeData();
@@ -1018,8 +1196,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			treeNode.setToolTipText(toolTipText);
 			vector.add(treeNode);
 		}
-	}
-
+	}*/
 	/**
 	 * Patch Id : FutureSCG_14
 	 * Description : method to getToolTipText
@@ -1033,14 +1210,14 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 */
 	private static String getToolTipText(String eventDays, String collectionPointLabel, String receivedDate)
 	{
-		StringBuffer toolTipText = new StringBuffer();
+		StringBuffer toolTipText= new StringBuffer();
 		toolTipText.append("Event point : ");
 		toolTipText.append(eventDays);
-		toolTipText.append("\\n  Collection point label : ");
+		toolTipText.append(";  Collection point label : ");
 		toolTipText.append(collectionPointLabel);
-		if (receivedDate != null)
+		if(receivedDate != null)
 		{
-			toolTipText.append("\\n  Received date : ");
+			toolTipText.append(";  Received date : ");
 			toolTipText.append(receivedDate);
 		}
 		return toolTipText.toString();
@@ -1067,27 +1244,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				//break;
 			}
 		}
-	}
-
-	public String retriveSCGNameFromSCGId(String id) throws DAOException
-	{
-		String scgName = "";
-		String[] selectColumnName = {"name"};
-		String[] whereColumnName = {"id"};
-		String[] whereColumnCondition = {"="};
-		Object[] whereColumnValue = {id};
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
-		List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
-				whereColumnValue, null);
-		if (scgList != null && !scgList.isEmpty())
-		{
-			
-			scgName=(String) scgList.get(0);
-		}
-		
-		dao.closeSession();
-		return scgName;
 	}
 
 }
