@@ -80,13 +80,18 @@
 	String participantId = (String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
 	%>
 		<script language="javascript">
-			var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
+			/*var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
 			<%if(participantId != null){%>
 			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId+"&participantId=<%=participantId%>";
 			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=<%=participantId%>";
 			<%} else{%>
 			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId;
 			<%}%>
+			*/
+			
+			//Changes made by Baljeet for Flexxxx related
+		    top.frames["cpAndParticipantView"].refreshCpParticipants();
+		
 		</script>
 	<%}%>
 
