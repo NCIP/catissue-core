@@ -637,7 +637,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				// Getting all active participant registered with CP
 				hql = "select p.id, cpr.protocolParticipantIdentifier from "
 					+ CollectionProtocolRegistration.class.getName()
-					+ " as cpr right outer join cpr.participant as p where cpr.participant.id = p.id and cpr.collectionProtocol.id = "+cpId+" and p.activityStatus != '"+Constants.ACTIVITY_STATUS_DISABLED+"' order by p.id";
+					+ " as cpr right outer join cpr.participant as p where cpr.participant.id = p.id and cpr.collectionProtocol.id = "+cpId+" and cpr.activityStatus != '"+Constants.ACTIVITY_STATUS_DISABLED + "' and p.activityStatus != '"+Constants.ACTIVITY_STATUS_DISABLED+"' order by p.id";
 				
 				List participantList = dao.executeQuery(hql, null, false, null);
 				
