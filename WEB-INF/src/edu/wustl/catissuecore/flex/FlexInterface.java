@@ -60,12 +60,12 @@ public class FlexInterface
 {
 	public FlexInterface() throws Exception
 	{
-		Variables.applicationHome = System.getProperty("user.dir");
-		Logger.out = org.apache.log4j.Logger.getLogger("");
-		PropertyConfigurator.configure(Variables.applicationHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
-		
-		Logger.out.debug("here");
-		CDEManager.init();
+//		Variables.applicationHome = System.getProperty("user.dir");
+//		Logger.out = org.apache.log4j.Logger.getLogger("");
+//		PropertyConfigurator.configure(Variables.applicationHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
+//		
+//		Logger.out.debug("here");
+//		CDEManager.init();
 	}
 	public SpecimenBean say(String str)
 	{
