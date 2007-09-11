@@ -541,6 +541,22 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
 		</action>
+		<action path="/DefineQueryResultsView"
+			type="edu.wustl.catissuecore.action.querysuite.DefineQueryResultsViewAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.defineQueryResultsView"/>			
+		</action>
+		
+		<action path="/ConfigureGridView"
+			type="edu.wustl.catissuecore.action.querysuite.ConfigureGridViewAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef"/>			
+		</action>
+		
 		<!-- Applet Action mapping for query Module -->
 		<action path="/ViewSearchResultsAction" 
 			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction" 
