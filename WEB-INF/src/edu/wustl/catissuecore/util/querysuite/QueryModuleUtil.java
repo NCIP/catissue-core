@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -14,6 +17,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
+import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -27,17 +31,17 @@ public abstract class QueryModuleUtil
 	/**
 	 * Returns the label for attribute's name. It compares ascii value of each char for lower or upper case and then forms a capitalized lebel. 
 	 * eg firstName is converted to First Name
-	 * @param attrName name of the attribute
+	 * @param objectName name of the attribute
 	 * @return capitalized label
 	 */
-	static public String getAttributeLabel(String attrName)
+	static public String getDisplayLabel(String objectName)
 	{
 		String attrLabel = "";
 		boolean isPreviousLetterLowerCase = false;
-		int len = attrName.length();
+		int len = objectName.length();
 		for (int i = 0; i < len; i++)
 		{
-			char attrChar = attrName.charAt(i);
+			char attrChar = objectName.charAt(i);
 			int asciiValue = attrChar;
 			if (i == 0)
 			{
@@ -58,7 +62,7 @@ public abstract class QueryModuleUtil
 					attrLabel = attrLabel + " " + attrChar;
 					for (int k = i + 1; k < len; k++)
 					{
-						attrChar = attrName.charAt(k);
+						attrChar = objectName.charAt(k);
 						asciiValue = attrChar;
 						if (asciiValue >= 65 && asciiValue <= 90)
 						{
@@ -325,5 +329,33 @@ public abstract class QueryModuleUtil
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Sets required data for grid.
+	 * @param request HTTPRequest
+	 * @param spreadSheetDatamap Map to store spreadshet data
+	 */
+	public static void setGridData(HttpServletRequest request, Map spreadSheetDatamap)
+	{
+		int pageNum = Constants.START_PAGE;
+		OutputTreeDataNode object = (OutputTreeDataNode)spreadSheetDatamap.get(Constants.CURRENT_SELECTED_OBJECT);
+		HttpSession session = request.getSession();
+		session.setAttribute(Constants.CURRENT_SELECTED_OBJECT,object);
+		request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
+		QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap.get(Constants.QUERY_SESSION_DATA);
+		int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
+		List<List<String>> dataList = (List<List<String>>) spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
+		request.setAttribute(Constants.SPREADSHEET_DATA_LIST,dataList);
+		request.setAttribute(Constants.PAGINATION_DATA_LIST,dataList);
+		List columnsList = (List) spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST);
+		if(columnsList != null)
+			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnsList);
+		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(totalNumberOfRecords));	
+		session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
+		String pageOf = (String)request.getParameter(Constants.PAGEOF);
+		if(pageOf == null)
+			pageOf = "pageOfQueryModule";
+		request.setAttribute(Constants.PAGEOF,pageOf);
 	}
 }
