@@ -3,8 +3,10 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -29,6 +31,93 @@ import edu.wustl.common.util.dbManager.DAOException;
  */
 public class QueryOutputSpreadsheetBizLogic
 {
+	/**
+	 * Processes spreadsheet data for label node which user has clicked.
+	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
+	 * @param columnMap map for column names for attributes for each node in query
+	 * @param sessionData session data bean
+	 * @param recordsPerPage 
+	 * @param actualParentNodeId string id of parent
+	 * @param nodeIds string array of node ids
+	 * @return Map of spreadsheet data 
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	public Map processSpreadsheetForLabelNode(Map<String, OutputTreeDataNode> idNodesMap,
+			List<OutputTreeDataNode> rootOutputTreeNodeList, 
+			Map<Long, Map<AttributeInterface, String>> columnMap, 
+			SessionDataBean sessionData, String idOfClickedNode, int recordsPerPage,Map<String, String> selectedColumnMetaData)
+	throws DAOException, ClassNotFoundException
+	{
+		this.selectedColumnMetaData = selectedColumnMetaData;
+		Map spreadSheetDataMap = new HashMap();
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
+		String[] nodeIds = idOfClickedNode.split(Constants.NODE_SEPARATOR);
+		String parentNode = nodeIds[0];//data
+		String[] spiltParentNodeId = parentNode.split(Constants.UNDERSCORE);
+		String treeNo = spiltParentNodeId[0];
+		String parentNodeId = spiltParentNodeId[1];
+		if(parentNode.contains("NULL"))
+		{
+			OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(rootOutputTreeNodeList,treeNo);
+			spreadSheetDataMap = createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage);
+			spreadSheetDataMap.put(Constants.CURRENT_SELECTED_OBJECT,root);
+		} else
+		{
+			String parentData = spiltParentNodeId[2];
+			String uniqueParentNodeId = treeNo+"_"+parentNodeId;
+			OutputTreeDataNode parentTreeNode = idNodesMap.get(uniqueParentNodeId);
+			String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(parentTreeNode);
+			String currentNode = nodeIds[1];//label
+			String[] spiltCurrentNodeId = currentNode.split(Constants.UNDERSCORE);
+			String currentNodeId = spiltCurrentNodeId[1];
+			String uniqueCurrentNodeId = treeNo+"_"+currentNodeId;
+			OutputTreeDataNode currentTreeNode = idNodesMap.get(uniqueCurrentNodeId);
+			String selectSql = createSQL(spreadSheetDataMap, currentTreeNode,parentIdColumnName,parentData,tableName);
+			int startIndex = 0;
+			QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql);
+			spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
+			spreadSheetDataMap.put(Constants.CURRENT_SELECTED_OBJECT,currentTreeNode);
+		}
+		return spreadSheetDataMap;
+	}
+	/**
+	 * Processes spreadsheet data for data node which user has clicked.
+	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
+	 * @param columnMap map for column names for attributes for each node in query
+	 * @param sessionData session data bean
+	 * @param actualParentNodeId string id of parent
+	 * @param recordsPerPage 
+	 * @return Map of spreadsheet data 
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	public Map processSpreadsheetForDataNode(Map<String, OutputTreeDataNode> idNodesMap,
+			List<OutputTreeDataNode> rootOutputTreeNodeList, SessionDataBean sessionData, String actualParentNodeId,
+			int recordsPerPage,Map<String, String> selectedColumnMetaData)
+	throws DAOException, ClassNotFoundException
+	{
+		this.selectedColumnMetaData = selectedColumnMetaData;
+		Map spreadSheetDatamap = null;
+		String[] nodeIds;
+		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
+		String treeNo = nodeIds[0];
+		String parentId = nodeIds[1];
+		String parentData = nodeIds[2];
+		String uniqueNodeId = treeNo+"_"+parentId;
+		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
+		if (parentNode.getChildren().isEmpty())
+		{
+			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
+		}
+		else
+		{
+			spreadSheetDatamap = updateSpreadsheet(treeNo,parentNode, rootOutputTreeNodeList, sessionData,parentData,recordsPerPage);
+		}
+		spreadSheetDatamap.put(Constants.CURRENT_SELECTED_OBJECT,parentNode);
+		return spreadSheetDatamap;
+	}
+	private Map<String, String> selectedColumnMetaData;
 	/**
 	 * This loads spreadsheet data when first level (default) tree is shown.This method is also called when data is to be 
 	 * loaded when user clicks on a leaf node of tree.
@@ -69,19 +158,21 @@ public class QueryOutputSpreadsheetBizLogic
 	}
 	
 	/**
+	 * Creates sql string for given data.
 	 * @param parentData
-	 * @param tableName
-	 * @param spreadSheetDataMap
-	 * @param parentIdColumnName
-	 * @param node
-	 * @return
+	 * @param tableName name of the table
+	 * @param spreadSheetDataMap map to store data list
+	 * @param parentIdColumnName String column name of id of parents node
+	 * @param node OutputTreeDataNode
+	 * @return String sql
 	 */
 	private String createSQL(String parentData, String tableName, Map spreadSheetDataMap, String parentIdColumnName, OutputTreeDataNode node)
 	{
 		String selectSql = "select distinct ";
-		List<String> columnsList = new ArrayList<String>();
-		//columnsList.add("");
 		String idColumnOfCurrentNode = "";
+		List<String> columnsList = new ArrayList<String>();
+		
+		//columnsList.add("");
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
@@ -94,12 +185,18 @@ public class QueryOutputSpreadsheetBizLogic
 				idColumnOfCurrentNode = sqlColumnName;
 			}
 			selectSql = selectSql + sqlColumnName + ",";
-			sqlColumnName = sqlColumnName.substring(SqlGenerator.COLUMN_NAME.length(), sqlColumnName.length());
-			String attrLabel = QueryModuleUtil.getAttributeLabel(attribute.getName());
+			String attrLabel = QueryModuleUtil.getDisplayLabel(attribute.getName());
 			columnsList.add(attrLabel + " : " + className);
 		}
-		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
-		selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
+		if(selectedColumnMetaData == null)
+		{
+			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
+			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
+		}
+		else
+		{
+			selectSql = getSQLForSelectedColumns(spreadSheetDataMap);
+		}
 		selectSql = selectSql + " from " + tableName;
 		if (parentData != null)
 		{
@@ -109,6 +206,34 @@ public class QueryOutputSpreadsheetBizLogic
 		else
 		{
 			selectSql = selectSql + " where "+idColumnOfCurrentNode +" "+RelationalOperator.getSQL(RelationalOperator.IsNotNull);	
+		}
+		return selectSql;
+	}
+	/**
+	 * @param spreadSheetDataMap map to store data list
+	 * @return String sql
+	 */
+	private String getSQLForSelectedColumns(Map spreadSheetDataMap)
+	{
+		String selectSql = "";
+		if(!selectedColumnMetaData.isEmpty())
+		{
+			List<String> definedColumnsList = new ArrayList<String>();
+			StringBuffer sqlColumnNames = new StringBuffer();
+			Set<String> keySet = selectedColumnMetaData.keySet();
+			Iterator<String> iter = keySet.iterator();
+			while(iter.hasNext())
+			{
+				String sqlColumnName = iter.next();
+				sqlColumnNames.append(sqlColumnName);
+				sqlColumnNames.append(", ");
+				String columnDisplayName = selectedColumnMetaData.get(sqlColumnName);
+				definedColumnsList.add(columnDisplayName);
+			}
+			String columnsInSql = sqlColumnNames.toString();
+			columnsInSql = columnsInSql.substring(0, columnsInSql.lastIndexOf(","));
+			selectSql =  "select distinct " + columnsInSql;
+			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
 		}
 		return selectSql;
 	}
@@ -211,6 +336,7 @@ public class QueryOutputSpreadsheetBizLogic
 			String sizeStr = new Integer(size).toString();
 			String name = childNode.getOutputEntity().getDynamicExtensionsEntity().getName();
 			name = Utility.parseClassName(name);
+			name = QueryModuleUtil.getDisplayLabel(name);
 			List<String> data = new ArrayList<String>();
 			data.add(name);
 			data.add(sizeStr);
@@ -231,7 +357,7 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @throws ClassNotFoundException
 	 * @throws DAOException
 	 */
-	private QuerySessionData getQuerySessionData(SessionDataBean sessionData, int recordsPerPage, int startIndex, Map spreadSheetDataMap, String selectSql) throws ClassNotFoundException, DAOException
+	public QuerySessionData getQuerySessionData(SessionDataBean sessionData, int recordsPerPage, int startIndex, Map spreadSheetDataMap, String selectSql) throws ClassNotFoundException, DAOException
 	{
 		QuerySessionData querySessionData = new QuerySessionData();
 		querySessionData.setSql(selectSql);
@@ -253,88 +379,7 @@ public class QueryOutputSpreadsheetBizLogic
 		querySessionData.setTotalNumberOfRecords(pagenatedResultData.getTotalRecords());
 		return querySessionData;
 	}
-	/**
-	 * Processes spreadsheet data for label node which user has clicked.
-	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
-	 * @param columnMap map for column names for attributes for each node in query
-	 * @param sessionData session data bean
-	 * @param recordsPerPage 
-	 * @param actualParentNodeId string id of parent
-	 * @param nodeIds string array of node ids
-	 * @return Map of spreadsheet data 
-	 * @throws DAOException DAOException
-	 * @throws ClassNotFoundException ClassNotFoundException
-	 */
-	public Map processSpreadsheetForLabelNode(Map<String, OutputTreeDataNode> idNodesMap,
-			List<OutputTreeDataNode> rootOutputTreeNodeList, 
-			Map<Long, Map<AttributeInterface, String>> columnMap, 
-			SessionDataBean sessionData, String idOfClickedNode, int recordsPerPage)
-	throws DAOException, ClassNotFoundException
-	{
-		Map spreadSheetDataMap = new HashMap();
-		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
-		String[] nodeIds = idOfClickedNode.split(Constants.NODE_SEPARATOR);
-		String parentNode = nodeIds[0];//data
-		String[] spiltParentNodeId = parentNode.split(Constants.UNDERSCORE);
-		String treeNo = spiltParentNodeId[0];
-		String parentNodeId = spiltParentNodeId[1];
-		if(parentNode.contains("NULL"))
-		{
-			OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(rootOutputTreeNodeList,treeNo);
-			spreadSheetDataMap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage);
-		} else
-		{
-			String parentData = spiltParentNodeId[2];
-			String uniqueParentNodeId = treeNo+"_"+parentNodeId;
-			OutputTreeDataNode parentTreeNode = idNodesMap.get(uniqueParentNodeId);
-			String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(parentTreeNode);
-			String currentNode = nodeIds[1];//label
-			String[] spiltCurrentNodeId = currentNode.split(Constants.UNDERSCORE);
-			String currentNodeId = spiltCurrentNodeId[1];
-			String uniqueCurrentNodeId = treeNo+"_"+currentNodeId;
-			OutputTreeDataNode currentTreeNode = idNodesMap.get(uniqueCurrentNodeId);
-			String selectSql = createSQL(spreadSheetDataMap, currentTreeNode,parentIdColumnName,parentData,tableName);
-			int startIndex = 0;
-			QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql);
-			spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
-		}
-		return spreadSheetDataMap;
-	}
-	/**
-	 * Processes spreadsheet data for data node which user has clicked.
-	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
-	 * @param columnMap map for column names for attributes for each node in query
-	 * @param sessionData session data bean
-	 * @param actualParentNodeId string id of parent
-	 * @param recordsPerPage 
-	 * @return Map of spreadsheet data 
-	 * @throws DAOException DAOException
-	 * @throws ClassNotFoundException ClassNotFoundException
-	 */
-	public Map processSpreadsheetForDataNode(Map<String, OutputTreeDataNode> idNodesMap,
-			List<OutputTreeDataNode> rootOutputTreeNodeList, SessionDataBean sessionData, String actualParentNodeId,
-			int recordsPerPage)
-	throws DAOException, ClassNotFoundException
-	{
-		Map spreadSheetDatamap = null;
-		String[] nodeIds;
-		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
-		String treeNo = nodeIds[0];
-		String parentId = nodeIds[1];
-		String parentData = nodeIds[2];
-		String uniqueNodeId = treeNo+"_"+parentId;
-		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
-		if (parentNode.getChildren().isEmpty())
-		{
-			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
-		}
-		else
-		{
-			spreadSheetDatamap = updateSpreadsheet(treeNo,parentNode, rootOutputTreeNodeList, sessionData,parentData,recordsPerPage);
-		}
-		return spreadSheetDatamap;
-	}
+	
 	/**
 	 * @param spreadSheetDataMap
 	 * @param columnsMap
@@ -347,6 +392,7 @@ public class QueryOutputSpreadsheetBizLogic
 	{
 		String selectSql = "select distinct ";
 		List<String> columnsList = new ArrayList<String>();
+		List<String> definedColumnsList = new ArrayList<String>();
 		//columnsList.add("");
 		String idColumnOfCurrentNode = "";
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
@@ -362,11 +408,18 @@ public class QueryOutputSpreadsheetBizLogic
 			}
 			selectSql = selectSql + sqlColumnName + ",";
 			sqlColumnName = sqlColumnName.substring(SqlGenerator.COLUMN_NAME.length(), sqlColumnName.length());
-			String attrLabel = QueryModuleUtil.getAttributeLabel(attribute.getName());
+			String attrLabel = QueryModuleUtil.getDisplayLabel(attribute.getName());
 			columnsList.add(attrLabel + " : " + className);
 		}
-		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
-		selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
+		if(selectedColumnMetaData == null)
+		{
+			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
+			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
+		}
+		else 
+		{
+			selectSql = getSQLForSelectedColumns(spreadSheetDataMap);
+		}
 		selectSql = selectSql + " from " + tableName;
 		if (parentData != null)
 		{
