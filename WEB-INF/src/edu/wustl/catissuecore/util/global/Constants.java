@@ -182,7 +182,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String OUTPUT_TREE_MAP = "outputTreeMap";
 	public static final String CHECK_ALL_PAGES = "checkAllPages";
 	public static final String CHECK_ALL_ACROSS_ALL_PAGES = "isCheckAllAcrossAllChecked";
-	public static final String CLASSES_PRESENT_IN_QUERY = "Classes Present In Query";
+	public static final String CLASSES_PRESENT_IN_QUERY = "Objects Present In Query";
 	public static final String DEFINE_QUERY_RESULTS_VIEW_ACTION = "DefineQueryResultsView.do";
 	public static final String CONFIGURE_GRID_VIEW_ACTION = "ConfigureGridView.do";
 	public static String ATTRIBUTE_MAP = "attributeMap";
@@ -191,8 +191,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SELECT_DISTINCT = "select distinct ";
 	public static final String FROM = " from ";
 	public static final String WHERE = " where ";
-	public static final String DEFINED_COLUMN_NAMES = "definedColumnNames";
-	
+	public static final String SELECTED_COLUMN_META_DATA = "selectedColumnMetaData";
+	public static final String CURRENT_SELECTED_OBJECT = "currentSelectedObject";
+	public static final String SELECTED_COLUMN_NAME_VALUE_BEAN_LIST = "selectedColumnNameValueBeanList";
 	// Query Module Interface UI constants---ends here
 	//	 Frame names in Query Module Results page.
 	public static final String GRID_DATA_VIEW_FRAME = "gridFrame";
