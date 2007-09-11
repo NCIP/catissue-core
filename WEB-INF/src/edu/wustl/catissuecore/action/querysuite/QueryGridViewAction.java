@@ -26,11 +26,11 @@ public class QueryGridViewAction extends BaseAction
 		HttpSession session = request.getSession();
 		int pageNum = Constants.START_PAGE;
 		request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
-		List dataList =(List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+		List dataList =(List)session.getAttribute(Constants.PAGINATION_DATA_LIST);
 		request.setAttribute(Constants.PAGINATION_DATA_LIST,dataList);
 		List<String> columnsList = (List<String>)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnsList);
-		session.setAttribute(Constants.SPREADSHEET_DATA_LIST,null);
+		session.setAttribute(Constants.PAGINATION_DATA_LIST,null);
 		String pageOf = (String)request.getParameter(Constants.PAGEOF);
 		request.setAttribute(Constants.PAGEOF,pageOf);
 		return mapping.findForward(Constants.SUCCESS);
