@@ -71,7 +71,12 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			Map<String,String> validationMessagesMap = new HashMap<String,String>();
 			try
 			{
-				setResultData(request, query);
+				boolean isZeroRecordsFound = setResultData(request, query);
+				if(isZeroRecordsFound)
+				{
+					String errorMessage = ApplicationProperties.getValue("query.zero.records.present");
+					validationMessagesMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
+				}
 			}
 			catch (MultipleRootsException e)
 			{
@@ -114,8 +119,8 @@ public class ViewSearchResultsAction extends BaseAppletAction
 	 * @throws DAOException error in DAO 
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	private void setResultData(HttpServletRequest request, IQuery query) throws MultipleRootsException, SqlException, DAOException, ClassNotFoundException
-	{
+	private boolean setResultData(HttpServletRequest request, IQuery query) throws MultipleRootsException, SqlException, DAOException, ClassNotFoundException
+	{ 
 		HttpSession session = request.getSession();
 		int recordsPerPage; 
 		String recordsPerPageSessionValue = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);
@@ -137,6 +142,8 @@ public class ViewSearchResultsAction extends BaseAppletAction
 		outputTreeBizLogic.createOutputTreeTable(selectSql, sessionData);
 		//Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap = sqlGenerator.getOutputTreeMap();
 		List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator.getRootOutputTreeNodeList();
+		OutputTreeDataNode rootNode = rootOutputTreeNodeList.get(0);
+		session.setAttribute(Constants.CURRENT_SELECTED_OBJECT, rootNode);
 		session.setAttribute(Constants.TREE_ROOTS,rootOutputTreeNodeList);
 		//Set<OutputTreeDataNode> keys = outputTreeMap.keySet();
 		Long noOfTrees = new Long(rootOutputTreeNodeList.size());
@@ -144,9 +151,15 @@ public class ViewSearchResultsAction extends BaseAppletAction
 		Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor.getAllChildrenNodes(rootOutputTreeNodeList);
 		session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
 		int i =0;
+		boolean isZeroRecordsFound = false;
 		for(OutputTreeDataNode node :rootOutputTreeNodeList)
 		{
 			Vector treeData = outputTreeBizLogic.createDefaultOutputTreeData(i,node, sessionData);
+			int resultsSize = treeData.size();
+			if(resultsSize == 0)
+			{
+				isZeroRecordsFound = true;
+			}
 			session.setAttribute(Constants.TREE_DATA+"_"+i, treeData);
 			i += 1;
 		}
@@ -160,8 +173,10 @@ public class ViewSearchResultsAction extends BaseAppletAction
 		session.setAttribute(Constants.QUERY_SESSION_DATA,querySessionData);
 		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(totalNumberOfRecords));	
 		List list= (List)spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
-		session.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
+		session.setAttribute(Constants.PAGINATION_DATA_LIST, list);
 		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
+		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA,null);
+		return isZeroRecordsFound;
 	}
 
 	/**
