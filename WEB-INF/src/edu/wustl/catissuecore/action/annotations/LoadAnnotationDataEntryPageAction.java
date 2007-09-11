@@ -614,7 +614,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         {
             dynEntitiesList = annotationBizLogic.getListOfDynamicEntities(Utility.toLong(entityId));
             dynEntitiesList = annotationBizLogic.getAnnotationIdsBasedOnCondition(dynEntitiesList,cpIdList);
-    //       dynEntitiesList = checkForAbstractEntity(dynEntitiesList);
+           dynEntitiesList = checkForAbstractEntity(dynEntitiesList);
         }       
       //  getConditionalDEId(dynEntitiesList,cpIdList);
         if (dynEntitiesList != null)
@@ -635,21 +635,16 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
     }
     
    /**
-    * 
+    * check for the abstract entity 
     * @param dynEntitiesList
- * @throws DynamicExtensionsApplicationException 
- * @throws DynamicExtensionsSystemException 
+    * @throws DynamicExtensionsApplicationException 
+    * @throws DynamicExtensionsSystemException 
     */ 
-/*    private List checkForAbstractEntity(List dynEntitiesList)
+   private List checkForAbstractEntity(List dynEntitiesList)
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException
     {
-        /*
-         * select  entity.isAbstract from edu.common.dynamicextensions.domain.Entity entity where
-         * entity = container.entity where container in (select container where container.id = ? ) 
-         *  
-         */
-    /*    List entitesList = new ArrayList();
+        List entitesList = new ArrayList();
         if (dynEntitiesList != null)
         {
             Iterator<Long> dynEntitiesIterator = dynEntitiesList.iterator();
@@ -657,13 +652,13 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
             while (dynEntitiesIterator.hasNext())
             {
                 Long deContainerId=dynEntitiesIterator.next();
-                deContainerId =entityManager.getContainedIdBasedOnAbstarctEntity(deContainerId,false);
+                deContainerId =entityManager.checkContainerForAbstractEntity(deContainerId,false);
                 if(deContainerId != null)
                       entitesList.add(deContainerId);                
             }
         }
         return entitesList;
-    }*/
+    }
 
     /**
      * @param long1
