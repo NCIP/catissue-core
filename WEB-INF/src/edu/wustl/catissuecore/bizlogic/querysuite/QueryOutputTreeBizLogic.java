@@ -79,12 +79,12 @@ public class QueryOutputTreeBizLogic
 
 		List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
-		if (dataList != null)
+		if (dataList != null && dataList.size() != 0)
 		{
 			QueryTreeNodeData treeNode = new QueryTreeNodeData();
 			String name = root.getOutputEntity().getDynamicExtensionsEntity().getName();
 			name = Utility.parseClassName(name);
-			String displayName = name + " (" + dataList.size() + ")";
+			String displayName = QueryModuleUtil.getDisplayLabel(name) + " (" + dataList.size() + ")";
 			String nodeId = createNodeId(treeNo, root);
 			displayName = Constants.TREE_NODE_FONT+displayName+Constants.TREE_NODE_FONT_CLOSE;
 			treeNode.setIdentifier(nodeId);
@@ -148,16 +148,11 @@ public class QueryOutputTreeBizLogic
 				treeNode.setIdentifier(nodeIdToSet);
 				EntityInterface dynExtEntity = node.getOutputEntity().getDynamicExtensionsEntity();
 				String fullyQualifiedEntityName = dynExtEntity.getName();
-				String entityName = Utility.parseClassName(fullyQualifiedEntityName);
 				treeNode.setObjectName(fullyQualifiedEntityName);
-				String displayName = entityName + Constants.UNDERSCORE + data;
+				String displayName = data;
 				if (index != -1)
 				{
 					displayName = (String) rowList.get(1);
-				}
-				if (displayName.equalsIgnoreCase(""))
-				{
-					displayName = entityName + Constants.UNDERSCORE + data;
 				}
 				treeNode.setDisplayName(displayName);
 				treeNode.setParentIdentifier(parentNode.getIdentifier().toString());
@@ -198,7 +193,7 @@ public class QueryOutputTreeBizLogic
 				String parId = id.substring(id.lastIndexOf(Constants.NODE_SEPARATOR) + 2, id.length());
 				String childNodeId = childNode.getUniqueNodeId() + Constants.UNDERSCORE + Constants.LABEL_TREE_NODE;
 				String nodeId = parId + Constants.NODE_SEPARATOR + childNodeId;
-				String displayName = name + " (" + size + ")";
+				String displayName = QueryModuleUtil.getDisplayLabel(name) + " (" + size + ")";
 				displayName = Constants.TREE_NODE_FONT + displayName + Constants.TREE_NODE_FONT_CLOSE;
 				String objectName = name;
 				String fullName = node.getOutputEntity().getDynamicExtensionsEntity().getName();
@@ -219,7 +214,7 @@ public class QueryOutputTreeBizLogic
 	 */
 	private String getSql(String parentNodeId, String tableName, String parentIdColumnName, OutputTreeDataNode childNode)
 	{
-		String selectSql = "select distinct ";
+		String selectSql = Constants.SELECT_DISTINCT;
 		String idColumnOfCurrentNode = "";
 		List<QueryOutputTreeAttributeMetadata> attributes = childNode.getAttributes();
 		String sqlColumnName = "";
@@ -234,10 +229,10 @@ public class QueryOutputTreeBizLogic
 			selectSql = selectSql + sqlColumnName + ",";
 		}
 		selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
-		selectSql = selectSql + " from " + tableName;
+		selectSql = selectSql + Constants.FROM + tableName;
 		if (parentNodeId != null)
 		{
-			selectSql = selectSql + " where (" + parentIdColumnName + " = '" + parentNodeId 
+			selectSql = selectSql + Constants.WHERE +" (" + parentIdColumnName + " = '" + parentNodeId 
 			+ "' "+LogicalOperator.And + " " + idColumnOfCurrentNode+" "+RelationalOperator.getSQL(RelationalOperator.IsNotNull)+")";
 		}
 		return selectSql;
@@ -350,7 +345,8 @@ public class QueryOutputTreeBizLogic
 			}
 			if (displayName.equalsIgnoreCase(""))
 			{
-				displayName = entityName + Constants.UNDERSCORE + data;
+				//displayName = entityName + Constants.UNDERSCORE + data;
+				displayName = data;
 			}
 			String objectname = fullyQualifiedEntityName;
 			String parentObjectName = "";
