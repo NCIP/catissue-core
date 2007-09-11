@@ -26,7 +26,7 @@ public class ViewSpecimenSummaryAction extends Action {
 	public  static final String SPECIMEN_LIST_httpSession_BEAN = "SpecimenListBean";
 	public static final String COLLECTION_PROTOCOL_httpSession_BEAN = "CPBean";
 
-	@Override
+	
 	public ActionForward execute(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -36,7 +36,7 @@ try{
 		ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 		String eventId = summaryForm.getEventId();
 		if(eventId==null){
-			//testData(session);
+			testData(session);
 			eventId = (String) request.getParameter("Event_Id");
 		}
 		System.out.println("Action called with event id "+ eventId);
@@ -103,19 +103,30 @@ try{
 				SpecimenDTO aliq2 =getspecimenObject(spec1.getSpecimenLabel());
 				SpecimenDTO aliq3 =getspecimenObject(spec1.getSpecimenLabel());
 				SpecimenDTO aliq4 =getspecimenObject(spec1.getSpecimenLabel());
+
+				SpecimenDTO deri1 =getspecimenObject(spec1.getSpecimenLabel());
+				SpecimenDTO deri2 =getspecimenObject(spec1.getSpecimenLabel());
 				
 				this.addSpecimen(spec1.getUniqueIdentifier(), spec1);
 				this.addSpecimen(spec2.getUniqueIdentifier(), spec2);
 				this.addSpecimen(spec3.getUniqueIdentifier(), spec3);
 				this.addSpecimen(spec4.getUniqueIdentifier(), spec4);
+
 				LinkedHashMap<String, SpecimenDTO> al = new LinkedHashMap<String, SpecimenDTO>();
 				al.put(aliq1.getUniqueIdentifier(), aliq1);
 				al.put(aliq2.getUniqueIdentifier(), aliq2);
 				al.put(aliq3.getUniqueIdentifier(), aliq3);
 				al.put(aliq4.getUniqueIdentifier(), aliq4);
+				
 				((SpecimenTest)spec1).setAliquots(al);
+	
+				LinkedHashMap<String, SpecimenDTO> dr = new LinkedHashMap<String, SpecimenDTO>();
+				dr.put(deri1.getUniqueIdentifier(), deri1);
+				dr.put(deri2.getUniqueIdentifier(), deri2);
+				((SpecimenTest)spec1).setDeriveds(dr);
+				
 			}
-			@Override
+			
 			public LinkedHashMap<String, SpecimenDTO> getSpecimenList(
 					String eventKey) {
 				
@@ -154,67 +165,67 @@ try{
 			derivedList = dr;
 		}
 
-		@Override
+		
 		public LinkedHashMap<String, SpecimenDTO> getAliquotes() {
 			return aliquotList;
 		}
 
-		@Override
+		
 		public String getConcentration() {
 			return "";
 		}
 
-		@Override
+		
 		public LinkedHashMap<String, SpecimenDTO> getDerived() {
 			return derivedList;
 		}
 
-		@Override
+		
 		public String getPathologyStatus() {
 			return "Malignant";
 		}
 
-		@Override
+		
 		public String getQuantity() {
 			return "13";
 		}
 
-		@Override
+		
 		public String getSpecimenClassName() {
 			return "Tissue";
 		}
 
-		@Override
+		
 		public String getSpecimenLabel() {
 			return specName;
 		}
 
-		@Override
+		
 		public String getSpecimenType() {
 			return "Fix tissue";
 		}
 
-		@Override
+		
 		public String getStorage() {
 			return "";
 		}
 
-		@Override
+		
 		public String getTissueSide() {
 			return "Not specified";
 		}
 
-		@Override
+		
 		public String getTissueSite() {
 			return "Not specified";
 		}
 
-		@Override
+		
 		public String getUniqueIdentifier() {
 			return specName;
 		}
 
-		@Override
+		
 		public String getParentName() {
 			// TODO Auto-generated method stub
 			return this.parentName;
