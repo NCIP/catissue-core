@@ -30,8 +30,11 @@ int noOfTrees = trees.intValue();
 var trees = new Array();
 function initTreeView()
 {
+
 var treeNo = 0;
 		<%  
+			String rootNodeIdOfFirstTree = "";
+			boolean isrootNodeIdOfFirstTree = false;
 		for(int i=0;i<noOfTrees;i++) 
 		{
 			String divId = "treebox"+i;
@@ -56,6 +59,11 @@ var treeNo = 0;
 									parentId = data.getParentIdentifier().toString();		
 								}
 								String nodeId = data.getIdentifier().toString();
+								if(!isrootNodeIdOfFirstTree)
+								{
+									rootNodeIdOfFirstTree = nodeId;
+									isrootNodeIdOfFirstTree = true;
+								}
 								String img = "results.gif";
 								if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
 								{
@@ -74,8 +82,22 @@ var treeNo = 0;
 treeNo = treeNo + 1;						
 		<%}
 	%>	
+		trees[0].selectItem("<%=rootNodeIdOfFirstTree%>",true);
 }
 </script>
+<%
+           boolean mac = false;
+	        Object os = request.getHeader("user-agent");
+			if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
+			{
+			    mac = true;
+			}
+	String height = "100%";		
+	if(mac)
+	{
+	  height="300";
+    }
+%>
 <body onload="initTreeView()">
 <html:errors />
 <%
@@ -92,7 +114,7 @@ treeNo = treeNo + 1;
 			String divId = "treebox"+i;
 			int divHeight= 600/noOfTrees;
 			%>
-				<div id="<%=divId%>"  style="background-color:white;width:300;height:400">
+				<div id="<%=divId%>"  style="background-color:white;width:300;height:600">
 				</div>
 			<% } %>
 		</td>
