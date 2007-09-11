@@ -123,7 +123,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				AttributeInterface attribute = (AttributeInterface) attributes.get(i);
 				String attrName = attribute.getName();
-				String attrLabel = QueryModuleUtil.getAttributeLabel(attrName);
+				String attrLabel = QueryModuleUtil.getDisplayLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;
 				if(isBGColor)
