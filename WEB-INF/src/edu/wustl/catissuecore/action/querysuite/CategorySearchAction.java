@@ -27,6 +27,7 @@ import edu.wustl.cab2b.common.util.EntityInterfaceComparator;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 
 /**
@@ -63,6 +64,11 @@ public class CategorySearchAction extends BaseAction
 		}
 		CategorySearchForm searchForm = (CategorySearchForm) form;
 		String currentPage = searchForm.getCurrentPage();
+		if(currentPage != null && currentPage.equalsIgnoreCase("resultsView"))
+		{
+			searchForm = QueryModuleUtil.setDefaultSelections(searchForm);
+			return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
+		}
 		String textfieldValue = searchForm.getTextField();
 		Map<String, EntityInterface> searchedEntitiesMap = (Map<String, EntityInterface>) session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP);
 		if (searchedEntitiesMap == null)
@@ -100,6 +106,13 @@ public class CategorySearchAction extends BaseAction
 						EntityInterface entity = (EntityInterface) resultList.get(i);
 						String fullyQualifiedEntityName = entity.getName();
 						String description = entity.getDescription();
+						/*if(description.length() > 50)
+						{
+							String des = description.substring(0,50);
+							des = des + "\\n";
+							des = des + " "+description.substring(50);
+							description = des;
+						}*/
 						entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|" + description;
 						searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
 					}
