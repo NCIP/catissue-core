@@ -263,7 +263,7 @@
 			<!--antcall target="cleanserver" /-->
 			<!-- Not required to copy csm war file -->
 			 <copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
-			 <copy file="dynamicextensions.war" todir="${jboss.home.dir}/server/default/deploy" />
+			 <copy file="dynamicExtensions.war" todir="${jboss.home.dir}/server/default/deploy" />
 			 <sleep seconds="2" />
 	</target>				
 	
