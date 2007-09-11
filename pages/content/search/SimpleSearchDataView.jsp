@@ -98,6 +98,13 @@ tr#hiddenCombo
 				document.forms[0].target = "myframe1";
 				document.forms[0].submit();
 		}
+		function onQueryResultsConfigure()
+		{
+			action="DefineQueryResultsView.do?pageOf=pageOfQueryModule";
+			document.forms[0].action = action;
+			document.forms[0].target = "<%=Constants.GRID_DATA_VIEW_FRAME%>";
+			document.forms[0].submit();
+		}
 		function onRedefineSimpleQuery()
 		{
 			action="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&operation=redefine";
@@ -114,7 +121,7 @@ tr#hiddenCombo
 		}
 		function onRedefineDAGQuery()
 		{
-			document.forms[0].action='SearchCategory.do';
+			document.forms[0].action='SearchCategory.do?currentPage=resultsView';
 			document.forms[0].target = "_parent";
 			document.forms[0].submit();
 		}
@@ -178,6 +185,7 @@ function checkAllOnThisPageResponse()
 		}
 		else if(pageOf.equals("pageOfQueryModule"))
 		{
+			configAction = "onQueryResultsConfigure()";
 			redefineQueryAction = "onRedefineDAGQuery()";
 		}
 		else
@@ -250,8 +258,8 @@ function checkAllOnThisPageResponse()
 		<% } 
 		%>
 		
-		<tr height="85%" valign="top" width="100%">
-			<td  width="100%">
+		<tr height="80%" valign="top" width="100%">
+			<td  width="100%" valign="top">
 <!--  **************  Code for New Grid  *********************** -->
 				<script>
 					/* 
@@ -267,11 +275,11 @@ function checkAllOnThisPageResponse()
 			</td>
 		</tr>
 
-		<tr height="5%" width="100%">
+		<tr height="5%" width="100%" valign="top">
 		<td>
-			<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+			<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" valign="top">
 			<tr>
-					<td width="5%" nowrap>
+					<td width="5%" nowrap valign="top">
 						<input type='checkbox' name='checkAll2' id='checkAll2' onClick='checkAllOnThisPage(this)'>
 						<span class="formLabelNoBackGround"><bean:message key="buttons.checkAllOnThisPage" /></span>
 						<input type='checkbox' name='checkAll' id='checkAll' onClick='checkAllAcrossAllPages(this)'>
@@ -281,7 +289,7 @@ function checkAllOnThisPageResponse()
 						Object obj = session.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
 						boolean isDefaultView = (obj!=null);
 					%>
-					<td nowrap width="5%">
+					<td nowrap width="5%" valign="top">
 					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
 						<input type='checkbox' <%if (isDefaultView){%>checked='checked' <%}%>name='checkDefaultSpecimenView' id='checkDefaultSpecimenView' onClick='setDefaultView(this)'>
 						<span class="formLabelNoBackGroundWithSize6"><bean:message key="buttons.defaultSpecimenView" /></span>&nbsp;
@@ -289,10 +297,10 @@ function checkAllOnThisPageResponse()
 						&nbsp;
 					<%}%>
 					</td>
-					<td width="70%" align="right">
+					<td width="70%" align="right" valign="top">
 						&nbsp;
 					</td>
-					<td width="5%" nowrap align="right">
+					<td width="5%" nowrap align="right" valign="top">
 					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
 						<html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
 							<bean:message key="buttons.addToCart"/>
@@ -301,17 +309,17 @@ function checkAllOnThisPageResponse()
 						&nbsp;
 					<%}%>
 					</td>
-					<td width="5%" nowrap align="right">
+					<td width="5%" nowrap align="right" valign="top">
 						<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
 							<bean:message key="buttons.export"/>
 						</html:button>&nbsp;
 					</td>
-					<td width="5%" nowrap align="right">
+					<td width="5%" nowrap align="right" valign="top">
 						<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
 							<bean:message  key="buttons.configure" />
 						</html:button>&nbsp;
 					</td>
-					<td width="5%" nowrap align="right">
+					<td width="5%" nowrap align="right" valign="top">
 						<html:button styleClass="actionButton" property="redefineButton" onclick="<%=redefineQueryAction%>">
 							<bean:message  key="buttons.redefineQuery" />
 						</html:button>&nbsp;
