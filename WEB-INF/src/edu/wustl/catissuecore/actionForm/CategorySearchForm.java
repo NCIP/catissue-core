@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 
+import edu.wustl.common.beans.NameValueBean;
+
 /**
  * FormBean representing the QueryModule's properties.
  * @author Mandar Shidhore
@@ -72,6 +74,18 @@ public class CategorySearchForm extends ActionForm
 	 */
     private String booleanAttribute = null;
     
+    private String []selectedColumnNames;
+    private String []columnNames;
+    private List<NameValueBean> selectedColumnNameValueBeanList;
+    /**
+	 * String to store currentSelectedObject
+	 */
+	private String currentSelectedObject = null;
+	 /**
+	 * String to store currentSelectedObject
+	 */
+	private String currentSelectedNodeInTree = null;
+	
 	/**
 	 * @return the currentPage
 	 */
@@ -261,5 +275,75 @@ public class CategorySearchForm extends ActionForm
 	public void setIncludeDescriptionChecked(String includeDescriptionChecked) 
 	{
 		this.includeDescriptionChecked = includeDescriptionChecked;
+	}
+	/**
+	 * @return the columnNames
+	 */
+	public String[] getColumnNames()
+	{
+		return columnNames;
+	}
+	/**
+	 * @param columnNames the columnNames to set
+	 */
+	public void setColumnNames(String[] columnNames)
+	{
+		this.columnNames = columnNames;
+	}
+	/**
+	 * @return the selectedColumnNames
+	 */
+	public String[] getSelectedColumnNames()
+	{
+		return selectedColumnNames;
+	}
+	/**
+	 * @param selectedColumnNames the selectedColumnNames to set
+	 */
+	public void setSelectedColumnNames(String[] selectedColumnNames)
+	{
+		this.selectedColumnNames = selectedColumnNames;
+	}
+	/**
+	 * @return the currentSelectedObject
+	 */
+	public String getCurrentSelectedObject()
+	{
+		return currentSelectedObject;
+	}
+	/**
+	 * @param currentSelectedObject the currentSelectedObject to set
+	 */
+	public void setCurrentSelectedObject(String currentSelectedObject)
+	{
+		this.currentSelectedObject = currentSelectedObject;
+	}
+	/**
+	 * @return the currentSelectedNodeInTree
+	 */
+	public String getCurrentSelectedNodeInTree()
+	{
+		return currentSelectedNodeInTree;
+	}
+	/**
+	 * @param currentSelectedNodeInTree the currentSelectedNodeInTree to set
+	 */
+	public void setCurrentSelectedNodeInTree(String currentSelectedNodeInTree)
+	{
+		this.currentSelectedNodeInTree = currentSelectedNodeInTree;
+	}
+	/**
+	 * @return the selectedColumnNameValueBeanList
+	 */
+	public List<NameValueBean> getSelectedColumnNameValueBeanList()
+	{
+		return selectedColumnNameValueBeanList;
+	}
+	/**
+	 * @param selectedColumnNameValueBeanList the selectedColumnNameValueBeanList to set
+	 */
+	public void setSelectedColumnNameValueBeanList(List<NameValueBean> selectedColumnNameValueBeanList)
+	{
+		this.selectedColumnNameValueBeanList = selectedColumnNameValueBeanList;
 	}
 }
