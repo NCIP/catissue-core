@@ -171,9 +171,9 @@ function setEditableChkbox(checkAllPages)
 	}
 </script>
 
-<table width="100%">
-	<tr>
-		<td>
+<table width="100%" valign="top">
+	<tr valign="top">
+		<td valign="top">
 			<!-- 
 				Patch ID: Bug#3090_25
 				Description: The height of the gridbox is increased to eliminate the blank space
