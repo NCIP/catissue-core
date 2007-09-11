@@ -174,9 +174,11 @@ public class QueryOutputSpreadsheetBizLogic
 		
 		//columnsList.add("");
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
+		List <AttributeInterface> attributeList = new ArrayList<AttributeInterface>();
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
 			AttributeInterface attribute = attributeMetaData.getAttribute();
+			attributeList.add(attribute);
 			String sqlColumnName = attributeMetaData.getColumnName();
 			String className = attribute.getEntity().getName();
 			className = Utility.parseClassName(className);
@@ -197,6 +199,7 @@ public class QueryOutputSpreadsheetBizLogic
 		{
 			selectSql = getSQLForSelectedColumns(spreadSheetDataMap);
 		}
+		spreadSheetDataMap.put(Constants.ATTRIBUTES, attributeList);
 		selectSql = selectSql + " from " + tableName;
 		if (parentData != null)
 		{
@@ -381,6 +384,41 @@ public class QueryOutputSpreadsheetBizLogic
 	}
 	
 	/**
+	 * Processes spreadsheet data for data node which user has clicked.
+	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
+	 * @param columnMap map for column names for attributes for each node in query
+	 * @param sessionData session data bean
+	 * @param actualParentNodeId string id of parent
+	 * @param recordsPerPage 
+	 * @return Map of spreadsheet data 
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	public Map processSpreadsheetForDataNode(Map<String, OutputTreeDataNode> idNodesMap,
+			List<OutputTreeDataNode> rootOutputTreeNodeList, SessionDataBean sessionData, String actualParentNodeId,
+			int recordsPerPage)
+	throws DAOException, ClassNotFoundException
+	{
+		Map spreadSheetDatamap = null;
+		String[] nodeIds;
+		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
+		String treeNo = nodeIds[0];
+		String parentId = nodeIds[1];
+		String parentData = nodeIds[2];
+		String uniqueNodeId = treeNo+"_"+parentId;
+		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
+		if (parentNode.getChildren().isEmpty())
+		{
+			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
+		}
+		else
+		{
+			spreadSheetDatamap = updateSpreadsheet(treeNo,parentNode, rootOutputTreeNodeList, sessionData,parentData,recordsPerPage);
+		}
+		return spreadSheetDatamap;
+	}
+		
+	/**
 	 * @param spreadSheetDataMap
 	 * @param columnsMap
 	 * @param tableName 
@@ -396,9 +434,12 @@ public class QueryOutputSpreadsheetBizLogic
 		//columnsList.add("");
 		String idColumnOfCurrentNode = "";
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
+		List<AttributeInterface> attributeList = new ArrayList<AttributeInterface>();
+		
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
 			AttributeInterface attribute = attributeMetaData.getAttribute();
+			attributeList.add(attribute);
 			String className = attribute.getEntity().getName();
 			className = Utility.parseClassName(className);
 			String sqlColumnName = attributeMetaData.getColumnName();
@@ -420,6 +461,7 @@ public class QueryOutputSpreadsheetBizLogic
 		{
 			selectSql = getSQLForSelectedColumns(spreadSheetDataMap);
 		}
+		spreadSheetDataMap.put(Constants.ATTRIBUTES, attributeList);
 		selectSql = selectSql + " from " + tableName;
 		if (parentData != null)
 		{
@@ -429,5 +471,26 @@ public class QueryOutputSpreadsheetBizLogic
 			selectSql = selectSql + " where "+idColumnOfCurrentNode+" "+RelationalOperator.getSQL(RelationalOperator.IsNotNull);	
 		}
 		return selectSql;
+	}
+	
+	/**
+	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
+	 * @param actualParentNodeId string id of parent
+	 * @return boolean true if node is a leafNode else false.
+	 */
+	public boolean isLeafNode(Map<String, OutputTreeDataNode> idNodesMap,String actualParentNodeId)
+	{
+		String[] nodeIds;
+		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
+		String treeNo = nodeIds[0];
+		String parentId = nodeIds[1];
+		String parentData = nodeIds[2];
+		String uniqueNodeId = treeNo+"_"+parentId;
+		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
+		if (parentNode.getChildren().isEmpty())
+		{
+			return true;
+		}
+		return false;
 	}
 }

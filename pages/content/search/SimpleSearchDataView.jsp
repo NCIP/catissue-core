@@ -22,6 +22,7 @@ tr#hiddenCombo
 <%
 	
 	int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
+	
 	int totalResults = (Integer)session.getAttribute(Constants.TOTAL_RESULTS);
 	int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
 	String pageName = "SpreadsheetView.do";	
@@ -33,12 +34,13 @@ tr#hiddenCombo
 
 	columnList.add(0," ");
 	List dataList = (List) request.getAttribute(Constants.PAGINATION_DATA_LIST);
-//	if(dataList==null)
-//		dataList = (List) request.getAttribute(Constants.PAGINATION_DATA_LIST);
+	
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String title = pageOf + ".searchResultTitle";
 	boolean isSpecimenData = false;	
 	int IDCount = 0;
+	Boolean isAddToCart  =(Boolean)session.getAttribute(Constants.ADD_TO_CART);
+	
 	%>
 		
 
@@ -51,14 +53,27 @@ tr#hiddenCombo
 			var isChecked = updateHiddenFields();
 			var chkBox = document.getElementById('checkAll');
 			var isCheckAllAcrossAllChecked = chkBox.checked;
+			
 		    if(isChecked == "true")
 		    {
 			    var pageNum = "<%=pageNum%>";
-				var action = "ShoppingCart.do?operation=add&pageNum="+pageNum+"&isCheckAllAcrossAllChecked="+isCheckAllAcrossAllChecked ;
-			
+				var action;
+                var isQueryModule = "<%=pageOf.equals(Constants.PAGEOF_QUERY_MODULE)%>";
+                <%if (pageOf.equals(Constants.PAGEOF_QUERY_MODULE))
+                {
+                %>
+				
+				 action = "QueryAddToCart.do?operation=add&pageNum="+pageNum+"&isCheckAllAcrossAllChecked="+isCheckAllAcrossAllChecked;
+				  document.forms[0].target = "gridFrame";
+				<%} else {%>
+				
+				
+			     action = "ShoppingCart.do?operation=add&pageNum="+pageNum+"&isCheckAllAcrossAllChecked="+isCheckAllAcrossAllChecked ;
+				 document.forms[0].target = "myframe1";
+				<%}%>
+
 				document.forms[0].operation.value="add";
 				document.forms[0].action = action;
-				document.forms[0].target = "myframe1";
 				document.forms[0].submit();
 			}
 		}
@@ -200,12 +215,13 @@ function checkAllOnThisPageResponse()
 <body onload="setCheckBoxState()">
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
 <tr>
-	<td>
+	<td >
 		<html:errors /> <!--Prafull:Added errors tag inside the table-->
 	</td>
 </tr>
 <html:form action="<%=Constants.SPREADSHEET_EXPORT_ACTION%>">
 <html:hidden property="checkAllPages" value=""/>	
+
 	<%
 		if(dataList == null && pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
 		{
@@ -301,11 +317,22 @@ function checkAllOnThisPageResponse()
 						&nbsp;
 					</td>
 					<td width="5%" nowrap align="right" valign="top">
-					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
-						<html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
+					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS) || pageOf.equals(Constants.PAGEOF_QUERY_MODULE) ){
+						if(!isAddToCart)
+						{
+					%>
+						<html:button styleClass="actionButton" disabled="true" property="addToCart" onclick="onAddToCart()">
 							<bean:message key="buttons.addToCart"/>
 						</html:button>&nbsp;
-					<%}else{%>
+					<%}
+					   else
+					{ %>
+                       <html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
+							<bean:message key="buttons.addToCart"/>
+						</html:button>&nbsp;
+                        
+					<%}}else
+				       {%>
 						&nbsp;
 					<%}%>
 					</td>

@@ -51,12 +51,13 @@ public class ShoppingCartAction  extends BaseAction
     protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
-    {
+    { 
     	 HttpSession session = request.getSession(true);
         //Gets the value of the operation parameter.
         String operation = (String)request.getParameter(Constants.OPERATION);
         String pageNo = (String)request.getParameter(Constants.PAGE_NUMBER);
         String recordsPerPageStr = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);//Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
+        String pageOff = (String)request.getParameter(Constants.PAGE_OF);
         List paginationDataList = null;
         if(pageNo != null)
         {
@@ -90,15 +91,20 @@ public class ShoppingCartAction  extends BaseAction
         	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));        		
         }
         else
-        {
+        { 
         	session.setAttribute("OrderForm","true");
         	if(operation.equals(Constants.ADD)) //IF OPERATION IS "ADD"
-	        {
+	        { 
         		//Get the checkbox map values
         		Map map = advForm.getValues();
 	        	Logger.out.debug("map of shopping form:"+map);
 	        	Object obj[] = map.keySet().toArray();
 	        	
+	        	if(pageOff !=null && pageOff.equals(Constants.PAGEOF_QUERY_MODULE))
+	        	{ 
+	        		List spreadsheetColumns = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+	        		System.out.println("");
+	        	}
 	        	//Get the column Ids from session
         		Map columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
         		
@@ -113,8 +119,7 @@ public class ShoppingCartAction  extends BaseAction
     			 *  Here, as results are not stored in session, the sql is executed again to form the shopping cart list.  
     			 */
         		int recordsPerPage = new Integer(recordsPerPageStr);
-        		int pageNum = new Integer(pageNo);
-	        	
+        		int pageNum = new Integer(pageNo);	        	
         		QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
         		if(isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equals("true"))
         		{

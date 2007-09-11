@@ -41,15 +41,15 @@ public class ShowGridAction extends BaseAction
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
-	{
+	{   
 		HttpSession session = request.getSession();
 		Map<String, OutputTreeDataNode> uniqueIdNodesMap = (Map<String, OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);
 		Map<Long, Map<AttributeInterface, String>> columnMap = (Map<Long, Map<AttributeInterface, String>>) session.getAttribute(
 				Constants.ID_COLUMNS_MAP);
 		List<OutputTreeDataNode> rootOutputTreeNodeList = (List<OutputTreeDataNode>)session.getAttribute(Constants.TREE_ROOTS);
 		SessionDataBean sessionData = getSessionData(request);
+ 		String idOfClickedNode = request.getParameter("nodeId");
 		Map<String, String> selectedColumnMetaData = (LinkedHashMap<String, String>)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
-		String idOfClickedNode = request.getParameter("nodeId");
 		Map spreadSheetDatamap = null;
 		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
 		int recordsPerPage = new Integer(recordsPerPageStr);
@@ -58,13 +58,19 @@ public class ShowGridAction extends BaseAction
 		if (idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
 		{
 			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode,recordsPerPage,selectedColumnMetaData);
+			session.setAttribute(Constants.ADD_TO_CART, true);
 		}
 		else
 		{
 			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,recordsPerPage,selectedColumnMetaData);
+			boolean isLeafNode = outputSpreadsheetBizLogic.isLeafNode(uniqueIdNodesMap, actualParentNodeId);
+			 //if(isLeafNode)
+				session.setAttribute(Constants.ADD_TO_CART, isLeafNode);
+			 //else
+				// session.setAttribute(Constants.ADD_TO_CART, "false");
 		}
 		QueryModuleUtil.setGridData(request, spreadSheetDatamap);
 		return mapping.findForward(Constants.SUCCESS);
 	}
-	
+		
 }

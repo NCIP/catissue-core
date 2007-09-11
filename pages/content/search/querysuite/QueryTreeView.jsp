@@ -45,7 +45,6 @@ var treeNo = 0;
 			trees[treeNo].setOnClickHandler(treeNodeClicked);
 			<%
 					Vector treeData = (Vector)request.getAttribute(treeDataId);
-					System.out.println("tree darta  :"+treeData);
 					if(treeData != null && treeData.size() != 0)
 						{
 							Iterator itr  = treeData.iterator();

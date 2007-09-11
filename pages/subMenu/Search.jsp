@@ -65,7 +65,7 @@
 		</div>		
 		
 		<div>
-      		<a class="subMenuPrimary" href="ShoppingCart.do">
+      		<a class="subMenuPrimary" href="QueryAddToCart.do?operation=view">
 	  			<bean:message key="app.view" />
 	  		</a>
       </div>

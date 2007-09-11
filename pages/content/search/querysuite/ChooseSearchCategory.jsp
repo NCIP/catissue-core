@@ -60,7 +60,7 @@ System.out.println("currentPage         "+currentPage);
 					</tr>
 					<tr>
 					    <td>&nbsp;</td>
-						<td height="10px" align="left" valign="top" colspan="3"><font face="Arial" size="2">(E.g. Participant,Spcimen,Collection Protocol)</font></td>
+						<td height="10px" align="left" valign="top" colspan="3"><font face="Arial" size="2"><bean:message key="query.chooseCategoryLable"/></font></td>
 					</tr>
 					<tr id="collapsableHeader" valign="top" class="row" width="97%">
 						<td valign="top">&nbsp;</td>

@@ -765,6 +765,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Shopping Cart
 	public static final String SHOPPING_CART = "shoppingCart";
+	public static final String QUERY_SHOPPING_CART = "queryShoppingCart";
 	
 	public static final int SELECT_OPTION_VALUE = -1;
 	
@@ -1962,4 +1963,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
     //Ordering constants
     public static final String ARRAY_NAME = "array";
     
+    //Query Shopping cart constants
+    //public static final String DUPLICATE_OBJECT_IN_CART = "duplicate object added in cart";
+    public static final String SHOPPING_CART_FILE_NAME = "ShoppingCart.csv";
+    public static final String ADD_TO_CART = "";
+    public static final String DUPLICATE_OBJECT = "duplicateObject";
+    public static final String DIFFERENT_VIEW_IN_CART = "differentCartView";
 }

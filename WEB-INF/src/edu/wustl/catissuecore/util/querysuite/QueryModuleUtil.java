@@ -346,6 +346,7 @@ public abstract class QueryModuleUtil
 		QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap.get(Constants.QUERY_SESSION_DATA);
 		int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
 		List<List<String>> dataList = (List<List<String>>) spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
+		List<List<AttributeInterface>>attributeList = (List<List<AttributeInterface>>)spreadSheetDatamap.get(Constants.ATTRIBUTES);
 		request.setAttribute(Constants.SPREADSHEET_DATA_LIST,dataList);
 		request.setAttribute(Constants.PAGINATION_DATA_LIST,dataList);
 		List columnsList = (List) spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST);
@@ -353,6 +354,7 @@ public abstract class QueryModuleUtil
 			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnsList);
 		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(totalNumberOfRecords));	
 		session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
+		session.setAttribute(Constants.ATTRIBUTES, attributeList);
 		String pageOf = (String)request.getParameter(Constants.PAGEOF);
 		if(pageOf == null)
 			pageOf = "pageOfQueryModule";

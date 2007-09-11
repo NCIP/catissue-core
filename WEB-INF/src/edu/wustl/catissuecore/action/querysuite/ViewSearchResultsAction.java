@@ -176,6 +176,7 @@ public class ViewSearchResultsAction extends BaseAppletAction
 		session.setAttribute(Constants.PAGINATION_DATA_LIST, list);
 		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
 		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA,null);
+		
 		return isZeroRecordsFound;
 	}
 

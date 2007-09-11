@@ -19,7 +19,7 @@ import edu.wustl.common.action.BaseAction;
  * @author deepti_shelar
  */
 public class QueryGridViewAction extends BaseAction
-{
+{ 
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
 	{
@@ -33,6 +33,7 @@ public class QueryGridViewAction extends BaseAction
 		session.setAttribute(Constants.PAGINATION_DATA_LIST,null);
 		String pageOf = (String)request.getParameter(Constants.PAGEOF);
 		request.setAttribute(Constants.PAGEOF,pageOf);
+		session.setAttribute(Constants.ADD_TO_CART, true);
 		return mapping.findForward(Constants.SUCCESS);
 	}
 }
