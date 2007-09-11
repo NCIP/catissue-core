@@ -210,7 +210,7 @@ create table DYEXTN_BOOLEAN_CONCEPT_VALUE (
 create table DE_FILE_ATTR_RECORD_VALUES (
    IDENTIFIER bigint not null auto_increment,
    CONTENT_TYPE varchar(255),
-   FILE_CONTENT blob,
+   FILE_CONTENT longblob,
    FILE_NAME varchar(255),
    RECORD_ID bigint,
    primary key (IDENTIFIER)
@@ -271,7 +271,7 @@ create table DYEXTN_TAGGED_VALUE (
 create table DE_OBJECT_ATTR_RECORD_VALUES (
    IDENTIFIER bigint not null auto_increment,
    CLASS_NAME varchar(255),
-   OBJECT_CONTENT blob,
+   OBJECT_CONTENT longblob,
    RECORD_ID bigint,
    primary key (IDENTIFIER)
 );
@@ -479,7 +479,7 @@ create table DYEXTN_RULE_PARAMETER (
 );
 create table DYEXTN_DATE_CONCEPT_VALUE (
    IDENTIFIER bigint not null,
-   VALUE date,
+   VALUE datetime,
    primary key (IDENTIFIER)
 );
 create table DYEXTN_VIEW (
