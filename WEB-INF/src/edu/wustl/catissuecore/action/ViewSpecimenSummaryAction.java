@@ -15,7 +15,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.MultipleSpecimenList;
-import edu.wustl.catissuecore.bean.SpecimenDTO;
+import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -23,8 +23,7 @@ import edu.wustl.common.action.SecureAction;
 
 public class ViewSpecimenSummaryAction extends Action {
 
-	public  static final String SPECIMEN_LIST_httpSession_BEAN = "SpecimenListBean";
-	public static final String COLLECTION_PROTOCOL_httpSession_BEAN = "CPBean";
+	
 
 	
 	public ActionForward execute(ActionMapping mapping,
@@ -36,37 +35,35 @@ try{
 		ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 		String eventId = summaryForm.getEventId();
 		if(eventId==null){
-			testData(session);
+			//testData(session);
 			eventId = (String) request.getParameter("Event_Id");
 		}
 		System.out.println("Action called with event id "+ eventId);
 		System.out.println("Action called with Selection id "+ 
 				summaryForm.getSelectedSpecimenId());
 
-		MultipleSpecimenList specimenList;
 		
+		LinkedHashMap<String, GenericSpecimen> specimenMap;
 		if (eventId != null) {
-			specimenList = (MultipleSpecimenList) session
-					.getAttribute(COLLECTION_PROTOCOL_httpSession_BEAN);
+			specimenMap = (LinkedHashMap) session
+					.getAttribute(Constants.COLLECTION_PROTOCOL_httpSession_BEAN);
 
 		} else {
-			specimenList = (MultipleSpecimenList) session
-					.getAttribute(SPECIMEN_LIST_httpSession_BEAN);
+			specimenMap = (LinkedHashMap) session
+					.getAttribute(Constants.SPECIMEN_LIST_httpSession_BEAN);
 		}
 
-		LinkedHashMap<String, SpecimenDTO> specimenMap = specimenList
-				.getSpecimenList(eventId);
 		summaryForm.setSpecimenList( specimenMap.values());
 //		summaryForm.setSelectedSpecimenId("specimen1");
 		String selectedSpecimenId = summaryForm.getSelectedSpecimenId();
 		System.out.println(selectedSpecimenId);
 		if (selectedSpecimenId != null) {
-			SpecimenDTO selectedSpecimen = specimenMap.get(selectedSpecimenId);
+			GenericSpecimen selectedSpecimen = specimenMap.get(selectedSpecimenId);
 			
 			if (selectedSpecimen != null){
-				HashMap<String, SpecimenDTO> aliqutesList = selectedSpecimen
+				HashMap<String, GenericSpecimen> aliqutesList = selectedSpecimen
 						.getAliquotes();
-				HashMap<String, SpecimenDTO> derivedList = selectedSpecimen
+				HashMap<String, GenericSpecimen> derivedList = selectedSpecimen
 						.getDerived();
 				if(aliqutesList != null){
 					summaryForm.setAliquoteList(aliqutesList.values());
@@ -90,29 +87,29 @@ try{
 	private void testData(HttpSession session) {
 		MultipleSpecimenList specimenList = new MultipleSpecimenList() {
 
-			private LinkedHashMap<String, SpecimenDTO> list = 
-					new LinkedHashMap<String, SpecimenDTO>();
+			private LinkedHashMap<String, GenericSpecimen> list = 
+					new LinkedHashMap<String, GenericSpecimen>();
 
 			{
-				SpecimenDTO spec1 =getspecimenObject("");
-				SpecimenDTO spec2 =getspecimenObject("");
-				SpecimenDTO spec3 =getspecimenObject("");
-				SpecimenDTO spec4 =getspecimenObject("");
+				GenericSpecimen spec1 =getspecimenObject("");
+				GenericSpecimen spec2 =getspecimenObject("");
+				GenericSpecimen spec3 =getspecimenObject("");
+				GenericSpecimen spec4 =getspecimenObject("");
 
-				SpecimenDTO aliq1 =getspecimenObject(spec1.getSpecimenLabel());
-				SpecimenDTO aliq2 =getspecimenObject(spec1.getSpecimenLabel());
-				SpecimenDTO aliq3 =getspecimenObject(spec1.getSpecimenLabel());
-				SpecimenDTO aliq4 =getspecimenObject(spec1.getSpecimenLabel());
+				GenericSpecimen aliq1 =getspecimenObject(spec1.getSpecimenLabel());
+				GenericSpecimen aliq2 =getspecimenObject(spec1.getSpecimenLabel());
+				GenericSpecimen aliq3 =getspecimenObject(spec1.getSpecimenLabel());
+				GenericSpecimen aliq4 =getspecimenObject(spec1.getSpecimenLabel());
 
-				SpecimenDTO deri1 =getspecimenObject(spec1.getSpecimenLabel());
-				SpecimenDTO deri2 =getspecimenObject(spec1.getSpecimenLabel());
+				GenericSpecimen deri1 =getspecimenObject(spec1.getSpecimenLabel());
+				GenericSpecimen deri2 =getspecimenObject(spec1.getSpecimenLabel());
 				
 				this.addSpecimen(spec1.getUniqueIdentifier(), spec1);
 				this.addSpecimen(spec2.getUniqueIdentifier(), spec2);
 				this.addSpecimen(spec3.getUniqueIdentifier(), spec3);
 				this.addSpecimen(spec4.getUniqueIdentifier(), spec4);
 
-				LinkedHashMap<String, SpecimenDTO> al = new LinkedHashMap<String, SpecimenDTO>();
+				LinkedHashMap<String, GenericSpecimen> al = new LinkedHashMap<String, GenericSpecimen>();
 				al.put(aliq1.getUniqueIdentifier(), aliq1);
 				al.put(aliq2.getUniqueIdentifier(), aliq2);
 				al.put(aliq3.getUniqueIdentifier(), aliq3);
@@ -120,53 +117,53 @@ try{
 				
 				((SpecimenTest)spec1).setAliquots(al);
 	
-				LinkedHashMap<String, SpecimenDTO> dr = new LinkedHashMap<String, SpecimenDTO>();
+				LinkedHashMap<String, GenericSpecimen> dr = new LinkedHashMap<String, GenericSpecimen>();
 				dr.put(deri1.getUniqueIdentifier(), deri1);
 				dr.put(deri2.getUniqueIdentifier(), deri2);
 				((SpecimenTest)spec1).setDeriveds(dr);
 				
 			}
 			
-			public LinkedHashMap<String, SpecimenDTO> getSpecimenList(
+			public LinkedHashMap<String, GenericSpecimen> getSpecimenList(
 					String eventKey) {
 				
 				return list;
 			}
 			
-			public void addSpecimen(String key, SpecimenDTO spec){
+			public void addSpecimen(String key, GenericSpecimen spec){
 				list.put(key, spec);
 				System.out.println(list.size());
 			}
 		};
 		
-		session.setAttribute(COLLECTION_PROTOCOL_httpSession_BEAN, specimenList);
+		session.setAttribute(Constants.COLLECTION_PROTOCOL_httpSession_BEAN, specimenList);
 		
 	}
 	private static int id=1;
 	
-	public SpecimenDTO getspecimenObject(String q) {
+	public GenericSpecimen getspecimenObject(String q) {
 		
-		SpecimenDTO tmp = new SpecimenTest(q);
+		GenericSpecimen tmp = new SpecimenTest(q);
 		return tmp;
 	}
 
-	class SpecimenTest implements SpecimenDTO{
+	class SpecimenTest implements GenericSpecimen{
 		String specName = "specimen" + id++;
 		String parentName = null;
-		LinkedHashMap<String, SpecimenDTO> aliquotList = null;
-		LinkedHashMap<String, SpecimenDTO> derivedList = null;
+		LinkedHashMap<String, GenericSpecimen> aliquotList = null;
+		LinkedHashMap<String, GenericSpecimen> derivedList = null;
 		public SpecimenTest(String parentName){
 			this.parentName = parentName;
 		}
-		public void setAliquots(LinkedHashMap<String, SpecimenDTO> al){
+		public void setAliquots(LinkedHashMap<String, GenericSpecimen> al){
 			aliquotList = al;
 		}
-		public void setDeriveds(LinkedHashMap<String, SpecimenDTO> dr){
+		public void setDeriveds(LinkedHashMap<String, GenericSpecimen> dr){
 			derivedList = dr;
 		}
 
 		
-		public LinkedHashMap<String, SpecimenDTO> getAliquotes() {
+		public LinkedHashMap<String, GenericSpecimen> getAliquotes() {
 			return aliquotList;
 		}
 
@@ -176,7 +173,7 @@ try{
 		}
 
 		
-		public LinkedHashMap<String, SpecimenDTO> getDerived() {
+		public LinkedHashMap<String, GenericSpecimen> getDerived() {
 			return derivedList;
 		}
 
@@ -227,8 +224,12 @@ try{
 
 		
 		public String getParentName() {
-			// TODO Auto-generated method stub
 			return this.parentName;
+		}
+		
+		public void setSpecimenLabel(String label) {
+			specName = label;
+			
 		}
 		
 	}

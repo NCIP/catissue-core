@@ -2,88 +2,133 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <html>
-		<html:form action="/GenericSpecimenSummary.do">
-		
-		<p>Specimen Requirement
-	    <table border="1" cellspecing="0" cellpadding="0">
-	      	<tr>
-	      		<td class="dataTableHeader" > </td>
-	      		<td class="dataTableHeader">Label</td>
-	      		<td class="dataTableHeader"> Class</td>
-	      		<td class="dataTableHeader"> Type</td>
-	      		<td class="dataTableHeader"> Tissue Site</td>
-	      		<td class="dataTableHeader"> Tissue Side</td>
-	      		<td class="dataTableHeader"> Pathological Status</td>
-	      		<td class="dataTableHeader"> Storage</td>
-	      		<td class="dataTableHeader"> Qty</td>
-				
-	      	</tr>
-	    
-	      <logic:iterate name="viewSpecimenSummaryForm" property="specimenList" id="specimen">
-	      	<tr>
-	      		<td> <html:radio property="selectedSpecimenId" value="uniqueIdentifier" idName="specimen" onclick="submit()"/> </td>
-	      		<td> <bean:write name="specimen" property="specimenLabel" /></td>
-	      		<td> <bean:write name="specimen" property="specimenClassName" /></td>
-	      		<td> <bean:write name="specimen" property="specimenType" /></td>
-	      		<td> <bean:write name="specimen" property="tissueSite" /></td>
-	      		<td> <bean:write name="specimen" property="tissueSide" /></td>
-	      		<td> <bean:write name="specimen" property="pathologyStatus" /></td>
-	      		<td> <bean:write name="specimen" property="storage" /></td>
-	      		<td> <bean:write name="specimen" property="quantity" /></td>
-				
-	      	</tr>
-	      </logic:iterate>	
-	    </table>
-	    <logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
-	    	<html:hidden property="eventId"  />
-	    </logic:notEmpty>
-		<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquoteList" >
-			<p>Aliquot details
-			<table border="1" cellspecing="0" cellpadding="0">
-	      		<tr>	
-	      		<td class="dataTableHeader">Parent</td>
-	      		<td class="dataTableHeader">Label</td>
-	      		<td class="dataTableHeader"> Storage</td>
-	      		<td class="dataTableHeader"> Qty</td>
-				</tr>
-		      <logic:iterate name="viewSpecimenSummaryForm" property="aliquoteList" id="aliquot">
-		      	<tr>
-		      		<td> <bean:write name="aliquot" property="parentName" /></td>		      		
-		      		<td> <bean:write name="aliquot" property="specimenLabel" /></td>
-		      		<td> <bean:write name="aliquot" property="storage" /></td>
-		      		<td> <bean:write name="aliquot" property="quantity" /></td>
-		      	</tr>
-		      </logic:iterate>	
-		    </table>
-		</logic:notEmpty>		
-
-		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >		
-			<p>Derived details
-			<table border="1" cellspecing="0" cellpadding="0">
+		<html:form action="/SubmitSpecimenCollectionProtocol.do">		
+		<table summary="" cellpadding="0" cellspacing="0" border="0">
 				<tr>
-				<td class="dataTableHeader">Parent</td>
-	      		<td class="dataTableHeader">Label</td>
-	      		<td class="dataTableHeader"> Class</td>
-	      		<td class="dataTableHeader"> Type</td>
-	      		<td class="dataTableHeader"> Qty</td>
-	      		<td class="dataTableHeader"> Storage</td>
-	      		<td class="dataTableHeader"> concentration</td>
+					<td class="dataTablePrimaryLabel" height="20">
+						Specimen Requirement
+					</td>
+				</tr>
+	
+		<tr>	
+		   <td>
+			<table summary="" cellpadding="3"
+							cellspacing="0" border="0" class="dataTable" width="100%">
+				<tr>
+					<th class="formSerialNumberLabelForTable" scope="col" > &nbsp </th>
+					<th class="formSerialNumberLabelForTable" scope="col">Label</th>
+					<th class="formSerialNumberLabelForTable" scope="col"> Class</th>
+					<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
+					<th class="formSerialNumberLabelForTable" scope="col"> Tissue Site</th>
+					<th class="formSerialNumberLabelForTable" scope="col"> Tissue Side</th>
+					<th class="formSerialNumberLabelForTable" scope="col"> Pathological Status</th>
+					<th class="formSerialNumberLabelForTable" scope="col"> Storage</th>
+					<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
+					
+				</tr>
+			
+			  <logic:iterate name="viewSpecimenSummaryForm" property="specimenList" id="specimen">
+				<tr>
+					<td> <html:radio property="selectedSpecimenId" value="uniqueIdentifier" idName="specimen" 
+					onclick=" form.action='GenericSpecimenSummary.do'; submit()"/> </td>
+					<td class="dataCellText" > <bean:write name="specimen" property="specimenLabel" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="specimenClassName" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="specimenType" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="tissueSite" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="tissueSide" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="pathologyStatus" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="storage" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="quantity" /></td>
+					
+				</tr>
+			  </logic:iterate>	
+			</table>
+			</td>
+		</tr>
+		<tr>
+		
+			<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
+				<html:hidden property="eventId"  />
+			</logic:notEmpty>
+			
+			<td class="dataTablePrimaryLabel" height="20">
+
+			<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquoteList" >
+				<p>Aliquot details
+		</td>
+		</tr>
+		<tr>
+		<td>
+			<table summary="" cellpadding="3"
+							cellspacing="0" border="0" class="dataTable" width="100%">
+				<tr>	
+					<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
+					<th class="formSerialNumberLabelForTable" scope="col">Label</th>
+					<th class="formSerialNumberLabelForTable" scope="col"> Storage</th>
+					<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
+					</tr>
+				  <logic:iterate name="viewSpecimenSummaryForm" property="aliquoteList" id="aliquot">
+					<tr>
+						<td > <bean:write name="aliquot" property="parentName" /></td>		      		
+						<td > <bean:write name="aliquot" property="specimenLabel" /></td>
+						<td > <bean:write name="aliquot" property="storage" /></td>
+						<td > <bean:write name="aliquot" property="quantity" /></td>
+					</tr>
+				  </logic:iterate>	
+				</table>
+			</logic:notEmpty>		
+		 </td>
+		</tr>
+		<tr>
+		 
+		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >		
+		<td class="dataTablePrimaryLabel" height="20">
+			<p>Derived details
+		 </td>
+		 </tr>
+		 <td>
+				    <table summary="" cellpadding="3"
+						cellspacing="0" border="0" class="dataTable" width="100%">
+			<tr>
+				<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
+	      		<th class="formSerialNumberLabelForTable" scope="col">Label</th>
+	      		<th class="formSerialNumberLabelForTable" scope="col"> Class</th>
+	      		<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
+	      		<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
+	      		<th class="formSerialNumberLabelForTable" scope="col"> Storage</th>
+	      		<th class="formSerialNumberLabelForTable" scope="col"> concentration</th>
 
 				</tr>
 		      <logic:iterate name="viewSpecimenSummaryForm" property="derivedList" id="derived">
 		      	<tr>
-		      		<td> <bean:write name="derived" property="parentName" /></td>
-		      		<td> <bean:write name="derived" property="specimenLabel" /></td>
-		      		<td> <bean:write name="derived" property="specimenClassName" /></td>
-		      		<td> <bean:write name="derived" property="specimenType" /></td>
-		      		<td> <bean:write name="derived" property="quantity" /></td>
-		      		<td> <bean:write name="derived" property="storage" /></td>
-		      		<td> <bean:write name="derived" property="concentration" /></td>
+		      		<td > <bean:write name="derived" property="parentName" /></td>
+		      		<td > <bean:write name="derived" property="specimenLabel" /></td>
+		      		<td > <bean:write name="derived" property="specimenClassName" /></td>
+		      		<td > <bean:write name="derived" property="specimenType" /></td>
+		      		<td > <bean:write name="derived" property="quantity" /></td>
+		      		<td > <bean:write name="derived" property="storage" /></td>
+		      		<td > <bean:write name="derived" property="concentration" /></td>
 		      	</tr>
 		      </logic:iterate>	
 		    </table>
+          </td>
 		</logic:notEmpty>
+		</tr>
+		<tr>
+		<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">		
+		   <td>
+			<html:submit value="Collection Protocol"/>
+			</td>
+		</logic:notEmpty>
+		
+		<logic:empty name="viewSpecimenSummaryForm" property="eventId">		
+		    <td>
+			<html:submit value="Save Specimens"/>
+			</td>
+		</logic:empty>
+		</tr>
+		</table>
 		</html:form>		
 </html>
