@@ -33,22 +33,14 @@ public class ShowCPAndParticipantsAction extends BaseAction
 			throws Exception
 	{
 		CPSearchForm cpsearchForm = (CPSearchForm) form;
+		
 		//Getting the instance of participantRegistrationCacheManager
 		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
-		//Gettiing the CP list 
-		List cpColl = participantRegCacheManager.getCPDetailCollection();
-		//Adding default value for CP
-
-		Collections.sort(cpColl);
-		cpColl.add(0, new NameValueBean("--Select--", "-1"));
-		//Setting the list in request
-		request.setAttribute(Constants.CP_LIST, cpColl);
-
+	
 		
-		//Smita changes start
-		//Gettiing the CP list 
+		//Getting the CP list 
 		Map<Long, String> cpIDTitleMap = participantRegCacheManager.getCPIDTitleMap();
-		Collections.sort(cpColl);
+		//Collections.sort(cpColl); Commented out by baljeet.....see the changes
 		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
 		//Smita changes end
 		
@@ -84,18 +76,21 @@ public class ShowCPAndParticipantsAction extends BaseAction
 				name = participantIdAndName.substring(index + 1);
 				participantColl.add(new NameValueBean(name, Id));
 			}
-		}
-		Collections.sort(participantColl);
-		request.setAttribute(Constants.REGISTERED_PARTICIPANT_LIST, participantColl);
-		
-		//if participantId is not null then set that in form for further use.
-		
+		   
+			
+			Collections.sort(participantColl);
+			
+			//Commented out by Baljeet for flex related changes 
+			//request.setAttribute(Constants.REGISTERED_PARTICIPANT_LIST, participantColl);
+            
+	    }
+	  
 		if (request.getParameter("participantId") != null && !request.getParameter("participantId").equals(""))
 		{
 			Long participantId = new Long(request.getParameter("participantId"));
 			cpsearchForm.setParticipantId(participantId);
 		}
-//		when collection protocol gets changes then don't shown any participant seelcted...
+        //when collection protocol gets changes then don't shown any participant seelcted...
 		String cpChange = request.getParameter("cpChange");
 		if(cpChange != null)
 		{
