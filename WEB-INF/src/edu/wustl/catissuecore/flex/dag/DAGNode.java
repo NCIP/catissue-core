@@ -22,10 +22,10 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	private String toolTip="";
 	private String operatorBetweenAttrAndAssociation="";
 	private String nodeType =DAGConstant.CONSTRAINT_VIEW_NODE;
-	private List<DAGNode> associationList  = new ArrayList<DAGNode>();
-	private List<String> operatorList  = new ArrayList<String>();
-	private List<String> pathList  = new ArrayList<String>();
-	
+	public  List<DAGNode> associationList  = new ArrayList<DAGNode>();
+	public List<String> operatorList  = new ArrayList<String>();
+	//private List<String> pathList  = new ArrayList<String>();
+	public List<DAGPath> dagpathList = new ArrayList<DAGPath>();
 	
 	public DAGNode()
 	{
@@ -129,7 +129,8 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 		nodeType =in.readUTF();
 		associationList = (List<DAGNode>) in.readObject();
 		operatorList = (List<String>) in.readObject();
-		pathList = (List<String>) in.readObject();
+	//	pathList = (List<String>) in.readObject();
+		dagpathList =( List<DAGPath>)in.readObject();
 		
 	}
 
@@ -142,7 +143,8 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 		out.writeUTF(nodeType);
 		out.writeObject(associationList);
 		out.writeObject(operatorList);
-		out.writeObject(pathList);
+		//out.writeObject(pathList);
+		out.writeObject(dagpathList);
 	}
 
 	public String toString()
@@ -192,14 +194,14 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	}
 
 
-	public List<String> getPathList() {
+/*	public List<String> getPathList() {
 		return pathList;
 	}
 
 
 	public void setPathList(String path) {
 		this.pathList.add(path);
-	}
+	}*/
 
 
 	public String getNodeType() {
@@ -209,6 +211,16 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 
 	public void setNodeType(String nodeType) {
 		this.nodeType = nodeType;
+	}
+
+
+	public List<DAGPath> getDagpathList() {
+		return dagpathList;
+	}
+
+
+	public void setDagpathList(DAGPath dagpath) {
+		this.dagpathList.add(dagpath);
 	}
 
 
