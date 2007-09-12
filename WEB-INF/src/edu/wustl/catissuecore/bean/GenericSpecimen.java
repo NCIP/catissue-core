@@ -6,20 +6,22 @@ import java.util.LinkedHashMap;
  * @author abhijit_naik
  *
  */
-public interface GenericSpecimen {
+public interface GenericSpecimen 
+{
 
 	public String getUniqueIdentifier();
-	public String getSpecimenLabel();
-	public void setSpecimenLabel(String label);
-	public String getSpecimenClassName();
-	public String getSpecimenType();
+	public String getDisplayName();
+	public String getClassName();
+	public String getType();
 	public String getTissueSite();
 	public String getTissueSide();
-	public String getPathologyStatus();
-	public String getStorage();
+	public String getPathologicalStatus();
+	public String getStorageContainerForSpecimen();
 	public String getQuantity();
 	public String getConcentration();
+	
 	public String getParentName();
-	public LinkedHashMap<String, GenericSpecimen> getAliquotes();
-	public LinkedHashMap<String, GenericSpecimen> getDerived();
+	
+	public LinkedHashMap<String, GenericSpecimen> getAliquotSpecimenCollection();
+	public LinkedHashMap<String, GenericSpecimen> getDeriveSpecimenCollection();
 }
