@@ -9,6 +9,8 @@ public class DAGPath implements Externalizable {
 	private String name =null;
 	private String id= null;
 	private boolean isSelected = false;
+	private int sourceExpId =0;
+	private int destinationExpId =0;
 		
 	
 	
@@ -33,6 +35,8 @@ public class DAGPath implements Externalizable {
 		name = in.readUTF();
 		id =   in.readUTF();
 		isSelected = in.readBoolean();
+		sourceExpId = in.readInt();
+		destinationExpId = in.readInt();
 		
 	}
 
@@ -41,7 +45,8 @@ public class DAGPath implements Externalizable {
 		out.writeUTF(name);
 		out.writeUTF(id);
 		out.writeBoolean(isSelected);
-		
+		out.writeInt(sourceExpId);
+		out.writeInt(destinationExpId);
 	}
 
 	public String getId() {
@@ -50,6 +55,22 @@ public class DAGPath implements Externalizable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public int getSourceExpId() {
+		return sourceExpId;
+	}
+
+	public void setSourceExpId(int sourceExpId) {
+		this.sourceExpId = sourceExpId;
+	}
+
+	public int getDestinationExpId() {
+		return destinationExpId;
+	}
+
+	public void setDestinationExpId(int destinationExpId) {
+		this.destinationExpId = destinationExpId;
 	}
 
 	
