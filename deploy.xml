@@ -527,8 +527,7 @@
     		onerror="continue"
     		rdbms="oracle">
 			<transaction  src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql"/>
-			<transaction  src="${oracle.sql.dir}/dynamicextension_CreateTable.sql"/>	
-			<transaction  src="${oracle.sql.dir}/dynamicextension_AddConstraints.sql"/>	
+			<transaction  src="${oracle.sql.dir}/dynamicextension.sql"/>	
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -574,10 +573,9 @@
 				      <transaction  src="${oracle.sql.dir}/insert_default_data.sql"/>	
 				      <transaction  src="${common.sql.dir}/indexes.sql"/>
 				   	  <transaction  src="${oracle.sql.dir}/cab2b_CreateTable.sql"/>	
-					  <transaction  src="${oracle.sql.dir}/dynamicextension_CreateTable.sql"/>	
+					  <transaction  src="${oracle.sql.dir}/dynamicextension.sql"/>	
 					  <transaction  src="${oracle.sql.dir}/SuiteQueryMetadataInsertScript.sql"/>	
 					  <transaction  src="${oracle.sql.dir}/cab2b_AddConstraints.sql"/>
-					  <transaction  src="${oracle.sql.dir}/dynamicextension_AddConstraints.sql"/>	
 				  	  <transaction>commit;</transaction>	
 		    	  <classpath >
 		            <fileset dir="${lib.dir}">
