@@ -591,6 +591,7 @@ public class FlexInterface
 		dagPanel = new DAGPanel(pathFinder);
 		dagPanel.setQueryObject(queryObject);
 		session= flex.messaging.FlexContext.getHttpRequest().getSession();
+		
 		dagPanel.setSession(session);
 		
 	}
@@ -639,8 +640,11 @@ public class FlexInterface
 	 * @param cpId :Collection protocol Id
 	 * @return the list of Participants
 	 */
-	public List getParticipantsList(String cpId)
+	public List getParticipantsList(String cpId,String cpTitle)
 	{
+		//Setting the cp title in session
+		session= flex.messaging.FlexContext.getHttpRequest().getSession();
+		session.setAttribute("cpTitle", cpTitle);
 		List<CpAndParticipentsBean>participantsList = new ArrayList<CpAndParticipentsBean>();
         
         //Getting the instance of participantRegistrationCacheManager
