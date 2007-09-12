@@ -6,7 +6,7 @@ import java.util.LinkedHashSet;
 
 import org.apache.struts.action.ActionForm;
 
-import edu.wustl.catissuecore.bean.SpecimenDTO;
+import edu.wustl.catissuecore.bean.GenericSpecimen;
 
 
 /**
@@ -21,11 +21,11 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	 * 
 	 */
 	private static final long serialVersionUID = -7978857673984149449L;
-	private static final Collection<SpecimenDTO> EMPTY_COLL = new LinkedHashSet<SpecimenDTO> ();
+	private static final Collection<GenericSpecimen> EMPTY_COLL = new LinkedHashSet<GenericSpecimen> ();
 	
-	private Collection<SpecimenDTO> specimenList = EMPTY_COLL ;
-	private Collection<SpecimenDTO> aliquoteList = EMPTY_COLL; 
-	private Collection<SpecimenDTO> derivedList = EMPTY_COLL; 
+	private Collection<GenericSpecimen> specimenList = EMPTY_COLL ;
+	private Collection<GenericSpecimen> aliquoteList = EMPTY_COLL; 
+	private Collection<GenericSpecimen> derivedList = EMPTY_COLL; 
 	private String eventId= null;
 	private String selectedSpecimenId= null;
 	
@@ -37,26 +37,26 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 		this.selectedSpecimenId = selectedSpecimenId;
 	}
 	
-	public Collection<SpecimenDTO> getSpecimenList() {
+	public Collection<GenericSpecimen> getSpecimenList() {
 		return specimenList;
 	}
-	public void setSpecimenList(Collection<SpecimenDTO> specimenList) {
+	public void setSpecimenList(Collection<GenericSpecimen> specimenList) {
 		this.specimenList = specimenList;
 	}
-	public Collection<SpecimenDTO> getAliquoteList() {
+	public Collection<GenericSpecimen> getAliquoteList() {
 		return aliquoteList;
 	}
-	public void setAliquoteList(Collection<SpecimenDTO> aliquoteList) {
+	public void setAliquoteList(Collection<GenericSpecimen> aliquoteList) {
 		if (aliquoteList == null){
 			this.aliquoteList = EMPTY_COLL;
 		}else{
 			this.aliquoteList = aliquoteList;
 		}
 	}
-	public Collection<SpecimenDTO> getDerivedList() {
+	public Collection<GenericSpecimen> getDerivedList() {
 		return derivedList;
 	}
-	public void setDerivedList(Collection<SpecimenDTO> derivedList) {
+	public void setDerivedList(Collection<GenericSpecimen> derivedList) {
 		if (derivedList == null){
 			this.derivedList = EMPTY_COLL;
 		}else{
