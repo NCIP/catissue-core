@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Vector;
 import javax.servlet.http.HttpSession;
 import edu.common.dynamicextensions.domain.Entity;
+import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
@@ -20,6 +21,7 @@ import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
 import edu.wustl.cab2b.client.ui.query.IPathFinder;
 import edu.wustl.cab2b.common.util.Utility;
+import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
@@ -27,15 +29,19 @@ import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.exceptions.CyclicException;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
 import edu.wustl.common.querysuite.exceptions.SqlException;
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
 import edu.wustl.common.querysuite.metadata.associations.IAssociation;
+import edu.wustl.common.querysuite.metadata.associations.IIntraModelAssociation;
 import edu.wustl.common.querysuite.metadata.path.IPath;
+import edu.wustl.common.querysuite.metadata.path.Path;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.ICondition;
+import edu.wustl.common.querysuite.queryobject.IJoinGraph;
 import edu.wustl.common.querysuite.queryobject.IQueryEntity;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
@@ -254,16 +260,6 @@ public class DAGPanel {
 	 */
 	private void LinkTwoNode(final DAGNode sourceNode, final DAGNode destNode, final IPath path,
 			List<IExpressionId> intermediateExpressions) {
-		PathLink link = getPathLink(sourceNode, destNode, path, intermediateExpressions);
-
-////		if (assPosition == 0) {
-////		updateQueryObject(link, sourceNode, destNode, null);
-////		} else {
-		updateQueryObject(link,sourceNode, destNode);
-
-	}
-
-	private PathLink getPathLink(final DAGNode sourceNode, final DAGNode destNode, final IPath path, List<IExpressionId> intermediateExpressions) {
 		IExpressionId sourceexpressionId = null;
 		IExpressionId destexpressionId = null;
 
@@ -281,14 +277,20 @@ public class DAGPanel {
 			e.printStackTrace();
 
 		}
-
+		//DAGPath dagpath  
 		PathLink link = new PathLink();
 		link.setAssociationExpressions(intermediateExpressions);
 		link.setDestinationExpressionId(destexpressionId);
 		link.setSourceExpressionId(sourceexpressionId);
 		link.setPath(path);
-		return link;
+
+////		if (assPosition == 0) {
+////		updateQueryObject(link, sourceNode, destNode, null);
+////		} else {
+		updateQueryObject(link,sourceNode, destNode);
+
 	}
+
 	/**
 	 * Updates query object
 	 * @param link
@@ -296,10 +298,11 @@ public class DAGPanel {
 	 * @param destNode
 	 */
 	private void updateQueryObject(PathLink link, DAGNode sourceNode, DAGNode destNode) {
+		//TODO required to modify code logic will not work for multiple association
 		IExpressionId sourceexpressionId = new ExpressionId(sourceNode
 				.getExpressionId());
-		IExpressionId destexpressionId = new ExpressionId(destNode
-				.getExpressionId());
+		//IExpressionId destexpressionId = new ExpressionId(destNode
+				//.getExpressionId());
 
 		// If the first association is added, put operator between attribute condition and association
 		String operator = null;
@@ -316,9 +319,10 @@ public class DAGPanel {
 				edu.wustl.cab2b.client.ui.query.Utility.getLogicalOperator(operator), false);
 
 		// Put appropriate parenthesis
+		// The code is required for multiple associations
 		//if (sourcePort != null) {
-		IExpressionId previousExpId = link.getLogicalConnectorExpressionId();
-		m_queryObject.addParantheses(sourceexpressionId, previousExpId, destId);
+		//IExpressionId previousExpId = link.getLogicalConnectorExpressionId();
+		//m_queryObject.addParantheses(sourceexpressionId, previousExpId, destId);
 		// }
 	}
 	/**
@@ -332,10 +336,10 @@ public class DAGPanel {
 		// text=text.concat("<HTML><B>Path</B>:");
 
 		List<IAssociation> pathList = path.getIntermediateAssociations();
-		text = text.concat(Utility.getDisplayName(path.getSourceEntity()));
+		text = text.concat(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(path.getSourceEntity()));
 		for (int i = 0; i < pathList.size(); i++) {
 			text = text.concat("---->");
-			text = text.concat(Utility.getDisplayName(pathList.get(i).getTargetEntity()));
+			text = text.concat(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(pathList.get(i).getTargetEntity()));
 		}
 		text = text.concat("");
 		Logger.out.debug(text);
@@ -454,6 +458,12 @@ public class DAGPanel {
 					String parentNodeId = null;
 					String treeNo = "0";
 					Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,node, sessionData,parentNodeId,recordsPerPage);
+					// Changes added by deepti for performance change
+					QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap.get(Constants.QUERY_SESSION_DATA);
+					int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
+					m_session.setAttribute(Constants.QUERY_SESSION_DATA,querySessionData);
+					m_session.setAttribute(Constants.TOTAL_RESULTS,new Integer(totalNumberOfRecords));
+					
 					m_session.setAttribute(Constants.SPREADSHEET_DATA_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST));
 					m_session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
 					message ="SUCCESS";
@@ -489,7 +499,7 @@ public class DAGPanel {
 	public List<DAGNode> repaintDAG()
 	{
 		List<DAGNode> nodeList = new ArrayList<DAGNode>();
-		IQuery query =(IQuery)m_session.getAttribute("queryObject");
+		IQuery query =(IQuery)m_session.getAttribute(DAGConstant.QUERY_OBJECT);
 		IConstraints constraints = query.getConstraints();
 
 		HashSet<IExpressionId> visibleExpression = new HashSet<IExpressionId>();
@@ -507,6 +517,7 @@ public class DAGPanel {
 		for(IExpressionId expressionId:visibleExpression){
 
 			IExpression exp = constraints.getExpression(expressionId);
+			
 			IQueryEntity constraintEntity = exp.getQueryEntity();
 			String nodeDisplayName = edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()); 
 			DAGNode dagNode = new DAGNode();
@@ -521,7 +532,13 @@ public class DAGPanel {
 			{
 				dagNode.setNodeType(DAGConstant.CONSTRAINT_ONLY_NODE);
 			}
-			nodeform(expressionId,dagNode,constraints,nodeDisplayName);
+			IJoinGraph graph = constraints.getJoinGraph();
+			List childList = graph.getChildrenList(expressionId);
+			
+			//for(int i=0;i<childList.size();i++)
+			{
+				nodeform(expressionId,dagNode,constraints,new ArrayList<IIntraModelAssociation>());
+			}
 
 			int numOperands = exp.numberOfOperands();
 			int numOperator = numOperands-1;
@@ -537,40 +554,80 @@ public class DAGPanel {
 		return nodeList;
 
 	}
-
-	private void nodeform(IExpressionId expressionId,DAGNode node,IConstraints constraints,String path)
+	/**
+	 * 
+	 * @param expressionId
+	 * @param node
+	 * @param constraints
+	 * @param path
+	 */
+	private void nodeform(IExpressionId expressionId,DAGNode node,IConstraints constraints,List<IIntraModelAssociation> intraModelAssociationList)
 	{
-
-		List childList = constraints.getJoinGraph().getChildrenList(expressionId);
+		IJoinGraph graph = constraints.getJoinGraph();
+		List childList = graph.getChildrenList(expressionId);
+		
 		for(int i=0;i<childList.size();i++)
 		{
 			String nodeDisplayName = "";
-			IExpressionId newId = (IExpressionId)childList.get(i);
-			IExpression exp = constraints.getExpression(newId);
+			IExpressionId newExpId = (IExpressionId)childList.get(i);
+			IExpression exp = constraints.getExpression(newExpId);
 			IQueryEntity constraintEntity = exp.getQueryEntity();
+		/*	Code to get IPath Object*/
+		 	IIntraModelAssociation association  =(IIntraModelAssociation)(graph.getAssociation(expressionId,newExpId));
+		 	
+		 	intraModelAssociationList.add(association);
+						
 			if(exp.isVisible())
 			{
+			//	PathFinder pathFinder =(PathFinder)m_pathFinder;
+				IPath pathObj = (IPath)m_pathFinder.getPathForAssociations(intraModelAssociationList);
+				long pathId =pathObj.getPathId();
+				System.out.println("path id  ----"+pathId);
+			 	
 				nodeDisplayName =edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity());
-				path = path + "--->"+nodeDisplayName;
+				//path = path + "--->"+nodeDisplayName;
 
 				DAGNode dagNode = new DAGNode();
 				dagNode.setExpressionId(exp.getExpressionId().getInt());
 				dagNode.setNodeName(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()));
 				dagNode.setToolTip(exp);
-
+				
+				
+			/*	Adding Dag Path in each visible list which have childrens*/
+			  	DAGPath dagPath  = new DAGPath();
+				dagPath.setName(getPathDisplayString(pathObj));
+				dagPath.setId( new Long(pathId).toString());
+				dagPath.setSourceExpId(node.getExpressionId());
+				dagPath.setDestinationExpId(dagNode.getExpressionId());
+				
+				System.out.println("dagPath ==" + dagPath.getSourceExpId() +"==="+dagPath.getDestinationExpId());
+				
+				node.setDagpathList(dagPath);
+				System.out.println("--");
 				node.setAssociationList(dagNode);
-				node.setPathList(path);
-
+				//node.setPathList(path);
+				intraModelAssociationList.clear();
+			//	intraModelAssociationList = new ArrayList<IIntraModelAssociation>();
+			//	IExpressionId sourceExpressionId = new ExpressionId(node.getExpressionId());
+			//	childList = graph.getChildrenList(sourceExpressionId);
 			}
 			else
 			{
 				nodeDisplayName =edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity());
-				path = path + "--->"+nodeDisplayName;	
-				nodeform(newId,node,constraints,path);
+				//path = path + "--->"+nodeDisplayName;	
+				nodeform(newExpId,node,constraints,intraModelAssociationList);
+				System.out.println("-----> "+newExpId.getInt());
+				//intraModelAssociationList = new ArrayList<IIntraModelAssociation>();
+				
 			}
 		}
 	}
-
+	/**
+	 * 
+	 * @param parentExpId
+	 * @param parentIndex
+	 * @param operator
+	 */
 
 	public void updateLogicalOperator(int parentExpId,int parentIndex,String operator )
 	{
@@ -583,6 +640,11 @@ public class DAGPanel {
 		m_queryObject.setQuery(query);
 
 	}
+	/**
+	 * 
+	 * @param expId
+	 * @return
+	 */
 	public Map editAddLimitUI(int expId)
 	{
 		Map<String, Object> map = new HashMap<String,Object>();
@@ -597,7 +659,11 @@ public class DAGPanel {
 		map.put(DAGConstant.EXPRESSION, expression);
 		return map;
 	}
-
+	/**
+	 * 
+	 * @param nodesStr
+	 * @return
+	 */
 	public DAGNode addNodeToOutPutView(String nodesStr)
 	{
 		DAGNode node = null;
@@ -621,6 +687,10 @@ public class DAGPanel {
 		}
 		return node;
 	}
+	/**
+	 * 
+	 *
+	 */
 	public void restoreQueryObject()
 	{
 		IQuery query =m_queryObject.getQuery();
@@ -635,31 +705,54 @@ public class DAGPanel {
 			m_session.setAttribute(AppletConstants.QUERY_OBJECT, query);
 		}
 	}
+	/**
+	 * 
+	 * @param expId
+	 */
 	public void deleteExpression(int expId)
 	{
 		IExpressionId expressionId = new ExpressionId(expId);
 		m_queryObject.removeExpression(expressionId);
 		//m_queryObject.setQuery(arg0)
 	}
-
+	/**
+	 * 
+	 * @param expId
+	 */
 	public void addExpressionToView(int expId) {
 		IExpressionId expressionId = new ExpressionId(expId);
 		Expression expression = (Expression) m_queryObject.getQuery().getConstraints().getExpression(expressionId);
 		expression.setInView(true);
 	}
+	/**
+	 * 
+	 * @param expId
+	 */
 	public void deleteExpressionFormView(int expId)
 	{
 		IExpressionId expressionId = new ExpressionId(expId);
 		Expression expression = (Expression) m_queryObject.getQuery().getConstraints().getExpression(expressionId);
 		expression.setInView(false);
 	}
+	/**
+	 * 
+	 * @param path
+	 * @param linkedNodeList
+	 */
 	public void deletePath(IPath path,List<DAGNode>linkedNodeList)
 	{
-		PathLink link = getPathLink(linkedNodeList.get(0),linkedNodeList.get(1) , path, new ArrayList<IExpressionId>());
-		List<IExpressionId> expressionIds = link.getAssociationExpressions();
+		IExpressionId sourceexpressionId = new ExpressionId(linkedNodeList.get(0)
+					.getExpressionId());
+		IExpressionId destexpressionId = new ExpressionId(linkedNodeList.get(1)
+					.getExpressionId());
+		List<IAssociation> associations =path.getIntermediateAssociations();
+		JoinGraph graph =(JoinGraph)m_queryObject.getQuery().getConstraints().getJoinGraph();
+	
+		List<IExpressionId> expressionIds = graph.getIntermediateExpressions(sourceexpressionId, destexpressionId, associations);
+		System.out.println(expressionIds.size());
 		// If the association is direct association, remove the respective association 
 		if (0 == expressionIds.size()) {
-			m_queryObject.removeAssociation(link.getSourceExpressionId(), link.getDestinationExpressionId());
+			m_queryObject.removeAssociation(sourceexpressionId, destexpressionId);
 		} else {
 			for (int i = 0; i < expressionIds.size(); i++) {
 				m_queryObject.removeExpression(expressionIds.get(i));
