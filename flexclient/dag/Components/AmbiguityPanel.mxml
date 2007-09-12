@@ -14,31 +14,49 @@
 		import mx.rpc.events.ResultEvent;
 
 	    [Bindable]
-		public var pathList:ArrayCollection = null;
+		public var pathList:ArrayCollection=new ArrayCollection();;
 	    [Bindable]
 		public var selectedList:ArrayCollection= null;
 		
 		public var nodeList:ArrayCollection =null;						
-		public var dagPath: IDAGPath;
+		public var dagPath: IDAGPath = null;
 		
 		private function init():void
         {
+        	 //Intialising ambiguity panel
+        	 
         	selectedList = new ArrayCollection()
+        	pathList.addItem(new IDAGPath());
             pathList.addEventListener(CollectionEvent.COLLECTION_CHANGE, handleDataProviderChange);
         }
        
 		public  function closePopUp(event:MouseEvent):void {
-			    PopUpManager.removePopUp(this);
-				this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,this.parentApplication.getPathHandler,false);
-				this.parentApplication.rpcService.addEventListener("result",this.parentApplication.linkNodesHandler);
-				this.parentApplication.rpcService.linkNodes(nodeList,selectedList);
+				var buttonStr:Array=event.currentTarget.toString().split(".");
+				var index:int=(buttonStr.length-1)
+	   	 	 	PopUpManager.removePopUp(this);
+				if(buttonStr[index]=="OK")
+				{
+					this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,this.parentApplication.getPathHandler,false);
+					this.parentApplication.rpcService.addEventListener("result",this.parentApplication.linkNodesHandler);
+					if(nodeList!=null&&selectedList!=null)
+					{
+						this.parentApplication.rpcService.linkNodes(nodeList,selectedList);
+					}
+				}
+				else
+				{
+					selectedList=null;
+					pathList=null;
+					this.parentApplication.cancelHandler(nodeList);
+				}
+						
 		}
 
 	private function handleDataProviderChange(event:CollectionEvent):void
         {
 		
-		var len:int = pathList.length;
-
+		try{
+				var len:int = pathList.length;
 				for (var i:int=0;i<len;i++)
 				{
 					dagPath = pathList.getItemAt(i) as IDAGPath;
@@ -47,6 +65,12 @@
 						selectedList.addItem(dagPath);
 					}
 				}
+			}catch(error:Error)
+			{
+				Alert.show("Error :"+error);
+			
+			}
+			
              
          }
 		
@@ -54,11 +78,11 @@
 </mx:Script>
 	<mx:DataGrid name="pathGrid" x="0" y="0" width="100%" height="100%" dataProvider="{pathList}">
 		<mx:columns>
-			<mx:DataGridColumn headerText="Paths" dataField="name" dataTipField="name" showDataTips="true" />
+			<mx:DataGridColumn headerText="Paths" dataField="name" dataTipField="name" showDataTips="true"/>
 			<mx:DataGridColumn headerText="Select" dataField="isSelected">
 			   <mx:itemRenderer>
 			      <mx:Component>
-				         <mx:CheckBox name="checkBox" click="data.isSelected=!data.isSelected"   selected="{data.isSelected}"/>			      	
+				         <mx:CheckBox name="checkBox" click="data.isSelected=!data.isSelected"  selected="{data.isSelected}"/>			      	
 			      </mx:Component>
       		   </mx:itemRenderer>
 			</mx:DataGridColumn>			
@@ -66,8 +90,8 @@
 	</mx:DataGrid>
 	<mx:ControlBar name="controlBar">
 		<mx:Spacer width="100%"/>
-		<mx:Button name="okButton" label="OK" click="closePopUp(event)"/>
-		<mx:Button name="cancelButton" label="Cancel" click="closePopUp(event)"/>
+		<mx:Button name="OK" label="OK" click="closePopUp(event)"/>
+		<mx:Button name="Cancel" label="Cancel" click="closePopUp(event)"/>
 	</mx:ControlBar>
 
 </mx:Panel>
