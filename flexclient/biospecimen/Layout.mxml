@@ -22,10 +22,10 @@
     [Bindable]
                 public var pCollection:ArrayCollection = new ArrayCollection(); 
   
-    [Bindable]  
+   
                  private var xmlString:XML = new XML();
    
-     [Bindable]
+    
                  private var treeData:XMLListCollection = new XMLListCollection();
 
       [Bindable]
@@ -51,23 +51,22 @@
     [Bindable]
   	       private var title:String = "Specimen Details for"; 
 
-    [Bindable]
-               
-                public var selectedNode:Object = null;
-     [Bindable]
-                public var refreshData:Boolean = false;  
-           
-
-      public var readyTimer:Timer; 	
+              public var selectedNode:Object = new Object;
+ 
+              public var parentNode :Object = new Object;
+              public var isEventHandled:Boolean = false;
 	  
-	  
-   
-  
     public function initApp():void
     {
     	 ExternalInterface.addCallback("myFlexMethod",refreshTree);
-	 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
+	 	 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
     }
+    
+     /*
+       This method is invoked from javaScript function when a new Participant is registered 
+     
+     */
+   
     public function refreshParticipants():void
     {
     	var selectedCp : NameValueBean = new NameValueBean();
@@ -77,8 +76,8 @@
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
 		{
-                     Alert.show("Please select valid Collection Protocol");
-                     pCombo.dataProvider = null;
+              Alert.show("Please select valid Collection Protocol");
+              pCombo.dataProvider = null;
 		}
 		else
 		{
@@ -88,41 +87,41 @@
 		remoteObj1.addEventListener("fault",faultHandler);
     }
 
-    
+    /*
+     This method is invoked when ever tree refreshes
+    */
     public function refreshTree(nodeId:String):void
     {
-   	
-	Alert.show("The selected tree node id is:"+nodeId);
-        var selectedParticipant:NameValueBean= new NameValueBean();
-	selectedParticipant = pCombo.selectedItem as NameValueBean
+   	    var selectedParticipant:NameValueBean= new NameValueBean();
+	    selectedParticipant = pCombo.selectedItem as NameValueBean
         var selectedParticipantId :String = selectedParticipant.value; 
 	
         var selectedCp : NameValueBean = new NameValueBean();
-	selectedCp =  cpCombo.selectedItem as NameValueBean;
-	var selectedCpId :String = selectedCp.value;
+	    selectedCp =  cpCombo.selectedItem as NameValueBean;
+	    var selectedCpId :String = selectedCp.value;
       
 
         //Here we can get data for updating specimen tree details for particular SCG/specimen instead of retrieving whole data 
-
          var remoteObj2:RemoteObject =  new RemoteObject(); 
-	     remoteObj2.destination = "cdeService"; 
+	 	 remoteObj2.destination = "cdeService"; 
          var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
-	     remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
-         remoteObj2.addEventListener("fault",faultHandler);
+		 remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
+        
+	     // specimenTree.validateNow();
+         // specimenTree.dataProvider = treeData;
+	     remoteObj2.addEventListener("fault",faultHandler);
       
-          var selectedNode:XML = new XML();
-         
-       //Making a selected node appear when tree is displayed
+        //Making a selected node appear when tree is displayed when dataProvider changes in cases of refresh 
+
+       //Selecting a particular tree node on the basis of "id" attribute of  previously selected node  
        for(var i:Number=0; i<treeData.length; i++)
        {
        	  var xmlNode:XML = treeData.getItemAt(i) as XML;
        	  if(xmlNode.@id == nodeId)
        	  {
-       	  	selectedNode = xmlNode;
-       	  	Alert.show("The selected Node is:"+selectedNode.toString());
-       	  	//specimenTree.expandItem(selectedNode, true);
-       	  	//specimenTree.selectedItem = selectedNode;
-       	  	break;
+       	  	  selectedNode = xmlNode;
+		  	  parentNode = xmlNode; 
+       	   	  break;
        	  }
        	  else
        	  {
@@ -133,78 +132,23 @@
        	  	 	if(descendantsList[j].@id == nodeId)
        	  	 	{
        	  	 		selectedNode = XML(descendantsList[j]);
-       	  	 		Alert.show("The selected node is:"+selectedNode.toXMLString());
+       	  	 		parentNode = treeData.getItemAt(i) as XML;
+				
        	  	 		break;
        	  	 	}
        	  	 }
        	  }
-       	  
-       	  
-       }   
-        
-    
-       specimenTree.visible = true;
-        
+       	} 
+        specimenTree.callLater(expandTree, [selectedNode, parentNode]); 
+   	}
 
-      //specimenTree.expandChildrenOf(selectedNode.parent(), true);
-      // specimenTree.expandItem(selectedNode, true); 
-       //specimenTree.selectedItem = selectedNode;
-        //specimenTree.firstVisibleItem = selectedNode;
-       //specimenTree.openItems(selectedNode);
-       //   Alert.show(specimenTree.isItemOpen(selectedNode).toString()); 
-    if(specimenTree.isItemOpen(selectedNode).toString()=="false")
-    {
-    	Alert.show("Node is closed");
-        specimenTree.expandItem(XML(selectedNode), true, true, true);
-	Alert.show(specimenTree.isItemOpen(selectedNode).toString());
-	//specimenTree.openItems(selectedNode);
-    }
-       //Making a selected node appear when tree is displayed
-         
-	 /*
-	 for(var i:int=0; i<treeData.length;i++)
-         {
-           //Alert.show(i.toString()); 
-           var xmlNode:XML = treeData.getItemAt(i,0) as XML;
-           Alert.show(xmlNode.node);
-	   
-	   if(node..node.(@id == nodeId))
-           {
-           	   Alert.show("Node matched & node is:"+ node.toXMLString() );
-           }
-           else
-           {
-           	 Alert.show("No match is found"); 
-           } 
-           //Alert.show(node.toString());
-         
-	 }*/
-      /*spDetailVbox.removeChild(specimenTree);
-	  var spTree:Tree = new Tree();
-	  spTree.id = "specimenTree";
-	  spTree.dataProvider = "{treeData}";
-	  spTree.labelField = "@name";
-	  spTree.selectedItem = selectedNode;
-	  spTree.addEventListener(MouseEvent.CLICK,onNodeClick);
-	
-	  spDetailVbox.addChild(spTree);  */
-	  // specimenTree.selectedIndex;
-	  //specimenTree.dataProvider = null;
-	 
-	 //specimenTree.dataProvider = treeData;
-	 //specimenTree.addEventListener(FlexEvent.DATA_CHANGE, openSelectedNode);
-	 
-	  //opening the selected item
-	  //Alert.show("The selected object in refresh tree is:"+selectedNode);
-	 // specimenTree.openItems = open;   
-	 //specimenTree.expandItem(selectedNode, true);
-	 //specimenTree.selectedItem = selectedNode;
-	 
-	
-	 
-   }
-
-     /*
+  	private function expandTree(node:Object, pNode:Object) :void
+  	{
+       	specimenTree.expandChildrenOf(pNode, true);
+   	   	specimenTree.selectedItem = node;
+  	}
+  
+    /*
         getCpData()  method retrieves the Collection protocols before application initializes
     */
    	private function getCPData():void
@@ -217,7 +161,7 @@
   	}
   	
   	/*
-  	 	Event Handler Method 
+  	   Collection Protocol	Event Handler Method 
   	*/
   	public function cpEventHandler(event:ResultEvent):void
   	{
@@ -230,17 +174,15 @@
    	*/
   	public function onCpChange():void
 	{
-		
 		var selectedCp : NameValueBean = new NameValueBean();
 		selectedCp =  cpCombo.selectedItem as NameValueBean;
 		var remoteObj1:RemoteObject =  new RemoteObject(); 
 		remoteObj1.destination = "cdeService";
 		var cpId :String = selectedCp.value;
-		
 		if(cpId == "-1")
 		{
-                     Alert.show("Please select valid Collection Protocol");
-                     pCombo.dataProvider = null;
+			Alert.show("Please select valid Collection Protocol");
+			pCombo.dataProvider = null;
 		}
 		else
 		{
@@ -250,15 +192,21 @@
 		remoteObj1.addEventListener("fault",faultHandler);
 		specimenTree.dataProvider = null;
 		spDetailsLabel.text = title;
-		
 	}
 	
+	/*
+	  Event Handler for Participants 
+	*/
 	public function participantHandler(pevent:ResultEvent):void
 	{
-		
-		var bean : NameValueBean = new NameValueBean();
+	    var bean : NameValueBean = new NameValueBean();
 		pCollection = pevent.result as ArrayCollection;	
 	}
+   
+    /*
+      This mehtod invoked when a Participant is clicked
+    */
+   
     public function onParticipantClick():void
 	{
 	    var selectedParticipant:NameValueBean= new NameValueBean();
@@ -273,24 +221,18 @@
           
 	   //Here we can get data for specimen tree details 
 
-             var remoteObj2:RemoteObject =  new RemoteObject(); 
+         var remoteObj2:RemoteObject =  new RemoteObject(); 
 	     remoteObj2.destination = "cdeService"; 
-    	     var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
+    	 var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
 	     remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
-             remoteObj2.addEventListener("fault",faultHandler);
-	    
-	    //invoking the java script method
-	    var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId +"')");
-		navigateToURL(url,"_self");
-	}
-	
-    private function treeHandler(tevent:ResultEvent):void
-    {
-	  
-	    var str:String = tevent.result as String;
-	    xmlString = new XML(str);
-	    treeData =  new XMLListCollection(xmlString.node);
+         remoteObj2.addEventListener("fault",faultHandler);
 
+	     
+	    //specimenTree.dataProvider = null;
+	   /* isEventHandled = false;
+	    Alert.show(treeData.toString());
+	    specimenTree.dataProvider = treeData;
+	    
 	    for(var i:int=0; i<treeData.length; i++)
     	    {
     	    var node:XML = treeData.getItemAt(i) as XML;
@@ -303,9 +245,51 @@
     	    }
     	    else
     	    {
-    	      specimenTree.setItemIcon(treeData.getItemAt(i),scgIcon,scgIcon);	
+    	        specimenTree.setItemIcon(treeData.getItemAt(i),scgIcon,scgIcon);	
+    	    }
+    	 }*/
+	    
+	    //invoking the java script method
+	    var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId +"')");
+		navigateToURL(url,"_self");
+	}
+	
+    
+    /*
+     Tree Handler  Method
+    */
+    
+    private function treeHandler(tevent:ResultEvent):void
+    {
+	  
+	    var str:String = tevent.result as String;
+	    xmlString = new XML(str);
+	    treeData =  new XMLListCollection(xmlString.node);
+
+	    specimenTree.dataProvider = treeData;
+	    
+	    for(var i:int=0; i<treeData.length; i++)
+    	    {
+    	    var node:XML = treeData.getItemAt(i) as XML;
+    	    var nodeId:String = node.@id;
+    	    
+    	    if(nodeId.match("future"))
+    	    {
+    	    	
+    	        specimenTree.setItemIcon(treeData.getItemAt(i), fscgIcon, fscgIcon);
+    	    }
+    	    else
+    	    {
+    	        specimenTree.setItemIcon(treeData.getItemAt(i),scgIcon,scgIcon);	
     	    }
     	 }
+    	 
+    	 /* if(selectedNode != null || parentNode != null)
+	      {
+	      	specimenTree.callLater(expandTree, [selectedNode, parentNode]);   
+	      }*/
+    	 
+    	
     }
 	
 	 /*
@@ -329,30 +313,25 @@
 	 */
 	 private function onNodeClick():void
 	 {
-             //Retrieving the selected node id 
-	     var id : String = specimenTree.selectedItem.@id;
+        //Retrieving the selected node id 
+	    var id : String = specimenTree.selectedItem.@id;
             
 	    //Selected CP and selected participants
-              var selectedParticipant:NameValueBean= new NameValueBean();
-	      selectedParticipant = pCombo.selectedItem as NameValueBean
-	      var selectedParticipantId :String = selectedParticipant.value; 
-	      var selectedCp : NameValueBean = new NameValueBean();
-	      selectedCp =  cpCombo.selectedItem as NameValueBean;
-	      var selectedCpId :String = selectedCp.value;
+        var selectedParticipant:NameValueBean= new NameValueBean();
+	    selectedParticipant = pCombo.selectedItem as NameValueBean
+	    var selectedParticipantId :String = selectedParticipant.value; 
+	    var selectedCp : NameValueBean = new NameValueBean();
+	    selectedCp =  cpCombo.selectedItem as NameValueBean;
+	    var selectedCpId :String = selectedCp.value;
 
-               //display name of selected tree node
-	      var displayName : String = specimenTree.selectedItem.@name;
-	      
-	     
-	      selectedNode = specimenTree.selectedItem;
+        //display name of selected tree node
+	    var displayName : String = specimenTree.selectedItem.@name;
+	    selectedNode = specimenTree.selectedItem;
 	       
-	      //Alert.show("The selected item object is:"selectedNode);
-	      
-	      //invoking java script method
-	       var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
+	    //invoking java script method
+	    var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
 	       navigateToURL(url,"_self"); 
-
-     	  }
+	}
           
           /*
              To resize the frames
@@ -381,6 +360,7 @@
 	 } */
 
 
+  	 
   	 /*
   	  Fault Handler
   	*/
@@ -390,7 +370,7 @@
 		Alert.show(event.fault.faultString, 'Error');
 	}
 	
-    public function openSelectedNode():void
+   /* public function openSelectedNode():void
     {
     	Alert("In open selected node method");
     	if(selectedNode != null)
@@ -402,15 +382,17 @@
     	{
     		Alert.show("Selected node is null");
     	}
-    }
+    }*/
    
     	
-  
+    /*
+       This mehod is for adding toolTip for each tree node
+    */
     
     public function addToolTip(item:Object):String
     {
     	
-	 var node:XML = XML(item);
+	     var node:XML = XML(item);
        	 return node.@toolTip; 
     }
   		
@@ -419,16 +401,16 @@
 
   
 
-     <mx:Box direction="vertical" backgroundColor="#FFFFFF" borderThickness="1" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" paddingLeft="0" paddingBottom="0" width="100%" height="100%">
+     <mx:Box direction="vertical" borderThickness="10" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" paddingLeft="0" paddingBottom="0" width="100%" height="100%">
       	<mx:VBox backgroundAlpha="0.1" width="100%" height="5%" backgroundColor="#FFFFFF"  >
              <mx:Label text="Collection Protocol:" width="100%" height="14" color="black" fontWeight="bold"/>
               <mx:ComboBox width="100%" id="cpCombo" dataProvider="{cpCollection}"  labelField="name" change="onCpChange()" prompt="--Select--"/>
         </mx:VBox>
         
-        <mx:VBox width="100%" height="95%"  borderSides="#000000">
-            <mx:VDividedBox width="100%" height="100%"  borderSides="#000000">
+        <mx:VBox width="100%" height="95%">
+            <mx:VDividedBox width="100%" height="100%">
                 <mx:VBox width="100%" height="13.5%" id="pVbox" borderSides="black">
-                   	<mx:HBox backgroundColor="#FFFFFF" width="100%" backgroundAlpha="0.1" > 
+                   	<mx:HBox backgroundColor="#FFFFFF" width="100%"> 
                      	<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/> 	
                      	<mx:Button toolTip="Click to  register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
                    	 
@@ -437,8 +419,8 @@
                  </mx:VBox>
         	     <mx:VBox height="86.5%" width="100%" id="spDetailVbox">
                    	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="100%" height="15" fontWeight="bold" />
-                   	<mx:Tree id="specimenTree" dataProvider="{treeData}" labelField="@name" width="100%" height="100%" click="onNodeClick()" folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
-                   		 defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')" disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true" dataTipFunction="addToolTip"  />
+                   	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" click="onNodeClick()" folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
+                   		 defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')" disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true" dataTipFunction="addToolTip"/>
                  </mx:VBox>
                    
                </mx:VDividedBox>    
@@ -448,7 +430,7 @@
 
    <mx:Style>
 		    Tree{
-			  folderClosedIcon:Embed(source='/images/Specimen.gif'); 
+              folderClosedIcon:Embed(source='/images/Specimen.gif'); 
 			  folderOpenIcon:Embed(source='/images/Specimen.gif');
 			  defaultLeafIcon:Embed(source='/images/Specimen.gif');
 			  disclosureClosedIcon:Embed(source='/images/nolines_plus.gif');
