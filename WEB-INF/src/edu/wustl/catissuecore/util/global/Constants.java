@@ -105,6 +105,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String  CONSENT_RESPONSE="ConsentResponse";
 	public  static final String SPECIMEN_LIST_SESSION_MAP = "SpecimenListBean";
 	public static final String COLLECTION_PROTOCOL_EVENT_SESSION_MAP = "collectionProtocolEventMap";
+	public static final String COLLECTION_PROTOCOL_SESSION_BEAN = "collectionProtocolBean";
 
 	public static final String [][] defaultValueKeys= {
 		{Constants.DEFAULT_TISSUE_SITE, edu.wustl.common.util.global.Constants.CDE_NAME_TISSUE_SITE},
