@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.common.querysuite.metadata.associations.IInterModelAssociation;
+import edu.wustl.common.querysuite.metadata.associations.IIntraModelAssociation;
 import edu.wustl.common.querysuite.metadata.path.ICuratedPath;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 /**
@@ -90,6 +91,12 @@ public class PathFinderAppletServerCommunicator implements IPathFinder
 	public List<IInterModelAssociation> getInterModelAssociations(Long arg0)
 	{
 		return new Vector<IInterModelAssociation>();
+	}
+
+
+	public IPath getPathForAssociations(List<IIntraModelAssociation> arg0) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
