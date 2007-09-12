@@ -17,6 +17,7 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.metadata.path.Path;
+import edu.wustl.common.querysuite.queryengine.impl.CommonPathFinder;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
@@ -47,7 +48,6 @@ import edu.wustl.catissuecore.flex.dag.DAGConstant;
 import edu.wustl.catissuecore.flex.dag.DAGNode;
 import edu.wustl.catissuecore.flex.dag.DAGPanel;
 import edu.wustl.catissuecore.flex.dag.DAGPath;
-import edu.wustl.catissuecore.flex.dag.DAGPathFinder;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -519,8 +519,9 @@ public class FlexInterface
 	 * @param selectedPaths
 	 */
 	
-	public void linkNodes(List<DAGNode>linkedNodeList,List<DAGPath> selectedPaths)
+	public List<DAGPath> linkNodes(List<DAGNode>linkedNodeList,List<DAGPath> selectedPaths)
 	{
+		List<DAGPath> dagPathList = new ArrayList<DAGPath>();
 		try {
 			DAGNode sourceNode = linkedNodeList.get(0);
 			DAGNode destinationNode = linkedNodeList.get(1);
@@ -532,10 +533,16 @@ public class FlexInterface
 				{
 					Path path =(Path) pathsList.get(i);
 					String pathStr = new Long(path.getPathId()).toString();
-					String pathId = selectedPaths.get(j).getId();
+					DAGPath dagPath = selectedPaths.get(j);
+					String pathId =dagPath.getId();
 					if(pathStr.equals(pathId))
 					{
 						selectedList.add(path);
+						dagPath.setName(DAGPanel.getPathDisplayString(pathsList.get(i)));
+						dagPath.setId(pathStr);
+						dagPath.setSourceExpId(sourceNode.getExpressionId());
+						dagPath.setDestinationExpId(destinationNode.getExpressionId());
+						dagPathList.add(dagPath);
 						break;
 					}
 					
@@ -546,6 +553,7 @@ public class FlexInterface
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return dagPathList;
 	}
 	/**
 	 * Deletes associaton between 2 nodes
@@ -587,7 +595,7 @@ public class FlexInterface
 	{
 		nodeList = new ArrayList<DAGNode>();
 		queryObject = new ClientQueryBuilder();
-		IPathFinder pathFinder = new DAGPathFinder();
+		IPathFinder pathFinder = new CommonPathFinder();
 		dagPanel = new DAGPanel(pathFinder);
 		dagPanel.setQueryObject(queryObject);
 		session= flex.messaging.FlexContext.getHttpRequest().getSession();
@@ -598,7 +606,6 @@ public class FlexInterface
 	
 	private	IClientQueryBuilderInterface queryObject=null;
 	private List<DAGNode> nodeList;
-	
 	private DAGPanel dagPanel;
 	private HttpSession session = null;
 	
