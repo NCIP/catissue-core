@@ -19,8 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.hibernate.HibernateException;
-
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
@@ -44,7 +42,6 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author vishvesh_mulay
