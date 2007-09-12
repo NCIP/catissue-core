@@ -42,13 +42,14 @@ creationComplete="initApp()"  width="100%" height="100%">
    	import mx.containers.ControlBar;
     import mx.controls.Spacer;
     import mx.containers.ControlBar;
+    import Util.HashMap;
 	
 	public var readyTimer:Timer;
 	private var dynamicNodeNum:int = 1;
 	private var linkNum:int = 1;
 	private var node1:String = "";
 	private var node2:String = "";
-	
+	private var selectedLink:String = "";
 	//------------------------
 	private var textData:Object = null;
     private var panel:AmbiguityPanel; 
@@ -65,6 +66,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 	public var isOutputView:Boolean=false;
 	public var rpcService: RemoteObject;
 	public var view:String ="";
+	public var dagPathUIMap:HashMap;
 	
 	
 	public function timerHandler():void
@@ -144,6 +146,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 		for(var i:int=0;i<outAsslength;i++)
 		{
 			ass = Association(outAssociations.getItemAt(i));
+			//Alert.show("drag "+ass.associatedLink);
 			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
 			if(panel1.getChildByName(dagNode.name) == null || panel1.getChildByName(ass.associatedNode) == null)
 			{
@@ -199,7 +202,9 @@ creationComplete="initApp()"  width="100%" height="100%">
 	{
 		//Alert.show("Intialized .....")
 	}
+	/**
 	
+	**/
 	private function initApp():void
 	{
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
@@ -207,6 +212,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 		rpcService.destination="cdeService";
 		isQuery =Application.application.parameters.isQuery;
 		view= Application.application.parameters.view;
+		dagPathUIMap = new HashMap();
 		if (isContainerReady())
 			{
 			// If the container is ready, register the SWF’s functions.
@@ -242,12 +248,12 @@ creationComplete="initApp()"  width="100%" height="100%">
 		 	 	rpcService.addEventListener("result",repaintHandler);
 			 	rpcService.repaintDAG();
 		    }
-		    panel = new  AmbiguityPanel();
-		    panel.title="Ambiguity resolver";
+		  
 	}
 	
 	private function repaintHandler(event: ResultEvent):void
 	{
+//		Alert.show("Repaint");
 		var nodeList:ArrayCollection = event.result  as ArrayCollection;
 		var xpos:int =0;
 		var ypos:int =0;
@@ -294,13 +300,14 @@ creationComplete="initApp()"  width="100%" height="100%">
 
 			var sourceNode:DAGNode = nodeList.getItemAt(i) as DAGNode;	
 			var associationList:ArrayCollection = sourceNode.associationList;
-			var pathList:ArrayCollection  = sourceNode.pathList;
+//			var pathList:ArrayCollection  = sourceNode.pathList;
+			var dagPathList:ArrayCollection = sourceNode.dagpathList;
 			var operatorList:ArrayCollection = sourceNode.operatorList;
 
 			 for(var j:int=0;j<associationList.length;j++)
 			 {
 			    var targetNode:DAGNode = associationList.getItemAt(j) as DAGNode;	
-				pathStr= pathList.getItemAt(j).toString() as String;
+				path = dagPathList.getItemAt(j) as IDAGPath;
 			    var operator:String = operatorList.getItemAt(0) as String;
 				if(sourceNode.operatorArray[0]!=operator)
 				{
@@ -377,33 +384,32 @@ creationComplete="initApp()"  width="100%" height="100%">
 	
 	public function linkNodesHandler(event: ResultEvent):void
 	{
-		if(panel.selectedList!=null)
+		var selectedList =  event.result  as  ArrayCollection;
+		if(selectedList!=null)
 		{
-			linkCount=0;
-			var numAssociation:int=panel.selectedList.length
-			for(var i:int;i<numAssociation;i++)
+			if(selectedList.length > 0 )
 			{
-				linkCount++;
-				path = panel.selectedList.getItemAt(i) as IDAGPath;
+				linkCount=0;
+				var numAssociation:int=selectedList.length
+				for(var i:int;i<numAssociation;i++)
+				{
+					linkCount++;
+					path = selectedList.getItemAt(i) as IDAGPath;
+					linkNodes(firstNode,secondNode);
+				}
+				selectedList=null;
+			}
+			else
+			{
+				path = selectedList.getItemAt(0) as IDAGPath;
 				linkNodes(firstNode,secondNode);
 			}
-			panel.selectedList=null;
 		}
 		else
 		{
-				if(panel.pathList.length==1)
-				{
-					path = panel.pathList.getItemAt(0) as IDAGPath;
-					linkNodes(firstNode,secondNode);
-				}
-				else
-				{
-					Alert.show("No association selected");
-				}
-			
+			Alert.show("No association selected");
 		}
-
-	rpcService.removeEventListener(ResultEvent.RESULT,linkNodesHandler,false);
+		rpcService.removeEventListener(ResultEvent.RESULT,linkNodesHandler,false);
 	}
 
 	public function getNodeResultHandler(event: ResultEvent):void
@@ -472,14 +478,18 @@ creationComplete="initApp()"  width="100%" height="100%">
 	
 	public function getPathHandler(event: ResultEvent):void
 	{
+		try
+		{
+
 		var dagpath:IDAGPath = new IDAGPath();
+		panel = new  AmbiguityPanel();
+	    panel.title="Ambiguity resolver";
 		panel.pathList= event.result as ArrayCollection;
-		
-	
+//		Alert.show("getPath");
 		if(panel.pathList.length>1)
 		{
-			createPopUp();
 			panel.nodeList=selectedNodeList;
+			createPopUp();
 		}
 		else
 		{
@@ -487,10 +497,25 @@ creationComplete="initApp()"  width="100%" height="100%">
 			rpcService.addEventListener("result",linkNodesHandler);
 			rpcService.linkNodes(selectedNodeList,panel.pathList);
 		}
-		count=0;
-
+		}catch(error:Error)
+		{
+			Alert.show("Error"+error.getStackTrace())
+		}
+		
 	}
-	
+	public function cancelHandler(nodeList:ArrayCollection):void
+	{
+			node1="";
+			node2="";
+			var dagNode1:DAGNode =nodeList[0]as DAGNode;
+			var dagNode2:DAGNode =nodeList[1]as DAGNode;
+			dagNode1.unSelect();
+			dagNode2.unSelect();
+			selectedNodeList.removeAll();
+			count=0;
+			rpcService.removeEventListener(ResultEvent.RESULT,linkNodesHandler,false);
+	}
+		
 	public function link(node1:String,node2:String):void
 	{
 		rpcService.removeEventListener(ResultEvent.RESULT,getNodeResultHandler,false);
@@ -511,6 +536,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 				var toX:int = dagNode2.x;
 				var toY:int = dagNode2.y+(linkCount*15);
 				var line:Sprite = new Sprite();
+				line.name="link";
 				
 				var graphics:Graphics = line.graphics;
 				graphics.clear();
@@ -527,22 +553,21 @@ creationComplete="initApp()"  width="100%" height="100%">
 				
 				var c:UIComponent = new UIComponent();
 				c.id="line"+linkNum++;
-//			c.name="line"+linkNum++;
-				
-				c.addChild(line);
+							
 				if(path!=null)			
 				{
 					c.toolTip=path.name;
 					c.name = path.id;
-					
+
+
 				}
-				else
-				{
-					c.toolTip=pathStr;
-					c.name ="line"+linkNum++;	
-				}
-	
+				c.addChild(line);
 				panel1.addChild(c);
+				dagPathUIMap.put(path.id,path);
+
+				c.addEventListener(MouseEvent.MOUSE_OVER,updateLinkSelection);
+				c.addEventListener(MouseEvent.MOUSE_OUT,updateLinkUnSelection);
+				
 				//removing selections
 				dagNode1.unSelect();
 				dagNode2.unSelect();
@@ -560,6 +585,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 				node1="";
 				node2="";
 				selectedNodeList.removeAll();
+				count=0;
 			}
 		
 	}
@@ -569,6 +595,58 @@ creationComplete="initApp()"  width="100%" height="100%">
 		panel1.getChildByName("line").y += 1 
 	}
 	
+	private function updateLinkSelection(event:MouseEvent):void {
+		var link:UIComponent =panel1.getChildByName(event.currentTarget.name) as UIComponent;	
+		//Alert.show("updat"+event.currentTarget.name);
+		if(link!=null)
+		{
+			var line:Sprite =link.getChildByName("link") as Sprite;
+			var dagPath:IDAGPath = dagPathUIMap.getValue(event.currentTarget.name);
+			var dagNode1:DAGNode = DAGNode(panel1.getChildByName(dagPath.sourceExpId+""));
+			var dagNode2:DAGNode = DAGNode(panel1.getChildByName(dagPath.destinationExpId+""));
+			var fromX:int = dagNode1.x+dagNode1.width;
+			var fromY:int = dagNode1.y+(linkCount*10);
+			var toX:int = dagNode2.x;
+			var toY:int = dagNode2.y+(linkCount*15);
+			var graphics:Graphics = line.graphics;
+		
+			selectedLink=event.currentTarget.name;
+			graphics.clear();
+			graphics.moveTo(fromX,fromY);
+			graphics.beginFill(0x0000ff);
+			graphics.lineTo(toX,toY);
+			graphics.lineStyle(2,0x0000ff);
+			graphics.drawCircle(toX,toY,3);
+			graphics.endFill();
+			addEventListener(KeyboardEvent.KEY_DOWN,deletePathHandler);
+		}
+					
+	}
+	
+	private function updateLinkUnSelection(event:MouseEvent)
+	{
+		var link:UIComponent =panel1.getChildByName(event.currentTarget.name) as UIComponent;	
+		if(link!=null)
+		{
+			var line:Sprite =link.getChildByName("link") as Sprite;
+			var dagPath:IDAGPath = dagPathUIMap.getValue(event.currentTarget.name);
+			var dagNode1:DAGNode = DAGNode(panel1.getChildByName(dagPath.sourceExpId+""));
+			var dagNode2:DAGNode = DAGNode(panel1.getChildByName(dagPath.destinationExpId+""));
+			var fromX:int = dagNode1.x+dagNode1.width;
+			var fromY:int = dagNode1.y+(linkCount*10);
+			var toX:int = dagNode2.x;
+			var toY:int = dagNode2.y+(linkCount*15);
+			var graphics:Graphics = line.graphics;
+			graphics.clear();
+			graphics.moveTo(fromX,fromY);
+			graphics.beginFill(0xFFCC00);
+			graphics.lineTo(toX,toY);
+			graphics.lineStyle(2,0xFFCC00);
+			graphics.drawCircle(toX,toY,3);
+			graphics.endFill();
+			selectedLink="";
+		}
+	}
 	private function updateNodeSelection(event:MouseEvent):void {
 	
 		if(event.ctrlKey)
@@ -581,20 +659,28 @@ creationComplete="initApp()"  width="100%" height="100%">
 					if(selectedNodeList!=null)
 					{
 						var index:int =node1 as int;
-						selectedNodeList.removeItemAt(0);
-						selectedNodeList.addItemAt(selectedNodeList.getItemIndex(1),0)
-						selectedNodeList.removeItemAt(1);
+
+						if(selectedNodeList.length==2)
+						{
+							selectedNodeList.removeItemAt(0);
+							node1=node2;
+							node2="";
+						}
+						else
+						{
+							selectedNodeList.removeItemAt(0);
+							node1 = "";
+						}
 						count--;
 					
 					}
 					dagNode.unSelect();
-					node1 = "";
+	
 				}
 				else if(dagNode.name == node2)
 				{
 					if(selectedNodeList!=null)
 					{
-						Alert.show("2");
 						var index:int =node2 as int;
 						selectedNodeList.removeItemAt(1);
 						count--;
@@ -634,37 +720,69 @@ creationComplete="initApp()"  width="100%" height="100%">
 		}
 		
 	}
-			
-	private function deleteLink():void
+	
+	private function deletePath(dagNode1:DAGNode,dagNode2:DAGNode):void
 	{
-		var dagNode1:DAGNode = DAGNode(panel1.getChildByName(node1));
-		var dagNode2:DAGNode = DAGNode(panel1.getChildByName(node2));
-		var ass:Association=dagNode1.getOutAssociation(node2);
-		if(ass != null)
-		{
-			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
-			if(dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)
+		//Alert.show("delete")
+			var ass:Association=dagNode1.getOutAssociation(node2);
+			if(ass != null)
 			{
-				dagNode1.removeOutAssociation(node2,ass.associatedLink);
+				panel1.removeChild(panel1.getChildByName(ass.associatedLink));
+				if(dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)
+				{
+					dagNode1.removeOutAssociation(node2,ass.associatedLink);
+				}
+				else
+				{
+					dagNode1.removeDisplayOutAssociation(node2,ass.associatedLink);
+					dagNode1.removeOutAssociation(node2,ass.associatedLink);
+				}
+				dagNode2.removeInAssociation(node1,ass.associatedLink);
+				node1="";
+				node2="";
+				rpcService.addEventListener(ResultEvent.RESULT,deleteLinkHandler);
+				var nodeList:ArrayCollection = new ArrayCollection();
+				nodeList.addItemAt(dagNode1,0);
+				nodeList.addItemAt(dagNode2,1);
+				rpcService.deleteLink(nodeList,ass.associatedLink)
 			}
 			else
 			{
-				dagNode1.removeDisplayOutAssociation(node2,ass.associatedLink);
-				dagNode1.removeOutAssociation(node2,ass.associatedLink);
+				Alert.show("Selected nodes do not have any association");
 			}
-			dagNode2.removeInAssociation(node1,ass.associatedLink);
-			dagNode1.unSelect();
-			dagNode2.unSelect();
-			rpcService.addEventListener(ResultEvent.RESULT,deleteLinkHandler);
-			var nodeList:ArrayCollection = new ArrayCollection();
-			nodeList.addItemAt(dagNode1,0);
-			nodeList.addItemAt(dagNode2,1);
-			rpcService.deleteLink(nodeList,ass.associatedLink)
-		}
-		else
-		{
-			Alert.show("Selected nodes do not have any association");
-		}
+	}	
+	
+	private function deletePathHandler(event:KeyboardEvent):void		
+	{
+
+			if(event.keyCode==Keyboard.DELETE)
+			{
+				var dagPath:IDAGPath = dagPathUIMap.getValue(selectedLink);
+				node1=dagPath.sourceExpId+"";
+				node2=dagPath.destinationExpId+"";
+				var dagNode1:DAGNode = DAGNode(panel1.getChildByName(node1));
+				var dagNode2:DAGNode = DAGNode(panel1.getChildByName(node2));
+				if(view==DAGConstants.RESULT_VIEW)
+				{
+				//	Alert.show("out page")
+					if((dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)||(dagNode2.nodeType==DAGConstants.VIEW_ONLY_NODE))
+					{
+					//	Alert.show("view page")
+						deletePath(dagNode1,dagNode2);
+					}
+					else
+					{
+						Alert.show("Constraint node  link cannot be deleted");
+					}
+				}
+				else
+				{
+//					Alert.show("Limit page")
+					deletePath(dagNode1,dagNode2);
+				}
+					
+			}
+				
 	}
 	public function deleteLinkHandler(event:ResultEvent):void
 	{
@@ -707,7 +825,6 @@ creationComplete="initApp()"  width="100%" height="100%">
 	<mx:Panel backgroundColor="white" id="panel1" width="100%" height="100%" layout="absolute">
 		<mx:HBox  borderStyle="none" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="190" height="39" x="0" y="0">
 			<mx:Button label="Add Link" click="drawLine()"/>
-			<mx:Button label="Delete Link" click="deleteLink()"/>
 		</mx:HBox>
 	</mx:Panel>
 	<mx:Label text="Current Expression"  fontFamily="Courier New" fontSize="11" fontWeight="bold"/>
