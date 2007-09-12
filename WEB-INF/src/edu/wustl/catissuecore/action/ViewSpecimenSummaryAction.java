@@ -30,19 +30,19 @@ public class ViewSpecimenSummaryAction extends BaseAction
 			String eventId = summaryForm.getEventId();
 			if(eventId==null)
 			{
-				eventId = (String) request.getParameter("Event_Id");
+				eventId = (String) request.getParameter(Constants.COLLECTION_PROTOCOL_EVENT_ID);
 			}
 					
 			LinkedHashMap<String, GenericSpecimen> specimenMap;
 			if (eventId != null)
 			{
-				Map collectionProtocolEventMap = (Map)session.getAttribute("collectionProtocolEventMap");
+				Map collectionProtocolEventMap = (Map)session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 				CollectionProtocolEventBean collectionProtocolEventBean =(CollectionProtocolEventBean)collectionProtocolEventMap.get(eventId);
 				specimenMap = (LinkedHashMap)collectionProtocolEventBean.getSpecimenRequirementbeanMap();
 			}
 			else 
 			{
-				specimenMap = (LinkedHashMap) session.getAttribute(Constants.SPECIMEN_LIST_httpSession_BEAN);
+				specimenMap = (LinkedHashMap) session.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
 			}
 	
 			summaryForm.setSpecimenList(specimenMap.values());

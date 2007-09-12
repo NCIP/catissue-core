@@ -103,8 +103,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String  COLUMNLIST="columnList";
 	public static final String  CONSENT_RESPONSE_KEY="CR_";
 	public static final String  CONSENT_RESPONSE="ConsentResponse";
-	public  static final String SPECIMEN_LIST_httpSession_BEAN = "SpecimenListBean";
-	public static final String COLLECTION_PROTOCOL_httpSession_BEAN = "CollectionProtocolEventBean";
+	public  static final String SPECIMEN_LIST_SESSION_MAP = "SpecimenListBean";
+	public static final String COLLECTION_PROTOCOL_EVENT_SESSION_MAP = "collectionProtocolEventMap";
 
 	public static final String [][] defaultValueKeys= {
 		{Constants.DEFAULT_TISSUE_SITE, edu.wustl.common.util.global.Constants.CDE_NAME_TISSUE_SITE},
@@ -1971,4 +1971,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String ADD_TO_CART = "";
     public static final String DUPLICATE_OBJECT = "duplicateObject";
     public static final String DIFFERENT_VIEW_IN_CART = "differentCartView";
+	public static final String COLLECTION_PROTOCOL_EVENT_ID = "Event_Id";
 }
