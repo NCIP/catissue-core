@@ -61,8 +61,9 @@
 	}
 	function onParticipantClick(pId,cpId)
 	{
-      window.parent.frames[1].location = "QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=edit&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&id="+pId;
-    }
+      window.parent.frames[1].location ="QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=edit&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&id="+pId;
+	 
+	}
   
     /*
        To register a participant for a CP
@@ -76,7 +77,8 @@
 		}    
         else
 		{
-			window.parent.frames[1].location = "CPQueryCollectionProtocolRegistration.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&operation=add&pageOf=<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>";
+			window.parent.frames[1].location = "QueryParticipant.do?operation=add&pageOf=<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>&clearConsentSession=true&<%=Constants.CP_SEARCH_CP_ID%>="+cpId;
+			
 		} 
 
     }
