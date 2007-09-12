@@ -33,13 +33,13 @@
 				<tr>
 					<td> <html:radio property="selectedSpecimenId" value="uniqueIdentifier" idName="specimen" 
 					onclick=" form.action='GenericSpecimenSummary.do'; submit()"/> </td>
-					<td class="dataCellText" > <bean:write name="specimen" property="specimenLabel" /></td>
-					<td class="dataCellText"> <bean:write name="specimen" property="specimenClassName" /></td>
-					<td class="dataCellText"> <bean:write name="specimen" property="specimenType" /></td>
+					<td class="dataCellText" > <bean:write name="specimen" property="displayName" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="className" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="type" /></td>
 					<td class="dataCellText"> <bean:write name="specimen" property="tissueSite" /></td>
 					<td class="dataCellText"> <bean:write name="specimen" property="tissueSide" /></td>
-					<td class="dataCellText"> <bean:write name="specimen" property="pathologyStatus" /></td>
-					<td class="dataCellText"> <bean:write name="specimen" property="storage" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="pathologicalStatus" /></td>
+					<td class="dataCellText"> <bean:write name="specimen" property="storageContainerForSpecimen" /></td>
 					<td class="dataCellText"> <bean:write name="specimen" property="quantity" /></td>
 					
 				</tr>
@@ -72,8 +72,8 @@
 				  <logic:iterate name="viewSpecimenSummaryForm" property="aliquoteList" id="aliquot">
 					<tr>
 						<td > <bean:write name="aliquot" property="parentName" /></td>		      		
-						<td > <bean:write name="aliquot" property="specimenLabel" /></td>
-						<td > <bean:write name="aliquot" property="storage" /></td>
+						<td > <bean:write name="aliquot" property="displayName" /></td>
+						<td > <bean:write name="aliquot" property="storageContainerForSpecimen" /></td>
 						<td > <bean:write name="aliquot" property="quantity" /></td>
 					</tr>
 				  </logic:iterate>	
@@ -104,11 +104,11 @@
 		      <logic:iterate name="viewSpecimenSummaryForm" property="derivedList" id="derived">
 		      	<tr>
 		      		<td > <bean:write name="derived" property="parentName" /></td>
-		      		<td > <bean:write name="derived" property="specimenLabel" /></td>
-		      		<td > <bean:write name="derived" property="specimenClassName" /></td>
-		      		<td > <bean:write name="derived" property="specimenType" /></td>
+		      		<td > <bean:write name="derived" property="displayName" /></td>
+		      		<td > <bean:write name="derived" property="className" /></td>
+		      		<td > <bean:write name="derived" property="type" /></td>
 		      		<td > <bean:write name="derived" property="quantity" /></td>
-		      		<td > <bean:write name="derived" property="storage" /></td>
+		      		<td > <bean:write name="derived" property="storageContainerForSpecimen" /></td>
 		      		<td > <bean:write name="derived" property="concentration" /></td>
 		      	</tr>
 		      </logic:iterate>	
