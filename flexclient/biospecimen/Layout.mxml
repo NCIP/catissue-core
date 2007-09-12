@@ -236,6 +236,7 @@
 		var remoteObj1:RemoteObject =  new RemoteObject(); 
 		remoteObj1.destination = "cdeService";
 		var cpId :String = selectedCp.value;
+		
 		if(cpId == "-1")
 		{
                      Alert.show("Please select valid Collection Protocol");
@@ -243,7 +244,7 @@
 		}
 		else
 		{
-			remoteObj1.getParticipantsList(selectedCp.value);
+			remoteObj1.getParticipantsList(selectedCp.value, selectedCp.name);
 		}
 		remoteObj1.addEventListener(ResultEvent.RESULT,participantHandler);
 		remoteObj1.addEventListener("fault",faultHandler);
@@ -447,7 +448,7 @@
 
    <mx:Style>
 		    Tree{
-              folderClosedIcon:Embed(source='/images/Specimen.gif'); 
+			  folderClosedIcon:Embed(source='/images/Specimen.gif'); 
 			  folderOpenIcon:Embed(source='/images/Specimen.gif');
 			  defaultLeafIcon:Embed(source='/images/Specimen.gif');
 			  disclosureClosedIcon:Embed(source='/images/nolines_plus.gif');
