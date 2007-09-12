@@ -43,7 +43,8 @@
 		
 		public var associationList:ArrayCollection;
 		public var operatorList:ArrayCollection;
-		public var pathList:ArrayCollection;
+//		public var pathList:ArrayCollection;
+		public var dagpathList:ArrayCollection;
 		public var outAssociations:ArrayCollection = new ArrayCollection();		
 		public var displayoutAssociations:ArrayCollection = new ArrayCollection();		
 		public var inAssociations:ArrayCollection = new ArrayCollection();
@@ -141,9 +142,12 @@
 			expressionId=input.readInt();
 			operatorBetweenAttrAndAssociation = input.readUTF();
 			nodeType = input.readUTF();
-			associationList = input.readObject();
-			operatorList = input.readObject();
-			pathList = input.readObject();
+			associationList = input.readObject() as ArrayCollection;
+			operatorList = input.readObject() as ArrayCollection;
+			//pathList = input.readObject();
+			dagpathList = input.readObject() as ArrayCollection;
+			
+			
 		}
 
 		public function writeExternal(out:IDataOutput):void {
@@ -154,7 +158,8 @@
 			out.writeUTF(nodeType);
 			out.writeObject(associationList);
 			out.writeObject(operatorList);
-			out.writeObject(pathList);
+			//out.writeObject(pathList);
+			out.writeObject(dagpathList);
 		}
 		//---
 		
