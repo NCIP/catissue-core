@@ -1006,4 +1006,19 @@ INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(SELECT PROTECTION
 INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE PROTECTION_ELEMENT_NAME='Quarantine Comments'),TO_DATE('2006-11-27','yyyy-mm-dd') FROM dual;
 /*------- caTIES end ------*/
 
+/*--------Query Wizard start---------------*/
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction','edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction','edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction',NULL,NULL,1,to_date('2007-01-04','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,24,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction','edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction','edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction',NULL,NULL,1,to_date('2007-01-04','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,24,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.action.querysuite.PathFinderAction','edu.wustl.catissuecore.action.querysuite.PathFinderAction','edu.wustl.catissuecore.action.querysuite.PathFinderAction',NULL,NULL,1,to_date('2007-01-04','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,24,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.querysuite.PathFinderAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction','edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction','edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction',NULL,NULL,1,to_date('2007-01-04','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,24,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+
+/*--------Query Wizard End---------------*/
+
 COMMIT;
