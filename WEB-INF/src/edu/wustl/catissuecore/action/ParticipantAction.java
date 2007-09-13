@@ -93,9 +93,19 @@ public class ParticipantAction extends SecureAction
 				}
 			}
 		}
+		/* Sachin
+		 * bug id 5317
+		 * Set Selcted Cp id in participant form so that it is get reflected whi;le adding SCG
+		 */ 
+		String cpid = (String)request.getParameter("cpSearchCpId");
+		if(participantForm.getCpId()!= -1 && cpid!=null)
+		{
+			participantForm.setCpId(new Long(cpid).longValue());
+		}
+		
 		if (participantForm.getOperation().equals(Constants.EDIT))
 		{
-			request.setAttribute("participantId", new Long(participantForm.getId()).toString());
+			request.setAttribute("participantId", new Long(participantForm.getId()).toString());			
 			//Setting Consent Response Bean to Session
 			//Abhishek Mehta
 			Hashtable consentResponseHashTable = participantForm.getConsentResponseHashTable();

@@ -648,7 +648,7 @@ tr#hiddenCombo
 </html:messages>
 
 <html:form action="<%=formName%>">
-<input type="hidden" name="cpId" id="cpId"/>
+<html:hidden property="cpId" />
 	<%
 	if(pageView.equals("add"))
 	{
