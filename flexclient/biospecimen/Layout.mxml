@@ -81,7 +81,7 @@
 		}
 		else
 		{
-			remoteObj1.getParticipantsList(selectedCp.value);
+			remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name);
 		}
 		remoteObj1.addEventListener(ResultEvent.RESULT,participantHandler);
 		remoteObj1.addEventListener("fault",faultHandler);
