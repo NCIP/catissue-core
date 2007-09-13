@@ -15,6 +15,7 @@
 		public var isSelected:Boolean=false;
 		public var sourceExpId:int = 0;
 		public var destinationExpId:int=0;		
+		public var operatorIndex:int=0;
 		
 		public function readExternal(input:IDataInput):void {
 			name = input.readUTF();
