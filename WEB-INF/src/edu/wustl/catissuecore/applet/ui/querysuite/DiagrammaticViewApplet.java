@@ -96,7 +96,7 @@ public class DiagrammaticViewApplet extends BaseApplet
             }
         });
 		panel.setQueryObject(queryObject);
-		panel.enableAutoConnect(false);
+		panel.enableAutoConnectButton(false);
 		this.getContentPane().add(panel);
 		this.setSize(3500, 2000);
 		this.setVisible(true);
