@@ -92,7 +92,7 @@ public class CategorySearchAction extends BaseAction
 			MatchedClass matchedClass = advancedSearch.search(searchTarget, searchString, basedOn);
 			entityCollection = matchedClass.getEntityCollection();
 			List resultList = new ArrayList(entityCollection);
-			Collections.sort(resultList, new EntityInterfaceComparator());
+//			Collections.sort(resultList, new EntityInterfaceComparator());
 			if(currentPage != null && currentPage.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.DEFINE_RESULTS_VIEW))
 			{
 				entitiesString = generateHTMLToDisplayList(resultList,searchedEntitiesMap);
