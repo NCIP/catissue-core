@@ -98,7 +98,7 @@ public class ParticipantAction extends SecureAction
 		 * Set Selcted Cp id in participant form so that it is get reflected whi;le adding SCG
 		 */ 
 		String cpid = (String)request.getParameter("cpSearchCpId");
-		if(participantForm.getCpId()!= -1 && cpid!=null)
+		if(participantForm.getCpId()== -1 && cpid!=null)
 		{
 			participantForm.setCpId(new Long(cpid).longValue());
 		}
