@@ -37,6 +37,8 @@
 		[Bindable]
 		public var operatorArray:Array = ["AND","OR"];
 		[Bindable]
+		public var operatorSelectedIndex:int=0;
+		[Bindable]
 		public var enable:Boolean=true;
 		[Bindable]
 		public var nodeColor:int =0xFFFFAA;
@@ -51,8 +53,8 @@
 
 
 		[Bindable]
-		public function addDisplayOutAssociation(node:String,link:String):void{
-			var ass:Association = new Association(node,link);
+		public function addDisplayOutAssociation(node:String,link:String,operatorIndex:int):void{
+			var ass:Association = new Association(node,link,operatorIndex);
 			displayoutAssociations.addItem(ass);
 			}
 
@@ -71,8 +73,8 @@
 		}
 
 		[Bindable]
-		public function addOutAssociation(node:String,link:String):void{
-			var ass:Association = new Association(node,link);
+		public function addOutAssociation(node:String,link:String,operatorIndex:int):void{
+			var ass:Association = new Association(node,link,operatorIndex);
 			outAssociations.addItem(ass);
 			}
 		[Bindable]
@@ -109,8 +111,8 @@
 		}
 		
 		[Bindable]
-		public function addInAssociation(node:String,link:String):void{
-			var ass:Association = new Association(node,link);
+		public function addInAssociation(node:String,link:String,operatorIndex:int):void{
+			var ass:Association = new Association(node,link,operatorIndex);
 			inAssociations.addItem(ass);
 		}
 		[Bindable]
@@ -200,7 +202,7 @@
 			myMenu.addEventListener(MenuEvent.ITEM_CLICK,handleMenuEvent);
 			
 		}
-		private function deleteNode():void
+		public function deleteNode():void
 		{
 				var ass:Association;
 				for(var i:int=0;i<inAssociations.length;i++)
@@ -216,7 +218,6 @@
 					this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
 					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeInAssociation(this.name,ass.associatedLink);
 				}
-				this.parent.removeChild(this.parent.getChildByName(this.name));
 				this.parentApplication.rpcService.deleteNode(this.expressionId);
 				this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,deleteHandler);
 				
@@ -268,8 +269,11 @@
 		}
 		public function deleteHandler(event:ResultEvent)
 		{
+			this.parent.removeChild(this.parent.getChildByName(this.name));
+			this.parentApplication.totalNodeMap.remove(this.name);
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteHandler,false);
 		}
+		
 		public function faultHandler (event:FaultEvent):void {
 				// Deal with event.fault.faultString, etc.
 			Alert.show(event.fault.faultString, 'Error');
@@ -302,6 +306,11 @@
 		 var index:int = cb.name as int;
 		 this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,setOperatorHandler);
 		 this.parentApplication.rpcService.setLogicalOperator(this,index,cb.selectedLabel);
+//		 var outAssociation:Association =  displayoutAssociations.getItemAt(index) as Association;
+//		 outAssociation.operatorIndex=cb.selectedIndex;
+		 var dagPath:IDAGPath = dagpathList.getItemAt(index) as IDAGPath;
+		 dagPath.operatorIndex = cb.selectedIndex;	
+		 		
 		}
 	
 		
@@ -323,7 +332,7 @@
 				<mx:Canvas backgroundColor="0xF5F5F5"  borderStyle="solid">
 					<mx:Label text="{assRep.currentItem.associatedNode}" />
 				</mx:Canvas>
-				<mx:ComboBox id="operatorCombo" name="{assRep.currentIndex.toString()}"  dataProvider="{operatorArray}" change="operatorChange(event)" enabled="{enable}"/>
+				<mx:ComboBox id="operatorCombo"  name="{assRep.currentIndex.toString()}"  dataProvider="{operatorArray}" change="operatorChange(event)"  selectedIndex="{assRep.currentItem.operatorIndex}" enabled="{enable}"/>
 		
 			</mx:HBox>
 			</mx:Repeater>
