@@ -664,7 +664,7 @@
 		<target name="build_dagViewApplet_jar" depends="compile">
 			<delete dir="${dagviewapplet.dir}" />
 			<mkdir dir="${dagviewapplet.dir}" />
-			<copy todir="${applet.dir}">
+			<copy todir="${applet.dir}" overwrite="true">
 				<fileset dir="${lib.dir}">
 					<include name="**/cab2bStandAlone.jar" />
 					<include name="**/commonpackage.jar" />
