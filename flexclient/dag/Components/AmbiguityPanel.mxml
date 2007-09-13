@@ -24,10 +24,8 @@
 		private function init():void
         {
         	 //Intialising ambiguity panel
-        	 
         	selectedList = new ArrayCollection()
-        	pathList.addItem(new IDAGPath());
-            pathList.addEventListener(CollectionEvent.COLLECTION_CHANGE, handleDataProviderChange);
+        	pathList.addEventListener(CollectionEvent.COLLECTION_CHANGE, handleDataProviderChange);
         }
        
 		public  function closePopUp(event:MouseEvent):void {
