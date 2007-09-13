@@ -687,7 +687,7 @@ public class AliquotAction extends SecureAction
 			 *  fired hql.
 			 */
 			Boolean aliquotInSameContainer = null;
-			aliquotInSameContainer =(Boolean)bizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup.collectionProtocolEvent.collectionProtocol.aliqoutInSameContainer");
+			aliquotInSameContainer =(Boolean)bizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup.collectionProtocolEvent.collectionProtocol.aliquotInSameContainer");
 			if (aliquotInSameContainer != null)
 			{
 				form.setAliqoutInSameContainer(aliquotInSameContainer.booleanValue());
