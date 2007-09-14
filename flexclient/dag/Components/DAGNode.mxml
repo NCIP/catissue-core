@@ -56,7 +56,7 @@
 		public function addDisplayOutAssociation(node:String,link:String,operatorIndex:int):void{
 			var ass:Association = new Association(node,link,operatorIndex);
 			displayoutAssociations.addItem(ass);
-			}
+		}
 
 		[Bindable]
 		public function removeDisplayOutAssociation(node:String,link:String):void{
@@ -306,8 +306,8 @@
 		 var index:int = cb.name as int;
 		 this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,setOperatorHandler);
 		 this.parentApplication.rpcService.setLogicalOperator(this,index,cb.selectedLabel);
-//		 var outAssociation:Association =  displayoutAssociations.getItemAt(index) as Association;
-//		 outAssociation.operatorIndex=cb.selectedIndex;
+		 var outAssociation:Association =  displayoutAssociations.getItemAt(index) as Association;
+		 outAssociation.operatorIndex=cb.selectedIndex;
 		 var dagPath:IDAGPath = dagpathList.getItemAt(index) as IDAGPath;
 		 dagPath.operatorIndex = cb.selectedIndex;	
 		 		
