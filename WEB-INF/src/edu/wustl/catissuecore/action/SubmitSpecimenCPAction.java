@@ -29,7 +29,6 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -55,7 +54,7 @@ public class SubmitSpecimenCPAction extends Action {
 			}
 
 			if (request.getParameter("Save Specimens") != null) {
-				insertSpecimens(request);
+				//insertSpecimens(request);
 			}
 
 			return mapping.findForward(Constants.SUCCESS);
@@ -72,130 +71,131 @@ public class SubmitSpecimenCPAction extends Action {
 		return mapping.findForward(target);
 
 	}
-
-	private void insertCollectionProtocol(HttpServletRequest request)
-			throws Exception {
-		HttpSession session = request.getSession();
-		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
-				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-
-		LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = (LinkedHashMap) session
-				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-
-		CollectionProtocol collectionProtocol = getCollectionProtocolDomainObject(collectionProtocolBean);
-		Collection collectionProtocolEventList = new HashSet();
-		Collection collectionProtocolEventBean = cpEventMap.values();
-		Iterator cpEventIterator = collectionProtocolEventBean.iterator();
-
-		while (cpEventIterator.hasNext()) {
-
-			CollectionProtocolEventBean cpEventBean = (CollectionProtocolEventBean) cpEventIterator
-					.next();
-			CollectionProtocolEvent collectionProtocolEvent = getCollectionProtocolEvent(cpEventBean);
-			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			collectionProtocolEventList.add(collectionProtocolEvent);
-
-		}
-
-		collectionProtocol
-				.setCollectionProtocolEventCollection(collectionProtocolEventList);
-		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-		bizLogic.insert(collectionProtocol, sessionDataBean, Constants.HIBERNATE_DAO); 
-		
-	}
-
-	private CollectionProtocolEvent getCollectionProtocolEvent(
-			CollectionProtocolEventBean cpEventBean) {
-
-		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
-		
-		collectionProtocolEvent.setClinicalStatus(cpEventBean.getClinicalStatus());
-		collectionProtocolEvent.setCollectionPointLabel(cpEventBean.getCollectionPointLabel());
-		collectionProtocolEvent.setStudyCalendarEventPoint(cpEventBean.getStudyCalenderEventPoint());
-		
-		SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = new SpecimenCollectionRequirementGroup();
-		
-		specimenCollectionRequirementGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		specimenCollectionRequirementGroup.setClinicalDiagnosis(cpEventBean.getClinicalDiagnosis());
-		specimenCollectionRequirementGroup.setClinicalStatus(cpEventBean.getClinicalStatus());
-		collectionProtocolEvent.setRequiredCollectionSpecimenGroup(specimenCollectionRequirementGroup);
-		Collection specimenCollection =null;
-		Map specimenMap =(Map)cpEventBean.getSpecimenRequirementbeanMap();
-		
-		if (specimenMap!=null && !specimenMap.isEmpty()){
-			specimenCollection =getSpecimens(cpEventBean.getSpecimenRequirementbeanMap().values());	
-		}
-		
-		specimenCollectionRequirementGroup.setSpecimenCollection(specimenCollection);
-		
-		//specimenCollectionRequirementGroup.setSpecimenCollectionSite()
-		
-		return collectionProtocolEvent;
-	}
-
-	private Collection getSpecimens(Collection values) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private CollectionProtocol getCollectionProtocolDomainObject(
-			CollectionProtocolBean cpBean) throws Exception {
-
-		CollectionProtocol collectionProtocol = new CollectionProtocol();
-		collectionProtocol.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		collectionProtocol.setAliquotInSameContainer(Boolean.TRUE);
-		collectionProtocol.setConsentsWaived(cpBean.isConsentWaived());
-		MapDataParser mapdataParser = new MapDataParser(
-				"edu.wustl.catissuecore.bean");
-		Collection consentValues = mapdataParser.generateData(cpBean
-				.getConsentValues());
-
-		collectionProtocol.setConsentTierCollection(consentValues);
-		Collection coordinatorCollection = new LinkedHashSet();
-		long[] coordinatorsArr = cpBean.getProtocolCoordinatorIds();
-
-		if (coordinatorsArr != null) {
-			for (int i = 0; i < coordinatorsArr.length; i++) {
-				if (coordinatorsArr[i] != -1) {
-					User coordinator = new User();
-					coordinator.setId(new Long(coordinatorsArr[i]));
-					coordinatorCollection.add(coordinator);
-				}
-			}
-			collectionProtocol.setCoordinatorCollection(coordinatorCollection);
-		}
-
-		collectionProtocol.setDescriptionURL(cpBean.getDescriptionURL());
-		collectionProtocol.setEnrollment(new Integer(cpBean.getEnrollment()));
-		User principalInvestigator = new User();
-		principalInvestigator.setId(new Long(cpBean
-				.getPrincipalInvestigatorId()));
-
-		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
-		collectionProtocol.setShortTitle(cpBean.getShortTitle());
-		Date startDate = Utility.parseDate(cpBean.getStartDate(), Utility
-				.datePattern(cpBean.getStartDate()));
-		collectionProtocol.setStartDate(startDate);
-		collectionProtocol.setTitle(cpBean.getTitle());
-		collectionProtocol.setUnsignedConsentDocumentURL(cpBean
-				.getUnsignedConsentURLName());
-
-		return collectionProtocol;
-	}
-
-	private void insertSpecimens(HttpServletRequest request) throws Exception {
-
-		HttpSession session = request.getSession();
-		LinkedHashMap<String, GenericSpecimen> cpEventMap;
-		cpEventMap = (LinkedHashMap) session
-				.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
-
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
-				Constants.NEW_SPECIMEN_FORM_ID);
-		SessionDataBean sessionDataBean = (SessionDataBean) session
-				.getAttribute(Constants.SESSION_DATA);
-		bizLogic.insert(cpEventMap, sessionDataBean, Constants.HIBERNATE_DAO);
-
-	}
+//
+//	private void insertCollectionProtocol(HttpServletRequest request)
+//			throws Exception {
+//		HttpSession session = request.getSession();
+//		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
+//				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+//
+//		LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = (LinkedHashMap) session
+//				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+//
+//		CollectionProtocol collectionProtocol = getCollectionProtocolDomainObject(collectionProtocolBean);
+//		Collection collectionProtocolEventList = new HashSet();
+//		Collection collectionProtocolEventBean = cpEventMap.values();
+//		Iterator cpEventIterator = collectionProtocolEventBean.iterator();
+//
+//		while (cpEventIterator.hasNext()) {
+//
+//			CollectionProtocolEventBean cpEventBean = (CollectionProtocolEventBean) cpEventIterator
+//					.next();
+//			CollectionProtocolEvent collectionProtocolEvent = getCollectionProtocolEvent(cpEventBean);
+//			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
+//			collectionProtocolEventList.add(collectionProtocolEvent);
+//
+//		}
+//
+//		collectionProtocol
+//				.setCollectionProtocolEventCollection(collectionProtocolEventList);
+//		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+//		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+//		bizLogic.insert(collectionProtocol, sessionDataBean, Constants.HIBERNATE_DAO); 
+//		
+//	}
+//
+//	private CollectionProtocolEvent getCollectionProtocolEvent(
+//			CollectionProtocolEventBean cpEventBean) {
+//
+//		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
+//		
+//		collectionProtocolEvent.setClinicalStatus(cpEventBean.getClinicalStatus());
+//		collectionProtocolEvent.setCollectionPointLabel(cpEventBean.getCollectionPointLabel());
+//		collectionProtocolEvent.setStudyCalendarEventPoint(cpEventBean.getStudyCalenderEventPoint());
+//		
+//		SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = new SpecimenCollectionRequirementGroup();
+//		
+//		specimenCollectionRequirementGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+//		specimenCollectionRequirementGroup.setClinicalDiagnosis(cpEventBean.getClinicalDiagnosis());
+//		specimenCollectionRequirementGroup.setClinicalStatus(cpEventBean.getClinicalStatus());
+//		collectionProtocolEvent.setRequiredCollectionSpecimenGroup(specimenCollectionRequirementGroup);
+//		Collection specimenCollection =null;
+//		Map specimenMap =(Map)cpEventBean.getSpecimenRequirementbeanMap();
+//		
+//		if (specimenMap!=null && !specimenMap.isEmpty()){
+//			specimenCollection =getSpecimens(cpEventBean.getSpecimenRequirementbeanMap().values());	
+//		}
+//		
+//		specimenCollectionRequirementGroup.setSpecimenCollection(specimenCollection);
+//		
+//		//specimenCollectionRequirementGroup.setSpecimenCollectionSite()
+//		
+//		return collectionProtocolEvent;
+//	}
+//
+//	private Collection getSpecimens(Collection values) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	private CollectionProtocol getCollectionProtocolDomainObject(
+//			CollectionProtocolBean cpBean) throws Exception {
+//
+//		CollectionProtocol collectionProtocol = new CollectionProtocol();
+//		collectionProtocol.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+//		collectionProtocol.setAliquotInSameContainer(Boolean.TRUE);
+//		collectionProtocol.setConsentsWaived(cpBean.isConsentWaived());
+//		MapDataParser mapdataParser = new MapDataParser(
+//				"edu.wustl.catissuecore.bean");
+//		Collection consentValues = mapdataParser.generateData(cpBean
+//				.getConsentValues());
+//
+//		collectionProtocol.setConsentTierCollection(consentValues);
+//		Collection coordinatorCollection = new LinkedHashSet();
+//		long[] coordinatorsArr = cpBean.getProtocolCoordinatorIds();
+//
+//		if (coordinatorsArr != null) {
+//			for (int i = 0; i < coordinatorsArr.length; i++) {
+//				if (coordinatorsArr[i] != -1) {
+//					User coordinator = new User();
+//					coordinator.setId(new Long(coordinatorsArr[i]));
+//					coordinatorCollection.add(coordinator);
+//				}
+//			}
+//			collectionProtocol.setCoordinatorCollection(coordinatorCollection);
+//		}
+//
+//		collectionProtocol.setDescriptionURL(cpBean.getDescriptionURL());
+//		collectionProtocol.setEnrollment(new Integer(cpBean.getEnrollment()));
+//		User principalInvestigator = new User();
+//		principalInvestigator.setId(new Long(cpBean
+//				.getPrincipalInvestigatorId()));
+//
+//		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
+//		collectionProtocol.setShortTitle(cpBean.getShortTitle());
+//		Date startDate = Utility.parseDate(cpBean.getStartDate(), Utility
+//				.datePattern(cpBean.getStartDate()));
+//		collectionProtocol.setStartDate(startDate);
+//		collectionProtocol.setTitle(cpBean.getTitle());
+//		collectionProtocol.setUnsignedConsentDocumentURL(cpBean
+//				.getUnsignedConsentURLName());
+//
+//		return collectionProtocol;
+//	}
+//
+//	private void insertSpecimens(HttpServletRequest request) throws Exception {
+//
+//		HttpSession session = request.getSession();
+//		LinkedHashMap<String, GenericSpecimen> cpEventMap;
+//		cpEventMap = (LinkedHashMap) session
+//				.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
+//
+//		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
+//				Constants.NEW_SPECIMEN_FORM_ID);
+//		SessionDataBean sessionDataBean = (SessionDataBean) session
+//				.getAttribute(Constants.SESSION_DATA);
+//		bizLogic.insert(cpEventMap, sessionDataBean, Constants.HIBERNATE_DAO);
+//
+//	}
+	
 }
