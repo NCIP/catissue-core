@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.sf.hibernate.Hibernate;
-
 import org.springframework.remoting.RemoteAccessException;
 
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
@@ -60,7 +58,7 @@ public class HL7ParserUtil
 				try
 				{
 					// Creating participant object from report text
-					Participant participant = parser.parserParticipantInformation(getReportDataFromReportMap(reportMap, CaTIESConstants.PID));
+					Participant participant = parser.parserParticipantInformation(getReportDataFromReportMap(reportMap, CaTIESConstants.PID), site);
 					participantName=participant.getLastName()+","+participant.getFirstName();
 					// check for matching participant
 					participantList=ReportLoaderUtil.checkForParticipant(participant);
@@ -73,30 +71,26 @@ public class HL7ParserUtil
 							// Exactly one matching found, use this participant
 							Iterator<Participant> iter=participantList.iterator();
 							Participant aParticipant=iter.next();
-							List scgList=Utility.getSCGList(aParticipant);
-							if(scgList!=null && scgList.size()>0)
+							
+							Logger.out.info("Checking for Matching SCG");
+							//	check for matching scg here
+							String obrLine=getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
+							scg=ReportLoaderUtil.checkForSpecimenCollectionGroup(aParticipant, site, getSurgicalPathologyNumber(obrLine));
+							if(scg!=null)
 							{
-								Logger.out.info("Checking for Matching SCG");
-								//	check for matching scg here
-								String pidLine=getReportDataFromReportMap(reportMap, CaTIESConstants.PID);
-								String obrLine=getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
-								scg=ReportLoaderUtil.checkForSpecimenCollectionGroup(aParticipant, parser.parseSiteInformation(pidLine), getSurgicalPathologyNumber(obrLine));
-								if(scg!=null)
+								if(scg.getSurgicalPathologyNumber()!=null && scg.getSurgicalPathologyNumber().trim().length()!=0)
 								{
-									if(scg.getSurgicalPathologyNumber().trim().length()!=0)
+									if(scg.getIdentifiedSurgicalPathologyReport()!=null)
 									{
-										if(scg.getIdentifiedSurgicalPathologyReport()!=null)
-										{
-											Logger.out.info("SCG conflict found with exact match");
-											status=CaTIESConstants.STATUS_SCG_CONFLICT;
-										}
+										Logger.out.info("SCG conflict found with exact match");
+										status=CaTIESConstants.STATUS_SCG_CONFLICT;
 									}
-									else
-									{
-										Logger.out.info("SCG conflict found with partial match");
-										scg=null;
-										status=CaTIESConstants.STATUS_SCG_PARTIAL_CONFLICT;
-									}
+								}
+								else
+								{
+									Logger.out.info("SCG conflict found with partial match");
+									scg=null;
+									status=CaTIESConstants.STATUS_SCG_PARTIAL_CONFLICT;
 								}
 							}
 						}
@@ -106,7 +100,6 @@ public class HL7ParserUtil
 							Logger.out.info("Conflict found for Participant ");
 							status=CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
 						}
-						
 					}
 					else
 					{
@@ -233,7 +226,7 @@ public class HL7ParserUtil
 		Logger.out.info("Adding report to queue");
 		try
 		{
-			ReportLoaderQueue queue= new ReportLoaderQueue(Hibernate.createClob(reportText));
+			ReportLoaderQueue queue= new ReportLoaderQueue(reportText);
 			// if no any error status is set means it should be set to NEW
 			if(status==null)
 			{
@@ -246,7 +239,7 @@ public class HL7ParserUtil
 			queue.setParticipantName(participantName);
 			queue.setSurgicalPathologyNumber(surgicalPathologyNumber);
 			queue.setReportLoadedDate(new Date());
-			Utility.saveObject(queue);
+			queue=(ReportLoaderQueue)CaCoreAPIService.getAppServiceInstance().createObject(queue);
 		}
 		catch(Exception ex)
 		{

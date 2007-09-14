@@ -3,23 +3,16 @@ package edu.wustl.catissuecore.reportloader;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
-import edu.wustl.catissuecore.caties.util.CaTIESConstants;
-import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.lookup.DefaultLookupResult;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author sandeep_ranade
@@ -128,50 +121,62 @@ public class ReportLoaderUtil
 		return "";
 	}
 	
-	/**
-	 * @return specimen collection group
-	 * @throws Exception throws exception
-	 */
 	public static SpecimenCollectionGroup checkForSpecimenCollectionGroup(Participant participant, Site site, String surgicalPathologyNumber)throws Exception
 	{
-		List<SpecimenCollectionGroup> scgSet=null;
-		SpecimenCollectionGroup existingSCG=null;
-		SpecimenCollectionGroup partialMatchingSCG=null;
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		Site existingSCGSite=null;
-		
-		Iterator<SpecimenCollectionGroup> scgIterator=null;
-		try
+		SpecimenCollectionGroup scg=getExactMatchingSCG(participant, site, surgicalPathologyNumber);
+		if(scg!=null)
 		{
-			// het list of all the scg associated with participant
-			scgSet=Utility.getSCGList(participant);
-			if(scgSet!=null && scgSet.size()>0)
+			return scg;
+		}
+		else
+		{
+			if(isPartialMatchingSCG(participant, site))
 			{
-				scgIterator=scgSet.iterator();
-				while(scgIterator.hasNext())
-				{
-					// check for mathcing scg
-					existingSCG=scgIterator.next();
-					existingSCGSite=(Site)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), existingSCG.getId(), Constants.COLUMN_NAME_SCG_SITE);
-					if(site.getName().equals(existingSCGSite.getName()))
-					{
-						if(surgicalPathologyNumber.equals(existingSCG.getSurgicalPathologyNumber()))
-						{
-							return existingSCG;
-						}
-						else
-						{
-							partialMatchingSCG=existingSCG;
-						}
-					}
-				}
+				return new SpecimenCollectionGroup();
 			}
 		}
-		catch(Exception ex)
-		{
-			Logger.out.error("Error while checking specimen collection group ",ex);
-			throw ex;
-		}
-		return partialMatchingSCG;
+		return null;
 	}
+	
+	public static SpecimenCollectionGroup getExactMatchingSCG(Participant participant, Site site, String surgicalPathologyNumber)
+	{
+		String scgHql = "select scg"+
+	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
+		" edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"+
+		" edu.wustl.catissuecore.domain.Participant as p "+
+		" where p.id = " +participant.getId()+ 
+		" and p.id = cpr.participant.id " +
+		" and scg.id in elements(cpr.specimenCollectionGroupCollection)" +
+		" and scg.specimenCollectionSite.name='"+site.getName()+"' "+
+		" and scg.surgicalPathologyNumber='"+surgicalPathologyNumber+"'";
+		
+		List resultList=(List)CaCoreAPIService.executeQuery(scgHql);
+		if(resultList!=null && resultList.size()==1)
+		{
+			return (SpecimenCollectionGroup)resultList.get(0);
+		}
+		return null;
+	}
+	
+	public static boolean isPartialMatchingSCG(Participant participant, Site site)
+	{
+		String scgHql = "select scg"+
+	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
+		" edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"+
+		" edu.wustl.catissuecore.domain.Participant as p "+
+		" where p.id = " +participant.getId()+ 
+		" and p.id = cpr.participant.id " +
+		" and scg.id in elements(cpr.specimenCollectionGroupCollection)" +
+		" and scg.specimenCollectionSite.name='"+site.getName()+"' "+
+		" and (scg.surgicalPathologyNumber="+null+
+		" or scg.surgicalPathologyNumber='')";
+		
+		List resultList=(List)CaCoreAPIService.executeQuery(scgHql);
+		if(resultList!=null && resultList.size()>0)
+		{
+			return true;
+		}
+		return false;
+	}
+	
 }

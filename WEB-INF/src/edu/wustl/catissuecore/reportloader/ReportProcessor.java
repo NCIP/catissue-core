@@ -163,7 +163,8 @@ public class ReportProcessor implements Observer
 	 */
 	public boolean isValidFile(String fileName)
 	{
-		if(fileName.endsWith(CaTIESConstants.INPUT_FILE_EXTENSION))
+		String extension=fileName.substring(fileName.lastIndexOf("."));
+		if(extension.equalsIgnoreCase(CaTIESConstants.INPUT_FILE_EXTENSION))
 		{
 			return true;
 		}

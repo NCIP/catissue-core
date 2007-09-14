@@ -1,20 +1,17 @@
 package edu.wustl.catissuecore.reportloader;
 
-import java.sql.Clob;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
+
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
-import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -27,10 +24,11 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.common.util.HQLCriteria;
+import gov.nih.nci.system.applicationservice.ApplicationException;
+import gov.nih.nci.system.applicationservice.ApplicationService;
 
 /**
  * @author sandeep_ranade
@@ -117,26 +115,13 @@ public class ReportLoader
 				// if scg is null create new scg
 				Logger.out.debug("Null SCG found in ReportLoader, Creating New SCG");
 				this.scg=createNewSpecimenCollectionGroup();
-				Utility.saveObject(this.scg);
+				CaCoreAPIService.getAppServiceInstance().createObject(this.scg);
 			}
 			else
 			{
 				// use existing scg
-				DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-				List scgList=(List)defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), Constants.SYSTEM_IDENTIFIER, this.scg.getId());
-				this.scg=(SpecimenCollectionGroup)scgList.get(0);
-				CollectionProtocolRegistration cpr=(CollectionProtocolRegistration)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), Constants.COLUMN_NAME_CPR);
-				this.scg.setCollectionProtocolRegistration(cpr);
-				Site scgSite=(Site)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(),Constants.COLUMN_NAME_SCG_SITE);
-				this.scg.setSpecimenCollectionSite(scgSite);
-				CollectionProtocolEvent collectionProtocolEvent=(CollectionProtocolEvent)defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), this.scg.getId(), Constants.COLUMN_NAME_COLL_PROT_EVENT);
-				this.scg.setCollectionProtocolEvent(collectionProtocolEvent);
-				this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport); 
-				if(this.scg.getSurgicalPathologyNumber()==null)
-				{
-					this.scg.setSurgicalPathologyNumber(this.surgicalPathologyNumber);
-				}
-				Utility.updateObject(this.scg);
+				retrieveAndSetSCG();
+				CaCoreAPIService.getAppServiceInstance().updateObject(this.scg);
 			}	
 			Logger.out.info("Processing finished for Report ");
 		}
@@ -161,8 +146,6 @@ public class ReportLoader
 		Logger.out.info("Creating New Specimen Collection Group");
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		//SCG Particpant direct relationship is removed
-//		scg.setParticipant(this.participant);
 		scg.setClinicalDiagnosis(Constants.NOT_SPECIFIED);
 		scg.setClinicalStatus(Constants.NOT_SPECIFIED);
 		scg.setSpecimenCollectionSite(site); 
@@ -171,30 +154,17 @@ public class ReportLoader
 		identifiedReport.setSpecimenCollectionGroup(scg);
 			 
 		// Retrieve collection generic protocol
-		String sourceObjectName=CollectionProtocol.class.getName();
-		String[] selectColumnName=new String[]{Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnName=new String[]{Constants.COLUMN_NAME_TITLE};
-		String[] whereColumnValue=new String[]{CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE)};
-		String[] whereColumnCondition=new String[]{"="};
-		String joinCondition="";
-		BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
-		CollectionProtocolBizLogic cpBizLogic=(CollectionProtocolBizLogic)bizLogicFactory.getBizLogic(CollectionProtocol.class.getName());
-		List cpIDList=cpBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-		Long cpID=null;
-		if(cpIDList!=null && cpIDList.size()>0)
-		{
-			cpID=(Long)cpIDList.get(0);
-		}
-		else
+		CollectionProtocol collectionProtocol = (CollectionProtocol)CaCoreAPIService.getObject(new CollectionProtocol(), Constants.COLUMN_NAME_TITLE, CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
+		if(collectionProtocol==null)
 		{
 			throw new Exception(CaTIESConstants.CP_NOT_FOUND_ERROR_MSG);
 		}
 		
 		//Autogeneration of SCG name
 		// SPR_<CollectionProtocol_Title>_<Participant_ID>_<Group_ID>
-		int groupId=0;
-		SpecimenCollectionGroupBizLogic scgBizLogic=(SpecimenCollectionGroupBizLogic)bizLogicFactory.getBizLogic(SpecimenCollectionGroup.class.getName());
-		groupId=scgBizLogic.getNextGroupNumber();
+		long groupId=0;
+		groupId=CaCoreAPIService.getAppServiceInstance().getNextSpecimenCollectionGroupNumber();
+		
 		String collProtocolTitle=CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE);
 		if(collProtocolTitle.length()>30)
 		{
@@ -205,8 +175,7 @@ public class ReportLoader
 		Logger.out.info("SCG name is =====>"+scgName);
 		
 		// retrieve collection protocol event list
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		Collection collProtocolEventList=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), cpID, Constants.COLUMN_NAME_COLL_PROT_EVENT_COLL);
+		Collection collProtocolEventList=(Collection)CaCoreAPIService.getList(new CollectionProtocolEvent(), "collectionProtocol", collectionProtocol);
 		Iterator cpEventIterator=collProtocolEventList.iterator();
 		
 		if(cpEventIterator.hasNext())
@@ -215,7 +184,7 @@ public class ReportLoader
 			scg.setCollectionProtocolEvent(collProtocolEvent);
 			
 			// check for existing CollectionProtocolRegistration, if exists then use existing
-			CollectionProtocolRegistration collProtocolReg=isCPRExists(participant.getId(), cpID);
+			CollectionProtocolRegistration collProtocolReg=getExistingCPR(participant, collectionProtocol);
 			if(collProtocolReg==null)
 			{	
 				// otherwise create new CollectionProtocolRegistration
@@ -225,9 +194,6 @@ public class ReportLoader
 				collProtocolReg.setRegistrationDate(new Date());
 				collProtocolReg.setParticipant(participant);	
 				collProtocolReg.setCollectionProtocol(collProtocolEvent.getCollectionProtocol());
-				Collection<CollectionProtocolRegistration> collProtocolRegList=(Collection<CollectionProtocolRegistration>)defaultBizLogic.retrieveAttribute(Participant.class.getName(), participant.getId(), Constants.COLUMN_NAME_CPR_COLL);
-				collProtocolRegList.add(collProtocolReg);
-//				participant.setCollectionProtocolRegistrationCollection(collProtocolRegList);
 				try
 				{
 					CaCoreAPIService.getAppServiceInstance().createObject(collProtocolReg);
@@ -257,71 +223,48 @@ public class ReportLoader
 	 * @return object of CollectionProtocolRegistration
 	 * @throws Exception generic exception
 	 */
-	private CollectionProtocolRegistration isCPRExists(Long participantID, Long cpID) throws Exception
+	private CollectionProtocolRegistration getExistingCPR(Participant participant, CollectionProtocol cp) throws Exception
 	{
-		try
+		List cprList=null;
+		
+		// retrive CollectionProtocolRegistration with current participant and collectionProtocol
+		DetachedCriteria criteria = DetachedCriteria.forClass(CollectionProtocolRegistration.class);
+		criteria.add(Restrictions.eq("participant", participant));
+		criteria.add(Restrictions.eq("collectionProtocol", cp));
+		try 
 		{
-			// retrive CollectionProtocolRegistration with current participant and collectionProtocol
-			String sourceObjectName=new String(CollectionProtocolRegistration.class.getName());
-			String[] selectColumnName=new String[]{"participant", "collectionProtocol"};
-			String[] whereColumnCondition=new String[]{"=","="};
-			String[] whereColumnValue=new String[]{participantID.toString(),cpID.toString()};
-			String joinCondition=Constants.AND_JOIN_CONDITION;
-			
-			BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
-			CollectionProtocolRegistrationBizLogic collProtRegBizLogic=(CollectionProtocolRegistrationBizLogic)bizLogicFactory.getBizLogic(CollectionProtocolRegistration.class.getName());
-			List cprList=collProtRegBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnCondition, whereColumnValue,joinCondition);
-			
+			cprList = CaCoreAPIService.getAppServiceInstance().query(criteria, CollectionProtocolRegistration.class.getName());
 			// check for existence
 			if(cprList!=null && cprList.size()>0)
 			{
 				// cpr exist then return existing cpr
-				Logger.out.info("Existing CPR found for participant id="+participantID+" collectionProtocol id="+cpID);
+				Logger.out.info("Existing CPR found for participant id="+participant.getId()+" collectionProtocol id="+cp.getId());
 				return (CollectionProtocolRegistration)cprList.get(0);
 			}
-		}
-		catch(DAOException ex)
+		} 
+		catch (ApplicationException appEx) 
 		{
-			Logger.out.error("DAOException occured in isCPRExists method");
-			Logger.out.debug(ex.getMessage());
+			Logger.out.error("Error while retrieving List for "+ CollectionProtocolRegistration.class.getName()+appEx);
 		}
+		Logger.out.info("No Existing CPR found for participant id="+participant.getId()+" collectionProtocol id="+cp.getId());
 		return null;
 	}
 	
-	/**
-	 * Method to check for the existence of textContent
-	 * @param report identified surgical pathology report
-	 * @return boolean value which indicates text content is present or not
-	 */
-	private boolean checkForTextContent(IdentifiedSurgicalPathologyReport report)throws Exception
-	{
-		Logger.out.info("Inside checkForTextContent function");
-		Clob tempClob=report.getTextContent().getData();
-		String textContent=tempClob.getSubString(1,(int) tempClob.length());
-		// check for null report text content
-		if(textContent!=null && textContent.length()>0)
-		{
-			return true;
-		}
-		return false;
-	}	
-	
-	private Collection<SpecimenEventParameters> getDefaultEvents(SpecimenCollectionGroup specimenCollectionGroup) throws DAOException
+	private Collection<SpecimenEventParameters> getDefaultEvents(SpecimenCollectionGroup specimenCollectionGroup) throws DAOException, ApplicationException
 	{
 		Collection<SpecimenEventParameters> defaultEventCollection=new HashSet<SpecimenEventParameters>();
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 		String loginName=CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA);
-		List userList=defaultBizLogic.retrieve(User.class.getName(), Constants.LOGINNAME, loginName);
-		User user=(User)userList.get(0);
+		User user=(User)CaCoreAPIService.getObject(new User(), Constants.LOGINNAME, loginName);
+		
 		CollectionEventParameters collectionEvent=new CollectionEventParameters();
-		collectionEvent.setCollectionProcedure((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
-		collectionEvent.setContainer((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER));
+		collectionEvent.setCollectionProcedure((String)CaCoreAPIService.getAppServiceInstance().getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
+		collectionEvent.setContainer((String)CaCoreAPIService.getAppServiceInstance().getDefaultValue(Constants.DEFAULT_CONTAINER));
 		collectionEvent.setSpecimenCollectionGroup(specimenCollectionGroup);
 		collectionEvent.setTimestamp(new Date());
 		collectionEvent.setUser(user);
 		
 		ReceivedEventParameters recievedEvent=new ReceivedEventParameters();
-		recievedEvent.setReceivedQuality((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
+		recievedEvent.setReceivedQuality((String)CaCoreAPIService.getAppServiceInstance().getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
 		recievedEvent.setSpecimenCollectionGroup(specimenCollectionGroup);
 		recievedEvent.setTimestamp(new Date());
 		recievedEvent.setUser(user);
@@ -329,5 +272,62 @@ public class ReportLoader
 		defaultEventCollection.add(collectionEvent);
 		defaultEventCollection.add(recievedEvent);
 		return defaultEventCollection;
+	}
+	
+	private void retrieveAndSetSCG() throws DAOException
+	{
+		// retrieve SCG
+		this.scg=(SpecimenCollectionGroup)CaCoreAPIService.getObject(new SpecimenCollectionGroup(),Constants.SYSTEM_IDENTIFIER, this.scg.getId());
+		
+		// set CPR
+		CollectionProtocolRegistration cpr=(CollectionProtocolRegistration)CaCoreAPIService.getObject(new CollectionProtocolRegistration(), Constants.COLUMN_NAME_CPR, this.scg.getId());
+		this.scg.setCollectionProtocolRegistration(cpr);
+		
+		// set Site 
+		List queue=null;
+		Site scgSite=null;
+		String hqlQuery="from edu.wustl.catissuecore.domain.Site where "+Constants.SYSTEM_IDENTIFIER+"="+this.scg.getSpecimenCollectionSite().getId();
+		HQLCriteria hqlCriteria = new HQLCriteria(hqlQuery); 
+		
+		try 
+		{
+			ApplicationService appService=CaCoreAPIService.getAppServiceInstance();
+			queue =appService.query(hqlCriteria, Site.class.getName());
+		}
+		catch (ApplicationException ex) 
+		{
+			Logger.out.error("Error while fetching Site objects "+ex);
+		}
+		if(queue!=null && queue.size()>0)
+		{
+			scgSite= (Site)queue.get(0);
+			this.scg.setSpecimenCollectionSite(scgSite);
+		}
+		
+		// set CollectionProtocolEvent
+		hqlQuery="from edu.wustl.catissuecore.domain.CollectionProtocolEvent where "+Constants.SYSTEM_IDENTIFIER+"="+this.scg.getSpecimenCollectionSite().getId();
+		hqlCriteria = new HQLCriteria(hqlQuery); 
+		CollectionProtocolEvent collectionProtocolEvent=null;
+		try 
+		{
+			ApplicationService appService=CaCoreAPIService.getAppServiceInstance();
+			queue =appService.query(hqlCriteria, CollectionProtocolEvent.class.getName());
+		}
+		catch (ApplicationException ex) 
+		{
+			Logger.out.error("Error while fetching CollectionProtocolEvent objects "+ex);
+		}
+		if(queue!=null && queue.size()>0)
+		{
+			collectionProtocolEvent= (CollectionProtocolEvent)queue.get(0);
+			this.scg.setCollectionProtocolEvent(collectionProtocolEvent);
+		}
+
+		// set identified report
+		this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport); 
+		if(this.scg.getSurgicalPathologyNumber()==null)
+		{
+			this.scg.setSurgicalPathologyNumber(this.surgicalPathologyNumber);
+		}
 	}
 }

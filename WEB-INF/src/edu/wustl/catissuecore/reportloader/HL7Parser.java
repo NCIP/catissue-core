@@ -9,16 +9,14 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.sf.hibernate.Hibernate;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
-import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
@@ -26,7 +24,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -266,7 +264,7 @@ public class HL7Parser implements Parser
      * @return Participant from the participant information text
      * @throws Exception exception while parsing the participant information 
      */
-	protected Participant parserParticipantInformation(String pidLine)throws Exception
+	protected Participant parserParticipantInformation(String pidLine, Site site)throws Exception
 	{
 		Logger.out.info("Parsing participant information");
 		Participant participant = new Participant();
@@ -393,7 +391,6 @@ public class HL7Parser implements Parser
 		//code of setSitetoParticipant function to avoid sepearte function call
 		Collection<ParticipantMedicalIdentifier> collection= participant.getParticipantMedicalIdentifierCollection();
 		ParticipantMedicalIdentifier medicalId=null; 
-		Site site=parseSiteInformation(pidLineforSite);
 		if(collection!=null)
 		{
 			Iterator<ParticipantMedicalIdentifier> it = collection.iterator();
@@ -419,7 +416,6 @@ public class HL7Parser implements Parser
 		StringTokenizer st=null;
 		String field=null;
 		String siteName=null;
-		List siteList=null;
 		Site siteObj=null;
 		String newPidLine = pidLine.replace('|', '~');
 		newPidLine = newPidLine.replaceAll("~", "|~~");
@@ -465,12 +461,8 @@ public class HL7Parser implements Parser
 				if(siteName!=null)
 				{
 					// check for site in DB
-					siteList=Utility.getObject(Site.class.getName(), "name", siteName);
-					if(siteList!=null && siteList.size()>0)
-					{
-						siteObj=(Site)siteList.get(0);
-					}
-					else
+					siteObj=(Site)CaCoreAPIService.getObject(new Site(), Constants.NAME, siteName);
+					if(siteObj==null)
 					{
 						Logger.out.error("Site name "+siteName+" not found in the database!");
 					}
@@ -533,7 +525,7 @@ public class HL7Parser implements Parser
 				section.setDocumentFragment(text);
 				if (isFINText)
 				{	
-					textContent.setData(Hibernate.createClob(text));
+					textContent.setData(text);
 				}	
 			}
 
