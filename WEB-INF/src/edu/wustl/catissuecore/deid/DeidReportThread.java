@@ -5,11 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.jdom.Element;
 import org.jdom.output.Format;
@@ -52,7 +50,7 @@ public class DeidReportThread extends Thread
 	 * This is default run method of the thread. Which is like a deid pipeline. This pipeline manages the de-identification process. 
 	 * @see java.lang.Thread#run()
 	 */
-	public void process()
+	public void run()
 	{
 		Long startTime = new Date().getTime();
 		try
