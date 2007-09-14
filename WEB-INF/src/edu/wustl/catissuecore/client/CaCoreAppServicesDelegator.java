@@ -40,7 +40,6 @@ import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.common.util.ListProxy;
 
 /**
  * This class contains the basic methods that are required for HTTP APIs. 
@@ -235,7 +234,6 @@ public class CaCoreAppServicesDelegator
 	{
 	    Logger.out.debug("In Filter Objects ......" );
 	    
-	    ListProxy listProxy=(ListProxy)objectList;
 	    // boolean that indicates whether user has READ_DENIED privilege on the main object.
 		boolean hasReadDeniedForMain = false;
 		
@@ -245,12 +243,10 @@ public class CaCoreAppServicesDelegator
 		
 		Logger.out.debug("Total Objects>>>>>>>>>>>>>>>>>>>>>"+objectList.size());
 		Iterator iterator = objectList.iterator();
-		int count=0;
-		while(iterator.hasNext() && count<listProxy.getMaxRecordsPerQuery())
+		while(iterator.hasNext())
 		{
 		    
 		    Object abstractDomainObject = (Object) iterator.next();//objectList.get(i);
-		    count++;
 		    
 		    //Get identifier of the object. 
 		    Object identifier = getFieldObject(abstractDomainObject, "id");
