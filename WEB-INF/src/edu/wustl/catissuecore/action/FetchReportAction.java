@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.PrintWriter;
-import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -100,16 +99,14 @@ public class FetchReportAction extends BaseAction
 		xmlData.append("<IdentifiedReportTextContent>");
 		if(identifiedReport.getTextContent()!=null)
 		{
-			Clob tempClob=identifiedReportText.getData();
-			xmlData.append(tempClob.getSubString(1,(int)tempClob.length()));
+			xmlData.append(identifiedReportText.getData());
 		}
 		xmlData.append("</IdentifiedReportTextContent>");
 		
 		xmlData.append("<DeIdentifiedReportTextContent>");
 		if(deidReportText!=null) 
 		{
-			Clob tempClob=deidReportText.getData();
-			xmlData.append(tempClob.getSubString(1,(int)tempClob.length()));
+			xmlData.append(deidReportText.getData());
 		}
 		xmlData.append("</DeIdentifiedReportTextContent>");
 		xmlData.append("<JavaScriptFunction>");

@@ -421,8 +421,10 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		try
 		{
 			this.deIdentifiedReportId=deidentifiedSurgicalPathologyReport.getId();
-			Clob tempClob=deidentifiedSurgicalPathologyReport.getTextContent().getData();
-			this.deIdentifiedReportTextContent=tempClob.getSubString(1,(int)tempClob.length());
+			if(deidentifiedSurgicalPathologyReport.getTextContent()!=null)
+			{
+				this.deIdentifiedReportTextContent=deidentifiedSurgicalPathologyReport.getTextContent().getData();
+			}
 			this.deIdentifiedReportSite=deidentifiedSurgicalPathologyReport.getReportSource().getName();
 		}
 		catch(Exception ex)
@@ -447,8 +449,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		try
 		{
 			this.identifiedReportId=ispr.getId().toString();
-			Clob tempClob=ispr.getTextContent().getData();
-			this.identifiedReportTextContent=tempClob.getSubString(1,(int)tempClob.length());
+			this.identifiedReportTextContent=ispr.getTextContent().getData();
 			this.identifiedReportSite=ispr.getReportSource().getName();
 		}
 		catch(Exception ex)
