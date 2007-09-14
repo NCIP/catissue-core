@@ -5,20 +5,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.hibernate.Hibernate;
-
 import org.jdom.Element;
 import org.jdom.output.Format;
 
 import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
-import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -27,9 +26,8 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.system.applicationservice.ApplicationException;
 
 /**
  * This class is a thread which converts a single identified report into its equivalent de-identified report.
@@ -50,31 +48,30 @@ public class DeidReportThread extends Thread
 		this.identifiedReport=ispr;	
 	}
 	
-	
 	/**
 	 * This is default run method of the thread. Which is like a deid pipeline. This pipeline manages the de-identification process. 
 	 * @see java.lang.Thread#run()
 	 */
-	public void run()
+	public void process()
 	{
 		Long startTime = new Date().getTime();
 		try
 		{
-			DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 			Logger.out.info("De-identification process started for "+identifiedReport.getId().toString());
 			// instantiate document
 			org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element("Dataset"));
 			// get SCG
-			List scgList=defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), Constants.SYSTEM_IDENTIFIER, identifiedReport.getSpecimenCollectionGroup().getId());
-			SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgList.get(0);
-			// get participant from SCG
-			Participant participant=(Participant)defaultBizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(), scg.getCollectionProtocolRegistration().getId(), Constants.COLUMN_NAME_PARTICIPANT); //scg.getCollectionProtocolRegistration().getParticipant();
+			SpecimenCollectionGroup scg=(SpecimenCollectionGroup)CaCoreAPIService.getObject(new SpecimenCollectionGroup(), Constants.SYSTEM_IDENTIFIER, identifiedReport.getSpecimenCollectionGroup().getId());
+			// get CPR from SCG
+			CollectionProtocolRegistration cpr=(CollectionProtocolRegistration)CaCoreAPIService.getObject(new CollectionProtocolRegistration(),Constants.SYSTEM_IDENTIFIER, scg.getCollectionProtocolRegistration().getId());
+			// get participant from CPR
+			Participant participant=(Participant)CaCoreAPIService.getObject(new Participant(), Constants.SYSTEM_IDENTIFIER, cpr.getId()); 
 			
 			// get textcontent
-			TextContent textContent=(TextContent)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_TEXT_CONTENT);
+			TextContent textContent=(TextContent)CaCoreAPIService.getObject(new TextContent(), Constants.SYSTEM_IDENTIFIER, identifiedReport.getTextContent().getId());
 			// synthesize the text content od identified report
 			String synthesizeSPRText=synthesizeSPRText(identifiedReport);
-			textContent.setData(Hibernate.createClob( synthesizeSPRText(identifiedReport)));
+			textContent.setData(synthesizeSPRText(identifiedReport));
 			Logger.out.info("ReportText is synthesized for report "+identifiedReport.getId().toString());
 			// set synthesized text content back to identified report
 			identifiedReport.setTextContent(textContent);
@@ -107,8 +104,7 @@ public class DeidReportThread extends Thread
 	    	{
 	    		Logger.out.info("Saving deidentified report for identified report id="+identifiedReport.getId().toString());
 	    		// save deidentified report
-//	    		pathologyReport.setConceptReferentCollection(new HashSet());
-	    		Utility.saveObject(pathologyReport);
+	    		pathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getAppServiceInstance().createObject(pathologyReport);
 	    		Logger.out.info("deidentified report saved for identified report id="+identifiedReport.getId().toString());
 	    		// update status of identified report
 	        	identifiedReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
@@ -116,15 +112,15 @@ public class DeidReportThread extends Thread
 	        	identifiedReport.setDeIdentifiedSurgicalPathologyReport(pathologyReport);
 	        	Logger.out.debug("Updating identified report report id="+identifiedReport.getId().toString());
 	        	// update object of identified report
-	        	Utility.updateObject(identifiedReport);
+	        	CaCoreAPIService.getAppServiceInstance().updateObject(identifiedReport);
 	        	Long endTime = new Date().getTime();
 	        	CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.DEIDENTIFIED+","+"Report De-identified successfully,"+(endTime-startTime));
 	    	}
-	    	catch(DAOException daoEx)
+	    	catch(ApplicationException appEx)
 	    	{
 	    		Long endTime = new Date().getTime();
-	    		CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.FAILURE+","+daoEx.getMessage()+",,"+(endTime-startTime));
-	    		Logger.out.error("Error while saving//updating Deidentified//Identified report ",daoEx);
+	    		CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.FAILURE+","+appEx.getMessage()+",,"+(endTime-startTime));
+	    		Logger.out.error("Error while saving//updating Deidentified//Identified report ",appEx);
 	    	} 
 		}
     	catch(Throwable ex)
@@ -136,7 +132,7 @@ public class DeidReportThread extends Thread
 				CSVLogger.error(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.FAILURE+","+ex.getMessage()+",,"+(endTime-startTime));
 				// if any exception occures then update the status of the identified report to failed
 				identifiedReport.setReportStatus(CaTIESConstants.DEID_PROCESS_FAILED);
-				Utility.updateObject(identifiedReport);
+				CaCoreAPIService.getAppServiceInstance().updateObject(identifiedReport);
 			}
 			catch(Exception e)
 			{
@@ -174,7 +170,7 @@ public class DeidReportThread extends Thread
         deidReport.setSpecimenCollectionGroup(ispr.getSpecimenCollectionGroup());
         TextContent tc=new TextContent();
         // set deidentified text to text content
-        tc.setData(Hibernate.createClob(deidText));
+        tc.setData(deidText);
         // set identified report to deidentified report
         tc.setSurgicalPathologyReport(deidReport);
         
@@ -196,10 +192,9 @@ public class DeidReportThread extends Thread
 	 */
 	private String synthesizeSPRText(final IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
 	{
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		String docText = "";
 		//Get report sections for report
-		Set<ReportSection> iss=(Set)defaultBizLogic.retrieveAttribute(TextContent.class.getName(), identifiedReport.getTextContent().getId(), Constants.COLUMN_NAME_REPORT_SECTION_COLL);
+		List<ReportSection> iss=(List)CaCoreAPIService.getList(new ReportSection(), Constants.SYSTEM_IDENTIFIER, identifiedReport.getTextContent().getId());
 		HashMap <String,String>nameToText = new HashMap<String, String>();
 		if(iss!=null)
 		{       	

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -15,21 +16,23 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
+
 import com.deid.JniDeID;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.caties.util.StopServer;
 import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.system.applicationservice.ApplicationException;
+import gov.nih.nci.system.applicationservice.ApplicationService;
 
 /**
  * This class is responsible to fetch identified reports and to spawn a sepearate thread to convert identified reports into deidentiied reports.
@@ -50,7 +53,7 @@ public class DeIDPipelineManager
 	/**
 	 * Default constructor of the class
 	 */
-	public DeIDPipelineManager()
+	public DeIDPipelineManager() throws Exception
 	{
 		try
 		{
@@ -59,6 +62,7 @@ public class DeIDPipelineManager
 		catch(Exception ex)
 		{
 			Logger.out.error("Initialization of deidentification process failed or error in main thread",ex);
+			throw ex;
 		}
 	}
 			
@@ -73,7 +77,8 @@ public class DeIDPipelineManager
 		Utility.init();
 		// Configuring CSV logger
 		CSVLogger.configure(CaTIESConstants.LOGGER_DEID_SERVER);
-		// Min. no of threads that should be created by threadPoolExecutor
+		// Initializing caCoreAPI instance
+		CaCoreAPIService.initialize();
 		corePoolSize=4;
 		// Max no og threads that should be created by threadPoolExecutor
 		maxPoolSize=Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.MAX_THREADPOOL_SIZE));
@@ -105,10 +110,11 @@ public class DeIDPipelineManager
 			try
 			{
 				Logger.out.info("Deidentification process started at "+new Date().toString());		
-				// Fetch the list of identified report Ids that are pending for de-identification
-				List isprIDList=getReportIDList();
 				// Process reports that are pending for de-identification
-				processReports(isprIDList);
+				processReports(); 
+				// if report list contains less than one report then thread will go to sleep
+				Logger.out.info("Deidentification process finished at "+new Date().toString()+ ". Thread is going to sleep.");
+				Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.DEID_SLEEPTIME)));
 			}
 			catch(Exception ex)
 			{
@@ -131,124 +137,83 @@ public class DeIDPipelineManager
 	 * @param isprIDList Identified surgical pathology report ID list
 	 * @throws Exception generic exception
 	 */
-	private void processReports(List isprIDList) throws  Exception
+	private void processReports() throws  Exception
 	{
 		// set policy for the handling of rejected threads by thread pool manager
 		rejectedExecutionHandler=new ThreadPoolExecutor.AbortPolicy();
 		// Instantiate threadPoolExecutor which manages the pool of thread, this is feature of java 1.5
 		ThreadPoolExecutor deidExecutor=new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveSeconds, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), Executors.defaultThreadFactory(), this.rejectedExecutionHandler);
-		// Get instance of bizLogicFactory
-		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
-		// Get bizlogic of IdentifiedSurgicalPathologyReport
-		IdentifiedSurgicalPathologyReportBizLogic bizLogic =(IdentifiedSurgicalPathologyReportBizLogic) bizLogicFactory.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
+		IdentifiedSurgicalPathologyReport identifiedReport=null;
 		
-		if(isprIDList ==null || isprIDList.size()<=1)
-		{
-			// if report list contains less than one report then thread will go to sleep
-			Logger.out.info("Deidentification process finished at "+new Date().toString()+ ". Thread is going to sleep.");
-			Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.DEID_SLEEPTIME)));
-		}
-		else
-		{
-			// if report list contains more than or equal to one reports then process reports
-			try
-			{
-				Logger.out.info("Loading deid library");
-				// load deidLibrary required for native call
-				JniDeID.loadDeidLibrary();	
-				try
-				{
-					CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_IDENTIFIED_REPORT+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
-					String id;
-					NameValueBean nb;
-					IdentifiedSurgicalPathologyReport identifiedReport=null;	
-					// loop to process each report
-					Logger.out.info("Starting to process list of size "+ isprIDList.size());
-					int isprListSize=isprIDList.size();
-					for(int i=1;i<isprListSize;i++)
-					{
-						Logger.out.info("Processing report serial no:"+i);
-						// list contains name value bean, get name value bean from list
-						nb=(NameValueBean)isprIDList.get(i);
-						// get value which is an id of the identified report
-						id=nb.getValue();
-						Logger.out.info("Got report id="+id);
-						// retrive the identified report using its id
-						identifiedReport=(IdentifiedSurgicalPathologyReport)bizLogic.getReportById(Long.parseLong(id));
-						// instantiate a thread to process the report
-						Logger.out.info("Instantiating thread for report id="+identifiedReport.getId());
-						Thread th = new DeidReportThread(identifiedReport);
-						// add thread to thread pool manager
-						deidExecutor.execute(th);
-					}					
-				}
-				catch(Exception ex)
-				{
-					Logger.out.error("Deidentification pipeline is failed:",ex);			
-				}
-				// check to wait until all active theads finish their task before shutting down the thread pool manager
-				while(deidExecutor.getActiveCount()>0)
-				{
-					// if there are active threads then sleep for 100 seconds 
-					Thread.sleep(100000);
-				}
-				// shut down the thread pool manager
-				deidExecutor.shutdown();
-				Logger.out.info("Unloading deid library");
-				// unload deid library
-				JniDeID.unloadDeidLibrary();
-			}
-			catch(UnsatisfiedLinkError ex)
-			{
-				Logger.out.error("Either Loading or unLoading of DeID library is failed:",ex);
-				throw new Error(ex.getMessage());
-			}
-		}
-	}
-			
-	/**
-	 * This method fetche a list of ID's of identified surgical pathology reports pending for de-indetification
-	 * @return List ISPR ID list
-	 * @throws Exception generic exception 
-	 */
-	private List getReportIDList() throws Exception
-	{
-		List isprIDList=null;
+		CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_IDENTIFIED_REPORT+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
 		try
 		{
-			// set values of the variables that are required to generate required query
-			// fetch from identified report
-			String sourceObjectName=IdentifiedSurgicalPathologyReport.class.getName();
-			// fetch column id
-			String[] displayNameFields=new String[] {Constants.SYSTEM_IDENTIFIER};
-			String valueField=new String(Constants.SYSTEM_IDENTIFIER);
-			// where report status
-			String[] whereColumnName = new String[]{CaTIESConstants.COLUMN_NAME_REPORT_STATUS};
-			// is equal to
-			String[] whereColumnCondition = new String[]{"="};
-			// the value of CaTIESConstants.PENDING_FOR_DEID
-			Object[] whereColumnValue = new String[]{CaTIESConstants.PENDING_FOR_DEID};
-			// join condition is null since there is single condition
-			String joinCondition = null;
-			// seperate values with comma
-			String separatorBetweenFields = ", ";	
-			
-			// get instnace of biz logic factory
-			BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
-			// get biz logic of identified report from biz logic factory
-			IdentifiedSurgicalPathologyReportBizLogic bizLogic =(IdentifiedSurgicalPathologyReportBizLogic) bizLogicFactory.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
-			// fire query to trtrieve list of identified reports required by identified report
-			Logger.out.info("Firing query to retriev ids of identified report");
-			isprIDList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
-			Logger.out.info("Report id list retrieved successfully, size is:"+isprIDList.size());
+			Logger.out.info("Loading deid library");
+			// load deidLibrary required for native call
+			JniDeID.loadDeidLibrary();	
 		}
-		catch(DAOException ex)
+		catch(UnsatisfiedLinkError ex)
 		{
-			Logger.out.error("Error in fetching identified reports for deidentification:",ex);
-		}	
-		return isprIDList;
+			Logger.out.error("Either Loading or unLoading of DeID library is failed:",ex);
+			throw new Error(ex.getMessage());
+		}
+		while((identifiedReport=getIdentifiedReportForDeid())!=null)
+		{
+			try
+			{
+				// instantiate a thread to process the report
+				Logger.out.info("Instantiating thread for report id="+identifiedReport.getId());
+				DeidReportThread th = new DeidReportThread(identifiedReport);
+				th.process();
+				// add thread to thread pool manager
+//				deidExecutor.execute(th);
+			}
+			catch(Exception ex)
+			{
+				Logger.out.error("Deidentification pipeline is failed:",ex);			
+			}
+		}
+		// shut down the thread pool manager
+		deidExecutor.shutdown();
+		// check to wait until all active theads finish their task before shutting down the thread pool manager
+		while(deidExecutor.getActiveCount()>0)
+		{
+			// if there are active threads then sleep for 100 seconds 
+			Thread.sleep(100000);
+		}
+		Logger.out.info("Unloading deid library");
+		// unload deid library
+		JniDeID.unloadDeidLibrary();
 	}
-		 
+
+	/**
+	 * Method to retrieve Identified report for deidentification process 
+	 * @return object of IdentifiedSurgicalPathologyReport
+	 * @throws Exception generic exception occured while retrieving object of deidentified report
+	 */
+	private IdentifiedSurgicalPathologyReport getIdentifiedReportForDeid() throws Exception
+	{
+		DetachedCriteria criteria = DetachedCriteria.forClass(IdentifiedSurgicalPathologyReport.class);
+		criteria.add(Restrictions.eq(CaTIESConstants.COLUMN_NAME_REPORT_STATUS, CaTIESConstants.PENDING_FOR_DEID));
+		Logger.out.info("Firing query to retrieve identintified report for deid");
+		try 
+		{
+			ApplicationService appService= CaCoreAPIService.getAppServiceInstance();
+			appService.setRecordsCount(1);
+			List resultList = appService.query(criteria, IdentifiedSurgicalPathologyReport.class.getName());
+			if(resultList!=null && resultList.size()>0)
+			{
+				Logger.out.info("Got identified report");
+				return (IdentifiedSurgicalPathologyReport)resultList.get(0);
+			}
+		} 
+		catch (ApplicationException appEx) 
+		{
+			Logger.out.error("Error while retrieving objectof identified report for deidentification"+appEx);
+			throw new Exception(appEx.getMessage());
+		}
+		return null;
+	}
 	/**
 	 * This method temporarily saves the name of deid config  file name. 
 	 * This deid config file conatins the keywords which will be the input for deidentification
@@ -311,17 +276,17 @@ public class DeIDPipelineManager
 	 */
 	public static void main(String[] args)
 	{
-		DeIDPipelineManager deidPipeline =new DeIDPipelineManager();
-		// Thread for stopping deid poller server
-		Thread stopThread=new StopServer(CaTIESConstants.DEID_PORT);
-		stopThread.start();
 		try
 		{
+			DeIDPipelineManager deidPipeline =new DeIDPipelineManager();
+			// Thread for stopping deid poller server
+			Thread stopThread=new StopServer(CaTIESConstants.DEID_PORT);
+			stopThread.start();
 			deidPipeline.startProcess();
 		}
-		catch(Exception exp)
+		catch(Exception ex)
 		{
-			exp.printStackTrace();
+			Logger.out.error("Error while initializing DeidPipelineManager "+ ex);
 		}
 		
 	}	

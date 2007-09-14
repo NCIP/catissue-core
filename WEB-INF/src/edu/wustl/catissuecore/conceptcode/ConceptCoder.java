@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.conceptcode;
 
 import java.io.ByteArrayInputStream;
-import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
@@ -9,8 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-
-import net.sf.hibernate.Hibernate;
 
 import org.jdom.CDATA;
 import org.jdom.Document;
@@ -23,8 +20,8 @@ import edu.upmc.opi.caBIG.caTIES.server.CaTIES_ConceptAccumulator;
 import edu.upmc.opi.caBIG.caTIES.server.CaTIES_ExporterPR;
 import edu.upmc.opi.caBIG.caTIES.services.caTIES_TiesPipe.TiesPipe;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
-import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.pathology.BinaryContent;
 import edu.wustl.catissuecore.domain.pathology.Concept;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
@@ -39,8 +36,7 @@ public class ConceptCoder
 	public ConceptCoder(DeidentifiedSurgicalPathologyReport deidReport, CaTIES_ExporterPR exporterPR, TiesPipe tiesPipe)throws SQLException
 	{
 		this.deidPathologyReport=deidReport;
-		Clob tempClob=this.deidPathologyReport.getTextContent().getData();
-		this.currentReportText= tempClob.getSubString(1,(int)tempClob.length());
+		this.currentReportText= this.deidPathologyReport.getTextContent().getData();
 		this.exporterPR=exporterPR;
 		this.tiesPipe=tiesPipe;
 	}
@@ -55,14 +51,14 @@ public class ConceptCoder
 			Logger.out.info("Report is Concept coded by caties");
 			Logger.out.info("Updating Report");
 			updateReport();
-			Utility.updateObject(this.deidPathologyReport);
+			CaCoreAPIService.getAppServiceInstance().updateObject(this.deidPathologyReport);
 		}
 		catch (Throwable ex) 
 		{
 			Long endTime=new Date().getTime();
 			Logger.out.error("Concept coding process failed for report id:"+this.deidPathologyReport.getId()+" "+ex.getMessage());
 			this.deidPathologyReport.setReportStatus(CaTIESConstants.CC_PROCESS_FAILED);
-			Utility.updateObject(this.deidPathologyReport);
+			CaCoreAPIService.getAppServiceInstance().updateObject(this.deidPathologyReport);
 			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CC_PROCESS_FAILED+","+ex.getMessage()+","+(endTime-startTime));
 		}
 		if(!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(CaTIESConstants.CC_PROCESS_FAILED))
@@ -112,12 +108,12 @@ public class ConceptCoder
 		 try 
 		 {
 			 BinaryContent binaryContent=new BinaryContent();
-			 binaryContent.setData(Hibernate.createClob(this.gateXML));
+			 binaryContent.setData(this.gateXML);
 			 binaryContent.setSurgicalPathologyReport(this.deidPathologyReport);
 			 this.deidPathologyReport.setBinaryContent(binaryContent);
 			 
 			 XMLContent xmlContent=new XMLContent();
-			 xmlContent.setData(Hibernate.createClob(this.chirpsXML));
+			 xmlContent.setData(this.chirpsXML);
 			 xmlContent.setSurgicalPathologyReport(this.deidPathologyReport);
 			 this.deidPathologyReport.setXmlContent(xmlContent);
 			 
