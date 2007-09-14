@@ -9,7 +9,6 @@ import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.caties.util.StopServer;
 import edu.wustl.catissuecore.caties.util.Utility;
-import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.util.logger.Logger;
 /**
  * Represents a poller which picks up the report files
@@ -36,8 +35,6 @@ public class FilePoller implements Observable
 			Utility.init();
 			// Configuring CSV logger
 			CSVLogger.configure(CaTIESConstants.LOGGER_FILE_POLLER);
-			// Initializing default value manager
-			DefaultValueManager.validateAndInitDefaultValueMap();
 			//Initializing caCoreAPI instance
 			CaCoreAPIService.initialize();
 			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_FILENAME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_REPORTQUEUE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
@@ -50,7 +47,7 @@ public class FilePoller implements Observable
 		}
 		catch (Exception ex) 
 		{
-			Logger.out.error("Error occured while inializing File Poller "+ex);
+			Logger.out.error("Error occured while inializing File Poller ",ex);
 			return;
 		}
 		try
