@@ -65,7 +65,7 @@
 				}
 			}catch(error:Error)
 			{
-				Alert.show("Error :"+error);
+				Alert.show("Error :"+error.message);
 			
 			}
 			
