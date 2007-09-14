@@ -516,8 +516,6 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		return receivedEventUserId;
 	}
 
-
-	
 	public void setReceivedEventUserId(long receivedEventUserId)
 	{
 		this.receivedEventUserId = receivedEventUserId;
@@ -536,8 +534,7 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	public String getParentName()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return parentName;
 	}
 
 	public void setParentName(String parentName)
