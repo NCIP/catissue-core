@@ -18,6 +18,7 @@ import java.util.List;
 import net.sf.hibernate.Session;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
@@ -25,7 +26,9 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
@@ -37,6 +40,7 @@ import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.common.util.ListProxy;
 
 /**
  * This class contains the basic methods that are required for HTTP APIs. 
@@ -152,6 +156,7 @@ public class CaCoreAppServicesDelegator
 	}
 	
 	/**
+	 * Method is modified to allow to delete object of ReportLoaderQueue
 	 * Returns Exception object as Delete operation is not supported by CaTissue Core Application.
 	 * @param domainObject the caCore Like object to delete using HTTP API
 	 * @param userName user name
@@ -160,7 +165,17 @@ public class CaCoreAppServicesDelegator
 	 */
 	public Object delegateDelete(String userName, Object domainObject) throws Exception
 	{
-		throw new Exception("caTissue does not support delete");
+		if(domainObject instanceof ReportLoaderQueue)
+		{
+			BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
+			IBizLogic bizLogic = bizLogicFactory.getBizLogic(domainObject.getClass().getName());
+			bizLogic.delete(domainObject,Constants.HIBERNATE_DAO);
+			return null;
+		}
+		else
+		{
+			throw new Exception("caTissue does not support delete");
+		}
 	}
 	
 	/**
@@ -220,6 +235,7 @@ public class CaCoreAppServicesDelegator
 	{
 	    Logger.out.debug("In Filter Objects ......" );
 	    
+	    ListProxy listProxy=(ListProxy)objectList;
 	    // boolean that indicates whether user has READ_DENIED privilege on the main object.
 		boolean hasReadDeniedForMain = false;
 		
@@ -229,10 +245,12 @@ public class CaCoreAppServicesDelegator
 		
 		Logger.out.debug("Total Objects>>>>>>>>>>>>>>>>>>>>>"+objectList.size());
 		Iterator iterator = objectList.iterator();
-		while(iterator.hasNext())
+		int count=0;
+		while(iterator.hasNext() && count<listProxy.getMaxRecordsPerQuery())
 		{
 		    
 		    Object abstractDomainObject = (Object) iterator.next();//objectList.get(i);
+		    count++;
 		    
 		    //Get identifier of the object. 
 		    Object identifier = getFieldObject(abstractDomainObject, "id");
@@ -304,7 +322,14 @@ public class CaCoreAppServicesDelegator
         Logger.out.debug("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+domainClassName);
         System.out.println("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+domainClassName);
         Logger.out.info("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+domainClassName);
-        className = Class.forName("edu.wustl.catissuecore.domain."+domainClassName);
+        try
+        {
+        	className = Class.forName("edu.wustl.catissuecore.domain."+domainClassName);
+        }catch (ClassNotFoundException ex) 
+        {
+        	Logger.out.error("ClassNotFoundException in CaCoreAppServicesDelegator.getAliasName() method");
+        	className = Class.forName(object.getClass().getName());
+		}
         String tableName = "'" + HibernateMetaData.getTableName(className) + "'";
             
         QueryBizLogic bizLogic = (QueryBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.QUERY_INTERFACE_ID);
@@ -622,5 +647,32 @@ public class CaCoreAppServicesDelegator
 		//checkNullObject(abstractDomainObject.getId(),"Identifier");
 		matchingObjects = bizLogic.getListOfMatchingParticipants((Participant)domainObject);
 		return matchingObjects;
+    }
+    
+    /**
+     * Method to get next Specimen Collection Group Number
+     * @param userName
+     * @return
+     * @throws Exception
+     */
+    public Long delegateGetNextSpecimenCollectionGroupNumber(String userName, Object obj) throws Exception
+    {
+    	Long groupId=new Long(0);
+		BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
+		SpecimenCollectionGroupBizLogic scgBizLogic=(SpecimenCollectionGroupBizLogic)bizLogicFactory.getBizLogic(SpecimenCollectionGroup.class.getName());
+		groupId=new Long(scgBizLogic.getNextGroupNumber());
+    	return groupId;
+    }
+    
+    /**
+     * Method to get default value for given key using default value manager
+     * @param userName
+     * @param obj
+     * @return
+     * @throws Exception
+     */
+    public String delegateGetDefaultValue(String userName, Object obj) throws Exception
+    {
+    	return((String)DefaultValueManager.getDefaultValue((String)obj));
     }
 }
