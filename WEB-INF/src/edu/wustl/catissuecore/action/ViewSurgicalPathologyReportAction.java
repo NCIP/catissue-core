@@ -198,7 +198,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			List participantList=defaultBizLogic.retrieve(className, colName, colValue);
 			Participant participant=(Participant)participantList.get(0);
 //			viewSPR.setParticipant(participant);
-			List scgList=Utility.getSCGList(participant);
+			List scgList=getSCGList(participant);
 			//For PHI
 			//List scgObjList = new ArrayList();
 			//try
@@ -397,6 +397,38 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
 		}
 	}
+	
+	 private List<SpecimenCollectionGroup> getSCGList(Participant participant)throws DAOException
+    {
+    	// FIRE ONLY ONE QUERY
+    	
+    	List<SpecimenCollectionGroup> scgList=new ArrayList<SpecimenCollectionGroup>();
+    	DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+    	// get all CollectionProtocolRegistration for participant
+    	String sourceObjectName=CollectionProtocolRegistration.class.getName();
+		String[] selectColumnName=new String[]{Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnName=new String[]{Constants.COLUMN_NAME_PARTICIPANT_ID};
+		String[] whereColumnValue=new String[]{participant.getId().toString()};
+		String[] whereColumnCondition=new String[]{"="};
+		String joinCondition="";
+    	Collection cprCollection=(List)defaultBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);	
+		Long cprID;
+		Iterator cprIter=cprCollection.iterator();
+		// iterate on all colletionProtocolRegistration for participant
+		while(cprIter.hasNext())
+		{
+			cprID=(Long)cprIter.next();
+			Collection tempSCGCollection=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(), cprID, Constants.COLUMN_NAME_SCG_COLL);
+			Iterator scgIter=tempSCGCollection.iterator();
+			// add all the scg associated with cpr to scgList
+			while(scgIter.hasNext())
+			{
+				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgIter.next();
+				scgList.add(scg);
+			}
+		}
+    	return scgList;
+    }
 }
 
 
