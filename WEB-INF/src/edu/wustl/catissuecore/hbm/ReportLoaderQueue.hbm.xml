@@ -91,7 +91,7 @@
 
         <property
             name="reportText"
-            type="java.sql.Clob"
+            type="string"
             update="true"
             insert="true"
             column="REPORT_TEXT"

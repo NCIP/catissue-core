@@ -27,7 +27,7 @@
 
         <property
             name="data"
-            type="java.sql.Clob"
+            type="string"
             update="true"
             insert="true"
             column="REPORT_DATA"
