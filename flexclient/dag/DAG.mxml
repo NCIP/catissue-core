@@ -344,7 +344,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 					linkNodes(sourceNode.expressionId.toString(),targetNode.expressionId.toString(),path);
                 }catch(error:TypeError)
                 {
-                	Alert.show("Error=>"+error.getStackTrace());	
+                	Alert.show("Error:"+error.message);	
                 }
 			 	
 			 }
@@ -609,8 +609,9 @@ creationComplete="initApp()"  width="100%" height="100%">
 					dagNode2.addInAssociation(firstNode,c.name,0);
 				}
 				else
-				{var operatorIndex:int = path.operatorIndex; //temp
-					dagNode1.addDisplayOutAssociation(secondNode,c.name,operatorIndex);
+				{	
+					var operatorIndex:int = path.operatorIndex;
+				 	dagNode1.addDisplayOutAssociation(secondNode,c.name,operatorIndex);
 					dagNode1.addOutAssociation(secondNode,c.name,operatorIndex);
 					dagNode2.addInAssociation(firstNode,c.name,operatorIndex);
 				}
@@ -691,7 +692,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 	}
 	private function updateNodeSelection(event:MouseEvent):void {
 	selectedNode=null;
-		if(event.ctrlKey)
+		if(event.shiftKey)
 		{
 			var dagNode:DAGNode = DAGNode(panel1.getChildByName(event.currentTarget.name));
 			if(dagNode != null)
@@ -771,6 +772,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 			{
 			if(selectedNode.name == node1 )
 				{
+					
 					if(selectedNodeList!=null)
 					{
 						var index:int =node1 as int;
@@ -861,6 +863,9 @@ creationComplete="initApp()"  width="100%" height="100%">
 					else
 					{
 						Alert.show("Constraint node  link cannot be deleted");
+						node1="";
+						node2="";
+						rpcService.addEventListener(ResultEvent.RESULT,deleteLinkHandler);
 					}
 				}
 				else
@@ -874,7 +879,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 	}
 	public function deleteLinkHandler(event:ResultEvent):void
 	{
-		Alert.show("Link deleted");		
+	//	Alert.show("Link deleted");		
 		rpcService.removeEventListener(ResultEvent.RESULT,deleteLinkHandler,false);
 	}
 	public function editNode(node:DAGNode):void
