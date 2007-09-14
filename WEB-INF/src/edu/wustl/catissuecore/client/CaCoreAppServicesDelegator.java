@@ -34,12 +34,14 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * This class contains the basic methods that are required for HTTP APIs. 
@@ -208,17 +210,35 @@ public class CaCoreAppServicesDelegator
 	    Logger.out.debug("list obtained from ApplicationService Search************** : "+list.getClass().getName());
 	    Logger.out.debug("Super Class ApplicationService Search************** : "+list.getClass().getSuperclass().getName());
 	    List filteredObjects = null;//new ArrayList();
-	    
-	    try
-	    {
-	        filteredObjects = filterObjects(userName, list);
-	    }
-	    catch (Exception exp)
-	    {
-	        exp.printStackTrace();
-	        throw exp;
-	    }
-	    
+	    User validUser = getUser(userName);
+	    String reviewerRole=null;
+        SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
+        try
+        {
+              Role role=securityManager.getUserRole(validUser.getId());
+              reviewerRole=role.getName();
+        }
+        catch(SMException ex)
+        {
+              Logger.out.info("Review Role not found!");
+        }
+        if(reviewerRole!=null && (reviewerRole.equalsIgnoreCase(Constants.ADMINISTRATOR)))
+        {
+        	filteredObjects=list;
+        }
+        else
+        {
+        	try
+    	    {
+    	        filteredObjects = filterObjects(userName, list);
+    	    }
+    	    catch (Exception exp)
+    	    {
+    	        exp.printStackTrace();
+    	        throw exp;
+    	    }
+        }
+        
 		return filteredObjects;
 	}	
 	
