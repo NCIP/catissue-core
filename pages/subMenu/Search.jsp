@@ -24,12 +24,9 @@
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17">
 				<bean:message key="app.simpleSearch" />
 			</a> |  
-			<a class="subMenuPrimary" href="AdvanceQueryInterfaceDefaultPage.do?pageOf=pageOfAdvanceQueryInterface&menuSelected=17">
-					<bean:message key="app.advancedSearch" />
-			</a> |
 			<a class="subMenuPrimary" href="QueryWizard.do?currentPage=QueryWizard&menuSelected=17">
-				<bean:message key="query.name" />
-			</a>	
+					<bean:message key="app.advancedSearch" />
+			</a>
 		</div>
 	</td>
 </tr>
