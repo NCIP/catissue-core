@@ -19,6 +19,7 @@ import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttr
 import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 
 /**
  * Creates QueryOutputTree Object as per the data filled by the user on AddLimits section.
@@ -153,6 +154,10 @@ public class QueryOutputTreeBizLogic
 				if (index != -1)
 				{
 					displayName = (String) rowList.get(1);
+					if(displayName.equals(""))
+					{
+						displayName = ApplicationProperties.getValue("query.tree.label.NA");;
+					}
 				}
 				treeNode.setDisplayName(displayName);
 				treeNode.setParentIdentifier(parentNode.getIdentifier().toString());
@@ -346,7 +351,14 @@ public class QueryOutputTreeBizLogic
 			if (displayName.equalsIgnoreCase(""))
 			{
 				//displayName = entityName + Constants.UNDERSCORE + data;
-				displayName = data;
+				if(data.equals(""))
+				{
+					System.out.println("data        "+data);
+				}
+				else
+				{
+					displayName = data;
+				}
 			}
 			String objectname = fullyQualifiedEntityName;
 			String parentObjectName = "";
