@@ -166,7 +166,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 		"lastName",
 		"title",
 		"name",
-		"label"
+		"label",
+		"shorttitle"
 	};
 	public static final String MISSING_TWO_VALUES = "missingTwoValues";
 	public static final String DATE = "date";
