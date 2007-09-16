@@ -455,7 +455,6 @@ public class QueryOutputSpreadsheetBizLogic
 		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
 		String treeNo = nodeIds[0];
 		String parentId = nodeIds[1];
-		String parentData = nodeIds[2];
 		String uniqueNodeId = treeNo+"_"+parentId;
 		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
 		if (parentNode.getChildren().isEmpty())
