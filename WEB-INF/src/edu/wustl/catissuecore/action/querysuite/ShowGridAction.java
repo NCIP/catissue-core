@@ -21,6 +21,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -48,9 +49,9 @@ public class ShowGridAction extends BaseAction
 				Constants.ID_COLUMNS_MAP);
 		List<OutputTreeDataNode> rootOutputTreeNodeList = (List<OutputTreeDataNode>)session.getAttribute(Constants.TREE_ROOTS);
 		SessionDataBean sessionData = getSessionData(request);
- 		String idOfClickedNode = request.getParameter("nodeId");
-		Map<String, String> selectedColumnMetaData = (LinkedHashMap<String, String>)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
-		Map spreadSheetDatamap = null;
+		SelectedColumnsMetadata selectedColumnMetaData = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
+		String idOfClickedNode = request.getParameter("nodeId");
+ 		Map spreadSheetDatamap = null;
 		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
 		int recordsPerPage = new Integer(recordsPerPageStr);
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
