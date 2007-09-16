@@ -3,10 +3,8 @@ package edu.wustl.catissuecore.action.querysuite;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -176,7 +174,7 @@ public class ViewSearchResultsAction extends BaseAppletAction
 		session.setAttribute(Constants.PAGINATION_DATA_LIST, list);
 		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
 		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA,null);
-		
+		session.setAttribute(Constants.SELECTED_COLUMN_NAME_VALUE_BEAN_LIST,null);
 		return isZeroRecordsFound;
 	}
 
