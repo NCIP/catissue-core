@@ -2,10 +2,8 @@
 package edu.wustl.catissuecore.util.querysuite;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -28,71 +26,6 @@ import edu.wustl.common.util.dbManager.DAOException;
  */
 public abstract class QueryModuleUtil
 {
-	/**
-	 * Returns the label for attribute's name. It compares ascii value of each char for lower or upper case and then forms a capitalized lebel. 
-	 * eg firstName is converted to First Name
-	 * @param objectName name of the attribute
-	 * @return capitalized label
-	 */
-	static public String getDisplayLabel(String objectName)
-	{
-		String attrLabel = "";
-		boolean isPreviousLetterLowerCase = false;
-		int len = objectName.length();
-		for (int i = 0; i < len; i++)
-		{
-			char attrChar = objectName.charAt(i);
-			int asciiValue = attrChar;
-			if (i == 0)
-			{
-				if (asciiValue >= 65 && asciiValue <= 90)
-				{
-					attrLabel = attrLabel + attrChar;
-				} 
-				else
-				{
-					int capitalAsciiValue = asciiValue - 32;
-					attrLabel = attrLabel + (char) capitalAsciiValue;
-				}
-			}
-			else
-			{
-				if (asciiValue >= 65 && asciiValue <= 90)
-				{
-					attrLabel = attrLabel + " " + attrChar;
-					for (int k = i + 1; k < len; k++)
-					{
-						attrChar = objectName.charAt(k);
-						asciiValue = attrChar;
-						if (asciiValue >= 65 && asciiValue <= 90)
-						{
-							if (isPreviousLetterLowerCase)
-							{
-								attrLabel = attrLabel + " " + attrChar;
-								isPreviousLetterLowerCase = false;
-							}
-							else
-							{
-								attrLabel = attrLabel + attrChar;
-							}
-							i++;
-						}
-						else
-						{
-							isPreviousLetterLowerCase = true;
-							attrLabel = attrLabel + attrChar;
-							i++;
-						}
-					}
-				}
-				else
-				{
-					attrLabel = attrLabel + attrChar;
-				}
-			}
-		}
-		return attrLabel;
-	}
 
 	/**
 	 * Executes the query and returns the results.
