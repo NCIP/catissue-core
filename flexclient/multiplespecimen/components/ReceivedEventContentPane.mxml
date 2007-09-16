@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*" xmlns:adobe="http://www.adobe.com/2006/fc" >
+<mx:Script source="../script/validate.as"/>
+<mx:Script>
+	<![CDATA[
+		import util.MetadataModel;
+		import util.Utility;
+		import valueobjects.EventBean;
+		[Bindable]
+		public var receivedEvent:EventBean;
+		import mx.controls.Alert;
+		/*private function preInit():void
+		{
+			collEvent = new EventBean();
+		}*/
+		
+		public function createComp():void
+		{
+			//Alert.show("HI 2 "+collEvent.toString());
+			Utility.bindData(receiverName, "selectedItem", receivedEvent, "userName"); 
+			Utility.bindData(receivedOn,"selectedDate",receivedEvent,"eventDate");
+			Utility.bindData(receivedHour,"selectedItem",receivedEvent,"eventHour");
+			Utility.bindData(receivedMinute,"selectedItem",receivedEvent,"eventMinute");
+			Utility.bindData(recievedQuality, "selectedItem", receivedEvent, "receivedQuality"); 
+			Utility.bindData(comment, "text", receivedEvent, "comment");
+			
+		}
+		public function validateRecvEvent(index:int):Boolean
+		{
+			var isValid:Boolean = true;
+			isValid = validateComboBoxField(receiverName,"selectedItem","Please select receiver") && isValid;			
+			isValid = validateComboBoxField(recievedQuality,"selectedItem","Please select received quality") && isValid;			
+			return isValid;
+		}
+	]]>
+</mx:Script>
+<components:MyCanvas>
+<mx:HBox>
+	<adobe:AutoComplete id="receiverName" dataProvider="{MetadataModel.getInstance().userList}"/>
+</mx:HBox>
+</components:MyCanvas>
+<components:MyCanvas>
+		<mx:DateField id="receivedOn" formatString="MM-DD-YYYY"/>
+</components:MyCanvas>
+<components:MyCanvas>
+		<mx:HBox>
+		<mx:ComboBox id="receivedHour" dataProvider="{MetadataModel.getInstance().hourListArray}"/>
+		<mx:ComboBox id="receivedMinute" dataProvider="{MetadataModel.getInstance().miniuteListArray}"/>
+		</mx:HBox>
+</components:MyCanvas>
+
+<components:MyCanvas>
+	<adobe:AutoComplete id="recievedQuality" dataProvider="{MetadataModel.getInstance().receivedQualityList}" />
+</components:MyCanvas>
+<components:MyCanvas>
+	<mx:TextArea id="comment">
+		
+	</mx:TextArea>
+</components:MyCanvas>
+<components:MyCanvas/>
+</mx:VBox>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" preinitialize="preInit()" creationComplete="creationComp()">
+<mx:Script source="../script/validate.as"/>
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
@@ -29,6 +30,19 @@
 				bindData(idName, "text", extIdBean, "identifierName");
 				bindData(idValue, "text", extIdBean, "identifierValue");
 			}
+			
+			public function validateExId(index:int) : Boolean
+			{
+				var isValid:Boolean = true;
+				if((idName.text.length!=0 && idValue.text.length ==0)  || (idName.text.length==0 && idValue.text.length !=0))
+				{
+					isValid= validateRequiredField(idName,"text","Please enter name") && isValid;
+					isValid= validateRequiredField(idValue,"text","Please enter value") && isValid;
+				}
+				
+				return isValid;
+			}
+			
 		]]>
 	</mx:Script>
 	

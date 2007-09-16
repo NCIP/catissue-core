@@ -19,10 +19,14 @@ package util
 		public var spDataList:ArrayCollection;
 		public function init(mode:String):void
 		{
-			if(mode==MSPParameter.MODE_PARAM_VAL_EDIT)
+			if(mode==MSPParameter.MODE_PARAM_VAL_EDIT)	
 			{
 				counterEndVal = 9;
 				loadData("readSpecimenList",handleReadSpecimenResult);
+			}
+			else
+			{
+				
 			}
 			
 			loadData("getTissueSidePVList",handleTissueSideResult);
@@ -33,6 +37,27 @@ package util
 			loadData("getTissueSpecimenTypePVList",handleTissueSpecimenTypeResult);
 			loadData("getMolecularSpecimenTypePVList",handleMolecularSpecimenTypeResult);
 			loadData("getCellSpecimenTypePVList",handleCellSpecimenTypeResult);
+			
+			
+			loadData("getUserList",handleUserListResult);
+			loadData("getProcedureList",handleProcedureListResult);
+			loadData("getContainerList",handleContainerListResult);
+			loadData("getReceivedQualityList",handleReceivedQualityListResult);
+
+			//Biohazard
+			loadData("getBiohazardTypeList",handleBioazardTypeListResult);
+			loadData("getBiohazardNameList",handleBioazardNameListResult);
+			
+		}
+		
+		public function initDerivedSp():void
+		{
+			loadData("getSpecimenClassStatusPVList",handleSpecimenClassResult);
+			loadData("getFluidSpecimenTypePVList",handleFluidSpecimenTypeResult);
+			loadData("getTissueSpecimenTypePVList",handleTissueSpecimenTypeResult);
+			loadData("getMolecularSpecimenTypePVList",handleMolecularSpecimenTypeResult);
+			loadData("getCellSpecimenTypePVList",handleCellSpecimenTypeResult);
+
 		}
 		
 		private function updateCounter():void
@@ -52,13 +77,16 @@ package util
 		}
 		private function loadData(remoteFuncName:String ,handlerFunction:Function):void
 		{
+
 			var operation:AbstractOperation = remoteObj.getOperation(remoteFuncName);
 			operation.addEventListener(ResultEvent.RESULT,handlerFunction);
 			operation.send();
+
 		}
 		
 		private function handleTissueSideResult(event:ResultEvent):void 
 		{
+			
 			MetadataModel.getInstance().tissueSidePVList = event.result as ArrayCollection;
 			updateCounter();
 		}
@@ -107,5 +135,45 @@ package util
 			MetadataModel.getInstance().specimenTypePVArrayColl.addItemAt(spTypeList,index);
 			updateCounter();				
 		}
+		
+		private function handleUserListResult(event:ResultEvent) : void
+		{
+			MetadataModel.getInstance().userList = event.result as ArrayCollection;
+
+		}
+
+		private function handleProcedureListResult(event:ResultEvent) : void
+		{
+			MetadataModel.getInstance().procedureList = event.result as ArrayCollection;
+
+		}
+
+		private function handleContainerListResult(event:ResultEvent) : void
+		{
+			MetadataModel.getInstance().containerList = event.result as ArrayCollection;
+
+		}
+		
+		private function handleReceivedQualityListResult(event:ResultEvent) : void
+		{
+			MetadataModel.getInstance().receivedQualityList = event.result as ArrayCollection;
+
+		}
+		
+
+		private function handleBioazardTypeListResult(event:ResultEvent) : void
+		{
+			MetadataModel.getInstance().biohazardTypeList = event.result as ArrayCollection;
+
+		}
+		
+
+		private function handleBioazardNameListResult(event:ResultEvent) : void
+		{
+			MetadataModel.getInstance().biohazardNameList = event.result as ArrayCollection;
+
+		}
+		
+		
 	}
 }

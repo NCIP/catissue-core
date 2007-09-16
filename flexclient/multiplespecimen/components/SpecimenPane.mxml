@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" borderStyle="solid" paddingLeft="5" paddingRight="5" 
-	xmlns:adobe="http://www.adobe.com/2006/fc" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*">
-
+	xmlns:adobe="http://www.adobe.com/2006/fc" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*" xmlns:components1="flexclient.multiplespecimen.components.*">
+<mx:Script source="../script/validate.as"/>
 <mx:Script>
 	<![CDATA[
 		import util.MetadataModel;
@@ -11,6 +11,7 @@
 		import mx.binding.utils.BindingUtils;
 		import mx.controls.Alert;
 		import mx.collections.ArrayCollection;
+		import mx.managers.PopUpManager;
 		
 		[Bindable]
 		public var spData:SpecimenData;
@@ -68,6 +69,7 @@
 			
 			//Bind Comments
 			Utility.bindData(spComment, "text", spData, "comment");
+
 		}
 		
 		private function switchSpType(event:Event):void
@@ -116,6 +118,99 @@
    		{
    			Utility.bindData(exIDPane, "exIdColl", spData, "exIdColl");
    		}
+   		private function bindCollectedEvents():void
+   		{
+   			Utility.bindData(colledtedEventPane, "collectionEvent", spData, "collectionEvent");
+   			//Alert.show("HI 1 "+collectionEvent.toString());
+				//eventContentPane.collEvent = collectionEvent; 
+			colledtedEventPane.createComp();
+   		}
+   		private function bindReceivedEvents():void
+   		{
+   			Utility.bindData(receivedEventPane, "receivedEvent", spData, "receivedEvent");
+   			//Alert.show("HI 1 "+collectionEvent.toString());
+				//eventContentPane.collEvent = collectionEvent; 
+			receivedEventPane.createComp();
+   		}
+   		
+   		private function bindBiohazards() : void
+   		{
+   			Utility.bindData(biohazardPane,"biohazardColl", spData,"biohazardColl");
+   		}
+   		
+		private function createPopUp():void 
+		{
+	    	var pop1:DerivedSpecimenPane = DerivedSpecimenPane(
+	        PopUpManager.createPopUp(this, DerivedSpecimenPane, true));
+    		pop1.derivedSpColl = spData.derivedSpColl;
+			pop1.title = "Create Derived Specimen";
+
+			/* creating a new derived sp array collection in case of cancel button pressed on derived sp page */
+			var tempDerivedSpColl:ArrayCollection = new ArrayCollection();
+			for(var i:int=0;i<spData.derivedSpColl.length;i++)
+			{
+				var spDataTemp:SpecimenData = spData.derivedSpColl.getItemAt(i) as SpecimenData;
+				var spDataDeepCopied:SpecimenData = spDataTemp.deepCopy();
+				tempDerivedSpColl.addItem(spDataDeepCopied);
+			}
+    		pop1.derivedSpCollOriginal = tempDerivedSpColl;
+			    	
+	    	Utility.bindData(pop1,"derivedSpColl", spData,"derivedSpColl");
+
+//	    PopUpManager.centerPopUp(pop1);
+
+
+		   }
+
+
+   		
+   		public function validateSpecimen(index:int):Boolean
+   		{
+   			var isValid:Boolean = true;
+   			var specimenNumber :String = " for specimen "+index;
+   			isValid= validateRequiredField(spLabel,"text","Please enter label") && isValid;
+   			isValid= validateRequiredField(spBarCode,"text","Please enter barcode") && isValid;
+
+			isValid = validateComboBoxField(spClass,"selectedItem","Please select class") && isValid;
+			isValid = validateComboBoxField(spType,"selectedItem","Please select type") && isValid;
+			isValid = validateComboBoxField(spTissueSite,"selectedItem","Please select tissue site") && isValid;			
+			isValid = validateComboBoxField(spTissueSide,"selectedItem","Please select tissue side") && isValid;			
+			isValid = validateComboBoxField(spPathologicalStatus,"selectedItem","Please select pathological status") && isValid;			
+			
+   			isValid =  validateNumberField(spQuantity,"text","Please enter Quantity",true,0) && isValid;
+   			isValid =  validateNumberField(spConcentration,"text","Please enter concentration",true,0) && isValid;
+			if(colledtedEventPane != null)
+   			{
+	   			isValid = colledtedEventPane.collectedEventContentPane.validateCollEvent(index) && isValid;
+   			}
+   			if(receivedEventPane != null)
+   			{
+				isValid= receivedEventPane.receivedEventContentPane.validateRecvEvent(index) && isValid;
+   			}
+		
+			if(exIDPane != null)
+			{
+				isValid = exIDPane.validateExIds(index) && isValid;
+			}
+			if(biohazardPane != null)
+			{
+				isValid = biohazardPane.validateBiohazards(index) && isValid;
+					
+			}
+			return isValid;
+		}        
+
+		public function changeParent():void
+		{
+			if(isSpSCGName.selected)
+			{
+				spParentName.text= null;
+			}
+			else
+			{
+				spSCGName.text = null;
+			}
+		}
 	]]>
 </mx:Script>
 
@@ -126,18 +221,16 @@
 	<components:MyCanvas>
 		<mx:HBox>
 			<mx:RadioButtonGroup id="spParent"/>
-			<mx:RadioButton id="isSpSCGName" label="SCG"  group="{spParent}"/>
-			<mx:RadioButton id="isSpParentName" label="Specimen" group="{spParent}"/>
+			<mx:RadioButton id="isSpSCGName" label="SCG"  group="{spParent}" click="changeParent()"/>
+			<mx:RadioButton id="isSpParentName" label="Specimen" group="{spParent}" click="changeParent()"/>
 		</mx:HBox>
 	</components:MyCanvas>
 
 	<components:MyCanvas>
-		<mx:TextInput id="spSCGName" enabled="{isSpSCGName.selected}" />
+		<mx:TextInput id="spParentName" visible="{isSpParentName.selected}"/>
+		<mx:TextInput id="spSCGName" visible="{isSpSCGName.selected}" />
 	</components:MyCanvas>
 
-	<components:MyCanvas>
-		<mx:TextInput id="spParentName" enabled="{isSpParentName.selected}" />
-	</components:MyCanvas>
 	
 	<components:MyCanvas>
 		<mx:TextInput id="spLabel"/>
@@ -168,46 +261,41 @@
 	</components:MyCanvas>
 	
 	<components:MyCanvas>
-		<mx:DateField id="spCreatedOn" formatString="{Constants.DATE_FORMAT}"/>
+		<mx:DateField id="spCreatedOn" formatString="{Constants.DATE_FORMAT}" keyDown="spCreatedOn.open()"/>
 	</components:MyCanvas>
 	
 	<components:MyCanvas>
 		<mx:HBox>
-			<mx:TextInput id="spQuantity" width="50"/>
+			<mx:TextInput id="spQuantity" width="50" restrict="[0-9]."/>
 			<mx:Label text="{spData.unit}"/>
 		</mx:HBox>
 	</components:MyCanvas>
 	
 	<components:MyCanvas>
 		<mx:HBox>
-			<mx:TextInput id="spConcentration" width="50"/>
+			<mx:TextInput id="spConcentration" width="50" restrict="[0-9]."/>
 			<mx:Label htmlText="{Constants.UNIT_CONCENTRATION}"/>
 		</mx:HBox>
 	</components:MyCanvas>
 	
-	<mx:Accordion id="specimenAccordion" resizeToContent="true">
+	<mx:Accordion id="specimenAccordion" resizeToContent="true" backgroundColor="#E2EFFF" headerHeight="25">
 		<mx:VBox label="Comment">
 			<mx:TextArea id="spComment"/>
 		</mx:VBox>
-		<mx:VBox label="Events">
-			<mx:TextArea id="spComment1"/>
+		<mx:VBox label="Collected Event">
+			<components:CollectedEventPane id="colledtedEventPane" creationComplete="bindCollectedEvents()" />
 		</mx:VBox >
-		
+		<mx:VBox label="Received Event">
+			<components:ReceivedEventPane id="receivedEventPane" creationComplete="bindReceivedEvents()" />
+		</mx:VBox >
+	
 		<mx:VBox label="External Identifier">
 			<components:ExternalIdentifierPane id="exIDPane" creationComplete="bindExData()" />
 		</mx:VBox>
 		
 		<mx:VBox label="Biohazards">
-			<mx:TextArea id="spComment3"/>
-		</mx:VBox>
-
-		<mx:VBox label="Derivative">
-			<mx:TextArea id="spComment4"/>
-		</mx:VBox>
-
-		<mx:VBox label="Aliquot">
-			<mx:TextArea id="spComment5"/>
+			<components:BiohazardPane id="biohazardPane" creationComplete="bindBiohazards()"/>
 		</mx:VBox>
 	</mx:Accordion>
-
+	<mx:Button label="Derivative" width="{specimenAccordion.width}" click="createPopUp()" height="25"/>
 </mx:VBox>

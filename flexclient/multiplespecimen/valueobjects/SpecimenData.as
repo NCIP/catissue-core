@@ -39,7 +39,11 @@ package valueobjects
 		public var unit:String;
 		
 		public var exIdColl:ArrayCollection = new ArrayCollection();
+		public var collectionEvent:EventBean ;
+		public var receivedEvent:EventBean ;
 		
+		public var biohazardColl:ArrayCollection = new ArrayCollection();
+		public var derivedSpColl:ArrayCollection = new ArrayCollection();
 		public function SpecimenData(specimenLabel:String="",specimenBarcode:String="",tissueSide:String="")
 		{
 			this.specimenParent = 'SCG';
@@ -66,10 +70,19 @@ package valueobjects
 			
 			var exBean:ExternalIdentifierBean = new ExternalIdentifierBean(false,0,'A','B');
 			exIdColl.addItem(exBean);
+			
+			collectionEvent = new EventBean();
+			receivedEvent = new EventBean();
+			
+			var biohazardBean:BiohazardBean = new BiohazardBean();
+			biohazardColl.addItem(biohazardBean);
+			
 		}
 		
 		public function copy(spData:SpecimenData):void
 		{
+
+			Alert.show("Here in Copy1");
 			this.specimenTypePVList = spData.specimenTypePVList;
 			this.specimenParent = spData.specimenParent;
 			
@@ -93,6 +106,12 @@ package valueobjects
 			this.comment = spData.comment;
 			this.unit = spData.unit;
 			copyExId(spData.exIdColl);
+			copyCollectedEvent(spData.collectionEvent);
+			copyReceivedEvent(spData.receivedEvent);
+			
+			copyBiohazard(spData.biohazardColl);
+			copyDerived(spData.derivedSpColl);
+//			this.collectionEvent = spData.collectionEvent;
 			//this.exIdColl = spData.exIdColl;
 		}
 		
@@ -109,6 +128,54 @@ package valueobjects
 			}
 		}
 		
+		private function copyBiohazard(biohazardCollCopy:ArrayCollection):void
+		{
+			this.biohazardColl = new ArrayCollection();
+			for(var i:int=0;i<biohazardCollCopy.length;i++)
+			{
+				var biohazardCopy:BiohazardBean = BiohazardBean(biohazardCollCopy.getItemAt(i));
+				var biohzardBean:BiohazardBean  = new BiohazardBean();
+				biohzardBean.copy(biohazardCopy);
+				
+				this.biohazardColl.addItem(biohzardBean);
+			}
+		}
+
+		private function copyCollectedEvent(collectedEvent:EventBean):void
+		{
+			var collectedEventBean:EventBean = new EventBean();
+			collectedEventBean.userName = collectedEvent.userName;
+			collectedEventBean.eventDate = collectedEvent.eventDate;
+			collectedEventBean.eventHour = collectedEvent.eventHour;
+			collectedEventBean.eventMinute = collectedEvent.eventMinute;
+			collectedEventBean.collectionProcedure = collectedEvent.collectionProcedure;
+			collectedEventBean.container = collectedEvent.container;
+			collectedEventBean.comment = collectedEvent.comment;	
+			this.collectionEvent = collectedEventBean;
+		}	
+		private function copyReceivedEvent(recievedEvent:EventBean):void
+		{
+			var receivedEventBean:EventBean = new EventBean();
+			receivedEventBean.userName = recievedEvent.userName;
+			receivedEventBean.eventDate = recievedEvent.eventDate;
+			receivedEventBean.eventHour = recievedEvent.eventHour;
+			receivedEventBean.eventMinute = recievedEvent.eventMinute;
+			receivedEventBean.receivedQuality = recievedEvent.receivedQuality;
+			receivedEventBean.comment = recievedEvent.comment;	
+			this.receivedEvent = receivedEventBean;
+		}	
+		private function copyDerived(derivedCollCopy:ArrayCollection):void
+		{
+			this.derivedSpColl = new ArrayCollection();
+			for(var i:int=0;i<derivedCollCopy.length;i++)
+			{
+				var derivedCopy:SpecimenData = SpecimenData(derivedCollCopy.getItemAt(i));
+				var derivedBean:SpecimenData  = new SpecimenData();
+				derivedBean.copy(derivedCopy);
+			
+				this.derivedSpColl.addItem(derivedBean);
+			}
+		}
 		public function writeExternal(output:IDataOutput) :void 
 		{
 			Alert.show("CLIENT IN writeExternal");
@@ -126,7 +193,11 @@ package valueobjects
 			output.writeDouble(quantity);
 			output.writeDouble(concentration);
 			output.writeUTF(comment);
-			output.writeObject(exIdColl);								
+			output.writeObject(exIdColl);	
+			output.writeObject(biohazardColl);	
+			output.writeObject(collectionEvent);
+			output.writeObject(receivedEvent);
+			output.writeObject(derivedSpColl);
     	}
         
     	public function readExternal(input:IDataInput):void
@@ -148,6 +219,10 @@ package valueobjects
 			concentration = input.readDouble();
 			comment = input.readUTF();
 			exIdColl = input.readObject() as ArrayCollection;
+			biohazardColl = input.readObject() as ArrayCollection;
+			collectionEvent = input.readObject() as EventBean;
+			receivedEvent = input.readObject() as EventBean;
+			derivedSpColl = input.readObject() as ArrayCollection;
        }
        
 		public function calcUnit() : void 
@@ -188,6 +263,13 @@ package valueobjects
 					unit = Constants.UNIT_GM;
 				}
 			}
+		}
+		public function deepCopy() :SpecimenData
+		{
+			var spData:SpecimenData = new SpecimenData();
+			spData.specimenLabel = this.specimenLabel;
+			spData.specimenBarcode = this.specimenBarcode;
+			return spData;
 		}
 	}
 }

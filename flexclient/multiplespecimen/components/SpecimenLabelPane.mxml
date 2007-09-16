@@ -1,63 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" borderStyle="solid" xmlns:components="components.*">
 
-	<components:MyCanvas>
+	<components:MyHBox>
+		<mx:CheckBox/>	
 		<mx:Label text=""/>	
-	</components:MyCanvas>
+	</components:MyHBox>
 	
-	<components:MyCanvas>
-		<mx:Label text="* Parent"/>	
-	</components:MyCanvas>
+	<components:MyHBox>
+	<mx:CheckBox/>	
+		<mx:Label text="" fontWeight="bold"/>	
+	</components:MyHBox>
 	
-	<components:MyCanvas>
-		<mx:Label text="* Specimen Group Name"/>	
-	</components:MyCanvas>
+	<components:MyHBox>
+	<mx:CheckBox/>	
+		<mx:Label text="* Name" fontWeight="bold" id="spOrScg"/>	
+	</components:MyHBox>
 	
-	<components:MyCanvas>	
-		<mx:Label text="* Specimen"/>	
-	</components:MyCanvas>		
 	
-	<components:MyCanvas>	
-		<mx:Label text="* Label"/>	
-	</components:MyCanvas>		
+	<components:MyHBox>
+		<mx:CheckBox id="labelChkBox"/>
+		<mx:Label text="* Label" fontWeight="bold"/>	
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
-		<mx:Label text="Barcode"/>	
-	</components:MyCanvas>		
+	<components:MyHBox>	
+		<mx:CheckBox/>	
+		<mx:Label text="  Barcode" fontWeight="bold"/>	
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
-		<mx:Label text="* Class"/>	
-	</components:MyCanvas>		
+	<components:MyHBox>	
+		<mx:CheckBox/>	
+		<mx:Label text="* Class" fontWeight="bold"/>	
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
-		<mx:Label text="* Type"/>	
-	</components:MyCanvas>		
+	<components:MyHBox>	
+		<mx:CheckBox/>	
+		<mx:Label text="* Type" fontWeight="bold"/>	
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
-		<mx:Label text="* Tissue Site"/>
-	</components:MyCanvas>		
+	<components:MyHBox>	
+		<mx:CheckBox/>	
+		<mx:Label text="* Tissue Site" fontWeight="bold"/>
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
-		<mx:Label text="* Tissue Side"/>
-	</components:MyCanvas>		
+	<components:MyHBox>	
+		<mx:CheckBox/>	
+		<mx:Label text="* Tissue Side" fontWeight="bold"/>
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
-		<mx:Label text="* Pathological Status"/>
-	</components:MyCanvas>		
+	<components:MyHBox>	
+		<mx:CheckBox/>	
+		<mx:Label text="* Pathological Status" fontWeight="bold"/>
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
-		<mx:Label text="Created on [MM-DD-YYYY]"/>	
-	</components:MyCanvas>		
+	<components:MyHBox>	
+		<mx:CheckBox/>	
+		<mx:Label text="  Created on" fontWeight="bold"/>	
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
-		<mx:Label text="Quantity"/>	
-	</components:MyCanvas>		
+	<components:MyHBox>	
+		<mx:CheckBox/>	
+		<mx:Label text="  Quantity" fontWeight="bold"/>	
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
-		<mx:Label text="Concentration"/>	
-	</components:MyCanvas>		
+	<components:MyHBox>	
+		<mx:CheckBox/>	
+		<mx:Label text="  Concentration" fontWeight="bold"/>	
+	</components:MyHBox>		
 
-	<components:MyCanvas>	
-		<mx:Label text="Comment"/>	
-	</components:MyCanvas>		
+	<components:MyHBox>
+	<mx:CheckBox/>	
+	<mx:Label text="  Comment" fontWeight="bold"/>	
+	</components:MyHBox>		
+	
+	<components:MyHBox>
+		<mx:CheckBox/>	
+	<mx:Label text="  Collected Event" fontWeight="bold"/>
+	</components:MyHBox>		
+	<components:MyHBox>
+			<mx:CheckBox/>	
+	<mx:Label text="  Received Event" fontWeight="bold"/>
+	</components:MyHBox>		
+	<components:MyHBox>
+			<mx:CheckBox/>	
+	<mx:Label text="  External Identifier" fontWeight="bold"/>
+	</components:MyHBox>		
+	<components:MyHBox>
+			<mx:CheckBox/>	
+	<mx:Label text="  Biohazards" fontWeight="bold"/>
+	</components:MyHBox>		
+	<components:MyHBox>
+			<mx:CheckBox/>	
+	<mx:Label text="  Derivative" fontWeight="bold"/>
+	</components:MyHBox>		
 </mx:VBox>

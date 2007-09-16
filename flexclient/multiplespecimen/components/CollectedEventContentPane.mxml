@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*" xmlns:adobe="http://www.adobe.com/2006/fc" >
+<mx:Script source="../script/validate.as"/>
+<mx:Script>
+	<![CDATA[
+
+		import util.MetadataModel;
+		import util.Utility;
+		import valueobjects.EventBean;
+		[Bindable]
+		public var collEvent:EventBean;
+		import mx.controls.Alert;
+		/*private function preInit():void
+		{
+			collEvent = new EventBean();
+		}*/
+		
+		public function createComp():void
+		{
+	
+			//Alert.show("HI 2 "+collEvent.toString());
+			Utility.bindData(collectorName, "selectedItem", collEvent, "userName"); 
+			Utility.bindData(collectedOn,"selectedDate",collEvent,"eventDate");
+			Utility.bindData(collectedHour,"selectedItem",collEvent,"eventHour");
+			Utility.bindData(collectedMinute,"selectedItem",collEvent,"eventMinute");
+			Utility.bindData(procedureName, "selectedItem", collEvent, "collectionProcedure"); 
+			Utility.bindData(containerName, "selectedItem", collEvent, "container"); 
+			Utility.bindData(comment, "text", collEvent, "comment");
+			
+		}
+		
+		public function validateCollEvent(index:int):Boolean
+		{
+			var isValid:Boolean = true;
+			isValid = validateComboBoxField(collectorName,"selectedItem","Please select collector") && isValid;			
+			isValid = validateComboBoxField(procedureName,"selectedItem","Please select procedure") && isValid;			
+			isValid = validateComboBoxField(containerName,"selectedItem","Please select container") && isValid;			
+			return isValid;
+		}
+	]]>
+</mx:Script>
+<components:MyCanvas>
+<mx:HBox>
+	<adobe:AutoComplete id="collectorName" dataProvider="{MetadataModel.getInstance().userList}"/>
+</mx:HBox>
+</components:MyCanvas>
+<components:MyCanvas>
+		<mx:DateField id="collectedOn" formatString="MM-DD-YYYY"/>
+</components:MyCanvas>
+<components:MyCanvas>
+		<mx:HBox>
+		<mx:ComboBox id="collectedHour" dataProvider="{MetadataModel.getInstance().hourListArray}"/>
+		<mx:ComboBox id="collectedMinute" dataProvider="{MetadataModel.getInstance().miniuteListArray}"/>
+		</mx:HBox>
+</components:MyCanvas>
+
+<components:MyCanvas>
+	<adobe:AutoComplete id="procedureName" dataProvider="{MetadataModel.getInstance().procedureList}"/>
+</components:MyCanvas>
+<components:MyCanvas>
+		<adobe:AutoComplete id="containerName" dataProvider="{MetadataModel.getInstance().containerList}"/>
+</components:MyCanvas>
+<components:MyCanvas>
+	<mx:TextArea id="comment">
+		
+	</mx:TextArea>
+</components:MyCanvas>
+<components:MyCanvas/>
+</mx:VBox>

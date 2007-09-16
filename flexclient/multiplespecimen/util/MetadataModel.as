@@ -31,6 +31,20 @@ package util
 		public var specimenTypePVArrayColl:ArrayCollection = new ArrayCollection();
 		
 		
+		public var userList:ArrayCollection = new ArrayCollection();
+		public var procedureList:ArrayCollection = new ArrayCollection();
+		public var containerList:ArrayCollection = new ArrayCollection();
+		
+		//For received Event
+		public var receivedQualityList:ArrayCollection = new ArrayCollection();
+		
+		public var hourListArray:Array = Constants.HOUR_ARRAY;
+		public var miniuteListArray:Array = Constants.MINIUTE_ARRAY;
+		
+		//biohazard
+		public var biohazardTypeList:ArrayCollection = new ArrayCollection();
+		public var biohazardNameList:ArrayCollection = new ArrayCollection();
+		
 		/**
 		 * Returns specimen type based on class.
 		 */
@@ -61,6 +75,20 @@ package util
 				spTypeColl = ArrayCollection(specimenTypePVArrayColl.getItemAt(3));
 			}
 			return spTypeColl;
+		}
+		
+		public function getBiohazardNameList(index:int):ArrayCollection
+		{
+			if(index>0)
+			{
+			return biohazardNameList.getItemAt(index) as ArrayCollection;
+			}
+			else
+			{
+				var bohazardDefNameList:ArrayCollection = new ArrayCollection();
+				bohazardDefNameList.addItem("-- Select --");
+				return bohazardDefNameList;
+			}
 		}
 	}
 }

@@ -36,6 +36,16 @@
 				var exBean:ExternalIdentifierBean = new ExternalIdentifierBean();
 				exIdColl.addItem(exBean);
 			}
+			
+			public function validateExIds(index:int): Boolean
+			{
+				var validateVal:Boolean = true;	
+				for(var i:int=0;i<exIdColl.length;i++)
+				{	
+					validateVal = E[i].validateExId(i+1) && validateVal;
+				}
+				return validateVal;
+			}
 		]]>
 	</mx:Script>
 	
@@ -46,17 +56,9 @@
 	
 	<components:ExternalIdentifierLabelPane/>
 	
-	<!--mx:TileList id="extidTileList" dataProvider="{exIdColl}">
-		<mx:itemRenderer>
-			<mx:Component>
-				<components:ExternalIdentifierContentPane/>
-			</mx:Component>
-		</mx:itemRenderer>
-	</mx:TileList--> 
-	
+
 	<mx:Repeater id="exIdRpter" dataProvider="{exIdColl}">
-		<components:ExternalIdentifierContentPane extIdBean="{exIdRpter.currentItem}"/>
+		<components:ExternalIdentifierContentPane id = "E" extIdBean="{exIdRpter.currentItem}"/>
 	</mx:Repeater>	
 	
-	<!--components:ExternalIdentifierContentPane/-->
 </mx:VBox>

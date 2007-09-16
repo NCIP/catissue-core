@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" horizontalAlign="left" xmlns:local="*" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*" backgroundColor="white">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" horizontalAlign="left" xmlns:local="*" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*" backgroundColor="white" xmlns:components1="flexclient.multiplespecimen.components.*">
+
 <mx:Script>
 	<![CDATA[
+		import mx.managers.HistoryManager;
+		import mx.rpc.events.FaultEvent;
+		import mx.rpc.AbstractOperation;
+		import mx.messaging.ChannelSet;
 		import util.MSPParameter;
 		import util.MSPParameterReader;
 		import util.MetadataManager;
 		import mx.events.DragEvent;
 		import flash.utils.setInterval;
-		import components.ProgressBarPanel;
 		import mx.managers.PopUpManager;
 		import valueobjects.SpecimenData;
-		import valueobjects.NameValueBeanFlex;
 		
 		import mx.rpc.events.ResultEvent;
 		import flash.utils.getQualifiedClassName;
@@ -20,27 +23,35 @@
 		import flash.utils.getQualifiedClassName;
 		import mx.controls.Alert;
 		import mx.rpc.events.ResultEvent;
-		
+		import mx.rpc.remoting.mxml.RemoteObject;
 		private var counter:int = 1;
 		private var mspParameter:MSPParameter ;
 		
 		[Bindable]
 		public var specimenColl:ArrayCollection = new ArrayCollection();
-		
+	
+		public var specimenDataBean:SpecimenData = new SpecimenData();
 		private var copyFromIndex:int = -1;
 		
 		public var metadataManager:MetadataManager = new MetadataManager();
-		
+	
+
+		public static var PERPAGE:int = 3;
+		public var currPage:int = 1;
+		[Bindable]
+		public var startingIndex:int = 0;
+
 		private function preInit():void
 		{
+		
 			mspParameter = MSPParameterReader.processParam(Application.application.parameters);
-			
 			specimenColl = new ArrayCollection();
 						
 			metadataManager.init(mspParameter.mode);
 			metadataManager.addEventListener("initCompleteEvent",init);
+		
 			
-			//PopUpManager.createPopUp(this,ProgressBarPanel,true);
+//			PopUpManager.createPopUp(this,ProgressBarPanel,true);
 			//flash.
 			//var spCount:String = Application.application.parameters.spCount;
 			//Alert.show("firstParam "+spCount);
@@ -72,12 +83,24 @@
 					specimenColl = new ArrayCollection();
 					addMoreSpecimen(null);
 				}
-			}		
+			}	
+			
+			if(specimenColl.length > PERPAGE)
+			{
+				btnNext.enabled = true;
+			}
+			else
+			{
+				btnNext.enabled = false;
+			}
 		}
 		
 		private function initSpecimenData(): SpecimenData
 		{
 			var spData:SpecimenData = new SpecimenData("Label"+counter,"Barcode"+counter,"Left");	
+			spData.collectionEvent.userName = specimenDataBean.collectionEvent.userName;
+
+			spData.receivedEvent.userName = specimenDataBean.receivedEvent.userName;
 			counter++;
 			
 			if(mspParameter.parentType==MSPParameter.PARENT_TYPE_PARAM_VAL_SCG)
@@ -95,22 +118,40 @@
 		
 		private function creationComp():void
 		{
-			//Alert.show("creation complete of multipl sepcimen");
-			//addMoreSpecimen(null);
+			myRemoteObject.initFlexInterfaceForMultipleSp();
 		}
 
 		private function addMoreSpecimen(event:Event):void
 		{
 			var spData:SpecimenData = initSpecimenData();
-			specimenColl.addItem(spData);			
+			specimenColl.addItem(spData);	
+			if(specimenColl.length > PERPAGE)
+			{
+				btnNext.enabled = true;
+			}
+			
 		}
 		
-		private function deleteLastSpecimen(event:Event):void
+		
+		private function deleteSpecimen(event:Event) : void
 		{
-			if(specimenColl.length>0)
+			for(var i:int;i<specimenColl.length;i++)
 			{
-				specimenColl.removeItemAt(specimenColl.length-1);
+				var spData:SpecimenData = SpecimenData(specimenColl.getItemAt(i));
+				if(spData.isSelected)
+				{
+					specimenColl.removeItemAt(i);
+					
+				}
+			}	
+			if(specimenColl.length%PERPAGE == 0)
+			{
+				if(startingIndex -PERPAGE >0)
+				{
+					startingIndex = startingIndex- PERPAGE;	
+				}
 			}
+			
 		}
 		 
 		private function copySPData(event:Event):void
@@ -127,6 +168,19 @@
 					break;
 				}
 			}
+	/*		if(copyFromIndex == -1)
+			{
+				if(spLabelPane.labelChkBox.selected)
+				{
+					var spDataFrom:SpecimenData = specimenColl.getItemAt(0) as SpecimenData;
+					for(var j:int=1;j<specimenColl.length;j++)
+					{
+						var spDataTo:SpecimenData = SpecimenData(specimenColl.getItemAt(i));
+						spDataTo.specimenLabel = spDataFrom.specimenLabel;
+					}
+					
+				}
+			}*/
 		}
 		
 		private function pasteSPData(event:Event):void
@@ -148,7 +202,20 @@
 		
 		private function submitSpecimen(event:Event):void
 		{
-			myRemoteObject.writeSpecimen(specimenColl);
+			var validateVal:Boolean = true;	
+			for(var i:int=0;i<specimenColl.length;i++)
+			{	
+				validateVal = A[i].validateSpecimen(i+1) && validateVal;
+			}
+		
+			if(validateVal)
+			{
+				myRemoteObject.writeSpecimen(specimenColl);
+			}
+			else
+			{
+				Alert.show("Please resolve all errors marked with red box.");
+			}
 		}
 		
 		private function handleReadSpecimen(event:ResultEvent):void
@@ -161,39 +228,75 @@
    		private function handleWriteSpecimen(event:ResultEvent):void
    		{
    			var obj:Object = event.result;
-   			Alert.show('Result '+obj);
+   			var message:String = obj.toString();
+   			messageText.text = message;
+   			var f:String = "callSubmitSpecimen";
+		    ExternalInterface.call(f);
    			//printSpDetails(obj);
+
+   		}
+   		private function handleInitMultipleSp(event:ResultEvent) : void
+   		{
+   			Alert.show("in init multiple SPecimen");
+   			specimenDataBean = event.result as SpecimenData;
+   			Alert.show("data in bean:"+specimenDataBean.collectionEvent.userName);
    		}
    		
    		private function getAlternateColor(index:int):uint 
    		{
    			if(index%2==0)
    			{
-   				return 0xE0E0E0;
+   				return 0xE2EFFF;
    			}	
    			else
    			{
-   				return 0xEFEFEF;
+   				return 0xC2EFFF;
    			}
    		}
+   		
+   		private function getNextPage(event:Event):void
+   		{
+   			startingIndex = startingIndex + PERPAGE;
+   			
+   		 }
+
+
+		private function getPreviousPage(event:Event):void
+		{
+			if(startingIndex-PERPAGE >=0)
+			{
+			startingIndex = startingIndex - PERPAGE;
+				
+			}
+			
+		}
+   		
 	]]>
 </mx:Script>
 
-	<mx:RemoteObject id="myRemoteObject" destination="cdeService" showBusyCursor="true">
+	<mx:RemoteObject id="myRemoteObject" destination="cdeService" showBusyCursor="true" >
 		<mx:method name="writeSpecimen" result="handleWriteSpecimen(event)"/>
 		<mx:method name="readSpecimen" result="handleReadSpecimen(event)"/>
+		<mx:method name="initFlexInterfaceForMultipleSp" result="handleInitMultipleSp(event)"/>
+
 	</mx:RemoteObject>
-	
+	<mx:Text id="messageText"/>
 	<mx:HBox>
-		<mx:Button label="copy" click="copySPData(event)" />
-		<mx:Button label="paste" click="pasteSPData(event)"/>
-		<mx:Button label="Add More" click="addMoreSpecimen(event)"/>
-		<mx:Button label="Delete Last" click="deleteLastSpecimen(event)"/>	
-		<mx:Button label="Submit" click="submitSpecimen(event)"/>
+		<mx:Button label="Copy" click="copySPData(event)" toolTip="Copy" borderColor="#AAAAFF"/>
+		<mx:Button label="Paste" click="pasteSPData(event)" toolTip="Paste" borderColor="#AAAAFF"/>
+		<mx:Spacer width="40"/>
+		<mx:Button label="Add More" click="addMoreSpecimen(event)" toolTip="Add More" borderColor="#AAAAFF"/>
+		<mx:Button label="Delete" click="deleteSpecimen(event)" toolTip="Delete" borderColor="#AAAAFF"/>	
+		<mx:Spacer width="40"/>
+		<mx:Button label="Submit" click="submitSpecimen(event)" id="submitButton" toolTip="Submit" borderColor="#AAAAFF"/>
+		<mx:Button label="Previous" click="getPreviousPage(event)" id="btnPrevious" toolTip="Previous" borderColor="#AAAAFF" visible="false"/>
+		<mx:Button label="Next" click="getNextPage(event)" id="btnNext" toolTip="Next" borderColor="#AAAAFF" visible="false"/>
 	</mx:HBox>
 	
 	<mx:HBox>
-		<components:SpecimenLabelPane backgroundColor="#D1D1D1"/>
+	
+		<components:SpecimenLabelPane backgroundColor="#E0EFFF" id="spLabelPane"/>
+
 		<mx:Repeater id="spRepeater" dataProvider="{specimenColl}">	
 			<components:SpecimenPane id="A" backgroundColor="{getAlternateColor(spRepeater.currentIndex)}"/>
 		</mx:Repeater>

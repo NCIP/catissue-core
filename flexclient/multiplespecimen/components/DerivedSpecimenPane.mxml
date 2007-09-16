@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" autoLayout="true" xmlns:components="components.*" creationComplete="init()" width="500" height="400" borderStyle="outset" backgroundColor="#E2EFFF">
+	<mx:Script>
+		<![CDATA[
+			import util.MetadataManager;
+			import util.Utility;
+			import mx.controls.TextInput;
+			import mx.controls.Alert;
+			import valueobjects.SpecimenData;
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			 public var derivedSpColl:ArrayCollection;
+			
+			[Bindable]
+			 public var derivedSpCollOriginal:ArrayCollection;
+			 
+	 		public var metadataManager:MetadataManager = new MetadataManager();
+			private function init():void
+			{
+				metadataManager.initDerivedSp();
+				if(derivedSpColl.length == 0)
+				{
+					var spData:SpecimenData = initSpecimenData();
+					derivedSpColl.addItem(spData);	
+				}
+
+			}
+
+			public  function closePopUp(event:MouseEvent):void 
+			{
+				Alert.show("Hi");
+	   			 PopUpManager.removePopUp(this);
+			}
+		
+		public  function cancel(event:MouseEvent):void {
+				
+				derivedSpColl = derivedSpCollOriginal;
+			    PopUpManager.removePopUp(this);
+
+				
+			
+		}
+		
+		private function addMoreDerivedSpecimen(event:Event):void
+		{
+			var spData:SpecimenData = initSpecimenData();
+			derivedSpColl.addItem(spData);	
+			/*if(specimenColl.length > PERPAGE)
+			{
+				btnNext.enabled = true;
+			}*/
+			
+		}
+
+		private function deleteDerivedSpecimen(event:Event) : void
+		{
+			for(var i:int;i<derivedSpColl.length;i++)
+			{
+				var spData:SpecimenData = SpecimenData(derivedSpColl.getItemAt(i));
+				if(spData.isSelected)
+				{
+					derivedSpColl.removeItemAt(i);
+					
+				}
+			}	
+/*			if(specimenColl.length%PERPAGE == 0)
+			{
+				if(startingIndex -PERPAGE >0)
+				{
+					startingIndex = startingIndex- PERPAGE;	
+				}
+			}*/
+			
+		}
+
+		private function initSpecimenData(): SpecimenData
+		{
+			var spData:SpecimenData = new SpecimenData("Label1","Barcode1","Left");	
+		
+			
+			
+			return spData;
+		}
+		
+		]]>
+	</mx:Script>
+	<mx:HBox>
+		
+	<mx:Button label="Add More" click="addMoreDerivedSpecimen(event)" toolTip="Add More" borderColor="#AAAAFF"/>
+	<mx:Button label="Delete" click="deleteDerivedSpecimen(event)" toolTip="Delete" borderColor="#AAAAFF"/>	
+
+	</mx:HBox>
+	<mx:HBox>
+		<components:DeriveSpecimenLabelPane backgroundColor="#E0EFFF"/>
+		<mx:Repeater id="dpRepeater" dataProvider="{derivedSpColl}">	
+			<components:DerivedSpecimenContentPane id="D" name="{dpRepeater.currentIndex.toString()}" derivedData="{dpRepeater.currentItem as SpecimenData}"/>
+		</mx:Repeater>
+	</mx:HBox>
+
+		
+<mx:ApplicationControlBar horizontalAlign="right">
+	
+
+	<mx:Button label="Submit" click="closePopUp(event)" />
+	<mx:Button label="Cancel" click="cancel(event)"/>
+</mx:ApplicationControlBar>
+</mx:TitleWindow>
