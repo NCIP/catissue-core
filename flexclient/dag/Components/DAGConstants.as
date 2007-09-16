@@ -13,6 +13,16 @@ package Components
 		public static  var RESULT_VIEW:String="Result";
 		
 		
+		//Error Codes 
+		public static  var SUCCESS:int=0;
+		public static  var EMPTY_DAG:int=1;
+		public static  var MULTIPLE_ROOT:int=2;
+		public static  var CYCLIC_GRAPH:int=3;
+		public static  var SQL_EXCEPTION:int=4;
+		public static  var DAO_EXCEPTION:int=5;
+		public static  var DYNAMIC_EXTENSION_EXCEPTION:int=6;
+		public static  var NO_PATHS_PRESENT:int=7;
+		
 		
 	}
 }
