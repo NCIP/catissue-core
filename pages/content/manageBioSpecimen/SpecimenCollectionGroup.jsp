@@ -64,7 +64,7 @@
 			{
 				form = (SpecimenCollectionGroupForm)obj;
 			}	
-	
+		String nodeId="";
 		String formName, pageView = operation ,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
 	   	if(!operation.equals("add") )
@@ -76,6 +76,7 @@
 				form = (SpecimenCollectionGroupForm)obj;
 		   		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf="+pageOf+"&id="+form.getId() ;
 		   		int radioButtonForParticipant1 = form.getRadioButtonForParticipant();
+				nodeId= "SpecimenCollectionGroup_"+form.getId();
 		   	}
 			
 	   	}
@@ -146,15 +147,7 @@
 		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 	%>
 		<script language="javascript">
-			var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
-			var participantId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("participantId").value;
-			<%if(request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID) != null ) {
-			String cpParticipantId = (String) request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);%>
-			participantId = <%=cpParticipantId%>;
-			<%}%>
-			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
-			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId+"&nodeId=SpecimenCollectionGroup_"+<%=idToTree%>;
-			
+			refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');	
 		</script>
 	<%}%>
 
