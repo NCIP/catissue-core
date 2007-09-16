@@ -214,70 +214,70 @@
 	]]>
 </mx:Script>
 
-	<components:MyHBox>
+	<components:MyCanvas>
 		<mx:CheckBox id="isCopy" click="onClick(event)"/>
-	</components:MyHBox>
+	</components:MyCanvas>
 	
-	<components:MyHBox>
+	<components:MyCanvas>
 	<mx:HBox>
 		<mx:RadioButtonGroup id="spParent"/>
 		<mx:RadioButton id="isSpSCGName" label="SCG"  group="{spParent}" click="changeParent()"/>
 		<mx:RadioButton id="isSpParentName" label="Specimen" group="{spParent}" click="changeParent()"/>
 	</mx:HBox>
-	</components:MyHBox>
+	</components:MyCanvas>
 
-	<components:MyHBox>
+	<components:MyCanvas>
 		<mx:TextInput id="spParentName" visible="{isSpParentName.selected}"/>
 		<mx:TextInput id="spSCGName" visible="{isSpSCGName.selected}" />
-	</components:MyHBox>
+	</components:MyCanvas>
 
 	
-	<components:MyHBox>
+	<components:MyCanvas>
 		<mx:TextInput id="spLabel"/>
-	</components:MyHBox>
+	</components:MyCanvas>
 	
-	<components:MyHBox>
+	<components:MyCanvas>
 		<mx:TextInput id="spBarCode"/>
-	</components:MyHBox>
+	</components:MyCanvas>
 	
-	<components:MyHBox>
+	<components:MyCanvas>
 		<adobe:AutoComplete id="spClass" dataProvider="{MetadataModel.getInstance().specimenClassPVList}" change="switchSpType(event)"/>
-	</components:MyHBox>
+	</components:MyCanvas>
 	
-	<components:MyHBox>
+	<components:MyCanvas>
 		<adobe:AutoComplete id="spType" dataProvider="{spData.specimenTypePVList}" lookAhead="true"/>
-	</components:MyHBox>
+	</components:MyCanvas>
 		
-	<components:MyHBox>	
+	<components:MyCanvas>	
 		<adobe:AutoComplete id="spTissueSite" dataProvider="{MetadataModel.getInstance().tissueSitePVList}" lookAhead="true"/>
-	</components:MyHBox>
+	</components:MyCanvas>
 	
-	<components:MyHBox>
+	<components:MyCanvas>
 		<adobe:AutoComplete id="spTissueSide" dataProvider="{MetadataModel.getInstance().tissueSidePVList}" lookAhead="true"/>
-	</components:MyHBox>
+	</components:MyCanvas>
 	
-	<components:MyHBox>
+	<components:MyCanvas>
 		<adobe:AutoComplete id="spPathologicalStatus" dataProvider="{MetadataModel.getInstance().pathologicalStatusPVList}" lookAhead="true"/>
-	</components:MyHBox>
+	</components:MyCanvas>
 	
-	<components:MyHBox>
+	<components:MyCanvas>
 		<mx:DateField id="spCreatedOn" formatString="{Constants.DATE_FORMAT}" keyDown="spCreatedOn.open()"/>
-	</components:MyHBox>
+	</components:MyCanvas>
 	
-	<components:MyHBox>
+	<components:MyCanvas>
 	<mx:HBox>
 		<mx:TextInput id="spQuantity" width="50" restrict="[0-9]."/>
 		<mx:Label text="{spData.unit}"/>
 	</mx:HBox>
-	</components:MyHBox>
+	</components:MyCanvas>
 	
-	<components:MyHBox>
+	<components:MyCanvas>
 		<mx:HBox>
 			
 			<mx:TextInput id="spConcentration" width="50" restrict="[0-9]."/>
 			<mx:Label htmlText="{Constants.UNIT_CONCENTRATION}"/>
 		</mx:HBox>
-	</components:MyHBox>
+	</components:MyCanvas>
 	
 	<mx:Accordion id="specimenAccordion" resizeToContent="true" backgroundColor="#E2EFFF" headerHeight="25">
 		<mx:VBox label="Comment">

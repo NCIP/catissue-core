@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*"  xmlns:components="components.*">
 
-	<components:MyHBox>	
+	<mx:HBox>	
 		<mx:Label text="" fontWeight="bold"/>	
-	</components:MyHBox>	
-	<components:MyHBox>	
+	</mx:HBox>	
+	<mx:HBox>	
 		<mx:Label text="* Label" fontWeight="bold"/>	
-	</components:MyHBox>		
-	<components:MyHBox>	
+	</mx:HBox>	
+	<mx:HBox>	
 		<mx:Label text="* Class" fontWeight="bold"/>	
-	</components:MyHBox>		
+	</mx:HBox>	
 	
-	<components:MyHBox>	
+	<mx:HBox>	
 		<mx:Label text="* Type" fontWeight="bold"/>	
-	</components:MyHBox>		
+	</mx:HBox>	
 	
-	<components:MyHBox>	
+	<mx:HBox>	
 		<mx:Label text="Created on" fontWeight="bold"/>	
-	</components:MyHBox>		
+	</mx:HBox>	
 	
-	<components:MyHBox>	
+	<mx:HBox>	
 		<mx:Label text="Concentration" fontWeight="bold"/>	
-	</components:MyHBox>		
+	</mx:HBox>	
 
-	<components:MyHBox>	
+	<mx:HBox>	
 		<mx:Label text="Quantity" fontWeight="bold"/>	
-	</components:MyHBox>		
+	</mx:HBox>	
 		
-	<components:MyHBox>	
+	<mx:HBox>	
 		<mx:Label text="Barcode" fontWeight="bold"/>	
-	</components:MyHBox>		
+	</mx:HBox>	
 	
-	<components:MyHBox>	
+	<mx:HBox>	
 		<mx:Label text="Comment" fontWeight="bold"/>	
-	</components:MyHBox>		
+	</mx:HBox>	
 </mx:VBox>
