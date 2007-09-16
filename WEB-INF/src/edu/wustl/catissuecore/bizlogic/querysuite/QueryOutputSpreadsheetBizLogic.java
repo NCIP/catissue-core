@@ -114,14 +114,15 @@ public class QueryOutputSpreadsheetBizLogic
 		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
 		if(selectedColumnMetaData == null)
 			this.selectedColumnMetaData = defineGridViewBizLogic.getColumnsMetadataForSelectedNode(parentNode);
-		if (parentNode.getChildren().isEmpty())
+		spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
+		/*if (parentNode.getChildren().isEmpty())
 		{
 			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
 		}
 		else
 		{
 			spreadSheetDatamap = updateSpreadsheet(treeNo,parentNode, rootOutputTreeNodeList, sessionData,parentData,recordsPerPage);
-		}
+		}*/
 		spreadSheetDatamap.put(Constants.CURRENT_SELECTED_OBJECT,parentNode);
 		return spreadSheetDatamap;
 	}
