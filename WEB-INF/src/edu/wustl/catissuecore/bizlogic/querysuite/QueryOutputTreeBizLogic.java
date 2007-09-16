@@ -84,7 +84,7 @@ public class QueryOutputTreeBizLogic
 			QueryTreeNodeData treeNode = new QueryTreeNodeData();
 			String name = root.getOutputEntity().getDynamicExtensionsEntity().getName();
 			name = Utility.parseClassName(name);
-			String displayName = QueryModuleUtil.getDisplayLabel(name) + " (" + dataList.size() + ")";
+			String displayName = Utility.getDisplayLabel(name) + " (" + dataList.size() + ")";
 			String nodeId = createNodeId(treeNo, root);
 			displayName = Constants.TREE_NODE_FONT+displayName+Constants.TREE_NODE_FONT_CLOSE;
 			treeNode.setIdentifier(nodeId);
@@ -193,7 +193,7 @@ public class QueryOutputTreeBizLogic
 				String parId = id.substring(id.lastIndexOf(Constants.NODE_SEPARATOR) + 2, id.length());
 				String childNodeId = childNode.getUniqueNodeId() + Constants.UNDERSCORE + Constants.LABEL_TREE_NODE;
 				String nodeId = parId + Constants.NODE_SEPARATOR + childNodeId;
-				String displayName = QueryModuleUtil.getDisplayLabel(name) + " (" + size + ")";
+				String displayName = Utility.getDisplayLabel(name) + " (" + size + ")";
 				displayName = Constants.TREE_NODE_FONT + displayName + Constants.TREE_NODE_FONT_CLOSE;
 				String objectName = name;
 				String fullName = node.getOutputEntity().getDynamicExtensionsEntity().getName();

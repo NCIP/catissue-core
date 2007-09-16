@@ -2,7 +2,6 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,7 +28,6 @@ import edu.wustl.cab2b.common.exception.CheckedException;
 import edu.wustl.cab2b.common.util.AttributeInterfaceComparator;
 import edu.wustl.cab2b.common.util.PermissibleValueComparator;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.util.ParseXMLFile;
@@ -123,7 +121,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				AttributeInterface attribute = (AttributeInterface) attributes.get(i);
 				String attrName = attribute.getName();
-				String attrLabel = QueryModuleUtil.getDisplayLabel(attrName);
+				String attrLabel = Utility.getDisplayLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;
 				if(isBGColor)
