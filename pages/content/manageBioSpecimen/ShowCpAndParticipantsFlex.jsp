@@ -25,9 +25,9 @@
     var jsReady = false;
 	function callFlexMethod()
 	{
-       if(navigator.appName.indexOf("microsoft")!=-1)
+       if(navigator.appName.indexOf("Microsoft")!=-1)
 		{
-			interfaceObj = window["Layout"];
+			interfaceObj = window.document.getElementById("Layout");
 		}
 		else
 		{
@@ -143,16 +143,20 @@
 
    <html:errors/>
    
- <object>
-           <embed src="flexclient/biospecimen/Layout.swf" quality="high" bgcolor="#ffffff"
-				width="100%" height="100%" name="Layout" align="middle"
-				play="true"
-				loop="false"
-				quality="high"
-				allowScriptAccess="sameDomain"
-				type="application/x-shockwave-flash"
-				pluginspage="http://www.adobe.com/go/getflashplayer">
-			</embed>
+ <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="Layout" width="100%" height="100%">
+		<param name=movie value="flexclient/biospecimen/Layout.swf"> 
+		<param name=quality value=high>
+		<param name="swliveconnect" value="true">
+				 
+		<embed src="flexclient/biospecimen/Layout.swf" quality="high" bgcolor="#ffffff"
+			width="100%" height="100%" id="Layout" name="Layout" align="middle"
+			play="true"
+			loop="false"
+			quality="high"
+			allowScriptAccess="sameDomain"
+			type="application/x-shockwave-flash"
+			pluginspage="http://www.adobe.com/go/getflashplayer">
+		</embed>
    
    </object>
    <!-- <input type="hidden" name="participantId" id="participantId"/>
