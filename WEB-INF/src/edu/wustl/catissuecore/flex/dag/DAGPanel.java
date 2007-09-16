@@ -189,16 +189,13 @@ public class DAGPanel {
 	 * @param destNode
 	 * @param paths
 	 */
-	public void linkNode(final DAGNode sourceNode, final DAGNode destNode,List<IPath> paths) {
-		try {
-
-			//	        if (paths == null || paths.isEmpty()) {
-//			JOptionPane.showMessageDialog(MainDagPanel.this,
-//			"No path available/selected between source and destination categories",
-//			"Connect Nodes warning", JOptionPane.WARNING_MESSAGE);
-//			return;
-//			}
-
+	public int linkNode(final DAGNode sourceNode, final DAGNode destNode,List<IPath> paths) {
+		int status=0;
+		if (paths == null || paths.isEmpty()) {
+			status = DAGConstant.NO_PATHS_PRESENT;
+		}
+		else
+		{
 			IExpressionId sourceExpressionId = new ExpressionId(sourceNode.getExpressionId());
 			IExpressionId destExpressionId = new ExpressionId(destNode.getExpressionId());
 			if (!m_queryObject.isPathCreatesCyclicGraph(sourceExpressionId, destExpressionId,
@@ -206,15 +203,14 @@ public class DAGPanel {
 				for (int i = 0; i < paths.size(); i++) {
 					LinkTwoNode(sourceNode, destNode, paths.get(i), new ArrayList<IExpressionId>());
 				}
+				status=DAGConstant.SUCCESS;
 			}
-//			else {
-//			JOptionPane.showMessageDialog(MainDagPanel.this,
-//			"Cannot connect selected nodes as it creates cycle in the query graph",
-//			"Connect Nodes warning", JOptionPane.WARNING_MESSAGE);
-//			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}	        
+			else {
+				status=DAGConstant.CYCLIC_GRAPH;
+			}
+
+		}
+		return status;
 	}
 	/**
 	 * Gets list of paths between two nodes
@@ -390,9 +386,9 @@ public class DAGPanel {
 	 * Generates sql query
 	 * @return
 	 */
-	public String search()
+	public int search()
 	{
-		String message=null;
+		int status=0;
 		try {
 			int recordsPerPage; 
 			String recordsPerPageSessionValue = (String)m_session.getAttribute(Constants.RESULTS_PER_PAGE);
@@ -406,22 +402,25 @@ public class DAGPanel {
 
 			boolean isRulePresentInDag = false;
 			IQuery query = m_queryObject.getQuery();
-			SqlGenerator sql = new SqlGenerator();
-			try {
-				System.out.println("Query: [ " + sql.generateSQL(query)+" ]");
-			} catch (SqlException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			IConstraints constraints = query.getConstraints();
-			Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
-			while(expressionIds.hasMoreElements())
+			if(query!=null)
 			{
-				IExpressionId id = expressionIds.nextElement();
-				if(((Expression)constraints.getExpression(id)).containsRule())
+				SqlGenerator sql = new SqlGenerator();
+				try {
+					System.out.println("Query: [ " + sql.generateSQL(query)+" ]");
+				} catch (SqlException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				IConstraints constraints = query.getConstraints();
+				Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
+				while(expressionIds.hasMoreElements())
 				{
-					isRulePresentInDag = true;
-					break;
+					IExpressionId id = expressionIds.nextElement();
+					if(((Expression)constraints.getExpression(id)).containsRule())
+					{
+						isRulePresentInDag = true;
+						break;
+					}
 				}
 			}
 			if(isRulePresentInDag)
@@ -436,7 +435,6 @@ public class DAGPanel {
 				if (obj != null)
 				{
 					SessionDataBean sessionData = (SessionDataBean) obj;
-
 					outputTreeBizLogic.createOutputTreeTable(selectSql, sessionData);
 					//Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap = sqlGenerator.getOutputTreeMap();
 					List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator.getRootOutputTreeNodeList();
@@ -466,31 +464,34 @@ public class DAGPanel {
 					
 					m_session.setAttribute(Constants.SPREADSHEET_DATA_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST));
 					m_session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
-					message ="SUCCESS";
+					status =DAGConstant.SUCCESS;
 				}
 				else
 				{
-					message = AppletConstants.EMPTY_DAG_ERROR_MESSAGE;
+					status=DAGConstant.EMPTY_DAG;
 				}
 
 			}
-		} catch (MultipleRootsException e)
+		}
+		catch (MultipleRootsException e)
 		{
-			e.printStackTrace();
+			status = DAGConstant.MULTIPLE_ROOT;
+			//e.printStackTrace();
 		}
 		catch (SqlException e)
 		{
-			e.printStackTrace();
+			status = DAGConstant.SQL_EXCEPTION;
 		} 
 		catch (ClassNotFoundException e)
 		{
-			e.printStackTrace();
+			status =DAGConstant.EMPTY_DAG;
+			//e.printStackTrace();
 		}
 		catch (DAOException e)
 		{
-			e.printStackTrace();
+			status = DAGConstant.DAO_EXCEPTION;
 		}				
-		return message;
+		return status;
 	}
 	/**
 	 * Repaints DAG
@@ -535,11 +536,8 @@ public class DAGPanel {
 			IJoinGraph graph = constraints.getJoinGraph();
 			List childList = graph.getChildrenList(expressionId);
 			
-			//for(int i=0;i<childList.size();i++)
-			{
-				nodeform(expressionId,dagNode,constraints,new ArrayList<IIntraModelAssociation>());
-			}
-
+			nodeform(expressionId,dagNode,constraints,new ArrayList<IIntraModelAssociation>());
+			
 			int numOperands = exp.numberOfOperands();
 			int numOperator = numOperands-1;
 			for(int i=0;i<numOperator;i++)
@@ -568,7 +566,7 @@ public class DAGPanel {
 		
 		for(int i=0;i<childList.size();i++)
 		{
-			String nodeDisplayName = "";
+			
 			IExpressionId newExpId = (IExpressionId)childList.get(i);
 			IExpression exp = constraints.getExpression(newExpId);
 			IQueryEntity constraintEntity = exp.getQueryEntity();
@@ -583,10 +581,7 @@ public class DAGPanel {
 				IPath pathObj = (IPath)m_pathFinder.getPathForAssociations(intraModelAssociationList);
 				long pathId =pathObj.getPathId();
 				System.out.println("path id  ----"+pathId);
-			 	
-				nodeDisplayName =edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity());
-				//path = path + "--->"+nodeDisplayName;
-
+			
 				DAGNode dagNode = new DAGNode();
 				dagNode.setExpressionId(exp.getExpressionId().getInt());
 				dagNode.setNodeName(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()));
@@ -613,12 +608,7 @@ public class DAGPanel {
 			}
 			else
 			{
-				nodeDisplayName =edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity());
-				//path = path + "--->"+nodeDisplayName;	
 				nodeform(newExpId,node,constraints,intraModelAssociationList);
-				System.out.println("-----> "+newExpId.getInt());
-				//intraModelAssociationList = new ArrayList<IIntraModelAssociation>();
-				
 			}
 		}
 	}
