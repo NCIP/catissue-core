@@ -384,7 +384,7 @@ public class FlexInterface
 		return dagPanel.repaintDAG();
 	}
 	
-	public String getSearchResult()
+	public int getSearchResult()
 	{
 		return dagPanel.search();
 	}
@@ -522,7 +522,8 @@ public class FlexInterface
 	public List<DAGPath> linkNodes(List<DAGNode>linkedNodeList,List<DAGPath> selectedPaths)
 	{
 		List<DAGPath> dagPathList = new ArrayList<DAGPath>();
-		try {
+		//try
+		{
 			DAGNode sourceNode = linkedNodeList.get(0);
 			DAGNode destinationNode = linkedNodeList.get(1);
 			List<IPath> pathsList=getPathList(linkedNodeList);
@@ -549,10 +550,11 @@ public class FlexInterface
 				}
 			}
 			dagPanel.linkNode(sourceNode,destinationNode,selectedList);
-		} catch (RuntimeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+//		catch (RuntimeException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		return dagPathList;
 	}
 	/**
