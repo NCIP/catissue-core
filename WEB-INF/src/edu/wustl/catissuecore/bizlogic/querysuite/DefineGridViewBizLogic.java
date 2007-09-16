@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +11,11 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.querysuite.queryobject.IOutputEntity;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.Utility;
 /**
@@ -31,7 +30,7 @@ public class DefineGridViewBizLogic
 	 * This list denotes the seleted columns in a session.
 	 */
 	List<NameValueBean> prevSelectedColumnNameValueBeanList;
-	
+
 	/**
 	 * returns class name when passed a OutputTreeDataNode
 	 * @param node OutputTreeDataNode
@@ -110,13 +109,13 @@ public class DefineGridViewBizLogic
 	{
 		long selectedObjectId = currentSelectedObject.getId();
 		long id = node.getId();
+		String uniqueNodeId = node.getUniqueNodeId();
 		IOutputEntity outputEntity = node.getOutputEntity();
 		EntityInterface dynamicExtensionsEntity = outputEntity.getDynamicExtensionsEntity();
-		String entityId = dynamicExtensionsEntity.getId().toString();
 		String className = dynamicExtensionsEntity.getName();
 		className = Utility.parseClassName(className);
-		String classDisplayName = QueryModuleUtil.getDisplayLabel(className);
-		String treeClassNodeId = Constants.CLASS + "_" + entityId+"_"+className;
+		String classDisplayName = Utility.getDisplayLabel(className);
+		String treeClassNodeId = Constants.CLASS + "_" + uniqueNodeId+"_"+className;
 		QueryTreeNodeData classTreeNode = new QueryTreeNodeData();
 		classTreeNode.setIdentifier(treeClassNodeId);
 		classTreeNode.setObjectName(className);
@@ -131,7 +130,7 @@ public class DefineGridViewBizLogic
 			if(prevSelectedColumnNameValueBeanList == null)
 				categorySearchForm.setCurrentSelectedNodeInTree(treeClassNodeId);	
 		}
-		addAttributeNodes(treeDataVector, dynamicExtensionsEntity, className, treeClassNodeId,categorySearchForm,node,isSelectedObject);
+		addAttributeNodes(treeDataVector, className, treeClassNodeId,categorySearchForm,node,isSelectedObject);
 	}
 	/**
 	 * Adds attribute nodes to tree.
@@ -143,20 +142,18 @@ public class DefineGridViewBizLogic
 	 * @param node  OutputTreeDataNode to be added
 	 * @param isSelectedObject whether the object is selected
 	 */
-	private void addAttributeNodes(Vector<QueryTreeNodeData> treeDataVector,
-			EntityInterface dynamicExtensionsEntity, String className, String treeClassNodeId, 
+	private void addAttributeNodes(Vector<QueryTreeNodeData> treeDataVector, String className, String treeClassNodeId, 
 			CategorySearchForm categorySearchForm, OutputTreeDataNode node, boolean isSelectedObject)
 	{
-		Collection<AttributeInterface> attributeCollection = dynamicExtensionsEntity.getAttributeCollection();
-		String uniqueNodeId = node.getUniqueNodeId();
+		List<QueryOutputTreeAttributeMetadata> attributeMetadataList = node.getAttributes();
 		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
-		for(AttributeInterface attribute : attributeCollection)
+		for(QueryOutputTreeAttributeMetadata attributeMetadata : attributeMetadataList)
 		{
-			Long attributeId = attribute.getId();
+			AttributeInterface attribute = attributeMetadata.getAttribute();
 			String attributeName = attribute.getName();
-			String attributeDisplayName = QueryModuleUtil.getDisplayLabel(attributeName);
-			String attributeWithClassName = className + " : " + attributeName;
-			String treeAttributeNodeId = uniqueNodeId + "##"+attributeId + "_" + attributeWithClassName;
+			String attributeDisplayName = Utility.getDisplayLabel(attributeName);
+			String attributeWithClassName = attributeMetadata.getDisplayName();
+			String treeAttributeNodeId = attributeMetadata.getUniqueId();
 			QueryTreeNodeData attributeTreeNode = new QueryTreeNodeData();
 			attributeTreeNode.setIdentifier(treeAttributeNodeId);
 			attributeTreeNode.setObjectName(attributeName);
@@ -164,69 +161,81 @@ public class DefineGridViewBizLogic
 			attributeTreeNode.setParentIdentifier(treeClassNodeId);
 			attributeTreeNode.setParentObjectName(className);
 			treeDataVector.add(attributeTreeNode);
-			if(prevSelectedColumnNameValueBeanList != null)
-			{
-				categorySearchForm.setSelectedColumnNameValueBeanList(prevSelectedColumnNameValueBeanList);
-			} 
-			else if(isSelectedObject)
-			{
-				NameValueBean nameValueBean = new NameValueBean();
-				nameValueBean.setName(attributeWithClassName);
-				nameValueBean.setValue(treeAttributeNodeId);
-				selectedColumnNameValue.add(nameValueBean);
-				categorySearchForm.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
-			}
+			NameValueBean nameValueBean = new NameValueBean();
+			nameValueBean.setName(attributeWithClassName);
+			nameValueBean.setValue(treeAttributeNodeId);
+			selectedColumnNameValue.add(nameValueBean);
 		}
+		if(prevSelectedColumnNameValueBeanList != null)
+		{
+			categorySearchForm.setSelectedColumnNameValueBeanList(prevSelectedColumnNameValueBeanList);
+		} 
+		else if(isSelectedObject)
+		{
+			categorySearchForm.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
+		}
+		System.out.println();
 	}
+	
 	/**
 	 * returns list of seletced columns
 	 * @param categorySearchForm form
 	 * @param uniqueIdNodesMap map of id and Node
-	 * @param selectedColumnNames buffer to store selected columns
-	 * @param selectedColumnMetaData metadata map to store attribute details
-	 * @return List<String> selected columns list
+	 * @return SelectedColumnsMetadata SelectedColumnsMetadata
 	 */
-	public List<String> getSelectedColumns(CategorySearchForm categorySearchForm, Map<Long, OutputTreeDataNode> uniqueIdNodesMap, StringBuffer selectedColumnNames, Map<String, String> selectedColumnMetaData)
+	public SelectedColumnsMetadata getSelectedColumnsMetadata(CategorySearchForm categorySearchForm, Map<Long, OutputTreeDataNode> uniqueIdNodesMap)
 	{
-		List<String> definedColumnsList = new ArrayList<String>();
-		String[] selectedAttributeNames = categorySearchForm.getSelectedColumnNames();
-		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
-		for (int i = 0; i < selectedAttributeNames.length; i++)
+		String[] selectedColumnIds = categorySearchForm.getSelectedColumnNames();
+		SelectedColumnsMetadata selectedColumnsMetadata = new SelectedColumnsMetadata();
+		List<QueryOutputTreeAttributeMetadata> attribureMetadataList = new ArrayList<QueryOutputTreeAttributeMetadata>(); 
+		for (int i = 0; i < selectedColumnIds.length; i++)
 		{
-			String column = selectedAttributeNames[i];
-			String[] split = column.split("##");
+			String columnId = selectedColumnIds[i];
+			String[] split = columnId.split(":");
 			String uniqueNodeId = split[0];
 			OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(uniqueNodeId);
 			if(outputTreeDataNode != null)
 			{
-				String className = getClassName(outputTreeDataNode);
 				List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode.getAttributes();
 				for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 				{
-					AttributeInterface attribute = attributeMetaData.getAttribute();
-					String attributeWithClassName = className + " : " + attribute.getName();
-					String treeAttributeNodeId = uniqueNodeId + "##"+attribute.getId() + "_" + attributeWithClassName;
-					if(treeAttributeNodeId.equalsIgnoreCase(column))
+					if(attributeMetaData.getUniqueId().equalsIgnoreCase(columnId))
 					{
-						String tableColumnName = attributeMetaData.getColumnName();
-						selectedColumnNames.append(tableColumnName);
-						selectedColumnNames.append(", ");
-						String columnIdName = split[1];
-						String columnDisplayName = columnIdName.substring(columnIdName.indexOf("_")+1);
-						definedColumnsList.add(columnDisplayName);
-						selectedColumnMetaData.put(tableColumnName, columnDisplayName);
-						NameValueBean nameValueBean = new NameValueBean();
-						nameValueBean.setName(attributeWithClassName);
-						nameValueBean.setValue(treeAttributeNodeId);
-						selectedColumnNameValue.add(nameValueBean);
-						categorySearchForm.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
+						attribureMetadataList.add(attributeMetaData);
 						break;
 					}
 				}
 			}
 		}
+		selectedColumnsMetadata.setSelectedAttributeMetaDataList(attribureMetadataList);
+		return selectedColumnsMetadata;
+	}
+	/**
+	 * 
+	 * @param categorySearchForm
+	 * @param selectedColumnsMetadata
+	 * @param selectedColumnNames
+	 * @return
+	 */
+	public List<String> getSelectedColumnList(CategorySearchForm categorySearchForm,SelectedColumnsMetadata selectedColumnsMetadata,StringBuffer selectedColumnNames)
+	{
+		List<String> definedColumnsList = new ArrayList<String>();
+		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
+		List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnsMetadata.getSelectedAttributeMetaDataList();
+		Iterator<QueryOutputTreeAttributeMetadata> iterator = selectedAttributeMetaDataList.iterator();
+		while (iterator.hasNext())
+		{
+			QueryOutputTreeAttributeMetadata element = (QueryOutputTreeAttributeMetadata) iterator.next();
+			selectedColumnNames.append(element.getColumnName());
+			selectedColumnNames.append(", ");
+			definedColumnsList.add(element.getDisplayName());
+			NameValueBean nameValueBean = new NameValueBean(element.getDisplayName(),element.getUniqueId());
+			selectedColumnNameValue.add(nameValueBean);
+		}
+		categorySearchForm.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 		return definedColumnsList;
 	}
+	
 	/**
 	 * @param selectedColumnNames buffer to store selected columns 
 	 * @param sql formed for newly defined columns
@@ -235,16 +244,41 @@ public class DefineGridViewBizLogic
 	public String createSQLForSelectedColumn(StringBuffer selectedColumnNames, String sql)
 	{
 		String columnsInSql = selectedColumnNames.toString();
-		columnsInSql = columnsInSql.substring(0, columnsInSql.lastIndexOf(","));
-		int indexOfSelectDistict = sql.indexOf(Constants.SELECT_DISTINCT);
-		int selectDistictLength = Constants.SELECT_DISTINCT.length();
-		int indexOfFrom = sql.indexOf(Constants.FROM);
-		StringBuffer newSql = new StringBuffer();
-		newSql.append(sql.substring(indexOfSelectDistict,selectDistictLength));
-		newSql.append(" ");
-		newSql.append(columnsInSql);
-		newSql.append(sql.substring(indexOfFrom));
-		return newSql.toString();
+		if(columnsInSql.lastIndexOf(",") != -1)
+		{
+			columnsInSql = columnsInSql.substring(0, columnsInSql.lastIndexOf(","));
+			int indexOfSelectDistict = sql.indexOf(Constants.SELECT_DISTINCT);
+			int selectDistictLength = Constants.SELECT_DISTINCT.length();
+			int indexOfFrom = sql.indexOf(Constants.FROM);
+			StringBuffer newSql = new StringBuffer();
+			newSql.append(sql.substring(indexOfSelectDistict,selectDistictLength));
+			newSql.append(" ");
+			newSql.append(columnsInSql);
+			newSql.append(sql.substring(indexOfFrom));
+			return newSql.toString();
+		}
+		return null;
+	}
+	/**
+	 * returns list of seletced columns
+	 * @param categorySearchForm form
+	 * @param uniqueIdNodesMap map of id and Node
+	 * @return SelectedColumnsMetadata SelectedColumnsMetadata
+	 */
+	public SelectedColumnsMetadata getColumnsMetadataForSelectedNode(OutputTreeDataNode outputTreeDataNode)
+	{
+		SelectedColumnsMetadata selectedColumnsMetadata = new SelectedColumnsMetadata();
+		List<QueryOutputTreeAttributeMetadata> attribureMetadataList = new ArrayList<QueryOutputTreeAttributeMetadata>(); 
+		if(outputTreeDataNode != null)
+		{
+			List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode.getAttributes();
+			for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
+			{
+				attribureMetadataList.add(attributeMetaData);
+			}
+		}
+		selectedColumnsMetadata.setSelectedAttributeMetaDataList(attribureMetadataList);
+		return selectedColumnsMetadata;
 	}
 
 }
