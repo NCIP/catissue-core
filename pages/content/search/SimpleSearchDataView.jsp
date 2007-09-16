@@ -136,9 +136,11 @@ tr#hiddenCombo
 		}
 		function onRedefineDAGQuery()
 		{
+			waitCursor();
 			document.forms[0].action='SearchCategory.do?currentPage=resultsView';
 			document.forms[0].target = "_parent";
 			document.forms[0].submit();
+			hideCursor();
 		}
 		var selected;
 

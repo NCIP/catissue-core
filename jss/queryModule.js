@@ -376,6 +376,7 @@
 	}
 	function retriveSearchedEntities(url,nameOfFormToPost,currentPage) 
 	{
+		waitCursor();
 		
 		var request = newXMLHTTPReq();		
 		var textFieldValue = document.forms[0].textField.value;
@@ -438,6 +439,7 @@
 		row = row + '<tr>' + text + '</tr>';
 		row = row+'</table>';		
 		element.innerHTML =row;
+		hideCursor();
 	}
 	
 	function onResponseUpdate(text)
@@ -486,9 +488,11 @@
 		
 		element.innerHTML =row;
 		}
+		hideCursor();
 	}
 	function retriveEntityInformation(url,nameOfFormToPost,entityName) 
 	{	
+		waitCursor();
 		var request = newXMLHTTPReq();			
 		var actionURL;
 		var handlerFunction = getReadyStateHandler(request,showEntityInformation,true);	
@@ -517,10 +521,13 @@
 			element.innerHTML = "";
 			addLimitsButtonElement.innerHTML = text;
 		}
+		hideCursor();
 	}
 	
 	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
 	{
+		waitCursor();
+	
 		var strToCreateQueyObject ="";
 		var attribute = attributesList.split(";");
 		for(i=1; i<attribute.length; i++)
@@ -663,10 +670,13 @@
 			document.applets[0].editExpression(strToCreateQueyObject,entityName);
 			
 		}
+			hideCursor();
 	}
 	function viewSearchResults()
 	{
+	waitCursor();
 		var errorMessage = document.applets[0].getSearchResults();
+		hideCursor();
 		if(errorMessage == null)
 		{
 			 showViewSearchResultsJsp();
@@ -733,8 +743,11 @@
 	}
 	function defineSearchResultsView()
 	{
+					waitCursor();
 		document.forms['categorySearchForm'].action='DefineSearchResultsView.do';
 		document.forms['categorySearchForm'].submit();
+		hideCursor();
+						
 	}
 	function showAddLimitsPage()
 	{
@@ -744,10 +757,12 @@
 	}
 	function previousFromDefineResults()
 	{
+		waitCursor();
 		document.applets[0].defineResultsView();
 		document.forms['categorySearchForm'].action='SearchCategory.do';
 		document.forms['categorySearchForm'].currentPage.value = "prevToAddLimits";
 		document.forms['categorySearchForm'].submit();
+			hideCursor();
 	}
 	function setIncludeDescriptionValue()
 	{
