@@ -550,7 +550,7 @@
 			delimiter="/"
 		    delimitertype="row">
 		    <transaction  src="${oracle.sql.dir}/DBUtility.sql"/>
-			<transaction  src="${oracle.sql.dir}/DESeqChangeForDataDump.sql"/>
+			<!--transaction  src="${oracle.sql.dir}/DESeqChangeForDataDump.sql"/-->
 		  	<classpath>
 	            <fileset dir="${lib.dir}">
 	                  <include name="*.jar"/>
