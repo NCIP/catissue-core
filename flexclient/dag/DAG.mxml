@@ -6,6 +6,7 @@ xmlns:Components="Components.*" xmlns:display="flash.display.*"
 creationComplete="initApp()"  width="100%" height="100%">
 <mx:Script>
 <![CDATA[
+	
 	import mx.controls.ComboBase;
 	import Components.DAGConstants;
 	import mx.containers.HBox;
@@ -151,7 +152,6 @@ creationComplete="initApp()"  width="100%" height="100%">
 		for(var i:int=0;i<outAsslength;i++)
 		{
 			ass = Association(outAssociations.getItemAt(i));
-			//Alert.show("drag "+ass.associatedLink);
 			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
 			path = dagPathUIMap.getValue(ass.associatedLink);
 			dagPathUIMap.remove(ass.associatedLink);
@@ -345,6 +345,7 @@ creationComplete="initApp()"  width="100%" height="100%">
                 }catch(error:TypeError)
                 {
                 	Alert.show("Error:"+error.message);	
+                
                 }
 			 	
 			 }
@@ -389,14 +390,29 @@ creationComplete="initApp()"  width="100%" height="100%">
 	
 	private function searchResultHandler(event: ResultEvent):void 
 	{
-		resultStr =event.result.toString();
-		if(resultStr=="SUCCESS")
+		var status:int =event.result as int;
+
+		if(status==DAGConstants.SUCCESS)
 		{
 			ExternalInterface.call("showViewSearchResultsJsp");
-		}else
+		}
+		if(status==DAGConstants.EMPTY_DAG)
 		{
 			ExternalInterface.call("showErrorPage");
 		}
+		if(status==DAGConstants.MULTIPLE_ROOT)
+		{
+			Alert.show("Mulitiple roots present.");
+		}
+		if(status==DAGConstants.SQL_EXCEPTION)
+		{
+			Alert.show("Sql exception");
+		}
+		if(status==DAGConstants.DAO_EXCEPTION)
+		{
+			Alert.show("Database connection problem.");
+		}
+		rpcService.removeEventListener(ResultEvent.RESULT,searchResultHandler,false);
 		
 	}
 	
@@ -411,6 +427,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 	public function linkNodesHandler(event: ResultEvent):void
 	{
 		var selectedList =  event.result  as  ArrayCollection;
+
 		var path:IDAGPath =null;
 		if(selectedList!=null)
 		{
@@ -449,6 +466,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 		{
 			this.addNode();
 		}
+		rpcService.removeEventListener(ResultEvent.RESULT,getNodeResultHandler,false);
 	}
 	        
 	private function createPopUp():void {
@@ -512,28 +530,36 @@ creationComplete="initApp()"  width="100%" height="100%">
 	{
 		try
 		{
-
 		var dagpath:IDAGPath = new IDAGPath();
 		panel = new  AmbiguityPanel();
 	    panel.title="Ambiguity resolver";
 		panel.pathList= event.result as ArrayCollection;
-//		Alert.show("getPath");
-		if(panel.pathList.length>1)
+		if(panel.pathList==null || panel.pathList.length==0)
 		{
-			panel.nodeList=selectedNodeList;
-			createPopUp();
+			Alert.show("No paths present.");
 		}
 		else
 		{
-			rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
-			rpcService.addEventListener("result",linkNodesHandler);
-			rpcService.linkNodes(selectedNodeList,panel.pathList);
+			if(panel.pathList.length>1)
+			{
+				panel.nodeList=selectedNodeList;
+				createPopUp();
+			}
+			else
+			{
+				rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
+				rpcService.addEventListener("result",linkNodesHandler);
+				rpcService.linkNodes(selectedNodeList,panel.pathList);
+			}
 		}
 		}catch(error:Error)
 		{
 			Alert.show("Error"+error.getStackTrace())
 		}
-		
+		finally
+		{
+			rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
+		}
 	}
 	public function cancelHandler(nodeList:ArrayCollection):void
 	{
@@ -594,7 +620,6 @@ creationComplete="initApp()"  width="100%" height="100%">
 					panel1.addChild(c);
 					dagPathUIMap.put(path.id,path);
 					dagNode1.dagpathList.addItem(path);
-//					Alert.show("dagPathUIMap ==>"+dagPathUIMap.size());
 
 					c.addEventListener(MouseEvent.MOUSE_OVER,updateLinkSelection);
 	     			c.addEventListener(MouseEvent.MOUSE_OUT,updateLinkUnSelection);
@@ -630,13 +655,11 @@ creationComplete="initApp()"  width="100%" height="100%">
 	
 	private function updateLinkSelection(event:MouseEvent):void {
 		var link:UIComponent =panel1.getChildByName(event.currentTarget.name) as UIComponent;	
-		//Alert.show("updat"+event.currentTarget.name);
 		if(link!=null)
 		{
 			
 			if(selectedLink=="")
 			{
-//				Alert.show("Select  "+event.currentTarget.name);
 				var line:Sprite =link.getChildByName("link") as Sprite;
 				var dagPath:IDAGPath = dagPathUIMap.getValue(event.currentTarget.name);
 				var dagNode1:DAGNode = DAGNode(panel1.getChildByName(dagPath.sourceExpId+""));
@@ -669,7 +692,6 @@ creationComplete="initApp()"  width="100%" height="100%">
 		{
 			if(selectedLink==event.currentTarget.name)
 			{
-	//			Alert.show("Unselect "+selectedLink)
 				var line:Sprite =link.getChildByName("link") as Sprite;
 				var dagPath:IDAGPath = dagPathUIMap.getValue(selectedLink);
 				var dagNode1:DAGNode = DAGNode(panel1.getChildByName(dagPath.sourceExpId+""));
@@ -811,7 +833,6 @@ creationComplete="initApp()"  width="100%" height="100%">
 	
 	private function deletePath(dagNode1:DAGNode,dagNode2:DAGNode):void
 	{
-		//Alert.show("delete")
 			var ass:Association=dagNode1.getOutAssociation(node2);
 			if(ass != null)
 			{
@@ -854,10 +875,8 @@ creationComplete="initApp()"  width="100%" height="100%">
 				var dagNode2:DAGNode = DAGNode(panel1.getChildByName(node2));
 				if(view==DAGConstants.RESULT_VIEW)
 				{
-				//	Alert.show("out page")
 					if((dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)||(dagNode2.nodeType==DAGConstants.VIEW_ONLY_NODE))
 					{
-					//	Alert.show("view page")
 						deletePath(dagNode1,dagNode2);
 					}
 					else
@@ -870,7 +889,6 @@ creationComplete="initApp()"  width="100%" height="100%">
 				}
 				else
 				{
-//					Alert.show("Limit page")
 					deletePath(dagNode1,dagNode2);
 				}
 					
@@ -879,7 +897,6 @@ creationComplete="initApp()"  width="100%" height="100%">
 	}
 	public function deleteLinkHandler(event:ResultEvent):void
 	{
-	//	Alert.show("Link deleted");		
 		rpcService.removeEventListener(ResultEvent.RESULT,deleteLinkHandler,false);
 	}
 	public function editNode(node:DAGNode):void
@@ -913,15 +930,10 @@ creationComplete="initApp()"  width="100%" height="100%">
 	private var eNode:DAGNode;
 ]]>
 </mx:Script>
-
-	<mx:VBox width="100%" height="100%" backgroundColor="#f9e886">
 	<mx:Panel backgroundColor="white" id="panel1" width="100%" height="100%" layout="absolute">
 		<mx:HBox  borderStyle="none" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="190" height="39" x="0" y="0">
 			<mx:Button label="Add Link" click="drawLine()"/>
 		</mx:HBox>
 	</mx:Panel>
-	<mx:Label text="Current Expression"  fontFamily="Courier New" fontSize="11" fontWeight="bold"/>
-	</mx:VBox>	
-	
 </mx:Application>
 
