@@ -22,7 +22,7 @@
 	<script  src="dhtml_comp/jss/dhtmlXCommon.js"></script>
 	<script src="jss/script.js"></script>
 	<%
-	String callAction=Constants.CONFIGURE_GRID_VIEW_ACTION+"?pageOf="+Constants.PAGEOF_QUERY_MODULE;
+	String callAction=Constants.CONFIGURE_GRID_VIEW_ACTION;
 	CategorySearchForm form = (CategorySearchForm)request.getAttribute("categorySearchForm");
 	String currentSelectedNodeInTree = form.getCurrentSelectedNodeInTree();
 	String showSelected = "false";
@@ -31,6 +31,7 @@
 	
 
 <html:form method="GET" action="<%=callAction%>">
+<html:hidden property="operation" value=""/>
 <body onload="initTreeView()">
 <table border="0" width="400" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
 	<tr height="4px">
@@ -61,18 +62,7 @@
 		<td class="formField" valign="top" width="60" height="100%">
 <!-- Mandar : 434 : for tooltip -->
 			<html:select property="selectedColumnNames" styleClass="formFieldNoSize" size="29" multiple="true">
-			<% if(selectedColumnNameValueBeanList!=null)
-			  {
-				for(int i=0;i<selectedColumnNameValueBeanList.size();i++) {
-				NameValueBean nameValueBean = selectedColumnNameValueBeanList.get(i);
-				String name = nameValueBean.getName();
-				String value = nameValueBean.getValue();
-			%>
-				<option value="<%=value%>"><%=name%></option>  
-			<%
-				}
-			  }
-			%>  
+				<html:options collection="selectedColumnNameValueBeanList" labelProperty="name" property="value"/>
 			</html:select>
 		</td>
 		<td width="1%"> &nbsp; </td>
@@ -90,13 +80,29 @@
 <td>&nbsp;
 </td>
 </tr>
-<tr height="2%">
-<td colspan="6" align="middle" height="2%">
-		<html:button styleClass="actionButton" property="configButton" onclick = "onSubmit(this.form.selectedColumnNames);" >
-			<bean:message key="query.finish.button"/>
-		</html:button>
-</td>
-</tr>
+<tr>
+  <td colspan="6" align="middle">
+    	<table>
+			<tr height="2%">
+			<td colspan="1" align="left" height="2%">
+					<html:button styleClass="actionButton" property="configureButton" onclick = "onSubmit(this.form.selectedColumnNames,'back');" >
+							<bean:message key="query.back.button"/>
+					</html:button>
+			</td>
+			<td colspan="3" align="middle" height="2%">
+					<html:button styleClass="actionButton" property="redefineButton" onclick = "onSubmit(this.form.selectedColumnNames,'restore');" >
+						<bean:message key="query.restoreDefault.button"/>
+					</html:button>
+			</td>
+			<td colspan="2" align="middle" height="2%">
+					<html:button styleClass="actionButton" property="configButton" onclick = "onSubmit(this.form.selectedColumnNames,'finish');" >
+						<bean:message key="query.finish.button"/>
+					</html:button>
+			</td>
+			</tr>
+		</table>
+	</td>
+			</tr>
 </table>
 </body>
 </html:form>
@@ -149,10 +155,6 @@
 						var parentId = tree.getParentId(selectedOption);
 						var parentNodeText = tree.getItemText(parentId);
 						var displaySelectedColumn = parentNodeText + " : " + nodetext;
-
-						var selectedAttribute = selectedOption.split("##");
-						var attrId = selectedAttribute[1];
-						var textValue = attrId.split("_");
 						selectedText[selectedCount] = displaySelectedColumn;
 						selectedValues[selectedCount] = selectedOption;
 						//deleteOption(theSelFrom, i);
@@ -290,15 +292,7 @@
 	    self.focus();
 	    obj.options.selectedIndex++;
 	  }
-	}
-	function onClickAction(action)
-	{
-		selectOptions(document.forms[0].selectedColumnNames);
-		
-		document.forms[0].action = action;		
-		document.forms[0].submit();
-	}
-	
+	}	
     function selectOptions(element)
 	{
 		for(i=0;i<element.length;i++) 
@@ -306,7 +300,7 @@
 			element.options[i].selected=true;
 		}
 	}
-	function onSubmit(theSelTo)
+	function onSubmit(theSelTo,operation)
 	{		
 		if(theSelTo.length==0)
 		{
@@ -314,8 +308,13 @@
 		}
 		else
 		{
-			var action = "<%=callAction%>";			
-			onClickAction(action);
+			if(operation == 'finish')
+			{
+				selectOptions(document.forms[0].selectedColumnNames);
+			}
+			document.forms[0].operation.value = operation;
+			document.forms[0].action =  "ConfigureGridView.do";	
+			document.forms[0].submit();
 		}
 	}
 	
@@ -394,4 +393,4 @@ function shiftRight()
 	var list=tree.getAllChecked(); 
 	alert(list);
 }
-</script>
+</script>					
