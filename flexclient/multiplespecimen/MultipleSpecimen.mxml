@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" horizontalAlign="left" xmlns:local="*" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*" backgroundColor="white" xmlns:components1="flexclient.multiplespecimen.components.*">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" horizontalAlign="left" xmlns:local="*" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*" backgroundColor="white">
 
 <mx:Script>
 	<![CDATA[

@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*"  xmlns:components="components.*">
 
-	<components:MyCanvas>	
+	<components:MyHBox>	
 		<mx:Label text="" fontWeight="bold"/>	
-	</components:MyCanvas>	
-	<components:MyCanvas>	
+	</components:MyHBox>	
+	<components:MyHBox>	
 		<mx:Label text="* Label" fontWeight="bold"/>	
-	</components:MyCanvas>		
-	<components:MyCanvas>	
+	</components:MyHBox>		
+	<components:MyHBox>	
 		<mx:Label text="* Class" fontWeight="bold"/>	
-	</components:MyCanvas>		
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
+	<components:MyHBox>	
 		<mx:Label text="* Type" fontWeight="bold"/>	
-	</components:MyCanvas>		
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
+	<components:MyHBox>	
 		<mx:Label text="Created on" fontWeight="bold"/>	
-	</components:MyCanvas>		
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
+	<components:MyHBox>	
 		<mx:Label text="Concentration" fontWeight="bold"/>	
-	</components:MyCanvas>		
+	</components:MyHBox>		
 
-	<components:MyCanvas>	
+	<components:MyHBox>	
 		<mx:Label text="Quantity" fontWeight="bold"/>	
-	</components:MyCanvas>		
+	</components:MyHBox>		
 		
-	<components:MyCanvas>	
+	<components:MyHBox>	
 		<mx:Label text="Barcode" fontWeight="bold"/>	
-	</components:MyCanvas>		
+	</components:MyHBox>		
 	
-	<components:MyCanvas>	
+	<components:MyHBox>	
 		<mx:Label text="Comment" fontWeight="bold"/>	
-	</components:MyCanvas>		
+	</components:MyHBox>		
 </mx:VBox>

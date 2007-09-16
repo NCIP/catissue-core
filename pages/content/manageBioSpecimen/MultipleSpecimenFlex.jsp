@@ -1,10 +1,21 @@
 <!-- saved from url=(0014)about:internet -->
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+
+
+
+<%@ page import="edu.wustl.common.beans.SessionDataBean" %>
+
+
 
 <%
 	String MODE = (String)request.getAttribute("MODE");
 	String PARENT_TYPE = (String)request.getAttribute("PARENT_TYPE");
 	String PARENT_NAME = (String)request.getAttribute("PARENT_NAME");
 	String SP_COUNT = (String)request.getAttribute("SP_COUNT");
+	SessionDataBean bean = (SessionDataBean) session.getAttribute("sessionData");
+	String temp = (String) session.getAttribute("temp");
 %>
 
 <head>
@@ -26,6 +37,23 @@ var requiredMinorVersion = 0;
 var requiredRevision = 0;
 // -----------------------------------------------------------------------------
 // -->
+
+
+</script>
+<script language="JavaScript">
+function callSubmitSpecimen()
+{
+	alert("in javscript functionm");
+	alert("<%=bean.getUserName()%>");
+	alert("<%=temp%>");
+	
+	
+	alert("After session attribute display");
+	document.forms[0].submit();
+//	alert("action:"+document.forms[0].action);
+	//document.forms[0].submit();
+	
+}
 </script>
 </head>
 
@@ -111,4 +139,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	</object>
 </noscript>
 <iframe name="_history" src="flexclient/resources/history.htm" frameborder="0" scrolling="no" width="22" height="0"></iframe>
+
 </body>
+<html:form action="GenericSpecimenSummary.do">
+</html:form>
