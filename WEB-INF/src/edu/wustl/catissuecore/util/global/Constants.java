@@ -197,6 +197,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SELECTED_COLUMN_META_DATA = "selectedColumnMetaData";
 	public static final String CURRENT_SELECTED_OBJECT = "currentSelectedObject";
 	public static final String SELECTED_COLUMN_NAME_VALUE_BEAN_LIST = "selectedColumnNameValueBeanList";
+	public static final String OPERATION = "operation";
+	public static final String FINISH = "finish";
+	public static final String BACK = "back";
+	public static final String RESTORE = "restore";
 	// Query Module Interface UI constants---ends here
 	//	 Frame names in Query Module Results page.
 	public static final String GRID_DATA_VIEW_FRAME = "gridFrame";
