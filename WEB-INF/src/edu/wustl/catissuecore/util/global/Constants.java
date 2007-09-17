@@ -154,7 +154,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DYNAMIC_UI_XML = "dynamicUI.xml";
 	public static final String TREE_DATA = "treeData";
 	public static final String ZERO_ID	= "0";
-	public static final String TEMP_OUPUT_TREE_TABLE_NAME = "temp_OutputTree";
+	public static final String TEMP_OUPUT_TREE_TABLE_NAME = "TEMP_OUTPUTTREE";
 	public static final String CREATE_TABLE = "Create table "; 
 	public static final String AS = "as";
 	public static final String UNDERSCORE = "_";
