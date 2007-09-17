@@ -152,6 +152,9 @@ creationComplete="initApp()"  width="100%" height="100%">
 		for(var i:int=0;i<outAsslength;i++)
 		{
 			ass = Association(outAssociations.getItemAt(i));
+//			Alert.show("src dagnode" + dagNode.name);//src
+//			Alert.show("dest dagnode" + ass.associatedNode);
+//			var key:String=ass.associatedLink+"_"+dagNode.name+"_"+ass.associatedNode;
 			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
 			path = dagPathUIMap.getValue(ass.associatedLink);
 			dagPathUIMap.remove(ass.associatedLink);
@@ -184,7 +187,9 @@ creationComplete="initApp()"  width="100%" height="100%">
 		for(var k:int=0;k<inAsslength;k++)
 		{
 			ass = Association(inAssociations.getItemAt(k));
-			
+			//Alert.show("dest dagnode" + dagNode.name);
+			//Alert.show("src dagnode" + ass.associatedNode);//src
+		//	var key:String=ass.associatedLink+"_"+ass.associatedNode+"_"+dagNode.name;
 			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
 			path = dagPathUIMap.getValue(ass.associatedLink);
 			dagPathUIMap.remove(ass.associatedLink);
@@ -376,15 +381,11 @@ creationComplete="initApp()"  width="100%" height="100%">
 	{
 //		Alert.show("path size" +dagPathUIMap.size());
 //		Alert.show("node size ="+totalNodeMap.size());
-		if((dagPathUIMap.size())>=(totalNodeMap.size()-1))
-		{
+		
 			rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
 			rpcService.addEventListener(ResultEvent.RESULT,searchResultHandler);
 			rpcService.getSearchResult();
-		}else
-		{
-			Alert.show("Nodes not connected");
-		}
+		
 		
 	}
 	
@@ -426,7 +427,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 	
 	public function linkNodesHandler(event: ResultEvent):void
 	{
-		var selectedList =  event.result  as  ArrayCollection;
+		var selectedList:ArrayCollection =  event.result  as  ArrayCollection;
 
 		var path:IDAGPath =null;
 		if(selectedList!=null)
@@ -499,6 +500,19 @@ creationComplete="initApp()"  width="100%" height="100%">
 		newNode.addEventListener(MouseEvent.MOUSE_MOVE,doDrag);
 		newNode.addEventListener(MouseEvent.CLICK,updateNodeSelection);
 		newNode.dagpathList = new ArrayCollection();
+		
+		if(panel1.getChildren().length==1)
+		{
+			newNode.x = 10;
+			newNode.y = (panel1.y+50);
+		}
+		else
+		{ 
+			var length:int=panel1.getChildren().length;
+			newNode.x = (40*length);
+			newNode.y = (panel1.y+50);
+		}
+	
 		panel1.addChild(newNode);
 		totalNodeMap.put(newNode.name,newNode);
 
@@ -615,10 +629,10 @@ creationComplete="initApp()"  width="100%" height="100%">
 				if(path!=null)			
 				{
 					c.toolTip=path.name;
-					c.name = path.id;
+					c.name = path.id+"_"+path.sourceExpId+"_"+path.destinationExpId;
 					c.addChild(line);
 					panel1.addChild(c);
-					dagPathUIMap.put(path.id,path);
+					dagPathUIMap.put(c.name,path);
 					dagNode1.dagpathList.addItem(path);
 
 					c.addEventListener(MouseEvent.MOUSE_OVER,updateLinkSelection);
@@ -685,7 +699,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 					
 	}
 	
-	private function updateLinkUnSelection(event:MouseEvent)
+	private function updateLinkUnSelection(event:MouseEvent):void
 	{
 		var link:UIComponent =panel1.getChildByName(event.currentTarget.name) as UIComponent;	
 		if(link!=null)
@@ -836,7 +850,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 			var ass:Association=dagNode1.getOutAssociation(node2);
 			if(ass != null)
 			{
-				panel1.removeChild(panel1.getChildByName(ass.associatedLink));
+				
 				if(dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)
 				{
 					dagNode1.removeOutAssociation(node2,ass.associatedLink);
@@ -854,6 +868,7 @@ creationComplete="initApp()"  width="100%" height="100%">
 				nodeList.addItemAt(dagNode1,0);
 				nodeList.addItemAt(dagNode2,1);
 				rpcService.deleteLink(nodeList,ass.associatedLink)
+				panel1.removeChild(panel1.getChildByName(ass.associatedLink));
 				dagPathUIMap.remove(selectedLink);
 				selectedLink="";
 			}
@@ -897,6 +912,11 @@ creationComplete="initApp()"  width="100%" height="100%">
 	}
 	public function deleteLinkHandler(event:ResultEvent):void
 	{
+		var status:int =event.result as int;
+		if(status==DAGConstants.NO_PATHS_PRESENT)
+		{
+			Alert.show("Link cannot be deleted");
+		}
 		rpcService.removeEventListener(ResultEvent.RESULT,deleteLinkHandler,false);
 	}
 	public function editNode(node:DAGNode):void
