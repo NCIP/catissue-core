@@ -849,6 +849,7 @@ function onRadioButtonGroupClick(element)
     	//This function gets called whenever a specimen/ scg gets added in system.
     	function refreshTree(cpAndParticipantsFrame, treeFrame,cpSearchCpId,cpSearchParticipantId,nodeId)
     	{
+    		//alert("In refresh tree method & node id is:"+nodeId);
     		//var cpId = window.parent.frames[cpAndParticipantsFrame].document.getElementById("cpId").value;
 			//var participantId = window.parent.frames[cpAndParticipantsFrame].document.getElementById("participantId").value;
 			//window.parent.frames[treeFrame].location="showTree.do?"+cpSearchCpId+"="+cpId+"&"+cpSearchParticipantId+"="+participantId+"&nodeId="+nodeId;
