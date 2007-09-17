@@ -562,10 +562,13 @@ public class FlexInterface
 	 * @param linkedNodeList
 	 * @param linkName
 	 */
-	public void deleteLink(List<DAGNode> linkedNodeList,String linkName)
+	public int deleteLink(List<DAGNode> linkedNodeList,String linkName)
 	{
+		int status =0;
 		List<IPath> pathsList=getPathList(linkedNodeList);
 		System.out.println("linkName=="+linkName);
+		linkName = linkName.substring(0,linkName.indexOf("_"));
+		System.out.println("=="+linkName);
 		for(int i=0; i<pathsList.size();i++)
 		{
 			Path path =(Path) pathsList.get(i);
@@ -574,9 +577,16 @@ public class FlexInterface
 			if(pathId.equals(linkName))
 			{
 				dagPanel.deletePath(path,linkedNodeList);
+				status =DAGConstant.SUCCESS;
 				break;
 			}
+			else
+			{
+				status =DAGConstant.NO_PATHS_PRESENT;
+			}
+			
 		}
+		return status;
 	}
 	/**
 	 * Sets logical operator set from UI
