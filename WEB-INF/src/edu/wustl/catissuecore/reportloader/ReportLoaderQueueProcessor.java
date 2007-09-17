@@ -41,50 +41,55 @@ public class ReportLoaderQueueProcessor extends Thread
 		{
 			try 
 			{
-				while((reportLoaderQueue=getQueueObject())!=null)
-				{	
-					Logger.out.info("Processing report loader queue id:"+reportLoaderQueue.getId());
-					try
-					{
-						Logger.out.debug("Processing report from Queue with serial no="+reportLoaderQueue.getId());
-						participantSet=(Set)reportLoaderQueue.getParticipantCollection();
-						Iterator it = participantSet.iterator();
-						
-						// get instance  of parser
-						parser= (HL7Parser)ParserManager.getInstance().getParser();
-						
-						Participant participant=null;
-						// parse report text
-						if(it.hasNext())
+				List reportLoaderQueueList=getReportLoaderQueueIDList();
+				if(reportLoaderQueueList!=null)
+				{
+					Logger.out.info("Total objects found in ReportLoaderQueu are:"+reportLoaderQueueList.size());
+					SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
+					for(int i=0;i<reportLoaderQueueList.size();i++)
+					{	
+						reportLoaderQueue=(ReportLoaderQueue)CaCoreAPIService.getObject(new ReportLoaderQueue(), Constants.SYSTEM_IDENTIFIER, (Long)reportLoaderQueueList.get(i));
+						Logger.out.info("Processing report loader queue id:"+reportLoaderQueue.getId());
+						try
 						{
-							participant=(Participant)it.next();
+							Logger.out.debug("Processing report from Queue with serial no="+reportLoaderQueue.getId());
+							participantSet=(Set)reportLoaderQueue.getParticipantCollection();
+							Iterator it = participantSet.iterator();
+							
+							// get instance  of parser
+							parser= (HL7Parser)ParserManager.getInstance().getParser();
+							
+							Participant participant=null;
+							// parse report text
+							if(it.hasNext())
+							{
+								participant=(Participant)it.next();
+							}
+							String reportText=reportLoaderQueue.getReportText();
+							startTime=new Date().getTime();
+							parser.parseString(participant, reportText, reportLoaderQueue.getSpecimenCollectionGroup());
+							endTime=new Date().getTime();
+							Logger.out.info("Report loaded successfully, deleting report queue object");
+							// delete record from queue
+							CaCoreAPIService.getAppServiceInstance().removeObject(reportLoaderQueue);
+							CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ,"+(endTime-startTime));
+							Logger.out.info("Processed report from Queue with id ="+reportLoaderQueue.getId());
 						}
-						String reportText=reportLoaderQueue.getReportText();
-						startTime=new Date().getTime();
-						parser.parseString(participant, reportText, reportLoaderQueue.getSpecimenCollectionGroup());
-						endTime=new Date().getTime();
-						Logger.out.info("Report loaded successfully, deleting report queue object");
-						// delete record from queue
-						CaCoreAPIService.getAppServiceInstance().removeObject(reportLoaderQueue);
-						CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ,"+(endTime-startTime));
-						Logger.out.info("Processed report from Queue with id ="+reportLoaderQueue.getId());
-					}
-					catch(Exception ex)
-					{
-						endTime=new Date().getTime();
-						reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
-						if(ex.getMessage().equalsIgnoreCase(CaTIESConstants.CP_NOT_FOUND_ERROR_MSG))
+						catch(Exception ex)
 						{
-							reportLoaderQueue.setStatus(CaTIESConstants.CP_NOT_FOUND);
+							endTime=new Date().getTime();
+							reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
+							if(ex.getMessage().equalsIgnoreCase(CaTIESConstants.CP_NOT_FOUND_ERROR_MSG))
+							{
+								reportLoaderQueue.setStatus(CaTIESConstants.CP_NOT_FOUND);
+							}
+							CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+reportLoaderQueue.getStatus()+","+ex.getMessage()+","+(endTime-startTime));
+							CaCoreAPIService.getAppServiceInstance().updateObject(reportLoaderQueue);
 						}
-						CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+reportLoaderQueue.getStatus()+","+ex.getMessage()+","+(endTime-startTime));
-						CaCoreAPIService.getAppServiceInstance().updateObject(reportLoaderQueue);
 					}
-				}
-						
+				}		
 				Logger.out.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
 				Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
-				SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
 			}
 			catch (NumberFormatException ex) 
 			{
@@ -98,6 +103,15 @@ public class ReportLoaderQueueProcessor extends Thread
 			{
 				Logger.out.error("Error in processing of ReportLoaderQueueThread ",ex);
 			}
+			try
+			{
+				Logger.out.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
+				Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
+			}
+			catch(Exception ex)
+			{
+				Logger.out.error("Error while calling Thread.sleep for ReportLoaderQueueProcessor thread",ex);
+			}
 		}
 	}
 	
@@ -106,27 +120,23 @@ public class ReportLoaderQueueProcessor extends Thread
 	 * @return list List of objects in report queue
 	 * @throws Exception Generic exception
 	 */
-	private ReportLoaderQueue getQueueObject() throws Exception
+	private List getReportLoaderQueueIDList() throws Exception
 	{
 		List queue=null;
-		String hqlQuery="from edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue where "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.NEW+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.SITE_NOT_FOUND+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.CP_NOT_FOUND+"'";
+		String hqlQuery="select id from edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue where "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.NEW+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.SITE_NOT_FOUND+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.CP_NOT_FOUND+"'";
 		Logger.out.info("HQL Query:"+hqlQuery);
 		HQLCriteria hqlCriteria = new HQLCriteria(hqlQuery); 
 		
 		try 
 		{
 			ApplicationService appService=CaCoreAPIService.getAppServiceInstance();
-			appService.setRecordsCount(1);
 			queue =appService.query(hqlCriteria, ReportLoaderQueue.class.getName());
+			Logger.out.info("ReportLoaderQueue query result" +queue.size());
+			return queue;
 		}
 		catch (ApplicationException ex) 
 		{
 			Logger.out.error("Error while fetching ReportLoaderQueue objects "+ex);
-		}
-		Logger.out.info("ReportLoaderQueue query result" +queue.size());
-		if(queue!=null && queue.size()>0)
-		{
-			return (ReportLoaderQueue)queue.get(0);
 		}
 		return null;
 	}
