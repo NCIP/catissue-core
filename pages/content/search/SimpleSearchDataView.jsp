@@ -362,5 +362,6 @@ function checkAllOnThisPageResponse()
 	<tr>
 		<td><html:hidden property="operation" value=""/></td>
 	</tr>
+	<input type="hidden" name="isQuery" value="true">
 </html:form>
 </table>
