@@ -42,7 +42,7 @@
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
 		
-				if (CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId") != null)
+		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId") != null)
 		{
 			scgEntityId = (Long)CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId");
 		}
@@ -142,14 +142,20 @@
 %>
 <head>
 
-	<%if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
-	{
+	<%
+	String refreshTree = (String)request.getAttribute("refresh");
+	
+	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY) && (refreshTree==null || !(refreshTree.equalsIgnoreCase("false"))))
+	{   
+		
 		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 	%>
 		<script language="javascript">
-			refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');	
+	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');	
 		</script>
-	<%}%>
+	<%}
+	
+	%>
 
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
      <script language="JavaScript">
