@@ -117,7 +117,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		Map aliquotMap = new LinkedHashMap();
 		Double aliquotCount = Double.parseDouble(noOfAliquotes);
 		Double parentQuantity = Double.parseDouble(createSpecimenTemplateForm.getQuantity());
-		Double aliquotQuantity=Double.parseDouble(quantityPerAliquot); ;
+		Double aliquotQuantity=0D;
 		if(quantityPerAliquot==null||quantityPerAliquot.equals(""))
 		{
 			aliquotQuantity = parentQuantity/aliquotCount;
@@ -125,6 +125,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 		else
 		{
+			aliquotQuantity=Double.parseDouble(quantityPerAliquot); ;
 			parentQuantity = parentQuantity - (aliquotQuantity*aliquotCount);
 		}
 		for(int iCount = 1; iCount<= aliquotCount; iCount++)
