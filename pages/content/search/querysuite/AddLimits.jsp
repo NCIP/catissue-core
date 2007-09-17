@@ -18,6 +18,12 @@
 
 	String formAction = Constants.SearchCategory;
 	String defineSearchResultsViewAction = Constants.DefineSearchResultsViewAction;
+	String isQuery =(String) request.getAttribute("isQuery");;
+	if(isQuery==null)
+	{
+		isQuery="false";
+	}
+	System.out.println("isQuery ====>"+isQuery);
 %>
 <html:form method="GET" action="<%=formAction%>">
 <html:hidden property="stringToCreateQueryObject" value="" />
@@ -60,8 +66,8 @@
 							<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
 								
 							<tr>
-							<td height="50%">
-								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
+							<td>
+								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="30%" bordercolorlight="#000000">
 							
 												<tr  id="rowMsg">
 													<td id="validationMessagesSection"  class='validationMessageCss'>
@@ -76,7 +82,7 @@
 												</tr>
 									
 								<tr>
-									<td height="350" width="100%" id="addLimitsSection"><div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
+									<td height="200" width="100%" id="addLimitsSection"><div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
 								</tr>
 								</table>
 							</td>
@@ -86,14 +92,33 @@
 								</td>
 								</tr>
 							<tr>
-							<td  height="50%" valign="top">
+							<td  height="40%" valign="top">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
 									<tr>																						
 										<td height="4%" bgcolor="#EAEAEA" style="border:solid 1px"><font face="Arial" size="2" color="#000000"><b><bean:message 	key="query.limitSetHeader"/></b></font></td>
 									</tr>
 									<tr>
-										<td height="36%">											
-											<div id="queryTableTd" style="overflow:auto;height:100%;width:100%"">
+										<td height="600px">											
+											<div id="queryTableTd" style="overflow:auto;height:100%;width:100%">
+											<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+												id="DAG" width="100%" height="100%"
+												codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
+												<param name="movie" value="flexclient/dag/DAG.swf?view=AddLimit&isQuery=<%=isQuery%>"/>
+												<param name="quality" value="high" />
+												<param name="bgcolor" value="#869ca7" />
+												<param name="allowScriptAccess" value="sameDomain"/>
+												<embed src="flexclient/dag/DAG.swf?view=AddLimit&isQuery=<%=isQuery%>" quality="high" bgcolor="#869ca7"
+													width="100%" height="100%" name="DAG" align="middle"
+													play="true"
+													loop="false"
+													quality="high"
+													allowScriptAccess="sameDomain"
+													type="application/x-shockwave-flash"
+													pluginspage="http://www.adobe.com/go/getflashplayer">
+												</embed>
+
+											</object>
+											<!--
 												<APPLET
 													CODEBASE = "<%=Constants.APPLET_CODEBASE%>"
 													ARCHIVE = "dagViewApplet.jar, cab2bStandAlone.jar,commonpackage.jar,swingx-2006_10_08.jar,org-netbeans-graph-vmd.jar,org-netbeans-graph.jar,org-openide-util.jar,DynamicExtensions.jar,struts.jar,hibernate2.1.7c.jar,odmg.jar,log4j-1.2.9.jar"
@@ -106,10 +131,8 @@
 													<PARAM name="session_id" value="<%=session.getId()%>">
 													<PARAM name="isForView" value="false">">
 													
-
-													
 													<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value="<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
-												</APPLET>
+												</APPLET> -->
 											</div>
 										</td>
 									</tr>
