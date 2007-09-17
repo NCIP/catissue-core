@@ -1,4 +1,4 @@
----- Ordering system  related alter table script Vaishali
+  ---- Ordering system  related alter table script Vaishali
 
 --ALTER TABLE CATISSUE_EXISTING_SP_ORD_ITEM DROP FOREIGN KEY FKF8B855EEBC7298A9;
 --ALTER TABLE CATISSUE_EXISTING_SP_ORD_ITEM DROP FOREIGN KEY FKF8B855EE60773DB2;
@@ -557,3 +557,68 @@ INSERT INTO `CSM_PROTECTION_ELEMENT` SELECT MAX(PROTECTION_ELEMENT_ID)+1,'edu.wu
 /* LOCAL EXTENSION  */
 INSERT INTO `CSM_PG_PE` SELECT MAX(PG_PE_ID)+1,17,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID='edu.common.dynamicextensions.domain.integration.EntityMap'),'0000-00-00' FROM CSM_PG_PE;
 INSERT INTO `CSM_PG_PE` SELECT MAX(PG_PE_ID)+1,17,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID='edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction'),'0000-00-00'  FROM CSM_PG_PE;
+/*-------------------CP base entry and multiple specimen addition ------*/
+
+/*------------Alteration in parent entity 'catissue_specimen_coll_group' ------*/
+
+alter table catissue_specimen_coll_group rename catissue_abstract_specimen_coll_group;
+alter table catissue_abstract_specimen_coll_group drop foreign key `FKDEBAF1677E07C4AC`;
+alter table catissue_abstract_specimen_coll_group drop foreign key `FKDEBAF16753B01F66`;
+
+
+/*------ Creating child entities ----------------------*/
+CREATE TABLE `catissue_specimen_coll_group` (                                                                                         
+                                `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                    
+                                `NAME` varchar(255) default NULL,                                                                                                   
+                                `COMMENTS` text,                                                                                                                    
+                                `COLLECTION_PROTOCOL_REG_ID` bigint(20) default NULL,                                                                               
+                                `SURGICAL_PATHOLOGY_NUMBER` varchar(50) default NULL,                                                                               
+                                PRIMARY KEY  (`IDENTIFIER`),                                                                                                        
+                                UNIQUE KEY `NAME` (`NAME`),                                                                                                         
+                                KEY `FKDEBAF1677E07C4AC` (`COLLECTION_PROTOCOL_REG_ID`),                                                                            
+                                CONSTRAINT `FKDEBAF1677E07C4AC` FOREIGN KEY (`COLLECTION_PROTOCOL_REG_ID`) REFERENCES `catissue_coll_prot_reg` (`IDENTIFIER`),
+                                CONSTRAINT FK_PARENT_SPEC_COLL_GROUP 
+				FOREIGN KEY (IDENTIFIER) REFERENCES 
+					catissue_abstract_specimen_coll_group(IDENTIFIER)
+                              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter table catissue_specimen_coll_group add column `COLLECTION_PROTOCOL_EVENT_ID` bigint(20) default NULL;
+alter table catissue_specimen_coll_group add CONSTRAINT `FK_COLL_PROT_EVENT_SPEC_COLL_GROUP` FOREIGN KEY (`COLLECTION_PROTOCOL_EVENT_ID`) REFERENCES `catissue_coll_prot_event` (`IDENTIFIER`);
+
+insert catissue_specimen_coll_group(identifier,name,comments,SURGICAL_PATHOLOGY_NUMBER, COLLECTION_PROTOCOL_EVENT_ID,COLLECTION_PROTOCOL_REG_ID) 
+select identifier,name,comments,SURGICAL_PATHOLOGY_NUMBER, COLLECTION_PROTOCOL_EVENT_ID,COLLECTION_PROTOCOL_REG_ID from catissue_abstract_specimen_coll_group;
+
+alter table catissue_abstract_specimen_coll_group drop column COLLECTION_PROTOCOL_EVENT_ID;
+alter table catissue_abstract_specimen_coll_group drop column COLLECTION_PROTOCOL_REG_ID;
+alter table catissue_abstract_specimen_coll_group drop column name;
+alter table catissue_abstract_specimen_coll_group drop column comments;
+alter table catissue_abstract_specimen_coll_group drop column SURGICAL_PATHOLOGY_NUMBER;
+
+CREATE TABLE `catissue_specimen_coll_requirement_group` (                                                         
+                                `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                    
+                                PRIMARY KEY  (`IDENTIFIER`),
+				CONSTRAINT FK_PARENT_SPEC_COLL_GROUP_REQ_GROUP 
+				FOREIGN KEY (IDENTIFIER) REFERENCES 
+				catissue_abstract_specimen_coll_group(IDENTIFIER)
+                              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* ----------------------Alteration in 'catissue_coll_prot_event' ------*/
+Alter table catissue_coll_prot_event add column SPECIMEN_COLLECTION_REQ_GROUP_ID bigint(20);
+Alter table catissue_coll_prot_event add constraint FK_COLL_EVENT_REQ_GROUP 
+						FOREIGN KEY (SPECIMEN_COLLECTION_REQ_GROUP_ID)
+						REFERENCES catissue_specimen_coll_requirement_group(IDENTIFIER);
+
+/*-------------------
+alter table catissue_consent_tier_status drop foreign key FKF74E94AEF69249F7;
+alter table catissue_consent_tier_status add CONSTRAINT `FKF74E94AEF69249F7` FOREIGN KEY (`SPECIMEN_COLL_GROUP_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);
+alter table catissue_specimen_event_param drop foreign key FK753F33AD8CA560D1;
+alter table catissue_specimen_event_param add CONSTRAINT `FK753F33AD8CA560D1` FOREIGN KEY (`SPECIMEN_COLL_GRP_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);  
+alter table catissue_identified_report drop foreign key FK6A2246DC91741663;
+alter table catissue_identified_report add CONSTRAINT `FK6A2246DC91741663` FOREIGN KEY (`SCG_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);  
+alter table catissue_deidentified_report drop foreign key FKCDD0DF7B91741663;
+alter table catissue_deidentified_report add CONSTRAINT `FKCDD0DF7B91741663` FOREIGN KEY (`SCG_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);  
+
+
+INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (296,'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup',NULL,NULL,1,'2007-01-17');
+INSERT INTO CSM_PG_PE (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) VALUES (2,296);
+

@@ -85,6 +85,9 @@ PUBLIC
 		
 		<form-bean name="annotationForm" type="edu.wustl.catissuecore.actionForm.AnnotationForm"/>
 		<form-bean name="annotationDataEntryForm" type="edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm"/>
+		<form-bean name="protocolEventDetailsForm" type="edu.wustl.catissuecore.actionForm.ProtocolEventDetailsForm"/>
+		<form-bean name="createSpecimenTemplateForm" type="edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm"/>
+		<form-bean name="viewSpecimenSummaryForm" type="edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm"/> 
 		
 	</form-beans>
 	
@@ -2865,6 +2868,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="query" path=".catissuecore.querySpecimenViewDef" />
+			<forward name="collectionProtocol" path=".catissuecore.querySpecimenViewDef" />
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.querySpecimenViewDef" />
 			<forward name="failure" path=".catissuecore.querySpecimenViewDef" />
 		</action>
@@ -4200,7 +4204,64 @@ PUBLIC
 		</action>
 		
 		<!-- Annotation actions end -->		
+		
+		<action path="/DefineEvents" 
+			type="edu.wustl.catissuecore.action.DefineEventsAction"
+			name="collectionProtocolForm"
+			scope="request"
+			validate="true"
+			input="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9">
+			<forward name="success" path=".catissuecore.DefineEvents" />
+		</action>
+		
+		<action path="/ProtocolEventsDetails" 
+			type="edu.wustl.catissuecore.action.ProtocolEventDetailsAction"
+			name="protocolEventDetailsForm"
+			validate="false">
+			<forward name="success" path=".catissuecore.ProtocolEventsDetails" />
+		</action>
 
+		<action path="/SaveProtocolEvents"
+			type="edu.wustl.catissuecore.action.SaveProtocolEventDetailsAction"
+			name="protocolEventDetailsForm"
+			validate="true"
+			input="/ProtocolEventsDetails.do?pageOf=specimenRequirement">
+			<forward name="defineEvents" path="/ProtocolEventsDetails.do?pageOf=defineEvents"/>
+			<forward name="specimenRequirement" path="/CreateSpecimenTemplate.do?operation=add"/>			
+		</action>
+		
+		<action path="/SaveSpecimenRequirements"
+			type="edu.wustl.catissuecore.action.SaveSpecimenRequirementAction"
+			name="createSpecimenTemplateForm"
+			validate="true"
+			input="/CreateSpecimenTemplate.do?operation=add&amp;pageOf=error">
+			<forward name="success" path="/CreateSpecimenTemplate.do?operation=add"/>
+		</action>
+		
+		<action path="/CreateSpecimenTemplate"
+			type="edu.wustl.catissuecore.action.CreateSpecimenTemplateAction"
+			name="createSpecimenTemplateForm"
+			validate="false">
+			<forward name="success" path=".catissuecore.CreateSpecimenTemplate"/>
+			<forward name="defineEvents" path="/ProtocolEventsDetails.do?pageOf=defineEvents"/>
+		</action>
+		<action path="/GenericSpecimenSummary"
+                type="edu.wustl.catissuecore.action.ViewSpecimenSummaryAction"
+                name="viewSpecimenSummaryForm"
+                validate="false"
+                scope="request">
+	            <forward name="success" path="/pages/SpecimenSummary.jsp" />
+                <forward name="failure" path="/Home.do" />
+       </action>    
+        <action path="/SubmitSpecimenCollectionProtocol"
+                  type="edu.wustl.catissuecore.action.SubmitSpecimenCPAction"
+                  name="viewSpecimenSummaryForm"
+                  validate="false"
+                  scope="request">
+                  <forward name="success" path="/pages/SpecimenSummary.jsp" />
+                  <forward name="failure" path="/pages/SpecimenSummary.jsp" />
+            </action>
+            
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

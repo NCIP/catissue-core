@@ -20,12 +20,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -60,13 +62,20 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
             throws Exception
     {
     	super.executeSecureAction(mapping, form, request, response);
-    	
-    	
     	//pageOf required for Advance Search Object View.
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
+    	String invokeFunction = (String)request.getParameter("invokeFunction");
     	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
         //Gets the value of the operation attribute.
     	String operation = (String)request.getParameter(Constants.OPERATION);
+    	if(invokeFunction!=null)
+    	{
+    		initCollectionProtocolPage(request, form, pageOf, mapping);	
+    	}
+    	else
+    	{
+    		initCleanSession(request);
+    	}
         Logger.out.debug("operation in coll prot action"+operation);
         //Sets the operation attribute to be used in the Edit/View Collection Protocol Page in Advance Search Object View. 
         request.setAttribute(Constants.OPERATION,operation);
@@ -196,6 +205,32 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		{
 			return null;
 		}
-		
     }
+	private ActionForward initCollectionProtocolPage(HttpServletRequest request, ActionForm form, String pageOf,ActionMapping mapping)
+	{
+		CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form;
+		HttpSession session = request.getSession();
+		CollectionProtocolBean collectionProtocolBean =(CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+		collectionProtocolForm.setPrincipalInvestigatorId(collectionProtocolBean.getPrincipalInvestigatorId());
+		collectionProtocolForm.setProtocolCoordinatorIds(collectionProtocolBean.getProtocolCoordinatorIds());
+		collectionProtocolForm.setTitle(collectionProtocolBean.getTitle());
+		collectionProtocolForm.setShortTitle(collectionProtocolBean.getShortTitle());
+		collectionProtocolForm.setStartDate(collectionProtocolBean.getStartDate());
+		collectionProtocolForm.setConsentWaived(collectionProtocolForm.isConsentWaived());
+		collectionProtocolForm.setEnrollment(collectionProtocolBean.getEnrollment());
+		collectionProtocolForm.setDescriptionURL(collectionProtocolBean.getDescriptionURL());
+		collectionProtocolForm.setIrbID(collectionProtocolBean.getIrbID());
+		//For Consent Tab
+		collectionProtocolForm.setConsentTierCounter(collectionProtocolBean.getConsentTierCounter());
+		collectionProtocolForm.setConsentValues(collectionProtocolBean.getConsentValues());
+		collectionProtocolForm.setUnsignedConsentURLName(collectionProtocolBean.getUnsignedConsentURLName());
+		return (mapping.findForward(pageOf));
+	}
+	
+	private void initCleanSession(HttpServletRequest request)
+	{
+		HttpSession session = request.getSession();
+		session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+	}
 }

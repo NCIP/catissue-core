@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -20,8 +21,10 @@ import org.apache.struts.action.ActionMapping;
 import com.adobe.agl.util.StringTokenizer;
 
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
+import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class ViewSpecimenSummaryAction extends Action {
@@ -37,7 +40,7 @@ public class ViewSpecimenSummaryAction extends Action {
 				eventId = (String) request
 						.getParameter(Constants.COLLECTION_PROTOCOL_EVENT_ID);
 				
-//				new Generatedata().generate(request);
+				//new Generatedata().generate(request);
 			}
 
 			LinkedHashMap<String, GenericSpecimen> specimenMap = 
@@ -56,6 +59,7 @@ public class ViewSpecimenSummaryAction extends Action {
 	}
 
 	/**
+	 * This function retrieves the Map of specimens from session.
 	 * @param session
 	 * @param eventId
 	 * @param specimenMap
@@ -101,48 +105,99 @@ public class ViewSpecimenSummaryAction extends Action {
 	}
 
 	/**
+	 * Populates form object of the action with speimen, aliquot specimen
+	 * and derived specimen object
 	 * @param summaryForm
 	 * @param specimenMap
 	 */
 	private void populateSpecimenSummaryForm(
 			ViewSpecimenSummaryForm summaryForm,
 			LinkedHashMap<String, GenericSpecimen> specimenMap) {
-		
-		
+				
 		ArrayList<GenericSpecimen> specimenList = getSpecimenList(specimenMap.values());
-		
 		summaryForm.setSpecimenList(specimenList);
 		String selectedSpecimenId = summaryForm.getSelectedSpecimenId();
 
-		if (selectedSpecimenId != null) 
+		if (selectedSpecimenId == null) 
 		{
-			GenericSpecimen selectedSpecimen = specimenMap
-					.get(selectedSpecimenId);
+			return;
+		}
+		GenericSpecimen selectedSpecimen = specimenMap
+				.get(selectedSpecimenId);
 
-			if (selectedSpecimen != null) 
-			{
-				HashMap<String, GenericSpecimen> aliqutesList = selectedSpecimen
-						.getAliquotSpecimenCollection();
-				HashMap<String, GenericSpecimen> derivedList = selectedSpecimen
-						.getDeriveSpecimenCollection();
+		if (selectedSpecimen == null) 
+		{
+			return;
+		}
+		
+		HashMap<String, GenericSpecimen> aliqutesList = selectedSpecimen
+				.getAliquotSpecimenCollection();
+		HashMap<String, GenericSpecimen> derivedList = selectedSpecimen
+				.getDeriveSpecimenCollection();
 
-				if (aliqutesList != null && !aliqutesList.values().isEmpty()) 
-				{
-					Collection nestedAliquots = new LinkedHashSet();
-					getNestedChildSpecimens(aliqutesList.values(), nestedAliquots);
+		Collection nestedAliquots = new LinkedHashSet();
+		Collection nestedDerives = new LinkedHashSet();
+		if (aliqutesList != null && !aliqutesList.values().isEmpty()) 
+		{
+			nestedAliquots.addAll(aliqutesList.values());
+			
+			getNestedAliquotSpecimens(aliqutesList.values(), nestedAliquots);
+			getNestedDerivedSpecimens(aliqutesList.values(), nestedDerives);
+			
+		}
 
-					specimenList = getSpecimenList(nestedAliquots);
-					
-					summaryForm.setAliquotList(specimenList);
-				}
+		if (derivedList != null && !derivedList.values().isEmpty()) 
+		{
 
-				if (derivedList != null && !derivedList.values().isEmpty()) 
-				{
-					Collection nestedDerives = new LinkedHashSet();
-					getNestedChildSpecimens(derivedList.values(), nestedDerives);
-					specimenList = getSpecimenList(nestedDerives);
-					summaryForm.setDerivedList(specimenList);
-				}
+			nestedDerives.addAll(derivedList.values());
+			getNestedAliquotSpecimens(derivedList.values(), nestedAliquots);
+			getNestedDerivedSpecimens(derivedList.values(), nestedDerives);
+		}
+
+		summaryForm.setAliquotList(getSpecimenList(nestedAliquots));
+		summaryForm.setDerivedList(getSpecimenList(nestedDerives));
+		
+	}
+
+
+	private void getNestedAliquotSpecimens(Collection topChildCollection,
+			Collection nestedCollection) {
+
+		
+		Iterator iterator = topChildCollection.iterator();
+
+		while (iterator.hasNext()) {
+			GenericSpecimen specimen = (GenericSpecimen) iterator.next();
+
+			if (specimen.getAliquotSpecimenCollection() != null) {
+
+				Collection childSpecimen = specimen
+						.getAliquotSpecimenCollection().values();
+				if (!childSpecimen.isEmpty()) {
+					nestedCollection.addAll(childSpecimen);
+					getNestedAliquotSpecimens(childSpecimen, nestedCollection);
+				}				
+			}
+		}
+	}
+
+	private void getNestedDerivedSpecimens(Collection topChildCollection,
+			Collection nestedCollection) {
+
+
+		Iterator iterator = topChildCollection.iterator();
+
+		while (iterator.hasNext()) {
+			GenericSpecimen specimen = (GenericSpecimen) iterator.next();
+
+			if (specimen.getDeriveSpecimenCollection() != null) {
+				Collection childSpecimen = specimen
+						.getDeriveSpecimenCollection().values();
+
+				if (!childSpecimen.isEmpty()) {
+					nestedCollection.addAll(childSpecimen);
+					getNestedDerivedSpecimens(childSpecimen, nestedCollection);
+				}				
 			}
 		}
 	}
@@ -158,35 +213,92 @@ public class ViewSpecimenSummaryAction extends Action {
 		return specimenList;
 	}
 
-	private void getNestedChildSpecimens(Collection topChildCollection,
-			Collection nestedCollection) {
+	class Generatedata {
 
-		nestedCollection.addAll(topChildCollection);
-		Iterator iterator = topChildCollection.iterator();
-
-		while (iterator.hasNext()) {
-			GenericSpecimen specimen = (GenericSpecimen) iterator.next();
-
-			if (specimen.getAliquotSpecimenCollection() != null) {
-				Collection childSpecimen = specimen
-						.getAliquotSpecimenCollection().values();
-				if (!childSpecimen.isEmpty()) {
-					getNestedChildSpecimens(childSpecimen, nestedCollection);
-				}				
+			public void generate(HttpServletRequest request) {
+				HttpSession session = request.getSession();
+				CollectionProtocolBean collectionProtocolBean = getCPBeanObject();
+				session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN,
+						collectionProtocolBean);
+				CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
+				eventBean.setClinicalStatus("New Diagnosis");
+				eventBean.setCollectionPointLabel("E_1");
+				eventBean.setStudyCalenderEventPoint(new Double(1));
+				eventBean.setUniqueIdentifier("1");
+				LinkedHashMap eventMap = new LinkedHashMap();
+				eventMap.put("1", eventBean);
+				session.setAttribute(
+						Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, eventMap);
+				LinkedHashMap specimenMap = createSpecimens(3, "Specimen", null);
+				SpecimenRequirementBean specimen = (SpecimenRequirementBean) specimenMap
+						.get("Specimen0");
+				specimen.setAliquotSpecimenCollection(createSpecimens(2, "Aliquot",
+						specimen.getDisplayName()));
+				specimen.setDeriveSpecimenCollection(createSpecimens(1, "Derived",
+						specimen.getDisplayName()));
+				eventBean.setSpecimenRequirementbeanMap(specimenMap);
+				specimen = (SpecimenRequirementBean) specimen
+						.getDeriveSpecimenCollection().get("Derived0");
+				specimen.setDeriveSpecimenCollection(createSpecimens(1,
+						"D_Specimen", specimen.getDisplayName()));
 			}
-			
-			if (specimen.getDeriveSpecimenCollection() != null) {
-				
-				Collection childSpecimen = specimen
-				.getDeriveSpecimenCollection().values();
-				
-				if (!childSpecimen.isEmpty()) {
-					getNestedChildSpecimens(childSpecimen, nestedCollection);
+
+			private LinkedHashMap createSpecimens(int count, String type,
+					String parentName) {
+
+				LinkedHashMap specimenMap = new LinkedHashMap();
+				for (int i = 0; i < count; i++) {
+					SpecimenRequirementBean specimenBean = new SpecimenRequirementBean();
+					specimenBean.setClassName("Tissue");
+					specimenBean.setType("Fixed Tissue");
+					specimenBean.setLineage(Constants.NEW_SPECIMEN);
+					specimenBean.setDisplayName(type + i);
+					specimenBean.setUniqueIdentifier(type + i);
+					specimenBean.setTissueSide("Not Specified");
+					specimenBean.setTissueSite("Not Specified");
+					specimenBean.setPathologicalStatus("Malignant");
+					specimenBean.setStorageContainerForSpecimen("Virtual");
+					specimenBean.setQuantity("10");
+					specimenBean.setConcentration("0");
+					specimenBean.setParentName(parentName);
+					specimenMap.put(specimenBean.getUniqueIdentifier(),
+							specimenBean);
+
 				}
-				
-			}			
+				return specimenMap;
+			}
 
+			private CollectionProtocolBean getCPBeanObject() {
+				CollectionProtocolBean collectionProtocol = new CollectionProtocolBean();
+				Collection consentTierColl = new HashSet();
+				//			
+				// ConsentTier c1 = new ConsentTier();
+				// c1.setStatement("Consent for aids research");
+				// consentTierColl.add(c1);
+				// ConsentTier c2 = new ConsentTier();
+				// c2.setStatement("Consent for cancer research");
+				// consentTierColl.add(c2);
+				// ConsentTier c3 = new ConsentTier();
+				// c3.setStatement("Consent for Tb research");
+				// consentTierColl.add(c3);
+				//			
+				// collectionProtocol. setConsentTierCollection(consentTierColl);
+				//			
+
+				collectionProtocol.setDescriptionURL("");
+				collectionProtocol.setEnrollment(null);
+				collectionProtocol.setIrbID("7777");
+				collectionProtocol
+						.setTitle("Study Collection Protocol For Consent track..");
+				collectionProtocol.setShortTitle("Cp Consent");
+				collectionProtocol.setUnsignedConsentURLName("C:\\consent12.pdf");
+
+				collectionProtocol.setStartDate("28/07/1975");
+				collectionProtocol.setPrincipalInvestigatorId(1L);
+				return collectionProtocol;
+
+			}
 		}
-	}
 
+	
 	}

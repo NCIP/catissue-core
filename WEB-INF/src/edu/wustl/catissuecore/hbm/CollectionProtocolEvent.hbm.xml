@@ -54,27 +54,16 @@
             length="50"
         />
 
-        <set
-            name="specimenRequirementCollection"
-            table="CATISSUE_COLL_SPECIMEN_REQ"
-            lazy="false"
-            inverse="false"
-            cascade="save-update"
-            sort="unsorted"
-        >
-
-            <key
-                column="COLLECTION_PROTOCOL_EVENT_ID"
-            >
-            </key>
-
-            <many-to-many
-                class="edu.wustl.catissuecore.domain.SpecimenRequirement"
-                column="SPECIMEN_REQUIREMENT_ID"
-                outer-join="auto"
-             />
-
-        </set>
+        <many-to-one
+            name="requiredCollectionSpecimenGroup"
+            class="edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_COLLECTION_REQ_GROUP_ID"
+            not-null="false"
+        />
 
         <many-to-one
             name="collectionProtocol"

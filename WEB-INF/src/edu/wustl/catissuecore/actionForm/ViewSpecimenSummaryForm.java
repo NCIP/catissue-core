@@ -1,8 +1,6 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
@@ -12,7 +10,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
-import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 
 
 /**

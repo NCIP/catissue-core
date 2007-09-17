@@ -12,7 +12,7 @@
 -->						
 
 <%-- Main table Start --%>
-<table style="display:none;" cellpadding="4" cellspacing="0" border="0" class="contentPage" width="99%" id="table4">
+<table style="display:none;" cellpadding="4" cellspacing="0" border="0" class="contentPage" width="99%" id="consentTierTable">
 	<tr>
 		<td>
 			<%-- First Table for Unsigned URL   Start--%>
@@ -153,6 +153,16 @@
 				</tr>
 				<%-- Outer Table for Add Consents End --%>
 			</table>	
+			<table cellpadding="0" cellspacing="0" border="0" width = "100%" id="submittable">
+				<tr>
+					<td align="right">
+						<html:button styleClass="actionButton" property="submitPage" onclick="">
+							<bean:message key="cpbasedentry.savecollectionprotocol"/>
+						</html:button>
+					</td>
+				</tr>
+			</table>
+			&nbsp;
 		</td>
 	</tr>	
 </table>	

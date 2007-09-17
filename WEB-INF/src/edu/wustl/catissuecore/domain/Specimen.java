@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.domain;
 
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -46,7 +47,11 @@ import edu.wustl.common.util.logger.Logger;
 public class Specimen extends AbstractDomainObject implements Serializable
 {
 
-	private static final long serialVersionUID = 1234567890L;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -905954650055370532L;
 
 	/**
 	 * System generated unique id.
@@ -124,7 +129,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	/**
 	 * An event that results in the collection of one or more specimen from a participant.
 	 */
-	protected SpecimenCollectionGroup specimenCollectionGroup;
+	protected AbstractSpecimenCollectionGroup specimenCollectionGroup;
 
 	//Change for API Search   --- Ashwin 04/10/2006
 	/**
@@ -195,7 +200,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 */
 	protected String applyChangesTo=Constants.APPLY_NONE;
 
-
+	
 	
 	
 	/**
@@ -568,7 +573,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 * @return the event that results in the collection of one or more specimen from a participant.
 	 * @see #setSpecimenCollectionGroup(SpecimenCollectionGroup)
 	 */
-	public SpecimenCollectionGroup getSpecimenCollectionGroup()
+	public AbstractSpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
 		return specimenCollectionGroup;
 	}
@@ -579,7 +584,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 * specimen from a participant.
 	 * @see #getSpecimenCollectionGroup()
 	 */
-	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
+	public void setSpecimenCollectionGroup(AbstractSpecimenCollectionGroup specimenCollectionGroup)
 	{
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
@@ -796,7 +801,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						parentSpecimen = null;
 						specimenCollectionGroup = new SpecimenCollectionGroup();
 						//this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
-						this.specimenCollectionGroup.setName(form.getSpecimenCollectionGroupName());
+						
+						this.specimenCollectionGroup.setGroupName(form.getSpecimenCollectionGroupName());
 					}
 
 					//Setting the SpecimenCharacteristics
@@ -1363,4 +1369,5 @@ public class Specimen extends AbstractDomainObject implements Serializable
     {
         this.createdOn = createdOn;
     }
+
 }

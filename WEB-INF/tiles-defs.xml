@@ -1106,5 +1106,18 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/SCGViewSPR.jsp" />
 	</definition>
 	<!--Annotation defs End-->
+	
+	<definition name=".catissuecore.DefineEvents" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/DefineEvents.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.ProtocolEventsDetails" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ProtocolEventDetails.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.CreateSpecimenTemplate" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/CreateSpecimenTemplate.jsp" />
+	</definition>
+	
 </tiles-definitions>
 

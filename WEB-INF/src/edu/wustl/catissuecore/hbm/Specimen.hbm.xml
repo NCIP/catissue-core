@@ -225,13 +225,14 @@
 
         <many-to-one
             name="specimenCollectionGroup"
-            class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+            class="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup"
             cascade="none"
             outer-join="auto"
             update="true"
             insert="true"
             column="SPECIMEN_COLLECTION_GROUP_ID"
         />
+
 
         <many-to-one
             name="specimenCharacteristics"

@@ -14,14 +14,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
+//import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
@@ -30,11 +37,14 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
+import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -46,6 +56,18 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * CollectionProtocolBizLogic is used to add CollectionProtocol information into the database using Hibernate.
  * @author Mandar Deshmukh
+ */
+/**
+ * @author abhijit_naik
+ *
+ */
+/**
+ * @author abhijit_naik
+ *
+ */
+/**
+ * @author abhijit_naik
+ *
  */
 public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic implements Roles
 {
@@ -71,28 +93,105 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		 * Description : Calling method to validate the CPE against uniqueness
 		 */
 		isCollectionProtocolLabelUnique(collectionProtocol);
+		System.out.println("ID = " + collectionProtocol.getId());
 		dao.insert(collectionProtocol, sessionDataBean, true, true);
+		
+		System.out.println("Collection protocol inserted...");
+		System.out.println("ID = " + collectionProtocol.getId());
+
+		insertCPEvents(dao, sessionDataBean, collectionProtocol);
+		System.out.println("Collection protocol events inserted...");
+		HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
+		protectionObjects.add(collectionProtocol);
+
+		authenticate(collectionProtocol, protectionObjects);
+			
+	}
+
+
+	/**
+	 * This function used to insert collection protocol events and specimens 
+	 * for the collectionProtocol object. 
+	 * @param dao used to insert events and specimens into database.
+	 * @param sessionDataBean Contains session information
+	 * @param collectionProtocol collection protocol for which events & specimens 
+	 * to be added
+	 * 
+	 * @throws DAOException If fails to insert events or its specimens 
+	 * @throws UserNotAuthorizedException If user is not authorized or session information 
+	 * is incorrect.
+	 */
+	private void insertCPEvents(DAO dao, SessionDataBean sessionDataBean,
+		CollectionProtocol collectionProtocol) throws 
+		DAOException, UserNotAuthorizedException {
 
 		Iterator it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
+		NewSpecimenBizLogic  bizLogic = new NewSpecimenBizLogic();
+
 		while (it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) it.next();
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
+			SpecimenCollectionRequirementGroup collectionRequirementGroup =
+							collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+			dao.insert(collectionRequirementGroup, sessionDataBean, true, true);
+			
 			dao.insert(collectionProtocolEvent, sessionDataBean, true, true);
+			Collection specimenCollection = collectionRequirementGroup.getSpecimenCollection();
+			
+			insertSpecimens(bizLogic, dao,  collectionRequirementGroup,
+					specimenCollection, sessionDataBean);
 
-			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
-			while (srIt.hasNext())
-			{
-				SpecimenRequirement specimenRequirement = (SpecimenRequirement) srIt.next();
-				specimenRequirement.getCollectionProtocolEventCollection().add(
-						collectionProtocolEvent);
-				dao.insert(specimenRequirement, sessionDataBean, true, true);
-			}
 		}
+	}
 
-		HashSet protectionObjects = new HashSet();
-		protectionObjects.add(collectionProtocol);
+	/**
+	 * @param bizLogic used to call business logic of Specimen.
+	 * @param dao Data access object to insert Specimen Collection groups
+	 * and specimens.
+	 * @param collectionRequirementGroup 
+	 * @param specimenCollection	specimen objects to be inserted.
+	 * @param sessionDataBean object containing session information which 
+	 * is required for authorization.
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private void insertSpecimens(NewSpecimenBizLogic  bizLogic, DAO dao,
+			SpecimenCollectionRequirementGroup collectionRequirementGroup,
+			Collection specimenCollection, SessionDataBean sessionDataBean) throws DAOException,
+			UserNotAuthorizedException {
 
+		Iterator<Specimen> specIter = collectionRequirementGroup.getSpecimenCollection().iterator();
+		
+		Map<Specimen, List<Specimen>> specimenMap = new LinkedHashMap<Specimen, List<Specimen>>();
+
+		while(specIter.hasNext())
+		{
+			Specimen specimen = specIter.next();									
+			System.out.println("-----INSERTING specimen :" + specimen.getId());
+
+			specimen.setSpecimenCollectionGroup(collectionRequirementGroup);
+
+			if (specimen.getParentSpecimen()==null){
+					specimenMap.put(specimen, new ArrayList<Specimen>());
+			}
+			
+			specimen.setSpecimenCharacteristics(null);
+			specimen.setStorageContainer(null);
+			//dao.insert(specimen, sessionDataBean, true, true);
+			specimenMap.put(specimen, null);
+		}
+		
+		System.out.println("-----BEFORE INSERTING specimen :");
+		
+		bizLogic.insert(specimenMap, dao, sessionDataBean);
+	
+		System.out.println("-----INSERTING specimen complete");
+	}
+
+
+	private void authenticate(CollectionProtocol collectionProtocol,
+			HashSet protectionObjects) throws DAOException {
 		try
 		{
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
@@ -108,6 +207,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
+		System.out.println("PostInsert called");
 		CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
 		ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
 		participantRegistrationCacheManager.addNewCP(collectionProtocol.getId(),collectionProtocol.getTitle(),collectionProtocol.getShortTitle());
@@ -179,17 +279,18 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			CollectionProtocolEvent oldCollectionProtocolEvent = (CollectionProtocolEvent) getCorrespondingOldObject(
 					oldCollectionProtocolEventCollection, collectionProtocolEvent.getId());
 			dao.audit(collectionProtocolEvent, oldCollectionProtocolEvent, sessionDataBean, true);
-
-			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
+			SpecimenCollectionRequirementGroup collectionRequirementGroup =
+				oldCollectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+			Iterator srIt = collectionRequirementGroup.getSpecimenCollection().iterator();
 			while (srIt.hasNext())
 			{
-				SpecimenRequirement specimenRequirement = (SpecimenRequirement) srIt.next();
+				Specimen specimen = (Specimen) srIt.next();
 
-				Logger.out.debug("specimenRequirement " + specimenRequirement);
+				Logger.out.debug("specimenRequirement " + specimen);
 
-				specimenRequirement.getCollectionProtocolEventCollection().add(
-						collectionProtocolEvent);
-				dao.update(specimenRequirement, sessionDataBean, true, true, false);
+//				specimen.getCollectionProtocolEventCollection().add(
+//						collectionProtocolEvent);
+//				dao.update(specimenRequirement, sessionDataBean, true, true, false);
 			}
 		}
 
@@ -592,7 +693,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		//Added by Ashish
 		//setAllValues(obj);
 		//END
-
+		System.out.println("=========================================================");
+		System.out.println("=================VALIDATING COLLECTION PROTOCOL==========");
+		
 		CollectionProtocol protocol = (CollectionProtocol) obj; 
 		Collection eventCollection = protocol.getCollectionProtocolEventCollection();		
 
@@ -685,7 +788,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		if (eventCollection != null && eventCollection.size() != 0)
 		{
-			List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+			CDEManager manager = CDEManager.getCDEManager();
+
+			if (manager == null){
+				throw new DAOException("Failed to get CDE manager object. " +
+						"CDE Manager is not yet initialized.");
+			}
+			
+			List specimenClassList = manager.getPermissibleValueList(
 					Constants.CDE_NAME_SPECIMEN_CLASS, null);
 
 			//	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
@@ -729,68 +839,72 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 						throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));
 					}
 
-					Collection reqCollection = event.getSpecimenRequirementCollection();
+					SpecimenCollectionRequirementGroup collectionRequirementGroup =
+						event.getRequiredCollectionSpecimenGroup();
+					
+					Collection<Specimen> reqCollection = collectionRequirementGroup.getSpecimenCollection();
 
 					if (reqCollection != null && reqCollection.size() != 0)
 					{
-						Iterator reqIterator = reqCollection.iterator();
+						Iterator<Specimen> reqIterator = reqCollection.iterator();
 
 						while (reqIterator.hasNext())
 						{							
 
-							SpecimenRequirement requirement = (SpecimenRequirement) reqIterator
+							Specimen specimen = (Specimen) reqIterator
 							.next();
-
-							if (requirement == null)
+							if (specimen == null)
 							{
 								throw new DAOException(ApplicationProperties
 										.getValue("protocol.spReqEmpty.errMsg"));
 							}
-							else
+
+							/**
+							 * Start: Change for API Search   --- Jitendra 06/10/2006
+							 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+							 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+							 * So we removed default class level initialization on domain object and are initializing in method
+							 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+							 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+							 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+							 */
+							ApiSearchUtil.setSpecimenDefault(specimen);
+							//End:- Change for API Search 
+
+							String specimenClass = specimen.getClassName();
+
+							if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
 							{
-								/**
-								 * Start: Change for API Search   --- Jitendra 06/10/2006
-								 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
-								 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
-								 * So we removed default class level initialization on domain object and are initializing in method
-								 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
-								 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
-								 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
-								 */
-								ApiSearchUtil.setSpecimenRequirementDefault(requirement);
-								//End:- Change for API Search 
-
-								String specimenClass = requirement.getSpecimenClass();
-
-								if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
-								{
-									throw new DAOException(ApplicationProperties
-											.getValue("protocol.class.errMsg"));
-								}
-
-								if (!Validator.isEnumeratedValue(Utility
-										.getSpecimenTypes(specimenClass), requirement
-										.getSpecimenType()))
-								{
-									throw new DAOException(ApplicationProperties
-											.getValue("protocol.type.errMsg"));
-								}
-
-								if (!Validator.isEnumeratedValue(tissueSiteList, requirement
-										.getTissueSite()))
-								{
-									throw new DAOException(ApplicationProperties
-											.getValue("protocol.tissueSite.errMsg"));
-								}
-
-								if (!Validator.isEnumeratedValue(pathologicalStatusList,
-										requirement.getPathologyStatus()))
-								{
-									throw new DAOException(ApplicationProperties
-											.getValue("protocol.pathologyStatus.errMsg"));
-								}
+								throw new DAOException(ApplicationProperties
+										.getValue("protocol.class.errMsg"));
 							}
+
+							if (!Validator.isEnumeratedValue(Utility
+									.getSpecimenTypes(specimenClass), specimen
+									.getType()))
+							{
+								throw new DAOException(ApplicationProperties
+										.getValue("protocol.type.errMsg"));
+							}
+//TODO:Abhijit Checkout valid values for tisse site and Pathalogy status.
+//								if (!Validator.isEnumeratedValue(tissueSiteList, specimen
+//										.getTissueSite()))
+//								{
+//									throw new DAOException(ApplicationProperties
+//											.getValue("protocol.tissueSite.errMsg"));
+//								}
+//
+//								if (!Validator.isEnumeratedValue(pathologicalStatusList,
+//										specimen.getActivityStatus()))
+//								{
+//									throw new DAOException(ApplicationProperties
+//											.getValue("protocol.pathologyStatus.errMsg"));
+//								}
+
 						}
+						System.out.println("=========================================================");
+						System.out.println("=================VALIDATING SPECIMEN COMPLETE==========");
+						
 					}
 					else
 					{
@@ -808,6 +922,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		if (operation.equals(Constants.ADD))
 		{
+
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
 			{
 				throw new DAOException(ApplicationProperties
@@ -822,6 +937,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
 			}
 		}
+		System.out.println("=========================================================");
+		System.out.println("=================VALIDATING COLLECTION COMPLETE==========");
 
 		return true;
 	}

@@ -1,4 +1,4 @@
-/* MySQL-Front 3.2  (Build 4.15)*/
+				   /* MySQL-Front 3.2  (Build 4.15)*/
 
 /*/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT ;*/
 /*/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS ;*/
@@ -792,6 +792,9 @@ INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMEN
 /* Local Extension  */
 INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (294,'Local Extensions','Local Extensions class','edu.common.dynamicextensions.domain.integration.EntityMap',NULL,NULL,1,'2007-01-17');
 INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (295,'edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction','edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction','edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction',NULL,NULL,1,'2007-01-17');
+/*---CP based entry----*/
+INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (296,'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup',NULL,NULL,1,'2007-01-17');
+
 /*--------Consent Tracking-------*/
 INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier','ConsentTier Object','edu.wustl.catissuecore.domain.ConsentTier',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
 INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier Response','Consent Tier Response Object','edu.wustl.catissuecore.domain.ConsentTierResponse',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
@@ -1263,7 +1266,8 @@ INSERT INTO CSM_PG_PE (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) VALUES (1,54);
 INSERT INTO CSM_PG_PE (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) VALUES (1,55);
 INSERT INTO CSM_PG_PE (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) VALUES (1,56);
 INSERT INTO CSM_PG_PE (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) VALUES (1,60);
-						 
+/*-----CP based entry ---*/
+INSERT INTO CSM_PG_PE (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) VALUES (2,296);
 
 
 /*-----Ordering System------ Start*/

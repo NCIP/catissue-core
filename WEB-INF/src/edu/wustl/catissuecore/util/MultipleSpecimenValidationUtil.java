@@ -133,7 +133,7 @@ public final class MultipleSpecimenValidationUtil
 				String[] selectColumnName = {"id","collectionProtocolRegistration.id","collectionProtocolRegistration.collectionProtocol.id"};
 				String[] whereColumnName = {Constants.NAME};
 				String[] whereColumnCondition = {"="};
-				String[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getName()};
+				String[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getGroupName()};
 				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
 						whereColumnValue, null);
 				// TODO saperate calls for SCG - ID and cpid
@@ -155,7 +155,7 @@ public final class MultipleSpecimenValidationUtil
 					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 					cpr.setId(new Long(cprId));
 					cpr.setCollectionProtocol(cp);
-					specimen.getSpecimenCollectionGroup().setCollectionProtocolRegistration(cpr);
+					((SpecimenCollectionGroup) specimen.getSpecimenCollectionGroup()).setCollectionProtocolRegistration(cpr);
 				}
 			}
 		}
@@ -439,18 +439,18 @@ public final class MultipleSpecimenValidationUtil
 		if (partOfMulipleSpecimen)
 		{
 
-			if (specimen.getSpecimenCollectionGroup() == null || validator.isEmpty(specimen.getSpecimenCollectionGroup().getName()))
+			if (specimen.getSpecimenCollectionGroup() == null || validator.isEmpty(specimen.getSpecimenCollectionGroup().getGroupName()))
 			{
 				String quantityString = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 			}
 
-			List spgList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
+			List spgList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
 
 			if (spgList.size() == 0)
 			{
 				throw new DAOException(ApplicationProperties.getValue("errors.item.unknown", "Specimen Collection Group "
-						+ specimen.getSpecimenCollectionGroup().getName()));
+						+ specimen.getSpecimenCollectionGroup().getGroupName()));
 			}
 		}
 

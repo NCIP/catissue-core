@@ -1,0 +1,810 @@
+package edu.wustl.catissuecore.actionForm;
+
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
+
+
+public class CreateSpecimenTemplateForm extends AbstractActionForm
+{
+	
+	/**
+	 * Display Name
+	 */
+	protected String displayName;
+
+	/**
+	 * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid
+	 */
+	protected String className;
+
+	/**
+	 * Sub Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+	 */
+	protected String type;
+
+
+	/**
+     * Anatomic site from which the specimen was derived.
+     */
+    private String tissueSite;
+
+    /**
+     * For bilateral sites, left or right.
+     */
+    private String tissueSide;
+
+    /**
+     * Histopathological character of the specimen 
+     * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
+     */
+    private String pathologicalStatus;
+    
+    private String storageLocationForSpecimen;
+    
+    private String storageLocationForAliquotSpecimen;
+    
+        
+	/**
+	 * Concentration of specimen.
+	 */
+	protected String concentration="0";
+
+	/**
+	 * Amount of Specimen.
+	 */
+	protected String quantity ="0";
+	
+	/**
+     * A historical information about the specimen i.e. whether the specimen is a new specimen
+     * or a derived specimen or an aliquot.
+     */
+    private String lineage;
+    
+    /**
+	 * Unit of specimen.
+	 */
+	protected String unit;
+    
+	
+	 /**
+     * A number that tells how many aliquots to be created.
+     */
+    private String noOfAliquots;
+    
+    /**
+     * Initial quantity per aliquot.
+     */
+    private String quantityPerAliquot;
+    
+    /**
+	 * Collection of aliquot specimens derived from this specimen. 
+	 */
+	protected Collection aliquotSpecimenCollection;
+	
+	/**
+	 * Collection of derive specimens derived from this specimen. 
+	 */
+	protected Collection deriveSpecimenCollection ;
+     
+	
+	private long collectionEventId;																											// Mandar : CollectionEvent 10-July-06
+	private long collectionEventSpecimenId;
+	private long collectionEventUserId;
+		
+	
+	private long receivedEventId;
+	private long receivedEventSpecimenId;
+	private long receivedEventUserId;
+	
+	
+	private String collectionEventCollectionProcedure;
+	
+	private String collectionEventContainer;
+	
+	private String receivedEventReceivedQuality;
+	
+	
+	 /**
+     * Number of biohazard rows.
+     */
+    private int noOfDeriveSpecimen;
+    
+    private Map deriveSpecimenValues = new LinkedHashMap();
+        
+	private String nodeKey = null;
+    
+	public String getClassName()
+	{
+		return className;
+	}
+
+	
+	public void setClassName(String className)
+	{
+		this.className = className;
+	}
+
+	
+	public String getType()
+	{
+		return type;
+	}
+
+	
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+
+	
+	public String getTissueSite()
+	{
+		return tissueSite;
+	}
+
+	
+	public void setTissueSite(String tissueSite)
+	{
+		this.tissueSite = tissueSite;
+	}
+
+	
+	public String getTissueSide()
+	{
+		return tissueSide;
+	}
+
+	
+	public void setTissueSide(String tissueSide)
+	{
+		this.tissueSide = tissueSide;
+	}
+
+	
+	public String getPathologicalStatus()
+	{
+		return pathologicalStatus;
+	}
+
+	
+	public void setPathologicalStatus(String pathologicalStatus)
+	{
+		this.pathologicalStatus = pathologicalStatus;
+	}
+
+	
+	public String getConcentration()
+	{
+		return concentration;
+	}
+
+	
+	public void setConcentration(String concentration)
+	{
+		this.concentration = concentration;
+	}
+
+	
+	public String getQuantity()
+	{
+		return quantity;
+	}
+
+	
+	public void setQuantity(String quantity)
+	{
+		this.quantity = quantity;
+	}
+
+	
+	public String getNoOfAliquots()
+	{
+		return noOfAliquots;
+	}
+
+	
+	public void setNoOfAliquots(String noOfAliquots)
+	{
+		this.noOfAliquots = noOfAliquots;
+	}
+
+	
+	public String getQuantityPerAliquot()
+	{
+		return quantityPerAliquot;
+	}
+
+	
+	public void setQuantityPerAliquot(String quantityPerAliquot)
+	{
+		this.quantityPerAliquot = quantityPerAliquot;
+	}
+
+	
+	public String getCollectionEventCollectionProcedure()
+	{
+		return collectionEventCollectionProcedure;
+	}
+
+	
+	public void setCollectionEventCollectionProcedure(String collectionEventCollectionProcedure)
+	{
+		this.collectionEventCollectionProcedure = collectionEventCollectionProcedure;
+	}
+
+	
+	public String getCollectionEventContainer()
+	{
+		return collectionEventContainer;
+	}
+
+	
+	public void setCollectionEventContainer(String collectionEventContainer)
+	{
+		this.collectionEventContainer = collectionEventContainer;
+	}
+
+	
+	public String getReceivedEventReceivedQuality()
+	{
+		return receivedEventReceivedQuality;
+	}
+
+	
+	public void setReceivedEventReceivedQuality(String receivedEventReceivedQuality)
+	{
+		this.receivedEventReceivedQuality = receivedEventReceivedQuality;
+	}
+
+	
+	public int getNoOfDeriveSpecimen()
+	{
+		return noOfDeriveSpecimen;
+	}
+
+	
+	public void setNoOfDeriveSpecimen(int noOfDeriveSpecimen)
+	{
+		this.noOfDeriveSpecimen = noOfDeriveSpecimen;
+	}
+
+	
+	public Object getDeriveSpecimenValue(String key)
+	{
+		return deriveSpecimenValues.get(key);
+	}
+	
+	public void setDeriveSpecimenValue(String key, Object value)
+	{
+		if (isMutable())
+	   	 {
+	   		if(deriveSpecimenValues==null)
+	   		{
+	   			deriveSpecimenValues = new LinkedHashMap();
+	   		}
+			deriveSpecimenValues.put(key, value);
+	   	 }
+	}
+
+	public Map getDeriveSpecimenValues()
+	{
+		return deriveSpecimenValues;
+	}
+	
+ 	public void setDeriveSpecimenValues(Map deriveSpecimenValues)
+ 	{
+		this.deriveSpecimenValues = deriveSpecimenValues;
+	}
+ 
+ 	/**
+	 * @return Returns the values.
+	 */
+	public Collection getAllDeriveSpecimenValuess() 
+	{
+		return deriveSpecimenValues.values();
+	}
+ 	
+	@Override
+	public int getFormId()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	protected void reset()
+	{
+		
+		
+	}
+
+	public void setAllValues(AbstractDomainObject arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	
+	public String getLineage()
+	{
+		return lineage;
+	}
+
+
+	
+	public void setLineage(String lineage)
+	{
+		this.lineage = lineage;
+	}
+
+
+	
+	public Collection getAliquotSpecimenCollection()
+	{
+		return aliquotSpecimenCollection;
+	}
+
+
+	
+	public void setAliquotSpecimenCollection(Collection aliquotSpecimenCollection)
+	{
+		this.aliquotSpecimenCollection = aliquotSpecimenCollection;
+	}
+
+
+	
+	public Collection getDeriveSpecimenCollection()
+	{
+		return deriveSpecimenCollection;
+	}
+
+
+	
+	public void setDeriveSpecimenCollection(Collection deriveSpecimenCollection)
+	{
+		this.deriveSpecimenCollection = deriveSpecimenCollection;
+	}
+
+
+	
+	public String getDisplayName()
+	{
+		return displayName;
+	}
+
+
+	
+	public void setDisplayName(String displayName)
+	{
+		this.displayName = displayName;
+	}
+
+
+	
+	public String getUnit()
+	{
+		return unit;
+	}
+
+
+	
+	public void setUnit(String unit)
+	{
+		this.unit = unit;
+	}
+
+
+	
+	public long getCollectionEventId()
+	{
+		return collectionEventId;
+	}
+
+
+	
+	public void setCollectionEventId(long collectionEventId)
+	{
+		this.collectionEventId = collectionEventId;
+	}
+
+
+	
+	public long getCollectionEventSpecimenId()
+	{
+		return collectionEventSpecimenId;
+	}
+
+
+	
+	public void setCollectionEventSpecimenId(long collectionEventSpecimenId)
+	{
+		this.collectionEventSpecimenId = collectionEventSpecimenId;
+	}
+
+
+	
+	public long getCollectionEventUserId()
+	{
+		return collectionEventUserId;
+	}
+
+
+	
+	public void setCollectionEventUserId(long collectionEventUserId)
+	{
+		this.collectionEventUserId = collectionEventUserId;
+	}
+
+
+	
+	public long getReceivedEventId()
+	{
+		return receivedEventId;
+	}
+
+
+	
+	public void setReceivedEventId(long receivedEventId)
+	{
+		this.receivedEventId = receivedEventId;
+	}
+
+
+	
+	public long getReceivedEventSpecimenId()
+	{
+		return receivedEventSpecimenId;
+	}
+
+
+	
+	public void setReceivedEventSpecimenId(long receivedEventSpecimenId)
+	{
+		this.receivedEventSpecimenId = receivedEventSpecimenId;
+	}
+
+
+	
+	public long getReceivedEventUserId()
+	{
+		return receivedEventUserId;
+	}
+
+
+	
+	public void setReceivedEventUserId(long receivedEventUserId)
+	{
+		this.receivedEventUserId = receivedEventUserId;
+	}
+
+
+	
+	public String getStorageLocationForSpecimen()
+	{
+		return storageLocationForSpecimen;
+	}
+
+
+	
+	public void setStorageLocationForSpecimen(String storageLocationForSpecimen)
+	{
+		this.storageLocationForSpecimen = storageLocationForSpecimen;
+	}
+
+
+	
+	public String getStorageLocationForAliquotSpecimen()
+	{
+		return storageLocationForAliquotSpecimen;
+	}
+
+
+	
+	public void setStorageLocationForAliquotSpecimen(String storageLocationForAliquotSpecimen)
+	{
+		this.storageLocationForAliquotSpecimen = storageLocationForAliquotSpecimen;
+	}
+	
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+    {
+        ActionErrors errors = new ActionErrors();
+        Validator validator = new Validator();
+        double aliquotQuantity = 0;
+        double initialQuantity = 0;
+        try
+        {
+    		if (validator.isEmpty(this.className))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("specimen.type")));
+			}
+			if (validator.isEmpty(this.type))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("specimen.subType")));
+			}
+			
+			if (!validator.isEmpty(quantity))
+			{					
+				try
+				{
+					quantity = new BigDecimal(quantity).toPlainString();
+					if(Utility.isQuantityDouble(className,type))
+        			{						
+        		        if(!validator.isDouble(quantity,true))
+        		        {
+        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.quantity")));        		        	
+        		        }
+        			}
+        			else
+        			{        				
+        				if(!validator.isNumeric(quantity,0))
+        		        {
+        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));        		        	
+        		        }
+        			}
+				}
+				catch (NumberFormatException exp)
+		        {    		  
+					errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+				}
+				
+			}
+			else
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+			}
+			
+		
+			if(!this.quantityPerAliquot.equals(""))
+			{
+				if (quantityPerAliquot != null && quantityPerAliquot.trim().length() != 0)
+				{
+					try
+					{
+						quantityPerAliquot = new BigDecimal(quantityPerAliquot).toPlainString();
+						if (Utility.isQuantityDouble(this.className, this.type))
+						{
+							if (!validator.isDouble(quantityPerAliquot.trim()))
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+										.getValue("aliquots.qtyPerAliquot")));
+								
+							}
+						}
+						else
+						{
+							if (!validator.isNumeric(quantityPerAliquot.trim()))
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+										.getValue("aliquots.qtyPerAliquot")));
+							}
+						}
+					}
+					catch (NumberFormatException exp)
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties.getValue("aliquots.qtyPerAliquot")));
+					}
+				}
+			}
+			
+			if(!this.noOfAliquots.equals(""))
+			{
+				if (!validator.isNumeric(this.noOfAliquots))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue("specimenArrayAliquots.noOfAliquots")));
+				}
+				else
+				{
+					try
+					{
+						if(this.quantityPerAliquot.equals(""))
+						{
+							aliquotQuantity = Double.parseDouble(this.quantity)/Double.parseDouble(this.noOfAliquots);
+							initialQuantity = Double.parseDouble(this.quantity) - (aliquotQuantity * Double.parseDouble(this.noOfAliquots)); 
+						}
+						else
+						{
+							aliquotQuantity = Double.parseDouble(this.quantityPerAliquot);
+							initialQuantity = Double.parseDouble(this.quantity);
+							initialQuantity = initialQuantity - (aliquotQuantity * Double.parseDouble(this.noOfAliquots));
+						}
+						if(initialQuantity < 0)
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",
+									ApplicationProperties.getValue("specimenArrayAliquots.noOfAliquots")));
+						}
+					}
+					catch (NumberFormatException exp)
+			        {    		  
+						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+					}
+				}
+			}
+			
+			if(this.tissueSite.equals("-1"))
+            {
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.tissueSite")));
+            }
+            	
+			if (this.tissueSide.equals(""))
+			{
+               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.tissueSide")));
+			}
+        	
+			if(this.noOfAliquots!=null && !this.noOfAliquots.equals(""))
+			{
+				if (this.storageLocationForAliquotSpecimen.equals(""))
+				{
+	               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.aliquotstoragelocation")));
+				}
+			}
+			if (this.storageLocationForSpecimen.equals(""))
+			{
+               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.specimenstoragelocation")));
+			}
+			if (this.pathologicalStatus.equals("-1"))
+           {
+               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));
+           }
+			if ((collectionEventUserId) == -1L)
+	        {
+	       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's user"));
+	        }
+			
+			// checks the collectionProcedure
+			if (!validator.isValidOption(this.getCollectionEventCollectionProcedure()))
+			{
+				String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",message));
+			}			
+			
+			List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+			if (!Validator.isEnumeratedValue(procedureList, this.getCollectionEventCollectionProcedure()))
+			{
+				String message = ApplicationProperties.getValue("cpbasedentry.collectionprocedure");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",message));
+			}
+			//Container validation
+			if (!validator.isValidOption(this.getCollectionEventContainer()))
+			{
+				String message = ApplicationProperties.getValue("collectioneventparameters.container");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",message));
+			}
+			List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
+			if (!Validator.isEnumeratedValue(containerList, this.getCollectionEventContainer()))
+			{
+				String message = ApplicationProperties.getValue("collectioneventparameters.container");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",message));
+			}
+			if ((receivedEventUserId) == -1L)
+	        {
+	       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received Event's user"));
+	        }			
+			List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
+			if (!Validator.isEnumeratedValue(qualityList, this.receivedEventReceivedQuality))
+			{
+				String message = ApplicationProperties.getValue("cpbasedentry.receivedquality");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",message));
+				
+			}
+			if(this.className.equals(Constants.MOLECULAR))
+			{
+				if(!validator.isNumeric(this.concentration))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.concentration")));	
+				}
+			}
+			
+			if(this.noOfDeriveSpecimen>=1)
+			{
+				boolean bSpecimenClass = false;
+				boolean bSpecimenType = false;
+				Iterator it = this.deriveSpecimenValues.keySet().iterator();
+				while (it.hasNext())
+				{
+					String key = (String)it.next();
+					String value = (String)deriveSpecimenValues.get(key);
+					
+					if(!bSpecimenClass)
+					{
+						if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
+							bSpecimenClass = true;
+						}
+					}
+					
+					if(!bSpecimenType)
+					{
+						if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimetype")));
+							bSpecimenType = true;
+						}
+					}
+					
+					if((key.indexOf("_concentration"))!=-1)
+					{
+						if(!validator.isNumeric(value,0))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.concentration")));	
+						}
+					}
+					if((key.indexOf("_quantity"))!=-1)
+					{
+						if (!validator.isEmpty(value))
+						{					
+							try
+							{
+								value = new BigDecimal(value).toPlainString();
+								if(Utility.isQuantityDouble(className,type))
+			        			{						
+			        		        if(!validator.isDouble(value,true))
+			        		        {
+			        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.quantity")));        		        	
+			        		        }
+			        			}
+			        			else
+			        			{        				
+			        				if(!validator.isNumeric(value,0))
+			        		        {
+			        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("cpbasedentry.derivedspecimen.quantity")));        		        	
+			        		        }
+			        			}
+							}
+							catch (NumberFormatException exp)
+					        {    		  
+								errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("cpbasedentry.derivedspecimen.quantity")));
+							}
+						}
+						else
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("cpbasedentry.derivedspecimen.quantity")));
+						}
+					}
+				}
+			}
+            	
+        }
+        catch(Exception excp)
+        {
+            Logger.out.error(excp.getMessage());
+        }
+        return errors;
+     }
+	
+	public String getNodeKey()
+	{
+		return nodeKey;
+	}
+	
+	public void setNodeKey(String nodeKey)
+	{
+		this.nodeKey = nodeKey;
+	}
+    
+
+}

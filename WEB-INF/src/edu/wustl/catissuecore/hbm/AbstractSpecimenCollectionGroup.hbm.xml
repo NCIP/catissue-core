@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+
+    <class
+        name="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup"
+        table="CATISSUE_ABSTRACT_SPECIMEN_COLL_GROUP"
+		lazy="true"
+    >
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_SPECIMEN_COLL_GRP_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-SpecimenCollectionGroup.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="clinicalDiagnosis"
+            type="string"
+            update="true"
+            insert="true"
+            column="CLINICAL_DIAGNOSIS"
+            length="150"
+        />
+
+        <property
+            name="clinicalStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="CLINICAL_STATUS"
+            length="50"
+        />
+
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
+
+        <many-to-one
+            name="specimenCollectionSite"
+            class="edu.wustl.catissuecore.domain.Site"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SITE_ID"
+        />
+
+
+        <set
+            name="specimenCollection"
+            table="CATISSUE_SPECIMEN"
+            lazy="true"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_COLLECTION_GROUP_ID"
+              >
+              </key>
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.Specimen"
+              />
+
+        </set>
+
+	    <joined-subclass
+	        name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+	        table="CATISSUE_SPECIMEN_COLL_GROUP"
+			lazy="true"
+	    >
+
+            <key
+                column="IDENTIFIER"
+            />
+	    
+	
+			
+	         <set
+	            name="consentTierStatusCollection"
+	            table="CATISSUE_CONSENT_TIER_STATUS"
+	            lazy="true"
+	            inverse="false"
+	            cascade="save-update"
+	            sort="unsorted"
+	        >
+	
+	              <key
+	                  column="SPECIMEN_COLL_GROUP_ID"
+	              />
+	
+	              <one-to-many
+	                  class="edu.wustl.catissuecore.domain.ConsentTierStatus"
+	              />
+	        </set>
+	        <set
+	            name="specimenEventParametersCollection"
+	            table="CATISSUE_SPECIMEN_EVENT_PARAM"
+	            lazy="false"
+	            inverse="true"
+	            cascade="save-update"
+	            sort="unsorted"
+	        >
+	
+	              <key
+	                  column="SPECIMEN_COLL_GRP_ID"
+	              />
+	
+	              <one-to-many
+	                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+	              />
+	        </set>
+	
+	        <property
+	            name="name"
+	            type="string"
+	            update="true"
+	            insert="true"
+	            column="NAME"
+	            length="255"
+	        />
+	
+			 <property
+	            name="comment"
+	            type="string"
+	            update="true"
+	            insert="true"
+	            column="COMMENTS"
+	            length="2000"
+	        />
+	         <property
+	            name="surgicalPathologyNumber"
+	            type="string"
+	            update="true"
+	            insert="true"
+	            column="SURGICAL_PATHOLOGY_NUMBER"
+	            length="50"
+	        />
+	
+	        <many-to-one
+	            name="collectionProtocolRegistration"
+	            class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+	            cascade="none"
+	            outer-join="auto"
+	            update="true"
+	            insert="true"
+	            column="COLLECTION_PROTOCOL_REG_ID"
+	        />
+
+	        <many-to-one
+	            name="collectionProtocolEvent"
+	            class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+	            cascade="none"
+	            outer-join="auto"
+	            update="true"
+	            insert="true"
+	            column="COLLECTION_PROTOCOL_EVENT_ID"
+	        />
+	        
+	        <one-to-one
+	            name="deIdentifiedSurgicalPathologyReport"
+	            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+	            cascade="save-update"
+	            outer-join="auto"
+	            constrained="false"
+		     	property-ref="specimenCollectionGroup"
+	        />
+	
+	        <one-to-one
+	            name="identifiedSurgicalPathologyReport"
+	            class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
+	            cascade="save-update"
+	            outer-join="auto"
+	            constrained="false"
+		     	property-ref="specimenCollectionGroup"
+	        />
+	
+	        <!--
+	            To add non XDoclet property mappings, create a file named
+	                hibernate-properties-SpecimenCollectionGroup.xml
+	            containing the additional properties and place it in your merge dir.
+	        -->
+		</joined-subclass>
+
+	    <joined-subclass
+	        name="edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup"
+	        table="CATISSUE_SPECIMEN_COLL_REQUIREMENT_GROUP"
+			lazy="true"
+	    >
+
+            <key
+                column="IDENTIFIER"
+            />
+
+	        <one-to-one
+	            name="collectionProtocolEvent"
+	            class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+	            cascade="save-update"
+	            outer-join="auto"
+	            constrained="false"
+		     	property-ref="requiredCollectionSpecimenGroup"
+	        />
+            
+		</joined-subclass>
+		
+    </class>
+
+</hibernate-mapping>
+

@@ -174,7 +174,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			
 			//Specimen specimen=(Specimen)specimenObjList.get(0);
 			Specimen specimen=(Specimen)specimenList.get(0);
-			specimenCollectionGroup=specimen.getSpecimenCollectionGroup();
+			specimenCollectionGroup=(SpecimenCollectionGroup)specimen.getSpecimenCollectionGroup();
 			
 			//IdentifiedSurgicalPathologyReport identifiedReport = scg.getIdentifiedSurgicalPathologyReport();			
 			//if(identifiedReport.getId() == null)

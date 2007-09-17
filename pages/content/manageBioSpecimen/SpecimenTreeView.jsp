@@ -19,6 +19,7 @@
 		{
 			divHeight = "280";		
 		}
+		String operation = (String)request.getAttribute("operation");
 
 %>
 <head>
@@ -32,24 +33,48 @@
 
 <body>
 <table border="0" cellpadding="0" cellspacing="0">
-		<tr>	
-			<td class="formLabelAllBorder" colspan="2" width="170">
-				<b>Specimen Details :</b>
-			</td>
-		</tr>	
-		<tr>
-			<td align="left" colspan="2">
-				<div id="treeboxbox_tree" style="width:212; height:<%=divHeight%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
-			</td>
-			
-		</tr>
-		<tr>
-			<td colspan="2" width="170">
 		
-			<input type="hidden" name="participantId" value="<%=participantId%>"/>
-			<input type="hidden" name="cpId" value="<%=cpId%>"/>
-			</td>
-	</tr>		
+		<%
+		if(participantId!=null)
+		{
+		%>
+			<tr>	
+				<td class="formLabelAllBorder" colspan="2" width="170">
+					<b>Specimen Details :</b>
+				</td>
+			</tr>	
+			<tr>
+				<td align="left" colspan="2">
+					<div id="treeboxbox_tree" style="width:212; height:<%=divHeight%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
+				</td>
+				
+			</tr>
+			<tr>
+				<td colspan="2" width="170">
+			
+				<input type="hidden" name="participantId" value="<%=participantId%>"/>
+				<input type="hidden" name="cpId" value="<%=cpId%>"/>
+				</td>
+			</tr>		
+		<%
+		}
+		else
+		{
+		%>
+			<tr>	
+				<td class="formLabelAllBorder" colspan="2" width="170">
+					<b><bean:message key="cpbasedentry.specimenevents"/></b>
+				</td>
+			</tr>	
+			<tr>
+				<td align="left" colspan="2">
+					<div id="treeboxbox_tree" style="width:240px; height:430px;background-color:#f5f5f5;border :1px solid Silver; overflow:auto;"/>
+				</td>
+				
+			</tr>
+		<%
+		}
+		%>
 	</table>
 
 	<script language="javascript">
@@ -65,12 +90,14 @@
 				}
 				else
 				{
-				var str = id;
+					var str = id;
 				}
 				var name = tree.getItemText(id);
 				var i = str.indexOf('_');
 				var obj1 = str.substring(0,i);
 				var id1 = str.substring(i+1);
+				//alert(obj1);
+				//alert(id1);
 				if(obj1 == "<%=Constants.SPECIMEN_COLLECTION_GROUP%>")
 				{
 					<%if(access != null && access.equals("Denied"))
@@ -92,11 +119,23 @@
 					}
 					<%}%>
 				}
-				else
+				if(obj1 == "<%=Constants.SPECIMEN%>")
 				{
 					window.parent.frames[2].location = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+<%=participantId%>+"&<%=Constants.CP_SEARCH_CP_ID%>="+<%=cpId%>;
 				}
-			};
+				else if(obj1 == "New")
+				{
+					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=edit&pageOf=specimenRequirement&key="+id1+"&nodeId="+id;
+				}
+				else if(obj1 == "ViewSummary")
+				{
+					window.parent.frames['SpecimenRequirementView'].location="GenericSpecimenSummary.do?Event_Id="+id1+"&nodeId="+id;
+				}
+				else
+				{
+					window.parent.frames['SpecimenRequirementView'].location="ProtocolEventsDetails.do?operation=edit&pageOf=defineEvents&key="+id1+"&nodeId="+id;
+				}
+			}; 
 									
 			// Creating the tree object								
 			tree=new dhtmlXTreeObject("treeboxbox_tree","100%","100%",0);
@@ -116,8 +155,7 @@
 						String id = data.getIdentifier().toString();
 						if(!data.getParentIdentifier().equals("0"))
 						{
-							parentId = data.getParentObjectName() + "_"+ data.getParentIdentifier().toString();
-		
+							parentId = data.getParentObjectName() + "_"+ data.getParentIdentifier().toString();		
 						}
 						String nodeId = data.getObjectName() + "_"+id;
 						String img = "Specimen.GIF";
@@ -134,6 +172,7 @@
 							}
 						}
 			%>
+
 					tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"<%=img%>","<%=img%>","<%=img%>","");
 					tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
 					tree.setItemText("<%=nodeId%>","<%=data.getDisplayName()%>","<%=tooltipText%>");

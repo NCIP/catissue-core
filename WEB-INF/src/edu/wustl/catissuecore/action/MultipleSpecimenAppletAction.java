@@ -1037,7 +1037,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 					message = "Class : "+ className+ " and ";
 					String collectionGroup="";
 					if(specimen.getSpecimenCollectionGroup() != null)
-						collectionGroup = specimen.getSpecimenCollectionGroup().getName();
+						collectionGroup = specimen.getSpecimenCollectionGroup().getGroupName();
 					
 					if(collectionGroup != null)
 					{

@@ -4,6 +4,25 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <html>
+<head>
+	<script language="JavaScript">
+		window.parent.frames['SpecimenEvents'].location="showTree.do?pageOf=specimenEventsPage&operation=ViewSummary";
+
+		function saveCollectionProtocol()
+		{
+				var action ="SubmitSpecimenCollectionProtocol.do?action=collectionprotocol";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+		}
+	</script>
+</head>
+		
+
+		<html:errors />
+		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+			<%=messageKey%>
+		</html:messages>
+		
 		<html:form action="SubmitSpecimenCollectionProtocol.do">		
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
 				<tr>
@@ -151,13 +170,14 @@
 		<tr>
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">		
 		   <td>
-			<html:submit  value="Save Collection Protocol"/>
+				<html:button  value="Save Collection Protocol" property="submitPage" onclick="saveCollectionProtocol()"/>
 			</td>
+			
 		</logic:notEmpty>
 		
 		<logic:empty name="viewSpecimenSummaryForm" property="eventId">		
 		    <td>
-			<html:submit value="Save Specimens"/>
+			<html:submit value="Save Specimens" property="submitPage" onclick="SubmitSpecimenCollectionProtocol.do?action=specimen" />
 			</td>
 		</logic:empty>
 		</tr>

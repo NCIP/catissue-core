@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class CollectionProtocolBean implements Serializable
 {
+	private Long identifier =null;
+	
 	private long[] protocolCoordinatorIds;
 
 	private long principalInvestigatorId;
@@ -161,6 +163,18 @@ public class CollectionProtocolBean implements Serializable
 	public void setConsentWaived(boolean consentWaived)
 	{
 		this.consentWaived = consentWaived;
+	}
+
+	
+	public Long getIdentifier()
+	{
+		return identifier;
+	}
+
+	
+	public void setIdentifier(Long identifier)
+	{
+		this.identifier = identifier;
 	}
 
 }

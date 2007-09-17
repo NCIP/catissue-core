@@ -351,7 +351,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
      * @return consentStatementColl
      * @throws Exception - Exception 
      */
-    private Collection prepareConsentTierCollection(Map consentTierMap) throws Exception 
+    public Collection prepareConsentTierCollection(Map consentTierMap) throws Exception 
     {
     	MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
     	Collection beanObjColl = mapdataParser.generateData(consentTierMap);

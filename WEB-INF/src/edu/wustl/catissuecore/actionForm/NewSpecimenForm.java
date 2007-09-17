@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
@@ -34,6 +35,7 @@ import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -376,7 +378,9 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
     	Specimen specimen = (Specimen) abstractDomain;
     	
     	this.parentPresent = false;
-    	SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+    	AbstractSpecimenCollectionGroup absspecimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+    	SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)HibernateMetaData.getProxyObjectImpl(absspecimenCollectionGroup);
+    	
     	if(specimenCollectionGroup!=null)
     	{
     		this.specimenCollectionGroupId = Utility.toString(specimenCollectionGroup.getId());

@@ -998,3 +998,59 @@ alter table CATISSUE_CONCEPT_REFERENT add index FK799CCA7EA9816272 (CONCEPT_ID),
 alter table CATISSUE_CONCEPT_REFERENT add index FK799CCA7E72C371DD (CONCEPT_CLASSIFICATION_ID), add constraint FK799CCA7E72C371DD foreign key (CONCEPT_CLASSIFICATION_ID) references CATISSUE_CONCEPT_CLASSIFICATN (IDENTIFIER);
 
 /****caTIES Realated Tables - end**********/
+
+/*------------Alteration in parent entity 'catissue_specimen_coll_group' ------*/
+
+alter table catissue_specimen_coll_group rename catissue_abstract_specimen_coll_group;
+alter table catissue_abstract_specimen_coll_group drop column name;
+alter table catissue_abstract_specimen_coll_group drop column comments;
+alter table catissue_abstract_specimen_coll_group drop column SURGICAL_PATHOLOGY_NUMBER;
+alter table catissue_abstract_specimen_coll_group drop foreign key `FKDEBAF1677E07C4AC`;
+alter table catissue_abstract_specimen_coll_group drop foreign key `FKDEBAF16753B01F66`;
+alter table catissue_abstract_specimen_coll_group drop column COLLECTION_PROTOCOL_EVENT_ID;
+alter table catissue_abstract_specimen_coll_group drop column COLLECTION_PROTOCOL_REG_ID;
+
+
+/*------ Creating child entities ----------------------*/
+CREATE TABLE `catissue_specimen_coll_group` (                                                                                         
+                                `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                    
+                                `NAME` varchar(255) default NULL,                                                                                                   
+                                `COMMENTS` text,                                                                                                                    
+                                `COLLECTION_PROTOCOL_REG_ID` bigint(20) default NULL,                                                                               
+                                `SURGICAL_PATHOLOGY_NUMBER` varchar(50) default NULL,                                                                               
+                                PRIMARY KEY  (`IDENTIFIER`),                                                                                                        
+                                UNIQUE KEY `NAME` (`NAME`),                                                                                                         
+                                KEY `FKDEBAF1677E07C4AC` (`COLLECTION_PROTOCOL_REG_ID`),                                                                            
+                                CONSTRAINT `FKDEBAF1677E07C4AC` FOREIGN KEY (`COLLECTION_PROTOCOL_REG_ID`) REFERENCES `catissue_coll_prot_reg` (`IDENTIFIER`),
+                                CONSTRAINT FK_PARENT_SPEC_COLL_GROUP 
+				FOREIGN KEY (IDENTIFIER) REFERENCES 
+					catissue_abstract_specimen_coll_group(IDENTIFIER)
+                              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter table catissue_specimen_coll_group add column `COLLECTION_PROTOCOL_EVENT_ID` bigint(20) default NULL;
+alter table catissue_specimen_coll_group add CONSTRAINT `FK_COLL_PROT_EVENT_SPEC_COLL_GROUP` FOREIGN KEY (`COLLECTION_PROTOCOL_EVENT_ID`) REFERENCES `catissue_coll_prot_event` (`IDENTIFIER`);
+insert catissue_specimen_coll_group(identifier) select identifier from catissue_abstract_specimen_coll_group;
+
+CREATE TABLE `catissue_specimen_coll_requirement_group` (                                                         
+                                `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                    
+                                PRIMARY KEY  (`IDENTIFIER`),
+				CONSTRAINT FK_PARENT_SPEC_COLL_GROUP_REQ_GROUP 
+				FOREIGN KEY (IDENTIFIER) REFERENCES 
+				catissue_abstract_specimen_coll_group(IDENTIFIER)
+                              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* ----------------------Alteration in 'catissue_coll_prot_event' ------*/
+Alter table catissue_coll_prot_event add column SPECIMEN_COLLECTION_REQ_GROUP_ID bigint(20);
+Alter table catissue_coll_prot_event add constraint FK_COLL_EVENT_REQ_GROUP 
+						FOREIGN KEY (SPECIMEN_COLLECTION_REQ_GROUP_ID)
+						REFERENCES catissue_specimen_coll_requirement_group(IDENTIFIER);
+
+/*-------------------*/
+alter table catissue_consent_tier_status drop foreign key FKF74E94AEF69249F7;
+alter table catissue_consent_tier_status add CONSTRAINT `FKF74E94AEF69249F7` FOREIGN KEY (`SPECIMEN_COLL_GROUP_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);
+alter table catissue_specimen_event_param drop foreign key FK753F33AD8CA560D1;
+alter table catissue_specimen_event_param add CONSTRAINT `FK753F33AD8CA560D1` FOREIGN KEY (`SPECIMEN_COLL_GRP_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);  
+alter table catissue_identified_report drop foreign key FK6A2246DC91741663;
+alter table catissue_identified_report add CONSTRAINT `FK6A2246DC91741663` FOREIGN KEY (`SCG_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);  
+alter table catissue_deidentified_report drop foreign key FKCDD0DF7B91741663;
+alter table catissue_deidentified_report add CONSTRAINT `FKCDD0DF7B91741663` FOREIGN KEY (`SCG_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);  

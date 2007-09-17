@@ -47,6 +47,7 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
@@ -638,12 +639,20 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	 * @param request
 	 * @param specimenCollectionGroupForm
 	 * @param calendarEventPointList
+	 * @throws DAOException 
 	 */
-	private void setNumberOfSpecimens(HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm, List calendarEventPointList) 
+	private void setNumberOfSpecimens(HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm, List calendarEventPointList) throws DAOException 
 	{
 		CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
 		specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
-		Collection specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+
+		SpecimenCollectionRequirementGroup collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+		
+		IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		Collection specimenRequirementCollection = (Collection)bizlogic.retrieveAttribute(SpecimenCollectionRequirementGroup.class.getName(),collectionRequirementGroup.getId(),"elements(specimenCollection)");
+			
+		//collectionRequirementGroup.getSpecimenCollection(); 
+			
 		if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
 		{
 			int numberOfSpecimen = specimenRequirementCollection.size();
@@ -1050,8 +1059,9 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	 * @param calendarEventPointList calendar event point list
 	 * @param request object of HttpServletRequest 
 	 * @param specimenCollectionGroupForm object of specimenCollectionGroup action form
+	 * @throws DAOException 
 	 */
-	private void setCalendarEventPoint(List calendarEventPointList, HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm)
+	private void setCalendarEventPoint(List calendarEventPointList, HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm) throws DAOException
 	{
 //		Patch ID: Bug#3184_27
 		int numberOfSpecimen = 1;
@@ -1063,7 +1073,10 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			/**
 			 * Patch ID: Bug#3184_9
 			 */
-			Collection specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+			SpecimenCollectionRequirementGroup collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+			IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+			Collection specimenRequirementCollection = (Collection)bizlogic.retrieveAttribute(SpecimenCollectionRequirementGroup.class.getName(),collectionRequirementGroup.getId(),"elements(specimenCollection)");
+			
 			if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
 			{
 				//Populate the number of Specimen Requirements.
