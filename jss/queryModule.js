@@ -171,7 +171,9 @@
 				items += selectTag[i].value + "~";
 			}
 		}
-		document.applets[0].addNodeToView(items);
+		//document.applets[0].addNodeToView(items);
+		addNodeToView(items);
+		
 	}
 	function expand()
 	{			
@@ -663,32 +665,37 @@
 		}
 		if(isEditLimit == 'Add Limit')
 		{	
-			document.applets[0].addExpression(strToCreateQueyObject,entityName);
+			//document.applets[0].addExpression(strToCreateQueyObject,entityName);
+			addLimit(strToCreateQueyObject,entityName);
 		}
 		else if(isEditLimit == 'Edit Limit')
 		{
-			document.applets[0].editExpression(strToCreateQueyObject,entityName);
+			//document.applets[0].editExpression(strToCreateQueyObject,entityName);
+			//alert('hi');
+			editLimits(strToCreateQueyObject,entityName);
 			
 		}
 			hideCursor();
 	}
 	function viewSearchResults()
 	{
-	waitCursor();
-		var errorMessage = document.applets[0].getSearchResults();
-		hideCursor();
-		if(errorMessage == null)
-		{
-			 showViewSearchResultsJsp();
-		}
-		else if (errorMessage == "<li><font color=\"red\">showErrorPage</font></li>")
-		{
-			showErrorPage();
-		}
-		else
-		{
-			showValidationMessages(errorMessage);
-		}
+		waitCursor();
+		 search();//document.applets[0].getSearchResults();
+		 hideCursor();
+		//alert('---'+interfaceObj.isCompleted());
+		//if(errorMessage == 'search sucess')
+		//{
+		//	alert(errorMessage);
+		//	 showViewSearchResultsJsp();
+		//}
+		//if (errorMessage == "<li><font color=\"red\">showErrorPage</font></li>")
+		//{
+		//	showErrorPage();
+		//}
+		//else
+		//{
+		//	showValidationMessages(errorMessage);
+		//}
 	}
 	function showValidationMessages(text)
 	{
@@ -731,12 +738,15 @@
 	}
 	function saveClientQueryToServer()
 	{
-		var message = document.applets[0].defineResultsView();
-		if(message != "")
+	//	alert('saveClientQueryToServer -1');
+		//var message = document.applets[0].defineResultsView();\
+		//setting quey in session here 
+	//	if(message != "")
 		{
-			showValidationMessages(message);
+		//	showValidationMessages(message);
+	
 		}
-		else
+	//	else
 		{
 			defineSearchResultsView();
 		}
@@ -758,11 +768,13 @@
 	function previousFromDefineResults()
 	{
 		waitCursor();
-		document.applets[0].defineResultsView();
-		document.forms['categorySearchForm'].action='SearchCategory.do';
+//		document.applets[0].defineResultsView();
+		var action ="SearchCategory.do";
+		document.forms['categorySearchForm'].action=action;
+		document.forms['categorySearchForm'].isQuery.value   // change for flex
 		document.forms['categorySearchForm'].currentPage.value = "prevToAddLimits";
 		document.forms['categorySearchForm'].submit();
-			hideCursor();
+		hideCursor();
 	}
 	function setIncludeDescriptionValue()
 	{
@@ -833,3 +845,62 @@ function permissibleValuesSelected(element)
 			}
 		}
   }
+  
+  //---Flex Call
+var interfaceObj;
+
+	function callFlexMethod()
+	{
+		if(navigator.appName.indexOf("Microsoft") != -1)
+		{
+			interfaceObj = window["DAG"];				
+		}
+		else
+		{
+			interfaceObj = document["DAG"];
+		}
+	}
+
+var jsReady = false;
+
+// ——- functions called by ActionScript ——-
+// called to check if the page has initialized and JavaScript is available
+	function isReady()
+	{
+		return jsReady;
+	}
+// called by the onload event of the <body> tag
+	function pageInit()
+	 {
+	// Record that JavaScript is ready to go.
+		jsReady = true;
+	}
+
+	function addLimit(strToCreateQueyObject,entityName)
+	{	
+		callFlexMethod();
+		interfaceObj.createNode(strToCreateQueyObject,entityName);
+	}
+
+	function editLimits(strToCreateQueyObject,entityName)
+	{	
+		callFlexMethod();
+		interfaceObj.editLimit(strToCreateQueyObject,entityName);
+	}
+	
+	window.onload=pageInit();
+	
+	 function search()
+	 {
+		 callFlexMethod();
+		 interfaceObj.searchResult();
+	 }
+	
+	function addNodeToView(nodesStr)
+	{	
+		callFlexMethod();
+		interfaceObj.addNodeToView(nodesStr);
+	}
+	
+	
+	//---
