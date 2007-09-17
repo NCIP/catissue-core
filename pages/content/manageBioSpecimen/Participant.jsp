@@ -748,25 +748,21 @@ tr#hiddenCombo
 	%>	
 	
 	  <%-- this is done at the end beacuse we want to set CpId value --%>
-	<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
-	{%>
+	<%
+	
+	String refreshTree = (String)request.getAttribute("refresh");
+   
+	if(refreshTree==null || refreshTree.equalsIgnoreCase("true"))
+	{
+	%>
 	<script language="javascript">
-		/*	var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
-			document.getElementById("cpId").value=cpId;
-			var participantId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("participantId").value;
-			<%if(participantId != null){%>
-			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId+"&participantId=<%=participantId%>";
-			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=<%=participantId%>";
-			<%} else{%>
-			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId;
-			<%}%> */
-
-    
-     //Modified for flex by Baljeet
-     top.frames["cpAndParticipantView"].refreshCpParticipants();
-
+	//Modified for flex by Baljeet
+	 
+	 top.frames["cpAndParticipantView"].refreshCpParticipants();
+     
 	</script>
 
-	<%}%>
+	<%}
+	%>
 	
 	</html:form>
