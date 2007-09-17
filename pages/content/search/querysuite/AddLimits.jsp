@@ -94,10 +94,7 @@
 							<tr>
 							<td  height="40%" valign="top">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
-									<tr>																						
-										<td height="4%" bgcolor="#EAEAEA" style="border:solid 1px"><font face="Arial" size="2" color="#000000"><b><bean:message 	key="query.limitSetHeader"/></b></font></td>
-									</tr>
-									<tr>
+								<tr>
 										<td height="600px">											
 											<div id="queryTableTd" style="overflow:auto;height:100%;width:100%">
 											<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
