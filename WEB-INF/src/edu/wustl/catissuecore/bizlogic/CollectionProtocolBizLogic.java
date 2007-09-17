@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -897,4 +898,20 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 		}
 	}
+	
+	
+	/**
+	 *Added by Baljeet : To retrieve all collection Protocol list
+	 * @return
+	 */
+	
+	public List getCollectionProtocolList()
+	{
+		List cpList = new ArrayList();
+		
+		
+	    return cpList;	
+	}
+	
+	
 }
