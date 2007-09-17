@@ -90,8 +90,11 @@ public class NewSpecimenAction extends SecureAction
 		//Logger.out.debug("NewSpecimenAction start@@@@@@@@@");
 		NewSpecimenForm specimenForm = (NewSpecimenForm) form;
 		IBizLogic bizLogicObj = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-
-		//Gets the value of the operation parameter.
+		
+		String treeRefresh = request.getParameter("refresh");
+		request.setAttribute("refresh",treeRefresh);
+		
+        //Gets the value of the operation parameter.
 		String operation = (String) request.getParameter(Constants.OPERATION);
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
