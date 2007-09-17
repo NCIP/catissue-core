@@ -70,6 +70,15 @@ public class ParticipantAction extends SecureAction
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		
+		String refreshParticipant = (String)request.getParameter("refresh");
+		if(refreshParticipant != null)
+		{
+			request.setAttribute("refresh",refreshParticipant);
+			
+		}
+		
+		
 		ParticipantForm participantForm = (ParticipantForm) form;
 		HttpSession session = request.getSession();
 		//This if condition is for participant lookup. When participant is selected from the list then 

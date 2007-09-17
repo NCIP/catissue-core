@@ -82,6 +82,11 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		
+		//changes made by Baljeet
+		String treeRefresh = request.getParameter("refresh");
+		request.setAttribute("refresh",treeRefresh);
+		
 		SpecimenCollectionGroupForm  specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
 		IBizLogic bizLogicObj = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getId());
