@@ -128,14 +128,19 @@
 
 	<%
 	
-	if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+	String refreshTree = (String)request.getAttribute("refresh");
+	
+	if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY) && (refreshTree==null || !(refreshTree.equalsIgnoreCase("false"))))
 	{
 		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
-		%>
+	%>
 		<script language="javascript">
-			refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');					
+		
+	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');					
 		</script>
-	<%}%>
+	<%}
+		
+%>
 
 <script language="JavaScript">
 	function deleteExternalIdentifiers()
@@ -190,13 +195,15 @@
 		
 		function onNormalSubmit()
 		{
+			
 			var checked = false;
 			if(document.forms[0].checkedButton != null)
 			{
 			   checked = document.forms[0].checkedButton.checked;
 			}
 			var operation = document.forms[0].operation.value;
-            var temp = "<%=frdTo%>";
+           
+			var temp = "<%=frdTo%>";
 			//Bug ID: 4040(Virender)
 			if(checked)
 			{
@@ -213,9 +220,9 @@
                     }
 					<%
 					actionToCall = "NewSpecimenAdd.do";
-					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
-					actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
-
+					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+					{
+					  	actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
 					}%>
 					
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
@@ -232,9 +239,10 @@
 					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
-					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
-					actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
-
+					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+					{
+						actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+                    
 					}%>
 					
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
@@ -254,9 +262,9 @@
 					}
 					<%
 					actionToCall = "NewSpecimenAdd.do";
-					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
-					actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
-
+					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+					{
+						actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
 					}%>
 					
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
@@ -273,12 +281,12 @@
 					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
-					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
-					actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+					{
+						
+						actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
 
 					}%>
-					
-					
 					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 			}
