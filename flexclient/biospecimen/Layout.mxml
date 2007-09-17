@@ -69,7 +69,8 @@
    
     public function refreshParticipants():void
     {
-    	var selectedCp : NameValueBean = new NameValueBean();
+		//Alert.show("In refresh Participants Method");    	
+		var selectedCp : NameValueBean = new NameValueBean();
 		selectedCp =  cpCombo.selectedItem as NameValueBean;
 		var remoteObj1:RemoteObject =  new RemoteObject(); 
 		remoteObj1.destination = "cdeService";
@@ -92,6 +93,7 @@
     */
     public function refreshTree(nodeId:String):void
     {
+   	   
    	    var selectedParticipant:NameValueBean= new NameValueBean();
 	    selectedParticipant = pCombo.selectedItem as NameValueBean
         var selectedParticipantId :String = selectedParticipant.value; 
@@ -153,7 +155,8 @@
     */
    	private function getCPData():void
   	{
-  		var remoteObj:RemoteObject =  new RemoteObject(); 
+  		
+		var remoteObj:RemoteObject =  new RemoteObject(); 
 		remoteObj.destination = "cdeService";
 		remoteObj.getCpList();
 		remoteObj.addEventListener(ResultEvent.RESULT,cpEventHandler); 		
@@ -221,13 +224,13 @@
           
 	   //Here we can get data for specimen tree details 
 
-         var remoteObj2:RemoteObject =  new RemoteObject(); 
+             var remoteObj2:RemoteObject =  new RemoteObject(); 
 	     remoteObj2.destination = "cdeService"; 
-    	 var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
+    	     var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
 	     remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
-         remoteObj2.addEventListener("fault",faultHandler);
+             remoteObj2.addEventListener("fault",faultHandler);
 
-	     
+	     var refreshParticipants:String = "false";  
 	    //specimenTree.dataProvider = null;
 	   /* isEventHandled = false;
 	    Alert.show(treeData.toString());
@@ -250,7 +253,7 @@
     	 }*/
 	    
 	    //invoking the java script method
-	    var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId +"')");
+	    var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId + "','" + refreshParticipants+"')");
 		navigateToURL(url,"_self");
 	}
 	
@@ -302,8 +305,9 @@
 	     selectedCp =  cpCombo.selectedItem as NameValueBean;
 	     var selectedCpId :String = selectedCp.value;         
             
+	     var refreshParticipants:String = "true";
 	    //invoking the java script method
-	    var url : URLRequest = new URLRequest("javascript: RegisterParticipants('"+ selectedCpId +"')");
+	    var url : URLRequest = new URLRequest("javascript: RegisterParticipants('"+ selectedCpId +"','"+refreshParticipants+"')");
 	    navigateToURL(url,"_self");  
 	   
 	 }
@@ -313,24 +317,25 @@
 	 */
 	 private function onNodeClick():void
 	 {
-        //Retrieving the selected node id 
+       
+	    //Retrieving the selected node id 
 	    var id : String = specimenTree.selectedItem.@id;
-            
+
 	    //Selected CP and selected participants
-        var selectedParticipant:NameValueBean= new NameValueBean();
+	    var selectedParticipant:NameValueBean= new NameValueBean();
 	    selectedParticipant = pCombo.selectedItem as NameValueBean
 	    var selectedParticipantId :String = selectedParticipant.value; 
 	    var selectedCp : NameValueBean = new NameValueBean();
 	    selectedCp =  cpCombo.selectedItem as NameValueBean;
 	    var selectedCpId :String = selectedCp.value;
-
-        //display name of selected tree node
+	    
+	    //display name of selected tree node
 	    var displayName : String = specimenTree.selectedItem.@name;
-	    selectedNode = specimenTree.selectedItem;
-	       
-	    //invoking java script method
+	    
+	   //invoking java script method
 	    var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
 	       navigateToURL(url,"_self"); 
+	       
 	}
           
           /*
@@ -422,8 +427,7 @@
                    	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" click="onNodeClick()" folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
                    		 defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')" disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true" dataTipFunction="addToolTip"/>
                  </mx:VBox>
-                   
-               </mx:VDividedBox>    
+                </mx:VDividedBox>    
          </mx:VBox>
     	
     </mx:Box> 
