@@ -21,21 +21,27 @@ import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 public class ViewSpecimenSummaryForm extends ActionForm {
 	
 	/**
-	 * 
+	 * Unique Serial verson uid.
 	 */
-	private static final long serialVersionUID = -7978857673984149449L;
-	private static final List<GenericSpecimen> EMPTY_COLL = new ArrayList<GenericSpecimen> ();
-	
-	private List<GenericSpecimen> specimenList = EMPTY_COLL ;
-	private List<GenericSpecimen> aliquotList = EMPTY_COLL; 
-	private List<GenericSpecimen> derivedList = EMPTY_COLL; 
+	private static final long serialVersionUID = -7978857673984149449L;	
+	public static final String ADD_USER_ACTION = "ADD";
+	public static final String UPDATE_USER_ACTION = "UPDATE";
+	public static final String REQUEST_TYPE_MULTI_SPECIMENS= "Multiple Specimen";
+	public static final String REQUEST_TYPE_COLLECTION_PROTOCOL= "Collection Protocol";
+	private List<GenericSpecimen> specimenList = null;
+	private List<GenericSpecimen> aliquotList = null; 
+	private List<GenericSpecimen> derivedList = null; 
 	private String eventId= null;
 	private String selectedSpecimenId= null;
+	private String userAction;
+	private String requestType;
+	private Object summaryObject = null;
 	public ViewSpecimenSummaryForm(){
 		specimenList = new ArrayList<GenericSpecimen> ();
 		aliquotList = new ArrayList<GenericSpecimen> ();
 		derivedList = new ArrayList<GenericSpecimen> ();
-
+		userAction = ADD_USER_ACTION;
+		requestType = REQUEST_TYPE_COLLECTION_PROTOCOL;
 	}
 	public void reset(ActionMapping mapping, ServletRequest request){
 		specimenList = new ArrayList<GenericSpecimen> ();
@@ -43,6 +49,29 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 		derivedList = new ArrayList<GenericSpecimen> ();		
 	}
 	
+	public String getUserAction() {
+		return userAction;
+	}
+	public void setUserAction(String userAction) {
+		this.userAction = userAction;
+	}
+	public String getRequestType() {
+		return requestType;
+	}
+	
+	public void switchUserAction(){
+
+		if ( UPDATE_USER_ACTION.equals(this.userAction)){
+			this.userAction = ADD_USER_ACTION;
+		}
+		else
+		{
+			this.userAction = UPDATE_USER_ACTION;
+		}
+	}
+	public void setRequestType(String requestType) {
+		this.requestType = requestType;
+	}
 	public String getSelectedSpecimenId() {
 		return selectedSpecimenId;
 	}
@@ -125,5 +154,11 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	private GenericSpecimen getNewSpecimen()
 	{
 		return new GenericSpecimenVO();
+	}
+	public Object getSummaryObject() {
+		return summaryObject;
+	}
+	public void setSummaryObject(Object summaryObject) {
+		this.summaryObject = summaryObject;
 	}
 }
