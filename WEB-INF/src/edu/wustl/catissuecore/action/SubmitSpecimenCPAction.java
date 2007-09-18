@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
@@ -400,6 +401,10 @@ public class SubmitSpecimenCPAction extends Action {
 				specimen.setLineage(Constants.DERIVED_SPECIMEN);
 				specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
 			}
+			SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+			specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
+			specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
+			specimen.setSpecimenCharacteristics(specimenCharacteristics);
 			
 			ArrayList childSpecimenList = new ArrayList();
 
@@ -439,6 +444,7 @@ public class SubmitSpecimenCPAction extends Action {
 			Specimen derivedSpecimen = getSpecimenDomainObjectFromObject(derivedSpecimenBean);
 			derivedSpecimen.setParentSpecimen(parentSpecimen);
 			derivedSpecimen.setLineage(Constants.DERIVED_SPECIMEN);
+			derivedSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 			childSpecimenList.add(derivedSpecimen);
 		}
 	}
@@ -461,6 +467,7 @@ public class SubmitSpecimenCPAction extends Action {
 			Specimen aliquotSpecimen = getSpecimenDomainObjectFromObject(aliquotSpecimenBean);
 			aliquotSpecimen.setParentSpecimen(parentSpecimen);
 			aliquotSpecimen.setLineage(Constants.ALIQUOT);
+			aliquotSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 			childSpecimenList.add(aliquotSpecimen);
 		}
 	}
@@ -477,7 +484,7 @@ public class SubmitSpecimenCPAction extends Action {
 		} catch (AssignDataException e1) {
 			e1.printStackTrace();
 			return null;
-		}
+		}		
 		
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		specimen.setBarcode(specimen.getBarcode());
