@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,11 +25,15 @@ import edu.common.dynamicextensions.domaininterface.LongValueInterface;
 import edu.common.dynamicextensions.domaininterface.PermissibleValueInterface;
 import edu.common.dynamicextensions.domaininterface.ShortValueInterface;
 import edu.common.dynamicextensions.domaininterface.StringValueInterface;
+import edu.wustl.cab2b.client.ui.util.CommonUtils;
 import edu.wustl.cab2b.common.exception.CheckedException;
 import edu.wustl.cab2b.common.util.AttributeInterfaceComparator;
 import edu.wustl.cab2b.common.util.PermissibleValueComparator;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
+import edu.wustl.common.cde.CommonUtilities;
 import edu.wustl.common.querysuite.queryobject.ICondition;
+import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.util.ParseXMLFile;
 import edu.wustl.common.util.Utility;
@@ -43,6 +48,23 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * Object which holds data operators fro attributes.
 	 */
 	static ParseXMLFile parseFile = null;
+
+	private int expressionId = -1;
+		
+	public int getExpressionId() {
+		return expressionId;
+	}
+
+
+
+	public void setExpressionId(int expressionId) {
+		this.expressionId = expressionId;
+	}
+
+
+
+	
+
 
 	/**
 	 * Constructor for GenerateHtmlForAddLimitsBizLogic
@@ -63,6 +85,210 @@ public class GenerateHtmlForAddLimitsBizLogic
 			}
 		}
 	}
+	
+	
+	
+	public StringBuffer generateSaveQueryPreHTML()
+	{
+		StringBuffer generatedPreHTML = new StringBuffer();
+		generatedPreHTML.append("<table border=\"0\" width=\"100%\"  callspacing=\"0\" cellpadding=\"0\">");
+		return generatedPreHTML;
+	}
+	
+	
+	
+	public StringBuffer generateSaveQueryForEntity(int expressionID,EntityInterface entity, List<ICondition> conditions,boolean isShowAll)
+	{
+		setExpressionId(expressionID);
+		System.out.println("Entity :---->"+entity.getName() +" contains conditions :----> "+conditions.size());
+		StringBuffer generatedHTML = new StringBuffer();
+		Collection attributeCollection = entity.getAttributeCollection();
+		String attributesList = "";
+		boolean isBGColor = false;
+		Map<String, ICondition> attributeNameConditionMap = getMapOfConditions(conditions);
+		System.out.println("attributeCollection Size :---->"+attributeCollection.size()+"  attributeNameConditionMap  Size----> "+attributeNameConditionMap.size() );
+		if (!attributeCollection.isEmpty())
+		{ 
+			List attributes = new ArrayList(attributeCollection);
+			String styleSheetClass = "rowBGWhiteColor";
+			Collections.sort(attributes, new AttributeInterfaceComparator());
+			for(int i=0;i<attributes.size();i++)
+			{
+				AttributeInterface attribute = (AttributeInterface) attributes.get(i);
+				String attrName = attribute.getName();
+				if (!attributeNameConditionMap.containsKey(attrName)&&!isShowAll)
+				{
+					continue;
+				}
+				String attrLabel =Utility.getDisplayLabel(attrName);
+				String componentId = generateComponentName(attribute);
+				attributesList = attributesList + ";" + componentId;
+				if(isBGColor)
+				{
+					styleSheetClass = "rowBGGreyColor1";
+				}
+				else
+				{
+					styleSheetClass = "rowBGWhiteColor";
+				}
+				isBGColor = !isBGColor;
+				generatedHTML.append("\n<tr class='"+styleSheetClass+"' id=\"" + componentId + "\" height=\"6%\">\n" +
+						generateCheckBox(attribute,false)+
+						"<td valign='top' align='right' >" +
+						"<input type=\"textbox\" name='displayName"+attribute.getId()+"' value='"+expressionID+"." +attrLabel+"' disabled='true'> " +
+						"</td>");
+				generatedHTML.append("<td valign='top' align='right' class='standardTextQuery' nowrap='nowrap' width=\"15%\"><b>"+attrLabel+" ");
+				if(attribute.getDataType().equalsIgnoreCase(Constants.DATE))
+				{
+					String dateFormat = Constants.DATE_FORMAT;//ApplicationProperties.getValue("query.date.format");
+					generatedHTML.append("\n("+dateFormat+")");
+				}
+				generatedHTML.append(":&nbsp;&nbsp;&nbsp;&nbsp;</b></td>\n");
+				List<String> operatorsList = getConditionsList(attribute);
+				boolean isBetween = false;
+				if (!operatorsList.isEmpty() && operatorsList.get(0).equalsIgnoreCase(RelationalOperator.Between.toString()))
+				{
+					isBetween = true;
+				}
+				List<PermissibleValueInterface> permissibleValues = getPermissibleValuesList(attribute);
+				if (conditions != null)
+				{
+					if(attributeNameConditionMap.containsKey(attrName))
+					{
+						ICondition condition = attributeNameConditionMap.get(attrName);
+						ArrayList<String> values = (ArrayList<String>) condition.getValues();
+						String operator = condition.getRelationalOperator().toString();
+						generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, operator));
+						if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
+						{
+							isBetween = true;
+						}
+						else
+						{
+							isBetween = false;
+						}
+						if (!permissibleValues.isEmpty())
+						{
+							generatedHTML.append("\n" + generateHTMLForEnumeratedValues(attribute, permissibleValues, values));
+						}
+						else
+						{
+							if(attribute.getDataType().equalsIgnoreCase("boolean"))
+							{
+								generatedHTML.append("\n" + generateHTMLForRadioButton(attribute,values));	
+							}
+							else
+							{
+								generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, values,operator));
+							}
+						}
+					
+					}
+					else 
+					{
+						generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, null));
+						if (!permissibleValues.isEmpty())
+						{
+							generatedHTML.append("\n" + generateHTMLForEnumeratedValues(attribute, permissibleValues, null));
+						}
+						else
+						{
+							if(attribute.getDataType().equalsIgnoreCase("boolean"))
+							{
+								generatedHTML.append("\n" +generateHTMLForRadioButton(attribute,null));	
+							}
+							else
+							{
+								generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null,null));
+							}
+						}
+					}
+						
+				}
+			
+				generatedHTML.append("\n</tr>");
+				
+				
+			}
+			generatedHTML.append("<tr>" +
+					                "<td> <input type='hidden'  name='"+
+					                "/>"+
+					                "</td>"+
+								"</tr>");
+		}
+		
+		return generatedHTML;
+	}
+	
+	
+	private String generateCheckBox(AttributeInterface attribute , boolean isSelected)
+	{
+	    String select = (isSelected?"select":"");	
+	    String componentId = generateComponentName(attribute);
+		String tag = "<td valign='top' align='right' width=\"10%\"><input type=\"checkbox\"  name='"+componentId+"_checkbox'"+  select+"  onClick=\"enableDisplayField(this.form,'"+attribute.getId()+"')\"></td>" ; 
+		return tag;
+	}
+	
+	
+	private String generateComponentName(AttributeInterface attribute )
+	{
+		String componentId =""; 
+		if(getExpressionId()> -1)
+		{
+			componentId = getExpressionId()+"_";
+		}
+			
+		String attributeName = attribute.getName();
+		componentId = componentId +attributeName + attribute.getId().toString();
+		return componentId;
+		
+	}
+	
+	
+	/* This method generates the html for Save Query section.
+	 * This internally calls methods to generate other UI components like text, Calendar, Combobox etc.
+	 * This method is same as the generateHTML except that this will generate html for selected conditions
+	 * and will display only those conditions with their values set by user.
+	 * @param entity entity to be presented on UI.
+	 * @param conditions List of conditions , will contains atleast one element always.
+	 * @return String html generated for Save Query section.
+	 * */
+	
+	public String generateHTMLForSavedQuery(Map<IExpressionId,Map<EntityInterface, List>>expressionMap,boolean isShowAll)
+	{
+		StringBuffer generatedHTML = new StringBuffer("<table>");
+		Map<EntityInterface, List> entityConditionMap = null;
+		if(expressionMap.isEmpty())
+		{
+			generatedHTML.append("No record found.");
+			return generatedHTML.toString();
+		}
+		else
+		{
+		   Iterator it = expressionMap.keySet().iterator();
+		   while(it.hasNext())
+		   {
+			   IExpressionId expressionId = (IExpressionId)it.next();
+			   entityConditionMap = expressionMap.get(expressionId);
+			   if(entityConditionMap.isEmpty())
+			   {
+				   continue;
+			   }
+			   Iterator it2 = entityConditionMap.keySet().iterator();
+			   while(it2.hasNext())
+			   {
+			    EntityInterface entity =(EntityInterface)it2.next();
+			    List<ICondition> conditions =  entityConditionMap.get(entity);
+			    generatedHTML.append( generateSaveQueryForEntity(expressionId.getInt(),entity, conditions,isShowAll));
+			   }
+		   }
+		}
+	
+		generatedHTML.append("</table>");
+		return generateSaveQueryPreHTML().toString()+" "+generatedHTML.toString();
+	}
+	
+	
 	/**
 	 * This method generates the html for Add Limits and Edit Limits section.
 	 * This internally calls methods to generate other UI components like text, Calendar, Combobox etc.
@@ -122,7 +348,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				AttributeInterface attribute = (AttributeInterface) attributes.get(i);
 				String attrName = attribute.getName();
 				String attrLabel = Utility.getDisplayLabel(attrName);
-				String componentId = attrName + attribute.getId().toString();
+				String componentId = generateComponentName(attribute);
 				attributesList = attributesList + ";" + componentId;
 				if(isBGColor)
 				{
@@ -365,7 +591,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		StringBuffer html = new StringBuffer();
 		String attributeName = attribute.getName();
-		String componentId = attributeName + attribute.getId().toString();
+		String componentId = generateComponentName(attribute);
 		if (operatorsList != null && operatorsList.size() != 0)
 		{
 			html.append("\n<td width='15%' class=\"dropdownQuery\" valign='top' >");
@@ -407,7 +633,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 */
 	private String generateHTMLForTextBox(AttributeInterface attributeInterface, boolean isBetween, ArrayList<String> values,String op)
 	{
-		String componentId = attributeInterface.getName() + attributeInterface.getId().toString();
+		String componentId = generateComponentName(attributeInterface);
 		String textBoxId = componentId + "_textBox";
 		String textBoxId1 = componentId + "_textBox1";
 		String dataType = attributeInterface.getDataType();
@@ -524,7 +750,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 */
 	private String generateHTMLForCalendar(AttributeInterface attribute, boolean isFirst, boolean isBetween)
 	{
-		String componentId = attribute.getName() + attribute.getId().toString();
+		String componentId = generateComponentName(attribute);
 		String innerStr = "";
 		//String divId = "overDiv" + (i + 1);
 		String divStr = "\n<div width='3%' id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
@@ -567,7 +793,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		StringBuffer html = new StringBuffer();
 		String attributeName = attribute.getName();
-		String componentId = attributeName + attribute.getId().toString();
+		String componentId = generateComponentName(attribute);
 		if (permissibleValues != null && permissibleValues.size() != 0)
 		{
 
@@ -617,7 +843,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				AttributeInterface attribute = (AttributeInterface) attributes.get(i);
 				String attrName = attribute.getName();
-				String componentId = attrName + attribute.getId().toString();
+				String componentId = generateComponentName(attribute);
 				attributesList = attributesList + ";" + componentId;
 			}
 		}
@@ -628,7 +854,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		StringBuffer html = new StringBuffer();
 		String attributeName = attribute.getName();
 		
-		String componentId = attributeName + attribute.getId().toString()+"_radioButton";
+		String componentId = generateComponentName(attribute)+"_radioButton";
 		String componentName = componentId+"_booleanAttribute";
 	    String radioButtonTrueId = componentId+"_true";
 	    String radioButtonFalseId = componentId+"_false";
