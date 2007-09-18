@@ -23,8 +23,9 @@
 			<c:forEach items="${parameterizedQueryCollection}" var="parameterizedQuery" varStatus="queries">
 			<jsp:useBean id="parameterizedQuery" type="edu.wustl.common.querysuite.queryobject.IParameterizedQuery" />
 				<tr>
+					<%String target = "executeQuery('"+parameterizedQuery.getId()+"')"; %>
 					<td>
-						<html:link href='#' onclick="executeQuery('${parameterizedQuery.id}')">
+						<html:link href='#' onclick='<%=target%>'>
 							<c:out value='${parameterizedQuery.name}' />
 						</html:link><br/>
 						<b>Description:</b><c:out value='${parameterizedQuery.description}' />

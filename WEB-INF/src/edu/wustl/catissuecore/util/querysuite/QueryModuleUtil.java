@@ -391,8 +391,13 @@ public abstract class QueryModuleUtil
 
 		OutputTreeDataNode node = rootOutputTreeNodeList.get(0);
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
+		
+		SelectedColumnsMetadata selectedColumnsMetadata = new SelectedColumnsMetadata();
+		selectedColumnsMetadata.setDefinedView(false);
+
+		
 		Map<String, List<String>> spreadSheetDatamap = outputSpreadsheetBizLogic
-				.createSpreadsheetData("0", node, sessionData, null, recordsPerPage,null);
+				.createSpreadsheetData("0", node, sessionData, null, recordsPerPage,selectedColumnsMetadata);
 		QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap
 				.get(Constants.QUERY_SESSION_DATA);
 		int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
@@ -403,7 +408,7 @@ public abstract class QueryModuleUtil
 		session.setAttribute(Constants.PAGINATION_DATA_LIST, list);
 		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap
 				.get(Constants.SPREADSHEET_COLUMN_LIST));
-		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA, null);
+		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA, selectedColumnsMetadata);
 
 		return isZeroRecordsFound;
 	}

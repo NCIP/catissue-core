@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
@@ -69,7 +70,7 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			Map<String,String> validationMessagesMap = new HashMap<String,String>();
 			try
 			{
-				boolean isZeroRecordsFound = setResultData(request, query);
+				boolean isZeroRecordsFound = QueryModuleUtil.setResultData(request, query);
 				if(isZeroRecordsFound)
 				{
 					String errorMessage = ApplicationProperties.getValue("query.zero.records.present");
@@ -106,76 +107,6 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * This method extracts query object and forms results for tree and grid.
-	 * @param request HttpRequest
-	 * @param query IQuery
-	 * @throws MultipleRootsException will be thrown when more than one root are present in query
-	 * @throws SqlException error in sql 
-	 * @throws DAOException error in DAO 
-	 * @throws ClassNotFoundException ClassNotFoundException
-	 */
-	private boolean setResultData(HttpServletRequest request, IQuery query) throws MultipleRootsException, SqlException, DAOException, ClassNotFoundException
-	{ 
-		HttpSession session = request.getSession();
-		int recordsPerPage; 
-		String recordsPerPageSessionValue = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);
-		if (recordsPerPageSessionValue==null)
-		{
-				recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(Constants.RECORDS_PER_PAGE_PROPERTY_NAME));
-				session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage+"");
-		}
-		else
-			recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
-		
-		session.setAttribute(AppletConstants.QUERY_OBJECT, query);
-		Map<Long, Map<AttributeInterface, String>> columnMap = null;
-		String selectSql = "";
-		SessionDataBean sessionData = getSessionData(request);
-		SqlGenerator sqlGenerator = (SqlGenerator)SqlGeneratorFactory.getInstance();
-		QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
-		selectSql = sqlGenerator.generateSQL(query);
-		outputTreeBizLogic.createOutputTreeTable(selectSql, sessionData);
-		//Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap = sqlGenerator.getOutputTreeMap();
-		List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator.getRootOutputTreeNodeList();
-		OutputTreeDataNode rootNode = rootOutputTreeNodeList.get(0);
-		session.setAttribute(Constants.CURRENT_SELECTED_OBJECT, rootNode);
-		session.setAttribute(Constants.TREE_ROOTS,rootOutputTreeNodeList);
-		//Set<OutputTreeDataNode> keys = outputTreeMap.keySet();
-		Long noOfTrees = new Long(rootOutputTreeNodeList.size());
-		session.setAttribute(Constants.NO_OF_TREES, noOfTrees);
-		Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor.getAllChildrenNodes(rootOutputTreeNodeList);
-		session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
-		int i =0;
-		boolean isZeroRecordsFound = false;
-		for(OutputTreeDataNode node :rootOutputTreeNodeList)
-		{
-			Vector treeData = outputTreeBizLogic.createDefaultOutputTreeData(i,node, sessionData);
-			int resultsSize = treeData.size();
-			if(resultsSize == 0)
-			{
-				isZeroRecordsFound = true;
-			}
-			session.setAttribute(Constants.TREE_DATA+"_"+i, treeData);
-			i += 1;
-		}
-		OutputTreeDataNode node = rootOutputTreeNodeList.get(0);
-		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
-		String parentNodeId = null;
-		String treeNo = "0";
-		Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,node, sessionData,parentNodeId,recordsPerPage,null);
-		QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap.get(Constants.QUERY_SESSION_DATA);
-		int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
-		session.setAttribute(Constants.QUERY_SESSION_DATA,querySessionData);
-		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(totalNumberOfRecords));	
-		List list= (List)spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
-		session.setAttribute(Constants.PAGINATION_DATA_LIST, list);
-		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
-//		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA,null);
-//		session.setAttribute(Constants.SELECTED_COLUMN_NAME_VALUE_BEAN_LIST,null);
-		return isZeroRecordsFound;
 	}
 
 	/**

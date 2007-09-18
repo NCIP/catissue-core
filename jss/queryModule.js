@@ -750,7 +750,7 @@
 		}
 		else if(action=='save')
 		{
-			window.open('LoadSaveQueryPage.do','Save Query Condition Page','width=800, height=550, scrollbars=yes');
+			saveQueryWindow = window.open('LoadSaveQueryPage.do','Save Query Condition Page','width=800, height=550, scrollbars=yes');
 		}
 	}
 	
@@ -910,6 +910,8 @@ var jsReady = false;
 	{
 		var saveQueryForm = document.getElementById('saveQueryForm');
 		saveQueryForm.submit();
+		alert('Query Saved Succesfully !!!!!');
+		self.close();
 	}
 	/*This function is called form QueryListView.jsp. It invokes the FetchAndExecuteQueryAction*/
 	function executeQuery(queryId)
