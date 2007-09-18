@@ -16,10 +16,10 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
-import edu.wustl.catissuecore.bizlogic.querysuite.CatissuecoreQueryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
@@ -48,14 +48,12 @@ public class SaveQueryAction extends BaseAction
 			IParameterizedQuery parameterizedQuery = populateParameterizedQueryData(query,
 					actionForm);
 
-			CatissuecoreQueryBizLogic catissuecoreQueryBizLogic = (CatissuecoreQueryBizLogic) AbstractBizLogicFactory
-					.getBizLogic(ApplicationProperties.getValue("app.bizLogicFactory"),
-							"getBizLogic", Constants.CATISSUECORE_QUERY_INTERFACE_ID);
-
+			IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
+					.getValue("app.bizLogicFactory"), "getBizLogic",
+					Constants.CATISSUECORE_QUERY_INTERFACE_ID);
 			try
 			{
-				catissuecoreQueryBizLogic.insert(parameterizedQuery, null,
-						Constants.HIBERNATE_DAO);
+				bizLogic.insert(parameterizedQuery, Constants.HIBERNATE_DAO);
 				target = Constants.SUCCESS;
 			}
 			catch (BizLogicException bizLogicException)
@@ -81,7 +79,7 @@ public class SaveQueryAction extends BaseAction
 						parameterizedQuery.getClass().getName());
 				errors.add(ActionErrors.GLOBAL_ERROR, error);
 				saveErrors(request, errors);
-				
+
 				Logger.out.error(userNotAuthorizedException.getMessage(),
 						userNotAuthorizedException);
 			}
