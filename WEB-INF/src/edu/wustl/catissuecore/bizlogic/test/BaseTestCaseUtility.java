@@ -88,7 +88,7 @@ public class BaseTestCaseUtility {
 		specimenRequirement.setQuantity(quantity);
 		specimenRequirementCollection.add(specimenRequirement);
 		
-		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
+//		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
@@ -188,7 +188,7 @@ public class BaseTestCaseUtility {
 		specimenRequirement.setQuantity(quantity);
 		specimenRequirementCollection.add(specimenRequirement);
 		
-		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
+//		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");

@@ -922,7 +922,7 @@ public class ConsentTrackingTest extends BaseTestCase
 		specimenRequirement.setQuantity(quantity);
 
 		specimenRequirementCollection.add(specimenRequirement);
-		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
+//		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 
 		collectionProtocolEventCollectionSet.add(collectionProtocolEvent);
 		collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventCollectionSet);

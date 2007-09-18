@@ -221,7 +221,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase {
 		specimenRequirement.setSpecimenClass("Invalid class");
 		specimenRequirementCollection.add(specimenRequirement);
 		
-		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
+	//	collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
@@ -262,7 +262,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase {
 		specimenRequirement.setSpecimenType("Invalid Type");
 		specimenRequirementCollection.add(specimenRequirement);
 		
-		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
+	///	collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
@@ -300,7 +300,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase {
 		
 		specimenRequirementCollection.add(specimenRequirement);
 		
-		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
+	//	collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
@@ -337,7 +337,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase {
 		
 		specimenRequirementCollection.add(specimenRequirement);
 		
-		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
+	//	collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
