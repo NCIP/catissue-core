@@ -387,7 +387,7 @@ boolean readOnlyValue=false,readOnlyForAll=false;
 		checkb.innerHTML=""+sname;
 	}
 
-	window.parent.frames['SpecimenEvents'].location="showTree.do?pageOf=specimenEventsPage&key="+"<%=mapKey%>";
+	window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key="+"<%=mapKey%>";
 </script>
 
 </head>
@@ -423,7 +423,7 @@ boolean readOnlyValue=false,readOnlyForAll=false;
 				else
 				{
 				%>
-					<bean:message key="cpbasedentry.editspecimenrequirements"/>							
+					<bean:message key="cpbasedentry.editspecimenrequirements"/>	<%=form.getLineage()%>													
 				<%
 				}
 				%>
@@ -854,18 +854,6 @@ boolean readOnlyValue=false,readOnlyForAll=false;
 	</table>
 	</td>
 </tr>	
-</table>
-<table summary="" cellpadding="3" cellspacing="0" border="0" width="700">
-		<tr>
-			<td width="400">
-			&nbsp;
-			</td>
-			<td align="right">
-				<html:button styleClass="actionButton" property="submitPage" onclick="">
-					<bean:message key="cpbasedentry.savecollectionprotocol"/>
-				</html:button>
-			</td>
-		</tr>
 </table>
 </html:form>
 </body>

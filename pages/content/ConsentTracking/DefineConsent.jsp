@@ -156,8 +156,12 @@
 			<table cellpadding="0" cellspacing="0" border="0" width = "100%" id="submittable">
 				<tr>
 					<td align="right">
-						<html:button styleClass="actionButton" property="submitPage" onclick="">
-							<bean:message key="cpbasedentry.savecollectionprotocol"/>
+						<html:button styleClass="actionButton" property="submitPage" onclick="collectionProtocolPage()">
+							<< <bean:message key="cpbasedentry.collectionprotocol" />
+						</html:button>
+
+						<html:button styleClass="actionButton" property="submitPage" onclick="defineEvents()">
+							<bean:message key="cpbasedentry.defineevents" /> >>
 						</html:button>
 					</td>
 				</tr>

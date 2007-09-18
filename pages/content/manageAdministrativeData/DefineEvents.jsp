@@ -8,6 +8,7 @@
 <%
       String access = (String)session.getAttribute("Access");
 	  String pageOf = request.getParameter("pageOf");
+	  request.setAttribute(Constants.PAGEOF,pageOf);
 	  boolean mac = false;
       Object os = request.getHeader("user-agent");
       if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
@@ -87,11 +88,7 @@
 	        <td height="20" width="10%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" id="consentTab" onclick="consentPage()">
 			    <bean:message key="consents.consents" />        
 	        </td>
-
-			<%
-				if(pageOf.equals("ViewSummary"))
-				{
-			%>
+			<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
 					<td height="20" width="10%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" 	onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="defineEvents()">
 						<bean:message key="cpbasedentry.defineevents" />					
 					</td>
@@ -99,12 +96,8 @@
 					<td height="20" width="9%" nowrap class="tabMenuItemSelected">
 						 <bean:message key="cpbasedentry.viewsummary" />
 					</td>
-			<%	
-				}
-				else
-				{
-			%>
-				
+			</logic:equal>
+			<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
 				<td height="20" width="9%" nowrap class="tabMenuItemSelected" id="collectionProtocolTab">
 					<bean:message key="cpbasedentry.defineevents" />
 				</td>
@@ -112,12 +105,8 @@
 				<td height="20" width="10%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" 	onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" id="consentTab" onclick="viewSummary()">
 					 <bean:message key="cpbasedentry.viewsummary" />
 				</td>
-
-			<%
-				}
-			%>
-			
-			
+			</logic:notEqual>
+						
 	
 	     <td width="600" class="tabMenuSeparator" colspan="1">&nbsp;</td>
 	   </tr>
@@ -136,41 +125,49 @@
 								</td>
 							</tr>
 							<tr>
-							<td align="center" valign="top">
-								<html:button styleClass="actionButton" property="submitPage" onclick="addNewEvent()">
-									 <bean:message key="cpbasedentry.addnewevent" />
-								</html:button>
-							</td>
+								<td align="left" valign="top">
+									<html:button styleClass="actionButton" property="submitPage" onclick="addNewEvent()">
+										 <bean:message key="cpbasedentry.addnewevent" />
+									</html:button>
+									<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
+										<html:button styleClass="actionButton" property="submitPage" onclick="defineEvents()">
+											<< <bean:message key="cpbasedentry.defineevents" />
+										</html:button>
+									</logic:equal>
+								</td>
 							</tr>
                         </table>	
 					</td>
 					<!--P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen-->
-					<%
-					if(pageOf.equals("ViewSummary"))
-					{
-					%>
+					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
 					<td width="100%" height="100%" valign="top">
-						<iframe name="SpecimenRequirementView" src="GenericSpecimenSummary.do?Event_Id=dummyId" scrolling="no" frameborder="1" width="780px" height="500px">
+						<iframe name="SpecimenRequirementView" src="GenericSpecimenSummary.do?Event_Id=dummyId" scrolling="auto" frameborder="0" width="800px" height="500px">
 							Your Browser doesn't support IFrames.
 						</iframe>
 					</td>
+					</logic:equal>
+					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
+						<td width="100%" height="100%" valign="top">
+							<iframe name="SpecimenRequirementView" src="ProtocolEventsDetails.do?operation=add" scrolling="auto" frameborder="0" width="800px" height="500px">
+								Your Browser doesn't support IFrames.
+							</iframe>
+						</td>
+						<tr>
+							<td align="right">
+								<html:button styleClass="actionButton" property="submitPage" onclick="consentPage()">
+									<< <bean:message key="consent.addconsents" />
+								</html:button>
 
-					<%
-					}
-					else
-					{
-					%>
-					<td width="100%" height="100%" valign="top">
-						<iframe name="SpecimenRequirementView" src="ProtocolEventsDetails.do?operation=add" scrolling="no" frameborder="1" width="780px" height="500px">
-							Your Browser doesn't support IFrames.
-						</iframe>
-					</td>
-					<%
-					}
-					%>
+								<html:button styleClass="actionButton" property="submitPage" onclick="viewSummary()">
+									<bean:message key="cpbasedentry.viewsummary" /> >>
+								</html:button>
+							</td>
+						</tr>
+					</logic:notEqual>
 					
 					<!--P.G. - End -->
 				</tr>
+				
 			</table>
 		</td>
 	</tr>

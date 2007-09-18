@@ -61,7 +61,6 @@
 	}
 	function onParticipantClick(pId,cpId,refParticipants)
 	{
-      
 	  window.parent.frames[1].location ="QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=edit&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&id="+pId;
 	}
   

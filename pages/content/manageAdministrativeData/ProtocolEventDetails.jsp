@@ -47,7 +47,7 @@ function submitAllEvents()
 	document.forms[0].submit();
 }
 
-window.parent.frames['SpecimenEvents'].location="showTree.do?pageOf=specimenEventsPage";
+window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage";
 
 </script>
 </head>
@@ -67,15 +67,6 @@ window.parent.frames['SpecimenEvents'].location="showTree.do?pageOf=specimenEven
 	</tr>
 	<tr>
 	 <td class="tabField" colspan="3">
-	 
-	  <table summary="" cellpadding="3" cellspacing="0" border="0" width="700">
-		<tr>
-			<td class="formMessage" colspan="6">
-				<bean:message key="requiredfield.message"/>  
-			</td>
-		</tr>	
-	  </table>
-	
 		<table summary="" cellpadding="3" cellspacing="0" border="0" width="700">
 		<tr>
 			<td class="formTitle" height="20" width="100%" colspan="7">
@@ -242,19 +233,6 @@ window.parent.frames['SpecimenEvents'].location="showTree.do?pageOf=specimenEven
 		</table>
 	</td>
   </tr>
-</table>
-&nbsp;
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="700">
-		<tr>
-			<td width="400">
-			&nbsp;
-			</td>
-			<td align="right">
-				<html:button styleClass="actionButton" property="submitPage" onclick="">
-					<bean:message key="cpbasedentry.savecollectionprotocol"/>
-				</html:button>
-			</td>
-		</tr>
 </table>
 </html:form>
 </body>

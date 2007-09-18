@@ -317,10 +317,6 @@ if(pageView.equals("add") || pageView.equals("edit"))
 					<td><html:hidden property="id" />
 					<html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
 				</tr>
-		
-				<tr>
-					<td class="formMessage" colspan="4">* indicates a required field</td>
-				</tr>
 <!-- page title -->	
 					<tr>
 						<td class="formTitle" height="20" width="100%" colspan="6">
@@ -568,10 +564,11 @@ if(pageView.equals("add") || pageView.equals("edit"))
 				</td>
 						   
 				<td align="right">
-					<html:button styleClass="actionButton" property="submitPage" onclick="">
-						<bean:message key="cpbasedentry.savecollectionprotocol"/>
+					<html:button styleClass="actionButton" property="submitPage" onclick="consentPage()">
+						<bean:message key="consent.addconsents" /> >>
 					</html:button>
 				</td>
+
 			</tr>
 			<tr>
 				<td>

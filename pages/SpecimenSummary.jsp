@@ -6,7 +6,7 @@
 <html>
 <head>
 	<script language="JavaScript">
-		window.parent.frames['SpecimenEvents'].location="showTree.do?pageOf=specimenEventsPage&operation=ViewSummary";
+		window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
 
 		function saveCollectionProtocol()
 		{

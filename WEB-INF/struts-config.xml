@@ -4253,7 +4253,7 @@ PUBLIC
 	            <forward name="success" path="/pages/SpecimenSummary.jsp" />
                 <forward name="failure" path="/Home.do" />
        </action>    
-        <action path="/SubmitSpecimenCollectionProtocol"
+       <action path="/SubmitSpecimenCollectionProtocol"
                   type="edu.wustl.catissuecore.action.SubmitSpecimenCPAction"
                   name="viewSpecimenSummaryForm"
                   validate="false"
@@ -4261,6 +4261,12 @@ PUBLIC
                   <forward name="success" path="/pages/SpecimenSummary.jsp" />
                   <forward name="failure" path="/pages/SpecimenSummary.jsp" />
             </action>
+       <action path="/ShowCollectionProtocol"
+				type="edu.wustl.catissuecore.action.ShowCollectionProtocolTreeAction"
+				scope="request">
+				<forward name="success" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
+				<forward name="failure" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
+		</action>
             
 	</action-mappings>
 	
