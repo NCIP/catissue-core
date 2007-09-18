@@ -79,7 +79,12 @@ public class SubmitSpecimenCPAction extends Action {
 				{
 					insertCollectionProtocol(collectionProtocol,request.getSession());
 				}
+				ActionMessages actionMessages = new ActionMessages();
+				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+						"object.add.successOnly","Collection Protocol"));
+				saveMessages(request, actionMessages);
 
+				
 			}
 			
 			if (ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(
@@ -95,12 +100,13 @@ public class SubmitSpecimenCPAction extends Action {
 				{
 					insertSpecimens(cpEventMap,request.getSession());
 				}
+				ActionMessages actionMessages = new ActionMessages();
+				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+						"object.add.successOnly","Specimen(s))"));
+				saveMessages(request, actionMessages);
+				
 			}
 			
-			ActionMessages actionMessages = new ActionMessages();
-			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-					"object.add.successOnly","Collection Protocol"));
-			saveMessages(request, actionMessages);
 			target = Constants.SUCCESS;
 			specimenSummaryForm.switchUserAction();
 		} catch (Exception ex) {
@@ -384,6 +390,16 @@ public class SubmitSpecimenCPAction extends Action {
 		{
 			SpecimenDataBean specimenDataBean =(SpecimenDataBean) iterator.next();
 			Specimen specimen =getSpecimenDomainObjectFromObject(specimenDataBean);
+			
+			if (specimen.getSpecimenCollectionGroup()!=null)
+			{
+				specimen.setLineage(Constants.NEW_SPECIMEN);
+			}
+			else
+			{
+				specimen.setLineage(Constants.DERIVED_SPECIMEN);
+				specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
+			}
 			
 			ArrayList childSpecimenList = new ArrayList();
 

@@ -64,6 +64,4 @@ public class UpdateCollectionProtocolAction extends Action {
 		}
 		return mapping.findForward(target);
 	}
-
-	
 }
