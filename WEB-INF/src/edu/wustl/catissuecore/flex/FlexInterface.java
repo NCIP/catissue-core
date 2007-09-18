@@ -482,36 +482,6 @@ public class FlexInterface
 			}
 		}
 	}
-	/**
-	 * Gets path List between nodes
-	 * @param linkedNodeList
-	 * @return
-	 */
-	private List<IPath> getPathList(List<DAGNode> linkedNodeList) {
-		DAGNode sourceNode = linkedNodeList.get(0);
-		DAGNode destinationNode = linkedNodeList.get(1);
-		List<IPath> pathsList=dagPanel.getPaths(sourceNode, destinationNode);
-		return pathsList;
-	}
-	/**
-	 * Gets association(path) between 2 nodes
-	 * @param linkedNodeList
-	 * @return
-	 */
-	public List getpaths(List<DAGNode> linkedNodeList)
-	{
-		List<IPath> pathsList=getPathList(linkedNodeList);
-		List<DAGPath> pathsListStr = new ArrayList<DAGPath>();
-		for(int i=0;i<pathsList.size();i++)
-		{
-			Path p =(Path) pathsList.get(i);
-			DAGPath path = new DAGPath();
-			path.setName(DAGPanel.getPathDisplayString(pathsList.get(i)));
-			path.setId(new Long(p.getPathId()).toString());
-			pathsListStr.add(path);
-		}
-		return pathsListStr;
-	}
 	
 	/**
 	 * Links 2 nodes
@@ -519,74 +489,18 @@ public class FlexInterface
 	 * @param selectedPaths
 	 */
 	
-	public List<DAGPath> linkNodes(List<DAGNode>linkedNodeList,List<DAGPath> selectedPaths)
+	public List<DAGPath> linkNodes(List<DAGNode>linkedNodeList)
 	{
-		List<DAGPath> dagPathList = new ArrayList<DAGPath>();
-		//try
-		{
-			DAGNode sourceNode = linkedNodeList.get(0);
-			DAGNode destinationNode = linkedNodeList.get(1);
-			List<IPath> pathsList=getPathList(linkedNodeList);
-			List<IPath> selectedList = new ArrayList<IPath>();
-			for(int j=0;j<selectedPaths.size();j++)
-			{
-				for(int i=0; i<pathsList.size();i++)
-				{
-					Path path =(Path) pathsList.get(i);
-					String pathStr = new Long(path.getPathId()).toString();
-					DAGPath dagPath = selectedPaths.get(j);
-					String pathId =dagPath.getId();
-					if(pathStr.equals(pathId))
-					{
-						selectedList.add(path);
-						dagPath.setName(DAGPanel.getPathDisplayString(pathsList.get(i)));
-						dagPath.setId(pathStr);
-						dagPath.setSourceExpId(sourceNode.getExpressionId());
-						dagPath.setDestinationExpId(destinationNode.getExpressionId());
-						dagPathList.add(dagPath);
-						break;
-					}
-					
-				}
-			}
-			dagPanel.linkNode(sourceNode,destinationNode,selectedList);
-		}
-//		catch (RuntimeException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		return dagPathList;
+		return dagPanel.linkNode(linkedNodeList);
 	}
 	/**
 	 * Deletes associaton between 2 nodes
 	 * @param linkedNodeList
 	 * @param linkName
 	 */
-	public int deleteLink(List<DAGNode> linkedNodeList,String linkName)
+	public void deleteLink(List<DAGNode> linkedNodeList,String linkName)
 	{
-		int status =0;
-		List<IPath> pathsList=getPathList(linkedNodeList);
-		System.out.println("linkName=="+linkName);
-		linkName = linkName.substring(0,linkName.indexOf("_"));
-		System.out.println("=="+linkName);
-		for(int i=0; i<pathsList.size();i++)
-		{
-			Path path =(Path) pathsList.get(i);
-			String pathId = new Long(path.getPathId()).toString();
-			System.out.println("pathId ==>"+pathId);			
-			if(pathId.equals(linkName))
-			{
-				dagPanel.deletePath(path,linkedNodeList);
-				status =DAGConstant.SUCCESS;
-				break;
-			}
-			else
-			{
-				status =DAGConstant.NO_PATHS_PRESENT;
-			}
-			
-		}
-		return status;
+		dagPanel.deletePath(linkName,linkedNodeList);
 	}
 	/**
 	 * Sets logical operator set from UI
@@ -611,7 +525,6 @@ public class FlexInterface
 		dagPanel = new DAGPanel(pathFinder);
 		dagPanel.setQueryObject(queryObject);
 		session= flex.messaging.FlexContext.getHttpRequest().getSession();
-		
 		dagPanel.setSession(session);
 		
 	}
