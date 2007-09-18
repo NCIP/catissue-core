@@ -199,6 +199,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FINISH = "finish";
 	public static final String BACK = "back";
 	public static final String RESTORE = "restore";
+	
+	public static final String SAVE_QUERY_ACTION = "SaveQueryAction.do";
+	public static final String RETRIEVE_QUERY_ACTION = "RetrieveQueryAction.do";
+	public static final String FETCH_AND_EXECUTE_QUERY_ACTION = "FetchAndExecuteQueryAction.do";
 	// Query Module Interface UI constants---ends here
 	//	 Frame names in Query Module Results page.
 	public static final String GRID_DATA_VIEW_FRAME = "gridFrame";
@@ -215,6 +219,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Sri: Changed the format for displaying in Specimen Event list (#463)
 	public static final String TIMESTAMP_PATTERN = "MM-dd-yyyy HH:mm";
 	public static final String DATE_PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
+	public static final String QUERY_ID = "queryId";
 	
 	// Mandar: Used for Date Validations in Validator Class
 	public static final String DATE_SEPARATOR = "-";
@@ -1964,7 +1969,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final int CLINICALSTUDY_FORM_ID = 65;
     public static final int CLINICAL_STUDY_REGISTRATION_FORM_ID=66;
     
-    
+    // Save query constant
+    public static final int CATISSUECORE_QUERY_INTERFACE_ID = 67;
     
     //Ordering constants
     public static final String ARRAY_NAME = "array";
