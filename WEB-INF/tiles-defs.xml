@@ -1042,6 +1042,44 @@
 	<definition name=".catissuecore.requestDetailsTreeViewDef" path="/pages/content/orderingsystem/SpecimenTreeView.jsp">
 	</definition>
 	
+<!-- Conflict Resolver :kalpana -->
+	<definition name=".catissuecore.conflictViewDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ConflictView.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.conflictDetailsViewDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ConflictDetailsView.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.conflictCommonDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ConflictCommonView.jsp" />
+	</definition>
+	
+	
+	<definition name=".catissuecore.conflictParticipantDataDetailsDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ConflictParticipantDataDetailsView.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.conflictSCGDataDetailsDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ConflictSCGDataDetailsView.jsp" />
+	</definition>
+	
+	
+	<definition name=".catissuecore.conflictParticipantSCGTreeDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ConflictParticipantSCGTreeView.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.conflictSCGDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ConflictSCGView.jsp" />
+	</definition>
+	
+	
+	<definition name=".catissuecore.conflictReportDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ConflictReportView.jsp" />
+	</definition>
+	
+<!--Conflict Resolver :end -->
+	
 	<!-- For ViewSpr on Specimen Page -->
 	<definition name=".catissuecore.newSpecimenViewSPRDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenViewSPR.jsp" />
