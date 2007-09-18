@@ -7,6 +7,7 @@
 <hibernate-configuration>
 	
     <session-factory>
+    <!--
     	<property name="show_sql">false</property>
     	<property name="dialect">net.sf.hibernate.dialect.MySQLDialect</property>	
         <property name="connection.datasource">java:/catissuecore</property>
@@ -14,7 +15,7 @@
 		<property name="transaction.manager_lookup_class">net.sf.hibernate.transaction.JBossTransactionManagerLookup</property>
     	<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
 		<property name="hibernate.jdbc.batch_size">0</property>
-  <!--
+  -->
      	<property name="show_sql">false</property>
     	<property name="dialect">net.sf.hibernate.dialect.MySQLDialect</property>	
     	<property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</property>
@@ -24,7 +25,7 @@
 	    <property name="connection.username">root</property>
 	    <property name="connection.password">root</property>   
 	    <property name="hibernate.jdbc.batch_size">0</property>   
-  -->  	
+  
     	<!--Consent Tracking Suite-->
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierResponse.hbm.xml"/>
