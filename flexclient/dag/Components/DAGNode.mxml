@@ -2,7 +2,7 @@
 
 <mx:Box backgroundColor="white" borderStyle="solid" direction="vertical"  
 	xmlns:mx="http://www.adobe.com/2006/mxml"  verticalGap="0"
-		implements="flash.utils.IExternalizable" creationComplete="init()">
+		implements="flash.utils.IExternalizable" creationComplete="init()" fontSize="9">
 <mx:Script>
 	<![CDATA[
 		import mx.controls.ComboBox;
@@ -259,19 +259,23 @@
 			}
 		}
 		
-		public function deleteFromViewHandler(event:ResultEvent)
+		public function deleteFromViewHandler(event:ResultEvent):void
 		{
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteFromViewHandler,false);
 		}
-		public function addToViewHandler(event:ResultEvent)
+		public function addToViewHandler(event:ResultEvent):void
 		{
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,addToViewHandler,false);
 		}
-		public function deleteHandler(event:ResultEvent)
+		public function deleteHandler(event:ResultEvent):void
 		{
 			this.parent.removeChild(this.parent.getChildByName(this.name));
 			this.parentApplication.totalNodeMap.remove(this.name);
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteHandler,false);
+			if(this.nodeType==DAGConstants.CONSTRAINT_VIEW_NODE)
+			{
+				this.parentApplication.showValidationMessagesToUser(DAGConstants.DELETE_LIMITS_MESSAGE);
+			}
 		}
 		
 		public function faultHandler (event:FaultEvent):void {
