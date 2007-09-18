@@ -7,7 +7,6 @@
 <head>
 	<script language="JavaScript">
 		window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
-
 		function saveCollectionProtocol()
 		{
 				var action ="SubmitSpecimenCollectionProtocol.do?action=collectionprotocol";
@@ -16,7 +15,6 @@
 		}
 	</script>
 </head>
-		
 
 		<html:errors />
 		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
@@ -103,7 +101,8 @@
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
 				<html:hidden property="eventId"  />
 			</logic:notEmpty>
-			
+				<html:hidden property="userAction" />
+				<html:hidden property="requestType" />
 			<td class="dataTablePrimaryLabel" height="20">
 
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
@@ -168,18 +167,17 @@
 		</logic:notEmpty>
 		</tr>
 		<tr>
-		<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">		
+		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
 		   <td>
-				<html:button  value="Save Collection Protocol" property="submitPage" onclick="saveCollectionProtocol()"/>
+			<html:submit  value="Save Collection Protocol" />
 			</td>
-			
-		</logic:notEmpty>
+		</logic:equal>
 		
-		<logic:empty name="viewSpecimenSummaryForm" property="eventId">		
+		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">		
 		    <td>
-			<html:submit value="Save Specimens" property="submitPage" onclick="SubmitSpecimenCollectionProtocol.do?action=specimen" />
+			<html:submit value="Save Specimens" />
 			</td>
-		</logic:empty>
+		</logic:equal>
 		</tr>
 		</table>
 		</html:form>		
