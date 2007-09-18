@@ -4,14 +4,19 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 
 /**
  * @author supriya_dankh
@@ -123,5 +128,65 @@ public class QueryShoppingCartBizLogic
     	int index = Integer.parseInt(strTokens.nextToken());
 		return index;
 	}
-
+	/**
+	 * Manipulate the dataList in constant order of columns in cart.
+	 * 
+     * @param dataList list of pagination data.
+     * @param oldAttributeList list of cart attributes.
+     * @param attributeList list of current view attributes.
+     * @return index.
+	 */
+	public List<List<String>> getManipulatedDataList(List<List<String>> dataList,List<AttributeInterface>oldAttributeList,List<AttributeInterface>attributeList)
+	{
+		boolean isError=false;
+		List<List<String>> tempDataList = new ArrayList<List<String>>();
+		if (oldAttributeList.size() == attributeList.size())
+		{
+			int index;
+			int[] indexArray = new int[attributeList.size()];
+			for (int i = 0; i < attributeList.size(); i++)
+			{
+				index = (oldAttributeList
+						.indexOf((AttributeInterface) attributeList.get(i)));
+				if (index == -1)
+				{
+					isError = true;
+					break;
+				}
+				else
+				{
+					indexArray[i] = index;
+				}
+			}
+			
+			for (int i = 0; i < dataList.size(); i++)
+			{
+				List<String> strDataList = dataList.get(i);
+				List<String> tempStrList = new ArrayList<String>();
+				int listIndex = 0;
+				int j = 0;
+				while (j < strDataList.size())
+				{
+					if (indexArray[j] == listIndex)
+					{
+						tempStrList.add(indexArray[j], strDataList.get(j));
+						listIndex++;
+						j = 0;
+						continue;
+					}
+					j++;
+				}
+				tempDataList.add(tempStrList);
+			}
+		}
+		else
+			isError =true;
+		    
+		if(isError)
+			return null;
+		else
+			return tempDataList;
+		
+	}
+	
 }

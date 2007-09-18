@@ -165,7 +165,7 @@ public class ViewSearchResultsAction extends BaseAppletAction
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		String parentNodeId = null;
 		String treeNo = "0";
-		Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,node, sessionData,parentNodeId,recordsPerPage);
+		Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,node, sessionData,parentNodeId,recordsPerPage,null);
 		QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap.get(Constants.QUERY_SESSION_DATA);
 		int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
 		session.setAttribute(Constants.QUERY_SESSION_DATA,querySessionData);
@@ -173,8 +173,8 @@ public class ViewSearchResultsAction extends BaseAppletAction
 		List list= (List)spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
 		session.setAttribute(Constants.PAGINATION_DATA_LIST, list);
 		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
-		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA,null);
-		session.setAttribute(Constants.SELECTED_COLUMN_NAME_VALUE_BEAN_LIST,null);
+//		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA,null);
+//		session.setAttribute(Constants.SELECTED_COLUMN_NAME_VALUE_BEAN_LIST,null);
 		return isZeroRecordsFound;
 	}
 

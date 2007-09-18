@@ -5,6 +5,10 @@
 package edu.wustl.catissuecore.action.querysuite;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +24,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
@@ -28,6 +33,8 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.dao.QuerySessionData;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -54,6 +61,7 @@ public class QueryShoppingCartAction extends BaseAction
 		HttpSession session = request.getSession();
 		String target = "";
 		String operation = request.getParameter(Constants.OPERATION);
+		List<String> columnList;
 
 		if (operation == null)
 			operation = "";
@@ -67,17 +75,21 @@ public class QueryShoppingCartAction extends BaseAction
 				.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
 		QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
+		//Get Attribute list and column list after define view.
+		SelectedColumnsMetadata selectedColumnMetaData = (SelectedColumnsMetadata) session
+				.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
 
-		// Getting column data & Attribute list from session.
-		List<AttributeInterface> attributeList = (List<AttributeInterface>) session
-				.getAttribute(Constants.ATTRIBUTES);
-		List<List<String>> columnList = (List<List<String>>) session
-				.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+		//QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+		List<AttributeInterface> attributeList =null;
+		if(selectedColumnMetaData!=null)
+		  attributeList = selectedColumnMetaData.getAttributeList();
+		columnList = (List<String>) session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 
 		// Check if user wants to add in Shopping Cart.
 		if (operation.equals(Constants.ADD))
 		{
-			target = addToCart(request, chkBoxValues, isCheckAllAcrossAllChecked, cart, attributeList, columnList);
+			target = addToCart(request, chkBoxValues, isCheckAllAcrossAllChecked, cart,
+					attributeList, columnList);
 
 		}// Check if user wants to delete record from cart.
 		else if (operation.equalsIgnoreCase(Constants.DELETE))
@@ -90,7 +102,7 @@ public class QueryShoppingCartAction extends BaseAction
 		{
 
 			export(cart, chkBoxValues, session, request, response);
-            return null;
+			return null;
 		}// Check if user wants to view the cart.
 		else if (operation.equalsIgnoreCase("view"))
 		{
@@ -113,18 +125,26 @@ public class QueryShoppingCartAction extends BaseAction
 	 * @return
 	 * @throws DAOException
 	 */
-	private String addToCart(HttpServletRequest request, Set chkBoxValues, String isCheckAllAcrossAllChecked,
-			QueryShoppingCart cart, List<AttributeInterface> attributeList,
-			List<List<String>> columnList) throws DAOException
+	private String addToCart(HttpServletRequest request, Set chkBoxValues,
+			String isCheckAllAcrossAllChecked, QueryShoppingCart cart,
+			List<AttributeInterface> attributeList, List<String> columnList) throws DAOException
 	{
 		String target;
-		boolean isError = false;
+
+		HttpSession session = request.getSession();
+		List<List<String>> dataList = getPaginationDataList(request, session);
+
+		if (isCheckAllAcrossAllChecked != null
+				&& isCheckAllAcrossAllChecked.equalsIgnoreCase(Constants.TRUE))
+			chkBoxValues = null;
+
 		//if cart is not present in session create new cart object
 		if (cart == null)
 		{
 			cart = new QueryShoppingCart();
 			cart.setCartAttributeList(attributeList);
 			cart.setColumnList(columnList);
+			addDataToCart(cart, dataList, chkBoxValues, request, session, columnList);
 		}
 		else
 		{
@@ -133,10 +153,11 @@ public class QueryShoppingCartAction extends BaseAction
 			 * from cart.Then take same cart object from session and set the
 			 * view of cart according to current records.
 			 */
-			if (cart.getCartAttributeList() == null)
+			if (cart.isEmpty())
 			{
 				cart.setCartAttributeList(attributeList);
 				cart.setColumnList(columnList);
+				addDataToCart(cart, dataList, chkBoxValues, request, session, columnList);
 			}
 			else
 			{
@@ -146,33 +167,94 @@ public class QueryShoppingCartAction extends BaseAction
 				 * to user.
 				 */
 				List<AttributeInterface> oldAttributeList = cart.getCartAttributeList();
-				if (!(oldAttributeList.equals(attributeList)))
+
+				int indexArray[] = getNewAttributeListIndexArray(oldAttributeList, attributeList);
+				if (indexArray != null)
 				{
-					ActionErrors errors = new ActionErrors();
-					ActionError error = new ActionError("shoppingcart.differentViewError");
-					errors.add(ActionErrors.GLOBAL_ERROR, error);
-					saveErrors(request, errors);
-					target = new String(Constants.DIFFERENT_VIEW_IN_CART);
-					isError = true;
+
+					List<List<String>> tempdataList = getManipulatedDataList(dataList, indexArray);
+					addDataToCart(cart, tempdataList, chkBoxValues, request, session, columnList);
 				}
+				else
+					addDifferentCartViewError(request);
+
 			}
 
 		}
 
-		HttpSession session = request.getSession();
-		List<List<String>> dataList = getPaginationDataList(request, session);
-		// If no error add object in cart.
-		if (!isError)
-		{
-			if (isCheckAllAcrossAllChecked != null
-					&& isCheckAllAcrossAllChecked.equalsIgnoreCase(Constants.TRUE))
-				chkBoxValues = null;
-			addDataToCart(cart, dataList, chkBoxValues, request, session, columnList);
-
-		}
 		target = new String(Constants.SHOPPING_CART_ADD);
 		request.setAttribute(Constants.PAGINATION_DATA_LIST, dataList);
 		return target;
+	}
+
+	/**
+	 * @param dataList list of cart records.
+	 * @param indexArray array of indexes of new attributes.
+	 * @return
+	 */
+	private List<List<String>> getManipulatedDataList(List<List<String>> dataList, int[] indexArray)
+	{
+		List<List<String>> tempDataList = new ArrayList<List<String>>();
+		String[] newRecordArray = new String[indexArray.length];
+		for (int recordIndex = 0; recordIndex < dataList.size(); recordIndex++)
+		{
+			List<String> oldReord = dataList.get(recordIndex);
+
+			for (int i = 0; i < indexArray.length; i++)
+			{
+				newRecordArray[indexArray[i]] = oldReord.get(i);
+			}
+			List<String> newRecord = Arrays.asList(newRecordArray);
+			tempDataList.add(newRecord);
+		}
+		dataList = tempDataList;
+		return dataList;
+	}
+
+	/**
+	 * @param oldAttributeList cart attribute list.
+	 * @param attributeList new Spreadsheet attribute list.
+	 * @return
+	 */
+	public int[] getNewAttributeListIndexArray(List<AttributeInterface> oldAttributeList,
+			List<AttributeInterface> attributeList)
+	{
+		int[] indexArray = new int[attributeList.size()];
+		if (oldAttributeList.size() == attributeList.size())
+		{
+			int index;
+
+			for (int i = 0; i < attributeList.size(); i++)
+			{
+				index = (oldAttributeList.indexOf((AttributeInterface) attributeList.get(i)));
+				if (index == -1)
+				{
+					indexArray = null;
+					break;
+				}
+				else
+				{
+					indexArray[i] = index;
+				}
+			}
+
+		}
+		else
+			indexArray = null;
+		return indexArray;
+	}
+
+	/**
+	 * @param request
+	 */
+	private void addDifferentCartViewError(HttpServletRequest request)
+	{
+		String target;
+		ActionErrors errors = new ActionErrors();
+		ActionError error = new ActionError("shoppingcart.differentViewError");
+		errors.add(ActionErrors.GLOBAL_ERROR, error);
+		saveErrors(request, errors);
+		target = new String(Constants.DIFFERENT_VIEW_IN_CART);
 	}
 
 	/**
@@ -184,8 +266,9 @@ public class QueryShoppingCartAction extends BaseAction
 	 * @param request HttpServletRequest.
 	 * @param response HttpServletResponse.
 	*/
-	public void addDataToCart(QueryShoppingCart cart, List<List<String>> dataList, Set chkBoxValues,
-			HttpServletRequest request, HttpSession session, List<List<String>> columnList)
+	public void addDataToCart(QueryShoppingCart cart, List<List<String>> dataList,
+			Set chkBoxValues, HttpServletRequest request, HttpSession session,
+			List<String> columnList)
 	{
 		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		// Add a record to cart.

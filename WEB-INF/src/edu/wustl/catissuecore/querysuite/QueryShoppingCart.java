@@ -18,16 +18,16 @@ public class QueryShoppingCart
 	List<AttributeInterface> cartAttributeList;
 	
 	//List of columns that should be displayed on cart.
-	List<List<String>> columnList;
+	List<String> columnList;
 	
 	//List that will store actual data of records added to cart.
 	List<List<String>> cart;
 	
 	public QueryShoppingCart()
 	{
-		cartAttributeList = new ArrayList();
-		cart = new ArrayList();
-		columnList = new ArrayList();
+		cartAttributeList = new ArrayList<AttributeInterface>();
+		cart = new ArrayList<List<String>>();
+		columnList = new ArrayList<String>();
 	}
 
 	/**
@@ -35,17 +35,21 @@ public class QueryShoppingCart
      * @return List Attribute List.
      * @see #setCartAttributeList(List)
      */
-	public List getCartAttributeList() 
+	public List<AttributeInterface> getCartAttributeList() 
 	{
 		return cartAttributeList;
 	}
 
+	public boolean isEmpty()
+	{
+		return cart==null || cart.isEmpty();
+	}
 	/**
      * Sets atrribute list.
      * @param cartAttributeList atrribute list.
      * @see #getCartAttributeList()
      */
-	public void setCartAttributeList(List cartAttributeList) 
+	public void setCartAttributeList(List<AttributeInterface> cartAttributeList) 
 	{
 		this.cartAttributeList = cartAttributeList;
 	}
@@ -70,12 +74,12 @@ public class QueryShoppingCart
 		this.cart = cart;
 	}
 
-	public List getColumnList() 
+	public List<String> getColumnList() 
 	{
 		return columnList;
 	}
 
-	public void setColumnList(List columnList)
+	public void setColumnList(List<String> columnList)
 	{
 		this.columnList = columnList;
 	} 

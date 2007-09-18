@@ -183,10 +183,9 @@ public class DefineGridViewBizLogic
 	 * @param uniqueIdNodesMap map of id and Node
 	 * @return SelectedColumnsMetadata SelectedColumnsMetadata
 	 */
-	public SelectedColumnsMetadata getSelectedColumnsMetadata(CategorySearchForm categorySearchForm, Map<Long, OutputTreeDataNode> uniqueIdNodesMap)
+	public void getSelectedColumnsMetadata(CategorySearchForm categorySearchForm, Map<Long, OutputTreeDataNode> uniqueIdNodesMap, SelectedColumnsMetadata selectedColumnsMetadata)
 	{
 		String[] selectedColumnIds = categorySearchForm.getSelectedColumnNames();
-		SelectedColumnsMetadata selectedColumnsMetadata = new SelectedColumnsMetadata();
 		List<QueryOutputTreeAttributeMetadata> attribureMetadataList = new ArrayList<QueryOutputTreeAttributeMetadata>(); 
 		for (int i = 0; i < selectedColumnIds.length; i++)
 		{
@@ -208,7 +207,6 @@ public class DefineGridViewBizLogic
 			}
 		}
 		selectedColumnsMetadata.setSelectedAttributeMetaDataList(attribureMetadataList);
-		return selectedColumnsMetadata;
 	}
 	/**
 	 * 
@@ -265,19 +263,13 @@ public class DefineGridViewBizLogic
 	 * @param uniqueIdNodesMap map of id and Node
 	 * @return SelectedColumnsMetadata SelectedColumnsMetadata
 	 */
-	public SelectedColumnsMetadata getColumnsMetadataForSelectedNode(OutputTreeDataNode outputTreeDataNode)
+	public SelectedColumnsMetadata getColumnsMetadataForSelectedNode(OutputTreeDataNode outputTreeDataNode,SelectedColumnsMetadata selectedColumnsMetadata)
 	{
-		SelectedColumnsMetadata selectedColumnsMetadata = new SelectedColumnsMetadata();
-		List<QueryOutputTreeAttributeMetadata> attribureMetadataList = new ArrayList<QueryOutputTreeAttributeMetadata>(); 
 		if(outputTreeDataNode != null)
 		{
 			List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode.getAttributes();
-			for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
-			{
-				attribureMetadataList.add(attributeMetaData);
-			}
+			selectedColumnsMetadata.setSelectedAttributeMetaDataList(attributes);
 		}
-		selectedColumnsMetadata.setSelectedAttributeMetaDataList(attribureMetadataList);
 		return selectedColumnsMetadata;
 	}
 

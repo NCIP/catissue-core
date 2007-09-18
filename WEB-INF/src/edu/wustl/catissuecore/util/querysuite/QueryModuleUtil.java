@@ -27,9 +27,11 @@ import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
 import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -291,33 +293,31 @@ public abstract class QueryModuleUtil
 	/**
 	 * Sets required data for grid.
 	 * @param request HTTPRequest
-	 * @param spreadSheetDatamap Map to store spreadshet data
+	 * @param spreadSheetDatamap Map to store spreadsheet data
 	 */
 	public static void setGridData(HttpServletRequest request, Map spreadSheetDatamap)
 	{
 		int pageNum = Constants.START_PAGE;
-		OutputTreeDataNode object = (OutputTreeDataNode) spreadSheetDatamap
-				.get(Constants.CURRENT_SELECTED_OBJECT);
+		SelectedColumnsMetadata  selectedColumnsMetadata = (SelectedColumnsMetadata)spreadSheetDatamap.get(Constants.SELECTED_COLUMN_META_DATA);
+		//OutputTreeDataNode object = selectedColumnsMetadata.getCurrentSelectedObject();
+		
 		HttpSession session = request.getSession();
-		session.setAttribute(Constants.CURRENT_SELECTED_OBJECT, object);
-		request.setAttribute(Constants.PAGE_NUMBER, Integer.toString(pageNum));
-		QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap
-				.get(Constants.QUERY_SESSION_DATA);
+		//session.setAttribute(Constants.CURRENT_SELECTED_OBJECT,object);
+		request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
+		QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap.get(Constants.QUERY_SESSION_DATA);
 		int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
-		List<List<String>> dataList = (List<List<String>>) spreadSheetDatamap
-				.get(Constants.SPREADSHEET_DATA_LIST);
-		List<List<AttributeInterface>> attributeList = (List<List<AttributeInterface>>) spreadSheetDatamap
-				.get(Constants.ATTRIBUTES);
-		request.setAttribute(Constants.SPREADSHEET_DATA_LIST, dataList);
-		request.setAttribute(Constants.PAGINATION_DATA_LIST, dataList);
+		List<List<String>> dataList = (List<List<String>>) spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
+		//request.setAttribute(Constants.SPREADSHEET_DATA_LIST,dataList);
+		request.setAttribute(Constants.PAGINATION_DATA_LIST,dataList);
 		List columnsList = (List) spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST);
-		if (columnsList != null)
-			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
-		session.setAttribute(Constants.TOTAL_RESULTS, new Integer(totalNumberOfRecords));
+		if(columnsList!=null)
+		  session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnsList);
+		
+		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(totalNumberOfRecords));	
 		session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
-		session.setAttribute(Constants.ATTRIBUTES, attributeList);
-		String pageOf = (String) request.getParameter(Constants.PAGEOF);
-		if (pageOf == null)
+		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA,selectedColumnsMetadata);
+		String pageOf = (String)request.getParameter(Constants.PAGEOF);
+		if(pageOf == null)
 			pageOf = "pageOfQueryModule";
 		request.setAttribute(Constants.PAGEOF, pageOf);
 	}
@@ -392,7 +392,7 @@ public abstract class QueryModuleUtil
 		OutputTreeDataNode node = rootOutputTreeNodeList.get(0);
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		Map<String, List<String>> spreadSheetDatamap = outputSpreadsheetBizLogic
-				.createSpreadsheetData("0", node, sessionData, null, recordsPerPage);
+				.createSpreadsheetData("0", node, sessionData, null, recordsPerPage,null);
 		QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap
 				.get(Constants.QUERY_SESSION_DATA);
 		int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();

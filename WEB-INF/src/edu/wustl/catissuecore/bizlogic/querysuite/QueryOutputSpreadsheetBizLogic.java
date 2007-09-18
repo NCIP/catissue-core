@@ -63,8 +63,8 @@ public class QueryOutputSpreadsheetBizLogic
 		if(parentNode.contains("NULL"))
 		{
 			OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(rootOutputTreeNodeList,treeNo);
-			spreadSheetDataMap = createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage);
-			spreadSheetDataMap.put(Constants.CURRENT_SELECTED_OBJECT,root);
+			spreadSheetDataMap = createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage,this.selectedColumnMetaData);
+			this.selectedColumnMetaData.setCurrentSelectedObject(root);
 		} else
 		{
 			String parentData = spiltParentNodeId[2];
@@ -76,14 +76,16 @@ public class QueryOutputSpreadsheetBizLogic
 			String currentNodeId = spiltCurrentNodeId[1];
 			String uniqueCurrentNodeId = treeNo+"_"+currentNodeId;
 			OutputTreeDataNode currentTreeNode = idNodesMap.get(uniqueCurrentNodeId);
-			if(selectedColumnMetaData == null)
-				this.selectedColumnMetaData = defineGridViewBizLogic.getColumnsMetadataForSelectedNode(currentTreeNode);
+			if(!selectedColumnMetaData.isDefinedView())
+				 defineGridViewBizLogic.getColumnsMetadataForSelectedNode(currentTreeNode,this.selectedColumnMetaData);
 			String selectSql = createSQL(spreadSheetDataMap, currentTreeNode,parentIdColumnName,parentData,tableName);
+			
 			int startIndex = 0;
 			QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql);
 			spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
-			spreadSheetDataMap.put(Constants.CURRENT_SELECTED_OBJECT,currentTreeNode);
+			this.selectedColumnMetaData.setCurrentSelectedObject(currentTreeNode);
 		}
+		spreadSheetDataMap.put(Constants.SELECTED_COLUMN_META_DATA,this.selectedColumnMetaData);
 		return spreadSheetDataMap;
 	}
 	/**
@@ -109,12 +111,12 @@ public class QueryOutputSpreadsheetBizLogic
 		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
 		String treeNo = nodeIds[0];
 		String parentId = nodeIds[1];
-		String parentData = nodeIds[2];
+		String parentData =nodeIds[2];
 		String uniqueNodeId = treeNo+"_"+parentId;
 		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
-		if(selectedColumnMetaData == null)
-			this.selectedColumnMetaData = defineGridViewBizLogic.getColumnsMetadataForSelectedNode(parentNode);
-		spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
+		if(! selectedColumnMetaData.isDefinedView())
+			 defineGridViewBizLogic.getColumnsMetadataForSelectedNode(parentNode,this.selectedColumnMetaData);
+		spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage,this.selectedColumnMetaData);
 		/*if (parentNode.getChildren().isEmpty())
 		{
 			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
@@ -123,7 +125,8 @@ public class QueryOutputSpreadsheetBizLogic
 		{
 			spreadSheetDatamap = updateSpreadsheet(treeNo,parentNode, rootOutputTreeNodeList, sessionData,parentData,recordsPerPage);
 		}*/
-		spreadSheetDatamap.put(Constants.CURRENT_SELECTED_OBJECT,parentNode);
+		this.selectedColumnMetaData.setCurrentSelectedObject(parentNode);
+		spreadSheetDatamap.put(Constants.SELECTED_COLUMN_META_DATA,this.selectedColumnMetaData);
 		return spreadSheetDatamap;
 	}
 
@@ -132,16 +135,19 @@ public class QueryOutputSpreadsheetBizLogic
 	 * loaded when user clicks on a leaf node of tree.
 	 * @param treeNo tree number user has clicked
 	 * @param node clicked by user
-	 * @param outputTreeMap  map which strores all details of tree
+	 * @param selectedColumnsMetadata 
+	 * @param outputTreeMap  map which stores all details of tree
 	 * @param parentNodeData the string id of the parent 
 	 * @return map having data for column headers and data records.
 	 * @throws DAOException  DAOException 
 	 */
 	public Map<String, List<String>> createSpreadsheetData(String treeNo,OutputTreeDataNode node,
-			 SessionDataBean sessionData,String parentData,int recordsPerPage) throws DAOException,
+			 SessionDataBean sessionData,String parentData,int recordsPerPage, SelectedColumnsMetadata selectedColumnsMetadata) throws DAOException,
 			ClassNotFoundException
 			{
+		this.selectedColumnMetaData = selectedColumnsMetadata;
 		Map spreadSheetDataMap = updateSpreadsheetData(sessionData, parentData,  node,recordsPerPage);
+		spreadSheetDataMap.put(Constants.SELECTED_COLUMN_META_DATA,this.selectedColumnMetaData);
 		return spreadSheetDataMap;
 			}
 	/**
@@ -183,11 +189,9 @@ public class QueryOutputSpreadsheetBizLogic
 		
 		//columnsList.add("");
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
-		List <AttributeInterface> attributeList = new ArrayList<AttributeInterface>();
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
 			AttributeInterface attribute = attributeMetaData.getAttribute();
-			attributeList.add(attribute);
 			String sqlColumnName = attributeMetaData.getColumnName();
 			String className = attribute.getEntity().getName();
 			className = Utility.parseClassName(className);
@@ -199,16 +203,16 @@ public class QueryOutputSpreadsheetBizLogic
 			String attrLabel = Utility.getDisplayLabel(attribute.getName());
 			columnsList.add(attrLabel + " : " + className);
 		}
-		if(selectedColumnMetaData == null)
+		if(!selectedColumnMetaData.isDefinedView())
 		{
 			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
+			selectedColumnMetaData.setSelectedAttributeMetaDataList(attributes);
 		}
 		else
 		{
 			selectSql = getSQLForSelectedColumns(spreadSheetDataMap);
 		}
-		spreadSheetDataMap.put(Constants.ATTRIBUTES, attributeList);
 		selectSql = selectSql + " from " + tableName;
 		if (parentData != null)
 		{
@@ -228,12 +232,13 @@ public class QueryOutputSpreadsheetBizLogic
 	private String getSQLForSelectedColumns(Map spreadSheetDataMap)
 	{
 		String selectSql = "";
-		if(selectedColumnMetaData != null)
+		if(selectedColumnMetaData.isDefinedView())
 		{
 			List<String> definedColumnsList = new ArrayList<String>();
 			StringBuffer sqlColumnNames = new StringBuffer();
 			List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnMetaData.getSelectedAttributeMetaDataList();
 			Iterator<QueryOutputTreeAttributeMetadata> iter = selectedAttributeMetaDataList.iterator();
+
 			while(iter.hasNext())
 			{
 				QueryOutputTreeAttributeMetadata metaData = iter.next();
@@ -243,8 +248,7 @@ public class QueryOutputSpreadsheetBizLogic
 				String columnDisplayName = metaData.getDisplayName();
 				definedColumnsList.add(columnDisplayName);
 			}
-			String columnsInSql = sqlColumnNames.toString();
-			columnsInSql = columnsInSql.substring(0, columnsInSql.lastIndexOf(","));
+			String columnsInSql = sqlColumnNames.substring(0, sqlColumnNames.length()-3).toString();
 			selectSql =  "select distinct " + columnsInSql;
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
 		}
@@ -406,12 +410,9 @@ public class QueryOutputSpreadsheetBizLogic
 		List<String> columnsList = new ArrayList<String>();
 		String idColumnOfCurrentNode = "";
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
-		List<AttributeInterface> attributeList = new ArrayList<AttributeInterface>();
-		
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
 			AttributeInterface attribute = attributeMetaData.getAttribute();
-			attributeList.add(attribute);
 			String className = attribute.getEntity().getName();
 			className = Utility.parseClassName(className);
 			String sqlColumnName = attributeMetaData.getColumnName();
@@ -424,16 +425,16 @@ public class QueryOutputSpreadsheetBizLogic
 			String attrLabel = Utility.getDisplayLabel(attribute.getName());
 			columnsList.add(attrLabel + " : " + className);
 		}
-		if(selectedColumnMetaData == null)
+		if(! selectedColumnMetaData.isDefinedView())
 		{
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
 			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
+			selectedColumnMetaData.setSelectedAttributeMetaDataList(attributes);
 		}
 		else 
 		{
 			selectSql = getSQLForSelectedColumns(spreadSheetDataMap);
 		}
-		spreadSheetDataMap.put(Constants.ATTRIBUTES, attributeList);
 		selectSql = selectSql + " from " + tableName;
 		if (parentData != null)
 		{

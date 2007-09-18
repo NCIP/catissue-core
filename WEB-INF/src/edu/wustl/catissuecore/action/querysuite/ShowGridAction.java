@@ -42,14 +42,14 @@ public class ShowGridAction extends BaseAction
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
-	{   
+	{    
 		HttpSession session = request.getSession();
 		Map<String, OutputTreeDataNode> uniqueIdNodesMap = (Map<String, OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);
 		Map<Long, Map<AttributeInterface, String>> columnMap = (Map<Long, Map<AttributeInterface, String>>) session.getAttribute(
 				Constants.ID_COLUMNS_MAP);
 		List<OutputTreeDataNode> rootOutputTreeNodeList = (List<OutputTreeDataNode>)session.getAttribute(Constants.TREE_ROOTS);
 		SessionDataBean sessionData = getSessionData(request);
-		SelectedColumnsMetadata selectedColumnMetaData = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
+		SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
 		String idOfClickedNode = request.getParameter("nodeId");
  		Map spreadSheetDatamap = null;
 		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
@@ -58,17 +58,12 @@ public class ShowGridAction extends BaseAction
 		String actualParentNodeId = idOfClickedNode.substring(idOfClickedNode.lastIndexOf(Constants.NODE_SEPARATOR) + 2, idOfClickedNode.length());
 		if (idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
 		{
-			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode,recordsPerPage,selectedColumnMetaData);
+			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode,recordsPerPage,selectedColumnsMetadata);
 			session.setAttribute(Constants.ADD_TO_CART, true);
 		}
 		else
 		{
-			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,recordsPerPage,selectedColumnMetaData);
-			boolean isLeafNode = outputSpreadsheetBizLogic.isLeafNode(uniqueIdNodesMap, actualParentNodeId);
-			 //if(isLeafNode)
-				session.setAttribute(Constants.ADD_TO_CART, isLeafNode);
-			 //else
-				// session.setAttribute(Constants.ADD_TO_CART, "false");
+			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,recordsPerPage,selectedColumnsMetadata);
 		}
 		QueryModuleUtil.setGridData(request, spreadSheetDatamap);
 		return mapping.findForward(Constants.SUCCESS);

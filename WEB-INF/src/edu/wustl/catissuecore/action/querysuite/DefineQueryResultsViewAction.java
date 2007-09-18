@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.tree.QueryTreeNodeData;
 
 /**
@@ -43,8 +44,9 @@ public class DefineQueryResultsViewAction extends BaseAction
 	{
 		CategorySearchForm categorySearchForm = (CategorySearchForm)form;
 		HttpSession session  = request.getSession();
-		List<NameValueBean> prevSelectedColumnNameValueBeanList= (List<NameValueBean>) session.getAttribute(Constants.SELECTED_COLUMN_NAME_VALUE_BEAN_LIST);
-		OutputTreeDataNode currentSelectedObject = (OutputTreeDataNode)session.getAttribute(Constants.CURRENT_SELECTED_OBJECT);
+		SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
+		List<NameValueBean> prevSelectedColumnNameValueBeanList= selectedColumnsMetadata.getSelectedColumnNameValueBeanList();
+		OutputTreeDataNode currentSelectedObject = selectedColumnsMetadata.getCurrentSelectedObject();
 		request.setAttribute(Constants.categorySearchForm,categorySearchForm);
 		Map<Long,OutputTreeDataNode> uniqueIdNodesMap = (Map<Long,OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
@@ -52,6 +54,8 @@ public class DefineQueryResultsViewAction extends BaseAction
 		defineGridViewBizLogic.createTree(categorySearchForm, uniqueIdNodesMap, 
 				treeDataVector,currentSelectedObject,prevSelectedColumnNameValueBeanList);
 		List<NameValueBean> selectedColumnNameValueBeanList = categorySearchForm.getSelectedColumnNameValueBeanList();
+		selectedColumnsMetadata.setSelectedColumnNameValueBeanList(selectedColumnNameValueBeanList);
+		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA,selectedColumnsMetadata);
 		session.setAttribute(Constants.SELECTED_COLUMN_NAME_VALUE_BEAN_LIST,selectedColumnNameValueBeanList);
 		session.setAttribute(Constants.TREE_DATA, treeDataVector);
 		return mapping.findForward(Constants.SUCCESS);
