@@ -1070,6 +1070,10 @@
 	<definition name=".catissuecore.defineSearchResultsViewBNT" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/querysuite/DefineSearchResultsViewBuildNewTree.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.queryViewPageDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/querysuite/QueryListView.jsp" />
+	</definition>
 	 <!-- Definition code : Deepti Shelar : For pagination : 20/07/2007 -->
 	<definition name=".catissuecore.queryTreeViewDef" path="/pages/content/search/querysuite/QueryTreeView.jsp">
 	</definition>

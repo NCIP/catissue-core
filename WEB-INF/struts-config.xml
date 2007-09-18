@@ -89,6 +89,8 @@ PUBLIC
 		<form-bean name="createSpecimenTemplateForm" type="edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm"/>
 		<form-bean name="viewSpecimenSummaryForm" type="edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm"/> 
 		
+		<form-bean name="saveQueryForm" type="edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm"/>
+				
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -490,6 +492,36 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.searchCategory"/>
+		</action>
+		<action path="/LoadSaveQueryPage"
+            type="edu.wustl.catissuecore.action.querysuite.LoadSaveQueryPageAction"
+            validate="false"
+            scope="request">
+            <forward name="success" path="/pages/content/search/querysuite/SavedQueryConditionPage.jsp"/>
+        </action>
+        <action path="/SaveQueryAction"
+			type="edu.wustl.catissuecore.action.querysuite.SaveQueryAction"
+			name="saveQueryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/RetrieveQueryAction.do"/>
+			<forward name="failure" path="/LoadSaveQueryPage.do"/>
+		</action>
+		<action path="/RetrieveQueryAction"
+			type="edu.wustl.catissuecore.action.querysuite.RetrieveQueryAction"
+			name="saveQueryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.queryViewPageDef"/>
+			<forward name="failure" path=".catissuecore.errorPageDef"/>
+		</action>
+		<action path="/FetchAndExecuteQueryAction"
+			type="edu.wustl.catissuecore.action.querysuite.FetchAndExecuteQueryAction"
+			name="saveQueryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.viewSearchResults"/>
+			<forward name="failure" path="/RetrieveQueryAction.do"/>
 		</action>
 		<action path="/loadDefineSearchRules"
 			type="edu.wustl.catissuecore.action.querysuite.LoadDefineSearchRulesAction"
