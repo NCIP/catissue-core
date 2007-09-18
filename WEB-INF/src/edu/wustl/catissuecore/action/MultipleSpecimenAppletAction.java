@@ -200,7 +200,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			
 			
             LinkedHashMap linkedMap = getLinkedHashMap(finalMap);
-			MultipleSpecimenValidationUtil.validateMultipleSpecimen(linkedMap,bizLogic,Constants.ADD);
+			//MultipleSpecimenValidationUtil.validateMultipleSpecimen(linkedMap,bizLogic,Constants.ADD);
 			//dao.commit();
 			// end
 			// ------------------------------------

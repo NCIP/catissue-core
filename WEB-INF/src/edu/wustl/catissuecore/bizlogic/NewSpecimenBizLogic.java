@@ -1417,7 +1417,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			//return true;
 			//result = validateMultipleSpecimen((Map) obj, dao, operation);
 			return MultipleSpecimenValidationUtil.validateMultipleSpecimen
-			((Map)obj,this, operation);
+			((Map)obj,dao, operation);
 		}
 		else
 		{
