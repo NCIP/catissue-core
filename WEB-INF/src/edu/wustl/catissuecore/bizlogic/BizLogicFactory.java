@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import edu.wustl.catissuecore.bizlogic.querysuite.CatissuecoreQueryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -22,7 +23,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class BizLogicFactory //extends AbstractBizLogicFactory
 {
-	//Singleton instace
+	//Singleton instance
 	private static BizLogicFactory factory = null;
 	
 	
@@ -212,7 +213,10 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     			break;	
     		case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
     			bizLogic=new QuarantineEventParameterBizLogic();
-    			break;	
+    			break;
+    		case Constants.CATISSUECORE_QUERY_INTERFACE_ID://CatissecoreQueryBizLogic
+    			bizLogic = new CatissuecoreQueryBizLogic();
+    			break;
     		//END
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
