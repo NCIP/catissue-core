@@ -115,7 +115,7 @@
 			<table border="0" height="100%" width="100%" cellpadding="0" cellspacing="0">
 				<tr height="100%">
 					<td width="22%" valign="top">
-						<table border="0" width="220" height="100%">
+						<table border="0" width="250px" height="100%">
 							<tr>
 								<td align="left" valign="top">		
 								<iframe id="SpecimenEvents" name="SpecimenEvents" src="showTree.do" scrolling="no" frameborder="0" width="250px" height="450px" marginheight=0 marginwidth=0 valign="top">
@@ -125,7 +125,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td align="left" valign="top">
+								<td align="left" valign="top" nowrap>
 									<html:button styleClass="actionButton" property="submitPage" onclick="addNewEvent()">
 										 <bean:message key="cpbasedentry.addnewevent" />
 									</html:button>
@@ -148,19 +148,15 @@
 					</logic:equal>
 					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
 						<td width="100%" height="100%" valign="top">
-							<iframe name="SpecimenRequirementView" src="ProtocolEventsDetails.do?operation=add" scrolling="auto" frameborder="0" width="800px" height="500px">
+							<iframe name="SpecimenRequirementView" src="ProtocolEventsDetails.do?operation=add&pageOf=newEvent" scrolling="auto" frameborder="0" width="800px" height="500px">
 								Your Browser doesn't support IFrames.
 							</iframe>
 						</td>
 						<tr>
-							<td align="right">
-								<html:button styleClass="actionButton" property="submitPage" onclick="consentPage()">
-									<< <bean:message key="consent.addconsents" />
-								</html:button>
+							<td align="left" colspan="2">
+								<html:button styleClass="actionButton" property="submitPage" onclick="consentPage()"> << <bean:message key="consent.addconsents" />	</html:button>
 
-								<html:button styleClass="actionButton" property="submitPage" onclick="viewSummary()">
-									<bean:message key="cpbasedentry.viewsummary" /> >>
-								</html:button>
+								<html:button styleClass="actionButton" property="submitPage" onclick="viewSummary()"> <bean:message key="cpbasedentry.viewsummary" /> >> </html:button>
 							</td>
 						</tr>
 					</logic:notEqual>

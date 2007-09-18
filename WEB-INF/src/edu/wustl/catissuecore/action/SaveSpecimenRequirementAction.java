@@ -17,9 +17,9 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.DeriveSpecimenBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.catissuecore.util.global.Constants;
 
 
 public class SaveSpecimenRequirementAction extends BaseAction
@@ -31,7 +31,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		CreateSpecimenTemplateForm createSpecimenTemplateForm = (CreateSpecimenTemplateForm)form;
 		HttpSession session = request.getSession();
 		String operation = (String)request.getParameter(Constants.OPERATION);
-		String eventKey = (String)request.getParameter("key");
+		String eventKey = (String)request.getParameter(Constants.EVENT_KEY);
 		if(operation.equals(Constants.ADD))
 		{
 			Map collectionProtocolEventMap = (Map)session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
@@ -81,10 +81,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	private SpecimenRequirementBean createSpecimen(CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier, Integer totalNoOfSpecimen)
 	{
 		SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
-		specimenRequirementBean.setParentName("Specimen"+uniqueIdentifier);
-		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+"_S"+totalNoOfSpecimen);
-		specimenRequirementBean.setDisplayName("Specimen"+totalNoOfSpecimen);
-		specimenRequirementBean.setLineage("New");
+		specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN+uniqueIdentifier);
+		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN+totalNoOfSpecimen);
+		specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+totalNoOfSpecimen);
+		specimenRequirementBean.setLineage(Constants.LINEAGE_NEW_SPECIMEN);
 		specimenRequirementBean.setClassName(createSpecimenTemplateForm.getClassName());
 		specimenRequirementBean.setType(createSpecimenTemplateForm.getType());
 		specimenRequirementBean.setTissueSide(createSpecimenTemplateForm.getTissueSide());
@@ -131,9 +131,9 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		for(int iCount = 1; iCount<= aliquotCount; iCount++)
 		{
 			SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,iCount);
-			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+"_A"+iCount);
-			specimenRequirementBean.setDisplayName("Aliquot"+iCount);
-			specimenRequirementBean.setLineage("Aliquot");
+			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
+			specimenRequirementBean.setDisplayName(Constants.ALIQUOT+iCount);
+			specimenRequirementBean.setLineage(Constants.ALIQUOT);
 			specimenRequirementBean.setQuantity(parentQuantity.toString());
 			specimenRequirementBean.setNoOfAliquots(null);
 			specimenRequirementBean.setQuantityPerAliquot(null);
@@ -154,9 +154,9 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		 {
 			 DeriveSpecimenBean deriveSpecimenBean =(DeriveSpecimenBean)deriveSpecimenCollectionItr.next();
 			 SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,deriveSpecimenCount);
-			 specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+"_D"+deriveSpecimenCount);
-			 specimenRequirementBean.setLineage("Derive");
-			 specimenRequirementBean.setDisplayName("Derive"+deriveSpecimenCount);
+			 specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_DERIVE+deriveSpecimenCount);
+			 specimenRequirementBean.setLineage(Constants.DERIVED_SPECIMEN);
+			 specimenRequirementBean.setDisplayName(Constants.DERIVED_SPECIMEN+deriveSpecimenCount);
 			
 			 specimenRequirementBean.setQuantity(deriveSpecimenBean.getQuantity());
 			 specimenRequirementBean.setConcentration(deriveSpecimenBean.getConcentration());

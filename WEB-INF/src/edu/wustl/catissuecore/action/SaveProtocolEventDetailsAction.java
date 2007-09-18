@@ -37,10 +37,10 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		}
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 				
-		if(protocolEventDetailsForm.getCollectionProtocolEventkey().equals("-1"))
+		if(protocolEventDetailsForm.getCollectionProtocolEventkey().equals(Constants.ADD_NEW_EVENT))
 		{
 			collectionProtocolEventBean = new CollectionProtocolEventBean();
-			collectionProtocolEventBean.setUniqueIdentifier("E"+(collectionProtocolEventMap.size()+1));
+			collectionProtocolEventBean.setUniqueIdentifier(Constants.UNIQUE_IDENTIFIER_FOR_EVENTS+(collectionProtocolEventMap.size()+1));
 			setCollectionProtocolBean(collectionProtocolEventBean,protocolEventDetailsForm);
 			collectionProtocolEventMap.put(collectionProtocolEventBean.getUniqueIdentifier(),collectionProtocolEventBean);
 		}
@@ -51,7 +51,7 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 			collectionProtocolEventMap.put(protocolEventDetailsForm.getCollectionProtocolEventkey(),collectionProtocolEventBean);
 		}
 		String listKey = collectionProtocolEventBean.getUniqueIdentifier();
-		session.setAttribute("listKey", listKey);
+		session.setAttribute(Constants.NEW_EVENT_KEY, listKey);
 		//request.setAttribute("listKey", listKey);
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, collectionProtocolEventMap);
 		return (mapping.findForward(pageOf));

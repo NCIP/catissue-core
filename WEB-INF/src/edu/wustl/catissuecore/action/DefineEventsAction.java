@@ -25,10 +25,15 @@ public class DefineEventsAction extends BaseAction
 		if(session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN)!=null)
 		{
 			collectionProtocolBean = (CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+			
 		}
 		else
-		{
+		{	
 			collectionProtocolBean = new CollectionProtocolBean();
+		}
+		
+		if(collectionProtocolForm.getShortTitle()!=null)
+		{
 			collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocolForm.getPrincipalInvestigatorId());
 			collectionProtocolBean.setProtocolCoordinatorIds(collectionProtocolForm.getProtocolCoordinatorIds());
 			collectionProtocolBean.setTitle(collectionProtocolForm.getTitle());
@@ -43,7 +48,6 @@ public class DefineEventsAction extends BaseAction
 			collectionProtocolBean.setConsentValues(collectionProtocolForm.getConsentValues());
 			collectionProtocolBean.setUnsignedConsentURLName(collectionProtocolForm.getUnsignedConsentURLName());
 		}
-		
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN, collectionProtocolBean);
 		return (mapping.findForward(Constants.SUCCESS));
 	}

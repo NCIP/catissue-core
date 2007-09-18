@@ -34,18 +34,18 @@ public class ProtocolEventDetailsAction extends BaseAction
 		String operation = (String)request.getParameter(Constants.OPERATION);
 		HttpSession session = request.getSession();
 		//Event Key when flow is form Specimen Requirement Page
-		String key = (String)request.getParameter("key");
-		String nodeId = (String)request.getParameter("nodeId");
-		session.setAttribute("nodeId",nodeId);
+		String key = (String)request.getParameter(Constants.EVENT_KEY);
+		String nodeId = (String)request.getParameter(Constants.TREE_NODE_ID);
+		session.setAttribute(Constants.TREE_NODE_ID,nodeId);
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		setUserInForm(request,operation,protocolEventDetailsForm);
-		if(pageOf!=null && pageOf.equals("defineEvents"))
+		if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_DEFINE_EVENTS))
 		{
 			initSpecimenrequirementForm(mapping, protocolEventDetailsForm, request);
 		}
-		else if(operation.equals("add")|| pageOf.equals("newEvent"))
+		else if(operation.equals(Constants.ADD)&&pageOf.equals(Constants.PAGE_OF_ADD_NEW_EVENT))
 		{
-			protocolEventDetailsForm.setCollectionProtocolEventkey("-1");
+			protocolEventDetailsForm.setCollectionProtocolEventkey(Constants.ADD_NEW_EVENT);
 			protocolEventDetailsForm.setStudyCalendarEventPoint(1D);
 			protocolEventDetailsForm.setCollectionPointLabel("");
 			protocolEventDetailsForm.setClinicalStatus((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS));
@@ -54,7 +54,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 			protocolEventDetailsForm.setCollectionEventContainer((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER));
 			protocolEventDetailsForm.setReceivedEventReceivedQuality((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
 		}
-		else if(pageOf!=null&&pageOf.equals("specimenRequirement"))
+		else if(pageOf!=null&&pageOf.equals(Constants.PAGE_OF_SPECIMEN_REQUIREMENT))
 		{
 			protocolEventDetailsForm.setCollectionProtocolEventkey(key);
 		}
@@ -119,20 +119,20 @@ public class ProtocolEventDetailsAction extends BaseAction
 	private void initSpecimenrequirementForm(ActionMapping mapping, ProtocolEventDetailsForm protocolEventDetailsForm, HttpServletRequest request)
 	{
 		HttpSession session = request.getSession(); 
-		Map collectionProtocolEventMap = (Map)session.getAttribute("collectionProtocolEventMap");
+		Map collectionProtocolEventMap = (Map)session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		
 		//If flow is from Specimen Requirement page save button.
-		String collectionProtocolEventKey = (String)request.getAttribute("key");
+		String collectionProtocolEventKey = (String)request.getAttribute(Constants.EVENT_KEY);
 		
 		if(collectionProtocolEventKey==null)
 		{
 			//If flow is from Specimen Tree View if Event Node is clicked to open Event page in Edit mode.
-			collectionProtocolEventKey = (String)request.getParameter("key");
+			collectionProtocolEventKey = (String)request.getParameter(Constants.EVENT_KEY);
 		}
 		if(collectionProtocolEventKey==null)
 		{
 			//If flow is when user Clicks Define Event button.
-			collectionProtocolEventKey = (String)session.getAttribute("listKey");
+			collectionProtocolEventKey = (String)session.getAttribute(Constants.NEW_EVENT_KEY);
 		}
 		CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventMap.get(collectionProtocolEventKey);	
 		protocolEventDetailsForm.setClinicalDiagnosis(collectionProtocolEventBean.getClinicalDiagnosis());
