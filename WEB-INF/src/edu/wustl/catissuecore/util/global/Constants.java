@@ -2028,4 +2028,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
  	
   	public static final String CONFLICT_BUTTON = "conflictButton";
   	public static final String IDENTIFIED_SURGICAL_PATHOLOGY_REPORT = "identifiedSurgicalPathologyReport";
+  	
+//Save Query Constants
+	
+	public static final String SHOW_ALL_ATTRIBUTE = "Show all attributes";
+	public static final String SHOW_SELECTED_ATTRIBUTE = "Show selected attributes";
 }
