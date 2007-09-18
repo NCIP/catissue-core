@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -38,23 +39,10 @@ public final class MultipleSpecimenValidationUtil
 	 * @return
 	 * @throws DAOException
 	 */
-	public static boolean validateMultipleSpecimen(Map specimenMap, IBizLogic bizLogic, String operation) throws DAOException
+	public static boolean validateMultipleSpecimen(Map specimenMap, DAO dao, String operation) throws DAOException
 	{
-		System.out.println("Inside validateMultipleSpecimen() ");
 		boolean result = true;
-/*		IBizLogic bizLogic;
-		try
-		{
-			bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties.getValue("app.bizLogicFactory"), "getBizLogic",
-					Constants.NEW_SPECIMEN_FORM_ID);
-		}
-		catch (BizLogicException e)
-		{
-			e.printStackTrace();
-			throw new DAOException(e);
-		}
-*/		
-		setSCGinSpecimen(specimenMap,bizLogic);
+		setSCGinSpecimen(specimenMap,dao);
 		Iterator specimenIterator = specimenMap.keySet().iterator();
 		int count = 0;
 		while (specimenIterator.hasNext() && result == true)
@@ -64,7 +52,7 @@ public final class MultipleSpecimenValidationUtil
 			// TODO uncomment code for label, performance
 			try
 			{
-				result = validateSingleSpecimen(specimen, bizLogic, operation, true);
+				result = validateSingleSpecimen(specimen, dao, operation, true);
 			}
 			catch (DAOException daoException)
 			{
@@ -92,7 +80,7 @@ public final class MultipleSpecimenValidationUtil
 				derivedSpecimen.getParentSpecimen().setId(specimen.getId());
 				try
 				{
-					result = validateSingleSpecimen(derivedSpecimen, bizLogic, operation, false);
+					result = validateSingleSpecimen(derivedSpecimen, dao, operation, false);
 				}
 				catch (DAOException daoException)
 				{
@@ -121,7 +109,7 @@ public final class MultipleSpecimenValidationUtil
 	 * @param dao dao
 	 * @throws DAOException dao exception
 	 */
-	public static void setSCGinSpecimen(Map specimenMap, IBizLogic bizLogic) throws DAOException
+	public static void setSCGinSpecimen(Map specimenMap, DAO dao) throws DAOException
 	{
 		Iterator specimenIterator = specimenMap.keySet().iterator();
 		while (specimenIterator.hasNext())
@@ -134,7 +122,7 @@ public final class MultipleSpecimenValidationUtil
 				String[] whereColumnName = {Constants.NAME};
 				String[] whereColumnCondition = {"="};
 				String[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getGroupName()};
-				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
+				List spCollGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
 						whereColumnValue, null);
 				// TODO saperate calls for SCG - ID and cpid
 				// SCG - ID will be needed before populateStorageLocations
@@ -170,7 +158,7 @@ public final class MultipleSpecimenValidationUtil
 	 * @return
 	 * @throws DAOException
 	 */
-	public static boolean validateSingleSpecimen(Specimen specimen, IBizLogic bizLogic, String operation, boolean partOfMulipleSpecimen) throws DAOException
+	public static boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation, boolean partOfMulipleSpecimen) throws DAOException
 	{
 		//Added by Ashish		
 		//Logger.out.debug("Start-Inside validate method of specimen bizlogic");
@@ -251,7 +239,7 @@ public final class MultipleSpecimenValidationUtil
 			//return true;
 		}
 
-		validateFields(specimen, bizLogic, operation, partOfMulipleSpecimen);
+		validateFields(specimen, dao, operation, partOfMulipleSpecimen);
 
 		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
 		String specimenClass = Utility.getSpecimenClassName(specimen);
@@ -427,12 +415,12 @@ public final class MultipleSpecimenValidationUtil
 	/**
 	 * validate fields
 	 * @param specimen specimen
-	 * @param dao dao
+	 * @param dao 
 	 * @param operation string operation
 	 * @param partOfMulipleSpecimen 
 	 * @throws DAOException
 	 */
-	private static void validateFields(Specimen specimen, IBizLogic bizLogic, String operation, boolean partOfMulipleSpecimen) throws DAOException
+	private static void validateFields(Specimen specimen, DAO dao, String operation, boolean partOfMulipleSpecimen) throws DAOException
 	{
 		Validator validator = new Validator();
 
@@ -445,7 +433,7 @@ public final class MultipleSpecimenValidationUtil
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 			}
 
-			List spgList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
+			List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
 
 			if (spgList.size() == 0)
 			{
