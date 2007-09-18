@@ -4257,7 +4257,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.SaveProtocolEventDetailsAction"
 			name="protocolEventDetailsForm"
 			validate="true"
-			input="/ProtocolEventsDetails.do?pageOf=specimenRequirement">
+			input="/ProtocolEventsDetails.do?pageOf=error">
 			<forward name="defineEvents" path="/ProtocolEventsDetails.do?pageOf=defineEvents"/>
 			<forward name="specimenRequirement" path="/CreateSpecimenTemplate.do?operation=add"/>			
 		</action>
@@ -4285,6 +4285,12 @@ PUBLIC
 	            <forward name="success" path="/pages/SpecimenSummary.jsp" />
                 <forward name="failure" path="/Home.do" />
        </action>    
+       <action path="/ShowCollectionProtocol"
+				type="edu.wustl.catissuecore.action.ShowCollectionProtocolTreeAction"
+				scope="request">
+				<forward name="success" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
+				<forward name="failure" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
+		</action>
 
 		<action path="/SubmitSpecimenCollectionProtocol"
 			type="edu.wustl.catissuecore.action.SubmitSpecimenCPAction"
