@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
+import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -43,6 +45,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
@@ -59,18 +63,46 @@ public class SubmitSpecimenCPAction extends Action {
 		try {
 			specimenSummaryForm = (ViewSpecimenSummaryForm) form;
 			String actionValue = request.getParameter("action");
-			if ("collectionprotocol".equals(actionValue)) {
-				insertCollectionProtocol(request);	
+
+			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(
+					specimenSummaryForm.getRequestType())) {
+				
+				CollectionProtocol collectionProtocol = populateCollectionProtocolObjects(request);
+
+				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(
+						specimenSummaryForm.getUserAction()))
+				{
+					specimenSummaryForm.setSummaryObject(collectionProtocol);
+					return mapping.findForward("updateCP");
+				}
+				else
+				{
+					insertCollectionProtocol(collectionProtocol,request.getSession());
+				}
+
 			}
 			
-			if ("specimens".equals(actionValue)) {
-				insertSpecimens(request);
+			if (ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(
+					specimenSummaryForm.getRequestType())) 
+			{
+				LinkedHashMap cpEventMap = populateSpecimenDomainObjectMap(request);
+				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(
+						specimenSummaryForm.getUserAction()))
+				{
+					//execute update multiplespecimens.
+				}
+				else
+				{
+					insertSpecimens(cpEventMap,request.getSession());
+				}
 			}
+			
 			ActionMessages actionMessages = new ActionMessages();
 			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"object.add.successOnly","Collection Protocol"));
 			saveMessages(request, actionMessages);
 			target = Constants.SUCCESS;
+			specimenSummaryForm.switchUserAction();
 		} catch (Exception ex) {
 			target = Constants.FAILURE;
 			String errorMsg = ex.getMessage();
@@ -91,7 +123,37 @@ public class SubmitSpecimenCPAction extends Action {
 
 	}
 
-	private void insertCollectionProtocol(HttpServletRequest request)
+	/**
+	 * @param cpEventMap
+	 * @throws BizLogicException
+	 * @throws UserNotAuthorizedException
+	 */
+	private void insertSpecimens(LinkedHashMap cpEventMap, HttpSession session )
+			throws BizLogicException, UserNotAuthorizedException {
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
+				Constants.NEW_SPECIMEN_FORM_ID);
+		SessionDataBean sessionDataBean = (SessionDataBean) session
+				.getAttribute(Constants.SESSION_DATA);
+		bizLogic.insert(cpEventMap, sessionDataBean, Constants.HIBERNATE_DAO);
+	}
+
+	/**
+	 * @param collectionProtocol
+	 * @throws BizLogicException
+	 * @throws UserNotAuthorizedException
+	 */
+	private void insertCollectionProtocol(CollectionProtocol collectionProtocol, HttpSession session)
+			throws BizLogicException, UserNotAuthorizedException {
+		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+//				SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+		SessionDataBean sessionDataBean = new SessionDataBean();
+		sessionDataBean.setUserId(new Long("1"));
+		sessionDataBean.setUserName("admin@admin.com");
+		
+		bizLogic.insert(collectionProtocol, sessionDataBean, Constants.HIBERNATE_DAO);
+	}
+
+	private CollectionProtocol populateCollectionProtocolObjects(HttpServletRequest request)
 			throws Exception {
 		HttpSession session = request.getSession();
 		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
@@ -100,32 +162,33 @@ public class SubmitSpecimenCPAction extends Action {
 		LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = (LinkedHashMap) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 
-		CollectionProtocol collectionProtocol = getCollectionProtocolDomainObject(collectionProtocolBean);
+		CollectionProtocol collectionProtocol = createCollectionProtocolDomainObject(collectionProtocolBean);
 		Collection collectionProtocolEventList = new HashSet();
-		Collection collectionProtocolEventBean = cpEventMap.values();
-		Iterator cpEventIterator = collectionProtocolEventBean.iterator();
-
-		while (cpEventIterator.hasNext()) {
-
-			CollectionProtocolEventBean cpEventBean = (CollectionProtocolEventBean) cpEventIterator
-					.next();
-			CollectionProtocolEvent collectionProtocolEvent = getCollectionProtocolEvent(cpEventBean);
-			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			collectionProtocolEventList.add(collectionProtocolEvent);
-		}
-		
+		Collection collectionProtocolEventBeanColl = cpEventMap.values();
+		if (collectionProtocolEventBeanColl != null)
+		{
+			Iterator cpEventIterator = collectionProtocolEventBeanColl.iterator();
+	
+			while (cpEventIterator.hasNext()) {
+	
+				CollectionProtocolEventBean cpEventBean = (CollectionProtocolEventBean) cpEventIterator
+						.next();
+				CollectionProtocolEvent collectionProtocolEvent = getCollectionProtocolEvent(cpEventBean);
+				collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
+				collectionProtocolEventList.add(collectionProtocolEvent);
+			}
+		}		
 		collectionProtocol
 				.setCollectionProtocolEventCollection(collectionProtocolEventList);
-		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-//		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setUserId(new Long("1"));
-		sessionDataBean.setUserName("admin@admin.com");
-		
-		bizLogic.insert(collectionProtocol, sessionDataBean, Constants.HIBERNATE_DAO); 
-		
+		return collectionProtocol;
 	}
 
+	/**
+	 * This function used to create CollectionProtocolEvent domain object
+	 * from given CollectionProtocolEventBean Object.
+	 * @param cpEventBean 
+	 * @return CollectionProtocolEvent domain object.
+	 */
 	private CollectionProtocolEvent getCollectionProtocolEvent(
 			CollectionProtocolEventBean cpEventBean) {
 
@@ -146,7 +209,7 @@ public class SubmitSpecimenCPAction extends Action {
 		
 		if (specimenMap!=null && !specimenMap.isEmpty()){
 			specimenCollection =getSpecimens(
-					cpEventBean.getSpecimenRequirementbeanMap().values()
+					specimenMap.values()
 					,null, specimenCollectionRequirementGroup);	
 		}
 		
@@ -157,6 +220,14 @@ public class SubmitSpecimenCPAction extends Action {
 		return collectionProtocolEvent;
 	}
 
+	
+	/**
+	 * creates collection of Specimen domain objects 
+	 * @param specimenRequirementBeanColl
+	 * @param parentSpecimen
+	 * @param requirementGroup
+	 * @return
+	 */
 	private Collection getSpecimens(Collection specimenRequirementBeanColl, 
 			Specimen parentSpecimen, SpecimenCollectionRequirementGroup requirementGroup ) {
 		
@@ -194,6 +265,11 @@ public class SubmitSpecimenCPAction extends Action {
 		return specimenCollection;
 	}
 
+	/**
+	 * creates specimen domain object from given specimen requirement bean.
+	 * @param specimenRequirementBean
+	 * @return
+	 */
 	private Specimen getSpecimenDomainObject(SpecimenRequirementBean specimenRequirementBean){
 
 		NewSpecimenForm form = new NewSpecimenForm();
@@ -228,15 +304,24 @@ public class SubmitSpecimenCPAction extends Action {
 		specimen.setType(specimenRequirementBean.getType());
 		StorageContainer storageContainer = new StorageContainer();
 		storageContainer.setName(
-				specimenRequirementBean.getStorageContainerForSpecimen());		
+				specimenRequirementBean.getStorageContainerForSpecimen());
+		
 		specimen.setStorageContainer(storageContainer);
 		
 		return specimen;
 	}
-	private CollectionProtocol getCollectionProtocolDomainObject(
+
+	/**
+	 * Creates collection protocol domain object from given collection protocol bean.
+	 * @param cpBean
+	 * @return
+	 * @throws Exception
+	 */
+	private CollectionProtocol createCollectionProtocolDomainObject(
 			CollectionProtocolBean cpBean) throws Exception {
 
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
+		//collectionProtocol.setId(cpBean.getID());
 		collectionProtocol.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		collectionProtocol.setAliquotInSameContainer(Boolean.TRUE);
 		collectionProtocol.setConsentsWaived(cpBean.isConsentWaived());
@@ -279,18 +364,142 @@ public class SubmitSpecimenCPAction extends Action {
 		return collectionProtocol;
 	}
 
-	private void insertSpecimens(HttpServletRequest request) throws Exception {
+	/**
+	 * Multiple specimen 
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	private LinkedHashMap populateSpecimenDomainObjectMap(HttpServletRequest request) throws Exception {
 
 		HttpSession session = request.getSession();
 		LinkedHashMap<String, GenericSpecimen> cpEventMap;
 		cpEventMap = (LinkedHashMap) session
 				.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
+		LinkedHashMap specimenMap = new LinkedHashMap();
+		Collection specimenSessionColl = cpEventMap.values();
+		Iterator iterator = specimenSessionColl.iterator();
+		
+		while(iterator.hasNext())
+		{
+			SpecimenDataBean specimenDataBean =(SpecimenDataBean) iterator.next();
+			Specimen specimen =getSpecimenDomainObjectFromObject(specimenDataBean);
+			
+			ArrayList childSpecimenList = new ArrayList();
 
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
-				Constants.NEW_SPECIMEN_FORM_ID);
-		SessionDataBean sessionDataBean = (SessionDataBean) session
-				.getAttribute(Constants.SESSION_DATA);
-		bizLogic.insert(cpEventMap, sessionDataBean, Constants.HIBERNATE_DAO);
+			if (specimenDataBean.getAliquotSpecimenCollection() != null)
+			{
+				getAliquotSpecimens(specimenDataBean, specimen,
+						childSpecimenList);
+			}
+
+			if (specimenDataBean.getDeriveSpecimenCollection() != null)
+			{
+				getDerivedSpecimens(specimenDataBean, specimen,
+						childSpecimenList);
+			}			
+			specimenMap.put(specimen, childSpecimenList);
+			
+		}
+		return specimenMap;
+
+	}
+
+	/**
+	 * @param specimenDataBean
+	 * @param parentSpecimen
+	 * @param childSpecimenList
+	 */
+	private void getDerivedSpecimens(SpecimenDataBean specimenDataBean,
+			Specimen parentSpecimen, ArrayList childSpecimenList) {
+		Collection derivedSpecimenCollection = specimenDataBean
+											.getDeriveSpecimenCollection().values();
+		Iterator derivedSpecimenIteraror = derivedSpecimenCollection.iterator();
+		
+		while(derivedSpecimenIteraror.hasNext())
+		{
+			SpecimenDataBean derivedSpecimenBean =
+				(SpecimenDataBean) derivedSpecimenIteraror.next();
+			Specimen derivedSpecimen = getSpecimenDomainObjectFromObject(derivedSpecimenBean);
+			derivedSpecimen.setParentSpecimen(parentSpecimen);
+			derivedSpecimen.setLineage(Constants.DERIVED_SPECIMEN);
+			childSpecimenList.add(derivedSpecimen);
+		}
+	}
+
+	/**
+	 * @param specimenDataBean
+	 * @param parentSpecimen
+	 * @param childSpecimenList
+	 */
+	private void getAliquotSpecimens(SpecimenDataBean specimenDataBean,
+			Specimen parentSpecimen, ArrayList childSpecimenList) {
+		Collection aliquotSpecimenCollection = specimenDataBean
+											.getAliquotSpecimenCollection().values();
+		Iterator aliquotSpecimenIteraror = aliquotSpecimenCollection.iterator();
+		
+		while(aliquotSpecimenIteraror.hasNext())
+		{
+			SpecimenDataBean aliquotSpecimenBean =
+				(SpecimenDataBean) aliquotSpecimenIteraror.next();
+			Specimen aliquotSpecimen = getSpecimenDomainObjectFromObject(aliquotSpecimenBean);
+			aliquotSpecimen.setParentSpecimen(parentSpecimen);
+			aliquotSpecimen.setLineage(Constants.ALIQUOT);
+			childSpecimenList.add(aliquotSpecimen);
+		}
+	}
+	
+	private Specimen getSpecimenDomainObjectFromObject(SpecimenDataBean specimenDataBean)
+	{
+		NewSpecimenForm form = new NewSpecimenForm();
+		form.setClassName(specimenDataBean.getClassName());
+		
+		Specimen specimen;
+		try {
+			specimen = (Specimen) new DomainObjectFactory()
+				.getDomainObject(Constants.NEW_SPECIMEN_FORM_ID, form);
+		} catch (AssignDataException e1) {
+			e1.printStackTrace();
+			return null;
+		}
+		
+		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		specimen.setBarcode(specimen.getBarcode());
+		specimen.setComment(specimenDataBean.getComment());
+		specimen.setCreatedOn(new Date());
+		specimen.setLabel(specimenDataBean.getLabel());
+		specimen.setPathologicalStatus(specimenDataBean.getPathologicalStatus());
+	
+		specimen.setAvailable(Boolean.TRUE);
+		Quantity availableQuantity = new Quantity();
+		double value=0;
+		String s=specimenDataBean.getQuantity();
+		try{
+			 value =Double.parseDouble(s);
+		}catch(NumberFormatException e){
+			value=0;
+		}
+		
+		availableQuantity.setValue(value);
+		specimen.setAvailableQuantity(availableQuantity);
+		specimen.setInitialQuantity(availableQuantity);
+		specimen.setLineage(specimenDataBean.getLineage());
+		specimen.setPathologicalStatus(
+				specimenDataBean.getPathologicalStatus());		
+		specimen.setType(specimenDataBean.getType());
+		
+		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
+		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
+		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
+		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());
+		
+		StorageContainer storageContainer = new StorageContainer();
+		storageContainer.setName(
+				specimenDataBean.getStorageContainerForSpecimen());
+		
+		specimen.setStorageContainer(null);
+		
+		return specimen;
 
 	}
 }

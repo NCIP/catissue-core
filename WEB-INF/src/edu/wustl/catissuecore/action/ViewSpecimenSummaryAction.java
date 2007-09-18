@@ -40,11 +40,18 @@ public class ViewSpecimenSummaryAction extends Action {
 				eventId = (String) request
 						.getParameter(Constants.COLLECTION_PROTOCOL_EVENT_ID);
 				
-				//new Generatedata().generate(request);
+//				new Generatedata().generate(request);
 			}
-
+			
+			summaryForm.setUserAction(ViewSpecimenSummaryForm.ADD_USER_ACTION);
+			
+			if("update".equals(request.getParameter("action")))
+			{
+				summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
+			}
+				
 			LinkedHashMap<String, GenericSpecimen> specimenMap = 
-							getSpecimensFromSessoin(session, eventId);
+							getSpecimensFromSessoin(session, eventId, summaryForm);
 
 			if (specimenMap != null) {
 				populateSpecimenSummaryForm(summaryForm, specimenMap);
@@ -66,12 +73,12 @@ public class ViewSpecimenSummaryAction extends Action {
 	 * @return
 	 */
 	private LinkedHashMap<String, GenericSpecimen> getSpecimensFromSessoin(
-			HttpSession session, String eventId) {
+			HttpSession session, String eventId, ViewSpecimenSummaryForm summaryForm) {
 
 		LinkedHashMap<String, GenericSpecimen> specimenMap = null;
-
+		
 		if (eventId != null) {
-
+			summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL);
 			StringTokenizer stringTokenizer =new StringTokenizer(eventId, "_");
 			if(stringTokenizer!=null)
 			{
@@ -80,7 +87,7 @@ public class ViewSpecimenSummaryAction extends Action {
 					eventId = stringTokenizer.nextToken();
 				}
 			}
-
+			
 			Map collectionProtocolEventMap = (Map) session
 					.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 			
@@ -98,9 +105,11 @@ public class ViewSpecimenSummaryAction extends Action {
 			}
 			
 		} else {
+			summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS);
 			specimenMap = (LinkedHashMap) session
 					.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
 		}
+		
 		return specimenMap;
 	}
 
@@ -130,25 +139,23 @@ public class ViewSpecimenSummaryAction extends Action {
 			return;
 		}
 		
-		HashMap<String, GenericSpecimen> aliqutesList = selectedSpecimen
+		HashMap<String, GenericSpecimen> aliquotsList = selectedSpecimen
 				.getAliquotSpecimenCollection();
 		HashMap<String, GenericSpecimen> derivedList = selectedSpecimen
 				.getDeriveSpecimenCollection();
 
 		Collection nestedAliquots = new LinkedHashSet();
 		Collection nestedDerives = new LinkedHashSet();
-		if (aliqutesList != null && !aliqutesList.values().isEmpty()) 
+		if (aliquotsList != null && !aliquotsList.values().isEmpty()) 
 		{
-			nestedAliquots.addAll(aliqutesList.values());
-			
-			getNestedAliquotSpecimens(aliqutesList.values(), nestedAliquots);
-			getNestedDerivedSpecimens(aliqutesList.values(), nestedDerives);
+			nestedAliquots.addAll(aliquotsList.values());
+			getNestedAliquotSpecimens(aliquotsList.values(), nestedAliquots);
+			getNestedDerivedSpecimens(aliquotsList.values(), nestedDerives);
 			
 		}
 
 		if (derivedList != null && !derivedList.values().isEmpty()) 
 		{
-
 			nestedDerives.addAll(derivedList.values());
 			getNestedAliquotSpecimens(derivedList.values(), nestedAliquots);
 			getNestedDerivedSpecimens(derivedList.values(), nestedDerives);
@@ -163,14 +170,13 @@ public class ViewSpecimenSummaryAction extends Action {
 	private void getNestedAliquotSpecimens(Collection topChildCollection,
 			Collection nestedCollection) {
 
-		
+
 		Iterator iterator = topChildCollection.iterator();
 
 		while (iterator.hasNext()) {
 			GenericSpecimen specimen = (GenericSpecimen) iterator.next();
 
 			if (specimen.getAliquotSpecimenCollection() != null) {
-
 				Collection childSpecimen = specimen
 						.getAliquotSpecimenCollection().values();
 				if (!childSpecimen.isEmpty()) {
@@ -183,7 +189,6 @@ public class ViewSpecimenSummaryAction extends Action {
 
 	private void getNestedDerivedSpecimens(Collection topChildCollection,
 			Collection nestedCollection) {
-
 
 		Iterator iterator = topChildCollection.iterator();
 
@@ -212,7 +217,7 @@ public class ViewSpecimenSummaryAction extends Action {
 		specimenList.addAll(specimenColl);
 		return specimenList;
 	}
-
+/*
 	class Generatedata {
 
 			public void generate(HttpServletRequest request) {
@@ -241,6 +246,8 @@ public class ViewSpecimenSummaryAction extends Action {
 						.getDeriveSpecimenCollection().get("Derived0");
 				specimen.setDeriveSpecimenCollection(createSpecimens(1,
 						"D_Specimen", specimen.getDisplayName()));
+				specimen.setAliquotSpecimenCollection(createSpecimens(1,
+						"AD_Specimen", specimen.getDisplayName()));
 			}
 
 			private LinkedHashMap createSpecimens(int count, String type,
@@ -289,7 +296,7 @@ public class ViewSpecimenSummaryAction extends Action {
 				collectionProtocol.setEnrollment(null);
 				collectionProtocol.setIrbID("7777");
 				collectionProtocol
-						.setTitle("Study Collection Protocol For Consent track..");
+						.setTitle("Study Collection Protocol For Consent track..123");
 				collectionProtocol.setShortTitle("Cp Consent");
 				collectionProtocol.setUnsignedConsentURLName("C:\\consent12.pdf");
 
@@ -299,6 +306,6 @@ public class ViewSpecimenSummaryAction extends Action {
 
 			}
 		}
-
+*/
 	
 	}
