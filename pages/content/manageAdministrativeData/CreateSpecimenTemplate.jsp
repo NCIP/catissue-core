@@ -77,13 +77,16 @@ if(form != null)
 			unitSpecimen = Constants.UNIT_MG;
 		}
 }
-boolean readOnlyValue=false,readOnlyForAll=false;
+
 
 %>
-
+<%!
+	boolean readOnlyValue=false,readOnlyForAll=false;
+	boolean concReadOnly=true;
+%>
 
 <%!
-	private String changeUnit(String specimenType,String subTypeValue)
+	private String changeUnit(String specimenType, String subTypeValue)
 	{
 		if (specimenType == null)
 			return "";
@@ -103,7 +106,10 @@ boolean readOnlyValue=false,readOnlyForAll=false;
 		else if(specimenType.equals("Cell"))
 			return Constants.UNIT_CC;
 		else if(specimenType.equals("Molecular"))
+		{
+			concReadOnly=false;
 			return Constants.UNIT_MG;
+		}
 		else
 			return " ";
 			
@@ -553,7 +559,7 @@ boolean readOnlyValue=false,readOnlyForAll=false;
 			</label>
 		</td>
 	    <td class="formFieldNoBordersSimple" >
-	     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
+	     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity"/>
 	     	<span id="unitSpan"><%=unitSpecimen%></span>
 	     	<html:hidden property="unit"/>
 	    </td>
@@ -773,6 +779,7 @@ boolean readOnlyValue=false,readOnlyForAll=false;
 				</td>
 				<%
 					String className = (String)form.getDeriveSpecimenValue(classKey);
+					String typeclassValue = (String)form.getDeriveSpecimenValue(srSubTypeKeyName);
 					specimenTypeList = (List)specimenTypeMap.get(className);
 					boolean subListEnabled1 = false;
 					if(specimenTypeList == null)
@@ -806,6 +813,7 @@ boolean readOnlyValue=false,readOnlyForAll=false;
 						
 					String qtyValue = (String)form.getDeriveSpecimenValue(quantityvalue);
 					String concValue = (String)form.getDeriveSpecimenValue(MolecularConc);
+					String strHiddenUnitValue = "" + changeUnit(className,typeclassValue);
 					if(qtyValue == null || qtyValue.equals("")) 
 					{
 						qtyValue="0";
@@ -818,9 +826,9 @@ boolean readOnlyValue=false,readOnlyForAll=false;
 				<html:text styleClass="formFieldSized5" size="30"  maxlength="10" 
 							styleId="<%=quantity%>" 
 							property="<%=quantity%>" 
-							readonly="<%=readOnlyValue%>"
 							value="<%=qtyValue%>" />
 					<span id="<%=unit%>">
+						<%=strHiddenUnitValue%>
 					</span>
 				</td>
 				
@@ -828,7 +836,7 @@ boolean readOnlyValue=false,readOnlyForAll=false;
 					<html:text styleClass="formFieldSized5" size="30"  maxlength="10" 
 							styleId="<%=concentration%>" 
 							property="<%=concentration%>" 
-							readonly="<%=readOnlyValue%>"
+							disabled="<%=concReadOnly%>"
 							value="<%=concValue%>"
 							/>
 				</td>
