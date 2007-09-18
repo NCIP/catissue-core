@@ -90,6 +90,18 @@ PUBLIC
 		<form-bean name="viewSpecimenSummaryForm" type="edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm"/> 
 		
 		<form-bean name="saveQueryForm" type="edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm"/>
+		
+<!-- Conflict Resolver : kalpana -->		
+		<form-bean name="conflictViewForm" type="edu.wustl.catissuecore.actionForm.ConflictViewForm"/>
+		<form-bean name="conflictDetailsForm" type="edu.wustl.catissuecore.actionForm.ConflictDetailsForm"/>
+		<form-bean name="conflictCommonForm" type="edu.wustl.catissuecore.actionForm.ConflictCommonForm"/>
+		<form-bean name="conflictParticipantDataDetailsForm" type="edu.wustl.catissuecore.actionForm.ConflictParticipantDataDetailsForm"/>
+		<form-bean name="conflictParticipantSCGTreeForm" type="edu.wustl.catissuecore.actionForm.ConflictParticipantSCGTreeForm"/>
+		<form-bean name="conflictSCGForm" type="edu.wustl.catissuecore.actionForm.ConflictSCGForm"/>
+<!-- end :Conflict Resolver -->		
+
+		
+		
 				
 	</form-beans>
 	
@@ -672,6 +684,8 @@ PUBLIC
 			<forward name="failure" path="/error.jsp" />
 		</action>
 		
+<!-- Conflict Resolver :by kalpana -->
+		
 		<action path="/ConflictView"
 			type="edu.wustl.catissuecore.action.ConflictViewAction"
 			name="conflictViewForm"
@@ -688,13 +702,63 @@ PUBLIC
 			<forward name="success" path=".catissuecore.conflictDetailsViewDef" />			
 		</action>
 		
+		<action path="/ConflictCommon"
+			type="edu.wustl.catissuecore.action.ConflictCommonAction"
+			name="conflictCommonForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.conflictCommonDef" />			
+		</action>
+		
+		<action path="/ConflictParticipantDataDetails"
+			type="edu.wustl.catissuecore.action.ConflictParticipantDataDetailsAction"
+			name="conflictParticipantDataDetailsForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.conflictParticipantDataDetailsDef" />			
+		</action>
+		
+		<action path="/ConflictSCGDataDetails"
+			type="edu.wustl.catissuecore.action.ConflictSCGDataDetailsAction"
+			name="specimenCollectionGroupForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.conflictSCGDataDetailsDef" />			
+		</action>
+		
+		<action path="/ConflictParticipantSCGTree"
+			type="edu.wustl.catissuecore.action.ConflictParticipantSCGTreeAction"
+			name="conflictParticipantSCGTreeForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.conflictParticipantSCGTreeDef" />			
+		</action>
+		
+		<action path="/ConflictSCGAction"
+			type="edu.wustl.catissuecore.action.ConflictSCGAction"
+			name="conflictSCGForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.conflictSCGDef" />			
+		</action>
+			
+		<action path="/ConflictReportAction"
+			type="edu.wustl.catissuecore.action.ConflictReportAction"
+			name="conflictSCGForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.conflictReportDef" />			
+		</action>
+		
 		<action path="/ConflictResolver"
 			type="edu.wustl.catissuecore.action.ConflictResolverAction"
 			name="conflictDetailsForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/ConflictView.do" />			
+			<forward name="success" path="/ConflictView.do?pageNum=1&amp;menuSelected=13" />			
 		</action>
+			
+<!-- end : conflict Resolver -->	
 			
 		<action path="/ReviewRequests" 
 				 name="viewSurgicalPathologyReportForm"
