@@ -1981,6 +1981,18 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLLECTION_PROTOCOL_SESSION_BEAN = "collectionProtocolBean";
 	public static final String EDIT_SPECIMEN_REQUIREMENT_BEAN ="EditSpecimenRequirementBean";
 	public static final String VIEW_SUMMARY ="ViewSummary";
+	public static final String EVENT_KEY ="key";
+	public static final String TREE_NODE_ID ="nodeId";
+	public static final String PAGE_OF_DEFINE_EVENTS = "defineEvents";
+	public static final String PAGE_OF_ADD_NEW_EVENT = "newEvent";
+	public static final String PAGE_OF_SPECIMEN_REQUIREMENT = "specimenRequirement";
+	public static final String ADD_NEW_EVENT = "-1";
+	public static final String NEW_EVENT_KEY = "listKey";
+	public static final String LINEAGE_NEW_SPECIMEN = "New Specimen";
+	public static final String UNIQUE_IDENTIFIER_FOR_DERIVE = "_D";
+	public static final String UNIQUE_IDENTIFIER_FOR_ALIQUOT = "_A";
+	public static final String UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN = "_S";
+	public static final String UNIQUE_IDENTIFIER_FOR_EVENTS = "E";
 
 	/*
      * Conflict resolver constants
@@ -2029,7 +2041,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
   	public static final String CONFLICT_BUTTON = "conflictButton";
   	public static final String IDENTIFIED_SURGICAL_PATHOLOGY_REPORT = "identifiedSurgicalPathologyReport";
   	
-//Save Query Constants
+  	//Save Query Constants
 	
 	public static final String SHOW_ALL_ATTRIBUTE = "Show all attributes";
 	public static final String SHOW_SELECTED_ATTRIBUTE = "Show selected attributes";
