@@ -247,6 +247,22 @@ public class SubmitSpecimenCPAction extends Action {
 						(SpecimenRequirementBean)iterator.next();
 			Specimen specimen = getSpecimenDomainObject(specimenRequirementBean);
 			specimen.setParentSpecimen(parentSpecimen);
+			if (parentSpecimen == null)
+			{
+					SpecimenCharacteristics specimenCharacteristics =
+							new SpecimenCharacteristics();
+					specimenCharacteristics.setTissueSide(
+							specimenRequirementBean.getTissueSide());
+					specimenCharacteristics.setTissueSite(
+							specimenRequirementBean.getTissueSite());
+					
+					specimen.setSpecimenCharacteristics(specimenCharacteristics);
+			}
+			else
+			{
+				specimen.setSpecimenCharacteristics(
+						parentSpecimen.getSpecimenCharacteristics());
+			}
 			specimen.setSpecimenCollectionGroup(requirementGroup);
 			specimenCollection.add(specimen);
 
