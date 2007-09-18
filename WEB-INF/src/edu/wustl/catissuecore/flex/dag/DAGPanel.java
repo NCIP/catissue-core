@@ -17,6 +17,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationExcept
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.client.ui.dag.PathLink;
 import edu.wustl.cab2b.client.ui.dag.ambiguityresolver.AmbiguityObject;
+import edu.wustl.cab2b.client.ui.dag.ambiguityresolver.ResolveAmbiguity;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
 import edu.wustl.cab2b.client.ui.query.IPathFinder;
@@ -69,6 +70,7 @@ public class DAGPanel {
 	private HttpSession m_session;
 	private IPathFinder m_pathFinder;
 	private IExpression expression;
+	private HashMap<String,IPath> m_pathMap = new HashMap<String, IPath>();
 
 	public DAGPanel(IPathFinder pathFinder)
 	{
@@ -187,28 +189,45 @@ public class DAGPanel {
 	 * @param destNode
 	 * @param paths
 	 */
-	public int linkNode(final DAGNode sourceNode, final DAGNode destNode,List<IPath> paths) {
-		int status=0;
+	public List<DAGPath> linkNode(List<DAGNode>linkedNodeList) {
+		//int status=0;
+		DAGNode sourceNode = linkedNodeList.get(0);
+		DAGNode destinationNode = linkedNodeList.get(1);
+		List<DAGPath> dagPathList = null;
+		List<IPath> paths = getPaths(sourceNode, destinationNode);
 		if (paths == null || paths.isEmpty()) {
-			status = DAGConstant.NO_PATHS_PRESENT;
+			//status = DAGConstant.NO_PATHS_PRESENT;
+			 dagPathList = null;
 		}
 		else
 		{
+			dagPathList = new ArrayList<DAGPath>();
 			IExpressionId sourceExpressionId = new ExpressionId(sourceNode.getExpressionId());
-			IExpressionId destExpressionId = new ExpressionId(destNode.getExpressionId());
+			IExpressionId destExpressionId = new ExpressionId(destinationNode.getExpressionId());
 			if (!m_queryObject.isPathCreatesCyclicGraph(sourceExpressionId, destExpressionId,
 					paths.get(0))) {
 				for (int i = 0; i < paths.size(); i++) {
-					LinkTwoNode(sourceNode, destNode, paths.get(i), new ArrayList<IExpressionId>());
+					IPath path = paths.get(i);
+					LinkTwoNode(sourceNode, destinationNode, paths.get(i), new ArrayList<IExpressionId>());
+					String pathStr = new Long(path.getPathId()).toString();
+					DAGPath dagPath = new DAGPath();
+					dagPath.setName(getPathDisplayString(path));
+					dagPath.setId(pathStr);
+					dagPath.setSourceExpId(sourceNode.getExpressionId());
+					dagPath.setDestinationExpId(destinationNode.getExpressionId());
+					dagPathList.add(dagPath);
+					String key =pathStr+"_"+sourceNode.getExpressionId()+"_"+destinationNode.getExpressionId();
+					m_pathMap.put(key,path);
 				}
-				status=DAGConstant.SUCCESS;
+			//	status=DAGConstant.SUCCESS;
 			}
 			else {
-				status=DAGConstant.CYCLIC_GRAPH;
+			//	status=DAGConstant.CYCLIC_GRAPH;
+				
 			}
 
 		}
-		return status;
+		return dagPathList;
 	}
 	/**
 	 * Gets list of paths between two nodes
@@ -235,9 +254,8 @@ public class DAGPanel {
 			ambiguityObject = new AmbiguityObject(
 					sourceEntity.getDynamicExtensionsEntity(),
 					destinationEntity.getDynamicExtensionsEntity());
-//			ResolveAmbiguity resolveAmbigity = new ResolveAmbiguity(
-//			ambiguityObject, m_pathFinder);
-			DAGResolveAmbiguity resolveAmbigity = new DAGResolveAmbiguity(ambiguityObject, m_pathFinder);
+			ResolveAmbiguity resolveAmbigity = new ResolveAmbiguity(ambiguityObject, m_pathFinder);
+//			DAGResolveAmbiguity resolveAmbigity = new DAGResolveAmbiguity(ambiguityObject, m_pathFinder);
 			map = resolveAmbigity.getPathsForAllAmbiguities();
 
 		} catch (Exception e) {
@@ -388,6 +406,7 @@ public class DAGPanel {
 	{
 		int status=0;
 		try {
+			IQuery query = m_queryObject.getQuery();
 			int recordsPerPage; 
 			String recordsPerPageSessionValue = (String)m_session.getAttribute(Constants.RESULTS_PER_PAGE);
 			if (recordsPerPageSessionValue==null)
@@ -399,7 +418,7 @@ public class DAGPanel {
 				recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
 
 			boolean isRulePresentInDag = false;
-			IQuery query = m_queryObject.getQuery();
+		
 			if(query!=null)
 			{
 				SqlGenerator sql = new SqlGenerator();
@@ -442,13 +461,7 @@ public class DAGPanel {
 					m_session.setAttribute(Constants.NO_OF_TREES, noOfTrees);
 					Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor.getAllChildrenNodes(rootOutputTreeNodeList);
 					m_session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
-					int i =0;
-					for(OutputTreeDataNode node :rootOutputTreeNodeList)
-					{
-						Vector treeData = outputTreeBizLogic.createDefaultOutputTreeData(i,node, sessionData);
-						m_session.setAttribute(Constants.TREE_DATA+"_"+i, treeData);
-						i += 1;
-					}
+					
 					OutputTreeDataNode node = rootOutputTreeNodeList.get(0);
 					QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 					String parentNodeId = null;
@@ -466,6 +479,18 @@ public class DAGPanel {
 					m_session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
 					m_session.setAttribute(Constants.SELECTED_COLUMN_META_DATA, spreadSheetDatamap.get(Constants.SELECTED_COLUMN_META_DATA));
 					status =DAGConstant.SUCCESS;
+					int i =0;
+					for(OutputTreeDataNode outnode :rootOutputTreeNodeList)
+					{
+						Vector treeData = outputTreeBizLogic.createDefaultOutputTreeData(i,outnode, sessionData);
+						int resultsSize = treeData.size();
+						if(resultsSize == 0)
+						{
+							status =DAGConstant.NO_RESULT_PRESENT;
+						}
+						m_session.setAttribute(Constants.TREE_DATA+"_"+i, treeData);
+						i += 1;
+					}
 				}
 				else
 				{
@@ -476,20 +501,23 @@ public class DAGPanel {
 		}
 		catch (MultipleRootsException e)
 		{
+			Logger.out.error(e);
 			status = DAGConstant.MULTIPLE_ROOT;
-			//e.printStackTrace();
+			
 		}
 		catch (SqlException e)
 		{
+			Logger.out.error(e);
 			status = DAGConstant.SQL_EXCEPTION;
 		} 
 		catch (ClassNotFoundException e)
 		{
-			status =DAGConstant.EMPTY_DAG;
-			//e.printStackTrace();
+			Logger.out.error(e);
+			status =DAGConstant.CLASS_NOT_FOUND;
 		}
 		catch (DAOException e)
 		{
+			Logger.out.error(e);
 			status = DAGConstant.DAO_EXCEPTION;
 		}				
 		return status;
@@ -730,8 +758,9 @@ public class DAGPanel {
 	 * @param path
 	 * @param linkedNodeList
 	 */
-	public void deletePath(IPath path,List<DAGNode>linkedNodeList)
+	public void deletePath(String pathName,List<DAGNode>linkedNodeList)
 	{
+		IPath path = m_pathMap.remove(pathName);
 		IExpressionId sourceexpressionId = new ExpressionId(linkedNodeList.get(0)
 					.getExpressionId());
 		IExpressionId destexpressionId = new ExpressionId(linkedNodeList.get(1)
