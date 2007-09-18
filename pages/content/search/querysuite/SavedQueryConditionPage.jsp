@@ -40,7 +40,7 @@
 					<td>
 						<table>
 							<tr>
-								<td>Title :</td>
+								<td><bean:message key="savequery.queryTitle"/>:</td>
 								<td><input type="text" style="width: 150px; display: block;" name="title" value=""/></td>
 								<!--
 								<td rowspan="2" valign="top">Share Query With :</td>
@@ -53,7 +53,7 @@
 								-->
 							</tr>
 							<tr>
-								<td>Description :</td>
+								<td><bean:message key="savequery.queryDescription"/>:</td>
 								<td>
 									<textarea cols="20" rows="4" style="width: 150px;" name="description"></textarea>
 								</td>
