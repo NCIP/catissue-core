@@ -202,7 +202,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				throw daoException;
 			}
 
-			List derivedSpecimens =null; // (List) specimenMap.get(specimen);
+			List derivedSpecimens = (List) specimenMap.get(specimen);
 			if (derivedSpecimens == null)
 			{
 				continue;
