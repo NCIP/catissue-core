@@ -35,8 +35,8 @@
               <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 		      
 		      <!-- link 4 begins -->
-		      <td height="20" class="mainMenuItemSelected" onclick="document.location.href='SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17'">
-                <html:link styleClass="mainMenuLink" page="/SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17">
+		      <td height="20" class="mainMenuItemSelected">
+                <html:link styleClass="mainMenuLink" page="/RetrieveQueryAction.do">
                 	<bean:message key="app.search" />
                 </html:link>
               </td>

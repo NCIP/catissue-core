@@ -4,11 +4,9 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <!--
  Kapil: For splitter UI. A dummy parameter added to the URL to have forcefully execution of the JSP, otherwise browser uses
- page from cache. This is required to do since becuase of chache splitter was not working correctly. 
+ page from cache. This is required to do since because of cache splitter was not working correctly. 
  This is added to main menu pages.
 -->
-
-	<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20">
             <tr>
               <td width="1"><!-- anchor to skip main menu -->
@@ -52,9 +50,8 @@
 			 	 	alt="" /></td>
 			 	 	
 			 <!-- link 4 begins -->
-			 <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-				onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17'">
-				<html:link styleClass="mainMenuLink" page="/SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17">
+			 <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()">
+				<html:link styleClass="mainMenuLink" page="/RetrieveQueryAction.do">
 					<bean:message key="app.search" />
 				</html:link>
 			 </td>
