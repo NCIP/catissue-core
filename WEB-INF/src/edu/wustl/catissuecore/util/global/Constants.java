@@ -1903,14 +1903,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String PARTICIPANT_PROTOCOL_ID="participantProtocolId";
     
     // caTIES
-	public static final String REPORT_QUEUE_LIST = "ReportQueueList";
-	public static final String BUTTON_NAME = "button";
-	public static final String CREATE_PARTICIPANT_BUTTON = "createParticipant";
-	public static final String ASSOCIATE_PARTICIPANT_BUTTON = "associateParticipant";
-	public static final String REPORT_PARTICIPANT_OBJECT = "reportParticipantObject";
-	public static final String REPORT_ID = "reportQueueId";
-	public static final String PARTICIPANT_ID_TO_ASSOCIATE = "participantIdToAssociate";
-	public static final String SCG_ID_TO_ASSOCIATE = "scgIdToAssociate";
 	public static final String CONCEPT_REFERENT_CLASSIFICATION_LIST = "conceptRefernetClassificationList";
 	public static final String CONCEPT_LIST = "conceptList";
 	public static final String[] CATEGORY_HIGHLIGHTING_COLOURS = {"#ff6d5f","#db9fe5","#2dcc00","#69bbf7","#f8e754"};
@@ -1989,4 +1981,51 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLLECTION_PROTOCOL_SESSION_BEAN = "collectionProtocolBean";
 	public static final String EDIT_SPECIMEN_REQUIREMENT_BEAN ="EditSpecimenRequirementBean";
 	public static final String VIEW_SUMMARY ="ViewSummary";
+
+	/*
+     * Conflict resolver constants
+     * 
+     */
+         
+    public static final String [] CONFLICT_LIST_HEADER = {
+      		"Participant name",
+      		"ID",
+      		"Surgical pathological number",
+      		"Report loaded on",
+      		"Status"
+    };
+      
+    public static final String [] CONFLICT_FILTER_LIST = {
+          "All",
+          "Ambiguous Participants",
+          "Ambiguous Specimen Collection Groups"
+      };
+    public static final String FILTER_LIST = "filterList";
+    public static final String REPORT_ID = "reportQueueId";
+    public static final String CONFLICT_STATUS = "conflictStatus";
+    public static final String REPORT_INFORMATION = "ReportInformation";
+    public static final String SELECTED_FILTER = "selectedFilter";
+    public static final String CONFLICT_COMMON_VIEW="conflictCommonView";
+    public static final String CONFLICT_TREE_VIEW="conflictTreeView";
+    public static final String CONFLICT_DATA_VIEW="conflictDataView";
+    public static final String CONFLICT_COMMON_VIEW_ACTION="ConflictCommon.do";
+    public static final String CONFLICT_TREE_VIEW_ACTION="ConflictParticipantSCGTree.do";
+    public static final String CONFLICT_DATA_VIEW_ACTION="ConflictParticipantDataDetails.do";
+    public static final String SURGICAL_PATHOLOGY_NUMBER="surgicalPathologyNumber";
+    public static final String REPORT_DATE="reportDate";
+    public static final String SITE_NAME = "siteName";
+    public static final String PARTICIPANT_NAME = "participantName";
+    public static final String COLUMN_NAME_PART_COLL="elements(participantCollection)";
+  	
+    public static final String PARTICIPANT_ID_TO_ASSOCIATE = "participantIdToAssociate";
+	public static final String SCG_ID_TO_ASSOCIATE = "scgIdToAssociate";
+	public static final String REPORT_QUEUE_LIST = "ReportQueueList";
+	public static final String USE_SELECTED_PARTICIPANT = "createNewSCG";
+  	public static final String USE_SELECTED_SCG = "associateSCG";
+  	public static final String CREATE_NEW_PARTICIPANT = "creatNewParticipant";
+	public static final String OVERWRITE_REPORT = "overwriteReport";
+	public static final String IGNORE_NEW_REPORT = "ignoreNewReport";
+ 	
+  	public static final String CONFLICT_BUTTON = "conflictButton";
+  	public static final String IDENTIFIED_SURGICAL_PATHOLOGY_REPORT = "identifiedSurgicalPathologyReport";
 }
