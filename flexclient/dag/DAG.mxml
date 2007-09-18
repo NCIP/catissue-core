@@ -152,9 +152,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		for(var i:int=0;i<outAsslength;i++)
 		{
 			ass = Association(outAssociations.getItemAt(i));
-//			Alert.show("src dagnode" + dagNode.name);//src
-//			Alert.show("dest dagnode" + ass.associatedNode);
-//			var key:String=ass.associatedLink+"_"+dagNode.name+"_"+ass.associatedNode;
 			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
 			path = dagPathUIMap.getValue(ass.associatedLink);
 			dagPathUIMap.remove(ass.associatedLink);
@@ -187,9 +184,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		for(var k:int=0;k<inAsslength;k++)
 		{
 			ass = Association(inAssociations.getItemAt(k));
-			//Alert.show("dest dagnode" + dagNode.name);
-			//Alert.show("src dagnode" + ass.associatedNode);//src
-		//	var key:String=ass.associatedLink+"_"+ass.associatedNode+"_"+dagNode.name;
 			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
 			path = dagPathUIMap.getValue(ass.associatedLink);
 			dagPathUIMap.remove(ass.associatedLink);
@@ -215,6 +209,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	private function initFlexInterfaceHandler(event: ResultEvent):void
 	{
 		//Alert.show("Intialized .....")
+		rpcService.removeEventListener(ResultEvent.RESULT,initFlexInterfaceHandler,false);
 	}
 	/**
 	
@@ -379,14 +374,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			
 	public function searchResult():void
 	{
-//		Alert.show("path size" +dagPathUIMap.size());
-//		Alert.show("node size ="+totalNodeMap.size());
-		
-			rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
-			rpcService.addEventListener(ResultEvent.RESULT,searchResultHandler);
-			rpcService.getSearchResult();
-		
-		
+		rpcService.addEventListener(ResultEvent.RESULT,searchResultHandler);
+		rpcService.getSearchResult();
 	}
 	
 	private function searchResultHandler(event: ResultEvent):void 
@@ -397,32 +386,57 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		{
 			ExternalInterface.call("showViewSearchResultsJsp");
 		}
+		if(status==DAGConstants.NO_RESULT_PRESENT)
+		{
+//			Alert.show(DAGConstants.NO_RESULT_PRESENT_MESSAGE);
+			showValidationMessagesToUser(DAGConstants.NO_RESULT_PRESENT_MESSAGE);
+		}
 		if(status==DAGConstants.EMPTY_DAG)
 		{
 			ExternalInterface.call("showErrorPage");
 		}
 		if(status==DAGConstants.MULTIPLE_ROOT)
 		{
-			Alert.show("Mulitiple roots present.");
+//			Alert.show(DAGConstants.MULTIPLE_ROOT_MESSAGE);
+			showValidationMessagesToUser(DAGConstants.MULTIPLE_ROOT_MESSAGE);
+		}
+		if(status==DAGConstants.CLASS_NOT_FOUND)
+		{
+//			Alert.show(DAGConstants.GENERIC_MESSAGE);
+			showValidationMessagesToUser(DAGConstants.GENERIC_MESSAGE)
 		}
 		if(status==DAGConstants.SQL_EXCEPTION)
 		{
-			Alert.show("Sql exception");
+//			Alert.show(DAGConstants.GENERIC_MESSAGE);
+			showValidationMessagesToUser(DAGConstants.GENERIC_MESSAGE)
 		}
 		if(status==DAGConstants.DAO_EXCEPTION)
 		{
-			Alert.show("Database connection problem.");
+			//Alert.show(DAGConstants.GENERIC_MESSAGE);
+			showValidationMessagesToUser(DAGConstants.GENERIC_MESSAGE)
 		}
 		rpcService.removeEventListener(ResultEvent.RESULT,searchResultHandler,false);
 		
 	}
 	
+	public function showValidationMessagesToUser(errorMessage:String):void
+	{
+		var paramArray:Array = new Array(errorMessage);
+		ExternalInterface.call("showValidationMessages",paramArray);
+	}
+	
 	public function createNode(strToCreateQueyObject:String,entityName:String):void
 	{
-		rpcService.removeEventListener(ResultEvent.RESULT,initFlexInterfaceHandler,false);
-		rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
-		rpcService.addEventListener(ResultEvent.RESULT,getNodeResultHandler);
-		rpcService.createNode(strToCreateQueyObject,entityName);
+		if(strToCreateQueyObject=="")	
+		{
+			showValidationMessagesToUser(DAGConstants.EMPTY_LIMIT_ERROR_MESSAGE);
+		}
+		else
+		{
+			rpcService.addEventListener(ResultEvent.RESULT,getNodeResultHandler);
+			rpcService.createNode(strToCreateQueyObject,entityName);
+			showValidationMessagesToUser("");
+		}
 	}
 	
 	public function linkNodesHandler(event: ResultEvent):void
@@ -433,13 +447,29 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		if(selectedList!=null)
 		{
 		//	linkCount=0;
-			if(selectedList.length > 0 )
+			if(selectedList.length > 1)
+			{
+				Alert.show("Multiple associations not yet supoorted.");		
+			}
+			else
+			{
+				path = selectedList.getItemAt(0) as IDAGPath;
+				linkNodes(firstNode,secondNode,path);
+			}
+		}
+		else
+		{
+			Alert.show("No association present or no association selected.");
+		}
+		rpcService.removeEventListener(ResultEvent.RESULT,linkNodesHandler,false);
+	}
+/*	//code for multiple association
+		if(selectedList.length > 0 )
 			{
 				
 				var numAssociation:int=selectedList.length
 				for(var i:int;i<numAssociation;i++)
 				{
-					
 					path = selectedList.getItemAt(i) as IDAGPath;
 					path.operatorIndex=0;
 					linkNodes(firstNode,secondNode,path);
@@ -452,13 +482,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				linkNodes(firstNode,secondNode,path);
 			}
 			//linkCount++;
-		}
-		else
-		{
-			Alert.show("No association selected");
-		}
-		rpcService.removeEventListener(ResultEvent.RESULT,linkNodesHandler,false);
-	}
+		}*/
+
+	
 
 	public function getNodeResultHandler(event: ResultEvent):void
 	{
@@ -540,41 +566,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 	}
 	
-	public function getPathHandler(event: ResultEvent):void
-	{
-		try
-		{
-		var dagpath:IDAGPath = new IDAGPath();
-		panel = new  AmbiguityPanel();
-	    panel.title="Ambiguity resolver";
-		panel.pathList= event.result as ArrayCollection;
-		if(panel.pathList==null || panel.pathList.length==0)
-		{
-			Alert.show("No paths present.");
-		}
-		else
-		{
-			if(panel.pathList.length>1)
-			{
-				panel.nodeList=selectedNodeList;
-				createPopUp();
-			}
-			else
-			{
-				rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
-				rpcService.addEventListener("result",linkNodesHandler);
-				rpcService.linkNodes(selectedNodeList,panel.pathList);
-			}
-		}
-		}catch(error:Error)
-		{
-			Alert.show("Error"+error.getStackTrace())
-		}
-		finally
-		{
-			rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
-		}
-	}
 	public function cancelHandler(nodeList:ArrayCollection):void
 	{
 			node1="";
@@ -590,11 +581,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		
 	public function link(node1:String,node2:String):void
 	{
-		rpcService.removeEventListener(ResultEvent.RESULT,getNodeResultHandler,false);
-		rpcService.addEventListener("result",getPathHandler);
-		rpcService.getpaths(selectedNodeList);
 		firstNode=node1;
 		secondNode=node2;
+		rpcService.addEventListener("result",linkNodesHandler);
+		rpcService.linkNodes(selectedNodeList);
 	}
 
 	public function linkNodes(firstNode:String,secondNode:String,path:IDAGPath):void
@@ -883,6 +873,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 
 			if(event.keyCode==Keyboard.DELETE)
 			{
+//				Alert.show("delete =="+selectedLink)
 				var dagPath:IDAGPath = dagPathUIMap.getValue(selectedLink);
 				node1=dagPath.sourceExpId+"";
 				node2=dagPath.destinationExpId+"";
@@ -912,11 +903,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	}
 	public function deleteLinkHandler(event:ResultEvent):void
 	{
-		var status:int =event.result as int;
-		if(status==DAGConstants.NO_PATHS_PRESENT)
-		{
-			Alert.show("Link cannot be deleted");
-		}
 		rpcService.removeEventListener(ResultEvent.RESULT,deleteLinkHandler,false);
 	}
 	public function editNode(node:DAGNode):void
@@ -936,8 +922,17 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	
 	public function editLimit(strToCreateQueyObject:String,entityName:String):void
 	{
-		rpcService.addEventListener(ResultEvent.RESULT,editNodeHandler);
-		rpcService.editNode(strToCreateQueyObject,entityName);
+		
+		if(strToCreateQueyObject=="")	
+		{
+			showValidationMessagesToUser(DAGConstants.EMPTY_LIMIT_ERROR_MESSAGE);
+		}
+		else
+		{
+			rpcService.addEventListener(ResultEvent.RESULT,editNodeHandler);
+			rpcService.editNode(strToCreateQueyObject,entityName);
+			showValidationMessagesToUser(DAGConstants.EDIT_LIMITS_MESSAGE);
+		}
 							
 	}
 	public function editNodeHandler(event:ResultEvent):void
@@ -952,7 +947,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 </mx:Script>
 	<mx:Panel backgroundColor="white" id="panel1" width="100%" height="100%" layout="absolute" title="Diagrammatic View" fontSize="11">
 		<mx:HBox  borderStyle="none" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="190" height="39" x="0" y="0">
-			<mx:Button label="Add Link" click="drawLine()" fontSize="11"/>
+			<mx:Button label="Add Link" click="drawLine()" fontSize="9"/>
 		</mx:HBox>
 	</mx:Panel>
 </mx:Application>
