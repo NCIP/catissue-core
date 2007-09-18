@@ -19,6 +19,8 @@ public class DAGConstant {
 	public static final int DAO_EXCEPTION=5;
 	public static final int DYNAMIC_EXTENSION_EXCEPTION=6;
 	public static final int NO_PATHS_PRESENT=7;
+	public static final int NO_RESULT_PRESENT=8;
+	public static final int CLASS_NOT_FOUND=9;
 	
 	
 	
