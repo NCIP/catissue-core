@@ -736,24 +736,27 @@
 		document.forms['categorySearchForm'].action='ViewSearchResultsJSPAction.do';
 		document.forms['categorySearchForm'].submit();			
 	}
-	function saveClientQueryToServer()
+		
+	function saveClientQueryToServer(action)
 	{
-	//	alert('saveClientQueryToServer -1');
-		//var message = document.applets[0].defineResultsView();\
-		//setting quey in session here 
-	//	if(message != "")
+		/*var message = document.applets[0].defineResultsView();
+		if(message != "")
 		{
-		//	showValidationMessages(message);
-	
+			showValidationMessages(message);
 		}
-	//	else
+		else*/ if(action=='next')
 		{
 			defineSearchResultsView();
 		}
+		else if(action=='save')
+		{
+			window.open('LoadSaveQueryPage.do','Save Query Condition Page','width=800, height=550, scrollbars=yes');
+		}
 	}
+	
 	function defineSearchResultsView()
 	{
-					waitCursor();
+		waitCursor();
 		document.forms['categorySearchForm'].action='DefineSearchResultsView.do';
 		document.forms['categorySearchForm'].submit();
 		hideCursor();
@@ -901,6 +904,19 @@ var jsReady = false;
 		callFlexMethod();
 		interfaceObj.addNodeToView(nodesStr);
 	}
+	
+	/*This function is called form SavedQueryConditionPage.jsp. It invokes the SaveQueryAction*/
+	function saveQuery()
+	{
+		var saveQueryForm = document.getElementById('saveQueryForm');
+		saveQueryForm.submit();
+	}
+	/*This function is called form QueryListView.jsp. It invokes the FetchAndExecuteQueryAction*/
+	function executeQuery(queryId)
+	{
+		document.getElementById('queryId').value = queryId;
+		document.forms[0].submit();
+	}  
 	
 	
 	//---
