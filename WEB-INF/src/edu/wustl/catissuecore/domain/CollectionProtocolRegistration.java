@@ -64,7 +64,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 */
 	protected CollectionProtocol collectionProtocol;
 
-	protected Collection specimenCollectionGroupCollection = new HashSet();
+	protected SpecimenCollectionGroup specimenCollectionGroup;
 	
 	/**
 	 * Defines whether this CollectionProtocolRegistration record can be queried (Active) or not queried (Inactive) by any actor
@@ -487,15 +487,15 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
 	 * @see setSpecimenCollectionGroupCollection(Collection)
 	 */
-	public Collection getSpecimenCollectionGroupCollection()
+	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
-		return specimenCollectionGroupCollection;
+		return specimenCollectionGroup;
 	}
 
 	
-	public void setSpecimenCollectionGroupCollection(Collection specimenCollectionGroupCollection)
+	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
-		this.specimenCollectionGroupCollection = specimenCollectionGroupCollection;
+		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
 	
 	//----------------------------Mandar 15-jan-07

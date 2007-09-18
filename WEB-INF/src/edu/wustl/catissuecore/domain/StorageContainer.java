@@ -61,7 +61,8 @@ public class StorageContainer extends Container
 
 	// -------- To check for changed position in the same container.
 	private boolean positionChanged = false;
-
+	
+	private Collection specimenCollection;
 	public StorageContainer()
 	{
 	}
@@ -532,5 +533,13 @@ public class StorageContainer extends Container
 		{
 			Logger.out.error(excp.getMessage(), excp);
 		}
+	}
+
+	public Collection getSpecimenCollection() {
+		return specimenCollection;
+	}
+
+	public void setSpecimenCollection(Collection specimenCollection) {
+		this.specimenCollection = specimenCollection;
 	}
 }

@@ -701,21 +701,32 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	/*
 	 * This method updates all the scg's associated with the selected collectionprotocolregistration.
 	 */
+//this method TBD.	
+//	private void updateSCG(CollectionProtocolRegistration collectionProtocolRegistration, CollectionProtocolRegistration oldCollectionProtocolRegistration, long consentTierID,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
+//	{
+//		
+//		Collection newScgCollection = new HashSet();
+//		Collection scgCollection = oldCollectionProtocolRegistration.getSpecimenCollectionGroupCollection();
+//		Iterator scgItr = scgCollection.iterator();
+//		
+//		while(scgItr.hasNext())
+//		{
+//			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)scgItr.next();
+//			String cprWithdrawOption = collectionProtocolRegistration.getConsentWithdrawalOption();
+//			WithdrawConsentUtil.updateSCG(scg,consentTierID, cprWithdrawOption, dao, sessionDataBean);
+//			newScgCollection.add(scg);	// set updated scg in cpr
+//		}
+//		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(newScgCollection);
+//	}
+
 	private void updateSCG(CollectionProtocolRegistration collectionProtocolRegistration, CollectionProtocolRegistration oldCollectionProtocolRegistration, long consentTierID,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
-		Collection newScgCollection = new HashSet();
-		Collection scgCollection = oldCollectionProtocolRegistration.getSpecimenCollectionGroupCollection();
-		Iterator scgItr = scgCollection.iterator();
-		while(scgItr.hasNext())
-		{
-			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)scgItr.next();
-			String cprWithdrawOption = collectionProtocolRegistration.getConsentWithdrawalOption();
-			WithdrawConsentUtil.updateSCG(scg,consentTierID, cprWithdrawOption, dao, sessionDataBean);
-			newScgCollection.add(scg);	// set updated scg in cpr
-		}
-		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(newScgCollection);
-	}
+		SpecimenCollectionGroup scg = oldCollectionProtocolRegistration.getSpecimenCollectionGroup();
+		String cprWithdrawOption = collectionProtocolRegistration.getConsentWithdrawalOption();
 
+		WithdrawConsentUtil.updateSCG(scg,consentTierID, cprWithdrawOption, dao, sessionDataBean);		
+		collectionProtocolRegistration.setSpecimenCollectionGroup(scg);
+	}
 	//Mandar : 11-Jan-07 For Consent Tracking Withdrawal -------- end
 
 }

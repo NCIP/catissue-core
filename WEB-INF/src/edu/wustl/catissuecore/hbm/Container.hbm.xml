@@ -305,6 +305,23 @@
               />
         </set>
         
+        <set
+            name="specimenCollection"
+            table="CATISSUE_SPECIMEN"
+            lazy="true"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="STORAGE_CONTAINER_IDENTIFIER"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.Specimen"
+              />
+        </set>
 
 
         <many-to-one

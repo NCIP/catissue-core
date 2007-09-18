@@ -75,6 +75,24 @@
             column="COLLECTION_PROTOCOL_ID"
         />
 
+	        <set
+	            name="specimenCollectionGroupCollection"
+	            table="CATISSUE_SPECIMEN_COLL_GROUP"
+	            lazy="false"
+	            inverse="true"
+	            cascade="save-update"
+	            sort="unsorted"
+	        >
+	
+	              <key
+	                  column="COLLECTION_PROTOCOL_EVENT_ID"
+	              />
+	
+	              <one-to-many
+	                  class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+	              />
+	        </set>
+
         <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-CollectionProtocolEvent.xml

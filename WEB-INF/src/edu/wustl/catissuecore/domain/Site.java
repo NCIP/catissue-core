@@ -9,6 +9,8 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.util.Collection;
+
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -61,6 +63,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
      */
 	private Address address;
 
+	private Collection<AbstractSpecimenCollectionGroup> abstractSpecimenCollectionGroupCollection;
 	//Default Constructor Required by hibernate
 	public Site()
 	{
@@ -276,5 +279,14 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
      */
 	public String getMessageLabel() {		
 		return this.name;
+	}
+
+	public Collection<AbstractSpecimenCollectionGroup> getAbstractSpecimenCollectionGroupCollection() {
+		return abstractSpecimenCollectionGroupCollection;
+	}
+
+	public void setAbstractSpecimenCollectionGroupCollection(
+			Collection<AbstractSpecimenCollectionGroup> abstractSpecimenCollectionGroupCollection) {
+		this.abstractSpecimenCollectionGroupCollection = abstractSpecimenCollectionGroupCollection;
 	}
 }
