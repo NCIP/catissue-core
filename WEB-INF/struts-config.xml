@@ -3791,7 +3791,7 @@ PUBLIC
 		scope="request">
 		<forward name="pageOfParticipantSelectCPQuery" path="/QueryParticipantEdit.do?operation=edit"/>
 		<forward name="pageOfParticipantQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=query"/>
-		<forward name="pageOfParticipantCPQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery"/>
+		<forward name="pageOfParticipantCPQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;refresh=false"/>
 		<forward name="failure" path="/QueryParticipant.do?pageOf=query"/>
 	</action>
 	<action path="/CPQueryParticipantAdd"
@@ -3910,7 +3910,7 @@ PUBLIC
 		validate="true"
 		input="/CPQueryNewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15"
 		scope="request">
-		<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
+		<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery"/>
 		<forward name="failure" path="/CPQueryNewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
 		<forward name="createNew" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<forward name="sameCollectionGroup" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
