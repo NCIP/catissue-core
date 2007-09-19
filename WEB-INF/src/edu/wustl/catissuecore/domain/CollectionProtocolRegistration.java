@@ -34,7 +34,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionProtocolRegistration extends AbstractDomainObject implements Serializable
 {
-	private static final long serialVersionUID = 1234567890L;
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5075110651381259752L;
 
 	/**
 	 * System generated unique id.
@@ -64,7 +69,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 */
 	protected CollectionProtocol collectionProtocol;
 
-	protected SpecimenCollectionGroup specimenCollectionGroup;
+	protected Collection specimenCollectionGroupCollection;
 	
 	/**
 	 * Defines whether this CollectionProtocolRegistration record can be queried (Active) or not queried (Inactive) by any actor
@@ -487,15 +492,15 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
 	 * @see setSpecimenCollectionGroupCollection(Collection)
 	 */
-	public SpecimenCollectionGroup getSpecimenCollectionGroup()
+	public Collection getSpecimenCollectionGroupCollection()
 	{
-		return specimenCollectionGroup;
+		return specimenCollectionGroupCollection;
 	}
 
 	
-	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
+	public void setSpecimenCollectionGroupCollection(Collection specimenCollectionGroupCollection)
 	{
-		this.specimenCollectionGroup = specimenCollectionGroup;
+		this.specimenCollectionGroupCollection = specimenCollectionGroupCollection;
 	}
 	
 	//----------------------------Mandar 15-jan-07

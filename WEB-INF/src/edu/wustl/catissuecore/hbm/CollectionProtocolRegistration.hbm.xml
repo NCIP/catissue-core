@@ -119,14 +119,23 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
-	        <one-to-one
-	            name="specimenCollectionGroup"
-	            class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-	            cascade="save-update"
-	            outer-join="auto"
-	            constrained="false"
-		     	property-ref="collectionProtocolRegistration"
-	        />
+        <set
+            name="specimenCollectionGroupCollection"
+            table="CATISSUE_SPECIMEN_COLL_GROUP"
+            lazy="true"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="COLLECTION_PROTOCOL_REG_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+              />
+        </set>
 
         <!--
             To add non XDoclet property mappings, create a file named
