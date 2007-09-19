@@ -289,8 +289,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		specimen.setSpecimenCharacteristics(parent.getSpecimenCharacteristics());		
 		
 		//Ashish - 8/6/07 - retriving parent scg for performance improvement
-		AbstractSpecimenCollectionGroup parentSCG = (AbstractSpecimenCollectionGroup)dao.retrieveAttribute(Specimen.class.getName(),parent.getId() , Constants.COLUMN_NAME_SCG);
-		specimen.setSpecimenCollectionGroup(parentSCG);
+//		AbstractSpecimenCollectionGroup parentSCG = (AbstractSpecimenCollectionGroup)dao.retrieveAttribute(Specimen.class.getName(),parent.getId() , Constants.COLUMN_NAME_SCG);
+		specimen.setSpecimenCollectionGroup(parent.getSpecimenCollectionGroup());
 		// set event parameters from parent specimen - added by Ashwin for bug id# 2476
 		specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(parent,specimen));
 		specimen.setPathologicalStatus(parent.getPathologicalStatus());
