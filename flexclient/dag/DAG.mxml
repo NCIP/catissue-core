@@ -77,7 +77,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	{
 		if (isContainerReady())
 		{
-			// If the container is ready, register the SWF’s functions.
+			// If the container is ready, register the SWF�s functions.
 			setUpCall();
 			readyTimer.stop();
 		}
@@ -152,6 +152,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		for(var i:int=0;i<outAsslength;i++)
 		{
 			ass = Association(outAssociations.getItemAt(i));
+//			Alert.show("src dagnode" + dagNode.name);//src
+//			Alert.show("dest dagnode" + ass.associatedNode);
+//			var key:String=ass.associatedLink+"_"+dagNode.name+"_"+ass.associatedNode;
 			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
 			path = dagPathUIMap.getValue(ass.associatedLink);
 			dagPathUIMap.remove(ass.associatedLink);
@@ -184,6 +187,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		for(var k:int=0;k<inAsslength;k++)
 		{
 			ass = Association(inAssociations.getItemAt(k));
+			//Alert.show("dest dagnode" + dagNode.name);
+			//Alert.show("src dagnode" + ass.associatedNode);//src
+		//	var key:String=ass.associatedLink+"_"+ass.associatedNode+"_"+dagNode.name;
 			panel1.removeChild(panel1.getChildByName(ass.associatedLink));
 			path = dagPathUIMap.getValue(ass.associatedLink);
 			dagPathUIMap.remove(ass.associatedLink);
@@ -225,7 +231,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		totalNodeMap = new HashMap();
 		if (isContainerReady())
 			{
-			// If the container is ready, register the SWF’s functions.
+			// If the container is ready, register the SWF�s functions.
 				setUpCall();
 			}
 			else
@@ -470,6 +476,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				var numAssociation:int=selectedList.length
 				for(var i:int;i<numAssociation;i++)
 				{
+					
 					path = selectedList.getItemAt(i) as IDAGPath;
 					path.operatorIndex=0;
 					linkNodes(firstNode,secondNode,path);
@@ -566,6 +573,42 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 	}
 	
+	public function getPathHandler(event: ResultEvent):void
+	{
+		try
+		{
+		var dagpath:IDAGPath = new IDAGPath();
+		panel = new  AmbiguityPanel();
+	    panel.title="Ambiguity resolver";
+	    
+		panel.pathList= event.result as ArrayCollection;
+		if(panel.pathList==null || panel.pathList.length==0)
+		{
+			Alert.show("No paths present.");
+		}
+		else
+		{
+			if(panel.pathList.length>1)
+			{
+				panel.nodeList=selectedNodeList;
+				createPopUp();
+			}
+			else
+			{
+				rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
+				rpcService.addEventListener("result",linkNodesHandler);
+				rpcService.linkNodes(selectedNodeList,panel.pathList);
+			}
+		}
+		}catch(error:Error)
+		{
+			Alert.show("Error"+error.getStackTrace())
+		}
+		finally
+		{
+			rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
+		}
+	}
 	public function cancelHandler(nodeList:ArrayCollection):void
 	{
 			node1="";
@@ -583,8 +626,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	{
 		firstNode=node1;
 		secondNode=node2;
-		rpcService.addEventListener("result",linkNodesHandler);
-		rpcService.linkNodes(selectedNodeList);
+		rpcService.addEventListener("result",getPathHandler);
+		rpcService.getpaths(selectedNodeList);
 	}
 
 	public function linkNodes(firstNode:String,secondNode:String,path:IDAGPath):void
@@ -599,16 +642,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				var toY:int = dagNode2.y+(15);
 				var line:Sprite = new Sprite();
 				line.name="link";
-				
-				var graphics:Graphics = line.graphics;
-				graphics.clear();
-				graphics.moveTo(fromX,fromY);
-				graphics.beginFill(0xFFCC00);
-				graphics.lineTo(toX,toY);
-				graphics.lineStyle(2,0xFFCC00);
-				graphics.drawCircle(toX,toY,3);
-				graphics.endFill();
-				
+						
+				drawLink(line,fromX,fromY,toX,toY,0x000000);
 			
 				var vBox:VBox = dagNode1.getChildByName("Association") as VBox;
 				vBox.visible=true;
@@ -624,9 +659,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 					panel1.addChild(c);
 					dagPathUIMap.put(c.name,path);
 					dagNode1.dagpathList.addItem(path);
-
+					addEventListener(KeyboardEvent.KEY_DOWN,deletePathHandler);
 					c.addEventListener(MouseEvent.MOUSE_OVER,updateLinkSelection);
 	     			c.addEventListener(MouseEvent.MOUSE_OUT,updateLinkUnSelection);
+				
 	   			}
 				
 				//removing selections
@@ -652,9 +688,20 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		
 	}
 							
-	private function moveLine():void{
-		panel1.getChildByName("line").x += 1 
-		panel1.getChildByName("line").y += 1 
+	private function drawLink(line:Sprite,fromX:int,fromY:int,toX:int,toY:int,color:uint):void
+	{
+				var graphics:Graphics = line.graphics;
+				graphics.clear();
+				graphics.moveTo(fromX,fromY);
+				graphics.beginFill(color)
+				graphics.lineTo(toX-6,toY);
+				graphics.lineStyle(2,color);
+//				building arrow
+				graphics.moveTo(toX,toY);
+		        graphics.lineTo(toX-6,toY-3);
+        		graphics.lineTo(toX-6,toY+3);
+		        graphics.lineTo(toX,toY);
+				graphics.endFill();
 	}
 	
 	private function updateLinkSelection(event:MouseEvent):void {
@@ -672,18 +719,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				var fromY:int = dagNode1.y+(15);
 				var toX:int = dagNode2.x;
 				var toY:int = dagNode2.y+(15);
-				var graphics:Graphics = line.graphics;
-			
 				selectedLink=event.currentTarget.name;
-				graphics.clear();
-				graphics.moveTo(fromX,fromY);
-				graphics.beginFill(0x0000ff);
-				graphics.lineTo(toX,toY);
-				graphics.lineStyle(2,0x0000ff);
-				graphics.drawCircle(toX,toY,3);
-				graphics.endFill();
-				removeEventListener(KeyboardEvent.KEY_DOWN,deleteNodeHandler,false);
-				addEventListener(KeyboardEvent.KEY_DOWN,deletePathHandler);
+				drawLink(line,fromX,fromY,toX,toY,0x0000ff);
+			//	removeEventListener(KeyboardEvent.KEY_DOWN,deleteNodeHandler,false);
+				//addEventListener(KeyboardEvent.KEY_DOWN,deletePathHandler);
 			}
 		}
 					
@@ -704,14 +743,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				var fromY:int = dagNode1.y+(15);
 				var toX:int = dagNode2.x;
 				var toY:int = dagNode2.y+(15);
-				var graphics:Graphics = line.graphics;
-				graphics.clear();
-				graphics.moveTo(fromX,fromY);
-				graphics.beginFill(0xFFCC00);
-				graphics.lineTo(toX,toY);
-				graphics.lineStyle(2,0xFFCC00);
-				graphics.drawCircle(toX,toY,3);
-				graphics.endFill();
+				drawLink(line,fromX,fromY,toX,toY,0x000000);
 				selectedLink="";
 			}
 		}
@@ -778,8 +810,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 					}
 					dagNode.select();
 					selectedNode = dagNode;
-					removeEventListener(KeyboardEvent.KEY_DOWN,deletePathHandler,false);
-					addEventListener(KeyboardEvent.KEY_DOWN,deleteNodeHandler);
+				//	removeEventListener(KeyboardEvent.KEY_DOWN,deletePathHandler,false);
+				//	addEventListener(KeyboardEvent.KEY_DOWN,deleteNodeHandler);
 							
 					if(count<2)
 					{
@@ -792,7 +824,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 		
 	}
-	private function deleteNodeHandler(event:KeyboardEvent):void	
+	/*private function deleteNodeHandler(event:KeyboardEvent):void	
 	{
 			if(event.keyCode==Keyboard.DELETE)
 			{
@@ -833,7 +865,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 					
 		}
 		
-	}
+	}*/
 	
 	private function deletePath(dagNode1:DAGNode,dagNode2:DAGNode):void
 	{
@@ -873,7 +905,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 
 			if(event.keyCode==Keyboard.DELETE)
 			{
-//				Alert.show("delete =="+selectedLink)
 				var dagPath:IDAGPath = dagPathUIMap.getValue(selectedLink);
 				node1=dagPath.sourceExpId+"";
 				node2=dagPath.destinationExpId+"";
