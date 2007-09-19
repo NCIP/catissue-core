@@ -1,23 +1,22 @@
 /**
- * <p>Title: ConflictViewForm Class>
- * <p>Description:	This class contains attributes to display on ConflictDetails.jsp Page</p>
+ * <p>Title: ConflictDetailsForm Class>
+ * <p>Description:	This class contains attributes to display on ConflictDetailsView.jsp Page</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Ashish Gupta
+ * @author kalpana Thakur
  * @version 1.00
- * Created on Feb 27,2007
+ * Created on sep 18,2007
  */
 package edu.wustl.catissuecore.actionForm;
+
+import java.util.Date;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 
-/**
- * @author ashish_gupta
- *
- */
+
 public class ConflictDetailsForm extends AbstractActionForm
 {
 	/**
@@ -32,10 +31,11 @@ public class ConflictDetailsForm extends AbstractActionForm
 	 * The report queue Id whose details we have to display
 	 */
 	protected String reportQueueId;
-
+	
+	
 	public int getFormId()
 	{		
-		return Constants.CONFLICT_DETAILS_FORM_ID;
+		return 0; //Constants.CONFLICT_DETAILS_FORM_ID;
 	}
 
 	protected void reset()
@@ -100,5 +100,6 @@ public class ConflictDetailsForm extends AbstractActionForm
 	{
 		this.scgId = scgId;
 	}
-
+	
+	
 }
