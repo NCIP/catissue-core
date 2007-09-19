@@ -17,7 +17,6 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationExcept
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.client.ui.dag.PathLink;
 import edu.wustl.cab2b.client.ui.dag.ambiguityresolver.AmbiguityObject;
-import edu.wustl.cab2b.client.ui.dag.ambiguityresolver.ResolveAmbiguity;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
 import edu.wustl.cab2b.client.ui.query.IPathFinder;
@@ -27,6 +26,7 @@ import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLog
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.exceptions.CyclicException;
@@ -70,7 +70,6 @@ public class DAGPanel {
 	private HttpSession m_session;
 	private IPathFinder m_pathFinder;
 	private IExpression expression;
-	private HashMap<String,IPath> m_pathMap = new HashMap<String, IPath>();
 
 	public DAGPanel(IPathFinder pathFinder)
 	{
@@ -189,45 +188,28 @@ public class DAGPanel {
 	 * @param destNode
 	 * @param paths
 	 */
-	public List<DAGPath> linkNode(List<DAGNode>linkedNodeList) {
-		//int status=0;
-		DAGNode sourceNode = linkedNodeList.get(0);
-		DAGNode destinationNode = linkedNodeList.get(1);
-		List<DAGPath> dagPathList = null;
-		List<IPath> paths = getPaths(sourceNode, destinationNode);
+	public int linkNode(final DAGNode sourceNode, final DAGNode destNode,List<IPath> paths) {
+		int status=0;
 		if (paths == null || paths.isEmpty()) {
-			//status = DAGConstant.NO_PATHS_PRESENT;
-			 dagPathList = null;
+			status = DAGConstant.NO_PATHS_PRESENT;
 		}
 		else
 		{
-			dagPathList = new ArrayList<DAGPath>();
 			IExpressionId sourceExpressionId = new ExpressionId(sourceNode.getExpressionId());
-			IExpressionId destExpressionId = new ExpressionId(destinationNode.getExpressionId());
+			IExpressionId destExpressionId = new ExpressionId(destNode.getExpressionId());
 			if (!m_queryObject.isPathCreatesCyclicGraph(sourceExpressionId, destExpressionId,
 					paths.get(0))) {
 				for (int i = 0; i < paths.size(); i++) {
-					IPath path = paths.get(i);
-					LinkTwoNode(sourceNode, destinationNode, paths.get(i), new ArrayList<IExpressionId>());
-					String pathStr = new Long(path.getPathId()).toString();
-					DAGPath dagPath = new DAGPath();
-					dagPath.setName(getPathDisplayString(path));
-					dagPath.setId(pathStr);
-					dagPath.setSourceExpId(sourceNode.getExpressionId());
-					dagPath.setDestinationExpId(destinationNode.getExpressionId());
-					dagPathList.add(dagPath);
-					String key =pathStr+"_"+sourceNode.getExpressionId()+"_"+destinationNode.getExpressionId();
-					m_pathMap.put(key,path);
+					LinkTwoNode(sourceNode, destNode, paths.get(i), new ArrayList<IExpressionId>());
 				}
-			//	status=DAGConstant.SUCCESS;
+				status=DAGConstant.SUCCESS;
 			}
 			else {
-			//	status=DAGConstant.CYCLIC_GRAPH;
-				
+				status=DAGConstant.CYCLIC_GRAPH;
 			}
 
 		}
-		return dagPathList;
+		return status;
 	}
 	/**
 	 * Gets list of paths between two nodes
@@ -254,8 +236,9 @@ public class DAGPanel {
 			ambiguityObject = new AmbiguityObject(
 					sourceEntity.getDynamicExtensionsEntity(),
 					destinationEntity.getDynamicExtensionsEntity());
-			ResolveAmbiguity resolveAmbigity = new ResolveAmbiguity(ambiguityObject, m_pathFinder);
-//			DAGResolveAmbiguity resolveAmbigity = new DAGResolveAmbiguity(ambiguityObject, m_pathFinder);
+//			ResolveAmbiguity resolveAmbigity = new ResolveAmbiguity(
+//			ambiguityObject, m_pathFinder);
+			DAGResolveAmbiguity resolveAmbigity = new DAGResolveAmbiguity(ambiguityObject, m_pathFinder);
 			map = resolveAmbigity.getPathsForAllAmbiguities();
 
 		} catch (Exception e) {
@@ -404,122 +387,9 @@ public class DAGPanel {
 	 */
 	public int search()
 	{
-		int status=0;
-		try {
-			IQuery query = m_queryObject.getQuery();
-			int recordsPerPage; 
-			String recordsPerPageSessionValue = (String)m_session.getAttribute(Constants.RESULTS_PER_PAGE);
-			if (recordsPerPageSessionValue==null)
-			{
-				recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(Constants.RECORDS_PER_PAGE_PROPERTY_NAME));
-				m_session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage+"");
-			}
-			else
-				recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
-
-			boolean isRulePresentInDag = false;
-		
-			if(query!=null)
-			{
-				SqlGenerator sql = new SqlGenerator();
-				try {
-					System.out.println("Query: [ " + sql.generateSQL(query)+" ]");
-				} catch (SqlException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				IConstraints constraints = query.getConstraints();
-				Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
-				while(expressionIds.hasMoreElements())
-				{
-					IExpressionId id = expressionIds.nextElement();
-					if(((Expression)constraints.getExpression(id)).containsRule())
-					{
-						isRulePresentInDag = true;
-						break;
-					}
-				}
-			}
-			if(isRulePresentInDag)
-			{
-				m_session.setAttribute(AppletConstants.QUERY_OBJECT, query);
-				String selectSql = "";
-
-				SqlGenerator sqlGenerator = (SqlGenerator)SqlGeneratorFactory.getInstance();
-				QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
-				selectSql = sqlGenerator.generateSQL(query);
-				Object obj = m_session.getAttribute(Constants.SESSION_DATA);
-				if (obj != null)
-				{
-					SessionDataBean sessionData = (SessionDataBean) obj;
-					outputTreeBizLogic.createOutputTreeTable(selectSql, sessionData);
-					//Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap = sqlGenerator.getOutputTreeMap();
-					List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator.getRootOutputTreeNodeList();
-					m_session.setAttribute(Constants.TREE_ROOTS,rootOutputTreeNodeList);
-					//Set<OutputTreeDataNode> keys = outputTreeMap.keySet();
-					Long noOfTrees = new Long(rootOutputTreeNodeList.size());
-					m_session.setAttribute(Constants.NO_OF_TREES, noOfTrees);
-					Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor.getAllChildrenNodes(rootOutputTreeNodeList);
-					m_session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
-					
-					OutputTreeDataNode node = rootOutputTreeNodeList.get(0);
-					QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
-					String parentNodeId = null;
-					String treeNo = "0";
-					SelectedColumnsMetadata selectedColumnsMetadata = new SelectedColumnsMetadata();
-					selectedColumnsMetadata.setDefinedView(false);
-					Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,node, sessionData,parentNodeId,recordsPerPage,selectedColumnsMetadata);
-					// Changes added by deepti for performance change
-					QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap.get(Constants.QUERY_SESSION_DATA);
-					int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
-					m_session.setAttribute(Constants.QUERY_SESSION_DATA,querySessionData);
-					m_session.setAttribute(Constants.TOTAL_RESULTS,new Integer(totalNumberOfRecords));
-					
-					m_session.setAttribute(Constants.SPREADSHEET_DATA_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST));
-					m_session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));
-					m_session.setAttribute(Constants.SELECTED_COLUMN_META_DATA, spreadSheetDatamap.get(Constants.SELECTED_COLUMN_META_DATA));
-					status =DAGConstant.SUCCESS;
-					int i =0;
-					for(OutputTreeDataNode outnode :rootOutputTreeNodeList)
-					{
-						Vector treeData = outputTreeBizLogic.createDefaultOutputTreeData(i,outnode, sessionData);
-						int resultsSize = treeData.size();
-						if(resultsSize == 0)
-						{
-							status =DAGConstant.NO_RESULT_PRESENT;
-						}
-						m_session.setAttribute(Constants.TREE_DATA+"_"+i, treeData);
-						i += 1;
-					}
-				}
-				else
-				{
-					status=DAGConstant.EMPTY_DAG;
-				}
-
-			}
-		}
-		catch (MultipleRootsException e)
-		{
-			Logger.out.error(e);
-			status = DAGConstant.MULTIPLE_ROOT;
-			
-		}
-		catch (SqlException e)
-		{
-			Logger.out.error(e);
-			status = DAGConstant.SQL_EXCEPTION;
-		} 
-		catch (ClassNotFoundException e)
-		{
-			Logger.out.error(e);
-			status =DAGConstant.CLASS_NOT_FOUND;
-		}
-		catch (DAOException e)
-		{
-			Logger.out.error(e);
-			status = DAGConstant.DAO_EXCEPTION;
-		}				
+		int status =0;
+		IQuery query = m_queryObject.getQuery();
+		status=QueryModuleUtil.searchQuery(m_session, query);
 		return status;
 	}
 	/**
@@ -758,9 +628,8 @@ public class DAGPanel {
 	 * @param path
 	 * @param linkedNodeList
 	 */
-	public void deletePath(String pathName,List<DAGNode>linkedNodeList)
+	public void deletePath(IPath path,List<DAGNode>linkedNodeList)
 	{
-		IPath path = m_pathMap.remove(pathName);
 		IExpressionId sourceexpressionId = new ExpressionId(linkedNodeList.get(0)
 					.getExpressionId());
 		IExpressionId destexpressionId = new ExpressionId(linkedNodeList.get(1)
