@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.reportloader;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -11,13 +12,16 @@ import java.util.StringTokenizer;
 
 import org.springframework.remoting.RemoteAccessException;
 
+
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -58,7 +62,7 @@ public class HL7ParserUtil
 				try
 				{
 					// Creating participant object from report text
-					Participant participant = parser.parserParticipantInformation(getReportDataFromReportMap(reportMap, CaTIESConstants.PID), site);
+					Participant participant = parserParticipantInformation(getReportDataFromReportMap(reportMap, CaTIESConstants.PID), site);
 					participantName=participant.getLastName()+","+participant.getFirstName();
 					// check for matching participant
 					participantList=ReportLoaderUtil.checkForParticipant(participant);
@@ -291,4 +295,155 @@ public class HL7ParserUtil
 		}
 		return null;
 	}
+	
+	
+	   
+    /**
+     * Method to create participant object using HL7 format report section for participant (PID)
+     * @param pidLine participant information text
+     * @return Participant from the participant information text
+     * @throws Exception exception while parsing the participant information 
+     */
+	public static Participant parserParticipantInformation(String pidLine,Site site)throws Exception
+	{
+		Logger.out.info("Parsing participant information");
+		Participant participant = new Participant();
+		String pidLineforSite=pidLine;
+		participant.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		ParticipantMedicalIdentifier medicalIdentification = null;
+		Collection<ParticipantMedicalIdentifier> medicalIdentificationCollection = null;
+		String field = null;
+		String newPidLine = pidLine.replace('|', '~');
+		newPidLine = newPidLine.replaceAll("~", "|~~");
+		StringTokenizer st = new StringTokenizer(newPidLine, "|");
+		//Validator validator = new Validator();
+
+		for (int x = 0; st.hasMoreTokens(); x++)
+		{
+
+			// 	USE STRINGBUFFER FOR FIELD
+			field = st.nextToken();
+			if (field.equals("~~"))
+			{
+				continue;
+			}
+			else
+			{
+				field = field.replaceAll("~~", "");
+			}	
+			// Token for Participant medical record number
+			if (x == CaTIESConstants.PARTICIPANT_MEDICAL_RECORD_INDEX) // Getting MRN
+			{
+				StringTokenizer st2 = new StringTokenizer(field, "^^^");
+				String mrn = st2.nextToken();
+				medicalIdentification = new ParticipantMedicalIdentifier();
+				medicalIdentification.setMedicalRecordNumber(mrn);
+				//set site
+				// Site is set at the end of this function
+				medicalIdentificationCollection = participant
+						.getParticipantMedicalIdentifierCollection();
+				if (medicalIdentificationCollection != null
+						&& medicalIdentificationCollection.size() > 0)
+				{	
+					// add MRI to set
+					medicalIdentificationCollection.add(medicalIdentification);
+				}	
+				else
+				{
+					// initialization of set
+					medicalIdentificationCollection = new HashSet<ParticipantMedicalIdentifier>();
+					medicalIdentificationCollection.add(medicalIdentification);
+					participant
+							.setParticipantMedicalIdentifierCollection(medicalIdentificationCollection);
+				}
+			}
+			// token for participant name
+			if (x == CaTIESConstants.PARTICIPANT_NAME_INDEX)
+			{
+				StringTokenizer st2 = new StringTokenizer(field, "^");
+				String lname = "";
+				String fname = "";
+				String mname = "";
+				
+				// Last name 
+				if (st2.hasMoreTokens())
+				{	
+					lname = st2.nextToken();
+				}
+				// first name
+				if (st2.hasMoreTokens())
+				{
+					fname = st2.nextToken();
+				}	
+				// middle name
+				if (st2.hasMoreTokens())
+				{
+					mname = st2.nextToken();
+				}	
+				participant.setFirstName(fname);
+				participant.setLastName(lname);
+				if (mname.trim().length() > 0)
+				{	
+					participant.setMiddleName(mname);
+				}	
+			}
+			// token for participant date of birth
+			if (x == CaTIESConstants.PARTICIPANT_DATEOFBIRTH_INDEX)
+			{
+				String year = field.substring(0, 4);
+				String month = field.substring(4, 6);
+				String day = field.substring(6, 8);
+
+				GregorianCalendar gc = new GregorianCalendar(Integer.parseInt(year), Integer
+						.parseInt(month)-1, Integer.parseInt(day));
+
+				participant.setBirthDate(gc.getTime());
+
+			}
+			// token for participant gender
+			if (x == CaTIESConstants.PARTICIPANT_GENDER_INDEX)
+			{
+				if (field.equalsIgnoreCase(CaTIESConstants.MALE))
+				{
+					participant.setGender("Male Gender");
+				}	
+				else if (field.equalsIgnoreCase(CaTIESConstants.FEMALE))
+				{
+					participant.setGender("Female Gender");
+				}	
+			}
+			// token for participant ethnicity
+			if (x == CaTIESConstants.PARTICIPANT_ETHNICITY_INDEX)
+			{
+				String ethnicity = field;
+				//make it null 
+				ethnicity=null;
+				participant.setEthnicity(ethnicity);
+			}
+			// token for participant Social Security Number
+			if (x == CaTIESConstants.PARTICIPANT_SSN_INDEX)
+			{
+				String ssn = field;
+				ssn=ReportLoaderUtil.getValidSSN(ssn);
+				participant.setSocialSecurityNumber(ssn);
+			}
+		}
+		//code of setSitetoParticipant function to avoid sepearte function call
+		Collection<ParticipantMedicalIdentifier> collection= participant.getParticipantMedicalIdentifierCollection();
+		ParticipantMedicalIdentifier medicalId=null; 
+		if(collection!=null)
+		{
+			Iterator<ParticipantMedicalIdentifier> it = collection.iterator();
+			while(it.hasNext())
+			{
+				medicalId=it.next();
+				medicalId.setSite(site);
+			}
+		}
+		Logger.out.info("Participant Created having Name="+participant.getLastName()+","+participant.getFirstName());
+		return participant;
+	}
+	
+	
+	
 }
