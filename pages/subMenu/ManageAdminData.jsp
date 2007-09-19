@@ -277,3 +277,24 @@
 		</div>
 	</td>
 </tr>
+
+
+<!-- menu id : 13 Conflict Resolver: kalpana -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 13, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
+<tr>
+	<%=strMouseOut%>
+		<div>
+			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->
+				<b><bean:message key="app.reportedConflicts" /></b>
+		</div>
+        <div>
+			<a class="subMenuPrimary" href="ConflictView.do?pageNum=1&menuSelected=13">
+					<bean:message key="app.view"/>
+			</a>
+		</div>
+
+		</td>
+</tr>
+
