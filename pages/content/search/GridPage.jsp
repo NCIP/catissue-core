@@ -130,6 +130,12 @@ function init_grid()
 	{
 		colWidth = "130,130,130,130,0";
 	}
+
+	if(useFunction == "goToConflictDetails")
+	{
+		colWidth = "130,130,200,130,130,130";
+	}
+
 	//document.write("<hr>"+colWidth+"<hr>");
 
 	mygrid.setInitWidths(colWidth);
@@ -151,7 +157,7 @@ function init_grid()
 		mygrid.addRow(row+1,myData[row],row+1);
 	}
 
-	if(useFunction == "eventParametersGrid" || useFunction == "derivedSpecimenGrid")
+	if(useFunction == "eventParametersGrid" || useFunction == "derivedSpecimenGrid" )
 	{
 		mygrid.setHeaderCol(4,"");
 		mygrid.setColumnHidden(4,true);
@@ -159,7 +165,38 @@ function init_grid()
 
 	//mygrid.setOnRowSelectHandler(funcName);
 	mygrid.setOnRowDblClickedHandler(funcName);
+	// :To hide ID columns by kalpana
+	function getIDColumns()
+		{
+			var hiddenColumnNumbers = new Array();
+			var i=0;
+			<%
+				int cols = 0;
+				
+				for(col=0;col<columnList.size();col++)
+				{
+					if (columnList.get(col).toString().trim().equals("ID") || columnList.get(col).toString().trim().equals("Status") || columnList.get(col).toString().trim().equals("Site Name"))
+					{%>
+						hiddenColumnNumbers[i] = <%=col%>;
+						i++;
+					<%}
+				}
+			%>
+			return hiddenColumnNumbers;
+		}
+	
+	
+	// :To hide ID columns
+		var hideCols = getIDColumns();
+		for(i=0;i<hideCols.length;i++)
+		{
+			mygrid.setHeaderCol(hideCols[i],"");
+			mygrid.setColumnHidden(hideCols[i],true);
+		}
+
+
 	mygrid.setSizes();
 }
+
 window.onload=init_grid;
 </script>
