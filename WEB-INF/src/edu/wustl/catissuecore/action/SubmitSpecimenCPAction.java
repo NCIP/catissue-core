@@ -246,7 +246,7 @@ public class SubmitSpecimenCPAction extends Action {
 			SpecimenRequirementBean specimenRequirementBean =
 						(SpecimenRequirementBean)iterator.next();
 			Specimen specimen = getSpecimenDomainObject(specimenRequirementBean);
-			specimen.setIscollectionProtocolRequirement(true);
+			specimen.setIscollectionProtocolRequirement(Boolean.TRUE);
 			specimen.setParentSpecimen(parentSpecimen);
 			
 			if (parentSpecimen == null)

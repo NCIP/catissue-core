@@ -201,15 +201,15 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	protected String applyChangesTo=Constants.APPLY_NONE;
 
 	protected String collectionStatus;
-	protected boolean iscollectionProtocolRequirement;
+	protected Boolean iscollectionProtocolRequirement;
 	
 	
-	public boolean getIscollectionProtocolRequirement() {
+	public Boolean getIscollectionProtocolRequirement() {
 		return iscollectionProtocolRequirement;
 	}
 
 	public void setIscollectionProtocolRequirement(
-			boolean collectionProtocolRequirement) {
+			Boolean collectionProtocolRequirement) {
 		this.iscollectionProtocolRequirement = collectionProtocolRequirement;
 	}
 

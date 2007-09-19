@@ -136,6 +136,25 @@
             length="1000"
         />
 
+
+        <set
+            name="collectionProtocolRegistrationCollection"
+            table="CATISSUE_COLL_PROT_REG"
+            lazy="true"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="COLLECTION_PROTOCOL_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+              />
+        </set>
+
         <set
             name="consentTierCollection"
             table="CATISSUE_CONSENT_TIER"
