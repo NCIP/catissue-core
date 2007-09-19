@@ -232,26 +232,24 @@ public class QueryOutputSpreadsheetBizLogic
 	private String getSQLForSelectedColumns(Map spreadSheetDataMap)
 	{
 		String selectSql = "";
-		if(selectedColumnMetaData.isDefinedView())
-		{
-			List<String> definedColumnsList = new ArrayList<String>();
-			StringBuffer sqlColumnNames = new StringBuffer();
-			List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnMetaData.getSelectedAttributeMetaDataList();
-			Iterator<QueryOutputTreeAttributeMetadata> iter = selectedAttributeMetaDataList.iterator();
+		List<String> definedColumnsList = new ArrayList<String>();
+		StringBuffer sqlColumnNames = new StringBuffer();
+		List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnMetaData.getSelectedAttributeMetaDataList();
+		Iterator<QueryOutputTreeAttributeMetadata> iter = selectedAttributeMetaDataList.iterator();
 
-			while(iter.hasNext())
-			{
-				QueryOutputTreeAttributeMetadata metaData = iter.next();
-				String sqlColumnName = metaData.getColumnName();
-				sqlColumnNames.append(sqlColumnName);
-				sqlColumnNames.append(", ");
-				String columnDisplayName = metaData.getDisplayName();
-				definedColumnsList.add(columnDisplayName);
-			}
-			String columnsInSql = sqlColumnNames.substring(0, sqlColumnNames.length()-3).toString();
-			selectSql =  "select distinct " + columnsInSql;
-			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
+		while(iter.hasNext())
+		{
+			QueryOutputTreeAttributeMetadata metaData = iter.next();
+			String sqlColumnName = metaData.getColumnName();
+			sqlColumnNames.append(sqlColumnName);
+			sqlColumnNames.append(", ");
+			String columnDisplayName = metaData.getDisplayName();
+			definedColumnsList.add(columnDisplayName);
 		}
+		int lastindexOfComma =  sqlColumnNames.lastIndexOf(",");
+		String columnsInSql = sqlColumnNames.substring(0, lastindexOfComma).toString();
+		selectSql =  "select distinct " + columnsInSql;
+		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
 		return selectSql;
 	}
 	/**
