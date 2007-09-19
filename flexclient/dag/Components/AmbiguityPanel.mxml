@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="450" height="500" creationComplete="init()">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="550" height="500" creationComplete="init()">
 <mx:Script>
 	<![CDATA[
 		import mx.controls.CheckBox;
@@ -74,10 +74,10 @@
 		
 	]]>
 </mx:Script>
-	<mx:DataGrid name="pathGrid" x="0" y="0" width="100%" height="100%" dataProvider="{pathList}">
+	<mx:DataGrid name="pathGrid" dataProvider="{pathList}" width="550" x="0" height="500" y="0"  verticalScrollPolicy="off" horizontalScrollPolicy="off">
 		<mx:columns>
-			<mx:DataGridColumn headerText="Paths" dataField="name" dataTipField="name" showDataTips="true"/>
-			<mx:DataGridColumn headerText="Select" dataField="isSelected">
+			<mx:DataGridColumn headerText="Paths" dataField="name" dataTipField="name" showDataTips="true" width="450" wordWrap="true"/>
+			<mx:DataGridColumn headerText="Select" dataField="isSelected" width="100">
 			   <mx:itemRenderer>
 			      <mx:Component>
 				         <mx:CheckBox name="checkBox" click="data.isSelected=!data.isSelected"  selected="{data.isSelected}"/>			      	
