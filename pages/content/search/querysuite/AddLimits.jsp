@@ -95,7 +95,7 @@
 							<td  height="40%" valign="top">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
 								<tr>
-										<td height="400px">											
+										<td height="600px">											
 											<div id="queryTableTd" style="overflow:auto;height:100%;width:100%">
 											<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 												id="DAG" width="100%" height="100%"
