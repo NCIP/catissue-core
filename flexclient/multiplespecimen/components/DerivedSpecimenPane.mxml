@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" autoLayout="true" xmlns:components="components.*" creationComplete="init()" width="500" height="400" borderStyle="outset" backgroundColor="#E2EFFF">
+<mx:Script source="../script/validate.as"/>
 	<mx:Script>
 		<![CDATA[
 			import util.MetadataManager;
@@ -19,7 +20,7 @@
 	 		public var metadataManager:MetadataManager = new MetadataManager();
 			private function init():void
 			{
-				metadataManager.initDerivedSp();
+//				metadataManager.initDerivedSp();
 				if(derivedSpColl.length == 0)
 				{
 					var spData:SpecimenData = initSpecimenData();
@@ -30,8 +31,30 @@
 
 			public  function closePopUp(event:MouseEvent):void 
 			{
-				Alert.show("Hi");
+				
+				var validateVal:Boolean = true;	
+
+				for(var i:int=0;i<derivedSpColl.length;i++)
+				{	
+					validateVal = D[i].validateDerivedSpecimen(i+1) && validateVal;
+				}
+				//Alert.show("Hi");
+			/*	var isValid:Boolean = true;
+
+   				isValid= validateRequiredField(spLabel,"text","Please enter label") && isValid;
+	   			isValid= validateRequiredField(spBarCode,"text","Please enter barcode") && isValid;
+
+				isValid = validateComboBoxField(spClass,"selectedItem","Please select class") && isValid;
+				isValid = validateComboBoxField(spType,"selectedItem","Please select type") && isValid;*/
+				if(validateVal)
+				{
 	   			 PopUpManager.removePopUp(this);
+	   			}
+	   			else
+	   			{
+	   				Alert.show("There are some Errors marked with red box");
+	   			}
+	   
 			}
 		
 		public  function cancel(event:MouseEvent):void {

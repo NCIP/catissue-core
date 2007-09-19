@@ -11,7 +11,10 @@
 
 package edu.wustl.catissuecore.domain;
 
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -27,7 +30,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class table="CATISSUE_BIOHAZARD"
  * @author gautam_shetty
  */
-public class Biohazard extends AbstractDomainObject implements Serializable
+public class Biohazard extends AbstractDomainObject implements Externalizable
 {
     private static final long serialVersionUID = 1234567890L;
 
@@ -216,5 +219,43 @@ public class Biohazard extends AbstractDomainObject implements Serializable
      */
 	public String getMessageLabel() {		
 		return this.name;
+	}
+	
+	public void writeExternal(ObjectOutput out) throws IOException 
+	{
+		System.out.println("SERVER IN writeExternal Biohazard START");
+        // Write out the client properties from the server representation
+		if(id!=null)
+		{
+			out.writeInt(id.intValue());
+		}
+		else
+		{
+			out.writeInt(-1);
+		}
+			
+		out.writeUTF(type);
+        out.writeUTF(name);
+        System.out.println("SERVER IN writeExternal ExternalIdentifier DONE");
+    }
+    
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+	{
+		System.out.println("SERVER IN readExternal ExternalIdentifier");
+		
+		id = new Long(in.readInt());
+		type = in.readUTF();
+		name = in.readUTF();
+		
+		System.out.println(toString());
+	}
+	
+	public String toString()
+	{
+		return "EI{"+
+				"id "+id+"\t"+
+				"Type "+type+"\t"+
+				"Name "+name+
+				"}";
 	}
 }

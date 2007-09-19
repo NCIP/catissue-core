@@ -1,45 +1,40 @@
 package edu.wustl.catissuecore.flex;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.PropertyConfigurator;
-
-import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.emory.mathcs.backport.java.util.Collections;
-import edu.wustl.common.querysuite.metadata.path.IPath;
-import edu.wustl.common.querysuite.metadata.path.Path;
-import edu.wustl.common.querysuite.queryengine.impl.CommonPathFinder;
-import edu.wustl.common.querysuite.queryobject.ICondition;
-import edu.wustl.common.querysuite.queryobject.IExpression;
-import edu.wustl.common.querysuite.queryobject.impl.Rule;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
 import edu.wustl.cab2b.client.ui.query.IPathFinder;
-import edu.wustl.catissuecore.applet.AppletConstants;
-import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
+import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
+import edu.wustl.catissuecore.bean.GenericSpecimen;
+import edu.wustl.catissuecore.bean.SpecimenDataBean;
+import edu.wustl.catissuecore.bizlogic.BiohazardBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -54,12 +49,13 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.querysuite.metadata.path.IPath;
+import edu.wustl.common.querysuite.metadata.path.Path;
+import edu.wustl.common.querysuite.queryengine.impl.CommonPathFinder;
+import edu.wustl.common.querysuite.queryobject.IExpression;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Constants;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
-import java.util.Collection;
-import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 public class FlexInterface
 {
 	public FlexInterface() throws Exception
@@ -73,28 +69,39 @@ public class FlexInterface
 	}
 	public SpecimenBean say(String str)
 	{
-		System.out.println("str from flex client "+str);
+		System.out.println("str from flex client " + str);
 		SpecimenBean sb = new SpecimenBean();
 		sb.specimenLabel = "AA";
 		return sb;
 	}
-	
+
+	public SpecimenBean initFlexInterfaceForMultipleSp()
+	{
+		session = flex.messaging.FlexContext.getHttpRequest().getSession();
+		SessionDataBean sdb = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+		SpecimenBean spBean = new SpecimenBean();
+		spBean.collectionEvent.userName = sdb.getLastName() + ", " + sdb.getFirstName();
+		spBean.receivedEvent.userName = sdb.getLastName() + ", " + sdb.getFirstName();
+		spBean.comment = "My comment vis ";
+		return spBean;
+	}
+
 	private List<String> toStrList(List<NameValueBean> nvBeanList)
 	{
-		List<String> strList = new ArrayList<String>(); 
+		List<String> strList = new ArrayList<String>();
 		for (NameValueBean bean : nvBeanList)
 		{
 			strList.add(bean.getName());
 		}
 		return strList;
 	}
-	
+
 	public List<String> getTissueSidePVList()
 	{
 		List<NameValueBean> aList = CDEManager.getCDEManager().getPermissibleValueList("Tissue Side", null);
 		return toStrList(aList);
 	}
-	
+
 	public List<String> getTissueSitePVList()
 	{
 		List<NameValueBean> aList = CDEManager.getCDEManager().getPermissibleValueList("Tissue Site", null);
@@ -106,47 +113,47 @@ public class FlexInterface
 		List<NameValueBean> aList = CDEManager.getCDEManager().getPermissibleValueList("Pathological Status", null);
 		return toStrList(aList);
 	}
-	
+
 	public List<String> getSpecimenClassStatusPVList()
 	{
 		Map specimenTypeMap = getSpecimenTypeMap();
 		Set specimenKeySet = specimenTypeMap.keySet();
 		List<NameValueBean> specimenClassList = new ArrayList<NameValueBean>();
-		
+
 		Iterator itr1 = specimenKeySet.iterator();
 		while (itr1.hasNext())
 		{
-			String specimenKey = (String)itr1.next();
+			String specimenKey = (String) itr1.next();
 			specimenClassList.add(new NameValueBean(specimenKey, specimenKey));
 		}
 		return toStrList(specimenClassList);
 	}
-	
+
 	public List<String> getFluidSpecimenTypePVList()
 	{
 		Map specimenTypeMap = getSpecimenTypeMap();
-		List<NameValueBean> aList = (List)specimenTypeMap.get("Fluid");
+		List<NameValueBean> aList = (List) specimenTypeMap.get("Fluid");
 		return toStrList(aList);
 	}
-	
+
 	public List<String> getTissueSpecimenTypePVList()
 	{
 		Map specimenTypeMap = getSpecimenTypeMap();
-		List<NameValueBean> aList =  (List)specimenTypeMap.get("Tissue");
+		List<NameValueBean> aList = (List) specimenTypeMap.get("Tissue");
 		return toStrList(aList);
 	}
-	
+
 	public List<String> getMolecularSpecimenTypePVList()
 	{
 		Map specimenTypeMap = getSpecimenTypeMap();
-		List<NameValueBean> aList =  (List<NameValueBean>)specimenTypeMap.get("Molecular");
+		List<NameValueBean> aList = (List<NameValueBean>) specimenTypeMap.get("Molecular");
 		return toStrList(aList);
 	}
-	
+
 	public List<String> getCellSpecimenTypePVList()
 	{
 		Map specimenTypeMap = getSpecimenTypeMap();
-		List<NameValueBean> aList = (List<NameValueBean>)specimenTypeMap.get("Cell");
+		List<NameValueBean> aList = (List<NameValueBean>) specimenTypeMap.get("Cell");
 		return toStrList(aList);
 	}
 
@@ -157,7 +164,7 @@ public class FlexInterface
 		Iterator itr = setPV.iterator();
 
 		//List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList("Specimen", null);
-		Map<String,List> subTypeMap = new HashMap<String,List>();
+		Map<String, List> subTypeMap = new HashMap<String, List>();
 		//specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 
 		while (itr.hasNext())
@@ -186,178 +193,549 @@ public class FlexInterface
 		//System.out.println("subTypeMap "+subTypeMap);
 		return subTypeMap;
 	}
-	
-	
+
 	public List getSpecimenTypeStatusPVList()
 	{
 		return CDEManager.getCDEManager().getPermissibleValueList("Specimen Type", null);
 	}
-	
+
 	public List getSCGList()
 	{
 		return null;
 	}
-	
-//----------------------------------------------------------------------------------------//	
-	
-	public String writeSpecimen(List<SpecimenBean> spBeanList)
+
+	public List getUserList() throws DAOException
 	{
-		Logger.out.debug("spBeanList size "+spBeanList.size());
-		Map<String, String> msgMap = new HashMap<String, String>();
-		for (SpecimenBean spBean : spBeanList)
-		{
-			String msg = writeSpecimen(spBean);
-			Logger.out.debug("MSG "+spBean.specimenLabel+" : "+msg);
-			msgMap.put(spBean.specimenLabel, msg);
-		}
-		return msgMap.toString();
+		UserBizLogic userBizLogic = new UserBizLogic();
+		List userList = userBizLogic.getUsers(Constants.ADD);
+		return toStrList(userList);
+
 	}
 
-	private String writeSpecimen(SpecimenBean spBean)
+	public List getProcedureList()
 	{
-		System.out.println("SERVER writeSpecimen");
-		Specimen sp = prepareSpecimen(spBean);
-		String message = "ERROR";
-		
-		if(sp==null)
-		{
-			return message;
-		}
-		
+		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
+				edu.wustl.catissuecore.util.global.Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+		return toStrList(procedureList);
+	}
+
+	public List getContainerList()
+	{
+		List containerList = CDEManager.getCDEManager()
+				.getPermissibleValueList(edu.wustl.catissuecore.util.global.Constants.CDE_NAME_CONTAINER, null);
+		return toStrList(containerList);
+	}
+
+	public List getReceivedQualityList()
+	{
+		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(edu.wustl.catissuecore.util.global.Constants.CDE_NAME_RECEIVED_QUALITY,
+				null);
+		return toStrList(qualityList);
+	}
+
+	public List getBiohazardTypeList()
+	{
+		List biohazardList = CDEManager.getCDEManager()
+				.getPermissibleValueList(edu.wustl.catissuecore.util.global.Constants.CDE_NAME_BIOHAZARD, null);
+		return toStrList(biohazardList);
+
+	}
+
+	public List getBiohazardNameList()
+	{
+		List<List> biohazardNameList = new ArrayList<List>();
 		try
 		{
-			NewSpecimenBizLogic spBizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
-			SessionDataBean sdb = new SessionDataBean();
-			sdb.setUserId(1L);
-			sdb.setUserName("admin@admin.com");
-			spBizLogic.insert(sp, sdb, Constants.HIBERNATE_DAO);
+			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+			List biohazardTypeList = getBiohazardTypeList();
+			Iterator biohazardTypeItr = biohazardTypeList.iterator();
+			while (biohazardTypeItr.hasNext())
+			{
+				List<String> nameList = new ArrayList<String>();
+				nameList.add(Constants.SELECT_OPTION);
+				//NameValueBean nvb = (NameValueBean) biohazardTypeItr.next();
+				String type = (String) biohazardTypeItr.next();
+
+				String[] selectColNames = {"name"};
+				String[] whereColName = {"type"};
+				String[] whereColCond = {"="};
+				Object[] whereColVal = {type};
+				List list = bizLogic.retrieve(Biohazard.class.getName(), selectColNames, whereColName, whereColCond, whereColVal,
+						Constants.AND_JOIN_CONDITION);
+				if (list != null && list.size() > 0)
+				{
+					Iterator iterator = list.iterator();
+					while (iterator.hasNext())
+					{
+						String name = (String) iterator.next();
+						nameList.add(name);
+					}
+				}
+				biohazardNameList.add(nameList);
+			}
+		}
+		catch (DAOException e)
+		{
+			Logger.out.debug("Error mesg :" + e.getMessage());
+		}
+
+		return biohazardNameList;
+
+	}
+
+	//----------------------------------------------------------------------------------------//	
+
+	public String writeSpecimen(List<SpecimenBean> spBeanList)
+	{
+		Logger.out.debug("spBeanList size " + spBeanList.size());
+		//Map<String, String> msgMap = new HashMap<String, String>();
+		//LinkedHashMap<Specimen,List> specimenMap = new LinkedHashMap<Specimen,List>();
+	 	LinkedHashMap<String, GenericSpecimen> viewSpecimenMap = new LinkedHashMap<String, GenericSpecimen>();
+		String message = "ERROR";
+
+		//SessionDataBean sdb2 = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+		int i = 1;
+		for (SpecimenBean spBean : spBeanList)
+		{
+			/*	String msg = writeSpecimen(spBean);
+			 Logger.out.debug("MSG " + spBean.specimenLabel + " : " + msg);
+			 msgMap.put(spBean.specimenLabel, msg);*/
+			SpecimenDataBean specimenDataBean = prepareSpecimen(spBean);
+			 
+			//spBean.spID = new Long(i);
+			specimenDataBean.uniqueId = ""+i;
+			viewSpecimenMap.put(specimenDataBean.getUniqueIdentifier(), specimenDataBean);
+			i++;
+
+		}
+		try
+		{
+			//SessionDataBean sdb1 = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+			/*IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties.getValue("app.bizLogicFactory"), "getBizLogic",
+			 edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+			 SessionDataBean sdb = new SessionDataBean();
+			 sdb.setUserId(1L);
+			 sdb.setUserName("admin@admin.com");
+
+			 bizLogic.insert(specimenMap, sdb, Constants.HIBERNATE_DAO);*/
+			//session.setAttribute("specimenMap",specimenMap);
+			session.setAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP, viewSpecimenMap);
+
 			message = "SUCCESS";
 		}
-		catch(Exception ex)
+		catch (Exception ex)
 		{
 			message = ex.getMessage();
+
 		}
-		
+
 		return message;
 	}
-	
+
+	/*private String writeSpecimen(SpecimenBean spBean)
+	 {
+	 System.out.println("SERVER writeSpecimen");
+	 Specimen sp = prepareSpecimen(spBean);
+	 String message = "ERROR";
+
+	 if (sp == null)
+	 {
+	 return message;
+	 }
+
+	 try
+	 {
+
+	 HttpSession session = flex.messaging.FlexContext.getHttpRequest().getSession();
+	 SessionDataBean sdb1 = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+	 IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties.getValue("app.bizLogicFactory"), "getBizLogic",
+	 edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+	 NewSpecimenBizLogic spBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+	 edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+	 SessionDataBean sdb = new SessionDataBean();
+	 sdb.setUserId(1L);
+	 sdb.setUserName("admin@admin.com");
+
+	 bizLogic.insert(sp, sdb, Constants.HIBERNATE_DAO);
+	 message = "SUCCESS";
+	 }
+	 catch (Exception ex)
+	 {
+	 message = ex.getMessage();
+	 }
+
+	 return message;
+	 }*/
+
 	public SpecimenBean readSpecimen()
 	{
 		Logger.out.debug("SERVER readSpecimen");
 		SpecimenBean sb = new SpecimenBean();
 		return sb;
 	}
-	
+
 	public List<SpecimenBean> readSpecimenList()
 	{
 		List<SpecimenBean> list = new ArrayList<SpecimenBean>();
-		
+
 		list.add(readSpecimen());
 		list.add(readSpecimen());
 		list.add(readSpecimen());
-		
+
 		return list;
 	}
-	
+
 	private Specimen getSpecimenInstance(String specimenClass)
 	{
-		System.out.println("specimenClass <"+specimenClass+">");
+		System.out.println("specimenClass <" + specimenClass + ">");
 		Specimen sp = null;
-		if(specimenClass.indexOf("Tissue")!=-1)
+		if (specimenClass.indexOf("Tissue") != -1)
 		{
 			sp = new TissueSpecimen();
 		}
-		else if(specimenClass.indexOf("Fluid")!=-1)
+		else if (specimenClass.indexOf("Fluid") != -1)
 		{
 			sp = new FluidSpecimen();
 		}
-		else if(specimenClass.indexOf("Molecular")!=-1)
+		else if (specimenClass.indexOf("Molecular") != -1)
 		{
 			sp = new MolecularSpecimen();
 		}
-		else if(specimenClass.indexOf("Cell")!=-1)
+		else if (specimenClass.indexOf("Cell") != -1)
 		{
 			sp = new CellSpecimen();
 		}
-		System.out.println("Returning basic specimen "+sp);
-		return sp;
-	}
-	
-	private Specimen prepareSpecimen(SpecimenBean spBean)
-	{
-		Specimen sp = getSpecimenInstance(spBean.specimenClass);
-		if(sp==null)
-		{
-			return null;
-		}
-		sp.setType(spBean.specimenType);
-		
-		sp.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		sp.setAvailable(true);
-		Quantity qt = new Quantity();
-		qt.setValue(spBean.quantity);
-		sp.setInitialQuantity(qt);
-		sp.setAvailableQuantity(qt);
-		sp.setBarcode(spBean.specimenBarcode);
-		sp.setBiohazardCollection(new HashSet<Biohazard>());
-		sp.setChildrenSpecimen(new HashSet<Specimen>());
-		sp.setComment("");
-		sp.setCreatedOn(new Date());
-		sp.setExternalIdentifierCollection(new HashSet<ExternalIdentifier>());
-		sp.setLabel(spBean.specimenLabel);
-		//sp.setLineage("New");
-		sp.setParentSpecimen(null);
-		sp.setPathologicalStatus(spBean.pathologicalStatus);
-		
-		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-		specimenCharacteristics.setTissueSide(spBean.tissueSide);
-		specimenCharacteristics.setTissueSite(spBean.tissueSite);
-		sp.setSpecimenCharacteristics(specimenCharacteristics);
-		
-		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
-		scg.setId(1L);
-		sp.setSpecimenCollectionGroup(scg);
-		
-		Set<SpecimenEventParameters> eventSet = new HashSet<SpecimenEventParameters>();
-		eventSet.add(getCollectionEventParameters());
-		eventSet.add(getReceivedEventParameters());
-		sp.setSpecimenEventCollection(eventSet);
-				
-		//StorageContainerBizLogic scBizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(edu.wustl.catissuecore.util.global.Constants.STORAGE_CONTAINER_FORM_ID);
-		//scBizLogic.setNe
-		
-		sp.setStorageContainer(null);
-		sp.setPositionDimensionOne(null);
-		sp.setPositionDimensionTwo(null);
-		System.out.println("Returning complete specimen");
+		System.out.println("Returning basic specimen " + sp);
 		return sp;
 	}
 
-	private CollectionEventParameters getCollectionEventParameters()
+	/*private Specimen prepareSpecimen(SpecimenBean spBean)
+	 {
+	 Specimen sp = getSpecimenInstance(spBean.specimenClass);
+	 if (sp == null)
+	 {
+	 return null;
+	 }
+	 sp.setType(spBean.specimenType);
+
+	 sp.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+	 sp.setAvailable(true);
+	 Quantity qt = new Quantity();
+	 qt.setValue(spBean.quantity);
+	 sp.setInitialQuantity(qt);
+	 sp.setAvailableQuantity(qt);
+	 sp.setBarcode(spBean.specimenBarcode);
+	 sp.setBiohazardCollection(new HashSet<Biohazard>());
+	 sp.setChildrenSpecimen(new HashSet<Specimen>());
+	 sp.setComment("");
+	 sp.setCreatedOn(new Date());
+	 //sp.setExternalIdentifierCollection(new HashSet<ExternalIdentifier>());
+	 if (spBean.exIdColl != null && !spBean.exIdColl.isEmpty())
+	 {
+	 sp.setExternalIdentifierCollection(getExternalIdentifierColl(spBean.exIdColl));
+	 }
+
+	 //sp.setExternalIdentifierCollection(spBean.exIdColl);
+
+	 
+	 if (spBean.biohazardColl != null && !spBean.biohazardColl.isEmpty())
+	 {
+	 sp.setBiohazardCollection(getBiohazardColl(spBean.biohazardColl));
+	 }
+	 sp.setLabel(spBean.specimenLabel);
+	 //sp.setLineage("New");
+	 sp.setParentSpecimen(null);
+	 sp.setPathologicalStatus(spBean.pathologicalStatus);
+
+	 SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+	 specimenCharacteristics.setTissueSide(spBean.tissueSide);
+	 specimenCharacteristics.setTissueSite(spBean.tissueSite);
+	 sp.setSpecimenCharacteristics(specimenCharacteristics);
+
+	 SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+	 scg.setId(1L);
+	 scg.setName("scg1");
+	 sp.setSpecimenCollectionGroup(scg);
+
+	 Set<SpecimenEventParameters> eventSet = new HashSet<SpecimenEventParameters>();
+	 CollectionEventParameters collectionEvent = getCollectionEventParameters(spBean.collectionEvent);
+	 collectionEvent.setSpecimen(sp);
+	 eventSet.add(collectionEvent);
+
+	 ReceivedEventParameters receEvent = getReceivedEventParameters(spBean.receivedEvent);
+	 receEvent.setSpecimen(sp);
+	 eventSet.add(receEvent);
+	 sp.setSpecimenEventCollection(eventSet);
+
+	 //Collection biohazardColl = getBiohazardColl(spBean.biohazardColl);
+	 //StorageContainerBizLogic scBizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(edu.wustl.catissuecore.util.global.Constants.STORAGE_CONTAINER_FORM_ID);
+	 //scBizLogic.setNe
+
+	 sp.setStorageContainer(null);
+	 sp.setPositionDimensionOne(null);
+	 sp.setPositionDimensionTwo(null);
+	 System.out.println("Returning complete specimen");
+	 return sp;
+	 }*/
+
+	private SpecimenDataBean prepareSpecimen(SpecimenBean spBean)
+	{
+		SpecimenDataBean specimenDataBean = new SpecimenDataBean();
+
+		specimenDataBean.setType(spBean.specimenType);
+
+		//specimenDataBean.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		//sp.setAvailable(true);
+		Quantity qt = new Quantity();
+		qt.setValue(spBean.quantity);
+		specimenDataBean.setInitialQuantity(qt);
+		//sp.setAvailableQuantity(qt);
+		specimenDataBean.setClassName(spBean.specimenClass);
+		specimenDataBean.setBarcode(spBean.specimenBarcode);
+		/*sp.setBiohazardCollection(new HashSet<Biohazard>());
+		 sp.setChildrenSpecimen(new HashSet<Specimen>());*/
+		specimenDataBean.setComment(spBean.comment);
+		//sp.setCreatedOn(new Date());
+		specimenDataBean.setExternalIdentifierCollection(new HashSet<ExternalIdentifier>());
+		if (spBean.exIdColl != null && !spBean.exIdColl.isEmpty())
+		{
+			specimenDataBean.setExternalIdentifierCollection(getExternalIdentifierColl(spBean.exIdColl));
+		}
+
+		if (spBean.biohazardColl != null && !spBean.biohazardColl.isEmpty())
+		{
+			specimenDataBean.setBiohazardCollection(getBiohazardColl(spBean.biohazardColl));
+		}
+		specimenDataBean.setLabel(spBean.specimenLabel);
+
+		specimenDataBean.setParentSpecimen(null);
+		specimenDataBean.setPathologicalStatus(spBean.pathologicalStatus);
+
+		specimenDataBean.setTissueSide(spBean.tissueSide);
+		specimenDataBean.setTissueSite(spBean.tissueSite);
+		/*SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		 specimenCharacteristics.setTissueSide(spBean.tissueSide);
+		 specimenCharacteristics.setTissueSite(spBean.tissueSite);
+		 sp.setSpecimenCharacteristics(specimenCharacteristics);*/
+
+		/*if (spBean.scgName != null)
+		{
+			specimenDataBean.setSpecimenCollectionGroup(getSpecimenCollGrp(spBean.scgName));
+		}*/
+		if(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE.equals(spBean.parentType))
+		{
+			specimenDataBean.setSpecimenCollectionGroup(getSpecimenCollGrp(spBean.parentName));
+		}
+		else
+		{
+			specimenDataBean.setParentSpecimen(getParentSpecimen(spBean.parentName));
+		}
+		
+		/*scg.setId(1L);
+		 scg.setName("scg1");
+		 sp.setSpecimenCollectionGroup(scg);*/
+
+		Set<SpecimenEventParameters> eventSet = new HashSet<SpecimenEventParameters>();
+		CollectionEventParameters collectionEvent = getCollectionEventParameters(spBean.collectionEvent);
+		//collectionEvent.setSpecimen(sp);
+		eventSet.add(collectionEvent);
+
+		ReceivedEventParameters receEvent = getReceivedEventParameters(spBean.receivedEvent);
+		//receEvent.setSpecimen(sp);
+		eventSet.add(receEvent);
+
+		specimenDataBean.setSpecimenEventCollection(eventSet);
+
+		/*specimenDataBean.setStorageContainer(null);
+		 sp.setPositionDimensionOne(null);
+		 sp.setPositionDimensionTwo(null);*/
+
+		if (spBean.derivedColl != null)
+		{
+			LinkedHashMap<String, GenericSpecimen> derivedMap = new LinkedHashMap<String, GenericSpecimen>();
+			Iterator itr = spBean.derivedColl.iterator();
+			int i = 1;
+			while (itr.hasNext())
+			{
+				SpecimenBean derivedBean = (SpecimenBean) itr.next();
+				SpecimenDataBean derivedDataBean = prepareSpecimen(derivedBean);
+
+				derivedMap.put("d1" + i, derivedDataBean);
+				i++;
+			}
+			specimenDataBean.setDeriveSpecimenCollection(derivedMap);
+		}
+		System.out.println("Returning complete specimen");
+		return specimenDataBean;
+	}
+
+	private HashSet getExternalIdentifierColl(Collection exIdColl)
+	{
+		HashSet<ExternalIdentifier> exIdSet = new HashSet<ExternalIdentifier>();
+		Iterator itr = exIdColl.iterator();
+		while (itr.hasNext())
+		{
+			ExternalIdentifier ex = (ExternalIdentifier) itr.next();
+			ex.setId(null);
+			exIdSet.add(ex);
+		}
+		return exIdSet;
+	}
+
+	private HashSet getBiohazardColl(Collection biohazardColl)
+	{
+		HashSet<Biohazard> biohazardSet = new HashSet<Biohazard>();
+		Iterator itr = biohazardColl.iterator();
+		while (itr.hasNext())
+		{
+			Biohazard biohazard = (Biohazard) itr.next();
+			if (!biohazard.getName().equals(Constants.SELECT_OPTION) && !biohazard.getType().equals(Constants.SELECT_OPTION))
+			{
+				Long id = getBiohazardIdentifier(biohazard.getType(), biohazard.getName());
+				biohazard.setId(id);
+				biohazardSet.add(biohazard);
+			}
+		}
+		return biohazardSet;
+	}
+
+	private Long getBiohazardIdentifier(String type, String name)
+	{
+		String sourceObjName = Biohazard.class.getName();
+		String[] selectColName = {"id"};
+		String[] whereColName = {"type", "name"};
+		String[] whereColCond = {"=", "="};
+		Object[] whereColVal = {type, name};
+		BiohazardBizLogic bizLogic = new BiohazardBizLogic();
+		try
+		{
+			List list = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+			Iterator itr = list.iterator();
+			while (itr.hasNext())
+			{
+				Long id = (Long) itr.next();
+				return id;
+			}
+
+		}
+		catch (DAOException e)
+		{
+			Logger.out.debug("Error whioe getting biohazard Id:" + e.getMessage());
+			System.out.println("Error whioe getting biohazard Id:" + e.getMessage());
+
+		}
+
+		return null;
+	}
+
+	private SpecimenCollectionGroup getSpecimenCollGrp(String scgName)
+	{
+
+		String sourceObjName = SpecimenCollectionGroup.class.getName();
+
+		String[] whereColName = {"name"};
+		String[] whereColCond = {"="};
+		Object[] whereColVal = {scgName};
+		SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
+		try
+		{
+			List list = bizLogic.retrieve(sourceObjName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+			Iterator itr = list.iterator();
+			while (itr.hasNext())
+			{
+				SpecimenCollectionGroup scg = (SpecimenCollectionGroup) itr.next();
+				return scg;
+			}
+			//SpecimenCollectionGroup scg1 = 
+		}
+		catch (DAOException e)
+		{
+			Logger.out.debug("Error whioe getting scg :" + e.getMessage());
+			System.out.println("Error whioe getting scg:" + e.getMessage());
+
+		}
+
+		return null;
+
+	}
+
+	private Specimen getParentSpecimen(String parentName)
+	{
+
+		String sourceObjName = Specimen.class.getName();
+
+		String[] whereColName = {"label"};
+		String[] whereColCond = {"="};
+		Object[] whereColVal = {parentName};
+		NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
+		try
+		{
+			List list = bizLogic.retrieve(sourceObjName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+			Iterator itr = list.iterator();
+			while (itr.hasNext())
+			{
+				Specimen specimen = (Specimen) itr.next();
+				return specimen;
+			}
+			//SpecimenCollectionGroup scg1 = 
+		}
+		catch (DAOException e)
+		{
+			Logger.out.debug("Error whioe getting specimen :" + e.getMessage());
+			System.out.println("Error whioe getting specimen :" + e.getMessage());
+
+		}
+
+		return null;
+
+	}
+
+	private CollectionEventParameters getCollectionEventParameters(EventParamtersBean collectionEvent)
 	{
 		CollectionEventParameters event = new CollectionEventParameters();
-		setCommomParam(event);
-		event.setCollectionProcedure("Not Specified");
-		event.setContainer("Not Specified");
-		return event;
-	}
-	
-	private ReceivedEventParameters getReceivedEventParameters()
-	{
-		ReceivedEventParameters event = new ReceivedEventParameters();
-		setCommomParam(event);
-		event.setReceivedQuality("Not Specified");
-		return event;
-	}
-	
-	private void setCommomParam(EventParameters event)
-	{
-		event.setComment("");
-		event.setTimestamp(new Date());
+		//setCommomParam(event);
+		event.setTimestamp(getTimeStamp(collectionEvent.eventdDate, collectionEvent.eventHour, collectionEvent.eventMinute));
+		event.setCollectionProcedure(collectionEvent.collectionProcedure);
+		event.setContainer(collectionEvent.container);
+		event.setComment(collectionEvent.comment);
 		User user = new User();
 		user.setId(1L);
 		event.setUser(user);
+		return event;
 	}
+
+	private ReceivedEventParameters getReceivedEventParameters(EventParamtersBean receivedEvent)
+	{
+		ReceivedEventParameters event = new ReceivedEventParameters();
+		event.setTimestamp(getTimeStamp(receivedEvent.eventdDate, receivedEvent.eventHour, receivedEvent.eventMinute));
+		User user = new User();
+		user.setId(1L);
+		event.setUser(user);
+		event.setComment(receivedEvent.comment);
+		//setCommomParam(event);
+		event.setReceivedQuality(receivedEvent.receivedQuality);
+		return event;
+	}
+
+	private Date getTimeStamp(Date date, String hour, String minute)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
+		calendar.set(Calendar.MINUTE, Integer.parseInt(minute));
+		return calendar.getTime();
+
+	}
+
+	/*private void setCommomParam(EventParameters event)
+	 {
+	 event.setComment("");
+	 event.setTimestamp(new Date());
+	 User user = new User();
+	 user.setId(1L);
+	 event.setUser(user);
+	 }*/
 	//--------------DAG-----------------------------
 	public void restoreQueryObject()
 	{

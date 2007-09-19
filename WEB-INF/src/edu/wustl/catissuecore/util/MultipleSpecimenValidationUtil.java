@@ -40,7 +40,7 @@ public final class MultipleSpecimenValidationUtil
 	 * @throws DAOException
 	 */
 	public static boolean validateMultipleSpecimen(Map specimenMap, DAO dao, String operation) throws DAOException
-	{
+	{ 
 		boolean result = true;
 		setSCGinSpecimen(specimenMap,dao);
 		Iterator specimenIterator = specimenMap.keySet().iterator();
@@ -177,12 +177,11 @@ public final class MultipleSpecimenValidationUtil
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
-		if (specimen.getParentSpecimen() != null
-				&& (specimen.getParentSpecimen().getId() == null || validator.isEmpty(specimen.getParentSpecimen().getId().toString())))
+		/*if (specimen.getParentSpecimen() == null && !Constants.NEW_SPECIMEN.equals(specimen.getLineage()))
 		{
 			String message = ApplicationProperties.getValue("createSpecimen.parent");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
+		}*/
 
 		if (validator.isEmpty(specimen.getLabel()))
 		{

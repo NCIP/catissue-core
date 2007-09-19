@@ -3584,8 +3584,12 @@ PUBLIC
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.multipleSpecimenFlexDef"/-->
                     
-  	<action path="/MultipleSpecimenFlexInitAction" type="edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction" scope="request">
+  	<action path="/MultipleSpecimenFlexInitAction" 
+  			type="edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction" 
+  			scope="request">
 			<forward name="success" path=".catissuecore.multipleSpecimenFlexDef" />  
+			<forward name="cpQuery" path=".catissuecore.multipleSpecimenFlexCPQueryDef" />  
+			
     </action>                        
 	
 	<action path="/MultipleSpecimenAppletAction" type="edu.wustl.catissuecore.action.MultipleSpecimenAppletAction" parameter="method">
@@ -3959,7 +3963,8 @@ PUBLIC
 		<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->
-		<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
+<!--		<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			-->
+		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?pageOf=cpQuery&amp;parentType=New_Specimen"/>
 		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 	</action>
 		
@@ -4034,7 +4039,8 @@ PUBLIC
 		<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->			
-		<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
+		<!--<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			-->
+		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?pageOf=cpQuery&amp;parentType=New_Specimen"/>
 		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 	</action>
 

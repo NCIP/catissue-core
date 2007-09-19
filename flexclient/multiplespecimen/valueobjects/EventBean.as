@@ -44,7 +44,7 @@ package valueobjects
 		
 		public function writeExternal(output:IDataOutput) :void 
 		{
-			Alert.show("CLIENT IN writeExternal of eventBean");
+			//Alert.show("CLIENT IN writeExternal of eventBean");
 			
 			output.writeInt(id);
 			output.writeUTF(userName);
@@ -59,7 +59,7 @@ package valueobjects
         
     	public function readExternal(input:IDataInput):void
     	{
-    		Alert.show("CLIENT IN readExternal of EventBean");
+    		//Alert.show("CLIENT IN readExternal of EventBean");
     		
 			id = input.readInt();
 			userName = input.readUTF();

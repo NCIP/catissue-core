@@ -1,95 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" borderStyle="solid" xmlns:components="components.*">
+<mx:Script>
+	<![CDATA[
+		import valueobjects.SpecimenData;
+		import mx.collections.ArrayCollection;
+		import mx.controls.Alert;
+		private function selectAllSp() : void
+		{
+			var spCollection:ArrayCollection = parentApplication.specimenColl;
+			for(var i:int=0;i<spCollection.length;i++)
+			{
+				var spData:SpecimenData = SpecimenData(spCollection.getItemAt(i));
+				spData.isSelected = selectAllChkBox.selected;
+			}
+			
+		}
+	]]>
+</mx:Script>
+	<mx:VBox backgroundColor="#E2EFFF" width="100%">
+
+		<mx:HBox height="25">
+			<mx:CheckBox id="selectAllChkBox" click="selectAllSp()"/>
+			<mx:Label text="Select All"/>	
+		</mx:HBox>
+		<!--<mx:HBox height="25">
+			<mx:CheckBox id="selectParentChkBox"/>	
+			<mx:Label text="" fontWeight="bold"/>	
+		</mx:HBox>-->
+		<mx:HBox height="25">
+			<mx:CheckBox id="nameChkBox"/>	
+			<mx:Label text="" fontWeight="bold" id="spOrScg"/>	
+		</mx:HBox>
+		<mx:HBox height="25">
+			<mx:CheckBox id="labelChkBox"/>
+			<mx:Label text="* Label" fontWeight="bold"/>	
+		</mx:HBox>
+		<mx:HBox height="25">
+			<mx:CheckBox id="barcodeChkBox"/>	
+			<mx:Label text="  Barcode" fontWeight="bold"/>	
+		</mx:HBox>
+		<mx:HRule width="100%"/>
+	</mx:VBox>	
 
 	<mx:HBox height="25">
-		<mx:CheckBox/>	
-		<mx:Label text=""/>	
-	</mx:HBox>
-	
-	<mx:HBox height="25">
-	<mx:CheckBox/>	
-		<mx:Label text="" fontWeight="bold"/>	
-	</mx:HBox>
-	
-	<mx:HBox height="25">
-	<mx:CheckBox/>	
-		<mx:Label text="* Name" fontWeight="bold" id="spOrScg"/>	
-	</mx:HBox>
-	
-	
-	<mx:HBox height="25">
-		<mx:CheckBox id="labelChkBox"/>
-		<mx:Label text="* Label" fontWeight="bold"/>	
-	</mx:HBox>
-	
-	<mx:HBox height="25">
-		<mx:CheckBox/>	
-		<mx:Label text="  Barcode" fontWeight="bold"/>	
-	</mx:HBox>
-	
-	<mx:HBox height="25">
-		<mx:CheckBox/>	
+		<mx:CheckBox id="classChkBox"/>	
 		<mx:Label text="* Class" fontWeight="bold"/>	
 	</mx:HBox>
-	
 	<mx:HBox height="25">
-		<mx:CheckBox/>	
+		<mx:CheckBox id="typeChkBox"/>	
 		<mx:Label text="* Type" fontWeight="bold"/>	
 	</mx:HBox>
 	
 	<mx:HBox height="25">
-		<mx:CheckBox/>	
+		<mx:CheckBox id="tissueSiteChkBox"/>	
 		<mx:Label text="* Tissue Site" fontWeight="bold"/>
 	</mx:HBox>
-	
 	<mx:HBox height="25">
-		<mx:CheckBox/>	
+		<mx:CheckBox id="tissueSideChkBox"/>	
 		<mx:Label text="* Tissue Side" fontWeight="bold"/>
 	</mx:HBox>
-	
 	<mx:HBox height="25">
-		<mx:CheckBox/>	
+		<mx:CheckBox id="pathStatusChkBox"/>	
 		<mx:Label text="* Pathological Status" fontWeight="bold"/>
 	</mx:HBox>
+	<mx:VBox backgroundColor="#E2EFFF" width="100%">
+		<mx:HRule width="100%"/>
+		<mx:HBox height="25">
+			<mx:CheckBox id="createdOnChkBox"/>	
+			<mx:Label text="  Created on" fontWeight="bold"/>	
+		</mx:HBox>
+		<mx:HBox height="25">
+			<mx:CheckBox id="quantityChkBox"/>	
+			<mx:Label text="  Quantity" fontWeight="bold"/>	
+		</mx:HBox>
 	
+		<mx:HBox height="25">
+			<mx:CheckBox id="concentrationChkBox"/>	
+			<mx:Label text="  Concentration" fontWeight="bold"/>	
+		</mx:HBox>
+		<mx:HRule width="100%"/>
+	</mx:VBox>
 	<mx:HBox height="25">
-		<mx:CheckBox/>	
-		<mx:Label text="  Created on" fontWeight="bold"/>	
+		<mx:CheckBox id="commentChkBox"/>	
+		<mx:Label text="  Comment" fontWeight="bold"/>	
 	</mx:HBox>
-	
 	<mx:HBox height="25">
-		<mx:CheckBox/>	
-		<mx:Label text="  Quantity" fontWeight="bold"/>	
+		<mx:CheckBox id="collEventChkBox"/>	
+		<mx:Label text="  Collected Event" fontWeight="bold"/>
 	</mx:HBox>
-	
 	<mx:HBox height="25">
-		<mx:CheckBox/>	
-		<mx:Label text="  Concentration" fontWeight="bold"/>	
+		<mx:CheckBox id="recEventChkBox"/>	
+		<mx:Label text="  Received Event" fontWeight="bold"/>
 	</mx:HBox>
+	<mx:HBox height="25">
+		<mx:CheckBox id="externalIdChkBox"/>	
+		<mx:Label text="  External Identifier" fontWeight="bold"/>
+	</mx:HBox>
+	<mx:HBox height="25">
+		<mx:CheckBox id="biohazardChkBox"/>	
+		<mx:Label text="  Biohazards" fontWeight="bold"/>
+	</mx:HBox>
+	<mx:HBox height="25">
+		<mx:CheckBox id="derivativeChkBox"/>	
+		<mx:Label text="  Derivative" fontWeight="bold"/>
+	</mx:HBox>
+		
 
-	<mx:HBox height="25">
-	<mx:CheckBox/>	
-	<mx:Label text="  Comment" fontWeight="bold"/>	
-	</mx:HBox>
-	
-	<mx:HBox height="25">
-		<mx:CheckBox/>	
-	<mx:Label text="  Collected Event" fontWeight="bold"/>
-	</mx:HBox>
-	<mx:HBox height="25">
-			<mx:CheckBox/>	
-	<mx:Label text="  Received Event" fontWeight="bold"/>
-	</mx:HBox>
-	<mx:HBox height="25">
-			<mx:CheckBox/>	
-	<mx:Label text="  External Identifier" fontWeight="bold"/>
-	</mx:HBox>
-	<mx:HBox height="25">
-			<mx:CheckBox/>	
-	<mx:Label text="  Biohazards" fontWeight="bold"/>
-	</mx:HBox>
-	<mx:HBox height="25">
-			<mx:CheckBox/>	
-	<mx:Label text="  Derivative" fontWeight="bold"/>
-	</mx:HBox>
 </mx:VBox>

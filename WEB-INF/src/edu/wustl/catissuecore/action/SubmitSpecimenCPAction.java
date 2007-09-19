@@ -448,7 +448,7 @@ public class SubmitSpecimenCPAction extends Action {
 	 * @param specimenDataBean
 	 * @param parentSpecimen
 	 * @param childSpecimenList
-	 */
+	 */ 
 	private void getDerivedSpecimens(SpecimenDataBean specimenDataBean,
 			Specimen parentSpecimen, ArrayList childSpecimenList) {
 		Collection derivedSpecimenCollection = specimenDataBean
@@ -461,6 +461,7 @@ public class SubmitSpecimenCPAction extends Action {
 				(SpecimenDataBean) derivedSpecimenIteraror.next();
 			Specimen derivedSpecimen = getSpecimenDomainObjectFromObject(derivedSpecimenBean);
 			derivedSpecimen.setParentSpecimen(parentSpecimen);
+			
 			derivedSpecimen.setLineage(Constants.DERIVED_SPECIMEN);
 			derivedSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 			childSpecimenList.add(derivedSpecimen);

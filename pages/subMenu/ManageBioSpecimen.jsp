@@ -67,7 +67,7 @@
 		</div>	
 		<div>
 			<a class="subMenuPrimary" href="MultipleSpecimenFlexInitAction.do">
-				New <bean:message key="specimen.menu.multipleAdd" />
+				<bean:message key="specimen.menu.multipleAdd" />
 			</a> 
 		</div>		
 	</td>

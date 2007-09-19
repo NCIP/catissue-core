@@ -35,6 +35,34 @@ package util
 										  		  "28","29","30","31","32","33","34","35","36",
 									 			  "37","38","39","40","41","42","43","44","45",
 												  "46","47","48","49","50","51","52","53","54",
-												  "55","56","57","58","59"];										        
+												  "55","56","57","58","59"];		
+												  
+						
+		public static const PARENT:String = "Parent";												  
+		public static const PARENT_NAME:String = "Name";
+		public static const LABEL:String = "Label";
+		public static const BARCODE:String = "Barcode";
+		public static const CLASS:String = "Class";
+		public static const TYPE:String = "Type";
+		public static const TISSUE_SITE:String = "Tissue Site";												  
+		public static const TISSUE_SIDE:String = "Tissue Side";
+		public static const PATHOLOGICAL_STATUS:String = "Pathological Status";
+		public static const CREATED_ON:String = "Created On";
+		public static const QUANTITY:String = "Quantity";
+		public static const CONCENTRATION:String = "Concentration";
+		
+		
+		public static const COMMENT:String = "Comment";												  
+		public static const COLLECTED_EVENT:String = "Collected Event";
+		public static const RECEIVED_EVENT:String = "Received Event";
+		public static const EXTERNAL_IDENTIFIER:String = "External Identifier";
+		public static const BIOHAZARDS:String = "Biohazard";
+		public static const DERIVATIVE:String = "Derivative";
+		
+		
+		public static const NEW_SPECIMEN:String = "New_Specimen";
+		public static const DERIVED_SPECIMEN:String = "Derived_Specimen";
+		
+														  								        
 	}
 }

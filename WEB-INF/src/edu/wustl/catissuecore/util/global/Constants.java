@@ -2046,4 +2046,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String SHOW_ALL_ATTRIBUTE = "Show all attributes";
 	public static final String SHOW_SELECTED_ATTRIBUTE = "Show selected attributes";
+	
+	public static final String NEW_SPECIMEN_TYPE = "New_Specimen";
+	public static final String DERIVED_SPECIMEN_TYPE = "Derived_Specimen";
+	
 }

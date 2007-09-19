@@ -630,6 +630,10 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimenFlex.jsp" />
 	</definition>
 
+	<definition name=".catissuecore.multipleSpecimenFlexCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimenFlex.jsp" />
+	</definition>
+
 
 	<definition name=".catissuecore.initMultipleSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/InitMultipleSpecimen.jsp" />

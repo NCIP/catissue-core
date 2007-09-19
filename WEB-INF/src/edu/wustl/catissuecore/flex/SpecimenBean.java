@@ -23,8 +23,10 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 	private static final long serialVersionUID = 1L;
 
 	public Long spID = -5L;
-	public String scgName = "A";
-	public String parentSpecimenName = "B";
+	/*public String scgName = "A";
+	public String parentSpecimenName = "B";*/
+	public String parentType = "";
+	public String parentName = "";
 
 	public String specimenLabel = "C";
 	public String specimenBarcode = "D";
@@ -131,7 +133,7 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 	public String getParentName()
 	{
 		// TODO Auto-generated method stub
-		return this.parentSpecimenName;
+		return this.parentName;
 	}
 
 	/* (non-Javadoc)
@@ -211,8 +213,10 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 		System.out.println("SERVER IN writeExternal START");
 		// Write out the client properties from the server representation
 		out.writeInt(spID.intValue());
-		out.writeUTF(scgName);
-		out.writeUTF(parentSpecimenName);
+		/*out.writeUTF(scgName);
+		out.writeUTF(parentSpecimenName);*/
+		out.writeUTF(parentType);
+		out.writeUTF(parentName);
 		out.writeUTF(specimenLabel);
 		out.writeUTF(specimenBarcode);
 		out.writeUTF(specimenClass);
@@ -238,8 +242,10 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 		System.out.println("SERVER IN readExternal");
 
 		spID = new Long(in.readInt());
-		scgName = in.readUTF();
-		parentSpecimenName = in.readUTF();
+		/*scgName = in.readUTF();
+		parentSpecimenName = in.readUTF();*/
+		parentType = in.readUTF();
+		parentName = in.readUTF();
 		specimenLabel = in.readUTF();
 		specimenBarcode = in.readUTF();
 		specimenClass = in.readUTF();
@@ -263,7 +269,7 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 
 	public String toString()
 	{
-		return "spID " + spID + "\n" + "scgName " + scgName + "\n" + "parentSpecimenName " + parentSpecimenName + "\n" + "specimenLabel "
+		return "spID " + spID + "\n" + "parentName " + parentName + "\n" + "specimenLabel "
 				+ specimenLabel + "\n" + "specimenBarcode " + specimenBarcode + "\n" + "specimenClass " + specimenClass + "\n" + "specimenType "
 				+ specimenType + "\n" + "tissueSite " + tissueSite + "\n" + "tissueSide " + tissueSide + "\n" + "pathologicalStatus "
 				+ pathologicalStatus + "\n" + "creationDate " + creationDate + "\n" + "quantity " + quantity + "\n" + "concentration "

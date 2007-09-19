@@ -14,6 +14,7 @@
 	String PARENT_TYPE = (String)request.getAttribute("PARENT_TYPE");
 	String PARENT_NAME = (String)request.getAttribute("PARENT_NAME");
 	String SP_COUNT = (String)request.getAttribute("SP_COUNT");
+	String SHOW_PARENT_SELECTION = (String) request.getAttribute("SHOW_PARENT_SELECTION");
 	SessionDataBean bean = (SessionDataBean) session.getAttribute("sessionData");
 	String temp = (String) session.getAttribute("temp");
 %>
@@ -43,15 +44,8 @@ var requiredRevision = 0;
 <script language="JavaScript">
 function callSubmitSpecimen()
 {
-	alert("in javscript functionm");
-	alert("<%=bean.getUserName()%>");
-	alert("<%=temp%>");
 	
-	
-	alert("After session attribute display");
 	document.forms[0].submit();
-//	alert("action:"+document.forms[0].action);
-	//document.forms[0].submit();
 	
 }
 </script>
@@ -98,7 +92,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// if we've detected an acceptable version
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
-			"src", "flexclient/multiplespecimen/MultipleSpecimen?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>",
+			"src", "flexclient/multiplespecimen/MultipleSpecimen?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>",
 			"width", "100%",
 			"height", "100%",
 			"align", "middle",

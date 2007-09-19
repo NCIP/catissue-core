@@ -63,8 +63,7 @@
 		private function printSpDetails(derivedData:SpecimenData):void
 		{
 			Alert.show("SPECIMEN DETAILS: \n"+
-					   "scgName: "+derivedData.scgName+"\n"+
-					   "parentSpecimenName: "+derivedData.parentSpecimenName+"\n"+
+					   "parentName: "+derivedData.parentName+"\n"+
 					   "specimenLabel: "+derivedData.specimenLabel+"\n"+
 					   "specimenBarcode: "+derivedData.specimenBarcode+"\n"+
 					   "specimenClass: "+derivedData.specimenClass+"\n"+
@@ -83,7 +82,7 @@
    	
    		
    		
-/*   		public function validateSpecimen(index:int):Boolean
+   		public function validateDerivedSpecimen(index:int):Boolean
    		{
    			var isValid:Boolean = true;
    			var specimenNumber :String = " for specimen "+index;
@@ -92,33 +91,12 @@
 
 			isValid = validateComboBoxField(spClass,"selectedItem","Please select class") && isValid;
 			isValid = validateComboBoxField(spType,"selectedItem","Please select type") && isValid;
-			isValid = validateComboBoxField(spTissueSite,"selectedItem","Please select tissue site") && isValid;			
-			isValid = validateComboBoxField(spTissueSide,"selectedItem","Please select tissue side") && isValid;			
-			isValid = validateComboBoxField(spPathologicalStatus,"selectedItem","Please select pathological status") && isValid;			
 			
    			isValid =  validateNumberField(spQuantity,"text","Please enter Quantity",true,0) && isValid;
    			isValid =  validateNumberField(spConcentration,"text","Please enter concentration",true,0) && isValid;
-			if(colledtedEventPane != null)
-   			{
-	   			isValid = colledtedEventPane.collectedEventContentPane.validateCollEvent(index) && isValid;
-   			}
-   			if(receivedEventPane != null)
-   			{
-				isValid= receivedEventPane.receivedEventContentPane.validateRecvEvent(index) && isValid;
-   			}
-		
-			if(exIDPane != null)
-			{
-				isValid = exIDPane.validateExIds(index) && isValid;
-			}
-			if(biohazardPane != null)
-			{
-				isValid = biohazardPane.validateBiohazards(index) && isValid;
-					
-			}
 			return isValid;
 		}                     
-*/
+
 	
 
 

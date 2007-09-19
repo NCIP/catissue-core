@@ -22,27 +22,41 @@ public class MultipleSpecimenFlexInitAction extends Action
         //Gets the value of the operation parameter.
         //String operation = request.getParameter(Constants.OPERATION);
 		String mode = "ADD";
-		String parentType = "SCG";
+		String showParentSelection = "false";
 		
+		String parentType = request.getParameter("parentType");
+		if(parentType == null)
+		{
+			parentType = Constants.NEW_SPECIMEN_TYPE;
+			showParentSelection = "true";
+			
+		}
 		String numberOfSpecimens = getNumberOfSpecimens(request);
 		String parentName = getParentName(request, parentType);
         
-		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens);
+		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens,showParentSelection);
+		
+		String pageOf = (String) request.getParameter("pageOf");
+		if(pageOf!=null)
+		{
+			return mapping.findForward(pageOf);
+		}
         return mapping.findForward("success");
     }
 	
-	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType, String parentName, String numberOfSpecimens)
+	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType, String parentName, String numberOfSpecimens,String showParentSelectiono)
 	{
 		//Sets the operation attribute to be used in the Add/Edit Department Page. 
         request.setAttribute("MODE",mode);
         request.setAttribute("PARENT_TYPE", parentType);
         request.setAttribute("PARENT_NAME", parentName);
         request.setAttribute("SP_COUNT",numberOfSpecimens);
+        request.setAttribute("SHOW_PARENT_SELECTION",showParentSelectiono);
 	}
 	
 	private String getParentName(HttpServletRequest request, String parentType)
 	{
-		if(parentType.equals("SCG"))
+		if(Constants.NEW_SPECIMEN_TYPE.equals(parentType))
 		{
 			String specimenCollectionGroupName = "";
 			HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
@@ -56,7 +70,7 @@ public class MultipleSpecimenFlexInitAction extends Action
 			}
 			return specimenCollectionGroupName;
 		}
-		else if(parentType.equals("SP"))
+		else if(Constants.DERIVED_SPECIMEN_TYPE.equals(parentType))
 		{
 			//TODO
 			return ""; 

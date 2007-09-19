@@ -7,16 +7,18 @@ package util
 		public static const MODE_PARAM_VAL_EDIT:String = "EDIT";
 		
 		public static const PARENT_PARAM:String = "PARENT";
-		public static const PARENT_TYPE_PARAM_VAL_SCG:String = "SCG";
-		public static const PARENT_TYPE_PARAM_VAL_SP:String = "SP";
+		public static const PARENT_TYPE_PARAM_VAL_SCG:String = "New_Specimen";
+		public static const PARENT_TYPE_PARAM_VAL_SP:String = "Derived_Specimen";
 		
 		public static const PARENT_NAME_PARAM:String = "PARENT_NAME";
 		public static const SP_COUNT_PARAM:String = "SP_COUNT";
+
 		
 		public var mode:String = "";
 		public var parentType:String = "";
 		public var parentName:String = "";
 		public var spCount:String = "";
+		public var showParentSelection:String="";
 		
 		public function toString():String
 		{

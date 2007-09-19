@@ -15,12 +15,13 @@ package valueobjects
 	{
 		public var specimenTypePVList:ArrayCollection;	
 		public var isSelected:Boolean;		
-		public var specimenParent:String;
+		public var parentType:String;
 		
 		public var spID:Number = -3;
-		public var scgName:String = '';
-		public var parentSpecimenName:String = '';
-		
+//		public var scgName:String = '';
+	//	public var parentSpecimenName:String = '';
+	
+		public var parentName:String = '';
 		public var specimenLabel:String = '';
 		public var specimenBarcode:String = '';
 		
@@ -46,10 +47,11 @@ package valueobjects
 		public var derivedSpColl:ArrayCollection = new ArrayCollection();
 		public function SpecimenData(specimenLabel:String="",specimenBarcode:String="",tissueSide:String="")
 		{
-			this.specimenParent = 'SCG';
+			this.parentType = Constants.NEW_SPECIMEN;
 			
-			this.scgName = '';
-			this.parentSpecimenName = ''
+//			this.scgName = '';
+//			this.parentSpecimenName = ''
+			this.parentName = '';
 			
 			this.specimenLabel = specimenLabel;
 			this.specimenBarcode = specimenBarcode;
@@ -82,12 +84,12 @@ package valueobjects
 		public function copy(spData:SpecimenData):void
 		{
 
-			Alert.show("Here in Copy1");
+			//Alert.show("Here in Copy1");
 			this.specimenTypePVList = spData.specimenTypePVList;
-			this.specimenParent = spData.specimenParent;
-			
-			this.scgName = spData.scgName;
-			this.parentSpecimenName = spData.parentSpecimenName;
+			this.parentType = spData.parentType;
+			this.parentName = spData.parentName;
+			//this.scgName = spData.scgName;
+			//this.parentSpecimenName = spData.parentSpecimenName;
 			
 			this.specimenLabel = spData.specimenLabel;
 			this.specimenBarcode = spData.specimenBarcode;
@@ -113,6 +115,87 @@ package valueobjects
 			copyDerived(spData.derivedSpColl);
 //			this.collectionEvent = spData.collectionEvent;
 			//this.exIdColl = spData.exIdColl;
+		}
+		
+		public function copyAttributes(spData:SpecimenData,attributeList:ArrayCollection):void
+		{
+			if(attributeList.contains(Constants.PARENT))
+			{
+				this.parentType = spData.parentType;
+			}
+			if(attributeList.contains(Constants.PARENT_NAME))
+			{
+				//this.scgName = spData.scgName;
+				//this.parentSpecimenName = spData.parentSpecimenName;
+				this.parentName = spData.parentName;
+				
+			}
+			if(attributeList.contains(Constants.LABEL))
+			{
+				this.specimenLabel = spData.specimenLabel;
+			}
+			if(attributeList.contains(Constants.BARCODE))
+			{	
+				this.specimenBarcode = spData.specimenBarcode;
+			}
+			if(attributeList.contains(Constants.CLASS))
+			{
+				this.specimenClass = spData.specimenClass;
+				this.specimenTypePVList = spData.specimenTypePVList;
+			}
+			if(attributeList.contains(Constants.TYPE))
+			{
+				this.specimenType = spData.specimenType;
+			}
+			if(attributeList.contains(Constants.TISSUE_SITE))
+			{
+				this.tissueSite = spData.tissueSite;
+			}
+			if(attributeList.contains(Constants.TISSUE_SIDE))
+			{
+				this.tissueSide = spData.tissueSide;
+			}
+			if(attributeList.contains(Constants.PATHOLOGICAL_STATUS))
+			{
+				this.pathologicalStatus = spData.pathologicalStatus;
+			}
+			if(attributeList.contains(Constants.CREATED_ON))
+			{
+				this.creationDate = spData.creationDate;
+			}
+			if(attributeList.contains(Constants.QUANTITY))
+			{
+				this.quantity = spData.quantity;
+			}
+			if(attributeList.contains(Constants.CONCENTRATION))
+			{
+				this.concentration = spData.concentration;
+			}
+			if(attributeList.contains(Constants.COMMENT))
+			{
+				this.comment = spData.comment;
+			}
+			if(attributeList.contains(Constants.COLLECTED_EVENT))
+			{
+				copyCollectedEvent(spData.collectionEvent);
+			}
+			if(attributeList.contains(Constants.RECEIVED_EVENT))
+			{
+				copyReceivedEvent(spData.receivedEvent);
+			}
+			if(attributeList.contains(Constants.EXTERNAL_IDENTIFIER))
+			{
+				copyExId(spData.exIdColl);
+			}
+			if(attributeList.contains(Constants.BIOHAZARDS))
+			{
+				copyBiohazard(spData.biohazardColl);
+			}
+			if(attributeList.contains(Constants.DERIVATIVE))
+			{
+				copyDerived(spData.derivedSpColl);
+			}
+						
 		}
 		
 		private function copyExId(exIdCollCopy:ArrayCollection):void
@@ -178,10 +261,12 @@ package valueobjects
 		}
 		public function writeExternal(output:IDataOutput) :void 
 		{
-			Alert.show("CLIENT IN writeExternal");
+			//Alert.show("CLIENT IN writeExternal");
 			output.writeInt(spID);
-			output.writeUTF(scgName);
-			output.writeUTF(parentSpecimenName);
+/*			output.writeUTF(scgName);
+			output.writeUTF(parentSpecimenName);*/
+			output.writeUTF(parentType);			
+			output.writeUTF(parentName);
 			output.writeUTF(specimenLabel);
 			output.writeUTF(specimenBarcode);
 			output.writeUTF(specimenClass);
@@ -205,8 +290,10 @@ package valueobjects
     		//Alert.show("CLIENT IN readExternal");
     		
 			spID = input.readInt();
-			scgName = input.readUTF();
-			parentSpecimenName = input.readUTF();
+/*			scgName = input.readUTF();
+			parentSpecimenName = input.readUTF();*/
+			parentType = input.readUTF();
+			parentName = input.readUTF();
 			specimenLabel = input.readUTF();
 			specimenBarcode = input.readUTF();
 			specimenClass = input.readUTF();
