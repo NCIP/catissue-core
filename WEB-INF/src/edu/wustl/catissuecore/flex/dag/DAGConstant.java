@@ -11,16 +11,16 @@ public class DAGConstant {
 	public static final String EDIT_LIMIT="Edit";
 	
 	//Error Codes 
-	public static final int SUCCESS =0;
-	public static final int EMPTY_DAG=1;
-	public static final int MULTIPLE_ROOT=2;
-	public static final int CYCLIC_GRAPH=3;
-	public static final int SQL_EXCEPTION=4;
-	public static final int DAO_EXCEPTION=5;
-	public static final int DYNAMIC_EXTENSION_EXCEPTION=6;
-	public static final int NO_PATHS_PRESENT=7;
-	public static final int NO_RESULT_PRESENT=8;
-	public static final int CLASS_NOT_FOUND=9;
+	public static  final int SUCCESS=0;
+	public static  final int EMPTY_DAG=1;
+	public static  final int MULTIPLE_ROOT=2;
+	public static  final int NO_RESULT_PRESENT=3;
+	public static  final int SQL_EXCEPTION=4;
+	public static  final int DAO_EXCEPTION=5;
+	public static  final int CLASS_NOT_FOUND=6;
+	public static  final int NO_PATHS_PRESENT=7;
+	public static  final int DYNAMIC_EXTENSION_EXCEPTION=8;
+	public static  final int CYCLIC_GRAPH=9;
 	
 	
 	
