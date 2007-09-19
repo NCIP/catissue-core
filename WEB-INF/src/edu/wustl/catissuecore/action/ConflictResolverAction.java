@@ -3,12 +3,15 @@
  * <p>Description:	Conflict Resolver Action class
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Ashish Gupta
  * @version 1.00
- * Created on Feb 28,2007
+ *@author kalpana Thakur
+ * Created on sep 18,2007
+ * 
  */
 package edu.wustl.catissuecore.action;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,28 +22,41 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ConflictDetailsForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.CaTIESProperties;
+import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
-import edu.wustl.catissuecore.reportloader.Parser;
+import edu.wustl.catissuecore.reportloader.HL7Parser;
+import edu.wustl.catissuecore.reportloader.HL7ParserUtil;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 
-/**
- * @author ashish_gupta
- *
- */
+
 public class ConflictResolverAction extends BaseAction
 {
 	/**
@@ -56,37 +72,117 @@ public class ConflictResolverAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConflictDetailsForm conflictDetailsForm = (ConflictDetailsForm)form;
-//		String participantIdToAssociate = request.getParameter(Constants.PARTICIPANT_ID_TO_ASSOCIATE);
-//		String specimenCollGrpId = request.getParameter(Constants.SCG_ID_TO_ASSOCIATE);
-		
-		String participantIdToAssociate = conflictDetailsForm.getParticipantId();
-		String specimenCollGrpId = conflictDetailsForm.getScgId();
-		
-		String button = request.getParameter(Constants.BUTTON_NAME);
 		HttpSession session = request.getSession();
-		if(button.trim().equalsIgnoreCase(Constants.CREATE_PARTICIPANT_BUTTON))
-		{//Creating a new Participant
-			createNewParticipant(session,conflictDetailsForm.getReportQueueId());
-		}
-		else if(button.trim().equalsIgnoreCase(Constants.ASSOCIATE_PARTICIPANT_BUTTON))
+		String participantIdToAssociate = (String) session.getAttribute(Constants.PARTICIPANT_ID_TO_ASSOCIATE);
+		String specimenCollGrpId = (String) session.getAttribute(Constants.SCG_ID_TO_ASSOCIATE);
+		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
+		String button = request.getParameter(Constants.CONFLICT_BUTTON);
+		String errorMessage =null;
+		
+				
+//		overwrite the existing report
+		if(button.trim().equalsIgnoreCase(Constants.OVERWRITE_REPORT))
 		{
-			associateParticipantWithReport(conflictDetailsForm.getReportQueueId(),participantIdToAssociate,specimenCollGrpId);
+			overwriteReport(request,reportQueueId);
 		}
+		
+//		Ignore new Report
+		if(button.trim().equalsIgnoreCase(Constants.IGNORE_NEW_REPORT))
+		{
+			ignoreNewReport(reportQueueId);
+		}
+
+	
+		
+//		Creating a new Participant		
+		if(button.trim().equalsIgnoreCase(Constants.CREATE_NEW_PARTICIPANT))
+		{
+			errorMessage = createNewParticipant(request,reportQueueId);
+			if(errorMessage!=null)
+			{
+				setActionError(request, errorMessage);
+			}
+		}
+		else
+		{	
+			if(button.trim().equalsIgnoreCase(Constants.USE_SELECTED_PARTICIPANT))
+			{
+				if(participantIdToAssociate != null && !participantIdToAssociate.equals(""))
+				{
+//				Associate existing participant with Report						
+				  createNewSCG(request,reportQueueId,participantIdToAssociate);
+				}  
+			}
+			else if(button.trim().equalsIgnoreCase(Constants.USE_SELECTED_SCG)){
+				
+				if(specimenCollGrpId != null && !specimenCollGrpId.equals(""))
+				{
+//					Associate existing SCG with Report	
+					associateSCGWithReport(request,reportQueueId,participantIdToAssociate,specimenCollGrpId);
+				}		
+			}
+		}	
+		resetSessionAttributes(session);
 		return mapping.findForward(Constants.SUCCESS);
 	}	
+	
 	/**
-	 * @param session object
-	 * @throws BizLogicException object
-	 * @throws UserNotAuthorizedException object
+	 * To retrive the reportLoaderQueueObject
+	 * @param reportQueueId
+	 * @return
+	 * @throws DAOException
 	 */
-	private void createNewParticipant(HttpSession session, String reportQueueId) throws BizLogicException,UserNotAuthorizedException,DAOException
+	private ReportLoaderQueue getReportQueueObject(String reportQueueId) throws DAOException
 	{
-		Participant participant = (Participant)session.getAttribute(Constants.REPORT_PARTICIPANT_OBJECT);
 		
-		ReportLoaderQueue reportLoaderQueue = getReportLoaderQueueObject(reportQueueId);
+		ReportLoaderQueue reportLoaderQueue =null;
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+	    List reportQueueList = (List)reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, reportQueueId);
+	    if((reportQueueList!=null) && reportQueueList.size()>0)
+		{
+			reportLoaderQueue = (ReportLoaderQueue)reportQueueList.get(0);
+		}
+	    
+	    
+	    return reportLoaderQueue;		
+	}
+	
+
+	
+	
+	/**
+	 * To create new participant and associate it to the report:
+	 * @param request
+	 * @param reportQueueId
+	 * @throws Exception 
+	 * @throws Exception
+	 */
+	private String createNewParticipant(HttpServletRequest request, String reportQueueId) throws Exception 
+	{
+		
+		String errorMessage = null;
+		Site site =null;
+		ReportLoaderQueue reportLoaderQueue =null;
+		reportLoaderQueue = getReportQueueObject(reportQueueId);
+		
+		//retrieve site
+		String siteName = reportLoaderQueue.getSiteName();
+		SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Site.class.getName());
+		List siteList = (List)siteBizLogic.retrieve(Site.class.getName(),Constants.SYSTEM_NAME, siteName);
+		
+		if((siteList!=null) && siteList.size()>0)
+		{
+			site = (Site)siteList.get(0);
+		}
+				
+		//retrive the PID		
+		String pidLine = ReportLoaderUtil.getLineFromReport(reportLoaderQueue.getReportText(), CaTIESConstants.PID);
+		
+		//Participant Object		
+		Participant participant = HL7ParserUtil.parserParticipantInformation(pidLine,site);
 		
 		Collection participantColl = new HashSet();
+		
 		//Adding the new participant
 		participantColl.add(participant);		
 		reportLoaderQueue.setParticipantCollection(participantColl);
@@ -94,27 +190,45 @@ public class ConflictResolverAction extends BaseAction
 		//The new SCG for this participant will be inserted by the FileProcessorThread
 		
 		//Setting the status to NEW
-		reportLoaderQueue.setStatus(Parser.NEW);
-		updateReportLoaderQueue(reportLoaderQueue);
-	}
-	/**
-	 * @param reportQueueId object
-	 * @param participantIdToAssociate
-	 * @throws DAOException object
-	 */
-	private void associateParticipantWithReport(String reportQueueId,String participantIdToAssociate,String specimenCollGrpId) throws DAOException
-	{
-		ReportLoaderQueue reportLoaderQueue = getReportLoaderQueueObject(reportQueueId);
-		//Changing the status of the report in the queue to NEW
-		reportLoaderQueue.setStatus(Parser.NEW);
+		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
 		
-		//Associating the SCG
-		if(specimenCollGrpId != null && !specimenCollGrpId.equals(""))
-		{			
-			List scgList = ReportLoaderUtil.getObject(SpecimenCollectionGroup.class.getName(),Constants.SYSTEM_IDENTIFIER, specimenCollGrpId);
-			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)scgList.get(0);
-			reportLoaderQueue.setSpecimenCollectionGroup(scg);
+		ParticipantBizLogic participantBizLogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
+		try
+		{
+		 participantBizLogic.insert(participant,getSessionData(request),Constants.HIBERNATE_DAO);
+		}catch(Exception e)
+		{
+			System.out.println("Error Occurred !!!!!");
+			errorMessage = ApplicationProperties.getValue("errors.caTies.conflict.genericmessage");
+			
 		}
+		
+		reportLoaderQueue.setSpecimenCollectionGroup(null);
+		
+		updateReportLoaderQueue(reportLoaderQueue,request);
+		
+		return errorMessage;
+	}
+	
+	
+	/**
+	 * To associate existing participant to the report and to create new SCG:
+	 * @param request
+	 * @param reportQueueId
+	 * @param participantIdToAssociate
+	 * @throws DAOException
+	 */
+	private void createNewSCG(HttpServletRequest request,String reportQueueId,String participantIdToAssociate) throws DAOException
+	{
+		
+		ReportLoaderQueue reportLoaderQueue =null;
+		reportLoaderQueue = getReportQueueObject(reportQueueId);
+		
+		//Changing the status of the report in the queue to NEW
+		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
+		
+		//Create new SCG
+		reportLoaderQueue.setSpecimenCollectionGroup(null);
 		
 		//removing all participants from CATISSUE_REPORT_PARTICIP_REL other than the selected participant
 		Collection participantColl = reportLoaderQueue.getParticipantCollection();
@@ -131,29 +245,87 @@ public class ConflictResolverAction extends BaseAction
 		reportLoaderQueue.setParticipantCollection(tempColl);
 		
 		//Updating the report queue obj
-		updateReportLoaderQueue(reportLoaderQueue);
+		updateReportLoaderQueue(reportLoaderQueue ,request);
 	}
+	
+	
 	/**
-	 * @param reportQueueId object
-	 * @return ReportLoaderQueue object
-	 * @throws DAOException object
+	 * Associate the existing SCG to the report
+	 * @param request
+	 * @param reportQueueId
+	 * @param participantIdToAssociate
+	 * @param specimenCollGrpId
+	 * @throws DAOException
+	 * @throws BizLogicException
+	 * @throws UserNotAuthorizedException
 	 */
-	private ReportLoaderQueue getReportLoaderQueueObject(String reportQueueId) throws DAOException
+	private void associateSCGWithReport(HttpServletRequest request,String reportQueueId,String participantIdToAssociate,String specimenCollGrpId) throws DAOException, BizLogicException, UserNotAuthorizedException
 	{
-		//retrieving the report queue object from db
-		List reportLoaderQueueList = ReportLoaderUtil.getObject(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, reportQueueId);
-		ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue)reportLoaderQueueList.get(0);
-		return reportLoaderQueue;
+		Long cprId =null;
+		ReportLoaderQueue reportLoaderQueue =null;
+		reportLoaderQueue = getReportQueueObject(reportQueueId);
+		
+		//Changing the status of the report in the queue to NEW
+		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
+		
+		//Associating the SCG
+		if(specimenCollGrpId != null && !specimenCollGrpId.equals(""))
+		{		
+			SpecimenCollectionGroup scg=null;
+			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+			List scgList = (List)reportLoaderQueueBizLogic.retrieve(SpecimenCollectionGroup.class.getName(),Constants.SYSTEM_IDENTIFIER, specimenCollGrpId);
+			if((scgList!=null) && scgList.size()>0)
+			{
+				scg = (SpecimenCollectionGroup)scgList.get(0);
+			}
+			cprId = (Long) scg.getCollectionProtocolRegistration().getId();
+			reportLoaderQueue.setSpecimenCollectionGroup(scg);
+		}
+		
+		//Retrieving participantID if it is null
+		if(participantIdToAssociate == null || participantIdToAssociate.equals(""))
+		{
+			DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+			Long partID=(Long)defaultBizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(), cprId,Constants.COLUMN_NAME_PARTICIPANT_ID );
+			participantIdToAssociate = (String)partID.toString();
+		}
+		
+		
+		
+		//removing all participants from CATISSUE_REPORT_PARTICIP_REL other than the selected participant
+		Collection participantColl = reportLoaderQueue.getParticipantCollection();
+		Iterator iter = participantColl.iterator();
+		Set tempColl = new HashSet();
+		Participant participant = null;
+		while(iter.hasNext())
+		{
+			participant = (Participant)iter.next();
+			if(participant.getId().toString().equals(participantIdToAssociate.trim()))
+			{
+				tempColl.add(participant);				
+			}
+		}
+		reportLoaderQueue.setParticipantCollection(tempColl);
+		
+		//Updating the report queue obj
+		updateReportLoaderQueue(reportLoaderQueue ,request);
 	}
+	
+	
+	
 	/**
-	 * @param reportLoaderQueue object
+	 * updating the reportloaderQueue obj
+	 * @param reportLoaderQueue
+	 * @param request
 	 */
-	private void updateReportLoaderQueue(ReportLoaderQueue reportLoaderQueue)
+	private void updateReportLoaderQueue(ReportLoaderQueue reportLoaderQueue , HttpServletRequest request)
 	{
-		//updating the reportloaderQueue obj
+					
 		try
 		{
-			ReportLoaderUtil.updateObject(reportLoaderQueue);
+			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+			reportLoaderQueueBizLogic.update(reportLoaderQueue, reportLoaderQueue, Constants.HIBERNATE_DAO, getSessionData(request));
+			
 		}
 		catch(Exception e)
 		{
@@ -161,4 +333,81 @@ public class ConflictResolverAction extends BaseAction
 		}
 	}
 	
+	protected SessionDataBean getSessionData(HttpServletRequest request) 
+	{
+			Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+			 /**
+			  *  This if loop is specific to Password Security feature.
+			  */
+			if(obj == null)
+			{
+				obj = request.getSession().getAttribute(Constants.TEMP_SESSION_DATA);
+			}
+			if(obj!=null)
+			{
+				SessionDataBean sessionData = (SessionDataBean) obj;
+				return  sessionData;
+			} 
+			return null;
+		
+	}
+	
+	/**
+	 * To generate the errors
+	 * @param request
+	 * @param errorMessage
+	 */
+	private void setActionError(HttpServletRequest request, String errorMessage)
+	{
+		ActionErrors errors = new ActionErrors();
+		ActionError error = new ActionError("errors.item", errorMessage);
+		errors.add(ActionErrors.GLOBAL_ERROR, error);
+		saveErrors(request, errors);
+	}
+	
+	 protected void resetSessionAttributes(HttpSession session)
+	 {
+		 //Removing the session objects
+		  session.removeAttribute(Constants.PARTICIPANT_ID_TO_ASSOCIATE);
+		  session.removeAttribute(Constants.SCG_ID_TO_ASSOCIATE);
+		 
+	  }
+	 
+	 
+	 
+	 /**
+	  * Ignore the new report and use the existing one. 
+	 * @param reportQueueId
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 * @throws BizLogicException
+	 */
+	protected void ignoreNewReport(String reportQueueId) throws DAOException, UserNotAuthorizedException, BizLogicException
+	  {
+		   	Long cprId =null;
+			ReportLoaderQueue reportLoaderQueue =null;
+			reportLoaderQueue = getReportQueueObject(reportQueueId);
+			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+			
+			//deleting the reportloaderQueue object
+			reportLoaderQueueBizLogic.delete(reportLoaderQueue, Constants.HIBERNATE_DAO);
+				  
+	  }
+	  
+	  
+	 /**To overwrite the existing report
+	 * @param request
+	 * @param reportQueueId
+	 * @throws DAOException
+	 */
+	protected void overwriteReport(HttpServletRequest request,String reportQueueId) throws DAOException
+	  {
+		   ReportLoaderQueue reportLoaderQueue =null;
+		   reportLoaderQueue = getReportQueueObject(reportQueueId);
+			
+			//Changing the status of the report in the queue to NEW
+			reportLoaderQueue.setStatus(CaTIESConstants.OVERWRITE_REPORT);
+			updateReportLoaderQueue(reportLoaderQueue,request);
+		  
+	  }
 }

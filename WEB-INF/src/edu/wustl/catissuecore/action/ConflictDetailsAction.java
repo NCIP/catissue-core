@@ -3,13 +3,16 @@
  * <p>Description:	Initialization action for conflict details view
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Ashish Gupta
- * @version 1.00
- * Created on Feb 27,2007
+  * @version 1.00
+  * @author kalpana_thakur
+  * @date 9/18/2007
  */
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,21 +23,25 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.CPSearchForm;
 import edu.wustl.catissuecore.actionForm.ConflictDetailsForm;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.actionForm.ConflictViewForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
+import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.reportloader.HL7Parser;
-import edu.wustl.catissuecore.reportloader.Parser;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.dbManager.DAOException;
 
-
-/**
- * @author ashish_gupta
- *
- */
 public class ConflictDetailsAction extends BaseAction
 {
 	/**
@@ -51,24 +58,14 @@ public class ConflictDetailsAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String reportQueueId = request.getParameter(Constants.REPORT_ID);
+		
 		ConflictDetailsForm conflictDetailsForm = (ConflictDetailsForm)form;
 		conflictDetailsForm.setReportQueueId(reportQueueId);
-		
-		List reportLoaderQueueList = ReportLoaderUtil.getObject(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, reportQueueId);
-		//Report Queue Object
-		ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue)reportLoaderQueueList.get(0);		
-		String pidLine = ReportLoaderUtil.getLineFromReport(reportLoaderQueue.getReportText(), Parser.PID);
-		//Participant Object		
-		Participant participant = HL7Parser.parserParticipantInformation(pidLine);
-		Site site = HL7Parser.parseSiteInformation(pidLine);
-		//TODO find alternative for this method 
-		//participant = HL7Parser.setSiteToParticipant(participant, site);
-		
-		HttpSession session = request.getSession();
-		session.setAttribute(Constants.REPORT_PARTICIPANT_OBJECT, participant);		
-		//Retrieving all conflicting participants
-		Collection conflictingParticipantColl = reportLoaderQueue.getParticipantCollection();
-		
+			
+		request.setAttribute(Constants.REPORT_ID,reportQueueId );
 		return mapping.findForward(Constants.SUCCESS);
+		
+	
 	}
+	
 }
