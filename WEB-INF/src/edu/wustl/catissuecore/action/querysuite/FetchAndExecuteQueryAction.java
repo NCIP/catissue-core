@@ -59,7 +59,7 @@ public class FetchAndExecuteQueryAction extends BaseAction
 				HttpSession session = request.getSession();
 				session.setAttribute(AppletConstants.QUERY_OBJECT, parameterizedQuery);
 
-				String errorMessage = executeQuery(request, parameterizedQuery);
+				String errorMessage = executeQuery(session, parameterizedQuery);
 				if (errorMessage == null)
 				{
 					target = Constants.SUCCESS;
@@ -94,32 +94,26 @@ public class FetchAndExecuteQueryAction extends BaseAction
 		saveErrors(request, errors);
 	}
 
-	private String executeQuery(HttpServletRequest request, IParameterizedQuery parameterizedQuery)
+	private String executeQuery(HttpSession session, IParameterizedQuery parameterizedQuery)
 	{
 		String errorMessage = null;
-		try
+		
+		int errorCode = QueryModuleUtil.searchQuery(session, parameterizedQuery);
+		switch (errorCode)
 		{
-			boolean isZeroRecordsFound = QueryModuleUtil.setResultData(request, parameterizedQuery);
-			if (isZeroRecordsFound)
-			{
+			case QueryModuleUtil.EMPTY_DAG :
+				errorMessage = ApplicationProperties.getValue("query.empty.dag");
+				break;
+			case QueryModuleUtil.MULTIPLE_ROOT :
+				errorMessage = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
+				break;
+			case QueryModuleUtil.NO_RESULT_PRESENT :
 				errorMessage = ApplicationProperties.getValue("query.zero.records.present");
-			}
-		}
-		catch (MultipleRootsException e)
-		{
-			errorMessage = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
-		}
-		catch (SqlException e)
-		{
-			errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
-		}
-		catch (ClassNotFoundException e)
-		{
-			errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
-		}
-		catch (DAOException e)
-		{
-			errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+				break;
+			case QueryModuleUtil.SQL_EXCEPTION :
+			case QueryModuleUtil.DAO_EXCEPTION :
+			case QueryModuleUtil.CLASS_NOT_FOUND :
+				errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
 		}
 
 		return errorMessage;

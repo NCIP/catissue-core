@@ -3,9 +3,7 @@ package edu.wustl.catissuecore.action.querysuite;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,26 +13,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.action.BaseAppletAction;
 import edu.wustl.catissuecore.applet.AppletConstants;
-import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
-import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.QuerySessionData;
-import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
-import edu.wustl.common.querysuite.exceptions.SqlException;
-import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
-import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IQuery;
-import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
-import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
-import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This action is an applet action called from DiagrammaticViewApplet class when user clicks on seach button of AddLimits.jsp 
@@ -47,6 +31,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ViewSearchResultsAction extends BaseAppletAction
 {
+
 	/**
 	 * This method gets IQuery Object from the applet and also generates sql out of it with the help of sqlGenerator.
 	 * This sql is then fired and each time a new table is created in database for each session user with the help of QueryOutputTreeBizLogic .
@@ -60,52 +45,45 @@ public class ViewSearchResultsAction extends BaseAppletAction
 	 * @throws Exception Exception
 	 * @return ActionForward actionForward
 	 */
-	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
-	throws Exception
+	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		Map inputDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		if (inputDataMap != null && !inputDataMap.isEmpty())
 		{
 			IQuery query = (IQuery) inputDataMap.get(AppletConstants.QUERY_OBJECT);
-			Map<String,String> validationMessagesMap = new HashMap<String,String>();
-			try
+			Map<String, String> validationMessagesMap = new HashMap<String, String>();
+			String errorMessage = null;
+
+			HttpSession session = request.getSession();
+			int errorCode = QueryModuleUtil.searchQuery(session, query);
+			switch (errorCode)
 			{
-				boolean isZeroRecordsFound = QueryModuleUtil.setResultData(request, query);
-				if(isZeroRecordsFound)
-				{
-					String errorMessage = ApplicationProperties.getValue("query.zero.records.present");
-					validationMessagesMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
-				}
+				case QueryModuleUtil.EMPTY_DAG :
+					errorMessage = ApplicationProperties.getValue("query.empty.dag");
+					break;
+				case QueryModuleUtil.MULTIPLE_ROOT :
+					errorMessage = ApplicationProperties
+							.getValue("errors.executeQuery.multipleRoots");
+					break;
+				case QueryModuleUtil.NO_RESULT_PRESENT :
+					errorMessage = ApplicationProperties.getValue("query.zero.records.present");
+					break;
+				case QueryModuleUtil.SQL_EXCEPTION :
+				case QueryModuleUtil.DAO_EXCEPTION :
+				case QueryModuleUtil.CLASS_NOT_FOUND :
+					errorMessage = ApplicationProperties
+							.getValue("errors.executeQuery.genericmessage");
 			}
-			catch (MultipleRootsException e)
+
+			if (errorMessage != null)
 			{
-				Logger.out.error(e);
-				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
 				validationMessagesMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			}
-			catch (SqlException e)
-			{
-				Logger.out.error(e);
-				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
-				validationMessagesMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
-			} 
-			catch (ClassNotFoundException e)
-			{
-				Logger.out.error(e);
-				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
-				validationMessagesMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
-			}
-			catch (DAOException e)
-			{
-				Logger.out.error(e);
-				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
-				validationMessagesMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
-			}
-			finally
-			{
-				writeMapToResponse(response, validationMessagesMap);
-			}
+
+			writeMapToResponse(response, validationMessagesMap);
 		}
+
 		return null;
 	}
 
@@ -119,9 +97,9 @@ public class ViewSearchResultsAction extends BaseAppletAction
 	 * @throws Exception Exception
 	 * @return ActionForward actionForward
 	 */
-	protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception
-			{
+	protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
 		if (methodName.trim().length() > 0)
 		{
 			Method method = getMethod(methodName, this.getClass());
@@ -134,5 +112,5 @@ public class ViewSearchResultsAction extends BaseAppletAction
 				return null;
 		}
 		return null;
-			}
+	}
 }
