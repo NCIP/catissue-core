@@ -133,6 +133,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
      */
     protected CollectionProtocolEvent collectionProtocolEvent;
 
+    protected String collectionStatus;
     /**
      * Returns the required specimen collection event 
      * associated with a Collection Protocol.
@@ -615,5 +616,13 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 					"SpecimenCollectionGroup Object");
 		}
 		this.setName(gpName);
+	}
+
+	public String getCollectionStatus() {
+		return collectionStatus;
+	}
+
+	public void setCollectionStatus(String collectionStatus) {
+		this.collectionStatus = collectionStatus;
 	}
 }

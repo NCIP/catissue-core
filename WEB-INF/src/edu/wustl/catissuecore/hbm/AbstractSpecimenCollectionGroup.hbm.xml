@@ -143,6 +143,14 @@
 	            column="NAME"
 	            length="255"
 	        />
+	        <property
+	            name="collectionStatus"
+	            type="string"
+	            update="true"
+	            insert="true"
+	            column="COLLECTION_STATUS"
+	            length="50"
+	        />
 	
 			 <property
 	            name="comment"

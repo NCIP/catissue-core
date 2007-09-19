@@ -113,6 +113,15 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
+
+        <property
+            name="collectionStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="COLLECTION_STATUS"
+            length="50"
+        />
         
 		<property
             name="createdOn"
@@ -121,6 +130,15 @@
             insert="true"
             column="CREATED_ON_DATE"
         />
+
+		<property
+            name="iscollectionProtocolRequirement"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="IS_COLL_PROT_REQ"
+        />
+        
         <many-to-one
             name="parentSpecimen"
             class="edu.wustl.catissuecore.domain.Specimen"

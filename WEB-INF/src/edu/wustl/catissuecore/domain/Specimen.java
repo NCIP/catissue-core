@@ -200,9 +200,19 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 */
 	protected String applyChangesTo=Constants.APPLY_NONE;
 
+	protected String collectionStatus;
+	protected boolean iscollectionProtocolRequirement;
 	
 	
-	
+	public boolean getIscollectionProtocolRequirement() {
+		return iscollectionProtocolRequirement;
+	}
+
+	public void setIscollectionProtocolRequirement(
+			boolean collectionProtocolRequirement) {
+		this.iscollectionProtocolRequirement = collectionProtocolRequirement;
+	}
+
 	/**
 	 * @return the consentTierStatusCollection
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus" lazy="true" cascade="save-update"
@@ -234,11 +244,13 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 	public Specimen()
 	{
+		iscollectionProtocolRequirement = false;
 	}
 
 	//Constructor
 	public Specimen(AbstractActionForm form) throws AssignDataException
 	{
+		this();
 		setAllValues(form);
 	}
 
@@ -1369,5 +1381,13 @@ public class Specimen extends AbstractDomainObject implements Serializable
     {
         this.createdOn = createdOn;
     }
+
+	public String getCollectionStatus() {
+		return collectionStatus;
+	}
+
+	public void setCollectionStatus(String collectionStatus) {
+		this.collectionStatus = collectionStatus;
+	}
 
 }
