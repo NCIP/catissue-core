@@ -735,6 +735,16 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
 							bSpecimenClass = true;
 						}
+						if(value.equals("Molecular"))
+						{
+							if((key.indexOf("_concentration"))!=-1)
+							{
+								if(!validator.isNumeric(value,0))
+								{
+									errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.concentration")));	
+								}
+							}
+						}
 					}
 					
 					if(!bSpecimenType)
@@ -746,13 +756,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						}
 					}
 					
-					if((key.indexOf("_concentration"))!=-1)
-					{
-						if(!validator.isNumeric(value,0))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.concentration")));	
-						}
-					}
+					
 					if((key.indexOf("_quantity"))!=-1)
 					{
 						if (!validator.isEmpty(value))

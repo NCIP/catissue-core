@@ -608,6 +608,9 @@ Alter table catissue_coll_prot_event add constraint FK_COLL_EVENT_REQ_GROUP
 						FOREIGN KEY (SPECIMEN_COLLECTION_REQ_GROUP_ID)
 						REFERENCES catissue_specimen_coll_requirement_group(IDENTIFIER);
 
+Alter table catissue_specimen add column IS_COLL_PROT_REQ boolean;
+Alter table catissue_specimen add column COLLECTION_STATUS varchar(50);
+Alter table catissue_specimen_coll_group add column COLLECTION_STATUS  varchar(50);
 /*-------------------
 alter table catissue_consent_tier_status drop foreign key FKF74E94AEF69249F7;
 alter table catissue_consent_tier_status add CONSTRAINT `FKF74E94AEF69249F7` FOREIGN KEY (`SPECIMEN_COLL_GROUP_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);
