@@ -51,6 +51,7 @@ public abstract class CaTIESConstants
 	public static final String NEW="ADDED_TO_QUEUE";
 	public static final String FAILURE="FAILURE";
 	public static final String STATUS_PARTICIPANT_CONFLICT = "PARTICIPANT_CONFLICT";
+	public static final String OVERWRITE_REPORT = "OVERWRITE_REPORT";
 	public static final String STATUS_SCG_CONFLICT="SCG_CONFLICT";
 	public static final String STATUS_SCG_PARTIAL_CONFLICT="SCG_PARTIAL_CONFLICT";
 	public static final String SITE_NOT_FOUND="SITE_NOT_FOUND";
