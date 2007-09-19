@@ -523,31 +523,50 @@ create table CATISSUE_FROZEN_EVENT_PARAM (
    METHOD varchar(50),
    primary key (IDENTIFIER)
 );
-create table CATISSUE_SPECIMEN (
-   IDENTIFIER bigint not null auto_increment,
-   SPECIMEN_CLASS varchar(255) not null,
-   TYPE varchar(50),
-   LABEL varchar(255) unique,
-   LINEAGE varchar(50),
-   PATHOLOGICAL_STATUS varchar(50),
-   AVAILABLE bit,
-   POSITION_DIMENSION_ONE integer,
-   POSITION_DIMENSION_TWO integer,
-   BARCODE varchar(255) unique,
-   COMMENTS text,
-   ACTIVITY_STATUS varchar(50),
-   PARENT_SPECIMEN_ID bigint,
-   STORAGE_CONTAINER_IDENTIFIER bigint,
-   SPECIMEN_COLLECTION_GROUP_ID bigint,
-   SPECIMEN_CHARACTERISTICS_ID bigint,
-   AVAILABLE_QUANTITY double precision,
-   QUANTITY double precision,
-   CONCENTRATION double precision,
-   CREATED_ON_DATE date,
-   IS_COLL_PROT_REQ boolean, 
-   COLLECTION_STATUS varchar(50),
-   primary key (IDENTIFIER)
-);
+
+CREATE TABLE `catissue_specimen`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                                 
+     `SPECIMEN_CLASS` varchar(255) NOT NULL default '',                                                                                               
+     `TYPE` varchar(50) default NULL,                                                                                                                 
+     `LABEL` varchar(255) default NULL,                                                                                                               
+     `LINEAGE` varchar(50) default NULL,                                                                                                              
+     `PATHOLOGICAL_STATUS` varchar(50) default NULL,                                                                                                  
+     `AVAILABLE` tinyint(1) default NULL,                                                                                                             
+     `POSITION_DIMENSION_ONE` int(11) default NULL,                                                                                                   
+     `POSITION_DIMENSION_TWO` int(11) default NULL,                                                                                                   
+     `BARCODE` varchar(255) default NULL,                                                                                                             
+     `COMMENTS` text,                                                                                                                                 
+     `ACTIVITY_STATUS` varchar(50) default NULL,                                                                                                      
+     `PARENT_SPECIMEN_ID` bigint(20) default NULL,                                                                                                    
+     `STORAGE_CONTAINER_IDENTIFIER` bigint(20) default NULL,                                                                                          
+     `SPECIMEN_COLLECTION_GROUP_ID` bigint(20) default NULL,                                                                                          
+     `SPECIMEN_CHARACTERISTICS_ID` bigint(20) default NULL,                                                                                           
+     `AVAILABLE_QUANTITY` double default NULL,                                                                                                        
+     `QUANTITY` double default NULL,                                                                                                                  
+     `CONCENTRATION` double default NULL,                                                                                                             
+     `CREATED_ON_DATE` date default NULL,                                                                                                             
+     `IS_COLL_PROT_REQ` tinyint(1) default NULL,                                                                                                      
+     `COLLECTION_STATUS` varchar(50) default NULL,                                                                                                    
+     PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+     UNIQUE KEY `LABEL` (`LABEL`),                                                                                                                    
+     UNIQUE KEY `BARCODE` (`BARCODE`),                                                                                                                
+     KEY `FK1674810456906F39` (`SPECIMEN_CHARACTERISTICS_ID`),                                                                                        
+     KEY `FK1674810433BF33C5` (`SPECIMEN_COLLECTION_GROUP_ID`),                                                                                       
+     KEY `FK16748104B189E99D` (`PARENT_SPECIMEN_ID`),                                                                                                 
+     KEY `FK1674810432B31EAB` (`STORAGE_CONTAINER_IDENTIFIER`),                                                                                       
+     KEY `INDX_CATISSUE_SPECIMEN_CLASS` (`SPECIMEN_CLASS`),                                                                                           
+     KEY `INDX_CATISSUE_SPECIMEN_TYPE` (`TYPE`),                                                                                                      
+     KEY `INDX_CATISSUE_SPECIMEN_PATH` (`PATHOLOGICAL_STATUS`),                                                                                       
+     KEY `INDX_CATISSUE_SPECIMEN_CONC` (`CONCENTRATION`),                                                                                             
+     KEY `INDX_CATISSUE_SPECIMEN_AVQTY` (`AVAILABLE_QUANTITY`),                                                                                       
+     KEY `INDX_CATISSUE_SPECIMEN_QTY` (`QUANTITY`),                                                                                                   
+     CONSTRAINT `FK1674810432B31EAB` FOREIGN KEY (`STORAGE_CONTAINER_IDENTIFIER`) REFERENCES `catissue_storage_container` (`IDENTIFIER`),             
+     CONSTRAINT `FK1674810433BF33C5` FOREIGN KEY (`SPECIMEN_COLLECTION_GROUP_ID`) REFERENCES `catissue_abstract_specimen_coll_group` (`IDENTIFIER`),  
+     CONSTRAINT `FK1674810456906F39` FOREIGN KEY (`SPECIMEN_CHARACTERISTICS_ID`) REFERENCES `catissue_specimen_char` (`IDENTIFIER`),                  
+     CONSTRAINT `FK16748104B189E99D` FOREIGN KEY (`PARENT_SPECIMEN_ID`) REFERENCES `catissue_specimen` (`IDENTIFIER`)                                 
+   ); 
+
 create table CATISSUE_USER (
    IDENTIFIER bigint not null auto_increment,
    EMAIL_ADDRESS varchar(255),
@@ -708,10 +727,10 @@ alter table CATISSUE_COLL_PROT_REG add index FK5EB25F1387E5ADC7 (PARTICIPANT_ID)
 alter table CATISSUE_COLL_PROT_REG add index FK5EB25F13A0FF79D4 (CONSENT_WITNESS), add constraint FK5EB25F13A0FF79D4 foreign key (CONSENT_WITNESS) references CATISSUE_USER (IDENTIFIER);
 alter table CATISSUE_COLL_PROT_REG add index FK5EB25F1348304401 (COLLECTION_PROTOCOL_ID), add constraint FK5EB25F1348304401 foreign key (COLLECTION_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
 alter table CATISSUE_FROZEN_EVENT_PARAM add index FK52627245BC7298A9 (IDENTIFIER), add constraint FK52627245BC7298A9 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM (IDENTIFIER);
-alter table CATISSUE_SPECIMEN add index FK1674810456906F39 (SPECIMEN_CHARACTERISTICS_ID), add constraint FK1674810456906F39 foreign key (SPECIMEN_CHARACTERISTICS_ID) references CATISSUE_SPECIMEN_CHAR (IDENTIFIER);
-alter table CATISSUE_SPECIMEN add index FK1674810433BF33C5 (SPECIMEN_COLLECTION_GROUP_ID), add constraint FK1674810433BF33C5 foreign key (SPECIMEN_COLLECTION_GROUP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
-alter table CATISSUE_SPECIMEN add index FK16748104B189E99D (PARENT_SPECIMEN_ID), add constraint FK16748104B189E99D foreign key (PARENT_SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
-alter table CATISSUE_SPECIMEN add index FK1674810432B31EAB (STORAGE_CONTAINER_IDENTIFIER), add constraint FK1674810432B31EAB foreign key (STORAGE_CONTAINER_IDENTIFIER) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
+--alter table CATISSUE_SPECIMEN add index FK1674810456906F39 (SPECIMEN_CHARACTERISTICS_ID);
+--alter table CATISSUE_SPECIMEN add index FK1674810433BF33C5 (SPECIMEN_COLLECTION_GROUP_ID);
+--alter table CATISSUE_SPECIMEN add index FK16748104B189E99D (PARENT_SPECIMEN_ID);
+--alter table CATISSUE_SPECIMEN add index FK1674810432B31EAB (STORAGE_CONTAINER_IDENTIFIER);
 alter table CATISSUE_USER add index FKB025CFC71792AD22 (INSTITUTION_ID), add constraint FKB025CFC71792AD22 foreign key (INSTITUTION_ID) references CATISSUE_INSTITUTION (IDENTIFIER);
 alter table CATISSUE_USER add index FKB025CFC7FFA96920 (CANCER_RESEARCH_GROUP_ID), add constraint FKB025CFC7FFA96920 foreign key (CANCER_RESEARCH_GROUP_ID) references CATISSUE_CANCER_RESEARCH_GROUP (IDENTIFIER);
 alter table CATISSUE_USER add index FKB025CFC76CD94566 (ADDRESS_ID), add constraint FKB025CFC76CD94566 foreign key (ADDRESS_ID) references CATISSUE_ADDRESS (IDENTIFIER);
