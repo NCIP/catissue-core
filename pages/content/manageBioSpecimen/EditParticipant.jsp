@@ -1,3 +1,218 @@
+
+<%
+	String[] activityStatusList = (String[])request.getAttribute(Constants.ACTIVITYSTATUSLIST);
+%>
+
+<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+	{
+	strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
+}%>
+
+
+<script language="JavaScript">
+function participantRegRow(subdivtag)
+		{
+			var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
+			collectionProtocolRegistrationVal = collectionProtocolRegistrationVal + 1;
+			document.forms[0].collectionProtocolRegistrationValueCounter.value = collectionProtocolRegistrationVal;
+			
+			var rows = new Array(); 
+			rows = document.getElementById(subdivtag).rows;
+			var cprSize = rows.length;
+			var row = document.getElementById(subdivtag).insertRow(cprSize);
+			
+			// First Cell
+			var cprTitle=row.insertCell(0);
+			cprTitle.className="formFieldWithoutBorder";
+			sname="";
+			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_id)";
+			var keyValue = name;
+			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
+			<%
+				if(collectionProtocolList!=null)
+				{
+					Iterator iterator = collectionProtocolList.iterator();
+					while(iterator.hasNext())
+					{
+						NameValueBean bean = (NameValueBean)iterator.next();
+			%>
+						sname = sname + "<option value='<%=bean.getValue()%>'><%=bean.getName()%></option>";
+			<%		}
+				}
+			%>
+			sname = sname + "</select>";
+			cprTitle.innerHTML="" + sname;
+			
+			//Second Cell
+			var cprParticipantId=row.insertCell(1);
+			cprParticipantId.className="formFieldWithoutBorder";
+			sname="";
+			name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_protocolParticipantIdentifier)";
+			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized10' id='" + name + "'>";
+			cprParticipantId.innerHTML="" + sname;
+			
+			<%
+				String registrationDate = Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY);
+    		%>
+    		
+			//Third Cell
+			var cprRegistrationDate=row.insertCell(2);
+			cprRegistrationDate.className="formFieldWithoutBorder";
+			cprRegistrationDate.colSpan=2;
+			sname="";
+			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_registrationDate)";
+			//sname = "<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "' value = 'MM-DD-YYYY or MM/DD/YYYY' onclick = \"this.value = ''\" onblur = \"if(this.value=='') {this.value = 'MM-DD-YYYY or MM/DD/YYYY';}\" onkeypress=\"return titliOnEnter(event, this, document.getElementById('" + name + "'))\">";
+			sname = "<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "' value = '<%=registrationDate%>'>";
+			cprRegistrationDate.innerHTML=sname;
+			
+			//Fourth Cell
+			var cprActivityStatus=row.insertCell(3);
+			cprActivityStatus.className="formFieldWithoutBorder";
+			sname="";
+			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_activityStatus)";
+			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized10' id='" + name + "' disabled='disabled' onmouseover=showTip(this.id) onmouseout=hideTip(this.id) >";
+			<%
+				for(int i=0 ; i<activityStatusList.length; i++)
+				{
+					String selected= "";
+					if(i==1)
+					{
+						selected="selected='selected'";
+					}
+			%>
+					sname = sname + "<option value='<%=activityStatusList[i]%>' <%=selected%> ><%=activityStatusList[i]%></option>";
+			<%	
+				}
+			%>
+			sname = sname + "</select>";
+			cprActivityStatus.innerHTML=sname;
+											
+			//Fifth Cell
+			var consent=row.insertCell(4);
+			consent.className="formFieldWithoutBorder";
+			sname="";
+			
+			var spanTag=document.createElement("span");
+			var consentCheckStatus="consentCheckStatus_"+(cprSize+1);
+			spanTag.setAttribute("id",consentCheckStatus);
+				
+			var name = "CollectionProtocolConsentChk_"+ (cprSize+1);
+			var anchorTagKey = "ConsentCheck_"+ (cprSize+1);
+			var collectionProtocolValue = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_id)";
+			var anchorTag = document.createElement("a");
+			anchorTag.setAttribute("id",anchorTagKey);
+			spanTag.innerHTML="<%=Constants.NO_CONSENTS_DEFINED%>"+"<input type='hidden' name='" + name + "' value='Consent' id='" + name + "'>";
+			spanTag.appendChild(anchorTag);
+			consent.appendChild(spanTag);
+			document.getElementById(keyValue).onchange=function(){getConsent(name,collectionProtocolValue,(cprSize+1),anchorTagKey,consentCheckStatus)};
+			
+			
+			//sixth Cell
+			var cprCheckb=row.insertCell(5);
+			cprCheckb.className="formFieldWithoutBorder";
+			sname="";
+			
+			var identifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_id)";
+			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
+			
+			var name = "CollectionProtocolRegistrationChk_"+(cprSize+1);
+			sname = sname +"<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteParticipantRegistrationValue,document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_')\">";
+			cprCheckb.innerHTML=""+sname;
+		}
+
+
+			function setSubmittedForParticipant(submittedFor,forwardTo)
+		{
+			document.forms[0].submittedFor.value = submittedFor;
+			document.forms[0].forwardTo.value    = forwardTo;
+			
+			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
+				document.forms[0].submittedFor.value = "AddNew";
+			<%}%>			
+			<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
+
+				if(document.forms[0].radioValue.value=="Add")
+				{
+					document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
+					<%
+					if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+					{
+							if(operation.equals(Constants.ADD))
+							{
+						%>
+							document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
+						<%
+							}
+						else
+							{ 
+						%>
+							document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_EDIT_ACTION%>";
+						<%
+							}
+					}
+					%>
+				}
+				else
+				{
+					if(document.forms[0].radioValue.value=="Lookup")
+					{
+						document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>";
+						<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+						{%>
+							document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_LOOKUP_ACTION%>";
+						<%}%>												
+						document.forms[0].submit();
+					}
+				}		
+			<%}%>	
+			
+	if((document.forms[0].activityStatus != undefined) && (document.forms[0].activityStatus.value == "Disabled"))
+   	{
+	    var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
+		if (go==true)
+		{
+			document.forms[0].submit();
+		}
+	} 
+	else
+	{
+			checkActivityStatusForCPR();	
+	}
+}
+
+
+	function checkActivityStatusForCPR()
+		{
+			var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
+			var isAllActive = true;
+			for(i = 1 ; i <= collectionProtocolRegistrationVal ; i++)
+			{
+				var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_activityStatus)";
+				if((document.getElementById(name) != undefined) && document.getElementById(name).value=="Disabled")
+				{
+					isAllActive = false;
+					var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
+					if (go==true)
+					{
+						document.forms[0].submit();
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			
+			if (isAllActive==true)
+			{
+				document.forms[0].submit();
+			}
+		}
+
+
+</script>
+
+
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	   		   
 			
