@@ -672,6 +672,14 @@ td.formFieldWithNoTopBorderFontSize1{ /* for the cell that contains the form ele
   border-left:1px solid #5C5C5C; /* constant: dark gray */
   background-color:#F4F4F5; /* constant: light gray */
 }
+
+td.formFieldWithNoBorderFontSize{ /* for the cell that contains the form elements; conflict page */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:1em;
+  color:#000000; /* constant: black */
+ 
+}
+
 .formFieldSized10{ /* for the form elements themselves and with a constant width (on elements) */
   font-family:arial,helvetica,verdana,sans-serif;
   border:1px solid #5C5C5C; /* constant: dark gray */
@@ -1412,6 +1420,14 @@ td.formFieldNoBordersSimple{ /* for the cell that contains the form elements */
   font-size:0.7em;
   color:#000000; /* constant: black */
 }
+
+td.formFieldNoBordersSimple1{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:1em;
+  color:#000000; /* constant: black */
+  font-weight:bold;
+}
+
 
 .formRequiredNoticeLBRBorders{ /* for the autoevents cell */
   font-family:arial,helvetica,verdana,sans-serif;
