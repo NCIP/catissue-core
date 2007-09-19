@@ -70,13 +70,17 @@
 	<%
 	}
 	%>
-	<%for(int i=0;i<conceptName.length;i++)
+	<%
+	if(conceptName!=null)
 	{
+		for(int i=0;i<conceptName.length;i++)
+		{
 	%>
 		conceptName[<%=i%>]='<%=conceptName[i]%>';
 		startOff[<%=i%>]='<%=startOff[i]%>';
 		endOff[<%=i%>]='<%=endOff[i]%>';
 	<%
+		}
 	}
 	%>
 
