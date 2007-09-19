@@ -2004,7 +2004,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
       		"ID",
       		"Surgical pathological number",
       		"Report loaded on",
-      		"Status"
+      		"Status",
+      		"Site Name"
     };
       
     public static final String [] CONFLICT_FILTER_LIST = {
