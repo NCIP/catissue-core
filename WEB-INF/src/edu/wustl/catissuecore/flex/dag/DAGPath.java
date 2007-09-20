@@ -6,21 +6,21 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 public class DAGPath implements Externalizable {
-	private String name =null;
+	private String toolTip =null;
 	private String id= null;
 	private boolean isSelected = false;
 	private int sourceExpId =0;
 	private int destinationExpId =0;
 		
-	
-	
-	public String getName() {
-		return name;
+	public String getToolTip() {
+		return toolTip;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setToolTip(String toolTip) {
+		this.toolTip = toolTip;
 	}
+	
+	
 	
 	public boolean isSelected() {
 		return isSelected;
@@ -32,7 +32,7 @@ public class DAGPath implements Externalizable {
 	
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method stub
-		name = in.readUTF();
+		toolTip = in.readUTF();
 		id =   in.readUTF();
 		isSelected = in.readBoolean();
 		sourceExpId = in.readInt();
@@ -42,7 +42,7 @@ public class DAGPath implements Externalizable {
 
 	public void writeExternal(ObjectOutput out) throws IOException {
 		// TODO Auto-generated method stub
-		out.writeUTF(name);
+		out.writeUTF(toolTip);
 		out.writeUTF(id);
 		out.writeBoolean(isSelected);
 		out.writeInt(sourceExpId);
@@ -72,6 +72,8 @@ public class DAGPath implements Externalizable {
 	public void setDestinationExpId(int destinationExpId) {
 		this.destinationExpId = destinationExpId;
 	}
+
+
 
 	
 
