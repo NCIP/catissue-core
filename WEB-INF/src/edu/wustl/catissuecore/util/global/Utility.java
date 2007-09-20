@@ -59,6 +59,8 @@ import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -1032,5 +1034,20 @@ public class Utility extends edu.wustl.common.util.Utility
 		paginationDataList = pagenatedResultData.getResult();
 		return paginationDataList;
 	}
+	/**
+	 * Executes hql Query and returns the results.
+	 * @param hql String hql
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	public static List executeQuery(String hql) throws DAOException, ClassNotFoundException
+	{
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(null);
+		List list = dao.executeQuery(hql, null, false, null);
+		dao.closeSession();
+		return list;
+	}
+			
 
 }
