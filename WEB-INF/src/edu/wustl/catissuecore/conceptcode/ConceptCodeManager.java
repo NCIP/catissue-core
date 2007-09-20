@@ -201,34 +201,31 @@ public class ConceptCodeManager
 	 */
 	private void processReports(List deidReportIDList) throws  Exception
 	{
-		if(deidReportIDList==null)
-		{
-			Logger.out.info("Concept Coding process finished at "+new Date().toString()+ ". Thread is going to sleep.");
-			Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
-		}
-		else
+		if(deidReportIDList!=null && deidReportIDList.size()>0)
 		{
 			Logger.out.info(deidReportIDList.size()+" reports found for Concept Coding");
 			try
-			{
-				if(deidReportIDList!=null)
+			{	
+				CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_DEIDENTIFIED_REPORT+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
+				DeidentifiedSurgicalPathologyReport deidReport=null;
+				for(int i=0;i<deidReportIDList.size();i++)
 				{
-					CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_DEIDENTIFIED_REPORT+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
-					DeidentifiedSurgicalPathologyReport deidReport=null;
-					for(int i=0;i<deidReportIDList.size();i++)
-					{
-						deidReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, (Long)deidReportIDList.get(i));
-						ConceptCoder cc=new ConceptCoder(deidReport,exporterPR, tiesPipe);
-						Logger.out.info("Concept coding of report serial no "+i+" started....");
-						cc.process();
-						Logger.out.info("Concept coding of report serial no "+i+" finished.");
-					}
-				}
+					deidReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, (Long)deidReportIDList.get(i));
+					ConceptCoder cc=new ConceptCoder(deidReport,exporterPR, tiesPipe);
+					Logger.out.info("Concept coding of report serial no "+i+" started....");
+					cc.process();
+					Logger.out.info("Concept coding of report serial no "+i+" finished.");
+				}			
 			}
 			catch(Exception ex)
 			{
 				Logger.out.error("Concept Coding pipeline failed:",ex);			
 			}
+		}
+		else
+		{
+			Logger.out.info("Concept Coding process finished at "+new Date().toString()+ ". Thread is going to sleep.");
+			Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
 		}
 	}
 			
