@@ -15,7 +15,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -28,9 +27,11 @@ import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.catissuecore.util.global.Utility;
 
 
 /**
@@ -114,10 +115,20 @@ public class CheckConsents extends BaseAction
 		        }
 			    //Getting SpecimenCollectionGroup object
 		        Specimen specimen = getConsentListForSpecimen(barcodeLable, barcodeLabelBasedDistribution);
-		        String colName = "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol";
-		        //Resolved lazy --- specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol();
-		        CollectionProtocol collectionProtocol=(CollectionProtocol)bizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),colName);
-	            Collection consentTierStatusCollection =(Collection)bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(),"elements(consentTierStatusCollection)");
+		        Long specimenId= (Long) specimen.getId();
+		        
+		        String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol"+ 
+				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
+				" edu.wustl.catissuecore.domain.Specimen as spec " +
+				" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimenId;
+			
+		        List collectionProtocolList= Utility.executeQuery(colProtHql);
+		        CollectionProtocol collectionProtocol =null;
+		        if(collectionProtocolList!=null)
+		        {
+		          collectionProtocol = (CollectionProtocol) collectionProtocolList.get(0);
+		        }
+		        Collection consentTierStatusCollection =(Collection)bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(),"elements(consentTierStatusCollection)");
 		        if(specimen.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))//disabled
 		        {
 		        	out.print(Constants.DISABLED);//disabled

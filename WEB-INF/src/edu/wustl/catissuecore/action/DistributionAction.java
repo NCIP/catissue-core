@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
@@ -309,8 +310,9 @@ public class DistributionAction extends SecureAction
 	 * @param request With request parameter we will fetch specimenconsent Variable present in request. 
 	 * @param barcodeLable This parameter have barcode or lable value
 	 * @throws DAOException 
+	 * @throws ClassNotFoundException 
 	 */
-	private void showConsents(DistributionForm dForm ,Specimen specimen, HttpServletRequest request, String barcodeLable) throws DAOException
+	private void showConsents(DistributionForm dForm ,Specimen specimen, HttpServletRequest request, String barcodeLable) throws DAOException, ClassNotFoundException
 	{
 		
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
@@ -318,11 +320,20 @@ public class DistributionAction extends SecureAction
 		String initialWitnessValue="";
 		String initialSignedConsentDateValue="";
 		
-		//Getting CollectionProtocolRegistration object
-		//Lazy --- specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
-		String colName = "specimenCollectionGroup.collectionProtocolRegistration";	
-        CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)bizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),colName);
-      
+	    Long specimenId= (Long) specimen.getId();
+        String colProtHql = "select scg.collectionProtocolRegistration"+ 
+		" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
+		" edu.wustl.catissuecore.domain.Specimen as spec " +
+		" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimenId;
+        
+        List collectionProtocolRegistrationList= Utility.executeQuery(colProtHql);
+        CollectionProtocolRegistration collectionProtocolRegistration=null;
+        if(collectionProtocolRegistrationList!=null)
+        {
+        	 collectionProtocolRegistration = (CollectionProtocolRegistration) collectionProtocolRegistrationList.get(0);
+        }
+        
+        
         if(collectionProtocolRegistration.getSignedConsentDocumentURL()==null)
 		{
 			initialURLValue=Constants.NULL;
