@@ -23,8 +23,6 @@ import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
-import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
-import edu.wustl.common.querysuite.exceptions.SqlException;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -97,7 +95,7 @@ public class FetchAndExecuteQueryAction extends BaseAction
 	private String executeQuery(HttpSession session, IParameterizedQuery parameterizedQuery)
 	{
 		String errorMessage = null;
-		
+
 		int errorCode = QueryModuleUtil.searchQuery(session, parameterizedQuery);
 		switch (errorCode)
 		{
