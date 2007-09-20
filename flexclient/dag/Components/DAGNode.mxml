@@ -5,6 +5,7 @@
 		implements="flash.utils.IExternalizable" creationComplete="init()" fontSize="9">
 <mx:Script>
 	<![CDATA[
+		import mx.collections.ICollectionView;
 		import mx.controls.ComboBox;
 		import mx.controls.HScrollBar;
 		import mx.containers.HBox;
@@ -20,6 +21,8 @@
 		import mx.controls.Alert;
 		import mx.core.Repeater;
 		import mx.controls.Menu;
+		import mx.collections.Sort;
+		import mx.collections.SortField;
 			
 		private var editedNode:DAGNode;	
 		[Bindable]
@@ -56,6 +59,14 @@
 		public function addDisplayOutAssociation(node:String,link:String,operatorIndex:int):void{
 			var ass:Association = new Association(node,link,operatorIndex);
 			displayoutAssociations.addItem(ass);
+				
+			 var col:ICollectionView = displayoutAssociations  as ICollectionView;
+			 var sort:Sort = new Sort();
+		     sort.fields = [new SortField("associatedNode",true)];
+		     col.sort = sort;
+			 col.refresh();
+
+					
 		}
 
 		[Bindable]
@@ -294,8 +305,8 @@
 		
 		[Bindable]
 		public var outputMenuData:Array = [	
-		{label: "AddToView", type: "radio", toggled: false,enabled:false},
-		{label: "DeleteFromView", type: "radio", toggled: false,enable:true}
+		{label: "Add To View", type: "radio", toggled: false,enabled:false},
+		{label: "Delete From View", type: "radio", toggled: false,enable:true}
 		
 		];
 		
@@ -307,14 +318,17 @@
 		public function operatorChange(event:Event):void
 		{
 		 var cb:ComboBox=event.currentTarget as ComboBox;
-		 var index:int = cb.name as int;
+	     var index:int = parseInt(cb.name) as int;
+
 		 this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,setOperatorHandler);
 		 this.parentApplication.rpcService.setLogicalOperator(this,index,cb.selectedLabel);
+		 
 		 var outAssociation:Association =  displayoutAssociations.getItemAt(index) as Association;
 		 outAssociation.operatorIndex=cb.selectedIndex;
-		 var dagPath:IDAGPath = dagpathList.getItemAt(index) as IDAGPath;
-		 dagPath.operatorIndex = cb.selectedIndex;	
-		 		
+
+		 var dagPath:DAGPath  =this.parentApplication.dagPathUIMap.getValue(outAssociation.associatedLink) as DAGPath;
+		 dagPath.operatorIndex = cb.selectedIndex;
+	 	 		
 		}
 	
 		
