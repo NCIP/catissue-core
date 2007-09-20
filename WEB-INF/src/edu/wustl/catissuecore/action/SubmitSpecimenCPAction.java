@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
@@ -152,11 +153,7 @@ public class SubmitSpecimenCPAction extends Action {
 	private void insertCollectionProtocol(CollectionProtocol collectionProtocol, HttpSession session)
 			throws BizLogicException, UserNotAuthorizedException {
 		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-//				SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setUserId(new Long("1"));
-		sessionDataBean.setUserName("admin@admin.com");
-		
+				SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
 		bizLogic.insert(collectionProtocol, sessionDataBean, Constants.HIBERNATE_DAO);
 	}
 
@@ -418,7 +415,12 @@ public class SubmitSpecimenCPAction extends Action {
 			{
 				specimen.setLineage(Constants.DERIVED_SPECIMEN);
 				specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
+				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)
+					specimen.getParentSpecimen().getSpecimenCollectionGroup();
+				
+				specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 			}
+			
 			SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 			specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
 			specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
