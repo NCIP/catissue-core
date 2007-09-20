@@ -80,9 +80,9 @@ public class QueryShoppingCartAction extends BaseAction
 				.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
 
 		//QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		List<AttributeInterface> attributeList =null;
-		if(selectedColumnMetaData!=null)
-		  attributeList = selectedColumnMetaData.getAttributeList();
+		List<AttributeInterface> attributeList = null;
+		if (selectedColumnMetaData != null)
+			attributeList = selectedColumnMetaData.getAttributeList();
 		columnList = (List<String>) session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 
 		// Check if user wants to add in Shopping Cart.
@@ -104,10 +104,48 @@ public class QueryShoppingCartAction extends BaseAction
 			export(cart, chkBoxValues, session, request, response);
 			return null;
 		}// Check if user wants to view the cart.
-		else if (operation.equalsIgnoreCase("view"))
+		else if (operation.equalsIgnoreCase(Constants.VIEW))
 		{
+			String isSpecimenIdPresent = "false";
+			if (cart != null)
+			{
+				List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
+				for (Iterator iterator = cartAttributeList.iterator(); iterator.hasNext();)
+				{
+					AttributeInterface name = (AttributeInterface) iterator.next();
+					if ((name.getName().equals(Constants.ID))
+							&& (name.getEntity().getName().equals(Constants.SPECIMEN_ENTITY_NAME)))
+					{
+						isSpecimenIdPresent = "true";
+						break;
+					}
+				}
+				request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
+			}
 			target = new String(Constants.VIEW);
-			session.removeAttribute(Constants.ADD_TO_CART);
+
+		}
+		else if (operation.equals("addToOrderList"))
+		{
+			List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
+			List idIndexList = new ArrayList();
+			int i = 0;
+			for (Iterator iterator = cartAttributeList.iterator(); iterator.hasNext();)
+			{
+				AttributeInterface name = (AttributeInterface) iterator.next();
+				if ((name.getName().equals(Constants.ID))
+						&& (name.getEntity().getName().equals(Constants.SPECIMEN_ENTITY_NAME)))
+				{
+					idIndexList.add(new Integer(i));
+				}
+				i++;
+			}
+			List<List<String>> dataList = cart.getCart();
+			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+			List specimenIds = bizLogic.createSpecimenOrderingList(dataList, chkBoxValues,
+					idIndexList);
+			session.setAttribute("specimenId", specimenIds);
+			target = new String("requestToOrder");
 		}
 
 		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_MODULE);
@@ -195,11 +233,10 @@ public class QueryShoppingCartAction extends BaseAction
 	private List<List<String>> getManipulatedDataList(List<List<String>> dataList, int[] indexArray)
 	{
 		List<List<String>> tempDataList = new ArrayList<List<String>>();
-		String[] newRecordArray = new String[indexArray.length];
 		for (int recordIndex = 0; recordIndex < dataList.size(); recordIndex++)
 		{
 			List<String> oldReord = dataList.get(recordIndex);
-
+			String[] newRecordArray = new String[indexArray.length];
 			for (int i = 0; i < indexArray.length; i++)
 			{
 				newRecordArray[indexArray[i]] = oldReord.get(i);
@@ -207,8 +244,7 @@ public class QueryShoppingCartAction extends BaseAction
 			List<String> newRecord = Arrays.asList(newRecordArray);
 			tempDataList.add(newRecord);
 		}
-		dataList = tempDataList;
-		return dataList;
+		return tempDataList;
 	}
 
 	/**

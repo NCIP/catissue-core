@@ -42,7 +42,7 @@ public class ShowGridAction extends BaseAction
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
-	{    
+	{     
 		HttpSession session = request.getSession();
 		Map<String, OutputTreeDataNode> uniqueIdNodesMap = (Map<String, OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);
 		Map<Long, Map<AttributeInterface, String>> columnMap = (Map<Long, Map<AttributeInterface, String>>) session.getAttribute(
@@ -59,7 +59,6 @@ public class ShowGridAction extends BaseAction
 		if (idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
 		{
 			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode,recordsPerPage,selectedColumnsMetadata);
-			session.setAttribute(Constants.ADD_TO_CART, true);
 		}
 		else
 		{

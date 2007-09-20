@@ -1968,11 +1968,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String ARRAY_NAME = "array";
     
     //Query Shopping cart constants
-    //public static final String DUPLICATE_OBJECT_IN_CART = "duplicate object added in cart";
     public static final String SHOPPING_CART_FILE_NAME = "ShoppingCart.csv";
-    public static final String ADD_TO_CART = "";
+   // public static final String ADD_TO_CART = "";
     public static final String DUPLICATE_OBJECT = "duplicateObject";
     public static final String DIFFERENT_VIEW_IN_CART = "differentCartView";
+    public static final String SPECIMEN_ENTITY_NAME = "edu.wustl.catissuecore.domain.Specimen";
+    public static final String IS_SPECIMENID_PRESENT = "isSpecimenIdPresent";
+    public static final String SPECIMEN_ID_INDEX ="specimenIdIndex";
 
     // Constants for CP Based Entry
     public static final String COLLECTION_PROTOCOL_EVENT_ID = "Event_Id";

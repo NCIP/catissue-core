@@ -616,6 +616,7 @@ PUBLIC
 			<forward name="differentCartView" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="shoppingCartDelete" path=".catissuecore.shoppingCartDef" />
 			<forward name="shoppingCartExport" path=".catissuecore.shoppingCartDef" />
+			<forward name="requestToOrder" path="/RequestToOrder.do"/>
 		</action>
 		
 		<!-- Applet Action mapping for query Module -->

@@ -128,65 +128,30 @@ public class QueryShoppingCartBizLogic
     	int index = Integer.parseInt(strTokens.nextToken());
 		return index;
 	}
+	
 	/**
-	 * Manipulate the dataList in constant order of columns in cart.
+	 * Creates specimen order list .
 	 * 
-     * @param dataList list of pagination data.
-     * @param oldAttributeList list of cart attributes.
-     * @param attributeList list of current view attributes.
-     * @return index.
+     * @param dataList List of cart data.
+     * @param keySet list of selected checkbox values.
+     * @param specimenIdIndex array of specimen id indices in attributelist.
+     * @return List of specimen ids present in cart.
 	 */
-	public List<List<String>> getManipulatedDataList(List<List<String>> dataList,List<AttributeInterface>oldAttributeList,List<AttributeInterface>attributeList)
+	public List<String> createSpecimenOrderingList(List<List<String>>dataList,Set keySet,List specimenIdIndex)
 	{
-		boolean isError=false;
-		List<List<String>> tempDataList = new ArrayList<List<String>>();
-		if (oldAttributeList.size() == attributeList.size())
+	    List<String> specimenIdsList = new ArrayList<String>();
+		for(Iterator itr = keySet.iterator();itr.hasNext();)
 		{
-			int index;
-			int[] indexArray = new int[attributeList.size()];
-			for (int i = 0; i < attributeList.size(); i++)
+			Object obj = itr.next();
+			int index = getIndex(obj);
+			List<String> record = dataList.get(index);
+			for (int i = 0; i < specimenIdIndex.size(); i++)
 			{
-				index = (oldAttributeList
-						.indexOf((AttributeInterface) attributeList.get(i)));
-				if (index == -1)
-				{
-					isError = true;
-					break;
-				}
-				else
-				{
-					indexArray[i] = index;
-				}
-			}
-			
-			for (int i = 0; i < dataList.size(); i++)
-			{
-				List<String> strDataList = dataList.get(i);
-				List<String> tempStrList = new ArrayList<String>();
-				int listIndex = 0;
-				int j = 0;
-				while (j < strDataList.size())
-				{
-					if (indexArray[j] == listIndex)
-					{
-						tempStrList.add(indexArray[j], strDataList.get(j));
-						listIndex++;
-						j = 0;
-						continue;
-					}
-					j++;
-				}
-				tempDataList.add(tempStrList);
+				if(!(specimenIdsList.contains(record.get((Integer)specimenIdIndex.get(i)))))
+				  specimenIdsList.add(record.get((Integer)specimenIdIndex.get(i)));
 			}
 		}
-		else
-			isError =true;
-		    
-		if(isError)
-			return null;
-		else
-			return tempDataList;
-		
+		return specimenIdsList;
 	}
 	
 }
