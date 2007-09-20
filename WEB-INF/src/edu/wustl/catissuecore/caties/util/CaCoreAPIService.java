@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.caties.util;
 
-import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationException;
@@ -59,50 +58,48 @@ public class CaCoreAPIService
 		}
 	}
 	
-	public static Object getObject(Object sourceObject, String columnName, Object columnValue)
+	public static Object getObject(Class targertClass, String columnName, Object columnValue)
 	{
-		DetachedCriteria criteria = DetachedCriteria.forClass(sourceObject.getClass());
-		criteria.add(Restrictions.eq(columnName, columnValue));
 		try 
 		{
-			List resultList = CaCoreAPIService.getAppServiceInstance().query(criteria, sourceObject.getClass().getName());
+			List resultList = getList(targertClass, columnName, columnValue);
 			if(resultList!=null && resultList.size()>0)
 			{
 				return resultList.get(0);
 			}
 		} 
-		catch (ApplicationException e) 
+		catch (Exception e) 
 		{
-			Logger.out.error("Error while retrieving object "+ sourceObject.getClass()+e);
+			Logger.out.error("Error while retrieving object "+ targertClass+e);
 		}
 		return null;
 	}
 	
-	public static Collection getList(Object sourceObject, String columnName, Object columnValue)
+	public static List getList(Class targertClass, String columnName, Object columnValue)
 	{
-		DetachedCriteria criteria = DetachedCriteria.forClass(sourceObject.getClass());
+		DetachedCriteria criteria = DetachedCriteria.forClass(targertClass);
 		criteria.add(Restrictions.eq(columnName, columnValue));
 		try 
 		{
-			Collection resultList = CaCoreAPIService.getAppServiceInstance().query(criteria, sourceObject.getClass().getName());
+			List resultList = CaCoreAPIService.getAppServiceInstance().query(criteria, targertClass.getName());
 			return resultList;
 		} 
 		catch (ApplicationException e) 
 		{
-			Logger.out.error("Error while retrieving List for "+ sourceObject.getClass()+e);
+			Logger.out.error("Error while retrieving List for "+ targertClass+e);
 		}
 		return null;
 	}
 	
-	public static Collection executeQuery(String hqlQuery)
+	public static Collection executeQuery(String hqlQuery, String targetClassName)
 	{
 		List resultList=null;
 		HQLCriteria hqlCriteria = new HQLCriteria(hqlQuery); 
 		
 		try 
 		{
-			ApplicationService appService=CaCoreAPIService.getAppServiceInstance();
-			resultList =appService.query(hqlCriteria, ReportLoaderQueue.class.getName());
+			ApplicationService appService=getAppServiceInstance();
+			resultList =appService.query(hqlCriteria, targetClassName);
 			return resultList;
 		}
 		catch (ApplicationException ex) 
