@@ -95,6 +95,13 @@ public class QueryShoppingCartAction extends BaseAction
 		else if (operation.equalsIgnoreCase(Constants.DELETE))
 		{
 			deleteFromCart(cart, chkBoxValues);
+			if (cart.getCart().size() == 0)
+			{
+				ActionErrors errors = new ActionErrors();
+				ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
+				errors.add(ActionErrors.GLOBAL_ERROR, error);
+				saveErrors(request, errors);
+			}
 			target = new String(Constants.SHOPPING_CART_DELETE);
 		}
 		// Check if user wants to export cart.
@@ -105,22 +112,37 @@ public class QueryShoppingCartAction extends BaseAction
 			return null;
 		}// Check if user wants to view the cart.
 		else if (operation.equalsIgnoreCase(Constants.VIEW))
-		{
+		{  
 			String isSpecimenIdPresent = "false";
+			boolean isEmpty = false;
 			if (cart != null)
 			{
 				List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
-				for (Iterator iterator = cartAttributeList.iterator(); iterator.hasNext();)
+				if (cartAttributeList != null)
 				{
-					AttributeInterface name = (AttributeInterface) iterator.next();
-					if ((name.getName().equals(Constants.ID))
-							&& (name.getEntity().getName().equals(Constants.SPECIMEN_ENTITY_NAME)))
+					for (Iterator iterator = cartAttributeList.iterator(); iterator.hasNext();)
 					{
-						isSpecimenIdPresent = "true";
-						break;
+						AttributeInterface name = (AttributeInterface) iterator.next();
+						if ((name.getName().equals(Constants.ID))
+								&& (name.getEntity().getName()
+										.equals(Constants.SPECIMEN_ENTITY_NAME)))
+						{
+							isSpecimenIdPresent = "true";
+							break;
+						}
 					}
+
+					request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
 				}
-				request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
+				else
+					isEmpty = true;
+			}
+			if(cart!=null || isEmpty)
+			{
+				ActionErrors errors = new ActionErrors();
+				ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
+				errors.add(ActionErrors.GLOBAL_ERROR, error);
+				saveErrors(request, errors);
 			}
 			target = new String(Constants.VIEW);
 
@@ -386,6 +408,7 @@ public class QueryShoppingCartAction extends BaseAction
 	{
 		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		bizLogic.delete(cart, chkBoxValues);
+
 	}
 
 	/**
