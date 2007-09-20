@@ -141,7 +141,6 @@ public class ExternalIdentifier extends AbstractDomainObject implements External
 	
 	public void writeExternal(ObjectOutput out) throws IOException 
 	{
-		System.out.println("SERVER IN writeExternal ExternalIdentifier START");
         // Write out the client properties from the server representation
 		if(id!=null)
 		{
@@ -151,21 +150,23 @@ public class ExternalIdentifier extends AbstractDomainObject implements External
 		{
 			out.writeInt(-1);
 		}
-			
+		if(name==null)
+		{
+			name="";
+		}
 		out.writeUTF(name);
+		if(value==null)
+		{
+			value="";
+		}
         out.writeUTF(value);
-        System.out.println("SERVER IN writeExternal ExternalIdentifier DONE");
     }
     
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
-	{
-		System.out.println("SERVER IN readExternal ExternalIdentifier");
-		
+	{	
 		id = new Long(in.readInt());
 		name = in.readUTF();
 		value = in.readUTF();
-		
-		System.out.println(toString());
 	}
 	
 	public String toString()
