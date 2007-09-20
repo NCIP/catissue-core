@@ -156,7 +156,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 					if(attributeNameConditionMap.containsKey(attrName))
 					{
 						ICondition condition = attributeNameConditionMap.get(attrName);
-						ArrayList<String> values = (ArrayList<String>) condition.getValues();
+						List<String> values = (List<String>) condition.getValues();
 						String operator = condition.getRelationalOperator().toString();
 						generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, operator));
 						if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
@@ -382,7 +382,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 					if (attributeNameConditionMap.containsKey(attrName))
 					{
 						ICondition condition = attributeNameConditionMap.get(attrName);
-						ArrayList<String> values = (ArrayList<String>) condition.getValues();
+						List<String> values = (List<String>) condition.getValues();
 						String operator = condition.getRelationalOperator().toString();
 						generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, operator));
 						if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
@@ -631,7 +631,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param isBetween boolean 
 	 * @return String HTMLForTextBox
 	 */
-	private String generateHTMLForTextBox(AttributeInterface attributeInterface, boolean isBetween, ArrayList<String> values,String op)
+	private String generateHTMLForTextBox(AttributeInterface attributeInterface, boolean isBetween, List<String> values,String op)
 	{
 		String componentId = generateComponentName(attributeInterface);
 		String textBoxId = componentId + "_textBox";
@@ -849,7 +849,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		}
 		return attributesList;
 	}
-	private String generateHTMLForRadioButton(AttributeInterface attribute,ArrayList<String> values)
+	private String generateHTMLForRadioButton(AttributeInterface attribute,List<String> values)
 	{
 		StringBuffer html = new StringBuffer();
 		String attributeName = attribute.getName();
