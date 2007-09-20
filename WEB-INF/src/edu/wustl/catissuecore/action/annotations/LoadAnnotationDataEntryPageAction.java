@@ -306,7 +306,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         String staticEntityRecordId = (String) getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
         Long entityMapId = (Long) getObjectFromCache(AnnotationConstants.SELECTED_ENTITY_MAP_ID);
         if ((entityMapId != null) && (staticEntityRecordId != null)
-                && (dynExtRecordId != null))
+                && (dynExtRecordId != null) && !(dynExtRecordId.equals("")))
         {
             entityMapRecord = new EntityMapRecord();
             //entityMapRecord.setEntityMapId(entityMapId);
