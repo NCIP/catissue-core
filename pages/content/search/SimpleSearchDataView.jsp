@@ -39,8 +39,7 @@ tr#hiddenCombo
 	String title = pageOf + ".searchResultTitle";
 	boolean isSpecimenData = false;	
 	int IDCount = 0;
-	Boolean isAddToCart  =(Boolean)session.getAttribute(Constants.ADD_TO_CART);
-	
+		
 	%>
 		
 
@@ -75,6 +74,10 @@ tr#hiddenCombo
 				document.forms[0].operation.value="add";
 				document.forms[0].action = action;
 				document.forms[0].submit();
+			}
+			else
+			{
+				alert("Please select at least one checkbox");
 			}
 		}
 		
@@ -320,20 +323,13 @@ function checkAllOnThisPageResponse()
 					</td>
 					<td width="5%" nowrap align="right" valign="top">
 					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS) || pageOf.equals(Constants.PAGEOF_QUERY_MODULE) ){
-						if(!isAddToCart)
-						{
+						
 					%>
-						<html:button styleClass="actionButton" disabled="true" property="addToCart" onclick="onAddToCart()">
+						<html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
 							<bean:message key="buttons.addToCart"/>
 						</html:button>&nbsp;
-					<%}
-					   else
-					{ %>
-                       <html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
-							<bean:message key="buttons.addToCart"/>
-						</html:button>&nbsp;
-                        
-					<%}}else
+				                        
+					<%}else
 				       {%>
 						&nbsp;
 					<%}%>
