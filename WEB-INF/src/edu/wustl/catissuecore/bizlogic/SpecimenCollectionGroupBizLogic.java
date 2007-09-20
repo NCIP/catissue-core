@@ -150,19 +150,24 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
 		}
+		
 		//site check complete
-
-		// -- check for closed CollectionProtocol
-		List list = dao.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup
-				.getCollectionProtocolEvent().getId());
-		if (!list.isEmpty())
+		Long oldEventId = oldspecimenCollectionGroup.getCollectionProtocolEvent().getId();
+		Long eventId =	specimenCollectionGroup.getCollectionProtocolEvent().getId();
+		if(oldEventId.longValue()!=eventId.longValue())
 		{
-			// check for closed CollectionProtocol
-			CollectionProtocolEvent cpe = (CollectionProtocolEvent) list.get(0);
-			if (!cpe.getCollectionProtocol().getId().equals(oldspecimenCollectionGroup.getCollectionProtocolEvent().getCollectionProtocol().getId()))
-				checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
-
-			specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent) list.get(0));
+			// -- check for closed CollectionProtocol
+			List list = dao.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup
+					.getCollectionProtocolEvent().getId());
+			if (!list.isEmpty())
+			{
+				// check for closed CollectionProtocol
+				CollectionProtocolEvent cpe = (CollectionProtocolEvent) list.get(0);
+				if (!cpe.getCollectionProtocol().getId().equals(oldspecimenCollectionGroup.getCollectionProtocolEvent().getCollectionProtocol().getId()))
+					checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
+	
+				specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent) list.get(0));
+			}
 		}
 		//CollectionProtocol check complete.
 
