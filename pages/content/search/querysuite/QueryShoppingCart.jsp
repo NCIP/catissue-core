@@ -121,7 +121,9 @@ function checkAll(element)
 <body onload="setCheckBoxState()">
 <html:html>
 
-
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 <html:form action="QueryAddToCart.do">
 
 <%
