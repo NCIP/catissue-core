@@ -33,9 +33,9 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
-import edu.wustl.catissuecore.bizlogic.AliquotBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -791,8 +791,9 @@ public class AliquotAction extends SecureAction
 	 * @param specimen object of Specimen
 	 * @param bizLogic object of class implemeting IBizLogic
 	 * @throws DAOException DAO exception
+	 * @throws ClassNotFoundException 
 	 */
-	private void populateParentSpecimenData(AliquotForm form, Specimen specimen, IBizLogic bizLogic) throws DAOException
+	private void populateParentSpecimenData(AliquotForm form, Specimen specimen, IBizLogic bizLogic) throws DAOException, ClassNotFoundException
 	{
 		//SpecimenCharacteristics chars= null;
 		Long cpID=null;
@@ -811,7 +812,20 @@ public class AliquotAction extends SecureAction
 		 * For retrive specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId(),
 		 * fired hql.
 		 */
-		cpID = (Long)bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id" );
+		String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol"+
+		" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
+		" edu.wustl.catissuecore.domain.Specimen as spec " +
+		" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimen.getId();
+
+		List collectionProtocolList = Utility.executeQuery(colProtHql);
+		System.out.println("---collectionProtocolList"+collectionProtocolList.size());
+		Object obj = (Object) collectionProtocolList.get(0);
+		if(obj!=null)
+		{
+			CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
+			cpID = collectionProtocol.getId();
+		}
+		//cpID = (Long)bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id" );
 		form.setSpCollectionGroupId(cpID);
 		if (specimen instanceof MolecularSpecimen)
 		{
