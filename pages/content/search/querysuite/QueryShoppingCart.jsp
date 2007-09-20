@@ -67,6 +67,10 @@ function onDelete()
 					document.forms[0].submit();
 				}
 			}
+			else
+			{
+				alert("Please select at least one checkbox");
+			}
 		}
 
 function onExport()
@@ -116,10 +120,7 @@ function checkAll(element)
 </head>
 <body onload="setCheckBoxState()">
 <html:html>
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
-<html:errors/>
+
 
 <html:form action="QueryAddToCart.do">
 
@@ -207,11 +208,10 @@ function checkAll(element)
 			</table>
 	<%}else{
 			%>
-     <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
-     <tr height="5%">
-		 <td class="formTitle" width="100%">
-			<bean:message key="ShoppingCart.emptyCartTitle"/>
-		 </td>
+     <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
+     <tr >
+		<td> <html:errors/></td>
+
 	</tr>
 	</table>
 	<%}%>
