@@ -434,7 +434,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void insertSingleSpecimen(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, boolean partOfMulipleSpecimen)
 			throws DAOException, UserNotAuthorizedException
 	{
-		try
+		try 
 		{
 			/**
 			 * Start: Change for API Search   --- Jitendra 06/10/2006
@@ -447,7 +447,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			 */
 			
 			//Setting Name from Id
-			retriveSCGIdFromSCGName(specimen,dao);
+			//retriveSCGIdFromSCGName(specimen,dao);
 			ApiSearchUtil.setSpecimenDefault(specimen); 
 			
 			if(specimen.getParentSpecimen()!=null)
@@ -875,8 +875,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	public void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
+		
 		Specimen specimen = (Specimen) obj;
-		Specimen specimenOld = (Specimen) oldObj;
+		Specimen specimenOld = (Specimen)HibernateMetaData.getProxyObjectImpl(oldObj);
+		//Specimen specimenOld = (Specimen) oldObj;
+		
 		boolean isInitQtyChange=false;
 		boolean isInitAvlChange=false;
 		/**
@@ -886,7 +889,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		 */
 		if(specimen.getLineage().equals(Constants.NEW_SPECIMEN))
 		{
-			retriveSCGIdFromSCGName(specimen,dao);
+			//retriveSCGIdFromSCGName(specimen,dao);
 		}
 		//retrive and set parentSpecimenId
 		if(specimen.getParentSpecimen()!= null && specimen.getParentSpecimen().getId()==null)

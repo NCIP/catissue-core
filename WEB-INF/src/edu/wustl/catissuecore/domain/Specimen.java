@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,11 +28,13 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.MapDataParser;
@@ -644,7 +647,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
 		if (SearchUtil.isNullobject(storageContainer))
 		{
-			storageContainer = new StorageContainer();
+			storageContainer = null;
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
@@ -811,10 +814,20 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					else
 					{
 						parentSpecimen = null;
-						specimenCollectionGroup = new SpecimenCollectionGroup();
+						specimenCollectionGroup = null;
 						//this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
 						
-						this.specimenCollectionGroup.setGroupName(form.getSpecimenCollectionGroupName());
+//						this.specimenCollectionGroup.setGroupName(form.getSpecimenCollectionGroupName());
+						IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+
+						List scgList = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "name",form.getSpecimenCollectionGroupName());
+						
+						if(!scgList.isEmpty())
+						{
+							this.specimenCollectionGroup =(SpecimenCollectionGroup) scgList.get(0);
+						}
+				
+
 					}
 
 					//Setting the SpecimenCharacteristics
