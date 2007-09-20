@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:UIComponent xmlns:mx="http://www.adobe.com/2006/mxml" implements="flash.utils.IExternalizable">
+<mx:Script>
+	<![CDATA[
+		import mx.controls.Menu;
+		import mx.controls.Alert;
+		import mx.events.MenuEvent;
+		import Components.DAGNode;
+		import Components.Association;
+		import mx.rpc.events.ResultEvent;
+		import mx.collections.ArrayCollection;
+		import Components.DAGConstants;
+//		public var name:String;
+//		public var id:String;
+		[Bindable]
+		public var isSelected:Boolean=false;
+		[Bindable]
+		public var sourceExpId:int = 0;
+		[Bindable]
+		public var destinationExpId:int=0;		
+		[Bindable]
+		public var operatorIndex:int=0;
+		
+		private var node1:String = "";
+		private var node2:String = "";
+		
+		public function readExternal(input:IDataInput):void {
+			toolTip=input.readUTF();
+			id = input.readUTF();
+			isSelected = input.readBoolean();
+			sourceExpId=input.readInt();
+			destinationExpId= input.readInt();
+		}
+		
+		public function writeExternal(out:IDataOutput):void {
+			out.writeUTF(toolTip);
+			out.writeUTF(id);
+			out.writeBoolean(isSelected);
+			out.writeInt(sourceExpId);
+			out.writeInt(destinationExpId);
+		}
+		
+		[Bindable]
+	public var menuData:Array = [	
+	{label: "Delete", type: "radio", toggled: false}
+	];
+	
+	public function createAndShow(event:MouseEvent):void {
+			var myMenu:Menu=null;
+			myMenu = Menu.createMenu(this, menuData, true);
+			//Alert.show("link name"+this.name);
+			myMenu.show(event.stageX,event.stageY);
+			myMenu.addEventListener(MenuEvent.ITEM_CLICK,deletePathHandler);
+		}
+		
+		private function deletePath(dagNode1:DAGNode,dagNode2:DAGNode):void
+			{
+				
+			var ass:Association=dagNode1.getOutAssociation(node2);
+			if(ass != null)
+			{
+				
+				if(dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)
+				{
+					dagNode1.removeOutAssociation(node2,ass.associatedLink);
+				}
+				else
+				{
+					dagNode1.removeDisplayOutAssociation(node2,ass.associatedLink);
+					dagNode1.removeOutAssociation(node2,ass.associatedLink);
+				}
+				dagNode2.removeInAssociation(node1,ass.associatedLink);
+				node1="";
+				node2="";
+				this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,deleteLinkHandler);
+				var nodeList:ArrayCollection = new ArrayCollection();
+				nodeList.addItemAt(dagNode1,0);
+				nodeList.addItemAt(dagNode2,1);
+				this.parentApplication.rpcService.deleteLink(nodeList,ass.associatedLink)
+				this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
+				this.parentApplication.dagPathUIMap.remove(this.name);
+				
+			}
+			else
+			{
+				Alert.show("Selected nodes do not have any association");
+			}
+	}	
+	
+	public function deletePathHandler(event:MenuEvent):void		
+	{
+
+			if(event.label==DAGConstants.DELETE)
+			{
+				
+				var dagPath:DAGPath = this.parentApplication.dagPathUIMap.getValue(this.name);
+				node1=dagPath.sourceExpId+"";
+				node2=dagPath.destinationExpId+"";
+				var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
+				var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
+				if(this.parentApplication.view==DAGConstants.RESULT_VIEW)
+				{
+//					if((dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)||(dagNode2.nodeType==DAGConstants.VIEW_ONLY_NODE))
+					{
+						deletePath(dagNode1,dagNode2);
+					}
+/*					else
+					{
+						Alert.show("Constraint node  link cannot be deleted");
+						node1="";
+						node2="";
+						this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,deleteLinkHandler);
+					}*/
+				}
+				else
+				{
+					deletePath(dagNode1,dagNode2);
+				}
+					
+			}
+				
+	}
+	public function deleteLinkHandler(event:ResultEvent):void
+	{
+		this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteLinkHandler,false);
+	}
+	
+	
+				
+	
+		
+	]]>
+</mx:Script>
+
+	
+</mx:UIComponent>
