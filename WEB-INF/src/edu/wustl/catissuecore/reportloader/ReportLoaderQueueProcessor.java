@@ -14,9 +14,6 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.common.util.HQLCriteria;
-import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.applicationservice.ApplicationService;
 
 /**
  * @author sandeep_ranade
@@ -44,7 +41,7 @@ public class ReportLoaderQueueProcessor extends Thread
 				List reportLoaderQueueList=getReportLoaderQueueIDList();
 				if(reportLoaderQueueList!=null)
 				{
-					Logger.out.info("Total objects found in ReportLoaderQueu are:"+reportLoaderQueueList.size());
+					Logger.out.info("Total objects found in ReportLoaderQueue are:"+reportLoaderQueueList.size());
 					SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
 					for(int i=0;i<reportLoaderQueueList.size();i++)
 					{	
@@ -122,22 +119,9 @@ public class ReportLoaderQueueProcessor extends Thread
 	 */
 	private List getReportLoaderQueueIDList() throws Exception
 	{
-		List queue=null;
-		String hqlQuery="select id from edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue where "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.NEW+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.SITE_NOT_FOUND+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.CP_NOT_FOUND+"'";
+		String hqlQuery="select id from edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue where "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.NEW+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.SITE_NOT_FOUND+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.CP_NOT_FOUND+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.OVERWRITE_REPORT+"'";
 		Logger.out.info("HQL Query:"+hqlQuery);
-		HQLCriteria hqlCriteria = new HQLCriteria(hqlQuery); 
-		
-		try 
-		{
-			ApplicationService appService=CaCoreAPIService.getAppServiceInstance();
-			queue =appService.query(hqlCriteria, ReportLoaderQueue.class.getName());
-			Logger.out.info("ReportLoaderQueue query result" +queue.size());
-			return queue;
-		}
-		catch (ApplicationException ex) 
-		{
-			Logger.out.error("Error while fetching ReportLoaderQueue objects "+ex);
-		}
-		return null;
+		List queue=(List)CaCoreAPIService.executeQuery(hqlQuery);
+		return queue;
 	}
 }
