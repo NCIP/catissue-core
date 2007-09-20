@@ -22,13 +22,12 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.applicationservice.ApplicationService;
 
 /**
  * @author sandeep_ranade
@@ -121,7 +120,7 @@ public class ReportLoader
 			{
 				// use existing scg
 				retrieveAndSetSCG();
-				CaCoreAPIService.getAppServiceInstance().updateObject(this.scg);
+				CaCoreAPIService.getAppServiceInstance().createObject(this.identifiedReport);
 			}	
 			Logger.out.info("Processing finished for Report ");
 		}
@@ -274,57 +273,46 @@ public class ReportLoader
 		return defaultEventCollection;
 	}
 	
-	private void retrieveAndSetSCG() throws DAOException
+	private void retrieveAndSetSCG() throws Exception
 	{
-		// retrieve SCG
-		this.scg=(SpecimenCollectionGroup)CaCoreAPIService.getObject(new SpecimenCollectionGroup(),Constants.SYSTEM_IDENTIFIER, this.scg.getId());
 		
-		// set CPR
-		CollectionProtocolRegistration cpr=(CollectionProtocolRegistration)CaCoreAPIService.getObject(new CollectionProtocolRegistration(), Constants.COLUMN_NAME_CPR, this.scg.getId());
-		this.scg.setCollectionProtocolRegistration(cpr);
-		
-		// set Site 
-		List queue=null;
-		Site scgSite=null;
-		String hqlQuery="from edu.wustl.catissuecore.domain.Site where "+Constants.SYSTEM_IDENTIFIER+"="+this.scg.getSpecimenCollectionSite().getId();
-		HQLCriteria hqlCriteria = new HQLCriteria(hqlQuery); 
-		
-		try 
-		{
-			ApplicationService appService=CaCoreAPIService.getAppServiceInstance();
-			queue =appService.query(hqlCriteria, Site.class.getName());
-		}
-		catch (ApplicationException ex) 
-		{
-			Logger.out.error("Error while fetching Site objects "+ex);
-		}
-		if(queue!=null && queue.size()>0)
-		{
-			scgSite= (Site)queue.get(0);
-			this.scg.setSpecimenCollectionSite(scgSite);
-		}
-		
-		// set CollectionProtocolEvent
-		hqlQuery="from edu.wustl.catissuecore.domain.CollectionProtocolEvent where "+Constants.SYSTEM_IDENTIFIER+"="+this.scg.getSpecimenCollectionSite().getId();
-		hqlCriteria = new HQLCriteria(hqlQuery); 
-		CollectionProtocolEvent collectionProtocolEvent=null;
-		try 
-		{
-			ApplicationService appService=CaCoreAPIService.getAppServiceInstance();
-			queue =appService.query(hqlCriteria, CollectionProtocolEvent.class.getName());
-		}
-		catch (ApplicationException ex) 
-		{
-			Logger.out.error("Error while fetching CollectionProtocolEvent objects "+ex);
-		}
-		if(queue!=null && queue.size()>0)
-		{
-			collectionProtocolEvent= (CollectionProtocolEvent)queue.get(0);
-			this.scg.setCollectionProtocolEvent(collectionProtocolEvent);
-		}
-
 		// set identified report
-		this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport); 
+		if(this.scg.getIdentifiedSurgicalPathologyReport()!=null  && this.scg.getIdentifiedSurgicalPathologyReport().getId()!=null)
+		{
+			Logger.out.info("inside"+this.scg.getIdentifiedSurgicalPathologyReport().getId());
+			IdentifiedSurgicalPathologyReport existingReport=scg.getIdentifiedSurgicalPathologyReport();
+		
+			existingReport.setSpecimenCollectionGroup(null);
+			this.scg.setIdentifiedSurgicalPathologyReport(null);
+			this.scg.setDeIdentifiedSurgicalPathologyReport(null);
+			try 
+			{
+				existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.getAppServiceInstance().updateObject(existingReport);
+				Logger.out.info("existingReport updated:"+existingReport.getId());
+				if(existingReport.getDeIdentifiedSurgicalPathologyReport()!=null)
+				{
+					existingReport.getDeIdentifiedSurgicalPathologyReport().setSpecimenCollectionGroup(null);
+					DeidentifiedSurgicalPathologyReport deidreport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getAppServiceInstance().updateObject(existingReport.getDeIdentifiedSurgicalPathologyReport());
+					Logger.out.info("deid report updated: "+deidreport.getId());
+				}
+			}
+			catch (ApplicationException ex) 
+			{
+				Logger.out.error("Error while updating old report!",ex);
+				throw new Exception(ex.getMessage());
+			}
+			/*}
+			else
+			{
+				this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport);
+				this.identifiedReport.setSpecimenCollectionGroup(this.scg);
+			}*/
+		}
+		
+			Logger.out.info("inside else");
+			this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport);
+			this.identifiedReport.setSpecimenCollectionGroup(this.scg);
+		
 		if(this.scg.getSurgicalPathologyNumber()==null)
 		{
 			this.scg.setSurgicalPathologyNumber(this.surgicalPathologyNumber);
