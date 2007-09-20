@@ -113,66 +113,85 @@ public class QueryShoppingCartAction extends BaseAction
 		}// Check if user wants to view the cart.
 		else if (operation.equalsIgnoreCase(Constants.VIEW))
 		{  
-			String isSpecimenIdPresent = "false";
-			boolean isEmpty = false;
-			if (cart != null)
-			{
-				List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
-				if (cartAttributeList != null)
-				{
-					for (Iterator iterator = cartAttributeList.iterator(); iterator.hasNext();)
-					{
-						AttributeInterface name = (AttributeInterface) iterator.next();
-						if ((name.getName().equals(Constants.ID))
-								&& (name.getEntity().getName()
-										.equals(Constants.SPECIMEN_ENTITY_NAME)))
-						{
-							isSpecimenIdPresent = "true";
-							break;
-						}
-					}
-
-					request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
-				}
-				else
-					isEmpty = true;
-			}
-			if(cart!=null || isEmpty)
-			{
-				ActionErrors errors = new ActionErrors();
-				ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
-				errors.add(ActionErrors.GLOBAL_ERROR, error);
-				saveErrors(request, errors);
-			}
+			setCartView(request, cart);
 			target = new String(Constants.VIEW);
 
 		}
 		else if (operation.equals("addToOrderList"))
 		{
-			List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
-			List idIndexList = new ArrayList();
-			int i = 0;
-			for (Iterator iterator = cartAttributeList.iterator(); iterator.hasNext();)
-			{
-				AttributeInterface name = (AttributeInterface) iterator.next();
-				if ((name.getName().equals(Constants.ID))
-						&& (name.getEntity().getName().equals(Constants.SPECIMEN_ENTITY_NAME)))
-				{
-					idIndexList.add(new Integer(i));
-				}
-				i++;
-			}
-			List<List<String>> dataList = cart.getCart();
-			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			List specimenIds = bizLogic.createSpecimenOrderingList(dataList, chkBoxValues,
-					idIndexList);
-			session.setAttribute("specimenId", specimenIds);
+			createOrderList(session, chkBoxValues, cart);
 			target = new String("requestToOrder");
 		}
 
 		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_MODULE);
 		return mapping.findForward(target);
 
+	}
+
+	/**
+	 * @param session
+	 * @param chkBoxValues
+	 * @param cart
+	 */
+	private void createOrderList(HttpSession session, Set chkBoxValues, QueryShoppingCart cart)
+	{
+		List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
+		List idIndexList = new ArrayList();
+		int i = 0;
+		for (Iterator iterator = cartAttributeList.iterator(); iterator.hasNext();)
+		{
+			AttributeInterface name = (AttributeInterface) iterator.next();
+			if ((name.getName().equals(Constants.ID))
+					&& (name.getEntity().getName().equals(Constants.SPECIMEN_ENTITY_NAME)))
+			{
+				idIndexList.add(new Integer(i));
+			}
+			i++;
+		}
+		List<List<String>> dataList = cart.getCart();
+		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+		List specimenIds = bizLogic.createSpecimenOrderingList(dataList, chkBoxValues,
+				idIndexList);
+		session.setAttribute("specimenId", specimenIds);
+	}
+
+	/**
+	 * @param request
+	 * @param cart
+	 */
+	private void setCartView(HttpServletRequest request, QueryShoppingCart cart)
+	{ 
+		String isSpecimenIdPresent = "false";
+		boolean isEmpty = false;
+		if (cart != null)
+		{
+			List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
+			if (cartAttributeList != null)
+			{
+				for (Iterator iterator = cartAttributeList.iterator(); iterator.hasNext();)
+				{
+					AttributeInterface name = (AttributeInterface) iterator.next();
+					if ((name.getName().equals(Constants.ID))
+							&& (name.getEntity().getName()
+									.equals(Constants.SPECIMEN_ENTITY_NAME)))
+					{
+						isSpecimenIdPresent = "true";
+						break;
+					}
+				}
+
+				request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
+			}
+			else
+				isEmpty = true;
+		}
+		if(cart==null || isEmpty)
+		{
+			ActionErrors errors = new ActionErrors();
+			ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
+			errors.add(ActionErrors.GLOBAL_ERROR, error);
+			saveErrors(request, errors);
+		}
 	}
 
 	/**
