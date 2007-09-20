@@ -26,7 +26,6 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -47,7 +46,6 @@ public class DeidUtils
 	 */
 	protected static Element buildReportElement(final Participant participant, final IdentifiedSurgicalPathologyReport ispr, String sprText) 
 	{
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 		Element reportElement = null;
 		String mrn="";
 		try 
@@ -66,7 +64,7 @@ public class DeidUtils
 			Element reportHeaderElement = new Element(CaTIESConstants.REPORT_HEADER);
 			reportHeaderElement.addContent(buildHeaderPersonElement(CaTIESConstants.PARTICIPANT_NAME, participant.getLastName()+","+participant.getFirstName(), CaTIESConstants.PARTICIPANT_ROLE));
 			// get participant medical identifier collection
-			Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection=(Set)defaultBizLogic.retrieveAttribute(Participant.class.getName(), participant.getId(), Constants.COLUMN_NAME_PART_MEDICAL_ID_COLL);
+			Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection=(Set)participant.getParticipantMedicalIdentifierCollection();
 			//iterate over participant medical identifier collection
 			for(ParticipantMedicalIdentifier participantMedicalIdentifier : medicalIdentifierCollection)
 			{

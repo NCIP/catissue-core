@@ -15,9 +15,6 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
-
 import com.deid.JniDeID;
 
 import edu.wustl.catissuecore.caties.util.CSVLogger;
@@ -41,7 +38,7 @@ public class DeIDPipelineManager
 	protected static HashMap<String,String> abbrToHeader;
 	protected static String configFileName;
 	protected static JniDeID deid;
-	private RejectedExecutionHandler rejectedExecutionHandler; 
+	private RejectedExecutionHandler rejectedExecutionHandler;
 	private static String pathToConfigFiles;
 	private int corePoolSize;
 	private int maxPoolSize;
@@ -112,6 +109,8 @@ public class DeIDPipelineManager
 				List isprIDList=getReportIDList();
 				// Process reports that are pending for de-identification
 				processReports(isprIDList);
+				Logger.out.info("Deidentification process finished at "+new Date().toString()+ ". Thread is going to sleep.");
+				Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.DEID_SLEEPTIME)));
 			}
 			catch(Exception ex)
 			{
@@ -159,6 +158,7 @@ public class DeIDPipelineManager
 				{
 					CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_IDENTIFIED_REPORT+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
 					IdentifiedSurgicalPathologyReport identifiedReport=null;	
+					List identifiedReportList=null;
 					// loop to process each report
 					Logger.out.info("Starting to process list of size "+ isprIDList.size());
 					int isprListSize=isprIDList.size();
@@ -166,7 +166,8 @@ public class DeIDPipelineManager
 					{
 						Logger.out.info("Processing report serial no:"+i);
 						// retrive the identified report using its id
-						identifiedReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(new IdentifiedSurgicalPathologyReport(), Constants.SYSTEM_IDENTIFIER, (Long)isprIDList.get(i));
+						identifiedReportList=(List)CaCoreAPIService.executeQuery("from edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport where id="+(Long)isprIDList.get(i));//(new IdentifiedSurgicalPathologyReport(), Constants.SYSTEM_IDENTIFIER, (Long)isprIDList.get(i));
+						identifiedReport=(IdentifiedSurgicalPathologyReport)identifiedReportList.get(0);
 						// instantiate a thread to process the report
 						Logger.out.info("Instantiating thread for report id="+identifiedReport.getId());
 						Thread th = new DeidReportThread(identifiedReport);
@@ -176,7 +177,13 @@ public class DeIDPipelineManager
 				}
 				catch(Exception ex)
 				{
-					Logger.out.error("Deidentification pipeline is failed:",ex);			
+					Logger.out.error("Deidentification pipeline is failed:",ex);
+					// shut down the thread pool manager
+					deidExecutor.shutdown();
+					Logger.out.info("Unloading deid library");
+					// unload deid library
+					JniDeID.unloadDeidLibrary();
+					throw ex;
 				}
 				// check to wait until all active theads finish their task before shutting down the thread pool manager
 				while(deidExecutor.getActiveCount()>0)
@@ -205,10 +212,7 @@ public class DeIDPipelineManager
 	 */
 	private List getReportIDList() throws Exception
 	{
-		DetachedCriteria criteria = DetachedCriteria.forClass(IdentifiedSurgicalPathologyReport.class);
-		criteria.add(Restrictions.eq(CaTIESConstants.COLUMN_NAME_REPORT_STATUS, CaTIESConstants.PENDING_FOR_DEID));
 		String hqlQuery="select id from edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport where "+CaTIESConstants.COLUMN_NAME_REPORT_STATUS+"='"+CaTIESConstants.PENDING_FOR_DEID+"'";
-		Logger.out.info("HQL Query:"+hqlQuery);
 		List isprIDList=(List)CaCoreAPIService.executeQuery(hqlQuery);
 		return isprIDList;
 	}
