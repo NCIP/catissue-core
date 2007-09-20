@@ -153,7 +153,7 @@ public class ReportLoader
 		identifiedReport.setSpecimenCollectionGroup(scg);
 			 
 		// Retrieve collection generic protocol
-		CollectionProtocol collectionProtocol = (CollectionProtocol)CaCoreAPIService.getObject(new CollectionProtocol(), Constants.COLUMN_NAME_TITLE, CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
+		CollectionProtocol collectionProtocol = (CollectionProtocol)CaCoreAPIService.getObject(CollectionProtocol.class, Constants.COLUMN_NAME_TITLE, CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
 		if(collectionProtocol==null)
 		{
 			throw new Exception(CaTIESConstants.CP_NOT_FOUND_ERROR_MSG);
@@ -174,7 +174,7 @@ public class ReportLoader
 		Logger.out.info("SCG name is =====>"+scgName);
 		
 		// retrieve collection protocol event list
-		Collection collProtocolEventList=(Collection)CaCoreAPIService.getList(new CollectionProtocolEvent(), "collectionProtocol", collectionProtocol);
+		Collection collProtocolEventList=(Collection)CaCoreAPIService.getList(CollectionProtocolEvent.class, "collectionProtocol", collectionProtocol);
 		Iterator cpEventIterator=collProtocolEventList.iterator();
 		
 		if(cpEventIterator.hasNext())
@@ -253,7 +253,7 @@ public class ReportLoader
 	{
 		Collection<SpecimenEventParameters> defaultEventCollection=new HashSet<SpecimenEventParameters>();
 		String loginName=CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA);
-		User user=(User)CaCoreAPIService.getObject(new User(), Constants.LOGINNAME, loginName);
+		User user=(User)CaCoreAPIService.getObject(User.class, Constants.LOGINNAME, loginName);
 		
 		CollectionEventParameters collectionEvent=new CollectionEventParameters();
 		collectionEvent.setCollectionProcedure((String)CaCoreAPIService.getAppServiceInstance().getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));

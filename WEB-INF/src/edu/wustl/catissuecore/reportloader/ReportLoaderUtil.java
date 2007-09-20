@@ -150,7 +150,7 @@ public class ReportLoaderUtil
 		" and scg.specimenCollectionSite.name='"+site.getName()+"' "+
 		" and scg.surgicalPathologyNumber='"+surgicalPathologyNumber+"'";
 		
-		List resultList=(List)CaCoreAPIService.executeQuery(scgHql);
+		List resultList=(List)CaCoreAPIService.executeQuery(scgHql, SpecimenCollectionGroup.class.getName());
 		if(resultList!=null && resultList.size()==1)
 		{
 			return (SpecimenCollectionGroup)resultList.get(0);
@@ -171,7 +171,7 @@ public class ReportLoaderUtil
 		" and (scg.surgicalPathologyNumber="+null+
 		" or scg.surgicalPathologyNumber='')";
 		
-		List resultList=(List)CaCoreAPIService.executeQuery(scgHql);
+		List resultList=(List)CaCoreAPIService.executeQuery(scgHql, SpecimenCollectionGroup.class.getName());
 		if(resultList!=null && resultList.size()>0)
 		{
 			return true;

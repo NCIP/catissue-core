@@ -166,7 +166,7 @@ public class DeIDPipelineManager
 					{
 						Logger.out.info("Processing report serial no:"+i);
 						// retrive the identified report using its id
-						identifiedReportList=(List)CaCoreAPIService.executeQuery("from edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport where id="+(Long)isprIDList.get(i));//(new IdentifiedSurgicalPathologyReport(), Constants.SYSTEM_IDENTIFIER, (Long)isprIDList.get(i));
+						identifiedReportList=(List)CaCoreAPIService.executeQuery("from edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport where id="+(Long)isprIDList.get(i),IdentifiedSurgicalPathologyReport.class.getName());//(new IdentifiedSurgicalPathologyReport(), Constants.SYSTEM_IDENTIFIER, (Long)isprIDList.get(i));
 						identifiedReport=(IdentifiedSurgicalPathologyReport)identifiedReportList.get(0);
 						// instantiate a thread to process the report
 						Logger.out.info("Instantiating thread for report id="+identifiedReport.getId());
@@ -213,7 +213,7 @@ public class DeIDPipelineManager
 	private List getReportIDList() throws Exception
 	{
 		String hqlQuery="select id from edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport where "+CaTIESConstants.COLUMN_NAME_REPORT_STATUS+"='"+CaTIESConstants.PENDING_FOR_DEID+"'";
-		List isprIDList=(List)CaCoreAPIService.executeQuery(hqlQuery);
+		List isprIDList=(List)CaCoreAPIService.executeQuery(hqlQuery, IdentifiedSurgicalPathologyReport.class.getName());
 		return isprIDList;
 	}
 	

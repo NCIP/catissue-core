@@ -58,15 +58,20 @@ public class DeidReportThread extends Thread
 			Logger.out.info("De-identification process started for "+identifiedReport.getId().toString());
 			// instantiate document
 			org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element("Dataset"));
-			// get SCG
-			SpecimenCollectionGroup scg=(SpecimenCollectionGroup)CaCoreAPIService.getObject(new SpecimenCollectionGroup(), Constants.SYSTEM_IDENTIFIER, identifiedReport.getSpecimenCollectionGroup().getId());
-			// get CPR from SCG
-			CollectionProtocolRegistration cpr=(CollectionProtocolRegistration)CaCoreAPIService.getObject(new CollectionProtocolRegistration(),Constants.SYSTEM_IDENTIFIER, scg.getCollectionProtocolRegistration().getId());
 			// get participant from CPR
-			Participant participant=(Participant)CaCoreAPIService.getObject(new Participant(), Constants.SYSTEM_IDENTIFIER, cpr.getId()); 
+			String hqlQuery="select cpr.participant from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr, " +
+					" edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg" +
+					" where scg.id="+identifiedReport.getSpecimenCollectionGroup().getId() +
+					" and scg.id in elements(cpr.specimenCollectionGroupCollection)";
+			List participantList=(List)CaCoreAPIService.executeQuery(hqlQuery, Participant.class.getName());
+			Participant participant=null;
+			if(participantList!=null && participantList.size()>0)
+			{
+				participant=(Participant)participantList.get(0);
+			}
 			
 			// get textcontent
-			TextContent textContent=(TextContent)CaCoreAPIService.getObject(new TextContent(), Constants.SYSTEM_IDENTIFIER, identifiedReport.getTextContent().getId());
+			TextContent textContent=(TextContent)CaCoreAPIService.getObject(TextContent.class, Constants.SYSTEM_IDENTIFIER, identifiedReport.getTextContent().getId());
 			// synthesize the text content od identified report
 			String synthesizeSPRText=synthesizeSPRText(identifiedReport);
 			textContent.setData(synthesizeSPRText(identifiedReport));
@@ -192,7 +197,7 @@ public class DeidReportThread extends Thread
 	{
 		String docText = "";
 		//Get report sections for report
-		List<ReportSection> iss=(List)CaCoreAPIService.getList(new ReportSection(), Constants.SYSTEM_IDENTIFIER, identifiedReport.getTextContent().getId());
+		List<ReportSection> iss=(List)CaCoreAPIService.getList(ReportSection.class, Constants.COLUMN_NAME_TEXT_CONTENT, identifiedReport.getTextContent());
 		HashMap <String,String>nameToText = new HashMap<String, String>();
 		if(iss!=null)
 		{       	

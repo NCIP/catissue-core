@@ -45,7 +45,7 @@ public class ReportLoaderQueueProcessor extends Thread
 					SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
 					for(int i=0;i<reportLoaderQueueList.size();i++)
 					{	
-						reportLoaderQueue=(ReportLoaderQueue)CaCoreAPIService.getObject(new ReportLoaderQueue(), Constants.SYSTEM_IDENTIFIER, (Long)reportLoaderQueueList.get(i));
+						reportLoaderQueue=(ReportLoaderQueue)CaCoreAPIService.getObject(ReportLoaderQueue.class, Constants.SYSTEM_IDENTIFIER, (Long)reportLoaderQueueList.get(i));
 						Logger.out.info("Processing report loader queue id:"+reportLoaderQueue.getId());
 						try
 						{
@@ -121,7 +121,7 @@ public class ReportLoaderQueueProcessor extends Thread
 	{
 		String hqlQuery="select id from edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue where "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.NEW+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.SITE_NOT_FOUND+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.CP_NOT_FOUND+"' OR "+Constants.COLUMN_NAME_STATUS+"='"+CaTIESConstants.OVERWRITE_REPORT+"'";
 		Logger.out.info("HQL Query:"+hqlQuery);
-		List queue=(List)CaCoreAPIService.executeQuery(hqlQuery);
+		List queue=(List)CaCoreAPIService.executeQuery(hqlQuery, ReportLoaderQueue.class.getName());
 		return queue;
 	}
 }

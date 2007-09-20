@@ -5,17 +5,14 @@ import java.util.List;
 
 import edu.upmc.opi.caBIG.caTIES.server.CaTIES_ExporterPR;
 import edu.upmc.opi.caBIG.caTIES.services.caTIES_TiesPipe.TiesPipe;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.DeidentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.caties.util.StopServer;
 import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
-import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import gate.Gate;
 
@@ -92,6 +89,8 @@ public class ConceptCodeManager
 	private void initCoder() throws Exception
 	{
 		Utility.init();
+		//Initialize CaCoreAPISservice
+		CaCoreAPIService.initialize();
 		// Configuring CSV logger
 		CSVLogger.configure(CaTIESConstants.LOGGER_CONCEPT_CODER);
 		setAll();
@@ -202,9 +201,7 @@ public class ConceptCodeManager
 	 */
 	private void processReports(List deidReportIDList) throws  Exception
 	{
-		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
-		DeidentifiedSurgicalPathologyReportBizLogic bizLogic =(DeidentifiedSurgicalPathologyReportBizLogic) bizLogicFactory.getBizLogic(DeidentifiedSurgicalPathologyReport.class.getName());
-		if(deidReportIDList.size()<=1)
+		if(deidReportIDList==null)
 		{
 			Logger.out.info("Concept Coding process finished at "+new Date().toString()+ ". Thread is going to sleep.");
 			Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
@@ -217,14 +214,10 @@ public class ConceptCodeManager
 				if(deidReportIDList!=null)
 				{
 					CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_DEIDENTIFIED_REPORT+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
-					String id;
-					NameValueBean nb;
-					DeidentifiedSurgicalPathologyReport deidReport=null;	
-					for(int i=1;i<deidReportIDList.size();i++)
+					DeidentifiedSurgicalPathologyReport deidReport=null;
+					for(int i=0;i<deidReportIDList.size();i++)
 					{
-						nb=(NameValueBean)deidReportIDList.get(i);
-						id=nb.getValue();
-						deidReport=(DeidentifiedSurgicalPathologyReport)bizLogic.getReportById(Long.parseLong(id));
+						deidReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, (Long)deidReportIDList.get(i));
 						ConceptCoder cc=new ConceptCoder(deidReport,exporterPR, tiesPipe);
 						Logger.out.info("Concept coding of report serial no "+i+" started....");
 						cc.process();
@@ -246,27 +239,8 @@ public class ConceptCodeManager
 	 */
 	private List getReportIDList() throws Exception
 	{
-		List deidReportIDList=null;
-		try
-		{
-			String sourceObjectName=DeidentifiedSurgicalPathologyReport.class.getName();
-			String[] displayNameFields=new String[] {Constants.SYSTEM_IDENTIFIER};
-			String valueField=new String(Constants.SYSTEM_IDENTIFIER);
-			String[] whereColumnName = new String[]{CaTIESConstants.COLUMN_NAME_REPORT_STATUS};
-			String[] whereColumnCondition = new String[]{"="};
-			Object[] whereColumnValue = new String[]{CaTIESConstants.PENDING_FOR_XML};
-			String joinCondition = null;
-			String separatorBetweenFields = ", ";	
-			
-			BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
-			DeidentifiedSurgicalPathologyReportBizLogic bizLogic =(DeidentifiedSurgicalPathologyReportBizLogic) bizLogicFactory.getBizLogic(DeidentifiedSurgicalPathologyReport.class.getName());
-			deidReportIDList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
-		}
-		catch(DAOException ex)
-		{
-			Logger.out.error("Error in fetching de-identified reports for concept coding:",ex);
-			throw ex;
-		}	
+		String hqlQuery="select id from edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport where "+CaTIESConstants.COLUMN_NAME_REPORT_STATUS+"='"+CaTIESConstants.PENDING_FOR_XML+"'";
+		List deidReportIDList=(List)CaCoreAPIService.executeQuery(hqlQuery, DeidentifiedSurgicalPathologyReport.class.getName());
 		return deidReportIDList;
 	}
 	/**

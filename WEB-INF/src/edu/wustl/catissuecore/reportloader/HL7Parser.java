@@ -315,7 +315,7 @@ public class HL7Parser implements Parser
 				if(siteName!=null)
 				{
 					// check for site in DB
-					siteObj=(Site)CaCoreAPIService.getObject(new Site(), Constants.NAME, siteName);
+					siteObj=(Site)CaCoreAPIService.getObject(Site.class, Constants.NAME, siteName);
 					if(siteObj==null)
 					{
 						Logger.out.error("Site name "+siteName+" not found in the database!");
