@@ -30,11 +30,8 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
 
 			<td width="25%" height="5%" class="queryTabMenuItemSelected">
 				<bean:message key="query.viewSearchResults"/>
-			</td>
+			</td> 
 
-			<td width="25%" height="5%" class="queryModuleTabMenuItem">
-				<bean:message key="query.dataList"/>
-			</td>			
 		</tr>
 		<tr height="100%">
 		<td colspan="4" height="100%">

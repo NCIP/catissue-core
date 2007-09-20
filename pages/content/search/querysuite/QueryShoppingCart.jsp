@@ -18,6 +18,9 @@
 <%
 	String checkAllPages = (String)session.getAttribute("checkAllPages");
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String isSpecimenIdPresent = (String)request.getAttribute(Constants.IS_SPECIMENID_PRESENT);
+	if(isSpecimenIdPresent==null)
+	 isSpecimenIdPresent = "";
 	
     QueryShoppingCart cart = (QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
 	List columnList = new ArrayList();
@@ -30,7 +33,6 @@
 	   columnList.add(0,"");
       dataList = cart.getCart();
 	}
-	System.out.println("hhii"+cart);
 %>
 <head>
 <script language="javascript">
@@ -60,7 +62,6 @@ function onDelete()
 				if(flag)
 				{
 					var action = "QueryAddToCart.do?operation=delete";
-					//document.forms[0].operation.value="delete";
 					document.forms[0].action = action;
 					document.forms[0].target = "_parent";
 					document.forms[0].submit();
@@ -75,9 +76,22 @@ function onExport()
 		    if(isChecked == "true")
 		    {
 				var action = "QueryAddToCart.do?operation=export";
-				//document.forms[0].operation.value="export";
 				document.forms[0].action = action;
-				//document.forms[0].target = "_blank";
+				document.forms[0].submit();
+			}
+			else
+			{
+				alert("Please select at least one checkbox");
+			}
+		}
+
+function addToOrderList()
+		{			
+		    var isChecked = updateHiddenFields();
+		    if(isChecked == "true")
+		    {
+				var action = "QueryAddToCart.do?operation=addToOrderList";
+				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
 			else
@@ -152,25 +166,38 @@ function checkAll(element)
 
 			<tr>
 			<td>
-			<table cellpadding="5" cellspacing="0" border="0" width="100%">
+			<table cellpadding="5" cellspacing="0" border="0" width="90%">
 			<tr>
 				<td width="10%" nowrap>
 					<input type='checkbox' name='checkAll1' id='checkAll1' onClick='checkAll(this)'>
 					<bean:message key="buttons.checkAll" />
 				</td>
-				<td width="40%">
+				<td width="70%">
 					&nbsp;
 				</td>
-				<td width="5%" nowrap align="left">
+				<td width="10%" nowrap align="left">
 					<html:button styleClass="actionButton" property="deleteCart" onclick="onDelete()">
 						<bean:message key="buttons.delete"/>
 					</html:button>
 				</td>
-				<td width="5%" nowrap align="left">
+				<td width="10%" nowrap align="left">
 					<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
 						<bean:message key="buttons.export"/>
 					</html:button>
 				</td> 
+				
+				<td width="10%" nowrap align="left">
+				<%if(isSpecimenIdPresent.equals("true")){
+					%>
+					<html:button styleClass="actionButton"  property="orderButton" onclick="addToOrderList()">
+						<bean:message key="buttons.addtolist"/>	
+					</html:button>
+					<%}else{%>
+                     <html:button styleClass="actionButton"  disabled="true" property="orderButton" onclick="addToOrderList()">
+						<bean:message key="buttons.addtolist"/>	
+					</html:button>
+					<%}%>
+				</td>
 
 			
 			</tr>

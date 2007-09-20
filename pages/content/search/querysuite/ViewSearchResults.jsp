@@ -238,11 +238,7 @@ treeNo = treeNo + 1;
 
 			<td width="25%" height="5%" class="queryTabMenuItemSelected">
 				<bean:message key="query.viewSearchResults"/>
-			</td>
-
-			<td width="25%" height="5%" class="queryModuleTabMenuItem">
-				<bean:message key="query.dataList"/>
-			</td>			
+			</td> 
 		</tr>
 		<tr>
 			<td height="500" width="100%" colspan="4">

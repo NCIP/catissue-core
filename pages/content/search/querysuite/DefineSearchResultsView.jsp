@@ -45,11 +45,8 @@
 
 								<td width="20%" class="queryModuleTabMenuItem">
 									<bean:message key="query.viewSearchResults"/>
-								</td>
+								</td> 
 
-								<td width="20%" class="queryModuleTabMenuItem">
-									<bean:message key="query.dataList"/>
-								</td>			
 							</tr>
 							<tr height="1">
 								<td></td>
