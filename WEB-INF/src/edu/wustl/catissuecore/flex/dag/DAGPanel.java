@@ -70,7 +70,8 @@ public class DAGPanel {
 	private HttpSession m_session;
 	private IPathFinder m_pathFinder;
 	private IExpression expression;
-
+	private HashMap<String,IPath> m_pathMap = new HashMap<String, IPath>();
+		
 	public DAGPanel(IPathFinder pathFinder)
 	{
 		m_pathFinder =pathFinder;
@@ -105,20 +106,21 @@ public class DAGPanel {
 		Map ruleDetailsMap = null;
 		IExpressionId expressionId = null;
 		DAGNode node = null;
-		//IQuery query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
-		IQuery query = m_queryObject.getQuery();
+		
+		IQuery query = (IQuery)m_session.getAttribute(DAGConstant.QUERY_OBJECT);// Get existing Query object from server  
+
+		if(query != null)
+		{
+			m_queryObject.setQuery(query);
+		}
+		else
+		{
+			query = m_queryObject.getQuery();
+		}
 		System.out.println("query=======>"+query);
-		m_session.setAttribute(AppletConstants.QUERY_OBJECT, query);
+		m_session.setAttribute(DAGConstant.QUERY_OBJECT, query);
 
 		try {
-			//-----------Init Code  from Digramatical Applet view 
-			//IQuery query = getQueryObjectFromServer(); Get exiting Query object from server
-//			if(query != null)
-//			{
-//			queryObject.setQuery(query);
-//			}
-//			DAGNodeBuilder nodeBuilder  = new DAGNodeBuilder();
-
 			Map searchedEntitiesMap = (Map)m_session.getAttribute(Constants.SEARCHED_ENTITIES_MAP);
 			EntityInterface entity = (Entity) searchedEntitiesMap.get(entityName);
 
@@ -188,28 +190,31 @@ public class DAGPanel {
 	 * @param destNode
 	 * @param paths
 	 */
-	public int linkNode(final DAGNode sourceNode, final DAGNode destNode,List<IPath> paths) {
-		int status=0;
-		if (paths == null || paths.isEmpty()) {
-			status = DAGConstant.NO_PATHS_PRESENT;
-		}
-		else
-		{
+	public  List<DAGPath> linkNode(final DAGNode sourceNode, final DAGNode destNode,List<IPath> paths) {
+
+		List<DAGPath> dagPathList = null;
+		if (paths != null && !paths.isEmpty()) {
+			dagPathList = new ArrayList<DAGPath>();
 			IExpressionId sourceExpressionId = new ExpressionId(sourceNode.getExpressionId());
 			IExpressionId destExpressionId = new ExpressionId(destNode.getExpressionId());
 			if (!m_queryObject.isPathCreatesCyclicGraph(sourceExpressionId, destExpressionId,
 					paths.get(0))) {
 				for (int i = 0; i < paths.size(); i++) {
+					IPath path = paths.get(i);
 					LinkTwoNode(sourceNode, destNode, paths.get(i), new ArrayList<IExpressionId>());
+					String pathStr = new Long(path.getPathId()).toString();
+					DAGPath dagPath = new DAGPath();
+					dagPath.setToolTip(getPathDisplayString(path));
+					dagPath.setId(pathStr);
+					dagPath.setSourceExpId(sourceNode.getExpressionId());
+					dagPath.setDestinationExpId(destNode.getExpressionId());
+					dagPathList.add(dagPath);
+					String key =pathStr+"_"+sourceNode.getExpressionId()+"_"+destNode.getExpressionId();
+					m_pathMap.put(key,path);
 				}
-				status=DAGConstant.SUCCESS;
 			}
-			else {
-				status=DAGConstant.CYCLIC_GRAPH;
-			}
-
 		}
-		return status;
+		return dagPathList;
 	}
 	/**
 	 * Gets list of paths between two nodes
@@ -432,8 +437,6 @@ public class DAGPanel {
 			{
 				dagNode.setNodeType(DAGConstant.CONSTRAINT_ONLY_NODE);
 			}
-			IJoinGraph graph = constraints.getJoinGraph();
-			List childList = graph.getChildrenList(expressionId);
 			
 			nodeform(expressionId,dagNode,constraints,new ArrayList<IIntraModelAssociation>());
 			
@@ -479,8 +482,7 @@ public class DAGPanel {
 			//	PathFinder pathFinder =(PathFinder)m_pathFinder;
 				IPath pathObj = (IPath)m_pathFinder.getPathForAssociations(intraModelAssociationList);
 				long pathId =pathObj.getPathId();
-				System.out.println("path id  ----"+pathId);
-			
+					
 				DAGNode dagNode = new DAGNode();
 				dagNode.setExpressionId(exp.getExpressionId().getInt());
 				dagNode.setNodeName(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()));
@@ -489,21 +491,14 @@ public class DAGPanel {
 				
 			/*	Adding Dag Path in each visible list which have childrens*/
 			  	DAGPath dagPath  = new DAGPath();
-				dagPath.setName(getPathDisplayString(pathObj));
+				dagPath.setToolTip(getPathDisplayString(pathObj));
 				dagPath.setId( new Long(pathId).toString());
 				dagPath.setSourceExpId(node.getExpressionId());
 				dagPath.setDestinationExpId(dagNode.getExpressionId());
-				
-				System.out.println("dagPath ==" + dagPath.getSourceExpId() +"==="+dagPath.getDestinationExpId());
-				
 				node.setDagpathList(dagPath);
-				System.out.println("--");
 				node.setAssociationList(dagNode);
-				//node.setPathList(path);
 				intraModelAssociationList.clear();
-			//	intraModelAssociationList = new ArrayList<IIntraModelAssociation>();
-			//	IExpressionId sourceExpressionId = new ExpressionId(node.getExpressionId());
-			//	childList = graph.getChildrenList(sourceExpressionId);
+		
 			}
 			else
 			{
@@ -628,8 +623,9 @@ public class DAGPanel {
 	 * @param path
 	 * @param linkedNodeList
 	 */
-	public void deletePath(IPath path,List<DAGNode>linkedNodeList)
+	public void deletePath(String pathName,List<DAGNode>linkedNodeList)
 	{
+		IPath path = m_pathMap.remove(pathName);
 		IExpressionId sourceexpressionId = new ExpressionId(linkedNodeList.get(0)
 					.getExpressionId());
 		IExpressionId destexpressionId = new ExpressionId(linkedNodeList.get(1)
