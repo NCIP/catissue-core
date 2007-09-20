@@ -73,7 +73,7 @@ public class CaCoreAPIService
 		} 
 		catch (ApplicationException e) 
 		{
-			Logger.out.error("Error while retrieving object "+ sourceObject.getClass());
+			Logger.out.error("Error while retrieving object "+ sourceObject.getClass()+e);
 		}
 		return null;
 	}
@@ -89,7 +89,7 @@ public class CaCoreAPIService
 		} 
 		catch (ApplicationException e) 
 		{
-			Logger.out.error("Error while retrieving List for "+ sourceObject.getClass());
+			Logger.out.error("Error while retrieving List for "+ sourceObject.getClass()+e);
 		}
 		return null;
 	}
