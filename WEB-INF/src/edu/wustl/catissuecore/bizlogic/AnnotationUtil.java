@@ -112,7 +112,7 @@ public class AnnotationUtil
      try
         {
         staticEntity = EntityManager.getInstance().persistEntityMetadata(
-                staticEntity, true);
+                staticEntity, true,false);
         }
         catch (Exception e)
         {
@@ -177,7 +177,7 @@ public class AnnotationUtil
         return association.getId();
    
     }
-
+ 
     /**
      * @param staticEntity
      * @param dynamicEntity
