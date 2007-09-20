@@ -14,12 +14,12 @@
     	<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
 		    	
 <!-- oracle settings-->   
- <!--  	
+  <!-- 	
   	    <property name="dialect">net.sf.hibernate.dialect.Oracle9Dialect</property>	
         <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
         <property name="hibernate.query.substitutions">true 1,false 0</property>
         
-  -->       
+   -->     
 <!-- oracle settings end-->  
 
 <!-- My sql settings -->
@@ -36,7 +36,7 @@
 		<property name="hibernate.c3p0.idle_test_period">3000</property>
 		<property name="hibernate.c3p0.acquire_increment">2</property>
 		<property name="hibernate.c3p0.validate">false</property>
-
+ 
   
 <!-- My sql settings end -->   
 

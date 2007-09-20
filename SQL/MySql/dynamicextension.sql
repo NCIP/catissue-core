@@ -145,6 +145,7 @@ drop table if exists DYEXTN_SHORT_TYPE_INFO;
 drop table if exists DYEXTN_CONTAINER;
 drop table if exists DYEXTN_RADIOBUTTON;
 drop table if exists DYEXTN_DATEPICKER;
+
 create table DYEXTN_OBJECT_TYPE_INFO (
    IDENTIFIER bigint not null,
    primary key (IDENTIFIER)
@@ -210,7 +211,7 @@ create table DYEXTN_BOOLEAN_CONCEPT_VALUE (
 create table DE_FILE_ATTR_RECORD_VALUES (
    IDENTIFIER bigint not null auto_increment,
    CONTENT_TYPE varchar(255),
-   FILE_CONTENT longblob,
+   FILE_CONTENT blob,
    FILE_NAME varchar(255),
    RECORD_ID bigint,
    primary key (IDENTIFIER)
@@ -271,7 +272,7 @@ create table DYEXTN_TAGGED_VALUE (
 create table DE_OBJECT_ATTR_RECORD_VALUES (
    IDENTIFIER bigint not null auto_increment,
    CLASS_NAME varchar(255),
-   OBJECT_CONTENT longblob,
+   OBJECT_CONTENT blob,
    RECORD_ID bigint,
    primary key (IDENTIFIER)
 );
