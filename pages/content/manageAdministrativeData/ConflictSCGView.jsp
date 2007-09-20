@@ -11,10 +11,10 @@
 <%
 	boolean readOnlyValue=true;
 	String divHeight="330";
-	String divWidth="440";
+
 %>
 
-<table summary="" cellpadding="0" cellspacing="" border="0" width="100%" height="40%">
+<table summary="" cellpadding="0" cellspacing="" border="0" width="100%" style="table-layout:fixed" height="40%">
 	
 	<tr>
 		<td width="50%" class="formFieldNoBordersBold">
@@ -28,13 +28,13 @@
 	<tr>
 		<td width="50%">
 		 	
-				<div style="height:<%=divHeight%>;; overflow:auto;;border: 1px solid #111;"><PRE><bean:write name="conflictSCGForm" property="existingConflictedReport"/></PRE>
+				<div style="height:<%=divHeight%>;width:100%;; overflow:auto;;border: 1px solid #111;"><PRE><bean:write name="conflictSCGForm" property="existingConflictedReport"/></PRE>
 				</div>
 		
 		 </td>
 		 <td width="50%">
 		 	
-				<div style="height:<%=divHeight%>;; overflow:auto;;border: 1px solid #111; "><PRE><bean:write name="conflictSCGForm" property="newConflictedReport"/></PRE>
+				<div style="height:<%=divHeight%>;width:100%; overflow:auto;;border: 1px solid #111; "><PRE><bean:write name="conflictSCGForm" property="newConflictedReport"/></PRE>
 				</div>
 		 </td>	
 	</tr>
