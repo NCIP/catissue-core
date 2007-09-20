@@ -282,6 +282,7 @@ public class ShoppingCartAction  extends BaseAction
 		    	if(session.getAttribute("DefineArrayFormObjects")!=null)
 		    		session.removeAttribute("DefineArrayFormObjects");
 	    	}
+	    	request.setAttribute(Constants.IS_SPECIMENID_PRESENT, "true");
     	}
         return mapping.findForward(target);
     }
