@@ -62,12 +62,10 @@ public class ReportProcessor implements Observer
 	public void run(Object obj)
 	{
 		String[] files=null;
-		List<String> fileToDelete=null;
 		try
 		{	
 			files=	(String[])obj;
 			// variable to store list of files that has to be deleted from input directory after processing
-			fileToDelete = new ArrayList<String>();
 			// Loop to process all incoming files
 			for(int i=0;i<files.length;i++)
 			{	
@@ -88,8 +86,8 @@ public class ReportProcessor implements Observer
 					{
 						Logger.out.info("Bad file found. Moving file to bad files directory. Filename:"+CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
 						CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,"Bad file found "+CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
-						fileToDelete.add(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
 						copyFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i],CaTIESProperties.getValue(CaTIESConstants.BAD_FILE_DIR)+"/"+files[i]);
+						deleteFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
 					}					
 				}
 				catch(IOException ex)
@@ -99,15 +97,13 @@ public class ReportProcessor implements Observer
 				catch(Exception ex)
 				{     
 			  	    copyFile("./"+files[i],CaTIESProperties.getValue(CaTIESConstants.BAD_FILE_DIR)+File.separator+files[i]);
-			  	    fileToDelete.add(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
+			  	    deleteFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
 					Logger.out.error("Bad File ",ex);
 				}
-				fileToDelete.add(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
 				copyFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i],CaTIESProperties.getValue(CaTIESConstants.PROCESSED_FILE_DIR)+"/"+files[i]);
+				deleteFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
 			}
 			files=null;
-			deleteFiles(fileToDelete);
-				
 		}
 		catch(Exception ex)
 		{     
@@ -142,17 +138,14 @@ public class ReportProcessor implements Observer
 	 * @param list list of files to delete
 	 * @throws Exception generic exception
 	 */
-	private static void deleteFiles(List<String> list)throws Exception
+	private static void deleteFile(String filePath)throws Exception
 	{
 		
 		File tempFile= null;
-		for(int i=0;i<list.size();i++)
+		tempFile=new File(filePath);
+		if(tempFile.exists())
 		{
-			tempFile=new File(list.get(i));
-			if(tempFile.exists())
-			{
-				 tempFile.delete();
-			}
+			 tempFile.delete();
 		}
 	}	
 	
