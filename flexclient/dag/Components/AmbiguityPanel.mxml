@@ -8,7 +8,7 @@
 		import mx.collections.ArrayCollection;
 		import mx.managers.PopUpManager;
 	    import mx.events.CollectionEvent;
-	    import Components.IDAGPath;
+	    import Components.DAGPath;
 	    import mx.controls.Alert;
 		import mx.managers.PopUpManager;
 		import mx.rpc.events.ResultEvent;
@@ -19,7 +19,7 @@
 		public var selectedList:ArrayCollection= null;
 		
 		public var nodeList:ArrayCollection =null;						
-		public var dagPath: IDAGPath = null;
+		public var dagPath:DAGPath = null;
 		
 		private function init():void
         {
@@ -57,7 +57,7 @@
 				var len:int = pathList.length;
 				for (var i:int=0;i<len;i++)
 				{
-					dagPath = pathList.getItemAt(i) as IDAGPath;
+					dagPath = pathList.getItemAt(i) as DAGPath;
 					if (dagPath.isSelected)
 					{
 						selectedList.addItem(dagPath);
@@ -76,7 +76,7 @@
 </mx:Script>
 	<mx:DataGrid name="pathGrid" dataProvider="{pathList}" width="550" x="0" height="500" y="0"  verticalScrollPolicy="off" horizontalScrollPolicy="off">
 		<mx:columns>
-			<mx:DataGridColumn headerText="Paths" dataField="name" dataTipField="name" showDataTips="true" width="450" wordWrap="true"/>
+			<mx:DataGridColumn headerText="Paths" dataField="toolTip" dataTipField="toolTip" showDataTips="true" width="450"/>
 			<mx:DataGridColumn headerText="Select" dataField="isSelected" width="100">
 			   <mx:itemRenderer>
 			      <mx:Component>
