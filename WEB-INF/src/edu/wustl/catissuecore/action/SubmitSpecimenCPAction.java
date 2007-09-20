@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
@@ -43,14 +44,17 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.flex.SpecimenBean;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 public class SubmitSpecimenCPAction extends Action {
@@ -113,7 +117,7 @@ public class SubmitSpecimenCPAction extends Action {
 			specimenSummaryForm.switchUserAction();
 		} catch (Exception ex) {
 			target = Constants.FAILURE;
-			String errorMsg = ex.getMessage();
+     			String errorMsg = ex.getMessage();
 			resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			ex.printStackTrace();
 			ActionErrors actionErrors = new ActionErrors();
@@ -413,12 +417,28 @@ public class SubmitSpecimenCPAction extends Action {
 			}
 			else
 			{
+				
 				specimen.setLineage(Constants.DERIVED_SPECIMEN);
 				specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
-				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)
-					specimen.getParentSpecimen().getSpecimenCollectionGroup();
 				
-				specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+				if(specimenDataBean.getSpecimenCollectionGroup()== null)
+				{
+					Specimen parentSpeciemn = specimen.getParentSpecimen();
+					
+					Long scgId =
+						parentSpeciemn.getSpecimenCollectionGroup().getId();
+					
+					IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+					List list =iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(),
+							"id", scgId);
+					specimen.setSpecimenCollectionGroup((AbstractSpecimenCollectionGroup) list.get(0));
+					
+
+				}
+				else
+				{
+					specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());
+				}
 			}
 			
 			SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();

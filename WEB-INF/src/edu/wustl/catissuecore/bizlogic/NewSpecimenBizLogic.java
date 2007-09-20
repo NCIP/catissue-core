@@ -1211,7 +1211,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			parentSpecimen.setId(specimen.getParentSpecimen().getId());
 			// check for closed Parent Specimen
 			checkStatus(dao, parentSpecimen, "Parent Specimen");
-			specimen.setLineage(Constants.DERIVED_SPECIMEN);
+			if(specimen.getLineage() == null)
+			{
+				specimen.setLineage(Constants.DERIVED_SPECIMEN);
+			}
 			// set parent specimen event parameters -- added by Ashwin for bug id# 2476
 			specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(specimen.getParentSpecimen(), specimen));
 			//			}
