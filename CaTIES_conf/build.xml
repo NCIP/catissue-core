@@ -46,10 +46,10 @@
 				<classpath>
 					<pathelement location="caties.jar"/>
 				</classpath>
-				<classpath refid="cp"/>
 				<classpath>
 					<pathelement location="${base.dir}/caTIES_conf" />
 				</classpath>
+				<classpath refid="cp"/>
 				<jvmarg value="-Dgate.plugins.home=E:/gate_3_1/gate_3_1/application/plugins" /> 
 				<jvmarg value="-DproxyHost=ptproxy.persistent.co.in" />
 				<jvmarg value="-DproxyPort=8080" />
