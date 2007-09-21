@@ -533,6 +533,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.viewSearchResults"/>
+			<forward name="treeNodeLimitExceededRecords" path="/OpenDecisionMakingPage.do" />			
 			<forward name="failure" path="/RetrieveQueryAction.do"/>
 		</action>
 		<action path="/loadDefineSearchRules"
@@ -603,6 +604,15 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef"/>			
 		</action>
+		<action path="/OpenDecisionMakingPage"
+			type="edu.wustl.catissuecore.action.querysuite.OpenDecisionMakingPageAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.openDecisionMakingPage"/>		
+			<forward name="viewAllRecords" path=".catissuecore.viewSearchResults"/>		
+		</action>
+		
 		
 		<!--Action to add any object to shopping cart called from Query Wizard -->
 		<action path="/QueryAddToCart"

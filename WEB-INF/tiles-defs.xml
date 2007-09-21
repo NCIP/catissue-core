@@ -1122,6 +1122,10 @@
 	<definition name=".catissuecore.defineQueryResultsView" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/querysuite/DefineGridResultsView.jsp" />
 	</definition>
+	<definition name=".catissuecore.openDecisionMakingPage" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/querysuite/DecisionMaking.jsp" />
+	</definition>
+	
 	<definition name=".catissuecore.participantConsentsDef" path="/pages/content/ConsentTracking/ParticipantConsentTracking.jsp"> 
 	</definition>
 	
@@ -1172,4 +1176,3 @@
 	
 	
 </tiles-definitions>
-
