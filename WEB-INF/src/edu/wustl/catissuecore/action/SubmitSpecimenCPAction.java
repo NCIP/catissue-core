@@ -42,10 +42,12 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.flex.SpecimenBean;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -57,11 +59,11 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
-public class SubmitSpecimenCPAction extends Action {
+public class SubmitSpecimenCPAction extends BaseAction {
 
 	private ViewSpecimenSummaryForm specimenSummaryForm;
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String target = Constants.SUCCESS;
@@ -84,6 +86,11 @@ public class SubmitSpecimenCPAction extends Action {
 				else
 				{
 					insertCollectionProtocol(collectionProtocol,request.getSession());
+					HttpSession session = request.getSession();
+					CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
+							.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+
+					collectionProtocolBean.setIdentifier(collectionProtocol.getId());
 				}
 				ActionMessages actionMessages = new ActionMessages();
 				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
@@ -555,6 +562,19 @@ public class SubmitSpecimenCPAction extends Action {
 		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
 		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
+		
+		if(specimenDataBean.getSpecimenEventCollection()==null && !specimenDataBean.getSpecimenEventCollection().isEmpty())
+		{
+			Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
+			while(iterator.hasNext())
+			{
+				SpecimenEventParameters specimenEventParameters =
+					(SpecimenEventParameters) iterator.next();
+				specimenEventParameters.setSpecimen(specimen);
+				
+			}
+		}
+		
 		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());
 		
 		StorageContainer storageContainer = new StorageContainer();
