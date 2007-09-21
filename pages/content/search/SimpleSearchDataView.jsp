@@ -280,7 +280,7 @@ function checkAllOnThisPageResponse()
 		%>
 		
 		<tr height="80%" valign="top" width="100%">
-			<td  width="100%" valign="top">
+			<td  width="100%" valign="top" height="100%">
 <!--  **************  Code for New Grid  *********************** -->
 				<script>
 					/* 

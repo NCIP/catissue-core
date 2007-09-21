@@ -33,40 +33,40 @@
 <html:form method="GET" action="<%=callAction%>">
 <html:hidden property="operation" value=""/>
 <body onload="initTreeView()">
-<table border="0" width="400" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
-	<tr height="4px">
-		<td width="1px" height="4px">&nbsp;</td>
-		<td valign="top"  width="100" height="4px"></td>
+<table border="0" width="400" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="90%" bordercolorlight="#000000" >
+	<tr >
+		<td width="1px" >&nbsp;</td>
+		<td valign="top"  width="100"></td>
 	</tr>
-	<tr height="4px">
-		<td width="1px" height="4px">&nbsp;	</td>
-		<td valign="top" colspan="8" width="100" height="4px"><bean:message key="query.select.attributes.for.view.header"/></td>
+	<tr >
+		<td width="1px">&nbsp;	</td>
+		<td valign="top" colspan="8" width="100%" ><bean:message key="query.select.attributes.for.view.header"/></td>
 	</tr>
 		
 	<tr>
 		<td width="1px">&nbsp;	</td>
-		<td valign="top"  width="100">
-			<div id="treeBox"  style=" background-color:white; overflow:auto; width:300; height:400; border-bottom:1px solid;  border-top:1px  solid #000000; border-left:1px solid #000000;border-right:1px solid #000000; "></div>
+		<td valign="top"  width="90%" height="90%">
+			<div id="treeBox" style="background-color:white;overflow:auto;height:270;width:260;border-left:solid 1px;border-right:solid 1px;border-top:solid 1px;border-bottom:solid 1px;"></div>
 		</td>
 		<td width="1%"> &nbsp; </td>
-		   <td align="center" valign="middle" width="80">
-			<html:button styleClass="actionButton" property="shiftRight" styleClass="actionButton" styleId ="shiftRight" onclick="moveOptionsRight(this.form.columnNames, this.form.selectedColumnNames);">
+		   <td align="center" valign="center" width="">
+			<html:button styleClass="actionButton" property="shiftRight"styleId ="shiftRight" onclick="moveOptionsRight(this.form.columnNames, this.form.selectedColumnNames);">
 				<bean:message key="buttons.addToView"/>
 			</html:button>
 			<br/><br/>
-			<html:button styleClass="actionButton" property="shiftLeft" styleClass="actionButton" styleId ="shiftLeft" onclick="moveOptionsLeft(this.form.selectedColumnNames, this.form.columnNames);" >
+			<html:button styleClass="actionButton" property="shiftLeft" styleId ="shiftLeft" onclick="moveOptionsLeft(this.form.selectedColumnNames, this.form.columnNames);" >
 				<bean:message key="buttons.deleteFromView"/>
 			</html:button>  
 		</td>
 		<td width="1%"> &nbsp; </td>
-		<td class="formField" valign="top" width="60" height="100%">
+		<td class="" valign="top" width="60" height="85%">
 <!-- Mandar : 434 : for tooltip -->
-			<html:select property="selectedColumnNames" styleClass="formFieldNoSize" size="29" multiple="true">
+			<html:select property="selectedColumnNames" styleClass="" size="16" multiple="true">
 				<html:options collection="selectedColumnNameValueBeanList" labelProperty="name" property="value"/>
 			</html:select>
 		</td>
 		<td width="1%"> &nbsp; </td>
-		<td align="middle" valign="middle">
+		<td align="center" valign="center">
 			<html:button styleClass="actionButton" property="shiftUp" styleClass="actionButton" styleId ="shiftUp" onclick="moveUp(this.form.selectedColumnNames);">
 				<bean:message key="buttons.up"/>
 			</html:button>  <br/><br/>
@@ -75,26 +75,25 @@
 				<bean:message key="buttons.down"/>
 			</html:button> 
 		</td>
-</tr>			
-<tr height="1%">
-<td>&nbsp;
-</td>
 </tr>
+<tr><td> &nbsp;
+</td>
+</tr>					
 <tr>
-  <td colspan="6" align="middle">
-    	<table>
-			<tr height="2%">
-			<td colspan="1" align="left" height="2%">
+  <td colspan="6" align="center" valign="top">
+    	<table border="0" cellpadding="0" cellspacing="0">
+			<tr height="1px">
+			<td colspan="3" align="right" height="2%">
 					<html:button styleClass="actionButton" property="configureButton" onclick = "onSubmit(this.form.selectedColumnNames,'back');" >
 							<bean:message key="query.back.button"/>
 					</html:button>
-			</td>
-			<td colspan="3" align="middle" height="2%">
+			</td>	 
+			<td colspan="1" align="center" height="2%" width="100%">
 					<html:button styleClass="actionButton" property="redefineButton" onclick = "onSubmit(this.form.selectedColumnNames,'restore');" >
 						<bean:message key="query.restoreDefault.button"/>
 					</html:button>
 			</td>
-			<td colspan="2" align="middle" height="2%">
+			<td colspan="1" align="left" height="2%">
 					<html:button styleClass="actionButton" property="configButton" onclick = "onSubmit(this.form.selectedColumnNames,'finish');" >
 						<bean:message key="query.finish.button"/>
 					</html:button>

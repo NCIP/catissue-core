@@ -108,12 +108,11 @@ treeNo = treeNo + 1;
 
 <table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
 	<tr>
-		<td valign="top" width="100%" height="100%">
+		<td valign="top" width="90%" height="90%">
 			<%  for(int i=0;i<noOfTrees;i++) {
 			String divId = "treebox"+i;
-			int divHeight= 600/noOfTrees;
 			%>
-				<div id="<%=divId%>"  style="background-color:white;width:300;height:600">
+				<div id="<%=divId%>"  style="background-color:white;overflow:auto;">
 				</div>
 			<% } %>
 		</td>
