@@ -42,6 +42,10 @@ public class CategorySearchForm extends ActionForm
 	 */
 	private String selected = null;
 	/**
+	 * String to store the radio button selected value.
+	 */
+	private String options = null;
+	/**
 	 * String to store the entityName value.
 	 */
 	private String entityName = null;
@@ -345,5 +349,19 @@ public class CategorySearchForm extends ActionForm
 	public void setSelectedColumnNameValueBeanList(List<NameValueBean> selectedColumnNameValueBeanList)
 	{
 		this.selectedColumnNameValueBeanList = selectedColumnNameValueBeanList;
+	}
+	/**
+	 * @return the options
+	 */
+	public String getOptions()
+	{
+		return options;
+	}
+	/**
+	 * @param options the options to set
+	 */
+	public void setOptions(String options)
+	{
+		this.options = options;
 	}
 }
