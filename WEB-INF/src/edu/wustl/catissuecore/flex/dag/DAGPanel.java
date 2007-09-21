@@ -394,7 +394,7 @@ public class DAGPanel {
 	{
 		int status =0;
 		IQuery query = m_queryObject.getQuery();
-		status=QueryModuleUtil.searchQuery(m_session, query);
+		status=QueryModuleUtil.searchQuery(m_session, query,null);
 		return status;
 	}
 	/**
