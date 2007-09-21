@@ -41,6 +41,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -298,7 +299,13 @@ public class NewSpecimenAction extends SecureAction
 				//Resolved lazy
 				//specimenObject.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getConsentTierResponseCollection()
 				//specimenObject.getConsentTierStatusCollection();
-				Collection consentResponse = (Collection)bizLogicObj.retrieveAttribute(Specimen.class.getName(),specimenObject.getId(), "elements(specimenCollectionGroup.collectionProtocolRegistration.consentTierResponseCollection)");
+				//Collection consentResponse = (Collection)bizLogicObj.retrieveAttribute(Specimen.class.getName(),specimenObject.getId(), "elements(specimenCollectionGroup.collectionProtocolRegistration.consentTierResponseCollection)");
+				
+				String consentResponseHql ="select elements(scg.collectionProtocolRegistration.consentTierResponseCollection)"+ 
+				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
+				" edu.wustl.catissuecore.domain.Specimen as spec " +
+				" where spec.specimenCollectionGroup.id=scg.id and spec.id="+ specimenObject.getId();
+				Collection consentResponse = Utility.executeQuery(consentResponseHql);
 				Collection consentResponseStatuslevel=(Collection)bizLogicObj.retrieveAttribute(Specimen.class.getName(),specimenObject.getId(), "elements(consentTierStatusCollection)"); 
 				Map tempMap=prepareSCGResponseMap(consentResponseStatuslevel, consentResponse);
 				specimenForm.setConsentResponseForSpecimenValues(tempMap);

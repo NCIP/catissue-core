@@ -72,7 +72,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	/**
 	 * Amount of Specimen.
 	 */
-	protected String quantity ="0";
+	protected String quantity;
 	
 	/**
      * A historical information about the specimen i.e. whether the specimen is a new specimen

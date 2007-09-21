@@ -814,8 +814,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					else
 					{
 						parentSpecimen = null;
-						specimenCollectionGroup = null;
-						//this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
+						//specimenCollectionGroup = null;
+						this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
 						
 //						this.specimenCollectionGroup.setGroupName(form.getSpecimenCollectionGroupName());
 						IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);

@@ -818,7 +818,6 @@ public class AliquotAction extends SecureAction
 		" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimen.getId();
 
 		List collectionProtocolList = Utility.executeQuery(colProtHql);
-		System.out.println("---collectionProtocolList"+collectionProtocolList.size());
 		Object obj = (Object) collectionProtocolList.get(0);
 		if(obj!=null)
 		{
