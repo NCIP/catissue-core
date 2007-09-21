@@ -62,6 +62,11 @@ public class FetchAndExecuteQueryAction extends BaseAction
 				{
 					target = Constants.SUCCESS;
 				}
+				else if(errorMessage.equalsIgnoreCase(Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS))
+				{
+					target = Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS;
+					return actionMapping.findForward(target);
+				}
 				else
 				{
 					setActionError(request, errorMessage);
@@ -96,7 +101,7 @@ public class FetchAndExecuteQueryAction extends BaseAction
 	{
 		String errorMessage = null;
 
-		int errorCode = QueryModuleUtil.searchQuery(session, parameterizedQuery);
+		int errorCode = QueryModuleUtil.searchQuery(session, parameterizedQuery,null);
 		switch (errorCode)
 		{
 			case QueryModuleUtil.EMPTY_DAG :
@@ -112,6 +117,8 @@ public class FetchAndExecuteQueryAction extends BaseAction
 			case QueryModuleUtil.DAO_EXCEPTION :
 			case QueryModuleUtil.CLASS_NOT_FOUND :
 				errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+			case QueryModuleUtil.RESULTS_MORE_THAN_LIMIT :
+				errorMessage = Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS;
 		}
 
 		return errorMessage;
