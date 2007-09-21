@@ -111,7 +111,7 @@ function showEvent()
 
 <html:form action="<%=formAction%>">
 <!-- Mandar 05-July-06 Code for tabs start -->
-	 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="450" class="tabPage" width="87%">  
+	 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="90%" class="tabPage" width="90%">  
 			<tr>
 				<td height="20" class="tabMenuItem"  onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction(<%= specimenPath %>)">
 					<bean:message key="tab.specimen.details"/>

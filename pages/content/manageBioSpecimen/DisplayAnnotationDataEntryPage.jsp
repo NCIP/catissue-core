@@ -31,7 +31,7 @@
 
 	
 	%>
-	<iframe src = "<%=url%>" style = "overflow-y:auto" height = 100% width = "100%" name = "dynamicExtensionsFrame" id = "dynamicExtensionsFrame" frameborder="0">
+	<iframe src = "<%=url%>" style = "overflow-y:auto;overflow-x:hidden" height = "550" width = "100%" name = "dynamicExtensionsFrame" id = "dynamicExtensionsFrame" frameborder="0">
 	</iframe>
 
 	<html:hidden property="id" /><html:hidden property="pageOf"/>

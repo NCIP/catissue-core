@@ -58,7 +58,7 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 	annotationsGrid = new dhtmlXGridObject('definedAnnotationsGrid');
 	annotationsGrid.setImagePath("dhtml_comp/imgs/");
 	annotationsGrid.setHeader("#,Annotation,Last Updated,Updated By");
-	annotationsGrid.setInitWidthsP("5,32,31,32")
+	annotationsGrid.setInitWidthsP("5,31,31,32")
 	annotationsGrid.setColAlign("center,left,left,left,left")
 	annotationsGrid.setColTypes("ch,link,ro,ro");
 	annotationsGrid.init();
@@ -119,48 +119,52 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 	<!-- Actual HTML Code Start -->
 	<br>
 
-		<table  valign="top" id = "test" class= "contentPage" width='100%' border ="0" height="95%"  cellspacing="0" cellpadding="3">
+		<table  valign="top" id = "test" class= "contentPage" width='100%' border ="0" height="90%"  cellspacing="0" cellpadding="3">
 		<tr>
 		    <td width="1%"></td>
 		<td>
-			<table  width="100%" class="tbBordersAllbordersBlack"  height="100%" summary="" cellpadding="3" cellspacing="0" >
+			<table valign="top" width="100%" class="tbBordersAllbordersBlack" height="85%" summary="" cellpadding="3" cellspacing="0" >
 
 				<tr valign="top">
-					<td align="left" class="formTitle">
+					<td align="left" class="formTitle" colspan="10">
 						<bean:message key="app.annotationDataEntryPageTitle"/>
-					</td>
+					</td>	
+
 				</tr>
 				<tr valign="top" >
-					<td align="left" >
+					<td align="left" colspan="4">
 						<label class="formRequiredLabelWithoutBackgrnd"><bean:message key="app.annotationFormsList"/> :</label>
-						<html:select property="selectedAnnotation" styleId= "selectedAnnotation" styleClass="formFieldVerySmallSized">
+					</td>
+					<td align="left" class="formFieldForAnnotaionList" colspan="6" >
+						<html:select property="selectedAnnotation" styleId= "selectedAnnotation" styleClass="formFieldSized35">
 							<html:options collection="annotationsList" labelProperty="name" property="value" />
 						</html:select>
+
 						<html:button property="getDataForAnnotation" styleClass="actionButton" onclick="loadDynamicExtDataEntryPage()" >
 								<bean:message key="app.gotoAddAnnotationData"/>
 						</html:button>
-						<!--<a href="#" id="getDataForAnnotation" onclick="loadDynamicExtDataEntryPage()">GO</a>-->
-					</td>
+					</td>	
+					
 				</tr>
 
 				
 
 				<tr valign="top">
-					<td align="left" class="formTitle">
+					<td align="left" class="formTitle" colspan="10" >
 						<bean:message key="app.listOfAnnotationsAddedTitle"/>
 					</td>
 					
 				</tr>
 				<tr height="100%" valign="top">
-					<td align="left" >
-						<div id="definedAnnotationsGrid" valign = "top" width="100%" height="100%" style="background-color:white;overflow:hidden"  />
+					<td align="left" colspan="10">
+						<div id="definedAnnotationsGrid" valign = "top" width="100%" height="90%" style="background-color:white;overflow:hidden;"  />
 						<script>
 							initAnnotationGrid();
 						</script>
 					</td>
 				</tr>
 				<tr valign="bottom">
-					<td align="left" class="formLabelAllBorder">
+					<td align="left" class="formLabelAllBorder" colspan="10">
 						<html:button property="deleteAnnotationData" styleClass="actionButton" onclick="deleteSelectedRecords();" >
 								Delete
 						</html:button>

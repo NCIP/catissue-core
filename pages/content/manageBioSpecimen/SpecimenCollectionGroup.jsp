@@ -657,7 +657,7 @@ function editSCG()
 	if(pageView.equals("viewAnnotations"))
 	{
 	%>
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="600" class="tabPage" width="600">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" height="90%" class="tabPage" width="90%">
 			<tr>
 				<td height="20" class="tabMenuItem" id="specimenCollectionGroupTab" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="setTarget(); editSCG()">
 					<bean:message key="specimenCollectionGroupPage.edit.title"/>

@@ -32,6 +32,17 @@ String selectedStaticEntityId=request.getParameter("selectedStaticEntityId");
 
 List groupList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_GROUP);
 
+boolean mac = false;
+Object os = request.getHeader("user-agent");
+if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
+{
+    mac = true;
+}
+boolean heightForGrid = true;
+if(mac)
+{
+heightForGrid=false;
+}
 %>
 	<head>
 		<%-- Stylesheet --%>
@@ -112,7 +123,9 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
         {	
 			gridForGroups= new dhtmlXGridObject('divForGroups');
 			gridForGroups.setImagePath("dhtml_comp/imgs/");
-			gridForGroups.enableAutoHeigth(false);
+			//		gridForGroups.enableAutoHeigth(false);  //on safari
+//			gridForGroups.enableAutoHeigth(true);  //for mozilla, IE
+			gridForGroups.enableAutoHeigth(<%=heightForGrid%>);
 			gridForGroups.setHeader("Group");
 			gridForGroups.setInitWidthsP("100");
 			gridForGroups.setColAlign("left");
