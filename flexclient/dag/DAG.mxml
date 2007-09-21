@@ -388,12 +388,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	{
 		var status:int =event.result as int;
 		
-		if(status>DAGConstants.TREE_NODES_LIMIT)
-		{
-			var paramArray:Array = new Array(status);
-			ExternalInterface.call("openDecisionMakingPage",paramArray);
-		}
-
+		
 		switch(status)
 		{
 			case DAGConstants.SUCCESS:
@@ -416,6 +411,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 							break;
 			case DAGConstants.DAO_EXCEPTION:
 							showValidationMessagesToUser(DAGConstants.GENERIC_MESSAGE)
+							break;
+			case DAGConstants.TREE_NODES_LIMIT:		
+							ExternalInterface.call("openDecisionMakingPage");		
 							break;
 			default:break; 				
 		}
