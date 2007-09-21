@@ -75,7 +75,9 @@
 			{
 				var treeValues = node.split(",");
 				var nodeId = treeValues[0];
-				var treeNums = nodeId.split('_');
+				var parentChildNode = nodeId.split('::');
+				var childNode= parentChildNode[1];
+				var treeNums = childNode.split('_');
 				var i1= treeNums[0];
 				var displayName = treeValues[1];
 				var objectname = treeValues[2];
@@ -920,5 +922,39 @@ var jsReady = false;
 		document.forms[0].submit();
 	}  
 	
+	function openDecisionMakingPage()
+	{
+		action="OpenDecisionMakingPage.do";
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
+	function proceedClicked()
+	{
+		var radioObj = document.forms[0].options;
+		var option = "";
+		var radioLength = radioObj.length;
+		for(var i = 0; i < radioLength; i++) 
+		{
+			if(radioObj[i].checked)
+			{
+				option =  radioObj[i].value;
+			}
+		}			
+		if(option == 'redefineQuery')
+		{
+			onRedefineQueryOption();
+		}
+		else
+		{
+			document.forms[0].submit();
+		}
+	}	
 	
+	function onRedefineQueryOption()
+		{
+			waitCursor();
+			document.forms[0].action='SearchCategory.do?currentPage=resultsView';
+			document.forms[0].submit();
+			hideCursor();
+		}
 	//---

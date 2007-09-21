@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.flex.dag.DAGConstant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
@@ -53,7 +54,9 @@ public abstract class QueryModuleUtil
 	public static final int SQL_EXCEPTION = 4;
 	public static final int DAO_EXCEPTION = 5;
 	public static final int CLASS_NOT_FOUND = 6;
-
+	public static final int RESULTS_MORE_THAN_LIMIT = 10;
+	
+	
 	/**
 	 * Executes the query and returns the results.
 	 * @param selectSql sql to be executed
@@ -342,25 +345,14 @@ public abstract class QueryModuleUtil
 	 * This method extracts query object and forms results for tree and grid.
 	 * @param session session object
 	 * @param query IQuery Object
+	 * @param option 
 	 * @return
 	 */
-	public static int searchQuery(HttpSession session, IQuery query)
+	public static int searchQuery(HttpSession session, IQuery query, String option)
 	{
 		int status = 0;
 		try
 		{
-			int recordsPerPage = 0;
-			String recordsPerPageSessionValue = (String) session
-					.getAttribute(Constants.RESULTS_PER_PAGE);
-			if (recordsPerPageSessionValue == null)
-			{
-				recordsPerPage = Integer.parseInt(XMLPropertyHandler
-						.getValue(Constants.RECORDS_PER_PAGE_PROPERTY_NAME));
-				session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage + "");
-			}
-			else
-				recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
-
 			boolean isRulePresentInDag = false;
 
 			if (query != null)
@@ -380,19 +372,68 @@ public abstract class QueryModuleUtil
 			if (isRulePresentInDag)
 			{
 				session.setAttribute(AppletConstants.QUERY_OBJECT, query);
-				String selectSql = "";
 
 				SqlGenerator sqlGenerator = (SqlGenerator) SqlGeneratorFactory.getInstance();
 				QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
-				selectSql = sqlGenerator.generateSQL(query);
+				String selectSql = sqlGenerator.generateSQL(query);
 				Object obj = session.getAttribute(Constants.SESSION_DATA);
 				if (obj != null)
 				{
 					SessionDataBean sessionData = (SessionDataBean) obj;
 					outputTreeBizLogic.createOutputTreeTable(selectSql, sessionData);
-
 					List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator
 							.getRootOutputTreeNodeList();
+					
+					status = DAGConstant.SUCCESS;
+					int i = 0;
+					for (OutputTreeDataNode outnode : rootOutputTreeNodeList)
+					{
+						Vector<QueryTreeNodeData> treeData = outputTreeBizLogic
+								.createDefaultOutputTreeData(i, outnode, sessionData);
+						int resultsSize = treeData.size();
+						System.out.println("resultsSize    :"+resultsSize);
+						if(option == null)
+						{
+							if (resultsSize == 0)
+							{
+								status = NO_RESULT_PRESENT;
+								return status;
+							} else if(resultsSize > Variables.maximumTreeNodeLimit)
+							{
+								System.out.println();
+								status = QueryModuleUtil.RESULTS_MORE_THAN_LIMIT;
+								String resultSizeStr = resultsSize+"";
+								session.setAttribute(Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS,resultSizeStr);
+								return status;
+							}
+							session.setAttribute(Constants.TREE_DATA + "_" + i, treeData);
+							i += 1;
+						}
+						else if(option.equalsIgnoreCase("viewAllRecords"))
+						{
+							session.setAttribute(Constants.TREE_DATA + "_" + i, treeData);
+							i += 1;
+						}
+						else if(option.equalsIgnoreCase("viewLimitedRecords"))
+						{
+							List<QueryTreeNodeData> limitedRecordsList = treeData.subList(0, Variables.maximumTreeNodeLimit+1);
+							Vector limitedTreeData = new Vector<QueryTreeNodeData>();
+							limitedTreeData.addAll(limitedRecordsList);
+							session.setAttribute(Constants.TREE_DATA + "_" + i, limitedTreeData);
+							i += 1;
+						}
+					}
+					int recordsPerPage = 0;
+					String recordsPerPageSessionValue = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
+					System.out.println(recordsPerPageSessionValue);
+					if (recordsPerPageSessionValue == null)
+					{
+						recordsPerPage = Integer.parseInt(XMLPropertyHandler
+								.getValue(Constants.RECORDS_PER_PAGE_PROPERTY_NAME));
+						session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage + "");
+					}
+					else
+						recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
 					session.setAttribute(Constants.TREE_ROOTS, rootOutputTreeNodeList);
 
 					Long noOfTrees = new Long(rootOutputTreeNodeList.size());
@@ -400,8 +441,8 @@ public abstract class QueryModuleUtil
 					Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor
 							.getAllChildrenNodes(rootOutputTreeNodeList);
 					session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
-
 					OutputTreeDataNode node = rootOutputTreeNodeList.get(0);
+					
 					QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 					String parentNodeId = null;
 					String treeNo = "0";
@@ -426,20 +467,7 @@ public abstract class QueryModuleUtil
 							.get(Constants.SPREADSHEET_COLUMN_LIST));
 					session.setAttribute(Constants.SELECTED_COLUMN_META_DATA, spreadSheetDatamap
 							.get(Constants.SELECTED_COLUMN_META_DATA));
-					status = DAGConstant.SUCCESS;
-					int i = 0;
-					for (OutputTreeDataNode outnode : rootOutputTreeNodeList)
-					{
-						Vector<QueryTreeNodeData> treeData = outputTreeBizLogic
-								.createDefaultOutputTreeData(i, outnode, sessionData);
-						int resultsSize = treeData.size();
-						if (resultsSize == 0)
-						{
-							status = NO_RESULT_PRESENT;
-						}
-						session.setAttribute(Constants.TREE_DATA + "_" + i, treeData);
-						i += 1;
-					}
+					
 				}
 				else
 				{
