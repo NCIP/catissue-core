@@ -178,6 +178,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String TREE_NODE_FONT_CLOSE = "</i></font>";  
 	public static final String NULL_ID = "NULL";
 	public static final String NODE_SEPARATOR = "::";
+	public static final String UNIQUE_ID_SEPARATOR = "UQ";
 	public static final String DEFINE_SEARCH_RULES = "Define Limits For";
 	public static final String DATE_FORMAT = "MM-dd-yyyy";
 	public static final String OUTPUT_TREE_MAP = "outputTreeMap";
@@ -199,10 +200,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FINISH = "finish";
 	public static final String BACK = "back";
 	public static final String RESTORE = "restore";
-	
+	public static final String VIEW_ALL_RECORDS = "viewAllRecords";
+	public static final String VIEW_LIMITED_RECORDS = "viewLimitedRecords";
 	public static final String SAVE_QUERY_ACTION = "SaveQueryAction.do";
 	public static final String RETRIEVE_QUERY_ACTION = "RetrieveQueryAction.do";
 	public static final String FETCH_AND_EXECUTE_QUERY_ACTION = "FetchAndExecuteQueryAction.do";
+	public static final String TREE_NODE_LIMIT_EXCEEDED_RECORDS = "treeNodeLimitExceededRecords";
+	public static final String MAXIMUM_TREE_NODE_LIMIT = "resultView.maximumTreeNodeLimit";
 	// Query Module Interface UI constants---ends here
 	//	 Frame names in Query Module Results page.
 	public static final String GRID_DATA_VIEW_FRAME = "gridFrame";

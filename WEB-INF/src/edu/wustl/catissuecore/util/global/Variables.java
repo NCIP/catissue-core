@@ -28,7 +28,8 @@ public class Variables extends edu.wustl.common.util.global.Variables
     public static String databaseDriver=new String();
     public static String[] databasenames;
     public static String applicationCvsTag = new String();
-
+    public static int maximumTreeNodeLimit;
+    
 	// Patch ID: SimpleSearchEdit_7
     public static Map<String, String> aliasAndPageOfMap = new HashMap<String, String>();
     
