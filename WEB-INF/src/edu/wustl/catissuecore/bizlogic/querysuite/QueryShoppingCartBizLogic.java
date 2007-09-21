@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
@@ -34,7 +35,7 @@ public class QueryShoppingCartBizLogic
 	 * @return int  no of records added in the cart .
 	 */
 		
-	public int add(QueryShoppingCart cart , List<List<String>> dataList ,Set keySet)
+	public int add(QueryShoppingCart cart , List<List<String>> dataList ,List<Integer> keySet)
 	{   
 		int addCount = 0 ;
 		
@@ -53,10 +54,8 @@ public class QueryShoppingCartBizLogic
 			
 		else 
 		{
-			for(Iterator itr = keySet.iterator();itr.hasNext();)
+			for(Integer index:keySet)
 			{
-				Object obj = itr.next();
-				int index = getIndex(obj);
 				if(!(cart.getCart().contains(dataList.get(index))))
 				{
 					cart.getCart().add(dataList.get(index));
@@ -68,7 +67,7 @@ public class QueryShoppingCartBizLogic
 					
 		return addCount;
 		
-	}
+	} 
 	
 	/**
 	 * Delete a object in the shopping cart.
@@ -76,13 +75,11 @@ public class QueryShoppingCartBizLogic
 	 * @param cart a shopping cart object preset in session.
      * @param keySet Set of checkboxs of selected records to delete.
 	 */
-	public int delete(QueryShoppingCart cart  ,Set keySet)
+	public int delete(QueryShoppingCart cart  ,List<Integer> keySet)
 	{ 
 		List<List<String>> removeList = new ArrayList<List<String>>();
-		for(Iterator itr = keySet.iterator();itr.hasNext();)
+		for(Integer index : keySet)
 		{
-			Object obj = itr.next();
-			int index = getIndex(obj);
 			removeList.add(cart.getCart().get(index));
 	    }
 		cart.getCart().removeAll(removeList);
@@ -100,58 +97,83 @@ public class QueryShoppingCartBizLogic
 	 * @param cart a shopping cart object preset in session.
      * @param keySet Set of checkboxs of selected records to export.
 	 */
-	public List<List<String>> export(QueryShoppingCart cart,Set keySet)
+	public List<List<String>> export(QueryShoppingCart cart,List<Integer> keySet)
 	{ 
 		List<List<String>> exportList = new ArrayList<List<String>>();
 		exportList.add(cart.getColumnList());
-		for(Iterator itr = keySet.iterator();itr.hasNext();)
+		for(Integer index: keySet)
 		{
-			Object obj = itr.next();
-			int index = getIndex(obj);
 			exportList.add(cart.getCart().get(index));
 		}
 		
 	    return exportList;
 	}
 	
+
 	/**
-	 * Separates a index of checkbox present in object obj.
+	 * Creates Entity Ids list .
 	 * 
-     * @param obj.
-     * @return index.
+     * @param cart Shopping cart.
+     * @param entityName Name of Entity.
+     * @param chkBoxValues List if checkbox indices.
+     * @return List of entity ids present in cart if chkBoxValues null it will return all ids else only selected ids.
 	 */
-	public int getIndex(Object obj)
+	
+	public List<String> getEntityIdsList(QueryShoppingCart cart,String entityName,List<Integer>chkBoxValues)
 	{
-		String str = obj.toString();
-    	StringTokenizer strTokens = new StringTokenizer(str,"_");
-    	strTokens.nextToken();
-    	int index = Integer.parseInt(strTokens.nextToken());
-		return index;
+
+	    List<String> entityIdsList = new ArrayList<String>();
+	    List<Integer> entityIdsColumnIndexList = getIdsColumnIndexList(cart.getCartAttributeList(),entityName);
+        List<List<String>> dataList = cart.getCart();
+        if(chkBoxValues!=null)
+        {
+	    for(Integer index:chkBoxValues)
+	    {
+			List<String> record = dataList.get(index);
+			for (int i = 0; i < entityIdsColumnIndexList.size(); i++)
+			{
+				if(!(entityIdsList.contains(record.get((Integer)entityIdsColumnIndexList.get(i)))))
+				  entityIdsList.add(record.get((Integer)entityIdsColumnIndexList.get(i)));
+			}
+	    }
+        }
+        else
+        {
+        	for (List<String> record : dataList)
+    		{
+    			for (int j = 0; j < entityIdsColumnIndexList.size(); j++)
+    			{
+    				if (!(entityIdsList.contains(record.get((Integer) entityIdsColumnIndexList.get(j)))))
+    					entityIdsList.add(record.get((Integer) entityIdsColumnIndexList.get(j)));
+    			}
+    		}
+        }
+	    return entityIdsList;
+
 	}
 	
 	/**
-	 * Creates specimen order list .
+	 * Creates Entity Ids column indices list .
 	 * 
-     * @param dataList List of cart data.
-     * @param keySet list of selected checkbox values.
-     * @param specimenIdIndex array of specimen id indices in attributelist.
-     * @return List of specimen ids present in cart.
+     * @param cartAttributeList Shopping cart attribute list.
+     * @param entityName Name of Entity.
+     * @return List of entity indices of entity ids present in cart.
 	 */
-	public List<String> createSpecimenOrderingList(List<List<String>>dataList,Set keySet,List specimenIdIndex)
+	public List<Integer> getIdsColumnIndexList(List<AttributeInterface> cartAttributeList,String entityName)
 	{
-	    List<String> specimenIdsList = new ArrayList<String>();
-		for(Iterator itr = keySet.iterator();itr.hasNext();)
+		List<Integer> idIndexList = new ArrayList<Integer>();
+		int i = 0;
+		for (AttributeInterface attribute : cartAttributeList)
 		{
-			Object obj = itr.next();
-			int index = getIndex(obj);
-			List<String> record = dataList.get(index);
-			for (int i = 0; i < specimenIdIndex.size(); i++)
+			if ((attribute.getName().equals(Constants.ID))
+					&& (attribute.getEntity().getName().equals(entityName)))
 			{
-				if(!(specimenIdsList.contains(record.get((Integer)specimenIdIndex.get(i)))))
-				  specimenIdsList.add(record.get((Integer)specimenIdIndex.get(i)));
+				idIndexList.add(new Integer(i));
 			}
+			i++;
 		}
-		return specimenIdsList;
+		
+		return idIndexList;
 	}
 	
 }
