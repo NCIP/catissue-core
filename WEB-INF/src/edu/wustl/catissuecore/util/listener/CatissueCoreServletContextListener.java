@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.10 $
+ * $Name: 1.41.2.11 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -352,7 +352,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		{
 			Logger.out.debug("Exception occured while initialising entity cache");
 		}
-				
+		int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
+		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
 		/*
 		//initialise TiTLi index
 		//create the index if it does not exist
