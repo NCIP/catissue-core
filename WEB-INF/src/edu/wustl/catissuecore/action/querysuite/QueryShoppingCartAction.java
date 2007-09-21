@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +28,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -69,7 +71,19 @@ public class QueryShoppingCartAction extends BaseAction
 		// Extracting map from formbean which gives the serial numbers of
 		// selected rows
 		Map map = searchForm.getValues();
-		Set chkBoxValues = map.keySet();
+		Set chkBoxValuesSet = map.keySet();
+		List<Integer> chkBoxValues = null;;
+		
+		if(chkBoxValuesSet!=null)
+		{
+			chkBoxValues = new ArrayList<Integer>();
+			for(Object checkedValue: chkBoxValuesSet)
+			{
+				chkBoxValues.add(getIndex(checkedValue));
+			}
+			
+			
+		}
 
 		String isCheckAllAcrossAllChecked = (String) request
 				.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
@@ -119,40 +133,15 @@ public class QueryShoppingCartAction extends BaseAction
 		}
 		else if (operation.equals("addToOrderList"))
 		{
-			createOrderList(session, chkBoxValues, cart);
+			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+			List<String> specimenIds = bizLogic.getEntityIdsList(cart, Specimen.class.getName(), chkBoxValues);
+			session.setAttribute("specimenId", specimenIds);
 			target = new String("requestToOrder");
 		}
 
 		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_MODULE);
 		return mapping.findForward(target);
 
-	}
-
-	/**
-	 * @param session
-	 * @param chkBoxValues
-	 * @param cart
-	 */
-	private void createOrderList(HttpSession session, Set chkBoxValues, QueryShoppingCart cart)
-	{
-		List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
-		List idIndexList = new ArrayList();
-		int i = 0;
-		for (Iterator iterator = cartAttributeList.iterator(); iterator.hasNext();)
-		{
-			AttributeInterface name = (AttributeInterface) iterator.next();
-			if ((name.getName().equals(Constants.ID))
-					&& (name.getEntity().getName().equals(Constants.SPECIMEN_ENTITY_NAME)))
-			{
-				idIndexList.add(new Integer(i));
-			}
-			i++;
-		}
-		List<List<String>> dataList = cart.getCart();
-		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		List specimenIds = bizLogic.createSpecimenOrderingList(dataList, chkBoxValues,
-				idIndexList);
-		session.setAttribute("specimenId", specimenIds);
 	}
 
 	/**
@@ -173,7 +162,7 @@ public class QueryShoppingCartAction extends BaseAction
 					AttributeInterface name = (AttributeInterface) iterator.next();
 					if ((name.getName().equals(Constants.ID))
 							&& (name.getEntity().getName()
-									.equals(Constants.SPECIMEN_ENTITY_NAME)))
+									.equals(Specimen.class.getName())))
 					{
 						isSpecimenIdPresent = "true";
 						break;
@@ -204,7 +193,7 @@ public class QueryShoppingCartAction extends BaseAction
 	 * @return
 	 * @throws DAOException
 	 */
-	private String addToCart(HttpServletRequest request, Set chkBoxValues,
+	private String addToCart(HttpServletRequest request, List<Integer> chkBoxValues,
 			String isCheckAllAcrossAllChecked, QueryShoppingCart cart,
 			List<AttributeInterface> attributeList, List<String> columnList) throws DAOException
 	{
@@ -344,7 +333,7 @@ public class QueryShoppingCartAction extends BaseAction
 	 * @param response HttpServletResponse.
 	*/
 	public void addDataToCart(QueryShoppingCart cart, List<List<String>> dataList,
-			Set chkBoxValues, HttpServletRequest request, HttpSession session,
+			List<Integer> chkBoxValues, HttpServletRequest request, HttpSession session,
 			List<String> columnList)
 	{
 		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
@@ -423,7 +412,7 @@ public class QueryShoppingCartAction extends BaseAction
 
 	}
 
-	public void deleteFromCart(QueryShoppingCart cart, Set chkBoxValues)
+	public void deleteFromCart(QueryShoppingCart cart, List<Integer> chkBoxValues)
 	{
 		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		bizLogic.delete(cart, chkBoxValues);
@@ -438,7 +427,7 @@ public class QueryShoppingCartAction extends BaseAction
 	 * @param request HttpServletRequest.
 	 * @param response HttpServletResponse.
 	*/
-	public void export(QueryShoppingCart cart, Set chkBoxValues, HttpSession session,
+	public void export(QueryShoppingCart cart, List<Integer> chkBoxValues, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
@@ -466,6 +455,21 @@ public class QueryShoppingCartAction extends BaseAction
 		SendFile.sendFileToClient(response, fileName, Constants.SHOPPING_CART_FILE_NAME,
 				"application/download");
 
+	}
+	
+	/**
+	 * Separates a index of checkbox present in object obj.
+	 * 
+     * @param obj.
+     * @return index.
+	 */
+	public Integer getIndex(Object obj)
+	{
+		String str = obj.toString();
+    	StringTokenizer strTokens = new StringTokenizer(str,"_");
+    	strTokens.nextToken();
+    	int index = Integer.parseInt(strTokens.nextToken());
+		return new Integer(index);
 	}
 
 }
