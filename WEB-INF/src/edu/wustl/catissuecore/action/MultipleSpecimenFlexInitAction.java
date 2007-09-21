@@ -39,6 +39,7 @@ public class MultipleSpecimenFlexInitAction extends Action
 		String pageOf = (String) request.getParameter("pageOf");
 		if(pageOf!=null)
 		{
+			request.setAttribute(Constants.PAGEOF,pageOf);
 			return mapping.findForward(pageOf);
 		}
         return mapping.findForward("success");
