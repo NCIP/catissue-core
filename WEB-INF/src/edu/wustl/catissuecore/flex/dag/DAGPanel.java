@@ -332,13 +332,13 @@ public class DAGPanel {
 	 */
 	public static String getPathDisplayString(IPath path) {
 
-		String text = "Path:";
+		String text = "";
 		// text=text.concat("<HTML><B>Path</B>:");
 
 		List<IAssociation> pathList = path.getIntermediateAssociations();
 		text = text.concat(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(path.getSourceEntity()));
 		for (int i = 0; i < pathList.size(); i++) {
-			text = text.concat("---->");
+			text = text.concat(">>");
 			text = text.concat(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(pathList.get(i).getTargetEntity()));
 		}
 		text = text.concat("");
@@ -355,7 +355,7 @@ public class DAGPanel {
 			currentString = text.substring(currentStart, (currentStart + offset));
 			strLen = strLen + currentString.length() + len;
 			sb.append(currentString);
-			int index = text.indexOf("--->", (currentStart + offset));
+			int index = text.indexOf(">>", (currentStart + offset));
 			if (index == -1) {
 				index = text.indexOf(".", (currentStart + offset));
 			}
