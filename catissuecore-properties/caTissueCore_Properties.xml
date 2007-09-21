@@ -238,6 +238,10 @@
 		<name>resultView.noOfRecordsPerPage</name>
 		<value>100</value>
 	</property>
+	<property>
+		<name>resultView.maximumTreeNodeLimit</name>
+		<value>10</value>
+	</property>
 	
 <!-- Constants for specifing columns per page in MultipleSpecimen -->
 
