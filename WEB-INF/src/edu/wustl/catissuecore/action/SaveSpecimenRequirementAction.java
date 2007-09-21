@@ -84,7 +84,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN+uniqueIdentifier);
 		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN+totalNoOfSpecimen);
 		specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+totalNoOfSpecimen);
-		specimenRequirementBean.setLineage(Constants.LINEAGE_NEW_SPECIMEN);
+		specimenRequirementBean.setLineage(Constants.NEW_SPECIMEN);
 		specimenRequirementBean.setClassName(createSpecimenTemplateForm.getClassName());
 		specimenRequirementBean.setType(createSpecimenTemplateForm.getType());
 		specimenRequirementBean.setTissueSide(createSpecimenTemplateForm.getTissueSide());

@@ -1990,7 +1990,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGE_OF_SPECIMEN_REQUIREMENT = "specimenRequirement";
 	public static final String ADD_NEW_EVENT = "-1";
 	public static final String NEW_EVENT_KEY = "listKey";
-	public static final String LINEAGE_NEW_SPECIMEN = "New Specimen";
 	public static final String UNIQUE_IDENTIFIER_FOR_DERIVE = "_D";
 	public static final String UNIQUE_IDENTIFIER_FOR_ALIQUOT = "_A";
 	public static final String UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN = "_S";
