@@ -560,6 +560,8 @@ public class FlexInterface
 			while (itr.hasNext())
 			{
 				SpecimenBean derivedBean = (SpecimenBean) itr.next();
+				derivedBean.collectionEvent = spBean.collectionEvent;
+				derivedBean.receivedEvent = spBean.receivedEvent;
 				SpecimenDataBean derivedDataBean = prepareSpecimen(derivedBean);
 
 				derivedMap.put("d1" + i, derivedDataBean);

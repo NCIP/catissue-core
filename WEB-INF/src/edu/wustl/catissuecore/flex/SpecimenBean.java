@@ -41,6 +41,7 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 	public Date creationDate = new Date();
 	public Double quantity = new Double(10);
 	public Double concentration = new Double(20);
+	public String storage= "Virtual";
 	public String comment = "MY COMMENT";
 	public List<ExternalIdentifier> exIdColl = new ArrayList<ExternalIdentifier>();
 	public List<Biohazard> biohazardColl = new ArrayList<Biohazard>();
@@ -164,7 +165,7 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 	public String getStorageContainerForSpecimen()
 	{
 		// TODO Auto-generated method stub
-		return "virtual";
+		return "Virtual";
 	}
 
 	/* (non-Javadoc)
@@ -227,6 +228,7 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 		out.writeObject(creationDate);
 		out.writeDouble(quantity);
 		out.writeDouble(concentration);
+		out.writeUTF(storage);
 		out.writeUTF(comment);
 		out.writeObject(exIdColl);
 		out.writeObject(biohazardColl);
@@ -256,6 +258,7 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 		creationDate = (Date) in.readObject();
 		quantity = in.readDouble();
 		concentration = in.readDouble();
+		storage = in.readUTF();
 		comment = in.readUTF();
 		//Object obj2 = in.readObject();
 		//System.out.println("obj2 "+obj2.getClass()+" "+obj2);

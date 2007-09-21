@@ -459,9 +459,9 @@ public class SpecimenDataBean implements GenericSpecimen
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getStorageContainerForSpecimen()
 	 */
 	public String getStorageContainerForSpecimen()
-	{
+	{ 
 		// TODO Auto-generated method stub
-		return null;
+		return "Virtual";
 	}
 
 	/* (non-Javadoc)
