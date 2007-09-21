@@ -8,6 +8,7 @@
 <%@ page import="edu.wustl.common.tree.QueryTreeNodeData"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.util.StringTokenizer"%>
 
 <%
 		String participantId=(String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
@@ -159,6 +160,34 @@
 						}
 						String nodeId = data.getObjectName() + "_"+id;
 						String img = "Specimen.GIF";
+						
+						String diaplayName = data.getDisplayName();
+						String name=null;
+						StringTokenizer stringTokenizer =new StringTokenizer(diaplayName, "_");
+						if(stringTokenizer!=null)
+						{	
+							while(stringTokenizer.hasMoreTokens())
+							{
+								name = stringTokenizer.nextToken();
+							}
+						}
+						
+						if(name.startsWith("S"))
+						{
+							img = "Specimen.GIF";
+						}
+						else if(name.startsWith("A"))
+						{
+							img = "aliquot_specimen.gif";
+						}
+						else if(name.startsWith("D"))
+						{
+							img = "derived_specimen.gif";
+						}
+						else
+						{
+							img = "cp_event.gif";
+						}
 						if(data.getObjectName().equals(Constants.SPECIMEN_COLLECTION_GROUP))
 						{
 							int index = id.indexOf(":");
