@@ -50,6 +50,7 @@ package util
 		public static const CREATED_ON:String = "Created On";
 		public static const QUANTITY:String = "Quantity";
 		public static const CONCENTRATION:String = "Concentration";
+		public static const STORAGE:String = "Storage";
 		
 		
 		public static const COMMENT:String = "Comment";												  

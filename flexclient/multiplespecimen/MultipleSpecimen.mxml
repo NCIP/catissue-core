@@ -270,6 +270,11 @@
 				attributeList.addItem(Constants.CONCENTRATION);
 				spLabelPane.concentrationChkBox.selected = false;
 			}
+			if(spLabelPane.storageChkBox.selected)
+			{
+				attributeList.addItem(Constants.STORAGE);
+				spLabelPane.storageChkBox.selected = false;
+			}
 			if(spLabelPane.commentChkBox.selected)
 			{
 				attributeList.addItem(Constants.COMMENT);

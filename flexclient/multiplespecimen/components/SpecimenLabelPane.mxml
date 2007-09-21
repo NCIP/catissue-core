@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" borderStyle="solid" xmlns:components="components.*">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" xmlns:components="components.*" paddingLeft="5" backgroundColor="#FFFFFF">
+	<mx:Style source="../defaltTheme.css"/>
 <mx:Script>
 	<![CDATA[
 		import valueobjects.SpecimenData;
@@ -19,89 +20,93 @@
 </mx:Script>
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">
 
-		<mx:HBox height="25">
-			<mx:CheckBox id="selectAllChkBox" click="selectAllSp()"/>
+		<mx:HBox height="25" styleName="hBoxForSpLabel">
+			<mx:CheckBox id="selectAllChkBox" click="selectAllSp()" styleName="chkBoxStyle"/>
 			<mx:Label text="Select All"/>	
 		</mx:HBox>
 		<!--<mx:HBox height="25">
 			<mx:CheckBox id="selectParentChkBox"/>	
 			<mx:Label text="" fontWeight="bold"/>	
 		</mx:HBox>-->
-		<mx:HBox height="25">
-			<mx:CheckBox id="nameChkBox"/>	
+		<mx:HBox height="25" styleName="hBoxForSpLabel">
+			<mx:CheckBox id="nameChkBox" styleName="chkBoxStyle" />	
 			<mx:Label text="" fontWeight="bold" id="spOrScg"/>	
 		</mx:HBox>
-		<mx:HBox height="25">
-			<mx:CheckBox id="labelChkBox"/>
+		<mx:HBox height="25" styleName="hBoxForSpLabel">
+			<mx:CheckBox id="labelChkBox" styleName="chkBoxStyle"/>
 			<mx:Label text="* Label" fontWeight="bold"/>	
 		</mx:HBox>
-		<mx:HBox height="25">
-			<mx:CheckBox id="barcodeChkBox"/>	
+		<mx:HBox height="25" styleName="hBoxForSpLabel">
+			<mx:CheckBox id="barcodeChkBox" styleName="chkBoxStyle"/>	
 			<mx:Label text="  Barcode" fontWeight="bold"/>	
 		</mx:HBox>
-		<mx:HRule width="100%"/>
+
 	</mx:VBox>	
 
-	<mx:HBox height="25">
-		<mx:CheckBox id="classChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="classChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="* Class" fontWeight="bold"/>	
 	</mx:HBox>
-	<mx:HBox height="25">
-		<mx:CheckBox id="typeChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="typeChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="* Type" fontWeight="bold"/>	
 	</mx:HBox>
 	
-	<mx:HBox height="25">
-		<mx:CheckBox id="tissueSiteChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="tissueSiteChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="* Tissue Site" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25">
-		<mx:CheckBox id="tissueSideChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="tissueSideChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="* Tissue Side" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25">
-		<mx:CheckBox id="pathStatusChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="pathStatusChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="* Pathological Status" fontWeight="bold"/>
 	</mx:HBox>
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">
-		<mx:HRule width="100%"/>
-		<mx:HBox height="25">
-			<mx:CheckBox id="createdOnChkBox"/>	
+
+		<mx:HBox height="25" styleName="hBoxForSpLabel">
+			<mx:CheckBox id="createdOnChkBox" styleName="chkBoxStyle"/>	
 			<mx:Label text="  Created on" fontWeight="bold"/>	
 		</mx:HBox>
-		<mx:HBox height="25">
-			<mx:CheckBox id="quantityChkBox"/>	
+		<mx:HBox height="25" styleName="hBoxForSpLabel">
+			<mx:CheckBox id="quantityChkBox" styleName="chkBoxStyle"/>	
 			<mx:Label text="  Quantity" fontWeight="bold"/>	
 		</mx:HBox>
 	
-		<mx:HBox height="25">
-			<mx:CheckBox id="concentrationChkBox"/>	
+		<mx:HBox height="25" styleName="hBoxForSpLabel">
+			<mx:CheckBox id="concentrationChkBox" styleName="chkBoxStyle"/>	
 			<mx:Label text="  Concentration" fontWeight="bold"/>	
 		</mx:HBox>
-		<mx:HRule width="100%"/>
+		<mx:HBox height="25" styleName="hBoxForSpLabel">
+			<mx:CheckBox id="storageChkBox" styleName="storageStyle"/>	
+			<mx:Label text="  Storage" fontWeight="bold"/>	
+		</mx:HBox>
+
 	</mx:VBox>
-	<mx:HBox height="25">
-		<mx:CheckBox id="commentChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="commentChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Comment" fontWeight="bold"/>	
 	</mx:HBox>
-	<mx:HBox height="25">
-		<mx:CheckBox id="collEventChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="collEventChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Collected Event" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25">
-		<mx:CheckBox id="recEventChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="recEventChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Received Event" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25">
-		<mx:CheckBox id="externalIdChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="externalIdChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  External Identifier" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25">
-		<mx:CheckBox id="biohazardChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="biohazardChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Biohazards" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25">
-		<mx:CheckBox id="derivativeChkBox"/>	
+	<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:CheckBox id="derivativeChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Derivative" fontWeight="bold"/>
 	</mx:HBox>
 		

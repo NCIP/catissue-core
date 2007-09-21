@@ -35,7 +35,7 @@ package valueobjects
 		public var creationDate:Date;
 		public var quantity:Number;
 		public var concentration:Number;
-		
+		public var storage:String;
 		public var comment:String;
 		public var unit:String;
 		
@@ -66,6 +66,7 @@ package valueobjects
 			this.creationDate =  new Date();
 			this.quantity = new Number();
 			this.concentration = new Number();
+			this.storage = "Virtual";
 			
 			this.comment = '';
 			this.unit = '';	
@@ -105,6 +106,7 @@ package valueobjects
 			this.creationDate = spData.creationDate;
 			this.quantity = spData.quantity;
 			this.concentration = spData.concentration;
+			this.storage = spData.storage;
 			
 			this.comment = spData.comment;
 			this.unit = spData.unit;
@@ -171,6 +173,10 @@ package valueobjects
 			if(attributeList.contains(Constants.CONCENTRATION))
 			{
 				this.concentration = spData.concentration;
+			}
+			if(attributeList.contains(Constants.STORAGE))
+			{
+				this.storage = spData.storage;
 			}
 			if(attributeList.contains(Constants.COMMENT))
 			{
@@ -278,6 +284,7 @@ package valueobjects
 			output.writeObject(creationDate);
 			output.writeDouble(quantity);
 			output.writeDouble(concentration);
+			output.writeUTF(storage);
 			output.writeUTF(comment);
 			output.writeObject(exIdColl);	
 			output.writeObject(biohazardColl);	
@@ -305,6 +312,7 @@ package valueobjects
 			creationDate = input.readObject() as Date;
 			quantity = input.readDouble();
 			concentration = input.readDouble();
+			storage = input.readUTF();
 			comment = input.readUTF();
 			exIdColl = input.readObject() as ArrayCollection;
 			biohazardColl = input.readObject() as ArrayCollection;

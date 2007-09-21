@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" borderStyle="solid" 
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" 
 	xmlns:adobe="http://www.adobe.com/2006/fc" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*" autoLayout="true">
 <mx:Script source="../script/validate.as"/>
 <mx:Script>
@@ -15,15 +15,23 @@
 		
 		[Bindable]
 		public var spData:SpecimenData;
+		[Bindable]
+		public var storage:ArrayCollection = new ArrayCollection();
 		
 		private function preInit():void
 		{
 			spData = parentApplication.spRepeater.currentItem;
 			switchSpType(null);
+			
+			
 		}
 		
 		private function creationComp():void
 		{
+			storage.addItem("Virtual");
+			storage.addItem("Manual");
+			storage.addItem("Auto");
+			
 			//Check box
 			Utility.bindData(isCopy, "selected", spData, "isSelected");
 			
@@ -67,6 +75,9 @@
 			Utility.bindData(spConcentration,"text",spData,"concentration");
 			//bindData(spQuantity,"restrict",spConcentration,"text",false);
 			
+			//Bind Storage
+			Utility.bindData(spStorage,"selectedItem",spData,"storage");
+			
 			//Bind Comments
 			Utility.bindData(spComment, "text", spData, "comment");
 
@@ -76,6 +87,17 @@
 		{
 			spData.specimenTypePVList = MetadataModel.getInstance().getSpecimenTypeCollection(spData.specimenClass);
 			spData.calcUnit();
+			if(event != null)
+			{
+				if(spClass.selectedItem == Constants.MOLECULAR)
+				{
+					spConcentration.enabled = true;
+				}
+				else
+				{
+					spConcentration.enabled = false;
+				}
+			}
 		}
 		
 		private function printSpDetails(spData:SpecimenData):void
@@ -222,6 +244,12 @@
 				spSCGName.text = null;
 			}
 		}*/
+		public function chkStorage() : void
+		{
+			Alert.show("In this build only Virtual storage is supported.");
+			spStorage.selectedItem = "Virtual"
+			
+		}
 	]]>
 </mx:Script>
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">
@@ -249,7 +277,7 @@
 		<components:MyCanvas>
 			<mx:TextInput id="spBarCode"/>
 		</components:MyCanvas>
-		<mx:HRule width="100%"/>
+
 	</mx:VBox>	
 		
 
@@ -274,7 +302,7 @@
 	</components:MyCanvas>
 
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">
-		<mx:HRule width="100%"/>
+
 		<components:MyCanvas id="createdOnBox">
 			<mx:DateField id="spCreatedOn" formatString="{Constants.DATE_FORMAT}" keyDown="spCreatedOn.open()"/>
 		</components:MyCanvas>
@@ -288,11 +316,14 @@
 	
 		<components:MyCanvas>
 			<mx:HBox>
-				<mx:TextInput id="spConcentration" width="50" restrict="[0-9]."/>
+				<mx:TextInput id="spConcentration" width="50" restrict="[0-9]." enabled="false"/>
 				<mx:Label htmlText="{Constants.UNIT_CONCENTRATION}"/>
 			</mx:HBox>
 		</components:MyCanvas>
-		<mx:HRule width="100%"/>
+		<components:MyCanvas>
+			<adobe:AutoComplete id="spStorage" dataProvider="{storage}" lookAhead="true" change="chkStorage()"/>
+		</components:MyCanvas>
+
 	</mx:VBox>
 	
 	<mx:Accordion id="specimenAccordion" resizeToContent="true" backgroundColor="#E2EFFF" headerHeight="25" >
