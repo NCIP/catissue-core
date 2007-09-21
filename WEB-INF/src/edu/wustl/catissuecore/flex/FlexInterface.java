@@ -576,8 +576,12 @@ public class FlexInterface
 		HashSet<ExternalIdentifier> exIdSet = new HashSet<ExternalIdentifier>();
 		Iterator itr = exIdColl.iterator();
 		while (itr.hasNext())
-		{
+		{ 
 			ExternalIdentifier ex = (ExternalIdentifier) itr.next();
+			if((ex.getName()==null||ex.getName().equals("")) && (ex.getValue() == null || ex.getValue().equals("")))
+			{
+				continue;
+			}
 			ex.setId(null);
 			exIdSet.add(ex);
 		}

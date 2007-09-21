@@ -295,7 +295,7 @@
 		<mx:HRule width="100%"/>
 	</mx:VBox>
 	
-	<mx:Accordion id="specimenAccordion" resizeToContent="true" backgroundColor="#E2EFFF" headerHeight="25">
+	<mx:Accordion id="specimenAccordion" resizeToContent="true" backgroundColor="#E2EFFF" headerHeight="25" >
 		<mx:VBox label="Comment">
 			<mx:TextArea id="spComment"/>
 		</mx:VBox>

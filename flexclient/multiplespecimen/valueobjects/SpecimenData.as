@@ -70,7 +70,8 @@ package valueobjects
 			this.comment = '';
 			this.unit = '';	
 			
-			var exBean:ExternalIdentifierBean = new ExternalIdentifierBean(false,0,'A','B');
+//			var exBean:ExternalIdentifierBean = new ExternalIdentifierBean(false,0,'A','B');
+			var exBean:ExternalIdentifierBean = new ExternalIdentifierBean();
 			exIdColl.addItem(exBean);
 			
 			collectionEvent = new EventBean();
