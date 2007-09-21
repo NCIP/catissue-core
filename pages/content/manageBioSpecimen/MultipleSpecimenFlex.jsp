@@ -2,10 +2,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-
-
-
 <%@ page import="edu.wustl.common.beans.SessionDataBean" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 
 
@@ -44,7 +42,14 @@ var requiredRevision = 0;
 <script language="JavaScript">
 function callSubmitSpecimen()
 {
-	
+	<%
+		String formAction = "GenericSpecimenSummary.do";
+		if(request.getAttribute(Constants.PAGEOF) != null)
+		{
+			formAction = "GenericSpecimenSummary.do?pageOf="+request.getAttribute(Constants.PAGEOF);
+		}
+	%>
+	document.forms[0].action = "<%=formAction%>";
 	document.forms[0].submit();
 	
 }

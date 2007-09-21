@@ -66,7 +66,7 @@
 			</a>
 		</div>	
 		<div>
-			<a class="subMenuPrimary" href="MultipleSpecimenFlexInitAction.do">
+			<a class="subMenuPrimary" href="MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu">
 				<bean:message key="specimen.menu.multipleAdd" />
 			</a> 
 		</div>		

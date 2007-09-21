@@ -53,6 +53,10 @@
 			Utility.bindData(spComment, "text", derivedData, "comment");
 
 		}
+			private function bindExData():void
+   		{
+   			Utility.bindData(exIDPane, "exIdColl", derivedData, "exIdColl");
+   		}
 		
 		private function switchSpType(event:Event):void
 		{
@@ -87,13 +91,17 @@
    			var isValid:Boolean = true;
    			var specimenNumber :String = " for specimen "+index;
    			isValid= validateRequiredField(spLabel,"text","Please enter label") && isValid;
-   			isValid= validateRequiredField(spBarCode,"text","Please enter barcode") && isValid;
+//   			isValid= validateRequiredField(spBarCode,"text","Please enter barcode") && isValid;
 
 			isValid = validateComboBoxField(spClass,"selectedItem","Please select class") && isValid;
 			isValid = validateComboBoxField(spType,"selectedItem","Please select type") && isValid;
 			
    			isValid =  validateNumberField(spQuantity,"text","Please enter Quantity",true,0) && isValid;
    			isValid =  validateNumberField(spConcentration,"text","Please enter concentration",true,0) && isValid;
+   			if(exIDPane != null)
+			{
+				isValid = exIDPane.validateExIds(index) && isValid;
+			}
 			return isValid;
 		}                     
 
@@ -145,5 +153,10 @@
 	<components:MyCanvas>
 		<mx:TextArea id="spComment"/>
 	</components:MyCanvas>
+	<mx:Accordion id="derivativeAccordion" resizeToContent="true" backgroundColor="#E2EFFF" headerHeight="25">
+		<mx:VBox label="External Identifier">
+			<components:ExternalIdentifierPane id="exIDPane" creationComplete="bindExData()" />
+		</mx:VBox>
+	</mx:Accordion>	
 	
 </mx:VBox>

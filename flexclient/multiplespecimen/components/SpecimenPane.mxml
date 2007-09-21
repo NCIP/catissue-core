@@ -180,7 +180,7 @@
    			
    			isValid = validateRequiredField(spParentName,"text",parentNameValMesg) && isValid;
    			isValid= validateRequiredField(spLabel,"text","Please enter label") && isValid;
-   			isValid= validateRequiredField(spBarCode,"text","Please enter barcode") && isValid;
+   			//isValid= validateRequiredField(spBarCode,"text","Please enter barcode") && isValid;
 
 			isValid = validateComboBoxField(spClass,"selectedItem","Please select class") && isValid;
 			isValid = validateComboBoxField(spType,"selectedItem","Please select type") && isValid;
@@ -275,7 +275,7 @@
 
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">
 		<mx:HRule width="100%"/>
-		<components:MyCanvas>
+		<components:MyCanvas id="createdOnBox">
 			<mx:DateField id="spCreatedOn" formatString="{Constants.DATE_FORMAT}" keyDown="spCreatedOn.open()"/>
 		</components:MyCanvas>
 	
