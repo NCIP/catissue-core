@@ -1797,3 +1797,16 @@ td.formFieldForAnnotaionList{ /* for the cell that contains the form elements */
 /*  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
  /* background-color:#F4F4F5; /* constant: light gray */
 }
+.formMessagewithoutcolor{ /* for the asterisk cell */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  color:#000000; /* constant: black */
+  line-height:1.5em;
+}
+.formMessageBold{ /* for the asterisk cell */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  color:#000000; /* constant: black */
+  line-height:1.5em;
+font-weight:bold;
+}
