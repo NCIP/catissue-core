@@ -3,11 +3,11 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,13 +18,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.adobe.agl.util.StringTokenizer;
-
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
-import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class ViewSpecimenSummaryAction extends Action {
@@ -55,14 +51,8 @@ public class ViewSpecimenSummaryAction extends Action {
 
 			if (specimenMap != null) {
 				populateSpecimenSummaryForm(summaryForm, specimenMap);
-			}  
-			summaryForm.setEventId(eventId);
-			String pageOf = request.getParameter(Constants.PAGEOF);
-			if(pageOf != null)
-			{
-				return mapping.findForward(pageOf);
 			}
-			
+			summaryForm.setEventId(eventId);
 			return mapping.findForward(Constants.SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -97,11 +87,22 @@ public class ViewSpecimenSummaryAction extends Action {
 			Map collectionProtocolEventMap = (Map) session
 					.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 			
-			if (collectionProtocolEventMap != null) {
+			if (collectionProtocolEventMap != null && !collectionProtocolEventMap.isEmpty()) {
 			
 				CollectionProtocolEventBean collectionProtocolEventBean = 
 					(CollectionProtocolEventBean) collectionProtocolEventMap.get(eventId);
+
+				if (collectionProtocolEventBean == null  ) {
 				
+					Collection cl =collectionProtocolEventMap.values();
+
+					if (cl!=null && !cl.isEmpty())
+					{
+						collectionProtocolEventBean = 
+							(CollectionProtocolEventBean) cl.iterator().next();
+					}
+					
+				}				
 				if (collectionProtocolEventBean != null) {
 				
 					specimenMap = (LinkedHashMap) collectionProtocolEventBean
@@ -135,7 +136,11 @@ public class ViewSpecimenSummaryAction extends Action {
 
 		if (selectedSpecimenId == null) 
 		{
-			return;
+			if(specimenList!=null && !specimenList.isEmpty())
+			{
+				selectedSpecimenId =((GenericSpecimen) specimenList.get(0)).getUniqueIdentifier();
+				summaryForm.setSelectedSpecimenId(selectedSpecimenId);
+			}
 		}
 		GenericSpecimen selectedSpecimen = specimenMap
 				.get(selectedSpecimenId);

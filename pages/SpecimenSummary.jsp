@@ -96,21 +96,21 @@
 				</td>
 			</tr>
 		</logic:notEmpty>
-		<tr>
+		
 		
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
 				<html:hidden property="eventId"  />
 			</logic:notEmpty>
 				<html:hidden property="userAction" />
 				<html:hidden property="requestType" />
-			<td class="dataTablePrimaryLabel" height="20">
-
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
+			<tr>
+			<td class="dataTablePrimaryLabel" height="20">			
 				<p>Aliquot details
-		</td>
-		</tr>
-		<tr>
-		<td>
+			</td>
+			</tr>
+			<tr>
+			<td>
 			<table summary="" cellpadding="3"
 							cellspacing="0" border="0" class="dataTable" width="100%">
 				<tr>	
@@ -127,13 +127,15 @@
 						<td > <bean:write name="aliquot" property="quantity" /></td>
 					</tr>
 				  </logic:iterate>	
-				</table>
+				</table>			
+			</td>
+			</tr>
 			</logic:notEmpty>		
-		 </td>
-		</tr>
-		<tr>
+		
+		
 		 
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >		
+		<tr>
 		<td class="dataTablePrimaryLabel" height="20">
 			<p>Derived details
 		 </td>
@@ -164,21 +166,27 @@
 		      </logic:iterate>	
 		    </table>
           </td>
-		</logic:notEmpty>
-		</tr>
-		<tr>
+		  </tr>
+		</logic:notEmpty>		
+		</table>
+
+		<table align="bottom">
 		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
+		<tr>
 		   <td>
 			<html:submit  value="Save Collection Protocol" />
 			</td>
+			</tr>
 		</logic:equal>
 		
 		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">		
+		<tr>
 		    <td>
 			<html:submit value="Save Specimens" />
 			</td>
+		 </tr>
 		</logic:equal>
-		</tr>
+
 		</table>
 		</html:form>		
 </html>
