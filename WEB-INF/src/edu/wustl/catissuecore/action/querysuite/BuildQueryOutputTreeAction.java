@@ -41,27 +41,25 @@ public class BuildQueryOutputTreeAction extends BaseAction
 	{
 		HttpSession session = request.getSession();
 		Map<Long,OutputTreeDataNode> idNodesMap = (Map<Long,OutputTreeDataNode>)session.getAttribute(Constants.ID_NODES_MAP);
-		List<OutputTreeDataNode> rootOutputTreeNodeList = (List<OutputTreeDataNode>)session.getAttribute(Constants.TREE_ROOTS);
 		CategorySearchForm actionForm = (CategorySearchForm)form;
 		SessionDataBean sessionData = getSessionData(request);
 		String outputTreeStr = "";
-		String idOfClickedNode = actionForm.getNodeId();		
+		String nodeId = actionForm.getNodeId();	
 		QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
-		String actualParentNodeId = idOfClickedNode.substring(idOfClickedNode.lastIndexOf(Constants.NODE_SEPARATOR)+2,idOfClickedNode.length());
+		String actualParentNodeId = nodeId.substring(nodeId.lastIndexOf(Constants.NODE_SEPARATOR)+2,nodeId.length());
 		String[] nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
 		String treeNo = nodeIds[0];
 		String treeNodeId = nodeIds[1]; 
 		String uniqueId = treeNo+"_"+treeNodeId;
 		OutputTreeDataNode parentNode = idNodesMap.get(uniqueId);
-		OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(rootOutputTreeNodeList, treeNo);
-		if(idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
+		if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
 		{
-			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(idOfClickedNode,idNodesMap,sessionData);
+			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(nodeId,idNodesMap,sessionData);
 		}
 		else
 		{
 			String data = nodeIds[2];
-			outputTreeStr = outputTreeBizLogic.updateTreeForDataNode(idOfClickedNode,parentNode, data, sessionData);	
+			outputTreeStr = outputTreeBizLogic.updateTreeForDataNode(nodeId,parentNode, data, sessionData);	
 		}
 		response.setContentType("text/html");
 		response.getWriter().write(outputTreeStr);

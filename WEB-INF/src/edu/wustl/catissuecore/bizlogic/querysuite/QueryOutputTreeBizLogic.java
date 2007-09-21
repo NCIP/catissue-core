@@ -28,6 +28,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
  */
 public class QueryOutputTreeBizLogic
 {
+	private static long lastId = 0; 
 	/**
 	 * Creates new table which has the same structure and also same data , as the output tree structurs has.  
 	 * @param String selectSql , from this sql , new table will be created .
@@ -109,6 +110,31 @@ public class QueryOutputTreeBizLogic
 		return nodeId;
 	}
 	/**
+	 * Encrypts the id to be set for tree node
+	 * @param id String original id
+	 * @return encrypted id
+	 */
+	public String encryptId(String id)
+	{
+		String encryptedId = Constants.UNIQUE_ID_SEPARATOR + id;
+		return encryptedId;
+	}
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public String decryptId(String id)
+	{
+		int indexOfSeperator = id.indexOf(Constants.UNIQUE_ID_SEPARATOR);
+		if(indexOfSeperator != -1)
+		{
+			String decryptedId = id.substring(indexOfSeperator + Constants.UNIQUE_ID_SEPARATOR.length());
+			return decryptedId;
+		}
+		return id;
+	}
+	/**
 	 * This method adds the node to tree.The id for new node is set as 'Id of OutputTreeNode _id value of that node in newly created table'
 	 * @param dataList all records in database satisfying the criteria.
 	 * @param parentNode parent node of tree data
@@ -133,6 +159,7 @@ public class QueryOutputTreeBizLogic
 			String data = (String) rowList.get(0);
 			String currentNodeId = uniqueNodeId + Constants.UNDERSCORE + data;
 			String nodeIdToSet = parentNodeId + Constants.NODE_SEPARATOR + currentNodeId;
+			nodeIdToSet = encryptId(nodeIdToSet);
 			Iterator iterTreeData = treeDataVector.iterator();
 			while (iterTreeData.hasNext())
 			{
@@ -197,7 +224,7 @@ public class QueryOutputTreeBizLogic
 			{
 				String parId = id.substring(id.lastIndexOf(Constants.NODE_SEPARATOR) + 2, id.length());
 				String childNodeId = childNode.getUniqueNodeId() + Constants.UNDERSCORE + Constants.LABEL_TREE_NODE;
-				String nodeId = parId + Constants.NODE_SEPARATOR + childNodeId;
+				String nodeId = Constants.UNIQUE_ID_SEPARATOR + parId + Constants.NODE_SEPARATOR + childNodeId;
 				String displayName = Utility.getDisplayLabel(name) + " (" + size + ")";
 				displayName = Constants.TREE_NODE_FONT + displayName + Constants.TREE_NODE_FONT_CLOSE;
 				String objectName = name;
@@ -264,9 +291,9 @@ public class QueryOutputTreeBizLogic
 		String treeNo = splitIds[0];
 		String treeNodeId = splitIds[1];
 		String uniqueCurrentNodeId = treeNo+"_"+treeNodeId;
-
 		String parentNodeId = nodeId.substring(0, nodeId.indexOf(Constants.NODE_SEPARATOR));
-		String[] nodeIds = parentNodeId.split(Constants.UNDERSCORE);
+		String decryptedId = decryptId(parentNodeId);
+		String[] nodeIds = decryptedId.split(Constants.UNDERSCORE);
 		String parentId = nodeIds[1];
 		String parentData = null;
 		if(nodeIds.length == 3)
@@ -342,7 +369,7 @@ public class QueryOutputTreeBizLogic
 			String entityName = Utility.parseClassName(fullyQualifiedEntityName);
 			String currentNodeId = currentNode.getUniqueNodeId() + Constants.UNDERSCORE + data;
 			String labelNode = parentNodeId.substring(parentNodeId.lastIndexOf(Constants.NODE_SEPARATOR) + 2, parentNodeId.length());
-			String nodeIdToSet = labelNode + Constants.NODE_SEPARATOR + currentNodeId;
+			String nodeIdToSet = Constants.UNIQUE_ID_SEPARATOR+labelNode + Constants.NODE_SEPARATOR + currentNodeId;
 			String displayName = entityName + Constants.UNDERSCORE + data;
 			if (index != -1)
 			{
@@ -353,7 +380,7 @@ public class QueryOutputTreeBizLogic
 				//displayName = entityName + Constants.UNDERSCORE + data;
 				if(data.equals(""))
 				{
-					System.out.println("data        "+data);
+					displayName = ApplicationProperties.getValue("query.tree.label.NA");;
 				}
 				else
 				{
