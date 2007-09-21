@@ -563,7 +563,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
 		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
 		
-		if(specimenDataBean.getSpecimenEventCollection()==null && !specimenDataBean.getSpecimenEventCollection().isEmpty())
+		if(specimenDataBean.getSpecimenEventCollection()!=null && !specimenDataBean.getSpecimenEventCollection().isEmpty())
 		{
 			Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
 			while(iterator.hasNext())
