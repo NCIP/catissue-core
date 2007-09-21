@@ -3590,6 +3590,7 @@ PUBLIC
   			scope="request">
 			<forward name="success" path=".catissuecore.multipleSpecimenFlexDef" />  
 			<forward name="cpQuery" path=".catissuecore.multipleSpecimenFlexCPQueryDef" />  
+			<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.multipleSpecimenFlexDef" />  
 			
     </action>                        
 	
@@ -4353,8 +4354,10 @@ PUBLIC
                 name="viewSpecimenSummaryForm"
                 validate="false"
                 scope="request">
-	            <forward name="success" path="/pages/SpecimenSummary.jsp" />
-                <forward name="failure" path="/Home.do" />
+					<forward name="success" path="/pages/SpecimenSummary.jsp" />
+					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
+					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
+	                <forward name="failure" path="/Home.do" />
        </action>    
        <action path="/ShowCollectionProtocol"
 				type="edu.wustl.catissuecore.action.ShowCollectionProtocolTreeAction"

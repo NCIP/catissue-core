@@ -1165,5 +1165,11 @@
 		<put name="content" value="/pages/content/manageAdministrativeData/CreateSpecimenTemplate.jsp" />
 	</definition>
 	
+	<!-- for specimen summary -->
+	<definition name=".catissuecore.viewSpecimenSummary" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/SpecimenSummary.jsp" />
+	</definition>
+	
+	
 </tiles-definitions>
 
