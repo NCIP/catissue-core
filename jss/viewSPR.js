@@ -141,7 +141,7 @@ function replaceString(startOff,innerHtml,subStr,text)
 {
 	var tempStr=innerHtml.substring(0,startOff);
 	var tempArray=tempStr.split("<span");
-	var spanCount=tempArray.size();
+	var spanCount=tempArray.length;
 	var total=startOff;
 	if(spanCount>1)
 	{
@@ -157,7 +157,7 @@ function getNewLineCount(str)
 {
 	var count=0;
 	var tempStr=str.split("\r");
-	count=tempStr.size();
+	count=tempStr.length;
 	return count;
 }
 
