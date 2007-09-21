@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.action.querysuite;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,16 +12,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
-import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
+import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
-import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * This class is invoked when user clicks on a node from the tree. It loads the data required for grid formation.
@@ -51,6 +48,8 @@ public class ShowGridAction extends BaseAction
 		SessionDataBean sessionData = getSessionData(request);
 		SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
 		String idOfClickedNode = request.getParameter("nodeId");
+		QueryOutputTreeBizLogic treeBizLogic = new QueryOutputTreeBizLogic();
+		idOfClickedNode = treeBizLogic.decryptId(idOfClickedNode);
  		Map spreadSheetDatamap = null;
 		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
 		int recordsPerPage = new Integer(recordsPerPageStr);
@@ -67,5 +66,4 @@ public class ShowGridAction extends BaseAction
 		QueryModuleUtil.setGridData(request, spreadSheetDatamap);
 		return mapping.findForward(Constants.SUCCESS);
 	}
-		
 }
