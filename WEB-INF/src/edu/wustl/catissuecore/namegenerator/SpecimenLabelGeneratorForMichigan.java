@@ -96,7 +96,8 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLableGener
 					"000");
 			String nextNumber = format(currentLable, "0000");
 
-			persistLabelCount();
+			//TODO :Commented by Falguni because hibernate session is getting closed by calling this method. 
+			//persistLabelCount();
 			String label = siteName + "-" + year + "-" + day + "-" + nextNumber; 
 			objSpecimen.setLabel(label);
 			labelCountTreeMap.put(objSpecimen,0);

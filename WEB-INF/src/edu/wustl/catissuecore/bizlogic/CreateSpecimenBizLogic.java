@@ -22,6 +22,8 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.namegenerator.LabelGenerator;
+import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
@@ -31,6 +33,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -161,6 +164,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			//Setting the Biohazard Collection
 			Specimen parentSpecimen = (Specimen) specimenObj;
 
+			
 			// check for closed ParentSpecimen
 			checkStatus(dao, parentSpecimen, "Parent Specimen");
 
@@ -268,6 +272,22 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			}
 			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			specimen.setLineage(Constants.DERIVED_SPECIMEN);
+//			Added by Falguni
+			if(edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl )
+			{
+			
+				try
+				{
+					LabelGenerator specimenGenerator  = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+					specimenGenerator.setLabel(specimen);
+					
+				} 
+				catch (BizLogicException e)
+				{
+					throw new DAOException(e.getMessage());
+					
+				}
+			}
 			
 //			Setting the External Identifier Collection
 			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
@@ -303,7 +323,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			
 
 					
-
+			
 			//Inserting data for Authorization
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
 					protectionObjects, getDynamicGroups(specimen));

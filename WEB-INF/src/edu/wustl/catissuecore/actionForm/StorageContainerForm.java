@@ -22,6 +22,8 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+
+
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -34,6 +36,8 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.global.Variables;
+
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -1060,7 +1064,9 @@ public class StorageContainerForm extends AbstractActionForm
 						errors, validator);
 			/*}*/
 			//validations for Container name
-			if (validator.isEmpty(containerName) && this.noOfContainers == 1)
+			//Modified by falguni
+				
+			if (!edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl && validator.isEmpty(containerName) && this.noOfContainers == 1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.name")));
@@ -1137,6 +1143,12 @@ public class StorageContainerForm extends AbstractActionForm
 					}
 					
 					int checkedButtonStatus = Integer.parseInt((String) getSimilarContainerMapValue("checkedButton"));
+					String containerName = (String) getSimilarContainerMapValue("simCont:" + i + "_name");
+					if (!edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl && validator.isEmpty(containerName))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+								ApplicationProperties.getValue("storageContainer.name")));
+					}
 					String siteId = (String) getSimilarContainerMapValue("simCont:" + i + "_siteId");
 					if (checkedButtonStatus == 2 || siteId == null)
 					{

@@ -10,7 +10,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
-
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
@@ -973,22 +973,24 @@
 									</td>
 									</logic:equal>
 								</tr>
-								
-								<tr>
-									<td class="formRequiredNotice" >
-								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-								     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-								    </td>
-								    <td class="formRequiredLabelWithoutBorder" >
-										<label for="label">
-											<bean:message key="specimen.label"/>
-										</label>
-									</td>
-								    <td class="formField" >
-								     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
-								    </td>							
-									<td class="formRequiredNotice" width="5">&nbsp;</td>
-								    <td class="formLabelWithoutBorder">							
+								<%  if( operation.equals(Constants.EDIT))
+									{
+								%>	
+									<tr>
+										<td class="formRequiredNotice" >
+									     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+									     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+									    </td>
+									    <td class="formRequiredLabelWithoutBorder" >
+											<label for="label">
+												<bean:message key="specimen.label"/>
+											</label>
+										</td>
+									    <td class="formField" >
+									     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+									    </td>							
+										<td class="formRequiredNotice" width="5">&nbsp;</td>
+										<td class="formLabelWithoutBorder">							
 								    	<label for="barcode">
 											<bean:message key="specimen.barcode"/>
 										</label>								
@@ -996,7 +998,47 @@
 								    <td class="formField" >
 										<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
 						        	</td>
-								</tr>
+								   </tr>
+									<%}
+									else  if((!Variables.isSpecimenLabelGeneratorAvl && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
+										{
+									%>  <tr>
+										<td class="formRequiredNotice" >
+									     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+									     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+									    </td>
+									    <td class="formRequiredLabelWithoutBorder" >
+											<label for="label">
+												<bean:message key="specimen.label"/>
+											</label>
+										</td>
+									    <td class="formField"  colspan=4>
+									     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+									    </td>							
+										
+								        </tr>
+									<%
+									 }else if((Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
+										{
+
+									%>
+										<tr>
+																			
+										<td class="formLabelWithoutBorder">							
+								    	<label for="barcode">
+											<bean:message key="specimen.barcode"/>
+										</label>								
+										</td>
+									    <td class="formField"  colspan=4>
+											<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
+							        	</td>
+										</tr>
+									
+									<% 
+										}
+									 %>
+								    								
+									
 						 		<tr>
 								 	<td class="formRequiredNotice" width="5">*</td>
 								    <td class="formRequiredLabelWithoutBorder">
@@ -1543,4 +1585,3 @@ if(pageView.equals("edit")||pageView.equals("add"))
 <script language="JavaScript">
 	onCheckboxButtonClick(document.getElementById("aliquotChk"));
 </script>
-

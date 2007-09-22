@@ -55,7 +55,6 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
 	 */
 	private boolean reset = true;
 	
-	
        
     /**
      * Returns an identifier of the Parent Speciemen.
@@ -138,7 +137,11 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
                     }
              	}
              	}
-             	
+             	if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl && validator.isEmpty(label) && this.label.trim().equals(""))
+             	{
+             		  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.label")));
+             		
+             	}
              }
          }
          catch(Exception excp)

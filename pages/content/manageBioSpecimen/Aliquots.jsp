@@ -16,8 +16,11 @@ Date   : May 12, 2006
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
 <%
+
+
 String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 String buttonKey = "";
 String parentSPId = "-1";
@@ -477,18 +480,30 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 	<td class="formRightSubTableTitleWithBorder" width="5">
      	#
     </td>
+     <%if(!Variables.isSpecimenLabelGeneratorAvl){ %>
+	   
     <td class="formRightSubTableTitleWithBorder">*
 		<bean:message key="specimen.label"/>
-	</td>
-	<td class="formRightSubTableTitleWithBorder">*
-		<bean:message key="specimen.quantity"/>
-	</td>
+	</td>	
+	<% } if ( !Variables.isSpecimenBarcodeGeneratorAvl ) {%>
 	<td class="formRightSubTableTitleWithBorder">&nbsp;
 		<bean:message key="specimen.barcode"/>
+	</td>
+	<%}
+		int   colspanValue1 = 0;
+          if((!Variables.isSpecimenLabelGeneratorAvl && Variables.isSpecimenBarcodeGeneratorAvl ) || (Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl) )
+		   {   colspanValue1 =1;} 
+		  else if(!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl )
+			{   colspanValue1 =2;} 
+
+	%>
+	<td class="formRightSubTableTitleWithBorder" colspan=<%=colspanValue1%> >*
+		<bean:message key="specimen.quantity"/>
 	</td>
 	<td class="formRightSubTableTitleWithBorder">*
 		<bean:message key="aliquots.location"/>
 	</td>
+	
 </tr>
 
 <%=ScriptGenerator.getJSForOutermostDataTable()%>
@@ -606,15 +621,24 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 		<td class="formSerialNumberField" width="5">
 	     	<%=i%>.
 	    </td>
+	    <%if(!Variables.isSpecimenLabelGeneratorAvl){%>
 	    <td class="formField" nowrap>
 			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="label" property="<%=labelKey%>" disabled="false"/>
 		</td>
-		<td class="formField" nowrap>
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="quantity" property="<%=qtyKey%>" disabled="false"/>
-			&nbsp; <%=unit%>
-		</td>
+		<%} if(!Variables.isSpecimenBarcodeGeneratorAvl) {%> 
 		<td class="formField">
 			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcodes" property="<%=barKey%>" disabled="false"/>
+		</td>
+		<%} 
+    		int   colspanValue = 0;
+          if((!Variables.isSpecimenLabelGeneratorAvl && Variables.isSpecimenBarcodeGeneratorAvl ) || (Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl) )
+		   {   colspanValue =1;} 
+		  else if(!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl )
+			{   colspanValue =2;} 
+         %>
+		<td class="formField" nowrap colspan=<%=colspanValue%>>
+			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="quantity" property="<%=qtyKey%>" disabled="false"/>
+			&nbsp; <%=unit%>
 		</td>
 		<td class="formField" nowrap>
 						<table border="0">

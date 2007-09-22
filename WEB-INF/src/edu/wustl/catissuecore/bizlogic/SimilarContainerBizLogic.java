@@ -19,15 +19,17 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
-
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.namegenerator.LabelGenerator;
+import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -80,6 +82,9 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 			if (checkButton == 1) // site
 			{
 				String siteId = (String) simMap.get(simContPrefix + "siteId");
+				String siteName = (String) simMap.get(simContPrefix + "siteName");
+				
+				
 				Site site = new Site();
 
 				/**
@@ -95,6 +100,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 				//End:- Change for API Search   -
 
 				site.setId(new Long(siteId));
+				site.setName(siteName);
 				cont.setSite(site);
 				loadSite(dao, cont); // <<----
 
@@ -161,7 +167,25 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 			//StorageContainer cont = new StorageContainer();
 			cont.setName(contName); // <<----
 			cont.setBarcode(barcode); // <<----     		
-
+			//by falguni
+			//Storage container label generator
+			
+			//Call Storage container label generator if its specified to use automatic label generator
+			if(edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl )
+			{
+				LabelGenerator storagecontLblGenerator;
+				try 
+				{
+					storagecontLblGenerator = LabelGeneratorFactory.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
+					storagecontLblGenerator.setLabel(cont);
+				}
+				catch (BizLogicException e) 
+				{
+					throw new DAOException(e.getMessage());
+				}
+			}
+			
+			simMap.put(simContPrefix + "name",cont.getName());
 			Logger.out.debug(cont.getParent() + " <<<<---- parentContainer");
 			Logger.out.debug("cont.getCollectionProtocol().size() " + cont.getCollectionProtocolCollection().size());
 			cont.setActivityStatus("Active");
@@ -208,10 +232,10 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 				String contName = (String) simMap.get(simContPrefix + "name");
 				String Id = (String) simMap.get(simContPrefix + "Id");
 				StorageContainer cont = new StorageContainer(container);
-				Logger.out.info("contName:" + contName);
+				//Logger.out.info("contName:" + contName);
 
 				cont.setId(new Long(Id));
-				cont.setName(contName);
+				cont.setName(contName); //by falguni ...Container name is generated via label generator.
 				if (checkButton == 2)
 				{
 					String parentId = (String) simMap.get(simContPrefix + "parentContainerId");

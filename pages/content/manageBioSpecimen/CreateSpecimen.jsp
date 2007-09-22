@@ -18,6 +18,7 @@
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 
 <% 
+
         String[] columnList1 = Constants.DERIVED_SPECIMEN_COLUMNS;
 		List columnList = new ArrayList();
 		for(int i=0;i<columnList1.length;i++)
@@ -553,7 +554,12 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 		        	</td>
 				 </tr>
 				<%}%> 
-				 <tr>
+				<!-- by Falguni -Hide label in case of auto generated label -->
+				<% if(!Variables.isSpecimenLabelGeneratorAvl)
+					{
+				%>
+				
+				<tr>
 			     	<td class="formRequiredNotice" width="5">
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
@@ -567,7 +573,9 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				     	<html:text styleClass="formFieldSized15" size="30" maxlength="50"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-				 
+				 <%
+				 	}
+				 %>
 				 <tr>
 				 	<td class="formRequiredNotice" width="5">*</td>
 				    <td class="formRequiredLabel">
@@ -859,7 +867,10 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						</td>
 					</tr>
 					</logic:equal>
-
+				<!-- by Falguni -Hide label in case of auto generated barcode -->
+				<% if(!Variables.isSpecimenBarcodeGeneratorAvl )
+					{
+				%>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formLabel">
@@ -871,7 +882,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						<html:text styleClass="formFieldSized"  maxlength="50" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
 		        	</td>
 				 </tr>
-				 
+				 <%}%>
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formLabel">
@@ -1014,4 +1025,3 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 
 	
  </html:form>
-	

@@ -4,7 +4,13 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.exception.BizLogicException;
 
-
+/**
+ * Class for initializing  label and barcode generator
+ *  
+ * @author Falguni_Sachde
+ * 
+ *
+ */
 public class LabelAndBarcodeGeneratorInitializer {
 	
 	
@@ -16,29 +22,35 @@ public class LabelAndBarcodeGeneratorInitializer {
 	{
 		LabelGenerator specimenGeneratorInstance;
 		LabelGenerator storageContainerGeneratorInstance;
+		BarcodeGenerator specimenBarcodeGeneratorInstance;
+		BarcodeGenerator storageContainerBarcodeGeneratorInstance;
 		try 
 		{
 			
-			specimenGeneratorInstance = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-		
-    	
+			specimenGeneratorInstance = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);    	
 			if(specimenGeneratorInstance!= null)
 			{	
 				Variables.isSpecimenLabelGeneratorAvl = true;
 			} 	
+			
 				
-			storageContainerGeneratorInstance =LabelGeneratorFactory.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
-    	
+			storageContainerGeneratorInstance =LabelGeneratorFactory.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);    	
 			if(storageContainerGeneratorInstance!= null)
+			{
 				Variables.isStorageContainerLabelGeneratorAvl = true;
+			}
     	
-			BarcodeGenerator specimenBarcodeGeneratorInstance = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
+			specimenBarcodeGeneratorInstance = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
 			if(specimenBarcodeGeneratorInstance!=null)
+			{
 				Variables.isSpecimenBarcodeGeneratorAvl = true;
+			}
     	
-			BarcodeGenerator storageContainerBarcodeGeneratorInstance = BarcodeGeneratorFactory.getInstance(Constants.STORAGECONTAINER_BARCODE_GENERATOR_PROPERTY_NAME);
+			storageContainerBarcodeGeneratorInstance = BarcodeGeneratorFactory.getInstance(Constants.STORAGECONTAINER_BARCODE_GENERATOR_PROPERTY_NAME);
 			if(storageContainerBarcodeGeneratorInstance!=null)
+			{
 				Variables.isStorageContainerBarcodeGeneratorAvl = true;
+			}
 		
 		} 
 		catch (BizLogicException e) 

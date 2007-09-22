@@ -31,6 +31,8 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.namegenerator.LabelGenerator;
+import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -158,6 +160,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					fullStatus = getStorageContainerFullStatus(dao, container.getParent().getId());
 					positionDimensionOne = container.getPositionDimensionOne().intValue();
 					positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+					
+				
 				}
 			}
 			else
@@ -182,7 +186,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 
 			Logger.out.debug("Collection protocol size:" + container.getCollectionProtocolCollection().size());
-
+			//by falguni
+			//Call Storage container label generator if its specified to use automatic label generator
+			if(edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl )
+			{
+				LabelGenerator storagecontLblGenerator;
+				try {
+					storagecontLblGenerator = LabelGeneratorFactory.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
+					storagecontLblGenerator.setLabel(cont);
+				} catch (BizLogicException e) {
+					throw new DAOException(e.getMessage());
+				}
+			}
 			dao.insert(cont.getCapacity(), sessionDataBean, true, true);
 			dao.insert(cont, sessionDataBean, true, true);
 
@@ -1033,7 +1048,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 		}
 	}
-
+	//This method is called from labelgenerator.
 	public long getNextContainerNumber() throws DAOException
 	{
 		String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
@@ -1045,7 +1060,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		List list = dao.retrieve(sourceObjectName, selectColumnName);
 
 		dao.closeSession();
-
 		if (!list.isEmpty())
 		{
 			List columnList = (List) list.get(0);
@@ -1062,7 +1076,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		return 1;
 	}
-
+	//what to do abt thi
 	public String getContainerName(String siteName, String typeName, String operation, long Id) throws DAOException
 	{
 		String containerName = "";
@@ -2080,11 +2094,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		 }
 		 */
 		//validations for Container name
-		if (validator.isEmpty(container.getName()))
+		//by falguni
+		/*if (validator.isEmpty(container.getName()))
 		{
 			message = ApplicationProperties.getValue("storageContainer.name");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
+		}*/
 
 		// validations for temperature
 		if (container.getTempratureInCentigrade() != null && !validator.isEmpty(container.getTempratureInCentigrade().toString())

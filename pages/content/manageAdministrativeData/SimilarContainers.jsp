@@ -7,7 +7,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm" %>
@@ -18,7 +18,7 @@
 
 <%
         //String operation = (String) request.getAttribute(Constants.OPERATION);
-		String containerNumber=(String)request.getAttribute("ContainerNumber");
+		//String containerNumber=(String)request.getAttribute("ContainerNumber");
 		List siteForParent = (List)request.getAttribute("siteForParentList");
 		Object obj = request.getAttribute("storageContainerForm");
 		
@@ -143,25 +143,17 @@
 		
 		function onSiteChange(i)
 		{
+			
 
-			var containerNameElement = document.getElementById("containerName_"+i);
-			if(containerNameElement.value == "")
+			var typeElement = document.forms[0].typeName.value;
+			var siteElement = document.getElementById("siteId_"+i);
+
+			if(typeElement.value != "-1" && siteElement.value != "-1" )
 			{
-				<% long tempContainerNumber = new Long(containerNumber).longValue();%>
-				var tempContainerNumber1 = <%=tempContainerNumber%>;
-				for(var j=1;j<i;j++)
-				{
-					tempContainerNumber1++;
-				}
-				var typeElement = document.forms[0].typeName.value;
-				var siteElement = document.getElementById("siteId_"+i);
-
-				if(typeElement.value != "-1" && siteElement.value != "-1" && containerNameElement.value == "")
-				{
 					//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
 					//and it is giving error. So these fields are truncated in case it is longer than 40.
 					//It also solves Bug 2829:System fails to create a default unique storage container name
-					var maxSiteName = siteElement.options[siteElement.selectedIndex].text;
+			        var maxSiteName = siteElement.options[siteElement.selectedIndex].text;
 					var maxTypeName = typeElement;
 					if(maxSiteName.length>40)
 					{
@@ -171,23 +163,24 @@
 					{
 						maxTypeName = maxTypeName.substring(0,39);
 					}
-
-					containerNameElement.value=maxSiteName+"_"+maxTypeName+"_"+tempContainerNumber1;
+					
+					
+					//var siteNameElement = document.forms["storageContainerForm"].getElementById("siteId");//similarContainerMapValue(simCont:1_siteName)
+					var formElements = document.forms["storageContainerForm"].elements;
+					var siteNameElement = formElements["similarContainerMapValue(simCont:"+i+"_siteName)"];
+					siteNameElement.value = maxSiteName;
+					
+					
 				}	
-			}
+			
 
 		}
-		
 		function onParentContainerChange(i)
 		{
 			var containerNameElement = document.getElementById("containerName_"+i);
 			if(containerNameElement.value == "")
 			{
-				var tempContainerNumber1 = <%=tempContainerNumber%>;
-				for(var j=1;j<i;j++)
-				{
-					tempContainerNumber1++;
-				}
+				
 				var parentContainerId = document.getElementById("customListBox_"+i+"_0");
 
 				getSiteName(parentContainerId.options[parentContainerId.selectedIndex].value);
@@ -208,7 +201,7 @@
 					{
 						maxTypeName = maxTypeName.substring(0,39);
 					}
-					containerNameElement.value = maxSiteName + "_"+maxTypeName+"_"+tempContainerNumber1;
+					//containerNameElement.value = maxSiteName + "_"+maxTypeName+"_"+tempContainerNumber1;
 				}
 			}
 			
@@ -357,7 +350,7 @@
 		String checkButtonStatus = Integer.toString(simForm.getCheckedButton());
 	
 		String noOfContainers = Integer.toString(simForm.getNoOfContainers());
-		int maxIdentifier = Integer.parseInt((String)request.getAttribute(Constants.MAX_IDENTIFIER));
+		//int maxIdentifier = Integer.parseInt((String)request.getAttribute(Constants.MAX_IDENTIFIER));
 	//maxIdentifier++;
 		if(!Constants.PAGEOF_SIMILAR_CONTAINERS.equals(pageOf))
 		{
@@ -544,14 +537,31 @@
 		 		  <tr>	
 						<td class="formLeftSubTableTitle" width="5">
 				    		 	#
-						 </td>
-				    	  <td class="formRightSubTableTitle">*
+						</td>
+				    	<% if(!Variables.isStorageContainerLabelGeneratorAvl ) {
+				    	%>
+				    	 <td class="formRightSubTableTitle">*
 								<bean:message key="storageContainer.containerName"/>
-						   </td>
-						 <td class="formRightSubTableTitle">
+						  </td>
+						<%
+						 } %>
+						<% if(!Variables.isStorageContainerBarcodeGeneratorAvl ) {
+				    	%>
+												
+						<td class="formRightSubTableTitle">
 								<bean:message key="storageContainer.barcode"/>
 						</td>
-						<td class="formRightSubTableTitle">*
+						<%}%>
+						<% int colspanValue =0 ;
+						    if(Variables.isStorageContainerLabelGeneratorAvl ) {
+						    colspanValue++;
+						    }
+          			        if(Variables.isStorageContainerBarcodeGeneratorAvl ) {
+          			        colspanValue++;
+          			        }
+						    
+						   %>
+						<td  colspan="<%=colspanValue%>" class="formRightSubTableTitle">*
 							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
 							<bean:message key="storageContainer.site"/>
 							</logic:equal>
@@ -564,7 +574,7 @@
 						  <%-- n-combo-box start --%>
 	  
 						<%
-						Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+						   Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 						//System.out.println("dataMap -> "+dataMap.size());
 							session.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,dataMap);							
 							
@@ -600,7 +610,7 @@
 			  <%
 				form = simForm;
 				int counter=0;
-		Map similarContainersMap = form.getSimilarContainersMap(); 
+		        Map similarContainersMap = form.getSimilarContainersMap(); 
 				if(form != null)
 				{
 					counter = (int)form.getNoOfContainers();
@@ -655,7 +665,12 @@
 	
 		       String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')"; //javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";
 		
-		
+		//falguni //generate hidden variable for sitename select combo box values
+		String siteNamekey = "similarContainerMapValue(simCont:" + i + "_siteName)";
+		String siteNamevalue = (String)similarContainersMap.get("simCont:"+i+"_siteName");
+		%>
+		<html:hidden property="<%=siteNamekey%>" value="<%=siteNamevalue%>"/>
+		<%
 	    if(similarContainersMap.get(rbKey)==null)
 		{
 		   similarContainersMap.put(rbKey,"1");
@@ -697,17 +712,15 @@
 						  	<td class="formSerialNumberField" width="5">
 						     	<%=i%>.
 						    </td>
+						    <% if(!Variables.isStorageContainerLabelGeneratorAvl ) {
+				    		%>
+				    	
 		    				<% 
 				    		if(i == 1 && (simForm.getContainerName() != null) && !(simForm.getContainerName().equals("")) )
 					    	{
 			    			%>
 						    <td class="formField" nowrap>
 								<html:text styleClass="formFieldSized10"  maxlength="100"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>" />
-								&nbsp;
-								<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
-								<bean:message key="StorageContainer.resetName" />
-								</html:link>
-				
 							</td>
 								<% 
 		    					}else{
@@ -715,19 +728,33 @@
 							<td class="formField" nowrap>
 								<html:text styleClass="formFieldSized10"  maxlength="255"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>"/>
 								&nbsp;
-								<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
+								<%-- <html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>"> 
 								<bean:message key="StorageContainer.resetName" />
-								</html:link>
+								</html:link>--%>
 							</td>
 			
 								<% 
 		    					}
 							    %>
+							 <%}%>  
+							 <% if(!Variables.isStorageContainerBarcodeGeneratorAvl ) {
+				    		%> 
 						    <td class="formField">
 							<html:text styleClass="formFieldSized10"  maxlength="255"  size="30" styleId="<%=barSId%>" property="<%=barcodeKey%>" />
 							</td>
-			
-							<td class="formField">
+							<%
+							} %>
+							
+							<% int colspanValue1 =0 ;
+						    if(Variables.isStorageContainerLabelGeneratorAvl ) {
+						    colspanValue1++;
+						    }
+          			        if(Variables.isStorageContainerBarcodeGeneratorAvl ) {
+          			        colspanValue1++;
+          			        }
+						    
+						   %>
+							<td class="formField" colspan="<%=colspanValue1 %>" >
 								<table summary="" cellpadding="3" cellspacing="0" border="0">
 									<tr>
 										<td class="formFieldNoBordersSimple">
@@ -790,7 +817,7 @@
 	  			
 	   	
 					  <%
-					  	maxIdentifier++;
+					  	//maxIdentifier++;
 						} //For
 					  %>
 

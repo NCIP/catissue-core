@@ -46,6 +46,8 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.namegenerator.LabelGenerator;
+import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
@@ -116,6 +118,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			throw new DAOException ("Object should be either specimen or LinkedHashMap " +
 					"of specimen objects.");
 		}
+	   
 	}
 
 	/**
@@ -201,6 +204,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				daoException.setSupportingMessage(message);
 				throw daoException;
 			}
+			
 
 			List derivedSpecimens = (List) specimenMap.get(specimen);
 			if (derivedSpecimens == null)
@@ -226,7 +230,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					String message = " (This message is for Derived Specimen " + j + " of Parent Specimen number " + count + ")";
 					daoException.setSupportingMessage(message);
 					throw daoException;
-				}
+				} 
 			}
 		}
 
@@ -432,7 +436,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException 
 	 */
 	private void insertSingleSpecimen(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, boolean partOfMulipleSpecimen)
-			throws DAOException, UserNotAuthorizedException
+			throws DAOException, UserNotAuthorizedException 
 	{
 		try 
 		{
@@ -518,6 +522,28 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
 			{
 				specimen.setAvailable(new Boolean(false));
+			}
+			/**
+			 * Name:Falguni Sachde
+			 * Reviewer: Sachin lale
+			 * Call Specimen label generator if automatic generation is specified 
+			 */
+			if(edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl )
+			{
+				//Setting Name from Id
+				if((specimen.getLabel()==null || specimen.getLabel().equals("") ) &&  !specimen.getIsCollectionProtocolRequirement())
+				{
+
+					try 
+					{
+						LabelGenerator spLblGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+						spLblGenerator.setLabel(specimen);
+					}
+					catch (BizLogicException e) 
+					{
+						throw new DAOException(e.getMessage());
+					}
+				}
 			}
 			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
 			dao.insert(specimen, sessionDataBean, true, true);
@@ -1466,11 +1492,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
-		if (validator.isEmpty(specimen.getLabel()))
+		/*		
+		 *if (validator.isEmpty(specimen.getLabel()))
 		{
 			String message = ApplicationProperties.getValue("specimen.label");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}
+		}*/
 
 		if (validator.isEmpty(specimen.getClassName()))
 		{
@@ -1702,11 +1729,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 
-		if (validator.isEmpty(specimen.getLabel()))
-		{
-			String labelString = ApplicationProperties.getValue("specimen.label");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
-		}
+//		if (validator.isEmpty(specimen.getLabel()))
+//		{
+//			String labelString = ApplicationProperties.getValue("specimen.label");
+//			throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
+//		}
 
 		if (specimen.getInitialQuantity() == null || specimen.getInitialQuantity().getValue() == null)
 		{

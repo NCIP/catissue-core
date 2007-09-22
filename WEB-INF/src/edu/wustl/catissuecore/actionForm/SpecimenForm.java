@@ -765,11 +765,11 @@ public class SpecimenForm extends AbstractActionForm
                     }
                 }
                 
-				if (validator.isEmpty(label))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-							ApplicationProperties.getValue("specimen.label")));
-				}
+				//Changed by falguni
+				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl && validator.isEmpty(label))
+	            {
+					 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.label")));
+	            }
 
 				if (validator.isEmpty(className))
 				{

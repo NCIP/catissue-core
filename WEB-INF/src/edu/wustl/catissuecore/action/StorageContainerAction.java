@@ -120,14 +120,14 @@ public class StorageContainerAction extends SecureAction
 		//request.setAttribute(Constants.IS_CONTAINER_FULL_LIST, Constants.IS_CONTAINER_FULL_VALUES );
 
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
-		long container_number = bizLogic.getNextContainerNumber();
+		//Comment by Falguni
+		/*long container_number = bizLogic.getNextContainerNumber();
 		if(operation.equals(Constants.EDIT))
 		{
 			container_number = storageContainerForm.getId();
 		}
 		request.setAttribute("ContainerNumber", new Long(container_number).toString());
-
+*/
 		Logger.out.info("is container full:" + storageContainerForm.getIsFull());
 
 		//*************Start Bug:1938  ForwardTo implementation *************
@@ -186,12 +186,12 @@ public class StorageContainerAction extends SecureAction
 						storageContainerForm.setCollectionIds(new long[]{-1});
 					}
 				}
-				if (storageContainerForm.getContainerName().equals(""))
-				{
-					storageContainerForm.setContainerName(bizLogic.getContainerName(storageContainerForm.getSiteName(), storageContainerForm
-							.getTypeName(), operation, new Long(initValues[0]).longValue()));
-
-				}
+//				if (storageContainerForm.getContainerName().equals(""))
+//				{
+//					storageContainerForm.setContainerName(bizLogic.getContainerName(storageContainerForm.getSiteName(), storageContainerForm
+//							.getTypeName(), operation, new Long(initValues[0]).longValue()));
+//
+//				}
 			}
 
 		}
@@ -207,7 +207,7 @@ public class StorageContainerAction extends SecureAction
 				if (!containerList.isEmpty())
 				{
 					StorageContainer cont = (StorageContainer) containerList.get(0);
-
+				
 					Container parent = (Container)bizLogic.retrieveAttribute(StorageContainer.class.getName(),cont.getId(),"parent");
 					if (parent != null)
 					{
@@ -268,6 +268,17 @@ public class StorageContainerAction extends SecureAction
 		if (operation.equals(Constants.EDIT) && storageContainerForm.getCheckedButton() == 1)
 		{
 			initialValues = checkForInitialValues(containerMap);
+			
+			//falguni
+			//get container name by getting storage container object from db.
+			String valueField = "id";
+			List containerList = bizLogic.retrieve(StorageContainer.class.getName(), valueField, new Long(storageContainerForm.getId()));
+			if (!containerList.isEmpty())
+			{
+				StorageContainer cont = (StorageContainer) containerList.get(0);
+				storageContainerForm.setContainerName(cont.getName());
+			}
+			
 
 		}
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
@@ -473,12 +484,12 @@ public class StorageContainerAction extends SecureAction
 		Logger.out.info("Container name:" + storageContainerForm.getContainerName());
 		Logger.out.info("Site Name:" + storageContainerForm.getSiteName());
 		Logger.out.info("type:" + storageContainerForm.getTypeName());
-		if (storageContainerForm.getContainerName().equals(""))
-		{
-			storageContainerForm.setContainerName(bizLogic.getContainerName(storageContainerForm.getSiteName(), storageContainerForm.getTypeName(),
-					operation, storageContainerForm.getId()));
-
-		}
+//		if (storageContainerForm.getContainerName().equals(""))
+//		{
+//			storageContainerForm.setContainerName(bizLogic.getContainerName(storageContainerForm.getSiteName(), storageContainerForm.getTypeName(),
+//					operation, storageContainerForm.getId()));
+//
+//		}
 
 		// ---------- Add new
 		String reqPath = request.getParameter(Constants.REQ_PATH);

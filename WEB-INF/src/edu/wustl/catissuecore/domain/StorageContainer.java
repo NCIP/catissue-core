@@ -342,6 +342,7 @@ public class StorageContainer extends Container
 			storageType.setId(new Long(form.getTypeId()));
 			storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 			storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
+			storageType.setName(form.getTypeName());
 			// Change for API Search   --- Ashwin 04/10/2006
 			if (SearchUtil.isNullobject(this.capacity))
 			{
@@ -446,6 +447,8 @@ public class StorageContainer extends Container
 				this.setPositionDimensionTwo(null);
 				site = new Site();
 				site.setId(new Long(form.getSiteId()));
+				site.setName(form.getSiteName());
+				
 			}
 
 //			collectionProtocolCollection.clear();

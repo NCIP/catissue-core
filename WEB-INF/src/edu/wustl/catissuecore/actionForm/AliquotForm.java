@@ -466,10 +466,11 @@ public class AliquotForm extends AbstractActionForm
 						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
 					}
          		}
-         		else if(key.endsWith("_label"))
+         		else if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl &&	key.endsWith("_label"))
          		{
+         			//by Falguni
          			String value = (String)aliquotMap.get(key);
-         			
+         			System.out.println("value");
          			if(validator.isEmpty(value))
          			{
          				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.label")));

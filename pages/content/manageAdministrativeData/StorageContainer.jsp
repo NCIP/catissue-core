@@ -4,6 +4,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
@@ -16,7 +17,7 @@
 		//StorageContainerForm form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		
         String operation = (String) request.getAttribute(Constants.OPERATION);
-		String containerNumber=(String)request.getAttribute("ContainerNumber");
+		//String containerNumber=(String)request.getAttribute("ContainerNumber");
         String formName;
 		List siteForParent = (List)request.getAttribute("siteForParentList");
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
@@ -222,6 +223,8 @@
 			var typeElement = document.getElementById("typeId");
 			var siteElement = document.getElementById("siteId");
 			var containerNameElement = document.getElementById("containerName");
+			document.forms[0].siteName.value = siteElement.options[siteElement.selectedIndex].text;
+			
 			if(typeElement.value != "-1" && siteElement.value != "-1" && containerNameElement.value == "")
 			{
 				//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
@@ -237,7 +240,7 @@
 				{
 					maxTypeName = maxTypeName.substring(0,39);
 				}
-				nameChange(maxSiteName,maxTypeName,<%=containerNumber%>);
+
 			}
 		}
 		function onParentContainerChange(element)
@@ -273,7 +276,7 @@
 				{
 					maxTypeName = maxTypeName.substring(0,39);
 				}
-				nameChange(siteName,maxTypeName,<%=containerNumber%>);
+
 			}	
 			//out of three drop downs if first dropdown that is the storage container name drop is changed
 			//then make a server trip to get all CPs 
@@ -287,13 +290,6 @@
 		}
 		
 		
-		function nameChange(siteName,typeName,Id)
-		{
-			if(siteName!="-1" && typeName!="-1")
-			{
-				document.forms[0].containerName.value=siteName+"_"+typeName+"_"+Id;
-			}
-		}	
 		function getSiteName(id)
 		{
 
@@ -307,28 +303,7 @@
 			}		
 					
 		}	
-		function setContainerName(maxSiteName)
-			{
-				var containerName = document.getElementById("containerName");		
-				var containerNumber = "<%=containerNumber%>";	
-				var typeElement =  document.getElementById("typeId");				
-				var maxTypeName =  typeElement.options[typeElement.selectedIndex].text;
-				if(maxTypeName != "-1" && maxSiteName != "-1" && containerName.value=="")
-				{		
-					//Jitendra:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
-					//and it is giving error. So these fields are truncated in case it is longer than 40.
-					//It also solves Bug 2829:System fails to create a default unique storage container name
-					if(maxSiteName>40)
-					{
-						maxSiteName = maxSiteName.substring(0,39);
-					}
-					if(maxTypeName.length>40)
-					{
-						maxTypeName = maxTypeName.substring(0,39);
-					}					
-					containerName.value=maxSiteName+"_"+maxTypeName+"_"+containerNumber;
-				}
-			}
+		
 //  function to insert a row in the inner block
 
 function insRow(subdivtag)
@@ -549,7 +524,7 @@ function onEditChange()
 				<tr>
 					<td>
 						<html:hidden property="operation" value="<%=operation%>" />
-						<html:hidden property="containerNumber" value="<%=containerNumber%>" />
+						<%--  <html:hidden property="containerNumber" value="<%=containerNumber%>" /> --%>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>	
 						<input type="hidden" name="radioValue">
 						<html:hidden property="containerId" styleId="containerId"/>
@@ -780,6 +755,9 @@ function onEditChange()
 						</td>
 					</tr>	
 					</logic:equal>
+					<% if(!Variables.isStorageContainerLabelGeneratorAvl || operation.equals(Constants.EDIT))
+					{
+					%>
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel" colspan="2">
@@ -789,13 +767,11 @@ function onEditChange()
 						</td>
 						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="containerName" property="containerName"/>
-							&nbsp;
-							<html:link href="#" styleId="newSite" onclick="ResetName(this)">
-								<bean:message key="StorageContainer.resetName" />
-							</html:link>
 						</td>
 					</tr>
-					
+					<%
+					}
+					%>
 					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 					
 					<tr>
@@ -811,7 +787,10 @@ function onEditChange()
 					</tr>
 					</logic:notEqual>
 					
-					
+					<% if(!Variables.isStorageContainerBarcodeGeneratorAvl || operation.equals(Constants.EDIT))
+					{
+					%>
+				
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">
@@ -823,7 +802,9 @@ function onEditChange()
 							<html:text styleClass="formFieldSized10" maxlength="255"  size="30" styleId="barcode" property="barcode"/>
 						</td>
 					</tr>
-					
+					<%
+					}
+					%>
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel" colspan="2">

@@ -269,9 +269,11 @@ public class SimilarContainersAction extends SecureAction
 
 		// code to set Max(IDENTIFIER) in storage container table 
 		// used for suffixing Unique numbers to auto-generated container name
-		long maxId = bizLogic.getNextContainerNumber();
+		/*
+		 * by falguni
+		 * long maxId = bizLogic.getNextContainerNumber();
 		request.setAttribute(Constants.MAX_IDENTIFIER, Long.toString(maxId));
-		request.setAttribute("ContainerNumber", new Long(maxId).toString());
+		request.setAttribute("ContainerNumber", new Long(maxId).toString());*/
 		List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request.getParameter("typeId")).longValue(), exceedingMaxLimit,similarContainersForm.getSelectedContainerName());
 		TreeMap containerMap = (TreeMap) mapSiteList.get(0);
 		List siteList1 = (List) mapSiteList.get(1);
@@ -353,11 +355,12 @@ public class SimilarContainersAction extends SecureAction
 				{
 					maxTypeName = typeName.substring(0, 39);
 				}
-
-				similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_name", maxSiteName + "_" + maxTypeName + "_" + (maxId + i - 1));
+				//falguni
+				//similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_name", maxSiteName + "_" + maxTypeName + "_" + (maxId + i - 1));
 				if (similarContainersForm.getCheckedButton() == 1)
 				{
 					similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_siteId", new Long(siteId).toString());
+					similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_siteName",maxSiteName.toString());
 				}
 
 			}
@@ -390,7 +393,8 @@ public class SimilarContainersAction extends SecureAction
 				}
 			}
 
-			similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_name", siteName + "_" + typeName + "_" + (maxId + i - 1));
+			//falguni
+			//similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_name", siteName + "_" + typeName + "_" + (maxId + i - 1));
 
 		}
 
