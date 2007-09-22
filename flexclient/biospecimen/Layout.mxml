@@ -46,8 +46,19 @@
      [Bindable] 
                 [Embed(source="/images/graydot.gif")]
                 public var fscgIcon:Class;  
+	 [Bindable]
+                 [Embed(source='/images/TreeMenuIcon_S.gif')]
+                 private var pendingSpecimenIcon:Class;  		
+	 [Bindable]
+                 [Embed(source='/images/TreeMenuIcon_A.gif')]
+                 private var pendingAliquotIcon:Class;  
+	  [Bindable]
+                 [Embed(source='/images/TreeMenuIcon_D.gif')]
+                 private var pendingDerivedIcon:Class;  
+ [Bindable]
+                 [Embed(source='/images/TreeMenuIcon_G.gif')]
+                 private var pendingSCGIcon:Class;  
 
-   
     [Bindable]
   	       private var title:String = "Specimen Details for"; 
 
@@ -232,25 +243,28 @@
 
 	     var refreshParticipants:String = "false";  
 	    //specimenTree.dataProvider = null;
-	   /* isEventHandled = false;
-	    Alert.show(treeData.toString());
-	    specimenTree.dataProvider = treeData;
+	   // isEventHandled = false;
+	   // Alert.show(treeData.toString());
+	    //specimenTree.dataProvider = treeData;
 	    
-	    for(var i:int=0; i<treeData.length; i++)
+	  /*  for(var i:int=0; i<treeData.length; i++)
     	    {
-    	    var node:XML = treeData.getItemAt(i) as XML;
-    	    var nodeId:String = node.@id;
+    		var node:XML = treeData.getItemAt(i) as XML;
+    		var nodeId:String = node.@id;
     	    
-    	    if(nodeId.match("future"))
-    	    {
+    		if(nodeId.match("future"))
+    		{
     	    	
-    	        specimenTree.setItemIcon(treeData.getItemAt(i), fscgIcon, fscgIcon);
-    	    }
-    	    else
-    	    {
-    	        specimenTree.setItemIcon(treeData.getItemAt(i),scgIcon,scgIcon);	
-    	    }
-    	 }*/
+    			specimenTree.setItemIcon(treeData.getItemAt(i), fscgIcon, fscgIcon);
+    		}
+    		else
+    		{
+    			specimenTree.setItemIcon(treeData.getItemAt(i),scgIcon,scgIcon);
+		
+		}
+            } */
+
+         
 	    
 	    //invoking the java script method
 	    var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId + "','" + refreshParticipants+"')");
@@ -271,7 +285,7 @@
 
 	    specimenTree.dataProvider = treeData;
 	    
-	    for(var i:int=0; i<treeData.length; i++)
+	   /* for(var i:int=0; i<treeData.length; i++)
     	    {
     	    var node:XML = treeData.getItemAt(i) as XML;
     	    var nodeId:String = node.@id;
@@ -285,7 +299,36 @@
     	    {
     	        specimenTree.setItemIcon(treeData.getItemAt(i),scgIcon,scgIcon);	
     	    }
-    	 }
+    	 }*/
+
+	 for(var j:Number=0; j<treeData.length; j++)
+	 {
+       		var xmlNode:XML = treeData.getItemAt(j) as XML;
+       		var scgNodeId:String = xmlNode.@scgCollectionStatus;
+		
+		if(scgNodeId.match("Pending"))
+       		{
+       			specimenTree.setItemIcon(treeData.getItemAt(j), pendingSCGIcon, pendingSCGIcon);	  
+		}
+       	 
+       	  	 //check for all descendents of SCG
+       	  	 var descendantsList:XMLList = XMLList(xmlNode.descendants());
+       	  	 
+		 for(var k:Number=0; k<descendantsList.length(); k++)
+       	  	 {
+       	  	 	var childNode:XML = XML(descendantsList[k]);
+			var childNodeId:String = childNode.@collectionStatus; 
+			
+			if(childNodeId.match("Pending"))
+       	  	 	{
+       	  	 		
+				specimenTree.setItemIcon(childNode, pendingSpecimenIcon, pendingSpecimenIcon);	  
+       	  	 	}
+       	  	 }
+       	  
+    	  }
+
+
     	 
     	 /* if(selectedNode != null || parentNode != null)
 	      {

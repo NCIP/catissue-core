@@ -146,7 +146,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			setDefaultEvents(specimenCollectionGroup, sessionDataBean);
 		}
 		// Check for different closed site
-		if (!specimenCollectionGroup.getSpecimenCollectionSite().getId().equals(oldspecimenCollectionGroup.getSpecimenCollectionSite().getId()))
+		if(oldspecimenCollectionGroup.getSpecimenCollectionSite()==null&&specimenCollectionGroup.getSpecimenCollectionSite()!=null)
+		{
+			checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
+		}
+		else if (!specimenCollectionGroup.getSpecimenCollectionSite().getId().equals(oldspecimenCollectionGroup.getSpecimenCollectionSite().getId()))
 		{
 			checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
 		}
@@ -851,7 +855,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			Object[] obj1 = (Object[]) scgList.get(i);
 			Long scgId = (Long) obj1[0];
-			 
+			String scgCollectionStatus=(String)obj1[3]; 
 			String scgNodeLabel = "";
 			//String scgActivityStatus = (String) obj1[2];
 			
@@ -891,7 +895,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			String toolTipText=getToolTipText(eventPoint.toString(),collectionPointLabel,receivedDate);
 
 			//creating SCG node
-			xmlString.append("<node id= \""+Constants.SPECIMEN_COLLECTION_GROUP+"_"+scgId.toString()+ "\" "+"name=\""+ scgNodeLabel+"\" "+ "toolTip=\""+toolTipText+"\" " +"type=\""+ Constants.SPECIMEN_COLLECTION_GROUP+"\">");
+			xmlString.append("<node id= \""+Constants.SPECIMEN_COLLECTION_GROUP+"_"+scgId.toString()+ "\" "+"name=\""+ scgNodeLabel+"\" "+ "toolTip=\""+toolTipText+"\" " +"type=\""+ Constants.SPECIMEN_COLLECTION_GROUP+"\" "+"scgCollectionStatus=\""+ scgCollectionStatus+"\">");
 			
 			//Adding specimen Nodes to SCG tree
 			addSpecimenNodesToSCGTree(xmlString,scgId);
@@ -913,7 +917,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 */
 	private List getSCGsForCPRAndEventId(Long eventId, Long cpId, Long participantId) throws DAOException, ClassNotFoundException
 	{
-		String hql = "select scg.id,scg.name,scg.activityStatus from "
+		String hql = "select scg.id,scg.name,scg.activityStatus,scg.collectionStatus from "
 			+ SpecimenCollectionGroup.class.getName()
 			+ " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from "
 			+ CollectionProtocolRegistration.class.getName() +" as cpr where cpr.collectionProtocol.id = "
@@ -933,7 +937,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 */
 	private void addSpecimenNodesToSCGTree(StringBuffer xmlString, Long scgId) throws DAOException, ClassNotFoundException
 	{
-		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.type from "
+		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.type,sp.collectionStatus	from "
 			+ Specimen.class.getName()
 			+ " as sp where sp.specimenCollectionGroup.id = "+scgId +" order by sp.id";
 		List specimenList = executeQuery(hql);
@@ -999,6 +1003,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		     	String spLabel1 = (String) specimens[1];
 		     	//String spActivityStatus = (String) specimens[3];
 		     	String type = (String)specimens[4];
+		     	String spCollectionStatus = (String)specimens[5];
 		     	
 		     	//Added later for toolTip text for specimens
 		        String toolTipText = "Label : " + spLabel1 + " ; Type : " + type;
@@ -1024,12 +1029,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		     	    
 		     		if(i == finalList.size()-1) //If last element & parent specimen
 		     		{
-		     			xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+Constants.SPECIMEN+"\">");
+		     			xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+Constants.SPECIMEN+"\" "+"collectionStatus=\""+spCollectionStatus+"\">");
 		     		    xmlString.append("</node>");
 		     		}
 		     		else //If not the last element and parent specimen
 		     		{
-		     		    xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+Constants.SPECIMEN+"\">");
+		     		    xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+Constants.SPECIMEN+"\" "+"collectionStatus=\""+spCollectionStatus+"\">");
 		     		    spStack.push((Object[])finalList.get(i));
 		     		}
 		     	}
@@ -1052,23 +1057,23 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		     			    	//Check if current specimen have children specimens
 			     			    if(spId.longValue() == nextSpPid.longValue())
 			     			    {
-			     			    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\">");
+			     			    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\" "+"collectionStatus=\""+spCollectionStatus+"\">");
 			     			        spStack.push((Object[])finalList.get(i)); 
 			     			    }
 			     			    else //if current specimen doesn't have children specimens
 			     			    {
-			     			    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+			     			    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\" "+"collectionStatus=\""+spCollectionStatus+"\"></node> ");
 			     			    }
 		     			    }
 		     			    else
 		     			    {
-		     			    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+		     			    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\" "+"collectionStatus=\""+spCollectionStatus+"\"></node> ");
 		     			    }
 		     			} 
 		     			
 		     			else //last element in specimen List
 		     			{
-		     			   xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+		     			   xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\" "+"collectionStatus=\""+spCollectionStatus+"\"></node> ");
 		     			    while(!spStack.isEmpty())
 		     			    {
 		     			    	spStack.pop();
@@ -1096,26 +1101,26 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		     					    	//If it has children
 			     					    if(spId.longValue() == nextSpPid.longValue())
 			     					    {
-			     					    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\">");
+			     					    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\" "+"collectionStatus=\""+spCollectionStatus+"\">");
 					     			        spStack.push((Object[])finalList.get(i)); 
 			     					    }
 			     					    else //if it doesn't has children
 			     					    {
-			     					    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+			     					    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\" "+"collectionStatus=\""+spCollectionStatus+"\"></node> ");
 			     					        break; //Note this break is imp
 			     					    }
 		     					    	
 		     					    }
 		     					    else // next node parent id is null then , then it's parent specimen
 		     					    {
-		     					    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+		     					    	xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\" "+"collectionStatus=\""+spCollectionStatus+"\"></node> ");
 		     					        break;
 		     					    }
 		     					    
 		     					}
 		     					else //If last element
 		     					{
-		     						xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\"></node> ");
+		     						xmlString.append("<node id=\""+Constants.SPECIMEN+"_"+spId.toString()+"\" "+"name=\""+spLabel1+"\" "+"toolTip=\""+toolTipText+"\" "+"type=\""+ Constants.SPECIMEN +"\" "+"collectionStatus=\""+spCollectionStatus+"\"></node> ");
 				     			    while(!spStack.isEmpty())
 				     			    {
 				     			    	spStack.pop();
