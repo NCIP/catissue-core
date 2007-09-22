@@ -37,8 +37,8 @@
 						<jsp:useBean id="parameterizedQuery" type="edu.wustl.common.querysuite.queryobject.IParameterizedQuery" />
 							<tr>
 								<%String target = "executeQuery('"+parameterizedQuery.getId()+"')"; %>
-								<td rowspan='2' valign="top">
-									<img src="images/savedQuery.gif"/>
+								<td valign="top">
+									<img src="images/savedQuery.bmp"/>
 								</td>
 								<td width='100%' valign="top" style="padding-left:0.8em;">
 									<html:link styleClass='formQueryLink' href='#' onclick='<%=target%>'>
