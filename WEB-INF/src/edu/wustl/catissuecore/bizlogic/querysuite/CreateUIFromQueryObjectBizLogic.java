@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
@@ -24,7 +25,7 @@ public class CreateUIFromQueryObjectBizLogic {
 		expressionMap = new HashMap<IExpressionId,Map<EntityInterface, List>>();
 	}
 
-	public String getHTMLForSavedQuery(IQuery queryObject,boolean isShowAll) 
+	public String getHTMLForSavedQuery(IQuery queryObject,boolean isShowAll,String forPage) 
 	{
 		String htmlString = "";
 		expressionMap.clear();
@@ -41,7 +42,7 @@ public class CreateUIFromQueryObjectBizLogic {
 
 		
 		GenerateHtmlForAddLimitsBizLogic generateHtml =	new GenerateHtmlForAddLimitsBizLogic();
-		htmlString = generateHtml.generateHTMLForSavedQuery(expressionMap,isShowAll);
+		htmlString = generateHtml.generateHTMLForSavedQuery(expressionMap,isShowAll,forPage);
 
 		return htmlString;
 	}
@@ -66,6 +67,7 @@ public class CreateUIFromQueryObjectBizLogic {
 				List<ICondition> conditions = ruleObject.getConditions();
 				EntityInterface entity = expression.getQueryEntity().getDynamicExtensionsEntity();
 				entityConditionMap.put(entity, conditions);
+				
 				expressionMap.put(expression.getExpressionId(), entityConditionMap);
 
 			}
