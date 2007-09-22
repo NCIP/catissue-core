@@ -124,8 +124,7 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 			gridForGroups= new dhtmlXGridObject('divForGroups');
 			gridForGroups.setImagePath("dhtml_comp/imgs/");
 			//		gridForGroups.enableAutoHeigth(false);  //on safari
-//			gridForGroups.enableAutoHeigth(true);  //for mozilla, IE
-			gridForGroups.enableAutoHeigth(<%=heightForGrid%>);
+			gridForGroups.enableAutoHeigth(true);  //for mozilla, IE
 			gridForGroups.setHeader("Group");
 			gridForGroups.setInitWidthsP("100");
 			gridForGroups.setColAlign("left");
