@@ -644,7 +644,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				}
 			}
 			
-			if(this.tissueSite.equals("-1"))
+			if(this.tissueSite.equals(""))
             {
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.tissueSite")));
             }
@@ -665,11 +665,11 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			{
                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.specimenstoragelocation")));
 			}
-			if (this.pathologicalStatus.equals("-1"))
-           {
+			if (this.pathologicalStatus.equals(""))
+            {
                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));
-           }
-			if ((collectionEventUserId) == -1L)
+            }
+			if ((collectionEventUserId) == 0L)
 	        {
 	       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's user"));
 	        }
@@ -699,7 +699,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				String message = ApplicationProperties.getValue("collectioneventparameters.container");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",message));
 			}
-			if ((receivedEventUserId) == -1L)
+			if ((receivedEventUserId) == 0L)
 	        {
 	       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received Event's user"));
 	        }			
