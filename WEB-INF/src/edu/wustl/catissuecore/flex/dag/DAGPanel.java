@@ -20,6 +20,7 @@ import edu.wustl.cab2b.client.ui.dag.ambiguityresolver.AmbiguityObject;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
 import edu.wustl.cab2b.client.ui.query.IPathFinder;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
@@ -121,8 +122,11 @@ public class DAGPanel {
 		m_session.setAttribute(DAGConstant.QUERY_OBJECT, query);
 
 		try {
-			Map searchedEntitiesMap = (Map)m_session.getAttribute(Constants.SEARCHED_ENTITIES_MAP);
-			EntityInterface entity = (Entity) searchedEntitiesMap.get(entityName);
+//			Map searchedEntitiesMap = (Map)m_session.getAttribute(Constants.SEARCHED_ENTITIES_MAP); //TODO Comment lines 
+//			EntityInterface entity = (Entity) searchedEntitiesMap.get(entityName);
+			
+			Long entityId = Long.parseLong(entityName);
+			EntityInterface entity =EntityCache.getCache().getEntityById(entityId);
 
 			CreateQueryObjectBizLogic queryBizLogic = new CreateQueryObjectBizLogic();
 			if (!strToCreateQueryObject.equalsIgnoreCase("")) {
@@ -556,12 +560,19 @@ public class DAGPanel {
 			if(nodesStr.indexOf("~")!= -1)
 			{
 				String[] entityArr =  nodesStr.split("~");
-				Map entityMap = (Map)m_session.getAttribute(Constants.SEARCHED_ENTITIES_MAP);
-
+	//			Map entityMap = (Map)m_session.getAttribute(Constants.SEARCHED_ENTITIES_MAP);//TODO  comment 
+				
+				
+				
 				for(int i=0;i<entityArr.length; i++)
 				{
 					String entityName = entityArr[i];
-					EntityInterface entity = (EntityInterface)entityMap.get(entityName);
+					
+					Long entityId = Long.parseLong(entityName);
+					EntityInterface entity =EntityCache.getCache().getEntityById(entityId);
+					
+					//EntityInterface entity = (EntityInterface)entityMap.get(entityName);
+					
 					IExpressionId expressionId = ((ClientQueryBuilder)m_queryObject).addExpression(entity);
 //					DAGNodeBuilder nodeBuilder  = new DAGNodeBuilder();
 					node = createNode(expressionId,true);
@@ -577,17 +588,9 @@ public class DAGPanel {
 	 */
 	public void restoreQueryObject()
 	{
-		IQuery query =m_queryObject.getQuery();
-		int roots = ((JoinGraph)(query.getConstraints().getJoinGraph())).getAllRoots().size();
-		if(roots > 1)
-		{
-			//errorMessage = AppletConstants.MULTIPLE_ROOTS_EXCEPTION;
-			//	showValidationMessagesToUser(errorMessage);
-		}
-		else
-		{
-			m_session.setAttribute(AppletConstants.QUERY_OBJECT, query);
-		}
+		IQuery query = (IQuery) m_session.getAttribute(DAGConstant.QUERY_OBJECT);
+		m_queryObject.setQuery(query);
+		
 	}
 	/**
 	 * 
