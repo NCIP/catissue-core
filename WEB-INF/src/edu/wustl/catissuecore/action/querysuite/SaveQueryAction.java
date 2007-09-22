@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.bizlogic.querysuite.CreateParameterizedQueryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -31,28 +32,27 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class saves the Query in Dag into database.
+ * 
  * @author chetan_patil
  * @created Sep 11, 2007, 3:50:16 PM
  */
-public class SaveQueryAction extends BaseAction
-{
+public class SaveQueryAction extends BaseAction {
 
-	protected ActionForward executeAction(ActionMapping actionMapping, ActionForm actionForm,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
+	protected ActionForward executeAction(ActionMapping actionMapping,
+			ActionForm actionForm, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
-		IQuery query = (IQuery) session.getAttribute(AppletConstants.QUERY_OBJECT);
+		IQuery query = (IQuery) session
+				.getAttribute(AppletConstants.QUERY_OBJECT);
 		String target = Constants.FAILURE;
-		if (query != null)
-		{
-			IParameterizedQuery parameterizedQuery = populateParameterizedQueryData(query,
-					actionForm);
+		if (query != null) {
+			IParameterizedQuery parameterizedQuery = populateParameterizedQueryData(
+					query, actionForm, request);
 
-			IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
-					.getValue("app.bizLogicFactory"), "getBizLogic",
-					Constants.CATISSUECORE_QUERY_INTERFACE_ID);
-			try
-			{
+			IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(
+					ApplicationProperties.getValue("app.bizLogicFactory"),
+					"getBizLogic", Constants.CATISSUECORE_QUERY_INTERFACE_ID);
+			try {
 				bizLogic.insert(parameterizedQuery, Constants.HIBERNATE_DAO);
 				target = Constants.SUCCESS;
 				session.removeAttribute(AppletConstants.QUERY_OBJECT);
@@ -60,61 +60,63 @@ public class SaveQueryAction extends BaseAction
 			catch (BizLogicException bizLogicException)
 			{
 				ActionErrors errors = new ActionErrors();
-				ActionError error = new ActionError("errors.item", bizLogicException.getMessage());
+				ActionError error = new ActionError("errors.item",
+						bizLogicException.getMessage());
 				errors.add(ActionErrors.GLOBAL_ERROR, error);
 				saveErrors(request, errors);
 
-				Logger.out.error(bizLogicException.getMessage(), bizLogicException);
-			}
-			catch (UserNotAuthorizedException userNotAuthorizedException)
-			{
+				Logger.out.error(bizLogicException.getMessage(),
+						bizLogicException);
+			} catch (UserNotAuthorizedException userNotAuthorizedException) {
 				SessionDataBean sessionDataBean = getSessionData(request);
 				String userName = "";
-				if (sessionDataBean != null)
-				{
+				if (sessionDataBean != null) {
 					userName = sessionDataBean.getUserName();
 				}
 
 				ActionErrors errors = new ActionErrors();
-				ActionError error = new ActionError("access.addedit.object.denied", userName,
+				ActionError error = new ActionError(
+						"access.addedit.object.denied", userName,
 						parameterizedQuery.getClass().getName());
 				errors.add(ActionErrors.GLOBAL_ERROR, error);
 				saveErrors(request, errors);
 
 				Logger.out.error(userNotAuthorizedException.getMessage(),
 						userNotAuthorizedException);
+			} catch (Exception e) {
+				Logger.out.error(e.getMessage(), e);
 			}
 		}
 		return actionMapping.findForward(target);
 	}
 
 	/**
-	 * This method populates the Parameterized Query related data form the ActionForm and returns the new ParameterizedQuery object
+	 * This method populates the Parameterized Query related data form the
+	 * ActionForm and returns the new ParameterizedQuery object
+	 * 
 	 * @param query
 	 * @param actionForm
 	 * @return
 	 */
-	private IParameterizedQuery populateParameterizedQueryData(IQuery query, ActionForm actionForm)
-	{
+	private IParameterizedQuery populateParameterizedQueryData(IQuery query,
+			ActionForm actionForm, HttpServletRequest request) {
 		SaveQueryForm saveActionForm = (SaveQueryForm) actionForm;
 		IParameterizedQuery parameterizedQuery = new ParameterizedQuery(query);
 
 		String queryTitle = saveActionForm.getTitle();
-		if (queryTitle != null)
-		{
+		if (queryTitle != null) {
 			parameterizedQuery.setName(queryTitle);
 		}
 
 		String queryDescription = saveActionForm.getDescription();
-		if (queryDescription != null)
-		{
+		if (queryDescription != null) {
 			parameterizedQuery.setDescription(queryDescription);
-		}
-		else
-		{
+		} else {
 			parameterizedQuery.setDescription("");
 		}
-
+		CreateParameterizedQueryBizLogic paraQueryBizObject = new CreateParameterizedQueryBizLogic();
+		paraQueryBizObject.getParameterizedConditions(parameterizedQuery,
+				request, actionForm);
 		return parameterizedQuery;
 	}
 
