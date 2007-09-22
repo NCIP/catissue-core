@@ -40,14 +40,14 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
 		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(
 				Constants.JDBC_DAO);
-		currentLable = new Long("0");
+		currentLabel = new Long("0");
 		try {
 			jdbcDao.openSession(null);
 			List resultList = jdbcDao.executeQuery(sql, null, false, null);
 			if (resultList != null && !resultList.isEmpty()) {
 				String number = (String) ((List) resultList.get(0)).get(0);
 				if (number != null && !number.equals("")) {
-					currentLable = Long.parseLong(number);
+					currentLabel = Long.parseLong(number);
 				}
 			}
 			jdbcDao.closeSession();
@@ -68,7 +68,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	private void persistLabelCount() 
 	{
 		String sql = "update CATISSUE_SPECIMEN_LABEL_COUNT SET LABEL_COUNT='"
-				+ currentLable + "'";
+				+ currentLabel + "'";
 
 		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(
 				Constants.JDBC_DAO);
@@ -89,12 +89,12 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		if(!labelCountTreeMap.containsKey(objSpecimen) &&	objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
 		{
 			String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
-			currentLable = currentLable + 1;
+			currentLabel = currentLabel + 1;
 
 			String year = new SimpleDateFormat("yy").format(new Date());
 			String day = format(Calendar.getInstance().get(Calendar.DAY_OF_YEAR),
 					"000");
-			String nextNumber = format(currentLable, "0000");
+			String nextNumber = format(currentLabel, "0000");
 
 			//TODO :Commented by Falguni because hibernate session is getting closed by calling this method. 
 			//persistLabelCount();

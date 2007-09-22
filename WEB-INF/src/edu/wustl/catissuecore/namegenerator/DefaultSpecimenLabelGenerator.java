@@ -25,7 +25,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	/**
 	 * Current label 
 	 */
-	protected Long currentLable;
+	protected Long currentLabel;
 	
 	/**
 	 * Default Constructor
@@ -46,11 +46,11 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	{
 		if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
 		{
-			currentLable = getLastAvailableSpecimenLabel(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+			currentLabel = getLastAvailableSpecimenLabel(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
 		}
 		else
 		{
-			currentLable = getLastAvailableSpecimenLabel(Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+			currentLabel = getLastAvailableSpecimenLabel(Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
 		}
 	}
 	
@@ -127,8 +127,8 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 */
 	private void setNextAvailableDeriveSpecimenlabel(Specimen parentObject, Specimen specimenObject) {
 		
-		currentLable= currentLable+1;
-		specimenObject.setLabel(currentLable.toString());
+		currentLabel= currentLabel+1;
+		specimenObject.setLabel(currentLabel.toString());
 		labelCountTreeMap.put(specimenObject,0);
 	}
 	
@@ -140,8 +140,8 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 
 		if(!labelCountTreeMap.containsKey(objSpecimen) &&	objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
 		{
-			currentLable= currentLable+1;
-			objSpecimen.setLabel(currentLable.toString());
+			currentLabel= currentLabel+1;
+			objSpecimen.setLabel(currentLabel.toString());
 			labelCountTreeMap.put(objSpecimen,0);
 		}
 	

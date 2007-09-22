@@ -18,7 +18,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	/**
 	 * Current label 
 	 */
-	protected Long currentLable ;
+	protected Long currentLabel ;
 	
 	/**
 	 * Default Constructor
@@ -40,7 +40,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 		try 
 		{
 			
-			currentLable = new StorageContainerBizLogic().getNextContainerNumber();
+			currentLabel = new StorageContainerBizLogic().getNextContainerNumber();
 		}
 		catch (DAOException daoException) 
 		{
@@ -57,7 +57,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	public void setLabel(AbstractDomainObject obj )
 	{
 		StorageContainer objStorageContainer = (StorageContainer)obj;
-		currentLable= currentLable+1;
+		currentLabel= currentLabel+1;
 		String containerName = "";
 		String maxSiteName = objStorageContainer.getSite().getName();
 		String maxTypeName =  objStorageContainer.getStorageType().getName();
@@ -70,7 +70,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 			maxTypeName = maxTypeName.substring(0, 39);
 		}
 
-		containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(currentLable);
+		containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(currentLabel);
 		
 		objStorageContainer.setName(containerName);	
 	}
