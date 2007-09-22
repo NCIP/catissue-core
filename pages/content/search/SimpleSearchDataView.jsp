@@ -173,6 +173,8 @@ tr#hiddenCombo
 		}
 		function setCheckBoxState()
 		{
+		   if(document.getElementById('checkAll'))
+		   {
 			var chkBox = document.getElementById('checkAll');
 			var isCheckAllAcrossAllChecked = chkBox.checked;
 		<%	if(checkAllPages != null && checkAllPages.equals("true"))
@@ -186,6 +188,7 @@ tr#hiddenCombo
 					cl.setChecked(true);
 				}
 		<%	} %>
+		}
 		}
 //this function is called after executing ajax call from checkAllOnThisPage function.
 function checkAllOnThisPageResponse()
