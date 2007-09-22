@@ -34,6 +34,17 @@ public class SaveQueryForm extends AbstractActionForm
 	private String description;
 
 	private Long queryId;
+	
+	private String queryString;
+	
+	
+	public String getQueryString() {
+		return queryString;
+	}
+
+	public void setQueryString(String queryString) {
+		this.queryString = queryString;
+	}
 
 	public int getFormId()
 	{
