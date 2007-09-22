@@ -16,7 +16,7 @@
 </head>
 
 <body>
-	<html:form styleId='saveQueryForm' action='<%=Constants.FETCH_AND_EXECUTE_QUERY_ACTION%>'>
+	<html:form styleId='saveQueryForm' action='<%=Constants.FETCH_QUERY_ACTION%>'>
 		<table cellpadding='0' cellspacing='0' border='0' align='center' width='95%'>
 			<tr><td>&nbsp;</td></tr>
 			<tr>
