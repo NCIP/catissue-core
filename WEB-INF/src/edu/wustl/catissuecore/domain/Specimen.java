@@ -738,7 +738,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 //					}
 					/**For Migration End**/		
 					this.activityStatus = form.getActivityStatus();
-
+					this.collectionStatus = form.getCollectionStatus();
 					if (!validator.isEmpty(form.getBarcode()))
 						this.barcode = form.getBarcode();
 					else
@@ -1424,6 +1424,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
     	{
     		this.specimenCharacteristics = new SpecimenCharacteristics(specimen.getSpecimenCharacteristics());
     	}
+    	this.type = specimen.getType();
      }
     
     private Collection setBiohazardCollection(Specimen specimen)

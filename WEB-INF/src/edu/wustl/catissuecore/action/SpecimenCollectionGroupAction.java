@@ -317,7 +317,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
-
+		//Sets the collectionStatusList attribute to be used in the Site Add/Edit Page.
+		request.setAttribute(Constants.COLLECTIONSTATUSLIST, Constants.SCG_COLLECTION_STATUS_VALUES);
 
 		Logger.out.debug("CP ID in SCG Action======>"+specimenCollectionGroupForm.getCollectionProtocolId());
 		Logger.out.debug("Participant ID in SCG Action=====>"+specimenCollectionGroupForm.getParticipantId()+"  "+specimenCollectionGroupForm.getProtocolParticipantIdentifier());

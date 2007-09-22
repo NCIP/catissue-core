@@ -373,7 +373,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		try
 		{
 			this.setName(form.getName());
-			
+			this.collectionStatus = form.getCollectionStatus();
 			/**
              * Name: Sachin Lale
              * Bug ID: 3052
@@ -654,4 +654,15 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		}
     	setConsentTierStatusCollection(consentTierStatusCollectionN);
     }
+	
+	public void setDefaultSpecimenGroupName(CollectionProtocol collectionProtocol, int ParticipantId , int SCGId)
+	{
+		String collectionProtocolTitle=collectionProtocol.getTitle();
+		String maxCollTitle = collectionProtocolTitle;
+		if(collectionProtocolTitle.length()>Constants.COLLECTION_PROTOCOL_TITLE_LENGTH)
+		{
+			maxCollTitle = collectionProtocolTitle.substring(0,Constants.COLLECTION_PROTOCOL_TITLE_LENGTH-1);
+		}
+		setName(maxCollTitle+"_"+ParticipantId+"_"+SCGId);
+	}
 }

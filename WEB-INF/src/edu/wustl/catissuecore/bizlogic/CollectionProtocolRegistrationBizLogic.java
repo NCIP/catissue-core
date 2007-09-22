@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
@@ -109,51 +110,53 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	
 	private void createSCG(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		NewSpecimenBizLogic  bizLogic = new NewSpecimenBizLogic();
-		Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
-		Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
-		userID = sessionDataBean.getUserId();
-		while(collectionProtocolEventIterator.hasNext())
+		try
 		{
-			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolEventIterator.next();
-			SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = (SpecimenCollectionRequirementGroup) collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
-			SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup(specimenCollectionRequirementGroup);
-			specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
-			specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
-			
-			Collection cloneSpecimenCollection = new LinkedHashSet();
-			Collection specimenCollection = specimenCollectionRequirementGroup.getSpecimenCollection();
-			if(specimenCollection != null && !specimenCollection.isEmpty())
+			NewSpecimenBizLogic  bizLogic = new NewSpecimenBizLogic();
+			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
+			Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
+			userID = sessionDataBean.getUserId();
+			while(collectionProtocolEventIterator.hasNext())
 			{
-				Iterator itSpecimenCollection = specimenCollection.iterator();
-				while(itSpecimenCollection.hasNext())
+				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolEventIterator.next();
+				SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = (SpecimenCollectionRequirementGroup) collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+				SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup(specimenCollectionRequirementGroup);
+				specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
+				specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
+				
+				LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance("speicmenCollectionGroupLabelGeneratorClass");
+				specimenCollectionGroupLableGenerator.setLabel(specimenCollectionGroup);
+				
+				Collection cloneSpecimenCollection = new LinkedHashSet();
+				Collection specimenCollection = specimenCollectionRequirementGroup.getSpecimenCollection();
+				if(specimenCollection != null && !specimenCollection.isEmpty())
 				{
-					Specimen specimen = (Specimen)itSpecimenCollection.next();
-					if(specimen.getLineage().equalsIgnoreCase("new"))
+					Iterator itSpecimenCollection = specimenCollection.iterator();
+					while(itSpecimenCollection.hasNext())
 					{
-						Specimen cloneSpecimen = getCloneSpecimen(specimen,null,specimenCollectionGroup);
-						try
+						Specimen specimen = (Specimen)itSpecimenCollection.next();
+						if(specimen.getLineage().equalsIgnoreCase("new"))
 						{
+							Specimen cloneSpecimen = getCloneSpecimen(specimen,null,specimenCollectionGroup);
 							LabelGenerator specimenLableGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
 							specimenLableGenerator.setLabel(cloneSpecimen);
+							cloneSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+							cloneSpecimenCollection.add(cloneSpecimen);
 						}
-						catch(BizLogicException e)
-						{
-							throw new DAOException(e);
-						}
-						cloneSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
-						cloneSpecimenCollection.add(cloneSpecimen);
 					}
 				}
+				
+				specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
+				
+				dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
+				bizLogic.insert(specimenMap, dao,  sessionDataBean);
 			}
-			
-			specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
-			
-			dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
-			bizLogic.insert(specimenMap, dao,  sessionDataBean);
+		}
+		catch(BizLogicException e)
+		{
+			throw new DAOException(e);
 		}
 	}
-	
 	
 	private Specimen getCloneSpecimen(Specimen specimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup)
 	{

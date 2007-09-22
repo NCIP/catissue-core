@@ -219,21 +219,6 @@
 <!-- Mandar : 434 : for tooltip -->						
 				     	     <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="participantName" property="participantName" disabled="true"/>
   						</logic:equal>
-						
-						&nbsp;
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
-						<html:link href="#" styleId="newParticipant" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=participant')">
-							<bean:message key="buttons.addNew" />
-						</html:link>
-						</logic:notEqual>
-						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
-						<html:link href="#" styleId="newParticipant" onclick="addNewAction('CPQuerySpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=participant')">
-							<bean:message key="buttons.addNew" />
-						</html:link>
-						</logic:equal>
-						
- 						</logic:notEqual>
 					</td>
   					
 				 </tr>
@@ -266,21 +251,7 @@
    						 	<html:text property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" maxlength="255" size="30" >
 							</html:text>
  						</logic:equal>
-					
-						&nbsp;
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
- 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=protocolParticipantIdentifier')">
-							<bean:message key="buttons.addNew" />
-						</html:link>
-						</logic:notEqual>
-						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
-						<html:link href="#" styleId="newParticipant" onclick="addNewAction('CPQuerySpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=protocolParticipantIdentifier')">
-							<bean:message key="buttons.addNew" />
-						</html:link>
-						</logic:equal>
-	 					</logic:notEqual>
-		        	</td>
+			    	</td>
 				 </tr>
 				<% }%>
 				<tr>
@@ -297,9 +268,6 @@
 						if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY)){
 							resetAction = "changeAction('QuerySpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroupCPQuery&resetName=Yes')"; 
 						}%>
-						<html:link href="#" styleId="resetName" onclick="<%=resetAction%>">
-							<bean:message key="link.resetName" />
-						</html:link>
 					</td>
 				</tr>
 				 <tr>
@@ -439,11 +407,27 @@
 						</label>
 					</td>
 					<td class="formField">
-<!-- Mandar : 434 : for tooltip -->						
-						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
-						</html:select>
+							<autocomplete:AutoCompleteTag property="activityStatus"
+								  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
+								  initialValue="<%=form.getActivityStatus()%>"
+								  onChange="<%=strCheckStatus%>"
+							/>
+					</td>
+				</tr>
+				<!-- collectionstatus -->	
+				<tr>
+					<td class="formRequiredNotice" colspan="2" width="5">*</td>
+					<td class="formRequiredLabel" >
+						<label for="collectionStatus">
+							<bean:message key="specimenCollectionGroup.collectionStatus" />
+						</label>
+					</td>
+					<td class="formField">
+							<autocomplete:AutoCompleteTag property="collectionStatus"
+								optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
+								initialValue="<%=form.getCollectionStatus()%>"
+								onChange="<%=strCheckStatus%>"
+							/>
 					</td>
 				</tr>
 				</logic:equal>

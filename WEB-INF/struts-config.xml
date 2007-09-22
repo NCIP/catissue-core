@@ -4304,9 +4304,10 @@ PUBLIC
 			<forward name="pageOfNewSpecimen" path=".catissuecore.viewSpecimenAnnotation"/>
 			<forward name="pageOfListSpecimenEventParameters" path=".catissuecore.viewSpecimenAnnotation"/>
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.viewSpecimenAnnotationCPQuery"/>	
-			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=viewAnnotations"/>
-			<forward name="pageOfSpecimenCollectionGroupCPQuery" path="/SpecimenCollectionGroup.do?operation=viewAnnotations"/>
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.viewSpecimenCollectionGroupAnnotation"/>
+			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.viewSpecimenCollectionGroupAnnotation"/>
 			<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.viewSpecimenAnnotationCPQuery"/>	
+			
 		</action>
 		
 		<action path="/LoadAnnotationDataEntryPage"

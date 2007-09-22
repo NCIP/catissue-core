@@ -1195,7 +1195,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 				 specimenCollectionGroupObj = new SpecimenCollectionGroup();
 				 specimenCollectionGroupObj.setId((Long)list.get(0));*/
-				if(specimen.getSpecimenCollectionGroup().getGroupName()!= null){
+				if(specimen.getSpecimenCollectionGroup().getGroupName()!= null && !specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING)){
 					List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
 					SpecimenCollectionGroup scg = (SpecimenCollectionGroup) spgList.get(0);				
 					specimenCollectionGroupObj = (SpecimenCollectionGroup)HibernateMetaData.getProxyObjectImpl(scg);

@@ -324,6 +324,8 @@ public class NewSpecimenAction extends SecureAction
 
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
+		//Sets the collectionStatusList attribute to be used in the Site Add/Edit Page.
+		request.setAttribute(Constants.COLLECTIONSTATUSLIST, Constants.SPECIMEN_COLLECTION_STATUS_VALUES);
 
 		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 

@@ -926,18 +926,7 @@
 									-->
 													
 									<html:text styleClass="formFieldSized15" maxlength="255" size="30" styleId="specimenCollectionGroupName" property="specimenCollectionGroupName" readonly="<%=readOnlyForAll%>"/>
-									<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-			   						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SPECIMEN_CP_QUERY%>">
-									<html:link href="#" styleId="newUser" onclick="addNewAction('NewSpecimenAddNew.do?addNewForwardTo=specimenCollectionGroup&forwardTo=createNewSpecimen&addNewFor=')">
-										<bean:message key="buttons.addNew" />
-									</html:link>					   
-			   						</logic:notEqual>
-			   						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SPECIMEN_CP_QUERY%>">
-									<html:link href="#" styleId="newUser" onclick="addNewAction('NewSpecimenAddNew.do?addNewForwardTo=specimenCollectionGroupCPQuery&forwardTo=createNewSpecimen&addNewFor=specimenCollectionGroupId')">
-										<bean:message key="buttons.addNew" />
-									</html:link>					   
-			   						</logic:equal>
-			   						</logic:notEqual>
+									
 									<!-- <a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
 										<bean:message key="app.addNew" />
 									</a> 
@@ -1459,27 +1448,15 @@
 										</label>
 									</td>
 
-								 <!-- 
-												 * Patch ID: 3835_1_23
-												 * See also: 1_1 to 1_5
-												 * Description : just manipulated the TD according to operation	
-												 * and activity status is made after commnets.		 
-									-->	 
-
-									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-									<td class="formField">
-									</logic:equal>
-
-									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-									<td class="formField" colspan="4">
-									</logic:equal>
-
+								 	<td class="formField" colspan="4">
 										<html:textarea styleClass="formFieldSized"  rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 									</td>
-
-									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+								</tr>
+								<!-- collectionstatus -->							
+								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+								<tr>
 									<td class="formRequiredNotice" width="5">*</td>
-									<td class="formRequiredLabel" >
+									<td class="formRequiredLabelWithoutBorder" >
 										<label for="activityStatus">
 											<bean:message key="participant.activityStatus" />
 										</label>
@@ -1492,10 +1469,23 @@
 												  onChange="<%=strCheckStatus%>"
 									/>
 									
-									</td>					
-									</logic:equal>
-									<!--End -->
+									</td>
+									
+									<td class="formRequiredNotice" width="5">*</td>
+									<td class="formRequiredLabelWithoutBorder">
+										<label for="collectionStatus">
+											<bean:message key="specimenCollectionGroup.collectionStatus" />
+										</label>
+									</td>
+									<td class="formField">
+									<autocomplete:AutoCompleteTag property="collectionStatus"
+												  optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
+												  initialValue="<%=form.getCollectionStatus()%>"
+												  onChange="<%=strCheckStatus%>"
+									/>
+									</td>
 								</tr>
+								</logic:equal>
 							</table>	
 							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 							<%@ include file="CollAndRecEvents.jsp" %>

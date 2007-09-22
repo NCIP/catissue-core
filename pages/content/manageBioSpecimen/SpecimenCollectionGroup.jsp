@@ -165,6 +165,7 @@
 			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=scgEntityId%>&entityRecordId=<%=id%>&staticEntityName=<%=staticEntityName%>&pageOf=<%=pageOf%>&operation=viewAnnotations";
 			document.forms[0].action=action;
 			document.forms[0].submit();
+			//var action="DisplayAnnotationDataEntryPage.do?entityId="+specimenEntityId+"&entityRecordId="+ID+"&pageOf="+pageOf+"&operation=viewAnnotations&consentTierCounter="+consentTierCounter+"&staticEntityName="+staticEntityName;
 		}
 		
     	function onRadioButtonClick(element)
@@ -647,43 +648,6 @@ function editSCG()
 				<td class="tabField" colspan="6" >
 					<%@ include file="EditSpecimenCollectionGroup.jsp" %>
 				
-	<%
-	}
-	%>
-	
-
-	
-	<%
-	if(pageView.equals("viewAnnotations"))
-	{
-	%>
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="90%" class="tabPage" width="90%">
-			<tr>
-				<td height="20" class="tabMenuItem" id="specimenCollectionGroupTab" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="setTarget(); editSCG()">
-					<bean:message key="specimenCollectionGroupPage.edit.title"/>
-				</td>		
-
-				<td height="20" class="tabMenuItem"  onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()"  onClick="viewSPR()">
-					<bean:message key="edit.tab.surgicalpathologyreport"/>
-				</td>								
-				
-				<td height="20" class="tabMenuItemSelected"  onClick="">
-					<bean:message key="edit.tab.clinicalannotation"/>
-				</td>
-				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="goToConsentPage()" id="consentTab">
-					<bean:message key="consents.consents"/>            
-				</td>
-
-				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
-			</tr>
-
-			<tr width = "100%" height = "100%">
-				<td class="tabField" colspan="6"  width = "100%" height = "100%">
-					<%@   include file="DisplayAnnotationDataEntryPage.jsp" %>
-				</td>
-			</tr>
-		</table>
 	<%
 	}
 	%>
