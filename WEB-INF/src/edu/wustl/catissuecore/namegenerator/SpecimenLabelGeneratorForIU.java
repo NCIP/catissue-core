@@ -8,7 +8,7 @@ import edu.wustl.catissuecore.domain.Specimen;
  * 
  * @author smita_kadam
  */
-public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLableGenerator
+public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 {
 
 	

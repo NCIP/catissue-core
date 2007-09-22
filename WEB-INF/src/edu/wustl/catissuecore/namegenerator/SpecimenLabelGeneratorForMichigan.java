@@ -23,7 +23,7 @@ import edu.wustl.common.util.dbManager.DAOException;
  * Format for derived specimen: parentSpecimenLabel_childCount+1
  * Format for derived specimen: parentSpecimenLabel_childCount+1
  */
-public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLableGenerator {
+public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGenerator {
 
 	public SpecimenLabelGeneratorForMichigan() {
 		super();

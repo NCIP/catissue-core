@@ -13,7 +13,7 @@ import edu.wustl.common.util.dbManager.DAOException;
  * implementations AbstractSpecimenGenerator classe.
  * @author virender_mehta
  */
-public class DefaultStorageContainerLableGenerator implements LabelGenerator
+public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 {
 	/**
 	 * Current label 
@@ -23,7 +23,7 @@ public class DefaultStorageContainerLableGenerator implements LabelGenerator
 	/**
 	 * Default Constructor
 	 */
-	public DefaultStorageContainerLableGenerator()
+	public DefaultStorageContainerLabelGenerator()
 	{
 		super();
 		init();
