@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
@@ -24,21 +23,12 @@ import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
-import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
-import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.exceptions.CyclicException;
-import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
-import edu.wustl.common.querysuite.exceptions.SqlException;
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
-import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
 import edu.wustl.common.querysuite.metadata.associations.IAssociation;
 import edu.wustl.common.querysuite.metadata.associations.IIntraModelAssociation;
 import edu.wustl.common.querysuite.metadata.path.IPath;
-import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
@@ -50,12 +40,7 @@ import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.ExpressionId;
 import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
-import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
-import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
-import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
-import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -68,6 +53,7 @@ import edu.wustl.common.util.logger.Logger;
 public class DAGPanel {
 
 	private IClientQueryBuilderInterface m_queryObject;
+	private HttpServletRequest m_request;
 	private HttpSession m_session;
 	private IPathFinder m_pathFinder;
 	private IExpression expression;
@@ -178,6 +164,11 @@ public class DAGPanel {
 	public void setSession(HttpSession session)
 	{
 		m_session=session;
+	}
+
+	public void setRequest(HttpServletRequest request)
+	{
+		m_request=request;
 	}
 	/**
 	 * Sets Expression
@@ -398,7 +389,8 @@ public class DAGPanel {
 	{
 		int status =0;
 		IQuery query = m_queryObject.getQuery();
-		status=QueryModuleUtil.searchQuery(m_session, query,null);
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		status=QueryModuleUtil.searchQuery(request, query,null);
 		return status;
 	}
 	/**

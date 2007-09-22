@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -959,9 +960,15 @@ public class FlexInterface
 		IPathFinder pathFinder = new CommonPathFinder();
 		dagPanel = new DAGPanel(pathFinder);
 		dagPanel.setQueryObject(queryObject);
+		restoreSession();
+		
+	}
+	private void restoreSession()
+	{
 		session= flex.messaging.FlexContext.getHttpRequest().getSession();
 		dagPanel.setSession(session);
-		
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		dagPanel.setRequest(request);
 	}
 	
 	private	IClientQueryBuilderInterface queryObject=null;
