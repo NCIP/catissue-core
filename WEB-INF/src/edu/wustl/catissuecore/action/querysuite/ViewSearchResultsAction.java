@@ -56,7 +56,7 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			String errorMessage = null;
 
 			HttpSession session = request.getSession();
-			int errorCode = QueryModuleUtil.searchQuery(session, query);
+			int errorCode = QueryModuleUtil.searchQuery(session, query,null);
 			switch (errorCode)
 			{
 				case QueryModuleUtil.EMPTY_DAG :
