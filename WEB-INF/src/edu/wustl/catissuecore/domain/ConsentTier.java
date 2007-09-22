@@ -78,4 +78,16 @@ public class ConsentTier extends AbstractDomainObject implements Serializable
 		this.id = id;		
 	}
 	
+	public ConsentTier()
+	{
+		
+	}
+	public ConsentTier(ConsentTier consentTier)
+	{
+		if(consentTier.getId() != null && consentTier.getId().toString().trim().length() > 0)
+		{
+			this.id = consentTier.getId();
+		}
+		this.statement = consentTier.getStatement();
+	}
 }

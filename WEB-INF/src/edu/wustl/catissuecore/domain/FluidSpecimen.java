@@ -122,4 +122,15 @@ public class FluidSpecimen extends Specimen implements Serializable
             Logger.out.error(excp.getMessage());
         }
     }
+    
+    public FluidSpecimen(FluidSpecimen fluidSpecimen)
+    {
+    	super(fluidSpecimen);
+    }
+    
+    public FluidSpecimen createClone()
+    {
+    	FluidSpecimen cloneFluidSpecimen = new FluidSpecimen(this);
+    	return cloneFluidSpecimen;
+    }
 }

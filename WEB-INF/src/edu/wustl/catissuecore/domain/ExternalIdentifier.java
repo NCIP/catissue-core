@@ -176,5 +176,16 @@ public class ExternalIdentifier extends AbstractDomainObject implements External
 				"Name "+name+"\t"+
 				"Value "+value+
 				"}";
-	}	
+	}
+	
+	public ExternalIdentifier()
+	{
+		
+	}
+	
+	public ExternalIdentifier(ExternalIdentifier externalIdentifier)
+	{
+		this.name = externalIdentifier.getName();
+		this.value = externalIdentifier.getValue();
+	}
 }

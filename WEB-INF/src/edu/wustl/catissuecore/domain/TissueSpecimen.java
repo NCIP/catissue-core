@@ -123,4 +123,15 @@ public class TissueSpecimen extends Specimen implements Serializable
             Logger.out.error(excp.getMessage());
         }
     }
+    
+    public TissueSpecimen(TissueSpecimen tissueSpecimen)
+    {
+    	super(tissueSpecimen);
+    }
+    
+    public TissueSpecimen createClone()
+    {
+    	TissueSpecimen cloneTissueSpecimen = new TissueSpecimen(this);
+    	return cloneTissueSpecimen;
+    }
 }

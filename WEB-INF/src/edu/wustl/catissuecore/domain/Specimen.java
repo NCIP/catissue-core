@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -1403,4 +1404,79 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		this.collectionStatus = collectionStatus;
 	}
 
+    public Specimen(Specimen specimen)
+    {
+    	this.activityStatus = specimen.getActivityStatus();
+    	this.applyChangesTo = specimen.getApplyChangesTo();
+    	this.available = specimen.getAvailable();
+    	if(specimen.getInitialQuantity() != null)
+    	{
+    		this.availableQuantity = new Quantity(specimen.getInitialQuantity());
+    		this.initialQuantity = new Quantity(specimen.getInitialQuantity());
+    	}
+    	this.biohazardCollection = setBiohazardCollection(specimen);
+    	this.createdOn = specimen.getCreatedOn();
+    	this.comment = specimen.getComment();
+    	this.lineage = specimen.getLineage();
+    	this.pathologicalStatus = specimen.getPathologicalStatus();
+    	this.collectionStatus = Constants.COLLECTION_STATUS_PENDING;
+    	if(specimen.getSpecimenCharacteristics() != null)
+    	{
+    		this.specimenCharacteristics = new SpecimenCharacteristics(specimen.getSpecimenCharacteristics());
+    	}
+     }
+    
+    private Collection setBiohazardCollection(Specimen specimen)
+    {
+    	Collection biohazardCollectionN = new HashSet();
+    	Collection biohazardCollection = specimen.getBiohazardCollection();
+    	if(biohazardCollection != null && !biohazardCollection.isEmpty())
+		{
+	    	Iterator it = biohazardCollection.iterator();
+	    	while(it.hasNext())
+	    	{
+	    		Biohazard bio = (Biohazard)it.next();
+	    		Biohazard bioN = new Biohazard(bio);
+	    		biohazardCollectionN.add(bioN);
+	     	}
+		}
+    	return biohazardCollectionN;
+    }
+    
+    public Specimen createClone()
+    {
+    	Specimen cloneSpecimen = new Specimen(this);
+    	return cloneSpecimen;
+    }
+    public void setDefaultSpecimenEventCollection(Long userID)
+    {
+    	Collection specimenEventCollection = new HashSet();
+    	User user = new User();
+		user.setId(userID);
+    	CollectionEventParameters collectionEventParameters = EventsUtil.populateCollectionEventParameters(user);
+    	collectionEventParameters.setSpecimen(this);
+    	specimenEventCollection.add(collectionEventParameters);
+    	
+    	ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);
+    	receivedEventParameters.setSpecimen(this);
+    	specimenEventCollection.add(receivedEventParameters);
+    	setSpecimenEventCollection(specimenEventCollection);
+    }
+    
+    public void setConsentTierStatusCollectionFromSCG(SpecimenCollectionGroup specimenCollectionGroup)
+    {
+    	Collection consentTierStatusCollectionN = new HashSet();
+    	Collection consentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
+    	if(consentTierStatusCollection != null && !consentTierStatusCollection.isEmpty())
+		{
+	    	Iterator it = consentTierStatusCollection.iterator();
+	    	while(it.hasNext())
+	    	{
+	    		ConsentTierStatus consentTierStatus = (ConsentTierStatus)it.next();
+	    		ConsentTierStatus consentTierstatusN = new ConsentTierStatus(consentTierStatus);
+	    		consentTierStatusCollectionN.add(consentTierstatusN);
+	    	}
+		}
+    	setConsentTierStatusCollection(consentTierStatusCollectionN);
+    }
 }

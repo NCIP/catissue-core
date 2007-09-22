@@ -164,4 +164,16 @@ public class MolecularSpecimen extends Specimen implements Serializable
             Logger.out.error(excp.getMessage());
         }
     }
+    
+    
+    public MolecularSpecimen(MolecularSpecimen molecularSpecimen)
+    {
+    	super(molecularSpecimen);
+    }
+    
+    public MolecularSpecimen createClone()
+    {
+    	MolecularSpecimen cloneMolecularSpecimen = new MolecularSpecimen(this);
+    	return cloneMolecularSpecimen;
+    }
 }

@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
@@ -225,6 +226,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	 */
 	private String buttonType;
 	
+	private String collectionStatus;
 	/**
 	 * @return the buttonType
 	 */
@@ -401,6 +403,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
 		activityStatus = Utility.toString(specimenCollectionGroup.getActivityStatus());
+		collectionStatus = Utility.toString(specimenCollectionGroup.getCollectionStatus());
 		surgicalPathologyNumber = Utility.toString(specimenCollectionGroup.getSurgicalPathologyNumber());
          /**
          * Name: Shital Lawhale
@@ -488,7 +491,13 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		Logger.out.debug("participantId.................................."+participantId);
 		Logger.out.debug("protocolParticipantIdentifier........................."+protocolParticipantIdentifier);
 		Logger.out.debug("SCgForm --------- checkButton : -- " + radioButtonForParticipant );
-		siteId = specimenCollectionGroup.getSpecimenCollectionSite().getId().longValue();
+		
+		//Abhishek Mehta If site is null
+		Site site = specimenCollectionGroup.getSpecimenCollectionSite();
+		if(null != site)
+		{
+			siteId = site.getId().longValue();
+		}
 		
         /**
 	  	 * For Consent tracking setting UI attributes
@@ -1419,6 +1428,18 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 
 	public void setParticipantNameWithProtocolId(String participantNameProtocolId) {
 		this.participantNameWithProtocolId = participantNameProtocolId;
+	}
+
+
+
+	public String getCollectionStatus() {
+		return collectionStatus;
+	}
+
+
+
+	public void setCollectionStatus(String collectionStatus) {
+		this.collectionStatus = collectionStatus;
 	}
 
 }

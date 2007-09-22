@@ -14,23 +14,38 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
+import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.namegenerator.LabelGenerator;
+import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
@@ -71,7 +86,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		registerParticipantAndProtocol(dao, collectionProtocolRegistration, sessionDataBean);
 
 		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);
-
+		createSCG(collectionProtocolRegistration,dao,sessionDataBean);
+		
 		try
 		{
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(collectionProtocolRegistration),
@@ -83,6 +99,96 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
 	}
 
+	/*
+	 * Creating SCG and specimen while creating participant.
+	 */
+	private Collection specimenCollectionNew;
+	private Long userID;
+
+	private Map<Specimen, List<Specimen>> specimenMap = new LinkedHashMap<Specimen, List<Specimen>>();
+	
+	private void createSCG(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		NewSpecimenBizLogic  bizLogic = new NewSpecimenBizLogic();
+		Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
+		Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
+		userID = sessionDataBean.getUserId();
+		while(collectionProtocolEventIterator.hasNext())
+		{
+			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolEventIterator.next();
+			SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = (SpecimenCollectionRequirementGroup) collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+			SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup(specimenCollectionRequirementGroup);
+			specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
+			specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
+			
+			Collection cloneSpecimenCollection = new LinkedHashSet();
+			Collection specimenCollection = specimenCollectionRequirementGroup.getSpecimenCollection();
+			if(specimenCollection != null && !specimenCollection.isEmpty())
+			{
+				Iterator itSpecimenCollection = specimenCollection.iterator();
+				while(itSpecimenCollection.hasNext())
+				{
+					Specimen specimen = (Specimen)itSpecimenCollection.next();
+					if(specimen.getLineage().equalsIgnoreCase("new"))
+					{
+						Specimen cloneSpecimen = getCloneSpecimen(specimen,null,specimenCollectionGroup);
+						try
+						{
+							LabelGenerator specimenLableGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+							specimenLableGenerator.setLabel(cloneSpecimen);
+						}
+						catch(BizLogicException e)
+						{
+							throw new DAOException(e);
+						}
+						cloneSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+						cloneSpecimenCollection.add(cloneSpecimen);
+					}
+				}
+			}
+			
+			specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
+			
+			dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
+			bizLogic.insert(specimenMap, dao,  sessionDataBean);
+		}
+	}
+	
+	
+	private Specimen getCloneSpecimen(Specimen specimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup)
+	{
+		Collection childrenSpecimen = new LinkedHashSet<Specimen>(); 
+		Specimen newSpecimen = specimen.createClone();
+		newSpecimen.setParentSpecimen(pSpecimen);
+		newSpecimen.setDefaultSpecimenEventCollection(userID);
+		newSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+		newSpecimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
+		if (newSpecimen.getParentSpecimen()== null)
+		{
+			specimenMap.put(newSpecimen, new ArrayList<Specimen>());
+		}
+    	else
+    	{
+    		specimenMap.put(newSpecimen, null);
+    	}
+		
+		Collection childrenSpecimenCollection = specimen.getChildrenSpecimen();
+    	if(childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
+		{
+	    	Iterator it = childrenSpecimenCollection.iterator();
+	    	while(it.hasNext())
+	    	{
+	    		Specimen childSpecimen = (Specimen)it.next();
+	    		Specimen newchildSpecimen = getCloneSpecimen(childSpecimen,newSpecimen, specimenCollectionGroup);
+	    		childrenSpecimen.add(newchildSpecimen);
+	    		newSpecimen.setChildrenSpecimen(childrenSpecimen);
+	    	}
+		}
+
+    	
+    	return newSpecimen;
+	}
+	
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;

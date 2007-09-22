@@ -195,6 +195,8 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	
 	private int numberOfSpecimen;
 	
+	private String collectionStatus;
+	
 	/**
 	 * @return the restrictSCGCheckbox
 	 */
@@ -451,6 +453,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 		}
 		this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
 		this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		this.collectionStatus = Utility.toString(specimenCollectionGroup.getCollectionStatus());
     }
 	 /**
 	 * @return biohazard Type Returns the biohazardType.
@@ -1246,4 +1249,12 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 		return "consentResponseForSpecimenValues(ConsentBean:`_specimenLevelResponse)";
 	}
 	//Consent Tracking Module Virender mehta
+
+	public String getCollectionStatus() {
+		return collectionStatus;
+	}
+
+	public void setCollectionStatus(String collectionStatus) {
+		this.collectionStatus = collectionStatus;
+	}
 }

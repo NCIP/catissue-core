@@ -123,4 +123,15 @@ public class CellSpecimen extends Specimen implements Serializable
         }
     }
     
+    
+    public CellSpecimen(CellSpecimen cellSpecimen)
+    {
+    	super(cellSpecimen);
+    }
+    
+    public CellSpecimen createClone()
+    {
+    	CellSpecimen cloneCellSpecimen = new CellSpecimen(this);
+    	return cloneCellSpecimen;
+    }
 }

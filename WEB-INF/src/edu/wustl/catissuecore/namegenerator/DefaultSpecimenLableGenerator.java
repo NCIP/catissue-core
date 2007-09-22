@@ -1,6 +1,8 @@
 package edu.wustl.catissuecore.namegenerator;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -157,15 +159,13 @@ public class DefaultSpecimenLableGenerator implements LabelGenerator
 		
 		if(objSpecimen.getChildrenSpecimen().size()>0)
 		{
-			List specimenList = (List)objSpecimen.getChildrenSpecimen();
-			for (int index=0;index <specimenList.size();index++) 
+			Collection specimenCollection = objSpecimen.getChildrenSpecimen();
+			Iterator it = specimenCollection.iterator();
+			while(it.hasNext())
 			{
-				Specimen objChildSpecimen = (Specimen)specimenList.get(index);
-							
+				Specimen objChildSpecimen = (Specimen)it.next();
 				setLabel(objChildSpecimen);
-					
-			}	
-			
+			}
 		}	
 		
 	}

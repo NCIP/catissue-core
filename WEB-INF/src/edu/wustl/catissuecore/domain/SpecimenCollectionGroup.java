@@ -625,4 +625,33 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	public void setCollectionStatus(String collectionStatus) {
 		this.collectionStatus = collectionStatus;
 	}
+	
+	public SpecimenCollectionGroup(SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup)
+	{
+		this.collectionProtocolEvent = specimenCollectionRequirementGroup.getCollectionProtocolEvent();
+		this.activityStatus = specimenCollectionRequirementGroup.getActivityStatus();
+		this.clinicalDiagnosis = specimenCollectionRequirementGroup.getClinicalDiagnosis();
+		this.clinicalStatus = specimenCollectionRequirementGroup.getClinicalStatus();
+		this.collectionStatus = Constants.COLLECTION_STATUS_PENDING;
+	}
+	
+	public void setConsentTierStatusCollectionFromCPR(CollectionProtocolRegistration collectionProtocolRegistration)
+    {
+    	Collection consentTierStatusCollectionN = new HashSet();
+    	Collection consentTierResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
+    	if(consentTierResponseCollection != null && !consentTierResponseCollection.isEmpty())
+		{
+	    	Iterator it = consentTierResponseCollection.iterator();
+	    	while(it.hasNext())
+	    	{
+	    		ConsentTierResponse consentTierResponse = (ConsentTierResponse)it.next();
+	    		ConsentTierStatus consentTierstatusN = new ConsentTierStatus();
+	    		ConsentTier consentTier = new ConsentTier(consentTierResponse.getConsentTier());
+	    		consentTierstatusN.setConsentTier(consentTier);
+	    		consentTierstatusN.setStatus(consentTierResponse.getResponse());
+	    		consentTierStatusCollectionN.add(consentTierstatusN);
+	    	}
+		}
+    	setConsentTierStatusCollection(consentTierStatusCollectionN);
+    }
 }

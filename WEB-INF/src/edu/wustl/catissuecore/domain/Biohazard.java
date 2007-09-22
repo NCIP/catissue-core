@@ -73,6 +73,14 @@ public class Biohazard extends AbstractDomainObject implements Externalizable
     	setAllValues(form);
     }
     
+    public Biohazard(Biohazard bioHazard)
+    {
+    	this.comment = bioHazard.getComment();
+    	this.name = bioHazard.getName();
+    	this.persisted = bioHazard.getPersisted();
+    	this.type = bioHazard.getType();
+    }
+    
     /**
      * Returns the system generated unique id.
      * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"

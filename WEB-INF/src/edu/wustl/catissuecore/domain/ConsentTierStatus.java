@@ -97,4 +97,15 @@ public class ConsentTierStatus extends AbstractDomainObject implements Serializa
 	{
 		this.id = id;	
 	}
+	
+	public ConsentTierStatus()
+	{
+		
+	}
+	
+	public ConsentTierStatus(ConsentTierStatus consentTierStatus)
+	{
+		this.status = consentTierStatus.getStatus();
+		this.consentTier = new ConsentTier(consentTierStatus.getConsentTier());
+	}
 }

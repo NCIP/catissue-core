@@ -143,5 +143,15 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
 	{
 		
 	}
+
+	public SpecimenCharacteristics()
+	{
+		
+	}
 	
+	public SpecimenCharacteristics(SpecimenCharacteristics specimenCharacteristics)
+	{
+		this.tissueSide = specimenCharacteristics.getTissueSide();
+		this.tissueSite = specimenCharacteristics.getTissueSite();
+	}
 }

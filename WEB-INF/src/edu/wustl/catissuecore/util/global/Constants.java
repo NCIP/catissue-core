@@ -283,6 +283,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String RECEIVEDSITELIST = "receivedSiteList";
 	public static final String RECEIVEDMODELIST = "receivedModeList";
 	public static final String ACTIVITYSTATUSLIST = "activityStatusList";
+	public static final String COLLECTIONSTATUSLIST = "collectionStatusList";
 	public static final String USERLIST = "userList";
 	public static final String SITETYPELIST = "siteTypeList";
 	public static final String STORAGETYPELIST="storageTypeList";
@@ -795,6 +796,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DISTRIBUTIONPROTOCOL_ADD_ACTION = "DistributionProtocolAdd.do";
 	public static final String DISTRIBUTIONPROTOCOL_EDIT_ACTION = "DistributionProtocolEdit.do";
 	
+	//Collection Status values
+	public static final String COLLECTION_STATUS_PENDING = "Pending";
+	
 	public static final String [] ACTIVITY_STATUS_VALUES = {
 	        SELECT_OPTION,
 	        "Active",
@@ -802,6 +806,26 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			"Disabled"
 	};
 
+	public static final String [] SCG_COLLECTION_STATUS_VALUES = {
+        SELECT_OPTION,
+        "Pending",
+        "Pending-Partially Complete",
+        "Overdue",
+		"Overdue-Partially Complete",
+		"Complete",
+		"Complete-Late",
+		"Incomplete",
+		"Not Collected"
+	};
+	
+	public static final String [] SPECIMEN_COLLECTION_STATUS_VALUES = {
+        SELECT_OPTION,
+        "Pending",
+        "Overdue",
+		"Collected",
+		"Not Collected"
+	};
+	
 	public static final String [] SITE_ACTIVITY_STATUS_VALUES = {
 	        SELECT_OPTION,
 	        "Active",
