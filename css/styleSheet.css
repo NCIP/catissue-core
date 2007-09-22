@@ -395,8 +395,8 @@ FORM BEGINS
 .formQueryLink{ /* for the asterisk cell */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:1em;
-  background-color:#F4F4F5; /* constant: white */
-  color:#9FA2BA; /* constant: black */
+  background-color:#FFFFFF; /* constant: white */
+  color:#6E81A6; /* constant: lighter blue */
 }
 .formTitle{ /* for header cells (top) of forms */
   font-family:arial,helvetica,verdana,sans-serif;
