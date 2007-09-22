@@ -4366,6 +4366,7 @@ PUBLIC
                 scope="request">
 					<forward name="success" path="/pages/SpecimenSummary.jsp" />
 					<forward name="pageOfMultipleSpWithoutMenu" path=".catissuecore.viewSpecimenSummary" />
+					<forward name="updateSpecimenStatus" path="/updateSpecimenStatus.do" />
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 	                <forward name="failure" path="/Home.do" />
        </action>    
@@ -4375,6 +4376,25 @@ PUBLIC
 				<forward name="success" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
 				<forward name="failure" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
 		</action>
+		<action path="/AnticipatorySpecimenView"
+                type="edu.wustl.catissuecore.action.AnticipatorySpecimenViewAction"
+                name="viewSpecimenSummaryForm"
+                validate="false"
+                scope="request">
+					<forward name="success" path="/GenericSpecimenSummary.do" />
+					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
+					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
+	                <forward name="failure" path="/Home.do" />
+       </action>    
+       <action path="/updateSpecimenStatus"
+                type="edu.wustl.catissuecore.action.UpdateSpecimenStatusAction"
+                name="viewSpecimenSummaryForm"
+                validate="false"
+                scope="request">
+					<forward name="success" path="/pages/SpecimenSummary.jsp" />
+					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
+	                <forward name="failure" path="/Home.do" />
+       </action>    
 
 		<action path="/SubmitSpecimenCollectionProtocol"
 			type="edu.wustl.catissuecore.action.SubmitSpecimenCPAction"
