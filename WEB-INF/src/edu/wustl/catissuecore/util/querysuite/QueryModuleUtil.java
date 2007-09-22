@@ -10,6 +10,8 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.globus.util.http.HTTPRequestParser;
+
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -348,8 +350,9 @@ public abstract class QueryModuleUtil
 	 * @param option 
 	 * @return
 	 */
-	public static int searchQuery(HttpSession session, IQuery query, String option)
+	public static int searchQuery(HttpServletRequest request, IQuery query, String option)
 	{
+		HttpSession session = request.getSession(); 
 		int status = 0;
 		try
 		{
@@ -461,7 +464,7 @@ public abstract class QueryModuleUtil
 							.setAttribute(Constants.TOTAL_RESULTS,
 									new Integer(totalNumberOfRecords));
 
-					session.setAttribute(Constants.SPREADSHEET_DATA_LIST, spreadSheetDatamap
+					request.setAttribute(Constants.PAGINATION_DATA_LIST, spreadSheetDatamap
 							.get(Constants.SPREADSHEET_DATA_LIST));
 					session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap
 							.get(Constants.SPREADSHEET_COLUMN_LIST));
