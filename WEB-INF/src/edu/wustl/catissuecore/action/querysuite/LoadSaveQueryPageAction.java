@@ -25,7 +25,7 @@ public class LoadSaveQueryPageAction extends BaseAction {
 				: true;
 		CreateUIFromQueryObjectBizLogic createUIFromQueryObject = new CreateUIFromQueryObjectBizLogic();
 		String htmlContents = createUIFromQueryObject.getHTMLForSavedQuery(
-				queryObject, isShowAll);
+				queryObject, isShowAll,Constants.SAVE_QUERY_PAGE);
 		request.setAttribute("HTMLContents", htmlContents);
 		String showAllLink = isShowAll ? Constants.SHOW_SELECTED_ATTRIBUTE
 				: Constants.SHOW_ALL_ATTRIBUTE;
