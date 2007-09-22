@@ -57,7 +57,7 @@ public class FetchAndExecuteQueryAction extends BaseAction
 				HttpSession session = request.getSession();
 				session.setAttribute(AppletConstants.QUERY_OBJECT, parameterizedQuery);
 
-				String errorMessage = executeQuery(session, parameterizedQuery);
+				String errorMessage = executeQuery(request, parameterizedQuery);
 				if (errorMessage == null)
 				{
 					target = Constants.SUCCESS;
@@ -97,11 +97,11 @@ public class FetchAndExecuteQueryAction extends BaseAction
 		saveErrors(request, errors);
 	}
 
-	private String executeQuery(HttpSession session, IParameterizedQuery parameterizedQuery)
+	private String executeQuery(HttpServletRequest request, IParameterizedQuery parameterizedQuery)
 	{
 		String errorMessage = null;
 
-		int errorCode = QueryModuleUtil.searchQuery(session, parameterizedQuery,null);
+		int errorCode = QueryModuleUtil.searchQuery(request , parameterizedQuery,null);
 		switch (errorCode)
 		{
 			case QueryModuleUtil.EMPTY_DAG :

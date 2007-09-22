@@ -43,7 +43,7 @@ public class OpenDecisionMakingPageAction extends BaseAction
 		
 		if(option != null)
 		{
-			QueryModuleUtil.searchQuery(session, query,option);
+			QueryModuleUtil.searchQuery(request, query,option);
 			return mapping.findForward(Constants.VIEW_ALL_RECORDS);
 		}
 		ActionErrors errors = new ActionErrors();

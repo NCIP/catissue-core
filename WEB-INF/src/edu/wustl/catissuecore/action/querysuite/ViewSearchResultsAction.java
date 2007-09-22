@@ -55,8 +55,7 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			Map<String, String> validationMessagesMap = new HashMap<String, String>();
 			String errorMessage = null;
 
-			HttpSession session = request.getSession();
-			int errorCode = QueryModuleUtil.searchQuery(session, query,null);
+			int errorCode = QueryModuleUtil.searchQuery(request, query,null);
 			switch (errorCode)
 			{
 				case QueryModuleUtil.EMPTY_DAG :
