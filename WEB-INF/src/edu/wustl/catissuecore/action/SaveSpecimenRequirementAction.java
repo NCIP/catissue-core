@@ -81,9 +81,9 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	private SpecimenRequirementBean createSpecimen(CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier, Integer totalNoOfSpecimen)
 	{
 		SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
-		specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN+uniqueIdentifier);
+		specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier);
 		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN+totalNoOfSpecimen);
-		specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+totalNoOfSpecimen);
+		specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN+totalNoOfSpecimen);
 		specimenRequirementBean.setLineage(Constants.NEW_SPECIMEN);
 		specimenRequirementBean.setClassName(createSpecimenTemplateForm.getClassName());
 		specimenRequirementBean.setType(createSpecimenTemplateForm.getType());
@@ -132,7 +132,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		{
 			SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,iCount);
 			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
-			specimenRequirementBean.setDisplayName(Constants.ALIQUOT+iCount);
+			specimenRequirementBean.setDisplayName(Constants.ALIQUOT+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
 			specimenRequirementBean.setLineage(Constants.ALIQUOT);
 			specimenRequirementBean.setQuantity(parentQuantity.toString());
 			specimenRequirementBean.setNoOfAliquots(null);
@@ -156,7 +156,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			 SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,deriveSpecimenCount);
 			 specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_DERIVE+deriveSpecimenCount);
 			 specimenRequirementBean.setLineage(Constants.DERIVED_SPECIMEN);
-			 specimenRequirementBean.setDisplayName(Constants.DERIVED_SPECIMEN+deriveSpecimenCount);
+			 specimenRequirementBean.setDisplayName(Constants.DERIVED_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_DERIVE+deriveSpecimenCount);
 			
 			 specimenRequirementBean.setQuantity(deriveSpecimenBean.getQuantity());
 			 specimenRequirementBean.setConcentration(deriveSpecimenBean.getConcentration());
