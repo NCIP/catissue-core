@@ -1,6 +1,5 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom"%>
 
 <%-- Imports --%>
 <%@
@@ -11,7 +10,7 @@
 <html:html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-		<script src="jss/queryModule.js"></script>
+		<script language="JavaScript" type="text/javascript" src="jss/queryModule.js"></script>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>
 			<bean:message key="savequery.conditionInformationTitle"/>
