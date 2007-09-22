@@ -1,8 +1,6 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,9 +9,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domain.Entity;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 /**
  * When the Link representing the searched entity is clicked, the UI for Add Limits section is generated with help of
@@ -41,15 +39,15 @@ public class LoadDefineSearchRulesAction extends BaseAction
 		GenerateHtmlForAddLimitsBizLogic addLimitsBizLogic = new GenerateHtmlForAddLimitsBizLogic();
 
 		String html = "";
-		Map searchedEntitiesMap = (Map) request.getSession().getAttribute(Constants.SEARCHED_ENTITIES_MAP);
+	/*	Map searchedEntitiesMap = (Map) request.getSession().getAttribute(Constants.SEARCHED_ENTITIES_MAP);
 		if (searchedEntitiesMap != null)
 		{
-			Entity entity = (Entity) searchedEntitiesMap.get(entityName);
+	*/		Entity entity = (Entity) EntityCache.getCache().getEntityById(new Long(entityName));
 			if (entity != null)
 			{
 				html = addLimitsBizLogic.generateHTML(entity,null);
 			}
-		}
+	//	}
 		response.setContentType("text/html");
 		response.getWriter().write(html);
 		return null;

@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.BaseAppletAction;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -58,7 +59,7 @@ public class GetDagViewDataAction extends BaseAppletAction
 	throws Exception
 	{
 		Map<String,EntityInterface> entityDataMap = new HashMap<String,EntityInterface>();
-		Map entityMap = (Map)request.getSession().getAttribute(Constants.SEARCHED_ENTITIES_MAP);
+	//	Map entityMap = (Map)request.getSession().getAttribute(Constants.SEARCHED_ENTITIES_MAP);
 		Map inputDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		if (inputDataMap != null && !inputDataMap.isEmpty())
 		{
@@ -66,7 +67,7 @@ public class GetDagViewDataAction extends BaseAppletAction
 			for(int i=0;i<entityArr.length; i++)
 			{
 				String entityName = entityArr[i];
-				EntityInterface entity = (EntityInterface)entityMap.get(entityName);
+				EntityInterface entity = EntityCache.getCache().getEntityById(new Long(entityName));
 				entityDataMap.put(entityName, entity);
 			}
 		}

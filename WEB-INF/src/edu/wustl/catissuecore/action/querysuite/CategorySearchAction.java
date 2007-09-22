@@ -2,18 +2,13 @@
 package edu.wustl.catissuecore.action.querysuite;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -23,12 +18,12 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.cab2b.client.metadatasearch.MetadataSearch;
 import edu.wustl.cab2b.common.beans.MatchedClass;
 import edu.wustl.cab2b.common.util.Constants;
-import edu.wustl.cab2b.common.util.EntityInterfaceComparator;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.util.Utility;
 
 /**
  * This class loads screen for categorySearch.
@@ -50,10 +45,8 @@ public class CategorySearchAction extends BaseAction
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
-	{
-		HttpSession session = request.getSession();
+	{ 
 		String isQuery =(String) request.getParameter("isQuery");
-		System.out.println("isQuery ====>"+isQuery);
 		if(isQuery!=null)
 		{
 			request.setAttribute("isQuery", isQuery);
@@ -70,11 +63,11 @@ public class CategorySearchAction extends BaseAction
 			return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 		}
 		String textfieldValue = searchForm.getTextField();
-		Map<String, EntityInterface> searchedEntitiesMap = (Map<String, EntityInterface>) session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP);
+		/*Map<String, EntityInterface> searchedEntitiesMap = (Map<String, EntityInterface>) session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP);
 		if (searchedEntitiesMap == null)
 		{
 			searchedEntitiesMap = new HashMap<String, EntityInterface>();
-		}
+		}*/
 		if(currentPage != null && currentPage.equalsIgnoreCase("prevToAddLimits"))
 		{
 			textfieldValue = "";
@@ -95,7 +88,7 @@ public class CategorySearchAction extends BaseAction
 //			Collections.sort(resultList, new EntityInterfaceComparator());
 			if(currentPage != null && currentPage.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.DEFINE_RESULTS_VIEW))
 			{
-				entitiesString = generateHTMLToDisplayList(resultList,searchedEntitiesMap);
+				entitiesString = generateHTMLToDisplayList(resultList);
 			}
 			else if(currentPage != null)
 			{
@@ -105,19 +98,14 @@ public class CategorySearchAction extends BaseAction
 					{
 						EntityInterface entity = (EntityInterface) resultList.get(i);
 						String fullyQualifiedEntityName = entity.getName();
+						String entityName = Utility.parseClassName(fullyQualifiedEntityName);
+						String entityId = entity.getId().toString();
 						String description = entity.getDescription();
-						/*if(description.length() > 50)
-						{
-							String des = description.substring(0,50);
-							des = des + "\\n";
-							des = des + " "+description.substring(50);
-							description = des;
-						}*/
-						entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|" + description;
-						searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
+						entitiesString = entitiesString + ";" + entityName + "|" + entityId + "|" + description;
+					//	searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
 					}
 				}
-				request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);
+				//request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);
 			}
 			response.setContentType("text/html");
 			response.getWriter().write(entitiesString);
@@ -132,7 +120,7 @@ public class CategorySearchAction extends BaseAction
 	 * @param searchedEntitiesMap map to store the entities found for given criteria
 	 * @return String representing html for a listbox 
 	 */
-	String generateHTMLToDisplayList(List resultList,Map<String, EntityInterface> searchedEntitiesMap)
+	String generateHTMLToDisplayList(List resultList)
 	{
 		String selectTagName =edu.wustl.catissuecore.util.global.Constants.SEARCH_CATEGORY_LIST_SELECT_TAG_NAME;				
 		StringBuffer html = new StringBuffer();		
@@ -146,8 +134,8 @@ public class CategorySearchAction extends BaseAction
 				String fullyQualifiedEntityName = entity.getName();
 				int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
 				String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);				
-				searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
-				html.append("\n<option class=\"dropdownQuery\" value=\"" + entity.getName() + "\">" + entityName + "</option>");
+			//	searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
+				html.append("\n<option class=\"dropdownQuery\" value=\"" + entity.getId() + "\">" + entityName + "</option>");
 			}
 			html.append("\n</select>");
 		}

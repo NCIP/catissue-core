@@ -2,8 +2,6 @@
 package edu.wustl.catissuecore.action.querysuite;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +12,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.BaseAppletAction;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
@@ -52,9 +50,9 @@ public class AddToLimitSetAction extends BaseAppletAction
 			session.setAttribute(AppletConstants.QUERY_OBJECT, query);
 			String strToCreateQueryObject = (String) inputDataMap.get(AppletConstants.STR_TO_CREATE_QUERY_OBJ);
 			String entityName = (String) inputDataMap.get(AppletConstants.ENTITY_NAME);
-			Map searchedEntitiesMap = (Map)session.getAttribute(Constants.SEARCHED_ENTITIES_MAP);
-			EntityInterface entity = (Entity) searchedEntitiesMap.get(entityName);
-			addEntityToSession(entity,request);
+			//Map searchedEntitiesMap = (Map)session.getAttribute(Constants.SEARCHED_ENTITIES_MAP);
+			EntityInterface entity = EntityCache.getCache().getEntityById(new Long(entityName));
+		//	addEntityToSession(entity,request);
 			CreateQueryObjectBizLogic queryBizLogic = new CreateQueryObjectBizLogic();
 			if (!strToCreateQueryObject.equalsIgnoreCase(""))
 			{
@@ -69,7 +67,7 @@ public class AddToLimitSetAction extends BaseAppletAction
 	 * adds the entity to list and keeps the list again in the session. 
 	 * @param entity Entity
 	 * @param request HttpServletRequest
-	 */
+	 *//*
 	private void addEntityToSession(EntityInterface entity, HttpServletRequest request)
 	{
 		HttpSession session = request.getSession();
@@ -80,7 +78,7 @@ public class AddToLimitSetAction extends BaseAppletAction
 		}
 		listOfEntitiesInQuery.add(entity);
 		session.setAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY,listOfEntitiesInQuery);
-	}
+	}*/
 
 	/**
 	 * This is a overloaded method to call the actions method set bt applet class.
