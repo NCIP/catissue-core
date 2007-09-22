@@ -123,7 +123,7 @@
             name="specimenCollectionGroupCollection"
             table="CATISSUE_SPECIMEN_COLL_GROUP"
             lazy="true"
-            inverse="false"
+            inverse="true"
             cascade="save-update"
             sort="unsorted"
         >
