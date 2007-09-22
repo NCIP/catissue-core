@@ -194,6 +194,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				try {
 					storagecontLblGenerator = LabelGeneratorFactory.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
 					storagecontLblGenerator.setLabel(cont);
+					container.setName(cont.getName());
 				} catch (BizLogicException e) {
 					throw new DAOException(e.getMessage());
 				}
