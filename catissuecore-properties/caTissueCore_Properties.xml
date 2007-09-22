@@ -388,6 +388,10 @@
 		<name>storageContainerBarcodeGeneratorClass</name>
 		<value>edu.wustl.catissuecore.namegenerator.DefaultStorageContainerBarcodeGenerator</value>
 	</property>
+	<property>
+		<name>speicmenCollectionGroupLabelGeneratorClass</name>
+		<value>edu.wustl.catissuecore.namegenerator.DefaultSCGLabelGenerator</value>
+	</property>
 
 	<!-- property for DynamicUI xml file -->
 	<property>
