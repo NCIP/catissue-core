@@ -246,6 +246,14 @@
 		{
 			var op = document.getElementById(opId).value;
 		} 
+		else if(document.forms[0].name=='savequery')
+		{
+            var op = document.forms['savequery'].elements[opId].value;    
+		}
+		else if(document.forms[0].name=='fetchQueryForm')
+		{
+			op = document.forms['fetchQueryForm'].elements[opId].value;
+		}
 		else
 		{
 			op = document.forms['categorySearchForm'].elements[opId].value;
@@ -525,9 +533,9 @@
 		hideCursor();
 	}
 	
-	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
-	{
-		waitCursor();
+	 function createQueryString(nameOfFormToPost, entityName , attributesList,callingFrom)
+        {
+         waitCursor();
 	
 		var strToCreateQueyObject ="";
 		var attribute = attributesList.split(";");
@@ -608,8 +616,12 @@
 				}
 				else
 				{
-					var row = document.getElementById('validationMessagesRow');
-					row.innerHTML = "";
+				   if(callingFrom=='addLimit')
+					{
+				 	 var row = document.getElementById('validationMessagesRow');
+				 	 row.innerHTML = "";
+					}
+					
 				}
 			}
 			if(op == "Between")
@@ -640,6 +652,20 @@
 				strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op +";";
 			}
 		}
+  
+           return strToCreateQueyObject;
+          
+         } 
+
+
+
+
+
+	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
+	{
+             var strToCreateQueyObject = createQueryString(nameOfFormToPost, entityName , attributesList,'addLimit');
+ 
+		
 		if(navigator.appName == "Microsoft Internet Explorer")
 		{
 			if(isTopButton)
@@ -670,31 +696,31 @@
 		else if(isEditLimit == 'Edit Limit')
 		{
 			//document.applets[0].editExpression(strToCreateQueyObject,entityName);
-			//alert('hi');
 			editLimits(strToCreateQueyObject,entityName);
 			
 		}
 			hideCursor();
 	}
+	
 	function viewSearchResults()
 	{
-		waitCursor();
-		 search();//document.applets[0].getSearchResults();
+         waitCursor();
+		 search();
 		 hideCursor();
-		//alert('---'+interfaceObj.isCompleted());
-		//if(errorMessage == 'search sucess')
-		//{
-		//	alert(errorMessage);
-		//	 showViewSearchResultsJsp();
-		//}
-		//if (errorMessage == "<li><font color=\"red\">showErrorPage</font></li>")
-		//{
-		//	showErrorPage();
-		//}
-		//else
-		//{
-		//	showValidationMessages(errorMessage);
-		//}
+	//	var errorMessage = document.applets[0].getSearchResults();
+	/*	if(errorMessage == null)
+		{
+			 showViewSearchResultsJsp();
+		}
+		else if (errorMessage == "<li><font color=\"red\">showErrorPage</font></li>")
+		{
+			showErrorPage();
+		}
+		else
+		{
+			showValidationMessages(errorMessage);
+		}
+      */  
 	}
 	function showValidationMessages(text)
 	{
@@ -735,24 +761,90 @@
 		document.forms['categorySearchForm'].action='ViewSearchResultsJSPAction.do';
 		document.forms['categorySearchForm'].submit();			
 	}
-		
+	
+	function produceSavedQuery()
+	{
+		  var totalentities = document.getElementById("totalentities").value;
+		  var numberOfEntities = totalentities.split(";");
+          var strquery='';
+          var count = numberOfEntities.length;
+        
+    	   for(i=0;i<count-1 ;i++)
+			  {
+		      		   var entityName = numberOfEntities[i];
+		    		   var attributesListComponent = numberOfEntities[i]+"_attributeList";
+		    		   var attributesList = document.getElementById(attributesListComponent).value;
+	                   var checkboxes =  attributesList.split(";"); 
+	                  
+	                    for(j=1;j<checkboxes.length;j++)
+		                   {
+		                         var comp = checkboxes[j]+'_checkbox';
+	  							 var val = document.getElementById(comp).checked;
+		                         if(val==true)
+		                           strquery = strquery + checkboxes[j] +";" ;                             
+					 	
+		                   }
+			
+		  	 } 
+		  	   var strvalu = document.getElementById('queryString');
+               strvalu.value =  strquery;
+               saveQuery();
+               
+                           
+	}
+
+	
+	function ExecuteSavedQuery()
+	{
+	   	  var entityName="";
+		  var frmName = document.forms[0].name;
+          var list = document.getElementById('attributesList').value;
+    	  var buildquerystr =  createQueryString(frmName, entityName , list,frmName);
+          document.getElementById('conditionList').value = buildquerystr;
+		  document.forms[0].submit();
+    }
+	
+	function enableDisplayField(frm, textfield)
+	{
+	   var fieldName = textfield+'_displayName';
+       var sts =  document.getElementById(fieldName).disabled;
+          if(sts==true)
+           document.getElementById(fieldName).disabled=false;
+          else
+            document.getElementById(fieldName).disabled=true;
+	}
+	
+ 	function saveQuerySubmitForm(frm,action)
+ 	{
+ 	  if(action=='preview')
+ 	  {
+ 	    frm.action="/previewExecuteQuery.do?action=preview";
+ 	    frm.submit();
+ 	  }
+ 	  else
+ 	  { 
+ 	    frm.action="/saveQuery.do";
+ 	  }
+ 	}
+	
+	
 	function saveClientQueryToServer(action)
 	{
-		/*var message = document.applets[0].defineResultsView();
+	/*	var message = document.applets[0].defineResultsView();
 		if(message != "")
 		{
 			showValidationMessages(message);
 		}
-		else*/ if(action=='next')
+		else */ if(action=='next')
 		{
 			defineSearchResultsView();
 		}
-		else if(action=='save')
-		{
-			saveQueryWindow = window.open('LoadSaveQueryPage.do','Save Query Condition Page','width=800, height=550, scrollbars=yes');
-		}
+	 else if(action=='save')
+	   {
+		window.open('LoadSaveQueryPage.do','Save Query Condition Page','width=800 ,height=550,scrollbars=yes') ; 
+	   }
+		
 	}
-	
 	function defineSearchResultsView()
 	{
 		waitCursor();
@@ -847,8 +939,8 @@ function permissibleValuesSelected(element)
 			}
 		}
   }
-  
-  //---Flex Call
+
+//---Flex Call
 var interfaceObj;
 
 	function callFlexMethod()
@@ -915,7 +1007,7 @@ var jsReady = false;
 	/*This function is called form QueryListView.jsp. It invokes the FetchAndExecuteQueryAction*/
 	function executeQuery(queryId)
 	{
-		document.getElementById('queryId').value = queryId;
+		document.getElementById('queryId').value=queryId;
 		document.forms[0].submit();
 	}  
 	
