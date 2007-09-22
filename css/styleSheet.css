@@ -392,6 +392,12 @@ FORM BEGINS
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
 }
+.formQueryLink{ /* for the asterisk cell */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:1em;
+  background-color:#F4F4F5; /* constant: white */
+  color:#9FA2BA; /* constant: black */
+}
 .formTitle{ /* for header cells (top) of forms */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.8em;
@@ -1771,7 +1777,6 @@ div.autocomplete {
   /*border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   text-align:left;
 }
-
 .entityLink
 {
     font-family:arial,helvetica,verdana,sans-serif;
@@ -1787,26 +1792,4 @@ div.autocomplete {
   border-top:1px  solid #000000;/* constant: dark gray */
   border-left:1px solid #000000; /* constant: dark gray */
   border-right:1px solid #000000; /* constant: dark gray */
-
-}
-td.formFieldForAnnotaionList{ /* for the cell that contains the form elements */
-  font-family:arial,helvetica,verdana,sans-serif;
-  font-size:0.8em;
-  color:#000000; /* constant: black */
- /* border-right:1px solid #5C5C5C; /* constant: dark gray */
-/*  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
- /* background-color:#F4F4F5; /* constant: light gray */
-}
-.formMessagewithoutcolor{ /* for the asterisk cell */
-  font-family:arial,helvetica,verdana,sans-serif;
-  font-size:0.8em;
-  color:#000000; /* constant: black */
-  line-height:1.5em;
-}
-.formMessageBold{ /* for the asterisk cell */
-  font-family:arial,helvetica,verdana,sans-serif;
-  font-size:0.8em;
-  color:#000000; /* constant: black */
-  line-height:1.5em;
-font-weight:bold;
 }
