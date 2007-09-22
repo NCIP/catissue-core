@@ -145,7 +145,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String APP_DYNAMIC_UI_XML = "xmlfile.dynamicUI";
 	public static final String QUERY_CONDITION_DELIMITER = "@#condition#@";
 	public static final String QUERY_OPERATOR_DELIMITER = "!*=*!";
-	public static final String SEARCHED_ENTITIES_MAP = "searchedEntitiesMap";
+	//public static final String SEARCHED_ENTITIES_MAP = "searchedEntitiesMap";
 	public static final String SUCCESS = "success";
 	public static final String LIST_OF_ENTITIES_IN_QUERY = "ListOfEntitiesInQuery";
 	public static final String DYNAMIC_UI_XML = "dynamicUI.xml";
