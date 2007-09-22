@@ -10,7 +10,7 @@
     <class
         name="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup"
         table="CATISSUE_ABSTRACT_SPECIMEN_COLL_GROUP"
-		lazy="true"
+		lazy="false"
     >
 
         <id
@@ -230,7 +230,7 @@
 	            cascade="save-update"
 	            outer-join="auto"
 	            constrained="false"
-		     	property-ref="requiredCollectionSpecimenGroup"
+		     	property-ref="requiredCollectionSpecimenGroup"  
 	        />
             
 		</joined-subclass>
