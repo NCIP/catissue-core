@@ -469,6 +469,7 @@
 			<transaction  src="${common.sql.dir}/indexes.sql"/>
 			<transaction  src="${mysql.sql.dir}/dynamicextension.sql"/>
 			<transaction  src="${mysql.sql.dir}/query/query_schema_script.sql"/>			
+			<transaction  src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql"/>	
 			<transaction  src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql"/>	
 			<transaction>commit;</transaction>
 			<classpath>
@@ -509,6 +510,7 @@
 			<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql"/>
 			<transaction  src="${mysql.sql.dir}/dynamicextension.sql"/>
 			<transaction  src="${mysql.sql.dir}/query/query_schema_script.sql"/>
+			<transaction  src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql"/>	
 			<transaction  src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
