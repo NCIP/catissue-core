@@ -100,7 +100,7 @@
 
 		private function initSpecimenData(): SpecimenData
 		{
-			var spData:SpecimenData = new SpecimenData("Label1","Barcode1","Left");	
+			var spData:SpecimenData = new SpecimenData("","","Left");	
 		
 			
 			

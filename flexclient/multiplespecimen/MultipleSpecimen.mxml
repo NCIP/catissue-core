@@ -117,7 +117,7 @@
 		private function initSpecimenData(): SpecimenData
 		{
 
-			var spData:SpecimenData = new SpecimenData("Label"+counter,"Barcode"+counter,"Left");	
+			var spData:SpecimenData = new SpecimenData("","","Left");	
 			spData.collectionEvent.userName = specimenDataBean.collectionEvent.userName;
 			
 			spData.receivedEvent.userName = specimenDataBean.receivedEvent.userName;

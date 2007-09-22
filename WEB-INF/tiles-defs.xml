@@ -1170,7 +1170,7 @@
 	</definition>
 	
 	<!-- for specimen summary -->
-	<definition name=".catissuecore.viewSpecimenSummary" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.viewSpecimenSummary" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/SpecimenSummary.jsp" />
 	</definition>
 	

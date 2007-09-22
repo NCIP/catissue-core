@@ -3599,7 +3599,7 @@ PUBLIC
   			type="edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction" 
   			scope="request">
 			<forward name="success" path=".catissuecore.multipleSpecimenFlexDef" />  
-			<forward name="cpQuery" path=".catissuecore.multipleSpecimenFlexCPQueryDef" />  
+			<forward name="pageOfMultipleSpWithoutMenu" path=".catissuecore.multipleSpecimenFlexCPQueryDef" />  
 			<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.multipleSpecimenFlexDef" />  
 			
     </action>                        
@@ -3976,7 +3976,7 @@ PUBLIC
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->
 <!--		<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			-->
-		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?pageOf=cpQuery&amp;parentType=New_Specimen"/>
+		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
 		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 	</action>
 		
@@ -4052,7 +4052,7 @@ PUBLIC
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->			
 		<!--<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			-->
-		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?pageOf=cpQuery&amp;parentType=New_Specimen"/>
+		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
 		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 	</action>
 
@@ -4365,7 +4365,7 @@ PUBLIC
                 validate="false"
                 scope="request">
 					<forward name="success" path="/pages/SpecimenSummary.jsp" />
-					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
+					<forward name="pageOfMultipleSpWithoutMenu" path=".catissuecore.viewSpecimenSummary" />
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 	                <forward name="failure" path="/Home.do" />
        </action>    
@@ -4382,8 +4382,11 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path="/pages/SpecimenSummary.jsp" />
+			<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="updateCP" path="/UpdateCollectionProtocol.do" />
 			<forward name="failure" path="/pages/SpecimenSummary.jsp" />
+			<forward name="pageOfMultipleSpWithMenuFailure" path=".catissuecore.viewSpecimenSummary" />
+			
 		</action>
 
 		<action path="/UpdateCollectionProtocol"

@@ -2,9 +2,18 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <html>
 <head>
+<%
+String formAction = "SubmitSpecimenCollectionProtocol.do";
+if(request.getAttribute(Constants.PAGEOF) != null)
+{
+	formAction = formAction + "?pageOf="+request.getAttribute(Constants.PAGEOF);
+}
+
+%>
 	<script language="JavaScript">
 		window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
 		function saveCollectionProtocol()
@@ -21,7 +30,7 @@
 			<%=messageKey%>
 		</html:messages>
 		
-		<html:form action="SubmitSpecimenCollectionProtocol.do">		
+		<html:form action="<%=formAction%>">		
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
 				<tr>
 					<td class="dataTablePrimaryLabel" height="20">

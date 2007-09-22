@@ -51,11 +51,12 @@ public class ViewSpecimenSummaryAction extends Action {
 
 			if (specimenMap != null) {
 				populateSpecimenSummaryForm(summaryForm, specimenMap);
-			}
+			} 
 			summaryForm.setEventId(eventId);
 			String pageOf = request.getParameter(Constants.PAGEOF);
 			if(pageOf != null)
 			{
+				request.setAttribute(Constants.PAGEOF,pageOf);
 				return mapping.findForward(pageOf);
 			}
 			return mapping.findForward(Constants.SUCCESS);

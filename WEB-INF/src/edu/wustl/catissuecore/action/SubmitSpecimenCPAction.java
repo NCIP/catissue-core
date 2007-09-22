@@ -67,6 +67,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String target = Constants.SUCCESS;
+		String pageOf = request.getParameter(Constants.PAGEOF);
 		HashMap resultMap = new HashMap();
 		try {
 			specimenSummaryForm = (ViewSpecimenSummaryForm) form;
@@ -121,9 +122,18 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			}
 			
 			target = Constants.SUCCESS;
+			
+			if(pageOf != null && pageOf.equals("pageOfMultipleSpWithMenu"))
+				target = pageOf;
+			
 			specimenSummaryForm.switchUserAction();
 		} catch (Exception ex) {
 			target = Constants.FAILURE;
+			if(pageOf!=null && pageOf.equals("pageOfMultipleSpWithMenu"))
+			{
+				target = "pageOfMultipleSpWithMenuFailure";
+			}
+				
      			String errorMsg = ex.getMessage();
 			resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			ex.printStackTrace();
