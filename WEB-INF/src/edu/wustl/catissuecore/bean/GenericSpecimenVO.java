@@ -25,8 +25,8 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 	private String tissueSite = null;
 	private String type = null;
 	private String uniqueIdentifier = null;
-
-	
+	private boolean checkedSpecimen = false;
+	private boolean readOnly =false;
 	public LinkedHashMap<String, GenericSpecimen> getAliquotSpecimenCollection() {
 		return aliquotSpecimenCollection;
 	}
@@ -131,6 +131,22 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 
 	public void setUniqueIdentifier(String uniqueIdentifier) {
 		this.uniqueIdentifier = uniqueIdentifier;
+	}
+
+	public boolean getCheckedSpecimen() {
+		return checkedSpecimen;
+	}
+
+	public void setCheckedSpecimen(boolean checkedSpecimen) {
+		this.checkedSpecimen = checkedSpecimen;
+	}
+
+	public boolean getReadOnly() {
+		return readOnly;
+	}
+
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
 	}
 
 }

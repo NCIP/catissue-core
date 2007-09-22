@@ -58,8 +58,10 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
@@ -2303,7 +2305,38 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				}
 			}
 		}
-		
+	}
+	public void setSpecimenCollected(Specimen newSpecimen, SessionDataBean sessionDataBean) throws DAOException
+	{
+		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		try
+		{
+			((HibernateDAO)dao).openSession(sessionDataBean);
+			List specList = dao.retrieve(Specimen.class.getName(), "id", newSpecimen.getId());
 	
+			if(specList != null && !specList.isEmpty())
+			{
+				Specimen specimenDO =(Specimen)specList.get(0);
+				specimenDO.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+				Collection childrenSpecimens = specimenDO.getChildrenSpecimen();
+				if (childrenSpecimens !=null)
+				{
+					Iterator iterator = childrenSpecimens.iterator();
+					while(iterator.hasNext())
+					{
+						Specimen childSpecimen = (Specimen) iterator.next();
+						childSpecimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+					}
+				}
+				dao.update(specimenDO, sessionDataBean, false, false, false);
+			}
+		}catch(UserNotAuthorizedException authorizedException){
+			throw new DAOException ("User not authorized to update specimens" + 
+					authorizedException.getMessage());
+			
+		}finally{
+			((HibernateDAO)dao).commit();
+			((HibernateDAO)dao).closeSession();		
+		}
 	}
 }

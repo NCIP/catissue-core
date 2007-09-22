@@ -28,6 +28,8 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	public static final String UPDATE_USER_ACTION = "UPDATE";
 	public static final String REQUEST_TYPE_MULTI_SPECIMENS= "Multiple Specimen";
 	public static final String REQUEST_TYPE_COLLECTION_PROTOCOL= "Collection Protocol";
+	public static final String REQUEST_TYPE_ANTICIPAT_SPECIMENS= "anticipatory specimens";
+
 	private List<GenericSpecimen> specimenList = null;
 	private List<GenericSpecimen> aliquotList = null; 
 	private List<GenericSpecimen> derivedList = null; 

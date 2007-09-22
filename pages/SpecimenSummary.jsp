@@ -51,6 +51,10 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 								cellspacing="0" border="0" class="dataTable" width="100%">
 					<tr>
 						<th class="formSerialNumberLabelForTable" scope="col" > &nbsp </th>
+						
+						<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
+						<th class="formSerialNumberLabelForTable" scope="col">Received</th>
+						</logic:equal>
 						<th class="formSerialNumberLabelForTable" scope="col">Label</th>
 						<th class="formSerialNumberLabelForTable" scope="col"> Class</th>
 						<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
@@ -65,7 +69,24 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				  <logic:iterate name="viewSpecimenSummaryForm" property="specimenList" id="specimen" indexId="counter">
 					<tr>
 						<td> <html:radio property="selectedSpecimenId" value="uniqueIdentifier" idName="specimen" 
-						onclick=" form.action='GenericSpecimenSummary.do'; submit()"/> </td>
+						onclick=" form.action='GenericSpecimenSummary.do'; submit()"/> 
+						<html:hidden name="specimen" indexed="true" property="uniqueIdentifier" /></td>
+						
+						<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
+							<logic:equal name="specimen" property="readOnly" value="false">
+								<td>
+								<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" />						
+								</td>
+							</logic:equal>
+							<logic:equal name="specimen" property="readOnly" value="true">
+								<td>
+								Collected!
+								<html:hidden name="specimen" indexed="true" property="checkedSpecimen" />						
+								</td>
+							</logic:equal>
+							<html:hidden name="specimen" indexed="true" property="readOnly"/>
+						</logic:equal>
+						
 						<td class="dataCellText" > <bean:write name="specimen" property="displayName" />
 						<html:hidden name="specimen" indexed="true" property="displayName" /></td>
 						<td class="dataCellText"> <bean:write name="specimen" property="className" />
@@ -195,7 +216,14 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			</td>
 		 </tr>
 		</logic:equal>
-
+		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
+		<tr>
+		    <td>
+			<html:submit value="Update Specimen status" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
+			</td>
+		 </tr>
+		</logic:equal>
+		
 		</table>
 		</html:form>		
 </html>

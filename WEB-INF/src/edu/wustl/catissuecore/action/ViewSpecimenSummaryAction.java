@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
+import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class ViewSpecimenSummaryAction extends Action {
@@ -29,6 +30,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			throws Exception {
 		try {
 			HttpSession session = request.getSession();
+			
 			ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 			String eventId = summaryForm.getEventId();
 
@@ -39,6 +41,14 @@ public class ViewSpecimenSummaryAction extends Action {
 //				new Generatedata().generate(request);
 			}
 			
+			if (summaryForm.getSpecimenList()!= null)
+			{
+				updateSessionBean(summaryForm, session);
+			}
+			if(request.getParameter("save")!=null)
+			{
+				return mapping.findForward("updateSpecimenStatus");
+			}
 			summaryForm.setUserAction(ViewSpecimenSummaryForm.ADD_USER_ACTION);
 			
 			if("update".equals(request.getParameter("action")))
@@ -68,6 +78,47 @@ public class ViewSpecimenSummaryAction extends Action {
 	}
 
 	/**
+	 * @param summaryForm
+	 */
+	private void updateSessionBean(ViewSpecimenSummaryForm summaryForm, HttpSession session)
+	{
+		String eventId = summaryForm.getEventId();
+		if (eventId == null)
+		{
+			return;
+		}
+		
+		Map collectionProtocolEventMap = (Map) session
+		.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);		
+		CollectionProtocolEventBean eventBean =(CollectionProtocolEventBean)
+							collectionProtocolEventMap.get(eventId);
+		LinkedHashMap specimenMap = (LinkedHashMap)eventBean.getSpecimenRequirementbeanMap();
+		String selectedItem = summaryForm.getSelectedSpecimenId();
+		GenericSpecimenVO selectedSpecimenObj=(GenericSpecimenVO) specimenMap.get(selectedItem);
+		
+		Collection specimenCollection = specimenMap.values();
+		Iterator iterator = summaryForm.getSpecimenList().iterator();
+		
+		while(iterator.hasNext())
+		{
+			GenericSpecimenVO specimenFormVO =(GenericSpecimenVO) iterator.next();
+			
+			if (specimenFormVO.getCheckedSpecimen())
+			{
+				GenericSpecimenVO specimenSessionVO =(GenericSpecimenVO)
+							specimenMap.get(specimenFormVO.getUniqueIdentifier());
+				if(specimenSessionVO!=null)
+				{
+					specimenSessionVO.setCheckedSpecimen(specimenFormVO.getCheckedSpecimen());
+				}
+				
+			}
+			
+		}	
+		
+	}
+	
+	/**
 	 * This function retrieves the Map of specimens from session.
 	 * @param session
 	 * @param eventId
@@ -79,8 +130,17 @@ public class ViewSpecimenSummaryAction extends Action {
 
 		LinkedHashMap<String, GenericSpecimen> specimenMap = null;
 		
-		if (eventId != null) {
-			summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL);
+		if (eventId != null || 
+				ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS.equals(summaryForm.getRequestType())) 
+		{
+			if(summaryForm.getRequestType() == null)
+			{
+				summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL);
+			}
+			if (eventId == null)
+			{
+				eventId = "dummy";
+			}
 			StringTokenizer stringTokenizer =new StringTokenizer(eventId, "_");
 			if(stringTokenizer!=null)
 			{
@@ -100,10 +160,12 @@ public class ViewSpecimenSummaryAction extends Action {
 
 				if (collectionProtocolEventBean == null  ) {
 				
+					eventId =(String) collectionProtocolEventMap.keySet().iterator().next();
 					Collection cl =collectionProtocolEventMap.values();
 
 					if (cl!=null && !cl.isEmpty())
 					{
+						
 						collectionProtocolEventBean = 
 							(CollectionProtocolEventBean) cl.iterator().next();
 					}
@@ -116,7 +178,7 @@ public class ViewSpecimenSummaryAction extends Action {
 					
 				}
 			}
-			
+			summaryForm.setEventId(eventId);			
 		} else {
 			summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS);
 			specimenMap = (LinkedHashMap) session

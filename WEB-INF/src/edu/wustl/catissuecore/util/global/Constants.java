@@ -2086,4 +2086,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	
 	
+	//SPECIMEN COllection Status
+	public static final String SPECIMEN_COLLECTED = "Collected";
+	public static final String SPECIMEN_ANTICOPATED = "Anticipated";
 }

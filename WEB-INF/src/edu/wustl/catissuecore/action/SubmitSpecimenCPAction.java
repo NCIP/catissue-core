@@ -545,7 +545,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		}		
 		
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		specimen.setBarcode(specimen.getBarcode());
+		specimen.setBarcode(specimenDataBean.getBarcode());
 		specimen.setComment(specimenDataBean.getComment());
 		specimen.setCreatedOn(new Date());
 		specimen.setLabel(specimenDataBean.getLabel());
@@ -576,6 +576,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		if(specimenDataBean.getSpecimenEventCollection()!=null && !specimenDataBean.getSpecimenEventCollection().isEmpty())
 		{
 			Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
+
 			while(iterator.hasNext())
 			{
 				SpecimenEventParameters specimenEventParameters =
