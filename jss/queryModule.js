@@ -826,24 +826,26 @@
  	    frm.action="/saveQuery.do";
  	  }
  	}
-	
-	
 	function saveClientQueryToServer(action)
 	{
-	/*	var message = document.applets[0].defineResultsView();
-		if(message != "")
-		{
-			showValidationMessages(message);
-		}
-		else */ if(action=='next')
+		if(action=='next')
 		{
 			defineSearchResultsView();
 		}
-	 else if(action=='save')
-	   {
-		window.open('LoadSaveQueryPage.do','Save Query Condition Page','width=800 ,height=550,scrollbars=yes') ; 
-	   }
-		
+		else if(action=='save')
+		{
+			var url = "LoadSaveQueryPage.do";
+			if (window.showModalDialog)
+			{
+				var modalDialogProperties = "dialogHeight:550px; dialogWidth:800px; edge:Sunken; center:Yes; resizable:Yes;";
+				window.showModalDialog(url, window, modalDialogProperties);
+			}
+			else
+			{
+				var windowProperties = "height=550,width=800,toolbar=no,status=no,menubar=no,scrollbars=no,resizable=yes,modal=yes";
+				window.open(url, window, windowProperties);
+			}
+		}
 	}
 	function defineSearchResultsView()
 	{
