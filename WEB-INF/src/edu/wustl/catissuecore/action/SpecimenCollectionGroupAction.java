@@ -644,9 +644,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	private void setNumberOfSpecimens(HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm, List calendarEventPointList) throws DAOException 
 	{
 		CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
-		specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
-
-		SpecimenCollectionRequirementGroup collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+		SpecimenCollectionRequirementGroup collectionRequirementGroup = (SpecimenCollectionRequirementGroup)collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
 		
 		IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Collection specimenRequirementCollection = (Collection)bizlogic.retrieveAttribute(SpecimenCollectionRequirementGroup.class.getName(),collectionRequirementGroup.getId(),"elements(specimenCollection)");
@@ -1068,12 +1066,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		if(!calendarEventPointList.isEmpty())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
-			specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
-
-			/**
-			 * Patch ID: Bug#3184_9
-			 */
-			SpecimenCollectionRequirementGroup collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+			SpecimenCollectionRequirementGroup collectionRequirementGroup = (SpecimenCollectionRequirementGroup)collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+		
 			IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			Collection specimenRequirementCollection = (Collection)bizlogic.retrieveAttribute(SpecimenCollectionRequirementGroup.class.getName(),collectionRequirementGroup.getId(),"elements(specimenCollection)");
 			
