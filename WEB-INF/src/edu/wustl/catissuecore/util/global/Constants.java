@@ -204,7 +204,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String VIEW_LIMITED_RECORDS = "viewLimitedRecords";
 	public static final String SAVE_QUERY_ACTION = "SaveQueryAction.do";
 	public static final String RETRIEVE_QUERY_ACTION = "RetrieveQueryAction.do";
-	public static final String FETCH_AND_EXECUTE_QUERY_ACTION = "FetchAndExecuteQueryAction.do";
+	public static final String FETCH_AND_EXECUTE_QUERY_ACTION = "ExecuteQueryAction.do";
 	public static final String TREE_NODE_LIMIT_EXCEEDED_RECORDS = "treeNodeLimitExceededRecords";
 	public static final String MAXIMUM_TREE_NODE_LIMIT = "resultView.maximumTreeNodeLimit";
 	// Query Module Interface UI constants---ends here
@@ -2075,6 +2075,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String SHOW_ALL_ATTRIBUTE = "Show all attributes";
 	public static final String SHOW_SELECTED_ATTRIBUTE = "Show selected attributes";
+	public static final String ADD_EDIT_PAGE ="Add Edit Page";
+	public static final String SAVE_QUERY_PAGE ="Save Query Page";
+	public static final String EXECUTE_QUERY_PAGE ="Execute Query Page";
+	public static final String FETCH_QUERY_ACTION ="FetchQuery.do"; 
+	public static final String EXECUTE_QUERY_ACTION ="ExecuteQueryAction.do"; 
+	public static final String EXECUTE_QUERY = "executeQuery";
+//	Save Query Constants ends
 	
 	public static final String NEW_SPECIMEN_TYPE = "New_Specimen";
 	public static final String DERIVED_SPECIMEN_TYPE = "Derived_Specimen";

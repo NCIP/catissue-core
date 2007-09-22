@@ -204,6 +204,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 			{
 				IExpressionId expressionId = queryObject.addRule(attributes, attributeOperators, conditionValues);
 				panel.updateGraph(expressionId);	
+	
 				showValidationMessagesToUser(errorMessage);
 			}
 			else
