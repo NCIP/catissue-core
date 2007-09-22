@@ -55,6 +55,7 @@ public class SaveQueryAction extends BaseAction
 			{
 				bizLogic.insert(parameterizedQuery, Constants.HIBERNATE_DAO);
 				target = Constants.SUCCESS;
+				session.removeAttribute(AppletConstants.QUERY_OBJECT);
 			}
 			catch (BizLogicException bizLogicException)
 			{
