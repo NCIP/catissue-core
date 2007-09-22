@@ -451,8 +451,6 @@
 		var element = document.getElementById('resultSet');
 		if(text == "")
 		{
-			//alert("Zero Entitites found.");
-//			var row1 ="abcd";
             text = '<font face="Arial" size="2" >No result found.</font>'
 			element.innerHTML =text;
 		} 
@@ -472,15 +470,14 @@
 		for(i=1; i<listOfEntities.length; i++)
 		{
 			var e = listOfEntities[i];			
-			var nameDescription = e.split("|");		
-			var name = nameDescription[0];				
-			var description = nameDescription[1];
-			var lastIndex = name.lastIndexOf(".");
-			var entityName = name.substring(lastIndex + 1);
+			var nameIdDescription = e.split("|");		
+			var name = nameIdDescription[0];
+			var id = nameIdDescription[1];				
+			var description = nameIdDescription[2];
 			if(currentPage != "DefineResultsView")
 			{
-				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+name+"')";		
-				entityName = "<font color=#6E97F0>"+entityName +"</font>";
+				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+id+"')";		
+				var entityName = "<font color=#6E97F0>"+name +"</font>";
 				row = row+'<tr><td><a  class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
 			}
 			else

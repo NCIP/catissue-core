@@ -301,6 +301,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		StringBuffer generatedPreHTML = new StringBuffer();
 		StringBuffer generatedHTML = new StringBuffer();
 		String nameOfTheEntity = entity.getName();
+		String entityId =  entity.getId().toString();
 		String entityName = Utility.parseClassName(nameOfTheEntity);//nameOfTheEntity.substring(nameOfTheEntity.lastIndexOf(".")+1,nameOfTheEntity.length());
 		Collection attributeCollection = entity.getAttributeCollection();
 		boolean isEditLimits = false;
@@ -318,7 +319,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		{ 
 			isEditLimits = true;
 		}
-		generatedPreHTML.append(generateHTMLForButton(nameOfTheEntity, getAttributesString(attributeCollection), isEditLimits,isTopButton));
+		generatedPreHTML.append(generateHTMLForButton(entityId, getAttributesString(attributeCollection), isEditLimits,isTopButton));
 		generatedPreHTML.append("\n</tr></table>");
 		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\">");
 		//generatedHTML.append("\n<tr>");
