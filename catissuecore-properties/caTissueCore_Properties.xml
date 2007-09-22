@@ -374,11 +374,11 @@
 
 	<property>
 		<name>specimenLabelGeneratorClass</name>
-		<value>edu.wustl.catissuecore.namegenerator.DefaultSpecimenLableGenerator</value>
+		<value>edu.wustl.catissuecore.namegenerator.DefaultSpecimenLabelGenerator</value>
 	</property>
 	<property>
 		<name>storageContainerLabelGeneratorClass</name>
-		<value>edu.wustl.catissuecore.namegenerator.DefaultStorageContainerLableGenerator</value>
+		<value>edu.wustl.catissuecore.namegenerator.DefaultStorageContainerLabelGenerator</value>
 	</property>
 	<property>
 		<name>specimenBarcodeGeneratorClass</name>
