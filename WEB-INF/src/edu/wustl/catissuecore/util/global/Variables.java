@@ -29,6 +29,10 @@ public class Variables extends edu.wustl.common.util.global.Variables
     public static String[] databasenames;
     public static String applicationCvsTag = new String();
     public static int maximumTreeNodeLimit;
+    public static boolean isSpecimenLabelGeneratorAvl = false;
+    public static boolean isStorageContainerLabelGeneratorAvl = false;
+    public static boolean isSpecimenBarcodeGeneratorAvl = false;
+    public static boolean isStorageContainerBarcodeGeneratorAvl = false;
     
 	// Patch ID: SimpleSearchEdit_7
     public static Map<String, String> aliasAndPageOfMap = new HashMap<String, String>();

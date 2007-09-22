@@ -2055,4 +2055,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String NEW_SPECIMEN_TYPE = "New_Specimen";
 	public static final String DERIVED_SPECIMEN_TYPE = "Derived_Specimen";
 	
+	public static final String SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME="specimenLabelGeneratorClass";
+	public static final String SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME="specimenBarcodeGeneratorClass";
+	public static final String STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME="storageContainerLabelGeneratorClass";
+	public static final String STORAGECONTAINER_BARCODE_GENERATOR_PROPERTY_NAME="storageContainerBarcodeGeneratorClass";
+	
+	
+	
 }

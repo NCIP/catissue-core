@@ -374,7 +374,19 @@
 
 	<property>
 		<name>specimenLabelGeneratorClass</name>
-		<value>edu.wustl.catissuecore.util.global.namegenerator.DefaultSpecimenLableGenerator</value>
+		<value>edu.wustl.catissuecore.namegenerator.DefaultSpecimenLableGenerator</value>
+	</property>
+	<property>
+		<name>storageContainerLabelGeneratorClass</name>
+		<value>edu.wustl.catissuecore.namegenerator.DefaultStorageContainerLableGenerator</value>
+	</property>
+	<property>
+		<name>specimenBarcodeGeneratorClass</name>
+		<value>edu.wustl.catissuecore.namegenerator.DefaultSpecimenBarcodeGenerator</value>
+	</property>
+	<property>
+		<name>storageContainerBarcodeGeneratorClass</name>
+		<value>edu.wustl.catissuecore.namegenerator.DefaultStorageContainerBarcodeGenerator</value>
 	</property>
 
 	<!-- property for DynamicUI xml file -->

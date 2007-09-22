@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.11 $
+ * $Name: 1.41.2.12 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -15,9 +15,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
-import edu.wustl.catissuecore.annotations.AnnotationUtil;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.cab2b.server.cache.EntityCache;
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
+import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
@@ -38,13 +38,12 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGenerator;
-import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGeneratorFactory;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.CVSTagReader;
@@ -243,12 +242,12 @@ public class CatissueCoreServletContextListener implements ServletContextListene
              */
         	DefaultValueManager.validateAndInitDefaultValueMap();
         	/**
-        	 * Name : Virender Mehta
+             * Name : Falguni Sachde
              * Reviewer: Sachin Lale
-             * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and
-             * 				set. 
-        	 */
-        	SpecimenLabelGenerator specimenGeneratorInstance = SpecimenLabelGeneratorFactory.getInstance();
+             * Description : This Factory initialize and set the Label and Barcode generator instance for Storage container and Specimen.
+             */
+        	LabelAndBarcodeGeneratorInitializer.init();
+        		
         	File propetiesDirPath = new File(path);
         	Variables.propertiesDirPath = propetiesDirPath.getParent();
         	Logger.out.debug("propetiesDirPath "+Variables.propertiesDirPath);
