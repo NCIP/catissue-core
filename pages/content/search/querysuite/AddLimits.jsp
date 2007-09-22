@@ -35,7 +35,7 @@
 	<tr>
 		<td>
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table2" >		
-		<tr  height="5%" class="trStyle">
+		<tr  height="5%">
 			<td width="23%" height="5%" class="queryTabMenuItemSelected" >
 				<bean:message key="query.addLimits"/>
 			</td>
