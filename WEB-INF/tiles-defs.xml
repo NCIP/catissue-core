@@ -1101,6 +1101,10 @@
 		<put name="content" value="/pages/content/search/querysuite/ViewResults.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.collectQueryParameter" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/querysuite/ParameterizedQueryExecutePage.jsp" />
+	</definition>
+	
 	<definition name=".catissuecore.defineSearchResultsView" extends=".catissuecore.searchHomeDef">
 		<put name="content" value=".catissuecore.defineSearchResultsWizard" />
 	</definition>

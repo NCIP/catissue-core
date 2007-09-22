@@ -527,14 +527,24 @@ PUBLIC
 			<forward name="success" path=".catissuecore.queryViewPageDef"/>
 			<forward name="failure" path=".catissuecore.errorPageDef"/>
 		</action>
-		<action path="/FetchAndExecuteQueryAction"
-			type="edu.wustl.catissuecore.action.querysuite.FetchAndExecuteQueryAction"
+		<action path="/ExecuteQueryAction"
+			type="edu.wustl.catissuecore.action.querysuite.ExecuteQueryAction"
 			name="saveQueryForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.viewSearchResults"/>
 			<forward name="treeNodeLimitExceededRecords" path="/OpenDecisionMakingPage.do" />			
 			<forward name="failure" path="/RetrieveQueryAction.do"/>
+		</action>
+		
+		<action path="/FetchQuery"
+			type="edu.wustl.catissuecore.action.querysuite.FetchQueryAction"
+			name="saveQueryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.collectQueryParameter"/>
+			<forward name="failure" path="/RetrieveQueryAction.do"/>
+			<forward name="executeQuery" path="/ExecuteQueryAction.do"/>
 		</action>
 		<action path="/loadDefineSearchRules"
 			type="edu.wustl.catissuecore.action.querysuite.LoadDefineSearchRulesAction"
