@@ -22,8 +22,6 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-
-
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -36,8 +34,6 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.global.Variables;
-
 import edu.wustl.common.util.logger.Logger;
 
 /**

@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -328,7 +329,7 @@ public class StorageContainer extends Container
 			}
 			if (this.noOfContainers.intValue() == 1)
 			{
-				if (!form.getBarcode().trim().equals(""))
+				if (!Variables.isStorageContainerBarcodeGeneratorAvl &&  form.getBarcode()!=null &&  !form.getBarcode().trim().equals(""))
 					this.barcode = form.getBarcode();
 				else
 					this.barcode = null;
