@@ -23,6 +23,7 @@
 		import mx.controls.Menu;
 		import mx.collections.Sort;
 		import mx.collections.SortField;
+		import Components.DAGPath;
 			
 		private var editedNode:DAGNode;	
 		[Bindable]
@@ -219,14 +220,30 @@
 				for(var i:int=0;i<inAssociations.length;i++)
 				{
 					ass = Association(inAssociations.getItemAt(i));
-					this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
+					//------
+					var dagPath:DAGPath=this.parentApplication.dagPathUIMap.getValue(ass.associatedLink) as DAGPath;
+					var node1:String=dagPath.sourceExpId+"";
+					var node2:String=dagPath.destinationExpId+"";
+					var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
+					var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
+					dagPath.deletePath(dagNode1,dagNode2);
+					//----
+				//	this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
 					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeOutAssociation(this.name,ass.associatedLink);
 					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeDisplayOutAssociation(this.name,ass.associatedLink);
 				}
 				for(var j:int=0;j<outAssociations.length;j++)
 				{
 					ass = Association(outAssociations.getItemAt(j));
-					this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
+					//------
+					var dagPath:DAGPath=this.parentApplication.dagPathUIMap.getValue(ass.associatedLink) as DAGPath;
+					var node1:String=dagPath.sourceExpId+"";
+					var node2:String=dagPath.destinationExpId+"";
+					var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
+					var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
+					dagPath.deletePath(dagNode1,dagNode2);
+					//----
+				//	this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
 					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeInAssociation(this.name,ass.associatedLink);
 				}
 				this.parentApplication.rpcService.deleteNode(this.expressionId);
@@ -285,7 +302,9 @@
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteHandler,false);
 			if(this.nodeType==DAGConstants.CONSTRAINT_VIEW_NODE)
 			{
-				this.parentApplication.showValidationMessagesToUser(DAGConstants.DELETE_LIMITS_MESSAGE);
+				//this.parentApplication.showValidationMessagesToUser(DAGConstants.DELETE_LIMITS_MESSAGE);
+				var paramArray:Array = new Array(DAGConstants.DELETE_LIMITS_MESSAGE);
+				ExternalInterface.call("showEntityInformation",paramArray);
 			}
 		}
 		
@@ -298,8 +317,8 @@
 		// The Array data provider
 		[Bindable]
 		public var menuData:Array = [	
-		{label: "Edit", type: "radio", toggled: false},
-		{label: "Delete", type: "radio", toggled: false}
+		{label: "Edit", type: "radio", toggled: false,enabled:true},
+		{label: "Delete", type: "radio", toggled: false,enabled:true}
 		
 		];
 		
