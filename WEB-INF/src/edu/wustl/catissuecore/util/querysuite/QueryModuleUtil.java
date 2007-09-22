@@ -405,7 +405,7 @@ public abstract class QueryModuleUtil
 							{
 								System.out.println();
 								status = QueryModuleUtil.RESULTS_MORE_THAN_LIMIT;
-								String resultSizeStr = resultsSize+"";
+								String resultSizeStr = resultsSize-1 +"";
 								session.setAttribute(Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS,resultSizeStr);
 								return status;
 							}

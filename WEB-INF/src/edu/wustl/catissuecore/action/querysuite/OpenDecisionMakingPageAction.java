@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.querysuite.queryobject.IQuery;
@@ -47,7 +48,7 @@ public class OpenDecisionMakingPageAction extends BaseAction
 			return mapping.findForward(Constants.VIEW_ALL_RECORDS);
 		}
 		ActionErrors errors = new ActionErrors();
-		ActionError addMsg = new ActionError("query.decision.making.message", noOfResults);
+		ActionError addMsg = new ActionError("query.decision.making.message", noOfResults,Variables.maximumTreeNodeLimit);
 		errors.add(ActionErrors.GLOBAL_ERROR, addMsg);
 		saveErrors(request, errors);
 		return mapping.findForward(Constants.SUCCESS);
