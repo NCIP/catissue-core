@@ -21,8 +21,7 @@
 		[Bindable]
 		public var operatorIndex:int=0;
 		
-		private var node1:String = "";
-		private var node2:String = "";
+	
 		
 		public function readExternal(input:IDataInput):void {
 			toolTip=input.readUTF();
@@ -53,38 +52,39 @@
 			myMenu.addEventListener(MenuEvent.ITEM_CLICK,deletePathHandler);
 		}
 		
-		private function deletePath(dagNode1:DAGNode,dagNode2:DAGNode):void
+		public function deletePath(dagNode1:DAGNode,dagNode2:DAGNode):void
 			{
-				
-			var ass:Association=dagNode1.getOutAssociation(node2);
-			if(ass != null)
-			{
-				
-				if(dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)
+				var node1:String=dagNode1.name;
+				var node2:String=dagNode2.name;
+				var ass:Association=dagNode1.getOutAssociation(node2);
+				if(ass != null)
 				{
-					dagNode1.removeOutAssociation(node2,ass.associatedLink);
+					
+					if(dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)
+					{
+						dagNode1.removeOutAssociation(node2,ass.associatedLink);
+					}
+					else
+					{
+						dagNode1.removeDisplayOutAssociation(node2,ass.associatedLink);
+						dagNode1.removeOutAssociation(node2,ass.associatedLink);
+					}
+					dagNode2.removeInAssociation(node1,ass.associatedLink);
+					node1="";
+					node2="";
+					this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,deleteLinkHandler);
+					var nodeList:ArrayCollection = new ArrayCollection();
+					nodeList.addItemAt(dagNode1,0);
+					nodeList.addItemAt(dagNode2,1);
+					this.parentApplication.rpcService.deleteLink(nodeList,ass.associatedLink)
+					this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
+					this.parentApplication.dagPathUIMap.remove(this.name);
+					
 				}
 				else
 				{
-					dagNode1.removeDisplayOutAssociation(node2,ass.associatedLink);
-					dagNode1.removeOutAssociation(node2,ass.associatedLink);
+					Alert.show("Selected nodes do not have any association");
 				}
-				dagNode2.removeInAssociation(node1,ass.associatedLink);
-				node1="";
-				node2="";
-				this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,deleteLinkHandler);
-				var nodeList:ArrayCollection = new ArrayCollection();
-				nodeList.addItemAt(dagNode1,0);
-				nodeList.addItemAt(dagNode2,1);
-				this.parentApplication.rpcService.deleteLink(nodeList,ass.associatedLink)
-				this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
-				this.parentApplication.dagPathUIMap.remove(this.name);
-				
-			}
-			else
-			{
-				Alert.show("Selected nodes do not have any association");
-			}
 	}	
 	
 	public function deletePathHandler(event:MenuEvent):void		
@@ -94,8 +94,8 @@
 			{
 				
 				var dagPath:DAGPath = this.parentApplication.dagPathUIMap.getValue(this.name);
-				node1=dagPath.sourceExpId+"";
-				node2=dagPath.destinationExpId+"";
+				var node1:String=dagPath.sourceExpId+"";
+				var node2:String=dagPath.destinationExpId+"";
 				var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
 				var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
 				if(this.parentApplication.view==DAGConstants.RESULT_VIEW)
