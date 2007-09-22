@@ -78,7 +78,8 @@ public class CreateMultipleSpecimenAction extends BaseAction
 				inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, request.getParameter("specimenLabel"));
 
 				SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
-				createForm.setLabel(abstractSpecimenGenerator.getNextAvailableDeriveSpecimenlabel(inputMap));
+			   //commented by Falguni.
+				//createForm.setLabel(abstractSpecimenGenerator.getNextAvailableDeriveSpecimenlabel(inputMap));
 				
 				createForm.setClassName(request.getParameter("derivedSpecimenClass"));
 				createForm.setType(request.getParameter("derivedSpecimenType"));

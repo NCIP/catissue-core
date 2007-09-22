@@ -292,6 +292,8 @@ public class NewSpecimenAction extends SecureAction
 				String specimenID = null;
 				specimenID = String.valueOf(specimenForm.getId());
 				Specimen specimenObject = getSpecimenObj(specimenID);
+				//Added by Falguni=To set Specimen label in Form.
+				specimenForm.setLabel(specimenObject.getLabel());
 				//List added for grid
 				List specimenDetails= new ArrayList();
 				getSpecimenDetails(specimenObject,specimenDetails);
@@ -512,11 +514,11 @@ public class NewSpecimenAction extends SecureAction
 	             * Reviewer: Sachin Lale
 	             * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set.
 	        	 */
-				SpecimenLabelGenerator spLblGenerator  = SpecimenLabelGeneratorFactory.getInstance();
-				Map inputMap = new HashMap();
-				inputMap.put(Constants.SCG_NAME_KEY, specimenCollectionGroupName);
-				String specimenLabel= spLblGenerator.getNextAvailableSpecimenlabel(inputMap);
-				specimenForm.setLabel(specimenLabel);
+//				SpecimenLabelGenerator spLblGenerator  = SpecimenLabelGeneratorFactory.getInstance();
+//				Map inputMap = new HashMap();
+//				inputMap.put(Constants.SCG_NAME_KEY, specimenCollectionGroupName);
+//				String specimenLabel= spLblGenerator.getNextAvailableSpecimenlabel(inputMap);
+//				specimenForm.setLabel(specimenLabel);
 			}
 			
 			if (specimenForm.getSpecimenCollectionGroupName() != null && !specimenForm.getSpecimenCollectionGroupName().equals("")

@@ -1481,14 +1481,14 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				String scgName = (String)request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME);
 				dataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME, scgName);
 				
-				// call here a labelgenerator passing scg name and get list of lables.
+/*				// call here a labelgenerator passing scg name and get list of lables.
 				if(request.getParameter("specimenCount")!=null)
 				{
 					int count = Integer.parseInt(request.getParameter("specimenCount")); 
 					List<String> labels = generateLables(scgName, count);
 					dataListsMap.put(Constants.MULTIPLE_SPECIMEN_LABEL_MAP_KEY, labels);
 				}
-				
+*/				
 				request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME);
 			}
 
@@ -1503,12 +1503,13 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			setDefaultValuesInMap(dataListsMap);
 		}
 		
-		private List<String> generateLables(String specimenCollectionGroupName, int count) throws BizLogicException
+/*		private List<String> generateLables(String specimenCollectionGroupName, int count) throws BizLogicException
 		{
 			Map inputMap = new HashMap();
 			inputMap.put(Constants.SCG_NAME_KEY, specimenCollectionGroupName);
-			return SpecimenLabelGeneratorFactory.getInstance().getNextAvailableSpecimenlabel(inputMap, count);
-		}
+			//return SpecimenLabelGeneratorFactory.getInstance().getNextAvailableSpecimenlabel(inputMap, count);
+			return new ArrayList<String>(); //falguni
+		}*/
 		
 		/**
 		 * This method sets the defaults values in the given Map.

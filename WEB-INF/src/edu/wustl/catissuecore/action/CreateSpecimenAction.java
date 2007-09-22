@@ -154,8 +154,8 @@ public class CreateSpecimenAction extends SecureAction
 					inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, createForm.getParentSpecimenLabel());
 					inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, String.valueOf(parentSpecimenID));
 
-					SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
-					createForm.setLabel(abstractSpecimenGenerator.getNextAvailableDeriveSpecimenlabel(inputMap));
+					//SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
+					//createForm.setLabel(abstractSpecimenGenerator.getNextAvailableDeriveSpecimenlabel(inputMap));
 				}
 				
 				if (forwardToHashMap == null && ((createForm.getCheckedButton().equals("1") && createForm

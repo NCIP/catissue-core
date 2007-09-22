@@ -502,7 +502,7 @@ public class AliquotAction extends SecureAction
 
 		if (Constants.PAGEOF_ALIQUOT_SUMMARY.equals(pageOf))
 		{
-			Map map = (Map) request.getAttribute("forwardToHashMap");
+			Map map = (Map) request.getAttribute("forwardToHashMap");		
 
 			if (map != null)
 			{
@@ -959,20 +959,23 @@ public class AliquotAction extends SecureAction
          * Reviewer: Sachin Lale
          * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set. 
     	 */
-		SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
+//		Commented by Falguni -As now label generation is done in Biz logic
+		/*SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
 		
 		HashMap inputMap = new HashMap();
 		inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, form.getSpecimenLabel());
 		inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, form.getSpecimenID());
 		
 		List<String> aliquotLabels = abstractSpecimenGenerator.getNextAvailableAliquotSpecimenlabel(inputMap, aliquotCount);
-
+		*/
 		for (int i = 1; i <= aliquotCount; i++)
 		{
 			String qtyKey = "Specimen:" + i + "_quantity";
 			aliquotMap.put(qtyKey, distributedQuantity);
-			String labelKey = "Specimen:" + i + "_label";
-			aliquotMap.put(labelKey, aliquotLabels.get(i-1));
+//			String labelKey = "Specimen:" + i + "_label";
+//			aliquotMap.put(labelKey,"Abc");
+//			aliquotMap.put(labelKey, aliquotLabels.get(i-1));
+			
 		}
 
 		form.setAliquotMap(aliquotMap);
