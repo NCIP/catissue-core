@@ -132,7 +132,7 @@
         />
 
 		<property
-            name="iscollectionProtocolRequirement"
+            name="isCollectionProtocolRequirement"
             type="boolean"
             update="true"
             insert="true"

@@ -204,16 +204,16 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	protected String applyChangesTo=Constants.APPLY_NONE;
 
 	protected String collectionStatus;
-	protected Boolean iscollectionProtocolRequirement;
+	protected Boolean isCollectionProtocolRequirement;
 	
 	
-	public Boolean getIscollectionProtocolRequirement() {
-		return iscollectionProtocolRequirement;
+	public Boolean getIsCollectionProtocolRequirement() {
+		return isCollectionProtocolRequirement;
 	}
 
-	public void setIscollectionProtocolRequirement(
+	public void setIsCollectionProtocolRequirement(
 			Boolean collectionProtocolRequirement) {
-		this.iscollectionProtocolRequirement = collectionProtocolRequirement;
+		this.isCollectionProtocolRequirement = collectionProtocolRequirement;
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 	public Specimen()
 	{
-		iscollectionProtocolRequirement = false;
+		isCollectionProtocolRequirement = false;
 	}
 
 	//Constructor
