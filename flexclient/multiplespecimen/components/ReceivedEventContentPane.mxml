@@ -44,8 +44,8 @@
 </components:MyCanvas>
 <components:MyCanvas>
 		<mx:HBox>
-		<mx:ComboBox id="receivedHour" dataProvider="{MetadataModel.getInstance().hourListArray}"/>
-		<mx:ComboBox id="receivedMinute" dataProvider="{MetadataModel.getInstance().miniuteListArray}"/>
+		<mx:ComboBox id="receivedHour" dataProvider="{MetadataModel.getInstance().hourListArray}"/><mx:Label text="Hr"/>
+		<mx:ComboBox id="receivedMinute" dataProvider="{MetadataModel.getInstance().miniuteListArray}"/><mx:Label text="Min"/>
 		</mx:HBox>
 </components:MyCanvas>
 
