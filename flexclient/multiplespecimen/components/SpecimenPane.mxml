@@ -304,7 +304,7 @@
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">
 
 		<components:MyCanvas id="createdOnBox">
-			<mx:DateField id="spCreatedOn" formatString="{Constants.DATE_FORMAT}" keyDown="spCreatedOn.open()"/>
+			<mx:DateField id="spCreatedOn" formatString="{Constants.DATE_FORMAT}" yearNavigationEnabled="true" keyDown="spCreatedOn.open()"/>
 		</components:MyCanvas>
 	
 		<components:MyCanvas>
