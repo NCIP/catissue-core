@@ -10,8 +10,10 @@ package edu.wustl.catissuecore.annotations;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -27,29 +29,26 @@ public class SpecimenAnnotationCondition implements ICPCondition
     {
         List<Long> annotationsList = new ArrayList<Long>();
         DefaultBizLogic bizLogic = new DefaultBizLogic();
-        List objectList = new ArrayList();
         try
         {
             if(entityInstanceId!=null || !entityInstanceId.equals(""))
-            {
-                CollectionProtocol  collectionProtocol=(CollectionProtocol) bizLogic.retrieveAttribute(Specimen.class.getName(),entityInstanceId,"specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol");
-                if(collectionProtocol != null && collectionProtocol.getId() != null)
-                annotationsList.add(collectionProtocol.getId());
-            }
-        /*    if(objectList!=null && !objectList.isEmpty())
-            {
-                Specimen specimen = (Specimen) objectList.get(0);
-                if(specimen.getSpecimenCollectionGroup()!=null)
+            {            
+                SpecimenCollectionGroup  specimenCollecetionGrp=(SpecimenCollectionGroup) 
+                bizLogic.retrieveAttribute(Specimen.class.getName(),entityInstanceId,
+                        "specimenCollectionGroup");
+                
+                if (specimenCollecetionGrp != null)
                 {
-                    SpecimenCollectionGroup spg =(SpecimenCollectionGroup)   specimen.getSpecimenCollectionGroup();
-                    if(spg.getCollectionProtocolRegistration()!=null)
-                    {                           
-                        CollectionProtocolRegistration cpReg = (CollectionProtocolRegistration)spg.getCollectionProtocolRegistration();
-                        if(cpReg!=null && cpReg.getCollectionProtocol()!=null && cpReg.getCollectionProtocol().getId()!=null )
-                            annotationsList.add(cpReg.getCollectionProtocol().getId());
-                    }
+                    CollectionProtocol collectionProtocol = (CollectionProtocol) bizLogic
+                            .retrieveAttribute(SpecimenCollectionGroup.class
+                                    .getName(), specimenCollecetionGrp.getId(),
+                                    "collectionProtocolRegistration.collectionProtocol");
+
+                    if (collectionProtocol != null
+                            && collectionProtocol.getId() != null)
+                        annotationsList.add(collectionProtocol.getId());
                 }
-            }*/
+            }
         }
         catch(DAOException e){}
         
