@@ -123,8 +123,7 @@ public class SaveQueryForm extends AbstractActionForm
 		Validator validator = new Validator();
 		if (title == null || validator.isEmpty(title))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-					ApplicationProperties.getValue("errors.queryName.required")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", "Title"));
 		}
 		return errors;
 	}
