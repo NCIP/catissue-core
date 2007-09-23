@@ -34,6 +34,9 @@ public class ViewSpecimenSummaryAction extends Action {
 			ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 			String eventId = summaryForm.getEventId();
 
+			Object obj = request.getAttribute("SCGFORM");
+			request.setAttribute("SCGFORM", obj);
+			
 			if (request.getAttribute("RequestType")!=null)
 			{
 				summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
@@ -70,7 +73,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			if (specimenMap != null) {
 				populateSpecimenSummaryForm(summaryForm, specimenMap);
 			} 
-			//summaryForm.setEventId(eventId);
+
 			String pageOf = request.getParameter(Constants.PAGEOF);
 			if(pageOf != null && ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(summaryForm.getRequestType()))
 			{

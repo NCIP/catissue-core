@@ -4058,7 +4058,7 @@ PUBLIC
 		validate="true"
 		input="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"
 		scope="request">
-		<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
+		<forward name="success" path="/AnticipatorySpecimenView.do" />
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->			
 		<!--<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			-->
@@ -4389,7 +4389,7 @@ PUBLIC
 		</action>
 		<action path="/AnticipatorySpecimenView"
                 type="edu.wustl.catissuecore.action.AnticipatorySpecimenViewAction"
-                name="viewSpecimenSummaryForm"
+                name="specimenCollectionGroupForm"
                 validate="false"
                 scope="request">
 					<forward name="success" path="/GenericSpecimenSummary.do" />
@@ -4402,9 +4402,17 @@ PUBLIC
                 name="viewSpecimenSummaryForm"
                 validate="false"
                 scope="request">
-					<forward name="success" path="/pages/SpecimenSummary.jsp" />
-					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
-	                <forward name="failure" path="/Home.do" />
+					<forward name="success" path="/redirecttoSCG.do" />	
+					<forward name="failure" path="/Home.do" />
+       </action>    
+
+       <action path="/redirecttoSCG"
+                type="edu.wustl.catissuecore.action.RedirectToSCGAction"
+                name="specimenCollectionGroupForm"
+                validate="false"
+                scope="request">
+					<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />	                
+					<forward name="failure" path="/Home.do" />
        </action>    
 
 		<action path="/SubmitSpecimenCollectionProtocol"

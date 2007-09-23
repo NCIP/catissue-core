@@ -64,6 +64,8 @@ public class UpdateSpecimenStatusAction extends Action {
 				bizLogic.setSpecimenCollected(specimen, sessionDataBean);
 			}
 		}
+		Object obj = request.getAttribute("SCGFORM");
+		request.setAttribute("SCGFORM", obj);		
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
