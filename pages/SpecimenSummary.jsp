@@ -75,13 +75,13 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
 							<logic:equal name="specimen" property="readOnly" value="false">
 								<td>
-								<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" />						
+									<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" />					
 								</td>
 							</logic:equal>
 							<logic:equal name="specimen" property="readOnly" value="true">
 								<td>
-								Collected!
-								<html:hidden name="specimen" indexed="true" property="checkedSpecimen" />						
+									<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
+									<html:hidden name="specimen" indexed="true" property="checkedSpecimen" />					
 								</td>
 							</logic:equal>
 							<html:hidden name="specimen" indexed="true" property="readOnly"/>
