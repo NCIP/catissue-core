@@ -407,6 +407,7 @@ public class DAGPanel {
 	{
 		List<DAGNode> nodeList = new ArrayList<DAGNode>();
 		IQuery query =(IQuery)m_session.getAttribute(DAGConstant.QUERY_OBJECT);
+		m_queryObject.setQuery(query);
 		IConstraints constraints = query.getConstraints();
 
 		HashSet<IExpressionId> visibleExpression = new HashSet<IExpressionId>();
