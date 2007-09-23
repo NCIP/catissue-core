@@ -593,7 +593,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		catch (Exception e)
 		{
-			//throw handleSMException(e);
+			e.printStackTrace();
+			throw new DAOException(e.getMessage());
 		}
 
 	}
@@ -1199,7 +1200,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 				 specimenCollectionGroupObj = new SpecimenCollectionGroup();
 				 specimenCollectionGroupObj.setId((Long)list.get(0));*/
-				if(specimen.getSpecimenCollectionGroup().getGroupName()!= null && !specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING)){
+				if(specimen.getSpecimenCollectionGroup().getGroupName()!= null && !Constants.COLLECTION_STATUS_PENDING.equalsIgnoreCase(specimen.getCollectionStatus())){
 					List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
 					SpecimenCollectionGroup scg = (SpecimenCollectionGroup) spgList.get(0);				
 					specimenCollectionGroupObj = (SpecimenCollectionGroup)HibernateMetaData.getProxyObjectImpl(scg);
