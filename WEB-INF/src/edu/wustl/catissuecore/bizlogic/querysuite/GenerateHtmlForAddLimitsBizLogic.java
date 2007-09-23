@@ -728,18 +728,18 @@ public class GenerateHtmlForAddLimitsBizLogic {
 		String componentId = generateComponentName(attribute);
 		if (operatorsList != null && operatorsList.size() != 0) {
 			html
-					.append("\n<td width='15%' class=\"dropdownQuery\" valign='top' >");
+					.append("\n<td width='15%' class=\"PermissibleValuesQuery\" valign='top' >");
 			AttributeTypeInformationInterface attrTypeInfo = attribute
 					.getAttributeTypeInformation();
 			if (attrTypeInfo instanceof DateAttributeTypeInformation) {
 				html
-						.append("\n<select  class=\"formFieldSized\" style=\"width:150px; display:block;\" name=\""
+						.append("\n<select  class=\"PermissibleValuesQuery\" style=\"width:150px; display:block;\" name=\""
 								+ componentId
 								+ "_combobox\" onChange=\"operatorChanged('"
 								+ componentId + "','true')\">");
 			} else {
 				html
-						.append("\n<select class=\"formFieldSized\" style=\"width:150px; display:block;\" name=\""
+						.append("\n<select class=\"PermissibleValuesQuery\" style=\"width:150px; display:block;\" name=\""
 								+ componentId
 								+ "_combobox\" onChange=\"operatorChanged('"
 								+ componentId + "','false')\">");
@@ -750,11 +750,11 @@ public class GenerateHtmlForAddLimitsBizLogic {
 				String operator = iter.next().toString();
 				String op1 = operator.replace(" ", "");
 				if (op1.equalsIgnoreCase(op)) {
-					html.append("\n<option class=\"dropdownQuery\" value=\""
+					html.append("\n<option class=\"PermissibleValuesQuery\" value=\""
 							+ operator + "\" SELECTED>" + operator
 							+ "</option>");
 				} else {
-					html.append("\n<option class=\"dropdownQuery\" value=\""
+					html.append("\n<option class=\"PermissibleValuesQuery\" value=\""
 							+ operator + "\">" + operator + "</option>");
 				}
 			}
