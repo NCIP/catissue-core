@@ -151,7 +151,9 @@ public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 				" edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg ,"+
 				" edu.wustl.catissuecore.domain.Site as s"+
 				
-				" where cpr.id = "+cprid + " and scg.id in elements(cpr.specimenCollectionGroupCollection)";
+				" where cpr.id = "+cprid + "  and scg.id in elements(cpr.specimenCollectionGroupCollection)" +
+				" and (scg.surgicalPathologyNumber="+null+
+				" or scg.surgicalPathologyNumber='')";
 				
 				
 				
