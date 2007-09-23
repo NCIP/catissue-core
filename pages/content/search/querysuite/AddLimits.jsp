@@ -68,13 +68,13 @@
 							
 												<tr  id="rowMsg">
 													<td id="validationMessagesSection"  class='validationMessageCss'>
-														<div id="validationMessagesRow"   class='validationMessageCss' style="overflow:auto; width:820; height:50;display:none"></div>
+														<div id="validationMessagesRow"   class='validationMessageCss' style="overflow:auto; height:50;display:none"></div>
 													</td>
 												</tr>
 												
 												<tr id="AddLimitsButtonMsg" style="color:#000000" border="0">
 													<td id="AddLimitsButtonSection" height="30" >
-														<div id="AddLimitsButtonRow"  border="0" style=" width:900; height:25;color:#000000;display:none"></div>
+														<div id="AddLimitsButtonRow"  border="0" style="height:25;color:#000000;display:none"></div>
 													</td>
 												</tr>
 									
