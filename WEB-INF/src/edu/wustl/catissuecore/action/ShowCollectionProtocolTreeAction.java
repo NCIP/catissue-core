@@ -93,7 +93,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		}
 		String identifier = specimenRequirementBean.getUniqueIdentifier();
 			
-		String displayName= Constants.SPECIMEN+specimenRequirementBean.getUniqueIdentifier();
+		String displayName= Constants.SPECIMEN+"_"+specimenRequirementBean.getUniqueIdentifier();
 		
 		addNode(objectName, displayName, parentIdentifier, identifier, parentObjectname, treeData);
 		
