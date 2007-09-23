@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
 import edu.wustl.catissuecore.bean.ConceptHighLightingBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
@@ -115,7 +116,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		String colName=new String(Constants.SYSTEM_IDENTIFIER);
 		long colValue=id;	
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		SpecimenCollectionGroup specimenCollectionGroup=null;
+		Long specimenCollectionGroupId=null;
 		
 		//For PHI
 		//SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
@@ -125,8 +126,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		//if page is of Specimen Collection group then the domain object is SpecimenCollectionGroup
 		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN_COLLECTION_GROUP)|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_SCG_CP_QUERY))
 		{
-			className=SpecimenCollectionGroup.class.getName();
-			List scgList=defaultBizLogic.retrieve(className, colName, colValue);
+//			className=SpecimenCollectionGroup.class.getName();
+//			List scgList=defaultBizLogic.retrieve(className, colName, colValue);
 			
 			//Passing scg list to the filter
 			//List scgObjList = new ArrayList();
@@ -139,7 +140,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			//	Logger.out.debug(""+e);
 			//}
 			//SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgObjList.get(0);
-			specimenCollectionGroup=(SpecimenCollectionGroup)scgList.get(0);
+			specimenCollectionGroupId=colValue;
 			
 			//IdentifiedSurgicalPathologyReport identifiedReport = scg.getIdentifiedSurgicalPathologyReport();			
 			//if(identifiedReport.getId() == null)
@@ -174,7 +175,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			
 			//Specimen specimen=(Specimen)specimenObjList.get(0);
 			Specimen specimen=(Specimen)specimenList.get(0);
-			specimenCollectionGroup=(SpecimenCollectionGroup)specimen.getSpecimenCollectionGroup();
+			specimenCollectionGroupId=specimen.getSpecimenCollectionGroup().getId();
 			
 			//IdentifiedSurgicalPathologyReport identifiedReport = scg.getIdentifiedSurgicalPathologyReport();			
 			//if(identifiedReport.getId() == null)
@@ -198,7 +199,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			List participantList=defaultBizLogic.retrieve(className, colName, colValue);
 			Participant participant=(Participant)participantList.get(0);
 //			viewSPR.setParticipant(participant);
-			List scgList=getSCGList(participant);
+			ParticipantBizLogic bizLogic=(ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
+			List scgList=bizLogic.getSCGList(participant);
 			//For PHI
 			//List scgObjList = new ArrayList();
 			//try
@@ -215,7 +217,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 //				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgObjList.get(0);
 			if(scgList!=null && scgList.size()>0)
 			{
-				specimenCollectionGroup=(SpecimenCollectionGroup)scgList.get(0);
+				Object[] temp=(Object[])scgList.get(0);
+				specimenCollectionGroupId=(Long)temp[0];
 			}
 			
 				//IdentifiedSurgicalPathologyReport identifiedReport = scg.getIdentifiedSurgicalPathologyReport();				
@@ -271,8 +274,10 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 //				DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =quarantineEventParameter.getDeIdentifiedSurgicalPathologyReport();
 //				viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
 //			}
-		if(specimenCollectionGroup!=null)
+		if(specimenCollectionGroupId!=null)
 		{
+			SpecimenCollectionGroup specimenCollectionGroup=new SpecimenCollectionGroup();
+			specimenCollectionGroup.setId(specimenCollectionGroupId);
 			try
 			{
 				defaultBizLogic.populateUIBean(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(), viewSPR);
@@ -297,13 +302,13 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	private List getReportIdList(List scgList)throws DAOException
 	{
 		List reportIDList=new ArrayList();
-		SpecimenCollectionGroup scg;
+		Object[] obj=null;
 		for(int i=0;i<scgList.size();i++)
 		{
-			scg=(SpecimenCollectionGroup)scgList.get(i);
-			if(scg.getIdentifiedSurgicalPathologyReport()!=null)
+			obj=(Object[])scgList.get(i);
+			if(obj[1]!=null || !((String)obj[1]).equals(""))
 			{
-				NameValueBean nb=new NameValueBean(scg.getSurgicalPathologyNumber(),scg.getIdentifiedSurgicalPathologyReport().getId().toString());
+				NameValueBean nb=new NameValueBean(obj[1],((Long)obj[0]).toString());
 				reportIDList.add(nb);
 			}		
 		}
@@ -397,38 +402,6 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			viewSPR.setAllValues(deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport());
 		}
 	}
-	
-	 private List<SpecimenCollectionGroup> getSCGList(Participant participant)throws DAOException
-    {
-    	// FIRE ONLY ONE QUERY
-    	
-    	List<SpecimenCollectionGroup> scgList=new ArrayList<SpecimenCollectionGroup>();
-    	DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-    	// get all CollectionProtocolRegistration for participant
-    	String sourceObjectName=CollectionProtocolRegistration.class.getName();
-		String[] selectColumnName=new String[]{Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnName=new String[]{Constants.COLUMN_NAME_PARTICIPANT_ID};
-		String[] whereColumnValue=new String[]{participant.getId().toString()};
-		String[] whereColumnCondition=new String[]{"="};
-		String joinCondition="";
-    	Collection cprCollection=(List)defaultBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);	
-		Long cprID;
-		Iterator cprIter=cprCollection.iterator();
-		// iterate on all colletionProtocolRegistration for participant
-		while(cprIter.hasNext())
-		{
-			cprID=(Long)cprIter.next();
-			Collection tempSCGCollection=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(), cprID, Constants.COLUMN_NAME_SCG_COLL);
-			Iterator scgIter=tempSCGCollection.iterator();
-			// add all the scg associated with cpr to scgList
-			while(scgIter.hasNext())
-			{
-				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgIter.next();
-				scgList.add(scg);
-			}
-		}
-    	return scgList;
-    }
 }
 
 
