@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
@@ -44,11 +45,13 @@ public class AnticipatorySpecimenViewAction extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
-		ViewSpecimenSummaryForm specimenSummaryForm =
-			(ViewSpecimenSummaryForm)form;
+		SpecimenCollectionGroupForm specimenCollectionGroupForm=
+			(SpecimenCollectionGroupForm)form;
 		HttpSession session = request.getSession();
-		String specId = (String)request.getParameter("SpecId");
-		Long id = new Long(specId);
+//		String specId = (String)request.getParameter("SpecId");
+		
+		
+		Long id = specimenCollectionGroupForm.getId();
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		SessionDataBean bean = new SessionDataBean(); 
@@ -74,7 +77,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 			session
 			.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);			
 			((AbstractDAO)dao).closeSession();
-			specimenSummaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
+			request.setAttribute("RequestType",ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		

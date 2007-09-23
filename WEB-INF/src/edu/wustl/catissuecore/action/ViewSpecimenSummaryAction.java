@@ -34,6 +34,11 @@ public class ViewSpecimenSummaryAction extends Action {
 			ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 			String eventId = summaryForm.getEventId();
 
+			if (request.getAttribute("RequestType")!=null)
+			{
+				summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
+			}
+				
 			if (eventId == null) {
 				eventId = (String) request
 						.getParameter(Constants.COLLECTION_PROTOCOL_EVENT_ID);
@@ -41,10 +46,13 @@ public class ViewSpecimenSummaryAction extends Action {
 //				new Generatedata().generate(request);
 			}
 			
-			if (summaryForm.getSpecimenList()!= null)
+			if (summaryForm.getSpecimenList()!= null  &&
+					ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS
+					.equals(summaryForm.getRequestType()))
 			{
 				updateSessionBean(summaryForm, session);
 			}
+
 			if(request.getParameter("save")!=null)
 			{
 				return mapping.findForward("updateSpecimenStatus");
@@ -62,9 +70,9 @@ public class ViewSpecimenSummaryAction extends Action {
 			if (specimenMap != null) {
 				populateSpecimenSummaryForm(summaryForm, specimenMap);
 			} 
-			summaryForm.setEventId(eventId);
+			//summaryForm.setEventId(eventId);
 			String pageOf = request.getParameter(Constants.PAGEOF);
-			if(pageOf != null)
+			if(pageOf != null && ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(summaryForm.getRequestType()))
 			{
 				request.setAttribute(Constants.PAGEOF,pageOf);
 				return mapping.findForward(pageOf);

@@ -64,7 +64,7 @@ public class UpdateSpecimenStatusAction extends Action {
 				bizLogic.setSpecimenCollected(specimen, sessionDataBean);
 			}
 		}
-		return null;
+		return mapping.findForward(Constants.SUCCESS);
 	}
 
 	/**
