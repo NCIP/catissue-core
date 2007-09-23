@@ -10,7 +10,7 @@
     <class
         name="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup"
         table="CATISSUE_ABSTRACT_SPECIMEN_COLL_GROUP"
-		lazy="false"
+		lazy="true"
     >
 
         <id
