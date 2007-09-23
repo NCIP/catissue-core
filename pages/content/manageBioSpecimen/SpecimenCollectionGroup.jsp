@@ -389,13 +389,14 @@
 			
 			if(restrictCheckbox.checked)
 			{
-				submitButton.disabled = true;
-				addSpecimenButton = false;
-				submitAndAddMultipleButton.disabled = false;
+				submitButton.disabled = false;
+				addSpecimenButton.disabled = true;
+				submitAndAddMultipleButton.disabled = true;
 			}
 			else
 			{
 				disablebuttons();
+				submitButton.disabled = true;
 			}
 		}
 				
