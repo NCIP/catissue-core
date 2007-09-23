@@ -507,6 +507,7 @@ PUBLIC
 		</action>
 		<action path="/LoadSaveQueryPage"
             type="edu.wustl.catissuecore.action.querysuite.LoadSaveQueryPageAction"
+            name="saveQueryForm"
             validate="false"
             scope="request">
             <forward name="success" path="/pages/content/search/querysuite/SavedQueryConditionPage.jsp"/>
@@ -514,9 +515,10 @@ PUBLIC
         <action path="/SaveQueryAction"
 			type="edu.wustl.catissuecore.action.querysuite.SaveQueryAction"
 			name="saveQueryForm"
-			validate="false"
+			validate="true"
+			input="/LoadSaveQueryPage.do"
 			scope="request">
-			<forward name="success" path="/RetrieveQueryAction.do"/>
+			<forward name="success" path="/LoadSaveQueryPage.do"/>
 			<forward name="failure" path="/LoadSaveQueryPage.do"/>
 		</action>
 		<action path="/RetrieveQueryAction"
