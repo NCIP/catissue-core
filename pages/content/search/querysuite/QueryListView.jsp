@@ -2,13 +2,14 @@
 
 <%-- TagLibs --%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
 
 <%-- Imports --%>
 <%@
 	page language="java" contentType="text/html"
-	import="edu.wustl.catissuecore.util.global.Constants"%>
+	import="edu.wustl.catissuecore.util.global.Constants"
+%>
 
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/queryModule.js"></script>

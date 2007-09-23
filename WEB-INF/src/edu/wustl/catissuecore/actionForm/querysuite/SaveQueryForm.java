@@ -34,15 +34,16 @@ public class SaveQueryForm extends AbstractActionForm
 	private String description;
 
 	private Long queryId;
-	
+
 	private String queryString;
-	
-	
-	public String getQueryString() {
+
+	public String getQueryString()
+	{
 		return queryString;
 	}
 
-	public void setQueryString(String queryString) {
+	public void setQueryString(String queryString)
+	{
 		this.queryString = queryString;
 	}
 
@@ -122,7 +123,7 @@ public class SaveQueryForm extends AbstractActionForm
 		Validator validator = new Validator();
 		if (title == null || validator.isEmpty(title))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.queryName.required",
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("errors.queryName.required")));
 		}
 		return errors;
