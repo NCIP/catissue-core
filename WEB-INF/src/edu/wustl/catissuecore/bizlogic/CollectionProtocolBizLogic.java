@@ -134,7 +134,17 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
 			SpecimenCollectionRequirementGroup collectionRequirementGroup =
 							collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+			
 			dao.insert(collectionRequirementGroup, sessionDataBean, true, true);
+			try
+			{
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(collectionRequirementGroup),
+						getDynamicGroups(collectionRequirementGroup));
+			}
+			catch (SMException e)
+			{
+				throw handleSMException(e);
+			}
 			
 			dao.insert(collectionProtocolEvent, sessionDataBean, true, true);
 			Collection specimenCollection = collectionRequirementGroup.getSpecimenCollection();
@@ -145,6 +155,17 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 	}
 
+	private Set getProtectionObjects(AbstractDomainObject obj)
+	{
+		Set protectionObjects = new HashSet();
+
+		SpecimenCollectionRequirementGroup specimenCollectionGroup = (SpecimenCollectionRequirementGroup) obj;
+		protectionObjects.add(specimenCollectionGroup);
+
+		Logger.out.debug(protectionObjects.toString());
+		return protectionObjects;
+	}
+	
 	/**
 	 * @param bizLogic used to call business logic of Specimen.
 	 * @param dao Data access object to insert Specimen Collection groups

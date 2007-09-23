@@ -247,14 +247,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				protectionObjects.add(specimen.getSpecimenCharacteristics());
 			}
-//			try
-//			{
-//				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
-//			}
-//			catch (SMException e)
-//			{
-//				throw handleSMException(e);
-//			}
+			try
+			{
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
+			}
+			catch (SMException e)
+			{
+				throw handleSMException(e);
+			}
 
 		}
 	}
