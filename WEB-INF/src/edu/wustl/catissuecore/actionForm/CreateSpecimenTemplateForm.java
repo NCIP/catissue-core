@@ -660,10 +660,18 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				{
 	               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.aliquotstoragelocation")));
 				}
+				if(validator.isNumeric(this.storageLocationForAliquotSpecimen))
+				{
+	               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.aliquotstoragelocation")));
+				}
 			}
 			if (this.storageLocationForSpecimen.equals(""))
 			{
                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.specimenstoragelocation")));
+			}
+			if(validator.isNumeric(this.storageLocationForSpecimen))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.specimenstoragelocation")));
 			}
 			if (this.pathologicalStatus.equals(""))
             {

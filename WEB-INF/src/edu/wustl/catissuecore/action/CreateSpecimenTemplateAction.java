@@ -53,14 +53,14 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		//Gets the value of the operation parameter.
 		String operation = (String) request.getParameter(Constants.OPERATION);
 		String pageOf = (String)request.getParameter("pageOf");
-		request.setAttribute("pageOf", pageOf);
 		//This will give node id when flow is from Specimen Tree View.
 		String mapkey = (String)request.getParameter("key");
 		String nodeId = (String)request.getParameter("nodeId");
 		if(pageOf!=null&&pageOf.equalsIgnoreCase("error"))
 		{
-			mapkey = null;
+			mapkey=null;
 		}
+		request.setAttribute("pageOf", pageOf);
 		//Sets the operation attribute to be used in the Edit/View Specimen Page in Advance Search Object View. 
 		request.setAttribute(Constants.OPERATION, operation);
 		
@@ -197,7 +197,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		session.setAttribute("nodeId",nodeId);
 		
 		setUserInForm(request,operation,createSpecimenTemplateForm);
-		if(operation.equals(Constants.EDIT))
+		if(operation.equals(Constants.EDIT)&&!pageOf.equals("error"))
 		{
 			initCreateSpecimenTemplateForm(createSpecimenTemplateForm, mapkey, request);
 		}

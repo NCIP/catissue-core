@@ -258,7 +258,6 @@ if(form != null)
 	function saveSpecimens()
 	{
 		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&redirectTo=defineEvents&key="+"<%=mapKey%>"+"&operation="+"<%=operation%>";
-		//alert(action);
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
@@ -270,7 +269,6 @@ if(form != null)
 	function ViewSummary()
 	{
 		var action ="GenericSpecimenSummary.do?Event_Id="+"<%=mapKey%>";
-		//alert(action);
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}

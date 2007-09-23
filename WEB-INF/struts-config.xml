@@ -4359,7 +4359,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.SaveSpecimenRequirementAction"
 			name="createSpecimenTemplateForm"
 			validate="true"
-			input="/CreateSpecimenTemplate.do?operation=add&amp;pageOf=error">
+			input="/CreateSpecimenTemplate.do?pageOf=error">
 			<forward name="success" path="/CreateSpecimenTemplate.do?operation=add"/>
 		</action>
 		
