@@ -401,9 +401,8 @@ public abstract class QueryModuleUtil
 							{
 								status = NO_RESULT_PRESENT;
 								return status;
-							} else if(resultsSize > Variables.maximumTreeNodeLimit)
+							} else if(resultsSize-1 > Variables.maximumTreeNodeLimit)
 							{
-								System.out.println();
 								status = QueryModuleUtil.RESULTS_MORE_THAN_LIMIT;
 								String resultSizeStr = resultsSize-1 +"";
 								session.setAttribute(Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS,resultSizeStr);
