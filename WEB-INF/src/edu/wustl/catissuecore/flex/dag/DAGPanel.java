@@ -492,11 +492,17 @@ public class DAGPanel {
 				
 				
 			/*	Adding Dag Path in each visible list which have childrens*/
+				String pathStr =new Long(pathId).toString();
 			  	DAGPath dagPath  = new DAGPath();
 				dagPath.setToolTip(getPathDisplayString(pathObj));
-				dagPath.setId( new Long(pathId).toString());
+				dagPath.setId(pathStr);
 				dagPath.setSourceExpId(node.getExpressionId());
 				dagPath.setDestinationExpId(dagNode.getExpressionId());
+				
+				String key =pathStr+"_"+node.getExpressionId()+"_"+dagNode.getExpressionId();
+				m_pathMap.put(key,pathObj);
+				
+				
 				node.setDagpathList(dagPath);
 				node.setAssociationList(dagNode);
 				intraModelAssociationList.clear();
