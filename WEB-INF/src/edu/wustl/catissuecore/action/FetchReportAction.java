@@ -76,7 +76,11 @@ public class FetchReportAction extends BaseAction
 		DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_DEID_REPORT);
 		Site source=(Site)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_REPORT_SOURCE);
 		TextContent identifiedReportText=(TextContent)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_TEXT_CONTENT);
-		TextContent deidReportText=(TextContent)defaultBizLogic.retrieveAttribute(DeidentifiedSurgicalPathologyReport.class.getName(), deidReport.getId(), Constants.COLUMN_NAME_TEXT_CONTENT);
+		TextContent deidReportText=null;
+		if(deidReport!=null)
+		{
+			deidReportText=(TextContent)defaultBizLogic.retrieveAttribute(DeidentifiedSurgicalPathologyReport.class.getName(), deidReport.getId(), Constants.COLUMN_NAME_TEXT_CONTENT);
+		}
 		List conceptBeanList=ViewSPRUtil.getConceptBeanList(request, deidReport);
 		String conceptBeans=getConceptBeans(conceptBeanList);
 		
@@ -107,6 +111,10 @@ public class FetchReportAction extends BaseAction
 		if(deidReportText!=null) 
 		{
 			xmlData.append(deidReportText.getData());
+		}
+		else
+		{
+			xmlData.append("");
 		}
 		xmlData.append("</DeIdentifiedReportTextContent>");
 		xmlData.append("<JavaScriptFunction>");
