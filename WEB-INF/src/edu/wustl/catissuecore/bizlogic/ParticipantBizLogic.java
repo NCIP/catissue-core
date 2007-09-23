@@ -897,7 +897,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 */
 	public List getSCGList(Participant participant) throws DAOException
 	{
-		String scgHql = "select scg.id, scg.surgicalPathologyNumber "+
+		String scgHql = "select scg.id, scg.surgicalPathologyNumber, scg.identifiedSurgicalPathologyReport.id "+
 	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
 		" edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"+
 		" edu.wustl.catissuecore.domain.Participant as p "+
