@@ -214,6 +214,15 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		//Alert.show("Intialized .....")
 		rpcService.removeEventListener(ResultEvent.RESULT,initFlexInterfaceHandler,false);
 	}
+	
+	private function restoreQueryObjectHandler(event: ResultEvent):void
+	{
+	//	Alert.show("restoring .....")
+		rpcService.removeEventListener(ResultEvent.RESULT,restoreQueryObjectHandler,false);
+		rpcService.addEventListener(ResultEvent.RESULT,repaintHandler);
+	 	rpcService.repaintDAG();
+		
+	}
 	/**
 	
 	**/
@@ -246,8 +255,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			{
 				if(isQuery=="true")
 				{
-					rpcService.addEventListener(ResultEvent.RESULT,repaintHandler);
-				 	rpcService.repaintDAG();
+					rpcService.addEventListener(ResultEvent.RESULT,restoreQueryObjectHandler);
+					rpcService.restoreQueryObject();
 				}
 				else
 				{
@@ -259,8 +268,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			}
 			else
 		 	{
-		 	 	rpcService.addEventListener("result",repaintHandler);
-			 	rpcService.repaintDAG();
+		 		rpcService.addEventListener(ResultEvent.RESULT,restoreQueryObjectHandler);
+				rpcService.restoreQueryObject();
+		 //	 	rpcService.addEventListener("result",repaintHandler);
+		//	 	rpcService.repaintDAG();
 		    }
 		  
 	}
