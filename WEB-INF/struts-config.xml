@@ -1613,7 +1613,7 @@ PUBLIC
 		<action path="/CreateSpecimen"
 			type="edu.wustl.catissuecore.action.CreateSpecimenAction"
 			name="createSpecimenForm"
-			validate="true"
+			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.createSpecimenDef" />
 			<forward name="failure" path=".catissuecore.createSpecimenDef" />
