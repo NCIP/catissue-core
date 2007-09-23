@@ -36,6 +36,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.lookup.DefaultLookupParameters;
@@ -886,5 +887,37 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	public List getMatchingObjects()
 	{
 		return new ArrayList();
+	}
+	
+	/**
+	 * Executes hql Query and returns the list of associated scg id
+	 * @param participant Participant
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	public List getSCGList(Participant participant) throws DAOException
+	{
+		String scgHql = "select scg.id, scg.surgicalPathologyNumber "+
+	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
+		" edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"+
+		" edu.wustl.catissuecore.domain.Participant as p "+
+		" where p.id = " +participant.getId()+ 
+		" and p.id = cpr.participant.id " +
+		" and scg.id in elements(cpr.specimenCollectionGroupCollection)";
+		
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(null);
+		List list=null;
+		try 
+		{
+			list = dao.executeQuery(scgHql, null, false, null);
+		}
+		catch (ClassNotFoundException e) 
+		{
+			Logger.out.error("Error occured while retrieving SCG List",e);
+			throw new DAOException(e.getMessage());
+		}
+		dao.closeSession();
+		return list;
 	}
 }
