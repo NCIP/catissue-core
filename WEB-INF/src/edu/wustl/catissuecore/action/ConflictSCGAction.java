@@ -113,8 +113,7 @@ public class ConflictSCGAction extends BaseAction
 		List scgList=(List)reportLoaderQueueBizLogic.executeQuery(scgHql);
 		if((scgList!=null) && (scgList).size()>0)
 		{
-			Object scgObj = (Object) scgList.get(0);
-			scgId = (Long) scgObj;
+			scgId  = (Long) scgList.get(0);
 		}	
 		
 		String ispReportHql = "select scg.identifiedSurgicalPathologyReport.textContent.data"+
@@ -124,9 +123,7 @@ public class ConflictSCGAction extends BaseAction
 		List ispReportList=(List)reportLoaderQueueBizLogic.executeQuery(ispReportHql);
 		if((ispReportList!=null) && (ispReportList).size()>0)
 		{
-			Object ispReportObj = (Object) ispReportList.get(0);
-			existingConflictedReport = (String) ispReportObj;
-			
+			existingConflictedReport = (String) ispReportList.get(0);
 		}
 					
 		return existingConflictedReport;
