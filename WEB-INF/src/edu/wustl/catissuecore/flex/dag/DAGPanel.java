@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
@@ -108,9 +109,6 @@ public class DAGPanel {
 		m_session.setAttribute(DAGConstant.QUERY_OBJECT, query);
 
 		try {
-//			Map searchedEntitiesMap = (Map)m_session.getAttribute(Constants.SEARCHED_ENTITIES_MAP); //TODO Comment lines 
-//			EntityInterface entity = (Entity) searchedEntitiesMap.get(entityName);
-			
 			Long entityId = Long.parseLong(entityName);
 			EntityInterface entity =EntityCache.getCache().getEntityById(entityId);
 
@@ -334,7 +332,15 @@ public class DAGPanel {
 		text = text.concat(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(path.getSourceEntity()));
 		for (int i = 0; i < pathList.size(); i++) {
 			text = text.concat(">>");
-			text = text.concat(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(pathList.get(i).getTargetEntity()));
+			IAssociation association = pathList.get(i);
+			if (association instanceof IIntraModelAssociation)
+			{
+				IIntraModelAssociation iAssociation = (IIntraModelAssociation)association;
+				AssociationInterface dynamicExtensionsAssociation = iAssociation.getDynamicExtensionsAssociation();
+				String role = "("+dynamicExtensionsAssociation.getTargetRole().getName()+")";
+				text = text.concat(role+">>");
+			}
+			text = text.concat(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(association.getTargetEntity()));
 		}
 		text = text.concat("");
 		Logger.out.debug(text);
