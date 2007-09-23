@@ -1,5 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
 
 <%-- Imports --%>
 <%@
@@ -11,13 +13,23 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 		<script language="JavaScript" type="text/javascript" src="jss/queryModule.js"></script>
+		<script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
+		<script>
+			function closeSaveQueryWindow()
+			{
+				//var parentWindowForm = window.opener.document.forms[0];
+				//parentWindowForm.action = "RetreiveQueryAction.do";
+				//parentWindowForm.submit();
+				
+				window.self.close();
+			}
+		</script>
+		
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>
 			<bean:message key="savequery.conditionInformationTitle"/>
 		</title>
 	</head>
-
-	
 
 	<body>
 		<html:errors/>
@@ -82,9 +94,16 @@
 					<td align="right">
 					    <input type="hidden" name="queryString" id="queryString" value=""/>
 					    <input type="hidden" name="buildQueryString" id="buildQueryString" value=""/>
-						<input type="button" name="preview" value="Preview"/>
-						<input type="button" name="save" value="Save" onClick="produceSavedQuery()"/>
-						<input type="button" name="cancel" value="Cancel" onClick="window.close();"/>
+						<input type="button" name="preview" value="Preview" disabled='true'/>
+						<c:choose>
+							<c:when test="${querySaved eq 'true'}">
+								<input type="button" name="close" value="Close" onClick="closeSaveQueryWindow()"/>
+							</c:when>
+							<c:otherwise>
+								<input type="button" name="save" value="Save" onClick="produceSavedQuery()"/>
+								<input type="button" name="cancel" value="Cancel" onClick="window.close();"/>
+							</c:otherwise>
+						</c:choose>
 					</td>
 				</tr>
 			</table>
