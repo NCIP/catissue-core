@@ -925,7 +925,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			+ CollectionProtocolRegistration.class.getName() +" as cpr where cpr.collectionProtocol.id = "
 			+ cpId + " and cpr.participant.id = "+participantId 
 			+") and scg.collectionProtocolEvent.id = "+eventId
-			+" and scg.activityStatus = '"+Constants.ACTIVITY_STATUS_ACTIVE+"'";
+			+" and scg.activityStatus <> '"+Constants.ACTIVITY_STATUS_DISABLED+"'";
 		List list = executeQuery(hql);
 		return list;
 	}
@@ -942,7 +942,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	{
 		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.type,sp.collectionStatus	from "
 			+ Specimen.class.getName()
-			+ " as sp where sp.specimenCollectionGroup.id = "+scgId +" and sp.activityStatus = '"+Constants.ACTIVITY_STATUS_ACTIVE+"' order by sp.id";
+			+ " as sp where sp.specimenCollectionGroup.id = "+scgId +" and sp.activityStatus <> '"+Constants.ACTIVITY_STATUS_DISABLED+"' order by sp.id";
 		List specimenList = executeQuery(hql);
 		
 	    //here we have two Lists to separate out Specimens and child Specimens
