@@ -308,7 +308,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			obj=(Object[])scgList.get(i);
 			if(obj[1]!=null || !((String)obj[1]).equals(""))
 			{
-				NameValueBean nb=new NameValueBean(obj[1],((Long)obj[0]).toString());
+				NameValueBean nb=new NameValueBean(obj[1],((Long)obj[2]).toString());
 				reportIDList.add(nb);
 			}		
 		}
