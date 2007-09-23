@@ -15,6 +15,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.globus.util.http.HTTPRequestParser;
+
 import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
@@ -57,6 +59,7 @@ import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+@SuppressWarnings("unused")
 public class FlexInterface
 {
 	public FlexInterface() throws Exception
@@ -747,7 +750,15 @@ public class FlexInterface
 	//--------------DAG-----------------------------
 	public void restoreQueryObject()
 	{
-		dagPanel.restoreQueryObject();
+		if(dagPanel==null)
+		{ 
+			this.initFlexInterface();
+		}
+		else
+		{
+			restoreSession();
+			dagPanel.restoreQueryObject();
+		}
 	}
 	/**
 	 * Add Nodes in define Result view
@@ -757,7 +768,7 @@ public class FlexInterface
 	public DAGNode addNodeToView(String nodesStr)
 	{
 		DAGNode dagNode = dagPanel.addNodeToOutPutView(nodesStr);
-		nodeList.add(dagNode);
+//		nodeList.add(dagNode);
 		return dagNode;
 	}
 	/**
@@ -782,7 +793,7 @@ public class FlexInterface
 	public DAGNode createNode(String strToCreateQueryObject,String entityName)
     {
 		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName,"Add");
-		nodeList.add(dagNode);
+//		nodeList.add(dagNode);
 		return dagNode;
 	}
 	
@@ -790,15 +801,15 @@ public class FlexInterface
 	 * GetLastNode
 	 * @return
 	 */
-	public DAGNode getLastNode()
-	{
-		int lastIndex =0;
-		if(!nodeList.isEmpty())
-		{
-			lastIndex= (nodeList.size()-1);
-		}
-		return nodeList.get(lastIndex);
-	}
+//	public DAGNode getLastNode()
+//	{
+//		int lastIndex =0;
+//		if(!nodeList.isEmpty())
+//		{
+//			lastIndex= (nodeList.size()-1);
+//		}
+//		return nodeList.get(lastIndex);
+//	}
 	/**
 	 * 
 	 * @param expressionId
@@ -822,16 +833,16 @@ public class FlexInterface
 	{
 		String conditionStr	= null;
 		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName,"Edit");
-		for(int i=0;i<nodeList.size();i++)
-		{
-			DAGNode node  = nodeList.get(i);
-			if(node.equals(dagNode))
-			{
-				nodeList.remove(i);
-				nodeList.add(i,dagNode);
-				break;
-			}
-		}
+//		for(int i=0;i<nodeList.size();i++)
+//		{
+//			DAGNode node  = nodeList.get(i);
+//			if(node.equals(dagNode))
+//			{
+//				nodeList.remove(i);
+//				nodeList.add(i,dagNode);
+//				break;
+//			}
+//		}
 		conditionStr = dagNode.getToolTip();
 		return conditionStr;
 	}
@@ -857,16 +868,16 @@ public class FlexInterface
 	 */
 	public void deleteNode(int expId)
 	{
-		for(int i=0;i<nodeList.size();i++)
-		{
-			DAGNode dagNode = nodeList.get(i);
-			if(dagNode.getExpressionId()==expId)
-			{
-				dagPanel.deleteExpression(dagNode.getExpressionId());//delete Expression 
-				nodeList.remove(i);
-				break;
-			}
-		}
+//		for(int i=0;i<nodeList.size();i++)
+//		{
+//			DAGNode dagNode = nodeList.get(i);
+//			if(dagNode.getExpressionId()==expId)
+//			{
+				dagPanel.deleteExpression(expId);//delete Expression 
+//				nodeList.remove(i);
+//				break;
+//			}
+//		}
 	}
 	/**
 	 * Gets path List between nodes
@@ -955,14 +966,14 @@ public class FlexInterface
 	 */
 	public void initFlexInterface()
 	{
-		nodeList = new ArrayList<DAGNode>();
+//		nodeList = new ArrayList<DAGNode>();
 		queryObject = new ClientQueryBuilder();
 		IPathFinder pathFinder = new CommonPathFinder();
 		dagPanel = new DAGPanel(pathFinder);
 		dagPanel.setQueryObject(queryObject);
 		restoreSession();
-		
 	}
+	
 	private void restoreSession()
 	{
 		session= flex.messaging.FlexContext.getHttpRequest().getSession();
@@ -972,8 +983,8 @@ public class FlexInterface
 	}
 	
 	private	IClientQueryBuilderInterface queryObject=null;
-	private List<DAGNode> nodeList;
-	private DAGPanel dagPanel;
+//	private List<DAGNode> nodeList = null;
+	private DAGPanel dagPanel = null;
 	private HttpSession session = null;
 	
 	
