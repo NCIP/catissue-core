@@ -71,7 +71,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 					String str = (String) columnList.get(0);
 					if (!str.equals(""))
 					{
-						noOfRecords = Long.parseLong(str)+1;
+						noOfRecords = Long.parseLong(str);
 					}
 				}
 			}
@@ -97,6 +97,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 		{
 			maxCollTitle = collectionProtocolTitle.substring(0,Constants.COLLECTION_PROTOCOL_TITLE_LENGTH-1);
 		}
+		currentLable++;
 		specimenCollectionGroup.setName(maxCollTitle+"_"+participantId+"_"+currentLable);
 	}
 
