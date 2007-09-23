@@ -764,35 +764,32 @@
 	
 	function produceSavedQuery()
 	{
-		  var totalentities = document.getElementById("totalentities").value;
-		  var numberOfEntities = totalentities.split(";");
-          var strquery='';
-          var count = numberOfEntities.length;
+		var totalentities = document.getElementById("totalentities").value;
+		var numberOfEntities = totalentities.split(";");
+        var strquery='';
+        var count = numberOfEntities.length;
         
-    	   for(i=0;i<count-1 ;i++)
-			  {
-		      		   var entityName = numberOfEntities[i];
-		    		   var attributesListComponent = numberOfEntities[i]+"_attributeList";
-		    		   var attributesList = document.getElementById(attributesListComponent).value;
-	                   var checkboxes =  attributesList.split(";"); 
-	                  
-	                    for(j=1;j<checkboxes.length;j++)
-		                   {
-		                         var comp = checkboxes[j]+'_checkbox';
-	  							 var val = document.getElementById(comp).checked;
-		                         if(val==true)
-		                           strquery = strquery + checkboxes[j] +";" ;                             
-					 	
-		                   }
+    	for(i=0;i<count-1 ;i++)
+		{
+			var entityName = numberOfEntities[i];
+			var attributesListComponent = numberOfEntities[i]+"_attributeList";
+			var attributesList = document.getElementById(attributesListComponent).value;
+			var checkboxes = attributesList.split(";"); 
 			
-		  	 } 
-		  	   var strvalu = document.getElementById('queryString');
-               strvalu.value =  strquery;
-               saveQuery();
-               
-                           
+			for(j=1;j<checkboxes.length;j++)
+			{
+        		var comp = checkboxes[j]+'_checkbox';
+				var val = document.getElementById(comp).checked;
+				if(val==true)
+					strquery = strquery + checkboxes[j] +";" ;                             
+            }
+		} 
+		var strvalu = document.getElementById('queryString');
+        strvalu.value =  strquery;
+        
+        // Save query
+        document.getElementById('saveQueryForm').submit();
 	}
-
 	
 	function ExecuteSavedQuery()
 	{
@@ -941,7 +938,7 @@ function permissibleValuesSelected(element)
 			}
 		}
   }
-
+  
 //---Flex Call
 var interfaceObj;
 
@@ -998,14 +995,6 @@ var jsReady = false;
 		interfaceObj.addNodeToView(nodesStr);
 	}
 	
-	/*This function is called form SavedQueryConditionPage.jsp. It invokes the SaveQueryAction*/
-	function saveQuery()
-	{
-		var saveQueryForm = document.getElementById('saveQueryForm');
-		saveQueryForm.submit();
-		alert('Query Saved Succesfully !!!!!');
-		self.close();
-	}
 	/*This function is called form QueryListView.jsp. It invokes the FetchAndExecuteQueryAction*/
 	function executeQuery(queryId)
 	{
