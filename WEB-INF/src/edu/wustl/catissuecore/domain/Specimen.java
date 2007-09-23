@@ -740,11 +740,11 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					this.activityStatus = form.getActivityStatus();
 					if (form.isAddOperation())
 					{
-						this.collectionStatus = form.getCollectionStatus();
+						this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
 					}
 					else
 					{
-						this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
+						this.collectionStatus = form.getCollectionStatus();
 					}
 					if (!validator.isEmpty(form.getBarcode()))
 						this.barcode = form.getBarcode();

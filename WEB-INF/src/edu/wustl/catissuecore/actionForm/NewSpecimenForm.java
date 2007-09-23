@@ -453,15 +453,8 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 		}
 		this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
 		this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
-		if(specimen.getCollectionStatus()!=null)
-		{
-			this.collectionStatus = Utility.toString(specimen.getCollectionStatus());
-		}
-		else
-		{
-			this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
-		}
-    }
+		this.collectionStatus = Utility.toString(specimen.getCollectionStatus());
+	}
 	 /**
 	 * @return biohazard Type Returns the biohazardType.
 	 */	 
@@ -508,6 +501,13 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
          {
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
              {
+            	 if (operation.equals(Constants.EDIT))
+                 {
+	            	 if(collectionStatus.trim().length() <= 0)
+	            	 {
+	            		 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.collectionStatus")));
+	            	 }
+                 }
             	 /**For Migration Start**/
              	if (specimenCollectionGroupName!=null && specimenCollectionGroupName.trim().equals(""))
                 {
