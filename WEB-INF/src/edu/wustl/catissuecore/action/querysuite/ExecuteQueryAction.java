@@ -5,7 +5,6 @@
 package edu.wustl.catissuecore.action.querysuite;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,21 +19,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
-import edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
-import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.util.QueryUtility;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 
 /**
@@ -73,7 +67,10 @@ public class ExecuteQueryAction extends BaseAction
 		}
 		else
 		{
-			setActionError(request, errorMessage);
+			ActionErrors errors = new ActionErrors();
+			ActionError error = new ActionError("errors.item", errorMessage);
+			errors.add(ActionErrors.GLOBAL_ERROR, error);
+			saveErrors(request, errors);
 		}
 		
 		return actionMapping.findForward(target);
@@ -82,7 +79,6 @@ public class ExecuteQueryAction extends BaseAction
 	private void processInputData(Map<String, String[]> conditions,
 			IParameterizedQuery query) {
 		Map<IExpressionId, Map<AttributeInterface, ICondition>> expressionConditionMap = QueryUtility.getSelectedConditions(query);
-
 		
 		Set<Map.Entry<IExpressionId, Map<AttributeInterface, ICondition>>> mapEntries = expressionConditionMap
 				.entrySet();
@@ -106,18 +102,9 @@ public class ExecuteQueryAction extends BaseAction
 					condition.setValues(conditionValueList);
 					condition.setRelationalOperator(RelationalOperator
 							.getOperatorForStringRepresentation(params[0]));
-
 				}
 			}
 		}
-	}
-	
-	private void setActionError(HttpServletRequest request, String errorMessage)
-	{
-		ActionErrors errors = new ActionErrors();
-		ActionError error = new ActionError("errors.item", errorMessage);
-		errors.add(ActionErrors.GLOBAL_ERROR, error);
-		saveErrors(request, errors);
 	}
 
 	private String executeQuery(HttpServletRequest request, IParameterizedQuery parameterizedQuery)
