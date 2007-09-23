@@ -1,20 +1,13 @@
 package edu.wustl.catissuecore.namegenerator;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -60,7 +53,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	private Long getLastAvailableSCGLabel(String databaseConstant)  
 	{
 		Long noOfRecords = new Long("0");
-		String sourceObjectName = "CATISSUE_SPECIMEN_COLL_GROUP";
+		String sourceObjectName = "CATISSUE_ABSTRACT_SPECIMEN_COLL_GROUP";
 		String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 
