@@ -69,15 +69,17 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 
-		Object siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSpecimenCollectionSite().getId());
-		if (siteObj != null)
+		if(specimenCollectionGroup.getSpecimenCollectionSite() != null)
 		{
-			// check for closed Site
-			checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
-
-			specimenCollectionGroup.setSpecimenCollectionSite((Site) siteObj);
+			Object siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSpecimenCollectionSite().getId());
+			if (siteObj != null)
+			{
+				// check for closed Site
+				checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
+	
+				specimenCollectionGroup.setSpecimenCollectionSite((Site) siteObj);
+			}
 		}
-
 		Object collectionProtocolEventObj = dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup
 				.getCollectionProtocolEvent().getId());
 		if (collectionProtocolEventObj != null)

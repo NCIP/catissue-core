@@ -87,7 +87,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		registerParticipantAndProtocol(dao, collectionProtocolRegistration, sessionDataBean);
 
 		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);
-		createSCG(collectionProtocolRegistration,dao,sessionDataBean);
 		
 		try
 		{
@@ -98,6 +97,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		{
 			throw handleSMException(e);
 		}
+		
+		createSCG(collectionProtocolRegistration,dao,sessionDataBean);
 	}
 
 	/*
@@ -113,6 +114,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		try
 		{
 			NewSpecimenBizLogic  bizLogic = new NewSpecimenBizLogic();
+			SpecimenCollectionGroupBizLogic specimenBizLogic = new SpecimenCollectionGroupBizLogic();
 			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
 			Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
 			userID = sessionDataBean.getUserId();
@@ -148,7 +150,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				
 				specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
 				
-				dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
+				specimenBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
 				bizLogic.insert(specimenMap, dao,  sessionDataBean);
 			}
 		}
