@@ -262,7 +262,11 @@ function ReplaceTags(xStr)
 				var surgicalPathologyNumber = xmlDocument.getElementsByTagName('SurgicalPathologyNumber')[0].firstChild.nodeValue;	
 				var reportSite = xmlDocument.getElementsByTagName('IdentifiedReportSite')[0].firstChild.nodeValue;			
 				var identifierReportText = xmlDocument.getElementsByTagName('IdentifiedReportTextContent')[0].firstChild.nodeValue;
-				var deIdentifierReportText = xmlDocument.getElementsByTagName('DeIdentifiedReportTextContent')[0].firstChild.nodeValue;
+				var deIdentifierReportText;
+				if(xmlDocument.getElementsByTagName('DeIdentifiedReportTextContent')[0].firstChild!=null)
+				{
+					deIdentifierReportText = xmlDocument.getElementsByTagName('DeIdentifiedReportTextContent')[0].firstChild.nodeValue;
+				}
 				
 				document.getElementById("surgicalPathologyNumber").innerHTML = surgicalPathologyNumber;
 				document.getElementById("identifiedReportSite").innerHTML = reportSite;
