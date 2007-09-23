@@ -345,9 +345,9 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		specimen.setPathologicalStatus(
 				specimenRequirementBean.getPathologicalStatus());		
 		specimen.setType(specimenRequirementBean.getType());
-		StorageContainer storageContainer = new StorageContainer();
-		storageContainer.setName(
-				specimenRequirementBean.getStorageContainerForSpecimen());
+		StorageContainer storageContainer = null; //new StorageContainer();
+//		storageContainer.setName(
+//				specimenRequirementBean.getStorageContainerForSpecimen());
 		
 		specimen.setStorageContainer(storageContainer);
 		

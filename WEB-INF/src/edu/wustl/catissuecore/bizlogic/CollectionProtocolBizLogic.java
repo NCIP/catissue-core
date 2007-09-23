@@ -171,14 +171,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			System.out.println("-----INSERTING specimen :" + specimen.getId());
 
 			specimen.setSpecimenCollectionGroup(collectionRequirementGroup);
-
-			if (specimen.getParentSpecimen()==null){
-					specimenMap.put(specimen, new ArrayList<Specimen>());
-			}
-			
-			specimen.setSpecimenCharacteristics(null);
-			specimen.setStorageContainer(null);
-			//dao.insert(specimen, sessionDataBean, true, true);
 			specimenMap.put(specimen, null);
 		}
 		
