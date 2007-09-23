@@ -76,7 +76,7 @@
 </mx:Script>
 	<mx:DataGrid name="pathGrid" dataProvider="{pathList}" width="550" x="0" height="500" y="0"  verticalScrollPolicy="off" horizontalScrollPolicy="off">
 		<mx:columns>
-			<mx:DataGridColumn headerText="Paths" dataField="toolTip" dataTipField="toolTip" showDataTips="true" width="450"/>
+			<mx:DataGridColumn headerText="Paths" dataField="toolTip" dataTipField="toolTip" showDataTips="true" width="450" wordWrap="true"/>
 			<mx:DataGridColumn headerText="Select" dataField="isSelected" width="100">
 			   <mx:itemRenderer>
 			      <mx:Component>
