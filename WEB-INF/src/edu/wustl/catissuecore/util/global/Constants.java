@@ -1997,7 +1997,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String ARRAY_NAME = "array";
     
     //Query Shopping cart constants
-    public static final String SHOPPING_CART_FILE_NAME = "ShoppingCart.csv";
+    public static final String SHOPPING_CART_FILE_NAME = "MyList.csv";
    // public static final String ADD_TO_CART = "";
     public static final String DUPLICATE_OBJECT = "duplicateObject";
     public static final String DIFFERENT_VIEW_IN_CART = "differentCartView";
