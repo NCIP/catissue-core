@@ -453,7 +453,14 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 		}
 		this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
 		this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
-		this.collectionStatus = Utility.toString(specimen.getCollectionStatus());
+		if(specimen.getCollectionStatus()!=null)
+		{
+			this.collectionStatus = Utility.toString(specimen.getCollectionStatus());
+		}
+		else
+		{
+			this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
+		}
     }
 	 /**
 	 * @return biohazard Type Returns the biohazardType.

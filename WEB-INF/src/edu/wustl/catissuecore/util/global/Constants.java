@@ -798,6 +798,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Collection Status values
 	public static final String COLLECTION_STATUS_PENDING = "Pending";
+	public static final String COLLECTION_STATUS_COLLECTED = "Collected";
 	
 	public static final String [] ACTIVITY_STATUS_VALUES = {
 	        SELECT_OPTION,

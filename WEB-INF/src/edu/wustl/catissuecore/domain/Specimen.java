@@ -738,7 +738,14 @@ public class Specimen extends AbstractDomainObject implements Serializable
 //					}
 					/**For Migration End**/		
 					this.activityStatus = form.getActivityStatus();
-					this.collectionStatus = form.getCollectionStatus();
+					if (form.isAddOperation())
+					{
+						this.collectionStatus = form.getCollectionStatus();
+					}
+					else
+					{
+						this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
+					}
 					if (!validator.isEmpty(form.getBarcode()))
 						this.barcode = form.getBarcode();
 					else
@@ -916,7 +923,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					}
 
 					//Mandar : autoevents 14-july-06 end
-
+					
 					if (form.isAddOperation())
 					{
 						if(form.getStContSelection()==1)
@@ -927,7 +934,12 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						}
 						if(form.getStContSelection()==2)
 						{
-							this.storageContainer.setId(new Long(form.getStorageContainer()));
+							long stContainerId = Long.parseLong(form.getStorageContainer());
+							if(this.storageContainer == null)
+							{
+								this.storageContainer = new StorageContainer();
+							}
+							this.storageContainer.setId(stContainerId);
 							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
 						}
@@ -947,7 +959,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					{
 						if(!validator.isEmpty(form.getSelectedContainerName()))
 						{
-							this.storageContainer.setName(form.getSelectedContainerName());							
+							this.storageContainer = new StorageContainer();
+							this.storageContainer.setName(form.getSelectedContainerName());
 							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
 						}
