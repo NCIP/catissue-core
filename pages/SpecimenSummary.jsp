@@ -34,28 +34,15 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		<html:form action="<%=formAction%>">		
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
 				<tr>
-				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
 
 					<td class="dataTablePrimaryLabel" height="20">
-						Specimen(s) Requirement
-					</td>
-				</logic:equal>
+						<bean:write name="viewSpecimenSummaryForm" property="title" />
+					</td>				
 				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
-
-					<td class="dataTablePrimaryLabel" height="20">
-						Specimen(s) Details
-					</td>
 					<script language="javascript">
-							refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');					
+							refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');	
 					</script>
 				</logic:equal>
-				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
-
-					<td class="dataTablePrimaryLabel" height="20">
-						Specimen(s) Details
-					</td>
-				</logic:equal>
-
 				</tr>
 		<logic:empty name="viewSpecimenSummaryForm" property="specimenList" >
 			<tr>
