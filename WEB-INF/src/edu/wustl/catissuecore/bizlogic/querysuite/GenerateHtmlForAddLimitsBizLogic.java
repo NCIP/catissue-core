@@ -1034,7 +1034,7 @@ public class GenerateHtmlForAddLimitsBizLogic {
 			html.append("\n<input type='radio' id = '" + componentId
 					+ "_false' value='false' onclick=\"resetOptionButton('"
 					+ radioButtonFalseId + "',this)\" name='" + componentName
-					+ "' disabled='true' CHECKED><font class='standardTextQuery'>False</font>");
+					+ "' disabled='true'><font class='standardTextQuery'>False</font>");
 			}else
 			{
 				html.append("\n<input type='radio' id = '" + componentId
