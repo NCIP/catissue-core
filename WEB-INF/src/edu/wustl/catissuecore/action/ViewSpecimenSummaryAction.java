@@ -239,23 +239,59 @@ public class ViewSpecimenSummaryAction extends Action {
 		if (aliquotsList != null && !aliquotsList.values().isEmpty()) 
 		{
 			nestedAliquots.addAll(aliquotsList.values());
-			getNestedAliquotSpecimens(aliquotsList.values(), nestedAliquots);
-			getNestedDerivedSpecimens(aliquotsList.values(), nestedDerives);
+			getNestedChildSpecimens(aliquotsList.values(), nestedAliquots, nestedDerives);
+//			getNestedAliquotSpecimens(aliquotsList.values(), nestedAliquots);
+//			getNestedDerivedSpecimens(aliquotsList.values(), nestedDerives);
 			
 		}
 
 		if (derivedList != null && !derivedList.values().isEmpty()) 
 		{
 			nestedDerives.addAll(derivedList.values());
-			getNestedAliquotSpecimens(derivedList.values(), nestedAliquots);
-			getNestedDerivedSpecimens(derivedList.values(), nestedDerives);
+			getNestedChildSpecimens(derivedList.values(), nestedAliquots, nestedDerives);			
+//			getNestedAliquotSpecimens(derivedList.values(), nestedAliquots);
+//			getNestedDerivedSpecimens(derivedList.values(), nestedDerives);
 		}
-
+		
 		summaryForm.setAliquotList(getSpecimenList(nestedAliquots));
 		summaryForm.setDerivedList(getSpecimenList(nestedDerives));
 		
 	}
 
+	private void getNestedChildSpecimens(Collection topChildCollection,
+			Collection nestedAliquoteCollection, Collection nestedDerivedCollection) {
+
+
+		Iterator iterator = topChildCollection.iterator();
+
+		while (iterator.hasNext()) {
+			GenericSpecimen specimen = (GenericSpecimen) iterator.next();
+
+			if (specimen.getAliquotSpecimenCollection() != null) {
+				Collection childSpecimen = specimen
+						.getAliquotSpecimenCollection().values();
+
+				if (!childSpecimen.isEmpty()) {
+					nestedAliquoteCollection.addAll(childSpecimen);
+					getNestedChildSpecimens(childSpecimen,
+							nestedAliquoteCollection,nestedDerivedCollection);
+				}				
+			}
+
+			if (specimen.getDeriveSpecimenCollection() != null) {
+				Collection childSpecimen = specimen
+						.getDeriveSpecimenCollection().values();
+
+				if (!childSpecimen.isEmpty()) {
+					nestedDerivedCollection.addAll(childSpecimen);
+					getNestedChildSpecimens(childSpecimen,
+							nestedAliquoteCollection,nestedDerivedCollection);
+				}				
+			}
+
+			
+		}
+	}
 
 	private void getNestedAliquotSpecimens(Collection topChildCollection,
 			Collection nestedCollection) {
