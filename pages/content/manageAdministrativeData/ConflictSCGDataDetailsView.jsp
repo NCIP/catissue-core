@@ -13,7 +13,7 @@
 						<tr>
 							<td class="formFieldNoBordersBold" styleClass="formFieldSized">
 								<label for="site">
-									<bean:message key="specimenCollectionGroup.site"/>
+									<bean:message key="specimen.specimenCollectionGroupName"/>
 								</label>
 							</td>
 							<td class="formFieldNoBordersSimple" styleClass="formFieldSized">
