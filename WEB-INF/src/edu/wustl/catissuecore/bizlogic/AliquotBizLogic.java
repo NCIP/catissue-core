@@ -164,7 +164,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			String containerNameKey = specimenKey + i + "_StorageContainer_name";
 			String posDim1Key = specimenKey + i + "_positionDimensionOne";
 			String posDim2Key = specimenKey + i + "_positionDimensionTwo";
-			String idKey = specimenKey + i + "_id";
+			//String idKey = specimenKey + i + "_id";
 			String labelKey = specimenKey + i + "_label";
 			String virtuallyLocatedKey = specimenKey + i + "_virtuallyLocated";
 			String storageContainerNameKey = specimenKey + i + "_stContainerName";
@@ -362,7 +362,8 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			//dao.insert(aliquotSpecimen, sessionDataBean, true, false);//NEEDS TO BE FIXED FOR SECURE INSERT
 
 			//Setting the identifier values in the map
-			aliquotMap.put(idKey, String.valueOf(aliquotSpecimen.getId()));
+            //by falguni=Comment here ,after insert set generated id in Map.
+			//aliquotMap.put(idKey, String.valueOf(aliquotSpecimen.getId()));
 
 			//TO BE DELETED LATER
 			aliquot.setId(aliquotSpecimen.getId());
@@ -402,7 +403,8 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		{
 			Specimen aliquotSpecimen = (Specimen) itrList.next();
 		    dao.insert(aliquotSpecimen, sessionDataBean, true, false);//NEEDS TO BE FIXED FOR SECURE INSERT
-		 
+		    String idKey = specimenKey + countLabel + "_id";
+		    aliquotMap.put(idKey, String.valueOf(aliquotSpecimen.getId()));
 		    String labelKey = "Specimen:" + countLabel +"_label";
 		    countLabel ++;
 		    String labelValue = aliquotSpecimen.getLabel();
