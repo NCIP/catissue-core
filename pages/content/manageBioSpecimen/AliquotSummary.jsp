@@ -54,7 +54,7 @@
     
     function CPQueryAliquot(action)
 	{
-		window.parent.frames[2].location = action;
+		window.parent.frames[1].location = action;
 	}	
 		
 </script>
