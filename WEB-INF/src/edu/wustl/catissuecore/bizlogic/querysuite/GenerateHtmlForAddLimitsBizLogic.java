@@ -1014,53 +1014,94 @@ public class GenerateHtmlForAddLimitsBizLogic {
 		}
 		return attributesList;
 	}
-
+//TODO please remove this quick fix for bug :#5462
 	private String generateHTMLForRadioButton(AttributeInterface attribute,
 			List<String> values) {
 		StringBuffer html = new StringBuffer();
-		String attributeName = attribute.getName();
-
 		String componentId = generateComponentName(attribute) + "_radioButton";
 		String componentName = componentId + "_booleanAttribute";
 		String radioButtonTrueId = componentId + "_true";
 		String radioButtonFalseId = componentId + "_false";
 		html.append("\n<td>");
-		if (values == null) {
-			// html.append("\n<select class=\"dropdownQuery\"
-			// style=\"width:150px; display:block;\" name=\"" + componentId +
-			// "_combobox\" onChange=\"operatorChanged('" + componentId +
-			// "','true')\">");
+		if (values == null) 
+		{
+			if(attribute.getName().equalsIgnoreCase("isCollectionProtocolRequirement"))
+			{
 			html.append("\n<input type='radio' id = '" + componentId
-					+ "_true' value='true' onclick=\"resetOptionButton('"
-					+ radioButtonTrueId + "',this)\" name='" + componentName
-					+ "'><font class='standardTextQuery'>True</font>");
+						+ "_true' value='true' onclick=\"resetOptionButton('"
+						+ radioButtonTrueId + "',this)\" name='" + componentName
+						+ "' disabled='true'><font class='standardTextQuery'>True</font>");
 			html.append("\n<input type='radio' id = '" + componentId
 					+ "_false' value='false' onclick=\"resetOptionButton('"
 					+ radioButtonFalseId + "',this)\" name='" + componentName
-					+ "'><font class='standardTextQuery'>False</font>");
-		} else {
-			if (values.get(0).equalsIgnoreCase("true")) {
-				html
-						.append("\n<input type='radio' id = '"
-								+ componentId
-								+ "_true' value='true' name='"
-								+ componentName
-								+ "' checked><font class='standardTextQuery'>True</font>");
+					+ "' disabled='true' CHECKED><font class='standardTextQuery'>False</font>");
+			}else
+			{
 				html.append("\n<input type='radio' id = '" + componentId
-						+ "_false' value='false' name='" + componentName
+						+ "_true' value='true' onclick=\"resetOptionButton('"
+						+ radioButtonTrueId + "',this)\" name='" + componentName
+						+ "'><font class='standardTextQuery'>True</font>");
+				html.append("\n<input type='radio' id = '" + componentId
+						+ "_false' value='false' onclick=\"resetOptionButton('"
+						+ radioButtonFalseId + "',this)\" name='" + componentName
 						+ "'><font class='standardTextQuery'>False</font>");
-			} else {
-				html.append("\n<input type='radio' id = '" + componentId
-						+ "_true' value='true' name='" + componentName
-						+ "' ><font class='standardTextQuery'>True</font>");
-				html
-						.append("\n<input type='radio' id = '"
-								+ componentId
-								+ "_false' value='false' name='"
-								+ componentName
-								+ "' checked><font class='standardTextQuery'>False</font>");
-
 			}
+		}
+		else 
+		{
+			if(attribute.getName().equalsIgnoreCase("isCollectionProtocolRequirement"))
+			{
+				if (values.get(0).equalsIgnoreCase("true"))
+				{
+					html
+							.append("\n<input type='radio' id = '"
+									+ componentId
+									+ "_true' value='true' name='"
+									+ componentName
+									+ "' checked><font class='standardTextQuery'>True</font>");
+					html.append("\n<input type='radio' id = '" + componentId
+							+ "_false' value='false' name='" + componentName
+							+ "'><font class='standardTextQuery'>False</font>");
+				}
+				else 
+				{
+					html.append("\n<input type='radio' id = '" + componentId
+							+ "_true' value='true' name='" + componentName
+							+ "' disabled='true'><font class='standardTextQuery'>True</font>");
+					html
+							.append("\n<input type='radio' id = '"
+									+ componentId
+									+ "_false' value='false' name='"
+									+ componentName
+									+ "' disabled='true' checked><font class='standardTextQuery'>False</font>");
+				}
+			}
+			else
+			{
+				if (values.get(0).equalsIgnoreCase("true")) {
+					html
+							.append("\n<input type='radio' id = '"
+									+ componentId
+									+ "_true' value='true' name='"
+									+ componentName
+									+ "' checked><font class='standardTextQuery'>True</font>");
+					html.append("\n<input type='radio' id = '" + componentId
+							+ "_false' value='false' name='" + componentName
+							+ "'><font class='standardTextQuery'>False</font>");
+				}
+				else
+				{
+					html.append("\n<input type='radio' id = '" + componentId
+							+ "_true' value='true' name='" + componentName
+							+ "' ><font class='standardTextQuery'>True</font>");
+					html
+							.append("\n<input type='radio' id = '"
+									+ componentId
+									+ "_false' value='false' name='"
+									+ componentName
+									+ "'  checked><font class='standardTextQuery'>False</font>");
+				}
+			}		
 		}
 		html.append("\n</td>");
 		html.append("\n<td>");
