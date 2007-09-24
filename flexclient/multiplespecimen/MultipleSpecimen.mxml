@@ -451,7 +451,7 @@
 	</mx:RemoteObject>
 	<mx:Text id="messageText"/>
 	<mx:HBox id="selectionBox">
-		<mx:Text text="Do you want to create New Specimen or Deived Specimen?" fontWeight="bold"/>
+		<mx:Text text="Do you want to create New Specimen or Derived Specimen?" fontWeight="bold"/>
 		<mx:RadioButtonGroup id="spParent"/>
 		<mx:RadioButton id="isSpSCGName" label="New Specimen"  group="{spParent}" click="setParentLabel('* Specimen Group Name')" fontWeight="bold"/>
 		<mx:RadioButton id="isSpParentName" label="Derived Specimen" group="{spParent}" click="setParentLabel('* Parent Name ')" fontWeight="bold"/>

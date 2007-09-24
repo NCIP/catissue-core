@@ -4378,7 +4378,7 @@ PUBLIC
                 validate="false"
                 scope="request">
 					<forward name="success" path="/pages/SpecimenSummary.jsp" />
-					<forward name="pageOfMultipleSpWithoutMenu" path=".catissuecore.viewSpecimenSummary" />
+					<forward name="pageOfMultipleSpWithoutMenu" path="/pages/SpecimenSummary.jsp" />
 					<forward name="updateSpecimenStatus" path="/updateSpecimenStatus.do" />
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 	                <forward name="failure" path="/Home.do" />

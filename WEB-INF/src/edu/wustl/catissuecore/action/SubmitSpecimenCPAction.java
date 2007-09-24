@@ -113,10 +113,10 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				else
 				{
 					insertSpecimens(cpEventMap,request.getSession());
-				}
+				} 
 				ActionMessages actionMessages = new ActionMessages();
 				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-						"object.add.successOnly","Specimen(s))"));
+						"object.add.successOnly","Specimen(s)"));
 				saveMessages(request, actionMessages);
 				
 			}

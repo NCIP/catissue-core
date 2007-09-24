@@ -37,7 +37,7 @@ package valueobjects
 			this.collectionProcedure = "Not Specified";
 			this.container = "Not Specified";
 			this.receivedQuality = "Not Specified";
-			this.comment = "Hey My Comment";
+			this.comment = "";
 			
 		}
 
