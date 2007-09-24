@@ -2,9 +2,9 @@
  *<p>Title: </p>
  *<p>Description:  </p>
  *<p>Copyright:TODO</p>
- *@author 
+ *@author
  *@version 1.0
- */ 
+ */
 package edu.wustl.catissuecore.bizlogic;
 
 
@@ -56,7 +56,7 @@ public class AnnotationUtil
      * @return
      * @throws DynamicExtensionsSystemException
      * @throws DynamicExtensionsApplicationException
-     * @throws DynamicExtensionsSystemException 
+     * @throws DynamicExtensionsSystemException
      */
     public static synchronized Long addAssociation(Long staticEntityId, Long dynamicEntityId)
             throws //DynamicExtensionsSystemException,
@@ -64,30 +64,30 @@ public class AnnotationUtil
     {
         //Get instance of entity manager.
         EntityManagerInterface entityManager = EntityManager.getInstance();
-        
+
         // Get instance of static entity from entity cache maintained by caB2B code
         EntityInterface staticEntity = EntityCacheFactory.getInstance()
                 .getEntityById(staticEntityId);
-        
+
         //Get dynamic Entity from entity Manger
         EntityInterface dynamicEntity = (entityManager
                 .getContainerByIdentifier(dynamicEntityId.toString()))
                 .getEntity();
-        
+
         //Get entitygroup that is used by caB2B for path finder purpose.
         EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
-        
+
         //Add the entity group to the dynamic entity and all it's associated entities.
         dynamicEntity
                 .addEntityGroupInterface(entityGroupInterface);
         Collection<AssociationInterface> associationCollection = dynamicEntity
         .getAssociationCollection();
-        
+
         for (AssociationInterface associationInteface : associationCollection)
         {
             associationInteface.getTargetEntity().addEntityGroupInterface(entityGroupInterface);
         }
-        
+
         //Create source role and target role for the association
         String roleName = staticEntityId.toString().concat("_").concat(
                 dynamicEntityId.toString());
@@ -95,33 +95,28 @@ public class AnnotationUtil
                 roleName, Cardinality.ZERO, Cardinality.ONE);
         RoleInterface targetRole = getRole(AssociationType.ASSOCIATION,
                 roleName, Cardinality.ZERO, Cardinality.MANY);
-        
+
         //Create association with the created source and target roles.
         AssociationInterface association = getAssociation(dynamicEntity,
                 AssociationDirection.SRC_DESTINATION, roleName, sourceRole,
                 targetRole);
-        
+
         //Create constraint properties for the created association.
         ConstraintPropertiesInterface constraintProperties = getConstraintProperties(
                 staticEntity, dynamicEntity);
         association.setConstraintProperties(constraintProperties);
-        
-        //Add association to the static entity and save it. 
+
+        //Add association to the static entity and save it.
         staticEntity.addAssociation(association);
         Long start = new Long(System.currentTimeMillis());
-     try
-        {
+
         staticEntity = EntityManager.getInstance().persistEntityMetadata(
                 staticEntity, true,false);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+
         Long end = new Long(System.currentTimeMillis());
         System.out.println("Time required to persist one entity is "
                 + (end - start) / 1000 + "seconds");
-        
+
         //Add the column related to the association to the entity table of the associated entities.
         EntityManager.getInstance().addAssociationColumn(association);
         Collection<AssociationInterface> staticEntityAssociation = staticEntity.getAssociationCollection();
@@ -133,7 +128,7 @@ public class AnnotationUtil
                 break;
             }
         }
-        
+
         start = new Long(System.currentTimeMillis());
         AnnotationUtil.addPathsForQuery(staticEntityId, dynamicEntity.getId(),
                 association.getId());
@@ -156,7 +151,7 @@ public class AnnotationUtil
         for (EntityInterface entity : entitySet)
         {
         EntityCache.getInstance().addEntityToCache(entity);
-        }        
+        }
         //EntityInterface cachedStaticEntityInterfaceEntityCache.getInstance().getEntityById(staticEntityId);
         Connection conn = null;
         try
@@ -169,15 +164,15 @@ public class AnnotationUtil
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-              
-        
+
+
         end = new Long(System.currentTimeMillis());
         System.out.println("Time required to refresh cache is "
                 + (end - start) / 1000 + "seconds");
         return association.getId();
-   
+
     }
- 
+
     /**
      * @param staticEntity
      * @param dynamicEntity
@@ -267,8 +262,8 @@ public class AnnotationUtil
 
             String associationQuery = "insert into ASSOCIATION (ASSOCIATION_ID, ASSOCIATION_TYPE) values ("
                     + intraModelAssociationId
-                    + ","                   
-                   +PathConstants.AssociationType.INTRA_MODEL_ASSOCIATION.getValue() + ")";                
+                    + ","
+                   +PathConstants.AssociationType.INTRA_MODEL_ASSOCIATION.getValue() + ")";
             String intraModelQuery = "insert into INTRA_MODEL_ASSOCIATION (ASSOCIATION_ID, DE_ASSOCIATION_ID) values ("
                     + intraModelAssociationId + "," + deAssociationID + ")";
             String directPathQuery = "insert into PATH (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values ("
@@ -393,8 +388,8 @@ public class AnnotationUtil
     /**
      * @param entity_name_participant
      * @return
-     * @throws DynamicExtensionsApplicationException 
-     * @throws DynamicExtensionsSystemException 
+     * @throws DynamicExtensionsApplicationException
+     * @throws DynamicExtensionsSystemException
      */
     public static Long getEntityId(String entityName) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
     {
