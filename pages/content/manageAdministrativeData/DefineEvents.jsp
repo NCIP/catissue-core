@@ -126,7 +126,7 @@
 							</tr>
 							<tr>
 								<td align="left" valign="top" nowrap>
-									<html:button styleClass="actionButton" property="submitPage" onclick="addNewEvent()">
+									<html:button styleClass="actionButton" property="submitPage" onclick="defineEvents()">
 										 <bean:message key="cpbasedentry.addnewevent" />
 									</html:button>
 									<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
