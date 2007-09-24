@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
@@ -38,7 +39,13 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	private String userAction;
 	private String requestType;
 	private Object summaryObject = null;
-	public ViewSpecimenSummaryForm(){
+	 
+	private HashMap<String, String> titleMap = new HashMap<String, String>();
+	public ViewSpecimenSummaryForm()
+	{
+		titleMap.put(REQUEST_TYPE_MULTI_SPECIMENS, "Specimen(s) Details");
+		titleMap.put(REQUEST_TYPE_COLLECTION_PROTOCOL, "Specimen requirement(s)");
+		titleMap.put(REQUEST_TYPE_ANTICIPAT_SPECIMENS, "Specimen(s) Details");
 		specimenList = new ArrayList<GenericSpecimen> ();
 		aliquotList = new ArrayList<GenericSpecimen> ();
 		derivedList = new ArrayList<GenericSpecimen> ();
@@ -51,6 +58,9 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 		derivedList = new ArrayList<GenericSpecimen> ();		
 	}
 	
+	public String getTitle(){
+		return titleMap.get(requestType);
+	}
 	public String getUserAction() {
 		return userAction;
 	}
