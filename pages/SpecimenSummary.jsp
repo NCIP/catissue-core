@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <html>
 <head>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <%
 String formAction = "SubmitSpecimenCollectionProtocol.do";
 if(request.getAttribute(Constants.PAGEOF) != null)
@@ -44,6 +45,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 					<td class="dataTablePrimaryLabel" height="20">
 						Specimen(s) Details
 					</td>
+					<script language="javascript">
+							refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');					
+					</script>
 				</logic:equal>
 				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
 
