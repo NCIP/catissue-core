@@ -132,7 +132,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		{
 			SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,iCount);
 			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
-			specimenRequirementBean.setDisplayName(Constants.ALIQUOT+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
+			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
 			specimenRequirementBean.setLineage(Constants.ALIQUOT);
 			specimenRequirementBean.setQuantity(quantityPerAliquot);
 			specimenRequirementBean.setNoOfAliquots(null);
@@ -156,7 +156,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			 SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,deriveSpecimenCount);
 			 specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_DERIVE+deriveSpecimenCount);
 			 specimenRequirementBean.setLineage(Constants.DERIVED_SPECIMEN);
-			 specimenRequirementBean.setDisplayName(Constants.DERIVED_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_DERIVE+deriveSpecimenCount);
+			 specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_DERIVE+deriveSpecimenCount);
 			
 			 specimenRequirementBean.setQuantity(deriveSpecimenBean.getQuantity());
 			 specimenRequirementBean.setConcentration(deriveSpecimenBean.getConcentration());
