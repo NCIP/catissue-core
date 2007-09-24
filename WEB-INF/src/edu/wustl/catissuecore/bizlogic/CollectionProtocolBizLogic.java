@@ -135,6 +135,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			SpecimenCollectionRequirementGroup collectionRequirementGroup =
 							collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
 			
+			dao.insert(collectionProtocolEvent, sessionDataBean, true, true);
 			dao.insert(collectionRequirementGroup, sessionDataBean, true, true);
 			try
 			{
@@ -146,7 +147,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				throw handleSMException(e);
 			}
 			
-			dao.insert(collectionProtocolEvent, sessionDataBean, true, true);
+			
 			Collection specimenCollection = collectionRequirementGroup.getSpecimenCollection();
 			
 			insertSpecimens(bizLogic, dao,  collectionRequirementGroup,

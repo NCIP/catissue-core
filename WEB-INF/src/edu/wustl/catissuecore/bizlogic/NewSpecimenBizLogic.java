@@ -58,7 +58,6 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
@@ -455,17 +454,21 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			//Setting Name from Id
 			//retriveSCGIdFromSCGName(specimen,dao);
 			ApiSearchUtil.setSpecimenDefault(specimen); 
-			
-			if(specimen.getParentSpecimen()!=null)
+			Specimen parentSpecimen =specimen.getParentSpecimen();
+			if(parentSpecimen !=null)
             {
-				List parentSpecimenList = dao.retrieve(Specimen.class.getName(),"label",specimen.getParentSpecimen().getLabel());
-				
-				if(parentSpecimenList!=null && !parentSpecimenList.isEmpty())
+				if(parentSpecimen .getId()==null)
 				{
-					Specimen parentSpecimen =(Specimen) parentSpecimenList.get(0);
-					specimen.setParentSpecimen(parentSpecimen);
-					specimen.getSpecimenCollectionGroup().setId(parentSpecimen.getSpecimenCollectionGroup().getId());
+					List parentSpecimenList = dao.retrieve(Specimen.class.getName(),"label",parentSpecimen .getLabel());
+					
+					if(parentSpecimenList!=null && !parentSpecimenList.isEmpty())
+					{
+						parentSpecimen =(Specimen) parentSpecimenList.get(0);
+					}
 				}
+				specimen.setParentSpecimen(parentSpecimen);
+				specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
+
             }
 			//End:- Change for API Search
 
@@ -1246,7 +1249,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Specimen parentSpecimen = new Specimen();
 			parentSpecimen.setId(specimen.getParentSpecimen().getId());
 			// check for closed Parent Specimen
-			checkStatus(dao, parentSpecimen, "Parent Specimen");
+			if(specimen.getParentSpecimen().getActivityStatus()==null)
+			{
+				checkStatus(dao, parentSpecimen, "Parent Specimen");
+			}
+			else if(!specimen.getParentSpecimen().getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_ACTIVE))
+			{
+				throw new DAOException("Parent Specimen " + ApplicationProperties.getValue("error.object.closed"));
+			}
+				
 			if(specimen.getLineage() == null)
 			{
 				specimen.setLineage(Constants.DERIVED_SPECIMEN);
