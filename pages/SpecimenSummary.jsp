@@ -33,9 +33,25 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		<html:form action="<%=formAction%>">		
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
 				<tr>
+				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
+
 					<td class="dataTablePrimaryLabel" height="20">
-						Specimen Requirement
+						Specimen(s) Requirement
 					</td>
+				</logic:equal>
+				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
+
+					<td class="dataTablePrimaryLabel" height="20">
+						Specimen(s) Details
+					</td>
+				</logic:equal>
+				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
+
+					<td class="dataTablePrimaryLabel" height="20">
+						Specimen(s) Details
+					</td>
+				</logic:equal>
+
 				</tr>
 		<logic:empty name="viewSpecimenSummaryForm" property="specimenList" >
 			<tr>
@@ -201,24 +217,27 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		</table>
 
 		<table align="bottom">
-		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
-		<tr>
-		   <td>
-			<html:submit  value="Save Collection Protocol" />
-			</td>
-			</tr>
-		</logic:equal>
-		
-		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">		
-		<tr>
-		    <td>
-			<html:submit value="Save Specimens" />
-			</td>
-		 </tr>
+		<logic:equal name="viewSpecimenSummaryForm" property="userAction" value="ADD">
+
+			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
+			<tr>
+			   <td>
+				<html:submit  value="Save Collection Protocol" />
+				</td>
+				</tr>
+			</logic:equal>
+			
+			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">		
+			<tr>
+				<td>
+				<html:submit value="Save Specimens" />
+				</td>
+			 </tr>
+			</logic:equal>
 		</logic:equal>
 		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
 		<tr>
-		    <td>
+			<td>
 			<html:submit value="Update Specimen status" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
 			</td>
 		 </tr>
