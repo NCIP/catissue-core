@@ -45,7 +45,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						Specimen(s) Details
 					</td>
 				</logic:equal>
-				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
+				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
 
 					<td class="dataTablePrimaryLabel" height="20">
 						Specimen(s) Details
