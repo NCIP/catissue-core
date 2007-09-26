@@ -151,6 +151,8 @@
 		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 	%>
 		<script language="javascript">
+		//Added by Falguni to refresh participant tree 
+		top.frames["cpAndParticipantView"].refreshCpParticipants();
 	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');	
 		</script>
 	<%}
