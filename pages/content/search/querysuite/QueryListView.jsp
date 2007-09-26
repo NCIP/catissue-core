@@ -26,7 +26,13 @@
 			<tr>
 				<td><html:errors /></td>
 			</tr>
-			<tr><td>&nbsp;</td></tr>
+			<tr>
+				<td align='right'>
+					<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+						<%=messageKey%>
+					</html:messages>
+				</td>
+			</tr>
 			<tr>
 				<td>
 					<div style="width:100%; height:500px; overflow-y:auto;">
