@@ -23,7 +23,7 @@ System.out.println("currentPage         "+currentPage);
 		else
 		{
 			<%
-				height ="440" ;
+				height ="410" ;
 			%>
 		}
 
@@ -50,27 +50,27 @@ System.out.println("currentPage         "+currentPage);
 						</th>
 					</tr>-->
 					
-					<tr bordercolorlight="#000000" height="5%">
-						<td>&nbsp;</td>
+					<tr bordercolorlight="#000000" >
+						<td  height="1%">&nbsp;</td>
 						<td width="75%" valign="top" ><html:text property="textField" onkeydown="setFocusOnSearchButton(event)"/></td>
-						<td width="25%" valign="top">
+						<td width="25%" valign="top" >
 					
 							<input type="button"  value="      Go       " name="searchButton" id="searchButton" onclick="retriveSearchedEntities('<%= SearchCategory %>','<%=formName%>','<%=currentPage%>');"/>
 					    </td>
 					</tr>
-					<tr>
-					    <td>&nbsp;</td>
-						<td height="10px" align="left" valign="top" colspan="3"><font face="Arial" size="2"><bean:message key="query.chooseCategoryLable"/></font></td>
+					<tr  height="1%">
+					    <td  height="1%">&nbsp;</td>
+						<td  height="1%" align="left" valign="top" colspan="3"><font face="Arial" size="2"><bean:message key="query.chooseCategoryLable"/></font></td>
 					</tr>
 					<tr id="collapsableHeader" valign="top" class="row" width="97%">
-						<td valign="top">&nbsp;</td>
-						<td id="advancedSearchHeaderTd" height="5%" valign="top" bgcolor="#EAEAEA" style="border-left:solid 1px;border-top:solid 1px;border-bottom:solid 1px;bordercolorlight:#EAEAEA">
+						<td valign="top"  height="1%">&nbsp;</td>
+						<td id="advancedSearchHeaderTd" height="1%" valign="top" bgcolor="#EAEAEA" style="border-left:solid 1px;border-top:solid 1px;border-bottom:solid 1px;bordercolorlight:#EAEAEA">
 							<b><font face="Arial" size="2"><bean:message key="query.advancedSearchHeader"/></font></b>									
 						</td>
-						<th id="imageContainer" valign="top" align="right" height="5%" bgcolor="#EAEAEA" style="border-top:solid 1px;border-bottom:solid 1px;border-right:solid 1px;bordercolorlight:#EAEAEA">
+						<th id="imageContainer" valign="top" align="right" height="1%" bgcolor="#EAEAEA" style="border-top:solid 1px;border-bottom:solid 1px;border-right:solid 1px;bordercolorlight:#EAEAEA">
 							<a id="image" onClick="expand()" style="display:block"><img src="images/nolines_plus.gif" /></a>
 						</th>
-						<td>&nbsp;</td>
+						<td  height="1%">&nbsp;</td>
 					</tr>
 					<tr valign="top" >
 						<td valign="top"  style="display:none" id="td1">&nbsp;</td>
@@ -102,19 +102,19 @@ System.out.println("currentPage         "+currentPage);
 					<tr>
 						<td height="5px"></td>
 				 	</tr>
-					<tr valign="top" class="row" width="98%"  height="5%">
-						<td>&nbsp;</td>
-						<td colspan="2" height="5%" valign="top" bgcolor="#EAEAEA"  class="tdWithoutBottomBorder">
+					<tr valign="top" class="row" width="98%"  height="1%">
+						<td  height="1%">&nbsp;</td>
+						<td colspan="2"  height="1%" valign="top" bgcolor="#EAEAEA"  class="tdWithoutBottomBorder">
 							<b><font face="Arial" size="2"><bean:message key="query.searchResults"/></font>	</b>				
 						</td>
-						<td>&nbsp;</td>
+						<td  height="1%">&nbsp;</td>
 					</tr>
-					<tr valign="top" class="row" width="100%">
-						<td width="100%">&nbsp;</td>
+					<tr valign="top" class="row" width="98%" height="100%">
+						<td width="100%" height=<%=height%>>&nbsp;</td>
 						<td height=<%=height%> width="100%" colspan="2" id='resultSetDiv' class="tdWithoutTopBorder">
-							<div id="resultSet" style="overflow:auto;height:100%;width:100%"></div>
+							<div id="resultSet" style="overflow:auto;height:410;width:227"></div>
 						</td>
-						<td>&nbsp;</td>
+						<td height=<%=height%>>&nbsp;</td>
 					</tr>
 					
 			</table>

@@ -28,12 +28,12 @@
 <html:hidden property="currentPage" value="prevToAddLimits"/>
 <table bordercolor="#000000" border="0" width="100%" cellspacing="2" cellpadding="2"  height="100%">
 	<tr>
-		<td>
+		<td valign="top">
 			<table border="1" width="100%" cellspacing="0" cellpadding="0" height="100%" id="table1">
 				<tr>
-					<td>
+					<td valign="top">
 						<table border="0" width="100%" cellspacing="0" cellpadding="4" height="100%" bordercolor="#000000" id="table2" >
-							<tr  height="10" class="trStyle">
+							<tr  height="10" >
 								
 								<td width="20%" class="queryModuleTabMenuItem" >
 									<bean:message key="query.addLimits"/>
@@ -55,7 +55,7 @@
 								<td colspan="4" valign="top" height="100%" width="100%">
 									<table border="1" cellspacing="0" cellpadding="0" valign="top"  height="100%" width="100%">
 									<tr valign="top">
-										<td valign="top" height="500" colspan="4" width="100%">
+										<td valign="top" height="600px" colspan="4" width="100%">
 											<!--		tiles insert -->
 											<tiles:insert attribute="content"></tiles:insert>
 										</td>
@@ -68,7 +68,7 @@
 				</tr>
 		
 				<tr bgcolor="#EAEAEA">
-					<td colspan="4">
+					<td colspan="4" valign="top">
 						<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EAEAEA" height="100%" bordercolorlight="#000000" >
 							<tr height="35" valign="center">
 								<td width="2%" valign="center">&nbsp;</td>

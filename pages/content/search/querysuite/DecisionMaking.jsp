@@ -69,7 +69,7 @@
 				<td class="formMessagewithoutcolor">&nbsp;
 						</td>
 					<td class="formMessagewithoutcolor">
-						<html:radio property="options" value="viewAllRecords" onclick=""/><bean:message key="query.options.all.records"/>
+						<html:radio property="options" value="viewAllRecords" onclick="" /><bean:message key="query.options.all.records"/>
 					</td>
 				</tr>
 			<tr>

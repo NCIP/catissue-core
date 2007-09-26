@@ -53,7 +53,7 @@
 			<td height="60%" valign="top" width="100%" colspan="4">
 				<table border="0"  height="100%" width="100%" cellpadding="1" cellspacing="3">
 					<tr>
-						<td valign="top" width="10%">
+						<td valign="top" width="10%" >
 						<%@ include file="/pages/content/search/querysuite/ChooseSearchCategory.jsp" %>
 						</td>
 					
@@ -79,7 +79,8 @@
 												</tr>
 									
 								<tr>
-									<td height="200" width="100%" id="addLimitsSection"><div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
+									<td height="200" width="100%" id="addLimitsSection">
+									<div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
 								</tr>
 								</table>
 							</td>
@@ -92,7 +93,7 @@
 							<td  height="40%" valign="top">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
 								<tr>
-										<td height="600px">											
+										<td height="400px">											
 											<div id="queryTableTd" style="overflow:auto;height:100%;width:100%">
 											<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 												id="DAG" width="100%" height="100%"
