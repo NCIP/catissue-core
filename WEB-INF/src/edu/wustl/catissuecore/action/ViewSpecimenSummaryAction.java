@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
@@ -61,8 +62,11 @@ public class ViewSpecimenSummaryAction extends Action {
 				return mapping.findForward("updateSpecimenStatus");
 			}
 			summaryForm.setUserAction(ViewSpecimenSummaryForm.ADD_USER_ACTION);
+			CollectionProtocolBean collectionProtocolBean = 
+				(CollectionProtocolBean)session
+				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 			
-			if("update".equals(request.getParameter("action")))
+			if("update".equals(collectionProtocolBean.getOperation()))
 			{
 				summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
 			}

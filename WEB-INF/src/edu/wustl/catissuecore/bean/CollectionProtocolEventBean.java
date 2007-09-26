@@ -6,8 +6,12 @@ import java.util.Map;
 
 
 public class CollectionProtocolEventBean implements Serializable
-{
-	private static final long serialVersionUID = 1L;
+{	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8381530294059504778L;
+	
 	private String uniqueIdentifier;
 	private Double studyCalenderEventPoint;
 	private String collectionPointLabel;
@@ -19,7 +23,7 @@ public class CollectionProtocolEventBean implements Serializable
 	private String collectedEventComments;
 	private String receivedEventComments;
 	private Map specimenRequirementbeanMap = new LinkedHashMap();
-	
+	private long id=-1;
 	
 	public Double getStudyCalenderEventPoint()
 	{
@@ -159,5 +163,13 @@ public class CollectionProtocolEventBean implements Serializable
 		public static long getSerialVersionUID()
 	{
 		return serialVersionUID;
-	}	
+	}
+
+		public long getId() {
+			return id;
+		}
+
+		public void setId(long id) {
+			this.id = id;
+		}	
 }

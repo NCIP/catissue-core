@@ -44,6 +44,7 @@ public class CollectionProtocolBean implements Serializable
 	 */
 	private boolean consentWaived = false;
 	
+	private String operation = "Add";
 	
 	public long[] getProtocolCoordinatorIds()
 	{
@@ -175,6 +176,14 @@ public class CollectionProtocolBean implements Serializable
 	public void setIdentifier(Long identifier)
 	{
 		this.identifier = identifier;
+	}
+
+	public String getOperation() {
+		return operation;
+	}
+
+	public void setOperation(String operation) {
+		this.operation = operation;
 	}
 
 }

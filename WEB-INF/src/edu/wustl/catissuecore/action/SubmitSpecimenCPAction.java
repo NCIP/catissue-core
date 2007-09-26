@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -46,6 +47,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.flex.SpecimenBean;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -92,6 +94,9 @@ public class SubmitSpecimenCPAction extends BaseAction {
 							.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 
 					collectionProtocolBean.setIdentifier(collectionProtocol.getId());
+
+					CollectionProtocolUtil.updateSession(request,collectionProtocol.getId());
+					
 				}
 				ActionMessages actionMessages = new ActionMessages();
 				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
@@ -126,7 +131,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			if(pageOf != null && pageOf.equals("pageOfMultipleSpWithMenu"))
 				target = pageOf;
 			
-			specimenSummaryForm.switchUserAction();
+			specimenSummaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
 		} catch (Exception ex) {
 			target = Constants.FAILURE;
 			if(pageOf!=null && pageOf.equals("pageOfMultipleSpWithMenu"))
@@ -229,6 +234,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		specimenCollectionRequirementGroup.setClinicalDiagnosis(cpEventBean.getClinicalDiagnosis());
 		specimenCollectionRequirementGroup.setClinicalStatus(cpEventBean.getClinicalStatus());
 		collectionProtocolEvent.setRequiredCollectionSpecimenGroup(specimenCollectionRequirementGroup);
+		collectionProtocolEvent.setId(new Long(cpEventBean.getId()));
 		Collection specimenCollection =null;
 		Map specimenMap =(Map)cpEventBean.getSpecimenRequirementbeanMap();
 		
@@ -326,7 +332,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			e1.printStackTrace();
 			return null;
 		}
-		
+		specimen.setId(new Long(specimenRequirementBean.getId()));
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		specimen.setAvailable(Boolean.TRUE);
 		Quantity availableQuantity = new Quantity();
@@ -364,7 +370,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			CollectionProtocolBean cpBean) throws Exception {
 
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
-		//collectionProtocol.setId(cpBean.getID());
+		collectionProtocol.setId(cpBean.getIdentifier());
 		collectionProtocol.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		collectionProtocol.setAliquotInSameContainer(Boolean.TRUE);
 		collectionProtocol.setConsentsWaived(cpBean.isConsentWaived());

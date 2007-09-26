@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -36,9 +37,12 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 			ViewSpecimenSummaryForm specimenSummaryForm = (ViewSpecimenSummaryForm) form;
 			CollectionProtocol collectionProtocol = (CollectionProtocol)
 								specimenSummaryForm.getSummaryObject();
+			CollectionProtocolBean collectionProtocolBean = 
+				(CollectionProtocolBean)(request.getSession())
+				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 			
 			IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-			List cpList =bizLogic.retrieve(CollectionProtocol.class.getName(), "id", collectionProtocol.getId());
+			List cpList =bizLogic.retrieve(CollectionProtocol.class.getName(), "id", collectionProtocolBean.getIdentifier());
 
 			if (cpList != null && !cpList.isEmpty())
 			{
