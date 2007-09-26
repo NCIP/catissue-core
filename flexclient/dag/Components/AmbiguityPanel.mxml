@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="550" height="500" creationComplete="init()">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="550" height="500" creationComplete="init()" verticalScrollPolicy="off" horizontalScrollPolicy="off">
 <mx:Script>
 	<![CDATA[
+		import mx.controls.DataGrid;
 		import mx.controls.CheckBox;
 		import mx.binding.utils.BindingUtils;
 		import mx.collections.ArrayCollection;
@@ -12,6 +13,7 @@
 	    import mx.controls.Alert;
 		import mx.managers.PopUpManager;
 		import mx.rpc.events.ResultEvent;
+
 
 	    [Bindable]
 		public var pathList:ArrayCollection=new ArrayCollection();;
@@ -25,20 +27,42 @@
         {
         	 //Intialising ambiguity panel
         	selectedList = new ArrayCollection()
-        	pathList.addEventListener(CollectionEvent.COLLECTION_CHANGE, handleDataProviderChange);
+        	var dg :DataGrid = this.getChildByName("pathGrid") as DataGrid;
+        	dg.dataProvider=pathList;
+			addEventListener(ClickEvent.CLICK, onSimpleClickEvent);
         }
-       
+       /*OK & Cancel event Handler
+       */
 		public  function closePopUp(event:MouseEvent):void {
 				var buttonStr:Array=event.currentTarget.toString().split(".");
 				var index:int=(buttonStr.length-1)
 	   	 	 	PopUpManager.removePopUp(this);
 				if(buttonStr[index]=="OK")
 				{
+					var len:int = pathList.length;
+					for (var i:int=0;i<len;i++)
+					{
+						dagPath = pathList.getItemAt(i) as DAGPath;
+						if (dagPath.isSelected)
+						{
+							selectedList.addItem(dagPath);
+						}
+					}
+					
 					this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,this.parentApplication.getPathHandler,false);
 					this.parentApplication.rpcService.addEventListener("result",this.parentApplication.linkNodesHandler);
 					if(nodeList!=null&&selectedList!=null)
 					{
-						this.parentApplication.rpcService.linkNodes(nodeList,selectedList);
+						if(selectedList.length > 1)
+						{
+							Alert.show("Multiple associations not yet supoorted.");		
+							this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,this.parentApplication.linkNodesHandler,false);
+						}
+						else
+						{
+							this.parentApplication.rpcService.linkNodes(nodeList,selectedList); 
+							selectedList.removeAll();
+						}
 					}
 				}
 				else
@@ -47,43 +71,35 @@
 					pathList=null;
 					this.parentApplication.cancelHandler(nodeList);
 				}
-						
 		}
 
-	private function handleDataProviderChange(event:CollectionEvent):void
-        {
+		 /* this is the function that will catch the click event
+		that will bubble up from the Checkbox in our DataGrid's itemRenderer*/
+		private function onSimpleClickEvent(e:ClickEvent):void
+		{
+			// create refs to the items we care about
+			var ir:CheckBoxItemRenderer = e.target as CheckBoxItemRenderer;
+			var cb:CheckBox = ir.cb as CheckBox;
+			var dagPathVo:DAGPath = e.vo as DAGPath;
 		
-		try{
-				var len:int = pathList.length;
-				for (var i:int=0;i<len;i++)
-				{
-					dagPath = pathList.getItemAt(i) as DAGPath;
-					if (dagPath.isSelected)
-					{
-						selectedList.addItem(dagPath);
-					}
-				}
-			}catch(error:Error)
+			// update the appropriate data property based on the CheckBox's selected state
+			if(cb.selected)
 			{
-				Alert.show("Error :"+error.message);
-			
+				dagPathVo.isSelected = true;
 			}
-			
-             
-         }
+			else
+			{
+				dagPathVo.isSelected = false;
+			}
+		}
 		
 	]]>
 </mx:Script>
-	<mx:DataGrid name="pathGrid" dataProvider="{pathList}" width="550" x="0" height="500" y="0"  verticalScrollPolicy="off" horizontalScrollPolicy="off">
+
+	<mx:DataGrid name="pathGrid" dataProvider="{pathList}" width="530" x="0" height="425" y="0" verticalScrollPolicy="on" horizontalScrollPolicy="off">
 		<mx:columns>
-			<mx:DataGridColumn headerText="Paths" dataField="toolTip" dataTipField="toolTip" showDataTips="true" width="450"/>
-			<mx:DataGridColumn headerText="Select" dataField="isSelected" width="100">
-			   <mx:itemRenderer>
-			      <mx:Component>
-				         <mx:CheckBox name="checkBox" click="data.isSelected=!data.isSelected"  selected="{data.isSelected}"/>			      	
-			      </mx:Component>
-      		   </mx:itemRenderer>
-			</mx:DataGridColumn>			
+			<mx:DataGridColumn headerText="Paths" dataField="toolTip" dataTipField="toolTip" showDataTips="true" width="440" wordWrap="true"/>
+			<mx:DataGridColumn headerText="Select" dataField="isSelected" width="90" itemRenderer="Components.CheckBoxItemRenderer" rendererIsEditor="true" editorDataField="selected"/>
 		</mx:columns>
 	</mx:DataGrid>
 	<mx:ControlBar name="controlBar">
