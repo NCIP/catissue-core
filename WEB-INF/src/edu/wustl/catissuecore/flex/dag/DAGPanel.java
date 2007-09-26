@@ -318,8 +318,6 @@ public class DAGPanel {
 	public static String getPathDisplayString(IPath path) {
 
 		String text = "";
-		// text=text.concat("<HTML><B>Path</B>:");
-
 		List<IAssociation> pathList = path.getIntermediateAssociations();
 		text = text.concat(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(path.getSourceEntity()));
 		for (int i = 0; i < pathList.size(); i++) {
@@ -334,49 +332,10 @@ public class DAGPanel {
 			}
 			text = text.concat(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(association.getTargetEntity()));
 		}
-		text = text.concat("");
-		Logger.out.debug(text);
-		StringBuffer sb = new StringBuffer();
-		int textLength = text.length();
-		Logger.out.debug(textLength);
-		int currentStart = 0;
-		String currentString = null;
-		int offset = 100;
-		int strLen = 0;
-		int len = 0;
-		while (currentStart < textLength && textLength > offset) {
-			currentString = text.substring(currentStart, (currentStart + offset));
-			strLen = strLen + currentString.length() + len;
-			sb.append(currentString);
-			int index = text.indexOf(">>", (currentStart + offset));
-			if (index == -1) {
-				index = text.indexOf(".", (currentStart + offset));
-			}
-			if (index == -1) {
-				index = text.indexOf(",", (currentStart + offset));
-			}
-			if (index == -1) {
-				index = text.indexOf(" ", (currentStart + offset));
-			}
-			if (index != -1) {
-				len = index - strLen;
-				currentString = text.substring((currentStart + offset), (currentStart + offset + len));
-				sb.append(currentString);
-				sb.append("");
-			} else {
-				if (currentStart == 0) {
-					currentStart = offset;
-				}
-				sb.append(text.substring(currentStart));
-				return sb.toString();
-			}
-
-			currentStart = currentStart + offset + len;
-			if ((currentStart + offset + len) > textLength)
-				break;
-		}
-		sb.append(text.substring(currentStart));
-		return sb.toString();
+		Logger.out.debug(text );
+		return text;
+		
+		
 	}
 
 	/**
