@@ -756,7 +756,6 @@ public class FlexInterface
 		}
 		else
 		{
-			restoreSession();
 			dagPanel.restoreQueryObject();
 		}
 	}
@@ -768,7 +767,6 @@ public class FlexInterface
 	public DAGNode addNodeToView(String nodesStr)
 	{
 		DAGNode dagNode = dagPanel.addNodeToOutPutView(nodesStr);
-//		nodeList.add(dagNode);
 		return dagNode;
 	}
 	/**
@@ -777,7 +775,6 @@ public class FlexInterface
 	 */
 	public List<DAGNode> repaintDAG()
 	{
-	//	restoreQueryObject();
 		return dagPanel.repaintDAG();
 	}
 	
@@ -793,23 +790,9 @@ public class FlexInterface
 	public DAGNode createNode(String strToCreateQueryObject,String entityName)
     {
 		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName,"Add");
-//		nodeList.add(dagNode);
 		return dagNode;
 	}
 	
-	/**
-	 * GetLastNode
-	 * @return
-	 */
-//	public DAGNode getLastNode()
-//	{
-//		int lastIndex =0;
-//		if(!nodeList.isEmpty())
-//		{
-//			lastIndex= (nodeList.size()-1);
-//		}
-//		return nodeList.get(lastIndex);
-//	}
 	/**
 	 * 
 	 * @param expressionId
@@ -833,16 +816,6 @@ public class FlexInterface
 	{
 		String conditionStr	= null;
 		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName,"Edit");
-//		for(int i=0;i<nodeList.size();i++)
-//		{
-//			DAGNode node  = nodeList.get(i);
-//			if(node.equals(dagNode))
-//			{
-//				nodeList.remove(i);
-//				nodeList.add(i,dagNode);
-//				break;
-//			}
-//		}
 		conditionStr = dagNode.getToolTip();
 		return conditionStr;
 	}
@@ -868,16 +841,7 @@ public class FlexInterface
 	 */
 	public void deleteNode(int expId)
 	{
-//		for(int i=0;i<nodeList.size();i++)
-//		{
-//			DAGNode dagNode = nodeList.get(i);
-//			if(dagNode.getExpressionId()==expId)
-//			{
-				dagPanel.deleteExpression(expId);//delete Expression 
-//				nodeList.remove(i);
-//				break;
-//			}
-//		}
+		dagPanel.deleteExpression(expId);//delete Expression 
 	}
 	/**
 	 * Gets path List between nodes
@@ -896,7 +860,7 @@ public class FlexInterface
 	 * @return
 	 */
 	public List getpaths(List<DAGNode> linkedNodeList)
-	{
+	{ 
 		List<IPath> pathsList=getPathList(linkedNodeList);
 		List<DAGPath> pathsListStr = new ArrayList<DAGPath>();
 		for(int i=0;i<pathsList.size();i++)
@@ -966,28 +930,17 @@ public class FlexInterface
 	 */
 	public void initFlexInterface()
 	{
-//		nodeList = new ArrayList<DAGNode>();
 		queryObject = new ClientQueryBuilder();
 		IPathFinder pathFinder = new CommonPathFinder();
 		dagPanel = new DAGPanel(pathFinder);
 		dagPanel.setQueryObject(queryObject);
-		restoreSession();
 	}
-	
-	private void restoreSession()
-	{
-		session= flex.messaging.FlexContext.getHttpRequest().getSession();
-		dagPanel.setSession(session);
-		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
-		dagPanel.setRequest(request);
-	}
-	
+		
 	private	IClientQueryBuilderInterface queryObject=null;
-//	private List<DAGNode> nodeList = null;
 	private DAGPanel dagPanel = null;
 	private HttpSession session = null;
 	
-	
+//----- END DAG -------	
 //	Methods added by Baljeet
 	/**
 	 * This method retrieves the List if all Collection Protocols

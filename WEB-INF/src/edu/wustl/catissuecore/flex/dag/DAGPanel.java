@@ -54,8 +54,6 @@ import edu.wustl.common.util.logger.Logger;
 public class DAGPanel {
 
 	private IClientQueryBuilderInterface m_queryObject;
-	private HttpServletRequest m_request;
-	private HttpSession m_session;
 	private IPathFinder m_pathFinder;
 	private IExpression expression;
 	private HashMap<String,IPath> m_pathMap = new HashMap<String, IPath>();
@@ -88,6 +86,13 @@ public class DAGPanel {
 		return dagNode;
 	}
 
+	/**
+	 * 
+	 * @param strToCreateQueryObject
+	 * @param entityName
+	 * @param mode
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public DAGNode createQueryObject(String strToCreateQueryObject,String entityName,String mode) 
 	{
@@ -95,7 +100,10 @@ public class DAGPanel {
 		IExpressionId expressionId = null;
 		DAGNode node = null;
 		
-		IQuery query = (IQuery)m_session.getAttribute(DAGConstant.QUERY_OBJECT);// Get existing Query object from server  
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		HttpSession session = request.getSession();
+		
+		IQuery query = (IQuery)session.getAttribute(DAGConstant.QUERY_OBJECT);// Get existing Query object from server  
 
 		if(query != null)
 		{
@@ -105,8 +113,7 @@ public class DAGPanel {
 		{
 			query = m_queryObject.getQuery();
 		}
-		System.out.println("query=======>"+query);
-		m_session.setAttribute(DAGConstant.QUERY_OBJECT, query);
+		session.setAttribute(DAGConstant.QUERY_OBJECT, query);
 
 		try {
 			Long entityId = Long.parseLong(entityName);
@@ -139,10 +146,8 @@ public class DAGPanel {
 
 			}
 		} catch (DynamicExtensionsSystemException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (DynamicExtensionsApplicationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return node;
@@ -154,19 +159,6 @@ public class DAGPanel {
 	 */
 	public void setQueryObject(IClientQueryBuilderInterface queryObject) {
 		m_queryObject = queryObject;
-	}
-	/**
-	 * Sets httpsession
-	 * @param session
-	 */
-	public void setSession(HttpSession session)
-	{
-		m_session=session;
-	}
-
-	public void setRequest(HttpServletRequest request)
-	{
-		m_request=request;
 	}
 	/**
 	 * Sets Expression
@@ -406,7 +398,9 @@ public class DAGPanel {
 	public List<DAGNode> repaintDAG()
 	{
 		List<DAGNode> nodeList = new ArrayList<DAGNode>();
-		IQuery query =(IQuery)m_session.getAttribute(DAGConstant.QUERY_OBJECT);
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		HttpSession session = request.getSession();
+		IQuery query =(IQuery)session.getAttribute(DAGConstant.QUERY_OBJECT);
 		m_queryObject.setQuery(query);
 		IConstraints constraints = query.getConstraints();
 
@@ -482,7 +476,6 @@ public class DAGPanel {
 						
 			if(exp.isVisible())
 			{
-			//	PathFinder pathFinder =(PathFinder)m_pathFinder;
 				IPath pathObj = (IPath)m_pathFinder.getPathForAssociations(intraModelAssociationList);
 				long pathId =pathObj.getPathId();
 					
@@ -490,7 +483,6 @@ public class DAGPanel {
 				dagNode.setExpressionId(exp.getExpressionId().getInt());
 				dagNode.setNodeName(edu.wustl.cab2b.common.util.Utility.getOnlyEntityName(constraintEntity.getDynamicExtensionsEntity()));
 				dagNode.setToolTip(exp);
-				
 				
 			/*	Adding Dag Path in each visible list which have childrens*/
 				String pathStr =new Long(pathId).toString();
@@ -502,7 +494,6 @@ public class DAGPanel {
 				
 				String key =pathStr+"_"+node.getExpressionId()+"_"+dagNode.getExpressionId();
 				m_pathMap.put(key,pathObj);
-				
 				
 				node.setDagpathList(dagPath);
 				node.setAssociationList(dagNode);
@@ -565,23 +556,13 @@ public class DAGPanel {
 			if(nodesStr.indexOf("~")!= -1)
 			{
 				String[] entityArr =  nodesStr.split("~");
-	//			Map entityMap = (Map)m_session.getAttribute(Constants.SEARCHED_ENTITIES_MAP);//TODO  comment 
-				
-				
-				
 				for(int i=0;i<entityArr.length; i++)
 				{
 					String entityName = entityArr[i];
-					
 					Long entityId = Long.parseLong(entityName);
 					EntityInterface entity =EntityCache.getCache().getEntityById(entityId);
-					
-					//EntityInterface entity = (EntityInterface)entityMap.get(entityName);
-					
 					IExpressionId expressionId = ((ClientQueryBuilder)m_queryObject).addExpression(entity);
-//					DAGNodeBuilder nodeBuilder  = new DAGNodeBuilder();
 					node = createNode(expressionId,true);
-
 				}
 			}
 		}
@@ -593,9 +574,10 @@ public class DAGPanel {
 	 */
 	public void restoreQueryObject()
 	{
-		IQuery query = (IQuery) m_session.getAttribute(DAGConstant.QUERY_OBJECT);
+		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
+		HttpSession session = request.getSession();
+		IQuery query = (IQuery) session.getAttribute(DAGConstant.QUERY_OBJECT);
 		m_queryObject.setQuery(query);
-		
 	}
 	/**
 	 * 
@@ -605,7 +587,6 @@ public class DAGPanel {
 	{
 		IExpressionId expressionId = new ExpressionId(expId);
 		m_queryObject.removeExpression(expressionId);
-		//m_queryObject.setQuery(arg0)
 	}
 	/**
 	 * 
@@ -642,7 +623,6 @@ public class DAGPanel {
 		JoinGraph graph =(JoinGraph)m_queryObject.getQuery().getConstraints().getJoinGraph();
 	
 		List<IExpressionId> expressionIds = graph.getIntermediateExpressions(sourceexpressionId, destexpressionId, associations);
-		System.out.println(expressionIds.size());
 		// If the association is direct association, remove the respective association 
 		if (0 == expressionIds.size()) {
 			m_queryObject.removeAssociation(sourceexpressionId, destexpressionId);
