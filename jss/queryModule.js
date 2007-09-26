@@ -201,7 +201,7 @@
 			}
 			else
 			{
-				resultSetDivObj.height = "400";
+				resultSetDivObj.height = "410";
 			}
 		}
 		else  							   //Clicked on + image
@@ -221,7 +221,7 @@
 				dataObj.style.display = 'block';
 				td1.style.display = 'block';
 				td2.style.display = 'block';
-				resultSetDivObj.height = "320";
+				resultSetDivObj.height = "300";
 			}
 			switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
 		}
