@@ -17,9 +17,9 @@
 		<script>
 			function closeSaveQueryWindow()
 			{
-				//var parentWindowForm = window.opener.document.forms[0];
-				//parentWindowForm.action = "RetreiveQueryAction.do";
-				//parentWindowForm.submit();
+				var parentWindowForm = window.opener.document.forms[0];
+				parentWindowForm.action = "RetrieveQueryAction.do";
+				parentWindowForm.submit();
 				
 				window.self.close();
 			}
@@ -36,65 +36,52 @@
 		<html:form styleId='saveQueryForm' action='<%=Constants.SAVE_QUERY_ACTION%>'>
 			<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 				<tr>
-					<td>
-						<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="4%">
+					<td colspan='3 height='20' class="formTitle">
+						<bean:message key="savequery.conditionInformationTitle"/>
+					</td>
+				</tr>
+				<tr>
+					<td width='5' class="formRequiredNotice">*</td>
+					<td class="formRequiredLabel">Title :</td>
+					<td class="formField">
+						<input type="text" style="width: 300px; display: block;" name="title" value=""/>
+					</td>
+					<!--
+					<td rowspan="2" valign="top">Share Query With :</td>
+					<td rowspan="2" valign="top">
+						<select multiple="multiple" name="userIds" class="dropdownQuery" style="width:150px; display:block;">
+							<option>All</option>
+							<option>Administrator</option>
+						</select>
+					</td>
+					-->
+				</tr>
+				<tr>
+					<td width='5' class="formRequiredNotice">&nbsp;</td>
+					<td class="formLabel">Description :</td>
+					<td class="formField">
+						<textarea cols="40" rows="4" style="width: 300px;" name="description"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan='3' class="formTitle" height="20">
+						<bean:message key="savequery.setConditionParametersTitle" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan='3'>
+						<table cellpadding="0" cellspacing="0" border="0" class="contentPage" width='100%'>
 							<tr>
-								<td class="formTitle"><bean:message key="savequery.conditionInformationTitle"/></td>
+								<td><%=request.getAttribute("HTMLContents")%></td>
 							</tr>
 						</table>
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<table>
-							<tr>
-								<td class="formLabel">Title :</td>
-								<td class="formField"><input type="text" style="width: 300px; display: block;" name="title" value=""/></td>
-								<!--
-								<td rowspan="2" valign="top">Share Query With :</td>
-								<td rowspan="2" valign="top">
-									<select multiple="multiple" name="userIds" class="dropdownQuery" style="width:150px; display:block;">
-										<option>All</option>
-										<option>Administrator</option>
-									</select>
-								</td>
-								-->
-							</tr>
-							<tr>
-								<td class="formLabel">Description :</td>
-								<td>
-									<textarea cols="40" rows="4" style="width: 300px;" name="description"></textarea>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="4%">
-							<tr>
-								<td class="formTitle">
-									<bean:message key="savequery.setConditionParametersTitle" />
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>
-						<table>
-							<tr>
-								<td> <%=request.getAttribute("HTMLContents") %>  </td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td align="right">
+					<td colspan='3' align="right">
 					    <input type="hidden" name="queryString" id="queryString" value=""/>
 					    <input type="hidden" name="buildQueryString" id="buildQueryString" value=""/>
-						<input type="button" name="preview" value="Preview" disabled='true'/>
+						<input type="button" name="preview" value="Preview" disabled="true"/>
 						<c:choose>
 							<c:when test="${querySaved eq 'true'}">
 								<input type="button" name="close" value="Close" onClick="closeSaveQueryWindow()"/>
