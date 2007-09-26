@@ -4422,7 +4422,7 @@ PUBLIC
 			name="viewSpecimenSummaryForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/pages/SpecimenSummary.jsp" />
+			<forward name="success" path="/GenericSpecimenSummary.do" />
 			<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="updateCP" path="/UpdateCollectionProtocol.do" />
 			<forward name="failure" path="/pages/SpecimenSummary.jsp" />
@@ -4435,8 +4435,8 @@ PUBLIC
 			name="viewSpecimenSummaryForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/pages/SpecimenSummary.jsp" />
-			<forward name="failure" path="/pages/SpecimenSummary.jsp" />
+			<forward name="success" path="/GenericSpecimenSummary.do" />
+			<forward name="failure" path="/GenericSpecimenSummary.do" />
 		</action>
             
 	</action-mappings>
