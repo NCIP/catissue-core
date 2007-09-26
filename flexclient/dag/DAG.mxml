@@ -460,15 +460,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		if(selectedList!=null)
 		{
 		//	linkCount=0;
-			if(selectedList.length > 1)
-			{
-				Alert.show("Multiple associations not yet supoorted.");		
-			}
-			else
-			{
-				path = selectedList.getItemAt(0) as DAGPath;
-				linkNodes(firstNode,secondNode,path);
-			}
+			path = selectedList.getItemAt(0) as DAGPath;
+			linkNodes(firstNode,secondNode,path);
+			
 		}
 		else
 		{
