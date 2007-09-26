@@ -11,6 +11,13 @@
 
 package edu.wustl.catissuecore.util.global;
 
+import edu.wustl.catissuecore.domain.CellSpecimen;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
+
 
 /**
  * This class stores the constants used in the operations in the application.
@@ -1998,11 +2005,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
     
     //Query Shopping cart constants
     public static final String SHOPPING_CART_FILE_NAME = "MyList.csv";
-   // public static final String ADD_TO_CART = "";
     public static final String DUPLICATE_OBJECT = "duplicateObject";
     public static final String DIFFERENT_VIEW_IN_CART = "differentCartView";
     public static final String IS_SPECIMENID_PRESENT = "isSpecimenIdPresent";
-    public static final String SPECIMEN_ID_INDEX ="specimenIdIndex";
 
     // Constants for CP Based Entry
     public static final String COLLECTION_PROTOCOL_EVENT_ID = "Event_Id";
@@ -2097,4 +2102,17 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//SPECIMEN COllection Status
 	public static final String SPECIMEN_COLLECTED = "Collected";
 	public static final String SPECIMEN_ANTICOPATED = "Anticipated";
+	
+	//Shopping cart constants.
+	public static final String[] entityNameArray = {
+		              Specimen.class.getName(),
+			          FluidSpecimen.class.getName(),
+			          MolecularSpecimen.class.getName(),
+			          TissueSpecimen.class.getName(),
+			          CellSpecimen.class.getName(),
+			          SpecimenArray.class.getName()
+    };
+	
+	public static final String SHOPPING_CART_ENTITY_NAME = "entityName";
+	
 }

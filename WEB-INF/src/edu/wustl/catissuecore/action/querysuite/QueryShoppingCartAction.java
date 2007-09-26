@@ -70,7 +70,6 @@ public class QueryShoppingCartAction extends BaseAction
 		Map map = searchForm.getValues();
 		Set chkBoxValuesSet = map.keySet();
 		List<Integer> chkBoxValues = null;;
-		
 		if(chkBoxValuesSet!=null)
 		{
 			chkBoxValues = new ArrayList<Integer>();
@@ -78,8 +77,6 @@ public class QueryShoppingCartAction extends BaseAction
 			{
 				chkBoxValues.add(getIndex(checkedValue));
 			}
-			
-			
 		}
 
 		String isCheckAllAcrossAllChecked = (String) request
@@ -126,19 +123,19 @@ public class QueryShoppingCartAction extends BaseAction
 		{  
 			setCartView(request, cart);
 			target = new String(Constants.VIEW);
-
 		}
 		else if (operation.equals("addToOrderList"))
 		{
 			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			List<String> specimenIds = bizLogic.getEntityIdsList(cart, Specimen.class.getName(), chkBoxValues);
+			List<String> specimenIds = new ArrayList<String>();
+			String entityName = request.getParameter(Constants.SHOPPING_CART_ENTITY_NAME);
+			if(entityName!=null)
+				specimenIds = bizLogic.getEntityIdsList(cart, entityName, chkBoxValues);
 			session.setAttribute("specimenId", specimenIds);
 			target = new String("requestToOrder");
 		}
-
 		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_MODULE);
 		return mapping.findForward(target);
-
 	}
 
 	/**
@@ -148,25 +145,27 @@ public class QueryShoppingCartAction extends BaseAction
 	private void setCartView(HttpServletRequest request, QueryShoppingCart cart)
 	{ 
 		String isSpecimenIdPresent = "false";
+		String entityName = "";
 		boolean isEmpty = false;
 		if (cart != null)
 		{
 			List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
 			if (cartAttributeList != null)
 			{
-				for (Iterator iterator = cartAttributeList.iterator(); iterator.hasNext();)
+				List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
+				for (AttributeInterface attribute :cartAttributeList)
 				{
-					AttributeInterface name = (AttributeInterface) iterator.next();
-					if ((name.getName().equals(Constants.ID))
-							&& (name.getEntity().getName()
-									.equals(Specimen.class.getName())))
+					if ((attribute.getName().equals(Constants.ID))
+							&& ((orderableEntityNameList)).contains(attribute.getEntity().getName()))
 					{
 						isSpecimenIdPresent = "true";
+						entityName = attribute.getEntity().getName();
 						break;
 					}
 				}
 
 				request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
+				request.setAttribute(Constants.SHOPPING_CART_ENTITY_NAME, entityName);
 			}
 			else
 				isEmpty = true;

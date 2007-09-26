@@ -19,6 +19,7 @@
 	String checkAllPages = (String)session.getAttribute("checkAllPages");
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String isSpecimenIdPresent = (String)request.getAttribute(Constants.IS_SPECIMENID_PRESENT);
+	String cartEntityName = (String)request.getAttribute(Constants.SHOPPING_CART_ENTITY_NAME);
 	if(isSpecimenIdPresent==null)
 	 isSpecimenIdPresent = "";
 	
@@ -92,9 +93,14 @@ function onExport()
 function addToOrderList()
 		{			
 		    var isChecked = updateHiddenFields();
+		    var action ="";
 		    if(isChecked == "true")
 		    {
-				var action = "QueryAddToCart.do?operation=addToOrderList";
+		        <%if(cartEntityName!=null && !cartEntityName.equals("")){%>
+			       action = "QueryAddToCart.do?operation=addToOrderList&entityName="+"<%=cartEntityName%>";
+			    <%}else{%>
+			       action = "QueryAddToCart.do?operation=addToOrderList";
+			    <%}%>
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
