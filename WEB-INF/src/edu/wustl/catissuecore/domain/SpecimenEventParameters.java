@@ -106,4 +106,16 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 	{
 		return super.clone();
 	}
+	
+	 /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {
+		
+		
+		return "specimen with label '"+getSpecimen().getLabel()+"'";
+		
+	}
+ 	
 }

@@ -186,4 +186,11 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
         }
 	}
 	
+	public String getMessageLabel() {
+		
+		
+		return "specimen with label";
+		
+	}
+	
 }
