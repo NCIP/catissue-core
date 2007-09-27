@@ -252,7 +252,7 @@ public class ReportLoader
 	private Collection<SpecimenEventParameters> getDefaultEvents(SpecimenCollectionGroup specimenCollectionGroup) throws DAOException, ApplicationException
 	{
 		Collection<SpecimenEventParameters> defaultEventCollection=new HashSet<SpecimenEventParameters>();
-		String loginName=CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA);
+		String loginName=CaTIESProperties.getValue(CaTIESConstants.USER_NAME);
 		User user=(User)CaCoreAPIService.getObject(User.class, Constants.LOGINNAME, loginName);
 		
 		CollectionEventParameters collectionEvent=new CollectionEventParameters();
