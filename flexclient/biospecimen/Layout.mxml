@@ -19,7 +19,7 @@
 
     [Bindable]
 		public var cpCollection:ArrayCollection = new ArrayCollection();
-    [Bindable]
+  
                 public var pCollection:ArrayCollection = new ArrayCollection(); 
   
    
@@ -66,11 +66,14 @@
  
               public var parentNode :Object = new Object;
               public var isEventHandled:Boolean = false;
+	          public var selectedParticipantIndex:Number = 0;
+		      public var tempCollection:ArrayCollection = new ArrayCollection();
 	  
     public function initApp():void
     {
     	 ExternalInterface.addCallback("myFlexMethod",refreshTree);
-	 	 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
+ 	 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
+	 ExternalInterface.addCallback("editParticipant",editParticipant);
     }
     
      /*
@@ -215,8 +218,20 @@
 	{
 	    var bean : NameValueBean = new NameValueBean();
 		pCollection = pevent.result as ArrayCollection;	
+		pCombo.dataProvider = pCollection;
 	}
-   
+	/*
+	  Event Handler for Temp Collection
+	*/
+   	public function tempHandler(pevent:ResultEvent):void
+	{	  
+	    var bean : NameValueBean = new NameValueBean();
+		tempCollection = pevent.result as ArrayCollection;
+		bean = tempCollection[selectedParticipantIndex] as NameValueBean;
+        pCombo.dataProvider = tempCollection;		
+		pCombo.selectedItem = bean;
+			
+	}
     /*
       This mehtod invoked when a Participant is clicked
     */
@@ -229,6 +244,7 @@
 	    var selectedCp : NameValueBean = new NameValueBean();
 	    selectedCp =  cpCombo.selectedItem as NameValueBean;
 	    var selectedCpId :String = selectedCp.value;
+        selectedParticipantIndex = pCombo.selectedIndex;
 	  
 	   // title  = title +" "+selectedParticipant.name;
 	     spDetailsLabel.text = title+"  "+selectedParticipant.name;
@@ -340,6 +356,32 @@
 	      }*/
     	 
     	
+    }
+    /*
+      Fuction to be called To refresh Participant Name after edit participant
+    */
+    public function editParticipant():void 
+    {
+    	
+    	var selectedCp : NameValueBean = new NameValueBean();
+ 		selectedCp =  cpCombo.selectedItem as NameValueBean;
+		var remoteObj1:RemoteObject =  new RemoteObject(); 
+		remoteObj1.destination = "cdeService";
+		var cpId :String = selectedCp.value;
+		if(cpId == "-1")
+		{
+             Alert.show("Please select valid Collection Protocol");
+             pCombo.dataProvider = null;
+		}
+		else
+		{
+	
+			remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name)
+			remoteObj1.addEventListener(ResultEvent.RESULT,tempHandler);
+			remoteObj1.addEventListener("fault",faultHandler);
+   
+        }       
+        
     }
 	
 	 /*
@@ -467,7 +509,7 @@
                      	<mx:Button toolTip="Click to  register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
                    	 
                    	 </mx:HBox>
-                   	 <mx:List id="pCombo" width="100%" rowCount="1" height="100%" dataProvider="{pCollection}" labelField="name" click="onParticipantClick()"/>
+                   	 <mx:List id="pCombo" width="100%" rowCount="1" height="100%"  labelField="name" click="onParticipantClick()"/>
                  </mx:VBox>
         	     <mx:VBox height="86.5%" width="100%" id="spDetailVbox">
                    	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="100%" height="15" fontWeight="bold" />

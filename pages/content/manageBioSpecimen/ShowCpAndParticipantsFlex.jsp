@@ -57,7 +57,15 @@
 	function refreshCpParticipants()
 	{
          callFlexMethod();
-	     interfaceObj.refreshParticipants();
+	     interfaceObj.editParticipant();
+	}
+
+	function editParticipant()
+	{
+		
+		 callFlexMethod();
+	     interfaceObj.editParticipant();
+	
 	}
 	function onParticipantClick(pId,cpId,refParticipants)
 	{

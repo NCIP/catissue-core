@@ -152,7 +152,7 @@
 	%>
 		<script language="javascript">
 		//Added by Falguni to refresh participant tree 
-		top.frames["cpAndParticipantView"].refreshCpParticipants();
+		top.frames["cpAndParticipantView"].editParticipant();
 	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');	
 		</script>
 	<%}
