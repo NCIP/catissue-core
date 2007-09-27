@@ -3456,7 +3456,7 @@ PUBLIC
 		name="quickEventsForm"
 		validate="false"
 		scope="request">
-		<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
+		<forward name="success" path="/QuickEvents.do?operation=add&amp;menuSelected=15" />
 		<forward name="failure" path="/QuickEvents.do" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
