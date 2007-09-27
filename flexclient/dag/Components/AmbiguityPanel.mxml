@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="550" height="500" creationComplete="init()" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="520" height="390" creationComplete="init()" verticalScrollPolicy="off" horizontalScrollPolicy="off">
 <mx:Script>
 	<![CDATA[
 		import mx.controls.DataGrid;
@@ -96,10 +96,10 @@
 	]]>
 </mx:Script>
 
-	<mx:DataGrid name="pathGrid" dataProvider="{pathList}" width="530" x="0" height="425" y="0" verticalScrollPolicy="on" horizontalScrollPolicy="off">
+	<mx:DataGrid name="pathGrid" dataProvider="{pathList}" width="500" x="0" height="315" y="0" verticalScrollPolicy="on" horizontalScrollPolicy="off">
 		<mx:columns>
 			<mx:DataGridColumn headerText="Paths" dataField="toolTip" dataTipField="toolTip" showDataTips="true" width="440" wordWrap="true"/>
-			<mx:DataGridColumn headerText="Select" dataField="isSelected" width="90" itemRenderer="Components.CheckBoxItemRenderer" rendererIsEditor="true" editorDataField="selected"/>
+			<mx:DataGridColumn headerText="Select" dataField="isSelected" width="60" itemRenderer="Components.CheckBoxItemRenderer" rendererIsEditor="true" editorDataField="selected"/>
 		</mx:columns>
 	</mx:DataGrid>
 	<mx:ControlBar name="controlBar">
