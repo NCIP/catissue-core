@@ -99,15 +99,15 @@ public class ReportLoaderQueueProcessor extends Thread
 			catch(Exception ex)
 			{
 				Logger.out.error("Error in processing of ReportLoaderQueueThread ",ex);
-			}
-			try
-			{
-				Logger.out.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
-				Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
-			}
-			catch(Exception ex)
-			{
-				Logger.out.error("Error while calling Thread.sleep for ReportLoaderQueueProcessor thread",ex);
+				try
+				{
+					Logger.out.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
+					Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
+				}
+				catch(Exception e)
+				{
+					Logger.out.error("Error while calling Thread.sleep for ReportLoaderQueueProcessor thread",e);
+				}
 			}
 		}
 	}
