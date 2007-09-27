@@ -126,7 +126,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 				specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
 				
-				LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance("speicmenCollectionGroupLabelGeneratorClass");
+				LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
 				specimenCollectionGroupLableGenerator.setLabel(specimenCollectionGroup);
 				
 				Collection cloneSpecimenCollection = new LinkedHashSet();
