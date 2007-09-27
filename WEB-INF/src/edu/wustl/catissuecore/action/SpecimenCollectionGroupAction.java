@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
+import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -50,6 +51,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
@@ -629,9 +631,18 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		{
 			setEventsId(specimenCollectionGroupForm,bizLogic);
 		}
+	
+		// set associated identified report id
+		Long reportId=getAssociatedIdentifiedReportId(specimenCollectionGroupForm.getId());
+		if(reportId==null)
+		{
+			reportId=new Long(-1);
+		}
+		HttpSession session = request.getSession();
+		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 		
 		return mapping.findForward(pageOf);
-			}
+	}
 	/**
 	 * Patch Id : FutureSCG_4
 	 * Description : method to set Number Of Specimens
@@ -1303,6 +1314,28 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		columnList.add(Constants.STORAGE_CONTAINER_LOCATION);
 		columnList.add(Constants.CLASS_NAME);
 		return columnList; 
+	}
+	
+	private Long getAssociatedIdentifiedReportId(Long scgId) throws DAOException
+	{
+		IdentifiedSurgicalPathologyReportBizLogic bizLogic = (IdentifiedSurgicalPathologyReportBizLogic)BizLogicFactory.getInstance().getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
+		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
+		String displayEventFields[] = {"id"};
+		String valueField = Constants.SYSTEM_IDENTIFIER;
+		String whereColumnName[] = {Constants.COLUMN_NAME_SCG_ID};
+		String whereColumnCondition[] = {"="};
+		Object[] whereColumnValue = {scgId};
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+		String separatorBetweenFields = "";
+
+		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField, whereColumnName,
+				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
+		if(list!=null && list.size()>1)
+		{
+			NameValueBean nvBean=(NameValueBean)list.get(1);
+			return (new Long(nvBean.getValue()));
+		}
+		return null;
 	}
 }
 

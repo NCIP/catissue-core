@@ -41,7 +41,6 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -643,6 +642,15 @@ public class NewSpecimenAction extends SecureAction
 		{
 			request.setAttribute("disabled", "true");
 		}
+		
+		// set associated identified report id
+		Long reportId=getAssociatedIdentifiedReportId(specimenForm.getId());
+		if(reportId==null)
+		{
+			reportId=new Long(-1);
+		}
+		HttpSession session = request.getSession();
+		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 		//Logger.out.debug("End of specimen action");
 
 		return mapping.findForward(pageOf);
@@ -1372,5 +1380,20 @@ public class NewSpecimenAction extends SecureAction
 		columnList.add(Constants.STORAGE_CONTAINER_LOCATION);
 		columnList.add(Constants.CLASS_NAME);
 		return columnList; 
+	}
+	
+	private Long getAssociatedIdentifiedReportId(Long specimenId) throws DAOException, ClassNotFoundException
+	{
+		String hqlString="select scg.identifiedSurgicalPathologyReport.id " +
+		" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
+		" edu.wustl.catissuecore.domain.Specimen as specimen ," +
+		" where specimen.id = " + specimenId +
+		" and specimen.id in elements(scg.specimenCollection)";
+		List reportIDList=Utility.executeQuery(hqlString);
+		if(reportIDList!=null && reportIDList.size()>0)
+		{
+			return ((Long)reportIDList.get(0));
+		}
+		return null;
 	}
 }

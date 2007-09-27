@@ -342,7 +342,14 @@ public class ParticipantAction extends SecureAction
 		List list = bizlogic.getList(cpSourceObjectName, cpDisplayNameFields, cpValueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
 		
-		
+		// set associated identified report id
+		Long reportId=getAssociatedIdentifiedReportId(participantForm.getId());
+		if(reportId==null)
+		{
+			reportId=new Long(-1);
+		}
+		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
+
 		Logger.out.debug("pageOf :---------- " + pageOf);
 
 		return mapping.findForward(pageOf);
@@ -532,5 +539,17 @@ public class ParticipantAction extends SecureAction
 				}
 			}
 		}
+	}
+	
+	private Long getAssociatedIdentifiedReportId(Long participantId) throws DAOException
+	{
+		ParticipantBizLogic bizLogic=(ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
+		List idList=bizLogic.getSCGList(participantId);
+		if(idList!=null && idList.size()>1)
+		{
+			Object[] obj=(Object[])idList.get(0);
+			return((Long)obj[2]);
+		}
+		return null;
 	}
 }
