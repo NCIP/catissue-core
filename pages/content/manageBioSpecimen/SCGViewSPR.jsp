@@ -38,7 +38,17 @@
 		
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
-		Long scgEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
+		Long scgEntityId = null;
+		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId") != null)
+		{
+			scgEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId");
+		}
+		else
+		{
+			scgEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
+			CatissueCoreCacheManager.getInstance().addObjectToCache("scgEntityId",scgEntityId);		
+		}	
+		
 String id = request.getParameter("id");
 		
 		

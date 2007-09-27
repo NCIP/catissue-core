@@ -29,7 +29,17 @@
 	{
  		specimenIdentifier= (String) session.getAttribute(Constants.SPECIMEN_ID);//,specimenIdentifier);
 	}
-	Long specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+	Long specimenEntityId = null;
+	if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
+	{
+		specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
+	}
+	else
+	{
+		specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+		CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
+	}
+	
 	String consentTierCounter =(String)request.getParameter("consentTierCounter");
 	String staticEntityName=null;
 	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN;
