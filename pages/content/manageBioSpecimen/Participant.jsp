@@ -538,7 +538,7 @@ tr#hiddenCombo
 				<tr>
 					<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="setTarget();editParticipant()">Edit</td>
 
-					<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
 						<bean:message key="edit.tab.surgicalpathologyreport"/>
 					</td>
 					<td height="20" class="tabMenuItemSelected"  onClick="">
