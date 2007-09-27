@@ -42,7 +42,7 @@
 	
 	<!-- run ConceptCodeManager java file -->
 		<target name="run_concept_code_server">
-			<java classname="edu.wustl.catissuecore.conceptcode.ConceptCodeManager" fork="yes">
+			<java classname="edu.wustl.catissuecore.conceptcode.ConceptCodeManager" maxmemory="1024m" fork="true">
 				<classpath>
 					<pathelement location="caties.jar"/>
 				</classpath>
@@ -53,7 +53,6 @@
 				<jvmarg value="-Dgate.plugins.home=E:/gate_3_1/gate_3_1/application/plugins" /> 
 				<jvmarg value="-DproxyHost=ptproxy.persistent.co.in" />
 				<jvmarg value="-DproxyPort=8080" />
-				<jvmarg value="-D64 -ms300m -mx900m"/>
 			</java>
 		</target>
 	
