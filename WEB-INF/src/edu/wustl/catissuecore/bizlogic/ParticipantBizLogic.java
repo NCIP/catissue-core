@@ -895,13 +895,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	public List getSCGList(Participant participant) throws DAOException
+	public List getSCGList(Long participantId) throws DAOException
 	{
 		String scgHql = "select scg.id, scg.surgicalPathologyNumber, scg.identifiedSurgicalPathologyReport.id "+
 	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
 		" edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"+
 		" edu.wustl.catissuecore.domain.Participant as p "+
-		" where p.id = " +participant.getId()+ 
+		" where p.id = " +participantId+ 
 		" and p.id = cpr.participant.id " +
 		" and scg.id in elements(cpr.specimenCollectionGroupCollection)";
 		

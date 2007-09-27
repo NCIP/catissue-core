@@ -200,7 +200,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			Participant participant=(Participant)participantList.get(0);
 //			viewSPR.setParticipant(participant);
 			ParticipantBizLogic bizLogic=(ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
-			List scgList=bizLogic.getSCGList(participant);
+			List scgList=bizLogic.getSCGList(participant.getId());
 			//For PHI
 			//List scgObjList = new ArrayList();
 			//try
