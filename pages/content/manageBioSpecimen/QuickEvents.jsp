@@ -4,6 +4,8 @@
 	Date   : July 03, 2006
 -->
 
+<%@ page import="org.apache.struts.action.ActionMessages"%>
+
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
@@ -12,9 +14,12 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.QuickEventsForm"%>
 <%@ page import="java.util.*"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/EventAction.jsp" %> 
 
 
 <head>
+
+
 	
 	<script language="JavaScript">
 		function onRadioButtonClick(element)
@@ -31,8 +36,18 @@
 				document.forms[0].specimenLabel.disabled = true;
 			}
 		}
+		
+		// called when the event is selected from the combo
+		function onParameterChange()
+		{
+						
+			document.forms[0].action = "QuickEventsSearch.do";//action;			
+			document.forms[0].submit();		
+		}		
+		
 	</script>
 </head>
+
 
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
@@ -40,7 +55,21 @@
 
 <html:errors/>
 
-<html:form action="<%=Constants.QUICKEVENTS_ACTION%>">
+<html:form method='POST' action="<%=Constants.QUICKEVENTS_ACTION%>">
+
+<%
+
+String eventSelected = (String)request.getAttribute(Constants.EVENT_SELECTED);
+String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
+String iframeSrc="blankScreenAction.do";
+if(eventSelected != null)	
+{
+	iframeSrc = getEventAction(eventSelected, specimenIdentifier);
+	//formAction = Constants.QUICKEVENTSPARAMETERS_ACTION;
+}
+
+session.setAttribute("EventOrigin", "QuickEvents");
+%>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 <tr>
@@ -123,15 +152,30 @@
 			&nbsp;
 		</td>
 		<td align="right">
-			<html:submit styleClass="actionButton">
+			<%--<html:submit styleClass="actionButton">
 				<bean:message  key="quickEvents.add" />
-			</html:submit>
+			</html:submit>--%>
+			<html:button property="quickEventsButton" onclick="onParameterChange()">
+			<bean:message  key="quickEvents.add" />
+		</html:button>
+			
 		</td>
 	</tr>
 	</table>
 </td>
 </tr>
 
+<tr>
+<td>
+	<iframe name="newEventFrame" id="newEventFrame" src="<%=iframeSrc %>" width="650" height="400" frameborder="0" scrolling="auto">
+	</iframe>
+</td>
+</tr>
+
 
 </table>
 </html:form>
+
+
+
+
