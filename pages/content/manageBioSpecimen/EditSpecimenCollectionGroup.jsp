@@ -104,14 +104,14 @@
 				 
 				 <!--Collection Protocol -->
 				 <tr>
-			     	<td class="formRequiredNotice" colspan="2" width="5">*</td>
-				    <td class="formRequiredLabel">
+			     	<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
+				    <td class="formFieldNoBordersSimple">
 						<label for="collectionProtocolId">
-							<bean:message key="specimenCollectionGroup.protocolTitle"/> 
+							<b><bean:message key="specimenCollectionGroup.protocolTitle"/></b> 
 						</label>
 					</td> 
 					
-					<td class="formField">
+					<td class="formFieldNoBordersSimple">
 				<%	
 					if(pageView.equals("add"))
 					{					
@@ -147,14 +147,14 @@
 				 </tr>
 
 				 <tr>
- 			     	<td class="formRequiredNotice" colspan="2" width="5">*</td>
-				    <td class="formRequiredLabel">
+ 			     	<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
+				    <td class="formFieldNoBordersSimple">
 						<label for="siteId">
-							<bean:message key="specimenCollectionGroup.site"/>
+							<b><bean:message key="specimenCollectionGroup.site"/></b>
 						</label>
 					</td>
 					
-					<td class="formField">
+					<td class="formFieldNoBordersSimple">
 					 <autocomplete:AutoCompleteTag property="siteId"
 										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
 										  initialValue="<%=form.getSiteId()%>"
@@ -176,13 +176,13 @@
 					{				
 				%>
 				<tr>
-					<td class="formRequiredNotice" colspan="2" width="5">*</td>
-					<td class="formRequiredLabel" >
+					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
+					<td class="formFieldNoBordersSimple" >
 						<label for="participantName">
-							 <bean:message key="specimenCollectionGroup.participantNameWitProtocolId" />
+							 <b><bean:message key="specimenCollectionGroup.participantNameWitProtocolId" /></b>
 						</label>
 					</td>
-					<td class="formField">
+					<td class="formFieldNoBordersSimple">
 						<label for="participantName">
 						<b>	<%=form.getParticipantNameWithProtocolId()%></b>
 						</label>
@@ -197,20 +197,20 @@
 				<html:hidden property="protocolParticipantIdentifier"/>
 
 				 <tr>
-					 <td class="formRequiredNoticeNoBottom">*</td>
-					 <td class="formRequiredNoticeWithoutBorder">
+					 <td class="formFieldNoBordersSimple"><b>*</b></td>
+					 <td class="formFieldNoBordersSimple">
 				     	<html:radio styleClass=""  property="radioButtonForParticipant" value="1" onclick="onRadioButtonClick(this)">
   				     	    <label for="participantId">
 								<%--<bean:message key="specimenCollectionGroup.collectedByParticipant" />--%>
 							</label>
 				     	</html:radio>
  				    </td>
- 				    <td class="formRequiredLabelLeftBorder" width="186">
+ 				    <td class="formFieldNoBordersSimple" width="186">
  				    	<label for="participantId">
-					        <bean:message key="specimenCollectionGroup.collectedByParticipant" />
+					        <b><bean:message key="specimenCollectionGroup.collectedByParticipant" /></b>
 						</label>
   					</td>
-  					<td class="formField">
+  					<td class="formFieldNoBordersSimple">
   						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">
 <!-- Mandar : 434 : for tooltip --> 						
 				     	    <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="participantName" property="participantName" />
@@ -224,21 +224,21 @@
 				 </tr>
 				 	
 				 <tr>
-				    <td class="formRequiredNotice" align="right">&nbsp;</td>
-					<td class="formRequiredNoticeWithoutLeftBorder">
+				    <td class="formFieldNoBordersSimple" align="right">&nbsp;</td>
+					<td class="formFieldNoBordersSimple">
 					<html:radio styleClass="" property="radioButtonForParticipant" value="2" onclick="onRadioButtonClick(this)">
   				       	    <label for="protocolParticipantIdentifier">
 								<%--<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />--%>
 							</label>
 				     	</html:radio>
 				    </td>
-				    <td class="formRequiredLabel"  width="186">
+				    <td class="formFieldNoBordersSimple"  width="186">
 						<label for="protocolParticipantIdentifier">
 							<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />
 						</label>
 					</td>
 					
-  			        <td class="formField">
+  			        <td class="formFieldNoBordersSimple">
   					<%-- LOGIC TAG FOR PARTICPANT NUMBER --%> 												
                         <logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">						
 <!-- Mandar : 434 : for tooltip -->
@@ -255,13 +255,13 @@
 				 </tr>
 				<% }%>
 				<tr>
-					<td class="formRequiredNotice" colspan="2" width="5">*</td>
-					<td class="formRequiredLabel" >
+					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
+					<td class="formFieldNoBordersSimple" >
 						<label for="name">
-							<bean:message key="specimenCollectionGroup.groupName" />
+							<b><bean:message key="specimenCollectionGroup.groupName" /></b>
 						</label>
 					</td>
-					<td class="formField">
+					<td class="formFieldNoBordersSimple">
 						<html:text styleClass="formFieldSized" size="30"  maxlength="255" styleId="name" property="name" />
 						&nbsp;
 						<%String resetAction = "changeAction('SpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroup&resetName=Yes')"; 
@@ -271,14 +271,14 @@
 					</td>
 				</tr>
 				 <tr>
-				 	<td class="formRequiredNotice" colspan="2" width="5">*</td>
+				 	<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
 				    
-				    <td class="formRequiredLabel">
+				    <td class="formFieldNoBordersSimple">
 						<label for="collectionProtocolEventId">
-							<bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/>
+							<b><bean:message key="specimenCollectionGroup.studyCalendarEventPoint"/></b>
 						</label>
 					</td>
-				    <td class="formField">
+				    <td class="formFieldNoBordersSimple">
 <!-- Mandar : 434 : for tooltip -->				    
 				     	<html:select property="collectionProtocolEventId" styleClass="formFieldSized" styleId="collectionProtocolEventId" size="1" onchange="onChangeEvent(this)" 
 				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -289,13 +289,13 @@
 				 </tr>
 				 
 				 <tr>
-				     <td class="formRequiredNotice" colspan="2" width="5">*</td>
-				     <td class="formRequiredLabel">
+				     <td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
+				     <td class="formFieldNoBordersSimple">
 						<label for="clinicalDiagnosis">
-							<bean:message key="specimenCollectionGroup.clinicalDiagnosis"/>
+							<b><bean:message key="specimenCollectionGroup.clinicalDiagnosis"/></b>
 						</label>
 					 </td>
-				     <td class="formField">
+				     <td class="formFieldNoBordersSimple">
                              <autocomplete:AutoCompleteTag property="clinicalDiagnosis"
 										  optionsList = "<%=request.getAttribute(Constants.CLINICAL_DIAGNOSIS_LIST)%>"
 										  initialValue="<%=form.getClinicalDiagnosis()%>"
@@ -314,14 +314,14 @@
 				 </tr>
 				 
 				 <tr>
-				     <td class="formRequiredNotice" colspan="2" width="5">*</td>
-				     <td class="formRequiredLabel">
+				     <td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
+				     <td class="formFieldNoBordersSimple">
 						<label for="clinicalStatus">
-							<bean:message key="specimenCollectionGroup.clinicalStatus"/>
+							<b><bean:message key="specimenCollectionGroup.clinicalStatus"/></b>
 						</label>
 					 </td>
 					 
-				     <td class="formField">
+				     <td class="formFieldNoBordersSimple">
 					 
 					 			 <autocomplete:AutoCompleteTag property="clinicalStatus"
 										  optionsList = "<%=request.getAttribute(Constants.CLINICAL_STATUS_LIST)%>"
@@ -334,13 +334,13 @@
 				 </tr>
 				 
 				 <tr>
-			     	<td class="formRequiredNotice" colspan="2" width="5">&nbsp;</td>
-				    <td class="formLabel">
+			     	<td class="formFieldNoBordersSimple" colspan="2" width="5">&nbsp;</td>
+				    <td class="formFieldNoBordersSimple">
 						<label for="participantsMedicalIdentifierId">
 							<bean:message key="specimenCollectionGroup.medicalRecordNumber"/>
 						</label>
 					</td>
-                    <td class="formField">
+                    <td class="formFieldNoBordersSimple">
    						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">
 <!-- Mandar : 434 : for tooltip -->   						
 				     		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>"
@@ -359,13 +359,13 @@
 				 </tr>
 				 
 				 <tr>
-					<td class="formRequiredNotice" colspan="2" width="5">&nbsp;</td>
-					<td class="formLabel">
+					<td class="formFieldNoBordersSimple" colspan="2" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple">
 						<label for="surgicalPathologyNumber">
 							<bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/>
 						</label>
 					</td>					
-				    <td class="formField" noWrap="true">
+				    <td class="formFieldNoBordersSimple" noWrap="true">
 				     	<html:text styleClass="formFieldSized" size="30"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
 					     	<!-- This feature will be implemented in next release
 							&nbsp;
@@ -385,13 +385,13 @@
 				 * Description : Added <TR> for comment field .				 
 				-->	 
 				 <tr>
-					<td class="formRequiredNotice" colspan="2" width="5">&nbsp;</td>
-					<td class="formLabel">
+					<td class="formFieldNoBordersSimple" colspan="2" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple">
 						<label for="comments">
 							<bean:message key="app.comments"/>
 						</label>
 					</td>					
-				   <td class="formField" colspan="4">
+				   <td class="formFieldNoBordersSimple" colspan="4">
 				    		<html:textarea styleClass="formFieldSized" rows="3"  property="comment"/>
 			    	</td>
 				 </tr>
@@ -400,13 +400,13 @@
 				<!-- activitystatus -->	
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 				<tr>
-					<td class="formRequiredNotice" colspan="2" width="5">*</td>
-					<td class="formRequiredLabel" >
+					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
+					<td class="formFieldNoBordersSimple" >
 						<label for="activityStatus">
-							<bean:message key="site.activityStatus" />
+							<b><bean:message key="site.activityStatus" /></b>
 						</label>
 					</td>
-					<td class="formField">
+					<td class="formFieldNoBordersSimple">
 							<autocomplete:AutoCompleteTag property="activityStatus"
 								  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
 								  initialValue="<%=form.getActivityStatus()%>"
@@ -416,13 +416,13 @@
 				</tr>
 				<!-- collectionstatus -->	
 				<tr>
-					<td class="formRequiredNotice" colspan="2" width="5">*</td>
-					<td class="formRequiredLabel" >
+					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
+					<td class="formFieldNoBordersSimple" >
 						<label for="collectionStatus">
-							<bean:message key="specimenCollectionGroup.collectionStatus" />
+							<b><bean:message key="specimenCollectionGroup.collectionStatus" /></b>
 						</label>
 					</td>
-					<td class="formField">
+					<td class="formFieldNoBordersSimple">
 							<autocomplete:AutoCompleteTag property="collectionStatus"
 								optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
 								initialValue="<%=form.getCollectionStatus()%>"

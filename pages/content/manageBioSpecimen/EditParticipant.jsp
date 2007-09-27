@@ -319,13 +319,13 @@ function participantRegRow(subdivtag)
 				</tr>
 				
 				 <tr>
-					 <td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-					 <td class="formLabelBorderless">
+					 <td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+					 <td class="formFieldNoBordersSimple">
 				     	<label for="socialSecurityNumber">
 				     		<bean:message key="participant.socialSecurityNumber"/>
 				     	</label>
 				     </td>
-				     <td class="formFieldWithoutBorder" colspan="5">
+				     <td class="formFieldNoBordersSimple" colspan="5">
 				     	<html:text styleClass="formFieldSized2" maxlength="3" styleId="socialSecurityNumberPartA" property="socialSecurityNumberPartA" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartB');"/>
 				     	-
 				     	<html:text styleClass="formFieldSized1" maxlength="2" styleId="socialSecurityNumberPartB" property="socialSecurityNumberPartB" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartC');"/>
@@ -335,14 +335,14 @@ function participantRegRow(subdivtag)
 				 </tr>
 				 	
 				 <tr>
-					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-					<td class="formFieldWithoutBorder" align="right">
+					<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple" >
 						<table summary="" cellpadding="3" cellspacing="0" border="0">
 							<tr>
 								<td>&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="formLabelBorderless">
+								<td class="formFieldNoBordersSimple">
 									<label for="Name">
 										<bean:message key="participant.Name"/>
 									</label>
@@ -350,33 +350,33 @@ function participantRegRow(subdivtag)
 							</tr>
 						 </table>
 					 </td>
-				    <td class="formFieldWithoutBorder" colspan="5">
+				    <td class="formFieldNoBordersSimple" colspan="5">
 					 <table summary="" cellpadding="3" cellspacing="0" border="0">
 						<tr>
-							<td class="formLabelBorderlessLeft">
+							<td class="formFieldNoBordersSimple">
 								<label for="lastName">
 									<bean:message key="participant.lastName"/>
 								</label>
 							 </td>
-							 <td class="formLabelBorderlessLeft">
+							 <td class="formFieldNoBordersSimple">
 								<label for="firstName">
 									<bean:message key="participant.firstName"/>
 								</label>
 							  </td>
-							<td class="formLabelBorderlessLeft">
+							<td class="formFieldNoBordersSimple">
 								<label for="middleName">
 									<bean:message key="participant.middleName"/>
 								</label>
 							 </td>
 						</tr>
 					 	<tr>
-							 <td class="formFieldWithoutBorder">
+							 <td class="formFieldNoBordersSimple">
 								<html:text styleClass="formFieldSized10" maxlength="255" styleId="lastName" name="participantForm" property="lastName" readonly="<%=readOnlyForAll%>" onkeyup="moveToNext(this,this.value,'firstName')"/>
 							 </td>
-					     	 <td class="formFieldWithoutBorder">
+					     	 <td class="formFieldNoBordersSimple">
 					     		<html:text styleClass="formFieldSized10" maxlength="255" styleId="firstName" property="firstName" readonly="<%=readOnlyForAll%>" onkeyup="moveToNext(this,this.value,'middleName')"/>
 							</td>
-					     	 <td class="formFieldWithoutBorder">
+					     	 <td class="formFieldNoBordersSimple">
 					     		<html:text styleClass="formFieldSized10" maxlength="255" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/>
 							</td>
 						</tr>
@@ -385,14 +385,14 @@ function participantRegRow(subdivtag)
 				 </tr>
 				 
 				 <tr>
-					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-					<td class="formLabelBorderless">
+					<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple">
 						<label for="birthDate">
 							<bean:message key="participant.birthDate"/>
 						</label>
 					</td>
 					 
-					 <td class="formFieldWithoutBorder" colspan="5">
+					 <td class="formFieldNoBordersSimple" colspan="5">
 <%
 	 if(currentBirthDate.trim().length() > 0)
 	{
@@ -427,13 +427,13 @@ function participantRegRow(subdivtag)
 				 </tr>			
 				 
 				 <tr>
-					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-					<td class="formLabelBorderless">
+					<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple">
 				     	<label for="vitalStatus">
 				     		<bean:message key="participant.vitalStatus"/>
 				     	</label>
 				     </td>
-				     <td class="formFieldWithoutBorder" colspan="5">
+				     <td class="formFieldNoBordersSimple" colspan="5">
 <!-- Mandar : 434 : for tooltip -->
 						<%--
 				     	<html:select property="vitalStatus" styleClass="formFieldSized" styleId="vitalStatus" size="1" disabled="<%=readOnlyForAll%>"
@@ -451,13 +451,13 @@ function participantRegRow(subdivtag)
 				
 				<%-- added by chetan for death date --%>
  <tr>
-	<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-	<td class="formLabelBorderless">
+	<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+	<td class="formFieldNoBordersSimple">
 		<label for="deathDate">
 			<bean:message key="participant.deathDate"/>
 		</label>
 	</td>	 
-	<td class="formFieldWithoutBorder" colspan="5">
+	<td class="formFieldNoBordersSimple" colspan="5">
 <%
 
 	ParticipantForm form = (ParticipantForm) request.getAttribute("participantForm");
@@ -501,11 +501,11 @@ function participantRegRow(subdivtag)
 </tr> 
 				 
 				 <tr>
-					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-					<td class="formLabelBorderless">
+					<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple">
 				     	<label for="gender"><bean:message key="participant.gender"/></label>
 				     </td>
-				     <td class="formFieldWithoutBorder" colspan="5">
+				     <td class="formFieldNoBordersSimple" colspan="5">
 <!-- Mandar : 434 : for tooltip -->
 				     	<%--<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -519,11 +519,11 @@ function participantRegRow(subdivtag)
 		        	  </td>
 				 </tr>
 				 <tr>
-					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-					<td class="formLabelBorderless">
+					<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple">
 						<label for="genotype"><bean:message key="participant.genotype"/></label>
 					</td>
-				     <td class="formFieldWithoutBorder" colspan="5">
+				     <td class="formFieldNoBordersSimple" colspan="5">
 					 
 					  <autocomplete:AutoCompleteTag property="genotype"
 										  optionsList = "<%=request.getAttribute(Constants.GENOTYPE_LIST)%>"
@@ -534,11 +534,11 @@ function participantRegRow(subdivtag)
 		        	  </td>
 				 </tr>
 				 <tr>
-					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-					<td class="formLabelBorderless">
+					<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple">
 					     <label for="race"><bean:message key="participant.race"/></label>
 				     </td>
-				     <td class="formFieldWithoutBorder" colspan="5">
+				     <td class="formFieldNoBordersSimple" colspan="5">
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="raceTypes" styleClass="formFieldSized" styleId="race" size="4" multiple="true" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -547,13 +547,13 @@ function participantRegRow(subdivtag)
 		        	  </td>
 				 </tr>
 				 <tr>
-					<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
-					<td class="formLabelBorderless">
+					<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple">
 				     	<label for="ethnicity">
 				     		<bean:message key="participant.ethnicity"/>
 				     	</label>
 				     </td>
-				     <td class="formFieldWithoutBorder" colspan="5">
+				     <td class="formFieldNoBordersSimple" colspan="5">
 					 
 					   <autocomplete:AutoCompleteTag property="ethnicity"
 										  optionsList = "<%=request.getAttribute(Constants.ETHNICITY_LIST)%>"
@@ -567,13 +567,13 @@ function participantRegRow(subdivtag)
 				 <!-- activitystatus -->	
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 				<tr>
-					<td class="formRequiredNoticeWithoutBorder" width="5">*</td>
-					<td class="formLabelBorderless" >
+					<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+					<td class="formFieldNoBordersSimple" >
 						<label for="activityStatus">
-							<bean:message key="participant.activityStatus" />
+							<b><bean:message key="participant.activityStatus" /></b>
 						</label>
 					</td>
-					<td class="formFieldWithoutBorder" colspan="5">
+					<td class="formFieldNoBordersSimple" colspan="5">
 <!-- Mandar : 434 : for tooltip -->
 						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -627,14 +627,14 @@ function participantRegRow(subdivtag)
 					String check = "chk_"+i;
 				%>
 				 <tr>
-					<td class="formFieldWithoutBorder">
+					<td class="formFieldNoBordersSimple">
 <!-- Mandar : 434 : for tooltip -->
 						<html:select property="<%=siteName%>" styleClass="formFieldSized10" styleId="<%=siteName%>" size="1" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>		
 						</html:select>
 					</td>
-				    <td class="formFieldWithoutBorder" colspan="3">
+				    <td class="formFieldNoBordersSimple" colspan="3">
 				     	<html:text styleClass="formFieldSized10" maxlength="50" size="30" styleId="<%=medicalRecordNumber%>" property="<%=medicalRecordNumber%>" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				    	<%
@@ -645,7 +645,7 @@ function participantRegRow(subdivtag)
 								condition = "disabled='disabled'";
 
 						%>
-						<td class="formFieldWithoutBorder" width="5" colspan="3">
+						<td class="formFieldNoBordersSimple" width="5" colspan="3">
 							<html:hidden property="<%=identifier%>" />
 							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteMedicalIdentifierValue,document.forms[0].valueCounter,'chk_')">		
 						</td>

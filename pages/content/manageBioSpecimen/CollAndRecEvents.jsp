@@ -44,13 +44,13 @@
 						
 						<html:hidden property="collectionEventId" />
 						<html:hidden property="collectionEventSpecimenId" />
-						<td class="formRequiredNotice" width="5">*</td>
-	 					<td width="130" class="formRequiredLabel"> 
+						<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+	 					<td width="130" class="formFieldNoBordersSimple"> 
 							<label for="user">
-								<bean:message key="specimen.collectedevents.username"/> 
+								<b><bean:message key="specimen.collectedevents.username"/></b> 
 							</label>
 						</td>						
-						<td width="340" class="formField">
+						<td width="340" class="formFieldNoBordersSimple">
 						
 							<autocomplete:AutoCompleteTag property="collectionEventUserId"
 										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
@@ -63,13 +63,13 @@
 						<!-- RecievedEvent fields -->
 						<html:hidden property="receivedEventId" />
 						<html:hidden property="receivedEventSpecimenId" />
-						<td class="formRequiredNotice" width="5">*</td>
-						<td width="110" class="formRequiredLabel">
+						<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+						<td width="110" class="formFieldNoBordersSimple">
 							<label for="type">
-								<bean:message key="specimen.receivedevents.username"/> 
+								<b><bean:message key="specimen.receivedevents.username"/></b> 
 							</label>
 						</td>
-						<td width="220" class="formField">
+						<td width="220" class="formFieldNoBordersSimple">
 						<autocomplete:AutoCompleteTag property="receivedEventUserId"
 										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
 										  initialValue="<%=form.getReceivedEventUserId()%>"
@@ -83,15 +83,15 @@
 					<tr>
 						
 						<!-- CollectionEvent fields -->	
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" nowrap> 
+						<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+						<td class="formFieldNoBordersSimple" nowrap> 
 							<label for="date">
-								<bean:message key="eventparameters.dateofevent"/>															
+								<b><bean:message key="eventparameters.dateofevent"/></b>															
 							</label>
 							<!-- <BR><small><bean:message key="page.dateFormat" /></small>  -->
 						</td>
 						
-						<td class="formField">
+						<td class="formFieldNoBordersSimple">
 							<%
 							if(currentCollectionDate.trim().length() > 0)
 							{
@@ -125,14 +125,14 @@
 						</td>	
 
 						<!-- RecievedEvent fields -->
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel" nowrap>
+						<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+						<td class="formFieldNoBordersSimple" nowrap>
 							<label for="date">
-								<bean:message key="eventparameters.dateofevent"/> 
+								<b><bean:message key="eventparameters.dateofevent"/></b> 
 							</label>
 							<!-- <BR><small><bean:message key="scecimen.dateformat" /></small> -->
 						</td>						
-						<td class="formField">
+						<td class="formFieldNoBordersSimple">
 								<%
 								if(currentReceivedDate.trim().length() > 0)
 								{
@@ -168,13 +168,13 @@
 					
 					<!-- hours & minutes -->		
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+						<td class="formFieldNoBordersSimple">
 							<label for="eventparameters.time">
-								<bean:message key="eventparameters.time"/>
+								<b><bean:message key="eventparameters.time"/></b>
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formFieldNoBordersSimple">
 						
 					
 							<autocomplete:AutoCompleteTag property="collectionEventTimeInHours"
@@ -201,13 +201,13 @@
 							</label>
 						</td>
 						
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+						<td class="formFieldNoBordersSimple">
 							<label for="eventparameters.time">
-								<bean:message key="eventparameters.time"/>
+								<b><bean:message key="eventparameters.time"/></b>
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formFieldNoBordersSimple">
 						
 						<autocomplete:AutoCompleteTag property="receivedEventTimeInHours"
 										  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
@@ -237,13 +237,13 @@
 					<tr>					
 						
 						<!-- CollectionEvent fields -->	
-						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+						<td class="formFieldNoBordersSimple">
 							<label for="collectionprocedure">
-								<bean:message key="collectioneventparameters.collectionprocedure"/> 
+								<b><bean:message key="collectioneventparameters.collectionprocedure"/></b> 
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formFieldNoBordersSimple">
 								<autocomplete:AutoCompleteTag property="collectionEventCollectionProcedure"
 										  optionsList = "<%=request.getAttribute(Constants.PROCEDURE_LIST)%>"
 										  initialValue="<%=form.getCollectionEventCollectionProcedure()%>"
@@ -251,14 +251,14 @@
 						</td>						
 						
 						<!-- RecievedEvent fields -->
-						<td class="formRequiredNotice" width="5"rowspan="2">*</td>
-						<td class="formRequiredLabel"rowspan="2"> 
+						<td class="formFieldNoBordersSimple" width="5"rowspan="2"><b>*</b></td>
+						<td class="formFieldNoBordersSimple"rowspan="2"> 
 							<label for="quality">
-								<bean:message key="receivedeventparameters.receivedquality"/> 
+								<b><bean:message key="receivedeventparameters.receivedquality"/></b> 
 							</label>
 						</td>						
 						<!-- receivedeventparameters.receivedquality -->
-						<td class="formField"rowspan="2">
+						<td class="formFieldNoBordersSimple"rowspan="2">
 							<autocomplete:AutoCompleteTag property="receivedEventReceivedQuality"
 										  optionsList = "<%=request.getAttribute(Constants.RECEIVED_QUALITY_LIST)%>"
 										  initialValue="<%=form.getReceivedEventReceivedQuality()%>"
@@ -268,13 +268,13 @@
 					
 					<!-- CollectionEvent fields -->	
 					<tr>							
-							<td class="formRequiredNotice" width="5">*</td>
-							<td class="formRequiredLabel">
+							<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+							<td class="formFieldNoBordersSimple">
 								<label for="container">
-									<bean:message key="collectioneventparameters.container"/> 
+									<b><bean:message key="collectioneventparameters.container"/></b> 
 								</label>
 							</td>
-							<td class="formField">
+							<td class="formFieldNoBordersSimple">
 								<autocomplete:AutoCompleteTag property="collectionEventContainer"
 										  optionsList = "<%=request.getAttribute(Constants.CONTAINER_LIST)%>"
 										  initialValue="<%=form.getCollectionEventContainer()%>"
@@ -285,24 +285,24 @@
 					<!-- comments -->
 					<tr>	
 						<!-- CollectionEvent fields -->	
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+						<td class="formFieldNoBordersSimple">
 							<label for="comments">
 								<bean:message key="eventparameters.comments"/> 
 							</label>
 						</td>
-						<td class="formField">
+						<td class="formFieldNoBordersSimple">
 							<html:textarea styleClass="formFieldSized20"  styleId="collectionEventComments" property="collectionEventComments" />
 						</td>						
 						
 						<!-- RecievedEvent fields -->
-						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+						<td class="formFieldNoBordersSimple">
 							<label for="comments">
 								<bean:message key="eventparameters.comments"/> 
 							</label>
 						</td>						
-						<td class="formField">
+						<td class="formFieldNoBordersSimple">
 							<html:textarea styleClass="formFieldSized20"  styleId="receivedEventComments" property="receivedEventComments" />
 						</td>						
 						</table>

@@ -897,7 +897,7 @@
 								<!--  Consent Tracking Module Virender mehta	 -->	
 
 								<tr>
-									<td class="formRequiredNotice" >*</td>
+									<td class="formFieldNoBordersSimple" ><b>*</b></td>
 									<%
 										String specimenColSpan;
 										if(operation.equals(Constants.EDIT))
@@ -913,12 +913,12 @@
 									style class formRequiredLabel is replaced with formRequiredLableWithoutBorder and formLabel is replaced with formLableWithoutBorder.
 									For this formLableWithoutBorder styleclass is added to css/styleSheet.jss file-->
 									<logic:equal name="newSpecimenForm" property="parentPresent" value="false">
-									<td class="formRequiredLabelWithoutBorder">
+									<td class="formFieldNoBordersSimple">
 										<label for="specimenCollectionGroupName">
-											<bean:message key="specimenCollectionGroup.groupName"/>
+											<b><bean:message key="specimenCollectionGroup.groupName"/></b>
 										</label>
 									</td>							
-									<td class="formField" colspan="<%=specimenColSpan%>">
+									<td class="formFieldNoBordersSimple" colspan="<%=specimenColSpan%>">
 									<!--
 										Patch ID: Bug#3184_4
 										Description: The following change shows read-only textbox on specimen page, if specimen is being added
@@ -935,13 +935,13 @@
 									</logic:equal>
 				        	
 									<logic:equal name="newSpecimenForm" property="parentPresent" value="true">
-						        	<td class="formRequiredLabelWithoutBorder" >
+						        	<td class="formFieldNoBordersSimple" >
 										<label for="parentSpecimenId">
 											<bean:message key="createSpecimen.parentLabel"/>
 										</label>
 									</td>
 							
-						        	<td class="formField" colspan="<%=specimenColSpan%>">
+						        	<td class="formFieldNoBordersSimple" colspan="<%=specimenColSpan%>">
 										<html:hidden property="specimenCollectionGroupName"/>
 										<!-- Mandar : 434 : for tooltip -->
 										<html:text styleClass="formFieldSized15" maxlength="255" size="30" styleId="parentSpecimenName" property="parentSpecimenName" readonly="<%=readOnlyForAll%>"/>
@@ -950,13 +950,13 @@
 									</logic:equal>	
 									
 									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-									<td class="formRequiredNotice">*</td>
-									<td class="formRequiredLabelWithoutBorder">
+									<td class="formFieldNoBordersSimple"><b>*</b></td>
+									<td class="formFieldNoBordersSimple">
 										<label for="lineage">
-											<bean:message key="specimen.lineage"/>
+											<b><bean:message key="specimen.lineage"/></b>
 										</label>
 									</td>
-									<td class="formField" >								
+									<td class="formFieldNoBordersSimple" >								
 							     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="lineage" property="lineage" 
 							     		readonly="true"/>														     	
 									</td>
@@ -966,25 +966,25 @@
 									{
 								%>	
 									<tr>
-										<td class="formRequiredNotice" >
-									     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+										<td class="formFieldNoBordersSimple" >
+									     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
 									     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 									    </td>
-									    <td class="formRequiredLabelWithoutBorder" >
+									    <td class="formFieldNoBordersSimple" >
 											<label for="label">
-												<bean:message key="specimen.label"/>
+												<b><bean:message key="specimen.label"/></b>
 											</label>
 										</td>
-									    <td class="formField" >
+									    <td class="formFieldNoBordersSimple" >
 									     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
 									    </td>							
-										<td class="formRequiredNotice" width="5">&nbsp;</td>
-										<td class="formLabelWithoutBorder">							
+										<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+										<td class="formFieldNoBordersSimple">							
 								    	<label for="barcode">
 											<bean:message key="specimen.barcode"/>
 										</label>								
 									</td>
-								    <td class="formField" >
+								    <td class="formFieldNoBordersSimple" >
 										<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
 						        	</td>
 								   </tr>
@@ -992,16 +992,16 @@
 									else  if((!Variables.isSpecimenLabelGeneratorAvl && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
 										{
 									%>  <tr>
-										<td class="formRequiredNotice" >
-									     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+										<td class="formFieldNoBordersSimple" >
+									     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
 									     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 									    </td>
-									    <td class="formRequiredLabelWithoutBorder" >
+									    <td class="formFieldNoBordersSimple" >
 											<label for="label">
-												<bean:message key="specimen.label"/>
+												<b><bean:message key="specimen.label"/></b>
 											</label>
 										</td>
-									    <td class="formField"  colspan=4>
+									    <td class="formFieldNoBordersSimple"  colspan=4>
 									     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
 									    </td>							
 										
@@ -1013,12 +1013,12 @@
 									%>
 										<tr>
 																			
-										<td class="formLabelWithoutBorder">							
+										<td class="formFieldNoBordersSimple">							
 								    	<label for="barcode">
 											<bean:message key="specimen.barcode"/>
 										</label>								
 										</td>
-									    <td class="formField"  colspan=4>
+									    <td class="formFieldNoBordersSimple"  colspan=4>
 											<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
 							        	</td>
 										</tr>
@@ -1029,13 +1029,13 @@
 								    								
 									
 						 		<tr>
-								 	<td class="formRequiredNotice" width="5">*</td>
-								    <td class="formRequiredLabelWithoutBorder">
+								 	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+								    <td class="formFieldNoBordersSimple">
 								     	<label for="className">
-								     		<bean:message key="specimen.type"/>
+								     		<b><bean:message key="specimen.type"/></b>
 								     	</label>
 								    </td>
-								    <td class="formField">
+								    <td class="formFieldNoBordersSimple">
 									
 										<%
 											String classReadOnly = "false";
@@ -1054,13 +1054,13 @@
 									
 						        	</td>
 								 
-								    <td class="formRequiredNotice" width="5">*</td>
-								    <td class="formRequiredLabelWithoutBorder">
+								    <td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+								    <td class="formFieldNoBordersSimple">
 								     	<label for="type">
-								     		<bean:message key="specimen.subType"/>
+								     		<b><bean:message key="specimen.subType"/></b>
 								     	</label>
 								    </td>				    
-								    <td class="formField" >
+								    <td class="formFieldNoBordersSimple" >
 								    <!-- --------------------------------------- -->
 								    <%
 												String classValue = (String)form.getClassName();
@@ -1101,16 +1101,16 @@
 						        	</td>
 								</tr>
 								<tr>
-								     <td class="formRequiredNotice" width="5">
-								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+								     <td class="formFieldNoBordersSimple" width="5">
+								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
 								     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 								     </td>
-								     <td class="formRequiredLabelWithoutBorder">
+								     <td class="formFieldNoBordersSimple">
 										<label for="tissueSite">
-											<bean:message key="specimen.tissueSite"/>
+											<b><bean:message key="specimen.tissueSite"/></b>
 										</label>
 									</td>
-								     <td class="formField" >
+								     <td class="formFieldNoBordersSimple" >
 							
 		                                       <autocomplete:AutoCompleteTag property="tissueSite"
 												  size="150"
@@ -1128,16 +1128,16 @@
 										</a>
 						        	  </td>
 								
-								     <td class="formRequiredNotice" width="5">
-								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+								     <td class="formFieldNoBordersSimple" width="5">
+								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
 								     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 								     </td>
-								     <td class="formRequiredLabelWithoutBorder">
+								     <td class="formFieldNoBordersSimple">
 										<label for="tissueSide">
-											<bean:message key="specimen.tissueSide"/>
+											<b><bean:message key="specimen.tissueSide"/></b>
 										</label>
 									</td>
-								     <td class="formField" >
+								     <td class="formFieldNoBordersSimple" >
 									 
 									  <autocomplete:AutoCompleteTag property="tissueSide"
 												  optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
@@ -1148,17 +1148,17 @@
 						        	  </td>
 								</tr>
 								<tr>
-								    <td class="formRequiredNotice" width="5">
-								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+								    <td class="formFieldNoBordersSimple" width="5">
+								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
 								     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 								    </td>
-								    <td class="formRequiredLabelWithoutBorder">
+								    <td class="formFieldNoBordersSimple">
 										<label for="pathologicalStatus">
-											<bean:message key="specimen.pathologicalStatus"/>
+											<b><bean:message key="specimen.pathologicalStatus"/></b>
 										</label>
 									</td>
 									<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-								    <td colspan="4" class="formField" >
+								    <td colspan="4" class="formFieldNoBordersSimple" >
 									
 									<autocomplete:AutoCompleteTag property="pathologicalStatus"
 												  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
@@ -1170,7 +1170,7 @@
 									</logic:notEqual>
 							     	
 									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-									<td class="formField" >
+									<td class="formFieldNoBordersSimple" >
 									<autocomplete:AutoCompleteTag property="pathologicalStatus"
 												  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
 												  initialValue="<%=form.getPathologicalStatus()%>"
@@ -1187,13 +1187,13 @@
 									 * Description : show CreatedOn date field if operation is edit.				 
 									-->	 
 									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-										<td class="formRequiredNotice" width="5">&nbsp;</td>
-									    <td class="formLabelWithoutBorder">							
+										<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+									    <td class="formFieldNoBordersSimple">							
 									    	<label for="createdDate">
 												<bean:message key="specimen.createdDate"/>
 											</label>								
 										</td>
-									   <td class="formField" >
+									   <td class="formFieldNoBordersSimple" >
 										<%								
 											String createdDate = form.getCreatedDate();
 											String nameOfForm ="newSpecimenForm";
@@ -1205,29 +1205,29 @@
 								</tr>
 						
 								<tr>					
-							     	<td class="formRequiredNotice" width="5">
-								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+							     	<td class="formFieldNoBordersSimple" width="5">
+								     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
 								     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 								    </td>
-								    <td class="formRequiredLabelWithoutBorder">
+								    <td class="formFieldNoBordersSimple">
 										<label for="quantity">
-											<bean:message key="specimen.quantity"/>
+											<b><bean:message key="specimen.quantity"/></b>
 										</label>
 									</td>
-								    <td class="formField" >
+								    <td class="formFieldNoBordersSimple" >
 								     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
 								     	<span id="unitSpan"><%=unitSpecimen%></span>
 								     	<html:hidden property="unit"/>
 								    </td>
-									<td class="formRequiredNotice" width="5">
+									<td class="formFieldNoBordersSimple" width="5">
 								     	&nbsp;
 								    </td>
-								    <td class="formLabelWithoutBorder">
+								    <td class="formFieldNoBordersSimple">
 										<label for="concentration">
 											<bean:message key="specimen.concentration"/>
 										</label>
 									</td>
-									<td class="formField" >
+									<td class="formFieldNoBordersSimple" >
 									<%
 										boolean concentrationDisabled = true;
 										
@@ -1244,24 +1244,24 @@
 								
 									<tr>
 										<!-- Available -->
-										<td class="formRequiredNotice" width="5">&nbsp;</td>
-										<td class="formLabelWithoutBorder">
+										<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+										<td class="formFieldNoBordersSimple">
 											<label for="available">
 												<bean:message key="specimen.available" />
 											</label>
 										</td>
-										<td class="formField">
+										<td class="formFieldNoBordersSimple">
 											<html:checkbox property="available">
 											</html:checkbox>
 										</td>	
 										<!-- Available Quantity -->							
-										<td class="formRequiredNotice" width="5">&nbsp;</td>
-										<td class="formLabelWithoutBorder" >
+										<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+										<td class="formFieldNoBordersSimple" >
 											<label for="availableQuantity">
 												<bean:message key="specimen.availableQuantity" />
 											</label>
 										</td>
-										<td class="formField">
+										<td class="formFieldNoBordersSimple">
 											<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="availableQuantity" property="availableQuantity" />
 											<span id="unitSpan1"><%=unitSpecimen%></span>
 										</td>
@@ -1270,10 +1270,10 @@
 								</logic:equal>						 
 						
 								<tr>
-								 	<td class="formRequiredNotice" width="5">*</td>
-									<td class="formRequiredLabelWithoutBorder">
+								 	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+									<td class="formFieldNoBordersSimple">
 									   <label for="className">
-									   		<bean:message key="specimen.positionInStorageContainer"/>
+									   		<b><bean:message key="specimen.positionInStorageContainer"/></b>
 									   </label>
 									</td>
 									
@@ -1361,12 +1361,12 @@
 						
 									<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 						
-									<td class="formField" colSpan="4">
+									<td class="formFieldNoBordersSimple" colSpan="4">
 										<table border="0">
 											<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 											<tr>
 												<td ><html:radio value="1" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-												<td class="formFieldNoBorders">																			
+												<td class="formFieldNoBordersSimple">																			
 														<bean:message key="specimen.virtuallyLocated" />											
 												</td>
 											</tr>
@@ -1391,7 +1391,7 @@
 											</tr>
 											<tr>
 												<td ><html:radio value="3" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-												<td class="formLabelBorderlessLeft">
+												<td class="formFieldNoBordersSimple">
 													<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
 													<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
 													<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
@@ -1410,7 +1410,7 @@
 												{
 												%>
 													<tr>											
-														<td class="formLabelBorderless">
+														<td class="formFieldNoBordersSimple">
 															<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "true"/>
 															<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true"/>
 															<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true"/>
@@ -1441,27 +1441,27 @@
 								</logic:equal>
 								<!--%}%-->				 				 
 								<tr>
-									<td class="formRequiredNotice" width="5">&nbsp;</td>
-									<td class="formLabelWithoutBorder">
+									<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+									<td class="formFieldNoBordersSimple">
 										<label for="comments">
 											<bean:message key="specimen.comments"/>
 										</label>
 									</td>
-
-								 	<td class="formField" colspan="4">
+									
+								 	<td class="formFieldNoBordersSimple" colspan="4">
 										<html:textarea styleClass="formFieldSized"  rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 									</td>
 								</tr>
 								<!-- collectionstatus -->							
 								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 								<tr>
-									<td class="formRequiredNotice" width="5">*</td>
-									<td class="formRequiredLabelWithoutBorder" >
+									<td class="formFieldNoBordersSimple" width="5"><b>*<b></td>
+									<td class="formFieldNoBordersSimple" >
 										<label for="activityStatus">
-											<bean:message key="participant.activityStatus" />
+											<b><bean:message key="participant.activityStatus" /></b>
 										</label>
 									</td>
-									<td class="formField">
+									<td class="formFieldNoBordersSimple">
 									
 									<autocomplete:AutoCompleteTag property="activityStatus"
 												  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
@@ -1471,13 +1471,13 @@
 									
 									</td>
 									
-									<td class="formRequiredNotice" width="5">*</td>
-									<td class="formRequiredLabelWithoutBorder">
+									<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+									<td class="formFieldNoBordersSimple">
 										<label for="collectionStatus">
-											<bean:message key="specimenCollectionGroup.collectionStatus" />
+											<b><bean:message key="specimenCollectionGroup.collectionStatus" /></b>
 										</label>
 									</td>
-									<td class="formField">
+									<td class="formFieldNoBordersSimple">
 									<autocomplete:AutoCompleteTag property="collectionStatus"
 												  optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
 												  initialValue="<%=form.getCollectionStatus()%>"
@@ -1509,7 +1509,7 @@
 				 			<table summary="" cellpadding="3" cellspacing="1" border="0" width="100%" id="aliquotId">
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
 								<tr>					
-									<td class="formFieldNoBordersBold" height="20" colspan="5">
+									<td class="formFieldNoBordersSimple" height="20" colspan="5">
 										<html:checkbox styleId="aliquotChk" property="checkedButton" onclick="onCheckboxButtonClick(this)">
 											&nbsp; <bean:message key="specimen.aliquot.message"/>
 										</html:checkbox>
