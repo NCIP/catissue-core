@@ -8,13 +8,14 @@
  * Created on July 3, 2006
  */
 package edu.wustl.catissuecore.action;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -52,6 +53,18 @@ public class QuickEventsAction extends BaseAction {
   	 	request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList); */
   	 	
   	 	request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
+  	 	
+  	 	//add messages from session to request
+  	 	HttpSession session = request.getSession(true);
+  	 	if (session != null)
+  	 	{
+  	 		ActionMessages messages = (ActionMessages)session.getAttribute("messages");
+  	 		if (messages != null)
+  	 		{
+	  	 		saveMessages(request,messages);
+	  	 		session.removeAttribute("messages");
+  	 		}
+  	 	}
   	 	
   	 	String pageOf = Constants.SUCCESS;
   	 	
