@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -246,16 +247,20 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
  */
 	private Long getCollectionProtocolId(Long specimenId, IBizLogic bizLogic) throws DAOException
 	{
-		String[] selectColumnName = {"specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id"};
-		String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnCondition = {"="};
-		Object[] whereColumnValue = {specimenId};
-		String sourceObjectName = Specimen.class.getName();
+		//Changed by Falguni.
+		//Find collectionprotocol id using HQL
+		String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol.id"+
+		" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
+		" edu.wustl.catissuecore.domain.Specimen as spec " +
+		" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimenId.longValue();
+		List collectionProtocolIdList;
+		try {
+			collectionProtocolIdList = Utility.executeQuery(colProtHql);
+		} catch (ClassNotFoundException e) {
+			throw new DAOException(e.getMessage());
+		}
 		
-		List collectionProtCollection = bizLogic.retrieve(sourceObjectName,selectColumnName,
-	            whereColumnName, whereColumnCondition,
-	            whereColumnValue,Constants.AND_JOIN_CONDITION );
-		Long collectionProtocolId = (Long)collectionProtCollection.get(0);
+		Long collectionProtocolId = (Long)collectionProtocolIdList.get(0);
 		return collectionProtocolId;
 	}
 }
