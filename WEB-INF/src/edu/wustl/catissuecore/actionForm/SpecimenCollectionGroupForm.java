@@ -424,6 +424,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 //		}
 			
 		collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+		collectionProtocolName = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle();
 		collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getId().longValue();
 		
 		Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
