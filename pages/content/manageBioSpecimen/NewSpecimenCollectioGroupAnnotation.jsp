@@ -79,13 +79,23 @@
 					
 %>
 <script>
- function viewSPR()
-        {
-			var tempId=document.forms[0].id.value;
-        	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+tempId;        	
-			document.forms[0].action=action;
-			document.forms[0].submit();
-        }
+		//View SPR Vijay pande
+		function viewSPR()
+		{
+			<% Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID); %>
+			var reportId='<%=reportId%>';
+			if(reportId==null || reportId==-1)
+			{
+				alert("There is no associate report in the system!");
+			}
+			else
+			{
+				var tempId=document.forms[0].id.value;
+		    	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+tempId;
+				document.forms[0].action=action;
+				document.forms[0].submit();
+			}
+		}
 		
 
 function editSCG()
