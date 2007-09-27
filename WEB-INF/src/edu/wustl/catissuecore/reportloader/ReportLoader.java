@@ -162,7 +162,7 @@ public class ReportLoader
 		//Autogeneration of SCG name
 		// SPR_<CollectionProtocol_Title>_<Participant_ID>_<Group_ID>
 		long groupId=0;
-		groupId=CaCoreAPIService.getAppServiceInstance().getNextSpecimenCollectionGroupNumber();
+		groupId=CaCoreAPIService.getAppServiceInstance().getSpecimenCollectionGroupLabel();
 		
 		String collProtocolTitle=CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE);
 		if(collProtocolTitle.length()>30)
