@@ -15,5 +15,5 @@ public interface LabelGenerator
 {
 	public void setLabel(AbstractDomainObject obj);
 	public void setLabel(List<AbstractDomainObject> obj);
-	
+	public Long getCurrentLabel();
 }

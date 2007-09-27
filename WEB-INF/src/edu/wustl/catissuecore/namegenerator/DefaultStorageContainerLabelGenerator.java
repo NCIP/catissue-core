@@ -88,4 +88,12 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 		}	
 		
 	}	
+	/**
+	 * Returns value of currentLabel
+	 */
+	public Long getCurrentLabel() 
+	{
+		currentLabel++;
+		return (currentLabel);
+	}	
 }

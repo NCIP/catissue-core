@@ -22,7 +22,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	/**
 	 * Current label 
 	 */
-	protected Long currentLable;
+	protected Long currentLabel;
 	
 	/**
 	 * Default Constructor
@@ -41,7 +41,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	 */
 	protected void init()
 	{
-		currentLable = getLastAvailableSCGLabel(null);
+		currentLabel = getLastAvailableSCGLabel(null);
 	}
 	
 	/**
@@ -97,8 +97,8 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 		{
 			maxCollTitle = collectionProtocolTitle.substring(0,Constants.COLLECTION_PROTOCOL_TITLE_LENGTH-1);
 		}
-		currentLable++;
-		specimenCollectionGroup.setName(maxCollTitle+"_"+participantId+"_"+currentLable);
+		currentLabel++;
+		specimenCollectionGroup.setName(maxCollTitle+"_"+participantId+"_"+currentLabel);
 	}
 
 	/* (non-Javadoc)
@@ -109,7 +109,12 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 		
 	}
 	
-
- 
-	
+	/**
+	 * Returns value of currentLabel
+	 */
+	public Long getCurrentLabel() 
+	{
+		currentLabel++;
+		return (currentLabel);
+	}	
 }

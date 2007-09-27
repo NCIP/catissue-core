@@ -52,7 +52,7 @@ public class LabelAndBarcodeGeneratorInitializer {
 				Variables.isStorageContainerBarcodeGeneratorAvl = true;
 			}
 		
-			LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance("speicmenCollectionGroupLabelGeneratorClass");
+			LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
 		} 
 		catch (BizLogicException e) 
 		{

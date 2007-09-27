@@ -184,7 +184,9 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		
 	}
 	
-
- 
-	
+	public Long getCurrentLabel() 
+	{
+		currentLabel++;
+		return (currentLabel);
+	}		
 }
