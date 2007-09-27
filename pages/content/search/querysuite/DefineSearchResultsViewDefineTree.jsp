@@ -17,11 +17,6 @@
 					<%@ include file="/pages/content/search/querysuite/ChooseSearchCategory.jsp" %>
 				</td>
 			</tr>
-			<tr valign="top" width="100%" height="20%" align="left">
-				<td valign="top" align="center" height="100%">
-					<html:button property="Button" onclick = "addToView()"><bean:message key="query.addToView"/></html:button>
-				</td>
-			</tr>
 		</table>
 	</td>
 	<td>

@@ -63,11 +63,6 @@ public class CategorySearchAction extends BaseAction
 			return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 		}
 		String textfieldValue = searchForm.getTextField();
-		/*Map<String, EntityInterface> searchedEntitiesMap = (Map<String, EntityInterface>) session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP);
-		if (searchedEntitiesMap == null)
-		{
-			searchedEntitiesMap = new HashMap<String, EntityInterface>();
-		}*/
 		if(currentPage != null && currentPage.equalsIgnoreCase("prevToAddLimits"))
 		{
 			textfieldValue = "";
@@ -85,27 +80,14 @@ public class CategorySearchAction extends BaseAction
 			MatchedClass matchedClass = advancedSearch.search(searchTarget, searchString, basedOn);
 			entityCollection = matchedClass.getEntityCollection();
 			List resultList = new ArrayList(entityCollection);
-//			Collections.sort(resultList, new EntityInterfaceComparator());
-			if(currentPage != null && currentPage.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.DEFINE_RESULTS_VIEW))
+			for (int i = 0; i < resultList.size(); i++)
 			{
-				entitiesString = generateHTMLToDisplayList(resultList);
-			}
-			else if(currentPage != null)
-			{
-				if(currentPage.equalsIgnoreCase("") || currentPage.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.ADD_LIMITS))
-				{
-					for (int i = 0; i < resultList.size(); i++)
-					{
-						EntityInterface entity = (EntityInterface) resultList.get(i);
-						String fullyQualifiedEntityName = entity.getName();
-						String entityName = Utility.parseClassName(fullyQualifiedEntityName);
-						String entityId = entity.getId().toString();
-						String description = entity.getDescription();
-						entitiesString = entitiesString + ";" + entityName + "|" + entityId + "|" + description;
-					//	searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
-					}
-				}
-				//request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);
+				EntityInterface entity = (EntityInterface) resultList.get(i);
+				String fullyQualifiedEntityName = entity.getName();
+				String entityName = Utility.parseClassName(fullyQualifiedEntityName);
+				String entityId = entity.getId().toString();
+				String description = entity.getDescription();
+				entitiesString = entitiesString + ";" + entityName + "|" + entityId + "|" + description;
 			}
 			response.setContentType("text/html");
 			response.getWriter().write(entitiesString);
@@ -113,34 +95,7 @@ public class CategorySearchAction extends BaseAction
 		}
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
-	/**
-	 * Generates HTML for entities to be displayed on define results page.
-	 * These entities will be shown in a Listbox.
-	 * @param resultArray array of entities in ascending alphabetical order 
-	 * @param searchedEntitiesMap map to store the entities found for given criteria
-	 * @return String representing html for a listbox 
-	 */
-	String generateHTMLToDisplayList(List resultList)
-	{
-		String selectTagName =edu.wustl.catissuecore.util.global.Constants.SEARCH_CATEGORY_LIST_SELECT_TAG_NAME;				
-		StringBuffer html = new StringBuffer();		
-		int size = resultList.size();
-		if ( size != 0)
-		{
-			html.append("\n<select id='"+selectTagName+"' name='"+ selectTagName + "' MULTIPLE size = '"+size+"'>");
-			for(int i=0;i<size;i++)
-			{
-				EntityInterface entity = (EntityInterface)resultList.get(i);
-				String fullyQualifiedEntityName = entity.getName();
-				int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
-				String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);				
-			//	searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
-				html.append("\n<option class=\"dropdownQuery\" value=\"" + entity.getId() + "\">" + entityName + "</option>");
-			}
-			html.append("\n</select>");
-		}
-		return html.toString();
-	}
+	
 
 	/**
 	 * Prepares a String to be sent to AdvancedSearch logic.

@@ -174,7 +174,6 @@ public class DefineGridViewBizLogic
 		{
 			categorySearchForm.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 		}
-		System.out.println();
 	}
 	
 	/**

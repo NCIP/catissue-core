@@ -507,23 +507,15 @@ public class DAGPanel {
 	 * @param nodesStr
 	 * @return
 	 */
-	public DAGNode addNodeToOutPutView(String nodesStr)
+	public DAGNode addNodeToOutPutView(String id)
 	{
 		DAGNode node = null;
-		if (!nodesStr.equalsIgnoreCase(""))
+		if (!id.equalsIgnoreCase(""))
 		{
-			if(nodesStr.indexOf("~")!= -1)
-			{
-				String[] entityArr =  nodesStr.split("~");
-				for(int i=0;i<entityArr.length; i++)
-				{
-					String entityName = entityArr[i];
-					Long entityId = Long.parseLong(entityName);
-					EntityInterface entity =EntityCache.getCache().getEntityById(entityId);
-					IExpressionId expressionId = ((ClientQueryBuilder)m_queryObject).addExpression(entity);
-					node = createNode(expressionId,true);
-				}
-			}
+			Long entityId = Long.parseLong(id);
+			EntityInterface entity =EntityCache.getCache().getEntityById(entityId);
+			IExpressionId expressionId = ((ClientQueryBuilder)m_queryObject).addExpression(entity);
+			node = createNode(expressionId,true);
 		}
 		return node;
 	}

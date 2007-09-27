@@ -158,25 +158,7 @@
 			}
 		}	
 	}
-	function addToView()
-	{
-		var row = document.getElementById('validationMessagesRow');
-		row.innerHTML = "";	
-		row.style.display = 'none';		
-		var selectTag = document.getElementById('selectCategoryList');
-		var len = selectTag.length;
-		var items = "";
-		for(i=0;i<len;i++)
-		{
-			if(selectTag[i].selected)
-			{
-				items += selectTag[i].value + "~";
-			}
-		}
-		//document.applets[0].addNodeToView(items);
-		addNodeToView(items);
-		
-	}
+
 	function expand()
 	{			
 		switchObj = document.getElementById('image');
@@ -201,7 +183,7 @@
 			}
 			else
 			{
-				resultSetDivObj.height = "410";
+				resultSetDivObj.height = "430";
 			}
 		}
 		else  							   //Clicked on + image
@@ -403,6 +385,7 @@
 			radioCheckStatus = "text_radioButton";
 		else if(document.forms[0].selected[1].checked)
 			radioCheckStatus = "conceptCode_radioButton";
+
 		if(currentPage == 'null')
 		{
 			var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
@@ -411,7 +394,7 @@
 		else
 		{
 			actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&includeDescriptionChecked="+includeDescriptionCheckedStatus+ "&selected=" + radioCheckStatus +"&currentPage=DefineResultsView";
-			var handlerFunction = getReadyStateHandler(request,showEntityList,true);
+			var handlerFunction = getReadyStateHandler(request,showEntityListOnDefineViewPage,true);
 		}
 		request.onreadystatechange = handlerFunction;
 				
@@ -438,19 +421,33 @@
 			request.send(actionURL);
 		}
 	}
-	function showEntityList(text)
+	function showEntityListOnDefineViewPage(text)
 	{
+		var element = document.getElementById('resultSet');
 		if(text == "")
 		{
-			//alert("Zero Entitites found.");
-			
+            text = '<font face="Arial" size="2" >No result found.</font>'
+			element.innerHTML =text;
+		} 
+		else
+		{
+			var listOfEntities = text.split(";");
+			var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
+			for(i=1; i<listOfEntities.length; i++)
+			{
+				var e = listOfEntities[i];			
+				var nameIdDescription = e.split("|");		
+				var name = nameIdDescription[0];
+				var id = nameIdDescription[1];				
+				var description = nameIdDescription[2];
+				var functionCall = "addNodeToView('"+id+"')";		
+				var entityName = "<font color=#6E97F0>"+name +"</font>";
+				row = row+'<tr><td><a  class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+				
+			}
+			row = row+'</table>';		
+			element.innerHTML =row;
 		}
-		
-		var element = document.getElementById('resultSet');
-		var row ='<table width="100%" height="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
-		row = row + '<tr>' + text + '</tr>';
-		row = row+'</table>';		
-		element.innerHTML =row;
 		hideCursor();
 	}
 	
@@ -465,37 +462,21 @@
 		else
 		{
 		
-		if(text.indexOf("##") != -1)
-		{
-			var currentPageText = text.split("##");
-			var currentPage = currentPageText[0];
-			text = currentPageText[1];
-		}
-		
-		var listOfEntities = text.split(";");
-		var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
-	
-		for(i=1; i<listOfEntities.length; i++)
-		{
-			var e = listOfEntities[i];			
-			var nameIdDescription = e.split("|");		
-			var name = nameIdDescription[0];
-			var id = nameIdDescription[1];				
-			var description = nameIdDescription[2];
-			if(currentPage != "DefineResultsView")
+			var listOfEntities = text.split(";");
+			var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
+			for(i=1; i<listOfEntities.length; i++)
 			{
+				var e = listOfEntities[i];			
+				var nameIdDescription = e.split("|");		
+				var name = nameIdDescription[0];
+				var id = nameIdDescription[1];				
+				var description = nameIdDescription[2];
 				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+id+"')";		
 				var entityName = "<font color=#6E97F0>"+name +"</font>";
 				row = row+'<tr><td><a  class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
-			}
-			else
-			{
-				row = row + '<tr><td class="entityLink" title="'+description+'">' + entityName + ' </td></tr>';
-			}
-		}			
-		row = row+'</table>';		
-		
-		element.innerHTML =row;
+			}			
+			row = row+'</table>';		
+			element.innerHTML =row;
 		}
 		hideCursor();
 	}
@@ -505,14 +486,14 @@
 		var request = newXMLHTTPReq();			
 		var actionURL;
 		var handlerFunction = getReadyStateHandler(request,showEntityInformation,true);	
-		request.onreadystatechange = handlerFunction;				
+		request.onreadystatechange = handlerFunction;	
 		actionURL = "entityName=" + entityName;				
 		request.open("POST",url,true);	
 		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
 		request.send(actionURL);		
 	} 
 	function showEntityInformation(text)
-	{				
+	{	
 		var row = document.getElementById('validationMessagesRow');
 		row.innerHTML = "";	
 		row.style.display = 'none';		
@@ -657,15 +638,10 @@
           
          } 
 
-
-
-
-
 	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
 	{
-             var strToCreateQueyObject = createQueryString(nameOfFormToPost, entityName , attributesList,'addLimit');
+        var strToCreateQueyObject = createQueryString(nameOfFormToPost, entityName , attributesList,'addLimit');
  
-		
 		if(navigator.appName == "Microsoft Internet Explorer")
 		{
 			if(isTopButton)
