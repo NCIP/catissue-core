@@ -2096,6 +2096,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME="specimenBarcodeGeneratorClass";
 	public static final String STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME="storageContainerLabelGeneratorClass";
 	public static final String STORAGECONTAINER_BARCODE_GENERATOR_PROPERTY_NAME="storageContainerBarcodeGeneratorClass";
+	public static final String SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME="speicmenCollectionGroupLabelGeneratorClass";
 	
 	
 	
@@ -2114,5 +2115,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
     };
 	
 	public static final String SHOPPING_CART_ENTITY_NAME = "entityName";
-	
+	public static final String IDENTIFIED_REPORT_ID="identifiedReportId";
 }
