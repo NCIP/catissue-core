@@ -66,11 +66,13 @@ public class ViewSpecimenSummaryAction extends Action {
 				(CollectionProtocolBean)session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 			
-			if("update".equals(collectionProtocolBean.getOperation()))
+			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(summaryForm.getRequestType()))
 			{
-				summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
+				if("update".equals(collectionProtocolBean.getOperation()))
+				{
+					summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
+				}
 			}
-				
 			LinkedHashMap<String, GenericSpecimen> specimenMap = 
 							getSpecimensFromSessoin(session, eventId, summaryForm);
 
