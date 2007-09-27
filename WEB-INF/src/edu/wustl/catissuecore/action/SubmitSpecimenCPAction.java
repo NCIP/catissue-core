@@ -234,7 +234,13 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		specimenCollectionRequirementGroup.setClinicalDiagnosis(cpEventBean.getClinicalDiagnosis());
 		specimenCollectionRequirementGroup.setClinicalStatus(cpEventBean.getClinicalStatus());
 		collectionProtocolEvent.setRequiredCollectionSpecimenGroup(specimenCollectionRequirementGroup);
-		collectionProtocolEvent.setId(new Long(cpEventBean.getId()));
+		if (cpEventBean.getId()==-1){
+			collectionProtocolEvent.setId(null);
+		}
+		else
+		{
+			collectionProtocolEvent.setId(new Long(cpEventBean.getId()));
+		}
 		Collection specimenCollection =null;
 		Map specimenMap =(Map)cpEventBean.getSpecimenRequirementbeanMap();
 		
@@ -324,6 +330,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		NewSpecimenForm form = new NewSpecimenForm();
 		form.setClassName(specimenRequirementBean.getClassName());
 		
+		
 		Specimen specimen;
 		try {
 			specimen = (Specimen) new DomainObjectFactory()
@@ -332,7 +339,15 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			e1.printStackTrace();
 			return null;
 		}
-		specimen.setId(new Long(specimenRequirementBean.getId()));
+		if (specimenRequirementBean.getId()==-1)
+		{
+			specimen.setId(null);
+		}
+		else
+		{
+			specimen.setId(new Long(specimenRequirementBean.getId()));
+		}
+		
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		specimen.setAvailable(Boolean.TRUE);
 		Quantity availableQuantity = new Quantity();

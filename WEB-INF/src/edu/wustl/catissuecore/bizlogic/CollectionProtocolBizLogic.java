@@ -248,7 +248,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		 */
 		
 		isCollectionProtocolLabelUnique(collectionProtocol);
-		CollectionProtocol collectionProtocolOld = (CollectionProtocol) oldObj;
+		List oldcpList = dao.retrieve(CollectionProtocol.class.getName(),"id",((CollectionProtocol)oldObj).getId());
+		CollectionProtocol collectionProtocolOld = (CollectionProtocol) oldcpList.get(0);
 		Logger.out.debug("PI OB*****************8" + collectionProtocol.getPrincipalInvestigator());
 		Logger.out.debug("PI Identifier................."
 				+ collectionProtocol.getPrincipalInvestigator().getId());
