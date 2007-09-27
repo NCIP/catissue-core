@@ -27,6 +27,8 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
+import edu.wustl.catissuecore.namegenerator.LabelGenerator;
+import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.beans.SessionDataBean;
@@ -671,13 +673,10 @@ public class CaCoreAppServicesDelegator
      * @return
      * @throws Exception
      */
-    public Long delegateGetNextSpecimenCollectionGroupNumber(String userName, Object obj) throws Exception
+    public Long delegateGetSpecimenCollectionGroupLabel(String userName, Object obj) throws Exception
     {
-    	Long groupId=new Long(0);
-		BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
-		SpecimenCollectionGroupBizLogic scgBizLogic=(SpecimenCollectionGroupBizLogic)bizLogicFactory.getBizLogic(SpecimenCollectionGroup.class.getName());
-		groupId=new Long(scgBizLogic.getNextGroupNumber());
-    	return groupId;
+    	LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
+    	return specimenCollectionGroupLableGenerator.getCurrentLabel();
     }
     
     /**
