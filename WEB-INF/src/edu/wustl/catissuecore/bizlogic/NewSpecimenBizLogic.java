@@ -1236,7 +1236,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				 throw new DAOException("Specimen Collection Group " + ApplicationProperties.getValue("error.object.closed"));
 				 }*/
 				checkStatus(dao, specimenCollectionGroupObj, "Specimen Collection Group");
-				specimen.setSpecimenCollectionGroup(specimenCollectionGroupObj);
+				//Commented as we should not set specific SCG object in business Logic to specimen.  
+				//specimen.setSpecimenCollectionGroup(specimenCollectionGroupObj);
 			}
 		}
 
