@@ -775,5 +775,25 @@
 		<delete dir="${base.dir}/caTissueCore_Jar/temp"/>
 		
 </target>
-	 	
+
+	<property name="filename" value="" />
+	<property name="hookentity" value="" />
+	<property name="condition" value="" />
+	<property name="package" value="" />
+	
+		<target name="import_xmi">			
+				<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true">
+					<arg value="${filename}"/>
+					<arg value="${hookentity}"/>
+					<arg value="${condition}"/>
+					<arg value="${package}"/>
+					<classpath>
+			            <pathelement location="${target.dir}"/> 
+		            	<fileset dir="${lib.dir}">
+		                  <include name="*.jar"/>
+		              </fileset>
+		            </classpath> 			
+				</java>
+		</target>
+	
 </project>
