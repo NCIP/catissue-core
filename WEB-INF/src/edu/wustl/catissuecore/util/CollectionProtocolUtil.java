@@ -11,13 +11,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.ActionMapping;
-
-import edu.wustl.catissuecore.action.GetSpecimenForArrayAction;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
@@ -29,10 +25,9 @@ import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
-import gate.creole.gazetteer.DefaultGazetteer.Iter;
 
 public class CollectionProtocolUtil {
 
@@ -43,16 +38,31 @@ public class CollectionProtocolUtil {
 	public static CollectionProtocolBean getCollectionProtocolBean(CollectionProtocol collectionProtocol)
 	{
 		CollectionProtocolBean collectionProtocolBean;
+		long[] protocolCoordinatorIds = null;
 		collectionProtocolBean = new CollectionProtocolBean();
 		collectionProtocolBean.setConsentTierCounter(collectionProtocol.getConsentTierCollection().size());
 		Long id = new Long (collectionProtocol.getId().longValue());
 		collectionProtocolBean.setIdentifier(id);
-		//Collection 
-		//collectionProtocolBean.setProtocolCoordinatorIds(collectionProtocol.getco);
+		
+		Collection userCollection = collectionProtocol.getCoordinatorCollection();
+		if(userCollection != null)
+		{
+			protocolCoordinatorIds = new long[userCollection.size()];
+			int i=0;
+			Iterator it = userCollection.iterator();
+			while(it.hasNext())
+			{
+				User user = (User)it.next();
+				protocolCoordinatorIds[i] = user.getId().longValue();
+				i++;
+			}
+		}
+		
+		collectionProtocolBean.setProtocolCoordinatorIds(protocolCoordinatorIds);
 		collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocol.getPrincipalInvestigator().getId().longValue());
 		Date date = collectionProtocol.getStartDate();
 		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, Constants.DATE_FORMAT) );
-
+		collectionProtocolBean.setDescriptionURL(collectionProtocol.getDescriptionURL());
 		collectionProtocolBean.setUnsignedConsentURLName(collectionProtocol.getUnsignedConsentDocumentURL());
 		collectionProtocolBean.setConsentWaived (collectionProtocol.getConsentsWaived().booleanValue());   
 		collectionProtocolBean.setIrbID(collectionProtocol.getIrbIdentifier());
@@ -98,9 +108,6 @@ public class CollectionProtocolUtil {
 								collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
 		eventBean.setClinicalDiagnosis(specimenRequirementGroup.getClinicalDiagnosis());
 		eventBean.setClinicalStatus(specimenRequirementGroup.getClinicalStatus());
-		//eventBean.setCollectionProcedure(collectionProtocolEvent.get)
-		//eventBean.setCollectionContainer(collectionContainer)
-		//eventBean.setReceivedQuality(receivedQuality)
 		eventBean.setId(collectionProtocolEvent.getId().longValue());
 		eventBean.setUniqueIdentifier("E"+ counter++);
 		AbstractSpecimenCollectionGroup requirementGroup =collectionProtocolEvent.getRequiredCollectionSpecimenGroup();

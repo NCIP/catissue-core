@@ -226,6 +226,11 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	public void setNoOfAliquots(String noOfAliquots)
 	{
 		this.noOfAliquots = noOfAliquots;
+		if(noOfAliquots!=null&&noOfAliquots.equals("0"))
+		{
+			this.noOfAliquots = "";
+		}
+		
 	}
 
 	
@@ -677,6 +682,11 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
             {
                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));
             }
+			
+
+			/*
+ 			Commented by Virender Mehta
+ 			
 			if ((collectionEventUserId) == 0L)
 	        {
 	       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's user"));
@@ -718,6 +728,8 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",message));
 				
 			}
+			*/
+			
 			if(this.className.equals(Constants.MOLECULAR))
 			{
 				if(!validator.isNumeric(this.concentration))

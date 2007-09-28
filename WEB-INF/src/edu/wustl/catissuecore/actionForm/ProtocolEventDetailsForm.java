@@ -329,6 +329,8 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 									ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus")));
 				}
+				/*
+				 Commented by Virender
 				if ((collectionEventUserId) == -1L)
 		        {
 		       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's user"));
@@ -369,7 +371,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 					String message = ApplicationProperties.getValue("cpbasedentry.receivedquality");
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",message));
 					
-				}
+				}*/
 		
 		}
 		catch (Exception excp)

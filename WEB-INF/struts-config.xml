@@ -4439,6 +4439,14 @@ PUBLIC
 			<forward name="success" path="/GenericSpecimenSummary.do" />
 			<forward name="failure" path="/GenericSpecimenSummary.do" />
 		</action>
+		
+		<action path="/RetrieveCollectionProtocol"
+			type="edu.wustl.catissuecore.action.RetrieveCollectionProtocolAction"
+			name="collectionProtocolForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;invokeFunction=cp" />
+		</action>
             
 	</action-mappings>
 	

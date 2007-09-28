@@ -98,6 +98,11 @@
 		var cl = mygrid.cells(id,colid);
 		var searchId = cl.getValue();
 		var url = "SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+searchId;
+		if(<%=pageOf.equals("pageOfCollectionProtocol")%>)
+		{
+			url = "RetrieveCollectionProtocol.do?&id="+searchId;
+		}
+		
 		window.location.href = url;
 	}
 	/**

@@ -27,11 +27,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
-import edu.wustl.catissuecore.domain.StorageContainer;
-//import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -41,8 +37,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
@@ -50,7 +44,6 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
-import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -142,17 +135,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			SpecimenCollectionRequirementGroup collectionRequirementGroup =
 							collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
 			
-			dao.insert(collectionProtocolEvent, sessionDataBean, true, true);
-			dao.insert(collectionRequirementGroup, sessionDataBean, true, true);
-			try
-			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(collectionRequirementGroup),
-						getDynamicGroups(collectionRequirementGroup));
-			}
-			catch (SMException e)
-			{
-				throw handleSMException(e);
-			}
+			insertCollectionProtocolEvent(dao, sessionDataBean, collectionProtocolEvent,
+					collectionRequirementGroup);
 			
 			
 			Collection specimenCollection = collectionRequirementGroup.getSpecimenCollection();
@@ -261,10 +245,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		checkForChangedStatus(collectionProtocol, collectionProtocolOld);
 		
-		dao.update(collectionProtocol, sessionDataBean, true, true, false);
-
-		//Audit of Collection Protocol.
-		dao.audit(obj, oldObj, sessionDataBean, true);
 
 		Collection oldCollectionProtocolEventCollection = collectionProtocolOld
 		.getCollectionProtocolEventCollection();
@@ -274,6 +254,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		updateCollectionProtocolEvents(dao, sessionDataBean,
 				collectionProtocol, oldCollectionProtocolEventCollection);
+
+		dao.update(collectionProtocol, sessionDataBean, true, true, false);
+
+		//Audit of Collection Protocol.
+		dao.audit(obj, oldObj, sessionDataBean, true);
 
 		disableRelatedObjects(dao, collectionProtocol);
 
@@ -370,14 +355,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
 	 */
-	private void updateCollectionProtocolEvents(DAO dao,
-			SessionDataBean sessionDataBean,
-			CollectionProtocol collectionProtocol,
+	private void updateCollectionProtocolEvents(DAO dao, SessionDataBean sessionDataBean, CollectionProtocol collectionProtocol,
 			Collection oldCollectionProtocolEventCollection)
-			throws DAOException, UserNotAuthorizedException {
-		Iterator it;
-		it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
-		
+			throws DAOException, UserNotAuthorizedException 
+	{
+		Iterator it =  collectionProtocol.getCollectionProtocolEventCollection().iterator();
 		while (it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) it.next();
@@ -389,8 +371,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			if (collectionProtocolEvent.getId()== null || collectionProtocolEvent.getId()<=0)
 			{
 				collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
-				dao.insert(collectionRequirementGroup, sessionDataBean, true, true);
-				dao.insert(collectionProtocolEvent, sessionDataBean, true, true);
+				insertCollectionProtocolEvent(dao, sessionDataBean, collectionProtocolEvent,
+						collectionRequirementGroup);
 			}
 			else
 			{
@@ -410,6 +392,25 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 
+	private void insertCollectionProtocolEvent(DAO dao, SessionDataBean sessionDataBean,
+			CollectionProtocolEvent collectionProtocolEvent,
+			SpecimenCollectionRequirementGroup collectionRequirementGroup) throws DAOException,
+			UserNotAuthorizedException
+	{
+		dao.insert(collectionProtocolEvent, sessionDataBean, true, true);
+		dao.insert(collectionRequirementGroup, sessionDataBean, true, true);
+		try
+		{
+			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(collectionRequirementGroup),
+					getDynamicGroups(collectionRequirementGroup));
+		}
+		catch (SMException e)
+		{
+			throw handleSMException(e);
+		}
+	}
+
+
 	/**
 	 * @param dao
 	 * @param sessionDataBean
@@ -424,10 +425,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			throws DAOException, UserNotAuthorizedException {
 		Iterator srIt = collectionRequirementGroup.getSpecimenCollection().iterator();
 		NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic ();
-		Collection oldSpecimenCollection = oldCollectionProtocolEvent
+		Collection oldSpecimenCollection = null;
+		
+		if (oldCollectionProtocolEvent != null)
+		{
+			oldSpecimenCollection = oldCollectionProtocolEvent
 												.getRequiredCollectionSpecimenGroup()
 													.getSpecimenCollection();
-
+		}
 		while (srIt.hasNext())
 		{
 			Specimen specimen = (Specimen) srIt.next();

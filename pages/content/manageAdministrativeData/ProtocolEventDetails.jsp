@@ -59,7 +59,7 @@ window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageO
 </html:messages>
 
 <html:form action="ProtocolEventsDetails.do">
-<table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="700">
+<table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="600">
 	<tr>
 		<td height="20" width="9%" nowrap class="tabMenuItemSelected" onclick="defineEvents()" id="collectionProtocolTab">Protocol Event Details</td>
 	
@@ -67,7 +67,7 @@ window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageO
 	</tr>
 	<tr>
 	 <td class="tabField" colspan="3">
-		<table summary="" cellpadding="3" cellspacing="0" border="0" width="700">
+		<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
 		<tr>
 			<td class="formTitle" height="20" width="100%" colspan="7">
 				<bean:message key="cpbasedentry.defineevents" />						
@@ -140,83 +140,6 @@ window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageO
 					/>
 				</td>
 			</tr>
-			<tr>	
-				<html:hidden property="collectionEventId" />
-				<html:hidden property="collectionEventSpecimenId" />
-				<td class="formFieldNoBordersSimple" width="5">*</td>
-	 			<td class="formFieldNoBordersSimple"> 
-					<label for="user">
-						<b><bean:message key="specimen.collectedevents.username"/> </b>
-					</label>
-				</td>						
-				<td colspan="2" class="formFieldNoBordersSimple">
-					<autocomplete:AutoCompleteTag property="collectionEventUserId"
-								  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
-								  initialValue="<%=form.getCollectionEventUserId()%>"
-								  staticField="false"
-					/>		
-				</td>		
-				<!-- RecievedEvent fields -->
-				<html:hidden property="receivedEventId" />
-				<html:hidden property="receivedEventSpecimenId" />
-				<td class="formFieldNoBordersSimple" width="5">*</td>
-				<td class="formFieldNoBordersSimple">
-					<label for="type">
-						<b><bean:message key="specimen.receivedevents.username"/> </b>
-					</label>
-				</td>
-				<td colspan="2" class="formFieldNoBordersSimple">
-					<autocomplete:AutoCompleteTag property="receivedEventUserId"
-						  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
-						  initialValue="<%=form.getReceivedEventUserId()%>"
-						  staticField="false"
-				/>	
-			</tr>
-			<tr>					
-				<!-- CollectionEvent fields -->	
-				<td class="formFieldNoBordersSimple" width="5">*</td>
-				<td class="formFieldNoBordersSimple">
-					<label for="collectionprocedure">
-						<b><bean:message key="cpbasedentry.collectionprocedure"/></b>
-					</label>
-				</td>
-				<td class="formFieldNoBordersSimple" colspan="2">
-						<autocomplete:AutoCompleteTag property="collectionEventCollectionProcedure"
-								  optionsList = "<%=request.getAttribute(Constants.PROCEDURE_LIST)%>"
-								  initialValue="<%=form.getCollectionEventCollectionProcedure()%>"
-				/>							
-				</td>						
-				
-				<!-- RecievedEvent fields -->
-				<td class="formFieldNoBordersSimple" width="5"rowspan="2">*</td>
-				<td class="formFieldNoBordersSimple"rowspan="2"> 
-					<label for="quality">
-						<b><bean:message key="cpbasedentry.receivedquality"/></b>
-					</label>
-				</td>						
-				<!-- receivedeventparameters.receivedquality -->
-				<td class="formFieldNoBordersSimple"rowspan="2" colsapn ="2">
-					<autocomplete:AutoCompleteTag property="receivedEventReceivedQuality"
-								  optionsList = "<%=request.getAttribute(Constants.RECEIVED_QUALITY_LIST)%>"
-								  initialValue="<%=form.getReceivedEventReceivedQuality()%>"
-				/>
-				</td>
-			</tr>
-			<!-- CollectionEvent fields -->	
-			<tr>							
-				<td class="formFieldNoBordersSimple" width="5">*</td>
-				<td class="formFieldNoBordersSimple">
-					<label for="container">
-						<b><bean:message key="cpbasedentry.collectioncontainer"/></b>
-					</label>
-				</td>
-				<td class="formFieldNoBordersSimple">
-					<autocomplete:AutoCompleteTag property="collectionEventContainer"
-							  optionsList = "<%=request.getAttribute(Constants.CONTAINER_LIST)%>"
-							  initialValue="<%=form.getCollectionEventContainer()%>"
-			    />
-				</td>
-			</tr>	
 		<table>
 		&nbsp;
 		<table>

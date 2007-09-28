@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -134,6 +135,12 @@ public class ProtocolEventDetailsAction extends BaseAction
 			//If flow is when user Clicks Define Event button.
 			collectionProtocolEventKey = (String)session.getAttribute(Constants.NEW_EVENT_KEY);
 		}
+		StringTokenizer st = new StringTokenizer(collectionProtocolEventKey,"_");
+		if(st.hasMoreTokens())
+		{
+			collectionProtocolEventKey = st.nextToken();
+		}
+		
 		CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventMap.get(collectionProtocolEventKey);	
 		protocolEventDetailsForm.setClinicalDiagnosis(collectionProtocolEventBean.getClinicalDiagnosis());
 		protocolEventDetailsForm.setClinicalStatus(collectionProtocolEventBean.getClinicalStatus());
