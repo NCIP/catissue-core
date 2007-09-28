@@ -112,7 +112,7 @@ treeNo = treeNo + 1;
 			<%  for(int i=0;i<noOfTrees;i++) {
 			String divId = "treebox"+i;
 			%>
-				<div id="<%=divId%>"  style="background-color:white;overflow:auto;">
+				<div id="<%=divId%>"  style="background-color:white;overflow:auto;height:365">
 				</div>
 			<% } %>
 		</td>
