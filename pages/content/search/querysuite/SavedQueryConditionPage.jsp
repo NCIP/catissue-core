@@ -14,6 +14,9 @@
 		<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 		<script language="JavaScript" type="text/javascript" src="jss/queryModule.js"></script>
 		<script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
+		<script language="JavaScript" type="text/javascript" src="jss/overlib_mini.js"></script>
+		<script language="JavaScript" type="text/javascript" src="jss/calender.js"></script>
+		
 		<script>
 			function closeSaveQueryWindow()
 			{
@@ -72,7 +75,7 @@
 					<td colspan='3'>
 						<table cellpadding="0" cellspacing="0" border="0" class="contentPage" width='100%'>
 							<tr>
-								<td><%=request.getAttribute("HTMLContents")%></td>
+								<td><%=request.getAttribute(Constants.HTML_CONTENTS)%></td>
 							</tr>
 						</table>
 					</td>

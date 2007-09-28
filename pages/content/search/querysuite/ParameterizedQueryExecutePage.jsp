@@ -12,6 +12,7 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 		<script src="jss/queryModule.js"></script>
+				<script src="jss/calender.js"></script>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>
 			<bean:message key="savequery.queryConditionTitle"/>
@@ -37,7 +38,7 @@
 					<td>
 						<table>
 							<tr>
-								<td> <%=request.getAttribute("HTMLContents") %>  </td>
+								<td> <%=request.getAttribute(Constants.HTML_CONTENTS) %>  </td>
 							</tr>
 						</table>
 					</td>
