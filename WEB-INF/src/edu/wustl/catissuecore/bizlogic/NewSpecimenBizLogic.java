@@ -2335,15 +2335,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				Specimen specimenDO =(Specimen)specList.get(0);
 				specimenDO.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
 				Collection childrenSpecimens = specimenDO.getChildrenSpecimen();
-				if (childrenSpecimens !=null)
-				{
-					Iterator iterator = childrenSpecimens.iterator();
-					while(iterator.hasNext())
-					{
-						Specimen childSpecimen = (Specimen) iterator.next();
-						childSpecimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
-					}
-				}
+				updateChildSpecimenStatus(childrenSpecimens);
 				dao.update(specimenDO, sessionDataBean, false, false, false);
 			}
 		}catch(UserNotAuthorizedException authorizedException){
@@ -2353,6 +2345,22 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}finally{
 			((HibernateDAO)dao).commit();
 			((HibernateDAO)dao).closeSession();		
+		}
+	}
+
+	/**
+	 * @param childrenSpecimens
+	 */
+	private void updateChildSpecimenStatus(Collection childrenSpecimens) {
+		if (childrenSpecimens !=null)
+		{
+			Iterator iterator = childrenSpecimens.iterator();
+			while(iterator.hasNext())
+			{
+				Specimen childSpecimen = (Specimen) iterator.next();
+				childSpecimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+				updateChildSpecimenStatus(childSpecimen.getChildrenSpecimen());
+			}
 		}
 	}
 }
