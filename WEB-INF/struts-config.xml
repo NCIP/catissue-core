@@ -537,6 +537,7 @@ PUBLIC
 			<forward name="success" path=".catissuecore.viewSearchResults"/>
 			<forward name="treeNodeLimitExceededRecords" path="/OpenDecisionMakingPage.do" />			
 			<forward name="failure" path="/RetrieveQueryAction.do"/>
+			<forward name="InvalidValues" path="/FetchQuery.do"/>
 		</action>
 		
 		<action path="/FetchQuery"
