@@ -56,7 +56,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	private var selectedLink:String = "";
 	private var selectedNode:DAGNode=null;
 	//------------------------
-	private var textData:Object = null;
+//	private var textData:Object = null;
     private var panel:AmbiguityPanel; 
     private var title:String  = new String();
     private var selectedNodeList:ArrayCollection = new ArrayCollection();
@@ -90,6 +90,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		ExternalInterface.addCallback("editLimit",editLimit);	
 		ExternalInterface.addCallback("searchResult",searchResult);	
 		ExternalInterface.addCallback("addNodeToView",addNodeToView);
+		ExternalInterface.addCallback("isDAGEmpty",isDAGEmpty);
 	}
 	
 	//setup the callback function so that HTML can call flex methods
@@ -98,6 +99,18 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	{
 		var result:Boolean = ExternalInterface.call("isReady");
 		return result;
+	}
+	
+	public function isDAGEmpty():Boolean
+	{
+		if(totalNodeMap.isEmpty())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 		
 	private function faultHandler (event:FaultEvent):void
@@ -380,11 +393,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		
 	private function addNodeToViewHandler(event: ResultEvent):void 		
 	{
-		textData = event.result;
-		if(textData!=null)
+		var node:DAGNode = event.result as DAGNode;
+		if(node!=null)
 		{
 			isOutputView = true;
-			this.addNode();
+			this.addNode(node);
 		}
 		rpcService.removeEventListener(ResultEvent.RESULT,addNodeToViewHandler,false);
 	}
@@ -448,7 +461,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		{
 			rpcService.addEventListener(ResultEvent.RESULT,getNodeResultHandler);
 			rpcService.createNode(strToCreateQueyObject,entityName);
-			showValidationMessagesToUser("");
 		}
 	}
 	
@@ -496,10 +508,20 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 
 	public function getNodeResultHandler(event: ResultEvent):void
 	{
-		textData = event.result;
-		if(textData!=null)
+		var node:DAGNode = event.result as DAGNode;
+		if(node!=null)
 		{
-			this.addNode();
+			if(node.errorMsg=="")
+			{
+				this.addNode(node);
+				showValidationMessagesToUser("");
+			}
+			else
+			{
+				//Alert.show("E:  "+node.errorMsg);
+				showValidationMessagesToUser(node.errorMsg);
+				node.errorMsg="";
+			}
 		}
 		rpcService.removeEventListener(ResultEvent.RESULT,getNodeResultHandler,false);
 	}
@@ -510,15 +532,15 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	    }
 	
 
-	private function addNode():void
+	private function addNode(node:DAGNode):void
 	{
 		var newNode:DAGNode = new DAGNode();
-		newNode.nodeName = textData.nodeName;
+		newNode.nodeName = node.nodeName;
 
-		newNode.nodeType =	textData.nodeType;
-		newNode.nodeNumber = textData.expressionId+"";
-		newNode.expressionId=textData.expressionId;
-		newNode.name = textData.expressionId+"";
+		newNode.nodeType =	node.nodeType;
+		newNode.nodeNumber = node.expressionId+"";
+		newNode.expressionId=node.expressionId;
+		newNode.name = node.expressionId+"";
 
 		if(isOutputView)
 		{
@@ -528,7 +550,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		else
 		{
 			newNode.nodeColor =0xFFFFAA;
-			newNode.toolTip=textData.toolTip;
+			newNode.toolTip=node.toolTip;
 		}
 
 		newNode.addEventListener(MouseEvent.MOUSE_MOVE,doDrag);
@@ -901,14 +923,29 @@ private function updateLinkSelection(event:MouseEvent):void {
 		{
 			rpcService.addEventListener(ResultEvent.RESULT,editNodeHandler);
 			rpcService.editNode(strToCreateQueyObject,entityName);
-			showValidationMessagesToUser(DAGConstants.EDIT_LIMITS_MESSAGE);
+		
 		}
 							
 	}
 	public function editNodeHandler(event:ResultEvent):void
 	{
-		var tooltip:String = event.result as String;
-		eNode.toolTip = tooltip;
+		var node:DAGNode = event.result as DAGNode;
+		if(node!=null)
+		{
+			if(node.errorMsg=="")
+			{
+				eNode.toolTip = node.toolTip;
+				showValidationMessagesToUser(DAGConstants.EDIT_LIMITS_MESSAGE);
+			}
+			else
+			{
+				//Alert.show("E:  "+node.errorMsg);
+				showValidationMessagesToUser(node.errorMsg);
+				node.errorMsg="";
+			}
+		}
+//		var tooltip:String = event.result as String;
+//		eNode.toolTip = tooltip;
 		rpcService.removeEventListener(ResultEvent.RESULT,editNodeHandler);
 	}
 	

@@ -26,6 +26,7 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	public List<String> operatorList  = new ArrayList<String>();
 	//private List<String> pathList  = new ArrayList<String>();
 	public List<DAGPath> dagpathList = new ArrayList<DAGPath>();
+	private String errorMsg = "";
 	
 	public DAGNode()
 	{
@@ -131,6 +132,7 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 		operatorList = (List<String>) in.readObject();
 	//	pathList = (List<String>) in.readObject();
 		dagpathList =( List<DAGPath>)in.readObject();
+		errorMsg = in.readUTF();
 		
 	}
 
@@ -145,12 +147,12 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 		out.writeObject(operatorList);
 		//out.writeObject(pathList);
 		out.writeObject(dagpathList);
+		out.writeUTF(errorMsg);
 	}
 
 	public String toString()
 	{
 		StringBuffer buff = new StringBuffer("");
-		
 		buff.append("\n nodeName: ").append(nodeName).append("\n toolTip: ").append(toolTip).
 		append("\n expressionId: ").append(expressionId).append("\n operatorBetweenAttrAndAssociation:").
 		append(operatorBetweenAttrAndAssociation);
@@ -221,6 +223,16 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 
 	public void setDagpathList(DAGPath dagpath) {
 		this.dagpathList.add(dagpath);
+	}
+
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
 	}
 
 

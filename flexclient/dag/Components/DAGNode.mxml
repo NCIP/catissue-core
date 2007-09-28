@@ -46,6 +46,7 @@
 		public var enable:Boolean=true;
 		[Bindable]
 		public var nodeColor:int =0xFFFFAA;
+		public var errorMsg:String= "";
 		
 		public var associationList:ArrayCollection;
 		public var operatorList:ArrayCollection;
@@ -158,9 +159,8 @@
 			nodeType = input.readUTF();
 			associationList = input.readObject() as ArrayCollection;
 			operatorList = input.readObject() as ArrayCollection;
-			//pathList = input.readObject();
 			dagpathList = input.readObject() as ArrayCollection;
-			
+			errorMsg = input.readUTF();
 			
 		}
 
@@ -172,8 +172,8 @@
 			out.writeUTF(nodeType);
 			out.writeObject(associationList);
 			out.writeObject(operatorList);
-			//out.writeObject(pathList);
 			out.writeObject(dagpathList);
+			out.writeUTF(errorMsg);
 		}
 		//---
 		

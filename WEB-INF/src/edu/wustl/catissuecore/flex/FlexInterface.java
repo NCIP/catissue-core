@@ -812,12 +812,10 @@ public class FlexInterface
 	 * @param entityName
 	 * @return
 	 */
-	public String editNode(String strToCreateQueryObject,String entityName)
+	public DAGNode editNode(String strToCreateQueryObject,String entityName)
 	{
-		String conditionStr	= null;
 		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName,"Edit");
-		conditionStr = dagNode.getToolTip();
-		return conditionStr;
+		return dagNode;
 	}
 	/**
 	 * Deletes node from output view

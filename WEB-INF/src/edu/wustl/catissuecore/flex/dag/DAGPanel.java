@@ -125,25 +125,34 @@ public class DAGPanel {
 				List<AttributeInterface> attributes = (List<AttributeInterface>) ruleDetailsMap.get(AppletConstants.ATTRIBUTES);
 				List<String> attributeOperators = (List<String>) ruleDetailsMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
 				List<List<String>> conditionValues = (List<List<String>>) ruleDetailsMap.get(AppletConstants.ATTR_VALUES);
-
-				if(mode.equals("Edit"))
+				String errMsg = (String)ruleDetailsMap.get(AppletConstants.ERROR_MESSAGE);
+				System.out.println("Error  msg =="+errMsg);
+				if(errMsg.equals(""))
 				{
-					Rule rule = ((Rule) (expression.getOperand(0)));
-					rule.removeAllConditions();
-					List<ICondition> conditionsList = ((ClientQueryBuilder)m_queryObject).getConditions(attributes, attributeOperators,conditionValues);
-					for (ICondition condition : conditionsList)
+					if(mode.equals("Edit"))
 					{
-						rule.addCondition(condition);
+						Rule rule = ((Rule) (expression.getOperand(0)));
+						rule.removeAllConditions();
+						List<ICondition> conditionsList = ((ClientQueryBuilder)m_queryObject).getConditions(attributes, attributeOperators,conditionValues);
+						for (ICondition condition : conditionsList)
+						{
+							rule.addCondition(condition);
+						}
+						expressionId = expression.getExpressionId();
+						node = createNode(expressionId,false);
 					}
-					expressionId = expression.getExpressionId();
-					node = createNode(expressionId,false);
-				}
-				else
+					else
+					{
+						expressionId = m_queryObject.addRule(attributes, attributeOperators, conditionValues);
+						node = createNode(expressionId,false);
+					}
+					node.setErrorMsg(errMsg);
+				}else
 				{
-					expressionId = m_queryObject.addRule(attributes, attributeOperators, conditionValues);
-					node = createNode(expressionId,false);
+					node= new DAGNode();
+					node.setErrorMsg(errMsg);
 				}
-
+				
 			}
 		} catch (DynamicExtensionsSystemException e) {
 			e.printStackTrace();
