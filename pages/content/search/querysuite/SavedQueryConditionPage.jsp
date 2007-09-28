@@ -47,7 +47,7 @@
 					<td width='5' class="formRequiredNotice">*</td>
 					<td class="formRequiredLabel">Title :</td>
 					<td class="formField">
-						<input type="text" style="width: 300px; display: block;" name="title" value=""/>
+						<html:text  style="width: 300px; display: block;" styleId="title" property="title" />
 					</td>
 					<!--
 					<td rowspan="2" valign="top">Share Query With :</td>
@@ -63,7 +63,7 @@
 					<td width='5' class="formRequiredNotice">&nbsp;</td>
 					<td class="formLabel">Description :</td>
 					<td class="formField">
-						<textarea cols="40" rows="4" style="width: 300px;" name="description"></textarea>
+						<html:textarea cols="40" rows="4" style="width: 300px;" styleId="description" property="description"> </html:textarea>
 					</td>
 				</tr>
 				<tr>
@@ -84,7 +84,7 @@
 					<td colspan='3' align="right">
 					    <input type="hidden" name="queryString" id="queryString" value=""/>
 					    <input type="hidden" name="buildQueryString" id="buildQueryString" value=""/>
-						<input type="button" name="preview" value="Preview" disabled="true"/>
+						<input type="button" name="preview" value="Preview"  disabled="true"/>
 						<c:choose>
 							<c:when test="${querySaved eq 'true'}">
 								<input type="button" name="close" value="Close" onClick="closeSaveQueryWindow()"/>
