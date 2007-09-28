@@ -7,6 +7,8 @@ package edu.wustl.catissuecore.action.querysuite;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,8 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -115,27 +119,72 @@ public class QueryShoppingCartAction extends BaseAction
 		// Check if user wants to export cart.
 		else if (operation.equalsIgnoreCase(Constants.EXPORT))
 		{
-
 			export(cart, chkBoxValues, session, request, response);
 			return null;
 		}// Check if user wants to view the cart.
 		else if (operation.equalsIgnoreCase(Constants.VIEW))
-		{  
+		{    
 			setCartView(request, cart);
 			target = new String(Constants.VIEW);
 		}
 		else if (operation.equals("addToOrderList"))
 		{
-			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+			Map <String,Set<String>> entityIdsMap = getOrderableEntityIds(chkBoxValues, cart);
+			Set<String> specimenIdsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
 			List<String> specimenIds = new ArrayList<String>();
-			String entityName = request.getParameter(Constants.SHOPPING_CART_ENTITY_NAME);
-			if(entityName!=null)
-				specimenIds = bizLogic.getEntityIdsList(cart, entityName, chkBoxValues);
+			specimenIds.addAll(specimenIdsSet);
 			session.setAttribute("specimenId", specimenIds);
 			target = new String("requestToOrder");
 		}
 		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_MODULE);
 		return mapping.findForward(target);
+	}
+
+	/**
+	 * @param chkBoxValues check box values.
+	 * @param cart Shopping cart object from session.
+	 * @return Map of entity ids.This map will contain 3 different Lists of all specimen ,specimen arrays and IdentifiedSurgicalPathologyReports. 
+	 */
+	private Map<String,Set<String>> getOrderableEntityIds(List<Integer> chkBoxValues, QueryShoppingCart cart)
+	{
+		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+		Set<String> specimenIds = new HashSet<String>();
+		Set<String> pathalogicalCaseIds = new HashSet<String>();
+		Set<String> specimenArrayIds = new HashSet<String>();
+		Map <String,Set<String>> entityIdsMap = new HashMap<String, Set<String>>();
+		
+		List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
+		if (cartAttributeList != null)
+		{
+			List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
+			Set<String> distinctEntityNameSet = new HashSet<String>(); 
+			for (AttributeInterface attribute : cartAttributeList)
+			{
+				
+				if ((attribute.getName().equals(Constants.ID))
+						&& ((orderableEntityNameList))
+								.contains(attribute.getEntity().getName()))
+				{
+					distinctEntityNameSet.add(attribute.getEntity().getName());
+				}
+			}
+			for(String entityName :distinctEntityNameSet)
+			{
+				Set<String> tempEntityIdsList = new HashSet<String>();
+				tempEntityIdsList = bizLogic.getEntityIdsList(cart, entityName,
+						chkBoxValues);
+				if(entityName.equals(Constants.SPECIMEN_ARRAY_CLASS_NAME))
+					specimenArrayIds.addAll(tempEntityIdsList);
+				else if(entityName.equals(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME))
+					pathalogicalCaseIds.addAll(tempEntityIdsList);
+				else
+					specimenIds.addAll(tempEntityIdsList);
+			}
+			entityIdsMap.put(Constants.SPECIMEN_ARRAY_CLASS_NAME, specimenArrayIds);
+			entityIdsMap.put(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, pathalogicalCaseIds);
+			entityIdsMap.put(Constants.SPECIMEN_NAME, specimenIds);
+		}
+		return entityIdsMap;
 	}
 
 	/**
@@ -145,7 +194,6 @@ public class QueryShoppingCartAction extends BaseAction
 	private void setCartView(HttpServletRequest request, QueryShoppingCart cart)
 	{ 
 		String isSpecimenIdPresent = "false";
-		String entityName = "";
 		boolean isEmpty = false;
 		if (cart != null)
 		{
@@ -159,13 +207,11 @@ public class QueryShoppingCartAction extends BaseAction
 							&& ((orderableEntityNameList)).contains(attribute.getEntity().getName()))
 					{
 						isSpecimenIdPresent = "true";
-						entityName = attribute.getEntity().getName();
 						break;
 					}
 				}
 
 				request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
-				request.setAttribute(Constants.SHOPPING_CART_ENTITY_NAME, entityName);
 			}
 			else
 				isEmpty = true;
@@ -241,7 +287,6 @@ public class QueryShoppingCartAction extends BaseAction
 				}
 				else
 					addDifferentCartViewError(request);
-
 			}
 
 		}
@@ -355,7 +400,6 @@ public class QueryShoppingCartAction extends BaseAction
 				error = new ActionError("shoppingcart.duplicateObjsError", addRecordCount,
 						duplicateRecordCount);
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
-
 		}
 		else
 		{
@@ -363,10 +407,8 @@ public class QueryShoppingCartAction extends BaseAction
 			errors.add(ActionErrors.GLOBAL_ERROR, addMsg);
 			session.setAttribute(Constants.QUERY_SHOPPING_CART, cart);
 			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
-
 		}
 		saveErrors(request, errors);
-
 	}
 
 	/**

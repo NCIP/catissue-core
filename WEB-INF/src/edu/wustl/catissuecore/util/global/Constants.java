@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 
 
 /**
@@ -26,6 +27,8 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 
 public class Constants extends edu.wustl.common.util.global.Constants
 {
+	
+	
 	//Constants added for Catissuecore V1.2
 	public static final String PAGE_OF_ADMINISTRATOR = "pageOfAdministrator";
 	public static final String PAGE_OF_SUPERVISOR = "pageOfSupervisor";
@@ -2107,14 +2110,21 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_ANTICOPATED = "Anticipated";
 	
 	//Shopping cart constants.
+	public static final String SPECIMEN_ARRAY_CLASS_NAME = SpecimenArray.class.getName();
+	public static final String IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME = IdentifiedSurgicalPathologyReport.class.getName();
+	public static final String SPECIMEN_NAME = Specimen.class.getName();
+	
 	public static final String[] entityNameArray = {
-		              Specimen.class.getName(),
+		              SPECIMEN_NAME,
 			          FluidSpecimen.class.getName(),
 			          MolecularSpecimen.class.getName(),
 			          TissueSpecimen.class.getName(),
 			          CellSpecimen.class.getName(),
-			          SpecimenArray.class.getName()
+			          SPECIMEN_ARRAY_CLASS_NAME,
+			          IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME
     };
+	
+	//public static final String SHOPPING_CART_ENTITY_NAME = "entityName";
 	
 	public static final String SHOPPING_CART_ENTITY_NAME = "entityName";
 	public static final String IDENTIFIED_REPORT_ID="identifiedReportId";

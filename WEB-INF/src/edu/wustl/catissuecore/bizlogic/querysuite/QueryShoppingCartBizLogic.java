@@ -5,6 +5,7 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -119,10 +120,9 @@ public class QueryShoppingCartBizLogic
      * @return List of entity ids present in cart if chkBoxValues null it will return all ids else only selected ids.
 	 */
 	
-	public List<String> getEntityIdsList(QueryShoppingCart cart,String entityName,List<Integer>chkBoxValues)
+	public Set<String> getEntityIdsList(QueryShoppingCart cart,String entityName,List<Integer>chkBoxValues)
 	{
-
-	    List<String> entityIdsList = new ArrayList<String>();
+	    Set<String> entityIdsList = new HashSet<String>();
 	    List<Integer> entityIdsColumnIndexList = getIdsColumnIndexList(cart.getCartAttributeList(),entityName);
         List<List<String>> dataList = cart.getCart();
         if(chkBoxValues!=null)
@@ -132,8 +132,9 @@ public class QueryShoppingCartBizLogic
 			List<String> record = dataList.get(index);
 			for (int i = 0; i < entityIdsColumnIndexList.size(); i++)
 			{
-				if(!(entityIdsList.contains(record.get((Integer)entityIdsColumnIndexList.get(i)))))
-				  entityIdsList.add(record.get((Integer)entityIdsColumnIndexList.get(i)));
+				String data = record.get(entityIdsColumnIndexList.get(i));
+				if(!(data.equals("")))
+				  entityIdsList.add(data);
 			}
 	    }
         }
@@ -143,8 +144,9 @@ public class QueryShoppingCartBizLogic
     		{
     			for (int j = 0; j < entityIdsColumnIndexList.size(); j++)
     			{
-    				if (!(entityIdsList.contains(record.get((Integer) entityIdsColumnIndexList.get(j)))))
-    					entityIdsList.add(record.get((Integer) entityIdsColumnIndexList.get(j)));
+    				String data = record.get(entityIdsColumnIndexList.get(j));
+					if (!(data.equals("")))
+    					entityIdsList.add(data);
     			}
     		}
         }
