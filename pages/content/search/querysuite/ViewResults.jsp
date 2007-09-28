@@ -36,12 +36,12 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
 		<td colspan="4" height="100%">
 <table border="0" height="100%" width="100%">
 	<tr height="100%">
-		<td width="200" colspan="1" valign="top">
+		<td width="25%" colspan="1" valign="top">
 			<iframe id="<%=Constants.TREE_VIEW_FRAME%>" src="<%=Constants.QUERY_TREE_VIEW_ACTION%>?pageOf=pageOfQueryResults" scrolling="auto" frameborder="0" width="100%" height="370px">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
-		<td width="600" colspan="3" valign="top">
+		<td width="75%" colspan="3" valign="top">
 			<iframe name="<%=Constants.GRID_DATA_VIEW_FRAME%>" src="<%=Constants.QUERY_GRID_VIEW_ACTION%>?pageOf=pageOfQueryModule" <%=Constants.VIEW_TYPE%>=<%=Constants.SPREADSHEET_VIEW%>" scrolling="auto" frameborder="0" width="100%" height="370px">
 				Your Browser doesn't support IFrames.
 			</iframe>
