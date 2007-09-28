@@ -22,6 +22,7 @@ import edu.upmc.opi.caBIG.caTIES.services.caTIES_TiesPipe.TiesPipe;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.domain.pathology.BinaryContent;
 import edu.wustl.catissuecore.domain.pathology.Concept;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
@@ -51,14 +52,14 @@ public class ConceptCoder
 			Logger.out.info("Report is Concept coded by caties");
 			Logger.out.info("Updating Report");
 			updateReport();
-			CaCoreAPIService.getAppServiceInstance().updateObject(this.deidPathologyReport);
+			this.deidPathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getAppServiceInstance().updateObject(this.deidPathologyReport);
 		}
-		catch (Throwable ex) 
+		catch (Exception ex) 
 		{
 			Long endTime=new Date().getTime();
 			Logger.out.error("Concept coding process failed for report id:"+this.deidPathologyReport.getId()+" "+ex.getMessage());
 			this.deidPathologyReport.setReportStatus(CaTIESConstants.CC_PROCESS_FAILED);
-			CaCoreAPIService.getAppServiceInstance().updateObject(this.deidPathologyReport);
+			this.deidPathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getAppServiceInstance().updateObject(this.deidPathologyReport);
 			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CC_PROCESS_FAILED+","+ex.getMessage()+","+(endTime-startTime));
 		}
 		if(!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(CaTIESConstants.CC_PROCESS_FAILED))
@@ -67,7 +68,7 @@ public class ConceptCoder
 			Logger.out.info("Report is updated");
 			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CONCEPT_CODED+","+"Report Concept Coded successfully,"+(endTime-startTime));
 		}
-		
+		this.deidPathologyReport=null;
 		Logger.out.info("Report is updated");
 	}
 	
@@ -107,18 +108,22 @@ public class ConceptCoder
 		Logger.out.info("*********************Inside update report***************");
 		 try 
 		 {
-			 BinaryContent binaryContent=new BinaryContent();
-			 binaryContent.setData(this.gateXML);
-			 binaryContent.setSurgicalPathologyReport(this.deidPathologyReport);
-			 this.deidPathologyReport.setBinaryContent(binaryContent);
-			 
-			 XMLContent xmlContent=new XMLContent();
-			 xmlContent.setData(this.chirpsXML);
-			 xmlContent.setSurgicalPathologyReport(this.deidPathologyReport);
-			 this.deidPathologyReport.setXmlContent(xmlContent);
-			 
+			 if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_BI_CONTENT)).equalsIgnoreCase("true"))
+			 {
+				 BinaryContent binaryContent=new BinaryContent();
+				 binaryContent.setData(this.gateXML);
+				 binaryContent.setSurgicalPathologyReport(this.deidPathologyReport);
+				 this.deidPathologyReport.setBinaryContent(binaryContent);
+			 }
+			 if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_XML_CONTENT)).equalsIgnoreCase("true"))
+			 {
+				 XMLContent xmlContent=new XMLContent();
+				 xmlContent.setData(this.chirpsXML);
+				 xmlContent.setSurgicalPathologyReport(this.deidPathologyReport);
+				 this.deidPathologyReport.setXmlContent(xmlContent);
+			 }
 			 this.deidPathologyReport.setReportStatus(CaTIESConstants.CONCEPT_CODED);
-		 }
+		}
 		 catch (Exception ex) 
 		 {
 			 Logger.out.error("Error occured while updating deidentified pathology report");
