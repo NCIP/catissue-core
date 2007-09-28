@@ -2078,7 +2078,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
   	public static final String IDENTIFIED_SURGICAL_PATHOLOGY_REPORT = "identifiedSurgicalPathologyReport";
   	
   	//Save Query Constants
-	
+  	public static final String HTML_CONTENTS = "HTMLContents";
+  	public static final String SHOW_ALL= "showall";
 	public static final String SHOW_ALL_ATTRIBUTE = "Show all attributes";
 	public static final String SHOW_SELECTED_ATTRIBUTE = "Show selected attributes";
 	public static final String ADD_EDIT_PAGE ="Add Edit Page";
@@ -2087,7 +2088,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FETCH_QUERY_ACTION ="FetchQuery.do"; 
 	public static final String EXECUTE_QUERY_ACTION ="ExecuteQueryAction.do"; 
 	public static final String EXECUTE_QUERY = "executeQuery";
-//	Save Query Constants ends
+	public static final String INVALID_CONDITION_VALUES ="InvalidValues";
+	//	Save Query Constants ends
 	
 	public static final String NEW_SPECIMEN_TYPE = "New_Specimen";
 	public static final String DERIVED_SPECIMEN_TYPE = "Derived_Specimen";
