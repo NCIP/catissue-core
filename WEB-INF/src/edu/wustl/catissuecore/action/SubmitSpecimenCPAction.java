@@ -436,7 +436,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		collectionProtocol.setTitle(cpBean.getTitle());
 		collectionProtocol.setUnsignedConsentDocumentURL(cpBean
 				.getUnsignedConsentURLName());
-
+		collectionProtocol.setIrbIdentifier(cpBean.getIrbID());
 		return collectionProtocol;
 	}
 
