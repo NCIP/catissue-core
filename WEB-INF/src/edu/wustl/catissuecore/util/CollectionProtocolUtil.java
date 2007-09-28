@@ -355,7 +355,7 @@ public class CollectionProtocolUtil {
 				(CollectionProtocolEvent)iterator.next();
 			
 			CollectionProtocolEventBean eventBean =
-				CollectionProtocolUtil.getCollectionProtocolEventBean(collectionProtocolEvent,ctr);
+				CollectionProtocolUtil.getCollectionProtocolEventBean(collectionProtocolEvent,ctr++);
 			eventMap.put(eventBean.getUniqueIdentifier(), eventBean);
 		}
 		return eventMap;
