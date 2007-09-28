@@ -32,7 +32,6 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 */
 	public DefaultSpecimenLabelGenerator()
 	{
-		super();
 		init();
 	}
 	
@@ -102,7 +101,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 * @param parentObject
 	 * @param specimenObject
 	 */
-	private synchronized  void setNextAvailableAliquotSpecimenlabel(Specimen parentObject,Specimen specimenObject) {
+	synchronized  void setNextAvailableAliquotSpecimenlabel(Specimen parentObject,Specimen specimenObject) {
 				
 		String parentSpecimenLabel = (String) parentObject.getLabel();
 		long aliquotChildCount = 0;
@@ -125,7 +124,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 * @param parentObject
 	 * @param specimenObject
 	 */
-	private void setNextAvailableDeriveSpecimenlabel(Specimen parentObject, Specimen specimenObject) {
+	void setNextAvailableDeriveSpecimenlabel(Specimen parentObject, Specimen specimenObject) {
 		
 		currentLabel= currentLabel+1;
 		specimenObject.setLabel(currentLabel.toString());
@@ -148,7 +147,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	
 		else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
 		{
-			setNextAvailableAliquotSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen);
+			this.setNextAvailableAliquotSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen);
 		}
 	
 	
