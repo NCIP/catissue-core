@@ -2,16 +2,12 @@ package edu.wustl.catissuecore.namegenerator;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -26,6 +22,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGenerator {
 
 	public SpecimenLabelGeneratorForMichigan() {
+		//init();//TODO :Commented by Falguni because we are not using separate table for Michigan ,as not able to persist label count. 
 		super();
 	}
 
@@ -65,6 +62,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		return df.format(input);
 	}
 
+	
 	private void persistLabelCount() 
 	{
 		String sql = "update CATISSUE_SPECIMEN_LABEL_COUNT SET LABEL_COUNT='"
@@ -130,9 +128,11 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		
 	}
 	
-
+	/**
+	 * This function is overridden as per Michgam requirement. 
+	 */
 	
-	private void setNextAvailableDeriveSpecimenlabel(Specimen parentObject,Specimen specimenObject)
+	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject,Specimen specimenObject)
 	{
 		String parentSpecimenId = parentObject.getId().toString();
 				
@@ -142,8 +142,11 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		long aliquotCount = parentObject.getChildrenSpecimen().size();
 		specimenObject.setLabel(parentSpecimenLabel + "_" + (format((aliquotCount + 1), "00")));
 	}
-	
-	private void setNextAvailableAliquotSpecimenlabel(Specimen parentObject, Specimen specimenObject) 
+
+	/**
+	 * This function is overridden as per Michgam requirement. 
+	 */
+	synchronized void setNextAvailableAliquotSpecimenlabel(Specimen parentObject, Specimen specimenObject) 
 	{
 		
 		String parentSpecimenLabel = (String) parentObject.getLabel();
