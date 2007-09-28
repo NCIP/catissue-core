@@ -11,7 +11,7 @@
 <script src="jss/queryModule.js">
 	</script>
 </head>
-<body>
+<body onload="checkItDefault()">
 <html:form method="GET" action="OpenDecisionMakingPage.do">
 <html:hidden property="noOfResults" value="" />
 
@@ -55,21 +55,21 @@
 				<td class="formMessagewithoutcolor">&nbsp;
 						</td>
 					<td class="formMessagewithoutcolor">
-						<html:radio property="options" value="redefineQuery" onclick=""/><bean:message key="query.options.redefine.query"/>
+						<html:radio property="options" value="redefineQuery" /><bean:message key="query.options.redefine.query"/>
 					</td>
 				</tr>
 				<tr>
 				<td class="formMessagewithoutcolor">&nbsp;
 						</td>
 					<td class="formMessagewithoutcolor">
-						<html:radio property="options" value="viewLimitedRecords" onclick=""/><bean:message key="query.options.view.few.results"/><bean:message key="query.options.note"/> 
+						<html:radio property="options" value="viewLimitedRecords" /><bean:message key="query.options.view.few.results"/><bean:message key="query.options.note"/> 
 					</td>
 				</tr>
 				<tr>
 				<td class="formMessagewithoutcolor">&nbsp;
 						</td>
 					<td class="formMessagewithoutcolor">
-						<html:radio property="options" value="viewAllRecords" onclick="" /><bean:message key="query.options.all.records"/>
+						<html:radio property="options" value="viewAllRecords" /><bean:message key="query.options.all.records"/>
 					</td>
 				</tr>
 			<tr>
