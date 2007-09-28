@@ -2123,9 +2123,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			          SPECIMEN_ARRAY_CLASS_NAME,
 			          IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME
     };
-	
-	//public static final String SHOPPING_CART_ENTITY_NAME = "entityName";
-	
-	public static final String SHOPPING_CART_ENTITY_NAME = "entityName";
 	public static final String IDENTIFIED_REPORT_ID="identifiedReportId";
 }
