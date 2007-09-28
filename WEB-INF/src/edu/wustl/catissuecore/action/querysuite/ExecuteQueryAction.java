@@ -4,10 +4,6 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,17 +14,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.querysuite.queryobject.ICondition;
-import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
-import edu.wustl.common.querysuite.queryobject.RelationalOperator;
-import edu.wustl.common.querysuite.queryobject.util.QueryUtility;
 import edu.wustl.common.util.global.ApplicationProperties;
 
 /**
@@ -38,21 +29,33 @@ import edu.wustl.common.util.global.ApplicationProperties;
 public class ExecuteQueryAction extends BaseAction
 {
 
+	/**
+	 * This action process the input from the UI and executes parameterized query with the input values.
+	 */
 	protected ActionForward executeAction(ActionMapping actionMapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String target = Constants.FAILURE;
-
-		CreateQueryObjectBizLogic bizLogic = null;
+        
 		HttpSession session = request.getSession();
 		IParameterizedQuery parameterizedQuery = (IParameterizedQuery) session.getAttribute(AppletConstants.QUERY_OBJECT);
 		String conditionstr = request.getParameter("conditionList");
-		Map<String, String[]> conditions = null;
+		
 		if (conditionstr != null) 
 		{
-			bizLogic = new CreateQueryObjectBizLogic();
-			conditions = bizLogic.createConditionsMap(conditionstr);
-			processInputData(conditions, parameterizedQuery);
+			CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
+			String errorMessage = bizLogic.setInputDataToQuery(conditionstr, parameterizedQuery,null);
+			if (errorMessage.trim().length()>0)
+			{
+				ActionErrors errors = new ActionErrors();
+				ActionError error = new ActionError("errors.item", errorMessage);
+				errors.add(ActionErrors.GLOBAL_ERROR, error);
+				saveErrors(request, errors);
+				target = Constants.INVALID_CONDITION_VALUES;
+				request.setAttribute("queryId", parameterizedQuery.getId());
+				return actionMapping.findForward(target);
+			}
+			
 		}
 		
 		String errorMessage = executeQuery(request, parameterizedQuery);
@@ -76,37 +79,13 @@ public class ExecuteQueryAction extends BaseAction
 		return actionMapping.findForward(target);
 	}
 
-	private void processInputData(Map<String, String[]> conditions,
-			IParameterizedQuery query) {
-		Map<IExpressionId, Map<AttributeInterface, ICondition>> expressionConditionMap = QueryUtility.getSelectedConditions(query);
-		
-		Set<Map.Entry<IExpressionId, Map<AttributeInterface, ICondition>>> mapEntries = expressionConditionMap
-				.entrySet();
-		for (Map.Entry<IExpressionId, Map<AttributeInterface, ICondition>> entry : mapEntries) {
-			IExpressionId id = entry.getKey();
-			Map<AttributeInterface, ICondition> map = entry.getValue();
-			Set<Map.Entry<AttributeInterface, ICondition>> attrEntries = map
-					.entrySet();
-			for (Map.Entry<AttributeInterface, ICondition> attrEntry : attrEntries) {
-				AttributeInterface attribute = attrEntry.getKey();
-				String expressionidattrid = id.getInt() + "_"
-						+ attribute.getId();
-				if (conditions.containsKey(expressionidattrid)) {
-					ICondition condition = attrEntry.getValue();
-					String[] params = conditions.get(expressionidattrid);
-					ArrayList<String> conditionValueList = new ArrayList<String>();
-					for (int i = 1; i < params.length; i++) {
-						if (params[i] != null)
-							conditionValueList.add(params[i]);
-					}
-					condition.setValues(conditionValueList);
-					condition.setRelationalOperator(RelationalOperator
-							.getOperatorForStringRepresentation(params[0]));
-				}
-			}
-		}
-	}
-
+	
+/**
+ * This method executes the query
+ * @param request
+ * @param parameterizedQuery
+ * @return
+ */
 	private String executeQuery(HttpServletRequest request, IParameterizedQuery parameterizedQuery)
 	{
 		String errorMessage = null;

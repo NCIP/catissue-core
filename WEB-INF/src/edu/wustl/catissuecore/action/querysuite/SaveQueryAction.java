@@ -4,6 +4,10 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,12 +17,10 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
-import edu.wustl.catissuecore.bizlogic.querysuite.CreateParameterizedQueryBizLogic;
+import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -51,53 +53,63 @@ public class SaveQueryAction extends BaseAction
 		{
 			IParameterizedQuery parameterizedQuery = populateParameterizedQueryData(query,
 					actionForm, request);
-
-			IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
-					.getValue("app.bizLogicFactory"), "getBizLogic",
-					Constants.CATISSUECORE_QUERY_INTERFACE_ID);
-			try
+			if (parameterizedQuery != null)
 			{
-				bizLogic.insert(parameterizedQuery, Constants.HIBERNATE_DAO);
-				target = Constants.SUCCESS;
-				
-				ActionErrors errors = new ActionErrors();
-				ActionError error = new ActionError("query.saved.success");
-				errors.add(ActionErrors.GLOBAL_ERROR, error);
-				saveErrors(request, errors);
-				request.setAttribute("querySaved", "true");
-			}
-			catch (BizLogicException bizLogicException)
-			{
-				setActionError(request,bizLogicException.getMessage());
-				Logger.out.error(bizLogicException.getMessage(), bizLogicException);
-			}
-			catch (UserNotAuthorizedException userNotAuthorizedException)
-			{
-				SessionDataBean sessionDataBean = getSessionData(request);
-				String userName = "";
-				if (sessionDataBean != null)
+				IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
+						.getValue("app.bizLogicFactory"), "getBizLogic",
+						Constants.CATISSUECORE_QUERY_INTERFACE_ID);
+				try
 				{
-					userName = sessionDataBean.getUserName();
+					bizLogic.insert(parameterizedQuery, Constants.HIBERNATE_DAO);
+					target = Constants.SUCCESS;
+
+					ActionErrors errors = new ActionErrors();
+					ActionError error = new ActionError("query.saved.success");
+					errors.add(ActionErrors.GLOBAL_ERROR, error);
+					saveErrors(request, errors);
+					
+					request.setAttribute("querySaved", "true");
 				}
+				catch (BizLogicException bizLogicException)
+				{
+					setActionError(request, bizLogicException.getMessage());
+					Logger.out.error(bizLogicException.getMessage(), bizLogicException);
+				}
+				catch (UserNotAuthorizedException userNotAuthorizedException)
+				{
+					SessionDataBean sessionDataBean = getSessionData(request);
+					String userName = "";
+					if (sessionDataBean != null)
+					{
+						userName = sessionDataBean.getUserName();
+					}
 
-				ActionErrors errors = new ActionErrors();
-				ActionError error = new ActionError("access.addedit.object.denied", userName,
-						parameterizedQuery.getClass().getName());
-				errors.add(ActionErrors.GLOBAL_ERROR, error);
-				saveErrors(request, errors);
+					ActionErrors errors = new ActionErrors();
+					ActionError error = new ActionError("access.addedit.object.denied", userName,
+							parameterizedQuery.getClass().getName());
+					errors.add(ActionErrors.GLOBAL_ERROR, error);
+					saveErrors(request, errors);
 
-				Logger.out.error(userNotAuthorizedException.getMessage(),
-						userNotAuthorizedException);
+					Logger.out.error(userNotAuthorizedException.getMessage(),
+							userNotAuthorizedException);
+				}
 			}
-			catch (Exception exception)
-			{
-				setActionError(request, exception.getMessage());
-				Logger.out.error(exception.getMessage(), exception);
-			}
+			
+		}
+		else
+		{
+			// Handle null query 
+			String errorMsg = ApplicationProperties.getValue("query.noLimit.error");
+			setActionError(request,errorMsg);
 		}
 		return actionMapping.findForward(target);
 	}
-	
+
+	/**
+	 * This method sets the error action 
+	 * @param request
+	 * @param errorMessage
+	 */
 	private void setActionError(HttpServletRequest request, String errorMessage)
 	{
 		ActionErrors errors = new ActionErrors();
@@ -135,9 +147,45 @@ public class SaveQueryAction extends BaseAction
 		{
 			parameterizedQuery.setDescription("");
 		}
-		CreateParameterizedQueryBizLogic paraQueryBizObject = new CreateParameterizedQueryBizLogic();
-		paraQueryBizObject.getParameterizedConditions(parameterizedQuery, request, actionForm);
+		
+		CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
+		String conditionList = request.getParameter("conditionList");
+		Map<String, String> displayNameMap = getDisplayNamesForConditions(saveActionForm, request);
+		String error = bizLogic.setInputDataToQuery(conditionList, parameterizedQuery,
+				displayNameMap);
+		if (error != null && error.trim().length() > 0)
+		{
+			setActionError(request, error);
+			return null;
+		}
 		return parameterizedQuery;
+	}
+	
+/**
+ * This method returns the map<expressionid+attributeId,displayname> containing the displaynames entered by user for 
+ * parameterized conditions 
+ * @param saveActionForm
+ * @param request
+ * @return
+ */
+	
+	private Map<String, String> getDisplayNamesForConditions(SaveQueryForm saveActionForm,
+			HttpServletRequest request)
+	{
+		Map<String, String> displayNameMap = new HashMap<String, String>();
+	
+		String queryString = saveActionForm.getQueryString();
+		if (queryString != null)
+		{
+			StringTokenizer strtokenizer = new StringTokenizer(queryString, ";");
+			while (strtokenizer.hasMoreTokens())
+			{
+				String token = strtokenizer.nextToken();
+				String displayName = request.getParameter(token + "_displayName");
+				displayNameMap.put(token, displayName);
+			}
+		}
+		return displayNameMap;
 	}
 
 }
