@@ -18,62 +18,10 @@ import edu.wustl.common.querysuite.queryobject.impl.ExpressionId;
 
 public class CreateUIFromQueryObjectBizLogic {
 	
-	private Map<IExpressionId,Map<EntityInterface, List>> expressionMap = null;
-	
-
-	public CreateUIFromQueryObjectBizLogic() {
-		expressionMap = new HashMap<IExpressionId,Map<EntityInterface, List>>();
-	}
-
-	public String getHTMLForSavedQuery(IQuery queryObject,boolean isShowAll,String forPage) 
+	public CreateUIFromQueryObjectBizLogic() 
 	{
-		String htmlString = "";
-		expressionMap.clear();
-		IConstraints constraints = queryObject.getConstraints();
-		Enumeration<IExpressionId> expressionIds = constraints
-				.getExpressionIds();
-		while (expressionIds.hasMoreElements()) 
-		{
-			IExpression expression = constraints.getExpression(expressionIds
-					.nextElement());
-			getEntityConditionMap(expression, constraints);
-
-		}
-
 		
-		GenerateHtmlForAddLimitsBizLogic generateHtml =	new GenerateHtmlForAddLimitsBizLogic();
-		htmlString = generateHtml.generateHTMLForSavedQuery(expressionMap,isShowAll,forPage);
-
-		return htmlString;
 	}
 
-	public void getEntityConditionMap(IExpression expression,
-			IConstraints constraints) {
-
-		for (int i = 0; i < expression.numberOfOperands(); i++) {
-			IExpressionOperand operand = expression.getOperand(i);
-
-			if (operand.isSubExpressionOperand()) 
-			{
-				IExpression requiredExpression = constraints.getExpression((IExpressionId) operand);
-				getEntityConditionMap(requiredExpression,constraints);
-				
-
-			} 
-			else 
-			{
-				Map<EntityInterface, List> entityConditionMap = new HashMap<EntityInterface, List>();
-				IRule ruleObject = (IRule) operand;
-				List<ICondition> conditions = ruleObject.getConditions();
-				EntityInterface entity = expression.getQueryEntity().getDynamicExtensionsEntity();
-				entityConditionMap.put(entity, conditions);
-				
-				expressionMap.put(expression.getExpressionId(), entityConditionMap);
-
-			}
-
-		}
-
-	}
 
 }

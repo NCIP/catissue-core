@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +23,9 @@ import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
 import edu.wustl.common.querysuite.queryobject.IParameterizedCondition;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.IRule;
+import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedCondition;
+import edu.wustl.common.querysuite.queryobject.util.QueryUtility;
 
 public class CreateParameterizedQueryBizLogic 
 {
@@ -31,6 +34,7 @@ public class CreateParameterizedQueryBizLogic
 	{
 		SaveQueryForm saveActionForm = (SaveQueryForm) actionForm;
 		String queryString =  saveActionForm.getQueryString();
+		
 		Set<Integer> expressionIds = new TreeSet<Integer>();  
 		displayNamesMap = new HashMap<String,String>(); 
         if(queryString!=null)
@@ -62,33 +66,72 @@ public class CreateParameterizedQueryBizLogic
         	{
         		
         	    fetchConditions(expressionIds,query);
-        	   
+        	    
+        	}
+        	String conditionString = request.getParameter("conditionList");
+    		Map<String,String[]> conditionMap = null;
+    		if(conditionString!=null)
+    		{
+    		  try
+    		  {	 
+    			CreateQueryObjectBizLogic bizLogic = new  CreateQueryObjectBizLogic();
+    			conditionMap = bizLogic.createConditionsMap(conditionString);
+    		  }
+    		  catch(Exception exp )
+    		  {
+    			  
+    		  }
+    		}
+        	if(conditionMap!=null&& !conditionMap.isEmpty())
+        	{
+        		processInputData(conditionMap, query);
         	}
         }
 		
 	}
 
 	
+	public void processInputData(Map<String, String[]> conditions,
+			IQuery query) {
+		Map<IExpressionId, Map<AttributeInterface, ICondition>> expressionConditionMap = QueryUtility.getSelectedConditions(query);
+
+		
+		Set<Map.Entry<IExpressionId, Map<AttributeInterface, ICondition>>> mapEntries = expressionConditionMap
+				.entrySet();
+		for (Map.Entry<IExpressionId, Map<AttributeInterface, ICondition>> entry : mapEntries) {
+			IExpressionId id = entry.getKey();
+			Map<AttributeInterface, ICondition> map = entry.getValue();
+			Set<Map.Entry<AttributeInterface, ICondition>> attrEntries = map
+					.entrySet();
+			for (Map.Entry<AttributeInterface, ICondition> attrEntry : attrEntries) {
+				AttributeInterface attribute = attrEntry.getKey();
+				String expressionidattrid = id.getInt() + "_"
+						+ attribute.getId();
+				if (conditions.containsKey(expressionidattrid)) {
+					ICondition condition = attrEntry.getValue();
+					String[] params = conditions.get(expressionidattrid);
+					ArrayList<String> conditionValueList = new ArrayList<String>();
+					for (int i = 1; i < params.length; i++) {
+						if (params[i] != null)
+							conditionValueList.add(params[i]);
+					}
+					condition.setValues(conditionValueList);
+					condition.setRelationalOperator(RelationalOperator
+							.getOperatorForStringRepresentation(params[0]));
+
+				}
+			}
+		}
+	}
+	
+	
 	private void fetchConditions(Set<Integer> expressionIdset,IQuery query)
 	{
 
-		IConstraints constraints = query.getConstraints();
-		Enumeration<IExpressionId> expressionIds = constraints
-				.getExpressionIds();
-		 
-		while (expressionIds.hasMoreElements()) 
-		{
-			IExpression expression = constraints.getExpression(expressionIds.nextElement());
-			int expId = expression.getExpressionId().getInt();
-			if(expressionIdset!=null  && expressionIdset.contains(expId))
-			{
-				replaceConditions(expression,constraints);
-				
-			}
-			
-
-		}
 		
+				replaceConditions(query);
+				
+				
 		
 	}
 	
@@ -104,45 +147,37 @@ public class CreateParameterizedQueryBizLogic
 	
 	
 	
-	public void replaceConditions(IExpression expression,IConstraints constraints) 
+	public void replaceConditions(IQuery query) 
 	{
-      
-		for (int i = 0; i < expression.numberOfOperands(); i++) 
+		IConstraints constraints = query.getConstraints();
+		Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
+		 
+		while (expressionIds.hasMoreElements()) 
 		{
+		 IExpression expression = constraints.getExpression(expressionIds.nextElement());
+		  for (int i = 0; i < expression.numberOfOperands(); i++) 
+		  {
 			IExpressionOperand operand = expression.getOperand(i);
-
-			if (operand.isSubExpressionOperand()) 
+			if(operand instanceof IRule)
 			{
-				IExpression requiredExpression = constraints.getExpression((IExpressionId) operand);
-				replaceConditions(requiredExpression,constraints);
-			} 
-			else 
-			{
-				IRule ruleObject = (IRule) operand;
-				List<ICondition> conditions = ruleObject.getConditions();
-				for(int j=0;j<conditions.size();j++)
+			 IRule ruleObject = (IRule) operand;
+ 			 List<ICondition> conditions = ruleObject.getConditions();
+			 for(int j=0;j<conditions.size();j++)
+			 {
+				ICondition condition = conditions.get(j);
+				String componentName = generateComponentName(expression.getExpressionId().getInt(),condition.getAttribute());
+				if(displayNamesMap!=null && displayNamesMap.containsKey(componentName))
 				{
-					ICondition condition = conditions.get(j);
-					String componentName = generateComponentName(expression.getExpressionId().getInt(),condition.getAttribute());
-					
-					if(displayNamesMap!=null && displayNamesMap.containsKey(componentName))
-					{
 						IParameterizedCondition iparameterizedCondition = new ParameterizedCondition(condition);
 						iparameterizedCondition.setName(displayNamesMap.get(componentName));
 						conditions.remove(condition);
 						conditions.add(j, iparameterizedCondition);
-					
-					}
-				   
 				}
-				
-			
-
 			}
-
+			}	
 		}
 
+	 }
 	}
-	
 	
 }
