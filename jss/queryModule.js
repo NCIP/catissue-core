@@ -531,7 +531,7 @@
 			if(navigator.appName == "Microsoft Internet Explorer")
 			{					
 				var op = document.getElementById(opId).value;
-				if(document.forms[nameOfFormToPost].elements[enumBox])
+				if(document.getElementById(enumBox))
 				{
 					enumValue = document.getElementById(enumBox).value;
 				}
