@@ -228,9 +228,9 @@
 		{
 			var op = document.getElementById(opId).value;
 		} 
-		else if(document.forms[0].name=='savequery')
+		else if(document.forms[0].name=='saveQueryForm')
 		{
-            var op = document.forms['savequery'].elements[opId].value;    
+            var op = document.forms['saveQueryForm'].elements[opId].value;    
 		}
 		else if(document.forms[0].name=='fetchQueryForm')
 		{
@@ -762,7 +762,11 @@
 		} 
 		var strvalu = document.getElementById('queryString');
         strvalu.value =  strquery;
-        
+        var entityName="";
+        var frmName = document.forms[0].name;
+        var list = document.getElementById('attributesList').value;
+    	var buildquerystr =  createQueryString(frmName, entityName , list,frmName);
+        document.getElementById('conditionList').value = buildquerystr;
         // Save query
         document.getElementById('saveQueryForm').submit();
 	}
