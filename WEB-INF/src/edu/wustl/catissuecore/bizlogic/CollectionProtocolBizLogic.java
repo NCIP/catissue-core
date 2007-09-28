@@ -1192,19 +1192,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				Collection collectionProtocolEventColl = 
 					collectionProtocol.getCollectionProtocolEventCollection();
 				
-				Iterator iterator = collectionProtocolEventColl.iterator();
 				LinkedHashMap<String, CollectionProtocolEventBean> eventMap = 
-					new LinkedHashMap<String, CollectionProtocolEventBean>();
-				
-				while(iterator.hasNext())
-				{
-					CollectionProtocolEvent collectionProtocolEvent=
-						(CollectionProtocolEvent)iterator.next();
-					
-					CollectionProtocolEventBean eventBean =
-						CollectionProtocolUtil.getCollectionProtocolEventBean(collectionProtocolEvent);
-					eventMap.put(eventBean.getUniqueIdentifier(), eventBean);
-				}
+						CollectionProtocolUtil.getCollectionProtocolEventMap(collectionProtocolEventColl);
 				
 				cpList = new ArrayList<Object>();
 				cpList.add(collectionProtocolBean);
@@ -1222,7 +1211,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				dao.closeSession();
 			}		
 	}
-	
+
 	public List<CollectionProtocol> retrieve(String className, String colName, Object colValue)
 	throws DAOException {
 		

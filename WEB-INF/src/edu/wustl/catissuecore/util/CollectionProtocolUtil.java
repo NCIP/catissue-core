@@ -85,7 +85,8 @@ public class CollectionProtocolUtil {
 		return tempMap;
 	}
 
-	public static CollectionProtocolEventBean getCollectionProtocolEventBean(CollectionProtocolEvent collectionProtocolEvent)
+	public static CollectionProtocolEventBean getCollectionProtocolEventBean(
+			CollectionProtocolEvent collectionProtocolEvent, int counter)
 	{
 		CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 				
@@ -101,7 +102,7 @@ public class CollectionProtocolUtil {
 		//eventBean.setCollectionContainer(collectionContainer)
 		//eventBean.setReceivedQuality(receivedQuality)
 		eventBean.setId(collectionProtocolEvent.getId().longValue());
-		eventBean.setUniqueIdentifier("E"+ eventBean.getId());
+		eventBean.setUniqueIdentifier("E"+ counter++);
 		AbstractSpecimenCollectionGroup requirementGroup =collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
 		
 		eventBean.setSpecimenCollRequirementGroupId(
@@ -115,19 +116,19 @@ public class CollectionProtocolUtil {
 	}
 	
 
-	private static LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection,
+	public static LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection,
 			String parentUniqueId)
 	{
 		LinkedHashMap<String, GenericSpecimen> specimenMap = new LinkedHashMap<String, GenericSpecimen>();
 		
 		Iterator specimenIterator = specimenCollection.iterator();
-
+		int specCtr=0;
 		while(specimenIterator.hasNext())
 		{
 			Specimen specimen = (Specimen)specimenIterator.next();
 			if (specimen.getParentSpecimen() == null)
 			{
-				SpecimenRequirementBean specBean =getSpecimenBean(specimen, null, parentUniqueId);
+				SpecimenRequirementBean specBean =getSpecimenBean(specimen, null, parentUniqueId, specCtr++);
 
 				specimenMap.put(specBean.getUniqueIdentifier(), specBean);				
 			}
@@ -143,13 +144,14 @@ public class CollectionProtocolUtil {
 		Iterator iterator = specimenChildren.iterator();
 		LinkedHashMap<String, GenericSpecimen>  aliquotMap = new
 			LinkedHashMap<String, GenericSpecimen> ();
+		int aliqCtr =1;
 		while(iterator.hasNext())
 		{
 			Specimen childSpecimen = (Specimen) iterator.next();
 			if(Constants.ALIQUOT.equals(childSpecimen.getLineage()))
 			{
 				SpecimenRequirementBean specimenBean = getSpecimenBean(
-						childSpecimen, specimen.getLabel(), parentuniqueId);
+						childSpecimen, specimen.getLabel(), parentuniqueId, aliqCtr++);
 				
 				aliquotMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
 			}
@@ -164,26 +166,50 @@ public class CollectionProtocolUtil {
 		Iterator iterator = specimenChildren.iterator();
 		LinkedHashMap<String, GenericSpecimen>  derivedMap = new
 			LinkedHashMap<String, GenericSpecimen> ();
+		int deriveCtr=1;
 		while(iterator.hasNext())
 		{
 			Specimen childSpecimen = (Specimen) iterator.next();
 			if(Constants.DERIVED_SPECIMEN.equals(childSpecimen.getLineage()))
 			{
 				SpecimenRequirementBean specimenBean = 
-					getSpecimenBean(childSpecimen, specimen.getLabel(), parentuniqueId);
+					getSpecimenBean(childSpecimen, specimen.getLabel(),
+							parentuniqueId, deriveCtr++);
 				derivedMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
 			}
 		}
 		return derivedMap;
 	}	
-	
+
+	private static String getUniqueId(String lineage, int ctr)
+	{
+		if(Constants.NEW_SPECIMEN.equals(lineage))
+		{
+			return Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN + ctr;
+		}
+
+		if(Constants.DERIVED_SPECIMEN.equals(lineage))
+		{
+			return Constants.UNIQUE_IDENTIFIER_FOR_DERIVE + ctr;
+		}
+		if(Constants.ALIQUOT.equals(lineage))
+		{
+			return Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT + ctr;
+		}
+		return null;
+	}
 	private static SpecimenRequirementBean getSpecimenBean(Specimen specimen, String parentName,
-										String parentUniqueId)
+										String parentUniqueId, int specCtr)
 	{
 		
 		SpecimenRequirementBean speRequirementBean = new SpecimenRequirementBean();
-		speRequirementBean.setUniqueIdentifier(parentUniqueId + "_"+ specimen.getLineage().charAt(0) + specimen.getId().longValue());
-		speRequirementBean.setDisplayName(specimen.getLabel());
+		speRequirementBean.setLineage(specimen.getLineage());
+		speRequirementBean.setUniqueIdentifier(
+				parentUniqueId + getUniqueId(specimen.getLineage(),specCtr));
+
+		speRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN 
+						+ "_" + speRequirementBean.getUniqueIdentifier());
+		
 		speRequirementBean.setClassName(specimen.getClassName());
 		speRequirementBean.setType(specimen.getType());
 		speRequirementBean.setId(specimen.getId().longValue());
@@ -217,7 +243,7 @@ public class CollectionProtocolUtil {
 				speRequirementBean.setQuantity(String.valueOf(quantityValue.doubleValue()));
 			}
 		}
-		speRequirementBean.setLineage(specimen.getLineage());
+		
 		speRequirementBean.setStorageContainerForSpecimen("Virtual");
 /*		
 		specimen.getSpecimenEventCollection()
@@ -303,5 +329,29 @@ public class CollectionProtocolUtil {
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP,
 				sessionCpList.get(1));
 	}
+
+
+	/**
+	 * @param collectionProtocolEventColl
+	 * @return
+	 */
+	public static  LinkedHashMap<String, CollectionProtocolEventBean> getCollectionProtocolEventMap(
+			Collection collectionProtocolEventColl) {
+		Iterator iterator = collectionProtocolEventColl.iterator();
+		LinkedHashMap<String, CollectionProtocolEventBean> eventMap = 
+			new LinkedHashMap<String, CollectionProtocolEventBean>();
+		int ctr=1;
+		while(iterator.hasNext())
+		{
+			CollectionProtocolEvent collectionProtocolEvent=
+				(CollectionProtocolEvent)iterator.next();
+			
+			CollectionProtocolEventBean eventBean =
+				CollectionProtocolUtil.getCollectionProtocolEventBean(collectionProtocolEvent,ctr);
+			eventMap.put(eventBean.getUniqueIdentifier(), eventBean);
+		}
+		return eventMap;
+	}
+	
 
 }
