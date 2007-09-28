@@ -961,7 +961,9 @@ var jsReady = false;
 		interfaceObj.editLimit(strToCreateQueyObject,entityName);
 	}
 	
-	window.onload=pageInit();
+	window.onload=function(){
+		pageInit();
+	}
 	
 	 function search()
 	 {
@@ -993,14 +995,19 @@ var jsReady = false;
 		var radioObj = document.forms[0].options;
 		var option = "";
 		var radioLength = radioObj.length;
+		
 		for(var i = 0; i < radioLength; i++) 
 		{
 			if(radioObj[i].checked)
 			{
 				option =  radioObj[i].value;
 			}
-		}			
-		if(option == 'redefineQuery')
+		}		
+		if(option == "")
+		{
+			alert("Please select the option to proceed");
+		}
+		else if(option == 'redefineQuery')
 		{
 			onRedefineQueryOption();
 		}
@@ -1011,10 +1018,13 @@ var jsReady = false;
 	}	
 	
 	function onRedefineQueryOption()
-		{
-			waitCursor();
-			document.forms[0].action='SearchCategory.do?currentPage=resultsView';
-			document.forms[0].submit();
-			hideCursor();
-		}
-	//---
+	{
+		waitCursor();
+		document.forms[0].action='SearchCategory.do?currentPage=resultsView';
+		document.forms[0].submit();
+		hideCursor();
+	}
+	function checkItDefault()
+	{
+		document.forms[0].options[1].checked = "true";
+	}
