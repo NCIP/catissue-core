@@ -48,6 +48,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.flex.SpecimenBean;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
+import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -110,6 +111,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 					specimenSummaryForm.getRequestType())) 
 			{
 				LinkedHashMap cpEventMap = populateSpecimenDomainObjectMap(request);
+
 				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(
 						specimenSummaryForm.getUserAction()))
 				{
@@ -118,6 +120,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				else
 				{
 					insertSpecimens(cpEventMap,request.getSession());
+					MultipleSpecimenValidationUtil
+					.setMultipleSpecimensInSession(request, specimenCollectionGroup.getId());
 					
 				} 
 				ActionMessages actionMessages = new ActionMessages();
@@ -466,8 +470,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				specimen.setLineage(Constants.NEW_SPECIMEN);
 				if (specimenCollectionGroup == null)
 				{
-					/*specimenCollectionGroup = (SpecimenCollectionGroup)
-					specimen.getSpecimenCollectionGroup();*/ 
+					specimenCollectionGroup = (SpecimenCollectionGroup)
+					specimen.getSpecimenCollectionGroup(); 
 				}
 			}
 			else

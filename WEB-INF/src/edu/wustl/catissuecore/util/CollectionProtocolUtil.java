@@ -152,6 +152,7 @@ public class CollectionProtocolUtil {
 		LinkedHashMap<String, GenericSpecimen>  aliquotMap = new
 			LinkedHashMap<String, GenericSpecimen> ();
 		int aliqCtr =1;
+		
 		while(iterator.hasNext())
 		{
 			Specimen childSpecimen = (Specimen) iterator.next();

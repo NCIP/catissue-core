@@ -368,6 +368,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
 			SpecimenCollectionRequirementGroup collectionRequirementGroup;
 			CollectionProtocolEvent oldCollectionProtocolEvent = null;
+
 			if (collectionProtocolEvent.getId()== null || collectionProtocolEvent.getId()<=0)
 			{
 				collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();

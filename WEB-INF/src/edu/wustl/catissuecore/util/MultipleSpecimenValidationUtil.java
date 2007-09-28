@@ -5,6 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -474,6 +478,15 @@ public final class MultipleSpecimenValidationUtil
 		}
 		*/
 	}
-	
+
+	public static void setMultipleSpecimensInSession(
+			HttpServletRequest request,  Long scgId)
+			throws DAOException
+	{
+		Map specimenMap = new SpecimenCollectionGroupBizLogic()
+								.getSpecimenList(scgId);
+		HttpSession session = request.getSession();
+		session.setAttribute(Constants.SPECIMEN_LIST_SESSION_MAP, specimenMap);
+	}
 }
 

@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 //import java.util.Vector;
 import java.util.Stack;
@@ -31,6 +32,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -1280,5 +1282,35 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return scgName;
 	}
 
+	public Map getSpecimenList(Long id) throws DAOException{
+	
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		try
+		{
+			dao.openSession(null);
+			List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), "id", id);
 
+			if (scgList != null && !scgList.isEmpty())
+			{
+				SpecimenCollectionGroup specimenCollectionGroup=
+					(SpecimenCollectionGroup)scgList.get(0);
+				Collection specimenCollection = 
+					specimenCollectionGroup.getSpecimenCollection();
+				return CollectionProtocolUtil.getSpecimensMap(specimenCollection, "E1");
+			}
+			else
+			{
+				return null;
+			}
+		}
+		catch(DAOException exception)
+		{
+			throw exception;
+		}
+		finally
+		{
+			dao.commit();
+			dao.closeSession();
+		}
+	}
 }
