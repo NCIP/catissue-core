@@ -124,7 +124,6 @@ public abstract class CaTIESConstants
 	public static final String PARSER_CLASS="edu.wustl.catissuecore.reportloader.HL7Parser";
 	
 	//Constants for catissuecore_properties.xml properties
-	public static final String SESSION_DATA="sessionDataLoginName"; 
 	public static final String INPUT_DIR="inputDir";
 	public static final String BAD_FILE_DIR="badFilesDir";
 	public static final String PROCESSED_FILE_DIR="processFileDir";
@@ -156,4 +155,7 @@ public abstract class CaTIESConstants
 	public static final String CATIES_CONCEPT_FILTER_URL_NAME="caties.concept.filter.url.name";
 	public static final String CATIES_CONCEPT_NEG_EX_URL_NAME="caties.neg.ex.url.name";
 	public static final String CATIES_CONCEPT_CATEGORIZER_URL_NAME="caties.concept.categorizer.url.name";
+	
+	public static final String CATIES_SAVE_BI_CONTENT="save.binary.content";
+	public static final String CATIES_SAVE_XML_CONTENT="save.xml.content";
 }
