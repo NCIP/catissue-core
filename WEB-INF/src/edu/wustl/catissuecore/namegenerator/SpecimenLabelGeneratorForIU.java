@@ -6,15 +6,24 @@ import edu.wustl.catissuecore.domain.Specimen;
  * Temporary label name maker for IU specifically. This will be enhanced in the
  * future to come from the database if even necessary.
  * 
- * @author smita_kadam
+ * @author falguni_sachde
  */
 public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 {
-
 	
-	private void setNextAvailableAliquotSpecimenlabel(Specimen parentObject,Specimen specimenObject) 
+	public SpecimenLabelGeneratorForIU()
 	{
+		super();
 		
+		
+	}
+	/**
+	 * This function is overridden as per IU requirement. 
+	 */
+	@Override
+	synchronized  void setNextAvailableAliquotSpecimenlabel(Specimen parentObject,Specimen specimenObject) {
+		
+
 		String parentSpecimenLabel = (String) parentObject.getLabel();
 		long aliquotChildCount = 0;
 		if(labelCountTreeMap.containsKey(parentObject))
@@ -23,7 +32,7 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 		}
 		else
 		{
-			// biz logic 
+		 
 			aliquotChildCount = parentObject.getChildrenSpecimen().size();	
 			
 		}		
@@ -49,8 +58,14 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 			labelCountTreeMap.put(specimenObject,0);	
 		}
 		
-
+	
 	}
+	
+	/**
+	 * @param type
+	 * @param num
+	 * @return Specific method of IU
+	 */
 	private String determineSerumPlasma(String type, long num) 
 	{
 		String sp = null;
