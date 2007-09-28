@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ include file="/pages/subMenu/SelectMenu.jsp" %>
-
+<script language="javascript" src="jss/script.js"></script>
 <tr>
     <td class="subMenuPrimaryTitle" height="22">
 		<a href="#content">
@@ -24,7 +24,7 @@
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17">
 				<bean:message key="app.simpleSearch" />
 			</a> |  
-			<a class="subMenuPrimary" href="QueryWizard.do?currentPage=QueryWizard&menuSelected=17">
+			<a class="subMenuPrimary" href="QueryWizard.do">
 					<bean:message key="app.advancedSearch" />
 			</a>
 		</div>
