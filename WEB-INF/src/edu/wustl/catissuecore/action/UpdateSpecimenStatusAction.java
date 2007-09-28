@@ -45,12 +45,12 @@ public class UpdateSpecimenStatusAction extends Action {
 		
 		Collection specimenCollection = specimenMap.values();
 		Iterator iterator = specimenCollection.iterator();
-//		SessionDataBean sessionDataBean =(SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-
+		SessionDataBean sessionDataBean =(SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+/*
 		SessionDataBean sessionDataBean = new SessionDataBean(); 
 		sessionDataBean.setUserId(new Long(1));
 		sessionDataBean.setUserName("admin@admin.com");
-
+*/
 
 		while(iterator.hasNext())
 		{

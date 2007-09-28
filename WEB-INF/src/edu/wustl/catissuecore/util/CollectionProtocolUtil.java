@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -101,6 +102,11 @@ public class CollectionProtocolUtil {
 		//eventBean.setReceivedQuality(receivedQuality)
 		eventBean.setId(collectionProtocolEvent.getId().longValue());
 		eventBean.setUniqueIdentifier("E"+ eventBean.getId());
+		AbstractSpecimenCollectionGroup requirementGroup =collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+		
+		eventBean.setSpecimenCollRequirementGroupId(
+				requirementGroup.getId().longValue());
+		
 		eventBean.setSpecimenRequirementbeanMap(
 				getSpecimensMap(specimenRequirementGroup.getSpecimenCollection(), 
 						eventBean.getUniqueIdentifier()) );
@@ -115,6 +121,7 @@ public class CollectionProtocolUtil {
 		LinkedHashMap<String, GenericSpecimen> specimenMap = new LinkedHashMap<String, GenericSpecimen>();
 		
 		Iterator specimenIterator = specimenCollection.iterator();
+
 		while(specimenIterator.hasNext())
 		{
 			Specimen specimen = (Specimen)specimenIterator.next();
@@ -188,6 +195,7 @@ public class CollectionProtocolUtil {
 			speRequirementBean.setTissueSide(characteristics.getTissueSide());
 		}
 		
+		speRequirementBean.setSpecimenCharsId(specimen.getSpecimenCharacteristics().getId().longValue());
 		speRequirementBean.setPathologicalStatus(specimen.getPathologicalStatus());
 		
 		if("Molecular".equals(specimen.getClassName()))

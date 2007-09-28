@@ -137,6 +137,7 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	private long id = -1;
 	
+	private long specimenCharsId = -1;
 	public long getId() {
 		return id;
 	}
@@ -555,5 +556,15 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	public void setParentName(String parentName)
 	{
 		this.parentName = parentName;
+	}
+
+
+	public long getSpecimenCharsId() {
+		return specimenCharsId;
+	}
+
+
+	public void setSpecimenCharsId(long specimenCharsId) {
+		this.specimenCharsId = specimenCharsId;
 	}	
 }

@@ -24,6 +24,7 @@ public class CollectionProtocolEventBean implements Serializable
 	private String receivedEventComments;
 	private Map specimenRequirementbeanMap = new LinkedHashMap();
 	private long id=-1;
+	private long specimenCollRequirementGroupId = -1;
 	
 	public Double getStudyCalenderEventPoint()
 	{
@@ -171,5 +172,14 @@ public class CollectionProtocolEventBean implements Serializable
 
 		public void setId(long id) {
 			this.id = id;
+		}
+
+		public long getSpecimenCollRequirementGroupId() {
+			return specimenCollRequirementGroupId;
+		}
+
+		public void setSpecimenCollRequirementGroupId(
+				long specimenCollRequirementGroupId) {
+			this.specimenCollRequirementGroupId = specimenCollRequirementGroupId;
 		}	
 }

@@ -64,7 +64,7 @@ import edu.wustl.common.util.logger.Logger;
 public class SubmitSpecimenCPAction extends BaseAction {
 
 	private ViewSpecimenSummaryForm specimenSummaryForm;
-
+	private SpecimenCollectionGroup specimenCollectionGroup = null;
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -118,6 +118,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				else
 				{
 					insertSpecimens(cpEventMap,request.getSession());
+					
 				} 
 				ActionMessages actionMessages = new ActionMessages();
 				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
@@ -229,6 +230,11 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		collectionProtocolEvent.setStudyCalendarEventPoint(cpEventBean.getStudyCalenderEventPoint());
 		
 		SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = new SpecimenCollectionRequirementGroup();
+		long scgId = cpEventBean.getSpecimenCollRequirementGroupId();
+		if (scgId!= -1)
+		{
+			specimenCollectionRequirementGroup.setId(new Long(scgId));
+		}
 		
 		specimenCollectionRequirementGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		specimenCollectionRequirementGroup.setClinicalDiagnosis(cpEventBean.getClinicalDiagnosis());
@@ -283,6 +289,11 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			{
 					SpecimenCharacteristics specimenCharacteristics =
 							new SpecimenCharacteristics();
+					long id =specimenRequirementBean.getSpecimenCharsId();
+					if(id != -1)
+					{
+						specimenCharacteristics.setId(new Long(id));
+					}
 					specimenCharacteristics.setTissueSide(
 							specimenRequirementBean.getTissueSide());
 					specimenCharacteristics.setTissueSite(
@@ -349,6 +360,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		}
 		
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		
 		specimen.setAvailable(Boolean.TRUE);
 		Quantity availableQuantity = new Quantity();
 		double value=0;
@@ -452,6 +464,11 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			if (specimen.getSpecimenCollectionGroup()!=null)
 			{
 				specimen.setLineage(Constants.NEW_SPECIMEN);
+				if (specimenCollectionGroup == null)
+				{
+					/*specimenCollectionGroup = (SpecimenCollectionGroup)
+					specimen.getSpecimenCollectionGroup();*/ 
+				}
 			}
 			else
 			{

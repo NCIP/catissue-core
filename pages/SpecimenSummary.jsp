@@ -208,7 +208,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		</table>
 
 		<table align="bottom">
-		<logic:equal name="viewSpecimenSummaryForm" property="userAction" value="ADD">
+		
 
 			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
 			<tr>
@@ -225,7 +225,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				</td>
 			 </tr>
 			</logic:equal>
-		</logic:equal>
+		
 		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
 		<tr>
 			<td>

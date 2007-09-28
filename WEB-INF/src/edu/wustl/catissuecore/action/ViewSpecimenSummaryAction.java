@@ -66,13 +66,6 @@ public class ViewSpecimenSummaryAction extends Action {
 				(CollectionProtocolBean)session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 			
-			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(summaryForm.getRequestType()))
-			{
-				if("update".equals(collectionProtocolBean.getOperation()))
-				{
-					summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
-				}
-			}
 			LinkedHashMap<String, GenericSpecimen> specimenMap = 
 							getSpecimensFromSessoin(session, eventId, summaryForm);
 
@@ -80,12 +73,21 @@ public class ViewSpecimenSummaryAction extends Action {
 				populateSpecimenSummaryForm(summaryForm, specimenMap);
 			} 
 
+			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(summaryForm.getRequestType()))
+			{
+				if("update".equals(collectionProtocolBean.getOperation()))
+				{
+					summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
+				}
+			}
+
 			String pageOf = request.getParameter(Constants.PAGEOF);
 			if(pageOf != null && ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(summaryForm.getRequestType()))
 			{
 				request.setAttribute(Constants.PAGEOF,pageOf);
 				return mapping.findForward(pageOf);
 			}
+			
 			return mapping.findForward(Constants.SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
