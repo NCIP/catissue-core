@@ -807,7 +807,16 @@
 	{
 		if(action=='next')
 		{
-			defineSearchResultsView();
+			callFlexMethod();
+						
+			if(interfaceObj.isDAGEmpty())
+			{
+				showValidationMessages("<li><font color='red'>Graph must have atleast one node.</font></li>")
+			}
+			else
+			{
+				defineSearchResultsView();
+			}
 		}
 		else if(action=='save')
 		{
