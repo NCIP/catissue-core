@@ -10,6 +10,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
+<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 
 <%@ include file="/pages/content/common/EventAction.jsp" %> 
 
@@ -75,7 +76,16 @@
 		}
 //		System.out.println("iframeSrc : "+ iframeSrc);
 	//------------- Mandar 04-july-06 QuickEvents
-	Long specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+	Long specimenEntityId = null;
+	if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
+	{
+		specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
+	}
+	else
+	{
+		specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+		CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
+	}	
 
 	session.setAttribute("EventOrigin", "SpecimenEventParameters");
 %>
@@ -187,7 +197,7 @@
 				</td>
 
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
-					<%=Constants.SURGICAL_PATHOLOGY_REPORT %>
+					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,'','<%=staticEntityName%>','<%=pageOf%>')">
