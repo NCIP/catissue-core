@@ -45,7 +45,8 @@
 				</tr>
 				<tr>
 					<td width='5' class="formRequiredNotice">*</td>
-					<td class="formRequiredLabel">Title :</td>
+					<td class="formRequiredLabel">
+					<bean:message key="query.title"/> :</td>
 					<td class="formField">
 						<html:text  style="width: 300px; display: block;" styleId="title" property="title" />
 					</td>
@@ -61,7 +62,7 @@
 				</tr>
 				<tr>
 					<td width='5' class="formRequiredNotice">&nbsp;</td>
-					<td class="formLabel">Description :</td>
+					<td class="formLabel"><bean:message key="query.description"/> :</td>
 					<td class="formField">
 						<html:textarea cols="40" rows="4" style="width: 300px;" styleId="description" property="description"> </html:textarea>
 					</td>

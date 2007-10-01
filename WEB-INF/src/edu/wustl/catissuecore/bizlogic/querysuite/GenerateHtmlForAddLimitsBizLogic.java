@@ -212,13 +212,18 @@ public class GenerateHtmlForAddLimitsBizLogic
 				}
 				isBGColor = !isBGColor;
 
+				generatedHTML.append("\n<tr  class='"
+						+ styleSheetClass
+						+ "'"+
+					"  id=\"componentId\" " + " >\n");
+				
 				if (forPage.equalsIgnoreCase(Constants.SAVE_QUERY_PAGE))
 				{
 					formName = "saveQueryForm";
-					generatedHTML.append("\n<tr   id=\"componentId\" " + " height=\"6%\">\n"
-							+ generateCheckBox(attribute, false)
+					generatedHTML.append(" "+
+							 generateCheckBox(attribute, false)
 							+ "<td valign='top' align='right'class=\"formLabel\" >"
-							+ "<input type=\"textbox\"   name='" + componentId
+							+ "<input type=\"textbox\" style=\"width:150px; display:block;\"  name='" + componentId
 							+ "_displayName'     id='" + componentId + "_displayName' value='"
 							+ expressionID + "." + attrLabel + "' disabled='true'> " + "</td>");
 				}
@@ -272,7 +277,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 						List<String> values = condition.getValues();
 						String operator = condition.getRelationalOperator().toString();
 						generatedHTML.append("\n"
-								+ generateHTMLForOperators(attribute, operatorsList, operator));
+								+ generateHTMLForOperators(attribute, operatorsList, operator,"formFieldVerySmallSized"));
 						if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
 						{
 							isBetween = true;
@@ -306,7 +311,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 					else
 					{
 						generatedHTML.append("\n"
-								+ generateHTMLForOperators(attribute, operatorsList, null));
+								+ generateHTMLForOperators(attribute, operatorsList, null,"formFieldVerySmallSized"));
 						if (!permissibleValues.isEmpty())
 						{
 							generatedHTML.append("\n"
@@ -332,7 +337,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				if (conditions == null)
 				{
 					generatedHTML.append("\n"
-							+ generateHTMLForOperators(attribute, operatorsList, null));
+							+ generateHTMLForOperators(attribute, operatorsList, null,"formFieldVerySmallSized"));
 					if (!permissibleValues.isEmpty())
 					{
 						generatedHTML.append("\n"
@@ -390,7 +395,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		String select = (isSelected ? "select" : "");
 		String componentId = generateComponentName(attribute);
-		String tag = "<td valign='top' align='right' width=\"10%\"><input type=\"checkbox\"  id='"
+		String tag = "<td   width=\"5\" valign=\"top\"><input type=\"checkbox\"  id='"
 				+ componentId + "_checkbox'" + select
 				+ "  onClick=\"enableDisplayField(this.form,'" + componentId + "')\"></td>";
 		return tag;
@@ -431,7 +436,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		StringBuffer generatedHTML = new StringBuffer("<table width=\"100%\">");
 		if (forPage.equalsIgnoreCase(Constants.SAVE_QUERY_PAGE))
 			generatedHTML
-					.append("<tr><td class=\"formLabel\">User Defined</td><td class=\"formLabel\">Display Labels</td><td class=\"formLabel\" colspan=\"5\" align=\"left\">Conditions</td></tr>");
+					.append("<tr><td nowrap='nowrap' class=\"formLeftSubTitle\">User Defined</td><td class=\"formLeftSubTitle\">Display Labels</td><td class=\"formLeftSubTitle\" colspan=\"5\" class=\"formLeftSubTitle\">Conditions</td></tr>");
 		attributesList = "";
 		Map<EntityInterface, List> entityConditionMap = null;
 		String expressionEntityString = "";
@@ -606,7 +611,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 						List<String> values = (List<String>) condition.getValues();
 						String operator = condition.getRelationalOperator().toString();
 						generatedHTML.append("\n"
-								+ generateHTMLForOperators(attribute, operatorsList, operator));
+								+ generateHTMLForOperators(attribute, operatorsList, operator,"PermissibleValuesQuery"));
 						if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
 						{
 							isBetween = true;
@@ -639,7 +644,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 					else
 					{
 						generatedHTML.append("\n"
-								+ generateHTMLForOperators(attribute, operatorsList, null));
+								+ generateHTMLForOperators(attribute, operatorsList, null,"PermissibleValuesQuery"));
 						if (!permissibleValues.isEmpty())
 						{
 							generatedHTML.append("\n"
@@ -664,7 +669,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				if (conditions == null)
 				{
 					generatedHTML.append("\n"
-							+ generateHTMLForOperators(attribute, operatorsList, null));
+							+ generateHTMLForOperators(attribute, operatorsList, null,"PermissibleValuesQuery"));
 					if (!permissibleValues.isEmpty())
 					{
 						generatedHTML.append("\n"
@@ -846,20 +851,20 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @return String HTMLForOperators
 	 */
 	private String generateHTMLForOperators(AttributeInterface attribute, List operatorsList,
-			String op)
+			String op,String cssClass)
 	{
 		StringBuffer html = new StringBuffer();
 		String attributeName = attribute.getName();
 		String componentId = generateComponentName(attribute);
 		if (operatorsList != null && operatorsList.size() != 0)
 		{
-			html.append("\n<td width='15%' class=\"PermissibleValuesQuery\" valign='top' >");
+			html.append("\n<td width='15%' class="+cssClass+" valign='top' >");
 			AttributeTypeInformationInterface attrTypeInfo = attribute
 					.getAttributeTypeInformation();
 			if (attrTypeInfo instanceof DateAttributeTypeInformation)
 			{
 				html
-						.append("\n<select  class=\"PermissibleValuesQuery\" style=\"width:150px; display:block;\" name=\""
+						.append("\n<select   class="+cssClass+" style=\"width:150px; display:block;\" name=\""
 								+ componentId
 								+ "_combobox\" onChange=\"operatorChanged('"
 								+ componentId + "','true')\">");
@@ -867,7 +872,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			else
 			{
 				html
-						.append("\n<select class=\"PermissibleValuesQuery\" style=\"width:150px; display:block;\" name=\""
+						.append("\n<select  class="+cssClass+" style=\"width:150px; display:block;\" name=\""
 								+ componentId
 								+ "_combobox\" onChange=\"operatorChanged('"
 								+ componentId + "','false')\">");
@@ -880,12 +885,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 				String op1 = operator.replace(" ", "");
 				if (op1.equalsIgnoreCase(op))
 				{
-					html.append("\n<option class=\"PermissibleValuesQuery\" value=\"" + operator
+					html.append("\n<option  class="+cssClass+" value=\"" + operator
 							+ "\" SELECTED>" + operator + "</option>");
 				}
 				else
 				{
-					html.append("\n<option class=\"PermissibleValuesQuery\" value=\"" + operator
+					html.append("\n<option  class="+cssClass+" value=\"" + operator
 							+ "\">" + operator + "</option>");
 				}
 			}
