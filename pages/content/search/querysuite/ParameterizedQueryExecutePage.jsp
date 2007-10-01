@@ -31,7 +31,7 @@
 
 	<body>
 		<html:errors/>
-		<form id='fetchQueryForm' name='fetchQueryForm' action='<%=Constants.EXECUTE_QUERY_ACTION%>' >
+		<html:form styleId='saveQueryForm'   action='<%=Constants.EXECUTE_QUERY_ACTION%>' >
 			<table width="100%">
 				<tr>
 					<td>
@@ -46,7 +46,12 @@
 					<td>
 						<table>
 							<tr>
-								<td> <%=request.getAttribute(Constants.HTML_CONTENTS) %>  </td>
+								<td> 
+ 								     <%=request.getAttribute(Constants.HTML_CONTENTS) %> 
+									<html:hidden property="queryString"  />					
+								</td>
+									
+								
 							</tr>
 						</table>
 					</td>
@@ -70,7 +75,7 @@
 					</td>
 				</tr>			
 			</table>
-		</form>
+		</html:form>
 	</body>
 </html>
 				
