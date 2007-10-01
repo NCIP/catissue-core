@@ -41,6 +41,8 @@ function participantRegRow(subdivtag)
 				}
 			%>
 			sname = sname + "</select>";
+			var collectionProtocolTitleValue = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_shortTitle)";
+			sname = sname + "<input type='hidden' name='" + collectionProtocolTitleValue + "' value='' id='" + collectionProtocolTitleValue + "'>";
 			cprTitle.innerHTML="" + sname;
 			
 			//Second Cell
@@ -99,12 +101,13 @@ function participantRegRow(subdivtag)
 			var name = "CollectionProtocolConsentChk_"+ (cprSize+1);
 			var anchorTagKey = "ConsentCheck_"+ (cprSize+1);
 			var collectionProtocolValue = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_id)";
+			var collectionProtocolTitleValue = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_shortTitle)";
 			var anchorTag = document.createElement("a");
 			anchorTag.setAttribute("id",anchorTagKey);
 			spanTag.innerHTML="<%=Constants.NO_CONSENTS_DEFINED%>"+"<input type='hidden' name='" + name + "' value='Consent' id='" + name + "'>";
 			spanTag.appendChild(anchorTag);
 			consent.appendChild(spanTag);
-			document.getElementById(keyValue).onchange=function(){getConsent(name,collectionProtocolValue,(cprSize+1),anchorTagKey,consentCheckStatus)};
+			document.getElementById(keyValue).onchange=function(){getConsent(name,collectionProtocolValue,collectionProtocolTitleValue,(cprSize+1),anchorTagKey,consentCheckStatus)};
 			
 			
 			//sixth Cell
@@ -121,7 +124,7 @@ function participantRegRow(subdivtag)
 		}
 
 
-			function setSubmittedForParticipant(submittedFor,forwardTo)
+		function setSubmittedForParticipant(submittedFor,forwardTo)
 		{
 			document.forms[0].submittedFor.value = submittedFor;
 			document.forms[0].forwardTo.value    = forwardTo;
@@ -165,7 +168,7 @@ function participantRegRow(subdivtag)
 					}
 				}		
 			<%}%>	
-			
+	setCollectionProtocolTitle();		
 	if((document.forms[0].activityStatus != undefined) && (document.forms[0].activityStatus.value == "Disabled"))
    	{
 	    var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
@@ -180,6 +183,34 @@ function participantRegRow(subdivtag)
 	}
 }
 
+	function setCollectionProtocolTitle()
+	{
+		var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
+		for(i = 1 ; i <= collectionProtocolRegistrationVal ; i++)
+		{
+			var collectionProtocolId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_CollectionProtocol_id)";
+			collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
+			var collectionProtocolTitle;
+			<%
+			if(collectionProtocolList!=null)
+			{
+				Iterator iterator = collectionProtocolList.iterator();
+				while(iterator.hasNext())
+				{
+					NameValueBean bean = (NameValueBean)iterator.next();
+			%>
+					if(collectionProtocolIdValue =='<%=bean.getValue()%>')
+					{
+						collectionProtocolTitle = '<%=bean.getName()%>';
+					}
+			<%		
+				}
+			}
+			%>
+			var collectionProtocolTitleKey = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_CollectionProtocol_shortTitle)";
+			document.getElementById(collectionProtocolTitleKey).value = collectionProtocolTitle;
+		}
+	}
 
 	function checkActivityStatusForCPR()
 		{
@@ -705,7 +736,8 @@ function participantRegRow(subdivtag)
 				<%
 				for(int i=1;i<=noOrRowsCollectionProtocolRegistration;i++)
 				{
-					String collectionProtocolTitle = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"+i+"_CollectionProtocol_id)";
+					String collectionProtocolId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"+i+"_CollectionProtocol_id)";
+					String collectionProtocolTitle = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"+i+"_CollectionProtocol_shortTitle)";
 					String collectionProtocolParticipantId = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:"+i+"_protocolParticipantIdentifier)";
 					String collectionProtocolRegistrationDate = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_registrationDate)";
 					String collectionProtocolIdentifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_id)";
@@ -720,7 +752,12 @@ function participantRegRow(subdivtag)
 					String consentResponseDisplayKey = "CollectionProtocolRegistration:" + i +"_isConsentAvailable";
 					String consentResponseDisplayValue = (String)form.getCollectionProtocolRegistrationValue(consentResponseDisplayKey);
 					
-					
+					String collectionProtocolTitleKey = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_shortTitle";
+					String collectionProtocolTitleValue = (String)form.getCollectionProtocolRegistrationValue(collectionProtocolTitleKey);
+
+					String collectionProtocolIdKey = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_id";
+					String collectionProtocolIdValue = (String)form.getCollectionProtocolRegistrationValue(collectionProtocolIdKey);
+
 					if(consentResponseDisplayValue ==null)
 					{
 						consentResponseDisplayValue = Constants.NO_CONSENTS_DEFINED;
@@ -730,17 +767,27 @@ function participantRegRow(subdivtag)
 					if(!CollectionProtocolRegConditionBoolean)
 						activityStatusCondition = true;
 					
-					String onChangeFun ="getConsent('"+collectionProtocolConsentCheck+"', '"+collectionProtocolTitle+"','"+i+"','"+anchorTagKey+"','"+consentCheckStatus+"')";
+					String onChangeFun ="getConsent('"+collectionProtocolConsentCheck+"', '"+collectionProtocolId+"','"+i+"','"+anchorTagKey+"','"+consentCheckStatus+"')";
 
 				%>
 					
 				 <tr>
-					<td class="formFieldWithoutBorder" width="40">
-				 		<html:select property="<%=collectionProtocolTitle%>" styleClass="formFieldSized15" styleId="<%=collectionProtocolTitle%>" size="1" 
+				 <td class="formFieldWithoutBorder">
+					<%
+					 if(CollectionProtocolRegConditionBoolean)
+					 {
+					 %>
+					 	<html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=collectionProtocolTitle%>" property="<%=collectionProtocolTitle%>" />
+				 		<input type="hidden" id="<%=collectionProtocolId%>" name="<%=collectionProtocolId%>" value="<%=collectionProtocolIdValue%>" />
+					<%}else{ %>
+						<html:select property="<%=collectionProtocolId%>" styleClass="formFieldSized15" styleId="<%=collectionProtocolId%>" size="1" 
 				 		onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=onChangeFun%>">
 						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 					    </html:select>
-					</td>
+					    <input type="hidden" id="<%=collectionProtocolTitle%>" name="<%=collectionProtocolTitle%>" value="<%=collectionProtocolTitleValue%>" />
+							
+					<%} %>
+				</td>
 				    <td class="formFieldWithoutBorder">
 						<html:text styleClass="formFieldSized10" maxlength="50"  styleId="<%=collectionProtocolParticipantId%>" property="<%=collectionProtocolParticipantId%>" />
 					</td>
@@ -764,7 +811,7 @@ function participantRegRow(subdivtag)
 									consentResponseDisplayValue = Constants.PARTICIPANT_CONSENT_EDIT_RESPONSE;
 								}
 						%>
-								<a id="<%=anchorTagKey%>" href="javascript:openConsentPage('<%=collectionProtocolTitle%>','<%=i%>','<%=consentResponseDisplayValue%>')">
+								<a id="<%=anchorTagKey%>" href="javascript:openConsentPage('<%=collectionProtocolId%>','<%=i%>','<%=consentResponseDisplayValue%>')">
 								<%=consentResponseDisplayValue%><br>
 								<input type='hidden' name="<%=collectionProtocolConsentCheck%>" value='Consent' id="<%=collectionProtocolConsentCheck%>" >
 								<input type='hidden' name="<%=consentResponseDisplay%>" value="<%=consentResponseDisplayValue%>" id="<%=consentResponseDisplay%>" >

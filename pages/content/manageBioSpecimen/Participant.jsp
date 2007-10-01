@@ -215,9 +215,10 @@ tr#hiddenCombo
 		
 		
 		
-		function getConsent(identifier,collectionProtocolId,index,anchorTagKey,consentCheckStatus)
+		function getConsent(identifier,collectionProtocolId,collectionProtocolTitle,index,anchorTagKey,consentCheckStatus)
 		{
 			var collectionProtocolIdValue;
+			var select = document.getElementById(collectionProtocolId); 
 			collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
 			var dataToSend="showConsents=yes&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue;
 			ajaxCall(dataToSend, collectionProtocolId, identifier, anchorTagKey, index,consentCheckStatus);
@@ -289,12 +290,12 @@ tr#hiddenCombo
 						}
 						anchorTag.setAttribute("id",anchorTagKey);
 						anchorTag.setAttribute("href", "javascript:openConsentPage('"+collectionProtocolId+"','"+index+"','"+responseString+"')");
-						anchorTag.innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent' id='" + verificationKey + "'/> <input type='hidden' name='" + consentResponseKey+ "' value='" +responseString+ "' id='" + consentResponseKey+ "'/>";
+						anchorTag.innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent' id='" + verificationKey + "'/><input type='hidden' name='" + consentResponseKey+ "' value='" +responseString+ "' id='" + consentResponseKey+ "'/>";
 						spanTag.appendChild(anchorTag);
 					}
 					else //No Consent
 					{
-						spanTag.innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent' id='" + verificationKey + "'/> <input type='hidden' name='" + consentResponseKey+ "' value='" +responseString+ "' id='" + consentResponseKey+ "'/>";
+						spanTag.innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent' id='" + verificationKey + "'/><input type='hidden' name='" + consentResponseKey+ "' value='" +responseString+ "' id='" + consentResponseKey+ "'/>";
 					}
 					
 					

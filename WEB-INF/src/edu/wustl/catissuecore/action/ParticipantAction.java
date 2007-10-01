@@ -155,6 +155,7 @@ public class ParticipantAction extends SecureAction
 		List collectionProtocolRegistrationKey = new ArrayList();
 		
 		collectionProtocolRegistrationKey.add("CollectionProtocolRegistration:outer_CollectionProtocol_id");
+		collectionProtocolRegistrationKey.add("CollectionProtocolRegistration:outer_CollectionProtocol_shortTitle");
 		collectionProtocolRegistrationKey.add("CollectionProtocolRegistration:outer_protocolParticipantIdentifier");
 		collectionProtocolRegistrationKey.add("CollectionProtocolRegistration:outer_id");
 		collectionProtocolRegistrationKey.add("CollectionProtocolRegistration:outer_registrationDate");
@@ -397,6 +398,7 @@ public class ParticipantAction extends SecureAction
 				String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:" + i +"_registrationDate";
 				String collectionProtocolIdentifier = "CollectionProtocolRegistration:" + i +"_id";
 				String isConsentAvailable = "CollectionProtocolRegistration:" + i +"_isConsentAvailable";
+				String collectionProtocolParticipantTitle = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_shortTitle";
 				
 				mapCollectionProtocolRegistration.remove(collectionProtocolTitle);
 				mapCollectionProtocolRegistration.remove(collectionProtocolParticipantId);
@@ -404,6 +406,7 @@ public class ParticipantAction extends SecureAction
 				mapCollectionProtocolRegistration.remove(collectionProtocolIdentifier);
 				mapCollectionProtocolRegistration.remove(isActive);
 				mapCollectionProtocolRegistration.remove(isConsentAvailable);
+				mapCollectionProtocolRegistration.remove(collectionProtocolParticipantTitle);
 				cprCount++;
 			}
 		}

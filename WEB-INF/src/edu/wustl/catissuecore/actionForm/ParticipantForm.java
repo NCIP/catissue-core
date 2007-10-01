@@ -286,12 +286,14 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)it.next();
         		if(collectionProtocolRegistration.getActivityStatus() !=null && !collectionProtocolRegistration.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
         		{
-	        		String collectionProtocolTitle = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_id";
+	        		String collectionProtocolId = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_id";
+	        		String collectionProtocolTitle = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_shortTitle";
 					String collectionProtocolParticipantId = "CollectionProtocolRegistration:"+i+"_protocolParticipantIdentifier";
 					String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:" + i +"_registrationDate";
 					String collectionProtocolIdentifier = "CollectionProtocolRegistration:" + i +"_id";
 					String isConsentAvailable = "CollectionProtocolRegistration:" + i +"_isConsentAvailable";
 					String isActive = "CollectionProtocolRegistration:" + i +"_activityStatus";
+					
 					
 					Collection consentTierCollection = collectionProtocolRegistration.getCollectionProtocol().getConsentTierCollection();
 					if(consentTierCollection!=null && consentTierCollection.isEmpty())
@@ -305,7 +307,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 					
 					String date = Utility.parseDateToString(collectionProtocolRegistration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 					
-					collectionProtocolRegistrationValues.put(collectionProtocolTitle,Utility.toString(collectionProtocolRegistration.getCollectionProtocol().getId()));
+					collectionProtocolRegistrationValues.put(collectionProtocolId,Utility.toString(collectionProtocolRegistration.getCollectionProtocol().getId()));
+					collectionProtocolRegistrationValues.put(collectionProtocolTitle,Utility.toString(collectionProtocolRegistration.getCollectionProtocol().getShortTitle()));
 					collectionProtocolRegistrationValues.put(collectionProtocolParticipantId,Utility.toString(collectionProtocolRegistration.getProtocolParticipantIdentifier()));
 					collectionProtocolRegistrationValues.put(collectionProtocolRegistrationDate,date);
 					collectionProtocolRegistrationValues.put(collectionProtocolIdentifier,Utility.toString(collectionProtocolRegistration.getId()));
@@ -690,28 +693,31 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			//validation for add more block for collection protocol registration
 			//(Abhishek Mehta)
 			String collectionProtocolClassName = "CollectionProtocolRegistration:";
-			String collectionProtocolTitle = "_CollectionProtocol_id";
+			String collectionProtocolId = "_CollectionProtocol_id";
 			String collectionProtocolParticipantId = "_protocolParticipantIdentifier";
 			String collectionProtocolRegistrationDate = "_registrationDate";
 			String collectionProtocolIdentifier = "_id";
 			String isConsentAvailable = "_isConsentAvailable";
 			String isActive = "_activityStatus";
+			String collectionProtocolTitle = "_CollectionProtocol_shortTitle";
 			
 			index = 1;
 			int count = 0;
 			while(true)
 			{
-				String keyOne = collectionProtocolClassName + index + collectionProtocolTitle;
+				String keyOne = collectionProtocolClassName + index + collectionProtocolId;
 				String keyTwo = collectionProtocolClassName + index + collectionProtocolParticipantId;
 				String keyThree = collectionProtocolClassName + index + collectionProtocolRegistrationDate;
 				String keyFour = collectionProtocolClassName + index + collectionProtocolIdentifier;
 				String keyFive = collectionProtocolClassName + index + isConsentAvailable;
 				String keySix = collectionProtocolClassName + index + isActive;
+				String KeySeven = collectionProtocolClassName + index + collectionProtocolTitle;
 				
 				String value1 = (String)collectionProtocolRegistrationValues.get(keyOne);
 				String value2 = (String)collectionProtocolRegistrationValues.get(keyTwo);
 				String value3 = (String)collectionProtocolRegistrationValues.get(keyThree);
 				String value6 = (String)collectionProtocolRegistrationValues.get(keySix);
+				
 				
 				if(value6 == null)
 				{
@@ -738,6 +744,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 					collectionProtocolRegistrationValues.remove(keyFour);
 					collectionProtocolRegistrationValues.remove(keyFive);
 					collectionProtocolRegistrationValues.remove(keySix);
+					collectionProtocolRegistrationValues.remove(KeySeven);
 					count++;
 				}
 				
