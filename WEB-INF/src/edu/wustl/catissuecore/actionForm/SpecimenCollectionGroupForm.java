@@ -688,6 +688,15 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		try
 		{
 			setRedirectValue(validator );
+			
+			if (operation.equals(Constants.EDIT))
+            {
+           	 if(collectionStatus.trim().length() <= 0)
+           	 {
+           		 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.collectionStatus")));
+           	 }
+            }
+			
 			if(this.collectionProtocolId == -1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
@@ -811,6 +820,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 			{
 				applyEventsToSpecimens = true;
 			}
+			if (isAddOperation())
+			{
+				this.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
+			}	
 		}
 		catch (Exception excp)
 		{

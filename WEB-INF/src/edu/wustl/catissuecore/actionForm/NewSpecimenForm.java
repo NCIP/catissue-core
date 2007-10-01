@@ -610,6 +610,10 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
                 	}
                 	index++;
                 }
+                if (operation.equals(Constants.ADD))
+				{
+					this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
+				}
              }
          }
          catch(Exception excp)

@@ -309,6 +309,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			}
 			aliquotSpecimen.setAvailable(Boolean.TRUE);
 			aliquotSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			aliquotSpecimen.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
 			aliquotSpecimen.setLineage(Constants.ALIQUOT);
 			/**
 			 *  Aliquot inherits external identifiers and biohazards of parent -- Bug No. 3094

@@ -95,7 +95,7 @@
 
 	
 	String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
-	boolean readOnlyValue=false,readOnlyForAll=false;
+	boolean readOnlyValue=false,readOnlyForAll=true;
 
 	if(operation.equals(Constants.EDIT))
 	{
@@ -985,7 +985,7 @@
 											</label>
 										</td>
 									    <td class="formFieldNoBordersSimple" >
-									     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+									     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label"/>
 									    </td>							
 										<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
 										<td class="formFieldNoBordersSimple">							
@@ -994,7 +994,7 @@
 										</label>								
 									</td>
 								    <td class="formFieldNoBordersSimple" >
-										<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
+										<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode"/>
 						        	</td>
 								   </tr>
 									<%}
@@ -1011,7 +1011,7 @@
 											</label>
 										</td>
 									    <td class="formFieldNoBordersSimple"  colspan=4>
-									     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+									     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label"/>
 									    </td>							
 										
 								        </tr>
@@ -1028,7 +1028,7 @@
 										</label>								
 										</td>
 									    <td class="formFieldNoBordersSimple"  colspan=4>
-											<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
+											<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode" />
 							        	</td>
 										</tr>
 									
@@ -1224,7 +1224,7 @@
 										</label>
 									</td>
 								    <td class="formFieldNoBordersSimple" >
-								     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
+								     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyValue%>"/>
 								     	<span id="unitSpan"><%=unitSpecimen%></span>
 								     	<html:hidden property="unit"/>
 								    </td>

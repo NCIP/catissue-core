@@ -687,6 +687,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 			this.aliqoutMap = form.getAliquotMap();
 			this.noOfAliquots = Integer.parseInt(form.getNoOfAliquots());
 			this.parentSpecimen = new Specimen();
+			this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
             
              /**            
              * Patch ID: 3835_1_2
@@ -977,7 +978,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					CreateSpecimenForm form = (CreateSpecimenForm) abstractForm;
 
 					this.activityStatus = form.getActivityStatus();
-
+					this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
+					
 					if (!validator.isEmpty(form.getBarcode()))
 						this.barcode = form.getBarcode();
 					else
@@ -1438,6 +1440,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
     		this.specimenCharacteristics = new SpecimenCharacteristics(specimen.getSpecimenCharacteristics());
     	}
     	this.type = specimen.getType();
+    	this.isCollectionProtocolRequirement = new Boolean(false);
      }
     
     private Collection setBiohazardCollection(Specimen specimen)

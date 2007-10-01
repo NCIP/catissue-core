@@ -558,6 +558,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		{
 			CollectionProtocol collectionProtocol = (CollectionProtocol)list.get(0);
 			collectionProtocolTitle=collectionProtocol.getTitle();
+			String collectionProtocolName =(String) collectionProtocol.getShortTitle();
+			specimenCollectionGroupForm.setCollectionProtocolName(collectionProtocolName);
 		}
 
 		long groupParticipantId = specimenCollectionGroupForm.getParticipantId();

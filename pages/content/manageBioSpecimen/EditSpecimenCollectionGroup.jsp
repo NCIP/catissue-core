@@ -1,4 +1,4 @@
-	<%			
+								<%			
 /**
  			* Name : Ashish Gupta
  			* Reviewer Name : Sachin Lale 
@@ -112,10 +112,6 @@
 					</td> 
 					
 					<td class="formFieldNoBordersSimple">
-				<%	
-					if(pageView.equals("add"))
-					{					
-				%>
 						<label for="collectionProtocolIdValue">
 							 <b><%=form.getCollectionProtocolName()%> </b>
 						</label>
@@ -123,29 +119,25 @@
 						<input type="hidden" id="collectionProtocolId" value="<%=form.getCollectionProtocolId()%>" />
 						<input type="hidden" id="collectionProtocolName" value="<%=form.getCollectionProtocolName()%>" />
 					
-				<% 
-					}
-					else
-					 {
-				%>
-						<!-- Mandar : 434 : for tooltip -->
-				
-				      	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>" onchange="onChangeEvent(this)"
-				     	 onmouseover="showToolTip(this)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
-
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
-						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=specimenCollectionGroup&addNewFor=collectionProtocol')">
-							<bean:message key="buttons.addNew" />
-						</html:link>
-						</logic:notEqual>
-       				<% 
-						}
-					%>
 		        	</td>
 				 </tr>
-
+				 
+                  <tr>
+					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
+					<td class="formFieldNoBordersSimple" >
+						<label for="participantName">
+							 <bean:message key="specimenCollectionGroup.participantNameWitProtocolId" />
+						</label>
+					</td>
+					<td class="formFieldNoBordersSimple">
+						<label for="participantName">
+						<b>	<%=form.getParticipantNameWithProtocolId()%></b>
+						</label>
+						
+					</td>
+					<html:hidden property="participantName"/>
+					<html:hidden property="protocolParticipantIdentifier"/>
+				</tr>
 				 <tr>
  			     	<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
 				    <td class="formFieldNoBordersSimple">
@@ -172,88 +164,7 @@
 						</logic:notEqual>
 		        	</td>
 				 </tr>
-				 <%	if(pageView.equals("add"))
-					{				
-				%>
 				<tr>
-					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
-					<td class="formFieldNoBordersSimple" >
-						<label for="participantName">
-							 <b><bean:message key="specimenCollectionGroup.participantNameWitProtocolId" /></b>
-						</label>
-					</td>
-					<td class="formFieldNoBordersSimple">
-						<label for="participantName">
-						<b>	<%=form.getParticipantNameWithProtocolId()%></b>
-						</label>
-						
-					</td>
-					<html:hidden property="participantName"/>
-					<html:hidden property="protocolParticipantIdentifier"/>
-				</tr>
-				<% }else {
-				%>
-				<html:hidden property="participantName"/>
-				<html:hidden property="protocolParticipantIdentifier"/>
-
-				 <tr>
-					 <td class="formFieldNoBordersSimple"><b>*</b></td>
-					 <td class="formFieldNoBordersSimple">
-				     	<html:radio styleClass=""  property="radioButtonForParticipant" value="1" onclick="onRadioButtonClick(this)">
-  				     	    <label for="participantId">
-								<%--<bean:message key="specimenCollectionGroup.collectedByParticipant" />--%>
-							</label>
-				     	</html:radio>
- 				    </td>
- 				    <td class="formFieldNoBordersSimple" width="186">
- 				    	<label for="participantId">
-					        <b><bean:message key="specimenCollectionGroup.collectedByParticipant" /></b>
-						</label>
-  					</td>
-  					<td class="formFieldNoBordersSimple">
-  						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">
-<!-- Mandar : 434 : for tooltip --> 						
-				     	    <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="participantName" property="participantName" />
-  						</logic:equal>     
-						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">
-<!-- Mandar : 434 : for tooltip -->						
-				     	     <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="participantName" property="participantName" disabled="true"/>
-  						</logic:equal>
-					</td>
-  					
-				 </tr>
-				 	
-				 <tr>
-				    <td class="formFieldNoBordersSimple" align="right">&nbsp;</td>
-					<td class="formFieldNoBordersSimple">
-					<html:radio styleClass="" property="radioButtonForParticipant" value="2" onclick="onRadioButtonClick(this)">
-  				       	    <label for="protocolParticipantIdentifier">
-								<%--<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />--%>
-							</label>
-				     	</html:radio>
-				    </td>
-				    <td class="formFieldNoBordersSimple"  width="186">
-						<label for="protocolParticipantIdentifier">
-							<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />
-						</label>
-					</td>
-					
-  			        <td class="formFieldNoBordersSimple">
-  					<%-- LOGIC TAG FOR PARTICPANT NUMBER --%> 												
-                        <logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">						
-<!-- Mandar : 434 : for tooltip -->
-   						 	<html:text property="protocolParticipantIdentifier" maxlength="255" size="30"  styleClass="formFieldSized" styleId="protocolParticipantIdentifier" disabled="true">
-							</html:text>
- 						</logic:equal>
- 						
- 						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">						
-<!-- Mandar : 434 : for tooltip -->
-   						 	<html:text property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" maxlength="255" size="30" >
-							</html:text>
- 						</logic:equal>
-			    	</td>
-				 </tr>
-				<% }%>
 				<tr>
 					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
 					<td class="formFieldNoBordersSimple" >
@@ -262,12 +173,7 @@
 						</label>
 					</td>
 					<td class="formFieldNoBordersSimple">
-						<html:text styleClass="formFieldSized" size="30"  maxlength="255" styleId="name" property="name" />
-						&nbsp;
-						<%String resetAction = "changeAction('SpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroup&resetName=Yes')"; 
-						if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY)){
-							resetAction = "changeAction('QuerySpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroupCPQuery&resetName=Yes')"; 
-						}%>
+						<html:text styleClass="formFieldSized" size="30"  maxlength="255" styleId="name" property="name" />						
 					</td>
 				</tr>
 				 <tr>

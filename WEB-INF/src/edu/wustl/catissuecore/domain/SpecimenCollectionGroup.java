@@ -373,7 +373,14 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		try
 		{
 			this.setName(form.getName());
-			this.collectionStatus = form.getCollectionStatus();
+			if (form.isAddOperation())
+			{
+				this.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
+			}
+			else
+			{
+				this.setCollectionStatus(form.getCollectionStatus());
+			}
 			/**
              * Name: Sachin Lale
              * Bug ID: 3052
