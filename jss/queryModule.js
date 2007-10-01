@@ -821,16 +821,15 @@
 		else if(action=='save')
 		{
 			var url = "LoadSaveQueryPage.do";
-			if (window.showModalDialog)
+			platform = navigator.platform.toLowerCase();
+		    if (platform.indexOf("mac") != -1)
 			{
-				var modalDialogProperties = "dialogHeight:550px; dialogWidth:800px; edge:Sunken; center:Yes; resizable:Yes;";
-				window.showModalDialog(url, window, modalDialogProperties);
-			}
-			else
-			{
-				var windowProperties = "height=550,width=800,toolbar=no,status=no,menubar=no,scrollbars=no,resizable=yes,modal=yes";
-				window.open(url, window, windowProperties);
-			}
+		    	NewWindow(url,'name',screen.width,screen.height,'yes');
+		    }
+		    else
+		    {
+		    	NewWindow(url,'name','800','600','yes');
+		    }
 		}
 	}
 	function defineSearchResultsView()
