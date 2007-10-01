@@ -13,6 +13,14 @@
 		<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 		<script src="jss/queryModule.js"></script>
 				<script src="jss/calender.js"></script>
+		<script>
+		   function GotoRetriveAction()
+		   {
+		      var frm = document.forms[0];
+		      frm.action="RetrieveQueryAction.do";
+		      frm.submit();
+		   }
+		</script>		
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>
 			<bean:message key="savequery.queryConditionTitle"/>
@@ -58,7 +66,7 @@
 					<td align="right">
 					    <input type="hidden" name="queryString" value="" />
 						<input type="button" name="execute" value="Execute" onClick="ExecuteSavedQuery()"/>
-						<input type="button" name="cancel" value="Cancel" onClick="window.close();"/>
+						<input type="button" name="cancel" value="Cancel" onClick="GotoRetriveAction();"/>
 					</td>
 				</tr>			
 			</table>
