@@ -29,9 +29,11 @@
 			{
 		%>
 			<html:button styleClass="actionButton" 
+					styleId="useSelPart"
 					property="" 
 					title=""
 					value="Use Selected Participant" 
+					disabled="<%=useSelPartDisable%>" 
 					onclick="onButtonClick('createNewSCG')">
  	    
 	     	</html:button>
@@ -44,9 +46,11 @@
 	    
 	    <td nowrap class="formFieldNoBorders">
 	    	<html:button styleClass="actionButton" 
+						styleId="useSelSCG"
 						property="" 
 						title=""
 						value="Use Selected SCG" 
+						disabled="<%=useSelSCGDisable%>" 
 						onclick="onButtonClick('associateSCG')">
 									  				     	    
 		    </html:button>
@@ -59,21 +63,23 @@
 		<%if(conflictStatus.equals(CaTIESConstants.STATUS_PARTICIPANT_CONFLICT))
 			{
 		%>
-			<html:button styleClass="actionButton"  
+			<html:button styleClass="actionButton" 
+					styleId="crtNewPart"
 					property="" 
 					title=""
 					value="Create New Participant"
-					disabled="" 
+					disabled="<%=crtNewPartDisable%>" 
 					onclick="onButtonClick('creatNewParticipant')">
 	     	</html:button>
 		<%} else
 		 	 {	
 		%>
 			<html:button styleClass="actionButton"  
+					styleId="crtNewSCG"
 					property="" 
 					title=""
 					value="Create New SCG"
-					disabled="" 
+					disabled="<%=crtNewSCGDisable%>" 
 					onclick="onButtonClick('createNewSCG')">
 	     	</html:button>
 

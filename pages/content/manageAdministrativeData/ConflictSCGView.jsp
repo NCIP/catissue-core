@@ -14,6 +14,8 @@
 
 %>
 
+<html:errors />
+
 <table summary="" cellpadding="0" cellspacing="" border="0" width="100%" style="table-layout:fixed" height="40%">
 	
 	<tr>

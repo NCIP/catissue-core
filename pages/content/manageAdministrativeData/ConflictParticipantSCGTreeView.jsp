@@ -17,7 +17,9 @@
 	String partId ="";
 	String conflictStatus = (String)request.getParameter(Constants.CONFLICT_STATUS);
 	String reportQueueId = (String)request.getParameter(Constants.REPORT_ID);
-	
+	boolean buttonDisable=true;
+	boolean buttonEnable=false;
+
 
 %>
 
@@ -40,6 +42,42 @@
 	</table>
 	<script language="javascript">
 	
+			function setButtons(obj1,conflictStat)
+			{
+			
+					if(obj1 == "<%=Constants.PARTICIPANT%>")
+					{	
+						var selSCGId=parent.document.getElementById("useSelSCG");
+						selSCGId.disabled="<%=buttonDisable%>";
+
+						if(conflictStat!="<%=CaTIESConstants.STATUS_SCG_PARTIAL_CONFLICT%>")	
+						{
+							var selPartId=parent.document.getElementById("useSelPart");
+							if(selPartId.disabled == true)
+							{
+								selPartId.disabled=false;
+							}
+						}	
+					
+					}
+
+					if(obj1 == "<%=Constants.SPECIMEN_COLLECTION_GROUP%>")
+					{
+						if(conflictStat!="<%=CaTIESConstants.STATUS_SCG_PARTIAL_CONFLICT%>")	
+						{
+							var selPartId=parent.document.getElementById("useSelPart");
+							selPartId.disabled="<%=buttonDisable%>";
+						}
+						
+						var selSCGId=parent.document.getElementById("useSelSCG");
+						if(selSCGId.disabled == true)
+						{
+							selSCGId.disabled=false;
+						}
+					}
+				
+			}
+
 			//This function is called when any of the node is selected in tree 
 			function tonclick(id)
 			{
@@ -71,9 +109,9 @@
 				}
 				else
 				{
-
+					setButtons(obj1,conflictStat);
 					if(obj1 == "<%=Constants.PARTICIPANT%>")
-					{
+					{	
 						
 						window.parent.frames[2].location = "ConflictParticipantDataDetails.do?id="+id1;
 					}

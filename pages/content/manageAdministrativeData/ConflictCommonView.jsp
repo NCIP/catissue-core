@@ -40,7 +40,7 @@
 
 
 <table summary="" cellpadding="" cellspacing="0" border="0"  width="100%">
-	<tr>
+		<tr>
 			<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" style="table-layout:fixed" width="90%" styleClass="formFieldSized">
 				<tr >
@@ -89,10 +89,10 @@
 				</tr>
 				<tr>
 					<td  class="formFieldNoBordersBold">
-						<bean:message key="caTies.conflict.report.date"/>
+						<bean:message key="caTies.conflict.report.loaded.date"/>
 					</td>
 					<td class="formFieldNoBordersSimple">
-						<bean:write name="conflictCommonForm" property="reportDate"/>
+						<bean:write name="conflictCommonForm" property="reportcreationDate"/>
 					</td>
 				
 				</tr>

@@ -11,6 +11,10 @@
 	String frame1Ysize = "120";
 	String frame2Ysize = "360";
 	String frame3Ysize = "360";
+	Boolean useSelPartDisable=false;
+	Boolean	useSelSCGDisable=false;
+	Boolean	crtNewPartDisable=false;
+	Boolean	crtNewSCGDisable=false;
 	
 	String reportQueueId = (String)request.getParameter(Constants.REPORT_ID);
 	String conflictStatus = (String)request.getParameter(Constants.CONFLICT_STATUS);
@@ -44,7 +48,6 @@ function onButtonClick(buttonPressed)
 	}
 </script>
 <html:form action="ConflictResolver.do">
-
 	<table border="0"  width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td width="100%"  valign="top">
@@ -103,5 +106,5 @@ function onButtonClick(buttonPressed)
 					</td>
 				</tr>
 			</table>	
-	
 </html:form>
+	
