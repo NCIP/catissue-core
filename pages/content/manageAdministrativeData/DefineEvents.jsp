@@ -6,15 +6,27 @@
 
 <head>
 <%
-      String access = (String)session.getAttribute("Access");
-	  String pageOf = request.getParameter("pageOf");
-	  request.setAttribute(Constants.PAGEOF,pageOf);
-	  boolean mac = false;
-      Object os = request.getHeader("user-agent");
-      if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
-      {
-          mac = true;
-      }
+    String access = (String)session.getAttribute("Access");
+	String pageOf = request.getParameter("pageOf");
+	String operationType = request.getParameter("operation");
+	
+	boolean disabled = false;
+	if(operationType==null)
+	{
+		operationType = (String)request.getAttribute("operation");
+	}
+	
+	if(operationType.equals("edit"))
+	{
+		disabled = true;
+	}
+	request.setAttribute(Constants.PAGEOF,pageOf);
+	boolean mac = false;
+    Object os = request.getHeader("user-agent");
+    if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
+    {
+         mac = true;
+    }
 	
 	String frame1Ysize = "100%";
 	String frame2Ysize = "200%";
@@ -43,14 +55,14 @@
 	<script>
 		function collectionProtocolPage()
 		{
-			var action ="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage";
+			var action ="CollectionProtocol.do?operation=<%=operationType%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
 		
 		function consentPage()
 		{
-			var action ="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage&tab=consentTab";
+			var action ="CollectionProtocol.do?operation=<%=operationType%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage&tab=consentTab";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -62,14 +74,14 @@
 		
 		function viewSummary()
 		{
-			var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary";
+			var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=<%=operationType%>";
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
 
 		function defineEvents()
 		{
-			var action="DefineEvents.do?pageOf=collectionProtocol";
+			var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=<%=operationType%>";
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
@@ -118,7 +130,7 @@
 						<table border="0" width="250px" height="100%">
 							<tr>
 								<td align="left" valign="top">		
-								<iframe id="SpecimenEvents" name="SpecimenEvents" src="showTree.do" scrolling="no" frameborder="0" width="250px" height="450px" marginheight=0 marginwidth=0 valign="top">
+								<iframe id="SpecimenEvents" name="SpecimenEvents" src="ShowCollectionProtocol.do?operationType=<%=operationType%>" scrolling="no" frameborder="0" width="250px" height="450px" marginheight=0 marginwidth=0 valign="top">
 									Your Browser doesn't support IFrames.
 								</iframe>
 
@@ -126,7 +138,7 @@
 							</tr>
 							<tr>
 								<td align="left" valign="top" nowrap>
-									<html:button styleClass="actionButton" property="submitPage" onclick="defineEvents()">
+									<html:button styleClass="actionButton" property="submitPage" onclick="defineEvents()" disabled = "<%=disabled%>">
 										 <bean:message key="cpbasedentry.addnewevent" />
 									</html:button>
 									<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
@@ -148,7 +160,7 @@
 					</logic:equal>
 					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
 						<td width="100%" height="100%" valign="top">
-							<iframe name="SpecimenRequirementView" src="ProtocolEventsDetails.do?operation=add&pageOf=newEvent" scrolling="auto" frameborder="0" width="800px" height="500px">
+							<iframe name="SpecimenRequirementView" src="ProtocolEventsDetails.do?operationType=<%=operationType%>&operation=<%=operationType%>&pageOf=newEvent" scrolling="auto" frameborder="0" width="800px" height="500px">
 								Your Browser doesn't support IFrames.
 							</iframe>
 						</td>

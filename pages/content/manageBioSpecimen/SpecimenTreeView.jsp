@@ -21,6 +21,7 @@
 			divHeight = "280";		
 		}
 		String operation = (String)request.getAttribute("operation");
+		String operationType = (String)request.getAttribute("operationType");
 
 %>
 <head>
@@ -126,7 +127,7 @@
 				}
 				else if(obj1 == "New")
 				{
-					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=edit&pageOf=specimenRequirement&key="+id1+"&nodeId="+id;
+					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=edit&pageOf=specimenRequirement&key="+id1+"&nodeId="+id+"&operationType=<%=operationType%>";
 				}
 				else if(obj1 == "ViewSummary")
 				{
@@ -134,7 +135,7 @@
 				}
 				else
 				{
-					window.parent.frames['SpecimenRequirementView'].location="ProtocolEventsDetails.do?operation=edit&pageOf=defineEvents&key="+id1+"&nodeId="+id;
+					window.parent.frames['SpecimenRequirementView'].location="ProtocolEventsDetails.do?operation=edit&pageOf=defineEvents&key="+id1+"&nodeId="+id+"&operationType=<%=operationType%>";
 				}
 			}; 
 									

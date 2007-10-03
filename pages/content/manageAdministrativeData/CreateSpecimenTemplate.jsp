@@ -27,6 +27,12 @@ Object obj = request.getAttribute("createSpecimenTemplateForm");
 String mapKey = (String)request.getAttribute("key");
 String nodeKey = (String)request.getAttribute("mapkey");
 String operation = (String)request.getAttribute(Constants.OPERATION);
+String operationType = (String)request.getAttribute("operationType");
+boolean disabled = false;
+if(operationType!=null && operationType.equals("edit"))
+{
+	disabled = true;
+}
 
 if(nodeKey!=null)
 {
@@ -391,7 +397,7 @@ if(form != null)
 		checkb.innerHTML=""+sname;
 	}
 
-	window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key="+"<%=mapKey%>";
+	window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>&operationType=<%=operationType%>";
 </script>
 
 </head>
@@ -580,6 +586,83 @@ if(form != null)
 			&nbsp;<bean:message key="specimen.concentrationUnit"/>
 		</td>
 	 </tr>
+	 <tr>	
+		<html:hidden property="collectionEventId" />
+		<html:hidden property="collectionEventSpecimenId" />
+		<td class="formFieldNoBordersSimple" width="5">*</td>
+			<td class="formFieldNoBordersSimple"> 
+			<label for="user">
+				<b><bean:message key="specimen.collectedevents.username"/> </b>
+			</label>
+		</td>						
+		<td class="formFieldNoBordersSimple">
+			<autocomplete:AutoCompleteTag property="collectionEventUserId"
+						  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
+						  initialValue="<%=form.getCollectionEventUserId()%>"
+						  staticField="false"
+			/>		
+		</td>		
+		<!-- RecievedEvent fields -->
+		<html:hidden property="receivedEventId" />
+		<html:hidden property="receivedEventSpecimenId" />
+		<td class="formFieldNoBordersSimple" width="5">*</td>
+		<td class="formFieldNoBordersSimple">
+			<label for="type">
+				<b><bean:message key="specimen.receivedevents.username"/> </b>
+			</label>
+		</td>
+		<td class="formFieldNoBordersSimple">
+			<autocomplete:AutoCompleteTag property="receivedEventUserId"
+				  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
+				  initialValue="<%=form.getReceivedEventUserId()%>"
+				  staticField="false"
+		/>	
+	</tr>
+	<tr>
+	 	<td class="formFieldNoBordersSimple" width="5">*</td>
+		<td class="formFieldNoBordersSimple">
+			<label for="collectionprocedure">
+				<b><bean:message key="cpbasedentry.collectionprocedure"/></b>
+			</label>
+		</td>
+		<td class="formFieldNoBordersSimple">
+				<autocomplete:AutoCompleteTag property="collectionEventCollectionProcedure"
+						  optionsList = "<%=request.getAttribute(Constants.PROCEDURE_LIST)%>"
+						  initialValue="<%=form.getCollectionEventCollectionProcedure()%>"
+		/>							
+		</td>						
+		
+		<!-- RecievedEvent fields -->
+		<td class="formFieldNoBordersSimple" width="5"rowspan="2">*</td>
+		<td class="formFieldNoBordersSimple"rowspan="2"> 
+			<label for="quality">
+				<b><bean:message key="cpbasedentry.receivedquality"/></b>
+			</label>
+		</td>						
+		<!-- receivedeventparameters.receivedquality -->
+		<td class="formFieldNoBordersSimple"rowspan="2">
+			<autocomplete:AutoCompleteTag property="receivedEventReceivedQuality"
+						  optionsList = "<%=request.getAttribute(Constants.RECEIVED_QUALITY_LIST)%>"
+						  initialValue="<%=form.getReceivedEventReceivedQuality()%>"
+		/>
+		</td>
+	</tr>
+	
+	<!-- CollectionEvent fields -->	
+	<tr>							
+		<td class="formFieldNoBordersSimple" width="5">*</td>
+		<td class="formFieldNoBordersSimple">
+			<label for="container">
+				<b><bean:message key="cpbasedentry.collectioncontainer"/></b>
+			</label>
+		</td>
+		<td class="formFieldNoBordersSimple">
+			<autocomplete:AutoCompleteTag property="collectionEventContainer"
+					  optionsList = "<%=request.getAttribute(Constants.CONTAINER_LIST)%>"
+					  initialValue="<%=form.getCollectionEventContainer()%>"
+	    />
+		</td>
+	</tr>	
 	</table>
 	&nbsp;
 	<table summary="" cellpadding="3" cellspacing="1" border="0" width="700" id="aliquotId">
@@ -775,7 +858,7 @@ if(form != null)
 	<table>
 		<tr>
 			<td align="right" colspan="6">
-				<html:button styleClass="actionButton" property="submitPage" onclick="saveSpecimens()">
+				<html:button styleClass="actionButton" property="submitPage" onclick="saveSpecimens()" disabled="<%=disabled%>">
 					<bean:message key="cpbasedentry.savespecimenrequirements"/>
 				</html:button>
 			<td>

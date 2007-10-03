@@ -18,7 +18,6 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -682,10 +681,6 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
             {
                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));
             }
-			
-
-			/*
- 			Commented by Virender Mehta
  			
 			if ((collectionEventUserId) == 0L)
 	        {
@@ -728,8 +723,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",message));
 				
 			}
-			*/
-			
+
 			if(this.className.equals(Constants.MOLECULAR))
 			{
 				if(!validator.isNumeric(this.concentration))

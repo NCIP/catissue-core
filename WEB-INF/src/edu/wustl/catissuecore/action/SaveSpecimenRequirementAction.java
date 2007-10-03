@@ -93,10 +93,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setConcentration(createSpecimenTemplateForm.getConcentration());
 		specimenRequirementBean.setQuantity(createSpecimenTemplateForm.getQuantity());
 		specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm.getStorageLocationForSpecimen());
+	
+		//Collected and received events
 		specimenRequirementBean.setCollectionEventUserId(createSpecimenTemplateForm.getCollectionEventUserId());
 		specimenRequirementBean.setReceivedEventUserId(createSpecimenTemplateForm.getReceivedEventUserId());
-		
-		//Collected and received events
 		specimenRequirementBean.setCollectionEventContainer(createSpecimenTemplateForm.getCollectionEventContainer());
 		specimenRequirementBean.setReceivedEventReceivedQuality(createSpecimenTemplateForm.getReceivedEventReceivedQuality());
 		specimenRequirementBean.setCollectionEventCollectionProcedure(createSpecimenTemplateForm.getCollectionEventCollectionProcedure());
@@ -104,6 +104,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		//Aliquot
 		specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
 		specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm.getQuantityPerAliquot());
+		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
 		
 		//Derive
 		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.getDeriveSpecimenValues());

@@ -385,7 +385,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",ApplicationProperties.getValue("collectionprotocol.participants")));
 					}                 	
                 }    				
-            }    
+            }
 		}
 		catch (Exception excp)
 		{

@@ -4337,8 +4337,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.DefineEventsAction"
 			name="collectionProtocolForm"
 			scope="request"
-			validate="true"
-			input="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9">
+			validate="false">
 			<forward name="success" path=".catissuecore.DefineEvents" />
 		</action>
 		

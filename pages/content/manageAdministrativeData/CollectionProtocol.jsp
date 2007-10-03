@@ -214,14 +214,14 @@
 //Add Bulk Specimen Virender(Start)
 function defineEvents()
 {
-	var action="DefineEvents.do?pageOf=collectionProtocol";
+	var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=<%=operation%>";
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
 
 function viewSummary()
 {
-	var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary";
+	var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=<%=operation%>";
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }

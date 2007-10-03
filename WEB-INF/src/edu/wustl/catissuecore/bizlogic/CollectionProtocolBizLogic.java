@@ -892,7 +892,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 //			}
 		}
 
-		if(protocol.getPrincipalInvestigator() == null)
+		if(protocol.getPrincipalInvestigator().getId() == -1)
 		{
 			//message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required","Principal Investigator"));	

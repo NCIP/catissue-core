@@ -26,6 +26,12 @@
 	{
 		form = (ProtocolEventDetailsForm)obj;
 	}	
+	String operationType = request.getParameter("operationType");
+	boolean disabled = false;
+	if(operationType!=null&&operationType.equals("edit"))
+	{
+		disabled = true;
+	}
 
 %>
 <head>
@@ -47,7 +53,7 @@ function submitAllEvents()
 	document.forms[0].submit();
 }
 
-window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage";
+window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operationType=<%=operationType%>";
 
 </script>
 </head>
@@ -145,10 +151,10 @@ window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageO
 		<table>
 			<tr>
 				<td>
-					<html:button styleClass="actionButton" property="submitPage" onclick="submitAllEvents()">
+					<html:button styleClass="actionButton" property="submitPage" onclick="submitAllEvents()" disabled="<%=disabled%>">
 						<bean:message key="buttons.submit"/>
 					</html:button>
-					<html:button styleClass="actionButton" property="submitPage" onclick="specimenRequirements()">
+					<html:button styleClass="actionButton" property="submitPage" onclick="specimenRequirements()" disabled="<%=disabled%>">
 						<bean:message key="cpbasedentry.addspecimenrequirements"/>
 					</html:button>
 				</td>

@@ -9,10 +9,6 @@ import java.util.Map;
 public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 {
 	
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6804520255061293674L;
 
 	private String uniqueIdentifier;
