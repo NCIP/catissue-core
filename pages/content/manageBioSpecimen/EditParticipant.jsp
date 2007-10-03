@@ -50,7 +50,7 @@ function participantRegRow(subdivtag)
 			cprParticipantId.className="formFieldWithoutBorder";
 			sname="";
 			name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_protocolParticipantIdentifier)";
-			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized10' id='" + name + "'>";
+			sname="<input type='text' name='" + name + "' maxlength='30'  class='formFieldSized7' id='" + name + "'>";
 			cprParticipantId.innerHTML="" + sname;
 			
 			<%
@@ -64,7 +64,7 @@ function participantRegRow(subdivtag)
 			sname="";
 			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_registrationDate)";
 			//sname = "<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "' value = 'MM-DD-YYYY or MM/DD/YYYY' onclick = \"this.value = ''\" onblur = \"if(this.value=='') {this.value = 'MM-DD-YYYY or MM/DD/YYYY';}\" onkeypress=\"return titliOnEnter(event, this, document.getElementById('" + name + "'))\">";
-			sname = "<input type='text' name='" + name + "' class='formFieldSized10' id='" + name + "' value = '<%=registrationDate%>'>";
+			sname = "<input type='text' name='" + name + "' class='formFieldSized7' id='" + name + "' value = '<%=registrationDate%>'>";
 			cprRegistrationDate.innerHTML=sname;
 			
 			//Fourth Cell
@@ -72,7 +72,7 @@ function participantRegRow(subdivtag)
 			cprActivityStatus.className="formFieldWithoutBorder";
 			sname="";
 			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_activityStatus)";
-			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized10' id='" + name + "' disabled='disabled' onmouseover=showTip(this.id) onmouseout=hideTip(this.id) >";
+			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized7' id='" + name + "' disabled='disabled' onmouseover=showTip(this.id) onmouseout=hideTip(this.id) >";
 			<%
 				for(int i=0 ; i<activityStatusList.length; i++)
 				{
@@ -789,14 +789,14 @@ function participantRegRow(subdivtag)
 					<%} %>
 				</td>
 				    <td class="formFieldWithoutBorder">
-						<html:text styleClass="formFieldSized10" maxlength="50"  styleId="<%=collectionProtocolParticipantId%>" property="<%=collectionProtocolParticipantId%>" />
+						<html:text styleClass="formFieldSized7" maxlength="30"  styleId="<%=collectionProtocolParticipantId%>" property="<%=collectionProtocolParticipantId%>" />
 					</td>
 				    <td class="formFieldWithoutBorder" colspan="2">
 				    	<!-- <html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=collectionProtocolRegistrationDate%>" property="<%=collectionProtocolRegistrationDate%>" onclick = "this.value = ''" onblur = "if(this.value=='') {this.value = 'MM-DD-YYYY or MM/DD/YYYY';}" onkeypress="return titliOnEnter(event, this, document.getElementById('<%=collectionProtocolRegistrationDate%>'))"/> -->
-				    	<html:text styleClass="formFieldSized10" maxlength="50"  styleId="<%=collectionProtocolRegistrationDate%>" property="<%=collectionProtocolRegistrationDate%>" />
+				    	<html:text styleClass="formFieldSized7" maxlength="30"  styleId="<%=collectionProtocolRegistrationDate%>" property="<%=collectionProtocolRegistrationDate%>" />
 				    </td>
 					<td class="formFieldWithoutBorder">
-						<html:select property="<%=collectionProtocolRegistrationActivityStatus%>" styleClass="formFieldSized10" styleId="<%=collectionProtocolRegistrationActivityStatus%>" size="1" disabled='<%=activityStatusCondition%>' onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						<html:select property="<%=collectionProtocolRegistrationActivityStatus%>" styleClass="formFieldSized7" styleId="<%=collectionProtocolRegistrationActivityStatus%>" size="1" disabled='<%=activityStatusCondition%>' onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 						</html:select>
 					</td>
