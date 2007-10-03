@@ -144,7 +144,7 @@ public class ConflictCommonAction extends BaseAction{
 		
 		//retrieve IdentifiedSurgicalPathologyReportObject
 		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReportObject = null;
-		identifiedSurgicalPathologyReportObject = HL7ParserUtil.extractOBRSegment(OBRLine);
+//		identifiedSurgicalPathologyReportObject = HL7ParserUtil.extractOBRSegment(OBRLine);
 		reportCreationDate =(Date)identifiedSurgicalPathologyReportObject.getCollectionDateTime();
 		
 		return reportCreationDate;
