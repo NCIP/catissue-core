@@ -235,7 +235,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		
 		isCollectionProtocolLabelUnique(collectionProtocol);
 		CollectionProtocol collectionProtocolOld = getOldCollectionProtocol(collectionProtocol);
-
+		if(collectionProtocolOld.getCollectionProtocolRegistrationCollection().size()>0)
+		{
+			throw new DAOException("Unable to update, Participants are already registered under this Collection protocol");
+		}
 		if (!collectionProtocol.getPrincipalInvestigator().getId().equals(
 				collectionProtocolOld.getPrincipalInvestigator().getId()))
 			checkStatus(dao, collectionProtocol.getPrincipalInvestigator(),
