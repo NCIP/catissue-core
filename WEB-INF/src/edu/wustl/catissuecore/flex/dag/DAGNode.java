@@ -5,14 +5,12 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import edu.wustl.cab2b.client.ui.util.ClientConstants;
 import edu.wustl.cab2b.client.ui.util.CommonUtils;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IExpression;
-
 import edu.wustl.common.querysuite.queryobject.IRule;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 
@@ -234,9 +232,4 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
 	}
-
-
-
-	
-
 }
