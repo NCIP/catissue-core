@@ -21,16 +21,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
-import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
@@ -38,15 +34,12 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
-import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
@@ -117,7 +110,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			SpecimenCollectionGroupBizLogic specimenBizLogic = new SpecimenCollectionGroupBizLogic();
 			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
 			Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
-			userID = sessionDataBean.getUserId();
+			userID = getUserID(dao, sessionDataBean);
 			while(collectionProtocolEventIterator.hasNext())
 			{
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolEventIterator.next();
@@ -831,4 +824,28 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 	//Mandar : 11-Jan-07 For Consent Tracking Withdrawal -------- end
 
+	/**
+	 * Method to get userID, retriev userId using loginName in case of API call
+	 * @param dao object of class DAO
+	 * @param sessionDataBean object of class SessionDataBean
+	 */
+	private Long getUserID(DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	{
+		Long userID=sessionDataBean.getUserId();
+		if(userID==null)
+		{
+			String sourceObjectName=User.class.getName();
+			String[] selectColumnName=new String[]{Constants.SYSTEM_IDENTIFIER};
+			String[] whereColumnName=new String[]{Constants.LOGINNAME};
+			String[] whereColumnCondition=new String[]{"="};
+			String[] whereColumnValue=new String[]{sessionDataBean.getUserName()};
+			String joinCondition="";
+			List userIDList=(List)dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+			if(userIDList!=null && userIDList.size()>0)
+			{
+				userID=(Long)userIDList.get(0);
+			}
+		}
+		return userID;
+	}
 }
