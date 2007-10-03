@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
+import edu.wustl.catissuecore.bean.DeriveSpecimenBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
@@ -32,11 +33,14 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 
 public class CollectionProtocolUtil {
 
 	
+	private static final String MOLECULAR_SPECIMEN_CLASS = "Molecular";
+
 	private LinkedHashMap<String, CollectionProtocolEventBean> eventBean = 
 						new LinkedHashMap<String, CollectionProtocolEventBean> ();
 	
@@ -194,6 +198,8 @@ public class CollectionProtocolUtil {
 				aliquotMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
 			}
 		}
+
+		
 		return aliquotMap;
 	}
 
@@ -216,6 +222,8 @@ public class CollectionProtocolUtil {
 				derivedMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
 			}
 		}
+
+
 		return derivedMap;
 	}	
 
@@ -262,7 +270,7 @@ public class CollectionProtocolUtil {
 		speRequirementBean.setSpecimenCharsId(specimen.getSpecimenCharacteristics().getId().longValue());
 		speRequirementBean.setPathologicalStatus(specimen.getPathologicalStatus());
 		
-		if("Molecular".equals(specimen.getClassName()))
+		if(MOLECULAR_SPECIMEN_CLASS.equals(specimen.getClassName()))
 		{
 			Double concentration = ((MolecularSpecimen)specimen).getConcentrationInMicrogramPerMicroliter();
 			if (concentration != null)
@@ -306,8 +314,10 @@ public class CollectionProtocolUtil {
 		
 		speRequirementBean.setNoOfAliquots(String.valueOf(aliquotCollection.size()));			
 		speRequirementBean.setAliquotSpecimenCollection(aliquotMap);
+		
 		speRequirementBean.setDeriveSpecimenCollection(derivedMap);
-		speRequirementBean.setNoOfDeriveSpecimen(derivedCollection.size());			
+		speRequirementBean.setNoOfDeriveSpecimen(derivedCollection.size());
+		derivedMap = getDerviredObjectMap(derivedMap.values());
 	    speRequirementBean.setDeriveSpecimen(derivedMap);
 
 		if (derivedCollection != null && !derivedCollection.isEmpty())
@@ -322,7 +332,59 @@ public class CollectionProtocolUtil {
 		
 		return speRequirementBean;
 	}
+	private static LinkedHashMap getDerviredObjectMap(Collection<GenericSpecimen> derivedCollection)
+	{
+		LinkedHashMap<String, String> derivedObjectMap = new LinkedHashMap<String, String> ();
+		Iterator<GenericSpecimen> iterator = derivedCollection.iterator();
+		int deriveCtr=1;
+		while (iterator.hasNext())
+		{
+			SpecimenRequirementBean derivedSpecimen = (SpecimenRequirementBean) iterator.next();
 
+			StringBuffer derivedSpecimenKey = getKeyBase(deriveCtr);
+			derivedSpecimenKey.append("_id");
+			derivedObjectMap.put(derivedSpecimenKey.toString(), String.valueOf(derivedSpecimen.getId()));
+			
+			derivedSpecimenKey = getKeyBase(deriveCtr);
+			derivedSpecimenKey.append("_specimenClass" );
+			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getClassName());
+
+			derivedSpecimenKey = getKeyBase(deriveCtr);
+			derivedSpecimenKey.append("_specimenType" );
+			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getType());
+
+			derivedSpecimenKey = getKeyBase(deriveCtr);
+			derivedSpecimenKey.append("_storageLocation" );
+			derivedObjectMap.put(derivedSpecimenKey.toString(), 
+					derivedSpecimen.getStorageContainerForSpecimen());
+
+			derivedSpecimenKey = getKeyBase(deriveCtr);
+			derivedSpecimenKey.append("_quantity" );
+			String quantity = derivedSpecimen.getQuantity();
+			derivedObjectMap.put(derivedSpecimenKey.toString(), quantity);
+
+			derivedSpecimenKey = getKeyBase(deriveCtr);
+			derivedSpecimenKey.append("_concentration" );
+			
+			derivedObjectMap.put(derivedSpecimenKey.toString(), 
+					derivedSpecimen.getConcentration());
+			derivedSpecimenKey = getKeyBase(deriveCtr);
+			derivedSpecimenKey.append("_unit" );
+			derivedObjectMap.put(derivedSpecimenKey.toString(), "");	
+		}
+		return derivedObjectMap;
+	}
+
+	/**
+	 * @param deriveCtr
+	 * @return
+	 */
+	private static StringBuffer getKeyBase(int deriveCtr) {
+		StringBuffer derivedSpecimenKey = new StringBuffer();
+		derivedSpecimenKey.append("DeriveSpecimenBean:");
+		derivedSpecimenKey.append(String.valueOf(deriveCtr));
+		return derivedSpecimenKey;
+	}
 	private  static void setSpecimenEventParameters(Specimen specimen, SpecimenRequirementBean specimenRequirementBean)
 	{
 		Collection eventsParametersColl = specimen.getSpecimenEventCollection();
