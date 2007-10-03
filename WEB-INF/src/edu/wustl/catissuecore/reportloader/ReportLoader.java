@@ -180,7 +180,7 @@ public class ReportLoader
 		if(cpEventIterator.hasNext())
 		{		
 			CollectionProtocolEvent collProtocolEvent=(CollectionProtocolEvent)cpEventIterator.next();
-			scg.setCollectionProtocolEvent(collProtocolEvent);
+			
 			
 			// check for existing CollectionProtocolRegistration, if exists then use existing
 			CollectionProtocolRegistration collProtocolReg=getExistingCPR(participant, collectionProtocol);
@@ -203,6 +203,7 @@ public class ReportLoader
 					throw new Exception("Could not save object of CollectionProtocolRegistration :"+ex.getMessage());
 				}		
 			}
+			scg.setCollectionProtocolEvent(collProtocolEvent);
 			scg.setCollectionProtocolRegistration(collProtocolReg);
 			scg.setSpecimenEventParametersCollection(getDefaultEvents(scg));
 		}

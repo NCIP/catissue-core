@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.reportloader;
 
+import java.util.HashMap;
+
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 
@@ -18,6 +20,6 @@ public interface Parser
 	 * @param specimenCollectionGroup
 	 * @throws Exception
 	 */
-	public void parseString(Participant participant,String reportText, SpecimenCollectionGroup specimenCollectionGroup)throws Exception;
+	public void parseString(Participant participant,String reportText, SpecimenCollectionGroup specimenCollectionGroup, HashMap<String,String> abbrToHeader)throws Exception;
 	
 }
