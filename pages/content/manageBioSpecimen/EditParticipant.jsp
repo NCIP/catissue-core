@@ -36,7 +36,7 @@ function participantRegRow(subdivtag)
 					{
 						NameValueBean bean = (NameValueBean)iterator.next();
 			%>
-						sname = sname + "<option value='<%=bean.getValue()%>'><%=bean.getName()%></option>";
+						sname = sname + "<option value=\"<%=bean.getValue()%>\"><%=bean.getName()%></option>";
 			<%		}
 				}
 			%>
@@ -199,9 +199,9 @@ function participantRegRow(subdivtag)
 				{
 					NameValueBean bean = (NameValueBean)iterator.next();
 			%>
-					if(collectionProtocolIdValue =='<%=bean.getValue()%>')
+					if(collectionProtocolIdValue =="<%=bean.getValue()%>")
 					{
-						collectionProtocolTitle = '<%=bean.getName()%>';
+						collectionProtocolTitle = "<%=bean.getName()%>";
 					}
 			<%		
 				}
