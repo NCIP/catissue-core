@@ -2,9 +2,9 @@
  *<p>Title: </p>
  *<p>Description:  </p>
  *<p>Copyright:TODO</p>
- *@author 
+ *@author
  *@version 1.0
- */ 
+ */
 
 package edu.wustl.catissuecore.bizlogic;
 
@@ -14,7 +14,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.ehcache.CacheException;
-
+import edu.common.dynamicextensions.domain.integration.EntityMap;
+import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
+import edu.common.dynamicextensions.domain.integration.EntityMapRecord;
+import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
@@ -23,15 +26,12 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.common.dynamicextensions.domain.integration.EntityMap;
-import edu.common.dynamicextensions.domain.integration.FormContext;
-import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
-import edu.common.dynamicextensions.domain.integration.EntityMapRecord;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Constants;
 
 /**
@@ -45,7 +45,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 {
 
     /**
-     * 
+     *
      * @param staticEntityId
      * @return List of all dynamic entities id from a given static entity
      * eg: returns all dynamic entity id from a Participant,Specimen etc
@@ -82,7 +82,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
     }
 
     /**
-     * 
+     *
      * @param staticEntityId
      * @return List of all dynamic entities Objects from a given static entity
      * eg: returns all dynamic entity objects from a Participant,Specimen etc
@@ -104,10 +104,10 @@ public class AnnotationBizLogic extends DefaultBizLogic
         return dynamicList;
     }
 
-   
+
 
     /**
-     * 
+     *
      * @param staticEntityId
      * @param typeId
      * @param staticRecordId
@@ -144,11 +144,12 @@ public class AnnotationBizLogic extends DefaultBizLogic
     }
 
     /**
-     * 
+     *
      * @param entityRecord
      * Updates the Entity Record object in database
+     * @throws BizLogicException
      */
-    public void updateEntityRecord(EntityMapRecord entityRecord)
+    public void updateEntityRecord(EntityMapRecord entityRecord) throws BizLogicException
     {
 
         try
@@ -159,21 +160,27 @@ public class AnnotationBizLogic extends DefaultBizLogic
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new BizLogicException(ApplicationProperties
+                    .getValue("app.annotatations.errors.updateannotation"), e);
+
         }
         catch (UserNotAuthorizedException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new BizLogicException(ApplicationProperties
+                    .getValue("app.annotatations.errors.updateannotation"), e);
         }
     }
 
     /**
-     * 
+     *
      * @param entityRecord
      * Inserts a new EntityRecord record in Database
-     * @throws DAOException 
+     * @throws DAOException
+     * @throws BizLogicException
      */
-    public void insertEntityRecord(EntityMapRecord entityRecord) throws DAOException
+    public void insertEntityRecord(EntityMapRecord entityRecord) throws DAOException, BizLogicException
     {
         try
         {
@@ -187,18 +194,22 @@ public class AnnotationBizLogic extends DefaultBizLogic
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new BizLogicException(ApplicationProperties
+                    .getValue("app.annotatations.errors.updateannotation"), e);
         }
         catch (UserNotAuthorizedException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new BizLogicException(ApplicationProperties
+                    .getValue("app.annotatations.errors.updateannotation"), e);
         }
     }
     /**
      * @param entityMapId
      * @param long1
      * @param long2
-     * @throws DAOException 
+     * @throws DAOException
      */
     private void associateRecords(Long entityMapId, Long staticEntityRecordId, Long dynamicEntityRecordId) throws DAOException
     {
@@ -232,15 +243,16 @@ public class AnnotationBizLogic extends DefaultBizLogic
     }
 
     /**
-     * 
+     *
      * @param entityMap
      * Updates the Entity Map object in database
+     * @throws BizLogicException
      */
-    public void updateEntityMap(EntityMap entityMap)
+    public void updateEntityMap(EntityMap entityMap) throws BizLogicException
     {
 
         try
-        { 
+        {
             update(entityMap,Constants.HIBERNATE_DAO);
             //update(entityMap,null, Constants.HIBERNATE_DAO,null);
         }
@@ -248,20 +260,25 @@ public class AnnotationBizLogic extends DefaultBizLogic
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new BizLogicException(ApplicationProperties
+                    .getValue("app.annotatations.errors.updateannotation"), e);
         }
         catch (UserNotAuthorizedException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new BizLogicException(ApplicationProperties
+                    .getValue("app.annotatations.errors.updateannotation"), e);
         }
     }
 
     /**
-     * 
+     *
      * @param entityMap
      * Inserts a new EntityMap record in Database
+     * @throws BizLogicException
      */
-    public void insertEntityMap(EntityMap entityMap)
+    public void insertEntityMap(EntityMap entityMap) throws BizLogicException
     {
         try
         {
@@ -274,15 +291,17 @@ public class AnnotationBizLogic extends DefaultBizLogic
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new BizLogicException(ApplicationProperties
+                    .getValue("app.annotatations.errors.saveannotation"), e);
         }
-       
+
     }
-  
+
         /**
-     * 
+     *
      * @param dynamicEntityContainerId
      * @return List of Static Entity Id from a given Dynamic Entity Id
-     * 
+     *
      */
     public List getListOfStaticEntitiesIds(long dynamicEntityContainerId)
     {
@@ -311,10 +330,10 @@ public class AnnotationBizLogic extends DefaultBizLogic
     }
 
     /**
-     * 
+     *
      * @param dynamicEntityContainerId
      * @return List of Static Entity Objects from a given Dynamic Entity Id
-     * 
+     *
      */
     public List getListOfStaticEntities(long dynamicEntityContainerId)
     {
@@ -335,7 +354,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
     }
 
     /**
-     * 
+     *
      * @param entityMapId
      * @return EntityMap object for its given id
      */
@@ -398,7 +417,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
     }
 
     public void deleteEntityMapRecord(long entityMapId,
-            long dynamicEntityRecordId)
+            long dynamicEntityRecordId) throws BizLogicException
     {
         List dynamicList = new ArrayList();
 
@@ -424,7 +443,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
 
         if (dynamicList != null && !dynamicList.isEmpty())
         {
-           
+
             try
             {
                 EntityMapRecord entityRecord = (EntityMapRecord) dynamicList.get(0);
@@ -435,16 +454,20 @@ public class AnnotationBizLogic extends DefaultBizLogic
             {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
+                throw new BizLogicException(ApplicationProperties
+                        .getValue("app.annotatations.errors.deleteRecord"), e1);
             }
             catch (BizLogicException e1)
             {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
+                throw new BizLogicException(ApplicationProperties
+                        .getValue("app.annotatations.errors.deleteRecord"), e1);
             }
         }
     }
 /**
- * 
+ *
  * @param containerId
  * @param recordIdList
  * @throws BizLogicException
@@ -461,8 +484,8 @@ public class AnnotationBizLogic extends DefaultBizLogic
         catch (Exception e)
         {
             e.printStackTrace();
-         /*   throw new BizLogicException(ApplicationProperties
-                    .getValue("app.annotatations.errors.deleteRecord"), e);*/
+            throw new BizLogicException(ApplicationProperties
+                    .getValue("app.annotatations.errors.deleteRecord"), e);
         }
     }
 
@@ -497,7 +520,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
                 while(formIterator.hasNext())
                 {
                     FormContext formContext = (FormContext) formIterator.next();
-                    if((formContext.getNoOfEntries() == null || formContext.getNoOfEntries().equals(""))&&(formContext.getStudyFormLabel() == null || formContext.getStudyFormLabel().equals("")))    
+                    if((formContext.getNoOfEntries() == null || formContext.getNoOfEntries().equals(""))&&(formContext.getStudyFormLabel() == null || formContext.getStudyFormLabel().equals("")))
                     {
                         if (formContext.getEntityMapConditionCollection() != null
                         && !formContext.getEntityMapConditionCollection()
@@ -521,21 +544,21 @@ public class AnnotationBizLogic extends DefaultBizLogic
      * @param entityMapConditionCollection
      * @param cpIdList
      * @return
-     * @throws CacheException 
+     * @throws CacheException
      */
     private boolean checkStaticRecId(Collection entityMapConditionCollection,
-            List cpIdList) 
+            List cpIdList)
     {
         Iterator entityMapCondIterator = entityMapConditionCollection
                 .iterator();
         try
         {
-            CatissueCoreCacheManager cache = CatissueCoreCacheManager.getInstance();    
+            CatissueCoreCacheManager cache = CatissueCoreCacheManager.getInstance();
             if (cpIdList != null && !cpIdList.isEmpty())
                 while (entityMapCondIterator.hasNext())
                 {
                     EntityMapCondition entityMapCond = (EntityMapCondition) entityMapCondIterator
-                            .next();                
+                            .next();
                     if (entityMapCond.getTypeId().toString().equals(cache.getObjectFromCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID).toString()) && cpIdList.contains(entityMapCond.getStaticRecordId()))
                         return true;
                 }
@@ -543,9 +566,9 @@ public class AnnotationBizLogic extends DefaultBizLogic
         catch(Exception e){}
         return false;
     }
-    
+
     /**
-     * 
+     *
      * @param entityMapId
      * @return EntityMap object for its given id
      */
@@ -567,10 +590,11 @@ public class AnnotationBizLogic extends DefaultBizLogic
         return dynamicList;
     }
     /**
-     * 
+     *
      * @param entityMapCondition
+     * @throws BizLogicException
      */
-    public void insertEntityMapCondition(EntityMapCondition entityMapCondition)
+    public void insertEntityMapCondition(EntityMapCondition entityMapCondition) throws BizLogicException
     {
         try
         {
@@ -580,9 +604,11 @@ public class AnnotationBizLogic extends DefaultBizLogic
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }    
-    
+            throw new BizLogicException(ApplicationProperties
+                    .getValue("app.annotatations.errors.updateannotation"), e);
+        }
+
     }
 
-  
+
 }

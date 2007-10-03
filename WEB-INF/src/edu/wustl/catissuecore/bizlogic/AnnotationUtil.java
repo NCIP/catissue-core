@@ -55,26 +55,26 @@ public class AnnotationUtil
      * @return
      * @throws DynamicExtensionsSystemException
      * @throws DynamicExtensionsApplicationException
-     * @throws DynamicExtensionsSystemException 
+     * @throws DynamicExtensionsSystemException
      */
     public static synchronized Long addAssociation(EntityInterface staticEntity, EntityInterface dynamicEntity)
             throws //DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException, DynamicExtensionsSystemException
-    {       
+    {
         //Get entitygroup that is used by caB2B for path finder purpose.
         EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
-        
+
         //Add the entity group to the dynamic entity and all it's associated entities.
         dynamicEntity
                 .addEntityGroupInterface(entityGroupInterface);
         Collection<AssociationInterface> associationCollection = dynamicEntity
         .getAssociationCollection();
-        
+
         for (AssociationInterface associationInteface : associationCollection)
         {
             associationInteface.getTargetEntity().addEntityGroupInterface(entityGroupInterface);
         }
-        
+
         //Create source role and target role for the association
         String roleName = staticEntity.getId().toString().concat("_").concat(
                 dynamicEntity.getId().toString());
@@ -82,33 +82,28 @@ public class AnnotationUtil
                 roleName, Cardinality.ZERO, Cardinality.ONE);
         RoleInterface targetRole = getRole(AssociationType.ASSOCIATION,
                 roleName, Cardinality.ZERO, Cardinality.MANY);
-        
+
         //Create association with the created source and target roles.
         AssociationInterface association = getAssociation(dynamicEntity,
                 AssociationDirection.SRC_DESTINATION, roleName, sourceRole,
                 targetRole);
-        
+
         //Create constraint properties for the created association.
         ConstraintPropertiesInterface constraintProperties = getConstraintProperties(
                 staticEntity, dynamicEntity);
         association.setConstraintProperties(constraintProperties);
-        
-        //Add association to the static entity and save it. 
+
+        //Add association to the static entity and save it.
         staticEntity.addAssociation(association);
         Long start = new Long(System.currentTimeMillis());
-     try
-        {
-        staticEntity = EntityManager.getInstance().persistEntityMetadata(
-                staticEntity, true, false);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+
+        staticEntity = EntityManager.getInstance().persistEntityMetadataForAnnotation(
+                staticEntity, true, false,association);
+
         Long end = new Long(System.currentTimeMillis());
         System.out.println("Time required to persist one entity is "
                 + (end - start) / 1000 + "seconds");
-        
+
         //Add the column related to the association to the entity table of the associated entities.
         EntityManager.getInstance().addAssociationColumn(association);
         Collection<AssociationInterface> staticEntityAssociation = staticEntity.getAssociationCollection();
@@ -120,7 +115,7 @@ public class AnnotationUtil
                 break;
             }
         }
-        
+
         start = new Long(System.currentTimeMillis());
         AnnotationUtil.addPathsForQuery(staticEntity.getId(), dynamicEntity.getId(),
                 association.getId());
@@ -141,12 +136,12 @@ public class AnnotationUtil
         entitySet.add(staticEntity);
         DynamicExtensionsUtility.getAssociatedEntities(dynamicEntity, entitySet);
 
-        
+
         end = new Long(System.currentTimeMillis());
         System.out.println("Time required to refresh cache is "
                 + (end - start) / 1000 + "seconds");
         return association.getId();
-   
+
     }
 
     /**
@@ -209,8 +204,8 @@ public class AnnotationUtil
         staticEntity.addAssociation(association);
         Long start = new Long(System.currentTimeMillis());
 
-        staticEntity = EntityManager.getInstance().persistEntityMetadata(
-                staticEntity, true,false);
+        staticEntity = EntityManager.getInstance().persistEntityMetadataForAnnotation(
+                staticEntity, true,false,association);
 
         Long end = new Long(System.currentTimeMillis());
         System.out.println("Time required to persist one entity is "

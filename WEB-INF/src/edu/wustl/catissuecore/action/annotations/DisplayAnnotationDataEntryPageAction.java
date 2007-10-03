@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -58,14 +59,14 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
         request.setAttribute("entityRecordId",request.getParameter("entityRecordId"));
         request.setAttribute(Constants.ID,request.getParameter(Constants.ID));
         request.setAttribute("staticEntityName",request.getParameter("staticEntityName"));
-        
-        
+
+
         return mapping.findForward(request.getParameter("pageOf"));
 	}
 
 	/**
 	 * @param request
-	 * @throws CacheException 
+	 * @throws CacheException
 	 */
 	private void updateCache(HttpServletRequest request) throws CacheException
 	{
@@ -81,13 +82,13 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 			cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID, parentEntityRecordId);
 			cacheManager.addObjectToCache(AnnotationConstants.ENTITY_ID_IN_CONDITION, entityIdForCondition);
 			cacheManager.addObjectToCache(AnnotationConstants.ENTITY_RECORDID_IN_CONDITION, entityRecordIdForCondition);
-		}		
+		}
 	}
 
 	/**
 	 * @param selected_static_entityid
 	 * @return
-	 * @throws CacheException 
+	 * @throws CacheException
 	 */
 	private Object getObjectFromCache(String key) throws CacheException
 	{
@@ -104,9 +105,10 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 
 	/**
 	 * @param request
-	 * @throws CacheException 
+	 * @throws CacheException
+	 * @throws BizLogicException
 	 */
-	private void processResponseFromDynamicExtensions(HttpServletRequest request) throws CacheException
+	private void processResponseFromDynamicExtensions(HttpServletRequest request) throws CacheException, BizLogicException
 	{
 		System.out.println("Request query string = " + request.getQueryString());
 		String operationStatus = request.getParameter(WebUIManager.getOperationStatusParameterName());
@@ -119,11 +121,12 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	}
 
 	/**
-	 * @param request 
+	 * @param request
 	 * @param dynExtRecordId
-	 * @throws CacheException 
+	 * @throws CacheException
+	 * @throws BizLogicException
 	 */
-	private void insertEntityMapRecord(HttpServletRequest request, String dynExtRecordId) throws CacheException
+	private void insertEntityMapRecord(HttpServletRequest request, String dynExtRecordId) throws CacheException, BizLogicException
 	{
 		EntityMapRecord entityMapRecord = getEntityMapRecord(request,dynExtRecordId);
 		if(entityMapRecord!=null)
@@ -142,10 +145,10 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	}
 
 	/**
-	 * @param request 
+	 * @param request
 	 * @param dynExtRecordId
 	 * @return
-	 * @throws CacheException 
+	 * @throws CacheException
 	 */
 	private EntityMapRecord getEntityMapRecord(HttpServletRequest request, String dynExtRecordId) throws CacheException
 	{
@@ -170,13 +173,13 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	}
 
 	/**
-	 * @param request 
-	 * @param entityRecordIdForCondition 
-	 * @param entityIdForCondition 
-	 * @param parentEntityId 
+	 * @param request
+	 * @param entityRecordIdForCondition
+	 * @param entityIdForCondition
+	 * @param parentEntityId
 	 * @param annotationDataEntryForm
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private void initializeDataEntryForm(HttpServletRequest request, String staticEntityId,String staticEntityRecordId, String entityIdForCondition, String entityRecordIdForCondition, AnnotationDataEntryForm annotationDataEntryForm) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -194,11 +197,11 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	}
 
 	/**
-	 * @param request 
-	 * @param entityId 
+	 * @param request
+	 * @param entityId
 	 * @return
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private String getDefinedAnnotationsDataXML(HttpServletRequest request, Long staticEntityId,Long staticEntityRecordId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -226,12 +229,12 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	}
 
 	/**
-	 * @param request 
+	 * @param request
 	 * @param entityMapRecord
-	 * @param index 
+	 * @param index
 	 * @return
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private String getXMLForEntityMapRecord(HttpServletRequest request, EntityMapRecord entityMapRecord, int index) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -256,21 +259,21 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	}
 
 	/**
-	 * @param request 
-	 * @param id 
+	 * @param request
+	 * @param id
 	 * @return
 	 */
 	private String getURLForEditEntityMapRecord(HttpServletRequest request, String containerId, Long dynExtensionEntityRecordId)
 	{
-		String urlForEditRecord =request.getContextPath() + "/LoadDynamicExtentionsDataEntryPage.do?selectedAnnotation="+containerId +"&amp;recordId="+dynExtensionEntityRecordId + "^_self"; 
+		String urlForEditRecord =request.getContextPath() + "/LoadDynamicExtentionsDataEntryPage.do?selectedAnnotation="+containerId +"&amp;recordId="+dynExtensionEntityRecordId + "^_self";
 		return urlForEditRecord;
 	}
 
 	/**
 	 * @param entityMapId
 	 * @return Name Value bean containing entity container id and name
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private NameValueBean getDynamicEntity(Long entityMapId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -281,11 +284,11 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 			List entityMapList  = annotationBizLogic.getEntityMap(entityMapId);
 			if((entityMapList!=null)&&(entityMapList.size()>0))
 			{
-				EntityMap entityMap = (EntityMap)entityMapList.get(0); 
+				EntityMap entityMap = (EntityMap)entityMapList.get(0);
 				if(entityMap!=null)
 				{
 					dynamicEntity = new NameValueBean(entityMap.getContainerId(),getDEContainerName(entityMap.getContainerId()));
-				}	
+				}
 			}
 		}
 		return dynamicEntity;
@@ -313,7 +316,7 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	 */
 	private List<Long>  getListOfEntityMapIdsForSE(Long staticEntityId)
 	{
-		List<Long> entityMapIds = new ArrayList<Long>(); 
+		List<Long> entityMapIds = new ArrayList<Long>();
 		AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
 		List<EntityMap> entityMapsForStaticEntity = annotationBizLogic.getListOfDynamicEntities(staticEntityId);
 		if(entityMapsForStaticEntity!=null)
@@ -334,11 +337,11 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 
 	/**
 	 * @param entityId
-	 * @param entityRecordIdForCondition 
-	 * @param entityIdForCondition 
+	 * @param entityRecordIdForCondition
+	 * @param entityIdForCondition
 	 * @return
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private List getAnnotationList(String entityId, String entityIdForCondition, String entityRecordIdForCondition) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -372,8 +375,8 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	/**
 	 * @param long1
 	 * @return
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private NameValueBean getNameValueBeanForDE(Long deContainerId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -389,8 +392,8 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	/**
 	 * @param deContainerId
 	 * @return
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private String getDEContainerName(Long deContainerId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
