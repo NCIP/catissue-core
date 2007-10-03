@@ -71,6 +71,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 
 	private ViewSpecimenSummaryForm specimenSummaryForm;
 	private SpecimenCollectionGroup specimenCollectionGroup = null;
+	
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -142,7 +143,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				target = pageOf;
 			
 			specimenSummaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
-		} catch (Exception ex) {
+		} 
+		catch (Exception ex) {
 			target = Constants.FAILURE;
 			if(pageOf!=null && pageOf.equals("pageOfMultipleSpWithMenu"))
 			{
@@ -201,12 +203,17 @@ public class SubmitSpecimenCPAction extends BaseAction {
 
 		LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = (LinkedHashMap) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-
+		if (cpEventMap == null)
+		{
+			throw new Exception("At least one event is required to create Collection Protocol");
+		}
 		CollectionProtocol collectionProtocol = createCollectionProtocolDomainObject(collectionProtocolBean);
 		Collection collectionProtocolEventList = new HashSet();
+		
 		Collection collectionProtocolEventBeanColl = cpEventMap.values();
 		if (collectionProtocolEventBeanColl != null)
 		{
+			
 			Iterator cpEventIterator = collectionProtocolEventBeanColl.iterator();
 	
 			while (cpEventIterator.hasNext()) {
@@ -217,7 +224,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
 				collectionProtocolEventList.add(collectionProtocolEvent);
 			}
-		}		
+		}	
 		collectionProtocol
 				.setCollectionProtocolEventCollection(collectionProtocolEventList);
 		return collectionProtocol;
