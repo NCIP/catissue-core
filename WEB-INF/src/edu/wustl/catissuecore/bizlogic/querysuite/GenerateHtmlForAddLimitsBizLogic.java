@@ -234,7 +234,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				if (forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE)
 						&& isParameterizedCondition)
 				{
-					formName = "fetchQueryForm";
+					formName = "saveQueryForm";
 					ParameterizedCondition con = (ParameterizedCondition) attributeNameConditionMap
 							.get(attrName);
 					generatedHTML
@@ -433,7 +433,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			Map<IExpressionId, Map<EntityInterface, List>> expressionMap, boolean isShowAll,
 			String forPage)
 	{
-		StringBuffer generatedHTML = new StringBuffer("<table width=\"100%\">");
+		StringBuffer generatedHTML = new StringBuffer("<table  cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\">");
 		if (forPage.equalsIgnoreCase(Constants.SAVE_QUERY_PAGE))
 			generatedHTML
 					.append("<tr><td nowrap='nowrap' class=\"formLeftSubTitle\">User Defined</td><td class=\"formLeftSubTitle\">Display Labels</td><td class=\"formLeftSubTitle\" colspan=\"5\" class=\"formLeftSubTitle\">Conditions</td></tr>");
