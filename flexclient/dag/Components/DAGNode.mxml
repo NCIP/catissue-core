@@ -5,6 +5,7 @@
 		implements="flash.utils.IExternalizable" creationComplete="init()" fontSize="9">
 <mx:Script>
 	<![CDATA[
+		import Util.HashMap;
 		import mx.collections.ICollectionView;
 		import mx.controls.ComboBox;
 		import mx.controls.HScrollBar;
@@ -47,7 +48,7 @@
 		[Bindable]
 		public var nodeColor:int =0xFFFFAA;
 		public var errorMsg:String= "";
-		
+		public var attachedNodeMap:HashMap = new HashMap();
 		public var associationList:ArrayCollection;
 		public var operatorList:ArrayCollection;
 //		public var pathList:ArrayCollection;
@@ -298,7 +299,15 @@
 		public function deleteHandler(event:ResultEvent):void
 		{
 			this.parent.removeChild(this.parent.getChildByName(this.name));
-			this.parentApplication.totalNodeMap.remove(this.name);
+//			this.parentApplication.totalNodeMap.remove(this.name);
+			for(var i:int =0;i<this.parentApplication.totalNodes.length;i++)	
+			{
+				var dagNode:DAGNode = this.parentApplication.totalNodes.getItemAt(i) as DAGNode;
+				if(dagNode.name==this.name)
+				{
+					this.parentApplication.totalNodes.removeItemAt(i);
+				}
+			}
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteHandler,false);
 			if(this.nodeType==DAGConstants.CONSTRAINT_VIEW_NODE)
 			{
@@ -347,7 +356,18 @@
 
 		 var dagPath:DAGPath  =this.parentApplication.dagPathUIMap.getValue(outAssociation.associatedLink) as DAGPath;
 		 dagPath.operatorIndex = cb.selectedIndex;
-	 	 		
+		 if(index==0)
+		 {
+		 	if(cb.selectedIndex==0)
+		 	{
+		 		operatorBetweenAttrAndAssociation="AND"
+		 	}
+		 	else
+		 	{
+		 		operatorBetweenAttrAndAssociation="OR"
+		 	}
+		 }
+		 this.parentApplication.currentExp.text = this.parentApplication.getExprssionString();	 	 		
 		}
 	
 		
