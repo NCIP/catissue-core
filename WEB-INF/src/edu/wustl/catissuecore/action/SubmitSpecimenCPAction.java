@@ -25,7 +25,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
@@ -35,16 +37,19 @@ import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Quantity;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.flex.SpecimenBean;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -75,8 +80,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		try {
 			specimenSummaryForm = (ViewSpecimenSummaryForm) form;
 			String actionValue = request.getParameter("action");
-
-			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(
+			
+			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(	
 					specimenSummaryForm.getRequestType())) {
 				
 				CollectionProtocol collectionProtocol = populateCollectionProtocolObjects(request);
@@ -304,11 +309,15 @@ public class SubmitSpecimenCPAction extends BaseAction {
 							specimenRequirementBean.getTissueSite());
 					specimen.setSpecimenCollectionGroup(requirementGroup);					
 					specimen.setSpecimenCharacteristics(specimenCharacteristics);
+					//Collected and received events
+					setSpecimenEvents(specimen, specimenRequirementBean);
 			}
 			else
 			{
 				specimen.setSpecimenCharacteristics(
 						parentSpecimen.getSpecimenCharacteristics());
+				specimen.setSpecimenEventCollection(
+						parentSpecimen.getSpecimenEventCollection());
 			}
 			specimen.setLineage(specimenRequirementBean.getLineage());
 			specimenCollection.add(specimen);
@@ -335,6 +344,39 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		return specimenCollection;
 	}
 
+	
+	private  void setSpecimenEvents(Specimen specimen, SpecimenRequirementBean specimenRequirementBean)
+	{
+		//seting collection event values
+		Collection<SpecimenEventParameters> specimenEventCollection = 
+			new LinkedHashSet<SpecimenEventParameters>();
+
+		CollectionEventParameters collectionEvent = new CollectionEventParameters();
+
+		collectionEvent.setCollectionProcedure(specimenRequirementBean.getCollectionEventCollectionProcedure());
+		collectionEvent.setContainer(specimenRequirementBean.getCollectionEventContainer());
+		User collectionEventUser = new User();
+		collectionEventUser.setId(new Long(specimenRequirementBean.getCollectionEventUserId()));
+		collectionEvent.setUser(collectionEventUser);
+		collectionEvent.setSpecimen(specimen);
+		
+		specimenEventCollection.add(collectionEvent);
+		
+		//setting received event values
+		ReceivedEventParameters receivedEvent = new ReceivedEventParameters();
+		
+		receivedEvent.setReceivedQuality(specimenRequirementBean.getReceivedEventReceivedQuality());
+
+		User receivedEventUser = new User();
+		receivedEventUser.setId(new Long(specimenRequirementBean.getReceivedEventUserId()));
+		receivedEvent.setUser(receivedEventUser);
+
+		receivedEvent.setSpecimen(specimen);
+		specimenEventCollection.add(receivedEvent);
+	
+		specimen.setSpecimenEventCollection(specimenEventCollection);
+	
+	}
 	/**
 	 * creates specimen domain object from given specimen requirement bean.
 	 * @param specimenRequirementBean
@@ -382,11 +424,9 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		specimen.setPathologicalStatus(
 				specimenRequirementBean.getPathologicalStatus());		
 		specimen.setType(specimenRequirementBean.getType());
-		StorageContainer storageContainer = null; //new StorageContainer();
-//		storageContainer.setName(
-//				specimenRequirementBean.getStorageContainerForSpecimen());
+		String storageType = specimenRequirementBean.getStorageContainerForSpecimen();
 		
-		specimen.setStorageContainer(storageContainer);
+		specimen.setPositionDimensionOne(CollectionProtocolUtil.getStorageTypeValue(storageType));
 		
 		return specimen;
 	}

@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.util;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,16 +18,20 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 
 public class CollectionProtocolUtil {
@@ -34,6 +39,31 @@ public class CollectionProtocolUtil {
 	
 	private LinkedHashMap<String, CollectionProtocolEventBean> eventBean = 
 						new LinkedHashMap<String, CollectionProtocolEventBean> ();
+	
+	private static final String storageTypeArr[]= {"Virtual", "Auto","Manual"};
+	
+
+	public static Integer getStorageTypeValue(String type)
+	{
+		for (int i=0;i<storageTypeArr.length;i++)
+		{
+			if(storageTypeArr[i].equals(type))
+			{
+				return new Integer(i);
+			}
+		}
+		
+		return 0;	//default considered as 'Virtual';
+	}
+
+	public static String getStorageTypeValue(Integer type)
+	{
+		if (type == null)
+		{
+			return storageTypeArr[0]; //default considered as 'Virtual';
+		}
+		return storageTypeArr[type.intValue()];
+	}
 	
 	public static CollectionProtocolBean getCollectionProtocolBean(CollectionProtocol collectionProtocol)
 	{
@@ -252,25 +282,9 @@ public class CollectionProtocolUtil {
 			}
 		}
 		
-		speRequirementBean.setStorageContainerForSpecimen("Virtual");
-/*		
-		specimen.getSpecimenEventCollection()
-		private String collectionEventCollectionProcedure;
-		
-		private String collectionEventContainer;
-		
-		private String receivedEventReceivedQuality;
-		
-		
-		private long collectionEventId;																											// Mandar : CollectionEvent 10-July-06
-		private long collectionEventSpecimenId;
-		private long collectionEventUserId;		
-
-		private long receivedEventId;
-		private long receivedEventSpecimenId;
-		private long receivedEventUserId;
-
-	 */	
+		speRequirementBean.setStorageContainerForSpecimen( 
+				getStorageTypeValue(specimen.getPositionDimensionOne()) );
+		setSpecimenEventParameters(specimen,speRequirementBean );
 		
 		speRequirementBean.setParentName(parentName);
 		
@@ -309,6 +323,46 @@ public class CollectionProtocolUtil {
 		return speRequirementBean;
 	}
 
+	private  static void setSpecimenEventParameters(Specimen specimen, SpecimenRequirementBean specimenRequirementBean)
+	{
+		Collection eventsParametersColl = specimen.getSpecimenEventCollection();
+		if(eventsParametersColl == null || eventsParametersColl.isEmpty())
+		{
+			return;
+		}
+
+		Iterator iter = eventsParametersColl.iterator();
+		
+		while(iter.hasNext())
+		{
+			Object tempObj = iter.next();
+
+			if(tempObj instanceof CollectionEventParameters)
+			{
+				CollectionEventParameters collectionEventParameters = (CollectionEventParameters)tempObj;
+				specimenRequirementBean.setCollectionEventId(collectionEventParameters.getId().longValue());
+				//this.collectionEventSpecimenId = collectionEventParameters.getSpecimen().getId().longValue();
+				specimenRequirementBean.setCollectionEventUserId(
+						collectionEventParameters.getUser().getId().longValue());					
+				specimenRequirementBean.setCollectionEventCollectionProcedure(
+						collectionEventParameters.getCollectionProcedure());
+
+				specimenRequirementBean.setCollectionEventContainer(collectionEventParameters.getContainer());
+			}
+			else if(tempObj instanceof ReceivedEventParameters)
+			{
+				ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)tempObj;
+
+				specimenRequirementBean.setReceivedEventId(receivedEventParameters.getId().longValue());
+				specimenRequirementBean.setReceivedEventUserId(
+						receivedEventParameters.getUser().getId().longValue());
+				specimenRequirementBean.setReceivedEventReceivedQuality(
+						receivedEventParameters.getReceivedQuality());
+			}
+		}
+		
+	}
+	
 	/**
 	 * @param mapping
 	 * @param request
