@@ -548,7 +548,7 @@ public class ParticipantAction extends SecureAction
 	{
 		ParticipantBizLogic bizLogic=(ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
 		List idList=bizLogic.getSCGList(participantId);
-		if(idList!=null && idList.size()>1)
+		if(idList!=null && idList.size()>0)
 		{
 			Object[] obj=(Object[])idList.get(0);
 			return((Long)obj[2]);
