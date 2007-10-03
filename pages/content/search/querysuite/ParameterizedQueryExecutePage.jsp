@@ -5,9 +5,12 @@
 <%-- Imports --%>
 <%@
 	page language="java" contentType="text/html"
-	import="edu.wustl.catissuecore.util.global.Constants"
+	import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.applet.AppletConstants"
 %>
-
+<%
+   ParameterizedQuery query = (ParameterizedQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
+%>
+<%@page import="edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery"%>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
@@ -33,6 +36,19 @@
 		<html:errors/>
 		<html:form styleId='saveQueryForm'   action='<%=Constants.EXECUTE_QUERY_ACTION%>' >
 			<table width="100%">
+			   <tr>
+			    <td>
+			       <table>
+			         <tr>
+			           <td width='100%' height='20' valign="top" style="padding-left:0.7em;"><b><bean:message key="query.title"/> : &nbsp;</b><%=query.getName() %>
+			            <br/><b><bean:message key="query.description"/>: &nbsp;</b><%=query.getDescription() %>
+			           </td>
+			         </tr>
+			         <tr><td >&nbsp;</td></tr>
+			       </table>
+			    </td>
+			   </tr>
+			
 				<tr>
 					<td>
 						<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="4%">
