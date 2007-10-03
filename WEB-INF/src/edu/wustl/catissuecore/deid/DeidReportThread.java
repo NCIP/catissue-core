@@ -72,15 +72,9 @@ public class DeidReportThread extends Thread
 			
 			// get textcontent
 			TextContent textContent=(TextContent)CaCoreAPIService.getObject(TextContent.class, Constants.SYSTEM_IDENTIFIER, identifiedReport.getTextContent().getId());
-			// synthesize the text content od identified report
-			String synthesizeSPRText=synthesizeSPRText(identifiedReport);
-			textContent.setData(synthesizeSPRText(identifiedReport));
-			Logger.out.info("ReportText is synthesized for report "+identifiedReport.getId().toString());
-			// set synthesized text content back to identified report
-			identifiedReport.setTextContent(textContent);
 			
 			// build report element using report text
-			Element reportElement = DeidUtils.buildReportElement(participant, identifiedReport, synthesizeSPRText);
+			Element reportElement = DeidUtils.buildReportElement(participant, identifiedReport, textContent.getData());
 			// add report element to root of the document
 			currentRequestDocument.getRootElement().addContent(reportElement);
 	        
@@ -186,47 +180,6 @@ public class DeidReportThread extends Thread
         
         return deidReport;
     }
-	
-	/**
-	 * Method to synthesize report text
-	 * @param identifiedReport identified surgical pathoology report
-	 * @return sysnthesized Surgical pathology report text
-	 * @throws Exception a generic exception occured while synthesizing report text
-	 */
-	private String synthesizeSPRText(final IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
-	{
-		String docText = "";
-		//Get report sections for report
-		List<ReportSection> iss=(List)CaCoreAPIService.getList(ReportSection.class, Constants.COLUMN_NAME_TEXT_CONTENT, identifiedReport.getTextContent());
-		HashMap <String,String>nameToText = new HashMap<String, String>();
-		if(iss!=null)
-		{       	
-			for (ReportSection rs : iss) 
-			{
-				String abbr = rs.getName();
-				String text = rs.getDocumentFragment();
-				//add abbreviation and report text to hash map
-				nameToText.put(abbr, text);
-			}
-		}
-		else
-		{
-			Logger.out.info("NULL report section collection found in synthesizeSPRText method");
-		}	
-		for (String key : DeIDPipelineManager.abbrToHeader.keySet()) 
-		{
-			if (nameToText.containsKey(key)) 
-			{
-				// get full section header name from its abbreviation 
-				String sectionHeader = (String) DeIDPipelineManager.abbrToHeader.get(key);
-				//if the key is present in the report section collection map then format the section header and section text
-				String sectionText = nameToText.get(key);
-				// format for section header and section text
-				docText += "\n[" + sectionHeader + "]" + "\n\n" + sectionText + "\n\n";
-			}
-		}
-		return docText.trim();
-	}
 	
 	/**
 	 * This method is responsible for preparing and calling a native method call to convert plain text into deindentified text.

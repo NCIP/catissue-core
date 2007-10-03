@@ -1,14 +1,10 @@
 package edu.wustl.catissuecore.deid;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -24,7 +20,6 @@ import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.caties.util.StopServer;
 import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
@@ -84,8 +79,6 @@ public class DeIDPipelineManager
 		pathToConfigFiles=new String(Variables.applicationHome + System.getProperty("file.separator")+"caTIES_conf"+System.getProperty("file.separator"));
 		// Function call to store name of config file name required for de-identification native call, deid.cfg
 		setConfigFileName();
-		// Function call to set up section header configuration from SectionHeaderConfig.txt file
-		setSectionHeaderPriorities();
 
 		// Instantiates wrapper class for deid native call
 		deid=new JniDeID(); 
@@ -232,46 +225,6 @@ public class DeIDPipelineManager
         DeIDPipelineManager.configFileName = cfgFile.getAbsolutePath();
         Logger.out.info("Config file name is "+DeIDPipelineManager.configFileName);
     }
-	
-	/**
-	 * This nethod sets the priority order and full name of the abrreviated section name
-	 * which is used by the synthesizeSPRText method
-	 * @throws Exception Generic exception
-	 */
-	private void setSectionHeaderPriorities() throws Exception
-	{
-		try 
-		{
-			// get path to the SectionHeaderConfig.txt file
-			String configName = new String(pathToConfigFiles+CaTIESProperties.getValue(CaTIESConstants.DEID_SECTION_HEADER_FILENAME));
-			// set bufferedReader to read file
-			BufferedReader br = new BufferedReader(new FileReader(configName));
-
-			String line = "";
-			StringTokenizer st;
-			String name;
-			String abbr;
-			String prty;
-			// iterate while file EOF
-			while ((line = br.readLine()) != null) 
-			{
-				// sepearete values for section header name, abbreviation of section header and its priority
-				st = new StringTokenizer(line, "|");
-				name = st.nextToken().trim();
-				abbr = st.nextToken().trim();
-				prty = st.nextToken().trim();
-				
-				// add abbreviation to section header maping in hash map
-				abbrToHeader.put(abbr, name);
-			}
-			Logger.out.info("Section Headers set successfully to the map");
-		}
-		catch (IOException ex) 
-		{
-			Logger.out.error("Error in setting Section header Priorities",ex);
-			throw new Exception(ex.getMessage());
-		}
-	}
 	
 	/**
 	 * Main method for the DeIDPipeline class
