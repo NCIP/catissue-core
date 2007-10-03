@@ -371,6 +371,7 @@ public class CollectionProtocolUtil {
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_unit" );
 			derivedObjectMap.put(derivedSpecimenKey.toString(), "");	
+			deriveCtr++;
 		}
 		return derivedObjectMap;
 	}

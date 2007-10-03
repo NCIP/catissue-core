@@ -709,11 +709,11 @@ if(form != null)
 				<b><bean:message key="cpbasedentry.derivespecimens"/></b>
 			</td>
 			<td class="formTitle">	
-				<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" onclick="insRow('DeriveSpecimenBean')"/>
+				<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" disabled="<%=disabled%>" onclick="insRow('DeriveSpecimenBean')"/>
 			</td>
 			<td class="formTitle" align="Right">
 			<%String deleteSpecimenRequirements = "deleteChecked('DeriveSpecimenBean','CreateSpecimenTemplate.do?operation=add',document.forms[0].noOfDeriveSpecimen,'checkBox_',false)"; %>
-				<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="<%= deleteSpecimenRequirements %>">
+				<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="<%= deleteSpecimenRequirements %>" disabled="<%=disabled%>">
 						<bean:message key="buttons.delete"/>
 				</html:button>
 			</td>
