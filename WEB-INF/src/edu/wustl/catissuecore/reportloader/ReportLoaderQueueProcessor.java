@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.reportloader;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -10,9 +11,11 @@ import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -34,10 +37,15 @@ public class ReportLoaderQueueProcessor extends Thread
 		HL7Parser parser=null;
 		Long startTime=null;
 		Long endTime=null;
+		
+		String configFileName=new String(Variables.applicationHome + System.getProperty("file.separator")+"caTIES_conf"+System.getProperty("file.separator"));
+		configFileName+=CaTIESProperties.getValue(CaTIESConstants.DEID_SECTION_HEADER_FILENAME);
 		while(true)
 		{
 			try 
 			{
+				// initialize section header map
+				HashMap<String,String> abbrToHeader = (HashMap<String,String>)Utility.initializeReportSectionHeaderMap(configFileName);
 				List reportLoaderQueueList=getReportLoaderQueueIDList();
 				if(reportLoaderQueueList!=null)
 				{
@@ -64,7 +72,7 @@ public class ReportLoaderQueueProcessor extends Thread
 							}
 							String reportText=reportLoaderQueue.getReportText();
 							startTime=new Date().getTime();
-							parser.parseString(participant, reportText, reportLoaderQueue.getSpecimenCollectionGroup());
+							parser.parseString(participant, reportText, reportLoaderQueue.getSpecimenCollectionGroup(), abbrToHeader);
 							endTime=new Date().getTime();
 							Logger.out.info("Report loaded successfully, deleting report queue object");
 							// delete record from queue

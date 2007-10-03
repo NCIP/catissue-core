@@ -5,17 +5,14 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.springframework.remoting.RemoteAccessException;
 
-
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
-import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
@@ -443,7 +440,4 @@ public class HL7ParserUtil
 		Logger.out.info("Participant Created having Name="+participant.getLastName()+","+participant.getFirstName());
 		return participant;
 	}
-	
-	
-	
 }
