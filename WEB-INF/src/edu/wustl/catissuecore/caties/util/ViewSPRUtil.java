@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.caties.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,9 +15,13 @@ import edu.wustl.catissuecore.bean.ConceptHighLightingBean;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.reportloader.HL7ParserUtil;
+import edu.wustl.catissuecore.reportloader.IdentifiedReportGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.Variables;
 
 public class ViewSPRUtil 
 {
@@ -73,4 +78,38 @@ public class ViewSPRUtil
 		}
 		return conceptBeanList;
 	}
+	
+	/**
+	 * Retrieve the synthesized report Text
+	 * @param reportText
+	 * @return
+	 * @throws Exception
+	 */
+	
+	public static String getSynthesizedText(String reportText) throws Exception
+	{
+		String sysnthesizedReportText="";
+		
+
+		String configFileName = Variables.propertiesDirPath +File.separator+"SectionHeaderConfig.txt";
+		
+		//initialize section header map
+		Map abbrToHeader = new HashMap();;
+		abbrToHeader=Utility.initializeReportSectionHeaderMap(configFileName);
+		
+		//retieved the report Map
+		Map reportMap = new HashMap();;
+		reportMap =HL7ParserUtil.getReportMap(reportText);
+		
+		//retrieved the identified report
+		IdentifiedSurgicalPathologyReport report = null;
+		report=(IdentifiedSurgicalPathologyReport)IdentifiedReportGenerator.getIdentifiedReport(reportMap, (HashMap<String, String>) abbrToHeader);
+		sysnthesizedReportText=report.getTextContent().getData();
+		
+		return sysnthesizedReportText;
+		
+	}
+	
+	
+	
 }
