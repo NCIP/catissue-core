@@ -27,6 +27,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	protected String participantName;
 	protected Date reportLoadedDate;
 	protected String siteName;
+	protected Date reportCollectionDate;
 	
 	/**
 	 * @return status information. 
@@ -230,5 +231,23 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	public void setSiteName(String siteName) 
 	{
 		this.siteName = siteName;
+	}
+
+	/**
+	 * @return report Loaded Date 
+     * @hibernate.property name="reportCollectionDate"
+     * type="date" column="REPORT_COLLECTION_DATE" 
+     */
+	public Date getReportCollectionDate() 
+	{
+		return reportCollectionDate;
+	}
+
+	/**
+	 * @param reportCollectionDate
+	 */
+	public void setReportCollectionDate(Date reportCollectionDate) 
+	{
+		this.reportCollectionDate = reportCollectionDate;
 	}
 }
