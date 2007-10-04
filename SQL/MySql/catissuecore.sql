@@ -1001,6 +1001,7 @@ create table CATISSUE_REPORT_QUEUE (
    REPORT_LOADED_DATE date,
    REPORT_TEXT text,
    SPECIMEN_COLL_GRP_ID bigint,
+   REPORT_COLLECTION_DATE date,
    primary key (IDENTIFIER)
 );
 
