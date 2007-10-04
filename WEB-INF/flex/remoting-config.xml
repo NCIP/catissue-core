@@ -14,7 +14,7 @@
     <destination id="cdeService">
         <properties>
             <source>edu.wustl.catissuecore.flex.FlexInterface</source>
-            <scope>application</scope>
+            <scope>session</scope>
         </properties>
     </destination>
 </service>
