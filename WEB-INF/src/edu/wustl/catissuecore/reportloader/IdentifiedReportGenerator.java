@@ -123,7 +123,7 @@ public class IdentifiedReportGenerator
 	* @return Identified surgical pathology report from report text
 	* @throws Exception while parsing the report text information
 	*/
-	private static IdentifiedSurgicalPathologyReport extractOBRSegment(String obrLine)
+	protected static IdentifiedSurgicalPathologyReport extractOBRSegment(String obrLine)
 	{
 		IdentifiedSurgicalPathologyReport report = new IdentifiedSurgicalPathologyReport();
 		try

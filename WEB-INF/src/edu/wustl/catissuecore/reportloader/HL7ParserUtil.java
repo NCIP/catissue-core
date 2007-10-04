@@ -144,9 +144,10 @@ public class HL7ParserUtil
 		}
 		String obrLine=getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
 		surgicalPathologyNumber=getSurgicalPathologyNumber(obrLine);
+		IdentifiedSurgicalPathologyReport report=IdentifiedReportGenerator.extractOBRSegment(obrLine);
 		// Save report to report queue 
 		reportText=getReportText(reportMap);
-		addReportToQueue(participantList,reportText,scg, status, siteName,participantName,surgicalPathologyNumber);
+		addReportToQueue(participantList,reportText,scg, status, siteName,participantName,surgicalPathologyNumber,report.getCollectionDateTime());
 		return status;
 	}
 	
@@ -224,7 +225,7 @@ public class HL7ParserUtil
 	 * @param reportText plain text format report
 	 * @param scg object of SpecimenCollectionGroup
 	 */
-	private static void addReportToQueue(Set<Participant> set,String reportText, SpecimenCollectionGroup scg, String status, String siteName, String participantName, String surgicalPathologyNumber)
+	private static void addReportToQueue(Set<Participant> set,String reportText, SpecimenCollectionGroup scg, String status, String siteName, String participantName, String surgicalPathologyNumber, Date collectionDate)
 	{
 		Logger.out.info("Adding report to queue");
 		try
@@ -241,6 +242,7 @@ public class HL7ParserUtil
 			queue.setSiteName(siteName);
 			queue.setParticipantName(participantName);
 			queue.setSurgicalPathologyNumber(surgicalPathologyNumber);
+			queue.setReportCollectionDate(collectionDate);
 			queue.setReportLoadedDate(new Date());
 			queue=(ReportLoaderQueue)CaCoreAPIService.getAppServiceInstance().createObject(queue);
 		}
