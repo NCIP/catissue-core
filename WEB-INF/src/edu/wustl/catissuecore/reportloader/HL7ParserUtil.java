@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
@@ -440,4 +441,70 @@ public class HL7ParserUtil
 		Logger.out.info("Participant Created having Name="+participant.getLastName()+","+participant.getFirstName());
 		return participant;
 	}
+	  /**
+	    * Method to extract information from OBR segment
+		* @param obrLine report information text
+		* @return Identified surgical pathology report from report text
+		* @throws Exception while parsing the report text information
+		*/
+		public static IdentifiedSurgicalPathologyReport extractOBRSegment(String obrLine)
+		{
+			IdentifiedSurgicalPathologyReport report = new IdentifiedSurgicalPathologyReport();
+			try
+			{
+		        String newObrLine = obrLine.replace('|', '~');
+		        newObrLine = newObrLine.replaceAll("~", "|~~");
+		        //set default values to report
+		        report.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		        report.setIsFlagForReview(new Boolean(false));
+		        StringTokenizer st = new StringTokenizer(newObrLine, "|");
+		        // iterate over token to create report
+		        for (int x = 0; st.hasMoreTokens(); x++)
+		        {
+		            String field = st.nextToken();
+		            if (field.equals("~~"))
+		            {
+		                continue;
+		            }
+
+		            else
+		            {
+		                field = field.replaceAll("~~", "");
+		            } 
+		            // token for accession number
+		            if (x == CaTIESConstants.REPORT_ACCESSIONNUMBER_INDEX) 
+		            {
+		                StringTokenizer st2 = new StringTokenizer(field, "^");
+		                String accNum = st2.nextToken();
+//	 		Field removed from SurgicalPathologyReport and Assigned to SCG as SurgicalPathologyNumber
+//		                report.setAccessionNumber(accNum);
+		            }
+		            // report collection date and time
+		            if (x == CaTIESConstants.REPORT_DATE_INDEX)
+		            {
+		                String year = field.substring(0, 4);
+		                String month = field.substring(4, 6);
+		                String day = field.substring(6, 8);
+		                String hours = field.substring(8, 10);
+		                String seconds = field.substring(10, 12);
+
+		                GregorianCalendar gc = new GregorianCalendar(Integer
+		                        .parseInt(year), Integer.parseInt(month)-1, Integer
+		                        .parseInt(day), Integer.parseInt(hours), Integer
+		                        .parseInt(seconds));
+
+		                report.setCollectionDateTime(gc.getTime());
+		            }
+		        }	        
+			}
+			catch(Exception e)
+			{
+				Logger.out.error("Error while parsing the report map",e);
+			}
+			return report;
+		}
+
+	
+	
+	
 }
