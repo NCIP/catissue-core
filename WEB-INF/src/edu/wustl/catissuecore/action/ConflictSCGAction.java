@@ -27,6 +27,8 @@ import edu.wustl.catissuecore.actionForm.ConflictSCGForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.Utility;
+import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
@@ -36,6 +38,8 @@ import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.reportloader.HL7Parser;
+import edu.wustl.catissuecore.reportloader.HL7ParserUtil;
+import edu.wustl.catissuecore.reportloader.IdentifiedReportGenerator;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -71,6 +75,7 @@ public class ConflictSCGAction extends BaseAction
 		}
 		
 		String newConfictedReport = reportLoaderQueue.getReportText();
+		newConfictedReport=ViewSPRUtil.getSynthesizedText(newConfictedReport);
 		
 		String existingConflictedReport = retrieveExistingReport(reportQueueId);
 		conflictSCGForm.setExistingConflictedReport(existingConflictedReport);
