@@ -159,20 +159,6 @@ public class ReportLoader
 			throw new Exception(CaTIESConstants.CP_NOT_FOUND_ERROR_MSG);
 		}
 		
-		//Autogeneration of SCG name
-		// SPR_<CollectionProtocol_Title>_<Participant_ID>_<Group_ID>
-		long groupId=0;
-		groupId=CaCoreAPIService.getAppServiceInstance().getSpecimenCollectionGroupLabel();
-		
-		String collProtocolTitle=CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE);
-		if(collProtocolTitle.length()>30)
-		{
-			collProtocolTitle=collProtocolTitle.substring(0,29);
-		}
-		String scgName="SPR_"+collProtocolTitle+"_"+participant.getId()+"_"+groupId; //this.identifiedReport.getAccessionNumber().toString());
-		scg.setName(scgName);
-		Logger.out.info("SCG name is =====>"+scgName);
-		
 		// retrieve collection protocol event list
 		Collection collProtocolEventList=(Collection)CaCoreAPIService.getList(CollectionProtocolEvent.class, "collectionProtocol", collectionProtocol);
 		Iterator cpEventIterator=collProtocolEventList.iterator();
@@ -192,7 +178,7 @@ public class ReportLoader
 				collProtocolReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 				collProtocolReg.setRegistrationDate(new Date());
 				collProtocolReg.setParticipant(participant);	
-				collProtocolReg.setCollectionProtocol(collProtocolEvent.getCollectionProtocol());
+				collProtocolReg.setCollectionProtocol(collectionProtocol);
 				try
 				{
 					CaCoreAPIService.getAppServiceInstance().createObject(collProtocolReg);
@@ -203,14 +189,16 @@ public class ReportLoader
 					throw new Exception("Could not save object of CollectionProtocolRegistration :"+ex.getMessage());
 				}		
 			}
+			collProtocolReg.setCollectionProtocol(collectionProtocol);
 			scg.setCollectionProtocolEvent(collProtocolEvent);
 			scg.setCollectionProtocolRegistration(collProtocolReg);
 			scg.setSpecimenEventParametersCollection(getDefaultEvents(scg));
+			scg.setName("SPR_"+CaCoreAPIService.getAppServiceInstance().getSpecimenCollectionGroupLabel(scg));
 		}
 		else
 		{
-			Logger.out.error("Associated Collection Protocol Event not found for "+ collProtocolTitle);
-			throw new Exception("Associated Collection Protocol Event not found for "+ collProtocolTitle);
+			Logger.out.error("Associated Collection Protocol Event not found for "+ CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
+			throw new Exception("Associated Collection Protocol Event not found for "+ CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
 		}
 			
 		return scg;
