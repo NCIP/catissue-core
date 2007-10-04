@@ -92,7 +92,7 @@ public class HL7Parser implements Parser
 		Map<String, Set> reportMap=null;
 		try
 		{
-			reportMap=this.getReportMap(reportText);
+			reportMap=HL7ParserUtil.getReportMap(reportText);
 			if(participant!=null)
 			{
 				process(participant,reportMap, scg, abbrToHeader);
@@ -151,7 +151,7 @@ public class HL7Parser implements Parser
 					// MSH or FTS are the starting point of individual report
 					if(token.equals(CaTIESConstants.PID) || token.equals(CaTIESConstants.OBR) || token.equals(CaTIESConstants.OBX))
 					{	
-						this.addToReportMap(reportMap,token,line);
+						HL7ParserUtil.addToReportMap(reportMap,token,line);
 					}
 					else if (token.equals(CaTIESConstants.MSH)|| token.equals(CaTIESConstants.FTS))
 					{
@@ -276,58 +276,6 @@ public class HL7Parser implements Parser
 		return siteObj;
 	}
 	
-	/**
-	 * This method creats a report map using reportText
-	 * @param reportText plain text report
-	 * @return Map report map
-	 */
-	private Map<String, Set> getReportMap(String reportText)
-	{
-		Logger.out.debug("Inside parseString method");
-		String[] lines=null;
-		StringTokenizer st=null;
-		String token = null;
-		Map<String, Set> reportMap=null;
-		
-		lines=reportText.split("\n");
-		String line = "";
-		reportMap = new HashMap<String, Set>();
-		//create reportMap using reportText
-		for (int i=0;i<lines.length;i++)
-		{
-			line=lines[i];
-			st = new StringTokenizer(line, "|");
-			if (st.hasMoreTokens())
-			{
-				token = st.nextToken();
-				addToReportMap(reportMap,token,line);
-			}
-		}	
-		return reportMap;	
-	}
 	
-	/**
-	* Method to add report section to report map
-	* @param tempMap temporary map
-	* @param key key of the map
-	* @param value value
-	*/
-	private void addToReportMap(Map<String, Set> tempMap,String key,String value)
-	{
-		Set<String> tempSet=null;
-		if(key !=null && value!=null)
-		{
-			if(tempMap.containsKey(key))
-			{
-				tempSet = tempMap.get(key);
-				tempSet.add(value);
-			}
-			else
-			{
-				tempSet = new HashSet<String>();
-				tempSet.add(value);
-				tempMap.put(key, tempSet);
-			}
-		}
-	}
+
 }
