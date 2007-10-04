@@ -27,6 +27,10 @@
 		import mx.controls.Alert;
 		import mx.rpc.events.ResultEvent;
 		import mx.rpc.remoting.mxml.RemoteObject;
+		import pagination.utils.PaginateData;
+		import pagination.managers.ModelManager;
+
+
 		private var counter:int = 1;
 		private var mspParameter:MSPParameter ;
 		
@@ -46,10 +50,15 @@
 		public var showParentSelection:Boolean = true;
 		[Bindable]
 		public var startingIndex:int = 0;
+		
+		[Bindable] public var paginateData:PaginateData = new PaginateData();
+		[Bindable] public var model:ModelManager = ModelManager.getInstance();
+
 
 		private function preInit():void
 		{
-		
+			model.collection = specimenColl;
+			model.filteredCollection = specimenColl;
 			mspParameter = MSPParameterReader.processParam(Application.application.parameters);
 			specimenColl = new ArrayCollection();
 						
@@ -66,18 +75,13 @@
 					showParentSelection = false;
 				}
 			}
-			
 
-			
-//			PopUpManager.createPopUp(this,ProgressBarPanel,true);
-			//flash.
-			//var spCount:String = Application.application.parameters.spCount;
-			//Alert.show("firstParam "+spCount);
 			
 		}
 		
 		private function init(event:Event):void
 		{
+			
 			if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_ADD)
 			{
 				specimenColl = new ArrayCollection();
@@ -87,8 +91,7 @@
 				for(var i:int=0; i<spCounts; i++)
 				{
 					
-					var spData:SpecimenData = initSpecimenData();
-					specimenColl.addItem(spData);
+					addMoreSpecimen(null);
 				}
 			}
 			else
@@ -103,15 +106,13 @@
 				}
 			}	
 			
+			model.collection = specimenColl;
+			model.currPage = 0;		
+			model.pageLimit = 5;		
+			model.filteredCollection  = getFilteredCollection(model.collection,model.currPage);
+			paginateData.paginate(model.collection, this.hbContainer, model.pageLimit);
+
 			
-			if(specimenColl.length > PERPAGE)
-			{
-				btnNext.enabled = true;
-			}
-			else
-			{
-				btnNext.enabled = false;
-			}
 		}
 		
 		private function initSpecimenData(): SpecimenData
@@ -142,24 +143,24 @@
 		
 		private function creationComp():void
 		{
-
+			setPagination();	
 			selectionBox.visible = showParentSelection;
 			spParent.selectedValue = "New Specimen";
 			spLabelPane.spOrScg.text = "* Specimen Group Name";
 			myRemoteObject.initFlexInterfaceForMultipleSp();
 			
 			
+			
 		}
 
 		private function addMoreSpecimen(event:Event):void
 		{
+			
 			var spData:SpecimenData = initSpecimenData();
 			specimenColl.addItem(spData);	
-			if(specimenColl.length > PERPAGE)
-			{
-				btnNext.enabled = true;
-			}
-			
+			setPagination();
+			model.filteredCollection = getFilteredCollection(model.collection,model.currPage);
+
 		}
 		
 		
@@ -174,16 +175,25 @@
 					
 				}
 			}	
-			if(specimenColl.length%PERPAGE == 0)
-			{
-				if(startingIndex -PERPAGE >0)
-				{
-					startingIndex = startingIndex- PERPAGE;	
-				}
-			}
+			setPagination();
+			model.filteredCollection  = getFilteredCollection(model.collection,model.currPage);
+
 			
 		}
-		 
+		 private function getFilteredCollection(collection:ArrayCollection,currPage:int) : ArrayCollection
+		{
+			var filteredColl:ArrayCollection = new ArrayCollection();
+			var lowLimit:int = currPage*model.pageLimit;
+			if((currPage*model.pageLimit + model.pageLimit) <collection.length)
+			{
+				filteredColl = paginateData.getPaginatedData(collection, lowLimit, (currPage*model.pageLimit + (model.pageLimit-1)));
+			}
+			else
+			{
+				filteredColl = paginateData.getPaginatedData(collection, lowLimit, collection.length-1);
+			}
+			return filteredColl;
+		}
 		private function copySPData(event:Event):void
 		{
 			//Alert.show("Here in Copy");
@@ -440,6 +450,10 @@
    			
 
    		}
+   		public function setPagination():void
+		{
+			paginateData.paginate(model.collection, this.hbContainer, model.pageLimit);
+		}
 	]]>
 </mx:Script>
 
@@ -467,12 +481,12 @@
 		<mx:Button label="Previous" click="getPreviousPage(event)" id="btnPrevious" toolTip="Previous" borderColor="#AAAAFF" visible="false"/>
 		<mx:Button label="Next" click="getNextPage(event)" id="btnNext" toolTip="Next" borderColor="#AAAAFF" visible="false"/>
 	</mx:HBox>
-	
+	<mx:HBox id="hbContainer"  width="100%" />
 	<mx:HBox>
 	
 		<components:SpecimenLabelPane backgroundColor="#F0F8FF" id="spLabelPane"/>
 
-		<mx:Repeater id="spRepeater" dataProvider="{specimenColl}">	
+		<mx:Repeater id="spRepeater" dataProvider="{model.filteredCollection}">	
 			<components:SpecimenPane id="A" backgroundColor="{getAlternateColor(spRepeater.currentIndex)}"/>
 		</mx:Repeater>
 	</mx:HBox>
