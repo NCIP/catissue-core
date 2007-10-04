@@ -911,7 +911,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 */
 	private String generateHTMLForTextBox(AttributeInterface attributeInterface, boolean isBetween,
 			List<String> values, String op)
-	{
+	{ 
 		String componentId = generateComponentName(attributeInterface);
 		String textBoxId = componentId + "_textBox";
 		String textBoxId1 = componentId + "_textBox1";
@@ -920,8 +920,18 @@ public class GenerateHtmlForAddLimitsBizLogic
 		html.append("<td width='15%' valign='top' class=\"standardTextQuery\">\n");
 		if (values == null || values.isEmpty())
 		{
-			html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\""
+			if(op != null)
+			{
+				if(op.equals("IsNotNull") || op.equals("IsNull"))
+				{
+					html.append("<input style=\"width:150px; display:block;\" type=\"text\" disabled='true' name=\""
+							+ textBoxId + "\" id=\"" + textBoxId + "\">");
+				}
+			}else
+			{
+				html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\""
 					+ textBoxId + "\" id=\"" + textBoxId + "\">");
+			}
 		}
 		else
 		{
@@ -1168,18 +1178,6 @@ public class GenerateHtmlForAddLimitsBizLogic
 		html.append("\n<td>");
 		if (values == null) 
 		{
-			if(attribute.getName().equalsIgnoreCase("isCollectionProtocolRequirement"))
-			{
-			html.append("\n<input type='radio' id = '" + componentId
-						+ "_true' value='true' onclick=\"resetOptionButton('"
-						+ radioButtonTrueId + "',this)\" name='" + componentName
-						+ "'><font class='standardTextQuery'>True</font>");
-			html.append("\n<input type='radio' id = '" + componentId
-					+ "_false' value='false' onclick=\"resetOptionButton('"
-					+ radioButtonFalseId + "',this)\" name='" + componentName
-					+ "' CHECKED><font class='standardTextQuery'>False</font>");
-			}else
-			{
 				html.append("\n<input type='radio' id = '" + componentId
 						+ "_true' value='true' onclick=\"resetOptionButton('"
 						+ radioButtonTrueId + "',this)\" name='" + componentName
@@ -1188,7 +1186,6 @@ public class GenerateHtmlForAddLimitsBizLogic
 						+ "_false' value='false' onclick=\"resetOptionButton('"
 						+ radioButtonFalseId + "',this)\" name='" + componentName
 						+ "'><font class='standardTextQuery'>False</font>");
-			}
 		}
 		else 
 		{
