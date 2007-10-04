@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 
 public class CollectionProtocolUtil {
@@ -100,6 +101,8 @@ public class CollectionProtocolUtil {
 		collectionProtocolBean.setEnrollment(String.valueOf(collectionProtocol.getEnrollment()));		
 		collectionProtocolBean.setConsentValues(prepareConsentTierMap(collectionProtocol.getConsentTierCollection()));
 		collectionProtocolBean.setActivityStatus(collectionProtocol.getActivityStatus());
+		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		collectionProtocolBean.setEndDate(endDate);
 		return collectionProtocolBean;
 	}
 

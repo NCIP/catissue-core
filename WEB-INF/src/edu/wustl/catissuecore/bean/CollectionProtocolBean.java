@@ -25,6 +25,8 @@ public class CollectionProtocolBean implements Serializable
 
 	private String startDate;
 	
+	protected String endDate;
+	
 	private String enrollment;
 	 /**
      * Activity Status.
@@ -202,6 +204,18 @@ public class CollectionProtocolBean implements Serializable
 	public void setActivityStatus(String activityStatus)
 	{
 		this.activityStatus = activityStatus;
+	}
+
+	
+	public String getEndDate()
+	{
+		return endDate;
+	}
+
+	
+	public void setEndDate(String endDate)
+	{
+		this.endDate = endDate;
 	}
 
 }

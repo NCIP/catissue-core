@@ -221,6 +221,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setDescriptionURL(collectionProtocolBean.getDescriptionURL());
 		collectionProtocolForm.setIrbID(collectionProtocolBean.getIrbID());
 		collectionProtocolForm.setActivityStatus(collectionProtocolBean.getActivityStatus());
+		collectionProtocolForm.setEndDate(collectionProtocolBean.getEndDate());
 		//For Consent Tab
 		collectionProtocolForm.setConsentTierCounter(collectionProtocolBean.getConsentTierCounter());
 		collectionProtocolForm.setConsentValues(collectionProtocolBean.getConsentValues());
