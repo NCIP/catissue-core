@@ -673,10 +673,10 @@ public class CaCoreAppServicesDelegator
      * @return
      * @throws Exception
      */
-    public Long delegateGetSpecimenCollectionGroupLabel(String userName, Object obj) throws Exception
+    public String delegateGetSpecimenCollectionGroupLabel(String userName, Object obj) throws Exception
     {
     	LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
-    	return specimenCollectionGroupLableGenerator.getCurrentLabel();
+    	return specimenCollectionGroupLableGenerator.getLabel((SpecimenCollectionGroup)obj);
     }
     
     /**
