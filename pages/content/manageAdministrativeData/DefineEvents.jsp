@@ -3,20 +3,18 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.bean.CollectionProtocolBean"%>
 
 <head>
 <%
     String access = (String)session.getAttribute("Access");
 	String pageOf = request.getParameter("pageOf");
-	String operationType = request.getParameter("operation");
-	
+	String operationType = null;
 	boolean disabled = false;
-	if(operationType==null)
-	{
-		operationType = (String)request.getAttribute("operation");
-	}
-	
-	if(operationType.equals("edit"))
+	HttpSession newSession = request.getSession();
+	CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)newSession.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+	operationType = collectionProtocolBean.getOperation();
+	if(operationType!=null && operationType.equals("update"))
 	{
 		disabled = true;
 	}
@@ -55,14 +53,14 @@
 	<script>
 		function collectionProtocolPage()
 		{
-			var action ="CollectionProtocol.do?operation=<%=operationType%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage";
+			var action ="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
 		
 		function consentPage()
 		{
-			var action ="CollectionProtocol.do?operation=<%=operationType%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage&tab=consentTab";
+			var action ="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage&tab=consentTab";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -74,14 +72,14 @@
 		
 		function viewSummary()
 		{
-			var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=<%=operationType%>";
+			var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary";
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
 
 		function defineEvents()
 		{
-			var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=<%=operationType%>";
+			var action="DefineEvents.do?pageOf=pageOfDefineEvents";
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
@@ -130,7 +128,7 @@
 						<table border="0" width="250px" height="100%">
 							<tr>
 								<td align="left" valign="top">		
-								<iframe id="SpecimenEvents" name="SpecimenEvents" src="ShowCollectionProtocol.do?operationType=<%=operationType%>" scrolling="no" frameborder="0" width="250px" height="450px" marginheight=0 marginwidth=0 valign="top">
+								<iframe id="SpecimenEvents" name="SpecimenEvents" src="ShowCollectionProtocol.do" scrolling="no" frameborder="0" width="250px" height="450px" marginheight=0 marginwidth=0 valign="top">
 									Your Browser doesn't support IFrames.
 								</iframe>
 
@@ -160,7 +158,7 @@
 					</logic:equal>
 					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.VIEW_SUMMARY%>">
 						<td width="100%" height="100%" valign="top">
-							<iframe name="SpecimenRequirementView" src="ProtocolEventsDetails.do?operationType=<%=operationType%>&operation=<%=operationType%>&pageOf=newEvent" scrolling="auto" frameborder="0" width="800px" height="500px">
+							<iframe name="SpecimenRequirementView" src="ProtocolEventsDetails.do?&operation=add&pageOf=newEvent" scrolling="auto" frameborder="0" width="800px" height="500px">
 								Your Browser doesn't support IFrames.
 							</iframe>
 						</td>

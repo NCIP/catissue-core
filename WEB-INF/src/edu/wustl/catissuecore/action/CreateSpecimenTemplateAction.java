@@ -52,8 +52,6 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		CreateSpecimenTemplateForm createSpecimenTemplateForm = (CreateSpecimenTemplateForm)form;
 		//Gets the value of the operation parameter.
 		String operation = (String) request.getParameter(Constants.OPERATION);
-		String operationType = (String) request.getParameter("operationType");
-		request.setAttribute("operationType", operationType);
 		String pageOf = (String)request.getParameter("pageOf");
 		//This will give node id when flow is from Specimen Tree View.
 		String mapkey = (String)request.getParameter("key");

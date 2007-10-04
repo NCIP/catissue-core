@@ -11,6 +11,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm"%>
+<%@ page import="edu.wustl.catissuecore.bean.CollectionProtocolBean"%>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 <%@ page import="edu.wustl.catissuecore.bean.DeriveSpecimenBean"%>
 
@@ -27,9 +28,12 @@ Object obj = request.getAttribute("createSpecimenTemplateForm");
 String mapKey = (String)request.getAttribute("key");
 String nodeKey = (String)request.getAttribute("mapkey");
 String operation = (String)request.getAttribute(Constants.OPERATION);
-String operationType = (String)request.getAttribute("operationType");
+String operationType =null;
 boolean disabled = false;
-if(operationType!=null && operationType.equals("edit"))
+HttpSession newSession = request.getSession();
+CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)newSession.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+operationType = collectionProtocolBean.getOperation();
+if(operationType!=null && operationType.equals("update"))
 {
 	disabled = true;
 }
@@ -397,7 +401,7 @@ if(form != null)
 		checkb.innerHTML=""+sname;
 	}
 
-	window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>&operationType=<%=operationType%>";
+	window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>";
 </script>
 
 </head>

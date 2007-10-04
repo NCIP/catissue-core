@@ -11,7 +11,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
-
+<%@ page import="edu.wustl.catissuecore.bean.CollectionProtocolBean"%>
 <%@ page import="java.util.*"%>
 
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
@@ -26,13 +26,15 @@
 	{
 		form = (ProtocolEventDetailsForm)obj;
 	}	
-	String operationType = request.getParameter("operationType");
+	String operationType=null;
 	boolean disabled = false;
-	if(operationType!=null&&operationType.equals("edit"))
+	HttpSession newSession = request.getSession();
+	CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)newSession.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+	operationType = collectionProtocolBean.getOperation();
+	if(operationType!=null && operationType.equals("update"))
 	{
 		disabled = true;
 	}
-
 %>
 <head>
 <script src="jss/script.js" type="text/javascript"></script>
@@ -53,7 +55,7 @@ function submitAllEvents()
 	document.forms[0].submit();
 }
 
-window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operationType=<%=operationType%>";
+window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage";
 
 </script>
 </head>

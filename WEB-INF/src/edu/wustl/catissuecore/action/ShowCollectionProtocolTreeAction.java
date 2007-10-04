@@ -34,8 +34,6 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		HttpSession session = request.getSession();
 		Map collectionProtocolEventMap = (Map)session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		String pageOf = request.getParameter(Constants.PAGE_OF);
-		String operationType = request.getParameter("operationType");
-		request.setAttribute("operationType", operationType);
 		String operation = request.getParameter(Constants.OPERATION);
 		request.setAttribute(Constants.OPERATION, operation);
 		Vector treeData=null;
