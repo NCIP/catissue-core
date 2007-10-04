@@ -265,10 +265,13 @@ public class AnnotationBizLogic extends DefaultBizLogic
     {
         try
         {
-            insert(entityMap, Constants.HIBERNATE_DAO);
             Long staticEntityId = entityMap.getStaticEntityId();
             Long dynamicEntityId = entityMap.getContainerId();
             Long deAssociationID = AnnotationUtil.addAssociation(staticEntityId, dynamicEntityId);
+            if (deAssociationID != null)
+            {
+            	insert(entityMap, Constants.HIBERNATE_DAO);
+            }
         }
         catch (Exception e)
         {

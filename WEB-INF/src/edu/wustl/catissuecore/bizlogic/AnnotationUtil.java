@@ -19,12 +19,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
+import edu.common.dynamicextensions.domain.Entity;
+import edu.common.dynamicextensions.domain.userinterface.Container;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.RoleInterface;
 import edu.common.dynamicextensions.domaininterface.databaseproperties.ConstraintPropertiesInterface;
+import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
@@ -37,11 +42,11 @@ import edu.wustl.cab2b.common.util.Utility;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.cab2b.server.path.PathConstants;
 import edu.wustl.cab2b.server.path.PathFinder;
-import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.dbManager.DBUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * @author vishvesh_mulay
@@ -151,23 +156,53 @@ public class AnnotationUtil
      * @throws DynamicExtensionsSystemException
      * @throws DynamicExtensionsApplicationException
      * @throws DynamicExtensionsSystemException
+     * @throws BizLogicException
      */
     public static synchronized Long addAssociation(Long staticEntityId, Long dynamicEntityId)
             throws //DynamicExtensionsSystemException,
-            DynamicExtensionsApplicationException, DynamicExtensionsSystemException
+            DynamicExtensionsApplicationException, DynamicExtensionsSystemException, BizLogicException
     {
         //Get instance of entity manager.
         EntityManagerInterface entityManager = EntityManager.getInstance();
+//
+//        // Get instance of static entity from entity cache maintained by caB2B code
+//        EntityInterface staticEntity = EntityCacheFactory.getInstance()
+//                .getEntityById(staticEntityId);
+//
+//        //Get dynamic Entity from entity Manger
+//        EntityInterface dynamicEntity = (entityManager
+//                .getContainerByIdentifier(dynamicEntityId.toString()))
+//                .getEntity();
 
-        // Get instance of static entity from entity cache maintained by caB2B code
-        EntityInterface staticEntity = EntityCacheFactory.getInstance()
-                .getEntityById(staticEntityId);
 
-        //Get dynamic Entity from entity Manger
-        EntityInterface dynamicEntity = (entityManager
-                .getContainerByIdentifier(dynamicEntityId.toString()))
-                .getEntity();
+        //This change is done because when the hierarchy of objects grow in dynamic extensions then NonUniqueObjectException is thrown.
+        //So static entity and dynamic entity are brought in one session and then associated.
 
+        Session session = null;
+		try
+		{
+			session = DBUtil.currentSession();
+		}
+		catch (HibernateException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+            throw new BizLogicException("", e1);
+		}
+        EntityInterface staticEntity = null;
+        EntityInterface dynamicEntity = null;
+		try
+		{
+			staticEntity = (EntityInterface) session.load(Entity.class, staticEntityId);
+			dynamicEntity = (EntityInterface) ((Container) session.load(Container.class,
+					dynamicEntityId)).getEntity();
+		}
+		catch (HibernateException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+            throw new BizLogicException("", e1);
+		}
         //Get entitygroup that is used by caB2B for path finder purpose.
         EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
 
