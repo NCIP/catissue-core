@@ -183,9 +183,14 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		
 	}
 	
-	public Long getCurrentLabel() 
+	/**
+	 * Returns label for the given domain object
+	 */
+	public String getLabel(AbstractDomainObject obj) 
 	{
-		currentLabel++;
-		return (currentLabel);
-	}		
+		Specimen objSpecimen = (Specimen)obj;
+		setLabel(objSpecimen);
+		
+		return (objSpecimen.getLabel());
+	}	
 }

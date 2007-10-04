@@ -110,11 +110,13 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	}
 	
 	/**
-	 * Returns value of currentLabel
+	 * Returns label for the given domain object
 	 */
-	public Long getCurrentLabel() 
+	public String getLabel(AbstractDomainObject obj) 
 	{
-		currentLabel++;
-		return (currentLabel);
+		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)obj;
+		setLabel(specimenCollectionGroup);
+		
+		return (specimenCollectionGroup.getName());
 	}	
 }

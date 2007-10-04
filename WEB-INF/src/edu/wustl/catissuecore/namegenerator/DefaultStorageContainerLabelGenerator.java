@@ -88,12 +88,15 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 		}	
 		
 	}	
+
 	/**
-	 * Returns value of currentLabel
+	 * Returns label for the given domain object
 	 */
-	public Long getCurrentLabel() 
+	public String getLabel(AbstractDomainObject obj) 
 	{
-		currentLabel++;
-		return (currentLabel);
+		StorageContainer objStorageContainer = (StorageContainer)obj;
+		setLabel(objStorageContainer);
+		
+		return (objStorageContainer.getName());
 	}	
 }
