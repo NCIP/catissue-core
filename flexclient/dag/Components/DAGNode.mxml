@@ -90,6 +90,11 @@
 		public function addOutAssociation(node:String,link:String,operatorIndex:int):void{
 			var ass:Association = new Association(node,link,operatorIndex);
 			outAssociations.addItem(ass);
+			 var col:ICollectionView = outAssociations  as ICollectionView;
+			 var sort:Sort = new Sort();
+		     sort.fields = [new SortField("associatedNode",true)];
+		     col.sort = sort;
+			 col.refresh();
 			}
 		[Bindable]
 		public function removeOutAssociation(node:String,link:String):void{
@@ -315,6 +320,7 @@
 				var paramArray:Array = new Array(DAGConstants.DELETE_LIMITS_MESSAGE);
 				ExternalInterface.call("showEntityInformation",paramArray);
 			}
+			this.parentApplication.currentExp.text = this.parentApplication.getExprssionString();
 		}
 		
 		public function faultHandler (event:FaultEvent):void {
