@@ -9,6 +9,7 @@
 <%
     String access = (String)session.getAttribute("Access");
 	String pageOf = request.getParameter("pageOf");
+	String operation = "add";
 	String operationType = null;
 	boolean disabled = false;
 	HttpSession newSession = request.getSession();
@@ -17,6 +18,7 @@
 	if(operationType!=null && operationType.equals("update"))
 	{
 		disabled = true;
+		operation="edit";
 	}
 	request.setAttribute(Constants.PAGEOF,pageOf);
 	boolean mac = false;
@@ -53,14 +55,14 @@
 	<script>
 		function collectionProtocolPage()
 		{
-			var action ="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage";
+			var action ="CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
 		
 		function consentPage()
 		{
-			var action ="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage&tab=consentTab";
+			var action ="CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage&tab=consentTab";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
