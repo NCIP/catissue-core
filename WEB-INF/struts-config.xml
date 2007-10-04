@@ -818,7 +818,7 @@ PUBLIC
 			<forward name="pageOfSupervisor" path="/CpBasedSearch.do?menuSelected=22" />
 			<!--forward name="pageOfTechnician" path="/CpBasedSearch.do?menuSelected=22" /-->
 			<forward name="pageOfTechnician" path="/SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&amp;aliasName=Specimen&amp;menuSelected=15"/>
-			<forward name="pageOfScientist" path="/AdvanceQueryInterfaceDefaultPage.do?pageOf=pageOfAdvanceQueryInterface&amp;menuSelected=17" />
+			<forward name="pageOfScientist" path="/QueryWizard.do" />
 			<forward name="access_denied" path=".catissuecore.changePasswordDef"/>
 			<forward name="failure" path=".catissuecore.mainTitlePageDef" />
 		</action>
