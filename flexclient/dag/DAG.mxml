@@ -359,7 +359,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			 {	
 			    var targetNode:DAGNode = associationList.getItemAt(j) as DAGNode;	
 				var path:DAGPath = dagPathList.getItemAt(j) as DAGPath;
-//				Alert.show("operatorList =="+operatorList)
+
 				if(operatorList!=null && operatorList.length!=0)
 				{
 				    var operator:String = operatorList.getItemAt(j) as String;
@@ -369,17 +369,23 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				     	path.operatorIndex=1;
 				    }
 				}
-			  	if(isQuery == "true")
-				{
-	                sourceNode.enable=true;
-				}
-				else
-				 {
-	                sourceNode.enable=false;
-				 }
-                try
+				try
                 {
-					linkNodes(sourceNode.expressionId.toString(),targetNode.expressionId.toString(),path);
+					if(isQuery == "true")
+					{
+						
+						if(sourceNode.nodeType!=DAGConstants.VIEW_ONLY_NODE)
+						{	
+							sourceNode.enable=true;
+							linkNodes(sourceNode.expressionId.toString(),targetNode.expressionId.toString(),path);
+					    }
+					}
+					else
+					 {
+						sourceNode.enable=false;
+						linkNodes(sourceNode.expressionId.toString(),targetNode.expressionId.toString(),path);
+					 }
+                
                 }catch(error:TypeError)
                 {
                 	Alert.show("Error:"+error.message);	
@@ -387,6 +393,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			 	
 			 }
 		}
+		currentExp.text = getExprssionString();
 		rpcService.removeEventListener(ResultEvent.RESULT,repaintHandler,false)
 	}
 	
@@ -478,12 +485,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		var path:DAGPath =null;
 		if(selectedList!=null)
 		{
-		//	linkCount=0;
 			path = selectedList.getItemAt(0) as DAGPath;
 			linkNodes(firstNode,secondNode,path);
-		//	Alert.show("=="+getExprssionString())
-	
-			
+				
 		}
 		else
 		{
@@ -524,13 +528,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			{
 				this.addNode(node);
 				showValidationMessagesToUser("");
-			//	var label:Label = panel1.getChildByName("currentExp") as Label;
-			//	label.text = ;
-			
 			}
 			else
 			{
-				//Alert.show("E:  "+node.errorMsg);
 				showValidationMessagesToUser(node.errorMsg);
 				node.errorMsg="";
 			}
@@ -693,12 +693,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 					newPath.sourceExpId=path.sourceExpId;
 					newPath.destinationExpId=path.destinationExpId;
 					newPath.operatorIndex=path.operatorIndex;
-					//c.addChild(line);
 					newPath.addChild(line);
 					panel1.addChild(newPath);
 					dagPathUIMap.put(newPath.name,newPath);
-					//dagNode1.dagpathList.addItem(newPath);
-//					addEventListener(KeyboardEvent.KEY_DOWN,deletePathHandler);
 					newPath.addEventListener(MouseEvent.CLICK,newPath.createAndShow); 
 					newPath.addEventListener(MouseEvent.MOUSE_OVER,updateLinkSelection);
 	     			newPath.addEventListener(MouseEvent.MOUSE_OUT,updateLinkUnSelection);
@@ -708,7 +705,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				//removing selections
 				dagNode1.unSelect();
 				dagNode2.unSelect();
-				if(dagNode2.nodeType==DAGConstants.VIEW_ONLY_NODE)
+				if(dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE || dagNode2.nodeType==DAGConstants.VIEW_ONLY_NODE)
 				{
 					dagNode1.addOutAssociation(secondNode,newPath.name,0);
 					dagNode2.addInAssociation(firstNode,newPath.name,0);
@@ -807,9 +804,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 					}
 					dagNode.select();
 					selectedNode = dagNode;
-				//	removeEventListener(KeyboardEvent.KEY_DOWN,deletePathHandler,false);
-				//	addEventListener(KeyboardEvent.KEY_DOWN,deleteNodeHandler);
-							
+										
 					if(count<2)
 					{
 						var index:int = dagNode.name as int;
@@ -936,9 +931,9 @@ public function getExprssionString():String
          for(var i:int = 0; i < totalNodes.length; i++) {
            var dagNode:DAGNode = totalNodes.getItemAt(i)as DAGNode;
            var exprssIdStr:String	= dagNode.expressionId + "";
-      // 	Alert.show("expressionsCovered =="+expressionsCovered)
+     
             if (expressionsCovered.containsKey(exprssIdStr) == false) {
-                if (dagNode.displayoutAssociations.length == 0)
+                if ((dagNode.displayoutAssociations.length == 0)&&(dagNode.nodeType!=DAGConstants.VIEW_ONLY_NODE))
                  {
                     nonConnectedExpressions += exprssIdStr;
                     nonConnectedExpressions += " ";
@@ -976,9 +971,16 @@ public function getExprssionString():String
 
 	     if(node.displayoutAssociations.length>0)
 		 {   
-			 expressionString=expressionString +"( [" + expressionId + "]" + node.operatorBetweenAttrAndAssociation + "";
+		 	var assocation:Association = node.displayoutAssociations.getItemAt(0) as Association;
+		 	if(assocation.operatorIndex==0)
+            {
+			 	expressionString=expressionString +"( [ " + expressionId + " ] " + "AND"+ "";
+            }
+            else
+            {
+            	expressionString=expressionString +"( [ " + expressionId + " ] " + "OR"+ "";
+         	}
 
-//			Alert.show("expressionString =="+expressionString);
 		     if(node.displayoutAssociations.length>1)
 			{
                  expressionString=expressionString + "( ";
@@ -986,7 +988,7 @@ public function getExprssionString():String
 
             for (var i:int=0; i <node.displayoutAssociations.length; i++) 
 			{
-				var assocation:Association = node.displayoutAssociations.getItemAt(i) as Association;
+				assocation = node.displayoutAssociations.getItemAt(i) as Association;
 				var attachedNode:HashMap =node.attachedNodeMap as HashMap;
 				
 				var associationNode:DAGNode = attachedNode.getValue(assocation.associatedNode) as DAGNode; 
@@ -1024,9 +1026,8 @@ public function getExprssionString():String
         } 
         else
         {
-           expressionString=expressionString +"[" + expressionId + "] ";
-		   		//	Alert.show("else"+expressionString)
-        }
+           expressionString=expressionString +" [ " + expressionId + " ]  ";
+		}
         expressionToStringMap.put(node.expressionId+"",expressionString);
    
         return expressionString;
