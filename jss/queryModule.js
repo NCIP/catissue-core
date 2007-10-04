@@ -680,8 +680,16 @@
 	
 	function viewSearchResults()
 	{
-         waitCursor();
+        waitCursor();
+		callFlexMethod();
+     	if(interfaceObj.isDAGEmpty())
+		{
+			showValidationMessages("<li><font color='red'>Graph must have atleast one node.</font></li>")
+		}
+		else
+		{
 		 search();
+		}
 		 hideCursor();
 	//	var errorMessage = document.applets[0].getSearchResults();
 	/*	if(errorMessage == null)
