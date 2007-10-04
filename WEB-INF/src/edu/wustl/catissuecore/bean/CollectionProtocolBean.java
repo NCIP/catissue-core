@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.wustl.common.util.global.Constants;
+
 
 public class CollectionProtocolBean implements Serializable
 {
@@ -24,6 +26,10 @@ public class CollectionProtocolBean implements Serializable
 	private String startDate;
 	
 	private String enrollment;
+	 /**
+     * Activity Status.
+     */
+    protected String activityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 	
 	/**
 	 * Unsigned Form Url for the Consents
@@ -184,6 +190,18 @@ public class CollectionProtocolBean implements Serializable
 
 	public void setOperation(String operation) {
 		this.operation = operation;
+	}
+
+	
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
+
+	
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
 	}
 
 }

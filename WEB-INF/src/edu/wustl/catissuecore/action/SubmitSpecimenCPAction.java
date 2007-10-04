@@ -449,7 +449,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
 		collectionProtocol.setId(cpBean.getIdentifier());
-		collectionProtocol.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		collectionProtocol.setActivityStatus(cpBean.getActivityStatus());
 		collectionProtocol.setAliquotInSameContainer(Boolean.TRUE);
 		collectionProtocol.setConsentsWaived(cpBean.isConsentWaived());
 		collectionProtocol.setConsentTierCollection(collectionProtocol.prepareConsentTierCollection(cpBean.getConsentValues()));

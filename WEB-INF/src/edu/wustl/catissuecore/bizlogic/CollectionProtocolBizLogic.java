@@ -239,10 +239,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			throw new DAOException("Unable to update, Participants are already registered under this Collection protocol");
 		}
-		if (!collectionProtocol.getPrincipalInvestigator().getId().equals(
-				collectionProtocolOld.getPrincipalInvestigator().getId()))
-			checkStatus(dao, collectionProtocol.getPrincipalInvestigator(),
-			"Principal Investigator");
+		if (!collectionProtocol.getPrincipalInvestigator().getId().equals(collectionProtocolOld.getPrincipalInvestigator().getId()))
+		{
+			checkStatus(dao, collectionProtocol.getPrincipalInvestigator(),"Principal Investigator");
+		}
 
 		checkCoordinatorStatus(dao, collectionProtocol, collectionProtocolOld);
 

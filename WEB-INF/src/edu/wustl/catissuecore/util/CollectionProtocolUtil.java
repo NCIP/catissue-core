@@ -98,7 +98,8 @@ public class CollectionProtocolUtil {
 		collectionProtocolBean.setTitle(collectionProtocol.getTitle());
 		collectionProtocolBean.setShortTitle(collectionProtocol.getShortTitle());
 		collectionProtocolBean.setEnrollment(String.valueOf(collectionProtocol.getEnrollment()));		
-		collectionProtocolBean.setConsentValues(prepareConsentTierMap(collectionProtocol.getConsentTierCollection()));		
+		collectionProtocolBean.setConsentValues(prepareConsentTierMap(collectionProtocol.getConsentTierCollection()));
+		collectionProtocolBean.setActivityStatus(collectionProtocol.getActivityStatus());
 		return collectionProtocolBean;
 	}
 
