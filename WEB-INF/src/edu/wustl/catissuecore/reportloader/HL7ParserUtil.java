@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.reportloader;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -502,6 +503,60 @@ public class HL7ParserUtil
 				Logger.out.error("Error while parsing the report map",e);
 			}
 			return report;
+		}
+		/**
+		 * This method creats a report map using reportText
+		 * @param reportText plain text report
+		 * @return Map report map
+		 */
+		public static Map<String, Set> getReportMap(String reportText)
+		{
+			Logger.out.debug("Inside parseString method");
+			String[] lines=null;
+			StringTokenizer st=null;
+			String token = null;
+			Map<String, Set> reportMap=null;
+			
+			lines=reportText.split("\n");
+			String line = "";
+			reportMap = new HashMap<String, Set>();
+			//create reportMap using reportText
+			for (int i=0;i<lines.length;i++)
+			{
+				line=lines[i];
+				st = new StringTokenizer(line, "|");
+				if (st.hasMoreTokens())
+				{
+					token = st.nextToken();
+					addToReportMap(reportMap,token,line);
+				}
+			}	
+			return reportMap;	
+		}
+		
+		/**
+		* Method to add report section to report map
+		* @param tempMap temporary map
+		* @param key key of the map
+		* @param value value
+		*/
+		public static void addToReportMap(Map<String, Set> tempMap,String key,String value)
+		{
+			Set<String> tempSet=null;
+			if(key !=null && value!=null)
+			{
+				if(tempMap.containsKey(key))
+				{
+					tempSet = tempMap.get(key);
+					tempSet.add(value);
+				}
+				else
+				{
+					tempSet = new HashSet<String>();
+					tempSet.add(value);
+					tempMap.put(key, tempSet);
+				}
+			}
 		}
 
 	
