@@ -68,6 +68,14 @@
 	    	column="REPORT_LOADED_DATE"
         />
         
+        <property
+	    	name="reportCollectionDate"
+	    	type="date"
+	    	update="true"
+	    	insert="true"
+	    	column="REPORT_COLLECTION_DATE"
+        />
+        
         <set
             name="participantCollection"
             table="CATISSUE_REPORT_PARTICIP_REL"
