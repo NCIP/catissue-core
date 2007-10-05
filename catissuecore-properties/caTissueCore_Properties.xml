@@ -240,7 +240,7 @@
 	</property>
 	<property>
 		<name>resultView.maximumTreeNodeLimit</name>
-		<value>10</value>
+		<value>200</value>
 	</property>
 	
 <!-- Constants for specifing columns per page in MultipleSpecimen -->
