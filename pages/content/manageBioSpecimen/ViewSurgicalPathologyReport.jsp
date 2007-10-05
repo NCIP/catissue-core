@@ -396,7 +396,7 @@
 			<tr>
 				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
 				
-				<div id="identifiedReportText" style="overflow:auto;height:200px;width:628"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty></PRE>
+				<div id="identifiedReportText" style="overflow:auto;height:200px;width:628" onmousemove='scrollInSync();'><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty></PRE>
 				</div>
 				</td>
 			</tr>
