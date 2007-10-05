@@ -2043,7 +2043,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
       		"Surgical pathological number",
       		"Report loaded on",
       		"Status",
-      		"Site Name"
+      		"Site Name",
+      		"Report Collection Date"
     };
       
     public static final String [] CONFLICT_FILTER_LIST = {
@@ -2053,6 +2054,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
       };
     public static final String FILTER_LIST = "filterList";
     public static final String REPORT_ID = "reportQueueId";
+    
     public static final String CONFLICT_STATUS = "conflictStatus";
     public static final String REPORT_INFORMATION = "ReportInformation";
     public static final String SELECTED_FILTER = "selectedFilter";
@@ -2079,6 +2081,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
  	
   	public static final String CONFLICT_BUTTON = "conflictButton";
   	public static final String IDENTIFIED_SURGICAL_PATHOLOGY_REPORT = "identifiedSurgicalPathologyReport";
+  	public static final String REPORT_COLLECTION_DATE = "reportCollectionDate";
   	
   	//Save Query Constants
   	public static final String HTML_CONTENTS = "HTMLContents";
