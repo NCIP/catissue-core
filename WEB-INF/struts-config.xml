@@ -265,7 +265,6 @@ PUBLIC
 		<forward name="success" path="/RequestListView.do?pageNum=1&amp;menuSelected=17" />
 		<forward name="specimenDistributionReport" path="/DistributionReport.do" />
 		<forward name="specimenArrayDistributionReport" path="/ArrayDistributionReport.do" />
-	
 		<forward name="failure" path="/RequestDetails.do" />
 	</action>
 	
@@ -783,7 +782,18 @@ PUBLIC
 		</action>
 			
 <!-- end : conflict Resolver -->	
-			
+<!-- For ordering consents:by kalpana -->	
+		<action path="/ConsentVerification"
+			type="edu.wustl.catissuecore.action.ConsentVerificationAction"
+			name="distributionForm"
+			validate="false"
+			scope="request">
+			<forward name="popup" path=".catissuecore.OrderingConsentsDef" />
+			<forward name="ViewAll" path=".catissuecore.ViewAllOrderingConsentsDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		</action>
+<!-- end -->		
+
 		<action path="/ReviewRequests" 
 				 name="viewSurgicalPathologyReportForm"
 				 type="edu.wustl.catissuecore.action.ReportReviewQuarantineAction"		 

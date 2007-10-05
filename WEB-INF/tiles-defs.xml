@@ -984,7 +984,17 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/Home.jsp" />
 	</definition>
 <!--bug #5013. - End -->
-	
+
+<!-- for ordering consents: kalpana-->
+
+<definition name=".catissuecore.OrderingConsentsDef" path="/pages/content/ConsentTracking/OrderingSpecimen.jsp"> 
+</definition>
+
+<definition name=".catissuecore.ViewAllOrderingConsentsDef" path="/pages/content/ConsentTracking/ViewAllOrderingConsents.jsp"> 
+</definition>
+
+<!--end-->
+		
 <!--Orderering System-->
 	<!--Added By Deepti request order page -->
 	<definition name=".catissuecore.orderDef" extends=".catissuecore.searchHomeDef">
@@ -1081,6 +1091,8 @@
 	<definition name=".catissuecore.conflictReportDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ConflictReportView.jsp" />
 	</definition>
+	
+	
 	
 <!--Conflict Resolver :end -->
 	

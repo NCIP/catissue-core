@@ -175,6 +175,11 @@ function popupWindow(nofConsentTiers)
 			width="100%";
 			innerWidth="100%";
 		}
+		else if(pageOf.equals("pageOfOrdering"))
+		{
+			width="100%";
+			innerWidth="100%";
+		}
 		if(pageOf.equals("pageOfConsent"))
 		{
 			width="100%";
@@ -323,7 +328,9 @@ function popupWindow(nofConsentTiers)
 			<%
 			}
 			if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfNewSpecimen")
-					||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution"))
+					||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution")
+					||pageOf.equals("pageOfOrdering")
+					)
 			{
 				Object formObject = form;
 				String witnessName="";
@@ -452,7 +459,7 @@ function popupWindow(nofConsentTiers)
 							
 							<%
 							if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfNewSpecimen")
-									||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution"))
+									||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution")||pageOf.equals("pageOfOrdering"))
 							{
 							%>
 							<%-- Title ( Response Status if page of SCG or New Specimen --%>									
@@ -479,7 +486,7 @@ function popupWindow(nofConsentTiers)
 							 String participantResponseKey =stringArray[2];
 							 String participantResponseIDKey=stringArray[3];
 							 if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfNewSpecimen")
-										||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution"))
+										||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution")||pageOf.equals("pageOfOrdering"))
 							 {
 								responseKey=stringArray[4];
 								responseIdKey=stringArray[5];
@@ -583,7 +590,7 @@ function popupWindow(nofConsentTiers)
 							<%
 							}
 							else if(pageOf.equals("pageOfSpecimenCollectionGroupCPQuery")||pageOf.equals("pageOfNewSpecimen")
-									||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution"))
+									||pageOf.equals("pageOfNewSpecimenCPQuery")||pageOf.equals("pageOfSpecimenCollectionGroup")||pageOf.equals("pageOfDistribution")||pageOf.equals("pageOfOrdering"))
 							{
 							%>
 							<td align="left" class="formField">
@@ -672,7 +679,7 @@ function popupWindow(nofConsentTiers)
 							<%-- If Page of Distribution then show Specimen Level response --%>																											
 							<%
 							}
-							else if(pageOf.equals("pageOfDistribution"))
+							else if(pageOf.equals("pageOfDistribution") || pageOf.equals("pageOfOrdering"))
 							{
 							%>
 							<td align="left" class="formField">
@@ -687,7 +694,7 @@ function popupWindow(nofConsentTiers)
 								<%-- For loop Ends --%>						
 						<% 
 						}
-						if(pageOf.equals("pageOfDistribution"))
+						if(pageOf.equals("pageOfDistribution") ||pageOf.equals("pageOfOrdering"))
 						{
 						%>
 						<%--Verification Message --%>													
