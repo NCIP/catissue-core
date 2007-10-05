@@ -36,11 +36,6 @@ function setCustomListBoxValue(elementId,elementValue)
 	}
 }
 
-function setContainerName()
-{
-	var siteName = "<%=siteName%>";
-	parent.opener.setContainerName(siteName);	
-}
 function setTextBoxValue(elementId,elementValue)
 {
 	var id = parent.opener.document.getElementById(elementId);	
@@ -343,13 +338,7 @@ function closeFramedWindow()
 															"javascript:setTextBoxValue('" + pos1 + "','"+  i + "');" + 
 															"javascript:setTextBoxValue('" + pos2 + "','"+  j + "');" +
 															"javascript:setParentWindowValue('positionInStorageContainer','"+ storageContainerGridObject.getType() + " : " + storageContainerGridObject.getId() + " Pos (" + i + "," + j + ")');" ;								
-								String storageContainer= (String) session.getAttribute("storageContainer");								
 								
-								if(storageContainer != null)
-								{
-									setParentWindowContainer = setParentWindowContainer + "javascript:setContainerName();";
-								}
-															
 								setParentWindowContainer = setParentWindowContainer + "javascript:closeFramedWindow()";
 							}	
 							else if (pageOf.equals(Constants.PAGEOF_ALIQUOT))
