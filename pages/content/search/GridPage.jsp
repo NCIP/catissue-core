@@ -138,7 +138,7 @@ function init_grid()
 
 	if(useFunction == "goToConflictDetails")
 	{
-		colWidth = "130,130,200,130,130,130";
+		colWidth = "130,130,200,130,130,130,200";
 	}
 
 	//document.write("<hr>"+colWidth+"<hr>");
@@ -180,7 +180,8 @@ function init_grid()
 				
 				for(col=0;col<columnList.size();col++)
 				{
-					if (columnList.get(col).toString().trim().equals("ID") || columnList.get(col).toString().trim().equals("Status") || columnList.get(col).toString().trim().equals("Site Name"))
+					if (columnList.get(col).toString().trim().equals("ID") || columnList.get(col).toString().trim().equals("Status")
+					 || columnList.get(col).toString().trim().equals("Site Name")|| columnList.get(col).toString().trim().equals("Report Collection Date"))
 					{%>
 						hiddenColumnNumbers[i] = <%=col%>;
 						i++;
