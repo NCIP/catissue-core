@@ -1,6 +1,5 @@
 alter table QUERY_PARAMETERIZED_QUERY drop constraint FKA272176BBC7298A9;
 alter table CATEGORIAL_CLASS drop constraint FK9651EF32D8D56A33;
-alter table CATEGORIAL_CLASS drop constraint FK9651EF3291B;
 alter table QUERY_INTRA_MODEL_ASSOCIATION drop constraint FKF1EDBDD3BC7298A9;
 alter table QUERY_CONSTRAINTS drop constraint FKE364FCFFD3C625EA;
 alter table QUERY_PARAMETERIZED_CONDITION drop constraint FK9BE75A3EBC7298A9;
@@ -14,6 +13,8 @@ alter table QUERY_EXPRESSION drop constraint FK1B473A8F9E19EF66;
 alter table QUERY_EXPRESSION drop constraint FK1B473A8F1CF7F689;
 alter table QUERY_CONDITION_VALUES drop constraint FK9997379DDA532516;
 alter table CATEGORIAL_ATTRIBUTE drop constraint FK31F77B56E8CBD948;
+alter table QUERY_OUTPUT_ATTRIBUTE drop constraint FK22C9DB75BF5EEB27;
+alter table QUERY_OUTPUT_ATTRIBUTE drop constraint FK22C9DB75C4E818F8;
 alter table QUERY_INTER_MODEL_ASSOCIATION drop constraint FKD70658D1BC7298A9;
 alter table QUERY_EXPRESSION_OPERAND drop constraint FKA3B976F965F8F4CB;
 alter table QUERY_GRAPH_ENTRY drop constraint FKF055E4EA955C60E6;
@@ -38,16 +39,18 @@ drop table QUERY_MODEL_ASSOCIATION cascade constraints;
 drop table QUERY_CONDITION_VALUES cascade constraints;
 drop table QUERY_JOIN_GRAPH cascade constraints;
 drop table CATEGORIAL_ATTRIBUTE cascade constraints;
+drop table QUERY_OUTPUT_ATTRIBUTE cascade constraints;
 drop table QUERY_INTER_MODEL_ASSOCIATION cascade constraints;
 drop table QUERY_EXPRESSION_OPERAND cascade constraints;
 drop table QUERY_GRAPH_ENTRY cascade constraints;
 drop table CATEGORY cascade constraints;
 drop table QUERY_EXPRESSIONID cascade constraints;
 drop sequence EXPRESSION_OPERAND_SEQ;
+drop sequence CONDITION_SEQ;
+drop sequence OUTPUT_ATTRIBUTE_SEQ;
 drop sequence CONSTRAINT_SEQ;
 drop sequence GRAPH_ENTRY_SEQ;
 drop sequence JOIN_GRAPH_SEQ;
-drop sequence CONDITION_SEQ;
 drop sequence LOGICAL_CONNECTOR_SEQ;
 drop sequence CATEGORIAL_ATTRIBUTE_SEQ;
 drop sequence MODEL_ASSOCIATION_SEQ;
@@ -145,6 +148,14 @@ create table CATEGORIAL_ATTRIBUTE (
    DE_SOURCE_CLASS_ATTRIBUTE_ID number(19,0),
    primary key (ID)
 );
+create table QUERY_OUTPUT_ATTRIBUTE (
+   IDENTIFIER number(19,0) not null,
+   EXPRESSIONID_ID number(19,0) unique,
+   ATTRIBUTE_ID number(19,0) not null,
+   PARAMETERIZED_QUERY_ID number(19,0),
+   POSITION number(10,0),
+   primary key (IDENTIFIER)
+);
 create table QUERY_INTER_MODEL_ASSOCIATION (
    IDENTIFIER number(19,0) not null,
    SOURCE_SERVICE_URL varchar2(1000) not null,
@@ -181,7 +192,6 @@ create table QUERY_EXPRESSIONID (
 );
 alter table QUERY_PARAMETERIZED_QUERY add constraint FKA272176BBC7298A9 foreign key (IDENTIFIER) references QUERY;
 alter table CATEGORIAL_CLASS add constraint FK9651EF32D8D56A33 foreign key (PARENT_CATEGORIAL_CLASS_ID) references CATEGORIAL_CLASS;
-alter table CATEGORIAL_CLASS add constraint FK9651EF3291B foreign key (ID) references CATEGORY;
 alter table QUERY_INTRA_MODEL_ASSOCIATION add constraint FKF1EDBDD3BC7298A9 foreign key (IDENTIFIER) references QUERY_MODEL_ASSOCIATION;
 alter table QUERY_CONSTRAINTS add constraint FKE364FCFFD3C625EA foreign key (QUERY_JOIN_GRAPH_ID) references QUERY_JOIN_GRAPH;
 alter table QUERY_PARAMETERIZED_CONDITION add constraint FK9BE75A3EBC7298A9 foreign key (IDENTIFIER) references QUERY_CONDITION;
@@ -195,6 +205,8 @@ alter table QUERY_EXPRESSION add constraint FK1B473A8F9E19EF66 foreign key (QUER
 alter table QUERY_EXPRESSION add constraint FK1B473A8F1CF7F689 foreign key (QUERY_QUERY_ENTITY_ID) references QUERY_QUERY_ENTITY;
 alter table QUERY_CONDITION_VALUES add constraint FK9997379DDA532516 foreign key (QUERY_CONDITION_ID) references QUERY_CONDITION;
 alter table CATEGORIAL_ATTRIBUTE add constraint FK31F77B56E8CBD948 foreign key (CATEGORIAL_CLASS_ID) references CATEGORIAL_CLASS;
+alter table QUERY_OUTPUT_ATTRIBUTE add constraint FK22C9DB75BF5EEB27 foreign key (EXPRESSIONID_ID) references QUERY_EXPRESSIONID;
+alter table QUERY_OUTPUT_ATTRIBUTE add constraint FK22C9DB75C4E818F8 foreign key (PARAMETERIZED_QUERY_ID) references QUERY_PARAMETERIZED_QUERY;
 alter table QUERY_INTER_MODEL_ASSOCIATION add constraint FKD70658D1BC7298A9 foreign key (IDENTIFIER) references QUERY_MODEL_ASSOCIATION;
 alter table QUERY_EXPRESSION_OPERAND add constraint FKA3B976F965F8F4CB foreign key (QUERY_EXPRESSION_ID) references QUERY_EXPRESSION;
 alter table QUERY_GRAPH_ENTRY add constraint FKF055E4EA955C60E6 foreign key (QUERY_MODEL_ASSOCIATION_ID) references QUERY_MODEL_ASSOCIATION;
@@ -205,10 +217,11 @@ alter table CATEGORY add constraint FK31A8ACFE2D0F63E7 foreign key (PARENT_CATEG
 alter table CATEGORY add constraint FK31A8ACFE211D9A6B foreign key (ROOT_CATEGORIAL_CLASS_ID) references CATEGORIAL_CLASS;
 alter table QUERY_EXPRESSIONID add constraint FK6662DBEABC7298A9 foreign key (IDENTIFIER) references QUERY_EXPRESSION_OPERAND;
 create sequence EXPRESSION_OPERAND_SEQ;
+create sequence CONDITION_SEQ;
+create sequence OUTPUT_ATTRIBUTE_SEQ;
 create sequence CONSTRAINT_SEQ;
 create sequence GRAPH_ENTRY_SEQ;
 create sequence JOIN_GRAPH_SEQ;
-create sequence CONDITION_SEQ;
 create sequence LOGICAL_CONNECTOR_SEQ;
 create sequence CATEGORIAL_ATTRIBUTE_SEQ;
 create sequence MODEL_ASSOCIATION_SEQ;
