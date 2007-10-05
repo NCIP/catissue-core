@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.globus.util.Util;
 
 import edu.wustl.catissuecore.actionForm.CPSearchForm;
 import edu.wustl.catissuecore.actionForm.ConflictViewForm;
@@ -35,9 +36,12 @@ import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.reportloader.HL7Parser;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.QuerySessionData;
+import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -59,8 +63,7 @@ public class ConflictViewAction extends BaseAction
 	{
 		ConflictViewForm conflictViewForm = (ConflictViewForm) form;
 		int selectedFilter =  Integer.parseInt(conflictViewForm.getSelectedFilter());
-		
-		
+				
 		String[] retrieveFilterList = Constants.CONFLICT_FILTER_LIST;
 		List filterList = new ArrayList();
 		for(int i=0;i<retrieveFilterList.length;i++)
@@ -125,15 +128,13 @@ public class ConflictViewAction extends BaseAction
 			    {	
 					reportQueueDataList = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), "status", CaTIESConstants.STATUS_PARTICIPANT_CONFLICT);
 				
-					
 			    }
 				else
 				{	//retrieving all the scg conflicts both partial and exact match
 					if (selectedFilter==2)
 					{	
-						reportQueueDataList = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), "status", CaTIESConstants.STATUS_SCG_CONFLICT);
+						reportQueueDataList=reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), "status", CaTIESConstants.STATUS_SCG_CONFLICT);
 						reportQueueDataList.addAll(reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), "status", CaTIESConstants.STATUS_SCG_PARTIAL_CONFLICT));
-					
 						
 					}	
 				}
@@ -205,6 +206,7 @@ public class ConflictViewAction extends BaseAction
 			rowData.add(reportLoaderQueue.getReportLoadedDate());
 			rowData.add(reportLoaderQueue.getStatus());
 			rowData.add(reportLoaderQueue.getSiteName());
+			rowData.add(reportLoaderQueue.getReportCollectionDate());
 			gridData.add(rowData);
 		}
 	
