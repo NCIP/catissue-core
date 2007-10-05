@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:UIComponent xmlns:mx="http://www.adobe.com/2006/mxml" implements="flash.utils.IExternalizable">
+<mx:UIComponent xmlns:mx="http://www.adobe.com/2006/mxml" implements="flash.utils.IExternalizable" creationComplete="init()">
 <mx:Script>
 	<![CDATA[
 		import mx.controls.Menu;
@@ -10,8 +10,7 @@
 		import mx.rpc.events.ResultEvent;
 		import mx.collections.ArrayCollection;
 		import Components.DAGConstants;
-//		public var name:String;
-//		public var id:String;
+
 		[Bindable]
 		public var isSelected:Boolean=false;
 		[Bindable]
@@ -20,9 +19,59 @@
 		public var destinationExpId:int=0;		
 		[Bindable]
 		public var operatorIndex:int=0;
-		
-	
-		
+		private var x1:int;
+	    private var y1:int;
+	    private var x2:int;
+	    private var y2:int;
+	    private var fromNode:DAGNode;
+	    private var toNode:DAGNode;
+     	private var isMousOver:Boolean=false;
+   	    private var thicknessNumber:uint = 2;
+	    private var alphaNumber:uint = 4.0;
+	    private var arrowWidth:int = 4;
+	    private var arrowHeight:int = 8;
+        private var color:uint = 0x000000;
+     	
+	    public function init()
+	    {
+	    	this.addEventListener(MouseEvent.CLICK,createAndShow); 
+			this.addEventListener(MouseEvent.MOUSE_OVER,select);
+ 			this.addEventListener(MouseEvent.MOUSE_OUT,unSelect);
+	    	
+	    }
+	    	    
+	    public function getX1():int{
+	  	  return this.x1;
+	  	}
+	  	public function setX1(value:int):void{
+	  	  this.x1 = value;
+	  	}
+	  	public function getY1():int{
+	  	  return this.y1;
+	  	}
+	  	public function setY1(value:int):void{
+	  	  this.y1 = value;
+	  	}
+	  	public function getX2():int{
+	  	  return this.x2;
+	  	}
+	  	public function setX2(value:int):void{		
+	  	  this.x2 = value;
+	  	}
+	  	public function getY2():int{
+	  	  return this.y2;
+	  	}
+	  	public function setY2(value:int):void{
+	  	  this.y2 = value;
+	  	}
+	  	
+	  	 public function setFromNode(value:DAGNode):void{
+	      this.fromNode = value;
+	    }
+	    public function setToNode(value:DAGNode):void{
+	      this.toNode = value;
+	    }
+				
 		public function readExternal(input:IDataInput):void {
 			toolTip=input.readUTF();
 			id = input.readUTF();
@@ -100,17 +149,7 @@
 				var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
 				if(this.parentApplication.view==DAGConstants.RESULT_VIEW)
 				{
-//					if((dagNode1.nodeType==DAGConstants.VIEW_ONLY_NODE)||(dagNode2.nodeType==DAGConstants.VIEW_ONLY_NODE))
-					{
-						deletePath(dagNode1,dagNode2);
-					}
-/*					else
-					{
-						Alert.show("Constraint node  link cannot be deleted");
-						node1="";
-						node2="";
-						this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,deleteLinkHandler);
-					}*/
+					deletePath(dagNode1,dagNode2);
 				}
 				else
 				{
@@ -125,8 +164,183 @@
 		this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteLinkHandler,false);
 	}
 	
+	private function select(event:MouseEvent):void {
+		
+			if (!this.isMousOver)
+			{
+				this.color = 0x0000ff;
+		     	this.isMousOver = true;
+	        }
+	        draw();
+	}
+	private function unSelect(event:MouseEvent):void {
+			if (this.isMousOver)
+			{
+				this.color = 0x000000;
+		        this.isMousOver = false;
+	        }
+	        draw();
+	}
 	
-				
+	 public function draw():void{
+	      calculateCoordinate();
+	  	  graphics.clear();
+	  	  //this transparent line for easy selection
+	  	  graphics.lineStyle(8,color,0.0);
+	  	  graphics.moveTo(getX1(),getY1());
+	  	  graphics.lineTo(getX2(),getY2());
+	  	  //this is real line
+	  	  graphics.lineStyle(thicknessNumber,color,alphaNumber);
+	  	  graphics.moveTo(getX1(),getY1());
+	  	  graphics.lineTo(getX2(),getY2());
+	  	  createArrow();
+    }
+ 	  //Draw the arrow
+  	private function createArrow():void{
+  	  var angle:Number = Math.atan2(getY2()-getY1(), getX2()-getX1());
+  	  graphics.lineTo(getX2()-arrowHeight*Math.cos(angle)-arrowWidth*Math.sin(angle),
+  									getY2()-arrowHeight*Math.sin(angle)+arrowWidth*Math.cos(angle));
+  	  graphics.lineTo(getX2(), getY2());
+  	  graphics.lineTo(getX2()-arrowHeight*Math.cos(angle)+arrowWidth*Math.sin(angle),	
+  									getY2()-arrowHeight*Math.sin(angle)-arrowWidth*Math.cos(angle));										
+  	}
+		
+	private function calculateCoordinate():void{
+  	  var drawDirection:String = getDrawDirection();
+  	  var fromNodeX2:int = fromNode.getX()+fromNode.getWidth();
+  	  var fromNodeY2:int = fromNode.getY()+fromNode.getHeight();
+  	  var toNodeX2:int = toNode.getX()+toNode.getWidth();
+  	  var toNodeY2:int = toNode.getY()+toNode.getHeight();
+  	  var diffY:int = 0;
+  	  var diffX:int = 0;
+  	  
+  	  if (drawDirection =="BOTTOM" || drawDirection =="TOP")
+  	  {
+    		if (fromNode.getX()<=toNode.getX() && fromNodeX2>=toNodeX2){					
+    		  diffX =(toNode.getWidth())/2;
+    		  diffX = toNode.getX() + diffX;				
+    		}
+    		else if (fromNode.getX()>toNode.getX() && fromNodeX2>toNodeX2){					
+    		  diffX =(toNodeX2 - fromNode.getX())/2;
+    		  diffX = fromNode.getX() + diffX;				
+    	  }
+    	  else if (fromNode.getX()<toNode.getX() && fromNodeX2<toNodeX2){					
+    		  diffX =(fromNodeX2 - toNode.getX())/2;
+    		  diffX = toNode.getX() + diffX;				
+    		}
+    		else if (fromNode.getX()>toNode.getX() && fromNodeX2<toNodeX2){					
+    		  diffX =(fromNode.getWidth())/2;
+    		  diffX = fromNode.getX() + diffX;
+    		}
+    	  if (diffX == 0){
+    		  diffX = fromNode.getX() + (fromNode.getWidth()/2);
+    		}
+  	  }
+  	  if (drawDirection =="RIGHT" || drawDirection =="LEFT" ){				
+    		if (fromNode.getY()<=toNode.getY() && fromNodeY2>=toNodeY2){				
+    		  diffY =(toNodeY2 - toNode.getY())/2;					
+    		  diffY = toNode.getY() + diffY;						
+    		}
+    		else if (fromNode.getY()>toNode.getY() && fromNodeY2>toNodeY2){					
+    		  diffY =(toNodeY2 - fromNode.getY())/2;
+    		  diffY = fromNode.getY() + diffY;
+    		}
+    		else if (fromNode.getY()<toNode.getY() && fromNodeY2<toNodeY2){					
+    	    diffY =(fromNodeY2 - toNode.getY())/2;
+    		  diffY = toNode.getY() + diffY;								
+    		}
+    		else if (fromNode.getY()>toNode.getY() && fromNodeY2<toNodeY2){					
+    		  diffY =(fromNode.getHeight())/2;
+    		  diffY = fromNode.getY() + diffY;															
+    		}				
+  	  }
+  	  switch (drawDirection ){
+  	    case "RIGHT_BOTTOM":
+  		  this.x1 = fromNode.getX()+diffX;
+  		  this.y1 = fromNode.getY();
+  		  this.x2 = toNodeX2;
+  		  this.y2 = toNodeY2-diffY;				
+  		break;
+  		case "RIGHT_TOP":
+  		  this.x1 = fromNode.getX();
+  		  this.y1 = fromNodeY2-diffY;
+  		  this.x2 = toNodeX2-diffX;
+  		  this.y2 = toNode.getY();				
+  		break;
+  		case "LEFT_BOTTOM":
+  		  this.x1 = fromNodeX2-diffX;
+  		  this.y1 = fromNode.getY() ;
+  		  this.x2 = toNode.getX();
+  		  this.y2 = toNodeY2-diffY;				
+  		break;					
+  		case "LEFT_TOP":
+  		  this.x1 = fromNodeX2;
+  		  this.y1 = fromNodeY2-diffY;
+  		  this.x2 = toNode.getX()+diffX;
+  		  this.y2 = toNode.getY();				
+  		break;					
+  		case "RIGHT":
+  		  this.x1 = fromNode.getX();
+  		  this.y1 = diffY;
+  		  this.x2 = toNodeX2;
+  		  this.y2 = diffY;			
+  		break;
+  		case "TOP":
+  		  this.x1 = diffX;
+  		  this.y1 = fromNodeY2;
+  		  this.x2 = diffX;
+  		  this.y2 = toNode.getY();				
+  		break;
+  		case "BOTTOM":
+  		  this.x1= diffX;
+  		  this.y1= fromNode.getY();
+  		  this.x2= diffX;
+  		  this.y2= toNodeY2;				
+  		break;
+  		case "LEFT":
+  		  this.x1= fromNodeX2;
+  		  this.y1= diffY;
+  		  this.x2= toNode.getX();
+  		  this.y2= diffY;	
+  		break;
+  	  }
+  	}
+		
+	public function getDrawDirection():String
+	{
+  	  var drawDirection :String;
+  	  var fromNodeX2:int = fromNode.getX()+fromNode.getWidth();
+  	  var fromNodeY2:int = fromNode.getY()+fromNode.getHeight();
+  	  var toNodeX2:int = toNode.getX()+toNode.getWidth();
+  	  var toNodeY2:int = toNode.getY()+toNode.getHeight();
+  		
+  	  if (fromNode.getX()>toNodeX2 && fromNodeY2<toNode.getY()){
+  		  drawDirection = "RIGHT_TOP";
+  	  }
+  	  else if (fromNode.getX()>toNodeX2 && fromNode.getY()>toNodeY2){
+  	    drawDirection  = "RIGHT_BOTTOM";
+  	  }
+  	  else if (fromNodeX2<toNode.getX() && fromNode.getY()>toNodeY2){
+  	    drawDirection  = "LEFT_BOTTOM";
+  	  }
+  	  else if (fromNodeX2<toNode.getX() && fromNodeY2<toNode.getY()){
+  	    drawDirection  = "LEFT_TOP";
+  	  }
+  	  else if (fromNode.getX()>toNodeX2){
+  	    drawDirection  = "RIGHT";
+  	  }
+  	  else if (fromNodeY2<toNode.getY()){
+  	    drawDirection  = "TOP";
+  	  }
+  	  else if (fromNode.getY()>toNodeY2){
+  	    drawDirection  = "BOTTOM";
+  	  }
+  	  else if (fromNodeX2<toNode.getX()){
+  	    drawDirection  = "LEFT";
+  	  }
+  	  return drawDirection;
+  	}
+  
 	
 		
 	]]>

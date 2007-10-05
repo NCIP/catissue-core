@@ -51,11 +51,26 @@
 		public var attachedNodeMap:HashMap = new HashMap();
 		public var associationList:ArrayCollection;
 		public var operatorList:ArrayCollection;
-//		public var pathList:ArrayCollection;
+
 		public var dagpathList:ArrayCollection;
 		public var outAssociations:ArrayCollection = new ArrayCollection();		
 		public var displayoutAssociations:ArrayCollection = new ArrayCollection();		
 		public var inAssociations:ArrayCollection = new ArrayCollection();
+		
+		// The Array data provider
+		[Bindable]
+		public var menuData:Array = [	
+		{label: "Edit", type: "radio", toggled: false,enabled:true},
+		{label: "Delete", type: "radio", toggled: false,enabled:true}
+		
+		];
+		
+		[Bindable]
+		public var outputMenuData:Array = [	
+		{label: "Add To View", type: "radio", toggled: false,enabled:false},
+		{label: "Delete From View", type: "radio", toggled: false,enable:true}
+		
+		];
 
 
 		[Bindable]
@@ -157,6 +172,33 @@
 		{
 			this.parentApplication.rpcService.addEventListener("fault", faultHandler);
 		}
+		
+		public function initializeNode(nodeName:String,nodeType:String,expressionId:int,toolTipStr:String,x:int,y:int,nodeColor:int):void
+		{
+			this.x =x;
+			this.y =y;
+			this.nodeName = nodeName;
+			this.nodeType =	nodeType;
+			this.nodeNumber = expressionId+"";
+			this.expressionId=expressionId;
+			this.name = expressionId+"";
+			this.toolTip = toolTipStr;
+			this.nodeColor=nodeColor;
+		}
+		
+		public function getWidth():int{
+	      return this.width;
+	    }
+	    public function getHeight():int{
+	      return this.height;
+	    }
+	    public function getX():int{
+	      return this.x;
+	    }
+	    public function getY():int{
+	      return this.y;
+	    }
+		
 		public function readExternal(input:IDataInput):void {
 			nodeName = input.readUTF();
 			toolTip=input.readUTF();
@@ -195,10 +237,7 @@
 			this.setStyle("borderThickness","1");
 		}
 		
-		private function selectionEffect():void{
-			this.setStyle("color","blue");
-		}
-		
+	
 		// Method to create an Array-based menu.
 		private function createAndShow(event:MouseEvent):void {
 			var myMenu:Menu=null;
@@ -220,36 +259,31 @@
 			myMenu.addEventListener(MenuEvent.ITEM_CLICK,handleMenuEvent);
 			
 		}
+		
+		private function deletePath(pathName:String):void
+		{
+			var dagPath:DAGPath=this.parentApplication.dagPathUIMap.getValue(pathName) as DAGPath;
+			var node1:String=dagPath.sourceExpId+"";
+			var node2:String=dagPath.destinationExpId+"";
+			var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
+			var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
+			dagPath.deletePath(dagNode1,dagNode2);
+		}
+		
 		public function deleteNode():void
 		{
 				var ass:Association;
 				for(var i:int=0;i<inAssociations.length;i++)
 				{
 					ass = Association(inAssociations.getItemAt(i));
-					//------
-					var dagPath:DAGPath=this.parentApplication.dagPathUIMap.getValue(ass.associatedLink) as DAGPath;
-					var node1:String=dagPath.sourceExpId+"";
-					var node2:String=dagPath.destinationExpId+"";
-					var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
-					var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
-					dagPath.deletePath(dagNode1,dagNode2);
-					//----
-				//	this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
+					deletePath(ass.associatedLink);
 					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeOutAssociation(this.name,ass.associatedLink);
 					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeDisplayOutAssociation(this.name,ass.associatedLink);
 				}
 				for(var j:int=0;j<outAssociations.length;j++)
 				{
 					ass = Association(outAssociations.getItemAt(j));
-					//------
-					var dagPath:DAGPath=this.parentApplication.dagPathUIMap.getValue(ass.associatedLink) as DAGPath;
-					var node1:String=dagPath.sourceExpId+"";
-					var node2:String=dagPath.destinationExpId+"";
-					var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
-					var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
-					dagPath.deletePath(dagNode1,dagNode2);
-					//----
-				//	this.parent.removeChild(this.parent.getChildByName(ass.associatedLink));
+					deletePath(ass.associatedLink);
 					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeInAssociation(this.name,ass.associatedLink);
 				}
 				this.parentApplication.rpcService.deleteNode(this.expressionId);
@@ -304,7 +338,6 @@
 		public function deleteHandler(event:ResultEvent):void
 		{
 			this.parent.removeChild(this.parent.getChildByName(this.name));
-//			this.parentApplication.totalNodeMap.remove(this.name);
 			for(var i:int =0;i<this.parentApplication.totalNodes.length;i++)	
 			{
 				var dagNode:DAGNode = this.parentApplication.totalNodes.getItemAt(i) as DAGNode;
@@ -316,7 +349,6 @@
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteHandler,false);
 			if(this.nodeType==DAGConstants.CONSTRAINT_VIEW_NODE)
 			{
-				//this.parentApplication.showValidationMessagesToUser(DAGConstants.DELETE_LIMITS_MESSAGE);
 				var paramArray:Array = new Array(DAGConstants.DELETE_LIMITS_MESSAGE);
 				ExternalInterface.call("showEntityInformation",paramArray);
 			}
@@ -328,22 +360,6 @@
 			Alert.show(event.fault.faultString, 'Error');
 		}
 			
-	
-		// The Array data provider
-		[Bindable]
-		public var menuData:Array = [	
-		{label: "Edit", type: "radio", toggled: false,enabled:true},
-		{label: "Delete", type: "radio", toggled: false,enabled:true}
-		
-		];
-		
-		[Bindable]
-		public var outputMenuData:Array = [	
-		{label: "Add To View", type: "radio", toggled: false,enabled:false},
-		{label: "Delete From View", type: "radio", toggled: false,enable:true}
-		
-		];
-		
 		public function setOperatorHandler(event:ResultEvent):void
 		{
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,setOperatorHandler,false);
@@ -362,17 +378,6 @@
 
 		 var dagPath:DAGPath  =this.parentApplication.dagPathUIMap.getValue(outAssociation.associatedLink) as DAGPath;
 		 dagPath.operatorIndex = cb.selectedIndex;
-		 if(index==0)
-		 {
-		 	if(cb.selectedIndex==0)
-		 	{
-		 		operatorBetweenAttrAndAssociation="AND"
-		 	}
-		 	else
-		 	{
-		 		operatorBetweenAttrAndAssociation="OR"
-		 	}
-		 }
 		 this.parentApplication.currentExp.text = this.parentApplication.getExprssionString();	 	 		
 		}
 	
