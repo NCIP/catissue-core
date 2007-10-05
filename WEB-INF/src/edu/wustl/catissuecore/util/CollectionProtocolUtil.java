@@ -178,7 +178,7 @@ public class CollectionProtocolUtil {
 	}
 	
 	private static LinkedHashMap<String, GenericSpecimen> getChildAliquots(Specimen specimen, 
-			String parentuniqueId)
+			String parentuniqueId, String parentName)
 	{
 		Collection specimenChildren = specimen.getChildrenSpecimen();
 		Iterator iterator = specimenChildren.iterator();
@@ -192,7 +192,7 @@ public class CollectionProtocolUtil {
 			if(Constants.ALIQUOT.equals(childSpecimen.getLineage()))
 			{
 				SpecimenRequirementBean specimenBean = getSpecimenBean(
-						childSpecimen, specimen.getLabel(), parentuniqueId, aliqCtr++);
+						childSpecimen, parentName, parentuniqueId, aliqCtr++);
 				
 				aliquotMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
 			}
@@ -203,7 +203,7 @@ public class CollectionProtocolUtil {
 	}
 
 	private static LinkedHashMap<String, GenericSpecimen> getChildDerived(Specimen specimen, 
-			String parentuniqueId)
+			String parentuniqueId, String parentName)
 	{
 		Collection specimenChildren = specimen.getChildrenSpecimen();
 		Iterator iterator = specimenChildren.iterator();
@@ -216,7 +216,7 @@ public class CollectionProtocolUtil {
 			if(Constants.DERIVED_SPECIMEN.equals(childSpecimen.getLineage()))
 			{
 				SpecimenRequirementBean specimenBean = 
-					getSpecimenBean(childSpecimen, specimen.getLabel(),
+					getSpecimenBean(childSpecimen, parentName,
 							parentuniqueId, deriveCtr++);
 				derivedMap.put(specimenBean.getUniqueIdentifier(), specimenBean);
 			}
@@ -296,9 +296,9 @@ public class CollectionProtocolUtil {
 		speRequirementBean.setParentName(parentName);
 		
 		LinkedHashMap<String, GenericSpecimen> aliquotMap = 
-			getChildAliquots(specimen, speRequirementBean.getUniqueIdentifier());
+			getChildAliquots(specimen, speRequirementBean.getUniqueIdentifier(),speRequirementBean.getDisplayName());
 		LinkedHashMap<String, GenericSpecimen> derivedMap =
-			getChildDerived(specimen, speRequirementBean.getUniqueIdentifier());
+			getChildDerived(specimen, speRequirementBean.getUniqueIdentifier(), speRequirementBean.getDisplayName());
 		
 		Collection aliquotCollection = aliquotMap.values();
 		Collection derivedCollection = derivedMap.values();

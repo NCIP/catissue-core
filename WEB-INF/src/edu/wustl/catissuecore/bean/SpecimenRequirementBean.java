@@ -206,6 +206,10 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	
 	public String getConcentration()
 	{
+		if(concentration==null)
+		{
+			concentration = "0";
+		}
 		return concentration;
 	}
 

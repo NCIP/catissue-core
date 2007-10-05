@@ -33,46 +33,42 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		
 		<html:form action="<%=formAction%>">		
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
-				<tr>
-
-					<td class="dataTablePrimaryLabel" height="20">
-						<bean:write name="viewSpecimenSummaryForm" property="title" />
-					</td>				
+			<tr>
+				<td class="dataTablePrimaryLabel" height="20">
+					<bean:write name="viewSpecimenSummaryForm" property="title" />
+				</td>				
 				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
 					<script language="javascript">
 							refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');	
 					</script>
 				</logic:equal>
-				</tr>
-		<logic:empty name="viewSpecimenSummaryForm" property="specimenList" >
-			<tr>
-				<td class="dataTableWhiteCenterHeader" colspan="9">  
-									No specimens to display for current action!!
-								</td>
-			</tr>		
-		</logic:empty>
-		<logic:notEmpty name="viewSpecimenSummaryForm" property="specimenList" >	
-			<tr>	
-			   <td>
-				<table summary="" cellpadding="3"
-								cellspacing="0" border="0" class="dataTable" width="100%">
-					<tr>
-						<th class="formSerialNumberLabelForTable" scope="col" > &nbsp </th>
-						
-						<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
-						<th class="formSerialNumberLabelForTable" scope="col">Received</th>
-						</logic:equal>
-						<th class="formSerialNumberLabelForTable" scope="col">Label</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Class</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Tissue Site</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Tissue Side</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Pathological Status</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Storage</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
-						
+			</tr>
+			<logic:empty name="viewSpecimenSummaryForm" property="specimenList" >
+				<tr>
+					<td class="dataTableWhiteCenterHeader" colspan="9">  
+							No specimens to display for current action!!
+					</td>
+				</tr>		
+			</logic:empty>
+
+			<logic:notEmpty name="viewSpecimenSummaryForm" property="specimenList" >	
+				<tr>	
+				<td>
+					<table summary="" cellpadding="3" cellspacing="0" border="0"  class="dataTable" width="100%">
+						<tr>
+								<th class="formSerialNumberLabelForTable" scope="col" > &nbsp </th>
+								<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
+								<th class="formSerialNumberLabelForTable" scope="col">Received</th>
+								</logic:equal>
+									<th class="formSerialNumberLabelForTable" scope="col">Label</th>
+									<th class="formSerialNumberLabelForTable" scope="col"> Class</th>
+									<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
+									<th class="formSerialNumberLabelForTable" scope="col"> Tissue Site</th>
+									<th class="formSerialNumberLabelForTable" scope="col"> Tissue Side</th>
+									<th class="formSerialNumberLabelForTable" scope="col"> Pathological Status</th>
+									<th class="formSerialNumberLabelForTable" scope="col"> Storage</th>
+									<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
 					</tr>
-				
 				  <logic:iterate name="viewSpecimenSummaryForm" property="specimenList" id="specimen" indexId="counter">
 					<tr>
 						<td> <html:radio property="selectedSpecimenId" value="uniqueIdentifier" idName="specimen" 
@@ -93,7 +89,6 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							</logic:equal>
 							<html:hidden name="specimen" indexed="true" property="readOnly"/>
 						</logic:equal>
-						
 						<td class="dataCellText" > <bean:write name="specimen" property="displayName" />
 						<html:hidden name="specimen" indexed="true" property="displayName" /></td>
 						<td class="dataCellText"> <bean:write name="specimen" property="className" />
@@ -141,71 +136,70 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				<html:hidden property="userAction" />
 				<html:hidden property="requestType" />
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
-			<tr>
-			<td class="dataTablePrimaryLabel" height="20">			
-				<p>Aliquot details
-			</td>
-			</tr>
-			<tr>
-			<td>
-			<table summary="" cellpadding="3"
-							cellspacing="0" border="0" class="dataTable" width="100%">
-				<tr>	
-					<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
-					<th class="formSerialNumberLabelForTable" scope="col">Label</th>
-					<th class="formSerialNumberLabelForTable" scope="col"> Storage</th>
-					<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
-					</tr>
-				  <logic:iterate name="viewSpecimenSummaryForm" property="aliquotList" id="aliquot">
-					<tr>
-						<td > <bean:write name="aliquot" property="parentName" /></td>		      		
-						<td > <bean:write name="aliquot" property="displayName" /></td>
-						<td > <bean:write name="aliquot" property="storageContainerForSpecimen" /></td>
-						<td > <bean:write name="aliquot" property="quantity" /></td>
-					</tr>
-				  </logic:iterate>	
-				</table>			
-			</td>
-			</tr>
-			</logic:notEmpty>		
+				
+				<tr>
+					<td class="dataTablePrimaryLabel" height="20">			
+						<p>Aliquot details
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
+							<tr>	
+								<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
+								<th class="formSerialNumberLabelForTable" scope="col">Label</th>
+								<th class="formSerialNumberLabelForTable" scope="col">Storage</th>
+								<th class="formSerialNumberLabelForTable" scope="col">Qty</th>
+							</tr>
+							<logic:iterate name="viewSpecimenSummaryForm" property="aliquotList" id="aliquot">
+							<tr>
+								<td class="dataCellText"> <bean:write name="aliquot" property="parentName" /></td>		      		
+								<td class="dataCellText"> <bean:write name="aliquot" property="displayName" /></td>
+								<td class="dataCellText"> <bean:write name="aliquot" property="storageContainerForSpecimen" /></td>
+								<td class="dataCellText"> <bean:write name="aliquot" property="quantity" /></td>
+							</tr>
+						  </logic:iterate>	
+					 </table>			
+				 </td>
+			 </tr>
+		</logic:notEmpty>		
 		
 		
 		 
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >		
 		<tr>
-		<td class="dataTablePrimaryLabel" height="20">
-			<p>Derived details
-		 </td>
-		 </tr>
-		 <td>
-				    <table summary="" cellpadding="3"
-						cellspacing="0" border="0" class="dataTable" width="100%">
-			<tr>
-				<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col">Label</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> Class</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> Storage</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> concentration</th>
-
-				</tr>
-		      <logic:iterate name="viewSpecimenSummaryForm" property="derivedList" id="derived">
-		      	<tr>
-		      		<td > <bean:write name="derived" property="parentName" /></td>
-		      		<td > <bean:write name="derived" property="displayName" /></td>
-		      		<td > <bean:write name="derived" property="className" /></td>
-		      		<td > <bean:write name="derived" property="type" /></td>
-		      		<td > <bean:write name="derived" property="quantity" /></td>
-		      		<td > <bean:write name="derived" property="storageContainerForSpecimen" /></td>
-		      		<td > <bean:write name="derived" property="concentration" /></td>
-		      	</tr>
-		      </logic:iterate>	
-		    </table>
-          </td>
-		  </tr>
-		</logic:notEmpty>		
-		</table>
+			<td class="dataTablePrimaryLabel" height="20">
+				<p>Derived details
+			 </td>
+		</tr>
+			 <td>
+			    <table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
+					<tr>
+						<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
+						<th class="formSerialNumberLabelForTable" scope="col">Label</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> Class</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> Storage</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> concentration</th>
+					</tr>
+					  <logic:iterate name="viewSpecimenSummaryForm" property="derivedList" id="derived">
+		      		<tr>
+						<td class="dataCellText"> <bean:write name="derived" property="parentName" /></td>
+						<td class="dataCellText" > <bean:write name="derived" property="displayName" /></td>
+						<td class="dataCellText"> <bean:write name="derived" property="className" /></td>
+						<td class="dataCellText"> <bean:write name="derived" property="type" /></td>
+						<td class="dataCellText"> <bean:write name="derived" property="quantity" /></td>
+						<td class="dataCellText"> <bean:write name="derived" property="storageContainerForSpecimen" /></td>
+						<td class="dataCellText"> <bean:write name="derived" property="concentration" /></td>
+			      	</tr>
+					  </logic:iterate>	
+				</table>
+			</td>
+		</tr>
+	</logic:notEmpty>		
+	</table>
 
 		<table align="bottom">
 		
