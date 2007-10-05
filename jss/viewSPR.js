@@ -332,3 +332,10 @@ function ReplaceTags(xStr)
 	}	
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>AJAX code end
 
+//Function to auto scroll deidentified report text's scroll bar while moving identified report's scrollbar
+function scrollInSync()
+{
+	ideReportDiv=document.getElementById('identifiedReportText');
+	deidReportDiv=document.getElementById('deidentifiedReportText');
+	deidReportDiv.scrollTop=ideReportDiv.scrollTop+45;
+}
