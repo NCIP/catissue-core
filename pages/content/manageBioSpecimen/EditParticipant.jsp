@@ -777,7 +777,7 @@ function participantRegRow(subdivtag)
 					 if(CollectionProtocolRegConditionBoolean)
 					 {
 					 %>
-					 	<html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=collectionProtocolTitle%>" property="<%=collectionProtocolTitle%>" />
+					 	<html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=collectionProtocolTitle%>" property="<%=collectionProtocolTitle%>" readonly="<%=readOnlyValue%>"/>
 				 		<input type="hidden" id="<%=collectionProtocolId%>" name="<%=collectionProtocolId%>" value="<%=collectionProtocolIdValue%>" />
 					<%}else{ %>
 						<html:select property="<%=collectionProtocolId%>" styleClass="formFieldSized15" styleId="<%=collectionProtocolId%>" size="1" 
