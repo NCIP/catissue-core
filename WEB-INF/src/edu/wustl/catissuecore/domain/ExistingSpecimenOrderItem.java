@@ -10,6 +10,8 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.util.Collection;
+
 
 
 /**
@@ -28,6 +30,9 @@ public class ExistingSpecimenOrderItem extends SpecimenOrderItem
 	 * The specimen associated with the order item.
 	 */
 	protected Specimen specimen;
+	
+	
+	private Collection consentTierStatusCollection = null;
 
 	
 	/**
@@ -50,5 +55,16 @@ public class ExistingSpecimenOrderItem extends SpecimenOrderItem
 	{
 		this.specimen = specimen;
 	}
+	
+	public Collection getConsentTierStatusCollection() {
+		return consentTierStatusCollection;
+	}
+
+	public void setConsentTierStatusCollection(
+			Collection consentTierStatusCollection) {
+		this.consentTierStatusCollection = consentTierStatusCollection;
+	}
+	
+	
 
 }
