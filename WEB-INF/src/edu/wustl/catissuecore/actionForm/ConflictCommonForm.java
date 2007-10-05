@@ -40,9 +40,9 @@ public class ConflictCommonForm extends AbstractActionForm
 	protected String reportDate;
 	
 	/**
-	 * String for report creationDate
+	 * String for report collectionDate
 	 */
-	protected String reportcreationDate;
+	protected String reportCollectionDate;
 	
 	/**
 	 * String for siteName 
@@ -175,13 +175,22 @@ public class ConflictCommonForm extends AbstractActionForm
 		this.socialSecurityNumber = socialSecurityNumber;
 	}
 
-	
-	public void setReportcreationDate(String reportcreationDate) {
-		this.reportcreationDate = reportcreationDate;
+	/**
+	 * This method called to get the collection date
+	 * @return
+	 */
+	 
+	public String getReportCollectionDate() {
+		return reportCollectionDate;
 	}
+	
+	/**
+	 * This method called to set the collection date
+	 * @param reportCollectionDate
+	 */
 
-	public String getReportcreationDate() {
-		return reportcreationDate;
+	public void setReportCollectionDate(String reportCollectionDate) {
+		this.reportCollectionDate = reportCollectionDate;
 	}
 
 	
