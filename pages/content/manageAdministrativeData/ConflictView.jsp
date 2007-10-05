@@ -42,6 +42,7 @@
 	Integer reportDateFieldIndex = 3;
 	Integer statusFieldIndex = 4;
 	Integer siteNameFieldIndex = 5; 
+	Integer reportColDateFieldIndex = 6; 
 		
 	String pageOf = "Add";
 
@@ -102,20 +103,22 @@
 		var surgicalPathologyNumberId = <%=spnFieldIndex.intValue()%>
 		var reportDateId = <%=reportDateFieldIndex.intValue()%>
 		var siteNameId = <%=siteNameFieldIndex.intValue()%>
+		var reportCollDateId = <%=reportColDateFieldIndex%>
 		
 		var surgicalPathologyNumberField =mygrid.cells(id,surgicalPathologyNumberId); 
 		var reportDateField =mygrid.cells(id,reportDateId); 
 		var siteNameField =mygrid.cells(id,siteNameId); 
 		var reportIdField = mygrid.cells(id,colid);
 		var statusField = mygrid.cells(id,statId);
+		var reportCollDateField = mygrid.cells(id,reportCollDateId);
 
 		var reportId = reportIdField.getValue();
 		var conflictStatus = statusField.getValue();
 		var surgicalPathologyNumber =surgicalPathologyNumberField.getValue();
 		var reportDate = reportDateField.getValue();
 		var siteName = siteNameField.getValue();
-		
-		var url = "ConflictDetails.do?reportQueueId="+reportId +"&conflictStatus="+conflictStatus +"&surgicalPathologyNumber="+ surgicalPathologyNumber +"&reportDate="+reportDate +"&siteName="+siteName;
+		var reportCollDate = reportCollDateField.getValue();
+		var url = "ConflictDetails.do?reportQueueId="+reportId +"&conflictStatus="+conflictStatus +"&surgicalPathologyNumber="+ surgicalPathologyNumber +"&reportDate="+reportDate +"&siteName="+siteName +"&reportCollectionDate="+reportCollDate;
 		window.location.href = url;
 		
 		

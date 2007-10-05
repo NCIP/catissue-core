@@ -89,10 +89,10 @@
 				</tr>
 				<tr>
 					<td  class="formFieldNoBordersBold">
-						<bean:message key="caTies.conflict.report.loaded.date"/>
+						<bean:message key="caTies.conflict.report.collection.date"/>
 					</td>
 					<td class="formFieldNoBordersSimple">
-						<bean:write name="conflictCommonForm" property="reportcreationDate"/>
+						<bean:write name="conflictCommonForm" property="reportCollectionDate"/>
 					</td>
 				
 				</tr>

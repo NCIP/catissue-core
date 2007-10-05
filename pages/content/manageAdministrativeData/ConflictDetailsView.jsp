@@ -21,6 +21,7 @@
 	String surgicalPathologyNumber = (String)request.getParameter(Constants.SURGICAL_PATHOLOGY_NUMBER);
 	String reportDate = (String)request.getParameter(Constants.REPORT_DATE);
 	String siteName = (String)request.getParameter(Constants.SITE_NAME);
+	String reportCollectionDate = (String)request.getParameter(Constants.REPORT_COLLECTION_DATE);
 %>
 
 
@@ -51,7 +52,7 @@ function onButtonClick(buttonPressed)
 	<table border="0"  width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td width="100%"  valign="top">
-						<iframe id="<%=Constants.CONFLICT_COMMON_VIEW%>" name="<%=Constants.CONFLICT_COMMON_VIEW%>" src="<%=Constants.CONFLICT_COMMON_VIEW_ACTION%>?conflictStatus=<%=conflictStatus%>&reportQueueId=<%=reportQueueId%>&surgicalPathologyNumber=<%=surgicalPathologyNumber%>&reportDate=<%=reportDate%>&siteName=<%=siteName%>" scrolling="no" frameborder="0" width="100%" height="<%=frame1Ysize%>" marginheight=0 marginwidth=0>
+						<iframe id="<%=Constants.CONFLICT_COMMON_VIEW%>" name="<%=Constants.CONFLICT_COMMON_VIEW%>" src="<%=Constants.CONFLICT_COMMON_VIEW_ACTION%>?conflictStatus=<%=conflictStatus%>&reportQueueId=<%=reportQueueId%>&surgicalPathologyNumber=<%=surgicalPathologyNumber%>&reportDate=<%=reportDate%>&siteName=<%=siteName%>&reportCollectionDate=<%=reportCollectionDate%>" scrolling="no" frameborder="0" width="100%" height="<%=frame1Ysize%>" marginheight=0 marginwidth=0>
 									Your Browser doesn't support IFrames.
 						</iframe>
 					</td>

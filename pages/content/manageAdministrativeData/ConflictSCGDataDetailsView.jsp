@@ -55,7 +55,17 @@
 							 </td>
 						</tr>
 							
-						
+						<tr>
+							<td class="formFieldNoBordersBold">
+								<label for="surgicalPathologyNumber">
+									<bean:message key="caTies.conflict.collection.event.date"/> 
+								</label>
+							</td>
+							 <td class="formFieldNoBordersSimple">
+								 <bean:write name="specimenCollectionGroupForm" property="collectionEventdateOfEvent"/>
+							 </td>
+						</tr>
+								
 					</table>
 				
 				</td>	
