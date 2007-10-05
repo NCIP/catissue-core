@@ -185,8 +185,7 @@ public class ImportXmi
 			// UML extent does not exist -> create it (note that in case one want's to instantiate
 			// a metamodel other than MOF, they need to provide the second parameter of the createExtent
 			// method which indicates the metamodel package that should be instantiated)
-			uml = (UmlPackage) rep.createExtent(UML_INSTANCE, getUmlPackage());
-			System.out.println("$$$$$$$$$$$$$$$$$$$$"  + uml);
+			uml = (UmlPackage) rep.createExtent(UML_INSTANCE, getUmlPackage());			
 		}
 	}
 
@@ -203,16 +202,14 @@ public class ImportXmi
 			umlMM = (ModelPackage) rep.createExtent(UML_MM);
 		}
 		// find package named "UML" in this extent
-		MofPackage result = getUmlPackage(umlMM);
-		System.out.println("$$$$$$$$$$$$$$$$$$$$  Outside IF "  + result);
+		MofPackage result = getUmlPackage(umlMM);		
 		if (result == null)
 		{
 			// it cannot be found -> UML metamodel is not loaded -> load it from XMI
 			reader.read(UmlPackage.class.getResource("resources/01-02-15_Diff.xml").toString(),
 					umlMM);
 			// try to find the "UML" package again
-			result = getUmlPackage(umlMM);
-			System.out.println("$$$$$$$$$$$$$$$$$$$$"  + result);
+			result = getUmlPackage(umlMM);			
 		}
 		return result;
 	}
@@ -227,12 +224,10 @@ public class ImportXmi
 		for (Iterator it = umlMM.getMofPackage().refAllOfClass().iterator(); it.hasNext();)
 		{
 			MofPackage pkg = (MofPackage) it.next();
-			System.out.println("\n\nName = " + pkg.getName());
-			System.out.println("^^^^^^^^^^^^" + pkg.getContainer());
+			System.out.println("\n\nName = " + pkg.getName());			
 			// is the package topmost and is it named "UML"?
 			if (pkg.getContainer() == null && "UML".equals(pkg.getName()))
-			{
-				System.out.println("%%%%%%%%% Inside IF  " + pkg.getName());
+			{				
 				// yes -> return it
 				return pkg;
 			}
