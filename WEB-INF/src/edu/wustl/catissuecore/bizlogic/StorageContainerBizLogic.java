@@ -2683,6 +2683,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @param closeSession
 	 * @return list of containers in order of there relevence.
 	 * @throws DAOException
+	 * @author Vaishali
 	 */
 	public List getRelevantContainerList(long cpId, String specimenClass, boolean closeSession) throws DAOException
 	{

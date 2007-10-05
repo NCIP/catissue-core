@@ -39,10 +39,10 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	private String userAction;
 	private String requestType;
 	private Object summaryObject = null;
-	private String selectedContainerName;
-	private String positionDimensionOne;
-	private String positionDimensionTwo;
+	private String lastSelectedSpecimenId = null;
 	private String containerMap;
+	private String targetSuccess;
+	private String submitAction;
 	private HashMap<String, String> titleMap = new HashMap<String, String>();
 	public ViewSpecimenSummaryForm()
 	{
@@ -163,6 +163,7 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 		return eventId;
 	}
 	public void setEventId(String eventId) {
+		
 		this.eventId = eventId;
 	}
 
@@ -176,28 +177,28 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	public void setSummaryObject(Object summaryObject) {
 		this.summaryObject = summaryObject;
 	}
-	public String getSelectedContainerName() {
-		return selectedContainerName;
+	public String getLastSelectedSpecimenId() {
+		return lastSelectedSpecimenId;
 	}
-	public void setSelectedContainerName(String selectedContainerName) {
-		this.selectedContainerName = selectedContainerName;
-	}
-	public String getPositionDimensionOne() {
-		return positionDimensionOne;
-	}
-	public void setPositionDimensionOne(String positionDimensionOne) {
-		this.positionDimensionOne = positionDimensionOne;
-	}
-	public String getPositionDimensionTwo() {
-		return positionDimensionTwo;
-	}
-	public void setPositionDimensionTwo(String positionDimensionTwo) {
-		this.positionDimensionTwo = positionDimensionTwo;
+	public void setLastSelectedSpecimenId(String lastEventId) {
+		this.lastSelectedSpecimenId = lastEventId;
 	}
 	public String getContainerMap() {
 		return containerMap;
 	}
 	public void setContainerMap(String containerMap) {
 		this.containerMap = containerMap;
+	}
+	public String getTargetSuccess() {
+		return targetSuccess;
+	}
+	public void setTargetSuccess(String targetSuccess) {
+		this.targetSuccess = targetSuccess;
+	}
+	public String getSubmitAction() {
+		return submitAction;
+	}
+	public void setSubmitAction(String submitAction) {
+		this.submitAction = submitAction;
 	}
 }

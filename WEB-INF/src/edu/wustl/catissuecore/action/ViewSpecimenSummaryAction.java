@@ -37,7 +37,24 @@ public class ViewSpecimenSummaryAction extends Action {
 
 			Object obj = request.getAttribute("SCGFORM");
 			request.setAttribute("SCGFORM", obj);
+			String target =request.getParameter("target");
+			String submitAction = request.getParameter("submitAction");
 			
+			if (target == null)
+			{
+				target = Constants.SUCCESS;
+			}
+			
+			if (submitAction != null)
+			{
+				summaryForm.setSubmitAction(submitAction);
+			}
+			
+			if(summaryForm.getTargetSuccess() == null)
+			{
+				summaryForm.setTargetSuccess(target);
+			}
+			target = summaryForm.getTargetSuccess();
 			if (request.getAttribute("RequestType")!=null)
 			{
 				summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
@@ -47,7 +64,6 @@ public class ViewSpecimenSummaryAction extends Action {
 				eventId = (String) request
 						.getParameter(Constants.COLLECTION_PROTOCOL_EVENT_ID);
 				
-//				new Generatedata().generate(request);
 			}
 			
 			if (summaryForm.getSpecimenList()!= null  &&
@@ -59,7 +75,7 @@ public class ViewSpecimenSummaryAction extends Action {
 
 			if(request.getParameter("save")!=null)
 			{
-				return mapping.findForward("updateSpecimenStatus");
+				return mapping.findForward(summaryForm.getSubmitAction());
 			}
 			summaryForm.setUserAction(ViewSpecimenSummaryForm.ADD_USER_ACTION);
 			CollectionProtocolBean collectionProtocolBean = 
@@ -87,8 +103,8 @@ public class ViewSpecimenSummaryAction extends Action {
 				request.setAttribute(Constants.PAGEOF,pageOf);
 				return mapping.findForward(pageOf);
 			}
-			
-			return mapping.findForward(Constants.SUCCESS);
+			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
+			return mapping.findForward(target);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -112,31 +128,181 @@ public class ViewSpecimenSummaryAction extends Action {
 		CollectionProtocolEventBean eventBean =(CollectionProtocolEventBean)
 							collectionProtocolEventMap.get(eventId);
 		LinkedHashMap specimenMap = (LinkedHashMap)eventBean.getSpecimenRequirementbeanMap();
-		String selectedItem = summaryForm.getSelectedSpecimenId();
-		GenericSpecimenVO selectedSpecimenObj=(GenericSpecimenVO) specimenMap.get(selectedItem);
+		String selectedItem = summaryForm.getLastSelectedSpecimenId();
+		GenericSpecimenVO selectedSpecimen=(GenericSpecimenVO) specimenMap.get(selectedItem);
 		
 		Collection specimenCollection = specimenMap.values();
 		Iterator iterator = summaryForm.getSpecimenList().iterator();
+
 		
 		while(iterator.hasNext())
 		{
 			GenericSpecimenVO specimenFormVO =(GenericSpecimenVO) iterator.next();
-			
-			if (specimenFormVO.getCheckedSpecimen())
-			{
-				GenericSpecimenVO specimenSessionVO =(GenericSpecimenVO)
-							specimenMap.get(specimenFormVO.getUniqueIdentifier());
+
+			GenericSpecimenVO specimenSessionVO =(GenericSpecimenVO)
+			specimenMap.get(specimenFormVO.getUniqueIdentifier());
+
 				if(specimenSessionVO!=null)
 				{
 					specimenSessionVO.setCheckedSpecimen(specimenFormVO.getCheckedSpecimen());
+					specimenSessionVO.setDisplayName(specimenFormVO.getDisplayName());
+					specimenSessionVO.setBarCode(specimenFormVO.getBarCode());
+					specimenSessionVO.setContainerId(specimenFormVO.getContainerId());
+					specimenSessionVO.setSelectedContainerName(specimenFormVO.getSelectedContainerName());
+					specimenSessionVO.setPositionDimensionOne(specimenFormVO.getPositionDimensionOne());
+					specimenSessionVO.setPositionDimensionTwo(specimenFormVO.getPositionDimensionTwo());
+					specimenSessionVO.setQuantity(specimenFormVO.getQuantity());
 				}
-				
-			}
-			
+
 		}	
+		updateAliquotToSession(summaryForm, selectedSpecimen);
+		updateDerivedToSession(summaryForm, selectedSpecimen);
 		
 	}
+
 	
+	private void updateDerivedToSession(ViewSpecimenSummaryForm summaryForm,
+			GenericSpecimenVO selectedSpecimen) {
+		Iterator derivedIterator = summaryForm.getDerivedList().iterator();
+		
+		while(derivedIterator.hasNext())
+		{
+			GenericSpecimenVO derivedFormVO =(GenericSpecimenVO) derivedIterator.next();
+			String derivedKey = derivedFormVO.getUniqueIdentifier();
+			GenericSpecimenVO  derivedSessionVO = (GenericSpecimenVO) 
+										getDerivedSessionObject(selectedSpecimen , derivedKey);
+			if(derivedSessionVO != null)
+			{
+				derivedSessionVO.setCheckedSpecimen(derivedFormVO.getCheckedSpecimen());
+				derivedSessionVO.setDisplayName(derivedFormVO.getDisplayName());
+				derivedSessionVO.setBarCode(derivedFormVO.getBarCode());
+				derivedSessionVO.setContainerId(derivedFormVO.getContainerId());
+				derivedSessionVO.setSelectedContainerName(derivedFormVO.getSelectedContainerName());
+				derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
+				derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
+				derivedSessionVO.setQuantity(derivedFormVO.getQuantity());
+				derivedSessionVO.setConcentration(derivedFormVO.getConcentration());
+			}
+			
+		}
+	}
+	
+	private GenericSpecimen getDerivedSessionObject(GenericSpecimen parentSessionObject, String derivedKey)
+	{
+		LinkedHashMap deriveMap = parentSessionObject.getDeriveSpecimenCollection();
+		if(deriveMap == null || deriveMap.isEmpty())
+		{
+			return null;
+		}
+		GenericSpecimen derivedSessionObject =(GenericSpecimen) deriveMap.get(derivedKey);
+		if (derivedSessionObject != null)
+		{
+			return derivedSessionObject;	
+		}
+		Collection parentCollection = deriveMap.values();
+		Iterator parentIterator = parentCollection.iterator();
+		
+		while(parentIterator.hasNext())
+		{
+			GenericSpecimen parentDerived = (GenericSpecimen) parentIterator.next();
+			derivedSessionObject = getDerivedSessionObject(parentDerived, derivedKey);
+			if (derivedSessionObject != null){
+				return derivedSessionObject;
+			}
+		}
+		//Search Derived in derived specimen tree.
+		LinkedHashMap aliquotMap = parentSessionObject.getAliquotSpecimenCollection();
+		
+		if(aliquotMap != null && !aliquotMap.isEmpty())
+		{
+			parentCollection = aliquotMap.values();
+			parentIterator = parentCollection.iterator();
+			
+			while(parentIterator.hasNext())
+			{
+				GenericSpecimen derivedSpecimen = (GenericSpecimen) parentIterator.next();
+				derivedSessionObject = getDerivedSessionObject(derivedSpecimen, derivedKey);
+				if (derivedSessionObject != null){
+					return derivedSessionObject;
+				}
+			}
+		}
+		return null;
+		
+	}
+
+	/**
+	 * @param summaryForm
+	 * @param selectedSpecimen
+	 */
+	private void updateAliquotToSession(ViewSpecimenSummaryForm summaryForm,
+			GenericSpecimenVO selectedSpecimen) {
+		Iterator aliquotIterator = summaryForm.getAliquotList().iterator();
+		
+		while(aliquotIterator.hasNext())
+		{
+			GenericSpecimenVO aliquotFormVO =(GenericSpecimenVO) aliquotIterator.next();
+			String aliquotKey = aliquotFormVO.getUniqueIdentifier();
+			GenericSpecimenVO  aliquotSessionVO = (GenericSpecimenVO) 
+										getAliquotSessionObject(selectedSpecimen , aliquotKey);
+			if(aliquotSessionVO != null)
+			{
+				aliquotSessionVO.setCheckedSpecimen(aliquotFormVO.getCheckedSpecimen());
+				aliquotSessionVO.setDisplayName(aliquotFormVO.getDisplayName());
+				aliquotSessionVO.setBarCode(aliquotFormVO.getBarCode());
+				aliquotSessionVO.setContainerId(aliquotFormVO.getContainerId());
+				aliquotSessionVO.setSelectedContainerName(aliquotFormVO.getSelectedContainerName());
+				aliquotSessionVO.setPositionDimensionOne(aliquotFormVO.getPositionDimensionOne());
+				aliquotSessionVO.setPositionDimensionTwo(aliquotFormVO.getPositionDimensionTwo());
+				aliquotSessionVO.setQuantity(aliquotFormVO.getQuantity());
+			}
+			
+		}
+	}
+	
+	private GenericSpecimen getAliquotSessionObject(GenericSpecimen parentSessionObject, String aliquotKey)
+	{
+		LinkedHashMap aliquotMap = parentSessionObject.getAliquotSpecimenCollection();
+		if(aliquotMap == null || aliquotMap.isEmpty())
+		{
+			return null;
+		}
+		GenericSpecimen aliquotSessionObject =(GenericSpecimen) aliquotMap.get(aliquotKey);
+		if (aliquotSessionObject != null)
+		{
+			return aliquotSessionObject;	
+		}
+		Collection parentCollection = aliquotMap.values();
+		Iterator parentIterator = parentCollection.iterator();
+		
+		while(parentIterator.hasNext())
+		{
+			GenericSpecimen parentAliquot = (GenericSpecimen) parentIterator.next();
+			aliquotSessionObject = getAliquotSessionObject(parentAliquot, aliquotKey);
+			if (aliquotSessionObject != null){
+				return aliquotSessionObject;
+			}
+		}
+		//Search Aliquot in derived specimen tree.
+		LinkedHashMap deriveMap = parentSessionObject.getDeriveSpecimenCollection();
+		
+		if(deriveMap != null && !deriveMap.isEmpty())
+		{
+			parentCollection = deriveMap.values();
+			parentIterator = parentCollection.iterator();
+			
+			while(parentIterator.hasNext())
+			{
+				GenericSpecimen derivedSpecimen = (GenericSpecimen) parentIterator.next();
+				aliquotSessionObject = getAliquotSessionObject(derivedSpecimen, aliquotKey);
+				if (aliquotSessionObject != null){
+					return aliquotSessionObject;
+				}
+			}
+		}
+		return null;
+		
+	}
 	/**
 	 * This function retrieves the Map of specimens from session.
 	 * @param session
@@ -348,7 +514,10 @@ public class ViewSpecimenSummaryAction extends Action {
 	private ArrayList<GenericSpecimen> getSpecimenList(
 			Collection<GenericSpecimen> specimenColl) {
 		ArrayList<GenericSpecimen> specimenList = new ArrayList<GenericSpecimen>();
-		specimenList.addAll(specimenColl);
+		if (!specimenColl.isEmpty())
+		{
+			specimenList.addAll(specimenColl);
+		}
 		return specimenList;
 	}
 /*

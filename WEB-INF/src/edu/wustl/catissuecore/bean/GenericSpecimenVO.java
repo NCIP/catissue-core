@@ -27,6 +27,12 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 	private String uniqueIdentifier = null;
 	private boolean checkedSpecimen = false;
 	private boolean readOnly =false;
+	private String barCode;
+	private String selectedContainerName;
+	private String positionDimensionOne;
+	private String positionDimensionTwo;
+	private String containerId;
+	private long id =-1;
 	public LinkedHashMap<String, GenericSpecimen> getAliquotSpecimenCollection() {
 		return aliquotSpecimenCollection;
 	}
@@ -147,6 +153,54 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
+	}
+
+	public String getBarCode() {
+		return barCode;
+	}
+
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
+	}
+
+	public String getSelectedContainerName() {
+		return selectedContainerName;
+	}
+
+	public void setSelectedContainerName(String selectedContainerName) {
+		this.selectedContainerName = selectedContainerName;
+	}
+
+	public String getPositionDimensionOne() {
+		return positionDimensionOne;
+	}
+
+	public void setPositionDimensionOne(String positionDimensionOne) {
+		this.positionDimensionOne = positionDimensionOne;
+	}
+
+	public String getPositionDimensionTwo() {
+		return positionDimensionTwo;
+	}
+
+	public void setPositionDimensionTwo(String positionDimensionTwo) {
+		this.positionDimensionTwo = positionDimensionTwo;
+	}
+
+	public String getContainerId() {
+		return containerId;
+	}
+
+	public void setContainerId(String containerId) {
+		this.containerId = containerId;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 }

@@ -1429,6 +1429,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
     	}
     	this.type = specimen.getType();
     	this.isCollectionProtocolRequirement = new Boolean(false);
+    	this.positionDimensionOne =specimen.positionDimensionOne;
      }
     
     private Collection setBiohazardCollection(Specimen specimen)

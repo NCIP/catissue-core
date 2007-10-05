@@ -1,9 +1,13 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,25 +18,36 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 public class AnticipatorySpecimenViewAction extends Action {
 
-	private String globalSpecimenId = null;  
+	private String globalSpecimenId = null;
+	private SessionDataBean bean;
+	private LinkedHashMap<String, ArrayList<GenericSpecimenVO>> autoStorageSpecimenMap =new LinkedHashMap<String, ArrayList<GenericSpecimenVO>> ();
+	Long cpId = null;
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -41,9 +56,8 @@ public class AnticipatorySpecimenViewAction extends Action {
 			(SpecimenCollectionGroupForm)form;
 		HttpSession session = request.getSession();
 		Long id = specimenCollectionGroupForm.getId();
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		SessionDataBean bean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+		bean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 		((AbstractDAO)dao).openSession(bean);
 		try{
 			session.setAttribute("SCGFORM", specimenCollectionGroupForm.getId());
@@ -52,7 +66,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 			{
 				SpecimenCollectionGroup specimencollectionGroup = (SpecimenCollectionGroup) cpList.get(0);			
 				LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = new LinkedHashMap<String, CollectionProtocolEventBean> ();
-				
+				cpId = specimencollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
 				CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 	
 				eventBean.setUniqueIdentifier(String.valueOf(specimencollectionGroup.getId().longValue()));
@@ -66,6 +80,20 @@ public class AnticipatorySpecimenViewAction extends Action {
 				.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);			
 			
 				request.setAttribute("RequestType",ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
+				((AbstractDAO)dao).closeSession();
+				Set<String> keySet = autoStorageSpecimenMap.keySet();
+				if (!keySet.isEmpty())
+				{
+					Iterator<String> keySetIterator = keySet.iterator();
+					while(keySetIterator.hasNext())
+					{
+						String key = keySetIterator.next();
+						ArrayList<GenericSpecimenVO> specimenList =
+							autoStorageSpecimenMap.get(key);
+						setSpecimenStorageDetails(specimenList,key);
+					}
+				}
+				
 				return mapping.findForward(Constants.SUCCESS);
 			}
 		}catch(Exception e){
@@ -76,7 +104,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		return null;
 	}
 
-	private LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection)
+	private LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection) throws DAOException
 	{
 		LinkedHashMap<String, GenericSpecimen> specimenMap = new LinkedHashMap<String, GenericSpecimen>();
 		
@@ -95,7 +123,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		return specimenMap;
 	}
 	
-	private LinkedHashMap<String, GenericSpecimen> getChildAliquots(Specimen specimen)
+	private LinkedHashMap<String, GenericSpecimen> getChildAliquots(Specimen specimen) throws DAOException
 	{
 		Collection specimenChildren = specimen.getChildrenSpecimen();
 		Iterator iterator = specimenChildren.iterator();
@@ -114,7 +142,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		return aliquotMap;
 	}
 
-	private LinkedHashMap<String, GenericSpecimen> getChildDerived(Specimen specimen)
+	private LinkedHashMap<String, GenericSpecimen> getChildDerived(Specimen specimen) throws DAOException
 	{
 		Collection specimenChildren = specimen.getChildrenSpecimen();
 		Iterator iterator = specimenChildren.iterator();
@@ -133,15 +161,15 @@ public class AnticipatorySpecimenViewAction extends Action {
 		return derivedMap;
 	}	
 	
-	private GenericSpecimenVO getSpecimenBean(Specimen specimen, String parentName)
+	private GenericSpecimenVO getSpecimenBean(Specimen specimen, String parentName) throws DAOException
 	{
 		GenericSpecimenVO specimenDataBean = new GenericSpecimenVO();
-		//specimenDataBean.setBarcode(specimen.getBarcode());
+		specimenDataBean.setBarCode(specimen.getBarcode());
 		specimenDataBean.setClassName(specimen.getClassName());
 //		specimenDataBean.setCreatedOn(specimen.getCreatedOn());
 		specimenDataBean.setDisplayName(specimen.getLabel());
 		specimenDataBean.setPathologicalStatus(specimen.getPathologicalStatus());
-
+		specimenDataBean.setId(specimen.getId().longValue());
 		specimenDataBean.setParentName(parentName);
 		specimenDataBean.setQuantity(specimen.getInitialQuantity().getValue().toString());
 		
@@ -149,9 +177,10 @@ public class AnticipatorySpecimenViewAction extends Action {
 //		specimenDataBean.setAvailableQuantity(availableQuantity);
 //		specimenDataBean.setInitialQuantity(availableQuantity);
 		//specimenDataBean.setConcentration(specimen.get);
+	
+		specimenDataBean.setCheckedSpecimen(true);
 		if (Constants.SPECIMEN_COLLECTED.equals(specimen.getCollectionStatus()))
 		{
-			specimenDataBean.setCheckedSpecimen(true);
 			specimenDataBean.setReadOnly(true);
 		}
 		specimenDataBean.setType(specimen.getType());
@@ -169,8 +198,111 @@ public class AnticipatorySpecimenViewAction extends Action {
 //		specimenDataBean.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 				
 //		specimenDataBean.setStorageContainer(null);
+		String concentration ="";
+		if ("Molecular".equals(specimen.getClass()))
+		{
+			concentration =String.valueOf(
+					((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter()
+					);
+		}
+		specimenDataBean.setConcentration(concentration);
+		StorageContainer container = specimen.getStorageContainer();
+		Logger.out.info("-----------Container while getting from domain--:"+container);
+		String storageType = null;
+		if (container != null)
+		{
+			specimenDataBean.setContainerId( String.valueOf(container.getId()));
+			specimenDataBean.setSelectedContainerName(container.getName());
+			specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getPositionDimensionOne()));
+			specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen.getPositionDimensionTwo()));
+
+			specimenDataBean.setStorageContainerForSpecimen("Auto");
+
+		}
+		else
+		{
+			//TODO:After model change 
+			if(specimen.getPositionDimensionOne() == null)
+			{
+				specimenDataBean.setStorageContainerForSpecimen("Virtual");
+			}
+			else
+			{
+				storageType = 
+					CollectionProtocolUtil.getStorageTypeValue(specimen.getPositionDimensionOne());
+				specimenDataBean.setStorageContainerForSpecimen(storageType);
+			}
+		}
+		if ("Auto".equals(storageType))
+		{
+			String className = specimenDataBean.getClassName();
+			
+			if (autoStorageSpecimenMap.get(className) == null)
+			{
+				autoStorageSpecimenMap.put(className, new ArrayList<GenericSpecimenVO>());				
+			}
+			ArrayList<GenericSpecimenVO> specimenList =
+						autoStorageSpecimenMap.get(className);
+			specimenList.add(specimenDataBean);
+		}
 		specimenDataBean.setAliquotSpecimenCollection(getChildAliquots(specimen));
 		specimenDataBean.setDeriveSpecimenCollection(getChildDerived(specimen));
 		return specimenDataBean;
 	}
+	
+	private void setSpecimenStorageDetails(List specimenDataBeanList, String className) throws DAOException
+	{
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		TreeMap containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(cpId.longValue(), className,
+				0, "false", bean, true);
+	
+		populateAliquotsStorageLocations(specimenDataBeanList, containerMap);
+	}
+
+	private void populateAliquotsStorageLocations(List specimenDataBeanList, Map containerMap)
+	{
+		
+		int counter = 1;
+
+		if (!containerMap.isEmpty())
+		{
+			Object[] containerId = containerMap.keySet().toArray();
+
+			for (int i = 0; i < containerId.length; i++)
+			{
+				Map xDimMap = (Map) containerMap.get(containerId[i]);
+
+				if (!xDimMap.isEmpty())
+				{
+					Object[] xDim = xDimMap.keySet().toArray();
+
+					for (int j = 0; j < xDim.length; j++)
+					{
+						List yDimList = (List) xDimMap.get(xDim[j]);
+
+						for (int k = 0; k < yDimList.size(); k++)
+						{
+							if(counter < specimenDataBeanList.size())
+							{
+								GenericSpecimenVO specimenDataBean = (GenericSpecimenVO)specimenDataBeanList.get(counter);
+								specimenDataBean.setContainerId(((NameValueBean) containerId[i]).getValue());
+								specimenDataBean.setSelectedContainerName(((NameValueBean) containerId[i]).getName());
+								specimenDataBean.setPositionDimensionOne(((NameValueBean) xDim[j]).getValue());
+								specimenDataBean.setPositionDimensionTwo(((NameValueBean) yDimList.get(k)).getValue());
+	
+								counter++;
+							}
+							else
+							{
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+
+	}
+	
+	
 }

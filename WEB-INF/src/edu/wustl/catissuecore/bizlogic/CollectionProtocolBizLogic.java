@@ -57,18 +57,6 @@ import edu.wustl.common.util.logger.Logger;
  * CollectionProtocolBizLogic is used to add CollectionProtocol information into the database using Hibernate.
  * @author Mandar Deshmukh
  */
-/**
- * @author abhijit_naik
- *
- */
-/**
- * @author abhijit_naik
- *
- */
-/**
- * @author abhijit_naik
- *
- */
 public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic implements Roles
 {
 

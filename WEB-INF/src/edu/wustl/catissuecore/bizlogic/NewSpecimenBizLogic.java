@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.hibernate.HibernateException;
+import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -34,6 +35,7 @@ import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.QuantityInCount;
 import edu.wustl.catissuecore.domain.QuantityInGram;
 import edu.wustl.catissuecore.domain.QuantityInMicrogram;
@@ -2319,32 +2321,88 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 	}
-	public void setSpecimenCollected(Specimen newSpecimen, SessionDataBean sessionDataBean) throws DAOException
+	
+	public void updateMultipleSpecimens(Collection newSpecimenCollection, SessionDataBean sessionDataBean) throws DAOException
 	{
+		Iterator iterator = newSpecimenCollection.iterator();
 		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		try
 		{
 			((HibernateDAO)dao).openSession(sessionDataBean);
+	
+			while (iterator.hasNext())
+			{
+				Specimen newSpecimen = (Specimen) iterator.next();
+				updateSignleSpecimen(dao,newSpecimen, sessionDataBean);
+			}
+			((HibernateDAO)dao).commit();
+		}
+		catch(Exception exception)
+		{
+			throw new DAOException("failed to update multiple specimen " +
+					exception.getMessage());
+		}
+		finally{
+		
+			((HibernateDAO)dao).closeSession();
+		}
+	}
+	
+	public void updateSignleSpecimen(DAO dao, Specimen newSpecimen, SessionDataBean sessionDataBean) throws DAOException
+	{
+		try
+		{
 			List specList = dao.retrieve(Specimen.class.getName(), "id", newSpecimen.getId());
 	
 			if(specList != null && !specList.isEmpty())
 			{
 				Specimen specimenDO =(Specimen)specList.get(0);
-				specimenDO.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
-				Collection childrenSpecimens = specimenDO.getChildrenSpecimen();
-				updateChildSpecimenStatus(childrenSpecimens);
+				updateSpecimenDomainObject(dao, newSpecimen, specimenDO);
+				updateChildrenSpecimens(dao,newSpecimen, specimenDO);
 				dao.update(specimenDO, sessionDataBean, false, false, false);
 			}
 		}catch(UserNotAuthorizedException authorizedException){
 			throw new DAOException ("User not authorized to update specimens" + 
 					authorizedException.getMessage());
 			
-		}finally{
-			((HibernateDAO)dao).commit();
-			((HibernateDAO)dao).closeSession();		
 		}
 	}
 
+	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO ,
+			Specimen specimenDO) throws DAOException
+	{
+		Collection childrenSpecimens = specimenDO.getChildrenSpecimen();
+		if (childrenSpecimens==null || childrenSpecimens.isEmpty())
+		{
+			return;
+		}
+		Iterator iterator = childrenSpecimens.iterator();
+		while(iterator.hasNext())
+		{
+			Specimen specimen = (Specimen) iterator.next();
+			Specimen relatedSpecimen = getCorelatedSpecimen(
+					specimen.getId(), specimenVO.getChildrenSpecimen());
+			
+			updateSpecimenDomainObject(dao, relatedSpecimen, specimen);
+			
+			updateChildrenSpecimens(dao, relatedSpecimen, specimen);
+		}	
+	}
+	
+	private Specimen getCorelatedSpecimen(
+			Long id, Collection specimenCollection) throws DAOException
+	{
+		Iterator iterator = specimenCollection.iterator();
+		while(iterator.hasNext())
+		{
+			Specimen specimen = (Specimen) iterator.next();
+			if (specimen.getId().longValue() == id.longValue())
+			{
+				return specimen;
+			}
+		}
+		throw new DAOException ("Invalid specimen: id =" + id );
+	}
 	/**
 	 * @param childrenSpecimens
 	 */
@@ -2360,4 +2418,76 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 	}
+	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO ,Specimen specimenDO) throws DAOException {
+		specimenDO.setLabel(specimenVO.getLabel());
+		if (specimenVO.getBarcode()!=null && specimenVO.getBarcode().trim().length()==0)
+		{
+			specimenDO.setBarcode(null);
+		}
+		else
+		{
+				specimenDO.setBarcode(specimenVO.getBarcode());
+		}
+		try{
+			if(specimenVO.getStorageContainer()!=null)
+			{
+				specimenDO.setPositionDimensionOne(
+						specimenVO.getPositionDimensionOne());
+				specimenDO.setPositionDimensionTwo(
+						specimenVO.getPositionDimensionTwo());
+				StorageContainer storageContainer =specimenVO.getStorageContainer();
+				Long containerId = storageContainer.getId();
+				List storageContainerList;
+				if(containerId !=null )
+				{
+					storageContainerList = dao.retrieve
+					(StorageContainer.class.getName(), "id", containerId);				
+				}
+				else
+				{
+					storageContainerList = dao.retrieve
+					(StorageContainer.class.getName(), "name", storageContainer.getName());
+				}
+				if (storageContainerList == null || storageContainerList.isEmpty())
+				{
+					throw new DAOException("Container name is invalid");
+				}
+				
+				storageContainer = (StorageContainer)storageContainerList.get(0);
+	
+				specimenDO.setStorageContainer(storageContainer);
+			}
+			else
+			{
+				specimenDO.setStorageContainer(null);
+			}
+			
+			
+			
+			if(specimenVO.getInitialQuantity() != null)
+			{
+				Quantity quantity = specimenVO.getInitialQuantity();
+				Double quantityValue = quantity.getValue();
+				if (specimenDO.getInitialQuantity() == null)
+				{
+					quantity = new Quantity();
+					specimenDO.setInitialQuantity(quantity);
+				}
+				else
+				{
+					quantity = specimenDO.getInitialQuantity();
+				}
+				quantity.setValue(quantityValue);
+				
+			}
+			specimenDO.setCollectionStatus(specimenVO.getCollectionStatus());
+		}
+		catch(DAOException exception)
+		{
+			exception.setMessage("Failed to update specimen " 
+					+ specimenVO.getLabel() + exception.getMessage());
+			throw exception;
+		}
+	}
+	
 }
