@@ -59,10 +59,7 @@ public class ConflictCommonAction extends BaseAction{
 		conflictCommonForm.setSurgicalPathologyNumber((String)request.getParameter(Constants.SURGICAL_PATHOLOGY_NUMBER));
 		conflictCommonForm.setReportDate((String)request.getParameter(Constants.REPORT_DATE));
 		conflictCommonForm.setSiteName((String)request.getParameter(Constants.SITE_NAME));
-	
-		Date reportCreationDate=(Date)retrieveReportCreationDate(reportQueueId);
-		String dateOfCreation=Utility.parseDateToString(reportCreationDate, Constants.DATE_PATTERN_MM_DD_YYYY);
-		conflictCommonForm.setReportcreationDate(dateOfCreation);
+		conflictCommonForm.setReportCollectionDate((String)request.getParameter(Constants.REPORT_COLLECTION_DATE));
 	
 		Participant participant = (Participant) retrieveReportParticipant(reportQueueId);
 		String participantName = (String)participant.getLastName()+","+ (String)participant.getFirstName();
@@ -126,28 +123,6 @@ public class ConflictCommonAction extends BaseAction{
 		 participant = HL7ParserUtil.parserParticipantInformation(pidLine,site);
 			 
 		return participant;
-	}
-	
-	private Date retrieveReportCreationDate(String reportQueueId) throws DAOException
-	{
-		Date reportCreationDate=null;
-		List reportQueueDataList =  new ArrayList();
-		ReportLoaderQueue reportLoaderQueue =null;
-		reportQueueDataList = getReportQueueDataList(reportQueueId);
-		if((reportQueueDataList!=null) && (reportQueueDataList).size()>0)
-		{
-			reportLoaderQueue = (ReportLoaderQueue)reportQueueDataList.get(0);
-		}
-		
-//		retrive the OBR	
-		String OBRLine = ReportLoaderUtil.getLineFromReport(reportLoaderQueue.getReportText(), CaTIESConstants.OBR);
-		
-		//retrieve IdentifiedSurgicalPathologyReportObject
-		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReportObject = null;
-	identifiedSurgicalPathologyReportObject = HL7ParserUtil.extractOBRSegment(OBRLine);
-		reportCreationDate =(Date)identifiedSurgicalPathologyReportObject.getCollectionDateTime();
-		
-		return reportCreationDate;
 	}
 
 }
