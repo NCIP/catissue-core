@@ -550,10 +550,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					}
 				}
 			}
-			if (specimen.getStorageContainer()!=null)
-			{
-				dao.insert(specimen.getStorageContainer(), sessionDataBean, true, true);
-			}
 			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
 			dao.insert(specimen, sessionDataBean, true, true);
 			//protectionObjects.add(specimen);

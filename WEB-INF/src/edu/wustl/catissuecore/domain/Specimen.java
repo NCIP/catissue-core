@@ -648,7 +648,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
 		if (SearchUtil.isNullobject(storageContainer))
 		{
-			storageContainer = null;
+			storageContainer = new StorageContainer();
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
@@ -676,8 +676,12 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		}
         
        try{  
-
-		if (abstractForm instanceof AliquotForm)
+		   if (abstractForm.isAddOperation())
+		   {
+			   this.isCollectionProtocolRequirement = new Boolean(false);
+		   }
+    	   
+    	if (abstractForm instanceof AliquotForm)
 		{
 			AliquotForm form = (AliquotForm) abstractForm;
 			// Dispose parent specimen Bug 3773
@@ -796,49 +800,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					}
 
 					Logger.out.debug("isParentChanged " + isParentChanged);
-				/*	if (form.getStContSelection() == 1)
-					{
-						this.storageContainer = null;
-						this.positionDimensionOne = null;
-						this.positionDimensionTwo = null;
-
-					}
-					else if(form.getStContSelection() == 2)
-					{
-						this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
-						this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
-					}
-					else if(form.getStContSelection() == 3)
-					{
-						this.setPositionDimensionOne(new Integer(form.getPos1()));
-						this.setPositionDimensionTwo(new Integer(form.getPos2()));
-					}*/
-					if (form.isParentPresent())
-					{
-						parentSpecimen = new CellSpecimen();
-						//parentSpecimen.setId(new Long(form.getParentSpecimenId()));
-						parentSpecimen.setLabel(form.getParentSpecimenName());
-						
-					}
-					else
-					{
-						parentSpecimen = null;
-						//specimenCollectionGroup = null;
-						this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
-						
-//						this.specimenCollectionGroup.setGroupName(form.getSpecimenCollectionGroupName());
-						IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-
-						List scgList = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "name",form.getSpecimenCollectionGroupName());
-						
-						if(!scgList.isEmpty())
-						{
-							this.specimenCollectionGroup =(SpecimenCollectionGroup) scgList.get(0);
-						}
-				
-
-					}
-
+					
 					//Setting the SpecimenCharacteristics
 					this.pathologicalStatus = form.getPathologicalStatus();
 					specimenCharacteristics.tissueSide = form.getTissueSide();
@@ -936,10 +898,6 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						if(form.getStContSelection()==2)
 						{
 							long stContainerId = Long.parseLong(form.getStorageContainer());
-							if(this.storageContainer == null)
-							{
-								this.storageContainer = new StorageContainer();
-							}
 							this.storageContainer.setId(stContainerId);
 							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
@@ -960,7 +918,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					{
 						if(!validator.isEmpty(form.getSelectedContainerName()))
 						{
-							this.storageContainer = new StorageContainer();
+							//this.storageContainer = new StorageContainer();
 							this.storageContainer.setName(form.getSelectedContainerName());
 							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
@@ -971,6 +929,32 @@ public class Specimen extends AbstractDomainObject implements Serializable
 							this.positionDimensionOne = null;
 							this.positionDimensionTwo = null;
 						}
+					}
+					
+					if (form.isParentPresent())
+					{
+						parentSpecimen = new CellSpecimen();
+						//parentSpecimen.setId(new Long(form.getParentSpecimenId()));
+						parentSpecimen.setLabel(form.getParentSpecimenName());
+						
+					}
+					else
+					{
+						parentSpecimen = null;
+						//specimenCollectionGroup = null;
+						this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
+						
+//						this.specimenCollectionGroup.setGroupName(form.getSpecimenCollectionGroupName());
+						IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+
+						List scgList = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "name",form.getSpecimenCollectionGroupName());
+						
+						if(!scgList.isEmpty())
+						{
+							this.specimenCollectionGroup =(SpecimenCollectionGroup) scgList.get(0);
+						}
+				
+
 					}
 				}
 				else if (abstractForm instanceof CreateSpecimenForm)

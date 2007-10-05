@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -44,6 +45,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -178,15 +180,22 @@ public class CreateSpecimenAction extends SecureAction
 						columnValue[0] = createForm.getParentSpecimenBarcode().trim();
 						errorString = ApplicationProperties.getValue("quickEvents.barcode");
 					}
-					String []selectColumnName={"specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id"};
+					
+					String []selectColumnName={Constants.COLUMN_NAME_SCG_ID};
 					String []whereColumnCondition={"="};
-					List spList = dao.retrieve(Specimen.class.getName(),selectColumnName ,columnName
+					List scgList = dao.retrieve(Specimen.class.getName(),selectColumnName,columnName
 							,whereColumnCondition,columnValue,null ); 
-
-					if (spList != null && !spList.isEmpty())
+					
+					boolean isSpecimenExist = true;
+					if (scgList != null && !scgList.isEmpty())
 					{
 //						Specimen sp = (Specimen) spList.get(0);
-						long cpId = ((Long)spList.get(0)).longValue();
+						Long scgId = (Long)scgList.get(0);
+						long cpId = getCpId(dao,scgId);
+						if(cpId == -1)
+						{
+							isSpecimenExist = false;
+						}
 						String spClass = createForm.getClassName();
 						
 						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
@@ -246,8 +255,13 @@ public class CreateSpecimenAction extends SecureAction
 					}
 					else
 					{
+						isSpecimenExist = false;
+					}
+					
+					if(!isSpecimenExist)
+					{
 						ActionErrors errors = (ActionErrors) request
-								.getAttribute(Globals.ERROR_KEY);
+						.getAttribute(Globals.ERROR_KEY);
 						if (errors == null)
 						{
 							errors = new ActionErrors();
@@ -445,7 +459,26 @@ public class CreateSpecimenAction extends SecureAction
 
 		return containerMap;
 	}
+	
+	private long getCpId(CreateSpecimenBizLogic dao, Long scgId) throws DAOException
+	{
+		long cpId = -1;
+		String []columnName = new String[1];
+		Object []columnValue = new Long[1];
 
+		columnName[0] = Constants.SYSTEM_IDENTIFIER; 
+		columnValue[0] = scgId;
+		String []selectColumnName={"collectionProtocolRegistration.collectionProtocol.id"};
+		String []whereColumnCondition={"="};
+		List cpList = dao.retrieve(SpecimenCollectionGroup.class.getName(),selectColumnName,columnName
+				,whereColumnCondition,columnValue,null );
+		if (cpList != null && !cpList.isEmpty())
+		{
+			cpId = (Long)cpList.get(0);
+		}
+		return cpId;
+	}
+	
 	Vector checkForInitialValues(Map containerMap)
 	{
 		Vector initialValues = null;
