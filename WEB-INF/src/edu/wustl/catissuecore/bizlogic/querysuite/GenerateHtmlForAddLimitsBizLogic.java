@@ -1059,7 +1059,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String innerStr = "";
 		// String divId = "overDiv" + (i + 1);
 		String divStr = "\n<div width='3%' id='overDiv' style='position:absolute; visibility:hidden; z-index:3500;'></div>";
-		String imgStr = "\n<img id=\"calendarImg\" src=\"images\\calendar.gif\" width=\"24\" height=\"22\" border=\"0\">";
+		String imgStr = "\n<img id=\"calendarImg\" src=\"images/calendar.gif\" width=\"24\" height=\"22\" border=\"0\">";
 		if (isFirst)
 		{
 			String textBoxId = componentId + "_textBox";
