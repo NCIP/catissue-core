@@ -857,10 +857,9 @@
 	function previousFromDefineResults()
 	{
 		waitCursor();
-//		document.applets[0].defineResultsView();
 		var action ="SearchCategory.do";
 		document.forms['categorySearchForm'].action=action;
-		document.forms['categorySearchForm'].isQuery.value   // change for flex
+		document.forms['categorySearchForm'].isQuery.value = "true";  // change for flex
 		document.forms['categorySearchForm'].currentPage.value = "prevToAddLimits";
 		document.forms['categorySearchForm'].submit();
 		hideCursor();

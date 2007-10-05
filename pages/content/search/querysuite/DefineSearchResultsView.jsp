@@ -26,6 +26,7 @@
 %>
 <html:form method="GET" action="<%=defineSearchResultsViewAction%>">
 <html:hidden property="currentPage" value="prevToAddLimits"/>
+<input type="hidden" name="isQuery" value="true">
 <table bordercolor="#000000" border="0" width="100%" cellspacing="2" cellpadding="2"  height="100%">
 	<tr>
 		<td valign="top">
@@ -86,7 +87,7 @@
 		</td>
 	</tr>
 </table>
-<input type="hidden" name="isQuery" value="true">
+
 </html:form>
 </body>
 </html> 
