@@ -370,6 +370,11 @@
 		<copy file="Dataset.dtd" todir="${zip.dir}" overwrite="true" />
 		<copy file="JniDeID.dll" todir="${zip.dir}" overwrite="true" />
 		<!--- caTIES related files  end-->
+		<!-- DE conf files -->
+		<copy todir="${zip.dir}/DE_conf" overwrite="true">
+			<fileset dir="${base.dir}/DE_conf" />
+		</copy>
+		<!-- DE conf files end -->
 		<zip destfile="${zip.file}" basedir="${zip.dir}" />
 		<delete dir="${zip.dir}" />
 	</target>
