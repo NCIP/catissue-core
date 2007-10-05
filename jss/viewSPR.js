@@ -136,7 +136,7 @@ function submitRejectComments()
 		
 	}
 }
-var spanSize=65;
+var spanSize=70;
 function replaceString(startOff,innerHtml,subStr,text)
 {
 	var tempStr=innerHtml.substring(0,startOff);
@@ -179,9 +179,14 @@ function selectByOffset(checkbox,start,end,colour,conceptName)
 			var startOff=startArr[x]-1;
 			var endOff=endArr[x]-1;
 			
-			var newLineCount=getNewLineCount(tempStr.substring(0,startOff));
-			startOff=startOff+newLineCount-1;
-			endOff=endOff+newLineCount-1;
+			if (navigator.userAgent.indexOf('MSIE') !=-1)
+			{
+				var newLineCount=getNewLineCount(tempStr.substring(0,startOff));
+				newLineCount=getNewLineCount(tempStr.substring(0,startOff+newLineCount));
+				newLineCount=getNewLineCount(tempStr.substring(0,startOff+newLineCount));
+				startOff=startOff+newLineCount-1;
+				endOff=endOff+newLineCount-1;
+			}
 			
 			var subStr = tempStr.substring(startOff,endOff);
 			var textBeforeString = tempStr.substring(0,startOff);
