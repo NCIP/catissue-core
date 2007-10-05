@@ -5,6 +5,8 @@
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
 <%@ page import="java.util.List"%>
 <%@ page import="edu.wustl.catissuecore.bean.RequestViewBean" %>
+<script src="jss/ajax.js"></script>	   
+
 
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
@@ -13,7 +15,14 @@
 
 <head>
 <%
-String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=ForwardTo";
+List requestDetailsList = (List) request.getAttribute(Constants.REQUEST_DETAILS_LIST);	
+int disabledStatus;
+System.out.println("requestDetailsList  size "+requestDetailsList.size());
+
+int count=requestDetailsList.size();	
+System.out.println("count value : "+count);
+
+String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=ForwardTo&noOfRecords="+count;;
 %>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
@@ -88,8 +97,82 @@ function submitAndNotify()
 {
 	document.getElementById("mailNotification").value= "true";
 	document.forms[0].submit();
-}	
- </script>
+}
+//this function used to view all the consents
+function showAllSpecimen(count)
+{
+
+	var speciemnIdValue="";
+	var labelIndexCount="";
+	var verifiedRows="";
+	var iCount=0;
+
+	for(i=0;i<count;i++)
+	{
+		var consentVerificationkey= "value(RequestDetailsBean:"+i+"_consentVerificationkey)";
+		var rowstatus= "value(RequestDetailsBean:"+i+"_rowStatuskey)";
+		var statusValue =  document.getElementById(rowstatus).value;
+		
+		var status = document.getElementById(consentVerificationkey).value;
+	
+		if(status=="<%=Constants.VIEW_CONSENTS%>"||status=="<%=Constants.VERIFIED%>" && statusValue!="disable")
+		{
+			var specimenkey= "value(RequestDetailsBean:"+i+"_specimenId)";
+			var specimenObj= document.getElementById(specimenkey);
+			speciemnIdValue= speciemnIdValue+document.getElementById(specimenkey).value;
+			labelIndexCount=labelIndexCount+i;
+			if(i!=count)
+			{
+				speciemnIdValue=speciemnIdValue+"|";
+				labelIndexCount=labelIndexCount+"|";
+			}
+			if(status=="<%=Constants.VERIFIED%>")
+			{
+				verifiedRows=verifiedRows+(i-iCount)+",";
+			}
+
+		}
+		else
+		{
+			iCount=iCount+1;
+		}
+	
+	}
+	if(count==(iCount))
+	{
+		alert("No consents available");
+	}
+	else
+	{
+			
+		
+		var url= 'ConsentVerification.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
+		window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
+	}
+				
+		
+	
+}
+
+
+
+//This function called to view the consent page
+function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationkey)
+{	
+	var consentVerificationkey1=consentVerificationkey;
+	var status = document.getElementById(consentVerificationkey1).value;
+	
+	var url ='ConsentVerification.do?operation=&pageOf=pageOfOrdering&status='+status+'&labelStatusId='+labelStatus+'&consentVerificationkey='+consentVerificationkey+'&showConsents=yes&specimenId='+specimenIdentifier;
+
+	
+	if(status!="No Consents")
+	{
+		window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
+	}
+	
+}
+	
+</script>
 </head>  
 <body onload="tabToDisplay()">
 	<html:form action="<%=form_action%>">
@@ -157,7 +240,17 @@ function submitAndNotify()
 						<tr>
 							<td>
 						 	<table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
-								 <tr>
+								 <% 
+													
+									if(requestDetailsList != null)
+									{
+									    session.setAttribute(Constants.REQUEST_DETAILS_LIST,requestDetailsList);
+			
+									 	int i = 0; 
+										String rowStatusValue ="";
+										
+								 %>
+							 	 <tr>
 								 	<th class="dataTableHeader" scope="col" align="center"  colspan='5'>
 								 	Requested specimen details
 								 	</th>
@@ -169,6 +262,26 @@ function submitAndNotify()
 										<bean:message key='requestdetails.datatable.label.AssignQty'/>
 									</th>
 								
+						<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
+						{%>	
+							
+									<th class="dataTableHeader" colspan="2" align="left" width="20%" rowspan="2" scope="col">
+																	
+										<div>
+										<label align="center">
+											<bean:message key="consent.consentforspecimen"/>
+										</label>
+										</div>
+
+										<div style="float:right;">
+										<a  href="javascript:showAllSpecimen('<%=count%>')">
+											<bean:message key="consent.viewall"/>
+										 </a>
+										</div>
+									</th>
+
+						<%}%>
+
 									<th class="dataTableHeader" scope="col" align="left" width="20%" rowspan="2" scope="col">
 										<bean:message key='requestdetails.datatable.label.AssignStatus'/>
 										<html:select property="status" name="requestDetailsForm" styleClass="formFieldSized15" styleId="nextStatusId" size="1" 
@@ -198,16 +311,7 @@ function submitAndNotify()
 								
 												
 							 	 </tr>						 									
-								 <% 
-								 	List requestDetailsList = (List) request.getAttribute(Constants.REQUEST_DETAILS_LIST);						 	
-									
-									if(requestDetailsList != null)
-									{
-									    session.setAttribute(Constants.REQUEST_DETAILS_LIST,requestDetailsList);
-			
-									 	int i = 0; 
-								 %>
-								 	<tbody id="tbody">									 	
+								<tbody id="tbody">									 	
 								 <logic:iterate id="requestDetailsBeanObj"  collection="<%= requestDetailsList%>" type="edu.wustl.catissuecore.bean.RequestDetailsBean">
 								 <% 
 								 	String requestFor = "value(RequestDetailsBean:"+i+"_requestFor)"; 
@@ -217,6 +321,11 @@ function submitAndNotify()
 									String instanceOf = "value(RequestDetailsBean:"+i+"_instanceOf)";
 									String orderItemId = "value(RequestDetailsBean:"+i+"_orderItemId)";
 									String specimenIdInMap = "value(RequestDetailsBean:"+i+"_specimenId)";
+									String consentVerificationkey = "value(RequestDetailsBean:"+i+"_consentVerificationkey)";
+									String rowStatuskey = "value(RequestDetailsBean:"+i+"_rowStatuskey)";
+									String labelStatus="labelStatus"+i;
+									
+
 									
 									String requestedItem = "value(RequestDetailsBean:"+i+"_requestedItem)";
 									String requestedQty = "value(RequestDetailsBean:"+i+"_requestedQty)";
@@ -229,23 +338,38 @@ function submitAndNotify()
 									String specimenCollGroupId = "value(RequestDetailsBean:"+i+"_specimenCollGroupId)";
 									String actualSpecimenType = "value(RequestDetailsBean:"+i+"_actualSpecimenType)";
 									String actualSpecimenClass = "value(RequestDetailsBean:"+i+"_actualSpecimenClass)";
-									
 									String specimenClickFunction = "showSpecimenDetails("+requestDetailsBeanObj.getSpecimenId()+")";
+
+									//added for consent page:	
+									String showNewConsentPageFunction = "showNewConsentPage("+requestDetailsBeanObj.getSpecimenId()+")";
 									
 									boolean disableRow = false;
 									if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 										&& (!((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals("")))
 									{
-										disableRow=true;%>
+										disableRow=true;
+										disabledStatus=i;
+										rowStatusValue =	"disable";	
+										System.out.println("disabledStatus"+disabledStatus);
+									//	requestDetailsForm.setValue("value(RequestDetailsBean:"+i+"_rowStatuskey)","disable");
+
+										
+										%>
+									
+									
+									
 									<html:hidden name="requestDetailsForm" property="<%= assignStatus %>" />
 									<html:hidden name="requestDetailsForm" property="<%= requestFor %>" />
 									<html:hidden name="requestDetailsForm" property="<%= description %>" />
-									<html:hidden name="requestDetailsForm" property="<%= assignQty %>" />	
+									<html:hidden name="requestDetailsForm" property="<%= assignQty %>" />
+								<!--	<html:hidden name="requestDetailsForm" property="<%= consentVerificationkey %>"/>	-->
 									<%
 									}
+									else{ rowStatusValue =	"enable";	}
 								 	//Added By Ramya.Construct corresponding rowids for request row expansion purpose.								 	
 									String data = "data" + i;
 									String switchText = "switch" + i;
+
 									
 									//Added By Ramya.Construct select element ids for corresponding rows.
 									//This is to update all rows' status in one shot.
@@ -263,6 +387,7 @@ function submitAndNotify()
 										<html:hidden name="requestDetailsForm" property="<%= specimenCollGroupId %>" />
 									<%}
 								 %>	<!-- Html hidden variables for all static fields -->	 
+								
 								 <html:hidden name="requestDetailsForm" property="<%= requestedItem %>" />	
 								 <html:hidden name="requestDetailsForm" property="<%= requestedQty %>" />	
 								 <html:hidden name="requestDetailsForm" property="<%= availableQty %>" />	
@@ -392,11 +517,18 @@ function submitAndNotify()
 											</span>	
 									 	</td>
 									 	<td class="dataCellText" style="border-right:0px" width="5%">	
-										 	<div id="<%= updateAvaiQty %>">	
+										 					
+											<div id="<%= updateAvaiQty %>">	
 										 		<!-- bean:write name="requestDetailsBeanObj" property="availableQty" /-->								 		
 										 		<bean:write name="requestDetailsForm" property="<%= availableQty %>" />
 										 	</div>
 										 </td>
+									<!--	<script>
+												changeStatus('<%= updateAvaiQty %>');
+										</script>-->
+
+												
+
 										 <td class="dataCellText">
 									 		<span>		
 												<script>													
@@ -417,6 +549,55 @@ function submitAndNotify()
 												</script>
 											</span>	
 									 	</td>
+
+					   <%
+												
+						String consentVerificationStatus=((String)(requestDetailsForm.getValue("value(RequestDetailsBean:"+i+"_consentVerificationkey)")));
+						String specimenIdValue=((String)(requestDetailsForm.getValue("value(RequestDetailsBean:"+i+"_specimenId)")));
+									
+						%>
+						<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
+						{%>	
+										<td class="dataCellText"  colspan="2"> 
+											<html:hidden property="<%=specimenIdInMap%>" styleId="<%=specimenIdInMap%>"  value="<%=specimenIdValue%>"/>
+
+											<html:hidden property="<%=rowStatuskey%>" styleId="<%=rowStatuskey%>"  value="<%=rowStatusValue%>"/>
+																			
+											<%
+											if(!disableRow)
+											{
+												
+											%>	
+												<a  id="<%=labelStatus%>" href="javascript:showNewConsentPage('<%=requestDetailsBeanObj.getSpecimenId()%>','<%=labelStatus%>','<%=consentVerificationkey%>')">
+													<logic:notEmpty name="requestDetailsForm" property="<%=consentVerificationkey%>">
+														<bean:write name="requestDetailsForm" property="<%=consentVerificationkey%>"/>
+													</logic:notEmpty>
+																				
+													<logic:empty name="requestDetailsForm" property="<%=consentVerificationkey%>">
+														<%=Constants.VIEW_CONSENTS %>
+													</logic:empty>
+													<logic:notEmpty name="requestDetailsForm" property="<%=consentVerificationkey%>">
+														<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=consentVerificationStatus%>"/>
+														</logic:notEmpty>
+													<logic:empty name="requestDetailsForm" property="<%=consentVerificationkey%>">
+														<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.VIEW_CONSENTS %>"/>
+													</logic:empty>
+
+												</a>
+											
+											<%}else{ 
+													
+											%>
+										
+												<%=Constants.VERIFIED%>
+												<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.VERIFIED%>"/>
+											<%}%>
+													
+
+										</td>
+
+
+							<%}%>
 									 	
 									 	<td class="dataCellText" width="20%">									 											 		
 									 		<html:select property="<%=assignStatus %>" name="requestDetailsForm" styleClass="formFieldSized15" styleId="<%=select%>"  
@@ -522,6 +703,7 @@ function submitAndNotify()
 					<html:hidden name="requestDetailsForm" property="mailNotification" styleId="mailNotification"/>							
 				
 			</tr>
+			
 			<tr width="100%">
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
