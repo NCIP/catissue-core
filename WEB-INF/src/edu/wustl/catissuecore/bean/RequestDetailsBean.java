@@ -90,6 +90,16 @@ public class RequestDetailsBean implements Serializable
 	 */
 	private String actualSpecimenType;
 	
+	
+	/**
+	 * For consent View form
+	 * 
+	 */
+	private String consentVerificationkey;
+	
+	private String rowStatuskey;
+	
+		
 	/**
 	 * @return the className
 	 */	
@@ -400,5 +410,23 @@ public class RequestDetailsBean implements Serializable
 	{
 		this.actualSpecimenType = actualSpecimenType;
 	}
+
+	public String getConsentVerificationkey() {
+		return consentVerificationkey;
+	}
+
+	public void setConsentVerificationkey(String consentVerificationkey) {
+		this.consentVerificationkey = consentVerificationkey;
+	}
+
+	public String getRowStatuskey() {
+		return rowStatuskey;
+	}
+
+	public void setRowStatuskey(String rowStatuskey) {
+		this.rowStatuskey = rowStatuskey;
+	}
+
+	
 	
 }

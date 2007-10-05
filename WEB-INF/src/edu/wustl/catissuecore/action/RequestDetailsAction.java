@@ -37,6 +37,7 @@ import edu.wustl.catissuecore.bean.ExistingArrayDetailsBean;
 import edu.wustl.catissuecore.bean.RequestDetailsBean;
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
@@ -366,8 +367,9 @@ public class RequestDetailsAction extends BaseAction
 	 * @param orderItem
 	 * @param request
 	 * @return
+	 * @throws DAOException 
 	 */
-	private List populateRequestDetailsListForSpecimenOrderItems(OrderItem orderItem, HttpServletRequest request, List requestDetailsList)
+	private List populateRequestDetailsListForSpecimenOrderItems(OrderItem orderItem, HttpServletRequest request, List requestDetailsList) throws DAOException
 	{
 		// The row number to update available quantity on selecting the required specimen from 'request for' drop down.
 		int finalSpecimenListId = 0;
@@ -797,19 +799,34 @@ public class RequestDetailsAction extends BaseAction
 	 * @param requestDetailsBean RequestDetailsBean
 	 * @param existingSpecimenorderItem ExistingSpecimenOrderItem
 	 * @return RequestDetailsBean object
+	 * @throws DAOException 
 	 */
 	private RequestDetailsBean populateRequestDetailsBeanForExistingSpecimen(RequestDetailsBean requestDetailsBean,
-			ExistingSpecimenOrderItem existingSpecimenorderItem)
+			ExistingSpecimenOrderItem existingSpecimenorderItem) throws DAOException
 	{
 		requestDetailsBean.setRequestedItem(existingSpecimenorderItem.getSpecimen().getLabel());
 		requestDetailsBean.setSpecimenId(existingSpecimenorderItem.getSpecimen().getId().toString());
 		List childrenSpecimenListToDisplay = new ArrayList();
-
 		requestDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
+		
+			
 		requestDetailsBean.setInstanceOf("Existing");
+	
+		/*if(existingSpecimenorderItem.getConsentTierStatusCollection().isEmpty())
+		{	
+			requestDetailsBean.setConsentVerificationkey(Constants.NO_CONSENTS);
+			
+		}	
+		else
+		{
+			requestDetailsBean.setConsentVerificationkey(Constants.VIEW_CONSENTS);
+			
+		}		
+*/
+		
 		// condition added by vaishali beacause requested Qty is coming NULL.
 		//@FIX ME
-
+	
 		if (existingSpecimenorderItem.getRequestedQuantity() != null)
 			requestDetailsBean.setRequestedQty(existingSpecimenorderItem.getRequestedQuantity().getValue().toString());
 		requestDetailsBean.setAvailableQty(existingSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString());
@@ -1252,6 +1269,8 @@ public class RequestDetailsAction extends BaseAction
 		{
 			Specimen specimen = (Specimen) orderItemList.get(0);
 			existingSpOrderItem.setSpecimen(specimen);
+			Collection consentTierStatusCollection =(Collection)orderBizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"elements(consentTierStatusCollection)");
+			existingSpOrderItem.setConsentTierStatusCollection(consentTierStatusCollection);
 		}
 
 	}
@@ -1294,5 +1313,5 @@ public class RequestDetailsAction extends BaseAction
 			}
 		}
 	}
-
+	
 }
