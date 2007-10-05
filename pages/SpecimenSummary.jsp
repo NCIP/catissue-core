@@ -33,6 +33,11 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		
 		<html:form action="<%=formAction%>">		
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
+		<tr>
+				<td>			
+					&nbsp;&nbsp;
+				</td>
+			</tr>
 			<tr>
 				<td class="dataTablePrimaryLabel" height="20">
 					<bean:write name="viewSpecimenSummaryForm" property="title" />
@@ -52,6 +57,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			</logic:empty>
 
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="specimenList" >	
+			
 				<tr>	
 				<td>
 					<table summary="" cellpadding="3" cellspacing="0" border="0"  class="dataTable" width="100%">
@@ -71,7 +77,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 					</tr>
 				  <logic:iterate name="viewSpecimenSummaryForm" property="specimenList" id="specimen" indexId="counter">
 					<tr>
-						<td> <html:radio property="selectedSpecimenId" value="uniqueIdentifier" idName="specimen" 
+						<td class="dataCellText">
+						<html:radio property="selectedSpecimenId" value="uniqueIdentifier" idName="specimen" 
 						onclick=" form.action='GenericSpecimenSummary.do'; submit()"/> 
 						<html:hidden name="specimen" indexed="true" property="uniqueIdentifier" /></td>
 						
@@ -138,6 +145,12 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
 				
 				<tr>
+					<td>			
+					&nbsp;&nbsp;
+					</td>
+				</tr>				
+
+				<tr>
 					<td class="dataTablePrimaryLabel" height="20">			
 						<p>Aliquot details
 					</td>
@@ -168,6 +181,12 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		
 		 
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >		
+		<tr>
+			<td>			
+				&nbsp;&nbsp;
+			</td>
+		</tr>				
+
 		<tr>
 			<td class="dataTablePrimaryLabel" height="20">
 				<p>Derived details
@@ -206,10 +225,15 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 
 			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
 			<tr>
-			   <td>
-				<html:submit  value="Save Collection Protocol" />
+				<td>			
+					&nbsp;&nbsp;
 				</td>
-				</tr>
+			</tr>
+			<tr>
+				<td>
+					<html:submit  value="Save Collection Protocol" />
+				</td>
+			</tr>
 			</logic:equal>
 			
 			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">		
