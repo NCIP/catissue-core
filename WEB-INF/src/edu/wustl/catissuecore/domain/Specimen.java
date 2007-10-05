@@ -648,7 +648,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
 		if (SearchUtil.isNullobject(storageContainer))
 		{
-			storageContainer = new StorageContainer();
+			storageContainer = null;
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
@@ -898,6 +898,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						if(form.getStContSelection()==2)
 						{
 							long stContainerId = Long.parseLong(form.getStorageContainer());
+							if(this.storageContainer == null)
+							{
+								this.storageContainer = new StorageContainer();
+							}
 							this.storageContainer.setId(stContainerId);
 							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
