@@ -275,6 +275,8 @@ public class RequestDetailsForm extends AbstractActionForm
 			String distributedItemId = "";
 			String specimenList = "";
 			String specimenCollGrpId = "";
+			String consentVerificationkey="";
+			String rowStatuskey="";
 
 			String actualSpecimenClass = "";
 			String actualSpecimenType = "";
@@ -299,6 +301,10 @@ public class RequestDetailsForm extends AbstractActionForm
 
 					requestFor = "RequestDetailsBean:" + requestDetailsBeanCounter + "_requestFor";
 					specimenId = "RequestDetailsBean:" + requestDetailsBeanCounter + "_specimenId";
+					consentVerificationkey = "RequestDetailsBean:" + requestDetailsBeanCounter + "_consentVerificationkey";
+					
+					rowStatuskey = "RequestDetailsBean:"+requestDetailsBeanCounter+"_rowStatuskey";
+					
 					assignQty = "RequestDetailsBean:" + requestDetailsBeanCounter + "_assignedQty";
 					instanceOf = "RequestDetailsBean:" + requestDetailsBeanCounter + "_instanceOf";
 					distributedItemId = "RequestDetailsBean:" + requestDetailsBeanCounter + "_distributedItemId";
@@ -310,7 +316,7 @@ public class RequestDetailsForm extends AbstractActionForm
 
 					populateValuesMap(orderItem, requestedItem, availableQty, specimenClass, specimenType, requestFor, specimenId, assignQty,
 							instanceOf, specimenList, specimenCollGrpId, totalSpecimenListInRequestForDropDown, actualSpecimenClass,
-							actualSpecimenType, assignStatus);
+							actualSpecimenType, assignStatus,consentVerificationkey);
 					requestDetailsBeanCounter++;
 				}
 				else
@@ -470,7 +476,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		String actualSpecimenType = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter + "_actualSpecimenType";
 
 		populateValuesMap(specimenOrderItem, requestedItem, availableQty, specimenClass, specimenType, requestFor, specimenId, assignQty, instanceOf,
-				specimenList, specimenCollGrpId, totalSpecimenListInRequestForDropDown, actualSpecimenClass, actualSpecimenType, assignStatus);
+				specimenList, specimenCollGrpId, totalSpecimenListInRequestForDropDown, actualSpecimenClass, actualSpecimenType, assignStatus,"");
 		putCommonValuesInValuesMap(specimenOrderItem, assignStatus, description, requestedQty, assignQty, orderItemId, "");
 	}
 
@@ -517,18 +523,28 @@ public class RequestDetailsForm extends AbstractActionForm
 	 */
 	private void populateValuesMap(OrderItem orderItem, String requestedItem, String availableQty, String specimenClass, String specimenType,
 			String requestFor, String specimenId, String assignQty, String instanceOf, String specimenList, String specimenCollGrpId,
-			List totalSpecimenListInRequestForDropDown, String actualSpecimenClass, String actualSpecimenType, String assignStatus)
+			List totalSpecimenListInRequestForDropDown, String actualSpecimenClass, String actualSpecimenType, String assignStatus,String consentVerificationkey)
 	{
 		if (orderItem instanceof ExistingSpecimenOrderItem)
 		{
 			ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
+			
 			values.put(requestedItem, existingSpecimenOrderItem.getSpecimen().getLabel());
 			values.put(availableQty, existingSpecimenOrderItem.getSpecimen().getAvailableQuantity().getValue());
 			values.put(specimenClass, existingSpecimenOrderItem.getSpecimen().getClassName());
 			values.put(specimenType, existingSpecimenOrderItem.getSpecimen().getType());
 			values.put(specimenId, existingSpecimenOrderItem.getSpecimen().getId().toString());
 			values.put(instanceOf, "Existing");
-
+			
+			if(existingSpecimenOrderItem.getConsentTierStatusCollection().isEmpty())
+			{	
+				values.put(consentVerificationkey, Constants.NO_CONSENTS);
+			}	
+			else
+			{
+				values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
+			}
+			//values.put(consentVerificationkey, "No Consents");
 			//Fix me second condition added by vaishali
 			if (existingSpecimenOrderItem.getDistributedItem() != null && existingSpecimenOrderItem.getDistributedItem().getQuantity() != null)
 			{
@@ -578,6 +594,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			values.put(specimenClass, derivedSpecimenOrderItem.getSpecimenClass());
 			values.put(specimenType, derivedSpecimenOrderItem.getSpecimenType());
 			values.put(specimenId, derivedSpecimenOrderItem.getParentSpecimen().getId().toString());
+		//	values.put(consentVerificationkey, "View");
 			values.put(instanceOf, "Derived");
 
 			//fix me second condition added by vaishali
@@ -682,7 +699,26 @@ public class RequestDetailsForm extends AbstractActionForm
 	{
 		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
+		
+		 String noOfRecords=(String)request.getParameter("noOfRecords");
+	     int recordCount=Integer.parseInt(noOfRecords);
+	     
+	 	for (int i = 0; i < recordCount; i++) 
+		{
+			String consentVerificationkey = "RequestDetailsBean:" +i+ "_consentVerificationkey";
+			String verificationStatus=(String)getValue(consentVerificationkey);
+			String assignStatusKey = "RequestDetailsBean:" + i + "_assignedStatus";
+			String assignStatus = (String)getValue(assignStatusKey);
+			
+			
+			
+			if(verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS) && assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.verify.Consent"));
+				break;
+			}
 
+		}	
 		//getting values from a map.
 		RequestDetailsBean requestDetailsBean = null;
 		DefinedArrayDetailsBean definedArrayDetailsBean = null;
