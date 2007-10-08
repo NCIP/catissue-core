@@ -216,7 +216,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setTitle(collectionProtocolBean.getTitle());
 		collectionProtocolForm.setShortTitle(collectionProtocolBean.getShortTitle());
 		collectionProtocolForm.setStartDate(collectionProtocolBean.getStartDate());
-		collectionProtocolForm.setConsentWaived(collectionProtocolForm.isConsentWaived());
+		collectionProtocolForm.setConsentWaived(collectionProtocolBean.isConsentWaived());
 		collectionProtocolForm.setEnrollment(collectionProtocolBean.getEnrollment());
 		collectionProtocolForm.setDescriptionURL(collectionProtocolBean.getDescriptionURL());
 		collectionProtocolForm.setIrbID(collectionProtocolBean.getIrbID());
