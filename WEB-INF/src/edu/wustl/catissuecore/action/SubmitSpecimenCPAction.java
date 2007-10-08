@@ -208,7 +208,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			throw new Exception("At least one event is required to create Collection Protocol");
 		}
 		CollectionProtocol collectionProtocol = createCollectionProtocolDomainObject(collectionProtocolBean);
-		Collection collectionProtocolEventList = new HashSet();
+		Collection collectionProtocolEventList = new LinkedHashSet();
 		
 		Collection collectionProtocolEventBeanColl = cpEventMap.values();
 		if (collectionProtocolEventBeanColl != null)

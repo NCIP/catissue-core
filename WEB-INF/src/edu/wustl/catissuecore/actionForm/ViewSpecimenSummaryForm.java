@@ -46,9 +46,9 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	private HashMap<String, String> titleMap = new HashMap<String, String>();
 	public ViewSpecimenSummaryForm()
 	{
-		titleMap.put(REQUEST_TYPE_MULTI_SPECIMENS, "Specimen(s) Details");
+		titleMap.put(REQUEST_TYPE_MULTI_SPECIMENS, "Specimen details");
 		titleMap.put(REQUEST_TYPE_COLLECTION_PROTOCOL, "Specimen requirement(s)");
-		titleMap.put(REQUEST_TYPE_ANTICIPAT_SPECIMENS, "Specimen(s) Details");
+		titleMap.put(REQUEST_TYPE_ANTICIPAT_SPECIMENS, "Specimen details");
 		specimenList = new ArrayList<GenericSpecimen> ();
 		aliquotList = new ArrayList<GenericSpecimen> ();
 		derivedList = new ArrayList<GenericSpecimen> ();
