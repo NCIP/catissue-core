@@ -124,7 +124,7 @@
             table="CATISSUE_SPECIMEN_COLL_GROUP"
             lazy="true"
             inverse="true"
-            cascade="save-update"
+            cascade="none"
             sort="unsorted"
         >
 
