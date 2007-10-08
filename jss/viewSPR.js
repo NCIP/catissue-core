@@ -158,6 +158,16 @@ function getNewLineCount(str)
 	var count=0;
 	var tempStr=str.split("\r");
 	count=tempStr.length;
+	tempStr=str.split("&gt");
+	if(tempStr.length>1)
+	{
+		count+=(tempStr.length-1)*3;
+	}
+	tempStr=str.split("&lt");
+	if(tempStr.length>1)
+	{
+		count+=(tempStr.length-1)*3;
+	}
 	return count;
 }
 
@@ -179,14 +189,11 @@ function selectByOffset(checkbox,start,end,colour,conceptName)
 			var startOff=startArr[x]-1;
 			var endOff=endArr[x]-1;
 			
-			if (navigator.userAgent.indexOf('MSIE') !=-1)
-			{
-				var newLineCount=getNewLineCount(tempStr.substring(0,startOff));
-				newLineCount=getNewLineCount(tempStr.substring(0,startOff+newLineCount));
-				newLineCount=getNewLineCount(tempStr.substring(0,startOff+newLineCount));
-				startOff=startOff+newLineCount-1;
-				endOff=endOff+newLineCount-1;
-			}
+			var newLineCount=getNewLineCount(tempStr.substring(0,startOff));
+			newLineCount=getNewLineCount(tempStr.substring(0,startOff+newLineCount));
+			newLineCount=getNewLineCount(tempStr.substring(0,startOff+newLineCount));
+			startOff=startOff+newLineCount-1;
+			endOff=endOff+newLineCount-1;
 			
 			var subStr = tempStr.substring(startOff,endOff);
 			var textBeforeString = tempStr.substring(0,startOff);
