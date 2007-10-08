@@ -2,6 +2,14 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ include file="/pages/subMenu/SelectMenu.jsp" %>
 <script language="javascript" src="jss/script.js"></script>
+<script>
+function QueryWizard()
+{
+	var rand_no = Math.random();
+	document.forms[0].action='QueryWizard.do?random='+rand_no;
+	document.forms[0].submit();
+}
+</script>
 <tr>
     <td class="subMenuPrimaryTitle" height="22">
 		<a href="#content">
@@ -24,7 +32,7 @@
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17">
 				<bean:message key="app.simpleSearch" />
 			</a> |  
-			<a class="subMenuPrimary" href="QueryWizard.do">
+			<a class="subMenuPrimary" href="javascript:QueryWizard()">
 					<bean:message key="app.advancedSearch" />
 			</a>
 		</div>
