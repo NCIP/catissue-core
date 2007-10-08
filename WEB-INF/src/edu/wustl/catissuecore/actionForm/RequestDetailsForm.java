@@ -711,12 +711,14 @@ public class RequestDetailsForm extends AbstractActionForm
 			String assignStatus = (String)getValue(assignStatusKey);
 			
 			
-			
-			if(verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS) && assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.verify.Consent"));
-				break;
-			}
+			if(verificationStatus!=null)
+			{	
+				if(verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS) && assignStatus.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.verify.Consent"));
+					break;
+				}
+			}	
 
 		}	
 		//getting values from a map.
