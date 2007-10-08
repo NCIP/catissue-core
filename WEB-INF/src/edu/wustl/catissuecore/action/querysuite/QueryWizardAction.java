@@ -34,11 +34,6 @@ public class QueryWizardAction extends BaseAction
 		CategorySearchForm searchForm = (CategorySearchForm) form;
 		session.setAttribute(AppletConstants.QUERY_OBJECT, null);
 		searchForm = QueryModuleUtil.setDefaultSelections(searchForm);
-	/*	Map<String, EntityInterface> searchedEntitiesMap = (Map<String, EntityInterface>) session.getAttribute(Constants.SEARCHED_ENTITIES_MAP);
-		if (searchedEntitiesMap == null)
-		{
-			searchedEntitiesMap = new HashMap<String, EntityInterface>();
-		}*/
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
 }
