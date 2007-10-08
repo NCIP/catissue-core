@@ -78,14 +78,17 @@
 		[Bindable]
 		public function addDisplayOutAssociation(node:String,link:String,operatorIndex:int):void{
 			var order:int=0;
-			if(orderOfAss.containsKey(link))
+			if(orderOfAss!=null)
 			{
-				order=orderOfAss.getValue(link);
-			}
-			else
-			{
-				order=orderAssociation++;
-				orderOfAss.put(link,order);
+				if(orderOfAss.containsKey(link))
+				{
+					order=orderOfAss.getValue(link);
+				}
+				else
+				{
+					order=orderAssociation++;
+					orderOfAss.put(link,order);
+				}
 			}
 			var ass:Association = new Association(node,link,operatorIndex,order);
 			displayoutAssociations.addItem(ass);
@@ -116,14 +119,17 @@
 		[Bindable]
 		public function addOutAssociation(node:String,link:String,operatorIndex:int):void{
 			var order:int=0;
-			if(orderOfAss.containsKey(link))
+			if(orderOfAss!=null)
 			{
-				order=orderOfAss.getValue(link);
-			}
-			else
-			{
-				order=orderAssociation++;
-				orderOfAss.put(link,order);
+				if(orderOfAss.containsKey(link))
+				{
+					order=orderOfAss.getValue(link);
+				}
+				else
+				{
+					order=orderAssociation++;
+					orderOfAss.put(link,order);
+				}
 			}
 			var ass:Association = new Association(node,link,operatorIndex,order);
 			outAssociations.addItem(ass);
@@ -193,6 +199,7 @@
 		
 		public function init():void
 		{ 
+		
 			orderOfAss = new HashMap();
 			this.parentApplication.rpcService.addEventListener("fault", faultHandler);
 		}
