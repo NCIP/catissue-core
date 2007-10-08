@@ -135,6 +135,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
 			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
 			specimenRequirementBean.setLineage(Constants.ALIQUOT);
+			if(quantityPerAliquot==null || quantityPerAliquot.equals(""))
+			{
+				quantityPerAliquot="0";
+			}
 			specimenRequirementBean.setQuantity(quantityPerAliquot);
 			specimenRequirementBean.setNoOfAliquots(null);
 			specimenRequirementBean.setQuantityPerAliquot(null);

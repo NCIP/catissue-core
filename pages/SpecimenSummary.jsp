@@ -170,7 +170,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 								<td class="dataCellText"> <bean:write name="aliquot" property="parentName" /></td>		      		
 								<td class="dataCellText"> <bean:write name="aliquot" property="displayName" /></td>
 								<td class="dataCellText"> <bean:write name="aliquot" property="storageContainerForSpecimen" /></td>
-								<td class="dataCellText"> <bean:write name="aliquot" property="quantity" /></td>
+								<td class="dataCellText">&nbsp; <bean:write name="aliquot" property="quantity" /></td>
 							</tr>
 						  </logic:iterate>	
 					 </table>			

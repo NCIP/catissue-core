@@ -626,8 +626,16 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 					{
 						if(this.quantityPerAliquot.equals(""))
 						{
-							aliquotQuantity = Double.parseDouble(this.quantity)/Double.parseDouble(this.noOfAliquots);
-							initialQuantity = Double.parseDouble(this.quantity) - (aliquotQuantity * Double.parseDouble(this.noOfAliquots)); 
+							if(this.quantity.equals("0") || this.quantity.equals("0") )
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",
+										ApplicationProperties.getValue("specimen.quantity")));
+							}
+							else
+							{
+								aliquotQuantity = Double.parseDouble(this.quantity)/Double.parseDouble(this.noOfAliquots);
+								initialQuantity = Double.parseDouble(this.quantity) - (aliquotQuantity * Double.parseDouble(this.noOfAliquots));
+							}
 						}
 						else
 						{
@@ -638,7 +646,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						if(initialQuantity < 0)
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",
-									ApplicationProperties.getValue("specimenArrayAliquots.noOfAliquots")));
+									ApplicationProperties.getValue("specimenArrayAliquots.qtyPerAliquot")));
 						}
 					}
 					catch (NumberFormatException exp)
