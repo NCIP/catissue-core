@@ -162,6 +162,7 @@
 	public function deleteLinkHandler(event:ResultEvent):void
 	{
 		this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteLinkHandler,false);
+		 this.parentApplication.currentExp.text = this.parentApplication.getExprssionString();	
 	}
 	
 	private function select(event:MouseEvent):void {
