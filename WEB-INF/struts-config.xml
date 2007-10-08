@@ -4388,6 +4388,7 @@ PUBLIC
                 validate="false"
                 scope="request">
 					<forward name="success" path="/pages/SpecimenSummary.jsp" />
+					<forward name="anticipatory" path="/pages/AnticipatorySpecimens.jsp" />  
 					<forward name="pageOfMultipleSpWithoutMenu" path="/pages/SpecimenSummary.jsp" />
 					<forward name="updateSpecimenStatus" path="/updateSpecimenStatus.do" />
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
@@ -4404,7 +4405,7 @@ PUBLIC
                 name="specimenCollectionGroupForm"
                 validate="false"
                 scope="request">
-					<forward name="success" path="/GenericSpecimenSummary.do" />
+					<forward name="success" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=updateSpecimenStatus" />
 					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 	                <forward name="failure" path="/Home.do" />
