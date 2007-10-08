@@ -717,6 +717,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int PATHOLOGY_REPORT_REVIEW_FORM_ID=61;
 	public static final int QUARANTINE_EVENT_PARAMETER_FORM_ID=62;
 	public static final int CONSENT_FORM_ID=63;
+	public static final int BULK_OPERATIONS_FORM_ID = 68;
 	//Misc
 	public static final String SEPARATOR = " : ";
 	
@@ -2005,6 +2006,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
     
     //Ordering constants
     public static final String ARRAY_NAME = "array";
+	
     
     //Query Shopping cart constants
     public static final String SHOPPING_CART_FILE_NAME = "MyList.csv";
@@ -2111,7 +2113,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//SPECIMEN COllection Status
 	public static final String SPECIMEN_COLLECTED = "Collected";
 	public static final String SPECIMEN_ANTICOPATED = "Anticipated";
-	
+		
 	//Shopping cart constants.
 	public static final String SPECIMEN_ARRAY_CLASS_NAME = SpecimenArray.class.getName();
 	public static final String IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME = IdentifiedSurgicalPathologyReport.class.getName();
@@ -2127,4 +2129,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			          IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME
     };
 	public static final String IDENTIFIED_REPORT_ID="identifiedReportId";
+	
+	public static final String BULK_TRANSFERS = "bulkTransfers";
+	public static final String BULK_DISPOSALS = "bulkDisposals";
 }

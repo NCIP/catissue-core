@@ -288,6 +288,18 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/Home.jsp" />
 	</definition>
 
+	<!-- Bulk operations pages definitions start -->
+	
+	<definition name=".catissuecore.bulkTransferEventsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/bulkOperations/BulkTransferEvents.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.bulkDisposalEventsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/bulkOperations/BulkDisposalEvents.jsp" />
+	</definition>
+	
+	<!-- Bulk operations pages definitions end -->
+	
 	<definition name=".catissuecore.participantDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
 	</definition>

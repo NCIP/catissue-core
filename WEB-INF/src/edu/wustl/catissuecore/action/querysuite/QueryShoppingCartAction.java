@@ -151,6 +151,15 @@ public class QueryShoppingCartAction extends BaseAction
 			
 			target = new String("requestToOrder");
 		}
+		else if (operation.equals(Constants.BULK_TRANSFERS) || operation.equals(Constants.BULK_DISPOSALS))
+		{
+			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+			List<String> specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Specimen.class.getName(), chkBoxValues));
+			request.setAttribute(Constants.SPECIMEN_ID, specimenIds);
+			request.setAttribute(Constants.OPERATION, operation);
+			target = new String(operation);
+		}
+		
 		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_MODULE);
 		return mapping.findForward(target);
 	}

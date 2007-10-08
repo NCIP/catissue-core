@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.DistributedItem;
@@ -81,7 +82,9 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class NewSpecimenBizLogic extends DefaultBizLogic
 {
-
+	private Map< Long, Collection> containerHoldsSpecimenClasses = new HashMap<Long, Collection>();
+	private Map< Long, Collection> containerHoldsCPs = new HashMap<Long, Collection>();
+	
 	/**
 	 * Saves the storageType object in the database.
 	 * @param obj The storageType object to be saved.
@@ -709,20 +712,38 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		return dynamicGroups;
 	}
 
-//	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen, DAO dao) throws DAOException
-//	{
-//
-//		boolean aa = container.getHoldsSpecimenClassCollection().contains(specimen.getClassName());
-//		boolean bb = container.getCollectionProtocolCollection().contains(
-//				specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol());
-//		if (!container.getHoldsSpecimenClassCollection().contains(specimen.getClassName())
-//				|| (!container.getCollectionProtocolCollection().contains(
-//						specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol()) && container
-//						.getCollectionProtocolCollection().size() != 0))
-//		{
-//			throw new DAOException("This Storage Container not valid for Specimen");
-//		}
-//	}
+	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen, DAO dao) throws DAOException
+	{
+		Collection holdsSpecimenClassColl = containerHoldsSpecimenClasses.get(container.getId());
+		if(holdsSpecimenClassColl == null)
+		{
+			holdsSpecimenClassColl = (Collection)dao.retrieveAttribute(StorageContainer.class.getName(),container.getId(),"elements(holdsSpecimenClassCollection)");
+			containerHoldsSpecimenClasses.put(container.getId(), holdsSpecimenClassColl);
+		}
+		boolean aa = holdsSpecimenClassColl.contains(specimen.getClassName());
+		if (!aa	)
+		{
+			throw new DAOException("This Storage Container cannot hold "+specimen.getClassName()+" Specimen "+specimen.getLabel());
+		}
+		
+		Collection collectionProtColl = containerHoldsCPs.get(container.getId());
+		if(collectionProtColl == null)
+		{
+			collectionProtColl = (Collection)dao.retrieveAttribute(StorageContainer.class.getName(),container.getId(),"elements(collectionProtocolCollection)");
+			containerHoldsCPs.put(container.getId(), collectionProtColl);
+		}
+		SpecimenCollectionGroup scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup");
+		CollectionProtocol protocol = (CollectionProtocol)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(), "collectionProtocolRegistration.collectionProtocol");
+		boolean bb = collectionProtColl.isEmpty();
+		if(!bb)
+		{
+			bb = collectionProtColl.contains(protocol);
+		}
+		if(!bb)
+		{
+			throw new DAOException("This Storage Container cannot hold specimen "+specimen.getLabel()+" of collection protocol is "+protocol.getTitle());
+		}
+	}
 
 	private SpecimenCollectionGroup loadSpecimenCollectionGroup(Long specimenID, DAO dao) throws DAOException
 	{
@@ -2490,4 +2511,23 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	
+	public Map<Long, Collection> getContainerHoldsCPs()
+	{
+		return containerHoldsCPs;
+	}
+
+	public void setContainerHoldsCPs(Map<Long, Collection> containerHoldsCPs)
+	{
+		this.containerHoldsCPs = containerHoldsCPs;
+	}
+
+	public Map<Long, Collection> getContainerHoldsSpecimenClasses()
+	{
+		return containerHoldsSpecimenClasses;
+	}
+
+	public void setContainerHoldsSpecimenClasses(Map<Long, Collection> containerHoldsSpecimenClasses)
+	{
+		this.containerHoldsSpecimenClasses = containerHoldsSpecimenClasses;
+	}
 }

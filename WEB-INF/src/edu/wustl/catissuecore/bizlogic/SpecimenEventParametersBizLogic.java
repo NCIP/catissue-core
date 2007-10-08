@@ -8,6 +8,8 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.io.Serializable;
+import java.sql.PreparedStatement;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,8 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -61,6 +65,26 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
+		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				Constants.NEW_SPECIMEN_FORM_ID);
+		//For bulk operations 
+		if (obj instanceof List)
+		{
+			List eventObjectsList = (List) obj;
+			
+			for(int i=0; i<eventObjectsList.size(); i++)
+			{
+				insertEvent(eventObjectsList.get(i), dao, sessionDataBean, newSpecimenBizLogic);
+			}
+		}
+		else
+		{
+			insertEvent(obj, dao, sessionDataBean, newSpecimenBizLogic);
+		}
+	}
+
+	private void insertEvent(Object obj, DAO dao, SessionDataBean sessionDataBean, NewSpecimenBizLogic newSpecimenBizLogic) throws DAOException, UserNotAuthorizedException
+	{
 		try
 		{
 			SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
@@ -80,7 +104,9 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			Specimen specimen = (Specimen)specimenList.get(0); //(Specimen) dao.retrieveAttribute(SpecimenEventParameters.class.getName(), specimenEventParametersObject.getSpecimen().getId(),"specimen");
 			//(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId(),Constants.SYSTEM_IDENTIFIER);
 			// check for closed Specimen
-			checkStatus(dao, specimen, "Specimen");
+			Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
+			specimen = proxySpecimen;
+			checkStatus(dao, proxySpecimen, "Specimen");
 
 			if (specimen != null)
 			{
@@ -95,21 +121,47 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					//				StorageContainer storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
 					//						.getToStorageContainer().getId());
 					StorageContainer storageContainerObj = new StorageContainer();
-					storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
+					
+					List stNamelist = null;
 					String sourceObjectName = StorageContainer.class.getName();
-					String[] selectColumnName = {"name"};
-					String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-					String[] whereColumnCondition = {"="};
-					Object[] whereColumnValue = {transferEventParameters.getToStorageContainer().getId()};
+					String[] selectColumnName = null;
+					String[] whereColumnName = null; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+					String[] whereColumnCondition = null;
+					Object[] whereColumnValue = null;
 					String joinCondition = null;
-
-					List stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
-							joinCondition);
-
-					if (!stNamelist.isEmpty())
+					
+					if(transferEventParameters.getToStorageContainer().getId() == null)
 					{
-						storageContainerObj.setName((String) stNamelist.get(0));
+						storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
+						selectColumnName = new String[]{"id"};
+						whereColumnName = new String[]{"name"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+						whereColumnCondition = new String[]{"="};
+						whereColumnValue = new Object[]{transferEventParameters.getToStorageContainer().getName()};
+						joinCondition = null;
+						stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+								joinCondition);
+						if (!stNamelist.isEmpty())
+						{
+							storageContainerObj.setId((Long) (stNamelist.get(0)));
+						}
 					}
+					else
+					{
+						storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
+						selectColumnName = new String[]{"name"};
+						whereColumnName = new String[]{"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+						whereColumnCondition = new String[]{"="};
+						whereColumnValue = new Object[]{transferEventParameters.getToStorageContainer().getId()};
+						joinCondition = null;
+						stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+								joinCondition);
+						if (!stNamelist.isEmpty())
+						{
+							storageContainerObj.setName((String) stNamelist.get(0));
+						}
+						
+					}
+					
 					// check for closed StorageContainer
 					checkStatus(dao, storageContainerObj, "Storage Container");
 
@@ -120,18 +172,19 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), transferEventParameters
 							.getToPositionDimensionOne().toString(), transferEventParameters.getToPositionDimensionTwo().toString(), sessionDataBean,false);
 					
-					//				if (storageContainer != null)
-					//				{
-					//					NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
-					//							Constants.NEW_SPECIMEN_FORM_ID);
-					//newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainer, specimen);
-					specimen.setStorageContainer(storageContainerObj);
-					specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
-					specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
-					//				}					
+					if (storageContainerObj != null)
+					{
+						//storageContainerObj.setHoldsSpecimenClassCollection(storageContainerBizLogic.getSpecimenClassList(storageContainerObj.getId().toString()));
+						//storageContainerObj.setCollectionProtocolCollection(storageContainerBizLogic.getCollectionProtocolList(storageContainerObj.getId().toString()));
+						
+						newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
+						specimen.setStorageContainer(storageContainerObj);
+						specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
+						specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
+					}					
 					
-//					Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
-					dao.update(specimen, sessionDataBean, true, true, false);
+					
+					dao.update(proxySpecimen, sessionDataBean, true, true, false);
 				}
 				if (specimenEventParametersObject instanceof DisposalEventParameters)
 				{
@@ -168,7 +221,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					 * Reviewer: Sachin lale
 					 * Calling Domain object from Proxy Object
 					 */
-					Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
+					//Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
 					dao.update(proxySpecimen, sessionDataBean, true, true, false);
 
 					try
@@ -210,6 +263,25 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	}
 
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		//For bulk operations
+		if (obj instanceof List)
+		{
+			List events = (List)obj;
+			for(int i =0; i<events.size();i++)
+			{
+				postInsertPerEvent(events.get(i), dao);
+			}
+		}
+		else
+		{
+			postInsertPerEvent(obj, dao);
+		}
+		
+
+	}
+
+	private void postInsertPerEvent(Object obj, DAO dao)
 	{
 		SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
 		try
@@ -280,7 +352,6 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		{
 
 		}
-
 	}
 
 	/**
@@ -332,6 +403,61 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	{
+		// For bulk operations
+		if (obj instanceof List)
+		{
+			List events = (List) obj;
+
+			//This map maintains the current event no being added per container
+			Map containerEventNumberMap = new HashMap();
+
+			SpecimenEventParameters specimenEventParameters = null;
+
+			//This is the event number corresponding to the current container. 
+			//This number is required to get the next location in the container that should be available 
+			Integer eventNumber = null;
+
+			for (int i = 0; i < events.size(); i++)
+			{
+				specimenEventParameters = (SpecimenEventParameters) events.get(i);
+
+				if (specimenEventParameters instanceof TransferEventParameters)
+				{
+					TransferEventParameters trEvent = (TransferEventParameters) specimenEventParameters;
+					eventNumber = (Integer) containerEventNumberMap.get(trEvent.getToStorageContainer().getName());
+					if (eventNumber == null)
+					{
+						eventNumber = new Integer(0);
+					}
+					containerEventNumberMap.put(trEvent.getToStorageContainer().getName(), new Integer(eventNumber.intValue() + 1));
+				}
+				else
+				{
+					if (eventNumber == null)
+					{
+						eventNumber = new Integer(0);
+					}
+					else
+					{
+						eventNumber++;
+					}
+				}
+
+				if (!validateSingleEvent(specimenEventParameters, dao, operation, eventNumber.intValue()))
+				{
+					return false;
+				}
+			}
+		}
+		else
+		{
+			return validateSingleEvent(obj, dao, operation, 0);
+		}
+		return true;
+	}
+
+	private boolean validateSingleEvent(Object obj, DAO dao, String operation, int numberOfEvent) throws DAOException
 	{
 		SpecimenEventParameters eventParameter = (SpecimenEventParameters) obj;
 
@@ -444,9 +570,10 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
 				TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-			
+				
 				if (parameter.getToStorageContainer() != null && parameter.getToStorageContainer().getName() != null)				
-				{			
+				{
+					Specimen specimen= (Specimen)dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, parameter.getSpecimen().getId()).get(0);
 					StorageContainer storageContainerObj = parameter.getToStorageContainer();			
 					String sourceObjectName = StorageContainer.class.getName();
 					String[] selectColumnName = {"id"};
@@ -465,9 +592,16 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					else
 					{
 						String message = ApplicationProperties.getValue("transfereventparameters.toposition");
-						throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+						throw new DAOException(ApplicationProperties.getValue("errors.invalid", message+" for specimen: "+specimen.getLabel()));
 					}
 					
+//					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic("edu.wustl.catissuecore.domain.StorageContainer");
+//					boolean canHoldSpecimen = storageContainerBizLogic.canHoldSpecimenClass(specimen.getClassName(), storageContainerObj);
+//					if(!canHoldSpecimen)
+//					{
+//						String message = ApplicationProperties.getValue("transfereventparameters.toposition");
+//						throw new DAOException(ApplicationProperties.getValue("errors.invalid", message+" for specimen: "+specimen.getLabel()+" Container cannot hold this type of Specimen"));
+//					}
 					
 						//Long storageContainerId = specimen.getStorageContainer().getId();
 						Integer xPos = parameter.getToPositionDimensionOne();
@@ -501,16 +635,30 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 								{
 								
 									Map tempMap = (Map) containerMapFromCache.get(nvb);
-									Iterator tempIterator = tempMap.keySet().iterator();;
-									NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+									Iterator tempIterator = tempMap.keySet().iterator();
 									
-									list = (List) tempMap.get(nvb1);
-									NameValueBean nvb2 = (NameValueBean) list.get(0);
-													
-									parameter.setToPositionDimensionOne(new Integer(nvb1.getValue()));
-									parameter.setToPositionDimensionTwo(new Integer(nvb2.getValue()));
-								    isContainerFull = false;
-								    break;
+									while (tempIterator.hasNext())
+									{
+										NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+										
+										list = (List) tempMap.get(nvb1);
+										NameValueBean nvb2;
+										
+										//To get the next available location for this event number assuming the pervious ones were allocated to previous events in the list
+										if(numberOfEvent >= list.size())
+										{
+											numberOfEvent= numberOfEvent - list.size();
+											continue;
+										}
+										nvb2 = (NameValueBean) list.get(numberOfEvent);
+										
+										parameter.setToPositionDimensionOne(new Integer(nvb1.getValue()));
+										parameter.setToPositionDimensionTwo(new Integer(nvb2.getValue()));
+									    isContainerFull = false;
+									    break;
+									}
+	
+									break;
 								}
 								
 							}
@@ -621,6 +769,62 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		Map disabledconts = (TreeMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIEN);
 		return disabledconts;
 	}
+	
+	public List getSpecimenDataForBulkOperations(List specimenIds, SessionDataBean sessionDataBean, String queryString) throws ClassNotFoundException, DAOException
+	{
+		List specimenDataList = null;
+		StringBuffer specimenIdsString = new StringBuffer();
+		specimenIdsString.append("(");
+		for (int i=0; i< specimenIds.size(); i++)
+		{
+			if(i == (specimenIds.size()-1))
+			{
+				specimenIdsString.append(specimenIds.get(i));
+			}
+			else
+			{
+				specimenIdsString.append(specimenIds.get(i)+", ");
+			}
+		}
+		specimenIdsString.append(")");
 		
-
+		String sql =queryString+specimenIdsString;
+		
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(edu.wustl.common.util.global.Constants.JDBC_DAO);
+		dao.openSession(null);
+		specimenDataList = dao.executeQuery(sql,sessionDataBean, false, new HashMap());
+		dao.closeSession();
+		return specimenDataList;
+	}
+	
+	public List getSpecimenDataForBulkOperations(String operation, List specimenIds, SessionDataBean sessionDataBean) throws ClassNotFoundException, DAOException
+	{
+		if(operation.equals(Constants.BULK_TRANSFERS))
+		{
+			return getSpecimenDataForBulkTransfers(specimenIds, sessionDataBean);
+		}
+		else
+		{
+			return getSpecimenDataForBulkDisposals(specimenIds, sessionDataBean);
+		}
+	}
+	
+	public List getSpecimenDataForBulkTransfers(List specimenIds, SessionDataBean sessionDataBean) throws ClassNotFoundException, DAOException
+	{
+		String sql = "Select specimen.IDENTIFIER, specimen.LABEL, specimen.SPECIMEN_CLASS, Container.NAME , specimen.POSITION_DIMENSION_ONE, specimen.POSITION_DIMENSION_TWO, Container.IDENTIFIER " 
+			+"from catissue_specimen specimen left join catissue_storage_container StorageContainer on (specimen.STORAGE_CONTAINER_IDENTIFIER = StorageContainer.IDENTIFIER) "
+			+"left join catissue_container Container on (StorageContainer.IDENTIFIER=Container.IDENTIFIER) "
+			+"where specimen.IDENTIFIER in ";
+		return getSpecimenDataForBulkOperations(specimenIds, sessionDataBean, sql);
+	}
+	
+	public List getSpecimenDataForBulkDisposals(List specimenIds, SessionDataBean sessionDataBean) throws ClassNotFoundException, DAOException
+	{
+		String sql = "Select specimen.IDENTIFIER, specimen.LABEL "
+			+"from catissue_specimen specimen "
+			+"where specimen.IDENTIFIER in ";
+		return getSpecimenDataForBulkOperations(specimenIds, sessionDataBean, sql);
+	}
+	
+	
 } 

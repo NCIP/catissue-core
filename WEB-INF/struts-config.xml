@@ -88,6 +88,7 @@ PUBLIC
 		<form-bean name="protocolEventDetailsForm" type="edu.wustl.catissuecore.actionForm.ProtocolEventDetailsForm"/>
 		<form-bean name="createSpecimenTemplateForm" type="edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm"/>
 		<form-bean name="viewSpecimenSummaryForm" type="edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm"/> 
+		<form-bean name="bulkEventOperationsForm" type="edu.wustl.catissuecore.actionForm.BulkEventOperationsForm"/>
 		
 		<form-bean name="saveQueryForm" type="edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm"/>
 		
@@ -639,6 +640,8 @@ PUBLIC
 			<forward name="shoppingCartDelete" path=".catissuecore.shoppingCartDef" />
 			<forward name="shoppingCartExport" path=".catissuecore.shoppingCartDef" />
 			<forward name="requestToOrder" path="/RequestToOrder.do"/>
+			<forward name="bulkTransfers" path="/BulkTransferEvents.do?menuSelected=15"/>
+			<forward name="bulkDisposals" path="/BulkDisposalEvents.do?menuSelected=15"/>
 		</action>
 		
 		<!-- Applet Action mapping for query Module -->
@@ -4341,7 +4344,8 @@ PUBLIC
 			<forward name="success" path="/pages/content/manageBioSpecimen/DynamicExtenstionsDataEntryPage.jsp"/>
 		</action>
 		
-		<!-- Annotation actions end -->		
+		<!-- Annotation actions end -->	
+
 		
 		<action path="/DefineEvents" 
 			type="edu.wustl.catissuecore.action.DefineEventsAction"
@@ -4458,6 +4462,37 @@ PUBLIC
 			<forward name="success" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;invokeFunction=cp" />
 		</action>
             
+            	
+		
+		<action path="/BulkTransferEvents"
+					type="edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction"
+					name="bulkEventOperationsForm"
+					validate="false"
+					scope="request">
+					<forward name="success" path=".catissuecore.bulkTransferEventsDef" />
+					<forward name="bulkTransfers" path=".catissuecore.bulkTransferEventsDef" />
+					<forward name="failure" path=".catissuecore.bulkTransferEventsDef" />
+		</action>
+		
+		<action path="/BulkDisposalEvents"
+					type="edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction"
+					name="bulkEventOperationsForm"
+					validate="false"
+					scope="request">
+					<forward name="success" path=".catissuecore.bulkDisposalEventsDef" />
+					<forward name="bulkDisposals" path=".catissuecore.bulkDisposalEventsDef" />
+					<forward name="failure" path=".catissuecore.bulkDisposalEventsDef" />
+		</action>
+		
+		<action path="/BulkTransferEventsSubmit"
+					type="edu.wustl.catissuecore.action.bulkOperations.BulkOperationSubmitAction"
+					name="bulkEventOperationsForm"
+					validate="false"
+					scope="request">
+					<forward name="bulkTransfers" path="/BulkTransferEvents.do?menuSelected=15" />
+					<forward name="bulkDisposals" path="/BulkDisposalEvents.do?menuSelected=15" />
+		</action>
+		
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

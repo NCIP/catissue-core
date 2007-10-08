@@ -88,6 +88,38 @@ function onExport()
 				alert("Please select at least one checkbox");
 			}
 		}
+		
+function dobulkOperations()
+		{
+			var isChecked = updateHiddenFields();
+		    
+		    if(isChecked == "true")
+		    {
+				var action = "QueryAddToCart.do?operation=bulkTransfers";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
+			else
+			{
+				alert("Please select at least one checkbox");
+			}
+		}
+		
+function dobulkDisposals()
+		{
+			var isChecked = updateHiddenFields();
+		    
+		    if(isChecked == "true")
+		    {
+				var action = "QueryAddToCart.do?operation=bulkDisposals";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
+			else
+			{
+				alert("Please select at least one checkbox");
+			}
+		}
 
 function addToOrderList()
 		{			
@@ -187,7 +219,17 @@ function checkAll(element)
 					<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
 						<bean:message key="buttons.export"/>
 					</html:button>
+				</td>
+				<td width="10%" nowrap align="left">
+					<html:button styleClass="actionButton" property="exportCart" onclick="dobulkOperations()">
+						<bean:message key="bulk.events.operation"/>
+					</html:button>
 				</td> 
+				<!--td width="10%" nowrap align="left">
+					<html:button styleClass="actionButton" property="exportCart" onclick="dobulkDisposals()">
+						<bean:message key="bulk.events.disposals"/>
+					</html:button>
+				</td--> 
 				
 				<td width="10%" nowrap align="left">
 				<%if(isSpecimenIdPresent.equals("true")){

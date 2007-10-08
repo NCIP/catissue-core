@@ -1010,6 +1010,15 @@ function mapButtonClickedOnSpecimen(frameUrl,name)
 	openPopupWindow(frameUrl,name);
 }
 
+function mapButtonClickedOnSpecimen(frameUrl,name,storageContainerName)
+{
+	var contName=storageContainerName+"";
+   	var storageContainer = document.getElementById(contName).value;
+	frameUrl+="&storageContainerName="+storageContainer;
+	alert(frameUrl+"");
+	openPopupWindow(frameUrl,name);
+}
+
 // Patch ID: Bug#4129_4
 // Description: Function to verify the validity of number of specimen value.
 //  check for valid numeric strings	

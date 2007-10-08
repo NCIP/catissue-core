@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import edu.wustl.catissuecore.bizlogic.bulkOperations.BulkOperationsBizlogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.CatissuecoreQueryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.CDEBizLogic;
@@ -101,8 +102,12 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
          	case Constants.SPUN_EVENT_PARAMETERS_FORM_ID:
          	case Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID:
          	case Constants.FIXED_EVENT_PARAMETERS_FORM_ID:
-         	case Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID:	
+         	case Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID:
          		bizLogic = new SpecimenEventParametersBizLogic();
+        		break;
+        		
+         	case Constants.BULK_OPERATIONS_FORM_ID:
+         		bizLogic = new BulkOperationsBizlogic();
         		break;
 
         	case Constants.COLLECTION_PROTOCOL_FORM_ID:
