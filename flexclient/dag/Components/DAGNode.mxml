@@ -56,6 +56,8 @@
 		public var outAssociations:ArrayCollection = new ArrayCollection();		
 		public var displayoutAssociations:ArrayCollection = new ArrayCollection();		
 		public var inAssociations:ArrayCollection = new ArrayCollection();
+		public var orderOfAss:HashMap;
+		public static var orderAssociation:int=0;
 		
 		// The Array data provider
 		[Bindable]
@@ -75,12 +77,22 @@
 
 		[Bindable]
 		public function addDisplayOutAssociation(node:String,link:String,operatorIndex:int):void{
-			var ass:Association = new Association(node,link,operatorIndex);
+			var order:int=0;
+			if(orderOfAss.containsKey(link))
+			{
+				order=orderOfAss.getValue(link);
+			}
+			else
+			{
+				order=orderAssociation++;
+				orderOfAss.put(link,order);
+			}
+			var ass:Association = new Association(node,link,operatorIndex,order);
 			displayoutAssociations.addItem(ass);
-				
+			
 			 var col:ICollectionView = displayoutAssociations  as ICollectionView;
 			 var sort:Sort = new Sort();
-		     sort.fields = [new SortField("associatedNode",true)];
+		     sort.fields = [new SortField("order",true)];
 		     col.sort = sort;
 			 col.refresh();
 
@@ -103,11 +115,21 @@
 
 		[Bindable]
 		public function addOutAssociation(node:String,link:String,operatorIndex:int):void{
-			var ass:Association = new Association(node,link,operatorIndex);
+			var order:int=0;
+			if(orderOfAss.containsKey(link))
+			{
+				order=orderOfAss.getValue(link);
+			}
+			else
+			{
+				order=orderAssociation++;
+				orderOfAss.put(link,order);
+			}
+			var ass:Association = new Association(node,link,operatorIndex,order);
 			outAssociations.addItem(ass);
 			 var col:ICollectionView = outAssociations  as ICollectionView;
 			 var sort:Sort = new Sort();
-		     sort.fields = [new SortField("associatedNode",true)];
+		     sort.fields = [new SortField("order",true)];
 		     col.sort = sort;
 			 col.refresh();
 			}
@@ -146,7 +168,8 @@
 		
 		[Bindable]
 		public function addInAssociation(node:String,link:String,operatorIndex:int):void{
-			var ass:Association = new Association(node,link,operatorIndex);
+			var order:int=0;
+			var ass:Association = new Association(node,link,operatorIndex,order);
 			inAssociations.addItem(ass);
 		}
 		[Bindable]
@@ -169,7 +192,8 @@
 		//-------------
 		
 		public function init():void
-		{
+		{ 
+			orderOfAss = new HashMap();
 			this.parentApplication.rpcService.addEventListener("fault", faultHandler);
 		}
 		
@@ -268,6 +292,7 @@
 			var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
 			var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
 			dagPath.deletePath(dagNode1,dagNode2);
+			orderOfAss.remove(pathName);
 		}
 		
 		public function deleteNode():void

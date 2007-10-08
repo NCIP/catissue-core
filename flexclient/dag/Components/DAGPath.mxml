@@ -118,6 +118,7 @@
 						dagNode1.removeDisplayOutAssociation(node2,ass.associatedLink);
 						dagNode1.removeOutAssociation(node2,ass.associatedLink);
 					}
+					dagNode1.orderOfAss.remove(ass.associatedLink);
 					dagNode2.removeInAssociation(node1,ass.associatedLink);
 					node1="";
 					node2="";
