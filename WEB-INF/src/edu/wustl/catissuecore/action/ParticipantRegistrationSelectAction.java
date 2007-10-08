@@ -203,6 +203,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
     	for(int i = cprCountOld+1 ; i<= cprCountNew ; i++)
     	{
     		String collectionProtocolId = "CollectionProtocolRegistration:"+(i-cprCountOld)+"_CollectionProtocol_id";
+    		String collectionProtocolTitle = "CollectionProtocolRegistration:"+(i-cprCountOld)+"_CollectionProtocol_shortTitle";
 			String collectionProtocolParticipantId = "CollectionProtocolRegistration:"+(i-cprCountOld)+"_protocolParticipantIdentifier";
 			String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:" +(i-cprCountOld) +"_registrationDate";
 			String collectionProtocolIdentifier = "CollectionProtocolRegistration:" + (i-cprCountOld) +"_id";
@@ -210,6 +211,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 			String isActive = "CollectionProtocolRegistration:" + (i-cprCountOld) +"_activityStatus";
 			
 			String collectionProtocolIdNew = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_id";
+			String collectionProtocolTitleNew = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_shortTitle";
 			String collectionProtocolParticipantIdNew = "CollectionProtocolRegistration:"+i+"_protocolParticipantIdentifier";
 			String collectionProtocolRegistrationDateNew = "CollectionProtocolRegistration:" + i +"_registrationDate";
 			String collectionProtocolIdentifierNew = "CollectionProtocolRegistration:" + i +"_id";
@@ -217,6 +219,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 			String isActiveNew = "CollectionProtocolRegistration:" + i +"_activityStatus";
 			
 			mapCollectionProtocolRegistrationOld.put(collectionProtocolIdNew,mapCollectionProtocolRegistration.get(collectionProtocolId));
+			mapCollectionProtocolRegistrationOld.put(collectionProtocolTitleNew, mapCollectionProtocolRegistration.get(collectionProtocolTitle));
 			mapCollectionProtocolRegistrationOld.put(collectionProtocolParticipantIdNew,mapCollectionProtocolRegistration.get(collectionProtocolParticipantId));
 			mapCollectionProtocolRegistrationOld.put(collectionProtocolRegistrationDateNew,mapCollectionProtocolRegistration.get(collectionProtocolRegistrationDate));
 			mapCollectionProtocolRegistrationOld.put(collectionProtocolIdentifierNew,mapCollectionProtocolRegistration.get(collectionProtocolIdentifier));
@@ -243,23 +246,25 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 	{
 		Validator validator = new Validator();
 		String collectionProtocolClassName = "CollectionProtocolRegistration:";
-		String collectionProtocolTitle = "_CollectionProtocol_id";
+		String collectionProtocolId = "_CollectionProtocol_id";
 		String collectionProtocolParticipantId = "_protocolParticipantIdentifier";
 		String collectionProtocolRegistrationDate = "_registrationDate";
 		String collectionProtocolIdentifier = "_id";
 		String isConsentAvailable = "_isConsentAvailable";
 		String isActive = "_activityStatus";
+		String collectionProtocolTitle = "_CollectionProtocol_shortTitle";
 		
 		int index = 1;
 
 		while(true)
 		{
-			String keyOne = collectionProtocolClassName + index + collectionProtocolTitle;
+			String keyOne = collectionProtocolClassName + index + collectionProtocolId;
 			String keyTwo = collectionProtocolClassName + index + collectionProtocolParticipantId;
 			String keyThree = collectionProtocolClassName + index + collectionProtocolRegistrationDate;
 			String keyFour = collectionProtocolClassName + index + collectionProtocolIdentifier;
 			String keyFive = collectionProtocolClassName + index + isConsentAvailable;
 			String keySix = collectionProtocolClassName + index + isActive;
+			String KeySeven = collectionProtocolClassName + index + collectionProtocolTitle;
 			
 			String value1 = (String)collectionProtocolRegistrationValues.get(keyOne);
 			String value2 = (String)collectionProtocolRegistrationValues.get(keyTwo);
@@ -277,6 +282,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 				collectionProtocolRegistrationValues.remove(keyFour);
 				collectionProtocolRegistrationValues.remove(keyFive);
 				collectionProtocolRegistrationValues.remove(keySix);
+				collectionProtocolRegistrationValues.remove(KeySeven);
 			}
 			index++;
 		}
