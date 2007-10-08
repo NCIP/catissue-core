@@ -265,6 +265,8 @@ public abstract class QueryModuleUtil
 		}
 		//TODO check if null and then set the value of seleted.
 		actionForm.setSelected("text_radioButton");
+		actionForm.setTextField("");
+		actionForm.setPermissibleValuesChecked("off");
 		return actionForm;
 	}
 
