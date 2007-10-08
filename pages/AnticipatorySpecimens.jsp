@@ -95,11 +95,13 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 								cellspacing="0" border="0" class="dataTable" >
 					<tr>
 						<th class="formSerialNumberLabelForTable" scope="col" > &nbsp </th>
-						<th class="formSerialNumberLabelForTable" scope="col">Received</th>
 						<th class="formSerialNumberLabelForTable" scope="col">Label</th>
 						<th class="formSerialNumberLabelForTable" scope="col"> Barcode</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Location</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
 						<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
+						<th class="formSerialNumberLabelForTable" scope="col">Conc.</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> Location</th>
+						<th class="formSerialNumberLabelForTable" scope="col">Created</th>
 						
 					</tr>
 				
@@ -111,9 +113,6 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						<html:hidden name="specimen" indexed="true" property="uniqueIdentifier" /></td>
 					<!--Editable Row -->	
 						<logic:equal name="specimen" property="readOnly" value="false">
-							<td class="dataCellText">
-								<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" />					
-							</td>
 								<html:hidden name="specimen" indexed="true" property="readOnly"/>
 							<td class="dataCellText" > 
 							<html:text  styleClass="formFieldSized10" name="specimen" indexed="true" property="displayName" />
@@ -121,7 +120,18 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							</td>
 							<td class="dataCellText"> 
 							<html:text   styleClass="formFieldSized10" name="specimen" indexed="true" property="barCode" />
-							<bean:write  name="specimen" property="barCode" />
+
+							</td>
+							<td class="dataCellText"> 
+							<bean:write name="specimen" property="type" />
+							<html:hidden name="specimen" indexed="true" property="type" />
+							</td>
+
+							<td class="dataCellText"> 
+							<html:text styleClass="formFieldSized3" name="specimen" indexed="true" property="quantity" />
+							</td>
+							<td class="dataCellText"> 
+							<html:text styleClass="formFieldSized3" name="specimen" indexed="true" property="concentration" />
 							</td>
 							
 							<logic:equal name="specimen" property="storageContainerForSpecimen" value="Virtual">
@@ -145,20 +155,21 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 																	+ positionDimensionTwo +"','"
 																	+containerId +"')" ;
 									%>
-
-									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=selectedContainerName%>" indexed="true"  name="specimen" property="selectedContainerName" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=positionDimensionOne%>" indexed="true"  name="specimen" property="positionDimensionOne" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=positionDimensionTwo%>" indexed="true"  name="specimen" property="positionDimensionTwo" readonly= "true"/>
-									<html:button styleClass="actionButton" property="containerMap" 
-									onclick="<%=functionCall%>" >
-									<bean:message key="buttons.map"/>
-									</html:button>
+									<span>
+									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="specimen" property="selectedContainerName" readonly= "true"/>
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="specimen" property="positionDimensionOne" readonly= "true"/>
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="specimen" property="positionDimensionTwo" readonly= "true"/>
+									<a href="#" onclick="<%=functionCall%>">
+									<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
+									</a>
+									</span>									
 									<html:hidden  styleId="<%=containerId%>" name="specimen" property="containerId" />
 									</td>
+
 							</logic:notEqual>												
 							
-							<td class="dataCellText"> 
-							<html:text styleClass="formFieldSized5" name="specimen" indexed="true" property="quantity" />
+							<td class="dataCellText">
+								<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" />					
 							</td>
 
 						</logic:equal>
@@ -166,10 +177,6 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 
 					<!---Readonly Row -->						
 						<logic:equal name="specimen" property="readOnly" value="true">
-							<td class="dataCellText">
-								<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
-								<html:hidden name="specimen" indexed="true" property="checkedSpecimen" />					
-							</td>
 
 							<html:hidden name="specimen" indexed="true" property="readOnly"/>
 							
@@ -177,19 +184,40 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							<html:hidden name="specimen" indexed="true" property="displayName" /></td>
 							<td class="dataCellText">&nbsp;<bean:write name="specimen" property="barCode" />
 							<html:hidden name="specimen" indexed="true" property="barCode" /></td>
+							<td class="dataCellText"> 
+							<bean:write  name="specimen" property="type" />
+							<html:hidden  name="specimen" indexed="true" property="type" />
+							</td>
+							<td class="dataCellText"> 
+							<bean:write name="specimen" property="quantity" />
+							<html:hidden name="specimen" indexed="true" property="quantity" />
+							</td>
+							<td class="dataCellText"> 
+							<html:hidden  name="specimen" indexed="true" property="concentration" />
+							&nbsp; <bean:write  name="specimen" property="concentration" />
+							</td>
+
 							<logic:equal name="specimen" property="storageContainerForSpecimen" value="Virtual">
 								
 									<td class="dataCellText"> <bean:write name="specimen" property="storageContainerForSpecimen" />
 									<html:hidden name="specimen" indexed="true" property="storageContainerForSpecimen" /></td>
 							</logic:equal>
 							<logic:notEqual name="specimen" property="storageContainerForSpecimen" value="Virtual">
-									<td class="dataCellText">	<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" indexed="true" name="specimen" property="selectedContainerName" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  indexed="true" size="5" styleId="positionDimensionOne" name="specimen" property="positionDimensionOne" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionTwo" indexed="true" name="specimen" property="positionDimensionTwo" readonly= "true"/>
-									</td>
+									<td class="dataCellText">	
+									<html:hidden indexed="true" name="specimen" property="selectedContainerName"/>
+									<html:hidden  indexed="true"  name="specimen" property="positionDimensionOne" />
+									<html:hidden  indexed="true" name="specimen" property="positionDimensionTwo" />
+									<span>
+										<bean:write name="specimen" property="selectedContainerName"/>
+										<B>:</B>
+										<bean:write  name="specimen" property="positionDimensionOne" />,
+										<bean:write name="specimen" property="positionDimensionTwo" />
+									</span>
 							</logic:notEqual>												
-							<td class="dataCellText"> <bean:write name="specimen" property="quantity" />
-							<html:hidden name="specimen" indexed="true" property="quantity" />
+							<td class="dataCellText">
+								<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
+								<html:hidden name="specimen" indexed="true" property="checkedSpecimen" />					
+							</td>
 							</td>
 						</logic:equal>					
 					<!--/Readonly Row -->
@@ -202,6 +230,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
 				<html:hidden property="eventId"  />
 				<html:hidden property="lastSelectedSpecimenId"  />
+				<html:hidden property="selectedSpecimenId"  />
 			</logic:notEmpty>
 				<html:hidden property="userAction" />
 				<html:hidden property="requestType" />
@@ -210,14 +239,14 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			<table>
 			<tr>
 			<td class="dataTablePrimaryLabel" height="20">		
-				<p>Aliquot details
+				Aliquot details
 			</td>
 			</tr>
 			</table>
 			<table summary="" cellpadding="3"
 							cellspacing="0" border="0" class="dataTable" >
 			<tr>
-	      		<th class="formSerialNumberLabelForTable" scope="col" colspan="5"> &nbsp;</th>
+	      		<th class="formSerialNumberLabelForTable" scope="col" colspan="7"> &nbsp;</th>
 	      		<th class="formSerialNumberLabelForTable" scope="col"> 
 					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('aliquotId',this);"/>			
 				</th>
@@ -225,66 +254,52 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 
 				<tr>	
 					<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
-					<th class="formSerialNumberLabelForTable" scope="col">Label</th>
-					<th class="formSerialNumberLabelForTable" scope="col">Barcode</th>
-					<th class="formSerialNumberLabelForTable" scope="col"> Location</th>
-					<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
-					<th class="formSerialNumberLabelForTable" scope="col"> Created</th>
+						<th class="formSerialNumberLabelForTable" scope="col">Label</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> Barcode</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
+						<th class="formSerialNumberLabelForTable" scope="col">Conc.</th>
+						<th class="formSerialNumberLabelForTable" scope="col"> Location</th>
+						<th class="formSerialNumberLabelForTable" scope="col">Created</th>
 					</tr>
 				  <logic:iterate name="viewSpecimenSummaryForm" property="aliquotList" id="aliquot" indexId="ctr">
-						<html:hidden name="aliquot" indexed="true" property="uniqueIdentifier" />
-						<html:hidden indexed="true" name="aliquot" property="containerId" />
 					<tr>
 
-					<td class="dataCellText"> <bean:write name="aliquot" property="parentName" />
-								<html:hidden indexed="true" name="aliquot" property="parentName" />
-					</td>		      	
-					<logic:equal name="aliquot" property="readOnly" value="true">
-		
-					<td class="dataCellText"> <bean:write name="aliquot" property="displayName" />
-							 <html:hidden indexed="true" name="aliquot" property="displayName" /></td>
-							<td class="dataCellText">&nbsp; <bean:write name="aliquot" property="barCode" />
-								 <html:hidden indexed="true" name="aliquot" property="barCode"/></td>
-							
-							<td class="dataCellText">
-								<logic:equal name="aliquot" property="storageContainerForSpecimen" value="Virtual">
-								
-									 <bean:write name="aliquot" property="storageContainerForSpecimen" />
-									<html:hidden name="aliquot" indexed="true" property="storageContainerForSpecimen" />
-								</logic:equal>
-								
-								<logic:notEqual name="aliquot" property="storageContainerForSpecimen" value="Virtual">
-									<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName"  indexed="true" name="aliquot" property="selectedContainerName" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionOne"  indexed="true" name="aliquot" property="positionDimensionOne" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionTwo" indexed="true" name="aliquot" property="positionDimensionTwo" readonly= "true"/>
-								</logic:notEqual>										
-								</td>
-							<td class="dataCellText"> <bean:write name="aliquot" property="quantity" />
-								<html:hidden indexed="true" name="aliquot" property="quantity" />
-							</td>
-							<td class="dataCellText">
-								<html:checkbox name="aliquot" indexed="true" property="checkedSpecimen" disabled = "true"/>	
-								<html:hidden name="aliquot" indexed="true" property="checkedSpecimen" />	
-							</td>
-								<html:hidden name="aliquot" indexed="true" property="readOnly"/>
-
-						</logic:equal>
-						
+						<td class="dataCellText"> <html:hidden  name="aliquot" indexed="true" property="displayName" />
+						<bean:write  name="aliquot" property="displayName" />
+						<html:hidden name="aliquot" indexed="true" property="uniqueIdentifier" /></td>
+					<!--Editable Row -->	
 						<logic:equal name="aliquot" property="readOnly" value="false">
-		
-							<td class="dataCellText">
-								 <html:text styleClass="formFieldSized10"  size="10" indexed="true" name="aliquot" property="displayName" /></td>
-							<td class="dataCellText">
-								 <html:text styleClass="formFieldSized10"  size="10" indexed="true" name="aliquot" property="barCode" /></td>
-							<td class="dataCellText">
+								<html:hidden name="aliquot" indexed="true" property="readOnly"/>
+							<td class="dataCellText" > 
+							<html:text  styleClass="formFieldSized10" name="aliquot" indexed="true" property="displayName" />
+
+							</td>
+							<td class="dataCellText"> 
+							<html:text   styleClass="formFieldSized10" name="aliquot" indexed="true" property="barCode" />
+
+							</td>
+							<td class="dataCellText"> 
+							<bean:write name="aliquot" property="type" />
+							<html:hidden name="aliquot" indexed="true" property="type" />
+							</td>
+
+							<td class="dataCellText"> 
+							<html:text styleClass="formFieldSized3" name="aliquot" indexed="true" property="quantity" />
+							</td>
+							<td class="dataCellText"> 
+							<html:text styleClass="formFieldSized3" name="aliquot" indexed="true" property="concentration" />
+							</td>
 							
 							<logic:equal name="aliquot" property="storageContainerForSpecimen" value="Virtual">
 								
-									 <bean:write name="aliquot" property="storageContainerForSpecimen" />
-									<html:hidden name="aliquot" indexed="true" property="storageContainerForSpecimen" />
+							<td class="dataCellText"> <bean:write name="aliquot" property="storageContainerForSpecimen" />
+									<html:hidden name="aliquot" indexed="true" property="storageContainerForSpecimen" /></td>
 							</logic:equal>
 								
 							<logic:notEqual name="aliquot" property="storageContainerForSpecimen" value="Virtual">
+									<td class="dataCellText">
+									
 									<bean:define id="specimenId" name="aliquot" property="uniqueIdentifier" />
 									
 									<%
@@ -292,35 +307,79 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 									  selectedContainerName = "selectedContainerName_"+specimenId;
 									  positionDimensionOne = "positionDimensionOne_"+specimenId;
   									  positionDimensionTwo = "positionDimensionTwo_"+specimenId;
-  									  functionCall="showMap('" + selectedContainerName + "','"+
-																positionDimensionOne +"','"
+									  functionCall="showMap('" + selectedContainerName + "','"+
+																	positionDimensionOne +"','"
 																	+ positionDimensionTwo +"','"
 																	+containerId +"')" ;
-
 									%>
-
-									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=selectedContainerName%>" indexed="true" name="aliquot" property="selectedContainerName" readonly= "true"/>
-									<html:text styleClass="formFieldSized3" indexed="true"  size="5" styleId="<%=positionDimensionOne%>" name="aliquot" property="positionDimensionOne" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=positionDimensionTwo%>" indexed="true" name="aliquot" property="positionDimensionTwo" readonly= "true"/>
-									<html:button styleClass="actionButton" property="containerMap" 
-									onclick="<%=functionCall%>" >
-									<bean:message key="buttons.map"/>
-									</html:button>
+									<span>
+									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="aliquot" property="selectedContainerName" readonly= "true"/>
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="aliquot" property="positionDimensionOne" readonly= "true"/>
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="aliquot" property="positionDimensionTwo" readonly= "true"/>
+									<a href="#" onclick="<%=functionCall%>">
+									<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
+									</a>
+									</span>									
 									<html:hidden  styleId="<%=containerId%>" name="aliquot" property="containerId" />
+									</td>
 
-							</logic:notEqual>										
-								</td>
+							</logic:notEqual>												
+							
 							<td class="dataCellText">
-								<html:text styleClass="formFieldSized5" indexed="true" name="aliquot" property="quantity" />
+								<html:checkbox name="aliquot" indexed="true" property="checkedSpecimen" />					
 							</td>
-							<td class="dataCellText">
-								<html:checkbox name="aliquot" indexed="true"  property="checkedSpecimen" />					
-							</td>
-								<html:hidden name="aliquot" indexed="true" property="readOnly"/>
 
 						</logic:equal>
+					<!--/Editable Row -->
 
+					<!---Readonly Row -->						
+						<logic:equal name="aliquot" property="readOnly" value="true">
 
+							<html:hidden name="aliquot" indexed="true" property="readOnly"/>
+							
+							<td class="dataCellText" > <bean:write name="aliquot" property="displayName" />
+							<html:hidden name="aliquot" indexed="true" property="displayName" /></td>
+							<td class="dataCellText">&nbsp;<bean:write name="aliquot" property="barCode" />
+							<html:hidden name="aliquot" indexed="true" property="barCode" /></td>
+							<td class="dataCellText"> 
+							<bean:write  name="aliquot" property="type" />
+							<html:hidden  name="aliquot" indexed="true" property="type" />
+							</td>
+							<td class="dataCellText"> 
+							<bean:write name="aliquot" property="quantity" />
+							<html:hidden name="aliquot" indexed="true" property="quantity" />
+							</td>
+							<td class="dataCellText"> 
+							<html:hidden  name="aliquot" indexed="true" property="concentration" />
+							&nbsp; <bean:write  name="aliquot" property="concentration" />
+							</td>
+
+							<logic:equal name="aliquot" property="storageContainerForSpecimen" value="Virtual">
+								
+									<td class="dataCellText"> <bean:write name="aliquot" property="storageContainerForSpecimen" />
+									<html:hidden name="aliquot" indexed="true" property="storageContainerForSpecimen" /></td>
+							</logic:equal>
+							<logic:notEqual name="aliquot" property="storageContainerForSpecimen" value="Virtual">
+									<td class="dataCellText">	
+									<html:hidden indexed="true" name="aliquot" property="selectedContainerName"/>
+									<html:hidden  indexed="true"  name="aliquot" property="positionDimensionOne" />
+									<html:hidden  indexed="true" name="aliquot" property="positionDimensionTwo" />
+									<span>
+										<bean:write name="aliquot" property="selectedContainerName"/>
+										<B>:</B>
+										<bean:write  name="aliquot" property="positionDimensionOne" />,
+										<bean:write name="aliquot" property="positionDimensionTwo" />
+									<html:hidden name="aliquot" property="containerId" />
+
+									</span>
+							</logic:notEqual>												
+							<td class="dataCellText">
+								<html:checkbox name="aliquot" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
+								<html:hidden name="aliquot" indexed="true" property="checkedSpecimen" />					
+							</td>
+							</td>
+						</logic:equal>					
+					<!--/Readonly Row -->
 					</tr>
 				  </logic:iterate>	
 				</table>			
@@ -330,7 +389,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		<table>
 		<tr>
 		<td class="dataTablePrimaryLabel" height="20">
-			<p>Derived details
+			Derivative details
 		 </td>
 		 </tr>
 		 </table>
@@ -343,112 +402,138 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				</th>
 			</tr>
 			<tr>
-				<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col">Label</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> Class</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> Location</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> concentration</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> Created</th>
-				</tr>
+				<th class="formSerialNumberLabelForTable" scope="col"> Parent </th>
+				<th class="formSerialNumberLabelForTable" scope="col">Label</th>
+				<th class="formSerialNumberLabelForTable" scope="col"> Barcode</th>
+				<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
+				<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
+				<th class="formSerialNumberLabelForTable" scope="col">Conc.</th>
+				<th class="formSerialNumberLabelForTable" scope="col"> Location</th>
+				<th class="formSerialNumberLabelForTable" scope="col">Created</th>
+			</tr>
 
 			  
 			  <logic:iterate name="viewSpecimenSummaryForm" property="derivedList" id="derived" indexId="count">
 					<html:hidden indexed="true" name="derived" property="uniqueIdentifier" />
-					<html:hidden indexed="true" name="derived" property="containerId" />
-		      	<tr>
-					<td class="dataCellText"> <bean:write name="derived" property="parentName" />
-						 <html:hidden indexed="true" name="derived" property="parentName" /></td>
-
-					<logic:equal name="derived" property="readOnly" value="true">
-						<td class="dataCellText"> <bean:write name="derived" property="displayName" />
-						  <html:hidden indexed="true" name="derived" property="displayName" /></td>
-						<td class="dataCellText"> <bean:write name="derived" property="className" />
-						  <html:hidden indexed="true" name="derived" property="className" /></td>
-						<td class="dataCellText"> <bean:write name="derived" property="type" />
-						  <html:hidden indexed="true" name="derived" property="type" /></td>
-						<td class="dataCellText"> <bean:write name="derived" property="quantity" />
-						  <html:hidden indexed="true" name="derived" property="quantity" /></td>
-						
-						<logic:equal name="derived" property="storageContainerForSpecimen" value="Virtual">
-							<td class="dataCellText"> <bean:write name="derived" property="storageContainerForSpecimen" />
-							<html:hidden name="derived" indexed="true" property="storageContainerForSpecimen" /></td>
-						</logic:equal>
-								
-						<logic:notEqual name="derived" property="storageContainerForSpecimen" value="Virtual">
-							<td class="dataCellText">	<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName"  indexed="true" name="derived" property="selectedContainerName" readonly= "true"/>
-							<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionOne"  indexed="true" name="derived" property="positionDimensionOne" readonly= "true"/>
-							<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionTwo"  indexed="true" name="derived" property="positionDimensionTwo" readonly= "true"/>
+					<tr>
+							<td class="dataCellText" > 
+							<html:hidden name="derived" indexed="true" property="parentName" />
+							<bean:write name="derived" property="parentName" />
 							</td>
-						</logic:notEqual>										
-
-						
-						<td class="dataCellText"> &nbsp; <bean:write name="derived" property="concentration" />
-						  <html:hidden indexed="true" name="derived" property="concentration" /></td>
-							<td class="dataCellText">
-								<html:checkbox name="derived" indexed="true" 
-								property="checkedSpecimen" disabled="true"/>
-								<html:hidden name="derived" indexed="true" 
-								property="checkedSpecimen" />
-							</td>
+					<!--Editable Row -->	
+						<logic:equal name="derived" property="readOnly" value="false">
 								<html:hidden name="derived" indexed="true" property="readOnly"/>
+							<td class="dataCellText" > 
+							<html:text  styleClass="formFieldSized10" name="derived" indexed="true" property="displayName" />
 
-					</logic:equal>
-
-					<logic:equal name="derived" property="readOnly" value="false">
-						<td class="dataCellText"> <html:text styleClass="formFieldSized10"  size="10" indexed="true" name="derived" property="displayName" /></td>
-						
-						<td class="dataCellText"> <bean:write name="derived" property="className" />
-						  <html:hidden indexed="true" name="derived" property="className" /></td>
-						<td class="dataCellText"> <bean:write name="derived" property="type" />
-						  <html:hidden indexed="true" name="derived" property="type" /></td>
-
-						<td class="dataCellText">
-						  <html:text styleClass="formFieldSized5"  indexed="true" name="derived" property="quantity" /></td>
-
-						<logic:equal name="derived" property="storageContainerForSpecimen" value="Virtual">		
-							<td class="dataCellText"> <bean:write name="derived" property="storageContainerForSpecimen" />
-							<html:hidden name="derived" indexed="true" property="storageContainerForSpecimen" /></td>
-						</logic:equal>
-								
-						<logic:notEqual name="derived" property="storageContainerForSpecimen" value="Virtual">
-							<td class="dataCellText">
-								<bean:define id="specimenId" name="derived" property="uniqueIdentifier" />
-								
-								<%
-								  containerId = "containerId_"+specimenId;
-								  selectedContainerName = "selectedContainerName_"+specimenId;
-								  positionDimensionOne = "positionDimensionOne_"+specimenId;
-								  positionDimensionTwo = "positionDimensionTwo_"+specimenId;
-								  functionCall="showMap('" + selectedContainerName + "','"+
-														positionDimensionOne +"','"
-														+ positionDimensionTwo +"','"
-														+containerId +"')" ;
-
-								%>
-
-								<html:text styleClass="formFieldSized10"  size="30" styleId="<%=selectedContainerName%>" indexed="true"  name="derived" property="selectedContainerName" readonly= "true"/>
-								<html:text styleClass="formFieldSized3"  size="5" styleId="<%=positionDimensionOne%>" indexed="true" name="derived" property="positionDimensionOne" readonly= "true"/>
-								<html:text styleClass="formFieldSized3"  size="5" styleId="<%=positionDimensionTwo%>" indexed="true"  name="derived" property="positionDimensionTwo" readonly= "true"/>
-								<html:button styleClass="actionButton" property="containerMap" 
-								onclick="<%=functionCall%>" >
-								<bean:message key="buttons.map"/>
-								</html:button>
-								<html:hidden  styleId="<%=containerId%>" name="derived" property="containerId" />
 							</td>
-						</logic:notEqual>
-					
-						<td class="dataCellText"> 
-						  <html:text indexed="true" name="derived" property="concentration" /></td>
-						<td class="dataCellText">
-							<html:checkbox name="derived" indexed="true"  property="checkedSpecimen" />	
-						</td>
-						 <html:hidden name="derived" indexed="true" property="readOnly"/>
 
-					</logic:equal>
+							<td class="dataCellText"> 
+							<html:text styleClass="formFieldSized10" name="derived" indexed="true" property="barCode" />
 
-		      	</tr>
+							</td>
+							<td class="dataCellText"> 
+							<bean:write name="derived" property="type" />
+							<html:hidden name="derived" indexed="true" property="type" />
+							</td>
+
+							<td class="dataCellText"> 
+							<html:text styleClass="formFieldSized3" name="derived" indexed="true" property="quantity" />
+							</td>
+							<td class="dataCellText"> 
+							<html:text styleClass="formFieldSized3" name="derived" indexed="true" property="concentration" />
+							</td>
+							
+							<logic:equal name="derived" property="storageContainerForSpecimen" value="Virtual">
+								
+							<td class="dataCellText"> <bean:write name="derived" property="storageContainerForSpecimen" />
+									<html:hidden name="derived" indexed="true" property="storageContainerForSpecimen" /></td>
+							</logic:equal>
+								
+							<logic:notEqual name="derived" property="storageContainerForSpecimen" value="Virtual">
+									<td class="dataCellText">
+									
+									<bean:define id="specimenId" name="derived" property="uniqueIdentifier" />
+									
+									<%
+									  containerId = "containerId_"+specimenId;
+									  selectedContainerName = "selectedContainerName_"+specimenId;
+									  positionDimensionOne = "positionDimensionOne_"+specimenId;
+  									  positionDimensionTwo = "positionDimensionTwo_"+specimenId;
+									  functionCall="showMap('" + selectedContainerName + "','"+
+																	positionDimensionOne +"','"
+																	+ positionDimensionTwo +"','"
+																	+containerId +"')" ;
+									%>
+									<span>
+									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="derived" property="selectedContainerName" readonly= "true"/>
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="derived" property="positionDimensionOne" readonly= "true"/>
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="derived" property="positionDimensionTwo" readonly= "true"/>
+									<a href="#" onclick="<%=functionCall%>">
+									<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
+									</a>
+									</span>									
+									<html:hidden  styleId="<%=containerId%>" name="derived" property="containerId" />
+									</td>
+
+							</logic:notEqual>												
+							
+							<td class="dataCellText">
+								<html:checkbox name="derived" indexed="true" property="checkedSpecimen" />					
+							</td>
+
+						</logic:equal>
+					<!--/Editable Row -->
+
+					<!---Readonly Row -->						
+						<logic:equal name="derived" property="readOnly" value="true">
+
+							<html:hidden name="derived" indexed="true" property="readOnly"/>
+							
+							<td class="dataCellText" > <bean:write name="derived" property="displayName" />
+							<html:hidden name="derived" indexed="true" property="displayName" /></td>
+							<td class="dataCellText">&nbsp;<bean:write name="derived" property="barCode" />
+							<html:hidden name="derived" indexed="true" property="barCode" /></td>
+							<td class="dataCellText"> 
+							<bean:write  name="derived" property="type" />
+							<html:hidden  name="derived" indexed="true" property="type" />
+							</td>
+							<td class="dataCellText"> 
+							<bean:write name="derived" property="quantity" />
+							<html:hidden name="derived" indexed="true" property="quantity" />
+							</td>
+							<td class="dataCellText"> 
+							<html:hidden  name="derived" indexed="true" property="concentration" />
+							&nbsp; <bean:write  name="derived" property="concentration" />
+							</td>
+
+							<logic:equal name="derived" property="storageContainerForSpecimen" value="Virtual">
+								
+									<td class="dataCellText"> <bean:write name="derived" property="storageContainerForSpecimen" />
+									<html:hidden name="derived" indexed="true" property="storageContainerForSpecimen" /></td>
+							</logic:equal>
+							<logic:notEqual name="derived" property="storageContainerForSpecimen" value="Virtual">
+									<td class="dataCellText">	
+									<html:hidden indexed="true" name="derived" property="selectedContainerName"/>
+									<html:hidden  indexed="true"  name="derived" property="positionDimensionOne" />
+									<html:hidden  indexed="true" name="derived" property="positionDimensionTwo" />
+									<html:hidden  name="derived" property="containerId" />
+
+									<span>
+										<bean:write name="derived" property="selectedContainerName"/>
+										<B>:</B>
+										<bean:write  name="derived" property="positionDimensionOne" />,
+										<bean:write name="derived" property="positionDimensionTwo" />
+									</span>
+							</logic:notEqual>												
+							<td class="dataCellText">
+								<html:checkbox name="derived" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
+								<html:hidden name="derived" indexed="true" property="checkedSpecimen" />					
+							</td>
+							</td>
+						</logic:equal>					
+					<!--/Readonly Row -->
+					</tr>
 		      </logic:iterate>	
 		    </table>
 		</logic:notEmpty>		
@@ -478,7 +563,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
 		<tr>
 			<td>
-			<html:submit value="Update Specimen status" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
+			<html:submit value="Submit" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
 			</td>
 		 </tr>
 		</logic:equal>
@@ -487,5 +572,5 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		</td>
 		</tr>
 		</table>
-		</html:form>		
+		</html:form>
 </html>
