@@ -646,7 +646,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						if(initialQuantity < 0)
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",
-									ApplicationProperties.getValue("specimenArrayAliquots.qtyPerAliquot")));
+									ApplicationProperties.getValue("cpbasedentry.quantityperaliquot")));
 						}
 					}
 					catch (NumberFormatException exp)
