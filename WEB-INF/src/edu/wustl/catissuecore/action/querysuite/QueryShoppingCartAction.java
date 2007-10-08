@@ -130,10 +130,25 @@ public class QueryShoppingCartAction extends BaseAction
 		else if (operation.equals("addToOrderList"))
 		{
 			Map <String,Set<String>> entityIdsMap = getOrderableEntityIds(chkBoxValues, cart);
+			
 			Set<String> specimenIdsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
+			Set<String> specimenArrayIdsSet = entityIdsMap.get(Constants.SPECIMEN_ARRAY_CLASS_NAME);
+			Set<String> pathalogicalCaseIdsSet = entityIdsMap.get(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME);
+			
+			List<String> specimenArrayIds = new ArrayList<String>();
 			List<String> specimenIds = new ArrayList<String>();
+			List<String> pathalogicalCaseIds = new ArrayList<String>();
+			
+			
 			specimenIds.addAll(specimenIdsSet);
+			specimenArrayIds.addAll(specimenArrayIdsSet);
+			pathalogicalCaseIds.addAll(pathalogicalCaseIdsSet);
+		
+			
 			session.setAttribute("specimenId", specimenIds);
+			session.setAttribute("specimenArrayIds", specimenArrayIds);
+			session.setAttribute("pathalogicalCaseIds", pathalogicalCaseIds);
+			
 			target = new String("requestToOrder");
 		}
 		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_MODULE);

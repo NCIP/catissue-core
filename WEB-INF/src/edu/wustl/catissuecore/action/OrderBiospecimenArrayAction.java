@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.actionForm.OrderForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -121,9 +122,30 @@ public class OrderBiospecimenArrayAction extends BaseAction
 		//		return arrayList;
 
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		HttpSession session = request.getSession(true);
+		
 		String sourceObjectName = SpecimenArray.class.getName();
-		String[] columnName = {"name"};
-		List specimenArrayList = bizLogic.retrieve(sourceObjectName);
+		String columnName="id";
+    	List valueField=(List)session.getAttribute("specimenArrayIds");
+    	
+    	List specimenArrayList=new ArrayList();
+    	if(valueField != null && valueField.size() >0)
+    	{
+			for(int i=0;i<valueField.size();i++)
+			{
+				List SpecimenArray = bizLogic.retrieve(sourceObjectName, columnName, (String)valueField.get(i));
+				SpecimenArray specArray=(SpecimenArray)SpecimenArray.get(0);
+				specimenArrayList.add(specArray);
+			}
+    	}
+    	
+    	
+    	
+    	
+    	
+    	
+	//	String[] columnName = {"name"};
+	//	List specimenArrayList = bizLogic.retrieve(sourceObjectName);
 		if (specimenArrayList != null && specimenArrayList.size() > 0)
 		{
 			Iterator itr = specimenArrayList.iterator();

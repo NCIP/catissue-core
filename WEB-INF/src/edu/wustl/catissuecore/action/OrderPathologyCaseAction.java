@@ -212,27 +212,28 @@ public class OrderPathologyCaseAction extends BaseAction
 		// to get data from database when specimen id is given
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_PATHOLOGY_FORM_ID);
 
-		//		List pathologicalCaseList = new ArrayList();
-		//		//retriving the id list from session.
-		//		if(request.getSession().getAttribute("pathologicalIdList") != null)
-		//		{
-		//			List idList = (List)request.getSession().getAttribute("pathologicalIdList");
-		//	    	
-		//			for(int i=0;i<idList.size();i++)
-		//			{
-		//				List pathologicalListFromDb = bizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), "id", (String)idList.get(i));
-		//				IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport)pathologicalListFromDb.get(0);
-		//				pathologicalCaseList.add(identifiedSurgicalPathologyReport);
-		//			}
-		//		}
-		//		return pathologicalCaseList;
+				List pathologicalCaseList = new ArrayList();
+			//	retriving the id list from session.
+				if(request.getSession().getAttribute("pathalogicalCaseIds") != null)
+				{
+					List idList = (List)request.getSession().getAttribute("pathalogicalCaseIds");
+					String columnName="id";
+					for(int i=0;i<idList.size();i++)
+					{
+						List pathologicalListFromDb = bizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), columnName, (String)idList.get(i));
+						IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport)pathologicalListFromDb.get(0);
+						pathologicalCaseList.add(identifiedSurgicalPathologyReport);
+					}
+				}
+		
+		System.out.println("pathologicalCaseList  ---  "+pathologicalCaseList);		
 
 		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 
-		List pathologyCaseList = bizLogic.retrieve(sourceObjectName);
-		if (pathologyCaseList != null && !pathologyCaseList.isEmpty())
+		//List pathologyCaseList = bizLogic.retrieve(sourceObjectName);
+		if (pathologicalCaseList != null && !pathologicalCaseList.isEmpty())
 		{
-			Iterator itr = pathologyCaseList.iterator();
+			Iterator itr = pathologicalCaseList.iterator();
 			while (itr.hasNext())
 			{
 				IdentifiedSurgicalPathologyReport identifiedSurPathReport = (IdentifiedSurgicalPathologyReport) itr.next();
@@ -249,7 +250,7 @@ public class OrderPathologyCaseAction extends BaseAction
 			}
 
 		}
-		return pathologyCaseList;
+		return pathologicalCaseList;
 
 	}
 }
