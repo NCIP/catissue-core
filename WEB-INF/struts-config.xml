@@ -4420,7 +4420,7 @@ PUBLIC
                 validate="false"
                 scope="request">
 					<forward name="success" path="/redirecttoSCG.do" />	
-					<forward name="failure" path="/Home.do" />
+					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
        </action>    
 
        <action path="/redirecttoSCG"
