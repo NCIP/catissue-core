@@ -49,6 +49,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
     import mx.containers.ControlBar;
    	import mx.controls.Menu;
     import Util.HashMap;
+    import mx.managers.CursorManager;
     
 	//------------------------
 	public var readyTimer:Timer;
@@ -553,7 +554,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	}
 	
 	private function drawLine():void{
-		
+		CursorManager.setBusyCursor();
 		var dagNode1:DAGNode = DAGNode(mainPanel.getChildByName(node1));
 		var dagNode2:DAGNode = DAGNode(mainPanel.getChildByName(node2));
 			
@@ -608,6 +609,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		finally
 		{
 			rpcService.removeEventListener(ResultEvent.RESULT,getPathHandler,false);
+	        CursorManager.removeBusyCursor();
 		}
 	}
 	public function cancelHandler(nodeList:ArrayCollection):void
