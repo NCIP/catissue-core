@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLog
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.querysuite.queryobject.IQuery;
+import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
 import edu.wustl.common.util.global.ApplicationProperties;
 
 public class LoadSaveQueryPageAction extends BaseAction
@@ -31,28 +32,49 @@ public class LoadSaveQueryPageAction extends BaseAction
 		IQuery queryObject = (IQuery) request.getSession().getAttribute(
 				AppletConstants.QUERY_OBJECT);
 		String target = Constants.FAILURE;
-		if (queryObject != null)
+		String isAjax = request.getParameter("isAjax");
+		String msg = "";
+		if (queryObject.getId() != null && queryObject instanceof ParameterizedQuery)
 		{
-
-			boolean isShowAll = request.getParameter(Constants.SHOW_ALL) == null ? false : true;
-			GenerateHtmlForAddLimitsBizLogic htmlGenerator = new GenerateHtmlForAddLimitsBizLogic();
-			String htmlContents = htmlGenerator.getHTMLForSavedQuery(queryObject, isShowAll,
-					Constants.SAVE_QUERY_PAGE);
-			request.setAttribute(Constants.HTML_CONTENTS, htmlContents);
-			String showAllLink = isShowAll
-					? Constants.SHOW_SELECTED_ATTRIBUTE
-					: Constants.SHOW_ALL_ATTRIBUTE;
-			request.setAttribute("showAllLink", showAllLink);
-			if (!isShowAll)
-				request.setAttribute(Constants.SHOW_ALL, "true");
+			msg = "This query is already saved, Re-saving query feature is not yet implemented.";
+			setActionError(request, msg);
+			System.out.println(msg);
 			target = Constants.SUCCESS;
+			response.setContentType("text/html");
+			response.getWriter().write(msg);
+			return null;
 		}
 		else
 		{
-			// Handle null query 
-			String errorMsg = ApplicationProperties.getValue("query.noLimit.error");
-			setActionError(request, errorMsg);
-
+			if (queryObject != null)
+			{
+				boolean isShowAll = request.getParameter(Constants.SHOW_ALL) == null ? false : true;
+				GenerateHtmlForAddLimitsBizLogic htmlGenerator = new GenerateHtmlForAddLimitsBizLogic();
+				String htmlContents = htmlGenerator.getHTMLForSavedQuery(queryObject, isShowAll,
+						Constants.SAVE_QUERY_PAGE);
+				request.setAttribute(Constants.HTML_CONTENTS, htmlContents);
+				String showAllLink = isShowAll
+						? Constants.SHOW_SELECTED_ATTRIBUTE
+						: Constants.SHOW_ALL_ATTRIBUTE;
+				request.setAttribute("showAllLink", showAllLink);
+				if (!isShowAll)
+					request.setAttribute(Constants.SHOW_ALL, "true");
+				target = Constants.SUCCESS;
+			}
+			else
+			{
+				// Handle null query 
+				String errorMsg = ApplicationProperties.getValue("query.noLimit.error");
+				setActionError(request, errorMsg);
+	
+			}
+		}
+		if(isAjax != null && isAjax.equals("true"))
+		{
+			msg = "";
+			response.setContentType("text/html");
+			response.getWriter().write(msg);
+			return null;
 		}
 		return mapping.findForward(target);
 

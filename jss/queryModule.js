@@ -828,6 +828,24 @@
 		}
 		else if(action=='save')
 		{
+			var request = newXMLHTTPReq();			
+			var actionURL;
+			var handlerFunction = getReadyStateHandler(request,showAlertBox,true);	
+			request.onreadystatechange = handlerFunction;				
+			var url = "LoadSaveQueryPage.do?isAjax=true";
+			request.open("POST",url,true);	
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+			request.send(actionURL);	
+		}
+	}
+	function showAlertBox(text)
+	{
+		if(text != "")
+		{
+			alert(text);
+		}
+		else
+		{
 			var url = "LoadSaveQueryPage.do";
 			platform = navigator.platform.toLowerCase();
 		    if (platform.indexOf("mac") != -1)
@@ -840,6 +858,8 @@
 		    }
 		}
 	}
+
+	
 	function defineSearchResultsView()
 	{
 		waitCursor();
