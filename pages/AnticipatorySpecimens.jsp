@@ -167,15 +167,25 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 																	+ positionDimensionTwo +"','"
 																	+containerId +"')" ;
 									%>
-									<span>
-									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="specimen" property="selectedContainerName" />
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="specimen" property="positionDimensionOne" />
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="specimen" property="positionDimensionTwo" />
-									<a href="#" onclick="<%=functionCall%>">
-									<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
-									</a>
-									</span>									
-									<html:hidden  styleId="<%=containerId%>" name="specimen" property="containerId" />
+									<table style="font-size:1em" size="100%">
+										<tr>
+											<td>
+												<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="specimen" property="selectedContainerName" />
+											</td>
+											<td>
+												<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="specimen" property="positionDimensionOne" />
+											</td>
+											<td>
+												<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="specimen" property="positionDimensionTwo" />
+											</td>
+											<td>
+												<a href="#" onclick="<%=functionCall%>">
+												<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
+												</a>
+												<html:hidden  styleId="<%=containerId%>" name="specimen" property="containerId" />
+											</td>
+										</tr>
+									</table>
 									</td>
 
 							</logic:notEqual>												
@@ -324,15 +334,25 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 																	+ positionDimensionTwo +"','"
 																	+containerId +"')" ;
 									%>
-									<span>
-									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="aliquot" property="selectedContainerName" />
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="aliquot" property="positionDimensionOne" />
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="aliquot" property="positionDimensionTwo" />
-									<a href="#" onclick="<%=functionCall%>">
-									<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
-									</a>
-									</span>									
-									<html:hidden  styleId="<%=containerId%>" name="aliquot" property="containerId" />
+									<table style="font-size:1em" size="100%">
+										<tr>
+											<td>
+												<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="aliquot" property="selectedContainerName" />
+											</td>
+											<td>
+												<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="aliquot" property="positionDimensionOne" />
+											</td>
+											<td>
+												<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="aliquot" property="positionDimensionTwo" />
+											</td>
+											<td>
+												<a href="#" onclick="<%=functionCall%>">
+												<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
+												</a>
+												<html:hidden  styleId="<%=containerId%>" name="aliquot" property="containerId" />
+											</td>
+										</tr>
+									</table>
 									</td>
 
 							</logic:notEqual>												
@@ -478,15 +498,25 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 																	+ positionDimensionTwo +"','"
 																	+containerId +"')" ;
 									%>
-									<span>
-									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="derived" property="selectedContainerName" />
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="derived" property="positionDimensionOne" />
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="derived" property="positionDimensionTwo" />
-									<a href="#" onclick="<%=functionCall%>">
-									<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
-									</a>
-									</span>									
-									<html:hidden  styleId="<%=containerId%>" name="derived" property="containerId" />
+									<table style="font-size:1em" size="100%">
+										<tr>
+											<td>
+												<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="derived" property="selectedContainerName" />
+											</td>
+											<td>
+												<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="derived" property="positionDimensionOne" />
+											</td>
+											<td>
+												<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="derived" property="positionDimensionTwo" />
+											</td>
+											<td>
+												<a href="#" onclick="<%=functionCall%>">
+												<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
+												</a>
+												<html:hidden  styleId="<%=containerId%>" name="derived" property="containerId" />
+											</td>
+										</tr>
+									</table>
 									</td>
 
 							</logic:notEqual>												
