@@ -84,6 +84,7 @@
 					<html:hidden property="<%=specimenFromLocPos1Field%>" />
 					<html:hidden property="<%=specimenFromLocPos2Field%>" />
 					<html:hidden property="<%=specimenList%>" />
+					<html:hidden property="<%=specimenFromLocField%>" />
 				
 					<td class="formLabelWithLeftBorder">
 						<label for="type">
@@ -91,10 +92,10 @@
 						</label>
 					</td>
 					<td class="formLabel">
-						<!--label for="type">
+						<label for="type">
 							<bean:write name="bulkEventOperationsForm" property="<%=specimenFromLocField%>" />
-						</label-->
-						<html:text styleId="<%=containerId%>" property="<%=specimenFromLocField%>" readonly="true" />
+						</label>
+						<!--html:text styleId="<%=containerId%>" property="<%=specimenFromLocField%>" readonly="true" /-->
 					</td>
 					<td class="formField">
 						<html:text styleId="<%=selContainerId%>" property="<%=specimenToSCLabelField%>" disabled="false" />			

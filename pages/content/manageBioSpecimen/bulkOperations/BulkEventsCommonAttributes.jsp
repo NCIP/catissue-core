@@ -30,7 +30,7 @@
 					<!-- User -->		
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredLabel" width="25%">
 							<label for="type">
 								<bean:message key="eventparameters.user"/> 
 							</label>
@@ -46,7 +46,7 @@
 					<!-- date -->		
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredLabel" width="25%">
 							<label for="type">
 								<bean:message key="eventparameters.dateofevent"/> 
 							</label>
@@ -69,7 +69,7 @@
 					<!-- Time -->
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
-						<td class="formRequiredLabel">
+						<td class="formRequiredLabel" width="25%">
 							<label for="eventparameters.time">
 								<bean:message key="eventparameters.time"/>
 							</label>
@@ -102,7 +102,7 @@
 					<!-- comments -->		
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
-						<td class="formLabel">
+						<td class="formLabel" width="25%">
 							<label for="type">
 								<bean:message key="eventparameters.comments"/> 
 							</label>
