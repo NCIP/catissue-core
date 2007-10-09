@@ -2,8 +2,12 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -240,7 +244,39 @@ public class StorageContainerUtil
 
 		return map;
 	}
+	public static LinkedList<Integer> getFirstAvailablePositionsInContainer(
+			StorageContainer storageContainer, Map continersMap, HashSet<String> allocatedPositions) throws DAOException
+	{
+		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
+		TreeMap storageContainerMap = (TreeMap) continersMap.get(storageContainerId);
 
+		Integer xpos= null;
+		Integer ypos=null;
+		String containerName = storageContainer.getName();
+		if (storageContainerMap.isEmpty())
+		{
+			throw new DAOException("Storagecontainer information not found!");
+		}
+		
+		Iterator containerPosIterator = storageContainerMap.keySet().iterator();
+		while (containerPosIterator.hasNext())
+		{
+			NameValueBean nvb = (NameValueBean) containerPosIterator.next();
+			xpos = new Integer(nvb.getValue());	
+			nvb =(NameValueBean) (((List) storageContainerMap.get(nvb)).get(0));
+			ypos= new Integer(nvb.getValue());
+			String containerValue = containerName +":"+ xpos+" ," +ypos;
+			
+			if (!allocatedPositions.contains(containerValue))
+			{
+				break;
+			}
+		}
+		LinkedList<Integer> positions = new LinkedList<Integer>();
+		positions.add(xpos);
+		positions.add(ypos);
+		return positions;
+	}
 	public static synchronized void updateStoragePositions(Map containerMap, StorageContainer currentContainer, StorageContainer oldContainer)
 	{
 		int xOld = oldContainer.getCapacity().getOneDimensionCapacity().intValue();
@@ -419,44 +455,45 @@ public class StorageContainerUtil
 			
 			if (xPos == null || yPos == null)
 			{
-			isContainerFull = true;
-			Map containerMapFromCache = null;
-			try
-			{
-				containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
-			}
-			catch (CacheException e)
-			{
-				e.printStackTrace();
-			}
-			
-			if (containerMapFromCache != null)
-			{
-				Iterator itr = containerMapFromCache.keySet().iterator();
-				while (itr.hasNext())
+				isContainerFull = true;
+				Map containerMapFromCache = null;
+				try
 				{
-					NameValueBean nvb = (NameValueBean) itr.next();
-					if(nvb.getValue().toString().equals(specimen.getStorageContainer().getId().toString()))
-					{
-					
-						Map tempMap = (Map) containerMapFromCache.get(nvb);
-						Iterator tempIterator = tempMap.keySet().iterator();;
-						NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-						
-						List list = (List) tempMap.get(nvb1);
-						NameValueBean nvb2 = (NameValueBean) list.get(0);
-										
-						specimen.setPositionDimensionOne(new Integer(nvb1.getValue()));
-					    specimen.setPositionDimensionTwo(new Integer(nvb2.getValue()));
-					    isContainerFull = false;
-					    break;
-					}
-					
+					containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
 				}
-			}
+				catch (CacheException e)
+				{
+					e.printStackTrace();
+				}
 			
-			xPos = specimen.getPositionDimensionOne();
-		    yPos = specimen.getPositionDimensionTwo();
+				if (containerMapFromCache != null)
+				{
+					Iterator itr = containerMapFromCache.keySet().iterator();
+					
+					while (itr.hasNext())
+					{
+						NameValueBean nvb = (NameValueBean) itr.next();
+						if(nvb.getValue().toString().equals(specimen.getStorageContainer().getId().toString()))
+						{
+						
+							Map tempMap = (Map) containerMapFromCache.get(nvb);
+							Iterator tempIterator = tempMap.keySet().iterator();;
+							NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+							
+							List list = (List) tempMap.get(nvb1);
+							NameValueBean nvb2 = (NameValueBean) list.get(0);
+											
+							specimen.setPositionDimensionOne(new Integer(nvb1.getValue()));
+						    specimen.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+						    isContainerFull = false;
+						    break;
+						}
+						
+					}
+				}
+			
+				xPos = specimen.getPositionDimensionOne();
+			    yPos = specimen.getPositionDimensionTwo();
 			}
 
 			if(isContainerFull)

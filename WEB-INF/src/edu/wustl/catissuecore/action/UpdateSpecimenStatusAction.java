@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +18,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.DomainObjectFactory;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
@@ -27,6 +31,7 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 
 public class UpdateSpecimenStatusAction extends Action {
@@ -53,7 +58,7 @@ public class UpdateSpecimenStatusAction extends Action {
 			Iterator iterator = specimenCollection.iterator();
 			SessionDataBean sessionDataBean =(SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 			NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
-			HashSet specimenDomainCollection = new HashSet();
+			LinkedHashSet specimenDomainCollection = new LinkedHashSet();
 			while(iterator.hasNext())
 			{
 				GenericSpecimenVO specimenVO =(GenericSpecimenVO) iterator.next();
@@ -121,7 +126,36 @@ public class UpdateSpecimenStatusAction extends Action {
 	 * @return
 	 */
 	private Specimen createSpecimenDomainObject(GenericSpecimenVO specimenVO) throws BizLogicException {
-		Specimen specimen = new Specimen ();
+
+		NewSpecimenForm form = new NewSpecimenForm();
+		form.setClassName(specimenVO.getClassName());
+		
+		
+		Specimen specimen;
+		try {
+			specimen = (Specimen) new DomainObjectFactory()
+				.getDomainObject(Constants.NEW_SPECIMEN_FORM_ID, form);
+		} catch (AssignDataException e1)
+		{
+			e1.printStackTrace();
+			return null;
+		}
+		
+		if (Constants.MOLECULAR.equals(specimenVO.getClassName()))
+		{
+			Double concentration= null;
+			try
+			{
+				concentration = new Double(specimenVO.getConcentration());
+			}
+			catch (Exception exception)
+			{
+				concentration =  new Double(0);
+			}
+			((MolecularSpecimen)specimen)
+				.setConcentrationInMicrogramPerMicroliter(concentration);
+		}
+		
 		Long id = getSpecimenId(specimenVO);
 		specimen.setId(id);
 		specimen.setLabel(specimenVO.getDisplayName() );
@@ -170,8 +204,9 @@ public class UpdateSpecimenStatusAction extends Action {
 				specimen.setPositionDimensionOne( Integer.parseInt(pos1) );
 			}catch(NumberFormatException exception)
 			{
-				throw new BizLogicException("Position dimention is missing for specimen" +
-						specimenVO.getDisplayName());
+				specimen.setPositionDimensionOne(null);
+//				throw new BizLogicException("Position dimention is missing for specimen" +
+//						specimenVO.getDisplayName());
 			}
 		}
 		if (pos2!=null)
@@ -180,8 +215,9 @@ public class UpdateSpecimenStatusAction extends Action {
 				specimen.setPositionDimensionTwo( Integer.parseInt(pos2) );
 			}catch(NumberFormatException exception)
 			{
-				throw new BizLogicException("Position dimention is missing for specimen" +
-						specimenVO.getDisplayName());
+				specimen.setPositionDimensionOne(null);
+//				throw new BizLogicException("Position dimention is missing for specimen" +
+//						specimenVO.getDisplayName());
 			}
 				
 		}
@@ -191,6 +227,10 @@ public class UpdateSpecimenStatusAction extends Action {
 		if(containerId !=null && containerId.trim().length()>0)
 		{
 			storageContainer.setId(new Long(containerId));
+		}
+		if (specimenVO.getSelectedContainerName() == null || specimenVO.getSelectedContainerName().trim().length()==0)
+		{
+			throw new BizLogicException("Container name is missing for specimen :" +specimenVO.getDisplayName());
 		}
 		storageContainer.setName(specimenVO.getSelectedContainerName());
 		specimen.setStorageContainer(storageContainer);

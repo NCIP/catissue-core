@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -2375,17 +2376,21 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public void updateMultipleSpecimens(Collection newSpecimenCollection, SessionDataBean sessionDataBean,boolean updateChildrens) throws DAOException
+	public void updateMultipleSpecimens(Collection newSpecimenCollection, 
+				SessionDataBean sessionDataBean,boolean updateChildrens) 
+				throws DAOException
 	{
 		Iterator iterator = newSpecimenCollection.iterator();
 		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		try
 		{
+	
 			((HibernateDAO)dao).openSession(sessionDataBean);
 	
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
+				
 				updateSignleSpecimen(dao,newSpecimen, sessionDataBean,updateChildrens);
 			}
 			((HibernateDAO)dao).commit();
@@ -2395,7 +2400,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		catch(Exception exception)
 		{
 			((AbstractDAO)dao).rollback();
-			throw new DAOException("failed to update multiple specimen " +
+			throw new DAOException("Failed to update multiple specimen " +
 					exception.getMessage());
 		}
 		finally{
@@ -2404,7 +2409,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public void updateSignleSpecimen(DAO dao, Specimen newSpecimen, SessionDataBean sessionDataBean,boolean updateChildrens) throws DAOException
+	public void updateSignleSpecimen(DAO dao, Specimen newSpecimen, 
+			SessionDataBean sessionDataBean,boolean updateChildrens) throws DAOException
 	{
 		try
 		{
@@ -2475,56 +2481,50 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 	}
+	private void checkDuplicateSpecimenFields(Specimen specimen, DAO dao) throws DAOException
+	{
+		List list = dao.retrieve(Specimen.class.getCanonicalName(),"label",specimen.getLabel());
+		if (!list.isEmpty())
+		{
+			for (int i=0;i<list.size();i++)
+			{
+				Specimen specimenObject = (Specimen)(list.get(i));
+				if (!specimenObject.getId().equals(specimen.getId()))
+				{
+					throw new DAOException("Label " + specimen.getLabel() +" is already exists!");
+					
+				}
+			}
+		}
+		if (specimen.getBarcode()!=null)
+		{
+			list = dao.retrieve(Specimen.class.getCanonicalName(),"barcode",specimen.getBarcode());
+			if (!list.isEmpty())
+			{
+				for (int i=0;i<list.size();i++)
+				{
+					Specimen specimenObject = (Specimen)(list.get(i));
+					if (!specimenObject.getId().equals(specimen.getId()))
+					{
+						throw new DAOException("Barcode " + specimen.getBarcode() +" is already exists.");
+						
+					}
+				}
+			}
+		}
+	}
 	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO ,Specimen specimenDO) throws DAOException {
-		specimenDO.setLabel(specimenVO.getLabel());
+		
 		if (specimenVO.getBarcode()!=null && specimenVO.getBarcode().trim().length()==0)
 		{
-			specimenDO.setBarcode(null);
+			specimenVO.setBarcode(null);
 		}
-		else
-		{
-				specimenDO.setBarcode(specimenVO.getBarcode());
-		}
+		checkDuplicateSpecimenFields(specimenVO,dao);
+		specimenDO.setLabel(specimenVO.getLabel());	
+		specimenDO.setBarcode(specimenVO.getBarcode());
 		if(specimenVO.getStorageContainer()!=null)
 		{
-			specimenDO.setPositionDimensionOne(
-					specimenVO.getPositionDimensionOne());
-			specimenDO.setPositionDimensionTwo(
-					specimenVO.getPositionDimensionTwo());
-			StorageContainer storageContainer =specimenVO.getStorageContainer();
-			Long containerId = storageContainer.getId();
-			List storageContainerList;
-			if(containerId !=null )
-			{
-				storageContainerList = dao.retrieve
-				(StorageContainer.class.getName(), "id", containerId);				
-			}
-			else
-			{
-				storageContainerList = dao.retrieve
-				(StorageContainer.class.getName(), "name", storageContainer.getName());
-			}
-			if (storageContainerList == null || storageContainerList.isEmpty())
-			{
-				throw new DAOException("Container name is invalid");
-			}
-			
-			storageContainer = (StorageContainer)storageContainerList.get(0);
-
-			String storageValue = storageContainer.getName()+":"+specimenVO.getPositionDimensionOne()+" ,"+ 
-			specimenVO.getPositionDimensionTwo();
-			
-			if(storageContainerIds.contains(storageValue))
-			{
-				throw new DAOException(",Storage Location:" + storageValue +
-					" has been assignes to two or more specimens");								
-			}
-			else
-			{
-				storageContainerIds.add(storageValue);
-			}
-			
-			specimenDO.setStorageContainer(storageContainer);
+			setStorageContainer(dao, specimenVO, specimenDO);
 		}
 		else
 		{
@@ -2578,8 +2578,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if(specimenVO.getBiohazardCollection() != null)
 		{
 			specimenDO.setBiohazardCollection(specimenVO.getBiohazardCollection());
+		}		
+
+		if (Constants.MOLECULAR.equals(specimenVO.getClassName()))
+		{
+			Double concentration =((MolecularSpecimen)specimenVO)
+			.getConcentrationInMicrogramPerMicroliter();
+
+			((MolecularSpecimen)specimenDO)
+				.setConcentrationInMicrogramPerMicroliter(concentration);
 		}
-		
 		
 	}
 	
@@ -2603,4 +2611,85 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		this.containerHoldsSpecimenClasses = containerHoldsSpecimenClasses;
 	}
+
+/**
+ * @param dao
+ * @param specimenVO
+ * @param specimenDO
+ * @throws DAOException
+ */
+private void setStorageContainer(DAO dao, Specimen specimenVO,
+		Specimen specimenDO) throws DAOException {
+	StorageContainer storageContainer =specimenVO.getStorageContainer();
+	Long containerId = storageContainer.getId();
+	List storageContainerList;
+	storageContainer = retrieveStorageContainerObject(dao,
+			storageContainer, containerId);
+
+	if (specimenVO.getPositionDimensionOne() == null || 
+			specimenVO.getPositionDimensionTwo() == null)
+	{
+		
+		LinkedList<Integer> positionValues = 
+			StorageContainerUtil
+			.getFirstAvailablePositionsInContainer(
+					storageContainer,getStorageContainerMap(),storageContainerIds);
+		
+		specimenVO.setPositionDimensionOne(positionValues.get(0));
+				
+		specimenVO.setPositionDimensionTwo(positionValues.get(1));
+		
+	}
+	
+	specimenDO.setPositionDimensionOne(
+			specimenVO.getPositionDimensionOne());
+	specimenDO.setPositionDimensionTwo(
+			specimenVO.getPositionDimensionTwo());
+	
+	chkContainerValidForSpecimen(storageContainer, specimenDO, dao);
+	
+	String storageValue = storageContainer.getName()+":"+specimenVO.getPositionDimensionOne()+" ,"+ 
+	specimenVO.getPositionDimensionTwo();
+	
+	if(storageContainerIds.contains(storageValue))
+	{
+		throw new DAOException(",Storage Location:" + storageValue +
+			" has been assignes to two or more specimens");								
+	}
+	else
+	{
+		storageContainerIds.add(storageValue);
+	}
+	
+	specimenDO.setStorageContainer(storageContainer);
+}
+
+/**
+ * @param dao
+ * @param storageContainer
+ * @param containerId
+ * @return
+ * @throws DAOException
+ */
+private StorageContainer retrieveStorageContainerObject(DAO dao,
+		StorageContainer storageContainer, Long containerId)
+		throws DAOException {
+		List storageContainerList;
+		if(containerId !=null )
+		{
+			storageContainerList = dao.retrieve
+			(StorageContainer.class.getName(), "id", containerId);				
+		}
+		else
+		{
+			storageContainerList = dao.retrieve
+			(StorageContainer.class.getName(), "name", storageContainer.getName());
+		}
+		if (storageContainerList == null || storageContainerList.isEmpty())
+		{
+			throw new DAOException("Container name is invalid");
+		}
+		storageContainer = (StorageContainer)storageContainerList.get(0);
+		return storageContainer;
+	}	
 }
