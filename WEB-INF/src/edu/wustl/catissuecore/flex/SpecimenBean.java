@@ -7,42 +7,39 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 
-import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 
-public class SpecimenBean implements Externalizable, GenericSpecimen
+public class SpecimenBean implements Externalizable
 {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Long spID = -5L;
+	public Long spID = -1L;
 	/*public String scgName = "A";
 	public String parentSpecimenName = "B";*/
 	public String parentType = "";
 	public String parentName = "";
 
-	public String specimenLabel = "C";
-	public String specimenBarcode = "D";
+	public String specimenLabel = "";
+	public String specimenBarcode = "";
 
-	public String specimenClass = "Tissue";
-	public String specimenType = "Fresh Tissue";
+	public String specimenClass = "";
+	public String specimenType = "";
 
-	public String tissueSite = "Heart";
-	public String tissueSide = "Right";
-	public String pathologicalStatus = "Metastatic";
+	public String tissueSite = "";
+	public String tissueSide = "";
+	public String pathologicalStatus = "";
 
 	public Date creationDate = new Date();
-	public Double quantity = new Double(10);
-	public Double concentration = new Double(20);
-	public String storage= "Virtual";
-	public String comment = "MY COMMENT";
+	public Double quantity = new Double(0);
+	public Double concentration = new Double(0);
+	public String storage= "";
+	public String comment = "";
 	public List<ExternalIdentifier> exIdColl = new ArrayList<ExternalIdentifier>();
 	public List<Biohazard> biohazardColl = new ArrayList<Biohazard>();
 	public EventParamtersBean collectionEvent = new EventParamtersBean();
@@ -51,30 +48,11 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 
 	public SpecimenBean()
 	{
-		ExternalIdentifier ei1 = new ExternalIdentifier();
-		ei1.setId(-3L);
-		ei1.setName("EIN1");
-		ei1.setValue("EIV1");
-
-		ExternalIdentifier ei2 = new ExternalIdentifier();
-		ei2.setId(-4L);
-		ei2.setName("EIN2");
-		ei2.setValue("EIV2");
-
-		exIdColl.add(ei1);
-		exIdColl.add(ei2);
+		
 
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getAliquotSpecimenCollection()
-	 */
-	public LinkedHashMap<String, GenericSpecimen> getAliquotSpecimenCollection()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getClassName()
 	 */
@@ -97,28 +75,7 @@ public class SpecimenBean implements Externalizable, GenericSpecimen
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getDeriveSpecimenCollection()
-	 */
-	public LinkedHashMap<String, GenericSpecimen> getDeriveSpecimenCollection()
-	{
-		// TODO Auto-generated method stub
-		if (derivedColl != null)
-		{
-			LinkedHashMap<String, GenericSpecimen> derivedMap = new LinkedHashMap<String, GenericSpecimen>();
-			Iterator itr = derivedColl.iterator();
-			int i = 1;
-			while (itr.hasNext())
-			{
-				SpecimenBean derivedBean = (SpecimenBean) itr.next();
-				derivedMap.put("d1" + i, derivedBean);
-				i++;
-			}
-			return derivedMap;
-		}
-		return null;
-	}
-
+	
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getDisplayName()
 	 */

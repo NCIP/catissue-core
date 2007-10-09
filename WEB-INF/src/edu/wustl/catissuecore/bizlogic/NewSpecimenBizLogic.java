@@ -2375,7 +2375,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public void updateMultipleSpecimens(Collection newSpecimenCollection, SessionDataBean sessionDataBean) throws DAOException
+	public void updateMultipleSpecimens(Collection newSpecimenCollection, SessionDataBean sessionDataBean,boolean updateChildrens) throws DAOException
 	{
 		Iterator iterator = newSpecimenCollection.iterator();
 		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
@@ -2386,7 +2386,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
-				updateSignleSpecimen(dao,newSpecimen, sessionDataBean);
+				updateSignleSpecimen(dao,newSpecimen, sessionDataBean,updateChildrens);
 			}
 			((HibernateDAO)dao).commit();
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
@@ -2404,7 +2404,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public void updateSignleSpecimen(DAO dao, Specimen newSpecimen, SessionDataBean sessionDataBean) throws DAOException
+	public void updateSignleSpecimen(DAO dao, Specimen newSpecimen, SessionDataBean sessionDataBean,boolean updateChildrens) throws DAOException
 	{
 		try
 		{
@@ -2413,7 +2413,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				Specimen specimenDO =(Specimen)specList.get(0);
 				updateSpecimenDomainObject(dao, newSpecimen, specimenDO);
-				updateChildrenSpecimens(dao,newSpecimen, specimenDO);
+				if(updateChildrens)
+					updateChildrenSpecimens(dao,newSpecimen, specimenDO);
 				dao.update(specimenDO, sessionDataBean, false, false, false);
 				//postInsert(specimenDO, dao, sessionDataBean);
 			}
@@ -2546,7 +2547,40 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			quantity.setValue(quantityValue);
 			
 		}
-		specimenDO.setCollectionStatus(specimenVO.getCollectionStatus());
+		if (specimenVO.getCollectionStatus() != null)
+		{
+			specimenDO.setCollectionStatus(specimenVO.getCollectionStatus());
+		}
+		
+		// code for multiple specimen edit
+		if(specimenVO.getCreatedOn() != null)
+		{
+			specimenDO.setCreatedOn(specimenVO.getCreatedOn());
+		}
+		if(specimenVO.getPathologicalStatus() != null)
+		{
+			specimenDO.setPathologicalStatus(specimenVO.getPathologicalStatus());
+		}
+		if(specimenVO.getSpecimenCharacteristics() != null)
+		{
+			SpecimenCharacteristics specimenCharacteristics = specimenDO.getSpecimenCharacteristics();
+			if(specimenCharacteristics != null)
+			{
+				specimenCharacteristics.setTissueSide(specimenVO.getSpecimenCharacteristics().getTissueSide());
+				specimenCharacteristics.setTissueSite(specimenVO.getSpecimenCharacteristics().getTissueSite());
+			}
+		}
+		
+		if(specimenVO.getComment() != null)
+		{
+			specimenDO.setComment(specimenVO.getComment());
+		}
+		if(specimenVO.getBiohazardCollection() != null)
+		{
+			specimenDO.setBiohazardCollection(specimenVO.getBiohazardCollection());
+		}
+		
+		
 	}
 	
 	

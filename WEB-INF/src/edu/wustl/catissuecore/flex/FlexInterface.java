@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.flex;
 
 import java.util.ArrayList;
@@ -12,10 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import org.globus.util.http.HTTPRequestParser;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
@@ -38,6 +36,7 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -59,18 +58,20 @@ import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+
 @SuppressWarnings("unused")
 public class FlexInterface
 {
 	public FlexInterface() throws Exception
 	{
-//		Variables.applicationHome = System.getProperty("user.dir");
-//		Logger.out = org.apache.log4j.Logger.getLogger("");
-//		PropertyConfigurator.configure(Variables.applicationHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
-//		
-//		Logger.out.debug("here");
-//		CDEManager.init();
+		//		Variables.applicationHome = System.getProperty("user.dir");
+		//		Logger.out = org.apache.log4j.Logger.getLogger("");
+		//		PropertyConfigurator.configure(Variables.applicationHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
+		//		
+		//		Logger.out.debug("here");
+		//		CDEManager.init();
 	}
+
 	public SpecimenBean say(String str)
 	{
 		System.out.println("str from flex client " + str);
@@ -295,7 +296,7 @@ public class FlexInterface
 		Logger.out.debug("spBeanList size " + spBeanList.size());
 		//Map<String, String> msgMap = new HashMap<String, String>();
 		//LinkedHashMap<Specimen,List> specimenMap = new LinkedHashMap<Specimen,List>();
-	 	LinkedHashMap<String, GenericSpecimen> viewSpecimenMap = new LinkedHashMap<String, GenericSpecimen>();
+		LinkedHashMap<String, GenericSpecimen> viewSpecimenMap = new LinkedHashMap<String, GenericSpecimen>();
 		String message = "ERROR";
 
 		//SessionDataBean sdb2 = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
@@ -305,10 +306,10 @@ public class FlexInterface
 			/*	String msg = writeSpecimen(spBean);
 			 Logger.out.debug("MSG " + spBean.specimenLabel + " : " + msg);
 			 msgMap.put(spBean.specimenLabel, msg);*/
-			SpecimenDataBean specimenDataBean = prepareSpecimen(spBean);
-			 
+			SpecimenDataBean specimenDataBean = prepareGenericSpecimen(spBean);
+
 			//spBean.spID = new Long(i);
-			specimenDataBean.uniqueId = ""+i;
+			specimenDataBean.uniqueId = "" + i;
 			viewSpecimenMap.put(specimenDataBean.getUniqueIdentifier(), specimenDataBean);
 			i++;
 
@@ -335,6 +336,34 @@ public class FlexInterface
 		}
 
 		return message;
+	}
+
+	public String editSpecimen(List<SpecimenBean> spBeanList)
+	{
+		List specimenList = new ArrayList();
+		if (spBeanList != null && spBeanList.size() > 0)
+		{
+			for (SpecimenBean spBean : spBeanList)
+			{
+				Specimen specimen = prepareSpecimen(spBean);
+				specimenList.add(specimen);
+			}
+			NewSpecimenBizLogic spBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+			HttpSession session = flex.messaging.FlexContext.getHttpRequest().getSession();
+			SessionDataBean sdb = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+
+			try
+			{
+				spBizLogic.updateMultipleSpecimens(specimenList, sdb,false);
+			}
+			catch (DAOException e)
+			{
+				return e.getMessage();
+			}
+
+		}
+		return "Edited successfully";
 	}
 
 	/*private String writeSpecimen(SpecimenBean spBean)
@@ -376,18 +405,100 @@ public class FlexInterface
 	{
 		Logger.out.debug("SERVER readSpecimen");
 		SpecimenBean sb = new SpecimenBean();
+		sb.specimenLabel = "tp";
+		sb.tissueSite = "VULVA";
+		sb.specimenClass = "Molecular";
+		sb.specimenType = "DNA";
 		return sb;
 	}
 
-	public List<SpecimenBean> readSpecimenList()
+	public List<SpecimenBean> readSpecimenList() throws DAOException
 	{
 		List<SpecimenBean> list = new ArrayList<SpecimenBean>();
+		// getting specimen list from session
+		/*List specimenIdList = new ArrayList();
+		 specimenIdList.add("66");
+		 specimenIdList.add("89");
+		 specimenIdList.add("4");
+		 specimenIdList.add("1");
+		 specimenIdList.add("3");
+		 specimenIdList.add("5");
+		 specimenIdList.add("47");*/
+		session = flex.messaging.FlexContext.getHttpRequest().getSession();
+		List specimenIdList = (List) session.getAttribute("specimenId");
+		if (specimenIdList != null)
+		{
+			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+			Iterator itr = specimenIdList.iterator();
+			while (itr.hasNext())
+			{
+				String specimenId = (String) itr.next();
+				List specimenList = bizLogic.retrieve(Specimen.class.getName(), "id", specimenId);
+				if (specimenList != null)
+				{
+					Specimen specimen = (Specimen) specimenList.get(0);
+					Collection exIdColl = (Collection) bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
+							"elements(externalIdentifierCollection)");
+					specimen.setExternalIdentifierCollection(exIdColl);
+					SpecimenBean sb = prepareSpecimenBean(specimen);
+					list.add(sb);
 
-		list.add(readSpecimen());
-		list.add(readSpecimen());
-		list.add(readSpecimen());
+				}
 
+			}
+
+			/*list = new ArrayList<SpecimenBean>();
+			 SpecimenBean sb = readSpecimen();
+			 sb.specimenClass = "Tissue";
+			 list.add(sb);
+			 list.add(readSpecimen());
+			 list.add(readSpecimen());
+			 
+			 list.add(sb);
+			 list.add(readSpecimen());
+			 list.add(readSpecimen());
+			 */
+		}
 		return list;
+	}
+
+	private SpecimenBean prepareSpecimenBean(Specimen specimen)
+	{
+		SpecimenBean sb = new SpecimenBean();
+		if (specimen.getId() != null)
+			sb.spID = specimen.getId();
+		if (specimen.getLabel() != null)
+			sb.specimenLabel = specimen.getLabel();
+		if (specimen.getBarcode() != null)
+			sb.specimenBarcode = specimen.getBarcode();
+		if (specimen.getClassName() != null)
+			sb.specimenClass = specimen.getClassName();
+		if (specimen.getType() != null)
+			sb.specimenType = specimen.getType();
+		if (specimen.getPathologicalStatus() != null)
+			sb.pathologicalStatus = specimen.getPathologicalStatus();
+		if (specimen.getInitialQuantity() != null)
+			sb.quantity = specimen.getInitialQuantity().getValue();
+		if (specimen.getCreatedOn() != null)
+			sb.creationDate = specimen.getCreatedOn();
+
+		SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
+		if (characteristic != null)
+		{
+			if (characteristic.getTissueSide() != null)
+				sb.tissueSide = characteristic.getTissueSide();
+			if (characteristic.getTissueSite() != null)
+				sb.tissueSite = characteristic.getTissueSite();
+		}
+		if (specimen.getComment() != null)
+			sb.comment = specimen.getComment();
+		if (specimen.getBiohazardCollection() != null)
+			sb.biohazardColl = new ArrayList(specimen.getBiohazardCollection());
+		if (specimen.getExternalIdentifierCollection() != null)
+			sb.exIdColl = new ArrayList(specimen.getExternalIdentifierCollection());
+
+		return sb;
 	}
 
 	private Specimen getSpecimenInstance(String specimenClass)
@@ -413,7 +524,6 @@ public class FlexInterface
 		System.out.println("Returning basic specimen " + sp);
 		return sp;
 	}
-	
 
 	/*private Specimen prepareSpecimen(SpecimenBean spBean)
 	 {
@@ -484,7 +594,7 @@ public class FlexInterface
 	 return sp;
 	 }*/
 
-	private SpecimenDataBean prepareSpecimen(SpecimenBean spBean)
+	private SpecimenDataBean prepareGenericSpecimen(SpecimenBean spBean)
 	{
 		SpecimenDataBean specimenDataBean = new SpecimenDataBean();
 
@@ -525,10 +635,10 @@ public class FlexInterface
 		 sp.setSpecimenCharacteristics(specimenCharacteristics);*/
 
 		/*if (spBean.scgName != null)
-		{
-			specimenDataBean.setSpecimenCollectionGroup(getSpecimenCollGrp(spBean.scgName));
-		}*/
-		if(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE.equals(spBean.parentType))
+		 {
+		 specimenDataBean.setSpecimenCollectionGroup(getSpecimenCollGrp(spBean.scgName));
+		 }*/
+		if (edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE.equals(spBean.parentType))
 		{
 			specimenDataBean.setSpecimenCollectionGroup(getSpecimenCollGrp(spBean.parentName));
 		}
@@ -536,7 +646,7 @@ public class FlexInterface
 		{
 			specimenDataBean.setParentSpecimen(getParentSpecimen(spBean.parentName));
 		}
-		
+
 		/*scg.setId(1L);
 		 scg.setName("scg1");
 		 sp.setSpecimenCollectionGroup(scg);*/
@@ -566,7 +676,7 @@ public class FlexInterface
 				SpecimenBean derivedBean = (SpecimenBean) itr.next();
 				derivedBean.collectionEvent = spBean.collectionEvent;
 				derivedBean.receivedEvent = spBean.receivedEvent;
-				SpecimenDataBean derivedDataBean = prepareSpecimen(derivedBean);
+				SpecimenDataBean derivedDataBean = prepareGenericSpecimen(derivedBean);
 
 				derivedMap.put("d1" + i, derivedDataBean);
 				i++;
@@ -577,18 +687,64 @@ public class FlexInterface
 		return specimenDataBean;
 	}
 
+	/* prepare specimen for edit multiple specimen */
+	private Specimen prepareSpecimen(SpecimenBean spBean)
+	{
+		Specimen specimen = new Specimen();
+
+		specimen.setType(spBean.specimenType);
+		specimen.setId(spBean.spID);
+		specimen.setCreatedOn(spBean.creationDate);
+		//specimenDataBean.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		//sp.setAvailable(true);
+		Quantity qt = new Quantity();
+		qt.setValue(spBean.quantity);
+		specimen.setInitialQuantity(qt);
+
+		//specimen.setClassName(spBean.specimenClass);
+		specimen.setBarcode(spBean.specimenBarcode);
+
+		specimen.setComment(spBean.comment);
+		//sp.setCreatedOn(new Date());
+		specimen.setExternalIdentifierCollection(new HashSet<ExternalIdentifier>());
+		if (spBean.exIdColl != null && !spBean.exIdColl.isEmpty())
+		{
+			specimen.setExternalIdentifierCollection(getExternalIdentifierColl(spBean.exIdColl));
+		}
+
+		if (spBean.biohazardColl != null && !spBean.biohazardColl.isEmpty())
+		{
+			specimen.setBiohazardCollection(getBiohazardColl(spBean.biohazardColl));
+		}
+		specimen.setLabel(spBean.specimenLabel);
+
+		//specimenDataBean.setParentSpecimen(null);
+		specimen.setPathologicalStatus(spBean.pathologicalStatus);
+
+		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		specimenCharacteristics.setTissueSide(spBean.tissueSide);
+		specimenCharacteristics.setTissueSite(spBean.tissueSite);
+		specimen.setSpecimenCharacteristics(specimenCharacteristics);
+
+		System.out.println("Returning complete specimen");
+		return specimen;
+	}
+
+	/* finish */
+
 	private HashSet getExternalIdentifierColl(Collection exIdColl)
 	{
 		HashSet<ExternalIdentifier> exIdSet = new HashSet<ExternalIdentifier>();
 		Iterator itr = exIdColl.iterator();
 		while (itr.hasNext())
-		{ 
+		{
 			ExternalIdentifier ex = (ExternalIdentifier) itr.next();
-			if((ex.getName()==null||ex.getName().equals("")) && (ex.getValue() == null || ex.getValue().equals("")))
+			if ((ex.getName() == null || ex.getName().equals("")) && (ex.getValue() == null || ex.getValue().equals("")))
 			{
 				continue;
 			}
-			ex.setId(null);
+			
+			ex.setId(ex.getId());
 			exIdSet.add(ex);
 		}
 		return exIdSet;
@@ -750,8 +906,8 @@ public class FlexInterface
 	//--------------DAG-----------------------------
 	public void restoreQueryObject()
 	{
-		if(dagPanel==null)
-		{ 
+		if (dagPanel == null)
+		{
 			this.initFlexInterface();
 		}
 		else
@@ -759,6 +915,7 @@ public class FlexInterface
 			dagPanel.restoreQueryObject();
 		}
 	}
+
 	/**
 	 * Add Nodes in define Result view
 	 * @param nodesStr
@@ -769,6 +926,7 @@ public class FlexInterface
 		DAGNode dagNode = dagPanel.addNodeToOutPutView(nodesStr);
 		return dagNode;
 	}
+
 	/**
 	 * Repaints DAG
 	 * @return
@@ -777,22 +935,23 @@ public class FlexInterface
 	{
 		return dagPanel.repaintDAG();
 	}
-	
+
 	public int getSearchResult()
 	{
 		return dagPanel.search();
 	}
+
 	/**
 	 * create DAG Node
 	 * @param strToCreateQueryObject
 	 * @param entityName
 	 */
-	public DAGNode createNode(String strToCreateQueryObject,String entityName)
-    {
-		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName,"Add");
+	public DAGNode createNode(String strToCreateQueryObject, String entityName)
+	{
+		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName, "Add");
 		return dagNode;
 	}
-	
+
 	/**
 	 * 
 	 * @param expressionId
@@ -800,39 +959,43 @@ public class FlexInterface
 	 */
 	public String getLimitUI(int expressionId)
 	{
-		Map map =dagPanel.editAddLimitUI(expressionId);
-		String htmlStr = (String)map.get(DAGConstant.HTML_STR);
-		IExpression expression = (IExpression)map.get(DAGConstant.EXPRESSION);
+		Map map = dagPanel.editAddLimitUI(expressionId);
+		String htmlStr = (String) map.get(DAGConstant.HTML_STR);
+		IExpression expression = (IExpression) map.get(DAGConstant.EXPRESSION);
 		dagPanel.setExpression(expression);
 		return htmlStr;
 	}
+
 	/**
 	 * Edit Node
 	 * @param strToCreateQueryObject
 	 * @param entityName
 	 * @return
 	 */
-	public DAGNode editNode(String strToCreateQueryObject,String entityName)
+	public DAGNode editNode(String strToCreateQueryObject, String entityName)
 	{
-		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName,"Edit");
+		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName, "Edit");
 		return dagNode;
 	}
+
 	/**
 	 * Deletes node from output view
 	 * @param expId
 	 */
 	public void deleteFromView(int expId)
 	{
-		dagPanel.deleteExpressionFormView(expId); 
+		dagPanel.deleteExpressionFormView(expId);
 	}
+
 	/**
 	 * Adds node to output view
 	 * @param expId
 	 */
 	public void addToView(int expId)
 	{
-		dagPanel.addExpressionToView(expId); 
+		dagPanel.addExpressionToView(expId);
 	}
+
 	/**
 	 * Deletes node from DAG
 	 * @param expId
@@ -841,29 +1004,32 @@ public class FlexInterface
 	{
 		dagPanel.deleteExpression(expId);//delete Expression 
 	}
+
 	/**
 	 * Gets path List between nodes
 	 * @param linkedNodeList
 	 * @return
 	 */
-	private List<IPath> getPathList(List<DAGNode> linkedNodeList) {
+	private List<IPath> getPathList(List<DAGNode> linkedNodeList)
+	{
 		DAGNode sourceNode = linkedNodeList.get(0);
 		DAGNode destinationNode = linkedNodeList.get(1);
-		List<IPath> pathsList=dagPanel.getPaths(sourceNode, destinationNode);
+		List<IPath> pathsList = dagPanel.getPaths(sourceNode, destinationNode);
 		return pathsList;
 	}
+
 	/**
 	 * Gets association(path) between 2 nodes
 	 * @param linkedNodeList
 	 * @return
 	 */
 	public List getpaths(List<DAGNode> linkedNodeList)
-	{ 
-		List<IPath> pathsList=getPathList(linkedNodeList);
+	{
+		List<IPath> pathsList = getPathList(linkedNodeList);
 		List<DAGPath> pathsListStr = new ArrayList<DAGPath>();
-		for(int i=0;i<pathsList.size();i++)
+		for (int i = 0; i < pathsList.size(); i++)
 		{
-			Path p =(Path) pathsList.get(i);
+			Path p = (Path) pathsList.get(i);
 			DAGPath path = new DAGPath();
 			path.setToolTip(DAGPanel.getPathDisplayString(pathsList.get(i)));
 			path.setId(new Long(p.getPathId()).toString());
@@ -871,57 +1037,60 @@ public class FlexInterface
 		}
 		return pathsListStr;
 	}
-	
+
 	/**
 	 * Links 2 nodes
 	 * @param linkedNodeList
 	 * @param selectedPaths
 	 */
-	
-	public List<DAGPath> linkNodes(List<DAGNode>linkedNodeList,List<DAGPath> selectedPaths)
+
+	public List<DAGPath> linkNodes(List<DAGNode> linkedNodeList, List<DAGPath> selectedPaths)
 	{
-			DAGNode sourceNode = linkedNodeList.get(0);
-			DAGNode destinationNode = linkedNodeList.get(1);
-			List<IPath> pathsList=getPathList(linkedNodeList);
-			List<IPath> selectedList = new ArrayList<IPath>();
-			for(int j=0;j<selectedPaths.size();j++)
+		DAGNode sourceNode = linkedNodeList.get(0);
+		DAGNode destinationNode = linkedNodeList.get(1);
+		List<IPath> pathsList = getPathList(linkedNodeList);
+		List<IPath> selectedList = new ArrayList<IPath>();
+		for (int j = 0; j < selectedPaths.size(); j++)
+		{
+			for (int i = 0; i < pathsList.size(); i++)
 			{
-				for(int i=0; i<pathsList.size();i++)
+				IPath path = pathsList.get(i);
+				String pathStr = new Long(path.getPathId()).toString();
+				DAGPath dagPath = selectedPaths.get(j);
+				String pathId = dagPath.getId();
+				if (pathStr.equals(pathId))
 				{
-					IPath path = pathsList.get(i);
-					String pathStr = new Long(path.getPathId()).toString();
-					DAGPath dagPath = selectedPaths.get(j);
-					String pathId =dagPath.getId();
-					if(pathStr.equals(pathId))
-					{
-						selectedList.add(path);
-						break;
-					}
-					
+					selectedList.add(path);
+					break;
 				}
+
 			}
-		return 	dagPanel.linkNode(sourceNode,destinationNode,selectedList);
+		}
+		return dagPanel.linkNode(sourceNode, destinationNode, selectedList);
 	}
+
 	/**
 	 * Deletes associaton between 2 nodes
 	 * @param linkedNodeList
 	 * @param linkName
 	 */
-	public void deleteLink(List<DAGNode> linkedNodeList,String linkName)
+	public void deleteLink(List<DAGNode> linkedNodeList, String linkName)
 	{
-		dagPanel.deletePath(linkName,linkedNodeList);
+		dagPanel.deletePath(linkName, linkedNodeList);
 	}
+
 	/**
 	 * Sets logical operator set from UI
 	 * @param node
 	 * @param operandIndex
 	 * @param operator
 	 */
-	public void setLogicalOperator(DAGNode node,int operandIndex,String operator)
+	public void setLogicalOperator(DAGNode node, int operandIndex, String operator)
 	{
 		int parentExpId = node.getExpressionId();
 		dagPanel.updateLogicalOperator(parentExpId, operandIndex, operator);
 	}
+
 	/**
 	 *Initalises DAG 
 	 *
@@ -933,68 +1102,68 @@ public class FlexInterface
 		dagPanel = new DAGPanel(pathFinder);
 		dagPanel.setQueryObject(queryObject);
 	}
-		
-	private	IClientQueryBuilderInterface queryObject=null;
+
+	private IClientQueryBuilderInterface queryObject = null;
 	private DAGPanel dagPanel = null;
 	private HttpSession session = null;
-	
-//----- END DAG -------	
-//	Methods added by Baljeet
+
+	//----- END DAG -------	
+	//	Methods added by Baljeet
 	/**
 	 * This method retrieves the List if all Collection Protocols
 	 * @return The cp List.
 	 */
 	public List getCpList()
 	{
-		
-		List<CpAndParticipentsBean>cpList = new ArrayList<CpAndParticipentsBean>();
-       
+
+		List<CpAndParticipentsBean> cpList = new ArrayList<CpAndParticipentsBean>();
+
 		//Getting the instance of participantRegistrationCacheManager
 		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
-       
+
 		//Getting the CP List 
 		List cpColl = participantRegCacheManager.getCPDetailCollection();
 		Collections.sort(cpColl);
-		
-       //Converting From NameValueBean to CpAndParticipentsBean
+
+		//Converting From NameValueBean to CpAndParticipentsBean
 		Iterator itr = cpColl.iterator();
-		while(itr.hasNext())
+		while (itr.hasNext())
 		{
 			CpAndParticipentsBean cpBean = new CpAndParticipentsBean();
-			NameValueBean bean = (NameValueBean)itr.next();
+			NameValueBean bean = (NameValueBean) itr.next();
 			cpBean.setName(bean.getName());
 			cpBean.setValue(bean.getValue());
-			
+
 			//Adding CpAndParticipentsBean to cpList
 			cpList.add(cpBean);
 		}
 		return cpList;
 	}
-	
+
 	/**
 	 * This method retrieves the List of participants associated with a cp
 	 * @param cpId :Collection protocol Id
 	 * @return the list of Participants
 	 */
-	public List getParticipantsList(String cpId,String cpTitle)
+	public List getParticipantsList(String cpId, String cpTitle)
 	{
 		//Setting the cp title in session
-		session= flex.messaging.FlexContext.getHttpRequest().getSession();
+		session = flex.messaging.FlexContext.getHttpRequest().getSession();
 		session.setAttribute("cpTitle", cpTitle);
-		List<CpAndParticipentsBean>participantsList = new ArrayList<CpAndParticipentsBean>();
-        
-        //Getting the instance of participantRegistrationCacheManager
+		List<CpAndParticipentsBean> participantsList = new ArrayList<CpAndParticipentsBean>();
+
+		//Getting the instance of participantRegistrationCacheManager
 		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
 
-        //getting the list of participants from cache for particular CP.
+		//getting the list of participants from cache for particular CP.
 		List participantNamesWithId = participantRegCacheManager.getParticipantNames(Long.parseLong(cpId));
-        
-        //Values in participantNamesWithID will be in format (ID:lastName firstName) 
+
+		//Values in participantNamesWithID will be in format (ID:lastName firstName) 
 		//tokenize the value and create nameValueBean with name as (lastName firstName) and value as participantId 
 		//and store in the list
-		
+
 		//List participantColl = new ArrayList();
-		if(participantNamesWithId != null && participantNamesWithId.size()>0) 
+		if (participantNamesWithId != null && participantNamesWithId.size() > 0)
 		{
 			Iterator itr = participantNamesWithId.iterator();
 			while (itr.hasNext())
@@ -1002,11 +1171,11 @@ public class FlexInterface
 				String participantIdAndName = (String) itr.next();
 				int index = participantIdAndName.indexOf(":");
 				Long Id = null;
-				String name="";
+				String name = "";
 				Id = new Long(participantIdAndName.substring(0, index));
 				name = participantIdAndName.substring(index + 1);
-			
-				participantsList.add(new CpAndParticipentsBean(name,Id.toString()));
+
+				participantsList.add(new CpAndParticipentsBean(name, Id.toString()));
 				//participantColl.add(new NameValueBean(name, Id));
 			}
 		}
@@ -1014,27 +1183,24 @@ public class FlexInterface
 		{
 			System.out.println("The participants list is empty");
 		}
-        //Sorting the participants
+		//Sorting the participants
 		//Collections.sort(participantsList);
-	    return participantsList;
+		return participantsList;
 	}
-	
-    /**
-     * This mehtod returns the XML String for generating tree 
-     * @param cpId : Selcted Collection Protocol ID
-     * @param pId : Selected Participant Id
-     * @return : The XML String for tree data 
-     * @throws Exception
-     */
-	public String getTreeData(String cpId, String pId)throws Exception
-    {
-    	//System.out.println("In get tree data method & cpID is:"+cpId);
-    	SpecimenCollectionGroupBizLogic bizlogic = new SpecimenCollectionGroupBizLogic();
-        String str = bizlogic.getSCGTreeForCPBasedView(Long.parseLong(cpId),Long.parseLong(pId)); 
-    	return str;
-    }
 
-	
-	
-	
+	/**
+	 * This mehtod returns the XML String for generating tree 
+	 * @param cpId : Selcted Collection Protocol ID
+	 * @param pId : Selected Participant Id
+	 * @return : The XML String for tree data 
+	 * @throws Exception
+	 */
+	public String getTreeData(String cpId, String pId) throws Exception
+	{
+		//System.out.println("In get tree data method & cpID is:"+cpId);
+		SpecimenCollectionGroupBizLogic bizlogic = new SpecimenCollectionGroupBizLogic();
+		String str = bizlogic.getSCGTreeForCPBasedView(Long.parseLong(cpId), Long.parseLong(pId));
+		return str;
+	}
+
 }

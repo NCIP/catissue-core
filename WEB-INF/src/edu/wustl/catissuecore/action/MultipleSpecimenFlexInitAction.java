@@ -20,8 +20,12 @@ public class MultipleSpecimenFlexInitAction extends Action
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //Gets the value of the operation parameter.
-        //String operation = request.getParameter(Constants.OPERATION);
+        String operation = request.getParameter(Constants.OPERATION);
+        
 		String mode = "ADD";
+        if(operation != null && operation.equals("EDIT"))
+        	mode = "EDIT";
+		
 		String showParentSelection = "false";
 		
 		String parentType = request.getParameter("parentType");
@@ -47,7 +51,7 @@ public class MultipleSpecimenFlexInitAction extends Action
 	
 	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType, String parentName, String numberOfSpecimens,String showParentSelectiono)
 	{
-		//Sets the operation attribute to be used in the Add/Edit Department Page. 
+		
         request.setAttribute("MODE",mode);
         request.setAttribute("PARENT_TYPE", parentType);
         request.setAttribute("PARENT_NAME", parentName);

@@ -642,6 +642,8 @@ PUBLIC
 			<forward name="requestToOrder" path="/RequestToOrder.do"/>
 			<forward name="bulkTransfers" path="/BulkTransferEvents.do?menuSelected=15"/>
 			<forward name="bulkDisposals" path="/BulkDisposalEvents.do?menuSelected=15"/>
+			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=EDIT"/>
+			
 		</action>
 		
 		<!-- Applet Action mapping for query Module -->
@@ -3050,6 +3052,7 @@ PUBLIC
 			<forward name="failure" path="/pages/content/search/ShoppingCart.jsp" /-->
 			<forward name="duplicateSpecimen" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="requestToOrder" path="/RequestToOrder.do"/>
+			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=EDIT"/>
 		</action>
 		
 		<action path="/ShoppingCartOperation"

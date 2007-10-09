@@ -2132,4 +2132,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String BULK_TRANSFERS = "bulkTransfers";
 	public static final String BULK_DISPOSALS = "bulkDisposals";
+	
+	public static final String EDIT_MULTIPLE_SPECIMEN = "editMultipleSp";
 }

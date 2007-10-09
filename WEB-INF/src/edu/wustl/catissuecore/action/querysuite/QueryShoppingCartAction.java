@@ -159,6 +159,17 @@ public class QueryShoppingCartAction extends BaseAction
 			request.setAttribute(Constants.OPERATION, operation);
 			target = new String(operation);
 		}
+		else if(Constants.EDIT_MULTIPLE_SPECIMEN.equals(operation))
+		{
+			if(session.getAttribute(Constants.SPECIMEN_ID) != null)
+				session.removeAttribute(Constants.SPECIMEN_ID);
+			
+			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+			List<String> specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Specimen.class.getName(), chkBoxValues));
+			session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
+			
+			target = new String(operation);
+		}
 		
 		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_MODULE);
 		return mapping.findForward(target);
