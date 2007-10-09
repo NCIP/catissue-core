@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -48,6 +49,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 	private SessionDataBean bean;
 	private LinkedHashMap<String, ArrayList<GenericSpecimenVO>> autoStorageSpecimenMap =new LinkedHashMap<String, ArrayList<GenericSpecimenVO>> ();
 	Long cpId = null;
+	private HashSet<String> storageContainerIds = new HashSet<String>();
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -85,6 +87,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 				if (!keySet.isEmpty())
 				{
 					Iterator<String> keySetIterator = keySet.iterator();
+					storageContainerIds.clear();
 					while(keySetIterator.hasNext())
 					{
 						String key = keySetIterator.next();
@@ -107,7 +110,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 	private LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection) throws DAOException
 	{
 		LinkedHashMap<String, GenericSpecimen> specimenMap = new LinkedHashMap<String, GenericSpecimen>();
-		
+		autoStorageSpecimenMap.clear();
 		Iterator specimenIterator = specimenCollection.iterator();
 		while(specimenIterator.hasNext())
 		{
@@ -262,7 +265,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 	private void populateAliquotsStorageLocations(List specimenDataBeanList, Map containerMap)
 	{
 		
-		int counter = 1;
+		int counter = 0;
 
 		if (!containerMap.isEmpty())
 		{
@@ -285,12 +288,19 @@ public class AnticipatorySpecimenViewAction extends Action {
 							if(counter < specimenDataBeanList.size())
 							{
 								GenericSpecimenVO specimenDataBean = (GenericSpecimenVO)specimenDataBeanList.get(counter);
-								specimenDataBean.setContainerId(((NameValueBean) containerId[i]).getValue());
-								specimenDataBean.setSelectedContainerName(((NameValueBean) containerId[i]).getName());
-								specimenDataBean.setPositionDimensionOne(((NameValueBean) xDim[j]).getValue());
-								specimenDataBean.setPositionDimensionTwo(((NameValueBean) yDimList.get(k)).getValue());
-	
-								counter++;
+								String stName = ((NameValueBean) containerId[i]).getName();
+								String posOne = ((NameValueBean) xDim[j]).getValue();
+								String posTwo = ((NameValueBean) yDimList.get(k)).getValue();
+								String storageValue = stName+":"+posOne+" ,"+posTwo; 
+								if(!storageContainerIds.contains(storageValue))
+								{													
+									specimenDataBean.setContainerId(((NameValueBean) containerId[i]).getValue());
+									specimenDataBean.setSelectedContainerName(stName);
+									specimenDataBean.setPositionDimensionOne(posOne);
+									specimenDataBean.setPositionDimensionTwo(posTwo);
+									storageContainerIds.add(storageValue);
+									counter++;									
+								}
 							}
 							else
 							{

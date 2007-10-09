@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.hibernate.HibernateException;
-import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -61,6 +60,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
@@ -80,11 +80,12 @@ import edu.wustl.common.util.logger.Logger;
  * NewSpecimenHDAO is used to add new specimen information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
+
 public class NewSpecimenBizLogic extends DefaultBizLogic
 {
 	private Map< Long, Collection> containerHoldsSpecimenClasses = new HashMap<Long, Collection>();
 	private Map< Long, Collection> containerHoldsCPs = new HashMap<Long, Collection>();
-	
+	private HashSet<String> storageContainerIds = new HashSet<String>();
 	/**
 	 * Saves the storageType object in the database.
 	 * @param obj The storageType object to be saved.
@@ -605,15 +606,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		Map containerMap = null;
-		try
-		{
-			containerMap = StorageContainerUtil.getContainerMapFromCache();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		
+		Map containerMap = getStorageContainerMap();
 		if (obj instanceof HashMap)
 		{
 			HashMap specimenMap = (HashMap) obj;
@@ -640,6 +634,44 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			updateStorageLocations((TreeMap) containerMap, (Specimen) obj);
 		}
 
+	}
+
+	synchronized public void postInsert(Collection speCollection, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		
+		Map containerMap = getStorageContainerMap();
+		Iterator specimenIterator = speCollection.iterator();
+		while (specimenIterator.hasNext())
+		{
+			Specimen specimen = (Specimen) specimenIterator.next();
+			updateStorageLocations((TreeMap) containerMap, specimen);
+			Collection childSpecimens = specimen.getChildrenSpecimen();
+
+			if (childSpecimens != null)
+			{
+				Iterator childSpecimenIterator = childSpecimens.iterator();
+				while(childSpecimenIterator.hasNext())
+				{
+					Specimen derivedSpecimen = (Specimen) childSpecimenIterator.next();
+					updateStorageLocations((TreeMap) containerMap, derivedSpecimen);
+				}
+			}
+		}
+
+	}
+
+	private Map getStorageContainerMap()
+	{
+		Map containerMap = null;
+		try
+		{
+			containerMap = StorageContainerUtil.getContainerMapFromCache();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return containerMap;
 	}
 
 	/**
@@ -2357,9 +2389,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				updateSignleSpecimen(dao,newSpecimen, sessionDataBean);
 			}
 			((HibernateDAO)dao).commit();
+			postInsert(newSpecimenCollection, dao, sessionDataBean);
+			
 		}
 		catch(Exception exception)
 		{
+			((AbstractDAO)dao).rollback();
 			throw new DAOException("failed to update multiple specimen " +
 					exception.getMessage());
 		}
@@ -2374,13 +2409,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		try
 		{
 			List specList = dao.retrieve(Specimen.class.getName(), "id", newSpecimen.getId());
-	
 			if(specList != null && !specList.isEmpty())
 			{
 				Specimen specimenDO =(Specimen)specList.get(0);
 				updateSpecimenDomainObject(dao, newSpecimen, specimenDO);
 				updateChildrenSpecimens(dao,newSpecimen, specimenDO);
 				dao.update(specimenDO, sessionDataBean, false, false, false);
+				//postInsert(specimenDO, dao, sessionDataBean);
 			}
 		}catch(UserNotAuthorizedException authorizedException){
 			throw new DAOException ("User not authorized to update specimens" + 
@@ -2449,67 +2484,71 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 				specimenDO.setBarcode(specimenVO.getBarcode());
 		}
-		try{
-			if(specimenVO.getStorageContainer()!=null)
+		if(specimenVO.getStorageContainer()!=null)
+		{
+			specimenDO.setPositionDimensionOne(
+					specimenVO.getPositionDimensionOne());
+			specimenDO.setPositionDimensionTwo(
+					specimenVO.getPositionDimensionTwo());
+			StorageContainer storageContainer =specimenVO.getStorageContainer();
+			Long containerId = storageContainer.getId();
+			List storageContainerList;
+			if(containerId !=null )
 			{
-				specimenDO.setPositionDimensionOne(
-						specimenVO.getPositionDimensionOne());
-				specimenDO.setPositionDimensionTwo(
-						specimenVO.getPositionDimensionTwo());
-				StorageContainer storageContainer =specimenVO.getStorageContainer();
-				Long containerId = storageContainer.getId();
-				List storageContainerList;
-				if(containerId !=null )
-				{
-					storageContainerList = dao.retrieve
-					(StorageContainer.class.getName(), "id", containerId);				
-				}
-				else
-				{
-					storageContainerList = dao.retrieve
-					(StorageContainer.class.getName(), "name", storageContainer.getName());
-				}
-				if (storageContainerList == null || storageContainerList.isEmpty())
-				{
-					throw new DAOException("Container name is invalid");
-				}
-				
-				storageContainer = (StorageContainer)storageContainerList.get(0);
-	
-				specimenDO.setStorageContainer(storageContainer);
+				storageContainerList = dao.retrieve
+				(StorageContainer.class.getName(), "id", containerId);				
 			}
 			else
 			{
-				specimenDO.setStorageContainer(null);
+				storageContainerList = dao.retrieve
+				(StorageContainer.class.getName(), "name", storageContainer.getName());
 			}
-			
-			
-			
-			if(specimenVO.getInitialQuantity() != null)
+			if (storageContainerList == null || storageContainerList.isEmpty())
 			{
-				Quantity quantity = specimenVO.getInitialQuantity();
-				Double quantityValue = quantity.getValue();
-				if (specimenDO.getInitialQuantity() == null)
-				{
-					quantity = new Quantity();
-					specimenDO.setInitialQuantity(quantity);
-				}
-				else
-				{
-					quantity = specimenDO.getInitialQuantity();
-				}
-				quantity.setValue(quantityValue);
-				
+				throw new DAOException("Container name is invalid");
 			}
-			specimenDO.setCollectionStatus(specimenVO.getCollectionStatus());
+			
+			storageContainer = (StorageContainer)storageContainerList.get(0);
+
+			String storageValue = storageContainer.getName()+":"+specimenVO.getPositionDimensionOne()+" ,"+ 
+			specimenVO.getPositionDimensionTwo();
+			
+			if(storageContainerIds.contains(storageValue))
+			{
+				throw new DAOException(",Storage Location:" + storageValue +
+					" has been assignes to two or more specimens");								
+			}
+			else
+			{
+				storageContainerIds.add(storageValue);
+			}
+			
+			specimenDO.setStorageContainer(storageContainer);
 		}
-		catch(DAOException exception)
+		else
 		{
-			exception.setMessage("Failed to update specimen " 
-					+ specimenVO.getLabel() + exception.getMessage());
-			throw exception;
+			specimenDO.setStorageContainer(null);
 		}
+			
+		if(specimenVO.getInitialQuantity() != null)
+		{
+			Quantity quantity = specimenVO.getInitialQuantity();
+			Double quantityValue = quantity.getValue();
+			if (specimenDO.getInitialQuantity() == null)
+			{
+				quantity = new Quantity();
+				specimenDO.setInitialQuantity(quantity);
+			}
+			else
+			{
+				quantity = specimenDO.getInitialQuantity();
+			}
+			quantity.setValue(quantityValue);
+			
+		}
+		specimenDO.setCollectionStatus(specimenVO.getCollectionStatus());
 	}
+	
 	
 	public Map<Long, Collection> getContainerHoldsCPs()
 	{
