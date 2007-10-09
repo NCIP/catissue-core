@@ -4,6 +4,7 @@ package valueobjects
 	import flash.utils.IDataOutput;
 	import flash.utils.IExternalizable;
 	import mx.controls.Alert;
+	import util.Constants;
 	[Bindable]
 	[RemoteClass(alias="edu.wustl.catissuecore.domain.Biohazard")]	
 
@@ -13,8 +14,9 @@ package valueobjects
 		
 		public var id:Number;
 		public var type:String = '-- Select --';
+		public var typeErrStr:String = null;
 		public var name:String = '-- Select --';
-
+		public var nameErrStr:String = null;
 		public function BiohazardBean(isSelected:Boolean=false, id:Number=0, type:String="-- Select --",name:String="-- Select --")
 		{
 			init(isSelected, id, type,name);
@@ -54,6 +56,34 @@ package valueobjects
        public function toString():String
        {
 			return this.type+"\n"+this.name;
+       }
+       
+       public function validate():Boolean
+       {
+       		var isValid:Boolean = true;
+	       	if(this.type == Constants.SELECT && this.name != Constants.SELECT)
+			{
+				this.typeErrStr = "Please select type";
+				isValid = false && isValid;
+			} 
+			else
+			{
+				this.typeErrStr = null;
+				isValid = true && isValid;
+			}
+			
+			if(this.name == Constants.SELECT && this.type != Constants.SELECT)
+			{
+				this.nameErrStr = "Please select value";
+				isValid = false && isValid;
+			} 
+			else
+			{
+				this.nameErrStr = null;
+				isValid = true && isValid;
+			}	
+			return isValid;
+       	 
        }
 	}
 }

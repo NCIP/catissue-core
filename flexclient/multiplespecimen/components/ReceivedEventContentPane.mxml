@@ -18,10 +18,17 @@
 		{
 			//Alert.show("HI 2 "+collEvent.toString());
 			Utility.bindData(receiverName, "selectedItem", receivedEvent, "userName"); 
+			Utility.bindData(receiverName, "errorString", receivedEvent, "userNameErrStr"); 
+			
 			Utility.bindData(receivedOn,"selectedDate",receivedEvent,"eventDate");
+			Utility.bindData(receivedOn,"errorString",receivedEvent,"eventDateErrStr");
+			
 			Utility.bindData(receivedHour,"selectedItem",receivedEvent,"eventHour");
 			Utility.bindData(receivedMinute,"selectedItem",receivedEvent,"eventMinute");
+			
 			Utility.bindData(recievedQuality, "selectedItem", receivedEvent, "receivedQuality"); 
+			Utility.bindData(recievedQuality, "errorString", receivedEvent, "receivedQualityErrStr"); 
+			
 			Utility.bindData(comment, "text", receivedEvent, "comment");
 			
 		}

@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" xmlns:components="components.*" paddingLeft="5" backgroundColor="#FFFFFF">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" xmlns:components="components.*" paddingLeft="5" backgroundColor="#FFFFFF" creationComplete="creationComp()">
 	<mx:Style source="../defaltTheme.css"/>
 <mx:Script>
 	<![CDATA[
+		import util.MSPParameter;
 		import valueobjects.SpecimenData;
 		import mx.collections.ArrayCollection;
 		import mx.controls.Alert;
+		public var mode:String;
+		private function creationComp():void
+		{
+			if(mode == MSPParameter.MODE_PARAM_VAL_EDIT)
+			{
+				nameBox.visible = false;
+				nameBox.height = 0;
+				storageBox.visible = false;
+				storageBox.height = 0;
+				collEventBox.visible = false;
+				collEventBox.height = 0;
+				recEventBox.visible = false;
+				recEventBox.height = 0;
+				commentBox.height = 15;
+			}
+		}
 		private function selectAllSp() : void
 		{
 			var spCollection:ArrayCollection = parentApplication.specimenColl;
@@ -22,13 +39,13 @@
 
 		<mx:HBox height="25" styleName="hBoxForSpLabel">
 			<mx:CheckBox id="selectAllChkBox" click="selectAllSp()" styleName="chkBoxStyle"/>
-			<mx:Label text="Select All"/>	
+			<mx:Label text="Select All Specimens"/>	
 		</mx:HBox>
 		<!--<mx:HBox height="25">
 			<mx:CheckBox id="selectParentChkBox"/>	
 			<mx:Label text="" fontWeight="bold"/>	
 		</mx:HBox>-->
-		<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:HBox height="25" styleName="hBoxForSpLabel" id="nameBox">
 			<mx:CheckBox id="nameChkBox" styleName="chkBoxStyle" />	
 			<mx:Label text="" fontWeight="bold" id="spOrScg"/>	
 		</mx:HBox>
@@ -79,21 +96,21 @@
 			<mx:CheckBox id="concentrationChkBox" styleName="chkBoxStyle"/>	
 			<mx:Label text="  Concentration" fontWeight="bold"/>	
 		</mx:HBox>
-		<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:HBox height="25" styleName="hBoxForSpLabel" id="storageBox">
 			<mx:CheckBox id="storageChkBox" styleName="storageStyle"/>	
 			<mx:Label text="  Storage" fontWeight="bold"/>	
 		</mx:HBox>
 
 	</mx:VBox>
-	<mx:HBox height="25" styleName="hBoxForSpLabel">
+	<mx:HBox height="25" styleName="hBoxForSpLabel" id="commentBox">
 		<mx:CheckBox id="commentChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Comment" fontWeight="bold"/>	
 	</mx:HBox>
-	<mx:HBox height="25" styleName="hBoxForSpLabel">
+	<mx:HBox height="25" styleName="hBoxForSpLabel" id="collEventBox">
 		<mx:CheckBox id="collEventChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Collected Event" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25" styleName="hBoxForSpLabel">
+	<mx:HBox height="25" styleName="hBoxForSpLabel" id="recEventBox">
 		<mx:CheckBox id="recEventChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Received Event" fontWeight="bold"/>
 	</mx:HBox>
@@ -105,7 +122,7 @@
 		<mx:CheckBox id="biohazardChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Biohazards" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25" styleName="hBoxForSpLabel">
+	<mx:HBox height="25" styleName="hBoxForSpLabel" visible="false" id="derivativeBox">
 		<mx:CheckBox id="derivativeChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Derivative" fontWeight="bold"/>
 	</mx:HBox>

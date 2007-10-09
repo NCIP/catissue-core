@@ -7,20 +7,26 @@
 		import util.MetadataModel;
 		import util.Utility;
 		import util.Constants;
+		import util.MSPParameter;
 		import valueobjects.SpecimenData;
 		import mx.binding.utils.BindingUtils;
 		import mx.controls.Alert;
 		import mx.collections.ArrayCollection;
 		import mx.managers.PopUpManager;
 		
-		[Bindable]
-		public var spData:SpecimenData;
-		[Bindable]
-		public var storage:ArrayCollection = new ArrayCollection();
-		
+		[Bindable]	public var spData:SpecimenData;
+		[Bindable]	public var storage:ArrayCollection = new ArrayCollection();
+		[Bindable]	public var mode:String;
+		[Bindable]	public var specimenNo:String;
 		private function preInit():void
 		{
+
+
 			spData = parentApplication.spRepeater.currentItem;
+
+			var index:int = parentApplication.specimenColl.getItemIndex(spData)+1;
+			specimenNo = "Specimen "+index;
+			
 			switchSpType(null);
 			
 			
@@ -28,9 +34,34 @@
 		
 		private function creationComp():void
 		{
+			if(spData.specimenClass == Constants.MOLECULAR)
+			{
+				spConcentration.enabled = true;
+			}
+			else
+			{
+				spConcentration.enabled = false;
+			}
+			
+			if(mode == MSPParameter.MODE_PARAM_VAL_EDIT)
+			{
+				spParentNameBox.visible = false;
+				spParentNameBox.height = 0.
+				storageContBox.visible= false;
+				storageContBox.height = 0;
+				
+				derivativeBtn.visible = false;
+				derivativeBtn.height = 0;
+				
+				specimenAccordion.removeChild(collEventBox);
+				specimenAccordion.removeChild(recEventBox);
+				spClass.enabled = false;
+				spType.enabled = false;
+			}
 			storage.addItem("Virtual");
 			storage.addItem("Manual");
 			storage.addItem("Auto");
+			
 			
 			//Check box
 			Utility.bindData(isCopy, "selected", spData, "isSelected");
@@ -43,34 +74,36 @@
 			
 			//Parent Specimen
 			Utility.bindData(spParentName, "text", spData, "parentName");
-			
+			Utility.bindData(spParentName, "errorString", spData,"parentNameErrStr");
 			//Label
 			Utility.bindData(spLabel, "text", spData,"specimenLabel");
-			
+			Utility.bindData(spLabel, "errorString", spData,"specimenLabelErrStr");
 			//Barcode
 			Utility.bindData(spBarCode, "text", spData, "specimenBarcode");
 		
 			//Specimen Class
 			Utility.bindData(spClass, "selectedItem", spData, "specimenClass");
+			Utility.bindData(spClass, "errorString", spData,"specimenClassErrStr");
 			
 			//Specimen Type
 			Utility.bindData(spType, "selectedItem", spData, "specimenType");
+			Utility.bindData(spType, "errorString", spData,"specimenTypeErrStr");
 
 			//Tissue Site
 			Utility.bindData(spTissueSite, "selectedItem", spData, "tissueSite");
-			
+			Utility.bindData(spTissueSite, "errorString", spData,"tissueSiteErrStr");
 			//Bind Tissue Side
 			Utility.bindData(spTissueSide,"selectedItem",spData,"tissueSide");
-			
+			Utility.bindData(spTissueSide, "errorString", spData,"tissueSideErrStr");
 			//Pathological Status
 			Utility.bindData(spPathologicalStatus,"selectedItem",spData,"pathologicalStatus");
-
+			Utility.bindData(spPathologicalStatus, "errorString", spData,"pathologicalStatusErrStr");
 			//Bind Creation date
 			Utility.bindData(spCreatedOn,"selectedDate",spData,"creationDate");
 			
 			//Bind Quantity
 			Utility.bindData(spQuantity,"text",spData,"quantity");
-			
+			Utility.bindData(spQuantity, "errorString", spData,"quantityErrStr");
 			//Bind Concentration
 			Utility.bindData(spConcentration,"text",spData,"concentration");
 			//bindData(spQuantity,"restrict",spConcentration,"text",false);
@@ -89,7 +122,7 @@
 			spData.calcUnit();
 			if(event != null)
 			{
-				if(spClass.selectedItem == Constants.MOLECULAR)
+				if(spData.specimenClass == Constants.MOLECULAR)
 				{
 					spConcentration.enabled = true;
 				}
@@ -187,9 +220,12 @@
    		
    		public function validateSpecimen(index:int):Boolean
    		{
+   			Alert.show("in specimnen Pane validation:");
    			var isValid:Boolean = true;
    			var specimenNumber :String = " for specimen "+index;
    			var parentNameValMesg:String;
+   			if(parentApplication.isSpSCGName != null)
+   			{
    			if(parentApplication.isSpSCGName.selected)
    			{
 				parentNameValMesg = "Please enter specimen collection group name";
@@ -199,8 +235,10 @@
    			{
    				parentNameValMesg = "Please enter parent specimen label";
    			}
+ 			   			isValid = validateRequiredField(spParentName,"text",parentNameValMesg) && isValid;
+   			}
    			
-   			isValid = validateRequiredField(spParentName,"text",parentNameValMesg) && isValid;
+
    			isValid= validateRequiredField(spLabel,"text","Please enter label") && isValid;
    			//isValid= validateRequiredField(spBarCode,"text","Please enter barcode") && isValid;
 
@@ -212,11 +250,11 @@
 			
    			isValid =  validateNumberField(spQuantity,"text","Please enter Quantity",true,0) && isValid;
    			isValid =  validateNumberField(spConcentration,"text","Please enter concentration",true,0) && isValid;
-			if(colledtedEventPane != null)
+			if(mode == MSPParameter.MODE_PARAM_VAL_ADD && colledtedEventPane != null)
    			{
 	   			isValid = colledtedEventPane.collectedEventContentPane.validateCollEvent(index) && isValid;
    			}
-   			if(receivedEventPane != null)
+   			if(mode == MSPParameter.MODE_PARAM_VAL_ADD && receivedEventPane != null)
    			{
 				isValid= receivedEventPane.receivedEventContentPane.validateRecvEvent(index) && isValid;
    			}
@@ -253,8 +291,9 @@
 	]]>
 </mx:Script>
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">
-		<components:MyCanvas>
+		<components:MyCanvas >
 			<mx:CheckBox id="isCopy" click="onClick(event)"/>
+			<mx:Label text="{specimenNo}" x="25"/>
 		</components:MyCanvas>
 	
 		<!--<components:MyCanvas>
@@ -265,7 +304,7 @@
 			</mx:HBox>
 		</components:MyCanvas>-->
 
-		<components:MyCanvas>
+		<components:MyCanvas id="spParentNameBox">
 			<mx:TextInput id="spParentName"/>
 		</components:MyCanvas>
 
@@ -316,11 +355,11 @@
 	
 		<components:MyCanvas>
 			<mx:HBox>
-				<mx:TextInput id="spConcentration" width="50" restrict="[0-9]." enabled="false"/>
+				<mx:TextInput id="spConcentration" width="50" restrict="[0-9]."/>
 				<mx:Label htmlText="{Constants.UNIT_CONCENTRATION}"/>
 			</mx:HBox>
 		</components:MyCanvas>
-		<components:MyCanvas>
+		<components:MyCanvas id="storageContBox">
 			<adobe:AutoComplete id="spStorage" dataProvider="{storage}" lookAhead="true" change="chkStorage()"/>
 		</components:MyCanvas>
 
@@ -330,10 +369,10 @@
 		<mx:VBox label="Comment">
 			<mx:TextArea id="spComment"/>
 		</mx:VBox>
-		<mx:VBox label="Collected Event">
+		<mx:VBox label="Collected Event" id="collEventBox">
 			<components:CollectedEventPane id="colledtedEventPane" creationComplete="bindCollectedEvents()" />
 		</mx:VBox >
-		<mx:VBox label="Received Event">
+		<mx:VBox label="Received Event" id="recEventBox">
 			<components:ReceivedEventPane id="receivedEventPane" creationComplete="bindReceivedEvents()" />
 		</mx:VBox >
 	
@@ -345,7 +384,7 @@
 			<components:BiohazardPane id="biohazardPane" creationComplete="bindBiohazards()"/>
 		</mx:VBox>
 	</mx:Accordion>
-	<mx:Button label="Derivative" width="{specimenAccordion.width}" click="createPopUp()" height="25"/>
+	<mx:Button id="derivativeBtn" label="Derivative" width="{specimenAccordion.width}" click="createPopUp()" height="25"/>
 
 
 </mx:VBox>

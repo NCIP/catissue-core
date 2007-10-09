@@ -29,21 +29,24 @@
 
 			//Label
 			Utility.bindData(spLabel, "text", derivedData,"specimenLabel");
-			
+			Utility.bindData(spLabel, "errorString", derivedData,"specimenLabelErrStr");
 			//Barcode
 			Utility.bindData(spBarCode, "text", derivedData, "specimenBarcode");
 		
 			//Specimen Class
 			Utility.bindData(spClass, "selectedItem", derivedData, "specimenClass");
+			Utility.bindData(spClass, "errorString", derivedData,"specimenClassErrStr");
 			
 			//Specimen Type
 			Utility.bindData(spType, "selectedItem", derivedData, "specimenType");
+			Utility.bindData(spType, "errorString", derivedData,"specimenTypeErrStr");
 
 			//Bind Creation date
 			Utility.bindData(spCreatedOn,"selectedDate",derivedData,"creationDate");
 			
 			//Bind Quantity
 			Utility.bindData(spQuantity,"text",derivedData,"quantity");
+			Utility.bindData(spQuantity, "errorString", derivedData,"quantityErrStr");
 			
 			//Bind Concentration
 			Utility.bindData(spConcentration,"text",derivedData,"concentration");
@@ -53,7 +56,7 @@
 			Utility.bindData(spComment, "text", derivedData, "comment");
 
 		}
-			private function bindExData():void
+		private function bindExData():void
    		{
    			Utility.bindData(exIDPane, "exIdColl", derivedData, "exIdColl");
    		}

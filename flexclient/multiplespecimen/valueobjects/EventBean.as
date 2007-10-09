@@ -7,6 +7,7 @@ package valueobjects
 	import mx.controls.Alert;
 	import mx.validators.StringValidator;
 	import mx.events.CalendarLayoutChangeEvent;
+	import util.Constants;
 	
 	[Bindable]
 	[RemoteClass(alias="edu.wustl.catissuecore.flex.EventParamtersBean")]
@@ -14,15 +15,19 @@ package valueobjects
 	{
 		public var id:Number=0;
 		public var userName:String="Hello";
+		public var userNameErrStr:String=null;
 		public var eventDate:Date = new Date();
-
+		public var eventDateErrStr:String = null;
 		public var eventHour:String;
 		public var eventMinute:String;
+
 		
 		public var collectionProcedure:String ;
+		public var collectionProcedureErrStr:String = null;
 		public var container:String ="-- Select --";
-		
+		public var containerErrStr:String = null;
 		public var receivedQuality:String = "-- Select --";
+		public var receivedQualityErrStr:String = null;
 		public var comment:String;
 
 		
@@ -71,6 +76,54 @@ package valueobjects
 			receivedQuality = input.readUTF();
 			comment=input.readUTF();
        }
+       
+       public function validate():Boolean
+       {
+       		var isValid:Boolean = true;
+       		if(this.userName == Constants.SELECT)
+			{
+				this.userNameErrStr = "Please select user";
+				isValid = false && isValid;
+			} 
+			else
+			{
+				this.userNameErrStr = null;
+				isValid = true && isValid;
+			}
+			if(this.collectionProcedure == Constants.SELECT)
+			{
+				this.collectionProcedureErrStr = "Please select collection procedure";
+				isValid = false && isValid;
+			} 
+			else
+			{
+				this.collectionProcedureErrStr = null;
+				isValid = true && isValid;
+			}
+			
+			if(this.container == Constants.SELECT)
+			{
+				this.containerErrStr = "Please select container";
+				isValid = false && isValid;
+			} 
+			else
+			{
+				this.containerErrStr = null;
+				isValid = true && isValid;
+			}
+			if(this.receivedQuality == Constants.SELECT)
+			{
+				this.receivedQualityErrStr = "Please select quality";
+				isValid = false && isValid;
+			} 
+			else
+			{
+				this.receivedQualityErrStr = null;
+				isValid = true && isValid;
+			}
+			return isValid;
+		}
+
        
        public function toString():String
        {

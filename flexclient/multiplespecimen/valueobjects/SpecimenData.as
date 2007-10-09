@@ -8,7 +8,8 @@ package valueobjects
 	import mx.controls.Alert;
 	
 	import util.Constants;
-	
+	import util.SpecimenValidator;
+	import util.MSPParameter;
 	[Bindable]
 	[RemoteClass(alias="edu.wustl.catissuecore.flex.SpecimenBean")]
 	public class SpecimenData implements IExternalizable
@@ -18,22 +19,33 @@ package valueobjects
 		public var parentType:String;
 		
 		public var spID:Number = -3;
+		public var mode:String = '';
 //		public var scgName:String = '';
 	//	public var parentSpecimenName:String = '';
 	
-		public var parentName:String = '';
+		public var parentName:String =null;
+		public var parentNameErrStr:String = null;
+		
 		public var specimenLabel:String = '';
+		public var specimenLabelErrStr:String = null;
+		
 		public var specimenBarcode:String = '';
 		
 		public var specimenClass:String = '';
+		public var specimenClassErrStr:String = null;
 		public var specimenType:String = '';
+		public var specimenTypeErrStr:String = null;
 		
 		public var tissueSite:String = '';
+		public var tissueSiteErrStr:String = null;
 		public var tissueSide:String = '';
+		public var tissueSideErrStr:String = null;
 		public var pathologicalStatus:String = '';
+		public var pathologicalStatusErrStr:String = null;
 		
 		public var creationDate:Date;
 		public var quantity:Number;
+		public var quantityErrStr:String= null;
 		public var concentration:Number;
 		public var storage:String;
 		public var comment:String;
@@ -366,6 +378,131 @@ package valueobjects
 			spData.specimenLabel = this.specimenLabel;
 			spData.specimenBarcode = this.specimenBarcode;
 			return spData;
+		}
+		
+		public function validate():Boolean
+		{
+			var specimenValidator:SpecimenValidator  = new SpecimenValidator();
+			var isValid:Boolean = true;
+			if(mode == MSPParameter.MODE_PARAM_VAL_ADD && this.parentName == "")
+			{
+				if(this.parentType == "New_Specimen")
+					parentNameErrStr = "Please enter Specimen Collection Group Name";
+				else
+					parentNameErrStr = "Please enter parent specimen label";	
+						
+				isValid = false && isValid;
+			}
+			else
+			{
+				this.parentNameErrStr = null;
+				isValid = true && isValid;	
+			}
+			
+			if(this.specimenLabel == "")
+			{
+				this.specimenLabelErrStr = "Please enter Label";
+				isValid = false && isValid;
+			} 
+			else
+			{
+				this.specimenLabelErrStr = null;
+				isValid = true && isValid;
+			}
+					
+			if(this.specimenClass == "" || this.specimenClass == Constants.SELECT)
+			{
+				this.specimenClassErrStr = "Please select specimen class";
+				isValid = false && isValid;
+			}	
+			else
+			{
+				this.specimenClassErrStr = null;
+				isValid = true && isValid;
+				 	
+			}	
+			if(this.specimenType == "" || this.specimenType == Constants.SELECT)
+			{
+				this.specimenTypeErrStr = "Please select specimen type";
+				isValid = false && isValid;
+			}	
+			else
+			{
+				this.specimenTypeErrStr = null;
+				isValid = true && isValid;
+				 	
+			}
+			if(this.tissueSite == "" || this.tissueSite == Constants.SELECT)
+			{
+				this.tissueSiteErrStr = "Please select tissue site";
+				isValid = false && isValid;
+			}	
+			else
+			{
+				this.tissueSiteErrStr = null;
+				isValid = true && isValid;
+				 	
+			}
+			if(this.tissueSide == "" || this.tissueSide == Constants.SELECT)
+			{
+				this.tissueSideErrStr = "Please select tissue side";
+				isValid = false && isValid;
+			}	
+			else
+			{
+				this.tissueSideErrStr = null;
+				isValid = true && isValid;
+				 	
+			}
+			if(this.pathologicalStatus == "" || this.pathologicalStatus == Constants.SELECT)
+			{
+				this.pathologicalStatusErrStr = "Please select pathological status";
+				isValid = false && isValid;
+			}	
+			else
+			{
+				this.pathologicalStatusErrStr = null;
+				isValid = true && isValid;
+				 	
+			}
+			if(this.quantity.toString() == "")
+			{
+				this.quantityErrStr = "Please enter quantity";
+				isValid = false && isValid;
+			}	
+			else
+			{
+				this.quantityErrStr = null;
+				isValid = true && isValid;
+				 	
+			}
+			var i:int=0;
+			if(this.exIdColl != null && this.exIdColl.length !=0)
+			{
+				for(i=0;i<this.exIdColl.length;i++)
+				{
+					var exIdBean:ExternalIdentifierBean = exIdColl.getItemAt(i) as ExternalIdentifierBean;
+					isValid = exIdBean.validate() && isValid;
+				}
+			}
+			
+			if(this.biohazardColl != null && this.biohazardColl.length !=0)
+			{
+				for(i=0;i<this.biohazardColl.length;i++)
+				{
+					var biohazardBean:BiohazardBean = biohazardColl.getItemAt(i) as BiohazardBean;
+					isValid = biohazardBean.validate() && isValid;
+				}
+			}
+			if(this.collectionEvent != null)
+			{
+				isValid = this.collectionEvent.validate() && isValid;
+			}
+			if(this.receivedEvent != null)
+			{
+				isValid = this.receivedEvent.validate() && isValid;
+			}
+			return isValid;
 		}
 	}
 }

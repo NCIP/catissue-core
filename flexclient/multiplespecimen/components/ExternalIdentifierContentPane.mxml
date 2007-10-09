@@ -28,7 +28,10 @@
 			{
 				bindData(isSelected, "selected", extIdBean, "isSelected");
 				bindData(idName, "text", extIdBean, "identifierName");
+				bindData(idName, "errorString", extIdBean,"identifierNameErrStr");
+					
 				bindData(idValue, "text", extIdBean, "identifierValue");
+				bindData(idValue, "errorString", extIdBean,"identifierValueErrStr");
 			}
 			
 			public function validateExId(index:int) : Boolean

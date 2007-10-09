@@ -23,7 +23,9 @@
 				
 				Utility.bindData(isSelected, "selected", biohazardBean, "isSelected");
 				Utility.bindData(type, "selectedItem", biohazardBean, "type");
+				Utility.bindData(type, "errorString", biohazardBean, "typeErrStr");
 				Utility.bindData(biohazardName, "selectedItem", biohazardBean, "name");
+				Utility.bindData(biohazardName, "errorString", biohazardBean, "nameErrStr");
 				biohazardName.dataProvider=MetadataModel.getInstance().getBiohazardNameList(type.selectedIndex);
 				biohazardName.selectedItem=biohazardNameSelected;
 				

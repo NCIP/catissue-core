@@ -99,11 +99,13 @@
 				//TODO
 				//Alert.show("Init of multipl sepcimen");
 				specimenColl = metadataManager.spDataList;
+				
 				if(specimenColl==null)
 				{
 					specimenColl = new ArrayCollection();
 					addMoreSpecimen(null);
 				}
+				
 			}	
 			
 			model.collection = specimenColl;
@@ -119,6 +121,7 @@
 		{
 
 			var spData:SpecimenData = new SpecimenData("","","Left");	
+			spData.mode= mspParameter.mode;
 			spData.collectionEvent.userName = specimenDataBean.collectionEvent.userName;
 			
 			spData.receivedEvent.userName = specimenDataBean.receivedEvent.userName;
@@ -128,10 +131,6 @@
 			{
 				spData.parentType = Constants.NEW_SPECIMEN;
 				spData.parentName = mspParameter.parentName;
-
-
-				
-
 			}
 			else
 			{
@@ -143,6 +142,12 @@
 		
 		private function creationComp():void
 		{
+			if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_EDIT)
+			{
+				addMoreBtn.visible = false;
+				deleteBtn.visible = false;
+				showParentSelection = false;
+			}
 			setPagination();	
 			selectionBox.visible = showParentSelection;
 			spParent.selectedValue = "New Specimen";
@@ -360,12 +365,24 @@
 
 			for(var i:int=0;i<specimenColl.length;i++)
 			{	
-				validateVal = A[i].validateSpecimen(i+1) && validateVal;
+			//	validateVal = A[i].validateSpecimen(i+1) && validateVal;
+				var specimenData:SpecimenData = specimenColl.getItemAt(i) as SpecimenData;
+				specimenData.mode = mspParameter.mode;
+				validateVal = specimenData.validate() && validateVal;
 			}
+			
 		
 			if(validateVal)
 			{
-				myRemoteObject.writeSpecimen(specimenColl);
+				if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_ADD)
+				{
+					myRemoteObject.writeSpecimen(specimenColl);
+				}
+				else
+				{
+					myRemoteObject.editSpecimen(specimenColl);
+				}
+				
 			}
 			else
 			{
@@ -390,6 +407,13 @@
    			//printSpDetails(obj);
 
    		}
+   		private function handleEditSpecimen(event:ResultEvent):void
+   		{
+   			var obj:Object = event.result;
+   			var message:String = obj.toString();
+   			messageText.text = message;
+   		}
+
    		private function handleInitMultipleSp(event:ResultEvent) : void
    		{
    			//Alert.show("in init multiple SPecimen");
@@ -409,28 +433,6 @@
    				return 0xF0F8FF;
    			}
    		}
-   		
-   		private function getNextPage(event:Event):void
-   		{
-   			startingIndex = startingIndex + PERPAGE;
-   			
-   		 }
-
-
-		private function getPreviousPage(event:Event):void
-		{
-			if(startingIndex-PERPAGE >=0)
-			{
-			startingIndex = startingIndex - PERPAGE;
-				
-			}
-			
-		}
-		
-		public function selectAllSp(): void
-		{
-			Alert("In select all sp");
-		}
    		
    		private function setParentLabel(name:String):void
    		{
@@ -454,12 +456,18 @@
 		{
 			paginateData.paginate(model.collection, this.hbContainer, model.pageLimit);
 		}
+		public function getMode() : String
+		{
+			return mspParameter.mode;	
+			
+		}
 	]]>
 </mx:Script>
 
 	<mx:RemoteObject id="myRemoteObject" destination="cdeService" showBusyCursor="true" >
 		<mx:method name="writeSpecimen" result="handleWriteSpecimen(event)"/>
 		<mx:method name="readSpecimen" result="handleReadSpecimen(event)"/>
+		<mx:method name="editSpecimen" result="handleEditSpecimen(event)"/>
 		<mx:method name="initFlexInterfaceForMultipleSp" result="handleInitMultipleSp(event)"/>
 
 	</mx:RemoteObject>
@@ -474,20 +482,18 @@
 		<mx:Button label="Copy" click="copySPData(event)" toolTip="Copy" borderColor="#AAAAFF"/>
 		<mx:Button label="Paste" click="pasteSPData(event)" toolTip="Paste" borderColor="#AAAAFF"/>
 		<mx:Spacer width="40"/>
-		<mx:Button label="Add More" click="addMoreSpecimen(event)" toolTip="Add More" borderColor="#AAAAFF"/>
-		<mx:Button label="Delete" click="deleteSpecimen(event)" toolTip="Delete" borderColor="#AAAAFF"/>	
+		<mx:Button id="addMoreBtn" label="Add More" click="addMoreSpecimen(event)" toolTip="Add More" borderColor="#AAAAFF"/>
+		<mx:Button id="deleteBtn" label="Delete" click="deleteSpecimen(event)" toolTip="Delete" borderColor="#AAAAFF"/>	
 		<mx:Spacer width="40"/>
 		<mx:Button label="Submit" click="submitSpecimen(event)" id="submitButton" toolTip="Submit" borderColor="#AAAAFF"/>
-		<mx:Button label="Previous" click="getPreviousPage(event)" id="btnPrevious" toolTip="Previous" borderColor="#AAAAFF" visible="false"/>
-		<mx:Button label="Next" click="getNextPage(event)" id="btnNext" toolTip="Next" borderColor="#AAAAFF" visible="false"/>
 	</mx:HBox>
 	<mx:HBox id="hbContainer"  width="100%" />
 	<mx:HBox>
 	
-		<components:SpecimenLabelPane backgroundColor="#F0F8FF" id="spLabelPane"/>
+		<components:SpecimenLabelPane backgroundColor="#F0F8FF" id="spLabelPane" mode="{getMode()}"/>
 
 		<mx:Repeater id="spRepeater" dataProvider="{model.filteredCollection}">	
-			<components:SpecimenPane id="A" backgroundColor="{getAlternateColor(spRepeater.currentIndex)}"/>
+			<components:SpecimenPane id="A" backgroundColor="{getAlternateColor(spRepeater.currentIndex)}" mode="{getMode()}"/>
 		</mx:Repeater>
 	</mx:HBox>
 	

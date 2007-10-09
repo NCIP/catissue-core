@@ -20,11 +20,20 @@
 	
 			//Alert.show("HI 2 "+collEvent.toString());
 			Utility.bindData(collectorName, "selectedItem", collEvent, "userName"); 
+			Utility.bindData(collectorName, "errorString", collEvent, "userNameErrStr"); 
+
 			Utility.bindData(collectedOn,"selectedDate",collEvent,"eventDate");
+			Utility.bindData(collectedOn,"errorString",collEvent,"eventDateErrStr");
+			
 			Utility.bindData(collectedHour,"selectedItem",collEvent,"eventHour");
 			Utility.bindData(collectedMinute,"selectedItem",collEvent,"eventMinute");
+			
 			Utility.bindData(procedureName, "selectedItem", collEvent, "collectionProcedure"); 
+			Utility.bindData(procedureName, "errorString", collEvent, "collectionProcedureErrStr"); 
+			
 			Utility.bindData(containerName, "selectedItem", collEvent, "container"); 
+			Utility.bindData(containerName, "errorString", collEvent, "containerErrStr"); 
+			
 			Utility.bindData(comment, "text", collEvent, "comment");
 			
 		}

@@ -14,8 +14,9 @@ package valueobjects
 		
 		public var id:Number;
 		public var identifierName:String = '';
-		public var identifierValue:String = '';
-
+		public var identifierNameErrStr:String = '';
+		public var identifierValue:String = null;
+		public var identifierValueErrStr:String = null;
 		public function ExternalIdentifierBean(isSelected:Boolean=false, id:Number=0, identifierName:String="",identifierValue:String="")
 		{
 			init(isSelected, id, identifierName,identifierValue);
@@ -50,6 +51,34 @@ package valueobjects
 			id = input.readInt();
 			identifierName = input.readUTF();
 			identifierValue = input.readUTF();
+       }
+       
+       public function validate():Boolean
+       {
+       		var isValid:Boolean = true;
+	       	if(this.identifierName == "" && this.identifierValue != "")
+			{
+				this.identifierNameErrStr = "Please enter name";
+				isValid = false && isValid;
+			} 
+			else
+			{
+				this.identifierNameErrStr = null;
+				isValid = true && isValid;
+			}
+			
+			if(this.identifierValue == "" && this.identifierName != "")
+			{
+				this.identifierValueErrStr = "Please enter value";
+				isValid = false && isValid;
+			} 
+			else
+			{
+				this.identifierValueErrStr = null;
+				isValid = true && isValid;
+			}
+			return isValid;
+       	 
        }
 	}
 }

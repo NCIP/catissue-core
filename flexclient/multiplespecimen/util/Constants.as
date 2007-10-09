@@ -64,6 +64,7 @@ package util
 		public static const NEW_SPECIMEN:String = "New_Specimen";
 		public static const DERIVED_SPECIMEN:String = "Derived_Specimen";
 		
+		public static const SELECT:String = "-- Select --";										
 														  								        
 	}
 }
