@@ -56,7 +56,7 @@
 		public var outAssociations:ArrayCollection = new ArrayCollection();		
 		public var displayoutAssociations:ArrayCollection = new ArrayCollection();		
 		public var inAssociations:ArrayCollection = new ArrayCollection();
-		public var orderOfAss:HashMap;
+		public var orderOfAss:HashMap=new HashMap();
 		public static var orderAssociation:int=0;
 		
 		// The Array data provider
@@ -199,8 +199,6 @@
 		
 		public function init():void
 		{ 
-		
-			orderOfAss = new HashMap();
 			this.parentApplication.rpcService.addEventListener("fault", faultHandler);
 		}
 		
