@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.cabig/3.0/edu.wustl.catissuecore.domain" targetNamespace="gme://caCORE.cabig/3.0/edu.wustl.catissuecore.domain" elementFormDefault="qualified">
+  <xs:element name="Address" type="Address" />
+  <xs:complexType name="Address">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence />
+        <xs:attribute name="city" type="xs:string" />
+        <xs:attribute name="country" type="xs:string" />
+        <xs:attribute name="faxNumber" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="phoneNumber" type="xs:string" />
+        <xs:attribute name="state" type="xs:string" />
+        <xs:attribute name="street" type="xs:string" />
+        <xs:attribute name="zipCode" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CollectionEventParameters" type="CollectionEventParameters" />
+  <xs:complexType name="CollectionEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+        <xs:attribute name="collectionProcedure" type="xs:string" />
+        <xs:attribute name="container" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SpecimenProtocol" type="SpecimenProtocol" />
+  <xs:complexType name="SpecimenProtocol">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="principalInvestigator" type="User" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
+        <xs:attribute name="descriptionURL" type="xs:string" />
+        <xs:attribute name="endDate" type="xs:dateTime" />
+        <xs:attribute name="enrollment" type="xs:integer" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="irbIdentifier" type="xs:string" />
+        <xs:attribute name="shortTitle" type="xs:string" />
+        <xs:attribute name="startDate" type="xs:dateTime" />
+        <xs:attribute name="title" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="FluidSpecimenReviewEventParameters" type="FluidSpecimenReviewEventParameters" />
+  <xs:complexType name="FluidSpecimenReviewEventParameters">
+    <xs:complexContent>
+      <xs:extension base="ReviewEventParameters">
+        <xs:sequence />
+        <xs:attribute name="cellCount" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ProcedureEventParameters" type="ProcedureEventParameters" />
+  <xs:complexType name="ProcedureEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="url" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CellSpecimenReviewParameters" type="CellSpecimenReviewParameters" />
+  <xs:complexType name="CellSpecimenReviewParameters">
+    <xs:complexContent>
+      <xs:extension base="ReviewEventParameters">
+        <xs:sequence />
+        <xs:attribute name="neoplasticCellularityPercentage" type="xs:double" />
+        <xs:attribute name="viableCellPercentage" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="QuantityInMilliliter" type="QuantityInMilliliter" />
+  <xs:complexType name="QuantityInMilliliter">
+    <xs:complexContent>
+      <xs:extension base="Quantity">
+        <xs:sequence />
+        <xs:attribute name="value" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Institution" type="Institution" />
+  <xs:complexType name="Institution">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="name" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="StorageType" type="StorageType" />
+  <xs:complexType name="StorageType">
+    <xs:complexContent>
+      <xs:extension base="ContainerType">
+        <xs:sequence>
+          <xs:element name="holdStorageTypeCollection" type="StorageType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="defaultTempratureInCentigrade" type="xs:double" />
+        <xs:attribute name="holdsSpecimenClassCollection" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ReviewEventParameters" type="ReviewEventParameters" />
+  <xs:complexType name="ReviewEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="MolecularSpecimen" type="MolecularSpecimen" />
+  <xs:complexType name="MolecularSpecimen">
+    <xs:complexContent>
+      <xs:extension base="Specimen">
+        <xs:sequence />
+        <xs:attribute name="concentrationInMicrogramPerMicroliter" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExternalIdentifier" type="ExternalIdentifier" />
+  <xs:complexType name="ExternalIdentifier">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="specimen" type="Specimen" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="value" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SpecimenCollectionGroup" type="SpecimenCollectionGroup" />
+  <xs:complexType name="SpecimenCollectionGroup">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="specimenCollection" type="Specimen" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="clinicalReport" type="ClinicalReport" minOccurs="0" maxOccurs="1" />
+          <xs:element name="collectionProtocolEvent" type="CollectionProtocolEvent" minOccurs="0" maxOccurs="1" />
+          <xs:element name="site" type="Site" minOccurs="0" maxOccurs="1" />
+          <xs:element name="collectionProtocolRegistration" type="CollectionProtocolRegistration" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
+        <xs:attribute name="clinicalDiagnosis" type="xs:string" />
+        <xs:attribute name="clinicalStatus" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="name" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AuditEventDetails" type="AuditEventDetails" />
+  <xs:complexType name="AuditEventDetails">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="auditEventLog" type="AuditEventLog" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="currentValue" type="xs:string" />
+        <xs:attribute name="elementName" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="previousValue" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="QuantityInGram" type="QuantityInGram" />
+  <xs:complexType name="QuantityInGram">
+    <xs:complexContent>
+      <xs:extension base="Quantity">
+        <xs:sequence />
+        <xs:attribute name="value" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Capacity" type="Capacity" />
+  <xs:complexType name="Capacity">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="oneDimensionCapacity" type="xs:integer" />
+        <xs:attribute name="twoDimensionCapacity" type="xs:integer" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CancerResearchGroup" type="CancerResearchGroup" />
+  <xs:complexType name="CancerResearchGroup">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="name" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SpunEventParameters" type="SpunEventParameters" />
+  <xs:complexType name="SpunEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+        <xs:attribute name="durationInMinutes" type="xs:integer" />
+        <xs:attribute name="gForce" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ParticipantMedicalIdentifier" type="ParticipantMedicalIdentifier" />
+  <xs:complexType name="ParticipantMedicalIdentifier">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="site" type="Site" minOccurs="0" maxOccurs="1" />
+          <xs:element name="participant" type="Participant" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="medicalRecordNumber" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Quantity" type="Quantity" />
+  <xs:complexType name="Quantity">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence />
+        <xs:attribute name="id" type="xs:long" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="QuantityInCount" type="QuantityInCount" />
+  <xs:complexType name="QuantityInCount">
+    <xs:complexContent>
+      <xs:extension base="Quantity">
+        <xs:sequence />
+        <xs:attribute name="value" type="xs:integer" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TissueSpecimenReviewEventParameters" type="TissueSpecimenReviewEventParameters" />
+  <xs:complexType name="TissueSpecimenReviewEventParameters">
+    <xs:complexContent>
+      <xs:extension base="ReviewEventParameters">
+        <xs:sequence />
+        <xs:attribute name="histologicalQuality" type="xs:string" />
+        <xs:attribute name="lymphocyticPercentage" type="xs:double" />
+        <xs:attribute name="necrosisPercentage" type="xs:double" />
+        <xs:attribute name="neoplasticCellularityPercentage" type="xs:double" />
+        <xs:attribute name="totalCellularityPercentage" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Site" type="Site" />
+  <xs:complexType name="Site">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="address" type="Address" minOccurs="0" maxOccurs="1" />
+          <xs:element name="coordinator" type="User" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
+        <xs:attribute name="emailAddress" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="type" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SpecimenArrayType" type="SpecimenArrayType" />
+  <xs:complexType name="SpecimenArrayType">
+    <xs:complexContent>
+      <xs:extension base="ContainerType">
+        <xs:sequence />
+        <xs:attribute name="specimenClass" type="xs:string" />
+        <xs:attribute name="specimenTypeCollection" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TissueSpecimen" type="TissueSpecimen" />
+  <xs:complexType name="TissueSpecimen">
+    <xs:complexContent>
+      <xs:extension base="Specimen">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="MolecularSpecimenReviewParameters" type="MolecularSpecimenReviewParameters" />
+  <xs:complexType name="MolecularSpecimenReviewParameters">
+    <xs:complexContent>
+      <xs:extension base="ReviewEventParameters">
+        <xs:sequence />
+        <xs:attribute name="absorbanceAt260" type="xs:double" />
+        <xs:attribute name="absorbanceAt280" type="xs:double" />
+        <xs:attribute name="gelImageURL" type="xs:string" />
+        <xs:attribute name="gelNumber" type="xs:integer" />
+        <xs:attribute name="laneNumber" type="xs:string" />
+        <xs:attribute name="qualityIndex" type="xs:string" />
+        <xs:attribute name="ratio28STo18S" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Biohazard" type="Biohazard" />
+  <xs:complexType name="Biohazard">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="specimenCollection" type="Specimen" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="comments" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="type" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CheckInCheckOutEventParameter" type="CheckInCheckOutEventParameter" />
+  <xs:complexType name="CheckInCheckOutEventParameter">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+        <xs:attribute name="storageStatus" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DistributionProtocol" type="DistributionProtocol" />
+  <xs:complexType name="DistributionProtocol">
+    <xs:complexContent>
+      <xs:extension base="SpecimenProtocol">
+        <xs:sequence>
+          <xs:element name="collectionProtocolCollection" type="CollectionProtocol" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="specimenRequirementCollection" type="SpecimenRequirement" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SpecimenEventParameters" type="SpecimenEventParameters" />
+  <xs:complexType name="SpecimenEventParameters">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="user" type="User" minOccurs="0" maxOccurs="1" />
+          <xs:element name="specimen" type="Specimen" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="comments" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="timestamp" type="xs:dateTime" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CollectionProtocolRegistration" type="CollectionProtocolRegistration" />
+  <xs:complexType name="CollectionProtocolRegistration">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="SpecimenCollectionGroupCollection" type="SpecimenCollectionGroup" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="participant" type="Participant" minOccurs="0" maxOccurs="1" />
+          <xs:element name="collectionProtocol" type="CollectionProtocol" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="protocolParticipantIdentifier" type="xs:string" />
+        <xs:attribute name="registrationDate" type="xs:dateTime" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SpecimenArrayContent" type="SpecimenArrayContent" />
+  <xs:complexType name="SpecimenArrayContent">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="specimenArray" type="SpecimenArray" minOccurs="0" maxOccurs="1" />
+          <xs:element name="quantity" type="Quantity" minOccurs="0" maxOccurs="1" />
+          <xs:element name="specimen" type="Specimen" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="concentrationInMicrogramPerMicroliter" type="xs:double" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="positionDimensionOne" type="xs:integer" />
+        <xs:attribute name="positionDimensionTwo" type="xs:integer" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DistributedItem" type="DistributedItem" />
+  <xs:complexType name="DistributedItem">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="distribution" type="Distribution" minOccurs="0" maxOccurs="1" />
+          <xs:element name="quantity" type="Quantity" minOccurs="0" maxOccurs="1" />
+          <xs:element name="specimen" type="Specimen" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:long" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CollectionProtocolEvent" type="CollectionProtocolEvent" />
+  <xs:complexType name="CollectionProtocolEvent">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="collectionProtocol" type="CollectionProtocol" minOccurs="0" maxOccurs="1" />
+          <xs:element name="specimenRequirementCollection" type="SpecimenRequirement" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="clinicalStatus" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="studyCalendarEventPoint" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Specimen" type="Specimen" />
+  <xs:complexType name="Specimen">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="initialQuantity" type="Quantity" minOccurs="0" maxOccurs="1" />
+          <xs:element name="specimenEventCollection" type="SpecimenEventParameters" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="biohazardCollection" type="Biohazard" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="specimenCollectionGroup" type="SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
+          <xs:element name="childrenSpecimen" type="Specimen" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="availableQuantity" type="Quantity" minOccurs="0" maxOccurs="1" />
+          <xs:element name="externalIdentifierCollection" type="ExternalIdentifier" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="specimenCharacteristics" type="SpecimenCharacteristics" minOccurs="0" maxOccurs="1" />
+          <xs:element name="parentSpecimen" type="Specimen" minOccurs="0" maxOccurs="1" />
+          <xs:element name="storageContainer" type="StorageContainer" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
+        <xs:attribute name="available" type="xs:boolean" />
+        <xs:attribute name="barcode" type="xs:string" />
+        <xs:attribute name="comment" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="label" type="xs:string" />
+        <xs:attribute name="lineage" type="xs:string" />
+        <xs:attribute name="pathologicalStatus" type="xs:string" />
+        <xs:attribute name="positionDimensionOne" type="xs:integer" />
+        <xs:attribute name="positionDimensionTwo" type="xs:integer" />
+        <xs:attribute name="type" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="FluidSpecimen" type="FluidSpecimen" />
+  <xs:complexType name="FluidSpecimen">
+    <xs:complexContent>
+      <xs:extension base="Specimen">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SpecimenCharacteristics" type="SpecimenCharacteristics" />
+  <xs:complexType name="SpecimenCharacteristics">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="tissueSide" type="xs:string" />
+        <xs:attribute name="tissueSite" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="User" type="User" />
+  <xs:complexType name="User">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="department" type="Department" minOccurs="0" maxOccurs="1" />
+          <xs:element name="cancerResearchGroup" type="CancerResearchGroup" minOccurs="0" maxOccurs="1" />
+          <xs:element name="institution" type="Institution" minOccurs="0" maxOccurs="1" />
+          <xs:element name="collectionProtocolCollection" type="CollectionProtocol" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="passwordCollection" type="Password" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="address" type="Address" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
+        <xs:attribute name="comments" type="xs:string" />
+        <xs:attribute name="csmUserId" type="xs:long" />
+        <xs:attribute name="emailAddress" type="xs:string" />
+        <xs:attribute name="firstName" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="lastName" type="xs:string" />
+        <xs:attribute name="loginName" type="xs:string" />
+        <xs:attribute name="startDate" type="xs:dateTime" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="FixedEventParameters" type="FixedEventParameters" />
+  <xs:complexType name="FixedEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+        <xs:attribute name="durationInMinutes" type="xs:integer" />
+        <xs:attribute name="fixationType" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Department" type="Department" />
+  <xs:complexType name="Department">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="name" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SpecimenArray" type="SpecimenArray" />
+  <xs:complexType name="SpecimenArray">
+    <xs:complexContent>
+      <xs:extension base="Container">
+        <xs:sequence>
+          <xs:element name="createdBy" type="User" minOccurs="0" maxOccurs="1" />
+          <xs:element name="storageContainer" type="StorageContainer" minOccurs="0" maxOccurs="1" />
+          <xs:element name="specimenArrayType" type="SpecimenArrayType" minOccurs="0" maxOccurs="1" />
+          <xs:element name="specimenArrayContentCollection" type="SpecimenArrayContent" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TransferEventParameters" type="TransferEventParameters" />
+  <xs:complexType name="TransferEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence>
+          <xs:element name="fromStorageContainer" type="StorageContainer" minOccurs="0" maxOccurs="1" />
+          <xs:element name="toStorageContainer" type="StorageContainer" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="fromPositionDimensionOne" type="xs:integer" />
+        <xs:attribute name="fromPositionDimensionTwo" type="xs:integer" />
+        <xs:attribute name="toPositionDimensionOne" type="xs:integer" />
+        <xs:attribute name="toPositionDimensionTwo" type="xs:integer" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CollectionProtocol" type="CollectionProtocol" />
+  <xs:complexType name="CollectionProtocol">
+    <xs:complexContent>
+      <xs:extension base="SpecimenProtocol">
+        <xs:sequence>
+          <xs:element name="collectionProtocolEventCollection" type="CollectionProtocolEvent" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="userCollection" type="User" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="distributionProtocolCollection" type="DistributionProtocol" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AuditEventLog" type="AuditEventLog" />
+  <xs:complexType name="AuditEventLog">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="auditEvent" type="AuditEvent" minOccurs="0" maxOccurs="1" />
+          <xs:element name="auditEventDetailsCollcetion" type="AuditEventDetails" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="eventType" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="objectIdentifier" type="xs:long" />
+        <xs:attribute name="objectName" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AuditEvent" type="AuditEvent" />
+  <xs:complexType name="AuditEvent">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="auditEventLogCollection" type="AuditEventLog" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="ipAddress" type="xs:string" />
+        <xs:attribute name="timestamp" type="xs:dateTime" />
+        <xs:attribute name="userId" type="xs:long" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="QuantityInMicrogram" type="QuantityInMicrogram" />
+  <xs:complexType name="QuantityInMicrogram">
+    <xs:complexContent>
+      <xs:extension base="Quantity">
+        <xs:sequence />
+        <xs:attribute name="value" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DisposalEventParameters" type="DisposalEventParameters" />
+  <xs:complexType name="DisposalEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+        <xs:attribute name="reason" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ClinicalReport" type="ClinicalReport" />
+  <xs:complexType name="ClinicalReport">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="participantMedicalIdentifier" type="ParticipantMedicalIdentifier" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="surgicalPathologyNumber" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SpecimenRequirement" type="SpecimenRequirement" />
+  <xs:complexType name="SpecimenRequirement">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="collectionProtocolEventCollection" type="CollectionProtocolEvent" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="distributionProtocolCollection" type="DistributionProtocol" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="quantity" type="Quantity" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="pathologyStatus" type="xs:string" />
+        <xs:attribute name="specimenClass" type="xs:string" />
+        <xs:attribute name="specimenType" type="xs:string" />
+        <xs:attribute name="tissueSite" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Password" type="Password" />
+  <xs:complexType name="Password">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="password" type="xs:string" />
+        <xs:attribute name="updateDate" type="xs:dateTime" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CellSpecimen" type="CellSpecimen" />
+  <xs:complexType name="CellSpecimen">
+    <xs:complexContent>
+      <xs:extension base="Specimen">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Participant" type="Participant" />
+  <xs:complexType name="Participant">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="participantMedicalIdentifierCollection" type="ParticipantMedicalIdentifier" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="collectionProtocolRegistrationCollection" type="CollectionProtocolRegistration" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
+        <xs:attribute name="birthDate" type="xs:dateTime" />
+        <xs:attribute name="deathDate" type="xs:dateTime" />
+        <xs:attribute name="ethnicity" type="xs:string" />
+        <xs:attribute name="firstName" type="xs:string" />
+        <xs:attribute name="gender" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="lastName" type="xs:string" />
+        <xs:attribute name="middleName" type="xs:string" />
+        <xs:attribute name="raceCollection" type="xs:string" />
+        <xs:attribute name="sexGenotype" type="xs:string" />
+        <xs:attribute name="socialSecurityNumber" type="xs:string" />
+        <xs:attribute name="vitalStatus" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AbstractDomainObject" type="AbstractDomainObject" />
+  <xs:complexType name="AbstractDomainObject">
+    <xs:sequence />
+    <xs:attribute name="id" type="xs:long" />
+  </xs:complexType>
+  <xs:element name="ReceivedEventParameters" type="ReceivedEventParameters" />
+  <xs:complexType name="ReceivedEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+        <xs:attribute name="receivedQuality" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Distribution" type="Distribution" />
+  <xs:complexType name="Distribution">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="user" type="User" minOccurs="0" maxOccurs="1" />
+          <xs:element name="toSite" type="Site" minOccurs="0" maxOccurs="1" />
+          <xs:element name="specimenArrayCollection" type="SpecimenArray" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="distributedItemCollection" type="DistributedItem" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="distributionProtocol" type="DistributionProtocol" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
+        <xs:attribute name="comments" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="timestamp" type="xs:dateTime" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Container" type="Container" />
+  <xs:complexType name="Container">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="capacity" type="Capacity" minOccurs="0" maxOccurs="1" />
+          <xs:element name="parent" type="Container" minOccurs="0" maxOccurs="1" />
+          <xs:element name="children" type="Container" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
+        <xs:attribute name="barcode" type="xs:string" />
+        <xs:attribute name="comment" type="xs:string" />
+        <xs:attribute name="full" type="xs:boolean" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="positionDimensionOne" type="xs:integer" />
+        <xs:attribute name="positionDimensionTwo" type="xs:integer" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="StorageContainer" type="StorageContainer" />
+  <xs:complexType name="StorageContainer">
+    <xs:complexContent>
+      <xs:extension base="Container">
+        <xs:sequence>
+          <xs:element name="site" type="Site" minOccurs="0" maxOccurs="1" />
+          <xs:element name="storageType" type="StorageType" minOccurs="0" maxOccurs="1" />
+          <xs:element name="CollectionProtocolCollection" type="CollectionProtocol" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="holdsStorageTypeCollection" type="StorageType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="holdsSpecimenClassCollection" type="xs:string" />
+        <xs:attribute name="tempratureInCentigrade" type="xs:double" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ThawEventParameters" type="ThawEventParameters" />
+  <xs:complexType name="ThawEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="EmbeddedEventParameters" type="EmbeddedEventParameters" />
+  <xs:complexType name="EmbeddedEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+        <xs:attribute name="embeddingMedium" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="FrozenEventParameters" type="FrozenEventParameters" />
+  <xs:complexType name="FrozenEventParameters">
+    <xs:complexContent>
+      <xs:extension base="SpecimenEventParameters">
+        <xs:sequence />
+        <xs:attribute name="method" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContainerType" type="ContainerType" />
+  <xs:complexType name="ContainerType">
+    <xs:complexContent>
+      <xs:extension base="AbstractDomainObject">
+        <xs:sequence>
+          <xs:element name="capacity" type="Capacity" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
+        <xs:attribute name="comment" type="xs:string" />
+        <xs:attribute name="id" type="xs:long" />
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="oneDimensionLabel" type="xs:string" />
+        <xs:attribute name="twoDimensionLabel" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>
+

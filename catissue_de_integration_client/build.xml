@@ -1,0 +1,50 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for create Build for caTISSUE Core-->
+
+<project name="catissue_de_integration_client" default="compile">
+	
+	<!--define require dir and Properties -->	
+	<property name="base.dir" value="."/>	
+	<property name="conf.dir" value="conf" />
+	<property name="lib.dir" value="lib" />
+	<property name="src.dir" value="." />
+
+	<path id="cp">
+		<fileset dir="lib">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement path="${conf.dir}"/>
+	</path>
+    
+	
+	<path id="app.classpath">
+		<fileset dir="${base.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+    <!-- Compile all files, generated and hand-written -->
+    <target name="compile">
+        <javac destdir="${base.dir}" includes="**/*.*" includeAntRuntime="false">
+            <src path="${base.dir}"/>
+            <classpath>
+       		  <fileset dir="lib">
+        			<include name="**/*.jar"/>
+        	  </fileset>
+            </classpath>
+        </javac>
+    </target>
+		
+	<!-- run TestClient java file -->
+	<target name="runDemo" depends="compile">		
+		<java classname="ClientDemo" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+			<sysproperty key="log4j.configuration"
+						value="${conf.dir}/client_log4j.properties"/>
+		</java>
+	</target>	
+</project>
