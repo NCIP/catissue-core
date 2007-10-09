@@ -168,9 +168,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 																	+containerId +"')" ;
 									%>
 									<span>
-									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="specimen" property="selectedContainerName" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="specimen" property="positionDimensionOne" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="specimen" property="positionDimensionTwo" readonly= "true"/>
+									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="specimen" property="selectedContainerName" />
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="specimen" property="positionDimensionOne" />
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="specimen" property="positionDimensionTwo" />
 									<a href="#" onclick="<%=functionCall%>">
 									<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
 									</a>
@@ -325,9 +325,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 																	+containerId +"')" ;
 									%>
 									<span>
-									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="aliquot" property="selectedContainerName" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="aliquot" property="positionDimensionOne" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="aliquot" property="positionDimensionTwo" readonly= "true"/>
+									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="aliquot" property="selectedContainerName" />
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="aliquot" property="positionDimensionOne" />
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="aliquot" property="positionDimensionTwo" />
 									<a href="#" onclick="<%=functionCall%>">
 									<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
 									</a>
@@ -479,9 +479,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 																	+containerId +"')" ;
 									%>
 									<span>
-									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="derived" property="selectedContainerName" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="derived" property="positionDimensionOne" readonly= "true"/>
-									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="derived" property="positionDimensionTwo" readonly= "true"/>
+									<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="derived" property="selectedContainerName" />
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionOne%>" indexed="true"  name="derived" property="positionDimensionOne" />
+									<html:text styleClass="formFieldSized3"  styleId="<%=positionDimensionTwo%>" indexed="true"  name="derived" property="positionDimensionTwo" />
 									<a href="#" onclick="<%=functionCall%>">
 									<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
 									</a>
