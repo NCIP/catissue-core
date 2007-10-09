@@ -101,6 +101,7 @@ public class CollectionProtocolUtil {
 		collectionProtocolBean.setEnrollment(String.valueOf(collectionProtocol.getEnrollment()));		
 		collectionProtocolBean.setConsentValues(prepareConsentTierMap(collectionProtocol.getConsentTierCollection()));
 		collectionProtocolBean.setActivityStatus(collectionProtocol.getActivityStatus());
+		collectionProtocolBean.setAliqoutInSameContainer(collectionProtocol.getAliquotInSameContainer().booleanValue());
 		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 		collectionProtocolBean.setEndDate(endDate);
 		return collectionProtocolBean;

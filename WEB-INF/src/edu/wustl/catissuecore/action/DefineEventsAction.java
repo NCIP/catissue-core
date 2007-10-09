@@ -44,6 +44,7 @@ public class DefineEventsAction extends BaseAction
 			collectionProtocolBean.setDescriptionURL(collectionProtocolForm.getDescriptionURL());
 			collectionProtocolBean.setIrbID(collectionProtocolForm.getIrbID());
 			collectionProtocolBean.setActivityStatus(collectionProtocolForm.getActivityStatus());
+			collectionProtocolBean.setAliqoutInSameContainer(collectionProtocolForm.isAliqoutInSameContainer());
 			//For Consent Tab
 			collectionProtocolBean.setConsentTierCounter(collectionProtocolForm.getConsentTierCounter());
 			collectionProtocolBean.setConsentValues(collectionProtocolForm.getConsentValues());

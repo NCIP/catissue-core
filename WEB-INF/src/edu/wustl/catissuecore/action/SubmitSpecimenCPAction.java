@@ -4,19 +4,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import java.util.Map;
-
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -25,9 +22,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
-import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
@@ -35,7 +30,6 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -49,22 +43,17 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.flex.SpecimenBean;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 public class SubmitSpecimenCPAction extends BaseAction {
@@ -450,8 +439,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
 		collectionProtocol.setId(cpBean.getIdentifier());
 		collectionProtocol.setActivityStatus(cpBean.getActivityStatus());
-		collectionProtocol.setAliquotInSameContainer(Boolean.TRUE);
 		collectionProtocol.setConsentsWaived(cpBean.isConsentWaived());
+		collectionProtocol.setAliquotInSameContainer(cpBean.isAliqoutInSameContainer());
 		collectionProtocol.setConsentTierCollection(collectionProtocol.prepareConsentTierCollection(cpBean.getConsentValues()));
 		Collection coordinatorCollection = new LinkedHashSet();
 		long[] coordinatorsArr = cpBean.getProtocolCoordinatorIds();
