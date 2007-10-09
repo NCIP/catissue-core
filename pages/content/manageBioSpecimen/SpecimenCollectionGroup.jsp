@@ -144,11 +144,10 @@
 
 	<%
 	String refreshTree = (String)request.getAttribute("refresh");
-	
+	strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY) && (refreshTree==null || !(refreshTree.equalsIgnoreCase("false"))))
 	{   
-		
-		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
+	
 	%>
 		<script language="javascript">
 		//Added by Falguni to refresh participant tree 
