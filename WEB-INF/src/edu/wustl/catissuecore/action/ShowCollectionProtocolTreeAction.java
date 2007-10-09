@@ -46,7 +46,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			while(collectionProtocolEventBeanCollectionItr.hasNext())
 			{
 				CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventBeanCollectionItr.next();
-				String objectName = collectionProtocolEventBean.getCollectionPointLabel();
+				String objectName = collectionProtocolEventBean.getCollectionPointLabel()+Constants.CLASS;
 				if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
 				{
 					objectName=Constants.VIEW_SUMMARY;
