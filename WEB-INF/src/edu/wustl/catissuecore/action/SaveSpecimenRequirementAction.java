@@ -185,6 +185,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	 {
 		 	HttpSession session = request.getSession();
 		 	SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean)session.getAttribute(Constants.EDIT_SPECIMEN_REQUIREMENT_BEAN);
+		 	specimenRequirementBean.setClassName(createSpecimenTemplateForm.getClassName());
 		 	specimenRequirementBean.setType(createSpecimenTemplateForm.getType());
 			specimenRequirementBean.setTissueSide(createSpecimenTemplateForm.getTissueSide());
 			specimenRequirementBean.setTissueSite(createSpecimenTemplateForm.getTissueSite());
