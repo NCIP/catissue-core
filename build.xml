@@ -359,7 +359,9 @@
 		<copy todir="${zip.dir}/images" overwrite="true">
 			<fileset file="${base.dir}/images/InstitutionLogo.gif" />
 		</copy>
-
+		<copy todir="${zip.dir}/catissue_de_integration_client" overwrite="true">
+					<fileset dir="${base.dir}/catissue_de_integration_client" />
+				</copy>
 		<copy todir="${zip.dir}/caTissueCore_caCORE_Client" overwrite="true">
 			<fileset dir="${base.dir}/caTissueCore_caCORE_Client" />
 		</copy>
@@ -656,6 +658,18 @@
             	<include name="catissuecore.jar"/>
             </fileset>
         </copy>
+		
+		<copy todir="${base.dir}/catissue_de_integration_client/lib" overwrite="true">
+		            <fileset dir="${lib.dir}">
+		            	<include name="commonpackage.jar"/>
+		            </fileset>
+		        </copy>
+
+				<copy todir="${base.dir}/catissue_de_integration_client/lib" overwrite="true">
+		            <fileset dir="${temp.dir}">
+		            	<include name="catissuecore.jar"/>
+		            </fileset>
+		        </copy>
 	</target>
 	
 	<target name="sendMail"  description="Send mail">
