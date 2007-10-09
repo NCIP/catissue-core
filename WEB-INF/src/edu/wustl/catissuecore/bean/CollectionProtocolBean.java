@@ -28,6 +28,11 @@ public class CollectionProtocolBean implements Serializable
 	protected String endDate;
 	
 	private String enrollment;
+	
+	/**
+	 * whether Aliquote in same container
+	 */
+	protected boolean aliqoutInSameContainer = false;
 	 /**
      * Activity Status.
      */
@@ -216,6 +221,18 @@ public class CollectionProtocolBean implements Serializable
 	public void setEndDate(String endDate)
 	{
 		this.endDate = endDate;
+	}
+
+	
+	public boolean isAliqoutInSameContainer()
+	{
+		return aliqoutInSameContainer;
+	}
+
+	
+	public void setAliqoutInSameContainer(boolean aliqoutInSameContainer)
+	{
+		this.aliqoutInSameContainer = aliqoutInSameContainer;
 	}
 
 }
