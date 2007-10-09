@@ -1,7 +1,9 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,9 +21,11 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
+import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IParameterizedCondition;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
+import edu.wustl.common.querysuite.queryobject.util.QueryUtility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
@@ -66,9 +70,11 @@ public class FetchQueryAction extends BaseAction
 					IParameterizedQuery parameterizedQuery = queryList.get(0);
 					request.getSession().setAttribute(AppletConstants.QUERY_OBJECT,
 							parameterizedQuery);
-					List<IParameterizedCondition> conditions = parameterizedQuery
-							.getParameterizedConditions();
-					if (conditions.isEmpty())
+
+					Map<IExpressionId, Collection<IParameterizedCondition>> expressionIdConditionCollectionMap = QueryUtility
+							.getAllParameterizedConditions(parameterizedQuery);
+
+					if (expressionIdConditionCollectionMap.isEmpty())
 					{
 						target = Constants.EXECUTE_QUERY;
 					}
