@@ -47,14 +47,26 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			openPopupWindow(frameUrl,'newSpecimenPage');
 			//mapButtonClickedOnSpecimen(frameUrl,'newSpecimenPage');
 		}
-		ChangeCheckBoxStatus(type,chkInstance)
+		function ChangeCheckBoxStatus(type,chkInstance)
 		{
-		var chkCount= document.getElementsById(type).length;
-		for (var i=0;i<chkCount;i++)
-		{
-			var elements = document.getElementsById(type);
-			elements[i].checked = chkInstance.checked;
-		}
+			var checkedSpecimen ='].checkedSpecimen';
+			var elementType = type +'[';
+			var ctr=0;
+			do
+			{
+				var elementName = elementType + ctr + checkedSpecimen;
+
+				var chkCount= document.getElementsByName(elementName).length;
+				//alert(chkCount);
+				//alert(document.getElementsByName(elementName));
+				if (chkCount >0)
+				{
+					var element = document.getElementsByName(elementName)[0];
+					element.checked = chkInstance.checked;
+					ctr++;
+				}
+			}
+			while(chkCount>0);
 
 		}
 	</script>
@@ -78,7 +90,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 					</td>				
 				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
 					<script language="javascript">
-							refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');	
+						refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');	
 					</script>
 				</logic:equal>
 				</tr>
@@ -248,7 +260,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			<tr>
 	      		<th class="formSerialNumberLabelForTable" scope="col" colspan="7"> &nbsp;</th>
 	      		<th class="formSerialNumberLabelForTable" scope="col"> 
-					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('aliquotId',this);"/>			
+					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
 				</th>
 			</tr>
 
@@ -326,7 +338,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							</logic:notEqual>												
 							
 							<td class="dataCellText">
-								<html:checkbox name="aliquot" indexed="true" property="checkedSpecimen" />					
+								<html:checkbox name="aliquot" styleId="aliquotId"
+								indexed="true" property="checkedSpecimen" />					
 							</td>
 
 						</logic:equal>
@@ -398,7 +411,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			<tr>
 	      		<th class="formSerialNumberLabelForTable" scope="col" colspan="7"> &nbsp;</th>
 	      		<th class="formSerialNumberLabelForTable" scope="col"> 
-					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('deriveId',this);"/>					
+					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
 				</th>
 			</tr>
 			<tr>
@@ -479,7 +492,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							</logic:notEqual>												
 							
 							<td class="dataCellText">
-								<html:checkbox name="derived" indexed="true" property="checkedSpecimen" />					
+								<html:checkbox name="derived" indexed="true" 
+								styleId="deriveId" property="checkedSpecimen" />					
 							</td>
 
 						</logic:equal>
