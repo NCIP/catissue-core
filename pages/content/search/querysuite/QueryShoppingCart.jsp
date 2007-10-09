@@ -135,6 +135,21 @@ function addToOrderList()
 				alert("Please select at least one checkbox");
 			}
 		}
+		function editMultipleSp()
+		{
+		
+			 var isChecked = updateHiddenFields();
+		    if(isChecked == "true")
+		    {
+				var action = "QueryAddToCart.do?operation=editMultipleSp";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
+			else
+			{
+				alert("Please select at least one checkbox");
+			}
+		}		
 
 function checkAll(element)
 {
@@ -237,6 +252,12 @@ function checkAll(element)
 					<html:button styleClass="actionButton"  property="orderButton" onclick="addToOrderList()">
 						<bean:message key="buttons.addtolist"/>	
 					</html:button>
+
+					<html:button styleClass="actionButton"  property="orderButton" onclick="editMultipleSp()" >
+						<bean:message key="edit.multiple.specimen"/>	
+
+					</html:button>
+
 					<%}else{%>
                      <html:button styleClass="actionButton"  disabled="true" property="orderButton" onclick="addToOrderList()">
 						<bean:message key="buttons.addtolist"/>	
