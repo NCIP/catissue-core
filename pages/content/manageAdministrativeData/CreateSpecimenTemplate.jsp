@@ -282,6 +282,11 @@ if(form != null)
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
+
+	function clearTypeCombo()
+	{
+		document.getElementById("type").value = "";
+	}
 	
 </script>
 
@@ -455,7 +460,7 @@ if(form != null)
 			    <autocomplete:AutoCompleteTag property="className"
 						  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
 						  initialValue="<%=form.getClassName()%>"
-						  onChange="onTypeChange(this)"
+						  onChange="onTypeChange(this);clearTypeCombo()"
 				/>
 	       	</td>
 		    <td class="formFieldNoBordersSimple" width="5">*</td>
