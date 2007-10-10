@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -340,13 +341,13 @@ public class FlexInterface
 
 	public String editSpecimen(List<SpecimenBean> spBeanList)
 	{
-		List specimenList = new ArrayList();
+		LinkedHashSet<Specimen> specimenSet = new LinkedHashSet<Specimen>();
 		if (spBeanList != null && spBeanList.size() > 0)
 		{
 			for (SpecimenBean spBean : spBeanList)
 			{
 				Specimen specimen = prepareSpecimen(spBean);
-				specimenList.add(specimen);
+				specimenSet.add(specimen);
 			}
 			NewSpecimenBizLogic spBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
@@ -355,7 +356,7 @@ public class FlexInterface
 
 			try
 			{
-				spBizLogic.bulkUpdateSpecimens(specimenList, sdb);
+				spBizLogic.bulkUpdateSpecimens(specimenSet, sdb);
 			}
 			catch (DAOException e)
 			{
@@ -363,7 +364,7 @@ public class FlexInterface
 			}
 
 		}
-		return "Edited successfully";
+		return "Specimens Updated Successfully";
 	}
 
 	/*private String writeSpecimen(SpecimenBean spBean)
@@ -690,8 +691,7 @@ public class FlexInterface
 	/* prepare specimen for edit multiple specimen */
 	private Specimen prepareSpecimen(SpecimenBean spBean)
 	{
-		Specimen specimen = new Specimen();
-
+		Specimen specimen =	getSpecimenInstance(spBean.specimenClass);
 		specimen.setType(spBean.specimenType);
 		specimen.setId(spBean.spID);
 		specimen.setCreatedOn(spBean.creationDate);
@@ -700,7 +700,7 @@ public class FlexInterface
 		Quantity qt = new Quantity();
 		qt.setValue(spBean.quantity);
 		specimen.setInitialQuantity(qt);
-
+		specimen.setAvailableQuantity(qt);	
 		//specimen.setClassName(spBean.specimenClass);
 		specimen.setBarcode(spBean.specimenBarcode);
 
@@ -726,6 +726,25 @@ public class FlexInterface
 		specimenCharacteristics.setTissueSite(spBean.tissueSite);
 		specimen.setSpecimenCharacteristics(specimenCharacteristics);
 
+		
+		if (spBean.derivedColl != null)
+		{
+			LinkedHashSet<Specimen> derivedSpecimenSet = new LinkedHashSet<Specimen>();
+			Iterator itr = spBean.derivedColl.iterator();
+			int i = 1;
+			while (itr.hasNext())
+			{
+				SpecimenBean derivedBean = (SpecimenBean) itr.next();
+				derivedBean.collectionEvent = spBean.collectionEvent;
+				derivedBean.receivedEvent = spBean.receivedEvent;
+				Specimen derivedSp = prepareSpecimen(derivedBean);
+				derivedSp.setLineage(edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN);
+				derivedSp.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
+				derivedSpecimenSet.add(derivedSp);
+				i++;
+			}
+			specimen.setChildrenSpecimen(derivedSpecimenSet);
+		}
 		System.out.println("Returning complete specimen");
 		return specimen;
 	}
