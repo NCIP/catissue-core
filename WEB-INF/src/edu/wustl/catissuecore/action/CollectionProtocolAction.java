@@ -86,7 +86,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     		initCollectionProtocolPage(request, form, pageOf, mapping);	
     	}
     	
-    	if(operation.equals("add"))
+    	if(operation.equals("add")&&invokeFunction==null)
     	{
     		initCleanSession(request);
     	}
