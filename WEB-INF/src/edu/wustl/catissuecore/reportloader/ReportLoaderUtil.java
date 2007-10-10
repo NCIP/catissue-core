@@ -121,7 +121,12 @@ public class ReportLoaderUtil
 		return "";
 	}
 	
-	
+	/**
+	 * This method returns tha matching SCG (based on SPN and site) present in the database 
+	 * @param site
+	 * @param surgicalPathologyNumber
+	 * @return specimenCollectionGroupObj
+	 */
 	public static SpecimenCollectionGroup getExactMatchingSCG(Site site, String surgicalPathologyNumber)
 	{
 		String scgHql = "select scg"+
@@ -137,27 +142,12 @@ public class ReportLoaderUtil
 		return null;
 	}
 	
-	public static boolean isPartialMatchingSCG(Participant participant, Site site)
-	{
-		String scgHql = "select scg"+
-	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
-		" edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"+
-		" edu.wustl.catissuecore.domain.Participant as p "+
-		" where p.id = " +participant.getId()+ 
-		" and p.id = cpr.participant.id " +
-		" and scg.id in elements(cpr.specimenCollectionGroupCollection)" +
-		" and scg.specimenCollectionSite.name='"+site.getName()+"' "+
-		" and (scg.surgicalPathologyNumber="+null+
-		" or scg.surgicalPathologyNumber='')";
-		
-		List resultList=(List)CaCoreAPIService.executeQuery(scgHql, SpecimenCollectionGroup.class.getName());
-		if(resultList!=null && resultList.size()>0)
-		{
-			return true;
-		}
-		return false;
-	}
-	
+	/**
+	 * This method returns the respective participant to which SCG is associated with
+	 * @param scgId
+	 * @return participntObj
+	 * @throws Exception
+	 */
 	public static Participant getParticipant(Long scgId) throws Exception
 	{
 		String hqlString = "select p"+

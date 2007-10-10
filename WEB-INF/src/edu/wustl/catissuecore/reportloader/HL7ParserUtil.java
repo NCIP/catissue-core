@@ -88,24 +88,7 @@ public class HL7ParserUtil
 						{
 							// matching participant found 
 							Logger.out.info("Matching Participant found "+participantList.size());
-							if(participantList.size()==1)
-							{
-								// Exactly one matching found, use this participant
-								Iterator<Participant> iter=participantList.iterator();
-								Participant aParticipant=iter.next();
-								if(ReportLoaderUtil.isPartialMatchingSCG(aParticipant, site))
-								{
-									Logger.out.info("SCG conflict found with partial match");
-									scg=null;
-									status=CaTIESConstants.STATUS_SCG_PARTIAL_CONFLICT;
-								}
-							}
-							if (participantList.size()>1)
-							{
-								// Multiple matching participant found, this is STATUS_CONFLICT state
-								Logger.out.info("Conflict found for Participant ");
-								status=CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
-							}
+							status=CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
 						}
 						else
 						{
