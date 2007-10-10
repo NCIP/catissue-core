@@ -2376,6 +2376,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	
+	/**
+	 * This function is used to update specimens and their dervied & aliquot 
+	 * specimens. 
+	 * @param newSpecimenCollection List of specimens to update along with children 
+	 * specimens.
+	 * @param sessionDataBean current user session information
+	 * @throws DAOException If DAO fails to update one or more specimens
+	 * this function will throw DAOException.
+	 */
 	public void updateAnticipatorySpecimens(Collection newSpecimenCollection, 
 	SessionDataBean sessionDataBean) 
 	throws DAOException
@@ -2384,6 +2393,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				 sessionDataBean, true);
 	}
 	
+	/**
+	 * This function is used to bulk update multiple specimens. If
+	 * any specimen contains children specimens those will be inserted. 
+	 * @param newSpecimenCollection List of specimens to update along with 
+	 * new children specimens if any. 
+	 * @param sessionDataBean current user session information
+	 * @throws DAOException If DAO fails to update one or more specimens
+	 * this function will throw DAOException.
+
+	 */
 	public void bulkUpdateSpecimens(Collection newSpecimenCollection, 
 				SessionDataBean sessionDataBean) throws DAOException
 	{
@@ -2427,14 +2446,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		catch(Exception exception)
 		{
 			((AbstractDAO)dao).rollback();
-			String errorMsg = "Update specimens failed. ";
+			String errorMsg = "Failed to save. ";
 			if (specimenCtr != 0)
 			{
-				errorMsg ="Failed to update specimen " + specimenCtr + " ";
+				errorMsg ="specimen number " + specimenCtr + " cannot be saved. ";
 				if (childSpecimenCtr != 0)
 				{
-					errorMsg ="Failed to insert child specimen " + childSpecimenCtr 
-					+", while updating specimen " + specimenCtr + " ";
+					errorMsg ="Cannot insert child specimen " + childSpecimenCtr 
+					+", of specimen " + specimenCtr + ". ";
 				}
 				
 			}
@@ -2447,6 +2466,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		
 	}
+	
 	public void updateMultipleSpecimens(Collection newSpecimenCollection, 
 				SessionDataBean sessionDataBean,boolean updateChildrens) 
 				throws DAOException
