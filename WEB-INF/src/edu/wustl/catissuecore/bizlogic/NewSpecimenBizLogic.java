@@ -2376,6 +2376,77 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	
+	public void updateAnticipatorySpecimens(Collection newSpecimenCollection, 
+	SessionDataBean sessionDataBean) 
+	throws DAOException
+	{
+		updateMultipleSpecimens(newSpecimenCollection,
+				 sessionDataBean, true);
+	}
+	
+	public void bulkUpdateSpecimens(Collection newSpecimenCollection, 
+				SessionDataBean sessionDataBean) throws DAOException
+	{
+		Iterator iterator = newSpecimenCollection.iterator();
+		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		int specimenCtr=1;
+		int childSpecimenCtr=0;
+		try
+		{
+	
+			((HibernateDAO)dao).openSession(sessionDataBean);
+			
+			while (iterator.hasNext())
+			{
+				Specimen newSpecimen = (Specimen) iterator.next();
+				
+				Specimen specimenDO = updateSignleSpecimen(dao,newSpecimen, sessionDataBean,false);
+				
+				Collection childrenSpecimenCollection = newSpecimen.getChildrenSpecimen();
+				if (childrenSpecimenCollection != null && 
+						!childrenSpecimenCollection.isEmpty())
+				{
+					Iterator childIterator = childrenSpecimenCollection.iterator();
+					while(childIterator.hasNext())
+					{
+						childSpecimenCtr++;
+						Specimen childSpecimen = (Specimen) childIterator.next();
+						childSpecimen.setParentSpecimen(specimenDO);
+						insertSingleSpecimen(childSpecimen, dao, sessionDataBean, false);
+						
+					}
+					childSpecimenCtr = 0;
+				}
+				specimenCtr++;
+			}
+			specimenCtr =0;
+			((HibernateDAO)dao).commit();
+			postInsert(newSpecimenCollection, dao, sessionDataBean);
+			
+		}
+		catch(Exception exception)
+		{
+			((AbstractDAO)dao).rollback();
+			String errorMsg = "Update specimens failed. ";
+			if (specimenCtr != 0)
+			{
+				errorMsg ="Failed to update specimen " + specimenCtr + " ";
+				if (childSpecimenCtr != 0)
+				{
+					errorMsg ="Failed to insert child specimen " + childSpecimenCtr 
+					+", while updating specimen " + specimenCtr + " ";
+				}
+				
+			}
+			throw new DAOException(errorMsg +
+					exception.getMessage());
+		}
+		finally{
+		
+			((HibernateDAO)dao).closeSession();
+		}
+		
+	}
 	public void updateMultipleSpecimens(Collection newSpecimenCollection, 
 				SessionDataBean sessionDataBean,boolean updateChildrens) 
 				throws DAOException
@@ -2409,7 +2480,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public void updateSignleSpecimen(DAO dao, Specimen newSpecimen, 
+	public Specimen updateSignleSpecimen(DAO dao, Specimen newSpecimen, 
 			SessionDataBean sessionDataBean,boolean updateChildrens) throws DAOException
 	{
 		try
@@ -2422,7 +2493,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				if(updateChildrens)
 					updateChildrenSpecimens(dao,newSpecimen, specimenDO);
 				dao.update(specimenDO, sessionDataBean, false, false, false);
-				//postInsert(specimenDO, dao, sessionDataBean);
+				return specimenDO;
+			}
+			else
+			{
+				throw new DAOException ("Invalid Specimen with label" + newSpecimen.getLabel());
 			}
 		}catch(UserNotAuthorizedException authorizedException){
 			throw new DAOException ("User not authorized to update specimens" + 
