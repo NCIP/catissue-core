@@ -1330,7 +1330,7 @@
 		                 				* Patch id: 4225_2
 		                  				* Description : Passing a different name to the popup window
 		                 				 */
-										String buttonOnClicked = "mapButtonClickedOnSpecimen('"+frameUrl+"','newSpecimenPage')";  
+										String buttonOnClicked = "mapButtonClickedOnNewSpecimen('"+frameUrl+"','newSpecimenPage')";  
 										
 										//"javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false"; 
 										//javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";

@@ -1003,7 +1003,7 @@ function openPopupWindow(frameUrl,name)
     }
 }
 
-function mapButtonClickedOnSpecimen(frameUrl,name)
+function mapButtonClickedOnNewSpecimen(frameUrl,name)
 {
    	var storageContainer = document.getElementById('selectedContainerName').value;
 	frameUrl+="&storageContainerName="+storageContainer;

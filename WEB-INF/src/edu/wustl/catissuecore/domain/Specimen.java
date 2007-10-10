@@ -889,6 +889,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					
 					if (form.isAddOperation())
 					{
+						if(this.storageContainer == null)
+						{
+							this.storageContainer = new StorageContainer();
+						}
 						if(form.getStContSelection()==1)
 						{
 							this.storageContainer = null;
@@ -898,10 +902,6 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						if(form.getStContSelection()==2)
 						{
 							long stContainerId = Long.parseLong(form.getStorageContainer());
-							if(this.storageContainer == null)
-							{
-								this.storageContainer = new StorageContainer();
-							}
 							this.storageContainer.setId(stContainerId);
 							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
