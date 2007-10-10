@@ -25,6 +25,7 @@
 			
 			ActionMessages messages = (ActionMessages)request.getAttribute(Globals.MESSAGE_KEY);
 			session.setAttribute("messages", messages);
+			session.removeAttribute("EventOrigin");
 			
 		}
 		else

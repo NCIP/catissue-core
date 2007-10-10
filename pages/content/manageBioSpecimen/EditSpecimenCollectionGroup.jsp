@@ -86,22 +86,13 @@
 					<td><html:hidden property="id"/></td>
 					<td><html:hidden property="onSubmit"/></td>
 					<td><html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
+					<html:hidden property="withdrawlButtonStatus"/>
 				 </tr>
-				 <tr>
-				 	<td class="formMessage" colspan="6">
-						<html:hidden property="withdrawlButtonStatus"/>
-						<bean:message key="requiredfield.message"/>  
-					</td>
-				 </tr>
-				 
-				<tr>
-					<td class="formTitle" height="20" colspan="5">
-						<%String title = "specimenCollectionGroup."+pageView+".title";%>
-							<bean:message key="<%=title%>"/>						
-					</td>
-				</tr>
 
-				 
+
+				<tr>
+					<br>
+				</tr>
 				 <!--Collection Protocol -->
 				 <tr>
 			     	<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
@@ -126,7 +117,7 @@
 					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
 					<td class="formFieldNoBordersSimple" >
 						<label for="participantName">
-							 <bean:message key="specimenCollectionGroup.participantNameWitProtocolId" />
+							 <b><bean:message key="specimenCollectionGroup.participantNameWitProtocolId" /></b>
 						</label>
 					</td>
 					<td class="formFieldNoBordersSimple">
@@ -354,7 +345,8 @@
 			
 	<!--  Consent Tracking Module Virender mehta	 -->
 	<%
-		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");					if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
+		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");
+		if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
 		{
 	%>
 	    	<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
@@ -399,7 +391,7 @@
 					</td>
 					<td class="formField" colspan="3">
 						<!-- html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimen"  /-->
-						<html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" onkeyup="disablebuttons()"/>
+						<html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" />
 					</td>
 				</tr>			
 			</table>

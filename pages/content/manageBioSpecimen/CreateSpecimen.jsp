@@ -250,16 +250,14 @@
 		function onCheckboxButtonClick(chkBox)
 		{
 			if(chkBox.checked)
-			{
-				document.forms[0].submitAndDistributeButton.disabled=true;
+			{				
 				document.forms[0].moreButton.disabled=true;
 				document.forms[0].noOfAliquots.disabled=false;
 				document.forms[0].quantityPerAliquot.disabled=false;
 				
 			}
 			else
-			{
-				document.forms[0].submitAndDistributeButton.disabled=false;
+			{				
 				document.forms[0].moreButton.disabled=false;
 				document.forms[0].noOfAliquots.disabled=true;
 				document.forms[0].quantityPerAliquot.disabled=true;
@@ -494,9 +492,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
 					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
-				 		<tr>
-				     		<td class="formMessage" colspan="3">* indicates a required field</td>
-				 		</tr>
+				 		
 				 	</logic:notEqual>
 				 <tr>
 				     <td class="formTitle" height="20" colspan="6">
@@ -509,16 +505,16 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 					{
         			 %>	
 				 <tr>
-			     	<td class="formRequiredNoticeNoBottom" width="5">*</td>
-				    <td class="formRequiredLabelLeftBorder" width="175">
+			     	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+				    <td class="formFieldNoBordersSimple" width="175">
 					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)"  >
 				    &nbsp;
 			        </html:radio>
 						<label for="specimenCollectionGroupId">
-							<bean:message key="createSpecimen.parentLabel"/>
+							<b><bean:message key="createSpecimen.parentLabel"/></b>
 						</label>
 					</td>
-					<td class="formField" colspan="2">
+					<td class="formFieldNoBordersSimple" colspan="2">
 						
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
 				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" />
@@ -532,16 +528,16 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				 </tr>
 				 
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formRequiredLabel" width="175">
+			     	<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+				    <td class="formFieldNoBordersSimple" width="175">
 					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
 				    &nbsp;
 			        </html:radio>
 						<label for="specimenCollectionGroupId">
-							<bean:message key="createSpecimen.parentBarcode"/>
+							<b><bean:message key="createSpecimen.parentBarcode"/></b>
 						</label>
 					</td>
-					<td class="formField" colspan="2">
+					<td class="formFieldNoBordersSimple" colspan="2">
 					
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
 				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="true" />
@@ -560,16 +556,16 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				%>
 				
 				<tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+			     	<td class="formFieldNoBordersSimple" width="5">
+				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*<b></logic:notEqual>
 				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 				    </td>
-				    <td class="formRequiredLabel">
+				    <td class="formFieldNoBordersSimple">
 						<label for="label">
-							<bean:message key="specimen.label"/>
+							<b><bean:message key="specimen.label"/></b>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
+				    <td class="formFieldNoBordersSimple" colspan="4">
 				     	<html:text styleClass="formFieldSized15" size="30" maxlength="50"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
@@ -577,13 +573,13 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				 	}
 				 %>
 				 <tr>
-				 	<td class="formRequiredNotice" width="5">*</td>
-				    <td class="formRequiredLabel">
+				 	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+				    <td class="formFieldNoBordersSimple">
 				     	<label for="className">
-				     		<bean:message key="specimen.type"/>
+				     		<b><bean:message key="specimen.type"/></b>
 				     	</label>
 				    </td>
-				    <td class="formField" colspan="2">
+				    <td class="formFieldNoBordersSimple" colspan="2">
 					
 					 <autocomplete:AutoCompleteTag property="className"
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
@@ -596,13 +592,13 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				 </tr>
 				 
 				 <tr>
-				    <td class="formRequiredNotice" width="5">*</td>
-				    <td class="formRequiredLabel">
+				    <td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+				    <td class="formFieldNoBordersSimple">
 				     	<label for="type">
-				     		<bean:message key="specimen.subType"/>
+				     		<b><bean:message key="specimen.subType"/></b>
 				     	</label>
 				    </td>
-				    <td class="formField" colspan="2">
+				    <td class="formFieldNoBordersSimple" colspan="2">
 				    <!-- --------------------------------------- -->
 				    <%
 								String classValue = (String)form.getClassName();
@@ -640,13 +636,13 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 							 * Description : Added <TR> for createdOn date field.				 
 							-->	 
 
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">							
+					<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple">							
 						<label for="createdDate">
 							<bean:message key="specimen.createdDate"/>
 						</label>								
 					</td>
-					<td class="formField" colspan="2" >
+					<td class="formFieldNoBordersSimple" colspan="2" >
 						<%
 						String createdDate = form.getCreatedDate();
 						String nameOfForm ="createSpecimenForm";
@@ -659,10 +655,10 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				 
 				 
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">
+			     	<td class="formFieldNoBordersSimple" width="5">
 				     	&nbsp;
 				    </td>
-				    <td class="formLabel">
+				    <td class="formFieldNoBordersSimple">
 						<label for="concentration">
 							<bean:message key="specimen.concentration"/>
 						</label>
@@ -671,7 +667,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						if(unitSpecimen.equals(Constants.UNIT_MG))
 						{
 					%>
-				    		<td class="formField" colspan="2">
+				    		<td class="formFieldNoBordersSimple" colspan="2">
 				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="false"/>
 								&nbsp;<bean:message key="specimen.concentrationUnit"/>
 				   			</td>
@@ -680,7 +676,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						else
 						{
 					%>
-							<td class="formField" colspan="2">
+							<td class="formFieldNoBordersSimple" colspan="2">
 				     			<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="true"/>
 				     			&nbsp;<bean:message key="specimen.concentrationUnit"/>
 				    		</td>
@@ -689,16 +685,16 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 					%>
 				 </tr>
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+			     	<td class="formFieldNoBordersSimple" width="5">
+				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
 				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 				    </td>
-				    <td class="formRequiredLabel">
+				    <td class="formFieldNoBordersSimple">
 						<label for="quantity">
-							<bean:message key="specimen.quantity"/>
+							<b><bean:message key="specimen.quantity"/></b>
 						</label>
 					</td>
-				    <td class="formField" colspan="2">
+				    <td class="formFieldNoBordersSimple" colspan="2">
 				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="unitSpan"><%=unitSpecimen%></span>
 				     	<html:hidden property="unit"/>
@@ -711,10 +707,10 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				%>
 				
 				<tr>
-				 	<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel">
+				 	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
+					<td class="formFieldNoBordersSimple">
 					   <label for="className">
-					   		<bean:message key="specimen.positionInStorageContainer"/>
+					   		<b><bean:message key="specimen.positionInStorageContainer"/></b>
 					   </label>
 					</td>
 					
@@ -787,7 +783,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 					
 					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 									
-				<td class="formField" colSpan="4">
+				<td class="formFieldNoBordersSimple" colSpan="4">
 						
 						<table border="0">
 						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
@@ -818,7 +814,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						</tr>
 						<tr>
 							<td ><html:radio value="3" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
-							<td class="formLabelBorderlessLeft">
+							<td class="formFieldNoBordersSimple">
 								<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
 								<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
 								<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
@@ -839,7 +835,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 							{
 							%>
 								<tr>											
-									<td class="formLabelBorderless">
+									<td class="formFieldNoBordersSimple">
 										<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "true"/>
 										<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true"/>
 										<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true"/>
@@ -872,25 +868,25 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 					{
 				%>
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
+			     	<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+				    <td class="formFieldNoBordersSimple">
 						<label for="barcode">
 							<bean:message key="specimen.barcode"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="2">
+				    <td class="formFieldNoBordersSimple" colspan="2">
 						<html:text styleClass="formFieldSized"  maxlength="50" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
 		        	</td>
 				 </tr>
 				 <%}%>
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
+			     	<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
+				    <td class="formFieldNoBordersSimple">
 						<label for="comments">
 							<bean:message key="specimen.comments"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="2">
+				    <td class="formFieldNoBordersSimple" colspan="2">
 				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
@@ -935,7 +931,6 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
 								String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-								String submitAndDistribute = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
 								String addMoreSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
 								String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;		
 
@@ -954,14 +949,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						   			</td>
 									
 						
-									<td class="formFieldNoBorders" nowrap>
-										<html:button
-											styleClass="actionButton" property="submitAndDistributeButton"
-											title="<%=Constants.SPECIMEN_BUTTON_TIPS[4]%>"
-											value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[4][0]%>"
-											onclick="<%=submitAndDistribute%>">
-										</html:button>
-									</td>
+
 									<td class="formFieldNoBorders" nowrap>
 										<html:button
 											styleClass="actionButton" property="moreButton"

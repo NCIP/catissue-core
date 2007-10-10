@@ -323,9 +323,7 @@
 
 						String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";			
 						String addMoreSubmitFunctionName= "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";	
-						String distributeSubmitFuntionName= "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"'),"; 			
 						String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;
-						String submitAndDistribute = distributeSubmitFuntionName + confirmDisableFuncName;					
 					%>						
 					<td align="right" class="formFieldNoBorders" nowrap>	
 						<html:button
@@ -335,12 +333,7 @@
 							onclick="<%=addMoreSubmit%>">
 						</html:button>
 						
-						<html:button
-							styleClass="actionButton" property="submitAndDistributeButton"
-							title="<%=Constants.SPECIMEN_BUTTON_TIPS[4]%>"
-							value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[4][0]%>"
-							onclick="<%=submitAndDistribute%>">
-						</html:button>
+				
 					</td>
 				<tr>
 			</table>

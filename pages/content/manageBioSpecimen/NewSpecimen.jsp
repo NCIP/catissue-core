@@ -175,8 +175,7 @@
 				aliquotCountTextBox.disabled = false;
 				qtyPerAliquotTextBox.disabled = false;				
 				document.forms[0].deriveButton.disabled=true;
-				document.forms[0].moreButton.disabled=true;
-				document.forms[0].submitAndDistributeButton.disabled=true;
+				document.forms[0].moreButton.disabled=true;				
 				document.forms[0].noOfAliquots.disabled=false;
 				document.forms[0].quantityPerAliquot.disabled=false;
 								
@@ -186,8 +185,7 @@
 				aliquotCountTextBox.disabled = true;
 				qtyPerAliquotTextBox.disabled = true;				
 				document.forms[0].deriveButton.disabled=false;
-				document.forms[0].moreButton.disabled=false;
-				document.forms[0].submitAndDistributeButton.disabled=false;
+				document.forms[0].moreButton.disabled=false;				
 				document.forms[0].noOfAliquots.disabled=true;
 				document.forms[0].quantityPerAliquot.disabled=true;
 			}
@@ -753,7 +751,6 @@
 				String deriveNewSubmit = deriveNewSubmitFunctionName + ","+confirmDisableFuncName;
 				String addEventsSubmit = addEventsSubmitFunctionName + ","+confirmDisableFuncName;
 				String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;		
-				String submitAndDistribute = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
 				
 				String specimenCollectionGroupId = (String)request.getAttribute("SpecimenCollectionGroupId");
 				String specimenCollectionGroupName = (String)request.getAttribute("SpecimenCollectionGroupName");
@@ -875,22 +872,10 @@
 			    	<tr>
 						<td width="100%">
 							<table summary="" cellpadding="1" border="0" cellspacing="0" id="addSpecimen" width="100%">
-								<tr>
-									<td class="formMessage" colspan="6">
-										<bean:message key="requiredfield.message"/>  
-									</td>
-								</tr>	
-				 				<tr>
-									<td class="formTitle" height="20" width="100%" colspan="7">
-										<%String title = "specimen."+pageView+".title";%>
-										<div style="float:right;">
-											<html:link href="#" styleId="newUser" onclick="consentPage()">
-												<bean:message key="consent.defineconsents" />
-											</html:link>	
-										</div>
-										<div>
-											<bean:message key="<%=title%>"/>							
-										</div>
+							<tr>
+								<br>
+							</tr>
+
 										<%--
 											<span style="width:85%;">
 												<bean:message key="<%=title%>"/>    
@@ -901,8 +886,7 @@
 												</html:link>	
 											</span>	
 										 --%>
-								 	</td>
-								</tr>
+								 	
 								<!--  Consent Tracking Module Virender mehta	 -->	
 
 								<tr>

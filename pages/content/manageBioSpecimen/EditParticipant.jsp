@@ -318,9 +318,7 @@ function participantRegRow(subdivtag)
 				 </tr>
 				 
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
-				 		<tr>
-				     		<td class="formMessage" colspan="3">* indicates a required field</td>
-				 		</tr>
+
 
 				 <%--<tr>
 				     <td class="formTitle" height="20" colspan="6">
@@ -334,11 +332,29 @@ function participantRegRow(subdivtag)
 					<%
 						}
 					%>
-				     </td>
+				     
 				 </tr>--%>
 				 
-				 
 				 <tr>
+				 	<% 
+				 		if (pageView.equals("add"))
+				 		{
+				 	%>
+				 			<td class="formTitle" height="20" colspan="6">
+						     <%title = "participant."+pageView+".title";%>
+						     <bean:message key="participant.add.title"/>
+						     </td>
+				 	<%	}
+				 		else
+				 		{
+				 	%>
+				 		<br>
+				 	<%
+				 		}
+				 	%>
+				</tr>
+				 
+				 <%-- <tr>
 				 	<td class="formTitle" height="20" colspan="7">
 					 <logic:equal name="operation" value="<%=Constants.ADD%>">
 						<bean:message key="participant.add.title"/>
@@ -347,7 +363,8 @@ function participantRegRow(subdivtag)
 						<bean:message key="participant.edit.title"/>
 					</logic:equal>
 					</td>
-				</tr>
+				</tr>--%>
+				
 				
 				 <tr>
 					 <td class="formFieldNoBordersSimple" width="5">&nbsp;</td>

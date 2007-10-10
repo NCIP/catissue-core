@@ -79,14 +79,7 @@
 			</html:button>
 		</td>
 
-		<td class="formFieldNoBorders" nowrap>
-			<html:button
-				styleClass="actionButton" property="submitAndDistributeButton"
-				title="<%=Constants.SPECIMEN_BUTTON_TIPS[4]%>"
-				value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[4][0]%>"
-				onclick="<%=submitAndDistribute%>">
-			</html:button>
-		</td>
+
 		</logic:notEqual>
 	</tr>
 </table>
