@@ -80,6 +80,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			if (actionForm.getForwardTo().equals("createNew"))
 			{
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId());
+				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
 			}
 			//Add To Same Collection Group
 			else if (actionForm.getForwardTo().equals("sameCollectionGroup"))

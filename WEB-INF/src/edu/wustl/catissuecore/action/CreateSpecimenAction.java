@@ -126,19 +126,17 @@ public class CreateSpecimenAction extends SecureAction
 			//if this action bcos of delete external identifier then validation should not happen.
 			if (request.getParameter("button") == null)
 			{
-				String parentSpecimenLabel = createForm.getParentSpecimenLabel();
+				String parentSpecimenLabel = null;
 				Long parentSpecimenID = null;
 				//Bug-2784: If coming from NewSpecimen page, then only set parent specimen label.
 				Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
-				if(forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
+				if(forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null && forwardToHashMap.get(Constants.SPECIMEN_LABEL) != null)
 				{
 					parentSpecimenID = (Long)forwardToHashMap.get("parentSpecimenId");
+					parentSpecimenLabel = Utility.toString(forwardToHashMap.get(Constants.SPECIMEN_LABEL));
 					request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenID);
-					if (parentSpecimenLabel == null || parentSpecimenLabel.trim().equals(""))
-					{
-						createForm.setParentSpecimenLabel(createForm.getLabel());
-						createForm.setLabel("");
-					}
+					createForm.setParentSpecimenLabel(parentSpecimenLabel);
+					createForm.setLabel("");
 				}
 
 				if(createForm.getLabel()==null || createForm.getLabel().equals(""))
@@ -151,7 +149,7 @@ public class CreateSpecimenAction extends SecureAction
 					//int totalNoOfSpecimen = bizLogic.totalNoOfSpecimen(sessionData)+1;
 					
 					HashMap inputMap = new HashMap();
-					inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, createForm.getParentSpecimenLabel());
+					inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, parentSpecimenLabel);
 					inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, String.valueOf(parentSpecimenID));
 
 					//SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
