@@ -518,15 +518,18 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			 * Patch Id : FutureSCG_3
 			 * Description : Setting number of specimens and restricted checkbox
 			 */
+			 /**
+			  * Removing the above patch, as it no more required. Now the new CP based entry page takes care of this. 
+			 */
 			Long cpeId = (Long)forwardToHashMap.get("COLLECTION_PROTOCOL_EVENT_ID");
 			if(cpeId != null)
 			{
 				specimenCollectionGroupForm.setCollectionProtocolEventId(cpeId);
-				List cpeList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),Constants.SYSTEM_IDENTIFIER,cpeId);
+				/*List cpeList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),Constants.SYSTEM_IDENTIFIER,cpeId);
 				if(!cpeList.isEmpty())
 				{
 					setNumberOfSpecimens(request, specimenCollectionGroupForm, cpeList);
-				}
+				}*/
 			}
 			//Bug 1915:SpecimenCollectionGroup.Study Calendar Event Point not populated when page is loaded through proceedTo
 			//Populating the Collection Protocol Events
@@ -552,13 +555,14 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 
 		//Get the collection protocol title for the collection protocol Id selected
 		String collectionProtocolTitle = "";
+		String collectionProtocolName = "";
 		list = bizLogic.retrieve(CollectionProtocol.class.getName(),valueField,new Long(specimenCollectionGroupForm.getCollectionProtocolId()));
 
 		if(!list.isEmpty())
 		{
 			CollectionProtocol collectionProtocol = (CollectionProtocol)list.get(0);
 			collectionProtocolTitle=collectionProtocol.getTitle();
-			String collectionProtocolName =(String) collectionProtocol.getShortTitle();
+			collectionProtocolName =(String) collectionProtocol.getShortTitle();
 			specimenCollectionGroupForm.setCollectionProtocolName(collectionProtocolName);
 		}
 
@@ -577,24 +581,15 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				//Poornima:Bug 2833 - Error thrown when adding a specimen collection group
 				//Max length of CP is 150 and Max length of SCG is 55, in Oracle the name does not truncate 
 				//and it is giving error. So the title is truncated in case it is longer than 30 .
-				String maxCollTitle = collectionProtocolTitle;
-				if(collectionProtocolTitle.length()>Constants.COLLECTION_PROTOCOL_TITLE_LENGTH)
+				String maxCollTitle = collectionProtocolName;
+				if(collectionProtocolName.length()>Constants.COLLECTION_PROTOCOL_TITLE_LENGTH)
 				{
-					maxCollTitle = collectionProtocolTitle.substring(0,Constants.COLLECTION_PROTOCOL_TITLE_LENGTH-1);
+					maxCollTitle = collectionProtocolName.substring(0,Constants.COLLECTION_PROTOCOL_TITLE_LENGTH-1);
 				}
 				//During add operation the id to set in the default name is generated
 				if(operation.equals(Constants.ADD))
 				{
-					//if participant is selected from the list
-					if(groupParticipantId>0) 
-					{
-						specimenCollectionGroupForm.setName(maxCollTitle+"_"+groupParticipantId+"_"+groupNumber);
-					}
-					//else if participant protocol Id is selected 
-					else
-					{
-						specimenCollectionGroupForm.setName(maxCollTitle+"_"+groupParticipantId+"_"+groupNumber);
-					}
+					specimenCollectionGroupForm.setName(maxCollTitle+"_"+groupParticipantId+"_"+groupNumber);
 				}
 				//During edit operation the id to set in the default name using the id
 				else if(operation.equals(Constants.EDIT) && (resetName!=null && resetName.equals("Yes")))
@@ -644,34 +639,6 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 		
 		return mapping.findForward(pageOf);
-	}
-	/**
-	 * Patch Id : FutureSCG_4
-	 * Description : method to set Number Of Specimens
-	 */
-	/**
-	 * @param request
-	 * @param specimenCollectionGroupForm
-	 * @param calendarEventPointList
-	 * @throws DAOException 
-	 */
-	private void setNumberOfSpecimens(HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm, List calendarEventPointList) throws DAOException 
-	{
-		CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
-		SpecimenCollectionRequirementGroup collectionRequirementGroup = (SpecimenCollectionRequirementGroup)collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
-		
-		IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		Collection specimenRequirementCollection = (Collection)bizlogic.retrieveAttribute(SpecimenCollectionRequirementGroup.class.getName(),collectionRequirementGroup.getId(),"elements(specimenCollection)");
-			
-		//collectionRequirementGroup.getSpecimenCollection(); 
-			
-		if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
-		{
-			int numberOfSpecimen = specimenRequirementCollection.size();
-			specimenCollectionGroupForm.setNumberOfSpecimens(numberOfSpecimen);
-			request.setAttribute(Constants.NUMBER_OF_SPECIMEN, numberOfSpecimen);
-			specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
-		}
 	}
 	/**
 	 * @param specimenCollectionGroupForm
@@ -1108,8 +1075,6 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			specimenCollectionGroupForm.setRestrictSCGCheckbox("false");
 		}
 		//Sets the value for number of specimen field on the specimen collection group page. 
-		specimenCollectionGroupForm.setNumberOfSpecimens(numberOfSpecimen);
-		request.setAttribute(Constants.NUMBER_OF_SPECIMEN, numberOfSpecimen);
 		//Set the number of actual specimen requirements for validation purpose.
 		//This value is used in validate method of SpecimenCollectionGroupForm.java.
 		request.setAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS, numberOfSpecimen + "");
