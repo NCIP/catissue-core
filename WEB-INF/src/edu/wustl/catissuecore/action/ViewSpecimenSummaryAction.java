@@ -152,6 +152,7 @@ public class ViewSpecimenSummaryAction extends Action {
 					specimenSessionVO.setPositionDimensionOne(specimenFormVO.getPositionDimensionOne());
 					specimenSessionVO.setPositionDimensionTwo(specimenFormVO.getPositionDimensionTwo());
 					specimenSessionVO.setQuantity(specimenFormVO.getQuantity());
+					specimenSessionVO.setConcentration(specimenFormVO.getConcentration());					
 				}
 
 		}	

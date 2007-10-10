@@ -202,7 +202,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 				
 //		specimenDataBean.setStorageContainer(null);
 		String concentration ="";
-		if ("Molecular".equals(specimen.getClass()))
+		if ("Molecular".equals(specimen.getClassName()))
 		{
 			concentration =String.valueOf(
 					((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter()
