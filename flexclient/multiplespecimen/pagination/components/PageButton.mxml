@@ -3,6 +3,7 @@
 	<mx:Style source="../defaltTheme.css"/>
 <mx:Script>
 	<![CDATA[
+		import mx.containers.HBox;
 		import pagination.utils.PaginateData;
 		import pagination.managers.ModelManager;
 	
@@ -13,10 +14,20 @@
 		
 		public function paginate():void
 		{
+			var hbCont:HBox = (HBox)( parentApplication.hbContainer);
+			var btnArray:Array = hbCont.getChildren();
+
+			for(var i:int=0;i<btnArray.length;i++)
+			{
+				var linkBtn:LinkButton = (LinkButton)(btnArray[i]);
+				linkBtn.styleName = "pageButtonStyleBlackColor";
+				
+			}
+
 
 			model.filteredCollection = paginateData.getPaginatedData(model.collection, lowLimit, highLimit);
 			model.currPage = (lowLimit / 5) ;
-			this.styleName = "pageButtonStyle";
+			this.styleName = "pageBtnWithBlueColor";
 			
 		}
 	]]>

@@ -7,10 +7,11 @@
 	horizontal-gap : 0.1;
 }
 
-.pageButtonStyle
+.pageBtnWithBlueColor
 {
-	   color: #0000FF;
+	color:#0000FF;
 }
+
 .pageButtonStyleBlackColor
 {
 	   color: #000000;

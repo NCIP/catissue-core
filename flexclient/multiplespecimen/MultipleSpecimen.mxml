@@ -471,7 +471,7 @@
 		<mx:method name="initFlexInterfaceForMultipleSp" result="handleInitMultipleSp(event)"/>
 
 	</mx:RemoteObject>
-	<mx:Text id="messageText"/>
+	<mx:Text id="messageText" color="#FF0000" fontSize="12"/>
 	<mx:HBox id="selectionBox">
 		<mx:Text text="Do you want to create New Specimen or Derived Specimen?" fontWeight="bold"/>
 		<mx:RadioButtonGroup id="spParent"/>
