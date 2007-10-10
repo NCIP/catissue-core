@@ -2467,7 +2467,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 	}
 	
-	public void updateMultipleSpecimens(Collection newSpecimenCollection, 
+	protected void updateMultipleSpecimens(Collection newSpecimenCollection, 
 				SessionDataBean sessionDataBean,boolean updateChildrens) 
 				throws DAOException
 	{

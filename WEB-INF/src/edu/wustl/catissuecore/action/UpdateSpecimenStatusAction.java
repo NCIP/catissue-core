@@ -68,7 +68,8 @@ public class UpdateSpecimenStatusAction extends Action {
 				specimenDomainCollection.add(specimen);
 	
 			}
-			bizLogic.updateMultipleSpecimens(specimenDomainCollection, sessionDataBean,true);
+			bizLogic.updateAnticipatorySpecimens
+			(specimenDomainCollection, sessionDataBean);
 			
 			Object obj = request.getAttribute("SCGFORM");
 			request.setAttribute("SCGFORM", obj);		
