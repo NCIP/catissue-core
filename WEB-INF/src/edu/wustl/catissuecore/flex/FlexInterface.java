@@ -355,7 +355,7 @@ public class FlexInterface
 
 			try
 			{
-				spBizLogic.updateMultipleSpecimens(specimenList, sdb,false);
+				spBizLogic.bulkUpdateSpecimens(specimenList, sdb);
 			}
 			catch (DAOException e)
 			{
