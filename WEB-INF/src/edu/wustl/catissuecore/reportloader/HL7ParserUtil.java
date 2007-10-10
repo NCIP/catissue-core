@@ -63,57 +63,61 @@ public class HL7ParserUtil
 					// Creating participant object from report text
 					Participant participant = parserParticipantInformation(getReportDataFromReportMap(reportMap, CaTIESConstants.PID), site);
 					participantName=participant.getLastName()+","+participant.getFirstName();
-					// check for matching participant
-					participantList=ReportLoaderUtil.checkForParticipant(participant);
-					if((participantList!=null)&& participantList.size()>0)
+					
+					Logger.out.info("Checking for Matching SCG");
+					//	check for matching scg here
+					String obrLine=getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
+					scg=ReportLoaderUtil.getExactMatchingSCG(site, getSurgicalPathologyNumber(obrLine));
+					
+					if(scg!=null) 
 					{
-						// matching participant found 
-						Logger.out.info("Matching Participant found "+participantList.size());
-						if(participantList.size()==1)
+						Logger.out.info("SCG found with exact match");
+						participantList= new HashSet<Participant>();
+						participantList.add(ReportLoaderUtil.getParticipant(scg.getId()));
+						if(scg.getIdentifiedSurgicalPathologyReport()!=null)
 						{
-							// Exactly one matching found, use this participant
-							Iterator<Participant> iter=participantList.iterator();
-							Participant aParticipant=iter.next();
-							
-							Logger.out.info("Checking for Matching SCG");
-							//	check for matching scg here
-							String obrLine=getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
-							scg=ReportLoaderUtil.checkForSpecimenCollectionGroup(aParticipant, site, getSurgicalPathologyNumber(obrLine));
-							if(scg!=null)
+							Logger.out.info("SCG conflict found with exact match");
+							status=CaTIESConstants.STATUS_SCG_CONFLICT;
+						}
+					}
+					else
+					{
+						// check for matching participant
+						participantList=ReportLoaderUtil.checkForParticipant(participant);
+						if((participantList!=null)&& participantList.size()>0)
+						{
+							// matching participant found 
+							Logger.out.info("Matching Participant found "+participantList.size());
+							if(participantList.size()==1)
 							{
-								if(scg.getSurgicalPathologyNumber()!=null && scg.getSurgicalPathologyNumber().trim().length()!=0)
-								{
-									if(scg.getIdentifiedSurgicalPathologyReport()!=null)
-									{
-										Logger.out.info("SCG conflict found with exact match");
-										status=CaTIESConstants.STATUS_SCG_CONFLICT;
-									}
-								}
-								else
+								// Exactly one matching found, use this participant
+								Iterator<Participant> iter=participantList.iterator();
+								Participant aParticipant=iter.next();
+								if(ReportLoaderUtil.isPartialMatchingSCG(aParticipant, site))
 								{
 									Logger.out.info("SCG conflict found with partial match");
 									scg=null;
 									status=CaTIESConstants.STATUS_SCG_PARTIAL_CONFLICT;
 								}
 							}
+							if (participantList.size()>1)
+							{
+								// Multiple matching participant found, this is STATUS_CONFLICT state
+								Logger.out.info("Conflict found for Participant ");
+								status=CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
+							}
 						}
-						else if (participantList.size()>1)
+						else
 						{
-							// Multiple matching participant found, this is STATUS_CONFLICT state
-							Logger.out.info("Conflict found for Participant ");
-							status=CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
+							// No matching participant found Create new participant
+							Logger.out.debug("No conflicts found. Creating new Participant ");
+							// this.setSiteToParticipant(participant, site);
+							Logger.out.debug("Creating new Participant");
+							participant=(Participant)CaCoreAPIService.getAppServiceInstance().createObject(participant);
+							Logger.out.info("New Participant Created");
+							participantList= new HashSet<Participant>();
+							participantList.add(participant);
 						}
-					}
-					else
-					{
-						// No matching participant found Create new participant
-						Logger.out.debug("No conflicts found. Creating new Participant ");
-						// this.setSiteToParticipant(participant, site);
-						Logger.out.debug("Creating new Participant");
-						participant=(Participant)CaCoreAPIService.getAppServiceInstance().createObject(participant);
-						Logger.out.info("New Participant Created");
-						participantList= new HashSet<Participant>();
-						participantList.add(participant);
 					}
 				}
 				catch (RemoteAccessException re) 

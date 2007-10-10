@@ -121,33 +121,12 @@ public class ReportLoaderUtil
 		return "";
 	}
 	
-	public static SpecimenCollectionGroup checkForSpecimenCollectionGroup(Participant participant, Site site, String surgicalPathologyNumber)throws Exception
-	{
-		SpecimenCollectionGroup scg=getExactMatchingSCG(participant, site, surgicalPathologyNumber);
-		if(scg!=null)
-		{
-			return scg;
-		}
-		else
-		{
-			if(isPartialMatchingSCG(participant, site))
-			{
-				return new SpecimenCollectionGroup();
-			}
-		}
-		return null;
-	}
 	
-	public static SpecimenCollectionGroup getExactMatchingSCG(Participant participant, Site site, String surgicalPathologyNumber)
+	public static SpecimenCollectionGroup getExactMatchingSCG(Site site, String surgicalPathologyNumber)
 	{
 		String scgHql = "select scg"+
-	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
-		" edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"+
-		" edu.wustl.catissuecore.domain.Participant as p "+
-		" where p.id = " +participant.getId()+ 
-		" and p.id = cpr.participant.id " +
-		" and scg.id in elements(cpr.specimenCollectionGroupCollection)" +
-		" and scg.specimenCollectionSite.name='"+site.getName()+"' "+
+	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg " +
+		" where scg.specimenCollectionSite.name='"+site.getName()+"' "+
 		" and scg.surgicalPathologyNumber='"+surgicalPathologyNumber+"'";
 		
 		List resultList=(List)CaCoreAPIService.executeQuery(scgHql, SpecimenCollectionGroup.class.getName());
@@ -179,4 +158,21 @@ public class ReportLoaderUtil
 		return false;
 	}
 	
+	public static Participant getParticipant(Long scgId) throws Exception
+	{
+		String hqlString = "select p"+
+	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
+		" edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"+
+		" edu.wustl.catissuecore.domain.Participant as p "+
+		" where scg.id = " +scgId+ 
+		" and p.id = cpr.participant.id " +
+		" and scg.id in elements(cpr.specimenCollectionGroupCollection)";
+		
+		List resultList=(List)CaCoreAPIService.executeQuery(hqlString, SpecimenCollectionGroup.class.getName());
+		if(resultList!=null && resultList.size()>0)
+		{
+			return (Participant)resultList.get(0);
+		}
+		return null;
+	}
 }
