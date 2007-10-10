@@ -116,6 +116,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			else if (actionForm.getForwardTo().equals("pageOfAliquot") || actionForm.getForwardTo().equals("pageOfCreateAliquot"))
 			{
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId().toString());
+				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
 			}
 
 			//Aniruddha:17/07/06 :: Added for aliquot result page
