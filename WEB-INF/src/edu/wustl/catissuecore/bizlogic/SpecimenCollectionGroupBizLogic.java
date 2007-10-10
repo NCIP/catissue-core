@@ -484,6 +484,39 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		bizLogic.assignPrivilegeToRelatedObjectsForSCG(dao, privilegeName, objectIds, userId, roleId, assignToUser, assignOperation);
 	}
+	
+	/**
+	 * check for the specimen associated with the SCG
+	 * @param obj
+	 * @param dao
+	 * @return
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	protected boolean isSpecimenExists(Object obj, DAO dao,Long scgId) throws DAOException, ClassNotFoundException
+	{
+		
+		String hql = " select" +
+        " elements(scg.specimenCollection) " +
+        " from " +
+        " edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg , " +
+        " edu.wustl.catissuecore.domain.Specimen as s" +
+        " where scg.id = "+scgId+" and"+
+        " scg.id = s.specimenCollectionGroup.id and " +
+        " s.activityStatus = '"+Constants.ACTIVITY_STATUS_ACTIVE+"'";
+		
+		List specimenList=(List)executeHqlQuery( dao,hql);
+		if((specimenList!=null) && (specimenList).size()>0)
+		{
+			return true;
+		}	
+		else
+		{
+			return false;
+		}
+		
+	
+	}
 
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
@@ -604,6 +637,23 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, group.getActivityStatus()))
 			{
 				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
+			}
+		}
+		
+		//check the activity status of all the specimens associated to the Specimen Collection Group
+		if(group.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
+		{
+			try {
+			
+				boolean isSpecimenExist=(boolean)isSpecimenExists(obj, dao,(Long)group.getId());
+				if(isSpecimenExist)
+				{
+					throw new DAOException(ApplicationProperties.getValue("specimencollectiongroup.specimen.exists"));
+				}
+		
+			
+			} catch (ClassNotFoundException e) {
+					e.printStackTrace();
 			}
 		}
 		/* Bug ID: 4165
@@ -1192,6 +1242,13 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		dao.closeSession();
 		return list;
 	}
+	
+	private List executeHqlQuery(DAO dao,String hql) throws DAOException, ClassNotFoundException
+	{
+		List list = dao.executeQuery(hql, null, false, null);
+		return list;
+	}
+	
 	/**
 	 * This function sets the data in QuertTreeNodeData object adds in a list of these nodes.
 	 * @param identifier

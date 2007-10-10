@@ -466,6 +466,72 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	}
 	
 	/**
+	 * 
+	 * @param dao
+	 * @param cprId
+	 * @return
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	protected boolean isSpecimenExistsForRegistration(DAO dao,Long cprId) throws DAOException, ClassNotFoundException
+	{
+		
+		String hql = " select " +
+        " elements(scg.specimenCollection) " +
+        "from " +
+        " edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr" +
+        ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg" +
+        ", edu.wustl.catissuecore.domain.Specimen as s" +
+        " where cpr.id = "+ cprId + " and "+
+        " cpr.id = scg.collectionProtocolRegistration.id and" +
+        " scg.id = s.specimenCollectionGroup.id and " +
+        " s.activityStatus = '"+Constants.ACTIVITY_STATUS_ACTIVE+"'";
+		
+		List scgList=(List)executeHqlQuery(dao,hql);
+		if((scgList!=null) && (scgList).size()>0)
+		{
+			return true;
+		}	
+		else
+		{
+			return false;
+		}
+	
+	}
+
+	protected boolean isSpecimenExists(DAO dao,Long participantId) throws DAOException, ClassNotFoundException
+	{
+		
+		String hql = " select" +
+        " elements(scg.specimenCollection) " +
+        "from" +
+        " edu.wustl.catissuecore.domain.Participant as p" +
+        ",edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr" +
+        ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg" +
+        ", edu.wustl.catissuecore.domain.Specimen as s" +
+        " where p.id = "+participantId+" and"+
+        " p.id = cpr.participant.id and" +
+        " cpr.id = scg.collectionProtocolRegistration.id and" +
+        " scg.id = s.specimenCollectionGroup.id and " +
+        " s.activityStatus = '"+Constants.ACTIVITY_STATUS_ACTIVE+"'";
+
+		
+		List specimenList=(List)executeHqlQuery(dao,hql);
+		if((specimenList!=null) && (specimenList).size()>0)
+		{
+			return true;
+		}	
+		else
+		{
+			return false;
+		}
+		
+	
+	}
+
+	
+	
+	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
@@ -473,6 +539,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		Participant participant = (Participant) obj;
 		Validator validator = new Validator();
 		//Added by Ashish Gupta
+		
 	
 		String message = "";		
 		if (participant == null)
@@ -564,6 +631,24 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		 		{		 			
 					throw new DAOException(ApplicationProperties.getValue("errors.participant.collectionProtocolRegistration.missing"));	
 		 		}
+//				check the activity status of all the specimens associated to the collection protocol registration
+				if(collectionProtocolRegistrationIdentifier.getActivityStatus()!=null && collectionProtocolRegistrationIdentifier.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
+				{
+					try {
+						
+						boolean isSpecimenExist=(boolean)isSpecimenExistsForRegistration(dao,(Long)collectionProtocolRegistrationIdentifier.getId());
+						if(isSpecimenExist)
+						{
+							throw new DAOException(ApplicationProperties.getValue("collectionprotocolregistration.scg.exists"));
+						}
+				
+					
+					} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+					}
+				}
+			
+				
 			}
 		}
 		
@@ -677,6 +762,9 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				throw new DAOException(ApplicationProperties.getValue("participant.ethnicity.errMsg"));
 			}
 		}
+	
+	
+		
 
 		if (operation.equals(Constants.ADD))
 		{
@@ -692,7 +780,23 @@ public class ParticipantBizLogic extends DefaultBizLogic
 				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
 			}
 		}
-
+		
+		//check the activity status of all the specimens associated to the participant
+		if(participant.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
+		{
+			try {
+				
+				boolean isSpecimenExist=(boolean)isSpecimenExists(dao,(Long)participant.getId());
+				if(isSpecimenExist)
+				{
+					throw new DAOException(ApplicationProperties.getValue("participant.specimen.exists"));
+				}
+		
+			
+			} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+			}
+		}
 		return true;
 	}
 
@@ -918,6 +1022,17 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			throw new DAOException(e.getMessage());
 		}
 		dao.closeSession();
+		return list;
+	}
+	/**
+	 * Executes hql Query and returns the results.
+	 * @param hql String hql
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	private List executeHqlQuery(DAO dao,String hql) throws DAOException, ClassNotFoundException
+	{
+		List list = dao.executeQuery(hql, null, false, null);
 		return list;
 	}
 }

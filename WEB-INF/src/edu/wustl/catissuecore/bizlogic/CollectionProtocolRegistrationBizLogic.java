@@ -522,7 +522,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		participantBizLogic.assignPrivilegeToRelatedObjectsForCPR(dao, privilegeName, objectIds, userId, roleId, assignToUser, assignOperation);
 
 	}
-
+		
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
@@ -607,6 +607,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		 }
 		 */
 		//End
+			
 		if (operation.equals(Constants.ADD))
 		{
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(registration.getActivityStatus()))
@@ -847,5 +848,20 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			}
 		}
 		return userID;
+	}
+	
+	/**
+	 * Executes hql Query and returns the results.
+	 * @param hql String hql
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	private List executeQuery(String hql) throws DAOException, ClassNotFoundException
+	{
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(null);
+		List list = dao.executeQuery(hql, null, false, null);
+		dao.closeSession();
+		return list;
 	}
 }

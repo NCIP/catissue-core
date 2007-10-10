@@ -692,6 +692,50 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		return false;
 	}
 
+	/**
+	 * Executes hql Query and returns the results.
+	 * @param hql String hql
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	private List executeHqlQuery(DAO dao,String hql) throws DAOException, ClassNotFoundException
+	{
+		List list = dao.executeQuery(hql, null, false, null);
+		return list;
+	}
+	
+	protected boolean isSpecimenExists(DAO dao,Long cpId) throws DAOException, ClassNotFoundException
+	{
+		
+		String hql = " select" +
+        " elements(scg.specimenCollection) " +
+        "from " +
+        " edu.wustl.catissuecore.domain.CollectionProtocol as cp" +
+        ", edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr" +
+        ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg" +
+        ", edu.wustl.catissuecore.domain.Specimen as s" +
+        " where cp.id = "+cpId+"  and"+
+        " cp.id = cpr.collectionProtocol.id and" +
+        " cpr.id = scg.collectionProtocolRegistration.id and" +
+        " scg.id = s.specimenCollectionGroup.id and " +
+        " s.activityStatus = '"+Constants.ACTIVITY_STATUS_ACTIVE+"'";
+
+		
+		List specimenList=(List)executeHqlQuery(dao,hql);
+		if((specimenList!=null) && (specimenList).size()>0)
+		{
+			return true;
+		}	
+		else
+		{
+			return false;
+		}
+		
+	
+	}
+	
+	
+	
 	//Added by Ashish
 	/*	Map values = null;
 	Map innerLoopValues = null;
@@ -805,8 +849,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		String innerCounterKey = String.valueOf(counter);
 		innerLoopValues.put(innerCounterKey, String.valueOf(innerCounter));
 	}
-
+	
 	//END
+	
+	
+	
+	
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
@@ -1062,6 +1110,24 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		System.out.println("=========================================================");
 		System.out.println("=================VALIDATING COLLECTION COMPLETE==========");
+		
+		
+//		check the activity status of all the specimens associated to the Collection Protocol
+		if(protocol.getActivityStatus()!=null && protocol.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
+		{
+			try {
+				
+				boolean isSpecimenExist=(boolean)isSpecimenExists(dao,(Long)protocol.getId());
+				if(isSpecimenExist)
+				{
+					throw new DAOException(ApplicationProperties.getValue("collectionprotocol.specimen.exists"));
+				}
+		
+			
+			} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+			}
+		}
 
 		return true;
 	}
