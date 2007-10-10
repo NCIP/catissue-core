@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:LinkButton xmlns:mx="http://www.adobe.com/2006/mxml" click="paginate()" label="test" textDecoration="underline">
+<mx:LinkButton xmlns:mx="http://www.adobe.com/2006/mxml" click="paginate()" label="test" textDecoration="underline" styleName="pageButtonStyleBlackColor">
+	<mx:Style source="../defaltTheme.css"/>
 <mx:Script>
 	<![CDATA[
 		import pagination.utils.PaginateData;
@@ -12,8 +13,10 @@
 		
 		public function paginate():void
 		{
+
 			model.filteredCollection = paginateData.getPaginatedData(model.collection, lowLimit, highLimit);
 			model.currPage = (lowLimit / 5) ;
+			this.styleName = "pageButtonStyle";
 			
 		}
 	]]>

@@ -50,8 +50,8 @@
 				storageContBox.visible= false;
 				storageContBox.height = 0;
 				
-				derivativeBtn.visible = false;
-				derivativeBtn.height = 0;
+//				derivativeBtn.visible = false;
+	//			derivativeBtn.height = 0;
 				
 				specimenAccordion.removeChild(collEventBox);
 				specimenAccordion.removeChild(recEventBox);
