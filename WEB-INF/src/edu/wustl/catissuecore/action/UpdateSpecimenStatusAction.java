@@ -201,24 +201,24 @@ public class UpdateSpecimenStatusAction extends Action {
 		String pos2 = specimenVO.getPositionDimensionTwo();
 		if (pos1!=null)
 		{
-			try{
+			try
+			{
 				specimen.setPositionDimensionOne( Integer.parseInt(pos1) );
-			}catch(NumberFormatException exception)
+			}
+			catch(NumberFormatException exception)
 			{
 				specimen.setPositionDimensionOne(null);
-//				throw new BizLogicException("Position dimention is missing for specimen" +
-//						specimenVO.getDisplayName());
 			}
 		}
 		if (pos2!=null)
 		{
-			try{
+			try
+			{
 				specimen.setPositionDimensionTwo( Integer.parseInt(pos2) );
-			}catch(NumberFormatException exception)
+			}
+			catch(NumberFormatException exception)
 			{
 				specimen.setPositionDimensionOne(null);
-//				throw new BizLogicException("Position dimention is missing for specimen" +
-//						specimenVO.getDisplayName());
 			}
 				
 		}

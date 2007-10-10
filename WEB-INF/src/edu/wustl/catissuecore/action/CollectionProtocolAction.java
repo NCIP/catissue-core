@@ -68,14 +68,29 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
         //Gets the value of the operation attribute.
     	String operation = (String)request.getParameter(Constants.OPERATION);
+    	
+    	HttpSession newSession = request.getSession();
+    	CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)newSession.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+    	
+    	if(operation==null && collectionProtocolBean!=null && collectionProtocolBean.getOperation().equals("update"))
+    	{
+    		operation = Constants.EDIT;
+    	}
+    	else if (operation==null && collectionProtocolBean==null)
+    	{
+    		operation = Constants.ADD;
+    	}
+    
     	if(invokeFunction!=null)
     	{
     		initCollectionProtocolPage(request, form, pageOf, mapping);	
     	}
-    	else
+    	
+    	if(operation.equals("add"))
     	{
     		initCleanSession(request);
     	}
+    	
         Logger.out.debug("operation in coll prot action"+operation);
         //Sets the operation attribute to be used in the Edit/View Collection Protocol Page in Advance Search Object View. 
         request.setAttribute(Constants.OPERATION,operation);
