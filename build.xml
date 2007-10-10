@@ -814,5 +814,17 @@
 		            </classpath> 			
 				</java>
 		</target>
-	
+	<target name="export_xmi" depends="compile" >			
+					<java classname="edu.wustl.catissuecore.annotations.xmi.XMIExporter" fork="true">
+						<arg value="${groupname}"/>
+						<arg value="${filename}"/>
+						<arg value="${version}"/>
+						<classpath>
+				            <pathelement location="${target.dir}"/>
+			            	<fileset dir="${lib.dir}">
+			                  <include name="*.jar"/>
+			              </fileset>
+			            </classpath> 			
+					</java>
+			</target>
 </project>
