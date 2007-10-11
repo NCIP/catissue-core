@@ -66,9 +66,7 @@ public class ViewSpecimenSummaryAction extends Action {
 				
 			}
 			
-			if (summaryForm.getSpecimenList()!= null  &&
-					ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS
-					.equals(summaryForm.getRequestType()))
+			if (summaryForm.getSpecimenList()!= null  )
 			{
 				updateSessionBean(summaryForm, session);
 			}
@@ -325,16 +323,16 @@ public class ViewSpecimenSummaryAction extends Action {
 
 		LinkedHashMap<String, GenericSpecimen> specimenMap = null;
 		
-		if (eventId != null || 
-				ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS.equals(summaryForm.getRequestType())) 
+		if (eventId == null)
+		{
+			eventId = "dummy";
+		}
+
+		if (eventId != null ) 
 		{
 			if(summaryForm.getRequestType() == null)
 			{
 				summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL);
-			}
-			if (eventId == null)
-			{
-				eventId = "dummy";
 			}
 			StringTokenizer stringTokenizer =new StringTokenizer(eventId, "_");
 			if(stringTokenizer!=null)
