@@ -82,6 +82,12 @@ public class ViewSpecimenSummaryAction extends Action {
 				(CollectionProtocolBean)session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 			
+			//for disabling of CP set the collection protocol status: kalpana
+	
+			if(collectionProtocolBean.getActivityStatus()!=null){
+				ViewSpecimenSummaryForm.setCollectionProtocolStatus(collectionProtocolBean.getActivityStatus());
+			}
+			
 			LinkedHashMap<String, GenericSpecimen> specimenMap = 
 							getSpecimensFromSessoin(session, eventId, summaryForm);
 
@@ -96,7 +102,6 @@ public class ViewSpecimenSummaryAction extends Action {
 					summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
 				}
 			}
-
 			String pageOf = request.getParameter(Constants.PAGEOF);
 			if(pageOf != null && ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(summaryForm.getRequestType()))
 			{

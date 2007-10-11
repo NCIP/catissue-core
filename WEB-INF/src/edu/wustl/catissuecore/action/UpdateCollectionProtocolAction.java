@@ -53,8 +53,14 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 				bizLogic.update(collectionProtocol, oldCollectionProtocol, 
 						Constants.HIBERNATE_DAO, sessionDataBean);
 			}
-			
-			target = Constants.SUCCESS;
+			if(specimenSummaryForm.getCollectionProtocolStatus()!=null && specimenSummaryForm.getCollectionProtocolStatus().equalsIgnoreCase(Constants.DISABLED))
+			{
+				target = "disabled";
+			}
+			else
+			{	
+				target = Constants.SUCCESS;
+			}
 			ActionMessages actionMessages = new ActionMessages();
 			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"object.edit.successOnly","Collection Protocol"));

@@ -75,20 +75,25 @@ public class SubmitSpecimenCPAction extends BaseAction {
 					specimenSummaryForm.getRequestType())) {
 				
 				CollectionProtocol collectionProtocol = populateCollectionProtocolObjects(request);
-
+				HttpSession session = request.getSession();
+				CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
+				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+	
 				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(
 						specimenSummaryForm.getUserAction()))
 				{
 					specimenSummaryForm.setSummaryObject(collectionProtocol);
+//					for disabling of CP set the collection protocol status: kalpana
+					if(collectionProtocolBean.getActivityStatus()!=null){
+						ViewSpecimenSummaryForm.setCollectionProtocolStatus(collectionProtocolBean.getActivityStatus());
+					}
 					return mapping.findForward("updateCP");
 				}
 				else
 				{
 					insertCollectionProtocol(collectionProtocol,request.getSession());
-					HttpSession session = request.getSession();
-					CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
-							.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-
+					
+				
 					collectionProtocolBean.setIdentifier(collectionProtocol.getId());
 
 					CollectionProtocolUtil.updateSession(request,collectionProtocol.getId());
