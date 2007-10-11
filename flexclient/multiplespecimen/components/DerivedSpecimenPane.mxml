@@ -17,6 +17,7 @@
 			[Bindable]
 			 public var derivedSpCollOriginal:ArrayCollection;
 			 
+			 [Bindable] public var mode:String;
 	 		public var metadataManager:MetadataManager = new MetadataManager();
 			private function init():void
 			{
@@ -36,7 +37,10 @@
 
 				for(var i:int=0;i<derivedSpColl.length;i++)
 				{	
-					validateVal = D[i].validateDerivedSpecimen(i+1) && validateVal;
+					//validateVal = D[i].validateDerivedSpecimen(i+1) && validateVal;
+					var derivedSpData:SpecimenData = derivedSpColl.getItemAt(i) as SpecimenData;
+					derivedSpData.mode = mode;
+					validateVal = derivedSpData.validate(false) && validateVal;
 				}
 				//Alert.show("Hi");
 			/*	var isValid:Boolean = true;

@@ -100,7 +100,7 @@
    	
    		
    		
-   		public function validateDerivedSpecimen(index:int):Boolean
+/*   		public function validateDerivedSpecimen(index:int):Boolean
    		{
    			var isValid:Boolean = true;
    			var specimenNumber :String = " for specimen "+index;
@@ -117,7 +117,7 @@
 				isValid = exIDPane.validateExIds(index) && isValid;
 			}
 			return isValid;
-		}                     
+		}     */                
 
 	
 

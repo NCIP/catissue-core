@@ -197,6 +197,7 @@
 	    	var pop1:DerivedSpecimenPane = DerivedSpecimenPane(
 	        PopUpManager.createPopUp(this, DerivedSpecimenPane, true));
     		pop1.derivedSpColl = spData.derivedSpColl;
+    		pop1.mode = mode;
 			pop1.title = "Create Derived Specimen";
 
 			/* creating a new derived sp array collection in case of cancel button pressed on derived sp page */
@@ -218,7 +219,7 @@
 
 
    		
-   		public function validateSpecimen(index:int):Boolean
+   	/*	public function validateSpecimen(index:int):Boolean
    		{
    			Alert.show("in specimnen Pane validation:");
    			var isValid:Boolean = true;
@@ -270,7 +271,7 @@
 			}
 			return isValid;
 		}        
-
+*/
 		/*public function changeParent():void
 		{
 			if(isSpSCGName.selected)

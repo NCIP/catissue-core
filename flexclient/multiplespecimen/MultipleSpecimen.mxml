@@ -110,7 +110,7 @@
 			
 			model.collection = specimenColl;
 			model.currPage = 0;		
-			model.pageLimit = 5;		
+			model.pageLimit = 4;		
 			model.filteredCollection  = getFilteredCollection(model.collection,model.currPage);
 			paginateData.paginate(model.collection, this.hbContainer, model.pageLimit);
 

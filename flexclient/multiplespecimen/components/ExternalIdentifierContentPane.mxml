@@ -34,7 +34,7 @@
 				bindData(idValue, "errorString", extIdBean,"identifierValueErrStr");
 			}
 			
-			public function validateExId(index:int) : Boolean
+/*			public function validateExId(index:int) : Boolean
 			{
 				var isValid:Boolean = true;
 				if((idName.text.length!=0 && idValue.text.length ==0)  || (idName.text.length==0 && idValue.text.length !=0))
@@ -44,7 +44,7 @@
 				}
 				
 				return isValid;
-			}
+			}*/
 			
 		]]>
 	</mx:Script>

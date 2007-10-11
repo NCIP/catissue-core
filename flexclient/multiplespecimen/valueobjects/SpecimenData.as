@@ -380,11 +380,11 @@ package valueobjects
 			return spData;
 		}
 		
-		public function validate():Boolean
+		public function validate(isNewSpecimen:Boolean = true):Boolean
 		{
 			var specimenValidator:SpecimenValidator  = new SpecimenValidator();
 			var isValid:Boolean = true;
-			if(mode == MSPParameter.MODE_PARAM_VAL_ADD && this.parentName == "")
+			if(isNewSpecimen && mode == MSPParameter.MODE_PARAM_VAL_ADD && this.parentName == "")
 			{
 				if(this.parentType == "New_Specimen")
 					parentNameErrStr = "Please enter Specimen Collection Group Name";
@@ -432,7 +432,7 @@ package valueobjects
 				isValid = true && isValid;
 				 	
 			}
-			if(this.tissueSite == "" || this.tissueSite == Constants.SELECT)
+			if(isNewSpecimen && (this.tissueSite == "" || this.tissueSite == Constants.SELECT))
 			{
 				this.tissueSiteErrStr = "Please select tissue site";
 				isValid = false && isValid;
@@ -443,7 +443,7 @@ package valueobjects
 				isValid = true && isValid;
 				 	
 			}
-			if(this.tissueSide == "" || this.tissueSide == Constants.SELECT)
+			if(isNewSpecimen && (this.tissueSide == "" || this.tissueSide == Constants.SELECT))
 			{
 				this.tissueSideErrStr = "Please select tissue side";
 				isValid = false && isValid;
@@ -454,7 +454,7 @@ package valueobjects
 				isValid = true && isValid;
 				 	
 			}
-			if(this.pathologicalStatus == "" || this.pathologicalStatus == Constants.SELECT)
+			if(isNewSpecimen && (this.pathologicalStatus == "" || this.pathologicalStatus == Constants.SELECT))
 			{
 				this.pathologicalStatusErrStr = "Please select pathological status";
 				isValid = false && isValid;
@@ -481,6 +481,7 @@ package valueobjects
 			{
 				for(i=0;i<this.exIdColl.length;i++)
 				{
+
 					var exIdBean:ExternalIdentifierBean = exIdColl.getItemAt(i) as ExternalIdentifierBean;
 					isValid = exIdBean.validate() && isValid;
 				}
@@ -494,11 +495,11 @@ package valueobjects
 					isValid = biohazardBean.validate() && isValid;
 				}
 			}
-			if(this.collectionEvent != null)
+			if(isNewSpecimen &&this.collectionEvent != null)
 			{
 				isValid = this.collectionEvent.validate() && isValid;
 			}
-			if(this.receivedEvent != null)
+			if(isNewSpecimen && this.receivedEvent != null)
 			{
 				isValid = this.receivedEvent.validate() && isValid;
 			}

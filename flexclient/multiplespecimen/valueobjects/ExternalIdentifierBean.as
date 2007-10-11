@@ -58,6 +58,7 @@ package valueobjects
        		var isValid:Boolean = true;
 	       	if(this.identifierName == "" && this.identifierValue != "")
 			{
+				
 				this.identifierNameErrStr = "Please enter name";
 				isValid = false && isValid;
 			} 

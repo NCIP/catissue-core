@@ -32,13 +32,13 @@
 			Utility.bindData(comment, "text", receivedEvent, "comment");
 			
 		}
-		public function validateRecvEvent(index:int):Boolean
+	/*	public function validateRecvEvent(index:int):Boolean
 		{
 			var isValid:Boolean = true;
 			isValid = validateComboBoxField(receiverName,"selectedItem","Please select receiver") && isValid;			
 			isValid = validateComboBoxField(recievedQuality,"selectedItem","Please select received quality") && isValid;			
 			return isValid;
-		}
+		}*/
 	]]>
 </mx:Script>
 <components:MyCanvas>

@@ -30,7 +30,7 @@
 				biohazardName.selectedItem=biohazardNameSelected;
 				
 			}
-			public function validateBiohazard(index:int) : Boolean
+			/*public function validateBiohazard(index:int) : Boolean
 			{
 				var isValid:Boolean = true;
 				if((type.text=="-- Select --" && biohazardName.text != "-- Select --")  || (type.text!="-- Select --" && biohazardName.text == "-- Select --"))
@@ -40,7 +40,7 @@
 				}
 				
 				return isValid;
-			}
+			}*/
 		
 		]]>
 	</mx:Script>

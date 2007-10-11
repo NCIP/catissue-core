@@ -38,14 +38,14 @@
 			
 		}
 		
-		public function validateCollEvent(index:int):Boolean
+		/*public function validateCollEvent(index:int):Boolean
 		{
 			var isValid:Boolean = true;
 			isValid = validateComboBoxField(collectorName,"selectedItem","Please select collector") && isValid;			
 			isValid = validateComboBoxField(procedureName,"selectedItem","Please select procedure") && isValid;			
 			isValid = validateComboBoxField(containerName,"selectedItem","Please select container") && isValid;			
 			return isValid;
-		}
+		}*/
 	]]>
 </mx:Script>
 <components:MyCanvas>
