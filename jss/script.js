@@ -195,6 +195,17 @@ function setSubmittedFor(submittedFor,forwardTo)
 	document.forms[0].submittedFor.value = submittedFor;
 	document.forms[0].forwardTo.value    = forwardTo;
 }
+//Falguni
+//This function sets value of submittedFor Print attribute of JSP form object
+function setSubmittedForPrint(submittedFor,forwardTo,nextForwardTo)
+{
+	
+	document.forms[0].submittedFor.value = submittedFor;
+	document.forms[0].forwardTo.value    = forwardTo;
+	document.forms[0].nextForwardTo.value   = nextForwardTo;
+	
+	
+}
 
 //this function is used in Specimen and Events page for non functional tabs 
 function featureNotSupported()
