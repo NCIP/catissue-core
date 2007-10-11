@@ -20,4 +20,8 @@ public class ForwardToFactory
     {
         return new ForwardToProcessor();
     }
+    public static ForwardToPrintProcessor getForwardToPrintProcessor()
+    {
+        return new ForwardToPrintProcessor();
+    }
 }
