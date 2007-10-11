@@ -4456,6 +4456,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/GenericSpecimenSummary.do" />
 			<forward name="failure" path="/GenericSpecimenSummary.do" />
+			<forward name="disabled" path="/ManageAdministrativeData.do" />
 		</action>
 		
 		<action path="/RetrieveCollectionProtocol"
