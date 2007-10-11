@@ -1240,7 +1240,7 @@
 										</label>
 									</td>
 								    <td class="formFieldNoBordersSimple" >
-								     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyValue%>"/>
+								     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" />
 								     	<span id="unitSpan"><%=unitSpecimen%></span>
 								     	<html:hidden property="unit"/>
 								    </td>
