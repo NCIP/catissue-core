@@ -2,13 +2,13 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 
 <%@ include file="/pages/subMenu/SelectMenu.jsp" %>
-<tr>
+<%--<tr>
 	<td class="subMenuPrimaryTitle" height="22">
 		<a href="#content">
     		<img src="images/shim.gif" alt="Skip Menu" width="1" height="1" border="0" />
     	</a>
 	</td>
-</tr>
+</tr>--%>
 <!-- menu id : 22 -->
 <%
 	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 22, normalMenuClass , selectedMenuClass , hoverMenuClass);

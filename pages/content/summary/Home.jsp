@@ -55,6 +55,30 @@
 								<%= request.getAttribute(Constants.CELL+Constants.SPECIMEN_TYPE_COUNT)%>
 							</TD>
 <!-- 2ND ROW END -->	</TR>
+<%
+	Collection cellDetails = (Collection)request.getAttribute(Constants.CELL+Constants.SPECIMEN_TYPE_DETAILS);
+	if (cellDetails != null)
+	{
+		Iterator itr = cellDetails.iterator();
+    	while(itr.hasNext())
+    	{
+    		NameValueBean bean = (NameValueBean)itr.next();
+%>
+<!--  CELL specimen DETAILS -->
+<TR>
+	<TD COLSPAN=2>&nbsp;&nbsp;</TD>
+	<TD class="detailsData">
+		<%=bean.getName()%>			
+	</TD>
+	<TD class="detailsCount">
+		<%=bean.getValue()%>
+	</TD>
+</TR>
+<!--  CELL specimen DETAILS end -->
+<%        		
+}
+}		
+%>
 
 <!-- SEPARATOR -->
 						<TR>

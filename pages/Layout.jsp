@@ -149,11 +149,23 @@
 			<!-- application hdr ends -->
 			<tr>
 				<td width="180" valign="top" class="subMenu" id="sideMenuTd">
-					<!-- submenu begins -->				
-					<tiles:insert attribute="commonmenu">
-						<tiles:put name="submenu" beanName="submenu" />
-					</tiles:insert> 
-					<!-- submenu ends -->
+				
+					<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
+						<tr>
+							<td class="subMenuPrimaryTitle" height="30">
+							<img src="images/caTISSUE_logo.gif" alt="application logo" width="170" height="40" border="0" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<!-- submenu begins -->				
+								<tiles:insert attribute="commonmenu">
+									<tiles:put name="submenu" beanName="submenu" />
+								</tiles:insert> 
+								<!-- submenu ends -->
+							</td>
+						</tr>
+					</table>
 				</td>
 				
 				<!--
