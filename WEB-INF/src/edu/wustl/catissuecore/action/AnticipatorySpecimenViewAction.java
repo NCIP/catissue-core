@@ -19,7 +19,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
@@ -36,7 +35,6 @@ import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
@@ -47,9 +45,9 @@ public class AnticipatorySpecimenViewAction extends Action {
 
 	private String globalSpecimenId = null;
 	private SessionDataBean bean;
-	private LinkedHashMap<String, ArrayList<GenericSpecimenVO>> autoStorageSpecimenMap =new LinkedHashMap<String, ArrayList<GenericSpecimenVO>> ();
+	protected LinkedHashMap<String, ArrayList<GenericSpecimenVO>> autoStorageSpecimenMap =new LinkedHashMap<String, ArrayList<GenericSpecimenVO>> ();
 	Long cpId = null;
-	private HashSet<String> storageContainerIds = new HashSet<String>();
+	protected HashSet<String> storageContainerIds = new HashSet<String>();
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -107,7 +105,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		return null;
 	}
 
-	private LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection) throws DAOException
+	protected LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection) throws DAOException
 	{
 		LinkedHashMap<String, GenericSpecimen> specimenMap = new LinkedHashMap<String, GenericSpecimen>();
 		autoStorageSpecimenMap.clear();
@@ -126,7 +124,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		return specimenMap;
 	}
 	
-	private LinkedHashMap<String, GenericSpecimen> getChildAliquots(Specimen specimen) throws DAOException
+	protected LinkedHashMap<String, GenericSpecimen> getChildAliquots(Specimen specimen) throws DAOException
 	{
 		Collection specimenChildren = specimen.getChildrenSpecimen();
 		Iterator iterator = specimenChildren.iterator();
@@ -145,7 +143,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		return aliquotMap;
 	}
 
-	private LinkedHashMap<String, GenericSpecimen> getChildDerived(Specimen specimen) throws DAOException
+	protected LinkedHashMap<String, GenericSpecimen> getChildDerived(Specimen specimen) throws DAOException
 	{
 		Collection specimenChildren = specimen.getChildrenSpecimen();
 		Iterator iterator = specimenChildren.iterator();
@@ -164,7 +162,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		return derivedMap;
 	}	
 	
-	private GenericSpecimenVO getSpecimenBean(Specimen specimen, String parentName) throws DAOException
+	protected GenericSpecimenVO getSpecimenBean(Specimen specimen, String parentName) throws DAOException
 	{
 		GenericSpecimenVO specimenDataBean = new GenericSpecimenVO();
 		specimenDataBean.setBarCode(specimen.getBarcode());
@@ -253,7 +251,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		return specimenDataBean;
 	}
 	
-	private void setSpecimenStorageDetails(List specimenDataBeanList, String className) throws DAOException
+	protected void setSpecimenStorageDetails(List specimenDataBeanList, String className) throws DAOException
 	{
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		TreeMap containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(cpId.longValue(), className,
@@ -262,7 +260,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		populateAliquotsStorageLocations(specimenDataBeanList, containerMap);
 	}
 
-	private void populateAliquotsStorageLocations(List specimenDataBeanList, Map containerMap)
+	protected void populateAliquotsStorageLocations(List specimenDataBeanList, Map containerMap)
 	{
 		
 		int counter = 0;

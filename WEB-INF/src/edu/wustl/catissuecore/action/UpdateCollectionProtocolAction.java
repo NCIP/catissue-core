@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -34,8 +35,9 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 
 		try{ 
 			ViewSpecimenSummaryForm specimenSummaryForm = (ViewSpecimenSummaryForm) form;
-			CollectionProtocol collectionProtocol = (CollectionProtocol)
-								specimenSummaryForm.getSummaryObject();
+			CollectionProtocol collectionProtocol = CollectionProtocolUtil
+			.populateCollectionProtocolObjects(request);
+
 			CollectionProtocolBean collectionProtocolBean = 
 				(CollectionProtocolBean)(request.getSession())
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);

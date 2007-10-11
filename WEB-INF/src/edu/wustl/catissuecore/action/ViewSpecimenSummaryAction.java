@@ -77,11 +77,12 @@ public class ViewSpecimenSummaryAction extends Action {
 			{
 				return mapping.findForward(summaryForm.getSubmitAction());
 			}
+			
 			summaryForm.setUserAction(ViewSpecimenSummaryForm.ADD_USER_ACTION);
 			CollectionProtocolBean collectionProtocolBean = 
 				(CollectionProtocolBean)session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-			
+						
 			//for disabling of CP set the collection protocol status: kalpana
 	
 			if(collectionProtocolBean!=null && collectionProtocolBean.getActivityStatus()!=null){
@@ -136,6 +137,18 @@ public class ViewSpecimenSummaryAction extends Action {
 		String selectedItem = summaryForm.getLastSelectedSpecimenId();
 		GenericSpecimenVO selectedSpecimen=(GenericSpecimenVO) specimenMap.get(selectedItem);
 		
+		updateSpecimenToSession(summaryForm, specimenMap);	
+		updateAliquotToSession(summaryForm, selectedSpecimen);
+		updateDerivedToSession(summaryForm, selectedSpecimen);
+		
+	}
+
+	/**
+	 * @param summaryForm
+	 * @param specimenMap
+	 */
+	private void updateSpecimenToSession(ViewSpecimenSummaryForm summaryForm,
+			LinkedHashMap specimenMap) {
 		Collection specimenCollection = specimenMap.values();
 		Iterator iterator = summaryForm.getSpecimenList().iterator();
 
@@ -149,23 +162,35 @@ public class ViewSpecimenSummaryAction extends Action {
 
 				if(specimenSessionVO!=null)
 				{
-					specimenSessionVO.setCheckedSpecimen(specimenFormVO.getCheckedSpecimen());
-					specimenSessionVO.setDisplayName(specimenFormVO.getDisplayName());
-					specimenSessionVO.setBarCode(specimenFormVO.getBarCode());
-					specimenSessionVO.setContainerId(specimenFormVO.getContainerId());
-					specimenSessionVO.setSelectedContainerName(specimenFormVO.getSelectedContainerName());
-					specimenSessionVO.setPositionDimensionOne(specimenFormVO.getPositionDimensionOne());
-					specimenSessionVO.setPositionDimensionTwo(specimenFormVO.getPositionDimensionTwo());
-					specimenSessionVO.setQuantity(specimenFormVO.getQuantity());
-					specimenSessionVO.setConcentration(specimenFormVO.getConcentration());					
+					setFormValuesToSession(specimenFormVO, specimenSessionVO);					
 				}
 
-		}	
-		updateAliquotToSession(summaryForm, selectedSpecimen);
-		updateDerivedToSession(summaryForm, selectedSpecimen);
-		
+		}
 	}
 
+
+	/**
+	 * @param summaryForm
+	 * @param selectedSpecimen
+	 */
+	private void updateAliquotToSession(ViewSpecimenSummaryForm summaryForm,
+			GenericSpecimenVO selectedSpecimen) {
+		Iterator aliquotIterator = summaryForm.getAliquotList().iterator();
+		
+		while(aliquotIterator.hasNext())
+		{
+			GenericSpecimenVO aliquotFormVO =(GenericSpecimenVO) aliquotIterator.next();
+			String aliquotKey = aliquotFormVO.getUniqueIdentifier();
+			GenericSpecimenVO  aliquotSessionVO = (GenericSpecimenVO) 
+										getAliquotSessionObject(selectedSpecimen , aliquotKey);
+			if(aliquotSessionVO != null)
+			{
+				setFormValuesToSession(aliquotFormVO, aliquotSessionVO);
+			}
+			
+		}
+	}
+	
 	
 	private void updateDerivedToSession(ViewSpecimenSummaryForm summaryForm,
 			GenericSpecimenVO selectedSpecimen) {
@@ -179,18 +204,27 @@ public class ViewSpecimenSummaryAction extends Action {
 										getDerivedSessionObject(selectedSpecimen , derivedKey);
 			if(derivedSessionVO != null)
 			{
-				derivedSessionVO.setCheckedSpecimen(derivedFormVO.getCheckedSpecimen());
-				derivedSessionVO.setDisplayName(derivedFormVO.getDisplayName());
-				derivedSessionVO.setBarCode(derivedFormVO.getBarCode());
-				derivedSessionVO.setContainerId(derivedFormVO.getContainerId());
-				derivedSessionVO.setSelectedContainerName(derivedFormVO.getSelectedContainerName());
-				derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
-				derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
-				derivedSessionVO.setQuantity(derivedFormVO.getQuantity());
-				derivedSessionVO.setConcentration(derivedFormVO.getConcentration());
+				setFormValuesToSession(derivedFormVO, derivedSessionVO);
 			}
 			
 		}
+	}
+
+	/**
+	 * @param derivedFormVO
+	 * @param derivedSessionVO
+	 */
+	private void setFormValuesToSession(GenericSpecimenVO derivedFormVO,
+			GenericSpecimenVO derivedSessionVO) {
+		derivedSessionVO.setCheckedSpecimen(derivedFormVO.getCheckedSpecimen());
+		derivedSessionVO.setDisplayName(derivedFormVO.getDisplayName());
+		derivedSessionVO.setBarCode(derivedFormVO.getBarCode());
+		derivedSessionVO.setContainerId(derivedFormVO.getContainerId());
+		derivedSessionVO.setSelectedContainerName(derivedFormVO.getSelectedContainerName());
+		derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
+		derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
+		derivedSessionVO.setQuantity(derivedFormVO.getQuantity());
+		derivedSessionVO.setConcentration(derivedFormVO.getConcentration());
 	}
 	
 	private GenericSpecimen getDerivedSessionObject(GenericSpecimen parentSessionObject, String derivedKey)
@@ -236,36 +270,6 @@ public class ViewSpecimenSummaryAction extends Action {
 		return null;
 		
 	}
-
-	/**
-	 * @param summaryForm
-	 * @param selectedSpecimen
-	 */
-	private void updateAliquotToSession(ViewSpecimenSummaryForm summaryForm,
-			GenericSpecimenVO selectedSpecimen) {
-		Iterator aliquotIterator = summaryForm.getAliquotList().iterator();
-		
-		while(aliquotIterator.hasNext())
-		{
-			GenericSpecimenVO aliquotFormVO =(GenericSpecimenVO) aliquotIterator.next();
-			String aliquotKey = aliquotFormVO.getUniqueIdentifier();
-			GenericSpecimenVO  aliquotSessionVO = (GenericSpecimenVO) 
-										getAliquotSessionObject(selectedSpecimen , aliquotKey);
-			if(aliquotSessionVO != null)
-			{
-				aliquotSessionVO.setCheckedSpecimen(aliquotFormVO.getCheckedSpecimen());
-				aliquotSessionVO.setDisplayName(aliquotFormVO.getDisplayName());
-				aliquotSessionVO.setBarCode(aliquotFormVO.getBarCode());
-				aliquotSessionVO.setContainerId(aliquotFormVO.getContainerId());
-				aliquotSessionVO.setSelectedContainerName(aliquotFormVO.getSelectedContainerName());
-				aliquotSessionVO.setPositionDimensionOne(aliquotFormVO.getPositionDimensionOne());
-				aliquotSessionVO.setPositionDimensionTwo(aliquotFormVO.getPositionDimensionTwo());
-				aliquotSessionVO.setQuantity(aliquotFormVO.getQuantity());
-			}
-			
-		}
-	}
-	
 	private GenericSpecimen getAliquotSessionObject(GenericSpecimen parentSessionObject, String aliquotKey)
 	{
 		LinkedHashMap aliquotMap = parentSessionObject.getAliquotSpecimenCollection();

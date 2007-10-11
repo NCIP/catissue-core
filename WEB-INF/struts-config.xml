@@ -4490,6 +4490,25 @@ PUBLIC
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 	                <forward name="failure" path="/Home.do" />
        </action>    
+		<action path="/MultipleSpecimenView"
+                type="edu.wustl.catissuecore.action.MultipleSpecimenViewAction"
+                name="specimenCollectionGroupForm"
+                validate="false"
+                scope="request">
+					<forward name="success" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=bulkUpdateSpecimens" />
+					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
+					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
+	                <forward name="failure" path="/Home.do" />
+       </action>    
+       <action path="/bulkUpdateSpecimens"
+                type="edu.wustl.catissuecore.action.UpdateBulkSpecimensAction"
+                name="viewSpecimenSummaryForm"
+                validate="false"
+                scope="request">
+					<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />	
+					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
+       </action>    
+
        <action path="/updateSpecimenStatus"
                 type="edu.wustl.catissuecore.action.UpdateSpecimenStatusAction"
                 name="viewSpecimenSummaryForm"

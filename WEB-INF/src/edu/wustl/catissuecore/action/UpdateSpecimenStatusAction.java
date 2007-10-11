@@ -45,29 +45,13 @@ public class UpdateSpecimenStatusAction extends Action {
 			String eventId = specimenSummaryForm.getEventId();
 			
 			HttpSession session = request.getSession();
-			
-			Map collectionProtocolEventMap = (Map) session
-			.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-			
-			CollectionProtocolEventBean eventBean =(CollectionProtocolEventBean)
-								collectionProtocolEventMap.get(eventId);
-			
-			LinkedHashMap specimenMap = (LinkedHashMap)eventBean.getSpecimenRequirementbeanMap();
-			
-			Collection specimenCollection = specimenMap.values();
-			Iterator iterator = specimenCollection.iterator();
-			SessionDataBean sessionDataBean =(SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 			NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
-			LinkedHashSet specimenDomainCollection = new LinkedHashSet();
-			while(iterator.hasNext())
-			{
-				GenericSpecimenVO specimenVO =(GenericSpecimenVO) iterator.next();
-				
-				Specimen specimen = createSpecimenDomainObject(specimenVO);
-				specimen.setChildrenSpecimen(getChildrenSpecimens(specimenVO));
-				specimenDomainCollection.add(specimen);
-	
-			}
+
+			LinkedHashSet specimenDomainCollection = getSpecimensToSave(
+					eventId, session);
+			
+			SessionDataBean sessionDataBean =(SessionDataBean)
+			session.getAttribute(Constants.SESSION_DATA);
 			bizLogic.updateAnticipatorySpecimens
 			(specimenDomainCollection, sessionDataBean);
 			
@@ -84,6 +68,38 @@ public class UpdateSpecimenStatusAction extends Action {
 			return mapping.findForward(Constants.FAILURE);
 		}
 		
+	}
+
+	/**
+	 * @param eventId
+	 * @param session
+	 * @return
+	 * @throws BizLogicException
+	 */
+	protected LinkedHashSet getSpecimensToSave(String eventId, HttpSession session)
+			throws BizLogicException {
+		Map collectionProtocolEventMap = (Map) session
+		.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+		
+		CollectionProtocolEventBean eventBean =(CollectionProtocolEventBean)
+							collectionProtocolEventMap.get(eventId);
+		
+		LinkedHashMap specimenMap = (LinkedHashMap)eventBean.getSpecimenRequirementbeanMap();
+		
+		Collection specimenCollection = specimenMap.values();
+		Iterator iterator = specimenCollection.iterator();
+		
+		LinkedHashSet specimenDomainCollection = new LinkedHashSet();
+		while(iterator.hasNext())
+		{
+			GenericSpecimenVO specimenVO =(GenericSpecimenVO) iterator.next();
+			
+			Specimen specimen = createSpecimenDomainObject(specimenVO);
+			specimen.setChildrenSpecimen(getChildrenSpecimens(specimenVO));
+			specimenDomainCollection.add(specimen);
+
+		}
+		return specimenDomainCollection;
 	}
 
 	private Collection getChildrenSpecimens(GenericSpecimenVO specimenVO) throws BizLogicException
