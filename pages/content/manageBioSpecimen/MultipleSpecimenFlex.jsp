@@ -46,7 +46,7 @@ function callSubmitSpecimen()
 		String formAction = "GenericSpecimenSummary.do";
 		if(request.getAttribute(Constants.PAGEOF) != null)
 		{
-			formAction = "GenericSpecimenSummary.do?pageOf="+request.getAttribute(Constants.PAGEOF);
+			formAction = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGEOF);
 		}
 	%>
 	document.forms[0].action = "<%=formAction%>";

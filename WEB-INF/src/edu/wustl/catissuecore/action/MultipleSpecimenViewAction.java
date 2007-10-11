@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
+import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -51,17 +52,16 @@ public class MultipleSpecimenViewAction extends AnticipatorySpecimenViewAction
 			CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 			
 			eventBean.setUniqueIdentifier("EventID-1");
-			Collection specimenCollection = (Collection) session
+			LinkedHashMap specimenCollection = (LinkedHashMap) session
 			.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
 			
-			eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
-					specimenCollection));
+			eventBean.setSpecimenRequirementbeanMap(specimenCollection);
 
 			String globalSpecimenId = "E"+eventBean.getUniqueIdentifier() + "_";
 			cpEventMap.put(globalSpecimenId, eventBean);			
 			session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 			session
-			.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);			
+			.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);
 		
 			Set<String> keySet = autoStorageSpecimenMap.keySet();
 			if (!keySet.isEmpty())

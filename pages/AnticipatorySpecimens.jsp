@@ -143,7 +143,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							<html:text styleClass="formFieldSized3" name="specimen" indexed="true" property="quantity" />
 							</td>
 							<td class="dataCellText"> 
-							<html:text styleClass="formFieldSized3" name="specimen" indexed="true" property="concentration" />
+							<html:text styleClass="formFieldSized3" name="specimen" indexed="true" property="concentration" /> &nbsp;&micro;g/&micro;l
 							</td>
 							
 							<logic:equal name="specimen" property="storageContainerForSpecimen" value="Virtual">
@@ -216,7 +216,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							</td>
 							<td class="dataCellText"> 
 							<html:hidden  name="specimen" indexed="true" property="concentration" />
-							&nbsp; <bean:write  name="specimen" property="concentration" />
+							&nbsp; <bean:write  name="specimen" property="concentration" /> &nbsp;&micro;g/&micro;l
 							</td>
 
 							<logic:equal name="specimen" property="storageContainerForSpecimen" value="Virtual">
@@ -310,7 +310,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							<html:text styleClass="formFieldSized3" name="aliquot" indexed="true" property="quantity" />
 							</td>
 							<td class="dataCellText"> 
-							<html:text styleClass="formFieldSized3" name="aliquot" indexed="true" property="concentration" />
+							<html:text styleClass="formFieldSized3" name="aliquot" indexed="true" property="concentration" /> &nbsp;&micro;g/&micro;l
 							</td>
 							
 							<logic:equal name="aliquot" property="storageContainerForSpecimen" value="Virtual">
@@ -384,7 +384,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							</td>
 							<td class="dataCellText"> 
 							<html:hidden  name="aliquot" indexed="true" property="concentration" />
-							&nbsp; <bean:write  name="aliquot" property="concentration" />
+							&nbsp; <bean:write  name="aliquot" property="concentration" /> &nbsp;&micro;g/&micro;l
 							</td>
 
 							<logic:equal name="aliquot" property="storageContainerForSpecimen" value="Virtual">
@@ -474,7 +474,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							<html:text styleClass="formFieldSized3" name="derived" indexed="true" property="quantity" />
 							</td>
 							<td class="dataCellText"> 
-							<html:text styleClass="formFieldSized3" name="derived" indexed="true" property="concentration" />
+							<html:text styleClass="formFieldSized3" name="derived" indexed="true" property="concentration" /> &nbsp;&micro;g/&micro;l
 							</td>
 							
 							<logic:equal name="derived" property="storageContainerForSpecimen" value="Virtual">
@@ -548,7 +548,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							</td>
 							<td class="dataCellText"> 
 							<html:hidden  name="derived" indexed="true" property="concentration" />
-							&nbsp; <bean:write  name="derived" property="concentration" />
+							&nbsp; <bean:write  name="derived" property="concentration" /> &nbsp;&micro;g/&micro;l
 							</td>
 
 							<logic:equal name="derived" property="storageContainerForSpecimen" value="Virtual">

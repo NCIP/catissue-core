@@ -23,17 +23,17 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * Reference to dimensional position one of the specimen in Storage Container.
 	 */
-	protected Integer positionDimensionOne;
+	protected String positionDimensionOne;
 
 	/**
 	 * Reference to dimensional position two of the specimen in Storage Container.
 	 */
-	protected Integer positionDimensionTwo;
+	protected String positionDimensionTwo;
 
 	/**
 	 * Barcode assigned to the specimen.
 	 */
-	protected String barcode;
+	protected String barCode;
 
 	/**
 	 * Comment on specimen.
@@ -84,29 +84,18 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * The quantity of a specimen.
 	 */
-	protected Quantity initialQuantity;
+	protected String initialQuantity;
 	
 	protected String concentration;
 
 	
 	public LinkedHashMap <String,GenericSpecimen> deriveSpecimenCollection = new LinkedHashMap<String,GenericSpecimen>();
+	private String parentName;
+	private String storageType;
+	private String selectedContainerName;
+	private String containerId;
+	private boolean checkedSpecimen;
 	
-	/* getters and setter for attributes */
-	/**
-	 * @return Returns the barcode.
-	 */
-	public String getBarcode()
-	{
-		return barcode;
-	}
-
-	/**
-	 * @param barcode The barcode to set.
-	 */
-	public void setBarcode(String barcode)
-	{
-		this.barcode = barcode;
-	}
 
 	/**
 	 * @return Returns the biohazardCollection.
@@ -191,7 +180,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * @return Returns the id.
 	 */
-	public Long getId()
+	public long getId()
 	{
 		return id;
 	}
@@ -204,21 +193,6 @@ public class SpecimenDataBean implements GenericSpecimen
 		this.id = id;
 	}
 
-	/**
-	 * @return Returns the initialQuantity.
-	 */
-	public Quantity getInitialQuantity()
-	{
-		return initialQuantity;
-	}
-
-	/**
-	 * @param initialQuantity The initialQuantity to set.
-	 */
-	public void setInitialQuantity(Quantity initialQuantity)
-	{
-		this.initialQuantity = initialQuantity;
-	}
 
 	/**
 	 * @return Returns the label.
@@ -287,33 +261,18 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * @return Returns the positionDimensionOne.
 	 */
-	public Integer getPositionDimensionOne()
+	public String getPositionDimensionOne()
 	{
-		return positionDimensionOne;
+		return String.valueOf(positionDimensionOne);
 	}
 
-	/**
-	 * @param positionDimensionOne The positionDimensionOne to set.
-	 */
-	public void setPositionDimensionOne(Integer positionDimensionOne)
-	{
-		this.positionDimensionOne = positionDimensionOne;
-	}
 
 	/**
 	 * @return Returns the positionDimensionTwo.
 	 */
-	public Integer getPositionDimensionTwo()
+	public String getPositionDimensionTwo()
 	{
-		return positionDimensionTwo;
-	}
-
-	/**
-	 * @param positionDimensionTwo The positionDimensionTwo to set.
-	 */
-	public void setPositionDimensionTwo(Integer positionDimensionTwo)
-	{
-		this.positionDimensionTwo = positionDimensionTwo;
+		return String.valueOf(positionDimensionTwo);
 	}
 
 	/**
@@ -443,7 +402,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	public String getParentName()
 	{
 		// TODO Auto-generated method stub
-		return null;
+		return this.parentName;
 	}
 
 	/* (non-Javadoc)
@@ -461,7 +420,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	public String getStorageContainerForSpecimen()
 	{ 
 		// TODO Auto-generated method stub
-		return "Virtual";
+		return this.storageType;
 	}
 
 	/* (non-Javadoc)
@@ -472,8 +431,127 @@ public class SpecimenDataBean implements GenericSpecimen
 		// TODO Auto-generated method stub
 		return this.uniqueId;
 	}
+
+	@Override
+	public String getBarCode() {
+		// TODO Auto-generated method stub
+		return this.barCode;
+	}
+
+	@Override
+	public boolean getCheckedSpecimen() {
+		// TODO Auto-generated method stub
+		return checkedSpecimen;
+	}
+
+	@Override
+	public String getContainerId() {
+		// TODO Auto-generated method stub
+		return this.containerId;
+	}
+
+	@Override
+	public boolean getReadOnly() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getSelectedContainerName() {
+		// TODO Auto-generated method stub
+		return selectedContainerName;
+	}
+
+	@Override
+	public void setAliquotSpecimenCollection(
+			LinkedHashMap<String, GenericSpecimen> aliquotSpecimenCollection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setBarCode(String barCode) {
+		// TODO Auto-generated method stub
+		this.barCode = barCode;
+	}
+
+	@Override
+	public void setCheckedSpecimen(boolean checkedSpecimen) {
+		this.checkedSpecimen =checkedSpecimen;
+		
+	}
+
+	@Override
+	public void setContainerId(String containerId) {
+		
+		this.containerId = containerId;
+	}
+
+	@Override
+	public void setDisplayName(String displayName) {
+		// TODO Auto-generated method stub
+		this.label = displayName ;
+	}
+
+	@Override
+	public void setId(long id) {
+		// TODO Auto-generated method stub
+		this.id = id ;
+	}
+
+	@Override
+	public void setParentName(String parentName) {
+
+		 this.parentName = parentName;
+		
+	}
+
+	@Override
+	public void setPositionDimensionOne(String positionDimensionOne) {
+		
+		this.positionDimensionOne = positionDimensionOne;
+		
+	}
+
+	@Override
+	public void setPositionDimensionTwo(String positionDimensionTwo) {
+
+		this.positionDimensionTwo = positionDimensionTwo;
+	}
+
+	@Override
+	public void setQuantity(String quantity) {
+		
+		this.initialQuantity = quantity;
+	}
+
+	@Override
+	public void setReadOnly(boolean readOnly) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSelectedContainerName(String selectedContainerName) {
+		
+		this.selectedContainerName = selectedContainerName;
+		
+	}
+
+	@Override
+	public void setStorageContainerForSpecimen(
+			String storageContainerForSpecimen) {
+		
+		this.storageType = storageContainerForSpecimen;
+		
+	}
+
+	@Override
+	public void setUniqueIdentifier(String uniqueIdentifier) {
 	
-	
+		this.uniqueId = uniqueIdentifier ;
+	}
+
 	/* override methods finish */
 
 

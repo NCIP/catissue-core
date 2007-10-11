@@ -334,7 +334,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		}		
 		
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		specimen.setBarcode(specimenDataBean.getBarcode());
+		specimen.setBarcode(specimenDataBean.getBarCode());
 		specimen.setComment(specimenDataBean.getComment());
 		specimen.setCreatedOn(new Date());
 		specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);

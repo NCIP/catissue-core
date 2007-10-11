@@ -603,12 +603,10 @@ public class FlexInterface
 
 		//specimenDataBean.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		//sp.setAvailable(true);
-		Quantity qt = new Quantity();
-		qt.setValue(spBean.quantity);
-		specimenDataBean.setInitialQuantity(qt);
+		specimenDataBean.setQuantity(String.valueOf(spBean.quantity));
 		//sp.setAvailableQuantity(qt);
 		specimenDataBean.setClassName(spBean.specimenClass);
-		specimenDataBean.setBarcode(spBean.specimenBarcode);
+		specimenDataBean.setBarCode(spBean.specimenBarcode);
 		/*sp.setBiohazardCollection(new HashSet<Biohazard>());
 		 sp.setChildrenSpecimen(new HashSet<Specimen>());*/
 		specimenDataBean.setComment(spBean.comment);

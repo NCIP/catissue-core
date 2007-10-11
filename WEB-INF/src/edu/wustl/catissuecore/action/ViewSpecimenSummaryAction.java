@@ -22,7 +22,7 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bean.GenericSpecimenVO;
+
 import edu.wustl.catissuecore.util.global.Constants;
 
 public class ViewSpecimenSummaryAction extends Action {
@@ -107,7 +107,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			if(pageOf != null && ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(summaryForm.getRequestType()))
 			{
 				request.setAttribute(Constants.PAGEOF,pageOf);
-				return mapping.findForward(pageOf);
+				return mapping.findForward(target);
 			}
 			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
 			return mapping.findForward(target);
@@ -135,7 +135,7 @@ public class ViewSpecimenSummaryAction extends Action {
 							collectionProtocolEventMap.get(eventId);
 		LinkedHashMap specimenMap = (LinkedHashMap)eventBean.getSpecimenRequirementbeanMap();
 		String selectedItem = summaryForm.getLastSelectedSpecimenId();
-		GenericSpecimenVO selectedSpecimen=(GenericSpecimenVO) specimenMap.get(selectedItem);
+		GenericSpecimen selectedSpecimen=(GenericSpecimen) specimenMap.get(selectedItem);
 		
 		updateSpecimenToSession(summaryForm, specimenMap);	
 		updateAliquotToSession(summaryForm, selectedSpecimen);
@@ -155,9 +155,9 @@ public class ViewSpecimenSummaryAction extends Action {
 		
 		while(iterator.hasNext())
 		{
-			GenericSpecimenVO specimenFormVO =(GenericSpecimenVO) iterator.next();
+			GenericSpecimen specimenFormVO =(GenericSpecimen) iterator.next();
 
-			GenericSpecimenVO specimenSessionVO =(GenericSpecimenVO)
+			GenericSpecimen specimenSessionVO =(GenericSpecimen)
 			specimenMap.get(specimenFormVO.getUniqueIdentifier());
 
 				if(specimenSessionVO!=null)
@@ -174,14 +174,14 @@ public class ViewSpecimenSummaryAction extends Action {
 	 * @param selectedSpecimen
 	 */
 	private void updateAliquotToSession(ViewSpecimenSummaryForm summaryForm,
-			GenericSpecimenVO selectedSpecimen) {
+			GenericSpecimen selectedSpecimen) {
 		Iterator aliquotIterator = summaryForm.getAliquotList().iterator();
 		
 		while(aliquotIterator.hasNext())
 		{
-			GenericSpecimenVO aliquotFormVO =(GenericSpecimenVO) aliquotIterator.next();
+			GenericSpecimen aliquotFormVO =(GenericSpecimen) aliquotIterator.next();
 			String aliquotKey = aliquotFormVO.getUniqueIdentifier();
-			GenericSpecimenVO  aliquotSessionVO = (GenericSpecimenVO) 
+			GenericSpecimen  aliquotSessionVO = (GenericSpecimen) 
 										getAliquotSessionObject(selectedSpecimen , aliquotKey);
 			if(aliquotSessionVO != null)
 			{
@@ -193,14 +193,14 @@ public class ViewSpecimenSummaryAction extends Action {
 	
 	
 	private void updateDerivedToSession(ViewSpecimenSummaryForm summaryForm,
-			GenericSpecimenVO selectedSpecimen) {
+			GenericSpecimen selectedSpecimen) {
 		Iterator derivedIterator = summaryForm.getDerivedList().iterator();
 		
 		while(derivedIterator.hasNext())
 		{
-			GenericSpecimenVO derivedFormVO =(GenericSpecimenVO) derivedIterator.next();
+			GenericSpecimen derivedFormVO =(GenericSpecimen) derivedIterator.next();
 			String derivedKey = derivedFormVO.getUniqueIdentifier();
-			GenericSpecimenVO  derivedSessionVO = (GenericSpecimenVO) 
+			GenericSpecimen  derivedSessionVO = (GenericSpecimen) 
 										getDerivedSessionObject(selectedSpecimen , derivedKey);
 			if(derivedSessionVO != null)
 			{
@@ -214,8 +214,8 @@ public class ViewSpecimenSummaryAction extends Action {
 	 * @param derivedFormVO
 	 * @param derivedSessionVO
 	 */
-	private void setFormValuesToSession(GenericSpecimenVO derivedFormVO,
-			GenericSpecimenVO derivedSessionVO) {
+	private void setFormValuesToSession(GenericSpecimen derivedFormVO,
+			GenericSpecimen derivedSessionVO) {
 		derivedSessionVO.setCheckedSpecimen(derivedFormVO.getCheckedSpecimen());
 		derivedSessionVO.setDisplayName(derivedFormVO.getDisplayName());
 		derivedSessionVO.setBarCode(derivedFormVO.getBarCode());

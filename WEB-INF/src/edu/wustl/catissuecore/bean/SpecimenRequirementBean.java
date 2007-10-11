@@ -566,5 +566,119 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	public void setSpecimenCharsId(long specimenCharsId) {
 		this.specimenCharsId = specimenCharsId;
+	}
+
+
+	@Override
+	public String getBarCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public boolean getCheckedSpecimen() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public String getContainerId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String getPositionDimensionOne() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String getPositionDimensionTwo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public boolean getReadOnly() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public String getSelectedContainerName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setAliquotSpecimenCollection(
+			LinkedHashMap<String, GenericSpecimen> aliquotSpecimenCollection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setBarCode(String barCode) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setCheckedSpecimen(boolean checkedSpecimen) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setContainerId(String containerId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setDeriveSpecimenCollection(
+			LinkedHashMap<String, GenericSpecimen> deriveSpecimenCollection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setPositionDimensionOne(String positionDimensionOne) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setPositionDimensionTwo(String positionDimensionTwo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setReadOnly(boolean readOnly) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setSelectedContainerName(String selectedContainerName) {
+		// TODO Auto-generated method stub
+		
 	}	
 }
