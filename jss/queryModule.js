@@ -569,14 +569,13 @@
 				{
 					if(ob.value != "")
 					{
-						var arSelected = new Array();			
+						var values = "";
 						while(ob.selectedIndex != -1)
 						{
 							var selectedValue = ob.options[ob.selectedIndex].value;
-							arSelected.push(selectedValue);
+							values = values + "&" +  selectedValue;
 							ob.options[ob.selectedIndex].selected = false;
 						}
-						var values = arSelected.toString();
 						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + values +";";
 					}
 				}
@@ -641,8 +640,7 @@
 	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
 	{
         var strToCreateQueyObject = createQueryString(nameOfFormToPost, entityName , attributesList,'addLimit');
- 
-		if(navigator.appName == "Microsoft Internet Explorer")
+ 		if(navigator.appName == "Microsoft Internet Explorer")
 		{
 			if(isTopButton)
 			{

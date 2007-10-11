@@ -72,7 +72,6 @@ public class CreateQueryObjectBizLogic
 			{
 				List<AttributeInterface> attributes = new ArrayList<AttributeInterface>();
 				List<String> attributeOperators = new ArrayList<String>();
-				List<String> firstAttributeValues = new ArrayList<String>();
 				List<String> secondAttributeValues = new ArrayList<String>();
 				ArrayList<ArrayList<String>> conditionValues = new ArrayList<ArrayList<String>>();
 
@@ -86,7 +85,7 @@ public class CreateQueryObjectBizLogic
 					{
 						attributes.add(attr);
 						attributeOperators.add(params[0]);
-						firstAttributeValues.add(params[1]);
+						//firstAttributeValues.add(params[1]);
 						secondAttributeValues.add(params[2]);
 						ArrayList<String> attributeValues = getConditionValuesList(params);
 						errorMessage = errorMessage
@@ -97,7 +96,7 @@ public class CreateQueryObjectBizLogic
 				}
 				ruleDetailsMap.put(AppletConstants.ATTRIBUTES, attributes);
 				ruleDetailsMap.put(AppletConstants.ATTRIBUTE_OPERATORS, attributeOperators);
-				ruleDetailsMap.put(AppletConstants.FIRST_ATTR_VALUES, firstAttributeValues);
+				//ruleDetailsMap.put(AppletConstants.FIRST_ATTR_VALUES, firstAttributeValues);
 				ruleDetailsMap.put(AppletConstants.SECOND_ATTR_VALUES, secondAttributeValues);
 				ruleDetailsMap.put(AppletConstants.ATTR_VALUES, conditionValues);
 				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
@@ -111,12 +110,13 @@ public class CreateQueryObjectBizLogic
 		ArrayList<String> attributeValues = new ArrayList<String>();
 		if (params[1] != null)
 		{
-			if (params[1].contains(","))
+			if (params[1].contains(Constants.QUERY_VALUES_DELIMITER))
 			{
-				String[] values = params[1].split(",");
+				String[] values = params[1].split(Constants.QUERY_VALUES_DELIMITER);
 				for (int i = 0; i < values.length; i++)
 				{
-					attributeValues.add(values[i]);
+					if(!values[i].equalsIgnoreCase(""))
+						attributeValues.add(values[i]);
 				}
 			}
 			else
