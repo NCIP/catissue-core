@@ -84,7 +84,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				{
 					specimenSummaryForm.setSummaryObject(collectionProtocol);
 //					for disabling of CP set the collection protocol status: kalpana
-					if(collectionProtocolBean.getActivityStatus()!=null){
+					if(collectionProtocolBean!=null && collectionProtocolBean.getActivityStatus()!=null){
 						ViewSpecimenSummaryForm.setCollectionProtocolStatus(collectionProtocolBean.getActivityStatus());
 					}
 					return mapping.findForward("updateCP");
