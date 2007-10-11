@@ -34,7 +34,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
-					
+							
 		}
 		
 	</script>
@@ -246,7 +246,12 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 					</tr>
 					<tr>
 						<td>
-							<html:submit  value="Save Collection Protocol" onclick="confirmDisable()"/>
+							<html:button  styleClass="actionButton" 
+								property="submitPage" 
+								title=""
+								value="Save Collection Protocol" 
+								onclick="confirmDisable()">
+							</html:button>
 						</td>
 					</tr>
 				</logic:equal>
