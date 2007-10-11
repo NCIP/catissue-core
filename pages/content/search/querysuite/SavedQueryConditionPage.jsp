@@ -37,67 +37,78 @@
 	<body>
 		<html:errors/>
 		<html:form styleId='saveQueryForm' action='<%=Constants.SAVE_QUERY_ACTION%>'>
-			<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
+		<tr>
+		  <td height="20">&nbsp;
+		  </td>
+		 <tr>
+		  <td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0"  width="100%">
 				<tr>
-					<td colspan='3 height='20' class="formTitle">
+					<td colspan='3'  class="formTitle" height="20">
 						<bean:message key="savequery.conditionInformationTitle"/>
 					</td>
 				</tr>
 				<tr>
-					<td width='5' class="formRequiredNotice">*</td>
-					<td class="formRequiredLabel">
-					<bean:message key="query.title"/> :</td>
-					<td class="formField">
-						<html:text  style="width: 300px; display: block;" styleId="title" property="title" />
+					<td width='5' class="formFieldNoBordersSimple">*</td>
+					<td class="formFieldNoBordersSimple"><b>
+								<bean:message key="query.title"/> </b>
 					</td>
-					<!--
-					<td rowspan="2" valign="top">Share Query With :</td>
-					<td rowspan="2" valign="top">
-						<select multiple="multiple" name="userIds" class="dropdownQuery" style="width:150px; display:block;">
-							<option>All</option>
-							<option>Administrator</option>
-						</select>
+					<td class="formFieldNoBordersSimple">
+						<html:text       styleClass="formFieldSized" maxlength="255"      styleId="title" property="title" />
 					</td>
-					-->
+					
 				</tr>
 				<tr>
-					<td width='5' class="formRequiredNotice">&nbsp;</td>
-					<td class="formLabel"><bean:message key="query.description"/> :</td>
-					<td class="formField">
-						<html:textarea cols="40" rows="4" style="width: 300px;" styleId="description" property="description"> </html:textarea>
+					<td width='5' class="formFieldNoBordersSimple">&nbsp;</td>
+					<td class="formFieldNoBordersSimple"><bean:message key="query.description"/> </td>
+					<td class="formFieldNoBordersSimple">
+						<html:textarea styleClass="formFieldSized"   cols="32" rows="5"  property="description"> </html:textarea>
 					</td>
+				</tr>
+				<tr>
+                   <td colspan="3" height="20">&nbsp;
+				</td>
 				</tr>
 				<tr>
 					<td colspan='3' class="formTitle" height="20">
 						<bean:message key="savequery.setConditionParametersTitle" />
 					</td>
 				</tr>
-				<tr>
-					<td colspan='3'>
-						<table cellpadding="0" cellspacing="0" border="0" class="contentPage" width='100%'>
-							<tr>
-								<td><%=request.getAttribute(Constants.HTML_CONTENTS)%></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan='3' align="right">
+				</table>
+            </td>
+          </tr>
+		   <tr>
+		    <td>
+		      <div  style="width:100%; max-height:300px; min-height:50px; overflow-y:auto;">
+			    <%=request.getAttribute(Constants.HTML_CONTENTS)%>
+			   </div>
+			</td> 
+		   </tr>
+		   <tr>
+		    <td colspan="3" height="20"/>
+		   </tr>
+		   <tr>
+		    <td>
+		    </td>
+		   </tr>
+			<tr>
+					<td colspan='3'  align="right">
 					    <input type="hidden" name="queryString" id="queryString" value=""/>
 					    <input type="hidden" name="buildQueryString" id="buildQueryString" value=""/>
-						<input type="button" name="preview" value="Preview"  disabled="true"/>
+						<input type="button" name="preview" value="Preview" class="actionButton"  disabled="true"/>
 						<c:choose>
 							<c:when test="${querySaved eq 'true'}">
-								<input type="button" name="close" value="Close" onClick="closeSaveQueryWindow()"/>
+								<input type="button" name="close" value="Close" class="actionButton" onClick="closeSaveQueryWindow()"/>
 							</c:when>
 							<c:otherwise>
-								<input type="button" name="save" value="Save" onClick="produceSavedQuery()"/>
-								<input type="button" name="cancel" value="Cancel" onClick="window.close();"/>
+								<input type="button" name="save" value="Save" class="actionButton" onClick="produceSavedQuery()"/>
+								<input type="button" name="cancel" value="Cancel" class="actionButton" onClick="window.close();"/>
 							</c:otherwise>
 						</c:choose>
 					</td>
 				</tr>
-			</table>
+		 </table>
 		</html:form>
 	</body>
 </html:html>
