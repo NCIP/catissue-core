@@ -388,10 +388,10 @@ public String editSpecimen(List<SpecimenBean> spBeanList)
 			catch (DAOException e)
 			{
 				return e.getMessage();
-			}
+			} 
 
 		}
-		return "Specimens Updated Successfully";
+		return "success:Specimens Updated Successfully";
 	}
 
 	/*private String writeSpecimen(SpecimenBean spBean)
@@ -706,8 +706,9 @@ public String editSpecimen(List<SpecimenBean> spBeanList)
 				derivedBean.receivedEvent = spBean.receivedEvent;
 
 				SpecimenDataBean derivedDataBean = prepareGenericSpecimen(derivedBean);
-				derivedDataBean.setUniqueIdentifier(""+i);	
-				derivedMap.put("d1" + i, derivedDataBean);
+				derivedDataBean.setUniqueIdentifier("d"+i);
+				derivedDataBean.setParentName(spBean.specimenLabel);
+				derivedMap.put("d" + i, derivedDataBean);
 				i++;
 			}
 			specimenDataBean.setDeriveSpecimenCollection(derivedMap);
