@@ -1145,8 +1145,17 @@ public class AliquotAction extends SecureAction
 	{
 		Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
 		if (forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
-		{
-			request.setAttribute(Constants.PARENT_SPECIMEN_ID, forwardToHashMap.get("parentSpecimenId"));
+		{   
+			if(forwardToHashMap.get("parentSpecimenId") instanceof Long)
+			{
+				String parentSpecimenId = forwardToHashMap.get("parentSpecimenId").toString();
+				request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenId);
+				
+			}
+			else
+			{
+				request.setAttribute(Constants.PARENT_SPECIMEN_ID, forwardToHashMap.get("parentSpecimenId"));
+			}
 		}
 		else
 		{
