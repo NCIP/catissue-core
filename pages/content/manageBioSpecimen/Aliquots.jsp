@@ -97,6 +97,9 @@ if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
 		document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=create&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>&<%=Constants.CP_QUERY%>=<%=CPQuery%>";
 							
 		<%}%>
+		document.forms[0].forwardTo.value= "printAliquot";
+		document.forms[0].nextForwardTo.value = "success";
+		
 	    document.forms[0].submit();
 	}
 	
@@ -730,6 +733,13 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 			<bean:message key="buttons.reset"/>
 		</html:reset>
 	</td--%> 
+<tr>					
+	<td class="formFieldNoBorders" colspan="5"  height="20" >
+	<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+		<bean:message key="print.checkboxLabel"/>
+	</html:checkbox>
+	</td>
+</tr>	
 <tr>
 	<td colspan="5" align="right">
 		<html:button styleClass="actionButton" property="submitButton" onclick="onCreate()">
@@ -747,4 +757,6 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 </table>
 <html:hidden property="specimenID"/>
 <html:hidden property="spCollectionGroupId"/>
+<html:hidden property="nextForwardTo" />
+<html:hidden property="forwardTo" />
 </html:form>

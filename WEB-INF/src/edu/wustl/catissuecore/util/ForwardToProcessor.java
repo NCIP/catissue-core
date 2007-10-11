@@ -22,7 +22,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.OrderDetails;
-import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -77,7 +76,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		{
 			Specimen specimen = (Specimen) domainObject;
 			//Derive New from This Specimen
-			if (actionForm.getForwardTo().equals("createNew"))
+			if (actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("printSpecimenAdd")||actionForm.getForwardTo().equals("printSpecimenEdit"))
 			{
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId());
 				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
@@ -97,13 +96,13 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 				}
 			}
 			//Add Events
-			else if (actionForm.getForwardTo().equals("eventParameters"))
+			else if (actionForm.getForwardTo().equals("eventParameters")|| actionForm.getForwardTo().equals("printDeriveSpecimen"))
 			{
 				forwardToHashMap.put("specimenId", domainObject.getId().toString());
 				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
 				forwardToHashMap.put("specimenClass", specimen.getClassName());
 			}
-			else if (actionForm.getForwardTo().equals("distribution"))
+			else if (actionForm.getForwardTo().equals("distribution") || actionForm.getForwardTo().equals("printSpecimenEdit") || actionForm.getForwardTo().equals("printSpecimenAdd") || actionForm.getForwardTo().equals("printDeriveSpecimen"))
 			{
 				forwardToHashMap.put("specimenObjectKey", domainObject);
 			}
@@ -114,7 +113,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			 * Reviewer: Sachin Lale
 			 * "ParentSpecimenID" added to forwardMap when page is "pageOfCreateAliquot"
 			 */
-			else if (actionForm.getForwardTo().equals("pageOfAliquot") || actionForm.getForwardTo().equals("pageOfCreateAliquot"))
+			else if (actionForm.getForwardTo().equals("pageOfAliquot") || actionForm.getForwardTo().equals("pageOfCreateAliquot") )
 			{
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId().toString());
 				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());

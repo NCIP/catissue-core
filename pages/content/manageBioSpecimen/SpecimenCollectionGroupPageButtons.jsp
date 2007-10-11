@@ -20,6 +20,13 @@
 													</html:checkbox>
 												</td>
 											</tr>
+											<tr>
+												<td class="formFieldNoBorders" colspan="3" valign="center">
+													&nbsp;<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+															<bean:message key="print.checkboxLabel"/>
+														</html:checkbox>
+												</td>
+											</tr>
 											<tr><td>&nbsp;</td></tr>
 											<tr>
 												<td nowrap class="formFieldNoBorders">
