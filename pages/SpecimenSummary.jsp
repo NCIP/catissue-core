@@ -23,6 +23,20 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				document.forms[0].action = action;
 				document.forms[0].submit();
 		}
+		
+		function confirmDisable()
+		{		
+			var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
+			if (go==true)
+			{
+				document.forms[0].target = "_top";
+				var action ="SubmitSpecimenCollectionProtocol.do";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
+					
+		}
+		
 	</script>
 </head>
 
@@ -224,16 +238,32 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		
 
 			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
-			<tr>
-				<td>			
-					&nbsp;&nbsp;
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<html:submit  value="Save Collection Protocol" />
-				</td>
-			</tr>
+				<logic:equal name="viewSpecimenSummaryForm" property="collectionProtocolStatus" value="Disabled">
+					<tr>
+						<td>			
+							&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<html:submit  value="Save Collection Protocol" onclick="confirmDisable()"/>
+						</td>
+					</tr>
+				</logic:equal>
+				
+				<logic:notEqual name="viewSpecimenSummaryForm" property="collectionProtocolStatus" value="Disabled">
+					<tr>
+						<td>			
+							&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<html:submit  value="Save Collection Protocol" />
+						</td>
+					</tr>
+				</logic:notEqual>
+					
 			</logic:equal>
 			
 			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">		
