@@ -137,8 +137,33 @@ public class AliquotForm extends AbstractActionForm
     
     private String createdDate;
     
-    
     /**
+	 * Next forwardto in case of Print
+	 */
+	private String nextForwardTo;
+	/**
+	 * print checkbox
+	 */
+	private String printCheckbox; 
+    
+    
+    public String getNextForwardTo() {
+		return nextForwardTo;
+	}
+
+	public void setNextForwardTo(String nextForwardTo) {
+		this.nextForwardTo = nextForwardTo;
+	}
+
+	public String getPrintCheckbox() {
+		return printCheckbox;
+	}
+
+	public void setPrintCheckbox(String printCheckbox) {
+		this.printCheckbox = printCheckbox;
+	}
+
+	/**
 	 * Returns the map that contains distinguished fields per aliquots.
 	 * @return The map that contains distinguished fields per aliquots.
 	 * @see #setAliquotMap(Map)

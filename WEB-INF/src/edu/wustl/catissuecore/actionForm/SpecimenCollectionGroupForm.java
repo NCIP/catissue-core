@@ -227,6 +227,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	private String buttonType;
 	
 	private String collectionStatus;
+	
+	private String printCheckbox;
+	
+	private String nextForwardTo;
 	/**
 	 * @return the buttonType
 	 */
@@ -1454,6 +1458,29 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 
 	public void setCollectionStatus(String collectionStatus) {
 		this.collectionStatus = collectionStatus;
+	}
+
+
+	public String getNextForwardTo() {
+		return nextForwardTo;
+	}
+
+
+
+	public void setNextForwardTo(String nextForwardTo) {
+		this.nextForwardTo = nextForwardTo;
+	}
+
+
+
+	public String getPrintCheckbox() {
+		return printCheckbox;
+	}
+
+
+
+	public void setPrintCheckbox(String printCheckbox) {
+		this.printCheckbox = printCheckbox;
 	}
 
 }

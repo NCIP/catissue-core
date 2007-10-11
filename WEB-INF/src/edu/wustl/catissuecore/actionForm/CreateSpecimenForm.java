@@ -54,7 +54,14 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
 	 *  Decides the calling of reset
 	 */
 	private boolean reset = true;
-	
+	/**
+	 * Next forwardto in case of Print
+	 */
+	private String nextForwardTo;
+	/**
+	 * print checkbox
+	 */
+	private String printCheckbox; 
        
     /**
      * Returns an identifier of the Parent Speciemen.
@@ -220,5 +227,21 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
 			Logger.out.error("Error in Clone method of CreateSpecimenForm:"+e);	
 		}
 		return null;
+	}
+
+	public String getNextForwardTo() {
+		return nextForwardTo;
+	}
+
+	public void setNextForwardTo(String nextForwardTo) {
+		this.nextForwardTo = nextForwardTo;
+	}
+
+	public String getPrintCheckbox() {
+		return printCheckbox;
+	}
+
+	public void setPrintCheckbox(String printCheckbox) {
+		this.printCheckbox = printCheckbox;
 	}
 }
