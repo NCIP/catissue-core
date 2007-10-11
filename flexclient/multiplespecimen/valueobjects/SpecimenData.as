@@ -19,7 +19,7 @@ package valueobjects
 		public var parentType:String;
 		
 		public var spID:Number = -3;
-		public var mode:String = '';
+
 //		public var scgName:String = '';
 	//	public var parentSpecimenName:String = '';
 	
@@ -57,6 +57,8 @@ package valueobjects
 		
 		public var biohazardColl:ArrayCollection = new ArrayCollection();
 		public var derivedSpColl:ArrayCollection = new ArrayCollection();
+		
+		public var mode:String = '';
 		public function SpecimenData(specimenLabel:String="",specimenBarcode:String="",tissueSide:String="")
 		{
 			this.parentType = Constants.NEW_SPECIMEN;
@@ -303,6 +305,7 @@ package valueobjects
 			output.writeObject(collectionEvent);
 			output.writeObject(receivedEvent);
 			output.writeObject(derivedSpColl);
+			output.writeUTF(mode);
     	}
         
     	public function readExternal(input:IDataInput):void
@@ -331,6 +334,7 @@ package valueobjects
 			collectionEvent = input.readObject() as EventBean;
 			receivedEvent = input.readObject() as EventBean;
 			derivedSpColl = input.readObject() as ArrayCollection;
+			mode = input.readUTF();
        }
        
 		public function calcUnit() : void 

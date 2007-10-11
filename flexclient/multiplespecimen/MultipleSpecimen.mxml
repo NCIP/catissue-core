@@ -361,6 +361,7 @@
 		
 		private function submitSpecimen(event:Event):void
 		{
+			Alert.show("In multiple specimen:");
 			var validateVal:Boolean = true;	
 
 			for(var i:int=0;i<specimenColl.length;i++)
@@ -371,7 +372,7 @@
 				validateVal = specimenData.validate() && validateVal;
 			}
 			
-		
+			Alert.show("Validation:"+validateVal);
 			if(validateVal)
 			{
 				if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_ADD)

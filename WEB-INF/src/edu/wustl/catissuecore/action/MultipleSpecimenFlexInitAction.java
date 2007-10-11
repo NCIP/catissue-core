@@ -22,9 +22,9 @@ public class MultipleSpecimenFlexInitAction extends Action
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
         
-		String mode = "ADD";
-        if(operation != null && operation.equals("EDIT"))
-        	mode = "EDIT";
+		String mode = Constants.ADD;
+        if(operation != null && operation.equals(Constants.EDIT))
+        	mode = Constants.EDIT;
 		
 		String showParentSelection = "false";
 		

@@ -60,7 +60,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
-@SuppressWarnings("unused")
+
 public class FlexInterface
 {
 	public FlexInterface() throws Exception
@@ -339,7 +339,34 @@ public class FlexInterface
 		return message;
 	}
 
-	public String editSpecimen(List<SpecimenBean> spBeanList)
+
+	
+	public String writeSpecimen1(List<SpecimenBean> spBeanList)
+	{
+		LinkedHashSet<Specimen> specimenHashSet = new LinkedHashSet<Specimen>();
+		String message = "ERROR";
+		for (SpecimenBean spBean : spBeanList)
+		{
+			Specimen specimen = prepareSpecimen(spBean);
+
+			specimenHashSet.add(specimen);	
+		}
+		try
+		{
+			session.setAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP, specimenHashSet);
+
+			message = "SUCCESS";
+		}
+		catch (Exception ex)
+		{
+			message = ex.getMessage();
+
+		}
+
+		return message;
+	}
+
+public String editSpecimen(List<SpecimenBean> spBeanList)
 	{
 		LinkedHashSet<Specimen> specimenSet = new LinkedHashSet<Specimen>();
 		if (spBeanList != null && spBeanList.size() > 0)
@@ -442,7 +469,7 @@ public class FlexInterface
 					Collection exIdColl = (Collection) bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
 							"elements(externalIdentifierCollection)");
 					specimen.setExternalIdentifierCollection(exIdColl);
-					SpecimenBean sb = prepareSpecimenBean(specimen);
+					SpecimenBean sb = prepareSpecimenBean(specimen, Constants.EDIT);
 					list.add(sb);
 
 				}
@@ -464,9 +491,11 @@ public class FlexInterface
 		return list;
 	}
 
-	private SpecimenBean prepareSpecimenBean(Specimen specimen)
+	private SpecimenBean prepareSpecimenBean(Specimen specimen, String mode)
 	{
 		SpecimenBean sb = new SpecimenBean();
+		sb.mode = mode;
+
 		if (specimen.getId() != null)
 			sb.spID = specimen.getId();
 		if (specimen.getLabel() != null)
@@ -600,7 +629,7 @@ public class FlexInterface
 		SpecimenDataBean specimenDataBean = new SpecimenDataBean();
 
 		specimenDataBean.setType(spBean.specimenType);
-
+		specimenDataBean.setStorageContainerForSpecimen(spBean.storage);	
 		//specimenDataBean.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		//sp.setAvailable(true);
 		specimenDataBean.setQuantity(String.valueOf(spBean.quantity));
@@ -675,8 +704,9 @@ public class FlexInterface
 				SpecimenBean derivedBean = (SpecimenBean) itr.next();
 				derivedBean.collectionEvent = spBean.collectionEvent;
 				derivedBean.receivedEvent = spBean.receivedEvent;
-				SpecimenDataBean derivedDataBean = prepareGenericSpecimen(derivedBean);
 
+				SpecimenDataBean derivedDataBean = prepareGenericSpecimen(derivedBean);
+				derivedDataBean.setUniqueIdentifier(""+i);	
 				derivedMap.put("d1" + i, derivedDataBean);
 				i++;
 			}
@@ -689,7 +719,27 @@ public class FlexInterface
 	/* prepare specimen for edit multiple specimen */
 	private Specimen prepareSpecimen(SpecimenBean spBean)
 	{
-		Specimen specimen =	getSpecimenInstance(spBean.specimenClass);
+		Specimen specimen = getSpecimenInstance(spBean.specimenClass);
+		if (edu.wustl.catissuecore.util.global.Constants.ADD.equals(spBean.mode))
+		{
+			specimen.setParentSpecimen(null);
+			if (edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE.equals(spBean.parentType))
+			{
+				specimen.setSpecimenCollectionGroup(getSpecimenCollGrp(spBean.parentName));
+			}
+			else
+			{
+				specimen.setParentSpecimen(getParentSpecimen(spBean.parentName));
+			}
+			
+			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			specimen.setCollectionStatus(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_COLLECTED);
+			specimen.setAvailable(Boolean.TRUE);
+			specimen.setStorageContainer(null);
+			specimen.setLineage(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN);
+		}
+		
+		
 		specimen.setType(spBean.specimenType);
 		specimen.setId(spBean.spID);
 		specimen.setCreatedOn(spBean.creationDate);
@@ -698,11 +748,14 @@ public class FlexInterface
 		Quantity qt = new Quantity();
 		qt.setValue(spBean.quantity);
 		specimen.setInitialQuantity(qt);
-		specimen.setAvailableQuantity(qt);	
+		specimen.setAvailableQuantity(qt);
+		//if(edu.wustl.catissuecore.util.global.Constants.MOLECULAR.equals(spBean.specimenClass))
+
 		//specimen.setClassName(spBean.specimenClass);
 		specimen.setBarcode(spBean.specimenBarcode);
 
 		specimen.setComment(spBean.comment);
+	
 		//sp.setCreatedOn(new Date());
 		specimen.setExternalIdentifierCollection(new HashSet<ExternalIdentifier>());
 		if (spBean.exIdColl != null && !spBean.exIdColl.isEmpty())
@@ -724,7 +777,20 @@ public class FlexInterface
 		specimenCharacteristics.setTissueSite(spBean.tissueSite);
 		specimen.setSpecimenCharacteristics(specimenCharacteristics);
 
-		
+		if (!edu.wustl.catissuecore.util.global.Constants.EDIT.equals(spBean.mode))
+		{
+			Set<SpecimenEventParameters> eventSet = new HashSet<SpecimenEventParameters>();
+			CollectionEventParameters collectionEvent = getCollectionEventParameters(spBean.collectionEvent);
+			collectionEvent.setSpecimen(specimen);
+			eventSet.add(collectionEvent);
+
+			ReceivedEventParameters receEvent = getReceivedEventParameters(spBean.receivedEvent);
+			receEvent.setSpecimen(specimen);
+			eventSet.add(receEvent);
+
+			specimen.setSpecimenEventCollection(eventSet);
+		}
+
 		if (spBean.derivedColl != null)
 		{
 			LinkedHashSet<Specimen> derivedSpecimenSet = new LinkedHashSet<Specimen>();
@@ -741,6 +807,7 @@ public class FlexInterface
 				derivedSpecimenSet.add(derivedSp);
 				i++;
 			}
+			specimen.setLineage(edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN);
 			specimen.setChildrenSpecimen(derivedSpecimenSet);
 		}
 		System.out.println("Returning complete specimen");
@@ -760,7 +827,7 @@ public class FlexInterface
 			{
 				continue;
 			}
-			
+
 			ex.setId(ex.getId());
 			exIdSet.add(ex);
 		}

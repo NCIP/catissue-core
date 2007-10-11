@@ -642,7 +642,7 @@ PUBLIC
 			<forward name="requestToOrder" path="/RequestToOrder.do"/>
 			<forward name="bulkTransfers" path="/BulkTransferEvents.do?menuSelected=15"/>
 			<forward name="bulkDisposals" path="/BulkDisposalEvents.do?menuSelected=15"/>
-			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=EDIT"/>
+			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=edit"/>
 			
 		</action>
 		
@@ -4071,7 +4071,7 @@ PUBLIC
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->
 <!--		<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			-->
-		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
+		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
 		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 		<forward name="printSCGAdd" path="/printSCGAdd.do" />				 
 	</action>
@@ -4152,7 +4152,7 @@ PUBLIC
 		<!--<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />		
 		-->
 		<forward name="printSCGEdit" path="/printSCGEdit.do" />			
-		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
+		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
 		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 	</action>
 

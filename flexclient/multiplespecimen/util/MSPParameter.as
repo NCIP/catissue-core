@@ -3,8 +3,8 @@ package util
 	public class MSPParameter
 	{
 		public static const MODE_PARAM:String = "MODE";
-		public static const MODE_PARAM_VAL_ADD:String = "ADD";
-		public static const MODE_PARAM_VAL_EDIT:String = "EDIT";
+		public static const MODE_PARAM_VAL_ADD:String = "add";
+		public static const MODE_PARAM_VAL_EDIT:String = "edit";
 		
 		public static const PARENT_PARAM:String = "PARENT";
 		public static const PARENT_TYPE_PARAM_VAL_SCG:String = "New_Specimen";

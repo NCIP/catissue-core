@@ -285,8 +285,8 @@
 		}*/
 		public function chkStorage() : void
 		{
-			Alert.show("In this build only Virtual storage is supported.");
-			spStorage.selectedItem = "Virtual"
+//			Alert.show("In this build only Virtual storage is supported.");
+	//		spStorage.selectedItem = "Virtual"
 			
 		}
 	]]>
