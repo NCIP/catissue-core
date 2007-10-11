@@ -6,10 +6,19 @@
  			* Patch ID: 2741_18 			
  			* Description: Adding check for changes function
 			*/
-	String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
-	String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
-	String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";									
-	String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+String printaction = "printSCGAdd";
+if(operation.equals(Constants.ADD))
+{
+	 printaction = "printSCGAdd";
+}
+else if(operation.equals(Constants.EDIT))
+{
+ 	 printaction = "printSCGEdit";
+} 
+String normalSubmitFunctionName = "setSubmitted('" + submittedFor+ "','"+printaction+"','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
+String forwardToSubmitFuctionName = "setSubmitted('ForwardTo','"+ printaction +"','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
+String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmitted('ForwardTo','"+printaction +"','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";
+String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 	/**
 		* Name : Ashish Gupta
 		* Reviewer Name : Sachin Lale 

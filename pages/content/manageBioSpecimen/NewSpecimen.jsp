@@ -210,11 +210,11 @@
 				{
 				  if(temp == "orderDetails")
 					{
-						setSubmittedFor('ForwardTo','orderDetails');
+						setSubmitted('ForwardTo','printSpecimenAdd','orderDetails');
 					}
 					else
 					{
-					    setSubmittedFor('ForwardTo','pageOfCreateAliquot');
+					    setSubmitted('ForwardTo','printSpecimenAdd','pageOfCreateAliquot');
                     }
 					<%
 					actionToCall = "NewSpecimenAdd.do";
@@ -229,11 +229,11 @@
 				{
 					if(temp == "orderDetails")
 					{
-						setSubmittedFor('ForwardTo','orderDetails');
+						setSubmitted('ForwardTo','printSpecimenEdit','orderDetails');
 					}
 					else
 					{
-						setSubmittedFor('ForwardTo','pageOfCreateAliquot');
+						setSubmitted('ForwardTo','printSpecimenEdit','pageOfCreateAliquot');
 					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
@@ -252,11 +252,12 @@
 				{
 					if(temp == "orderDetails")
 					{
-					   	setSubmittedFor('ForwardTo','orderDetails');
+					   	setSubmitted('ForwardTo','printSpecimenAdd','orderDetails');
 					}
 					else
 					{
-					setSubmittedFor('null','success');
+
+					setSubmitted('null','printSpecimenAdd','success');
 					}
 					<%
 					actionToCall = "NewSpecimenAdd.do";
@@ -264,18 +265,25 @@
 					{
 						actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
 					}%>
-					
-					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
+					if(document.forms[0].nextForwardTo.value!=null)
+					{
+					 confirmDisable('<%=actionToCall%>'+"?nextForwardTo="+document.forms[0].nextForwardTo.value,document.forms[0].activityStatus);
+					}
+					else
+					{
+						confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
+					}
+					 
 				}
 				else
 				{
 					if(temp == "orderDetails")
 					{
-						setSubmittedFor('ForwardTo','orderDetails');
+						setSubmitted('ForwardTo','printSpecimenEdit','orderDetails');
 					}
 					else
 					{
-					setSubmittedFor('null','success');
+					setSubmitted('null','printSpecimenEdit','success');
 					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
@@ -536,7 +544,7 @@
 			var formName;
 			<% String formNameAction = null;%>
 			if (answer){
-				setSubmittedFor('ForwardTo','eventParameters');
+				setSubmitted('ForwardTo','printSpecimenEdit','eventParameters');
 				<%
 				formNameAction = "NewSpecimenEdit.do";
 				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
@@ -694,6 +702,23 @@
 				document.forms[0].submit();
 			}
 		}
+
+		function setSubmitted(forwardTo,printaction,nextforwardTo)
+		{
+				
+			var printFlag = document.getElementById("printCheckbox");
+
+			if(printFlag.checked)
+			{
+		
+			  setSubmittedForPrint(forwardTo,printaction,nextforwardTo);
+			}
+			else
+			{
+			  setSubmittedFor(forwardTo,nextforwardTo);
+			}
+		
+		}
 	</script>
 </head>
 <body onload="newSpecimenInit();showConsents();">
@@ -740,17 +765,24 @@
 <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
 	<html:errors />
 	<%
-				String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_FORWARD_TO_LIST[0][1]+"')";
-				String deriveNewSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[1][1]+"')";									
-				String addEventsSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[2][1]+"')";
-				String addMoreSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
+		
+				String printAction = "printSpecimenAdd";
+				if(operation.equals(Constants.EDIT))
+				{
+					 printAction = "printSpecimenEdit";
+				}
 				
+				String normalSubmitFunctionName = "setSubmitted('" + submittedFor+ "','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[0][1]+"')";
+				String deriveNewSubmitFunctionName = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[1][1]+"')";						
+				String addEventsSubmitFunctionName = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[2][1]+"')";
+				String addMoreSubmitFunctionName = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";				
 				String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 				
 				String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 				String deriveNewSubmit = deriveNewSubmitFunctionName + ","+confirmDisableFuncName;
 				String addEventsSubmit = addEventsSubmitFunctionName + ","+confirmDisableFuncName;
 				String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;		
+				String submitAndDistribute = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
 				
 				String specimenCollectionGroupId = (String)request.getAttribute("SpecimenCollectionGroupId");
 				String specimenCollectionGroupName = (String)request.getAttribute("SpecimenCollectionGroupName");
@@ -1520,7 +1552,14 @@
 					                    &nbsp;
 										<html:text styleClass="formFieldSized5" styleId="quantityPerAliquot" property="quantityPerAliquot" disabled="true" />
 								    </td>
-								</tr>								
+								</tr>			
+								<tr>
+											<td class="formFieldNoBorders" colspan="3" valign="center">
+													<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+															<bean:message key="print.checkboxLabel"/>
+														</html:checkbox>
+											</td>
+								</tr>					
 								</logic:notEqual>
 							</table>	 
 						
@@ -1554,6 +1593,7 @@ if(pageView.equals("edit")||pageView.equals("add"))
 %>
 <html:hidden property="stContSelection"/>
 <html:hidden property="lineage"/>
+<html:hidden property="nextForwardTo" />
 <!--
 	Patch ID: Bug#3184_8
 -->

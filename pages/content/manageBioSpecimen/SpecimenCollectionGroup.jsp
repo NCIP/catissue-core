@@ -326,7 +326,12 @@
 			{
 				var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
 				if (go==true)
-				{	document.forms[0].action = temp;
+				{	
+					if(document.forms[0].nextForwardTo.value!=null)
+					{
+					 temp = temp + "&domainObject=SCG&nextForwardTo="+document.forms[0].nextForwardTo.value;
+					}
+				    document.forms[0].action = temp;
 					document.forms[0].submit();
 				}
 			}
@@ -576,6 +581,22 @@ function editSCG()
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
+		function setSubmitted(forwardTo,printaction,nextforwardTo)
+		{
+				
+			var printFlag = document.getElementById("printCheckbox");
+			
+			if(printFlag.checked)
+			{
+		
+			  setSubmittedForPrint(forwardTo,printaction,nextforwardTo);
+			}
+			else
+			{
+			  setSubmittedFor(forwardTo,nextforwardTo);
+			}
+		
+		}
 		
  </script>
 </head>
@@ -709,5 +730,7 @@ function editSCG()
 	<%
 	}
 	%>
+
+	<html:hidden property="nextForwardTo" />
 </html:form>
 </body>

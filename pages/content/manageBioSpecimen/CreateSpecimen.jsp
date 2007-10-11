@@ -273,7 +273,7 @@
 			var checked = document.forms[0].aliCheckedButton.checked;
 			if(checked)
 			{
-				setSubmittedFor('ForwardTo','pageOfCreateAliquot');
+				setSubmitted('ForwardTo','printDeriveSpecimen','pageOfCreateAliquot');
 				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 			
 			}
@@ -282,15 +282,31 @@
 				var temp = "<%=frdTo%>";				
 				if(temp == "orderDetails")
 				{
-					setSubmittedFor('ForwardTo','orderDetails');
+					setSubmitted('ForwardTo','printDeriveSpecimen','orderDetails');
 			     }
 			     else
 			    {
-				   setSubmittedFor('ForwardTo','eventParameters');
+				   setSubmitted('ForwardTo','printDeriveSpecimen','eventParameters');
 			     }  
 				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 			
 			}
+		}
+		function setSubmitted(forwardTo,printaction,nextforwardTo)
+		{
+				
+			var printFlag = document.getElementById("printCheckbox");
+			
+			if(printFlag.checked)
+			{
+		
+			  setSubmittedForPrint(forwardTo,printaction,nextforwardTo);
+			}
+			else
+			{
+			  setSubmittedFor(forwardTo,nextforwardTo);
+			}
+		
 		}
 		
 	</script>
@@ -317,6 +333,9 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 
 
 	<html:errors />
+	<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+		<%=messageKey%>
+	</html:messages>
    <html:form action="<%=action%>">
    
                       <input type="hidden" id="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
@@ -473,6 +492,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						<html:hidden property="forwardTo" value="<%=frdTo%>"/>
 						<html:hidden property="multipleSpecimen" value="<%=multipleSpecimen%>"/>
 						<html:hidden property="containerId" styleId="containerId"/>
+						<html:hidden property="nextForwardTo" />
 						<td></td>
 					</td>
 				 </tr>
@@ -920,6 +940,13 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				         />
 	    				</td>
 					</tr>								
+					<tr>					
+						<td class="formFieldNoBorders" colspan="5"  height="20" >
+							<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+								<bean:message key="print.checkboxLabel"/>
+							</html:checkbox>
+						</td>
+					</tr>
 					
 				</table>
 				</logic:notEqual>
@@ -931,7 +958,8 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
 								String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-								String addMoreSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
+								String submitAndDistribute = "setSubmitted('ForwardTo','printDeriveSpecimen','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
+								String addMoreSubmitFunctionName = "setSubmitted('ForwardTo','printDeriveSpecimen','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
 								String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;		
 
 				 			%>
