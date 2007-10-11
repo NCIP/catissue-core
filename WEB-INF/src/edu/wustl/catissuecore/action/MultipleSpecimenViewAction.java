@@ -64,10 +64,12 @@ public class MultipleSpecimenViewAction extends AnticipatorySpecimenViewAction
 			.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);
 		
 			Set<String> keySet = autoStorageSpecimenMap.keySet();
+			
 			if (!keySet.isEmpty())
 			{
 				Iterator<String> keySetIterator = keySet.iterator();
 				storageContainerIds.clear();
+				
 				while(keySetIterator.hasNext())
 				{
 					String key = keySetIterator.next();
@@ -77,6 +79,7 @@ public class MultipleSpecimenViewAction extends AnticipatorySpecimenViewAction
 				}
 			}
 			
+			request.setAttribute("RequestType","");
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception e)

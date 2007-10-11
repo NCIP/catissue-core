@@ -18,19 +18,19 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
+import edu.wustl.catissuecore.bean.GenericSpecimen;
+import edu.wustl.catissuecore.bean.GenericSpecimenVO;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
-import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
-import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
-import edu.wustl.catissuecore.bean.GenericSpecimenVO;
-import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 
@@ -92,7 +92,7 @@ public class UpdateSpecimenStatusAction extends Action {
 		LinkedHashSet specimenDomainCollection = new LinkedHashSet();
 		while(iterator.hasNext())
 		{
-			GenericSpecimenVO specimenVO =(GenericSpecimenVO) iterator.next();
+			GenericSpecimen specimenVO =(GenericSpecimen) iterator.next();
 			
 			Specimen specimen = createSpecimenDomainObject(specimenVO);
 			specimen.setChildrenSpecimen(getChildrenSpecimens(specimenVO));
@@ -102,12 +102,12 @@ public class UpdateSpecimenStatusAction extends Action {
 		return specimenDomainCollection;
 	}
 
-	private Collection getChildrenSpecimens(GenericSpecimenVO specimenVO) throws BizLogicException
+	private Collection getChildrenSpecimens(GenericSpecimen specimenVO) throws BizLogicException
 	{
 		HashSet childrenSpecimens = new HashSet();
 		LinkedHashMap aliquotMap = specimenVO.getAliquotSpecimenCollection();
 
-		if(aliquotMap!= null || !aliquotMap.isEmpty() )
+		if(aliquotMap!= null && !aliquotMap.isEmpty() )
 		{
 			Collection aliquotCollection = aliquotMap.values();
 			Iterator iterator = aliquotCollection.iterator();
@@ -123,7 +123,7 @@ public class UpdateSpecimenStatusAction extends Action {
 
 		LinkedHashMap derivedMap = specimenVO.getDeriveSpecimenCollection();
 
-		if(derivedMap!= null || !derivedMap.isEmpty() )
+		if(derivedMap!= null && !derivedMap.isEmpty() )
 		{
 			Collection aliquotCollection = derivedMap.values();
 			Iterator iterator = aliquotCollection.iterator();
@@ -142,7 +142,7 @@ public class UpdateSpecimenStatusAction extends Action {
 	 * @param specimenVO
 	 * @return
 	 */
-	private Specimen createSpecimenDomainObject(GenericSpecimenVO specimenVO) throws BizLogicException {
+	private Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws BizLogicException {
 
 		NewSpecimenForm form = new NewSpecimenForm();
 		form.setClassName(specimenVO.getClassName());
@@ -211,7 +211,7 @@ public class UpdateSpecimenStatusAction extends Action {
 	 * @param specimenVO
 	 * @param specimen
 	 */
-	private void setStorageContainer(GenericSpecimenVO specimenVO,
+	private void setStorageContainer(GenericSpecimen specimenVO,
 			Specimen specimen)throws BizLogicException {
 		String pos1 = specimenVO.getPositionDimensionOne();
 		String pos2 = specimenVO.getPositionDimensionTwo();
@@ -257,8 +257,12 @@ public class UpdateSpecimenStatusAction extends Action {
 	 * @param specimenVO
 	 * @return
 	 */
-	private Long getSpecimenId(GenericSpecimenVO specimenVO) {
+	private Long getSpecimenId(GenericSpecimen specimenVO) {
 		long uniqueId = specimenVO.getId();
+		if(uniqueId<=0)
+		{
+			return null;
+		}
 		Long id = new Long(uniqueId);
 		return id;
 	}

@@ -102,12 +102,13 @@ public class ViewSpecimenSummaryAction extends Action {
 				}
 			}
 			String pageOf = request.getParameter(Constants.PAGEOF);
+			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
 			if(pageOf != null && ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(summaryForm.getRequestType()))
 			{
 				request.setAttribute(Constants.PAGEOF,pageOf);
 				return mapping.findForward(target);
 			}
-			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
+			
 			return mapping.findForward(target);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -527,96 +528,5 @@ public class ViewSpecimenSummaryAction extends Action {
 			specimenList.addAll(specimenColl);
 		}
 		return specimenList;
-	}
-/*
-	class Generatedata {
-
-			public void generate(HttpServletRequest request) {
-				HttpSession session = request.getSession();
-				CollectionProtocolBean collectionProtocolBean = getCPBeanObject();
-				session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN,
-						collectionProtocolBean);
-				CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
-				eventBean.setClinicalStatus("New Diagnosis");
-				eventBean.setCollectionPointLabel("E_1");
-				eventBean.setStudyCalenderEventPoint(new Double(1));
-				eventBean.setUniqueIdentifier("1");
-				LinkedHashMap eventMap = new LinkedHashMap();
-				eventMap.put("1", eventBean);
-				session.setAttribute(
-						Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, eventMap);
-				LinkedHashMap specimenMap = createSpecimens(3, "Specimen", null);
-				SpecimenRequirementBean specimen = (SpecimenRequirementBean) specimenMap
-						.get("Specimen0");
-				specimen.setAliquotSpecimenCollection(createSpecimens(2, "Aliquot",
-						specimen.getDisplayName()));
-				specimen.setDeriveSpecimenCollection(createSpecimens(1, "Derived",
-						specimen.getDisplayName()));
-				eventBean.setSpecimenRequirementbeanMap(specimenMap);
-				specimen = (SpecimenRequirementBean) specimen
-						.getDeriveSpecimenCollection().get("Derived0");
-				specimen.setDeriveSpecimenCollection(createSpecimens(1,
-						"D_Specimen", specimen.getDisplayName()));
-				specimen.setAliquotSpecimenCollection(createSpecimens(1,
-						"AD_Specimen", specimen.getDisplayName()));
-			}
-
-			private LinkedHashMap createSpecimens(int count, String type,
-					String parentName) {
-
-				LinkedHashMap specimenMap = new LinkedHashMap();
-				for (int i = 0; i < count; i++) {
-					SpecimenRequirementBean specimenBean = new SpecimenRequirementBean();
-					specimenBean.setClassName("Tissue");
-					specimenBean.setType("Fixed Tissue");
-					specimenBean.setLineage(Constants.NEW_SPECIMEN);
-					specimenBean.setDisplayName(type + i);
-					specimenBean.setUniqueIdentifier(type + i);
-					specimenBean.setTissueSide("Not Specified");
-					specimenBean.setTissueSite("Not Specified");
-					specimenBean.setPathologicalStatus("Malignant");
-					specimenBean.setStorageContainerForSpecimen("Virtual");
-					specimenBean.setQuantity("10");
-					specimenBean.setConcentration("0");
-					specimenBean.setParentName(parentName);
-					specimenMap.put(specimenBean.getUniqueIdentifier(),
-							specimenBean);
-
-				}
-				return specimenMap;
-			}
-
-			private CollectionProtocolBean getCPBeanObject() {
-				CollectionProtocolBean collectionProtocol = new CollectionProtocolBean();
-				Collection consentTierColl = new HashSet();
-				//			
-				// ConsentTier c1 = new ConsentTier();
-				// c1.setStatement("Consent for aids research");
-				// consentTierColl.add(c1);
-				// ConsentTier c2 = new ConsentTier();
-				// c2.setStatement("Consent for cancer research");
-				// consentTierColl.add(c2);
-				// ConsentTier c3 = new ConsentTier();
-				// c3.setStatement("Consent for Tb research");
-				// consentTierColl.add(c3);
-				//			
-				// collectionProtocol. setConsentTierCollection(consentTierColl);
-				//			
-
-				collectionProtocol.setDescriptionURL("");
-				collectionProtocol.setEnrollment(null);
-				collectionProtocol.setIrbID("7777");
-				collectionProtocol
-						.setTitle("Study Collection Protocol For Consent track..123");
-				collectionProtocol.setShortTitle("Cp Consent");
-				collectionProtocol.setUnsignedConsentURLName("C:\\consent12.pdf");
-
-				collectionProtocol.setStartDate("28/07/1975");
-				collectionProtocol.setPrincipalInvestigatorId(1L);
-				return collectionProtocol;
-
-			}
-		}
-*/
-	
-	}
+	}	
+}

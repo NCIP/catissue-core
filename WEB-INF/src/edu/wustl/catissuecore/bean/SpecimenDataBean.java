@@ -181,7 +181,11 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public long getId()
 	{
-		return id;
+		if(id == null)
+		{
+			return -1;
+		}
+		return id.longValue();
 	}
 
 	/**

@@ -66,6 +66,7 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 		}
 		catch(Exception exception)
 		{
+			exception.printStackTrace();
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 					"errors.item",exception.getMessage()));
@@ -160,7 +161,8 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 						childSpecimenList);
 			}
 
-			if (specimenDataBean.getDeriveSpecimenCollection() != null)
+			if (specimenDataBean.getDeriveSpecimenCollection() != null 
+					&& !specimenDataBean.getDeriveSpecimenCollection().isEmpty())
 			{
 				getDerivedSpecimens(specimenDataBean, specimen,
 						childSpecimenList);
