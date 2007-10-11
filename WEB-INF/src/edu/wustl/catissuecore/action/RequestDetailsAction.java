@@ -812,7 +812,7 @@ public class RequestDetailsAction extends BaseAction
 			
 		requestDetailsBean.setInstanceOf("Existing");
 	
-		/*if(existingSpecimenorderItem.getConsentTierStatusCollection().isEmpty())
+		if(existingSpecimenorderItem.getConsentTierStatusCollection().isEmpty())
 		{	
 			requestDetailsBean.setConsentVerificationkey(Constants.NO_CONSENTS);
 			
@@ -822,7 +822,7 @@ public class RequestDetailsAction extends BaseAction
 			requestDetailsBean.setConsentVerificationkey(Constants.VIEW_CONSENTS);
 			
 		}		
-*/
+
 		
 		// condition added by vaishali beacause requested Qty is coming NULL.
 		//@FIX ME

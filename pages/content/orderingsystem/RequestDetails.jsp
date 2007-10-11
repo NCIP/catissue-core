@@ -558,7 +558,7 @@ function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationke
 						%>
 						<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
 						{%>	
-										<td class="dataCellText"  colspan="2"> 
+									<td class="dataCellText"  colspan="2" width="20%"> 
 											<html:hidden property="<%=specimenIdInMap%>" styleId="<%=specimenIdInMap%>"  value="<%=specimenIdValue%>"/>
 
 											<html:hidden property="<%=rowStatuskey%>" styleId="<%=rowStatuskey%>"  value="<%=rowStatusValue%>"/>
@@ -566,8 +566,20 @@ function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationke
 											<%
 											if(!disableRow)
 											{
-												
+												System.out.println("requestDetailsBeanObj.getConsentVerificationkey() "+requestDetailsBeanObj.getConsentVerificationkey());
+												if(requestDetailsBeanObj.getConsentVerificationkey().equals(Constants.NO_CONSENTS))
+												{
 											%>	
+
+												<%=Constants.NO_CONSENTS%>
+												<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.NO_CONSENTS%>"/>
+
+											<%
+												}
+												else
+												{	
+											%>
+
 												<a  id="<%=labelStatus%>" href="javascript:showNewConsentPage('<%=requestDetailsBeanObj.getSpecimenId()%>','<%=labelStatus%>','<%=consentVerificationkey%>')">
 													<logic:notEmpty name="requestDetailsForm" property="<%=consentVerificationkey%>">
 														<bean:write name="requestDetailsForm" property="<%=consentVerificationkey%>"/>
@@ -585,7 +597,8 @@ function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationke
 
 												</a>
 											
-											<%}else{ 
+											<%}}else{ 
+											
 													
 											%>
 										
@@ -595,7 +608,6 @@ function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationke
 													
 
 										</td>
-
 
 							<%}%>
 									 	
