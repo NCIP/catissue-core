@@ -30,7 +30,7 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	public static final String REQUEST_TYPE_MULTI_SPECIMENS= "Multiple Specimen";
 	public static final String REQUEST_TYPE_COLLECTION_PROTOCOL= "Collection Protocol";
 	public static final String REQUEST_TYPE_ANTICIPAT_SPECIMENS= "anticipatory specimens";
-
+	
 	private List<GenericSpecimen> specimenList = null;
 	private List<GenericSpecimen> aliquotList = null; 
 	private List<GenericSpecimen> derivedList = null; 
@@ -44,7 +44,10 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	private String targetSuccess;
 	private String submitAction;
 	private HashMap<String, String> titleMap = new HashMap<String, String>();
-	public ViewSpecimenSummaryForm()
+	
+	private static String collectionProtocolStatus = "";
+	
+	public  ViewSpecimenSummaryForm()
 	{
 		titleMap.put(REQUEST_TYPE_MULTI_SPECIMENS, "Specimen details");
 		titleMap.put(REQUEST_TYPE_COLLECTION_PROTOCOL, "Specimen requirement(s)");
@@ -54,6 +57,8 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 		derivedList = new ArrayList<GenericSpecimen> ();
 		userAction = ADD_USER_ACTION;
 		requestType = REQUEST_TYPE_COLLECTION_PROTOCOL;
+		collectionProtocolStatus = "";
+	
 	}
 	public void reset(ActionMapping mapping, ServletRequest request){
 		specimenList = new ArrayList<GenericSpecimen> ();
@@ -201,4 +206,11 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	public void setSubmitAction(String submitAction) {
 		this.submitAction = submitAction;
 	}
+	public String getCollectionProtocolStatus() {
+		return collectionProtocolStatus;
+	}
+	public static void setCollectionProtocolStatus(String collectionProtocolStatus) {
+		ViewSpecimenSummaryForm.collectionProtocolStatus = collectionProtocolStatus;
+	}
+	
 }
