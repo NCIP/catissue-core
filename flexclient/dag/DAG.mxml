@@ -75,8 +75,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	public var totalNodes:ArrayCollection;
 	private var eNode:DAGNode;
 	
-
-	public function timerHandler():void
+	/**
+	* Timer handler  to check container has been initialized.	
+	*/
+	private function timerHandler():void
 	{
 		if (isContainerReady())
 		{
@@ -85,7 +87,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			readyTimer.stop();
 		}
 	}
-
+	/**
+	* Initilise call-back call to java script methods.
+	*/
 	public function setUpCall():void 
 	{
 		ExternalInterface.addCallback("createNode",createNode);		
@@ -95,14 +99,18 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		ExternalInterface.addCallback("isDAGEmpty",isDAGEmpty);
 	}
 	
-	//setup the callback function so that HTML can call flex methods
-	//Checks wheather HTML page is loaded or not.
+	/**
+	* Setup the callback function so that HTML can call flex methods
+	* Checks wheather HTML page is loaded or not.
+	*/
 	private function isContainerReady():Boolean
 	{
 		var result:Boolean = ExternalInterface.call("isReady");
 		return result;
 	}
-	
+	/**
+	* Function to check DAG empty on click of search
+	*/
 	public function isDAGEmpty():Boolean
 	{
 		if(totalNodes.length==0)
@@ -114,14 +122,16 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			return false;
 		}
 	}
-		
+	/**
+	* Remote Call fault handler
+	*/	
 	private function faultHandler (event:FaultEvent):void
 	{
-		// Deal with event.fault.faultString, etc.
 		Alert.show(event.fault.faultString, 'Error');
 	}
-	
-		//-----------------
+	/**
+	* To drag nodes on UI
+	*/
 	private function doDrag(event:MouseEvent):void
 	{
 		var dragInitiator:DAGNode = DAGNode(event.currentTarget);
@@ -130,18 +140,22 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		var canvasProxy:DAGNode = new DAGNode();
 		canvasProxy.nodeNumber = dragInitiator.nodeNumber;
 		canvasProxy.nodeName =dragInitiator.nodeName;
-		
-		
+				
 		var pointOffSet:Point = new Point(dragInitiator.mouseX,dragInitiator.mouseY);
 		ds.addData(pointOffSet,"point");
 		
 		DragManager.doDrag(dragInitiator,ds,event,canvasProxy,0,0);
 	}
-	
+	/**
+	* To drag nodes on UI
+	*/
 	private function doDragEnter(event:DragEvent):void{
 		DragManager.acceptDragDrop(event.currentTarget as IUIComponent)
 	}
 	
+	/**
+	* To drag nodes on UI
+	*/	
 	private function onDragDrop(event:DragEvent):void{
 		var dagNode:DAGNode = DAGNode(event.dragInitiator) ;
 		var pointOffSet:Point = Point(event.dragSource.dataForFormat("point") );
@@ -198,12 +212,16 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 
 	}
-			
+	/**
+	* Initilization handler
+	*/		
 	private function initFlexInterfaceHandler(event: ResultEvent):void
 	{
 		rpcService.removeEventListener(ResultEvent.RESULT,initFlexInterfaceHandler,false);
 	}
-	
+	/**
+	* Restoring query object from session
+	*/
 	private function restoreQueryObjectHandler(event: ResultEvent):void
 	{
 		rpcService.removeEventListener(ResultEvent.RESULT,restoreQueryObjectHandler,false);
@@ -211,8 +229,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	 	rpcService.repaintDAG();
 	}
 	/**
-	
-	**/
+	* Initilization of DAG
+	*/
 	private function initApp():void
 	{
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
@@ -260,7 +278,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		    }
 		  
 	}
-	
+	/**
+	* Repaint handler DAG on NEXT, PREVIOUS and REDEFINE buttons.
+	*/
 	private function repaintHandler(event: ResultEvent):void
 	{
 		var nodeList:ArrayCollection = event.result  as ArrayCollection;
@@ -368,14 +388,20 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		rpcService.removeEventListener(ResultEvent.RESULT,repaintHandler,false)
 	}
 	
-
+	
+	/**
+     * Adds node in define result view
+     * @param nodesStr name of node
+     */
 	public function addNodeToView(nodesStr:String):void
 	{
 		rpcService.removeEventListener(ResultEvent.RESULT,repaintHandler);
 		rpcService.addEventListener(ResultEvent.RESULT,addNodeToViewHandler);
 		rpcService.addNodeToView(nodesStr);
 	}	
-		
+	/**
+     * Handler to add node in define result view. 
+     */	
 	private function addNodeToViewHandler(event: ResultEvent):void 		
 	{
 		var node:DAGNode = event.result as DAGNode;
@@ -386,18 +412,21 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 		rpcService.removeEventListener(ResultEvent.RESULT,addNodeToViewHandler,false);
 	}
-			
+	/**
+	 * Search Result. 
+	 */		
 	public function searchResult():void
 	{
 		rpcService.addEventListener(ResultEvent.RESULT,searchResultHandler);
 		rpcService.getSearchResult();
 	}
-	
+	/**
+	 * Search Result handler. 
+	 */	
 	private function searchResultHandler(event: ResultEvent):void 
 	{
 		var status:int =event.result as int;
-		
-		
+				
 		switch(status)
 		{
 			case DAGConstants.SUCCESS:
@@ -429,13 +458,19 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		rpcService.removeEventListener(ResultEvent.RESULT,searchResultHandler,false);
 		
 	}
-	
+	/**
+	 *Show validation messages. 
+	 */	
 	public function showValidationMessagesToUser(errorMessage:String):void
 	{
 		var paramArray:Array = new Array(errorMessage);
 		ExternalInterface.call("showValidationMessages",paramArray);
 	}
-	
+	/**
+	* Adds node to DAG
+	* @param strToCreateQueyObject contraint string to create node
+	* @param entityName node name
+	*/
 	public function createNode(strToCreateQueyObject:String,entityName:String):void
 	{
 		if(strToCreateQueyObject=="")	
@@ -448,7 +483,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			rpcService.createNode(strToCreateQueyObject,entityName);
 		}
 	}
-	
+	/**
+	* Link node Handler
+	*/
 	public function linkNodesHandler(event: ResultEvent):void
 	{
 		var selectedList:ArrayCollection =  event.result  as  ArrayCollection;
@@ -496,7 +533,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}*/
 
 	
-
+	/**
+	*Add node handler
+	*/
 	public function getNodeResultHandler(event: ResultEvent):void
 	{
 		var node:DAGNode = event.result as DAGNode;
@@ -515,13 +554,17 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 		rpcService.removeEventListener(ResultEvent.RESULT,getNodeResultHandler,false);
 	}
-	        
+	/**
+	* Creates Ambiguity Popup
+	*/        
 	private function createPopUp():void {
 	    PopUpManager.addPopUp(ambiguityPanel,this,true);
 	    PopUpManager.centerPopUp(ambiguityPanel);  
 	    }
 	
-
+	/**
+	* Actula addition of node on DAG panel.
+	*/
 	private function addNode(node:DAGNode):void
 	{
 		var newNode:DAGNode = new DAGNode();
@@ -559,7 +602,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		totalNodes.addItem(newNode);
 		currentExp.text =getExprssionString();
 	}
-	
+	/**
+	 Draw link between 2 nodes. 
+	*/
 	private function drawLine():void{
 		CursorManager.setBusyCursor();
 		var dagNode1:DAGNode = DAGNode(mainPanel.getChildByName(node1));
@@ -583,7 +628,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			}
 		}
 	}
-	
+	/**
+	Path handler.
+	*/
 	public function getPathHandler(event: ResultEvent):void
 	{
 		try
@@ -621,6 +668,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	        CursorManager.removeBusyCursor();
 		}
 	}
+	/**
+	Ambiguity panel cancel handler.
+	*/
 	public function cancelHandler(nodeList:ArrayCollection):void
 	{
 			node1="";
@@ -633,7 +683,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			count=0;
 			rpcService.removeEventListener(ResultEvent.RESULT,linkNodesHandler,false);
 	}
-		
+	/**
+	Link 2 nodes.
+	*/	
 	public function link(node1:String,node2:String):void
 	{
 		firstNode=node1;
@@ -641,7 +693,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		rpcService.addEventListener("result",getPathHandler);
 		rpcService.getpaths(selectedNodeList);
 	}
-
+	/**
+	Link 2 nodes.
+	*/	
 	public function linkNodes(firstNode:String,secondNode:String,path:DAGPath):void
 	{
 			var dagNode1:DAGNode = DAGNode(mainPanel.getChildByName(firstNode));
@@ -702,7 +756,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			currentExp.text = getExprssionString();
 	}
 							
-	
+	/**
+	Selectin nodes on DAG
+	*/
 	public function updateNodeSelection(event:MouseEvent):void {
 	selectedNode=null;
 		if(event.shiftKey)
@@ -761,6 +817,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 							DAGNode(mainPanel.getChildByName(node1)).unSelect();
 							node1 = node2;
 							node2 = event.currentTarget.name;
+							selectedNodeList.removeItemAt(0);
+							count--;
 						}
 					}
 					dagNode.select();
@@ -777,7 +835,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 		
 	}
-	
+	/**
+	*Edit node 
+	*/
 	public function editNode(node:DAGNode):void
 	{
 		eNode=node;
@@ -786,13 +846,20 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		rpcService.addEventListener(ResultEvent.RESULT,limitUIHandler);
 		
 	}
+	/**
+	* Show entity information on editing UI
+	*/
 	public function limitUIHandler(event:ResultEvent):void
 	{
 		var htmlStr:String = event.result as String;
 		ExternalInterface.call("showEntityInformation",htmlStr);
 		rpcService.removeEventListener(ResultEvent.RESULT,limitUIHandler);
 	}	
-	
+	/**
+	* Edits Limit 
+	* @param strToCreateQueyObject condition string on node
+	* @param entityName Entity name.
+	*/
 	public function editLimit(strToCreateQueyObject:String,entityName:String):void
 	{
 		
@@ -808,6 +875,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 							
 	}
+	/**
+	* Edit node handler
+	*/
 	public function editNodeHandler(event:ResultEvent):void
 	{
 		var node:DAGNode = event.result as DAGNode;
@@ -826,8 +896,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		}
 		rpcService.removeEventListener(ResultEvent.RESULT,editNodeHandler);
 	}
-
-public function getExprssionString():String
+	/**
+	*Getting Current Expression
+	*/
+	public function getExprssionString():String
 	{
         var expressionToStringMap:HashMap = new HashMap();
         var expressionsCovered:HashMap = new HashMap();
@@ -874,7 +946,9 @@ public function getExprssionString():String
 
 	   return expressionString;
     }
-    
+    /**
+    * Forming current expression
+    */
     private function FormExpression(expressionToStringMap:HashMap,expressionsCovered:HashMap,node:DAGNode):String
     {
         var expressionString:String = "";
