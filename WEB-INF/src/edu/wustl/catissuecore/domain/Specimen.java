@@ -389,6 +389,11 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
+		if ("".equals(barcode) )
+		{
+			this.barcode = null;
+		}
+		
 	}
 
 	/**

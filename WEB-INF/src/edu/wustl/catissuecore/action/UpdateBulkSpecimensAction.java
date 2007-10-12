@@ -17,13 +17,14 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Quantity;
@@ -47,7 +48,8 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 			HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
+				Constants.NEW_SPECIMEN_FORM_ID);
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 		try{
 			ViewSpecimenSummaryForm specimenSummaryForm =
@@ -62,6 +64,11 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 			
 			bizLogic.insert(createSpecimenMap(specimenDomainCollection), 
 					sessionDataBean, Constants.HIBERNATE_DAO);
+			ActionMessages actionMessages = new ActionMessages();
+			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+					"object.add.successOnly","Specimens"));
+			saveMessages(request, actionMessages);
+			
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception exception)

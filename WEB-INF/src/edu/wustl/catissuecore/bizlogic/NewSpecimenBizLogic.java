@@ -1369,6 +1369,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				//					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
 				//				}
 			}
+			else
+			{
+				specimen.setStorageContainer(
+						retrieveStorageContainerObject(dao, specimen.getStorageContainer(), null)
+						);
+				
+			}
 
 		}
 
