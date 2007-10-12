@@ -159,11 +159,12 @@ function showAllSpecimen(count)
 
 
 //This function called to view the consent page
-function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationkey)
+function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificationkey)
 {	
-	var consentVerificationkey1=consentVerificationkey;
-	var status = document.getElementById(consentVerificationkey1).value;
 	
+	var status = document.getElementById(consentVerificationkey).value;
+	var specimenIdentifier= document.getElementById(specimenIdentifierkey).value;
+		
 	var url ='ConsentVerification.do?operation=&pageOf=pageOfOrdering&status='+status+'&labelStatusId='+labelStatus+'&consentVerificationkey='+consentVerificationkey+'&showConsents=yes&specimenId='+specimenIdentifier;
 
 	
@@ -580,20 +581,17 @@ function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationke
 											<%
 											if(!disableRow)
 											{
-												if(requestDetailsBeanObj.getConsentVerificationkey()!=null && requestDetailsBeanObj.getConsentVerificationkey().equals(Constants.NO_CONSENTS))
-												{
+												
 											%>	
-
+											<logic:equal name="requestDetailsForm" property="<%=consentVerificationkey%>" value="<%=Constants.NO_CONSENTS%>">
 												<%=Constants.NO_CONSENTS%>
 												<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.NO_CONSENTS%>"/>
-
+											</logic:equal>
 											<%
-												}
-												else
-												{	
+							
 											%>
-
-												<a  id="<%=labelStatus%>" href="javascript:showNewConsentPage('<%=requestDetailsBeanObj.getSpecimenId()%>','<%=labelStatus%>','<%=consentVerificationkey%>')">
+											<logic:notEqual name="requestDetailsForm" property="<%=consentVerificationkey%>" value="<%=Constants.NO_CONSENTS%>">
+												<a  id="<%=labelStatus%>" href="javascript:showNewConsentPage('<%=specimenIdInMap%>','<%=labelStatus%>','<%=consentVerificationkey%>')">
 													<logic:notEmpty name="requestDetailsForm" property="<%=consentVerificationkey%>">
 														<bean:write name="requestDetailsForm" property="<%=consentVerificationkey%>"/>
 													</logic:notEmpty>
@@ -609,8 +607,9 @@ function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationke
 													</logic:empty>
 
 												</a>
-											
-											<%}}else{ 
+
+											</logic:notEqual>
+											<%}else{ 
 											
 													
 											%>
