@@ -472,6 +472,7 @@
 			<transaction  src="${mysql.sql.dir}/query/query_schema_script.sql"/>			
 			<transaction  src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql"/>	
 			<transaction  src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql"/>	
+			<transaction  src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql"/>	
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -513,6 +514,8 @@
 			<transaction  src="${mysql.sql.dir}/query/query_schema_script.sql"/>
 			<transaction  src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql"/>	
 			<transaction  src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql"/>
+			<transaction  src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql"/>
+			
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -643,6 +646,7 @@
 			  <transaction  src="${oracle.sql.dir}/query/DisableConstraints.sql"/>
 			  <transaction  src="${oracle.sql.dir}/query/PopulateTable.sql"/>
 			  <transaction  src="${oracle.sql.dir}/query/enableCons.sql"/>
+			 <transaction  src="${oracle.sql.dir}/query/UpdateTable.sql"/>
 		  <transaction>commit;</transaction>	
 		  <classpath>
 	        <fileset dir="${lib.dir}">
