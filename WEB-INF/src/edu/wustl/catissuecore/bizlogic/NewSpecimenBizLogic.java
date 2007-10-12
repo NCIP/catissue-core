@@ -1332,42 +1332,47 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			if (specimen.getStorageContainer().getId() != null)
 			{
-				//				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
-				//				if (containerObj != null)
-				//				{
-				//					StorageContainer container = (StorageContainer) containerObj;
-				StorageContainer storageContainerObj = new StorageContainer();
-				storageContainerObj.setId(specimen.getStorageContainer().getId());
-				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"name"};
-				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
-				String joinCondition = null;
+				specimen.setStorageContainer(
+						retrieveStorageContainerObject(dao, specimen.getStorageContainer(), 
+								specimen.getStorageContainer().getId())
+						);
 
-				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-
-				if (!list.isEmpty())
-				{
-					storageContainerObj.setName((String) list.get(0));
-				}
-
-				// check for closed Storage Container
-				checkStatus(dao, storageContainerObj, "Storage Container");
-
-				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
-						Constants.STORAGE_CONTAINER_FORM_ID);
-
-				// --- check for all validations on the storage container.
-				storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
-						specimen.getPositionDimensionTwo().toString(), sessionDataBean, partOfMultipleSpecimen);
-				//    chkContainerValidForSpecimen(specimen.getStorageContainer(), specimen,dao);
-				specimen.setStorageContainer(storageContainerObj);
-				//				}
-				//				else
-				//				{
-				//					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
-				//				}
+//				//				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
+//				//				if (containerObj != null)
+//				//				{
+//				//					StorageContainer container = (StorageContainer) containerObj;
+//				StorageContainer storageContainerObj = new StorageContainer();
+//				storageContainerObj.setId(specimen.getStorageContainer().getId());
+//				String sourceObjectName = StorageContainer.class.getName();
+//				String[] selectColumnName = {"name"};
+//				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+//				String[] whereColumnCondition = {"="};
+//				Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
+//				String joinCondition = null;
+//
+//				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+//
+//				if (!list.isEmpty())
+//				{
+//					storageContainerObj.setName((String) list.get(0));
+//				}
+//
+//				// check for closed Storage Container
+//				checkStatus(dao, storageContainerObj, "Storage Container");
+//
+//				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+//						Constants.STORAGE_CONTAINER_FORM_ID);
+//
+//				// --- check for all validations on the storage container.
+//				storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
+//						specimen.getPositionDimensionTwo().toString(), sessionDataBean, partOfMultipleSpecimen);
+//				//    chkContainerValidForSpecimen(specimen.getStorageContainer(), specimen,dao);
+//				specimen.setStorageContainer(storageContainerObj);
+//				//				}
+//				//				else
+//				//				{
+//				//					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
+//				//				}
 			}
 			else
 			{

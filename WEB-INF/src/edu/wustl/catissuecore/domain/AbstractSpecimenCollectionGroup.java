@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
@@ -75,7 +76,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
     /**
      * The Specimens in this SpecimenCollectionGroup.
      */
-    protected Collection<Specimen> specimenCollection = new HashSet<Specimen>();
+    protected Collection<Specimen> specimenCollection = new LinkedHashSet<Specimen>();
 
     
 	public AbstractSpecimenCollectionGroup()

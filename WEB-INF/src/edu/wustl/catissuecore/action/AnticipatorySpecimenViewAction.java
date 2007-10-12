@@ -65,6 +65,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		try{
 			session.setAttribute("SCGFORM", specimenCollectionGroupForm.getId());
 			List cpList = dao.retrieve(SpecimenCollectionGroup.class.getName(), "id", id);
+			
 			if(cpList != null && !cpList.isEmpty())
 			{
 				SpecimenCollectionGroup specimencollectionGroup = (SpecimenCollectionGroup) cpList.get(0);			
@@ -109,9 +110,11 @@ public class AnticipatorySpecimenViewAction extends Action {
 		return null;
 	}
 
-	protected LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection) throws DAOException
+	protected LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection)
+				throws DAOException
 	{
-		LinkedHashMap<String, GenericSpecimen> specimenMap = new LinkedHashMap<String, GenericSpecimen>();
+		LinkedHashMap<String, GenericSpecimen> specimenMap = 
+						new LinkedHashMap<String, GenericSpecimen>();
 		autoStorageSpecimenMap.clear();
 		Iterator specimenIterator = specimenCollection.iterator();
 		while(specimenIterator.hasNext())

@@ -434,7 +434,6 @@ public class CollectionProtocolUtil {
 	}
 	
 	/**
-	 * @param mapping
 	 * @param request
 	 * @param cpSessionList
 	 */
@@ -451,13 +450,16 @@ public class CollectionProtocolUtil {
 		
 		HttpSession session = request.getSession();
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+
 		CollectionProtocolBean collectionProtocolBean = 
 			(CollectionProtocolBean)sessionCpList.get(0);
 		collectionProtocolBean.setOperation("update");
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN,
 				sessionCpList.get(0));
 		
-		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+
+		
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP,
 				sessionCpList.get(1));
 	}

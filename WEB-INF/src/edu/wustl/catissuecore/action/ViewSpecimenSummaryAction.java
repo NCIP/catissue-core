@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -63,7 +64,6 @@ public class ViewSpecimenSummaryAction extends Action {
 			if (eventId == null) {
 				eventId = (String) request
 						.getParameter(Constants.COLLECTION_PROTOCOL_EVENT_ID);
-				
 			}
 			
 			if (summaryForm.getSpecimenList()!= null  )
@@ -392,7 +392,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			ViewSpecimenSummaryForm summaryForm,
 			LinkedHashMap<String, GenericSpecimen> specimenMap) {
 				
-		ArrayList<GenericSpecimen> specimenList = getSpecimenList(specimenMap.values());
+		LinkedList<GenericSpecimen> specimenList = getSpecimenList(specimenMap.values());
 		summaryForm.setSpecimenList(specimenList);
 		String selectedSpecimenId = summaryForm.getSelectedSpecimenId();
 
@@ -412,9 +412,9 @@ public class ViewSpecimenSummaryAction extends Action {
 			return;
 		}
 		
-		HashMap<String, GenericSpecimen> aliquotsList = selectedSpecimen
+		LinkedHashMap<String, GenericSpecimen> aliquotsList = selectedSpecimen
 				.getAliquotSpecimenCollection();
-		HashMap<String, GenericSpecimen> derivedList = selectedSpecimen
+		LinkedHashMap<String, GenericSpecimen> derivedList = selectedSpecimen
 				.getDeriveSpecimenCollection();
 
 		Collection nestedAliquots = new LinkedHashSet();
@@ -520,9 +520,9 @@ public class ViewSpecimenSummaryAction extends Action {
 	 * @param specimenMap
 	 * @return
 	 */
-	private ArrayList<GenericSpecimen> getSpecimenList(
+	private LinkedList<GenericSpecimen> getSpecimenList(
 			Collection<GenericSpecimen> specimenColl) {
-		ArrayList<GenericSpecimen> specimenList = new ArrayList<GenericSpecimen>();
+		LinkedList<GenericSpecimen> specimenList = new LinkedList<GenericSpecimen>();
 		if (!specimenColl.isEmpty())
 		{
 			specimenList.addAll(specimenColl);

@@ -74,8 +74,8 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			e.printStackTrace();
 		}
 		
-		specimenRequirementBean.setAliquotSpecimenCollection(aliquotSpecimenMap);
-		specimenRequirementBean.setDeriveSpecimenCollection(deriveSpecimenMap);
+		specimenRequirementBean.setAliquotSpecimenCollection((LinkedHashMap)aliquotSpecimenMap);
+		specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveSpecimenMap);
 		return specimenRequirementBean;
 	}
 	private SpecimenRequirementBean createSpecimen(CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier, Integer totalNoOfSpecimen)
@@ -220,7 +220,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			{
 				e.printStackTrace();
 			}
-			specimenRequirementBean.setAliquotSpecimenCollection(aliquotSpecimenMap);
-			specimenRequirementBean.setDeriveSpecimenCollection(deriveSpecimenMap);
+			specimenRequirementBean.setAliquotSpecimenCollection((LinkedHashMap)aliquotSpecimenMap);
+			specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveSpecimenMap);
 	 }
 }

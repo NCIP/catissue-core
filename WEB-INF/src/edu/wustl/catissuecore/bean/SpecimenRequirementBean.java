@@ -387,13 +387,6 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		return (LinkedHashMap)aliquotSpecimenCollection;
 	}
 
-
-	
-	public void setAliquotSpecimenCollection(Map aliquotSpecimenCollection)
-	{
-		this.aliquotSpecimenCollection = aliquotSpecimenCollection;
-	}
-
 	public void addAliquotSpecimenBean(SpecimenRequirementBean specimenRequirementBean)
 	{
 		aliquotSpecimenCollection.put(specimenRequirementBean.getUniqueIdentifier(), specimenRequirementBean);
@@ -405,14 +398,6 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	{
 		return (LinkedHashMap)deriveSpecimenCollection;
 	}
-
-
-	
-	public void setDeriveSpecimenCollection(Map deriveSpecimenCollection)
-	{
-		this.deriveSpecimenCollection = deriveSpecimenCollection;
-	}
-
 
 	
 	public String getDisplayName()
@@ -621,7 +606,8 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	
 	public void setAliquotSpecimenCollection(
 			LinkedHashMap<String, GenericSpecimen> aliquotSpecimenCollection) {
-		// TODO Auto-generated method stub
+
+		this.aliquotSpecimenCollection = aliquotSpecimenCollection;
 		
 	}
 
@@ -650,8 +636,7 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	 
 	public void setDeriveSpecimenCollection(
 			LinkedHashMap<String, GenericSpecimen> deriveSpecimenCollection) {
-		// TODO Auto-generated method stub
-		
+		this.deriveSpecimenCollection =	deriveSpecimenCollection;
 	}
 
 
