@@ -175,8 +175,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 		// set the map to subtype
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
-    	// sets the Specimen Class list
-		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
+    	
 		// sets the Specimen Type list
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 		// sets the Tissue Site list
@@ -185,8 +184,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
 		// sets the Side list
 		request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
-		// set the map of subtype
-		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
+		
 		//Storage Container List
 		request.setAttribute("storageContainerList", storageContainerList);
 		
