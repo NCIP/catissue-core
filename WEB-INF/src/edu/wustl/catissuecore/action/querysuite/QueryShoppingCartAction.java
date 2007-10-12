@@ -136,6 +136,20 @@ public class QueryShoppingCartAction extends BaseAction
 		}
 		else if (operation.equals("addToOrderList"))
 		{
+			
+		 	if(session.getAttribute("RequestedBioSpecimens") != null)
+	    		session.removeAttribute("RequestedBioSpecimens");
+		 	
+			if(session.getAttribute("DefineArrayFormObjects")!=null)
+	    		session.removeAttribute("DefineArrayFormObjects");
+		 	
+			if(session.getAttribute(Constants.SPECIMEN_ARRAY_ID) != null)
+				session.removeAttribute(Constants.SPECIMEN_ARRAY_ID);
+			
+			if(session.getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
+				session.removeAttribute(Constants.PATHALOGICAL_CASE_ID);
+			
+			
 			Map <String,Set<String>> entityIdsMap = getOrderableEntityIds(chkBoxValues, cart);
 			
 			Set<String> specimenIdsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
@@ -152,9 +166,9 @@ public class QueryShoppingCartAction extends BaseAction
 			pathalogicalCaseIds.addAll(pathalogicalCaseIdsSet);
 		
 			
-			session.setAttribute("specimenId", specimenIds);
-			session.setAttribute("specimenArrayIds", specimenArrayIds);
-			session.setAttribute("pathalogicalCaseIds", pathalogicalCaseIds);
+			session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
+			session.setAttribute(Constants.SPECIMEN_ARRAY_ID, specimenArrayIds);
+			session.setAttribute(Constants.PATHALOGICAL_CASE_ID, pathalogicalCaseIds);
 			
 			target = new String("requestToOrder");
 		}
@@ -170,7 +184,7 @@ public class QueryShoppingCartAction extends BaseAction
 		{
 			if(session.getAttribute(Constants.SPECIMEN_ID) != null)
 				session.removeAttribute(Constants.SPECIMEN_ID);
-			
+							
 			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 			List<String> specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Specimen.class.getName(), chkBoxValues));
 			session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
