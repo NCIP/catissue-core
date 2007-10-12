@@ -379,6 +379,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//For Specimen Event Parameters.
 	public static final String SPECIMEN_ID = "specimenId";
+	public static final String SPECIMEN_ARRAY_ID = "specimenArrayIds";
+	public static final String PATHALOGICAL_CASE_ID = "pathalogicalCaseIds";
 	public static final String FROM_POSITION_DATA = "fromPositionData";
 	public static final String POS_ONE ="posOne";
 	public static final String POS_TWO ="posTwo";
