@@ -448,10 +448,10 @@ public class GenerateHtmlForAddLimitsBizLogic
 				"<table  cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">");
 		if (forPage.equalsIgnoreCase(Constants.SAVE_QUERY_PAGE))
 			generatedHTML
-					.append("<tr><td  class=\"formSubTitleWithoutBorder\">User Defined</td><td class=\"formSubTitleWithoutBorder\">Display Labels</td><td class=\"formSubTitleWithoutBorder\" colspan=\"6\"  >Conditions</td></tr>");
+					.append("<tr><td  class=\"formSubTitleWithoutBorder\">User Defined</td><td class=\"formSubTitleWithoutBorder\">Display Label</td><td class=\"formSubTitleWithoutBorder\" colspan=\"6\"  >Conditions</td></tr>");
 		else if(forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE))
 			generatedHTML
-			.append("<tr><td class=\"formSubTitleWithoutBorder\">Display Labels</td><td class=\"formSubTitleWithoutBorder\" colspan=\"5\"  >Conditions</td></tr>");
+			.append("<tr><td class=\"formSubTitleWithoutBorder\">Display Label</td><td class=\"formSubTitleWithoutBorder\" colspan=\"5\"  >Condition</td></tr>");
 		attributesList = "";
 		Map<EntityInterface, List> entityConditionMap = null;
 		String expressionEntityString = "";
@@ -496,6 +496,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 					.append("<input type='hidden' id='conditionList' name='conditionList' value='' />");
 		}
 		generatedHTML.append("</table>");
+		System.out.println(generatedHTML.toString());
 		return generatedHTML.toString();
 	}
 
@@ -538,10 +539,10 @@ public class GenerateHtmlForAddLimitsBizLogic
 		//ApplicationProperties.getValue("query.defineSearchRulesFor");//"\nDefine Search Rules For";//
 		String attributesList = "";
 		generatedPreHTML
-				.append("<table border=\"0\" width=\"100%\" height=\"30%\" callspacing=\"0\" cellpadding=\"0\">");
-		generatedPreHTML.append("\n<tr height=\"2%\"> ");
+				.append("<table border=\"0\" width=\"100%\" height=\"30%\" callspacing=\"0\" cellpadding=\"0\" bgcolor=\"#EAEAEA\" >");
+		generatedPreHTML.append("\n<tr height=\"2%\" bgcolor=\"#EAEAEA\" > ");
 		generatedPreHTML
-				.append("<td valign='top' height=\"2%\" colspan=\"8\" bgcolor=\"#EAEAEA\" ><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
+				.append("<td class='standardLabelQuery' valign='top' height=\"2%\" colspan=\"8\" bgcolor=\"#EAEAEA\" ><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
 		generatedPreHTML.append(header + " '" + entityName + "'</b></font>");
 		generatedPreHTML.append("\n</td>");
 
@@ -554,24 +555,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 				getAttributesString(attributeCollection), isEditLimits, isTopButton));
 		generatedPreHTML.append("\n</tr></table>");
 		generatedHTML
-				.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\">");
-		//generatedHTML.append("\n<tr>");
-		//		generatedHTML
-		//		.append("<td valign='top' height=\"4%\" colspan=\"8\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
-		//		generatedHTML.append(header + " '" + entityName + "'</b></font>");
-		//		generatedHTML.append("\n</td></tr>");
-		//generatedHTML.append("\n<tr><td valign='top' height=\"3%\" colspan=\"8\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
-		//		if(conditions != null)
-		//		{ 
-		//			isEditLimits = true;
-		//		}
-
+				.append("<table valign='top' border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\" class='rowBGWhiteColor'>");
 		boolean isBGColor = false;
 		generatedHTML.append("\n<tr>");
 		generatedHTML.append("\n<td valign=\"top\">");
 		generatedHTML.append("\n</td>");
 		generatedHTML.append("\n</tr>");
-		//generatedHTML.append(generateHTMLForButton(nameOfTheEntity, getAttributesString(attributeCollection), isEditLimits,isTopButton));
 		if (!attributeCollection.isEmpty())
 		{
 			List attributes = new ArrayList(attributeCollection);
@@ -598,15 +587,15 @@ public class GenerateHtmlForAddLimitsBizLogic
 								+ styleSheetClass
 								+ "' id=\""
 								+ componentId
-								+ "\" height=\"6%\">\n"
-								+ "<td valign='top' align='right' class='standardTextQuery' nowrap='nowrap' width=\"15%\"><b>");
+								+ "\" height=\"6%\" >\n"
+								+ "<td valign='top' align='right' class='standardLabelQuery' nowrap='nowrap' width=\"15%\">");
 				generatedHTML.append(attrLabel + " ");
 				if (attribute.getDataType().equalsIgnoreCase(Constants.DATE))
 				{
 					String dateFormat = Constants.DATE_FORMAT;//ApplicationProperties.getValue("query.date.format");
 					generatedHTML.append("\n(" + dateFormat + ")");
 				}
-				generatedHTML.append(":&nbsp;&nbsp;&nbsp;&nbsp;</b></td>\n");
+				generatedHTML.append(":&nbsp;&nbsp;&nbsp;&nbsp;</td>\n");
 				List<String> operatorsList = getConditionsList(attribute);
 				boolean isBetween = false;
 				if (!operatorsList.isEmpty()
@@ -1098,7 +1087,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		{
 			String textBoxId = componentId + "_textBox";
 			String calendarId = componentId + "_calendar";
-			innerStr = "\n<td width='3%' valign='top' id=\"" + calendarId + "\">" + divStr
+			innerStr = "\n<td width='3%' class='"+ cssClass +"' valign='top' id=\"" + calendarId + "\">" + divStr
 					+ "\n<a href=\"javascript:show_calendar('" + formName + "." + textBoxId
 					+ "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
 		}
@@ -1115,7 +1104,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				style = "display:none";
 			}
-			innerStr = "\n<td width='3%' valign='top' id=\"" + calendarId1 + "\" style=\"" + style
+			innerStr = "\n<td width='3%' class='"+ cssClass +"' valign='top' id=\"" + calendarId1 + "\" style=\"" + style
 					+ "\">" + divStr + "\n<a href=\"javascript:show_calendar('" + formName + "."
 					+ textBoxId1 + "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
 		}

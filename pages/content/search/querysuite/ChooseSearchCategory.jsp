@@ -23,7 +23,7 @@ System.out.println("currentPage         "+currentPage);
 		else
 		{
 			<%
-				height ="410" ;
+				height ="530" ;
 			%>
 		}
 
@@ -110,11 +110,11 @@ System.out.println("currentPage         "+currentPage);
 						<td  height="1%">&nbsp;</td>
 					</tr>
 					<tr valign="top" class="row" width="98%" height="100%">
-						<td width="100%" height="<%=height%>">&nbsp;</td>
-						<td height=<%=height%> width="100%" colspan="2" id='resultSetDiv' class="tdWithoutTopBorder">
-							<div id="resultSet" style="overflow:auto;height:410;width:227"></div>
+						<td width="100%">&nbsp;</td>
+						<td  width="100%" colspan="2" id='resultSetTd' class="tdWithoutTopBorder">
+							<div id="resultSet" style="overflow:auto;height:530;width:227"></div>
 						</td>
-						<td height=<%=height%>>&nbsp;</td>
+						<td >&nbsp;</td>
 					</tr>
 					
 			</table>

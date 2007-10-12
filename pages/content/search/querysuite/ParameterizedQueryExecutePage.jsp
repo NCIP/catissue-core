@@ -47,18 +47,25 @@
 				width="100%">
 				
 				<tr>
-					<td  width='100%' height='20' valign="top" style="padding-left:0.7em;" >
-					  <b><bean:message	key="query.title" /></b>&nbsp;:&nbsp; <%=query.getName()%><br>
-							<b><bean:message	key="query.description" /></b>&nbsp;:&nbsp;<%=query.getDescription()%>
-					  
-					  </td>
+					<td  width="2%" valign="top" class="formSaveQueryTitle">
+					  <b><bean:message	key="query.title" /></b>
+					 </td>
+					 <td class="formSaveQueryTitle" align="left">
+					 : <%=query.getName()%>
+					 </td>
+				</tr>
+				<tr>
+					<td  valign="top" width="2%" class="formSaveQueryTitle">
+						<b><bean:message	key="query.description" /></b>
 					
-
-					
+					 </td>
+					 <td  class="formSaveQueryTitle" align="left">
+					: <%=query.getDescription()%>
+					 </td>
 				</tr>
 				
 				<tr>
-					<td colspan="2" height="20">&nbsp;</td>
+					<td colspan="4" height="20">&nbsp;</td>
 				</tr>
 			</table>
 			</td>

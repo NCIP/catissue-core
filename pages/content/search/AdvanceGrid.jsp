@@ -183,7 +183,7 @@ function setEditableChkbox(checkAllPages)
 							 screen, the div runs out of the frame, and there was no way to scroll
 							 down, as we had disabled the scrollbar.
 			-->
-			<div id="gridbox" width="600px" height="280px" style="border-left:solid 1px;border-right:solid 1px;border-top:solid 1px;border-bottom:solid 1px;background-color:white;overflow:hidden"></div>
+			<div id="gridbox" width="700px" height="280px" style="border-left:solid 1px;border-right:solid 1px;border-top:solid 1px;border-bottom:solid 1px;background-color:white;overflow:hidden"></div>
 		</td>
 	</tr>
 </table>
