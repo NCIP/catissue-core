@@ -1629,22 +1629,27 @@ td.queryModuleTabMenuItem{ /* for the off state of the tab menu (top) cells */
   white-space: nowrap;
   border-right:1px solid #5C5C5C; /* constant: dark gray */
  }
- .rowBGGreyColor1
+  .rowBGGreyColor1
  {
-	 background-color:#F4F4F5; /*#9FA2BA;  constant: light purple ;C4E2FF : for light purple*/	 
+	 background-color:#EAEAEF; /*#9FA2BA;  constant: light purple ;C4E2FF : for light purple*/	 
  }
  .rowBGWhiteColor
  {
-	 background-color:#EAEAEF; /*#9FA2BA;  constant: light purple ;C4E2FF : for light purple*/	 
+	 background-color:#F4F4F5; /*#9FA2BA;  constant: light purple ;C4E2FF : for light purple*/	 
  }
 /* .standardTextQueryWithBackColor{ /* for stand-alone text not affected by any cascading text styles 
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.6em;
   color:#000000; /* constant: black 
 }*/
- .standardTextQuery{ /* for stand-alone text not affected by any cascading text styles */
+  .standardTextQuery{ /* for stand-alone text not affected by any cascading text styles */
   font-family:arial,helvetica,verdana,sans-serif;
-  font-size:0.75em;
+  font-size:0.9em;
+  color:#000000; /* constant: black */
+}
+.standardLabelQuery{
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
   color:#000000; /* constant: black */
 }
 .dropdownQuery{ /* for stand-alone text not affected by any cascading text styles */
@@ -1843,4 +1848,14 @@ td.formFieldForAnnotaionList{ /* for the cell that contains the form elements */
   color:#000000; /* constant: black */
   line-height:1.5em;
 font-weight:bold;
+}
+.formSaveQueryTitle
+{
+ font-family:arial,helvetica,verdana,sans-serif;
+ font-size:0.8em;
+}
+td.formFieldNoBordersQuery{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  color:#000000; /* constant: black */
 }
