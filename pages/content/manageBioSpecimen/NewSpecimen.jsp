@@ -1474,7 +1474,7 @@
 									</td>
 									
 								 	<td class="formFieldNoBordersSimple" colspan="4">
-										<html:textarea styleClass="formFieldSized"  rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
+										<html:textarea styleClass="formFieldSized"  rows="3" styleId="comments" property="comments"/>
 									</td>
 								</tr>
 								<!-- collectionstatus -->							
