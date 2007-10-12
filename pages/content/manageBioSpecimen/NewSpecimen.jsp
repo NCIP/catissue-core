@@ -940,7 +940,7 @@
 									<logic:equal name="newSpecimenForm" property="parentPresent" value="false">
 									<td class="formFieldNoBordersSimple">
 										<label for="specimenCollectionGroupName">
-											<b><bean:message key="specimenCollectionGroup.groupName"/></b>
+											<b><bean:message key="newSpecimen.groupName"/></b>
 										</label>
 									</td>							
 									<td class="formFieldNoBordersSimple" colspan="<%=specimenColSpan%>">
@@ -949,8 +949,11 @@
 										Description: The following change shows read-only textbox on specimen page, if specimen is being added
 										from specimen collection group page, otherwise combobox having names of specimen collection group is displayed.
 									-->
-													
-									<html:text styleClass="formFieldSized15" maxlength="255" size="30" styleId="specimenCollectionGroupName" property="specimenCollectionGroupName" readonly="<%=readOnlyForAll%>"/>
+									<html:hidden property="specimenCollectionGroupName"/>				
+									
+									<label for="specimenCollectionGroupName">
+										<b><%=form.getSpecimenCollectionGroupName()%></b>
+									</label>
 									
 									<!-- <a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
 										<bean:message key="app.addNew" />
@@ -962,15 +965,19 @@
 									<logic:equal name="newSpecimenForm" property="parentPresent" value="true">
 						        	<td class="formFieldNoBordersSimple" >
 										<label for="parentSpecimenId">
-											<bean:message key="createSpecimen.parentLabel"/>
+											<b><bean:message key="newSpecimen.parentLabel"/></b>
 										</label>
 									</td>
 							
 						        	<td class="formFieldNoBordersSimple" colspan="<%=specimenColSpan%>">
 										<html:hidden property="specimenCollectionGroupName"/>
 										<!-- Mandar : 434 : for tooltip -->
-										<html:text styleClass="formFieldSized15" maxlength="255" size="30" styleId="parentSpecimenName" property="parentSpecimenName" readonly="<%=readOnlyForAll%>"/>
-										<html:hidden property="parentSpecimenId"/>
+										<html:hidden property="parentSpecimenName"/>
+										
+										<label for="parentSpecimenId">
+											<b><%=form.getParentSpecimenName()%></b>
+										</label>
+										
 						        	</td>
 									</logic:equal>	
 									
@@ -982,8 +989,11 @@
 										</label>
 									</td>
 									<td class="formFieldNoBordersSimple" >								
-							     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="lineage" property="lineage" 
-							     		readonly="true"/>														     	
+							     		
+							     		
+							     		<label for="lineage">
+										<b><%=form.getLineage()%></b>
+									</label>
 									</td>
 									</logic:equal>
 								</tr>
@@ -1488,11 +1498,10 @@
 									</td>
 									<td class="formFieldNoBordersSimple">
 									
-									<autocomplete:AutoCompleteTag property="activityStatus"
-												  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
-												  initialValue="<%=form.getActivityStatus()%>"
-												  onChange="<%=strCheckStatus%>"
-									/>
+									
+									<label for="activityStatus">
+										<b><%=form.getActivityStatus()%></b>
+									</label>
 									
 									</td>
 									
