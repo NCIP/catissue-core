@@ -226,7 +226,9 @@ public final class MultipleSpecimenValidationUtil
 				if (validator.isEmpty(extIdentifier.getName()))
 				{
 					String message = ApplicationProperties.getValue("specimen.msg");
-					throw new DAOException(ApplicationProperties.getValue("errors.specimen.externalIdentifier.missing", message));
+					extIdentifierCollection.remove(extIdentifier);
+					continue;
+					//throw new DAOException(ApplicationProperties.getValue("errors.specimen.externalIdentifier.missing", message));
 				}
 				if (validator.isEmpty(extIdentifier.getValue()))
 				{

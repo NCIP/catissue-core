@@ -60,7 +60,7 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 			LinkedHashSet specimenDomainCollection = 
 				specimenUpdateAction.getSpecimensToSave(eventId, session);
 			
-			bizLogic.insert(populateSpecimenDomainObjectMap(request), 
+			bizLogic.insert(createSpecimenMap(specimenDomainCollection), 
 					sessionDataBean, Constants.HIBERNATE_DAO);
 			return mapping.findForward(Constants.SUCCESS);
 		}
@@ -90,6 +90,7 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 			while(childrenIterator.hasNext())
 			{
 				Specimen childSpecimen = (Specimen) childrenIterator.next();
+				childSpecimen.setParentSpecimen(specimen);
 				childrenList.add(childSpecimen);				
 			}
 			specimenMap.put(specimen, childrenList);
@@ -280,12 +281,15 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 		}
 		
 		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());
-		
+		if("Virtual".equals(specimenDataBean.getStorageContainerForSpecimen()))
+		{
+			specimen.setStorageContainer(null);
+		}
 		StorageContainer storageContainer = new StorageContainer();
 		storageContainer.setName(
 				specimenDataBean.getStorageContainerForSpecimen());
 		
-		specimen.setStorageContainer(null);
+		
 		
 		return specimen;
 

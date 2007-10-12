@@ -223,7 +223,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			for (int i = 0; i < derivedSpecimens.size(); i++)
 			{
 				Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
-				resetId(derivedSpecimen);
+				//resetId(derivedSpecimen);
 				derivedSpecimen.setParentSpecimen(specimen);
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 				
@@ -1255,13 +1255,20 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 				 specimenCollectionGroupObj = new SpecimenCollectionGroup();
 				 specimenCollectionGroupObj.setId((Long)list.get(0));*/
-				if(specimen.getSpecimenCollectionGroup().getGroupName()!= null && !Constants.COLLECTION_STATUS_PENDING.equalsIgnoreCase(specimen.getCollectionStatus())){
+				Collection consentTierStatusCollection = null;
+
+				if(specimen.getSpecimenCollectionGroup().getGroupName()!= null && !Constants.COLLECTION_STATUS_PENDING.equalsIgnoreCase(specimen.getCollectionStatus()))
+				{
 					List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
 					SpecimenCollectionGroup scg = (SpecimenCollectionGroup) spgList.get(0);				
 					specimenCollectionGroupObj = (SpecimenCollectionGroup)HibernateMetaData.getProxyObjectImpl(scg);
 				
 					//Resolved lazy ----  specimenCollectionGroupObj.getConsentTierStatusCollection();
-					Collection consentTierStatusCollection= (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroupObj.getId(), "elements(consentTierStatusCollection)" );
+					consentTierStatusCollection= (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroupObj.getId(), "elements(consentTierStatusCollection)" );
+				}
+				
+				if (consentTierStatusCollection != null)
+				{
 					Collection consentTierStatusCollectionForSpecimen = new HashSet(); 
 					Iterator itr = consentTierStatusCollection.iterator();
 					while(itr.hasNext())
@@ -1273,7 +1280,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 						 consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
 					}
 					specimen.setConsentTierStatusCollection(consentTierStatusCollectionForSpecimen);
-				}
+				}				
 			}
 			else
 			{

@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -22,12 +23,15 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bean.GenericSpecimenVO;
+import edu.wustl.catissuecore.bean.SpecimenDataBean;
+
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -113,7 +117,7 @@ public class UpdateSpecimenStatusAction extends Action {
 			Iterator iterator = aliquotCollection.iterator();
 			while(iterator.hasNext())
 			{
-				GenericSpecimenVO aliquotSpecimen = (GenericSpecimenVO) iterator.next();
+				GenericSpecimen aliquotSpecimen = (GenericSpecimen) iterator.next();
 				Specimen specimen = createSpecimenDomainObject(aliquotSpecimen);
 				specimen.setChildrenSpecimen(
 						getChildrenSpecimens(aliquotSpecimen));
@@ -129,7 +133,7 @@ public class UpdateSpecimenStatusAction extends Action {
 			Iterator iterator = aliquotCollection.iterator();
 			while(iterator.hasNext())
 			{
-				GenericSpecimenVO derivedSpecimen = (GenericSpecimenVO) iterator.next();
+				GenericSpecimen derivedSpecimen = (GenericSpecimen) iterator.next();
 				Specimen specimen = createSpecimenDomainObject(derivedSpecimen);
 				specimen.setChildrenSpecimen(
 						getChildrenSpecimens(derivedSpecimen));
@@ -204,9 +208,54 @@ public class UpdateSpecimenStatusAction extends Action {
 		{
 			specimen.setCollectionStatus("Pending");
 		}
+		
+		if(specimen.getId() == null)
+		{
+			setValuesForNewSpecimen(specimen,specimenVO);
+		}
+		
 		return specimen;
 	}
 
+	private void setValuesForNewSpecimen(Specimen specimen, GenericSpecimen genericSpecimen)
+	{
+		SpecimenDataBean specimenDataBean = (SpecimenDataBean) genericSpecimen;
+		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		specimen.setComment(specimenDataBean.getComment());
+		specimen.setCreatedOn(new Date());
+		specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+		specimen.setPathologicalStatus(specimenDataBean.getPathologicalStatus());
+		specimen.setLineage(specimenDataBean.getLineage());
+		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
+		specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
+		specimen.setSpecimenCharacteristics(specimenCharacteristics);
+		specimen.setAvailableQuantity(specimen.getInitialQuantity());
+		specimen.setAvailable(Boolean.TRUE);
+		specimen.setLineage(specimenDataBean.getLineage());
+		specimen.setPathologicalStatus(
+				specimenDataBean.getPathologicalStatus());		
+		specimen.setType(specimenDataBean.getType());
+		
+		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
+		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
+		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
+		
+		if(specimenDataBean.getSpecimenEventCollection()!=null && !specimenDataBean.getSpecimenEventCollection().isEmpty())
+		{
+			Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
+
+			while(iterator.hasNext())
+			{
+				SpecimenEventParameters specimenEventParameters =
+					(SpecimenEventParameters) iterator.next();
+				specimenEventParameters.setSpecimen(specimen);
+				
+			}
+		}
+		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());		
+	}
+	
 	/**
 	 * @param specimenVO
 	 * @param specimen
