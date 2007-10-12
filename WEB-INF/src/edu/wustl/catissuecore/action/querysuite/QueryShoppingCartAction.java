@@ -64,6 +64,8 @@ public class QueryShoppingCartAction extends BaseAction
 		HttpSession session = request.getSession();
 		String target = "";
 		String operation = request.getParameter(Constants.OPERATION);
+		request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
+		
 		List<String> columnList;
 
 		if (operation == null)
@@ -91,6 +93,11 @@ public class QueryShoppingCartAction extends BaseAction
 		SelectedColumnsMetadata selectedColumnMetaData = (SelectedColumnsMetadata) session
 				.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
 
+		if(operation.equalsIgnoreCase("view"))
+		{
+			isSpecimenArrayExist(request,cart);
+		}
+		
 		//QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		List<AttributeInterface> attributeList = null;
 		if (selectedColumnMetaData != null)
@@ -175,6 +182,38 @@ public class QueryShoppingCartAction extends BaseAction
 		return mapping.findForward(target);
 	}
 
+	/*
+	 * This will check for specimen array in the list 
+	 */
+	private void isSpecimenArrayExist(HttpServletRequest request,QueryShoppingCart cart)
+	{
+		List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
+		String isSpecimenArrayExist = "false";
+		if (cartAttributeList != null)
+		{
+			List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
+			Set<String> distinctEntityNameSet = new HashSet<String>(); 
+			for (AttributeInterface attribute : cartAttributeList)
+			{
+				
+				if ((attribute.getName().equals(Constants.ID))
+						&& ((orderableEntityNameList))
+								.contains(attribute.getEntity().getName()))
+				{
+					distinctEntityNameSet.add(attribute.getEntity().getName());
+				}
+			}
+			for(String entityName :distinctEntityNameSet)
+			{
+				if(entityName.equals(Constants.SPECIMEN_ARRAY_CLASS_NAME))
+				{
+					isSpecimenArrayExist = "true";
+					break;
+				}
+			}
+		}
+		request.setAttribute(Constants.IS_SPECIMENARRAY_PRESENT, isSpecimenArrayExist);
+	}
 	/**
 	 * @param chkBoxValues check box values.
 	 * @param cart Shopping cart object from session.

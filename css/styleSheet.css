@@ -1452,6 +1452,18 @@ td.formFieldNoBordersSimple1{ /* for the cell that contains the form elements */
   font-weight:bold;
 }
 
+td.formFieldNoBordersSimpleNotBold{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  color:#000000; /* constant: black */
+}
+
+td.formFieldNoBordersSimpleBold{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  color:#000000; /* constant: black */
+  font-weight:bold;
+}
 
 .formRequiredNoticeLBRBorders{ /* for the autoevents cell */
   font-family:arial,helvetica,verdana,sans-serif;

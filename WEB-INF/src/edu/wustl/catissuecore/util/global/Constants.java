@@ -2014,6 +2014,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String DUPLICATE_OBJECT = "duplicateObject";
     public static final String DIFFERENT_VIEW_IN_CART = "differentCartView";
     public static final String IS_SPECIMENID_PRESENT = "isSpecimenIdPresent";
+    public static final String IS_SPECIMENARRAY_PRESENT = "isSpecimenArrayPresent";
 
     // Constants for CP Based Entry
     public static final String COLLECTION_PROTOCOL_EVENT_ID = "Event_Id";

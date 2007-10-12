@@ -8,6 +8,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+
 <script src="jss/script.js"></script>
 
 <style>
@@ -22,6 +24,26 @@
 	if(isSpecimenIdPresent==null)
 	 isSpecimenIdPresent = "";
 	
+	String isSpecimenArrayPresent = (String)request.getAttribute(Constants.IS_SPECIMENARRAY_PRESENT);
+	
+	String disabled = "";
+	boolean disabledList = false;
+	if(isSpecimenArrayPresent!= null && isSpecimenArrayPresent.equals("true"))
+	{
+		disabled = "DISABLED";
+		disabledList = true;
+	}
+	
+	String disabledOrder = "";
+	boolean disabledButton = false;
+	if(isSpecimenIdPresent.equals("false"))
+	{
+		disabled = "DISABLED";
+		disabledList = true;
+		disabledButton = true;
+		disabledOrder = "DISABLED";
+	}
+
     QueryShoppingCart cart = (QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
 	List columnList = new ArrayList();
 	List dataList = new ArrayList() ;
@@ -37,7 +59,28 @@
 <head>
 <script language="javascript">
 
-
+function onSubmit()
+{
+	if(document.forms[0].chkName[0].checked == true)
+	{
+		if(document.getElementById('specimenEventParameter').value == "Transfer")
+		{
+			dobulkOperations();
+		}
+		else
+		{
+			alert("Only Transfer functionality is available in this version");
+		}
+	}
+	else if(document.forms[0].chkName[1].checked == true)
+	{
+		editMultipleSp();
+	}
+	else if(document.forms[0].chkName[2].checked == true)
+	{
+		addToOrderList();
+	}
+}
 function setCheckBoxState()
 		{
 			var chkBox = document.getElementById('checkAll1');
@@ -177,23 +220,33 @@ function checkAll(element)
    if(dataList!=null && dataList.size()!=0)
    {
 %>
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="600" height="100%">
 
-	<tr height="5%">
-		 <td class="formTitle" width="100%">
+	<tr>
+		 <td class="formTitle">
 			<bean:message key="shoppingCart.title"/>
 		 </td>
 	</tr>
 
-	<tr height="5%">
-		 <td width="100%">
+	<tr>
+		 <td>
 			&nbsp;
 		 </td>
 	</tr>
-	
-	
-	 <tr height="85%">
-		<td width="100%">
+
+	<tr>
+		<td nowrap align="right">
+			<html:button styleClass="actionButton" property="deleteCart" onclick="onDelete()">
+				<bean:message key="buttons.delete"/>
+			</html:button>
+		
+			<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
+				<bean:message key="buttons.export"/>
+			</html:button>
+		</td>
+	<tr>
+	<tr>
+		<td>
 <!--  **************  Code for New Grid  *********************** -->
 			<script>
 					function queryshopingcart(id)
@@ -214,63 +267,93 @@ function checkAll(element)
 		</td>
 	</tr>
 
+	<tr>
+		<td class="formFieldNoBordersSimple">
+			<input type='checkbox' name='checkAll1' id='checkAll1' onClick='checkAll(this)'>
+				<bean:message key="buttons.checkAll" />
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>		
+	<tr>
+		<td nowrap class="formFieldNoBordersSimpleBold">
+			<label for="selectLabel">&nbsp;&nbsp;
+				<bean:message key="mylist.label.selectLabel"/>
+			</label>
+		</td>
+	</tr>
+
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table cellpadding="2" cellspacing="0" border="0" width="300">
 			<tr>
-			<td>
-			<table cellpadding="5" cellspacing="0" border="0" width="90%">
-			<tr>
-				<td width="10%" nowrap>
-					<input type='checkbox' name='checkAll1' id='checkAll1' onClick='checkAll(this)'>
-					<bean:message key="buttons.checkAll" />
+				<td nowrap class="formFieldNoBordersSimpleNotBold">
+					<INPUT TYPE='RADIO' NAME='chkName' value="Events" <%=disabled%> ><bean:message key="mylist.label.specimenEvent"/></INPUT>
 				</td>
-				<td width="70%">
+				<% if(!disabledList)
+					{
+				%>
+				<td nowrap class="formFieldNoBordersSimpleNotBold">
+					<autocomplete:AutoCompleteTag property="specimenEventParameter"
+						  optionsList = "<%=request.getAttribute(Constants.EVENT_PARAMETERS_LIST)%>"
+						  initialValue="Transfer"
+						  />
+				</td>
+				<%
+					}
+					else
+					{
+				%>
+					<td nowrap class="formFieldNoBordersSimpleNotBold">
+						<input type="text" id="specimenEventParameter" name="specimenEventParameter" value="Transfer" readonly="<%=disabledList%>"/>
+					</td>
+				<%
+					}
+				%>
+			</tr>
+			<tr>
+				<td nowrap class="formFieldNoBordersSimpleNotBold">
+					<INPUT TYPE='RADIO' NAME='chkName' value="Specimenpage" <%=disabled%> ><bean:message key="mylist.label.multipleSpecimenPage"/></INPUT>	
+				</td>
+				<td nowrap class="formFieldNoBordersSimple">
 					&nbsp;
 				</td>
-				<td width="10%" nowrap align="left">
-					<html:button styleClass="actionButton" property="deleteCart" onclick="onDelete()">
-						<bean:message key="buttons.delete"/>
-					</html:button>
+			</tr>
+			<tr>
+				<td nowrap class="formFieldNoBordersSimpleNotBold">
+					<INPUT TYPE='RADIO' NAME='chkName' value="OrderSpecimen" checked=true <%=disabledOrder%> ><bean:message key="mylist.label.orderBioSpecimen"/></INPUT>
 				</td>
-				<td width="10%" nowrap align="left">
-					<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
-						<bean:message key="buttons.export"/>
-					</html:button>
+				<td nowrap class="formFieldNoBordersSimple">
+					&nbsp;
 				</td>
-				<td width="10%" nowrap align="left">
-					<html:button styleClass="actionButton" property="exportCart" onclick="dobulkOperations()">
-						<bean:message key="bulk.events.operation"/>
-					</html:button>
-				</td> 
-				<!--td width="10%" nowrap align="left">
-					<html:button styleClass="actionButton" property="exportCart" onclick="dobulkDisposals()">
-						<bean:message key="bulk.events.disposals"/>
-					</html:button>
-				</td--> 
-				
-				<td width="10%" nowrap align="left">
-				<%if(isSpecimenIdPresent.equals("true")){
-					%>
-					<html:button styleClass="actionButton"  property="orderButton" onclick="addToOrderList()">
-						<bean:message key="buttons.addtolist"/>	
-					</html:button>
-
-					<html:button styleClass="actionButton"  property="orderButton" onclick="editMultipleSp()" >
-						<bean:message key="edit.multiple.specimen"/>	
-
-					</html:button>
-
-					<%}else{%>
-                     <html:button styleClass="actionButton"  disabled="true" property="orderButton" onclick="addToOrderList()">
-						<bean:message key="buttons.addtolist"/>	
-					</html:button>
-					<%}%>
-				</td>
-
-			
 			</tr>
 			</table>
-			</td>
-			</tr>
-			</table>
+		</td>
+	</tr>
+
+	<tr>
+		<td nowrap class="formFieldNoBordersSimpleNotBold">
+			&nbsp;
+		</td>
+	</tr>
+	
+	<tr>
+		<td nowrap class="formFieldNoBordersSimpleNotBold">&nbsp;&nbsp;
+			<html:button styleClass="actionButton" property="proceed" onclick="onSubmit()" disabled="<%=disabledButton%>" >
+				<bean:message key="buttons.submit"/>	
+			</html:button>
+		</td>
+	</tr>
+
+	</table>
 	<%}else{
 			%>
      <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -283,4 +366,3 @@ function checkAll(element)
 	</body>
 	</html:form>
 	</html:html>
-
