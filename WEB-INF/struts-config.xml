@@ -4498,7 +4498,7 @@ PUBLIC
                 scope="request">
 					<forward name="success" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=bulkUpdateSpecimens" />
 					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
-					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
+					<forward name="pageOfMultipleSpWithMenu" path="/GenericSpecimenSummary.do?target=pageOfMultipleSpWithMenu&amp;submitAction=bulkUpdateSpecimens" />
 	                <forward name="failure" path="/Home.do" />
        </action>    
        <action path="/bulkUpdateSpecimens"

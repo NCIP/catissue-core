@@ -327,6 +327,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			<logic:empty name="viewSpecimenSummaryForm" property="aliquotList" >
 				
 				<logic:empty name="viewSpecimenSummaryForm" property="derivedList" >
+				<table>
 				<tr> <td> <br> </td> </tr>
 					<tr>
 						<td class="dataTablePrimaryLabel" colspan="6" height="20">  
@@ -334,6 +335,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						</td>						
 					</tr>
 					<tr> <td> <br> </td> </tr>
+				</table>	
 				</logic:empty>				
 				
 			</logic:empty>

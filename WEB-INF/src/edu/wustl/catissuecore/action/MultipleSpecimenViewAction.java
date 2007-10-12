@@ -48,7 +48,7 @@ public class MultipleSpecimenViewAction extends BaseAction
 		try{
 			LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = new LinkedHashMap<String, CollectionProtocolEventBean> ();
 			CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
-			
+			String pageOf = request.getParameter(Constants.PAGE_OF);
 			eventBean.setUniqueIdentifier("EventID-1");
 			LinkedHashMap specimenCollection = (LinkedHashMap) session
 			.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
@@ -63,6 +63,8 @@ public class MultipleSpecimenViewAction extends BaseAction
 		
 			
 			request.setAttribute("RequestType","");
+			if(pageOf != null)
+				return mapping.findForward(pageOf);
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception e)
