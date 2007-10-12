@@ -126,7 +126,7 @@ public class OrderBiospecimenArrayAction extends BaseAction
 		
 		String sourceObjectName = SpecimenArray.class.getName();
 		String columnName="id";
-    	List valueField=(List)session.getAttribute("specimenArrayIds");
+    	List valueField=(List)session.getAttribute(Constants.SPECIMEN_ARRAY_ID);
     	
     	List specimenArrayList=new ArrayList();
     	if(valueField != null && valueField.size() >0)

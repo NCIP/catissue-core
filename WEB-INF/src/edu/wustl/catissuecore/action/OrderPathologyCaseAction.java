@@ -214,9 +214,9 @@ public class OrderPathologyCaseAction extends BaseAction
 
 				List pathologicalCaseList = new ArrayList();
 			//	retriving the id list from session.
-				if(request.getSession().getAttribute("pathalogicalCaseIds") != null)
+				if(request.getSession().getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
 				{
-					List idList = (List)request.getSession().getAttribute("pathalogicalCaseIds");
+					List idList = (List)request.getSession().getAttribute(Constants.PATHALOGICAL_CASE_ID);
 					String columnName="id";
 					for(int i=0;i<idList.size();i++)
 					{
@@ -226,8 +226,6 @@ public class OrderPathologyCaseAction extends BaseAction
 					}
 				}
 		
-		System.out.println("pathologicalCaseList  ---  "+pathologicalCaseList);		
-
 		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 
 		//List pathologyCaseList = bizLogic.retrieve(sourceObjectName);
