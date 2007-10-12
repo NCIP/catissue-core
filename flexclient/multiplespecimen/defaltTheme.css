@@ -16,3 +16,16 @@
 {
 	   color: #000000;
 }
+
+.errorMessageStyle
+{
+	font-size:12;
+	color:#FF0000;
+}	
+	
+.successMessageStyle	
+{
+	font-size:12;
+	color:#0000FF;
+
+}

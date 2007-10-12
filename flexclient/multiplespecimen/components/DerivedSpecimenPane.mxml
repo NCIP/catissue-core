@@ -110,6 +110,11 @@
 			
 			return spData;
 		}
+		public function getMode() : String
+		{
+			return mode;	
+			
+		}
 		
 		]]>
 	</mx:Script>
@@ -122,7 +127,7 @@
 	<mx:HBox>
 		<components:DeriveSpecimenLabelPane backgroundColor="#E0EFFF"/>
 		<mx:Repeater id="dpRepeater" dataProvider="{derivedSpColl}">	
-			<components:DerivedSpecimenContentPane id="D" name="{dpRepeater.currentIndex.toString()}" derivedData="{dpRepeater.currentItem as SpecimenData}"/>
+			<components:DerivedSpecimenContentPane id="D" name="{dpRepeater.currentIndex.toString()}" derivedData="{dpRepeater.currentItem as SpecimenData}" mode="{getMode()}"/>
 		</mx:Repeater>
 	</mx:HBox>
 

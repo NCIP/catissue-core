@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -41,11 +40,11 @@ public class SpecimenAutoStorageContainer {
 	{
 		addToMap(specimen, className, specimenMap);
 	}
-	
+	 
 	public void addSpecimen(GenericSpecimen specimen, String className, Long collectionProtocolId)
-	{
+	{ 
 		if (collectionProtocolSpecimenMap.get(collectionProtocolId) == null)
-		{
+		{ 
 			collectionProtocolSpecimenMap.put(collectionProtocolId, new HashMap<String, ArrayList<GenericSpecimen>> ());
 		}
 		HashMap<String, ArrayList<GenericSpecimen>> targetMap = collectionProtocolSpecimenMap.get(collectionProtocolId);
@@ -72,7 +71,7 @@ public class SpecimenAutoStorageContainer {
 	public void setCollectionProtocolSpecimenStoragePositions(
 			SessionDataBean sessionDataBean) throws DAOException
 	{
-
+ 
 		storageContainerIds.clear();
 		Set<Long> keySet = collectionProtocolSpecimenMap.keySet();
 		Iterator<Long> keySetIterator = keySet.iterator();
@@ -107,7 +106,7 @@ public class SpecimenAutoStorageContainer {
 			{
 				String key = keySetIterator.next();
 				ArrayList<GenericSpecimen> specimenList =
-					specimenMap.get(key);
+					autoSpecimenMap.get(key);
 				setSpecimenStorageDetails(specimenList,key, sessionDataBean, collectionProtocolId);
 			}
 		}
@@ -116,7 +115,7 @@ public class SpecimenAutoStorageContainer {
 	protected void setSpecimenStorageDetails(List<GenericSpecimen> specimenDataBeanList, 
 			String className, SessionDataBean bean, Long collectionProtocolId ) throws DAOException
 	{
-
+ 
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance()
 		.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		
@@ -151,7 +150,7 @@ public class SpecimenAutoStorageContainer {
 						{
 							if(counter < specimenDataBeanList.size())
 							{
-								GenericSpecimenVO specimenDataBean = (GenericSpecimenVO)specimenDataBeanList.get(counter);
+								GenericSpecimen specimenDataBean = (GenericSpecimen)specimenDataBeanList.get(counter);
 								String stName = ((NameValueBean) containerId[i]).getName();
 								String posOne = ((NameValueBean) xDim[j]).getValue();
 								String posTwo = ((NameValueBean) yDimList.get(k)).getValue();

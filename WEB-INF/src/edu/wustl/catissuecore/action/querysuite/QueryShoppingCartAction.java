@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,8 +28,6 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenArray;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -182,7 +179,7 @@ public class QueryShoppingCartAction extends BaseAction
 				session.removeAttribute(Constants.SPECIMEN_ID);
 							
 			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			List<String> specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Specimen.class.getName(), chkBoxValues));
+			Set<String> specimenIds = new HashSet<String>(bizLogic.getEntityIdsList(cart, Specimen.class.getName(), chkBoxValues));
 			session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 			
 			target = new String(operation);

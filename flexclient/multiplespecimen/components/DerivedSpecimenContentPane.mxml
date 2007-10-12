@@ -12,9 +12,10 @@
 		import mx.controls.Alert;
 		import mx.collections.ArrayCollection;
 		import mx.managers.PopUpManager;
-		[Bindable]
-		public var derivedData:SpecimenData ;
-	
+		import util.MSPParameter;
+		[Bindable]	public var derivedData:SpecimenData ;
+		[Bindable]	public var mode:String;
+		[Bindable]	public var storage:ArrayCollection = new ArrayCollection();
 		private function preInit():void
 		{
 			
@@ -51,9 +52,17 @@
 			//Bind Concentration
 			Utility.bindData(spConcentration,"text",derivedData,"concentration");
 			//bindData(spQuantity,"restrict",spConcentration,"text",false);
+
+			//Bind Storage
+			Utility.bindData(spStorage,"selectedItem",derivedData,"storage");
 			
 			//Bind Comments
 			Utility.bindData(spComment, "text", derivedData, "comment");
+
+			storage.addItem("Virtual");
+			storage.addItem("Manual");
+			storage.addItem("Auto");
+
 
 		}
 		private function bindExData():void
@@ -119,7 +128,15 @@
 			return isValid;
 		}     */                
 
-	
+		public function chkStorage() : void
+		{
+			if(mode == MSPParameter.MODE_PARAM_VAL_EDIT)
+			{
+				Alert.show("In this build only Virtual storage is supported.");
+				spStorage.selectedItem = "Virtual"
+			}
+			
+		}
 
 
 	]]>
@@ -164,6 +181,10 @@
 		<mx:TextInput id="spBarCode"/>
 	</components:MyCanvas>
 	
+	<components:MyCanvas id="storageContBox">
+		<adobe:AutoComplete id="spStorage" dataProvider="{storage}" lookAhead="true" change="chkStorage()"/>
+	</components:MyCanvas>
+
 	<components:MyCanvas>
 		<mx:TextArea id="spComment"/>
 	</components:MyCanvas>

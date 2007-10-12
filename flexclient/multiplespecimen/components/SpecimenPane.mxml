@@ -43,6 +43,9 @@
 				spConcentration.enabled = false;
 			}
 			
+			if(!spData.isParentEnabled)
+				spParentName.enabled = false;
+				
 			if(mode == MSPParameter.MODE_PARAM_VAL_EDIT)
 			{
 				spParentNameBox.visible = false;

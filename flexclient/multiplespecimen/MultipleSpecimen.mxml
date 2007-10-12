@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" horizontalAlign="left" xmlns:local="*" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*" backgroundColor="white" paddingTop="0">
-
+	<mx:Style source="../defaltTheme.css"/>
 <mx:Script>
 	<![CDATA[
 		import mx.messaging.management.Attribute;
@@ -123,7 +123,12 @@
 			var spData:SpecimenData = new SpecimenData("","","Left");	
 			spData.mode= mspParameter.mode;
 			spData.collectionEvent.userName = specimenDataBean.collectionEvent.userName;
-			
+
+			if(showParentSelection == true)
+				spData.isParentEnabled = true;
+			else
+				spData.isParentEnabled = false;	
+				
 			spData.receivedEvent.userName = specimenDataBean.receivedEvent.userName;
 			counter++;
 			
@@ -361,7 +366,6 @@
 		
 		private function submitSpecimen(event:Event):void
 		{
-			Alert.show("In multiple specimen:");
 			var validateVal:Boolean = true;	
 
 			for(var i:int=0;i<specimenColl.length;i++)
@@ -372,7 +376,7 @@
 				validateVal = specimenData.validate() && validateVal;
 			}
 			
-			Alert.show("Validation:"+validateVal);
+		
 			if(validateVal)
 			{
 				if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_ADD)
@@ -412,7 +416,13 @@
    		{
    			var obj:Object = event.result;
    			var message:String = obj.toString();
-   			messageText.text = message;
+   			var subMessage:String = message.substr(0,7);
+   			if(subMessage == "success")
+	   			messageText.styleName = "successMessageStyle";
+	   		else
+	   			messageText.styleName = "errorMessageStyle";	
+	   			
+   			messageText.text = message.substr(8,message.length);
    		}
 
    		private function handleInitMultipleSp(event:ResultEvent) : void
@@ -472,7 +482,7 @@
 		<mx:method name="initFlexInterfaceForMultipleSp" result="handleInitMultipleSp(event)"/>
 
 	</mx:RemoteObject>
-	<mx:Text id="messageText" color="#FF0000" fontSize="12"/>
+	<mx:Text id="messageText" styleName="successMessageStyle" fontSize="12"/>
 	<mx:HBox id="selectionBox">
 		<mx:Text text="Do you want to create New Specimen or Derived Specimen?" fontWeight="bold"/>
 		<mx:RadioButtonGroup id="spParent"/>

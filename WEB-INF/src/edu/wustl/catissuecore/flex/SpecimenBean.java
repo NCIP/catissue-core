@@ -194,7 +194,7 @@ public class SpecimenBean implements Externalizable
 		out.writeObject(collectionEvent);
 		out.writeObject(receivedEvent);
 		out.writeObject(derivedColl);
-		out.writeUTF(mode);
+		
 		System.out.println(toString());
 		System.out.println("SERVER IN writeExternal DONE");
 	}
@@ -227,7 +227,7 @@ public class SpecimenBean implements Externalizable
 		collectionEvent = (EventParamtersBean) in.readObject();
 		receivedEvent = (EventParamtersBean) in.readObject();
 		derivedColl = (List) in.readObject();
-		mode = (String) in.readUTF();
+		
 		System.out.println(toString());
 	}
 

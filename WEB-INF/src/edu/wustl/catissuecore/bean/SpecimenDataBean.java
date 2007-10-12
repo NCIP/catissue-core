@@ -95,6 +95,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	private String containerId;
 	private boolean checkedSpecimen;
 	
+	private Long collectionProtocolId = null;
 
 	/**
 	 * @return Returns the biohazardCollection.
@@ -555,8 +556,25 @@ public class SpecimenDataBean implements GenericSpecimen
 		this.uniqueId = uniqueIdentifier ;
 	}
 
+	/**
+	 * @return Returns the collectionProtocolId.
+	 */
+	public Long getCollectionProtocolId()
+	{
+		return collectionProtocolId;
+	}
+
+	/**
+	 * @param collectionProtocolId The collectionProtocolId to set.
+	 */
+	public void setCollectionProtocolId(Long collectionProtocolId)
+	{
+		this.collectionProtocolId = collectionProtocolId;
+	}
+
 	/* override methods finish */
 
+	
 
 
 		

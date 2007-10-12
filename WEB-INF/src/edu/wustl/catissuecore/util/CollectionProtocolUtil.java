@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -29,6 +30,7 @@ import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
@@ -785,4 +787,39 @@ public class CollectionProtocolUtil {
 		return specimen;
 	}
 	
+	public static CollectionProtocol getCollectionProtocolForSCG(String id) throws DAOException 
+	{
+		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		String sourceObjectName =  SpecimenCollectionGroup.class.getName();
+		String[] whereColName = {"id"};
+		String[] whereColCond = {"="};
+		Object[] whereColVal = {id};
+		String [] selectColumnName = {"collectionProtocolRegistration.collectionProtocol"};
+		List list = collectionProtocolBizLogic.retrieve(sourceObjectName,selectColumnName,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION);
+		if(list != null && !list.isEmpty())
+		{
+			CollectionProtocol cp = (CollectionProtocol) list.get(0);
+			return cp;
+			
+		}
+		return null;
+	}
+	
+	public static CollectionProtocol getCollectionProtocolForSpecimen(String id) throws DAOException 
+	{
+		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		String sourceObjectName =  SpecimenCollectionGroup.class.getName();
+		String[] whereColName = {"id"};
+		String[] whereColCond = {"="};
+		Object[] whereColVal = {id};
+		String [] selectColumnName = {"specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol"};
+		List list = collectionProtocolBizLogic.retrieve(sourceObjectName,selectColumnName,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION);
+		if(list != null && !list.isEmpty())
+		{
+			CollectionProtocol cp = (CollectionProtocol) list.get(0);
+			return cp;
+			
+		}
+		return null;
+	}
 }
