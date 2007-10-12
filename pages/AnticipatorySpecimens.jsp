@@ -62,15 +62,67 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				if (chkCount >0)
 				{
 					var element = document.getElementsByName(elementName)[0];
-					element.checked = chkInstance.checked;
+					if (element.disabled == false)
+					{
+						element.checked = chkInstance.checked;
+					}
 					ctr++;
 				}
 			}
 			while(chkCount>0);
 
 		}
+		
+		function UpdateCheckBoxStatus()
+		{
+			var checkedSpecimen ='].checkedSpecimen';
+			var aliquotType = "aliquot[";
+			var ctr = 0;
+			if (document.forms[0].chkAllAliquot != null)
+			{
+				document.forms[0].chkAllAliquot.disabled = true;
+				document.forms[0].chkAllAliquot.checked = true;
+				do
+				{
+					var elementName = aliquotType + ctr + checkedSpecimen;
+					var chkCount= document.getElementsByName(elementName).length;
+					if (chkCount >0)
+					{
+						var element = document.getElementsByName(elementName)[0];
+						if (element.disabled == false)
+						{
+							document.forms[0].chkAllAliquot.disabled = false;							
+						}
+						ctr++;
+					}
+				}while(chkCount>0);
+			}
+			
+			if (document.forms[0].chkAllAliquot != null)
+			{
+				ctr = 0;
+				var derivedType = "derived[";
+				document.forms[0].chkAllDerived.disabled = true;
+				document.forms[0].chkAllDerived.checked = true;
+				do
+				{
+					var elementName = derivedType + ctr + checkedSpecimen;
+					var chkCount= document.getElementsByName(elementName).length;
+					if (chkCount >0)
+					{
+						var element = document.getElementsByName(elementName)[0];
+						if (element.disabled == false)
+						{
+							document.forms[0].chkAllDerived.disabled = false;							
+						}
+						ctr++;
+					}
+				}while(chkCount>0);
+			}		
+		}
 	</script>
 </head>
+<body onload="UpdateCheckBoxStatus()">
 
 		<html:errors />
 		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
@@ -79,10 +131,23 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		
 		<html:form action="<%=formAction%>">		
 		<table>
+		
 		<tr>
 				<td> &nbsp; </td>
 		<td>
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
+		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
+		<tr>
+		<td>
+		<html:submit value="Submit" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
+		</td>
+		</tr>
+		</logic:equal>
+		<tr>
+			<td>
+				&nbsp;
+			</td>
+		</tr>
 				<tr>
 
 					<td class="dataTablePrimaryLabel" height="20">
@@ -107,13 +172,13 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 								cellspacing="0" border="0" class="dataTable" >
 					<tr>
 						<th class="formSerialNumberLabelForTable" scope="col" > &nbsp </th>
-						<th class="formSerialNumberLabelForTable" scope="col">Label</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Barcode</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
-						<th class="formSerialNumberLabelForTable" scope="col">Conc.</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Location</th>
-						<th class="formSerialNumberLabelForTable" scope="col">Created</th>
+						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="specimen.label"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.barcode"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.subType"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Quantity"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Concentration"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Collected"/></th>
 						
 					</tr>
 				
@@ -143,7 +208,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							<html:text styleClass="formFieldSized3" name="specimen" indexed="true" property="quantity" />
 							</td>
 							<td class="dataCellText"> 
-							<html:text styleClass="formFieldSized3" name="specimen" indexed="true" property="concentration" /> &nbsp;&micro;g/&micro;l
+							<html:text styleClass="formFieldSized3" name="specimen" indexed="true" property="concentration" />
 							</td>
 							
 							<logic:equal name="specimen" property="storageContainerForSpecimen" value="Virtual">
@@ -216,7 +281,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							</td>
 							<td class="dataCellText"> 
 							<html:hidden  name="specimen" indexed="true" property="concentration" />
-							&nbsp; <bean:write  name="specimen" property="concentration" /> &nbsp;&micro;g/&micro;l
+							&nbsp; <bean:write  name="specimen" property="concentration" />
 							</td>
 
 							<logic:equal name="specimen" property="storageContainerForSpecimen" value="Virtual">
@@ -256,39 +321,54 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			</logic:notEmpty>
 				<html:hidden property="userAction" />
 				<html:hidden property="requestType" />
+				
+				
+				
+			<logic:empty name="viewSpecimenSummaryForm" property="aliquotList" >
+				
+				<logic:empty name="viewSpecimenSummaryForm" property="derivedList" >
+				<tr> <td> <br> </td> </tr>
+					<tr>
+						<td class="dataTablePrimaryLabel" colspan="6" height="20">  
+							Child specimens not defined.
+						</td>						
+					</tr>
+					<tr> <td> <br> </td> </tr>
+				</logic:empty>				
+				
+			</logic:empty>
+			
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
+			
 			&nbsp;
 			<table>
-			<tr>
-			<td class="dataTablePrimaryLabel" height="20">		
-				Aliquot details
-			</td>
-			</tr>
+				<tr>
+					<td class="dataTablePrimaryLabel" height="20">	
+					<bean:message key="anticipatorySpecimen.AliquotDetails"/>
+					</td>
+				</tr>
 			</table>
 			<table summary="" cellpadding="3"
 							cellspacing="0" border="0" class="dataTable" >
-			<tr>
-	      		<th class="formSerialNumberLabelForTable" scope="col" colspan="7"> &nbsp;</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> 
-					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
-				</th>
-			</tr>
+			
 
 				<tr>	
-					<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
-						<th class="formSerialNumberLabelForTable" scope="col">Label</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Barcode</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
-						<th class="formSerialNumberLabelForTable" scope="col">Conc.</th>
-						<th class="formSerialNumberLabelForTable" scope="col"> Location</th>
-						<th class="formSerialNumberLabelForTable" scope="col">Created</th>
+					<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Parent"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="specimen.label"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.barcode"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.subType"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Quantity"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Concentration"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col">
+						<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
+						<bean:message key="anticipatorySpecimen.Created"/></th>
 					</tr>
 				  <logic:iterate name="viewSpecimenSummaryForm" property="aliquotList" id="aliquot" indexId="ctr">
 					<tr>
 
-						<td class="dataCellText"> <html:hidden  name="aliquot" indexed="true" property="displayName" />
-						<bean:write  name="aliquot" property="displayName" />
+						<td class="dataCellText"> <html:hidden  name="aliquot" indexed="true" property="parentName" />
+						<bean:write  name="aliquot" property="parentName" />
 						<html:hidden name="aliquot" indexed="true" property="uniqueIdentifier" /></td>
 					<!--Editable Row -->	
 						<logic:equal name="aliquot" property="readOnly" value="false">
@@ -310,7 +390,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							<html:text styleClass="formFieldSized3" name="aliquot" indexed="true" property="quantity" />
 							</td>
 							<td class="dataCellText"> 
-							<html:text styleClass="formFieldSized3" name="aliquot" indexed="true" property="concentration" /> &nbsp;&micro;g/&micro;l
+							<html:text styleClass="formFieldSized3" name="aliquot" indexed="true" property="concentration" />
 							</td>
 							
 							<logic:equal name="aliquot" property="storageContainerForSpecimen" value="Virtual">
@@ -384,7 +464,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							</td>
 							<td class="dataCellText"> 
 							<html:hidden  name="aliquot" indexed="true" property="concentration" />
-							&nbsp; <bean:write  name="aliquot" property="concentration" /> &nbsp;&micro;g/&micro;l
+							&nbsp; <bean:write  name="aliquot" property="concentration" />
 							</td>
 
 							<logic:equal name="aliquot" property="storageContainerForSpecimen" value="Virtual">
@@ -414,35 +494,34 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						</logic:equal>					
 					<!--/Readonly Row -->
 					</tr>
-				  </logic:iterate>	
-				</table>			
-			</logic:notEmpty>				 
+				  </logic:iterate>					 
+				</table>				
+				
+			</logic:notEmpty>
+		
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >
 		&nbsp;
 		<table>
 		<tr>
 		<td class="dataTablePrimaryLabel" height="20">
-			Derivative details
+			<bean:message key="anticipatorySpecimen.DerivativeDetails"/>
 		 </td>
 		 </tr>
 		 </table>
 		    <table summary="" cellpadding="3"
 						cellspacing="0" border="0" class="dataTable" >
+			
 			<tr>
-	      		<th class="formSerialNumberLabelForTable" scope="col" colspan="7"> &nbsp;</th>
-	      		<th class="formSerialNumberLabelForTable" scope="col"> 
-					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
-				</th>
-			</tr>
-			<tr>
-				<th class="formSerialNumberLabelForTable" scope="col"> Parent </th>
-				<th class="formSerialNumberLabelForTable" scope="col">Label</th>
-				<th class="formSerialNumberLabelForTable" scope="col"> Barcode</th>
-				<th class="formSerialNumberLabelForTable" scope="col"> Type</th>
-				<th class="formSerialNumberLabelForTable" scope="col"> Qty</th>
-				<th class="formSerialNumberLabelForTable" scope="col">Conc.</th>
-				<th class="formSerialNumberLabelForTable" scope="col"> Location</th>
-				<th class="formSerialNumberLabelForTable" scope="col">Created</th>
+				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Parent"/> </th>
+				<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="specimen.label"/></th>
+				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.barcode"/></th>
+				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.subType"/></th>
+				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Quantity"/></th>
+				<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Concentration"/></th>
+				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/></th>
+				<th class="formSerialNumberLabelForTable" scope="col">
+				<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
+				<bean:message key="anticipatorySpecimen.Created"/></th>
 			</tr>
 
 			  
@@ -474,7 +553,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							<html:text styleClass="formFieldSized3" name="derived" indexed="true" property="quantity" />
 							</td>
 							<td class="dataCellText"> 
-							<html:text styleClass="formFieldSized3" name="derived" indexed="true" property="concentration" /> &nbsp;&micro;g/&micro;l
+							<html:text styleClass="formFieldSized3" name="derived" indexed="true" property="concentration" />
 							</td>
 							
 							<logic:equal name="derived" property="storageContainerForSpecimen" value="Virtual">
@@ -548,7 +627,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 							</td>
 							<td class="dataCellText"> 
 							<html:hidden  name="derived" indexed="true" property="concentration" />
-							&nbsp; <bean:write  name="derived" property="concentration" /> &nbsp;&micro;g/&micro;l
+							&nbsp; <bean:write  name="derived" property="concentration" />
 							</td>
 
 							<logic:equal name="derived" property="storageContainerForSpecimen" value="Virtual">
@@ -617,4 +696,5 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		</tr>
 		</table>
 		</html:form>
+</body>
 </html>
