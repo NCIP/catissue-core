@@ -64,8 +64,7 @@ public class QueryShoppingCartAction extends BaseAction
 		HttpSession session = request.getSession();
 		String target = "";
 		String operation = request.getParameter(Constants.OPERATION);
-		request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
-		
+				
 		List<String> columnList;
 
 		if (operation == null)
@@ -93,11 +92,6 @@ public class QueryShoppingCartAction extends BaseAction
 		SelectedColumnsMetadata selectedColumnMetaData = (SelectedColumnsMetadata) session
 				.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
 
-		if(operation.equalsIgnoreCase("view"))
-		{
-			isSpecimenArrayExist(request,cart);
-		}
-		
 		//QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		List<AttributeInterface> attributeList = null;
 		if (selectedColumnMetaData != null)
@@ -130,8 +124,10 @@ public class QueryShoppingCartAction extends BaseAction
 			return null;
 		}// Check if user wants to view the cart.
 		else if (operation.equalsIgnoreCase(Constants.VIEW))
-		{    
+		{  
+			request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
 			setCartView(request, cart);
+			isSpecimenArrayExist(request,cart);
 			target = new String(Constants.VIEW);
 		}
 		else if (operation.equals("addToOrderList"))
@@ -201,28 +197,31 @@ public class QueryShoppingCartAction extends BaseAction
 	 */
 	private void isSpecimenArrayExist(HttpServletRequest request,QueryShoppingCart cart)
 	{
-		List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
 		String isSpecimenArrayExist = "false";
-		if (cartAttributeList != null)
+		if (cart != null)
 		{
-			List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
-			Set<String> distinctEntityNameSet = new HashSet<String>(); 
-			for (AttributeInterface attribute : cartAttributeList)
+			List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
+			if (cartAttributeList != null)
 			{
-				
-				if ((attribute.getName().equals(Constants.ID))
-						&& ((orderableEntityNameList))
-								.contains(attribute.getEntity().getName()))
+				List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
+				Set<String> distinctEntityNameSet = new HashSet<String>(); 
+				for (AttributeInterface attribute : cartAttributeList)
 				{
-					distinctEntityNameSet.add(attribute.getEntity().getName());
+					
+					if ((attribute.getName().equals(Constants.ID))
+							&& ((orderableEntityNameList))
+									.contains(attribute.getEntity().getName()))
+					{
+						distinctEntityNameSet.add(attribute.getEntity().getName());
+					}
 				}
-			}
-			for(String entityName :distinctEntityNameSet)
-			{
-				if(entityName.equals(Constants.SPECIMEN_ARRAY_CLASS_NAME))
+				for(String entityName :distinctEntityNameSet)
 				{
-					isSpecimenArrayExist = "true";
-					break;
+					if(entityName.equals(Constants.SPECIMEN_ARRAY_CLASS_NAME))
+					{
+						isSpecimenArrayExist = "true";
+						break;
+					}
 				}
 			}
 		}
