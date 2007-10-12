@@ -220,22 +220,26 @@ function checkAll(element)
    if(dataList!=null && dataList.size()!=0)
    {
 %>
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="600" height="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="700" height="100%">
 
-	<tr>
-		 <td class="formTitle">
+	<tr >
+		 <td class="formTitle" colspan="2">
 			<bean:message key="shoppingCart.title"/>
 		 </td>
 	</tr>
 
 	<tr>
-		 <td>
+		 <td colspan="2">
 			&nbsp;
 		 </td>
 	</tr>
-
-	<tr>
-		<td nowrap align="right">
+	
+	<tr width="700">
+	<td width="700" class="formFieldNoBordersSimple" align="left">
+		<input type='checkbox' name='checkAll1' id='checkAll1' onClick='checkAll(this)'>
+				<bean:message key="buttons.checkAll" />
+		</td>
+		<td nowrap align="right" width="50%" class="padding-reight:3em">
 			<html:button styleClass="actionButton" property="deleteCart" onclick="onDelete()">
 				<bean:message key="buttons.delete"/>
 			</html:button>
@@ -246,7 +250,7 @@ function checkAll(element)
 		</td>
 	<tr>
 	<tr>
-		<td>
+		<td colspan="2" width="100%">
 <!--  **************  Code for New Grid  *********************** -->
 			<script>
 					function queryshopingcart(id)
@@ -267,19 +271,14 @@ function checkAll(element)
 		</td>
 	</tr>
 
+	
 	<tr>
-		<td class="formFieldNoBordersSimple">
-			<input type='checkbox' name='checkAll1' id='checkAll1' onClick='checkAll(this)'>
-				<bean:message key="buttons.checkAll" />
-		</td>
-	</tr>
-	<tr>
-		<td>
+		<td colspan="2">
 			&nbsp;
 		</td>
 	</tr>		
 	<tr>
-		<td nowrap class="formFieldNoBordersSimpleBold">
+		<td nowrap class="formFieldNoBordersSimpleBold" colspan="2">
 			<label for="selectLabel">&nbsp;&nbsp;
 				<bean:message key="mylist.label.selectLabel"/>
 			</label>
@@ -287,12 +286,12 @@ function checkAll(element)
 	</tr>
 
 	<tr>
-		<td>
+		<td colspan="2">
 			&nbsp;
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td colspan="2">
 			<table cellpadding="2" cellspacing="0" border="0" width="300">
 			<tr>
 				<td nowrap class="formFieldNoBordersSimpleNotBold">
@@ -340,13 +339,13 @@ function checkAll(element)
 	</tr>
 
 	<tr>
-		<td nowrap class="formFieldNoBordersSimpleNotBold">
+		<td  colspan="2" nowrap class="formFieldNoBordersSimpleNotBold">
 			&nbsp;
 		</td>
 	</tr>
 	
 	<tr>
-		<td nowrap class="formFieldNoBordersSimpleNotBold">&nbsp;&nbsp;
+		<td colspan="2" nowrap class="formFieldNoBordersSimpleNotBold">&nbsp;&nbsp;
 			<html:button styleClass="actionButton" property="proceed" onclick="onSubmit()" disabled="<%=disabledButton%>" >
 				<bean:message key="buttons.submit"/>	
 			</html:button>
@@ -358,7 +357,7 @@ function checkAll(element)
 			%>
      <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
      <tr >
-		<td> <html:errors/></td>
+		<td > <html:errors/></td>
 
 	</tr>
 	</table>
