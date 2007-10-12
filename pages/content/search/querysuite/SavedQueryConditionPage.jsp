@@ -50,19 +50,19 @@
 					</td>
 				</tr>
 				<tr>
-					<td width='5' class="formFieldNoBordersSimple">*</td>
-					<td class="formFieldNoBordersSimple"><b>
+					<td width='5' class="formFieldNoBordersQuery">*</td>
+					<td class="formFieldNoBordersQuery"><b>
 								<bean:message key="query.title"/> </b>
 					</td>
-					<td class="formFieldNoBordersSimple">
+					<td class="formFieldNoBordersQuery">
 						<html:text       styleClass="formFieldSized" maxlength="255"      styleId="title" property="title" />
 					</td>
 					
 				</tr>
 				<tr>
-					<td width='5' class="formFieldNoBordersSimple">&nbsp;</td>
-					<td class="formFieldNoBordersSimple"><bean:message key="query.description"/> </td>
-					<td class="formFieldNoBordersSimple">
+					<td width='5' class="formFieldNoBordersQuery">&nbsp;</td>
+					<td class="formFieldNoBordersQuery"><bean:message key="query.description"/> </td>
+					<td class="formFieldNoBordersQuery">
 						<html:textarea styleClass="formFieldSized"   cols="32" rows="5"  property="description"> </html:textarea>
 					</td>
 				</tr>
