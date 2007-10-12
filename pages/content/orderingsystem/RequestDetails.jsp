@@ -17,10 +17,11 @@
 <%
 List requestDetailsList = (List) request.getAttribute(Constants.REQUEST_DETAILS_LIST);	
 int disabledStatus;
-System.out.println("requestDetailsList  size "+requestDetailsList.size());
-
-int count=requestDetailsList.size();	
-System.out.println("count value : "+count);
+int count=0;
+if(requestDetailsList!=null && requestDetailsList.size()>0 )
+{
+ count=requestDetailsList.size();	
+}
 
 String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=ForwardTo&noOfRecords="+count;;
 %>
@@ -111,6 +112,7 @@ function showAllSpecimen(count)
 	{
 		var consentVerificationkey= "value(RequestDetailsBean:"+i+"_consentVerificationkey)";
 		var rowstatus= "value(RequestDetailsBean:"+i+"_rowStatuskey)";
+		
 		var statusValue =  document.getElementById(rowstatus).value;
 		
 		var status = document.getElementById(consentVerificationkey).value;
@@ -262,9 +264,7 @@ function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationke
 										<bean:message key='requestdetails.datatable.label.AssignQty'/>
 									</th>
 								
-						<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
-						{%>	
-							
+					
 									<th class="dataTableHeader" colspan="2" align="left" width="20%" rowspan="2" scope="col">
 																	
 										<div>
@@ -280,7 +280,7 @@ function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationke
 										</div>
 									</th>
 
-						<%}%>
+					
 
 									<th class="dataTableHeader" scope="col" align="left" width="20%" rowspan="2" scope="col">
 										<bean:message key='requestdetails.datatable.label.AssignStatus'/>
@@ -350,8 +350,7 @@ function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationke
 										disableRow=true;
 										disabledStatus=i;
 										rowStatusValue =	"disable";	
-										System.out.println("disabledStatus"+disabledStatus);
-									//	requestDetailsForm.setValue("value(RequestDetailsBean:"+i+"_rowStatuskey)","disable");
+									
 
 										
 										%>
@@ -556,18 +555,32 @@ function showNewConsentPage(specimenIdentifier,labelStatus,consentVerificationke
 						String specimenIdValue=((String)(requestDetailsForm.getValue("value(RequestDetailsBean:"+i+"_specimenId)")));
 									
 						%>
-						<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
-						{%>	
-									<td class="dataCellText"  colspan="2" width="20%"> 
+					
+							
+							<td class="dataCellText"  colspan="2" width="20%"> 
 											<html:hidden property="<%=specimenIdInMap%>" styleId="<%=specimenIdInMap%>"  value="<%=specimenIdValue%>"/>
+											<html:hidden property="<%=rowStatuskey%>" styleId="<%=rowStatuskey%>"  value="<%=rowStatusValue%>"/>		
 
-											<html:hidden property="<%=rowStatuskey%>" styleId="<%=rowStatuskey%>"  value="<%=rowStatusValue%>"/>
-																			
+											
+							<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Derived") ||
+							((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological") ||
+							((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological"))
+							{
+							
+							%>
+														
+										<%=Constants.NO_CONSENTS%>
+										<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.NO_CONSENTS%>"/>
+							
+							<%}%>
+
+							<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
+							{%>
+
 											<%
 											if(!disableRow)
 											{
-												System.out.println("requestDetailsBeanObj.getConsentVerificationkey() "+requestDetailsBeanObj.getConsentVerificationkey());
-												if(requestDetailsBeanObj.getConsentVerificationkey().equals(Constants.NO_CONSENTS))
+												if(requestDetailsBeanObj.getConsentVerificationkey()!=null && requestDetailsBeanObj.getConsentVerificationkey().equals(Constants.NO_CONSENTS))
 												{
 											%>	
 
