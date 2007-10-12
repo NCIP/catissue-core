@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
@@ -33,12 +34,10 @@ import edu.wustl.common.dao.DAOFactory;
  * @author abhijit_naik
  *
  */
-public class MultipleSpecimenViewAction extends AnticipatorySpecimenViewAction 
+public class MultipleSpecimenViewAction extends BaseAction 
 {
 
-	private SessionDataBean bean;
-
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
@@ -46,7 +45,6 @@ public class MultipleSpecimenViewAction extends AnticipatorySpecimenViewAction
 			(SpecimenCollectionGroupForm)form;
 
 		HttpSession session = request.getSession();
-		bean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 		try{
 			LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = new LinkedHashMap<String, CollectionProtocolEventBean> ();
 			CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
@@ -63,21 +61,6 @@ public class MultipleSpecimenViewAction extends AnticipatorySpecimenViewAction
 			session
 			.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);
 		
-			Set<String> keySet = autoStorageSpecimenMap.keySet();
-			
-			if (!keySet.isEmpty())
-			{
-				Iterator<String> keySetIterator = keySet.iterator();
-				storageContainerIds.clear();
-				
-				while(keySetIterator.hasNext())
-				{
-					String key = keySetIterator.next();
-					ArrayList<GenericSpecimenVO> specimenList =
-						autoStorageSpecimenMap.get(key);
-					setSpecimenStorageDetails(specimenList,key);
-				}
-			}
 			
 			request.setAttribute("RequestType","");
 			return mapping.findForward(Constants.SUCCESS);
