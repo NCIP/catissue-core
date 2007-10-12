@@ -165,7 +165,8 @@
 		dataObj = document.getElementById('collapsableTable');
         var td1 = document.getElementById('td1');
 		var td2 = document.getElementById('td3');
-		resultSetDivObj = document.getElementById('resultSetDiv');
+		resultSetDivObj = document.getElementById('resultSetTd');
+		var resultSetDiv = document.getElementById('resultSet');
 	    //var advancedSearchHeaderTd = document.forms[0].elements['advancedSearchHeaderTd'];
 		var advancedSearchHeaderTd = document.getElementById('advancedSearchHeaderTd');
 		var imageContainer = document.getElementById('imageContainer');
@@ -179,12 +180,13 @@
 			switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0"/>';
 			if(navigator.appName == "Microsoft Internet Explorer")
 			{					
-				resultSetDivObj.height = "420";
+				resultSetDivObj.height = "530";
 			}
 			else
 			{
-				resultSetDivObj.height = "430";
+				resultSetDivObj.height = "530";
 			}
+			resultSetDiv.style.height = "530"+'px';
 		}
 		else  							   //Clicked on + image
 		{
@@ -195,7 +197,7 @@
 				dataObj.style.display = 'block';
 				td1.style.display = 'block';
 				td2.style.display = 'block';
-				resultSetDivObj.height = "320";
+				resultSetDivObj.height = "420";
 			}
 			else
 			{
@@ -203,8 +205,9 @@
 				dataObj.style.display = 'block';
 				td1.style.display = 'block';
 				td2.style.display = 'block';
-				resultSetDivObj.height = "300";
+				resultSetDivObj.height = "420";
 			}
+			resultSetDiv.style.height = "420"+'px'
 			switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
 		}
 	}
