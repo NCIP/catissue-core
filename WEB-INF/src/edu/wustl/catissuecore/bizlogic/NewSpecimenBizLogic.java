@@ -203,6 +203,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 			try
 			{
+				setStorageLocationToNewSpecimen(dao, specimen,sessionDataBean,true);
 				insertSingleSpecimen(specimen, dao, sessionDataBean, true);
 				specimenList.add(specimen);
 			}
@@ -211,6 +212,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				String message = " (This message is for Specimen number " + count + ")";
 				daoException.setSupportingMessage(message);
 				throw daoException;
+			} catch (SMException e) {
+				String message = " (This message is for Specimen number " + count + ")";
+				e.printStackTrace();
+				DAOException daoException = new DAOException(e);
+				daoException.setSupportingMessage(message);
+				throw daoException;
+
+				
+				
 			}
 			
 
@@ -1236,6 +1246,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimen.setBarcode(null);
 		}
+		//Load & set Storage Container
+		if (!partOfMultipleSpecimen)
+		{
+			setStorageLocationToNewSpecimen(dao, specimen,sessionDataBean,partOfMultipleSpecimen);
+		}
 		// TODO
 		//Load & set Specimen Collection Group if present
 		if (specimen.getSpecimenCollectionGroup() != null)
@@ -1326,62 +1341,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			//			}
 		}
 
-		//Load & set Storage Container
-		if (specimen.getStorageContainer() != null)
-		{
-			if (specimen.getStorageContainer().getId() != null)
-			{
-				specimen.setStorageContainer(
-						retrieveStorageContainerObject(dao, specimen.getStorageContainer(), 
-								specimen.getStorageContainer().getId())
-						);
-
-//				//				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
-//				//				if (containerObj != null)
-//				//				{
-//				//					StorageContainer container = (StorageContainer) containerObj;
-//				StorageContainer storageContainerObj = new StorageContainer();
-//				storageContainerObj.setId(specimen.getStorageContainer().getId());
-//				String sourceObjectName = StorageContainer.class.getName();
-//				String[] selectColumnName = {"name"};
-//				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-//				String[] whereColumnCondition = {"="};
-//				Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
-//				String joinCondition = null;
-//
-//				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-//
-//				if (!list.isEmpty())
-//				{
-//					storageContainerObj.setName((String) list.get(0));
-//				}
-//
-//				// check for closed Storage Container
-//				checkStatus(dao, storageContainerObj, "Storage Container");
-//
-//				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
-//						Constants.STORAGE_CONTAINER_FORM_ID);
-//
-//				// --- check for all validations on the storage container.
-//				storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
-//						specimen.getPositionDimensionTwo().toString(), sessionDataBean, partOfMultipleSpecimen);
-//				//    chkContainerValidForSpecimen(specimen.getStorageContainer(), specimen,dao);
-//				specimen.setStorageContainer(storageContainerObj);
-//				//				}
-//				//				else
-//				//				{
-//				//					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
-//				//				}
-			}
-			else
-			{
-				specimen.setStorageContainer(
-						retrieveStorageContainerObject(dao, specimen.getStorageContainer(), null)
-						);
-				
-			}
-
-		}
 
 		//Setting the Biohazard Collection
 		Set set = new HashSet();
@@ -1404,6 +1363,84 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		specimen.setBiohazardCollection(set);
 	}
 
+	/**
+	 * @param dao
+	 * @param specimen
+	 * @param sessionDataBean 
+	 * @param partOfMultipleSpecimen 
+	 * @throws DAOException
+	 */
+	private void setStorageLocationToNewSpecimen(DAO dao, Specimen specimen, SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen)
+			throws DAOException,SMException {
+		if (specimen.getStorageContainer() != null)
+		{
+			
+			//retrieveStorageContainerObject(dao, specimen.getStorageContainer(), specimen.getStorageContainer().getId());
+			StorageContainer storageContainerObj = new StorageContainer();
+			
+			String sourceObjectName = StorageContainer.class.getName();
+			String[] whereColumnCondition = {"="};
+			
+			String joinCondition = null;
+
+			if (specimen.getStorageContainer().getId() != null)
+			{
+				storageContainerObj.setId(specimen.getStorageContainer().getId());
+				String[] selectColumnName = {"name"};
+				String[] whereColumnName = {"id"}; 
+				Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+				if (!list.isEmpty())
+				{
+					storageContainerObj.setName((String) list.get(0));
+				}
+			}
+			else
+			{
+				storageContainerObj.setName(specimen.getStorageContainer().getName());
+				String[] selectColumnName = {"id"};
+				String[] whereColumnName = {"name"}; 
+				Object[] whereColumnValue = {specimen.getStorageContainer().getName()};
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+				if (!list.isEmpty())
+				{
+					storageContainerObj.setId((Long) list.get(0));
+				}
+				
+			}
+
+			// check for closed Storage Container
+			checkStatus(dao, storageContainerObj, "Storage Container");
+
+			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					Constants.STORAGE_CONTAINER_FORM_ID);
+
+			// --- check for all validations on the storage container.
+			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
+					specimen.getPositionDimensionTwo().toString(), sessionDataBean, partOfMultipleSpecimen);
+			specimen.setStorageContainer(storageContainerObj);
+			
+			if(specimen.getChildrenSpecimen()!= null){
+				setChildrenSpecimenStorage(specimen.getChildrenSpecimen(),
+						dao, sessionDataBean, partOfMultipleSpecimen);
+			}
+		}
+	}
+
+	private void setChildrenSpecimenStorage(Collection specimenCollection, DAO dao,SessionDataBean sessionDataBean,
+			boolean partOfMultipleSpecimen) throws DAOException, SMException
+	{
+		Iterator iterator = specimenCollection.iterator();
+		while(iterator.hasNext())
+		{
+			Specimen specimen = (Specimen) iterator.next();
+			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, partOfMultipleSpecimen);
+			
+		}
+	}
+	
 	public void disableRelatedObjectsForSpecimenCollectionGroup(DAO dao, Long specimenCollectionGroupArr[]) throws DAOException
 	{
 		Logger.out.debug("disableRelatedObjects NewSpecimenBizLogic");
