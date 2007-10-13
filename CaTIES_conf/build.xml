@@ -16,7 +16,7 @@
     
 	<!-- run FilePoller java file -->
 	<target name="run_report_loader_server">
-		<java classname="edu.wustl.catissuecore.reportloader.FilePoller">
+		<java classname="edu.wustl.catissuecore.reportloader.FilePoller" maxmemory="1024m" fork="true">
 			<classpath>
 				<pathelement location="caties.jar"/>
 			</classpath>
@@ -29,7 +29,7 @@
 	
 	<!-- run DeIDPipelineManager java file -->
 	<target name="run_deid_server">
-		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager">
+		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager" maxmemory="1024m" fork="true">
 			<classpath>
 				<pathelement location="caties.jar"/>
 			</classpath>
