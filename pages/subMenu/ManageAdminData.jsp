@@ -271,7 +271,7 @@
 				<b><bean:message key="app.localExtn" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="DefineAnnotations.do">
+			<a class="subMenuPrimary" href="DefineAnnotationsInformationPage.do">
 					<bean:message key="anno.define" />
 			</a>
 		</div>
