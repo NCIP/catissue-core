@@ -63,8 +63,8 @@ public class MultipleSpecimenViewAction extends BaseAction
 		
 			
 			request.setAttribute("RequestType","");
-			if(pageOf != null)
-				return mapping.findForward(pageOf);
+//			if(pageOf != null)
+//				return mapping.findForward(pageOf);
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception e)

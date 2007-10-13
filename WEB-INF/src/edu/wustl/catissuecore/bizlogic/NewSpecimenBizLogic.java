@@ -1422,11 +1422,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					specimen.getPositionDimensionTwo().toString(), sessionDataBean, partOfMultipleSpecimen);
 			specimen.setStorageContainer(storageContainerObj);
 			
-			if(specimen.getChildrenSpecimen()!= null){
-				setChildrenSpecimenStorage(specimen.getChildrenSpecimen(),
-						dao, sessionDataBean, partOfMultipleSpecimen);
-			}
 		}
+
+		if(specimen.getChildrenSpecimen()!= null)
+		{
+			setChildrenSpecimenStorage(specimen.getChildrenSpecimen(),
+					dao, sessionDataBean, partOfMultipleSpecimen);
+		}
+		
 	}
 
 	private void setChildrenSpecimenStorage(Collection specimenCollection, DAO dao,SessionDataBean sessionDataBean,
