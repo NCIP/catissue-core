@@ -928,26 +928,20 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String textBoxId1 = componentId + "_textBox1";
 		String dataType = attributeInterface.getDataType();
 		StringBuffer html = new StringBuffer();
-		String width = cssClass.equalsIgnoreCase("standardTextQuery")
-				? "style=\"width:150px; display:block;\""
-				: "";
-	
-		html.append("<td width='15%' valign='top' class='" + cssClass + "' >\n");
+		html.append("<td width='15%' valign='top' class=\"standardTextQuery\">\n");
 		if (values == null || values.isEmpty())
 		{
-			if (op != null)
+			if(op != null)
 			{
-				if (op.equals("IsNotNull") || op.equals("IsNull"))
+				if(op.equals("IsNotNull") || op.equals("IsNull"))
 				{
-					html.append("<input  class='" + cssClass + "' " + width
-							+ " type=\"text\" disabled='true' name=\"" + textBoxId + "\" id=\""
-							+ textBoxId + "\">");
+					html.append("<input style=\"width:150px; display:block;\" type=\"text\" disabled='true' name=\""
+							+ textBoxId + "\" id=\"" + textBoxId + "\">");
 				}
-			}
-			else
+			}else
 			{
-				html.append("<input  class='" + cssClass + "' " + width
-						+ " type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\">");
+				html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\""
+					+ textBoxId + "\" id=\"" + textBoxId + "\">");
 			}
 		}
 		else
@@ -958,57 +952,52 @@ public class GenerateHtmlForAddLimitsBizLogic
 				valueStr = values.toString();
 				valueStr = valueStr.replace("[", "");
 				valueStr = valueStr.replace("]", "");
-				html.append("<input  class='" + cssClass + "' " + width
-						+ " type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId
-						+ "\" value=\"" + valueStr + "\">");
+				html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\""
+						+ textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + valueStr + "\">");
 			}
 			else
 			{
-				html.append("<input  class='" + cssClass + "' " + width
-						+ " type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId
-						+ "\" value=\"" + values.get(0) + "\">");
+				html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\""
+						+ textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + values.get(0)
+						+ "\">");
 			}
 		}
 		html.append("\n</td>");
 		if (dataType.equalsIgnoreCase(Constants.DATE))
 		{
-			html.append("\n" + generateHTMLForCalendar(attributeInterface, true, false, cssClass));
+			html.append("\n" + generateHTMLForCalendar(attributeInterface, true, false,cssClass));
 			// html.append("\n<td valign='top' nowrap='nowrap' id=\""
 			// +dateFormatLabelId1+ "\" class=\"standardTextQuery\"
 			// width=\"8%\">"+dateFormat+"</td>");
 		}
 		else
 		{
-
-			html.append("\n<td valign='top' class='" + cssClass + "'>&nbsp;</td> ");
+			html.append("\n<td valign='top' width='1%'>&nbsp;</td>");
 			// html.append("\n<td valign='top' />");
 		}
-
-		html.append("<td width='15%' id='secondTextBoxTd'  valign='top' class='" + cssClass + "'  >\n");
+		html.append("<td width='15%'  valign='top' class=\"standardTextQuery\">\n");
 		if (isBetween)
 		{
 			if (values == null || values.isEmpty())
 			{
-				html.append("<input type=\"text\"  class='" + cssClass + "'   name=\""
-						+ textBoxId1 + "\" id=\"" + textBoxId1 + "\" style=\"display:block\">");
+				html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1
+						+ "\" style=\"display:block\">");
 			}
 			else
 			{
-				html.append("<input type=\"text\"  class='" + cssClass + "' name=\""
-						+ textBoxId1 + "\" id=\"" + textBoxId1 + "\" value=\"" + values.get(1)
-						+ "\" style=\"display:block\">");
+				html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1
+						+ "\" value=\"" + values.get(1) + "\" style=\"display:block\">");
 			}
 		}
 		else
 		{
-			html.append("<input type=\"text\"  class='" + cssClass + "' name=\"" + textBoxId1
-					+ "\" id=\"" + textBoxId1 + "\" style=\"display:none\">&nbsp;");
+			html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1
+					+ "\" style=\"display:none\">");
 		}
 		html.append("\n</td>");
 		if (dataType.equalsIgnoreCase(Constants.DATE))
 		{
-			html.append("\n"
-					+ generateHTMLForCalendar(attributeInterface, false, isBetween, cssClass));
+			html.append("\n" + generateHTMLForCalendar(attributeInterface, false, isBetween,cssClass));
 			/*
 			 * if(!isBetween) { html.append("\n<td valign='top' nowrap='nowrap' id=\"" +dateFormatLabelId2+ "\" class=\"standardTextQuery\" style=\"display:none\" width=\"8%\">"+dateFormat+"</td>"); }
 			 * else { html.append("\n<td valign='top' nowrap='nowrap' id=\"" +dateFormatLabelId2+ "\" class=\"standardTextQuery\" style=\"display:block\" width=\"8%\">"+dateFormat+"</td>"); }
@@ -1016,8 +1005,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		}
 		else
 		{
-
-			html.append("\n<td valign='top' class='" + cssClass + "'/>");
+			html.append("\n<td valign='top' />");
 			// html.append("\n<td valign='top' />");
 		}
 		return html.toString();
@@ -1129,16 +1117,13 @@ public class GenerateHtmlForAddLimitsBizLogic
 		StringBuffer html = new StringBuffer();
 		String attributeName = attribute.getName();
 		String componentId = generateComponentName(attribute);
-		String width = cssClass.equalsIgnoreCase("formField")
-				? "style=\"width:150px; display:block;\""
-				: "";
-		
 		if (permissibleValues != null && permissibleValues.size() != 0)
 		{
 
-			html.append("\n<td width='15%' valign='centre'  class='" + cssClass + "' >");
-			html.append("\n<select " + width + "  MULTIPLE styleId='country' size ='3' class='"+cssClass+"' name=\""
-					+ componentId + "_enumeratedvaluescombobox\">");
+			html.append("\n<td width='15%' valign='centre' >");
+			html
+					.append("\n<select style=\"width:150px; display:block;\" MULTIPLE styleId='country' size ='3' name=\""
+							+ componentId + "_enumeratedvaluescombobox\"\">");
 			List values = new ArrayList(permissibleValues);
 			Collections.sort(values, new PermissibleValueComparator());
 			for (int i = 0; i < values.size(); i++)
@@ -1148,28 +1133,27 @@ public class GenerateHtmlForAddLimitsBizLogic
 				if (editLimitPermissibleValues != null
 						&& editLimitPermissibleValues.contains(value))
 				{
-					html.append("\n<option class='" + cssClass + "' title=\"" + value
+					html.append("\n<option class=\"PermissibleValuesQuery\" title=\"" + value
 							+ "\" value=\"" + value + "\" SELECTED>" + value + "</option>");
 
 				}
 				else
 				{
-					html.append("\n<option class='" + cssClass + "' title=\"" + value
+					html.append("\n<option class=\"PermissibleValuesQuery\" title=\"" + value
 							+ "\" value=\"" + value + "\">" + value + "</option>");
 				}
 			}
-
 			html.append("\n</select>");
 			html.append("\n</td>");
-			html.append("\n<td class='" + cssClass + "'>&nbsp; ");
+			html.append("\n<td>");
 			html.append("\n</td>");
-			html.append("\n<td class='" + cssClass + "'>&nbsp;");
+			html.append("\n<td>");
 			html.append("\n</td>");
-			html.append("\n<td class='" + cssClass + "'>&nbsp;");
+			html.append("\n<td>");
 			html.append("\n</td>");
-
 		}
 		return html.toString();
+
 	}
 
 	/**
