@@ -2,182 +2,181 @@
 <!--Ant Script for create Build for caTISSUE Core-->
 
 <project name="caTissue Core Installation" default="deploy_app">
-	
-	<!--define require dir and Properties -->	
+
+	<!--define require dir and Properties -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-	<classpath>
-	    <pathelement location="./lib/ant-contrib.jar"/>
-	  </classpath>
+		<classpath>
+			<pathelement location="./lib/ant-contrib.jar" />
+		</classpath>
 	</taskdef>
 
-	<property file="caTissueInstall.properties"/>
-	
-	<property name="base.dir" value="."/>
-	<property name="temp.dir" value="./tempCatissuecore"/>
-	<property name="csm.dir" value="${temp.dir}/tempcsm"/>
-	<property name="lib.dir" value="${base.dir}/lib"/>
+	<property file="caTissueInstall.properties" />
 
-    <property name="mysql.sql.dir" value="${base.dir}/SQL/MySql"/>
-    <property name="dbupgrade.sql.dir" value="${base.dir}/SQL/DBUpgrade"/>
-	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle"/>
-	<property name="common.sql.dir" value="${base.dir}/SQL/Common"/>
-	<property name="oracle.dialect.string" value="net.sf.hibernate.dialect.Oracle9Dialect"/>
-	<property name="mysql.dialect.string" value="net.sf.hibernate.dialect.MySQLDialect"/>
-	
-	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
-	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect"/>
-	
-	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver"/>
-	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver"/>
-	
-	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
-	<property name="oracle.lib" value="oracleDriver.jar"/>
-	
+	<property name="base.dir" value="." />
+	<property name="temp.dir" value="./tempCatissuecore" />
+	<property name="csm.dir" value="${temp.dir}/tempcsm" />
+	<property name="lib.dir" value="${base.dir}/lib" />
+
+	<property name="mysql.sql.dir" value="${base.dir}/SQL/MySql" />
+	<property name="dbupgrade.sql.dir" value="${base.dir}/SQL/DBUpgrade" />
+	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle" />
+	<property name="common.sql.dir" value="${base.dir}/SQL/Common" />
+	<property name="oracle.dialect.string" value="net.sf.hibernate.dialect.Oracle9Dialect" />
+	<property name="mysql.dialect.string" value="net.sf.hibernate.dialect.MySQLDialect" />
+
+	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect" />
+	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect" />
+
+	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
+	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
+
+	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar" />
+	<property name="oracle.lib" value="oracleDriver.jar" />
+
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
-			<equals arg1="" arg2="${jboss.home.dir}"/>
+			<equals arg1="" arg2="${jboss.home.dir}" />
 			<then>
-				<fail message="The property 'jboss.home.dir' can not be empty"/>
+				<fail message="The property 'jboss.home.dir' can not be empty" />
 			</then>
 		</if>
 		<if>
 			<or>
-				<equals arg1="mysql" arg2="${database.type}"/>
-				<equals arg1="oracle" arg2="${database.type}"/>	
+				<equals arg1="mysql" arg2="${database.type}" />
+				<equals arg1="oracle" arg2="${database.type}" />
 			</or>
-			<then/>
+			<then />
 			<else>
-				<fail message="The value of property 'database.type' must be mysql or oracle"/>
-			</else>	
+				<fail message="The value of property 'database.type' must be mysql or oracle" />
+			</else>
 		</if>
 		<if>
-			<equals arg1="" arg2="${database.host}"/>
+			<equals arg1="" arg2="${database.host}" />
 			<then>
-				<fail message="The property 'database.host' can not be empty"/>
+				<fail message="The property 'database.host' can not be empty" />
 			</then>
 		</if>
 		<if>
-			<equals arg1="" arg2="${database.port}"/>
+			<equals arg1="" arg2="${database.port}" />
 			<then>
-				<fail message="The property 'database.port' can not be empty. Default port for MySQL:3306 and for Oracle: 1521"/>
+				<fail message="The property 'database.port' can not be empty. Default port for MySQL:3306 and for Oracle: 1521" />
 			</then>
 		</if>
 		<if>
-			<equals arg1="" arg2="${database.name}"/>
+			<equals arg1="" arg2="${database.name}" />
 			<then>
-				<fail message="The property 'database.name' can not be empty"/>
+				<fail message="The property 'database.name' can not be empty" />
 			</then>
 		</if>
 		<if>
-			<equals arg1="" arg2="${database.username}"/>
+			<equals arg1="" arg2="${database.username}" />
 			<then>
-				<fail message="The property 'database.username' can not be empty"/>
+				<fail message="The property 'database.username' can not be empty" />
 			</then>
-		</if>			
+		</if>
 		<!-- Mandar 17May06 check for first user -->
 		<if>
-			<equals arg1="" arg2="${first.admin.department}"/>
+			<equals arg1="" arg2="${first.admin.department}" />
 			<then>
-				<fail message="The property 'first.admin.department' can not be empty"/>
+				<fail message="The property 'first.admin.department' can not be empty" />
 			</then>
 		</if>
 		<if>
-			<equals arg1="" arg2="${first.admin.institution}"/>
+			<equals arg1="" arg2="${first.admin.institution}" />
 			<then>
-				<fail message="The property 'first.admin.institution' can not be empty"/>
+				<fail message="The property 'first.admin.institution' can not be empty" />
 			</then>
 		</if>
 		<if>
-			<equals arg1="" arg2="${first.admin.cancerresearchgroup}"/>
+			<equals arg1="" arg2="${first.admin.cancerresearchgroup}" />
 			<then>
-				<fail message="The property 'first.admin.cancerresearchgroup' can not be empty"/>
+				<fail message="The property 'first.admin.cancerresearchgroup' can not be empty" />
 			</then>
 		</if>
 		<if>
-			<equals arg1="" arg2="${first.admin.emailAddress}"/>
+			<equals arg1="" arg2="${first.admin.emailAddress}" />
 			<then>
-				<fail message="The property 'first.admin.emailAddress' can not be empty"/>
+				<fail message="The property 'first.admin.emailAddress' can not be empty" />
 			</then>
 		</if>
 		<if>
-			<equals arg1="" arg2="${first.admin.password}"/>
+			<equals arg1="" arg2="${first.admin.password}" />
 			<then>
-				<fail message="The property 'first.admin.password' can not be empty"/>
+				<fail message="The property 'first.admin.password' can not be empty" />
 			</then>
 		</if>
 	</target>
-	
-	<!--Extrct WAR and copy Configuration files to temp directory--> 
-	<target name="init">
-		<echo message="Initializing installation..."/>
 
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<unwar src="${base.dir}/dynamicExtensions.war" dest="${temp.dir}/dynamicExtensions"/>
-		
+	<!--Extrct WAR and copy Configuration files to temp directory-->
+	<target name="init">
+		<echo message="Initializing installation..." />
+
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<unwar src="${base.dir}/dynamicExtensions.war" dest="${temp.dir}/dynamicExtensions" />
+
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
-			<fileset dir="${base.dir}/catissuecore-properties"/>
+			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
-		<copy file="${base.dir}/caTIES_conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true"/>
-		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true"/>
-		
-		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}"/>
+		<copy file="${base.dir}/caTIES_conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
+		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
+
+		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}" />
 		<!--Kapil V 1.0.1 Changes-->
-		<copy file="login-config.xml" todir="${temp.dir}" overwrite="true"/>
-		<copy file="properties-service.xml" todir="${temp.dir}" overwrite="true"/>
-		<copy file="log4j.xml" todir="${temp.dir}" overwrite="true"/>
- 	</target>
-	
+		<copy file="login-config.xml" todir="${temp.dir}" overwrite="true" />
+		<copy file="properties-service.xml" todir="${temp.dir}" overwrite="true" />
+		<copy file="log4j.xml" todir="${temp.dir}" overwrite="true" />
+	</target>
+
 	<!--Modify Configuration such as Session Timeout, Admin details and JBoss server port-->
 	<target name="configure_war">
-		<echo message="Modifying caTissueCore Configuration File..."/>
-		
-		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
-			<replacefilter token="&lt;session-timeout>30&lt;/session-timeout>" 
-			  	value="&lt;session-timeout>${session.timeout}&lt;/session-timeout>"/>
+		<echo message="Modifying caTissueCore Configuration File..." />
+
+		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
+			<replacefilter token="&lt;session-timeout>30&lt;/session-timeout>" value="&lt;session-timeout>${session.timeout}&lt;/session-timeout>" />
 		</replace>
-		
+
 		<!--<replace file="${temp.dir}/catissuecore/WEB-INF/classes/remoteService.xml"> 
 			<replacefilter token="@@server.port@@" value="${jboss.server.port}"/>
 		</replace>-->
 	</target>
-	
-	
+
+
 	<!--Modify Adopter's Institution images, URL of Institution website and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files-->
 	<target name="adopter_configuration">
-		<echo message="Updating Site Images"/>
+		<echo message="Updating Site Images" />
 		<copy todir="${temp.dir}/catissuecore/images" overwrite="true">
-			<fileset dir="${base.dir}/images"/>
+			<fileset dir="${base.dir}/images" />
 		</copy>
 	</target>
-	
-	
-	
+
+
+
 	<!--Modify Configuration For MySQL-->
 	<target name="mysql_config">
-		<echo message="Modifying caTISSUECore MySQL specific Configuration File..."/>
-		
-		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties"> 
-	  		<include name="upt.hibernate.cfg.xml"/>
-			<include name="catissuecore.hibernate.cfg.xml"/>
-			<replacefilter token="@@dialect@@" value="${mysql.dialect.string}"/>
+		<echo message="Modifying caTISSUECore MySQL specific Configuration File..." />
+
+		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties">
+			<include name="upt.hibernate.cfg.xml" />
+			<include name="catissuecore.hibernate.cfg.xml" />
+			<replacefilter token="@@dialect@@" value="${mysql.dialect.string}" />
 		</replace>
 		<!-- added for csm orm1.cfg.xml file-->
-		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
-			<include name ="orm1.cfg.xml"/>
-			<replacefilter token="@@dialect@@" value="${mysql.dialect.h3.string}"/>
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+			<include name="orm1.cfg.xml" />
+			<replacefilter token="@@dialect@@" value="${mysql.dialect.h3.string}" />
 		</replace>
-		
-		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
-			<include name="catissuecore-ds.xml"/>
-			<include name="login-config.xml"/>
-			<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
-			<replacefilter token="@@username@@" value="${database.username}"/>
-			<replacefilter token="@@pasword@@" value="${database.password}"/>
-			<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}"/>
+
+		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
+			<include name="catissuecore-ds.xml" />
+			<include name="login-config.xml" />
+			<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+			<replacefilter token="@@username@@" value="${database.username}" />
+			<replacefilter token="@@pasword@@" value="${database.password}" />
+			<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}" />
 		</replace>
-		
+
 		<!-- change ${csm.dir} to {catissuecore} because using one war only -->
 		<!-- Configuring CSM hibernate property File-->
 		<!--
@@ -203,38 +202,38 @@
 		</replace>
 		-->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
-			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}"/>
+			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
 		</replace>
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
-			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}"/>
+			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
 		</replace>
 	</target>
-	
+
 	<!--Modify Configuration For Oracle-->
 	<target name="oracle_config">
-		<echo message="Modifying caTISSUECore Oracle specific Configuration File..."/>
-		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties"> 
-	  		<include name="upt.hibernate.cfg.xml"/>
-			<include name="catissuecore.hibernate.cfg.xml"/>
-			<replacefilter token="@@dialect@@" value="${oracle.dialect.string}"/>
+		<echo message="Modifying caTISSUECore Oracle specific Configuration File..." />
+		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties">
+			<include name="upt.hibernate.cfg.xml" />
+			<include name="catissuecore.hibernate.cfg.xml" />
+			<replacefilter token="@@dialect@@" value="${oracle.dialect.string}" />
 		</replace>
-		
+
 		<!-- added for csm orm1.cfg.xml file-->
-		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
-			<include name ="orm1.cfg.xml"/>
-			<replacefilter token="@@dialect@@" value="${oracle.dialect.h3.string}"/>
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+			<include name="orm1.cfg.xml" />
+			<replacefilter token="@@dialect@@" value="${oracle.dialect.h3.string}" />
 		</replace>
-			
+
 		<!-- Configuring Data Source File-->
-		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
-			<include name="catissuecore-ds.xml"/>
-			<include name="login-config.xml"/>
-			<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
-			<replacefilter token="@@username@@" value="${database.username}"/>
-			<replacefilter token="@@pasword@@" value="${database.password}"/>
-			<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}"/>
+		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
+			<include name="catissuecore-ds.xml" />
+			<include name="login-config.xml" />
+			<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+			<replacefilter token="@@username@@" value="${database.username}" />
+			<replacefilter token="@@pasword@@" value="${database.password}" />
+			<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}" />
 		</replace>
-		
+
 		<!-- change ${csm.dir} to {catissuecore} because using one war only -->
 		<!-- Configuring CSM hibernate property File-->
 		<!--
@@ -260,60 +259,58 @@
 		</replace>
 		-->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
-			<replacefilter 
-				token="${mysql.dialect.string}" 
-			  	value="${oracle.dialect.string}"/>
+			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
 		</replace>
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
-			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}"/>
-	        <replacefilter token="&lt;!--MySQL c3p properties start-->" value="&lt;!--MySQL c3p properties start"/>
-	        <replacefilter token="&lt;!--MySQL c3p properties end-->" value="MySQL c3p properties end-->"/>
+			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
+			<replacefilter token="&lt;!--MySQL c3p properties start-->" value="&lt;!--MySQL c3p properties start" />
+			<replacefilter token="&lt;!--MySQL c3p properties end-->" value="MySQL c3p properties end-->" />
 		</replace>
 	</target>
 	<!--Server clean-up-->
-	<target name="clean_server" description="deletes the WAR file and cache from server ">		
+	<target name="clean_server" description="deletes the WAR file and cache from server ">
 		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war" />
-		<delete file="${jboss.home.dir}/server/default/deploy/dynamicExtensions.war" />		
+		<delete file="${jboss.home.dir}/server/default/deploy/dynamicExtensions.war" />
 		<delete includeemptydirs="true">
 			<fileset dir="${jboss.home.dir}/server/default/work">
-				<include name="**/*" />					
+				<include name="**/*" />
 			</fileset>
 		</delete>
 		<delete includeemptydirs="true">
 			<fileset dir="${jboss.home.dir}/server/default/tmp">
-				<include name="**/*" />					
+				<include name="**/*" />
 			</fileset>
 		</delete>
 	</target>
-	
+
 	<!--Buid New WAR File-->
 	<target name="build_war">
-		<echo message="Creating New Web Application Archieve File..."/>
-		<delete file="${temp.dir}/catissuecore.war"/>
-		<delete file="${temp.dir}/dynamicExtensions.war"/>	
-	
+		<echo message="Creating New Web Application Archieve File..." />
+		<delete file="${temp.dir}/catissuecore.war" />
+		<delete file="${temp.dir}/dynamicExtensions.war" />
+
 		<war destfile="${temp.dir}/catissuecore.war" webxml="${temp.dir}/catissuecore/WEB-INF/web.xml">
 			<fileset dir="${temp.dir}/catissuecore">
-				<exclude name="**/*build*"/>
-				<exclude name="**/*WEB-INF*"/>
-				<exclude name="**/*servlet.jar*"/>
-				<exclude name="**/WEB-INF/lib/log4j-1.2.9.jar*"/>
-				<exclude name="**/*hibernate2.jar*"/>
-				<exclude name="**/*jta.jar*"/>
-				<exclude name="**/.*"/>
-				<exclude name="**/*.sql"/>
-				<exclude name="**/CVS*"/>	
+				<exclude name="**/*build*" />
+				<exclude name="**/*WEB-INF*" />
+				<exclude name="**/*servlet.jar*" />
+				<exclude name="**/WEB-INF/lib/log4j-1.2.9.jar*" />
+				<exclude name="**/*hibernate2.jar*" />
+				<exclude name="**/*jta.jar*" />
+				<exclude name="**/.*" />
+				<exclude name="**/*.sql" />
+				<exclude name="**/CVS*" />
 			</fileset>
 		</war>
-		
-		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true"/>
-		
+
+		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
+
 		<war destfile="${temp.dir}/dynamicExtensions.war" webxml="${temp.dir}/dynamicExtensions/WEB-INF/web.xml">
 			<fileset dir="${temp.dir}/dynamicExtensions">
-				<include name="**/**/**.*"/>
+				<include name="**/**/**.*" />
 			</fileset>
 		</war>
-		
+
 		<!-- change because using one war only -->
 		<!--
 		<delete file="${temp.dir}/catissuecorecsm.war"/>
@@ -322,123 +319,119 @@
 		</war>
 		-->
 	</target>
-	
+
 	<!--Copy WAR and Configuration Files to JBOSS Directory-->
 	<target name="copy_files">
-		<echo message="Copying caTISSUECore Application Components..."/>
+		<echo message="Copying caTISSUECore Application Components..." />
 
 		<copy todir="${jboss.home.dir}/server/default/catissuecore-properties" overwrite="true">
 			<fileset dir="${temp.dir}/catissuecore-properties">
-				<include name="**/*"/>
-			</fileset>	
+				<include name="**/*" />
+			</fileset>
 		</copy>
 		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
-  			<fileset dir="${temp.dir}">
-  				<include name="catissuecore.war"/>
-  				<include name="catissuecore-ds.xml"/>
-  				<include name="catissuecorecsm.war"/>
-				<include name="dynamicExtensions.war"/>   			  				
-   			</fileset>
-  		</copy>
-		<replace dir="${jboss.home.dir}/server/default/catissuecore-properties"> 
-	  		<include name="ApplicationSecurityConfig.xml"/>
-			<replacefilter token="@@hibernate-config-file@@" 
-				  	value="${jboss.home.dir}/server/default/catissuecore-properties/catissuecore.hibernate.cfg.xml"/>
+			<fileset dir="${temp.dir}">
+				<include name="catissuecore.war" />
+				<include name="catissuecore-ds.xml" />
+				<include name="catissuecorecsm.war" />
+				<include name="dynamicExtensions.war" />
+			</fileset>
+		</copy>
+		<replace dir="${jboss.home.dir}/server/default/catissuecore-properties">
+			<include name="ApplicationSecurityConfig.xml" />
+			<replacefilter token="@@hibernate-config-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/catissuecore.hibernate.cfg.xml" />
 		</replace>
-		<copy todir="${jboss.home.dir}/server/default/lib" >
+		<copy todir="${jboss.home.dir}/server/default/lib">
 			<fileset dir="${lib.dir}">
-				<include name="${mysql.lib}"/>
-				<include name="${oracle.lib}"/>
+				<include name="${mysql.lib}" />
+				<include name="${oracle.lib}" />
 			</fileset>
 		</copy>
 		<copy todir="${jboss.home.dir}/bin" overwrite="true">
 			<fileset dir="${temp.dir}">
-				<include name="DAOConfig.xml"/>
+				<include name="DAOConfig.xml" />
 			</fileset>
-		</copy>	
-  	</target>
+		</copy>
+	</target>
 	<!--Changes for v 1.0.1 - Start-->
 	<target name="config_jboss_files">
 		<copy todir="${jboss.home.dir}/server/default/conf" overwrite="true">
-  			<fileset dir="${temp.dir}">
-  				<include name="login-config.xml"/>
-  				<include name="log4j.xml"/>
-   			</fileset>
-  		</copy>
+			<fileset dir="${temp.dir}">
+				<include name="login-config.xml" />
+				<include name="log4j.xml" />
+			</fileset>
+		</copy>
 
-		<replace dir="${temp.dir}"> 
-	  		<include name="properties-service.xml"/>
-			<replacefilter token="@@app-security-file@@" 
-				  	value="${jboss.home.dir}/server/default/catissuecore-properties/ApplicationSecurityConfig.xml"/>
-			<replacefilter token="@@app-properties-file@@" 
-				  	value="${jboss.home.dir}/server/default/catissuecore-properties/caTissueCore_Properties.xml"/>
-			<replacefilter token="@@app-dynamicuixml-file@@" 
-				  	value="${jboss.home.dir}/server/default/catissuecore-properties/dynamicUI.xml"/>
+		<replace dir="${temp.dir}">
+			<include name="properties-service.xml" />
+			<replacefilter token="@@app-security-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/ApplicationSecurityConfig.xml" />
+			<replacefilter token="@@app-properties-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/caTissueCore_Properties.xml" />
+			<replacefilter token="@@app-dynamicuixml-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/dynamicUI.xml" />
 		</replace>
 
 
 		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
-  			<fileset dir="${temp.dir}">
-  				<include name="properties-service.xml"/>
-   			</fileset>
-  		</copy>
-		<delete file="${jboss.home.dir}/server/default/lib/hibernate2.jar"/>
+			<fileset dir="${temp.dir}">
+				<include name="properties-service.xml" />
+			</fileset>
+		</copy>
+		<delete file="${jboss.home.dir}/server/default/lib/hibernate2.jar" />
 	</target>
 	<target name="deploy_app">
-		<antcall target="assert"/>
-		<delete dir="${temp.dir}"/>
-		<antcall target="init"/>
-		<antcall target="configure_war"/>
-		<antcall target="adopter_configuration"/>
+		<antcall target="assert" />
+		<delete dir="${temp.dir}" />
+		<antcall target="init" />
+		<antcall target="configure_war" />
+		<antcall target="adopter_configuration" />
 		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>		
+			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="mysql_config"/>
+				<antcall target="mysql_config" />
 			</then>
-			<elseif>	
-				<equals arg1="oracle" arg2="${database.type}"/>		
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="oracle_config"/>
+					<antcall target="oracle_config" />
 				</then>
 			</elseif>
 		</if>
 		<!-- configure titli.properties -->
-		<antcall target="configure_titli"/>
-		<antcall target="build_war"/>
-		<antcall target="copy_files"/>
-		<antcall target="send_mail"/>
+		<antcall target="configure_titli" />
+		<antcall target="build_war" />
+		<antcall target="copy_files" />
+		<antcall target="send_mail" />
 	</target>
 
-	
+
 	<!--Target for Deployment with jboss config-->
-	<target name="deploy_app_with_config" >
-		<antcall target="deploy_app"/>
-		<antcall target="config_jboss_files"/>
-		<delete dir="${temp.dir}"/>
+	<target name="deploy_app_with_config">
+		<antcall target="deploy_app" />
+		<antcall target="config_jboss_files" />
+		<delete dir="${temp.dir}" />
 	</target>
 
 	<!--Target call for both Deployment and Database Creation-->
 	<target name="deploy_all_with_config">
-		<antcall target="deploy_app_with_config"/>
-		<antcall target="db_initialize"/>
+		<antcall target="deploy_app_with_config" />
+		<antcall target="db_initialize" />
 	</target>
-		<!--Target for Database Creation-->
+	<!--Target for Database Creation-->
 	<target name="db_initialize">
-		<antcall target="firstUser"/>
-		
+		<antcall target="firstUser" />
+
 		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>		
+			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="db_initialize_mysql"/>
+				<antcall target="db_initialize_mysql" />
 			</then>
-			<elseif>	
-				<equals arg1="oracle" arg2="${database.type}"/>		
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="db_initialize_oracle"/>
+					<antcall target="db_initialize_oracle" />
 				</then>
 			</elseif>
 			<else>
-				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error"/>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
 		</if>
 	</target>
@@ -446,221 +439,165 @@
 
 	<!--Target call for both Deployment and Database Creation-->
 	<target name="deploy_all">
-		<antcall target="deploy_app"/>
-		<antcall target="db_initialize"/>
+		<antcall target="deploy_app" />
+		<antcall target="db_initialize" />
 	</target>
 
 	<!--MySQL Database Creation -->
 	<target name="db_initialize_mysql">
-		<echo message="Initializing MySQL Database for caTISSUECore Application..."/>
-		<sql
-			driver="${mysql.driver.string}"
-		    url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-			onerror="continue">
-			<transaction  src="${mysql.sql.dir}/catissuecore.sql"/>
-			<transaction  src="${mysql.sql.dir}/InitDB_CreateTable.sql"/>
-			<transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
-			<transaction  src="${common.sql.dir}/AlterTable.sql"/>
-			<transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
-			<transaction  src="${mysql.sql.dir}/csm_catissuecore.sql"/>
-			<transaction  src="${common.sql.dir}/createUser.sql"/>
-			<transaction  src="${common.sql.dir}/insert_default_data.sql"/>
-			<transaction  src="${common.sql.dir}/indexes.sql"/>
-			<transaction  src="${mysql.sql.dir}/dynamicextension.sql"/>
-			<transaction  src="${mysql.sql.dir}/query/query_schema_script.sql"/>			
-			<transaction  src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql"/>	
-			<transaction  src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql"/>	
-			<transaction  src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql"/>	
+		<echo message="Initializing MySQL Database for caTISSUECore Application..." />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+			<transaction src="${mysql.sql.dir}/catissuecore.sql" />
+			<transaction src="${mysql.sql.dir}/InitDB_CreateTable.sql" />
+			<transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
+			<transaction src="${common.sql.dir}/AlterTable.sql" />
+			<transaction src="${common.sql.dir}/CDE_DummyData_Common.sql" />
+			<transaction src="${mysql.sql.dir}/csm_catissuecore.sql" />
+			<transaction src="${common.sql.dir}/createUser.sql" />
+			<transaction src="${common.sql.dir}/insert_default_data.sql" />
+			<transaction src="${common.sql.dir}/indexes.sql" />
+			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
+			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
+			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
+			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql" />
+			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
-			<fileset dir="${lib.dir}">
-			  <include name="*.jar"/>
-			  </fileset>
-			</classpath> 
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 		</sql>
-  	</target>
+	</target>
 
-  	<!--Target for Database Upgrade from 1.1 to 1.2-->
+	<!--Target for Database Upgrade from 1.1 to 1.2-->
 	<target name="db_upgrade">
 		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>		
+			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="db_upgrade_mysql"/>
+				<antcall target="db_upgrade_mysql" />
 			</then>
-			<elseif>	
-				<equals arg1="oracle" arg2="${database.type}"/>		
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="db_upgrade_oracle"/>
+					<antcall target="db_upgrade_oracle" />
 				</then>
 			</elseif>
 			<else>
-				<echo message="DATABASE UPGRADATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error"/>
+				<echo message="DATABASE UPGRADATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
 		</if>
 	</target>
-		<!--MySQL Database Upgradation -->
+	<!--MySQL Database Upgradation -->
 	<target name="db_upgrade_mysql">
-		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..."/>
-		<sql
-			driver="${mysql.driver.string}"
-		    url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-			onerror="continue">
-			<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql"/>
-			<transaction  src="${mysql.sql.dir}/dynamicextension.sql"/>
-			<transaction  src="${mysql.sql.dir}/query/query_schema_script.sql"/>
-			<transaction  src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql"/>	
-			<transaction  src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql"/>
-			<transaction  src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql"/>
-			
+		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..." />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
+			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
+			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
+			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
+			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql" />
+			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql" />
+
 			<transaction>commit;</transaction>
 			<classpath>
-			<fileset dir="${lib.dir}">
-			  <include name="*.jar"/>
-			  </fileset>
-			</classpath> 
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 		</sql>
-  	</target>
-  	<!--MySQL Database Upgradation -->
+	</target>
+	<!--MySQL Database Upgradation -->
 	<target name="db_upgrade_oracle">
-		<echo message="Upgrading Oracle Database for caTISSUE Suite Application ..."/>
-		<sql 
-			driver="${oracle.driver.string}"
-		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-    		onerror="continue"
-    		rdbms="oracle">
-			<transaction  src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql"/>
-			<transaction  src="${oracle.sql.dir}/dynamicextension.sql"/>	
-	   	  	<transaction  src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql"/>	
-		  	<transaction  src="${oracle.sql.dir}/query/query_schema_script.sql"/>
+		<echo message="Upgrading Oracle Database for caTISSUE Suite Application ..." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql" />
+			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
+			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
+			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
-			<fileset dir="${lib.dir}">
-			  <include name="*.jar"/>
-			  </fileset>
-			</classpath> 
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 		</sql>
-		
-		<antcall target="insertQueryMetadata"/>
-		
-		<sql
-			driver="${oracle.driver.string}"
-		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-    		onerror="continue"
-    		rdbms="oracle" 
-			delimiter="/"
-		    delimitertype="row">
-		    <transaction  src="${oracle.sql.dir}/DBUtility.sql"/>
+
+		<antcall target="insertQueryMetadata" />
+
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle" delimiter="/" delimitertype="row">
+			<transaction src="${oracle.sql.dir}/DBUtility.sql" />
 			<!--transaction  src="${oracle.sql.dir}/DESeqChangeForDataDump.sql"/-->
-		  	<classpath>
-	            <fileset dir="${lib.dir}">
-	                  <include name="*.jar"/>
-	            </fileset>
-            </classpath> 
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 		</sql>
-  	</target>
+	</target>
 	<!--Oracle Database Creation -->
 	<target name="db_initialize_oracle">
-		<echo message="Initializing Oracle Database for caTISSUECore Application..."/>
-		<sql 
-			driver="${oracle.driver.string}"
-		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-    		onerror="continue"			
-    		rdbms="oracle">	
-			  <transaction  src="${oracle.sql.dir}/catissuecore.sql"/>
-			  <transaction  src="${oracle.sql.dir}/InitDB_CreateTable.sql"/>
-			  <transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
-			  <transaction  src="${oracle.sql.dir}/AlterTable.sql"/>
-			  <transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
-			  <transaction  src="${oracle.sql.dir}/CSM_Create_Oracle.sql"/>
-			  <transaction  src="${oracle.sql.dir}/createUser.sql"/>
-		      <transaction  src="${oracle.sql.dir}/insert_default_data.sql"/>	
-		      <transaction  src="${common.sql.dir}/indexes.sql"/>
-			  <transaction  src="${oracle.sql.dir}/dynamicextension.sql"/>	
-		   	  <transaction  src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql"/>	
-			  <transaction  src="${oracle.sql.dir}/query/query_schema_script.sql"/>
-		  	  <transaction>commit;</transaction>	
-    	  <classpath >
-            <fileset dir="${lib.dir}">
-                  <include name="*.jar"/>
-              </fileset>
-            </classpath> 
-		</sql>	
-		
-		<antcall target="insertQueryMetadata"/>
-		
-		<sql
-			driver="${oracle.driver.string}"
-		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-			onerror="continue"
-			rdbms="oracle" 
-			delimiter="/"
-		    delimitertype="row">
-			<transaction  src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql"/>
-			<transaction  src="${oracle.sql.dir}/DBUtility.sql"/>
+		<echo message="Initializing Oracle Database for caTISSUECore Application..." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${oracle.sql.dir}/catissuecore.sql" />
+			<transaction src="${oracle.sql.dir}/InitDB_CreateTable.sql" />
+			<transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
+			<transaction src="${oracle.sql.dir}/AlterTable.sql" />
+			<transaction src="${common.sql.dir}/CDE_DummyData_Common.sql" />
+			<transaction src="${oracle.sql.dir}/CSM_Create_Oracle.sql" />
+			<transaction src="${oracle.sql.dir}/createUser.sql" />
+			<transaction src="${oracle.sql.dir}/insert_default_data.sql" />
+			<transaction src="${common.sql.dir}/indexes.sql" />
+			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
+			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
+			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
+			<transaction>commit;</transaction>
 			<classpath>
-		    	<fileset dir="${lib.dir}">
-		              <include name="*.jar"/>
-		        </fileset>
-			</classpath> 
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 		</sql>
-			<sql
-				driver="${oracle.driver.string}"
-			    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-			    userid="${database.username}"
-			    password="${database.password}" 
-				onerror="continue"
-				rdbms="oracle">
-			  <transaction  src="${oracle.sql.dir}/CSM_InsertData_Oracle.sql"/>	
-				  <transaction  src="${oracle.sql.dir}/CSM_AddConstraints_Oracle.sql"/>
-				  <transaction  src="${oracle.sql.dir}/createUser.sql"/>
-			  <transaction>commit;</transaction>	
-			  <classpath>
-		        <fileset dir="${lib.dir}">
-		              <include name="*.jar"/>
-		          </fileset>
-		        </classpath> 
-			</sql>
-	
+
+		<antcall target="insertQueryMetadata" />
+
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle" delimiter="/" delimitertype="row">
+			<transaction src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql" />
+			<transaction src="${oracle.sql.dir}/DBUtility.sql" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${oracle.sql.dir}/CSM_InsertData_Oracle.sql" />
+			<transaction src="${oracle.sql.dir}/CSM_AddConstraints_Oracle.sql" />
+			<transaction src="${oracle.sql.dir}/createUser.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+
 	</target>
-	
+
 	<target name="insertQueryMetadata">
-		<sql
-			driver="${oracle.driver.string}"
-		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-			onerror="continue"
-			rdbms="oracle">
-			  <transaction  src="${oracle.sql.dir}/query/DisableConstraints.sql"/>
-			  <transaction  src="${oracle.sql.dir}/query/PopulateTable.sql"/>
-			  <transaction  src="${oracle.sql.dir}/query/enableCons.sql"/>
-			 <transaction  src="${oracle.sql.dir}/query/UpdateTable.sql"/>
-		  <transaction>commit;</transaction>	
-		  <classpath>
-	        <fileset dir="${lib.dir}">
-	              <include name="*.jar"/>
-	          </fileset>
-	        </classpath> 
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${oracle.sql.dir}/query/DisableConstraints.sql" />
+			<transaction src="${oracle.sql.dir}/query/PopulateTable.sql" />
+			<transaction src="${oracle.sql.dir}/query/enableCons.sql" />
+			<transaction src="${oracle.sql.dir}/query/UpdateTable.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 		</sql>
-		<sql
-			driver="${oracle.driver.string}"
-		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-			onerror="continue"
-			rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction>
 			DROP SEQUENCE DE_ATTR_REC_SEQ ;                              
 			DROP SEQUENCE DE_COLL_ATTR_REC_VALUES_SEQ ;        
@@ -686,40 +623,30 @@
 			DROP SEQUENCE DYEXTN_TAGGED_VALUE_SEQ ;            
 			DROP SEQUENCE DYEXTN_VALUE_DOMAIN_SEQ ;            
 			DROP SEQUENCE DYEXTN_VIEW_SEQ ;
-			</transaction>	
-		  <transaction>commit;</transaction>	
-		  <classpath>
-	        <fileset dir="${lib.dir}">
-	              <include name="*.jar"/>
-	          </fileset>
-	        </classpath> 
-		</sql>			
-		<sql
-			driver="${oracle.driver.string}"
-		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-		    userid="${database.username}"
-		    password="${database.password}" 
-			onerror="continue"
-			delimiter="/"
-		    delimitertype="row"
-		    keepformat="yes"
-			rdbms="oracle">
-		 	<classpath>
-		       	<fileset dir="${lib.dir}">
-		              <include name="*.jar"/>
-		    	</fileset>
-	        </classpath> 
-			<transaction  src="${oracle.sql.dir}/query/createDESequence.SQL"/>
+			</transaction>
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<transaction src="${oracle.sql.dir}/query/createDESequence.SQL" />
 		</sql>
 	</target>
-	
+
 	<target name="send_mail">
-		<echo message="Sending mail to: ${email.administrative.emailAddress}"/>
-		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}"/>
-		<mail mailhost="${email.mailServer}" subject="caTissue Core Successfully Deployed" encoding="plain"
-			failonerror="false">
-			<from address="${email.sendEmailFrom.emailAddress}"/>
-			<to address="${email.administrative.emailAddress}"/>
+		<echo message="Sending mail to: ${email.administrative.emailAddress}" />
+		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}" />
+		<mail mailhost="${email.mailServer}" subject="caTissue Core Successfully Deployed" encoding="plain" failonerror="false">
+			<from address="${email.sendEmailFrom.emailAddress}" />
+			<to address="${email.administrative.emailAddress}" />
 			<message>
 Dear caTissue Core Administrator,
 	
@@ -745,166 +672,166 @@ Thanking You,
 			If the Deployment mail is not received please check your 
 			email.administrative.emailAddress and email.sendEmailFrom.emailAddress 
 			properties in caTissueInstall.properties and Re-deploy the Application.
-		</echo>	
+		</echo>
 	</target>
-	
+
 	<!--First User Creation. Mandar : 02-May-2006 -->
-		<target name="firstUser">
+	<target name="firstUser">
 		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>		
+			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="mysqlFirstUser"/>
+				<antcall target="mysqlFirstUser" />
 			</then>
-			<elseif>	
-				<equals arg1="oracle" arg2="${database.type}"/>		
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="oracleFirstUser"/>
+					<antcall target="oracleFirstUser" />
 				</then>
 			</elseif>
 		</if>
 	</target>
 	<target name="oracleFirstUser">
-		<echo message="Encoding Password..."/>
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-	
+		<echo message="Encoding Password..." />
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+
 		<java classname="edu.wustl.common.util.global.PasswordManager" fork="true">
 			<classpath>
-				<pathelement path="${temp.dir}/catissuecore/WEB-INF/lib"/>
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/lib/commonpackage.jar"/>
+				<pathelement path="${temp.dir}/catissuecore/WEB-INF/lib" />
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/lib/commonpackage.jar" />
 			</classpath>
-			<arg value="${base.dir}/catissuetmp.txt"/>
-			<arg value="${first.admin.password}"/>
+			<arg value="${base.dir}/catissuetmp.txt" />
+			<arg value="${first.admin.password}" />
 		</java>
-		
-		<property file="${base.dir}/catissuetmp.txt"/>
-			<echo>
+
+		<property file="${base.dir}/catissuetmp.txt" />
+		<echo>
 					Encoded Password ${first.admin.encodedPassword}
 			</echo>
 
-		<echo message="Modifying caTISSUECore SQL file for user information..."/>
-			<copy file="${oracle.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
+		<echo message="Modifying caTISSUECore SQL file for user information..." />
+		<copy file="${oracle.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true" />
 
-			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
-				<include name="createUser.sql"/>
-				<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
-				<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
-				<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}"/>
-				<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
-				<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
-			</replace>
-			
-			<copy todir="${oracle.sql.dir}" overwrite="true">
-				<fileset dir="${temp.dir}">
-					<include name="createUser.sql"/>
-				</fileset>
-			</copy>	
-		<delete dir="${temp.dir}"/>
+		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
+			<include name="createUser.sql" />
+			<replacefilter token="@@first.admin.department@@" value="${first.admin.department}" />
+			<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}" />
+			<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}" />
+			<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}" />
+			<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}" />
+		</replace>
+
+		<copy todir="${oracle.sql.dir}" overwrite="true">
+			<fileset dir="${temp.dir}">
+				<include name="createUser.sql" />
+			</fileset>
+		</copy>
+		<delete dir="${temp.dir}" />
 	</target>
 	<target name="mysqlFirstUser">
-		<echo message="Encoding Password..."/>
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-	
+		<echo message="Encoding Password..." />
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+
 		<java classname="edu.wustl.common.util.global.PasswordManager" fork="true">
 			<classpath>
-				<pathelement path="${temp.dir}/catissuecore/WEB-INF/lib"/>
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/lib/commonpackage.jar"/>
+				<pathelement path="${temp.dir}/catissuecore/WEB-INF/lib" />
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/lib/commonpackage.jar" />
 			</classpath>
-			<arg value="${base.dir}/catissuetmp.txt"/>
-			<arg value="${first.admin.password}"/>
+			<arg value="${base.dir}/catissuetmp.txt" />
+			<arg value="${first.admin.password}" />
 		</java>
-		
-		<property file="${base.dir}/catissuetmp.txt"/>
-			<echo>
+
+		<property file="${base.dir}/catissuetmp.txt" />
+		<echo>
 					Encoded Password ${first.admin.encodedPassword}
 			</echo>
 
-		<echo message="Modifying caTISSUECore SQL file for user information..."/>
-		<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
+		<echo message="Modifying caTISSUECore SQL file for user information..." />
+		<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true" />
 
-			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
-				<include name="createUser.sql"/>
-				<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
-				<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
-				<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}"/>
-				<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
-				<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
-			</replace>
-			
-			<copy todir="${common.sql.dir}" overwrite="true">
-				<fileset dir="${temp.dir}">
-					<include name="createUser.sql"/>
-				</fileset>
-			</copy>	
-		<delete dir="${temp.dir}"/>
+		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
+			<include name="createUser.sql" />
+			<replacefilter token="@@first.admin.department@@" value="${first.admin.department}" />
+			<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}" />
+			<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}" />
+			<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}" />
+			<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}" />
+		</replace>
+
+		<copy todir="${common.sql.dir}" overwrite="true">
+			<fileset dir="${temp.dir}">
+				<include name="createUser.sql" />
+			</fileset>
+		</copy>
+		<delete dir="${temp.dir}" />
 	</target>
-	
+
 	<!-- Configure titli.properties according to properties in caTissueInstall.properties and other set properties -->
 	<target name="configure_titli">
-		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
-			<include name="titli.properties"/>
-			<replacefilter token="@@username@@" value="${database.username}"/>
-			<replacefilter token="@@password@@" value="${database.password}"/>
-			<replacefilter token="@@titliindexlocation@@" value="${jboss.home.dir}/server/default/catissuecore-properties/titli-index"/>
-			<replacefilter token="@@databasename@@" value="${database.name}"/>
-			<replacefilter token="@@databasetype@@" value="${database.type}"/>
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+			<include name="titli.properties" />
+			<replacefilter token="@@username@@" value="${database.username}" />
+			<replacefilter token="@@password@@" value="${database.password}" />
+			<replacefilter token="@@titliindexlocation@@" value="${jboss.home.dir}/server/default/catissuecore-properties/titli-index" />
+			<replacefilter token="@@databasename@@" value="${database.name}" />
+			<replacefilter token="@@databasetype@@" value="${database.type}" />
 		</replace>
 		<!-- conditional configuration of database url and driver names -->
 		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>		
+			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
-					<include name="titli.properties"/>
-					<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}"/>
-					<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+					<include name="titli.properties" />
+					<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}" />
+					<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 				</replace>
-				<echo message="${database.type} ${database.name}"/>
+				<echo message="${database.type} ${database.name}" />
 			</then>
-			<elseif>	
-				<equals arg1="oracle" arg2="${database.type}"/>		
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
-						<include name="titli.properties"/>
-						<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
-						<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}"/>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
+						<include name="titli.properties" />
+						<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+						<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}" />
 					</replace>
-					<echo message="${database.type} ${database.name}"/>
+					<echo message="${database.type} ${database.name}" />
 				</then>
 			</elseif>
 		</if>
 	</target>
-	
+
 	<target name="assertforcaties">
 		<if>
-			<equals arg1="" arg2="${caties.installation.dir}"/>
+			<equals arg1="" arg2="${caties.installation.dir}" />
 			<then>
-				<fail message="The property 'caties.installation.dir' can not be empty"/>
+				<fail message="The property 'caties.installation.dir' can not be empty" />
 			</then>
 		</if>
 		<if>
-			<equals arg1="" arg2="${collectionProtocol.title}"/>
+			<equals arg1="" arg2="${collectionProtocol.title}" />
 			<then>
-				<fail message="The property 'collectionProtocol.title' can not be empty"/>
+				<fail message="The property 'collectionProtocol.title' can not be empty" />
 			</then>
 		</if>
 	</target>
 
 	<!--Target call for Deployment of caTIES -->
-	<target name="deploy_caties" >
-		<antcall target="assertforcaties"/>
-		<antcall target="deploy_caties_internal"/>
+	<target name="deploy_caties">
+		<antcall target="assertforcaties" />
+		<antcall target="deploy_caties_internal" />
 		<delete dir="${temp.dir}" />
 	</target>
-	
-	<target name="deploy_caties_with_cp" >
-		<antcall target="assertforcaties"/>
-		<antcall target="deploy_caties_internal"/>
+
+	<target name="deploy_caties_with_cp">
+		<antcall target="assertforcaties" />
+		<antcall target="deploy_caties_internal" />
 		<delete dir="${temp.dir}" />
-		<antcall target="insert_default_cp"/>
+		<antcall target="insert_default_cp" />
 	</target>
-		
-		
-	<target name="deploy_caties_internal" >
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+
+
+	<target name="deploy_caties_internal">
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
 		<copy todir="${caties.installation.dir}/classes">
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/classes" />
 		</copy>
@@ -912,184 +839,236 @@ Thanking You,
 			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
 		<replace file="${caties.installation.dir}/catissuecore-properties/ApplicationSecurityConfig.xml" propertyfile="${basedir}/caTissueInstall.properties">
-			<replacefilter token="@@hibernate-config-file@@" value="./catissuecore-properties/catissuecore.hibernate.cfg.xml"/>	
+			<replacefilter token="@@hibernate-config-file@@" value="./catissuecore-properties/catissuecore.hibernate.cfg.xml" />
 		</replace>
-		<copy file="${base.dir}/caTIES_conf/hibernate.cfg.xml" todir="${caties.installation.dir}/classes" overwrite="true"/>
-		<copy file="${base.dir}/caTIES_conf/dbutil.properties" todir="${caties.installation.dir}/classes" overwrite="true"/>
-		<copy file="${base.dir}/caTIES_conf/catissuecore.hibernate.cfg.xml" todir="${caties.installation.dir}/catissuecore-properties" overwrite="true"/>
+		<copy file="${base.dir}/caTIES_conf/hibernate.cfg.xml" todir="${caties.installation.dir}/classes" overwrite="true" />
+		<copy file="${base.dir}/caTIES_conf/dbutil.properties" todir="${caties.installation.dir}/classes" overwrite="true" />
+		<copy file="${base.dir}/caTIES_conf/catissuecore.hibernate.cfg.xml" todir="${caties.installation.dir}/catissuecore-properties" overwrite="true" />
 		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>
+			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
 				<replace dir="${caties.installation.dir}" propertyfile="${basedir}/caTissueInstall.properties">
 					<include name="**/*.cfg.xml" />
 					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 				</replace>
 			</then>
-		<elseif>
-			<equals arg1="oracle" arg2="${database.type}"/>
-			<then>
-				<replace dir="${caties.installation.dir}" propertyfile="${basedir}/caTissueInstall.properties">
-					<include name="**/*.cfg.xml" />
-					<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}"/>
-					<replacefilter token="com.mysql.jdbc.Driver" value="${oracle.driver.string}"/>
-					<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-				</replace>
-			</then>
-		</elseif>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace dir="${caties.installation.dir}" propertyfile="${basedir}/caTissueInstall.properties">
+						<include name="**/*.cfg.xml" />
+						<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
+						<replacefilter token="com.mysql.jdbc.Driver" value="${oracle.driver.string}" />
+						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					</replace>
+				</then>
+			</elseif>
 		</if>
 		<replace dir="${caties.installation.dir}" propertyfile="${basedir}/caTissueInstall.properties">
 			<include name="**/*.cfg.xml" />
-			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
-			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}"/>
-			<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>
+			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+			<replacefilter token="@@DATABASE_NAME@@" value="${database.name}" />
 		</replace>
-		<jar destfile="${caties.installation.dir}/caties.jar" basedir="${caties.installation.dir}/classes" />	
+		<jar destfile="${caties.installation.dir}/caties.jar" basedir="${caties.installation.dir}/classes" />
 		<delete dir="${caties.installation.dir}/classes" />
 		<copy todir="${caties.installation.dir}/lib">
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
 		</copy>
-		<copy file="${basedir}/caTissueCore_caCORE_Client/lib/catissuecore-client.jar" todir="${caties.installation.dir}/lib" /> 
-		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>	
-		<copy file="${temp.dir}/catissuecore/CDEConfig.xml" todir="${caties.installation.dir}" overwrite="true"/>
-		<copy file="Dataset.dtd" todir="${caties.installation.dir}" overwrite="true"/>
-		<copy file="JniDeID.dll" todir="${caties.installation.dir}" overwrite="true"/>
-		<copy file="${basedir}/caTIES_conf/build.xml" todir="${caties.installation.dir}" overwrite="true"/>
-		<copy file="${basedir}/caTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>	
-		<copy file="${basedir}/caTIES_conf/deid.cfg" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>
-		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>	
-		<copy file="${basedir}/caTIES_conf/SectionHeaderConfig.txt" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>
-		<copy file="${base.dir}/caTissueCore_caCORE_Client/conf/remoteService.xml" todir="${caties.installation.dir}/caTIES_conf" overwrite="true"/>
-		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${caties.installation.dir}" overwrite="true"/>
-		<replace file="${caties.installation.dir}/caTIES_conf/caTIES.properties"> 
-			<replacefilter token="@@COLL_PROT_TITLE@@" value="${collectionProtocol.title}"/>
-			<replacefilter token="@@ADMIN_EMAIL@@" value="${first.admin.emailAddress}"/>
-			<replacefilter token="@@ADMIN_PASSWORD@@" value="${first.admin.password}"/>
+		<copy file="${basedir}/caTissueCore_caCORE_Client/lib/catissuecore-client.jar" todir="${caties.installation.dir}/lib" />
+		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${temp.dir}/catissuecore/CDEConfig.xml" todir="${caties.installation.dir}" overwrite="true" />
+		<copy file="Dataset.dtd" todir="${caties.installation.dir}" overwrite="true" />
+		<copy file="JniDeID.dll" todir="${caties.installation.dir}" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/build.xml" todir="${caties.installation.dir}" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/deid.cfg" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/SectionHeaderConfig.txt" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${base.dir}/caTissueCore_caCORE_Client/conf/remoteService.xml" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${caties.installation.dir}" overwrite="true" />
+		<replace file="${caties.installation.dir}/caTIES_conf/caTIES.properties">
+			<replacefilter token="@@COLL_PROT_TITLE@@" value="${collectionProtocol.title}" />
+			<replacefilter token="@@ADMIN_EMAIL@@" value="${first.admin.emailAddress}" />
+			<replacefilter token="@@ADMIN_PASSWORD@@" value="${first.admin.password}" />
 		</replace>
 	</target>
-	
+
 	<target name="insert_default_cp">
 		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>
+			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<replace file="${mysql.sql.dir}/insertCP_mysql.sql"> 
-					<replacefilter token="@@COLL_PROT_TITLE@@" 
-					  	value="${collectionProtocol.title}"/>
+				<replace file="${mysql.sql.dir}/insertCP_mysql.sql">
+					<replacefilter token="@@COLL_PROT_TITLE@@" value="${collectionProtocol.title}" />
 				</replace>
-				<antcall target="insertCP_mysql"/>
+				<antcall target="insertCP_mysql" />
 			</then>
 			<elseif>
-				<equals arg1="oracle" arg2="${database.type}"/>
+				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<replace file="${oracle.sql.dir}/insertCP_oracle.sql"> 
-						<replacefilter token="@@COLL_PROT_TITLE@@" 
-						  	value="${collectionProtocol.title}"/>
+					<replace file="${oracle.sql.dir}/insertCP_oracle.sql">
+						<replacefilter token="@@COLL_PROT_TITLE@@" value="${collectionProtocol.title}" />
 					</replace>
-					<antcall target="insertCP_oracle"/>
+					<antcall target="insertCP_oracle" />
 				</then>
 			</elseif>
 		</if>
 	</target>
-	
+
 	<target name="insertCP_mysql">
-		<echo message="Inserting default CP in MySQL Database for caTIES"/>
-		<sql
-			driver="${mysql.driver.string}"
-			url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
-			userid="${database.username}"
-			password="${database.password}" 
-			onerror="continue">
-			<transaction  src="${mysql.sql.dir}/insertCP_mysql.sql"/>
+		<echo message="Inserting default CP in MySQL Database for caTIES" />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+			<transaction src="${mysql.sql.dir}/insertCP_mysql.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
-					<include name="*.jar"/>
+					<include name="*.jar" />
 				</fileset>
-			</classpath> 
+			</classpath>
 		</sql>
 	</target>
-	
+
 	<target name="insertCP_oracle">
-		<echo message="Inserting default CP in ORACLE Database for caTIES"/>
-		<sql 
-			driver="${oracle.driver.string}"
-			url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-			userid="${database.username}"
-			password="${database.password}" 
-			onerror="continue"			
-			rdbms="oracle">	
-			<transaction  src="${oracle.sql.dir}/insertCP_oracle.sql"/>
-			<transaction>commit;</transaction>	
-			<classpath >
+		<echo message="Inserting default CP in ORACLE Database for caTIES" />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${oracle.sql.dir}/insertCP_oracle.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
 				<fileset dir="${lib.dir}">
-					<include name="*.jar"/>
+					<include name="*.jar" />
 				</fileset>
-			</classpath> 
-		</sql>	
+			</classpath>
+		</sql>
 	</target>
-	
+
 	<property name="filename" value="" />
 	<property name="hookentity" value="" />
 	<property name="condition" value="" />
 	<property name="package" value="" />
-		
-	<target name="import_xmi">	
+
+	<target name="import_xmi">
 		<delete quiet="true" includeemptydirs="true">
 			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />					
+				<include name="**/*" />
 			</fileset>
 		</delete>
-				
-				<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>		
 
-				<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
-				<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
-						
-				<if>
-					<equals arg1="mysql" arg2="${database.type}"/>
-					<then>
-						<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-							<include name="*.cfg.xml" />
-							<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}"/>
-							<replacefilter token="@@DRIVER@@" value="${mysql.driver.string}"/>
-							<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
-						</replace>
-					</then>
-				<elseif>
-					<equals arg1="oracle" arg2="${database.type}"/>
-					<then>							
-						<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-							<include name="*.cfg.xml" />
-							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}"/>
-							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}"/>
-							<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-						</replace>
-					</then>
-				</elseif>
-				</if>
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+
+		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
 				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 					<include name="*.cfg.xml" />
-					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
-					<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}"/>
-					<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>
+					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+					<replacefilter token="@@DRIVER@@" value="${mysql.driver.string}" />
+					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
 				</replace>
-		
-			<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true">
-				<arg value="${filename}"/>
-				<arg value="${hookentity}"/>
-				<arg value="${condition}"/>
-				<arg value="${package}"/>
-				<classpath>
-		           <pathelement location="${temp.dir}/catissuecore/WEB-INF/classes"/> 
-	            	<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
-	                  <include name="*.jar"/>
-	            		<exclude name="uml-1.3.jar"/>
-	              </fileset>					
-	            </classpath> 			
-			</java>		
-		
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+						<include name="*.cfg.xml" />
+						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					</replace>
+				</then>
+			</elseif>
+		</if>
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+			<include name="*.cfg.xml" />
+			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+			<!--<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>  -->
+		</replace>
+
+		<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true">
+			<arg value="${filename}" />
+			<arg value="${hookentity}" />
+			<arg value="${condition}" />
+			<arg value="${package}" />
+			<classpath>
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+				<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+					<include name="*.jar" />
+					<exclude name="uml-1.3.jar" />
+				</fileset>
+			</classpath>
+		</java>
+
 		<delete includeemptydirs="true">
 			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />					
+				<include name="**/*" />
+			</fileset>
+		</delete>
+	</target>
+
+
+	<property name="groupname" value="" />
+	<property name="version" value="" />
+	<target name="export_xmi">
+		<delete quiet="true" includeemptydirs="true">
+			<fileset dir="${temp.dir}/catissuecore">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+
+		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+					<replacefilter token="@@DRIVER@@" value="${mysql.driver.string}" />
+					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+				</replace>
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+						<include name="*.cfg.xml" />
+						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					</replace>
+				</then>
+			</elseif>
+		</if>
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+			<include name="*.cfg.xml" />
+			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+			<!--<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>  -->
+		</replace>
+
+		<java classname="edu.wustl.catissuecore.annotations.xmi.XMIExporter" fork="true">
+			<arg value="${groupname}" />
+			<arg value="${filename}" />
+			<arg value="${version}" />
+			<classpath>
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+				<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+					<include name="*.jar" />
+					<exclude name="uml-1.3.jar" />
+					<exclude name="commons-lang-1.0.1.jar" />
+				</fileset>
+			</classpath>
+		</java>
+
+		<delete includeemptydirs="true">
+			<fileset dir="${temp.dir}/catissuecore">
+				<include name="**/*" />
 			</fileset>
 		</delete>
 	</target>

@@ -3,48 +3,142 @@
 <!--Ant Script for create Build for caTISSUE Core-->
 
 <project name="catissue_de_integration_client" default="compile">
-	
-	<!--define require dir and Properties -->	
-	<property name="base.dir" value="."/>	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location=".././lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+	<!--define require dir and Properties -->
+	<property name="base.dir" value="." />
 	<property name="conf.dir" value="conf" />
 	<property name="lib.dir" value="lib" />
 	<property name="src.dir" value="." />
+	<property name="oracle.dialect.string" value="net.sf.hibernate.dialect.Oracle9Dialect" />
+	<property name="mysql.dialect.string" value="net.sf.hibernate.dialect.MySQLDialect" />
+
+
+
+	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
+	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
+
 
 	<path id="cp">
 		<fileset dir="lib">
-			<include name="**/*.jar"/>
+			<include name="**/*.jar" />
 		</fileset>
-		<pathelement path="${conf.dir}"/>
+		<pathelement path="${conf.dir}" />
 	</path>
-    
-	
+
+
 	<path id="app.classpath">
 		<fileset dir="${base.dir}">
-			<include name="*.jar"/>
+			<include name="*.jar" />
 		</fileset>
 	</path>
-	
-    <!-- Compile all files, generated and hand-written -->
-    <target name="compile">
-        <javac destdir="${base.dir}" includes="**/*.*" includeAntRuntime="false">
-            <src path="${base.dir}"/>
-            <classpath>
-       		  <fileset dir="lib">
-        			<include name="**/*.jar"/>
-        	  </fileset>
-            </classpath>
-        </javac>
-    </target>
-		
-	<!-- run TestClient java file -->
-	<target name="runDemo" depends="compile">		
-		<java classname="ClientDemo" fork="true">
-			<classpath refid="cp"/>
+
+	<!-- Compile all files, generated and hand-written -->
+	<target name="compile">
+		<javac destdir="${base.dir}" includes="**/*.*" includeAntRuntime="false">
+			<src path="${base.dir}" />
 			<classpath>
-				<pathelement location="${src.dir}"/>
+				<fileset dir="lib">
+					<include name="**/*.jar" />
+				</fileset>
 			</classpath>
-			<sysproperty key="log4j.configuration"
-						value="${conf.dir}/client_log4j.properties"/>
+		</javac>
+	</target>
+
+
+	<property name="unzip.dir" value="../${base.dir}" />
+	<property file="${unzip.dir}/caTissueInstall.properties" />
+
+
+
+
+
+
+	<!-- run TestClient java file -->
+	<target name="runDemo" depends="compile">
+
+		<unjar src="${lib.dir}/DynamicExtensions.jar" dest="${base.dir}/temp/DynamicExtensions" />
+
+		<copy file="${unzip.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${base.dir}/temp/DynamicExtensions" overwrite="true" />
+
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace dir="${base.dir}/temp/DynamicExtensions">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+					<replacefilter token="@@DRIVER@@" value="${mysql.driver.string}" />
+					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+				</replace>
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace dir="${base.dir}/temp/DynamicExtensions">
+						<include name="*.cfg.xml" />
+						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					</replace>
+				</then>
+			</elseif>
+		</if>
+		<replace dir="${base.dir}/temp/DynamicExtensions">
+			<include name="*.cfg.xml" />
+			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+
+		</replace>
+
+		<jar destfile="${lib.dir}/DynamicExtensions.jar" basedir="${base.dir}/temp/DynamicExtensions" />
+		<delete dir="${base.dir}/temp/DynamicExtensions" />
+
+		<java classname="ClientDemo" fork="true">
+			<classpath refid="cp" />
+			<classpath>
+				<pathelement location="${src.dir}" />
+			</classpath>
+			<sysproperty key="log4j.configuration" value="${conf.dir}/client_log4j.properties" />
 		</java>
-	</target>	
+	</target>
+
+	<target name="copyDeIntegrationWar">
+		<unwar src="${unzip.dir}/deintegration.war" dest="${base.dir}/temp/deintegration" />
+		<copy file="${unzip.dir}/DE_conf/hibernate.properties" todir="${base.dir}/temp/deintegration/WEB-INF/classes" overwrite="true" />
+
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace dir="${base.dir}/temp/deintegration/WEB-INF/classes">
+					<include name="hibernate.properties" />
+					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+				</replace>
+			</then>
+		</if>
+		<replace dir="${base.dir}/temp/deintegration/WEB-INF/classes">
+			<include name="hibernate.properties" />
+			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+
+		</replace>
+
+		<war destfile="${base.dir}/temp/deintegration.war" webxml="${base.dir}/temp/deintegration/WEB-INF/web.xml">
+			<fileset dir="${base.dir}/temp/deintegration">
+				<include name="**/**/**.*" />
+			</fileset>
+		</war>
+
+		<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/temp/deintegration.war" overwrite="true" />
+
+		<delete includeemptydirs="true">
+			<fileset dir="${base.dir}/temp">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+
+		<delete file="${base.dir}/temp/deintegration.war" />
+	</target>
 </project>
