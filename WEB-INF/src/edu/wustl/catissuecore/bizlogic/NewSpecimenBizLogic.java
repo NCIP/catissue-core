@@ -524,10 +524,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			    specimen.setLineage(Constants.NEW_SPECIMEN);
 			}
 			//Setting the created on date = collection date if lineage = NEW_SPECIMEN
-			if(specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
-			{
+			
 					setCreatedOnDate(specimen);
-			}
+			
 			
 			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
 			
@@ -1763,6 +1762,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				}
 			}
 		}
+		
+	/*	if (operation.equals(Constants.EDIT))
+		{
+			if (!specimen.getAvailable().booleanValue())
+			{
+				throw new DAOException(ApplicationProperties.getValue("specimen.available.operation"));
+			}
+		}*/
 
 		if (operation.equals(Constants.ADD))
 		{
