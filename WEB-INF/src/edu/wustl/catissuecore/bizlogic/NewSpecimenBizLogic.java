@@ -535,7 +535,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			//Setting the created on date = collection date if lineage = NEW_SPECIMEN
 			
-					setCreatedOnDate(specimen);
+			setCreatedOnDate(specimen);
 			
 			
 			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
