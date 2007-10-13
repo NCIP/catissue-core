@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 
 public class ViewSpecimenSummaryAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,

@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.AbstractDAO;
@@ -41,8 +42,8 @@ public class MultipleSpecimenViewAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
-		SpecimenCollectionGroupForm specimenCollectionGroupForm=
-			(SpecimenCollectionGroupForm)form;
+		ViewSpecimenSummaryForm summaryForm=
+			(ViewSpecimenSummaryForm)form;
 
 		HttpSession session = request.getSession();
 		try{
@@ -61,7 +62,9 @@ public class MultipleSpecimenViewAction extends BaseAction
 			session
 			.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);
 		
-			
+			summaryForm.setShowCheckBoxes(false);
+			summaryForm.setShowbarCode(Variables.isSpecimenBarcodeGeneratorAvl);
+			summaryForm.setShowLabel(Variables.isSpecimenLabelGeneratorAvl);			
 			request.setAttribute("RequestType","");
 //			if(pageOf != null)
 //				return mapping.findForward(pageOf);

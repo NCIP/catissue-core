@@ -43,6 +43,12 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	private String containerMap;
 	private String targetSuccess;
 	private String submitAction;
+	
+	private boolean showCheckBoxes = true;
+	private boolean showbarCode = true;
+	private boolean showLabel = true;
+
+	
 	private HashMap<String, String> titleMap = new HashMap<String, String>();
 	
 	private static String collectionProtocolStatus = "";
@@ -211,6 +217,24 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	}
 	public static void setCollectionProtocolStatus(String collectionProtocolStatus) {
 		ViewSpecimenSummaryForm.collectionProtocolStatus = collectionProtocolStatus;
+	}
+	public boolean getShowCheckBoxes() {
+		return showCheckBoxes;
+	}
+	public void setShowCheckBoxes(boolean showCheckBoxes) {
+		this.showCheckBoxes = showCheckBoxes;
+	}
+	public boolean getShowbarCode() {
+		return showbarCode;
+	}
+	public void setShowbarCode(boolean showbarCode) {
+		this.showbarCode = showbarCode;
+	}
+	public boolean getShowLabel() {
+		return showLabel;
+	}
+	public void setShowLabel(boolean showLabel) {
+		this.showLabel = showLabel;
 	}
 	
 }
