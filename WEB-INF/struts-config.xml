@@ -4501,7 +4501,7 @@ PUBLIC
        </action>    
 		<action path="/MultipleSpecimenView"
                 type="edu.wustl.catissuecore.action.MultipleSpecimenViewAction"
-                name="specimenCollectionGroupForm"
+                name="viewSpecimenSummaryForm"
                 validate="false"
                 scope="request">
 					<forward name="success" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=bulkUpdateSpecimens" />
