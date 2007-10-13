@@ -172,14 +172,19 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 								cellspacing="0" border="0" class="dataTable" >
 					<tr>
 						<th class="formSerialNumberLabelForTable" scope="col" > &nbsp </th>
-						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="specimen.label"/></th>
-						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.barcode"/></th>
+						<logic:equal name="viewSpecimenSummaryForm" property="showLabel" value="true">
+							<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="specimen.label"/></th>
+						</logic:equal>
+						<logic:equal name="viewSpecimenSummaryForm" property="showbarCode" value="true">
+							<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.barcode"/></th>
+						</logic:equal>
 						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.subType"/></th>
 						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Quantity"/></th>
 						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Concentration"/></th>
 						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/></th>
-						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Collected"/></th>
-						
+						<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+							<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Collected"/></th>
+						</logic:equal>
 					</tr>
 				
 				  <logic:iterate name="viewSpecimenSummaryForm" property="specimenList" id="specimen" indexId="counter">
@@ -191,14 +196,19 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 					<!--Editable Row -->	
 						<logic:equal name="specimen" property="readOnly" value="false">
 								<html:hidden name="specimen" indexed="true" property="readOnly"/>
-							<td class="dataCellText" > 
-							<html:text  styleClass="formFieldSized10" name="specimen" indexed="true" property="displayName" />
+							
+							<logic:equal name="viewSpecimenSummaryForm" property="showLabel" value="true">
+								<td class="dataCellText" > 
+								<html:text  styleClass="formFieldSized10" name="specimen" indexed="true" property="displayName" />
+								</td>
+							</logic:equal>
+							
+							<logic:equal name="viewSpecimenSummaryForm" property="showbarCode" value="true">
+								<td class="dataCellText"> 
+								<html:text   styleClass="formFieldSized10" name="specimen" indexed="true" property="barCode" />
+								</td>
+							</logic:equal>
 
-							</td>
-							<td class="dataCellText"> 
-							<html:text   styleClass="formFieldSized10" name="specimen" indexed="true" property="barCode" />
-
-							</td>
 							<td class="dataCellText"> 
 							<bean:write name="specimen" property="type" />
 							<html:hidden name="specimen" indexed="true" property="type" />
@@ -254,11 +264,11 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 									</td>
 
 							</logic:notEqual>												
-							
-							<td class="dataCellText">
-								<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" />					
-							</td>
-
+							<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+								<td class="dataCellText">
+									<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" />					
+								</td>
+							</logic:equal>
 						</logic:equal>
 					<!--/Editable Row -->
 
@@ -300,11 +310,13 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 										<bean:write  name="specimen" property="positionDimensionOne" />,
 										<bean:write name="specimen" property="positionDimensionTwo" />
 									</span>
-							</logic:notEqual>												
-							<td class="dataCellText">
-								<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
-								<html:hidden name="specimen" indexed="true" property="checkedSpecimen" />					
-							</td>
+							</logic:notEqual>		
+							<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+								<td class="dataCellText">
+									<html:checkbox name="specimen" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
+									<html:hidden name="specimen" indexed="true" property="checkedSpecimen" />					
+								</td>
+							</logic:equal>
 							</td>
 						</logic:equal>					
 					<!--/Readonly Row -->
@@ -355,34 +367,46 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			
 
 				<tr>	
-					<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Parent"/></th>
-						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="specimen.label"/></th>
-						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.barcode"/></th>
+						<logic:equal name="viewSpecimenSummaryForm" property="showLabel" value="true">
+							<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Parent"/> </th>				
+							<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="specimen.label"/></th>
+						</logic:equal>
+						<logic:equal name="viewSpecimenSummaryForm" property="showbarCode" value="true">
+							<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.barcode"/></th>
+						</logic:equal>
 						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.subType"/></th>
 						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Quantity"/></th>
 						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Concentration"/></th>
 						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/></th>
-						<th class="formSerialNumberLabelForTable" scope="col">
-						<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
-						<bean:message key="anticipatorySpecimen.Created"/></th>
+						<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+							<th class="formSerialNumberLabelForTable" scope="col">
+							<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
+							<bean:message key="anticipatorySpecimen.Created"/></th>
+						</logic:equal>
 					</tr>
 				  <logic:iterate name="viewSpecimenSummaryForm" property="aliquotList" id="aliquot" indexId="ctr">
 					<tr>
-
-						<td class="dataCellText"> <html:hidden  name="aliquot" indexed="true" property="parentName" />
-						<bean:write  name="aliquot" property="parentName" />
+						<logic:equal name="viewSpecimenSummaryForm" property="showLabel" value="true">
+							<td class="dataCellText"> <html:hidden  name="aliquot" indexed="true" property="parentName" />
+							<bean:write  name="aliquot" property="parentName" />
+						</logic:equal>
 						<html:hidden name="aliquot" indexed="true" property="uniqueIdentifier" /></td>
 					<!--Editable Row -->	
 						<logic:equal name="aliquot" property="readOnly" value="false">
 								<html:hidden name="aliquot" indexed="true" property="readOnly"/>
-							<td class="dataCellText" > 
-							<html:text  styleClass="formFieldSized10" name="aliquot" indexed="true" property="displayName" />
+							
+							<logic:equal name="viewSpecimenSummaryForm" property="showLabel" value="true">
+								<td class="dataCellText" > 
+								<html:text  styleClass="formFieldSized10" name="aliquot" indexed="true" property="displayName" />
+								</td>
+							</logic:equal>
+							
+							<logic:equal name="viewSpecimenSummaryForm" property="showbarCode" value="true">
+								<td class="dataCellText"> 
+								<html:text   styleClass="formFieldSized10" name="aliquot" indexed="true" property="barCode" />
+								</td>
+							</logic:equal>
 
-							</td>
-							<td class="dataCellText"> 
-							<html:text   styleClass="formFieldSized10" name="aliquot" indexed="true" property="barCode" />
-
-							</td>
 							<td class="dataCellText"> 
 							<bean:write name="aliquot" property="type" />
 							<html:hidden name="aliquot" indexed="true" property="type" />
@@ -439,10 +463,12 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 
 							</logic:notEqual>												
 							
-							<td class="dataCellText">
-								<html:checkbox name="aliquot" styleId="aliquotId"
-								indexed="true" property="checkedSpecimen" />					
-							</td>
+							<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+								<td class="dataCellText">
+									<html:checkbox name="aliquot" styleId="aliquotId"
+									indexed="true" property="checkedSpecimen" />					
+								</td>
+							</logic:equal>
 
 						</logic:equal>
 					<!--/Editable Row -->
@@ -487,11 +513,14 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 									<html:hidden name="aliquot" property="containerId" />
 
 									</span>
-							</logic:notEqual>												
-							<td class="dataCellText">
-								<html:checkbox name="aliquot" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
-								<html:hidden name="aliquot" indexed="true" property="checkedSpecimen" />					
-							</td>
+							</logic:notEqual>	
+
+							<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+								<td class="dataCellText">
+									<html:checkbox name="aliquot" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
+									<html:hidden name="aliquot" indexed="true" property="checkedSpecimen" />					
+								</td>
+							</logic:equal>
 							</td>
 						</logic:equal>					
 					<!--/Readonly Row -->
@@ -514,38 +543,50 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						cellspacing="0" border="0" class="dataTable" >
 			
 			<tr>
-				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Parent"/> </th>
-				<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="specimen.label"/></th>
-				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.barcode"/></th>
+				<logic:equal name="viewSpecimenSummaryForm" property="showLabel" value="true">
+					<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Parent"/> </th>				
+					<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="specimen.label"/></th>
+				</logic:equal>
+				<logic:equal name="viewSpecimenSummaryForm" property="showbarCode" value="true">
+					<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.barcode"/></th>
+				</logic:equal>
 				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.subType"/></th>
 				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Quantity"/></th>
 				<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Concentration"/></th>
 				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/></th>
-				<th class="formSerialNumberLabelForTable" scope="col">
-				<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
-				<bean:message key="anticipatorySpecimen.Created"/></th>
+				<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+					<th class="formSerialNumberLabelForTable" scope="col">
+					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
+					<bean:message key="anticipatorySpecimen.Created"/></th>
+				</logic:equal>
 			</tr>
 
 			  
 			  <logic:iterate name="viewSpecimenSummaryForm" property="derivedList" id="derived" indexId="count">
 					<html:hidden indexed="true" name="derived" property="uniqueIdentifier" />
 					<tr>
+						<logic:equal name="viewSpecimenSummaryForm" property="showLabel" value="true">
 							<td class="dataCellText" > 
 							<html:hidden name="derived" indexed="true" property="parentName" />
 							<bean:write name="derived" property="parentName" />
 							</td>
+						</logic:equal>
+
 					<!--Editable Row -->	
 						<logic:equal name="derived" property="readOnly" value="false">
-								<html:hidden name="derived" indexed="true" property="readOnly"/>
-							<td class="dataCellText" > 
-							<html:text  styleClass="formFieldSized10" name="derived" indexed="true" property="displayName" />
+							<html:hidden name="derived" indexed="true" property="readOnly"/>
 
-							</td>
+							<logic:equal name="viewSpecimenSummaryForm" property="showLabel" value="true">
+								<td class="dataCellText" > 
+									<html:text  styleClass="formFieldSized10" name="derived" indexed="true" property="displayName" />
+								</td>
+							</logic:equal>
+							<logic:equal name="viewSpecimenSummaryForm" property="showbarCode" value="true">
+								<td class="dataCellText"> 
+								<html:text styleClass="formFieldSized10" name="derived" indexed="true" property="barCode" />
+								</td>
+							</logic:equal>
 
-							<td class="dataCellText"> 
-							<html:text styleClass="formFieldSized10" name="derived" indexed="true" property="barCode" />
-
-							</td>
 							<td class="dataCellText"> 
 							<bean:write name="derived" property="type" />
 							<html:hidden name="derived" indexed="true" property="type" />
@@ -600,12 +641,14 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 									</table>
 									</td>
 
-							</logic:notEqual>												
+							</logic:notEqual>	
 							
-							<td class="dataCellText">
-								<html:checkbox name="derived" indexed="true" 
-								styleId="deriveId" property="checkedSpecimen" />					
-							</td>
+							<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+								<td class="dataCellText">
+									<html:checkbox name="derived" indexed="true" 
+									styleId="deriveId" property="checkedSpecimen" />					
+								</td>
+							</logic:equal>
 
 						</logic:equal>
 					<!--/Editable Row -->
@@ -650,11 +693,14 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 										<bean:write  name="derived" property="positionDimensionOne" />,
 										<bean:write name="derived" property="positionDimensionTwo" />
 									</span>
-							</logic:notEqual>												
-							<td class="dataCellText">
-								<html:checkbox name="derived" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
-								<html:hidden name="derived" indexed="true" property="checkedSpecimen" />					
-							</td>
+							</logic:notEqual>									
+							
+							<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
+								<td class="dataCellText">
+									<html:checkbox name="derived" indexed="true" property="checkedSpecimen" disabled="true" value="true"/>
+									<html:hidden name="derived" indexed="true" property="checkedSpecimen" />					
+								</td>
+							</logic:equal>
 							</td>
 						</logic:equal>					
 					<!--/Readonly Row -->
