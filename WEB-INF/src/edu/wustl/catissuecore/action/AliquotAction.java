@@ -533,7 +533,10 @@ public class AliquotAction extends SecureAction
 		if (specimenLabel == null || specimenLabel.trim().equals(""))
 		{
 			Map map = (Map) request.getAttribute("forwardToHashMap");
-			specimenLabel = Utility.toString(map.get(Constants.SPECIMEN_LABEL));
+			if(map != null)
+			{
+				specimenLabel = Utility.toString(map.get(Constants.SPECIMEN_LABEL));
+			}
 		}
 		// this code is used in case we come from Specimen page
 		if (specimenLabel != null)
