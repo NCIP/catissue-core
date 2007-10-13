@@ -1165,6 +1165,12 @@
 	<definition name=".catissuecore.annotationDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DefineAnnotations.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.DefineAnnotationsInformationPage" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/DefineAnnotationsInformationPage.jsp" />
+	</definition>
+	
+	
 	<definition name=".catissuecore.dynamicFormDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DynamicExtensionsHome.jsp" />
 	</definition>

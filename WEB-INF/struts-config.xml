@@ -4359,6 +4359,14 @@ PUBLIC
 			<forward name="success" path=".catissuecore.annotationDef"></forward>
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
+		
+		<action path="/DefineAnnotationsInformationPage"
+			type="edu.wustl.catissuecore.action.ForwardAction"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.DefineAnnotationsInformationPage"></forward>
+		</action>
+		
 		<action path="/BuildDynamicEntity"
 			type="edu.wustl.catissuecore.action.annotations.LoadDynamicExtensionsAction"
 			name="annotationForm"
