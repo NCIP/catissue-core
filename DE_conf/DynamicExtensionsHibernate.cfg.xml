@@ -12,7 +12,7 @@
 
 
        	<property name="dialect">@@DIALECT@@</property>	
-        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.driver_class">@@DRIVER@@</property>
         <property name="hibernate.query.substitutions">true 1,false 0</property>
 
  

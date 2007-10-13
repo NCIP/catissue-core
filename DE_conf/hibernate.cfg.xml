@@ -11,6 +11,7 @@
     	<property name="dialect">@@DIALECT@@</property>	
         <property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
+		<property name="connection.driver_class">@@DRIVER@@</property>
 	
 	 	<property name="connection.url">@@URL@@</property>
 	    <property name="connection.username">@@DATABASE_USERNAME@@</property>
