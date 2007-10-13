@@ -24,7 +24,9 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -211,34 +213,46 @@ public class OrderPathologyCaseAction extends BaseAction
 	{
 		// to get data from database when specimen id is given
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_PATHOLOGY_FORM_ID);
-
-				List pathologicalCaseList = new ArrayList();
-			//	retriving the id list from session.
-				if(request.getSession().getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
-				{
-					List idList = (List)request.getSession().getAttribute(Constants.PATHALOGICAL_CASE_ID);
-					String columnName="id";
-					for(int i=0;i<idList.size();i++)
-					{
-						List pathologicalListFromDb = bizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), columnName, (String)idList.get(i));
-						IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport)pathologicalListFromDb.get(0);
-						pathologicalCaseList.add(identifiedSurgicalPathologyReport);
-					}
-				}
+		List pathologicalCaseList = new ArrayList();
+		//retriving the id list from session.
+		String [] className = {IdentifiedSurgicalPathologyReport.class.getName(),DeidentifiedSurgicalPathologyReport.class.getName(),SurgicalPathologyReport.class.getName()};
+		int [] size = new int[3];
 		
-		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
-
-		//List pathologyCaseList = bizLogic.retrieve(sourceObjectName);
+		if(request.getSession().getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
+		{
+			size[0] = getList(request, Constants.PATHALOGICAL_CASE_ID , className[0], pathologicalCaseList, bizLogic);
+		}
+		if(request.getSession().getAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID) != null)
+		{
+			size[1] = size[0] + getList(request , Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID ,className[1], pathologicalCaseList, bizLogic);
+		}
+		if(request.getSession().getAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID) != null)
+		{
+			size[2] = size[1] + getList(request, Constants.SURGICAL_PATHALOGY_CASE_ID , className[2], pathologicalCaseList, bizLogic);
+		}
+		
 		if (pathologicalCaseList != null && !pathologicalCaseList.isEmpty())
 		{
-			Iterator itr = pathologicalCaseList.iterator();
-			while (itr.hasNext())
+			for(int i = 0 ; i < pathologicalCaseList.size() ; i++)
 			{
-				IdentifiedSurgicalPathologyReport identifiedSurPathReport = (IdentifiedSurgicalPathologyReport) itr.next();
 				String[] selectColName = {"specimenCollectionGroup"};
 				String[] whereColName = {Constants.SYSTEM_IDENTIFIER};
 				String[] whereColCond = {"="};
+				String sourceObjectName;
+				SurgicalPathologyReport identifiedSurPathReport = (SurgicalPathologyReport) pathologicalCaseList.get(i);
 				Object[] whereColVal = {identifiedSurPathReport.getId()};
+				if(i<size[0])
+				{
+					sourceObjectName = className[0];
+				}
+				else if(i>=size[0] && i<size[1])
+				{
+					sourceObjectName = className[1];
+				}
+				else
+				{
+					sourceObjectName = className[2];
+				}
 				List specimenCollList = bizLogic.retrieve(sourceObjectName,selectColName,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION);
 				if(specimenCollList != null && !specimenCollList.isEmpty())
 				{
@@ -246,9 +260,21 @@ public class OrderPathologyCaseAction extends BaseAction
 					identifiedSurPathReport.setSpecimenCollectionGroup(specimenColGroup);
 				}
 			}
-
 		}
+		
 		return pathologicalCaseList;
-
+	}
+	
+	private int getList(HttpServletRequest request , String attr , String className , List pathologicalCaseList, IBizLogic bizLogic)throws DAOException
+	{
+		String columnName="id";
+		List idList = (List)request.getSession().getAttribute(attr);
+		int size = idList.size();
+		for(int i=0;i<idList.size();i++)
+		{
+			List pathologicalListFromDb = bizLogic.retrieve(className, columnName, (String)idList.get(i));
+			pathologicalCaseList.add(pathologicalListFromDb.get(0));
+		}
+		return size;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -47,6 +48,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 * Collection of review items for current pathology report.
 	 */
 	protected Set pathologyReportReviewParameterCollection;
+	
+	/**
+	 * Specimen collection group of the report 
+	 */
+	protected SpecimenCollectionGroup specimenCollectionGroup;
 	
 	/**
 	 * XML content of the pathology report.
@@ -302,5 +308,24 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 		
 	}
     
+	/**	
+	 * @return specimen collection group of the report.
+	 * @hibernate.many-to-one name="specimenCollectionGroup"
+	 * class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+	 * column="SCG_ID" not-null="false"
+	 */
+	public SpecimenCollectionGroup getSpecimenCollectionGroup()
+	{
+		return specimenCollectionGroup;
+	}
+
+	/**
+	 * @param specimenCollectionGroup sets specimen collection group of the identified report.
+	 */
+	public void setSpecimenCollectionGroup(
+			SpecimenCollectionGroup specimenCollectionGroup)
+	{
+		this.specimenCollectionGroup = specimenCollectionGroup;
+	}
 	
 }

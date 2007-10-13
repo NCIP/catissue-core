@@ -17,7 +17,9 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 
 
 /**
@@ -381,6 +383,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_ID = "specimenId";
 	public static final String SPECIMEN_ARRAY_ID = "specimenArrayIds";
 	public static final String PATHALOGICAL_CASE_ID = "pathalogicalCaseIds";
+	public static final String DEIDENTIFIED_PATHALOGICAL_CASE_ID = "deidentifiedPathalogicalCaseIds";
+	public static final String SURGICAL_PATHALOGY_CASE_ID ="surgicalPathalogicalCaseIds";
 	public static final String FROM_POSITION_DATA = "fromPositionData";
 	public static final String POS_ONE ="posOne";
 	public static final String POS_TWO ="posTwo";
@@ -2121,6 +2125,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Shopping cart constants.
 	public static final String SPECIMEN_ARRAY_CLASS_NAME = SpecimenArray.class.getName();
 	public static final String IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME = IdentifiedSurgicalPathologyReport.class.getName();
+	public static final String DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME = DeidentifiedSurgicalPathologyReport.class.getName();
+	public static final String SURGICAL_PATHALOGY_REPORT_CLASS_NAME = SurgicalPathologyReport.class.getName();
 	public static final String SPECIMEN_NAME = Specimen.class.getName();
 	
 	public static final String[] entityNameArray = {
@@ -2130,7 +2136,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			          TissueSpecimen.class.getName(),
 			          CellSpecimen.class.getName(),
 			          SPECIMEN_ARRAY_CLASS_NAME,
-			          IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME
+			          IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
+			          DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
+			          SURGICAL_PATHALOGY_REPORT_CLASS_NAME
     };
 	public static final String IDENTIFIED_REPORT_ID="identifiedReportId";
 	

@@ -142,26 +142,37 @@ public class QueryShoppingCartAction extends BaseAction
 			if(session.getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
 				session.removeAttribute(Constants.PATHALOGICAL_CASE_ID);
 			
+			if(session.getAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID) != null)
+				session.removeAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID);
+			
+			if(session.getAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID) != null)
+				session.removeAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID);
 			
 			Map <String,Set<String>> entityIdsMap = getOrderableEntityIds(chkBoxValues, cart);
 			
 			Set<String> specimenIdsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
 			Set<String> specimenArrayIdsSet = entityIdsMap.get(Constants.SPECIMEN_ARRAY_CLASS_NAME);
 			Set<String> pathalogicalCaseIdsSet = entityIdsMap.get(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME);
+			Set<String> deidentifiedPathalogicalCaseIdsSet = entityIdsMap.get(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME);
+			Set<String> surgicalPathalogicalCaseIdsSet = entityIdsMap.get(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME);
 			
 			List<String> specimenArrayIds = new ArrayList<String>();
 			List<String> specimenIds = new ArrayList<String>();
 			List<String> pathalogicalCaseIds = new ArrayList<String>();
-			
+			List<String> deidentifiedPathalogicalCaseIds = new ArrayList<String>();
+			List<String> surgicalPathalogicalCaseIds = new ArrayList<String>();
 			
 			specimenIds.addAll(specimenIdsSet);
 			specimenArrayIds.addAll(specimenArrayIdsSet);
 			pathalogicalCaseIds.addAll(pathalogicalCaseIdsSet);
-		
+			deidentifiedPathalogicalCaseIds.addAll(deidentifiedPathalogicalCaseIdsSet);
+			surgicalPathalogicalCaseIds.addAll(surgicalPathalogicalCaseIdsSet);
 			
 			session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 			session.setAttribute(Constants.SPECIMEN_ARRAY_ID, specimenArrayIds);
 			session.setAttribute(Constants.PATHALOGICAL_CASE_ID, pathalogicalCaseIds);
+			session.setAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID, deidentifiedPathalogicalCaseIds);
+			session.setAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID, surgicalPathalogicalCaseIds);
 			
 			target = new String("requestToOrder");
 		}
@@ -214,7 +225,7 @@ public class QueryShoppingCartAction extends BaseAction
 				}
 				for(String entityName :distinctEntityNameSet)
 				{
-					if(entityName.equals(Constants.SPECIMEN_ARRAY_CLASS_NAME))
+					if(!entityName.equals(Constants.SPECIMEN_NAME))
 					{
 						isSpecimenArrayExist = "true";
 						break;
@@ -233,8 +244,11 @@ public class QueryShoppingCartAction extends BaseAction
 	{
 		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		Set<String> specimenIds = new HashSet<String>();
-		Set<String> pathalogicalCaseIds = new HashSet<String>();
 		Set<String> specimenArrayIds = new HashSet<String>();
+		Set<String> pathalogicalCaseIds = new HashSet<String>();
+		Set<String> deidentifiedPathalogicalCaseIds = new HashSet<String>();
+		Set<String> surgicalPathalogicalCaseIds = new HashSet<String>();
+		
 		Map <String,Set<String>> entityIdsMap = new HashMap<String, Set<String>>();
 		
 		List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
@@ -261,11 +275,17 @@ public class QueryShoppingCartAction extends BaseAction
 					specimenArrayIds.addAll(tempEntityIdsList);
 				else if(entityName.equals(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME))
 					pathalogicalCaseIds.addAll(tempEntityIdsList);
+				else if(entityName.equals(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME))
+					deidentifiedPathalogicalCaseIds.addAll(tempEntityIdsList);
+				else if(entityName.equals(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME))
+					surgicalPathalogicalCaseIds.addAll(tempEntityIdsList);
 				else
 					specimenIds.addAll(tempEntityIdsList);
 			}
 			entityIdsMap.put(Constants.SPECIMEN_ARRAY_CLASS_NAME, specimenArrayIds);
 			entityIdsMap.put(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, pathalogicalCaseIds);
+			entityIdsMap.put(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, deidentifiedPathalogicalCaseIds);
+			entityIdsMap.put(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME, surgicalPathalogicalCaseIds);
 			entityIdsMap.put(Constants.SPECIMEN_NAME, specimenIds);
 		}
 		return entityIdsMap;

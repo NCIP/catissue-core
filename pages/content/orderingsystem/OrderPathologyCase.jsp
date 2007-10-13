@@ -14,7 +14,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.OrderSpecimenForm"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm"%>
 <%@ page import="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"%>
-<%@ page import="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"%>
+<%@ page import="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"%>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
@@ -543,7 +543,7 @@ function onCheck()
 							Iterator it=pathologyCase.iterator();
 							while(it.hasNext())
 							{				
-					        	IdentifiedSurgicalPathologyReport obj=(IdentifiedSurgicalPathologyReport)it.next();
+					        	SurgicalPathologyReport obj=(SurgicalPathologyReport)it.next();
 								String cnt=new Integer(i).toString();
 								String unitRequestedQuantity = "value(OrderSpecimenBean:"+i+"_unitRequestedQuantity)";
 								String specimenName = "value(OrderSpecimenBean:"+i+"_specimenName)";
