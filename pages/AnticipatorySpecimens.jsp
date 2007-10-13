@@ -139,7 +139,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
 		<tr>
 		<td>
-		<html:submit value="Submit" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
+		<input type="button" value="Submit" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
 		</td>
 		</tr>
 		</logic:equal>
@@ -731,10 +731,13 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			</logic:equal>
 		<html:hidden property="targetSuccess" />
 		<html:hidden property="submitAction" />
+		<html:hidden property="showCheckBoxes" />
+		<html:hidden property="showLabel" />
+		<html:hidden property="showbarCode" />
 		<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
 		<tr>
 			<td>
-			<html:submit value="Submit" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
+			<input type="button" value="Submit" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
 			</td>
 		 </tr>
 		</logic:equal>
