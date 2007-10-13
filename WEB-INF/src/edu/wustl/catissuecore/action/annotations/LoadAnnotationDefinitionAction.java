@@ -285,7 +285,16 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			{
 				staticEntity = (EntityInterface) session.load(Entity.class, new Long(staticEntityId));
 				dynamicContainer = (Container) session.load(Container.class,new Long(dynExtContainerId));
-					
+				//	Get entitygroup that is used by caB2B for path finder purpose.
+//				EntityGroupInterface entityGroupInterface = edu.wustl.cab2b.common.util.Utility.getEntityGroup(staticEntity);
+				
+				edu.wustl.catissuecore.bizlogic.AnnotationUtil.addCatissueGroup(dynamicContainer.getEntity(), staticEntity);
+				staticEntity = EntityManager.getInstance().persistEntityMetadata(
+						dynamicContainer.getEntity(), true, false);
+				
+				
+				//Adding paths from second level as first level paths between static entity and top level dynamic entity have already been added
+				addQueryPathsForEntityHierarchy(dynamicContainer.getEntity()/*,entityGroupInterface*/);
 			}
 			catch (HibernateException e1)
 			{
@@ -306,12 +315,6 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					throw new BizLogicException("", e);
 				}
 			}
-		//	Get entitygroup that is used by caB2B for path finder purpose.
-			EntityGroupInterface entityGroupInterface = edu.wustl.cab2b.common.util.Utility.getEntityGroup(staticEntity);
-
-			//Adding paths from second level as first level paths between static entity and top level dynamic entity have already been added
-			addQueryPathsForEntityHierarchy(dynamicContainer.getEntity(),entityGroupInterface);
-			
 		}
 	}
 	/**
@@ -321,7 +324,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws DynamicExtensionsApplicationException
 	 * @throws BizLogicException 
 	 */
-	private void addQueryPathsForEntityHierarchy(EntityInterface dynamicEntity,EntityGroupInterface entityGroupInterface) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, BizLogicException
+	private void addQueryPathsForEntityHierarchy(EntityInterface dynamicEntity/*,EntityGroupInterface entityGroupInterface*/) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, BizLogicException
 	{		
 		Collection<AssociationInterface> associationCollection = dynamicEntity.getAllAssociations();
 		for(AssociationInterface association : associationCollection)
@@ -330,24 +333,24 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			if(!ispathAdded)
 			{
 				//Add the entity group to the dynamic entity and all it's associated entities.
-				if(!edu.wustl.catissuecore.bizlogic.AnnotationUtil.checkBaseEntityGroup(dynamicEntity.getEntityGroupCollection()))
-				{
-					dynamicEntity.addEntityGroupInterface(entityGroupInterface);
-				}
-				if(!edu.wustl.catissuecore.bizlogic.AnnotationUtil.checkBaseEntityGroup(association.getTargetEntity().getEntityGroupCollection()))
-				{
-					association.getTargetEntity().addEntityGroupInterface(entityGroupInterface);
-				}
-				
-				dynamicEntity = EntityManager.getInstance().persistEntityMetadata(
-						dynamicEntity, true, false);
+//				if(!edu.wustl.catissuecore.bizlogic.AnnotationUtil.checkBaseEntityGroup(dynamicEntity.getEntityGroupCollection()))
+//				{
+//					dynamicEntity.addEntityGroupInterface(entityGroupInterface);
+//				}
+//				if(!edu.wustl.catissuecore.bizlogic.AnnotationUtil.checkBaseEntityGroup(association.getTargetEntity().getEntityGroupCollection()))
+//				{
+//					association.getTargetEntity().addEntityGroupInterface(entityGroupInterface);
+//				}
+//				
+//				dynamicEntity = EntityManager.getInstance().persistEntityMetadata(
+//						dynamicEntity, true, false);
 				if(dynamicEntity.getId() != null)
 				{
 					edu.wustl.catissuecore.bizlogic.AnnotationUtil.addPathsForQuery(dynamicEntity.getId(), association.getTargetEntity().getId(), association.getId());
 					edu.wustl.catissuecore.bizlogic.AnnotationUtil.addEntitiesToCache(false, association.getTargetEntity(), dynamicEntity);
 				}
 			}
-			addQueryPathsForEntityHierarchy(association.getTargetEntity(),entityGroupInterface);
+			addQueryPathsForEntityHierarchy(association.getTargetEntity()/*,entityGroupInterface*/);
 		}		
 	}
 	
@@ -371,17 +374,19 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try
 		{
 			String checkForPathQuery = "select path_id from path where FIRST_ENTITY_ID = ? and LAST_ENTITY_ID = ?";
-			PreparedStatement preparedStatement = conn.prepareStatement(checkForPathQuery);
+			preparedStatement = conn.prepareStatement(checkForPathQuery);
 			preparedStatement.setLong(1, staticEntityId);
 			
 			preparedStatement.setLong(2, dynamicEntityId);
-			ResultSet re = preparedStatement.executeQuery();
-			if (re != null)
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet != null)
 			{
-				while (re.next())
+				while (resultSet.next())
 				{
 					ispathAdded = true;
 					break;
@@ -401,9 +406,16 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			
 			try
 			{
+				resultSet.close();
+				preparedStatement.close();
 				DBUtil.closeConnection();
 			}
 			catch (HibernateException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (SQLException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();

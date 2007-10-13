@@ -5,8 +5,8 @@
  *@author
  *@version 1.0
  */
-package edu.wustl.catissuecore.bizlogic;
 
+package edu.wustl.catissuecore.bizlogic;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,7 +29,6 @@ import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.RoleInterface;
 import edu.common.dynamicextensions.domaininterface.databaseproperties.ConstraintPropertiesInterface;
-import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
@@ -43,11 +42,8 @@ import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.cab2b.server.path.PathConstants;
 import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.dbManager.DBUtil;
-import gov.nih.nlm.nls.db.util.DbUtil;
 
 /**
  * @author vishvesh_mulay
@@ -55,15 +51,16 @@ import gov.nih.nlm.nls.db.util.DbUtil;
  */
 public class AnnotationUtil
 {
-    /**
-     * @param staticEntityId
-     * @param dynamicEntityId
-     * @return
-     * @throws DynamicExtensionsSystemException
-     * @throws DynamicExtensionsApplicationException
-     * @throws DynamicExtensionsSystemException
-     * @throws BizLogicException
-     */
+
+	/**
+	 * @param staticEntityId
+	 * @param dynamicEntityId
+	 * @return
+	 * @throws DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
+	 * @throws BizLogicException
+	 */
 	public static synchronized Long addAssociation(Long staticEntityId, Long dynamicEntityId,
 			boolean isEntityFromXmi)
 			throws //DynamicExtensionsSystemException,
@@ -136,19 +133,19 @@ public class AnnotationUtil
 			//Add the column related to the association to the entity table of the associated entities.
 			EntityManager.getInstance().addAssociationColumn(association);
 
-			Collection<AssociationInterface> staticEntityAssociation = staticEntity
-					.getAssociationCollection();
-			for (AssociationInterface tempAssociation : staticEntityAssociation)
-			{
-				if (tempAssociation.getName().equals(association.getName()))
-				{
-					association = tempAssociation;
-					break;
-				}
-			}
+			//			Collection<AssociationInterface> staticEntityAssociation = staticEntity
+			//					.getAssociationCollection();
+			//			for (AssociationInterface tempAssociation : staticEntityAssociation)
+			//			{
+			//				if (tempAssociation.getName().equals(association.getName()))
+			//				{
+			//					association = tempAssociation;
+			//					break;
+			//				}
+			//			}
 
 			addQueryPathsForAllAssociatedEntities(dynamicEntity, staticEntity, association.getId());
-			
+
 			addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
 		}
 		catch (HibernateException e1)
@@ -178,13 +175,13 @@ public class AnnotationUtil
 	 * @param dynamicEntity
 	 * @param staticEntity
 	 */
-	private static void addCatissueGroup(EntityInterface dynamicEntity, EntityInterface staticEntity)
+	public static void addCatissueGroup(EntityInterface dynamicEntity, EntityInterface staticEntity)
 	{
 		//		Get entitygroup that is used by caB2B for path finder purpose.
 		EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
 
 		//Add the entity group to the dynamic entity and all it's associated entities.
-		if(!checkBaseEntityGroup(dynamicEntity.getEntityGroupCollection()))
+		if (!checkBaseEntityGroup(dynamicEntity.getEntityGroupCollection()))
 		{
 			dynamicEntity.addEntityGroupInterface(entityGroupInterface);
 		}
@@ -193,19 +190,20 @@ public class AnnotationUtil
 
 		for (AssociationInterface associationInteface : associationCollection)
 		{
-			addCatissueGroup(associationInteface.getTargetEntity(),staticEntity);
+			addCatissueGroup(associationInteface.getTargetEntity(), staticEntity);
 			//associationInteface.getTargetEntity().addEntityGroupInterface(entityGroupInterface);
 		}
 	}
+
 	/**
 	 * @param entityGroupColl
 	 * @return
 	 */
 	public static boolean checkBaseEntityGroup(Collection<EntityGroupInterface> entityGroupColl)
 	{
-		for(EntityGroupInterface eg :entityGroupColl)
+		for (EntityGroupInterface eg : entityGroupColl)
 		{
-			if(eg.getId().intValue() == Constants.CATISSUE_ENTITY_GROUP)
+			if (eg.getId().intValue() == Constants.CATISSUE_ENTITY_GROUP)
 			{
 				return true;
 			}
@@ -221,8 +219,7 @@ public class AnnotationUtil
 	 * @throws BizLogicException
 	 */
 	private static void addQueryPathsForAllAssociatedEntities(EntityInterface dynamicEntity,
-			EntityInterface staticEntity, Long associationId)
-			throws BizLogicException
+			EntityInterface staticEntity, Long associationId) throws BizLogicException
 	{
 		Long start = new Long(System.currentTimeMillis());
 
@@ -232,16 +229,16 @@ public class AnnotationUtil
 				.getAssociationCollection();
 		for (AssociationInterface associationInteface : associationCollection)
 		{
-			addQueryPathsForAllAssociatedEntities(dynamicEntity,associationInteface.getTargetEntity(),associationInteface.getId());
+			System.out.println("PERSISTING PATH");
+			addQueryPathsForAllAssociatedEntities( associationInteface
+					.getTargetEntity(),dynamicEntity, associationInteface.getId());
 			
-//			AnnotationUtil.addPathsForQuery(dynamicEntity.getId(), associationInteface
-//					.getTargetEntity().getId(), associationInteface.getId());
+			//			AnnotationUtil.addPathsForQuery(dynamicEntity.getId(), associationInteface
+			//					.getTargetEntity().getId(), associationInteface.getId());
 		}
 		Long end = new Long(System.currentTimeMillis());
 		System.out.println("Time required to add complete paths is" + (end - start) / 1000
 				+ "seconds");
-
-		
 
 	}
 
@@ -277,6 +274,18 @@ public class AnnotationUtil
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			finally
+			{
+				try
+				{
+					DBUtil.closeConnection();
+				}
+				catch (HibernateException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 
 		}
 
@@ -284,239 +293,353 @@ public class AnnotationUtil
 		System.out.println("Time required to refresh cache is " + (end - start) / 1000 + "seconds");
 	}
 
-    /**
-     * @param staticEntity
-     * @param dynamicEntity
-     * @return
-     */
-    private static ConstraintPropertiesInterface getConstraintProperties(
-            EntityInterface staticEntity, EntityInterface dynamicEntity)
-    {
-        ConstraintPropertiesInterface cp = DomainObjectFactory.getInstance()
-                .createConstraintProperties();
-        cp.setName(dynamicEntity.getTableProperties().getName());
-        cp.setTargetEntityKey("DYEXTN_AS_" + staticEntity.getId().toString()
-                + "_" + dynamicEntity.getId().toString());
-        return cp;
-    }
+	/**
+	 * @param staticEntity
+	 * @param dynamicEntity
+	 * @return
+	 */
+	private static ConstraintPropertiesInterface getConstraintProperties(
+			EntityInterface staticEntity, EntityInterface dynamicEntity)
+	{
+		ConstraintPropertiesInterface cp = DomainObjectFactory.getInstance()
+				.createConstraintProperties();
+		cp.setName(dynamicEntity.getTableProperties().getName());
+		cp.setTargetEntityKey("DYEXTN_AS_" + staticEntity.getId().toString() + "_"
+				+ dynamicEntity.getId().toString());
+		return cp;
+	}
 
-    /**
-     * @param targetEntity
-     * @param associationDirection
-     * @param assoName
-     * @param sourceRole
-     * @param targetRole
-     * @return
-     */
-    private static AssociationInterface getAssociation(
-            EntityInterface targetEntity,
-            AssociationDirection associationDirection, String assoName,
-            RoleInterface sourceRole, RoleInterface targetRole)
-    {
-        AssociationInterface association = DomainObjectFactory.getInstance()
-                .createAssociation();
-        association.setTargetEntity(targetEntity);
-        association.setAssociationDirection(associationDirection);
-        association.setName(assoName);
-        association.setSourceRole(sourceRole);
-        association.setTargetRole(targetRole);
-        return association;
-    }
+	/**
+	 * @param targetEntity
+	 * @param associationDirection
+	 * @param assoName
+	 * @param sourceRole
+	 * @param targetRole
+	 * @return
+	 */
+	private static AssociationInterface getAssociation(EntityInterface targetEntity,
+			AssociationDirection associationDirection, String assoName, RoleInterface sourceRole,
+			RoleInterface targetRole)
+	{
+		AssociationInterface association = DomainObjectFactory.getInstance().createAssociation();
+		association.setTargetEntity(targetEntity);
+		association.setAssociationDirection(associationDirection);
+		association.setName(assoName);
+		association.setSourceRole(sourceRole);
+		association.setTargetRole(targetRole);
+		return association;
+	}
 
-    /**
-     * @param associationType associationType
-     * @param name name
-     * @param minCard  minCard
-     * @param maxCard maxCard
-     * @return  RoleInterface
-     */
-    private static RoleInterface getRole(AssociationType associationType,
-            String name, Cardinality minCard, Cardinality maxCard)
-    {
-        RoleInterface role = DomainObjectFactory.getInstance().createRole();
-        role.setAssociationsType(associationType);
-        role.setName(name);
-        role.setMinimumCardinality(minCard);
-        role.setMaximumCardinality(maxCard);
-        return role;
-    }
+	/**
+	 * @param associationType associationType
+	 * @param name name
+	 * @param minCard  minCard
+	 * @param maxCard maxCard
+	 * @return  RoleInterface
+	 */
+	private static RoleInterface getRole(AssociationType associationType, String name,
+			Cardinality minCard, Cardinality maxCard)
+	{
+		RoleInterface role = DomainObjectFactory.getInstance().createRole();
+		role.setAssociationsType(associationType);
+		role.setName(name);
+		role.setMinimumCardinality(minCard);
+		role.setMaximumCardinality(maxCard);
+		return role;
+	}
 
-    /**
-     * @param staticEntityId
-     * @param dynamicEntityId
-     * @param deAssociationID
-     */
-    public static void addPathsForQuery(Long staticEntityId,
-            Long dynamicEntityId, Long deAssociationID)
-    {
-        Long maxPathId = getMaxId("path_id", "path");
-        maxPathId += 1;
-        insertNewPaths(maxPathId, staticEntityId, dynamicEntityId,
-                deAssociationID);
-    }
-    
-    
+	/**
+	 * @param staticEntityId
+	 * @param dynamicEntityId
+	 * @param deAssociationID
+	 */
+	public static void addPathsForQuery(Long staticEntityId, Long dynamicEntityId,
+			Long deAssociationID)
+	{
+		Long maxPathId = getMaxId("path_id", "path");
+		maxPathId += 1;
+		insertNewPaths(maxPathId, staticEntityId, dynamicEntityId, deAssociationID);
+	}
 
-    /**
-     * @param maxPathId
-     * @param staticEntityId
-     * @param dynamicEntityId
-     * @param deAssociationID
-     */
-    private static void insertNewPaths(Long maxPathId, Long staticEntityId,
-            Long dynamicEntityId, Long deAssociationID)
-    {
-        StringBuffer query = new StringBuffer();
-        Long intraModelAssociationId = getMaxId("ASSOCIATION_ID", "ASSOCIATION");
-        intraModelAssociationId += 1;
-        try
-        {
-            Connection conn = DBUtil.getConnection();
+	/**
+	 * @param maxPathId
+	 * @param staticEntityId
+	 * @param dynamicEntityId
+	 * @param deAssociationID
+	 */
+	private static void insertNewPaths(Long maxPathId, Long staticEntityId, Long dynamicEntityId,
+			Long deAssociationID)
+	{
+		// StringBuffer query = new StringBuffer();
+		Long intraModelAssociationId = getMaxId("ASSOCIATION_ID", "ASSOCIATION");
+		intraModelAssociationId += 1;
+		Connection conn = null;
+		try
+		{
+			conn = DBUtil.getConnection();
 
-            String associationQuery = "insert into ASSOCIATION (ASSOCIATION_ID, ASSOCIATION_TYPE) values ("
-                    + intraModelAssociationId
-                    + ","
-                   +PathConstants.AssociationType.INTRA_MODEL_ASSOCIATION.getValue() + ")";
-            String intraModelQuery = "insert into INTRA_MODEL_ASSOCIATION (ASSOCIATION_ID, DE_ASSOCIATION_ID) values ("
-                    + intraModelAssociationId + "," + deAssociationID + ")";
-            String directPathQuery = "insert into PATH (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values ("
-                    + maxPathId
-                    + ","
-                    + staticEntityId
-                    + ","
-                    + intraModelAssociationId + "," + dynamicEntityId + ")";
+			String associationQuery = "insert into ASSOCIATION (ASSOCIATION_ID, ASSOCIATION_TYPE) values ("
+					+ intraModelAssociationId
+					+ ","
+					+ PathConstants.AssociationType.INTRA_MODEL_ASSOCIATION.getValue() + ")";
+			String intraModelQuery = "insert into INTRA_MODEL_ASSOCIATION (ASSOCIATION_ID, DE_ASSOCIATION_ID) values ("
+					+ intraModelAssociationId + "," + deAssociationID + ")";
+			String directPathQuery = "insert into PATH (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values ("
+					+ maxPathId
+					+ ","
+					+ staticEntityId
+					+ ","
+					+ intraModelAssociationId
+					+ ","
+					+ dynamicEntityId + ")";
 
-            List<String> list = new ArrayList<String>();
-            list.add(associationQuery);
-            list.add(intraModelQuery);
-            list.add(directPathQuery);
+			List<String> list = new ArrayList<String>();
+			list.add(associationQuery);
+			list.add(intraModelQuery);
+			list.add(directPathQuery);
 
-            executeQuery(conn, list);
-            maxPathId += 1;
-            addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId,
-                    intraModelAssociationId, conn);
-            conn.commit();
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+			executeQuery(conn, list);
+			maxPathId += 1;
+			addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId, intraModelAssociationId,
+					conn);
+			conn.commit();
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				conn.close();
+				DBUtil.closeConnection();				
+			}
+			catch (HibernateException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
-    }
+	}
 
-    /**
-     * @param maxPathId
-     * @param staticEntityId
-     * @param dynamicEntityId
-     * @param intraModelAssociationId
-     * @param conn
-     * @throws SQLException
-     */
-    private static void addIndirectPaths(Long maxPathId, Long staticEntityId,
-            Long dynamicEntityId, Long intraModelAssociationId, Connection conn)
-            throws SQLException
-    {
-        ResultSet resultSet = getIndirectPaths(conn, staticEntityId);
-        String query = "insert into path (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values (?,?,?,?)";
-        PreparedStatement statement = conn.prepareStatement(query);
-        while (resultSet.next())
-        {
+	/**
+	 * @param maxPathId
+	 * @param staticEntityId
+	 * @param dynamicEntityId
+	 * @param intraModelAssociationId
+	 * @param conn
+	 * @throws SQLException
+	 */
+	private static void addIndirectPaths(Long maxPathId, Long staticEntityId, Long dynamicEntityId,
+			Long intraModelAssociationId, Connection conn)
 
-            Long firstEntityId = resultSet.getLong(1);
-            String path = resultSet.getString(2);
-            path = path.concat("_").concat(intraModelAssociationId.toString());
+	{
+		ResultSet resultSet = null;
+		PreparedStatement statement = null;
+		String query = "";
+		try
+		{
+			//resultSet = getIndirectPaths(conn, staticEntityId);
+			query = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
+					+ staticEntityId;
+			statement = conn.prepareStatement(query);
+			resultSet = statement.executeQuery();
+		
+		
+			query = "insert into path (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values (?,?,?,?)";
+			statement = conn.prepareStatement(query);
+			while (resultSet.next())
+			{
 
-            statement.setLong(1, maxPathId);
-            maxPathId++;
-            statement.setLong(2, firstEntityId);
-            statement.setString(3, path);
-            statement.setLong(4, dynamicEntityId);
-            statement.execute();
-            statement.clearParameters();
-        }
-        resultSet.close();
-        statement.close();
+				Long firstEntityId = resultSet.getLong(1);
+				String path = resultSet.getString(2);
+				path = path.concat("_").concat(intraModelAssociationId.toString());
 
-    }
+				statement.setLong(1, maxPathId);
+				maxPathId++;
+				statement.setLong(2, firstEntityId);
+				statement.setString(3, path);
+				statement.setLong(4, dynamicEntityId);
+				statement.execute();
+				statement.clearParameters();
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				resultSet.close();
+				statement.close();
+			}
+			catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-    /**
-     * @param conn
-     * @param staticEntityId
-     * @return
-     * @throws SQLException
-     */
-    private static ResultSet getIndirectPaths(Connection conn,
-            Long staticEntityId) throws SQLException
-    {
-        String query = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
-                + staticEntityId;
-        java.sql.PreparedStatement statement = conn.prepareStatement(query);
-        ResultSet resultSet = statement.executeQuery();
-        return resultSet;
-    }
+		}
+	}
 
-    /**
-     * @param conn
-     * @param queryList
-     * @throws SQLException
-     */
-    private static void executeQuery(Connection conn, List<String> queryList)
-            throws SQLException
-    {
-        Statement statement = conn.createStatement();
-        for (String query : queryList)
-        {
-            statement.execute(query);
-        }
-        statement.close();
-    }
+	/**
+	 * @param conn
+	 * @param staticEntityId
+	 * @return
+	 * @throws SQLException
+	 */
+	private static ResultSet getIndirectPaths(Connection conn, Long staticEntityId)
+	{
+		String query = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
+				+ staticEntityId;
+		java.sql.PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try
+		{
+			statement = conn.prepareStatement(query);
+			resultSet = statement.executeQuery();
+		}
+		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    /**
-     * @param columnName
-     * @param tableName
-     * @return
-     */
-    private static Long getMaxId(String columnName, String tableName)
-    {
-        String query = "select max(" + columnName + ") from " + tableName;
-        HibernateDAO hibernateDAO = (HibernateDAO) DAOFactory.getInstance()
-                .getDAO(Constants.HIBERNATE_DAO);
-        try
-        {
-            Connection conn = DBUtil.getConnection();
-            java.sql.PreparedStatement statement = conn.prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            Long maxId = resultSet.getLong(1);
-            return maxId;
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
-    /**
-     * @param entity_name_participant
-     * @return
-     * @throws DynamicExtensionsApplicationException
-     * @throws DynamicExtensionsSystemException
-     */
-    public static Long getEntityId(String entityName) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
-    {
-        if(entityName!=null)
-        {
-            EntityManagerInterface entityManager = EntityManager.getInstance();
-            EntityInterface entity;
-            entity = entityManager.getEntityByName(entityName);
-            if(entity!=null)
-            {
-                return entity.getId();
-            }
-        }
-        return new Long(0);
-    }
+		finally
+		{
+			try
+			{
+
+				statement.close();
+			}
+			catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		return resultSet;
+	}
+
+	/**
+	 * @param conn
+	 * @param queryList
+	 * @throws SQLException
+	 */
+	private static void executeQuery(Connection conn, List<String> queryList)
+	{
+		Statement statement = null;
+		try
+		{
+			statement = conn.createStatement();
+			for (String query : queryList)
+			{
+				statement.execute(query);
+			}
+		}
+		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		finally
+		{
+			try
+			{
+				statement.close();
+			}
+			catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * @param columnName
+	 * @param tableName
+	 * @return
+	 */
+	private static Long getMaxId(String columnName, String tableName)
+	{
+		String query = "select max(" + columnName + ") from " + tableName;
+		//		HibernateDAO hibernateDAO = (HibernateDAO) DAOFactory.getInstance().getDAO(
+		//				Constants.HIBERNATE_DAO);
+		java.sql.PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		Connection conn = null;
+		try
+		{
+			conn = DBUtil.getConnection();
+			statement = conn.prepareStatement(query);
+			resultSet = statement.executeQuery();
+			resultSet.next();
+			Long maxId = resultSet.getLong(1);
+
+			return maxId;
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				resultSet.close();
+				statement.close();
+				conn.close();
+				DBUtil.closeConnection();
+				
+			}
+			catch (HibernateException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param entity_name_participant
+	 * @return
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
+	 */
+	public static Long getEntityId(String entityName) throws DynamicExtensionsSystemException,
+			DynamicExtensionsApplicationException
+	{
+		if (entityName != null)
+		{
+			EntityManagerInterface entityManager = EntityManager.getInstance();
+			EntityInterface entity;
+			entity = entityManager.getEntityByName(entityName);
+			if (entity != null)
+			{
+				return entity.getId();
+			}
+		}
+		return new Long(0);
+	}
 
 }
