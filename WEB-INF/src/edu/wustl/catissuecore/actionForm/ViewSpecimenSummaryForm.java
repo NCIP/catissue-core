@@ -53,6 +53,8 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	
 	private static String collectionProtocolStatus = "";
 	
+	private static String specimenExist = "";
+	
 	public  ViewSpecimenSummaryForm()
 	{
 		titleMap.put(REQUEST_TYPE_MULTI_SPECIMENS, "Specimen details");
@@ -235,6 +237,12 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	}
 	public void setShowLabel(boolean showLabel) {
 		this.showLabel = showLabel;
+	}
+	public String getSpecimenExist() {
+		return specimenExist;
+	}
+	public static void setSpecimenExist(String specimenExist) {
+		ViewSpecimenSummaryForm.specimenExist = specimenExist;
 	}
 	
 }
