@@ -108,9 +108,6 @@
 				<b><bean:message key="app.distribution" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16"><bean:message key="app.add" /></a>
-		</div>	
-		<div>
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution&menuSelected=16">
 				<bean:message key="app.specimenreport" />
 			</a> |
