@@ -75,7 +75,7 @@ public class MultipleSpecimenViewAction extends BaseAction
 			e.printStackTrace();
 		}
 		return null;
-		
+
 	}
 
 }
