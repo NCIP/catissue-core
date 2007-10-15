@@ -47,7 +47,16 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	private boolean showCheckBoxes = true;
 	private boolean showbarCode = true;
 	private boolean showLabel = true;
-
+	private boolean readOnly = false;
+	
+	public boolean getReadOnly(){
+		return this.readOnly;
+	}
+	
+	public void setReadOnly(boolean readOnly)
+	{
+		this.readOnly  = readOnly;
+	}
 	
 	private HashMap<String, String> titleMap = new HashMap<String, String>();
 	
