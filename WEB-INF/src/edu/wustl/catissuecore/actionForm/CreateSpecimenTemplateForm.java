@@ -669,7 +669,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
         	
 			if(this.noOfAliquots!=null && !this.noOfAliquots.equals(""))
 			{
-				if (this.storageLocationForAliquotSpecimen.equals(""))
+				if (!this.storageLocationForAliquotSpecimen.equals("Auto")&&!this.storageLocationForAliquotSpecimen.equals("Mannual")&&!this.storageLocationForAliquotSpecimen.equals("Virtual"))
 				{
 	               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.aliquotstoragelocation")));
 				}
@@ -678,7 +678,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.aliquotstoragelocation")));
 				}
 			}
-			if (this.storageLocationForSpecimen.equals(""))
+			if (!this.storageLocationForSpecimen.equals("Auto")&&!this.storageLocationForSpecimen.equals("Manual")&&!this.storageLocationForSpecimen.equals("Virtual"))
 			{
                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.specimenstoragelocation")));
 			}
