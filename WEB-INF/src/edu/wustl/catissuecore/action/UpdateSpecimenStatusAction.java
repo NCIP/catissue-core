@@ -237,7 +237,7 @@ public class UpdateSpecimenStatusAction extends Action {
 		specimen.setPathologicalStatus(
 				specimenDataBean.getPathologicalStatus());		
 		specimen.setType(specimenDataBean.getType());
-		
+		specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
 		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
 		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
