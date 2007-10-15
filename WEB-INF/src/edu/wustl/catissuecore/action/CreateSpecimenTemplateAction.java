@@ -197,7 +197,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		setUserInForm(request,operation,createSpecimenTemplateForm);
 		if(operation.equals(Constants.EDIT)&&!pageOf.equals("error"))
 		{
-			initCreateSpecimenTemplateForm(createSpecimenTemplateForm, mapkey, request);
+			if(!pageOf.equals("delete"))
+			{
+				initCreateSpecimenTemplateForm(createSpecimenTemplateForm, mapkey, request);
+			}
 		}
 		
 		if(pageOf!=null&&pageOf.equals("error"))

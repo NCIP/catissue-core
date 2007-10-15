@@ -721,7 +721,7 @@ if(form != null)
 				<html:button property="addSpecimenReq" styleClass="actionButton" value="Add More" disabled="<%=disabled%>" onclick="insRow('DeriveSpecimenBean')"/>
 			</td>
 			<td class="formTitle" align="Right">
-			<%String deleteSpecimenRequirements = "deleteChecked('DeriveSpecimenBean','CreateSpecimenTemplate.do?operation=add',document.forms[0].noOfDeriveSpecimen,'checkBox_',false)"; %>
+			<%String deleteSpecimenRequirements = "deleteChecked('DeriveSpecimenBean','CreateSpecimenTemplate.do?operation=edit&pageOf=delete',document.forms[0].noOfDeriveSpecimen,'checkBox_',false)"; %>
 				<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="<%= deleteSpecimenRequirements %>" disabled="<%=disabled%>">
 						<bean:message key="buttons.delete"/>
 				</html:button>

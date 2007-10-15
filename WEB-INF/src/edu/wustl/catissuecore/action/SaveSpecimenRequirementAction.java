@@ -217,7 +217,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			{
 				aliquotSpecimenMap = (Map)getAliquots(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier());
 			}
-			Map deriveSpecimenMap = createSpecimenTemplateForm.getDeriveSpecimenValues();
+			Map deriveSpecimenMap = createSpecimenTemplateForm.deriveSpecimenMap();
 			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
 			try
 			{
