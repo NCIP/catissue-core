@@ -781,15 +781,6 @@ if(form != null)
 					<%=rowno%>.
 					<html:hidden property="<%=id%>" />
 				</td>
-				<td class="formFieldNoBordersSimple">		
-					<html:select property= "<%=specimenClass%>"
-									styleClass="formFieldSized10" 
-									styleId="<%=specimenClass%>" size="1"
-									onchange="<%=changeClass%>"
-									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-						<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
-					</html:select>
-				</td>
 				<%
 					String className = (String)form.getDeriveSpecimenValue(classKey);
 					String typeclassValue = (String)form.getDeriveSpecimenValue(srSubTypeKeyName);
@@ -799,9 +790,21 @@ if(form != null)
 					{
 						specimenTypeList = new ArrayList();
 						specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+						specimenClassList.add(0,new NameValueBean(Constants.SELECT_OPTION,"-1"));
 					}
 					pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+					pageContext.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 				%>
+				<td class="formFieldNoBordersSimple">		
+					<html:select property= "<%=specimenClass%>"
+									styleClass="formFieldSized10" 
+									styleId="<%=specimenClass%>" size="1"
+									onchange="<%=changeClass%>"
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
+					</html:select>
+				</td>
+				
 				<td class="formFieldNoBordersSimple">
 					<html:select property="<%=specimenType%>" 
 									styleClass="formFieldSized10" 
