@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -549,6 +548,18 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("specimen.subType")));
 			}
+			List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
+			if (!Validator.isEnumeratedValue(specimenClassList, this.className))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
+						ApplicationProperties.getValue("specimen.type")));
+			}
+
+			if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(this.className), this.type))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
+						ApplicationProperties.getValue("specimen.subType")));
+			}
 			
 			if (!validator.isEmpty(quantity))
 			{					
@@ -686,10 +697,30 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.specimenstoragelocation")));
 			}
+			
 			if (this.pathologicalStatus.equals(""))
             {
                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));
             }
+			List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
+			if (!Validator.isEnumeratedValue(tissueSiteList, this.tissueSite))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("specimen.tissueSite")));
+			}
+
+			List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
+			if (!Validator.isEnumeratedValue(tissueSideList, this.tissueSide))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("specimen.tissueSide")));
+			}
+
+			List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+
+			if (!Validator.isEnumeratedValue(pathologicalStatusList, this.pathologicalStatus))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("specimen.pathologicalStatus")));
+			}
+
  			
 			if ((collectionEventUserId) == 0L)
 	        {
@@ -735,7 +766,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 			if(this.className.equals(Constants.MOLECULAR))
 			{
-				if(!validator.isNumeric(this.concentration))
+				if(!validator.isDouble(this.concentration,true))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.concentration")));	
 				}
@@ -758,15 +789,13 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
 							bSpecimenClass = true;
 						}
-						if("Molecular".equals(mapValue))
+					}
+					if((key.indexOf("_concentration"))!=-1&&mapValue!=null)
+					{
+						mapValue = new BigDecimal(mapValue).toPlainString();
+						if(!validator.isDouble(mapValue, true))
 						{
-							if((key.indexOf("_concentration"))!=-1)
-							{
-								if(!validator.isNumeric(mapValue,0))
-								{
-									errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.concentration")));	
-								}
-							}
+							errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.concentration")));	
 						}
 					}
 					
