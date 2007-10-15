@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -38,6 +40,7 @@ public class ViewSpecimenSummaryAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+			String target = Constants.SUCCESS; 
 		try {
 			HttpSession session = request.getSession();
 			
@@ -46,7 +49,7 @@ public class ViewSpecimenSummaryAction extends Action {
 
 			Object obj = request.getAttribute("SCGFORM");
 			request.setAttribute("SCGFORM", obj);
-			String target =request.getParameter("target");
+			target =request.getParameter("target");
 			String submitAction = request.getParameter("submitAction");
 			
 			if (target == null)
@@ -77,11 +80,22 @@ public class ViewSpecimenSummaryAction extends Action {
 			if (summaryForm.getSpecimenList()!= null  )
 			{
 				updateSessionBean(summaryForm, session);
+				
 			}
-
 			if(request.getParameter("save")!=null)
 			{
+				if (!isTokenValid(request))
+				{
+					summaryForm.setReadOnly(true);
+					throw new Exception ("cannot submit duplicate request.");
+				}
+
+				resetToken(request);
 				return mapping.findForward(summaryForm.getSubmitAction());
+			}
+			else
+			{
+				saveToken(request);
 			}
 			
 			summaryForm.setUserAction(ViewSpecimenSummaryForm.ADD_USER_ACTION);
@@ -131,9 +145,13 @@ public class ViewSpecimenSummaryAction extends Action {
 			}
 			
 			return mapping.findForward(target);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			ActionErrors actionErrors = new ActionErrors();
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
+					"errors.item",exception.getMessage()));
+			saveErrors(request, actionErrors);			
+			return mapping.findForward(target);
 		}
 
 	}

@@ -65,10 +65,12 @@ public class CollectionProtocolUtil {
 
 	public static String getStorageTypeValue(Integer type)
 	{
+		
 		if (type == null)
 		{
 			return storageTypeArr[0]; //default considered as 'Virtual';
 		}
+		//if(type.intValue()>2) return storageTypeArr[1];
 		return storageTypeArr[type.intValue()];
 	}
 	

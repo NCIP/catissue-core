@@ -50,7 +50,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 	Long cpId = null;
 	protected HashSet<String> storageContainerIds = new HashSet<String>();
 	
-	SpecimenAutoStorageContainer autoStorageContainer = new SpecimenAutoStorageContainer (); 
+	SpecimenAutoStorageContainer autoStorageContainer; 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -68,6 +68,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 			
 			if(cpList != null && !cpList.isEmpty())
 			{
+				autoStorageContainer = new SpecimenAutoStorageContainer ();
 				SpecimenCollectionGroup specimencollectionGroup = (SpecimenCollectionGroup) cpList.get(0);			
 				LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = new LinkedHashMap<String, CollectionProtocolEventBean> ();
 				cpId = specimencollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();

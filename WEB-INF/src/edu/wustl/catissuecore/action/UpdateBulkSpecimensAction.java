@@ -52,32 +52,23 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 				Constants.NEW_SPECIMEN_FORM_ID);
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 		try{
-//			if (!isTokenValid(request))
-//			{
-				ViewSpecimenSummaryForm specimenSummaryForm =
-					(ViewSpecimenSummaryForm)form;
-					String eventId = specimenSummaryForm.getEventId();
-					
-					session = request.getSession();
-					UpdateSpecimenStatusAction specimenUpdateAction = new UpdateSpecimenStatusAction();
-					
-					LinkedHashSet specimenDomainCollection = 
-						specimenUpdateAction.getSpecimensToSave(eventId, session);
-					
-					bizLogic.insert(createSpecimenMap(specimenDomainCollection), 
-							sessionDataBean, Constants.HIBERNATE_DAO);
-					ActionMessages actionMessages = new ActionMessages();
-					actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-							"object.add.successOnly","Specimens"));
-					saveMessages(request, actionMessages);
-					specimenSummaryForm.setReadOnly(true);
-					//saveToken(request);
-//			}
-//			else
-//			{
-//				resetToken(request);
-//			}
+			ViewSpecimenSummaryForm specimenSummaryForm =
+			(ViewSpecimenSummaryForm)form;
+			String eventId = specimenSummaryForm.getEventId();
 			
+			session = request.getSession();
+			UpdateSpecimenStatusAction specimenUpdateAction = new UpdateSpecimenStatusAction();
+			
+			LinkedHashSet specimenDomainCollection = 
+				specimenUpdateAction.getSpecimensToSave(eventId, session);
+			
+			bizLogic.insert(createSpecimenMap(specimenDomainCollection), 
+					sessionDataBean, Constants.HIBERNATE_DAO);
+			ActionMessages actionMessages = new ActionMessages();
+			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+					"object.add.successOnly","Specimens"));
+			saveMessages(request, actionMessages);
+			specimenSummaryForm.setReadOnly(true);
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception exception)
@@ -86,7 +77,8 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 					"errors.item",exception.getMessage()));
-			saveErrors(request, actionErrors);			
+			saveErrors(request, actionErrors);
+			saveToken(request);
 			return mapping.findForward(Constants.FAILURE);
 		}
 	}

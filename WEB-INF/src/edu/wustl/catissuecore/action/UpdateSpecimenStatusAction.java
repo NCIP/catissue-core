@@ -68,7 +68,8 @@ public class UpdateSpecimenStatusAction extends Action {
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 					"errors.item",exception.getMessage()));
-			saveErrors(request, actionErrors);			
+			saveErrors(request, actionErrors);		
+			saveToken(request);
 			return mapping.findForward(Constants.FAILURE);
 		}
 		

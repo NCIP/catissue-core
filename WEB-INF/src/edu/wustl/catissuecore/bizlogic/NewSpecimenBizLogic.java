@@ -203,6 +203,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 			try
 			{
+				storageContainerIds.clear();
 				setStorageLocationToNewSpecimen(dao, specimen,sessionDataBean,true);
 				insertSingleSpecimen(specimen, dao, sessionDataBean, true);
 				specimenList.add(specimen);
@@ -1417,6 +1418,34 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
 
+			if (specimen.getPositionDimensionOne() == null || 
+					specimen.getPositionDimensionTwo() == null)
+			{
+				
+				LinkedList<Integer> positionValues = 
+					StorageContainerUtil
+					.getFirstAvailablePositionsInContainer(
+							storageContainerObj,getStorageContainerMap(),storageContainerIds);
+				
+				specimen.setPositionDimensionOne(positionValues.get(0));
+						
+				specimen.setPositionDimensionTwo(positionValues.get(1));
+				
+			}
+
+			String storageValue = storageContainerObj.getName()+":"+specimen.getPositionDimensionOne()+" ,"+ 
+			specimen.getPositionDimensionTwo();
+			
+			if(storageContainerIds.contains(storageValue))
+			{
+				throw new DAOException(",Storage Location:" + storageValue +
+					" has been assignes to two or more specimens");								
+			}
+			else
+			{
+				storageContainerIds.add(storageValue);
+			}
+			
 			// --- check for all validations on the storage container.
 			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
 					specimen.getPositionDimensionTwo().toString(), sessionDataBean, partOfMultipleSpecimen);
@@ -2541,15 +2570,23 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		try
 		{
-	
+
+			
 			((HibernateDAO)dao).openSession(sessionDataBean);
 	
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
+				setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true);
+			}
+			iterator = newSpecimenCollection.iterator();
+			storageContainerIds.clear();
+			while (iterator.hasNext())
+			{
+				Specimen newSpecimen = (Specimen) iterator.next();
 				
 				updateSignleSpecimen(dao,newSpecimen, sessionDataBean,updateChildrens);
-			}
+			}			
 			((HibernateDAO)dao).commit();
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
 			
@@ -2575,9 +2612,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			if(specList != null && !specList.isEmpty())
 			{
 				Specimen specimenDO =(Specimen)specList.get(0);
-				updateSpecimenDomainObject(dao, newSpecimen, specimenDO);
+				updateSpecimenDomainObject(dao, newSpecimen, specimenDO, sessionDataBean);
 				if(updateChildrens)
-					updateChildrenSpecimens(dao,newSpecimen, specimenDO);
+					updateChildrenSpecimens(dao,newSpecimen, specimenDO,sessionDataBean);
 				dao.update(specimenDO, sessionDataBean, false, false, false);
 				return specimenDO;
 			}
@@ -2589,11 +2626,17 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			throw new DAOException ("User not authorized to update specimens" + 
 					authorizedException.getMessage());
 			
+		} catch (SMException exception)
+		{
+			throw new DAOException (exception.getMessage(),exception);
+			
 		}
+	
 	}
 
 	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO ,
-			Specimen specimenDO) throws DAOException
+			Specimen specimenDO,SessionDataBean sessionDataBean) 
+			throws DAOException,SMException
 	{
 		Collection childrenSpecimens = specimenDO.getChildrenSpecimen();
 		if (childrenSpecimens==null || childrenSpecimens.isEmpty())
@@ -2607,9 +2650,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Specimen relatedSpecimen = getCorelatedSpecimen(
 					specimen.getId(), specimenVO.getChildrenSpecimen());
 			
-			updateSpecimenDomainObject(dao, relatedSpecimen, specimen);
+			updateSpecimenDomainObject(dao, relatedSpecimen, specimen, sessionDataBean);
 			
-			updateChildrenSpecimens(dao, relatedSpecimen, specimen);
+			updateChildrenSpecimens(dao, relatedSpecimen, specimen,sessionDataBean);
 		}	
 	}
 	
@@ -2674,7 +2717,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 	}
-	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO ,Specimen specimenDO) throws DAOException {
+	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO 
+			,Specimen specimenDO, SessionDataBean sessionDataBean)
+			throws DAOException,SMException {
 		
 		if (specimenVO.getBarcode()!=null && specimenVO.getBarcode().trim().length()==0)
 		{
@@ -2685,7 +2730,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		specimenDO.setBarcode(specimenVO.getBarcode());
 		if(specimenVO.getStorageContainer()!=null)
 		{
-			setStorageContainer(dao, specimenVO, specimenDO);
+			setStorageContainer(dao, specimenVO, specimenDO ,sessionDataBean);
 		}
 		else
 		{
@@ -2780,48 +2825,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
  * @throws DAOException
  */
 private void setStorageContainer(DAO dao, Specimen specimenVO,
-		Specimen specimenDO) throws DAOException {
+		Specimen specimenDO, SessionDataBean sessionDataBean) throws DAOException,SMException {
 	StorageContainer storageContainer =specimenVO.getStorageContainer();
-	Long containerId = storageContainer.getId();
-	List storageContainerList;
-	storageContainer = retrieveStorageContainerObject(dao,
-			storageContainer, containerId);
-
-	if (specimenVO.getPositionDimensionOne() == null || 
-			specimenVO.getPositionDimensionTwo() == null)
-	{
-		
-		LinkedList<Integer> positionValues = 
-			StorageContainerUtil
-			.getFirstAvailablePositionsInContainer(
-					storageContainer,getStorageContainerMap(),storageContainerIds);
-		
-		specimenVO.setPositionDimensionOne(positionValues.get(0));
-				
-		specimenVO.setPositionDimensionTwo(positionValues.get(1));
-		
-	}
 	
 	specimenDO.setPositionDimensionOne(
 			specimenVO.getPositionDimensionOne());
 	specimenDO.setPositionDimensionTwo(
-			specimenVO.getPositionDimensionTwo());
-	
-	chkContainerValidForSpecimen(storageContainer, specimenDO, dao);
-	
-	String storageValue = storageContainer.getName()+":"+specimenVO.getPositionDimensionOne()+" ,"+ 
-	specimenVO.getPositionDimensionTwo();
-	
-	if(storageContainerIds.contains(storageValue))
-	{
-		throw new DAOException(",Storage Location:" + storageValue +
-			" has been assignes to two or more specimens");								
-	}
-	else
-	{
-		storageContainerIds.add(storageValue);
-	}
-	
+			specimenVO.getPositionDimensionTwo());	
 	specimenDO.setStorageContainer(storageContainer);
 }
 
