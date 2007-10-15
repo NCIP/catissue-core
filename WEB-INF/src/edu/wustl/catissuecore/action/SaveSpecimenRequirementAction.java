@@ -59,7 +59,14 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		{
 			aliquotSpecimenMap = (Map)getAliquots(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier());
 		}
-		Map deriveSpecimenMap = createSpecimenTemplateForm.getDeriveSpecimenValues();
+		
+		Map deriveSpecimenMap = createSpecimenTemplateForm.deriveSpecimenMap();
+		
+		if(createSpecimenTemplateForm.getNoOfDeriveSpecimen() == 0)
+		{
+			createSpecimenTemplateForm.setDeriveSpecimenValues(null);
+			deriveSpecimenMap = null;
+		}
 		MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
 		try
 		{
@@ -107,6 +114,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
 		
 		//Derive
+		if(createSpecimenTemplateForm.getNoOfDeriveSpecimen() == 0)
+		{
+			createSpecimenTemplateForm.setDeriveSpecimenValues(null);
+		}
 		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.getDeriveSpecimenValues());
 		return specimenRequirementBean;
 	}

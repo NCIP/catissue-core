@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -532,7 +533,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
-        ActionErrors errors = new ActionErrors();
+       ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
         double aliquotQuantity = 0;
         double initialQuantity = 0;
@@ -744,24 +745,24 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			{
 				boolean bSpecimenClass = false;
 				boolean bSpecimenType = false;
-				Iterator it = this.deriveSpecimenValues.keySet().iterator();
-				while (it.hasNext())
+				Map deriveSpecimenMap = deriveSpecimenMap();
+				Iterator it = deriveSpecimenMap.keySet().iterator();
+				while(it.hasNext())
 				{
 					String key = (String)it.next();
-					String value = (String)deriveSpecimenValues.get(key);
-					
+					String mapValue = (String)deriveSpecimenMap.get(key);
 					if(!bSpecimenClass)
 					{
-						if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
+						if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption(mapValue))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
 							bSpecimenClass = true;
 						}
-						if(value.equals("Molecular"))
+						if("Molecular".equals(mapValue))
 						{
 							if((key.indexOf("_concentration"))!=-1)
 							{
-								if(!validator.isNumeric(value,0))
+								if(!validator.isNumeric(mapValue,0))
 								{
 									errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.concentration")));	
 								}
@@ -771,7 +772,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 					
 					if(!bSpecimenType)
 					{
-						if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
+						if(key.indexOf("specimenType")!=-1 && !validator.isValidOption(mapValue))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimetype")));
 							bSpecimenType = true;
@@ -781,21 +782,21 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 					
 					if((key.indexOf("_quantity"))!=-1)
 					{
-						if (!validator.isEmpty(value))
+						if (!validator.isEmpty(mapValue))
 						{					
 							try
 							{
-								value = new BigDecimal(value).toPlainString();
+								mapValue = new BigDecimal(mapValue).toPlainString();
 								if(Utility.isQuantityDouble(className,type))
 			        			{						
-			        		        if(!validator.isDouble(value,true))
+			        		        if(!validator.isDouble(mapValue,true))
 			        		        {
 			        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.quantity")));        		        	
 			        		        }
 			        			}
 			        			else
 			        			{        				
-			        				if(!validator.isNumeric(value,0))
+			        				if(!validator.isNumeric(mapValue,0))
 			        		        {
 			        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("cpbasedentry.derivedspecimen.quantity")));        		        	
 			        		        }
@@ -813,7 +814,6 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 					}
 				}
 			}
-            	
         }
         catch(Exception excp)
         {
@@ -821,6 +821,41 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
         }
         return errors;
      }
+
+
+	public Map deriveSpecimenMap()
+	{
+		int iCount;
+		Map deriveSpecimenMap = new LinkedHashMap<String, String>();
+		for(iCount = 1 ; iCount <= noOfDeriveSpecimen ; iCount++)
+		{
+			String key = null;
+			key  = "DeriveSpecimenBean:"+iCount+"_specimenClass";
+			String specimenClass = (String)deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, specimenClass);
+			
+			key = "DeriveSpecimenBean:"+iCount+"_id";
+			String id = (String)deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, id);
+			
+			key = "DeriveSpecimenBean:"+iCount+"_specimenType";
+			String specimenType = (String)deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, specimenType);
+			
+			key = "DeriveSpecimenBean:"+iCount+"_quantity";
+			String quantity = (String)deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, quantity);
+			
+			key = "DeriveSpecimenBean:"+iCount+"_concentration";
+			String conc = (String)deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, conc);
+			
+			key = "DeriveSpecimenBean:"+iCount+"_storageLocation";
+			String storageLocation = (String)deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, storageLocation);
+		}
+		return deriveSpecimenMap;
+	}
 	
 	public String getNodeKey()
 	{
