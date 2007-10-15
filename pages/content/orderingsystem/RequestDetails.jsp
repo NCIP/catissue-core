@@ -541,7 +541,7 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 									 		//String assignedQtyValue = requestDetailsBeanObj.getAssignedQty() ;									 		
 									 	%>	
 									 	<td class="dataCellText"> 										 		
-									 		<html:text name="requestDetailsForm" styleClass="formFieldSized3" maxlength="4"  styleId="<%=assignQty%>" property="<%=assignQty %>" disabled="<%= disableRow %>" />
+									 		<html:text name="requestDetailsForm" styleClass="formFieldSized3" maxlength="10"  styleId="<%=assignQty%>" property="<%=assignQty %>" disabled="<%= disableRow %>" />
 									 		<span>		
 												<script>
 													var v= getUnit('<%= className %>','<%= type %>');
