@@ -26,6 +26,21 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		
 		function confirmDisable()
 		{		
+			
+			var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
+			if (go==true)
+			{
+				document.forms[0].target = "_self";
+				var action ="SubmitSpecimenCollectionProtocol.do";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
+							
+		}
+		
+		function confirmDisableTop()
+		{		
+			
 			var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
 			if (go==true)
 			{
@@ -239,21 +254,41 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 
 			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
 				<logic:equal name="viewSpecimenSummaryForm" property="collectionProtocolStatus" value="Disabled">
-					<tr>
-						<td>			
-							&nbsp;&nbsp;
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<html:button  styleClass="actionButton" 
-								property="submitPage" 
-								title=""
-								value="Save Collection Protocol" 
-								onclick="confirmDisable()">
-							</html:button>
-						</td>
-					</tr>
+						<logic:equal name="viewSpecimenSummaryForm" property="specimenExist" value="true">
+							<tr>
+								<td>			
+									&nbsp;&nbsp;
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<html:button  styleClass="actionButton" 
+										property="submitPage" 
+										title=""
+										value="Save Collection Protocol" 
+										onclick="confirmDisable()">
+									</html:button>
+								</td>
+							</tr>
+					</logic:equal>
+
+					<logic:equal name="viewSpecimenSummaryForm" property="specimenExist" value="false">
+							<tr>
+								<td>			
+									&nbsp;&nbsp;
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<html:button  styleClass="actionButton" 
+										property="submitPage" 
+										title=""
+										value="Save Collection Protocol" 
+										onclick="confirmDisableTop()">
+									</html:button>
+								</td>
+							</tr>
+					</logic:equal>
 				</logic:equal>
 				
 				<logic:notEqual name="viewSpecimenSummaryForm" property="collectionProtocolStatus" value="Disabled">
