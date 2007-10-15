@@ -74,7 +74,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 				CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 	
 				eventBean.setUniqueIdentifier(String.valueOf(specimencollectionGroup.getId().longValue()));
-	//			eventBean.setUniqueIdentifier("E"+eventBean.getUniqueIdentifier() + "_");
+
 				eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
 						specimencollectionGroup.getSpecimenCollection() ));
 				globalSpecimenId = "E"+eventBean.getUniqueIdentifier() + "_";
