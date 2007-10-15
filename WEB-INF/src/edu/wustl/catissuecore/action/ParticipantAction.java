@@ -386,12 +386,17 @@ public class ParticipantAction extends SecureAction
 			String collectionProtocolTitle = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_id";
 			String activityStatus = (String)mapCollectionProtocolRegistration.get(isActive);
 			String cpId = (String)mapCollectionProtocolRegistration.get(collectionProtocolTitle);
+			if(activityStatus == null && cpId == null)
+			{
+				cprCount++;
+				continue;
+			}
 			if(activityStatus == null)
     		{
 				mapCollectionProtocolRegistration.put(isActive, Constants.ACTIVITY_STATUS_ACTIVE);
     		}
 			
-			if(activityStatus != null && activityStatus.equalsIgnoreCase(Constants.DISABLED) || cpId.equalsIgnoreCase("-1"))
+			if(activityStatus != null && activityStatus.equalsIgnoreCase(Constants.DISABLED) || (cpId != null && cpId.equalsIgnoreCase("-1")))
     		{
 				
 				String collectionProtocolParticipantId = "CollectionProtocolRegistration:"+i+"_protocolParticipantIdentifier";
