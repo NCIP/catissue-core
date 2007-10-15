@@ -303,16 +303,18 @@
 		public function deleteNode():void
 		{
 				var ass:Association;
-				for(var i:int=0;i<inAssociations.length;i++)
+				var length:int  = inAssociations.length as int;
+				for(var i:int=0;i<length;i++)
 				{
-					ass = Association(inAssociations.getItemAt(i));
+					ass = Association(inAssociations.getItemAt(0));
 					deletePath(ass.associatedLink);
 					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeOutAssociation(this.name,ass.associatedLink);
 					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeDisplayOutAssociation(this.name,ass.associatedLink);
 				}
-				for(var j:int=0;j<outAssociations.length;j++)
+				length=outAssociations.length as int;
+				for(var j:int=0;j<length;j++)
 				{
-					ass = Association(outAssociations.getItemAt(j));
+					ass = Association(outAssociations.getItemAt(0));
 					deletePath(ass.associatedLink);
 					DAGNode(this.parent.getChildByName(ass.associatedNode)).removeInAssociation(this.name,ass.associatedLink);
 				}
