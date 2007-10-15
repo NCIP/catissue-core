@@ -118,7 +118,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		{
 			createSpecimenTemplateForm.setDeriveSpecimenValues(null);
 		}
-		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.getDeriveSpecimenValues());
+		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.deriveSpecimenMap());
 		return specimenRequirementBean;
 	}
 	
@@ -210,7 +210,12 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			specimenRequirementBean.setCollectionEventContainer(createSpecimenTemplateForm.getCollectionEventContainer());
 			specimenRequirementBean.setReceivedEventReceivedQuality(createSpecimenTemplateForm.getReceivedEventReceivedQuality());
 			specimenRequirementBean.setCollectionEventCollectionProcedure(createSpecimenTemplateForm.getCollectionEventCollectionProcedure());
-			
+			//Aliquot
+			specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
+			specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm.getQuantityPerAliquot());
+			specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
+			//Derive
+			specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
 			Map aliquotSpecimenMap = null;
 			Collection deriveSpecimenCollection = null;
 			if(createSpecimenTemplateForm.getNoOfAliquots()!=null && !createSpecimenTemplateForm.getNoOfAliquots().equals(""))
