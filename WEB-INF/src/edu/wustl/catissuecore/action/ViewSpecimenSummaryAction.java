@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -25,7 +26,13 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 
 public class ViewSpecimenSummaryAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -85,6 +92,19 @@ public class ViewSpecimenSummaryAction extends Action {
 			//for disabling of CP set the collection protocol status: kalpana
 	
 			if(collectionProtocolBean!=null && collectionProtocolBean.getActivityStatus()!=null){
+			
+			//checked the associated specimens to the cp	
+				boolean isSpecimenExist=(boolean)isSpecimenExists((Long)collectionProtocolBean.getIdentifier());
+				if(isSpecimenExist)
+				{
+					ViewSpecimenSummaryForm.setSpecimenExist("true");
+				}
+				else
+				{
+					ViewSpecimenSummaryForm.setSpecimenExist("false");
+				}
+		
+			
 				ViewSpecimenSummaryForm.setCollectionProtocolStatus(collectionProtocolBean.getActivityStatus());
 			}
 			
@@ -530,4 +550,41 @@ public class ViewSpecimenSummaryAction extends Action {
 		}
 		return specimenList;
 	}	
+	
+	/**
+	 * To check the associated specimens to the Collection protocol
+	 * @param cpId
+	 * @return
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	protected boolean isSpecimenExists(Long cpId) throws DAOException, ClassNotFoundException
+	{
+		
+		String hql = " select" +
+        " elements(scg.specimenCollection) " +
+        "from " +
+        " edu.wustl.catissuecore.domain.CollectionProtocol as cp" +
+        ", edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr" +
+        ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg" +
+        ", edu.wustl.catissuecore.domain.Specimen as s" +
+        " where cp.id = "+cpId+"  and"+
+        " cp.id = cpr.collectionProtocol.id and" +
+        " cpr.id = scg.collectionProtocolRegistration.id and" +
+        " scg.id = s.specimenCollectionGroup.id and " +
+        " s.activityStatus = '"+Constants.ACTIVITY_STATUS_ACTIVE+"'";
+		
+		List specimenList=(List)Utility.executeQuery(hql);
+		if((specimenList!=null) && (specimenList).size()>0)
+		{
+			return true;
+		}	
+		else
+		{
+			return false;
+		}
+		
+	}
+	
+	
 }
