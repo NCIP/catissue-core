@@ -26,6 +26,28 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	public List<DAGPath> dagpathList = new ArrayList<DAGPath>();
 	private String errorMsg = "";
 	
+	private int x;
+	private int y;
+	
+	public int getX()
+	{
+		return x;
+	}
+	public void setX(int x)
+	{
+		this.x = x;
+	}
+
+	public int getY()
+	{
+		return y;
+	}
+	public void setY(int y)
+	{
+		this.y = y;
+	}
+
+
 	public DAGNode()
 	{
 		setOperatorBetweenAttrAndAssociation(ClientConstants.OPERATOR_AND);
@@ -131,7 +153,8 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 	//	pathList = (List<String>) in.readObject();
 		dagpathList =( List<DAGPath>)in.readObject();
 		errorMsg = in.readUTF();
-		
+		x = in.readInt();
+		y = in.readInt();
 	}
 
 	public void writeExternal(ObjectOutput out) throws IOException {
@@ -146,6 +169,8 @@ public class DAGNode implements Externalizable,Comparable<DAGNode>{
 		//out.writeObject(pathList);
 		out.writeObject(dagpathList);
 		out.writeUTF(errorMsg);
+		out.writeInt(x);
+		out.writeInt(y);
 	}
 
 	public String toString()

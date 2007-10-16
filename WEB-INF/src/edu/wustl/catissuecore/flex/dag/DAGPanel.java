@@ -42,6 +42,8 @@ import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.ExpressionId;
 import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
+import edu.wustl.common.querysuite.queryobject.locator.Position;
+import edu.wustl.common.querysuite.queryobject.locator.QueryNodeLocator;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -57,7 +59,7 @@ public class DAGPanel {
 	private IPathFinder m_pathFinder;
 	private IExpression expression;
 	private HashMap<String,IPath> m_pathMap = new HashMap<String, IPath>();
-		
+	private Map<IExpressionId, Position> positionMap;	
 	public DAGPanel(IPathFinder pathFinder)
 	{
 		m_pathFinder =pathFinder;
@@ -372,6 +374,8 @@ public class DAGPanel {
 		m_queryObject.setQuery(query);
 		IConstraints constraints = query.getConstraints();
 
+		positionMap = new QueryNodeLocator(400,query).getPositionMap();
+
 		HashSet<IExpressionId> visibleExpression = new HashSet<IExpressionId>();
 
 		Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
@@ -394,6 +398,12 @@ public class DAGPanel {
 			dagNode.setExpressionId(exp.getExpressionId().getInt());
 			dagNode.setNodeName(nodeDisplayName);
 			dagNode.setToolTip(exp);
+			Position position = positionMap.get(exp.getExpressionId());
+			if (position!=null)
+			{
+				dagNode.setX(position.getX());
+				dagNode.setY(position.getY());
+			}
 			if(!exp.containsRule())
 			{
 				dagNode.setNodeType(DAGConstant.VIEW_ONLY_NODE);

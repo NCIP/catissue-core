@@ -2,7 +2,7 @@
 
 <mx:Box backgroundColor="white" borderStyle="solid" direction="vertical"  
 	xmlns:mx="http://www.adobe.com/2006/mxml"  verticalGap="0"
-		implements="flash.utils.IExternalizable" creationComplete="init()" fontSize="9">
+		implements="flash.utils.IExternalizable" creationComplete="init()" fontSize="9" >
 <mx:Script>
 	<![CDATA[
 		import Util.HashMap;
@@ -238,6 +238,12 @@
 			operatorList = input.readObject() as ArrayCollection;
 			dagpathList = input.readObject() as ArrayCollection;
 			errorMsg = input.readUTF();
+			x = input.readInt();
+
+			//Alert.show( nodeName + "x ==" +x)
+
+			y = input.readInt();
+//			Alert.show( nodeName+"y ==" +y)
 			
 		}
 
@@ -251,6 +257,8 @@
 			out.writeObject(operatorList);
 			out.writeObject(dagpathList);
 			out.writeUTF(errorMsg);
+			out.writeInt(x);
+			out.writeInt(y);
 		}
 		//---
 		
@@ -420,7 +428,7 @@
 		<mx:Canvas backgroundColor="0xF5F5F5"  borderStyle="solid">
 			<mx:Label text="{nodeNumber}" />
 		</mx:Canvas>
-		<mx:Label styleName="Arial"  text="{nodeName}" color="blue" />
+		<mx:Label styleName="Arial"  text="{nodeName}" color="blue" width="100"/>
 		
 		<mx:Button label=">" click="createAndShow(event);" />
 	</mx:HBox>

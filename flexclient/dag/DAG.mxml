@@ -165,7 +165,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		
 		dagNode.x = pt.x;
 		dagNode.y = pt.y;
-
+//		Alert.show(""+dagNode.width);
 		var ass:Association;
 		var inAssociations:ArrayCollection;
 		var inAsslength:int;
@@ -291,7 +291,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			var ypos:int =0;
 			var nodeColor:int=0xFFFFAA;
 			
-			if(mainPanel.getChildren().length==1)
+/*			if(mainPanel.getChildren().length==1)
 			{
 				xpos = 20;
 				ypos = (mainPanel.y+40);
@@ -301,7 +301,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				var length:int=mainPanel.getChildren().length;
 				xpos = 20;
 				ypos = (mainPanel.y+50)+(40*length);
-			}	
+			}	*/
 			
 			node.addEventListener(MouseEvent.MOUSE_MOVE,doDrag);
 			node.addEventListener(MouseEvent.CLICK,updateNodeSelection);	
@@ -327,6 +327,12 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				default:																
 						nodeColor=0xFFFFAA	
 			}	
+
+			//Alert.show(" node.x =="+ node.x)
+			//Alert.show(" node.y =="+ node.y)
+
+			xpos = node.x;
+			ypos = node.y;
 			node.initializeNode(node.nodeName,node.nodeType,node.expressionId,node.toolTip,xpos,ypos,nodeColor);
 			if(hideNodeFlag)
 			{
@@ -702,6 +708,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			var dagNode2:DAGNode = DAGNode(mainPanel.getChildByName(secondNode));
 			if(dagNode2!=null)	
 			{
+				if (dagNode1.width==0)
+				{
+					dagNode1.width = 190;	
+				}
 				var fromX:int = dagNode1.x+dagNode1.width;
 				var fromY:int = dagNode1.y+(15);
 				var toX:int = dagNode2.x;
