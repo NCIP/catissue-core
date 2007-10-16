@@ -285,7 +285,8 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			
 			LinkedHashMap oldDeriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
 			Object keyArr[] = deriveSpecimenMap.keySet().toArray();
-			if(totalNewDeriveSpecimen>=0)
+			
+			if(totalNewDeriveSpecimen>0)
 			{
 				for (int iCount = 0; iCount<noOfBeanDerive;iCount++)				
 				{				
@@ -297,10 +298,14 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			}
 			else
 			{
-				LinkedHashMap deriveMap = new LinkedHashMap();;
+				LinkedHashMap deriveMap = new LinkedHashMap();
 				for (int iCount = 0; iCount<keyArr.length;iCount++)				
 				{				
-					deriveMap.put(keyArr[iCount], oldDeriveSpecimenMap.get(keyArr[iCount]));	
+					SpecimenRequirementBean newBean = (SpecimenRequirementBean)deriveSpecimenMap.get(keyArr[iCount]);
+					SpecimenRequirementBean oldBean = (SpecimenRequirementBean)oldDeriveSpecimenMap.get(keyArr[iCount]);
+					deriveMap.put(keyArr[iCount], deriveSpecimenMap.get(keyArr[iCount]));
+					newBean.setAliquotSpecimenCollection(oldBean.getAliquotSpecimenCollection());
+					newBean.setDeriveSpecimenCollection(oldBean.getDeriveSpecimenCollection());
 				}
 				specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveMap);
 				oldDeriveSpecimenMap.clear();
