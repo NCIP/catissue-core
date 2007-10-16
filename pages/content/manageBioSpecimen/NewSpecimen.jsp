@@ -210,11 +210,11 @@
 				{
 				  if(temp == "orderDetails")
 					{
-						setSubmitted('ForwardTo','printSpecimenAdd','orderDetails');
+						setSubmitted('ForwardTo','CPQueryPrintSpecimenAdd','orderDetails');
 					}
 					else
 					{
-					    setSubmitted('ForwardTo','printSpecimenAdd','pageOfCreateAliquot');
+					    setSubmitted('ForwardTo','CPQueryPrintSpecimenAdd','pageOfCreateAliquot');
                     }
 					<%
 					actionToCall = "NewSpecimenAdd.do";
@@ -229,11 +229,11 @@
 				{
 					if(temp == "orderDetails")
 					{
-						setSubmitted('ForwardTo','printSpecimenEdit','orderDetails');
+						setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','orderDetails');
 					}
 					else
 					{
-						setSubmitted('ForwardTo','printSpecimenEdit','pageOfCreateAliquot');
+						setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','pageOfCreateAliquot');
 					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
@@ -252,12 +252,12 @@
 				{
 					if(temp == "orderDetails")
 					{
-					   	setSubmitted('ForwardTo','printSpecimenAdd','orderDetails');
+					   	setSubmitted('ForwardTo','CPQueryPrintSpecimenAdd','orderDetails');
 					}
 					else
 					{
 
-					setSubmitted('null','printSpecimenAdd','success');
+					setSubmitted('null','CPQueryPrintSpecimenAdd','success');
 					}
 					<%
 					actionToCall = "NewSpecimenAdd.do";
@@ -279,11 +279,11 @@
 				{
 					if(temp == "orderDetails")
 					{
-						setSubmitted('ForwardTo','printSpecimenEdit','orderDetails');
+						setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','orderDetails');
 					}
 					else
 					{
-					setSubmitted('null','printSpecimenEdit','success');
+					setSubmitted('null','CPQueryPrintSpecimenEdit','success');
 					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
@@ -544,7 +544,7 @@
 			var formName;
 			<% String formNameAction = null;%>
 			if (answer){
-				setSubmitted('ForwardTo','printSpecimenEdit','eventParameters');
+				setSubmitted('ForwardTo','CPQueryPrintSpecimenEdit','eventParameters');
 				<%
 				formNameAction = "NewSpecimenEdit.do";
 				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
@@ -766,10 +766,10 @@
 	<html:errors />
 	<%
 		
-				String printAction = "printSpecimenAdd";
+				String printAction = "CPQueryPrintSpecimenAdd";
 				if(operation.equals(Constants.EDIT))
 				{
-					 printAction = "printSpecimenEdit";
+					 printAction = "CPQueryPrintSpecimenEdit";
 				}
 				
 				String normalSubmitFunctionName = "setSubmitted('" + submittedFor+ "','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[0][1]+"')";
@@ -970,7 +970,7 @@
 									</td>
 							
 						        	<td class="formFieldNoBordersSimple" colspan="<%=specimenColSpan%>">
-										<html:hidden property="specimenCollectionGroupName"/>
+						        		<html:hidden property="specimenCollectionGroupName"/>
 										<!-- Mandar : 434 : for tooltip -->
 										<html:hidden property="parentSpecimenName"/>
 										

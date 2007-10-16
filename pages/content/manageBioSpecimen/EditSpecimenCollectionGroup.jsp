@@ -6,14 +6,14 @@
  			* Patch ID: 2741_18 			
  			* Description: Adding check for changes function
 			*/
-String printaction = "printSCGAdd";
+String printaction = "CPQueryPrintSCGAdd";
 if(operation.equals(Constants.ADD))
 {
-	 printaction = "printSCGAdd";
+	 printaction = "CPQueryPrintSCGAdd";
 }
 else if(operation.equals(Constants.EDIT))
 {
- 	 printaction = "printSCGEdit";
+ 	 printaction = "CPQueryPrintSCGEdit";
 } 
 String normalSubmitFunctionName = "setSubmitted('" + submittedFor+ "','"+printaction+"','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
 String forwardToSubmitFuctionName = "setSubmitted('ForwardTo','"+ printaction +"','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									

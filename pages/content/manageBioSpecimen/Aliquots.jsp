@@ -95,12 +95,13 @@ if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
 		<%if(CPQuery != null){%>
 		var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
 		document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=create&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>&<%=Constants.CP_QUERY%>=<%=CPQuery%>";
-							
-		<%}%>
-		document.forms[0].forwardTo.value= "printAliquot";
-		document.forms[0].nextForwardTo.value = "success";
+		document.forms[0].forwardTo.value= "CPQueryPrintAliquot";					
+		<%} else { %>
+			document.forms[0].forwardTo.value= "printAliquot";
+		<%}%>	
 		
-	    document.forms[0].submit();
+		document.forms[0].nextForwardTo.value = "success";
+		document.forms[0].submit();
 	}
 	
 	function onCheckboxClicked() 

@@ -1417,7 +1417,7 @@ PUBLIC
 		</action>
   		<!--Report Problem Actions Ends-->
 		<!--print Actions Begins-->
-		<action path="/printSCGEdit"
+		<action path="/CPQueryPrintSCGEdit"
 			type="edu.wustl.catissuecore.action.PrintAction"
 			scope="request">
 			<forward name="success" path="/AnticipatorySpecimenView.do" />
@@ -1425,7 +1425,7 @@ PUBLIC
 			<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
 			<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 		</action>
-		<action path="/printSCGAdd"
+		<action path="/CPQueryPrintSCGAdd"
 			type="edu.wustl.catissuecore.action.PrintAction"
 			scope="request">
 			<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
@@ -1433,7 +1433,7 @@ PUBLIC
 			<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
 			<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 		</action>		
-		<action path="/printSpecimenAdd"
+		<action path="/CPQueryPrintSpecimenAdd"
 			type="edu.wustl.catissuecore.action.PrintAction"
 			scope="request">
 			<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
@@ -1445,7 +1445,7 @@ PUBLIC
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 			<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />		
 		</action>
-		<action path="/printSpecimenEdit"
+		<action path="/CPQueryPrintSpecimenEdit"
 			type="edu.wustl.catissuecore.action.PrintAction"
 			scope="request">
 			<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery"/>
@@ -1458,7 +1458,7 @@ PUBLIC
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 			<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 		</action>
-		<action path="/printDeriveSpecimen"
+		<action path="/CPQueryPrintDeriveSpecimen"
 			type="edu.wustl.catissuecore.action.PrintAction"
 			scope="request">
 			<forward name="success" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
@@ -1469,18 +1469,41 @@ PUBLIC
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 			<forward name="sameCollectionGroup" path="/QuerySpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />			
 		</action>		
-		<action path="/printAliquot"
+		<action path="/CPQueryPrintAliquot"
 			type="edu.wustl.catissuecore.action.PrintAction"
 			scope="request">
 			<forward name="success" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;menuSelected=15" />
 			<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfCreateAliquot&amp;CPQuery=true&amp;menuSelected=15" />
-		</action>	
-		<action path="/printAliquotSummary"
+		</action>
+		
+		<action path="/CPQueryPrintAliquotSummary"
 			type="edu.wustl.catissuecore.action.PrintAction"
 			scope="request">
 			<forward name="success" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;menuSelected=15" />
 			<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;menuSelected=15" />
-		</action>		
+		</action>
+		
+		<!-- Non cp Query Pages -->
+		<action path="/printAliquot"
+			type="edu.wustl.catissuecore.action.PrintAction"
+			scope="request">
+			<forward name="success" path="/Aliquots.do?pageOf=pageOfAliquotSummary&amp;menuSelected=15" />
+			<forward name="failure" path="/Aliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
+		</action>
+		
+		<action path="/printDeriveSpecimen"
+			type="edu.wustl.catissuecore.action.PrintAction"
+			scope="request">
+			<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
+			<forward name="failure" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
+			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
+			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=15" />
+			<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15" />
+			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit" />
+			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
+			<forward name="orderDetails" path="/RequestDetails.do" />
+		</action>
+				
 		<!--print Actions ends-->
 		<!--Forgot Password Actions Begins-->
 		<action path="/ForgotPassword"
@@ -3465,6 +3488,7 @@ PUBLIC
 		validate="true"
 		input="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15"
 		scope="request">
+		<forward name="printAliquot" path="/printAliquot.do" />	
 		<forward name="success" path="/Aliquots.do?pageOf=pageOfAliquotSummary&amp;menuSelected=15" />
 		<forward name="failure" path="/Aliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 	</action>
@@ -3923,7 +3947,7 @@ PUBLIC
 		validate="true"
 		input="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimenCPQuery&amp;menuSelected=15"
 		scope="request">
-		<forward name="printDeriveSpecimen" path="/printDeriveSpecimen.do" />			
+		<forward name="CPQueryPrintDeriveSpecimen" path="/CPQueryPrintDeriveSpecimen.do" />			
 		<forward name="success" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
 		<forward name="failure" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 		<forward name="eventParameters" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
@@ -4073,7 +4097,7 @@ PUBLIC
 <!--		<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			-->
 		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
 		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
-		<forward name="printSCGAdd" path="/printSCGAdd.do" />				 
+		<forward name="CPQueryPrintSCGAdd" path="/CPQueryPrintSCGAdd.do" />				 
 	</action>
 		
 	<action path="/CPQueryNewSpecimen"
@@ -4102,7 +4126,7 @@ PUBLIC
 		validate="true"
 		input="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15"
 		scope="request">
-		<forward name="printSpecimenAdd" path="/printSpecimenAdd.do"/>
+		<forward name="CPQueryPrintSpecimenAdd" path="/CPQueryPrintSpecimenAdd.do"/>
 		<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
 		<forward name="failure" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
 		<forward name="createNew" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
@@ -4120,7 +4144,7 @@ PUBLIC
 		validate="true"
 		input="/CPQueryNewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15"
 		scope="request">
-		<forward name="printSpecimenEdit" path="/printSpecimenEdit.do"/>
+		<forward name="CPQueryPrintSpecimenEdit" path="/CPQueryPrintSpecimenEdit.do"/>
 		<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery"/>
 		<forward name="failure" path="/CPQueryNewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
 		<forward name="createNew" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
@@ -4151,7 +4175,7 @@ PUBLIC
 		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->			
 		<!--<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />		
 		-->
-		<forward name="printSCGEdit" path="/printSCGEdit.do" />			
+		<forward name="CPQueryPrintSCGEdit" path="/CPQueryPrintSCGEdit.do" />			
 		<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=New_Specimen"/>
 		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 	</action>
@@ -4185,7 +4209,7 @@ PUBLIC
 		validate="true"
 		input="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15"
 		scope="request">
-		<forward name="printAliquot" path="/printAliquot.do" />
+		<forward name="CPQueryPrintAliquot" path="/CPQueryPrintAliquot.do" />	
 		<forward name="success" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;menuSelected=15" />
 		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfCreateAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 	</action>

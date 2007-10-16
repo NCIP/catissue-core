@@ -32,6 +32,7 @@
 		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 		boolean readOnlyValue=false,readOnlyForAll=false;
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+		String printAction="printDeriveSpecimen";
 		if(operation!=null && operation.equals(Constants.EDIT))
 		{
 			editViewButton="buttons."+Constants.VIEW;
@@ -44,6 +45,7 @@
 			if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
 			{
 				formName = Constants.CP_QUERY_CREATE_SPECIMEN_ADD_ACTION ;
+				printAction="CPQueryPrintDeriveSpecimen";
 			}
 			readOnlyValue=false;
 		}
@@ -273,7 +275,7 @@
 			var checked = document.forms[0].aliCheckedButton.checked;
 			if(checked)
 			{
-				setSubmitted('ForwardTo','printDeriveSpecimen','pageOfCreateAliquot');
+				setSubmitted('ForwardTo','<%=printAction%>','pageOfCreateAliquot');
 				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 			
 			}
@@ -282,11 +284,11 @@
 				var temp = "<%=frdTo%>";				
 				if(temp == "orderDetails")
 				{
-					setSubmitted('ForwardTo','printDeriveSpecimen','orderDetails');
+					setSubmitted('ForwardTo','<%=printAction%>','orderDetails');
 			     }
 			     else
 			    {
-				   setSubmitted('ForwardTo','printDeriveSpecimen','eventParameters');
+				   setSubmitted('ForwardTo','<%=printAction%>','eventParameters');
 			     }  
 				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 			
@@ -958,8 +960,8 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
 								String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-								String submitAndDistribute = "setSubmitted('ForwardTo','printDeriveSpecimen','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
-								String addMoreSubmitFunctionName = "setSubmitted('ForwardTo','printDeriveSpecimen','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
+								String submitAndDistribute = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
+								String addMoreSubmitFunctionName = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
 								String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;		
 
 				 			%>

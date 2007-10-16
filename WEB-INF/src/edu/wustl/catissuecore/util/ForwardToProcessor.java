@@ -76,7 +76,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		{
 			Specimen specimen = (Specimen) domainObject;
 			//Derive New from This Specimen
-			if (actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("printSpecimenAdd")||actionForm.getForwardTo().equals("printSpecimenEdit"))
+			if (actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit"))
 			{
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId());
 				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
@@ -96,13 +96,13 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 				}
 			}
 			//Add Events
-			else if (actionForm.getForwardTo().equals("eventParameters")|| actionForm.getForwardTo().equals("printDeriveSpecimen"))
+			else if (actionForm.getForwardTo().equals("eventParameters")|| actionForm.getForwardTo().equals("CPQueryPrintDeriveSpecimen"))
 			{
 				forwardToHashMap.put("specimenId", domainObject.getId().toString());
 				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
 				forwardToHashMap.put("specimenClass", specimen.getClassName());
 			}
-			else if (actionForm.getForwardTo().equals("distribution") || actionForm.getForwardTo().equals("printSpecimenEdit") || actionForm.getForwardTo().equals("printSpecimenAdd") || actionForm.getForwardTo().equals("printDeriveSpecimen"))
+			else if (actionForm.getForwardTo().equals("distribution") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd") || actionForm.getForwardTo().equals("CPQueryPrintDeriveSpecimen"))
 			{
 				forwardToHashMap.put("specimenObjectKey", domainObject);
 			}
