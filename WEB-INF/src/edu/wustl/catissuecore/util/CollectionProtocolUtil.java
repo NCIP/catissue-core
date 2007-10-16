@@ -341,7 +341,7 @@ public class CollectionProtocolUtil {
 		
 		return speRequirementBean;
 	}
-	private static LinkedHashMap getDerviredObjectMap(Collection<GenericSpecimen> derivedCollection)
+	public static LinkedHashMap getDerviredObjectMap(Collection<GenericSpecimen> derivedCollection)
 	{
 		LinkedHashMap<String, String> derivedObjectMap = new LinkedHashMap<String, String> ();
 		Iterator<GenericSpecimen> iterator = derivedCollection.iterator();

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,6 +24,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
@@ -351,15 +353,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		createSpecimenTemplateForm.setQuantityPerAliquot(specimenRequirementBean.getQuantityPerAliquot());
 		createSpecimenTemplateForm.setStorageLocationForAliquotSpecimen(specimenRequirementBean.getStorageContainerForAliquotSpecimem());
 		
+		
 		//Derive
-		createSpecimenTemplateForm.setDeriveSpecimenValues(specimenRequirementBean.getDeriveSpecimen());
-		if(specimenRequirementBean.getDeriveSpecimen()==null ||specimenRequirementBean.getDeriveSpecimen().size()==0)
-		{
-			createSpecimenTemplateForm.setNoOfDeriveSpecimen(0);
-		}
-		else
-		{
-			createSpecimenTemplateForm.setNoOfDeriveSpecimen(specimenRequirementBean.getDeriveSpecimenCollection().size());
-		}
+		LinkedHashMap deriveSpecimenLinkedHashMap = CollectionProtocolUtil.getDerviredObjectMap(specimenRequirementBean.getDeriveSpecimenCollection().values());
+		createSpecimenTemplateForm.setDeriveSpecimenValues(deriveSpecimenLinkedHashMap);
+		createSpecimenTemplateForm.setNoOfDeriveSpecimen(specimenRequirementBean.getDeriveSpecimenCollection().size());
 	}
 }

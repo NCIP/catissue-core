@@ -4461,6 +4461,7 @@ PUBLIC
 			validate="true"
 			input="/CreateSpecimenTemplate.do?pageOf=error">
 			<forward name="success" path="/CreateSpecimenTemplate.do?operation=add"/>
+			<forward name="failure" path="/CreateSpecimenTemplate.do?pageOf=error"/>
 		</action>
 		
 		<action path="/CreateSpecimenTemplate"

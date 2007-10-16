@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -45,7 +47,18 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 		if(operation.equals(Constants.EDIT))
 		{
-			initCreateSpecimenTemplateForm(createSpecimenTemplateForm, request);
+			try
+			{
+				initCreateSpecimenTemplateForm(createSpecimenTemplateForm, request);
+			}
+			catch(Exception e)
+			{
+				ActionErrors actionErrors = new ActionErrors();
+				actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
+						"errors.item",e.getMessage()));
+				saveErrors(request, actionErrors);						
+				return (mapping.findForward(Constants.FAILURE));
+			}
 		}
 		return (mapping.findForward(Constants.SUCCESS));
 	}
@@ -118,6 +131,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		{
 			createSpecimenTemplateForm.setDeriveSpecimenValues(null);
 		}
+		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
 		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.deriveSpecimenMap());
 		return specimenRequirementBean;
 	}
@@ -143,22 +157,31 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		for(int iCount = 1; iCount<= aliquotCount; iCount++)
 		{
 			SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,iCount);
-			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
-			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
-			specimenRequirementBean.setLineage(Constants.ALIQUOT);
-			if(quantityPerAliquot==null || quantityPerAliquot.equals(""))
-			{
-				quantityPerAliquot="0";
-			}
-			specimenRequirementBean.setQuantity(quantityPerAliquot);
-			specimenRequirementBean.setNoOfAliquots(null);
-			specimenRequirementBean.setQuantityPerAliquot(null);
-			specimenRequirementBean.setStorageContainerForAliquotSpecimem(null);
-			specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
-			specimenRequirementBean.setDeriveSpecimen(null);
+			createAliquot(createSpecimenTemplateForm, uniqueIdentifier,
+					quantityPerAliquot, iCount, specimenRequirementBean);
 			aliquotMap.put(specimenRequirementBean.getUniqueIdentifier(), specimenRequirementBean);
 		}
 		return aliquotMap;
+	}
+
+	private String createAliquot(CreateSpecimenTemplateForm createSpecimenTemplateForm,
+			String uniqueIdentifier, String quantityPerAliquot, int iCount,
+			SpecimenRequirementBean specimenRequirementBean)
+	{
+		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
+		specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
+		specimenRequirementBean.setLineage(Constants.ALIQUOT);
+		if(quantityPerAliquot==null || quantityPerAliquot.equals(""))
+		{
+			quantityPerAliquot="0";
+		}
+		specimenRequirementBean.setQuantity(quantityPerAliquot);
+		specimenRequirementBean.setNoOfAliquots(null);
+		specimenRequirementBean.setQuantityPerAliquot(null);
+		specimenRequirementBean.setStorageContainerForAliquotSpecimem(null);
+		specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
+		specimenRequirementBean.setDeriveSpecimen(null);
+		return quantityPerAliquot;
 	}
 	
 	 private Map getderiveSpecimen(Collection deriveSpecimenCollection, CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier)
@@ -192,7 +215,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		 return deriveSpecimenMap;
 	 }
 
-	 private void initCreateSpecimenTemplateForm(CreateSpecimenTemplateForm createSpecimenTemplateForm, HttpServletRequest request)
+	 private void initCreateSpecimenTemplateForm(CreateSpecimenTemplateForm createSpecimenTemplateForm, HttpServletRequest request) throws Exception
 	 {
 		 	HttpSession session = request.getSession();
 		 	SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean)session.getAttribute(Constants.EDIT_SPECIMEN_REQUIREMENT_BEAN);
@@ -211,32 +234,77 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			specimenRequirementBean.setReceivedEventReceivedQuality(createSpecimenTemplateForm.getReceivedEventReceivedQuality());
 			specimenRequirementBean.setCollectionEventCollectionProcedure(createSpecimenTemplateForm.getCollectionEventCollectionProcedure());
 			//Aliquot
+			
+			int noOfAliquots = 0;
+			if(createSpecimenTemplateForm.getNoOfAliquots()!=null&&!createSpecimenTemplateForm.getNoOfAliquots().equals(""))
+			{
+				noOfAliquots = new Integer(createSpecimenTemplateForm.getNoOfAliquots());
+			}
+			int noOfBeanAliquots = 0;
+			if(specimenRequirementBean.getNoOfAliquots()!=null&&!specimenRequirementBean.getNoOfAliquots().equals(""))
+			{
+				noOfBeanAliquots = new Integer(specimenRequirementBean.getNoOfAliquots());	
+			}
+			int totalNewAliquots = noOfAliquots - noOfBeanAliquots;
+			if(totalNewAliquots<0)
+			{
+				throw new Exception("Cannot delete aliquot(s)");
+			}
+			LinkedHashMap newAliquotSpecimenMap =
+				specimenRequirementBean.getAliquotSpecimenCollection();
+			if(newAliquotSpecimenMap==null)
+			{
+				newAliquotSpecimenMap = new LinkedHashMap();
+			}
+			for (int i=0;i<totalNewAliquots; i++)
+			{
+				int iCount = ++noOfBeanAliquots;
+				SpecimenRequirementBean aliquotBean = 					
+					createSpecimen(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), iCount);
+				
+				createAliquot(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), createSpecimenTemplateForm.getNoOfAliquots(), iCount, aliquotBean);
+				newAliquotSpecimenMap.put(aliquotBean.getUniqueIdentifier(), aliquotBean);
+			}
 			specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
 			specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm.getQuantityPerAliquot());
 			specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
+			specimenRequirementBean.setAliquotSpecimenCollection(newAliquotSpecimenMap);
+	
 			//Derive
-			specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
-			Map aliquotSpecimenMap = null;
+			int noOfDeriveSpecimen = new Integer(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
+			int noOfBeanDerive = new Integer(specimenRequirementBean.getNoOfDeriveSpecimen());
+			int totalNewDeriveSpecimen = noOfDeriveSpecimen - noOfBeanDerive;
 			Collection deriveSpecimenCollection = null;
-			if(createSpecimenTemplateForm.getNoOfAliquots()!=null && !createSpecimenTemplateForm.getNoOfAliquots().equals(""))
-			{
-				aliquotSpecimenMap = (Map)getAliquots(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier());
-			}
 			Map deriveSpecimenMap = createSpecimenTemplateForm.deriveSpecimenMap();
 			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
-			try
+			if(deriveSpecimenMap!=null&&deriveSpecimenMap.size()!=0)
 			{
-				if(deriveSpecimenMap!=null&&deriveSpecimenMap.size()!=0)
-				{
-					deriveSpecimenCollection = parser.generateData(deriveSpecimenMap);
-					deriveSpecimenMap = getderiveSpecimen(deriveSpecimenCollection,createSpecimenTemplateForm,specimenRequirementBean.getUniqueIdentifier());
+				deriveSpecimenCollection = parser.generateData(deriveSpecimenMap);
+				deriveSpecimenMap = getderiveSpecimen(deriveSpecimenCollection,createSpecimenTemplateForm,specimenRequirementBean.getUniqueIdentifier());
+			}
+			
+			LinkedHashMap oldDeriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
+			Object keyArr[] = deriveSpecimenMap.keySet().toArray();
+			if(totalNewDeriveSpecimen>=0)
+			{
+				for (int iCount = 0; iCount<noOfBeanDerive;iCount++)				
+				{				
+					deriveSpecimenMap.remove(keyArr[iCount]);				
 				}
+				
+				oldDeriveSpecimenMap.putAll(deriveSpecimenMap);
+				specimenRequirementBean.setDeriveSpecimenCollection(oldDeriveSpecimenMap);
 			}
-			catch (Exception e)
+			else
 			{
-				e.printStackTrace();
+				LinkedHashMap deriveMap = new LinkedHashMap();;
+				for (int iCount = 0; iCount<keyArr.length;iCount++)				
+				{				
+					deriveMap.put(keyArr[iCount], oldDeriveSpecimenMap.get(keyArr[iCount]));	
+				}
+				specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveMap);
+				oldDeriveSpecimenMap.clear();
 			}
-			specimenRequirementBean.setAliquotSpecimenCollection((LinkedHashMap)aliquotSpecimenMap);
-			specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveSpecimenMap);
+			specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
 	 }
 }

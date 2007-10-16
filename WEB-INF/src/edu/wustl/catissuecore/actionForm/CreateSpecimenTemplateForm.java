@@ -122,11 +122,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	
 	private String receivedEventReceivedQuality;
 	
-	
-	 /**
-     * Number of biohazard rows.
-     */
-    private int noOfDeriveSpecimen;
+	private int noOfDeriveSpecimen;
     
     private Map deriveSpecimenValues = new LinkedHashMap();
         
@@ -684,20 +680,11 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				{
 	               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.aliquotstoragelocation")));
 				}
-				if(validator.isNumeric(this.storageLocationForAliquotSpecimen))
-				{
-	               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.aliquotstoragelocation")));
-				}
 			}
 			if (!this.storageLocationForSpecimen.equals("Auto")&&!this.storageLocationForSpecimen.equals("Manual")&&!this.storageLocationForSpecimen.equals("Virtual"))
 			{
                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.specimenstoragelocation")));
 			}
-			if(validator.isNumeric(this.storageLocationForSpecimen))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.specimenstoragelocation")));
-			}
-			
 			if (this.pathologicalStatus.equals(""))
             {
                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.pathologicalStatus")));

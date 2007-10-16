@@ -102,10 +102,8 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	 */
 	protected Map deriveSpecimenCollection = new LinkedHashMap();
 	
-	/**
-     * Number of biohazard rows.
-     */
-    private int noOfDeriveSpecimen=1;
+	
+    private int noOfDeriveSpecimen=0;
     
     private Map deriveSpecimen = new HashMap();
     
