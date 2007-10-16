@@ -486,11 +486,14 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		{
 				participantId = participant.getId().longValue();
 				radioButtonForParticipant = 1;
+				protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+				
 		}
 		else
 		{
-			protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
 			radioButtonForParticipant = 2;
+			//protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+			
 		}
 		
 		Logger.out.debug("participantId.................................."+participantId);
