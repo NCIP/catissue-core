@@ -82,6 +82,7 @@ public class ViewSpecimenSummaryAction extends Action {
 				updateSessionBean(summaryForm, session);
 				
 			}
+			
 			if(request.getParameter("save")!=null)
 			{
 				if (!isTokenValid(request))
@@ -98,7 +99,7 @@ public class ViewSpecimenSummaryAction extends Action {
 				saveToken(request);
 			}
 			
-			summaryForm.setUserAction(ViewSpecimenSummaryForm.ADD_USER_ACTION);
+
 			CollectionProtocolBean collectionProtocolBean = 
 				(CollectionProtocolBean)session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
@@ -131,6 +132,7 @@ public class ViewSpecimenSummaryAction extends Action {
 
 			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(summaryForm.getRequestType()))
 			{
+				summaryForm.setUserAction(ViewSpecimenSummaryForm.ADD_USER_ACTION);
 				if("update".equals(collectionProtocolBean.getOperation()))
 				{
 					summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);

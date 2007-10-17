@@ -64,7 +64,10 @@ public class MultipleSpecimenViewAction extends BaseAction
 		
 			summaryForm.setShowCheckBoxes(false);
 			summaryForm.setShowbarCode(Variables.isSpecimenBarcodeGeneratorAvl);
-			summaryForm.setShowLabel(Variables.isSpecimenLabelGeneratorAvl);			
+			summaryForm.setShowLabel(Variables.isSpecimenLabelGeneratorAvl);
+			if(Constants.EDIT.equals(request.getParameter("mode"))){
+				summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
+			}
 			request.setAttribute("RequestType","");
 //			if(pageOf != null)
 //				return mapping.findForward(pageOf);

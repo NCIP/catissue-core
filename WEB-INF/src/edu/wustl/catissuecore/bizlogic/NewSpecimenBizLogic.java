@@ -2567,12 +2567,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				throws DAOException
 	{
 		Iterator iterator = newSpecimenCollection.iterator();
-		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		try
 		{
 
 			
-			((HibernateDAO)dao).openSession(sessionDataBean);
+			dao.openSession(sessionDataBean);
 	
 			while (iterator.hasNext())
 			{
@@ -2587,13 +2587,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				
 				updateSignleSpecimen(dao,newSpecimen, sessionDataBean,updateChildrens);
 			}			
-			((HibernateDAO)dao).commit();
+			dao.commit();
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
 			
 		}
 		catch(Exception exception)
 		{
-			((AbstractDAO)dao).rollback();
+			dao.rollback();
 			throw new DAOException("Failed to update multiple specimen " +
 					exception.getMessage());
 		}
@@ -2612,9 +2612,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			if(specList != null && !specList.isEmpty())
 			{
 				Specimen specimenDO =(Specimen)specList.get(0);
-				updateSpecimenDomainObject(dao, newSpecimen, specimenDO, sessionDataBean);
+				updateSpecimenDomainObject(dao, newSpecimen, specimenDO);
 				if(updateChildrens)
-					updateChildrenSpecimens(dao,newSpecimen, specimenDO,sessionDataBean);
+					updateChildrenSpecimens(dao,newSpecimen, specimenDO);
 				dao.update(specimenDO, sessionDataBean, false, false, false);
 				return specimenDO;
 			}
@@ -2635,7 +2635,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	}
 
 	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO ,
-			Specimen specimenDO,SessionDataBean sessionDataBean) 
+			Specimen specimenDO) 
 			throws DAOException,SMException
 	{
 		Collection childrenSpecimens = specimenDO.getChildrenSpecimen();
@@ -2650,9 +2650,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Specimen relatedSpecimen = getCorelatedSpecimen(
 					specimen.getId(), specimenVO.getChildrenSpecimen());
 			
-			updateSpecimenDomainObject(dao, relatedSpecimen, specimen, sessionDataBean);
+			updateSpecimenDomainObject(dao, relatedSpecimen, specimen);
 			
-			updateChildrenSpecimens(dao, relatedSpecimen, specimen,sessionDataBean);
+			updateChildrenSpecimens(dao, relatedSpecimen, specimen);
 		}	
 	}
 	
@@ -2718,7 +2718,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO 
-			,Specimen specimenDO, SessionDataBean sessionDataBean)
+			,Specimen specimenDO)
 			throws DAOException,SMException {
 		
 		if (specimenVO.getBarcode()!=null && specimenVO.getBarcode().trim().length()==0)
@@ -2730,7 +2730,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		specimenDO.setBarcode(specimenVO.getBarcode());
 		if(specimenVO.getStorageContainer()!=null)
 		{
-			setStorageContainer(dao, specimenVO, specimenDO ,sessionDataBean);
+			setStorageContainer(dao, specimenVO, specimenDO);
 		}
 		else
 		{
@@ -2825,7 +2825,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
  * @throws DAOException
  */
 private void setStorageContainer(DAO dao, Specimen specimenVO,
-		Specimen specimenDO, SessionDataBean sessionDataBean) throws DAOException,SMException {
+		Specimen specimenDO) throws DAOException,SMException {
 	StorageContainer storageContainer =specimenVO.getStorageContainer();
 	
 	specimenDO.setPositionDimensionOne(

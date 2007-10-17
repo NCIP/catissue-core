@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Quantity;
@@ -61,9 +62,16 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 			
 			LinkedHashSet specimenDomainCollection = 
 				specimenUpdateAction.getSpecimensToSave(eventId, session);
-			
-			bizLogic.insert(createSpecimenMap(specimenDomainCollection), 
+			if (ViewSpecimenSummaryForm.ADD_USER_ACTION.equals(specimenSummaryForm.getUserAction()))
+			{
+				bizLogic.insert(createSpecimenMap(specimenDomainCollection), 
 					sessionDataBean, Constants.HIBERNATE_DAO);
+			}
+			else
+			{
+				((NewSpecimenBizLogic)bizLogic).bulkUpdateSpecimens(
+						specimenDomainCollection, sessionDataBean);
+			}
 			ActionMessages actionMessages = new ActionMessages();
 			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"object.add.successOnly","Specimens"));

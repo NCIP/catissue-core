@@ -36,7 +36,7 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	private List<GenericSpecimen> derivedList = null; 
 	private String eventId= null;
 	private String selectedSpecimenId= null;
-	private String userAction;
+	private String userAction = ADD_USER_ACTION;
 	private String requestType;
 	private Object summaryObject = null;
 	private String lastSelectedSpecimenId = null;
