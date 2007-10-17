@@ -300,7 +300,7 @@
 		}
 
 		function onCollOrClassChange(element)
-		{
+		{			
 			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupName");
 			var classNameElement = document.getElementById("className").value;
 			classNameElement = trim(classNameElement);
@@ -336,7 +336,6 @@
 		function onCollectionGroupChange(element)
 		{
 			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupName");
-			alert(specimenCollGroupElement.value);
 			if(specimenCollGroupElement.value != "-1")
 			{
 				if(element=='1')
@@ -949,7 +948,7 @@
 										Description: The following change shows read-only textbox on specimen page, if specimen is being added
 										from specimen collection group page, otherwise combobox having names of specimen collection group is displayed.
 									-->
-									<html:hidden property="specimenCollectionGroupName"/>				
+									<html:hidden property="specimenCollectionGroupName" styleId="specimenCollectionGroupName"/>				
 									
 									<label for="specimenCollectionGroupName">
 										<b><%=form.getSpecimenCollectionGroupName()%></b>
@@ -970,7 +969,7 @@
 									</td>
 							
 						        	<td class="formFieldNoBordersSimple" colspan="<%=specimenColSpan%>">
-						        		<html:hidden property="specimenCollectionGroupName"/>
+						        		<html:hidden property="specimenCollectionGroupName" styleId="specimenCollectionGroupName"/>
 										<!-- Mandar : 434 : for tooltip -->
 										<html:hidden property="parentSpecimenName"/>
 										
@@ -1350,7 +1349,7 @@
 										String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 											+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 											+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
-										System.out.println(frameUrl);
+										
 										/**
 		                  				* bug ID: 4225
 		                 				* Patch id: 4225_2
