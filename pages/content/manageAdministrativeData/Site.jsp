@@ -57,34 +57,14 @@
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 <script>
 
-    /***  code using ajax :gets the emailAddress of the coordinator without refreshing the whole page  ***/
-	function onCoordinatorChange()
-	{
-		//Bug 4250
-		var submittedForValue = document.forms[0].submittedFor.value;
-		
-		var request = newXMLHTTPReq();
-		var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
-		
-		//no brackets after the function name and no parameters are passed because we are assigning a reference to the function and not actually calling it
-		request.onreadystatechange = handlerFunction;
-		//Bug 4250
-		var action = "operation="+document.forms[0].operation.value+"&pageOf=pageOfSite&isOnChange=true&coordinatorId="+document.getElementById("coordinatorId").value+"&submittedFor="+submittedForValue;
-		
-		//Open connection to servlet
-		request.open("POST","Site.do",true);	
-		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-		
-		//send data to ActionServlet
-		request.send(action);
-	}
 
-	function onResponseUpdate(emailAddress) 
-	{
-		document.getElementById("emailAddress").value = emailAddress;
-	}
-
-	/*** code using ajax  ***/
+function onCoordinatorChange()
+{
+	var submittedForValue = document.forms[0].submittedFor.value;
+	var action = "Site.do?"+"operation="+document.forms[0].operation.value+"&pageOf=pageOfSite&isOnChange=true&coordinatorId="+document.getElementById("coordinatorId").value+"&submittedFor="+submittedForValue;
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
 	
 </script>
 <script language="JavaScript" src="jss/script.js" type="text/javascript"></script>

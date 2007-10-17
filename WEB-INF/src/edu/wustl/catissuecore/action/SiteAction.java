@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -78,7 +79,7 @@ public class SiteAction  extends SecureAction
     	
     	// ------------------------------------------------------------------
     	
-    	/**** code for ajax *****/
+    	
     	
     	boolean isOnChange = getIsOnChange(request);  
  		Long coordinatorId = getCoordinatorId(request);
@@ -86,6 +87,14 @@ public class SiteAction  extends SecureAction
  		if(siteForm != null && isOnChange && coordinatorId!=null)
     	{
     	    String emailAddress ="";
+    	    String street="";
+    	    String city="";
+    	    String state="";
+    	    String country="";
+    	    String zipCode="";
+    	    String phoneNo="";
+    	    
+    	    
     	    List userList = userBizLogic.retrieve(User.class.getName(),Constants.SYSTEM_IDENTIFIER , coordinatorId);
     	    
     	    if(userList.size()>0)
@@ -95,15 +104,34 @@ public class SiteAction  extends SecureAction
         		{
         		    emailAddress = user.getEmailAddress() ; 
         		    Logger.out.debug("Email Id of Coordinator of Site : " + emailAddress );
-        		    sendEmailAddress(emailAddress,response);
-        		    
-        		    //set the email id in form bean
+    
         		    siteForm.setEmailAddress(emailAddress);
+           		    if(user.getAddress()!=null)
+        		    {	
+        		  
+        		    	street=(String)user.getAddress().getStreet();
+        		      	siteForm.setStreet(street);
+        		    	
+        		    	city=(String)user.getAddress().getCity();
+        		     	siteForm.setCity(city);
+        		     	
+        		     	state=(String)user.getAddress().getState();
+        		     	siteForm.setState(state);
+        		     	
+        		     	country=(String)user.getAddress().getCountry();
+        		     	siteForm.setCountry(country);
+        		     
+        		     	zipCode=(String)user.getAddress().getZipCode();
+        		     	siteForm.setZipCode(zipCode);
+        		     	
+        		     	phoneNo=(String)user.getAddress().getPhoneNumber();
+        		     	siteForm.setPhoneNumber(phoneNo);
+        		     
+        		    }
+        		    
         		}
     	    }
-			//for ajax return null as Actionservlet returns ActionForward object
-			return null;   
-    	}
+		}
         String pageOf = (String)request.getParameter(Constants.PAGEOF);
         
         if (pageOf != null)
@@ -115,20 +143,7 @@ public class SiteAction  extends SecureAction
 
 
     
-    /**
-     * method for ajax response
-     * @param emailAddress : emailaddress of the coordinator
-     * @param response :object of HttpServletResponse
-     * @throws Exception
-     */
-    private void sendEmailAddress(String emailAddress, HttpServletResponse response) throws Exception 		  
-	{
-		PrintWriter out = response.getWriter();
-		Logger.out.debug("mail"+emailAddress);
-		response.setContentType("text/html");
-		out.write(emailAddress );
-	}
-
+    
     /**
 	 * method for getting coordinatorId from request
 	 * @param request :object of HttpServletResponse
