@@ -964,7 +964,7 @@ Thanking You,
 				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 					<include name="*.cfg.xml" />
 					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
-					<replacefilter token="@@DRIVER@@" value="${mysql.driver.string}" />
+					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
 					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
 				</replace>
 			</then>
@@ -1029,7 +1029,7 @@ Thanking You,
 				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 					<include name="*.cfg.xml" />
 					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
-					<replacefilter token="@@DRIVER@@" value="${mysql.driver.string}" />
+					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
 					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
 				</replace>
 			</then>
