@@ -278,6 +278,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		if(!collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION) )
 		{
 			verifyAndUpdateConsentWithdrawn(collectionProtocolRegistration, oldCollectionProtocolRegistration, dao, sessionDataBean);
+			collectionProtocolRegistration.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 		}
 		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) end
 		//Update registration
