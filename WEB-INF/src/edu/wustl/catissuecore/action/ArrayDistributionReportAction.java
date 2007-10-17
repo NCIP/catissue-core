@@ -203,7 +203,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 				int postionTwoInArray = arrayContent.getPositionDimensionTwo().intValue();
 				if (postionOneInArray > 0)
 				{
-					((List) gridInfo.get(postionOneInArray - 1)).add(postionTwoInArray - 1, specimen.getLabel());
+					((List) gridInfo.get(postionOneInArray - 1)).set(postionTwoInArray - 1, specimen.getLabel());
 				}
 			}
 
