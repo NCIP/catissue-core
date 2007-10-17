@@ -124,7 +124,6 @@ public class QueryShoppingCartAction extends BaseAction
 		{  
 			request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
 			setCartView(request, cart);
-			isSpecimenArrayExist(request,cart);
 			target = new String(Constants.VIEW);
 		}
 		else if (operation.equals("addToOrderList"))
@@ -200,41 +199,6 @@ public class QueryShoppingCartAction extends BaseAction
 		return mapping.findForward(target);
 	}
 
-	/*
-	 * This will check for specimen array in the list 
-	 */
-	private void isSpecimenArrayExist(HttpServletRequest request,QueryShoppingCart cart)
-	{
-		String isSpecimenArrayExist = "false";
-		if (cart != null)
-		{
-			List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
-			if (cartAttributeList != null)
-			{
-				List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
-				Set<String> distinctEntityNameSet = new HashSet<String>(); 
-				for (AttributeInterface attribute : cartAttributeList)
-				{
-					
-					if ((attribute.getName().equals(Constants.ID))
-							&& ((orderableEntityNameList))
-									.contains(attribute.getEntity().getName()))
-					{
-						distinctEntityNameSet.add(attribute.getEntity().getName());
-					}
-				}
-				for(String entityName :distinctEntityNameSet)
-				{
-					if(!entityName.equals(Constants.SPECIMEN_NAME))
-					{
-						isSpecimenArrayExist = "true";
-						break;
-					}
-				}
-			}
-		}
-		request.setAttribute(Constants.IS_SPECIMENARRAY_PRESENT, isSpecimenArrayExist);
-	}
 	/**
 	 * @param chkBoxValues check box values.
 	 * @param cart Shopping cart object from session.
@@ -311,10 +275,12 @@ public class QueryShoppingCartAction extends BaseAction
 							&& ((orderableEntityNameList)).contains(attribute.getEntity().getName()))
 					{
 						isSpecimenIdPresent = "true";
-						break;
+						if(!attribute.getEntity().getName().equals(Constants.SPECIMEN_NAME))
+						{
+							request.setAttribute(Constants.IS_SPECIMENARRAY_PRESENT, "true");
+						}
 					}
 				}
-
 				request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
 			}
 			else
