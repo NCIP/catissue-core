@@ -64,7 +64,7 @@ public class ParticipantLookupAction extends BaseAction
 		abstractDomain = abstractDomainObjectFactory.getDomainObject(abstractForm.getFormId(),
 				abstractForm);
 		Participant participant = (Participant) abstractDomain;
-		ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		
 		Logger.out.debug("Participant Id :"+request.getParameter("participantId"));
 		//checks weather participant is selected from the list and so forwarding to next action instead of participant lookup.
 		//Abhishek Mehta
@@ -76,28 +76,40 @@ public class ParticipantLookupAction extends BaseAction
 				return mapping.findForward("participantSelect");
 			}
 		}
-		List matchingParticipantList = bizlogic.getListOfMatchingParticipants(participant);
 		
-		//if any matching participants are there then show the participants otherwise add the participant
-		if (matchingParticipantList!=null && matchingParticipantList.size() > 0)
+		boolean isCallToLookupLogicNeeded = isCallToLookupLogicNeeded(participant);
+		
+		if(isCallToLookupLogicNeeded)
 		{
-			messages=new ActionMessages();
-			messages.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("participant.lookup.success","Submit was not successful because some matching participants found."));
-   			//Creating the column headings for Data Grid
-			List columnList = getColumnHeadingList(bizlogic);
-			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
-			
-			//Getitng the Participant List in Data Grid Format
-			List participantDisplayList=getParticipantDisplayList(matchingParticipantList);
-			request.setAttribute(Constants.SPREADSHEET_DATA_LIST, participantDisplayList);
-			
-			target=Constants.PARTICIPANT_LOOKUP_SUCCESS;
+			ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
+			List matchingParticipantList = bizlogic.getListOfMatchingParticipants(participant);
+			if (matchingParticipantList!=null && matchingParticipantList.size() > 0)
+			{
+				messages=new ActionMessages();
+				messages.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("participant.lookup.success","Submit was not successful because some matching participants found."));
+	   			//Creating the column headings for Data Grid
+				List columnList = getColumnHeadingList(bizlogic);
+				request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
+				
+				//Getitng the Participant List in Data Grid Format
+				List participantDisplayList=getParticipantDisplayList(matchingParticipantList);
+				request.setAttribute(Constants.SPREADSHEET_DATA_LIST, participantDisplayList);
+				
+				target=Constants.PARTICIPANT_LOOKUP_SUCCESS;
+			}
+			//	if no participant match found then add the participant in system
+			else
+			{
+				target=Constants.PARTICIPANT_ADD_FORWARD;
+			}
 		}
-		//	if no participant match found then add the participant in system
 		else
 		{
-			target=Constants.PARTICIPANT_ADD_FORWARD;
+			target= Constants.FAILURE;
 		}
+		
+		//if any matching participants are there then show the participants otherwise add the participant
+		
 		
 		//setting the Submitted_for and Forward_to variable in request
 		if(request.getParameter(Constants.SUBMITTED_FOR)!=null && !request.getParameter(Constants.SUBMITTED_FOR).equals(""))
@@ -120,6 +132,16 @@ public class ParticipantLookupAction extends BaseAction
 		}
 		Logger.out.debug("target:"+target);
 		return (mapping.findForward(target));
+	}
+	
+	
+	private boolean isCallToLookupLogicNeeded(Participant participant)
+	{
+		if((participant.getFirstName() == null || participant.getFirstName().length()==0) && (participant.getMiddleName() == null || participant.getMiddleName().length() == 0) && (participant.getLastName() == null || participant.getLastName().length() == 0) && (participant.getSocialSecurityNumber()== null || participant.getSocialSecurityNumber().length() == 0) && participant.getBirthDate() == null && (participant.getParticipantMedicalIdentifierCollection() == null || participant.getParticipantMedicalIdentifierCollection().size()==0))
+		{
+			return false;
+		}
+		return true;
 	}
 	/**
 	 * This Function creates the Column Headings for Data Grid

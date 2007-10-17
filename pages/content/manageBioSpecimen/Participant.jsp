@@ -324,6 +324,17 @@ tr#hiddenCombo
 				field.value = field.value.replace(/[^\d]+/g, ''); 
 			}
 		}
+
+		function deselectParticipant()
+		{
+			var rowCount = mygrid.getRowsNum();
+			for(i=1;i<=rowCount;i++)
+			{
+				var cl = mygrid.cells(i,0);
+				cl.setChecked(false);
+			}
+		}
+
 		//this function is called when participant clicks on radiao button 
 		function onParticipantClick(participant_id)
 		{
@@ -347,9 +358,11 @@ tr#hiddenCombo
 			}
 			%>
 			
-			//window.location.href="ParticipantSelect.do?operation=&pageOf=pageOfParticipantRegistration&keepParticipantForm=true&forwardTo=editParticipant&id="+pid;
-			document.forms[0].submit();
-			
+			document.forms[0].radioValue.value="";
+			for (var i = 0 ; i < document.forms[0].chkName.length; i++)
+			{
+				document.forms[0].chkName[i].checked = false;
+			}
 		}
 		//This Function is called when user clicks on 'Add New Participant' Button
 		function AddParticipant()
@@ -384,15 +397,23 @@ tr#hiddenCombo
 		{
 			document.forms[0].radioValue.value="Add";
 			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
+			document.forms[0].forwardTo.value="ForwardTo";
+			document.forms[0].participantId.value="";
+			document.forms[0].id.value="";
 			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 			{%>
 				document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
 			<%}%>
+			deselectParticipant();
 		}
 	
 		function LookupAgain()
 		{
 			document.forms[0].radioValue.value="Lookup";
+			document.forms[0].forwardTo.value="ForwardTo";
+			document.forms[0].participantId.value="";
+			document.forms[0].id.value="";
+			deselectParticipant();
 		}
 		
 		
@@ -571,7 +592,7 @@ tr#hiddenCombo
 	//Modified for flex by Baljeet
 	 
 	 top.frames["cpAndParticipantView"].refreshCpParticipants();
-     
+     refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','');
 	</script>
 
 	<%}
