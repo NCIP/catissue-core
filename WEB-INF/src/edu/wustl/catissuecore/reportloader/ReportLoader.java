@@ -114,13 +114,13 @@ public class ReportLoader
 				// if scg is null create new scg
 				Logger.out.debug("Null SCG found in ReportLoader, Creating New SCG");
 				this.scg=createNewSpecimenCollectionGroup();
-				CaCoreAPIService.getAppServiceInstance().createObject(this.scg);
+				CaCoreAPIService.createObject(this.scg);
 			}
 			else
 			{
 				// use existing scg
 				retrieveAndSetSCG();
-				CaCoreAPIService.getAppServiceInstance().createObject(this.identifiedReport);
+				CaCoreAPIService.createObject(this.identifiedReport);
 			}	
 			Logger.out.info("Processing finished for Report ");
 		}
@@ -182,7 +182,7 @@ public class ReportLoader
 				collProtocolReg.setCollectionProtocol(collectionProtocol);
 				try
 				{
-					CaCoreAPIService.getAppServiceInstance().createObject(collProtocolReg);
+					CaCoreAPIService.createObject(collProtocolReg);
 				}
 				catch(Exception ex)
 				{
@@ -194,7 +194,7 @@ public class ReportLoader
 			scg.setCollectionProtocolEvent(collProtocolEvent);
 			scg.setCollectionProtocolRegistration(collProtocolReg);
 			scg.setSpecimenEventParametersCollection(getDefaultEvents(scg));
-			scg.setName("SPR_"+CaCoreAPIService.getAppServiceInstance().getSpecimenCollectionGroupLabel(scg));
+			scg.setName("SPR_"+CaCoreAPIService.getSpecimenCollectionGroupLabel(scg));
 		}
 		else
 		{
@@ -222,7 +222,7 @@ public class ReportLoader
 		criteria.add(Restrictions.eq("collectionProtocol", cp));
 		try 
 		{
-			cprList = CaCoreAPIService.getAppServiceInstance().query(criteria, CollectionProtocolRegistration.class.getName());
+			cprList = (List)CaCoreAPIService.executeQuery(criteria, CollectionProtocolRegistration.class.getName());
 			// check for existence
 			if(cprList!=null && cprList.size()>0)
 			{
@@ -239,21 +239,21 @@ public class ReportLoader
 		return null;
 	}
 	
-	private Collection<SpecimenEventParameters> getDefaultEvents(SpecimenCollectionGroup specimenCollectionGroup) throws DAOException, ApplicationException
+	private Collection<SpecimenEventParameters> getDefaultEvents(SpecimenCollectionGroup specimenCollectionGroup) throws DAOException, Exception
 	{
 		Collection<SpecimenEventParameters> defaultEventCollection=new HashSet<SpecimenEventParameters>();
 		String loginName=CaTIESProperties.getValue(CaTIESConstants.USER_NAME);
 		User user=(User)CaCoreAPIService.getObject(User.class, Constants.LOGINNAME, loginName);
 		
 		CollectionEventParameters collectionEvent=new CollectionEventParameters();
-		collectionEvent.setCollectionProcedure((String)CaCoreAPIService.getAppServiceInstance().getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
-		collectionEvent.setContainer((String)CaCoreAPIService.getAppServiceInstance().getDefaultValue(Constants.DEFAULT_CONTAINER));
+		collectionEvent.setCollectionProcedure((String)CaCoreAPIService.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
+		collectionEvent.setContainer((String)CaCoreAPIService.getDefaultValue(Constants.DEFAULT_CONTAINER));
 		collectionEvent.setSpecimenCollectionGroup(specimenCollectionGroup);
 		collectionEvent.setTimestamp(new Date());
 		collectionEvent.setUser(user);
 		
 		ReceivedEventParameters recievedEvent=new ReceivedEventParameters();
-		recievedEvent.setReceivedQuality((String)CaCoreAPIService.getAppServiceInstance().getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
+		recievedEvent.setReceivedQuality((String)CaCoreAPIService.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
 		recievedEvent.setSpecimenCollectionGroup(specimenCollectionGroup);
 		recievedEvent.setTimestamp(new Date());
 		recievedEvent.setUser(user);
@@ -277,12 +277,12 @@ public class ReportLoader
 			this.scg.setDeIdentifiedSurgicalPathologyReport(null);
 			try 
 			{
-				existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.getAppServiceInstance().updateObject(existingReport);
+				existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(existingReport);
 				Logger.out.info("existingReport updated:"+existingReport.getId());
 				if(existingReport.getDeIdentifiedSurgicalPathologyReport()!=null)
 				{
 					existingReport.getDeIdentifiedSurgicalPathologyReport().setSpecimenCollectionGroup(null);
-					DeidentifiedSurgicalPathologyReport deidreport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getAppServiceInstance().updateObject(existingReport.getDeIdentifiedSurgicalPathologyReport());
+					DeidentifiedSurgicalPathologyReport deidreport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(existingReport.getDeIdentifiedSurgicalPathologyReport());
 					Logger.out.info("deid report updated: "+deidreport.getId());
 				}
 			}

@@ -41,26 +41,16 @@ public class Utility
 		HashMap<String,String> abbrToHeader = new LinkedHashMap <String,String>();
 		Logger.out.info("Initializing section header map");
 		// Function call to set up section header configuration from SectionHeaderConfig.txt file
-		return(setSectionHeaderPriorities(abbrToHeader, configFileName));
-	}
-	
-	/**
-	 * This nethod sets the priority order and full name of the abrreviated section name
-	 * which is used by the synthesizeSPRText method
-	 * @throws Exception Generic exception
-	 */
-	private static Map setSectionHeaderPriorities(HashMap<String,String> abbrToHeader, String configFileName) throws Exception
-	{
 		try 
 		{
 			// set bufferedReader to read file
 			BufferedReader br = new BufferedReader(new FileReader(configFileName));
 
-			String line = "";
+			String line = null;
 			StringTokenizer st;
 			String name;
 			String abbr;
-			String prty;
+			String priority;
 			// iterate while file EOF
 			while ((line = br.readLine()) != null) 
 			{
@@ -68,7 +58,7 @@ public class Utility
 				st = new StringTokenizer(line, "|");
 				name = st.nextToken().trim();
 				abbr = st.nextToken().trim();
-				prty = st.nextToken().trim();
+				priority = st.nextToken().trim();
 				
 				// add abbreviation to section header maping in hash map
 				abbrToHeader.put(abbr, name);

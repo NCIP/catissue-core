@@ -102,8 +102,6 @@ public class DeIDPipelineManager
 				List isprIDList=getReportIDList();
 				// Process reports that are pending for de-identification
 				processReports(isprIDList);
-				Logger.out.info("Deidentification process finished at "+new Date().toString()+ ". Thread is going to sleep.");
-				Thread.sleep(Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.DEID_SLEEPTIME)));
 			}
 			catch(Exception ex)
 			{

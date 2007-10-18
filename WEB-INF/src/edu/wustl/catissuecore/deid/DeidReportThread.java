@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.jdom.Element;
@@ -16,16 +15,12 @@ import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.system.applicationservice.ApplicationException;
 
 /**
  * This class is a thread which converts a single identified report into its equivalent de-identified report.
@@ -93,32 +88,14 @@ public class DeidReportThread extends Thread
 	   
 	        // ectract collection date and time
 	        deidCollectionDate=DeidUtils.extractDate(deidText);	
+	        deidText = deidText.substring(0, deidText.lastIndexOf("||-"));
 	        Logger.out.info("Creating deidentified report for identified report id="+identifiedReport.getId().toString());
 	        // Create object of deidentified report
 	        DeidentifiedSurgicalPathologyReport pathologyReport = createDeidPathologyReport(identifiedReport, deidText, deidCollectionDate);
 	        Logger.out.info("De-identification process finished for "+identifiedReport.getId().toString());
-	    	try
-	    	{
-	    		Logger.out.info("Saving deidentified report for identified report id="+identifiedReport.getId().toString());
-	    		// save deidentified report
-	    		pathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getAppServiceInstance().createObject(pathologyReport);
-	    		Logger.out.info("deidentified report saved for identified report id="+identifiedReport.getId().toString());
-	    		// update status of identified report
-	        	identifiedReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
-	        	// set deidentified report to identified report
-	        	identifiedReport.setDeIdentifiedSurgicalPathologyReport(pathologyReport);
-	        	Logger.out.debug("Updating identified report report id="+identifiedReport.getId().toString());
-	        	// update object of identified report
-	        	CaCoreAPIService.getAppServiceInstance().updateObject(identifiedReport);
-	        	Long endTime = new Date().getTime();
-	        	CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.DEIDENTIFIED+","+"Report De-identified successfully,"+(endTime-startTime));
-	    	}
-	    	catch(ApplicationException appEx)
-	    	{
-	    		Long endTime = new Date().getTime();
-	    		CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.FAILURE+","+appEx.getMessage()+",,"+(endTime-startTime));
-	    		Logger.out.error("Error while saving//updating Deidentified//Identified report ",appEx);
-	    	} 
+	        saveReports(pathologyReport);
+	        Long endTime = new Date().getTime();
+	        CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.DEIDENTIFIED+","+"Report De-identified successfully,"+(endTime-startTime));
 		}
     	catch(Throwable ex)
     	{
@@ -129,7 +106,7 @@ public class DeidReportThread extends Thread
 				CSVLogger.error(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString()+","+identifiedReport.getId()+","+CaTIESConstants.FAILURE+","+ex.getMessage()+",,"+(endTime-startTime));
 				// if any exception occures then update the status of the identified report to failed
 				identifiedReport.setReportStatus(CaTIESConstants.DEID_PROCESS_FAILED);
-				CaCoreAPIService.getAppServiceInstance().updateObject(identifiedReport);
+				CaCoreAPIService.updateObject(identifiedReport);
 			}
 			catch(Exception e)
 			{
@@ -237,5 +214,27 @@ public class DeidReportThread extends Thread
 			throw ex;
 		}
 		return output;
+	}
+	
+	/**
+	 * Method to save deidentified report and to update status of identified report
+	 * @param pathologyReport deidentified report to be saved
+	 * @throws Exception generic exception occured
+	 */
+	private void saveReports(DeidentifiedSurgicalPathologyReport pathologyReport) throws Exception
+	{
+		{
+    		Logger.out.info("Saving deidentified report for identified report id="+identifiedReport.getId().toString());
+    		// save deidentified report
+    		pathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.createObject(pathologyReport);
+    		Logger.out.info("deidentified report saved for identified report id="+identifiedReport.getId().toString());
+    		// update status of identified report
+        	identifiedReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
+        	// set deidentified report to identified report
+        	identifiedReport.setDeIdentifiedSurgicalPathologyReport(pathologyReport);
+        	Logger.out.debug("Updating identified report report id="+identifiedReport.getId().toString());
+        	// update object of identified report
+        	CaCoreAPIService.updateObject(identifiedReport);
+        }
 	}
 }

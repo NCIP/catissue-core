@@ -44,6 +44,10 @@ public class FilePoller implements Observable
 			Observer obr=new ReportProcessor();
 			// registering poller to the object obr
 			poller.register(obr);
+			//start thread ReportLoaderQueueProcessor
+			ReportLoaderQueueProcessor queueProcessor = new ReportLoaderQueueProcessor();
+			// Starts ReportLoaderQueueProcessor thread
+			queueProcessor.start();
 		}
 		catch (Exception ex) 
 		{
@@ -70,10 +74,10 @@ public class FilePoller implements Observable
 		}
 		try
 		{	
+			inputDir = new File(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)); 
 			// Loop to contineusly poll on directory for new incoming files
 			while(true)
 			{
-				inputDir = new File(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)); 
 				files=	inputDir.list();
 				 if(files.length>0)
 				 {

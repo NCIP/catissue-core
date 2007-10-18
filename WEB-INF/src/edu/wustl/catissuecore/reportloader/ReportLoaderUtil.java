@@ -28,7 +28,7 @@ public class ReportLoaderUtil
 	public static Set<Participant> checkForParticipant(Participant participant)throws Exception
 	{
 		Set<Participant> result=null;
-		List participantList=(List)CaCoreAPIService.getAppServiceInstance().getParticipantMatchingObects(participant);
+		List participantList=(List)CaCoreAPIService.getParticipantMatchingObects(participant);
 		// check for matching participant list
    		if(participantList!=null && participantList.size()>0)
 		{
@@ -56,9 +56,8 @@ public class ReportLoaderUtil
 				dir.mkdir();
 			}
 	}
-	
-	
-	 /**
+
+	/**
      * 
      * @param ssn Social Security Number to check
      * @return boolean depending on the value of ssn.
@@ -66,7 +65,6 @@ public class ReportLoaderUtil
     public static String getValidSSN(String ssn)
     {
     	boolean result = true;
-    	String validSSN=null;
     	Pattern re=null;
     	Matcher  mat=null;
     	StringBuffer buff=null;
@@ -88,19 +86,18 @@ public class ReportLoaderUtil
         	    	     .append(ssn.substring(3,5))
         	    	     .append("-")
         	    	     .append(ssn.substring(5,9));
-        	    	validSSN=buff.toString();
         	    }
             }
     	    else
     	    {
-    	    	validSSN=ssn;
+    	    	buff=new StringBuffer(ssn);
     	    }
     	}
     	catch(Exception exp)
 		{
-			return validSSN;
+			return buff.toString();
 		}
-    	return validSSN;
+    	return buff.toString();
     }
     
     /**
@@ -126,8 +123,9 @@ public class ReportLoaderUtil
 	 * @param site
 	 * @param surgicalPathologyNumber
 	 * @return specimenCollectionGroupObj
+	 * @throws Exception 
 	 */
-	public static SpecimenCollectionGroup getExactMatchingSCG(Site site, String surgicalPathologyNumber)
+	public static SpecimenCollectionGroup getExactMatchingSCG(Site site, String surgicalPathologyNumber) throws Exception
 	{
 		String scgHql = "select scg"+
 	    " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg " +

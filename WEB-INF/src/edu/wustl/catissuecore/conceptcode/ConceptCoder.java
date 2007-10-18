@@ -29,7 +29,9 @@ import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SemanticType;
+import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.domain.pathology.XMLContent;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 public class ConceptCoder 
@@ -37,7 +39,12 @@ public class ConceptCoder
 	public ConceptCoder(DeidentifiedSurgicalPathologyReport deidReport, CaTIES_ExporterPR exporterPR, TiesPipe tiesPipe)throws SQLException
 	{
 		this.deidPathologyReport=deidReport;
-		this.currentReportText= this.deidPathologyReport.getTextContent().getData();
+		this.currentReportText="";
+		if(this.deidPathologyReport.getTextContent()!=null)
+		{
+			TextContent textContent=(TextContent)CaCoreAPIService.getObject(TextContent.class, Constants.SYSTEM_IDENTIFIER,this.deidPathologyReport.getTextContent().getId());
+			this.currentReportText= textContent.getData();
+		}
 		this.exporterPR=exporterPR;
 		this.tiesPipe=tiesPipe;
 	}
@@ -52,14 +59,14 @@ public class ConceptCoder
 			Logger.out.info("Report is Concept coded by caties");
 			Logger.out.info("Updating Report");
 			updateReport();
-			this.deidPathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getAppServiceInstance().updateObject(this.deidPathologyReport);
+			this.deidPathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(this.deidPathologyReport);
 		}
 		catch (Exception ex) 
 		{
 			Long endTime=new Date().getTime();
 			Logger.out.error("Concept coding process failed for report id:"+this.deidPathologyReport.getId()+" "+ex.getMessage());
 			this.deidPathologyReport.setReportStatus(CaTIESConstants.CC_PROCESS_FAILED);
-			this.deidPathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getAppServiceInstance().updateObject(this.deidPathologyReport);
+			this.deidPathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(this.deidPathologyReport);
 			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CC_PROCESS_FAILED+","+ex.getMessage()+","+(endTime-startTime));
 		}
 		if(!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(CaTIESConstants.CC_PROCESS_FAILED))

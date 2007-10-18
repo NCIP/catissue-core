@@ -47,7 +47,7 @@ public class ReportLoaderQueueProcessor extends Thread
 				// initialize section header map
 				HashMap<String,String> abbrToHeader = (HashMap<String,String>)Utility.initializeReportSectionHeaderMap(configFileName);
 				List reportLoaderQueueList=getReportLoaderQueueIDList();
-				if(reportLoaderQueueList!=null)
+				if(reportLoaderQueueList!=null && reportLoaderQueueList.size()>0)
 				{
 					Logger.out.info("Total objects found in ReportLoaderQueue are:"+reportLoaderQueueList.size());
 					SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
@@ -76,7 +76,7 @@ public class ReportLoaderQueueProcessor extends Thread
 							endTime=new Date().getTime();
 							Logger.out.info("Report loaded successfully, deleting report queue object");
 							// delete record from queue
-							CaCoreAPIService.getAppServiceInstance().removeObject(reportLoaderQueue);
+							CaCoreAPIService.removeObject(reportLoaderQueue);
 							CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ,"+(endTime-startTime));
 							Logger.out.info("Processed report from Queue with id ="+reportLoaderQueue.getId());
 						}
@@ -89,12 +89,15 @@ public class ReportLoaderQueueProcessor extends Thread
 								reportLoaderQueue.setStatus(CaTIESConstants.CP_NOT_FOUND);
 							}
 							CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+reportLoaderQueue.getStatus()+","+ex.getMessage()+","+(endTime-startTime));
-							CaCoreAPIService.getAppServiceInstance().updateObject(reportLoaderQueue);
+							CaCoreAPIService.updateObject(reportLoaderQueue);
 						}
 					}
-				}		
-				Logger.out.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
-				Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
+				}
+				else
+				{
+					Logger.out.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
+					Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
+				}
 			}
 			catch (NumberFormatException ex) 
 			{

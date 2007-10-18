@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
@@ -33,6 +31,13 @@ public class ReportProcessor implements Observer
 	protected Parser parser=null;
 	
 	/**
+	 * Variables for input directory, parsed file directory and bad file directory
+	 */
+	String inputFileDir=CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR);
+	String parsedFileDir=CaTIESProperties.getValue(CaTIESConstants.PROCESSED_FILE_DIR);
+	String badFileDir=CaTIESProperties.getValue(CaTIESConstants.BAD_FILE_DIR);
+	
+	/**
 	 * Constructor
 	 */
 	public ReportProcessor()
@@ -40,9 +45,6 @@ public class ReportProcessor implements Observer
 		parserManager = ParserManager.getInstance();
 		// get instance of parser
 		parser = parserManager.getParser();
-		ReportLoaderQueueProcessor queueProcessor = new ReportLoaderQueueProcessor();
-		// Starts ReportLoaderQueueProcessor thread
-		queueProcessor.start();
 	}
 	
 	/**
@@ -62,32 +64,31 @@ public class ReportProcessor implements Observer
 	public void run(Object obj)
 	{
 		String[] files=null;
+		String siteInfoFileName=CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME);
 		try
 		{	
 			files=	(String[])obj;
-			// variable to store list of files that has to be deleted from input directory after processing
 			// Loop to process all incoming files
 			for(int i=0;i<files.length;i++)
 			{	
 				try
 				{		
-					if(isValidFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]))
+					if(isValidFile(inputFileDir+File.separator+files[i]))
 					{
 						Logger.out.info("parsing file "+files[i]);
 						// Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
-						SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
+						SiteInfoHandler.init(siteInfoFileName);
 						// calling parser to parse file
 						Long startTime=new Date().getTime();
-						parser.parse(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
+						parser.parse(inputFileDir+File.separator+files[i]);
 						Long endTime=new Date().getTime();
 						Logger.out.info("parsing of file "+files[i]+" finished. Time required:"+(endTime-startTime));
 					}
 					else
 					{
-						Logger.out.info("Bad file found. Moving file to bad files directory. Filename:"+CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
-						CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,"Bad file found "+CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
-						copyFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i],CaTIESProperties.getValue(CaTIESConstants.BAD_FILE_DIR)+"/"+files[i]);
-						deleteFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
+						Logger.out.info("Bad file found. Moving file to bad files directory. Filename:"+inputFileDir+File.separator+files[i]);
+						CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,"Bad file found "+inputFileDir+File.separator+files[i]);
+						moveToBadFileDir(files[i]);
 					}					
 				}
 				catch(IOException ex)
@@ -96,12 +97,10 @@ public class ReportProcessor implements Observer
 				}
 				catch(Exception ex)
 				{     
-			  	    copyFile("./"+files[i],CaTIESProperties.getValue(CaTIESConstants.BAD_FILE_DIR)+File.separator+files[i]);
-			  	    deleteFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
+					moveToBadFileDir(files[i]);
 					Logger.out.error("Bad File ",ex);
 				}
-				copyFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i],CaTIESProperties.getValue(CaTIESConstants.PROCESSED_FILE_DIR)+"/"+files[i]);
-				deleteFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
+				moveToProcessedFileDir(files[i]);
 			}
 			files=null;
 		}
@@ -162,5 +161,27 @@ public class ReportProcessor implements Observer
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Method to move file to processed file directory
+	 * @param fileName
+	 * @throws Exception
+	 */
+	private void moveToProcessedFileDir(String fileName) throws Exception
+	{
+		copyFile(inputFileDir+File.separator+fileName,parsedFileDir+File.separator+fileName);
+		deleteFile(inputFileDir+File.separator+fileName);
+	}
+	
+	/**
+	 * Method to move file to bad file directory
+	 * @param fileName
+	 * @throws Exception
+	 */
+	private void moveToBadFileDir(String fileName) throws Exception
+	{
+		copyFile(inputFileDir+File.separator+fileName,badFileDir+File.separator+fileName);
+		deleteFile(inputFileDir+File.separator+fileName);
 	}
 }
