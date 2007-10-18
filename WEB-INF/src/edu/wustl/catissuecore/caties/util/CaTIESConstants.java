@@ -12,6 +12,9 @@ public abstract class CaTIESConstants
 	public static final String MALE = "M";
 	public static final String FEMALE = "F";
 	
+	public static final String MALE_GENDER="Male Gender";
+	public static final String FEMALE_GENDER="Female Gender";
+	
 	//Report observation section constants  
 	public static final String  FINAL_SECTION="FIN";
 	public static final String  TEXT_SECTION="TX";
