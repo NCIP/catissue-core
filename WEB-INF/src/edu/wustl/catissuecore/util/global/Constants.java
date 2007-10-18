@@ -1857,6 +1857,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLUMN_NAME_STATUS="status";
 	public static final String COLUMN_NAME_CPR="collectionProtocolRegistration";
 	public static final String COLUMN_NAME_COLL_PROT_EVENT="collectionProtocolEvent";
+	public static final String COLUMN_NAME_SCG_CPR_PARTICIPANT_ID="specimenCollectionGroup.collectionProtocolRegistration.participant.id";
 	
 	//Bug 2833. Field for the length of CP Title
 	public static final int COLLECTION_PROTOCOL_TITLE_LENGTH=30; 
