@@ -2,7 +2,7 @@
 
 <mx:Box backgroundColor="white" borderStyle="solid" direction="vertical"  
 	xmlns:mx="http://www.adobe.com/2006/mxml"  verticalGap="0"
-		implements="flash.utils.IExternalizable" creationComplete="init()" fontSize="9" >
+		implements="flash.utils.IExternalizable" creationComplete="init()" fontSize="9" verticalScrollPolicy="off" horizontalScrollPolicy="off">
 <mx:Script>
 	<![CDATA[
 		import Util.HashMap;
@@ -74,7 +74,9 @@
 		
 		];
 
-
+		/**
+		* Add out association to be displayed. 
+		*/
 		[Bindable]
 		public function addDisplayOutAssociation(node:String,link:String,operatorIndex:int):void{
 			var order:int=0;
@@ -98,10 +100,11 @@
 		     sort.fields = [new SortField("order",true)];
 		     col.sort = sort;
 			 col.refresh();
-
-					
+	
 		}
-
+		/**
+		* Remove displayed out association
+		*/
 		[Bindable]
 		public function removeDisplayOutAssociation(node:String,link:String):void{
 			var ass:Association;
@@ -116,6 +119,9 @@
 			}
 		}
 
+		/**
+		* Add out association to be displayed. 
+		*/
 		[Bindable]
 		public function addOutAssociation(node:String,link:String,operatorIndex:int):void{
 			var order:int=0;
@@ -138,7 +144,10 @@
 		     sort.fields = [new SortField("order",true)];
 		     col.sort = sort;
 			 col.refresh();
-			}
+		}
+		/**
+		* Remove out association
+		*/	
 		[Bindable]
 		public function removeOutAssociation(node:String,link:String):void{
 			var ass:Association;
@@ -157,7 +166,7 @@
 		public function getOutAssociations():ArrayCollection{
 			return outAssociations;
 		}
-		
+			
 		[Bindable]
 		public function getOutAssociation(node:String):Association{
 			var ass:Association;
@@ -171,13 +180,18 @@
 			}
 			return null;
 		}
-		
+		/**
+		* Add in association to be displayed. 
+		*/
 		[Bindable]
 		public function addInAssociation(node:String,link:String,operatorIndex:int):void{
 			var order:int=0;
 			var ass:Association = new Association(node,link,operatorIndex,order);
 			inAssociations.addItem(ass);
 		}
+		/**
+		* Remove in association
+		*/	
 		[Bindable]
 		public function removeInAssociation(node:String,link:String):void{
 			var ass:Association;
@@ -195,13 +209,17 @@
 		public function getInAssociations():ArrayCollection{
 			return inAssociations;
 		}
-		//-------------
 		
+		/**
+		*Init method
+		*/
 		public function init():void
 		{ 
 			this.parentApplication.rpcService.addEventListener("fault", faultHandler);
 		}
-		
+		/**
+		*Initilize DAG node before creation
+		*/
 		public function initializeNode(nodeName:String,nodeType:String,expressionId:int,toolTipStr:String,x:int,y:int,nodeColor:int):void
 		{
 			this.x =x;
@@ -214,20 +232,33 @@
 			this.toolTip = toolTipStr;
 			this.nodeColor=nodeColor;
 		}
-		
+		/**
+		* Get node width
+		*/
 		public function getWidth():int{
 	      return this.width;
 	    }
+   		/**
+		* Get node height
+		*/
 	    public function getHeight():int{
 	      return this.height;
 	    }
+   		/**
+		* Get node x co-ordinate
+		*/
 	    public function getX():int{
 	      return this.x;
 	    }
+	    /**
+		* Get node y co-ordinate
+		*/
 	    public function getY():int{
 	      return this.y;
 	    }
-		
+		/**
+		* Read serialized data
+		*/
 		public function readExternal(input:IDataInput):void {
 			nodeName = input.readUTF();
 			toolTip=input.readUTF();
@@ -239,14 +270,11 @@
 			dagpathList = input.readObject() as ArrayCollection;
 			errorMsg = input.readUTF();
 			x = input.readInt();
-
-			//Alert.show( nodeName + "x ==" +x)
-
 			y = input.readInt();
-//			Alert.show( nodeName+"y ==" +y)
-			
 		}
-
+		/**
+		* Write serialized data.
+		*/
 		public function writeExternal(out:IDataOutput):void {
 			out.writeUTF(nodeName);
 			out.writeUTF(toolTip);
@@ -261,21 +289,26 @@
 			out.writeInt(y);
 		}
 		//---
-		
+		/**
+		* Select node
+		*/
 		public function select():void
 		{
 			this.setStyle("borderColor","blue");
 			this.setStyle("borderThickness","2");
 		}
-		
+		/**
+		* Unselect node
+		*/
 		public function unSelect():void
 		{
 			this.setStyle("borderColor","gray");
 			this.setStyle("borderThickness","1");
 		}
-		
-	
-		// Method to create an Array-based menu.
+			
+		/**
+		* Method to create an Array-based menu.
+		*/
 		private function createAndShow(event:MouseEvent):void {
 			var myMenu:Menu=null;
 			if(this.parentApplication.view=="Result")
@@ -296,7 +329,9 @@
 			myMenu.addEventListener(MenuEvent.ITEM_CLICK,handleMenuEvent);
 			
 		}
-		
+		/**
+		* Delete path associated with node
+		*/
 		private function deletePath(pathName:String):void
 		{
 			var dagPath:DAGPath=this.parentApplication.dagPathUIMap.getValue(pathName) as DAGPath;
@@ -307,7 +342,9 @@
 			dagPath.deletePath(dagNode1,dagNode2);
 			orderOfAss.remove(pathName);
 		}
-		
+		/**
+		* Delete node.
+		*/
 		public function deleteNode():void
 		{
 				var ass:Association;
@@ -330,6 +367,9 @@
 				this.parentApplication.rpcService.addEventListener(ResultEvent.RESULT,deleteHandler);
 				
 		}
+		/**
+		* Handling menu click event 
+		*/
 		private function handleMenuEvent(event:MenuEvent):void
 		{
 			if(event.label == DAGConstants.DELETE)
@@ -366,15 +406,23 @@
 				
 			}
 		}
-		
+		/**
+		* Handler for delete from result view.
+		*/
 		public function deleteFromViewHandler(event:ResultEvent):void
 		{
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteFromViewHandler,false);
 		}
+		/**
+		* Handler for add to result view 
+		*/
 		public function addToViewHandler(event:ResultEvent):void
 		{
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,addToViewHandler,false);
 		}
+		/**
+		* Delete node handler 
+		*/
 		public function deleteHandler(event:ResultEvent):void
 		{
 			this.parent.removeChild(this.parent.getChildByName(this.name));
@@ -394,17 +442,23 @@
 			}
 			this.parentApplication.currentExp.text = this.parentApplication.getExprssionString();
 		}
-		
+		/**
+		* Error handler
+		*/
 		public function faultHandler (event:FaultEvent):void {
 				// Deal with event.fault.faultString, etc.
 			Alert.show(event.fault.faultString, 'Error');
 		}
-			
+		/**
+		* Change operator handler
+		*/	
 		public function setOperatorHandler(event:ResultEvent):void
 		{
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,setOperatorHandler,false);
 		}
-		
+		/**
+		* Changing logical operator
+		*/
 		public function operatorChange(event:Event):void
 		{
 		 var cb:ComboBox=event.currentTarget as ComboBox;
