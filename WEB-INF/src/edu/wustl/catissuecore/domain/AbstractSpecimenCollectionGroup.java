@@ -2,23 +2,14 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
-import edu.wustl.catissuecore.bean.ConsentBean;
-import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.util.EventsUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -26,7 +17,7 @@ import edu.wustl.common.util.logger.Logger;
  * An abstract base class for specimen collection group 
  * and requirement group 
  * 
- * @hibernate.class table="CATISSUE_ABSTRACT_SPECIMEN_COLL_GROUP"
+ * @hibernate.class table="CATISSUE_ABS_SPECI_COLL_GROUP"
 
  * @author abhijit_naik
  *

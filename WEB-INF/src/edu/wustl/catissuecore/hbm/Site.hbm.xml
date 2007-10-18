@@ -89,7 +89,7 @@
 
         <set
             name="abstractSpecimenCollectionGroupCollection"
-            table="CATISSUE_ABSTRACT_SPECIMEN_COLL_GROUP"
+            table="CATISSUE_ABS_SPECI_COLL_GROUP"
             lazy="true"
             inverse="true"
             cascade="save-update"

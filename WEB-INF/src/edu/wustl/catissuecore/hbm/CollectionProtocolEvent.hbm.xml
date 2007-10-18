@@ -61,7 +61,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="SPECIMEN_COLLECTION_REQ_GROUP_ID"
+            column="SPECIMEN_COLL_REQ_GROUP_ID"
             not-null="false"
         />
 

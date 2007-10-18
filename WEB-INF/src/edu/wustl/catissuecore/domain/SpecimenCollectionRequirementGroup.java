@@ -5,7 +5,7 @@ import java.io.Serializable;
 import edu.wustl.common.exception.BizLogicException;
 
 /**
- *@hibernate.class table="CATISSUE_SPECIMEN_COLL_REQUIREMENT_GROUP"
+ *@hibernate.class table="CATISSUE_SPECI_COLL_REQ_GROUP"
  *
  * @author abhijit_naik
  *

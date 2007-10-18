@@ -53,7 +53,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	private Long getLastAvailableSCGLabel(String databaseConstant)  
 	{
 		Long noOfRecords = new Long("0");
-		String sourceObjectName = "CATISSUE_ABSTRACT_SPECIMEN_COLL_GROUP";
+		String sourceObjectName = "CATISSUE_ABS_SPECI_COLL_GROUP";
 		String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 

@@ -9,7 +9,7 @@
 
     <class
         name="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup"
-        table="CATISSUE_ABSTRACT_SPECIMEN_COLL_GROUP"
+        table="CATISSUE_ABS_SPECI_COLL_GROUP"
 		lazy="true"
     >
 
@@ -216,7 +216,7 @@
 
 	    <joined-subclass
 	        name="edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup"
-	        table="CATISSUE_SPECIMEN_COLL_REQUIREMENT_GROUP"
+	        table="CATISSUE_SPECI_COLL_REQ_GROUP"
 			lazy="true"
 	    >
 

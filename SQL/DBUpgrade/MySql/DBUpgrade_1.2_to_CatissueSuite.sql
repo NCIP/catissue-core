@@ -562,9 +562,9 @@ INSERT INTO `CSM_PG_PE` SELECT MAX(PG_PE_ID)+1,17,(SELECT PROTECTION_ELEMENT_ID 
 
 /*------------Alteration in parent entity 'catissue_specimen_coll_group' ------*/
 
-alter table catissue_specimen_coll_group rename catissue_abstract_specimen_coll_group;
-alter table catissue_abstract_specimen_coll_group drop foreign key `FKDEBAF1677E07C4AC`;
-alter table catissue_abstract_specimen_coll_group drop foreign key `FKDEBAF16753B01F66`;
+alter table catissue_specimen_coll_group rename catissue_abs_speci_coll_group;
+alter table catissue_abs_speci_coll_group drop foreign key `FKDEBAF1677E07C4AC`;
+alter table catissue_abs_speci_coll_group drop foreign key `FKDEBAF16753B01F66`;
 
 
 /*------ Creating child entities ----------------------*/
@@ -580,34 +580,34 @@ CREATE TABLE `catissue_specimen_coll_group` (
                                 CONSTRAINT `FKDEBAF1677E07C4AC` FOREIGN KEY (`COLLECTION_PROTOCOL_REG_ID`) REFERENCES `catissue_coll_prot_reg` (`IDENTIFIER`),
                                 CONSTRAINT FK_PARENT_SPEC_COLL_GROUP 
 				FOREIGN KEY (IDENTIFIER) REFERENCES 
-					catissue_abstract_specimen_coll_group(IDENTIFIER)
+					catissue_abs_speci_coll_group(IDENTIFIER)
                               ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 alter table catissue_specimen_coll_group add column `COLLECTION_PROTOCOL_EVENT_ID` bigint(20) default NULL;
 alter table catissue_specimen_coll_group add CONSTRAINT `FK_COLL_PROT_EVENT_SPEC_COLL_GROUP` FOREIGN KEY (`COLLECTION_PROTOCOL_EVENT_ID`) REFERENCES `catissue_coll_prot_event` (`IDENTIFIER`);
 
 insert catissue_specimen_coll_group(identifier,name,comments,SURGICAL_PATHOLOGY_NUMBER, COLLECTION_PROTOCOL_EVENT_ID,COLLECTION_PROTOCOL_REG_ID) 
-select identifier,name,comments,SURGICAL_PATHOLOGY_NUMBER, COLLECTION_PROTOCOL_EVENT_ID,COLLECTION_PROTOCOL_REG_ID from catissue_abstract_specimen_coll_group;
+select identifier,name,comments,SURGICAL_PATHOLOGY_NUMBER, COLLECTION_PROTOCOL_EVENT_ID,COLLECTION_PROTOCOL_REG_ID from catissue_abs_speci_coll_group;
 
-alter table catissue_abstract_specimen_coll_group drop column COLLECTION_PROTOCOL_EVENT_ID;
-alter table catissue_abstract_specimen_coll_group drop column COLLECTION_PROTOCOL_REG_ID;
-alter table catissue_abstract_specimen_coll_group drop column name;
-alter table catissue_abstract_specimen_coll_group drop column comments;
-alter table catissue_abstract_specimen_coll_group drop column SURGICAL_PATHOLOGY_NUMBER;
+alter table catissue_abs_speci_coll_group drop column COLLECTION_PROTOCOL_EVENT_ID;
+alter table catissue_abs_speci_coll_group drop column COLLECTION_PROTOCOL_REG_ID;
+alter table catissue_abs_speci_coll_group drop column name;
+alter table catissue_abs_speci_coll_group drop column comments;
+alter table catissue_abs_speci_coll_group drop column SURGICAL_PATHOLOGY_NUMBER;
 
-CREATE TABLE `catissue_specimen_coll_requirement_group` (                                                         
+CREATE TABLE `catissue_speci_coll_req_group` (                                                         
                                 `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                    
                                 PRIMARY KEY  (`IDENTIFIER`),
 				CONSTRAINT FK_PARENT_SPEC_COLL_GROUP_REQ_GROUP 
 				FOREIGN KEY (IDENTIFIER) REFERENCES 
-				catissue_abstract_specimen_coll_group(IDENTIFIER)
+				catissue_abs_speci_coll_group(IDENTIFIER)
                               ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /* ----------------------Alteration in 'catissue_coll_prot_event' ------*/
-Alter table catissue_coll_prot_event add column SPECIMEN_COLLECTION_REQ_GROUP_ID bigint(20);
+Alter table catissue_coll_prot_event add column SPECIMEN_COLL_REQ_GROUP_ID bigint(20);
 Alter table catissue_coll_prot_event add constraint FK_COLL_EVENT_REQ_GROUP 
-						FOREIGN KEY (SPECIMEN_COLLECTION_REQ_GROUP_ID)
-						REFERENCES catissue_specimen_coll_requirement_group(IDENTIFIER);
+						FOREIGN KEY (SPECIMEN_COLL_REQ_GROUP_ID)
+						REFERENCES catissue_speci_coll_req_group(IDENTIFIER);
 
 Alter table catissue_specimen add column IS_COLL_PROT_REQ boolean;
 Alter table catissue_specimen add column COLLECTION_STATUS varchar(50);

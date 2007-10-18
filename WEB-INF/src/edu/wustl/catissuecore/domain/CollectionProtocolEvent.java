@@ -89,7 +89,7 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 	 * @return specimen collection requirement group.
 	 * @hibernate.many-to-one name="requiredCollectionSpecimenGroup"
 	 * class="edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup"
-	 * column="SPECIMEN_COLLECTION_REQ_GROUP_ID" not-null="false"
+	 * column="SPECIMEN_COLL_REQ_GROUP_ID" not-null="false"
 	 */
 
 	public SpecimenCollectionRequirementGroup getRequiredCollectionSpecimenGroup() {
