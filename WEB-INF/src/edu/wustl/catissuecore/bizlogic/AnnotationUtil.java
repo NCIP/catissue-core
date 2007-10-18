@@ -41,6 +41,7 @@ import edu.wustl.cab2b.common.util.Utility;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.cab2b.server.path.PathConstants;
 import edu.wustl.cab2b.server.path.PathFinder;
+import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.dbManager.DBUtil;
@@ -99,8 +100,10 @@ public class AnnotationUtil
 			staticEntity = (EntityInterface) session.load(Entity.class, staticEntityId);
 			dynamicEntity = (EntityInterface) ((Container) session.load(Container.class,
 					dynamicEntityId)).getEntity();
-
-			addCatissueGroup(dynamicEntity, staticEntity);
+//			Get entitygroup that is used by caB2B for path finder purpose.
+			EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
+			List<EntityInterface> processedEntityList = new ArrayList<EntityInterface>();
+			addCatissueGroup(dynamicEntity, entityGroupInterface,processedEntityList);
 
 			//Create source role and target role for the association
 			String roleName = staticEntityId.toString().concat("_").concat(
@@ -144,7 +147,8 @@ public class AnnotationUtil
 			//				}
 			//			}
 
-			addQueryPathsForAllAssociatedEntities(dynamicEntity, staticEntity, association.getId());
+			Set<PathObject> processedPathList = new HashSet<PathObject>();
+			addQueryPathsForAllAssociatedEntities(dynamicEntity, staticEntity, association.getId(), processedPathList);
 
 			addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
 		}
@@ -175,10 +179,16 @@ public class AnnotationUtil
 	 * @param dynamicEntity
 	 * @param staticEntity
 	 */
-	public static void addCatissueGroup(EntityInterface dynamicEntity, EntityInterface staticEntity)
+	public static void addCatissueGroup(EntityInterface dynamicEntity, EntityGroupInterface entityGroupInterface,List<EntityInterface> processedEntityList)
 	{
-		//		Get entitygroup that is used by caB2B for path finder purpose.
-		EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
+		if (processedEntityList.contains(dynamicEntity))
+		{
+			return;
+		}
+		else
+		{
+			processedEntityList.add(dynamicEntity);
+		}
 
 		//Add the entity group to the dynamic entity and all it's associated entities.
 		if (!checkBaseEntityGroup(dynamicEntity.getEntityGroupCollection()))
@@ -190,7 +200,7 @@ public class AnnotationUtil
 
 		for (AssociationInterface associationInteface : associationCollection)
 		{
-			addCatissueGroup(associationInteface.getTargetEntity(), staticEntity);
+			addCatissueGroup(associationInteface.getTargetEntity(), entityGroupInterface, processedEntityList);
 			//associationInteface.getTargetEntity().addEntityGroupInterface(entityGroupInterface);
 		}
 	}
@@ -219,8 +229,21 @@ public class AnnotationUtil
 	 * @throws BizLogicException
 	 */
 	private static void addQueryPathsForAllAssociatedEntities(EntityInterface dynamicEntity,
-			EntityInterface staticEntity, Long associationId) throws BizLogicException
+			EntityInterface staticEntity, Long associationId, Set<PathObject> processedPathList) throws BizLogicException
 	{
+		PathObject pathObject = new PathObject();
+		pathObject.setSourceEntity(staticEntity);
+		pathObject.setTargetEntity(dynamicEntity);
+		
+		if (processedPathList.contains(pathObject))
+		{
+			return;
+		}
+		else
+		{
+			processedPathList.add(pathObject);
+		}		
+		
 		Long start = new Long(System.currentTimeMillis());
 
 		AnnotationUtil.addPathsForQuery(staticEntity.getId(), dynamicEntity.getId(), associationId);
@@ -228,10 +251,10 @@ public class AnnotationUtil
 		Collection<AssociationInterface> associationCollection = dynamicEntity
 				.getAssociationCollection();
 		for (AssociationInterface associationInteface : associationCollection)
-		{
+		{			
 			System.out.println("PERSISTING PATH");
 			addQueryPathsForAllAssociatedEntities( associationInteface
-					.getTargetEntity(),dynamicEntity, associationInteface.getId());
+					.getTargetEntity(),dynamicEntity, associationInteface.getId(),processedPathList);
 			
 			//			AnnotationUtil.addPathsForQuery(dynamicEntity.getId(), associationInteface
 			//					.getTargetEntity().getId(), associationInteface.getId());
@@ -492,45 +515,45 @@ public class AnnotationUtil
 		}
 	}
 
-	/**
-	 * @param conn
-	 * @param staticEntityId
-	 * @return
-	 * @throws SQLException
-	 */
-	private static ResultSet getIndirectPaths(Connection conn, Long staticEntityId)
-	{
-		String query = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
-				+ staticEntityId;
-		java.sql.PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		try
-		{
-			statement = conn.prepareStatement(query);
-			resultSet = statement.executeQuery();
-		}
-		catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		finally
-		{
-			try
-			{
-
-				statement.close();
-			}
-			catch (SQLException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-		return resultSet;
-	}
+//	/**
+//	 * @param conn
+//	 * @param staticEntityId
+//	 * @return
+//	 * @throws SQLException
+//	 */
+//	private static ResultSet getIndirectPaths(Connection conn, Long staticEntityId)
+//	{
+//		String query = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
+//				+ staticEntityId;
+//		java.sql.PreparedStatement statement = null;
+//		ResultSet resultSet = null;
+//		try
+//		{
+//			statement = conn.prepareStatement(query);
+//			resultSet = statement.executeQuery();
+//		}
+//		catch (SQLException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		finally
+//		{
+//			try
+//			{
+//
+//				statement.close();
+//			}
+//			catch (SQLException e)
+//			{
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//		}
+//		return resultSet;
+//	}
 
 	/**
 	 * @param conn
