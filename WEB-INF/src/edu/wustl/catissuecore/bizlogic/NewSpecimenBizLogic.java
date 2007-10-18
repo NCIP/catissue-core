@@ -1106,11 +1106,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
          *    has become 0.
 		 */
 		
-		if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+		if(specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() == 0)
 		{
 			specimen.setAvailable(new Boolean(false));
 		}
-		else if(specimenOld.getAvailableQuantity().getValue().doubleValue()==0)
+		else if(specimenOld.getAvailableQuantity()!=null && specimenOld.getAvailableQuantity().getValue().doubleValue()==0)
 		{
 			// quantity of old object is zero and that of current is nonzero
 			specimen.setAvailable(new Boolean(true));
@@ -2418,6 +2418,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		if(!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION ))
 		{
+			
 			String consentWithdrawOption = specimen.getConsentWithdrawalOption();
 			//Resolved Lazy ----  specimen.getConsentTierStatusCollection()
 			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
@@ -2430,14 +2431,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				if(status.getStatus().equalsIgnoreCase(Constants.WITHDRAWN) )
 				{
 					//Resolved lazy - specimen.getChildrenSpecimen();
-					Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class.getName(),oldSpecimen.getId(),"elements(childrenSpecimen)");
-					//Collection childSpecimens = specimen.getChildrenSpecimen();
-					Iterator childItr = childSpecimens.iterator();  
-					while(childItr.hasNext())
-					{
-						Specimen childSpecimen = (Specimen)childItr.next();
-						WithdrawConsentUtil.updateSpecimenStatus(childSpecimen, consentWithdrawOption, consentTierID, dao, sessionDataBean  );
-					}
+					
+					WithdrawConsentUtil.updateSpecimenStatus(specimen, consentWithdrawOption, consentTierID, dao, sessionDataBean  );
+						
 				}
 			}
 		}

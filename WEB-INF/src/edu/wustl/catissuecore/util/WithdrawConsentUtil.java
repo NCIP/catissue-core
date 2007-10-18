@@ -59,6 +59,7 @@ public class WithdrawConsentUtil
 			newScgStatusCollection.add(consentTierstatus );	// set updated consenttierstatus in scg
 		}
 		scg.setConsentTierStatusCollection( newScgStatusCollection);
+		scg.setActivityStatus(Constants.DISABLED);
 	}
 	
 	/**
@@ -104,6 +105,7 @@ public class WithdrawConsentUtil
 	 */
 	public static void updateSpecimenStatus(Specimen specimen, String consentWithdrawalOption, long consentTierID,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
+		
 		Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
 		Collection updatedSpecimenStatusCollection = new HashSet();
 		Iterator specimenStatusItr = consentTierStatusCollection.iterator() ;
@@ -213,13 +215,18 @@ public class WithdrawConsentUtil
 	
 	private static void updateChildSpecimens(Specimen specimen, String consentWithdrawalOption, long consentTierID, DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
-		Collection childSpecimens = specimen.getChildrenSpecimen();
-		Iterator childItr = childSpecimens.iterator();  
-		while(childItr.hasNext() )
-		{
-			Specimen childSpecimen = (Specimen)childItr.next();
-			consentWithdrawForchildSpecimens(childSpecimen , dao,  sessionDataBean, consentWithdrawalOption, consentTierID);
-		}
+		Long specimenId = (Long)specimen.getId();	
+		Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class.getName(),specimenId,"elements(childrenSpecimen)");
+		//Collection childSpecimens = specimen.getChildrenSpecimen();
+		if(childSpecimens!=null)
+		{	
+			Iterator childItr = childSpecimens.iterator();  
+			while(childItr.hasNext() )
+			{
+				Specimen childSpecimen = (Specimen)childItr.next();
+				consentWithdrawForchildSpecimens(childSpecimen , dao,  sessionDataBean, consentWithdrawalOption, consentTierID);
+			}
+		}	
 	}
 	
 	private static void consentWithdrawForchildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, String consentWithdrawalOption, long consentTierID) throws DAOException
