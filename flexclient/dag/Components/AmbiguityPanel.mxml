@@ -19,19 +19,21 @@
 		public var pathList:ArrayCollection=new ArrayCollection();;
 	    [Bindable]
 		public var selectedList:ArrayCollection= null;
-		
 		public var nodeList:ArrayCollection =null;						
 		public var dagPath:DAGPath = null;
 		
+		/**
+		* Initialization ambiguity panel.
+		*/
 		private function init():void
         {
-        	 //Intialising ambiguity panel
         	selectedList = new ArrayCollection()
         	var dg :DataGrid = this.getChildByName("pathGrid") as DataGrid;
         	dg.dataProvider=pathList;
 			addEventListener(ClickEvent.CLICK, onSimpleClickEvent);
         }
-       /*OK & Cancel event Handler
+       /**
+       * OK & Cancel event Handler
        */
 		public  function closePopUp(event:MouseEvent):void {
 				var buttonStr:Array=event.currentTarget.toString().split(".");
@@ -73,8 +75,10 @@
 				}
 		}
 
-		 /* this is the function that will catch the click event
-		that will bubble up from the Checkbox in our DataGrid's itemRenderer*/
+		/**
+		* This is the function that will catch the click event
+		* that will bubble up from the Checkbox in our DataGrid's itemRenderer
+		*/
 		private function onSimpleClickEvent(e:ClickEvent):void
 		{
 			// create refs to the items we care about
