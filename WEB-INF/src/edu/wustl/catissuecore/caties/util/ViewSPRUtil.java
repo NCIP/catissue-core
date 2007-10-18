@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
 import edu.wustl.catissuecore.bean.ConceptHighLightingBean;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
@@ -29,7 +27,7 @@ public class ViewSPRUtil
 	 * @param request
 	 * @param deidentifiedSurgicalPathologyReport
 	 */
-	public static List getConceptBeanList(HttpServletRequest request,DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport) throws DAOException
+	public static List getConceptBeanList(DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport) throws DAOException
 	{		
 		List conceptBeanList = new ArrayList();
 		if(deidentifiedSurgicalPathologyReport != null)
