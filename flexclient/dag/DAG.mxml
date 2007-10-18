@@ -9,7 +9,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	import mx.controls.Label;
 	import mx.utils.StringUtil;
 	import Components.DAGPath;
-	
 	import mx.controls.ComboBase;
 	import Components.DAGConstants;
 	import mx.containers.HBox;
@@ -52,14 +51,10 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
     import mx.managers.CursorManager;
     
 	//------------------------
-	public var readyTimer:Timer;
-	private var dynamicNodeNum:int = 1;
-	private var linkNum:int = 1;
 	private var node1:String = "";
 	private var node2:String = "";
 	private var selectedLink:String = "";
 	private var selectedNode:DAGNode=null;
-	
     private var ambiguityPanel:AmbiguityPanel; 
     private var title:String  = new String();
     private var selectedNodeList:ArrayCollection = new ArrayCollection();
@@ -68,12 +63,16 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
     private var secondNode:String;
  	private var pathStr:String
 	private	var isQuery:String = "false";
+	private var eNode:DAGNode;
+	
+	public var readyTimer:Timer;
 	public var isOutputView:Boolean=false;
 	public var rpcService: RemoteObject;
 	public var view:String ="";
 	public var dagPathUIMap:HashMap;
 	public var totalNodes:ArrayCollection;
-	private var eNode:DAGNode;
+	public var allPaths:ArrayCollection;
+
 	
 	/**
 	* Timer handler  to check container has been initialized.	
@@ -165,7 +164,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		
 		dagNode.x = pt.x;
 		dagNode.y = pt.y;
-//		Alert.show(""+dagNode.width);
+
 		var ass:Association;
 		var inAssociations:ArrayCollection;
 		var inAsslength:int;
@@ -241,6 +240,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		view= Application.application.parameters.view;
 		dagPathUIMap = new HashMap();
 		totalNodes = new ArrayCollection();
+		allPaths = new ArrayCollection();
 		if (isContainerReady())
 			{
 			// If the container is ready, register the SWF functions.
@@ -291,18 +291,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			var ypos:int =0;
 			var nodeColor:int=0xFFFFAA;
 			
-/*			if(mainPanel.getChildren().length==1)
-			{
-				xpos = 20;
-				ypos = (mainPanel.y+40);
-			}
-			else
-			{ 
-				var length:int=mainPanel.getChildren().length;
-				xpos = 20;
-				ypos = (mainPanel.y+50)+(40*length);
-			}	*/
-			
 			node.addEventListener(MouseEvent.MOUSE_MOVE,doDrag);
 			node.addEventListener(MouseEvent.CLICK,updateNodeSelection);	
 			var hideNodeFlag:Boolean=false;
@@ -327,10 +315,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				default:																
 						nodeColor=0xFFFFAA	
 			}	
-
-			//Alert.show(" node.x =="+ node.x)
-			//Alert.show(" node.y =="+ node.y)
-
+			
 			xpos = node.x;
 			ypos = node.y;
 			node.initializeNode(node.nodeName,node.nodeType,node.expressionId,node.toolTip,xpos,ypos,nodeColor);
@@ -740,6 +725,11 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 					//-----
 					mainPanel.addChild(newPath);
 					dagPathUIMap.put(newPath.name,newPath);
+					if(!allPaths.contains(newPath.name))
+					{
+						allPaths.addItem(newPath.name);
+					}
+								
 					dagNode1.attachedNodeMap.put(dagNode2.name,dagNode2);
 	   			}
 				
@@ -1034,7 +1024,19 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
    
         return expressionString;
     }
-
+    /**
+    * Clear all Paths in DAG
+    */
+	public function clearPaths():void
+	{
+		 for(var i:int=0;i<allPaths.length;i++)
+		 {
+			var key:String = allPaths.getItemAt(i) as String;
+			var dagPath:DAGPath = dagPathUIMap.getValue(key) as DAGPath;
+			dagPath.deletePath(dagPath.getFromNode(),dagPath.getToNode());
+		 }
+		 dagPathUIMap.clear();
+	}
 
 ]]>
 </mx:Script>
@@ -1042,6 +1044,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	<mx:Panel backgroundColor="white" id="mainPanel" width="100%" height="100%" layout="absolute" title="Diagrammatic View" fontSize="11">
 		<mx:HBox  borderStyle="none" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="190" height="39" x="0" y="0">
 			<mx:Button label="Add Link" click="drawLine()" fontSize="9"/>
+			<mx:Button label="Clear All Paths" click="clearPaths()" fontSize="9"/>
 		</mx:HBox>
 	</mx:Panel>
 	<mx:Label id="currentExp" fontFamily="Courier New" fontSize="11" fontWeight="bold"/>
