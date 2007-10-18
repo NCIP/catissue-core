@@ -54,7 +54,7 @@ public class FetchReportAction extends BaseAction
     			IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport)reportListFromDB.get(0);
     			if(identifiedReport.getSpecimenCollectionGroup() != null) 
     			{
-    				xmlData = makeXMLData(request, xmlData, identifiedReport);
+    				xmlData = makeXMLData(xmlData, identifiedReport);
     			}
     		}
     	}
@@ -69,7 +69,7 @@ public class FetchReportAction extends BaseAction
 	 * @return
 	 * @throws DAOException 
 	 */
-	private StringBuffer makeXMLData(HttpServletRequest request, StringBuffer xmlData, IdentifiedSurgicalPathologyReport identifiedReport) throws DAOException, SQLException
+	private StringBuffer makeXMLData(StringBuffer xmlData, IdentifiedSurgicalPathologyReport identifiedReport) throws DAOException, SQLException
 	{	
 		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		SpecimenCollectionGroup scg=(SpecimenCollectionGroup)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_SCG);
@@ -81,7 +81,7 @@ public class FetchReportAction extends BaseAction
 		{
 			deidReportText=(TextContent)defaultBizLogic.retrieveAttribute(DeidentifiedSurgicalPathologyReport.class.getName(), deidReport.getId(), Constants.COLUMN_NAME_TEXT_CONTENT);
 		}
-		List conceptBeanList=ViewSPRUtil.getConceptBeanList(request, deidReport);
+		List conceptBeanList=ViewSPRUtil.getConceptBeanList(deidReport);
 		String conceptBeans=getConceptBeans(conceptBeanList);
 		
 		xmlData.append("<ReportInfo>");
