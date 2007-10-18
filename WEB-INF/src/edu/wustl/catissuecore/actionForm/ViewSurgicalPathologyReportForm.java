@@ -401,13 +401,13 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		SpecimenCollectionGroup specimenCollectionGroup=(SpecimenCollectionGroup)abstractDomain;
-		if(specimenCollectionGroup!=null)
+		IdentifiedSurgicalPathologyReport identifiedReport=(IdentifiedSurgicalPathologyReport)abstractDomain;
+		if(identifiedReport!=null)
 		{
-			this.surgicalPathologyNumber=specimenCollectionGroup.getSurgicalPathologyNumber();
-			setIdentifiedReport(specimenCollectionGroup.getIdentifiedSurgicalPathologyReport());
-			setDeIdentifiedReport(specimenCollectionGroup.getDeIdentifiedSurgicalPathologyReport());
-			setParticipant(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant());
+			this.surgicalPathologyNumber=identifiedReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber();
+			setIdentifiedReport(identifiedReport);
+			setDeIdentifiedReport(identifiedReport.getDeIdentifiedSurgicalPathologyReport());
+			setParticipant(identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant());
 		}
 		this.comments=null;
 	}
