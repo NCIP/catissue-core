@@ -51,8 +51,6 @@
 				</classpath>
 				<classpath refid="cp"/>
 				<jvmarg value="-Dgate.plugins.home=E:/gate_3_1/gate_3_1/application/plugins" /> 
-				<jvmarg value="-DproxyHost=ptproxy.persistent.co.in" />
-				<jvmarg value="-DproxyPort=8080" />
 			</java>
 		</target>
 	
