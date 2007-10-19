@@ -15,10 +15,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import net.sf.hibernate.Session;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
@@ -478,7 +479,10 @@ public class CaCoreAppServicesDelegator
 	    {
 	        removeCollectionProtocolRegistrationIdentifiedData(object);
 	    }
-	    
+	    else if (classObject.equals(IdentifiedSurgicalPathologyReport.class))
+	    {
+	        removeIdentifiedReportIdentifiedData(object);
+	    }
 //	    if (Client.identifiedClassNames.contains(classObject.getName()) 
 //	            || Client.identifiedFieldsMap.containsKey(classObject.getName()))
 //	    {
@@ -689,5 +693,18 @@ public class CaCoreAppServicesDelegator
     public String delegateGetDefaultValue(String userName, Object obj) throws Exception
     {
     	return((String)DefaultValueManager.getDefaultValue((String)obj));
+    }
+    
+    /**
+     * Removes the identified data from identified Report object
+     * @param object object of IdentifiedSurgicalPathologyReport
+     */
+    private void  removeIdentifiedReportIdentifiedData(Object object)
+    {
+    	IdentifiedSurgicalPathologyReport identiPathologyReport=(IdentifiedSurgicalPathologyReport)object;
+    	if(identiPathologyReport.getTextContent()!=null)
+    	{
+    		identiPathologyReport.getTextContent().setData(null);
+    	}
     }
 }
