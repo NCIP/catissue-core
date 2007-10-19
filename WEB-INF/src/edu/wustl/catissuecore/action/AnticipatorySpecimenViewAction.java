@@ -49,12 +49,13 @@ public class AnticipatorySpecimenViewAction extends Action {
 	protected LinkedHashMap<String, ArrayList<GenericSpecimenVO>> autoStorageSpecimenMap =new LinkedHashMap<String, ArrayList<GenericSpecimenVO>> ();
 	Long cpId = null;
 	protected HashSet<String> storageContainerIds = new HashSet<String>();
-	
+	String target = null;
 	SpecimenAutoStorageContainer autoStorageContainer; 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
+		target=Constants.SUCCESS;
 		SpecimenCollectionGroupForm specimenCollectionGroupForm=
 			(SpecimenCollectionGroupForm)form;
 		HttpSession session = request.getSession();
@@ -63,13 +64,17 @@ public class AnticipatorySpecimenViewAction extends Action {
 		bean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 		((AbstractDAO)dao).openSession(bean);
 		try{
+			target=Constants.SUCCESS;
 			session.setAttribute("SCGFORM", specimenCollectionGroupForm.getId());
 			List cpList = dao.retrieve(SpecimenCollectionGroup.class.getName(), "id", id);
-			
 			if(cpList != null && !cpList.isEmpty())
 			{
 				autoStorageContainer = new SpecimenAutoStorageContainer ();
-				SpecimenCollectionGroup specimencollectionGroup = (SpecimenCollectionGroup) cpList.get(0);			
+				SpecimenCollectionGroup specimencollectionGroup = (SpecimenCollectionGroup) cpList.get(0);
+				if(specimencollectionGroup.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
+				{
+					target=Constants.ACTIVITY_STATUS_DISABLED;
+				}
 				LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = new LinkedHashMap<String, CollectionProtocolEventBean> ();
 				cpId = specimencollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
 				CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
@@ -101,7 +106,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 //				}
 				autoStorageContainer.setCollectionProtocol(cpId);
 				autoStorageContainer.setSpecimenStoragePositions(bean);				
-				return mapping.findForward(Constants.SUCCESS);
+				return mapping.findForward(target);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -180,8 +185,10 @@ public class AnticipatorySpecimenViewAction extends Action {
 		specimenDataBean.setPathologicalStatus(specimen.getPathologicalStatus());
 		specimenDataBean.setId(specimen.getId().longValue());
 		specimenDataBean.setParentName(parentName);
-		specimenDataBean.setQuantity(specimen.getInitialQuantity().getValue().toString());
-		
+		if(specimen.getInitialQuantity()!=null)
+		{	
+			specimenDataBean.setQuantity(specimen.getInitialQuantity().getValue().toString());
+		}
 //		specimenDataBean.setAvailable(Boolean.TRUE);
 //		specimenDataBean.setAvailableQuantity(availableQuantity);
 //		specimenDataBean.setInitialQuantity(availableQuantity);
