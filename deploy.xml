@@ -943,6 +943,7 @@ Thanking You,
 
 	<property name="filename" value="" />
 	<property name="hookentity" value="" />
+	<property name="mainContainerList" value="" />
 	<property name="condition" value="" />
 	<property name="package" value="" />
 
@@ -990,6 +991,7 @@ Thanking You,
 		<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true">
 			<arg value="${filename}" />
 			<arg value="${hookentity}" />
+			<arg value="${mainContainerList}" />
 			<arg value="${condition}" />
 			<arg value="${package}" />
 			<classpath>
@@ -1008,7 +1010,7 @@ Thanking You,
 		</delete>
 	</target>
 
-
+<!-- XMI EXPORT-->
 	<property name="groupname" value="" />
 	<property name="version" value="" />
 	<target name="export_xmi">
