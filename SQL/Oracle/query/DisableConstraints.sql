@@ -2,7 +2,7 @@
 /* File:query_schema */
 alter table QUERY_PARAMETERIZED_QUERY disable constraint FKA272176BBC7298A9 ;
 alter table CATEGORIAL_CLASS disable constraint FK9651EF32D8D56A33 ;
-alter table CATEGORIAL_CLASS disable constraint FK9651EF3291B ;
+/*alter table CATEGORIAL_CLASS disable constraint FK9651EF3291B ; */
 alter table QUERY_INTRA_MODEL_ASSOCIATION disable constraint FKF1EDBDD3BC7298A9 ;
 alter table QUERY_CONSTRAINTS disable constraint FKE364FCFFD3C625EA ;
 alter table QUERY_PARAMETERIZED_CONDITION disable constraint FK9BE75A3EBC7298A9 ;
