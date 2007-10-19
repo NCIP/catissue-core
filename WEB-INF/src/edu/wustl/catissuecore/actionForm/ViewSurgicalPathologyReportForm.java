@@ -198,7 +198,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get name of particicpant
-	 * @return firstName First name of participant
+	 * @return participantName name of participant
 	 */
 	public String getParticipantName()
 	{
@@ -207,11 +207,11 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set name of particicpant
-	 * @param firstName First name of participant
+	 * @param participantName name of participant
 	 */
-	public void setParticipantName(String firstName)
+	public void setParticipantName(String participantName)
 	{
-		this.participantName = firstName;
+		this.participantName = participantName;
 	}
 	
 	/**
