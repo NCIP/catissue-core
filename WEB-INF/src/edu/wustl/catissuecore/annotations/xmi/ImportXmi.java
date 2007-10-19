@@ -3,15 +3,20 @@
  */
 package edu.wustl.catissuecore.annotations.xmi;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.jmi.model.ModelPackage;
 import javax.jmi.model.MofPackage;
@@ -36,7 +41,6 @@ import edu.common.dynamicextensions.xmi.importer.XMIImportProcessor;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
-
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -78,22 +82,26 @@ public class ImportXmi
 			{
 				throw new Exception("Please Specify the hook entity name");
 			}
+			if(args.length < 3)
+			{
+				throw new Exception("Please Specify the main container csv file name");
+			}
 			
 			//Ist parameter is fileName
 	//		Fully qualified Name of the xmi file to be imported
 			String fileName = args[0]; 
 			String hookEntity = args[1];
+
+			
 				//"C://Documents and Settings//ashish_gupta//Desktop//XMLs//caTissueCore_1.4_Edited.xmi";	
 			
 			fileName = fileName.replaceAll("\\\\", "//");		
 			System.out.println("Filename = " +fileName);
 			System.out.println("Hook Entity = " +hookEntity);
 			String packageName = "";			
-			String conditionRecordObjectName = "";
-			
-						
-			
-			
+			String conditionRecordObjectCsvFileName = "";
+			String pathCsvFileName = "";
+							
 			int beginIndex = fileName.lastIndexOf("//");
 			int endIndex = fileName.lastIndexOf(".");
 			String domainModelName = fileName.substring(beginIndex+2, endIndex);
@@ -114,21 +122,34 @@ public class ImportXmi
 			
 			// read the document
 			reader.read(in, null, uml);
-						
+			
 			if(args.length > 2)
 			{
-				conditionRecordObjectName = args[2];
+				pathCsvFileName = args[2];
 			}
 			if(args.length > 3)
 			{
-				packageName = args[3];
+				conditionRecordObjectCsvFileName = args[3];
 			}
-			
-			Long cpId =(Long) getObjectIdentifier(conditionRecordObjectName,CollectionProtocol.class.getName(),Constants.TITLE);
-			if(args.length > 2 && cpId == null)
+			if(args.length > 4)
 			{
-				throw new DynamicExtensionsSystemException("Specified Collection Protocol does not exist.");
-			}				
+				packageName = args[4];
+			}
+			List<Long> conditionObjectIds = new ArrayList<Long>();
+			if(!conditionRecordObjectCsvFileName.equals(""))
+			{
+				List<String> conditionObjectNames = readFile(conditionRecordObjectCsvFileName);				
+				for(String conditionObjName :conditionObjectNames)
+				{
+					System.out.println("conditionObjName = " + conditionObjName);
+					Long cpId =(Long) getObjectIdentifier(conditionObjName,CollectionProtocol.class.getName(),Constants.TITLE);
+					if(cpId == null)
+					{
+						throw new DynamicExtensionsSystemException("Specified Collection Protocol does not exist.");
+					}
+					conditionObjectIds.add(cpId);
+				}
+			}
 			
 			DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 			List staticEntityList = defaultBizLogic.retrieve(AbstractMetadata.class.getName(), Constants.NAME, hookEntity);			
@@ -148,8 +169,9 @@ public class ImportXmi
 			System.out.println("Forms have been created !!!!");
 			System.out.println("Associating with hook entity.");
 			
+			List<ContainerInterface> mainContainerList = getMainContainerList(pathCsvFileName,entityNameVsContainers);
 			//Integrating with hook entity
-			associateHookEntity(entityNameVsContainers,cpId,staticEntity,isEditedXmi);
+			associateHookEntity(mainContainerList,conditionObjectIds,staticEntity,isEditedXmi);
 			System.out.println("--------------- Done ------------");
 		
 		}
@@ -174,6 +196,62 @@ public class ImportXmi
 			XMIUtilities.cleanUpRepository();
 		
 		}
+	}
+	/**
+	 * @param path
+	 * @param entityNameVsContainers
+	 * @return
+	 * @throws IOException
+	 */
+	private static List<ContainerInterface> getMainContainerList(String path,Map<String, List<ContainerInterface>> entityNameVsContainers) throws IOException
+	{
+		 List<String> containerNames = readFile(path);
+		List<ContainerInterface> mainContainerList = getContainerObjectList(containerNames,entityNameVsContainers);
+		return mainContainerList;
+	}
+	/**
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 */
+	private static  List<String> readFile(String path) throws IOException
+	{
+		 List<String> containerNames = new ArrayList<String>();
+		File file = new File(path);
+	 
+		BufferedReader bufRdr  = new BufferedReader(new FileReader(file));
+		String line = null;
+		 
+		//read each line of text file
+		while((line = bufRdr.readLine()) != null)
+		{	
+			StringTokenizer st = new StringTokenizer(line,",");
+			while (st.hasMoreTokens())
+			{
+				//get next token and store it in the array
+				containerNames.add(st.nextToken());
+			}		
+		}
+		return containerNames;
+	}
+	/**
+	 * @param containerNames
+	 * @param entityNameVsContainers
+	 * @return
+	 */
+	private static List<ContainerInterface> getContainerObjectList( List<String> containerNames,Map<String, List<ContainerInterface>> entityNameVsContainers)
+	{
+		List<ContainerInterface> mainContainerList = new ArrayList<ContainerInterface>();
+			
+		for(String name : containerNames)
+		{
+			Object containerList = entityNameVsContainers.get(name);
+			if(containerList != null)
+			{
+				mainContainerList.add(((ContainerInterface)((List)containerList).get(0)));				
+			}						
+		}
+		return mainContainerList;
 	}
 
 	private static void init() throws Exception
@@ -244,15 +322,16 @@ public class ImportXmi
 	 * @throws DynamicExtensionsApplicationException 
 	 * 
 	 */
-	private static void associateHookEntity(Map<String, List<ContainerInterface>> entityNameVsContainers,Long collectionProtocolId,EntityInterface staticEntity,boolean isEditedXmi) throws DAOException, DynamicExtensionsSystemException, BizLogicException, UserNotAuthorizedException, DynamicExtensionsApplicationException
+	private static void associateHookEntity(List<ContainerInterface> mainContainerList,List<Long> conditionObjectIds,EntityInterface staticEntity,boolean isEditedXmi) throws DAOException, DynamicExtensionsSystemException, BizLogicException, UserNotAuthorizedException, DynamicExtensionsApplicationException
 	{		
 		Object typeId = getObjectIdentifier("edu.wustl.catissuecore.domain.CollectionProtocol",AbstractMetadata.class.getName(),Constants.NAME);
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();		
-		Set<String> keySet = entityNameVsContainers.keySet();
-		for(String key : keySet)
+		//Set<String> keySet = entityNameVsContainers.keySet();
+//		for(String key : keySet)
+		for(ContainerInterface container: mainContainerList)
 		{
-			List<ContainerInterface> containerList = entityNameVsContainers.get(key);
-			ContainerInterface container = containerList.get(0);
+//			List<ContainerInterface> containerList = entityNameVsContainers.get(key);
+//			ContainerInterface container = containerList.get(0);
 						
 			if(isEditedXmi)
 			{//Retrieve entity map
@@ -260,21 +339,21 @@ public class ImportXmi
 				if(entityMapList != null && entityMapList.size() > 0)
 				{
 					EntityMap entityMap = entityMapList.get(0);
-					if(collectionProtocolId != null)
+					if(conditionObjectIds != null)
 					{
-						editConditions(entityMap,collectionProtocolId,typeId);
+						editConditions(entityMap,conditionObjectIds,typeId);
 					}
 					AnnotationBizLogic annotation = new AnnotationBizLogic();
 					annotation.updateEntityMap(entityMap);
 				}
 				else
 				{//Create new Entity Map
-					createIntegrationObjects(container,staticEntity,collectionProtocolId,typeId);
+					createIntegrationObjects(container,staticEntity,conditionObjectIds,typeId);
 				}
 			}
 			else
 			{//Create new Entity Map
-				createIntegrationObjects(container,staticEntity,collectionProtocolId,typeId);
+				createIntegrationObjects(container,staticEntity,conditionObjectIds,typeId);
 			}				
 		}
 	}
@@ -285,26 +364,27 @@ public class ImportXmi
 	 * @throws DynamicExtensionsSystemException
 	 * @throws DAOException
 	 */
-	private static void editConditions(EntityMap entityMap,Long collectionProtocolId,Object typeId) throws DynamicExtensionsSystemException, DAOException
+	private static void editConditions(EntityMap entityMap,List<Long> conditionObjectIds,Object typeId) throws DynamicExtensionsSystemException, DAOException
 	{
 		Collection<FormContext> formContextColl = entityMap.getFormContextCollection();
 		for(FormContext formContext : formContextColl)
 		{
-			Collection<EntityMapCondition> entityMapCondColl = formContext.getEntityMapConditionCollection();
-			int temp = 0;
-			for(EntityMapCondition condition : entityMapCondColl)
-			{
-				if(condition.getStaticRecordId().compareTo(collectionProtocolId) == 0)
-				{
-					temp++;
-					break;								
-				}
-			}
-			if(temp == 0)
-			{
-				EntityMapCondition entityMapCondition = getEntityMapCondition(formContext,collectionProtocolId,typeId);
-				entityMapCondColl.add(entityMapCondition);
-			}
+//			Collection<EntityMapCondition> entityMapCondColl = formContext.getEntityMapConditionCollection();
+//			int temp = 0;
+//			for(EntityMapCondition condition : entityMapCondColl)
+//			{
+//				if(condition.getStaticRecordId().compareTo(collectionProtocolId) == 0)
+//				{
+//					temp++;
+//					break;								
+//				}
+//			}
+//			if(temp == 0)
+//			{
+//				EntityMapCondition entityMapCondition = getEntityMapCondition(formContext,collectionProtocolId,typeId);
+//				entityMapCondColl.add(entityMapCondition);
+//			}
+			formContext.setEntityMapConditionCollection(getEntityMapCondition(formContext,conditionObjectIds,typeId));
 		}
 	}
 	/**
@@ -318,11 +398,11 @@ public class ImportXmi
 	 * @throws UserNotAuthorizedException
 	 * @throws DynamicExtensionsApplicationException
 	 */
-	private static void createIntegrationObjects(ContainerInterface container,EntityInterface staticEntity,Long collectionProtocolId,Object typeId) throws DynamicExtensionsSystemException, DAOException, BizLogicException, UserNotAuthorizedException, DynamicExtensionsApplicationException
+	private static void createIntegrationObjects(ContainerInterface container,EntityInterface staticEntity,List<Long> conditionObjectIds,Object typeId) throws DynamicExtensionsSystemException, DAOException, BizLogicException, UserNotAuthorizedException, DynamicExtensionsApplicationException
 	{
 		EntityMap entityMap = getEntityMap(container,staticEntity.getId());
 					
-		Collection<FormContext> formContextColl = getFormContext(entityMap,collectionProtocolId,typeId);
+		Collection<FormContext> formContextColl = getFormContext(entityMap,conditionObjectIds,typeId);
 					
 		entityMap.setFormContextCollection(formContextColl);
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
@@ -338,16 +418,16 @@ public class ImportXmi
 	 * @throws DynamicExtensionsSystemException
 	 * @throws DAOException
 	 */
-	private static Collection<FormContext> getFormContext(EntityMap entityMap,Long cpId,Object typeId) throws DynamicExtensionsSystemException, DAOException
+	private static Collection<FormContext> getFormContext(EntityMap entityMap,List<Long> conditionObjectIds,Object typeId) throws DynamicExtensionsSystemException, DAOException
 	{
 		Collection<FormContext> formContextColl = new HashSet<FormContext>();
 		FormContext formContext = new FormContext();
 		formContext.setEntityMap(entityMap);
 		
 		Collection<EntityMapCondition> entityMapConditionColl = new HashSet<EntityMapCondition>();
-		 if(cpId != null)
+		 if(conditionObjectIds != null)
 		{
-			entityMapConditionColl.add(getEntityMapCondition(formContext,cpId,typeId));
+			entityMapConditionColl = getEntityMapCondition(formContext,conditionObjectIds,typeId);
 		}
 		
 		formContext.setEntityMapConditionCollection(entityMapConditionColl);
@@ -364,15 +444,19 @@ public class ImportXmi
 	 * @throws DynamicExtensionsSystemException
 	 * @throws DAOException
 	 */
-	private static EntityMapCondition getEntityMapCondition(FormContext formContext,Long cpId,Object typeId) throws DynamicExtensionsSystemException, DAOException
-	{		
-		EntityMapCondition entityMapCondition = new EntityMapCondition();		
-		entityMapCondition.setStaticRecordId((cpId));
-					
-		entityMapCondition.setTypeId(((Long)typeId));
-		entityMapCondition.setFormContext(formContext);		
-		
-		return entityMapCondition;
+	private static Collection<EntityMapCondition> getEntityMapCondition(FormContext formContext,List<Long> conditionObjectIds,Object typeId) throws DynamicExtensionsSystemException, DAOException
+	{	
+		Collection<EntityMapCondition> entityMapCondColl = new HashSet<EntityMapCondition>();
+		for(Long cpId : conditionObjectIds)
+		{
+			EntityMapCondition entityMapCondition = new EntityMapCondition();		
+			entityMapCondition.setStaticRecordId((cpId));
+						
+			entityMapCondition.setTypeId(((Long)typeId));
+			entityMapCondition.setFormContext(formContext);	
+			entityMapCondColl.add(entityMapCondition);
+		}
+		return entityMapCondColl;
 	}
 	/**
 	 * @param container
