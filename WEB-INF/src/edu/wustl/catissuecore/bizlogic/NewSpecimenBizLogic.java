@@ -1834,7 +1834,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 		if (operation.equals(Constants.EDIT))
 		{
-			if (!specimen.getAvailable().booleanValue())
+			if (specimen.getCollectionStatus()!=null && specimen.getCollectionStatus().equals("Collected") && !specimen.getAvailable().booleanValue())
 			{
 				throw new DAOException(ApplicationProperties.getValue("specimen.available.operation"));
 			}
