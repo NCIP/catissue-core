@@ -108,8 +108,7 @@ function showEvent()
 			}
 			else
 			{
-				var tempId=document.forms[0].id.value;
-		    	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+tempId;
+		    	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+reportId;
 				document.forms[0].action=action;
 				document.forms[0].submit();
 			}
