@@ -15,15 +15,18 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
+import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
@@ -35,14 +38,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ViewSurgicalPathologyReportAction extends BaseAction
 {
-
-	private ViewSurgicalPathologyReportForm viewSPR;
 	/**
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		viewSPR=(ViewSurgicalPathologyReportForm)form;
+		ViewSurgicalPathologyReportForm viewSPR=(ViewSurgicalPathologyReportForm)form;
 		String pageOf = viewSPR.getPageOf();
 		String operation = viewSPR.getOperation();
 		String submittedFor=viewSPR.getSubmittedFor();
@@ -60,11 +61,11 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		{
 			identifier=new Long(strIdentifier);
 			viewSPR.setId(identifier);
-			retriveFromReportId(identifier, request);
+			retriveFromReportId(identifier, request, viewSPR);
 		}
 		if(id!=null && id!=0 && operation.equalsIgnoreCase(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
         {
-            retrieveAndSetObject(pageOf, id, request);
+            retrieveAndSetObject(pageOf, id, request, viewSPR);
         }
         request.setAttribute(Constants.PAGEOF, pageOf);
         request.setAttribute(Constants.OPERATION, Constants.VIEW_SURGICAL_PATHOLOGY_REPORT);
@@ -88,7 +89,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 * @throws DAOException exception occured while DB handling
 	 * @throws BizLogicException
 	 */
-	private void retrieveAndSetObject(String pageOf, long id, HttpServletRequest request) throws DAOException
+	private void retrieveAndSetObject(String pageOf, long id, HttpServletRequest request, ViewSurgicalPathologyReportForm viewSPR) throws DAOException
 	{
 		Long identifiedReportId=id;
 		
@@ -104,13 +105,14 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 
 		if(identifiedReportId!=null)
 		{
-			DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+			IdentifiedSurgicalPathologyReportBizLogic bizLogic=(IdentifiedSurgicalPathologyReportBizLogic)BizLogicFactory.getInstance().getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
 			IdentifiedSurgicalPathologyReport identifiedReport=new IdentifiedSurgicalPathologyReport();
 			identifiedReport.setId(identifiedReportId);
 			try
 			{
-				defaultBizLogic.populateUIBean(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), viewSPR);
-				DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_DEID_REPORT);
+				bizLogic.populateUIBean(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), viewSPR);
+				filterObjects(identifiedReportId, viewSPR, request);
+				DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)bizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_DEID_REPORT);
 				List conceptBeanList=ViewSPRUtil.getConceptBeanList(deidReport);
 				request.setAttribute(Constants.CONCEPT_BEAN_LIST, conceptBeanList);
 			}
@@ -147,7 +149,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 * @param collProtId Get Witness List for this ID
 	 * @return consentWitnessList
 	 */ 
-	public void retriveFromReportId(Long identifier,HttpServletRequest request) throws DAOException
+	public void retriveFromReportId(Long identifier,HttpServletRequest request, ViewSurgicalPathologyReportForm viewSPR) throws DAOException
 	{   	
 		IBizLogic bizLogic=null;
 		List objectList=null;
@@ -211,6 +213,50 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			return (Long)participantIdList.get(0); 
 		}
 		return null;
+	}
+	
+	public void filterObjects(Long identifiedReportId, ViewSurgicalPathologyReportForm viewSPR, HttpServletRequest request) throws Exception
+	{
+		//For PHI
+		SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+		CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
+		String userName = edu.wustl.common.util.Utility.toString(sessionDataBean.getUserName());
+		
+		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+		List reportList=(List)defaultBizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), Constants.SYSTEM_IDENTIFIER, identifiedReportId);
+		IdentifiedSurgicalPathologyReport identifiedReport=(IdentifiedSurgicalPathologyReport)reportList.get(0);
+		TextContent textContent=null;
+		if(identifiedReport.getTextContent()!=null)
+		{
+			textContent=(TextContent)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReportId, Constants.COLUMN_NAME_TEXT_CONTENT);
+			identifiedReport.setTextContent(textContent);
+			List<IdentifiedSurgicalPathologyReport> identifiedReportList=new ArrayList<IdentifiedSurgicalPathologyReport>();
+			identifiedReportList.add(identifiedReport);
+			identifiedReportList=caCoreAppServicesDelegator.delegateSearchFilter(userName, identifiedReportList);
+			if(identifiedReport.getTextContent().getData()==null)
+			{
+				viewSPR.setIdentifiedReportTextContent(Constants.HASHED_OUT);
+				viewSPR.setSurgicalPathologyNumber(Constants.HASHED_OUT);
+				viewSPR.setIdentifiedReportSite(Constants.HASHED_OUT);
+			}
+			
+		}
+		Long participantId=getParticipantId(identifiedReportId);
+		List participantList=(List)defaultBizLogic.retrieve(Participant.class.getName(), Constants.SYSTEM_IDENTIFIER, participantId);
+		participantList=caCoreAppServicesDelegator.delegateSearchFilter(userName, participantList);
+		Participant participant=(Participant)participantList.get(0);
+		if(participant.getFirstName()==null && participant.getLastName()==null)
+		{
+			viewSPR.setParticipantName(Constants.HASHED_OUT);
+			if(participant.getBirthDate()==null)
+			{
+				viewSPR.setBirthDate(Constants.HASHED_OUT);
+			}
+			if(participant.getSocialSecurityNumber()==null)
+			{
+				viewSPR.setSocialSecurityNumber(Constants.HASHED_OUT);
+			}
+		}
 	}
 }
 
