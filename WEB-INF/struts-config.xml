@@ -4523,6 +4523,7 @@ PUBLIC
 					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
 					<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 	                <forward name="failure" path="/Home.do" />
+	                 <forward name="Disabled" path="/homeAction.do" />
        </action>    
 		<action path="/MultipleSpecimenView"
                 type="edu.wustl.catissuecore.action.MultipleSpecimenViewAction"
