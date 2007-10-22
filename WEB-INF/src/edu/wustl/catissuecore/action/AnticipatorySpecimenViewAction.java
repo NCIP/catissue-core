@@ -91,19 +91,6 @@ public class AnticipatorySpecimenViewAction extends Action {
 			
 				request.setAttribute("RequestType",ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
 				((AbstractDAO)dao).closeSession();
-//				Set<String> keySet = autoStorageSpecimenMap.keySet();
-//				if (!keySet.isEmpty())
-//				{
-//					Iterator<String> keySetIterator = keySet.iterator();
-//					storageContainerIds.clear();
-//					while(keySetIterator.hasNext())
-//					{
-//						String key = keySetIterator.next();
-//						ArrayList<GenericSpecimenVO> specimenList =
-//							autoStorageSpecimenMap.get(key);
-//						setSpecimenStorageDetails(specimenList,key);
-//					}
-//				}
 				autoStorageContainer.setCollectionProtocol(cpId);
 				autoStorageContainer.setSpecimenStoragePositions(bean);				
 				return mapping.findForward(target);
@@ -200,7 +187,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 			specimenDataBean.setReadOnly(true);
 		}
 		specimenDataBean.setType(specimen.getType());
-		specimenDataBean.setStorageContainerForSpecimen("Virtual");
+//		specimenDataBean.setStorageContainerForSpecimen("Virtual");
 		SpecimenCharacteristics characteristics = specimen.getSpecimenCharacteristics();
 		if (characteristics != null)
 		{
@@ -251,15 +238,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 		}
 		if ("Auto".equals(storageType))
 		{
-//			String className = specimenDataBean.getClassName();
-//			
-//			if (autoStorageSpecimenMap.get(className) == null)
-//			{
-//				autoStorageSpecimenMap.put(className, new ArrayList<GenericSpecimenVO>());				
-//			}
-//			ArrayList<GenericSpecimenVO> specimenList =
-//						autoStorageSpecimenMap.get(className);
-//			specimenList.add(specimenDataBean);
+
 			autoStorageContainer.addSpecimen(specimenDataBean, specimenDataBean.getClassName());
 			
 		}
@@ -267,67 +246,5 @@ public class AnticipatorySpecimenViewAction extends Action {
 		specimenDataBean.setDeriveSpecimenCollection(getChildDerived(specimen));
 		return specimenDataBean;
 	}
-	
-//	protected void setSpecimenStorageDetails(List specimenDataBeanList, String className) throws DAOException
-//	{
-//		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-//		TreeMap containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(cpId.longValue(), className,
-//				0, "false", bean, true);
-//	
-//		populateAliquotsStorageLocations(specimenDataBeanList, containerMap);
-//	}
-//
-//	protected void populateAliquotsStorageLocations(List specimenDataBeanList, Map containerMap)
-//	{
-//		
-//		int counter = 0;
-//
-//		if (!containerMap.isEmpty())
-//		{
-//			Object[] containerId = containerMap.keySet().toArray();
-//
-//			for (int i = 0; i < containerId.length; i++)
-//			{
-//				Map xDimMap = (Map) containerMap.get(containerId[i]);
-//
-//				if (!xDimMap.isEmpty())
-//				{
-//					Object[] xDim = xDimMap.keySet().toArray();
-//
-//					for (int j = 0; j < xDim.length; j++)
-//					{
-//						List yDimList = (List) xDimMap.get(xDim[j]);
-//
-//						for (int k = 0; k < yDimList.size(); k++)
-//						{
-//							if(counter < specimenDataBeanList.size())
-//							{
-//								GenericSpecimenVO specimenDataBean = (GenericSpecimenVO)specimenDataBeanList.get(counter);
-//								String stName = ((NameValueBean) containerId[i]).getName();
-//								String posOne = ((NameValueBean) xDim[j]).getValue();
-//								String posTwo = ((NameValueBean) yDimList.get(k)).getValue();
-//								String storageValue = stName+":"+posOne+" ,"+posTwo; 
-//								if(!storageContainerIds.contains(storageValue))
-//								{													
-//									specimenDataBean.setContainerId(((NameValueBean) containerId[i]).getValue());
-//									specimenDataBean.setSelectedContainerName(stName);
-//									specimenDataBean.setPositionDimensionOne(posOne);
-//									specimenDataBean.setPositionDimensionTwo(posTwo);
-//									storageContainerIds.add(storageValue);
-//									counter++;									
-//								}
-//							}
-//							else
-//							{
-//								break;
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//
-//	}
-//	
-	
+		
 }

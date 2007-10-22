@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
@@ -187,12 +188,13 @@ public final class MultipleSpecimenValidationUtil
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}*/
 
-		if (validator.isEmpty(specimen.getLabel()))
-		{
-			String message = ApplicationProperties.getValue("specimen.label");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+		if(!Variables.isSpecimenLabelGeneratorAvl){
+			if (validator.isEmpty(specimen.getLabel()))
+			{
+				String message = ApplicationProperties.getValue("specimen.label");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			}
 		}
-
 		if (validator.isEmpty(specimen.getClassName()))
 		{
 			String message = ApplicationProperties.getValue("specimen.type");
@@ -446,13 +448,14 @@ public final class MultipleSpecimenValidationUtil
 						+ specimen.getSpecimenCollectionGroup().getGroupName()));
 			}
 		}
-
-		if (validator.isEmpty(specimen.getLabel()))
+		if  (!Variables.isSpecimenLabelGeneratorAvl)
 		{
-			String labelString = ApplicationProperties.getValue("specimen.label");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
+			if (validator.isEmpty(specimen.getLabel()))
+			{
+				String labelString = ApplicationProperties.getValue("specimen.label");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
+			}
 		}
-
 		if (specimen.getInitialQuantity() == null || specimen.getInitialQuantity().getValue() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");

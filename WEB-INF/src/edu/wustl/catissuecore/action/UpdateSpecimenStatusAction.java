@@ -98,11 +98,17 @@ public class UpdateSpecimenStatusAction extends Action {
 		while(iterator.hasNext())
 		{
 			GenericSpecimen specimenVO =(GenericSpecimen) iterator.next();
-			
-			Specimen specimen = createSpecimenDomainObject(specimenVO);
-			specimen.setChildrenSpecimen(getChildrenSpecimens(specimenVO));
-			specimenDomainCollection.add(specimen);
-
+			Specimen specimen = null;
+			if(!specimenVO.getReadOnly())
+			{
+				specimen = createSpecimenDomainObject(specimenVO);
+				specimen.setChildrenSpecimen(getChildrenSpecimens(specimenVO));
+				specimenDomainCollection.add(specimen);
+			}
+			else
+			{
+				specimenDomainCollection.addAll(getChildrenSpecimens(specimenVO));	
+			}
 		}
 		return specimenDomainCollection;
 	}
@@ -119,10 +125,18 @@ public class UpdateSpecimenStatusAction extends Action {
 			while(iterator.hasNext())
 			{
 				GenericSpecimen aliquotSpecimen = (GenericSpecimen) iterator.next();
-				Specimen specimen = createSpecimenDomainObject(aliquotSpecimen);
-				specimen.setChildrenSpecimen(
+				Specimen specimen = null;
+				if(!aliquotSpecimen.getReadOnly())
+				{
+					specimen = createSpecimenDomainObject(aliquotSpecimen);
+					specimen.setChildrenSpecimen(
 						getChildrenSpecimens(aliquotSpecimen));
-				childrenSpecimens.add(specimen);
+					childrenSpecimens.add(specimen);
+				}
+				else
+				{
+					childrenSpecimens.addAll(getChildrenSpecimens(aliquotSpecimen));
+				}
 			}
 		}
 
@@ -135,10 +149,17 @@ public class UpdateSpecimenStatusAction extends Action {
 			while(iterator.hasNext())
 			{
 				GenericSpecimen derivedSpecimen = (GenericSpecimen) iterator.next();
-				Specimen specimen = createSpecimenDomainObject(derivedSpecimen);
-				specimen.setChildrenSpecimen(
-						getChildrenSpecimens(derivedSpecimen));
-				childrenSpecimens.add(specimen);
+				if(!derivedSpecimen.getReadOnly())
+				{
+					Specimen specimen = createSpecimenDomainObject(derivedSpecimen);
+					specimen.setChildrenSpecimen(
+							getChildrenSpecimens(derivedSpecimen));
+					childrenSpecimens.add(specimen);
+				}
+				else
+				{
+					childrenSpecimens.addAll(getChildrenSpecimens(derivedSpecimen));	
+				}
 			}
 		}
 		return childrenSpecimens;
@@ -151,7 +172,7 @@ public class UpdateSpecimenStatusAction extends Action {
 
 		NewSpecimenForm form = new NewSpecimenForm();
 		form.setClassName(specimenVO.getClassName());
-		
+	
 		
 		Specimen specimen;
 		try {
@@ -264,8 +285,15 @@ public class UpdateSpecimenStatusAction extends Action {
 	 */
 	private void setStorageContainer(GenericSpecimen specimenVO,
 			Specimen specimen)throws BizLogicException {
+		
 		String pos1 = specimenVO.getPositionDimensionOne();
 		String pos2 = specimenVO.getPositionDimensionTwo();
+
+		if (!specimenVO.getCheckedSpecimen()){
+			specimenVO.setPositionDimensionOne("1");
+			return;
+		}
+		
 		if (pos1!=null)
 		{
 			try

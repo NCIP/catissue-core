@@ -1376,6 +1376,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if (specimen.getStorageContainer() != null)
 		{
 			
+			
 			//retrieveStorageContainerObject(dao, specimen.getStorageContainer(), specimen.getStorageContainer().getId());
 			StorageContainer storageContainerObj = new StorageContainer();
 			
@@ -2488,7 +2489,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * This function is used to bulk update multiple specimens. If
 	 * any specimen contains children specimens those will be inserted. 
 	 * @param newSpecimenCollection List of specimens to update along with 
-	 * new children specimens if any. 
+	 * new children specimens if any. 7
 	 * @param sessionDataBean current user session information
 	 * @throws DAOException If DAO fails to update one or more specimens
 	 * this function will throw DAOException.
@@ -2579,8 +2580,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			storageContainerIds.clear();
 			while (iterator.hasNext())
 			{
-				Specimen newSpecimen = (Specimen) iterator.next();
-				
+				Specimen newSpecimen = (Specimen) iterator.next();				
 				updateSignleSpecimen(dao,newSpecimen, sessionDataBean,updateChildrens);
 			}			
 			dao.commit();
@@ -2611,6 +2611,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				updateSpecimenDomainObject(dao, newSpecimen, specimenDO);
 				if(updateChildrens)
 					updateChildrenSpecimens(dao,newSpecimen, specimenDO);
+
 				dao.update(specimenDO, sessionDataBean, false, false, false);
 				return specimenDO;
 			}
@@ -2624,10 +2625,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			
 		} catch (SMException exception)
 		{
-			throw new DAOException (exception.getMessage(),exception);
-			
-		}
-	
+			throw new DAOException (exception.getMessage(),exception);	
+		}	
 	}
 
 	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO ,
@@ -2645,10 +2644,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Specimen specimen = (Specimen) iterator.next();
 			Specimen relatedSpecimen = getCorelatedSpecimen(
 					specimen.getId(), specimenVO.getChildrenSpecimen());
+			if (relatedSpecimen != null)
+			{
+				updateSpecimenDomainObject(dao, relatedSpecimen, specimen);
 			
-			updateSpecimenDomainObject(dao, relatedSpecimen, specimen);
-			
-			updateChildrenSpecimens(dao, relatedSpecimen, specimen);
+				updateChildrenSpecimens(dao, relatedSpecimen, specimen);
+			}
 		}	
 	}
 	
@@ -2664,23 +2665,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				return specimen;
 			}
 		}
-		throw new DAOException ("Invalid specimen: id =" + id );
+		return null;
 	}
-	/**
-	 * @param childrenSpecimens
-	 */
-	private void updateChildSpecimenStatus(Collection childrenSpecimens) {
-		if (childrenSpecimens !=null)
-		{
-			Iterator iterator = childrenSpecimens.iterator();
-			while(iterator.hasNext())
-			{
-				Specimen childSpecimen = (Specimen) iterator.next();
-				childSpecimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
-				updateChildSpecimenStatus(childSpecimen.getChildrenSpecimen());
-			}
-		}
-	}
+
 	private void checkDuplicateSpecimenFields(Specimen specimen, DAO dao) throws DAOException
 	{
 		List list = dao.retrieve(Specimen.class.getCanonicalName(),"label",specimen.getLabel());
@@ -2763,13 +2750,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimenDO.setPathologicalStatus(specimenVO.getPathologicalStatus());
 		}
-		if(specimenVO.getSpecimenCharacteristics() != null)
+
+		if(specimenVO.getSpecimenCharacteristics() != null )
 		{
-			SpecimenCharacteristics specimenCharacteristics = specimenDO.getSpecimenCharacteristics();
-			if(specimenCharacteristics != null)
+			SpecimenCharacteristics characteristics = specimenVO.getSpecimenCharacteristics();
+			if (characteristics.getTissueSide()!= null || characteristics.getTissueSite()!=null)
 			{
-				specimenCharacteristics.setTissueSide(specimenVO.getSpecimenCharacteristics().getTissueSide());
-				specimenCharacteristics.setTissueSite(specimenVO.getSpecimenCharacteristics().getTissueSite());
+				SpecimenCharacteristics specimenCharacteristics = specimenDO.getSpecimenCharacteristics();
+				if(specimenCharacteristics != null)
+				{
+					specimenCharacteristics.setTissueSide(specimenVO.getSpecimenCharacteristics().getTissueSide());
+					specimenCharacteristics.setTissueSite(specimenVO.getSpecimenCharacteristics().getTissueSite());
+				}
 			}
 		}
 		
@@ -2777,7 +2769,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimenDO.setComment(specimenVO.getComment());
 		}
-		if(specimenVO.getBiohazardCollection() != null)
+		if(specimenVO.getBiohazardCollection() != null && !specimenVO.getBiohazardCollection().isEmpty())
 		{
 			specimenDO.setBiohazardCollection(specimenVO.getBiohazardCollection());
 		}		

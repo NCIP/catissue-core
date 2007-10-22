@@ -242,7 +242,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 																	+ positionDimensionTwo +"','"
 																	+containerId +"')" ;
 									%>
-									<table style="font-size:1em" size="100%">
+									
+									<logic:equal name="viewSpecimenSummaryForm" property="showParentStorage" value="true">
+									 <table style="font-size:1em" size="100%">
 										<tr>
 											<td>
 												<html:text styleClass="formFieldSized7"  styleId="<%=selectedContainerName%>" indexed="true"  name="specimen" property="selectedContainerName" />
@@ -259,8 +261,22 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 												</a>
 												<html:hidden  styleId="<%=containerId%>" name="specimen" property="containerId" />
 											</td>
-										</tr>
-									</table>
+										</tr>										
+									 </table>
+									 </logic:equal>
+
+									<logic:equal name="viewSpecimenSummaryForm" property="showParentStorage" value="false">
+									
+										<html:hidden indexed="true" name="specimen" property="selectedContainerName"/>
+										<html:hidden  indexed="true"  name="specimen" property="positionDimensionOne" />
+										<html:hidden  indexed="true" name="specimen" property="positionDimensionTwo" />
+										<span>
+											<bean:write name="specimen" property="selectedContainerName"/>
+											<B>:</B>
+											<bean:write  name="specimen" property="positionDimensionOne" />,
+											<bean:write name="specimen" property="positionDimensionTwo" />
+										</span>
+									 </logic:equal>
 									</td>
 
 							</logic:notEqual>												

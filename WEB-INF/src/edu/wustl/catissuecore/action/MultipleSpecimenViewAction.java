@@ -63,10 +63,11 @@ public class MultipleSpecimenViewAction extends BaseAction
 			.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);
 		
 			summaryForm.setShowCheckBoxes(false);
-			summaryForm.setShowbarCode(Variables.isSpecimenBarcodeGeneratorAvl);
-			summaryForm.setShowLabel(Variables.isSpecimenLabelGeneratorAvl);
+			summaryForm.setShowbarCode(!Variables.isSpecimenBarcodeGeneratorAvl);
+			summaryForm.setShowLabel(!Variables.isSpecimenLabelGeneratorAvl);
 			if(Constants.EDIT.equals(request.getParameter("mode"))){
 				summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
+				summaryForm.setShowParentStorage(false);
 			}
 			request.setAttribute("RequestType","");
 //			if(pageOf != null)

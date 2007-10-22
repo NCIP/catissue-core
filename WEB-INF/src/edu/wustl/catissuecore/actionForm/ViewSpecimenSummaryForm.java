@@ -43,6 +43,7 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	private String containerMap;
 	private String targetSuccess;
 	private String submitAction;
+	private boolean showParentStorage = true;
 	
 	private boolean showCheckBoxes = true;
 	private boolean showbarCode = true;
@@ -252,6 +253,14 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	}
 	public static void setSpecimenExist(String specimenExist) {
 		ViewSpecimenSummaryForm.specimenExist = specimenExist;
+	}
+
+	public boolean getShowParentStorage() {
+		return showParentStorage;
+	}
+
+	public void setShowParentStorage(boolean showParentStorage) {
+		this.showParentStorage = showParentStorage;
 	}
 	
 }
