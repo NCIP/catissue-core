@@ -21,8 +21,8 @@
 	<property name="dbupgrade.sql.dir" value="${base.dir}/SQL/DBUpgrade" />
 	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle" />
 	<property name="common.sql.dir" value="${base.dir}/SQL/Common" />
-	<property name="oracle.dialect.string" value="net.sf.hibernate.dialect.Oracle9Dialect" />
-	<property name="mysql.dialect.string" value="net.sf.hibernate.dialect.MySQLDialect" />
+	<property name="oracle.dialect.string" value="org.hibernate.dialect.Oracle9Dialect" />
+	<property name="mysql.dialect.string" value="org.hibernate.dialect.MySQLDialect" />
 
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect" />
 	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect" />

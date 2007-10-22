@@ -1386,7 +1386,7 @@ public class NewSpecimenAction extends SecureAction
 	{
 		String hqlString="select scg.identifiedSurgicalPathologyReport.id " +
 		" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, " +
-		" edu.wustl.catissuecore.domain.Specimen as specimen ," +
+		" edu.wustl.catissuecore.domain.Specimen as specimen" +
 		" where specimen.id = " + specimenId +
 		" and specimen.id in elements(scg.specimenCollection)";
 		List reportIDList=Utility.executeQuery(hqlString);

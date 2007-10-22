@@ -1,17 +1,8 @@
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import net.sf.hibernate.Query;
-
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -22,7 +13,6 @@ import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.dbManager.HibernateMetaData;
 
 /**
  * This class is used add, update and retrieve report loader queue  

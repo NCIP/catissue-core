@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
-    "-//Hibernate/Hibernate Configuration DTD//EN"
-    "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd">
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
 	
     <session-factory>
     	<property name="show_sql">false</property>
-    	<property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</property>
-    	<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
+    	<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+    	<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
 
 
        	<property name="dialect">@@DIALECT@@</property>	
@@ -34,7 +34,7 @@
 
 <!-- PostGreSQL settings -->
 <!-- 
-       	<property name="dialect">net.sf.hibernate.dialect.PostgreSQLDialect</property>	
+       	<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>	
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
 -->
 <!-- PostGreSQL settings  end-->
