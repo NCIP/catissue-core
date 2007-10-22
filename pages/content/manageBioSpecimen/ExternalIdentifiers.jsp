@@ -148,10 +148,10 @@
 					 			<html:hidden property="<%=exIdentifier%>" />
 			 		</td>
 				    <td class="formField" width="365" >
-			     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
+			     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="<%=exName%>" property="<%=exName%>" />
 			    	</td>
 			    	<td class="formField" colspan="2">
-			     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
+			     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="<%=exValue%>" property="<%=exValue%>" />
 			    	</td>
 			    	<%
 						String exKey = "ExternalIdentifier:" + i +"_id";
