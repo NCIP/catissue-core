@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.13 $
+ * $Name: 1.41.2.14 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -169,7 +169,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         // get database name and set variables used in query
         Variables.databaseName=HibernateMetaData.getDataBaseName();
         
-       // QueryBizLogic.initializeQueryData();
+        QueryBizLogic.initializeQueryData();
         
         String fileName = Variables.applicationHome + System.getProperty("file.separator")+ ApplicationProperties.getValue("application.version.file");
         CVSTagReader cvsTagReader = new CVSTagReader();
