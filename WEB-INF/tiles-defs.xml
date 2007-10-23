@@ -709,10 +709,16 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
+	
+	<definition name=".catissuecore.conflictResolverDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ConflictView.jsp" />
+	</definition>
+	
+	
 	<definition name=".catissuecore.simpleSearchResultsDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/SimpleSearchDataView.jsp" />
 	</definition>
-	
+
 	<definition name=".catissuecore.simpleSearchDepartmentDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/Department.jsp" />
 	</definition>

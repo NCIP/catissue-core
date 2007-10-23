@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
@@ -72,7 +73,7 @@ public class ConflictViewAction extends BaseAction
 		}
 		Collections.sort(filterList);
 	    //Setting the list in request
-		request.setAttribute(Constants.FILTER_LIST, filterList);
+		request.getSession().setAttribute(Constants.FILTER_LIST, filterList);
 		
 		
 		
@@ -84,104 +85,82 @@ public class ConflictViewAction extends BaseAction
         
         //The start index in the list of users to be approved/rejected.
         int startIndex = Constants.ZERO;
-        
-        //The end index in the list of conflicts.
-        int recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(edu.wustl.common.util.global.Constants.RECORDS_PER_PAGE_PROPERTY_NAME));
-        
-        if(request.getParameter(Constants.RESULTS_PER_PAGE) != null) 
-    	{
-        	recordsPerPage = Integer.parseInt(request.getParameter(Constants.RESULTS_PER_PAGE));       
-    	}
-        else if (session.getAttribute(Constants.RESULTS_PER_PAGE)!=null)
-        {
-        	recordsPerPage = Integer.parseInt(session.getAttribute(Constants.RESULTS_PER_PAGE).toString());
-        } 
-        int endIndex = recordsPerPage;
-    
-        
-        
-		
-		List reportQueueDataList = null;;
-		
-		//making grid data to display
-		if (pageNum == Constants.START_PAGE)
-        {
-            //If start page is to be shown retrieve the list from the database.
-           //	retrieving the report queue data from db
-			
-			//reportQueueDataList = getReportQueueDataList();
-			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
-			
-			// retrieving all the conflicts
-			if (selectedFilter==0)
-			{	
-				reportQueueDataList = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), "status", CaTIESConstants.STATUS_PARTICIPANT_CONFLICT);
-				reportQueueDataList.addAll(reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), "status", CaTIESConstants.STATUS_SCG_CONFLICT));
-				reportQueueDataList.addAll(reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), "status", CaTIESConstants.STATUS_SCG_PARTIAL_CONFLICT));
-				
-			
-			
-			}
+        String sqlString="";
+         
+        if (selectedFilter==0)
+		{	
+        	sqlString="select PARTICIPANT_NAME ,IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER,REPORT_LOADED_DATE,STATUS ,SITE_NAME ,REPORT_COLLECTION_DATE from catissue_report_queue where status='PARTICIPANT_CONFLICT' or status='SCG_PARTIAL_CONFLICT' or status='SCG_CONFLICT'";
+
+		}
+        else
+		{	//retrieving only the participant conflicts
+			if (selectedFilter==1)
+		    {	
+				sqlString="select PARTICIPANT_NAME ,IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER,REPORT_LOADED_DATE,STATUS ,SITE_NAME,REPORT_COLLECTION_DATE from catissue_report_queue where status='PARTICIPANT_CONFLICT'";
+		    }
 			else
-			{	//retrieving only the participant conflicts
-				if (selectedFilter==1)
-			    {	
-					reportQueueDataList = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), "status", CaTIESConstants.STATUS_PARTICIPANT_CONFLICT);
-				
-			    }
-				else
-				{	//retrieving all the scg conflicts both partial and exact match
-					if (selectedFilter==2)
-					{	
-						reportQueueDataList=reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), "status", CaTIESConstants.STATUS_SCG_CONFLICT);
-						reportQueueDataList.addAll(reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), "status", CaTIESConstants.STATUS_SCG_PARTIAL_CONFLICT));
-						
-					}	
+			{	//retrieving all the scg conflicts both partial and exact match
+				if (selectedFilter==2)
+				{	
+					sqlString="select PARTICIPANT_NAME ,IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER,REPORT_LOADED_DATE,STATUS ,SITE_NAME,REPORT_COLLECTION_DATE from catissue_report_queue where status='SCG_PARTIAL_CONFLICT' or status='SCG_CONFLICT'";
 				}
-			}	
-		    if (recordsPerPage > reportQueueDataList.size())
-            {
-                endIndex = reportQueueDataList.size();
-            }
-		    //Save the list of conflicts in the sesson.
-            session.setAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST,reportQueueDataList);
-        }
-		else
-	        {
-	            //Get the list of conflicts from the session.
-				reportQueueDataList = (List)session.getAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST);
-	            if (recordsPerPage!= Integer.MAX_VALUE)
-	            {
-		            //Set the start index of the conflicts in the list.
-		            startIndex = (pageNum-1) * recordsPerPage;
-		            
-		            //Set the end index of the conflicts in the list.
-		            endIndex = startIndex + recordsPerPage;
-		            
-		            if (endIndex > reportQueueDataList.size())
-		            {
-		                endIndex = reportQueueDataList.size();
-		            }
-	            }
-	            else
-	            {
-	            	startIndex = 0;
-	            	endIndex = reportQueueDataList.size();
-	            }
-	        }
-		
-    
+				
+			}
+		}	
         
+        
+     
+ 		int recordsPerPage; 
+ 		String recordsPerPageSessionValue = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);
+		if (recordsPerPageSessionValue==null)
+		{
+				recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(Constants.RECORDS_PER_PAGE_PROPERTY_NAME));
+				session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage+"");
+		}
+		else
+			recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
+	
+		PagenatedResultData pagenatedResultData=null;	
+		pagenatedResultData = Utility.executeForPagination(sqlString,getSessionData(request), false, null, false,0,recordsPerPage);
+	
+		
+  	
+  		QuerySessionData querySessionData = new QuerySessionData();
+		querySessionData.setSql(sqlString);
+		querySessionData.setQueryResultObjectDataMap(null);
+		querySessionData.setSecureExecute(false);
+		querySessionData.setHasConditionOnIdentifiedField(false);
+		querySessionData.setRecordsPerPage(recordsPerPage);
+		querySessionData.setTotalNumberOfRecords(pagenatedResultData.getTotalRecords());
+		session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
+		
+		
+		
+		String[] retrieveColumnList = Constants.CONFLICT_LIST_HEADER;
+		List columnList = new ArrayList();
+		for(int i=0;i<retrieveColumnList.length;i++)
+		{
+			columnList.add(retrieveColumnList[i]);
+		}
+		
+		// List of results the query will return on execution.
+		List list = pagenatedResultData.getResult();
+  
+		//request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
+		//request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
+		
+	        
         //Saves the page number in the request.
         request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
         
         //Saves the total number of results in the request. 
-        session.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(reportQueueDataList.size()));
+        session.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(pagenatedResultData.getTotalRecords()));
         
         session.setAttribute(Constants.RESULTS_PER_PAGE,recordsPerPage+"");
 		
-		List dataList = makeGridData(reportQueueDataList,selectedFilter );
-		request.getSession().setAttribute(Constants.REPORT_QUEUE_LIST, dataList);
+		List dataList = makeGridData(list);
+		request.setAttribute(Constants.PAGINATION_DATA_LIST, dataList);
+		request.getSession().setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
 		request.getSession().setAttribute(Constants.SELECTED_FILTER, Integer.toString(selectedFilter));
 		return mapping.findForward(Constants.SUCCESS);
 	}
@@ -192,21 +171,24 @@ public class ConflictViewAction extends BaseAction
 	 * @param selectedFilter 
 	 * @return
 	 */
-	private List makeGridData(List reportQueueDataList, int selectedFilter)
+	private List makeGridData(List reportQueueDataList)
 	{
 		Iterator iter = reportQueueDataList.iterator();
 		List gridData = new ArrayList();
+		
 		while(iter.hasNext())
 		{
 			List rowData = new ArrayList();
-			ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue)iter.next();
-			rowData.add(reportLoaderQueue.getParticipantName());
-			rowData.add(reportLoaderQueue.getId());
-			rowData.add(reportLoaderQueue.getSurgicalPathologyNumber());
-			rowData.add(reportLoaderQueue.getReportLoadedDate());
-			rowData.add(reportLoaderQueue.getStatus());
-			rowData.add(reportLoaderQueue.getSiteName());
-			rowData.add(reportLoaderQueue.getReportCollectionDate());
+			
+			List reportDataList = new ArrayList();
+			reportDataList = (ArrayList) iter.next();
+			rowData.add((String) reportDataList.get(0));
+			rowData.add((String) reportDataList.get(1));
+			rowData.add((String) reportDataList.get(2));
+			rowData.add((String) reportDataList.get(3));
+			rowData.add((String) reportDataList.get(4));
+			rowData.add((String) reportDataList.get(5));
+			rowData.add((String) reportDataList.get(6));
 			gridData.add(rowData);
 		}
 	

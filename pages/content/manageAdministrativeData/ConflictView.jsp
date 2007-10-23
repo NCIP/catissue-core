@@ -30,21 +30,20 @@
   	int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
   	int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
 
-	String[] retrieveColumnList = Constants.CONFLICT_LIST_HEADER;
-	List columnList = new ArrayList();
-	for(int i=0;i<retrieveColumnList.length;i++)
-	{
-		columnList.add(retrieveColumnList[i]);
-	}
-	List dataList = (List) request.getSession().getAttribute(Constants.REPORT_QUEUE_LIST);
+	List columnList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+	List dataList = (List) request.getAttribute(Constants.PAGINATION_DATA_LIST);
+		
+	String pageOf = "pageOfConflictResolver";
+	String pageName = "SpreadsheetView.do";		
+	
+	
 	Integer identifierFieldIndex = 1;
 	Integer spnFieldIndex = 2;
 	Integer reportDateFieldIndex = 3;
 	Integer statusFieldIndex = 4;
 	Integer siteNameFieldIndex = 5; 
 	Integer reportColDateFieldIndex = 6; 
-		
-	String pageOf = "Add";
+	
 
 %>
 
@@ -55,8 +54,7 @@
 				
 			<td class="formFieldNoBordersBold">
 				<bean:message key="caTies.conflict.filter.conflicts"/> :
-				<html:select property="selectedFilter" styleClass="formFieldSized" styleId="selectedFilter" size="1" onchange="onFilterChange(this)"
-							>
+				<html:select property="selectedFilter" name="conflictViewForm" styleClass="formFieldSized" styleId="selectedFilter" size="1" onchange="onFilterChange(this)">
 				<html:options collection="<%=Constants.FILTER_LIST%>" labelProperty="name" property="value" />
 				</html:select>
 				
@@ -78,7 +76,10 @@
 	<!-- paging begins -->
 	<tr>
 		<td colspan = "8" class="dataPagingSection">
-			<custom:test name="New User Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="ConflictView.do" showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>"/>
+			<custom:test name="New User Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>" showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>"/>
+			<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
+			<html:hidden property="isPaging" value="true"/>
+		
 		</td>
 	</tr>
 	<!-- paging ends -->				

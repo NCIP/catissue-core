@@ -2825,6 +2825,7 @@ PUBLIC
 		<action path="/SpreadsheetView"
 			type="edu.wustl.catissuecore.action.SpreadsheetViewAction"
 			scope="request">
+			<forward name="pageOfConflictResolver" path=".catissuecore.conflictResolverDef" />
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchResultsDef" />
 			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsSpreadsheetViewDef" />	
 			<forward name="pageOfQueryModule" path=".catissuecore.queryResultsSpreadsheetViewDef" />	
