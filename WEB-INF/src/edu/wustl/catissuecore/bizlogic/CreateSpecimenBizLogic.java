@@ -155,6 +155,13 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		Object specimenObj =null;
 		List specimenList = dao.retrieve(Specimen.class.getName(),"label", specimen.getParentSpecimen()
 				.getLabel());
+		//by falguni
+		//Bug:From quick links when creating derive specimen with only parent  barcode then retrieve list
+		if(specimen.getParentSpecimen().getLabel()!=null && specimen.getParentSpecimen().getLabel().trim().length() ==0) 
+		{
+			specimenList = dao.retrieve(Specimen.class.getName(),"barcode", specimen.getParentSpecimen().getBarcode());
+		}
+		
 		if(specimenList!=null&&!specimenList.isEmpty())
 		{
 			specimenObj = (Specimen)specimenList.get(0);

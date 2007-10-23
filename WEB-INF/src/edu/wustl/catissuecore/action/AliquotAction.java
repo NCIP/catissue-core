@@ -542,6 +542,8 @@ public class AliquotAction extends SecureAction
 		if (specimenLabel != null)
 		{
 			aliquotForm.setSpecimenLabel(specimenLabel);
+			//by falguni-When user selects parent specimen barcode and submit.
+			if(!aliquotForm.getCheckedButton().equals("2"))
 			aliquotForm.setCheckedButton("1");
 			//resolvede bug #4236 Virender Mehta
 			if (aliquotForm.getCheckedButton().equals("1"))

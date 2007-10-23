@@ -1005,6 +1005,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 					//this.parentSpecimen.setId(new Long(form.getParentSpecimenId()));
 					this.parentSpecimen.setLabel(form.getParentSpecimenLabel());
+					this.parentSpecimen.setBarcode(form.getParentSpecimenBarcode());
 					//Getting the Map of External Identifiers
 					Map extMap = form.getExternalIdentifier();
 
