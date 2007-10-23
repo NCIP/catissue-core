@@ -21,6 +21,7 @@ import org.jdom.xpath.XPath;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
+import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -64,7 +65,10 @@ public class DeidUtils
 			Element reportHeaderElement = new Element(CaTIESConstants.REPORT_HEADER);
 			reportHeaderElement.addContent(buildHeaderPersonElement(CaTIESConstants.PARTICIPANT_NAME, participant.getLastName()+","+participant.getFirstName(), CaTIESConstants.PARTICIPANT_ROLE));
 			// get participant medical identifier collection
-			Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection=(Set)participant.getParticipantMedicalIdentifierCollection();
+			String hqlQuery="select elements(p.participantMedicalIdentifierCollection)" +
+					" from edu.wustl.catissuecore.domain.Participant as p" +
+					" where p.id="+participant.getId();
+			Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection=(List)CaCoreAPIService.executeQuery(hqlQuery, Participant.class.getName());
 			//iterate over participant medical identifier collection
 			for(ParticipantMedicalIdentifier participantMedicalIdentifier : medicalIdentifierCollection)
 			{
@@ -207,7 +211,6 @@ public class DeidUtils
 			catch (Exception ex) 
 			{
 				Logger.out.error("Extracting date from deidentified text is failed",ex);
-				throw ex;
 			}
 		}
 		return deidDate;
