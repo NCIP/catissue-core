@@ -9,6 +9,7 @@
         table="CATISSUE_CONSENT_TIER_STATUS"
         dynamic-update="false"
         dynamic-insert="false"
+        lazy="false"
     >
 
         <id
@@ -29,7 +30,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="CONSENT_TIER_ID"
+            column="CONSENT_TIER_ID"          
         />
 
         <property

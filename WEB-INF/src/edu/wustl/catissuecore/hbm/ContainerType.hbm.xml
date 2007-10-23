@@ -32,6 +32,7 @@
             update="true"
             insert="true"
             column="CAPACITY_ID"
+            lazy="false"
         />
 
         <property

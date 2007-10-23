@@ -9,6 +9,7 @@
         table="CATISSUE_CONSENT_TIER_RESPONSE"
         dynamic-update="false"
         dynamic-insert="false"
+        lazy="false"
     >
 
         <id
