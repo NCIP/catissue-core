@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.util.global;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,11 +62,13 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
+import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -1048,6 +1051,26 @@ public class Utility extends edu.wustl.common.util.Utility
 		dao.closeSession();
 		return list;
 	}
-			
-
+	
+	//for conflictResolver pagination:kalpana
+	public static PagenatedResultData executeForPagination(String sql,SessionDataBean sessionDataBean,
+			boolean isSecureExecute, Map queryResultObjectDataMap, boolean hasConditionOnIdentifiedField, int startIndex, int totoalRecords)
+			throws DAOException, SQLException {
+		try {
+			JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+			dao.openSession(null);
+			Logger.out.debug("SQL************" + sql);
+			PagenatedResultData pagenatedResultData = dao.executeQuery(sql, sessionDataBean,
+					isSecureExecute,hasConditionOnIdentifiedField, queryResultObjectDataMap,startIndex,totoalRecords);
+			dao.closeSession();
+			return pagenatedResultData;
+		} catch (DAOException daoExp) {
+			throw new DAOException(daoExp.getMessage(), daoExp);
+		} catch (ClassNotFoundException classExp) {
+			throw new DAOException(classExp.getMessage(), classExp);
+		}
+	}
+		
+	
+	
 }
