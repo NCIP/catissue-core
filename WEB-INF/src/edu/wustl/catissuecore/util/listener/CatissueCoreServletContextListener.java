@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.12 $
+ * $Name: 1.41.2.13 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -169,7 +169,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         // get database name and set variables used in query
         Variables.databaseName=HibernateMetaData.getDataBaseName();
         
-        QueryBizLogic.initializeQueryData();
+       // QueryBizLogic.initializeQueryData();
         
         String fileName = Variables.applicationHome + System.getProperty("file.separator")+ ApplicationProperties.getValue("application.version.file");
         CVSTagReader cvsTagReader = new CVSTagReader();
@@ -328,29 +328,29 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 
 //		 Initialising Entity cache
-		try
-		{
-            EntityCache entityCache = EntityCache.getInstance();
-            Logger.out.debug("Entity Cache is initialised");           
-            CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-            Logger.out.debug("Entity Cache is initialised");
-            //Stores the list of system entities into the cache.-- Vishvesh.
-            AnnotationUtil.getSystemEntityList();
-            //Stores the ids in the cache
-            Long participantId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
-            catissueCoreCacheManager.addObjectToCache("participantEntityId",participantId);
-            Long scgId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
-            catissueCoreCacheManager.addObjectToCache("scgEntityId",scgId);
-            Long specimenEntityId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
-            catissueCoreCacheManager.addObjectToCache("specimenEntityId",specimenEntityId);
-            Long cpEntityId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_COLLECTION_PROTOCOL);
-            catissueCoreCacheManager.addObjectToCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID,cpEntityId);
-           
-		}
-		catch (Exception e)
-		{
-			Logger.out.debug("Exception occured while initialising entity cache");
-		}
+//		try
+//		{
+//            EntityCache entityCache = EntityCache.getInstance();
+//            Logger.out.debug("Entity Cache is initialised");           
+//            CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+//            Logger.out.debug("Entity Cache is initialised");
+//            //Stores the list of system entities into the cache.-- Vishvesh.
+//            AnnotationUtil.getSystemEntityList();
+//            //Stores the ids in the cache
+//            Long participantId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
+//            catissueCoreCacheManager.addObjectToCache("participantEntityId",participantId);
+//            Long scgId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
+//            catissueCoreCacheManager.addObjectToCache("scgEntityId",scgId);
+//            Long specimenEntityId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+//            catissueCoreCacheManager.addObjectToCache("specimenEntityId",specimenEntityId);
+//            Long cpEntityId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_COLLECTION_PROTOCOL);
+//            catissueCoreCacheManager.addObjectToCache(AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID,cpEntityId);
+//           
+//		}
+//		catch (Exception e)
+//		{
+//			Logger.out.debug("Exception occured while initialising entity cache");
+//		}
 		int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
 		/*
