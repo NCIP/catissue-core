@@ -149,13 +149,13 @@
 
    <html:errors/>
    
- <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="Layout" width="100%" height="100%">
+ <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="Layout" width="99.9%" height="99.9%">
 		<param name=movie value="flexclient/biospecimen/Layout.swf"> 
 		<param name=quality value=high>
 		<param name="swliveconnect" value="true">
 				 
 		<embed src="flexclient/biospecimen/Layout.swf" quality="high" bgcolor="#ffffff"
-			width="100%" height="100%" id="Layout" name="Layout" align="middle"
+			width="99.9%" height="99.9%" id="Layout" name="Layout" align="middle"
 			play="true"
 			loop="false"
 			quality="high"
