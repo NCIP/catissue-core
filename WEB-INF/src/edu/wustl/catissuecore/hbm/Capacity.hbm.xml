@@ -8,6 +8,7 @@
     <class
         name="edu.wustl.catissuecore.domain.Capacity"
         table="CATISSUE_CAPACITY"
+        lazy="false"
     >
 
         <id
