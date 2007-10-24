@@ -751,6 +751,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		<html:hidden property="showLabel" />
 		<html:hidden property="showbarCode" />
 		<html:hidden property="readOnly" />
+		<html:hidden property="showParentStorage" />
+		
 		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
 		 <tr>
 			<td>
