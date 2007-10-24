@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.namegenerator;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import edu.wustl.common.dao.DAOFactory;
@@ -10,6 +11,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.global.Constants;
+import java.util.Collection;
 /**
  * DefaultSpecimenBarcodeGenerator is a class which contains the default 
  * implementations AbstractSpecimenGenerator classe.
@@ -154,16 +156,14 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 		
 		if(objSpecimen.getChildrenSpecimen().size()>0)
 		{
-			List specimenList = (List)objSpecimen.getChildrenSpecimen();
-			for (int index=0;index <specimenList.size();index++) 
+			Collection specimenCollection = objSpecimen.getChildrenSpecimen();
+			Iterator it = specimenCollection.iterator();
+			while(it.hasNext())
 			{
-				Specimen objChildSpecimen = (Specimen)specimenList.get(index);
-							
+				Specimen objChildSpecimen = (Specimen)it.next();
 				setBarcode(objChildSpecimen);
-					
-			}	
-			
-		}	
+			}
+		}		
 		
 	}
 
