@@ -121,10 +121,8 @@
 	</mx:HBox>
 
 		
-<mx:ApplicationControlBar horizontalAlign="right">
-	
-
+<mx:HBox>
 	<mx:Button label="Submit" click="closePopUp(event)" />
 	<mx:Button label="Cancel" click="cancel(event)"/>
-</mx:ApplicationControlBar>
+</mx:HBox>
 </mx:TitleWindow>
