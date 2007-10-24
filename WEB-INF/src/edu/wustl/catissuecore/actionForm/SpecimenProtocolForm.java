@@ -319,7 +319,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		Validator validator = new Validator();
 		try
 		{
-			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
+			if (operation!=null && (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT)))
             {
                 if(this.principalInvestigatorId == -1)
 				{
