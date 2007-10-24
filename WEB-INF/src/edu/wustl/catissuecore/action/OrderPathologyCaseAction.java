@@ -241,17 +241,17 @@ public class OrderPathologyCaseAction extends BaseAction
 				String sourceObjectName;
 				SurgicalPathologyReport identifiedSurPathReport = (SurgicalPathologyReport) pathologicalCaseList.get(i);
 				Object[] whereColVal = {identifiedSurPathReport.getId()};
-				if(i<size[0])
-				{
-					sourceObjectName = className[0];
+				
+				if (identifiedSurPathReport instanceof IdentifiedSurgicalPathologyReport) {
+					sourceObjectName = className[0];  ;
 				}
-				else if(i>=size[0] && i<size[1])
+				else if(identifiedSurPathReport instanceof DeidentifiedSurgicalPathologyReport)
 				{
 					sourceObjectName = className[1];
 				}
 				else
 				{
-					sourceObjectName = className[2];
+					continue;
 				}
 				List specimenCollList = bizLogic.retrieve(sourceObjectName,selectColName,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION);
 				if(specimenCollList != null && !specimenCollList.isEmpty())

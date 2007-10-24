@@ -15,6 +15,8 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm"%>
 <%@ page import="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"%>
 <%@ page import="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"%>
+<%@ page import="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"%>
+<%@ page import="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"%>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
@@ -555,7 +557,19 @@ function onCheck()
 								String specimenId="value(OrderSpecimenBean:"+i+"_specimenId)";
 								String typeOfItem="value(OrderSpecimenBean:"+i+"_typeOfItem)";
 								String specimenCollectionGroup="value(OrderSpecimenBean:"+i+"_specimenCollectionGroup)";
-								SpecimenCollectionGroup speccollgrp=(SpecimenCollectionGroup)obj.getSpecimenCollectionGroup();
+								SpecimenCollectionGroup speccollgrp;
+								if (obj instanceof IdentifiedSurgicalPathologyReport) {
+									speccollgrp =(SpecimenCollectionGroup)obj.getSpecimenCollectionGroup();
+								}
+								else if(obj instanceof DeidentifiedSurgicalPathologyReport)
+								{
+									speccollgrp =(SpecimenCollectionGroup)obj.getSpecimenCollectionGroup();
+								}
+								else
+								{
+									continue;
+								}
+								
 								
 							%>
 							<tr class="dataRowLight" width="100%">
