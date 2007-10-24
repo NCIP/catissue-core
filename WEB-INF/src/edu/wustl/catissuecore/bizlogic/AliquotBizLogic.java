@@ -31,6 +31,8 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
+import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -395,7 +397,21 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 				throw new DAOException(e1.getMessage());
 			
 			}
+		}
+		//Populate aliquotMap with barcode generator value if automatic barcode generation is set.
+		if(edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl )
+		{
+			
+			try {
+				BarcodeGenerator barcodeGenerator  = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
+				barcodeGenerator.setBarcode(aliquotList);
+			
+			} catch (BizLogicException e1) {
+				throw new DAOException(e1.getMessage());
+			
 			}
+		}
+		
 		//by Falguni
 //		Inserting an aliquot in the database and setting label key and value in Map
 		Iterator itrList = aliquotList.iterator();
@@ -407,10 +423,15 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		    String idKey = specimenKey + countLabel + "_id";
 		    aliquotMap.put(idKey, String.valueOf(aliquotSpecimen.getId()));
 		    String labelKey = "Specimen:" + countLabel +"_label";
+		    String barcodeKey = "Specimen:" + countLabel +"_barcode";
 		    countLabel ++;
 		    String labelValue = aliquotSpecimen.getLabel();
+		    String barcodeValue = aliquotSpecimen.getBarcode();
 		    aliquotMap.remove(labelKey);
+		    aliquotMap.remove(barcodeKey);
 		    aliquotMap.put(labelKey,labelValue);
+		    aliquotMap.put(barcodeKey,barcodeValue);
+		    
 		}
 		
 		/* Vaishali - Inserting authorization data */
