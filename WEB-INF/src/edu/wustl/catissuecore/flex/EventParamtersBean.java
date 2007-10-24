@@ -4,7 +4,13 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Calendar;
 import java.util.Date;
+
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.util.global.Utility;
 
 
 public class EventParamtersBean implements Externalizable
@@ -20,16 +26,43 @@ public class EventParamtersBean implements Externalizable
 	public String container="";
 	public String receivedQuality="";
 	public String comment="";
-	
+	 
 	public EventParamtersBean()
 	{
-		this.userName = "";
+		this.userName = "-- Select --";
 		this.eventHour = "";
 		this.eventMinute = "";
-		this.collectionProcedure = "";
-		this.container = "";
-		this.receivedQuality = "";
+		this.collectionProcedure = "Not Specified";
+		this.container = "Not Specified";
+		this.receivedQuality = "Not Specified";
 		this.comment = "";
+		Calendar calender = Calendar.getInstance();
+		//calender.setTime(new Date().getT);
+		this.eventHour = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
+		this.eventMinute = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+	}
+	public void copy(EventParameters event)
+	{
+		if(event instanceof CollectionEventParameters)
+		{
+			CollectionEventParameters collEvent = (CollectionEventParameters) event;
+			this.collectionProcedure = collEvent.getCollectionProcedure();
+			this.container = collEvent.getContainer();
+		}
+		else if(event instanceof ReceivedEventParameters)
+		{
+			ReceivedEventParameters recEvent=  (ReceivedEventParameters) event;
+			this.receivedQuality = recEvent.getReceivedQuality();
+		} 
+		//this.userName = event.getUser().getLoginName();
+		this.userName = event.getUser().getLastName() + ", " + event.getUser().getFirstName();
+		this.comment = event.getComment();
+		Calendar calender = Calendar.getInstance();
+		calender.setTime(event.getTimestamp());
+		this.eventdDate = event.getTimestamp();
+		this.eventHour = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
+		this.eventMinute = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+		
 	}
 	public void writeExternal(ObjectOutput out) throws IOException 
 	{

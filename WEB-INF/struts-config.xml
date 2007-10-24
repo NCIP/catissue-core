@@ -4503,6 +4503,8 @@ PUBLIC
                 scope="request">
 					<forward name="success" path="/pages/SpecimenSummary.jsp" />
 					<forward name="bulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do" />
+					<forward name="pageOfbulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do?pageOf=multipleSpWithMenu" />
+
 					<forward name="anticipatory" path="/pages/AnticipatorySpecimens.jsp" />  
 					<forward name="pageOfMultipleSpWithoutMenu" path="/pages/SpecimenSummary.jsp" />
 					<forward name="updateSpecimenStatus" path="/updateSpecimenStatus.do" />
@@ -4533,7 +4535,8 @@ PUBLIC
                 scope="request">
 					<forward name="success" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=bulkUpdateSpecimens" />
 					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
-					<forward name="pageOfMultipleSpWithMenu" path="/GenericSpecimenSummary.do?target=pageOfMultipleSpWithMenu&amp;submitAction=bulkUpdateSpecimens" />
+					<forward name="pageOfMultipleSpWithMenu" path="/GenericSpecimenSummary.do?target=pageOfMultipleSpWithMenu&amp;submitAction=pageOfbulkUpdateSpecimens" />
+					<forward name="pageOfMultipleSpWithoutMenu" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=bulkUpdateSpecimens" />
 	                <forward name="failure" path="/Home.do" />
        </action>    
        <action path="/bulkUpdateSpecimens"
@@ -4542,7 +4545,9 @@ PUBLIC
                 validate="false"
                 scope="request">
 					<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />	
+					<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />	
 					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
+					<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
        </action>    
 
        <action path="/updateSpecimenStatus"

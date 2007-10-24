@@ -27,6 +27,8 @@ public class MultipleSpecimenFlexInitAction extends Action
         	mode = Constants.EDIT;
 		
 		String showParentSelection = "false";
+		String showLabel = "true";
+		String showBarcode = "true";
 		
 		String parentType = request.getParameter("parentType");
 		if(parentType == null)
@@ -37,8 +39,16 @@ public class MultipleSpecimenFlexInitAction extends Action
 		}
 		String numberOfSpecimens = getNumberOfSpecimens(request);
 		String parentName = getParentName(request, parentType);
-        
-		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens,showParentSelection);
+		
+		if(edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl )
+		{
+			showLabel = "false";
+		}
+		if(edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl )
+		{
+			showBarcode = "false";
+		}
+		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens,showParentSelection,showLabel,showBarcode);
 		
 		String pageOf = (String) request.getParameter("pageOf");
 		if(pageOf!=null)
@@ -49,14 +59,16 @@ public class MultipleSpecimenFlexInitAction extends Action
         return mapping.findForward("success");
     }
 	
-	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType, String parentName, String numberOfSpecimens,String showParentSelectiono)
+	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType, String parentName, String numberOfSpecimens,String showParentSelection,String showLabel,String showBarcode)
 	{
 		
         request.setAttribute("MODE",mode);
         request.setAttribute("PARENT_TYPE", parentType);
         request.setAttribute("PARENT_NAME", parentName);
         request.setAttribute("SP_COUNT",numberOfSpecimens);
-        request.setAttribute("SHOW_PARENT_SELECTION",showParentSelectiono);
+        request.setAttribute("SHOW_PARENT_SELECTION",showParentSelection);
+        request.setAttribute("SHOW_LABEL",showLabel);
+        request.setAttribute("SHOW_BARCODE",showBarcode);
 	}
 	
 	private String getParentName(HttpServletRequest request, String parentType)

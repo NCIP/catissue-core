@@ -77,6 +77,8 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 					"object.add.successOnly","Specimens"));
 			saveMessages(request, actionMessages);
 			specimenSummaryForm.setReadOnly(true);
+			if(request.getParameter("pageOf") != null)
+				return mapping.findForward(request.getParameter("pageOf"));
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception exception)
@@ -87,6 +89,8 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 					"errors.item",exception.getMessage()));
 			saveErrors(request, actionErrors);
 			saveToken(request);
+			if(request.getParameter("pageOf") != null)
+				return mapping.findForward("multipleSpWithMenuFaliure");
 			return mapping.findForward(Constants.FAILURE);
 		}
 	}

@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -41,6 +42,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.flex.dag.DAGConstant;
@@ -50,6 +52,7 @@ import edu.wustl.catissuecore.flex.dag.DAGPath;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
@@ -82,15 +85,79 @@ public class FlexInterface
 		sb.specimenLabel = "AA";
 		return sb;
 	}
-
-	public SpecimenBean initFlexInterfaceForMultipleSp()
+ 
+	public SpecimenBean initFlexInterfaceForMultipleSp(String mode, String parentType, String parentName) throws DAOException
 	{
 		session = flex.messaging.FlexContext.getHttpRequest().getSession();
 		SessionDataBean sdb = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 		SpecimenBean spBean = new SpecimenBean();
+
+		EventParamtersBean collEvBean = new EventParamtersBean();
+		EventParamtersBean recEvBean = new EventParamtersBean();
+		spBean.collectionEvent = collEvBean;
+		spBean.receivedEvent = recEvBean;
+
 		spBean.collectionEvent.userName = sdb.getLastName() + ", " + sdb.getFirstName();
 		spBean.receivedEvent.userName = sdb.getLastName() + ", " + sdb.getFirstName();
-		spBean.comment = "My comment vis ";
+		spBean.comment = "";
+
+		if (Constants.ADD.equals(mode) && edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE.equals(parentType))
+		{
+			if (parentName != null)
+			{
+				SpecimenCollectionGroup scg = getSpecimenCollGrp(parentName);
+				if (scg != null)
+				{
+					SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
+
+					Collection eventColl = (Collection) bizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(),
+							"elements(specimenEventParametersCollection)");
+					/*String[] selectColName = {"elements(specimenEventParametersCollection)"};
+					 String[] whereColName = {"name"};
+
+					 String[] whereColCond = {"="};
+					 Object[] whereColVal = {parentName};
+
+					 List list = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColName, whereColName, whereColCond, whereColVal,
+					 Constants.AND_JOIN_CONDITION);
+					 
+					 Logger.out.info("List:"+list);*/
+					if (eventColl != null && !eventColl.isEmpty())
+					{
+						Iterator itr = eventColl.iterator();
+						while (itr.hasNext())
+						{
+							SpecimenEventParameters event = (SpecimenEventParameters) itr.next();
+							String[] selectColName = {"user"};
+							String[] whereColName = {"id"};
+
+							String[] whereColCond = {"="};
+							Object[] whereColVal = {event.getId()};
+
+							List list = bizLogic.retrieve(EventParameters.class.getName(), selectColName, whereColName, whereColCond,
+									whereColVal, Constants.AND_JOIN_CONDITION);
+
+							Logger.out.info("List:" + list);
+							if(list != null && !list.isEmpty())
+							{
+								User user = (User) list.get(0);
+								event.setUser(user);
+							}
+							if (event instanceof CollectionEventParameters)
+							{
+								collEvBean.copy(event);
+							}
+							else if (event instanceof ReceivedEventParameters)
+							{
+								recEvBean.copy(event);
+							}
+						}
+					}
+
+				}
+			}
+		}
+
 		return spBean;
 	}
 
@@ -295,7 +362,7 @@ public class FlexInterface
 	//----------------------------------------------------------------------------------------//	
 
 	public String writeSpecimen(List<SpecimenBean> spBeanList)
-	{ 
+	{
 		Logger.out.debug("spBeanList size " + spBeanList.size());
 		//Map<String, String> msgMap = new HashMap<String, String>();
 		//LinkedHashMap<Specimen,List> specimenMap = new LinkedHashMap<Specimen,List>();
@@ -309,28 +376,14 @@ public class FlexInterface
 		{
 			for (SpecimenBean spBean : spBeanList)
 			{
-				/*	String msg = writeSpecimen(spBean);
-				 Logger.out.debug("MSG " + spBean.specimenLabel + " : " + msg);
-				 msgMap.put(spBean.specimenLabel, msg);*/
 				SpecimenDataBean specimenDataBean = prepareGenericSpecimen(spBean, speicmenAutoStorageCont);
 				specimenDataBean = getStorageContainers(specimenDataBean, specimenDataBean.getCollectionProtocolId(), speicmenAutoStorageCont);
-				//spBean.spID = new Long(i);
 				specimenDataBean.uniqueId = "" + i;
 				viewSpecimenMap.put(specimenDataBean.getUniqueIdentifier(), specimenDataBean);
 				i++;
 
 			}
 			speicmenAutoStorageCont.setCollectionProtocolSpecimenStoragePositions(sdb);
-
-			//SessionDataBean sdb1 = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-			/*IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties.getValue("app.bizLogicFactory"), "getBizLogic",
-			 edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
-			 SessionDataBean sdb = new SessionDataBean();
-			 sdb.setUserId(1L);
-			 sdb.setUserName("admin@admin.com");
-
-			 bizLogic.insert(specimenMap, sdb, Constants.HIBERNATE_DAO);*/
-			//session.setAttribute("specimenMap",specimenMap);
 			session.setAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP, viewSpecimenMap);
 
 			message = "SUCCESS";
@@ -371,33 +424,126 @@ public class FlexInterface
 
 	public String editSpecimen(List<SpecimenBean> spBeanList)
 	{
-		LinkedHashSet<Specimen> specimenSet = new LinkedHashSet<Specimen>();
-		if (spBeanList != null && spBeanList.size() > 0)
+		session = flex.messaging.FlexContext.getHttpRequest().getSession();
+		LinkedHashMap specimenMap = (LinkedHashMap) session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP);
+		Iterator itr = specimenMap.values().iterator();
+		while (itr.hasNext())
 		{
-			for (SpecimenBean spBean : spBeanList)
+			SpecimenDataBean spDataBean = (SpecimenDataBean) itr.next();
+			if (spDataBean != null)
 			{
-				Specimen specimen = prepareSpecimen(spBean);
-				specimenSet.add(specimen);
-			}
-			NewSpecimenBizLogic spBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
-					edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
-			HttpSession session = flex.messaging.FlexContext.getHttpRequest().getSession();
-			SessionDataBean sdb = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+				for (SpecimenBean spBean : spBeanList)
+				{
+					if (spDataBean.getId() == spBean.spID.longValue())
+					{
+						if (spBean.specimenLabel != null && !spBean.specimenLabel.equals(spDataBean.getLabel()))
+						{
+							spDataBean.setLabel(spBean.specimenLabel);
+						}
+						if (spBean.specimenBarcode != null && !spBean.specimenBarcode.equals(spDataBean.getBarCode()))
+						{
+							spDataBean.setBarCode(spBean.specimenBarcode);
+						}
 
-			try
-			{
-				spBizLogic.bulkUpdateSpecimens(specimenSet, sdb);
-			}
-			catch (DAOException e)
-			{
-				return e.getMessage();
+						if (spBean.quantity != null && !spBean.quantity.toString().equals(spDataBean.getQuantity()))
+						{
+							spDataBean.setQuantity(spBean.quantity.toString());
+						}
+						if (spBean.concentration != null && !spBean.concentration.toString().equals(spDataBean.getConcentration()))
+						{
+							spDataBean.setConcentration(spBean.concentration.toString());
+						}
+						if (spBean.comment != null && !spBean.comment.equals(spDataBean.getComment()))
+						{
+							spDataBean.setComment(spBean.comment);
+						}
+						if (spBean.pathologicalStatus != null && !spBean.pathologicalStatus.equals(spDataBean.getPathologicalStatus()))
+						{
+							spDataBean.setPathologicalStatus(spBean.pathologicalStatus);
+						}
+						if (spBean.tissueSite != null && !spBean.tissueSite.equals(spDataBean.getTissueSite()))
+						{
+							spDataBean.setTissueSite(spBean.tissueSite);
+						}
+						if (spBean.tissueSide != null && !spBean.tissueSide.equals(spDataBean.getTissueSide()))
+						{
+							spDataBean.setTissueSide(spBean.tissueSide);
+						}
+
+						if (spBean.exIdColl != null && !spBean.exIdColl.isEmpty())
+						{
+							spDataBean.setExternalIdentifierCollection(getExternalIdentifierColl(spBean.exIdColl));
+						}
+
+						if (spBean.biohazardColl != null && !spBean.biohazardColl.isEmpty())
+						{
+							spDataBean.setBiohazardCollection(getBiohazardColl(spBean.biohazardColl));
+						}
+
+						try
+						{
+							if (spBean.derivedColl != null && !spBean.derivedColl.isEmpty())
+							{
+								SpecimenAutoStorageContainer speicmenAutoStorageCont = new SpecimenAutoStorageContainer();
+								int i = 1;
+								LinkedHashMap<String, GenericSpecimen> derivedMap = new LinkedHashMap<String, GenericSpecimen>();
+
+								for (SpecimenBean derivedBean : spBean.derivedColl)
+								{
+									derivedBean.parentName = spBean.specimenLabel;
+									derivedBean.parentType = edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN_TYPE;
+									SpecimenDataBean derivedDataBean = prepareGenericSpecimen(derivedBean, speicmenAutoStorageCont);
+									derivedDataBean = getStorageContainers(derivedDataBean, derivedDataBean.getCollectionProtocolId(),
+											speicmenAutoStorageCont);
+									derivedDataBean.uniqueId = "d" + i;
+									derivedMap.put("d" + i, derivedDataBean);
+									i++;
+
+								}
+								spDataBean.setDeriveSpecimenCollection(derivedMap);
+								SessionDataBean sdb = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+								speicmenAutoStorageCont.setCollectionProtocolSpecimenStoragePositions(sdb);
+							}
+						}
+						catch (DAOException e)
+						{
+							System.out.println("Error while derived:" + e.getMessage());
+						}
+
+						//break;
+					}
+
+				}
+
 			}
 
 		}
-		return "success:Specimens Updated Successfully";
-	}
+		/*LinkedHashSet<Specimen> specimenSet = new LinkedHashSet<Specimen>();
+		 if (spBeanList != null && spBeanList.size() > 0)
+		 {
 
-	/*private String writeSpecimen(SpecimenBean spBean)
+		 for (SpecimenBean spBean : spBeanList)
+		 {
+		 Specimen specimen = prepareSpecimen(spBean);
+		 specimenSet.add(specimen);
+		 }
+		 NewSpecimenBizLogic spBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+		 edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+		 HttpSession session = flex.messaging.FlexContext.getHttpRequest().getSession();
+		 SessionDataBean sdb = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);*/
+
+		/*try
+		 {
+		 //	spBizLogic.bulkUpdateSpecimens(specimenSet, sdb);
+		 }
+		 catch (DAOException e)
+		 {
+		 return e.getMessage();
+		 }*/
+
+		//}
+		return "success:Specimens Updated Successfully";
+	} /*private String writeSpecimen(SpecimenBean spBean)
 	 {
 	 System.out.println("SERVER writeSpecimen");
 	 Specimen sp = prepareSpecimen(spBean);
@@ -434,7 +580,7 @@ public class FlexInterface
 
 	public SpecimenBean readSpecimen()
 	{
-		Logger.out.debug("SERVER readSpecimen");
+		Logger.out.info("SERVER readSpecimen");
 		SpecimenBean sb = new SpecimenBean();
 		sb.specimenLabel = "tp";
 		sb.tissueSite = "VULVA";
@@ -446,21 +592,15 @@ public class FlexInterface
 	public List<SpecimenBean> readSpecimenList() throws DAOException
 	{
 		List<SpecimenBean> list = new ArrayList<SpecimenBean>();
-		// getting specimen list from session
-		/*List specimenIdList = new ArrayList();
-		 specimenIdList.add("66");
-		 specimenIdList.add("89");
-		 specimenIdList.add("4");
-		 specimenIdList.add("1");
-		 specimenIdList.add("3");
-		 specimenIdList.add("5");
-		 specimenIdList.add("47");*/
 		session = flex.messaging.FlexContext.getHttpRequest().getSession();
 		HashSet specimenIdList = (HashSet) session.getAttribute("specimenId");
+		LinkedHashMap<String, GenericSpecimen> viewSpecimenMap = new LinkedHashMap<String, GenericSpecimen>();
 		if (specimenIdList != null)
 		{
 			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+
+			int i = 1;
 			Iterator itr = specimenIdList.iterator();
 			while (itr.hasNext())
 			{
@@ -472,25 +612,24 @@ public class FlexInterface
 					Collection exIdColl = (Collection) bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
 							"elements(externalIdentifierCollection)");
 					specimen.setExternalIdentifierCollection(exIdColl);
+					/*SpecimenCollectionGroup scg = getSpecimenCollGrpForSpecimen(specimenId);
+					 specimen.setSpecimenCollectionGroup(scg);*/
+					specimen = getAttributesForSpecimen(specimen);
 					SpecimenBean sb = prepareSpecimenBean(specimen, Constants.EDIT);
 					list.add(sb);
-
+					SpecimenDataBean sdb = prepareGenericSpecimen(specimen);
+					sdb.setUniqueIdentifier("" + i);
+					viewSpecimenMap.put("" + i, sdb);
+					i++;
 				}
 
 			}
-
-			/*list = new ArrayList<SpecimenBean>();
-			 SpecimenBean sb = readSpecimen();
-			 sb.specimenClass = "Tissue";
-			 list.add(sb);
-			 list.add(readSpecimen());
-			 list.add(readSpecimen());
-			 
-			 list.add(sb);
-			 list.add(readSpecimen());
-			 list.add(readSpecimen());
-			 */
 		}
+		if (session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP) != null)
+		{
+			session.removeAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP);
+		}
+		session.setAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP, viewSpecimenMap);
 		return list;
 	}
 
@@ -630,7 +769,7 @@ public class FlexInterface
 	private SpecimenDataBean prepareGenericSpecimen(SpecimenBean spBean, SpecimenAutoStorageContainer speicmenAutoStorageCont) throws DAOException
 	{
 		SpecimenDataBean specimenDataBean = new SpecimenDataBean();
-		specimenDataBean.setLineage(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN);
+
 		specimenDataBean.setType(spBean.specimenType);
 		specimenDataBean.setStorageContainerForSpecimen(spBean.storage);
 		//specimenDataBean.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
@@ -638,7 +777,14 @@ public class FlexInterface
 		specimenDataBean.setQuantity(String.valueOf(spBean.quantity));
 		//sp.setAvailableQuantity(qt);
 		specimenDataBean.setClassName(spBean.specimenClass);
-		specimenDataBean.setBarCode(spBean.specimenBarcode);
+		if (Variables.isSpecimenBarcodeGeneratorAvl)
+		{
+			specimenDataBean.setBarCode(null);
+		}
+		else
+		{
+			specimenDataBean.setBarCode(spBean.specimenBarcode);
+		}
 		/*sp.setBiohazardCollection(new HashSet<Biohazard>());
 		 sp.setChildrenSpecimen(new HashSet<Specimen>());*/
 		specimenDataBean.setComment(spBean.comment);
@@ -653,7 +799,14 @@ public class FlexInterface
 		{
 			specimenDataBean.setBiohazardCollection(getBiohazardColl(spBean.biohazardColl));
 		}
-		specimenDataBean.setLabel(spBean.specimenLabel);
+		if (Variables.isSpecimenLabelGeneratorAvl)
+		{
+			specimenDataBean.setLabel(null);
+		}
+		else
+		{
+			specimenDataBean.setLabel(spBean.specimenLabel);
+		}
 
 		specimenDataBean.setParentSpecimen(null);
 		specimenDataBean.setPathologicalStatus(spBean.pathologicalStatus);
@@ -673,6 +826,7 @@ public class FlexInterface
 		if (edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE.equals(spBean.parentType))
 		{
 			SpecimenCollectionGroup scg = getSpecimenCollGrp(spBean.parentName);
+			specimenDataBean.setLineage(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN);
 			if (scg != null)
 			{
 				specimenDataBean.setSpecimenCollectionGroup(scg);
@@ -684,16 +838,19 @@ public class FlexInterface
 		else
 		{
 			Specimen parentSp = getParentSpecimen(spBean.parentName);
+			specimenDataBean.setLineage(edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN);
 			if (parentSp != null)
 			{
 				specimenDataBean.setParentSpecimen(parentSp);
+				specimenDataBean.setSpecimenCollectionGroup((SpecimenCollectionGroup) parentSp.getSpecimenCollectionGroup());
 				if (parentSp.getId() != null)
-					cp = CollectionProtocolUtil.getCollectionProtocolForSpecimen(parentSp.getId().toString());
+					cp = CollectionProtocolUtil.getCollectionProtocolForSCG(parentSp.getSpecimenCollectionGroup().getId().toString());
 			}
 		}
 
 		if (cp != null && cp.getId() != null)
 			specimenDataBean.setCollectionProtocolId(cp.getId());
+
 		/*scg.setId(1L);
 		 scg.setName("scg1");
 		 sp.setSpecimenCollectionGroup(scg);*/
@@ -734,6 +891,45 @@ public class FlexInterface
 			specimenDataBean.setDeriveSpecimenCollection(derivedMap);
 		}
 
+		System.out.println("Returning complete specimen");
+		//specimenDataBean = getStorageContainers(specimenDataBean, specimenDataBean.getCollectionProtocolId(), speicmenAutoStorageCont);
+		return specimenDataBean;
+	}
+
+	private SpecimenDataBean prepareGenericSpecimen(Specimen sp) throws DAOException
+	{
+		SpecimenDataBean specimenDataBean = new SpecimenDataBean();
+		specimenDataBean.setId(sp.getId());
+		specimenDataBean.setType(sp.getType());
+		specimenDataBean.setStorageContainerForSpecimen("Auto");
+		specimenDataBean.setQuantity(String.valueOf(sp.getInitialQuantity()));
+		specimenDataBean.setClassName(sp.getClassName());
+		specimenDataBean.setBarCode(sp.getBarcode());
+		specimenDataBean.setComment(sp.getComment());
+		specimenDataBean.setExternalIdentifierCollection(new HashSet<ExternalIdentifier>());
+		specimenDataBean.setExternalIdentifierCollection(sp.getExternalIdentifierCollection());
+		specimenDataBean.setBiohazardCollection(sp.getBiohazardCollection());
+		specimenDataBean.setLabel(sp.getLabel());
+		specimenDataBean.setParentSpecimen(sp.getParentSpecimen());
+		specimenDataBean.setPathologicalStatus(sp.getPathologicalStatus());
+
+		specimenDataBean.setTissueSide(sp.getSpecimenCharacteristics().getTissueSide());
+		specimenDataBean.setTissueSite(sp.getSpecimenCharacteristics().getTissueSite());
+		specimenDataBean.setLineage(sp.getLineage());
+		specimenDataBean.setSpecimenCollectionGroup((SpecimenCollectionGroup) sp.getSpecimenCollectionGroup());
+		specimenDataBean.setSpecimenEventCollection(sp.getSpecimenEventCollection());
+
+		if (sp.getStorageContainer() != null)
+		{
+			specimenDataBean.setStorageContainerForSpecimen(sp.getStorageContainer().getName());
+			specimenDataBean.setSelectedContainerName(sp.getStorageContainer().getName());
+			specimenDataBean.setPositionDimensionOne(sp.getPositionDimensionOne().toString());
+			specimenDataBean.setPositionDimensionTwo(sp.getPositionDimensionTwo().toString());
+		}
+		else
+		{
+			specimenDataBean.setStorageContainerForSpecimen("Virtual");
+		}
 		System.out.println("Returning complete specimen");
 		//specimenDataBean = getStorageContainers(specimenDataBean, specimenDataBean.getCollectionProtocolId(), speicmenAutoStorageCont);
 		return specimenDataBean;
@@ -918,23 +1114,99 @@ public class FlexInterface
 
 	}
 
+	private SpecimenCollectionGroup getSpecimenCollGrpForSpecimen(String spId)
+	{
+
+		String sourceObjName = Specimen.class.getName();
+		String[] selectColName = {"specimenCollectionGroup"};
+		String[] whereColName = {"id"};
+		String[] whereColCond = {"="};
+		Object[] whereColVal = {spId};
+		SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
+		try
+		{
+			List list = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+			Iterator itr = list.iterator();
+			while (itr.hasNext())
+			{
+				SpecimenCollectionGroup scg = (SpecimenCollectionGroup) itr.next();
+				return scg;
+			}
+			//SpecimenCollectionGroup scg1 = 
+		}
+		catch (DAOException e)
+		{
+			Logger.out.debug("Error whioe getting scg :" + e.getMessage());
+			System.out.println("Error whioe getting scg:" + e.getMessage());
+
+		}
+
+		return null;
+
+	}
+
+	private Specimen getAttributesForSpecimen(Specimen specimen)
+	{
+
+		String sourceObjName = Specimen.class.getName();
+		String[] selectColName = {"specimenCollectionGroup", "storageContainer"};
+		String[] whereColName = {"id"};
+		String[] whereColCond = {"="};
+		Object[] whereColVal = {specimen.getId()};
+		NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
+		try
+		{
+			List list = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.OR_JOIN_CONDITION);
+			if (!list.isEmpty())
+			{
+				Object[] obj = (Object[]) list.get(0);
+				SpecimenCollectionGroup scg = (SpecimenCollectionGroup) obj[0];
+				specimen.setSpecimenCollectionGroup(scg);
+
+				StorageContainer storageCont = (StorageContainer) obj[1];
+				specimen.setStorageContainer(storageCont);
+
+				/*Collection exIdColl = (Collection) obj[2];
+				 specimen.setExternalIdentifierCollection(exIdColl);*/
+				return specimen;
+			}
+		}
+		catch (DAOException e)
+		{
+			Logger.out.debug("Error whioe getting attributes for sp :" + e.getMessage());
+			System.out.println("Error whioe getting attributes for sp:" + e.getMessage());
+
+		}
+
+		return specimen;
+
+	}
+
 	private Specimen getParentSpecimen(String parentName)
 	{
 
 		String sourceObjName = Specimen.class.getName();
-
+		String[] selectColVal = {"id", "specimenCollectionGroup"};
 		String[] whereColName = {"label"};
 		String[] whereColCond = {"="};
 		Object[] whereColVal = {parentName};
 		NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
 		try
 		{
-			List list = bizLogic.retrieve(sourceObjName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
-			Iterator itr = list.iterator();
-			while (itr.hasNext())
+			List list = bizLogic.retrieve(sourceObjName, selectColVal, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+			if (list != null && !list.isEmpty())
 			{
-				Specimen specimen = (Specimen) itr.next();
-				return specimen;
+				Iterator itr = list.iterator();
+				while (itr.hasNext())
+				{
+					Object[] obj = (Object[]) list.get(0);
+					Long id = (Long) obj[0];
+					SpecimenCollectionGroup scg = (SpecimenCollectionGroup) obj[1];
+					Specimen specimen = new Specimen();
+					specimen.setId(id);
+					specimen.setSpecimenCollectionGroup(scg);
+					return specimen;
+				}
 			}
 			//SpecimenCollectionGroup scg1 = 
 		}

@@ -1,14 +1,7 @@
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,19 +10,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
-import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bean.GenericSpecimenVO;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
 
 /**
  * @author abhijit_naik
@@ -68,10 +53,13 @@ public class MultipleSpecimenViewAction extends BaseAction
 			if(Constants.EDIT.equals(request.getParameter("mode"))){
 				summaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
 				summaryForm.setShowParentStorage(false);
+				summaryForm.setShowbarCode(true);
+				summaryForm.setShowLabel(true);
+				
 			}
 			request.setAttribute("RequestType","");
-//			if(pageOf != null)
-//				return mapping.findForward(pageOf);
+			if(pageOf != null)
+				return mapping.findForward(pageOf);
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception e)
