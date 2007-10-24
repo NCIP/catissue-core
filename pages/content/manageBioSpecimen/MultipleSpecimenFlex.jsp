@@ -13,6 +13,8 @@
 	String PARENT_NAME = (String)request.getAttribute("PARENT_NAME");
 	String SP_COUNT = (String)request.getAttribute("SP_COUNT");
 	String SHOW_PARENT_SELECTION = (String) request.getAttribute("SHOW_PARENT_SELECTION");
+	String SHOW_LABEL = (String) request.getAttribute("SHOW_LABEL");
+	String SHOW_BARCODE = (String) request.getAttribute("SHOW_BARCODE");
 	SessionDataBean bean = (SessionDataBean) session.getAttribute("sessionData");
 	String temp = (String) session.getAttribute("temp");
 %>
@@ -46,10 +48,24 @@ function callSubmitSpecimen()
 		String formAction = "GenericSpecimenSummary.do";
 		if(request.getAttribute(Constants.PAGEOF) != null)
 		{
-			formAction = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGEOF);
+			formAction = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGEOF)+"&mode=add";
 		}
 	%>
 	document.forms[0].action = "<%=formAction%>";
+	document.forms[0].submit();
+	
+}
+
+function callUpdateSpecimen()
+{
+	<%
+		String formAction1 = "GenericSpecimenSummary.do";
+		if(request.getAttribute(Constants.PAGEOF) != null)
+		{
+			formAction1 = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGEOF)+"&mode=edit";
+		}
+	%>
+	document.forms[0].action = "<%=formAction1%>";
 	document.forms[0].submit();
 	
 }
@@ -97,7 +113,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// if we've detected an acceptable version
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
-			"src", "flexclient/multiplespecimen/MultipleSpecimen?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>",
+			"src", "flexclient/multiplespecimen/MultipleSpecimen?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>",
 			"width", "100%",
 			"height", "100%",
 			"align", "middle",
@@ -122,11 +138,11 @@ if ( hasProductInstall && !hasRequestedVersion ) {
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="MultipleSpecimen" width="100%" height="100%"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-			<param name="movie" value="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=ADD&PARENT_TYPE=SCG&PARENT_NAME=AA&SP_COUNT=2" />
+			<param name="movie" value="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#ffffff" />
 			<param name="allowScriptAccess" value="sameDomain" />
-			<embed src="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=ADD&PARENT_TYPE=SCG&PARENT_NAME=AA&SP_COUNT=2" quality="high" bgcolor="#ffffff"
+			<embed src="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>" quality="high" bgcolor="#ffffff"
 				width="100%" height="100%" name="MultipleSpecimen" align="middle"
 				play="true"
 				loop="false"
