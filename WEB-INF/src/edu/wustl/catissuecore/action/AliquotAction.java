@@ -665,12 +665,37 @@ public class AliquotAction extends SecureAction
 				{
 					return Constants.PAGEOF_ALIQUOT;
 				}
+				else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_CREATE_ALIQUOT))
+				{
+					return Constants.PAGEOF_CREATE_ALIQUOT;
+				}
 				else
 				{
 					return Constants.PAGE_OF_SPECIMEN;
 				}
 			}
-			
+			else if(specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+			{
+				/**
+	 			* Name : Falguni Sachde
+	 			* Reviewer Name : Sachin Lale 
+	 			* Bug ID: 4919
+	 			* Description: Added new error message and check for pageOf flow, if user clicks directly aliquot 
+	 			* 			   link and specimen status is disabled 	
+				*/
+				ActionErrors errors = getActionErrors(request);
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.disabled" , "Specimen"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aliquots" , "Aliquot(s)"));
+				saveErrors(request, errors);
+				if(pageOf.equalsIgnoreCase(Constants.PAGEOF_CREATE_ALIQUOT))
+				{
+					return Constants.PAGEOF_CREATE_ALIQUOT;
+				}
+				else
+				{
+					return Constants.PAGE_OF_SPECIMEN;
+				}
+			}
 			/**
 			 * set the value of aliquotInSameContainer which was set while creation of collection protocol
 			 * required for Bug 2309

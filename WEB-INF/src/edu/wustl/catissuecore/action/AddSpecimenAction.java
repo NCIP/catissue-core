@@ -16,6 +16,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -65,10 +68,10 @@ public class AddSpecimenAction extends SecureAction
 
 		String[] whereColumnCondition = {"="};
 
-		String joinCondition = null;
+		
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-
-		List list = bizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+		List list  = bizLogic.retrieve(sourceObjectName, whereColumnName[0], whereColumnValue[0]);
+		
 
 		/**
 		 *  If list is not empty, set the Parent specimen Id and forward to success. 
@@ -76,8 +79,40 @@ public class AddSpecimenAction extends SecureAction
 		 */
 		if (list != null && !list.isEmpty())
 		{
-			Object obj = list.get(0);
-			Long specimen = (Long) obj;
+			Specimen objSpecimen = (Specimen) list.get(0);
+			
+			if(objSpecimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+			{
+				/**
+	 			* Name : Falguni Sachde
+	 			* Reviewer Name : Sachin Lale 
+	 			* Bug ID: 4919
+	 			* Description: Added new error message and check for pageOf flow, if user clicks directly derived 
+	 			* 			   link and specimen status is disabled 	
+				*/
+				ActionErrors errors = getActionErrors(request);
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.disabled" , "Specimen"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.derived" , "Derived Specimen"));
+				saveErrors(request, errors);
+				return mapping.findForward(Constants.FAILURE);
+			}
+			else if(objSpecimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED ))
+			{
+				/**
+	 			* Name : Falguni Sachde
+	 			* Reviewer Name : Sachin Lale 
+	 			* Bug ID: 4919
+	 			* Description: Added new error message and check for pageOf flow, if user clicks directly derived 
+	 			* 			   link and specimen status is disabled 	
+				*/
+				ActionErrors errors = getActionErrors(request);
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.closed" , "Specimen"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.derived" , "Derived Specimen"));
+				saveErrors(request, errors);
+				return mapping.findForward(Constants.FAILURE);
+			}
+			
+			Long specimen = (Long) objSpecimen.getId();
 			createForm.setParentSpecimenId("" + specimen.longValue());
 			createForm.setReset(false);   // Will not reset the parameters   
 			if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
@@ -92,4 +127,22 @@ public class AddSpecimenAction extends SecureAction
 		}
 
 	}
+	/**
+	 * This method returns the ActionErrors object present in the request scope.
+	 * If it is absent method creates & returns new ActionErrors object.
+	 * @param request object of HttpServletRequest
+	 * @return ActionErrors
+	 */
+	private ActionErrors getActionErrors(HttpServletRequest request)
+	{
+		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+
+		if (errors == null)
+		{
+			errors = new ActionErrors();
+		}
+
+		return errors;
+	}
+
 }
