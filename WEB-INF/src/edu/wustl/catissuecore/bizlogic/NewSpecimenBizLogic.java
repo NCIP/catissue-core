@@ -49,6 +49,8 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
+import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -567,6 +569,24 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					}
 				}
 			}
+			if(edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl )
+			{
+				//Setting Name from Id
+				if((specimen.getBarcode()==null || specimen.getBarcode().equals("") ) &&  !specimen.getIsCollectionProtocolRequirement())
+				{
+
+					try 
+					{
+						BarcodeGenerator spBarcodeGenerator = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
+						spBarcodeGenerator.setBarcode(specimen);
+					}
+					catch (BizLogicException e) 
+					{
+						throw new DAOException(e.getMessage());
+					}
+				}
+			}
+
 			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
 			dao.insert(specimen, sessionDataBean, true, true);
 			//protectionObjects.add(specimen);

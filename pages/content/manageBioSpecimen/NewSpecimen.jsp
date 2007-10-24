@@ -996,7 +996,7 @@
 									</td>
 									</logic:equal>
 								</tr>
-								<%  if( operation.equals(Constants.EDIT))
+								<%  if( operation.equals(Constants.EDIT) || (!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
 									{
 								%>	
 									<tr>
@@ -1046,13 +1046,13 @@
 
 									%>
 										<tr>
-																			
+										<td class="formFieldNoBordersSimple">&nbsp;</td>									
 										<td class="formFieldNoBordersSimple">							
 								    	<label for="barcode">
 											<bean:message key="specimen.barcode"/>
 										</label>								
 										</td>
-									    <td class="formFieldNoBordersSimple"  colspan=4>
+									    <td class="formFieldNoBordersSimple"  colspan=5>
 											<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode" />
 							        	</td>
 										</tr>

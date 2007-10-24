@@ -3,16 +3,13 @@ package edu.wustl.catissuecore.namegenerator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.DAOException;
-
-
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.Constants;
 /**
  * DefaultSpecimenBarcodeGenerator is a class which contains the default 
  * implementations AbstractSpecimenGenerator classe.
@@ -126,7 +123,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	private void setNextAvailableDeriveSpecimenBarcode(Specimen parentObject, Specimen specimenObject) {
 		
 		currentBarcode= currentBarcode+1;
-		specimenObject.setLabel(currentBarcode.toString());
+		specimenObject.setBarcode(currentBarcode.toString());
 		barcodeCountTreeMap.put(specimenObject,0);
 	}
 	
@@ -171,7 +168,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	}
 
 	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.List)
+	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setBarcode(java.util.List)
 	 */
 	public void setBarcode(List<AbstractDomainObject> objSpecimenList) {
 

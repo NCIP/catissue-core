@@ -22,6 +22,8 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
+import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -287,6 +289,21 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 				{
 					LabelGenerator specimenGenerator  = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
 					specimenGenerator.setLabel(specimen);
+					
+				} 
+				catch (BizLogicException e)
+				{
+					throw new DAOException(e.getMessage());
+					
+				}
+			}
+			if(edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl )
+			{
+			
+				try
+				{
+					BarcodeGenerator barcodeGenerator  = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
+					barcodeGenerator.setBarcode(specimen);
 					
 				} 
 				catch (BizLogicException e)
