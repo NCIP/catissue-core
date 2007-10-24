@@ -63,6 +63,8 @@
 			specimenColl = new ArrayCollection();
 						
 			metadataManager.init(mspParameter.mode);
+			myRemoteObject.initFlexInterfaceForMultipleSp(mspParameter.mode,mspParameter.parentType,mspParameter.parentName);
+						
 			metadataManager.addEventListener("initCompleteEvent",init);
 			if(mspParameter.showParentSelection == "true")
 			{
@@ -86,8 +88,6 @@
 			{
 				specimenColl = new ArrayCollection();
 				var spCounts:int = int(mspParameter.spCount);
-				
-				//Alert.show("spCounts "+spCounts);
 				for(var i:int=0; i<spCounts; i++)
 				{
 					
@@ -96,8 +96,6 @@
 			}
 			else
 			{
-				//TODO
-				//Alert.show("Init of multipl sepcimen");
 				specimenColl = metadataManager.spDataList;
 				
 				if(specimenColl==null)
@@ -123,7 +121,7 @@
 			var spData:SpecimenData = new SpecimenData("","","Left");	
 			spData.mode= mspParameter.mode;
 			spData.collectionEvent.userName = specimenDataBean.collectionEvent.userName;
-
+			
 			if(showParentSelection == true)
 				spData.isParentEnabled = true;
 			else
@@ -136,6 +134,9 @@
 			{
 				spData.parentType = Constants.NEW_SPECIMEN;
 				spData.parentName = mspParameter.parentName;
+				setScgEvents(spData);
+				
+
 			}
 			else
 			{
@@ -144,7 +145,21 @@
 			}
 			return spData;
 		}
-		
+		private function setScgEvents(spData:SpecimenData):void
+		{
+			spData.copyCollectedEvent(specimenDataBean.collectionEvent);
+			spData.copyReceivedEvent(specimenDataBean.receivedEvent);
+/*			spData.collectionEvent.container = specimenDataBean.collectionEvent.container;
+			spData.collectionEvent.collectionProcedure = specimenDataBean.collectionEvent.collectionProcedure;
+			spData.collectionEvent.collectionProcedure = specimenDataBean.collectionEvent.collectionProcedure;
+			spData.collectionEvent.eventHour = specimenDataBean.collectionEvent.eventHour;
+			spData.collectionEvent.eventMinute = specimenDataBean.collectionEvent.eventMinute;
+			
+			spData.receivedEvent.receivedQuality = specimenDataBean.receivedEvent.receivedQuality;
+			spData.receivedEvent.eventHour = specimenDataBean.receivedEvent.eventHour;
+			spData.receivedEvent.eventMinute = specimenDataBean.receivedEvent.eventMinute;*/
+
+		}		
 		private function creationComp():void
 		{
 			if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_EDIT)
@@ -157,7 +172,7 @@
 			selectionBox.visible = showParentSelection;
 			spParent.selectedValue = "New Specimen";
 			spLabelPane.spOrScg.text = "* Specimen Group Name";
-			myRemoteObject.initFlexInterfaceForMultipleSp();
+//			myRemoteObject.initFlexInterfaceForMultipleSp(mspParameter.mode,mspParameter.parentType,mspParameter.parentName);
 			
 			
 			
@@ -176,7 +191,7 @@
 		
 		private function deleteSpecimen(event:Event) : void
 		{
-			for(var i:int;i<specimenColl.length;i++)
+			for(var i:int=(specimenColl.length-1);i>=0;i--)
 			{
 				var spData:SpecimenData = SpecimenData(specimenColl.getItemAt(i));
 				if(spData.isSelected)
@@ -385,7 +400,8 @@
 				}
 				else
 				{
-					myRemoteObject.editSpecimen(specimenColl);
+					var specimenCollForEdit:ArrayCollection = getCollectionForEdit(specimenColl);
+					myRemoteObject.editSpecimen(specimenCollForEdit);
 				}
 				
 			}
@@ -393,6 +409,28 @@
 			{
 				Alert.show("Please resolve all errors marked with red box.");
 			}
+		}
+		private function getCollectionForEdit(specimenColl:ArrayCollection):ArrayCollection
+		{
+			var specimenCollForEdit:ArrayCollection = new ArrayCollection();
+			for(var j:int = 0; j<specimenColl.length;j++)
+			{
+				var specimenData:SpecimenData = specimenColl.getItemAt(j) as SpecimenData;
+				var specimenDatForEdit:SpecimenData = new SpecimenData();
+				specimenDatForEdit.spID = specimenData.spID;
+				specimenDatForEdit.specimenLabel = specimenData.specimenLabel;
+				specimenDatForEdit.specimenBarcode = specimenData.specimenBarcode;
+				specimenDatForEdit.creationDate = specimenData.creationDate;
+				specimenDatForEdit.tissueSide = specimenData.tissueSide;
+				specimenDatForEdit.tissueSite = specimenData.tissueSite;
+				specimenDatForEdit.pathologicalStatus = specimenData.pathologicalStatus;
+				specimenDatForEdit.quantity = specimenData.quantity;
+				specimenDatForEdit.derivedSpColl = specimenData.derivedSpColl;
+				specimenDatForEdit.exIdColl = specimenData.exIdColl;
+				specimenDatForEdit.biohazardColl = specimenData.biohazardColl;
+				specimenCollForEdit.addItem(specimenDatForEdit);
+			}
+			return specimenCollForEdit;
 		}
 		
 		private function handleReadSpecimen(event:ResultEvent):void
@@ -423,6 +461,9 @@
 	   			messageText.styleName = "errorMessageStyle";	
 	   			
    			messageText.text = message.substr(8,message.length);
+   			var f:String = "callUpdateSpecimen";
+		    ExternalInterface.call(f);
+
    		}
 
    		private function handleInitMultipleSp(event:ResultEvent) : void
@@ -467,9 +508,9 @@
 		{
 			paginateData.paginate(model.collection, this.hbContainer, model.pageLimit);
 		}
-		public function getMode() : String
+		public function getMSParameter() : MSPParameter
 		{
-			return mspParameter.mode;	
+			return mspParameter;	
 			
 		}
 	]]>
@@ -501,10 +542,10 @@
 	<mx:HBox id="hbContainer"  width="100%" />
 	<mx:HBox>
 	
-		<components:SpecimenLabelPane backgroundColor="#F0F8FF" id="spLabelPane" mode="{getMode()}"/>
+		<components:SpecimenLabelPane backgroundColor="#F0F8FF" id="spLabelPane" mspParameter="{getMSParameter()}"/>
 
 		<mx:Repeater id="spRepeater" dataProvider="{model.filteredCollection}">	
-			<components:SpecimenPane id="A" backgroundColor="{getAlternateColor(spRepeater.currentIndex)}" mode="{getMode()}"/>
+			<components:SpecimenPane id="A" backgroundColor="{getAlternateColor(spRepeater.currentIndex)}" mspParameter="{getMSParameter()}"/>
 		</mx:Repeater>
 	</mx:HBox>
 	

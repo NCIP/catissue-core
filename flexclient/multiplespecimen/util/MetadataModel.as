@@ -35,11 +35,14 @@ package util
 		public var procedureList:ArrayCollection = new ArrayCollection();
 		public var containerList:ArrayCollection = new ArrayCollection();
 		
+		public var storageList:Array=['Virtual','Auto','Manual'];
+		
 		//For received Event
 		public var receivedQualityList:ArrayCollection = new ArrayCollection();
 		
 		public var hourListArray:Array = Constants.HOUR_ARRAY;
 		public var miniuteListArray:Array = Constants.MINIUTE_ARRAY;
+		
 		
 		//biohazard
 		public var biohazardTypeList:ArrayCollection = new ArrayCollection();

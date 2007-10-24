@@ -245,7 +245,7 @@ package valueobjects
 			}
 		}
 
-		private function copyCollectedEvent(collectedEvent:EventBean):void
+		public function copyCollectedEvent(collectedEvent:EventBean):void
 		{
 			var collectedEventBean:EventBean = new EventBean();
 			collectedEventBean.userName = collectedEvent.userName;
@@ -257,7 +257,7 @@ package valueobjects
 			collectedEventBean.comment = collectedEvent.comment;	
 			this.collectionEvent = collectedEventBean;
 		}	
-		private function copyReceivedEvent(recievedEvent:EventBean):void
+		public function copyReceivedEvent(recievedEvent:EventBean):void
 		{
 			var receivedEventBean:EventBean = new EventBean();
 			receivedEventBean.userName = recievedEvent.userName;
@@ -282,7 +282,6 @@ package valueobjects
 		}
 		public function writeExternal(output:IDataOutput) :void 
 		{
-			//Alert.show("CLIENT IN writeExternal");
 			output.writeInt(spID);
 /*			output.writeUTF(scgName);
 			output.writeUTF(parentSpecimenName);*/
@@ -309,8 +308,6 @@ package valueobjects
         
     	public function readExternal(input:IDataInput):void
     	{
-    		//Alert.show("CLIENT IN readExternal");
-    		
 			spID = input.readInt();
 /*			scgName = input.readUTF();
 			parentSpecimenName = input.readUTF();*/

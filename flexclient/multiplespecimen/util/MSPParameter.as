@@ -19,13 +19,17 @@ package util
 		public var parentName:String = "";
 		public var spCount:String = "";
 		public var showParentSelection:String="";
+		public var showLabel:String="";
+		public var showBarcode:String="";
 		
 		public function toString():String
 		{
 			return  "mode "+mode+"\n"+
 					"parent "+parentType+"\n"+
 					"parentName "+parentName+"\n"+
-					"spCount "+spCount;
+					"spCount "+spCount+"\n" +
+					"showLabel "+showLabel+"\n"+
+					"showBArcode "+showBarcode;
 		}
 		
 		public function validate():String

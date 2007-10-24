@@ -12,9 +12,8 @@ package util
 			mspParameter.parentName = parameter.PARENT_NAME;
 			mspParameter.spCount = parameter.SP_COUNT;
 			mspParameter.showParentSelection = parameter.SHOW_PARENT_SELECTION;
-
-			//Alert.show(mspParameter.toString());
-			
+			mspParameter.showLabel = parameter.SHOW_LABEL;
+			mspParameter.showBarcode = parameter.SHOW_BARCODE;
 			return mspParameter;
 		} 
 		

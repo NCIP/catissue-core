@@ -10,14 +10,14 @@
 			import valueobjects.SpecimenData;
 			import mx.collections.ArrayCollection;
 			import mx.managers.PopUpManager;
-			
+			import util.MSPParameter;
 			[Bindable]
 			 public var derivedSpColl:ArrayCollection;
 			
 			[Bindable]
 			 public var derivedSpCollOriginal:ArrayCollection;
 			 
-			 [Bindable] public var mode:String;
+			[Bindable] public var msParameter:MSPParameter;
 	 		public var metadataManager:MetadataManager = new MetadataManager();
 			private function init():void
 			{
@@ -39,7 +39,7 @@
 				{	
 					//validateVal = D[i].validateDerivedSpecimen(i+1) && validateVal;
 					var derivedSpData:SpecimenData = derivedSpColl.getItemAt(i) as SpecimenData;
-					derivedSpData.mode = mode;
+					derivedSpData.mode = msParameter.mode;
 					validateVal = derivedSpData.validate(false) && validateVal;
 				}
 				//Alert.show("Hi");
@@ -92,27 +92,16 @@
 					
 				}
 			}	
-/*			if(specimenColl.length%PERPAGE == 0)
-			{
-				if(startingIndex -PERPAGE >0)
-				{
-					startingIndex = startingIndex- PERPAGE;	
-				}
-			}*/
-			
 		}
 
 		private function initSpecimenData(): SpecimenData
 		{
 			var spData:SpecimenData = new SpecimenData("","","Left");	
-		
-			
-			
 			return spData;
 		}
-		public function getMode() : String
+		public function getMspParameter() : MSPParameter
 		{
-			return mode;	
+			return msParameter;	
 			
 		}
 		
@@ -125,9 +114,9 @@
 
 	</mx:HBox>
 	<mx:HBox>
-		<components:DeriveSpecimenLabelPane backgroundColor="#E0EFFF"/>
+		<components:DeriveSpecimenLabelPane backgroundColor="#E0EFFF" msParamter="{msParameter}"/>
 		<mx:Repeater id="dpRepeater" dataProvider="{derivedSpColl}">	
-			<components:DerivedSpecimenContentPane id="D" name="{dpRepeater.currentIndex.toString()}" derivedData="{dpRepeater.currentItem as SpecimenData}" mode="{getMode()}"/>
+			<components:DerivedSpecimenContentPane id="D" name="{dpRepeater.currentIndex.toString()}" derivedData="{dpRepeater.currentItem as SpecimenData}" msParamter="{getMspParameter()}"/>
 		</mx:Repeater>
 	</mx:HBox>
 

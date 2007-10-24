@@ -7,10 +7,24 @@
 		import valueobjects.SpecimenData;
 		import mx.collections.ArrayCollection;
 		import mx.controls.Alert;
-		public var mode:String;
+		public var mspParameter:MSPParameter;
 		private function creationComp():void
 		{
-			if(mode == MSPParameter.MODE_PARAM_VAL_EDIT)
+			if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_ADD)
+			{
+				if(mspParameter.showLabel == "false")
+				{
+					labelBox.visible = false;
+					labelBox.height = 0;
+				}
+				if(mspParameter.showBarcode == "false")
+				{
+					barcodeBox.visible = false;
+					barcodeBox.height = 0;
+				}
+				
+			}
+			if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_EDIT)
 			{
 				nameBox.visible = false;
 				nameBox.height = 0;
@@ -49,11 +63,11 @@
 			<mx:CheckBox id="nameChkBox" styleName="chkBoxStyle" />	
 			<mx:Label text="" fontWeight="bold" id="spOrScg"/>	
 		</mx:HBox>
-		<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:HBox height="25" styleName="hBoxForSpLabel" id="labelBox">
 			<mx:CheckBox id="labelChkBox" styleName="chkBoxStyle"/>
 			<mx:Label text="* Label" fontWeight="bold"/>	
 		</mx:HBox>
-		<mx:HBox height="25" styleName="hBoxForSpLabel">
+		<mx:HBox height="25" styleName="hBoxForSpLabel" id="barcodeBox">
 			<mx:CheckBox id="barcodeChkBox" styleName="chkBoxStyle"/>	
 			<mx:Label text="  Barcode" fontWeight="bold"/>	
 		</mx:HBox>
