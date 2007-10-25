@@ -22,6 +22,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.util.TaskTimeCalculater;
+
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
@@ -90,6 +92,9 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				}
 				else
 				{
+					TaskTimeCalculater cpTask =TaskTimeCalculater.startTask
+					("Populate CP,Event & Specimen domain objects before calling insert" , SubmitSpecimenCPAction.class);
+					
 					CollectionProtocol collectionProtocol = CollectionProtocolUtil
 					.populateCollectionProtocolObjects(request);
 
@@ -97,9 +102,11 @@ public class SubmitSpecimenCPAction extends BaseAction {
 					
 				
 					collectionProtocolBean.setIdentifier(collectionProtocol.getId());
-
+					TaskTimeCalculater.endTask(cpTask);
+					cpTask =TaskTimeCalculater.startTask
+					("Retrieve CP,Event & Specimen domain objects after insert for update.",SubmitSpecimenCPAction.class);
 					CollectionProtocolUtil.updateSession(request,collectionProtocol.getId());
-					
+					TaskTimeCalculater.endTask(cpTask);
 				}
 				ActionMessages actionMessages = new ActionMessages();
 				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(

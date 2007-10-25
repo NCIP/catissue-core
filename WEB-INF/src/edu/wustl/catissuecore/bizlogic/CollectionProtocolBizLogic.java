@@ -22,8 +22,12 @@ import java.util.Vector;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+
+import com.util.TaskTimeCalculater;
+
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
+import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -70,8 +74,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 	throws DAOException, UserNotAuthorizedException
 	{
+		TaskTimeCalculater cpInsert = TaskTimeCalculater.startTask
+		("Complete Collection Protocol Insert", CollectionProtocolBizLogic.class);
+		
 		CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
-
 		checkStatus(dao, collectionProtocol.getPrincipalInvestigator(), "Principal Investigator");
 
 		setPrincipalInvestigator(dao, collectionProtocol);
@@ -84,16 +90,16 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		System.out.println("ID = " + collectionProtocol.getId());
 		dao.insert(collectionProtocol, sessionDataBean, true, true);
 		
-		System.out.println("Collection protocol inserted...");
-		System.out.println("ID = " + collectionProtocol.getId());
-
+		TaskTimeCalculater eventInsert = TaskTimeCalculater.startTask
+		("Insert all events in CP", CollectionProtocolBizLogic.class);	
 		insertCPEvents(dao, sessionDataBean, collectionProtocol);
-		System.out.println("Collection protocol events inserted...");
+		TaskTimeCalculater.endTask(eventInsert);
 		HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
 		protectionObjects.add(collectionProtocol);
 
 		authenticate(collectionProtocol, protectionObjects);
-			
+		
+		TaskTimeCalculater.endTask(cpInsert);	
 	}
 
 
@@ -161,7 +167,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			SpecimenCollectionRequirementGroup collectionRequirementGroup,
 			Collection specimenCollection, SessionDataBean sessionDataBean) throws DAOException,
 			UserNotAuthorizedException {
-
+		TaskTimeCalculater specimenInsert = TaskTimeCalculater.startTask
+		("Insert specimen for CP", CollectionProtocolBizLogic.class);
 		Iterator<Specimen> specIter = collectionRequirementGroup.getSpecimenCollection().iterator();
 		
 		Map<Specimen, List<Specimen>> specimenMap = new LinkedHashMap<Specimen, List<Specimen>>();
@@ -169,24 +176,25 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		while(specIter.hasNext())
 		{
 			Specimen specimen = specIter.next();									
-			System.out.println("-----INSERTING specimen :" + specimen.getId());
-
+		
 			specimen.setSpecimenCollectionGroup(collectionRequirementGroup);
 			specimenMap.put(specimen, null);
 		}
-		
-		System.out.println("-----BEFORE INSERTING specimen :");
-		
+		bizLogic.setCpbased(true);
 		bizLogic.insert(specimenMap, dao, sessionDataBean);
-	
-		System.out.println("-----INSERTING specimen complete");
+		TaskTimeCalculater.endTask(specimenInsert);
 	}
 
 
 	private void authenticate(CollectionProtocol collectionProtocol,
 			HashSet protectionObjects) throws DAOException {
+		
+		TaskTimeCalculater cpAuth = TaskTimeCalculater.startTask
+		("CP insert Authenticatge", CollectionProtocolBizLogic.class);
 		try
 		{
+
+			
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
 					getAuthorizationData(collectionProtocol), protectionObjects,
 					getDynamicGroups(collectionProtocol));
@@ -194,7 +202,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (SMException e)
 		{
 			throw handleSMException(e);
+		} finally{
+			TaskTimeCalculater.endTask(cpAuth);	
 		}
+		
 	}
 
 
@@ -391,16 +402,23 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			SpecimenCollectionRequirementGroup collectionRequirementGroup) throws DAOException,
 			UserNotAuthorizedException
 	{
-		dao.insert(collectionProtocolEvent, sessionDataBean, true, true);
-		dao.insert(collectionRequirementGroup, sessionDataBean, true, true);
+		dao.insert(collectionProtocolEvent, sessionDataBean, true, false);
+		dao.insert(collectionRequirementGroup, sessionDataBean, true, false);
+		TaskTimeCalculater eventAuth = TaskTimeCalculater.startTask
+		("CP: Specimen collection req. group insert Authenticatge", CollectionProtocolBizLogic.class);
+
 		try
 		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(collectionRequirementGroup),
+
+			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+					null, getProtectionObjects(collectionRequirementGroup),
 					getDynamicGroups(collectionRequirementGroup));
 		}
 		catch (SMException e)
 		{
 			throw handleSMException(e);
+		}finally{
+			TaskTimeCalculater.endTask(eventAuth);
 		}
 	}
 
@@ -865,8 +883,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		//Added by Ashish
 		//setAllValues(obj);
 		//END
-		System.out.println("=========================================================");
-		System.out.println("=================VALIDATING COLLECTION PROTOCOL==========");
 		
 		CollectionProtocol protocol = (CollectionProtocol) obj; 
 		Collection eventCollection = protocol.getCollectionProtocolEventCollection();		
@@ -1074,8 +1090,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 //								}
 
 						}
-						System.out.println("=========================================================");
-						System.out.println("=================VALIDATING SPECIMEN COMPLETE==========");
 						
 					}
 					else

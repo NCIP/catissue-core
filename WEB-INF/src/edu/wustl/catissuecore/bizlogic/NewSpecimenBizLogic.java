@@ -1,4 +1,4 @@
-
+									   
 /**
  * <p>Title: NewSpecimenHDAO Class>
  * <p>Description:	NewSpecimenBizLogicHDAO is used to add new specimen information into the database using Hibernate.</p>
@@ -24,6 +24,9 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.hibernate.HibernateException;
+
+import com.util.TaskTimeCalculater;
+
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -73,6 +76,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -89,6 +93,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private Map< Long, Collection> containerHoldsSpecimenClasses = new HashMap<Long, Collection>();
 	private Map< Long, Collection> containerHoldsCPs = new HashMap<Long, Collection>();
 	private HashSet<String> storageContainerIds = new HashSet<String>();
+	private boolean cpbased =false;
 	/**
 	 * Saves the storageType object in the database.
 	 * @param obj The storageType object to be saved.
@@ -97,6 +102,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
+		
+		if(!isCpbased())
+		{
+			isAuthorise(sessionDataBean.getUserName());
+		}
 		
 		if (obj.getClass().hashCode() == LinkedHashMap.class.hashCode())
 		{
@@ -131,6 +141,22 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	   
 	}
 
+	private void isAuthorise(String userName) throws UserNotAuthorizedException
+	{
+		try
+		{
+			if(!SecurityManager.getInstance(this.getClass())
+	                .isAuthorized(userName,
+	                        Specimen.class.getName(),
+	                        Permissions.CREATE)
+			){
+				throw new UserNotAuthorizedException("User is not authorised to create specimens");
+			}
+		}catch(SMException exception){
+			throw new UserNotAuthorizedException(exception.getMessage(),exception);
+		}
+		
+	}
 	/**
 	 * Insert multiple specimen into the data base.
 	 * @param specimenList
@@ -147,6 +173,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 		while (specimenIterator.hasNext())
 		{
+			TaskTimeCalculater mulSpec = TaskTimeCalculater.startTask("Multiple specimen ", NewSpecimenBizLogic.class);
 			count++;
 			Specimen specimen = (Specimen) specimenIterator.next();
 
@@ -200,7 +227,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
             //Setting parent specimens events if derived 
             if(specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId() != null && specimen.getParentSpecimen().getId() > 0)
             {            	
+            	TaskTimeCalculater setParentData = TaskTimeCalculater.startTask("Set parent Data", NewSpecimenBizLogic.class);
             	setParentSpecimenData(specimen,dao);
+            	TaskTimeCalculater.endTask(setParentData);
             }            
 
 			try
@@ -230,6 +259,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			List derivedSpecimens = (List) specimenMap.get(specimen);
 			if (derivedSpecimens == null)
 			{
+				TaskTimeCalculater.endTask(mulSpec);
 				continue;
 			}
 			//insert derived specimens
@@ -253,28 +283,44 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					throw daoException;
 				} 
 			}
+			TaskTimeCalculater.endTask(mulSpec);
 		}
-
+		
 		//inserting authorization data 
-		Iterator itr = specimenList.iterator();
-		while (itr.hasNext())
-		{
-			Specimen specimen = (Specimen) itr.next();
-			Set protectionObjects = new HashSet();
-			protectionObjects.add(specimen);
-			if (specimen.getSpecimenCharacteristics() != null)
-			{
-				protectionObjects.add(specimen.getSpecimenCharacteristics());
-			}
-			try
-			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
-			}
-			catch (SMException e)
-			{
-				throw handleSMException(e);
-			}
+		authenticateSpecimens(specimenList);
+		
+	}
 
+	/**
+	 * @param specimenList
+	 * @throws DAOException
+	 */
+	private void authenticateSpecimens(List specimenList) throws DAOException {
+		Iterator itr = specimenList.iterator();
+		TaskTimeCalculater specAuth = TaskTimeCalculater.startTask
+		("Specimen insert Authenticate ("+ specimenList.size() +")", NewSpecimenBizLogic.class);
+		try
+		{
+	
+			while (itr.hasNext())
+			{
+				Specimen specimen = (Specimen) itr.next();
+				Set protectionObjects = new HashSet();
+				protectionObjects.add(specimen);
+				if (specimen.getSpecimenCharacteristics() != null)
+				{
+					protectionObjects.add(specimen.getSpecimenCharacteristics());
+				}
+					SecurityManager.getInstance(this.getClass())
+					.insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
+	
+			}
+		}
+		catch (SMException e)
+		{
+			throw handleSMException(e);
+		}finally{
+			TaskTimeCalculater.endTask(specAuth);
 		}
 	}
 	/**
@@ -470,125 +516,51 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 			 */
-			
-			//Setting Name from Id
-			//retriveSCGIdFromSCGName(specimen,dao);
+			TaskTimeCalculater singleSpec = TaskTimeCalculater.startTask
+			("Single specimen insert", NewSpecimenBizLogic.class);
+
 			ApiSearchUtil.setSpecimenDefault(specimen); 
+			TaskTimeCalculater internalTask = TaskTimeCalculater.startTask
+			("setParentSCG", NewSpecimenBizLogic.class);
+
 			Specimen parentSpecimen =specimen.getParentSpecimen();
-			if(parentSpecimen !=null)
-            {
-				if(parentSpecimen .getId()==null)
-				{
-					List parentSpecimenList = dao.retrieve(Specimen.class.getName(),"label",parentSpecimen .getLabel());
-					
-					if(parentSpecimenList!=null && !parentSpecimenList.isEmpty())
-					{
-						parentSpecimen =(Specimen) parentSpecimenList.get(0);
-					}
-				}
-				specimen.setParentSpecimen(parentSpecimen);
-				specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
+			setParentSCG(specimen, dao, parentSpecimen);
+			
+			TaskTimeCalculater.endTask(internalTask);
+			
+			setExternalIdentifiers(specimen, specimen.getExternalIdentifierCollection());
 
-            }
-			//End:- Change for API Search
-
-			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
-
-			if (externalIdentifierCollection != null)
+			if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
 			{
-				if (externalIdentifierCollection.isEmpty()) //Dummy entry added for query
-				{
-					ExternalIdentifier exId = new ExternalIdentifier();
-
-					exId.setName(null);
-					exId.setValue(null);
-					exId.setSpecimen(specimen);
-					externalIdentifierCollection.add(exId);
-				}
-				else
-				{
-					/**
-					 *  Bug 3007 - Santosh
-					 */
-					Iterator it = externalIdentifierCollection.iterator();
-					while (it.hasNext())
-					{
-						ExternalIdentifier exId = (ExternalIdentifier) it.next();
-						exId.setSpecimen(specimen);
-						//					dao.insert(exId, sessionDataBean, true, true);
-					}
-				}
-			}
-			else
-			{
-				//Dummy entry added for query.
-				externalIdentifierCollection = new HashSet();
-				ExternalIdentifier exId = new ExternalIdentifier();
-				exId.setName(null);
-				exId.setValue(null);
-				exId.setSpecimen(specimen);
-				externalIdentifierCollection.add(exId);
-				specimen.setExternalIdentifierCollection(externalIdentifierCollection);
+				specimen.setAvailable(new Boolean(false));
 			}
 
-			//Set protectionObjects = new HashSet();
 			if(specimen.getLineage() == null)
 			{
 			    specimen.setLineage(Constants.NEW_SPECIMEN);
 			}
 			//Setting the created on date = collection date if lineage = NEW_SPECIMEN
-			
+			internalTask = TaskTimeCalculater.startTask
+			("set created on date ", NewSpecimenBizLogic.class);			
 			setCreatedOnDate(specimen);
+			TaskTimeCalculater.endTask(internalTask);
 			
-			
+			TaskTimeCalculater setSpecAttr = TaskTimeCalculater.startTask
+			("Specimen setSpecimenAttributes before insert",NewSpecimenBizLogic.class);
 			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
-			
-			if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
-			{
-				specimen.setAvailable(new Boolean(false));
-			}
-			/**
-			 * Name:Falguni Sachde
-			 * Reviewer: Sachin lale
-			 * Call Specimen label generator if automatic generation is specified 
-			 */
-			if(edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl )
-			{
-				//Setting Name from Id
-				if((specimen.getLabel()==null || specimen.getLabel().equals("") ) &&  !specimen.getIsCollectionProtocolRequirement())
-				{
+			TaskTimeCalculater.endTask(setSpecAttr);
 
-					try 
-					{
-						LabelGenerator spLblGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-						spLblGenerator.setLabel(specimen);
-					}
-					catch (BizLogicException e) 
-					{
-						throw new DAOException(e.getMessage());
-					}
-				}
-			}
-			if(edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl )
-			{
-				//Setting Name from Id
-				if((specimen.getBarcode()==null || specimen.getBarcode().equals("") ) &&  !specimen.getIsCollectionProtocolRequirement())
-				{
+			generateLabel(specimen);
+			generateBarCode(specimen);
 
-					try 
-					{
-						BarcodeGenerator spBarcodeGenerator = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
-						spBarcodeGenerator.setBarcode(specimen);
-					}
-					catch (BizLogicException e) 
-					{
-						throw new DAOException(e.getMessage());
-					}
-				}
-			}
+			TaskTimeCalculater.endTask(singleSpec);
 
-			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
-			dao.insert(specimen, sessionDataBean, true, true);
+			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, false,  false);
+
+			TaskTimeCalculater insertDao = TaskTimeCalculater.startTask
+			("Inserting DAO in DB", NewSpecimenBizLogic.class);
+			dao.insert(specimen, sessionDataBean, false, false);
+			TaskTimeCalculater.endTask(insertDao);
 			//protectionObjects.add(specimen);
 
 			/*if (specimen.getSpecimenCharacteristics() != null)
@@ -632,7 +604,151 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			e.printStackTrace();
 			throw new DAOException(e.getMessage());
 		}
+		
+	}
 
+	/**
+	 * @param specimen
+	 * @throws DAOException
+	 */
+	private void generateBarCode(Specimen specimen) throws DAOException {
+		if(edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl )
+		{
+			//Setting Name from Id
+			if((specimen.getBarcode()==null || specimen.getBarcode().equals("") ) &&  !specimen.getIsCollectionProtocolRequirement())
+			{
+
+				try 
+				{
+					BarcodeGenerator spBarcodeGenerator = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
+					spBarcodeGenerator.setBarcode(specimen);
+				}
+				catch (BizLogicException e) 
+				{
+					throw new DAOException(e.getMessage());
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param specimen
+	 * @param externalIdentifierCollection
+	 */
+	private void setExternalIdentifiers(Specimen specimen,
+			Collection externalIdentifierCollection) {
+		if (externalIdentifierCollection != null)
+		{
+			if (externalIdentifierCollection.isEmpty()) //Dummy entry added for query
+			{
+				setEmptyExternalIdentifier(specimen,
+						externalIdentifierCollection);
+			}
+			else
+			{
+				setSpecimenToExternalIdentifier(specimen,
+						externalIdentifierCollection);
+			}
+		}
+		else
+		{
+			//Dummy entry added for query.
+			externalIdentifierCollection = new HashSet();
+			setEmptyExternalIdentifier(specimen,
+					externalIdentifierCollection);
+			specimen.setExternalIdentifierCollection(externalIdentifierCollection);
+		}
+	}
+
+	/**
+	 * @param specimen
+	 * @param dao
+	 * @param parentSpecimen
+	 * @throws DAOException
+	 */
+	private void setParentSCG(Specimen specimen, DAO dao,
+			Specimen parentSpecimen) throws DAOException {
+		if(parentSpecimen !=null)
+		{
+			if(parentSpecimen.getId()==null)
+			{
+				List parentSpecimenList = dao.retrieve(Specimen.class.getName(),"label",parentSpecimen .getLabel());
+				
+				if(parentSpecimenList!=null && !parentSpecimenList.isEmpty())
+				{
+					parentSpecimen =(Specimen) parentSpecimenList.get(0);
+				}
+			}
+			specimen.setParentSpecimen(parentSpecimen);
+			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
+
+		}
+		//End:- Change for API Search
+	}
+
+	/**
+	 * @param specimen
+	 * @throws DAOException
+	 */
+	private void generateLabel(Specimen specimen) throws DAOException {
+		/**
+		 * Name:Falguni Sachde
+		 * Reviewer: Sachin lale
+		 * Call Specimen label generator if automatic generation is specified 
+		 */
+		if(edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl )
+		{
+			//Setting Name from Id
+			if((specimen.getLabel()==null || specimen.getLabel().equals("") ) &&  !specimen.getIsCollectionProtocolRequirement())
+			{
+
+				try 
+				{
+					TaskTimeCalculater labelGen = TaskTimeCalculater.startTask
+					("Time required for label Generator",NewSpecimenBizLogic.class);
+
+					LabelGenerator spLblGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+					spLblGenerator.setLabel(specimen);
+					TaskTimeCalculater.endTask(labelGen);
+				}
+				catch (BizLogicException e) 
+				{
+					throw new DAOException(e.getMessage());
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param specimen
+	 * @param externalIdentifierCollection
+	 */
+	private void setSpecimenToExternalIdentifier(Specimen specimen,
+			Collection externalIdentifierCollection) {
+		/**
+		 *  Bug 3007 - Santosh
+		 */
+		Iterator it = externalIdentifierCollection.iterator();
+		while (it.hasNext())
+		{
+			ExternalIdentifier exId = (ExternalIdentifier) it.next();
+			exId.setSpecimen(specimen);
+			//					dao.insert(exId, sessionDataBean, true, true);
+		}
+	}
+
+	/**
+	 * @param specimen
+	 * @param externalIdentifierCollection
+	 */
+	private void setEmptyExternalIdentifier(Specimen specimen,
+			Collection externalIdentifierCollection) {
+		ExternalIdentifier exId = new ExternalIdentifier();
+
+		exId.setName(null);
+		exId.setValue(null);
+		exId.setSpecimen(specimen);
+		externalIdentifierCollection.add(exId);
 	}
 
 	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
@@ -2870,5 +2986,13 @@ private StorageContainer retrieveStorageContainerObject(DAO dao,
 		}
 		storageContainer = (StorageContainer)storageContainerList.get(0);
 		return storageContainer;
-	}	
+	}
+
+public boolean isCpbased() {
+	return cpbased;
+}
+
+public void setCpbased(boolean cpbased) {
+	this.cpbased = cpbased;
+}	
 }
