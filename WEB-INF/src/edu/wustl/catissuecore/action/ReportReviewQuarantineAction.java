@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,25 +11,21 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
-import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
-
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.factory.AbstractDomainObjectFactory;
-import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.Validator;
 
 /**
  * <p>Title: ReportReviewQuarantineAction Class>
@@ -54,6 +49,7 @@ public class ReportReviewQuarantineAction extends BaseAction
      */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 		String reportAction = request.getParameter(Constants.REPORT_ACTION);
 		String pageOf =(String)request.getParameter(Constants.PAGEOF);
 		if(reportAction==null)
@@ -61,6 +57,10 @@ public class ReportReviewQuarantineAction extends BaseAction
 			reportAction = (String)request.getAttribute(Constants.REPORT_ACTION);
 		}
 		List reportStatusList=getReportStatus(Constants.COMMENT_STATUS_RENDING,reportAction);
+		if(reportStatusList==null || reportStatusList.size()==0)
+		{
+			return mapping.findForward(Constants.NO_PENDING_REQUEST);
+		}
 		List finalDataList=null;
 		if(reportStatusList.size()>0)
 		{
@@ -74,34 +74,42 @@ public class ReportReviewQuarantineAction extends BaseAction
 			SurgicalPathologyReport surgicalPathologyReport=null;
 			String scgName=null;
 			Long reportId=null;
+			User user=null;
 			if(reportAction.equalsIgnoreCase(Constants.REVIEW))
 			{
 				reportObject = (PathologyReportReviewParameter)reportStatusList.get(iCount);
-				surgicalPathologyReport =(SurgicalPathologyReport)((PathologyReportReviewParameter)reportObject).getSurgicalPathologyReport();
+				surgicalPathologyReport = (SurgicalPathologyReport)defaultBizLogic.retrieveAttribute(PathologyReportReviewParameter.class.getName(), reportObject.getId(), "surgicalPathologyReport");
+//				surgicalPathologyReport =(SurgicalPathologyReport)((PathologyReportReviewParameter)reportObject).getSurgicalPathologyReport();
+				user = (User)defaultBizLogic.retrieveAttribute(PathologyReportReviewParameter.class.getName(), reportObject.getId(), "user");
 			}
 			else
 			{
 				reportObject = (QuarantineEventParameter)reportStatusList.get(iCount);
-				surgicalPathologyReport =(SurgicalPathologyReport)((QuarantineEventParameter)reportObject).getDeidentifiedSurgicalPathologyReport();
+				surgicalPathologyReport =(SurgicalPathologyReport)((QuarantineEventParameter)reportObject).getDeIdentifiedSurgicalPathologyReport();
+				user = (User)defaultBizLogic.retrieveAttribute(QuarantineEventParameter.class.getName(), reportObject.getId(), "user");
 			}
-			try
+			if(surgicalPathologyReport instanceof DeidentifiedSurgicalPathologyReport)
 			{
 				DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)surgicalPathologyReport;
-				scgName=deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getName();
+				scgName = (String)defaultBizLogic.retrieveAttribute(DeidentifiedSurgicalPathologyReport.class.getName(), deidentifiedSurgicalPathologyReport.getId(), "specimenCollectionGroup.name");
+				
 			}
-			catch(ClassCastException e) 
+			else
 			{
 				IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport =(IdentifiedSurgicalPathologyReport)surgicalPathologyReport;
-				scgName=identifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getName();
+				scgName = (String)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedSurgicalPathologyReport.getId(), "specimenCollectionGroup.name");
+				
 			}
-			witnessFullName = reportObject.getUser().getLastName()+", "+reportObject.getUser().getFirstName();
+			
+			witnessFullName = user.getLastName()+", "+user.getFirstName();
 			dataList.add(iCount+1);
 			dataList.add(reportObject.getTimestamp());
 			dataList.add(witnessFullName);
 			dataList.add(scgName);
 			dataList.add(reportObject.getId());
 			//dataList.add(surgicalPathologyReport.getAccessionNumber());
-			dataList.add(surgicalPathologyReport.getSource().getName());
+			Site reportSource=(Site)defaultBizLogic.retrieveAttribute(SurgicalPathologyReport.class.getName(), surgicalPathologyReport.getId(), "reportSource");
+			dataList.add(reportSource.getName());
 			finalDataList.add(dataList);
 		}
 		List columnList=columnNames();
@@ -217,7 +225,7 @@ public class ReportReviewQuarantineAction extends BaseAction
 		List columnList = new ArrayList();
 		columnList.add(Constants.IDENTIFIER_NO);
 		columnList.add(Constants.REQUEST_DATE);
-		columnList.add(Constants.USER_NAME);
+		columnList.add(Constants.USER_NAME_ADMIN_VIEW);
 		columnList.add(Constants.SCG_NAME);
 		columnList.add(Constants.IDENTIFIER);
 		columnList.add(Constants.ACCESSION_NO);
