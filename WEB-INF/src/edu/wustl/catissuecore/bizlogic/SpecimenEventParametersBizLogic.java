@@ -48,6 +48,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author mandar_deshmukh</p>
@@ -130,61 +131,69 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					Object[] whereColumnValue = null;
 					String joinCondition = null;
 					
-					if(transferEventParameters.getToStorageContainer().getId() == null)
+					storageContainerObj = transferEventParameters.getToStorageContainer();
+					if (storageContainerObj != null && (storageContainerObj.getId()!=null || storageContainerObj.getName()!=null))
 					{
-						storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
-						selectColumnName = new String[]{"id"};
-						whereColumnName = new String[]{"name"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-						whereColumnCondition = new String[]{"="};
-						whereColumnValue = new Object[]{transferEventParameters.getToStorageContainer().getName()};
-						joinCondition = null;
-						stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
-								joinCondition);
-						if (!stNamelist.isEmpty())
+						if(storageContainerObj.getId() == null)
 						{
-							storageContainerObj.setId((Long) (stNamelist.get(0)));
+							//storageContainerObj.setId(storageContainerObj.getId());
+							selectColumnName = new String[]{"id"};
+							whereColumnName = new String[]{"name"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+							whereColumnCondition = new String[]{"="};
+							whereColumnValue = new Object[]{transferEventParameters.getToStorageContainer().getName()};
+							joinCondition = null;
+							stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+									joinCondition);
+							if (!stNamelist.isEmpty())
+							{
+								storageContainerObj.setId((Long) (stNamelist.get(0)));
+							}
 						}
-					}
-					else
-					{
-						storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
-						selectColumnName = new String[]{"name"};
-						whereColumnName = new String[]{"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-						whereColumnCondition = new String[]{"="};
-						whereColumnValue = new Object[]{transferEventParameters.getToStorageContainer().getId()};
-						joinCondition = null;
-						stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
-								joinCondition);
-						if (!stNamelist.isEmpty())
+						else
 						{
-							storageContainerObj.setName((String) stNamelist.get(0));
+							//storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
+							selectColumnName = new String[]{"name"};
+							whereColumnName = new String[]{"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+							whereColumnCondition = new String[]{"="};
+							whereColumnValue = new Object[]{transferEventParameters.getToStorageContainer().getId()};
+							joinCondition = null;
+							stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+									joinCondition);
+							if (!stNamelist.isEmpty())
+							{
+								storageContainerObj.setName((String) stNamelist.get(0));
+							}
+							
 						}
 						
-					}
+						// check for closed StorageContainer
+						checkStatus(dao, storageContainerObj, "Storage Container");
+	
+						StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+								Constants.STORAGE_CONTAINER_FORM_ID);
+	
+						// --- check for all validations on the storage container.
+						storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), transferEventParameters
+								.getToPositionDimensionOne().toString(), transferEventParameters.getToPositionDimensionTwo().toString(), sessionDataBean,false);
+						
 					
-					// check for closed StorageContainer
-					checkStatus(dao, storageContainerObj, "Storage Container");
-
-					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
-							Constants.STORAGE_CONTAINER_FORM_ID);
-
-					// --- check for all validations on the storage container.
-					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), transferEventParameters
-							.getToPositionDimensionOne().toString(), transferEventParameters.getToPositionDimensionTwo().toString(), sessionDataBean,false);
-					
-					if (storageContainerObj != null)
-					{
 						//storageContainerObj.setHoldsSpecimenClassCollection(storageContainerBizLogic.getSpecimenClassList(storageContainerObj.getId().toString()));
 						//storageContainerObj.setCollectionProtocolCollection(storageContainerBizLogic.getCollectionProtocolList(storageContainerObj.getId().toString()));
 						
 						newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
-						specimen.setStorageContainer(storageContainerObj);
-						specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
-						specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
-					}					
+						
+					}
+					else
+					{
+						storageContainerObj = null;
+					}
+					specimen.setStorageContainer(storageContainerObj);
+					specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
+					specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
 					
 					
 					dao.update(proxySpecimen, sessionDataBean, true, true, false);
+					transferEventParameters.setToStorageContainer(storageContainerObj);
 				}
 				if (specimenEventParametersObject instanceof DisposalEventParameters)
 				{
@@ -194,7 +203,19 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 						disableSubSpecimens(dao, specimen.getId().toString());
 
 					}
-					Map disabledCont = new TreeMap();
+					Map disabledCont = null;
+					try
+					{
+						disabledCont = getContForDisabledSpecimenFromCache();
+					}
+					catch (Exception e1)
+					{
+						e1.printStackTrace();
+					}
+					if(disabledCont == null)
+					{
+						disabledCont = new TreeMap();
+					}
 					/**
 					 * Name: Virender Mehta
 					 * Reviewer: Sachin
@@ -258,7 +279,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		containerDetails.put(pos1Key, specimen.getPositionDimensionOne());
 		containerDetails.put(pos2Key, specimen.getPositionDimensionTwo());
 
-		disabledConts.put(container.getId().toString(), containerDetails);
+		disabledConts.put(specimen.getId().toString(), containerDetails);
 
 	}
 
@@ -272,6 +293,17 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			{
 				postInsertPerEvent(events.get(i), dao);
 			}
+			CatissueCoreCacheManager catissueCoreCacheManager;
+			try
+			{
+				catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+				catissueCoreCacheManager.removeObjectFromCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIEN);
+			}
+			catch (CacheException e)
+			{
+				Logger.out.debug(e.getMessage());
+			}
+			
 		}
 		else
 		{
@@ -570,10 +602,24 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
 				TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-				
+				Specimen specimen= (Specimen)dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, parameter.getSpecimen().getId()).get(0);
+				Long fromContainerId = (Long) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"storageContainer.id");
+				Integer pos1 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"positionDimensionOne");
+				Integer pos2 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"positionDimensionTwo");
+				if((fromContainerId == null && parameter.getFromStorageContainer() != null) || (fromContainerId != null && parameter.getFromStorageContainer() == null))
+				{
+					throw new DAOException("Specimen "+specimen.getLabel()+" had been moved to another location! Updated the locations. Please redo the transfers.");
+				}
+				else if((fromContainerId != null && parameter.getFromStorageContainer() != null) && 
+						!((fromContainerId.equals(parameter.getFromStorageContainer().getId()) && 
+								pos1.equals(parameter.getFromPositionDimensionOne())
+										&& pos2.equals(parameter.getFromPositionDimensionTwo()))))
+				{
+					throw new DAOException("Specimen "+specimen.getLabel()+" had been moved to another location! Updated the locations. Please redo the transfers.");
+				}
 				if (parameter.getToStorageContainer() != null && parameter.getToStorageContainer().getName() != null)				
 				{
-					Specimen specimen= (Specimen)dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, parameter.getSpecimen().getId()).get(0);
+					
 					StorageContainer storageContainerObj = parameter.getToStorageContainer();			
 					String sourceObjectName = StorageContainer.class.getName();
 					String[] selectColumnName = {"id"};

@@ -21,6 +21,7 @@
 				var text="";
 				var valueToSet = "";
 				var isFirstField = true;
+				var isFirstFieldDisabled = false;
 				for (i=0; i<fields.length;i++)
 				{
 					text = fields[i].name;
@@ -28,12 +29,56 @@
 					{
 						if(isFirstField)
 						{
-							valueToSet = fields[i].value;
+							if(!fields[i].disabled)
+							{
+								valueToSet = fields[i].value;
+							}
+							else
+							{
+								valueToSet = "";
+								isFirstFieldDisabled = true;								
+							}
 							isFirstField = false;
 						}
+						if(isFirstFieldDisabled)
+						{
+							fields[i].disabled = true;
+						}
+						else 
+						{
+							fields[i].disabled = false;
+						}
+						
 						fields[i].value = valueToSet;
+						
+						
+					}
+					else if(text.indexOf("_TOVirLoc")>=0)
+					{
+						if(isFirstFieldDisabled)
+						{
+							fields[i].checked = true;
+						}
+						else
+						{
+							fields[i].checked = false;
+						}
 					}
 				}
+			}
+		}
+		
+		function virtualLocationSelChanged(specimenId)
+		{
+			if(document.getElementById("VirLocChk"+specimenId).checked)
+			{
+				document.getElementById("SelCont"+specimenId).value = "";
+				document.getElementById("SelCont"+specimenId).disabled = true;
+			}
+			else
+			{
+				document.getElementById("SelCont"+specimenId).value = "";
+				document.getElementById("SelCont"+specimenId).disabled = false;
 			}
 		}
 	
@@ -77,6 +122,10 @@
 					String pos2Id = "Pos2Id"+specimenId;
 					
 					String specimenList = "specimenId("+specimenId+")";
+					String specimenToVirLocField = "fieldValue(ID_"+specimenId+"_TOVirLoc)";
+					String methodCall = "virtualLocationSelChanged("+specimenId+")";
+					String virLoc = "VirLocChk"+specimenId;
+										
 				%>
 				<tr>
 					
@@ -97,14 +146,26 @@
 						</label>
 						<!--html:text styleId="<%=containerId%>" property="<%=specimenFromLocField%>" readonly="true" /-->
 					</td>
+					
+					<!-- To Container Field starts -->
+					
+					
 					<td class="formField">
-						<html:text styleId="<%=selContainerId%>" property="<%=specimenToSCLabelField%>" disabled="false" />			
-					</td>
+						<logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >
+							<html:text styleId="<%=selContainerId%>" property="<%=specimenToSCLabelField%>" disabled="true" />			
+						</logic:equal>
+						<logic:notEqual name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >
+							<html:text styleId="<%=selContainerId%>" property="<%=specimenToSCLabelField%>" disabled="false" />			
+						</logic:notEqual>
+						<html:checkbox styleId="<%=virLoc%>" property="<%=specimenToVirLocField%>" onclick="<%=methodCall%>" value="true"/> Is virtually located
+					</td>					
+					<!-- To Container Field ends -->
+					
 					<!--td>
 						<html:text styleId="<%=pos1Id%>" property="<%=specimenToSCPos1Field%>" disabled="false" />			
 					</td>
 					<td>
-						<html:text styleId="<%=pos2Id%>" property="<%=specimenToSCPos2Field%>" disabled="false" />			
+						<html:text styleId="<%=pos2Id%>" property="<%=specimenToSCPos2Field%>" disabled="false" />
 					</td>
 					<td>
 	

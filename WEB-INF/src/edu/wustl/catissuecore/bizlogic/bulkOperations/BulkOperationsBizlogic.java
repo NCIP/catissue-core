@@ -129,7 +129,7 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 			disposalEventParameters = new DisposalEventParameters();
 			specimenId = (String) specimenIds.get(i); 
 			setCommonEventParameters(specimenId, userId, dateOfEvent, timeInHours, timeInseconds, comments, disposalEventParameters, i);
-			disposalEventParameters.setActivityStatus(eventSpecificData.get("ID_" + specimenId + "_STATUS"));
+			disposalEventParameters.setActivityStatus(eventSpecificData.get("ID_ALL_STATUS"));
 			disposalEventParameters.setReason(eventSpecificData.get("ID_ALL_REASON"));
 			events.add(disposalEventParameters);
 		}
