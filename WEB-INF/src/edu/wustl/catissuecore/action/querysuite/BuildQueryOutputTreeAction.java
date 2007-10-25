@@ -52,14 +52,16 @@ public class BuildQueryOutputTreeAction extends BaseAction
 		String treeNodeId = nodeIds[1]; 
 		String uniqueId = treeNo+"_"+treeNodeId;
 		OutputTreeDataNode parentNode = idNodesMap.get(uniqueId);
+		String randomNumber =(String)session.getAttribute("randomNumber");
 		if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
 		{
-			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(nodeId,idNodesMap,sessionData);
+			
+			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(nodeId,idNodesMap,sessionData,randomNumber);
 		}
 		else
 		{
 			String data = nodeIds[2];
-			outputTreeStr = outputTreeBizLogic.updateTreeForDataNode(nodeId,parentNode, data, sessionData);	
+			outputTreeStr = outputTreeBizLogic.updateTreeForDataNode(nodeId,parentNode, data, sessionData,randomNumber);	
 		}
 		response.setContentType("text/html");
 		response.getWriter().write(outputTreeStr);

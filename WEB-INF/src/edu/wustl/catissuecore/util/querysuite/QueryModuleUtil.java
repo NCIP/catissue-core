@@ -385,7 +385,28 @@ public abstract class QueryModuleUtil
 				if (obj != null)
 				{
 					SessionDataBean sessionData = (SessionDataBean) obj;
-					outputTreeBizLogic.createOutputTreeTable(selectSql, sessionData);
+					String propertyValue = XMLPropertyHandler.getValue("multiuser");
+					
+					String randomNumber="";
+					if(propertyValue!=null)
+					{
+							if(session.getAttribute("randomNumber")==null)
+							{
+								int number =(int) (Math.random()*100000);
+								if(propertyValue.equalsIgnoreCase("true"))
+								{
+									randomNumber ="_"+Integer.toString(number);
+								}
+								session.setAttribute("randomNumber",randomNumber);
+									
+							}
+							else
+							{
+								randomNumber = (String)session.getAttribute("randomNumber");
+							}
+						
+					}
+					outputTreeBizLogic.createOutputTreeTable(selectSql,sessionData,randomNumber);
 					List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator
 							.getRootOutputTreeNodeList();
 					
@@ -394,7 +415,7 @@ public abstract class QueryModuleUtil
 					for (OutputTreeDataNode outnode : rootOutputTreeNodeList)
 					{
 						Vector<QueryTreeNodeData> treeData = outputTreeBizLogic
-								.createDefaultOutputTreeData(i, outnode, sessionData);
+								.createDefaultOutputTreeData(i, outnode, sessionData,randomNumber);
 						int resultsSize = treeData.size();
 						System.out.println("resultsSize    :"+resultsSize);
 						if(option == null)
@@ -454,7 +475,7 @@ public abstract class QueryModuleUtil
 					selectedColumnsMetadata.setDefinedView(false);
 					Map<String, List<String>> spreadSheetDatamap = outputSpreadsheetBizLogic
 							.createSpreadsheetData(treeNo, node, sessionData, parentNodeId,
-									recordsPerPage, selectedColumnsMetadata);
+									recordsPerPage, selectedColumnsMetadata,randomNumber);
 
 					// Changes added by deepti for performance change
 					QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap
@@ -473,10 +494,11 @@ public abstract class QueryModuleUtil
 							.get(Constants.SELECTED_COLUMN_META_DATA));
 					
 				}
-				else
-				{
-					status = EMPTY_DAG;
-				}
+				
+			}
+			else
+			{
+				status = EMPTY_DAG;
 			}
 		}
 		catch (MultipleRootsException e)
@@ -501,4 +523,5 @@ public abstract class QueryModuleUtil
 		}
 		return status;
 	}
+	
 }

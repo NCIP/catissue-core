@@ -26,7 +26,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
  * Creates QueryOutputTree Table.
  * @author deepti_shelar
  */
-public class QueryOutputTreeBizLogic
+public class QueryOutputTreeBizLogic		
 {
 	private static long lastId = 0; 
 	/**
@@ -36,9 +36,9 @@ public class QueryOutputTreeBizLogic
 	 * @param String tableName 
 	 * @throws Exception Exception
 	 */
-	public void createOutputTreeTable(String selectSql, SessionDataBean sessionData) throws DAOException
+	public void createOutputTreeTable(String selectSql, SessionDataBean sessionData,String randomNumber) throws DAOException
 	{
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
 		String createTableSql = Constants.CREATE_TABLE + tableName + " " + Constants.AS + " " + selectSql;
 		QueryModuleUtil.executeCreateTable(tableName, createTableSql, sessionData);
 	}
@@ -71,9 +71,9 @@ public class QueryOutputTreeBizLogic
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(int treeNo,OutputTreeDataNode root, SessionDataBean sessionData) throws DAOException, ClassNotFoundException
+	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(int treeNo,OutputTreeDataNode root, SessionDataBean sessionData,String randomNumber) throws DAOException, ClassNotFoundException
 			{
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId();
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId()+randomNumber;
 		String selectSql = QueryModuleUtil.getSQLForRootNode(root, tableName);
 		String[] sqlIndex = selectSql.split(Constants.NODE_SEPARATOR);
 		selectSql = sqlIndex[0];
@@ -207,9 +207,10 @@ public class QueryOutputTreeBizLogic
 	 * @throws DAOException DAOException
 	 */
 	public String updateTreeForDataNode(String id, OutputTreeDataNode node,
-			String parentNodeId, SessionDataBean sessionData) throws ClassNotFoundException, DAOException
+			String parentNodeId, SessionDataBean sessionData,
+			String randomNumber) throws ClassNotFoundException, DAOException
 			{
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId();
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId()+randomNumber;
 		String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(node);
 		List<OutputTreeDataNode> children = node.getChildren();
 		String outputTreeStr = "";
@@ -279,10 +280,10 @@ public class QueryOutputTreeBizLogic
 	 * String for one node is comma seperated for its id, display name, object name , parentId, parent Object name.
 	 * Such string elements for child nodes are seperated by "|".
 	 */
-	public String updateTreeForLabelNode(String nodeId, Map<Long, OutputTreeDataNode> idNodeMap, SessionDataBean sessionData)
+	public String updateTreeForLabelNode(String nodeId, Map<Long, OutputTreeDataNode> idNodeMap, SessionDataBean sessionData,String randomNumber)
 	throws ClassNotFoundException, DAOException
 	{
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
 		String selectSql = "";
 		int index = -1;
 

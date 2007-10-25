@@ -47,13 +47,13 @@ public class QueryOutputSpreadsheetBizLogic
 	public Map processSpreadsheetForLabelNode(Map<String, OutputTreeDataNode> idNodesMap,
 			List<OutputTreeDataNode> rootOutputTreeNodeList, 
 			Map<Long, Map<AttributeInterface, String>> columnMap, 
-			SessionDataBean sessionData, String idOfClickedNode, int recordsPerPage,SelectedColumnsMetadata selectedColumnMetaData)
+			SessionDataBean sessionData, String idOfClickedNode, int recordsPerPage,SelectedColumnsMetadata selectedColumnMetaData,String randomNumber)
 	throws DAOException, ClassNotFoundException
 	{
 		this.selectedColumnMetaData = selectedColumnMetaData;
 		DefineGridViewBizLogic defineGridViewBizLogic = new DefineGridViewBizLogic();
 		Map spreadSheetDataMap = new HashMap();
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
 		String[] nodeIds = idOfClickedNode.split(Constants.NODE_SEPARATOR);
 		String parentNode = nodeIds[0];//data
 		String[] spiltParentNodeId = parentNode.split(Constants.UNDERSCORE);
@@ -62,7 +62,7 @@ public class QueryOutputSpreadsheetBizLogic
 		if(parentNode.contains("NULL"))
 		{
 			OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(rootOutputTreeNodeList,treeNo);
-			spreadSheetDataMap = createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage,this.selectedColumnMetaData);
+			spreadSheetDataMap = createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage,this.selectedColumnMetaData,randomNumber);
 			this.selectedColumnMetaData.setCurrentSelectedObject(root);
 		} else
 		{
@@ -100,7 +100,7 @@ public class QueryOutputSpreadsheetBizLogic
 	 */
 	public Map processSpreadsheetForDataNode(Map<String, OutputTreeDataNode> idNodesMap,
 			List<OutputTreeDataNode> rootOutputTreeNodeList, SessionDataBean sessionData, String actualParentNodeId,
-			int recordsPerPage,SelectedColumnsMetadata selectedColumnMetaData)
+			int recordsPerPage,SelectedColumnsMetadata selectedColumnMetaData,String randomNumber)
 	throws DAOException, ClassNotFoundException
 	{
 		this.selectedColumnMetaData = selectedColumnMetaData;
@@ -115,7 +115,7 @@ public class QueryOutputSpreadsheetBizLogic
 		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
 		if(! selectedColumnMetaData.isDefinedView())
 			 defineGridViewBizLogic.getColumnsMetadataForSelectedNode(parentNode,this.selectedColumnMetaData);
-		spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage,this.selectedColumnMetaData);
+		spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage,this.selectedColumnMetaData,randomNumber);
 		/*if (parentNode.getChildren().isEmpty())
 		{
 			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
@@ -141,11 +141,11 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @throws DAOException  DAOException 
 	 */
 	public Map<String, List<String>> createSpreadsheetData(String treeNo,OutputTreeDataNode node,
-			 SessionDataBean sessionData,String parentData,int recordsPerPage, SelectedColumnsMetadata selectedColumnsMetadata) throws DAOException,
+			 SessionDataBean sessionData,String parentData,int recordsPerPage, SelectedColumnsMetadata selectedColumnsMetadata,String randomNumber) throws DAOException,
 			ClassNotFoundException
 			{
 		this.selectedColumnMetaData = selectedColumnsMetadata;
-		Map spreadSheetDataMap = updateSpreadsheetData(sessionData, parentData,  node,recordsPerPage);
+		Map spreadSheetDataMap = updateSpreadsheetData(sessionData, parentData,node,recordsPerPage,randomNumber);
 		spreadSheetDataMap.put(Constants.SELECTED_COLUMN_META_DATA,this.selectedColumnMetaData);
 		return spreadSheetDataMap;
 			}
@@ -159,10 +159,10 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @throws ClassNotFoundException
 	 * @throws DAOException
 	 */
-	private Map updateSpreadsheetData(SessionDataBean sessionData, String parentData, OutputTreeDataNode node, int recordsPerPage) throws ClassNotFoundException, DAOException
+	private Map updateSpreadsheetData(SessionDataBean sessionData, String parentData, OutputTreeDataNode node, int recordsPerPage,String randomNumber) throws ClassNotFoundException, DAOException
 	{
 		Map spreadSheetDataMap = new HashMap();
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
 		String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(node);
 		String selectSql = createSQL(parentData, tableName, spreadSheetDataMap, parentIdColumnName, node);
 		int startIndex = 0;

@@ -55,13 +55,14 @@ public class ShowGridAction extends BaseAction
 		int recordsPerPage = new Integer(recordsPerPageStr);
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		String actualParentNodeId = idOfClickedNode.substring(idOfClickedNode.lastIndexOf(Constants.NODE_SEPARATOR) + 2, idOfClickedNode.length());
+		String randomNumber = (String)session.getAttribute("randomNumber");
 		if (idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
 		{
-			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode,recordsPerPage,selectedColumnsMetadata);
+			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode,recordsPerPage,selectedColumnsMetadata,randomNumber);
 		}
 		else
 		{
-			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,recordsPerPage,selectedColumnsMetadata);
+			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,recordsPerPage,selectedColumnsMetadata,randomNumber);
 		}
 		QueryModuleUtil.setGridData(request, spreadSheetDatamap);
 		return mapping.findForward(Constants.SUCCESS);
