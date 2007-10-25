@@ -31,12 +31,13 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 	//Cleanup after session invalidates.
 	public void sessionDestroyed(HttpSessionEvent arg0) {
 		HttpSession session = arg0.getSession();
-		
+	
 		SessionDataBean sessionData= (SessionDataBean)session.getAttribute(Constants.SESSION_DATA);
+		
 		if(sessionData!=null)
-			cleanUp(sessionData);
+			cleanUp(sessionData,(String)session.getAttribute("randomNumber"));
 	}
-    private void cleanUp(SessionDataBean sessionData)
+    private void cleanUp(SessionDataBean sessionData,String randomNumber)
     {
 		//Delete Advance Query table if exists
 	 	//Advance Query table name with userID attached
@@ -52,7 +53,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 		{
 			Logger.out.error("Could not delete the Advance Search temporary table."+ex.getMessage(),ex);
 		}
-		String tempTableNameForQuery = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
+		String tempTableNameForQuery = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
 		try
 		{
 			JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
