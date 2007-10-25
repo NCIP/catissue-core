@@ -59,7 +59,10 @@ public class WithdrawConsentUtil
 			newScgStatusCollection.add(consentTierstatus );	// set updated consenttierstatus in scg
 		}
 		scg.setConsentTierStatusCollection( newScgStatusCollection);
-		scg.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+		if(!(withdrawOption.equals(Constants.WITHDRAW_RESPONSE_RESET)))
+		{	
+			scg.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+		}
 	}
 	
 	/**

@@ -33,7 +33,14 @@ function getButtonStatus(element)
 	}
 	else
 	{
-		answer= confirm("Are you sure you want to return Specimen to Collection Site?");	
+		if(element.value=="<%=Constants.WITHDRAW_RESPONSE_RESET%>")
+		{
+			answer= confirm("Are you sure you don't want to perform any action on the specimen?");	
+		}
+		else
+		{
+			answer= confirm("Are you sure you want to return Specimen to Collection Site?");	
+		}
 	}
 	if(answer)
 	{
