@@ -298,3 +298,21 @@
 		</td>
 </tr>
 
+<!-- menu id : 14 Pending Report Requests: Vijay -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 14, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
+<tr>
+	<%=strMouseOut%>
+		<div>
+			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->
+				<b><bean:message key="app.pendingrequests" /></b>
+		</div>
+        <div>
+			<a class="subMenuPrimary" href="ReviewRequests.do?reportAction=review&pageNum=1&pageOf=pageOfReviewSPR&menuSelected=14"><bean:message key="app.review" /></a> | 
+			<a class="subMenuPrimary" href="QuarantineRequests.do?reportAction=quarantine&pageNum=1&pageOf=pageOfQuarantineSPR&menuSelected=14" ><bean:message key="app.quarantine" /></a>
+		</div>
+
+		</td>
+</tr>
+
