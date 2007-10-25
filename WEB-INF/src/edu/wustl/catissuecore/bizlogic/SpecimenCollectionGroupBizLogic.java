@@ -185,7 +185,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		if (!specimenCollectionGroup.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
 		{
 			verifyAndUpdateConsentWithdrawn(specimenCollectionGroup, oldspecimenCollectionGroup, dao, sessionDataBean);
-			specimenCollectionGroup.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+					
 		}
 		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) end
 		//Mandar 24-Jan-07 To update consents accordingly in SCG and Specimen(s) start
