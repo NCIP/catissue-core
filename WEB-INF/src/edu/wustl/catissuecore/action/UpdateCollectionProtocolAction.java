@@ -51,7 +51,7 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 				HttpSession session = request.getSession();
 				SessionDataBean sessionDataBean = (SessionDataBean)
 								session.getAttribute(Constants.SESSION_DATA);
-				
+				collectionProtocol.setCollectionProtocolRegistrationCollection(oldCollectionProtocol.getCollectionProtocolRegistrationCollection());
 				bizLogic.update(collectionProtocol, oldCollectionProtocol, 
 						Constants.HIBERNATE_DAO, sessionDataBean);
 			}

@@ -223,11 +223,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		
 		isCollectionProtocolLabelUnique(collectionProtocol);
 		CollectionProtocol collectionProtocolOld = getOldCollectionProtocol(collectionProtocol);
-		if(collectionProtocolOld.getCollectionProtocolRegistrationCollection().size()>0&&collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+		int consentCount = collectionProtocol.getConsentTierCollection().size();
+		int consentCountOld = collectionProtocolOld.getConsentTierCollection().size();
+		if(collectionProtocolOld.getCollectionProtocolRegistrationCollection().size()>0&&collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE)&& consentCount==consentCountOld)
 		{
-			throw new DAOException("Unable to update, Participants are already registered under this Collection protocol");
+			throw new DAOException("Unable to update, Only Consents can be added under this Collection protocol");
 		}
-		
 		if (!collectionProtocol.getPrincipalInvestigator().getId().equals(collectionProtocolOld.getPrincipalInvestigator().getId()))
 		{
 			checkStatus(dao, collectionProtocol.getPrincipalInvestigator(),"Principal Investigator");
@@ -1301,6 +1302,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				Collection<CollectionProtocolEvent> collectionEventCollection = 
 					collectionProtocol.getCollectionProtocolEventCollection();
 				Iterator<CollectionProtocolEvent> cpIterator = collectionEventCollection.iterator();
+				Collection collectinProtocolRegistration = collectionProtocol.getCollectionProtocolRegistrationCollection();
 				while (cpIterator.hasNext())
 				{
 					CollectionProtocolEvent collectionProtocolEvent =
