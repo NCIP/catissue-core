@@ -1,8 +1,9 @@
 package edu.wustl.catissuecore.print;
 
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import java.util.List;
+
 import gov.nih.nci.security.authorization.domainobjects.User;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
  * This Interface is used to declare method for label printing
@@ -10,10 +11,7 @@ import gov.nih.nci.security.authorization.domainobjects.User;
  */
 public interface LabelPrinter {
 
-	public boolean printLabel(SpecimenCollectionGroup scgObj, String ipAddress, User userObj);
+	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj);	
 	
-	public boolean printLabel(Specimen specimenObj, String ipAddress, User userObj);
-	
-	public boolean printLabel(Specimen[] specimenObj, String ipAddress, User userObj);
-
+	public boolean printLabel(List<AbstractDomainObject> abstractDomainObject, String ipAddress, User userObj);	
 }
