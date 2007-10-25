@@ -178,7 +178,7 @@
 					String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 							+ "&" + Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE +"=" + arrayTypeId;
 							
-					String buttonOnClicked = "mapButtonClickedOnSpecimen('"+frameUrl+"')";  		
+					String buttonOnClicked = "mapButtonClickedOnNewSpecimen('"+frameUrl+"')";  		
 					// String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";
 					String noOfEmptyCombos = "3";
 					
