@@ -79,6 +79,9 @@ function withdrawAll(element)
 <%--Popup Window will open up on calling this function--%>	
 function popupWindow(nofConsentTiers)
 {
+	<%
+		List specimenList = (List)session.getAttribute(Constants.SPECIMEN_LIST);
+	%>
 	var withdraw = "<%=form.getConsentTierMap()%>";
 	var iCount=nofConsentTiers;
 	for(var i=0;i<nofConsentTiers;i++)
@@ -130,8 +133,20 @@ function popupWindow(nofConsentTiers)
 		else
 		{
 			submitString();
-			var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=nowithdraw&pageOf="+"<%=pageOf%>";
-			window.open(url,'WithdrawAll','height=200,width=550,scrollbars=1,resizable=1');
+			<%	
+			if(specimenList.size()>1 || !(pageOf.equals("pageOfNewSpecimenCPQuery")))
+			{
+			%>	
+		
+				var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=nowithdraw&pageOf="+"<%=pageOf%>";
+				window.open(url,'WithdrawAll','height=200,width=550,scrollbars=1,resizable=1');
+			<%}
+			else
+			{%>
+				document.forms[0].action="<%=Constants.CP_QUERY_SPECIMEN_EDIT_ACTION%>";
+				document.forms[0].submit();
+			<%}
+			%>
 		}
 		
 	}	
