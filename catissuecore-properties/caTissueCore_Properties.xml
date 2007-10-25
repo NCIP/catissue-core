@@ -398,5 +398,11 @@
 		<name>xmlfile.dynamicUI</name>
 		<value>dynamicUI.xml</value>
 	</property>
+	
+	<!-- property for Crating Multiple temporary tables for multi-user -->
+	<property>
+		<name>multiuser</name>
+		<value>true</value>
+	</property>
 
 </properties>
