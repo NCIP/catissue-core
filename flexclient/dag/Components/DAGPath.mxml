@@ -200,15 +200,7 @@
 				var node2:String=dagPath.destinationExpId+"";
 				var dagNode1:DAGNode = DAGNode(this.parent.getChildByName(node1));
 				var dagNode2:DAGNode = DAGNode(this.parent.getChildByName(node2));
-				if(this.parentApplication.view==DAGConstants.RESULT_VIEW)
-				{
-					deletePath(dagNode1,dagNode2);
-				}
-				else
-				{
-					deletePath(dagNode1,dagNode2);
-				}
-					
+				deletePath(dagNode1,dagNode2);
 			}
 				
 		}

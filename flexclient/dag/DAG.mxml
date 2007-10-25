@@ -427,7 +427,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 							showValidationMessagesToUser(DAGConstants.NO_RESULT_PRESENT_MESSAGE);
 							break;
 			case DAGConstants.EMPTY_DAG:
-							ExternalInterface.call("showErrorPage");
+							showValidationMessagesToUser(DAGConstants.EMPTY_DAG_MESSAGE);
 							break;
 			case DAGConstants.MULTIPLE_ROOT:
 							showValidationMessagesToUser(DAGConstants.MULTIPLE_ROOT_MESSAGE);
@@ -770,8 +770,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				{
 					if(selectedNodeList!=null)
 					{
-						var index:int =node1 as int;
-
 						if(selectedNodeList.length==2)
 						{
 							selectedNodeList.removeItemAt(0);
@@ -793,7 +791,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				{
 					if(selectedNodeList!=null)
 					{
-						var index:int =node2 as int;
 						selectedNodeList.removeItemAt(1);
 						count--;
 					}
@@ -826,7 +823,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 										
 					if(count<2)
 					{
-						var index:int = dagNode.name as int;
 						selectedNodeList.addItem(dagNode);
 					}
 					count++;

@@ -31,5 +31,6 @@ package Components
 		public static var NO_RESULT_PRESENT_MESSAGE:String="<li><font color='blue' family='arial,helvetica,verdana,sans-serif'>Zero records found for this query.</font></li>"
 		public static var EDIT_LIMITS_MESSAGE:String = "<li><font color='blue'>Limit succesfully edited.</font></li>";
 		public static var DELETE_LIMITS_MESSAGE:String = "<li><font color='blue'>Limit succesfully deleted.</font></li>";
+		public static var EMPTY_DAG_MESSAGE:String = "<li><font color='blue' family='arial,helvetica,verdana,sans-serif'>DAG is empty.</font></li>";
 	}
 }
