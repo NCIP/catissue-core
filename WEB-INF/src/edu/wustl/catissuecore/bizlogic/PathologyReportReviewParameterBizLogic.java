@@ -70,17 +70,14 @@ public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws Exception 
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) 
 	{
 		try
 		{
 			PathologyReportReviewParameter oldreviewParam = (PathologyReportReviewParameter) oldObj;
 			PathologyReportReviewParameter newreviewParam = (PathologyReportReviewParameter) obj;
-			if(newreviewParam.getUser().getId()==null){
-				dao.insert(newreviewParam.getUser(), sessionDataBean, false, false);	
-			}
 			oldreviewParam.setStatus(Constants.COMMENT_STATUS_REVIEWED);
 			dao.update(oldreviewParam, sessionDataBean, true, false, false);
 			newreviewParam.setStatus(Constants.COMMENT_STATUS_REPLIED);

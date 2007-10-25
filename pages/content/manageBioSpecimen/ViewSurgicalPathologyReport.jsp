@@ -29,7 +29,6 @@
    		
 		if(objAbsForm != null && objAbsForm instanceof ViewSurgicalPathologyReportForm)
 		{
-			formName=Constants.VIEW_SPR_ACTION;
 			formSPR=(ViewSurgicalPathologyReportForm)objAbsForm;
 			mapPMI = formSPR.getValues();
 			noOfRowsPMI = formSPR.getCounter();
@@ -103,7 +102,7 @@
 	}
 	</style>
 </head>
-<html:form action="ViewSurgicalPathologyReport">
+<html:form action="<%=Constants.VIEW_SPR_ACTION%>">
 <!-- Main table start -->
 <table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  style="table-layout:fixed" width="650" >
 	 <tr>
@@ -173,7 +172,7 @@
 				</tr>
 				<%
 				String requestFor=(String)request.getParameter(Constants.REQUEST_FOR);
-				if(requestFor!=null||pageOf.equals(Constants.REVIEW_SPR)||pageOf.equals(Constants.QUARANTINE_SPR)||requestFor!=null)
+				if(requestFor!=null||pageOf.equals(Constants.PAGEOF_REVIEW_SPR)||pageOf.equals(Constants.PAGEOF_QUARANTINE_SPR)||requestFor!=null)
 				{
 				%>
 					<tr>
@@ -479,14 +478,14 @@
 				<td colspan="2" align="right">
 <%
 	pageOf=request.getParameter(Constants.PAGEOF);
-	if(pageOf.equals(Constants.REVIEW_SPR))
+	if(pageOf.equals(Constants.PAGEOF_REVIEW_SPR))
 	{
 %>
 		<input type="button" name="doneButton" style="actionButton" value="Finish Review " onclick="finishReview()"/>
 		
 <%					
 	}
-	else if(pageOf.equals(Constants.QUARANTINE_SPR))
+	else if(pageOf.equals(Constants.PAGEOF_QUARANTINE_SPR))
 	{
 %>
 		

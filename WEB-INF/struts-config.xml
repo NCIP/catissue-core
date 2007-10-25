@@ -685,8 +685,8 @@ PUBLIC
 			name="viewSurgicalPathologyReportForm"
 			validate="false"
 			scope="request">
-			<forward name="reviewSPR" path=".catissuecore.ViewSPR" />
-			<forward name="quarantineSPR" path=".catissuecore.ViewSPR" />
+			<forward name="pageOfReviewSPR" path=".catissuecore.ViewSPR" />
+			<forward name="pageOfQuarantineSPR" path=".catissuecore.ViewSPR" />
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupViewSPRDef" />
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.specimenCollectionGroupEditViewSPRDef" />
 			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenViewSPRDef" />
@@ -709,6 +709,17 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path="/ViewSurgicalPathologyReport.do?operation=viewSPR" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/SPRAdminComment"
+			type="edu.wustl.catissuecore.action.SPRCommentAddEditAction"
+			name="viewSurgicalPathologyReportForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/ViewSurgicalPathologyReport.do?operation=viewSPR" />
+			<forward name="review" path="/ReviewRequests.do?reportAction=review&amp;pageNum=1&amp;pageOf=pageOfReviewSPR&amp;menuSelected=14" />
+			<forward name="quarantine" path="/QuarantineRequests.do?reportAction=quarantine&amp;pageNum=1&amp;pageOf=pageOfQuarantineSPR&amp;menuSelected=14" />
 			<forward name="failure" path="/error.jsp" />
 		</action>
 		
@@ -805,6 +816,7 @@ PUBLIC
 				 validate="false"
 				 scope="request">	 
 				 <forward name="success" path=".catissuecore.ReviewQuarantineRequests"/>
+				 <forward name="noPendingRequest" path=".catissuecore.NoPendingSPRRequest"/>
 		</action>
 		
 		<action path="/QuarantineRequests" 
@@ -813,6 +825,7 @@ PUBLIC
 				 validate="false"
 				 scope="request">	 
 				 <forward name="success" path=".catissuecore.ReviewQuarantineRequests" />
+				 <forward name="noPendingRequest" path=".catissuecore.NoPendingSPRRequest"/>
 		</action>
 		<!-- caTIES end-->
 			

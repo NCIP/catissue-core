@@ -5,6 +5,7 @@ import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
 import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -103,7 +104,7 @@ public class QuarantineEventParameter extends EventParameters
 	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
 	 * 
 	 */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException 
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException 
 	{
 		ViewSurgicalPathologyReportForm form=(ViewSurgicalPathologyReportForm)abstractForm;
     	

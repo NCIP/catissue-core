@@ -1962,13 +1962,14 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	USER_NAME_ADMIN_VIEW="User Name";
 	public static final String 	SCG_NAME="Specimen Collection Group";
 	public static final String 	ACCESSION_NO="Accession Number";
-	public static final String  REVIEW_SPR="reviewSPR";
-	public static final String  QUARANTINE_SPR="quarantineSPR";
+	public static final String  PAGEOF_REVIEW_SPR="pageOfReviewSPR";
+	public static final String  PAGEOF_QUARANTINE_SPR="pageOfQuarantineSPR";
 	public static final String  SITE="Site";
 	public static final String  REQUEST_FOR="requestFor";
 	public static final String  REPORT_ACTION="reportAction";
 	public static final String  REPORT_STATUS_LIST="reportStatusList";
 	public static final String  COLUMN_LIST="columnList";
+	public static final String  NO_PENDING_REQUEST="noPendingRequest";
 
 	//Surgical Pathology Report UI constants
 	public static final String VIEW_SPR_ACTION="ViewSurgicalPathologyReport.do";
@@ -1977,8 +1978,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP="pageOfSpecimenCollectionGroup";
 	public static final String PAGEOF_PARTICIPANT="pageOfParticipant";
 	public static final String PAGEOF_NEW_SPECIMEN="pageOfNewSpecimen";
-	public static final String REVIEW="REVIEW";
-	public static final String QUARANTINE="QUARANTINE";
+	public static final String REVIEW="review";
+	public static final String QUARANTINE="quarantine";
 	public static final String COMMENT_STATUS_RENDING="PENDING";
 	public static final String COMMENT_STATUS_REVIEWED="REVIEWED";
 	public static final String COMMENT_STATUS_REPLIED="REPLIED";

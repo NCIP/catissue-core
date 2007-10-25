@@ -164,7 +164,7 @@
             table="CATISSUE_QUARANTINE_PARAMS"
             lazy="false"
             inverse="false"
-            cascade="all"
+            cascade="none"
             sort="unsorted"
         >
 

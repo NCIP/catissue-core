@@ -104,7 +104,7 @@ function finishReview()
 	{
 		document.forms[0].submittedFor.value='review';
 		document.forms[0].forwardTo.value='success';
-		var action="SurgicalPathologyReportEventParam.do?operation=edit&requestFor=REVIEW"
+		var action="SPRAdminComment.do?operation=edit&requestFor=review&onSubmit=review"
 		document.forms[0].action=action;
 		document.forms[0].submit();
 	}
@@ -116,7 +116,7 @@ function submitAcceptComments()
 	{
 		document.forms[0].submittedFor.value='quarantine';
 		document.forms[0].forwardTo.value='success';
-		var action="SurgicalPathologyReportEventParam.do?operation=edit&requestFor=ACCEPT"
+		var action="SPRAdminComment.do?operation=edit&requestFor=ACCEPT&onSubmit=quarantine"
 		document.forms[0].acceptReject.value=1;
 		document.forms[0].action=action;
 		document.forms[0].submit();
@@ -129,7 +129,7 @@ function submitRejectComments()
 	{
 		document.forms[0].submittedFor.value='quarantine';
 		document.forms[0].forwardTo.value='success';
-		var action="SurgicalPathologyReportEventParam.do?operation=edit&requestFor=REJECT"
+		var action="SPRAdminComment.do?operation=edit&requestFor=REJECT&onSubmit=quarantine"
 		document.forms[0].acceptReject.value=2;
 		document.forms[0].action=action;
 		document.forms[0].submit();

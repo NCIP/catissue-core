@@ -618,7 +618,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public int getFormId()
 	{	
-		if(this.submittedFor.equalsIgnoreCase("quarantine"))
+		if(this.submittedFor.equalsIgnoreCase(Constants.QUARANTINE))
 		{
 			return Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID;
 		}

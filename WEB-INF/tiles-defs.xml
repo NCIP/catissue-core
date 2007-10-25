@@ -1218,5 +1218,16 @@
 		<put name="content" value="/pages/AnticipatorySpecimens.jsp" />
 	</definition>
 	
+	<!-- For Admini View -->
+	<definition name=".catissuecore.ReviewQuarantineRequests" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/ReviewQuarantineRequests.jsp" />
+	</definition>
+	<definition name=".catissuecore.ViewSPR" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/AdministratorViewSPR.jsp" />
+	</definition>
+	<definition name=".catissuecore.NoPendingSPRRequest" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/NoPendingSPRRequest.jsp" />
+	</definition>
+	<!-- For Admini View -->
 	
 </tiles-definitions>
