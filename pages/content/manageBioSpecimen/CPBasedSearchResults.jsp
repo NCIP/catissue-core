@@ -23,7 +23,7 @@
 	{
 		frame1Ysize = "180";
 		frame2Ysize = "180";
-		frame3Ysize = "400";
+		frame3Ysize = "420";
 		
 
 		if(access != null && access.equals("Denied"))
@@ -38,24 +38,16 @@
 <table border="0" height="100%" width="100%" cellpadding="0" cellspacing="0">
 	<tr height="100%">
 		<td width="25%" valign="top">
-			<table border="0" width="268" height="100%">
+			<table border="0" width="275" height="100%">
 				<tr height="<%=cpAndParticipantViewFrameHeight%>">
-					<td>				
-					<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>" scrolling="no" frameborder="0" width="100%" height="<%=frame1Ysize%>" marginheight=0 marginwidth=0>
+					<td valign="top" width="25%">
+					<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>" scrolling="no" frameborder="0" width="100%" height="<%=frame3Ysize%>" marginheight=0 marginwidth=0>
 						Your Browser doesn't support IFrames.
 					</iframe>
 
 					</td>
 				</tr>	
-				<!--<tr>
-					<td align="left" valign="top">		
-
-					<iframe id="<%=Constants.CP_TREE_VIEW%>" name="<%=Constants.CP_TREE_VIEW%>" src="<%=Constants.CP_TREE_VIEW_ACTION%>" scrolling="no" frameborder="0" width="100%" height="<%=frame2Ysize%>" marginheight=0 marginwidth=0 valign="top">
-						Your Browser doesn't support IFrames.
-					</iframe>
-
-					</td>
-				</tr> -->	
+				
 			</table>	
 		</td>
 		<!--P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen-->
