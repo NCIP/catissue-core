@@ -23,6 +23,7 @@
 	ViewSurgicalPathologyReportForm formSPR=null;
 	Object objAbsForm=null;
 	String deidText=null;
+	boolean hasAccess=false;
 	if(operation.equals("viewSPR"))
 	{		
 		objAbsForm = request.getAttribute("viewSurgicalPathologyReportForm");
@@ -33,6 +34,7 @@
 			mapPMI = formSPR.getValues();
 			noOfRowsPMI = formSPR.getCounter();
 			deidText=formSPR.getDeIdentifiedReportTextContent();
+			hasAccess=formSPR.isHasAccess();
 		}
 	}
 	List conceptClassificationList1 = (List)request.getAttribute(Constants.CONCEPT_BEAN_LIST);
@@ -102,6 +104,14 @@
 	}
 	</style>
 </head>
+<%
+if(!hasAccess)
+{
+%>
+	<body onload="setUI();">
+<%
+}
+%>
 <html:form action="<%=Constants.VIEW_SPR_ACTION%>">
 <!-- Main table start -->
 <table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  style="table-layout:fixed" width="650" >
@@ -150,6 +160,10 @@
 						<bean:message key="viewSPR.view.title" />
 					</td>
 				</tr>
+	<% 
+	if(hasAccess)
+	{
+	%>	
 				<tr>
 					<td class="formFieldNoBordersBold" >
 						<input type=radio name="review" value="abc1" checked="checked" onClick="clickOnLinkReport()" />
@@ -170,6 +184,24 @@
 							<bean:message key="viewSPR.myRequests" />						
 					</td>
 				</tr>
+	<% 	
+	}
+	else
+	{
+	%>	
+				<tr>
+					<td class="formFieldNoBordersBold" >
+						<input type=radio name="review" value="abc2" checked="checked" onClick="setUI()" />
+							<bean:message key="viewSPR.deIdenfiedReport" />
+					</td>
+					<td class="formFieldNoBordersBold" >
+						<input type=radio name="review" value="abc4" onClick="" disabled="true" />
+							<bean:message key="viewSPR.myRequests" />						
+					</td>
+				</tr>
+	<%
+	}
+	%>
 				<%
 				String requestFor=(String)request.getParameter(Constants.REQUEST_FOR);
 				if(requestFor!=null||pageOf.equals(Constants.PAGEOF_REVIEW_SPR)||pageOf.equals(Constants.PAGEOF_QUARANTINE_SPR)||requestFor!=null)
@@ -204,7 +236,10 @@
 	</tr>
 	<tr>
 		<td>
-		
+	<% 
+	if(hasAccess)
+	{
+	%>	
 		<table id="participantTable" border="0" cellpadding="0" cellspacing="0"   width="100%" id="table2" >
 			<tr>
 				<td class="formFieldAllBorders" align="right" width="1%">
@@ -404,6 +439,9 @@
 		</tr>
 		<tr>
 		<td>
+	<% 	
+	}
+	%>	
 		<table border="0" cellpadding="5" cellspacing="0" width="100%" id="deidReportInfo" style='display:none'>
 			<tr>
 				<td colspan="3" class="formTitle" height="20">
@@ -536,3 +574,11 @@
 	</tr>
 </table>	
 </html:form>
+<%
+if(!hasAccess)
+{
+%>
+	</body>
+<%
+}
+%>

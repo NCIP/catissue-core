@@ -31,8 +31,11 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 /**
  * @author vijay_pande
  * Action class to show Surgical Pathology  Report
@@ -68,6 +71,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         {
             retrieveAndSetObject(pageOf, id, request, viewSPR);
         }
+		viewSPR.setHasAccess(isAuthorized(getSessionBean(request)));
         request.setAttribute(Constants.PAGEOF, pageOf);
         request.setAttribute(Constants.OPERATION, Constants.VIEW_SURGICAL_PATHOLOGY_REPORT);
         request.setAttribute(Constants.REQ_PATH, "");
@@ -223,6 +227,13 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param identifiedReportId
+	 * @param viewSPR
+	 * @param request
+	 * @throws Exception
+	 */
 	public void filterObjects(Long identifiedReportId, ViewSurgicalPathologyReportForm viewSPR, HttpServletRequest request) throws Exception
 	{
 		//For PHI
@@ -265,6 +276,48 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				viewSPR.setSocialSecurityNumber(Constants.HASHED_OUT);
 			}
 		}
+	}
+	
+	/**
+	 * This method is to retrieve sessionDataBean from request object
+	 * @param request HttpServletRequest object
+	 * @return sessionBean SessionDataBean object
+	 */
+	private SessionDataBean getSessionBean(HttpServletRequest request)
+	{
+		try
+		{
+			SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+			return sessionBean;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * This method verifies wthere the user is 
+	 * @param sessionBean
+	 * @return
+	 * @throws Exception
+	 */
+	private boolean isAuthorized(SessionDataBean sessionBean) throws Exception
+	{
+		SecurityManager sm=SecurityManager.getInstance(this.getClass());
+		try
+		{
+			Role role=sm.getUserRole(sessionBean.getUserId());
+			if(role.getName().equalsIgnoreCase(Constants.ADMINISTRATOR))
+			{
+				return true;
+			}		
+		}
+		catch(SMException ex)
+		{
+			Logger.out.info("Reviewer's Role not found!");
+		}
+		return false;
 	}
 }
 

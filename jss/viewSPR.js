@@ -351,3 +351,8 @@ function scrollInSync()
 	deidReportDiv=document.getElementById('deidentifiedReportText');
 	deidReportDiv.scrollTop=ideReportDiv.scrollTop+45;
 }
+// Function to set intial UI based on Access right
+function setUI()
+{
+	show('deidReportInfo');
+}
