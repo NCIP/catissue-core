@@ -3,7 +3,7 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping default-lazy="false">
     <class
         name="edu.wustl.catissuecore.domain.pathology.ConceptReferent"
         table="CATISSUE_CONCEPT_REFERENT"
@@ -31,6 +31,7 @@
             update="true"
             insert="true"
             column="CONCEPT_ID"
+            lazy="false"
         />
 
         <many-to-one
