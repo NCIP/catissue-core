@@ -13,7 +13,7 @@
 	
 	<!--define require dir and Properties -->
 	<property file="caTissueInstall.properties" />
-
+	<property file="JMeterTest.properties" />
 	<property name="base.dir" value="." />
 	<property name="src.dir" value="${base.dir}/WEB-INF/src" />
 	<property name="target.dir" value="${base.dir}/WEB-INF/classes" />
@@ -30,7 +30,7 @@
 	<property name="catissue.applet.dir" value="${base.dir}/Applet/catissue" />
 	<property name="test.src.dir" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/bizlogic/test" />
 	<property name="test.class.dir" value="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/bizlogic/test" />
-
+	
 	<!-- csm related properties -->
 	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
@@ -491,6 +491,47 @@
 		</junitreport>
 	</target>
 	
+<!-- =================================================================== -->
+<!-- JMeter TestCases for Nightly Build  -->
+<!-- =================================================================== -->
+		<property name="Jmeter-Tests" value="${base.dir}/Jmeter-Tests"/>
+		<property name="testplan" value="CaTissueJMeterTests"/>
+		<property name="jtl" value="JTL"/>
+					
+		<mkdir dir="${base.dir}/${Jmeter-Tests}/${jtl}"/>
+	
+			<taskdef name="jmeter"	
+				classpath="${lib.dir}/ant-jmeter.jar"
+			    classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>				
+	
+		<target name="JMeterTests" depends="runJmeterTests,JmeterReport"/>	
+		<target name="runJmeterTests"> 
+			<delete file="${Jmeter-Tests}/${testplan}.html"/>
+		 	<delete file="${Jmeter-Tests}/${jtl}/${testplan}.jtl"/>	
+		 		
+			<jmeter
+			    jmeterhome="${jmeter.home.dir}"
+			    testplan ="${Jmeter-Tests}/${testplan}.jmx"
+			    resultlog="${Jmeter-Tests}/${jtl}/${testplan}.jtl">
+			
+				<!-- Force suitable defaults -->
+				<property name="jmeter.save.saveservice.output_format" value="xml"/>
+				<property name="jmeter.save.saveservice.assertion_results" value="all"/>
+				<property name="jmeter.save.saveservice.bytesx" value="true"/>
+				<property name="file_format.testlog" value="${format}"/>
+				<property name="jmeter.save.saveservice.response_data.on_error" value="${funcMode}"/>
+			</jmeter>
+		</target>
+
+		<target name="JmeterReport">
+			<xslt
+				force="true"
+			    in="${Jmeter-Tests}/${jtl}/${testplan}.jtl"
+			    out="${Jmeter-Tests}/${testplan}.html"
+			    style="${Jmeter-Tests}/jmeter-results-detail-report_21.xsl">
+				<param name="showData" expression="${show-data}"/>
+			</xslt>
+		</target>
 
   <!-- =================================================================== -->
   <!-- Cobertura code coverage report                                      -->
