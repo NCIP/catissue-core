@@ -4,25 +4,16 @@ package edu.wustl.catissuecore.applet.listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.BaseCopyPasteValidator;
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
-import edu.wustl.catissuecore.applet.MultipleSpecimenCopyPasteValidator;
 import edu.wustl.catissuecore.applet.SpecimenArrayCopyPasteValidator;
-import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
-import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
@@ -94,58 +85,58 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 
 	protected void populateValidatorModel()
 	{
-		
+
 		/**
 		 *  Following code is added for checkbox
 		 */
 		populateValidatorModel = true;
 		int[] intSelectedRows = null;
 		int[] intSelectedCols = null;
-		if (table.getModel() instanceof MultipleSpecimenTableModel)
-		{
-			MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel(table);
-			Map checkBoxMap = multipleSpecimenTableModel.getSpecimenCheckBoxMap();
-			int columnsPerPage = multipleSpecimenTableModel.getColumnsPerPage();
-			if (checkBoxMap != null && checkBoxMap.size() > 0)
-			{
-				List selectedRows = new ArrayList();
-				List selectedCols = new ArrayList();
-				Iterator itr = checkBoxMap.keySet().iterator();
-				while (itr.hasNext())
-				{
-					String key = (String) itr.next();
-					if (checkBoxMap.get(key) != null && ((Boolean) checkBoxMap.get(key)).booleanValue() == true)
-					{
-						int colNo = Integer.parseInt(key) - 1;
-						selectedCols.add(new Integer(colNo % columnsPerPage));
-						checkBoxMap.put(key, new Boolean(false));
-						populateValidatorModel = false;
-					}
-				}
-				if (populateValidatorModel == false)
-				{
-					for (int i = AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO; i <= AppletConstants.SPECIMEN_DERIVE_ROW_NO; i++)
-					{
-						selectedRows.add(new Integer(i));
-					}
-					Collections.sort(selectedCols);
+		/*if (table.getModel() instanceof MultipleSpecimenTableModel)
+		 {
+		 MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel(table);
+		 Map checkBoxMap = multipleSpecimenTableModel.getSpecimenCheckBoxMap();
+		 int columnsPerPage = multipleSpecimenTableModel.getColumnsPerPage();
+		 if (checkBoxMap != null && checkBoxMap.size() > 0)
+		 {
+		 List selectedRows = new ArrayList();
+		 List selectedCols = new ArrayList();
+		 Iterator itr = checkBoxMap.keySet().iterator();
+		 while (itr.hasNext())
+		 {
+		 String key = (String) itr.next();
+		 if (checkBoxMap.get(key) != null && ((Boolean) checkBoxMap.get(key)).booleanValue() == true)
+		 {
+		 int colNo = Integer.parseInt(key) - 1;
+		 selectedCols.add(new Integer(colNo % columnsPerPage));
+		 checkBoxMap.put(key, new Boolean(false));
+		 populateValidatorModel = false;
+		 }
+		 }
+		 if (populateValidatorModel == false)
+		 {
+		 for (int i = AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO; i <= AppletConstants.SPECIMEN_DERIVE_ROW_NO; i++)
+		 {
+		 selectedRows.add(new Integer(i));
+		 }
+		 Collections.sort(selectedCols);
 
-					intSelectedRows = new int[selectedRows.size()];
-					for (int i = 0; i < selectedRows.size(); i++)
-					{
-						intSelectedRows[i] = ((Integer) selectedRows.get(i)).intValue();
-					}
-					intSelectedCols = new int[selectedCols.size()];
-					for (int i = 0; i < selectedCols.size(); i++)
-					{
-						intSelectedCols[i] = ((Integer) selectedCols.get(i)).intValue();
-					}
+		 intSelectedRows = new int[selectedRows.size()];
+		 for (int i = 0; i < selectedRows.size(); i++)
+		 {
+		 intSelectedRows[i] = ((Integer) selectedRows.get(i)).intValue();
+		 }
+		 intSelectedCols = new int[selectedCols.size()];
+		 for (int i = 0; i < selectedCols.size(); i++)
+		 {
+		 intSelectedCols[i] = ((Integer) selectedCols.get(i)).intValue();
+		 }
 
-				}
+		 }
 
-			}
+		 }
 
-		}
+		 }*/
 
 		CopyPasteOperationValidatorModel validatorModel = new CopyPasteOperationValidatorModel();
 
@@ -159,22 +150,22 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 			populateValidatorModel(validatorModel, selectedRows, selectedColumns);
 
 		}
-		else
-		{
-			populateValidatorModel(validatorModel, intSelectedRows, intSelectedCols);
-			List selectedCopiedColumns = validatorModel.getSelectedCopiedCols();
-			TableColumnModel columnModel = table.getColumnModel();
-			for (int i = 0; i < selectedCopiedColumns.size(); i++)
-			{
-				int copiedColumn = ((Integer) selectedCopiedColumns.get(i)).intValue();
-				SpecimenColumnModel scm = (SpecimenColumnModel) columnModel.getColumn(copiedColumn).getCellEditor();
-				scm.updateComponentValue(AppletConstants.SPECIMEN_CHECKBOX_ROW_NO, "false");
-				SpecimenColumnModel scmRenderer = (SpecimenColumnModel) columnModel.getColumn(copiedColumn).getCellRenderer();
-				scmRenderer.updateComponent(AppletConstants.SPECIMEN_CHECKBOX_ROW_NO);
-			}
-			SwingUtilities.updateComponentTreeUI(table);
+		/*else
+		 {
+		 populateValidatorModel(validatorModel, intSelectedRows, intSelectedCols);
+		 List selectedCopiedColumns = validatorModel.getSelectedCopiedCols();
+		 TableColumnModel columnModel = table.getColumnModel();
+		 for (int i = 0; i < selectedCopiedColumns.size(); i++)
+		 {
+		 int copiedColumn = ((Integer) selectedCopiedColumns.get(i)).intValue();
+		 SpecimenColumnModel scm = (SpecimenColumnModel) columnModel.getColumn(copiedColumn).getCellEditor();
+		 scm.updateComponentValue(AppletConstants.SPECIMEN_CHECKBOX_ROW_NO, "false");
+		 SpecimenColumnModel scmRenderer = (SpecimenColumnModel) columnModel.getColumn(copiedColumn).getCellRenderer();
+		 scmRenderer.updateComponent(AppletConstants.SPECIMEN_CHECKBOX_ROW_NO);
+		 }
+		 SwingUtilities.updateComponentTreeUI(table);
 
-		}
+		 }*/
 		BaseCopyPasteValidator validator = null;
 		String validationMessage = null;
 
@@ -184,11 +175,11 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 			{
 				validator = new SpecimenArrayCopyPasteValidator(validatorModel);
 			}
-			else if (table.getModel() instanceof MultipleSpecimenTableModel)
-			{
-				//TODO put same as above construstor
-				validator = new MultipleSpecimenCopyPasteValidator(table, validatorModel);
-			}
+			/*else if (table.getModel() instanceof MultipleSpecimenTableModel)
+			 {
+			 //TODO put same as above construstor
+			 validator = new MultipleSpecimenCopyPasteValidator(table, validatorModel);
+			 }*/
 		}
 
 		if (validator != null)
@@ -240,8 +231,7 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 				map.put(key, valueList);
 			}
 		}
-		
-				
+
 		/**
 		 * Smita Kadam
 		 * Reviewer: Sachin
@@ -249,20 +239,16 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 		 * Patch ID: 4574_1 
 		 * Description: Tooltip related processing done only for Multiple specimen table
 		 */
-		if (table.getModel() instanceof MultipleSpecimenTableModel)
-		{
-		/**
-		* Patch ID: Entered_Events_Need_To_Be_Visible_13
-		* See also: 1-5
-		* Description: get event tool tip for given column and put it into the map
-		*/
-			for (int columnIndex = 0; columnIndex < selectedColumns.length; columnIndex++)
-			{
-				String key = CommonAppletUtil.getDataKey(AppletConstants.SPECIMEN_EVENTS_ROW_NO, selectedColumns[columnIndex]);
-				String value = getEventTooltip(selectedColumns[columnIndex]);
-				map.put(key, value);
-			}
-		}
+		/*	if (table.getModel() instanceof MultipleSpecimenTableModel)
+		 {
+		 
+		 for (int columnIndex = 0; columnIndex < selectedColumns.length; columnIndex++)
+		 {
+		 String key = CommonAppletUtil.getDataKey(AppletConstants.SPECIMEN_EVENTS_ROW_NO, selectedColumns[columnIndex]);
+		 String value = getEventTooltip(selectedColumns[columnIndex]);
+		 map.put(key, value);
+		 }
+		 }*/
 		return map;
 	}
 
@@ -271,17 +257,17 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	 * @param columnIndex for which tool tip to retrieve
 	 * @return tooltip of event button for given column
 	 */
-	protected String getEventTooltip(int columnIndex)
-	{
-		TableColumnModel columnModel = table.getColumnModel();
-		
-		TableColumn tm = columnModel.getColumn(columnIndex);
-		SpecimenColumnModel scm = (SpecimenColumnModel) tm.getCellEditor();
-		if (scm == null || scm.getToolTipToEventButton()==null)
-			return "";
-		else
-			return scm.getToolTipToEventButton();
-	}
+	/*protected String getEventTooltip(int columnIndex)
+	 {
+	 TableColumnModel columnModel = table.getColumnModel();
+	 
+	 TableColumn tm = columnModel.getColumn(columnIndex);
+	 SpecimenColumnModel scm = (SpecimenColumnModel) tm.getCellEditor();
+	 if (scm == null || scm.getToolTipToEventButton()==null)
+	 return "";
+	 else
+	 return scm.getToolTipToEventButton();
+	 }*/
 	/** -- patch ends here -- */
 	/**
 	 * @param rowIndex

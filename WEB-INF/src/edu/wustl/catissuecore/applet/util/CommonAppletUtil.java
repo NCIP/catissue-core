@@ -23,8 +23,6 @@ import netscape.javascript.JSObject;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.model.BaseTabelModel;
-import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
-import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 
 
 
@@ -104,7 +102,7 @@ public final class CommonAppletUtil
 	 * It is specific to MultipleSpecimen.
 	 * @return MultipleSpecimenTableModel 
 	 */
-	public static MultipleSpecimenTableModel getMultipleSpecimenTableModel(JTable table) 
+	/*public static MultipleSpecimenTableModel getMultipleSpecimenTableModel(JTable table) 
 	{	
 		if(table != null)
 		{
@@ -115,7 +113,7 @@ public final class CommonAppletUtil
 		}
 		else
 			return null;
-	}
+	}*/
 
 	/**
 	 * This method checks the instance of JTable and its model and then returns the model.
@@ -184,7 +182,7 @@ public final class CommonAppletUtil
 	 * @param table Table to get the selected cells.
 	 * @return HashMap containing data of selected cells.
 	 */
-	public static HashMap getAllDataOnPage(JTable table)
+	/*public static HashMap getAllDataOnPage(JTable table)
 	{
 		int numberOfColumns = table.getColumnCount();
 		int numberOfRows = table.getRowCount();		
@@ -211,13 +209,13 @@ public final class CommonAppletUtil
 	//	System.out.println("Returning Map from getAllDataOnPage-------------------------\n");
 	//	System.out.println(map);
 		return map;
-	}
+	}*/
 	/**
 	 * This method returns the HashMap of data of selected cells.
 	 * @param table Table to get the selected cells.
 	 * @return HashMap containing data of selected cells.
 	 */
-	public static HashMap getSelectedData(JTable table)
+	/*public static HashMap getSelectedData(JTable table)
 	{
 		int[] selectedColumns = table.getSelectedColumns();
 		int[] selectedRows = table.getSelectedRows();		
@@ -244,7 +242,7 @@ public final class CommonAppletUtil
 		System.out.println("Returning Map -------------------------\n");
 		System.out.println(map);
 		return map;
-	}
+	}*/
 
 	public static boolean isNull(Object obj)
 	{

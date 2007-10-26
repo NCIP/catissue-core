@@ -5,11 +5,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JTable;
 
-import com.mockobjects.constraint.IsNull;
-
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
-import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 
