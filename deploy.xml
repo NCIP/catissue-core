@@ -535,6 +535,20 @@
 			</classpath>
 		</sql>
 	</target>
+	
+	<!--- Target To Initialise Database For JMeter Tests-->
+	<target name="Jmeter_DataInitialise">
+		<echo message="Initializing MySQL Database for JMeter Tests..." />
+				<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+					<transaction src="${mysql.sql.dir}/JMeterTests_dump.sql" />
+					<classpath>
+							<fileset dir="${lib.dir}">
+									<include name="*.jar" />
+							</fileset>
+					</classpath>
+				</sql>		
+		</target>
+	
 	<!--Oracle Database Creation -->
 	<target name="db_initialize_oracle">
 		<echo message="Initializing Oracle Database for caTISSUECore Application..." />
