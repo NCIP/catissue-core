@@ -210,13 +210,14 @@ public class UpdateSpecimenStatusAction extends Action {
 		}
 		
 		String initialQuantity = specimenVO.getQuantity();
-		
+		 
 		if(initialQuantity != null )
 		{
 			Quantity quantity = new Quantity();
 			if(!initialQuantity.equals(""))
 				quantity.setValue(new Double(initialQuantity));
 			specimen.setInitialQuantity(quantity);
+			specimen.setAvailableQuantity(quantity);
 		}
 		if(specimenVO.getCheckedSpecimen())
 		{

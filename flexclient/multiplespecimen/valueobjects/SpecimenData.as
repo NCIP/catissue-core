@@ -392,12 +392,12 @@ package valueobjects
 						
 				isValid = false && isValid;
 			}
+
 			else
 			{
 				this.parentNameErrStr = null;
 				isValid = true && isValid;	
 			}
-			
 			if(this.specimenLabel == "")
 			{
 				this.specimenLabelErrStr = "Please enter Label";
@@ -422,6 +422,7 @@ package valueobjects
 			}	
 			if(this.specimenType == "" || this.specimenType == Constants.SELECT)
 			{
+
 				this.specimenTypeErrStr = "Please select specimen type";
 				isValid = false && isValid;
 			}	
@@ -496,6 +497,7 @@ package valueobjects
 			}
 			if(isNewSpecimen &&this.collectionEvent != null)
 			{
+
 				isValid = this.collectionEvent.validate() && isValid;
 			}
 			if(isNewSpecimen && this.receivedEvent != null)

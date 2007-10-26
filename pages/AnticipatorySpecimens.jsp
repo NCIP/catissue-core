@@ -123,6 +123,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 	</script>
 </head>
 <body onload="UpdateCheckBoxStatus()">
+<script language="javascript">
+	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');	
+</script>
 
 		<html:errors />
 		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">

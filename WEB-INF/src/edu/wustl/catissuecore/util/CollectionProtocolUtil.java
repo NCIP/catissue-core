@@ -808,8 +808,8 @@ public class CollectionProtocolUtil {
 		}
 		return null;
 	}
-	
-	public static CollectionProtocol getCollectionProtocolForSpecimen(String id) throws DAOException 
+	 
+	/*public static CollectionProtocol getCollectionProtocolForSpecimen(String id) throws DAOException 
 	{
 		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 		String sourceObjectName =  SpecimenCollectionGroup.class.getName();
@@ -825,5 +825,5 @@ public class CollectionProtocolUtil {
 			
 		}
 		return null;
-	}
+	}*/
 }
