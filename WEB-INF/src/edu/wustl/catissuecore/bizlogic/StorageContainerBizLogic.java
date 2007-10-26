@@ -2527,7 +2527,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Map containerMapFromCache = null;
 		try
 		{
-			containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+		//	containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+			containerMapFromCache=getAllocatedContainerMap();
 		}
 		catch (Exception e1)
 		{
