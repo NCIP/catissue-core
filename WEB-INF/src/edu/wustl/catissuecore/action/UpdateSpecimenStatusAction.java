@@ -26,12 +26,12 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -170,19 +170,14 @@ public class UpdateSpecimenStatusAction extends Action {
 	 */
 	private Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws BizLogicException {
 
-		NewSpecimenForm form = new NewSpecimenForm();
-		form.setClassName(specimenVO.getClassName());
-	
-		
 		Specimen specimen;
 		try {
-			specimen = (Specimen) new DomainObjectFactory()
-				.getDomainObject(Constants.NEW_SPECIMEN_FORM_ID, form);
-		} catch (AssignDataException e1)
-		{
+			specimen = (Specimen) new SpecimenObjectFactory()
+				.getDomainObject(specimenVO.getClassName());
+		} catch (AssignDataException e1) {
 			e1.printStackTrace();
 			return null;
-		}
+		}	
 		
 		if (Constants.MOLECULAR.equals(specimenVO.getClassName()))
 		{

@@ -36,7 +36,6 @@ import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -44,6 +43,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -328,13 +328,10 @@ public class SubmitSpecimenCPAction extends BaseAction {
 	
 	private Specimen getSpecimenDomainObjectFromObject(SpecimenDataBean specimenDataBean)
 	{
-		NewSpecimenForm form = new NewSpecimenForm();
-		form.setClassName(specimenDataBean.getClassName());
-		
 		Specimen specimen;
 		try {
-			specimen = (Specimen) new DomainObjectFactory()
-				.getDomainObject(Constants.NEW_SPECIMEN_FORM_ID, form);
+			specimen = (Specimen) new SpecimenObjectFactory()
+				.getDomainObject(specimenDataBean.getClassName());
 		} catch (AssignDataException e1) {
 			e1.printStackTrace();
 			return null;
@@ -390,6 +387,10 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				specimenDataBean.getStorageContainerForSpecimen());
 		
 		specimen.setStorageContainer(null);
+		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
+		specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
+		specimen.setSpecimenCharacteristics(specimenCharacteristics);
 		
 		return specimen;
 
