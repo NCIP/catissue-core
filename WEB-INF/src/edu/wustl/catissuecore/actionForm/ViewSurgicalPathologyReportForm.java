@@ -143,6 +143,10 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	private String reportId="";
 	/**
+	 * boolean to set user has access on identified data or not 
+	 */
+	private boolean hasAccess;
+	/**
 	 * This is the method to get date of birth of particicpant
 	 * @return birthDate Date of Birth of participant
 	 */
@@ -410,6 +414,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			setParticipant(identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant());
 		}
 		this.comments=null;
+		this.hasAccess=false;
 	}
 	
 	/**
@@ -444,8 +449,6 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public void setIdentifiedReport(final IdentifiedSurgicalPathologyReport ispr)
 	{
-//		if(ispr.getId() != null)
-//		{
 		try
 		{
 			this.identifiedReportId=ispr.getId().toString();
@@ -460,14 +463,6 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 				this.identifiedReportTextContent=Constants.IDENTIFIED_REPORT_NOT_FOUND_MSG;
 			}
 		}
-//		}
-//		else
-//		{
-//			this.identifiedReportId=Constants.HASHED_OUT;
-//			this.identifiedReportAccessionNumber=Constants.HASHED_OUT;
-//			this.identifiedReportTextContent=Constants.HASHED_OUT;	
-//			this.identifiedReportSite=Constants.HASHED_OUT;
-//		}
 	}
 
 	/**
@@ -539,76 +534,8 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		{
 			Logger.out.error("viewSPR:Participant information is null");
 		}
-//		}
-//		else
-//		{
-//			this.firstName=Constants.HASHED_OUT;
-//			this.lastName=Constants.HASHED_OUT;
-//			this.birthDate = Constants.HASHED_OUT;
-//			this.deathDate = Constants.HASHED_OUT;
-//			this.ethinicity=Constants.HASHED_OUT;
-//			Collection raceColl = new HashSet();
-//			raceColl.add(Constants.HASHED_OUT);
-//			this.race=raceColl;
-//			this.gender=Constants.HASHED_OUT;
-//			this.sexGenotype=Constants.HASHED_OUT;
-//			this.socialSecurityNumber=Constants.HASHED_OUT;
-//			
-//			Collection medicalIdentifierColl = participant.getParticipantMedicalIdentifierCollection();
-//			Collection tempColl = new HashSet();
-//			if(medicalIdentifierColl != null)
-//			{
-//				Iterator iter = medicalIdentifierColl.iterator();
-//				
-//				while(iter.hasNext())
-//				{
-//					ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)iter.next();
-//					ParticipantMedicalIdentifier tempParticipantMedicalIdentifier = participantMedicalIdentifier;
-//					tempParticipantMedicalIdentifier.getSite().setName(Constants.HASHED_OUT);
-//					tempParticipantMedicalIdentifier.setMedicalRecordNumber(Constants.HASHED_OUT);
-//					
-//					tempColl.add(tempParticipantMedicalIdentifier);					
-//				}
-//			}
-//			this.medicalIdentifierNumbers=tempColl;
-//			makeMapForMedicalIdentifier();
-//		}
 	}
-//	private void makeMapForMedicalIdentifier()
-//	{		
-//		if(medicalIdentifierNumbers != null)
-//        {
-//        	values = new HashMap();
-//        	int i = 1;
-//        	
-//        	Iterator it = medicalIdentifierNumbers.iterator();
-//        	while(it.hasNext())
-//        	{
-//        		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
-//        		
-//        		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_id";
-//				String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
-//				String key3 = "ParticipantMedicalIdentifier:" + i  +"_id";
-//
-//				Site site = participantMedicalIdentifier.getSite();
-//				
-//				if(site!=null)
-//				{
-//					values.put(key1,Utility.toString(site.getName()));
-//				}
-//				else
-//				{
-//					values.put(key1,Utility.toString(Constants.SELECT_OPTION));
-//				}
-//				
-//				values.put(key2,Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
-//				values.put(key3,Utility.toString(participantMedicalIdentifier.getId()));
-//				
-//				i++;
-//        	}
-//        	counter = medicalIdentifierNumbers.size();
-//        }
-//	}
+
 	
 	/** 
 	 * On the basis of Request for submitting comments different form ID will be returned to save two different kind of comments
@@ -907,5 +834,23 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	public void setUserName(String userName)
 	{
 		this.userName = userName;
+	}
+
+	/**
+	 * returns boolean value of hasAccess
+	 * @return hasAccess
+	 */
+	public boolean isHasAccess() 
+	{
+		return hasAccess;
+	}
+
+	/**
+	 * Set the boolean value for hass aceess
+	 * @param hasAccess
+	 */
+	public void setHasAccess(boolean hasAccess) 
+	{
+		this.hasAccess = hasAccess;
 	}
 }
