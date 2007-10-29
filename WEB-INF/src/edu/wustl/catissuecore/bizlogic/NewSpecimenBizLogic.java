@@ -2868,6 +2868,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			else
 			{
 				quantity = specimenDO.getInitialQuantity();
+				if(quantity.getValue()<specimenDO.getAvailableQuantity().getValue())
+				{
+					specimenDO.setAvailableQuantity(quantity);
+				}
 			}
 			quantity.setValue(quantityValue);
 			
