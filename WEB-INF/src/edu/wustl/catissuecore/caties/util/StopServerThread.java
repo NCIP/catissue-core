@@ -34,13 +34,11 @@ public class StopServerThread
 			// Configuring logger properties
 			PropertyConfigurator.configure(Variables.applicationHome + File.separator+"logger.properties");
 			System.setProperty("gov.nih.nci.security.configFile",
-					"./catissuecore-properties"+File.separator+"ApplicationSecurityConfig.xml");
-			CaTIESProperties.initBundle("caTIES");
+					"./catissuecore-properties"+File.separator+"ApplicationSecurityConfig.xml");	
 			// get port number of DeidServer
-	    	int port=Integer.parseInt(CaTIESProperties.getValue(args[0]));
+	    	int port=Integer.parseInt(args[0]);
 	    	// Create client socket to connect to server
 	        Socket s = new Socket("localhost",port);
-	        Logger.out.info(CaTIESProperties.getValue(CaTIESConstants.DEID_PORT));
 	        BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 	        PrintWriter out = new PrintWriter(new OutputStreamWriter(s.getOutputStream()),true);
 	        // send stop command to stop the server
