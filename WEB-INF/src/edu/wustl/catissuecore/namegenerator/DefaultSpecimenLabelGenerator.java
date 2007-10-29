@@ -124,7 +124,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 * @param parentObject
 	 * @param specimenObject
 	 */
-	void setNextAvailableDeriveSpecimenlabel(Specimen parentObject, Specimen specimenObject) {
+	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject, Specimen specimenObject) {
 		
 		currentLabel= currentLabel+1;
 		specimenObject.setLabel(currentLabel.toString());
@@ -133,7 +133,10 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	
 	
 	
-	public void setLabel(AbstractDomainObject obj) {
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(edu.wustl.common.domain.AbstractDomainObject)
+	 */
+	public synchronized void setLabel(AbstractDomainObject obj) {
 		
 		Specimen objSpecimen = (Specimen)obj;
 
@@ -172,7 +175,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.List)
 	 */
-	public void setLabel(List<AbstractDomainObject> objSpecimenList) {
+	public synchronized void setLabel(List<AbstractDomainObject> objSpecimenList) {
 
 		List specimenList = objSpecimenList;
 		for (int index=0;index <specimenList.size();index++) 
