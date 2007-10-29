@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 
 public class TaskTimeCalculater {
 
+	private static boolean logPerformance = false;
+	private static TaskTimeCalculater nullTaskTimeCalculater = new TaskTimeCalculater();
 	private long startTime;
 	private long endTime;
 	private String taskName;
@@ -11,6 +13,10 @@ public class TaskTimeCalculater {
 	protected TaskTimeCalculater(Class clazz){
 		logger = Logger.getLogger(clazz);
 	}
+	private TaskTimeCalculater(){
+
+	}
+
 	protected String getTaskName(){
 		return taskName;
 	}
@@ -38,6 +44,10 @@ public class TaskTimeCalculater {
 		return logString;
 	}
 	public String getTimeTakenInSecs(){
+		if (!logPerformance)
+		{
+			return "";
+		}
 		double timeTaken = ((double)getEndTime()) - ((double)getStartTime());
 		timeTaken/=1000;
 		String logString = getTaskName() +"," + timeTaken;
@@ -45,12 +55,22 @@ public class TaskTimeCalculater {
 		return logString;
 	}
 	public static TaskTimeCalculater startTask(String taskName, Class clazz){
+		if (!logPerformance)
+		{
+			return nullTaskTimeCalculater;
+		}
+
 		TaskTimeCalculater taskTimeCalculater = new TaskTimeCalculater(clazz);
 		taskTimeCalculater.setTaskName(taskName);
 		taskTimeCalculater.setStartTime(System.currentTimeMillis());
 		return taskTimeCalculater;
 	}
 	public static String endTask(TaskTimeCalculater taskTimeCalculater){
+		if (!logPerformance)
+		{
+			return "";
+		}
+
 		taskTimeCalculater.setEndTime(System.currentTimeMillis());
 		return taskTimeCalculater.getTimeTaken();
 	}

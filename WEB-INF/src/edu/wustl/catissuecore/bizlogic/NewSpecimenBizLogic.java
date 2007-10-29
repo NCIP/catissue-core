@@ -93,6 +93,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private Map< Long, Collection> containerHoldsSpecimenClasses = new HashMap<Long, Collection>();
 	private Map< Long, Collection> containerHoldsCPs = new HashMap<Long, Collection>();
 	private HashSet<String> storageContainerIds = new HashSet<String>();
+	private SecurityManager securityManager = new SecurityManager(this.getClass());
 	private boolean cpbased =false;
 	/**
 	 * Saves the storageType object in the database.
@@ -127,7 +128,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			try
 			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
+				securityManager.insertAuthorizationData(
+								null, protectionObjects, 
+									getDynamicGroups(specimen.getSpecimenCollectionGroup()));
 			}
 			catch (SMException e)
 			{
@@ -145,7 +148,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			if(!SecurityManager.getInstance(this.getClass())
+			if(!securityManager
 	                .isAuthorized(userName,
 	                        Specimen.class.getName(),
 	                        Permissions.CREATE)
@@ -299,21 +302,27 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		Iterator itr = specimenList.iterator();
 		TaskTimeCalculater specAuth = TaskTimeCalculater.startTask
 		("Specimen insert Authenticate ("+ specimenList.size() +")", NewSpecimenBizLogic.class);
+		String dynamicGroups [] =null;
 		try
 		{
-	
+			Set protectionObjects = new HashSet();
+			AbstractSpecimenCollectionGroup collectionGroup = null;
 			while (itr.hasNext())
 			{
 				Specimen specimen = (Specimen) itr.next();
-				Set protectionObjects = new HashSet();
 				protectionObjects.add(specimen);
+	
 				if (specimen.getSpecimenCharacteristics() != null)
 				{
 					protectionObjects.add(specimen.getSpecimenCharacteristics());
 				}
-					SecurityManager.getInstance(this.getClass())
-					.insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
-	
+				collectionGroup = specimen.getSpecimenCollectionGroup();
+			}
+			if (collectionGroup != null)
+			{
+				dynamicGroups =  getDynamicGroups(collectionGroup);
+				securityManager
+				.insertAuthorizationData(null, protectionObjects, dynamicGroups);	
 			}
 		}
 		catch (SMException e)
@@ -880,14 +889,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 
-	protected String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
+	protected String[] getDynamicGroups(AbstractSpecimenCollectionGroup obj) throws SMException
 	{
-		Specimen specimen = (Specimen) obj;
+		TaskTimeCalculater getDynaGrps = TaskTimeCalculater.startTask
+		("DynamicGroup", NewSpecimenBizLogic.class);
+		
 		String[] dynamicGroups = new String[1];
 
-		dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimen.getSpecimenCollectionGroup(),
+		dynamicGroups[0] = securityManager
+							.getProtectionGroupByName(obj,
 				Constants.getCollectionProtocolPGName(null));
 		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
+		TaskTimeCalculater.endTask(getDynaGrps);
 		return dynamicGroups;
 	}
 

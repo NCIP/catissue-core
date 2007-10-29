@@ -448,7 +448,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			}
 			try
 			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(aliquotSpecimen));
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(aliquotSpecimen.getSpecimenCollectionGroup()));
 			}
 			catch (SMException e)
 			{
