@@ -874,6 +874,10 @@ Thanking You,
 			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 			<replacefilter token="@@GATE_HOME@@" value="${caties.installation.dir}/gate" />
 		</replace>
+		<replace file="${caties.installation.dir}/caTIES_conf/remoteService.xml">
+			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
+			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
+		</replace>
 		<unzip src="gate.zip" dest="${caties.installation.dir}/gate" /> 
 			<replace file="${caties.installation.dir}/gate/gate_3_1/application/plugins/caTIES/creole.xml">
 				<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
