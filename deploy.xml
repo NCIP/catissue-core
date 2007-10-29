@@ -407,6 +407,7 @@
 	<target name="deploy_app_with_config">
 		<antcall target="deploy_app" />
 		<antcall target="config_jboss_files" />
+		<antcall target="deploy_gate" />
 		<delete dir="${temp.dir}" />
 	</target>
 
@@ -849,49 +850,12 @@ Thanking You,
 		<copy todir="${caties.installation.dir}/classes">
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/classes" />
 		</copy>
-		<copy todir="${caties.installation.dir}/catissuecore-properties">
-			<fileset dir="${base.dir}/catissuecore-properties" />
-		</copy>
-		<replace file="${caties.installation.dir}/catissuecore-properties/ApplicationSecurityConfig.xml" propertyfile="${basedir}/caTissueInstall.properties">
-			<replacefilter token="@@hibernate-config-file@@" value="./catissuecore-properties/catissuecore.hibernate.cfg.xml" />
-		</replace>
-		<copy file="${base.dir}/caTIES_conf/hibernate.cfg.xml" todir="${caties.installation.dir}/classes" overwrite="true" />
-		<copy file="${base.dir}/caTIES_conf/dbutil.properties" todir="${caties.installation.dir}/classes" overwrite="true" />
-		<copy file="${base.dir}/caTIES_conf/catissuecore.hibernate.cfg.xml" todir="${caties.installation.dir}/catissuecore-properties" overwrite="true" />
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<replace dir="${caties.installation.dir}" propertyfile="${basedir}/caTissueInstall.properties">
-					<include name="**/*.cfg.xml" />
-					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-				</replace>
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<replace dir="${caties.installation.dir}" propertyfile="${basedir}/caTissueInstall.properties">
-						<include name="**/*.cfg.xml" />
-						<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
-						<replacefilter token="com.mysql.jdbc.Driver" value="${oracle.driver.string}" />
-						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-					</replace>
-				</then>
-			</elseif>
-		</if>
-		<replace dir="${caties.installation.dir}" propertyfile="${basedir}/caTissueInstall.properties">
-			<include name="**/*.cfg.xml" />
-			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
-			<replacefilter token="@@DATABASE_NAME@@" value="${database.name}" />
-		</replace>
 		<jar destfile="${caties.installation.dir}/caties.jar" basedir="${caties.installation.dir}/classes" />
 		<delete dir="${caties.installation.dir}/classes" />
 		<copy todir="${caties.installation.dir}/lib">
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
 		</copy>
-		<copy file="${basedir}/caTissueCore_caCORE_Client/lib/catissuecore-client.jar" todir="${caties.installation.dir}/lib" />
 		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${temp.dir}/catissuecore/CDEConfig.xml" todir="${caties.installation.dir}" overwrite="true" />
 		<copy file="Dataset.dtd" todir="${caties.installation.dir}" overwrite="true" />
 		<copy file="JniDeID.dll" todir="${caties.installation.dir}" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/build.xml" todir="${caties.installation.dir}" overwrite="true" />
@@ -905,7 +869,17 @@ Thanking You,
 			<replacefilter token="@@COLL_PROT_TITLE@@" value="${collectionProtocol.title}" />
 			<replacefilter token="@@ADMIN_EMAIL@@" value="${first.admin.emailAddress}" />
 			<replacefilter token="@@ADMIN_PASSWORD@@" value="${first.admin.password}" />
+			<replacefilter token="@@GATE_HOME@@" value="${caties.installation.dir}/gate/gate_3_1" />
+			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
+			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
+			<replacefilter token="@@GATE_HOME@@" value="${caties.installation.dir}/gate" />
 		</replace>
+		<unzip src="gate.zip" dest="${caties.installation.dir}/gate" /> 
+			<replace file="${caties.installation.dir}/gate/gate_3_1/application/plugins/caTIES/creole.xml">
+				<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
+				<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
+				<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
+			</replace>
 	</target>
 
 	<target name="insert_default_cp">
@@ -1087,5 +1061,15 @@ Thanking You,
 				<include name="**/*" />
 			</fileset>
 		</delete>
+	</target>
+	
+	<target name="deploy_gate">
+		<echo message="Deploying gate...." />
+		<unzip src="gate.zip" dest="${jboss.home.dir}/server/default/deploy/gate.war" /> 
+		<replace file="${jboss.home.dir}/server/default/deploy/gate.war/gate_3_1/application/plugins/caTIES/creole.xml">
+			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
+			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
+			<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
+		</replace>
 	</target>
 </project>
