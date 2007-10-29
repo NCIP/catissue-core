@@ -3,7 +3,9 @@ package edu.wustl.catissuecore.namegenerator;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Specimen;
@@ -96,7 +98,9 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 
 			//TODO :Commented by Falguni because hibernate session is getting closed by calling this method. 
 			//persistLabelCount();
-			String label = siteName + "-" + year + "-" + day + "-" + nextNumber; 
+			//String label = siteName + "-" + year + "-" + day + "-" + nextNumber;
+			//Modification suggested for Michigan only -as per catissuecore 1.2.0.1
+			String label = siteName + "_" + nextNumber;
 			objSpecimen.setLabel(label);
 			labelCountTreeMap.put(objSpecimen,0);
 		}
@@ -115,14 +119,13 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		
 		if(objSpecimen.getChildrenSpecimen().size()>0)
 		{
-			List specimenList = (List)objSpecimen.getChildrenSpecimen();
-			for (int index=0;index <specimenList.size();index++) 
+			Collection specimenCollection = objSpecimen.getChildrenSpecimen();
+			Iterator it = specimenCollection.iterator();
+			while(it.hasNext())
 			{
-				Specimen objChildSpecimen = (Specimen)specimenList.get(index);
-							
+				Specimen objChildSpecimen = (Specimen)it.next();
 				setLabel(objChildSpecimen);
-					
-			}	
+			}
 			
 		}	
 		
@@ -134,13 +137,12 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	
 	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject,Specimen specimenObject)
 	{
-		String parentSpecimenId = parentObject.getId().toString();
-				
-		String parentSpecimenLabel = (String) parentObject.getLabel();
-				
+						
+		String parentSpecimenLabel = (String) parentObject.getLabel();				
 
 		long aliquotCount = parentObject.getChildrenSpecimen().size();
 		specimenObject.setLabel(parentSpecimenLabel + "_" + (format((aliquotCount + 1), "00")));
+		labelCountTreeMap.put(specimenObject,0);
 	}
 
 	/**
@@ -150,9 +152,20 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	{
 		
 		String parentSpecimenLabel = (String) parentObject.getLabel();
-		long aliquotCount =  parentObject.getChildrenSpecimen().size();		
-		specimenObject.setLabel( parentSpecimenLabel + "_"+ format((++aliquotCount), "00"));
-		
+		long aliquotChildCount = 0;
+		if(labelCountTreeMap.containsKey(parentObject))
+		{
+			 aliquotChildCount= Long.parseLong(labelCountTreeMap.get(parentObject).toString());	
+		}
+		else
+		{
+			// biz logic 
+			aliquotChildCount = parentObject.getChildrenSpecimen().size();	
+			
+		}
+		specimenObject.setLabel( parentSpecimenLabel + "_"+ format((++aliquotChildCount), "00"));
+		labelCountTreeMap.put(parentObject,aliquotChildCount);	
+		labelCountTreeMap.put(specimenObject,0);
 		
 	}
 	
