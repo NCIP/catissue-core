@@ -355,6 +355,10 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	        
 	        collectionProtocolRegistration.setParticipant(participant);
 	        
+	        //Audit of CollectionProtocolRegistration.
+			CollectionProtocolRegistration oldcollectionProtocolRegistration = (CollectionProtocolRegistration) getCorrespondingOldObject(
+					oldCollectionProtocolRegistrationCollection, collectionProtocolRegistration.getId());
+			
 	        if(collectionProtocolRegistration.getId() == null) // If Collection Protocol Registration is not happened for given participant
 			{
 	        	collectionProtocolRegistration.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
@@ -363,9 +367,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			}
 	        
 	       
-			//Audit of CollectionProtocolRegistration.
-			CollectionProtocolRegistration oldcollectionProtocolRegistration = (CollectionProtocolRegistration) getCorrespondingOldObject(
-					oldCollectionProtocolRegistrationCollection, collectionProtocolRegistration.getId());
+			
 			
 			cprBizLogic.update(dao, collectionProtocolRegistration, oldcollectionProtocolRegistration, sessionDataBean);
 		}
