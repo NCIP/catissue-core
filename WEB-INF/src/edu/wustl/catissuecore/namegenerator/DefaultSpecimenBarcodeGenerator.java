@@ -52,7 +52,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	}
 	
 	/**
-	 * This method will retrive unique specimen Lable.
+	 * This method will retrive unique specimen Barcode.
 	 * @return Total No of Specimen
 	 * @throws ClassNotFoundException
 	 * @throws DAOException 
@@ -89,7 +89,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 
 	
 	
-	/**Functions for Tree base new specimen entry 's label generation***/
+	/**Functions for Tree base new specimen entry 's Barcode generation***/
 	//Falguni...
 	
 	Map barcodeCountTreeMap = new HashMap();
@@ -99,7 +99,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 * @param parentObject
 	 * @param specimenObject
 	 */
-	public synchronized  void setNextAvailableAliquotSpecimenBarcode(Specimen parentObject,Specimen specimenObject) {
+	 synchronized  void setNextAvailableAliquotSpecimenBarcode(Specimen parentObject,Specimen specimenObject) {
 				
 		String parentSpecimenBarcode = (String) parentObject.getBarcode();
 		long aliquotChildCount = 0;
@@ -122,7 +122,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 * @param parentObject
 	 * @param specimenObject
 	 */
-	private void setNextAvailableDeriveSpecimenBarcode(Specimen parentObject, Specimen specimenObject) {
+	synchronized void setNextAvailableDeriveSpecimenBarcode(Specimen parentObject, Specimen specimenObject) {
 		
 		currentBarcode= currentBarcode+1;
 		specimenObject.setBarcode(currentBarcode.toString());
@@ -131,7 +131,10 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	
 	
 	
-	public void setBarcode(AbstractDomainObject obj) {
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.namegenerator.BarcodeGenerator#setBarcode(edu.wustl.common.domain.AbstractDomainObject)
+	 */
+	synchronized public void setBarcode(AbstractDomainObject obj) {
 		
 		Specimen objSpecimen = (Specimen)obj;
 
@@ -170,7 +173,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setBarcode(java.util.List)
 	 */
-	public void setBarcode(List<AbstractDomainObject> objSpecimenList) {
+	synchronized public void setBarcode(List<AbstractDomainObject> objSpecimenList) {
 
 		List specimenList = objSpecimenList;
 		for (int index=0;index <specimenList.size();index++) 
