@@ -3,7 +3,7 @@
 <!--Ant Script for caTIES-->
 
 <project name="caTIES">
-	
+	<property file="caTIES_conf/caTIES.properties" />
 	<!--define require dir and Properties -->	
 	<property name="base.dir" value="."/>	
 	<property name="lib.dir" value="lib" />
@@ -50,14 +50,14 @@
 					<pathelement location="${base.dir}/caTIES_conf" />
 				</classpath>
 				<classpath refid="cp"/>
-				<jvmarg value="-Dgate.plugins.home=E:/gate_3_1/gate_3_1/application/plugins" /> 
+				<jvmarg value="-Dgate.plugins.home=${caties.gate.home}/application/plugins" /> 
 			</java>
 		</target>
 	
 	<!-- stop Report Loader Server  -->
 		<target name="stop_report_loader_server">
 			<java classname="edu.wustl.catissuecore.caties.util.StopServerThread">
-				<arg value="filePollerPort" />
+				<arg value="${filePollerPort}" />
 				<classpath>
 					<pathelement location="caties.jar"/>
 				</classpath>
@@ -71,7 +71,7 @@
 	<!-- stop DeIDPipelineManager  -->
 	<target name="stop_deid_server">
 		<java classname="edu.wustl.catissuecore.caties.util.StopServerThread">
-			<arg value="deidPort" />
+			<arg value="${deidPort}" />
 			<classpath>
 				<pathelement location="caties.jar"/>
 			</classpath>
@@ -85,7 +85,7 @@
 	<!-- stop ConceptCodeManager  -->
 	<target name="stop_concept_code_server">
 		<java classname="edu.wustl.catissuecore.caties.util.StopServerThread">
-			<arg value="conceptCoderPort" />
+			<arg value="${conceptCoderPort}" />
 			<classpath>
 				<pathelement location="caties.jar"/>
 			</classpath>
