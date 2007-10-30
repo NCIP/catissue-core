@@ -31,6 +31,8 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
+import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -195,6 +197,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					storagecontLblGenerator = LabelGeneratorFactory.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
 					storagecontLblGenerator.setLabel(cont);
 					container.setName(cont.getName());
+				} catch (BizLogicException e) {
+					throw new DAOException(e.getMessage());
+				}
+			}
+			if(edu.wustl.catissuecore.util.global.Variables.isStorageContainerBarcodeGeneratorAvl )
+			{
+				BarcodeGenerator storagecontBarcodeGenerator;
+				try {
+					storagecontBarcodeGenerator = BarcodeGeneratorFactory.getInstance(Constants.STORAGECONTAINER_BARCODE_GENERATOR_PROPERTY_NAME);
+					storagecontBarcodeGenerator.setBarcode(cont);					
 				} catch (BizLogicException e) {
 					throw new DAOException(e.getMessage());
 				}
