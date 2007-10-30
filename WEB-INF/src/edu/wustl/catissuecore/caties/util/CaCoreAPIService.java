@@ -46,7 +46,8 @@ public class CaCoreAPIService
 				cs.startSession(CaTIESProperties.getValue(CaTIESConstants.USER_NAME), CaTIESProperties.getValue(CaTIESConstants.PASSWORD));
 			} 
 			catch (Exception ex) 
-			{ 
+			{
+				System.out.println("Please check your login information!");
 				Logger.out.error("Error in initializing CaCoreAPIService "+ex); 
 				throw ex;
 			}
