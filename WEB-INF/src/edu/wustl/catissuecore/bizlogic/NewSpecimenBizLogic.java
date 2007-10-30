@@ -25,7 +25,7 @@ import java.util.TreeMap;
 
 import org.hibernate.HibernateException;
 
-import com.util.TaskTimeCalculater;
+import edu.wustl.catissuecore.TaskTimeCalculater;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.Address;

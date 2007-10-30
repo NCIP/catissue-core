@@ -23,7 +23,7 @@ import java.util.Vector;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
-import com.util.TaskTimeCalculater;
+import edu.wustl.catissuecore.TaskTimeCalculater;
 
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
