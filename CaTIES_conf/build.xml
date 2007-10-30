@@ -97,11 +97,14 @@
 	</target>
 	
 	<!-- task to add default CollectionProtocol for caTIES -->
-	<target name="addcp" >	
-		<echo message="addcp trget started" />
-		<java classname="edu.wustl.catissuecore.reportloader.test.AddCollectionProtocol" fork="true">
+	<target name="add_cp" >	
+		<echo message="addcp target started" />
+		<java classname="edu.wustl.catissuecore.caties.util.AddCollectionProtocol" fork="true">
 			<classpath>
 				<pathelement location="caties.jar"/>
+			</classpath>
+			<classpath>
+				<pathelement location="${base.dir}/caTIES_conf" />
 			</classpath>
 			<classpath refid="cp"/>
 		</java>
