@@ -837,14 +837,6 @@ Thanking You,
 		<delete dir="${temp.dir}" />
 	</target>
 
-	<target name="deploy_caties_with_cp">
-		<antcall target="assertforcaties" />
-		<antcall target="deploy_caties_internal" />
-		<delete dir="${temp.dir}" />
-		<antcall target="insert_default_cp" />
-	</target>
-
-
 	<target name="deploy_caties_internal">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
 		<copy todir="${caties.installation.dir}/classes">
@@ -884,53 +876,6 @@ Thanking You,
 				<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 				<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
 			</replace>
-	</target>
-
-	<target name="insert_default_cp">
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<replace file="${mysql.sql.dir}/insertCP_mysql.sql">
-					<replacefilter token="@@COLL_PROT_TITLE@@" value="${collectionProtocol.title}" />
-				</replace>
-				<antcall target="insertCP_mysql" />
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<replace file="${oracle.sql.dir}/insertCP_oracle.sql">
-						<replacefilter token="@@COLL_PROT_TITLE@@" value="${collectionProtocol.title}" />
-					</replace>
-					<antcall target="insertCP_oracle" />
-				</then>
-			</elseif>
-		</if>
-	</target>
-
-	<target name="insertCP_mysql">
-		<echo message="Inserting default CP in MySQL Database for caTIES" />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-			<transaction src="${mysql.sql.dir}/insertCP_mysql.sql" />
-			<transaction>commit;</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-	</target>
-
-	<target name="insertCP_oracle">
-		<echo message="Inserting default CP in ORACLE Database for caTIES" />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
-			<transaction src="${oracle.sql.dir}/insertCP_oracle.sql" />
-			<transaction>commit;</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
 	</target>
 
 	<property name="filename" value="" />
