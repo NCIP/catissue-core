@@ -1,10 +1,10 @@
-package com.util;
+package edu.wustl.catissuecore;
 
 import org.apache.log4j.Logger;
 
 public class TaskTimeCalculater {
 
-	private static boolean logPerformance = false;
+	private static boolean logPerformance = true;
 	private static TaskTimeCalculater nullTaskTimeCalculater = new TaskTimeCalculater();
 	private long startTime;
 	private long endTime;
@@ -53,6 +53,10 @@ public class TaskTimeCalculater {
 		String logString = getTaskName() +"," + timeTaken;
 		logger.info(logString);
 		return logString;
+	}
+	
+	public static TaskTimeCalculater startTask(String taskName){
+		return startTask(taskName, TaskTimeCalculater.class);
 	}
 	public static TaskTimeCalculater startTask(String taskName, Class clazz){
 		if (!logPerformance)
