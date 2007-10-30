@@ -640,7 +640,7 @@ public class CollectionProtocolUtil {
 	 * @param requirementGroup
 	 * @return
 	 */
-	private static Collection getSpecimens(Collection specimenRequirementBeanColl, 
+	public static Collection getSpecimens(Collection specimenRequirementBeanColl, 
 			Specimen parentSpecimen, SpecimenCollectionRequirementGroup requirementGroup ) {
 		
 		Collection specimenCollection = new LinkedHashSet();
