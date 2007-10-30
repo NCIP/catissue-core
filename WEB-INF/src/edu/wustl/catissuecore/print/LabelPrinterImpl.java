@@ -19,6 +19,7 @@ import org.w3c.dom.Document;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.XMLPropertyHandler;
 import gov.nih.nci.security.authorization.domainobjects.User;
 /**
  * This Class is used to define method for label printing
@@ -46,13 +47,14 @@ public class LabelPrinterImpl implements LabelPrinter {
 	
 
 	private void callPrintWebService(String strXMLData) throws Exception {
-		String endpoint = "http://localhost:8080/ws4ee/services/PrintWebService";
+		//String endpoint = "http://localhost:8080/ws4ee/services/PrintWebService";
+		String endpointURL = XMLPropertyHandler.getValue("printWebServiceEndPoint");
 		String method = "print";
 
 		// Make the call
 		Service service = new Service();
 		Call call = (Call) service.createCall();
-		call.setTargetEndpointAddress(new java.net.URL(endpoint));
+		call.setTargetEndpointAddress(new java.net.URL(endpointURL));
 		call.setOperationName(method);
 		call.addParameter("op1", XMLType.XSD_STRING, ParameterMode.IN);
 		call.setReturnType(XMLType.XSD_STRING);
