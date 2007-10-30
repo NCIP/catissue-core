@@ -206,7 +206,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				BarcodeGenerator storagecontBarcodeGenerator;
 				try {
 					storagecontBarcodeGenerator = BarcodeGeneratorFactory.getInstance(Constants.STORAGECONTAINER_BARCODE_GENERATOR_PROPERTY_NAME);
-					storagecontBarcodeGenerator.setBarcode(cont);					
+					//storagecontBarcodeGenerator.setBarcode(cont);					
 				} catch (BizLogicException e) {
 					throw new DAOException(e.getMessage());
 				}
