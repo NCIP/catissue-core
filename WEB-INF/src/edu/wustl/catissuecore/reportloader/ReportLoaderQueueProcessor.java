@@ -92,12 +92,9 @@ public class ReportLoaderQueueProcessor extends Thread
 							CaCoreAPIService.updateObject(reportLoaderQueue);
 						}
 					}
-				}
-				else
-				{
-					Logger.out.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
-					Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
-				}
+				}				
+				Logger.out.info("Report loader Queue server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+ "ms");
+				Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
 			}
 			catch (NumberFormatException ex) 
 			{
