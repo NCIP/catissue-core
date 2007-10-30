@@ -6,7 +6,6 @@ package edu.wustl.catissuecore.annotations.xmi;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.jmi.model.ModelPackage;
@@ -159,9 +157,9 @@ public class ImportXmi
 			}
 			EntityInterface staticEntity = (EntityInterface) staticEntityList.get(0);
 			
-			
+			 List<String> containerNames = readFile(pathCsvFileName);
 			XMIImportProcessor xmiImportProcessor = new XMIImportProcessor();
-			Map<String, List<ContainerInterface>> entityNameVsContainers = xmiImportProcessor.processXmi(uml, domainModelName,packageName);
+			List<ContainerInterface> mainContainerList = xmiImportProcessor.processXmi(uml, domainModelName,packageName, containerNames);
 			
 			boolean isEditedXmi = xmiImportProcessor.isEditedXmi;
 			System.out.println("Package name = " +packageName);
@@ -169,7 +167,7 @@ public class ImportXmi
 			System.out.println("Forms have been created !!!!");
 			System.out.println("Associating with hook entity.");
 			
-			List<ContainerInterface> mainContainerList = getMainContainerList(pathCsvFileName,entityNameVsContainers);
+			//List<ContainerInterface> mainContainerList = getMainContainerList(pathCsvFileName,entityNameVsContainers);
 			//Integrating with hook entity
 			associateHookEntity(mainContainerList,conditionObjectIds,staticEntity,isEditedXmi);
 			System.out.println("--------------- Done ------------");
@@ -203,12 +201,12 @@ public class ImportXmi
 	 * @return
 	 * @throws IOException
 	 */
-	private static List<ContainerInterface> getMainContainerList(String path,Map<String, List<ContainerInterface>> entityNameVsContainers) throws IOException
-	{
-		 List<String> containerNames = readFile(path);
-		List<ContainerInterface> mainContainerList = getContainerObjectList(containerNames,entityNameVsContainers);
-		return mainContainerList;
-	}
+//	private static List<ContainerInterface> getMainContainerList(String path,Map<String, List<ContainerInterface>> entityNameVsContainers) throws IOException
+//	{
+//		
+//		List<ContainerInterface> mainContainerList = getContainerObjectList(containerNames,entityNameVsContainers);
+//		return mainContainerList;
+//	}
 	/**
 	 * @param path
 	 * @return
@@ -234,25 +232,7 @@ public class ImportXmi
 		}
 		return containerNames;
 	}
-	/**
-	 * @param containerNames
-	 * @param entityNameVsContainers
-	 * @return
-	 */
-	private static List<ContainerInterface> getContainerObjectList( List<String> containerNames,Map<String, List<ContainerInterface>> entityNameVsContainers)
-	{
-		List<ContainerInterface> mainContainerList = new ArrayList<ContainerInterface>();
-			
-		for(String name : containerNames)
-		{
-			Object containerList = entityNameVsContainers.get(name);
-			if(containerList != null)
-			{
-				mainContainerList.add(((ContainerInterface)((List)containerList).get(0)));				
-			}						
-		}
-		return mainContainerList;
-	}
+	
 
 	private static void init() throws Exception
 	{
@@ -369,22 +349,26 @@ public class ImportXmi
 		Collection<FormContext> formContextColl = entityMap.getFormContextCollection();
 		for(FormContext formContext : formContextColl)
 		{
-//			Collection<EntityMapCondition> entityMapCondColl = formContext.getEntityMapConditionCollection();
-//			int temp = 0;
-//			for(EntityMapCondition condition : entityMapCondColl)
-//			{
-//				if(condition.getStaticRecordId().compareTo(collectionProtocolId) == 0)
-//				{
-//					temp++;
-//					break;								
-//				}
-//			}
-//			if(temp == 0)
-//			{
-//				EntityMapCondition entityMapCondition = getEntityMapCondition(formContext,collectionProtocolId,typeId);
-//				entityMapCondColl.add(entityMapCondition);
-//			}
-			formContext.setEntityMapConditionCollection(getEntityMapCondition(formContext,conditionObjectIds,typeId));
+			Collection<EntityMapCondition> entityMapCondColl = formContext.getEntityMapConditionCollection();
+			
+			for(Long collectionProtocolId : conditionObjectIds)
+			{
+				int temp = 0;
+				for(EntityMapCondition condition : entityMapCondColl)
+				{
+					if(condition.getStaticRecordId().compareTo(collectionProtocolId) == 0)
+					{
+						temp++;
+						break;						
+					}
+				}
+				if(temp == 0)
+				{
+					EntityMapCondition entityMapCondition = getEntityMapCondition(formContext,collectionProtocolId,typeId);
+					entityMapCondColl.add(entityMapCondition);
+				}				
+			}			
+			formContext.setEntityMapConditionCollection(entityMapCondColl);
 		}
 	}
 	/**
@@ -425,9 +409,13 @@ public class ImportXmi
 		formContext.setEntityMap(entityMap);
 		
 		Collection<EntityMapCondition> entityMapConditionColl = new HashSet<EntityMapCondition>();
-		 if(conditionObjectIds != null)
+		if(conditionObjectIds != null)
 		{
-			entityMapConditionColl = getEntityMapCondition(formContext,conditionObjectIds,typeId);
+			for(Long cpId: conditionObjectIds)
+			{
+				entityMapConditionColl.add(getEntityMapCondition(formContext,cpId,typeId));
+			}
+			
 		}
 		
 		formContext.setEntityMapConditionCollection(entityMapConditionColl);
@@ -444,19 +432,19 @@ public class ImportXmi
 	 * @throws DynamicExtensionsSystemException
 	 * @throws DAOException
 	 */
-	private static Collection<EntityMapCondition> getEntityMapCondition(FormContext formContext,List<Long> conditionObjectIds,Object typeId) throws DynamicExtensionsSystemException, DAOException
+	private static EntityMapCondition getEntityMapCondition(FormContext formContext,Long conditionObjectId,Object typeId) throws DynamicExtensionsSystemException, DAOException
 	{	
-		Collection<EntityMapCondition> entityMapCondColl = new HashSet<EntityMapCondition>();
-		for(Long cpId : conditionObjectIds)
-		{
+//		Collection<EntityMapCondition> entityMapCondColl = new HashSet<EntityMapCondition>();
+//		for(Long cpId : conditionObjectIds)
+//		{
 			EntityMapCondition entityMapCondition = new EntityMapCondition();		
-			entityMapCondition.setStaticRecordId((cpId));
+			entityMapCondition.setStaticRecordId((conditionObjectId));
 						
 			entityMapCondition.setTypeId(((Long)typeId));
 			entityMapCondition.setFormContext(formContext);	
-			entityMapCondColl.add(entityMapCondition);
-		}
-		return entityMapCondColl;
+//			entityMapCondColl.add(entityMapCondition);
+//		}
+		return entityMapCondition;
 	}
 	/**
 	 * @param container
