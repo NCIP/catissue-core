@@ -355,6 +355,7 @@ public abstract class QueryModuleUtil
 	public static int searchQuery(HttpServletRequest request, IQuery query, String option)
 	{
 		HttpSession session = request.getSession(); 
+		session.removeAttribute(Constants.HYPERLINK_COLUMN_MAP);
 		int status = 0;
 		try
 		{
