@@ -676,7 +676,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
         	
 			if(this.noOfAliquots!=null && !this.noOfAliquots.equals(""))
 			{
-				if (!this.storageLocationForAliquotSpecimen.equals("Auto")&&!this.storageLocationForAliquotSpecimen.equals("Mannual")&&!this.storageLocationForAliquotSpecimen.equals("Virtual"))
+				if (!this.storageLocationForAliquotSpecimen.equals("Auto")&&!this.storageLocationForAliquotSpecimen.equals("Manual")&&!this.storageLocationForAliquotSpecimen.equals("Virtual"))
 				{
 	               errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cpbasedentry.aliquotstoragelocation")));
 				}
