@@ -247,12 +247,12 @@ public class ConceptCodeManager
 	 * @param args commandline arguments
 	 */
 	public static void main(String[] args)
-	{
-		ConceptCodeManager conceptCodeManager=new ConceptCodeManager();
-		Thread stopThread=new StopServer(CaTIESConstants.CONCEPT_CODER_PORT);
-		stopThread.start();
+	{	
 		try
 		{
+			ConceptCodeManager conceptCodeManager=new ConceptCodeManager();
+			Thread stopThread=new StopServer(CaTIESConstants.CONCEPT_CODER_PORT);
+			stopThread.start();
 			conceptCodeManager.startProcess();
 		}
 		catch(Exception ex)
