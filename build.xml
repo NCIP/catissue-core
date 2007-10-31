@@ -30,6 +30,8 @@
 	<property name="catissue.applet.dir" value="${base.dir}/Applet/catissue" />
 	<property name="test.src.dir" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/bizlogic/test" />
 	<property name="test.class.dir" value="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/bizlogic/test" />
+	<property name="mysql.sql.dir" value="${base.dir}/SQL/MySql" />
+	<property name="mysql.driver.string" value="com.mysql.jdbc.Driver" />
 	
 	<!-- csm related properties -->
 	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
@@ -533,6 +535,19 @@
 				<param name="showData" expression="${show-data}"/>
 			</xslt>
 		</target>
+
+	<!--- Target To Initialise Database For JMeter Tests-->
+	   <target name="Jmeter_DataInitialise">
+			<echo message="Initializing MySQL Database for JMeter Tests..." />
+					<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+						<transaction src="${mysql.sql.dir}/JMeterTests_dump.sql" />
+						<classpath>
+								<fileset dir="${lib.dir}">
+										<include name="*.jar" />
+								</fileset>
+						</classpath>
+					</sql>		
+			</target>
 
   <!-- =================================================================== -->
   <!-- Cobertura code coverage report                                      -->
