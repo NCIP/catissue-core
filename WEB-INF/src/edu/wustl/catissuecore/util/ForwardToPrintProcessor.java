@@ -87,10 +87,14 @@ public class ForwardToPrintProcessor extends AbstractForwardToProcessor
 			{
 				forwardToPrintMap = (HashMap) ((Specimen) domainObject).getAliqoutMap();
 				return forwardToPrintMap;
+			} 
+			if (actionForm.getForwardTo().equals("deriveMultiple"))
+			{
+				forwardToPrintMap.put("specimenLabel", specimen.getLabel());
 			}
 
 		}
-		
+		 
 		return forwardToPrintMap;
 	}
 }

@@ -775,12 +775,14 @@
 				String addEventsSubmitFunctionName = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[2][1]+"')";
 				String addMoreSubmitFunctionName = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";				
 				String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-				
+				String deriveMultipleSubmitFunctionName = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[5][1]+"')";						
+								
 				String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 				String deriveNewSubmit = deriveNewSubmitFunctionName + ","+confirmDisableFuncName;
 				String addEventsSubmit = addEventsSubmitFunctionName + ","+confirmDisableFuncName;
 				String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;		
 				String submitAndDistribute = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
+				String deriveMultipleSubmit = deriveMultipleSubmitFunctionName + ","+confirmDisableFuncName;
 				
 				String specimenCollectionGroupId = (String)request.getAttribute("SpecimenCollectionGroupId");
 				String specimenCollectionGroupName = (String)request.getAttribute("SpecimenCollectionGroupName");
@@ -1537,7 +1539,23 @@
 								}
 								%>
 							<!--  Consent Tracking Module Virender mehta	 -->										
-	 				
+			 				<table summary="" cellpadding="3" cellspacing="0" border="0"
+							width="100%">
+					
+								<tr>
+									<td class="formTitle" " colspan="6" height="20">
+										<bean:message key="multipleDerivatives.mainTitle" />
+									</td>
+								</tr>
+								<tr>
+									<td class="formLabel" colspan="2" style="border-left:1px solid #5C5C5C;">
+										<bean:message key="multipleDerivatives.numberOfSpecimen" />
+									</td>
+									<td class="formField" colspan="3">
+										<html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimens" property="numberOfSpecimens" />
+									</td>
+								</tr>			
+							</table>
 							<!--specimenPageButton-->
 				 			<table summary="" cellpadding="3" cellspacing="1" border="0" width="100%" id="aliquotId">
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
@@ -1570,7 +1588,8 @@
 								</tr>					
 								</logic:notEqual>
 							</table>	 
-						
+							
+							
 							<table>
 								<!-- Bio-hazards End here -->	
 						   	 	<tr>

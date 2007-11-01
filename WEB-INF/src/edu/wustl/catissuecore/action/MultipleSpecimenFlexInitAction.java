@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.util.HashMap;
@@ -16,90 +17,97 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 public class MultipleSpecimenFlexInitAction extends Action
 {
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) throws Exception
-    {
-        //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
-        
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		//Gets the value of the operation parameter.
+		String operation = request.getParameter(Constants.OPERATION);
+
 		String mode = Constants.ADD;
-        if(operation != null && operation.equals(Constants.EDIT))
-        	mode = Constants.EDIT;
-		
+		if (operation != null && operation.equals(Constants.EDIT))
+			mode = Constants.EDIT;
+
 		String showParentSelection = "false";
 		String showLabel = "true";
 		String showBarcode = "true";
-		
+
 		String parentType = request.getParameter("parentType");
-		if(parentType == null)
+		if (parentType == null)
 		{
 			parentType = Constants.NEW_SPECIMEN_TYPE;
 			showParentSelection = "true";
-			
+
 		}
 		String numberOfSpecimens = getNumberOfSpecimens(request);
 		String parentName = getParentName(request, parentType);
-		
-		if(edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl )
+
+		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 		{
 			showLabel = "false";
 		}
-		if(edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl )
+		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl)
 		{
 			showBarcode = "false";
 		}
-		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens,showParentSelection,showLabel,showBarcode);
-		
+		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens, showParentSelection, showLabel, showBarcode);
+
 		String pageOf = (String) request.getParameter("pageOf");
-		if(pageOf!=null)
+		if (pageOf != null)
 		{
-			request.setAttribute(Constants.PAGEOF,pageOf);
+			request.setAttribute(Constants.PAGEOF, pageOf);
 			return mapping.findForward(pageOf);
 		}
-        return mapping.findForward("success");
-    }
-	
-	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType, String parentName, String numberOfSpecimens,String showParentSelection,String showLabel,String showBarcode)
-	{
-		
-        request.setAttribute("MODE",mode);
-        request.setAttribute("PARENT_TYPE", parentType);
-        request.setAttribute("PARENT_NAME", parentName);
-        request.setAttribute("SP_COUNT",numberOfSpecimens);
-        request.setAttribute("SHOW_PARENT_SELECTION",showParentSelection);
-        request.setAttribute("SHOW_LABEL",showLabel);
-        request.setAttribute("SHOW_BARCODE",showBarcode);
+		return mapping.findForward("success");
 	}
-	
+
+	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType, String parentName, String numberOfSpecimens,
+			String showParentSelection, String showLabel, String showBarcode)
+	{
+
+		request.setAttribute("MODE", mode);
+		request.setAttribute("PARENT_TYPE", parentType);
+		request.setAttribute("PARENT_NAME", parentName);
+		request.setAttribute("SP_COUNT", numberOfSpecimens);
+		request.setAttribute("SHOW_PARENT_SELECTION", showParentSelection);
+		request.setAttribute("SHOW_LABEL", showLabel);
+		request.setAttribute("SHOW_BARCODE", showBarcode);
+	}
+
 	private String getParentName(HttpServletRequest request, String parentType)
 	{
-		if(Constants.NEW_SPECIMEN_TYPE.equals(parentType))
+		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+		if (forwardToHashMap != null)
 		{
-			String specimenCollectionGroupName = "";
-			HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
-			if(forwardToHashMap!=null)
+			if (Constants.NEW_SPECIMEN_TYPE.equals(parentType))
 			{
+				String specimenCollectionGroupName = "";
 				Object obj = forwardToHashMap.get("specimenCollectionGroupName");
-				if(obj!=null)
+				if (obj != null)
 				{
-					specimenCollectionGroupName = (String)obj;
+					specimenCollectionGroupName = (String) obj;
 				}
+
+				return specimenCollectionGroupName;
 			}
-			return specimenCollectionGroupName;
+			else if (Constants.DERIVED_SPECIMEN_TYPE.equals(parentType))
+			{
+				String parentSpecimenLabel = "";
+				Object obj = forwardToHashMap.get("specimenLabel");
+				if (obj != null)
+				{
+					parentSpecimenLabel = (String) obj;
+				}
+
+				return parentSpecimenLabel;
+			}
 		}
-		else if(Constants.DERIVED_SPECIMEN_TYPE.equals(parentType))
-		{
-			//TODO
-			return ""; 
-		}
-		return "";	
+		return "";
 	}
-	
+
 	private String getNumberOfSpecimens(HttpServletRequest request)
 	{
 		String numberOfSpecimens = request.getParameter(Constants.NUMBER_OF_SPECIMENS);
-		System.out.println("numberOfSpecimens "+numberOfSpecimens);
-		if( numberOfSpecimens==null || numberOfSpecimens.equals(""))
+		System.out.println("numberOfSpecimens " + numberOfSpecimens);
+		if (numberOfSpecimens == null || numberOfSpecimens.equals(""))
 		{
 			numberOfSpecimens = "1";
 		}

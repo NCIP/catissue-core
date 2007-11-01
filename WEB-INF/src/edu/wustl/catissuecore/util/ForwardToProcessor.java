@@ -118,7 +118,11 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId().toString());
 				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
 			}
-
+			else if (actionForm.getForwardTo().equals("deriveMultiple"))
+			{
+				forwardToHashMap.put("specimenLabel", specimen.getLabel());
+			}
+			
 			//Aniruddha:17/07/06 :: Added for aliquot result page
 			if (Constants.ALIQUOT.equals(((Specimen) domainObject).getLineage()) && actionForm.getOperation().equals(Constants.ADD))
 			{

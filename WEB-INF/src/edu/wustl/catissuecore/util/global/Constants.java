@@ -1192,14 +1192,16 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			{"Derive",			"createNew"},
 			{"Add Events",				"eventParameters"},
 			{"More",	"sameCollectionGroup"},
-			{"Distribute", "distribution" }
+			{"Distribute", "distribution" },
+			{"Derive Multiple", "deriveMultiple"}
 	};
 	public static final String [] SPECIMEN_BUTTON_TIPS = {
 		"Submit only",
 		"Submit and derive",
 		"Submit and add events",
 		"Submit and add more to same group",
-		"Submit and distribute"
+		"Submit and distribute",
+		"Submit and derive multiple"
 	};
 
 	public static final String [][] SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST = {

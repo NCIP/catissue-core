@@ -81,6 +81,15 @@
 
 
 		</logic:notEqual>
+		<td>
+		<html:button
+		styleClass="actionButton" property="deriveButton"
+		title="<%=Constants.SPECIMEN_BUTTON_TIPS[5]%>"
+		value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[5][0]%>"
+		onclick="<%=deriveMultipleSubmit%>"
+		>
+		</html:button>
+		</td>
 	</tr>
 </table>
 <!-- action buttons end -->

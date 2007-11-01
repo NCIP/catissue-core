@@ -42,17 +42,10 @@
 					derivedSpData.mode = msParameter.mode;
 					validateVal = derivedSpData.validate(false) && validateVal;
 				}
-				//Alert.show("Hi");
-			/*	var isValid:Boolean = true;
-
-   				isValid= validateRequiredField(spLabel,"text","Please enter label") && isValid;
-	   			isValid= validateRequiredField(spBarCode,"text","Please enter barcode") && isValid;
-
-				isValid = validateComboBoxField(spClass,"selectedItem","Please select class") && isValid;
-				isValid = validateComboBoxField(spType,"selectedItem","Please select type") && isValid;*/
+			
 				if(validateVal)
 				{
-	   			 PopUpManager.removePopUp(this);
+		   			 PopUpManager.removePopUp(this);
 	   			}
 	   			else
 	   			{
@@ -101,6 +94,7 @@
 		}
 		public function getMspParameter() : MSPParameter
 		{
+			Alert.show("msParameter in derived pane:"+msParameter);
 			return msParameter;	
 			
 		}

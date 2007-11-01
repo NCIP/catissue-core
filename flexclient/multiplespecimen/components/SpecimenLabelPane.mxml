@@ -36,6 +36,37 @@
 				recEventBox.height = 0;
 				commentBox.height = 15;
 			}
+			specimenParentChanges(mspParameter.parentType);
+			
+		}
+		public function specimenParentChanges(parentType:String):void
+		{
+			if(parentType == MSPParameter.PARENT_TYPE_PARAM_VAL_SP)
+			{
+				tissueSiteBox.visible = false;
+				tissueSiteBox.height = 0;
+				tissueSideBox.visible = false;
+				tissueSideBox.height = 0;
+				pathStatusBox.visible = false;
+				pathStatusBox.height = 0;
+				collEventBox.visible = false;
+				collEventBox.height = 0;
+				recEventBox.visible = false;
+				recEventBox.height = 0;
+			}
+			else
+			{
+				tissueSiteBox.visible = true;
+				tissueSiteBox.height = 25;
+				tissueSideBox.visible = true;
+				tissueSideBox.height = 25;
+				pathStatusBox.visible = true;
+				pathStatusBox.height = 25;
+				collEventBox.visible = true;
+				collEventBox.height = 25;
+				recEventBox.visible = true;
+				recEventBox.height = 35;
+			}
 		}
 		private function selectAllSp() : void
 		{
@@ -83,15 +114,15 @@
 		<mx:Label text="* Type" fontWeight="bold"/>	
 	</mx:HBox>
 	
-	<mx:HBox height="25" styleName="hBoxForSpLabel">
+	<mx:HBox height="25" styleName="hBoxForSpLabel" id="tissueSiteBox">
 		<mx:CheckBox id="tissueSiteChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="* Tissue Site" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25" styleName="hBoxForSpLabel">
+	<mx:HBox height="25" styleName="hBoxForSpLabel" id="tissueSideBox">
 		<mx:CheckBox id="tissueSideChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="* Tissue Side" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25" styleName="hBoxForSpLabel">
+	<mx:HBox height="25" styleName="hBoxForSpLabel" id="pathStatusBox">
 		<mx:CheckBox id="pathStatusChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="* Pathological Status" fontWeight="bold"/>
 	</mx:HBox>

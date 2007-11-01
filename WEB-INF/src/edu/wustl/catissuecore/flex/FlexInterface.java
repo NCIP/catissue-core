@@ -101,6 +101,8 @@ public class FlexInterface
 		spBean.receivedEvent.userName = sdb.getLastName() + ", " + sdb.getFirstName();
 		spBean.comment = "";
 
+		try
+		{
 		if (Constants.ADD.equals(mode) && edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE.equals(parentType))
 		{
 			if (parentName != null)
@@ -112,16 +114,6 @@ public class FlexInterface
 
 					Collection eventColl = (Collection) bizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(),
 							"elements(specimenEventParametersCollection)");
-					/*String[] selectColName = {"elements(specimenEventParametersCollection)"};
-					 String[] whereColName = {"name"};
-
-					 String[] whereColCond = {"="};
-					 Object[] whereColVal = {parentName};
-
-					 List list = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColName, whereColName, whereColCond, whereColVal,
-					 Constants.AND_JOIN_CONDITION);
-					 
-					 Logger.out.info("List:"+list);*/
 					if (eventColl != null && !eventColl.isEmpty())
 					{
 						Iterator itr = eventColl.iterator();
@@ -156,6 +148,10 @@ public class FlexInterface
 
 				}
 			}
+		}
+		}catch(Exception e)
+		{
+			System.out.println("Error while init flex for multiple sp :"+e.getMessage());
 		}
 
 		return spBean;

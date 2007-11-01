@@ -1457,6 +1457,8 @@ PUBLIC
 			<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 			<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />		
+			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
+	
 		</action>
 		<action path="/CPQueryPrintSpecimenEdit"
 			type="edu.wustl.catissuecore.action.PrintAction"
@@ -1470,6 +1472,7 @@ PUBLIC
 			<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 			<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 			<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
 		</action>
 		<action path="/CPQueryPrintDeriveSpecimen"
 			type="edu.wustl.catissuecore.action.PrintAction"
@@ -4149,6 +4152,7 @@ PUBLIC
 		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 		<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+		<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
 	</action>
 		
 			
@@ -4168,6 +4172,8 @@ PUBLIC
 		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 		<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+		<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
+		
 	</action>
 
 	<action path="/CPQuerySpecimenCollectionGroupAddNew"

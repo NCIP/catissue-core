@@ -56,7 +56,8 @@ public class EventParamtersBean implements Externalizable
 		} 
 		//this.userName = event.getUser().getLoginName();
 		this.userName = event.getUser().getLastName() + ", " + event.getUser().getFirstName();
-		this.comment = event.getComment();
+		if(event.getComment() != null)
+			this.comment = event.getComment();
 		Calendar calender = Calendar.getInstance();
 		calender.setTime(event.getTimestamp());
 		this.eventdDate = event.getTimestamp();

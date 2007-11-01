@@ -201,6 +201,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	
 	private String nextForwardTo;
 	
+	private int numberOfSpecimens;
 	public String getNextForwardTo() {
 		return nextForwardTo;
 	}
@@ -379,6 +380,22 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
   
     
     /**
+	 * @return Returns the numberOfSpecimens.
+	 */
+	public int getNumberOfSpecimens()
+	{
+		return numberOfSpecimens;
+	}
+
+	/**
+	 * @param numberOfSpecimens The numberOfSpecimens to set.
+	 */
+	public void setNumberOfSpecimens(int numberOfSpecimens)
+	{
+		this.numberOfSpecimens = numberOfSpecimens;
+	}
+
+	/**
      * @return NEW_SPECIMEN_FORM_ID Returns the id assigned to form bean.
      */
     public int getFormId()
@@ -386,7 +403,9 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
         return Constants.NEW_SPECIMEN_FORM_ID;
     }
     
-    /**
+    
+  
+	/**
      * This function Copies the data from an site object to a SiteForm object.
      * @param abstractDomain An object containing the information about site.  
      */

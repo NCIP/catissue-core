@@ -61,9 +61,8 @@
 			model.filteredCollection = specimenColl;
 			mspParameter = MSPParameterReader.processParam(Application.application.parameters);
 			specimenColl = new ArrayCollection();
-						
+			myRemoteObject.initFlexInterfaceForMultipleSp(mspParameter.mode,mspParameter.parentType,mspParameter.parentName);		
 			metadataManager.init(mspParameter.mode);
-			myRemoteObject.initFlexInterfaceForMultipleSp(mspParameter.mode,mspParameter.parentType,mspParameter.parentName);
 						
 			metadataManager.addEventListener("initCompleteEvent",init);
 			if(mspParameter.showParentSelection == "true")
@@ -83,6 +82,7 @@
 		
 		private function init(event:Event):void
 		{
+
 			
 			if(mspParameter.mode == MSPParameter.MODE_PARAM_VAL_ADD)
 			{
@@ -133,14 +133,12 @@
 				
 			spData.receivedEvent.userName = specimenDataBean.receivedEvent.userName;
 			counter++;
-			
+
 			if(mspParameter.parentType==MSPParameter.PARENT_TYPE_PARAM_VAL_SCG)
 			{
 				spData.parentType = Constants.NEW_SPECIMEN;
 				spData.parentName = mspParameter.parentName;
 				setScgEvents(spData);
-				
-
 			}
 			else
 			{
@@ -164,8 +162,16 @@
 			}
 			setPagination();	
 			selectionBox.visible = showParentSelection;
-			spParent.selectedValue = "New Specimen";
-			spLabelPane.spOrScg.text = "* Specimen Group Name";
+			if(mspParameter.parentType == MSPParameter.PARENT_TYPE_PARAM_VAL_SP)
+			{
+				spParent.selectedValue = "Derived Specimen";
+				spLabelPane.spOrScg.text = "* Parent Name ";
+			}
+			else
+			{
+				spParent.selectedValue = "New Specimen";
+				spLabelPane.spOrScg.text = "* Specimen Group Name";
+			}
 		}
 
 		private function addMoreSpecimen(event:Event):void
@@ -473,11 +479,18 @@
 	   			if(isSpParentName.selected)
 	   			{
 	   				spData.parentType = Constants.DERIVED_SPECIMEN;
+	   				mspParameter.parentType = MSPParameter.PARENT_TYPE_PARAM_VAL_SP;
 	   			}
 	   			else
 	   			{
 	   				spData.parentType = Constants.NEW_SPECIMEN;	
+	   				mspParameter.parentType = MSPParameter.PARENT_TYPE_PARAM_VAL_SCG;
+
 	   			}
+	   			if(A[i] != null)
+		   			A[i].specimenParentChanges(mspParameter.parentType);
+		   	//	model.filteredCollection.refresh();	
+		   		spLabelPane.specimenParentChanges(mspParameter.parentType);	
   			}
    			
 
@@ -522,7 +535,7 @@
 	
 		<components:SpecimenLabelPane backgroundColor="#F0F8FF" id="spLabelPane" mspParameter="{getMSParameter()}"/>
 
-		<mx:Repeater id="spRepeater" dataProvider="{model.filteredCollection}">	
+		<mx:Repeater id="spRepeater" dataProvider="{model.filteredCollection}" >	
 			<components:SpecimenPane id="A" backgroundColor="{getAlternateColor(spRepeater.currentIndex)}" mspParameter="{getMSParameter()}"/>
 		</mx:Repeater>
 	</mx:HBox>

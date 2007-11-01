@@ -31,9 +31,10 @@
 			
 		}
 		
-		private function creationComp():void
+		public function creationComp():void
 		{
-				bindData();
+			bindData();
+		
 			if(spData.specimenClass == Constants.MOLECULAR)
 			{
 				spConcentration.enabled = true;
@@ -62,8 +63,41 @@
 				spClass.enabled = false;
 				spType.enabled = false;
 			}
-	
+			specimenParentChanges(mspParameter.parentType,false);	
 		}
+		public function specimenParentChanges(parentType:String,accordianChanges:Boolean=true):void
+		{
+			if(parentType == MSPParameter.PARENT_TYPE_PARAM_VAL_SP)
+			{
+				tissueSiteBox.visible = false;
+				tissueSiteBox.height = 0;
+				
+				tissueSideBox.visible = false;
+				tissueSideBox.height = 0;
+				
+				pathStatusBox.visible = false;
+				pathStatusBox.height = 0;
+				
+				specimenAccordion.removeChild(collEventBox);
+				specimenAccordion.removeChild(recEventBox);
+			}
+			else
+			{
+				tissueSiteBox.visible = true;
+				tissueSiteBox.height = 25;
+				tissueSideBox.visible = true;
+				tissueSideBox.height = 25;
+				pathStatusBox.visible = true;
+				pathStatusBox.height = 25;
+				if(accordianChanges)
+				{
+					specimenAccordion.addChildAt(collEventBox,1);
+					specimenAccordion.addChildAt(recEventBox,2);
+				}
+			}
+		}
+		
+		
 		private function bindData() : void
 		{
 			//Check box
@@ -208,6 +242,7 @@
 	    	var pop1:DerivedSpecimenPane = DerivedSpecimenPane(
 	        PopUpManager.createPopUp(this, DerivedSpecimenPane, true));
     		pop1.derivedSpColl = spData.derivedSpColl;
+    		Alert.show("msParameter in createPopup function:"+mspParameter);
     		pop1.msParameter = mspParameter;
 			pop1.title = "Create Derived Specimen";
 
@@ -230,70 +265,6 @@
 
 
    		
-   	/*	public function validateSpecimen(index:int):Boolean
-   		{
-   			Alert.show("in specimnen Pane validation:");
-   			var isValid:Boolean = true;
-   			var specimenNumber :String = " for specimen "+index;
-   			var parentNameValMesg:String;
-   			if(parentApplication.isSpSCGName != null)
-   			{
-   			if(parentApplication.isSpSCGName.selected)
-   			{
-				parentNameValMesg = "Please enter specimen collection group name";
-				
-   			}
-   			else
-   			{
-   				parentNameValMesg = "Please enter parent specimen label";
-   			}
- 			   			isValid = validateRequiredField(spParentName,"text",parentNameValMesg) && isValid;
-   			}
-   			
-
-   			isValid= validateRequiredField(spLabel,"text","Please enter label") && isValid;
-   			//isValid= validateRequiredField(spBarCode,"text","Please enter barcode") && isValid;
-
-			isValid = validateComboBoxField(spClass,"selectedItem","Please select class") && isValid;
-			isValid = validateComboBoxField(spType,"selectedItem","Please select type") && isValid;
-			isValid = validateComboBoxField(spTissueSite,"selectedItem","Please select tissue site") && isValid;			
-			isValid = validateComboBoxField(spTissueSide,"selectedItem","Please select tissue side") && isValid;			
-			isValid = validateComboBoxField(spPathologicalStatus,"selectedItem","Please select pathological status") && isValid;			
-			
-   			isValid =  validateNumberField(spQuantity,"text","Please enter Quantity",true,0) && isValid;
-   			isValid =  validateNumberField(spConcentration,"text","Please enter concentration",true,0) && isValid;
-			if(mode == MSPParameter.MODE_PARAM_VAL_ADD && colledtedEventPane != null)
-   			{
-	   			isValid = colledtedEventPane.collectedEventContentPane.validateCollEvent(index) && isValid;
-   			}
-   			if(mode == MSPParameter.MODE_PARAM_VAL_ADD && receivedEventPane != null)
-   			{
-				isValid= receivedEventPane.receivedEventContentPane.validateRecvEvent(index) && isValid;
-   			}
-		
-			if(exIDPane != null)
-			{
-				isValid = exIDPane.validateExIds(index) && isValid;
-			}
-			if(biohazardPane != null)
-			{
-				isValid = biohazardPane.validateBiohazards(index) && isValid;
-					
-			}
-			return isValid;
-		}        
-*/
-		/*public function changeParent():void
-		{
-			if(isSpSCGName.selected)
-			{
-				spParentName.text= null;
-			}
-			else
-			{
-				spSCGName.text = null;
-			}
-		}*/
 		public function chkStorage() : void
 		{
 //			Alert.show("In this build only Virtual storage is supported.");
@@ -307,28 +278,15 @@
 			<mx:CheckBox id="isCopy" click="onClick(event)"/>
 			<mx:Label text="{specimenNo}" x="25"/>
 		</components:MyCanvas>
-	
-		<!--<components:MyCanvas>
-			<mx:HBox>
-				<mx:RadioButtonGroup id="spParent"/>
-				<mx:RadioButton id="isSpSCGName" label="SCG"  group="{spParent}" click="changeParent()"/>
-				<mx:RadioButton id="isSpParentName" label="Specimen" group="{spParent}" click="changeParent()"/>
-			</mx:HBox>
-		</components:MyCanvas>-->
-
 		<components:MyCanvas id="spParentNameBox">
 			<mx:TextInput id="spParentName" width="160" toolTip="{spData.parentName}"/>
 		</components:MyCanvas>
-
-	
 		<components:MyCanvas id="spLabelBox">
 			<mx:TextInput id="spLabel"/>
 		</components:MyCanvas>
-	
 		<components:MyCanvas id="spBarcodeBox">
 			<mx:TextInput id="spBarCode"/>
 		</components:MyCanvas>
-
 	</mx:VBox>	
 		
 
@@ -340,15 +298,15 @@
 		<adobe:AutoComplete id="spType" dataProvider="{spData.specimenTypePVList}" lookAhead="true"/>
 	</components:MyCanvas>
 		
-	<components:MyCanvas>	
+	<components:MyCanvas id="tissueSiteBox">	
 		<adobe:AutoComplete id="spTissueSite" dataProvider="{MetadataModel.getInstance().tissueSitePVList}" lookAhead="true"/>
 	</components:MyCanvas>
 	
-	<components:MyCanvas>
+	<components:MyCanvas id="tissueSideBox">
 		<adobe:AutoComplete id="spTissueSide" dataProvider="{MetadataModel.getInstance().tissueSidePVList}" lookAhead="true"/>
 	</components:MyCanvas>
 	
-	<components:MyCanvas>
+	<components:MyCanvas id="pathStatusBox">
 		<adobe:AutoComplete id="spPathologicalStatus" dataProvider="{MetadataModel.getInstance().pathologicalStatusPVList}" lookAhead="true"/>
 	</components:MyCanvas>
 
