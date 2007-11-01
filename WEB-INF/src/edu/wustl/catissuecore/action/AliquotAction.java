@@ -549,6 +549,7 @@ public class AliquotAction extends SecureAction
 			if (aliquotForm.getCheckedButton().equals("1"))
 			{
 				tempAliquotMap.put("label", aliquotForm.getSpecimenLabel());
+				tempAliquotMap.put("barcode", aliquotForm.getBarcode());
 			}
 			else
 			{
