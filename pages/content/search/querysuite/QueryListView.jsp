@@ -53,8 +53,12 @@
 										</html:link><br/>
 										<b>Description: &nbsp;</b><c:out value='${parameterizedQuery.description}' />
 									</td>
+									<td valign="top" height='20'>
+										<%target = "deleteQuery('"+parameterizedQuery.getId()+"')"; %>
+										<html:image src="images/delete.gif" alt="Delete" onclick='<%=target%>' />
+									</td>
 								</tr>
-								<tr><td colspan='2'>&nbsp;</td></tr>
+								<tr><td colspan='3' class="saveQuery">&nbsp;</td></tr>
 							</c:forEach>
 						</table>
 					</div>

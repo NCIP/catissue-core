@@ -539,7 +539,13 @@ PUBLIC
 			<forward name="failure" path="/RetrieveQueryAction.do"/>
 			<forward name="InvalidValues" path="/FetchQuery.do"/>
 		</action>
-		
+		<action path="/DeleteQuery"
+			type="edu.wustl.catissuecore.action.querysuite.DeleteQueryAction"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/RetrieveQueryAction.do"/>
+			<forward name="failure" path="/RetrieveQueryAction.do"/>
+		</action>
 		<action path="/FetchQuery"
 			type="edu.wustl.catissuecore.action.querysuite.FetchQueryAction"
 			name="saveQueryForm"
