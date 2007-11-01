@@ -40,9 +40,7 @@ public class LoadSaveQueryPageAction extends BaseAction
 			setActionError(request, msg);
 			System.out.println(msg);
 			target = Constants.SUCCESS;
-			response.setContentType("text/html");
-			response.getWriter().write(msg);
-			return null;
+			request.setAttribute("isQuerySaved","isQuerySaved");
 		}
 		else
 		{
@@ -68,13 +66,6 @@ public class LoadSaveQueryPageAction extends BaseAction
 				setActionError(request, errorMsg);
 	
 			}
-		}
-		if(isAjax != null && isAjax.equals("true"))
-		{
-			msg = "";
-			response.setContentType("text/html");
-			response.getWriter().write(msg);
-			return null;
 		}
 		return mapping.findForward(target);
 

@@ -9,6 +9,15 @@
 	import="edu.wustl.catissuecore.util.global.Constants"
 %>
 
+<%
+	String isQuerySaved =(String) request.getAttribute("isQuerySaved");
+	String isSaveButtonDisable = "";
+	if(isQuerySaved != null)
+	{
+		isSaveButtonDisable = "disabled='disabled'";
+	}
+%>
+
 <html:html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
@@ -102,7 +111,7 @@
 								<input type="button" name="close" value="Close" class="actionButton" onClick="closeSaveQueryWindow()"/>
 							</c:when>
 							<c:otherwise>
-								<input type="button" name="save" value="Save" class="actionButton" onClick="produceSavedQuery()"/>
+								<input type="button" name="save" value="Save" class="actionButton" onClick="produceSavedQuery()" <%=isSaveButtonDisable%>/>
 								<input type="button" name="cancel" value="Cancel" class="actionButton" onClick="window.close();"/>
 							</c:otherwise>
 						</c:choose>
