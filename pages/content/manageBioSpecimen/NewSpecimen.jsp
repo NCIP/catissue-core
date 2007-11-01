@@ -614,6 +614,10 @@
 				
 		var aliquotTable=document.getElementById('aliquotId');
 		aliquotTable.style.display=tabSelected;
+
+		var display6=document.getElementById('multipleDerivativeTbl'); 
+		display6.style.display=tabSelected;
+
 				
 		var collectionTab=document.getElementById('newSpecimenTab');
 		var consentTab=document.getElementById('consentTab');
@@ -1540,7 +1544,7 @@
 								%>
 							<!--  Consent Tracking Module Virender mehta	 -->										
 			 				<table summary="" cellpadding="3" cellspacing="0" border="0"
-							width="100%">
+							width="100%" id="multipleDerivativeTbl">
 					
 								<tr>
 									<td class="formTitle" " colspan="6" height="20">
