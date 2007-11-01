@@ -36,7 +36,10 @@
 				recEventBox.height = 0;
 				commentBox.height = 15;
 			}
-			specimenParentChanges(mspParameter.parentType);
+			else
+			{
+				specimenParentChanges(mspParameter.parentType);
+			}
 			
 		}
 		public function specimenParentChanges(parentType:String):void

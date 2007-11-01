@@ -94,7 +94,6 @@
 		}
 		public function getMspParameter() : MSPParameter
 		{
-			Alert.show("msParameter in derived pane:"+msParameter);
 			return msParameter;	
 			
 		}

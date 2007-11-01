@@ -63,7 +63,10 @@
 				spClass.enabled = false;
 				spType.enabled = false;
 			}
-			specimenParentChanges(mspParameter.parentType,false);	
+			else
+			{
+				specimenParentChanges(mspParameter.parentType,false);	
+			}
 		}
 		public function specimenParentChanges(parentType:String,accordianChanges:Boolean=true):void
 		{

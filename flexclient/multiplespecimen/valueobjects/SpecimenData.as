@@ -495,12 +495,12 @@ package valueobjects
 					isValid = biohazardBean.validate() && isValid;
 				}
 			}
-			if(isNewSpecimen &&this.collectionEvent != null)
+			if(mode == MSPParameter.MODE_PARAM_VAL_ADD&&isNewSpecimen &&this.collectionEvent != null)
 			{
 
 				isValid = this.collectionEvent.validate() && isValid;
 			}
-			if(isNewSpecimen && this.receivedEvent != null)
+			if(mode == MSPParameter.MODE_PARAM_VAL_ADD && isNewSpecimen && this.receivedEvent != null)
 			{
 				isValid = this.receivedEvent.validate() && isValid;
 			}

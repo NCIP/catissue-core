@@ -85,7 +85,7 @@ public class FlexInterface
 		sb.specimenLabel = "AA";
 		return sb;
 	}
- 
+
 	public SpecimenBean initFlexInterfaceForMultipleSp(String mode, String parentType, String parentName) throws DAOException
 	{
 		session = flex.messaging.FlexContext.getHttpRequest().getSession();
@@ -103,55 +103,56 @@ public class FlexInterface
 
 		try
 		{
-		if (Constants.ADD.equals(mode) && edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE.equals(parentType))
-		{
-			if (parentName != null)
+			if (Constants.ADD.equals(mode) && edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE.equals(parentType))
 			{
-				SpecimenCollectionGroup scg = getSpecimenCollGrp(parentName);
-				if (scg != null)
+				if (parentName != null)
 				{
-					SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
-
-					Collection eventColl = (Collection) bizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(),
-							"elements(specimenEventParametersCollection)");
-					if (eventColl != null && !eventColl.isEmpty())
+					SpecimenCollectionGroup scg = getSpecimenCollGrp(parentName);
+					if (scg != null)
 					{
-						Iterator itr = eventColl.iterator();
-						while (itr.hasNext())
+						SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
+
+						Collection eventColl = (Collection) bizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(),
+								"elements(specimenEventParametersCollection)");
+						if (eventColl != null && !eventColl.isEmpty())
 						{
-							SpecimenEventParameters event = (SpecimenEventParameters) itr.next();
-							String[] selectColName = {"user"};
-							String[] whereColName = {"id"};
-
-							String[] whereColCond = {"="};
-							Object[] whereColVal = {event.getId()};
-
-							List list = bizLogic.retrieve(EventParameters.class.getName(), selectColName, whereColName, whereColCond,
-									whereColVal, Constants.AND_JOIN_CONDITION);
-
-							Logger.out.info("List:" + list);
-							if(list != null && !list.isEmpty())
+							Iterator itr = eventColl.iterator();
+							while (itr.hasNext())
 							{
-								User user = (User) list.get(0);
-								event.setUser(user);
-							}
-							if (event instanceof CollectionEventParameters)
-							{
-								collEvBean.copy(event);
-							}
-							else if (event instanceof ReceivedEventParameters)
-							{
-								recEvBean.copy(event);
+								SpecimenEventParameters event = (SpecimenEventParameters) itr.next();
+								String[] selectColName = {"user"};
+								String[] whereColName = {"id"};
+
+								String[] whereColCond = {"="};
+								Object[] whereColVal = {event.getId()};
+
+								List list = bizLogic.retrieve(EventParameters.class.getName(), selectColName, whereColName, whereColCond,
+										whereColVal, Constants.AND_JOIN_CONDITION);
+
+								Logger.out.info("List:" + list);
+								if (list != null && !list.isEmpty())
+								{
+									User user = (User) list.get(0);
+									event.setUser(user);
+								}
+								if (event instanceof CollectionEventParameters)
+								{
+									collEvBean.copy(event);
+								}
+								else if (event instanceof ReceivedEventParameters)
+								{
+									recEvBean.copy(event);
+								}
 							}
 						}
-					}
 
+					}
 				}
 			}
 		}
-		}catch(Exception e)
+		catch (Exception e)
 		{
-			System.out.println("Error while init flex for multiple sp :"+e.getMessage());
+			System.out.println("Error while init flex for multiple sp :" + e.getMessage());
 		}
 
 		return spBean;
@@ -608,9 +609,9 @@ public class FlexInterface
 					Collection exIdColl = (Collection) bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
 							"elements(externalIdentifierCollection)");
 					specimen.setExternalIdentifierCollection(exIdColl);
-					/*SpecimenCollectionGroup scg = getSpecimenCollGrpForSpecimen(specimenId);
-					 specimen.setSpecimenCollectionGroup(scg);*/
-					specimen = getAttributesForSpecimen(specimen);
+					SpecimenCollectionGroup scg = getSpecimenCollGrpForSpecimen(specimenId);
+					specimen.setSpecimenCollectionGroup(scg);
+					specimen = setStorageContForSpecimen(specimen);
 					SpecimenBean sb = prepareSpecimenBean(specimen, Constants.EDIT);
 					list.add(sb);
 					SpecimenDataBean sdb = prepareGenericSpecimen(specimen);
@@ -1026,8 +1027,14 @@ public class FlexInterface
 			{
 				continue;
 			}
-
-			ex.setId(ex.getId());
+			if (ex.getId() == -1)
+			{
+				ex.setId(null);
+			}
+			else
+			{
+				ex.setId(ex.getId());
+			}
 			exIdSet.add(ex);
 		}
 		return exIdSet;
@@ -1141,11 +1148,11 @@ public class FlexInterface
 
 	}
 
-	private Specimen getAttributesForSpecimen(Specimen specimen)
+	private Specimen setStorageContForSpecimen(Specimen specimen)
 	{
 
 		String sourceObjName = Specimen.class.getName();
-		String[] selectColName = {"specimenCollectionGroup", "storageContainer"};
+		String[] selectColName = {"storageContainer"};
 		String[] whereColName = {"id"};
 		String[] whereColCond = {"="};
 		Object[] whereColVal = {specimen.getId()};
@@ -1155,15 +1162,8 @@ public class FlexInterface
 			List list = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.OR_JOIN_CONDITION);
 			if (!list.isEmpty())
 			{
-				Object[] obj = (Object[]) list.get(0);
-				SpecimenCollectionGroup scg = (SpecimenCollectionGroup) obj[0];
-				specimen.setSpecimenCollectionGroup(scg);
-
-				StorageContainer storageCont = (StorageContainer) obj[1];
+				StorageContainer storageCont = (StorageContainer) list.get(0);
 				specimen.setStorageContainer(storageCont);
-
-				/*Collection exIdColl = (Collection) obj[2];
-				 specimen.setExternalIdentifierCollection(exIdColl);*/
 				return specimen;
 			}
 		}

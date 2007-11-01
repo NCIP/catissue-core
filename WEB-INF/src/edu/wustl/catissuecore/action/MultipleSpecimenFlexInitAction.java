@@ -56,6 +56,11 @@ public class MultipleSpecimenFlexInitAction extends Action
 			request.setAttribute(Constants.PAGEOF, pageOf);
 			return mapping.findForward(pageOf);
 		}
+		else if(Constants.EDIT.equals(mode))
+		{
+			request.setAttribute(Constants.PAGEOF,"pageOfMultipleSpWithMenu");
+		}
+			
 		return mapping.findForward("success");
 	}
 
