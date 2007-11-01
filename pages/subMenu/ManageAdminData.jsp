@@ -299,13 +299,14 @@
 </tr>
 
 <!-- menu id : 14 Pending Report Requests: Vijay -->
+<!-- temporarily commented  
 <%
-	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 14, normalMenuClass , selectedMenuClass , hoverMenuClass);
+//	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 14, normalMenuClass , selectedMenuClass , hoverMenuClass);
 %>
 <tr>
 	<%=strMouseOut%>
 		<div>
-			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->
+			
 				<b><bean:message key="app.pendingrequests" /></b>
 		</div>
         <div>
@@ -315,4 +316,6 @@
 
 		</td>
 </tr>
+
+-->
 
