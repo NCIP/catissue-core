@@ -1032,6 +1032,13 @@ var jsReady = false;
 		document.forms[0].submit();
 	}  
 	
+	function deleteQuery(queryId)
+	{
+		action="DeleteQuery.do?queryId="+queryId;
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}  
+	
 	function openDecisionMakingPage()
 	{
 		action="OpenDecisionMakingPage.do";
