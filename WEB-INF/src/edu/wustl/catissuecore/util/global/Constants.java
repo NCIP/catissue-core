@@ -2131,6 +2131,14 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SURGICAL_PATHALOGY_REPORT_CLASS_NAME = SurgicalPathologyReport.class.getName();
 	public static final String SPECIMEN_NAME = Specimen.class.getName();
 	
+	public static final String[] specimenNameArray = {
+        SPECIMEN_NAME,
+        FluidSpecimen.class.getName(),
+        MolecularSpecimen.class.getName(),
+        TissueSpecimen.class.getName(),
+        CellSpecimen.class.getName()
+    };
+	
 	public static final String[] entityNameArray = {
 		              SPECIMEN_NAME,
 			          FluidSpecimen.class.getName(),

@@ -178,7 +178,7 @@ public class QueryShoppingCartAction extends BaseAction
 		else if (operation.equals(Constants.BULK_TRANSFERS) || operation.equals(Constants.BULK_DISPOSALS))
 		{
 			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			List<String> specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Specimen.class.getName(), chkBoxValues));
+			List<String> specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Arrays.asList(Constants.specimenNameArray), chkBoxValues));
 			request.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 			request.setAttribute(Constants.OPERATION, operation);
 			target = new String(operation);
@@ -189,7 +189,7 @@ public class QueryShoppingCartAction extends BaseAction
 				session.removeAttribute(Constants.SPECIMEN_ID);
 							
 			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			Set<String> specimenIds = new HashSet<String>(bizLogic.getEntityIdsList(cart, Specimen.class.getName(), chkBoxValues));
+			Set<String> specimenIds = new HashSet<String>(bizLogic.getEntityIdsList(cart, Arrays.asList(Constants.specimenNameArray), chkBoxValues));
 			session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 			
 			target = new String(operation);
@@ -233,7 +233,7 @@ public class QueryShoppingCartAction extends BaseAction
 			for(String entityName :distinctEntityNameSet)
 			{
 				Set<String> tempEntityIdsList = new HashSet<String>();
-				tempEntityIdsList = bizLogic.getEntityIdsList(cart, entityName,
+				tempEntityIdsList = bizLogic.getEntityIdsList(cart, Arrays.asList(entityName),
 						chkBoxValues);
 				if(entityName.equals(Constants.SPECIMEN_ARRAY_CLASS_NAME))
 					specimenArrayIds.addAll(tempEntityIdsList);
@@ -275,7 +275,8 @@ public class QueryShoppingCartAction extends BaseAction
 							&& ((orderableEntityNameList)).contains(attribute.getEntity().getName()))
 					{
 						isSpecimenIdPresent = "true";
-						if(!attribute.getEntity().getName().equals(Constants.SPECIMEN_NAME))
+						
+						if(!Arrays.asList(Constants.specimenNameArray).contains(attribute.getEntity().getName()))
 						{
 							request.setAttribute(Constants.IS_SPECIMENARRAY_PRESENT, "true");
 						}

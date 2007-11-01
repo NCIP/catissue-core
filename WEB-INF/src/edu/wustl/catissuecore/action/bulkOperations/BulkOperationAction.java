@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.action.bulkOperations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
@@ -132,7 +133,7 @@ public abstract class BulkOperationAction extends BaseAction
 		if(cart != null)
 		{
 			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Specimen.class.getName(), null));
+			specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Arrays.asList(Constants.specimenNameArray), null));
 			if(specimenIds == null)
 			{
 				specimenIds = new ArrayList();

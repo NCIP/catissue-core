@@ -120,7 +120,7 @@ public class QueryShoppingCartBizLogic
      * @return List of entity ids present in cart if chkBoxValues null it will return all ids else only selected ids.
 	 */
 	
-	public Set<String> getEntityIdsList(QueryShoppingCart cart,String entityName,List<Integer>chkBoxValues)
+	public Set<String> getEntityIdsList(QueryShoppingCart cart,List entityName,List<Integer>chkBoxValues)
 	{
 	    Set<String> entityIdsList = new HashSet<String>();
 	    List<Integer> entityIdsColumnIndexList = getIdsColumnIndexList(cart.getCartAttributeList(),entityName);
@@ -161,14 +161,14 @@ public class QueryShoppingCartBizLogic
      * @param entityName Name of Entity.
      * @return List of entity indices of entity ids present in cart.
 	 */
-	public List<Integer> getIdsColumnIndexList(List<AttributeInterface> cartAttributeList,String entityName)
+	public List<Integer> getIdsColumnIndexList(List<AttributeInterface> cartAttributeList,List entityName)
 	{
 		List<Integer> idIndexList = new ArrayList<Integer>();
 		int i = 0;
 		for (AttributeInterface attribute : cartAttributeList)
 		{
 			if ((attribute.getName().equals(Constants.ID))
-					&& (attribute.getEntity().getName().equals(entityName)))
+					&& (entityName.contains(attribute.getEntity().getName())))
 			{
 				idIndexList.add(new Integer(i));
 			}
