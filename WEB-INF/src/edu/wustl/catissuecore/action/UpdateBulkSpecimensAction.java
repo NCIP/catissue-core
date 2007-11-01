@@ -62,7 +62,8 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 			
 			LinkedHashSet specimenDomainCollection = 
 				specimenUpdateAction.getSpecimensToSave(eventId, session);
-			if (ViewSpecimenSummaryForm.ADD_USER_ACTION.equals(specimenSummaryForm.getUserAction()))
+			if (ViewSpecimenSummaryForm.ADD_USER_ACTION
+					.equals(specimenSummaryForm.getUserAction()))
 			{
 				bizLogic.insert(createSpecimenMap(specimenDomainCollection), 
 					sessionDataBean, Constants.HIBERNATE_DAO);

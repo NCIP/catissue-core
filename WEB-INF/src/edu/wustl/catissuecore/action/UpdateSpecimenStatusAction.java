@@ -199,15 +199,6 @@ public class UpdateSpecimenStatusAction extends Action {
 		specimen.setLabel(specimenVO.getDisplayName() );
 		specimen.setBarcode(specimenVO.getBarCode());
 		
-		if ("Virtual".equals(
-				specimenVO.getStorageContainerForSpecimen()))
-		{
-			specimen.setStorageContainer(null);
-		}
-		else
-		{
-			setStorageContainer(specimenVO, specimen);
-		}
 		
 		String initialQuantity = specimenVO.getQuantity();
 		 
@@ -232,6 +223,16 @@ public class UpdateSpecimenStatusAction extends Action {
 		{
 			setValuesForNewSpecimen(specimen,specimenVO);
 		}
+
+		if ("Virtual".equals(
+				specimenVO.getStorageContainerForSpecimen()))
+		{
+			specimen.setStorageContainer(null);
+		}
+		else
+		{
+			setStorageContainer(specimenVO, specimen);
+		}
 		
 		return specimen;
 	}
@@ -243,6 +244,7 @@ public class UpdateSpecimenStatusAction extends Action {
 		specimen.setComment(specimenDataBean.getComment());
 		specimen.setCreatedOn(new Date());
 		specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+		genericSpecimen.setCheckedSpecimen(true);
 		specimen.setPathologicalStatus(specimenDataBean.getPathologicalStatus());
 		specimen.setLineage(specimenDataBean.getLineage());
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();

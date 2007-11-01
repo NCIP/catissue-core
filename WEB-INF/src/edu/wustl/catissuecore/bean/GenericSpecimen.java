@@ -1,12 +1,13 @@
 package edu.wustl.catissuecore.bean;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 
 /**
  * @author abhijit_naik
  *
  */
-public interface GenericSpecimen 
+public interface GenericSpecimen extends Serializable 
 {
 	public LinkedHashMap<String, GenericSpecimen> getAliquotSpecimenCollection() ;
 

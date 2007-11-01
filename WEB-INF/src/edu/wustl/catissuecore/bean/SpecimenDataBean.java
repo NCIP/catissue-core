@@ -10,6 +10,10 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 public class SpecimenDataBean implements GenericSpecimen
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -593612220432189911L;
 	public String uniqueId ;
 	protected Long id;
 

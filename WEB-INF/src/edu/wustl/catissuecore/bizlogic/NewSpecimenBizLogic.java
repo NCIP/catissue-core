@@ -275,6 +275,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				
 				try
 				{
+	            	setParentSpecimenData(derivedSpecimen,dao);
 					insertSingleSpecimen(derivedSpecimen, dao, sessionDataBean, true);
 					specimenList.add(derivedSpecimen);
 				}
@@ -366,13 +367,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 		//Added by Poornima
 	   	specimen.setParentSpecimen(parent);
-		specimen.setSpecimenCharacteristics(parent.getSpecimenCharacteristics());		
+		specimen.setSpecimenCharacteristics(parent.getSpecimenCharacteristics());
 		
 		//Ashish - 8/6/07 - retriving parent scg for performance improvement
 //		AbstractSpecimenCollectionGroup parentSCG = (AbstractSpecimenCollectionGroup)dao.retrieveAttribute(Specimen.class.getName(),parent.getId() , Constants.COLUMN_NAME_SCG);
-		specimen.setSpecimenCollectionGroup(parent.getSpecimenCollectionGroup());
+//		specimen.setSpecimenCollectionGroup(parent.getSpecimenCollectionGroup());
 		// set event parameters from parent specimen - added by Ashwin for bug id# 2476
-		specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(parent,specimen));
+//		specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(parent,specimen));
 		specimen.setPathologicalStatus(parent.getPathologicalStatus());
 		if(parent != null)
 		{
@@ -525,17 +526,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 			 */
-			TaskTimeCalculater singleSpec = TaskTimeCalculater.startTask
-			("Single specimen insert", NewSpecimenBizLogic.class);
 
 			ApiSearchUtil.setSpecimenDefault(specimen); 
-			TaskTimeCalculater internalTask = TaskTimeCalculater.startTask
-			("setParentSCG", NewSpecimenBizLogic.class);
 
 			Specimen parentSpecimen =specimen.getParentSpecimen();
 			setParentSCG(specimen, dao, parentSpecimen);
-			
-			TaskTimeCalculater.endTask(internalTask);
 			
 			setExternalIdentifiers(specimen, specimen.getExternalIdentifierCollection());
 
@@ -549,27 +544,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			    specimen.setLineage(Constants.NEW_SPECIMEN);
 			}
 			//Setting the created on date = collection date if lineage = NEW_SPECIMEN
-			internalTask = TaskTimeCalculater.startTask
-			("set created on date ", NewSpecimenBizLogic.class);			
 			setCreatedOnDate(specimen);
-			TaskTimeCalculater.endTask(internalTask);
 			
-			TaskTimeCalculater setSpecAttr = TaskTimeCalculater.startTask
-			("Specimen setSpecimenAttributes before insert",NewSpecimenBizLogic.class);
 			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
-			TaskTimeCalculater.endTask(setSpecAttr);
 
 			generateLabel(specimen);
 			generateBarCode(specimen);
-
-			TaskTimeCalculater.endTask(singleSpec);
-
 			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, false,  false);
-
-			TaskTimeCalculater insertDao = TaskTimeCalculater.startTask
-			("Inserting DAO in DB", NewSpecimenBizLogic.class);
 			dao.insert(specimen, sessionDataBean, false, false);
-			TaskTimeCalculater.endTask(insertDao);
 			//protectionObjects.add(specimen);
 
 			/*if (specimen.getSpecimenCharacteristics() != null)
@@ -1428,7 +1410,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					specimenCollectionGroupObj = (SpecimenCollectionGroup)HibernateMetaData.getProxyObjectImpl(scg);
 				
 					//Resolved lazy ----  specimenCollectionGroupObj.getConsentTierStatusCollection();
-					consentTierStatusCollection= (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroupObj.getId(), "elements(consentTierStatusCollection)" );
+					consentTierStatusCollection =specimenCollectionGroupObj.getConsentTierStatusCollection();
+					//consentTierStatusCollection= (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroupObj.getId(), "elements(consentTierStatusCollection)" );
 				}
 				
 				if (consentTierStatusCollection != null)
