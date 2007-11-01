@@ -65,11 +65,15 @@ function onSubmit()
 	{
 		if(document.getElementById('specimenEventParameter').value == "Transfer")
 		{
-			dobulkOperations();
+			dobulkTransferOperations();
+		}
+		else if(document.getElementById('specimenEventParameter').value == "Disposal")
+		{
+			dobulkDisposals();
 		}
 		else
 		{
-			alert("Only Transfer functionality is available in this version");
+			alert("Only Transfer and Disposal bulk functionality is available in this version");
 		}
 	}
 	else if(document.forms[0].chkName[1].checked == true)
@@ -132,7 +136,7 @@ function onExport()
 			}
 		}
 		
-function dobulkOperations()
+function dobulkTransferOperations()
 		{
 			var isChecked = updateHiddenFields();
 		    
