@@ -160,7 +160,9 @@ function putQuantity(element)
 		{
 			for(var i=0;i<document.OrderPathologyCase.selectedItems.length;i++)
 			{
-					document.OrderPathologyCase.requestedQuantity[i].value=document.getElementById("reqquantity").value;
+					//document.OrderPathologyCase.requestedQuantity[i].value=document.getElementById("reqquantity").value;
+					//Bug fixed -5837
+					document.getElementById("requestedQuantity"+i).value=document.getElementById("reqquantity").value;
 			}
 		}
 	}
