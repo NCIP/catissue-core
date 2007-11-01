@@ -308,7 +308,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 					newBean.setDeriveSpecimenCollection(oldBean.getDeriveSpecimenCollection());
 				}
 				specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveMap);
-				oldDeriveSpecimenMap.clear();
+				if(oldDeriveSpecimenMap!=null)
+				{
+					oldDeriveSpecimenMap.clear();
+				}
 			}
 			specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
 	 }
