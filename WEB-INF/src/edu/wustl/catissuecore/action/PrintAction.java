@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.print.LabelPrinterImpl;
+import edu.wustl.catissuecore.print.SpecimenLabelPrinterImpl;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAO;
@@ -53,7 +53,7 @@ public class PrintAction extends Action
     {
 
     	String nextforwardTo = request.getParameter("nextForwardTo");
-    	String printerClassName = XMLPropertyHandler.getValue("labelPrinterClass");
+    	String printerClassName = XMLPropertyHandler.getValue("SpecimenlabelPrinterClass");
     	if(printerClassName!= null)
     	{
     		
@@ -71,7 +71,7 @@ public class PrintAction extends Action
 				{
 					String specimenId = (String) forwardToPrintMap.get("specimenId");
 					Specimen objSpecimen = retriveSpecimen(specimenId,request);
-		        	LabelPrinterImpl labelPrinter = new LabelPrinterImpl();
+		        	SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
 		        	boolean printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, objUser);
 		        	
 		        	if(printStauts)

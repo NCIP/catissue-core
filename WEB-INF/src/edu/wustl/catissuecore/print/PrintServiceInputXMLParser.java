@@ -1,31 +1,89 @@
 package edu.wustl.catissuecore.print;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.rpc.ParameterMode;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.apache.axis.client.Call;
+import org.apache.axis.client.Service;
+import org.apache.axis.encoding.XMLType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import edu.wustl.common.util.XMLPropertyHandler;
+
 /*
  * this class used to generate the xml document for the client to send to
  * the web service method
  */
 
-public class PrintXMLGenerator {
-
-	
+public class PrintServiceInputXMLParser implements PrintServiceInputParserInterface 
+{
 	private Document document;
 
 	String value = null;
 
 	String key = null;
 
+	
+	public boolean callPrintWebService(Object listData) throws Exception 
+	{
+		try
+		{
+			Document doc = this.generateXMLDoc((ArrayList)listData);		
+			String strXMLData = this.getStringFromDocument(doc);
+			
+			//String endpoint = "http://localhost:8080/ws4ee/services/PrintWebService";
+			String endpointURL = XMLPropertyHandler.getValue("printWebServiceEndPoint");
+			String method = "print";
+	
+			// Make the call
+			Service service = new Service();
+			Call call = (Call) service.createCall();
+			call.setTargetEndpointAddress(new java.net.URL(endpointURL));
+			call.setOperationName(method);
+			call.addParameter("op1", XMLType.XSD_STRING, ParameterMode.IN);
+			call.setReturnType(XMLType.XSD_STRING);
+			String ret = (String) call.invoke(new Object[] {strXMLData});
+			System.out.println("LabelPrinterImpl.callPrintWebService()"+ret);
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;	
+			
+		}
+	}
+	
+	public String getStringFromDocument(Document doc) {
+		try {
+			DOMSource domSource = new DOMSource(doc);
+			StringWriter writer = new StringWriter();
+			StreamResult result = new StreamResult(writer);
+			TransformerFactory tf = TransformerFactory.newInstance();
+			Transformer transformer = tf.newTransformer();
+			transformer.transform(domSource, result);
+			System.out.println(writer.toString());
+			return writer.toString();
+		} catch (TransformerException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
 	// return the documet type object of the Map
 	public Document generateXMLDoc(ArrayList mapList) {
 		
