@@ -80,7 +80,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		registerParticipantAndProtocol(dao, collectionProtocolRegistration, sessionDataBean);
 
 		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);
-		
 		try
 		{
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(collectionProtocolRegistration),
@@ -111,6 +110,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
 			Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
 			userID = getUserID(dao, sessionDataBean);
+			Collection scgCollection = new HashSet();
 			while(collectionProtocolEventIterator.hasNext())
 			{
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolEventIterator.next();
@@ -142,10 +142,11 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				}
 				
 				specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
-				
+				scgCollection.add(specimenCollectionGroup);
 				specimenBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
 				bizLogic.insert(specimenMap, dao,  sessionDataBean);
 			}
+			collectionProtocolRegistration.setSpecimenCollectionGroupCollection(scgCollection);
 		}
 		catch(BizLogicException e)
 		{

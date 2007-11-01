@@ -1,4 +1,4 @@
-/**
+	 /**
  * <p>Title: StorageContainerHDAO Class>
  * <p>Description:	StorageContainerHDAO is used to add Storage Container information into the database using Hibernate.</p>
  * Copyright:    Copyright (c) year
@@ -966,16 +966,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		if (site != null)
 		{
 // Commenting dao.retrive() call as retrived object is not realy required for further processing -Prafull			
-//			Object siteObj = dao.retrieve(Site.class.getName(), container.getSite().getId());
-//			if (siteObj != null)
+			Site siteObj = (Site)dao.retrieve(Site.class.getName(), container.getSite().getId());
+			if (siteObj != null)
 			{
 				
 
 				// check for closed site
-				checkStatus(dao, site, "Site");
+				checkStatus(dao, siteObj, "Site");
 
-				container.setSite(site);
-				setSiteForSubContainers(container, site,dao);
+				container.setSite(siteObj);
+				setSiteForSubContainers(container, siteObj,dao);
 			}
 		}
 	}

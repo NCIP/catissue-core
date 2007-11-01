@@ -1,0 +1,75 @@
+edu.wustl.catissuecore.domain.User@95c083
+Object created successfully
+edu.wustl.catissuecore.domain.Institution@5a9de6
+Object created successfully
+edu.wustl.catissuecore.domain.Institution@7c4c51
+edu.wustl.catissuecore.domain.Department@120d62b
+Object created successfully
+edu.wustl.catissuecore.domain.Department@1c56c60
+edu.wustl.catissuecore.domain.CancerResearchGroup@1e1a408
+Object created successfully
+edu.wustl.catissuecore.domain.CancerResearchGroup@51052d
+edu.wustl.catissuecore.domain.Site@fb56b1
+Object created successfully
+edu.wustl.catissuecore.domain.Site@888e6c
+edu.wustl.catissuecore.domain.Site@16c79d7
+edu.wustl.catissuecore.domain.Site@16c163f
+edu.wustl.catissuecore.domain.Site@1e228bc
+EI{id null	Type Toxic	Name bh1193895815137}
+SERVER IN writeExternal Biohazard START
+SERVER IN writeExternal ExternalIdentifier DONE
+SERVER IN readExternal ExternalIdentifier
+EI{id 4	Type Toxic	Name bh1193895815137}
+Object created successfully
+SERVER IN writeExternal Biohazard START
+SERVER IN writeExternal ExternalIdentifier DONE
+SERVER IN readExternal ExternalIdentifier
+EI{id 5	Type Toxic	Name bh1193895815262}
+SERVER IN writeExternal Biohazard START
+SERVER IN writeExternal ExternalIdentifier DONE
+SERVER IN readExternal ExternalIdentifier
+EI{id 5	Type Radioactive	Name bh1193895815356}
+EI{id null	Type Toxic	Name }
+SERVER IN writeExternal Biohazard START
+SERVER IN writeExternal ExternalIdentifier DONE
+EI{id null	Type Toxic	Name bh1193895815606}
+SERVER IN writeExternal Biohazard START
+SERVER IN writeExternal ExternalIdentifier DONE
+SERVER IN readExternal ExternalIdentifier
+EI{id 6	Type Toxic	Name bh1193895815606}
+SERVER IN writeExternal Biohazard START
+SERVER IN writeExternal ExternalIdentifier DONE
+EI{id null	Type Invalid	Name bh1193895815731}
+SERVER IN writeExternal Biohazard START
+SERVER IN writeExternal ExternalIdentifier DONE
+reached setUp
+2.0:aliquotCount
+2:aliquotMap.size()
+2.0:aliquotCount
+2:aliquotMap.size()
+2.0:aliquotCount
+2:aliquotMap.size()
+2.0:aliquotCount
+2:aliquotMap.size()
+edu.wustl.catissuecore.domain.Participant@1855562
+Object created successfully
+1
+Befor
+After
+edu.wustl.catissuecore.domain.SpecimenCollectionGroup@8a1977: sprObj
+edu.wustl.catissuecore.domain.Participant@5e7020: participant
+Before Update
+Inside Event Parameters
+Before Update
+true
+edu.wustl.catissuecore.domain.StorageType@1b5a40a
+Object created successfully
+edu.wustl.catissuecore.domain.StorageType@f6398
+edu.wustl.catissuecore.domain.StorageType@842e74
+edu.wustl.catissuecore.domain.StorageType@15d45d9
+edu.wustl.catissuecore.domain.StorageContainer@36ae83
+Object created successfully
+Before Update
+After Update
+DP1193895825791 [SR edu.wustl.catissuecore.domain.SpecimenRequirement : DNA | Placenta]
+Object created successfully
