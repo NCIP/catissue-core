@@ -2,14 +2,11 @@ package edu.wustl.catissuecore.bizlogic.test;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
@@ -21,8 +18,11 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 	{
 		try
 		{
-			Specimen sp = (Specimen)TestCaseUtility.getObjectMap(Specimen.class);
-			System.out.println(sp+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			Specimen sp = new Specimen();
+			sp = (Specimen)TestCaseUtility.getObjectMap(Specimen.class);
+			sp.setId(sp.getId());
+			List spCollection = appService.getObjects(sp);
+			sp = (Specimen)spCollection.get(0);
 			sp.setCollectionStatus("Collected");
 			sp.setExternalIdentifierCollection(null);
 			System.out.println(sp+": sp");
@@ -41,7 +41,11 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 	{
 		try
 		{
-			Specimen sp = (Specimen)TestCaseUtility.getObjectMap(Specimen.class);
+			Specimen sp = new Specimen();
+			sp = (Specimen)TestCaseUtility.getObjectMap(Specimen.class);
+			sp.setId(sp.getId());
+			List spCollection = appService.getObjects(sp);
+			sp = (Specimen)spCollection.get(0);
 			sp.setCollectionStatus("Collected");
 			sp.setExternalIdentifierCollection(null);
 			
