@@ -404,5 +404,13 @@
 		<name>multiuser</name>
 		<value>true</value>
 	</property>
-
+	<!-- property for Print webservice  -->
+	<property>
+		<name>SpecimenlabelPrinterClass</name>
+		<value>edu.wustl.catissuecore.print.SpecimenLabelPrinterImpl</value>
+	</property>
+	<property>
+		<name>printWebServiceEndPoint</name>
+		<value>http://localhost:8080/ws4ee/services/PrintWebService</value>
+	</property>
 </properties>

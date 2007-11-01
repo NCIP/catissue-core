@@ -1,0 +1,58 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for create Build for caTISSUE Core-->
+<project name="PrintWebService" >
+	<path id="web.classpath">
+	  <fileset dir="./WEB-INF/lib">
+	    <include name="**/*.jar" />
+	  </fileset>
+	   <fileset dir="C:\Java\jdk1.5.0_05\lib">
+	    <include name="tools.jar" />
+	  </fileset>
+	</path>
+	
+	<property name="base.dir" value="."/>
+	<property name="base.dir" value="."/>
+	<property name="jboss.home.dir" value="E:/jboss-4.0.0/jboss-4.0.0" />
+
+	
+	
+	<target name="WsCompile">
+		<java classname="com.sun.xml.rpc.tools.wscompile.Main" fork="true">
+					<classpath refid="web.classpath"/>
+					<classpath> 	
+						<pathelement location="./bin"/>
+					</classpath>
+					<arg value="-gen:server"/>
+					<arg value="-f:rpcliteral"/>
+					<arg line="-mapping WEB-INF/mapping.xml"/>
+					<arg value="config.xml"/>
+				</java>
+	</target>
+
+
+	<target name="copyFiles">
+		<copy file="PrintWebService.wsdl" todir="./WEB-INF/wsdl"/>
+		<copy todir="./WEB-INF/classes">
+		    <fileset dir="./bin">
+		    </fileset>
+		  </copy>
+		  
+	</target>
+	<target name="build_war" depends="copyFiles">
+		<war destfile="caTissuePrintWebService.war" webxml="./WEB-INF/web.xml" >
+			<fileset dir="${base.dir}">
+			<include name="WEB-INF/**" />
+			<include name="edu/**" />
+			</fileset>  
+		</war>
+		</target>
+    <target name="deploy_catissue_print_web_service'" depends="clean_temp_dir_war,WsCompile,copyFiles,build_war">
+				 <copy file="caTissuePrintWebService.war" todir="${jboss.home.dir}/server/default/deploy" />
+	</target>		
+	<target name="clean_temp_dir_war" description="delete temp directory used for caCORE unpack">
+			<!-- do delete ${temp.dir} -->
+			<delete file="${jboss.home.dir}/server/default/deploy/caTissuePrintWebService.war" />
+		</target>
+
+	</project>
