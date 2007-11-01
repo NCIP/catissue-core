@@ -109,18 +109,22 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
     	while(dataListItr.hasNext())
     	{
     		List rowList = (List)dataListItr.next();
-    		List data  = (List)rowList.get(0);
-			int extraColumns = data.size()-((List)distributedItemsColumns.get(0)).size();
-			//Remove extra ID columns
-			if(extraColumns>0)
-			{
-				int size = data.size()-1;
-				for(int j=1;j<=extraColumns;j++)
-				{
-					data.remove(size);
-					size--;
-				}
-			}
+    		//Remove extra ID columns from all rows.-Bug 5590
+    		for(int cntRow = 0 ;cntRow<rowList.size();cntRow++)
+    		{
+    			List data  = (List)rowList.get(cntRow);
+    			int extraColumns = data.size()-((List)distributedItemsColumns.get(0)).size();
+    			//Remove extra ID columns
+    			if(extraColumns>0)
+    			{
+    				int size = data.size()-1;
+    				for(int j=1;j<=extraColumns;j++)
+    				{
+    					data.remove(size);
+    					size--;
+    				}
+    			}
+    		}	
 			report.writeData(rowList,delimiter);
     	}
     	
