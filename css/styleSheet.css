@@ -1859,3 +1859,9 @@ td.formFieldNoBordersQuery{ /* for the cell that contains the form elements */
   font-size:0.8em;
   color:#000000; /* constant: black */
 }
+
+.saveQuery
+{
+	 border-bottom:1px solid #CCCCCC; /* constant: medium gray */
+ }
+ 
