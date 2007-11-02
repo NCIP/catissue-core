@@ -281,6 +281,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			verifyAndUpdateConsentWithdrawn(collectionProtocolRegistration, oldCollectionProtocolRegistration, dao, sessionDataBean);
 			collectionProtocolRegistration.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 		}
+		
+		updateConsentResponseForSCG(collectionProtocolRegistration,dao,sessionDataBean);
+		
 		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) end
 		//Update registration
 		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
@@ -301,6 +304,30 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
 	}
 
+	private void updateConsentResponseForSCG(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		Collection specimenCollectionGroupCollection = (Collection)dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(), collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);
+		Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
+		while(specimenCollectionGroupIterator.hasNext())
+		{
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)specimenCollectionGroupIterator.next();
+			specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
+			
+			Collection specimenCollection = specimenCollectionGroup.getSpecimenCollection();
+			if(specimenCollection != null && !specimenCollection.isEmpty())
+			{
+				Iterator itSpecimenCollection = specimenCollection.iterator();
+				while(itSpecimenCollection.hasNext())
+				{
+					Specimen specimen = (Specimen)itSpecimenCollection.next();
+					specimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
+				}
+			}
+			
+			dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
+		}
+	}
+	
 	public void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException,
 			UserNotAuthorizedException
 	{
