@@ -98,6 +98,7 @@
 	
 	<!-- task to add default CollectionProtocol for caTIES -->
 	<target name="add_cp" >	
+		<echo message="Please make sure that JBoss server is Running" />
 		<echo message="addcp target started" />
 		<java classname="edu.wustl.catissuecore.caties.util.AddCollectionProtocol" fork="true">
 			<classpath>
