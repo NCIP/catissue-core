@@ -220,6 +220,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FETCH_AND_EXECUTE_QUERY_ACTION = "ExecuteQueryAction.do";
 	public static final String TREE_NODE_LIMIT_EXCEEDED_RECORDS = "treeNodeLimitExceededRecords";
 	public static final String MAXIMUM_TREE_NODE_LIMIT = "resultView.maximumTreeNodeLimit";
+	public static final String DEFINED_VIEW_ATTRIBUTES = "definedViewAttributes";
+	public static final String IS_SAVED_QUERY = "isSavedQuery";
 	// Query Module Interface UI constants---ends here
 	//	 Frame names in Query Module Results page.
 	public static final String GRID_DATA_VIEW_FRAME = "gridFrame";
