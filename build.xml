@@ -510,9 +510,10 @@
 	
 		<target name="JMeterTests" depends="runJmeterTests,JmeterReport"/>	
 		<target name="runJmeterTests"> 
+			<delete file="${Jmeter-Tests}/Mysql_CaTissueJMeterTests.html"/>
+			<delete file="${Jmeter-Tests}/Oracle_CaTissueJMeterTests.html"/>
 			<delete file="${Jmeter-Tests}/${testplan}.html"/>
 		 	<delete file="${Jmeter-Tests}/${jtl}/${testplan}.jtl"/>	
-				
 			<jmeter
 			    jmeterhome="${jmeter.home.dir}"
 				testplan ="${Jmeter-Tests}/${testplan}.jmx"
@@ -534,8 +535,8 @@
 			    out="${Jmeter-Tests}/${testplan}.html"
 			    style="${Jmeter-Tests}/jmeter-results-detail-report_21.xsl">
 				<param name="showData" expression="${show-data}"/>
-			</xslt>
-		</target>
+			</xslt>   
+		</target>  
 
   <!-- =================================================================== -->
   <!-- Cobertura code coverage report                                      -->
