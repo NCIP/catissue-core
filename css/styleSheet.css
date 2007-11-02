@@ -397,6 +397,7 @@ FORM BEGINS
   font-size:1em;
   background-color:#FFFFFF; /* constant: white */
   color:#6E81A6; /* constant: lighter blue */
+  white-space: nowrap;
 }
 .formTitle{ /* for header cells (top) of forms */
   font-family:arial,helvetica,verdana,sans-serif;
@@ -408,6 +409,7 @@ FORM BEGINS
   border-top:1px solid #5C5C5C; /* constant: dark gray */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
+  white-space: nowrap;
 }
 .formTitleWithoutBold{ /* for header cells (top) of forms */
   font-family:arial,helvetica,verdana,sans-serif;
@@ -810,6 +812,15 @@ DATA TABLE BEGINS
   border-top:1px solid #5C5C5C; /* constant: dark gray */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  padding-left:0.4em;
+}
+.dataTableWithoutBorder{
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#FFFFFF; /* constant: white */
+  color:#5C5C5C; /* constant: dark gray */
   padding-left:0.4em;
 }
 .dataTableHeader{ /* for the horizontal column headers */
@@ -879,12 +890,13 @@ DATA TABLE BEGINS
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   text-align:right;
 }
-.dataPagingSection{ /* for the cell that contains the paging table */
-  border-right:1px solid #5C5C5C; /* constant: dark gray */
-  border-top:1px solid #5C5C5C; /* constant: dark gray */
-  border-left:1px solid #5C5C5C; /* constant: dark gray */
+.dataPagingSection{ /* for the cell that contains the paging table */   
+  border-right:0px solid #5C5C5C; /* constant: dark gray */
+  border-top:0px solid #5C5C5C; /* constant: dark gray */
+  border-left:0px solid #5C5C5C; /* constant: dark gray */
   background-color:#F4F4F5; /* constant: light gray */
 }
+
 .dataPagingText{ /* for the cells that contain the paging text */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
@@ -968,6 +980,18 @@ td.onlyBottomBorder{ /* for the cell that contains the form elements */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   background-color:#F4F4F5; /* constant: light gray */
 }
+td.searchColumn{
+	padding-left:0.7em;
+	width:760px;	
+}
+/*used in QueryListView.jsp : div tag*/
+div.searchDiv
+{
+	width:100%; 
+	height:500px; 
+	overflow:auto;
+}
+
 /*  used for addmore functionality */
 
 	div#d1
@@ -1340,9 +1364,9 @@ td.queryTabMenuItemSelected{ /* for the selected tab menu (top) cells */
   background-color:#FFFFFF; /*#797C9C;  darker */
   padding-left:1em;
   padding-right:1em;
-  border-right:1px solid #5C5C5C; /* constant: dark gray */
-  border-left:1px solid #5C5C5C; /* constant: dark gray */
-  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  /*border-right:1px solid #5C5C5C; /* constant: dark gray */
+  /*border-left:1px solid #5C5C5C; /* constant: dark gray */
+  /*border-top:1px solid #5C5C5C; /* constant: dark gray */
   
   color:#000000;  /* constant: white */
   text-decoration:none;
@@ -1574,7 +1598,7 @@ td.queryModuleTabMenuItem{ /* for the off state of the tab menu (top) cells */
   padding-right:1em;
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
-  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  /*border-top:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
 
   color:#000000;  /* constant: white */
@@ -1716,6 +1740,7 @@ queryLink{ /* for the text links in the Search category page */
 {
  font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.9em;
+  border-top:1px  solid #000000;/* constant: dark gray */
   color:#000000; /* constant: black */
 }
 .tdWithoutBottomBorder{ /* for block table with border 1 */
