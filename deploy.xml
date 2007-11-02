@@ -114,6 +114,8 @@
 
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
 		<unwar src="${base.dir}/dynamicExtensions.war" dest="${temp.dir}/dynamicExtensions" />
+		<unwar src="${base.dir}/caTissuePrintWebService.war" dest="${temp.dir}/caTissuePrintWebService" />
+		
 
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
@@ -271,6 +273,8 @@
 	<target name="clean_server" description="deletes the WAR file and cache from server ">
 		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war" />
 		<delete file="${jboss.home.dir}/server/default/deploy/dynamicExtensions.war" />
+		<delete file="${jboss.home.dir}/server/default/deploy/caTissuePrintWebService.war" />
+		
 		<delete includeemptydirs="true">
 			<fileset dir="${jboss.home.dir}/server/default/work">
 				<include name="**/*" />
@@ -288,6 +292,7 @@
 		<echo message="Creating New Web Application Archieve File..." />
 		<delete file="${temp.dir}/catissuecore.war" />
 		<delete file="${temp.dir}/dynamicExtensions.war" />
+		<delete file="${temp.dir}/caTissuePrintWebService.war" />
 
 		<war destfile="${temp.dir}/catissuecore.war" webxml="${temp.dir}/catissuecore/WEB-INF/web.xml">
 			<fileset dir="${temp.dir}/catissuecore">
@@ -309,6 +314,11 @@
 			<fileset dir="${temp.dir}/dynamicExtensions">
 				<include name="**/**/**.*" />
 			</fileset>
+		</war>
+		<war destfile="${temp.dir}/caTissuePrintWebService.war" webxml="${temp.dir}/caTissuePrintWebService/WEB-INF/web.xml">
+					<fileset dir="${temp.dir}/caTissuePrintWebService">
+						<include name="**/**/**.*" />
+					</fileset>
 		</war>
 
 		<!-- change because using one war only -->
@@ -335,6 +345,7 @@
 				<include name="catissuecore-ds.xml" />
 				<include name="catissuecorecsm.war" />
 				<include name="dynamicExtensions.war" />
+				<include name="caTissuePrintWebService.war" />
 			</fileset>
 		</copy>
 		<replace dir="${jboss.home.dir}/server/default/catissuecore-properties">
