@@ -24,17 +24,15 @@
 		isQuery="false";
 	}
 	System.out.println("isQuery ====>"+isQuery);
+	
 %>
-<html:form method="GET" action="<%=formAction%>">
-<html:hidden property="stringToCreateQueryObject" value="" />
-<html:hidden property="nextOperation" value="" />
-<table bordercolor="#000000" border="0" width="100%" cellspacing="2" cellpadding="2"  height="100%">
-	<tr>
-	<td>
-	<table border="1" width="100%" cellspacing="0" cellpadding="0" height="100%" id="table1">
-	<tr>
-		<td>
-		<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table2" >		
+
+<html:form method="GET" action="<%=formAction%>" style="margin:0;padding:0;">
+	<html:hidden property="stringToCreateQueryObject" value="" />
+	<html:hidden property="nextOperation" value="" />
+
+<table border="0" width="100%" cellspacing="0" cellpadding="2"  height="100%" class='tbBordersAllbordersBlack'>	
+	
 		<tr  height="5%">
 			<td width="23%" height="5%" class="queryTabMenuItemSelected" >
 				<bean:message key="query.addLimits"/>
@@ -49,9 +47,16 @@
 			</td> 
 		
 		</tr>
+	<tr>
+	<td colspan="3">
+	<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" id="table1">			 
+	<tr>
+		<td>
+		<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table2" >																					
+		
 		<tr>
 			<td height="60%" valign="top" width="100%" colspan="4">
-				<table border="0"  height="100%" width="100%" cellpadding="1" cellspacing="3">
+				<table border="0"  height="100%" width="100%" cellpadding="1" cellspacing="3">			
 					<tr>
 						<td valign="top" width="10%" >
 						<%@ include file="/pages/content/search/querysuite/ChooseSearchCategory.jsp" %>
@@ -60,11 +65,11 @@
 					
 
 					<td valign="top" height="60%">
-							<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
+							<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >        
 								
 							<tr>
 							<td>
-								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="30%" bordercolorlight="#000000">
+								<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="30%" bordercolorlight="#000000" class='tbBordersAllbordersBlack'>
 							
 												<tr  id="rowMsg">
 													<td id="validationMessagesSection"  class='validationMessageCss'>
@@ -74,7 +79,7 @@
 												
 												<tr id="AddLimitsButtonMsg" style="color:#000000" border="0">
 													<td id="AddLimitsButtonSection" height="30" >
-														<div id="AddLimitsButtonRow"  border="0" style="height:25;color:#000000;display:none"></div>
+														<div id="AddLimitsButtonRow"  border="0" style="height:25;color:#000000;display:none;border-bottom:1px solid #5C5C5C;"></div>
 													</td>
 												</tr>
 									
@@ -82,13 +87,14 @@
 									<td height="200" width="100%" id="addLimitsSection">
 									<div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
 								</tr>
-								</table>
+						</table>
 							</td>
 							</tr>
-							<tr >
+							<%--<tr >
 								<td height="5px">
+								&nbsp;
 								</td>
-								</tr>
+								</tr>--%>
 							<tr>
 							<td  height="40%" valign="top">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
@@ -139,12 +145,12 @@
 						
 					</tr>
 					
-				</table>
+				</table>    
 				
 			</td>
 		</tr>
 	
-			</table>
+			</table>		
 			</td>
 			</tr>
 			<tr bgcolor="#DFE9F3">
@@ -152,20 +158,35 @@
 					<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EAEAEA" height="100%" bordercolorlight="#000000" >
 					<tr height="35" valign="center">
 					 <td width="2%" valign="center">&nbsp;</td>
-						<td valign="center" width="6%"><html:button property="saveButton" onclick="saveClientQueryToServer('save');"><bean:message key="query.saveButton"/></html:button></td>
-						<td  valign="center" align="left" width="75%"><html:button property="searchButton" onclick="viewSearchResults()"><bean:message key="query.searchButton"/></html:button></td>
-						<td  align="right" valign="center" ><html:button property="previousButton" disabled="true"><bean:message key="query.previousButton"/></html:button></td>
-						<td align="right" valign="center"><html:button property="nextButton" onclick="saveClientQueryToServer('next');"><bean:message key="query.nextButton"/></html:button>
+						<td valign="center" width="6%">
+						<html:button property="saveButton" onclick="saveClientQueryToServer('save');">
+							<bean:message key="query.saveButton"/>
+						</html:button>
+						</td>
+						<td  valign="center" align="left" width="75%">
+						<html:button property="searchButton" onclick="viewSearchResults()">
+							<bean:message key="query.searchButton"/>
+						</html:button>
+						</td>
+						<td  align="right" valign="center" >
+						<html:button property="previousButton" disabled="true">
+							<bean:message key="query.previousButton"/>
+						</html:button>
+						</td>
+						<td align="right" valign="center"
+						><html:button property="nextButton" onclick="saveClientQueryToServer('next');">
+							<bean:message key="query.nextButton"/>
+						</html:button>
 						</td>
 						<td width="2%">&nbsp;</td>
 					</tr>
-				</table>
+				</table>      
 				</td>
 					</tr>
-			</table>
+			</table>          
 			</td></tr>
 
-</table>
+</table>               
 </html:form>
 </body>
 </html> 

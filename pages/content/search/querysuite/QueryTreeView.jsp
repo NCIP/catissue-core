@@ -106,13 +106,13 @@ treeNo = treeNo + 1;
 <html:hidden property="currentPage" value=""/>
 <html:hidden property="stringToCreateQueryObject" value="" />
 
-<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
+<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" class='tbBordersAllbordersBlack'>
 	<tr>
-		<td valign="top" width="90%" height="90%">
+		<td valign="top" width="90%" height="100%">
 			<%  for(int i=0;i<noOfTrees;i++) {
 			String divId = "treebox"+i;
 			%>
-				<div id="<%=divId%>"  style="background-color:white;overflow:auto;height:365">
+				<div id="<%=divId%>"  style="background-color:white;overflow:auto;height:100%">
 				</div>
 			<% } %>
 		</td>

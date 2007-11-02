@@ -24,16 +24,17 @@
 	String defineSearchResultsViewAction = Constants.DefineSearchResultsViewAction;
 	Map treesMap = (Map) request.getAttribute("treesMap");
 %>
-<html:form method="GET" action="<%=defineSearchResultsViewAction%>">
+<html:form method="GET" action="<%=defineSearchResultsViewAction%>" style="margin:0;padding:0;">
 <html:hidden property="currentPage" value="prevToAddLimits"/>
 <input type="hidden" name="isQuery" value="true">
-<table bordercolor="#000000" border="0" width="100%" cellspacing="2" cellpadding="2"  height="100%">
+<table bordercolor="#000000" border="0" width="100%" cellspacing="0" cellpadding="0"  height="100%" class='tbBordersAllbordersBlack'>
+
 	<tr>
 		<td valign="top">
-			<table border="1" width="100%" cellspacing="0" cellpadding="0" height="100%" id="table1">
+			<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" id="table1" >
 				<tr>
 					<td valign="top">
-						<table border="0" width="100%" cellspacing="0" cellpadding="4" height="100%" bordercolor="#000000" id="table2" >
+						<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table2" >
 							<tr  height="10" >
 								
 								<td width="20%" class="queryModuleTabMenuItem" >
@@ -54,7 +55,7 @@
 							</tr>
 							<tr valign="top"  height="100%" width="100%">
 								<td colspan="4" valign="top" height="100%" width="100%">
-									<table border="1" cellspacing="0" cellpadding="0" valign="top"  height="100%" width="100%">
+									<table border="0" cellspacing="0" cellpadding="0" valign="top"  height="100%" width="100%">
 									<tr valign="top">
 										<td valign="top" height="600px" colspan="4" width="100%">
 											<!--		tiles insert -->
@@ -86,8 +87,9 @@
 			</table>
 		</td>
 	</tr>
+	
 </table>
-
 </html:form>
+
 </body>
 </html> 

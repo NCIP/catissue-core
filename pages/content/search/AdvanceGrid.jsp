@@ -195,6 +195,7 @@ function setEditableChkbox(checkAllPages)
 	if(useFunction == "participant")
 	{
 		//alert("test");
+		mygrid.entBox.style.width="650px";
 		colDataTypes=colDataTypes.replace(/ch/,"ra");
 		colDataTypes=colDataTypes.replace(/int/,"ro");
 		columns=","+columns+",";
@@ -270,6 +271,7 @@ function setEditableChkbox(checkAllPages)
 
 	if(useFunction == "participant")
 	{
+		
 		mygrid.setColumnHidden(mygrid.getColumnCount()-1,true);
 		/** Patch ID: 4149_1 
          * See also: 1-2

@@ -221,13 +221,14 @@ function checkAllOnThisPageResponse()
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 <body onload="setCheckBoxState()">
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+<div style="width:100%; height:100%; " >
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="99%" height="100%" style="overflow:auto;">
 <tr>
 	<td >
 		<html:errors /> <!--Prafull:Added errors tag inside the table-->
 	</td>
 </tr>
-<html:form action="<%=Constants.SPREADSHEET_EXPORT_ACTION%>">
+<html:form action="<%=Constants.SPREADSHEET_EXPORT_ACTION%>" style="margin:0;padding:0;">
 <html:hidden property="checkAllPages" value=""/>	
 
 	<%
@@ -244,14 +245,14 @@ function checkAllOnThisPageResponse()
 			Description: The width of <td> are adjusted to fit into the iframe. 
 			These changes were made to remove the extra white space on the data view/spreadsheet view page. 
 		-->
-		<tr height="3%">
+		<%--<tr height="3%">
 			 <td  class="formTitle" width="100%">
 				<bean:message key="<%=title%>"/>
 			 </td>
-		</tr>	
+		</tr>--%>	
 		
 		<tr height="5%">
-			<td class="dataPagingSection">					
+			<td>					
 				<custom:test name="Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>"  showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>" />
 				<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
 				<html:hidden property="isPaging" value="true"/>			
@@ -282,7 +283,7 @@ function checkAllOnThisPageResponse()
 		<% } 
 		%>
 		
-		<tr height="80%" valign="top" width="100%">
+		<tr height="60%" valign="top" width="100%">
 			<td  width="100%" valign="top" height="100%">
 <!--  **************  Code for New Grid  *********************** -->
 				<script>
@@ -300,7 +301,9 @@ function checkAllOnThisPageResponse()
 		</tr>
 
 		<tr height="5%" width="100%" valign="top">
-		<td>
+		
+		<td width="90%">
+		
 			<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" valign="top">
 			<tr>
 					<td width="5%" nowrap valign="top">
@@ -321,7 +324,7 @@ function checkAllOnThisPageResponse()
 						&nbsp;
 					<%}%>
 					</td>
-					<td width="70%" align="right" valign="top">
+					<td width="10%" align="right" valign="top">
 						&nbsp;
 					</td>
 					<td width="5%" nowrap align="right" valign="top">
@@ -354,6 +357,7 @@ function checkAllOnThisPageResponse()
 					</td>
 			</tr>
 			</table>
+			
 			</td>
 		</tr>
 	<% } %>
@@ -364,3 +368,4 @@ function checkAllOnThisPageResponse()
 	<input type="hidden" name="isQuery" value="true">
 </html:form>
 </table>
+</div>

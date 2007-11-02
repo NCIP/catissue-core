@@ -17,8 +17,9 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
 	  height="500";
     }
 %>
-<html:form method="GET" action="<%=formAction%>">
+
 <table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table1" >
+<html:form method="GET" action="<%=formAction%>" style="margin:0;padding:0;">
 		<tr  class="">
 			<td width="25%" height="" class="queryModuleTabMenuItem" >
 				<bean:message key="query.addLimits"/>
@@ -37,12 +38,12 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
 <table border="0" height="100%" width="100%">
 	<tr height="100%">
 		<td width="25%" colspan="1" valign="top">
-			<iframe id="<%=Constants.TREE_VIEW_FRAME%>" src="<%=Constants.QUERY_TREE_VIEW_ACTION%>?pageOf=pageOfQueryResults" scrolling="auto" frameborder="0" width="100%" height="370px">
+			<iframe id="<%=Constants.TREE_VIEW_FRAME%>" src="<%=Constants.QUERY_TREE_VIEW_ACTION%>?pageOf=pageOfQueryResults" scrolling="auto" frameborder="0" width="100%" height="100%">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
 		<td width="75%" colspan="3" valign="top">
-			<iframe name="<%=Constants.GRID_DATA_VIEW_FRAME%>" src="<%=Constants.QUERY_GRID_VIEW_ACTION%>?pageOf=pageOfQueryModule" <%=Constants.VIEW_TYPE%>=<%=Constants.SPREADSHEET_VIEW%>" scrolling="auto" frameborder="0" width="100%" height="370px">
+			<iframe name="<%=Constants.GRID_DATA_VIEW_FRAME%>" src="<%=Constants.QUERY_GRID_VIEW_ACTION%>?pageOf=pageOfQueryModule" <%=Constants.VIEW_TYPE%>=<%=Constants.SPREADSHEET_VIEW%>" scrolling="auto" frameborder="0" width="100%" height="100%">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
@@ -66,5 +67,5 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
 
 </td>
 </tr>
-</table>			
 </html:form>
+</table>			
