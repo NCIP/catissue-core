@@ -213,6 +213,10 @@ public class UpdateSpecimenStatusAction extends Action {
 		if(specimenVO.getCheckedSpecimen())
 		{
 			specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() > 0))
+			{
+				specimen.setAvailable(Boolean.TRUE);
+			}
 		}
 		else
 		{

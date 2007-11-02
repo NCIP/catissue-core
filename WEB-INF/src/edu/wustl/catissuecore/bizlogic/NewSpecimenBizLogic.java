@@ -534,9 +534,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			
 			setExternalIdentifiers(specimen, specimen.getExternalIdentifierCollection());
 
-			if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() == 0) || specimen.getCollectionStatus()==null || specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING))
 			{
 				specimen.setAvailable(new Boolean(false));
+			}
+			else
+			{
+				specimen.setAvailable(new Boolean(true));
 			}
 
 			if(specimen.getLineage() == null)
@@ -1237,13 +1241,17 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
          *    has become 0.
 		 */
 		
-		if(specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+		if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() == 0) || specimen.getCollectionStatus()==null || specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING))
 		{
 			specimen.setAvailable(new Boolean(false));
 		}
 		else if(specimenOld.getAvailableQuantity()!=null && specimenOld.getAvailableQuantity().getValue().doubleValue()==0)
 		{
 			// quantity of old object is zero and that of current is nonzero
+			specimen.setAvailable(new Boolean(true));
+		}
+		else
+		{
 			specimen.setAvailable(new Boolean(true));
 		}
 		
@@ -2843,6 +2851,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		checkDuplicateSpecimenFields(specimenVO,dao);
 		specimenDO.setLabel(specimenVO.getLabel());	
 		specimenDO.setBarcode(specimenVO.getBarcode());
+		specimenDO.setAvailable(specimenVO.getAvailable());
+		
 		if(specimenVO.getStorageContainer()!=null)
 		{
 			setStorageContainer(dao, specimenVO, specimenDO);

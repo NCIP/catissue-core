@@ -345,7 +345,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		specimen.setLabel(specimenDataBean.getLabel());
 		specimen.setPathologicalStatus(specimenDataBean.getPathologicalStatus());
 	
-		specimen.setAvailable(Boolean.TRUE);
+		//specimen.setAvailable(Boolean.FALSE);
 		Quantity availableQuantity = new Quantity();
 		double value=0;
 		String s=specimenDataBean.getQuantity();
