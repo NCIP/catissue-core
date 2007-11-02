@@ -22,7 +22,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionEventParameters extends SpecimenEventParameters
 		implements java.io.Serializable
-{
+{ 
 	private static final long serialVersionUID = 1234567890L;
 
 	/**	

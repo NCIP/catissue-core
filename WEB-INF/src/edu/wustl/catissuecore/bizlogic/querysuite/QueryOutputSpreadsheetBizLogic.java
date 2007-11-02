@@ -3,12 +3,16 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
+import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.dao.QuerySessionData;
@@ -41,6 +45,7 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param idOfClickedNode
 	 * @param recordsPerPage number of recordsPerPage
 	 * @param selectedColumnMetaData metadat for selected columns 
+	 * @param queryResultObjectDataMap 
 	 * @return Map for data
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
@@ -48,7 +53,7 @@ public class QueryOutputSpreadsheetBizLogic
 	public Map processSpreadsheetForLabelNode(Map<String, OutputTreeDataNode> idNodesMap,
 			List<OutputTreeDataNode> rootOutputTreeNodeList, 
 			Map<Long, Map<AttributeInterface, String>> columnMap, 
-			SessionDataBean sessionData, String idOfClickedNode, int recordsPerPage,SelectedColumnsMetadata selectedColumnMetaData,String randomNumber)
+			SessionDataBean sessionData, String idOfClickedNode, int recordsPerPage,SelectedColumnsMetadata selectedColumnMetaData,String randomNumber,boolean hasConditionOnIdentifiedField, Map<Long, QueryResultObjectDataBean> queryResultObjectDataMap)
 	throws DAOException, ClassNotFoundException
 	{
 		this.selectedColumnMetaData = selectedColumnMetaData;
@@ -60,32 +65,57 @@ public class QueryOutputSpreadsheetBizLogic
 		String[] spiltParentNodeId = parentNode.split(Constants.UNDERSCORE);
 		String treeNo = spiltParentNodeId[0];
 		String parentNodeId = spiltParentNodeId[1];
+		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap;
 		if(parentNode.contains("NULL"))
 		{
 			OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(rootOutputTreeNodeList,treeNo);
-			spreadSheetDataMap = createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage,this.selectedColumnMetaData,randomNumber);
+			
+			    QueryResultObjectDataBean queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(root);
+				queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
+				queryResultObjectDataBeanMap.put(root.getId(), queryResulObjectDataBean);
+				if(!selectedColumnMetaData.isDefinedView())
+				    spreadSheetDataMap = createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage,this.selectedColumnMetaData,randomNumber,idNodesMap,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField);
+				else
+				{
+					if(queryResultObjectDataMap==null)
+						queryResultObjectDataMap = new HashMap<Long, QueryResultObjectDataBean>();
+					 spreadSheetDataMap = createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage,this.selectedColumnMetaData,randomNumber,idNodesMap,queryResultObjectDataMap,hasConditionOnIdentifiedField);
+				}
 			this.selectedColumnMetaData.setCurrentSelectedObject(root);
 		} else
-		{
+		{ 
 			String parentData = spiltParentNodeId[2];
 			String uniqueParentNodeId = treeNo+"_"+parentNodeId;
 			OutputTreeDataNode parentTreeNode = idNodesMap.get(uniqueParentNodeId);
+					
 			String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(parentTreeNode);
 			String currentNode = nodeIds[1];//label
 			String[] spiltCurrentNodeId = currentNode.split(Constants.UNDERSCORE);
 			String currentNodeId = spiltCurrentNodeId[1];
 			String uniqueCurrentNodeId = treeNo+"_"+currentNodeId;
 			OutputTreeDataNode currentTreeNode = idNodesMap.get(uniqueCurrentNodeId);
+			
+			QueryResultObjectDataBean queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(currentTreeNode);
+			queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
+			queryResultObjectDataBeanMap.put(currentTreeNode.getId(), queryResulObjectDataBean);
+			
 			if(!selectedColumnMetaData.isDefinedView())
 				 defineGridViewBizLogic.getColumnsMetadataForSelectedNode(currentTreeNode,this.selectedColumnMetaData);
-			String selectSql = createSQL(spreadSheetDataMap, currentTreeNode,parentIdColumnName,parentData,tableName);
+			List resultList = createSQL(spreadSheetDataMap, currentTreeNode,parentIdColumnName,parentData,tableName,queryResultObjectDataBeanMap);
 			
+			String selectSql = (String)resultList.get(0);
+			queryResultObjectDataBeanMap = (Map<Long, QueryResultObjectDataBean>)resultList.get(1);
 			int startIndex = 0;
-			QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql);
+			QuerySessionData querySessionData;
+			if(!selectedColumnMetaData.isDefinedView())
+			   querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField);
+			else
+				querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql,queryResultObjectDataMap,hasConditionOnIdentifiedField);
 			spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
 			this.selectedColumnMetaData.setCurrentSelectedObject(currentTreeNode);
 		}
 		spreadSheetDataMap.put(Constants.SELECTED_COLUMN_META_DATA,this.selectedColumnMetaData);
+		spreadSheetDataMap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataBeanMap);
 		return spreadSheetDataMap;
 	}
 	/**
@@ -95,13 +125,14 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param sessionData session data bean
 	 * @param actualParentNodeId string id of parent
 	 * @param recordsPerPage 
+	 * @param queryResultObjectDataMap 
 	 * @return Map of spreadsheet data 
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
 	public Map processSpreadsheetForDataNode(Map<String, OutputTreeDataNode> idNodesMap,
 			List<OutputTreeDataNode> rootOutputTreeNodeList, SessionDataBean sessionData, String actualParentNodeId,
-			int recordsPerPage,SelectedColumnsMetadata selectedColumnMetaData,String randomNumber)
+			int recordsPerPage,SelectedColumnsMetadata selectedColumnMetaData,String randomNumber,boolean hasConditionOnIdentifiedField, Map<Long, QueryResultObjectDataBean> queryResultObjectDataMap)
 	throws DAOException, ClassNotFoundException
 	{
 		this.selectedColumnMetaData = selectedColumnMetaData;
@@ -116,7 +147,19 @@ public class QueryOutputSpreadsheetBizLogic
 		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
 		if(! selectedColumnMetaData.isDefinedView())
 			 defineGridViewBizLogic.getColumnsMetadataForSelectedNode(parentNode,this.selectedColumnMetaData);
-		spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage,this.selectedColumnMetaData,randomNumber);
+		
+		QueryResultObjectDataBean queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(parentNode);
+		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
+		queryResultObjectDataBeanMap.put(parentNode.getId(), queryResulObjectDataBean);
+		
+		if(!selectedColumnMetaData.isDefinedView())
+		  spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage,this.selectedColumnMetaData,randomNumber,idNodesMap,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField);
+		else
+		{
+			if(queryResultObjectDataMap==null)
+				queryResultObjectDataMap = new HashMap<Long, QueryResultObjectDataBean>();
+			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage,this.selectedColumnMetaData,randomNumber,idNodesMap,queryResultObjectDataMap,hasConditionOnIdentifiedField);
+		}
 		/*if (parentNode.getChildren().isEmpty())
 		{
 			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
@@ -127,6 +170,7 @@ public class QueryOutputSpreadsheetBizLogic
 		}*/
 		this.selectedColumnMetaData.setCurrentSelectedObject(parentNode);
 		spreadSheetDatamap.put(Constants.SELECTED_COLUMN_META_DATA,this.selectedColumnMetaData);
+		spreadSheetDatamap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataBeanMap);
 		return spreadSheetDatamap;
 	}
 
@@ -142,12 +186,16 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @throws DAOException  DAOException 
 	 */
 	public Map<String, List<String>> createSpreadsheetData(String treeNo,OutputTreeDataNode node,
-			 SessionDataBean sessionData,String parentData,int recordsPerPage, SelectedColumnsMetadata selectedColumnsMetadata,String randomNumber) throws DAOException,
-			ClassNotFoundException
-			{
+			 SessionDataBean sessionData, String parentData, int recordsPerPage,
+			SelectedColumnsMetadata selectedColumnsMetadata,String randomNumber,
+			Map<String, OutputTreeDataNode> idNodesMap,
+			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,boolean hasConditionOnIdentifiedField)
+			throws DAOException, ClassNotFoundException
+	{
 		this.selectedColumnMetaData = selectedColumnsMetadata;
-		Map spreadSheetDataMap = updateSpreadsheetData(sessionData, parentData,node,recordsPerPage,randomNumber);
-		spreadSheetDataMap.put(Constants.SELECTED_COLUMN_META_DATA,this.selectedColumnMetaData);
+		Map spreadSheetDataMap = updateSpreadsheetData(sessionData, parentData, node,
+				recordsPerPage,randomNumber, idNodesMap, queryResultObjectDataBeanMap,hasConditionOnIdentifiedField);
+		spreadSheetDataMap.put(Constants.SELECTED_COLUMN_META_DATA, this.selectedColumnMetaData);
 		return spreadSheetDataMap;
 			}
 	/**
@@ -160,15 +208,17 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @throws ClassNotFoundException
 	 * @throws DAOException
 	 */
-	private Map updateSpreadsheetData(SessionDataBean sessionData, String parentData, OutputTreeDataNode node, int recordsPerPage,String randomNumber) throws ClassNotFoundException, DAOException
+	private Map updateSpreadsheetData(SessionDataBean sessionData, String parentData, OutputTreeDataNode node, int recordsPerPage,String randomNumber,Map<String, OutputTreeDataNode> idNodesMap,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap,boolean hasConditionOnIdentifiedField) throws ClassNotFoundException, DAOException
 	{
 		Map spreadSheetDataMap = new HashMap();
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
 		String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(node);
-		String selectSql = createSQL(parentData, tableName, spreadSheetDataMap, parentIdColumnName, node);
+		String selectSql = createSQL(parentData, tableName, spreadSheetDataMap, parentIdColumnName, node,queryResultObjectDataBeanMap);
 		int startIndex = 0;
-		QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql);
+		QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField);
 		spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
+		spreadSheetDataMap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataBeanMap);
+		
 		return spreadSheetDataMap;
 	}
 	
@@ -181,31 +231,53 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param node OutputTreeDataNode
 	 * @return String sql
 	 */
-	private String createSQL(String parentData, String tableName, Map spreadSheetDataMap, String parentIdColumnName, OutputTreeDataNode node)
-	{
+	private String createSQL(String parentData, String tableName, Map spreadSheetDataMap, String parentIdColumnName, OutputTreeDataNode node,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap)
+	{    
 		String selectSql = Constants.SELECT_DISTINCT;
 		String idColumnOfCurrentNode = "";
 		List<String> columnsList = new ArrayList<String>();
 		List<IOutputAttribute> selectedOutputAttributeList = new ArrayList<IOutputAttribute>();
+		QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
+		if(!selectedColumnMetaData.isDefinedView())
+		   queryResultObjectDataBean = queryResultObjectDataBeanMap.get(node.getId());
+		Vector<Integer> identifiedDataColumnIds = new Vector<Integer>();
+		Vector<Integer> objectDataColumnIds = new Vector<Integer>();
+		int columnIndex = 0;
 		
-		//columnsList.add("");
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
+		
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
 			AttributeInterface attribute = attributeMetaData.getAttribute();
 			String sqlColumnName = attributeMetaData.getColumnName();
+			
 			String className = attribute.getEntity().getName();
 			className = Utility.parseClassName(className);
+			if( !selectedColumnMetaData.isDefinedView() && edu.wustl.common.querysuite.security.utility.Utility.isIdentified(attribute))
+			{
+				identifiedDataColumnIds.add(columnIndex);
+				queryResultObjectDataBean.setIdentifiedDataColumnIds(identifiedDataColumnIds);
+			}
 			if(attribute.getName().equals(Constants.ID))
 			{
 				idColumnOfCurrentNode = sqlColumnName;
+				if(!selectedColumnMetaData.isDefinedView())
+				{
+				if(queryResultObjectDataBean.isMainEntity())
+				   queryResultObjectDataBean.setMainEntityIdentifierColumnId(columnIndex);
+				else
+				   queryResultObjectDataBean.setEntityId(columnIndex);
+				}
 			}
 			selectSql = selectSql + sqlColumnName + ",";
+			
 			String attrLabel = Utility.getDisplayLabel(attribute.getName());
 			columnsList.add(attrLabel + " : " + className);
 			IOutputAttribute attr = new OutputAttribute(node.getExpressionId(),attribute);
 			selectedOutputAttributeList.add(attr);
-		}
+			objectDataColumnIds.add(columnIndex);
+			columnIndex++;
+		}  
 		if(!selectedColumnMetaData.isDefinedView())
 		{
 			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
@@ -214,8 +286,23 @@ public class QueryOutputSpreadsheetBizLogic
 			selectedColumnMetaData.setSelectedOutputAttributeList(selectedOutputAttributeList);
 		}
 		else
+		{ 
+			selectSql = getSQLForSelectedColumns(spreadSheetDataMap,queryResultObjectDataBeanMap);
+		} 
+		if(parentData != null && parentData.equals(Constants.HASHED_NODE_ID) && false)
 		{
-			selectSql = getSQLForSelectedColumns(spreadSheetDataMap);
+			addHashedRow(spreadSheetDataMap);
+			return "";
+		}
+		if(!selectedColumnMetaData.isDefinedView() && queryResultObjectDataBean.getMainEntityIdentifierColumnId()==-1)
+		{ 
+			Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
+		    selectSql = QueryModuleUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columnIndex,selectSql,null,entityIdIndexMap);
+		    entityIdIndexMap = queryResultObjectDataBean.getEntityIdIndexMap();
+		    if(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity())!=null)
+			{
+				queryResultObjectDataBean.setMainEntityIdentifierColumnId(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity()));
+			} 
 		}
 		selectSql = selectSql + " from " + tableName;
 		if (parentData != null)
@@ -227,28 +314,85 @@ public class QueryOutputSpreadsheetBizLogic
 		{
 			selectSql = selectSql + " where "+idColumnOfCurrentNode +" "+RelationalOperator.getSQL(RelationalOperator.IsNotNull);	
 		}
+		if(!selectedColumnMetaData.isDefinedView()){
+		if(identifiedDataColumnIds.size()!=0)
+			queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
+		queryResultObjectDataBean.setObjectColumnIds(objectDataColumnIds);
+		}
 		return selectSql;
 	}
 	/**
+	 * @param spreadSheetDataMap
+	 */
+	private void addHashedRow(Map spreadSheetDataMap)
+	{
+		List<String> columnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
+		List<List<String>> dataList = new ArrayList<List<String>>();
+		List<String> row = new ArrayList<String>();
+		for(int columnIndex=0;columnIndex<columnsList.size();columnIndex++)
+		{
+			row.add(Constants.HASHED_OUT);
+		}
+		dataList.add(row);
+		spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, dataList);
+	}
+	/**
 	 * @param spreadSheetDataMap map to store data list
+	 * @param queryResultObjectDataBeanMap 
 	 * @return String sql
 	 */
-	private String getSQLForSelectedColumns(Map spreadSheetDataMap)
-	{
+	private String getSQLForSelectedColumns(Map spreadSheetDataMap, Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap)
+	{     
 		String selectSql = "";
 		List<String> definedColumnsList = new ArrayList<String>();
+		//Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 		StringBuffer sqlColumnNames = new StringBuffer();
 		List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnMetaData.getSelectedAttributeMetaDataList();
 		List<IOutputAttribute> selectedOutputAttributeList = selectedColumnMetaData.getSelectedOutputAttributeList();
-		for(IOutputAttribute at :selectedOutputAttributeList)
+		Vector<Integer> objectIdsList = new Vector<Integer>();
+		boolean isUniqueNode = false;
+		int columnIndex = 0;
+		 List<OutputTreeDataNode> defineViewNodeList = new ArrayList<OutputTreeDataNode>();
+      	for(IOutputAttribute at :selectedOutputAttributeList)
 		{
-			for(QueryOutputTreeAttributeMetadata metaData : selectedAttributeMetaDataList) {
-				if(metaData.getAttribute().equals(at.getAttribute())) {
+			for(QueryOutputTreeAttributeMetadata metaData : selectedAttributeMetaDataList) 
+			{
+				AttributeInterface attribute = at.getAttribute();
+				if(metaData.getAttribute().equals(attribute)) 
+				{
+					QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
 					String sqlColumnName = metaData.getColumnName();
 					sqlColumnNames.append(sqlColumnName);
 					sqlColumnNames.append(", ");
 					String columnDisplayName = metaData.getDisplayName();
 					definedColumnsList.add(columnDisplayName);
+					if(!defineViewNodeList.contains(metaData.getTreeDataNode()))
+					{
+//						if(queryResultObjectDataBeanMap.get(metaData.getTreeDataNode().getId())!=null)
+//							queryResultObjectDataBean = queryResultObjectDataBeanMap.get(metaData.getTreeDataNode().getId());
+//						else
+						   queryResultObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(metaData.getTreeDataNode());
+					    defineViewNodeList.add(metaData.getTreeDataNode());
+					    //queryResultObjectDataBeanMap.put(metaData.getTreeDataNode().getId(), queryResultObjectDataBean);
+					    isUniqueNode = true;
+					}
+					else
+						isUniqueNode = false;
+					if(attribute.getName().equalsIgnoreCase(Constants.ID))
+					{
+						if(queryResultObjectDataBean.isMainEntity())
+							   queryResultObjectDataBean.setMainEntityIdentifierColumnId(columnIndex);
+							else
+							   queryResultObjectDataBean.setEntityId(columnIndex);
+					}
+					if(edu.wustl.common.querysuite.security.utility.Utility.isIdentified(attribute))
+					{
+						queryResultObjectDataBean.getIdentifiedDataColumnIds().add(columnIndex);
+					}
+					queryResultObjectDataBean.getObjectColumnIds().add(columnIndex);
+					//if(isUniqueNode)
+						//queryResultObjectDataBeanMap.put(metaData.getTreeDataNode().getId(), queryResultObjectDataBean);
+					columnIndex++;
 					break;
 				}
 			}
@@ -256,8 +400,23 @@ public class QueryOutputSpreadsheetBizLogic
 		int lastindexOfComma =  sqlColumnNames.lastIndexOf(",");
 		if(lastindexOfComma != -1)
 		{
-			String columnsInSql = sqlColumnNames.substring(0, lastindexOfComma).toString();
-			selectSql =  Constants.SELECT_DISTINCT + columnsInSql;
+		String columnsInSql = sqlColumnNames.substring(0, lastindexOfComma).toString();
+		Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
+		columnsInSql = QueryModuleUtil.updateEntityIdIndexMap(null, columnIndex, columnsInSql,defineViewNodeList,entityIdIndexMap);
+		Iterator<QueryResultObjectDataBean> iterator = queryResultObjectDataBeanMap.values().iterator();
+		while (iterator.hasNext())
+		{
+			QueryResultObjectDataBean elem = (QueryResultObjectDataBean) iterator.next();
+			if(elem.getMainEntityIdentifierColumnId()==-1)
+			{
+				if(!elem.isMainEntity())
+					elem.setMainEntityIdentifierColumnId(entityIdIndexMap.get(elem.getMainEntity()));
+				else
+					elem.setMainEntityIdentifierColumnId(entityIdIndexMap.get(elem.getEntity()));
+			}
+			
+		}
+		selectSql =  Constants.SELECT_DISTINCT + columnsInSql;
 		}
 		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
 		return selectSql;
@@ -354,8 +513,7 @@ public class QueryOutputSpreadsheetBizLogic
 		{
 			String selectSql = getSql(parentIdColumnName, parentData, tableName, childNode);
 			int startIndex = 0;
-			QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql);
-		
+			QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql,null,false);
 			List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 			int size = dataList.size();
 			String sizeStr = new Integer(size).toString();
@@ -382,16 +540,23 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @throws ClassNotFoundException
 	 * @throws DAOException
 	 */
-	public QuerySessionData getQuerySessionData(SessionDataBean sessionData, int recordsPerPage, int startIndex, Map spreadSheetDataMap, String selectSql) throws ClassNotFoundException, DAOException
-	{
+	public QuerySessionData getQuerySessionData(SessionDataBean sessionData, int recordsPerPage, int startIndex, Map spreadSheetDataMap, String selectSql,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap,boolean hasConditionOnIdentifiedField) throws ClassNotFoundException, DAOException
+	{         
 		QuerySessionData querySessionData = new QuerySessionData();
 		querySessionData.setSql(selectSql);
-		querySessionData.setQueryResultObjectDataMap(null);
-		querySessionData.setSecureExecute(false);
-		querySessionData.setHasConditionOnIdentifiedField(false);
+		querySessionData.setQueryResultObjectDataMap(queryResultObjectDataBeanMap);
+		querySessionData.setSecureExecute(true);
+		querySessionData.setHasConditionOnIdentifiedField(hasConditionOnIdentifiedField);
 		querySessionData.setRecordsPerPage(recordsPerPage);
 		QueryBizLogic qBizLogic = new QueryBizLogic(); 
-		PagenatedResultData pagenatedResultData = qBizLogic.execute( sessionData, querySessionData, startIndex);
+		if(selectSql.equals(""))
+		{
+			addHashedRow(spreadSheetDataMap);
+			querySessionData.setTotalNumberOfRecords(1);
+		}
+		else
+		{
+		PagenatedResultData pagenatedResultData = qBizLogic.execute(sessionData, querySessionData, startIndex);
 		spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, pagenatedResultData.getResult());
 		/**
 		 * Name: Prafull
@@ -401,6 +566,7 @@ public class QueryOutputSpreadsheetBizLogic
 		 *  saving required query data in Session so that can be used later on while navigating through result pages using pagination.  
 		 */
 		querySessionData.setTotalNumberOfRecords(pagenatedResultData.getTotalRecords());
+		}
 		return querySessionData;
 	}
 	
@@ -412,26 +578,44 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param parentIdColumnName 
 	 * @return
 	 */
-	private String createSQL(Map spreadSheetDataMap, OutputTreeDataNode node, String parentIdColumnName, String parentData, String tableName)
-	{
+	private List createSQL(Map spreadSheetDataMap, OutputTreeDataNode node, String parentIdColumnName, String parentData, String tableName,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap)
+	{ 
 		String selectSql = Constants.SELECT_DISTINCT;
 		List<String> columnsList = new ArrayList<String>();
 		String idColumnOfCurrentNode = "";
+		QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(node.getId());
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
+		Vector<Integer> identifiedDataColumnIds = new Vector<Integer>();
+		Vector<Integer> objectColumnIds = new Vector<Integer>();
+		List resultList = new ArrayList();
+		int columnIndex =0;
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
 			AttributeInterface attribute = attributeMetaData.getAttribute();
 			String className = attribute.getEntity().getName();
 			className = Utility.parseClassName(className);
 			String sqlColumnName = attributeMetaData.getColumnName();
+			
 			if(attribute.getName().equalsIgnoreCase(Constants.ID))
 			{
 				idColumnOfCurrentNode = sqlColumnName;
+				if(queryResultObjectDataBean.isMainEntity())
+					   queryResultObjectDataBean.setMainEntityIdentifierColumnId(columnIndex);
+					else
+					   queryResultObjectDataBean.setEntityId(columnIndex);
 			}
+			if(edu.wustl.common.querysuite.security.utility.Utility.isIdentified(attribute))
+			{
+				identifiedDataColumnIds.add(columnIndex);
+				queryResultObjectDataBean.setIdentifiedDataColumnIds(identifiedDataColumnIds);
+			}
+			objectColumnIds.add(columnIndex);
+
 			selectSql = selectSql + sqlColumnName + ",";
 			sqlColumnName = sqlColumnName.substring(SqlGenerator.COLUMN_NAME.length(), sqlColumnName.length());
 			String attrLabel = Utility.getDisplayLabel(attribute.getName());
 			columnsList.add(attrLabel + " : " + className);
+			columnIndex++;
 		}
 		if(! selectedColumnMetaData.isDefinedView())
 		{
@@ -441,7 +625,17 @@ public class QueryOutputSpreadsheetBizLogic
 		}
 		else 
 		{
-			selectSql = getSQLForSelectedColumns(spreadSheetDataMap);
+			selectSql = getSQLForSelectedColumns(spreadSheetDataMap,queryResultObjectDataBeanMap);
+		}
+		if(!selectedColumnMetaData.isDefinedView() && queryResultObjectDataBean.getMainEntityIdentifierColumnId() == -1)
+		{
+			Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
+		    selectSql = QueryModuleUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex, selectSql,null,entityIdIndexMap);
+		    entityIdIndexMap = queryResultObjectDataBean.getEntityIdIndexMap();
+			 if(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity())!=null)
+				  queryResultObjectDataBean.setMainEntityIdentifierColumnId(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity()));
+			 else
+				 queryResultObjectDataBean.setMainEntityIdentifierColumnId(-1);
 		}
 		selectSql = selectSql + " from " + tableName;
 		if (parentData != null)
@@ -451,7 +645,14 @@ public class QueryOutputSpreadsheetBizLogic
 		{
 			selectSql = selectSql + " where "+idColumnOfCurrentNode+" "+RelationalOperator.getSQL(RelationalOperator.IsNotNull);	
 		}
-		return selectSql;
+		//return selectSql;
+		if(identifiedDataColumnIds.size()!=0)
+			queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
+		queryResultObjectDataBean.setObjectColumnIds(objectColumnIds);
+		 
+		resultList.add(selectSql);
+		resultList.add(queryResultObjectDataBeanMap);
+		return resultList;
 	}
 	
 	/**

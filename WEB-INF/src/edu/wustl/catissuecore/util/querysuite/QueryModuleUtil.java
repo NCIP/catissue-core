@@ -3,6 +3,8 @@ package edu.wustl.catissuecore.util.querysuite;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -10,7 +12,13 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.entitymanager.EntityManager;
+import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.DefineGridViewBizLogic;
@@ -20,6 +28,7 @@ import edu.wustl.catissuecore.flex.dag.DAGConstant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
@@ -59,6 +68,7 @@ public abstract class QueryModuleUtil
 	public static final int DAO_EXCEPTION = 5;
 	public static final int CLASS_NOT_FOUND = 6;
 	public static final int RESULTS_MORE_THAN_LIMIT = 10;
+	private static Map<String, OutputTreeDataNode> uniqueIdNodesMap;
 	
 	
 	/**
@@ -152,11 +162,13 @@ public abstract class QueryModuleUtil
 	 * Returns SQL for root node in tree.
 	 * @param root root node of the tree
 	 * @param tableName name of the temp table created
+	 * @param queryResulObjectDataMap 
+	 * @param uniqueIdNodesMap 
 	 * @return String sql for root node
 	 */
-	public static String getSQLForRootNode(OutputTreeDataNode root, String tableName)
+	public static String getSQLForRootNode(OutputTreeDataNode root, String tableName, Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap)
 	{
-		String columnNames = getColumnNamesForSelectpart(root);
+		String columnNames = getColumnNamesForSelectpart(root,queryResulObjectDataMap);
 		String indexStr = columnNames.substring(columnNames.lastIndexOf(";") + 1, columnNames
 				.length());
 		int index = -1;
@@ -182,20 +194,25 @@ public abstract class QueryModuleUtil
 	/**
 	 * Forms select part of the query.
 	 * @param node Node of Uotput tree .
+	 * @param queryResulObjectDataMap 
 	 * @param columnMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @return String having all columnnames for select part.
 	 */
-	public static String getColumnNamesForSelectpart(OutputTreeDataNode node)
-	{
+	public static String getColumnNamesForSelectpart(OutputTreeDataNode node, Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap)
+	{  
 		String columnNames = "";
 		String idColumnName = null;
 		String displayNameColumnName = null;
 		String index = null;
+		int columIndex = 0;
+		Vector<Integer> objectColumnIdsVector = new Vector<Integer>();
+		QueryResultObjectDataBean queryResultObjectDataBean = queryResulObjectDataMap.get(node.getId());
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
 		for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
 			AttributeInterface attribute = attributeMetaData.getAttribute();
 			String columnName = attributeMetaData.getColumnName();
+			
 			if (idColumnName != null && displayNameColumnName != null)
 			{
 				break;
@@ -203,23 +220,41 @@ public abstract class QueryModuleUtil
 			if (attribute.getName().equalsIgnoreCase(Constants.ID))
 			{
 				idColumnName = columnName;
+				if(queryResultObjectDataBean.isMainEntity())
+					   queryResultObjectDataBean.setMainEntityIdentifierColumnId(0);
+					else
+					   queryResultObjectDataBean.setEntityId(0);
+				objectColumnIdsVector.add(0);
+				columIndex++;
+				
 			}
 			else if (ifAttributeIsDisplayName(attribute.getName()))
 			{
 				index = columnName.substring(Constants.COLUMN_NAME.length(), columnName.length());
+				Vector<Integer> idvector = new Vector<Integer>();
+				
+				if(edu.wustl.common.querysuite.security.utility.Utility.isIdentified(attribute))
+				 idvector.add(1);
+				objectColumnIdsVector.add(1);
+				
+				queryResultObjectDataBean.setIdentifiedDataColumnIds(idvector);
 				displayNameColumnName = columnName;
+				columIndex++;
 			}
 		}
+		queryResultObjectDataBean.setObjectColumnIds(objectColumnIdsVector);
 		if (displayNameColumnName != null)
 		{
-			columnNames = idColumnName + " , " + displayNameColumnName + " , " + columnNames;
+			columnNames = idColumnName + " , " + displayNameColumnName;// + " , " + columnNames;
 		}
 		else
 		{
-			columnNames = idColumnName + " , " + columnNames;
+			columnNames = idColumnName;
 		}
-		columnNames = columnNames.substring(0, columnNames.lastIndexOf(","));
+	//	columnNames = columnNames.substring(0, columnNames.lastIndexOf(","));
 		columnNames = columnNames + ";" + index;
+		Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
+		QueryModuleUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columIndex,columnNames,null,entityIdIndexMap);
 		return columnNames;
 	}
 
@@ -341,6 +376,7 @@ public abstract class QueryModuleUtil
 		session.setAttribute(Constants.TOTAL_RESULTS, new Integer(totalNumberOfRecords));
 		session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
 		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA, selectedColumnsMetadata);
+		session.setAttribute(Constants.QUERY_REASUL_OBJECT_DATA_MAP, spreadSheetDatamap.get(Constants.QUERY_REASUL_OBJECT_DATA_MAP));
 		String pageOf = (String) request.getParameter(Constants.PAGEOF);
 		if (pageOf == null)
 			pageOf = "pageOfQueryModule";
@@ -360,6 +396,7 @@ public abstract class QueryModuleUtil
 		if(isSavedQuery == null)
 			isSavedQuery = Constants.FALSE;
 		HttpSession session = request.getSession(); 
+		boolean hasConditionOnIdentifiedField = edu.wustl.common.querysuite.security.utility.Utility.isConditionOnIdentifiedField(query);
 		session.removeAttribute(Constants.HYPERLINK_COLUMN_MAP);
 		int status = 0;
 		try
@@ -400,13 +437,16 @@ public abstract class QueryModuleUtil
 					outputTreeBizLogic.createOutputTreeTable(selectSql,sessionData,randomNumber);
 					List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator
 							.getRootOutputTreeNodeList();
-					
+					Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor
+					.getAllChildrenNodes(rootOutputTreeNodeList);
+					session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
+					QueryModuleUtil.uniqueIdNodesMap = uniqueIdNodesMap;
 					status = DAGConstant.SUCCESS;
 					int i = 0;
 					for (OutputTreeDataNode outnode : rootOutputTreeNodeList)
 					{
 						Vector<QueryTreeNodeData> treeData = outputTreeBizLogic
-								.createDefaultOutputTreeData(i, outnode, sessionData,randomNumber);
+								.createDefaultOutputTreeData(i, outnode, sessionData,randomNumber,hasConditionOnIdentifiedField);
 						int resultsSize = treeData.size();
 						if(option == null)
 						{
@@ -450,13 +490,19 @@ public abstract class QueryModuleUtil
 					else
 						recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
 					session.setAttribute(Constants.TREE_ROOTS, rootOutputTreeNodeList);
-
+					
 					Long noOfTrees = new Long(rootOutputTreeNodeList.size());
 					session.setAttribute(Constants.NO_OF_TREES, noOfTrees);
-					Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor
+					/*Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor
 							.getAllChildrenNodes(rootOutputTreeNodeList);
-					session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
+					session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);*/
+					
+					
 					OutputTreeDataNode node = rootOutputTreeNodeList.get(0);
+					
+					QueryResultObjectDataBean queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(node);
+					Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
+					queryResultObjectDataBeanMap.put(node.getId(), queryResulObjectDataBean);
 					
 					QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 					String parentNodeId = null;
@@ -477,15 +523,14 @@ public abstract class QueryModuleUtil
 					}
 					Map<String, List<String>> spreadSheetDatamap = outputSpreadsheetBizLogic
 							.createSpreadsheetData(treeNo, node, sessionData, parentNodeId,
-									recordsPerPage, selectedColumnsMetadata,randomNumber);
+									recordsPerPage, selectedColumnsMetadata,randomNumber,uniqueIdNodesMap,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField);
 
 					// Changes added by deepti for performance change
 					QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap
 							.get(Constants.QUERY_SESSION_DATA);
 					int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
 					session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
-					session
-							.setAttribute(Constants.TOTAL_RESULTS,
+					session.setAttribute(Constants.TOTAL_RESULTS,
 									new Integer(totalNumberOfRecords));
 
 					request.setAttribute(Constants.PAGINATION_DATA_LIST, spreadSheetDatamap
@@ -494,7 +539,8 @@ public abstract class QueryModuleUtil
 							.get(Constants.SPREADSHEET_COLUMN_LIST));
 					session.setAttribute(Constants.SELECTED_COLUMN_META_DATA, spreadSheetDatamap
 							.get(Constants.SELECTED_COLUMN_META_DATA));
-					
+					session.setAttribute(Constants.QUERY_REASUL_OBJECT_DATA_MAP, spreadSheetDatamap
+							.get(Constants.QUERY_REASUL_OBJECT_DATA_MAP));
 				}
 				
 			}
@@ -611,5 +657,149 @@ public abstract class QueryModuleUtil
 		else 
 			return null;
 	}
+
+	/**
+	 * @param node
+	 * @return
+	 */
+	public static  QueryResultObjectDataBean getQueryResulObjectDataBean(
+			OutputTreeDataNode node)
+	{
+			QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
+			queryResultObjectDataBean.setPrivilegeType(edu.wustl.common.querysuite.security.utility.Utility.getPrivilegeType(node.getOutputEntity().getDynamicExtensionsEntity()));
+			queryResultObjectDataBean.setEntity(node.getOutputEntity().getDynamicExtensionsEntity());
+			List<List<AssociationInterface>> listOfAssociationList= new ArrayList<List<AssociationInterface>>();
+//			try
+//			{
+				List<AssociationInterface> associationList = edu.wustl.common.querysuite.security.utility.Utility.getContainmentAssociations(node.getOutputEntity().getDynamicExtensionsEntity());
+				if(associationList.size()!=0)
+				{
+				 queryResultObjectDataBean.setMainEntity(associationList.get(0).getTargetEntity());
+				 queryResultObjectDataBean.setAssociationList(associationList);
+				 listOfAssociationList.add(associationList);
+				 queryResultObjectDataBean.setMainEntity(false);
+				}
+				else
+					queryResultObjectDataBean.setMainEntity(true);					//	}
+//			catch (DynamicExtensionsSystemException e)
+//			{
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+		return queryResultObjectDataBean;
+	}
 	
+	public static List<AssociationInterface> getIncomingContainmentAssociations(EntityInterface entity) throws DynamicExtensionsSystemException
+	{
+		
+		EntityManagerInterface entityManager = EntityManager.getInstance();
+		List<Long> allIds = (List<Long>)entityManager.getIncomingAssociationIds(entity);
+		List<AssociationInterface> list = new ArrayList<AssociationInterface>();
+		EntityCache cache = EntityCache.getInstance();
+		for (Long id: allIds)
+		{
+			AssociationInterface associationById = cache.getAssociationById(id);
+			
+			if (associationById!=null && associationById.getSourceRole().getAssociationsType().getValue().equals("CONTENMENT"))
+				list.add(associationById);
+		}
+		return list;
+	}
+
+	/**
+	 * @param selectSql
+	 * @param sessionData
+	 * @param queryResulObjectDataMap
+	 * @param root 
+	 * @param hasConditionOnIdentifiedField 
+	 * @return
+	 * @throws DAOException 
+	 * @throws ClassNotFoundException 
+	 */
+	public static List executeCSMQuery(String selectSql, SessionDataBean sessionData,
+			Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap, OutputTreeDataNode root, boolean hasConditionOnIdentifiedField) throws DAOException, ClassNotFoundException
+	{
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		List<List<String>> dataList = new ArrayList<List<String>>();
+		try
+		{ 
+			dao.openSession(sessionData);
+			dataList = dao.executeQuery(selectSql, sessionData, true, hasConditionOnIdentifiedField, queryResulObjectDataMap);
+			dao.commit();
+		}
+		finally
+		{
+			dao.closeSession();
+		}
+		return dataList;
+	}
+	/**
+	 * @param queryResultObjectDataBean
+	 * @param columnIndex
+	 * @param selectSql 
+	 * @param entityIdIndexMap 
+	 * @param defineViewEntityList 
+	 */
+	public static String updateEntityIdIndexMap(QueryResultObjectDataBean queryResultObjectDataBean,
+			int columnIndex, String selectSql, List<OutputTreeDataNode> defineViewNodeList, Map<EntityInterface, Integer> entityIdIndexMap)
+	{  
+		if(defineViewNodeList!=null)
+		{
+			for (OutputTreeDataNode outputTreeDataNode2 : defineViewNodeList)
+			{
+				OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(outputTreeDataNode2
+						.getUniqueNodeId());
+				if (outputTreeDataNode != null)
+				{
+					List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
+							.getAttributes();
+					for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
+					{
+						AttributeInterface attribute = attributeMetaData.getAttribute();
+						String sqlColumnName = attributeMetaData.getColumnName();
+						if (attribute.getName().equals(Constants.ID))
+						{
+							selectSql += ", " + sqlColumnName;
+
+							entityIdIndexMap.put(attribute.getEntity(), columnIndex);
+							columnIndex++;
+							break;
+						}
+					}
+				}
+
+			}
+		}
+		else
+		{
+			Iterator<String> iterator = uniqueIdNodesMap.keySet().iterator();
+			while (iterator.hasNext())
+			{
+				Object key = iterator.next();
+				OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(key);
+				if (queryResultObjectDataBean!=null && outputTreeDataNode.getOutputEntity().getDynamicExtensionsEntity().equals(
+						queryResultObjectDataBean.getMainEntity()))
+				{
+					List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
+							.getAttributes();
+					for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
+					{
+						AttributeInterface attribute = attributeMetaData.getAttribute();
+						String sqlColumnName = attributeMetaData.getColumnName();
+						if (attribute.getName().equals(Constants.ID))
+						{
+							selectSql += ", " + sqlColumnName;
+
+							entityIdIndexMap.put(attribute.getEntity(), columnIndex);
+							columnIndex++;
+							break;
+						}
+					}
+				}
+			}
+		}
+		if (queryResultObjectDataBean != null)
+			queryResultObjectDataBean.setEntityIdIndexMap(entityIdIndexMap);
+		return selectSql;
+	}
 }

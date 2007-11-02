@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
+import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
@@ -66,20 +68,26 @@ public class QueryOutputTreeBizLogic
 	 * @param tableName name fo the table created
 	 * @param query IQuery obj created out of user inputs to dag view.
 	 * @param sessionData session data to get the user id.
+	 * @param hasConditionOnIdentifiedField 
 	 * @param nodeAttributeColumnNameMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @return Vector<QueryTreeNodeData> data structure to form tree out of it.
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(int treeNo,OutputTreeDataNode root, SessionDataBean sessionData,String randomNumber) throws DAOException, ClassNotFoundException
-			{
+	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(int treeNo,OutputTreeDataNode root, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField) throws DAOException, ClassNotFoundException
+			{ 
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId()+randomNumber;
-		String selectSql = QueryModuleUtil.getSQLForRootNode(root, tableName);
+		QueryResultObjectDataBean queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(root);
+		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
+		queryResultObjectDataBeanMap.put(root.getId(), queryResulObjectDataBean);
+		String selectSql = QueryModuleUtil.getSQLForRootNode(root, tableName,queryResultObjectDataBeanMap);
+		
 		String[] sqlIndex = selectSql.split(Constants.NODE_SEPARATOR);
 		selectSql = sqlIndex[0];
 		int index = Integer.parseInt(sqlIndex[1]);
 
-		List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
+		//List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
+		List dataList = QueryModuleUtil.executeCSMQuery(selectSql, sessionData,queryResultObjectDataBeanMap,root,hasConditionOnIdentifiedField);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
 		if (dataList != null && dataList.size() != 0)
 		{
@@ -95,7 +103,7 @@ public class QueryOutputTreeBizLogic
 			treeNode.setParentIdentifier(Constants.ZERO_ID);
 			treeNode.setParentObjectName("");
 			treeDataVector.add(treeNode);
-			treeDataVector = addNodeToTree(index, dataList, treeNode, root, treeDataVector);
+			treeDataVector = addNodeToTree(index,dataList,treeNode, root, treeDataVector);
 		}
 		return treeDataVector;
 			}
@@ -158,20 +166,24 @@ public class QueryOutputTreeBizLogic
 			QueryTreeNodeData treeNode = null;
 			String data = (String) rowList.get(0);
 			String currentNodeId = uniqueNodeId + Constants.UNDERSCORE + data;
+			if(data.contains("#"))
+			{
+				currentNodeId = uniqueNodeId + Constants.UNDERSCORE + Constants.HASHED_NODE_ID;
+			}
 			String nodeIdToSet = parentNodeId + Constants.NODE_SEPARATOR + currentNodeId;
 			nodeIdToSet = encryptId(nodeIdToSet);
-			Iterator iterTreeData = treeDataVector.iterator();
-			while (iterTreeData.hasNext())
-			{
-				QueryTreeNodeData nodeInTree = (QueryTreeNodeData) iterTreeData.next();
-				if (nodeInTree.getIdentifier().equals(nodeIdToSet))
-				{
-					isNodeAlreadyPresentInTree = true;
-					break;
-				}
-			}
-			if (!isNodeAlreadyPresentInTree)
-			{
+//			Iterator iterTreeData = treeDataVector.iterator();
+//			while (iterTreeData.hasNext())
+//			{
+//				QueryTreeNodeData nodeInTree = (QueryTreeNodeData) iterTreeData.next();
+//				if (nodeInTree.getIdentifier().equals(nodeIdToSet))
+//				{
+//					isNodeAlreadyPresentInTree = true;
+//					break;
+//				}
+//			}
+//			if (!isNodeAlreadyPresentInTree)
+//			{
 				treeNode = new QueryTreeNodeData();
 				treeNode.setIdentifier(nodeIdToSet);
 				EntityInterface dynExtEntity = node.getOutputEntity().getDynamicExtensionsEntity();
@@ -191,7 +203,7 @@ public class QueryOutputTreeBizLogic
 				treeNode.setParentObjectName(parentNode.getObjectName());
 				treeDataVector.add(treeNode);
 			}
-		}
+//		}
 		return treeDataVector;
 			}
 
@@ -282,7 +294,7 @@ public class QueryOutputTreeBizLogic
 	 */
 	public String updateTreeForLabelNode(String nodeId, Map<Long, OutputTreeDataNode> idNodeMap, SessionDataBean sessionData,String randomNumber)
 	throws ClassNotFoundException, DAOException
-	{
+	{ 
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
 		String selectSql = "";
 		int index = -1;
@@ -297,6 +309,7 @@ public class QueryOutputTreeBizLogic
 		String[] nodeIds = decryptedId.split(Constants.UNDERSCORE);
 		String parentId = nodeIds[1];
 		String parentData = null;
+		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = null;
 		if(nodeIds.length == 3)
 		{
 			parentData = nodeIds[2];
@@ -313,7 +326,10 @@ public class QueryOutputTreeBizLogic
 				return "";
 			}
 			String columnNames = "";
-			columnNames = QueryModuleUtil.getColumnNamesForSelectpart(currentNode);
+			QueryResultObjectDataBean queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(currentNode);
+		    queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
+			queryResultObjectDataBeanMap.put(currentNode.getId(), queryResulObjectDataBean);
+			columnNames = QueryModuleUtil.getColumnNamesForSelectpart(currentNode,queryResultObjectDataBeanMap);
 			String indexStr = columnNames.substring(columnNames.lastIndexOf(";") + 1, columnNames.length());
 			if (!indexStr.equalsIgnoreCase(Constants.NULL))
 			{
@@ -331,7 +347,8 @@ public class QueryOutputTreeBizLogic
 		}
 		if (parentNodeId.contains(Constants.NULL_ID))
 		{
-			selectSql = QueryModuleUtil.getSQLForRootNode(currentNode, tableName);
+			
+			selectSql = QueryModuleUtil.getSQLForRootNode(currentNode, tableName,queryResultObjectDataBeanMap);
 
 			String indexStr = selectSql.substring(selectSql.indexOf(Constants.NODE_SEPARATOR)+2,selectSql.length());
 			if (!indexStr.equalsIgnoreCase(Constants.NULL))

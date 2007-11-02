@@ -42,10 +42,10 @@ import edu.wustl.common.util.logger.Logger;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInterface
-{
+{ 
 	//Creates a temporary table containing the Advance Query Search results given the AdvanceSearchQuery.
 	public int createTempTable(String searchQuery,String tempTableName,SessionDataBean sessionData,Map queryResultObjectDataMap, boolean hasConditionOnIdentifiedField) throws Exception
-	{
+	{ 
  		String sql = "Create table "+tempTableName+" as "+"("+searchQuery+" AND 1!=1)";
 		//String sql = "Create table "+tempTableName+" as "+"("+searchQuery+")";
  		Logger.out.debug("sql for create table"+sql);

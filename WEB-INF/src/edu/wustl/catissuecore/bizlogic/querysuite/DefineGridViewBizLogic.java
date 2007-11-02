@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +13,9 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IOutputEntity;
 import edu.wustl.common.querysuite.queryobject.impl.OutputAttribute;
@@ -185,10 +188,10 @@ public class DefineGridViewBizLogic
 	 * @param uniqueIdNodesMap map of id and Node
 	 * @return SelectedColumnsMetadata SelectedColumnsMetadata
 	 */
-	public void getSelectedColumnsMetadata(CategorySearchForm categorySearchForm, Map<Long, OutputTreeDataNode> uniqueIdNodesMap, SelectedColumnsMetadata selectedColumnsMetadata)
-	{
+	public void getSelectedColumnsMetadata(CategorySearchForm categorySearchForm, Map<String, OutputTreeDataNode> uniqueIdNodesMap, SelectedColumnsMetadata selectedColumnsMetadata)
+	{ 
 		String[] selectedColumnIds = categorySearchForm.getSelectedColumnNames();
-		List<QueryOutputTreeAttributeMetadata> attribureMetadataList = new ArrayList<QueryOutputTreeAttributeMetadata>(); 
+		List<QueryOutputTreeAttributeMetadata> attribureMetadataList = new ArrayList<QueryOutputTreeAttributeMetadata>();
 		List<IOutputAttribute> outputAttributeList = new ArrayList<IOutputAttribute>();
 		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
 		for (int i = 0; i < selectedColumnIds.length; i++)
@@ -199,7 +202,7 @@ public class DefineGridViewBizLogic
 			String uniqueNodeId = split[0];
 			OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(uniqueNodeId);
 			if(outputTreeDataNode != null)
-			{
+			{			
 				List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode.getAttributes();
 				for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 				{
@@ -224,22 +227,76 @@ public class DefineGridViewBizLogic
 	 * @param categorySearchForm
 	 * @param selectedColumnsMetadata
 	 * @param selectedColumnNames
+	 * @param queryResultObjecctDataMap 
 	 * @return
 	 */
-	public List<String> getSelectedColumnList(CategorySearchForm categorySearchForm,SelectedColumnsMetadata selectedColumnsMetadata,StringBuffer selectedColumnNames)
+	public List<String> getSelectedColumnList(CategorySearchForm categorySearchForm,SelectedColumnsMetadata selectedColumnsMetadata,StringBuffer selectedColumnNames, Map<Long, QueryResultObjectDataBean> queryResultObjecctDataMap)
 	{
 		List<String> definedColumnsList = new ArrayList<String>();
 		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
 		List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnsMetadata.getSelectedAttributeMetaDataList();
+		QueryResultObjectDataBean queryResulObjectDataBean =null;
+		Vector<Integer> identifiedColumnIds = null;
+		Vector<Integer> objectColumnIds = null;
+		List<OutputTreeDataNode> defineViewNodeList = new ArrayList<OutputTreeDataNode>();
+		int columnIndex = 0;
 		Iterator<QueryOutputTreeAttributeMetadata> iterator = selectedAttributeMetaDataList.iterator();
 		while (iterator.hasNext())
 		{
 			QueryOutputTreeAttributeMetadata element = (QueryOutputTreeAttributeMetadata) iterator.next();
+			queryResulObjectDataBean = queryResultObjecctDataMap.get(element.getTreeDataNode().getId());
+			if(queryResulObjectDataBean==null)
+			{
+				identifiedColumnIds = new Vector<Integer>();
+				objectColumnIds = new Vector<Integer>();
+				queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(element.getTreeDataNode());
+				queryResultObjecctDataMap.put(element.getTreeDataNode().getId(), queryResulObjectDataBean);
+				defineViewNodeList.add(element.getTreeDataNode());
+			}
+			
+			if(edu.wustl.common.querysuite.security.utility.Utility.isIdentified(element.getAttribute()))
+			{
+				identifiedColumnIds.add(columnIndex);
+			}
+			if(element.getAttribute().getName().equalsIgnoreCase(Constants.ID))
+			{
+				if(queryResulObjectDataBean.isMainEntity())
+					queryResulObjectDataBean.setMainEntityIdentifierColumnId(columnIndex);
+				else
+					queryResulObjectDataBean.setEntityId(columnIndex);
+			}
+			objectColumnIds.add(columnIndex);
+			queryResulObjectDataBean.setIdentifiedDataColumnIds(identifiedColumnIds);
+			queryResulObjectDataBean.setObjectColumnIds(objectColumnIds);
+			
 			selectedColumnNames.append(element.getColumnName());
 			selectedColumnNames.append(", ");
 			definedColumnsList.add(element.getDisplayName());
 			NameValueBean nameValueBean = new NameValueBean(element.getDisplayName(),element.getUniqueId());
 			selectedColumnNameValue.add(nameValueBean);
+			columnIndex++;
+		}
+		Iterator<Long> mapItr = queryResultObjecctDataMap.keySet().iterator();
+		String sql="";
+		sql = selectedColumnNames.substring(0, selectedColumnNames.lastIndexOf(","));
+		selectedColumnNames.replace(0, selectedColumnNames.length(), sql);
+		while(mapItr.hasNext())
+		{
+		queryResulObjectDataBean = queryResultObjecctDataMap.get(mapItr.next());
+		if(queryResulObjectDataBean.getMainEntityIdentifierColumnId()==-1)
+		{
+			Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
+			sql = QueryModuleUtil.updateEntityIdIndexMap(queryResulObjectDataBean, columnIndex, sql,defineViewNodeList,entityIdIndexMap);
+			selectedColumnNames.replace(0, selectedColumnNames.length(), sql);
+			if(queryResulObjectDataBean.isMainEntity())
+			 queryResulObjectDataBean.setMainEntityIdentifierColumnId(queryResulObjectDataBean.getEntityIdIndexMap().get(queryResulObjectDataBean.getEntity()));
+			else
+			{
+				EntityInterface mainEntity = queryResulObjectDataBean.getMainEntity();
+				if(queryResulObjectDataBean.getEntityIdIndexMap().get(mainEntity)!=null)
+				  queryResulObjectDataBean.setMainEntityIdentifierColumnId(queryResulObjectDataBean.getEntityIdIndexMap().get(mainEntity));
+			}
+		}
 		}
 		categorySearchForm.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 		return definedColumnsList;
@@ -255,7 +312,7 @@ public class DefineGridViewBizLogic
 		String columnsInSql = selectedColumnNames.toString();
 		if(columnsInSql.lastIndexOf(",") != -1)
 		{
-			columnsInSql = columnsInSql.substring(0, columnsInSql.lastIndexOf(","));
+			//columnsInSql = columnsInSql.substring(0, columnsInSql.lastIndexOf(","));
 			int indexOfSelectDistict = sql.indexOf(Constants.SELECT_DISTINCT);
 			int selectDistictLength = Constants.SELECT_DISTINCT.length();
 			int indexOfFrom = sql.indexOf(Constants.FROM);
