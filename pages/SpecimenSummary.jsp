@@ -23,6 +23,21 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				document.forms[0].action = action;
 				document.forms[0].submit();
 		}
+		function toggleLayer( whichLayer )
+		{
+		  var elem, vis;
+		  if( document.getElementById ) // this is the way the standards work
+		    elem = document.getElementById( whichLayer );
+		  else if( document.all ) // this is the way old msie versions work
+		      elem = document.all[whichLayer];
+		  else if( document.layers ) // this is the way nn4 works
+		    elem = document.layers[whichLayer];
+		  vis = elem.style;
+		  // if the style.display value is blank we try to figure it out here
+		  if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
+		    vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
+		  vis.display = (vis.display==''||vis.display=='block')?'none':'block';
+		}		
 		
 		function confirmDisable()
 		{		
@@ -51,7 +66,11 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			}
 							
 		}
-		
+		function showhide()
+		{
+			toggleLayer('wait'); 
+			toggleLayer('summary');
+		}
 	</script>
 </head>
 
@@ -59,8 +78,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 			<%=messageKey%>
 		</html:messages>
-		
-		<html:form action="<%=formAction%>">		
+	<div id="summary">	
+		<html:form action="<%=formAction%>" onsubmit="showhide()">		
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
 		<tr>
 				<td>			
@@ -322,6 +341,10 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		 </tr>
 		</logic:equal>
 		
-		</table>
-		</html:form>		
+		</table>		
+		</html:form>
+	</div>
+	<div id="wait" style="display:none;" >
+	    Creating collection protocol....
+	</div> 		
 </html>
