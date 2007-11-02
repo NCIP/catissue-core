@@ -8,49 +8,69 @@
 <%-- Imports --%>
 <%@
 	page language="java" contentType="text/html"
-	import="edu.wustl.catissuecore.util.global.Constants"
+	import="edu.wustl.catissuecore.util.global.Constants, org.apache.struts.Globals"
 %>
+<%@ page import="org.apache.struts.action.ActionMessages, edu.wustl.catissuecore.util.global.Utility;"%>
+
 
 <head>
+	
 	<script language="JavaScript" type="text/javascript" src="jss/queryModule.js"></script>
+	<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+	
 </head>
 
-<body>
-	<html:form styleId='saveQueryForm' action='<%=Constants.FETCH_QUERY_ACTION%>'>
-		<table cellpadding='0' cellspacing='0' border='0' align='center' width='95%'>
-			<tr><td>&nbsp;</td></tr>
+<body >
+
+<% String message = null; %>
+<html:messages id="messageKey" message="true" >
+<% message = messageKey;    %>
+</html:messages>
+	<html:form styleId='saveQueryForm' action='<%=Constants.FETCH_QUERY_ACTION%>' style="margin:0;padding:0;">
+		<table cellpadding='0' cellspacing='0' border='0' align='center' style="width:100%; height:100%;"> 
+			<tr ><td>&nbsp;</td></tr>
 			<tr>
-				<td class="formTitle" height="20"><bean:message key="query.savedQueries.label"/></td>
-			</tr>
-			<tr>
-				<td><html:errors /></td>
-			</tr>
-			<tr>
-				<td align='right'>
-					<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-						<%=messageKey%>
-					</html:messages>
+				<td class="formTitle" height="20">
+					<bean:message key="query.savedQueries.label"/>
+				</td>
+				<td class="formTitle" height="20" width="20%">
+					<%= message %>
 				</td>
 			</tr>
-			<tr>
-				<td>
-					<div style="width:100%; height:500px; overflow-y:auto;">
-						<table cellpadding='0' cellspacing='0' border='0' width='100%' class='contentPage'>
+			<tr >
+				<td><html:errors /></td>
+			</tr>
+			
+			<tr style="height:100%;">
+				<td colspan='2'>
+					<div style="width:100%; height:100%; overflow:auto; " id="searchDiv">
+						<table cellpadding='0' cellspacing='0' border='0' width='99%' class='contentPage' >
 							<c:set var="parameterizedQueryCollection" value="${saveQueryForm.parameterizedQueryCollection}" />
 							<jsp:useBean id="parameterizedQueryCollection" type="java.util.Collection" />
 					
 							<c:forEach items="${parameterizedQueryCollection}" var="parameterizedQuery" varStatus="queries">
 							<jsp:useBean id="parameterizedQuery" type="edu.wustl.common.querysuite.queryobject.IParameterizedQuery" />
+							
 								<tr>
-									<%String target = "executeQuery('"+parameterizedQuery.getId()+"')"; %>
-									<td valign="top" height='20'>
+									<%String target = "executeQuery('"+parameterizedQuery.getId()+"')"; 
+									  String title = parameterizedQuery.getName();
+									  String newTitle = Utility.getQueryTitle(title);
+									  int index = 0;
+									  int length = title.length();
+									  String tooltip = Utility.getTooltip(title);
+									  String function = "Tip('"+tooltip+"', WIDTH, 700)";
+									%>
+									
+									<td valign="top" height='20'width='30'>
 										<img src="images/savedQuery.bmp"/>
 									</td>
-									<td width='100%' height='20' valign="top" style="padding-left:0.7em;">
-										<html:link styleClass='formQueryLink' href='#' onclick='<%=target%>'>
-											<b><c:out value='${parameterizedQuery.name}' /></b>
-										</html:link><br/>
+									<td  height='20' valign="top" style="padding-left:0.7em;
+																		 width:760px;">
+										<html:link styleClass='formQueryLink' href='#' onclick='<%=target%>'  onmouseover="<%=function%>" >
+											<b> <%=newTitle%> </b>
+										</html:link><br/>				
+																				
 										<b>Description: &nbsp;</b><c:out value='${parameterizedQuery.description}' />
 									</td>
 									<td valign="top" height='20'>
