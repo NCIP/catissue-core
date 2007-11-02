@@ -35,7 +35,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 		SessionDataBean sessionData= (SessionDataBean)session.getAttribute(Constants.SESSION_DATA);
 		
 		if(sessionData!=null)
-			cleanUp(sessionData,(String)session.getAttribute("randomNumber"));
+			cleanUp(sessionData,(String)session.getAttribute(Constants.RANDOM_NUMBER));
 	}
     private void cleanUp(SessionDataBean sessionData,String randomNumber)
     {

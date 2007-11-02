@@ -47,7 +47,7 @@ public class ShowGridAction extends BaseAction
 		List<OutputTreeDataNode> rootOutputTreeNodeList = (List<OutputTreeDataNode>)session.getAttribute(Constants.TREE_ROOTS);
 		SessionDataBean sessionData = getSessionData(request);
 		SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
-		String idOfClickedNode = request.getParameter("nodeId");
+		String idOfClickedNode = request.getParameter(Constants.TREE_NODE_ID);
 		QueryOutputTreeBizLogic treeBizLogic = new QueryOutputTreeBizLogic();
 		idOfClickedNode = treeBizLogic.decryptId(idOfClickedNode);
  		Map spreadSheetDatamap = null;
@@ -55,7 +55,7 @@ public class ShowGridAction extends BaseAction
 		int recordsPerPage = new Integer(recordsPerPageStr);
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		String actualParentNodeId = idOfClickedNode.substring(idOfClickedNode.lastIndexOf(Constants.NODE_SEPARATOR) + 2, idOfClickedNode.length());
-		String randomNumber = (String)session.getAttribute("randomNumber");
+		String randomNumber = (String)session.getAttribute(Constants.RANDOM_NUMBER);
 		if (idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
 		{
 			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode,recordsPerPage,selectedColumnsMetadata,randomNumber);
