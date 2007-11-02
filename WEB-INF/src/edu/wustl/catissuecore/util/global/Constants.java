@@ -101,6 +101,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	PROTOCOL_EVENT_ID="protocolEventId";
 	public static final String 	SCG_DROPDOWN="value";
 	public static final String 	HASHED_OUT="####";
+	public static final String 	HASHED_NODE_ID = "-1";
 	public static final String 	VERIFIED="Verified";
 	public static final String  STATUS="status";
 	public static final String 	NOT_APPLICABLE="Not Applicable";
@@ -2165,4 +2166,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String EDIT_MULTIPLE_SPECIMEN = "editMultipleSp";
 	public static final int CATISSUE_ENTITY_GROUP = 1;
+	
+	//Query-CSM related constants
+	public static final String QUERY_REASUL_OBJECT_DATA_MAP = "queryReasultObjectDataMap";
+	public static final String DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP = "defineViewQueryReasultObjectDataMap";
+	public static final String HAS_CONDITION_ON_IDENTIFIED_FIELD = "hasConditionOnIdentifiedField";
+	
 }
