@@ -404,7 +404,7 @@ public class QueryOutputSpreadsheetBizLogic
 		Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
 		columnsInSql = QueryModuleUtil.updateEntityIdIndexMap(null, columnIndex, columnsInSql,defineViewNodeList,entityIdIndexMap);
 		Iterator<QueryResultObjectDataBean> iterator = queryResultObjectDataBeanMap.values().iterator();
-		while (iterator.hasNext())
+		/*while (iterator.hasNext())
 		{
 			QueryResultObjectDataBean elem = (QueryResultObjectDataBean) iterator.next();
 			if(elem.getMainEntityIdentifierColumnId()==-1)
@@ -415,7 +415,7 @@ public class QueryOutputSpreadsheetBizLogic
 					elem.setMainEntityIdentifierColumnId(entityIdIndexMap.get(elem.getEntity()));
 			}
 			
-		}
+		}*/
 		selectSql =  Constants.SELECT_DISTINCT + columnsInSql;
 		}
 		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
