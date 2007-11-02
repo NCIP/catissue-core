@@ -1071,6 +1071,34 @@ public class Utility extends edu.wustl.common.util.Utility
 		}
 	}
 		
+	/**
+	 * limits the title of the saved query to 125 characters to avoid horizontal scrollbar
+	 * @param title - title of the saved query (may be greater than 125 characters)
+	 * @return - query title upto 125 characters
+	 */public static String getQueryTitle(String title)
+	{  
+		String multilineTitle = "";
+		if (title.length() <= Constants.CHARACTERS_IN_ONE_LINE)
+		{ 
+			multilineTitle = title;
+		}
+		else
+		{	 
+			multilineTitle = title.substring(0, Constants.CHARACTERS_IN_ONE_LINE) + ".....";			
+		}
+		return multilineTitle;
+	}
+	
+	/**
+	 * returns the entire title to display it in tooltip .
+	 * @param title - title of the saved query
+	 * @return tooltip string
+	 */public static String getTooltip(String title)
+	{
+		String tooltip = title.replaceAll("'", Constants.SINGLE_QUOTE_ESCAPE_SEQUENCE); // escape sequence for '
+		return tooltip;
+	}
+			
 	
 	
 }
