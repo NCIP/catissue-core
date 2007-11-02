@@ -741,14 +741,13 @@ public abstract class QueryModuleUtil
 	 * @param defineViewEntityList 
 	 */
 	public static String updateEntityIdIndexMap(QueryResultObjectDataBean queryResultObjectDataBean,
-			int columnIndex, String selectSql, List<OutputTreeDataNode> defineViewNodeList, Map<EntityInterface, Integer> entityIdIndexMap)
+			int columnIndex, String selectSql, List<EntityInterface> defineViewNodeList, Map<EntityInterface, Integer> entityIdIndexMap)
 	{  
 		if(defineViewNodeList!=null)
 		{
-			for (OutputTreeDataNode outputTreeDataNode2 : defineViewNodeList)
+			for (EntityInterface entity : defineViewNodeList)
 			{
-				OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(outputTreeDataNode2
-						.getUniqueNodeId());
+				 OutputTreeDataNode outputTreeDataNode = getMatchingEntityNode(entity);
 				if (outputTreeDataNode != null)
 				{
 					List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
@@ -767,18 +766,12 @@ public abstract class QueryModuleUtil
 						}
 					}
 				}
-
 			}
 		}
 		else
 		{
-			Iterator<String> iterator = uniqueIdNodesMap.keySet().iterator();
-			while (iterator.hasNext())
-			{
-				Object key = iterator.next();
-				OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(key);
-				if (queryResultObjectDataBean!=null && outputTreeDataNode.getOutputEntity().getDynamicExtensionsEntity().equals(
-						queryResultObjectDataBean.getMainEntity()))
+				OutputTreeDataNode outputTreeDataNode = getMatchingEntityNode(queryResultObjectDataBean.getMainEntity());
+				if (outputTreeDataNode!=null)
 				{
 					List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
 							.getAttributes();
@@ -797,9 +790,24 @@ public abstract class QueryModuleUtil
 					}
 				}
 			}
-		}
 		if (queryResultObjectDataBean != null)
 			queryResultObjectDataBean.setEntityIdIndexMap(entityIdIndexMap);
 		return selectSql;
+	}
+
+	/**
+	 * @param entity
+	 * @return
+	 */
+	private static OutputTreeDataNode getMatchingEntityNode(EntityInterface entity)
+	{
+		Iterator<OutputTreeDataNode> iterator = uniqueIdNodesMap.values().iterator(); 
+		while (iterator.hasNext())
+		{
+			OutputTreeDataNode outputTreeDataNode = (OutputTreeDataNode) iterator.next();
+			if(outputTreeDataNode.getOutputEntity().getDynamicExtensionsEntity().equals(entity))
+				return outputTreeDataNode;
+		}
+		return null;
 	}
 }

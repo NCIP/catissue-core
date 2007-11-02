@@ -352,7 +352,7 @@ public class QueryOutputSpreadsheetBizLogic
 		Vector<Integer> objectIdsList = new Vector<Integer>();
 		boolean isUniqueNode = false;
 		int columnIndex = 0;
-		 List<OutputTreeDataNode> defineViewNodeList = new ArrayList<OutputTreeDataNode>();
+		 List<EntityInterface> defineViewNodeList = new ArrayList<EntityInterface>();
       	for(IOutputAttribute at :selectedOutputAttributeList)
 		{
 			for(QueryOutputTreeAttributeMetadata metaData : selectedAttributeMetaDataList) 
@@ -366,13 +366,13 @@ public class QueryOutputSpreadsheetBizLogic
 					sqlColumnNames.append(", ");
 					String columnDisplayName = metaData.getDisplayName();
 					definedColumnsList.add(columnDisplayName);
-					if(!defineViewNodeList.contains(metaData.getTreeDataNode()))
+					if(!defineViewNodeList.contains(attribute.getEntity()))
 					{
 //						if(queryResultObjectDataBeanMap.get(metaData.getTreeDataNode().getId())!=null)
 //							queryResultObjectDataBean = queryResultObjectDataBeanMap.get(metaData.getTreeDataNode().getId());
 //						else
 						   queryResultObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(metaData.getTreeDataNode());
-					    defineViewNodeList.add(metaData.getTreeDataNode());
+					    defineViewNodeList.add(attribute.getEntity());
 					    //queryResultObjectDataBeanMap.put(metaData.getTreeDataNode().getId(), queryResultObjectDataBean);
 					    isUniqueNode = true;
 					}
@@ -399,7 +399,7 @@ public class QueryOutputSpreadsheetBizLogic
 		}
 		int lastindexOfComma =  sqlColumnNames.lastIndexOf(",");
 		if(lastindexOfComma != -1)
-		{
+		{ 
 		String columnsInSql = sqlColumnNames.substring(0, lastindexOfComma).toString();
 		Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
 		columnsInSql = QueryModuleUtil.updateEntityIdIndexMap(null, columnIndex, columnsInSql,defineViewNodeList,entityIdIndexMap);

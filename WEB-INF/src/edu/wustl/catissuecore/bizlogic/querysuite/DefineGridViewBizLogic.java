@@ -238,7 +238,7 @@ public class DefineGridViewBizLogic
 		QueryResultObjectDataBean queryResulObjectDataBean =null;
 		Vector<Integer> identifiedColumnIds = null;
 		Vector<Integer> objectColumnIds = null;
-		List<OutputTreeDataNode> defineViewNodeList = new ArrayList<OutputTreeDataNode>();
+		List<EntityInterface> defineViewNodeList = new ArrayList<EntityInterface>();
 		int columnIndex = 0;
 		Iterator<QueryOutputTreeAttributeMetadata> iterator = selectedAttributeMetaDataList.iterator();
 		while (iterator.hasNext())
@@ -251,7 +251,7 @@ public class DefineGridViewBizLogic
 				objectColumnIds = new Vector<Integer>();
 				queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(element.getTreeDataNode());
 				queryResultObjecctDataMap.put(element.getTreeDataNode().getId(), queryResulObjectDataBean);
-				defineViewNodeList.add(element.getTreeDataNode());
+				defineViewNodeList.add(element.getTreeDataNode().getOutputEntity().getDynamicExtensionsEntity());
 			}
 			
 			if(edu.wustl.common.querysuite.security.utility.Utility.isIdentified(element.getAttribute()))
