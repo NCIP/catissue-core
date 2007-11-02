@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,9 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IOutputEntity;
+import edu.wustl.common.querysuite.queryobject.impl.OutputAttribute;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
@@ -186,8 +189,11 @@ public class DefineGridViewBizLogic
 	{
 		String[] selectedColumnIds = categorySearchForm.getSelectedColumnNames();
 		List<QueryOutputTreeAttributeMetadata> attribureMetadataList = new ArrayList<QueryOutputTreeAttributeMetadata>(); 
+		List<IOutputAttribute> outputAttributeList = new ArrayList<IOutputAttribute>();
+		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
 		for (int i = 0; i < selectedColumnIds.length; i++)
 		{
+			IOutputAttribute attr= null;
 			String columnId = selectedColumnIds[i];
 			String[] split = columnId.split(":");
 			String uniqueNodeId = split[0];
@@ -200,12 +206,18 @@ public class DefineGridViewBizLogic
 					if(attributeMetaData.getUniqueId().equalsIgnoreCase(columnId))
 					{
 						attribureMetadataList.add(attributeMetaData);
+						attr= new OutputAttribute(outputTreeDataNode.getExpressionId(),attributeMetaData.getAttribute());
+						outputAttributeList.add(attr);
+						NameValueBean nameValueBean = new NameValueBean(attributeMetaData.getDisplayName(),attributeMetaData.getUniqueId());
+						selectedColumnNameValue.add(nameValueBean);
 						break;
 					}
 				}
 			}
 		}
 		selectedColumnsMetadata.setSelectedAttributeMetaDataList(attribureMetadataList);
+		selectedColumnsMetadata.setSelectedOutputAttributeList(outputAttributeList);
+		selectedColumnsMetadata.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 	}
 	/**
 	 * 
@@ -266,10 +278,51 @@ public class DefineGridViewBizLogic
 	{
 		if(outputTreeDataNode != null)
 		{
+			List<IOutputAttribute> selectedOutputAttributeList = new ArrayList<IOutputAttribute>();
 			List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode.getAttributes();
 			selectedColumnsMetadata.setSelectedAttributeMetaDataList(attributes);
+			for(QueryOutputTreeAttributeMetadata metadata:attributes)
+			{
+				AttributeInterface attribute = metadata.getAttribute();
+				OutputAttribute attr = new OutputAttribute(outputTreeDataNode.getExpressionId(),attribute);
+				selectedOutputAttributeList.add(attr);
+			}
+			selectedColumnsMetadata.setSelectedOutputAttributeList(selectedOutputAttributeList);
 		}
 		return selectedColumnsMetadata;
 	}
-
+	/**
+	 * 
+	 * @param uniqueIdNodesMap
+	 * @param selectedAttributeList
+	 * @param selectedColumnsMetadata
+	 */
+	public void getSelectedColumnMetadataForSavedQuery(Map<String, OutputTreeDataNode> uniqueIdNodesMap,List<IOutputAttribute> selectedAttributeList,SelectedColumnsMetadata selectedColumnsMetadata)
+	{
+		Collection<OutputTreeDataNode> values = uniqueIdNodesMap.values();
+		List<QueryOutputTreeAttributeMetadata> attribureMetadataList = new ArrayList<QueryOutputTreeAttributeMetadata>();
+		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
+		for(OutputTreeDataNode node:values)
+		{
+			for(IOutputAttribute outAttr :selectedAttributeList)
+			{
+				if(outAttr.getExpressionId().equals(node.getExpressionId()))
+				{
+					List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
+					for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
+					{
+						if(outAttr.getAttribute().equals(attributeMetaData.getAttribute()))
+						{
+							attribureMetadataList.add(attributeMetaData);
+							NameValueBean nameValueBean = new NameValueBean(attributeMetaData.getDisplayName(),attributeMetaData.getUniqueId());
+							selectedColumnNameValue.add(nameValueBean);
+							break;
+						}
+					}
+				}
+			}
+		}
+		selectedColumnsMetadata.setSelectedAttributeMetaDataList(attribureMetadataList);
+		selectedColumnsMetadata.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
+	}
 }

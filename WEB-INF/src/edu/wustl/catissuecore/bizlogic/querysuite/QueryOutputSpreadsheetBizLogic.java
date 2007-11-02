@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +14,10 @@ import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
+import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
+import edu.wustl.common.querysuite.queryobject.impl.OutputAttribute;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
@@ -182,9 +183,10 @@ public class QueryOutputSpreadsheetBizLogic
 	 */
 	private String createSQL(String parentData, String tableName, Map spreadSheetDataMap, String parentIdColumnName, OutputTreeDataNode node)
 	{
-		String selectSql = "select distinct ";
+		String selectSql = Constants.SELECT_DISTINCT;
 		String idColumnOfCurrentNode = "";
 		List<String> columnsList = new ArrayList<String>();
+		List<IOutputAttribute> selectedOutputAttributeList = new ArrayList<IOutputAttribute>();
 		
 		//columnsList.add("");
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
@@ -201,12 +203,15 @@ public class QueryOutputSpreadsheetBizLogic
 			selectSql = selectSql + sqlColumnName + ",";
 			String attrLabel = Utility.getDisplayLabel(attribute.getName());
 			columnsList.add(attrLabel + " : " + className);
+			IOutputAttribute attr = new OutputAttribute(node.getExpressionId(),attribute);
+			selectedOutputAttributeList.add(attr);
 		}
 		if(!selectedColumnMetaData.isDefinedView())
 		{
 			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
 			selectedColumnMetaData.setSelectedAttributeMetaDataList(attributes);
+			selectedColumnMetaData.setSelectedOutputAttributeList(selectedOutputAttributeList);
 		}
 		else
 		{
@@ -234,20 +239,26 @@ public class QueryOutputSpreadsheetBizLogic
 		List<String> definedColumnsList = new ArrayList<String>();
 		StringBuffer sqlColumnNames = new StringBuffer();
 		List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnMetaData.getSelectedAttributeMetaDataList();
-		Iterator<QueryOutputTreeAttributeMetadata> iter = selectedAttributeMetaDataList.iterator();
-
-		while(iter.hasNext())
+		List<IOutputAttribute> selectedOutputAttributeList = selectedColumnMetaData.getSelectedOutputAttributeList();
+		for(IOutputAttribute at :selectedOutputAttributeList)
 		{
-			QueryOutputTreeAttributeMetadata metaData = iter.next();
-			String sqlColumnName = metaData.getColumnName();
-			sqlColumnNames.append(sqlColumnName);
-			sqlColumnNames.append(", ");
-			String columnDisplayName = metaData.getDisplayName();
-			definedColumnsList.add(columnDisplayName);
+			for(QueryOutputTreeAttributeMetadata metaData : selectedAttributeMetaDataList) {
+				if(metaData.getAttribute().equals(at.getAttribute())) {
+					String sqlColumnName = metaData.getColumnName();
+					sqlColumnNames.append(sqlColumnName);
+					sqlColumnNames.append(", ");
+					String columnDisplayName = metaData.getDisplayName();
+					definedColumnsList.add(columnDisplayName);
+					break;
+				}
+			}
 		}
 		int lastindexOfComma =  sqlColumnNames.lastIndexOf(",");
-		String columnsInSql = sqlColumnNames.substring(0, lastindexOfComma).toString();
-		selectSql =  "select distinct " + columnsInSql;
+		if(lastindexOfComma != -1)
+		{
+			String columnsInSql = sqlColumnNames.substring(0, lastindexOfComma).toString();
+			selectSql =  Constants.SELECT_DISTINCT + columnsInSql;
+		}
 		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, definedColumnsList);
 		return selectSql;
 	}
@@ -261,7 +272,7 @@ public class QueryOutputSpreadsheetBizLogic
 	 */
 	private String getSql(String parentIdColumnName, String parentData, String tableName, OutputTreeDataNode node)
 	{
-		String selectSql = "select distinct ";
+		String selectSql = Constants.SELECT_DISTINCT;
 		String idColumnOfCurrentNode = "";
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
@@ -403,7 +414,7 @@ public class QueryOutputSpreadsheetBizLogic
 	 */
 	private String createSQL(Map spreadSheetDataMap, OutputTreeDataNode node, String parentIdColumnName, String parentData, String tableName)
 	{
-		String selectSql = "select distinct ";
+		String selectSql = Constants.SELECT_DISTINCT;
 		List<String> columnsList = new ArrayList<String>();
 		String idColumnOfCurrentNode = "";
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();

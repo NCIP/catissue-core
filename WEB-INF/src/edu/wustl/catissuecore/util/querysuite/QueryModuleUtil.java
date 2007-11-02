@@ -10,11 +10,10 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.globus.util.http.HTTPRequestParser;
-
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.bizlogic.querysuite.DefineGridViewBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.flex.dag.DAGConstant;
@@ -31,9 +30,12 @@ import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
+import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
+import edu.wustl.common.querysuite.queryobject.impl.OutputAttribute;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
+import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
@@ -354,27 +356,15 @@ public abstract class QueryModuleUtil
 	 */
 	public static int searchQuery(HttpServletRequest request, IQuery query, String option)
 	{
+		String isSavedQuery = (String) request.getAttribute(Constants.IS_SAVED_QUERY);
+		if(isSavedQuery == null)
+			isSavedQuery = Constants.FALSE;
 		HttpSession session = request.getSession(); 
 		session.removeAttribute(Constants.HYPERLINK_COLUMN_MAP);
 		int status = 0;
 		try
 		{
-			boolean isRulePresentInDag = false;
-
-			if (query != null)
-			{
-				IConstraints constraints = query.getConstraints();
-				Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
-				while (expressionIds.hasMoreElements())
-				{
-					IExpressionId id = expressionIds.nextElement();
-					if (((Expression) constraints.getExpression(id)).containsRule())
-					{
-						isRulePresentInDag = true;
-						break;
-					}
-				}
-			}
+			boolean isRulePresentInDag = checkIfRulePresentInDag(query) ;
 			if (isRulePresentInDag)
 			{
 				session.setAttribute(AppletConstants.QUERY_OBJECT, query);
@@ -386,24 +376,24 @@ public abstract class QueryModuleUtil
 				if (obj != null)
 				{
 					SessionDataBean sessionData = (SessionDataBean) obj;
-					String propertyValue = XMLPropertyHandler.getValue("multiuser");
+					String propertyValue = XMLPropertyHandler.getValue(Constants.MULTIUSER);
 					
 					String randomNumber="";
 					if(propertyValue!=null)
 					{
-							if(session.getAttribute("randomNumber")==null)
+							if(session.getAttribute(Constants.RANDOM_NUMBER)==null)
 							{
 								int number =(int) (Math.random()*100000);
-								if(propertyValue.equalsIgnoreCase("true"))
+								if(propertyValue.equalsIgnoreCase(Constants.TRUE))
 								{
-									randomNumber ="_"+Integer.toString(number);
+									randomNumber =Constants.UNDERSCORE+Integer.toString(number);
 								}
-								session.setAttribute("randomNumber",randomNumber);
+								session.setAttribute(Constants.RANDOM_NUMBER,randomNumber);
 									
 							}
 							else
 							{
-								randomNumber = (String)session.getAttribute("randomNumber");
+								randomNumber = (String)session.getAttribute(Constants.RANDOM_NUMBER);
 							}
 						
 					}
@@ -418,7 +408,6 @@ public abstract class QueryModuleUtil
 						Vector<QueryTreeNodeData> treeData = outputTreeBizLogic
 								.createDefaultOutputTreeData(i, outnode, sessionData,randomNumber);
 						int resultsSize = treeData.size();
-						System.out.println("resultsSize    :"+resultsSize);
 						if(option == null)
 						{
 							if (resultsSize == 0)
@@ -435,12 +424,12 @@ public abstract class QueryModuleUtil
 							session.setAttribute(Constants.TREE_DATA + "_" + i, treeData);
 							i += 1;
 						}
-						else if(option.equalsIgnoreCase("viewAllRecords"))
+						else if(option.equalsIgnoreCase(Constants.VIEW_ALL_RECORDS))
 						{
 							session.setAttribute(Constants.TREE_DATA + "_" + i, treeData);
 							i += 1;
 						}
-						else if(option.equalsIgnoreCase("viewLimitedRecords"))
+						else if(option.equalsIgnoreCase(Constants.VIEW_LIMITED_RECORDS))
 						{
 							List<QueryTreeNodeData> limitedRecordsList = treeData.subList(0, Variables.maximumTreeNodeLimit+1);
 							Vector limitedTreeData = new Vector<QueryTreeNodeData>();
@@ -472,8 +461,20 @@ public abstract class QueryModuleUtil
 					QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 					String parentNodeId = null;
 					String treeNo = "0";
-					SelectedColumnsMetadata selectedColumnsMetadata = new SelectedColumnsMetadata();
-					selectedColumnsMetadata.setDefinedView(false);
+					SelectedColumnsMetadata selectedColumnsMetadata = getAppropriateSelectedColumnMetadata(query, session);
+					List<IOutputAttribute> selectedAttributeList = null;
+					if(query.getId() != null && isSavedQuery.equals(Constants.TRUE))
+					{
+						if (query instanceof ParameterizedQuery)
+						{
+							ParameterizedQuery savedQuery = (ParameterizedQuery) query;
+							selectedAttributeList = savedQuery.getOutputAttributeList();
+							DefineGridViewBizLogic defineGridViewBizLogic = new DefineGridViewBizLogic();
+							selectedColumnsMetadata.setSelectedOutputAttributeList(selectedAttributeList);
+							defineGridViewBizLogic.getSelectedColumnMetadataForSavedQuery(uniqueIdNodesMap,selectedAttributeList, selectedColumnsMetadata);
+							selectedColumnsMetadata.setDefinedView(true);
+						}
+					}
 					Map<String, List<String>> spreadSheetDatamap = outputSpreadsheetBizLogic
 							.createSpreadsheetData(treeNo, node, sessionData, parentNodeId,
 									recordsPerPage, selectedColumnsMetadata,randomNumber);
@@ -523,6 +524,92 @@ public abstract class QueryModuleUtil
 			status = DAO_EXCEPTION;
 		}
 		return status;
+	}
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
+	private static boolean checkIfRulePresentInDag(IQuery query) {
+		boolean isRulePresentInDag = false;
+
+		if (query != null)
+		{
+			IConstraints constraints = query.getConstraints();
+			Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
+			while (expressionIds.hasMoreElements())
+			{
+				IExpressionId id = expressionIds.nextElement();
+				if (((Expression) constraints.getExpression(id)).containsRule())
+				{
+					isRulePresentInDag = true;
+					break;
+				}
+			}
+		}
+		return isRulePresentInDag;
+	}
+
+	/**
+	 * @param query
+	 * @param session
+	 * @param isQueryChanged
+	 * @return
+	 */
+	private static SelectedColumnsMetadata getAppropriateSelectedColumnMetadata(IQuery query, HttpSession session)
+	{
+		boolean isQueryChanged = false;
+		SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata) session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
+		if(query != null && selectedColumnsMetadata != null)
+		{
+			IConstraints constraints = query.getConstraints();
+			Enumeration<IExpressionId> expressionsInQuery = constraints.getExpressionIds();
+			List<IExpressionId> expressionIdsInQuery = new ArrayList<IExpressionId>();
+			List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnsMetadata.getSelectedAttributeMetaDataList();
+			while(expressionsInQuery.hasMoreElements())
+			{
+				IExpressionId nextElement = expressionsInQuery.nextElement();
+				if (constraints.getExpression(nextElement).isInView())
+					expressionIdsInQuery.add(nextElement);
+			}
+			for(QueryOutputTreeAttributeMetadata element :selectedAttributeMetaDataList)
+			{
+				IExpressionId expressionId = element.getTreeDataNode().getExpressionId();
+				if(!expressionIdsInQuery.contains(expressionId))
+				{
+					isQueryChanged = true;
+					break;
+				}
+			}
+		}
+		if(isQueryChanged || selectedColumnsMetadata == null)
+		{
+			selectedColumnsMetadata = new SelectedColumnsMetadata();
+			selectedColumnsMetadata.setDefinedView(false);
+		}
+		return selectedColumnsMetadata;
+	}
+
+	public static List<IOutputAttribute> getOutAttributeListForDirectSaveQuery(IQuery query) throws MultipleRootsException, SqlException {
+		boolean isRulePresentInDag = checkIfRulePresentInDag(query) ;
+		if (isRulePresentInDag)
+		{
+			SqlGenerator sqlGenerator = (SqlGenerator) SqlGeneratorFactory.getInstance();
+			sqlGenerator.generateSQL(query);
+			List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator.getRootOutputTreeNodeList();
+			OutputTreeDataNode node = rootOutputTreeNodeList.get(0);
+			List<IOutputAttribute> selectedOutputAttributeList = new ArrayList<IOutputAttribute>();
+			List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
+			for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
+			{
+				AttributeInterface attribute = attributeMetaData.getAttribute();
+				IOutputAttribute attr = new OutputAttribute(node.getExpressionId(),attribute);
+				selectedOutputAttributeList.add(attr);
+			}
+			return selectedOutputAttributeList;
+		}
+		else 
+			return null;
 	}
 	
 }
