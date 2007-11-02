@@ -48,7 +48,8 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		}
 		try
 		{
-			new PrintServiceInputXMLParser().callPrintWebService(listMap);
+			 PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
+			 return objParser.callPrintWebService(listMap);
 			
 		}
 		catch(Exception exp)
@@ -57,7 +58,6 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 			
 		}
 		
-		return true;
 		
 	}
 	
