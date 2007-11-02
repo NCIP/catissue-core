@@ -121,7 +121,7 @@
 </head>
 <body>
 <table summary="" cellpadding="0" cellspacing="0" border="0"
-	width="100%" height="100%">
+	width="100%" height="99%">
 
 	<!-- caBIG hdr begins -->
 	<tr>
@@ -132,7 +132,7 @@
 	<tr>
 		<td height="100%" valign="top">
 		<table summary="" cellpadding="0" cellspacing="0" border="0"
-			height="100%">
+			height="100%" >
 			<!-- 
 				 Name : Virender Mehta
 		       	 Reviewer: Sachin Lale
@@ -148,12 +148,12 @@
 			</tr-->
 			<!-- application hdr ends -->
 			<tr>
-				<td width="180" valign="top" class="subMenu" id="sideMenuTd">
+				<td width="180px" valign="top" class="subMenu" id="sideMenuTd">
 				
-					<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
+					<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%" width="100%">
 						<tr>
-							<td class="subMenuPrimaryTitle" height="30">
-							<img src="images/caTISSUE_logo.gif" alt="application logo" width="170" height="40" border="0" />
+							<td class="subMenuPrimaryTitle" height="40">
+							<img src="images/caTISSUE_logo.gif" alt="application logo" width="170" border="0" height="40px"/>
 							</td>
 						</tr>
 						<tr>
@@ -223,7 +223,7 @@
 					</tr>
 
 					<!--_____ main content begins _____-->
-					<tr>
+					<tr height="90%">
 						<td colspan="2" width="100%" valign="top"><!-- target of anchor to skip menus --><a
 							name="content" /> <tiles:insert attribute="content"></tiles:insert></td>
 					</tr>
