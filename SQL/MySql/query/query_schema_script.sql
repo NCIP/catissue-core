@@ -137,7 +137,7 @@ create table CATEGORIAL_ATTRIBUTE (
 );
 create table QUERY_OUTPUT_ATTRIBUTE (
    IDENTIFIER bigint not null auto_increment,
-   EXPRESSIONID_ID bigint unique,
+   EXPRESSIONID_ID bigint,
    ATTRIBUTE_ID bigint not null,
    PARAMETERIZED_QUERY_ID bigint,
    POSITION integer,
