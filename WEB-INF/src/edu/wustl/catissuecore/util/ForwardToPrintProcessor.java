@@ -44,7 +44,7 @@ public class ForwardToPrintProcessor extends AbstractForwardToProcessor
 		{
 			Specimen specimen = (Specimen) domainObject;
 		
-			if (actionForm.getForwardTo().equals("createNew"))
+			if (actionForm.getForwardTo().equals("createNew") )
 			{
 				forwardToPrintMap.put("parentSpecimenId", domainObject.getId());
 			}
@@ -78,7 +78,7 @@ public class ForwardToPrintProcessor extends AbstractForwardToProcessor
 			{
 				forwardToPrintMap.put("parentSpecimenId", domainObject.getId().toString());
 			}
-			else if ( actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd") || actionForm.getForwardTo().equals("CPQueryPrintDeriveSpecimen"))
+			else if ( actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd") || actionForm.getForwardTo().equals("CPQueryPrintDeriveSpecimen") || actionForm.getForwardTo().equals("printDeriveSpecimen"))
 			{
 				forwardToPrintMap.put("specimenId", domainObject.getId().toString());
 			}

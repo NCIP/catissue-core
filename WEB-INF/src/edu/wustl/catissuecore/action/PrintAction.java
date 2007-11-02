@@ -2,7 +2,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -25,6 +27,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -91,6 +94,45 @@ public class PrintAction extends Action
 		        	}
 	    			
 				}
+		    	if(forwardToPrintMap != null &&  request.getParameter("forwardTo")!=null &&( request.getParameter("forwardTo").equals("CPQueryPrintAliquot") || request.getParameter("forwardTo").equals("printAliquot")))
+		    	{
+		    	  
+		    		List<AbstractDomainObject> listofAliquot = new ArrayList();
+		    		HashMap aliquotMap = forwardToPrintMap;
+		    		Iterator it =  aliquotMap.keySet().iterator();
+		    		
+		    	    while (it.hasNext()) {
+		    	        
+		    	        String  key = (String)it.next();
+		    	        if(key.endsWith("_id"))
+		    	        {
+		    	        	String idValue = (String) aliquotMap.get(key);
+		    	        	Specimen objSpecimen = retriveSpecimen(idValue,request);
+		    	        	listofAliquot.add(objSpecimen);
+		    	        }
+		    	    }
+		    	  
+		    	    SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+		        	boolean printStauts = labelPrinter.printLabel(listofAliquot, strIpAddress, objUser);
+		        	
+		        	if(printStauts)
+	    			{
+		        		//printservice returns true ,Printed Successfully
+		        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
+		        		messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.success"));
+		    			saveMessages(request,messages);
+	    			}
+		        	else
+		        	{
+		        		
+		        		//If any case print service return false ,it means error while printing.
+		        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
+		    			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.failure"));
+		    			saveMessages(request,messages);
+		        	}
+		    		//String specimenId = (String) forwardToPrintMap.get("specimenId");Specimen:1_id
+		    	}
+		    	
     	
     		}
     		catch (Exception e) 
