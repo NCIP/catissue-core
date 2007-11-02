@@ -29,7 +29,11 @@ import edu.wustl.common.querysuite.queryobject.util.QueryUtility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
-
+/**
+ * 
+ * @author Chetan Patil
+ *
+ */
 public class FetchQueryAction extends BaseAction
 {
 
@@ -70,7 +74,6 @@ public class FetchQueryAction extends BaseAction
 					IParameterizedQuery parameterizedQuery = queryList.get(0);
 					request.getSession().setAttribute(AppletConstants.QUERY_OBJECT,
 							parameterizedQuery);
-
 					Map<IExpressionId, Collection<IParameterizedCondition>> expressionIdConditionCollectionMap = QueryUtility
 							.getAllParameterizedConditions(parameterizedQuery);
 

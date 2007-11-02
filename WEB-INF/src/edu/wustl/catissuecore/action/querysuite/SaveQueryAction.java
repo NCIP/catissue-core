@@ -4,7 +4,9 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -22,15 +24,21 @@ import edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
+import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
+import edu.wustl.common.querysuite.exceptions.SqlException;
+import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
@@ -130,8 +138,9 @@ public class SaveQueryAction extends BaseAction
 			HttpServletRequest request)
 	{
 		SaveQueryForm saveActionForm = (SaveQueryForm) actionForm;
+		String error = "";
 		IParameterizedQuery parameterizedQuery = new ParameterizedQuery(query);
-
+		HttpSession session = request.getSession();
 		String queryTitle = saveActionForm.getTitle();
 		if (queryTitle != null)
 		{
@@ -151,13 +160,21 @@ public class SaveQueryAction extends BaseAction
 		CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
 		String conditionList = request.getParameter("conditionList");
 		Map<String, String> displayNameMap = getDisplayNamesForConditions(saveActionForm, request);
-		String error = bizLogic.setInputDataToQuery(conditionList, parameterizedQuery,
+		error = bizLogic.setInputDataToQuery(conditionList, parameterizedQuery,
 				displayNameMap);
 		if (error != null && error.trim().length() > 0)
 		{
 			setActionError(request, error);
 			return null;
 		}
+		// Saving view 
+		SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
+		List<IOutputAttribute> selectedOutputAttributeList = null;
+		if(selectedColumnsMetadata != null)
+		{
+			selectedOutputAttributeList = selectedColumnsMetadata.getSelectedOutputAttributeList();
+		}
+		parameterizedQuery.setOutputAttributeList(selectedOutputAttributeList);
 		return parameterizedQuery;
 	}
 	

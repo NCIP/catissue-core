@@ -10,6 +10,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 /**
@@ -32,7 +33,8 @@ public class QueryWizardAction extends BaseAction
 	{
 		HttpSession session = request.getSession();
 		CategorySearchForm searchForm = (CategorySearchForm) form;
-		session.setAttribute(AppletConstants.QUERY_OBJECT, null);
+		session.removeAttribute(AppletConstants.QUERY_OBJECT);
+		session.removeAttribute(Constants.SELECTED_COLUMN_META_DATA);
 		searchForm = QueryModuleUtil.setDefaultSelections(searchForm);
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}

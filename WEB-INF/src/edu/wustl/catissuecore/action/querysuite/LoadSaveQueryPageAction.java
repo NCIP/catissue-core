@@ -1,8 +1,11 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -13,10 +16,17 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
+import edu.wustl.common.querysuite.exceptions.SqlException;
+import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
+import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedQuery;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.logger.Logger;
 
 public class LoadSaveQueryPageAction extends BaseAction
 {
@@ -33,8 +43,10 @@ public class LoadSaveQueryPageAction extends BaseAction
 				AppletConstants.QUERY_OBJECT);
 		String target = Constants.FAILURE;
 		String isAjax = request.getParameter("isAjax");
+		String error = "";
+		HttpSession session = request.getSession();
 		String msg = "";
-		if (queryObject.getId() != null && queryObject instanceof ParameterizedQuery)
+		if (queryObject != null && queryObject.getId() != null && queryObject instanceof ParameterizedQuery)
 		{
 			msg = "This query is already saved, Re-saving query feature is not yet implemented.";
 			setActionError(request, msg);
@@ -46,6 +58,46 @@ public class LoadSaveQueryPageAction extends BaseAction
 		{
 			if (queryObject != null)
 			{
+//				 Saving view 
+				SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
+				List<IOutputAttribute> selectedOutputAttributeList = null;
+				if(selectedColumnsMetadata != null)
+				{
+					selectedOutputAttributeList = selectedColumnsMetadata.getSelectedOutputAttributeList();
+				}
+				else
+				{
+					try
+					{
+						selectedColumnsMetadata = new SelectedColumnsMetadata();
+						selectedOutputAttributeList = QueryModuleUtil.getOutAttributeListForDirectSaveQuery(queryObject);
+						if(selectedOutputAttributeList == null)
+						{
+							error = ApplicationProperties.getValue("query.empty.dag");
+							setActionError(request, error);
+							target = Constants.SUCCESS;
+							request.setAttribute("isQuerySaved","isQuerySaved");
+						} 
+						selectedColumnsMetadata.setSelectedOutputAttributeList(selectedOutputAttributeList);
+						session.setAttribute(Constants.SELECTED_COLUMN_META_DATA,selectedColumnsMetadata);
+					}catch (MultipleRootsException e)
+					{
+						Logger.out.error(e);
+						error = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
+						setActionError(request, error);
+						target = Constants.SUCCESS;
+						request.setAttribute("isQuerySaved","isQuerySaved");
+					}
+					catch (SqlException e)
+					{
+						Logger.out.error(e);
+						error = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+						setActionError(request, error);
+						target = Constants.SUCCESS;
+						request.setAttribute("isQuerySaved","isQuerySaved");
+					}
+				}
+				
 				boolean isShowAll = request.getParameter(Constants.SHOW_ALL) == null ? false : true;
 				GenerateHtmlForAddLimitsBizLogic htmlGenerator = new GenerateHtmlForAddLimitsBizLogic();
 				String htmlContents = htmlGenerator.getHTMLForSavedQuery(queryObject, isShowAll,
@@ -62,8 +114,10 @@ public class LoadSaveQueryPageAction extends BaseAction
 			else
 			{
 				// Handle null query 
+				target = Constants.SUCCESS;
 				String errorMsg = ApplicationProperties.getValue("query.noLimit.error");
 				setActionError(request, errorMsg);
+				request.setAttribute("isQuerySaved","isQuerySaved");
 	
 			}
 		}
