@@ -1365,6 +1365,9 @@ INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID fro
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ReportLoaderQueue'),'2006-11-27' from CSM_PG_PE;
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Review Comments'),'2006-11-27' from CSM_PG_PE;
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Quarantine Comments'),'2006-11-27' from CSM_PG_PE;
+
+INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.ConflictViewAction','edu.wustl.catissuecore.action.ConflictViewAction','edu.wustl.catissuecore.action.ConflictViewAction',1);
+INSERT INTO CSM_PG_PE (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (17,(select MAX(PROTECTION_ELEMENT_ID) from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.ConflictViewAction'));
 /*---------caTIES end-------------*/
 
 /*--------Query Wizard start---------------*/
