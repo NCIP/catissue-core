@@ -240,7 +240,7 @@
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
 		</copy>
 		<copy file="${temp.caties.dir}/caTIES_conf/caTIES.properties" todir="${concept.code.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${concept.code.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${concept.code.installation.dir}" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${concept.code.installation.dir}" overwrite="true" />
 		<copy file="${temp.caties.dir}/caties.jar" todir="${report.loader.installation.dir}" overwrite="true" />	
