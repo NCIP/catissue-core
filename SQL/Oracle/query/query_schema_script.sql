@@ -150,7 +150,7 @@ create table CATEGORIAL_ATTRIBUTE (
 );
 create table QUERY_OUTPUT_ATTRIBUTE (
    IDENTIFIER number(19,0) not null,
-   EXPRESSIONID_ID number(19,0) unique,
+   EXPRESSIONID_ID number(19,0),
    ATTRIBUTE_ID number(19,0) not null,
    PARAMETERIZED_QUERY_ID number(19,0),
    POSITION number(10,0),
