@@ -93,7 +93,7 @@
 			<span class = "message">
 				<font size="3"><b>
 				<c:out value="Search String : "/> <bold><c:out value="${titliSearchForm.searchString}" /></bold></br>
-				<c:out value="Found ${titliSearchForm.numberOfMatches} matches in ${titliSearchForm.timeTaken} seconds" />
+				<c:out value="${titliSearchForm.displayStats}" />
 				</b></font>
 				</span>
 								
