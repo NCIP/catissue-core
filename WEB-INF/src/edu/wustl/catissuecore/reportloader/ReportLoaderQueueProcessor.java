@@ -39,7 +39,7 @@ public class ReportLoaderQueueProcessor extends Thread
 		Long endTime=null;
 		
 		String configFileName=new String(Variables.applicationHome + System.getProperty("file.separator")+"caTIES_conf"+System.getProperty("file.separator"));
-		configFileName+=CaTIESProperties.getValue(CaTIESConstants.DEID_SECTION_HEADER_FILENAME);
+		configFileName+=CaTIESProperties.getValue(CaTIESConstants.SECTION_HEADER_FILENAME);
 		while(true)
 		{
 			try 

@@ -134,6 +134,7 @@ public abstract class CaTIESConstants
 	public static final String SITE_INFO_FILENAME="siteInfoFilename";
 	public static final String FILE_POLLER_PORT="filePollerPort";
 	public static final String COLLECTION_PROTOCOL_TITLE="collectionProtocolTitle";
+	public static final String SECTION_HEADER_FILENAME="sectionHeaderPriorityFilename";
 	public static final String USER_NAME="userName";
 	public static final String PASSWORD="password";
 	
@@ -141,7 +142,6 @@ public abstract class CaTIESConstants
 	public static final String DEID_DCTIONARY_FOLDER="deidDnyFolder";
 	public static final String DEID_SLEEPTIME="deidSleepTime";
 	public static final String DEID_CONFIG_FILE_NAME="deidConfigFilename";
-	public static final String DEID_SECTION_HEADER_FILENAME="deidSectionheaderpriorityFilename";
 	public static final String DEID_DTD_FILENAME="deidDTDFilename";
 	public static final String MAX_THREADPOOL_SIZE="maxThreadPoolSize";
 	public static final String DEID_PORT="deidPort";
