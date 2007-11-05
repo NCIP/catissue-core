@@ -498,6 +498,8 @@ delete from CATISSUE_TABLE_RELATION where RELATIONSHIP_ID=47;
 delete from CATISSUE_RELATED_TABLES_MAP where FIRST_TABLE_ID=26 and SECOND_TABLE_ID=35;
 update CATISSUE_INTERFACE_COLUMN_DATA set COLUMN_NAME='SURGICAL_PATHOLOGY_NUMBER' where IDENTIFIER=215;
 
+INSERT INTO CSM_PROTECTION_ELEMENT select CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'edu.wustl.catissuecore.action.ConflictViewAction','edu.wustl.catissuecore.action.ConflictViewAction','edu.wustl.catissuecore.action.ConflictViewAction',NULL,NULL,1,TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.ConflictViewAction'),TO_DATE('2006-11-27','yyyy-mm-dd') from dual;
 
 
 
