@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -23,30 +22,17 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.globus.util.Util;
 
-import edu.wustl.catissuecore.actionForm.CPSearchForm;
 import edu.wustl.catissuecore.actionForm.ConflictViewForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
-import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
-import edu.wustl.catissuecore.caties.util.CaTIESConstants;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
-import edu.wustl.catissuecore.reportloader.HL7Parser;
-import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.dbManager.DAOException;
 
-public class ConflictViewAction extends BaseAction
+public class ConflictViewAction extends SecureAction
 {
 
 	/**
@@ -59,8 +45,7 @@ public class ConflictViewAction extends BaseAction
 	 * @return ActionForward object
 	 * @throws Exception object
 	 * */
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception, DAOException
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
 	{
 		ConflictViewForm conflictViewForm = (ConflictViewForm) form;
 		int selectedFilter =  Integer.parseInt(conflictViewForm.getSelectedFilter());
@@ -194,6 +179,4 @@ public class ConflictViewAction extends BaseAction
 	
 		return gridData;
 	}
-	
-	
 }
