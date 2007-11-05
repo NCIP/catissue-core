@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.16 $
+ * $Name: 1.41.2.17 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -13,6 +13,12 @@ import java.util.Vector;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import titli.controller.Name;
+import titli.controller.interfaces.TitliInterface;
+import titli.model.Titli;
+import titli.model.TitliException;
+import titli.model.util.IndexUtility;
 
 import net.sf.ehcache.CacheException;
 import edu.wustl.cab2b.server.cache.EntityCache;
@@ -353,30 +359,24 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 		int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
-		/*
+		
 		//initialise TiTLi index
-		//create the index if it does not exist
-		try
-		{
-			TitliInterface titli = Titli.getInstance();
-			
-			String dbName = titli.getDatabases().keySet().toArray(new String[0])[0];
-			
-			File dbIndexLocation = IndexUtility.getIndexDirectoryForDatabase(dbName);
-			
-			if(!dbIndexLocation.exists())
-			{
-				titli.index();
-			}
-				
-		}
-		catch (TitliException e)
-		{
-			Logger.out.debug("Exception occured while initialising TiTLi Search");
-			e.printStackTrace();
-		}*/
-		
-		
+        //create the index if it does not exist
+        try
+        {
+             TitliInterface titli = Titli.getInstance();
+             Name dbName = titli.getDatabases().keySet().toArray(new Name[0])[0];
+             File dbIndexLocation = IndexUtility.getIndexDirectoryForDatabase(dbName);
+             if(!dbIndexLocation.exists())
+             {
+                    titli.index();
+             }
+        }
+        catch (TitliException e)
+        {
+                  Logger.out.debug("Exception occured while initialising TiTLi Search");
+                  e.printStackTrace();
+        }
     }
     
     /**
