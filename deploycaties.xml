@@ -222,17 +222,18 @@
 	</target>
 
 	<target name="deploy_deid_server" >
-		<copy todir="${report.loader.installation.dir}/lib">
+		<copy todir="${deid.installation.dir}/lib">
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
 		</copy>
 		<copy file="${temp.caties.dir}/caTIES_conf/caTIES.properties" todir="${deid.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${deid.installation.dir}/caTIES_conf" overwrite="true" />					
 		<copy file="${basedir}/caTIES_conf/deid.cfg" todir="${deid.installation.dir}/caTIES_conf" overwrite="true" />		
+		<copy file="${basedir}/caTIES_conf/sites_configuration.xml" todir="${deid.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="JniDeID.dll" todir="${deid.installation.dir}" overwrite="true" />
 		<copy file="Dataset.dtd" todir="${deid.installation.dir}" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${deid.installation.dir}" overwrite="true" />
 		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${deid.installation.dir}" overwrite="true" />
-		<copy file="${temp.caties.dir}/caties.jar" todir="${report.loader.installation.dir}" overwrite="true" />	
+		<copy file="${temp.caties.dir}/caties.jar" todir="${deid.installation.dir}" overwrite="true" />	
 	</target>
 
 	<target name="deploy_concept_code_server" >
