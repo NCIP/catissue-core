@@ -509,6 +509,7 @@
 		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/SCG_DB_changes.sql" />
 			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
 			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
@@ -523,14 +524,15 @@
 			</classpath>
 		</sql>
 	</target>
-	<!--MySQL Database Upgradation -->
+	<!--Oracle Database Upgradation -->
 	<target name="db_upgrade_oracle">
 		<echo message="Upgrading Oracle Database for caTISSUE Suite Application ..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Oracle/SCG_DB_changes.sql" />
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql" />
-			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
-			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
-			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/dynamicextension.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/caB2B Table Generation Script.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/query_schema_script.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
