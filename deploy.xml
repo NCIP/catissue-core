@@ -817,69 +817,6 @@ Thanking You,
 		</if>
 	</target>
 
-	<target name="assertforcaties">
-		<if>
-			<equals arg1="" arg2="${caties.installation.dir}" />
-			<then>
-				<fail message="The property 'caties.installation.dir' can not be empty" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${collectionProtocol.title}" />
-			<then>
-				<fail message="The property 'collectionProtocol.title' can not be empty" />
-			</then>
-		</if>
-	</target>
-
-	<!--Target call for Deployment of caTIES -->
-	<target name="deploy_caties">
-		<antcall target="assertforcaties" />
-		<antcall target="deploy_caties_internal" />
-		<delete dir="${temp.dir}" />
-	</target>
-
-	<target name="deploy_caties_internal">
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		<copy todir="${caties.installation.dir}/classes">
-			<fileset dir="${temp.dir}/catissuecore/WEB-INF/classes" />
-		</copy>
-		<jar destfile="${caties.installation.dir}/caties.jar" basedir="${caties.installation.dir}/classes" />
-		<delete dir="${caties.installation.dir}/classes" />
-		<copy todir="${caties.installation.dir}/lib">
-			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
-		</copy>
-		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="Dataset.dtd" todir="${caties.installation.dir}" overwrite="true" />
-		<copy file="JniDeID.dll" todir="${caties.installation.dir}" overwrite="true" />
-		<copy file="${basedir}/caTIES_conf/build.xml" todir="${caties.installation.dir}" overwrite="true" />
-		<copy file="${basedir}/caTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${basedir}/caTIES_conf/deid.cfg" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${basedir}/caTIES_conf/SectionHeaderConfig.txt" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${base.dir}/caTissueCore_caCORE_Client/conf/remoteService.xml" todir="${caties.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${caties.installation.dir}" overwrite="true" />
-		<replace file="${caties.installation.dir}/caTIES_conf/caTIES.properties">
-			<replacefilter token="@@COLL_PROT_TITLE@@" value="${collectionProtocol.title}" />
-			<replacefilter token="@@ADMIN_EMAIL@@" value="${first.admin.emailAddress}" />
-			<replacefilter token="@@ADMIN_PASSWORD@@" value="${first.admin.password}" />
-			<replacefilter token="@@GATE_HOME@@" value="${caties.installation.dir}/gate/gate_3_1" />
-			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
-			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
-			<replacefilter token="@@GATE_HOME@@" value="${caties.installation.dir}/gate" />
-		</replace>
-		<replace file="${caties.installation.dir}/caTIES_conf/remoteService.xml">
-			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
-			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
-		</replace>
-		<unzip src="gate.zip" dest="${caties.installation.dir}/gate" /> 
-			<replace file="${caties.installation.dir}/gate/gate_3_1/application/plugins/caTIES/creole.xml">
-				<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
-				<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
-				<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
-			</replace>
-	</target>
-
 	<property name="filename" value="" />
 	<property name="hookentity" value="" />
 	<property name="mainContainerList" value="" />
