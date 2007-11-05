@@ -736,7 +736,8 @@ PUBLIC
 			name="conflictViewForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.conflictViewDef" />			
+			<forward name="success" path=".catissuecore.conflictViewDef" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />			
 		</action>
 		
 		<action path="/ConflictDetails"
