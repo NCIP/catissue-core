@@ -1,0 +1,255 @@
+<?xml version ="1.0"?>
+<!--Ant Script for caTIES installation-->
+
+<project name="caTIES Installation" default="deploy_caties">
+	<!--define require dir and Properties -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="./lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+	
+	<property file="caTIES_conf/caTIES.properties" />
+	<property file="caTissueInstall.properties" />
+	
+	<property name="base.dir" value="." />
+	<property name="temp.dir" value="./tempCatissuecore" />
+	<property name="temp.caties.dir" value="./tempCaties" />
+	<property name="lib.dir" value="${base.dir}/lib" />
+	
+	<condition property="is.deploy.caties">
+		<or>
+			<isset property="${install.report.loader.server}" /> 
+			<isset property="${install.deid.server}" /> 
+			<isset property="${install.concept.code.server}" /> 
+		</or>
+	</condition>
+
+	<target name="assertforcaties">
+		<!-- Assertions common to all server-->
+		<if>
+			<equals arg1="" arg2="${first.admin.emailAddress}" />
+			<then>
+				<fail message="The property 'first.admin.emailAddress' can not be empty in caTissueInstall.properties" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${first.admin.password}" />
+			<then>
+				<fail message="The property 'first.admin.password' can not be empty in caTissueInstall.properties" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${jboss.server.host}" />
+			<then>
+				<fail message="The property 'jboss.server.host' can not be empty in caTissueInstall.properties" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${jboss.server.port}" />
+			<then>
+				<fail message="The property 'jboss.server.port' can not be empty in caTissueInstall.properties" />
+			</then>
+		</if>
+		<!-- Assertions for report loader server-->
+		<if>
+			<equals arg1="yes" arg2="${install.report.loader.server}" />
+			<then>
+				<if>
+					<equals arg1="" arg2="${report.loader.installation.dir}" />
+					<then>
+						<fail message="The property 'report.loader.installation.dir' can not be empty" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${collectionProtocolTitle}" />
+					<then>
+						<fail message="The property 'collectionProtocolTitle' can not be empty" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${inputDir}" />
+					<then>
+						<fail message="The property 'inputDir' can not be empty" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${processFileDir}" />
+					<then>
+						<fail message="The property 'processFileDir' can not be empty" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${badFilesDir}" />
+					<then>
+						<fail message="The property 'badFilesDir' can not be empty" />
+					</then>
+				</if>
+			</then>
+		</if>
+		<!-- Assertions for deid server -->
+		<if>
+			<equals arg1="yes" arg2="${install.deid.server}" />
+			<then>
+				<if>
+					<equals arg1="" arg2="${deid.installation.dir}" />
+					<then>
+						<fail message="The property 'deid.installation.dir' can not be empty" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${deidHome}" />
+					<then>
+						<fail message="The property 'deidHome' can not be empty" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${deidDnyFolder}" />
+					<then>
+						<fail message="The property 'deidDnyFolder' can not be empty" />
+					</then>
+				</if>
+			</then>
+		</if>
+		<!-- Assertions for concept coder server -->
+		<if>
+			<equals arg1="yes" arg2="${install.concept.code.server}" />
+			<then>
+				<if>
+					<equals arg1="" arg2="${concept.code.installation.dir}" />
+					<then>
+						<fail message="The property 'concept.code.installation.dir' can not be empty" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${jboss.server.host}" />
+					<then>
+						<fail message="The property 'jboss.server.host' can not be empty in caTissueInstall.properties" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${jboss.server.port}" />
+					<then>
+						<fail message="The property 'jboss.server.port' can not be empty in caTissueInstall.properties" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${caties.mmtx.home}" />
+					<then>
+						<fail message="The property 'caties.mmtx.home' can not be empty in caTissueInstall.properties" />
+					</then>
+				</if>
+			</then>
+		</if>
+	</target>
+	
+	<!--Target call for Deployment of caTIES -->
+	<target name="deploy_caties"  >
+		<antcall target="assertforcaties" />
+		<antcall target="create_jar" />
+		<antcall target="replacefiletoken" />
+		<antcall target="deploy_caties_internal" />
+		<delete dir="${temp.dir}" />
+		<delete dir="${temp.caties.dir}" />
+		<delete file="${base.dir}/caties.jar" />
+	</target>
+
+	<target name="create_jar" >
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<copy todir="${temp.caties.dir}/classes">
+			<fileset dir="${temp.dir}/catissuecore/WEB-INF/classes" />
+		</copy>
+		<jar destfile="${temp.caties.dir}/caties.jar" basedir="${temp.caties.dir}/classes" />
+		<delete dir="${temp.caties.dir}/classes" />
+	</target>
+	
+	<target name="replacefiletoken">
+		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/build.xml" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${base.dir}/caTissueCore_caCORE_Client/conf/remoteService.xml" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
+		<replace dir="${temp.caties.dir}/caTIES_conf">
+			<replacefilter token="@@COLL_PROT_TITLE@@" value="${collectionProtocol.title}" />
+			<replacefilter token="@@ADMIN_EMAIL@@" value="${first.admin.emailAddress}" />
+			<replacefilter token="@@ADMIN_PASSWORD@@" value="${first.admin.password}" />
+			<replacefilter token="@@GATE_HOME@@" value="${concept.code.installation.dir}/gate/gate_3_1" />
+			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
+			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
+		</replace>
+		<replace file="${temp.caties.dir}/caTIES_conf/remoteService.xml">
+			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
+			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
+		</replace>
+	</target>
+	
+	<target name="deploy_caties_internal">
+		<if>
+			<equals arg1="yes" arg2="${install.report.loader.server}" />
+			<then>
+				<antcall target="deploy_report_loader" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="yes" arg2="${install.deid.server}" />
+			<then>
+				<antcall target="deploy_deid_server" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="yes" arg2="${install.concept.code.server}" />
+			<then>
+				<antcall target="deploy_concept_code_server" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="yes" arg2="${add.default.collection.protocol}" />
+			<then>
+				<ant dir="${report.loader.installation.dir}" inheritAll="false" antfile="build.xml" target="add_cp" />
+			</then>
+		</if>
+	</target>
+	
+	<target name="deploy_report_loader" >
+		<copy todir="${report.loader.installation.dir}/lib">
+			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
+		</copy>
+		<copy file="${temp.caties.dir}/caTIES_conf/caTIES.properties" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/SectionHeaderConfig.txt" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/sites_configuration.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${report.loader.installation.dir}" overwrite="true" />
+		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${report.loader.installation.dir}" overwrite="true" />	
+		<copy file="${temp.caties.dir}/caties.jar" todir="${report.loader.installation.dir}" overwrite="true" />	
+	</target>
+
+	<target name="deploy_deid_server" >
+		<copy todir="${report.loader.installation.dir}/lib">
+			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
+		</copy>
+		<copy file="${temp.caties.dir}/caTIES_conf/caTIES.properties" todir="${deid.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${deid.installation.dir}/caTIES_conf" overwrite="true" />					
+		<copy file="${basedir}/caTIES_conf/deid.cfg" todir="${deid.installation.dir}/caTIES_conf" overwrite="true" />		
+		<copy file="JniDeID.dll" todir="${deid.installation.dir}" overwrite="true" />
+		<copy file="Dataset.dtd" todir="${deid.installation.dir}" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${deid.installation.dir}" overwrite="true" />
+		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${deid.installation.dir}" overwrite="true" />
+		<copy file="${temp.caties.dir}/caties.jar" todir="${report.loader.installation.dir}" overwrite="true" />	
+	</target>
+
+	<target name="deploy_concept_code_server" >
+		<copy todir="${concept.code.installation.dir}/lib">
+			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
+		</copy>
+		<copy file="${temp.caties.dir}/caTIES_conf/caTIES.properties" todir="${concept.code.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${concept.code.installation.dir}" overwrite="true" />
+		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${concept.code.installation.dir}" overwrite="true" />
+		<copy file="${temp.caties.dir}/caties.jar" todir="${report.loader.installation.dir}" overwrite="true" />	
+		<unzip src="gate.zip" dest="${concept.code.installation.dir}/gate" /> 
+		<replace file="${concept.code.installation.dir}/gate/gate_3_1/application/plugins/caTIES/creole.xml">
+			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
+			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
+			<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
+		</replace>
+	</target>
+
+</project>
