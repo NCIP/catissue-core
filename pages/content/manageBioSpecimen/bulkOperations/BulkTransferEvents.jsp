@@ -157,7 +157,6 @@
 						<logic:notEqual name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >
 							<html:text styleId="<%=selContainerId%>" property="<%=specimenToSCLabelField%>" disabled="false" />			
 						</logic:notEqual>
-						<html:checkbox styleId="<%=virLoc%>" property="<%=specimenToVirLocField%>" onclick="<%=methodCall%>" value="true"/> Is virtually located
 					</td>					
 					<!-- To Container Field ends -->
 					
