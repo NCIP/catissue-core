@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.AssignDataException;
@@ -292,7 +293,11 @@ public class UpdateSpecimenStatusAction extends Action {
 		String pos2 = specimenVO.getPositionDimensionTwo();
 
 		if (!specimenVO.getCheckedSpecimen()){
-			specimenVO.setPositionDimensionOne("1");
+			specimenVO.setPositionDimensionOne
+			(String.valueOf(CollectionProtocolUtil.getStorageTypeValue(
+					specimenVO.getStorageContainerForSpecimen()))
+			);
+			
 			return;
 		}
 		

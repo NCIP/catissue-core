@@ -60,7 +60,7 @@ public class CollectionProtocolUtil {
 			}
 		}
 		
-		return 0;	//default considered as 'Virtual';
+		return new Integer(0);	//default considered as 'Virtual';
 	}
 
 	public static String getStorageTypeValue(Integer type)

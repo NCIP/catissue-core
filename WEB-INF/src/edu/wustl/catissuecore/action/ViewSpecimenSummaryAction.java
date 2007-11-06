@@ -259,7 +259,8 @@ public class ViewSpecimenSummaryAction extends Action {
 		derivedSessionVO.setCheckedSpecimen(derivedFormVO.getCheckedSpecimen());
 		derivedSessionVO.setDisplayName(derivedFormVO.getDisplayName());
 		derivedSessionVO.setBarCode(derivedFormVO.getBarCode());
-		derivedSessionVO.setContainerId(derivedFormVO.getContainerId());
+		//derivedSessionVO.setContainerId(derivedFormVO.getContainerId());
+		derivedSessionVO.setContainerId(null);
 		derivedSessionVO.setSelectedContainerName(derivedFormVO.getSelectedContainerName());
 		derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
 		derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
