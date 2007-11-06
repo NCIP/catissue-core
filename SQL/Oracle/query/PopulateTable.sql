@@ -1,8 +1,6 @@
 /* Modified to run on Oracle 6 Nov 2007 */
 
 
-/*Data for the table association */
-
 insert into association (ASSOCIATION_ID,ASSOCIATION_TYPE) values (1,2);
 insert into association (ASSOCIATION_ID,ASSOCIATION_TYPE) values (2,2);
 insert into association (ASSOCIATION_ID,ASSOCIATION_TYPE) values (3,2);
@@ -667,23 +665,7 @@ insert into association (ASSOCIATION_ID,ASSOCIATION_TYPE) values (661,2);
 insert into association (ASSOCIATION_ID,ASSOCIATION_TYPE) values (662,2);
 insert into association (ASSOCIATION_ID,ASSOCIATION_TYPE) values (663,2);
 
-/*Data for the table categorial_attribute */
 
-/*Data for the table categorial_class */
-
-/*Data for the table category */
-
-/*Data for the table curated_path */
-
-/*Data for the table curated_path_to_path */
-
-/*Data for the table de_coll_attr_record_values */
-
-/*Data for the table de_file_attr_record_values */
-
-/*Data for the table de_object_attr_record_values */
-
-/*Data for the table dyextn_abstract_metadata */
 
 insert into dyextn_abstract_metadata (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values (1,to_date('2007-10-10','YYYY-MM-DD'),'Catissue Suite',to_date('2007-10-10','YYYY-MM-DD'),'Catissue Suite',NULL);
 insert into dyextn_abstract_metadata (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values (2,to_date('2007-10-10','YYYY-MM-DD'),'Base class for defining all domain objects in the system.',to_date('2007-10-10','YYYY-MM-DD'),'edu.wustl.catissuecore.domain.AbstractDomainObject',NULL);
@@ -1904,9 +1886,7 @@ insert into dyextn_abstract_metadata (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_U
 insert into dyextn_abstract_metadata (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values (1217,NULL,NULL,NULL,'availableQuantity',NULL);
 insert into dyextn_abstract_metadata (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values (1218,NULL,NULL,NULL,'initialQuantity',NULL);
 
-/*Data for the table dyextn_asso_display_attr */
 
-/*Data for the table dyextn_association */
 
 insert into dyextn_association (IDENTIFIER,DIRECTION,TARGET_ENTITY_ID,SOURCE_ROLE_ID,TARGET_ROLE_ID,IS_SYSTEM_GENERATED) values (5,'BI_DIRECTIONAL',722,1,2,0);
 insert into dyextn_association (IDENTIFIER,DIRECTION,TARGET_ENTITY_ID,SOURCE_ROLE_ID,TARGET_ROLE_ID,IS_SYSTEM_GENERATED) values (6,'BI_DIRECTIONAL',379,3,4,0);
@@ -2572,7 +2552,7 @@ insert into dyextn_association (IDENTIFIER,DIRECTION,TARGET_ENTITY_ID,SOURCE_ROL
 insert into dyextn_association (IDENTIFIER,DIRECTION,TARGET_ENTITY_ID,SOURCE_ROLE_ID,TARGET_ROLE_ID,IS_SYSTEM_GENERATED) values (1206,'BI_DIRECTIONAL',975,880,879,1);
 insert into dyextn_association (IDENTIFIER,DIRECTION,TARGET_ENTITY_ID,SOURCE_ROLE_ID,TARGET_ROLE_ID,IS_SYSTEM_GENERATED) values (1207,'BI_DIRECTIONAL',915,828,827,1);
 
-/*Data for the table dyextn_attribute */
+
 
 insert into dyextn_attribute (IDENTIFIER,ENTIY_ID) values (3,2);
 insert into dyextn_attribute (IDENTIFIER,ENTIY_ID) values (5,4);
@@ -3698,9 +3678,7 @@ insert into dyextn_attribute (IDENTIFIER,ENTIY_ID) values (1216,297);
 insert into dyextn_attribute (IDENTIFIER,ENTIY_ID) values (1217,333);
 insert into dyextn_attribute (IDENTIFIER,ENTIY_ID) values (1218,333);
 
-/*Data for the table dyextn_attribute_record */
 
-/*Data for the table dyextn_attribute_type_info */
 
 insert into dyextn_attribute_type_info (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values (1,3);
 insert into dyextn_attribute_type_info (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values (2,15);
@@ -4163,11 +4141,7 @@ insert into dyextn_attribute_type_info (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) value
 insert into dyextn_attribute_type_info (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values (459,1217);
 insert into dyextn_attribute_type_info (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values (460,1218);
 
-/*Data for the table dyextn_barr_concept_value */
 
-/*Data for the table dyextn_boolean_concept_value */
-
-/*Data for the table dyextn_boolean_type_info */
 
 insert into dyextn_boolean_type_info (IDENTIFIER) values (6);
 insert into dyextn_boolean_type_info (IDENTIFIER) values (7);
@@ -4192,9 +4166,6 @@ insert into dyextn_boolean_type_info (IDENTIFIER) values (332);
 insert into dyextn_boolean_type_info (IDENTIFIER) values (333);
 insert into dyextn_boolean_type_info (IDENTIFIER) values (427);
 
-/*Data for the table dyextn_byte_array_type_info */
-
-/*Data for the table dyextn_cadsr_value_domain_info */
 
 insert into dyextn_cadsr_value_domain_info (IDENTIFIER,DATATYPE,NAME,TYPE,PRIMITIVE_ATTRIBUTE_ID) values (1,'java.lang.Long','java.lang.Long','NON_ENUMERATED',3);
 insert into dyextn_cadsr_value_domain_info (IDENTIFIER,DATATYPE,NAME,TYPE,PRIMITIVE_ATTRIBUTE_ID) values (2,'java.lang.Long','java.lang.Long','NON_ENUMERATED',15);
@@ -4647,11 +4618,6 @@ insert into dyextn_cadsr_value_domain_info (IDENTIFIER,DATATYPE,NAME,TYPE,PRIMIT
 insert into dyextn_cadsr_value_domain_info (IDENTIFIER,DATATYPE,NAME,TYPE,PRIMITIVE_ATTRIBUTE_ID) values (449,'java.lang.String','java.lang.String','NON_ENUMERATED',991);
 insert into dyextn_cadsr_value_domain_info (IDENTIFIER,DATATYPE,NAME,TYPE,PRIMITIVE_ATTRIBUTE_ID) values (450,'java.lang.Long','java.lang.Long','NON_ENUMERATED',992);
 
-/*Data for the table dyextn_cadsrde */
-
-/*Data for the table dyextn_check_box */
-
-/*Data for the table dyextn_column_properties */
 
 insert into dyextn_column_properties (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values (2,3);
 insert into dyextn_column_properties (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values (40,15);
@@ -5114,9 +5080,7 @@ insert into dyextn_column_properties (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values 
 insert into dyextn_column_properties (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values (1215,1217);
 insert into dyextn_column_properties (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values (1216,1218);
 
-/*Data for the table dyextn_combobox */
 
-/*Data for the table dyextn_constraint_properties */
 
 insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values (4,'SPECIMEN_ID','BIOHAZARD_ID',993);
 insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values (5,NULL,'SPECIMEN_ID',994);
@@ -5782,13 +5746,7 @@ insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_EN
 insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values (1202,'ORDER_ID',NULL,988);
 insert into dyextn_constraint_properties (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values (1203,'DISTRIBUTED_ITEM_ID',NULL,989);
 
-/*Data for the table dyextn_container */
 
-/*Data for the table dyextn_containment_control */
-
-/*Data for the table dyextn_control */
-
-/*Data for the table dyextn_data_element */
 
 insert into dyextn_data_element (IDENTIFIER,ATTRIBUTE_TYPE_INFO_ID) values (1,5);
 insert into dyextn_data_element (IDENTIFIER,ATTRIBUTE_TYPE_INFO_ID) values (2,10);
@@ -5823,9 +5781,7 @@ insert into dyextn_data_element (IDENTIFIER,ATTRIBUTE_TYPE_INFO_ID) values (30,4
 insert into dyextn_data_element (IDENTIFIER,ATTRIBUTE_TYPE_INFO_ID) values (31,429);
 insert into dyextn_data_element (IDENTIFIER,ATTRIBUTE_TYPE_INFO_ID) values (32,443);
 
-/*Data for the table dyextn_data_grid */
 
-/*Data for the table dyextn_database_properties */
 
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (1,'DE_E_2');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (2,'DE_AT_3');
@@ -7044,9 +7000,7 @@ insert into dyextn_database_properties (IDENTIFIER,NAME) values (1214,'QUANTITY'
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (1215,'AVAILABLE_QUANTITY');
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (1216,'QUANTITY');
 
-/*Data for the table dyextn_date_concept_value */
 
-/*Data for the table dyextn_date_type_info */
 
 insert into dyextn_date_type_info (IDENTIFIER,FORMAT) values (9,NULL);
 insert into dyextn_date_type_info (IDENTIFIER,FORMAT) values (50,NULL);
@@ -7093,11 +7047,7 @@ insert into dyextn_date_type_info (IDENTIFIER,FORMAT) values (400,NULL);
 insert into dyextn_date_type_info (IDENTIFIER,FORMAT) values (417,NULL);
 insert into dyextn_date_type_info (IDENTIFIER,FORMAT) values (425,NULL);
 
-/*Data for the table dyextn_datepicker */
 
-/*Data for the table dyextn_double_concept_value */
-
-/*Data for the table dyextn_double_type_info */
 
 insert into dyextn_double_type_info (IDENTIFIER) values (41);
 insert into dyextn_double_type_info (IDENTIFIER) values (85);
@@ -7129,7 +7079,7 @@ insert into dyextn_double_type_info (IDENTIFIER) values (458);
 insert into dyextn_double_type_info (IDENTIFIER) values (459);
 insert into dyextn_double_type_info (IDENTIFIER) values (460);
 
-/*Data for the table dyextn_entity */
+
 
 insert into dyextn_entity (IDENTIFIER,DATA_TABLE_STATE,IS_ABSTRACT,PARENT_ENTITY_ID,INHERITANCE_STRATEGY,DISCRIMINATOR_COLUMN_NAME,DISCRIMINATOR_VALUE) values (2,2,0,NULL,3,NULL,NULL);
 insert into dyextn_entity (IDENTIFIER,DATA_TABLE_STATE,IS_ABSTRACT,PARENT_ENTITY_ID,INHERITANCE_STRATEGY,DISCRIMINATOR_COLUMN_NAME,DISCRIMINATOR_VALUE) values (4,2,0,NULL,3,NULL,NULL);
@@ -7225,12 +7175,12 @@ insert into dyextn_entity (IDENTIFIER,DATA_TABLE_STATE,IS_ABSTRACT,PARENT_ENTITY
 insert into dyextn_entity (IDENTIFIER,DATA_TABLE_STATE,IS_ABSTRACT,PARENT_ENTITY_ID,INHERITANCE_STRATEGY,DISCRIMINATOR_COLUMN_NAME,DISCRIMINATOR_VALUE) values (975,2,0,2,3,NULL,NULL);
 insert into dyextn_entity (IDENTIFIER,DATA_TABLE_STATE,IS_ABSTRACT,PARENT_ENTITY_ID,INHERITANCE_STRATEGY,DISCRIMINATOR_COLUMN_NAME,DISCRIMINATOR_VALUE) values (981,2,0,857,3,NULL,NULL);
 
-/*Data for the table dyextn_entity_group */
+
 
 insert into dyextn_entity_group (IDENTIFIER,LONG_NAME,SHORT_NAME,VERSION,IS_SYSTEM_GENERATED) values (1,'Catissue Suite','caTissueCore',NULL,1);
 insert into dyextn_entity_group (IDENTIFIER,LONG_NAME,SHORT_NAME,VERSION,IS_SYSTEM_GENERATED) values (1208,'DataListEntityGroup','DataListEntityGroup',NULL,1);
 
-/*Data for the table dyextn_entity_group_rel */
+
 
 insert into dyextn_entity_group_rel (ENTITY_GROUP_ID,ENTITY_ID) values (1,2);
 insert into dyextn_entity_group_rel (ENTITY_GROUP_ID,ENTITY_ID) values (1,4);
@@ -7326,27 +7276,7 @@ insert into dyextn_entity_group_rel (ENTITY_GROUP_ID,ENTITY_ID) values (1,965);
 insert into dyextn_entity_group_rel (ENTITY_GROUP_ID,ENTITY_ID) values (1,975);
 insert into dyextn_entity_group_rel (ENTITY_GROUP_ID,ENTITY_ID) values (1,981);
 
-/*Data for the table dyextn_entity_map */
 
-/*Data for the table dyextn_entity_map_condns */
-
-/*Data for the table dyextn_entity_map_record */
-
-/*Data for the table dyextn_file_extensions */
-
-/*Data for the table dyextn_file_type_info */
-
-/*Data for the table dyextn_file_upload */
-
-/*Data for the table dyextn_float_concept_value */
-
-/*Data for the table dyextn_float_type_info */
-
-/*Data for the table dyextn_form_context */
-
-/*Data for the table dyextn_integer_concept_value */
-
-/*Data for the table dyextn_integer_type_info */
 
 insert into dyextn_integer_type_info (IDENTIFIER) values (3);
 insert into dyextn_integer_type_info (IDENTIFIER) values (15);
@@ -7382,11 +7312,7 @@ insert into dyextn_integer_type_info (IDENTIFIER) values (313);
 insert into dyextn_integer_type_info (IDENTIFIER) values (437);
 insert into dyextn_integer_type_info (IDENTIFIER) values (438);
 
-/*Data for the table dyextn_list_box */
 
-/*Data for the table dyextn_long_concept_value */
-
-/*Data for the table dyextn_long_type_info */
 
 insert into dyextn_long_type_info (IDENTIFIER) values (1);
 insert into dyextn_long_type_info (IDENTIFIER) values (2);
@@ -7487,7 +7413,7 @@ insert into dyextn_long_type_info (IDENTIFIER) values (442);
 insert into dyextn_long_type_info (IDENTIFIER) values (446);
 insert into dyextn_long_type_info (IDENTIFIER) values (450);
 
-/*Data for the table dyextn_numeric_type_info */
+
 
 insert into dyextn_numeric_type_info (IDENTIFIER,MEASUREMENT_UNITS,DECIMAL_PLACES,NO_DIGITS) values (1,NULL,0,NULL);
 insert into dyextn_numeric_type_info (IDENTIFIER,MEASUREMENT_UNITS,DECIMAL_PLACES,NO_DIGITS) values (2,NULL,0,NULL);
@@ -7650,9 +7576,7 @@ insert into dyextn_numeric_type_info (IDENTIFIER,MEASUREMENT_UNITS,DECIMAL_PLACE
 insert into dyextn_numeric_type_info (IDENTIFIER,MEASUREMENT_UNITS,DECIMAL_PLACES,NO_DIGITS) values (459,NULL,0,NULL);
 insert into dyextn_numeric_type_info (IDENTIFIER,MEASUREMENT_UNITS,DECIMAL_PLACES,NO_DIGITS) values (460,NULL,0,NULL);
 
-/*Data for the table dyextn_object_type_info */
 
-/*Data for the table dyextn_permissible_value */
 
 insert into dyextn_permissible_value (IDENTIFIER,DESCRIPTION,ATTRIBUTE_TYPE_INFO_ID,USER_DEF_DE_ID) values (1,NULL,NULL,1);
 insert into dyextn_permissible_value (IDENTIFIER,DESCRIPTION,ATTRIBUTE_TYPE_INFO_ID,USER_DEF_DE_ID) values (2,NULL,NULL,1);
@@ -10244,7 +10168,7 @@ insert into dyextn_permissible_value (IDENTIFIER,DESCRIPTION,ATTRIBUTE_TYPE_INFO
 insert into dyextn_permissible_value (IDENTIFIER,DESCRIPTION,ATTRIBUTE_TYPE_INFO_ID,USER_DEF_DE_ID) values (2588,NULL,NULL,32);
 insert into dyextn_permissible_value (IDENTIFIER,DESCRIPTION,ATTRIBUTE_TYPE_INFO_ID,USER_DEF_DE_ID) values (2589,NULL,NULL,32);
 
-/*Data for the table dyextn_primitive_attribute */
+
 
 insert into dyextn_primitive_attribute (IDENTIFIER,IS_COLLECTION,IS_IDENTIFIED,IS_PRIMARY_KEY,IS_NULLABLE) values (3,0,NULL,1,1);
 insert into dyextn_primitive_attribute (IDENTIFIER,IS_COLLECTION,IS_IDENTIFIED,IS_PRIMARY_KEY,IS_NULLABLE) values (15,0,NULL,1,1);
@@ -10707,9 +10631,7 @@ insert into dyextn_primitive_attribute (IDENTIFIER,IS_COLLECTION,IS_IDENTIFIED,I
 insert into dyextn_primitive_attribute (IDENTIFIER,IS_COLLECTION,IS_IDENTIFIED,IS_PRIMARY_KEY,IS_NULLABLE) values (1217,0,NULL,0,1);
 insert into dyextn_primitive_attribute (IDENTIFIER,IS_COLLECTION,IS_IDENTIFIED,IS_PRIMARY_KEY,IS_NULLABLE) values (1218,0,NULL,0,1);
 
-/*Data for the table dyextn_radiobutton */
 
-/*Data for the table dyextn_role */
 
 insert into dyextn_role (IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) values (1,'ASSOCIATION',2,0,'specimenCollection');
 insert into dyextn_role (IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) values (2,'ASSOCIATION',1,0,'specimenCollectionGroup');
@@ -11608,13 +11530,7 @@ insert into dyextn_role (IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINA
 insert into dyextn_role (IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) values (895,'ASSOCIATION',2,0,NULL);
 insert into dyextn_role (IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) values (896,'ASSOCIATION',1,0,'distributedItem');
 
-/*Data for the table dyextn_rule */
 
-/*Data for the table dyextn_rule_parameter */
-
-/*Data for the table dyextn_select_control */
-
-/*Data for the table dyextn_semantic_property */
 
 insert into dyextn_semantic_property (IDENTIFIER,CONCEPT_CODE,TERM,THESAURAS_NAME,SEQUENCE_NUMBER,CONCEPT_DEFINITION,ABSTRACT_METADATA_ID,ABSTRACT_VALUE_ID) values (1,'Not Specified','Not Specified',NULL,0,'Not Specified',3,NULL);
 insert into dyextn_semantic_property (IDENTIFIER,CONCEPT_CODE,TERM,THESAURAS_NAME,SEQUENCE_NUMBER,CONCEPT_DEFINITION,ABSTRACT_METADATA_ID,ABSTRACT_VALUE_ID) values (2,'C42874','Abstract',NULL,2,'A concept or idea not associated with any specific instance.',2,NULL);
@@ -15016,11 +14932,7 @@ insert into dyextn_semantic_property (IDENTIFIER,CONCEPT_CODE,TERM,THESAURAS_NAM
 insert into dyextn_semantic_property (IDENTIFIER,CONCEPT_CODE,TERM,THESAURAS_NAME,SEQUENCE_NUMBER,CONCEPT_DEFINITION,ABSTRACT_METADATA_ID,ABSTRACT_VALUE_ID) values (3398,'Not Specified','Not Specified',NULL,0,'Not Specified',992,NULL);
 insert into dyextn_semantic_property (IDENTIFIER,CONCEPT_CODE,TERM,THESAURAS_NAME,SEQUENCE_NUMBER,CONCEPT_DEFINITION,ABSTRACT_METADATA_ID,ABSTRACT_VALUE_ID) values (3399,'BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=0;HSwimLanes=0;BorderStyle=0;','BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=0;HSwimLanes=0;BorderStyle=0;',NULL,0,'BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=0;HSwimLanes=0;BorderStyle=0;',981,NULL);
 
-/*Data for the table dyextn_short_concept_value */
 
-/*Data for the table dyextn_short_type_info */
-
-/*Data for the table dyextn_string_concept_value */
 
 insert into dyextn_string_concept_value (IDENTIFIER,VALUE) values (1,'Metastatic');
 insert into dyextn_string_concept_value (IDENTIFIER,VALUE) values (2,'Malignant');
@@ -17612,7 +17524,6 @@ insert into dyextn_string_concept_value (IDENTIFIER,VALUE) values (2587,'Infecti
 insert into dyextn_string_concept_value (IDENTIFIER,VALUE) values (2588,'Carcinogen');
 insert into dyextn_string_concept_value (IDENTIFIER,VALUE) values (2589,'Toxic');
 
-/*Data for the table dyextn_string_type_info */
 
 insert into dyextn_string_type_info (IDENTIFIER,MAX_SIZE) values (4,NULL);
 insert into dyextn_string_type_info (IDENTIFIER,MAX_SIZE) values (5,NULL);
@@ -17849,7 +17760,6 @@ insert into dyextn_string_type_info (IDENTIFIER,MAX_SIZE) values (447,NULL);
 insert into dyextn_string_type_info (IDENTIFIER,MAX_SIZE) values (448,NULL);
 insert into dyextn_string_type_info (IDENTIFIER,MAX_SIZE) values (449,NULL);
 
-/*Data for the table dyextn_table_properties */
 
 insert into dyextn_table_properties (IDENTIFIER,ENTITY_ID) values (1,2);
 insert into dyextn_table_properties (IDENTIFIER,ENTITY_ID) values (3,4);
@@ -17945,7 +17855,6 @@ insert into dyextn_table_properties (IDENTIFIER,ENTITY_ID) values (1179,965);
 insert into dyextn_table_properties (IDENTIFIER,ENTITY_ID) values (1189,975);
 insert into dyextn_table_properties (IDENTIFIER,ENTITY_ID) values (1195,981);
 
-/*Data for the table dyextn_tagged_value */
 
 insert into dyextn_tagged_value (IDENTIFIER,T_KEY,T_VALUE,ABSTRACT_METADATA_ID) values (1,'ProjectVersion','1.1',1);
 insert into dyextn_tagged_value (IDENTIFIER,T_KEY,T_VALUE,ABSTRACT_METADATA_ID) values (2,'caB2BEntityGroup','caB2BEntityGroup',1);
@@ -19271,11 +19180,6 @@ insert into dyextn_tagged_value (IDENTIFIER,T_KEY,T_VALUE,ABSTRACT_METADATA_ID) 
 insert into dyextn_tagged_value (IDENTIFIER,T_KEY,T_VALUE,ABSTRACT_METADATA_ID) values (1368,'derived','derived',1217);
 insert into dyextn_tagged_value (IDENTIFIER,T_KEY,T_VALUE,ABSTRACT_METADATA_ID) values (1369,'derived','derived',1218);
 
-/*Data for the table dyextn_textarea */
-
-/*Data for the table dyextn_textfield */
-
-/*Data for the table dyextn_userdefined_de */
 
 insert into dyextn_userdefined_de (IDENTIFIER) values (1);
 insert into dyextn_userdefined_de (IDENTIFIER) values (2);
@@ -19310,11 +19214,8 @@ insert into dyextn_userdefined_de (IDENTIFIER) values (30);
 insert into dyextn_userdefined_de (IDENTIFIER) values (31);
 insert into dyextn_userdefined_de (IDENTIFIER) values (32);
 
-/*Data for the table dyextn_view */
 
-/*Data for the table inter_model_association */
 
-/*Data for the table intra_model_association */
 
 insert into intra_model_association (ASSOCIATION_ID,DE_ASSOCIATION_ID) values (1,1014);
 insert into intra_model_association (ASSOCIATION_ID,DE_ASSOCIATION_ID) values (2,735);
@@ -19980,7 +19881,6 @@ insert into intra_model_association (ASSOCIATION_ID,DE_ASSOCIATION_ID) values (6
 insert into intra_model_association (ASSOCIATION_ID,DE_ASSOCIATION_ID) values (662,645);
 insert into intra_model_association (ASSOCIATION_ID,DE_ASSOCIATION_ID) values (663,69);
 
-/*Data for the table path */
 
 insert into path (PATH_ID,FIRST_ENTITY_ID,INTERMEDIATE_PATH,LAST_ENTITY_ID) values (1,177,'284',717);
 insert into path (PATH_ID,FIRST_ENTITY_ID,INTERMEDIATE_PATH,LAST_ENTITY_ID) values (4,373,'328',89);
