@@ -31,7 +31,7 @@ public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) obj;
-		dao.insert(reportLoaderQueue, sessionDataBean, true, false);
+		dao.insert(reportLoaderQueue, sessionDataBean, false, false);
  	}
 
 	/**
@@ -55,7 +55,7 @@ public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue)obj;
-		dao.update(reportLoaderQueue, sessionDataBean, true, false, false);
+		dao.update(reportLoaderQueue, sessionDataBean, false, false, false);
 	}
 	
 	/**
