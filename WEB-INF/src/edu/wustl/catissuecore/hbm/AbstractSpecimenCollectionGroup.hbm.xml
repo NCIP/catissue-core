@@ -191,7 +191,7 @@
 	        <one-to-one
 	            name="deIdentifiedSurgicalPathologyReport"
 	            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
-	            cascade="save-update"
+	            cascade="none"
 	            outer-join="auto"
 	            constrained="false"
 		     	property-ref="specimenCollectionGroup"
@@ -200,7 +200,7 @@
 	        <one-to-one
 	            name="identifiedSurgicalPathologyReport"
 	            class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
-	            cascade="save-update"
+	            cascade="none"
 	            outer-join="auto"
 	            constrained="false"
 		     	property-ref="specimenCollectionGroup"
