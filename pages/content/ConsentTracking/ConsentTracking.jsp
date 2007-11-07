@@ -134,7 +134,7 @@ function popupWindow(nofConsentTiers)
 		{
 			submitString();
 			<%	
-			if(specimenList.size()>1 || !(pageOf.equals("pageOfNewSpecimenCPQuery")))
+			if(specimenList!=null && specimenList.size()>1 || !(pageOf.equals("pageOfNewSpecimenCPQuery")))
 			{
 			%>	
 		
