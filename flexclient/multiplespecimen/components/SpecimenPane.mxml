@@ -245,7 +245,7 @@
 	    	var pop1:DerivedSpecimenPane = DerivedSpecimenPane(
 	        PopUpManager.createPopUp(this, DerivedSpecimenPane, true));
     		pop1.derivedSpColl = spData.derivedSpColl;
-    		Alert.show("msParameter in createPopup function:"+mspParameter);
+    		//Alert.show("msParameter in createPopup function:"+mspParameter);
     		pop1.msParameter = mspParameter;
 			pop1.title = "Create Derived Specimen";
 
