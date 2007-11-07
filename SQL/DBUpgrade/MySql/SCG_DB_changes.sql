@@ -492,8 +492,7 @@ alter table CatIssue_Abs_Speci_coll_Group drop column COLLECTION_PROTOCOL_REG_ID
 
 alter table `CatIssue_Abs_Speci_coll_Group` drop column `CLINICAL_REPORT_ID`;
 
-alter table `CatIssue_Abs_Speci_coll_Group` drop column `SURGICAL_PATHOLOGY_NUMBER`;
-
+/*alter table `CatIssue_Abs_Speci_coll_Group` drop column `SURGICAL_PATHOLOGY_NUMBER`;*/
 
 
 
