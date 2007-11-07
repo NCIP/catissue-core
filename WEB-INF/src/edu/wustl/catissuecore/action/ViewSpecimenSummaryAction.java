@@ -271,24 +271,26 @@ public class ViewSpecimenSummaryAction extends Action {
 	private GenericSpecimen getDerivedSessionObject(GenericSpecimen parentSessionObject, String derivedKey)
 	{
 		LinkedHashMap deriveMap = parentSessionObject.getDeriveSpecimenCollection();
-		if(deriveMap == null || deriveMap.isEmpty())
+		Collection parentCollection;
+		if(deriveMap != null && !deriveMap.isEmpty())
 		{
-			return null;
-		}
-		GenericSpecimen derivedSessionObject =(GenericSpecimen) deriveMap.get(derivedKey);
-		if (derivedSessionObject != null)
-		{
-			return derivedSessionObject;	
-		}
-		Collection parentCollection = deriveMap.values();
-		Iterator parentIterator = parentCollection.iterator();
+		//	return null;
 		
-		while(parentIterator.hasNext())
-		{
-			GenericSpecimen parentDerived = (GenericSpecimen) parentIterator.next();
-			derivedSessionObject = getDerivedSessionObject(parentDerived, derivedKey);
-			if (derivedSessionObject != null){
-				return derivedSessionObject;
+			GenericSpecimen derivedSessionObject =(GenericSpecimen) deriveMap.get(derivedKey);
+			if (derivedSessionObject != null)
+			{
+				return derivedSessionObject;	
+			}
+			parentCollection = deriveMap.values();
+			Iterator parentIterator = parentCollection.iterator();
+			
+			while(parentIterator.hasNext())
+			{
+				GenericSpecimen parentDerived = (GenericSpecimen) parentIterator.next();
+				derivedSessionObject = getDerivedSessionObject(parentDerived, derivedKey);
+				if (derivedSessionObject != null){
+					return derivedSessionObject;
+				}
 			}
 		}
 		//Search Derived in derived specimen tree.
@@ -297,12 +299,12 @@ public class ViewSpecimenSummaryAction extends Action {
 		if(aliquotMap != null && !aliquotMap.isEmpty())
 		{
 			parentCollection = aliquotMap.values();
-			parentIterator = parentCollection.iterator();
+			Iterator parentIterator = parentCollection.iterator();
 			
 			while(parentIterator.hasNext())
 			{
 				GenericSpecimen derivedSpecimen = (GenericSpecimen) parentIterator.next();
-				derivedSessionObject = getDerivedSessionObject(derivedSpecimen, derivedKey);
+				GenericSpecimen derivedSessionObject = getDerivedSessionObject(derivedSpecimen, derivedKey);
 				if (derivedSessionObject != null){
 					return derivedSessionObject;
 				}
@@ -314,38 +316,38 @@ public class ViewSpecimenSummaryAction extends Action {
 	private GenericSpecimen getAliquotSessionObject(GenericSpecimen parentSessionObject, String aliquotKey)
 	{
 		LinkedHashMap aliquotMap = parentSessionObject.getAliquotSpecimenCollection();
-		if(aliquotMap == null || aliquotMap.isEmpty())
+		if(aliquotMap != null && !aliquotMap.isEmpty())
 		{
-			return null;
-		}
-		GenericSpecimen aliquotSessionObject =(GenericSpecimen) aliquotMap.get(aliquotKey);
-		if (aliquotSessionObject != null)
-		{
-			return aliquotSessionObject;	
-		}
-		Collection parentCollection = aliquotMap.values();
-		Iterator parentIterator = parentCollection.iterator();
-		
-		while(parentIterator.hasNext())
-		{
-			GenericSpecimen parentAliquot = (GenericSpecimen) parentIterator.next();
-			aliquotSessionObject = getAliquotSessionObject(parentAliquot, aliquotKey);
-			if (aliquotSessionObject != null){
-				return aliquotSessionObject;
+			GenericSpecimen aliquotSessionObject =(GenericSpecimen) aliquotMap.get(aliquotKey);
+			if (aliquotSessionObject != null)
+			{
+				return aliquotSessionObject;	
 			}
+			Collection parentCollection = aliquotMap.values();
+			Iterator parentIterator = parentCollection.iterator();
+			
+			while(parentIterator.hasNext())
+			{
+				GenericSpecimen parentAliquot = (GenericSpecimen) parentIterator.next();
+				aliquotSessionObject = getAliquotSessionObject(parentAliquot, aliquotKey);
+				if (aliquotSessionObject != null){
+					return aliquotSessionObject;
+				}
+			}
+
 		}
 		//Search Aliquot in derived specimen tree.
 		LinkedHashMap deriveMap = parentSessionObject.getDeriveSpecimenCollection();
 		
 		if(deriveMap != null && !deriveMap.isEmpty())
 		{
-			parentCollection = deriveMap.values();
-			parentIterator = parentCollection.iterator();
+			Collection parentCollection = deriveMap.values();
+			Iterator parentIterator = parentCollection.iterator();
 			
 			while(parentIterator.hasNext())
 			{
 				GenericSpecimen derivedSpecimen = (GenericSpecimen) parentIterator.next();
-				aliquotSessionObject = getAliquotSessionObject(derivedSpecimen, aliquotKey);
+				GenericSpecimen aliquotSessionObject = getAliquotSessionObject(derivedSpecimen, aliquotKey);
 				if (aliquotSessionObject != null){
 					return aliquotSessionObject;
 				}
