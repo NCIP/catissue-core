@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.AbstractDAO;
@@ -42,7 +43,7 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
-public class AnticipatorySpecimenViewAction extends Action {
+public class AnticipatorySpecimenViewAction extends BaseAction {
 
 	private String globalSpecimenId = null;
 	private SessionDataBean bean;
@@ -51,7 +52,7 @@ public class AnticipatorySpecimenViewAction extends Action {
 	protected HashSet<String> storageContainerIds = new HashSet<String>();
 	String target = null;
 	SpecimenAutoStorageContainer autoStorageContainer; 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 

@@ -267,7 +267,18 @@ public class NewSpecimenAction extends SecureAction
 			Collection consentTierRespCollection = (Collection)bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(),cprObject.getId(), "elements(consentTierResponseCollection)" );
 			//Lazy Resolved --- cprObject.getConsentTierResponseCollection() 
 			Set participantResponseSet =(Set)consentTierRespCollection;
-			List participantResponseList= new ArrayList(participantResponseSet);
+			
+			List participantResponseList;
+			
+			if (participantResponseSet != null)
+			{
+				participantResponseList = new ArrayList(participantResponseSet);
+			}
+			else
+			{
+				participantResponseList = new ArrayList();
+			}				
+			
 			if(operation.equalsIgnoreCase(Constants.ADD))
 			{
 				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
