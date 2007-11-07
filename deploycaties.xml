@@ -245,7 +245,7 @@
 		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${concept.code.installation.dir}" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/logger.properties" todir="${concept.code.installation.dir}" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/sites_configuration.xml" todir="${concept.code.installation.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${temp.caties.dir}/caties.jar" todir="${report.loader.installation.dir}" overwrite="true" />	
+		<copy file="${temp.caties.dir}/caties.jar" todir="${concept.code.installation.dir}" overwrite="true" />	
 		<unzip src="gate.zip" dest="${concept.code.installation.dir}/gate" /> 
 		<replace file="${concept.code.installation.dir}/gate/gate_3_1/application/plugins/caTIES/creole.xml">
 			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
