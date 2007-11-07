@@ -105,7 +105,7 @@ public class ParticipantLookupAction extends BaseAction
 		}
 		else
 		{
-			target= Constants.FAILURE;
+			target=Constants.PARTICIPANT_ADD_FORWARD;
 		}
 		
 		//if any matching participants are there then show the participants otherwise add the participant
