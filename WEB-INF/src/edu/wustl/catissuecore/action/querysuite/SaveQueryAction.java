@@ -169,7 +169,7 @@ public class SaveQueryAction extends BaseAction
 		}
 		// Saving view 
 		SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
-		List<IOutputAttribute> selectedOutputAttributeList = null;
+		List<IOutputAttribute> selectedOutputAttributeList = new ArrayList<IOutputAttribute>();
 		if(selectedColumnsMetadata != null)
 		{
 			selectedOutputAttributeList = selectedColumnsMetadata.getSelectedOutputAttributeList();
