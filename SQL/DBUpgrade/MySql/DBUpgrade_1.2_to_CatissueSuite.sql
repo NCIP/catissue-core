@@ -1522,8 +1522,9 @@ SELECT MAX(PROTECTION_ELEMENT_ID) + 1,
             'edu.wustl.catissuecore.action.ConflictViewAction',
 	    NULL,
 	    NULL,
-            1
-'2006-11-27');
+            1,
+'2006-11-27' 
+FROM CSM_PROTECTION_ELEMENT;
 
 
 
@@ -1578,7 +1579,7 @@ FROM   CSM_PG_PE;
 INSERT INTO CSM_PG_PE 
 SELECT MAX(PG_PE_ID) +1 ,
         1,
-        (select MAX(PROTECTION_ELEMENT_ID) 
+        (select PROTECTION_ELEMENT_ID
 	from csm_protection_element 
 	where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.ConflictViewAction' LIMIT 1),
         '2006-11-27'
