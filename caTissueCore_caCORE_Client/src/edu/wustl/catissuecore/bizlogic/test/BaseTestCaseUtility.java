@@ -611,7 +611,7 @@ public class BaseTestCaseUtility {
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
-		collectionProtocol.setId(new Long(1));
+		collectionProtocol.setId(new Long(3));
 		collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
 		collectionProtocolRegistration.setParticipant(participant);
@@ -1053,12 +1053,8 @@ public class BaseTestCaseUtility {
 		participant.setRaceCollection(raceCollection);
 		participant.setActivityStatus("Active"); //Active
 		participant.setEthnicity("Unknown"); //Hispanic or Latino
-		//participant.setSocialSecurityNumber("333-33-3333");
 
 		Collection participantMedicalIdentifierCollection = new HashSet();
-//		participantMedicalIdentifierCollection.add("Washington University School of Medicine");
-//		 participantMedicalIdentifierCollection.add("1111");
-//		 
 		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
 		
 	}

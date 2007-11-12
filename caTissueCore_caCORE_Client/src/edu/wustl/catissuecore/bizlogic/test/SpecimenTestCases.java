@@ -20,10 +20,12 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		{
 			Specimen sp = new Specimen();
 			sp = (Specimen)TestCaseUtility.getObjectMap(Specimen.class);
-			sp.setId(sp.getId());
+			System.out.println("Get Object Sp"+sp.getId());
 			List spCollection = appService.getObjects(sp);
 			sp = (Specimen)spCollection.get(0);
+			System.out.println("Get Object Sp");
 			sp.setCollectionStatus("Collected");
+			sp.setAvailable(true);
 			sp.setExternalIdentifierCollection(null);
 			System.out.println(sp+": sp");
 			sp =  (Specimen) appService.updateObject(sp);
@@ -47,6 +49,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 			List spCollection = appService.getObjects(sp);
 			sp = (Specimen)spCollection.get(0);
 			sp.setCollectionStatus("Collected");
+			sp.setAvailable(true);
 			sp.setExternalIdentifierCollection(null);
 			
 			Collection consentTierStatusCollection = new HashSet();
