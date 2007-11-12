@@ -1084,7 +1084,7 @@ public class BaseTestCaseUtility {
 		storageContainer.setCapacity(capacity);
 
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
-		collectionProtocol.setId(new Long(1));
+		collectionProtocol.setId(new Long(3));
 		
 		
 		Collection collectionProtocolCollection = new HashSet();
@@ -1133,7 +1133,7 @@ public class BaseTestCaseUtility {
 		storageContainer.setCapacity(capacity);
 
 		CollectionProtocol collectionProtocol =  new CollectionProtocol();
-		collectionProtocol.setId(new Long(1));
+		collectionProtocol.setId(new Long(3));
 		
 		Collection collectionProtocolCollection = new HashSet();
 		collectionProtocolCollection.add(collectionProtocol);
