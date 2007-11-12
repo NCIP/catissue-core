@@ -439,6 +439,10 @@ tr#hiddenCombo
 			{
 				alert("There is no associate report in the system!");
 			}
+			else if(reportId==null || reportId==-2)
+			{
+				alert("Associated repoty is under quarantined request! Please contact administrator for further details.");
+			}
 			else
 			{
 		    	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+reportId;

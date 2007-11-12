@@ -36,7 +36,8 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 	{
 		QuarantineEventParameter quarantineParam = (QuarantineEventParameter) obj;
 		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)dao.retrieve(DeidentifiedSurgicalPathologyReport.class.getName(), quarantineParam.getDeIdentifiedSurgicalPathologyReport().getId()); 
-		deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE_REQUEST);	
+		deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE_REQUEST);
+		deidentifiedSurgicalPathologyReport.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 		dao.update(deidentifiedSurgicalPathologyReport, sessionDataBean, true, false, false);
 		String className;
 		String colName=new String(Constants.SYSTEM_IDENTIFIER);
@@ -73,6 +74,7 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 			if(oldquarantineParam.getStatus().equalsIgnoreCase(Constants.COMMENT_STATUS_QUARANTINED))
 			{
 				deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE);
+				deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.ACTIVITY_STATUS_DISABLED);
 			}
 			else
 			{

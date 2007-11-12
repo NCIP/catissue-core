@@ -635,6 +635,10 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		{
 			reportId=new Long(-1);
 		}
+		else if(Utility.isQuarantined(reportId))
+		{
+			reportId=new Long(-2);
+		}
 		HttpSession session = request.getSession();
 		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 		

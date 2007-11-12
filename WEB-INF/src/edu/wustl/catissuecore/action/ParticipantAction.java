@@ -349,6 +349,10 @@ public class ParticipantAction extends SecureAction
 		{
 			reportId=new Long(-1);
 		}
+		else if(Utility.isQuarantined(reportId))
+		{
+			reportId=new Long(-2);
+		}
 		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 
 		Logger.out.debug("pageOf :---------- " + pageOf);
