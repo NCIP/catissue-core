@@ -1100,5 +1100,28 @@ public class Utility extends edu.wustl.common.util.Utility
 	}
 			
 	
+	/**
+	 * Method to check the associated deidentified report is quarantined or not
+	 * @param reportId id of identified report
+	 * @return boolean value for is quarantine
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */ 
+	public static boolean isQuarantined(Long reportId) throws DAOException, ClassNotFoundException
+	{
+		String hqlString="select ispr.deIdentifiedSurgicalPathologyReport.id " +
+		" from edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport as ispr, " +
+		" edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport as deidReport" +
+		" where ispr.id = " + reportId +
+		" and ispr.deIdentifiedSurgicalPathologyReport.id=deidReport.id"+
+		" and ispr.deIdentifiedSurgicalPathologyReport.isQuanrantined='"+Constants.QUARANTINE_REQUEST+"'";
+		
+		List reportIDList=Utility.executeQuery(hqlString);
+		if(reportIDList!=null && reportIDList.size()>0)
+		{
+			return true;
+		}
+		return false;
+	}
 	
 }
