@@ -39,7 +39,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>
-			<bean:message key="savequery.conditionInformationTitle"/>
+			<bean:message key="savequery.queryInformationTitle"/>
 		</title>
 	</head>
 
@@ -55,7 +55,7 @@
 			<table summary="" cellpadding="3" cellspacing="0" border="0"  width="100%">
 				<tr>
 					<td colspan='3'  class="formTitle" height="20">
-						<bean:message key="savequery.conditionInformationTitle"/>
+						<bean:message key="savequery.queryInformationTitle"/>
 					</td>
 				</tr>
 				<tr>
