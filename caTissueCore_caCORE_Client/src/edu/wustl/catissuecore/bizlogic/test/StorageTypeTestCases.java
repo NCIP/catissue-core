@@ -17,7 +17,8 @@ public class StorageTypeTestCases extends CaTissueBaseTestCase {
 			try{
 				StorageType storagetype = BaseTestCaseUtility.initStorageType();			
 				System.out.println(storagetype);
-				storagetype = (StorageType) appService.createObject(storagetype); 
+				storagetype = (StorageType) appService.createObject(storagetype);
+				TestCaseUtility.setObjectMap(storagetype, StorageType.class);
 				System.out.println("Object created successfully");
 				assertTrue("Object added successfully", true);
 			 }

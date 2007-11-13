@@ -33,6 +33,12 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			Participant participant= BaseTestCaseUtility.initParticipantWithCPR();			
 			System.out.println(participant);
 			participant = (Participant) appService.createObject(participant); 
+			Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+			Iterator cprItr = collectionProtocolRegistrationCollection.iterator();
+			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)cprItr.next();
+			
+			TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
+			TestCaseUtility.setObjectMap(participant, Participant.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
 		 }

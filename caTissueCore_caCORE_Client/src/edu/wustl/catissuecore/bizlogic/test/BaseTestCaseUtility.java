@@ -343,16 +343,20 @@ public class BaseTestCaseUtility {
 		
 		userObj.setAddress(address);
 		
-		Institution inst = new Institution();
-		inst.setId(new Long(1));
+		Institution inst = (Institution)TestCaseUtility.getObjectMap(Institution.class); 
+		//new Institution();
+		//inst.setId(new Long(1));
+		
 		userObj.setInstitution(inst);
 		
-		Department department = new Department();
-		department.setId(new Long(1));
+		Department department = (Department)TestCaseUtility.getObjectMap(Department.class); 
+		//new Department();
+		//department.setId(new Long(1));
 		userObj.setDepartment(department);
 		
-		CancerResearchGroup cancerResearchGroup =  new CancerResearchGroup();
-		cancerResearchGroup.setId(new Long(1));
+		CancerResearchGroup cancerResearchGroup = (CancerResearchGroup)TestCaseUtility.getObjectMap(CancerResearchGroup.class);  
+		//new CancerResearchGroup();
+		//cancerResearchGroup.setId(new Long(1));
 		userObj.setCancerResearchGroup(cancerResearchGroup);
 		
 		userObj.setRoleId("1");
@@ -376,8 +380,9 @@ public class BaseTestCaseUtility {
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
 		specimenCollectionGroup.setCollectionStatus("Completed");
-		Site site = new Site();
-		site.setId(new Long(1));
+		Site site = (Site)TestCaseUtility.getObjectMap(Site.class);
+		//Site site = new Site();
+		//site.setId(new Long(1));
 		specimenCollectionGroup.setSpecimenCollectionSite(site);
 
 		specimenCollectionGroup.setClinicalDiagnosis("Abdominal fibromatosis");
@@ -388,13 +393,18 @@ public class BaseTestCaseUtility {
 		collectionProtocolEvent.setId(new Long(1));
 		specimenCollectionGroup.setCollectionProtocolEvent(collectionProtocolEvent);
 
-		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
-		Participant participant = new Participant();
-		participant.setId(new Long(1));
+		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)TestCaseUtility.getObjectMap(CollectionProtocolRegistration.class);
+		
+		//new CollectionProtocolRegistration();
+		//collectionProtocolRegistration.setId(new Long(3));
+		Participant participant =(Participant)TestCaseUtility.getObjectMap(Participant.class); 
+		//new Participant();
+		//participant.setId(new Long(1));
 		collectionProtocolRegistration.setParticipant(participant);
-		collectionProtocolRegistration.setId(new Long(3));
-		CollectionProtocol collectionProt = new CollectionProtocol();
-		collectionProt.setId(new Long(1));
+		
+		CollectionProtocol collectionProt = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
+		//new CollectionProtocol();
+		//collectionProt.setId(new Long(1));
 		
 		collectionProtocolRegistration.setCollectionProtocol(collectionProt);
 		//collectionProtocolRegistration.setProtocolParticipantIdentifier("");
@@ -432,8 +442,9 @@ public class BaseTestCaseUtility {
 	
 	public static SpecimenCollectionGroup updateSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
-		Site site = new Site();
-		site.setId(new Long(1));
+		Site site = (Site)TestCaseUtility.getObjectMap(Site.class);
+		//Site site = new Site();
+		//site.setId(new Long(1));
 		specimenCollectionGroup.setSpecimenCollectionSite(site);
 
 		specimenCollectionGroup.setClinicalDiagnosis("Abdominal fibromatosis");
@@ -445,8 +456,9 @@ public class BaseTestCaseUtility {
 		specimenCollectionGroup.setCollectionProtocolEvent(collectionProtocol);
 
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
-		Participant participant = new Participant();
-		participant.setId(new Long(1));
+		Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class); 
+		//new Participant();
+		//participant.setId(new Long(1));
 		collectionProtocolRegistration.setParticipant(participant);
 		collectionProtocolRegistration.setId(new Long(5));
 		CollectionProtocol collectionProt = new CollectionProtocol();
@@ -531,8 +543,9 @@ public class BaseTestCaseUtility {
 
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 	//	collectionEventParameters.setComments("");
-		User user = new User();
-		user.setId(new Long(1));
+		User user = (User)TestCaseUtility.getObjectMap(User.class);
+		//User user = new User();
+		//user.setId(new Long(1));
 	//	collectionEventParameters.setId(new Long(0));
 		collectionEventParameters.setUser(user);
 		try
@@ -610,8 +623,9 @@ public class BaseTestCaseUtility {
 		//Logger.configure("");
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 
-		CollectionProtocol collectionProtocol = new CollectionProtocol();
-		collectionProtocol.setId(new Long(3));
+		CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+		//new CollectionProtocol();
+		//collectionProtocol.setId(new Long(3));
 		collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
 		collectionProtocolRegistration.setParticipant(participant);
@@ -638,34 +652,43 @@ public class BaseTestCaseUtility {
 			e.printStackTrace();
 		}
 		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
-		
-		User user = new User();
-		user.setId(new Long(1));
+		User user = (User)TestCaseUtility.getObjectMap(User.class);
+		//User user = new User();
+		//user.setId(new Long(1));
 		collectionProtocolRegistration.setConsentWitness(user);
 		
 		Collection consentTierResponseCollection = new HashSet();
-		
-		ConsentTierResponse r1 = new ConsentTierResponse();
-		ConsentTier consentTier = new ConsentTier();
-		consentTier.setId(new Long(1));
-		r1.setConsentTier(consentTier);
-		r1.setResponse("Yes");
-		consentTierResponseCollection.add(r1);
-		
-		ConsentTierResponse r2 = new ConsentTierResponse();
-		ConsentTier consentTier2 = new ConsentTier();
-		consentTier2.setId(new Long(2));
-		r2.setConsentTier(consentTier2);
-		r2.setResponse("Yes");
-		consentTierResponseCollection.add(r2);
-		
-		ConsentTierResponse r3 = new ConsentTierResponse();
-		ConsentTier consentTier3 = new ConsentTier();
-		consentTier3.setId(new Long(3));
-		r3.setConsentTier(consentTier3);
-		r3.setResponse("No");
-		consentTierResponseCollection.add(r3);
-		
+		Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
+		Iterator consentTierItr = consentTierCollection.iterator();
+		while(consentTierItr.hasNext())
+		{
+			ConsentTier consentTier = (ConsentTier)consentTierItr.next();
+			ConsentTierResponse consentResponse = new ConsentTierResponse();
+			consentResponse.setConsentTier(consentTier);
+			consentResponse.setResponse("Yes");
+			consentTierResponseCollection.add(consentResponse);
+		}
+//		ConsentTierResponse r1 = new ConsentTierResponse();
+//		ConsentTier consentTier = new ConsentTier();
+//		consentTier.setId(new Long(1));
+//		r1.setConsentTier(consentTier);
+//		r1.setResponse("Yes");
+//		consentTierResponseCollection.add(r1);
+//		
+//		ConsentTierResponse r2 = new ConsentTierResponse();
+//		ConsentTier consentTier2 = new ConsentTier();
+//		consentTier2.setId(new Long(2));
+//		r2.setConsentTier(consentTier2);
+//		r2.setResponse("Yes");
+//		consentTierResponseCollection.add(r2);
+//		
+//		ConsentTierResponse r3 = new ConsentTierResponse();
+//		ConsentTier consentTier3 = new ConsentTier();
+//		consentTier3.setId(new Long(3));
+//		r3.setConsentTier(consentTier3);
+//		r3.setResponse("No");
+//		consentTierResponseCollection.add(r3);
+//		
 		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);		
 		SpecimenCollectionGroup specimenCollectionGroup = createSCG(collectionProtocolRegistration);
 		
@@ -684,8 +707,9 @@ public class BaseTestCaseUtility {
 		{
 			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
 			Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
-			User user = new User();
-			user.setId(new Long(1));
+			User user = (User)TestCaseUtility.getObjectMap(User.class);
+			//User user = new User();
+			//user.setId(new Long(1));
 			while(collectionProtocolEventIterator.hasNext())
 			{
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolEventIterator.next();
@@ -912,10 +936,9 @@ public class BaseTestCaseUtility {
 	public static Site initSite()
 	{
 		Site siteObj = new Site();
+		User userObj = (User)TestCaseUtility.getObjectMap(User.class);
 //		User userObj = new User();
 //		userObj.setId(new Long(1));
-		User userObj = new User();
-		userObj.setId(new Long(1));
 
 		siteObj.setEmailAddress("admin@admin.com");
 		siteObj.setName("sit" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -1064,12 +1087,14 @@ public class BaseTestCaseUtility {
 		StorageContainer storageContainer = new StorageContainer();
 		storageContainer.setName("sc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
-		StorageType storageType = new StorageType();
-		storageType.setId(new Long(3));
+		StorageType storageType =(StorageType)TestCaseUtility.getObjectMap(StorageType.class); 
+		//new StorageType();
+		//storageType.setId(new Long(3));
 		storageContainer.setStorageType(storageType);
 		
-		Site site = new Site();
-		site.setId(new Long(1));
+		Site site = (Site)TestCaseUtility.getObjectMap(Site.class); 
+		//new Site();
+		//site.setId(new Long(1));
 		
 		storageContainer.setSite(site);
 
@@ -1083,10 +1108,9 @@ public class BaseTestCaseUtility {
 		capacity.setTwoDimensionCapacity(new Integer(2));
 		storageContainer.setCapacity(capacity);
 
-		CollectionProtocol collectionProtocol = new CollectionProtocol();
-		collectionProtocol.setId(new Long(3));
-		
-		
+		CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+		//new CollectionProtocol();
+		//collectionProtocol.setId(new Long(3));
 		Collection collectionProtocolCollection = new HashSet();
 		collectionProtocolCollection.add(collectionProtocol);
 		storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
@@ -1116,12 +1140,14 @@ public class BaseTestCaseUtility {
 	
 	public static void updateStorageContainer(StorageContainer storageContainer)
 	{	
-		StorageType storageType = new StorageType();
-		storageType.setId(new Long(4));  //setId(1)
+		StorageType storageType =(StorageType)TestCaseUtility.getObjectMap(StorageType.class);
+		//StorageType storageType = new StorageType();
+		//storageType.setId(new Long(4));  //setId(1)
 		storageContainer.setStorageType(storageType);
 		
-		Site site = new Site();
-		site.setId(new Long(1));
+		Site site = (Site)TestCaseUtility.getObjectMap(Site.class);
+		//Site site = new Site();
+		//site.setId(new Long(1));
 		storageContainer.setSite(site);
 		
 		storageContainer.setTempratureInCentigrade(new Double(30)); //-30
@@ -1132,8 +1158,9 @@ public class BaseTestCaseUtility {
 		capacity.setTwoDimensionCapacity(new Integer(2));
 		storageContainer.setCapacity(capacity);
 
-		CollectionProtocol collectionProtocol =  new CollectionProtocol();
-		collectionProtocol.setId(new Long(3));
+		CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
+		//CollectionProtocol collectionProtocol =  new CollectionProtocol();
+		//collectionProtocol.setId(new Long(3));
 		
 		Collection collectionProtocolCollection = new HashSet();
 		collectionProtocolCollection.add(collectionProtocol);
@@ -1276,9 +1303,10 @@ public class BaseTestCaseUtility {
 		DistributionProtocol distributionProtocol =  new DistributionProtocol();
 		distributionProtocol.setId(new Long(2));
 		distribution.setDistributionProtocol(distributionProtocol);
+		Site toSite = (Site)TestCaseUtility.getObjectMap(Site.class);
 		
-		Site toSite =  new Site();
-		toSite.setId(new Long(6));
+		//Site toSite =  new Site();
+		//toSite.setId(new Long(6));
 		//toSite.setId(new Long("1000"));
 		distribution.setToSite(toSite);
 		/*	
@@ -1298,9 +1326,9 @@ public class BaseTestCaseUtility {
 		}
 		*/
 		distribution.setComment("");
-
-		User user = new User();
-		user.setId(new Long(2));
+		User user = (User)TestCaseUtility.getObjectMap(User.class);
+		//User user = new User();
+		//user.setId(new Long(2));
 		/*	
 		new User();
 		user.setId(new Long(1));
@@ -1326,13 +1354,15 @@ public class BaseTestCaseUtility {
 		distributionProtocol.setId(new Long(2));
 		distribution.setDistributionProtocol(distributionProtocol);
 		
-		Site toSite =  new Site();
-		toSite.setId(new Long(2));
+		Site toSite = (Site)TestCaseUtility.getObjectMap(Site.class);
+		
+		//Site toSite =  new Site();
+		//toSite.setId(new Long(2));
 		distribution.setToSite(toSite);	
 		distribution.setComment("");
-
-		User user =  new User();
-		user.setId(new Long(2));
+		User user = (User)TestCaseUtility.getObjectMap(User.class);
+		//User user =  new User();
+		//user.setId(new Long(2));
 		distribution.setDistributedBy(user);
 		return distribution;
 	}
@@ -1390,9 +1420,9 @@ public class BaseTestCaseUtility {
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComment("");
 		collectionEventParameters.setSpecimen(ts);
-		
-		User user = new User();
-		user.setId(new Long(1));
+		User user = (User)TestCaseUtility.getObjectMap(User.class);
+		//User user = new User();
+		//user.setId(new Long(1));
 		collectionEventParameters.setUser(user);		
 		try
 		{
@@ -1497,8 +1527,9 @@ public class BaseTestCaseUtility {
 		specimenArray.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
 		specimenArray.setName("sa" + UniqueKeyGeneratorUtil.getUniqueKey()); 
 		
-		User createdBy = new User();
-		createdBy.setId(new Long(1));
+		User createdBy = (User)TestCaseUtility.getObjectMap(User.class);
+//		User createdBy = new User();
+//		createdBy.setId(new Long(1));
 		specimenArray.setCreatedBy(createdBy);
 		
 		Capacity capacity = new Capacity();

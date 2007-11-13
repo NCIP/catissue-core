@@ -16,6 +16,7 @@ public class InstitutionTestCases extends CaTissueBaseTestCase{
 			Institution institution = BaseTestCaseUtility.initInstitution();
 			System.out.println(institution);
 			institution = (Institution) appService.createObject(institution); 
+			TestCaseUtility.setObjectMap(institution, Institution.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
 		 }

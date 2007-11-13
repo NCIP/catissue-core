@@ -17,7 +17,8 @@ public class DepartmentTestCases extends CaTissueBaseTestCase {
 		try{
 			Department dept = BaseTestCaseUtility.initDepartment();			
 			System.out.println(dept);
-			dept = (Department) appService.createObject(dept); 
+			dept = (Department) appService.createObject(dept);
+			TestCaseUtility.setObjectMap(dept, Department.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
 		 }

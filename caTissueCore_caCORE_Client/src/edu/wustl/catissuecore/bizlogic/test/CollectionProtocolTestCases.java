@@ -8,6 +8,7 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -23,7 +24,8 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 		try
 		{
 			CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();			
-			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol); 
+			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
+			TestCaseUtility.setObjectMap(collectionProtocol, CollectionProtocol.class);
 			assertTrue("Object added successfully", true);
 		 }
 		 catch(Exception e)

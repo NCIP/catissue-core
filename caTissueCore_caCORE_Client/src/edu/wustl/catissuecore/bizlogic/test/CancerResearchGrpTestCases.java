@@ -17,6 +17,7 @@ public class CancerResearchGrpTestCases extends CaTissueBaseTestCase {
 			CancerResearchGroup crg = BaseTestCaseUtility.initCancerResearchGrp();			
 			System.out.println(crg);
 			crg = (CancerResearchGroup) appService.createObject(crg); 
+			TestCaseUtility.setObjectMap(crg,CancerResearchGroup.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
 		 }

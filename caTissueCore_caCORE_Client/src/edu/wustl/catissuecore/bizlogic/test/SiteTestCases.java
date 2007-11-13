@@ -18,6 +18,7 @@ public class SiteTestCases extends CaTissueBaseTestCase {
 			Site site= BaseTestCaseUtility.initSite();			
 			System.out.println(site);
 			site = (Site) appService.createObject(site); 
+			TestCaseUtility.setObjectMap(site, Site.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
 		 }

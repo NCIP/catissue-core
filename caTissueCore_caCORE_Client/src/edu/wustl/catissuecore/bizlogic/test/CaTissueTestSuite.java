@@ -14,10 +14,10 @@ public class CaTissueTestSuite
 	{
 		TestSuite suite = new TestSuite("Test for edu.wustl.catissuecore.bizlogic.test");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(UserTestCases.class);
 		suite.addTestSuite(InstitutionTestCases.class);
 		suite.addTestSuite(DepartmentTestCases.class);
 		suite.addTestSuite(CancerResearchGrpTestCases.class);
+		suite.addTestSuite(UserTestCases.class);
 		suite.addTestSuite(SiteTestCases.class);
 		suite.addTestSuite(BioHazardTestCases.class);
 		suite.addTestSuite(CollectionProtocolTestCases.class);

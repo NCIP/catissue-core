@@ -12,8 +12,8 @@ public class UserTestCases extends CaTissueBaseTestCase {
 	 {
 		 try{
 			User user = BaseTestCaseUtility.initUser();
-			System.out.println(user);
-			user = (User)appService.createObject(user); 
+			user = (User)appService.createObject(user);
+			TestCaseUtility.setObjectMap(user, User.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
 		 }

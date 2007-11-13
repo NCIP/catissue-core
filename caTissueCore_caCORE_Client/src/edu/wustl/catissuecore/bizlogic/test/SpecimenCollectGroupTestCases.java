@@ -3,9 +3,11 @@ package edu.wustl.catissuecore.bizlogic.test;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
@@ -46,35 +48,27 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		System.out.println("Before Update");
 		sprObj.setCollectionStatus("Complete");
 		
+		CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
+		Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
+		Iterator consentTierItr = consentTierCollection.iterator();
 		Collection consentTierStatusCollection = new HashSet();
-		ConsentTierStatus r1 = new ConsentTierStatus();
-		ConsentTier consentTier = new ConsentTier();
-		consentTier.setId(new Long(1));
-		r1.setConsentTier(consentTier);
-		r1.setStatus("Yes");
-		consentTierStatusCollection.add(r1);
-		
-		ConsentTierStatus r2 = new ConsentTierStatus();
-		ConsentTier consentTier2 = new ConsentTier();
-		consentTier2.setId(new Long(2));
-		r2.setConsentTier(consentTier2);
-		r2.setStatus("No");
-		consentTierStatusCollection.add(r2);
-		
-		ConsentTierStatus r3 = new ConsentTierStatus();
-		ConsentTier consentTier3 = new ConsentTier();
-		consentTier3.setId(new Long(3));
-		r3.setConsentTier(consentTier3);
-		r3.setStatus("Yes");
-		consentTierStatusCollection.add(r3);
-		
+		while(consentTierItr.hasNext())
+		{
+			ConsentTier consentTier = (ConsentTier)consentTierItr.next();
+			ConsentTierStatus consentStatus = new ConsentTierStatus();
+			consentStatus.setConsentTier(consentTier);
+			consentStatus.setStatus("No");
+			consentTierStatusCollection.add(consentStatus);
+		}
 		sprObj.setConsentTierStatusCollection(consentTierStatusCollection);
 		sprObj.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
 		sprObj.getCollectionProtocolRegistration().setParticipant(participant);
 		Collection collectionProtocolEventList = new LinkedHashSet();
 		
-		Site site = new Site();
-		site.setId(new Long(1));
+		
+		Site site = (Site)TestCaseUtility.getObjectMap(Site.class); 
+		//new Site();
+		//site.setId(new Long(1));
 		sprObj.setSpecimenCollectionSite(site);
 		setEventParameters(sprObj);
 		try
