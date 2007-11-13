@@ -170,7 +170,7 @@
 		<mx:CheckBox id="biohazardChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Biohazards" fontWeight="bold"/>
 	</mx:HBox>
-	<mx:HBox height="25" styleName="hBoxForSpLabel" visible="false" id="derivativeBox">
+	<mx:HBox height="25" styleName="hBoxForSpLabel" id="derivativeBox">
 		<mx:CheckBox id="derivativeChkBox" styleName="chkBoxStyle"/>	
 		<mx:Label text="  Derivative" fontWeight="bold"/>
 	</mx:HBox>
