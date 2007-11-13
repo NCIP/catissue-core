@@ -731,12 +731,13 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 			<tr width="100%">
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
+				<td>&nbsp;</td>
 				<td class="" align="right" >
 					<input type="button" value="Submit" onclick="submitPage()">
 				</td>
-				<td>	
+				<%-- <td>	
 					<input type="button" value="Submit And Notify" onclick="submitAndNotify()">
-				</td>	
+				</td> --%>	
 				
 			</tr>
 			<tr></tr>
