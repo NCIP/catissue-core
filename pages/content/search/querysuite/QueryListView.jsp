@@ -19,6 +19,17 @@
 	<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 	
+<script language="javascript">
+	function deleteQueryPopup(queryId)
+	{
+		var r=confirm("Delete the saved query ? ");
+		if (r==true)
+		{
+			deleteQuery(queryId);
+		}
+
+	}
+</script>
 </head>
 
 <body >
@@ -56,8 +67,7 @@
 									<%String target = "executeQuery('"+parameterizedQuery.getId()+"')"; 
 									  String title = parameterizedQuery.getName();
 									  String newTitle = Utility.getQueryTitle(title);
-									  int index = 0;
-									  int length = title.length();
+									  
 									  String tooltip = Utility.getTooltip(title);
 									  String function = "Tip('"+tooltip+"', WIDTH, 700)";
 									%>
@@ -74,7 +84,7 @@
 										<b>Description: &nbsp;</b><c:out value='${parameterizedQuery.description}' />
 									</td>
 									<td valign="top" height='20'>
-										<%target = "deleteQuery('"+parameterizedQuery.getId()+"')"; %>
+										<%target = "deleteQueryPopup('"+parameterizedQuery.getId()+"')"; %>
 										<html:image src="images/delete.gif" alt="Delete" onclick='<%=target%>' />
 									</td>
 								</tr>
