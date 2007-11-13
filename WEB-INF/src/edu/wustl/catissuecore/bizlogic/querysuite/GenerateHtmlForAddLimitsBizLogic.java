@@ -40,6 +40,7 @@ import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.querysuite.queryobject.impl.ParameterizedCondition;
 import edu.wustl.common.util.ParseXMLFile;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.ApplicationProperties;
 
 /**
  * This class generates UI for 'Add Limits' and 'Edit Limits' section.
@@ -448,7 +449,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				"<table  cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">");
 		if (forPage.equalsIgnoreCase(Constants.SAVE_QUERY_PAGE))
 			generatedHTML
-					.append("<tr><td  class=\"formSubTitleWithoutBorder\">User Defined</td><td class=\"formSubTitleWithoutBorder\">Display Label</td><td class=\"formSubTitleWithoutBorder\" colspan=\"6\"  >Conditions</td></tr>");
+					.append("<tr><td  class=\"formSubTitleWithoutBorder\">"+ApplicationProperties.getValue("savequery.column.userDefined")+"</td><td class=\"formSubTitleWithoutBorder\">"+ApplicationProperties.getValue("savequery.column.displayLabel")+"</td><td class=\"formSubTitleWithoutBorder\">"+ApplicationProperties.getValue("savequery.column.attributeName")+"</td><td class=\"formSubTitleWithoutBorder\" >"+ApplicationProperties.getValue("savequery.column.condition")+"</td><td class=\"formSubTitleWithoutBorder\" colspan=\"4\"  >"+ApplicationProperties.getValue("savequery.column.value")+"</td></tr>");
 		else if(forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE))
 			generatedHTML
 			.append("<tr><td class=\"formSubTitleWithoutBorder\">Display Label</td><td class=\"formSubTitleWithoutBorder\" colspan=\"5\"  >Condition</td></tr>");
