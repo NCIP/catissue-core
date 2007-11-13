@@ -515,10 +515,13 @@ public abstract class QueryModuleUtil
 						{
 							ParameterizedQuery savedQuery = (ParameterizedQuery) query;
 							selectedAttributeList = savedQuery.getOutputAttributeList();
-							DefineGridViewBizLogic defineGridViewBizLogic = new DefineGridViewBizLogic();
-							selectedColumnsMetadata.setSelectedOutputAttributeList(selectedAttributeList);
-							defineGridViewBizLogic.getSelectedColumnMetadataForSavedQuery(uniqueIdNodesMap,selectedAttributeList, selectedColumnsMetadata);
-							selectedColumnsMetadata.setDefinedView(true);
+							if(!selectedAttributeList.isEmpty())
+							{
+								DefineGridViewBizLogic defineGridViewBizLogic = new DefineGridViewBizLogic();
+								selectedColumnsMetadata.setSelectedOutputAttributeList(selectedAttributeList);
+								defineGridViewBizLogic.getSelectedColumnMetadataForSavedQuery(uniqueIdNodesMap,selectedAttributeList, selectedColumnsMetadata);
+								selectedColumnsMetadata.setDefinedView(true);
+							}
 						}
 					}
 					Map<String, List<String>> spreadSheetDatamap = outputSpreadsheetBizLogic

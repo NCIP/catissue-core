@@ -338,13 +338,16 @@ public class DefineGridViewBizLogic
 			List<IOutputAttribute> selectedOutputAttributeList = new ArrayList<IOutputAttribute>();
 			List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode.getAttributes();
 			selectedColumnsMetadata.setSelectedAttributeMetaDataList(attributes);
-			for(QueryOutputTreeAttributeMetadata metadata:attributes)
+			if(selectedColumnsMetadata.isDefinedView())
 			{
-				AttributeInterface attribute = metadata.getAttribute();
-				OutputAttribute attr = new OutputAttribute(outputTreeDataNode.getExpressionId(),attribute);
-				selectedOutputAttributeList.add(attr);
+				for(QueryOutputTreeAttributeMetadata metadata:attributes)
+				{
+					AttributeInterface attribute = metadata.getAttribute();
+					OutputAttribute attr = new OutputAttribute(outputTreeDataNode.getExpressionId(),attribute);
+					selectedOutputAttributeList.add(attr);
+				}
+				selectedColumnsMetadata.setSelectedOutputAttributeList(selectedOutputAttributeList);
 			}
-			selectedColumnsMetadata.setSelectedOutputAttributeList(selectedOutputAttributeList);
 		}
 		return selectedColumnsMetadata;
 	}

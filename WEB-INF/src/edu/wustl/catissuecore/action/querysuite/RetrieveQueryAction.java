@@ -9,6 +9,7 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.hibernate.HibernateException;
 
@@ -38,6 +39,8 @@ public class RetrieveQueryAction extends BaseAction
 
 		try
 		{
+			HttpSession session = request.getSession();
+			session.removeAttribute(Constants.SELECTED_COLUMN_META_DATA);
 			SaveQueryForm saveQueryForm = (SaveQueryForm) actionForm;
 			Collection<IParameterizedQuery> parameterizedQueryCollection = (Collection<IParameterizedQuery>) HibernateUtility
 					.executeHQL(HibernateUtility.GET_PARAMETERIZED_QUERIES_DETAILS);

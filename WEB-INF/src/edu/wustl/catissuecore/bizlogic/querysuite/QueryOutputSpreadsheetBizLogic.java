@@ -283,7 +283,7 @@ public class QueryOutputSpreadsheetBizLogic
 			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
 			spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
 			selectedColumnMetaData.setSelectedAttributeMetaDataList(attributes);
-			selectedColumnMetaData.setSelectedOutputAttributeList(selectedOutputAttributeList);
+		//	selectedColumnMetaData.setSelectedOutputAttributeList(selectedOutputAttributeList);
 		}
 		else
 		{ 
