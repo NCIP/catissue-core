@@ -41,6 +41,7 @@ public class BuildQueryOutputTreeAction extends BaseAction
 	{
 		HttpSession session = request.getSession();
 		Map<Long,OutputTreeDataNode> idNodesMap = (Map<Long,OutputTreeDataNode>)session.getAttribute(Constants.ID_NODES_MAP);
+		boolean hasConditionOnIdentifiedField = (Boolean)session.getAttribute(Constants.HAS_CONDITION_ON_IDENTIFIED_FIELD);
 		CategorySearchForm actionForm = (CategorySearchForm)form;
 		SessionDataBean sessionData = getSessionData(request);
 		String outputTreeStr = "";
@@ -56,7 +57,7 @@ public class BuildQueryOutputTreeAction extends BaseAction
 		if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
 		{
 			
-			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(nodeId,idNodesMap,sessionData,randomNumber);
+			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(nodeId,idNodesMap,sessionData,randomNumber,hasConditionOnIdentifiedField);
 		}
 		else
 		{
