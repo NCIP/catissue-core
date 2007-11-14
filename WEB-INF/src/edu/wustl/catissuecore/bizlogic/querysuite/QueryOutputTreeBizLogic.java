@@ -14,6 +14,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.dao.QuerySessionData;
+import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
@@ -231,7 +234,8 @@ public class QueryOutputTreeBizLogic
  			String selectSql = getSql(parentNodeId, tableName, parentIdColumnName, childNode);
 			String name = childNode.getOutputEntity().getDynamicExtensionsEntity().getName();
 			name = Utility.parseClassName(name);
-			List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
+			List<List<String>> dataList = getTreeDataList(sessionData, selectSql, null, false);
+			//List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 			int size = dataList.size();
 			if(size != 0)
 			{
@@ -288,11 +292,12 @@ public class QueryOutputTreeBizLogic
 	 * @param nodeId id of the node clicked.
 	 * @param idNodeMap map which stores id and nodes already added to tree.
 	 * @param sessionData sessionData session data to get the user id.
+	 * @param hasConditionOnIdentifiedField 
 	 * @return String outputTreeStr which is then parsed and then sent to client to form tree. 
 	 * String for one node is comma seperated for its id, display name, object name , parentId, parent Object name.
 	 * Such string elements for child nodes are seperated by "|".
 	 */
-	public String updateTreeForLabelNode(String nodeId, Map<Long, OutputTreeDataNode> idNodeMap, SessionDataBean sessionData,String randomNumber)
+	public String updateTreeForLabelNode(String nodeId, Map<Long, OutputTreeDataNode> idNodeMap, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField)
 	throws ClassNotFoundException, DAOException
 	{ 
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
@@ -357,10 +362,13 @@ public class QueryOutputTreeBizLogic
 			}
 			selectSql = selectSql.substring(0,selectSql.indexOf(Constants.NODE_SEPARATOR));
 		}
-		List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
+		List<List<String>> dataList = getTreeDataList(sessionData,selectSql , queryResultObjectDataBeanMap, hasConditionOnIdentifiedField);
+		
+		//List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 		String outputTreeStr = buildOutputTreeString(index, dataList, currentNode, nodeId, parentNode, idNodeMap);
 		return outputTreeStr;
 			}
+	
 	/**
 	 * This method builds a string from the input data , based on this string tree will be formed.
 	 * @param dataList List of result records
@@ -420,5 +428,28 @@ public class QueryOutputTreeBizLogic
 			}
 		}
 		return outputTreeStr;
+	}
+	
+
+	/**
+	 * @return
+	 * @throws DAOException 
+	 * @throws ClassNotFoundException 
+	 */
+	private List<List<String>> getTreeDataList(SessionDataBean sessionData, String selectSql,
+			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
+			boolean hasConditionOnIdentifiedField) throws ClassNotFoundException, DAOException
+	{
+		QuerySessionData querySessionData = new QuerySessionData();
+		querySessionData.setSql(selectSql);
+		querySessionData.setQueryResultObjectDataMap(queryResultObjectDataBeanMap);
+		querySessionData.setSecureExecute(true);
+		querySessionData.setHasConditionOnIdentifiedField(hasConditionOnIdentifiedField);
+		List<List<String>> dataList = QueryModuleUtil.executeQuery(selectSql, sessionData,
+				querySessionData);
+
+		querySessionData.setTotalNumberOfRecords(dataList.size());
+
+		return dataList;
 	}
 }
