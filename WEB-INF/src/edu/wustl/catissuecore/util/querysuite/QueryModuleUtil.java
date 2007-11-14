@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.domaininterface.RoleInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
@@ -75,11 +76,12 @@ public abstract class QueryModuleUtil
 	 * Executes the query and returns the results.
 	 * @param selectSql sql to be executed
 	 * @param sessionData sessiondata
+	 * @param querySessionData 
 	 * @return list of results 
 	 * @throws ClassNotFoundException 
 	 * @throws DAOException 
 	 */
-	public static List<List<String>> executeQuery(String selectSql, SessionDataBean sessionData)
+	public static List<List<String>> executeQuery(String selectSql, SessionDataBean sessionData, QuerySessionData querySessionData)
 			throws ClassNotFoundException, DAOException
 	{
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
@@ -87,7 +89,7 @@ public abstract class QueryModuleUtil
 		try
 		{
 			dao.openSession(sessionData);
-			dataList = dao.executeQuery(selectSql, sessionData, false, false, null);
+			dataList = dao.executeQuery(querySessionData.getSql(), sessionData, querySessionData.isSecureExecute(), querySessionData.isHasConditionOnIdentifiedField(), querySessionData.getQueryResultObjectDataMap());
 			dao.commit();
 		}
 		finally
@@ -233,7 +235,7 @@ public abstract class QueryModuleUtil
 				index = columnName.substring(Constants.COLUMN_NAME.length(), columnName.length());
 				Vector<Integer> idvector = new Vector<Integer>();
 				
-				if(edu.wustl.common.querysuite.security.utility.Utility.isIdentified(attribute))
+				if(attribute.getIsIdentified()!=null)
 				 idvector.add(1);
 				objectColumnIdsVector.add(1);
 				
@@ -667,33 +669,36 @@ public abstract class QueryModuleUtil
 	 */
 	public static  QueryResultObjectDataBean getQueryResulObjectDataBean(
 			OutputTreeDataNode node)
-	{
+	{ 
 			QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
 			queryResultObjectDataBean.setPrivilegeType(edu.wustl.common.querysuite.security.utility.Utility.getPrivilegeType(node.getOutputEntity().getDynamicExtensionsEntity()));
 			queryResultObjectDataBean.setEntity(node.getOutputEntity().getDynamicExtensionsEntity());
 			List<List<AssociationInterface>> listOfAssociationList= new ArrayList<List<AssociationInterface>>();
-//			try
-//			{
-				List<AssociationInterface> associationList = edu.wustl.common.querysuite.security.utility.Utility.getContainmentAssociations(node.getOutputEntity().getDynamicExtensionsEntity());
+			try
+			{
+				//List<AssociationInterface> associationList = edu.wustl.common.querysuite.security.utility.Utility.getContainmentAssociations(node.getOutputEntity().getDynamicExtensionsEntity());
+				List<AssociationInterface> associationList = getIncomingContainmentAssociations(node.getOutputEntity().getDynamicExtensionsEntity());
 				if(associationList.size()!=0)
-				{
-				 queryResultObjectDataBean.setMainEntity(associationList.get(0).getTargetEntity());
+				{ 
+				 AssociationInterface association = associationList.get(0);
+				 queryResultObjectDataBean.setMainEntity(association.getEntity());
 				 queryResultObjectDataBean.setAssociationList(associationList);
 				 listOfAssociationList.add(associationList);
 				 queryResultObjectDataBean.setMainEntity(false);
 				}
 				else
-					queryResultObjectDataBean.setMainEntity(true);					//	}
-//			catch (DynamicExtensionsSystemException e)
-//			{
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+					queryResultObjectDataBean.setMainEntity(true);						
+			}
+			catch (DynamicExtensionsSystemException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		return queryResultObjectDataBean;
 	}
 	
 	public static List<AssociationInterface> getIncomingContainmentAssociations(EntityInterface entity) throws DynamicExtensionsSystemException
-	{
+	{  
 		
 		EntityManagerInterface entityManager = EntityManager.getInstance();
 		List<Long> allIds = (List<Long>)entityManager.getIncomingAssociationIds(entity);
@@ -703,7 +708,8 @@ public abstract class QueryModuleUtil
 		{
 			AssociationInterface associationById = cache.getAssociationById(id);
 			
-			if (associationById!=null && associationById.getSourceRole().getAssociationsType().getValue().equals("CONTENMENT"))
+			RoleInterface targetRole = associationById.getTargetRole();
+			if (associationById!=null && targetRole.getAssociationsType().getValue().equals("CONTAINTMENT"))
 				list.add(associationById);
 		}
 		return list;
