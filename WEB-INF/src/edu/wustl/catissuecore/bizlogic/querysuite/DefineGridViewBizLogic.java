@@ -254,7 +254,7 @@ public class DefineGridViewBizLogic
 				defineViewNodeList.add(element.getTreeDataNode().getOutputEntity().getDynamicExtensionsEntity());
 			}
 			
-			if(edu.wustl.common.querysuite.security.utility.Utility.isIdentified(element.getAttribute()))
+			if(element.getAttribute().getIsIdentified()!=null)
 			{
 				identifiedColumnIds.add(columnIndex);
 			}
