@@ -476,6 +476,7 @@
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql" />
 			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql" />
+			<transaction src="${mysql.sql.dir}/query/csm.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -514,7 +515,7 @@
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql" />
 			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql" />
-
+			<transaction src="${mysql.sql.dir}/query/csm.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1004,4 +1005,5 @@ Thanking You,
 			</then>
 		</if>
 	</target>
+	
 </project>
