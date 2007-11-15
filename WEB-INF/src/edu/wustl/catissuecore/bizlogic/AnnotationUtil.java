@@ -108,9 +108,9 @@ public class AnnotationUtil
 			//Create source role and target role for the association
 			String roleName = staticEntityId.toString().concat("_").concat(
 					dynamicEntityId.toString());
-			RoleInterface sourceRole = getRole(AssociationType.ASSOCIATION, roleName,
+			RoleInterface sourceRole = getRole(AssociationType.CONTAINTMENT, roleName,
 					Cardinality.ZERO, Cardinality.ONE);
-			RoleInterface targetRole = getRole(AssociationType.ASSOCIATION, roleName,
+			RoleInterface targetRole = getRole(AssociationType.CONTAINTMENT, roleName,
 					Cardinality.ZERO, Cardinality.MANY);
 
 			//Create association with the created source and target roles.
