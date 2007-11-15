@@ -99,7 +99,7 @@
 					From Location
 				</td>
 				<td class="formRightSubTableTitleWithBorder">
-					To Location <input id="chk" type="checkbox" onClick="ApplyToAll()"/> Apply to all
+					Destination Container &nbsp;&nbsp;&nbsp;<input id="chk" type="checkbox" onClick="ApplyToAll()"/>Apply First Destination to All
 				</td>
 				
 			</tr>
