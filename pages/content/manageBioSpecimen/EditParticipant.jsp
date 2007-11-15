@@ -999,7 +999,7 @@ function participantRegRow(subdivtag)
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
-											title="Submit and register Specimen Collection Group"
+											title="Submit and Create Extra Specimen Collection Group"
 											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>"
 											onclick="<%=forwardToSCG%>">
 									</html:button>
