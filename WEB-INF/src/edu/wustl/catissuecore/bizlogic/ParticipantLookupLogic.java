@@ -52,6 +52,7 @@ public class ParticipantLookupLogic implements LookupLogic
 			+ pointsForDOBExact + pointsForSSNExact + pointsForGenderExact + pointsForRaceExact;
 	private int cutoffPoints;
 	private int totalPoints;
+	private boolean isSSNOrPMI = false;
 
 	/**
 	 * This function first retrieves all the participants present in the PARTICIPANT table. Then it checks 
@@ -241,6 +242,9 @@ public class ParticipantLookupLogic implements LookupLogic
 					weight += checkFlipped(userParticipant.getFirstName(), userParticipant.getLastName(), existingParticipant.getFirstName(),
 							existingParticipant.getLastName());
 				}
+				
+				weight += checkParticipantMedicalIdentifier(userParticipant.getParticipantMedicalIdentifierCollection(), existingParticipant);
+				
 
 				/**
 				 *  check whether weight will ever reach cutoff, if it will never reach the cutoff, skip this 
@@ -279,11 +283,11 @@ public class ParticipantLookupLogic implements LookupLogic
 				 *  Description :If user has entered Medical Recoded No and it is present in the participant from database as well,
 				 *  check for match between the two.
 				 */
-				weight += checkParticipantMedicalIdentifier(userParticipant.getParticipantMedicalIdentifierCollection(), existingParticipant);
+			//	weight += checkParticipantMedicalIdentifier(userParticipant.getParticipantMedicalIdentifierCollection(), existingParticipant);
 				
 				
 				// If total points are greater than cutoff points, add participant to the List
-				if (weight >= cutoffPoints)
+				if (isSSNOrPMI || weight >= cutoffPoints)
 				{
 
 					DefaultLookupResult result = new DefaultLookupResult();
@@ -333,9 +337,11 @@ public class ParticipantLookupLogic implements LookupLogic
 
 	private int checkNumber(String userNumber, String existingNumber, boolean ssnOrPMI)
 	{
+		isSSNOrPMI=false;
 		// complete match
 		if (existingNumber.equals(userNumber))
 		{
+			isSSNOrPMI=true;
 			if(ssnOrPMI)
 			{
 				return pointsForSSNExact;
