@@ -116,7 +116,7 @@ public class CreateQueryObjectBizLogic
 				for (int i = 0; i < values.length; i++)
 				{
 					if(!values[i].equalsIgnoreCase(""))
-						attributeValues.add(values[i]);
+						attributeValues.add(values[i].trim());
 				}
 			}
 			else

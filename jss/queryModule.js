@@ -101,6 +101,7 @@
 					 img = "folder.gif";
 				}
 				trees[i1].insertNewChild(parentIdToSet,nodeId,displayName,0,img,img,img,"");
+				trees[i1].setItemText(nodeId,displayName,displayName);
 			}
 		}
 	}
@@ -554,7 +555,22 @@
 					textId = document.getElementById(textBoxId).value;		
 					if(textId != "")
 					{
-						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
+						if(op == "In" || op =="Not In")
+						{
+							var valString = "";
+							var inVals = textId.split(",");
+							for(g=0; g<inVals.length; g++)
+							{
+								if(inVals[g] != "")
+								{
+									valString = valString  + "&" + inVals[g];
+								}
+							}
+							strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + valString +";";
+						} else 
+						{
+							strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
+						}
 					}
 				}
 				if(navigator.appName == "Microsoft Internet Explorer")
@@ -643,7 +659,7 @@
 	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
 	{
         var strToCreateQueyObject = createQueryString(nameOfFormToPost, entityName , attributesList,'addLimit');
- 		if(navigator.appName == "Microsoft Internet Explorer")
+		if(navigator.appName == "Microsoft Internet Explorer")
 		{
 			if(isTopButton)
 			{
