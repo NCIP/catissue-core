@@ -2865,7 +2865,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if(specimenVO.getInitialQuantity() != null)
 		{
 			Quantity quantity = specimenVO.getInitialQuantity();
+			Quantity availableQuantity = specimenVO.getAvailableQuantity();
 			Double quantityValue = quantity.getValue();
+			Double availableQuantityValue = availableQuantity.getValue();
 			if (specimenDO.getInitialQuantity() == null)
 			{
 				quantity = new Quantity();
@@ -2873,13 +2875,22 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				quantity = specimenDO.getInitialQuantity();
-				if(quantity.getValue()<specimenDO.getAvailableQuantity().getValue())
-				{
-					specimenDO.setAvailableQuantity(quantity);
-				}
+				quantity =specimenDO.getInitialQuantity();
 			}
+			
+			
+			if (specimenDO.getAvailableQuantity() == null)
+			{
+				quantity = new Quantity();
+				specimenDO.setAvailableQuantity(quantity);
+			}
+			else
+			{
+				availableQuantity = specimenDO.getAvailableQuantity();
+			}
+			
 			quantity.setValue(quantityValue);
+			availableQuantity.setValue(availableQuantityValue);
 			
 		}
 		if (specimenVO.getCollectionStatus() != null)
