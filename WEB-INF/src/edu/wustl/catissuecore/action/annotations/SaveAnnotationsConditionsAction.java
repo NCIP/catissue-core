@@ -23,15 +23,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.AnnotationForm;
-import edu.wustl.catissuecore.annotations.AnnotationUtil;
-import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.FormContext;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.actionForm.AnnotationForm;
+import edu.wustl.catissuecore.annotations.AnnotationUtil;
+import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Constants;
 
@@ -67,8 +65,8 @@ public class SaveAnnotationsConditionsAction extends BaseAction
         AnnotationBizLogic bizLogic = new AnnotationBizLogic();
         List dynamicList = new ArrayList();
         dynamicList = bizLogic.getListOfStaticEntities(new Long(containerId));
-        CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
-                .getInstance();
+//        CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+//                .getInstance();
 
         if (dynamicList != null && !dynamicList.isEmpty())
         {
@@ -107,7 +105,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
                                         EntityMapCondition condn = new EntityMapCondition();
                                         condn.setStaticRecordId(new Long(annotationForm.getConditionVal()[conditionValindex]));
                                         condn.setFormContext(formContext);
-                                        condn.setTypeId(new Long(catissueCoreCacheManager.getObjectFromCache(
+                                        condn.setTypeId(new Long(request.getSession().getAttribute(
                                                              AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID).toString()));
                                         formContext.getEntityMapConditionCollection().add(condn);
                                     }
@@ -128,7 +126,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
                                 EntityMapCondition condn = new EntityMapCondition();
                                 condn.setStaticRecordId(new Long(annotationForm.getConditionVal()[conditionValindex]));
                                 condn.setFormContext(formContext);
-                                condn.setTypeId(new Long(catissueCoreCacheManager.getObjectFromCache(
+                                condn.setTypeId(new Long(request.getSession().getAttribute(
                                         AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID).toString()));  
                                 formContext.getEntityMapConditionCollection().add(condn);
                                 conditionValindex++;

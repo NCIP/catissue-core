@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.ehcache.CacheException;
 
@@ -33,7 +34,6 @@ import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.annotations.ICPCondition;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -72,8 +72,8 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
             //Return from dynamic extensions
 
             processResponseFromDynamicExtensions(request);
-            staticEntityId = (String) getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITYID);
-            staticEntityRecordId = (String) getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
+            staticEntityId = (String) request.getSession().getAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID);
+            staticEntityRecordId = (String) request.getSession().getAttribute(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
             if (annotationDataEntryForm.getSelectedStaticEntityId() == null)
             {
                 annotationDataEntryForm
@@ -92,8 +92,8 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
             if(staticEntityName == null )
                 staticEntityName=(String)request.getSession().getAttribute(edu.wustl.catissuecore.util.global.Constants.STATIC_ENTITY_NAME);
 
-            entityIdForCondition = (String) getObjectFromCache(AnnotationConstants.ENTITY_ID_IN_CONDITION);
-            entityRecordIdForCondition = (String) getObjectFromCache(AnnotationConstants.ENTITY_RECORDID_IN_CONDITION);
+            entityIdForCondition = (String) request.getSession().getAttribute(AnnotationConstants.ENTITY_ID_IN_CONDITION);
+            entityRecordIdForCondition = (String) request.getSession().getAttribute(AnnotationConstants.ENTITY_RECORDID_IN_CONDITION);
         }
         else
         {
@@ -210,43 +210,45 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         String entityRecordIdForCondition = request
                 .getParameter(AnnotationConstants.REQST_PARAM_CONDITION_ENTITY_RECORD_ID);
         //Set into Cache
-        CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
-                .getInstance();
-        if (cacheManager != null)
+//        CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
+//                .getInstance();
+        HttpSession session = request.getSession();
+        
+        if (session  != null)
         {
-            cacheManager.addObjectToCache(
+        	session.setAttribute(
                     AnnotationConstants.SELECTED_STATIC_ENTITYID,
                     parentEntityId);
-            cacheManager.addObjectToCache(
+        	session.setAttribute(
                     AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID,
                     parentEntityRecordId);
-            cacheManager.addObjectToCache(
+        	session.setAttribute(
                     AnnotationConstants.ENTITY_ID_IN_CONDITION,
                     entityIdForCondition);
-            cacheManager.addObjectToCache(
+        	session.setAttribute(
                     AnnotationConstants.ENTITY_RECORDID_IN_CONDITION,
                     entityRecordIdForCondition);
         }
     }
 
-    /**
-     * @param selected_static_entityid
-     * @return
-     * @throws CacheException
-     */
-    private Object getObjectFromCache(String key) throws CacheException
-    {
-        if (key != null)
-        {
-            CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
-                    .getInstance();
-            if (cacheManager != null)
-            {
-                return cacheManager.getObjectFromCache(key);
-            }
-        }
-        return null;
-    }
+//    /**
+//     * @param selected_static_entityid
+//     * @return
+//     * @throws CacheException
+//     */
+//    private Object getObjectFromCache(String key) throws CacheException
+//    {
+//        if (key != null)
+//        {
+//            CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
+//                    .getInstance();
+//            if (cacheManager != null)
+//            {
+//                return cacheManager.getObjectFromCache(key);
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * @param request
@@ -306,8 +308,8 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
             String dynExtRecordId) throws CacheException
     {
         EntityMapRecord entityMapRecord = null;
-        String staticEntityRecordId = (String) getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
-        Long entityMapId = (Long) getObjectFromCache(AnnotationConstants.SELECTED_ENTITY_MAP_ID);
+        String staticEntityRecordId = (String) request.getSession().getAttribute(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
+        Long entityMapId = (Long) request.getSession().getAttribute(AnnotationConstants.SELECTED_ENTITY_MAP_ID);
         if ((entityMapId != null) && (staticEntityRecordId != null)
                 && (dynExtRecordId != null) && !(dynExtRecordId.equals("")))
         {

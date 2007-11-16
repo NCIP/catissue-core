@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.ehcache.CacheException;
 
@@ -18,12 +19,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.common.dynamicextensions.domain.integration.EntityMap;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.logger.Logger;
@@ -65,15 +65,12 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		String dynEntContainerId = annotationDataEntryForm.getSelectedAnnotation();
 
 		//Set into Cache
-		CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
-		if (cacheManager != null)
-		{
-            
-			Long entityMapId = getEntityMapId(Utility.toLong(staticEntityId),Utility.toLong(dynEntContainerId));
-			cacheManager.addObjectToCache(AnnotationConstants.SELECTED_ENTITY_MAP_ID, entityMapId);
-            cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITYID,annotationDataEntryForm.getSelectedStaticEntityId());
-            cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID,annotationDataEntryForm.getSelectedStaticEntityRecordId());
-		}
+		//CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
+		HttpSession session = request.getSession();
+		Long entityMapId = getEntityMapId(Utility.toLong(staticEntityId),Utility.toLong(dynEntContainerId));
+		session.setAttribute(AnnotationConstants.SELECTED_ENTITY_MAP_ID, entityMapId);
+		session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID,annotationDataEntryForm.getSelectedStaticEntityId());
+		session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID,annotationDataEntryForm.getSelectedStaticEntityRecordId());
 	}
 
 	/**

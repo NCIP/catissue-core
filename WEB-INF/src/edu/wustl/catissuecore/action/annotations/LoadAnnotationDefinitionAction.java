@@ -14,7 +14,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -27,12 +26,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.ehcache.CacheException;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.domain.Entity;
@@ -40,16 +39,10 @@ import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.common.dynamicextensions.domain.userinterface.Container;
-import edu.common.dynamicextensions.domain.userinterface.ContainmentAssociationControl;
-import edu.common.dynamicextensions.domain.userinterface.SelectControl;
-import edu.common.dynamicextensions.domaininterface.AbstractAttributeInterface;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
-import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
-import edu.common.dynamicextensions.domaininterface.userinterface.AssociationControlInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
-import edu.common.dynamicextensions.domaininterface.userinterface.ControlInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
@@ -61,7 +54,6 @@ import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -138,7 +130,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				String containerCaption = entityManager.getContainerCaption(new Long(containerId));
 				request.setAttribute(Constants.CONTAINER_NAME, containerCaption);
 
-				getCPConditions(annotationForm, containerId);
+				getCPConditions(annotationForm, containerId,request);
 				actionfwd = mapping.findForward(Constants.SUCCESS);
 			}
 		}
@@ -159,13 +151,13 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws CacheException
 	 * @throws IllegalStateException
 	 */
-	private void getCPConditions(AnnotationForm annotationForm, String containerId)
+	private void getCPConditions(AnnotationForm annotationForm, String containerId,HttpServletRequest request)
 			throws IllegalStateException, CacheException
 	{
 		if (containerId != null)
 		{
-			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
-					.getInstance();
+//			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+//					.getInstance();
 			List entitymapList = getEntityMapsForDE(new Long(containerId));
 			if (entitymapList != null && !entitymapList.isEmpty())
 			{
@@ -196,7 +188,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 								EntityMapCondition entityMapCondition = (EntityMapCondition) entityMapCondIterator
 										.next();
 								if (entityMapCondition.getTypeId().toString().equals(
-										catissueCoreCacheManager.getObjectFromCache(
+										request.getSession().getAttribute(
 												AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID)
 												.toString()))
 									whereColumnValue[i++] = entityMapCondition.getStaticRecordId()
@@ -229,9 +221,9 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		{
 			String dynExtContainerId = request.getParameter(WebUIManager
 					.getContainerIdentifierParameterName());
-			String staticEntityId = getStaticEntityIdForLinking();
+			String staticEntityId = getStaticEntityIdForLinking(request);
 
-			String[] staticRecordId = getStaticRecordIdForLinking();
+			String[] staticRecordId = getStaticRecordIdForLinking(request);
 
 			Logger.out.info("Need to link static entity [" + staticEntityId + "] to dyn ent ["
 					+ dynExtContainerId + "]");
@@ -501,16 +493,11 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @return
 	 * @throws CacheException
 	 */
-	private String getStaticEntityIdForLinking() throws CacheException
+	private String getStaticEntityIdForLinking(HttpServletRequest request) throws CacheException
 	{
-		String staticEntityId = null;
-		CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
-		if (cacheManager != null)
-		{
-			staticEntityId = (String) cacheManager
-					.getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITYID);
-			cacheManager.removeObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITYID);
-		}
+		String 	staticEntityId = (String) request.getSession().getAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID);
+		 request.getSession().removeAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID);
+		
 		return staticEntityId;
 	}
 
@@ -519,16 +506,10 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @return
 	 * @throws CacheException
 	 */
-	private String[] getStaticRecordIdForLinking() throws CacheException
+	private String[] getStaticRecordIdForLinking(HttpServletRequest request) throws CacheException
 	{
-		String[] staticRecordId = null;
-		CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
-		if (cacheManager != null)
-		{
-			staticRecordId = (String[]) cacheManager
-					.getObjectFromCache(AnnotationConstants.SELECTED_STATIC_RECORDID);
-			cacheManager.removeObjectFromCache(AnnotationConstants.SELECTED_STATIC_RECORDID);
-		}
+		String[] staticRecordId = (String[]) request.getSession().getAttribute(AnnotationConstants.SELECTED_STATIC_RECORDID);
+		request.getSession().removeAttribute(AnnotationConstants.SELECTED_STATIC_RECORDID);
 		return staticRecordId;
 	}
 
@@ -640,7 +621,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				{
 					List innerList = new ArrayList();
 					NameValueBean container = containerCollnIter.next();
-					entitiesXML.append(getEntityXMLString(container, entityIndex, innerList));
+					entitiesXML.append(getEntityXMLString(container, entityIndex, innerList,request));
 					entityIndex++;
 					dataList.add(innerList);
 				}
@@ -661,7 +642,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws DynamicExtensionsApplicationException
 	 * @throws CacheException
 	 */
-	private String getEntityXMLString(NameValueBean container, int entityIndex, List innerList)
+	private String getEntityXMLString(NameValueBean container, int entityIndex, List innerList,HttpServletRequest request)
 			throws DAOException, DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, CacheException
 	{
@@ -684,7 +665,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					entityXML
 							.append(getXMLForEntityMap(container.getName(), entityMapObj,
 									entityIndex + index, editDynExtEntityURL, editDynExtCondnURL,
-									innerList));
+									innerList,request));
 					index++;
 				}
 			}
@@ -703,7 +684,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws CacheException
 	 */
 	private StringBuffer getXMLForEntityMap(String containercaption, EntityMap entityMapObj,
-			int rowId, String dynExtentionsEditEntityURL, String editDynExtCondnURL, List innerList)
+			int rowId, String dynExtentionsEditEntityURL, String editDynExtCondnURL, List innerList,HttpServletRequest request)
 			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException,
 			CacheException
 	{
@@ -717,7 +698,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		innerList.add(url);
 		if (entityMapObj != null)
 		{
-			String staticEntityName = getEntityName(entityMapObj.getStaticEntityId());
+			String staticEntityName = getEntityName(entityMapObj.getStaticEntityId(),request);
 			entityMapXML.append("<cell>" + staticEntityName + "</cell>");
 			innerList.add(staticEntityName);
 			entityMapXML.append("<cell>"
@@ -797,16 +778,15 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws DynamicExtensionsSystemException
 	 * @throws CacheException
 	 */
-	private String getEntityName(Long entityId) throws DynamicExtensionsSystemException,
+	private String getEntityName(Long entityId,HttpServletRequest request) throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, CacheException
 	{
 		String entityName = "";
 		if (entityId != null)
 		{
 			EntityManagerInterface entityManager = EntityManager.getInstance();
-			CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
-			List staticEntityList = (List) cacheManager
-					.getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST);
+			
+			List staticEntityList = (List) request.getSession().getAttribute(AnnotationConstants.STATIC_ENTITY_LIST);
 			if (staticEntityList != null && !staticEntityList.isEmpty())
 			{
 				Iterator listIterator = staticEntityList.iterator();

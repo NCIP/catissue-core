@@ -9,6 +9,7 @@ package edu.wustl.catissuecore.action.annotations;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -17,7 +18,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.common.action.BaseAction;
 
 /**
@@ -39,12 +39,10 @@ public class LoadDynamicExtensionsAction extends BaseAction
         String staticEntityId = annotationForm.getSelectedStaticEntityId();
         String[] conditions = annotationForm.getConditionVal();
         
-        CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
-        if(cacheManager!=null)
-        {
-            cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITYID, staticEntityId);
-            cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_RECORDID, conditions);          
-        }
+        HttpSession session = request.getSession();
+        session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID, staticEntityId);
+        session.setAttribute(AnnotationConstants.SELECTED_STATIC_RECORDID, conditions);          
+        
         //Get Dynamic extensions URL
         String dynamicExtensionsURL =getDynamicExtensionsURL(request);
         //Set as request attribute

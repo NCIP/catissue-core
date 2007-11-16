@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.ehcache.CacheException;
 
@@ -18,6 +19,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.domain.integration.EntityMap;
+import edu.common.dynamicextensions.domain.integration.EntityMapRecord;
 import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
@@ -28,9 +31,6 @@ import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.common.dynamicextensions.domain.integration.EntityMap;
-import  edu.common.dynamicextensions.domain.integration.EntityMapRecord;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -75,33 +75,34 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		String entityIdForCondition =  request.getParameter(AnnotationConstants.REQST_PARAM_CONDITION_ENTITY_ID);
 		String entityRecordIdForCondition =  request.getParameter(AnnotationConstants.REQST_PARAM_CONDITION_ENTITY_RECORD_ID);
 		//Set into Cache
-		CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
-		if(cacheManager!=null)
+		//CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
+		HttpSession session = request.getSession();
+		if(session !=null)
 		{
-			cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITYID, parentEntityId);
-			cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID, parentEntityRecordId);
-			cacheManager.addObjectToCache(AnnotationConstants.ENTITY_ID_IN_CONDITION, entityIdForCondition);
-			cacheManager.addObjectToCache(AnnotationConstants.ENTITY_RECORDID_IN_CONDITION, entityRecordIdForCondition);
+			session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID, parentEntityId);
+			session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID, parentEntityRecordId);
+			session.setAttribute(AnnotationConstants.ENTITY_ID_IN_CONDITION, entityIdForCondition);
+			session.setAttribute(AnnotationConstants.ENTITY_RECORDID_IN_CONDITION, entityRecordIdForCondition);
 		}
 	}
 
-	/**
-	 * @param selected_static_entityid
-	 * @return
-	 * @throws CacheException
-	 */
-	private Object getObjectFromCache(String key) throws CacheException
-	{
-		if(key!=null)
-		{
-			CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
-			if(cacheManager!=null)
-			{
-				return cacheManager.getObjectFromCache(key);
-			}
-		}
-		return null;
-	}
+//	/**
+//	 * @param selected_static_entityid
+//	 * @return
+//	 * @throws CacheException
+//	 */
+//	private Object getObjectFromCache(String key) throws CacheException
+//	{
+//		if(key!=null)
+//		{
+//			CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
+//			if(cacheManager!=null)
+//			{
+//				return cacheManager.getObjectFromCache(key);
+//			}
+//		}
+//		return null;
+//	}
 
 	/**
 	 * @param request
@@ -153,8 +154,8 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	private EntityMapRecord getEntityMapRecord(HttpServletRequest request, String dynExtRecordId) throws CacheException
 	{
 		EntityMapRecord entityMapRecord = null;
-		String staticEntityRecordId = (String)getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
-		Long entityMapId = (Long)getObjectFromCache(AnnotationConstants.SELECTED_ENTITY_MAP_ID);
+		String staticEntityRecordId = (String)request.getSession().getAttribute(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
+		Long entityMapId = (Long)request.getSession().getAttribute(AnnotationConstants.SELECTED_ENTITY_MAP_ID);
 		if((entityMapId!=null)&&(staticEntityRecordId!=null)&&(dynExtRecordId!=null))
 		{
 			entityMapRecord = new EntityMapRecord();
