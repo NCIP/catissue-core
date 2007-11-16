@@ -455,8 +455,8 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                                 );
                 entityMapRecordXML.append("<row id='"
                         + entityMapRecord.getId().toString() + "' >");
-                entityMapRecordXML.append("<cell>" + "0" + "</cell>");
-                innerList.add("0");
+                //entityMapRecordXML.append("<cell>" + "0" + "</cell>");
+                //innerList.add("0");
                 //entityMapRecordXML.append("<cell>" + entityMapRecord.getId() +  "</cell>");
                 entityMapRecordXML.append("<cell>" + dynamicEntity.getValue()
                         + "^" + strURLForEditRecord + "</cell>");
