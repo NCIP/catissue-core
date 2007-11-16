@@ -221,7 +221,7 @@ function checkAllOnThisPageResponse()
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 <body onload="setCheckBoxState()">
-<div style="width:100%; height:100%; " >
+<div style="width:100%; height:390px;overflow:auto " >
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="99%" height="100%" style="overflow:auto;">
 <tr>
 	<td >
@@ -283,8 +283,8 @@ function checkAllOnThisPageResponse()
 		<% } 
 		%>
 		
-		<tr height="60%" valign="top" width="100%">
-			<td  width="100%" valign="top" height="100%">
+		<tr height="300px" valign="top" width="100%">
+			<td  width="100%" valign="top" height="300px">
 <!--  **************  Code for New Grid  *********************** -->
 				<script>
 					/* 
@@ -316,7 +316,7 @@ function checkAllOnThisPageResponse()
 						Object obj = session.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
 						boolean isDefaultView = (obj!=null);
 					%>
-					<td nowrap width="5%" valign="top">
+					<td width="5%" valign="top">
 					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
 						<input type='checkbox' <%if (isDefaultView){%>checked='checked' <%}%>name='checkDefaultSpecimenView' id='checkDefaultSpecimenView' onClick='setDefaultView(this)'>
 						<span class="formLabelNoBackGroundWithSize6"><bean:message key="buttons.defaultSpecimenView" /></span>&nbsp;

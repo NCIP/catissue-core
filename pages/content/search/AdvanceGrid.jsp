@@ -171,7 +171,7 @@ function setEditableChkbox(checkAllPages)
 	}
 </script>
 
-<table width="100%" valign="top">
+<table width="100%" valign="top" border="0">
 	<tr valign="top">
 		<td valign="top">
 			<!-- 
