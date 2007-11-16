@@ -480,20 +480,22 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		{
 			ssn = participant.getSocialSecurityNumber();
 		}
-		
+	
+		//kalpana :bug #5761
+		if(Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier())	!=null)
+		{
+			protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+			
+		}
 	
 		if(firstName.length()>0 || lastName.length()>0 || birthDate.length()>0 || ssn.length()>0)
 		{
 				participantId = participant.getId().longValue();
 				radioButtonForParticipant = 1;
-				protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
-				
 		}
 		else
 		{
 			radioButtonForParticipant = 2;
-			//protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
-			
 		}
 		
 		Logger.out.debug("participantId.................................."+participantId);
