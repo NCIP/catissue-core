@@ -91,7 +91,7 @@ function showDerivative(objectenabled,objectdisabled,element)
 		{
 			var requestQtyId = "requestedQuantity"+i;
 			document.getElementById(requestQtyId).value="1";
-			document.getElementById(requestQtyId).disabled=true;
+			document.getElementById(requestQtyId).readOnly=true;
 		}
 			
 		var unitreq=document.getElementById("unitSpan");
