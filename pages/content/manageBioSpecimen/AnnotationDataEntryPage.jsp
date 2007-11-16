@@ -57,10 +57,10 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 {
 	annotationsGrid = new dhtmlXGridObject('definedAnnotationsGrid');
 	annotationsGrid.setImagePath("dhtml_comp/imgs/");
-	annotationsGrid.setHeader("#,Annotation,Last Updated,Updated By");
-	annotationsGrid.setInitWidthsP("5,31,31,32")
-	annotationsGrid.setColAlign("center,left,left,left,left")
-	annotationsGrid.setColTypes("ch,link,ro,ro");
+	annotationsGrid.setHeader("Annotation,Last Updated,Updated By");
+	annotationsGrid.setInitWidthsP("31,31,32")
+	annotationsGrid.setColAlign("left,left,left,left")
+	annotationsGrid.setColTypes("link,ro,ro");
 	annotationsGrid.init();
 	//var annotationXMLFld = document.getElementById('definedAnnotationsDataXML');
 	//annotationsGrid.loadXMLString(annotationXMLFld.value);
@@ -163,13 +163,6 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 						</script>
 					</td>
 				</tr>
-				<tr valign="bottom">
-					<td align="left" class="formLabelAllBorder" colspan="10">
-						<html:button property="deleteAnnotationData" styleClass="actionButton" onclick="deleteSelectedRecords();" >
-								Delete
-						</html:button>
-					</td>
-				</tr> 
 			</table>
 
 		</td></tr>
