@@ -128,7 +128,6 @@ public class DAGPanel {
 				List<String> attributeOperators = (List<String>) ruleDetailsMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
 				List<List<String>> conditionValues = (List<List<String>>) ruleDetailsMap.get(AppletConstants.ATTR_VALUES);
 				String errMsg = (String)ruleDetailsMap.get(AppletConstants.ERROR_MESSAGE);
-				System.out.println("Error  msg =="+errMsg);
 				if(errMsg.equals(""))
 				{
 					if(mode.equals("Edit"))
