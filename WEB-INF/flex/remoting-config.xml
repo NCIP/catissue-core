@@ -9,7 +9,8 @@
 
     <default-channels>
         <channel ref="my-amf"/>
-    </default-channels>
+         <channel ref="my-secure-amf"/>
+     </default-channels>
 
     <destination id="cdeService">
         <properties>
