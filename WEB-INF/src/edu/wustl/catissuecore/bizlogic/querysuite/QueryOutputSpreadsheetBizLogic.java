@@ -12,6 +12,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.QueryBizLogic;
@@ -245,7 +246,6 @@ public class QueryOutputSpreadsheetBizLogic
 		int columnIndex = 0;
 		
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
-		
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
 			AttributeInterface attribute = attributeMetaData.getAttribute();
@@ -352,6 +352,7 @@ public class QueryOutputSpreadsheetBizLogic
 				.getSelectedOutputAttributeList();
 		int columnIndex = 0;
 		List<EntityInterface> defineViewNodeList = new ArrayList<EntityInterface>();
+		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
 		QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
 		for (IOutputAttribute at : selectedOutputAttributeList)
 		{
@@ -360,7 +361,13 @@ public class QueryOutputSpreadsheetBizLogic
 				AttributeInterface attribute = at.getAttribute();
 				if (metaData.getAttribute().equals(attribute))
 				{
-
+					NameValueBean nameValueBean = new NameValueBean();
+					String attributeWithClassName = metaData.getDisplayName();
+					String treeAttributeNodeId = metaData.getUniqueId();
+					nameValueBean.setName(attributeWithClassName);
+					nameValueBean.setValue(treeAttributeNodeId);
+					selectedColumnNameValue.add(nameValueBean);
+										
 					String sqlColumnName = metaData.getColumnName();
 					sqlColumnNames.append(sqlColumnName);
 					sqlColumnNames.append(", ");
@@ -393,6 +400,7 @@ public class QueryOutputSpreadsheetBizLogic
 				}
 			}
 		}
+		this.selectedColumnMetaData.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 		int lastindexOfComma = sqlColumnNames.lastIndexOf(",");
 		if (lastindexOfComma != -1)
 		{

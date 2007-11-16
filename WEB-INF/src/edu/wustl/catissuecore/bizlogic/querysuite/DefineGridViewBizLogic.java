@@ -198,9 +198,9 @@ public class DefineGridViewBizLogic
 		{
 			IOutputAttribute attr= null;
 			String columnId = selectedColumnIds[i];
-			String[] split = columnId.split(":");
-			String uniqueNodeId = split[0];
-			OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(uniqueNodeId);
+			String[] split = columnId.split(Constants.EXPRESSION_ID_SEPARATOR);
+			String expressionId = split[0] + Constants.EXPRESSION_ID_SEPARATOR+ split[1];
+			OutputTreeDataNode outputTreeDataNode = getMatchingOutputTreeDataNode(uniqueIdNodesMap, expressionId);
 			if(outputTreeDataNode != null)
 			{			
 				List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode.getAttributes();
@@ -221,6 +221,29 @@ public class DefineGridViewBizLogic
 		selectedColumnsMetadata.setSelectedAttributeMetaDataList(attribureMetadataList);
 		selectedColumnsMetadata.setSelectedOutputAttributeList(outputAttributeList);
 		selectedColumnsMetadata.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
+	}
+	/**
+	 * Returns the matching OutputTreeDataNode, compares expression id.
+	 * @param uniqueIdNodesMap map of all nodes in query
+	 * @param expressionId string id
+	 * @return OutputTreeDataNode node
+	 */
+	private OutputTreeDataNode getMatchingOutputTreeDataNode(Map<String, OutputTreeDataNode> uniqueIdNodesMap, String expressionId) {
+		OutputTreeDataNode outputTreeDataNode = null;
+		Set<String> keySet = uniqueIdNodesMap.keySet();
+		Iterator<String> iterator = keySet.iterator();
+		while (iterator.hasNext()) {
+			Object next = iterator.next();
+			if(next instanceof String)
+			{
+				outputTreeDataNode = uniqueIdNodesMap.get(next);
+				if(outputTreeDataNode.getExpressionId().toString().equals(expressionId))
+				{
+					break;
+				}
+			}
+		}
+		return outputTreeDataNode;
 	}
 	/**
 	 * 

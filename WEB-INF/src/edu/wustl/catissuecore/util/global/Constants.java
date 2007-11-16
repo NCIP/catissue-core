@@ -192,6 +192,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String TREE_NODE_FONT_CLOSE = "</i></font>";  
 	public static final String NULL_ID = "NULL";
 	public static final String NODE_SEPARATOR = "::";
+	public static final String EXPRESSION_ID_SEPARATOR = ":";
 	public static final String UNIQUE_ID_SEPARATOR = "UQ";
 	public static final String DEFINE_SEARCH_RULES = "Define Limits For";
 	public static final String DATE_FORMAT = "MM-dd-yyyy";
