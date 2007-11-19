@@ -83,7 +83,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction {
 				eventBean.setUniqueIdentifier(String.valueOf(specimencollectionGroup.getId().longValue()));
 
 				eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
-						specimencollectionGroup.getSpecimenCollection() ));
+						specimencollectionGroup.getSpecimenCollection(),cpId ));
 				globalSpecimenId = "E"+eventBean.getUniqueIdentifier() + "_";
 				cpEventMap.put(globalSpecimenId, eventBean);			
 				session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
@@ -104,7 +104,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction {
 		return null;
 	}
 
-	protected LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection)
+	protected LinkedHashMap<String, GenericSpecimen> getSpecimensMap(
+			Collection specimenCollection, long collectionProtocolId)
 				throws DAOException
 	{
 		LinkedHashMap<String, GenericSpecimen> specimenMap = 
@@ -118,6 +119,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction {
 			{
 				GenericSpecimenVO specBean =getSpecimenBean(specimen, null);
 				specBean.setUniqueIdentifier("S_"+specimen.getId());
+				specBean.setCollectionProtocolId(collectionProtocolId);
 				specimenMap.put("S_"+specimen.getId(), specBean);				
 			}
 			
