@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.util.dbManager.HibernateUtility;
+import edu.wustl.common.util.global.ApplicationProperties;
 
 /**
  * @author chetan_patil
@@ -69,7 +70,8 @@ public class RetrieveQueryAction extends BaseAction
 		{
 			actionForward = actionMapping.findForward(Constants.FAILURE);
 		}
-
+		
+		request.setAttribute("popupMessage", ApplicationProperties.getValue("query.confirmBox.message"));
 		return actionForward;
 	}
 
