@@ -676,7 +676,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				{
 					User coordinator = (User) obj;//list.get(0);
 
-					checkStatus(dao, coordinator, "coordinator");
+					//checkStatus(dao, coordinator, "coordinator");
+					String activityStatus = coordinator.getActivityStatus();
+					if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+					{
+						throw new DAOException("Coordinator " + coordinator.getLastName() +" "+ coordinator.getFirstName()+" " + ApplicationProperties.getValue("error.object.closed"));
+					}
 
 					coordinatorColl.add(coordinator);
 					coordinator.getCollectionProtocolCollection().add(collectionProtocol);
