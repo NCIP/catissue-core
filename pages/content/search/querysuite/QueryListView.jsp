@@ -13,28 +13,19 @@
 <%@ page import="org.apache.struts.action.ActionMessages, edu.wustl.catissuecore.util.global.Utility;"%>
 
 
+
 <head>
 	
 	<script language="JavaScript" type="text/javascript" src="jss/queryModule.js"></script>
 	<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 	
-<script language="javascript">
-	function deleteQueryPopup(queryId)
-	{
-		var r=confirm("Delete the saved query ? ");
-		if (r==true)
-		{
-			deleteQuery(queryId);
-		}
-
-	}
-</script>
 </head>
 
 <body >
 
-<% String message = null; %>
+<% String message = null; 
+   String popupMessage = (String)request.getAttribute("popupMessage");%>
 <html:messages id="messageKey" message="true" >
 <% message = messageKey;    %>
 </html:messages>
@@ -84,7 +75,7 @@
 										<b>Description: &nbsp;</b><c:out value='${parameterizedQuery.description}' />
 									</td>
 									<td valign="top" height='20'>
-										<%target = "deleteQueryPopup('"+parameterizedQuery.getId()+"')"; %>
+										<%target = "deleteQueryPopup('"+parameterizedQuery.getId()+"','"+popupMessage+"')"; %>
 										<html:image src="images/delete.gif" alt="Delete" onclick='<%=target%>' />
 									</td>
 								</tr>
