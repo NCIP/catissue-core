@@ -1973,7 +1973,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				pc.setPositionDimensionOne((Integer) obj[1]);
 			if (obj[2] != null)
 				pc.setPositionDimensionTwo((Integer) obj[2]);
-/*
+
 			//check if user has privilege to use the container
 			boolean hasAccess = validateContainerAccess(pc, sessionDataBean);
 			Logger.out.debug("hasAccess..............." + hasAccess);
@@ -1981,7 +1981,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				throw new DAOException(ApplicationProperties.getValue("access.use.object.denied"));
 			}
-	*/		// check for closed Container
+			// check for closed Container
 			checkStatus(dao, pc, "Storage Container");
 
 			// check for valid position
@@ -2643,7 +2643,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				{
 					StorageContainer sc = new StorageContainer();
 					sc.setId(new Long(Id));
-	/*				boolean hasAccess = true;
+					boolean hasAccess = true;
 					try
 					{
 						hasAccess = validateContainerAccess(sc, sessionData);
@@ -2655,7 +2655,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					}
 					if (!hasAccess)
 						continue;
-*/
+
 					if (i > containersMaxLimit)
 					{
 						Logger.out.debug("CONTAINERS_MAX_LIMIT reached");

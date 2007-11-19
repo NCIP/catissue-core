@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.domain;
 
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -51,7 +50,6 @@ import edu.wustl.common.util.logger.Logger;
 public class Specimen extends AbstractDomainObject implements Serializable
 {
 
-	
 	/**
 	 * 
 	 */
@@ -180,40 +178,39 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	private transient int noOfAliquots;
 
 	private transient Map aliqoutMap = new HashMap();
-	
 
 	protected transient boolean disposeParentSpecimen = false;
 
-    //-----For Consent Tracking. Ashish 21/11/06
+	//-----For Consent Tracking. Ashish 21/11/06
 	/**
 	 * The consent tier status for multiple participants for a particular specimen.
 	 */
 	protected Collection consentTierStatusCollection;
-	
+
 	//Mandar 15-jan-07 
 	/*
 	 * To perform operation based on withdraw button clicked.
 	 * Default No Action to allow normal behaviour. 
 	 */
-	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
-	
+	protected String consentWithdrawalOption = Constants.WITHDRAW_RESPONSE_NOACTION;
+
 	//Mandar 23-jan-07 
 	/*
 	 * To apply changes to child specimen based on consent status changes.
 	 * Default Apply none to allow normal behaviour. 
 	 */
-	protected String applyChangesTo=Constants.APPLY_NONE;
+	protected String applyChangesTo = Constants.APPLY_NONE;
 
 	protected String collectionStatus;
 	protected Boolean isCollectionProtocolRequirement;
-	
-	
-	public Boolean getIsCollectionProtocolRequirement() {
+
+	public Boolean getIsCollectionProtocolRequirement()
+	{
 		return isCollectionProtocolRequirement;
 	}
 
-	public void setIsCollectionProtocolRequirement(
-			Boolean collectionProtocolRequirement) {
+	public void setIsCollectionProtocolRequirement(Boolean collectionProtocolRequirement)
+	{
 		this.isCollectionProtocolRequirement = collectionProtocolRequirement;
 	}
 
@@ -227,7 +224,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		return consentTierStatusCollection;
 	}
-	
+
 	/**
 	 * @param consentTierStatusCollection the consentTierStatusCollection to set
 	 */
@@ -235,16 +232,17 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		this.consentTierStatusCollection = consentTierStatusCollection;
 	}
+
 	//-----Consent Tracking end.
-    
-     /**
-     * Name: Sachin Lale 
-     * Bug ID: 3835
-     * Patch ID: 3835_1
-     * See also: 1-4 
-     * Description : Addeed createdOn field for derived and aliqut Specimen.
-     */
-    protected Date createdOn;
+
+	/**
+	 * Name: Sachin Lale 
+	 * Bug ID: 3835
+	 * Patch ID: 3835_1
+	 * See also: 1-4 
+	 * Description : Addeed createdOn field for derived and aliqut Specimen.
+	 */
+	protected Date createdOn;
 
 	public Specimen()
 	{
@@ -389,11 +387,11 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
-		if ("".equals(barcode) )
+		if ("".equals(barcode))
 		{
 			this.barcode = null;
 		}
-		
+
 	}
 
 	/**
@@ -650,7 +648,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
 		//Change for API Search   --- Ashwin 04/10/2006
-		AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
+		AbstractActionForm abstractForm = (AbstractActionForm) valueObject;
 		if (SearchUtil.isNullobject(storageContainer))
 		{
 			storageContainer = null;
@@ -679,74 +677,74 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		{
 			availableQuantity = new Quantity();
 		}
-        
-       try{  
-		   if (abstractForm.isAddOperation())
-		   {
-			   this.isCollectionProtocolRequirement = new Boolean(false);
-		   }
-    	   
-    	if (abstractForm instanceof AliquotForm)
-		{
-			AliquotForm form = (AliquotForm) abstractForm;
-			// Dispose parent specimen Bug 3773
-			this.setDisposeParentSpecimen(form.getDisposeParentSpecimen());
-			Validator validator = new Validator();
 
-			this.aliqoutMap = form.getAliquotMap();
-			this.noOfAliquots = Integer.parseInt(form.getNoOfAliquots());
-			this.parentSpecimen = new Specimen();
-			this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
-            
-             /**            
-             * Patch ID: 3835_1_2
-             * See also: 1_1 to 1_5
-             * Description : Set createdOn date for aliquot.  
-             */            
-           
-                this.createdOn = Utility.parseDate(form.getCreatedDate(),
-                    Constants.DATE_PATTERN_MM_DD_YYYY);     
-            
-			if (!validator.isEmpty(form.getSpecimenLabel())) // TODO
-			{
-				parentSpecimen.setLabel(form.getSpecimenLabel());
-				parentSpecimen.setId(new Long(form.getSpecimenID()));
-			}
-			else if (!validator.isEmpty(form.getBarcode()))
-			{
-				parentSpecimen.setId(new Long(form.getSpecimenID()));
-				parentSpecimen.setBarcode(form.getBarcode());
-			}
-		}
-		else
+		try
 		{
-			String qty = ((SpecimenForm) abstractForm).getQuantity();
-			if(qty != null && qty.trim().length() > 0   )
-				this.initialQuantity = new Quantity(((SpecimenForm) abstractForm).getQuantity());
-			else
-				this.initialQuantity = new Quantity("0");
-			this.label = ((SpecimenForm) abstractForm).getLabel();
-
 			if (abstractForm.isAddOperation())
 			{
-				this.availableQuantity = new Quantity(this.initialQuantity);
+				this.isCollectionProtocolRequirement = new Boolean(false);
+			}
+
+			if (abstractForm instanceof AliquotForm)
+			{
+				AliquotForm form = (AliquotForm) abstractForm;
+				// Dispose parent specimen Bug 3773
+				this.setDisposeParentSpecimen(form.getDisposeParentSpecimen());
+				Validator validator = new Validator();
+
+				this.aliqoutMap = form.getAliquotMap();
+				this.noOfAliquots = Integer.parseInt(form.getNoOfAliquots());
+				this.parentSpecimen = new Specimen();
+				this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
+
+				/**            
+				 * Patch ID: 3835_1_2
+				 * See also: 1_1 to 1_5
+				 * Description : Set createdOn date for aliquot.  
+				 */
+
+				this.createdOn = Utility.parseDate(form.getCreatedDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+
+				if (!validator.isEmpty(form.getSpecimenLabel())) // TODO
+				{
+					parentSpecimen.setLabel(form.getSpecimenLabel());
+					parentSpecimen.setId(new Long(form.getSpecimenID()));
+				}
+				else if (!validator.isEmpty(form.getBarcode()))
+				{
+					parentSpecimen.setId(new Long(form.getSpecimenID()));
+					parentSpecimen.setBarcode(form.getBarcode());
+				}
 			}
 			else
 			{
-				this.availableQuantity = new Quantity(((SpecimenForm) abstractForm).getAvailableQuantity());
-			}
-            
+				String qty = ((SpecimenForm) abstractForm).getQuantity();
+				if (qty != null && qty.trim().length() > 0)
+					this.initialQuantity = new Quantity(((SpecimenForm) abstractForm).getQuantity());
+				else
+					this.initialQuantity = new Quantity("0");
+				this.label = ((SpecimenForm) abstractForm).getLabel();
+
+				if (abstractForm.isAddOperation())
+				{
+					this.availableQuantity = new Quantity(this.initialQuantity);
+				}
+				else
+				{
+					this.availableQuantity = new Quantity(((SpecimenForm) abstractForm).getAvailableQuantity());
+				}
+
 				Validator validator = new Validator();
 				if (abstractForm instanceof NewSpecimenForm)
 				{
 					NewSpecimenForm form = (NewSpecimenForm) abstractForm;
 					/**For Migration Start**/
-//					This case is handled in Biz logic.
-//					if(form.getSpecimenCollectionGroupName()!=null&&!form.getSpecimenCollectionGroupName().trim().equals(""))
-//					{
-//						form.setSpecimenCollectionGroupId(Utility.getSCGId(form.getSpecimenCollectionGroupName().trim()));
-//					}
-					/**For Migration End**/		
+					//					This case is handled in Biz logic.
+					//					if(form.getSpecimenCollectionGroupName()!=null&&!form.getSpecimenCollectionGroupName().trim().equals(""))
+					//					{
+					//						form.setSpecimenCollectionGroupId(Utility.getSCGId(form.getSpecimenCollectionGroupName().trim()));
+					//					}
+					/**For Migration End**/
 					this.activityStatus = form.getActivityStatus();
 					if (form.isAddOperation())
 					{
@@ -794,18 +792,17 @@ public class Specimen extends AbstractDomainObject implements Serializable
 								isParentChanged = true;
 							}
 						}
-                        
-                        /**                         
-                         * Patch ID: 3835_1_3
-                         * See also: 1_1 to 1_5
-                         * Description : Set createdOn date in edit mode for new specimen 
-                         */
-                        this.createdOn = Utility.parseDate(form.getCreatedDate(),
-                                Constants.DATE_PATTERN_MM_DD_YYYY); 
+
+						/**                         
+						 * Patch ID: 3835_1_3
+						 * See also: 1_1 to 1_5
+						 * Description : Set createdOn date in edit mode for new specimen 
+						 */
+						this.createdOn = Utility.parseDate(form.getCreatedDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
 					}
 
 					Logger.out.debug("isParentChanged " + isParentChanged);
-					
+
 					//Setting the SpecimenCharacteristics
 					this.pathologicalStatus = form.getPathologicalStatus();
 					specimenCharacteristics.tissueSide = form.getTissueSide();
@@ -827,7 +824,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					//Getting the Map of Biohazards
 					parser = new MapDataParser("edu.wustl.catissuecore.domain");
 					Collection bioCollection = parser.generateData(bioMap);
-                    
+
 					Logger.out.debug("BIO-COL : " + bioCollection);
 
 					this.biohazardCollection = bioCollection;
@@ -872,15 +869,13 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 						receivedEventParameters.setAllValues(receivedEvent);
 						receivedEventParameters.setSpecimen(this);
-                        
-                         /**                         
-                         * Patch ID: 3835_1_4
-                         * See also: 1_1 to 1_5
-                         * Description :createdOn should be collection event date for new specimen. 
-                         */
-                        this.createdOn = Utility.parseDate(form.getCollectionEventdateOfEvent(),
-                                Constants.DATE_PATTERN_MM_DD_YYYY); 
-                        
+
+						/**                         
+						 * Patch ID: 3835_1_4
+						 * See also: 1_1 to 1_5
+						 * Description :createdOn should be collection event date for new specimen. 
+						 */
+						this.createdOn = Utility.parseDate(form.getCollectionEventdateOfEvent(), Constants.DATE_PATTERN_MM_DD_YYYY);
 
 						Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 						specimenEventCollection.add(receivedEventParameters);
@@ -891,41 +886,41 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					}
 
 					//Mandar : autoevents 14-july-06 end
-					
+
 					if (form.isAddOperation())
 					{
-						if(this.storageContainer == null)
+						if (this.storageContainer == null)
 						{
 							this.storageContainer = new StorageContainer();
 						}
-						if(form.getStContSelection()==1)
+						if (form.getStContSelection() == 1)
 						{
 							this.storageContainer = null;
 							this.positionDimensionOne = null;
 							this.positionDimensionTwo = null;
 						}
-						if(form.getStContSelection()==2)
+						if (form.getStContSelection() == 2)
 						{
 							long stContainerId = Long.parseLong(form.getStorageContainer());
 							this.storageContainer.setId(stContainerId);
 							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
 						}
-						else if(form.getStContSelection()==3)
+						else if (form.getStContSelection() == 3)
 						{
-							this.storageContainer.setName(form.getSelectedContainerName());	
-							if (form.getPos1() != null && !form.getPos1().trim().equals("")
-									&& form.getPos2() != null && !form.getPos2().trim().equals(""))
+							this.storageContainer.setName(form.getSelectedContainerName());
+							if (form.getPos1() != null && !form.getPos1().trim().equals("") && form.getPos2() != null
+									&& !form.getPos2().trim().equals(""))
 							{
-							this.positionDimensionOne = new Integer(form.getPos1());
-							this.positionDimensionTwo = new Integer(form.getPos2());
+								this.positionDimensionOne = new Integer(form.getPos1());
+								this.positionDimensionTwo = new Integer(form.getPos2());
 							}
 
 						}
 					}
 					else
 					{
-						if(!validator.isEmpty(form.getSelectedContainerName()))
+						if (!validator.isEmpty(form.getSelectedContainerName()))
 						{
 							//this.storageContainer = new StorageContainer();
 							this.storageContainer.setName(form.getSelectedContainerName());
@@ -939,30 +934,29 @@ public class Specimen extends AbstractDomainObject implements Serializable
 							this.positionDimensionTwo = null;
 						}
 					}
-					
+
 					if (form.isParentPresent())
 					{
 						parentSpecimen = new CellSpecimen();
 						//parentSpecimen.setId(new Long(form.getParentSpecimenId()));
 						parentSpecimen.setLabel(form.getParentSpecimenName());
-						
+
 					}
 					else
 					{
 						parentSpecimen = null;
 						//specimenCollectionGroup = null;
 						this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
-						
-//						this.specimenCollectionGroup.setGroupName(form.getSpecimenCollectionGroupName());
+
+						//						this.specimenCollectionGroup.setGroupName(form.getSpecimenCollectionGroupName());
 						IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 
-						List scgList = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "name",form.getSpecimenCollectionGroupName());
-						
-						if(!scgList.isEmpty())
+						List scgList = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "name", form.getSpecimenCollectionGroupName());
+
+						if (!scgList.isEmpty())
 						{
-							this.specimenCollectionGroup =(SpecimenCollectionGroup) scgList.get(0);
+							this.specimenCollectionGroup = (SpecimenCollectionGroup) scgList.get(0);
 						}
-				
 
 					}
 				}
@@ -972,7 +966,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 					this.activityStatus = form.getActivityStatus();
 					this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
-					
+
 					if (!validator.isEmpty(form.getBarcode()))
 						this.barcode = form.getBarcode();
 					else
@@ -982,15 +976,14 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					//this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 					//this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
 					this.type = form.getType();
-                    
-                     /**                  
-                     * Patch ID: 3835_1_5
-                     * See also: 1_1 to 1_5
-                     * Description : Set createdOn date for derived specimen . 
-                     */
-                      this.createdOn = Utility.parseDate(form.getCreatedDate(),
-                                Constants.DATE_PATTERN_MM_DD_YYYY);     
-                  
+
+					/**                  
+					 * Patch ID: 3835_1_5
+					 * See also: 1_1 to 1_5
+					 * Description : Set createdOn date for derived specimen . 
+					 */
+					this.createdOn = Utility.parseDate(form.getCreatedDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+
 					if (form.isAddOperation())
 					{
 						this.available = new Boolean(true);
@@ -1014,75 +1007,83 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					Collection extCollection = parser.generateData(extMap);
 					this.externalIdentifierCollection = extCollection;
 
-//					if (form.isVirtuallyLocated())
-//					{
-//						Logger.out.info("------------------Virtually located--------------");
-//						this.storageContainer = null;
-//						this.positionDimensionOne = null;
-//						this.positionDimensionTwo = null;
-//					}
-//					else
-//					{
-//						this.storageContainer.setId(new Long(form.getStorageContainer()));
-//						this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-//						this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-//
-//					}
-					
+					//					if (form.isVirtuallyLocated())
+					//					{
+					//						Logger.out.info("------------------Virtually located--------------");
+					//						this.storageContainer = null;
+					//						this.positionDimensionOne = null;
+					//						this.positionDimensionTwo = null;
+					//					}
+					//					else
+					//					{
+					//						this.storageContainer.setId(new Long(form.getStorageContainer()));
+					//						this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+					//						this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+					//
+					//					}
+
 					//setting the value of storage container
 					if (form.isAddOperation())
 					{
-						if(form.getStContSelection()==1)
+						if (this.storageContainer == null)
+						{
+							this.storageContainer = new StorageContainer();
+						}
+						if (form.getStContSelection() == 1)
 						{
 							this.storageContainer = null;
 							this.positionDimensionOne = null;
 							this.positionDimensionTwo = null;
 						}
-						if(form.getStContSelection()==2)
+						if (form.getStContSelection() == 2)
 						{
 							this.storageContainer.setId(new Long(form.getStorageContainer()));
 							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
 						}
-						else if(form.getStContSelection()==3)
+						else if (form.getStContSelection() == 3)
 						{
-							this.storageContainer.setName(form.getSelectedContainerName());							
-							this.positionDimensionOne = new Integer(form.getPos1());
-							this.positionDimensionTwo = new Integer(form.getPos2());
+							this.storageContainer.setName(form.getSelectedContainerName());
+							if (form.getPos1() != null && !form.getPos1().trim().equals("") && form.getPos2() != null
+									&& !form.getPos2().trim().equals(""))
+							{
+								this.positionDimensionOne = new Integer(form.getPos1());
+								this.positionDimensionTwo = new Integer(form.getPos2());
+							}
 
 						}
 					}
 				}
+			}
 		}
-        }
-	    catch (Exception excp)
+		catch (Exception excp)
 		{
-				Logger.out.error(excp.getMessage(), excp);
-                throw new AssignDataException();  
+			Logger.out.error(excp.getMessage(), excp);
+			throw new AssignDataException();
 
 		}
-	    //Setting the consentTier responses. (Virender Mehta)
+		//Setting the consentTier responses. (Virender Mehta)
 		if (abstractForm instanceof NewSpecimenForm)
 		{
 			NewSpecimenForm form = (NewSpecimenForm) abstractForm;
 			this.consentTierStatusCollection = prepareParticipantResponseCollection(form);
 			// ----------- Mandar --16-Jan-07
-			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();  
+			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();
 			// ----- Mandar : ---23-jan-07 For bug 3464.
-			this.applyChangesTo = form.getApplyChangesTo(); 
+			this.applyChangesTo = form.getApplyChangesTo();
 		}
 	}
-	
+
 	/**
-	* For Consent Tracking
-	* Setting the Domain Object 
-	* @param  form CollectionProtocolRegistrationForm
-	* @return consentResponseColl
-	*/
-	private Collection prepareParticipantResponseCollection(NewSpecimenForm form) 
+	 * For Consent Tracking
+	 * Setting the Domain Object 
+	 * @param  form CollectionProtocolRegistrationForm
+	 * @return consentResponseColl
+	 */
+	private Collection prepareParticipantResponseCollection(NewSpecimenForm form)
 	{
 		MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
-        Collection beanObjColl=null;
+		Collection beanObjColl = null;
 		try
 		{
 			beanObjColl = mapdataParser.generateData(form.getConsentResponseForSpecimenValues());
@@ -1091,25 +1092,25 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		{
 			e.printStackTrace();
 		}
-        Iterator iter = beanObjColl.iterator();
-        Collection consentResponseColl = new HashSet();
-        while(iter.hasNext())
-        {
-        	ConsentBean consentBean = (ConsentBean)iter.next();
-        	ConsentTierStatus consentTierstatus = new ConsentTierStatus();
-        	//Setting response
-        	consentTierstatus.setStatus(consentBean.getSpecimenLevelResponse());
-        	if(consentBean.getSpecimenLevelResponseID()!=null&&consentBean.getSpecimenLevelResponseID().trim().length()>0)
-        	{
-        		consentTierstatus.setId(Long.parseLong(consentBean.getSpecimenLevelResponseID()));
-        	}
-        	//Setting consent tier
-        	ConsentTier consentTier = new ConsentTier();
-        	consentTier.setId(new Long(consentBean.getConsentTierID()));
-        	consentTierstatus.setConsentTier(consentTier);	        	
-        	consentResponseColl.add(consentTierstatus);
-        }
-        return consentResponseColl;
+		Iterator iter = beanObjColl.iterator();
+		Collection consentResponseColl = new HashSet();
+		while (iter.hasNext())
+		{
+			ConsentBean consentBean = (ConsentBean) iter.next();
+			ConsentTierStatus consentTierstatus = new ConsentTierStatus();
+			//Setting response
+			consentTierstatus.setStatus(consentBean.getSpecimenLevelResponse());
+			if (consentBean.getSpecimenLevelResponseID() != null && consentBean.getSpecimenLevelResponseID().trim().length() > 0)
+			{
+				consentTierstatus.setId(Long.parseLong(consentBean.getSpecimenLevelResponseID()));
+			}
+			//Setting consent tier
+			ConsentTier consentTier = new ConsentTier();
+			consentTier.setId(new Long(consentBean.getConsentTierID()));
+			consentTierstatus.setConsentTier(consentTier);
+			consentResponseColl.add(consentTierstatus);
+		}
+		return consentResponseColl;
 	}
 
 	protected Map fixMap(Map orgMap)
@@ -1137,7 +1138,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	public final String getClassName()
 	{
 		String className = null;
-		
+
 		if (this instanceof CellSpecimen)
 		{
 			className = Constants.CELL;
@@ -1342,153 +1343,160 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		return this.label;
 	}
+
 	//----------------------------Mandar 16-jan-07
 	public String getConsentWithdrawalOption()
 	{
 		return consentWithdrawalOption;
 	}
 
-	public void setConsentWithdrawalOption(String consentWithdrawalOption) 
+	public void setConsentWithdrawalOption(String consentWithdrawalOption)
 	{
 		this.consentWithdrawalOption = consentWithdrawalOption;
 	}
-	
-	public String getApplyChangesTo() 
+
+	public String getApplyChangesTo()
 	{
 		return applyChangesTo;
 	}
-	public void setApplyChangesTo(String applyChangesTo) 
+
+	public void setApplyChangesTo(String applyChangesTo)
 	{
 		this.applyChangesTo = applyChangesTo;
-	}	  
-
+	}
 
 	/**
 	 * @return Returns the disposeParentSpecimen.
 	 */
-	public boolean getDisposeParentSpecimen() {
+	public boolean getDisposeParentSpecimen()
+	{
 		return disposeParentSpecimen;
 	}
 
 	/**
 	 * @param disposeParentSpecimen The disposeParentSpecimen to set.
 	 */
-	public void setDisposeParentSpecimen(boolean disposeParentSpecimen) {
+	public void setDisposeParentSpecimen(boolean disposeParentSpecimen)
+	{
 		this.disposeParentSpecimen = disposeParentSpecimen;
 	}
-    /**
-     * Name: Sachin Lale 
-     * Bug ID: 3835
-     * Patch ID: 3835_2
-     * See also: 1-4 
-     * Description : Addeed createdOn field for derived and aliqut Specimen.
-     * Returns the date on which the Participant is 
-     * registered to the Collection Protocol.
-     * @hibernate.property name="createdOn" column="CREATED_ON_DATE" type="date"
-     * @return the date on which the Dervive/aliqut Specimen is created 
-     * @see #setCreatedOn(Date)
-     */
-    public Date getCreatedOn()
-    {
-        return createdOn;
-    }
 
-    /**
-     * Sets the date on which the Participant is 
-     * registered to the Collection Protocol.
-     * @param registrationDate the date on which the Participant is 
-     * registered to the Collection Protocol.
-     * @see #getRegistrationDate()
-     */
-    public void setCreatedOn(Date createdOn)
-    {
-        this.createdOn = createdOn;
-    }
+	/**
+	 * Name: Sachin Lale 
+	 * Bug ID: 3835
+	 * Patch ID: 3835_2
+	 * See also: 1-4 
+	 * Description : Addeed createdOn field for derived and aliqut Specimen.
+	 * Returns the date on which the Participant is 
+	 * registered to the Collection Protocol.
+	 * @hibernate.property name="createdOn" column="CREATED_ON_DATE" type="date"
+	 * @return the date on which the Dervive/aliqut Specimen is created 
+	 * @see #setCreatedOn(Date)
+	 */
+	public Date getCreatedOn()
+	{
+		return createdOn;
+	}
 
-	public String getCollectionStatus() {
+	/**
+	 * Sets the date on which the Participant is 
+	 * registered to the Collection Protocol.
+	 * @param registrationDate the date on which the Participant is 
+	 * registered to the Collection Protocol.
+	 * @see #getRegistrationDate()
+	 */
+	public void setCreatedOn(Date createdOn)
+	{
+		this.createdOn = createdOn;
+	}
+
+	public String getCollectionStatus()
+	{
 		return collectionStatus;
 	}
 
-	public void setCollectionStatus(String collectionStatus) {
+	public void setCollectionStatus(String collectionStatus)
+	{
 		this.collectionStatus = collectionStatus;
 	}
 
-    public Specimen(Specimen specimen)
-    {
-    	this.activityStatus = specimen.getActivityStatus();
-    	this.applyChangesTo = specimen.getApplyChangesTo();
-    	this.available = specimen.getAvailable();
-    	if(specimen.getInitialQuantity() != null)
-    	{
-    		this.availableQuantity = new Quantity(specimen.getInitialQuantity());
-    		this.initialQuantity = new Quantity(specimen.getInitialQuantity());
-    	}
-    	this.biohazardCollection = setBiohazardCollection(specimen);
-    	this.createdOn = specimen.getCreatedOn();
-    	this.comment = specimen.getComment();
-    	this.lineage = specimen.getLineage();
-    	this.pathologicalStatus = specimen.getPathologicalStatus();
-    	this.collectionStatus = Constants.COLLECTION_STATUS_PENDING;
-    	if(specimen.getSpecimenCharacteristics() != null)
-    	{
-    		this.specimenCharacteristics = new SpecimenCharacteristics(specimen.getSpecimenCharacteristics());
-    	}
-    	this.type = specimen.getType();
-    	this.isCollectionProtocolRequirement = new Boolean(false);
-    	this.positionDimensionOne =specimen.positionDimensionOne;
-     }
-    
-    private Collection setBiohazardCollection(Specimen specimen)
-    {
-    	Collection biohazardCollectionN = new HashSet();
-    	Collection biohazardCollection = specimen.getBiohazardCollection();
-    	if(biohazardCollection != null && !biohazardCollection.isEmpty())
+	public Specimen(Specimen specimen)
+	{
+		this.activityStatus = specimen.getActivityStatus();
+		this.applyChangesTo = specimen.getApplyChangesTo();
+		this.available = specimen.getAvailable();
+		if (specimen.getInitialQuantity() != null)
 		{
-	    	Iterator it = biohazardCollection.iterator();
-	    	while(it.hasNext())
-	    	{
-	    		Biohazard bio = (Biohazard)it.next();
-	    		Biohazard bioN = new Biohazard(bio);
-	    		biohazardCollectionN.add(bioN);
-	     	}
+			this.availableQuantity = new Quantity(specimen.getInitialQuantity());
+			this.initialQuantity = new Quantity(specimen.getInitialQuantity());
 		}
-    	return biohazardCollectionN;
-    }
-    
-    public Specimen createClone()
-    {
-    	Specimen cloneSpecimen = new Specimen(this);
-    	return cloneSpecimen;
-    }
-    public void setDefaultSpecimenEventCollection(Long userID)
-    {
-    	Collection specimenEventCollection = new HashSet();
-    	User user = new User();
+		this.biohazardCollection = setBiohazardCollection(specimen);
+		this.createdOn = specimen.getCreatedOn();
+		this.comment = specimen.getComment();
+		this.lineage = specimen.getLineage();
+		this.pathologicalStatus = specimen.getPathologicalStatus();
+		this.collectionStatus = Constants.COLLECTION_STATUS_PENDING;
+		if (specimen.getSpecimenCharacteristics() != null)
+		{
+			this.specimenCharacteristics = new SpecimenCharacteristics(specimen.getSpecimenCharacteristics());
+		}
+		this.type = specimen.getType();
+		this.isCollectionProtocolRequirement = new Boolean(false);
+		this.positionDimensionOne = specimen.positionDimensionOne;
+	}
+
+	private Collection setBiohazardCollection(Specimen specimen)
+	{
+		Collection biohazardCollectionN = new HashSet();
+		Collection biohazardCollection = specimen.getBiohazardCollection();
+		if (biohazardCollection != null && !biohazardCollection.isEmpty())
+		{
+			Iterator it = biohazardCollection.iterator();
+			while (it.hasNext())
+			{
+				Biohazard bio = (Biohazard) it.next();
+				Biohazard bioN = new Biohazard(bio);
+				biohazardCollectionN.add(bioN);
+			}
+		}
+		return biohazardCollectionN;
+	}
+
+	public Specimen createClone()
+	{
+		Specimen cloneSpecimen = new Specimen(this);
+		return cloneSpecimen;
+	}
+
+	public void setDefaultSpecimenEventCollection(Long userID)
+	{
+		Collection specimenEventCollection = new HashSet();
+		User user = new User();
 		user.setId(userID);
-    	CollectionEventParameters collectionEventParameters = EventsUtil.populateCollectionEventParameters(user);
-    	collectionEventParameters.setSpecimen(this);
-    	specimenEventCollection.add(collectionEventParameters);
-    	
-    	ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);
-    	receivedEventParameters.setSpecimen(this);
-    	specimenEventCollection.add(receivedEventParameters);
-    	setSpecimenEventCollection(specimenEventCollection);
-    }
-    
-    public void setConsentTierStatusCollectionFromSCG(SpecimenCollectionGroup specimenCollectionGroup)
-    {
-    	Collection consentTierStatusCollectionN = new HashSet();
-    	Collection consentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
-    	if(consentTierStatusCollection != null && !consentTierStatusCollection.isEmpty())
+		CollectionEventParameters collectionEventParameters = EventsUtil.populateCollectionEventParameters(user);
+		collectionEventParameters.setSpecimen(this);
+		specimenEventCollection.add(collectionEventParameters);
+
+		ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);
+		receivedEventParameters.setSpecimen(this);
+		specimenEventCollection.add(receivedEventParameters);
+		setSpecimenEventCollection(specimenEventCollection);
+	}
+
+	public void setConsentTierStatusCollectionFromSCG(SpecimenCollectionGroup specimenCollectionGroup)
+	{
+		Collection consentTierStatusCollectionN = new HashSet();
+		Collection consentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
+		if (consentTierStatusCollection != null && !consentTierStatusCollection.isEmpty())
 		{
-	    	Iterator it = consentTierStatusCollection.iterator();
-	    	while(it.hasNext())
-	    	{
-	    		ConsentTierStatus consentTierStatus = (ConsentTierStatus)it.next();
-	    		ConsentTierStatus consentTierstatusN = new ConsentTierStatus(consentTierStatus);
-	    		consentTierStatusCollectionN.add(consentTierstatusN);
-	    	}
+			Iterator it = consentTierStatusCollection.iterator();
+			while (it.hasNext())
+			{
+				ConsentTierStatus consentTierStatus = (ConsentTierStatus) it.next();
+				ConsentTierStatus consentTierstatusN = new ConsentTierStatus(consentTierStatus);
+				consentTierStatusCollectionN.add(consentTierstatusN);
+			}
 		}
-    	setConsentTierStatusCollection(consentTierStatusCollectionN);
-    }
+		setConsentTierStatusCollection(consentTierStatusCollectionN);
+	}
 }
