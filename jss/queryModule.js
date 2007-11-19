@@ -101,7 +101,21 @@
 					 img = "folder.gif";
 				}
 				trees[i1].insertNewChild(parentIdToSet,nodeId,displayName,0,img,img,img,"");
-				trees[i1].setItemText(nodeId,displayName,displayName);
+				var start = displayName.indexOf("<i>");
+				if (start == -1)
+				{
+					trees[i1].setItemText(nodeId,displayName,displayName);
+					
+				}
+				else
+				{
+					start = start + 3;
+					var end = displayName.indexOf("</i>");
+					end = end + 0;
+					var name = displayName.substring(start, end);
+					trees[i1].setItemText(nodeId,displayName,name);
+					
+				}
 			}
 		}
 	}
@@ -659,7 +673,7 @@
 	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
 	{
         var strToCreateQueyObject = createQueryString(nameOfFormToPost, entityName , attributesList,'addLimit');
-		if(navigator.appName == "Microsoft Internet Explorer")
+ 		if(navigator.appName == "Microsoft Internet Explorer")
 		{
 			if(isTopButton)
 			{
@@ -1046,7 +1060,18 @@ var jsReady = false;
 	{
 		document.getElementById('queryId').value=queryId;
 		document.forms[0].submit();
-	}  
+	} 
+	
+	/*This function is called form QueryListView.jsp. Pops up for confirmation while deleting the query*/
+	function deleteQueryPopup(queryId, popupMessage)
+	{
+		var r=confirm(popupMessage);
+		if (r==true)
+		{
+			deleteQuery(queryId);
+		}
+
+	} 
 	
 	function deleteQuery(queryId)
 	{
