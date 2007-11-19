@@ -3,6 +3,8 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.bean.GenericSpecimen"%>
+
 <script src="jss/script.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <html>
@@ -15,7 +17,10 @@ String formAction = "SubmitSpecimenCollectionProtocol.do";
   String selectedContainerName ;
   String positionDimensionOne;
   String positionDimensionTwo;
+  String specimenClassName;
+  String cpId;
   String functionCall;
+  
 
 if(request.getAttribute(Constants.PAGEOF) != null)
 {
@@ -32,14 +37,15 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				document.forms[0].submit();
 		}
 
-		function showMap(selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId)
+		function showMap(selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName,cpId)
 		{
 			frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&"+
 				"selectedContainerName=" + selectedContainerName +
 				"&pos1=" + positionDimensionOne + 
 				"&pos2=" + positionDimensionTwo +
 				"&containerId=" +containerId +
-			"&<%=Constants.CAN_HOLD_SPECIMEN_CLASS %>=Tissue";
+				"&<%=Constants.CAN_HOLD_SPECIMEN_CLASS %>="+specimenClassName +
+				"&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%> =" + cpId;
 			
 			var storageContainer = document.getElementById(selectedContainerName).value;
 			frameUrl+="&storageContainerName="+storageContainer;
@@ -47,6 +53,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			openPopupWindow(frameUrl,'newSpecimenPage');
 			//mapButtonClickedOnSpecimen(frameUrl,'newSpecimenPage');
 		}
+		
 		function ChangeCheckBoxStatus(type,chkInstance)
 		{
 			var checkedSpecimen ='].checkedSpecimen';
@@ -234,16 +241,23 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 									<td class="dataCellText">
 									
 									<bean:define id="specimenId" name="specimen" property="uniqueIdentifier" />
-									
+									<bean:define id="specimenClass" name="specimen" property="className"/>
+									<bean:define id="collectionProtocolId" name="specimen" property="collectionProtocolId"/>
 									<%
 									  containerId = "containerId_"+specimenId;
 									  selectedContainerName = "selectedContainerName_"+specimenId;
 									  positionDimensionOne = "positionDimensionOne_"+specimenId;
   									  positionDimensionTwo = "positionDimensionTwo_"+specimenId;
+  									  specimenClassName = (String)specimenClass;
+  									  cpId = collectionProtocolId.toString();
+  									  String classNameStyleId = "className_"+specimenId;
+  									  String cpStyleId = "cp_"+specimenId;
 									  functionCall="showMap('" + selectedContainerName + "','"+
 																	positionDimensionOne +"','"
 																	+ positionDimensionTwo +"','"
-																	+containerId +"')" ;
+																	+containerId +"','"+
+																	specimenClassName +"','"+
+																	cpId +"')" ;
 									%>
 									
 									<logic:equal name="viewSpecimenSummaryForm" property="showParentStorage" value="true">
@@ -263,6 +277,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 												<img src="images\Tree.gif" border="0" width="13" height="15" title='View storage locations'>
 												</a>
 												<html:hidden  styleId="<%=containerId%>" name="specimen" property="containerId" />
+												
 											</td>
 										</tr>										
 									 </table>
@@ -281,7 +296,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 										</span>
 									 </logic:equal>
 									</td>
-
+							<html:hidden  name="specimen" property="className" styleId="<%=classNameStyleId%>" indexed="true"/>
+							<html:hidden  name="specimen" property="collectionProtocolId" styleId="<%=cpStyleId%>" indexed="true"/>
 							</logic:notEqual>												
 							<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 								<td class="dataCellText">
@@ -448,16 +464,23 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 									<td class="dataCellText">
 									
 									<bean:define id="specimenId" name="aliquot" property="uniqueIdentifier" />
-									
+									<bean:define id="specimenClass" name="aliquot" property="className"/>
+									<bean:define id="collectionProtocolId" name="aliquot" property="collectionProtocolId"/>
 									<%
 									  containerId = "containerId_"+specimenId;
 									  selectedContainerName = "selectedContainerName_"+specimenId;
 									  positionDimensionOne = "positionDimensionOne_"+specimenId;
   									  positionDimensionTwo = "positionDimensionTwo_"+specimenId;
+  									  specimenClassName = (String)specimenClass;
+  									  cpId = collectionProtocolId.toString();
+  									  String classNameStyleId = "className_"+specimenId;
+  									  String cpStyleId = "cp_"+specimenId;
 									  functionCall="showMap('" + selectedContainerName + "','"+
 																	positionDimensionOne +"','"
 																	+ positionDimensionTwo +"','"
-																	+containerId +"')" ;
+																	+containerId +"','"+
+																	specimenClassName +"','"+
+																	cpId +"')" ;
 									%>
 									<table style="font-size:1em" size="100%">
 										<tr>
@@ -479,7 +502,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 										</tr>
 									</table>
 									</td>
-
+								<html:hidden  name="aliquot" property="className" styleId="<%=classNameStyleId%>" indexed="true"/>
+								<html:hidden  name="aliquot" property="collectionProtocolId" styleId="<%=cpStyleId%>" indexed="true"/>
 							</logic:notEqual>												
 							
 							<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
@@ -628,16 +652,23 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 									<td class="dataCellText">
 									
 									<bean:define id="specimenId" name="derived" property="uniqueIdentifier" />
-									
+									<bean:define id="specimenClass" name="derived" property="className"/>
+									<bean:define id="collectionProtocolId" name="derived" property="collectionProtocolId"/>
 									<%
 									  containerId = "containerId_"+specimenId;
 									  selectedContainerName = "selectedContainerName_"+specimenId;
 									  positionDimensionOne = "positionDimensionOne_"+specimenId;
   									  positionDimensionTwo = "positionDimensionTwo_"+specimenId;
+									  specimenClassName = (String)specimenClass;
+  									  cpId = collectionProtocolId.toString();
+  									  String classNameStyleId = "className_"+specimenId;
+  									  String cpStyleId = "cp_"+specimenId;
 									  functionCall="showMap('" + selectedContainerName + "','"+
 																	positionDimensionOne +"','"
 																	+ positionDimensionTwo +"','"
-																	+containerId +"')" ;
+																	+containerId +"','"+
+																	specimenClassName +"','"+
+																	cpId +"')" ;
 									%>
 									<table style="font-size:1em" size="100%">
 										<tr>
@@ -659,7 +690,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 										</tr>
 									</table>
 									</td>
-
+							<html:hidden  name="derived" property="className" styleId="<%=classNameStyleId%>" indexed="true"/>
+							<html:hidden  name="derived" property="collectionProtocolId" styleId="<%=cpStyleId%>" indexed="true"/>
 							</logic:notEqual>	
 							
 							<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">

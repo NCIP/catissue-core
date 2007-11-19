@@ -99,7 +99,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	private String containerId;
 	private boolean checkedSpecimen;
 	
-	private Long collectionProtocolId = null;
+	private Long collectionProtocolId = -1l;
 
 	/**
 	 * @return Returns the biohazardCollection.

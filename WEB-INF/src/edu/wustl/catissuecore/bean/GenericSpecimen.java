@@ -92,6 +92,9 @@ public interface GenericSpecimen extends Serializable
 	public long getId();
 
 	public void setId(long id);
+	public Long getCollectionProtocolId();
+	public void setCollectionProtocolId(Long collectionProtocolId);
+	
 
 /*
 	public String getUniqueIdentifier();

@@ -764,7 +764,7 @@ public class FlexInterface
 	 }*/
 
 	private SpecimenDataBean prepareGenericSpecimen(SpecimenBean spBean, SpecimenAutoStorageContainer speicmenAutoStorageCont) throws DAOException
-	{
+	{ 
 		SpecimenDataBean specimenDataBean = new SpecimenDataBean();
 
 		specimenDataBean.setType(spBean.specimenType);
@@ -879,6 +879,7 @@ public class FlexInterface
 				derivedBean.collectionEvent = spBean.collectionEvent;
 				derivedBean.receivedEvent = spBean.receivedEvent;
 				SpecimenDataBean derivedDataBean = prepareGenericSpecimen(derivedBean, speicmenAutoStorageCont);
+				derivedDataBean.setCollectionProtocolId(specimenDataBean.getCollectionProtocolId());
 				derivedDataBean.setLineage(edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN);
 				derivedDataBean.setUniqueIdentifier("d" + i);
 				derivedDataBean.setParentName(spBean.specimenLabel);

@@ -663,5 +663,26 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	public void setSelectedContainerName(String selectedContainerName) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getCollectionProtocolId()
+	 */
+	public Long getCollectionProtocolId()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#setCollectionProtocolId(java.lang.Long)
+	 */
+	public void setCollectionProtocolId(Long collectionProtocolId)
+	{
+		// TODO Auto-generated method stub
+		
 	}	
+	
 }

@@ -32,6 +32,7 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 	private String positionDimensionOne;
 	private String positionDimensionTwo;
 	private String containerId;
+	private Long collectionProtocolId = -1l;
 	private long id =-1;
 	public LinkedHashMap<String, GenericSpecimen> getAliquotSpecimenCollection() {
 		return aliquotSpecimenCollection;
@@ -193,6 +194,25 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 
 	public void setContainerId(String containerId) {
 		this.containerId = containerId;
+	}
+
+	
+	
+
+	/**
+	 * @return Returns the collectionProtocolId.
+	 */
+	public Long getCollectionProtocolId()
+	{
+		return collectionProtocolId;
+	}
+
+	/**
+	 * @param collectionProtocolId The collectionProtocolId to set.
+	 */
+	public void setCollectionProtocolId(Long collectionProtocolId)
+	{
+		this.collectionProtocolId = collectionProtocolId;
 	}
 
 	public long getId() {
