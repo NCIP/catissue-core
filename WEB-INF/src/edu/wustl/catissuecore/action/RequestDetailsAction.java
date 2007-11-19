@@ -463,6 +463,7 @@ public class RequestDetailsAction extends BaseAction
 			}
 			else if (specimenOrderItem instanceof PathologicalCaseOrderItem)
 			{
+				getSpecimenCollectionGroup(specimenOrderItem);
 				arrayDetailsBean = populatePathologicalCasesForArrayDetails(arrayDetailsBean, specimenOrderItem);
 			}
 			//arrayDetailsBean.setArrayRequestBean(arrayRequestBean);
@@ -1140,30 +1141,7 @@ public class RequestDetailsAction extends BaseAction
 			}
 			else if(orderItem instanceof PathologicalCaseOrderItem)
 			{
-				PathologicalCaseOrderItem pathCaseOrderItem =  (PathologicalCaseOrderItem) orderItem;
-				String[] selectColumnName1 = {"specimenCollectionGroup"};
-				Object[] whereColumnValue1 = {orderItem.getId()};
-				List specimenColGroupList = orderBizLogic.retrieve(PathologicalCaseOrderItem.class.getName(), selectColumnName1, whereColumnName, whereColumnCond,
-						whereColumnValue1, Constants.AND_JOIN_CONDITION);
-				if(specimenColGroupList != null && specimenColGroupList.size()>0)
-				{
-					SpecimenCollectionGroup specimenColGroup = (SpecimenCollectionGroup)specimenColGroupList.get(0);
-					pathCaseOrderItem.setSpecimenCollectionGroup(specimenColGroup);
-					Collection specimenList = (Collection)orderBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenColGroup.getId(),"elements(specimenCollection)");
-					if(specimenList != null)
-					{
-						specimenColGroup.setSpecimenCollection(specimenList);
-						if(specimenList != null)
-						{
-							Iterator itr = specimenList.iterator();
-							while(itr.hasNext())
-							{
-								Specimen specimen = (Specimen)itr.next();
-								getChildrenSpecimen(specimen);
-							}
-						}
-					}
-				}
+				getSpecimenCollectionGroup(orderItem);
 			}
 		}
 
@@ -1313,5 +1291,42 @@ public class RequestDetailsAction extends BaseAction
 			}
 		}
 	}
+	
+	//kalpana:Bug#5950
+	private void getSpecimenCollectionGroup(OrderItem orderItem) throws DAOException
+	{
+		
+		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) orderItem;
+		
+		String[] whereColumnName = {"id"};
+		String[] whereColumnCond = {"="};
+		String[] selectColumnName1 = {"specimenCollectionGroup"};
+		Object[] whereColumnValue1 = {orderItem.getId()};
+		List specimenColGroupList = orderBizLogic.retrieve(PathologicalCaseOrderItem.class.getName(), selectColumnName1, whereColumnName, whereColumnCond,
+				whereColumnValue1, Constants.AND_JOIN_CONDITION);
+		if(specimenColGroupList != null && specimenColGroupList.size()>0)
+		{
+			SpecimenCollectionGroup specimenColGroup = (SpecimenCollectionGroup)specimenColGroupList.get(0);
+			pathologicalCaseOrderItem.setSpecimenCollectionGroup(specimenColGroup);
+			Collection specimenList = (Collection)orderBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenColGroup.getId(),"elements(specimenCollection)");
+			if(specimenList != null)
+			{
+				specimenColGroup.setSpecimenCollection(specimenList);
+				if(specimenList != null)
+				{
+					Iterator itr = specimenList.iterator();
+					while(itr.hasNext())
+					{
+						Specimen specimen = (Specimen)itr.next();
+						getChildrenSpecimen(specimen);
+					}
+				}
+			}
+		}
+		
+		
+	}
+	
 	
 }
