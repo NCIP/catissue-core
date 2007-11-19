@@ -30,8 +30,12 @@ import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -62,11 +66,27 @@ public class ConsentResponseDisplayAction extends BaseAction
 		{
 			collectionProtocolId = request.getParameter(Constants.CP_SEARCH_CP_ID);
 		}
-		long cpId = new Long(collectionProtocolId).longValue();
-
-
-	
+		String collectionProtocolRegIdValue = null;
+		if(request.getParameter("collectionProtocolRegIdValue")!=null)
+		{
+			collectionProtocolRegIdValue = request.getParameter("collectionProtocolRegIdValue");
+		}
 		
+		
+		long cpId = new Long(collectionProtocolId).longValue();
+		//Bug: 5935
+		//Remove old list of specimen from Session.
+		session.removeAttribute(Constants.SPECIMEN_LIST);
+		//As per the collection protocol registration id of Participant set All Participant's Specimen List to Session
+		if(collectionProtocolRegIdValue!=null)
+		{	
+			List columnList=columnNames();		
+			session.setAttribute(Constants.COLUMNLIST,columnList);		
+			CollectionProtocolRegistration collectionProtocolRegistration = getcprObj(collectionProtocolRegIdValue);
+			List specimenDetails= new ArrayList();
+			getSpecimenDetails(collectionProtocolRegistration,specimenDetails);
+			session.setAttribute(Constants.SPECIMEN_LIST,specimenDetails);
+		}
 		//Getting witness name list for CollectionProtocolID
 		List witnessList = getWitnessNameList(collectionProtocolId);
 		//Getting ResponseList if Operation=Edit then "Withdraw" is added to the List 
@@ -108,7 +128,85 @@ public class ConsentResponseDisplayAction extends BaseAction
 		
         return mapping.findForward(pageOf);
 	}
-
+	/**
+	 * This function adds the columns to the List
+	 * @return columnList 
+	 */
+	public List columnNames()
+	{
+		List columnList = new ArrayList();
+		columnList.add("Label");
+		columnList.add(Constants.TYPE);
+		columnList.add(Constants.STORAGE_CONTAINER_LOCATION);
+		columnList.add(Constants.CLASS_NAME);
+		return columnList; 
+	}
+	/**
+	 * This function will return CollectionProtocolRegistration object 
+	 * @param scg_id Selected SpecimenCollectionGroup ID
+	 * @return collectionProtocolRegistration
+	 */
+	private CollectionProtocolRegistration getcprObj(String cpr_id) throws DAOException
+	{
+		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		String colName = "id";			
+		List getCPRIdFromDB = collectionProtocolRegistrationBizLogic.retrieve(CollectionProtocolRegistration.class.getName(), colName, cpr_id);		
+		CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration)getCPRIdFromDB.get(0);
+		return collectionProtocolRegistrationObject;
+	}
+	
+	/**
+	 * @param collectionProtocolRegistration
+	 * @param finalDataList
+	 * @throws DAOException
+	 */
+	private void getSpecimenDetails(CollectionProtocolRegistration collectionProtocolRegistration, List finalDataList) throws DAOException
+	{
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		Collection specimencollectionGroup = (Collection)bizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(),collectionProtocolRegistration.getId(), "elements(specimenCollectionGroupCollection)");
+		//Collection specimencollectionGroup = collectionProtocolRegistration.getSpecimenCollectionGroupCollection();
+		Iterator specimenCollGroupIterator = specimencollectionGroup.iterator();
+		while(specimenCollGroupIterator.hasNext())
+		{
+			SpecimenCollectionGroup specimenCollectionGroupObj =(SpecimenCollectionGroup)specimenCollGroupIterator.next(); 
+			getDetailsOfSpecimen(specimenCollectionGroupObj, finalDataList);
+		}		
+	}
+	/**
+	 * This function is used for retriving specimen and sub specimen's attributes.
+	 * @param specimenObj
+	 * @param finalDataList
+	 * @throws DAOException 
+	 */
+	private void getDetailsOfSpecimen(SpecimenCollectionGroup specimenCollGroupObj, List finalDataList) throws DAOException
+	{
+		// lazy Resolved specimenCollGroupObj.getSpecimenCollection();
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		Collection specimenCollection = (Collection)bizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollGroupObj.getId(), "elements(specimenCollection)");
+		Iterator specimenIterator = specimenCollection.iterator();
+		while(specimenIterator.hasNext())
+		{
+			Specimen specimenObj =(Specimen)specimenIterator.next();
+			List specimenDetailList=new ArrayList();
+			if(specimenObj.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+			{
+				specimenDetailList.add(specimenObj.getLabel());
+				specimenDetailList.add(specimenObj.getType());
+				if(specimenObj.getStorageContainer()==null)
+				{
+					specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
+				}
+				else
+				{
+					String storageLocation=specimenObj.getStorageContainer().getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
+					specimenDetailList.add(storageLocation);
+				}
+				specimenDetailList.add(specimenObj.getClassName());
+				finalDataList.add(specimenDetailList);
+			}
+		}
+		
+	}
 	/**
 	 * Returns the Map of consent responses for given collection protocol.
 	 * @param consentResponse
