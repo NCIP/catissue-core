@@ -80,23 +80,25 @@
 </td>
 </tr>					
 <tr>
-  <td colspan="6" align="center" valign="top">
-    	<table border="0" cellpadding="0" cellspacing="0">
+<td colspan="6" align="left" valign="top">
+  	<table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr height="1px">
-			<td colspan="3" align="right" height="2%">
+			<td align="center" height="2%">
 					<html:button styleClass="actionButton" property="configureButton" onclick = "onSubmit(this.form.selectedColumnNames,'back');" >
 							<bean:message key="query.back.button"/>
 					</html:button>
 			</td>	 
-			<td colspan="1" align="center" height="2%" width="100%">
+			<td align="center" height="2%">
 					<html:button styleClass="actionButton" property="redefineButton" onclick = "onSubmit(this.form.selectedColumnNames,'restore');" >
 						<bean:message key="query.restoreDefault.button"/>
 					</html:button>
 			</td>
-			<td colspan="1" align="left" height="2%">
+			<td align="center" height="2%">
 					<html:button styleClass="actionButton" property="configButton" onclick = "onSubmit(this.form.selectedColumnNames,'finish');" >
 						<bean:message key="query.finish.button"/>
 					</html:button>
+			</td>
+			<td width="40%">
 			</td>
 			</tr>
 		</table>
