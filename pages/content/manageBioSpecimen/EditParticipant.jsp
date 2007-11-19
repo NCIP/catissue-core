@@ -774,7 +774,9 @@ function participantRegRow(subdivtag)
 
 					String collectionProtocolIdKey = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_id";
 					String collectionProtocolIdValue = (String)form.getCollectionProtocolRegistrationValue(collectionProtocolIdKey);
-
+					//Bug:5935 
+					String collectionProtocolRegIdValue = 	(String)form.getCollectionProtocolRegistrationValue("CollectionProtocolRegistration:" + i +"_id");
+					
 					if(consentResponseDisplayValue ==null)
 					{
 						consentResponseDisplayValue = Constants.NO_CONSENTS_DEFINED;
@@ -828,7 +830,7 @@ function participantRegRow(subdivtag)
 									consentResponseDisplayValue = Constants.PARTICIPANT_CONSENT_EDIT_RESPONSE;
 								}
 						%>
-								<a id="<%=anchorTagKey%>" href="javascript:openConsentPage('<%=collectionProtocolId%>','<%=i%>','<%=consentResponseDisplayValue%>')">
+								<a id="<%=anchorTagKey%>" href="javascript:openConsentPage('<%=collectionProtocolId%>','<%=i%>','<%=consentResponseDisplayValue%>','<%=collectionProtocolRegIdValue%>')">
 								<%=consentResponseDisplayValue%><br>
 								<input type='hidden' name="<%=collectionProtocolConsentCheck%>" value='Consent' id="<%=collectionProtocolConsentCheck%>" >
 								<input type='hidden' name="<%=consentResponseDisplay%>" value="<%=consentResponseDisplayValue%>" id="<%=consentResponseDisplay%>" >

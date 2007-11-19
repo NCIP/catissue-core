@@ -224,7 +224,29 @@ tr#hiddenCombo
 			ajaxCall(dataToSend, collectionProtocolId, identifier, anchorTagKey, index,consentCheckStatus);
 		}
 		
-		function openConsentPage(collectionProtocolId,index,responseString){
+		function openConsentPage(collectionProtocolId,index,responseString,collectionProtocolRegIdValue){
+			
+			//Bug:5935 collectionProtocolRegIdValue is added to display list of Specimen related to Participant.
+			if(responseString == "<%=Constants.NO_CONSENTS_DEFINED%>")
+			{
+				return;
+			}
+			
+			var collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
+			if(collectionProtocolIdValue=="-1")
+			{
+				alert("Please select collection protocol");
+				return;
+			}
+			
+			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue+"&collectionProtocolRegIdValue="+collectionProtocolRegIdValue;
+			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
+		}
+		/*
+		 This function is linked with new CP Participant Registration Dynamically
+		*/
+		function openConsentPageAjax(collectionProtocolId,index,responseString){
+
 			
 			if(responseString == "<%=Constants.NO_CONSENTS_DEFINED%>")
 			{
@@ -241,6 +263,7 @@ tr#hiddenCombo
 			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue;
 			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
 		}
+		
 		
 		var flag=false;
 		//Ajax Code Start
@@ -289,7 +312,7 @@ tr#hiddenCombo
 							anchorTag = document.createElement("a");
 						}
 						anchorTag.setAttribute("id",anchorTagKey);
-						anchorTag.setAttribute("href", "javascript:openConsentPage('"+collectionProtocolId+"','"+index+"','"+responseString+"')");
+						anchorTag.setAttribute("href", "javascript:openConsentPageAjax('"+collectionProtocolId+"','"+index+"','"+responseString+"')");
 						anchorTag.innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent' id='" + verificationKey + "'/><input type='hidden' name='" + consentResponseKey+ "' value='" +responseString+ "' id='" + consentResponseKey+ "'/>";
 						spanTag.appendChild(anchorTag);
 					}
