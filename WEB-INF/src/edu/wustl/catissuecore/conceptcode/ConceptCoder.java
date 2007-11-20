@@ -115,7 +115,7 @@ public class ConceptCoder
 		Logger.out.info("*********************Inside update report***************");
 		 try 
 		 {
-			 if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_BI_CONTENT)).equalsIgnoreCase("true"))
+			/* if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_BI_CONTENT)).equalsIgnoreCase("true"))
 			 {
 				 BinaryContent binaryContent=new BinaryContent();
 				 binaryContent.setData(this.gateXML);
@@ -128,7 +128,7 @@ public class ConceptCoder
 				 xmlContent.setData(this.chirpsXML);
 				 xmlContent.setSurgicalPathologyReport(this.deidPathologyReport);
 				 this.deidPathologyReport.setXmlContent(xmlContent);
-			 }
+			 }*/
 			 this.deidPathologyReport.setReportStatus(CaTIESConstants.CONCEPT_CODED);
 		}
 		 catch (Exception ex) 
