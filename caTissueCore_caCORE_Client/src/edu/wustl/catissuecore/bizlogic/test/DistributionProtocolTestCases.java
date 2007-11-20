@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -19,8 +18,9 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 		try{
 			DistributionProtocol distributionprotocol = BaseTestCaseUtility.initDistributionProtocol();			
 			System.out.println(distributionprotocol);
-			distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol); 
-			System.out.println("Object created successfully");
+			distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
+			TestCaseUtility.setObjectMap(distributionprotocol, DistributionProtocol.class);
+			System.out.println("Object created successfully");			
 			assertTrue("Object added successfully", true);
 		 }
 		 catch(Exception e){
@@ -31,13 +31,13 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 	
 	public void testSearchDistributionProtocol()
 	{
-			DistributionProtocol distributionprotocol = new DistributionProtocol();
-	       	Logger.out.info(" searching domain object");
-	    	distributionprotocol.setId(new Long(1));
-	   
-	         try {
-	        	 List resultList = appService.search(DistributionProtocol.class,distributionprotocol);
-	        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+		try {		
+		    DistributionProtocol distributionProtocol = new DistributionProtocol();
+			DistributionProtocol cachedDistributionProtocol = new DistributionProtocol();
+			Logger.out.info(" searching domain object");
+	    	distributionProtocol.setId((Long) cachedDistributionProtocol.getId());
+	        List resultList = appService.search(DistributionProtocol.class,distributionProtocol);
+	         for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
 	        		 DistributionProtocol returnedDP = (DistributionProtocol) resultsIterator.next();
 	        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedDP.getTitle());
 	        		// System.out.println(" Domain Object is successfully Found ---->  :: " + returnedDepartment.getName());
@@ -51,24 +51,24 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 	          }
 	}
 	
-	/*public void testUpdateDistributionProtocol()
+	public void testUpdateDistributionProtocol()
 	{
 	    try 
 	  	{
-	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
-	    	Logger.out.info("updating domain object------->"+distributionprotocol);
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
-	    	BaseTestCaseUtility.updateDistributionProtocol(distributionprotocol);	    	
-	    	DistributionProtocol updatedCRG = (DistributionProtocol) appService.updateObject(distributionprotocol);
-	       	Logger.out.info("Domain object successfully updated ---->"+updatedCRG);
-	       	assertTrue("Domain object successfully updated ---->"+updatedCRG, true);
+	    	DistributionProtocol distributionProtocol = (DistributionProtocol) TestCaseUtility.getObjectMap(DistributionProtocol.class);
+	    	Logger.out.info("updating domain object------->"+distributionProtocol);
+	    	//distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
+	    	BaseTestCaseUtility.updateDistributionProtocol(distributionProtocol);	    	
+	    	DistributionProtocol updatedDistributionProtocol = (DistributionProtocol) appService.updateObject(distributionProtocol);
+	       	Logger.out.info("Domain object successfully updated ---->"+updatedDistributionProtocol);
+	       	assertTrue("Domain object successfully updated ---->"+updatedDistributionProtocol, true);
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	 		assertFalse("failed to update Object", true);
 	    }
-	}	*/
+	}
 	
 	public void testDistributionProtocolWithEmptyTitle()
 	{
@@ -150,26 +150,7 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 	    }
 	}
 	
-	public void testDistributionProtocolWithClosedActivityStatus()
-	{
-		    	
-	    try 
-	  	{
-	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
-	    	distributionprotocol.setActivityStatus("Closed");
-	    		    	
-	    	Logger.out.info("updating domain object------->"+distributionprotocol);
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
-	    	Logger.out.info("DistributionProtocol object with closed activity status ---->"+distributionprotocol);
-	       	assertFalse("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
-	    } 
-	    catch (Exception e) {
-	       	Logger.out.error(e.getMessage(),e);
-	 		e.printStackTrace();
-	 		assertTrue("failed to create Distribution Protocol object", true);
-	    }
-	}
-	
+		
 	public void testDistributionProtocolWithInvalidActivityStatus()
 	{
 		    	
@@ -291,62 +272,43 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 	    }
 	}
 	
-//	public void testNullDomainObjectInInsert_DistributionProtocol()
-//	{
-//		domainObject = new DistributionProtocol(); 
-//		testNullDomainObjectInInsert(domainObject);
-//	}
-//	
-//	public void testNullSessionDataBeanInInsert_DistributionProtocol()
-//	{
-//		domainObject = new DistributionProtocol();
-//		testNullSessionDataBeanInInsert(domainObject);
-//	}
-//		
-//	public void testWrongDaoTypeInInsert_DistributionProtocol()
-//	{
-//		domainObject = new DistributionProtocol();
-//		testWrongDaoTypeInInsert(domainObject);
-//	}
-//	public void testNullSessionDataBeanInUpdate_DistributionProtocol()
-//	{
-//		domainObject = new DistributionProtocol();
-//		testNullSessionDataBeanInUpdate(domainObject);
-//	}
-//	
-//	public void testNullOldDomainObjectInUpdate_DistributionProtocol()
-//	{
-//		domainObject = new DistributionProtocol();
-//		testNullOldDomainObjectInUpdate(domainObject);
-//	}
-//	
-//		
-//	public void testNullCurrentDomainObjectInUpdate_DistributionProtocol()
-//	{
-//		domainObject = new DistributionProtocol();
-//		testNullCurrentDomainObjectInUpdate(domainObject);
-//	}
-//	
-//	public void testEmptyCurrentDomainObjectInUpdate_DistributionProtocol()
-//	{
-//		domainObject = new DistributionProtocol();
-//		AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initDistributionProtocol();
-//		testEmptyCurrentDomainObjectInUpdate(domainObject, initialisedDomainObject);
-//	}
-//	
-//	public void testEmptyOldDomainObjectInUpdate_DistributionProtocol()
-//	{
-//		domainObject = new DistributionProtocol();
-//		AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initDistributionProtocol();
-//		testEmptyOldDomainObjectInUpdate(domainObject,initialisedDomainObject);
-//	}
-//	
-//	public void testNullDomainObjectInRetrieve_DistributionProtocol()
-//	{
-//		domainObject = new DistributionProtocol();
-//		testNullCurrentDomainObjectInRetrieve(domainObject);
-//	}
-//		
-//		
-//	
+	public void testDistributionProtocolWithClosedActivityStatus()
+	{
+		    	
+	    try 
+	  	{
+	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
+	    	Logger.out.info("updating domain object------->"+distributionprotocol);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
+	    	distributionprotocol.setActivityStatus("Closed");
+	    	DistributionProtocol updatedDistributionprotocol = (DistributionProtocol) appService.updateObject(distributionprotocol);
+	    	Logger.out.info("DistributionProtocol object with closed activity status ---->"+distributionprotocol);
+	       	assertTrue("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
+	    } 
+	    catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("Failed to close Distribution Protocol object", true);
+	    }
+	}
+	
+	public void testDistributionProtocolWithDisabledActivityStatus()
+	{
+		    	
+	    try 
+	  	{
+	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
+	    	Logger.out.info("updating domain object------->"+distributionprotocol);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
+	    	distributionprotocol.setActivityStatus("Disabled");
+	    	DistributionProtocol updatedDistributionprotocol = (DistributionProtocol) appService.updateObject(distributionprotocol);
+	    	Logger.out.info("DistributionProtocol object with closed activity status ---->"+distributionprotocol);
+	       	assertTrue("DistributionProtocol successfully updated  ---->"+distributionprotocol, true);
+	    } 
+	    catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("Failed to disable Distribution Protocol object", true);
+	    }
+	}
 }

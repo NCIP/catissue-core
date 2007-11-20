@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
@@ -17,34 +18,39 @@ public class BioHazardTestCases extends CaTissueBaseTestCase {
 			Biohazard biohazard= BaseTestCaseUtility.initBioHazard();			
 			System.out.println(biohazard);
 			biohazard = (Biohazard) appService.createObject(biohazard); 
+			TestCaseUtility.setObjectMap(biohazard, Biohazard.class);
 			System.out.println("Object created successfully");
+			Logger.out.info(" Domain Object added successfully");
 			assertTrue("Object added successfully", true);
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
-			 assertFalse("could not add object", true);
+			 assertFalse("Could not add object", true);
 		 }
 	}
 	
 	/*public void testSearchBioHazard()
 	{
-		Biohazard biohazard = new Biohazard();
-    	Logger.out.info("searching domain object");
-    	biohazard.setId(new Long(1));
-   
-         try {
-        	 List resultList = appService.search(Biohazard.class,biohazard);
+        try {
+        	Biohazard biohazard = new Biohazard();
+    		Biohazard cachedBiohazard = (Biohazard) TestCaseUtility.getObjectMap(Biohazard.class);
+        	Logger.out.info("searching domain object");
+        	//biohazard.setId((Long) cachedBiohazard.getId());
+        	biohazard.setId(new Long(2));
+        	List resultList = appService.search(Biohazard.class,biohazard);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
         	 {
-        		 Biohazard returnedBiohazard = (Biohazard) resultsIterator.next();
-        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
-        		// System.out.println(" Domain Object is successfully Found ---->  :: " + returnedDepartment.getName());
+	    		 Biohazard returnedBiohazard = (Biohazard) resultsIterator.next();
+	    		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
+	    		 System.out.println(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
+	    		 assertTrue("Object added successfully", true);
              }
           } 
           catch (Exception e) {
            	Logger.out.error(e.getMessage(),e);
+            System.out.println(e.getMessage());
            	e.printStackTrace();
-           	assertFalse("Does not find Domain Object", true);
+           	fail("Does not find Domain Object");
 	 		
           }
 	}*/
@@ -118,8 +124,6 @@ public class BioHazardTestCases extends CaTissueBaseTestCase {
 			e.printStackTrace();
 			assertTrue("Invalid Biohazard type " , true);
 			 
-		 }
-		
+		 }		
 	}
-
 }

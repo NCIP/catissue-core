@@ -22,7 +22,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	public void testAddCollectionProtocol()
 	{
 		try
-		{
+		 {
 			CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();			
 			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 			TestCaseUtility.setObjectMap(collectionProtocol, CollectionProtocol.class);
@@ -35,13 +35,12 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 		 }
 	}
 	
-	/*public void testUpdateCollectionProtocol()
+	public void testUpdateCollectionProtocol()
 	{
 	    try 
 		{
-	    	CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();
+	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
 		   	Logger.out.info("updating domain object------->"+collectionProtocol);
-	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	BaseTestCaseUtility.updateCollectionProtocol(collectionProtocol);
 	    	System.out.println("befor");
 	    	System.out.println(collectionProtocol.getId()+">>>>");
@@ -56,12 +55,13 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    	e.printStackTrace();
 	    	assertFalse("Failed to update object",true);
 	    }
-	}*/
+	}
    
-	/*public void testSearchCollectionProtocol()
+	public void testSearchCollectionProtocol()
 	{
-    	CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();
-    	collectionProtocol.setId(new Long(2));
+    	CollectionProtocol collectionProtocol = new CollectionProtocol();
+    	CollectionProtocol cachedCollectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+    	cachedCollectionProtocol.setId((Long) cachedCollectionProtocol.getId());
        	Logger.out.info(" searching domain object");
     	
          try {
@@ -78,11 +78,10 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	 		e.printStackTrace();
 	 		assertFalse("Doesnot found collection protocol", true);
           }
-	}*/
+	}
     
-	/*public void testCollectionProtocolWithEmptyTitle()
-	{
-		    	
+	public void testCollectionProtocolWithEmptyTitle()
+	{		    	
 	    try 
 	  	{
 	    	CollectionProtocol collectionProtocol =  BaseTestCaseUtility.initCollectionProtocol();
@@ -155,25 +154,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	 		assertTrue("failed to create Collection Protocol object", true);
 	    }
 	}
-	public void testCollectionProtocolWithClosedActivityStatus()
-	{
-	    try 
-	  	{
-	    	CollectionProtocol collectionProtocol =  BaseTestCaseUtility.initCollectionProtocol();
-	    	collectionProtocol.setActivityStatus("Closed");
-	    		    	
-	    	Logger.out.info("updating domain object------->"+collectionProtocol);
-	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
-	    	Logger.out.info("Collection Protocol object with closed activity status ---->"+collectionProtocol);
-	       	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
-	    } 
-	    catch (Exception e)
-	    {
-	       	Logger.out.error(e.getMessage(),e);
-	 		e.printStackTrace();
-	 		assertTrue("failed to create Collection Protocol object", true);
-	    }
-	}
+	
 	public void testCollectionProtocolWithInvalidActivityStatus()
 	{
 		    	
@@ -192,7 +173,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	 		e.printStackTrace();
 	 		assertTrue("failed to create Collection Protocol object", true);
 	    }
-	}  
+	} 
 
 	public void testCollectionProtocolWithInvalidSpecimenClass()
 	{
@@ -335,51 +316,44 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	 		assertTrue("failed to create Collection Protocol object", true);
 	    }
 	}
-*/
 	
-//	public void testNullObjectInInsert_CollectionProtocol(){
-//		domainObject = new CollectionProtocol(); 
-//		testNullDomainObjectInInsert(domainObject);
-//	}
-//	
-//	public void testNullSessionDatBeanInInsert_CollectionProtocol(){
-//		domainObject = new CollectionProtocol();
-//		testNullSessionDataBeanInInsert(domainObject);
-//	}
-//	
-//	public void testNullSessionDataBeanInUpdate_CollectionProtocol(){
-//		domainObject = new CollectionProtocol();
-//		testNullSessionDataBeanInUpdate(domainObject);
-//	}
-//	
-//	public void testNullOldDomainObjectInUpdate_CollectionProtocol(){
-//		domainObject = new CollectionProtocol();
-//		testNullOldDomainObjectInUpdate(domainObject);
-//	}
-//	
-//	public void testNullCurrentDomainObjectInUpdate_CollectionProtocol(){
-//		domainObject = new CollectionProtocol();
-//		testNullCurrentDomainObjectInUpdate(domainObject);
-//	}
-//	
-//	public void testWrongDaoTypeInUpdate_CollectionProtocol(){
-//		domainObject = new CollectionProtocol();
-//		testNullCurrentDomainObjectInUpdate(domainObject);
-//	}
-//	
-//	public void testEmptyCurrentDomainObjectInUpdate_CollectionProtocol(){
-//		domainObject = new CollectionProtocol();
-//		AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initCollectionProtocol();
-//		testEmptyCurrentDomainObjectInUpdate(domainObject, initialisedDomainObject);
-//	}
-//	
-//	public void testEmptyOldDomainObjectInUpdate_CollectionProtocol(){
-//		domainObject = new CollectionProtocol();
-//		AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initCollectionProtocol();
-//		testEmptyOldDomainObjectInUpdate(domainObject, initialisedDomainObject);
-//	}
-//	
-//	
-//	
+	/*public void testCollectionProtocolWithClosedActivityStatus()
+	{
+	    try 
+	  	{
+	    	CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();			
+			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
+			collectionProtocol.setActivityStatus("Closed");
+	    	Logger.out.info("updating domain object------->"+collectionProtocol);
+	    	CollectionProtocol updatedCP  = (CollectionProtocol) appService.updateObject(collectionProtocol);
+	    	Logger.out.info("Collection Protocol object with closed activity status ---->"+updatedCP);
+	       	assertTrue("Collection Protocol updated successfully ---->"+updatedCP, true);
+	    } 
+	    catch (Exception e)
+	    {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("Failed to close Collection Protocol object", true);
+	    }
+	}*/
 	
+	public void testCollectionProtocolWithDisabledActivityStatus()
+	{
+	    try 
+	  	{
+	    	CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();			
+			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
+			collectionProtocol.setActivityStatus("Disabled");
+	    	Logger.out.info("updating domain object------->"+collectionProtocol);
+	    	CollectionProtocol updatedCP  = (CollectionProtocol) appService.updateObject(collectionProtocol);
+	    	Logger.out.info("Collection Protocol object with closed activity status ---->"+updatedCP);
+	       	assertTrue("Collection Protocol updated successfully ---->"+updatedCP, true);
+	    } 
+	    catch (Exception e)
+	    {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertTrue("Failed to disable Collection Protocol object", true);
+	    }
+	}
 }
