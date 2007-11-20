@@ -168,7 +168,7 @@
 		}
 		else if(reportId==null || reportId==-2)
 		{
-			alert("Associated repoty is under quarantined request! Please contact administrator for further details.");
+			alert("Associated report is under quarantined request! Please contact administrator for further details.");
 		}
 		else
 		{
