@@ -773,7 +773,8 @@ public abstract class QueryModuleUtil
 							{
 								for(int i=0;i<split.length;i++)
 								{
-									if(split[i].equals(sqlColumnName))
+									String string = split[i].trim();
+									if(string.equals(sqlColumnName.trim()))
 									{
 										entityIdIndexMap.put(attribute.getEntity(), i);
 										break;
