@@ -2,7 +2,7 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 
-<project name="caTissueSuite Client" default="compile">
+<project name="caTissueSuite Client" default="compile_junit_TestCases" >
 	
 	<!--define require dir and Properties -->	
 	<property name="base.dir" value="."/>
@@ -29,9 +29,9 @@
 			<include name="*.jar"/>
 		</fileset>
 	</path>
-	
+	<!-- Target ,compile and runDemo are disabled as it no longer supported .Only Junit test cases are available.-->	
     <!-- Compile all files, generated and hand-written -->
-    <target name="compile">
+    <!--<target name="compile">
         <javac destdir="${base.dir}" includes="**/*.*" includeAntRuntime="false">
             <src path="${base.dir}"/>
             <classpath>
@@ -41,9 +41,9 @@
             </classpath>
         </javac>
     </target>
-		
+	-->	
 	<!-- run TestClient java file -->
-	<target name="runDemo" depends="compile">		
+	<!--<target name="runDemo" depends="compile">		
 		<java classname="ClientDemo" fork="true">
 			<classpath refid="cp"/>
 			<classpath>
@@ -52,7 +52,7 @@
 			<sysproperty key="log4j.configuration"
 						value="${conf.dir}/client_log4j.properties"/>
 		</java>
-	</target>
+	</target>-->
 	
 	
 	<!-- =================================================================== -->
