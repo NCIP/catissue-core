@@ -277,7 +277,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 							continue;
 
 						List<String> values = condition.getValues();
-						String operator = condition.getRelationalOperator().toString();
+						String operator = condition.getRelationalOperator().getStringRepresentation();
 						generatedHTML.append("\n"
 								+ generateHTMLForOperators(attribute, operatorsList, operator,
 										"PermissibleValuesQuery"));
@@ -613,7 +613,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 					{
 						ICondition condition = attributeNameConditionMap.get(attrName);
 						List<String> values = (List<String>) condition.getValues();
-						String operator = condition.getRelationalOperator().toString();
+						String operator = condition.getRelationalOperator().getStringRepresentation();
 						generatedHTML.append("\n"
 								+ generateHTMLForOperators(attribute, operatorsList, operator,
 										"PermissibleValuesQuery"));
@@ -893,8 +893,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 			while (iter.hasNext())
 			{
 				String operator = iter.next().toString();
-				String op1 = operator.replace(" ", "");
-				if (op1.equalsIgnoreCase(op))
+				//String op1 = operator.replace(" ", "");
+				if (operator.equalsIgnoreCase(op))
 				{
 					html.append("\n<option  class=" + cssClass + " value=\"" + operator
 							+ "\" SELECTED>" + operator + "</option>");
