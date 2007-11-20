@@ -141,7 +141,6 @@ public class SiteTestCases extends CaTissueBaseTestCase {
 	{
 		try{
 			Site site = BaseTestCaseUtility.initSite();		
-			//te.setId(new Long("1"));
 			User user= new User();
 			user = BaseTestCaseUtility.initUser(); 
 			site.setCoordinator(user);
@@ -155,62 +154,21 @@ public class SiteTestCases extends CaTissueBaseTestCase {
 			 assertTrue("Cordinator is required", true);
 		 }
 	}
+	public void testUpdateSiteToClosedActivityStatus()
+	{
+		try{
+			Site site = BaseTestCaseUtility.initSite();		
+			site = (Site) appService.createObject(site); 
+			site.setActivityStatus("Closed");
+			System.out.println(site);
+			Site updatedSite = (Site) appService.updateObject(site); 
+			assertTrue("Site updated successfully", true);
+		 }
+		 catch(Exception e){
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertFalse("Failed to update site", true);
+		 }
+	}
 	
-	
-//	
-//	public void testNullDomainObjectInInsert_Site()
-//	{
-//		domainObject = new Site(); 
-//		testNullDomainObjectInInsert(domainObject);
-//	}
-//	
-//	public void testNullSessionDataBeanInInsert_Site()
-//	{
-//		domainObject = new Site();
-//		testNullSessionDataBeanInInsert(domainObject);
-//	}
-//		
-//	public void testWrongDaoTypeInInsert_Site()
-//	{
-//		domainObject = new Site();
-//		testWrongDaoTypeInInsert(domainObject);
-//	}
-//	public void testNullSessionDataBeanInUpdate_Site()
-//	{
-//		domainObject = new Site();
-//		testNullSessionDataBeanInUpdate(domainObject);
-//	}
-//	
-//	public void testNullOldDomainObjectInUpdate_Site()
-//	{
-//		domainObject = new Site();
-//		testNullOldDomainObjectInUpdate(domainObject);
-//	}
-//	
-//		
-//	public void testNullCurrentDomainObjectInUpdate_Site()
-//	{
-//		domainObject = new Site();
-//		testNullCurrentDomainObjectInUpdate(domainObject);
-//	}
-//	
-//	public void testEmptyCurrentDomainObjectInUpdate_Site()
-//	{
-//		domainObject = new Site();
-//		AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initDistributionProtocol();
-//		testEmptyCurrentDomainObjectInUpdate(domainObject, initialisedDomainObject);
-//	}
-//	
-//	public void testEmptyOldDomainObjectInUpdate_Site()
-//	{
-//		domainObject = new Site();
-//		AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initDistributionProtocol();
-//		testEmptyOldDomainObjectInUpdate(domainObject,initialisedDomainObject);
-//	}
-//	
-//	public void testNullDomainObjectInRetrieve_Site()
-//	{
-//		domainObject = new Site();
-//		testNullCurrentDomainObjectInRetrieve(domainObject);
-//	}
 }

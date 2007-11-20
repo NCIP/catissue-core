@@ -168,16 +168,24 @@ public class UserTestCases extends CaTissueBaseTestCase {
 		 }
 	 }
 	
-	public void testAddUserWithNullInstitutuion()
+	public void testAddUserWithEmptyZipCode()
 	 {
 		 try
 		 {
 			User user = (User) BaseTestCaseUtility.initUser();		
-			user.setInstitution(null);
+			Address address = new Address();
+			address.setStreet("Main street");
+			address.setCity("New hampshier");
+			address.setState("Alabama");
+			address.setZipCode("");
+			address.setCountry("United States");
+			address.setPhoneNumber("21222324");
+			address.setFaxNumber("21222324");
+			user.setAddress(address);
 			System.out.println(user);
 			user = (User) appService.createObject(user);
-			Logger.out.info("For empty null Institute name, it should throw exception");
-			fail("For empty null Institute name, it should throw exception");
+			Logger.out.info("For empty last name, it should throw exception");
+			fail("For empty last name, it should throw exception");
 			
 		 }
 		 catch(Exception e)
@@ -189,7 +197,28 @@ public class UserTestCases extends CaTissueBaseTestCase {
 		 }
 	 }
 	
-	public void testAddUserWithNullDeptepartment()
+	public void testAddUserWithNullInstitution()
+	 {
+		 try
+		 {
+			User user = (User) BaseTestCaseUtility.initUser();		
+			user.setCancerResearchGroup(null);
+			System.out.println(user);
+			user = (User) appService.createObject(user);
+			Logger.out.info("For null Institute name, it should throw exception");
+			fail("For null Institute name, it should throw exception");
+			
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("For empty last name, it throws exception", true);
+			 
+		 }
+	 }
+	
+	public void testAddUserWithNullDepartment()
 	 {
 		 try
 		 {
@@ -197,8 +226,29 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			user.setDepartment(null);
 			System.out.println(user);
 			user = (User) appService.createObject(user);
-			Logger.out.info("For empty last name, it should throw exception");
-			fail("For empty last name, it should throw exception");
+			Logger.out.info("For null department, it should throw exception");
+			fail("For null department, it should throw exception");
+			
+		 }
+		 catch(Exception e)
+		 {
+		//	 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("For null Department, it throws exception", true);
+			 
+		 }
+	 }
+	
+	public void testAddUserWithNullCRG()
+	 {
+		 try
+		 {
+			User user = (User) BaseTestCaseUtility.initUser();		
+			user.setDepartment(null);
+			System.out.println(user);
+			user = (User) appService.createObject(user);
+			Logger.out.info("For null CRG, it should throw exception");
+			fail("For null CRG, it should throw exception");
 			
 		 }
 		 catch(Exception e)
@@ -206,6 +256,27 @@ public class UserTestCases extends CaTissueBaseTestCase {
 		//	 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
 			 assertTrue("For empty last name, it throws exception", true);
+			 
+		 }
+	 }
+	
+	public void testAddUserWithNullRoleId()
+	 {
+		 try
+		 {
+			User user = BaseTestCaseUtility.initUser();		
+			user.setRoleId("");
+			System.out.println(user);
+			user = (User) appService.createObject(user);
+			Logger.out.info("For invalid role id, it should throw exception");
+			fail("For invalid role id, it should throw exception");
+			
+		 }
+		 catch(Exception e)
+		 {
+		//	 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("For invalid role id, it throws exception", true);
 			 
 		 }
 	 }
