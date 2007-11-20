@@ -130,13 +130,7 @@ public class DeidReportThread extends Thread
 		Logger.out.info("Creating deid report for identifiedReport id="+ispr.getId());
 		// instnatiate deidentified report
 		DeidentifiedSurgicalPathologyReport deidReport=new DeidentifiedSurgicalPathologyReport();
-		
-		if (ispr.getCollectionDateTime() != null) 
-		{
-			//if collection date and time is not null then set it to deidentifide repot
-            deidReport.setCollectionDateTime(deidCollectedDate);
-        }
-		  
+        		  
 		// set default values for deidentified report
 		deidReport.setActivityStatus(ispr.getActivityStatus()); 
        	deidReport.setReportStatus(CaTIESConstants.PENDING_FOR_XML);
@@ -148,8 +142,6 @@ public class DeidReportThread extends Thread
         // set identified report to deidentified report
         tc.setSurgicalPathologyReport(deidReport);
         
-        // set reportSource for deidentified report
-        deidReport.setReportSource(ispr.getReportSource());
         // set text content which contains deidentified text to deidentified report 
         deidReport.setTextContent(tc);
         // set default value for flag for review
