@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.util.querysuite;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -752,6 +753,7 @@ public abstract class QueryModuleUtil
 	public static String updateEntityIdIndexMap(QueryResultObjectDataBean queryResultObjectDataBean,
 			int columnIndex, String selectSql, List<EntityInterface> defineViewNodeList, Map<EntityInterface, Integer> entityIdIndexMap)
 	{  
+		String[] split = selectSql.split(",");
 		if(defineViewNodeList!=null)
 		{
 			for (EntityInterface entity : defineViewNodeList)
@@ -767,11 +769,25 @@ public abstract class QueryModuleUtil
 						String sqlColumnName = attributeMetaData.getColumnName();
 						if (attribute.getName().equals(Constants.ID))
 						{
-							selectSql += ", " + sqlColumnName;
-
-							entityIdIndexMap.put(attribute.getEntity(), columnIndex);
-							columnIndex++;
-							break;
+							if(selectSql.contains(sqlColumnName.trim()))
+							{
+								for(int i=0;i<split.length;i++)
+								{
+									if(split[i].equals(sqlColumnName))
+									{
+										entityIdIndexMap.put(attribute.getEntity(), i);
+										break;
+									}
+								}
+							}
+							else
+							{
+								selectSql += ", " + sqlColumnName;
+	
+								entityIdIndexMap.put(attribute.getEntity(), columnIndex);
+								columnIndex++;
+								break;
+							}
 						}
 					}
 				}
@@ -790,11 +806,24 @@ public abstract class QueryModuleUtil
 						String sqlColumnName = attributeMetaData.getColumnName();
 						if (attribute.getName().equals(Constants.ID))
 						{
-							selectSql += ", " + sqlColumnName;
-
-							entityIdIndexMap.put(attribute.getEntity(), columnIndex);
-							columnIndex++;
-							break;
+							if(selectSql.contains(sqlColumnName.trim()))
+							{
+								for(int i=0;i<split.length;i++)
+								{
+									if(split[i].equals(sqlColumnName))
+									{
+										entityIdIndexMap.put(attribute.getEntity(), i);
+										break;
+									}
+								}
+							}
+							else
+							{
+								selectSql += ", " + sqlColumnName;
+								entityIdIndexMap.put(attribute.getEntity(), columnIndex);
+								columnIndex++;
+								break;
+							}
 						}
 					}
 				}

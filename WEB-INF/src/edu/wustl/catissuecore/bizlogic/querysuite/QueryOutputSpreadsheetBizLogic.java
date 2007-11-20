@@ -234,7 +234,7 @@ public class QueryOutputSpreadsheetBizLogic
 	 */
 	private String createSQL(String parentData, String tableName, Map spreadSheetDataMap, String parentIdColumnName, OutputTreeDataNode node,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap)
 	{    
-		String selectSql = Constants.SELECT_DISTINCT;
+		String selectSql = "";
 		String idColumnOfCurrentNode = "";
 		List<String> columnsList = new ArrayList<String>();
 		List<IOutputAttribute> selectedOutputAttributeList = new ArrayList<IOutputAttribute>();
@@ -319,6 +319,8 @@ public class QueryOutputSpreadsheetBizLogic
 			queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
 		queryResultObjectDataBean.setObjectColumnIds(objectDataColumnIds);
 		}
+		if(selectSql.indexOf(Constants.SELECT_DISTINCT) == -1)
+			selectSql = Constants.SELECT_DISTINCT + selectSql;
 		return selectSql;
 	}
 	/**
@@ -419,9 +421,7 @@ public class QueryOutputSpreadsheetBizLogic
 						elem.setMainEntityIdentifierColumnId(entityIdIndexMap.get(elem
 								.getMainEntity()));
 					else
-						elem
-								.setMainEntityIdentifierColumnId(entityIdIndexMap.get(elem
-										.getEntity()));
+						elem.setMainEntityIdentifierColumnId(entityIdIndexMap.get(elem.getEntity()));
 				}
 
 			}
