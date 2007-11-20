@@ -2172,5 +2172,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String QUERY_REASUL_OBJECT_DATA_MAP = "queryReasultObjectDataMap";
 	public static final String DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP = "defineViewQueryReasultObjectDataMap";
 	public static final String HAS_CONDITION_ON_IDENTIFIED_FIELD = "hasConditionOnIdentifiedField";
+	public static final String CONTAINTMENT_ASSOCIATION = "CONTAINTMENT";
 	
 }
