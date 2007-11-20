@@ -45,7 +45,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				"&pos2=" + positionDimensionTwo +
 				"&containerId=" +containerId +
 				"&<%=Constants.CAN_HOLD_SPECIMEN_CLASS %>="+specimenClassName +
-				"&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%> =" + cpId;
+				"&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + cpId;
 			
 			var storageContainer = document.getElementById(selectedContainerName).value;
 			frameUrl+="&storageContainerName="+storageContainer;
