@@ -84,6 +84,7 @@ public class BaseTestCaseUtility {
 		collectionProtocol.setTitle("coll proto"+UniqueKeyGeneratorUtil.getUniqueKey());
 		collectionProtocol.setShortTitle("pc"+UniqueKeyGeneratorUtil.getUniqueKey());
 		collectionProtocol.setEnrollment(2);
+		
 		System.out.println("reached setUp");
 		
 		try
@@ -237,7 +238,9 @@ public class BaseTestCaseUtility {
 	
 	public static void updateCollectionProtocol(CollectionProtocol collectionProtocol)
 	{
-		collectionProtocol.setAliquotInSameContainer(new Boolean(false)); //true
+		collectionProtocol.setIrbIdentifier("abcdef");
+		collectionProtocol.setShortTitle("PC1"+UniqueKeyGeneratorUtil.getUniqueKey());
+		/*collectionProtocol.setAliquotInSameContainer(new Boolean(false)); //true
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active"); //Active
 		collectionProtocol.setEndDate(null);
@@ -255,7 +258,7 @@ public class BaseTestCaseUtility {
 		catch (ParseException e)
 		{
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	public static CollectionProtocolEvent initCollectionProtocolEvent()
@@ -893,12 +896,13 @@ public class BaseTestCaseUtility {
 	
 	public static void updateDistributionProtocol(DistributionProtocol distributionProtocol)
 	{
-		User principalInvestigator = initUser();
+		User principalInvestigator = new User();
+		principalInvestigator.setId(new Long(1));
 		/*	
 		new User();
 		principalInvestigator.setId(new Long(1));
 		*/
-		distributionProtocol.setPrincipalInvestigator(principalInvestigator);
+		//distributionProtocol.setPrincipalInvestigator(principalInvestigator);
 		distributionProtocol.setTitle("DP"+ UniqueKeyGeneratorUtil.getUniqueKey());
 		distributionProtocol.setShortTitle("DP"); //DP1
 		distributionProtocol.setIrbIdentifier("11111");//55555
