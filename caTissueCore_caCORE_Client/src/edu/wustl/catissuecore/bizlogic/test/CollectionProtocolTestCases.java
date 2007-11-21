@@ -30,8 +30,10 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 		 }
 		 catch(Exception e)
 		 {
+			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertFalse("could not add object", true);
+			 //assertFalse("could not add object", true);
+			 fail("could not add object");
 		 }
 	}
 	
@@ -42,10 +44,10 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
 		   	Logger.out.info("updating domain object------->"+collectionProtocol);
 	    	BaseTestCaseUtility.updateCollectionProtocol(collectionProtocol);
-	    	System.out.println("befor");
-	    	System.out.println(collectionProtocol.getId()+">>>>");
+	    	//System.out.println("befor");
+	    	//System.out.println(collectionProtocol.getId()+">>>>");
 	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
-	    	System.out.println("after");
+	    	//System.out.println("after");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 	    	assertTrue("Domain object updated successfully", true);
 	    } 
@@ -53,7 +55,8 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    {
 	    	Logger.out.error(e.getMessage(),e);
 	    	e.printStackTrace();
-	    	assertFalse("Failed to update object",true);
+	    	//assertFalse("Failed to update object",true);
+	    	fail("Failed to update object");
 	    }
 	}
    
@@ -63,8 +66,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
     	CollectionProtocol cachedCollectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
     	cachedCollectionProtocol.setId((Long) cachedCollectionProtocol.getId());
        	Logger.out.info(" searching domain object");
-    	
-         try {
+    	try {
         	// collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
         	 List resultList = appService.search(CollectionProtocol.class,collectionProtocol);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
@@ -76,7 +78,8 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
           catch (Exception e) {
         	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-	 		assertFalse("Doesnot found collection protocol", true);
+	 		//assertFalse("Doesnot found collection protocol", true);
+	 		fail("Doesnot found collection protocol");
           }
 	}
     
@@ -89,7 +92,8 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    	Logger.out.info("updating domain object------->"+collectionProtocol);
 	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object eith empty title ---->"+collectionProtocol);
-	       	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
+	       	//assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
+	       	fail("Collection Protocol should throw exception");
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
@@ -107,6 +111,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol); 
 			dupCollectionProtocol = (CollectionProtocol) appService.createObject(dupCollectionProtocol); 
 			assertFalse("Test Failed. Duplicate Collection Protocol name should throw exception", true);
+			fail("Test Failed. Duplicate Collection Protocol name should throw exception");
 		}
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -126,7 +131,8 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    	Logger.out.info("updating domain object------->"+collectionProtocol);
 	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with empty short title ---->"+collectionProtocol);
-	       	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
+	       	//assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
+	    	fail("Collection Protocol should throw exception");
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
@@ -147,6 +153,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with empty date ---->"+collectionProtocol);
 	       	assertFalse("Collection should throw exception ---->"+collectionProtocol, true);
+	       	fail("Collection Protocol should throw exception");
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
@@ -167,6 +174,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid activity status ---->"+collectionProtocol);
 	       	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
+	       	fail("Collection Protocol should throw exception");
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
@@ -198,7 +206,8 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 
 			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
-	       	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true); 
+	       //assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
+	    	fail("Collection Protocol should throw exception");
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
@@ -234,7 +243,8 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 
 			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
-	       	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true); 
+	       	//assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true); 
+	       	fail("Collection Protocol should throw exception");
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
@@ -272,7 +282,8 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 
 			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
-	       	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true); 
+	      // 	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true); 
+	       	fail("Collection Protocol should throw exception");
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
@@ -308,52 +319,15 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	  	{
 			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
-	       	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true); 
+	       	//assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
+	    	fail("Collection Protocol should throw exception");
 	    } 
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-	 		assertTrue("failed to create Collection Protocol object", true);
+	 		assertTrue("Failed to create Collection Protocol object", true);
 	    }
 	}
 	
-	/*public void testCollectionProtocolWithClosedActivityStatus()
-	{
-	    try 
-	  	{
-	    	CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();			
-			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
-			collectionProtocol.setActivityStatus("Closed");
-	    	Logger.out.info("updating domain object------->"+collectionProtocol);
-	    	CollectionProtocol updatedCP  = (CollectionProtocol) appService.updateObject(collectionProtocol);
-	    	Logger.out.info("Collection Protocol object with closed activity status ---->"+updatedCP);
-	       	assertTrue("Collection Protocol updated successfully ---->"+updatedCP, true);
-	    } 
-	    catch (Exception e)
-	    {
-	       	Logger.out.error(e.getMessage(),e);
-	 		e.printStackTrace();
-	 		assertFalse("Failed to close Collection Protocol object", true);
-	    }
-	}*/
-	
-	public void testCollectionProtocolWithDisabledActivityStatus()
-	{
-	    try 
-	  	{
-	    	CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();			
-			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
-			collectionProtocol.setActivityStatus("Disabled");
-	    	Logger.out.info("updating domain object------->"+collectionProtocol);
-	    	CollectionProtocol updatedCP  = (CollectionProtocol) appService.updateObject(collectionProtocol);
-	    	Logger.out.info("Collection Protocol object with closed activity status ---->"+updatedCP);
-	       	assertTrue("Collection Protocol updated successfully ---->"+updatedCP, true);
-	    } 
-	    catch (Exception e)
-	    {
-	       	Logger.out.error(e.getMessage(),e);
-	 		e.printStackTrace();
-	 		assertTrue("Failed to disable Collection Protocol object", true);
-	    }
-	}
+
 }
