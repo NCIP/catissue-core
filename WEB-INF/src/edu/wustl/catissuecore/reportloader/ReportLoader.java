@@ -114,7 +114,8 @@ public class ReportLoader
 				// if scg is null create new scg
 				Logger.out.debug("Null SCG found in ReportLoader, Creating New SCG");
 				this.scg=createNewSpecimenCollectionGroup();
-				CaCoreAPIService.createObject(this.scg);
+				this.scg=(SpecimenCollectionGroup)CaCoreAPIService.createObject(this.scg);
+				this.identifiedReport.setSpecimenCollectionGroup(this.scg);
 				CaCoreAPIService.createObject(this.identifiedReport);
 			}
 			else
@@ -266,12 +267,17 @@ public class ReportLoader
 	
 	private void retrieveAndSetSCG() throws Exception
 	{
-		
+
+		this.scg=(SpecimenCollectionGroup)CaCoreAPIService.getObject(SpecimenCollectionGroup.class, Constants.SYSTEM_IDENTIFIER, scg.getId());
+		CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)CaCoreAPIService.getObject(CollectionProtocolRegistration.class, Constants.SYSTEM_IDENTIFIER, this.scg.getCollectionProtocolRegistration().getId());
+		this.scg.setCollectionProtocolRegistration(collectionProtocolRegistration);
 		// set identified report
-		if(this.scg.getIdentifiedSurgicalPathologyReport()!=null  && this.scg.getIdentifiedSurgicalPathologyReport().getId()!=null)
+		if(this.scg.getIdentifiedSurgicalPathologyReport()!=null)
 		{
+			
 			Logger.out.info("inside"+this.scg.getIdentifiedSurgicalPathologyReport().getId());
-			IdentifiedSurgicalPathologyReport existingReport=scg.getIdentifiedSurgicalPathologyReport();
+			
+			IdentifiedSurgicalPathologyReport existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(IdentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, this.scg.getIdentifiedSurgicalPathologyReport().getId());
 		
 			existingReport.setSpecimenCollectionGroup(null);
 			this.scg.setIdentifiedSurgicalPathologyReport(null);
@@ -304,9 +310,6 @@ public class ReportLoader
 			this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport);
 			this.identifiedReport.setSpecimenCollectionGroup(this.scg);
 		
-		if(this.scg.getSurgicalPathologyNumber()==null)
-		{
 			this.scg.setSurgicalPathologyNumber(this.surgicalPathologyNumber);
-		}
 	}
 }
