@@ -1677,6 +1677,7 @@ PUBLIC
 			<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.specimenEditDef" />
 			<forward name="failure" path=".catissuecore.newSpecimenDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="pageOfSpecimenCollectionRequirementGroup" path=".catissuecore.SpecimenCollectionRequirementGroupEditDef" />
 		</action>
 		
 		<action path="/NewSpecimenAdd"
