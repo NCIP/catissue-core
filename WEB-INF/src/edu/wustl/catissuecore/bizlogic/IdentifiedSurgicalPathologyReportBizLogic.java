@@ -36,7 +36,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) obj;
-		dao.insert(report, sessionDataBean, true, true);
+		dao.insert(report, sessionDataBean, false, true);
 		Set protectionObjects = new HashSet();
 		protectionObjects.add(report);
 		try

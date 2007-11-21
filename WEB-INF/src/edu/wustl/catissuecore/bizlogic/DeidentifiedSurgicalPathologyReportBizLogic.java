@@ -36,7 +36,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 		{
 		DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) obj;
 
-		dao.insert(report, sessionDataBean, true, false);
+		dao.insert(report, sessionDataBean, false, false);
 		Set protectionObjects = new HashSet();
 		protectionObjects.add(report);
 		try
