@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -41,7 +43,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 		protectionObjects.add(report);
 		try
 		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, null);
+			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(dao, report));
 		}
 		catch (SMException e)
 		{
@@ -49,6 +51,25 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 		}
 	}
 
+	/**
+	 * Method to get dynamicGroup for given Report
+	 * @param obj IdentifiedSurgicalPathologyReport object
+	 * @return Array of dynamicGroup
+	 * @throws SMException Security manager exception
+	 * @throws DAOException 
+	 */
+	private String[] getDynamicGroups(DAO dao, AbstractDomainObject obj) throws SMException, DAOException
+	{
+		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport= (IdentifiedSurgicalPathologyReport)obj;
+		CollectionProtocolRegistration collectionProtocolRegistration=identifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
+		String[] dynamicGroups = new String[1];
+
+		dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
+				collectionProtocolRegistration, Constants.getCollectionProtocolPGName(null));
+		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
+		return dynamicGroups;
+	}
+	
 	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
