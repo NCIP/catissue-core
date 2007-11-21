@@ -766,15 +766,15 @@ public abstract class QueryModuleUtil
 					for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 					{
 						AttributeInterface attribute = attributeMetaData.getAttribute();
-						String sqlColumnName = attributeMetaData.getColumnName();
+						String sqlColumnName = attributeMetaData.getColumnName().trim();
 						if (attribute.getName().equals(Constants.ID))
 						{
-							if(selectSql.contains(sqlColumnName.trim()))
+							if(selectSql.contains(sqlColumnName))
 							{
 								for(int i=0;i<split.length;i++)
 								{
 									String string = split[i].trim();
-									if(string.equals(sqlColumnName.trim()))
+									if(string.equals(sqlColumnName))
 									{
 										entityIdIndexMap.put(attribute.getEntity(), i);
 										break;

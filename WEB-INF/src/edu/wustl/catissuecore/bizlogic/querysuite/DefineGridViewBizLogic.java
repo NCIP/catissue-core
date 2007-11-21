@@ -311,9 +311,11 @@ public class DefineGridViewBizLogic
 			Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
 			sql = QueryModuleUtil.updateEntityIdIndexMap(queryResulObjectDataBean, columnIndex, sql,defineViewNodeList,entityIdIndexMap);
 			selectedColumnNames.replace(0, selectedColumnNames.length(), sql);
-			if(queryResulObjectDataBean.isMainEntity())
-			 queryResulObjectDataBean.setMainEntityIdentifierColumnId(queryResulObjectDataBean.getEntityIdIndexMap().get(queryResulObjectDataBean.getEntity()));
-			else
+			if(queryResulObjectDataBean.isMainEntity()) {
+				EntityInterface entity = queryResulObjectDataBean.getEntity();
+				Integer integer = queryResulObjectDataBean.getEntityIdIndexMap().get(entity);
+				queryResulObjectDataBean.setMainEntityIdentifierColumnId(integer);
+			} else
 			{
 				EntityInterface mainEntity = queryResulObjectDataBean.getMainEntity();
 				if(queryResulObjectDataBean.getEntityIdIndexMap().get(mainEntity)!=null)

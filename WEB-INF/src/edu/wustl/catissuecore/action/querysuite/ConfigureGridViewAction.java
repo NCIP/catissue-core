@@ -108,7 +108,6 @@ public class ConfigureGridViewAction extends BaseAction
 			StringBuffer selectedColumnNames = new StringBuffer();
 			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm, selectedColumnsMetadata, selectedColumnNames,queryResultObjecctDataMap);
 			String SqlForSelectedColumns = defineGridViewBizLogic.createSQLForSelectedColumn(selectedColumnNames, sql);
-			queryResultObjecctDataMap = (Map<Long, QueryResultObjectDataBean>)session.getAttribute(Constants.QUERY_REASUL_OBJECT_DATA_MAP);
 			querySessionData = queryOutputSpreadsheetBizLogic.getQuerySessionData(sessionData, recordsPerPage, 0, spreadSheetDataMap,
 					SqlForSelectedColumns,queryResultObjecctDataMap,hasConditionOnIdentifiedField);
 			selectedColumnNameValueBeanList = null;
