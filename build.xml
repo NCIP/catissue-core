@@ -383,8 +383,10 @@
 		</copy>
 		<!-- DE conf files end -->
 		<!-- Copying DEIntegration.war-->
-		<copy file="deintegration.war" todir="${zip.dir}" overwrite="true" />
+		<copy file="deintegration.war" todir="${zip.dir}" overwrite="true" />		
 		
+		<delete file="${zip.dir}/caTissueCore_caCORE_Client/ClientDemo.java" />
+		<delete file="${zip.dir}/caTissueCore_caCORE_Client/APIDemo.java" />
 		<zip destfile="${zip.file}" basedir="${zip.dir}" />
 		<delete dir="${zip.dir}" />
 	</target>
