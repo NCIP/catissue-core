@@ -225,7 +225,12 @@ tr#hiddenCombo
 		}
 		
 		function openConsentPage(collectionProtocolId,index,responseString,collectionProtocolRegIdValue){
-			
+			//When RegId value is not available.-Add participant page.
+			if(collectionProtocolRegIdValue == "null")
+			{
+			 openConsentPageAjax(collectionProtocolId,index,responseString);
+			 return;
+			}
 			//Bug:5935 collectionProtocolRegIdValue is added to display list of Specimen related to Participant.
 			if(responseString == "<%=Constants.NO_CONSENTS_DEFINED%>")
 			{
