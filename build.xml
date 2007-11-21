@@ -693,6 +693,7 @@
 				<include name="**/edu/wustl/catissuecore/client/**"/>
 				<include name="**/edu/wustl/catissuecore/bean/**"/>
 				<include name="**/edu/wustl/catissuecore/namegenerator/**"/>
+				<include name="**/edu/wustl/catissuecore/caties/**"/>
 				
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />
