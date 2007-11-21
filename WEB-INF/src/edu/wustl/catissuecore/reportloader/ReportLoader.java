@@ -115,6 +115,7 @@ public class ReportLoader
 				Logger.out.debug("Null SCG found in ReportLoader, Creating New SCG");
 				this.scg=createNewSpecimenCollectionGroup();
 				CaCoreAPIService.createObject(this.scg);
+				CaCoreAPIService.createObject(this.identifiedReport);
 			}
 			else
 			{
