@@ -240,16 +240,10 @@ public class BaseTestCaseUtility {
 	{
 		collectionProtocol.setIrbIdentifier("abcdef");
 		collectionProtocol.setShortTitle("PC1"+UniqueKeyGeneratorUtil.getUniqueKey());
-		collectionProtocol.setAliquotInSameContainer(new Boolean(false)); //true
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active"); //Active
-		collectionProtocol.setEndDate(null);
-		collectionProtocol.setEnrollment(null);
-		collectionProtocol.setIrbIdentifier("11111");//77777
-		collectionProtocol.setTitle("cp consent updated title" + UniqueKeyGeneratorUtil.getUniqueKey());
-		collectionProtocol.setShortTitle("cp concent"); //pc!
-		collectionProtocol.setEnrollment(10);//2
-		
+		//collectionProtocol.setEndDate(null);
+		collectionProtocol.setTitle("cp updated title" + UniqueKeyGeneratorUtil.getUniqueKey());
 		try
 		{
 			collectionProtocol.setStartDate(Utility.parseDate("08/15/1975", Utility
