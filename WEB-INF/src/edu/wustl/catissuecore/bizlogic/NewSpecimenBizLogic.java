@@ -27,6 +27,7 @@ import org.hibernate.HibernateException;
 
 import edu.wustl.catissuecore.TaskTimeCalculater;
 
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -48,6 +49,7 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -63,6 +65,7 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
@@ -3016,4 +3019,33 @@ public boolean isCpbased() {
 public void setCpbased(boolean cpbased) {
 	this.cpbased = cpbased;
 }	
+/**
+ * This function throws BizLogicException if the domainObj is of type SpecimenCollectionRequirementGroup
+ * @param domainObj
+ * @param uiForm
+ */
+ 
+protected void prePopulateUIBean(AbstractDomainObject domainObj, IValueObject uiForm) throws BizLogicException
+{
+	
+	Specimen specimen = (Specimen) domainObj;
+	AbstractSpecimenCollectionGroup absspecimenCollectionGroup = specimen.getSpecimenCollectionGroup();  
+ 	Object proxySpecimenCollectionGroup = HibernateMetaData.getProxyObjectImpl(absspecimenCollectionGroup);
+	if((proxySpecimenCollectionGroup instanceof SpecimenCollectionRequirementGroup))
+	{
+		NewSpecimenForm newSpecimenForm = (NewSpecimenForm)uiForm;		
+		newSpecimenForm.setForwardTo(Constants.PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP);
+		throw new BizLogicException("The Specimen is Added as Requirement, this can not be edited!!");
+		
+	}	
+	
+}
+
+
+
+
+
+
+
+
 }
