@@ -98,14 +98,6 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
 		
-		if(specimenCollectionGroup.getIdentifiedSurgicalPathologyReport()!=null)
-		{
-			dao.insert(specimenCollectionGroup.getIdentifiedSurgicalPathologyReport(), sessionDataBean, false, true);
-		}
-		if(specimenCollectionGroup.getDeIdentifiedSurgicalPathologyReport()!=null)
-		{
-			dao.insert(specimenCollectionGroup.getDeIdentifiedSurgicalPathologyReport(), sessionDataBean, false, true);
-		}
 		try
 		{
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(specimenCollectionGroup),
