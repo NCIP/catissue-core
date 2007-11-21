@@ -5,8 +5,10 @@ package edu.wustl.catissuecore.bizlogic.test;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
@@ -50,6 +53,10 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.ReportSection;
+import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.common.util.Utility;
@@ -1559,5 +1566,81 @@ public class BaseTestCaseUtility {
 		specimenArrayContentCollection.add(specimenArrayContent);
 		specimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
 		return specimenArray;	
+	}
+	
+	public static IdentifiedSurgicalPathologyReport initIdentifiedSurgicalPathologyReport()
+	{
+		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=new IdentifiedSurgicalPathologyReport();
+		identifiedSurgicalPathologyReport.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		identifiedSurgicalPathologyReport.setCollectionDateTime(new Date());
+		identifiedSurgicalPathologyReport.setIsFlagForReview(new Boolean(false));
+		identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.PENDING_FOR_DEID);
+		identifiedSurgicalPathologyReport.setReportSource((Site)TestCaseUtility.getObjectMap(Site.class));
+		TextContent textContent=new TextContent();
+		String data="[FINAL DIAGNOSIS]\n" +
+				"This is the Final Diagnosis Text" +
+				"\n\n[GROSS DESCRIPTION]" +
+				"The specimen is received unfixed labeled hernia sac and consists of a soft, pink to yellow segment of fibrous and fatty tissue measuring 7.5cm in length x 3.2 x 0.9cm with a partly defined lumen.  Representative tissue submitted labeled 1A.";
+	
+		textContent.setData(data);
+		textContent.setSurgicalPathologyReport(identifiedSurgicalPathologyReport);
+		Set reportSectionCollection=new HashSet();
+		ReportSection reportSection1=new ReportSection();
+		reportSection1.setName("GDT");
+		reportSection1.setDocumentFragment("The specimen is received unfixed labeled hernia sac and consists of a soft, pink to yellow segment of fibrous and fatty tissue measuring 7.5cm in length x 3.2 x 0.9cm with a partly defined lumen.  Representative tissue submitted labeled 1A.");
+		reportSection1.setTextContent(textContent);
+		
+		ReportSection reportSection2=new ReportSection();
+		reportSection2.setName("FIN");
+		reportSection2.setDocumentFragment("This is the Final Diagnosis Text");
+		reportSection2.setTextContent(textContent);
+		
+		reportSectionCollection.add(reportSection1);
+		reportSectionCollection.add(reportSection2);
+		
+		textContent.setReportSectionCollection(reportSectionCollection);
+		
+		identifiedSurgicalPathologyReport.setTextContent(textContent);
+		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+		specimenCollectionGroup.setSurgicalPathologyNumber("SPN"+UniqueKeyGeneratorUtil.getUniqueKey());
+		identifiedSurgicalPathologyReport.setSpecimenCollectionGroup(specimenCollectionGroup);
+		return identifiedSurgicalPathologyReport;
+	}
+	
+	public static IdentifiedSurgicalPathologyReport updateIdentifiedSurgicalPathologyReport(IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport)
+	{
+		identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)TestCaseUtility.getObjectMap(IdentifiedSurgicalPathologyReport.class);
+		identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
+		return identifiedSurgicalPathologyReport;
+	}
+	
+	public static DeidentifiedSurgicalPathologyReport initDeIdentifiedSurgicalPathologyReport()
+	{
+		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport=new DeidentifiedSurgicalPathologyReport();
+		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)TestCaseUtility.getObjectMap(IdentifiedSurgicalPathologyReport.class);
+		deidentifiedSurgicalPathologyReport.setIsFlagForReview(new Boolean(false));
+		deidentifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.PENDING_FOR_XML);
+		deidentifiedSurgicalPathologyReport.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		deidentifiedSurgicalPathologyReport.setSpecimenCollectionGroup(identifiedSurgicalPathologyReport.getSpecimenCollectionGroup());
+		
+		TextContent textContent = new TextContent();
+		String data="Report is de-identified \n"+identifiedSurgicalPathologyReport.getTextContent().getData();
+		textContent.setData(data);
+		textContent.setSurgicalPathologyReport(deidentifiedSurgicalPathologyReport);
+		
+		deidentifiedSurgicalPathologyReport.setTextContent(textContent);
+		
+		return deidentifiedSurgicalPathologyReport;
+	}
+	
+	public static DeidentifiedSurgicalPathologyReport updateIdentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
+	{
+		deidentifiedSurgicalPathologyReport=(DeidentifiedSurgicalPathologyReport)TestCaseUtility.getObjectMap(DeidentifiedSurgicalPathologyReport.class);
+		deidentifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.CONCEPT_CODED);
+		TextContent textContent=deidentifiedSurgicalPathologyReport.getTextContent();
+		String data=textContent.getData();
+		data+="Updated\n";
+		
+		return deidentifiedSurgicalPathologyReport;
 	}
 }
