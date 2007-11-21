@@ -26,7 +26,9 @@ public class CaTissueTestSuite
 		suite.addTestSuite(SpecimenTestCases.class);
 		suite.addTestSuite(StorageTypeTestCases.class);
 		suite.addTestSuite(StorageContainerTestCases.class);
-		suite.addTestSuite(DistributionProtocolTestCases.class);			
+		suite.addTestSuite(DistributionProtocolTestCases.class);
+		suite.addTestSuite(IdentifiedSurgicalPathologyReportTestCases.class);
+		suite.addTestSuite(DeIdentifiedSurgicalPathologyReportTestCases.class);
 		//$JUnit-END$
 		return suite;
 	}
