@@ -1230,4 +1230,6 @@
 	</definition>
 	<!-- For Admini View -->
 	
+	<definition name=".catissuecore.SpecimenCollectionRequirementGroupEditDef" path="/pages/content/common/success.jsp">
+	</definition>
 </tiles-definitions>
