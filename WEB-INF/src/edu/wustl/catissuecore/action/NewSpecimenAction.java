@@ -87,6 +87,14 @@ public class NewSpecimenAction extends SecureAction
 	{
 		//Logger.out.debug("NewSpecimenAction start@@@@@@@@@");
 		NewSpecimenForm specimenForm = (NewSpecimenForm) form;
+		String pageOf = request.getParameter(Constants.PAGEOF);
+		String forwardPage=specimenForm.getForwardTo();
+        if(forwardPage.equals(Constants.PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP))
+	    {
+        	pageOf=forwardPage;
+        	request.setAttribute(Constants.STATUS_MESSAGE_KEY, "errors.specimencollectionrequirementgroupedit");
+        	return mapping.findForward(pageOf);
+	    }
 		IBizLogic bizLogicObj = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
 		String treeRefresh = request.getParameter("refresh");
@@ -329,7 +337,7 @@ public class NewSpecimenAction extends SecureAction
 			request.setAttribute(Constants.SPECIMEN_RESPONSELIST, specimenResponseList);
 		//Consent Tracking (Virender Mehta)		- Stop 		
      		
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		pageOf = request.getParameter(Constants.PAGEOF);
 		request.setAttribute(Constants.PAGEOF, pageOf);
 
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
