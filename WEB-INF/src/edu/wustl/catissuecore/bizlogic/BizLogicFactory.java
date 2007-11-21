@@ -365,8 +365,11 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	else if(className.equals("edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue"))
     	{
     		bizLogic = new ReportLoaderQueueBizLogic();
-    	}
-    	// caTIES END
+    	}// caTIES END
+    	else if(className.equals("edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"))
+    	{
+    		bizLogic = new ParticipantMedicalIdentifierBizLogic();
+    	}//kalpana
     	else
     	{
     		bizLogic = new DefaultBizLogic();

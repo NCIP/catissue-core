@@ -1,0 +1,58 @@
+
+/**
+ * <p>Title: ParticipantMedicalIdentifierBizLogic Class>
+ * <p>Description:	ParticipantMedicalIdentifierBizLogic </p>
+ * Copyright:    Copyright (c) year
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author kalpana Thakur
+ * @version 1.00
+ */
+
+package edu.wustl.catissuecore.bizlogic;
+
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.DAO;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
+
+
+public class ParticipantMedicalIdentifierBizLogic extends DefaultBizLogic
+{
+
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	{	
+		
+		//throw new DAOException(ApplicationProperties.getValue("participant.medical.identifier.creation.error"));
+		
+		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) obj;
+			
+		Site site = participantMedicalIdentifier.getSite();
+		Participant participant = participantMedicalIdentifier.getParticipant();
+		String medicalRecordNumber = participantMedicalIdentifier.getMedicalRecordNumber();
+		if (site==null || site.getId()==null)
+		{
+		
+			throw new DAOException(ApplicationProperties.getValue("errors.participant.extiden.missing"));
+			//throw new DAOException("errors.item.required", new String[]{message});
+		}
+		if (participant==null || participant.getId()==null)
+		{
+		
+			throw new DAOException(ApplicationProperties.getValue("participant.medical.identifier.creation.error"));
+			//throw new DAOException("errors.item.required", new String[]{message});
+		}
+		Validator validate = new Validator();
+		if (validate.isEmpty(medicalRecordNumber))
+		{
+		
+			throw new DAOException(ApplicationProperties.getValue("errors.participant.extiden.missing"));
+			//throw new DAOException("errors.item.required", new String[]{message});
+		}
+		return true;
+	}
+
+}
