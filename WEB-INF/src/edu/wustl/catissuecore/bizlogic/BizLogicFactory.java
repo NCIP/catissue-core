@@ -369,7 +369,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	else if(className.equals("edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"))
     	{
     		bizLogic = new ParticipantMedicalIdentifierBizLogic();
-    	}//kalpana
+    	}//kalpana:Bug#5941
     	else
     	{
     		bizLogic = new DefaultBizLogic();
