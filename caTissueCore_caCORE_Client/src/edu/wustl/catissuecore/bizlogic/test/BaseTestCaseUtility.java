@@ -240,7 +240,7 @@ public class BaseTestCaseUtility {
 	{
 		collectionProtocol.setIrbIdentifier("abcdef");
 		collectionProtocol.setShortTitle("PC1"+UniqueKeyGeneratorUtil.getUniqueKey());
-		/*collectionProtocol.setAliquotInSameContainer(new Boolean(false)); //true
+		collectionProtocol.setAliquotInSameContainer(new Boolean(false)); //true
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active"); //Active
 		collectionProtocol.setEndDate(null);
@@ -258,7 +258,7 @@ public class BaseTestCaseUtility {
 		catch (ParseException e)
 		{
 			e.printStackTrace();
-		}*/
+		}
 	}
 	
 	public static CollectionProtocolEvent initCollectionProtocolEvent()
