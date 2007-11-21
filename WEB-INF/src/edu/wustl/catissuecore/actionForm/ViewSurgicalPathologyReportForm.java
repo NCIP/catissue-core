@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.actionForm;
 
-import java.sql.Clob;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,7 +11,6 @@ import java.util.Map;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -405,16 +403,23 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		IdentifiedSurgicalPathologyReport identifiedReport=(IdentifiedSurgicalPathologyReport)abstractDomain;
-		if(identifiedReport!=null)
+		try
 		{
-			this.surgicalPathologyNumber=identifiedReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber();
-			setIdentifiedReport(identifiedReport);
-			setDeIdentifiedReport(identifiedReport.getDeIdentifiedSurgicalPathologyReport());
-			setParticipant(identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant());
+			IdentifiedSurgicalPathologyReport identifiedReport=(IdentifiedSurgicalPathologyReport)abstractDomain;
+			if(identifiedReport!=null)
+			{
+				setIdentifiedReport(identifiedReport);
+				setDeIdentifiedReport(identifiedReport.getDeIdentifiedSurgicalPathologyReport());
+				setParticipant(identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant());
+				this.surgicalPathologyNumber=identifiedReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber();
+			}
+			this.comments=null;
+			this.hasAccess=false;
 		}
-		this.comments=null;
-		this.hasAccess=false;
+		catch (Exception e) 
+		{
+			Logger.out.error("Exception in setAllValues of ViewSurgicalPathologyReportForm"+e);
+		}
 	}
 	
 	/**
