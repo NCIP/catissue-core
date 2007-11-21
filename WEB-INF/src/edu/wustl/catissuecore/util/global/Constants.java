@@ -2174,4 +2174,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String HAS_CONDITION_ON_IDENTIFIED_FIELD = "hasConditionOnIdentifiedField";
 	public static final String CONTAINTMENT_ASSOCIATION = "CONTAINTMENT";
 	
+	public static final String PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP = "pageOfSpecimenCollectionRequirementGroup";
 }
