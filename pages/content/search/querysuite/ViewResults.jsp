@@ -18,7 +18,7 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
     }
 %>
 
-<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table1" >
+<table border="0" width="100%" cellspacing="0" cellpadding="0" height="<%=height%>" bordercolor="#000000" id="table1" >
 <html:form method="GET" action="<%=formAction%>" style="margin:0;padding:0;">
 		<tr  class="">
 			<td width="25%" height="" class="queryModuleTabMenuItem" >

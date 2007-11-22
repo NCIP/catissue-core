@@ -24,13 +24,25 @@
 
 <body >
 
-<% String message = null; 
-   String popupMessage = (String)request.getAttribute("popupMessage");%>
+<% 
+boolean mac = false;
+Object os = request.getHeader("user-agent");
+if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
+{
+	mac = true;
+}
+String height = "100%";		
+if(mac)
+{
+  height="500";
+}
+String message = null; 
+String popupMessage = (String)request.getAttribute("popupMessage");%>
 <html:messages id="messageKey" message="true" >
 <% message = messageKey;    %>
 </html:messages>
 	<html:form styleId='saveQueryForm' action='<%=Constants.FETCH_QUERY_ACTION%>' style="margin:0;padding:0;">
-		<table cellpadding='0' cellspacing='0' border='0' align='center' style="width:100%; height:100%;"> 
+		<table cellpadding='0' cellspacing='0' border='0' height="<%=height%>"  align='center' style="width:100%;"> 
 			<tr ><td>&nbsp;</td></tr>
 			<tr>
 				<td class="formTitle" height="20">
