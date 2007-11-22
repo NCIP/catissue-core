@@ -51,14 +51,14 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
     import mx.managers.CursorManager;
     
 	//------------------------
-	private var node1:String = "";
-	private var node2:String = "";
+	public var node1:String = "";
+	public var node2:String = "";
 	private var selectedLink:String = "";
 	private var selectedNode:DAGNode=null;
     private var ambiguityPanel:AmbiguityPanel; 
     private var title:String  = new String();
-    private var selectedNodeList:ArrayCollection = new ArrayCollection();
-    private var count:int = 0;
+    public var selectedNodeList:ArrayCollection = new ArrayCollection();
+    public var count:int = 0;
     private var firstNode:String;
     private var secondNode:String;
  	private var pathStr:String
@@ -760,6 +760,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	Selectin nodes on DAG
 	*/
 	public function updateNodeSelection(event:MouseEvent):void {
+
 	selectedNode=null;
 		if(event.shiftKey)
 		{
@@ -829,7 +830,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				}
 			}
 		}
-		
 	}
 	/**
 	*Edit node 

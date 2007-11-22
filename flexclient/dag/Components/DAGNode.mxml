@@ -425,6 +425,11 @@
 		*/
 		public function deleteHandler(event:ResultEvent):void
 		{
+			for(var j:int =0;j<this.parentApplication.selectedNodeList.length;j++)	
+			{
+				var dd:DAGNode = this.parentApplication.selectedNodeList.getItemAt(j) as DAGNode;
+				dd.unSelect();
+			}
 			this.parent.removeChild(this.parent.getChildByName(this.name));
 			for(var i:int =0;i<this.parentApplication.totalNodes.length;i++)	
 			{
@@ -432,7 +437,12 @@
 				if(dagNode.name==this.name)
 				{
 					this.parentApplication.totalNodes.removeItemAt(i);
+					this.parentApplication.selectedNodeList.removeAll();
+					this.parentApplication.count = 0;
+					this.parentApplication.node1 = "";
+					this.parentApplication.node2 = "";
 				}
+			
 			}
 			this.parentApplication.rpcService.removeEventListener(ResultEvent.RESULT,deleteHandler,false);
 			if(this.nodeType==DAGConstants.CONSTRAINT_VIEW_NODE)
