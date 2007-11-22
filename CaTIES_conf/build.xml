@@ -36,6 +36,7 @@
 			<classpath>
 				<pathelement location="${base.dir}/caTIES_conf" />
 			</classpath>
+			<jvmarg value="-Xcheck:jni"/>
 			<classpath refid="cp"/>
 		</java>
 	</target>
