@@ -775,7 +775,7 @@ function participantRegRow(subdivtag)
 					String collectionProtocolIdKey = "CollectionProtocolRegistration:"+i+"_CollectionProtocol_id";
 					String collectionProtocolIdValue = (String)form.getCollectionProtocolRegistrationValue(collectionProtocolIdKey);
 					//Bug:5935 
-					String collectionProtocolRegIdValue = 	(String)form.getCollectionProtocolRegistrationValue("CollectionProtocolRegistration:" + i +"_id");
+					String collectionProtocolRegIdValue = 	(String)form.getCollectionProtocolRegistrationValue("CollectionProtocolRegistration:" + i +"_id");					
 					
 					if(consentResponseDisplayValue ==null)
 					{
@@ -786,8 +786,7 @@ function participantRegRow(subdivtag)
 					if(!CollectionProtocolRegConditionBoolean)
 						activityStatusCondition = true;
 					
-					String onChangeFun ="getConsent('"+collectionProtocolConsentCheck+"', '"+collectionProtocolId+"','"+i+"','"+anchorTagKey+"','"+consentCheckStatus+"')";
-
+					String onChangeFun ="getConsent('"+collectionProtocolCheck+"','"+collectionProtocolId+"', '"+collectionProtocolTitleKey+"','"+i+"','"+anchorTagKey+"','"+consentCheckStatus+"')";					
 				%>
 					
 				 <tr>
