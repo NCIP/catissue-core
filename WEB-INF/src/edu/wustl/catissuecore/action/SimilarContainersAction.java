@@ -274,14 +274,14 @@ public class SimilarContainersAction extends SecureAction
 		 * long maxId = bizLogic.getNextContainerNumber();
 		request.setAttribute(Constants.MAX_IDENTIFIER, Long.toString(maxId));
 		request.setAttribute("ContainerNumber", new Long(maxId).toString());*/
-		List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request.getParameter("typeId")).longValue(), exceedingMaxLimit,similarContainersForm.getSelectedContainerName());
-		TreeMap containerMap = (TreeMap) mapSiteList.get(0);
-		List siteList1 = (List) mapSiteList.get(1);
+	
+		TreeMap containerMap = bizLogic.getAllocatedContaienrMapForContainer(new Long(request.getParameter("typeId")).longValue(), exceedingMaxLimit,similarContainersForm.getSelectedContainerName());
+		
 		/*Map containerMap1 = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
 		 .getParameter("typeId")).longValue());*/
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
-		request.setAttribute("siteForParentList", siteList1);
+		//request.setAttribute("siteForParentList", siteList1);
 		int noOfContainers = Integer.parseInt((String) request.getParameter("noOfContainers"));
 		if (similarContainersForm.getSimilarContainersMap().size() == 0)
 		{

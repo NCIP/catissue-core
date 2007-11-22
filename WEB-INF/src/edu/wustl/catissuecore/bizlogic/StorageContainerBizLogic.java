@@ -2505,21 +2505,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	public List getAllocatedContaienrMapForContainer(long type_id, String exceedingMaxLimit, String selectedContainerName) throws DAOException
+	public TreeMap getAllocatedContaienrMapForContainer(long type_id, String exceedingMaxLimit, String selectedContainerName) throws DAOException
 	{
-		List mapSiteList = new ArrayList();
-		//		List list = retrieve(StorageContainer.class.getName());
-
+		long start =0;
+		long end = 0;
 		TreeMap containerMap = new TreeMap();
-		List siteList = new ArrayList();
-		siteList.add(new NameValueBean("---", "---"));
-
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		
 		dao.openSession(null);
-
-		String queryStr = "SELECT t1.IDENTIFIER, t1.NAME, t2.NAME FROM CATISSUE_CONTAINER t1, CATISSUE_SITE t2 ,CATISSUE_STORAGE_CONTAINER t3 WHERE "
+		start = System.currentTimeMillis();
+		String queryStr = "SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1 WHERE "
 				+ "t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 " + "WHERE t4.STORAGE_TYPE_ID = '" + type_id
-				+ "' OR t4.STORAGE_TYPE_ID='1') and t1.IDENTIFIER = t3.IDENTIFIER and t2.IDENTIFIER=t3.SITE_ID AND " + "t1.ACTIVITY_STATUS='"
+				+ "' OR t4.STORAGE_TYPE_ID='1') AND " + "t1.ACTIVITY_STATUS='"
 				+ Constants.ACTIVITY_STATUS_ACTIVE + "' order by IDENTIFIER";
 
 		Logger.out.debug("Storage Container query......................" + queryStr);
@@ -2534,13 +2531,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			throw new DAOException(ex.getMessage());
 		}
 
+		end = System.currentTimeMillis();
+		System.out.println("Time taken for executing query : "+ (end-start));
 		dao.closeSession();
-		Logger.out.info("Size of list:" + list.size());
+		
 		Map containerMapFromCache = null;
+		
 		try
 		{
-		//	containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
-			containerMapFromCache=getAllocatedContainerMap();
+			containerMapFromCache=StorageContainerUtil.getContainerMapFromCache();
 		}
 		catch (Exception e1)
 		{
@@ -2557,7 +2556,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(0);
 				String name = (String) list1.get(1);
-				String siteName = (String) list1.get(2);
 				NameValueBean nvb = new NameValueBean(name, Id, new Long(Id));
 				if (selectedContainerName != null && flag)
 				{
@@ -2585,7 +2583,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						{
 							containerMap.put(nvb, positionMap1);
 						}
-						siteList.add(new NameValueBean(siteName, Id));
 						i++;
 					}
 				}
@@ -2599,9 +2596,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 		}
 
-		mapSiteList.add(containerMap);
-		mapSiteList.add(siteList);
-		return mapSiteList;
+		return containerMap;
 
 	}
 

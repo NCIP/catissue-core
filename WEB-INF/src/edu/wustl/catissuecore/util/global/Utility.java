@@ -429,7 +429,7 @@ public class Utility extends edu.wustl.common.util.Utility
     		collectionProtocolList.add(new NameValueBean(cp.getTitle(),cp.getId()));
     	}
     	Collections.sort(collectionProtocolList);
-    	collectionProtocolList.add(0,new NameValueBean(Constants.HOLDS_ANY,"-1"));
+    	collectionProtocolList.add(0,new NameValueBean(Constants.SELECT_OPTION,"-1"));
     	return collectionProtocolList;
     }
     

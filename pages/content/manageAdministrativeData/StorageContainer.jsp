@@ -19,7 +19,7 @@
         String operation = (String) request.getAttribute(Constants.OPERATION);
 		//String containerNumber=(String)request.getAttribute("ContainerNumber");
         String formName;
-		List siteForParent = (List)request.getAttribute("siteForParentList");
+		//List siteForParent = (List)request.getAttribute("siteForParentList");
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
         boolean readOnlyValue;
@@ -100,19 +100,6 @@
 	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
-		var parentIdArray = new Array();
-		var siteNameArray = new Array();
-		<%
-			if(siteForParent != null) 
-			{
-			for(int i=0; i<siteForParent.size();i++)
-    		{
-    			NameValueBean nvb = (NameValueBean) siteForParent.get(i);
-		%>
-				parentIdArray[<%=i%>] = "<%=nvb.getValue()%>";
-				siteNameArray[<%=i%>] = "<%=nvb.getName()%>";
-    	<%	}}%>
-		
 		function checkNoOfContainers(action,formField)
 		{
 			var operation = "<%=operation%>";
@@ -205,79 +192,14 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		function ResetName(element)
-		{
-			var containerNameElement = document.getElementById("containerName");
-			containerNameElement.value = "";	
-			if(document.forms[0].checkedButton[0].checked==true)
-			{
-				onSiteChange();
-			}
-			else
-			{
-				onParentContainerChange(element);
-			}	
-		}
 		function onSiteChange()
 		{
-			var typeElement = document.getElementById("typeId");
 			var siteElement = document.getElementById("siteId");
-			var containerNameElement = document.getElementById("containerName");
 			document.forms[0].siteName.value = siteElement.options[siteElement.selectedIndex].text;
-			
-			if(typeElement.value != "-1" && siteElement.value != "-1" && containerNameElement.value == "")
-			{
-				//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
-				//and it is giving error. So these fields are truncated in case it is longer than 40.
-				//It also solves Bug 2829:System fails to create a default unique storage container name
-				var maxSiteName = siteElement.options[siteElement.selectedIndex].text;
-				var maxTypeName = typeElement.options[typeElement.selectedIndex].text;
-				if(maxSiteName.length>40)
-				{
-					maxSiteName = maxSiteName.substring(0,39);
-				}
-				if(maxTypeName.length>40)
-				{
-					maxTypeName = maxTypeName.substring(0,39);
-				}
-
-			}
+		
 		}
 		function onParentContainerChange(element)
 		{
-			var typeElement = document.getElementById("typeId");
-			var containerName = document.getElementById("containerName");
-			var radioArray = document.getElementsByName("stContSelection");				
-			var parentContainer;				
-			if(radioArray[0].checked)
-			{
-				parentContainer = document.getElementById("customListBox_1_0");				
-			}
-			else
-			{
-				parentContainer = document.getElementById("selectedContainerName");				
-			}
-			
-			if(typeElement.value != "-1" && parentContainer.value != "-1" && containerName.value == "")
-			{
-				getSiteName(parentContainer.value);
-				var siteName = document.forms[0].siteForParentContainer.value;
-
-				//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
-				//and it is giving error. So these fields are truncated in case it is longer than 40.
-				//It also solves Bug 2829:System fails to create a default unique storage container name
-				var maxSiteName = siteName;
-				var maxTypeName = typeElement.options[typeElement.selectedIndex].text;
-				if(maxSiteName.length>40)
-				{
-					maxSiteName = maxSiteName.substring(0,39);
-				}
-				if(maxTypeName.length>40)
-				{
-					maxTypeName = maxTypeName.substring(0,39);
-				}
-
-			}	
 			//out of three drop downs if first dropdown that is the storage container name drop is changed
 			//then make a server trip to get all CPs 
 			if(element.name == "parentContainerId")
@@ -290,19 +212,6 @@
 		}
 		
 		
-		function getSiteName(id)
-		{
-
-			for(var i=0; i<parentIdArray.length; i++)
-			{
-				if(id == parentIdArray[i])
-				{
-					document.forms[0].siteForParentContainer.value = siteNameArray[i];
-					break;
-				}
-			}		
-					
-		}	
 		
 //  function to insert a row in the inner block
 

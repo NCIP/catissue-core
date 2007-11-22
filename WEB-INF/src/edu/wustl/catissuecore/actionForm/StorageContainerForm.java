@@ -156,7 +156,7 @@ public class StorageContainerForm extends AbstractActionForm
 	/**
 	 * Map to handle values of all the CollectionProtocol Events
 	 */
-	protected Map values = new HashMap();
+	//protected Map values = new HashMap();
 
 	/** 
 	 * Positon for dimension 1
@@ -784,45 +784,45 @@ public class StorageContainerForm extends AbstractActionForm
 	 * @param key the key to which the object is mapped.
 	 * @param value the object which is mapped.
 	 */
-	public void setValue(String key, Object value)
+	/*public void setValue(String key, Object value)
 	{
 		if (isMutable())
 			values.put(key, value);
-	}
+	}*/
 
 	/**
 	 * Returns the object to which this map maps the specified key.
 	 * @param key the required key.
 	 * @return the object to which this map maps the specified key.
 	 */
-	public Object getValue(String key)
+	/*public Object getValue(String key)
 	{
 		return values.get(key);
-	}
+	}*/
 
 	/**
 	 * @return Returns the values.
 	 */
-	public Collection getAllValues()
+/*	public Collection getAllValues()
 	{
 		return values.values();
-	}
+	}*/
 
 	/**
 	 * @param values The values to set.
 	 */
-	public void setValues(Map values)
+	/*public void setValues(Map values)
 	{
 		this.values = values;
-	}
+	}*/
 
 	/**
 	 * @return values The values to set.
 	 */
-	public Map getValues()
+	/*public Map getValues()
 	{
 		return this.values;
-	}
+	}*/
 
 	/**
 	 * @return Returns the positionDimensionOne.

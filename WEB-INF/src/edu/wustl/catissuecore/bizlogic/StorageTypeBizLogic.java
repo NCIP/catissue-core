@@ -235,7 +235,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	 */
 	public long[] getDefaultHoldSpecimenArrayTypeList(StorageType type) throws DAOException
 	{
-		Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsSpecimenArrayTypeCollection)");
-		return Utility.getobjectIds(spcimenArrayTypeCollection);
+		//Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsSpecimenArrayTypeCollection)");
+		return Utility.getobjectIds(type.getHoldsSpecimenArrayTypeCollection());
 	}
 }

@@ -19,7 +19,7 @@
 <%
         //String operation = (String) request.getAttribute(Constants.OPERATION);
 		//String containerNumber=(String)request.getAttribute("ContainerNumber");
-		List siteForParent = (List)request.getAttribute("siteForParentList");
+		//List siteForParent = (List)request.getAttribute("siteForParentList");
 		Object obj = request.getAttribute("storageContainerForm");
 		
 		String label1 = null;
@@ -49,22 +49,6 @@
 	
 	
 	<script language="JavaScript">
-	
-			var parentIdArray = new Array();
-		var siteNameArray = new Array();
-		<%
-			if(siteForParent != null) 
-			{
-			for(int i=0; i<siteForParent.size();i++)
-    		{
-    			NameValueBean nvb = (NameValueBean) siteForParent.get(i);
-		%>
-				parentIdArray[<%=i%>] = "<%=nvb.getValue()%>";
-				siteNameArray[<%=i%>] = "<%=nvb.getName()%>";
-    	<%	}}%>
-		
-	
-	
 		function onCreate()
 		{
 			var action = '<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>';			
@@ -177,46 +161,9 @@
 		}
 		function onParentContainerChange(i)
 		{
-			var containerNameElement = document.getElementById("containerName_"+i);
-			if(containerNameElement.value == "")
-			{
-				
-				var parentContainerId = document.getElementById("customListBox_"+i+"_0");
-
-				getSiteName(parentContainerId.options[parentContainerId.selectedIndex].value);
-
-				var typeElement = document.forms[0].typeName.value;
-				if(typeElement.value != "" && parentContainerId.value != "-1" && containerNameElement.value == "")
-				{
-					//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
-					//and it is giving error. So these fields are truncated in case it is longer than 40.
-					//It also solves Bug 2829:System fails to create a default unique storage container name
-					var maxSiteName = document.forms[0].siteForParentContainer.value;
-					var maxTypeName = typeElement;
-					if(maxSiteName.length>40)
-					{
-						maxSiteName = maxSiteName.substring(0,39);
-					}
-					if(maxTypeName.length>40)
-					{
-						maxTypeName = maxTypeName.substring(0,39);
-					}
-					//containerNameElement.value = maxSiteName + "_"+maxTypeName+"_"+tempContainerNumber1;
-				}
-			}
-			
 		}
 		function getSiteName(id)
 		{
-
-			for(var i=0; i<parentIdArray.length; i++)
-			{
-				if(id == parentIdArray[i])
-				{
-					document.forms[0].siteForParentContainer.value = siteNameArray[i];
-					break;
-				}
-			}		
 		}	
 		function resetName(i)
 		{
