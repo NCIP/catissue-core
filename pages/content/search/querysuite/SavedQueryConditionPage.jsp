@@ -105,7 +105,7 @@
 					<td colspan='3'  align="right">
 					    <input type="hidden" name="queryString" id="queryString" value=""/>
 					    <input type="hidden" name="buildQueryString" id="buildQueryString" value=""/>
-						<input type="button" name="preview" value="Preview" class="actionButton"  disabled="true"/>
+						<!--input type="button" name="preview" value="Preview" class="actionButton"  disabled="true"/-->
 						<c:choose>
 							<c:when test="${querySaved eq 'true'}">
 								<input type="button" name="close" value="Close" class="actionButton" onClick="closeSaveQueryWindow()"/>
