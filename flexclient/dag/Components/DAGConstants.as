@@ -24,6 +24,7 @@ package Components
 		public static  var DYNAMIC_EXTENSION_EXCEPTION:int=8;
 		public static  var CYCLIC_GRAPH:int=9;
 		public static  var TREE_NODES_LIMIT:int =10;
+		public static  var NO_MAIN_OBJECT_IN_QUERY:int =11;
 		//messages 
 		public static var EMPTY_LIMIT_ERROR_MESSAGE:String = "<li><font color='red'>Please enter at least one condition to add a limit to limit set.</font></li>";
 		public static var GENERIC_MESSAGE:String="<li><font color='red'>Error occured while executing query.Please report this problem to the Adminstrator.</font></li>";
