@@ -292,7 +292,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				{				
 					deriveSpecimenMap.remove(keyArr[iCount]);				
 				}
-				
+				if(oldDeriveSpecimenMap==null)
+				{
+					oldDeriveSpecimenMap = new LinkedHashMap();
+				}
 				oldDeriveSpecimenMap.putAll(deriveSpecimenMap);
 				specimenRequirementBean.setDeriveSpecimenCollection(oldDeriveSpecimenMap);
 			}
