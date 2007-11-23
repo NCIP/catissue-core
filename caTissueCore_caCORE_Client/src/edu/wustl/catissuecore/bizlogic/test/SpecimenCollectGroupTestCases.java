@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
@@ -91,6 +93,91 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		}
 
 	}
+	
+	public void testSearchSpecimenCollectionGroup()
+    {
+		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+    	SpecimenCollectionGroup cachedSCG = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+    	scg.setId((Long) cachedSCG.getId());
+     	Logger.out.info(" searching domain object");
+    	 try {
+        	 List resultList = appService.search(SpecimenCollectionGroup.class, scg);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 SpecimenCollectionGroup returnedSCG = (SpecimenCollectionGroup) resultsIterator.next();
+        		 System.out.println("here-->" + returnedSCG.getName() +"Id:"+returnedSCG.getId());
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedSCG.getName());
+             }
+        	 assertTrue("SCG found", true);
+          } 
+          catch (Exception e) {
+        	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("Couldnot found Specimen", true);  
+          }
+
+    }
+	
+	public void testAddSCGWithDuplicateName()
+	{
+		
+		try{
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();		    
+		    	
+		  //  TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
+		    SpecimenCollectionGroup duplicateSCG = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();
+		    duplicateSCG.setName(scg.getName());
+		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
+		    duplicateSCG = (SpecimenCollectionGroup)appService.createObject(duplicateSCG);
+		    System.out.println("After Creating SCG");
+			fail("Test Failed. Duplicate SCG name should throw exception");
+		}
+		 catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			assertTrue("Submission failed since a Collection Protocol with the same NAME already exists" , true);
+			 
+		 }
+    	
+	}
+	
+	public void testAddSCGWithClosedActivityStatus()
+	{
+		
+		try{
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();	
+			scg.setActivityStatus("Closed");
+		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
+		    assertFalse("Should throw Exception", true);
+			
+		}
+		 catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();			
+			assertTrue("While adding SCG Activity status should be Active" , true);
+		 }
+    	
+	}
+	
+	public void testAddSCGWithDisabledActivityStatus()
+	{
+		
+		try{
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();	
+			scg.setActivityStatus("Disabled");
+		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
+		   assertFalse("Should throw Exception" , true);
+			
+		}
+		 catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+			System.out.println(e);
+			e.printStackTrace();
+			assertTrue("While adding SCG Activity status should be Active", true);
+			 
+		 }
+    	
+	} 
+	
 	private void setEventParameters(SpecimenCollectionGroup sprObj)
 	{
 		System.out.println("Inside Event Parameters");
