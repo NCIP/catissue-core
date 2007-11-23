@@ -28,23 +28,26 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.BizLogicException;
 
-public class UpdateBulkSpecimensAction extends BaseAction {
+public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 
 	private SpecimenCollectionGroup specimenCollectionGroup = null;
 	
-	protected ActionForward executeAction(ActionMapping mapping,
+	public ActionForward executeAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
@@ -58,10 +61,9 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 			String eventId = specimenSummaryForm.getEventId();
 			
 			session = request.getSession();
-			UpdateSpecimenStatusAction specimenUpdateAction = new UpdateSpecimenStatusAction();
-			
+
 			LinkedHashSet specimenDomainCollection = 
-				specimenUpdateAction.getSpecimensToSave(eventId, session);
+				getSpecimensToSave(eventId, session);
 			if (ViewSpecimenSummaryForm.ADD_USER_ACTION
 					.equals(specimenSummaryForm.getUserAction()))
 			{
@@ -96,6 +98,57 @@ public class UpdateBulkSpecimensAction extends BaseAction {
 		}
 	}
 	
+	/**
+	 * @param specimenVO
+	 * @return
+	 */
+	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws BizLogicException {
+
+		Specimen specimen = super.createSpecimenDomainObject(specimenVO);
+		setValuesForNewSpecimen(specimen,specimenVO);
+		return specimen;
+	}
+
+	protected void setValuesForNewSpecimen(Specimen specimen, GenericSpecimen genericSpecimen)
+	{
+		SpecimenDataBean specimenDataBean = (SpecimenDataBean) genericSpecimen;
+		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		specimen.setComment(specimenDataBean.getComment());
+		specimen.setCreatedOn(new Date());
+		specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+		genericSpecimen.setCheckedSpecimen(true);
+		specimen.setPathologicalStatus(specimenDataBean.getPathologicalStatus());
+		specimen.setLineage(specimenDataBean.getLineage());
+		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
+		specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
+		specimen.setSpecimenCharacteristics(specimenCharacteristics);
+		specimen.setAvailableQuantity(specimen.getInitialQuantity());
+		specimen.setAvailable(Boolean.TRUE);
+		specimen.setLineage(specimenDataBean.getLineage());
+		specimen.setPathologicalStatus(
+				specimenDataBean.getPathologicalStatus());		
+		specimen.setType(specimenDataBean.getType());
+		specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
+		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
+		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
+		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
+		
+		if(specimenDataBean.getSpecimenEventCollection()!=null && !specimenDataBean.getSpecimenEventCollection().isEmpty())
+		{
+			Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
+
+			while(iterator.hasNext())
+			{
+				SpecimenEventParameters specimenEventParameters =
+					(SpecimenEventParameters) iterator.next();
+				specimenEventParameters.setSpecimen(specimen);
+				
+			}
+		}
+		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());		
+	}
+
 	private LinkedHashMap createSpecimenMap(Collection specimenCollection)
 	{
 		Iterator specimenIterator = specimenCollection.iterator();
