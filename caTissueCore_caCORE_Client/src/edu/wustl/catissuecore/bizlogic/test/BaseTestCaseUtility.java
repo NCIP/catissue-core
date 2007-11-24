@@ -1093,10 +1093,10 @@ public class BaseTestCaseUtility {
 		StorageContainer storageContainer = new StorageContainer();
 		storageContainer.setName("sc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
-	//	StorageType storageType =(StorageType)TestCaseUtility.getObjectMap(StorageType.class); 
+		StorageType storageType =(StorageType)TestCaseUtility.getObjectMap(StorageType.class); 
 		//new StorageType();
 		//storageType.setId(new Long(3));
-	//	storageContainer.setStorageType(storageType);
+		storageContainer.setStorageType(storageType);
 		
 		Site site = (Site)TestCaseUtility.getObjectMap(Site.class); 
 		//new Site();
