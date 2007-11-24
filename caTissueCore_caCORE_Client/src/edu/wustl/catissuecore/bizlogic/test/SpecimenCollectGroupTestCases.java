@@ -140,39 +140,55 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
     	
 	}
 	
-	public void testAddSCGWithClosedActivityStatus()
+	public void testUpdateSCGWithClosedActivityStatus()
 	{
 		
 		try{
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();	
-			scg.setActivityStatus("Closed");
+			//scg.setActivityStatus("Closed");
 		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
-		    assertFalse("Should throw Exception", true);
+		    Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
+		    scg.setSpecimenCollectionSite(site);
+		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
+		    Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
+		    scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
+		    scg.getCollectionProtocolRegistration().setParticipant(participant);
+		    scg.setActivityStatus("Closed");
+		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
+		    assertTrue("Should throw Exception", true);
 			
 		}
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();			
-			assertTrue("While adding SCG Activity status should be Active" , true);
+			assertFalse("While adding SCG Activity status should be Active" , true);
 		 }
     	
 	}
 	
-	public void testAddSCGWithDisabledActivityStatus()
+	public void testUpdateSCGWithDisabledActivityStatus()
 	{
 		
 		try{
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();	
-			scg.setActivityStatus("Disabled");
+			//scg.setActivityStatus("Closed");
 		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
-		   assertFalse("Should throw Exception" , true);
+		    Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
+		    scg.setSpecimenCollectionSite(site);
+		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
+		    Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
+		    scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
+		    scg.getCollectionProtocolRegistration().setParticipant(participant);
+		    scg.setActivityStatus("Disabled");
+		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
+		    assertTrue("Should throw Exception", true);
 			
 		}
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			System.out.println(e);
 			e.printStackTrace();
-			assertTrue("While adding SCG Activity status should be Active", true);
+			assertFalse("While adding SCG Activity status should be Active", true);
 			 
 		 }
     	
@@ -208,220 +224,6 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		sprObj.setSpecimenEventParametersCollection(specimenEventParametersCollection);
 	}
 	
-	/*public void testAddSpecimenCollectionGroup()
-	{
-		try
-		{
-			SpecimenCollectionGroup specimenCollectionGroupObj =  BaseTestCaseUtility.initSpecimenCollectionGroup();
-	    	Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj);
-			specimenCollectionGroupObj =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj);
-			assertTrue("Domain Object is successfully added" , true);
-			Logger.out.info(" Specimen Collection Group is successfully added ---->    ID:: " + specimenCollectionGroupObj.getId().toString());
-		}
-		catch(Exception e)
-		{
-			Logger.out.error(e.getMessage(),e);
-			e.printStackTrace();
-			fail("Failed to add Domain Object");
-		}
-	}
 	
-	 public void testSearchSpecimenCollectionGroup()
-	 {
-    	try 
-    	{
-	       	SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
-	     	Logger.out.info(" searching domain object");		    	
-	    	 	    List resultList = appService.search(SpecimenCollectionGroup.class,specimenCollectionGroup);
-	        	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
-	        		 SpecimenCollectionGroup returnedspecimencollectiongroup = (SpecimenCollectionGroup) resultsIterator.next();
-	        		 assertTrue("Specimen Collection Group is successfully Found" , true);
-	        		 Logger.out.info(" Specimen Collection Group is successfully Found ---->  :: " + returnedspecimencollectiongroup.getName());
-	             }
-          } 
-          catch (Exception e) {
-        	Logger.out.error(e.getMessage(),e);
-	 		e.printStackTrace();
-	 		fail("Failed to search Domain Object");
-          }
-	 }
-	*/
-	/**
-	 * Negative Testcases for SpecimenCollectionGroup Object
-	 */
-	
-	/*public void testAddSpecimenCollectionGroupWithEmptySCGName()
-	{
- 		SpecimenCollectionGroup specimenCollectionGroupObj = null;
-		try
-		{
-			specimenCollectionGroupObj =  BaseTestCaseUtility.initSpecimenCollectionGroup();
-	    	Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj);
-	    	specimenCollectionGroupObj.setName("");
-			specimenCollectionGroupObj =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj);
-			fail("Empty SCG name should throw exception");
-			
-		}
-		catch(Exception e)
-		{
-			Logger.out.error(e.getMessage(),e);
-			e.printStackTrace();
-			assertTrue("Empty SCG name throws exception" , true);
-		}
-	}
-	
-	public void testAddSpecimenCollectionGroupWithWrongClinicalDiagnosis()
-	{
- 		SpecimenCollectionGroup specimenCollectionGroupObj = null;
-		try
-		{
-			specimenCollectionGroupObj =  BaseTestCaseUtility.initSpecimenCollectionGroup();
-	    	Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj);
-	    	specimenCollectionGroupObj.setClinicalDiagnosis("Wrong Clinical Diagnosis");
-	    	specimenCollectionGroupObj =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj);
-			fail("Wrong Clinical Diagnosis should throw exception");
-			
-		}
-		catch(Exception e)
-		{
-			Logger.out.error(e.getMessage(),e);
-			e.printStackTrace();
-			assertTrue("Wrong Clinical Diagnosis value throws exception" , true);
-		}
-	}
-	
-	public void testAddSpecimenCollectionGroupWithWrongClinicalStatus()
-	{
- 		SpecimenCollectionGroup specimenCollectionGroupObj = null;
-		try
-		{
-			specimenCollectionGroupObj =  BaseTestCaseUtility.initSpecimenCollectionGroup();
-	    	Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj);
-	    	specimenCollectionGroupObj.setClinicalStatus("wrong Clinical status");
-	    	specimenCollectionGroupObj =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj);
-			fail("Wrong Clinical Status should throw exception");
-			
-		}
-		catch(Exception e)
-		{
-			Logger.out.error(e.getMessage(),e);
-			e.printStackTrace();
-			assertTrue("Wrong Clinical Status value throws exception" , true);
-		}
-	}
-	
-	public void testAddSpecimenCollectionGroupWithInvalidActivityStatus()
-	{
- 		SpecimenCollectionGroup specimenCollectionGroupObj = null;
-		try
-		{
-			specimenCollectionGroupObj =  BaseTestCaseUtility.initSpecimenCollectionGroup();
-	    	Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj);
-	    	specimenCollectionGroupObj.setActivityStatus("Wrong Activity status");
-	    	specimenCollectionGroupObj =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj);
-			fail("Wrong Clinical Status should throw exception");
-			
-		}
-		catch(Exception e)
-		{
-			Logger.out.error(e.getMessage(),e);
-			e.printStackTrace();
-			assertTrue("Wrong Clinical Status value throws exception" , true);
-		}
-	}
-	
-	public void testAddSpecimeColeectionGroupWithWrongCollectionEvents()
- 	{
- 		SpecimenCollectionGroup specimenCollectionGroupObj = null;
-		try
-		{
-			specimenCollectionGroupObj = BaseTestCaseUtility.initSpecimenCollectionGroup();
-	    	Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj);	    	
-	    	CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
-	    	(specimenCollectionGroupObj.getSpecimenEventParametersCollection()).add(collectionEventParameters);	    
-	    	specimenCollectionGroupObj =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj);
-	    	fail("Empty collection events should throw exception");
-		}
-		catch(Exception e)
-		{
-			Logger.out.error(e.getMessage(),e);
-			e.printStackTrace();
-			assertTrue("Empty collection events throws exception", true);
-		}
- 	}*/
-	
-//	public void testUpdateSpecimenCollectionGroupWithDisabledActivityStatus()
-//	{
-// 		
-//		try
-//		{
-//			SpecimenCollectionGroup specimenCollectionGroupObj = new SpecimenCollectionGroup();
-//			specimenCollectionGroupObj.setId((Long) dataModelObjectMap.get("updatedSpecimenCollectionGroup"));
-//			BaseTestCaseUtility.updateSpecimenCollectionGroup(specimenCollectionGroupObj);
-//			specimenCollectionGroupObj.setActivityStatus("Disabled");
-//			Logger.out.info("Updating domain object------->"+specimenCollectionGroupObj);
-//	       	specimenCollectionGroupObj = (SpecimenCollectionGroup) appService.updateObject(specimenCollectionGroupObj);
-//	    	assertTrue("Successfully updated activity status" , true);  	
-//		}
-//		catch(Exception e)
-//		{
-//			Logger.out.error(e.getMessage(),e);
-//			e.printStackTrace();
-//			fail("Failed to update activity status");
-//		}
-//	}
-	
-	
-	/**
-	 * Testcases using Mock Objects
-	 * 
-	 *//*
-		
-	public void testEmptyObjectInInsertInSpecimenCollectionGroup(){
-		domainObject = new SpecimenCollectionGroup();
-		testEmptyDomainObjectInInsert(domainObject);
-	}
-	
-	public void testNullObjectInInsertInSpecimenCollectionGroup(){
-		domainObject = new SpecimenCollectionGroup();
-		testNullDomainObjectInInsert(domainObject);
-	}
-	
-	public void testNullSessionDatBeanInInsertInSpecimenCollectionGroup(){
-		domainObject = new SpecimenCollectionGroup();
-		testNullSessionDataBeanInInsert(domainObject);
-	}
-	
-	public void testNullSessionDataBeanInUpdateSpecimenInCollectionGroup(){
-		domainObject = new SpecimenCollectionGroup();
-		testNullSessionDataBeanInUpdate(domainObject);
-	}
-	
-	public void testNullOldDomainObjectInUpdateSInpecimenCollectionGroup(){
-		domainObject = new SpecimenCollectionGroup();
-		testNullOldDomainObjectInUpdate(domainObject);
-	}
-	
-	public void testNullCurrentDomainObjectInUpdateInSpecimenCollectionGroup(){
-		domainObject = new SpecimenCollectionGroup();
-		testNullCurrentDomainObjectInUpdate(domainObject);
-	}
-	
-	public void testWrongDaoTypeInUpdateInSpecimenCollectionGroup(){
-		domainObject = new SpecimenCollectionGroup();
-		testNullCurrentDomainObjectInUpdate(domainObject);
-	}
-	
-	public void testEmptyCurrentDomainObjectInUpdateInCollectionProtocolRegistration(){
-		domainObject = new SpecimenCollectionGroup();
-		AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initSpecimenCollectionGroup();
-		testEmptyCurrentDomainObjectInUpdate(domainObject, initialisedDomainObject);
-	}
-	
-	public void testEmptyOldDomainObjectInUpdateInCollectionProtocolRegistration(){
-		domainObject = new SpecimenCollectionGroup();
-		AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initSpecimenCollectionGroup();
-		testEmptyOldDomainObjectInUpdate(domainObject, initialisedDomainObject);
-	}
-*/
 }
+	
