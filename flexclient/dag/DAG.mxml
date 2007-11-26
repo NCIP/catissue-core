@@ -444,6 +444,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 			case DAGConstants.TREE_NODES_LIMIT:		
 							ExternalInterface.call("openDecisionMakingPage");		
 							break;
+			case DAGConstants.NO_MAIN_OBJECT_IN_QUERY:		
+							ExternalInterface.call("showMainObjectNotPresentMessage");		
+							break;
 			default:break; 				
 		}
 		rpcService.removeEventListener(ResultEvent.RESULT,searchResultHandler,false);
@@ -760,7 +763,6 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	Selectin nodes on DAG
 	*/
 	public function updateNodeSelection(event:MouseEvent):void {
-
 	selectedNode=null;
 		if(event.shiftKey)
 		{
@@ -830,6 +832,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 				}
 			}
 		}
+		
 	}
 	/**
 	*Edit node 
