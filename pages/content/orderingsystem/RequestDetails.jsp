@@ -416,9 +416,24 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 											<img src="images\Participant.GIF" border="0"/>
 										<%}String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType"))); %>
 									 		<span title="<%= toolTipTypeClass %>">
-											<html:link href="#" styleId="label" onclick="<%=specimenClickFunction%>">
+									 		<%--Bug :6010- Hide link to Specimen Label in case of Pathological case report. 
+									 		    Modified by:Falguni Sachde
+									 		  --%>
+									 		<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
+												|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological")) {%>
+												
+												<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />									 	
+											<%
+												}
+												else
+												{
+										    %>
+												<html:link href="#" styleId="label" onclick="<%=specimenClickFunction%>">
 										 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />									 	
-											</html:link>
+												</html:link>
+											<%
+												}
+											%>
 									 		</span>
 									 	</td>
 									 	<%
