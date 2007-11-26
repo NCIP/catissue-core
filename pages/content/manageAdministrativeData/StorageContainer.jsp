@@ -99,6 +99,7 @@
 </style>
 	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 	<script language="JavaScript">
 		function checkNoOfContainers(action,formField)
 		{
@@ -153,7 +154,7 @@
 			}
 			else //if parent container radio button is selected.
 			{
-			
+				
 				document.forms[0].siteId.disabled = true;
 				document.forms[0].stContSelection[0].disabled=false;
 				document.forms[0].stContSelection[1].disabled=false;
@@ -167,7 +168,8 @@
 					document.forms[0].containerMap.disabled=true;
 					document.forms[0].selectedContainerName.disabled=true;
 					document.forms[0].pos1.disabled=true;
-					document.forms[0].pos2.disabled=true;					
+					document.forms[0].pos2.disabled=true;	
+									
 				} 
 				else 
 				{
@@ -180,8 +182,8 @@
 					document.forms[0].pos1.disabled=false;
 					document.forms[0].pos2.disabled=false;					
 				}
-				
-				onParentContainerChange(element)
+				var ele0 = document.getElementById("customListBox_1_0");
+				onParentContainerChange1(ele0);
 				//window.location.reload();
 			}
 		}
@@ -210,6 +212,59 @@
 			}	
 			
 		}
+		
+	
+
+    /***  code using ajax :gets the default cps without refreshing the whole page  ***/
+	function onParentContainerChange1(element)
+	{
+		if(element.name == "parentContainerId")
+		{
+			var request = newXMLHTTPReq();
+			var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
+		
+			//no brackets after the function name and no parameters are passed because we are assigning a reference to the function and not actually calling it
+			request.onreadystatechange = handlerFunction;
+			var action = "operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isSiteOrParentContainerChange=true&parentContainerId="+element.value;
+		
+			//Open connection to servlet
+			request.open("POST","StorageContainer.do",true);	
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		
+			//send data to ActionServlet
+			request.send(action);
+		}
+	}
+
+	function onResponseUpdate(collectionIdsStr) 
+	{
+
+		var collectionIds = document.getElementById("collectionIds");
+	
+		for (var i=collectionIds.options.length-1; i >= 0;i--) {
+			collectionIds.options[i].selected=false;
+		}
+		if(collectionIdsStr == "-1")
+		{
+			collectionIds.options[0].selected=true;
+		}
+		else
+		{
+			for (var i=collectionIds.options.length-1; i >= 0;i--) {
+				if(collectionIdsStr.indexOf(collectionIds.options[i].value) >= 0)
+				{
+					
+					collectionIds.options[i].selected = true;
+				}
+			}
+		}	
+		
+		
+	}
+
+	/*** code using ajax  ***/
+
+		
 		
 		
 		
@@ -564,7 +619,7 @@ function onEditChange()
 							String tdStyleClass = "formField";
 							boolean disabled = true;
 							String onChange = "";
-							onChange = "onCustomListBoxChange(this),onParentContainerChange(this)";
+							onChange = "onCustomListBoxChange(this),onParentContainerChange1(this)";
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange()";
 							boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";							
