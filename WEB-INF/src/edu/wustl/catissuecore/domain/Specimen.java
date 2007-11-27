@@ -1427,7 +1427,14 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		this.available = specimen.getAvailable();
 		if (specimen.getInitialQuantity() != null)
 		{
-			this.availableQuantity = new Quantity(specimen.getInitialQuantity());
+			/**
+			 * Name: Abhishek Mehta 
+			 * Bug ID: 5558
+			 * Patch ID: 5558_1
+			 * See also: 1-3 
+			 * Description : Earlier the available quantity for specimens that haven't been collected yet is greater than 0.
+			 */
+			this.availableQuantity = new Quantity("0");
 			this.initialQuantity = new Quantity(specimen.getInitialQuantity());
 		}
 		this.biohazardCollection = setBiohazardCollection(specimen);

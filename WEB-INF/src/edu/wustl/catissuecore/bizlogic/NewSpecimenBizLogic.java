@@ -537,6 +537,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			
 			setExternalIdentifiers(specimen, specimen.getExternalIdentifierCollection());
 
+			/**
+			 * Name: Abhishek Mehta 
+			 * Bug ID: 5558
+			 * Patch ID: 5558_2
+			 * See also: 1-3 
+			 * Description : Earlier the available quantity for specimens that haven't been collected yet is greater than 0.
+			 */
+			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() == 0 && specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED)))
+			{
+				specimen.setAvailableQuantity(specimen.getInitialQuantity());
+			}
+			
 			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() == 0) || specimen.getCollectionStatus()==null || specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING))
 			{
 				specimen.setAvailable(new Boolean(false));
@@ -2882,6 +2894,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			
 			
+			
 			if (specimenDO.getAvailableQuantity() == null)
 			{
 				quantity = new Quantity();
@@ -2889,11 +2902,25 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				availableQuantity = specimenDO.getAvailableQuantity();
+				/**
+			 	* Name: Abhishek Mehta 
+			 	* Bug ID: 5558
+			 	* Patch ID: 5558_3
+			 	* See also: 1-3 
+			 	* Description : Earlier the available quantity for specimens that haven't been collected yet is greater than 0.
+			 	*/
+				if((specimenDO.getAvailableQuantity().getValue().doubleValue() == 0 && specimenVO.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED)))
+				{
+					specimenDO.setAvailableQuantity(specimenVO.getInitialQuantity());
+				}
+				else
+				{
+					availableQuantity = specimenDO.getAvailableQuantity();
+					quantity.setValue(quantityValue);
+					availableQuantity.setValue(availableQuantityValue);
+				}
 			}
 			
-			quantity.setValue(quantityValue);
-			availableQuantity.setValue(availableQuantityValue);
 			
 		}
 		if (specimenVO.getCollectionStatus() != null)
