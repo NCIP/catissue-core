@@ -35,7 +35,7 @@ System.out.println("currentPage         "+currentPage);
 	String formName = Constants.categorySearchForm ;
 	String SearchCategory = Constants.SearchCategory ;
 %>
-<html:form method="GET" action="SearchCategory.do">
+<html:form method="GET" action="SearchCategory.do" focus="textField">
 <html:hidden property="currentPage" value=""/>
 	<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" id="table11">
 		<tr>
