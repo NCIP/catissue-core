@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.bizlogic.test;
 
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -8,11 +9,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -20,6 +23,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -144,7 +148,339 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 		}
-	}	
+	}
+	
+	/*public void testAddParticipantWithUniquePMI()
+	{
+		try{
+			Participant participant= BaseTestCaseUtility.initParticipant();
+			Collection participantMedicalIdentifierCollection = new HashSet();
+			ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
+			Site site =(Site)  TestCaseUtility.getObjectMap(Site.class);
+			pmi.setSite(site);
+			pmi.setMedicalRecordNumber("1234");
+			pmi.setParticipant(participant);
+			participantMedicalIdentifierCollection.add(pmi);						
+			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);	
+			participant = (Participant) appService.createObject(participant); 
+			assertTrue("Object created successfully", true);
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+			 assertFalse("could not add object", true);
+		 }
+	}
+	
+	public void testAddParticipantWithDuplicatePMI()
+	{
+		try{
+			Participant participant= BaseTestCaseUtility.initParticipant();
+			Collection participantMedicalIdentifierCollection = new HashSet();
+			ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
+			Site site =(Site)  TestCaseUtility.getObjectMap(Site.class);
+			pmi.setSite(site);
+			pmi.setMedicalRecordNumber("1234");
+			pmi.setParticipant(participant);
+			participantMedicalIdentifierCollection.add(pmi);						
+			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);				
+			participant = (Participant) appService.createObject(participant); 
+			assertFalse("Object created successfully", true);			
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();			 
+			 assertTrue("Submission failed because Participant with same PMI is already exist", true);
+		 }
+	}*/
+	
+	public void testAddParticipantRegistrationWithUniquePMI()
+	{
+		
+		Participant participant= BaseTestCaseUtility.initParticipant();		
+		Collection participantMedicalIdentifierCollection = new HashSet();
+		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
+		Site site =(Site)  TestCaseUtility.getObjectMap(Site.class);
+		pmi.setSite(site);
+		pmi.setMedicalRecordNumber("1234");
+		pmi.setParticipant(participant);
+		participantMedicalIdentifierCollection.add(pmi);						
+		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
+		try{	
+			participant = (Participant) appService.createObject(participant);
+		 }
+		 	catch(Exception e){
+			 e.printStackTrace();			 
+			 assertFalse("Unable to create participant", true);
+		 }
+			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+
+			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+
+			collectionProtocolRegistration.setParticipant(participant);
+
+			collectionProtocolRegistration.setProtocolParticipantIdentifier("");
+					
+			collectionProtocolRegistration.setActivityStatus("Active");
+			try
+			{
+				collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
+						Utility.datePattern("08/15/1975")));
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+			//Setting Consent Tier Responses.
+			try
+			{
+				collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+			}
+			catch (ParseException e)
+			{			
+				e.printStackTrace();
+			}
+			collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+			User user = (User)TestCaseUtility.getObjectMap(User.class);
+			collectionProtocolRegistration.setConsentWitness(user);
+			
+			Collection consentTierResponseCollection = new HashSet();
+			Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
+			Iterator consentTierItr = consentTierCollection.iterator();
+			while(consentTierItr.hasNext())
+			{
+				ConsentTier consentTier = (ConsentTier)consentTierItr.next();
+				ConsentTierResponse consentResponse = new ConsentTierResponse();
+				consentResponse.setConsentTier(consentTier);
+				consentResponse.setResponse("Yes");
+				consentTierResponseCollection.add(consentResponse);
+			}
+			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+		try
+		  {		
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
+			assertTrue("Participant Registration successfully created",true);
+		 }
+		 catch(Exception e)
+		 {
+		 	 e.printStackTrace();
+			 assertFalse("could not add object", true);
+		 }
+	}
+	
+	public void testParticipantRegistrationWithDuplicatePMI()
+	{
+		
+		Participant participant= BaseTestCaseUtility.initParticipant();		
+		Collection participantMedicalIdentifierCollection = new HashSet();
+		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
+		Site site =(Site)  TestCaseUtility.getObjectMap(Site.class);
+		pmi.setSite(site);
+		pmi.setMedicalRecordNumber("1234");
+		pmi.setParticipant(participant);
+		participantMedicalIdentifierCollection.add(pmi);						
+		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
+		try{	
+			participant = (Participant) appService.createObject(participant);
+		 }
+		 	catch(Exception e){
+			 e.printStackTrace();			 
+			 assertTrue("Unable to create participant", true);
+		 }
+			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+
+			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+
+			collectionProtocolRegistration.setParticipant(participant);
+
+			collectionProtocolRegistration.setProtocolParticipantIdentifier("");
+			
+			collectionProtocolRegistration.setActivityStatus("Active");
+			try
+			{
+				collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
+						Utility.datePattern("08/15/1975")));
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+			//Setting Consent Tier Responses.
+			try
+			{
+				collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+			}
+			catch (ParseException e)
+			{			
+				e.printStackTrace();
+			}
+			collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+			User user = (User)TestCaseUtility.getObjectMap(User.class);
+			collectionProtocolRegistration.setConsentWitness(user);
+			
+			Collection consentTierResponseCollection = new HashSet();
+			Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
+			Iterator consentTierItr = consentTierCollection.iterator();
+			while(consentTierItr.hasNext())
+			{
+				ConsentTier consentTier = (ConsentTier)consentTierItr.next();
+				ConsentTierResponse consentResponse = new ConsentTierResponse();
+				consentResponse.setConsentTier(consentTier);
+				consentResponse.setResponse("Yes");
+				consentTierResponseCollection.add(consentResponse);
+			}
+			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+		try
+		  {		
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
+			assertFalse("Shouldnot create object", true);
+			
+		 }
+		 catch(Exception e)
+		 {
+		 	 e.printStackTrace();
+			 assertTrue("Participant with same medical identifier ia already present", true);
+		 }
+	}
+	
+	public void testParticipantRegistrationWithUniquePPI()
+	{
+		
+		Participant participant= BaseTestCaseUtility.initParticipant();		
+		try{	
+			participant = (Participant) appService.createObject(participant);
+		 }
+		 	catch(Exception e){
+			 e.printStackTrace();			 
+			 assertFalse("Unable to create participant", true);
+		 }
+			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+
+			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+
+			collectionProtocolRegistration.setParticipant(participant);
+
+			collectionProtocolRegistration.setProtocolParticipantIdentifier("123");
+			collectionProtocolRegistration.setActivityStatus("Active");
+			try
+			{
+				collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
+						Utility.datePattern("08/15/1975")));
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+			//Setting Consent Tier Responses.
+			try
+			{
+				collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+			}
+			catch (ParseException e)
+			{			
+				e.printStackTrace();
+			}
+			collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+			User user = (User)TestCaseUtility.getObjectMap(User.class);
+			collectionProtocolRegistration.setConsentWitness(user);
+			
+			Collection consentTierResponseCollection = new HashSet();
+			Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
+			Iterator consentTierItr = consentTierCollection.iterator();
+			while(consentTierItr.hasNext())
+			{
+				ConsentTier consentTier = (ConsentTier)consentTierItr.next();
+				ConsentTierResponse consentResponse = new ConsentTierResponse();
+				consentResponse.setConsentTier(consentTier);
+				consentResponse.setResponse("Yes");
+				consentTierResponseCollection.add(consentResponse);
+			}
+			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+		try
+		  {		
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
+			
+		 }
+		 catch(Exception e)
+		 {
+		 	 e.printStackTrace();
+			 assertFalse("could not add object", true);
+		 }
+	}
+	
+	public void testParticipantRegistrationWithDuplicatePPI()
+	{
+		
+		Participant participant= BaseTestCaseUtility.initParticipant();		
+		try{	
+			participant = (Participant) appService.createObject(participant);
+		 }
+		 	catch(Exception e){
+			 e.printStackTrace();			 
+			 assertFalse("Unable to create participant", true);
+		 }
+			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+
+			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+
+			collectionProtocolRegistration.setParticipant(participant);
+
+			collectionProtocolRegistration.setProtocolParticipantIdentifier("123");
+			collectionProtocolRegistration.setActivityStatus("Active");
+			try
+			{
+				collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
+						Utility.datePattern("08/15/1975")));
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+			//Setting Consent Tier Responses.
+			try
+			{
+				collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+			}
+			catch (ParseException e)
+			{			
+				e.printStackTrace();
+			}
+			collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+			User user = (User)TestCaseUtility.getObjectMap(User.class);
+			collectionProtocolRegistration.setConsentWitness(user);
+			
+			Collection consentTierResponseCollection = new HashSet();
+			Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
+			Iterator consentTierItr = consentTierCollection.iterator();
+			while(consentTierItr.hasNext())
+			{
+				ConsentTier consentTier = (ConsentTier)consentTierItr.next();
+				ConsentTierResponse consentResponse = new ConsentTierResponse();
+				consentResponse.setConsentTier(consentTier);
+				consentResponse.setResponse("Yes");
+				consentTierResponseCollection.add(consentResponse);
+			}
+			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+		try
+		  {		
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
+			assertFalse("Failed to create CPR with duplicate PPI", true);
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+		 	 e.printStackTrace();
+			 assertTrue("should not not create object", true);
+		 }
+	}
+	
+	
 	
 	
 /*	public void testInvalidParticipantActivityStatus()
@@ -162,62 +498,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			 assertTrue("Name is required", true);
 		 }
 	}
-*///	
-//	public void testEmptyObjectInInsert_Participant(){
-//		domainObject = new Participant();
-//		testEmptyDomainObjectInInsert(domainObject);
-//	}
-//	
-//	public void testNullObjectInInsert_Participant(){
-//		domainObject = new Participant();
-//		testNullDomainObjectInInsert(domainObject);
-//	}
-//	
-//	public void testNullSessionDatBeanInInsert_Participant(){
-//		domainObject = new Participant();
-//		testNullSessionDataBeanInInsert(domainObject);
-//	}
-//	
-//	public void testNullSessionDataBeanInUpdate_Participant(){
-//		domainObject = new Participant();
-//		testNullSessionDataBeanInUpdate(domainObject);
-//	}
-//	
-//	public void testNullOldDomainObjectInUpdate_Participant(){
-//		domainObject = new Participant();
-//		testNullOldDomainObjectInUpdate(domainObject);
-//	}
-//	
-//	public void testNullCurrentDomainObjectInUpdate_Participant(){
-//		domainObject = new Participant();
-//		testNullCurrentDomainObjectInUpdate(domainObject);
-//	}
-//	
-//	public void testWrongDaoTypeInUpdate_Participant(){
-//		domainObject = new Participant();
-//		testNullCurrentDomainObjectInUpdate(domainObject);
-//	}
-//	
-//	public void testEmptyCurrentDomainObjectInUpdate_Participant()
-//	{
-//		domainObject = new Participant();
-//		AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initParticipant();
-//		testEmptyCurrentDomainObjectInUpdate(domainObject, initialisedDomainObject);
-//	}
-//	
-//	public void testEmptyOldDomainObjectInUpdate_Participant()
-//	{
-//		domainObject = new Participant();
-//		AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initParticipant();
-//		testEmptyOldDomainObjectInUpdate(domainObject,initialisedDomainObject);
-//	}
-//	public void testNullDomainObjectInRetrieve_Participant()
-//	{
-//		domainObject = new Participant();
-//		testNullCurrentDomainObjectInRetrieve(domainObject);
-//	}
-//
-//	
-		
+
+*/		
 	
 }
