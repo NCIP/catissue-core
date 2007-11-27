@@ -52,7 +52,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			ts = (TissueSpecimen) appService.createObject(ts);
 			System.out.println("Tissue Specimen successfully created with Lable"+ ts.getLabel());
 			Logger.out.info("Tissue Specimen successfully created with Lable"+ ts.getLabel());
-			assertTrue("Object added successfully", true);
+			assertTrue("Successfully added tissue specimen in container", true);
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
@@ -60,7 +60,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 		 }
 	}
 	
-	public void testAddMolSpecInStorageContainerCanHoldTissueSpecimen()
+	public void testAddMolSpecInStorageContainerCanHoldTissueSpecimenNegativeTestcase()
 	{
 		try{			
 			StorageContainer storageContainer= (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);				
@@ -72,7 +72,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			ts.setSpecimenCollectionGroup(scg);
 			System.out.println("Befor creating Mol Specimen");
 			ts = (MolecularSpecimen) appService.createObject(ts);
-			assertFalse("could not add object", true);
+			assertFalse("Successfully added mol specimen in container", true);
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
