@@ -10,6 +10,8 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -85,7 +87,7 @@ public class StorageContainerAction extends SecureAction
 		{
 			isSiteOrParentContainerChange = true;
 
-		}
+		} 
 //		Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 		request.setAttribute(Constants.OPERATION,operation);
@@ -105,7 +107,7 @@ public class StorageContainerAction extends SecureAction
 			
 			System.out.println("Time taken for getAllocatedMapForCOntainer:"+(end-start));
 		}
-
+ 
 		if (operation.equals(Constants.ADD))
 		{
 
@@ -130,7 +132,8 @@ public class StorageContainerAction extends SecureAction
 
 		if (isSiteOrParentContainerChange)
 		{
-			onSiteOrParentContChange(request, storageContainerForm);
+			onSiteOrParentContChange(request, response,storageContainerForm);
+			return null;
 		}
 
 		
@@ -144,7 +147,8 @@ public class StorageContainerAction extends SecureAction
 
 		if (request.getAttribute(Constants.SUBMITTED_FOR) != null)
 		{
-			parentContChange(request, storageContainerForm);
+			long[] collectionIds = parentContChange(request);
+			storageContainerForm.setCollectionIds(collectionIds);
 		}
 
 		// ---------- Add new
@@ -433,7 +437,7 @@ public class StorageContainerAction extends SecureAction
 
 	private void SetParentStorageContainersForAdd(TreeMap containerMap, StorageContainerForm storageContainerForm, HttpServletRequest request)
 			throws DAOException
-	{
+	{ 
 		Vector initialValues = null;
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		initialValues = checkForInitialValues(containerMap);
@@ -547,7 +551,7 @@ public class StorageContainerAction extends SecureAction
 
 	}
 
-	private void onSiteOrParentContChange(HttpServletRequest request, StorageContainerForm storageContainerForm) throws DAOException
+	private void onSiteOrParentContChange(HttpServletRequest request,HttpServletResponse response, StorageContainerForm storageContainerForm) throws DAOException, IOException
 	{
 
 		if (storageContainerForm.getCheckedButton() == 2)
@@ -571,10 +575,12 @@ public class StorageContainerAction extends SecureAction
 			initialValues.add(startingPoints);
 			request.setAttribute("initValues", initialValues);
 		}
-		parentContChange(request, storageContainerForm);
+		long[] collectionIds = parentContChange(request);
+		storageContainerForm.setCollectionIds(collectionIds);
+		sendCollectionIds(collectionIds,response);;
 	}
 
-	private void parentContChange(HttpServletRequest request, StorageContainerForm storageContainerForm) throws DAOException
+	private long[] parentContChange(HttpServletRequest request) throws DAOException
 	{
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		String valueField = "id";
@@ -585,12 +591,26 @@ public class StorageContainerAction extends SecureAction
 			if (!list.isEmpty())
 			{
 				StorageContainer container = (StorageContainer) list.get(0);
-				//site_name=container.getSite().getName();
-
-				//Site site = (Site) bizLogic.retrieveAttribute(StorageContainer.class.getName(), container.getId(), "site");//container.getSite();
-				//storageContainerForm.setSiteName(site.getName());
-				storageContainerForm.setCollectionIds(bizLogic.getDefaultHoldCollectionProtocolList(container));
+				return bizLogic.getDefaultHoldCollectionProtocolList(container);
 			}
 		}
+		return new long[]{-1};
+	}
+	private void sendCollectionIds(long[] collectionIds,HttpServletResponse response) throws IOException
+	{
+		PrintWriter out = response.getWriter();
+		response.setContentType("text/html");
+		String collectionIdStr = "";
+		for(int i=0;i<collectionIds.length-1;i++)
+		{
+			long id = collectionIds[i];
+			collectionIdStr = collectionIdStr + new Long(id).toString()+"|"; 
+			
+		}
+		long id = collectionIds[collectionIds.length-1];
+		collectionIdStr = collectionIdStr + new Long(id).toString();
+		
+		out.write(collectionIdStr);
+		
 	}
 }
