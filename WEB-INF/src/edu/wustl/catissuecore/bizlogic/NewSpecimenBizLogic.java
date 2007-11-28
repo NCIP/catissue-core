@@ -2916,12 +2916,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				else
 				{
 					availableQuantity = specimenDO.getAvailableQuantity();
-					quantity.setValue(quantityValue);
 					availableQuantity.setValue(availableQuantityValue);
 				}
 			}
 			
-			
+			quantity.setValue(quantityValue);
 		}
 		if (specimenVO.getCollectionStatus() != null)
 		{
