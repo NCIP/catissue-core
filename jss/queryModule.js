@@ -1128,3 +1128,15 @@ var jsReady = false;
 	{
 		document.forms[0].options[1].checked = "true";
 	}
+	function showMainObjectNotPresentMessage()
+	{
+		var request = newXMLHTTPReq();			
+		var actionURL;
+		var handlerFunction = getReadyStateHandler(request,showValidationMessages,true);	
+		request.onreadystatechange = handlerFunction;				
+		var url = "QueryMessageAction.do";
+		<!-- Open connection to servlet -->
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);	
+	}
