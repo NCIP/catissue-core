@@ -380,11 +380,17 @@
 		if (!e) var e = window.event
 		if (e.keyCode) code = e.keyCode;
 		else if (e.which) code = e.which;
+		
 		if(code == 13)
 		{
-			document.getElementById('searchButton').focus();
-		//	document.getElementById('searchButton').onclick();
-		}
+			var platform = navigator.platform.toLowerCase();
+			if (platform.indexOf("mac") == -1)
+			{						
+				document.getElementById('searchButton').focus();
+			}	
+		} 
+		else return true;
+		
 	}
 	function retriveSearchedEntities(url,nameOfFormToPost,currentPage) 
 	{
@@ -442,9 +448,8 @@
 	function showEntityListOnDefineViewPage(text)
 	{
 		var element = document.getElementById('resultSet');
-		if(text == "")
+		if(text.indexOf("No result found") != -1)
 		{
-            text = '<font face="Arial" size="2" >No result found.</font>'
 			element.innerHTML =text;
 		} 
 		else
@@ -472,9 +477,8 @@
 	function onResponseUpdate(text)
 	{
 		var element = document.getElementById('resultSet');
-		if(text == "")
+		if(text.indexOf("No result found") != -1)
 		{
-            text = '<font face="Arial" size="2" >No result found.</font>'
 			element.innerHTML =text;
 		} 
 		else
