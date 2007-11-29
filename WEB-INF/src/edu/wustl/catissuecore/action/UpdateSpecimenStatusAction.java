@@ -201,6 +201,9 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 		specimen.setLabel(specimenVO.getDisplayName() );
 		specimen.setBarcode(specimenVO.getBarCode());
 		
+		/* bug 6015  vaishali khandelwal*/
+		
+		/* end bug 6015 */
 		
 		String initialQuantity = specimenVO.getQuantity();
 		 

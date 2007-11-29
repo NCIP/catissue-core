@@ -97,7 +97,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	private String storageType;
 	private String selectedContainerName;
 	private String containerId;
-	private boolean checkedSpecimen;
+	private boolean checkedSpecimen = true;
 	
 	private Long collectionProtocolId = -1l;
 

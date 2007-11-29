@@ -46,7 +46,7 @@ import edu.wustl.common.exception.BizLogicException;
 public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 
 	private SpecimenCollectionGroup specimenCollectionGroup = null;
-	
+	private ViewSpecimenSummaryForm specimenSummaryForm = null;
 	public ActionForward executeAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -56,7 +56,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 				Constants.NEW_SPECIMEN_FORM_ID);
 		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 		try{
-			ViewSpecimenSummaryForm specimenSummaryForm =
+			specimenSummaryForm =
 			(ViewSpecimenSummaryForm)form;
 			String eventId = specimenSummaryForm.getEventId();
 			
@@ -104,36 +104,30 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 	 */
 	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws BizLogicException {
 
+		specimenVO = (SpecimenDataBean) specimenVO;
+		specimenVO.setCheckedSpecimen(true);
 		Specimen specimen = super.createSpecimenDomainObject(specimenVO);
-		setValuesForNewSpecimen(specimen,specimenVO);
+		setValuesForSpecimen(specimen,specimenVO);
+		if(ViewSpecimenSummaryForm.ADD_USER_ACTION.equals(specimenSummaryForm.getUserAction()))
+			setValuesForNewSpecimen(specimen,specimenVO);
+		
+			
 		return specimen;
 	}
 
 	protected void setValuesForNewSpecimen(Specimen specimen, GenericSpecimen genericSpecimen)
 	{
 		SpecimenDataBean specimenDataBean = (SpecimenDataBean) genericSpecimen;
+
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		specimen.setComment(specimenDataBean.getComment());
 		specimen.setCreatedOn(new Date());
 		specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
 		genericSpecimen.setCheckedSpecimen(true);
-		specimen.setPathologicalStatus(specimenDataBean.getPathologicalStatus());
-		specimen.setLineage(specimenDataBean.getLineage());
-		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-		specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
-		specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
-		specimen.setSpecimenCharacteristics(specimenCharacteristics);
-		specimen.setAvailableQuantity(specimen.getInitialQuantity());
-		specimen.setAvailable(Boolean.TRUE);
-		specimen.setLineage(specimenDataBean.getLineage());
-		specimen.setPathologicalStatus(
-				specimenDataBean.getPathologicalStatus());		
-		specimen.setType(specimenDataBean.getType());
-		specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
-		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
-		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
-		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
 		
+
+		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
+		specimen.setAvailableQuantity(specimen.getInitialQuantity());
 		if(specimenDataBean.getSpecimenEventCollection()!=null && !specimenDataBean.getSpecimenEventCollection().isEmpty())
 		{
 			Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
@@ -145,7 +139,26 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 				specimenEventParameters.setSpecimen(specimen);
 				
 			}
-		}
+		} 
+		 
+	}
+	protected void setValuesForSpecimen(Specimen specimen, GenericSpecimen genericSpecimen)
+	{
+		SpecimenDataBean specimenDataBean = (SpecimenDataBean) genericSpecimen;
+		specimen.setPathologicalStatus(specimenDataBean.getPathologicalStatus());
+		specimen.setLineage(specimenDataBean.getLineage());
+		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
+		specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
+		specimen.setSpecimenCharacteristics(specimenCharacteristics);		
+		specimen.setLineage(specimenDataBean.getLineage());
+		specimen.setAvailable(Boolean.TRUE);
+		specimen.setPathologicalStatus(
+				specimenDataBean.getPathologicalStatus());
+		specimen.setType(specimenDataBean.getType());
+		specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
+		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
+		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
 		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());		
 	}
 

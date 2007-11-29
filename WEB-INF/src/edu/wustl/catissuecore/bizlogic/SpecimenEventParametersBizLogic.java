@@ -8,7 +8,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.io.Serializable;
-import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +24,7 @@ import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
@@ -179,7 +179,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					
 						//storageContainerObj.setHoldsSpecimenClassCollection(storageContainerBizLogic.getSpecimenClassList(storageContainerObj.getId().toString()));
 						//storageContainerObj.setCollectionProtocolCollection(storageContainerBizLogic.getCollectionProtocolList(storageContainerObj.getId().toString()));
-						
+						SpecimenCollectionGroup scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup");
+						specimen.setSpecimenCollectionGroup(scg);
 						newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
 						
 					}

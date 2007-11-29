@@ -1,4 +1,3 @@
-									   
 /**
  * <p>Title: NewSpecimenHDAO Class>
  * <p>Description:	NewSpecimenBizLogicHDAO is used to add new specimen information into the database using Hibernate.</p>
@@ -93,11 +92,12 @@ import edu.wustl.common.util.logger.Logger;
 
 public class NewSpecimenBizLogic extends DefaultBizLogic
 {
-	private Map< Long, Collection> containerHoldsSpecimenClasses = new HashMap<Long, Collection>();
-	private Map< Long, Collection> containerHoldsCPs = new HashMap<Long, Collection>();
+	private Map<Long, Collection> containerHoldsSpecimenClasses = new HashMap<Long, Collection>();
+	private Map<Long, Collection> containerHoldsCPs = new HashMap<Long, Collection>();
 	private HashSet<String> storageContainerIds = new HashSet<String>();
 	private SecurityManager securityManager = new SecurityManager(this.getClass());
-	private boolean cpbased =false;
+	private boolean cpbased = false;
+
 	/**
 	 * Saves the storageType object in the database.
 	 * @param obj The storageType object to be saved.
@@ -106,17 +106,17 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		
-		if(!isCpbased())
+
+		if (!isCpbased())
 		{
 			isAuthorise(sessionDataBean.getUserName());
 		}
-		
+
 		if (obj.getClass().hashCode() == LinkedHashMap.class.hashCode())
 		{
 			insertMultipleSpecimen((LinkedHashMap<Specimen, List<Specimen>>) obj, dao, sessionDataBean);
 		}
-		
+
 		else if (obj instanceof Specimen)
 		{
 			insertSingleSpecimen((Specimen) obj, dao, sessionDataBean, false);
@@ -131,38 +131,37 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			try
 			{
-				securityManager.insertAuthorizationData(
-								null, protectionObjects, 
-									getDynamicGroups(specimen.getSpecimenCollectionGroup()));
+				securityManager.insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen.getSpecimenCollectionGroup()));
 			}
 			catch (SMException e)
 			{
 				throw handleSMException(e);
 			}
 
-		}else{
-			throw new DAOException ("Object should be either specimen or LinkedHashMap " +
-					"of specimen objects.");
 		}
-	   
+		else
+		{
+			throw new DAOException("Object should be either specimen or LinkedHashMap " + "of specimen objects.");
+		}
+
 	}
 
 	private void isAuthorise(String userName) throws UserNotAuthorizedException
 	{
 		try
 		{
-			if(!securityManager
-	                .isAuthorized(userName,
-	                        Specimen.class.getName(),
-	                        Permissions.CREATE)
-			){
+			if (!securityManager.isAuthorized(userName, Specimen.class.getName(), Permissions.CREATE))
+			{
 				throw new UserNotAuthorizedException("User is not authorised to create specimens");
 			}
-		}catch(SMException exception){
-			throw new UserNotAuthorizedException(exception.getMessage(),exception);
 		}
-		
+		catch (SMException exception)
+		{
+			throw new UserNotAuthorizedException(exception.getMessage(), exception);
+		}
+
 	}
+
 	/**
 	 * Insert multiple specimen into the data base.
 	 * @param specimenList
@@ -171,12 +170,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
 	 */
-	private void insertMultipleSpecimen(LinkedHashMap<Specimen, List<Specimen>> specimenMap, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	private void insertMultipleSpecimen(LinkedHashMap<Specimen, List<Specimen>> specimenMap, DAO dao, SessionDataBean sessionDataBean)
+			throws DAOException, UserNotAuthorizedException
 	{
 		List specimenList = new ArrayList();
 		Iterator specimenIterator = specimenMap.keySet().iterator();
 		int count = 0;
-		
+
 		while (specimenIterator.hasNext())
 		{
 			TaskTimeCalculater mulSpec = TaskTimeCalculater.startTask("Multiple specimen ", NewSpecimenBizLogic.class);
@@ -192,10 +192,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			 * Description: Adding Default Events if user has not entered them
 			 */
 			Collection specimenEventColl = specimen.getSpecimenEventCollection();
-			if(sessionDataBean!=null && ( specimenEventColl == null || specimenEventColl.isEmpty()) )
+			if (sessionDataBean != null && (specimenEventColl == null || specimenEventColl.isEmpty()))
 			{
-				setDefaultEventsToSpecimen(specimen,sessionDataBean);
-			}			
+				setDefaultEventsToSpecimen(specimen, sessionDataBean);
+			}
 			/**
 			 * Start: Change for API Search   --- Jitendra 06/10/2006
 			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -211,37 +211,37 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Long parentSpecimenId = specimen.getId();
 
 			//resetId(specimen);
-            
-            /**
-              * Patch ID: 3835_1_21
-              * See also: 1_1 to 1_5
-              * Description : set created date to collected event date if this specimen is not derived one in case of multiple specimen.
-              */
-            
-            if((specimen.getParentSpecimen() == null ))
-            {              
-                setCreatedOnDate(specimen);                
-            }            
-            
-            /*
-             * Name:Ashish Gupta
-             * Reviewer: Santosh Chandak
-             * Bug ID: 2989
-             * Pathch ID:2989_1
-             * Description:If parent specimen is present, retriving its events 
-             * */
-            //Setting parent specimens events if derived 
-            if(specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId() != null && specimen.getParentSpecimen().getId() > 0)
-            {            	
-            	TaskTimeCalculater setParentData = TaskTimeCalculater.startTask("Set parent Data", NewSpecimenBizLogic.class);
-            	setParentSpecimenData(specimen,dao);
-            	TaskTimeCalculater.endTask(setParentData);
-            }            
+
+			/**
+			 * Patch ID: 3835_1_21
+			 * See also: 1_1 to 1_5
+			 * Description : set created date to collected event date if this specimen is not derived one in case of multiple specimen.
+			 */
+
+			if ((specimen.getParentSpecimen() == null))
+			{
+				setCreatedOnDate(specimen);
+			}
+
+			/*
+			 * Name:Ashish Gupta
+			 * Reviewer: Santosh Chandak
+			 * Bug ID: 2989
+			 * Pathch ID:2989_1
+			 * Description:If parent specimen is present, retriving its events 
+			 * */
+			//Setting parent specimens events if derived 
+			if (specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId() != null && specimen.getParentSpecimen().getId() > 0)
+			{
+				TaskTimeCalculater setParentData = TaskTimeCalculater.startTask("Set parent Data", NewSpecimenBizLogic.class);
+				setParentSpecimenData(specimen, dao);
+				TaskTimeCalculater.endTask(setParentData);
+			}
 
 			try
 			{
 				storageContainerIds.clear();
-				setStorageLocationToNewSpecimen(dao, specimen,sessionDataBean,true);
+				setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
 				insertSingleSpecimen(specimen, dao, sessionDataBean, true);
 				specimenList.add(specimen);
 			}
@@ -250,17 +250,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				String message = " (This message is for Specimen number " + count + ")";
 				daoException.setSupportingMessage(message);
 				throw daoException;
-			} catch (SMException e) {
+			}
+			catch (SMException e)
+			{
 				String message = " (This message is for Specimen number " + count + ")";
 				e.printStackTrace();
 				DAOException daoException = new DAOException(e);
 				daoException.setSupportingMessage(message);
 				throw daoException;
 
-				
-				
 			}
-			
 
 			List derivedSpecimens = (List) specimenMap.get(specimen);
 			if (derivedSpecimens == null)
@@ -275,10 +274,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				//resetId(derivedSpecimen);
 				derivedSpecimen.setParentSpecimen(specimen);
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
-				
+
 				try
 				{
-	            	setParentSpecimenData(derivedSpecimen,dao);
+					setParentSpecimenData(derivedSpecimen, dao);
 					insertSingleSpecimen(derivedSpecimen, dao, sessionDataBean, true);
 					specimenList.add(derivedSpecimen);
 				}
@@ -288,25 +287,26 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					String message = " (This message is for Derived Specimen " + j + " of Parent Specimen number " + count + ")";
 					daoException.setSupportingMessage(message);
 					throw daoException;
-				} 
+				}
 			}
 			TaskTimeCalculater.endTask(mulSpec);
 		}
-		
+
 		//inserting authorization data 
 		authenticateSpecimens(specimenList);
-		
+
 	}
 
 	/**
 	 * @param specimenList
 	 * @throws DAOException
 	 */
-	private void authenticateSpecimens(List specimenList) throws DAOException {
+	private void authenticateSpecimens(List specimenList) throws DAOException
+	{
 		Iterator itr = specimenList.iterator();
-		TaskTimeCalculater specAuth = TaskTimeCalculater.startTask
-		("Specimen insert Authenticate ("+ specimenList.size() +")", NewSpecimenBizLogic.class);
-		String dynamicGroups [] =null;
+		TaskTimeCalculater specAuth = TaskTimeCalculater.startTask("Specimen insert Authenticate (" + specimenList.size() + ")",
+				NewSpecimenBizLogic.class);
+		String dynamicGroups[] = null;
 		try
 		{
 			Set protectionObjects = new HashSet();
@@ -315,7 +315,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				Specimen specimen = (Specimen) itr.next();
 				protectionObjects.add(specimen);
-	
+
 				if (specimen.getSpecimenCharacteristics() != null)
 				{
 					protectionObjects.add(specimen.getSpecimenCharacteristics());
@@ -324,115 +324,122 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			if (collectionGroup != null)
 			{
-				dynamicGroups =  getDynamicGroups(collectionGroup);
-				securityManager
-				.insertAuthorizationData(null, protectionObjects, dynamicGroups);	
+				dynamicGroups = getDynamicGroups(collectionGroup);
+				securityManager.insertAuthorizationData(null, protectionObjects, dynamicGroups);
 			}
 		}
 		catch (SMException e)
 		{
 			throw handleSMException(e);
-		}finally{
+		}
+		finally
+		{
 			TaskTimeCalculater.endTask(specAuth);
 		}
 	}
+
 	/**
 	 * @param specimen
 	 * @param dao
 	 * @throws DAOException
 	 * This method retrieves the parent specimen events and sets them in the parent specimen
 	 */
-	private void setParentSpecimenData(Specimen specimen,DAO dao) throws DAOException
+	private void setParentSpecimenData(Specimen specimen, DAO dao) throws DAOException
 	{
 		Specimen parent = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getId());
-		
-//		retrieving the parent specimen events
-		if(parent.getSpecimenEventCollection()!=null){
-		
+
+		//		retrieving the parent specimen events
+		if (parent.getSpecimenEventCollection() != null)
+		{
+
 			String sourceObjectName = SpecimenEventParameters.class.getName();
 			String columnName = Constants.COLUMN_NAME_SPECIMEN;
 			long whereColumnValue = parent.getId().longValue();
 			/*List parentSpecimenEventColl = dao.retrieve(sourceObjectName, columnName, whereColumnValue);
-			
-			if(parentSpecimenEventColl == null || parent.getSpecimenEventCollection().isEmpty())
-	    	{
-				parent.setSpecimenEventCollection(new HashSet());
-	    	}
-			else
-	    	{	//Converting list to hashset
-	    		Collection tempColl = new HashSet();    		
-	        	tempColl.addAll(parentSpecimenEventColl);        		
-	    		parent.setSpecimenEventCollection(tempColl);
-	    	}*/
-		}else{
+			 
+			 if(parentSpecimenEventColl == null || parent.getSpecimenEventCollection().isEmpty())
+			 {
+			 parent.setSpecimenEventCollection(new HashSet());
+			 }
+			 else
+			 {	//Converting list to hashset
+			 Collection tempColl = new HashSet();    		
+			 tempColl.addAll(parentSpecimenEventColl);        		
+			 parent.setSpecimenEventCollection(tempColl);
+			 }*/
+		}
+		else
+		{
 			parent.setSpecimenEventCollection(new HashSet());
 		}
-		
+
 		//Added by Poornima
-	   	specimen.setParentSpecimen(parent);
+		specimen.setParentSpecimen(parent);
 		specimen.setSpecimenCharacteristics(parent.getSpecimenCharacteristics());
-		
+
 		//Ashish - 8/6/07 - retriving parent scg for performance improvement
-//		AbstractSpecimenCollectionGroup parentSCG = (AbstractSpecimenCollectionGroup)dao.retrieveAttribute(Specimen.class.getName(),parent.getId() , Constants.COLUMN_NAME_SCG);
-//		specimen.setSpecimenCollectionGroup(parent.getSpecimenCollectionGroup());
+		//		AbstractSpecimenCollectionGroup parentSCG = (AbstractSpecimenCollectionGroup)dao.retrieveAttribute(Specimen.class.getName(),parent.getId() , Constants.COLUMN_NAME_SCG);
+		//		specimen.setSpecimenCollectionGroup(parent.getSpecimenCollectionGroup());
 		// set event parameters from parent specimen - added by Ashwin for bug id# 2476
-//		specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(parent,specimen));
+		//		specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(parent,specimen));
 		specimen.setPathologicalStatus(parent.getPathologicalStatus());
-		if(parent != null)
+		if (parent != null)
 		{
 			Set set = new HashSet();
-			
+
 			Collection biohazardCollection = parent.getBiohazardCollection();
-			if(biohazardCollection != null)
+			if (biohazardCollection != null)
 			{
 				Iterator it = biohazardCollection.iterator();
-				while(it.hasNext())
+				while (it.hasNext())
 				{
-					Biohazard hazard = (Biohazard)it.next();
+					Biohazard hazard = (Biohazard) it.next();
 					set.add(hazard);
 				}
 			}
 			specimen.setBiohazardCollection(set);
 		}
 	}
+
 	//This method sets the created on date = collection date
 	private void setCreatedOnDate(Specimen specimen)
 	{
 		Collection specimenEventsCollection = specimen.getSpecimenEventCollection();
-		if(specimenEventsCollection != null)
+		if (specimenEventsCollection != null)
 		{
 			Iterator specimenEventsCollectionIterator = specimenEventsCollection.iterator();
-	        while (specimenEventsCollectionIterator.hasNext())
-	        {               
-	              Object eventObject = specimenEventsCollectionIterator.next();
-	              if (eventObject instanceof CollectionEventParameters)
-	              {
-	                  CollectionEventParameters collEventParam=(CollectionEventParameters)eventObject;
-	                  specimen.setCreatedOn(collEventParam.getTimestamp());
-	              }
-	        }
+			while (specimenEventsCollectionIterator.hasNext())
+			{
+				Object eventObject = specimenEventsCollectionIterator.next();
+				if (eventObject instanceof CollectionEventParameters)
+				{
+					CollectionEventParameters collEventParam = (CollectionEventParameters) eventObject;
+					specimen.setCreatedOn(collEventParam.getTimestamp());
+				}
+			}
 		}
 	}
+
 	/**
 	 * @param specimen
 	 * @param sessionDataBean
 	 * This method sets the default events to specimens if they are null
 	 */
-	private void setDefaultEventsToSpecimen(Specimen specimen,SessionDataBean sessionDataBean)
-	{		
+	private void setDefaultEventsToSpecimen(Specimen specimen, SessionDataBean sessionDataBean)
+	{
 		Collection specimenEventColl = new HashSet();
 		User user = new User();
 		user.setId(sessionDataBean.getUserId());
 		CollectionEventParameters collectionEventParameters = EventsUtil.populateCollectionEventParameters(user);
 		collectionEventParameters.setSpecimen(specimen);
 		specimenEventColl.add(collectionEventParameters);
-		
-		ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);	
+
+		ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);
 		receivedEventParameters.setSpecimen(specimen);
 		specimenEventColl.add(receivedEventParameters);
-		
-		specimen.setSpecimenEventCollection(specimenEventColl);		
-	}	
+
+		specimen.setSpecimenEventCollection(specimenEventColl);
+	}
 
 	/**
 	 * By Rahul Ner
@@ -516,9 +523,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException 
 	 */
 	private void insertSingleSpecimen(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, boolean partOfMulipleSpecimen)
-			throws DAOException, UserNotAuthorizedException 
+			throws DAOException, UserNotAuthorizedException
 	{
-		try 
+		try
 		{
 			/**
 			 * Start: Change for API Search   --- Jitendra 06/10/2006
@@ -530,11 +537,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 			 */
 
-			ApiSearchUtil.setSpecimenDefault(specimen); 
+			ApiSearchUtil.setSpecimenDefault(specimen);
 
-			Specimen parentSpecimen =specimen.getParentSpecimen();
+			Specimen parentSpecimen = specimen.getParentSpecimen();
 			setParentSCG(specimen, dao, parentSpecimen);
-			
+
 			setExternalIdentifiers(specimen, specimen.getExternalIdentifierCollection());
 
 			/**
@@ -544,12 +551,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			 * See also: 1-3 
 			 * Description : Earlier the available quantity for specimens that haven't been collected yet is greater than 0.
 			 */
-			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() == 0 && specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED)))
+			if ((specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity().getValue().doubleValue() == 0 && specimen
+					.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED)))
 			{
 				specimen.setAvailableQuantity(specimen.getInitialQuantity());
 			}
-			
-			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() == 0) || specimen.getCollectionStatus()==null || specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING))
+
+			if ((specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+					|| specimen.getCollectionStatus() == null || specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING))
 			{
 				specimen.setAvailable(new Boolean(false));
 			}
@@ -558,18 +567,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				specimen.setAvailable(new Boolean(true));
 			}
 
-			if(specimen.getLineage() == null)
+			if (specimen.getLineage() == null)
 			{
-			    specimen.setLineage(Constants.NEW_SPECIMEN);
+				specimen.setLineage(Constants.NEW_SPECIMEN);
 			}
 			//Setting the created on date = collection date if lineage = NEW_SPECIMEN
 			setCreatedOnDate(specimen);
-			
+
 			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
 
 			generateLabel(specimen);
 			generateBarCode(specimen);
-			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, false,  false);
+			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, false, false);
 			dao.insert(specimen, sessionDataBean, false, false);
 			//protectionObjects.add(specimen);
 
@@ -614,26 +623,27 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			e.printStackTrace();
 			throw new DAOException(e.getMessage());
 		}
-		
+
 	}
 
 	/**
 	 * @param specimen
 	 * @throws DAOException
 	 */
-	private void generateBarCode(Specimen specimen) throws DAOException {
-		if(edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl )
+	private void generateBarCode(Specimen specimen) throws DAOException
+	{
+		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenBarcodeGeneratorAvl)
 		{
 			//Setting Name from Id
-			if((specimen.getBarcode()==null || specimen.getBarcode().equals("") ) &&  !specimen.getIsCollectionProtocolRequirement())
+			if ((specimen.getBarcode() == null || specimen.getBarcode().equals("")) && !specimen.getIsCollectionProtocolRequirement())
 			{
 
-				try 
+				try
 				{
 					BarcodeGenerator spBarcodeGenerator = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
 					spBarcodeGenerator.setBarcode(specimen);
 				}
-				catch (BizLogicException e) 
+				catch (BizLogicException e)
 				{
 					throw new DAOException(e.getMessage());
 				}
@@ -645,27 +655,24 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @param specimen
 	 * @param externalIdentifierCollection
 	 */
-	private void setExternalIdentifiers(Specimen specimen,
-			Collection externalIdentifierCollection) {
+	private void setExternalIdentifiers(Specimen specimen, Collection externalIdentifierCollection)
+	{
 		if (externalIdentifierCollection != null)
 		{
 			if (externalIdentifierCollection.isEmpty()) //Dummy entry added for query
 			{
-				setEmptyExternalIdentifier(specimen,
-						externalIdentifierCollection);
+				setEmptyExternalIdentifier(specimen, externalIdentifierCollection);
 			}
 			else
 			{
-				setSpecimenToExternalIdentifier(specimen,
-						externalIdentifierCollection);
+				setSpecimenToExternalIdentifier(specimen, externalIdentifierCollection);
 			}
 		}
 		else
 		{
 			//Dummy entry added for query.
 			externalIdentifierCollection = new HashSet();
-			setEmptyExternalIdentifier(specimen,
-					externalIdentifierCollection);
+			setEmptyExternalIdentifier(specimen, externalIdentifierCollection);
 			specimen.setExternalIdentifierCollection(externalIdentifierCollection);
 		}
 	}
@@ -676,17 +683,17 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @param parentSpecimen
 	 * @throws DAOException
 	 */
-	private void setParentSCG(Specimen specimen, DAO dao,
-			Specimen parentSpecimen) throws DAOException {
-		if(parentSpecimen !=null)
+	private void setParentSCG(Specimen specimen, DAO dao, Specimen parentSpecimen) throws DAOException
+	{
+		if (parentSpecimen != null)
 		{
-			if(parentSpecimen.getId()==null)
+			if (parentSpecimen.getId() == null)
 			{
-				List parentSpecimenList = dao.retrieve(Specimen.class.getName(),"label",parentSpecimen .getLabel());
-				
-				if(parentSpecimenList!=null && !parentSpecimenList.isEmpty())
+				List parentSpecimenList = dao.retrieve(Specimen.class.getName(), "label", parentSpecimen.getLabel());
+
+				if (parentSpecimenList != null && !parentSpecimenList.isEmpty())
 				{
-					parentSpecimen =(Specimen) parentSpecimenList.get(0);
+					parentSpecimen = (Specimen) parentSpecimenList.get(0);
 				}
 			}
 			specimen.setParentSpecimen(parentSpecimen);
@@ -700,28 +707,28 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @param specimen
 	 * @throws DAOException
 	 */
-	private void generateLabel(Specimen specimen) throws DAOException {
+	private void generateLabel(Specimen specimen) throws DAOException
+	{
 		/**
 		 * Name:Falguni Sachde
 		 * Reviewer: Sachin lale
 		 * Call Specimen label generator if automatic generation is specified 
 		 */
-		if(edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl )
+		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 		{
 			//Setting Name from Id
-			if((specimen.getLabel()==null || specimen.getLabel().equals("") ) &&  !specimen.getIsCollectionProtocolRequirement())
+			if ((specimen.getLabel() == null || specimen.getLabel().equals("")) && !specimen.getIsCollectionProtocolRequirement())
 			{
 
-				try 
+				try
 				{
-					TaskTimeCalculater labelGen = TaskTimeCalculater.startTask
-					("Time required for label Generator",NewSpecimenBizLogic.class);
+					TaskTimeCalculater labelGen = TaskTimeCalculater.startTask("Time required for label Generator", NewSpecimenBizLogic.class);
 
 					LabelGenerator spLblGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
 					spLblGenerator.setLabel(specimen);
 					TaskTimeCalculater.endTask(labelGen);
 				}
-				catch (BizLogicException e) 
+				catch (BizLogicException e)
 				{
 					throw new DAOException(e.getMessage());
 				}
@@ -733,8 +740,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @param specimen
 	 * @param externalIdentifierCollection
 	 */
-	private void setSpecimenToExternalIdentifier(Specimen specimen,
-			Collection externalIdentifierCollection) {
+	private void setSpecimenToExternalIdentifier(Specimen specimen, Collection externalIdentifierCollection)
+	{
 		/**
 		 *  Bug 3007 - Santosh
 		 */
@@ -751,8 +758,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @param specimen
 	 * @param externalIdentifierCollection
 	 */
-	private void setEmptyExternalIdentifier(Specimen specimen,
-			Collection externalIdentifierCollection) {
+	private void setEmptyExternalIdentifier(Specimen specimen, Collection externalIdentifierCollection)
+	{
 		ExternalIdentifier exId = new ExternalIdentifier();
 
 		exId.setName(null);
@@ -763,7 +770,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		
+
 		Map containerMap = getStorageContainerMap();
 		if (obj instanceof HashMap)
 		{
@@ -793,9 +800,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 	}
 
-	synchronized public void postInsert(Collection speCollection, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	synchronized public void postInsert(Collection speCollection, DAO dao, SessionDataBean sessionDataBean) throws DAOException,
+			UserNotAuthorizedException
 	{
-		
+
 		Map containerMap = getStorageContainerMap();
 		Iterator specimenIterator = speCollection.iterator();
 		while (specimenIterator.hasNext())
@@ -807,7 +815,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			if (childSpecimens != null)
 			{
 				Iterator childSpecimenIterator = childSpecimens.iterator();
-				while(childSpecimenIterator.hasNext())
+				while (childSpecimenIterator.hasNext())
 				{
 					Specimen derivedSpecimen = (Specimen) childSpecimenIterator.next();
 					updateStorageLocations((TreeMap) containerMap, derivedSpecimen);
@@ -846,29 +854,30 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		/**
 		 * Bug 3094 --> This jdbc query updates all the aliquots of a specimen, saperate query is written to improve the performance
 		 */
-		
+
 		Specimen currentSpecimen = (Specimen) currentObj;
 		Specimen oldSpecimen = (Specimen) oldObj;
 		String type = currentSpecimen.getType();
 		String pathologicalStatus = currentSpecimen.getPathologicalStatus();
 		String id = currentSpecimen.getId().toString();
-		if(!currentSpecimen.getPathologicalStatus().equals(oldSpecimen.getPathologicalStatus())||!currentSpecimen.getType().equals(oldSpecimen.getType()))
+		if (!currentSpecimen.getPathologicalStatus().equals(oldSpecimen.getPathologicalStatus())
+				|| !currentSpecimen.getType().equals(oldSpecimen.getType()))
 		{
-		try
-		{
-			JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-			jdbcDao.openSession(null);
+			try
+			{
+				JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+				jdbcDao.openSession(null);
 
-			String queryStr = "UPDATE CATISSUE_SPECIMEN SET TYPE = '" + type + "',PATHOLOGICAL_STATUS = '" + pathologicalStatus
-					+ "' WHERE LINEAGE = 'ALIQUOT' AND PARENT_SPECIMEN_ID ='" + id + "';";
+				String queryStr = "UPDATE CATISSUE_SPECIMEN SET TYPE = '" + type + "',PATHOLOGICAL_STATUS = '" + pathologicalStatus
+						+ "' WHERE LINEAGE = 'ALIQUOT' AND PARENT_SPECIMEN_ID ='" + id + "';";
 
-			jdbcDao.executeUpdate(queryStr);
-			jdbcDao.closeSession();
-		}
-		catch (Exception e)
-		{
-               Logger.out.debug("Exception occured while updating aliquots");
-		}
+				jdbcDao.executeUpdate(queryStr);
+				jdbcDao.closeSession();
+			}
+			catch (Exception e)
+			{
+				Logger.out.debug("Exception occured while updating aliquots");
+			}
 		}
 	}
 
@@ -892,14 +901,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 	protected String[] getDynamicGroups(AbstractSpecimenCollectionGroup obj) throws SMException
 	{
-		TaskTimeCalculater getDynaGrps = TaskTimeCalculater.startTask
-		("DynamicGroup", NewSpecimenBizLogic.class);
-		
+		TaskTimeCalculater getDynaGrps = TaskTimeCalculater.startTask("DynamicGroup", NewSpecimenBizLogic.class);
+
 		String[] dynamicGroups = new String[1];
 
-		dynamicGroups[0] = securityManager
-							.getProtectionGroupByName(obj,
-				Constants.getCollectionProtocolPGName(null));
+		dynamicGroups[0] = securityManager.getProtectionGroupByName(obj, Constants.getCollectionProtocolPGName(null));
 		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
 		TaskTimeCalculater.endTask(getDynaGrps);
 		return dynamicGroups;
@@ -908,33 +914,55 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen, DAO dao) throws DAOException
 	{
 		Collection holdsSpecimenClassColl = containerHoldsSpecimenClasses.get(container.getId());
-		if(holdsSpecimenClassColl == null)
+		if (holdsSpecimenClassColl == null)
 		{
-			holdsSpecimenClassColl = (Collection)dao.retrieveAttribute(StorageContainer.class.getName(),container.getId(),"elements(holdsSpecimenClassCollection)");
+			holdsSpecimenClassColl = (Collection) dao.retrieveAttribute(StorageContainer.class.getName(), container.getId(),
+					"elements(holdsSpecimenClassCollection)");
 			containerHoldsSpecimenClasses.put(container.getId(), holdsSpecimenClassColl);
 		}
 		boolean aa = holdsSpecimenClassColl.contains(specimen.getClassName());
-		if (!aa	)
+		if (!aa)
 		{
-			throw new DAOException("This Storage Container cannot hold "+specimen.getClassName()+" Specimen "+specimen.getLabel());
+			throw new DAOException("This Storage Container cannot hold " + specimen.getClassName() + " Specimen ");
 		}
-		
+
 		Collection collectionProtColl = containerHoldsCPs.get(container.getId());
-		if(collectionProtColl == null)
+		if (collectionProtColl == null)
 		{
-			collectionProtColl = (Collection)dao.retrieveAttribute(StorageContainer.class.getName(),container.getId(),"elements(collectionProtocolCollection)");
+			collectionProtColl = (Collection) dao.retrieveAttribute(StorageContainer.class.getName(), container.getId(),
+					"elements(collectionProtocolCollection)");
 			containerHoldsCPs.put(container.getId(), collectionProtColl);
 		}
-		SpecimenCollectionGroup scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup");
-		CollectionProtocol protocol = (CollectionProtocol)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(), "collectionProtocolRegistration.collectionProtocol");
-		boolean bb = collectionProtColl.isEmpty();
-		if(!bb)
+		//SpecimenCollectionGroup scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup");
+		//CollectionProtocol protocol = (CollectionProtocol)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(), "collectionProtocolRegistration.collectionProtocol");
+		SpecimenCollectionGroup scg = null;
+		CollectionProtocol protocol = null;
+		if (specimen.getSpecimenCollectionGroup() != null)
 		{
-			bb = collectionProtColl.contains(protocol);
+			scg = (SpecimenCollectionGroup) specimen.getSpecimenCollectionGroup();
 		}
-		if(!bb)
+		else if (specimen.getId() != null)
 		{
-			throw new DAOException("This Storage Container cannot hold specimen "+specimen.getLabel()+" of collection protocol is "+protocol.getTitle());
+			scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "specimenCollectionGroup");
+		}
+		if (scg != null)
+			protocol = (CollectionProtocol) dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(),
+					"collectionProtocolRegistration.collectionProtocol");
+		if (protocol != null)
+		{
+			boolean bb = collectionProtColl.isEmpty();
+			if (!bb)
+			{
+				bb = collectionProtColl.contains(protocol);
+			}
+			if (!bb)
+			{
+				throw new DAOException("This Storage Container cannot hold specimen of collection protocol " + protocol.getTitle());
+			}
+		}
+		else
+		{
+			throw new DAOException("This Collection Protocol not found");
 		}
 	}
 
@@ -1123,30 +1151,30 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	public void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		
+
 		Specimen specimen = (Specimen) obj;
-		Specimen specimenOld = (Specimen)HibernateMetaData.getProxyObjectImpl(oldObj);
+		Specimen specimenOld = (Specimen) HibernateMetaData.getProxyObjectImpl(oldObj);
 		//Specimen specimenOld = (Specimen) oldObj;
-		
-		boolean isInitQtyChange=false;
-		boolean isInitAvlChange=false;
+
+		boolean isInitQtyChange = false;
+		boolean isInitAvlChange = false;
 		/**
 		 * Name:Virender Mehta
 		 * Reviewer: Sachin lale
 		 * This methos will retrive and set SCG Id from SCG name.
 		 */
-		if(specimen.getLineage().equals(Constants.NEW_SPECIMEN))
+		if (specimen.getLineage().equals(Constants.NEW_SPECIMEN))
 		{
 			//retriveSCGIdFromSCGName(specimen,dao);
 		}
 		//retrive and set parentSpecimenId
-		if(specimen.getParentSpecimen()!= null && specimen.getParentSpecimen().getId()==null)
+		if (specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId() == null)
 		{
-			Long parentSpecimenId =(Long)dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"parentSpecimen.id");
+			Long parentSpecimenId = (Long) dao.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "parentSpecimen.id");
 			specimen.getParentSpecimen().setId(parentSpecimenId);
 
 		}
-		
+
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
 		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -1172,8 +1200,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		 * Reviewer: Sachin lale
 		 * Calling Domain object from Proxy Object
 		 */
-		Specimen specimenImplObj = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenOld);
-		if(!specimenImplObj.getClassName().equals(specimen.getClassName()))
+		Specimen specimenImplObj = (Specimen) HibernateMetaData.getProxyObjectImpl(specimenOld);
+		if (!specimenImplObj.getClassName().equals(specimen.getClassName()))
 		{
 			throw new DAOException("Class should not be changed while updating the specimen");
 		}
@@ -1187,20 +1215,20 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		// get old qunatity from database			
 		double oldAvailableQty = Double.parseDouble(specimenOld.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
 		double oldQty = Double.parseDouble(specimenOld.getInitialQuantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
-		
+
 		//get new qunatity modifed by user
 		double newAvailableQty = Double.parseDouble(specimen.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
 		double newQty = Double.parseDouble(specimen.getInitialQuantity().toString());//tissueSpecimenObj.getQuantityInGram().doubleValue();
 
-		if((oldAvailableQty - newAvailableQty)!= 0)
+		if ((oldAvailableQty - newAvailableQty) != 0)
 		{
-			isInitAvlChange =true;
+			isInitAvlChange = true;
 		}
-		else if((oldQty - newQty)!= 0)
+		else if ((oldQty - newQty) != 0)
 		{
-			isInitQtyChange=true;
+			isInitQtyChange = true;
 		}
-		if(isInitQtyChange && !isInitAvlChange)
+		if (isInitQtyChange && !isInitAvlChange)
 		{
 			setAvailableQuantity(specimen, specimenOld);
 		}
@@ -1225,7 +1253,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		//check for closed Specimen Collection Group
 		if (!specimen.getSpecimenCollectionGroup().getId().equals(specimenOld.getSpecimenCollectionGroup().getId()))
 			checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
-		
+
 		/**
 		 * Name:Virender Mehta
 		 * Reviewer: Aarti Sharma
@@ -1234,33 +1262,34 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		}
-		setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup() ,dao);
-		
+		setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup(), dao);
+
 		//Consent Tracking
-		if(!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION   ) )
+		if (!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
 		{
 			updateConsentWithdrawStatus(specimen, specimenImplObj, dao, sessionDataBean);
 		}
-		else if(!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE ) )
+		else if (!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
 		{
-			updateConsentStatus(specimen,dao,specimenImplObj);
+			updateConsentStatus(specimen, dao, specimenImplObj);
 		}
-        //Consent Tracking	
+		//Consent Tracking	
 		//Mandar: 16-Jan-07
 
 		/**
 		 * Refer bug 3269 
 		 * 1. If quantity of old object > 0 and it is unavailable, it was marked 
-         *    unavailale by user. 
-         * 2. If quantity of old object = 0, we can assume that it is unavailable because its quantity 
-         *    has become 0.
+		 *    unavailale by user. 
+		 * 2. If quantity of old object = 0, we can assume that it is unavailable because its quantity 
+		 *    has become 0.
 		 */
-		
-		if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() == 0) || specimen.getCollectionStatus()==null || specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING))
+
+		if ((specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+				|| specimen.getCollectionStatus() == null || specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING))
 		{
 			specimen.setAvailable(new Boolean(false));
 		}
-		else if(specimenOld.getAvailableQuantity()!=null && specimenOld.getAvailableQuantity().getValue().doubleValue()==0)
+		else if (specimenOld.getAvailableQuantity() != null && specimenOld.getAvailableQuantity().getValue().doubleValue() == 0)
 		{
 			// quantity of old object is zero and that of current is nonzero
 			specimen.setAvailable(new Boolean(true));
@@ -1269,7 +1298,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimen.setAvailable(new Boolean(true));
 		}
-		
+
 		dao.update(specimen, sessionDataBean, true, false, false);//dao.update(specimen, sessionDataBean, true, true, false);
 
 		//Audit of Specimen.
@@ -1277,7 +1306,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 		//Audit of Specimen Characteristics.
 		dao.audit(specimen.getSpecimenCharacteristics(), specimenOld.getSpecimenCharacteristics(), sessionDataBean, true);
-		Collection oldExternalIdentifierCollection = specimenOld.getExternalIdentifierCollection(); 
+		Collection oldExternalIdentifierCollection = specimenOld.getExternalIdentifierCollection();
 		//dao.retrieve(ExternalIdentifier.class.getName(),"specimen",specimenOld.getId()); 
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if (externalIdentifierCollection != null)
@@ -1296,37 +1325,37 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 		//Disable functionality
 		Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
-		if(specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION ) )
+		if (specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
 		{
-		if (specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
-		{
-			//			 check for disabling a specimen 
-			boolean disposalEventPresent = false;
-			Collection eventCollection = specimen.getSpecimenEventCollection();
-			Iterator itr = eventCollection.iterator();
-			while (itr.hasNext())
+			if (specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 			{
-				Object eventObject = itr.next();
-				if (eventObject instanceof DisposalEventParameters)
+				//			 check for disabling a specimen 
+				boolean disposalEventPresent = false;
+				Collection eventCollection = specimen.getSpecimenEventCollection();
+				Iterator itr = eventCollection.iterator();
+				while (itr.hasNext())
 				{
-					disposalEventPresent = true;
-					break;
+					Object eventObject = itr.next();
+					if (eventObject instanceof DisposalEventParameters)
+					{
+						disposalEventPresent = true;
+						break;
+					}
 				}
-			}
-			if (!disposalEventPresent)
-			{
-				throw new DAOException(ApplicationProperties.getValue("errors.specimen.not.disabled.no.disposalevent"));
-			}
+				if (!disposalEventPresent)
+				{
+					throw new DAOException(ApplicationProperties.getValue("errors.specimen.not.disabled.no.disposalevent"));
+				}
 
-			setDisableToSubSpecimen(specimen);
-			Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
-			Long specimenIDArr[] = new Long[1];
-			specimenIDArr[0] = specimen.getId();
+				setDisableToSubSpecimen(specimen);
+				Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
+				Long specimenIDArr[] = new Long[1];
+				specimenIDArr[0] = specimen.getId();
 
-			disableSubSpecimens(dao, specimenIDArr);
+				disableSubSpecimens(dao, specimenIDArr);
+			}
 		}
 	}
-   }
 
 	private boolean isUnderSubSpecimen(Specimen specimen, Long parentSpecimenID)
 	{
@@ -1356,13 +1385,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @param dao
 	 * @throws DAOException
 	 */
-	private void setSpecimenGroupForSubSpecimen(Specimen specimen, AbstractSpecimenCollectionGroup specimenCollectionGroup,
-			DAO dao) throws DAOException
+	private void setSpecimenGroupForSubSpecimen(Specimen specimen, AbstractSpecimenCollectionGroup specimenCollectionGroup, DAO dao)
+			throws DAOException
 	{
 		if (specimen != null)
 		{
 			Logger.out.debug("specimen() " + specimen.getId());
-			Collection childrenSpecimen = (Collection)dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"elements(childrenSpecimen)");
+			Collection childrenSpecimen = (Collection) dao
+					.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "elements(childrenSpecimen)");
 			Logger.out.debug("specimen.getChildrenContainerCollection() " + childrenSpecimen.size());
 			Iterator iterator = childrenSpecimen.iterator();
 			while (iterator.hasNext())
@@ -1370,8 +1400,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				Specimen childSpecimen = (Specimen) iterator.next();
 				childSpecimen.getSpecimenCharacteristics();
 				childSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
-				setSpecimenGroupForSubSpecimen(childSpecimen, specimenCollectionGroup,dao);
-				
+				setSpecimenGroupForSubSpecimen(childSpecimen, specimenCollectionGroup, dao);
+
 			}
 		}
 	}
@@ -1401,11 +1431,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimen.setBarcode(null);
 		}
-		//Load & set Storage Container
-		if (!partOfMultipleSpecimen)
-		{
-			setStorageLocationToNewSpecimen(dao, specimen,sessionDataBean,partOfMultipleSpecimen);
-		}
+
 		// TODO
 		//Load & set Specimen Collection Group if present
 		if (specimen.getSpecimenCollectionGroup() != null)
@@ -1426,31 +1452,33 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				 specimenCollectionGroupObj.setId((Long)list.get(0));*/
 				Collection consentTierStatusCollection = null;
 
-				if(specimen.getSpecimenCollectionGroup().getGroupName()!= null && !Constants.COLLECTION_STATUS_PENDING.equalsIgnoreCase(specimen.getCollectionStatus()))
+				if (specimen.getSpecimenCollectionGroup().getGroupName() != null
+						&& !Constants.COLLECTION_STATUS_PENDING.equalsIgnoreCase(specimen.getCollectionStatus()))
 				{
-					List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
-					SpecimenCollectionGroup scg = (SpecimenCollectionGroup) spgList.get(0);				
-					specimenCollectionGroupObj = (SpecimenCollectionGroup)HibernateMetaData.getProxyObjectImpl(scg);
-				
+					List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup()
+							.getGroupName());
+					SpecimenCollectionGroup scg = (SpecimenCollectionGroup) spgList.get(0);
+					specimenCollectionGroupObj = (SpecimenCollectionGroup) HibernateMetaData.getProxyObjectImpl(scg);
+
 					//Resolved lazy ----  specimenCollectionGroupObj.getConsentTierStatusCollection();
-					consentTierStatusCollection =specimenCollectionGroupObj.getConsentTierStatusCollection();
+					consentTierStatusCollection = specimenCollectionGroupObj.getConsentTierStatusCollection();
 					//consentTierStatusCollection= (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroupObj.getId(), "elements(consentTierStatusCollection)" );
 				}
-				
+
 				if (consentTierStatusCollection != null)
 				{
-					Collection consentTierStatusCollectionForSpecimen = new HashSet(); 
+					Collection consentTierStatusCollectionForSpecimen = new HashSet();
 					Iterator itr = consentTierStatusCollection.iterator();
-					while(itr.hasNext())
+					while (itr.hasNext())
 					{
-						 ConsentTierStatus conentTierStatus = (ConsentTierStatus) itr.next();
-						 ConsentTierStatus consentTierStatusForSpecimen = new ConsentTierStatus();
-						 consentTierStatusForSpecimen.setStatus(conentTierStatus.getStatus());
-						 consentTierStatusForSpecimen.setConsentTier(conentTierStatus.getConsentTier());
-						 consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
+						ConsentTierStatus conentTierStatus = (ConsentTierStatus) itr.next();
+						ConsentTierStatus consentTierStatusForSpecimen = new ConsentTierStatus();
+						consentTierStatusForSpecimen.setStatus(conentTierStatus.getStatus());
+						consentTierStatusForSpecimen.setConsentTier(conentTierStatus.getConsentTier());
+						consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
 					}
 					specimen.setConsentTierStatusCollection(consentTierStatusCollectionForSpecimen);
-				}				
+				}
 			}
 			else
 			{
@@ -1479,16 +1507,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Specimen parentSpecimen = new Specimen();
 			parentSpecimen.setId(specimen.getParentSpecimen().getId());
 			// check for closed Parent Specimen
-			if(specimen.getParentSpecimen().getActivityStatus()==null)
+			if (specimen.getParentSpecimen().getActivityStatus() == null)
 			{
 				checkStatus(dao, parentSpecimen, "Parent Specimen");
 			}
-			else if(!specimen.getParentSpecimen().getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_ACTIVE))
+			else if (!specimen.getParentSpecimen().getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_ACTIVE))
 			{
 				throw new DAOException("Parent Specimen " + ApplicationProperties.getValue("error.object.closed"));
 			}
-				
-			if(specimen.getLineage() == null)
+
+			if (specimen.getLineage() == null)
 			{
 				specimen.setLineage(Constants.DERIVED_SPECIMEN);
 			}
@@ -1496,7 +1524,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(specimen.getParentSpecimen(), specimen));
 			//			}
 		}
-
 
 		//Setting the Biohazard Collection
 		Set set = new HashSet();
@@ -1517,6 +1544,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 		specimen.setBiohazardCollection(set);
+
+		//Load & set Storage Container
+		if (!partOfMultipleSpecimen)
+		{
+			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, partOfMultipleSpecimen);
+		}
+
 	}
 
 	/**
@@ -1527,24 +1561,25 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 */
 	private void setStorageLocationToNewSpecimen(DAO dao, Specimen specimen, SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen)
-			throws DAOException,SMException {
+			throws DAOException, SMException
+	{
 		if (specimen.getStorageContainer() != null)
 		{
-			
-			
+
 			//retrieveStorageContainerObject(dao, specimen.getStorageContainer(), specimen.getStorageContainer().getId());
 			StorageContainer storageContainerObj = new StorageContainer();
-			
-			String sourceObjectName = StorageContainer.class.getName();
-			String[] whereColumnCondition = {"="};
-			
+
+
 			String joinCondition = null;
 
 			if (specimen.getStorageContainer().getId() != null)
 			{
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] whereColumnCondition = {"="};
+
 				storageContainerObj.setId(specimen.getStorageContainer().getId());
 				String[] selectColumnName = {"name"};
-				String[] whereColumnName = {"id"}; 
+				String[] whereColumnName = {"id"};
 				Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
 				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
 
@@ -1555,80 +1590,82 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				storageContainerObj.setName(specimen.getStorageContainer().getName());
-				String[] selectColumnName = {"id"};
-				String[] whereColumnName = {"name"}; 
-				Object[] whereColumnValue = {specimen.getStorageContainer().getName()};
-				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+				setStorageContainerId(dao, specimen, storageContainerObj);
 
-				if (!list.isEmpty())
-				{
-					storageContainerObj.setId((Long) list.get(0));
-				}
-				
 			}
 
 			// check for closed Storage Container
 			checkStatus(dao, storageContainerObj, "Storage Container");
-
+			chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
 			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
 
-			if (specimen.getPositionDimensionOne() == null || 
-					specimen.getPositionDimensionTwo() == null)
+			if (specimen.getPositionDimensionOne() == null || specimen.getPositionDimensionTwo() == null)
 			{
-				
-				LinkedList<Integer> positionValues = 
-					StorageContainerUtil
-					.getFirstAvailablePositionsInContainer(
-							storageContainerObj,getStorageContainerMap(),storageContainerIds);
-				
+
+				LinkedList<Integer> positionValues = StorageContainerUtil.getFirstAvailablePositionsInContainer(storageContainerObj,
+						getStorageContainerMap(), storageContainerIds);
+
 				specimen.setPositionDimensionOne(positionValues.get(0));
-						
+
 				specimen.setPositionDimensionTwo(positionValues.get(1));
-				
+
 			}
 
-			String storageValue = storageContainerObj.getName()+":"+specimen.getPositionDimensionOne()+" ,"+ 
-			specimen.getPositionDimensionTwo();
-			
-			if(storageContainerIds.contains(storageValue))
+			String storageValue = storageContainerObj.getName() + ":" + specimen.getPositionDimensionOne() + " ,"
+					+ specimen.getPositionDimensionTwo();
+
+			if (storageContainerIds.contains(storageValue))
 			{
-				throw new DAOException(",Storage Location:" + storageValue +
-					" has been assignes to two or more specimens");								
+				throw new DAOException(",Storage Location:" + storageValue + " has been assignes to two or more specimens");
 			}
 			else
 			{
 				storageContainerIds.add(storageValue);
 			}
-			
+
 			// --- check for all validations on the storage container.
 			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
 					specimen.getPositionDimensionTwo().toString(), sessionDataBean, partOfMultipleSpecimen);
 			specimen.setStorageContainer(storageContainerObj);
-			
+
 		}
 
-		if(specimen.getChildrenSpecimen()!= null)
+		if (specimen.getChildrenSpecimen() != null)
 		{
-			setChildrenSpecimenStorage(specimen.getChildrenSpecimen(),
-					dao, sessionDataBean, partOfMultipleSpecimen);
+			setChildrenSpecimenStorage(specimen.getChildrenSpecimen(), dao, sessionDataBean, partOfMultipleSpecimen);
 		}
-		
+
 	}
 
-	private void setChildrenSpecimenStorage(Collection specimenCollection, DAO dao,SessionDataBean sessionDataBean,
-			boolean partOfMultipleSpecimen) throws DAOException, SMException
+	private void setStorageContainerId(DAO dao, Specimen specimen, StorageContainer storageContainerObj) throws DAOException
+	{
+		String sourceObjectName = StorageContainer.class.getName();
+		String[] whereColumnCondition = {"="};		
+		storageContainerObj.setName(specimen.getStorageContainer().getName());
+		String[] selectColumnName = {"id"};
+		String[] whereColumnName = {"name"};
+		Object[] whereColumnValue = {specimen.getStorageContainer().getName()};
+		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
+
+		if (!list.isEmpty())
+		{
+			storageContainerObj.setId((Long) list.get(0));
+		}
+	}
+
+	private void setChildrenSpecimenStorage(Collection specimenCollection, DAO dao, SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen)
+			throws DAOException, SMException
 	{
 		Iterator iterator = specimenCollection.iterator();
-		while(iterator.hasNext())
+		while (iterator.hasNext())
 		{
 			Specimen specimen = (Specimen) iterator.next();
 			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, partOfMultipleSpecimen);
-			
+
 		}
 	}
-	
+
 	public void disableRelatedObjectsForSpecimenCollectionGroup(DAO dao, Long specimenCollectionGroupArr[]) throws DAOException
 	{
 		Logger.out.debug("disableRelatedObjects NewSpecimenBizLogic");
@@ -1762,8 +1799,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			//validation on multiple specimens are performed in MultipleSpecimenValidationUtil, so dont require to perform the bizlogic validations.
 			//return true;
 			//result = validateMultipleSpecimen((Map) obj, dao, operation);
-			return MultipleSpecimenValidationUtil.validateMultipleSpecimen
-			((Map)obj,dao, operation);
+			return MultipleSpecimenValidationUtil.validateMultipleSpecimen((Map) obj, dao, operation);
 		}
 		else
 		{
@@ -1780,11 +1816,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		//Added by Ashish		
 		//Logger.out.debug("Start-Inside validate method of specimen bizlogic");
-		if (specimen == null) 
+		if (specimen == null)
 		{
 			throw new DAOException(ApplicationProperties.getValue("specimen.object.null.err.msg", "Specimen"));
 		}
-		
+
 		Validator validator = new Validator();
 		/**
 		 * Name: Virender Mehta
@@ -1792,9 +1828,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		 * Description: Resolved Performance Issue,retrive scg obj explicitly  
 		 * 
 		 */
-		if (specimen.getSpecimenCollectionGroup() == null && ((specimen.getSpecimenCollectionGroup().getId() == null ||
-				specimen.getSpecimenCollectionGroup().getId().equals("-1")) ||(specimen.getSpecimenCollectionGroup().getGroupName()==null||
-				specimen.getSpecimenCollectionGroup().getGroupName().equals(""))))
+		if (specimen.getSpecimenCollectionGroup() == null
+				&& ((specimen.getSpecimenCollectionGroup().getId() == null || specimen.getSpecimenCollectionGroup().getId().equals("-1")) || (specimen
+						.getSpecimenCollectionGroup().getGroupName() == null || specimen.getSpecimenCollectionGroup().getGroupName().equals(""))))
 		{
 			String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
@@ -1808,10 +1844,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 		/*		
 		 *if (validator.isEmpty(specimen.getLabel()))
-		{
-			String message = ApplicationProperties.getValue("specimen.label");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}*/
+		 {
+		 String message = ApplicationProperties.getValue("specimen.label");
+		 throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+		 }*/
 
 		if (validator.isEmpty(specimen.getClassName()))
 		{
@@ -1831,7 +1867,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			String message = ApplicationProperties.getValue("specimen.storageContainer");
 			throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 		}
-		
+
 		if (specimen.getStorageContainer() != null && specimen.getStorageContainer().getName() != null)
 		{
 			StorageContainer storageContainerObj = specimen.getStorageContainer();
@@ -1855,7 +1891,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 			}
 		}
-		
+
 		//Events Validation
 		/**
 		 * Name: Virender Mehta
@@ -1866,9 +1902,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		 * 				retriving explicetely specimenEeventcollection. 
 		 */
 		Collection specimenEventCollection = null;
-		if(specimen.getId()!= null)
+		if (specimen.getId() != null)
 		{
-			specimenEventCollection = dao.retrieve(SpecimenEventParameters.class.getName(),"specimen.id", specimen.getId());
+			specimenEventCollection = dao.retrieve(SpecimenEventParameters.class.getName(), "specimen.id", specimen.getId());
 		}
 		else
 		{
@@ -1878,9 +1914,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			Iterator specimenEventCollectionIterator = specimenEventCollection.iterator();
 			while (specimenEventCollectionIterator.hasNext())
-			{				
+			{
 				Object eventObject = specimenEventCollectionIterator.next();
-				EventsUtil.validateEventsObject(eventObject,validator);
+				EventsUtil.validateEventsObject(eventObject, validator);
 			}
 		}
 		else
@@ -1987,10 +2023,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				}
 			}
 		}
-		
+
 		if (operation.equals(Constants.EDIT))
 		{
-			if (specimen.getCollectionStatus()!=null && specimen.getCollectionStatus().equals("Collected") && !specimen.getAvailable().booleanValue())
+			if (specimen.getCollectionStatus() != null && specimen.getCollectionStatus().equals("Collected")
+					&& !specimen.getAvailable().booleanValue())
 			{
 				throw new DAOException(ApplicationProperties.getValue("specimen.available.operation"));
 			}
@@ -2016,16 +2053,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 		//Logger.out.debug("End-Inside validate method of specimen bizlogic");
-		
+
 		//Validating createdOn date
-		if(specimen.getCreatedOn() != null && specimen.getLineage() != null && !specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
+		if (specimen.getCreatedOn() != null && specimen.getLineage() != null && !specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
 		{
-			String tempDate = Utility.parseDateToString(specimen.getCreatedOn(),Constants.DATE_PATTERN_MM_DD_YYYY);
-			if(!validator.checkDate(tempDate))
+			String tempDate = Utility.parseDateToString(specimen.getCreatedOn(), Constants.DATE_PATTERN_MM_DD_YYYY);
+			if (!validator.checkDate(tempDate))
 			{
 				throw new DAOException(ApplicationProperties.getValue("error.invalid.createdOnDate"));
 			}
-		}		
+		}
 		return true;
 	}
 
@@ -2042,7 +2079,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 			}
 
-			List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
+			List spgList = dao
+					.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
 
 			if (spgList.size() == 0)
 			{
@@ -2051,18 +2089,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 
-//		if (validator.isEmpty(specimen.getLabel()))
-//		{
-//			String labelString = ApplicationProperties.getValue("specimen.label");
-//			throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
-//		}
+		//		if (validator.isEmpty(specimen.getLabel()))
+		//		{
+		//			String labelString = ApplicationProperties.getValue("specimen.label");
+		//			throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
+		//		}
 
 		if (specimen.getInitialQuantity() == null || specimen.getInitialQuantity().getValue() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 		}
-		
+
 		if (specimen.getAvailableQuantity() == null || specimen.getAvailableQuantity().getValue() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.availableQuantity");
@@ -2507,40 +2545,41 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 		return deriveEventCollection;
 	}
+
 	/**
 	 * This method will retrive no of specimen in the catissue_specimen table.
 	 * @return Total No of Specimen
 	 * @throws ClassNotFoundException
 	 * @throws DAOException 
 	 */
-	public int totalNoOfSpecimen(SessionDataBean sessionData)  
+	public int totalNoOfSpecimen(SessionDataBean sessionData)
 	{
 		String sql = "select MAX(IDENTIFIER) from CATISSUE_SPECIMEN";
- 		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-        int noOfRecords = 0;
-        try
+		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		int noOfRecords = 0;
+		try
 		{
-        	jdbcDao.openSession(sessionData);
-        	List resultList = jdbcDao.executeQuery(sql,sessionData,false,null);
-        	String number = (String)((List)resultList.get(0)).get(0);
-        	if(number==null || number.equals(""))
-        	{
-        		number="0";
-        	}
-        	noOfRecords = Integer.parseInt(number);
-	        jdbcDao.closeSession();
+			jdbcDao.openSession(sessionData);
+			List resultList = jdbcDao.executeQuery(sql, sessionData, false, null);
+			String number = (String) ((List) resultList.get(0)).get(0);
+			if (number == null || number.equals(""))
+			{
+				number = "0";
+			}
+			noOfRecords = Integer.parseInt(number);
+			jdbcDao.closeSession();
 		}
-        catch(DAOException daoexception)
+		catch (DAOException daoexception)
 		{
-        	daoexception.printStackTrace();
+			daoexception.printStackTrace();
 		}
-        catch(ClassNotFoundException classnotfound)
-        {
-        	classnotfound.printStackTrace();
-        }
-        return noOfRecords;
+		catch (ClassNotFoundException classnotfound)
+		{
+			classnotfound.printStackTrace();
+		}
+		return noOfRecords;
 	}
-	
+
 	/**
 	 * Name: Virender Mehta
 	 * Reviewer: sachin lale
@@ -2552,77 +2591,80 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	public void retriveSCGIdFromSCGName(Specimen specimen, DAO dao) throws DAOException
 	{
 		String specimenCollGpName = specimen.getSpecimenCollectionGroup().getGroupName();
-		if(specimenCollGpName!= null && !specimenCollGpName.equals(""))
+		if (specimenCollGpName != null && !specimenCollGpName.equals(""))
 		{
 			String[] selectColumnName = {"id"};
 			String[] whereColumnName = {"name"};
 			String[] whereColumnCondition = {"="};
 			String[] whereColumnValue = {specimenCollGpName};
-			List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
-					whereColumnCondition, whereColumnValue ,null);
-			if(scgList!=null && !scgList.isEmpty())
+			List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
+					whereColumnValue, null);
+			if (scgList != null && !scgList.isEmpty())
 			{
-				specimen.getSpecimenCollectionGroup().setId(((Long)scgList.get(0)));
+				specimen.getSpecimenCollectionGroup().setId(((Long) scgList.get(0)));
 			}
 		}
 	}
+
 	//Mandar: 16-Jan-07 ConsentWithdrawl
 	/*
 	 * This method updates the consents and specimen based on the the consent withdrawal option.
 	 */
-	private void updateConsentWithdrawStatus(Specimen specimen, Specimen oldSpecimen,DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	private void updateConsentWithdrawStatus(Specimen specimen, Specimen oldSpecimen, DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
-		if(!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION ))
+		if (!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
 		{
-			
+
 			String consentWithdrawOption = specimen.getConsentWithdrawalOption();
 			//Resolved Lazy ----  specimen.getConsentTierStatusCollection()
 			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
 			//Collection consentTierStatusCollection = (Collection)dao.retrieveAttribute(Specimen.class.getName(), specimen.getId(),"elements(consentTierStatusCollection)");
 			Iterator itr = consentTierStatusCollection.iterator();
-			while(itr.hasNext())
+			while (itr.hasNext())
 			{
-				ConsentTierStatus status = (ConsentTierStatus)itr.next();
+				ConsentTierStatus status = (ConsentTierStatus) itr.next();
 				long consentTierID = status.getConsentTier().getId().longValue();
-				if(status.getStatus().equalsIgnoreCase(Constants.WITHDRAWN) )
+				if (status.getStatus().equalsIgnoreCase(Constants.WITHDRAWN))
 				{
 					//Resolved lazy - specimen.getChildrenSpecimen();
-					
-					WithdrawConsentUtil.updateSpecimenStatus(specimen, consentWithdrawOption, consentTierID, dao, sessionDataBean  );
-						
+
+					WithdrawConsentUtil.updateSpecimenStatus(specimen, consentWithdrawOption, consentTierID, dao, sessionDataBean);
+
 				}
 			}
 		}
 	}
-	
+
 	/*
 	 * This method is used to update the consent staus of child specimens as per the option selected by the user.
 	 */
 	private void updateConsentStatus(Specimen specimen, DAO dao, Specimen oldSpecimen) throws DAOException
 	{
-		if(!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE ))
+		if (!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
 		{
 			String applyChangesTo = specimen.getApplyChangesTo();
 			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
 			Collection oldConsentTierStatusCollection = oldSpecimen.getConsentTierStatusCollection();
 			Iterator itr = consentTierStatusCollection.iterator();
-			while(itr.hasNext())
+			while (itr.hasNext())
 			{
-				ConsentTierStatus status = (ConsentTierStatus)itr.next();
+				ConsentTierStatus status = (ConsentTierStatus) itr.next();
 				long consentTierID = status.getConsentTier().getId().longValue();
 				String statusValue = status.getStatus();
 				//Collection childSpecimens = oldSpecimen.getChildrenSpecimen();
-				Collection childSpecimens =(Collection)dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"elements(childrenSpecimen)"); 
-				Iterator childItr = childSpecimens.iterator();  
-				while(childItr.hasNext() )
+				Collection childSpecimens = (Collection) dao.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
+						"elements(childrenSpecimen)");
+				Iterator childItr = childSpecimens.iterator();
+				while (childItr.hasNext())
 				{
-					Specimen childSpecimen = (Specimen)childItr.next();
-					WithdrawConsentUtil.updateSpecimenConsentStatus(childSpecimen, applyChangesTo, consentTierID, statusValue, consentTierStatusCollection, oldConsentTierStatusCollection, dao);
+					Specimen childSpecimen = (Specimen) childItr.next();
+					WithdrawConsentUtil.updateSpecimenConsentStatus(childSpecimen, applyChangesTo, consentTierID, statusValue,
+							consentTierStatusCollection, oldConsentTierStatusCollection, dao);
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * This function is used to update specimens and their dervied & aliquot 
 	 * specimens. 
@@ -2632,14 +2674,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException If DAO fails to update one or more specimens
 	 * this function will throw DAOException.
 	 */
-	public void updateAnticipatorySpecimens(Collection newSpecimenCollection, 
-	SessionDataBean sessionDataBean) 
-	throws DAOException
+	public void updateAnticipatorySpecimens(Collection newSpecimenCollection, SessionDataBean sessionDataBean) throws DAOException
 	{
-		updateMultipleSpecimens(newSpecimenCollection,
-				 sessionDataBean, true);
+		updateMultipleSpecimens(newSpecimenCollection, sessionDataBean, true);
 	}
-	
+
 	/**
 	 * This function is used to bulk update multiple specimens. If
 	 * any specimen contains children specimens those will be inserted. 
@@ -2650,82 +2689,84 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * this function will throw DAOException.
 
 	 */
-	public void bulkUpdateSpecimens(Collection newSpecimenCollection, 
-				SessionDataBean sessionDataBean) throws DAOException
+	public void bulkUpdateSpecimens(Collection newSpecimenCollection, SessionDataBean sessionDataBean) throws DAOException
 	{
 		Iterator iterator = newSpecimenCollection.iterator();
 		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		int specimenCtr=1;
-		int childSpecimenCtr=0;
+		int specimenCtr = 1;
+		int childSpecimenCtr = 0;
 		try
 		{
-	
-			((HibernateDAO)dao).openSession(sessionDataBean);
-			
+
+			((HibernateDAO) dao).openSession(sessionDataBean);
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
-				
-				Specimen specimenDO = updateSignleSpecimen(dao,newSpecimen, sessionDataBean,false);
-				
+				if(newSpecimen.getStorageContainer() != null && newSpecimen.getStorageContainer().getId() == null)
+					setStorageContainerId(dao, newSpecimen, newSpecimen.getStorageContainer());
+			}
+			iterator = newSpecimenCollection.iterator();
+
+			while (iterator.hasNext())
+			{
+				Specimen newSpecimen = (Specimen) iterator.next();
+					
+				Specimen specimenDO = updateSignleSpecimen(dao, newSpecimen, sessionDataBean, false);
+
 				Collection childrenSpecimenCollection = newSpecimen.getChildrenSpecimen();
-				if (childrenSpecimenCollection != null && 
-						!childrenSpecimenCollection.isEmpty())
+				if (childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
 				{
 					Iterator childIterator = childrenSpecimenCollection.iterator();
-					while(childIterator.hasNext())
+					while (childIterator.hasNext())
 					{
 						childSpecimenCtr++;
 						Specimen childSpecimen = (Specimen) childIterator.next();
 						childSpecimen.setParentSpecimen(specimenDO);
 						insertSingleSpecimen(childSpecimen, dao, sessionDataBean, false);
-						
+
 					}
 					childSpecimenCtr = 0;
 				}
 				specimenCtr++;
 			}
-			specimenCtr =0;
-			((HibernateDAO)dao).commit();
+			specimenCtr = 0;
+			((HibernateDAO) dao).commit();
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
-			
+
 		}
-		catch(Exception exception)
+		catch (Exception exception)
 		{
-			((AbstractDAO)dao).rollback();
+			((AbstractDAO) dao).rollback();
 			String errorMsg = "Failed to save. ";
 			if (specimenCtr != 0)
 			{
-				errorMsg ="specimen number " + specimenCtr + " cannot be saved. ";
+				errorMsg = "specimen number " + specimenCtr + " cannot be saved. ";
 				if (childSpecimenCtr != 0)
 				{
-					errorMsg ="Cannot insert child specimen " + childSpecimenCtr 
-					+", of specimen " + specimenCtr + ". ";
+					errorMsg = "Cannot insert child specimen " + childSpecimenCtr + ", of specimen " + specimenCtr + ". ";
 				}
-				
+
 			}
-			throw new DAOException(errorMsg +
-					exception.getMessage());
+			throw new DAOException(errorMsg + exception.getMessage());
 		}
-		finally{
-		
-			((HibernateDAO)dao).closeSession();
+		finally
+		{
+
+			((HibernateDAO) dao).closeSession();
 		}
-		
+
 	}
-	
-	protected void updateMultipleSpecimens(Collection newSpecimenCollection, 
-				SessionDataBean sessionDataBean,boolean updateChildrens) 
-				throws DAOException
+
+	protected void updateMultipleSpecimens(Collection newSpecimenCollection, SessionDataBean sessionDataBean, boolean updateChildrens)
+			throws DAOException
 	{
 		Iterator iterator = newSpecimenCollection.iterator();
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		try
 		{
 
-			
 			dao.openSession(sessionDataBean);
-	
+
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
@@ -2735,84 +2776,81 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			storageContainerIds.clear();
 			while (iterator.hasNext())
 			{
-				Specimen newSpecimen = (Specimen) iterator.next();				
-				updateSignleSpecimen(dao,newSpecimen, sessionDataBean,updateChildrens);
-			}			
+				Specimen newSpecimen = (Specimen) iterator.next();
+				updateSignleSpecimen(dao, newSpecimen, sessionDataBean, updateChildrens);
+			}
 			dao.commit();
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
-			
+
 		}
-		catch(Exception exception)
+		catch (Exception exception)
 		{
 			dao.rollback();
-			throw new DAOException("Failed to update multiple specimen " +
-					exception.getMessage());
+			throw new DAOException("Failed to update multiple specimen " + exception.getMessage());
 		}
-		finally{
-		
-			((HibernateDAO)dao).closeSession();
+		finally
+		{
+
+			((HibernateDAO) dao).closeSession();
 		}
 	}
-	
-	public Specimen updateSignleSpecimen(DAO dao, Specimen newSpecimen, 
-			SessionDataBean sessionDataBean,boolean updateChildrens) throws DAOException
+
+	public Specimen updateSignleSpecimen(DAO dao, Specimen newSpecimen, SessionDataBean sessionDataBean, boolean updateChildrens) throws DAOException
 	{
 		try
 		{
 			List specList = dao.retrieve(Specimen.class.getName(), "id", newSpecimen.getId());
-			if(specList != null && !specList.isEmpty())
+			if (specList != null && !specList.isEmpty())
 			{
-				Specimen specimenDO =(Specimen)specList.get(0);
+				Specimen specimenDO = (Specimen) specList.get(0);
 				updateSpecimenDomainObject(dao, newSpecimen, specimenDO);
-				if(updateChildrens)
-					updateChildrenSpecimens(dao,newSpecimen, specimenDO);
+				if (updateChildrens)
+					updateChildrenSpecimens(dao, newSpecimen, specimenDO);
 
 				dao.update(specimenDO, sessionDataBean, false, false, false);
 				return specimenDO;
 			}
 			else
 			{
-				throw new DAOException ("Invalid Specimen with label" + newSpecimen.getLabel());
+				throw new DAOException("Invalid Specimen with label" + newSpecimen.getLabel());
 			}
-		}catch(UserNotAuthorizedException authorizedException){
-			throw new DAOException ("User not authorized to update specimens" + 
-					authorizedException.getMessage());
-			
-		} catch (SMException exception)
+		}
+		catch (UserNotAuthorizedException authorizedException)
 		{
-			throw new DAOException (exception.getMessage(),exception);	
-		}	
+			throw new DAOException("User not authorized to update specimens" + authorizedException.getMessage());
+
+		}
+		catch (SMException exception)
+		{
+			throw new DAOException(exception.getMessage(), exception);
+		}
 	}
 
-	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO ,
-			Specimen specimenDO) 
-			throws DAOException,SMException
+	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO, Specimen specimenDO) throws DAOException, SMException
 	{
 		Collection childrenSpecimens = specimenDO.getChildrenSpecimen();
-		if (childrenSpecimens==null || childrenSpecimens.isEmpty())
+		if (childrenSpecimens == null || childrenSpecimens.isEmpty())
 		{
 			return;
 		}
 		Iterator iterator = childrenSpecimens.iterator();
-		while(iterator.hasNext())
+		while (iterator.hasNext())
 		{
 			Specimen specimen = (Specimen) iterator.next();
-			Specimen relatedSpecimen = getCorelatedSpecimen(
-					specimen.getId(), specimenVO.getChildrenSpecimen());
+			Specimen relatedSpecimen = getCorelatedSpecimen(specimen.getId(), specimenVO.getChildrenSpecimen());
 			if (relatedSpecimen != null)
 			{
 				updateSpecimenDomainObject(dao, relatedSpecimen, specimen);
-			
+
 				updateChildrenSpecimens(dao, relatedSpecimen, specimen);
 			}
-		}	
+		}
 	}
-	
-	private Specimen getCorelatedSpecimen(
-			Long id, Collection specimenCollection) throws DAOException
+
+	private Specimen getCorelatedSpecimen(Long id, Collection specimenCollection) throws DAOException
 	{
 		Iterator iterator = specimenCollection.iterator();
-		while(iterator.hasNext())
+		while (iterator.hasNext())
 		{
 			Specimen specimen = (Specimen) iterator.next();
 			if (specimen.getId().longValue() == id.longValue())
@@ -2825,50 +2863,50 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 	private void checkDuplicateSpecimenFields(Specimen specimen, DAO dao) throws DAOException
 	{
-		List list = dao.retrieve(Specimen.class.getCanonicalName(),"label",specimen.getLabel());
+		List list = dao.retrieve(Specimen.class.getCanonicalName(), "label", specimen.getLabel());
 		if (!list.isEmpty())
 		{
-			for (int i=0;i<list.size();i++)
+			for (int i = 0; i < list.size(); i++)
 			{
-				Specimen specimenObject = (Specimen)(list.get(i));
+				Specimen specimenObject = (Specimen) (list.get(i));
 				if (!specimenObject.getId().equals(specimen.getId()))
 				{
-					throw new DAOException("Label " + specimen.getLabel() +" is already exists!");
-					
+					throw new DAOException("Label " + specimen.getLabel() + " is already exists!");
+
 				}
 			}
 		}
-		if (specimen.getBarcode()!=null)
+		if (specimen.getBarcode() != null)
 		{
-			list = dao.retrieve(Specimen.class.getCanonicalName(),"barcode",specimen.getBarcode());
+			list = dao.retrieve(Specimen.class.getCanonicalName(), "barcode", specimen.getBarcode());
 			if (!list.isEmpty())
 			{
-				for (int i=0;i<list.size();i++)
+				for (int i = 0; i < list.size(); i++)
 				{
-					Specimen specimenObject = (Specimen)(list.get(i));
+					Specimen specimenObject = (Specimen) (list.get(i));
 					if (!specimenObject.getId().equals(specimen.getId()))
 					{
-						throw new DAOException("Barcode " + specimen.getBarcode() +" is already exists.");
-						
+						throw new DAOException("Barcode " + specimen.getBarcode() + " is already exists.");
+
 					}
 				}
 			}
 		}
 	}
-	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO 
-			,Specimen specimenDO)
-			throws DAOException,SMException {
-		
-		if (specimenVO.getBarcode()!=null && specimenVO.getBarcode().trim().length()==0)
+
+	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO, Specimen specimenDO) throws DAOException, SMException
+	{
+
+		if (specimenVO.getBarcode() != null && specimenVO.getBarcode().trim().length() == 0)
 		{
 			specimenVO.setBarcode(null);
 		}
-		checkDuplicateSpecimenFields(specimenVO,dao);
-		specimenDO.setLabel(specimenVO.getLabel());	
+		checkDuplicateSpecimenFields(specimenVO, dao);
+		specimenDO.setLabel(specimenVO.getLabel());
 		specimenDO.setBarcode(specimenVO.getBarcode());
 		specimenDO.setAvailable(specimenVO.getAvailable());
-		
-		if(specimenVO.getStorageContainer()!=null)
+
+		if (specimenVO.getStorageContainer() != null)
 		{
 			setStorageContainer(dao, specimenVO, specimenDO);
 		}
@@ -2876,8 +2914,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimenDO.setStorageContainer(null);
 		}
-			
-		if(specimenVO.getInitialQuantity() != null)
+
+		if (specimenVO.getInitialQuantity() != null)
 		{
 			Quantity quantity = specimenVO.getInitialQuantity();
 			Quantity availableQuantity = specimenVO.getAvailableQuantity();
@@ -2890,11 +2928,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				quantity =specimenDO.getInitialQuantity();
+				quantity = specimenDO.getInitialQuantity();
 			}
-			
-			
-			
+
 			if (specimenDO.getAvailableQuantity() == null)
 			{
 				quantity = new Quantity();
@@ -2903,13 +2939,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			else
 			{
 				/**
-			 	* Name: Abhishek Mehta 
-			 	* Bug ID: 5558
-			 	* Patch ID: 5558_3
-			 	* See also: 1-3 
-			 	* Description : Earlier the available quantity for specimens that haven't been collected yet is greater than 0.
-			 	*/
-				if((specimenDO.getAvailableQuantity().getValue().doubleValue() == 0 && specimenVO.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED)))
+				 * Name: Abhishek Mehta 
+				 * Bug ID: 5558
+				 * Patch ID: 5558_3
+				 * See also: 1-3 
+				 * Description : Earlier the available quantity for specimens that haven't been collected yet is greater than 0.
+				 */
+				if ((specimenDO.getAvailableQuantity().getValue().doubleValue() == 0 && specimenVO.getCollectionStatus().equalsIgnoreCase(
+						Constants.COLLECTION_STATUS_COLLECTED)))
 				{
 					specimenDO.setAvailableQuantity(specimenVO.getInitialQuantity());
 				}
@@ -2926,52 +2963,49 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimenDO.setCollectionStatus(specimenVO.getCollectionStatus());
 		}
-		
+
 		// code for multiple specimen edit
-		if(specimenVO.getCreatedOn() != null)
+		if (specimenVO.getCreatedOn() != null)
 		{
 			specimenDO.setCreatedOn(specimenVO.getCreatedOn());
 		}
-		if(specimenVO.getPathologicalStatus() != null)
+		if (specimenVO.getPathologicalStatus() != null)
 		{
 			specimenDO.setPathologicalStatus(specimenVO.getPathologicalStatus());
 		}
 
-		if(specimenVO.getSpecimenCharacteristics() != null )
+		if (specimenVO.getSpecimenCharacteristics() != null)
 		{
 			SpecimenCharacteristics characteristics = specimenVO.getSpecimenCharacteristics();
-			if (characteristics.getTissueSide()!= null || characteristics.getTissueSite()!=null)
+			if (characteristics.getTissueSide() != null || characteristics.getTissueSite() != null)
 			{
 				SpecimenCharacteristics specimenCharacteristics = specimenDO.getSpecimenCharacteristics();
-				if(specimenCharacteristics != null)
+				if (specimenCharacteristics != null)
 				{
 					specimenCharacteristics.setTissueSide(specimenVO.getSpecimenCharacteristics().getTissueSide());
 					specimenCharacteristics.setTissueSite(specimenVO.getSpecimenCharacteristics().getTissueSite());
 				}
 			}
 		}
-		
-		if(specimenVO.getComment() != null)
+
+		if (specimenVO.getComment() != null)
 		{
 			specimenDO.setComment(specimenVO.getComment());
 		}
-		if(specimenVO.getBiohazardCollection() != null && !specimenVO.getBiohazardCollection().isEmpty())
+		if (specimenVO.getBiohazardCollection() != null && !specimenVO.getBiohazardCollection().isEmpty())
 		{
 			specimenDO.setBiohazardCollection(specimenVO.getBiohazardCollection());
-		}		
+		}
 
 		if (Constants.MOLECULAR.equals(specimenVO.getClassName()))
 		{
-			Double concentration =((MolecularSpecimen)specimenVO)
-			.getConcentrationInMicrogramPerMicroliter();
+			Double concentration = ((MolecularSpecimen) specimenVO).getConcentrationInMicrogramPerMicroliter();
 
-			((MolecularSpecimen)specimenDO)
-				.setConcentrationInMicrogramPerMicroliter(concentration);
+			((MolecularSpecimen) specimenDO).setConcentrationInMicrogramPerMicroliter(concentration);
 		}
-		
+
 	}
-	
-	
+
 	public Map<Long, Collection> getContainerHoldsCPs()
 	{
 		return containerHoldsCPs;
@@ -2992,86 +3026,77 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		this.containerHoldsSpecimenClasses = containerHoldsSpecimenClasses;
 	}
 
-/**
- * @param dao
- * @param specimenVO
- * @param specimenDO
- * @throws DAOException
- */
-private void setStorageContainer(DAO dao, Specimen specimenVO,
-		Specimen specimenDO) throws DAOException,SMException {
-	StorageContainer storageContainer =specimenVO.getStorageContainer();
-	
-	specimenDO.setPositionDimensionOne(
-			specimenVO.getPositionDimensionOne());
-	specimenDO.setPositionDimensionTwo(
-			specimenVO.getPositionDimensionTwo());	
-	specimenDO.setStorageContainer(storageContainer);
-}
+	/**
+	 * @param dao
+	 * @param specimenVO
+	 * @param specimenDO
+	 * @throws DAOException
+	 */
+	private void setStorageContainer(DAO dao, Specimen specimenVO, Specimen specimenDO) throws DAOException, SMException
+	{
+		StorageContainer storageContainer = specimenVO.getStorageContainer();
 
-/**
- * @param dao
- * @param storageContainer
- * @param containerId
- * @return
- * @throws DAOException
- */
-private StorageContainer retrieveStorageContainerObject(DAO dao,
-		StorageContainer storageContainer, Long containerId)
-		throws DAOException {
+		specimenDO.setPositionDimensionOne(specimenVO.getPositionDimensionOne());
+		specimenDO.setPositionDimensionTwo(specimenVO.getPositionDimensionTwo());
+		specimenDO.setStorageContainer(storageContainer);
+	}
+
+	/**
+	 * @param dao
+	 * @param storageContainer
+	 * @param containerId
+	 * @return
+	 * @throws DAOException
+	 */
+	private StorageContainer retrieveStorageContainerObject(DAO dao, StorageContainer storageContainer, Long containerId) throws DAOException
+	{
 		List storageContainerList;
-		if(containerId !=null )
+		if (containerId != null)
 		{
-			storageContainerList = dao.retrieve
-			(StorageContainer.class.getName(), "id", containerId);				
+			storageContainerList = dao.retrieve(StorageContainer.class.getName(), "id", containerId);
 		}
 		else
 		{
-			storageContainerList = dao.retrieve
-			(StorageContainer.class.getName(), "name", storageContainer.getName());
+			storageContainerList = dao.retrieve(StorageContainer.class.getName(), "name", storageContainer.getName());
 		}
 		if (storageContainerList == null || storageContainerList.isEmpty())
 		{
 			throw new DAOException("Container name is invalid");
 		}
-		storageContainer = (StorageContainer)storageContainerList.get(0);
+		storageContainer = (StorageContainer) storageContainerList.get(0);
 		return storageContainer;
 	}
 
-public boolean isCpbased() {
-	return cpbased;
-}
-
-public void setCpbased(boolean cpbased) {
-	this.cpbased = cpbased;
-}	
-/**
- * This function throws BizLogicException if the domainObj is of type SpecimenCollectionRequirementGroup
- * @param domainObj
- * @param uiForm
- */
- 
-protected void prePopulateUIBean(AbstractDomainObject domainObj, IValueObject uiForm) throws BizLogicException
-{
-	
-	Specimen specimen = (Specimen) domainObj;
-	AbstractSpecimenCollectionGroup absspecimenCollectionGroup = specimen.getSpecimenCollectionGroup();  
- 	Object proxySpecimenCollectionGroup = HibernateMetaData.getProxyObjectImpl(absspecimenCollectionGroup);
-	if((proxySpecimenCollectionGroup instanceof SpecimenCollectionRequirementGroup))
+	public boolean isCpbased()
 	{
-		NewSpecimenForm newSpecimenForm = (NewSpecimenForm)uiForm;		
-		newSpecimenForm.setForwardTo(Constants.PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP);
-		throw new BizLogicException("The Specimen is Added as Requirement, this can not be edited!!");
-		
-	}	
-	
-}
+		return cpbased;
+	}
 
+	public void setCpbased(boolean cpbased)
+	{
+		this.cpbased = cpbased;
+	}
 
+	/**
+	 * This function throws BizLogicException if the domainObj is of type SpecimenCollectionRequirementGroup
+	 * @param domainObj
+	 * @param uiForm
+	 */
 
+	protected void prePopulateUIBean(AbstractDomainObject domainObj, IValueObject uiForm) throws BizLogicException
+	{
 
+		Specimen specimen = (Specimen) domainObj;
+		AbstractSpecimenCollectionGroup absspecimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+		Object proxySpecimenCollectionGroup = HibernateMetaData.getProxyObjectImpl(absspecimenCollectionGroup);
+		if ((proxySpecimenCollectionGroup instanceof SpecimenCollectionRequirementGroup))
+		{
+			NewSpecimenForm newSpecimenForm = (NewSpecimenForm) uiForm;
+			newSpecimenForm.setForwardTo(Constants.PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP);
+			throw new BizLogicException("The Specimen is Added as Requirement, this can not be edited!!");
 
+		}
 
-
+	}
 
 }
