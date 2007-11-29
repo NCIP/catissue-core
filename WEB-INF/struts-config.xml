@@ -600,6 +600,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef" />
+			<forward name="failure" path="/pages/content/search/querysuite/UserNotAuthorised.jsp"/>
 		</action>
 		<action path="/BuildQueryOutputSpreadsheet"
 			type="edu.wustl.catissuecore.action.querysuite.BuildQueryOutputSpreadsheetAction"
@@ -651,7 +652,13 @@ PUBLIC
 			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=edit"/>
 			
 		</action>
-		
+		<action path="/QueryMessageAction"
+			type="edu.wustl.catissuecore.action.querysuite.QueryMessageAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.searchCategory"/>
+		</action>
 		<!-- Applet Action mapping for query Module -->
 		<action path="/ViewSearchResultsAction" 
 			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction" 
@@ -662,6 +669,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction" 
 			parameter="method">
 		</action>
+		
 		<action path="/PathFinderAction" 
 			type="edu.wustl.catissuecore.action.querysuite.PathFinderAction" 
 			parameter="method">
