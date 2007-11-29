@@ -13,6 +13,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
@@ -251,9 +252,10 @@ public class DefineGridViewBizLogic
 	 * @param selectedColumnsMetadata
 	 * @param selectedColumnNames
 	 * @param queryResultObjecctDataMap 
+	 * @param mainEntityMap 
 	 * @return
 	 */
-	public List<String> getSelectedColumnList(CategorySearchForm categorySearchForm,SelectedColumnsMetadata selectedColumnsMetadata,StringBuffer selectedColumnNames, Map<Long, QueryResultObjectDataBean> queryResultObjecctDataMap)
+	public List<String> getSelectedColumnList(CategorySearchForm categorySearchForm,SelectedColumnsMetadata selectedColumnsMetadata,StringBuffer selectedColumnNames, Map<Long, QueryResultObjectDataBean> queryResultObjecctDataMap, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
 	{
 		List<String> definedColumnsList = new ArrayList<String>();
 		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
@@ -272,12 +274,12 @@ public class DefineGridViewBizLogic
 			{
 				identifiedColumnIds = new Vector<Integer>();
 				objectColumnIds = new Vector<Integer>();
-				queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(element.getTreeDataNode());
+				queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(element.getTreeDataNode(),mainEntityMap);
 				queryResultObjecctDataMap.put(element.getTreeDataNode().getId(), queryResulObjectDataBean);
 				defineViewNodeList.add(element.getTreeDataNode().getOutputEntity().getDynamicExtensionsEntity());
 			}
 			
-			if(element.getAttribute().getIsIdentified()!=null)
+			if(element.getAttribute().getIsIdentified()!=null && element.getAttribute().getIsIdentified())
 			{
 				identifiedColumnIds.add(columnIndex);
 			}
@@ -309,7 +311,7 @@ public class DefineGridViewBizLogic
 		if(queryResulObjectDataBean.getMainEntityIdentifierColumnId()==-1)
 		{
 			Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
-			sql = QueryModuleUtil.updateEntityIdIndexMap(queryResulObjectDataBean, columnIndex, sql,defineViewNodeList,entityIdIndexMap);
+			sql = QueryCSMUtil.updateEntityIdIndexMap(queryResulObjectDataBean, columnIndex, sql,defineViewNodeList,entityIdIndexMap);
 			selectedColumnNames.replace(0, selectedColumnNames.length(), sql);
 			if(queryResulObjectDataBean.isMainEntity()) {
 				EntityInterface entity = queryResulObjectDataBean.getEntity();

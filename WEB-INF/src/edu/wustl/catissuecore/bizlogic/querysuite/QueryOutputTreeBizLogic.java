@@ -11,6 +11,7 @@ import java.util.Vector;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -72,15 +73,16 @@ public class QueryOutputTreeBizLogic
 	 * @param query IQuery obj created out of user inputs to dag view.
 	 * @param sessionData session data to get the user id.
 	 * @param hasConditionOnIdentifiedField 
+	 * @param mainEntityMap 
 	 * @param nodeAttributeColumnNameMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @return Vector<QueryTreeNodeData> data structure to form tree out of it.
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(int treeNo,OutputTreeDataNode root, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField) throws DAOException, ClassNotFoundException
+	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(int treeNo,OutputTreeDataNode root, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField, Map<EntityInterface, List<EntityInterface>> mainEntityMap) throws DAOException, ClassNotFoundException
 			{ 
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId()+randomNumber;
-		QueryResultObjectDataBean queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(root);
+		QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(root,mainEntityMap);
 		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 		queryResultObjectDataBeanMap.put(root.getId(), queryResulObjectDataBean);
 		String selectSql = QueryModuleUtil.getSQLForRootNode(root, tableName,queryResultObjectDataBeanMap);
@@ -90,7 +92,7 @@ public class QueryOutputTreeBizLogic
 		int index = Integer.parseInt(sqlIndex[1]);
 
 		//List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
-		List dataList = QueryModuleUtil.executeCSMQuery(selectSql, sessionData,queryResultObjectDataBeanMap,root,hasConditionOnIdentifiedField);
+		List dataList = QueryCSMUtil.executeCSMQuery(selectSql, sessionData,queryResultObjectDataBeanMap,root,hasConditionOnIdentifiedField);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
 		if (dataList != null && dataList.size() != 0)
 		{
@@ -293,11 +295,12 @@ public class QueryOutputTreeBizLogic
 	 * @param idNodeMap map which stores id and nodes already added to tree.
 	 * @param sessionData sessionData session data to get the user id.
 	 * @param hasConditionOnIdentifiedField 
+	 * @param mainEntityMap 
 	 * @return String outputTreeStr which is then parsed and then sent to client to form tree. 
 	 * String for one node is comma seperated for its id, display name, object name , parentId, parent Object name.
 	 * Such string elements for child nodes are seperated by "|".
 	 */
-	public String updateTreeForLabelNode(String nodeId, Map<Long, OutputTreeDataNode> idNodeMap, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField)
+	public String updateTreeForLabelNode(String nodeId, Map<Long, OutputTreeDataNode> idNodeMap, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
 	throws ClassNotFoundException, DAOException
 	{ 
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
@@ -331,7 +334,7 @@ public class QueryOutputTreeBizLogic
 				return "";
 			}
 			String columnNames = "";
-			QueryResultObjectDataBean queryResulObjectDataBean = QueryModuleUtil.getQueryResulObjectDataBean(currentNode);
+			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(currentNode,mainEntityMap);
 		    queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 			queryResultObjectDataBeanMap.put(currentNode.getId(), queryResulObjectDataBean);
 			columnNames = QueryModuleUtil.getColumnNamesForSelectpart(currentNode,queryResultObjectDataBeanMap);
@@ -443,7 +446,7 @@ public class QueryOutputTreeBizLogic
 		QuerySessionData querySessionData = new QuerySessionData();
 		querySessionData.setSql(selectSql);
 		querySessionData.setQueryResultObjectDataMap(queryResultObjectDataBeanMap);
-		querySessionData.setSecureExecute(true);
+		querySessionData.setSecureExecute(sessionData.isSecurityRequired());
 		querySessionData.setHasConditionOnIdentifiedField(hasConditionOnIdentifiedField);
 		List<List<String>> dataList = QueryModuleUtil.executeQuery(selectSql, sessionData,
 				querySessionData);

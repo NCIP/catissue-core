@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -42,6 +43,7 @@ public class BuildQueryOutputTreeAction extends BaseAction
 		HttpSession session = request.getSession();
 		Map<Long,OutputTreeDataNode> idNodesMap = (Map<Long,OutputTreeDataNode>)session.getAttribute(Constants.ID_NODES_MAP);
 		boolean hasConditionOnIdentifiedField = (Boolean)session.getAttribute(Constants.HAS_CONDITION_ON_IDENTIFIED_FIELD);
+		Map<EntityInterface ,List<EntityInterface>> mainEntityMap =(Map<EntityInterface ,List<EntityInterface>>)session.getAttribute(Constants.MAIN_ENTITY_MAP);
 		CategorySearchForm actionForm = (CategorySearchForm)form;
 		SessionDataBean sessionData = getSessionData(request);
 		String outputTreeStr = "";
@@ -57,7 +59,7 @@ public class BuildQueryOutputTreeAction extends BaseAction
 		if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
 		{
 			
-			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(nodeId,idNodesMap,sessionData,randomNumber,hasConditionOnIdentifiedField);
+			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(nodeId,idNodesMap,sessionData,randomNumber,hasConditionOnIdentifiedField,mainEntityMap);
 		}
 		else
 		{

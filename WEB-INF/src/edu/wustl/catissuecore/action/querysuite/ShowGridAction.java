@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.action.querysuite;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,14 +13,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-
-import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
-import edu.common.dynamicextensions.entitymanager.EntityManager;
-import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
-import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
@@ -55,14 +47,14 @@ public class ShowGridAction extends BaseAction
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
-	{       
+	{         
 	 	HttpSession session = request.getSession();
 		IQuery query = (IQuery)session.getAttribute(AppletConstants.QUERY_OBJECT);
 		boolean hasConditionOnIdentifiedField = Utility.isConditionOnIdentifiedField(query);
 		session.setAttribute(Constants.HAS_CONDITION_ON_IDENTIFIED_FIELD, hasConditionOnIdentifiedField);
+		Map<EntityInterface ,List<EntityInterface>> mainEntityMap =(Map<EntityInterface ,List<EntityInterface>>)session.getAttribute(Constants.MAIN_ENTITY_MAP);
 		Map<Long, QueryResultObjectDataBean> queryResultObjectDataMap = (Map<Long, QueryResultObjectDataBean>)session.getAttribute(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP);
 		Map<String, OutputTreeDataNode> uniqueIdNodesMap = (Map<String, OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);
-		//EntityManagerInterface entityManager = EntityManager.getInstance();
 		Map<Long, Map<AttributeInterface, String>> columnMap = (Map<Long, Map<AttributeInterface, String>>) session.getAttribute(
 				Constants.ID_COLUMNS_MAP);
 		List<OutputTreeDataNode> rootOutputTreeNodeList = (List<OutputTreeDataNode>)session.getAttribute(Constants.TREE_ROOTS);
@@ -76,25 +68,46 @@ public class ShowGridAction extends BaseAction
 		int recordsPerPage = new Integer(recordsPerPageStr);
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		String actualParentNodeId = idOfClickedNode.substring(idOfClickedNode.lastIndexOf(Constants.NODE_SEPARATOR) + 2, idOfClickedNode.length());
-		String randomNumber = (String)session.getAttribute(Constants.RANDOM_NUMBER);
-		if (idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
+		String actualId = actualParentNodeId.substring(actualParentNodeId.lastIndexOf("_")+1, actualParentNodeId.length());
+		if(actualId !=null && actualId.equals(Constants.HASHED_NODE_ID))
 		{
-			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode,recordsPerPage,selectedColumnsMetadata,randomNumber,hasConditionOnIdentifiedField,queryResultObjectDataMap);
+		  getErrorMessageUserNotAuthorized(request);
+		  return mapping.findForward(Constants.FAILURE);
 		}
+		
 		else
 		{
-			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,recordsPerPage,selectedColumnsMetadata,randomNumber,hasConditionOnIdentifiedField,queryResultObjectDataMap);
-		}
-		QueryModuleUtil.setGridData(request, spreadSheetDatamap);
-		List dataList = (List)spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
-		if (dataList.size()==0)
-		{
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("errors.item", "Not Authorised To See This Record !!!!");
-			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
+			String randomNumber = (String) session.getAttribute(Constants.RANDOM_NUMBER);
+			if (idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
+			{
+				spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(
+						uniqueIdNodesMap, rootOutputTreeNodeList, columnMap, sessionData,
+						idOfClickedNode, recordsPerPage, selectedColumnsMetadata, randomNumber,
+						hasConditionOnIdentifiedField, queryResultObjectDataMap, mainEntityMap);
+			}
+			else
+			{
+				spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(
+						uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId,
+						recordsPerPage, selectedColumnsMetadata, randomNumber,
+						hasConditionOnIdentifiedField, queryResultObjectDataMap, mainEntityMap);
+			}
+			spreadSheetDatamap.put(Constants.MAIN_ENTITY_MAP, mainEntityMap);
+			QueryModuleUtil.setGridData(request, spreadSheetDatamap);
 		}
 		
 		return mapping.findForward(Constants.SUCCESS);
+	}
+
+	/**Method that will add an error message in action errors when id perticular data node is -1 i.e. user is not authorized to see 
+	 * this perticular record. 
+	 * @param request
+	 */
+	private void getErrorMessageUserNotAuthorized(HttpServletRequest request)
+	{
+			ActionErrors errors = new ActionErrors();
+			ActionError error = new ActionError("query.userNotAuthorizedError");
+			errors.add(ActionErrors.GLOBAL_ERROR, error);
+			saveErrors(request, errors);
 	}
 }
