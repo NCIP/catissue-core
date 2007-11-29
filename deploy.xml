@@ -530,7 +530,7 @@
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/SCG_DB_changes.sql" />
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql" />
-			<transaction src="${dbupgrade.sql.dir}/Oracle/dynamicextension.sql" />
+			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
 			<transaction src="${oracle.sql.dir}/query/csm_oracle.sql" />
