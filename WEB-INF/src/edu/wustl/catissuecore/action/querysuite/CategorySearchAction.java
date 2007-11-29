@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.ApplicationProperties;
 
 /**
  * This class loads screen for categorySearch.
@@ -88,6 +89,10 @@ public class CategorySearchAction extends BaseAction
 				String entityId = entity.getId().toString();
 				String description = entity.getDescription();
 				entitiesString = entitiesString + ";" + entityName + "|" + entityId + "|" + description;
+			}
+			if (entitiesString.equals(""))
+			{
+				entitiesString = ApplicationProperties.getValue("query.noResultFoundMessage");
 			}
 			response.setContentType("text/html");
 			response.getWriter().write(entitiesString);
