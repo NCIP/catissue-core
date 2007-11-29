@@ -328,4 +328,9 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
 	
+	public String getObjectId() 
+	{
+		return this.getClass().getName()+ "_" + this.getId();
+	}
+	
 }
