@@ -27,9 +27,23 @@ System.out.println("currentPage         "+currentPage);
 			%>
 		}
 
+function checkKey() 
+{
+	var platform = navigator.platform.toLowerCase();
+	if (platform.indexOf("mac") != -1)
+	{		
+		var key = event.keyCode; 
+		if (key == 13) { event.returnValue=false; } 
+	}
+	else
+	{
+		event.returnValue=true;
+	}
+}
+
 </script>
 </head>
-<body>
+<body onKeyPress="checkKey()" >
 <html:errors />
 <%
 	String formName = Constants.categorySearchForm ;
