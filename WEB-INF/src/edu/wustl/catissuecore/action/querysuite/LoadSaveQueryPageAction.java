@@ -1,6 +1,8 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +12,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.querysuite.SaveQueryForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -31,41 +34,52 @@ public class LoadSaveQueryPageAction extends BaseAction
 		IQuery queryObject = (IQuery) request.getSession().getAttribute(
 				AppletConstants.QUERY_OBJECT);
 		String target = Constants.FAILURE;
-		String msg = "";
-		if (queryObject != null && queryObject.getId() != null && queryObject instanceof ParameterizedQuery)
+		/**
+		 * Name: Abhishek Mehta
+		 * Reviewer Name : Deepti 
+		 * Bug ID: 5661
+		 * Patch ID: 5661_2
+		 * See also: 1-4 
+		 * Description : Loading save and update query page
+		 */
+		
+		boolean isDagEmpty = true;
+		if (queryObject != null)
 		{
-			msg = "This query is already saved, Re-saving query feature is not yet implemented.";
-			setActionError(request, msg);
-			System.out.println(msg);
+			boolean isShowAll = request.getParameter(Constants.SHOW_ALL) == null ? false : true;
+			GenerateHtmlForAddLimitsBizLogic htmlGenerator = new GenerateHtmlForAddLimitsBizLogic();
+			String htmlContents = htmlGenerator.getHTMLForSavedQuery(queryObject, isShowAll,
+					Constants.SAVE_QUERY_PAGE);
+			request.setAttribute(Constants.HTML_CONTENTS, htmlContents);
+			String showAllLink = isShowAll
+					? Constants.SHOW_SELECTED_ATTRIBUTE
+					: Constants.SHOW_ALL_ATTRIBUTE;
+			request.setAttribute(Constants.SHOW_ALL_LINK, showAllLink);
+			if (!isShowAll)
+				request.setAttribute(Constants.SHOW_ALL, Constants.TRUE);
 			target = Constants.SUCCESS;
-			request.setAttribute("isQuerySaved","isQuerySaved");
+			if (queryObject.getId() != null && queryObject instanceof ParameterizedQuery)
+			{
+				SaveQueryForm savedQueryForm = (SaveQueryForm)form;
+				savedQueryForm.setDescription(((ParameterizedQuery)queryObject).getDescription());
+				savedQueryForm.setTitle(((ParameterizedQuery)queryObject).getName());
+			}
+			
+			Enumeration e = queryObject.getConstraints().getExpressionIds();
+			if(e.hasMoreElements())
+			{
+				isDagEmpty = false;
+			}
 		}
-		else
+		if(isDagEmpty)
 		{
-			if (queryObject != null)
-			{
-				boolean isShowAll = request.getParameter(Constants.SHOW_ALL) == null ? false : true;
-				GenerateHtmlForAddLimitsBizLogic htmlGenerator = new GenerateHtmlForAddLimitsBizLogic();
-				String htmlContents = htmlGenerator.getHTMLForSavedQuery(queryObject, isShowAll,
-						Constants.SAVE_QUERY_PAGE);
-				request.setAttribute(Constants.HTML_CONTENTS, htmlContents);
-				String showAllLink = isShowAll
-						? Constants.SHOW_SELECTED_ATTRIBUTE
-						: Constants.SHOW_ALL_ATTRIBUTE;
-				request.setAttribute("showAllLink", showAllLink);
-				if (!isShowAll)
-					request.setAttribute(Constants.SHOW_ALL, "true");
-				target = Constants.SUCCESS;
-			}
-			else
-			{
-				// Handle null query 
-				target = Constants.SUCCESS;
-				String errorMsg = ApplicationProperties.getValue("query.noLimit.error");
-				setActionError(request, errorMsg);
-				request.setAttribute("isQuerySaved","isQuerySaved");
-			}
+			// Handle null query 
+			target = Constants.SUCCESS;
+			String errorMsg = ApplicationProperties.getValue("query.noLimit.error");
+			setActionError(request, errorMsg);
+			request.setAttribute(Constants.IS_QUERY_SAVED,Constants.IS_QUERY_SAVED);
 		}
+		
 		return mapping.findForward(target);
 	}
 	/**

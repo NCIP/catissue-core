@@ -24,6 +24,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.QuerySessionData;
+import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
 
@@ -106,6 +107,8 @@ public class ConfigureGridViewAction extends BaseAction
 			selectedColumnsMetadata.setDefinedView(false);
 			defineGridViewBizLogic.getColumnsMetadataForSelectedNode(currentSelectedObject,selectedColumnsMetadata);
 			StringBuffer selectedColumnNames = new StringBuffer();
+			//Restoring to the default view.
+			selectedColumnsMetadata.setSelectedOutputAttributeList(new ArrayList<IOutputAttribute>());
 			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm, selectedColumnsMetadata, selectedColumnNames,queryResultObjecctDataMap);
 			String SqlForSelectedColumns = defineGridViewBizLogic.createSQLForSelectedColumn(selectedColumnNames, sql);
 			querySessionData = queryOutputSpreadsheetBizLogic.getQuerySessionData(sessionData, recordsPerPage, 0, spreadSheetDataMap,

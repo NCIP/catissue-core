@@ -55,50 +55,63 @@ public class SaveQueryAction extends BaseAction
 		String target = Constants.FAILURE;
 		if (query != null)
 		{
+			/**
+			 * Name: Abhishek Mehta
+			 * Reviewer Name : Deepti 
+			 * Bug ID: 5661
+			 * Patch ID: 5661_3
+			 * See also: 1-4 
+			 * Description : Calling bizlogic insert and update
+			 */
+			
 			IParameterizedQuery parameterizedQuery = populateParameterizedQueryData(query,
 					actionForm, request);
-			if (parameterizedQuery != null)
+			try
 			{
 				IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
 						.getValue("app.bizLogicFactory"), "getBizLogic",
 						Constants.CATISSUECORE_QUERY_INTERFACE_ID);
-				try
+				if (query.getId() != null && query instanceof ParameterizedQuery)
+				{
+					bizLogic.update(parameterizedQuery, Constants.HIBERNATE_DAO);
+					Logger.out.info(ApplicationProperties.getValue("query.update.info"));
+				}
+				else
 				{
 					bizLogic.insert(parameterizedQuery, Constants.HIBERNATE_DAO);
-					target = Constants.SUCCESS;
-
-					ActionErrors errors = new ActionErrors();
-					ActionError error = new ActionError("query.saved.success");
-					errors.add(ActionErrors.GLOBAL_ERROR, error);
-					saveErrors(request, errors);
-					
-					request.setAttribute("querySaved", "true");
+					Logger.out.info(ApplicationProperties.getValue("query.saved.info"));
 				}
-				catch (BizLogicException bizLogicException)
-				{
-					setActionError(request, bizLogicException.getMessage());
-					Logger.out.error(bizLogicException.getMessage(), bizLogicException);
-				}
-				catch (UserNotAuthorizedException userNotAuthorizedException)
-				{
-					SessionDataBean sessionDataBean = getSessionData(request);
-					String userName = "";
-					if (sessionDataBean != null)
-					{
-						userName = sessionDataBean.getUserName();
-					}
-
-					ActionErrors errors = new ActionErrors();
-					ActionError error = new ActionError("access.addedit.object.denied", userName,
-							parameterizedQuery.getClass().getName());
-					errors.add(ActionErrors.GLOBAL_ERROR, error);
-					saveErrors(request, errors);
-
-					Logger.out.error(userNotAuthorizedException.getMessage(),
-							userNotAuthorizedException);
-				}
+				target = Constants.SUCCESS;
+				ActionErrors errors = new ActionErrors();
+				ActionError error = new ActionError("query.saved.success");
+				errors.add(ActionErrors.GLOBAL_ERROR, error);
+				saveErrors(request, errors);
+				
+				request.setAttribute(Constants.QUERY_SAVED, Constants.TRUE);
 			}
-			
+			catch (BizLogicException bizLogicException)
+			{
+				setActionError(request, bizLogicException.getMessage());
+				Logger.out.error(bizLogicException.getMessage(), bizLogicException);
+			}
+			catch (UserNotAuthorizedException userNotAuthorizedException)
+			{
+				SessionDataBean sessionDataBean = getSessionData(request);
+				String userName = "";
+				if (sessionDataBean != null)
+				{
+					userName = sessionDataBean.getUserName();
+				}
+
+				ActionErrors errors = new ActionErrors();
+				ActionError error = new ActionError("access.addedit.object.denied", userName,
+						parameterizedQuery.getClass().getName());
+				errors.add(ActionErrors.GLOBAL_ERROR, error);
+				saveErrors(request, errors);
+
+				Logger.out.error(userNotAuthorizedException.getMessage(),
+						userNotAuthorizedException);
+			}
 		}
 		else
 		{
@@ -135,7 +148,23 @@ public class SaveQueryAction extends BaseAction
 	{
 		SaveQueryForm saveActionForm = (SaveQueryForm) actionForm;
 		String error = "";
-		IParameterizedQuery parameterizedQuery = new ParameterizedQuery(query);
+		
+		/**
+		 * Name: Abhishek Mehta
+		 * Reviewer Name : Deepti 
+		 * Bug ID: 5661
+		 * Patch ID: 5661_4
+		 * See also: 1-4 
+		 * Description : Creating IParameterizedQuery's new instance only if it new query else type casting IQuery to IParameterizedQuery. 
+		 */
+		
+		IParameterizedQuery parameterizedQuery = (IParameterizedQuery)query;
+		
+		if (query.getId() == null)
+		{
+			parameterizedQuery = new ParameterizedQuery(query);
+		}
+		
 		HttpSession session = request.getSession();
 		String queryTitle = saveActionForm.getTitle();
 		if (queryTitle != null)
@@ -154,7 +183,7 @@ public class SaveQueryAction extends BaseAction
 		}
 		
 		CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
-		String conditionList = request.getParameter("conditionList");
+		String conditionList = request.getParameter(Constants.CONDITIONLIST);
 		Map<String, String> displayNameMap = getDisplayNamesForConditions(saveActionForm, request);
 		error = bizLogic.setInputDataToQuery(conditionList, parameterizedQuery,
 				displayNameMap);
@@ -194,7 +223,7 @@ public class SaveQueryAction extends BaseAction
 			while (strtokenizer.hasMoreTokens())
 			{
 				String token = strtokenizer.nextToken();
-				String displayName = request.getParameter(token + "_displayName");
+				String displayName = request.getParameter(token + Constants.DISPLAY_NAME_FOR_CONDITION);
 				displayNameMap.put(token, displayName);
 			}
 		}

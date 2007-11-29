@@ -226,6 +226,22 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String IS_SAVED_QUERY = "isSavedQuery";
 	public static final String RANDOM_NUMBER = "randomNumber";
 	public static final String MULTIUSER ="multiuser";
+	
+	/**
+	 * Name: Abhishek Mehta
+	 * Reviewer Name : Deepti 
+	 * Bug ID: 5661
+	 * Patch ID: 5661_1
+	 * See also: 1-4 
+	 * Description : Constants added for Query Module
+	 */
+    
+	public static final String IS_QUERY_SAVED = "isQuerySaved";
+	public static final String CONDITIONLIST = "conditionList";
+	public static final String QUERY_SAVED = "querySaved";
+	public static final String DISPLAY_NAME_FOR_CONDITION = "_displayName";
+	public static final String SHOW_ALL_LINK = "showAllLink";
+	
 	// Query Module Interface UI constants---ends here
 	//	 Frame names in Query Module Results page.
 	public static final String GRID_DATA_VIEW_FRAME = "gridFrame";
