@@ -129,9 +129,37 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			 assertTrue("Failed to add Mol specimen in SC", true);
 		 }
 	} */
-	
-	
 	public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPPositiveTest()
+	{
+		try {
+			StorageType ST = BaseTestCaseUtility.initStorageType();
+			ST = (StorageType) appService.createObject(ST);
+			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();	
+			storageContainer.setStorageType(ST);
+			System.out.println("Storage Container"+storageContainer.getName()+" successfully created");
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
+			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
+			SpecimenCollectionGroup scg = BaseTestCaseUtility.initSCG();
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
+			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			ts.setStorageContainer(storageContainer);
+			ts.setPositionDimensionOne(new Integer(1));
+			ts.setPositionDimensionTwo(new Integer(1));
+			ts.setSpecimenCollectionGroup(scg);
+			System.out.println("Befor creating Tissue Specimen");
+			ts = (TissueSpecimen) appService.createObject(ts);
+			System.out.println("Tissue Specimen successfully created with Lable"+ ts.getLabel());
+			Logger.out.info("Tissue Specimen successfully created with Lable"+ ts.getLabel());
+			assertTrue("Object added successfully", true);			
+	 }
+	 catch(Exception e){
+		 e.printStackTrace();
+		 assertFalse("Failed to add Tissue specimen in SC", true);
+	 }
+	}  
+	
+	
+/*	public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPPositiveTest()
 	{
 		
 		try {
@@ -225,7 +253,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			}
 			System.out.println("TissueSpec:"+ts.getLabel());	
 			
-		} 
+		} */
 	
 	public SpecimenCollectionGroup cpRestriction(CollectionProtocol cp)
 	{
