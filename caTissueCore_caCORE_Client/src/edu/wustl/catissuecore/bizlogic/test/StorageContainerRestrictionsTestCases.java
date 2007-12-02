@@ -30,6 +30,14 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase {
+	
+	StorageType box =null;
+	StorageType rack =null;
+	StorageType freezer =null;
+	StorageContainer freezerContainer = null;
+	StorageContainer rackContainer = null;
+	StorageContainer boxContainer = null;
+	
 	public void testAddTissueSpecInStorageContainerCanHoldTissueSpecimen()
 	{
 		try{
@@ -72,11 +80,11 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			ts.setSpecimenCollectionGroup(scg);
 			System.out.println("Befor creating Mol Specimen");
 			ts = (MolecularSpecimen) appService.createObject(ts);
-			assertFalse("Successfully added mol specimen in container", true);
+			assertFalse("Successfully added mol specimen in container which can only store tissue specimens", true);
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
-			 assertTrue("Failed to add Mol specimen in SC", true);
+			 assertTrue("Failed to add Mol specimen in container which can only store tissue specimens", true);
 		 }
 	}
 	
@@ -122,99 +130,62 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 		 }
 	} */
 	
-	public void testStorageContainerWithRestricToHoldSpecOfParticularCPPositiveTest()
+	
+	public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPPositiveTest()
 	{
+		
 		try {
+			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
+			cp = (CollectionProtocol) appService.createObject(cp);
+			
 			StorageType ST = BaseTestCaseUtility.initStorageType();
 			ST = (StorageType) appService.createObject(ST);
-			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();	
+			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
+			Collection cpCollection = new HashSet();
+			cpCollection.add(cp);
+			storageContainer.setCollectionProtocolCollection(cpCollection);
 			storageContainer.setStorageType(ST);
 			System.out.println("Storage Container"+storageContainer.getName()+" successfully created");
 			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
-			SpecimenCollectionGroup scg = BaseTestCaseUtility.initSCG();
-			scg = (SpecimenCollectionGroup) appService.createObject(scg);
+			
+			SpecimenCollectionGroup scg= (SpecimenCollectionGroup)cpRestriction(cp);
+					
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			ts.setStorageContainer(storageContainer);
 			ts.setPositionDimensionOne(new Integer(1));
-			ts.setPositionDimensionTwo(new Integer(1));
+			ts.setPositionDimensionTwo(new Integer(2));
 			ts.setSpecimenCollectionGroup(scg);
+			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			System.out.println("Befor creating Tissue Specimen");
 			ts = (TissueSpecimen) appService.createObject(ts);
-			System.out.println("Tissue Specimen successfully created with Lable"+ ts.getLabel());
-			Logger.out.info("Tissue Specimen successfully created with Lable"+ ts.getLabel());
-			assertTrue("Object added successfully", true);			
-	 }
-	 catch(Exception e){
-		 e.printStackTrace();
-		 assertFalse("Failed to add Tissue specimen in SC", true);
-	 }
-	}  
+			System.out.println("TissueSpec:"+ts.getLabel());	
+			}
+			catch(Exception e){
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+				assertFalse("Failed to register participant", true);
+			}
+	}
 	
-/*	public void testStorageContainerWithRestrictionToHoldSpecimenOfParticularCPNegativeTest()
+	
+	public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPNegativeTest()
 	{
-		try {
-//			System.out.println("Insside Tescase");
+		
 			StorageContainer storageContainer =(StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
 			
-			Participant participant = BaseTestCaseUtility.initParticipant();
-			participant = (Participant) appService.createObject(participant);
-			System.out.println("Creating participant"+participant.getFirstName());
-			
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-			cp = (CollectionProtocol) appService.createObject(cp);
-			System.out.println("CPcreated" +cp.getTitle());
-			Logger.out.info("CPcreated" +cp.getTitle());
-			
-			CollectionProtocolRegistration collectionProtocolRegistration =new CollectionProtocolRegistration();		
-			collectionProtocolRegistration.setParticipant(participant);
-			collectionProtocolRegistration.setCollectionProtocol(cp);
-			
-			collectionProtocolRegistration.setProtocolParticipantIdentifier("");
-			collectionProtocolRegistration.setActivityStatus("Active");
-			try
-			{
-				collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
-						Utility.datePattern("08/15/1975")));
+			try{
+				cp = (CollectionProtocol) appService.createObject(cp);
 			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
+			catch(Exception e){
+				Logger.out.error(e.getMessage(),e);
+	           	e.printStackTrace();
+	           	assertFalse("Failed to create collection protocol", true);
 			}
-			
-			//Setting Consent Tier Responses.
-			try
-			{
-				collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
-			}
-			catch (ParseException e)
-			{			
-				e.printStackTrace();
-			}
-			collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
-			User user = (User)TestCaseUtility.getObjectMap(User.class);
-			collectionProtocolRegistration.setConsentWitness(user);			
-			Collection consentTierResponseCollection = new HashSet();
-			Collection consentTierCollection = cp.getConsentTierCollection();
-			Iterator consentTierItr = consentTierCollection.iterator();
-			while(consentTierItr.hasNext())
-			{
-				ConsentTier consentTier = (ConsentTier)consentTierItr.next();
-				ConsentTierResponse consentResponse = new ConsentTierResponse();
-				consentResponse.setConsentTier(consentTier);
-				consentResponse.setResponse("Yes");
-				consentTierResponseCollection.add(consentResponse);
-			}
-			
-			SpecimenCollectionGroup scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
-		    Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
-		    scg.setSpecimenCollectionSite(site);
-		    scg.setName("SCGwithDiffCP1"+UniqueKeyGeneratorUtil.getUniqueKey());		    
-		    scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);	
-			scg = (SpecimenCollectionGroup) appService.createObject(scg);
-					
-			System.out.println("SCG created" +scg.getName());
-			
+			System.out.println("CP:"+cp.getTitle());
+			SpecimenCollectionGroup scg= (SpecimenCollectionGroup)cpRestriction(cp);
+							
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			ts.setStorageContainer(storageContainer);
 			ts.setPositionDimensionOne(new Integer(1));
@@ -222,21 +193,112 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("WithDiffCPTisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			System.out.println("Befor creating Tissue Specimen");
-			ts = (TissueSpecimen) appService.createObject(ts);
-			System.out.println("Tissue Specimen successfully created with Lable"+ ts.getLabel());
-			Logger.out.info("Tissue Specimen successfully created with Lable"+ ts.getLabel());
-			assertTrue("Object added successfully", true);			
-	 }
-	 catch(Exception e){
-		 Logger.out.error(e.getMessage(),e);
-		 e.printStackTrace();
-		 assertFalse("Failed to add Tissue specimen in SC", true);
-	 }
-	}  
+			
+			try{
+				ts = (TissueSpecimen) appService.createObject(ts);
+			}
+			catch(Exception e){
+				assertTrue("Failed to add Specimen in container which has restriction to hold diff. CP", true);
+			}
+			System.out.println("TissueSpec:"+ts.getLabel());	
+			
+		} 
 	
-	public void testCreateBoxRackFreezerStorageTypes()
+	public SpecimenCollectionGroup cpRestriction(CollectionProtocol cp)
 	{
-		StorageType box = new StorageType();
+		Participant participant = BaseTestCaseUtility.initParticipant();
+		
+		try{
+			participant = (Participant) appService.createObject(participant);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to create collection protocol", true);
+		}
+		System.out.println("Participant:"+participant.getFirstName());
+		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+		collectionProtocolRegistration.setCollectionProtocol(cp);
+		collectionProtocolRegistration.setParticipant(participant);
+		collectionProtocolRegistration.setProtocolParticipantIdentifier("");
+		collectionProtocolRegistration.setActivityStatus("Active");
+		try
+		{
+			collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
+					Utility.datePattern("08/15/1975")));
+			collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+			
+		}
+		catch (ParseException e)
+		{			
+			e.printStackTrace();
+			assertFalse("Failed to add collection protocol registration", true);
+		}
+		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+		User user = (User)TestCaseUtility.getObjectMap(User.class);
+		collectionProtocolRegistration.setConsentWitness(user);
+		
+		Collection consentTierResponseCollection = new HashSet();
+		Collection consentTierCollection = cp.getConsentTierCollection();
+	
+		ConsentTierResponse r1 = new ConsentTierResponse();
+		r1.setResponse("Yes");
+		consentTierResponseCollection.add(r1);
+		ConsentTierResponse r2 = new ConsentTierResponse();
+		r2.setResponse("No");
+		consentTierResponseCollection.add(r2);
+		ConsentTierResponse r3 = new ConsentTierResponse();
+		r3.setResponse("Not Applicable");
+		consentTierResponseCollection.add(r3);
+		
+		Iterator ConsentierItr = consentTierCollection.iterator();
+		Iterator ConsentierResponseItr = consentTierResponseCollection.iterator();
+		
+		while(ConsentierItr.hasNext()&& ConsentierResponseItr.hasNext())
+		{
+			ConsentTier consentTier = (ConsentTier)ConsentierItr.next();
+			ConsentTierResponse consentResponse = (ConsentTierResponse) ConsentierResponseItr.next();
+			consentResponse.setConsentTier(consentTier);		
+		}
+	
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+	
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+		System.out.println("Creating CPR");
+		try{
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to register participant", true);
+		}
+		
+		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+		scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
+		Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
+		scg.setSpecimenCollectionSite(site);
+		scg.setName("New SCG"+UniqueKeyGeneratorUtil.getUniqueKey());		    
+		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
+		System.out.println("Creating SCG");
+		try{
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to register participant", true);
+		}		
+		return scg;		
+	}
+	  
+	
+	
+	
+
+	public void createStorageTypes()
+	{
+		box = new StorageType();
 		Capacity capacity = new Capacity();
 		box.setName("Box" + UniqueKeyGeneratorUtil.getUniqueKey());
 		box.setDefaultTempratureInCentigrade(new Double(-30));
@@ -260,7 +322,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			assertFalse("",true);
 		}
 		
-		StorageType rack = new StorageType();
+		rack = new StorageType();
 		Capacity rackCapacity = new Capacity();
 		rack.setName("Rack" + UniqueKeyGeneratorUtil.getUniqueKey());
 		rack.setDefaultTempratureInCentigrade(new Double(-30));
@@ -282,7 +344,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 		}
 		
 		
-		StorageType freezer = new StorageType();
+		freezer = new StorageType();
 		Capacity freezerCapacity = new Capacity();
 		freezer.setName("Freezer" + UniqueKeyGeneratorUtil.getUniqueKey());
 		freezer.setDefaultTempratureInCentigrade(new Double(-30));
@@ -303,17 +365,25 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			assertFalse("",true);
 		}
 		
-		StorageContainer freezerContainer = new StorageContainer();
+	}
+	
+	public void createStorageContainers()
+	{
+		freezerContainer = new StorageContainer();
 		freezerContainer.setStorageType(freezer);
 		Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
 		freezerContainer.setSite(site);
-		freezerContainer.setNoOfContainers(2);
+		freezerContainer.setNoOfContainers(3);
 		freezerContainer.setActivityStatus("Active");
 		Capacity capacity1 = new Capacity();
-		capacity.setOneDimensionCapacity(new Integer(3));
-		capacity.setTwoDimensionCapacity(new Integer(3));
+		capacity1.setOneDimensionCapacity(new Integer(3));
+		capacity1.setTwoDimensionCapacity(new Integer(3));
 		freezerContainer.setCapacity(capacity1);
 		freezerContainer.setFull(Boolean.valueOf(false));
+		Collection holdsRackCollection = new HashSet();
+		holdsRackCollection.add(rack);
+		freezerContainer.setHoldsStorageTypeCollection(holdsRackCollection);
+		
 		
 		try{
 			freezerContainer = (StorageContainer) appService.createObject(freezerContainer);
@@ -323,13 +393,18 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 		}
 		
 		
-		StorageContainer rackContainer = new StorageContainer();
+		rackContainer = new StorageContainer();
 		rackContainer.setStorageType(rack);
-		rackContainer.setSite(site);		
-		rackContainer.setNoOfContainers(2);
+		rackContainer.setParent(freezerContainer);	
+		rackContainer.setPositionDimensionOne(new Integer(1));
+		rackContainer.setPositionDimensionOne(new Integer(1));
+		rackContainer.setNoOfContainers(3);
 		rackContainer.setActivityStatus("Active");
 		rackContainer.setCapacity(capacity1);
 		rackContainer.setFull(Boolean.valueOf(false));
+		Collection holdsBoxCollection = new HashSet();
+		holdsBoxCollection.add(box);
+		rackContainer.setHoldsStorageTypeCollection(holdsBoxCollection);
 		
 		try{
 			rackContainer = (StorageContainer) appService.createObject(rackContainer);
@@ -339,9 +414,11 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 		}
 		
 
-		StorageContainer boxContainer = new StorageContainer();
+		boxContainer = new StorageContainer();
 		boxContainer.setStorageType(box);
-		boxContainer.setSite(site);
+		boxContainer.setParent(rackContainer);
+		boxContainer.setPositionDimensionOne(new Integer(1));
+		boxContainer.setPositionDimensionOne(new Integer(2));
 		boxContainer.setActivityStatus("Active");
 		boxContainer.setCapacity(capacity1);
 		boxContainer.setFull(Boolean.valueOf(false));
@@ -352,27 +429,64 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 		catch(Exception e){
 			assertFalse("Should not allow",true);
 		}
-	 
-	
-	StorageContainer sc = new StorageContainer();
-	sc.setStorageType(box);
-	sc.setParent(freezerContainer);
-	sc.setPositionDimensionOne(new Integer(2));
-	sc.setPositionDimensionOne(new Integer(2));
-	sc.setNoOfContainers(1);
-	sc.setActivityStatus("Active");
-	sc.setCapacity(capacity1);
-	sc.setFull(Boolean.valueOf(false));
-		
-	try{
-		sc = (StorageContainer) appService.createObject(sc);
-	}
-	catch(Exception e){
-		 Logger.out.error(e.getMessage(),e);
-		 e.printStackTrace();
-		 assertTrue("Shoudnot allow to create container ",true);
 		
 	}
 	
-	} */
+
+	public void testAddBoxInRackContainerPositiveTestcase()
+	{
+		createStorageTypes();
+		createStorageContainers();
+		StorageContainer sc = new StorageContainer();
+		sc.setStorageType(box);
+		sc.setParent(rackContainer);
+		sc.setPositionDimensionOne(new Integer(1));
+		sc.setPositionDimensionOne(new Integer(1));
+		sc.setNoOfContainers(1);
+		sc.setActivityStatus("Active");
+		Capacity capacity1 = new Capacity();
+		capacity1.setOneDimensionCapacity(new Integer(3));
+		capacity1.setTwoDimensionCapacity(new Integer(3));
+		sc.setCapacity(capacity1);
+		sc.setFull(Boolean.valueOf(false));
+			
+		try{
+			sc = (StorageContainer) appService.createObject(sc);
+			assertTrue("Successfully added box container in rack container",true);
+		}catch(Exception e){
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertFalse("Failed to add the box container in rack container ",true);
+			
+		}
+	}
+	
+	public void testAddBoxInFreezerContainerNegativeTestCase()
+	{
+		StorageContainer sc = new StorageContainer();
+		sc.setStorageType(box);
+		sc.setParent(freezerContainer);
+		sc.setPositionDimensionOne(new Integer(1));
+		sc.setPositionDimensionOne(new Integer(2));
+		sc.setNoOfContainers(1);
+		sc.setActivityStatus("Active");
+		Capacity capacity1 = new Capacity();
+		capacity1.setOneDimensionCapacity(new Integer(3));
+		capacity1.setTwoDimensionCapacity(new Integer(3));
+		sc.setCapacity(capacity1);
+		sc.setFull(Boolean.valueOf(false));
+			
+		try{
+			sc = (StorageContainer) appService.createObject(sc);
+			assertFalse("Successfully added box container in freezer container",true);
+		}
+		catch(Exception e){
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("Shoudnot allow to create container ",true);
+			
+		}
+		
+	}
+	
   }
