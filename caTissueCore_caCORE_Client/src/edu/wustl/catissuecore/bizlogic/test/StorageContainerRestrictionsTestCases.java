@@ -129,7 +129,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			 assertTrue("Failed to add Mol specimen in SC", true);
 		 }
 	} */
-	public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPPositiveTest()
+	/*public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPPositiveTest1()
 	{
 		try {
 			StorageType ST = BaseTestCaseUtility.initStorageType();
@@ -156,13 +156,13 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 		 e.printStackTrace();
 		 assertFalse("Failed to add Tissue specimen in SC", true);
 	 }
-	}  
+	}  */
 	
 	
-/*	public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPPositiveTest()
+	public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPPositiveTest()
 	{
 		
-		try {
+		
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 			try{
 				cp = (CollectionProtocol) appService.createObject(cp);
@@ -172,7 +172,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 	           	e.printStackTrace();
 	           	assertFalse("Failed to create collection protocol", true);
 			}
-			
+			System.out.println("CP:"+cp.getTitle());
 			StorageType ST = BaseTestCaseUtility.initStorageType();			
 			try{
 				ST = (StorageType) appService.createObject(ST);
@@ -207,16 +207,17 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			ts.setPositionDimensionOne(new Integer(1));
 			ts.setPositionDimensionTwo(new Integer(1));
 			ts.setSpecimenCollectionGroup(scg);
-			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
+			ts.setLabel("CPTisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			System.out.println("Befor creating Tissue Specimen");
+			try{
 			ts = (TissueSpecimen) appService.createObject(ts);
 			System.out.println("CPTissueSpec:"+ts.getLabel());	
-			}
-			catch(Exception e){
+			}catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
-				assertFalse("Failed to register Tissue specimen", true);
+				assertFalse("Failed to create Tissue specimen", true);
 			}
+			
 	}
 	
 	
@@ -247,13 +248,15 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			
 			try{
 				ts = (TissueSpecimen) appService.createObject(ts);
+				System.out.println("TissueSpec:"+ts.getLabel());
+				assertFalse("Successfully created specimen", true);
 			}
 			catch(Exception e){
 				assertTrue("Failed to add Specimen in container which has restriction to hold diff. CP", true);
 			}
-			System.out.println("TissueSpec:"+ts.getLabel());	
+				
 			
-		} */
+		} 
 	
 	public SpecimenCollectionGroup cpRestriction(CollectionProtocol cp)
 	{
@@ -515,6 +518,8 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 	
 	public void testAddBoxInFreezerContainerNegativeTestCase()
 	{
+		createStorageTypes();
+		createStorageContainers();
 		StorageContainer sc = new StorageContainer();
 		sc.setStorageType(box);
 		sc.setParent(freezerContainer);
