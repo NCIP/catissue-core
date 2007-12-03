@@ -134,10 +134,10 @@ public class BaseTestCaseUtility {
 		
 	}
 	
-	private static void setCollectionProtocolEvent(CollectionProtocolEvent collectionProtocolEvent)
+	public static void setCollectionProtocolEvent(CollectionProtocolEvent collectionProtocolEvent)
 	{
-		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));
-		collectionProtocolEvent.setCollectionPointLabel("PreStudy1" + UniqueKeyGeneratorUtil.getUniqueKey());
+		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1.0));
+		collectionProtocolEvent.setCollectionPointLabel("PreStudy1"+ Math.random());
 		collectionProtocolEvent.setClinicalStatus("Operative");		
 		SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = new SpecimenCollectionRequirementGroup();
 		specimenCollectionRequirementGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
@@ -286,7 +286,7 @@ public class BaseTestCaseUtility {
 //		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 
 		//Setting collection point label
-		collectionProtocolEvent.setCollectionPointLabel("User entered value");
+		collectionProtocolEvent.setCollectionPointLabel("User entered value"+UniqueKeyGeneratorUtil.getUniqueKey());
 		
 		return collectionProtocolEvent;
 		
@@ -1619,7 +1619,7 @@ public class BaseTestCaseUtility {
 		}
 		catch (ParseException e1)
 		{
-			System.out.println(" exception in APIDemo");
+			System.out.println("exception in APIDemo");
 			e1.printStackTrace();
 		}
 		
