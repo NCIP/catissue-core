@@ -698,6 +698,11 @@
 	
 	<definition name=".catissuecore.queryResultsTreeViewDef" path="/pages/content/search/TreeView.jsp">
 	</definition>
+	
+	<!--Added By Pallavi Mistry -->	
+	<!--TreeNode view for DHTMLX tree grid view of storage container-->
+	<definition name=".catissuecore.queryResultsTreeViewNodeDef" path="/pages/content/search/TreeNodeView.jsp">
+	</definition>
 			
 	<definition name=".catissuecore.searchHomeDef" extends=".catissuecore.homePageDef">
 		<put name="submenu" value="/pages/subMenu/Search.jsp" />

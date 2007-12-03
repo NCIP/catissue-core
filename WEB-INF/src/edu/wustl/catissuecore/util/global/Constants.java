@@ -495,6 +495,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Query Results view Actions
 	public static final String TREE_VIEW_ACTION = "TreeView.do";
+	//-- TreeNodeDataAction added for DHTMLX tree grid view of storage container
+	public static final String TREE_NODE_DATA_ACTION = "TreeNodeData.do";
 	public static final String DATA_VIEW_FRAME_ACTION = "SpreadsheetView.do";
 	public static final String SIMPLE_QUERY_INTERFACE_URL = "SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17";
 	
@@ -1702,7 +1704,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String GRID_FOR_EVENTS="eventParameter";
 	public static final String GRID_FOR_EDIT_SEARCH="editSearch";
 	public static final String GRID_FOR_DERIVED_SPECIMEN="derivedSpecimen";
-	
+	/*
+	 * used to find whether iframe needs to be reloaded or not
+	 */
+	public static final String RELOAD ="false";
+	public static final String CHILD_CONTAINER_NAME="childContainerName";
 	
 	//CpBasedSearch Constants
 	public static final String CP_QUERY = "CPQuery";

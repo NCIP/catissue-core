@@ -109,6 +109,8 @@ public class ShowStorageGridViewAction  extends BaseAction
         int [][]fullStatus = null;
         int [][] childContainerIds = null;
         String [][] childContainerType = null;
+        String [][] childContainerName=null;
+        Object a=request.getAttribute("tree");
         
         if ((list != null) && (list.size() > 0))
         {
@@ -122,7 +124,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             
             StorageType storageType = (StorageType) bizLogic.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "storageType");//storageContainer.getStorageType();
 			request.setAttribute("storageTypeName",storageType.getName());
-            
+            Object tree=request.getAttribute("tree");
             
             //Mandar : Labels for Dimensions  
             String oneDimLabel = storageType.getOneDimensionLabel();
@@ -150,8 +152,8 @@ public class ShowStorageGridViewAction  extends BaseAction
             
             fullStatus = new int[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             childContainerType = new String[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
-            
-			//Showing Containers in the Container map.
+            childContainerName= new String[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
+            //Showing Containers in the Container map.
             Collection children = (Collection)bizLogic.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "elements(children)");//storageContainer.getChildren();
             if (children != null)
             {
@@ -167,7 +169,8 @@ public class ShowStorageGridViewAction  extends BaseAction
                                                    = childStorageContainer.getId().intValue();
                     childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
                                                    = Constants.CONTAINER_LABEL_CONTAINER_MAP + childStorageContainer.getName();
-                                                  
+                    childContainerName[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]=childStorageContainer.getName();
+                    
                 }
             }          
             
@@ -249,6 +252,7 @@ public class ShowStorageGridViewAction  extends BaseAction
         request.setAttribute(Constants.PAGEOF, pageOf);
         request.setAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS, childContainerIds);
         request.setAttribute(Constants.CHILD_CONTAINER_TYPE, childContainerType);
+        request.setAttribute(Constants.CHILD_CONTAINER_NAME, childContainerName);
         request.setAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS,fullStatus);
         request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT,
                 storageContainerGridObject);
@@ -265,8 +269,8 @@ public class ShowStorageGridViewAction  extends BaseAction
     }
 
     /**
-     * To enable or disable the Storage coctinaer links on the page depending on restriction criteria on Container.
-	 * @param request Teh HttpServletRequest object reference.
+     * To enable or disable the Storage container links on the page depending on restriction criteria on Container.
+	 * @param request Th HttpServletRequest object reference.
      * @param storageContainer The Storage container object reference.
      * @param bizLogic reference to bizLogic class. 
      * @throws DAOException 

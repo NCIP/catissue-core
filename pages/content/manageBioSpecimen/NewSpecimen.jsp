@@ -713,7 +713,7 @@
 		{
 				
 			var printFlag = document.getElementById("printCheckbox");
-
+				
 			if(printFlag.checked)
 			{
 		
@@ -1167,7 +1167,7 @@
 											String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 										%>
 										<!-- Patch ID: Bug#3090_19 -->
-										<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
+										<a href="#" onclick="javascript:NewWindow('<%=url%>','tissuesite','360','525','no');return false">
 											<img src="images\Tree.gif" border="0" width="24" height="18" title='Tissue Site Selector'>
 										</a>
 						        	  </td>

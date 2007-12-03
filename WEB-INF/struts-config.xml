@@ -2945,7 +2945,14 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.TreeViewAction">
 			<forward name="success" path=".catissuecore.queryResultsTreeViewDef" />
 		</action>
-		<action path="/DataView"
+		
+<!-- TreeNodeDataAction added for DHTMLX tree grid view of storage container -->
+		<action path="/TreeNodeData"
+			type="edu.wustl.catissuecore.action.TreeNodeDataAction">
+			<forward name="success" path=".catissuecore.queryResultsTreeViewNodeDef" />
+		</action>
+
+	<action path="/DataView"
 			type="edu.wustl.catissuecore.action.DataViewAction"
 			name="advanceSearchForm"
 			scope="request">

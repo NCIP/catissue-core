@@ -10,6 +10,10 @@
 	String siteName = (String) request.getAttribute("siteName");   
 %>
 <script>
+<%
+String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+String [][] childContainerName = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_NAME);
+%>
 function setParentWindowValue(elementName,elementValue)
 {
 	for (var i=0;i < top.opener.document.forms[0].elements.length;i++)
@@ -46,6 +50,14 @@ function closeFramedWindow()
 {
 	top.window.close();
 }
+
+
+function refresh_tree(nodeId)
+{	
+	window.parent.<%=Constants.APPLET_VIEW_FRAME%>.location="<%=Constants.TREE_NODE_DATA_ACTION%>?<%=Constants.PAGEOF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>="+nodeId;
+}
+
+
 </script>
 
 <%
@@ -54,7 +66,7 @@ function closeFramedWindow()
 	int [][]fullStatus = (int [][])request.getAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS);
 	int [][] childContainerIds = (int [][])request.getAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS);
     String [][] childContainerType = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_TYPE);
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	
 	
 	String enablePageStr = (String)request.getAttribute(Constants.ENABLE_STORAGE_CONTAINER_GRID_PAGE);
 	boolean enablePage = false;
@@ -312,14 +324,15 @@ function closeFramedWindow()
 							if (fullStatus[i][j] == 1)
 							{%>
 							<td class="mapTdred" noWrap="true">
-								<a href="<%=openStorageContainer%>"> 
+								<a href="<%=openStorageContainer%>" onclick="javaScript:refresh_tree('<%=childContainerName[i][j]%>')"> 
 								 <%=childContainerType[i][j]%><!-- : <%=childContainerIds[i][j]%> -->
 								</a>
  							</td>
 					   	  <%}
 							else{%>
 							<td class="mapTdspe" noWrap="true">
-							<%=childContainerType[i][j]%><!--: <%=childContainerIds[i][j]%> -->
+							<a href="QuerySpecimenSearch.do?<%=Constants.PAGEOF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>"><%=childContainerType[i][j]%><!--: <%=childContainerIds[i][j]%> -->
+								</a>
 							</td>
 							<%}%>
 						<%}

@@ -3,7 +3,7 @@
 <%
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String treeViewAction = Constants.TREE_VIEW_ACTION + "?" + Constants.PAGEOF + "=" + pageOf;
-	
+	String treeNodeDataAction = Constants.TREE_NODE_DATA_ACTION + "?" + Constants.PAGEOF + "=" + pageOf;
 	//Get the storage type.
 	String storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 	if (storageContainerType != null)
@@ -39,7 +39,7 @@
 	if(mac)
    	{	
         // Patch ID: Bug#3090_12
-        // Description: The height value is increased to elemenate the empty space that
+        // Description: The height value is increased to eleminate the empty space that
         //				appears below the tree applet. 
         height = "580";
    	}
@@ -52,7 +52,9 @@
 				Patch ID: Bug#3090_13
 				Description: The scrolling is set to value 'no' inorder to disable the outer scrollbar.
 			-->
-			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeViewAction%>" scrolling="no" frameborder="1" width="99%" height="<%=height%>">
+			<!--  changed by Pallavi Mistry -->
+			<!-- treeNodeDataAction  added for DHTMLX tree view-->
+			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeNodeDataAction%>" scrolling="yes" frameborder="1" width="99%" height="<%=height%>">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
