@@ -97,13 +97,13 @@ public abstract class QueryCSMUtil
 					isMainEntityPresent = true;
 					break;
 				}
-			}
+			} 
 			if(!isMainEntityPresent)
 			{
 				mainEntityNames = mainEntityNames.substring(0, mainEntityNames.lastIndexOf("r")-1);
-				errorMsg = entityName
+				errorMsg = entityName+" "
 						+ ApplicationProperties.getValue("query.mainObjectErrorPartPre")
-						+ mainEntityNames + ApplicationProperties.getValue("query.mainObjectErrorPartPost");
+						+ " "+mainEntityNames + ApplicationProperties.getValue("query.mainObjectErrorPartPost");
 				break;
 			}
 		}
