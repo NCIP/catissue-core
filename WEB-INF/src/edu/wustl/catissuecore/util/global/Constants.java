@@ -1599,9 +1599,19 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String APPLET_SERVER_HTTP_START_STR = "http://";
 	public static final String APPLET_SERVER_URL_PARAM_NAME = "serverURL";
 
-	//
+	//operators for simple query and advanced query
 	public static final String IS_NOT_NULL = "is not null";
 	public static final String IS_NULL = "is null";
+	public static final String In = "In";
+	public static final String Not_In = "Not In";
+	public static final String Equals = "Equals";
+	public static final String Not_Equals = "Not Equals";
+	public static final String Between = "Between";
+	public static final String Less_Than = "Less than";
+	public static final String Less_Than_Or_Equals = "Less than or Equal to";
+	public static final String Greater_Than = "Greater than";
+	public static final String Greater_Than_Or_Equals = "Greater than or Equal to";
+	public static final String Contains = "Contains";
 	
 	// Used in array action 
 	public static final String ARRAY_TYPE_ANY_VALUE = "2";
