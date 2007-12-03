@@ -551,14 +551,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			 * See also: 1-3 
 			 * Description : Earlier the available quantity for specimens that haven't been collected yet is greater than 0.
 			 */
-			if ((specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity().getValue().doubleValue() == 0 && specimen
-					.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED)))
+			if (specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity().getValue().doubleValue() == 0 && Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase(specimen.getCollectionStatus()))
 			{
 				specimen.setAvailableQuantity(specimen.getInitialQuantity());
 			}
 
 			if ((specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity().getValue().doubleValue() == 0)
-					|| specimen.getCollectionStatus() == null || specimen.getCollectionStatus().equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING))
+					|| specimen.getCollectionStatus() == null || Constants.COLLECTION_STATUS_PENDING.equalsIgnoreCase(specimen.getCollectionStatus()))
 			{
 				specimen.setAvailable(new Boolean(false));
 			}
@@ -2945,8 +2944,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				 * See also: 1-3 
 				 * Description : Earlier the available quantity for specimens that haven't been collected yet is greater than 0.
 				 */
-				if ((specimenDO.getAvailableQuantity().getValue().doubleValue() == 0 && specimenVO.getCollectionStatus().equalsIgnoreCase(
-						Constants.COLLECTION_STATUS_COLLECTED)))
+				if ((specimenDO.getAvailableQuantity().getValue().doubleValue() == 0 && Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase(
+						specimenVO.getCollectionStatus())))
 				{
 					specimenDO.setAvailableQuantity(specimenVO.getInitialQuantity());
 				}
