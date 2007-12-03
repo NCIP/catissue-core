@@ -101,7 +101,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	public String getHTMLForSavedQuery(IQuery queryObject, boolean isShowAll, String forPage)
 	{
 		String htmlString = "";
-		Map<IExpressionId, Map<EntityInterface, List>> expressionMap = new HashMap<IExpressionId, Map<EntityInterface, List>>();
+		Map<IExpressionId, Map<EntityInterface, List<ICondition>>> expressionMap = new HashMap<IExpressionId, Map<EntityInterface, List<ICondition>>>();
 		IConstraints constraints = queryObject.getConstraints();
 		Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
 		while (expressionIds.hasMoreElements())
@@ -116,7 +116,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 					List<ICondition> conditions = ruleObject.getConditions();
 					EntityInterface entity = expression.getQueryEntity()
 							.getDynamicExtensionsEntity();
-					Map<EntityInterface, List> entityConditionMap = new HashMap<EntityInterface, List>();
+					Map<EntityInterface, List<ICondition>> entityConditionMap = new HashMap<EntityInterface, List<ICondition>>();
 					entityConditionMap.put(entity, conditions);
 					expressionMap.put(expression.getExpressionId(), entityConditionMap);
 				}
@@ -151,14 +151,15 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @return
 	 */
 	public StringBuffer generateSaveQueryForEntity(int expressionID, EntityInterface entity,
-			List<ICondition> conditions, boolean isShowAll, String forPage, boolean isTopButton)
+			List<ICondition> conditions, boolean isShowAll, String forPage, boolean isTopButton,
+			Map<EntityInterface, List<IExpressionId>> entityList)
 	{
 		setExpressionId(expressionID);
 		StringBuffer generatedHTML = new StringBuffer();
 		StringBuffer generatedPreHTML = new StringBuffer();
 		String nameOfTheEntity = entity.getName();
-		Collection attributeCollection = entity.getAttributeCollection();
-		Collection collection = new ArrayList<AttributeInterface>();
+		Collection<AttributeInterface> attributeCollection = entity.getAttributeCollection();
+		Collection<AttributeInterface> collection = new ArrayList<AttributeInterface>();
 		// String attributesList = "";
 		boolean isEditLimits = false;
 		boolean isBGColor = false;
@@ -171,7 +172,15 @@ public class GenerateHtmlForAddLimitsBizLogic
 		}
 		if (!attributeCollection.isEmpty())
 		{
-			List attributes = new ArrayList(attributeCollection);
+			// get the list of dag ids for the corresponding entity
+			List<IExpressionId> entityDagId = (List<IExpressionId>)entityList.get(entity);
+			String DAGNodeId = "";		// Converting the dagId to string
+			if (entityDagId.size() > 1)
+			{
+				// DAGNodeId / expressionID to be shown only in case if there are more than one node of the same class
+				DAGNodeId = String.valueOf(expressionID) + "."; 
+			}
+			List<AttributeInterface> attributes = new ArrayList<AttributeInterface>(attributeCollection);
 			String styleSheetClass = "rowBGWhiteColor";
 			Collections.sort(attributes, new AttributeInterfaceComparator());
 			if (forPage.equalsIgnoreCase(Constants.ADD_EDIT_PAGE))
@@ -183,9 +192,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 				generatedHTML.append("\n</td>");
 				generatedHTML.append("\n</tr>");
 			}
-			for (int i = 0; i < attributes.size(); i++)
+			for(AttributeInterface attribute : attributes)
 			{
-				AttributeInterface attribute = (AttributeInterface) attributes.get(i);
 				String attrName = attribute.getName();
 				if (forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE))
 					isParameterizedCondition = attributeNameConditionMap.containsKey(attrName)
@@ -212,11 +220,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 					styleSheetClass = "rowBGWhiteColor";
 				}
 				isBGColor = !isBGColor;
+				String name =Utility.parseClassName(entity.getName());				
 
 				generatedHTML.append("\n<tr  class='"+styleSheetClass +"'" +
 
 				"  id=\"componentId\" " +
-				"\" height=\"6%\" " +
+				//"\" height=\"6%\" " +
 				" >\n");
 
 				if (forPage.equalsIgnoreCase(Constants.SAVE_QUERY_PAGE))
@@ -224,10 +233,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 					formName = "saveQueryForm";
 					generatedHTML.append(" " + generateCheckBox(attribute, false)
 							+ "<td valign='top' align='left' class='standardTextQuery'>"
-							+ "<input type=\"textbox\"  class=\"formFieldSized10\"    name='"
+							+"<label for='" + componentId
+							+ "_displayName' title='" + DAGNodeId + name + "." + attrLabel + "'>"
+							+ "<input type=\"textbox\"  class=\"formFieldSized20\"  name='"
 							+ componentId + "_displayName'     id='" + componentId
-							+ "_displayName' value='" + expressionID + "." + attrLabel
-							+ "' disabled='true'> " + "</td>");
+							+ "_displayName' value='" + DAGNodeId + name + "." + attrLabel
+							+ "' disabled='true'> " + "</label></td>");
 				}
 				if (!forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE))
 					generatedHTML
@@ -442,19 +453,43 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 */
 
 	public String generateHTMLForSavedQuery(
-			Map<IExpressionId, Map<EntityInterface, List>> expressionMap, boolean isShowAll,
+			Map<IExpressionId, Map<EntityInterface, List<ICondition>>> expressionMap, boolean isShowAll,
 			String forPage)
 	{
 		StringBuffer generatedHTML = new StringBuffer(
 				"<table  cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">");
 		if (forPage.equalsIgnoreCase(Constants.SAVE_QUERY_PAGE))
 			generatedHTML
-					.append("<tr><td  class=\"formSubTitleWithoutBorder\">"+ApplicationProperties.getValue("savequery.column.userDefined")+"</td><td class=\"formSubTitleWithoutBorder\">"+ApplicationProperties.getValue("savequery.column.displayLabel")+"</td><td class=\"formSubTitleWithoutBorder\">"+ApplicationProperties.getValue("savequery.column.attributeName")+"</td><td class=\"formSubTitleWithoutBorder\" >"+ApplicationProperties.getValue("savequery.column.condition")+"</td><td class=\"formSubTitleWithoutBorder\" colspan=\"4\"  >"+ApplicationProperties.getValue("savequery.column.value")+"</td></tr>");
+					.append("<tr style='height:10%'><td  valign='top' class='formSubTitleWithoutBorder'>"
+							+ ApplicationProperties
+									.getValue("savequery.column.userDefined")
+							+ "</td><td valign='top' class='formSubTitleWithoutBorder'>"
+							+ ApplicationProperties
+									.getValue("savequery.column.displayLabel")
+							+ "</td><td valign='top' class='formSubTitleWithoutBorder'>"
+							+ ApplicationProperties
+									.getValue("savequery.column.attributeName")
+							+ "</td><td valign='top' class='formSubTitleWithoutBorder'>"
+							+ ApplicationProperties
+									.getValue("savequery.column.condition")
+							+ "</td><td colspan=\"4\"  valign='top' class='formSubTitleWithoutBorder'>"
+							+ ApplicationProperties
+									.getValue("savequery.column.value")
+							+ "</td></tr>");
 		else if(forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE))
 			generatedHTML
-			.append("<tr><td class=\"formSubTitleWithoutBorder\">Display Label</td><td class=\"formSubTitleWithoutBorder\" colspan=\"5\"  >Condition</td></tr>");
+					.append("<tr valign='top'><td class=\"formSubTitleWithoutBorder\" valign='top'>" 
+							+ ApplicationProperties
+									.getValue("savequery.column.displayLabel")
+							+ "</td><td class=\"formSubTitleWithoutBorder\" valign='top' >" 
+							+ ApplicationProperties
+									.getValue("savequery.column.condition")
+							+ "</td><td class=\"formSubTitleWithoutBorder\" colspan=\"4\" valign='top' >" 
+							+ ApplicationProperties
+							.getValue("savequery.column.value")
+							+ "</td></tr>");
 		attributesList = "";
-		Map<EntityInterface, List> entityConditionMap = null;
+		Map<EntityInterface, List<ICondition>> entityConditionMap = null;
 		String expressionEntityString = "";
 		if (expressionMap.isEmpty())
 		{
@@ -463,7 +498,10 @@ public class GenerateHtmlForAddLimitsBizLogic
 		}
 		else
 		{
-			Iterator it = expressionMap.keySet().iterator();
+			//get the map which holds the list of all dag ids / expression ids for a particular entity
+			Map<EntityInterface, List<IExpressionId>> entityExpressionIdListMap = 
+																	getEntityExpressionIdListMap(expressionMap);
+			Iterator<IExpressionId> it = expressionMap.keySet().iterator();
 			while (it.hasNext())
 			{
 				IExpressionId expressionId = (IExpressionId) it.next();
@@ -472,13 +510,13 @@ public class GenerateHtmlForAddLimitsBizLogic
 				{
 					continue;
 				}
-				Iterator it2 = entityConditionMap.keySet().iterator();
+				Iterator<EntityInterface> it2 = entityConditionMap.keySet().iterator();
 				while (it2.hasNext())
 				{
 					EntityInterface entity = (EntityInterface) it2.next();
 					List<ICondition> conditions = entityConditionMap.get(entity);
 					generatedHTML.append(generateSaveQueryForEntity(expressionId.getInt(), entity,
-							conditions, isShowAll, forPage, false));
+							conditions, isShowAll, forPage, false, entityExpressionIdListMap));
 					expressionEntityString = expressionEntityString + expressionId.getInt() + ":"
 							+ Utility.parseClassName(entity.getName()) + ";";
 
@@ -500,8 +538,47 @@ public class GenerateHtmlForAddLimitsBizLogic
 		return generatedHTML.toString();
 	}
 
-	private StringBuffer generatePreHtml(Collection attributeCollection, String nameOfTheEntity,
-			boolean isEditLimits, boolean isTopButton)
+	/** Create a map which holds the list of all Expression(DAGNode) ids for a particular entity
+	 * @param expressionMap
+	 * @return map consisting of the entity and their corresponding expression ids
+	 */
+	private Map<EntityInterface, List<IExpressionId>> getEntityExpressionIdListMap(
+			Map<IExpressionId, Map<EntityInterface, List<ICondition>>> expressionMap) 
+	{
+			Map<EntityInterface, List<IExpressionId>> entityExpressionIdMap = new HashMap<EntityInterface, 
+																					List<IExpressionId>>();
+			Iterator<IExpressionId> outerMapIterator = expressionMap.keySet().iterator();
+			while (outerMapIterator.hasNext())
+			{
+				IExpressionId expressionId = (IExpressionId) outerMapIterator.next();
+				Map<EntityInterface, List<ICondition>> entityMap = expressionMap.get(expressionId);
+				if (!entityMap.isEmpty())
+				{
+					Iterator<EntityInterface> innerMapIterator = entityMap.keySet().iterator();
+					while (innerMapIterator.hasNext())
+					{
+						List<IExpressionId> dagIdList = null;
+						EntityInterface entity = (EntityInterface)innerMapIterator.next();
+						if (!entityExpressionIdMap.containsKey(entity))
+						{
+							//if the entity is not present in the map create new list and add it to map
+							dagIdList = new ArrayList<IExpressionId>();
+							dagIdList.add(expressionId);
+							entityExpressionIdMap.put(entity, dagIdList);
+							continue;
+						}		
+						//if the entity is present in the map add the dag id to the existing list 
+						dagIdList = (List<IExpressionId>)entityExpressionIdMap.get(entity);
+						dagIdList.add(expressionId);
+						entityExpressionIdMap.put(entity, dagIdList);
+					}
+				}
+			}
+		return entityExpressionIdMap;
+	}
+
+	private StringBuffer generatePreHtml(Collection<AttributeInterface> attributeCollection, 
+			String nameOfTheEntity, boolean isEditLimits, boolean isTopButton)
 	{
 		String header = Constants.DEFINE_SEARCH_RULES;
 		String entityName = Utility.parseClassName(nameOfTheEntity);
@@ -533,7 +610,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String nameOfTheEntity = entity.getName();
 		String entityId = entity.getId().toString();
 		String entityName = Utility.parseClassName(nameOfTheEntity);//nameOfTheEntity.substring(nameOfTheEntity.lastIndexOf(".")+1,nameOfTheEntity.length());
-		Collection attributeCollection = entity.getAttributeCollection();
+		Collection<AttributeInterface> attributeCollection = entity.getAttributeCollection();
 		boolean isEditLimits = false;
 		String header = Constants.DEFINE_SEARCH_RULES;
 		//ApplicationProperties.getValue("query.defineSearchRulesFor");//"\nDefine Search Rules For";//
@@ -563,7 +640,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		generatedHTML.append("\n</tr>");
 		if (!attributeCollection.isEmpty())
 		{
-			List attributes = new ArrayList(attributeCollection);
+			List<AttributeInterface> attributes = new ArrayList<AttributeInterface>(attributeCollection);
 			String styleSheetClass = "rowBGWhiteColor";
 			Collections.sort(attributes, new AttributeInterfaceComparator());
 			for (int i = 0; i < attributes.size(); i++)
@@ -792,7 +869,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	private List<String> getConditionsList(AttributeInterface attributeInterface)
 	{
 		List<String> operatorsList = new ArrayList<String>();
-		List strObj = null;
+		List<String> strObj = null;
 		if (attributeInterface != null)
 		{
 			String dataType = attributeInterface.getDataType();
@@ -840,7 +917,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 					operatorsList = parseFile.getNonEnumConditionList("date");
 				}
 			}
-			strObj = new ArrayList(operatorsList);;
+			strObj = new ArrayList<String>(operatorsList);;
 			operatorsList = new ArrayList<String>();
 			Collections.sort(strObj);
 			for (int i = 0; i < strObj.size(); i++)
@@ -862,11 +939,11 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 *            list of operators for each attribute
 	 * @return String HTMLForOperators
 	 */
-	private String generateHTMLForOperators(AttributeInterface attribute, List operatorsList,
+	private String generateHTMLForOperators(AttributeInterface attribute, List<String> operatorsList,
 			String op, String cssClass)
 	{
 		StringBuffer html = new StringBuffer();
-		String attributeName = attribute.getName();
+		//String attributeName = attribute.getName();
 		String componentId = generateComponentName(attribute);
 		if (operatorsList != null && operatorsList.size() != 0)
 		{
@@ -888,7 +965,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 						+ "_combobox\" onChange=\"operatorChanged('" + componentId
 						+ "','false')\">");
 			}
-			Iterator iter = operatorsList.iterator();
+			Iterator<String> iter = operatorsList.iterator();
 
 			while (iter.hasNext())
 			{
@@ -933,7 +1010,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		{
 			if(op != null)
 			{
-				if(op.equals("IsNotNull") || op.equals("IsNull"))
+				if(op.equalsIgnoreCase(Constants.IS_NOT_NULL) || op.equalsIgnoreCase(Constants.IS_NULL))
 				{
 					html.append("<input style=\"width:150px; display:block;\" type=\"text\" disabled='true' name=\""
 							+ textBoxId + "\" id=\"" + textBoxId + "\">");
@@ -947,7 +1024,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		else
 		{
 			String valueStr = "";
-			if (op.equalsIgnoreCase("In") || op.equalsIgnoreCase("NotIn"))
+			if (op.equalsIgnoreCase(Constants.In) || op.equalsIgnoreCase(Constants.Not_In))
 			{
 				valueStr = values.toString();
 				valueStr = valueStr.replace("[", "");
@@ -1112,10 +1189,10 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @return String html for enumerated value dropdown
 	 */
 	private String generateHTMLForEnumeratedValues(AttributeInterface attribute,
-			List permissibleValues, List<String> editLimitPermissibleValues, String cssClass)
+			List<PermissibleValueInterface> permissibleValues, List<String> editLimitPermissibleValues, String cssClass)
 	{
 		StringBuffer html = new StringBuffer();
-		String attributeName = attribute.getName();
+		//String attributeName = attribute.getName();
 		String componentId = generateComponentName(attribute);
 		if (permissibleValues != null && permissibleValues.size() != 0)
 		{
@@ -1124,7 +1201,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			html
 					.append("\n<select style=\"width:150px; display:block;\" MULTIPLE styleId='country' size ='3' name=\""
 							+ componentId + "_enumeratedvaluescombobox\"\">");
-			List values = new ArrayList(permissibleValues);
+			List<PermissibleValueInterface> values = new ArrayList<PermissibleValueInterface>(permissibleValues);
 			Collections.sort(values, new PermissibleValueComparator());
 			for (int i = 0; i < values.size(); i++)
 			{
@@ -1161,17 +1238,17 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param attributeCollection
 	 * @return
 	 */
-	String getAttributesString(Collection attributeCollection)
+	String getAttributesString(Collection<AttributeInterface> attributeCollection)
 	{
 		String attributesList = "";
 		if (!attributeCollection.isEmpty())
 		{
-			List attributes = new ArrayList(attributeCollection);
+			List<AttributeInterface> attributes = new ArrayList<AttributeInterface>(attributeCollection);
 			Collections.sort(attributes, new AttributeInterfaceComparator());
 			for (int i = 0; i < attributes.size(); i++)
 			{
 				AttributeInterface attribute = (AttributeInterface) attributes.get(i);
-				String attrName = attribute.getName();
+				//String attrName = attribute.getName();
 				String componentId = generateComponentName(attribute);
 				attributesList = attributesList + ";" + componentId;
 			}
