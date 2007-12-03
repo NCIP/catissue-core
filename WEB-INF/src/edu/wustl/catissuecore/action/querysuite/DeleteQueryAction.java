@@ -43,7 +43,8 @@ public class DeleteQueryAction extends BaseAction{
 					IParameterizedQuery parameterizedQuery = queryList.get(0);
 					{
 						bizLogic.delete(parameterizedQuery,Constants.HIBERNATE_DAO);
-						target = Constants.SUCCESS;
+						target = Constants.SUCCESS; 
+						setActionError(request, ApplicationProperties.getValue("query.deletedSuccessfully.message"));
 					}
 				}
 			}
