@@ -422,7 +422,6 @@ CREATE TABLE `catissue_coll_prot_event`
     UNIQUE KEY `COLLECTION_PROTOCOL_ID` (`COLLECTION_PROTOCOL_ID`,`COLLECTION_POINT_LABEL`),                                                                    
     KEY `FK7AE7715948304401` (`COLLECTION_PROTOCOL_ID`),                                                                                                        
     KEY `FK_COLL_EVENT_REQ_GROUP` (`SPECIMEN_COLL_REQ_GROUP_ID`),                                                                                         
-    KEY `INDX_COLPROTO_EVNT_CAL` (`STUDY_CALENDAR_EVENT_POINT`),                                                                                                
     CONSTRAINT `FK7AE7715948304401` FOREIGN KEY (`COLLECTION_PROTOCOL_ID`) REFERENCES `catissue_collection_protocol` (`IDENTIFIER`),                            
     CONSTRAINT `FK_COLL_EVENT_REQ_GROUP` FOREIGN KEY (`SPECIMEN_COLL_REQ_GROUP_ID`) REFERENCES `catissue_speci_coll_req_group` (`IDENTIFIER`)  
 );
@@ -555,12 +554,6 @@ CREATE TABLE `catissue_specimen`
      KEY `FK1674810433BF33C5` (`SPECIMEN_COLLECTION_GROUP_ID`),                                                                                       
      KEY `FK16748104B189E99D` (`PARENT_SPECIMEN_ID`),                                                                                                 
      KEY `FK1674810432B31EAB` (`STORAGE_CONTAINER_IDENTIFIER`),                                                                                       
-     KEY `INDX_CATISSUE_SPECIMEN_CLASS` (`SPECIMEN_CLASS`),                                                                                           
-     KEY `INDX_CATISSUE_SPECIMEN_TYPE` (`TYPE`),                                                                                                      
-     KEY `INDX_CATISSUE_SPECIMEN_PATH` (`PATHOLOGICAL_STATUS`),                                                                                       
-     KEY `INDX_CATISSUE_SPECIMEN_CONC` (`CONCENTRATION`),                                                                                             
-     KEY `INDX_CATISSUE_SPECIMEN_AVQTY` (`AVAILABLE_QUANTITY`),                                                                                       
-     KEY `INDX_CATISSUE_SPECIMEN_QTY` (`QUANTITY`),                                                                                                   
      CONSTRAINT `FK1674810432B31EAB` FOREIGN KEY (`STORAGE_CONTAINER_IDENTIFIER`) REFERENCES `catissue_storage_container` (`IDENTIFIER`),             
      CONSTRAINT `FK1674810433BF33C5` FOREIGN KEY (`SPECIMEN_COLLECTION_GROUP_ID`) REFERENCES `catissue_abs_speci_coll_group` (`IDENTIFIER`),  
      CONSTRAINT `FK1674810456906F39` FOREIGN KEY (`SPECIMEN_CHARACTERISTICS_ID`) REFERENCES `catissue_specimen_char` (`IDENTIFIER`),                  
