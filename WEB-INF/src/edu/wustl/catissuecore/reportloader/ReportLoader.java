@@ -147,7 +147,7 @@ public class ReportLoader
 		Logger.out.info("Creating New Specimen Collection Group");
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		scg.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
+		scg.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
 		scg.setClinicalDiagnosis(Constants.NOT_SPECIFIED);
 		scg.setClinicalStatus(Constants.NOT_SPECIFIED);
 		scg.setSpecimenCollectionSite(site); 
@@ -278,7 +278,11 @@ public class ReportLoader
 			Logger.out.info("inside"+this.scg.getIdentifiedSurgicalPathologyReport().getId());
 			
 			IdentifiedSurgicalPathologyReport existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(IdentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, this.scg.getIdentifiedSurgicalPathologyReport().getId());
-		
+			if(this.scg.getDeIdentifiedSurgicalPathologyReport()!=null)
+			{
+				DeidentifiedSurgicalPathologyReport existingDeidReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, this.scg.getDeIdentifiedSurgicalPathologyReport().getId());
+				existingReport.setDeIdentifiedSurgicalPathologyReport(existingDeidReport);
+			}
 			existingReport.setSpecimenCollectionGroup(null);
 			this.scg.setIdentifiedSurgicalPathologyReport(null);
 			this.scg.setDeIdentifiedSurgicalPathologyReport(null);
