@@ -330,7 +330,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	
 	public String getObjectId() 
 	{
-		return this.getClass().getName()+ "_" + this.getId();
+		return SurgicalPathologyReport.class.getName()+ "_" + this.getId();
 	}
 	
 }
