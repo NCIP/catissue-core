@@ -729,7 +729,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		 * Bug ID: 4926
 		 * Description: Combination of collection protocol id and protocol participant id should be unique. 
 		 */
-		if(!(collectionProtocolRegistration.getProtocolParticipantIdentifier().equals("")) && !(collectionProtocolRegistration.getProtocolParticipantIdentifier()==null))
+		if(!(collectionProtocolRegistration.getProtocolParticipantIdentifier()==null) && !(collectionProtocolRegistration.getProtocolParticipantIdentifier().equals("")))
 		{	//	    		 build query for collectionProtocol_id AND protocol_participant_id
 			selectColumns = new String[]{"collectionProtocol.id", "protocolParticipantIdentifier"};
 			whereColumnName = new String[]{"collectionProtocol.id", "protocolParticipantIdentifier"};
