@@ -247,13 +247,14 @@ public class StorageContainerUtil
 	public static LinkedList<Integer> getFirstAvailablePositionsInContainer(
 			StorageContainer storageContainer, Map continersMap, HashSet<String> allocatedPositions) throws DAOException
 	{
+		//kalpana bug#6001
 		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
 		TreeMap storageContainerMap = (TreeMap) continersMap.get(storageContainerId);
 
 		Integer xpos= null;
 		Integer ypos=null;
 		String containerName = storageContainer.getName();
-		if (storageContainerMap.isEmpty())
+		if (storageContainerMap == null || storageContainerMap.isEmpty())
 		{
 			throw new DAOException("Storagecontainer information not found!");
 		}
@@ -261,21 +262,28 @@ public class StorageContainerUtil
 		Iterator containerPosIterator = storageContainerMap.keySet().iterator();
 		while (containerPosIterator.hasNext())
 		{
-			NameValueBean nvb = (NameValueBean) containerPosIterator.next();
-			xpos = new Integer(nvb.getValue());	
-			nvb =(NameValueBean) (((List) storageContainerMap.get(nvb)).get(0));
-			ypos= new Integer(nvb.getValue());
-			String containerValue = containerName +":"+ xpos+" ," +ypos;
 			
-			if (!allocatedPositions.contains(containerValue))
+			NameValueBean nvb = (NameValueBean) containerPosIterator.next();
+			xpos = new Integer(nvb.getValue());
+			List yposValues = (List) storageContainerMap.get(nvb);
+			Iterator yposIterator = yposValues.iterator();
+			
+			while(yposIterator.hasNext())
 			{
-				break;
-			}
+				nvb =(NameValueBean) yposIterator.next();
+				ypos= new Integer(nvb.getValue());
+				String containerValue = containerName +":"+ xpos+" ," +ypos;
+				
+				if (!allocatedPositions.contains(containerValue))
+				{
+					LinkedList<Integer> positions = new LinkedList<Integer>();
+					positions.add(xpos);
+					positions.add(ypos);
+					return positions;
+				}
+			}			
 		}
-		LinkedList<Integer> positions = new LinkedList<Integer>();
-		positions.add(xpos);
-		positions.add(ypos);
-		return positions;
+		throw new DAOException("Either Storagecontainer is full! or it cannot accomodate all the specimens.");
 	}
 	public static synchronized void updateStoragePositions(Map containerMap, StorageContainer currentContainer, StorageContainer oldContainer)
 	{
