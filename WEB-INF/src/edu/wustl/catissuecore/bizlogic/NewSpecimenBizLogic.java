@@ -1598,6 +1598,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
 			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
+			
+			//kalpana : check closed site
+			storageContainerBizLogic.checkClosedSite(dao, storageContainerObj.getId(), "Container Site");
 
 			if (specimen.getPositionDimensionOne() == null || specimen.getPositionDimensionTwo() == null)
 			{
@@ -1611,16 +1614,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 			}
 
-			String storageValue = storageContainerObj.getName() + ":" + specimen.getPositionDimensionOne() + " ,"
-					+ specimen.getPositionDimensionTwo();
-
-			if (storageContainerIds.contains(storageValue))
+			//kalpana: Bug#6001
+			String storageValue = storageContainerObj.getName()+":"+specimen.getPositionDimensionOne()+" ,"+ 
+			specimen.getPositionDimensionTwo();
+			
+			if (!storageContainerIds.contains(storageValue))
 			{
-				throw new DAOException(",Storage Location:" + storageValue + " has been assignes to two or more specimens");
-			}
-			else
-			{
-				storageContainerIds.add(storageValue);
+					storageContainerIds.add(storageValue);
 			}
 
 			// --- check for all validations on the storage container.
@@ -1662,6 +1662,26 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Specimen specimen = (Specimen) iterator.next();
 			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, partOfMultipleSpecimen);
 
+		}
+	}
+	
+	//kalpana Bug#6001
+	private void allocatePositionForChildrenSpecimen(Collection specimenCollection)
+	{
+		Iterator iterator = specimenCollection.iterator();
+		while(iterator.hasNext())
+		{
+			Specimen specimen = (Specimen) iterator.next();
+			if (specimen.getPositionDimensionOne() != null || 
+					specimen.getPositionDimensionTwo() != null)
+			{
+				
+				String storageValue = specimen.getStorageContainer().getName()+":"+specimen.getPositionDimensionOne()+" ,"+ 
+				specimen.getPositionDimensionTwo();				
+				storageContainerIds.add(storageValue);
+				
+			}
+			
 		}
 	}
 
@@ -2765,7 +2785,28 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 
 			dao.openSession(sessionDataBean);
-
+			
+			//kalpana bug#6001
+			while (iterator.hasNext())
+			{
+				Specimen newSpecimen = (Specimen) iterator.next();
+				if (newSpecimen.getPositionDimensionOne() != null || 
+						newSpecimen.getPositionDimensionTwo() != null)
+				{
+					
+					String storageValue = newSpecimen.getStorageContainer().getName()+":"+newSpecimen.getPositionDimensionOne()+" ,"+ 
+					newSpecimen.getPositionDimensionTwo();				
+					storageContainerIds.add(storageValue);
+					
+				}
+				if(newSpecimen.getChildrenSpecimen()!=null)
+				{
+					allocatePositionForChildrenSpecimen(newSpecimen.getChildrenSpecimen());
+				}
+				
+			}
+			
+			iterator = newSpecimenCollection.iterator();
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
