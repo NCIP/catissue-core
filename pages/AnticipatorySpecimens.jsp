@@ -30,6 +30,43 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 %>
 	<script language="JavaScript">
 		window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
+
+		
+		//kalpana bug#6001:Reviewer-Vaishali
+		//Apply storage container name at first location to all.
+		
+		function ApplyToAll(object,type)
+		{
+			
+			if(object.checked )
+			{
+				var fields = document.getElementsByTagName("input");
+				var i =0;
+				var text="";
+				var valueToSet = "";
+				var isFirstField = true;
+				
+				for (i=0; i<fields.length;i++)
+				{
+					text = fields[i].name;
+					if(text.indexOf(type)>=0 && text.indexOf(".selectedContainerName")>=0)
+					{
+						if(isFirstField)
+						{
+							valueToSet = fields[i].value;
+							isFirstField = false;
+						}
+						if(fields[i].value=="")
+						{
+							fields[i].value = valueToSet;
+						}
+				
+					}
+				}
+				
+			}
+		}
+
 		function saveCollectionProtocol()
 		{
 				var action ="SubmitSpecimenCollectionProtocol.do?action=collectionprotocol";
@@ -191,7 +228,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.subType"/></th>
 						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Quantity"/></th>
 						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Concentration"/></th>
-						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Location"/>
+							<input id="chkSpecimen" type="checkbox" onClick="ApplyToAll(this,'specimen')"/> Apply First to All
+						</th>
 						<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 							<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Collected"/></th>
 						</logic:equal>
@@ -412,7 +451,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.subType"/></th>
 						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Quantity"/></th>
 						<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Concentration"/></th>
-						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/></th>
+						<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/>
+							<input id="chkAliquot" type="checkbox" onClick="ApplyToAll(this,'aliquot')"/> Apply First to All
+						</th>
 						<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 							<th class="formSerialNumberLabelForTable" scope="col">
 							<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
@@ -596,7 +637,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="specimen.subType"/></th>
 				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Quantity"/></th>
 				<th class="formSerialNumberLabelForTable" scope="col"><bean:message key="anticipatorySpecimen.Concentration"/></th>
-				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/></th>
+				<th class="formSerialNumberLabelForTable" scope="col"> <bean:message key="anticipatorySpecimen.Location"/>
+					<input id="chkDrived" type="checkbox" onClick="ApplyToAll(this,'derived')"/> Apply First to All
+				</th>
 				<logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
 					<th class="formSerialNumberLabelForTable" scope="col">
 					<input type="checkbox" name="chkAllDerived" onclick="ChangeCheckBoxStatus('derived',this)"/>
