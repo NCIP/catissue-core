@@ -37689,11 +37689,397 @@
             </hashTree>
           </hashTree>
         </hashTree>
-        <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Misc" enabled="true">
+        <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Misc Testcases" enabled="true">
           <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">true</boolProp>
         </LoopController>
         <hashTree>
+          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Close Storage Container" enabled="true">
+            <stringProp name="LoopController.loops">1</stringProp>
+            <boolProp name="LoopController.continue_forever">true</boolProp>
+          </LoopController>
+          <hashTree>
+            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Close Storage Container: Object: Query Page" enabled="true">
+              <stringProp name="HTTPSampler.path">/catissuecore/SimpleQueryInterface.do</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <stringProp name="HTTPSampler.protocol">http</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">pageOfStorageContainer</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">pageOf</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">pageOfStorageContainer</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">StorageContainer</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">aliasName</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">StorageContainer</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">7</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">menuSelected</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">7</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.port">18080</stringProp>
+              <stringProp name="HTTPSampler.mimetype"></stringProp>
+              <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+              <stringProp name="HTTPSampler.monitor">false</stringProp>
+              <stringProp name="HTTPSampler.domain">localhost</stringProp>
+              <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            </HTTPSampler>
+            <hashTree/>
+            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Close Storage Container: Search Storage Container" enabled="true">
+              <stringProp name="HTTPSampler.path">/catissuecore/SimpleSearch.do</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <stringProp name="HTTPSampler.protocol">http</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">StorageContainer</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">aliasName</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">StorageContainer</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">7</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">menuSelected</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">7</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.name">objectChanged</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">objectChanged</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">counter</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">counter</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">1</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">pageOfStorageContainer</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">pageOf</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">pageOfStorageContainer</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">false</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">andOrOperation</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">andOrOperation</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">false</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">StorageContainer</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_DataElement_table)</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_table%29</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">StorageContainer</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">Container.NAME.varchar</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_DataElement_field)</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_field%29</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">Container.NAME.varchar</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">Starts With</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_Operator_operator)</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_Operator_operator%29</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">Starts+With</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.name">showCalendar(SimpleConditionsNode:1_showCalendar)</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">showCalendar%28SimpleConditionsNode%3A1_showCalendar%29</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_value)</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_value%29</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.port">18080</stringProp>
+              <stringProp name="HTTPSampler.mimetype"></stringProp>
+              <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+              <stringProp name="HTTPSampler.monitor">false</stringProp>
+              <stringProp name="HTTPSampler.domain">localhost</stringProp>
+              <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            </HTTPSampler>
+            <hashTree/>
+            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Close Storage Container :Edit Storage Container" enabled="true">
+              <stringProp name="HTTPSampler.path">/catissuecore/StorageContainerEdit.do</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <stringProp name="HTTPSampler.protocol">http</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">edit</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">operation</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">edit</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.name">submittedFor</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.name">radioValue</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">radioValue</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.name">containerId</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">containerId</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">id</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">id</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">1</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">ST</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">typeName</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">typeName</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">ST</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">site</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">siteName</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">siteName</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">site</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.name">positionInParentContainer</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">positionInParentContainer</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.name">siteForParentContainer</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">siteForParentContainer</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.name">onSubmit</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">onSubmit</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">3</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">typeId</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">typeId</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">3</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">checkedButton</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">checkedButton</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">1</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">siteId</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">siteId</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">1</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">UpdatedStorageContainer01</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">containerName</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">containerName</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">UpdatedStorageContainer01</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.name">barcode</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">barcode</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">15.0</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">defaultTemperature</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">defaultTemperature</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">15.0</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">Closed</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">activityStatus</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">activityStatus</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">Active</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">-1</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">collectionIds</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">collectionIds</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">-1</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">Specimen</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">specimenOrArrayType</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">specimenOrArrayType</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">Specimen</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">holdsStorageTypeIds</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">holdsStorageTypeIds</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">1</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">-1</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">holdsSpecimenClassTypes</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">holdsSpecimenClassTypes</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">-1</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">10</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">oneDimensionCapacity</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">oneDimensionCapacity</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">10</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="HTTPArgument">
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <stringProp name="Argument.value">10</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                    <stringProp name="Argument.name">twoDimensionCapacity</stringProp>
+                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                    <stringProp name="HTTPArgument.encoded_name">twoDimensionCapacity</stringProp>
+                    <stringProp name="HTTPArgument.encoded_value">10</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.port">18080</stringProp>
+              <stringProp name="HTTPSampler.mimetype"></stringProp>
+              <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+              <stringProp name="HTTPSampler.monitor">false</stringProp>
+              <stringProp name="HTTPSampler.domain">localhost</stringProp>
+              <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            </HTTPSampler>
+            <hashTree>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="-839156730">Storage Container successfully updated</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
+                <intProp name="Assertion.test_type">2</intProp>
+              </ResponseAssertion>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
           <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Disable Participant with specimens" enabled="true">
             <stringProp name="LoopController.loops">1</stringProp>
             <boolProp name="LoopController.continue_forever">true</boolProp>
@@ -42580,392 +42966,6 @@
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
-            </hashTree>
-          </hashTree>
-          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Close Storage Container" enabled="true">
-            <stringProp name="LoopController.loops">1</stringProp>
-            <boolProp name="LoopController.continue_forever">true</boolProp>
-          </LoopController>
-          <hashTree>
-            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Close Storage Container: Object: Query Page" enabled="true">
-              <stringProp name="HTTPSampler.path">/catissuecore/SimpleQueryInterface.do</stringProp>
-              <stringProp name="HTTPSampler.method">GET</stringProp>
-              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-              <stringProp name="HTTPSampler.protocol">http</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-              <stringProp name="HTTPSampler.port">18080</stringProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">pageOfStorageContainer</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">pageOf</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">pageOfStorageContainer</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">StorageContainer</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">aliasName</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">StorageContainer</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">7</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">menuSelected</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">7</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.mimetype"></stringProp>
-              <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
-              <stringProp name="HTTPSampler.monitor">false</stringProp>
-              <stringProp name="HTTPSampler.domain">localhost</stringProp>
-              <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            </HTTPSampler>
-            <hashTree/>
-            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Close Storage Container: Search Storage Container" enabled="true">
-              <stringProp name="HTTPSampler.path">/catissuecore/SimpleSearch.do</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-              <stringProp name="HTTPSampler.protocol">http</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-              <stringProp name="HTTPSampler.port">18080</stringProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">StorageContainer</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">aliasName</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">aliasName</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">StorageContainer</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">7</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">menuSelected</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">7</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.value"></stringProp>
-                    <stringProp name="Argument.name">objectChanged</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">objectChanged</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">1</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">counter</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">counter</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">1</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">pageOfStorageContainer</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">pageOf</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">pageOfStorageContainer</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">false</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">andOrOperation</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">andOrOperation</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">false</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">StorageContainer</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_DataElement_table)</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_table%29</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">StorageContainer</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">Container.NAME.varchar</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_DataElement_field)</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_DataElement_field%29</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">Container.NAME.varchar</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">Starts With</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_Operator_operator)</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_Operator_operator%29</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">Starts+With</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.value"></stringProp>
-                    <stringProp name="Argument.name">showCalendar(SimpleConditionsNode:1_showCalendar)</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">showCalendar%28SimpleConditionsNode%3A1_showCalendar%29</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.value"></stringProp>
-                    <stringProp name="Argument.name">value(SimpleConditionsNode:1_Condition_value)</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">value%28SimpleConditionsNode%3A1_Condition_value%29</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.mimetype"></stringProp>
-              <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
-              <stringProp name="HTTPSampler.monitor">false</stringProp>
-              <stringProp name="HTTPSampler.domain">localhost</stringProp>
-              <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            </HTTPSampler>
-            <hashTree/>
-            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Close Storage Container :Edit Storage Container" enabled="true">
-              <stringProp name="HTTPSampler.path">/catissuecore/StorageContainerEdit.do</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-              <stringProp name="HTTPSampler.protocol">http</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-              <stringProp name="HTTPSampler.port">18080</stringProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">edit</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">operation</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">edit</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.value"></stringProp>
-                    <stringProp name="Argument.name">submittedFor</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.value"></stringProp>
-                    <stringProp name="Argument.name">radioValue</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">radioValue</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.value"></stringProp>
-                    <stringProp name="Argument.name">containerId</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">containerId</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">1</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">id</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">id</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">1</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">ST</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">typeName</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">typeName</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">ST</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">site</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">siteName</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">siteName</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">site</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.value"></stringProp>
-                    <stringProp name="Argument.name">positionInParentContainer</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">positionInParentContainer</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.value"></stringProp>
-                    <stringProp name="Argument.name">siteForParentContainer</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">siteForParentContainer</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.value"></stringProp>
-                    <stringProp name="Argument.name">onSubmit</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">onSubmit</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">3</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">typeId</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">typeId</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">3</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">1</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">checkedButton</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">checkedButton</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">1</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">1</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">siteId</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">siteId</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">1</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">UpdatedStorageContainer01</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">containerName</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">containerName</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">UpdatedStorageContainer01</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.value"></stringProp>
-                    <stringProp name="Argument.name">barcode</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">barcode</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value"></stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">15.0</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">defaultTemperature</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">defaultTemperature</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">15.0</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">Closed</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">activityStatus</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">activityStatus</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">Active</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">-1</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">collectionIds</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">collectionIds</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">-1</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">Specimen</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">specimenOrArrayType</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">specimenOrArrayType</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">Specimen</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">1</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">holdsStorageTypeIds</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">holdsStorageTypeIds</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">1</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">-1</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">holdsSpecimenClassTypes</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">holdsSpecimenClassTypes</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">-1</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">10</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">oneDimensionCapacity</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">oneDimensionCapacity</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">10</stringProp>
-                  </elementProp>
-                  <elementProp name="" elementType="HTTPArgument">
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <stringProp name="Argument.value">10</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">twoDimensionCapacity</stringProp>
-                    <stringProp name="HTTPArgument.encoded_name">twoDimensionCapacity</stringProp>
-                    <stringProp name="HTTPArgument.always_encode">true</stringProp>
-                    <stringProp name="HTTPArgument.encoded_value">10</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.mimetype"></stringProp>
-              <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
-              <stringProp name="HTTPSampler.monitor">false</stringProp>
-              <stringProp name="HTTPSampler.domain">localhost</stringProp>
-              <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            </HTTPSampler>
-            <hashTree>
-              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                  <stringProp name="-839156730">Storage Container successfully updated</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
-                <intProp name="Assertion.test_type">2</intProp>
-              </ResponseAssertion>
-              <hashTree/>
             </hashTree>
           </hashTree>
           <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Close Distribution protocol" enabled="true">
