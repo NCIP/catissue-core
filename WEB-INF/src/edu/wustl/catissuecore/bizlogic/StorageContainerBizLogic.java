@@ -150,10 +150,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						throw new DAOException("Parent Container is not valid for this container type");
 					}
 					container.setParent(pc);
-
-					// check for closed ParentSite
-					checkStatus(dao, pc.getSite(), "Parent Site");
-
+			
 					container.setSite(pc.getSite());
 
 					posOneCapacity = pc.getCapacity().getOneDimensionCapacity().intValue();
@@ -259,6 +256,32 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	}
 
+	
+	
+	/**
+	 * Name : kalpana thakur
+	 * Reviewer Name : Vaishali
+	 * Bug ID: 4922
+	 * Description:Storage container will not be added to closed site :check for closed site
+    */
+	public List getSiteList(String sourceObjectName, String[] displayNameFields, String valueField,String activityStatusArr[] ,boolean isToExcludeDisabled) throws DAOException
+	{
+		String[] whereColumnName = null;
+		String[] whereColumnCondition = null;
+		String joinCondition = null;
+		String separatorBetweenFields = ", ";
+
+		whereColumnName = new String[]{"activityStatus"};
+		whereColumnCondition = new String[]{"not in"};
+		//whereColumnCondition = new String[]{"in"};
+		Object[] whereColumnValue = {activityStatusArr};
+		
+
+		return getList(sourceObjectName, displayNameFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition,
+						separatorBetweenFields,isToExcludeDisabled);
+		
+	}
+	
 	/**
 	 * this function checks weather parent of the container is valid or not 
 	 * according to restriction provided for the containers
@@ -376,7 +399,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				Site site=getSite(dao,container.getParent().getId());
 				
 				//check for closed Site
-				checkStatus(dao, site, "Parent Site");
+				checkStatus(dao, site, "Parent Container Site");
 
 				container.setSite(site);		
 				/** -- patch ends here -- */
@@ -497,16 +520,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 		}
 
-		//Check for closed Site
-		if ((container.getSite() != null) && (oldContainer.getSite() != null))
+		/**
+		 * Name : kalpana thakur
+		 * Reviewer Name : Vaishali
+		 * Bug ID: 4922
+		 * Description:Storage container will not be added to closed site :check for closed site
+	    */
+		if(container.getId()!=null)
 		{
-			if ((container.getSite().getId() != null) && (oldContainer.getSite().getId() != null))
-			{
-				if ((!container.getSite().getId().equals(oldContainer.getSite().getId())))
-				{
-					checkStatus(dao, container.getSite(), "Site");
-				}
-			}
+			checkClosedSite(dao, container.getId(), "Container site");
 		}
 		setSiteForSubContainers(container, container.getSite(),dao);
 
@@ -967,6 +989,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 // Commenting dao.retrive() call as retrived object is not realy required for further processing -Prafull			
 			Site siteObj = (Site)dao.retrieve(Site.class.getName(), container.getSite().getId());
+			siteObj=(Site)HibernateMetaData.getProxyObjectImpl(siteObj);
 			if (siteObj != null)
 			{
 				
@@ -1983,7 +2006,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 			// check for closed Container
 			checkStatus(dao, pc, "Storage Container");
+			
+			/**
+			 * Name : kalpana thakur
+			 * Reviewer Name : Vaishali
+			 * Bug ID: 4922
+			 * Description:Storage container will not be added to closed site :check for closed site
+		    */
+			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					Constants.STORAGE_CONTAINER_FORM_ID);
 
+			storageContainerBizLogic.checkClosedSite(dao, pc.getId(), "Container Site");
+			
 			// check for valid position
 			boolean isValidPosition = validatePosition(pc, positionOne, positionTwo);
 			Logger.out.debug("isValidPosition : " + isValidPosition);
@@ -2246,10 +2280,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
 			}
 		}
-
+		
+		
+		
 		return true;
 	}
-
+	
 	// TODO Write the proper business logic to return an appropriate list of containers.
 	public List getStorageContainerList() throws DAOException
 	{
@@ -3127,6 +3163,27 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			return((Site)list.get(0));
 		}
 		return null;
+	}
+	/**
+	 * Name : kalpana thakur
+	 * Reviewer Name : Vaishali
+	 * Bug ID: 4922
+	 * Description:Storage container will not be added to closed site :check for closed site
+    */
+	public void checkClosedSite(DAO dao,Long containerId,String errMessage) throws DAOException
+	{
+		
+		Site site=getSite(dao, containerId);
+	
+		//check for closed Site
+		if(site!=null)
+		{
+			if (Constants.ACTIVITY_STATUS_CLOSED.equals(site.getActivityStatus()))
+			{
+				throw new DAOException(errMessage + " " + ApplicationProperties.getValue("error.object.closed"));
+			}
+		}
+		
 	}
 	
 	/**

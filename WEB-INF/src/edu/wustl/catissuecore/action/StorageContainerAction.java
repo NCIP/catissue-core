@@ -331,7 +331,15 @@ public class StorageContainerAction extends SecureAction
 		//Populating the Site Array
 		String[] siteDisplayField = {"name"};
 		String valueField = "id";
-		List list = bizLogic.getList(Site.class.getName(), siteDisplayField, valueField, true);
+		
+		/**
+		 * Name : kalpana thakur
+		 * Reviewer Name : Vaishali
+		 * Bug ID: 4922
+		 * Description: get the list of site with activity status "Active"  
+	    */
+		String[] activityStatusArray = {Constants.ACTIVITY_STATUS_DISABLED,Constants.ACTIVITY_STATUS_CLOSED};
+		List list = bizLogic.getSiteList(Site.class.getName(), siteDisplayField, valueField,activityStatusArray, false);
 		request.setAttribute(Constants.SITELIST, list);
 		//get the Specimen class and type from the cde
 		List specimenClassTypeList = Utility.getSpecimenClassTypeListWithAny();

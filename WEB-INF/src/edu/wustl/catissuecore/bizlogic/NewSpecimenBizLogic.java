@@ -1599,9 +1599,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
 			
-			//kalpana : check closed site
-			//storageContainerBizLogic.checkClosedSite(dao, storageContainerObj.getId(), "Container Site");
-
 			if (specimen.getPositionDimensionOne() == null || specimen.getPositionDimensionTwo() == null)
 			{
 
