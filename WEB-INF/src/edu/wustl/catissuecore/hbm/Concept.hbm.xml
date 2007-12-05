@@ -18,7 +18,7 @@
             length="30"
         >
             <generator class="native">
-                <param name="sequence">CATISSUE_CONCEPRT_SEQ</param>
+                <param name="sequence">CATISSUE_CONCEPT_SEQ</param>
             </generator>
         </id>
 
