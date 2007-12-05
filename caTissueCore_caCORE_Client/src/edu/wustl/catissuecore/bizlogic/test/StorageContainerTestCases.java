@@ -1,11 +1,23 @@
 package edu.wustl.catissuecore.bizlogic.test;
 
+import java.text.ParseException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -106,4 +118,49 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			 assertFalse("Could not disable Storage Container", true);
 		 }
 	}
+	
+	public void testAddStorageContainerToClosedSite()
+	{
+	try{
+		Site site= BaseTestCaseUtility.initSite(); 	
+		System.out.println(site);
+		try{
+			site = (Site) appService.createObject(site); 
+		}catch(Exception e){
+			Logger.out.error(e.getMessage(),e);	
+			e.printStackTrace();	
+			assertFalse("Failed to create site ", true);
+		}
+		
+		site.setActivityStatus("Closed");
+		
+		try{
+			site =(Site)appService.updateObject(site);
+		 }catch(Exception e){
+			Logger.out.error(e.getMessage(),e);	
+			e.printStackTrace();	
+			assertFalse("Failed to close the site ", true);
+		 }
+		
+		StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer(); 
+		System.out.println(storageContainer);
+		storageContainer.setSite(site);
+		
+		try{
+			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			assertFalse("Storage Container successfully created", true);
+	
+		}catch(Exception e){
+			Logger.out.error(e.getMessage(),e);	
+			e.printStackTrace();	
+			assertTrue("Could not add Storage Container to close site ", true);
+		 }
+			
+	}catch(Exception e){
+		Logger.out.error(e.getMessage(),e);	
+		e.printStackTrace();	
+		assertFalse("Test Failed", true);
+	}
+  }	
+
 }
