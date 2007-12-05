@@ -72,7 +72,7 @@ public class BaseTestCaseUtility {
 	{
 	    CollectionProtocol collectionProtocol = new CollectionProtocol();
 	    
-	    Collection consentTierColl = new HashSet();
+	    Collection consentTierColl = new LinkedHashSet();
 		ConsentTier c1 = new ConsentTier();
 		c1.setStatement("Consent for aids research");
 		consentTierColl.add(c1);
