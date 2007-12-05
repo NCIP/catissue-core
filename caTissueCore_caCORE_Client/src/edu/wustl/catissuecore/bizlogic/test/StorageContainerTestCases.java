@@ -162,5 +162,146 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		assertFalse("Test Failed", true);
 	}
   }	
+	public void testAddTissueSpecimenInStorageContainerWithClosedSite()
+	{ 
+		Site site = BaseTestCaseUtility.initSite();
+		try{
+			site = (Site) appService.createObject(site);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertFalse("Failed to create site", true);
+		}		
+		
+			
+		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
+		try{
+			cp = (CollectionProtocol) appService.createObject(cp);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to create collection protocol", true);
+		}
+		StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
+		storageContainer.setSite(site);
+		Collection cpCollection = new HashSet();
+		cpCollection.add(cp);
+		storageContainer.setCollectionProtocolCollection(cpCollection);
+		try{			
+			storageContainer = (StorageContainer) appService.createObject(storageContainer); 			
+		}catch(Exception e){
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertFalse("Failed create Storage Container", true);
+		}
+		
+		Participant participant = BaseTestCaseUtility.initParticipant();
+		
+		try{
+			participant = (Participant) appService.createObject(participant);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to create participant", true);
+		}
+		System.out.println("Participant:"+participant.getFirstName());
+		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+		collectionProtocolRegistration.setCollectionProtocol(cp);
+		collectionProtocolRegistration.setParticipant(participant);
+		collectionProtocolRegistration.setProtocolParticipantIdentifier("");
+		collectionProtocolRegistration.setActivityStatus("Active");
+		try
+		{
+			collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
+					Utility.datePattern("08/15/1975")));
+			collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+			
+		}
+		catch (ParseException e)
+		{			
+			e.printStackTrace();
+			assertFalse("Failed to add registration date", true);
+		}
+		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+		User user = (User)TestCaseUtility.getObjectMap(User.class);
+		collectionProtocolRegistration.setConsentWitness(user);
+		
+		Collection consentTierResponseCollection = new HashSet();
+		Collection consentTierCollection = cp.getConsentTierCollection();
+		
+		Iterator ConsentierItr = consentTierCollection.iterator();
+		Iterator ConsentierResponseItr = consentTierResponseCollection.iterator();
+		
+		while(ConsentierItr.hasNext())
+		{
+			ConsentTier consentTier = (ConsentTier)ConsentierItr.next();
+			ConsentTierResponse consentResponse = new ConsentTierResponse();
+			consentResponse.setResponse("Yes");
+			consentResponse.setConsentTier(consentTier);		
+		}
+	
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+	
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+		System.out.println("Creating CPR");
+		try{
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to register participant", true);
+		}
+		
+		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+		scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
+		scg.setSpecimenCollectionSite(site);
+		scg.setName("New SCG"+UniqueKeyGeneratorUtil.getUniqueKey());		    
+		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
+		System.out.println("Creating SCG");
+		
+		
+		try{
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to create SCG", true);
+		}
+		
+		site.setActivityStatus("Closed");
+		
+		try{
+			site = (Site) appService.updateObject(site);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertFalse("Could not update site", true);
+		}
+		
+		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+		ts.setStorageContainer(storageContainer);
+		ts.setPositionDimensionOne(new Integer(1));
+		ts.setPositionDimensionTwo(new Integer(2));
+		ts.setSpecimenCollectionGroup(scg);
+		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
+		System.out.println("Befor creating Tissue Specimen");
+		
+		try{
+			ts = (TissueSpecimen) appService.createObject(ts);
+			System.out.println("TissueSpec:"+ts.getLabel());
+			assertFalse("Successfully created specimen", true);
+		}
+		catch(Exception e){
+			assertTrue("Failed to add Specimen in container with closed site", true);
+		}	
+	
+	
+	}
 
 }
