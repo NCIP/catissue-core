@@ -228,7 +228,7 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		sprObj.setSpecimenEventParametersCollection(specimenEventParametersCollection);
 	}
 	
-	public void testVerifyConsentResponseAndConsentStatusAtSCG()
+	/*public void testVerifyConsentResponseAndConsentStatusAtSCG()
 	{	
         System.out.println("Inside ConsentsVerificationTestCases:");
         CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
@@ -777,7 +777,7 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
            	assertFalse("Failed to update SCG", true);
 		}	
 		
-	}	
+	}	*/
 	
 	
 }
