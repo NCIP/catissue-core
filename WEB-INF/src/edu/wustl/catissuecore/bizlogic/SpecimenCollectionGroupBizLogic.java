@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -1004,9 +1005,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 */
 	private void addSpecimenNodesToSCGTree(StringBuffer xmlString, Long scgId) throws DAOException, ClassNotFoundException
 	{
+		/**
+		 * kalpana
+		 * Bug #5906
+		 * Reviewer : vaishali
+		 * To display the children specimens of the specimen in acending order.   
+		 * changed to order by specimen label.
+		 */
 		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.type,sp.collectionStatus	from "
 			+ Specimen.class.getName()
-			+ " as sp where sp.specimenCollectionGroup.id = "+scgId +" and sp.activityStatus <> '"+Constants.ACTIVITY_STATUS_DISABLED+"' order by sp.id";
+			+ " as sp where sp.specimenCollectionGroup.id = "+scgId +" and sp.activityStatus <> '"+Constants.ACTIVITY_STATUS_DISABLED+"' order by sp.label";
 		List specimenList = executeQuery(hql);
 		
 	    //here we have two Lists to separate out Specimens and child Specimens
@@ -1039,22 +1047,54 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			}
 		}
 		
-		//Now iterate over childrenList to place children specimens just after their parent specimen  
+				
+		/**
+		 * kalpana
+		 * Bug #5906
+		 * Reviewer : vaishali
+		 * To display the children specimens of the specimen in acending order.   
+		 * Map hold parent specimen id and the count of all the childern under that parent specimen.
+		 */
+				
+		Map countOfChildSpecimenMap = new HashMap<Long,Integer>(); 
+		Integer countOfChildSpecimen=1;
 		for(int i=0;i<childrenList.size();i++)
 		{
 			Object[] obj = (Object[])childrenList.get(i);
 			Long parentSpecimenId = (Long)obj[2];
 			
+			/*
+			 * fetching the count of children specimen if it's parent specimen Id is there in the Map
+			 * else setting it to 1.
+			 */
+			
+			if(countOfChildSpecimenMap.containsKey(parentSpecimenId))
+			{
+				countOfChildSpecimen=(Integer)countOfChildSpecimenMap.get(parentSpecimenId);
+			}
+			else
+			{
+				countOfChildSpecimen=1;
+			}
 			
 			for(int j=0; j< finalList.size(); j++)
 			{
 				Object[] obj1 = (Object[])finalList.get(j);
 				Long spId = (Long)obj1[0];
+				Long parentOfParentspId = (Long)obj1[2];
 				
 				//This if statement is not working.......convert Long objects to long values 
 				if(parentSpecimenId.longValue() == spId.longValue())
 				{
-					finalList.add(j+1, childrenList.get(i));
+							
+					finalList.add(j+countOfChildSpecimen, childrenList.get(i));
+					countOfChildSpecimen++;
+					countOfChildSpecimenMap.put(parentSpecimenId, countOfChildSpecimen);
+					
+					/* kalpana
+					 * Update the children specimen count of all the parent specimens accept the immediate parent
+					 */
+					updateChildSpecimenCount(finalList,parentOfParentspId,countOfChildSpecimenMap,countOfChildSpecimen);
 					break;
 					//Here break is important ....once parent is found
 				}
@@ -1225,6 +1265,40 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		     	}
 		    }
 	}
+	
+	/**
+	 * kalpana
+	 * Bug #5906
+	 * Reviewer : vaishali
+	 * Update the children specimen count of all the parent specimens accept the immediate parent
+	 */
+	
+	private void updateChildSpecimenCount(List finalList,Long spId,Map countOfChildSpecimenMap,Integer countOfChildSpecimen)
+	{
+		
+		for(int j=0; j< finalList.size(); j++)
+		{
+			Object[] obj1 = (Object[])finalList.get(j);
+			Long specimenId = (Long)obj1[0];
+			Long parentSpecimenId=(Long)obj1[2];
+			
+			if(specimenId!=null && specimenId.equals(spId))
+			{
+				if(countOfChildSpecimenMap.containsKey(specimenId))
+				{
+					Integer newChildCount =(Integer)countOfChildSpecimenMap.get(specimenId);
+					newChildCount=newChildCount+1;
+					countOfChildSpecimenMap.put(specimenId, newChildCount);
+					
+					updateChildSpecimenCount(finalList,parentSpecimenId,countOfChildSpecimenMap,countOfChildSpecimen);
+					return;
+				}
+			}
+			
+		}
+			
+	}
+	
 	/**
 	 * Patch Id : FutureSCG_13
 	 * Description : method to executeQuery
