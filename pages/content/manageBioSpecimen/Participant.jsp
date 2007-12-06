@@ -623,9 +623,13 @@ tr#hiddenCombo
 	%>
 	<script language="javascript">
 	//Modified for flex by Baljeet
-	 
-	 top.frames["cpAndParticipantView"].refreshCpParticipants();
-     refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','');
+	//Modified by Falguni Sachde
+	//Bug:6072 In case of LHS menu selection this property will not available.	
+	 if(top.frames["cpAndParticipantView"] != undefined)
+	 {
+	 	top.frames["cpAndParticipantView"].refreshCpParticipants();
+	     refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','');
+	 }
 	</script>
 
 	<%}
