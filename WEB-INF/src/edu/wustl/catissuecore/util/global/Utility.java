@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 
+import edu.common.dynamicextensions.entitymanager.EntityManagerConstantsInterface;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -1123,5 +1124,75 @@ public class Utility extends edu.wustl.common.util.Utility
 		}
 		return false;
 	}
+	
+	/**
+	 *  Adds the attribute values in the list in sorted order and returns the list containing the attribute 
+	 *  values in proper order
+	 * @param dataType - data type of the attribute value
+	 * @param value1 - first attribute value
+	 * @param value2 - second attribute value
+	 * @return List containing value1 and valu2 in sorted order
+	 */
+	public static ArrayList<String> getAttributeValuesInProperOrder(String dataType, String value1, String value2)
+	{
+		ArrayList<String> attributeValues = new ArrayList<String>();
+		
+		String v1 = value1;  
+		String v2 = value2;
+		if (dataType.equalsIgnoreCase(EntityManagerConstantsInterface.DATE_ATTRIBUTE_TYPE))
+		{
+			if (getYear(value1) > getYear(value2))
+			{
+				v1 = value2;
+				v2 = value1;
+				
+			}
+			else
+			{
+				if (getMonth(value1) > getMonth(value2))
+				{
+					v1 = value2;
+					v2 = value1;
+				}
+				else
+				{
+					if (getDay(value1) > getDay(value2))
+					{
+						v1 = value2;
+						v2 = value1;
+					}	
+				}
+			}
+		}
+		else
+		{
+			if (dataType.equalsIgnoreCase(EntityManagerConstantsInterface.INTEGER_ATTRIBUTE_TYPE) || 
+				dataType.equalsIgnoreCase(EntityManagerConstantsInterface.LONG_ATTRIBUTE_TYPE))
+			{
+				if (Long.parseLong(value1) > Long.parseLong(value2))
+				{
+					v1 = value2;
+					v2 = value1;
+				}	
+				
+			}
+			else
+			{
+				if (dataType.equalsIgnoreCase(EntityManagerConstantsInterface.DOUBLE_ATTRIBUTE_TYPE))
+				{
+					if (Double.parseDouble(value1) > Double.parseDouble(value2))
+					{
+						v1 = value2;
+						v2 = value1;
+					}	
+					
+				}
+			}
+		}
+		attributeValues.add(v1);
+		attributeValues.add(v2);
+		return attributeValues;
+	}
+	
 	
 }
