@@ -32,6 +32,7 @@ import edu.wustl.common.querysuite.queryobject.impl.ParameterizedCondition;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.util.global.Utility;
 
 /**
  * Creates Query Object as per the data filled by the user on AddLimits section.
@@ -86,10 +87,15 @@ public class CreateQueryObjectBizLogic
 						attributes.add(attr);
 						attributeOperators.add(params[0]);
 						//firstAttributeValues.add(params[1]);
-						secondAttributeValues.add(params[2]);
+						secondAttributeValues.add(params[2]); 
 						ArrayList<String> attributeValues = getConditionValuesList(params);
 						errorMessage = errorMessage
 								+ validateAttributeValues(attr, attributeValues);
+						if (params[0].equalsIgnoreCase(Constants.Between))
+						{
+							attributeValues = Utility.getAttributeValuesInProperOrder(attr.getDataType(),
+									attributeValues.get(0), attributeValues.get(1));
+						}
 						conditionValues.add(attributeValues);
 					}
 					System.out.println(errorMessage);
