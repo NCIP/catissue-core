@@ -109,17 +109,20 @@
     {
    	   
    	    var selectedParticipant:NameValueBean= new NameValueBean();
-	    selectedParticipant = pCombo.selectedItem as NameValueBean
-        var selectedParticipantId :String = selectedParticipant.value; 
+	    selectedParticipant = pCombo.selectedItem as NameValueBean;
 	
         var selectedCp : NameValueBean = new NameValueBean();
 	    selectedCp =  cpCombo.selectedItem as NameValueBean;
+		if(selectedParticipant != null && selectedCp != null)
+		{
+        var selectedParticipantId :String = selectedParticipant.value; 
 	    var selectedCpId :String = selectedCp.value;
-      
+
 
         //Here we can get data for updating specimen tree details for particular SCG/specimen instead of retrieving whole data 
          var remoteObj2:RemoteObject =  new RemoteObject(); 
 	 	 remoteObj2.destination = "cdeService"; 
+	 	 
          var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
 		 remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
         
@@ -156,6 +159,7 @@
        	  }
        	} 
         specimenTree.callLater(expandTree, [selectedNode, parentNode]); 
+  }
    	}
 
   	private function expandTree(node:Object, pNode:Object) :void
@@ -240,51 +244,33 @@
 	{
 	    var selectedParticipant:NameValueBean= new NameValueBean();
 	    selectedParticipant = pCombo.selectedItem as NameValueBean
-	    var selectedParticipantId :String = selectedParticipant.value; 
-	    var selectedCp : NameValueBean = new NameValueBean();
-	    selectedCp =  cpCombo.selectedItem as NameValueBean;
-	    var selectedCpId :String = selectedCp.value;
-        selectedParticipantIndex = pCombo.selectedIndex;
+		if(selectedParticipant != null)
+		{
+	 	   var selectedParticipantId :String = selectedParticipant.value; 
+	  	   var selectedCp : NameValueBean = new NameValueBean();
+	  	  	selectedCp =  cpCombo.selectedItem as NameValueBean;
+		    var selectedCpId :String = selectedCp.value;
+    	    selectedParticipantIndex = pCombo.selectedIndex;
 	  
-	   // title  = title +" "+selectedParticipant.name;
-	     spDetailsLabel.text = title+"  "+selectedParticipant.name;
+		   // title  = title +" "+selectedParticipant.name;
+		     spDetailsLabel.text = title+"  "+selectedParticipant.name;
           
-	   //Here we can get data for specimen tree details 
-
+		   //Here we can get data for specimen tree details 
+	
              var remoteObj2:RemoteObject =  new RemoteObject(); 
-	     remoteObj2.destination = "cdeService"; 
+		     remoteObj2.destination = "cdeService"; 
     	     var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
-	     remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
+	    	 remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
              remoteObj2.addEventListener("fault",faultHandler);
 
-	     var refreshParticipants:String = "false";  
-	    //specimenTree.dataProvider = null;
-	   // isEventHandled = false;
-	   // Alert.show(treeData.toString());
-	    //specimenTree.dataProvider = treeData;
-	    
-	  /*  for(var i:int=0; i<treeData.length; i++)
-    	    {
-    		var node:XML = treeData.getItemAt(i) as XML;
-    		var nodeId:String = node.@id;
-    	    
-    		if(nodeId.match("future"))
-    		{
-    	    	
-    			specimenTree.setItemIcon(treeData.getItemAt(i), fscgIcon, fscgIcon);
-    		}
-    		else
-    		{
-    			specimenTree.setItemIcon(treeData.getItemAt(i),scgIcon,scgIcon);
-		
-		}
-            } */
-
+		     var refreshParticipants:String = "false";  
+	   
          
 	    
-	    //invoking the java script method
-	    var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId + "','" + refreshParticipants+"')");
-		navigateToURL(url,"_self");
+		    //invoking the java script method
+	    	var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId + "','" + refreshParticipants+"')");
+			navigateToURL(url,"_self");
+		}
 	}
 	
     
@@ -406,24 +392,26 @@
 	 */
 	 private function onNodeClick():void
 	 {
-       
-	    //Retrieving the selected node id 
-	    var id : String = specimenTree.selectedItem.@id;
+		if(specimenTree.selectedItem != null)
+		{
+		    //Retrieving the selected node id 
+		    var id : String = specimenTree.selectedItem.@id;
 
-	    //Selected CP and selected participants
-	    var selectedParticipant:NameValueBean= new NameValueBean();
-	    selectedParticipant = pCombo.selectedItem as NameValueBean
-	    var selectedParticipantId :String = selectedParticipant.value; 
-	    var selectedCp : NameValueBean = new NameValueBean();
-	    selectedCp =  cpCombo.selectedItem as NameValueBean;
-	    var selectedCpId :String = selectedCp.value;
+		    //Selected CP and selected participants
+		    var selectedParticipant:NameValueBean= new NameValueBean();
+	    	selectedParticipant = pCombo.selectedItem as NameValueBean
+		    var selectedParticipantId :String = selectedParticipant.value; 
+		    var selectedCp : NameValueBean = new NameValueBean();
+	    	selectedCp =  cpCombo.selectedItem as NameValueBean;
+		    var selectedCpId :String = selectedCp.value;
 	    
-	    //display name of selected tree node
-	    var displayName : String = specimenTree.selectedItem.@name;
+		    //display name of selected tree node
+	    	var displayName : String = specimenTree.selectedItem.@name;
 	    
-	   //invoking java script method
-	    var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
-	       navigateToURL(url,"_self"); 
+		   //invoking java script method
+		    var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
+	    	navigateToURL(url,"_self"); 
+		 }
 	       
 	}
           
