@@ -1,10 +1,7 @@
 -- Ordering system  related alter table script*/
 
--- create sequence CATISSUE_ORDER_SEQ;
--- create sequence CATISSUE_ORDER_ITEM_SEQ;
-
-
-
+create sequence CATISSUE_ORDER_SEQ;
+create sequence CATISSUE_ORDER_ITEM_SEQ;
 
 CREATE TABLE CATISSUE_EXISTING_SP_ORD_ITEM (
    IDENTIFIER NUMBER(19,0) NOT NULL,
