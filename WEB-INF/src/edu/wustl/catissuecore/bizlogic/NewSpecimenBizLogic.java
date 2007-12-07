@@ -934,15 +934,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		//SpecimenCollectionGroup scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup");
 		//CollectionProtocol protocol = (CollectionProtocol)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(), "collectionProtocolRegistration.collectionProtocol");
-		SpecimenCollectionGroup scg = null;
+		AbstractSpecimenCollectionGroup scg = null;
 		CollectionProtocol protocol = null;
 		if (specimen.getSpecimenCollectionGroup() != null)
 		{
-			scg = (SpecimenCollectionGroup) specimen.getSpecimenCollectionGroup();
+			scg = specimen.getSpecimenCollectionGroup();
 		}
 		else if (specimen.getId() != null)
 		{
-			scg = (SpecimenCollectionGroup) dao.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "specimenCollectionGroup");
+			scg = (AbstractSpecimenCollectionGroup)dao.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "specimenCollectionGroup");
 		}
 		if (scg != null)
 			protocol = (CollectionProtocol) dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(),
