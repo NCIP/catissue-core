@@ -494,7 +494,9 @@ alter table `CatIssue_Abs_Speci_coll_Group` drop column `CLINICAL_REPORT_ID`;
 
 /*alter table `CatIssue_Abs_Speci_coll_Group` drop column `SURGICAL_PATHOLOGY_NUMBER`;*/
 
+UPDATE CATISSUE_SPECIMEN_PROTOCOL SET ENROLLMENT=0 WHERE ENROLLMENT IS NULL;
 
+commit;
 
 
 

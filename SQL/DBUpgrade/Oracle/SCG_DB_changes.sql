@@ -145,7 +145,7 @@ SELECT CATISSUE_SPECIMEN_SEQ.NEXTVAL,
       a.Specimen_Class,
        a.Specimen_Type,
        NULL,
-       'NEW',
+       'New',
        a.Pathology_Status,
        1,/*BUG 5745*/
        1,/*Bug related to auto*/
@@ -182,8 +182,11 @@ UPDATE CATISSUE_SPECIMEN SET IS_COLL_PROT_REQ =0,COLLECTION_STATUS='Collected'  
 /*TODO Verified above*/
 /* Updating catissue_specimen_char with "Not Specified".See REF#9999 */
 UPDATE CATISSUE_SPECIMEN_CHAR
-SET    Tissue_Side = 'NOT Specified'
+SET    Tissue_Side = 'Not Specified'
 WHERE  Tissue_Side LIKE 'S.%';
+
+/*SELECT count(*) from CATISSUE_SPECIMEN_PROTOCOL where ENROLLMENT IS NULL;*/
+UPDATE CATISSUE_SPECIMEN_PROTOCOL SET ENROLLMENT = 0 WHERE ENROLLMENT IS NULL;
 
 /*Deleting catissue_specimen_requirement rec those inserted in specimen table TODO*/
 ALTER TABLE CATISSUE_SPECIMEN_REQUIREMENT DROP constraint FK39AFE96861A1C94F;

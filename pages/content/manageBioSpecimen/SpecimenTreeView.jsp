@@ -98,6 +98,11 @@
 				var i = str.indexOf('_');
 				var obj1 = str.substring(0,i);
 				var id1 = str.substring(i+1);
+				if(id1.indexOf('class') != -1)
+				{
+					i = id1.lastIndexOf('_');
+					id1 = id1.substring(i+1);
+				}
 				//alert(obj1);
 				//alert(id1);
 				if(obj1 == "<%=Constants.SPECIMEN_COLLECTION_GROUP%>")
