@@ -75,7 +75,9 @@ function showEvent()
 
 
 </script>
-
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 <html:form action="<%=formAction%>">
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">  

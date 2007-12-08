@@ -19,19 +19,6 @@
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	
 	String operation = (String)request.getAttribute(Constants.OPERATION);
-	String specimenIdentifier = (String)request.getAttribute(Constants.ID);
-	String formName=null;
-	if(specimenIdentifier == null || specimenIdentifier.equals("0"))
-		specimenIdentifier = (String)request.getParameter(Constants.ID);
-
-	if(specimenIdentifier != null && !specimenIdentifier.equals("0"))
-	           session.setAttribute(Constants.SCG_ID,specimenIdentifier);
-
-	if(specimenIdentifier == null || specimenIdentifier.equals("0"))
-	{
- 		specimenIdentifier= (String) session.getAttribute(Constants.SCG_ID);//,specimenIdentifier);
-	}
-
 		
 		String formAction = Constants.VIEW_SPR_ACTION;
 			
@@ -76,7 +63,10 @@ function showAnnotations()
 			document.forms[0].submit();
 		}
 </script>
-
+<html:errors />
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
 <html:form action="<%=formAction%>">
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="650">
