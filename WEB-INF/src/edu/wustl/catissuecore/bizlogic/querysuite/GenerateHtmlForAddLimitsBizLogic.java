@@ -1146,20 +1146,23 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String componentId = generateComponentName(attribute);
 		String innerStr = "";
 		// String divId = "overDiv" + (i + 1);
-		String divStr = "\n<div width='3%' id='overDiv' style='position:absolute; visibility:hidden; z-index:3500;'></div>";
-		String imgStr = "\n<img id=\"calendarImg\" src=\"images/calendar.gif\" width=\"24\" height=\"22\" border=\"0\">";
+		
 		if (isFirst)
 		{
 			String textBoxId = componentId + "_textBox";
 			String calendarId = componentId + "_calendar";
-			innerStr = "\n<td width='3%' class='"+ cssClass +"' valign='top' id=\"" + calendarId + "\">" + divStr
-					+ "\n<a href=\"javascript:show_calendar('" + formName + "." + textBoxId
-					+ "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
+			String imgStr = "\n<img id=\"calendarImg\" src=\"images/calendar.gif\" width=\"24\" height=\"22\"" +
+					" border=\"0\" onclick='scwShow("+ textBoxId + ",event);'>";
+			
+			innerStr = "\n<td width='3%' class='"+ cssClass +"' valign='top' id=\"" + calendarId + "\">" 
+						+ "\n" + imgStr ;
 		}
 		else
 		{
 			String textBoxId1 = componentId + "_textBox1";
 			String calendarId1 = componentId + "_calendar1";
+			String imgStr = "\n<img id=\"calendarImg\" src=\"images/calendar.gif\" width=\"24\" height=\"22\" border='0'" +
+					" onclick='scwShow(" + textBoxId1 + ",event);'>";
 			String style = "";
 			if (isBetween)
 			{
@@ -1169,9 +1172,10 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				style = "display:none";
 			}
+			
 			innerStr = "\n<td width='3%' class='"+ cssClass +"' valign='top' id=\"" + calendarId1 + "\" style=\"" + style
-					+ "\">" + divStr + "\n<a href=\"javascript:show_calendar('" + formName + "."
-					+ textBoxId1 + "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
+						+ "\">" 
+						+ "\n" + imgStr ;
 		}
 		innerStr = innerStr + "\n</td>";
 		return innerStr.toString();
