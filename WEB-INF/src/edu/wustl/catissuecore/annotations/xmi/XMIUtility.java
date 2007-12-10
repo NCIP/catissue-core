@@ -45,29 +45,52 @@ public class XMIUtility
 	}
 	public static void addHookEntitiesToGroup(EntityGroupInterface entityGroup) throws DAOException, DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
-		ContainerInterface mainContainer = getMainContainer(entityGroup);
-		if(mainContainer!=null)
+		//ContainerInterface mainContainer = getMainContainer(entityGroup);
+		Collection<ContainerInterface> mainContainers = entityGroup.getMainContainerCollection();
+		if(mainContainers!=null)
 		{
 			AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-			System.out.println(mainContainer.getId());
-			Collection entityMapsForContainer = annotationBizLogic.getEntityMapsForContainer(mainContainer.getId());
-			System.out.println("entityMapsForContainer "  +entityMapsForContainer);
-			if(entityMapsForContainer!=null)
+			for(ContainerInterface mainContainer : mainContainers)
 			{
-				Iterator entityMapsForContainerIter = entityMapsForContainer.iterator();
-				//Add all associated static entities to uml model 
-				while(entityMapsForContainerIter.hasNext())
+				System.out.println(mainContainer.getId());
+				Collection entityMapsForContainer = annotationBizLogic.getEntityMapsForContainer(mainContainer.getId());
+				System.out.println("entityMapsForContainer "  +entityMapsForContainer);
+				if(entityMapsForContainer!=null)
 				{
-					Object entityMap = entityMapsForContainerIter.next();
-					System.out.println();
-					if(entityMap!=null)
+					Iterator entityMapsForContainerIter = entityMapsForContainer.iterator();
+					//Add all associated static entities to uml model 
+					while(entityMapsForContainerIter.hasNext())
 					{
-						Long staticEntityId = ((EntityMap)entityMap).getStaticEntityId();
-						EntityInterface staticEntity = entityManager.getEntityByIdentifier(staticEntityId);
-						if(staticEntity!=null)
+						Object entityMap = entityMapsForContainerIter.next();
+						System.out.println();
+						if(entityMap!=null)
 						{
-							EntityInterface xmiStaticEntity = getHookEntityDetailsForXMI(staticEntity,mainContainer.getEntity());
-							entityGroup.addEntity(xmiStaticEntity);
+							Long staticEntityId = ((EntityMap)entityMap).getStaticEntityId();
+							EntityInterface staticEntity = entityManager.getEntityByIdentifier(staticEntityId);
+							if(staticEntity!=null)
+							{
+								EntityInterface xmiStaticEntity = null;
+								AssociationInterface association = getHookEntityAssociation(staticEntity,mainContainer.getEntity());
+								Collection<EntityInterface> entityColl = entityGroup.getEntityCollection();
+								for(EntityInterface entity : entityColl)
+								{
+									if(entity.getId().compareTo(staticEntity.getId()) == 0)
+									{
+										xmiStaticEntity = entity;
+										break;									
+									}								
+								}
+								
+								if(xmiStaticEntity != null)
+								{
+									xmiStaticEntity.addAssociation(association);
+								}
+								else
+								{
+									xmiStaticEntity = getHookEntityDetailsForXMI(staticEntity,mainContainer.getEntity());
+									entityGroup.addEntity(xmiStaticEntity);
+								}
+							}
 						}
 					}
 				}
