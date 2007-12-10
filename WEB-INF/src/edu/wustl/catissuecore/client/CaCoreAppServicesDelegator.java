@@ -389,43 +389,52 @@ public class CaCoreAppServicesDelegator
     /**
      * Removes the identified data from SpecimenCollectionGroup object.
      * @param object The SpecimenCollectionGroup object.
+     * @throws DAOException 
      */
-	private void removeSpecimenCollectionGroupIdentifiedData(Object object)
+	private void removeSpecimenCollectionGroupIdentifiedData(Object object) throws DAOException
 	{
+		/**
+		 * Kalpana 
+		 * Bug #6076
+		 * Reviewer : 
+		 * Description : Because of lazy initialization problem retrieved the object.
+		 */
 	    SpecimenCollectionGroup specimenCollGrp = (SpecimenCollectionGroup) object;
 	    Logger.out.info("specimenCollGrp getClinicalDiagnosis : " + specimenCollGrp.getClinicalDiagnosis());
-	    Site site = specimenCollGrp.getSpecimenCollectionSite();
-	    Logger.out.info("specimenCollGrp getClinicalDiagnosis : " + site.getName());
-//	    ClinicalReport clinicalReport = specimenCollGrp.getClinicalReport();
-//	    if (clinicalReport != null)
-//	    {
-//	    	clinicalReport.setSurgicalPathologyNumber(null);
-//	    }
-//	    ParticipantMedicalIdentifier participantMedicalIdentifier 
-//	    						= clinicalReport.getParticipantMedicalIdentifier();
-//	    if (participantMedicalIdentifier != null)
-//	    {
-//	        participantMedicalIdentifier.setMedicalRecordNumber(null);
-//	        
-//	        Participant participant = participantMedicalIdentifier.getParticipant();
-//		    participant.setFirstName(null);
-//		    participant.setLastName(null);
-//		    participant.setMiddleName(null);
-//		    participant.setBirthDate(null);
-//		    participant.setSocialSecurityNumber(null);
-//	    }
+	    specimenCollGrp.setSurgicalPathologyNumber(null);
+	    
+		IBizLogic bizLogic=getBizLogic(SpecimenCollectionGroup.class.getName());
+		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport)bizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollGrp.getId(),Constants.IDENTIFIED_SURGICAL_PATHOLOGY_REPORT);
+		if (identifiedSurgicalPathologyReport != null)
+		{	
+			removeIdentifiedReportIdentifiedData(identifiedSurgicalPathologyReport);
+		}	
 	}
 	
 	/**
      * Removes the identified data from Specimen object.
      * @param object The Specimen object.
+	 * @throws DAOException 
      */
-	private void removeSpecimenIdentifiedData(Object object) 
+	private void removeSpecimenIdentifiedData(Object object) throws DAOException 
 	{
+		
+		/**
+		 * Kalpana 
+		 * Bug #6076
+		 * Reviewer : 
+		 * Description : Because of lazy initialization problem retrieved the object.
+		 */
+		
 	    Specimen specimen = (Specimen) object;
 	    // call Biz logic for change in our objects
-	    SpecimenCollectionGroup specimenCollectionGroup = 
-	        	(SpecimenCollectionGroup) specimen.getSpecimenCollectionGroup();
+	    SpecimenCollectionGroup specimenCollectionGroup=null;
+		IBizLogic bizLogic = getBizLogic(SpecimenCollectionGroup.class.getName());
+		List  specimenCollectionGroupList =(List) bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),Constants.SYSTEM_IDENTIFIER,specimen.getSpecimenCollectionGroup().getId());
+		if(specimenCollectionGroupList!=null && specimenCollectionGroupList.size()>0)
+		{
+			specimenCollectionGroup = (SpecimenCollectionGroup)specimenCollectionGroupList.get(0);
+		}
 	    if (specimenCollectionGroup != null)
 	    {	
 	    	removeSpecimenCollectionGroupIdentifiedData(specimenCollectionGroup);
