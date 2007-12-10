@@ -13,6 +13,7 @@
 <script type="text/javascript" src="jss/ajax.js"></script> 
 </head>
 <body>
+<script type='text/JavaScript' src='jss/scwcalendar.js'></script>
 <html:errors />
 <%
 
