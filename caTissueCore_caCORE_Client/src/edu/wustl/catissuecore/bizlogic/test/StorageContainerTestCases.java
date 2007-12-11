@@ -12,6 +12,8 @@ import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -30,6 +32,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
 			System.out.println(storageContainer);
 			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
 		 }
@@ -303,5 +306,127 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	
 	
 	}
+	
+	public void testAddSpecimenArrayType()
+	{
+		try
+		{
+			SpecimenArrayType specimenArrayType =  BaseTestCaseUtility.initSpecimenSpecimenArrayType();
+	    	Logger.out.info("Inserting domain object------->"+specimenArrayType);
+	    	specimenArrayType =  (SpecimenArrayType) appService.createObject(specimenArrayType);
+	    	TestCaseUtility.setObjectMap(specimenArrayType, SpecimenArrayType.class);
+			assertTrue("Domain Object is successfully added" , true);
+			Logger.out.info(" SpecimenSpecimenArrayType is successfully added ---->    ID:: " + specimenArrayType.getId().toString());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			fail("Failed to add Domain Object");
+		}
+	}
+	
+	 public void testSearchSpecimenArrayType()
+	 {
+    	try 
+    	{
+    	//	SpecimenArrayType cachedSpecimenArrayType = (SpecimenArrayType) TestCaseUtility.getObjectMap(SpecimenArrayType.class);
+    		SpecimenArrayType specimenArrayType = new SpecimenArrayType();
+    		specimenArrayType.setId(new Long(16));
+	     	Logger.out.info(" searching domain object");		    	
+	    	List resultList = appService.search(SpecimenArrayType.class,specimenArrayType);
+        	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+        	{
+        		SpecimenArrayType returnedSpecimenArray = (SpecimenArrayType)resultsIterator.next();
+        		assertTrue("Specimen Array Type is successfully Found" , true);
+        		Logger.out.info(" Specimen Array type is successfully Found ---->  :: " + returnedSpecimenArray.getName());
+            }
+       } 
+       catch (Exception e) 
+       {
+    	 Logger.out.error(e.getMessage(),e);
+ 		 e.printStackTrace();
+ 		 fail("Failed to search Domain Object");
+       }
+	}
+	 public void testUpdateSpecimenArrayType()
+	 {
+		try 
+		{
+			SpecimenArrayType specimenArrayType =  BaseTestCaseUtility.initSpecimenSpecimenArrayType();
+			specimenArrayType =  (SpecimenArrayType) appService.createObject(specimenArrayType);
+			Logger.out.info("updating Specimen Array Type------->"+specimenArrayType);
+			BaseTestCaseUtility.updateSpecimenSpecimenArrayType(specimenArrayType);
+			SpecimenArrayType updateSpecimenSpecimenArrayType = (SpecimenArrayType) appService.updateObject(specimenArrayType);
+			assertTrue("updateSpecimenSpecimenArrayType is successfully updated" , true);
+			Logger.out.info("updateSpecimenSpecimenArrayType successfully updated ---->"+updateSpecimenSpecimenArrayType);
+		} 
+		catch (Exception e) 
+		{
+			Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		fail("Failed to update Specimen Collection Group");
+		}
+	}
+	 public void testAddSpecimenArray()
+		{
+			try
+			{
+				SpecimenArray specimenArray =  BaseTestCaseUtility.initSpecimenArray();
+		    	Logger.out.info("Inserting domain object------->"+specimenArray);
+		    	specimenArray =  (SpecimenArray) appService.createObject(specimenArray);
+		    	TestCaseUtility.setObjectMap(specimenArray, SpecimenArray.class);
+				assertTrue("Domain Object is successfully added" , true);
+				Logger.out.info(" Specimen Collection Group is successfully added ---->    ID:: " + specimenArray.getId().toString());
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+				fail("Failed to add Domain Object");
+			}
+		}
+	 
+	 public void testSearchSpecimenArray()
+	 {
+    	try 
+    	{
+    		SpecimenArray cachedSpecimenArray = (SpecimenArray) TestCaseUtility.getObjectMap(SpecimenArray.class);
+    		SpecimenArray specimenArray = new SpecimenArray();
+    		specimenArray.setId(cachedSpecimenArray.getId());
+	     	Logger.out.info(" searching domain object");		    	
+	    	List resultList = appService.search(SpecimenArray.class,specimenArray);
+        	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+        	{
+        		SpecimenArray returnedSpecimenArray = (SpecimenArray)resultsIterator.next();
+        		assertTrue("Specimen Array is successfully Found" , true);
+        		Logger.out.info(" Specimen Array is successfully Found ---->  :: " + returnedSpecimenArray.getName());
+            }
+       } 
+       catch (Exception e) 
+       {
+    	 Logger.out.error(e.getMessage(),e);
+ 		 e.printStackTrace();
+ 		 fail("Failed to search Domain Object");
+       }
+   }
+	 public void testUpdateSpecimenArray()
+		{
+			try
+			{
+				SpecimenArray specimenArray = (SpecimenArray) TestCaseUtility.getObjectMap(SpecimenArray.class);
+		    	Logger.out.info("Inserting domain object------->"+specimenArray);
+		       	specimenArray =  BaseTestCaseUtility.updateSpecimenArray(specimenArray);
+		       	specimenArray =  (SpecimenArray) appService.updateObject(specimenArray);
+				assertTrue("Domain Object is successfully added" , true);
+				Logger.out.info(" Specimen Collection Group is successfully added ---->    ID:: " + specimenArray.getId().toString());
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+				fail("Failed to add Domain Object");
+			}
+		}
 
 }
