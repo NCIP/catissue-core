@@ -2043,18 +2043,18 @@ public class BaseTestCaseUtility {
 	public static SpecimenArrayType updateSpecimenSpecimenArrayType(SpecimenArrayType specimenArrayType)
 	{
 		specimenArrayType.setName("Updated SpecimenArray"+ UniqueKeyGeneratorUtil.getUniqueKey());
-		Capacity capacity = new Capacity();
-		capacity.setOneDimensionCapacity(new Integer(5));//4
-		capacity.setTwoDimensionCapacity(new Integer(5));//4
-		specimenArrayType.setCapacity(capacity);
+//		Capacity capacity = new Capacity();
+//		capacity.setOneDimensionCapacity(new Integer(5));//4
+//		capacity.setTwoDimensionCapacity(new Integer(5));//4
+//		specimenArrayType.setCapacity(capacity);
 		return specimenArrayType;	
 	}
 	
 	public static SpecimenArray initSpecimenArray()
 	{
 		SpecimenArray specimenArray = new SpecimenArray();
-		SpecimenArrayType specimenArrayType = new SpecimenArrayType();
-		specimenArrayType.setId(new Long(9));
+		SpecimenArrayType specimenArrayType = (SpecimenArrayType) TestCaseUtility.getObjectMap(SpecimenArrayType.class);
+	//	specimenArrayType.setId(new Long(9));
 		specimenArray.setSpecimenArrayType(specimenArrayType);
 		
 		specimenArray.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -2071,8 +2071,9 @@ public class BaseTestCaseUtility {
 		specimenArray.setCapacity(capacity);
 		
 		specimenArray.setComment("");
-		StorageContainer storageContainer = new StorageContainer();
-		storageContainer.setId(new Long(1));	
+		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
+		
+		//storageContainer.setId(new Long(1));	
 		
 		specimenArray.setStorageContainer(storageContainer);
 		specimenArray.setPositionDimensionOne(new Integer(1));
@@ -2081,19 +2082,39 @@ public class BaseTestCaseUtility {
 		Collection specimenArrayContentCollection = new HashSet();
 		SpecimenArrayContent specimenArrayContent = new SpecimenArrayContent();
 		
-		Specimen specimen = new Specimen(); 
-		specimen.setId(new Long(50));
+		Specimen specimen = (Specimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
+	//	specimen.setId(new Long(50));
 		
 		specimenArrayContent.setSpecimen(specimen);
-		specimenArrayContent.setPositionDimensionOne(new Integer(1));
+		specimenArrayContent.setPositionDimensionOne(new Integer(2));
 		specimenArrayContent.setPositionDimensionTwo(new Integer(1));
 		
-		Quantity quantity = new Quantity();
-		quantity.setValue(new Double(2));
-		specimenArrayContent.setInitialQuantity(quantity);
+//		Quantity quantity = new Quantity();
+//		quantity.setValue(new Double(1));
+//		specimenArrayContent.setInitialQuantity(quantity);
+		
 		specimenArrayContentCollection.add(specimenArrayContent);
 		specimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
 		return specimenArray;	
+	}
+	
+	public static SpecimenArray updateSpecimenArray(SpecimenArray specimenArray)
+	{
+		
+		
+		specimenArray.setBarcode("new updatedbarcode" + UniqueKeyGeneratorUtil.getUniqueKey());
+		specimenArray.setName("updated spec array" + UniqueKeyGeneratorUtil.getUniqueKey()); 
+		
+		User createdBy = (User)TestCaseUtility.getObjectMap(User.class);
+//		User createdBy = new User();
+//		createdBy.setId(new Long(1));
+		specimenArray.setCreatedBy(createdBy);
+		
+//		Capacity capacity = new Capacity();
+//		capacity.setOneDimensionCapacity(5); //4
+//		capacity.setTwoDimensionCapacity(5); //4
+//		specimenArray.setCapacity(capacity);
+		return specimenArray;
 	}
 	
 	public static IdentifiedSurgicalPathologyReport initIdentifiedSurgicalPathologyReport()
