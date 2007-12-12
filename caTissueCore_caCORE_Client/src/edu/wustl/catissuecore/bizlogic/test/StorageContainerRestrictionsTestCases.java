@@ -235,6 +235,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 	           	e.printStackTrace();
 	           	assertFalse("Failed to create collection protocol", true);
 			}
+			TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
 			System.out.println("CP:"+cp.getTitle());
 			SpecimenCollectionGroup scg= (SpecimenCollectionGroup)cpRestriction(cp);
 							
