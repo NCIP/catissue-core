@@ -1,11 +1,18 @@
 package edu.wustl.catissuecore.bizlogic.test;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Address;
+import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -28,6 +35,169 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			 assertFalse("could not add object", true);
 		 }
 	 }
+	 public void testAddSupervisor()
+	 {
+		 try{
+			User userObj = new User();
+			userObj.setEmailAddress("supervisor@admin.com");
+			userObj.setLoginName(userObj.getEmailAddress());
+			userObj.setLastName("last" + UniqueKeyGeneratorUtil.getUniqueKey());
+			userObj.setFirstName("name" + UniqueKeyGeneratorUtil.getUniqueKey());
+			
+			Address address = new Address();
+			address.setStreet("Main street");
+			address.setCity("New hampshier");
+			address.setState("Alabama");
+			address.setZipCode("12345");
+			address.setCountry("United States");
+			address.setPhoneNumber("21222324");
+			address.setFaxNumber("21222324");	 
+			
+			
+			userObj.setAddress(address);
+			
+			Institution inst = new Institution();
+			inst.setId(new Long(1));
+			userObj.setInstitution(inst);
+			
+			Department department = new Department();
+			department.setId(new Long(1));
+			userObj.setDepartment(department);
+			
+			CancerResearchGroup cancerResearchGroup =  new CancerResearchGroup();
+			cancerResearchGroup.setId(new Long(1));
+			userObj.setCancerResearchGroup(cancerResearchGroup);
+			
+			
+			userObj.setRoleId("2");
+			userObj.setActivityStatus("Active");
+			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);		
+			userObj = (User)appService.createObject(userObj);	
+			
+
+			userObj.setNewPassword("Test123");
+			
+			userObj.setRoleId("2");
+			userObj.setActivityStatus("Active");
+			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);	
+			userObj = (User)appService.updateObject(userObj);	
+			
+		}
+		 catch(Exception e){
+			 e.printStackTrace();
+			 assertFalse("could not add object", true);
+		 }		 
+	 }
+	
+	public void testAddTechnician()
+	 {
+		try{
+			User userObj = new User();
+			userObj.setEmailAddress("technician@admin.com");
+			userObj.setLoginName(userObj.getEmailAddress());
+			userObj.setLastName("last" + UniqueKeyGeneratorUtil.getUniqueKey());
+			userObj.setFirstName("name" + UniqueKeyGeneratorUtil.getUniqueKey());
+			
+			Address address = new Address();
+			address.setStreet("Main street");
+			address.setCity("New hampshier");
+			address.setState("Alabama");
+			address.setZipCode("12345");
+			address.setCountry("United States");
+			address.setPhoneNumber("21222324");
+			address.setFaxNumber("21222324");	 
+			
+			
+			userObj.setAddress(address);
+			
+			Institution inst = new Institution();
+			inst.setId(new Long(1));
+			userObj.setInstitution(inst);
+			
+			Department department = new Department();
+			department.setId(new Long(1));
+			userObj.setDepartment(department);
+			
+			CancerResearchGroup cancerResearchGroup =  new CancerResearchGroup();
+			cancerResearchGroup.setId(new Long(1));
+			userObj.setCancerResearchGroup(cancerResearchGroup);
+			
+			userObj.setRoleId("3");
+			userObj.setActivityStatus("Active");
+			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);
+		
+			userObj = (User)appService.createObject(userObj);			
+			Logger.out.info("Object created successfully");
+			System.out.println("Object created successfully");
+			
+			userObj.setNewPassword("Test123");
+			
+			userObj.setRoleId("3");
+			userObj.setActivityStatus("Active");
+			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);	
+			userObj = (User)appService.updateObject(userObj);	
+			
+		}catch(Exception e){
+				 e.printStackTrace();
+				 assertFalse("could not add object", true);
+		 }
+			
+			
+	 } 
+	
+/*	public void testAddScientist()
+	 {
+		try{
+			User userObj = new User();
+			userObj.setEmailAddress("scientist3@admin.com");
+			userObj.setLoginName(userObj.getEmailAddress());
+			userObj.setLastName("last" + UniqueKeyGeneratorUtil.getUniqueKey());
+			userObj.setFirstName("name" + UniqueKeyGeneratorUtil.getUniqueKey());
+			
+			Address address = new Address();
+			address.setStreet("Main street");
+			address.setCity("New hampshier");
+			address.setState("Alabama");
+			address.setZipCode("12345");
+			address.setCountry("United States");
+			address.setPhoneNumber("21222324");
+			address.setFaxNumber("21222324");	 
+			
+			
+			userObj.setAddress(address);
+			
+			Institution inst = new Institution();
+			inst.setId(new Long(1));
+			userObj.setInstitution(inst);
+			
+			Department department = new Department();
+			department.setId(new Long(1));
+			userObj.setDepartment(department);
+			
+			CancerResearchGroup cancerResearchGroup =  new CancerResearchGroup();
+			cancerResearchGroup.setId(new Long(1));
+			userObj.setCancerResearchGroup(cancerResearchGroup);
+			
+			userObj.setRoleId("4");
+			userObj.setActivityStatus("Active");
+			userObj.setPageOf(Constants.PAGEOF_SIGNUP);
+
+		
+			userObj = (User)appService.createObject(userObj);
+			
+			userObj.setNewPassword("Test123");
+			
+			userObj.setRoleId("4");
+			userObj.setActivityStatus("Active");
+			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);	
+			userObj = (User)appService.updateObject(userObj);	
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+			 assertFalse("could not add object", true);
+		 }
+	 } */
+		
 	
 	public void testSearchUser()
     {
@@ -232,7 +402,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 		 }
 		 catch(Exception e)
 		 {
-		//	 Logger.out.error(e.getMessage(),e);
+			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
 			 assertTrue("For null Department, it throws exception", true);
 			 
@@ -253,7 +423,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 		 }
 		 catch(Exception e)
 		 {
-		//	 Logger.out.error(e.getMessage(),e);
+			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
 			 assertTrue("For empty last name, it throws exception", true);
 			 
@@ -274,7 +444,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 		 }
 		 catch(Exception e)
 		 {
-		//	 Logger.out.error(e.getMessage(),e);
+			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
 			 assertTrue("For invalid role id, it throws exception", true);
 			 
