@@ -14,7 +14,7 @@ public class CaTissueTestSuite
 	{
 		TestSuite suite = new TestSuite("Test for edu.wustl.catissuecore.bizlogic.test");
 		//$JUnit-BEGIN$
-    	suite.addTestSuite(InstitutionTestCases.class);
+		suite.addTestSuite(InstitutionTestCases.class);
 		suite.addTestSuite(DepartmentTestCases.class);
 		suite.addTestSuite(CancerResearchGrpTestCases.class);
 		suite.addTestSuite(UserTestCases.class);
@@ -30,8 +30,12 @@ public class CaTissueTestSuite
 		suite.addTestSuite(StorageTypeTestCases.class);
 		suite.addTestSuite(StorageContainerTestCases.class);
 		suite.addTestSuite(StorageContainerRestrictionsTestCases.class);
-	//	suite.addTestSuite(ConsentsVerificationTestCases.class);
-//		//$JUnit-END$
+		suite.addTestSuite(SupervisorRoleTestCases.class);
+		suite.addTestSuite(TechnicianRoleTestCases.class);	
+		
+	//	suite.addTestSuite(ScientistRoleTestCases.class);
+	//	suite.addTestSuite(PrivilegeBasedTestCases.class);
+		//$JUnit-END$
 		return suite;
 	}
 	
