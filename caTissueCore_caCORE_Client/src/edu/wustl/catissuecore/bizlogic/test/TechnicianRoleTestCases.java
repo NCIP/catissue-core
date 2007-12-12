@@ -53,7 +53,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		}		
 	}
      
-   public void testAddDepartment()
+   public void testAddDepartmentWithTechnicianLogin()
  	  {
  		try{
  			Department dept =(Department) BaseTestCaseUtility.initDepartment();			
@@ -67,7 +67,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
  			 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
  		 }
  	  }
-   public void testUpdateDepartment()
+   public void testUpdateDepartmentWithTechnicianLogin()
 	{ 	
 	    try 
 		{
@@ -85,7 +85,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	    }
 	}
     
-   public void testAddInstitution()
+   public void testAddInstitutionWithTechnicianLogin()
 	{
 		try{
 			Institution institution = BaseTestCaseUtility.initInstitution();
@@ -100,7 +100,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	}
     
-  public void testUpdateInstitution()
+  public void testUpdateInstitutionWithTechnicianLogin()
 	{		
     	
 	    try 
@@ -118,7 +118,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	 		 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 	    }
 	}
-  public void testAddCancerResearchGrp()
+  public void testAddCancerResearchGrpWithTechnicianLogin()
 	{
 		try{
 			CancerResearchGroup crg = BaseTestCaseUtility.initCancerResearchGrp();			
@@ -132,7 +132,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	}
     
-  public void testUpdateCancerResearchGrp()
+  public void testUpdateCancerResearchGrpWithTechnicianLogin()
 	{
   
 	    try 
@@ -166,7 +166,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	 }*/
     
-  public void testAddSite()
+  public void testAddSiteWithTechnicianLogin()
 	{
 		try{
 			Site site= BaseTestCaseUtility.initSite();			
@@ -180,7 +180,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		     assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 		 }
 	}
-   public void testUpdateSite()
+   public void testUpdateSiteWithTechnicianLogin()
 	{
 		try 
 		{
@@ -198,7 +198,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	    }
 	}
    
-    public void testAddBioHazard()
+    public void testAddBioHazardWithTechnicianLogin()
 	{
 		try{
 			Biohazard biohazard= BaseTestCaseUtility.initBioHazard();			
@@ -213,7 +213,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 		 }
 	}
-   public void testUpdateBioHazard()
+   public void testUpdateBioHazardWithTechnicianLogin()
 	{		  
 	    try 
 		{
@@ -231,7 +231,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	    }
 	}
    
-    public void testAddCollectionProtocol()
+    public void testAddCollectionProtocolWithTechnicianLogin()
 	{
 		try
 		 {
@@ -248,7 +248,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	}
    
-   public void testUpdateCollectionProtocol()
+   public void testUpdateCollectionProtocolWithTechnicianLogin()
 	{
 	    try 
 		{
@@ -267,7 +267,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	    }
 	}
    
-   public void testAddDistributionProtocol()
+   public void testAddDistributionProtocolWithTechnicianLogin()
 	{
 		try{
 			DistributionProtocol distributionprotocol = BaseTestCaseUtility.initDistributionProtocol();			
@@ -282,7 +282,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	}
    
-   public void testUpdateDistributionProtocol()
+   public void testUpdateDistributionProtocolWithTechnicianLogin()
 	{
 	    try 
 	  	{
@@ -299,11 +299,11 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 	    }
 	} 
-   public void testSearchDepartmet()
+   public void testSearchDepartmetWithTechnicianLogin()
 	{
 		Department dept = new Department();
      	Logger.out.info(" searching domain object");
-   	dept.setId(new Long(1));
+   	     dept.setId(new Long(1));
          try {
        	 List resultList = appService.search(Department.class,dept);
        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
@@ -318,7 +318,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
           	assertFalse("Does not find Domain Object", true);	 		
          }
 	}
- public void testSearchCancerResearchGrp()
+   public void testSearchCancerResearchGrpWithTechnicianLogin()
 	{
 			CancerResearchGroup crg = new CancerResearchGroup();
 	     	Logger.out.info(" searching domain object");
@@ -339,7 +339,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 		
 	          }
 	}
- public void testSearchInstitution()
+   public void testSearchInstitutionWithTechnicianLogin()
 	{
 		Institution institution = new Institution();
    	Logger.out.info(" searching domain object");
@@ -360,7 +360,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	 		
          }
 	}
- public void testSearchSite()
+   public void testSearchSiteWithTechnicianLogin()
 	{
 		Site site = new Site();
    	Logger.out.info(" searching domain object");
@@ -404,7 +404,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	 		
          }
 	}*/
- public void testSearchCollectionProtocol()
+ public void testSearchCollectionProtocolWithTechnicianLogin()
 	{
    	CollectionProtocol collectionProtocol = new CollectionProtocol();
    	CollectionProtocol cachedCollectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
@@ -427,7 +427,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
          }
 	}
  
- public void testSearchDistributionProtocol()
+ public void testSearchDistributionProtocolWithTechnicianLogin()
 	{
 		try {		
 		    DistributionProtocol distributionProtocol = new DistributionProtocol();
@@ -488,7 +488,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		 }
 	}*/
    
-   public void testUpdateParticipant()
+   public void testUpdateParticipantWithTechnicianLogin()
 	{
 		Participant participant =  BaseTestCaseUtility.initParticipant();
 		Logger.out.info("updating domain object------->"+participant);
@@ -507,7 +507,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	 		
 	    }
 	}
-   public void testSearchParticipant()
+   public void testSearchParticipantWithTechnicianLogin()
 	{
 		Participant participant = new Participant();
 		Logger.out.info(" searching domain object");
@@ -775,7 +775,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		return scg;			
  }*/
    
-   public void testAddTissueSpecimenWithTechnicianWithTechnician()
+   public void testAddTissueSpecimenWithTechnicianWithTechnicianLogin()
 	{
 	   try {
 		  
@@ -800,7 +800,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		}
 	}
    
-   public void testAddMolecularSpecimenWithTechnician()
+   public void testAddMolecularSpecimenWithTechnicianLogin()
 	{
 	   try {
 		    MolecularSpecimen specimenObj = (MolecularSpecimen) BaseTestCaseUtility.initMolecularSpecimen();
@@ -826,7 +826,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		}
 	}
 	
-	public void testAddCellSpecimenWithTechnician()
+	public void testAddCellSpecimenWithTechnicianLogin()
 	{
 	   try {
 		    CellSpecimen specimenObj = (CellSpecimen) BaseTestCaseUtility.initCellSpecimen();
@@ -851,7 +851,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			assertFalse("Failed to create Domain Object", true);
 		}
 	}
-	public void testAddFluidSpecimenWithTechnician()
+	public void testAddFluidSpecimenWithTechnicianLogin()
 	{
 	   try {
 		    FluidSpecimen specimenObj = (FluidSpecimen) BaseTestCaseUtility.initFluidSpecimen();
