@@ -11,7 +11,7 @@
 	import="edu.wustl.catissuecore.util.global.Constants, org.apache.struts.Globals"
 %>
 <%@ page import="org.apache.struts.action.ActionMessages, edu.wustl.catissuecore.util.global.Utility;"%>
-
+<%@ page import="edu.wustl.catissuecore.util.global.Constants;"%>
 
 
 <head>
@@ -37,7 +37,7 @@ if(mac)
   height="500";
 }
 String message = null; 
-String popupMessage = (String)request.getAttribute("popupMessage");%>
+String popupMessage = (String)request.getAttribute(Constants.POPUP_MESSAGE);%>
 <html:messages id="messageKey" message="true" >
 <% message = messageKey;    %>
 </html:messages>
