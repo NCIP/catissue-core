@@ -31,7 +31,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 			ClientSession cs = ClientSession.getInstance();
 			try
 			{ 
-				cs.startSession("scientist11@admin.com", "Test123");
+				cs.startSession("scientist@admin.com", "Test123");
 			} 	
 						
 			catch (Exception ex) 
