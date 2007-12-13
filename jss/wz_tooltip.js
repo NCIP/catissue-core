@@ -37,6 +37,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 For more details on the GNU Lesser General Public License,
 see http://www.gnu.org/copyleft/lesser.html
 */
+// Reference site : http://www.walterzorn.com/tooltip/tooltip_e.htm
 
 var config = new Object();
 

@@ -21,6 +21,9 @@
 //
 // *****************************************************************************
 //
+//
+//	Reference Site : http://www.bigwebmaster.com/2710.html
+//
 // Contact:   Sorry, I can't offer support for this but if you find a problem
 //            (or just want to tell me how useful you find it), please send
 //            me an email at scwfeedback@tarrget.info (Note the two Rs in
@@ -207,7 +210,7 @@
     // alternatively, hard code a date like this...
     //      var scwBaseYear = 1990;
 
-    var scwBaseYear        = scwDateNow.getFullYear()-100;
+    var scwBaseYear        = 1900 ;  //scwDateNow.getFullYear()-100;
 
     // How many years do want to be valid and to show in the drop-down list?
 
