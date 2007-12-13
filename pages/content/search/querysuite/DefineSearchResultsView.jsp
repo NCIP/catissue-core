@@ -11,6 +11,7 @@
 <meta http-equiv="Content-Language" content="en-us">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <script src="jss/queryModule.js"></script>
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmXTreeCommon.js"></script>
 <script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmlXTree.js"></script>
 
@@ -74,10 +75,25 @@
 						<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EAEAEA" height="100%" bordercolorlight="#000000" >
 							<tr height="35" valign="center">
 								<td width="2%" valign="center">&nbsp;</td>
-								<td valign="center" width="6%"><html:button property="saveButton" onclick="saveClientQueryToServer('save');"><bean:message key="query.saveButton"/></html:button></td>								
-								<td  valign="center" align="left" width="70%"><html:button property="Button"  onclick="viewSearchResults()"><bean:message key="query.searchButton"/></html:button></td>
-								<td  align="right" valign="center"><html:button property="Button" onclick="previousFromDefineResults()"><bean:message key="query.previousButton"/></html:button></td>
-								<td align="right" valign="center"><html:button property="Button" onclick="viewSearchResults()"><bean:message key="query.nextButton"/></html:button>
+								<td valign="center" width="6%">
+									<html:button property="saveButton" onclick="validateQuery('save');">
+										<bean:message key="query.saveButton"/>
+									</html:button>
+								</td>								
+								<td  valign="center" align="left" width="70%">
+									<html:button property="Button"  onclick="validateQuery('search');">
+										<bean:message key="query.searchButton"/>
+									</html:button>
+								</td>
+								<td  align="right" valign="center">
+									<html:button property="Button" onclick="previousFromDefineResults()">
+										<bean:message key="query.previousButton"/>
+									</html:button>
+								</td>
+								<td align="right" valign="center">
+									<html:button property="Button" onclick="validateQuery('search');">
+										<bean:message key="query.nextButton"/>
+									</html:button>
 								</td>
 								<td width="2%">&nbsp;</td>
 							</tr>

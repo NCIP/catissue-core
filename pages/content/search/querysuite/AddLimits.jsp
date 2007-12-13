@@ -10,6 +10,7 @@
 <meta http-equiv="Content-Language" content="en-us">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <script src="jss/queryModule.js"></script>
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script> 
 </head>
 <body>
@@ -160,12 +161,12 @@
 					<tr height="35" valign="center">
 					 <td width="2%" valign="center">&nbsp;</td>
 						<td valign="center" width="6%">
-						<html:button property="saveButton" onclick="saveClientQueryToServer('save');">
+						<html:button property="saveButton" onclick="validateQuery('save');">
 							<bean:message key="query.saveButton"/>
 						</html:button>
 						</td>
 						<td  valign="center" align="left" width="75%">
-						<html:button property="searchButton" onclick="viewSearchResults()">
+						<html:button property="searchButton" onclick="validateQuery('search');">
 							<bean:message key="query.searchButton"/>
 						</html:button>
 						</td>
