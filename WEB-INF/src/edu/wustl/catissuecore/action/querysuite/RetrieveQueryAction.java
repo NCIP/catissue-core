@@ -42,6 +42,10 @@ public class RetrieveQueryAction extends BaseAction
 		{
 			HttpSession session = request.getSession();
 			session.removeAttribute(Constants.SELECTED_COLUMN_META_DATA);
+			session.removeAttribute(Constants.SAVE_GENERATED_SQL);
+			session.removeAttribute(Constants.SAVE_TREE_NODE_LIST);
+			session.removeAttribute(Constants.ID_NODES_MAP);
+			session.removeAttribute(Constants.MAIN_ENTITY_MAP);
 			SaveQueryForm saveQueryForm = (SaveQueryForm) actionForm;
 			Collection<IParameterizedQuery> parameterizedQueryCollection = (Collection<IParameterizedQuery>) HibernateUtility
 					.executeHQL(HibernateUtility.GET_PARAMETERIZED_QUERIES_DETAILS);
@@ -71,7 +75,7 @@ public class RetrieveQueryAction extends BaseAction
 			actionForward = actionMapping.findForward(Constants.FAILURE);
 		}
 		
-		request.setAttribute("popupMessage", ApplicationProperties.getValue("query.confirmBox.message"));
+		request.setAttribute(Constants.POPUP_MESSAGE, ApplicationProperties.getValue("query.confirmBox.message"));
 		return actionForward;
 	}
 
