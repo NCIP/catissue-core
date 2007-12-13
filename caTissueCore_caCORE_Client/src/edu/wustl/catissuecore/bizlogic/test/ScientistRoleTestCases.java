@@ -370,7 +370,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 		 		
 	        }
 		}
-	public void testSearchBioHazardWithScientistLogin()
+/*	public void testSearchBioHazardWithScientistLogin()
 		{
 	      try {
 	        Biohazard cachedBiohazard = (Biohazard) TestCaseUtility.getObjectMap(Biohazard.class);
@@ -393,7 +393,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 	         	assertFalse("Does not find Domain Object", true);
 		 		
 	        }
-		}
+		}*/
 	public void testSearchCollectionProtocol()
 		{
 	  	CollectionProtocol collectionProtocol = new CollectionProtocol();
