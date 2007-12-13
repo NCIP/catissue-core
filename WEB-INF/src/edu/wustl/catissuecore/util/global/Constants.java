@@ -226,6 +226,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String IS_SAVED_QUERY = "isSavedQuery";
 	public static final String RANDOM_NUMBER = "randomNumber";
 	public static final String MULTIUSER ="multiuser";
+	public static final String SAVE_TREE_NODE_LIST = "rootOutputTreeNodeList";
+	public static final String SAVE_GENERATED_SQL = "sql";
+	public static final String POPUP_MESSAGE = "popupMessage";
+	public static final String BUTTON_CLICKED = "buttonClicked";
 	
 	/**
 	 * Name: Abhishek Mehta
