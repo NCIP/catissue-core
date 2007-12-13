@@ -10,8 +10,8 @@
 	page language="java" contentType="text/html"
 	import="edu.wustl.catissuecore.util.global.Constants, org.apache.struts.Globals"
 %>
-<%@ page import="org.apache.struts.action.ActionMessages, edu.wustl.catissuecore.util.global.Utility;"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants;"%>
+<%@ page import="org.apache.struts.action.ActionMessages, edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 
 <head>
