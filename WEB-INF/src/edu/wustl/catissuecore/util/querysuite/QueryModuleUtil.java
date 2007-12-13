@@ -390,9 +390,9 @@ public abstract class QueryModuleUtil
 	public static int searchQuery(HttpServletRequest request, IQuery query, String option)
 	{  
 		String isSavedQuery = (String) request.getAttribute(Constants.IS_SAVED_QUERY);
-		if(isSavedQuery == null)
+		if(isSavedQuery == null) 
 			isSavedQuery = Constants.FALSE;
-		HttpSession session = request.getSession(); 
+		HttpSession session = request.getSession();  
 		boolean hasConditionOnIdentifiedField = edu.wustl.common.querysuite.security.utility.Utility.isConditionOnIdentifiedField(query);
 		session.removeAttribute(Constants.HYPERLINK_COLUMN_MAP);
 		int status = 0;
@@ -405,13 +405,24 @@ public abstract class QueryModuleUtil
  
 				SqlGenerator sqlGenerator = (SqlGenerator) SqlGeneratorFactory.getInstance();
 				QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
-				String selectSql = sqlGenerator.generateSQL(query);
+				String selectSql = (String)session.getAttribute(Constants.SAVE_GENERATED_SQL);
+				List<OutputTreeDataNode> rootOutputTreeNodeList = (List<OutputTreeDataNode>)session.getAttribute(Constants.SAVE_TREE_NODE_LIST);
+				Map<String, OutputTreeDataNode> uniqueIdNodesMap = (Map<String, OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);
+				Map<EntityInterface, List<EntityInterface>> mainEntityMap = (Map<EntityInterface, List<EntityInterface>>)session.getAttribute(Constants.MAIN_ENTITY_MAP);
+				if(isSavedQuery.equalsIgnoreCase(Constants.TRUE))
+				{
+					selectSql = sqlGenerator.generateSQL(query);
+					rootOutputTreeNodeList = sqlGenerator.getRootOutputTreeNodeList();
+					uniqueIdNodesMap = QueryObjectProcessor.getAllChildrenNodes(rootOutputTreeNodeList);
+					session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
+					mainEntityMap = QueryCSMUtil.setMainObjectErrorMessage(query, request.getSession(), uniqueIdNodesMap);
+				}
+				QueryModuleUtil.uniqueIdNodesMap = uniqueIdNodesMap;
 				Object obj = session.getAttribute(Constants.SESSION_DATA);
 				if (obj != null)
 				{
 					SessionDataBean sessionData = (SessionDataBean) obj;
 					String propertyValue = XMLPropertyHandler.getValue(Constants.MULTIUSER);
-					
 					String randomNumber="";
 					if(propertyValue!=null)
 					{
@@ -423,34 +434,20 @@ public abstract class QueryModuleUtil
 									randomNumber =Constants.UNDERSCORE+Integer.toString(number);
 								}
 								session.setAttribute(Constants.RANDOM_NUMBER,randomNumber);
-									
 							}
 							else
 							{
 								randomNumber = (String)session.getAttribute(Constants.RANDOM_NUMBER);
 							}
-						
 					}
 					outputTreeBizLogic.createOutputTreeTable(selectSql,sessionData,randomNumber);
-					List<OutputTreeDataNode> rootOutputTreeNodeList = sqlGenerator
-							.getRootOutputTreeNodeList();
-					Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor
-					.getAllChildrenNodes(rootOutputTreeNodeList);
-					session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
-					QueryModuleUtil.uniqueIdNodesMap = uniqueIdNodesMap;
-					 
-					//This method will check if main objects for all the dependant objects are present in query or not.
-					Map<EntityInterface, List<EntityInterface>> mainEntityMap = QueryCSMUtil.setMainObjectErrorMessage(
-							query, session, uniqueIdNodesMap);
-					if(mainEntityMap == null)
-						return NO_MAIN_OBJECT_IN_QUERY;
-					
 					status = DAGConstant.SUCCESS;
 					int i = 0;
 					for (OutputTreeDataNode outnode : rootOutputTreeNodeList)
 					{
 						Vector<QueryTreeNodeData> treeData = outputTreeBizLogic
 								.createDefaultOutputTreeData(i, outnode, sessionData,randomNumber,hasConditionOnIdentifiedField,mainEntityMap);
+						
 						int resultsSize = treeData.size();
 						if(option == null)
 						{
@@ -476,7 +473,7 @@ public abstract class QueryModuleUtil
 						else if(option.equalsIgnoreCase(Constants.VIEW_LIMITED_RECORDS))
 						{
 							List<QueryTreeNodeData> limitedRecordsList = treeData.subList(0, Variables.maximumTreeNodeLimit+1);
-							Vector limitedTreeData = new Vector<QueryTreeNodeData>();
+							Vector<QueryTreeNodeData> limitedTreeData = new Vector<QueryTreeNodeData>();
 							limitedTreeData.addAll(limitedRecordsList);
 							session.setAttribute(Constants.TREE_DATA + "_" + i, limitedTreeData);
 							i += 1;
@@ -576,12 +573,14 @@ public abstract class QueryModuleUtil
 
 	
 
+	
+
 	/**
 	 * 
 	 * @param query
 	 * @return
 	 */
-	private static boolean checkIfRulePresentInDag(IQuery query) {
+	public static boolean checkIfRulePresentInDag(IQuery query) {
 		boolean isRulePresentInDag = false;
 
 		if (query != null)
