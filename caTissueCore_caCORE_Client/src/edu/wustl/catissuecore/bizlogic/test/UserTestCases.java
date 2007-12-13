@@ -140,16 +140,14 @@ public class UserTestCases extends CaTissueBaseTestCase {
 		}catch(Exception e){
 				 e.printStackTrace();
 				 assertFalse("could not add object", true);
-		 }
-			
-			
+		 }			
 	 } 
 	
-/*	public void testAddScientist()
+	public void testAddScientist()
 	 {
 		try{
 			User userObj = new User();
-			userObj.setEmailAddress("scientist3@admin.com");
+			userObj.setEmailAddress("scientist@admin.com");
 			userObj.setLoginName(userObj.getEmailAddress());
 			userObj.setLastName("last" + UniqueKeyGeneratorUtil.getUniqueKey());
 			userObj.setFirstName("name" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -178,25 +176,26 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			cancerResearchGroup.setId(new Long(1));
 			userObj.setCancerResearchGroup(cancerResearchGroup);
 			
-			userObj.setRoleId("4");
+			userObj.setRoleId("7");
 			userObj.setActivityStatus("Active");
-			userObj.setPageOf(Constants.PAGEOF_SIGNUP);
+			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);
 
 		
 			userObj = (User)appService.createObject(userObj);
 			
 			userObj.setNewPassword("Test123");
 			
-			userObj.setRoleId("4");
+			userObj.setRoleId("7");
 			userObj.setActivityStatus("Active");
 			userObj.setPageOf(Constants.PAGEOF_USER_ADMIN);	
 			userObj = (User)appService.updateObject(userObj);	
 		 }
 		 catch(Exception e){
+			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
 			 assertFalse("could not add object", true);
 		 }
-	 } */
+	 } 
 		
 	
 	public void testSearchUser()
@@ -449,6 +448,6 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			 assertTrue("For invalid role id, it throws exception", true);
 			 
 		 }
-	 }
+	 }  
 	
 }
