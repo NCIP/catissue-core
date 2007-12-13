@@ -3,6 +3,10 @@ drop table  CATISSUE_CDE cascade constraints;
 drop table  CATISSUE_COLL_COORDINATORS cascade constraints;
 drop table  CATISSUE_CANCER_RESEARCH_GROUP cascade constraints;
 drop table  CATISSUE_COLLECTION_PROTOCOL cascade constraints;
+
+drop table CATISSUE_ABS_SPECI_COLL_GROUP cascade constraints;
+drop table CATISSUE_SPECI_COLL_REQ_GROUP cascade constraints;
+
 drop table  CATISSUE_EVENT_PARAM cascade constraints;
 drop table  CATISSUE_TRANSFER_EVENT_PARAM cascade constraints;
 drop table  CATISSUE_STOR_CONT_SPEC_CLASS cascade constraints;
