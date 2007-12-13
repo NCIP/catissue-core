@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.action.querysuite;
+package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.Enumeration;
 import java.util.List;
