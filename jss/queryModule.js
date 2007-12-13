@@ -464,8 +464,9 @@
 				var id = nameIdDescription[1];				
 				var description = nameIdDescription[2];
 				var functionCall = "addNodeToView('"+id+"')";		
-				var entityName = "<font color=#6E97F0>"+name +"</font>";
-				row = row+'<tr><td><a  class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+				var entityName = "<font color=#0055E6>"+name +"</font>";
+				var tooltipFunction = "Tip('"+description+"', WIDTH, 200)";				
+				row = row+'<tr><td><a  class="entityLink" onmouseover="'+tooltipFunction+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
 				
 			}
 			row = row+'</table>';		
@@ -494,8 +495,9 @@
 				var id = nameIdDescription[1];				
 				var description = nameIdDescription[2];
 				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+id+"')";		
-				var entityName = "<font color=#6E97F0>"+name +"</font>";
-				row = row+'<tr><td><a  class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+				var entityName = "<font color=#0055E6>"+name +"</font>";
+				var tooltipFunction = "Tip('"+description+"', WIDTH, 200)";				
+				row = row+'<tr><td ><a  class="entityLink"  onmouseover="'+tooltipFunction+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
 			}			
 			row = row+'</table>';		
 			element.innerHTML =row;
@@ -872,7 +874,7 @@
 		    }
 		    else
 		    {
-		    	NewWindow(url,'name','800','600','yes');
+		    	NewWindow(url,'name','870','600','yes');
 		    }
 			hideCursor();
 		/*	var request = newXMLHTTPReq();			
@@ -1139,4 +1141,38 @@ var jsReady = false;
 		request.open("POST",url,true);	
 		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
 		request.send(actionURL);	
+	}
+	
+	function validateQuery(text)
+	{
+		var request = newXMLHTTPReq();			
+		var handlerFunction = getReadyStateHandler(request,displayValidationMessage,true);	
+		request.onreadystatechange = handlerFunction;			
+		var actionURL = "buttonClicked=" + text;		
+		var url = "ValidateQuery.do";
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);		
+	}
+
+	function displayValidationMessage(text)
+	{		
+		if (text == "save")
+		{
+			saveClientQueryToServer('save');
+		}
+		else
+		{
+			if (text == "search")
+			{
+				viewSearchResults();
+			}			
+			else 
+			{
+				if(text != "")
+				{			
+					showValidationMessages(text);
+				}		
+			}
+		}
 	}
