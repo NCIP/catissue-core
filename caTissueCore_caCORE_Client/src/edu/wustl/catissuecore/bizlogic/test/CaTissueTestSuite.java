@@ -32,8 +32,7 @@ public class CaTissueTestSuite
 		suite.addTestSuite(StorageContainerRestrictionsTestCases.class);
 		suite.addTestSuite(SupervisorRoleTestCases.class);
 		suite.addTestSuite(TechnicianRoleTestCases.class);	
-		
-	//	suite.addTestSuite(ScientistRoleTestCases.class);
+		suite.addTestSuite(ScientistRoleTestCases.class);
 	//	suite.addTestSuite(PrivilegeBasedTestCases.class);
 		//$JUnit-END$
 		return suite;
