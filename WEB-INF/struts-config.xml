@@ -505,6 +505,13 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.searchCategory"/>
 		</action>
+		<action path="/ValidateQuery"
+			type="edu.wustl.catissuecore.action.querysuite.ValidateQueryAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.searchCategory"/>
+		</action>
 		<action path="/LoadSaveQueryPage"
             type="edu.wustl.catissuecore.action.querysuite.LoadSaveQueryPageAction"
             name="saveQueryForm"
