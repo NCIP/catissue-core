@@ -1275,11 +1275,11 @@ public class GenerateHtmlForAddLimitsBizLogic
 		{
 			html.append("\n<input type='radio' id = '" + componentId
 					+ "_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId
-					+ "',this)\" name='" + componentName + "'><font class='" + cssClass
+					+ "',this)\" name='" + componentName + "'/><font class='" + cssClass
 					+ "'>True</font>");
 			html.append("\n<input type='radio' id = '" + componentId
 					+ "_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId
-					+ "',this)\" name='" + componentName + "'><font class='" + cssClass
+					+ "',this)\" name='" + componentName + "'/><font class='" + cssClass
 					+ "'>False</font>");
 		}
 		else
@@ -1287,19 +1287,23 @@ public class GenerateHtmlForAddLimitsBizLogic
 			if (values.get(0).equalsIgnoreCase("true"))
 			{
 				html.append("\n<input type='radio' id = '" + componentId
-						+ "_true' value='true' name='" + componentName + "' checked><font  class='"
+						+ "_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId
+					+ "',this)\" name='" + componentName + "' checked><font  class='"
 						+ cssClass + "'>True</font>");
 				html.append("\n<input type='radio' id = '" + componentId
-						+ "_false' value='false' name='" + componentName + "'><font class='"
+						+ "_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId
+						+ "',this)\" name='" + componentName + "'><font class='"
 						+ cssClass + "'>False</font>");
 			}
 			else
 			{
 				html.append("\n<input type='radio' id = '" + componentId
-						+ "_true' value='true' name='" + componentName + "' ><font class='"
+						+ "_true' value='true' onclick=\"resetOptionButton('" + radioButtonTrueId
+					+ "',this)\" name='" + componentName + "' ><font class='"
 						+ cssClass + "'>True</font>");
 				html.append("\n<input type='radio' id = '" + componentId
-						+ "_false' value='false' name='" + componentName
+						+ "_false' value='false' onclick=\"resetOptionButton('" + radioButtonFalseId
+					+ "',this)\" name='" + componentName
 						+ "'  checked><font class='" + cssClass + "'>False</font>");
 			}
 		}
