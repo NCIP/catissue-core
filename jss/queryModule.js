@@ -958,13 +958,30 @@
 
 	}
 	var radio="";
+	var toggleRadio ="";
 	function resetOptionButton(id,currentObj)
 	{ 
-		if(currentObj.checked == true && id==radio)
-            currentObj.checked = false;
-		radio = id;
-
+		
+		//variable radio keeps track of which radio button is selected (True/False) and 
+		// variable toggleRadio maintains the status of the radiobutton clicked (selected/not selected)
+		if (id != radio) // if previous object and current object are not same
+		{
+			radio = id;						// set the current object id;
+			toggleRadio = "false";			// default value of radio button
+		}
+		if (toggleRadio == "false")			//if radiobutton is deselected
+		{
+			currentObj.checked = true;		// select it
+			toggleRadio = "true";			//set toggleRadio to radio button status
+		}
+		else							//if toggleRadio == "true" i.e. if radiobutton is selected
+		{			
+			currentObj.checked = false;		// deselect it
+			toggleRadio = "false";			//set toggleRadio to radio button status
+		}		
+		
 	}
+
 	function radioButtonSelected(element)
 	{
 		if(element.value == 'conceptCode_radioButton')
