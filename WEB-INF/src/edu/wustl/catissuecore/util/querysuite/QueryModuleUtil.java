@@ -532,7 +532,9 @@ public abstract class QueryModuleUtil
 					session.setAttribute(Constants.TOTAL_RESULTS,
 									new Integer(totalNumberOfRecords));
 
-					request.setAttribute(Constants.PAGINATION_DATA_LIST, spreadSheetDatamap
+//					request.setAttribute(Constants.PAGINATION_DATA_LIST, spreadSheetDatamap
+//							.get(Constants.SPREADSHEET_DATA_LIST));
+					session.setAttribute(Constants.PAGINATION_DATA_LIST, spreadSheetDatamap
 							.get(Constants.SPREADSHEET_DATA_LIST));
 					session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap
 							.get(Constants.SPREADSHEET_COLUMN_LIST));
