@@ -31,6 +31,7 @@ import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -192,7 +193,7 @@ public abstract class QueryCSMUtil
 				.getDynamicExtensionsEntity());
 		if (mainEntityList != null)
 		{
-			EntityInterface mainEntity = getmainEntity(mainEntityList, node);
+			EntityInterface mainEntity = getMainEntity(mainEntityList, node);
 			queryResultObjectDataBean.setMainEntity(mainEntity);
 			queryResultObjectDataBean.setMainEntity(false);
 		}
@@ -207,19 +208,48 @@ public abstract class QueryCSMUtil
 	 * @param mainEntityList
 	 * @param node
 	 */
-	private static EntityInterface getmainEntity(List<EntityInterface> mainEntityList, OutputTreeDataNode node)
+	private static EntityInterface getMainEntity(List<EntityInterface> mainEntityList, OutputTreeDataNode node)
+
 	{
-		if(node!=null)
-		{
-		EntityInterface dynamicExtensionsEntity = node.getOutputEntity().getDynamicExtensionsEntity();
-		if(mainEntityList.contains(dynamicExtensionsEntity))
-			return dynamicExtensionsEntity;
-		else if (node.getParent().getParent()!=null)
-			return getmainEntity(mainEntityList,node.getParent().getParent());
+
+		if (node != null)
+
+		{ 
+
+			EntityInterface dynamicExtensionsEntity = node.getOutputEntity()
+					.getDynamicExtensionsEntity();
+
+			if (mainEntityList.contains(dynamicExtensionsEntity))
+
+				return dynamicExtensionsEntity;
+
+			else if (node.getParent() != null)
+
+				return getMainEntity(mainEntityList, node.getParent());
+
 		}
-		return node.getOutputEntity().getDynamicExtensionsEntity();	
-		
+
+		if (node != null)
+
+		{
+
+			List<OutputTreeDataNode> children = node.getChildren();
+
+			for (OutputTreeDataNode childNode : children)
+
+			{
+
+				return getMainEntity(mainEntityList, childNode);
+
+			}
+
+		}
+
+		return null;
+
 	}
+
+
 
 	/**This method will internally call  getIncomingAssociationIds of DE which will return all incoming associations 
 	 * for entities passed.This method will filter out all incoming containment associations and return list of them.
@@ -254,13 +284,15 @@ public abstract class QueryCSMUtil
 	 */
 	public static List executeCSMQuery(String selectSql, SessionDataBean sessionData,
 			Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap, OutputTreeDataNode root, boolean hasConditionOnIdentifiedField) throws DAOException, ClassNotFoundException
-	{
+	{  
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List<List<String>> dataList = new ArrayList<List<String>>();
 		try
 		{ 
 			dao.openSession(sessionData);
 			dataList = dao.executeQuery(selectSql, sessionData, true, hasConditionOnIdentifiedField, queryResulObjectDataMap);
+			System.out.println("Time after checkPermissions for CSM filtering of tree: " +new java.util.Date());
+			Logger.out.debug("Time after checkPermissions for CSM filtering of tree: " +new java.util.Date());
 			dao.commit();
 		}
 		finally
