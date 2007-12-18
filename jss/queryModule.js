@@ -24,6 +24,7 @@
 	}
 	
 	var addedNodes = "";
+	var isFirtHit = true;
 	function treeNodeClicked(id)
 	{
 		if(id.indexOf('_NULL') == -1)
@@ -58,7 +59,13 @@
 				addedNodes = addedNodes + ","+id;
 			}
 		}
-		buildSpreadsheet(id);
+		if(!isFirtHit)
+		{
+			//alert(isFirtHit);
+		  buildSpreadsheet(id);
+		  
+		}
+		isFirtHit = false;
 	}
 	function buildSpreadsheet(id)
 	{
