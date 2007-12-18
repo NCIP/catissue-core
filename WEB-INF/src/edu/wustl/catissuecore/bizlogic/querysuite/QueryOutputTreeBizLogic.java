@@ -397,6 +397,10 @@ public class QueryOutputTreeBizLogic
 			String fullyQualifiedEntityName = currentNode.getOutputEntity().getDynamicExtensionsEntity().getName();
 			String entityName = Utility.parseClassName(fullyQualifiedEntityName);
 			String currentNodeId = currentNode.getUniqueNodeId() + Constants.UNDERSCORE + data;
+			if(data.contains("#"))
+			{
+				currentNodeId = currentNode.getUniqueNodeId() + Constants.UNDERSCORE + Constants.HASHED_NODE_ID;
+			}
 			String labelNode = parentNodeId.substring(parentNodeId.lastIndexOf(Constants.NODE_SEPARATOR) + 2, parentNodeId.length());
 			String nodeIdToSet = Constants.UNIQUE_ID_SEPARATOR+labelNode + Constants.NODE_SEPARATOR + currentNodeId;
 			String displayName = entityName + Constants.UNDERSCORE + data;
