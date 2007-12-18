@@ -2213,4 +2213,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP = "pageOfSpecimenCollectionRequirementGroup";
 	public static final String NO_MAIN_OBJECT_IN_QUERY = "noMainObjectInQuery";
+	public static final String QUERY_ALREADY_DELETED = "queryAlreadyDeleted";
 }
