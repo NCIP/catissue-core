@@ -610,7 +610,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String nameOfTheEntity = entity.getName();
 		String entityId = entity.getId().toString();
 		String entityName = Utility.parseClassName(nameOfTheEntity);//nameOfTheEntity.substring(nameOfTheEntity.lastIndexOf(".")+1,nameOfTheEntity.length());
-		Collection<AttributeInterface> attributeCollection = entity.getAttributeCollection();
+		Collection<AttributeInterface> attributeCollection = entity.getEntityAttributesForQuery();
 		boolean isEditLimits = false;
 		String header = Constants.DEFINE_SEARCH_RULES;
 		//ApplicationProperties.getValue("query.defineSearchRulesFor");//"\nDefine Search Rules For";//
