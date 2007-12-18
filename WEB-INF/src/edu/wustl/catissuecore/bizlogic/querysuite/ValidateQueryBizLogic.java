@@ -22,6 +22,7 @@ import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * When the user searches or saves a query , the query is checked for the conditions like DAG should not be empty , is there 
@@ -41,7 +42,7 @@ public class ValidateQueryBizLogic {
 	 * @throws MultipleRootsException
 	 * @throws SqlException
 	 */
-	public static String getValidationMessage(HttpServletRequest request, IQuery query) throws MultipleRootsException, SqlException
+	public static String getValidationMessage(HttpServletRequest request, IQuery query)
 	{
 		String validationMessage = null;  
 		
@@ -70,6 +71,8 @@ public class ValidateQueryBizLogic {
 			validationMessage = ApplicationProperties.getValue("query.defineView.noExpression.message");
 			return validationMessage;
 		}
+		try 
+		{
 		SqlGenerator sqlGenerator = (SqlGenerator) SqlGeneratorFactory.getInstance();
 		String selectSql = sqlGenerator.generateSQL(query);
 		HttpSession session = request.getSession();
@@ -89,6 +92,17 @@ public class ValidateQueryBizLogic {
 			//return NO_MAIN_OBJECT_IN_QUERY;
 			validationMessage = (String)session.getAttribute(Constants.NO_MAIN_OBJECT_IN_QUERY);
 			validationMessage = "<li><font color='blue' family='arial,helvetica,verdana,sans-serif'>"+validationMessage+"</font></li>";
+		}
+		}
+		catch (MultipleRootsException e)
+		{
+			Logger.out.error(e);
+			validationMessage = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
+		}
+		catch (SqlException e)
+		{
+			Logger.out.error(e);
+			validationMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
 		}
 		
 		
