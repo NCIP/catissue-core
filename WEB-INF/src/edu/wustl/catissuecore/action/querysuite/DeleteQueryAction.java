@@ -5,11 +5,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -29,28 +32,37 @@ public class DeleteQueryAction extends BaseAction{
 		String target = Constants.FAILURE;
 
 		String queryIdStr = request.getParameter(QUERY_ID);
+		HttpSession session = request.getSession();
+		String queryDeletedInLastRequest = (String)session.getAttribute(Constants.QUERY_ALREADY_DELETED);
 		Long queryId = Long.parseLong(queryIdStr);
 		if (queryId != null)
 		{
-			IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
-					.getValue("app.bizLogicFactory"), "getBizLogic",
-					Constants.CATISSUECORE_QUERY_INTERFACE_ID);
-			try
+			if(!queryIdStr.equalsIgnoreCase(queryDeletedInLastRequest))
 			{
-				List<IParameterizedQuery> queryList = bizLogic.retrieve(ParameterizedQuery.class.getName(), Constants.ID, queryId);
-				if (!queryList.isEmpty())
+				session.setAttribute(Constants.QUERY_ALREADY_DELETED,queryIdStr);
+				IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
+						.getValue("app.bizLogicFactory"), "getBizLogic",
+						Constants.CATISSUECORE_QUERY_INTERFACE_ID);
+				try
 				{
-					IParameterizedQuery parameterizedQuery = queryList.get(0);
+					List<IParameterizedQuery> queryList = bizLogic.retrieve(ParameterizedQuery.class.getName(), Constants.ID, queryId);
+					if (!queryList.isEmpty())
 					{
+						IParameterizedQuery parameterizedQuery = queryList.get(0);
 						bizLogic.delete(parameterizedQuery,Constants.HIBERNATE_DAO);
 						target = Constants.SUCCESS; 
 						setActionError(request, ApplicationProperties.getValue("query.deletedSuccessfully.message"));
+						session.setAttribute(Constants.QUERY_ALREADY_DELETED,queryIdStr );
+					}
+					else
+					{
+						session.removeAttribute(Constants.QUERY_ALREADY_DELETED);
 					}
 				}
-			}
-			catch (DAOException daoException)
-			{
-				setActionError(request, daoException.getMessage());
+				catch (DAOException daoException)
+				{
+					setActionError(request, daoException.getMessage());
+				}
 			}
 		}
 		return actionMapping.findForward(target);
