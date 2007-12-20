@@ -185,7 +185,7 @@ public class ImportXmi
 		catch (Exception e)
 		{
 			System.out.println("Fatal error reading XMI.");
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		finally
 		{
