@@ -240,7 +240,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 			try
 			{
-				storageContainerIds.clear();
+				
 				setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
 				insertSingleSpecimen(specimen, dao, sessionDataBean, true);
 				specimenList.add(specimen);
@@ -291,6 +291,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			TaskTimeCalculater.endTask(mulSpec);
 		}
+		
+		//kalpana bug #6254
+		storageContainerIds.clear();
 
 		//inserting authorization data 
 		authenticateSpecimens(specimenList);
