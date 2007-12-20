@@ -388,7 +388,7 @@ public abstract class QueryModuleUtil
 	 * @return
 	 */
 	public static int searchQuery(HttpServletRequest request, IQuery query, String option)
-	{  
+	{     
 		String isSavedQuery = (String) request.getAttribute(Constants.IS_SAVED_QUERY);
 		if(isSavedQuery == null) 
 			isSavedQuery = Constants.FALSE;
@@ -504,6 +504,7 @@ public abstract class QueryModuleUtil
 					String parentNodeId = null;
 					String treeNo = "0";
 					SelectedColumnsMetadata selectedColumnsMetadata = getAppropriateSelectedColumnMetadata(query, session);
+					selectedColumnsMetadata.setCurrentSelectedObject(node);
 					List<IOutputAttribute> selectedAttributeList = null;
 					if(query.getId() != null && isSavedQuery.equals(Constants.TRUE))
 					{
