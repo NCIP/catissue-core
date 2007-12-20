@@ -539,9 +539,9 @@
 			</xslt>   
 		</target>  
 	
-			<property name="reportgenerator.input.jmeterfile" value="E:/Nightly Build/CaTissueJMeterTests.xml" />
-			<property name="reportgenerator.input.junitfile" value="E:/Nightly Build/TESTS-TestSuites.xml" />
-			<property name="reportgenerator.output.file" value="E:/Nightly build output/mail_setting.properties" />
+			<property name="reportgenerator.input.jmeterfile" value="D:/Nightly_Build/XmlReport/CaTissueJMeterTests.jtl" />
+			<property name="reportgenerator.input.junitfile" value="D:/Nightly_Build/XmlReport/TESTS-TestSuites.xml" />
+			<property name="reportgenerator.output.file" value="D:/Nightly_Build/script/mail_setting.properties" />
 				
 		<target name="GenerateNightlyBuildReport" depends="compile">
 			<java classname="NightlyBuildReportGenerator" fork="true">
