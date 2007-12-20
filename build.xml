@@ -538,6 +538,23 @@
 				<param name="showData" expression="${show-data}"/>
 			</xslt>   
 		</target>  
+	
+			<property name="reportgenerator.input.jmeterfile" value="E:/Nightly Build/CaTissueJMeterTests.xml" />
+			<property name="reportgenerator.input.junitfile" value="E:/Nightly Build/TESTS-TestSuites.xml" />
+			<property name="reportgenerator.output.file" value="E:/Nightly build output/mail_setting.properties" />
+				
+		<target name="GenerateNightlyBuildReport" depends="compile">
+			<java classname="NightlyBuildReportGenerator" fork="true">
+				<arg value="${reportgenerator.input.jmeterfile}" />
+				<arg value="${reportgenerator.input.junitfile}" />
+				<arg value="${reportgenerator.output.file}" />
+				<classpath>
+					<pathelement location="./WEB-INF/classes"/>
+				</classpath>
+			
+			</java>
+						
+		</target>
 
   <!-- =================================================================== -->
   <!-- Cobertura code coverage report                                      -->
