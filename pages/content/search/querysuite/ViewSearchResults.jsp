@@ -185,7 +185,7 @@ function initGridView()
 								String img = "results.gif";
 								if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
 								{
-									 img = "folder.gif";
+									 img = "ic_folder.gif";
 								}
 								if (parentId.equals("0"))
 								{
