@@ -34,9 +34,9 @@ function divHeight(treeNumber, currentNumber)
       }
   else
   {
-	  var divHt = 410 / treeNumber;    
+	  var divHt = 396 / treeNumber;    
 	  divHt = divHt + "px";
-    document.getElementById("table1").style.height="410px";
+    document.getElementById("table1").style.height="400px";
 	document.getElementById(treeName).style.height=divHt;
   }
 }
@@ -93,7 +93,7 @@ var treeNo = 0;
 								String img = "results.gif";
 								if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
 								{
-									 img = "folder.gif";
+									 img = "ic_folder.gif";
 								}
 								if (parentId.equals("0"))
 								{
