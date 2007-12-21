@@ -37,27 +37,38 @@ if(mac)
   height="500";
 }
 String message = null; 
-String popupMessage = (String)request.getAttribute(Constants.POPUP_MESSAGE);%>
+String popupMessage = (String)request.getAttribute(Constants.POPUP_MESSAGE);
+int queryCount = 0;%>
 <html:messages id="messageKey" message="true" >
 <% message = messageKey;    %>
 </html:messages>
 	<html:form styleId='saveQueryForm' action='<%=Constants.FETCH_QUERY_ACTION%>' style="margin:0;padding:0;">
 		<table cellpadding='0' cellspacing='0' border='0' height="<%=height%>"  align='center' style="width:100%;"> 
-			<tr ><td>&nbsp;</td></tr>
-			<tr>
-				<td class="formTitle" height="20">
-					<bean:message key="query.savedQueries.label"/>
+			
+			<tr valign="center" class="bgImage"> 
+				<td width="10" >&nbsp;</td>			
+				<td  align="left" class="bgImage">
+					<img src="images/ic_saved_queries.gif" alt="Saved Queries"   width="38" height="48" hspace="5" align="absmiddle"/>
+					<span class="savedQueryHeading" > <bean:message key="query.savedQueries.label"/> </span>
 				</td>
-				<td class="formTitle" height="20" width="20%">
-					<%= message %>
+				<td  width="130" align="left" class="bgImage"> 					
+					<span class="savedQueryHeading" ><%= message %> </span>					
+				</td>
+				<td width="1" valign="middle" class="bgImage">
+					<img src="images/dot.gif" width="1" height="25" />
+				</td>
+				<td width="130" align="right" valign="middle" class="bgImage">
+					<!--a href="javascript:QueryWizard()"> <img src="images/add.gif" width="125" height="18" /> </a-->
+					<img src="images/add.gif" width="125" height="18" onclick="QueryWizard()"/>
 				</td>
 			</tr>
+			
 			<tr >
-				<td><html:errors /></td>
+				<td colspan='5' ><html:errors /></td>
 			</tr>
 			
 			<tr style="height:100%;">
-				<td colspan='2'>
+				<td colspan='5'>
 					<div style="width:100%; height:100%; overflow:auto; " id="searchDiv">
 						<table cellpadding='0' cellspacing='0' border='0' width='99%' class='contentPage' >
 							<c:set var="parameterizedQueryCollection" value="${saveQueryForm.parameterizedQueryCollection}" />
@@ -73,22 +84,23 @@ String popupMessage = (String)request.getAttribute(Constants.POPUP_MESSAGE);%>
 									  
 									  String tooltip = Utility.getTooltip(title);
 									  String function = "Tip('"+tooltip+"', WIDTH, 700)";
+									  queryCount++;
 									%>
 									
-									<td valign="top" height='20'width='30'>
-										<img src="images/savedQuery.bmp"/>
+									<td valign="top" height='20'width='30' style="font-size:1.2em;">
+										<!--img src="images/savedQuery.bmp"/-->
+										<%=queryCount%> 
 									</td>
-									<td  height='20' valign="top" style="padding-left:0.7em;
-																		 width:760px;">
+									<td  height='20'  style="padding-left:0.7em; font-size:1.1em; font-family:arial; width:92%;">
 										<html:link styleClass='formQueryLink' href='#' onclick='<%=target%>'  onmouseover="<%=function%>" >
-											<b> <%=newTitle%> </b>
-										</html:link><br/>				
+											 <%=newTitle%>
+										</html:link><br/>
 																				
 										<b>Description: &nbsp;</b><c:out value='${parameterizedQuery.description}' />
 									</td>
-									<td valign="top" height='20'>
+									<td valign="center" height='20' align="right">
 										<%target = "deleteQueryPopup('"+parameterizedQuery.getId()+"','"+popupMessage+"')"; %>
-										<html:image src="images/delete.gif" alt="Delete" onclick='<%=target%>' />
+										<html:image src="images/ic_trash.gif" alt="Delete" onclick='<%=target%>' />
 									</td>
 								</tr>
 								<tr><td colspan='3' class="saveQuery">&nbsp;</td></tr>
