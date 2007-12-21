@@ -59,6 +59,7 @@
 				addedNodes = addedNodes + ","+id;
 			}
 		}
+		isFirtHit = false;
 		if(!isFirtHit)
 		{
 			//alert(isFirtHit);
@@ -105,7 +106,7 @@
 				var lab = nodeId.substring(diff);
 				if(lab == 'Label')
 				{
-					 img = "folder.gif";
+					 img = "ic_folder.gif";
 				}
 				trees[i1].insertNewChild(parentIdToSet,nodeId,displayName,0,img,img,img,"");
 				var start = displayName.indexOf("<i>");
@@ -199,7 +200,7 @@
 			advancedSearchHeaderTd.style.borderBottom = "1px solid #000000";
             imageContainer.style.borderBottom = "1px solid #000000";
 			dataObj.style.display = 'none';				
-			switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0"/>';
+			switchObj.innerHTML = '<img src="images/ic_expand.gif" border="0" hspace="3" vspace="3"/>';
 			if(navigator.appName == "Microsoft Internet Explorer")
 			{					
 				resultSetDivObj.height = "530";
@@ -230,7 +231,7 @@
 				resultSetDivObj.height = "420";
 			}
 			resultSetDiv.style.height = "420"+'px'
-			switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
+			switchObj.innerHTML = '<img src="images/ic_coll.gif" border="0" hspace="3" vspace="3"/>';
 		}
 	}
 	
@@ -728,7 +729,8 @@
 		callFlexMethod();
      	if(interfaceObj.isDAGEmpty())
 		{
-			showValidationMessages("<li><font color='red'>Graph must have atleast one node.</font></li>")
+			var message = 	"<li> <font color='red'>Graph must have atleast one node.</font> </li>";
+			showValidationMessages(message)
 		}
 		else
 		{
@@ -863,7 +865,9 @@
 						
 			if(interfaceObj.isDAGEmpty())
 			{
-				showValidationMessages("<li><font color='red'>Graph must have atleast one node.</font></li>")
+				//showValidationMessages("<li><font color='red'>Graph must have atleast one node.</font></li>")
+				var message = 	"<li> <font color='red'>Graph must have atleast one node.</font></li>";
+				showValidationMessages(message);
 			}
 			else
 			{
@@ -1194,7 +1198,7 @@ var jsReady = false;
 			else 
 			{
 				if(text != "")
-				{			
+				{		
 					showValidationMessages(text);
 				}		
 			}
