@@ -819,7 +819,7 @@ DATA TABLE BEGINS
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.8em;
   font-weight:bold;
-  background-color:#FFFFFF; /* constant: white */
+  background-color:#F1F2F7; 
   color:#5C5C5C; /* constant: dark gray */
   padding-left:0.4em;
 }
@@ -1740,7 +1740,7 @@ queryLink{ /* for the text links in the Search category page */
 {
  font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.9em;
-  border-top:1px  solid #000000;/* constant: dark gray */
+  /*border-top:1px  solid #000000;/* constant: dark gray */
   color:#000000; /* constant: black */
 }
 .tdWithoutBottomBorder{ /* for block table with border 1 */
@@ -1889,4 +1889,50 @@ td.formFieldNoBordersQuery{ /* for the cell that contains the form elements */
 {
 	 border-bottom:1px solid #CCCCCC; /* constant: medium gray */
  }
+
+ .savedQueryHeading
+ {
+	font-family: Arial, Helvetica, sans-serif; 	
+	font-size: .8em; 
+	font-weight: bold;
+	color: #000000; 
+ }
  
+ .bgImage 
+ {	
+	background-image: url(../images/top_bg.gif);
+}
+
+.createQueryLink
+ {
+	font-family: Arial, Helvetica, sans-serif; 	
+	font-size: .75em;
+	color: #000000; 
+ }
+
+ .bgWizardImage
+ {
+	background-image: url(../images/top_bg_wiz.gif);
+ }
+
+ .errorMessageFont
+ {
+	font-family: Arial, Helvetica, sans-serif; 	
+	font-size: .8em;
+	color: #000000; 
+	border-bottom:1px solid #000000; /* constant: dark gray */
+	border-top:1px  solid #000000;/* constant: dark gray */
+	border-left:1px solid #000000; /* constant: dark gray */
+	border-right:1px solid #000000; /* constant: dark gray */
+ }
+
+ .bottomBgImage
+ {
+	background-image: url(../images/bot_bg_wiz.gif);
+ }
+
+ .bgResultRow
+ {
+	/*background-image: url(../images/bg_dv.gif);*/
+	background-color:#F1F2F7; 
+ }
