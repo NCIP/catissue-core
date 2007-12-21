@@ -221,7 +221,7 @@ function checkAllOnThisPageResponse()
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 <body onload="setCheckBoxState()">
-<div style="width:100%; height:390px;overflow:auto " >
+<div style="width:100%; height:100%;overflow:auto " >
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="99%" height="100%" style="overflow:auto;">
 <tr>
 	<td >
@@ -252,8 +252,8 @@ function checkAllOnThisPageResponse()
 		</tr>--%>	
 		
 		<tr height="5%">
-			<td>					
-				<custom:test name="Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>"  showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>" />
+			<td class="bgResultRow" >					
+				<custom:test name="" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>"  showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>" />
 				<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
 				<html:hidden property="isPaging" value="true"/>			
 			</td>
@@ -300,7 +300,7 @@ function checkAllOnThisPageResponse()
 			</td>
 		</tr>
 
-		<tr height="5%" width="100%" valign="top">
+		<tr height="100%" width="100%" valign="top">
 		
 		<td width="90%">
 		
@@ -331,9 +331,10 @@ function checkAllOnThisPageResponse()
 					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS) || pageOf.equals(Constants.PAGEOF_QUERY_MODULE) ){
 						
 					%>
-						<html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
+						<%--<html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
 							<bean:message key="buttons.addToCart"/>
-						</html:button>&nbsp;
+						</html:button>--%>
+						<img src="images/b_add_list.gif" width="100" height="25" hspace="3" onclick="onAddToCart()"/>&nbsp;
 				                        
 					<%}else
 				       {%>
@@ -341,19 +342,22 @@ function checkAllOnThisPageResponse()
 					<%}%>
 					</td>
 					<td width="5%" nowrap align="right" valign="top">
-						<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
+						<%--<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
 							<bean:message key="buttons.export"/>
-						</html:button>&nbsp;
+						</html:button>>--%>
+						<img src="images/b_exp.gif" width="57" height="25" hspace="3" onclick="onExport()"/>&nbsp;
 					</td>
 					<td width="5%" nowrap align="right" valign="top">
-						<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
+						<%--<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%><%--">
 							<bean:message  key="buttons.configure" />
-						</html:button>&nbsp;
+						</html:button>--%>
+						<img src="images/b_def_view.gif" width="88" height="25" hspace="3" onclick="<%=configAction%>"/>&nbsp;
 					</td>
 					<td width="5%" nowrap align="right" valign="top">
-						<html:button styleClass="actionButton" property="redefineButton" onclick="<%=redefineQueryAction%>">
+						<%--<html:button styleClass="actionButton" property="redefineButton" onclick="<%=redefineQueryAction%><%--">
 							<bean:message  key="buttons.redefineQuery" />
-						</html:button>&nbsp;
+						</html:button>--%>
+						<img src="images/b_red_query.gif" width="107" height="25" hspace="3" onclick="<%=redefineQueryAction%>"/>&nbsp;
 					</td>
 			</tr>
 			</table>
