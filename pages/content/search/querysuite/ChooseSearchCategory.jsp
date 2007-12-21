@@ -81,8 +81,8 @@ function checkKey()
 						<td id="advancedSearchHeaderTd" height="1%" valign="top" bgcolor="#EAEAEA" style="border-left:solid 1px;border-top:solid 1px;border-bottom:solid 1px;bordercolorlight:#EAEAEA">
 							<b><font face="Arial" size="2"><bean:message key="query.advancedSearchHeader"/></font></b>									
 						</td>
-						<th id="imageContainer" valign="top" align="right" height="1%" bgcolor="#EAEAEA" style="border-top:solid 1px;border-bottom:solid 1px;border-right:solid 1px;bordercolorlight:#EAEAEA">
-							<a id="image" onClick="expand()" style="display:block"><img src="images/nolines_plus.gif" /></a>
+						<th id="imageContainer" valign="center" align="right" height="1%" bgcolor="#EAEAEA" style="border-top:solid 1px;border-bottom:solid 1px;border-right:solid 1px;bordercolorlight:#EAEAEA;">
+							<a id="image" onClick="expand()" style="display:block"> <img src="images/ic_expand.gif" hspace="3" vspace="3"/> </a>
 						</th>
 						<td  height="1%">&nbsp;</td>
 					</tr>
@@ -119,6 +119,8 @@ function checkKey()
 					<tr valign="top" class="row" width="98%"  height="1%">
 						<td  height="1%">&nbsp;</td>
 						<td colspan="2"  height="1%" valign="top" bgcolor="#EAEAEA"  class="tdWithoutBottomBorder">
+							
+							<img src="images/ic_search.gif" hspace="1" vspace="1"/>
 							<b><font face="Arial" size="2"><bean:message key="query.searchResults"/></font>	</b>				
 						</td>
 						<td  height="1%">&nbsp;</td>
