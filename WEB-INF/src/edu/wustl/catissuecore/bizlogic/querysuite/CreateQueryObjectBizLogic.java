@@ -90,21 +90,26 @@ public class CreateQueryObjectBizLogic
 						secondAttributeValues.add(params[2]); 
 						ArrayList<String> attributeValues = getConditionValuesList(params);
 						errorMessage = errorMessage
-								+ validateAttributeValues(attr, attributeValues);
-						if (params[0].equalsIgnoreCase(Constants.Between))
+						+ validateAttributeValues(attr, attributeValues);
+						if(errorMessage.equalsIgnoreCase(""))
 						{
-							attributeValues = Utility.getAttributeValuesInProperOrder(attr.getDataType(),
-									attributeValues.get(0), attributeValues.get(1));
+							if (params[0].equalsIgnoreCase(Constants.Between))
+							{
+								attributeValues = Utility.getAttributeValuesInProperOrder(attr.getDataType(),
+										attributeValues.get(0), attributeValues.get(1));
+							}
+							conditionValues.add(attributeValues);
 						}
-						conditionValues.add(attributeValues);
 					}
-					System.out.println(errorMessage);
 				}
-				ruleDetailsMap.put(AppletConstants.ATTRIBUTES, attributes);
-				ruleDetailsMap.put(AppletConstants.ATTRIBUTE_OPERATORS, attributeOperators);
-				//ruleDetailsMap.put(AppletConstants.FIRST_ATTR_VALUES, firstAttributeValues);
-				ruleDetailsMap.put(AppletConstants.SECOND_ATTR_VALUES, secondAttributeValues);
-				ruleDetailsMap.put(AppletConstants.ATTR_VALUES, conditionValues);
+				if(errorMessage.equalsIgnoreCase(""))
+				{
+					ruleDetailsMap.put(AppletConstants.ATTRIBUTES, attributes);
+					ruleDetailsMap.put(AppletConstants.ATTRIBUTE_OPERATORS, attributeOperators);
+					//ruleDetailsMap.put(AppletConstants.FIRST_ATTR_VALUES, firstAttributeValues);
+					ruleDetailsMap.put(AppletConstants.SECOND_ATTR_VALUES, secondAttributeValues);
+					ruleDetailsMap.put(AppletConstants.ATTR_VALUES, conditionValues);
+				}
 				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			}
 		}
@@ -161,7 +166,7 @@ public class CreateQueryObjectBizLogic
 			if (enteredValue.equalsIgnoreCase(Constants.MISSING_TWO_VALUES))
 			{
 				errorMessages = errorMessages
-						+ ApplicationProperties.getValue("simpleQuery.twovalues.required");
+				+ ApplicationProperties.getValue("simpleQuery.twovalues.required");
 				Logger.out.debug(enteredValue + " two values required for 'Between' operator ");
 			}
 			else if ((dataType.trim().equalsIgnoreCase("bigint") || dataType.trim()
@@ -173,14 +178,14 @@ public class CreateQueryObjectBizLogic
 				if (validator.convertToLong(enteredValue) == null)
 				{
 					errorMessages = errorMessages
-							+ ApplicationProperties.getValue("simpleQuery.intvalue.required");
+					+ ApplicationProperties.getValue("simpleQuery.intvalue.required");
 					Logger.out.debug(enteredValue + " is not a valid integer");
 				}
 				else if (!validator.isPositiveNumeric(enteredValue, 0))
 				{
 					errorMessages = errorMessages
-							+ ApplicationProperties
-									.getValue("simpleQuery.intvalue.poisitive.required");
+					+ ApplicationProperties
+					.getValue("simpleQuery.intvalue.poisitive.required");
 					Logger.out.debug(enteredValue + " is not a positive integer");
 				}
 
@@ -189,9 +194,9 @@ public class CreateQueryObjectBizLogic
 					&& !validator.isDouble(enteredValue, false))
 			{
 				errorMessages = errorMessages
-						+ ApplicationProperties.getValue("simpleQuery.decvalue.required");
+				+ ApplicationProperties.getValue("simpleQuery.decvalue.required");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"simpleQuery.decvalue.required"));
+				"simpleQuery.decvalue.required"));
 			} // double
 			else if (dataType.trim().equalsIgnoreCase("tinyint"))
 			{
@@ -199,7 +204,7 @@ public class CreateQueryObjectBizLogic
 						&& !enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_NO))
 				{
 					errorMessages = errorMessages
-							+ ApplicationProperties.getValue("simpleQuery.tinyint.format");
+					+ ApplicationProperties.getValue("simpleQuery.tinyint.format");
 				}
 			}
 			else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
@@ -207,7 +212,7 @@ public class CreateQueryObjectBizLogic
 				if (!validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS))
 				{
 					errorMessages = errorMessages
-							+ ApplicationProperties.getValue("simpleQuery.time.format");
+					+ ApplicationProperties.getValue("simpleQuery.time.format");
 				}
 			}
 			else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
@@ -216,7 +221,7 @@ public class CreateQueryObjectBizLogic
 				if (!validator.checkDate(enteredValue))
 				{
 					errorMessages = errorMessages
-							+ ApplicationProperties.getValue("simpleQuery.date.format");
+					+ ApplicationProperties.getValue("simpleQuery.date.format");
 				}
 			}
 		}
@@ -310,8 +315,8 @@ public class CreateQueryObjectBizLogic
 							String[] params = newConditions.get(componentName);
 							ArrayList<String> attributeValues = getConditionValuesList(params);
 							errorMessage = errorMessage
-									+ validateAttributeValues(condition.getAttribute(),
-											attributeValues);
+							+ validateAttributeValues(condition.getAttribute(),
+									attributeValues);
 							condition.setValues(attributeValues);
 							condition.setRelationalOperator(RelationalOperator
 									.getOperatorForStringRepresentation(params[0]));
