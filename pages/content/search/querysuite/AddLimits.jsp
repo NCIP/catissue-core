@@ -33,21 +33,18 @@
 	<html:hidden property="stringToCreateQueryObject" value="" />
 	<html:hidden property="nextOperation" value="" />
 
-<table border="0" width="100%" cellspacing="0" cellpadding="2"  height="100%" class='tbBordersAllbordersBlack'>	
-	
-		<tr  height="5%">
-			<td width="23%" height="5%" class="queryTabMenuItemSelected" >
-				<bean:message key="query.addLimits"/>
-			</td>
-
-			<td width="23%" height="5%" class="queryModuleTabMenuItem" >
-				<bean:message key="query.defineSearchResultsViews"/>
-			</td>
-
-			<td width="23%" height="5%" class="queryModuleTabMenuItem">
-				<bean:message key="query.viewSearchResults"/>
-			</td> 
+<table border="0" width="100%" cellspacing="0" cellpadding="0"  height="100%" >	
 		
+		<tr>	
+			<td width="33%" align="center" class="bgWizardImage" valign="top">
+				<img src="images/1_active.gif"/> <!-- width="118" height="25" /-->
+			</td>
+			<td width="33%" align="center" class="bgWizardImage" valign="top">
+				<img src="images/2_inactive.gif" /> <!-- width="199" height="38" /-->
+			</td>
+			<td width="33%" align="center" class="bgWizardImage" valign="top">
+				<img src="images/3_inactive.gif" /> <!--  width="139" height="38" /-->
+			</td>
 		</tr>
 	<tr>
 	<td colspan="3">
@@ -75,9 +72,9 @@
 							
 												<tr  id="rowMsg">
 													<td id="validationMessagesSection"  class='validationMessageCss'>
-														<div id="validationMessagesRow"   class='validationMessageCss' style="overflow:auto; height:50;display:none"></div>
+														<div id="validationMessagesRow"   class='validationMessageCss' style="overflow:auto; height:30;display:none"></div>
 													</td>
-												</tr>
+												</tr>												
 												
 												<tr id="AddLimitsButtonMsg" style="color:#000000" border="0">
 													<td id="AddLimitsButtonSection" height="30" >
@@ -85,10 +82,10 @@
 													</td>
 												</tr>
 									
-								<tr>
-									<td height="200" width="100%" id="addLimitsSection">
-									<div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
-								</tr>
+												<tr>
+													<td height="200" width="100%" id="addLimitsSection">
+													<div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
+												</tr>
 						</table>
 							</td>
 							</tr>
@@ -157,28 +154,32 @@
 			</tr>
 			<tr bgcolor="#DFE9F3">
 					<td colspan="4">
-					<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EAEAEA" height="100%" bordercolorlight="#000000" >
-					<tr height="35" valign="center">
-					 <td width="2%" valign="center">&nbsp;</td>
-						<td valign="center" width="6%">
-						<html:button property="saveButton" onclick="validateQuery('save');">
+					<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" background="images/bot_bg_wiz.gif">
+					<tr height="35" valign="bottom">
+					 <td width="2%" valign="bottom">&nbsp;</td>
+						<td valign="top" width="6%">
+						<%--<html:button property="saveButton" onclick="validateQuery('save');">
 							<bean:message key="query.saveButton"/>
-						</html:button>
+						</html:button>--%>
+						<img src="images/b_save.gif" width="51" height="25" hspace="3" vspace="3" onclick="validateQuery('save');" />						
 						</td>
-						<td  valign="center" align="left" width="75%">
-						<html:button property="searchButton" onclick="validateQuery('search');">
+						<td  valign="top" align="left" width="75%">
+						<%--<html:button property="searchButton" onclick="validateQuery('search');">
 							<bean:message key="query.searchButton"/>
-						</html:button>
+						</html:button>--%>
+						<img src="images/b_search.gif" width="56" height="25" hspace="3" vspace="3" onclick="validateQuery('search');" />
 						</td>
-						<td  align="right" valign="center" >
-						<html:button property="previousButton" disabled="true">
+						<td  align="right" valign="top" >
+						<%--<html:button property="previousButton" disabled="true">
 							<bean:message key="query.previousButton"/>
-						</html:button>
+						</html:button>--%>
+						<!--img src="images/b_prev.gif" width="72" height="25" hspace="3" onclick="previousFromDefineResults()"/-->
 						</td>
-						<td align="right" valign="center"
-						><html:button property="nextButton" onclick="saveClientQueryToServer('next');">
+						<td align="right" valign="top">
+						<%--<html:button property="nextButton" onclick="saveClientQueryToServer('next');">
 							<bean:message key="query.nextButton"/>
-						</html:button>
+						</html:button>--%>
+						<img src="images/b_next.gif" width="51" height="25" hspace="3" vspace="3" onclick="saveClientQueryToServer('next');" />
 						</td>
 						<td width="2%">&nbsp;</td>
 					</tr>

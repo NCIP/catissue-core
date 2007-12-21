@@ -20,17 +20,15 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
 
 <table border="0" width="100%" cellspacing="0" cellpadding="0" height="<%=height%>" bordercolor="#000000" id="table1" >
 <html:form method="GET" action="<%=formAction%>" style="margin:0;padding:0;">
-		<tr  class="">
-			<td width="25%" height="" class="queryModuleTabMenuItem" >
-				<bean:message key="query.addLimits"/>
+		<tr>	
+			<td width="33%" align="center" class="bgWizardImage">
+				<img src="images/1_inactive.gif" /> <!-- width="118" height="25" /-->
 			</td>
-
-			<td width="25%" height="" class="queryModuleTabMenuItem" >
-				<bean:message key="query.defineSearchResultsViews"/>
+			<td width="33%" align="center" class="bgWizardImage">
+				<img src="images/2_inactive.gif" /> <!-- width="199" height="38" /-->
 			</td>
-
-			<td width="25%" height="" class="queryTabMenuItemSelected">
-				<bean:message key="query.viewSearchResults"/>
+			<td width="33%" align="center" class="bgWizardImage">
+				<img src="images/3_active.gif" /> <!--  width="139" height="38" /-->
 			</td>
 		</tr>
 		<tr height="100%">
@@ -51,14 +49,27 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
 </table>
 </td>
 </tr>
-<tr bgcolor="#DFE9F3" height="1%" valign="top"> 
+<tr bgcolor="#DFE9F3" height="30" valign="top"> 
 		<td colspan="4" valign="bottom" height="10%">
-		<table border="0" style="border-left:solid 1px;border-right:solid 1px;border-top:solid 1px;border-bottom:solid 1px;" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EAEAEA" height="100%" bordercolorlight="#000000" >
-		<tr height="1%" valign="center">
-		 <td width="2%" valign="center">&nbsp;</td>
-		 <td valign="center" width="80-%"><html:button property="saveButton" onclick="saveClientQueryToServer('save');"><bean:message key="query.saveButton"/></html:button></td>
-	   	 <td align="right" valign="center"><html:button property="Button" onclick="defineSearchResultsView()"><bean:message key="query.previousButton" /></html:button></td>
-		 <td align="right" valign="center"><html:button property="Button" onclick="" disabled="true"><bean:message key="query.nextButton"/></html:button>
+		<table border="0"  width="100%" cellspacing="0" cellpadding="0"  background="images/bot_bg_wiz.gif" height="30"  >
+		<tr height="1%" valign="bottom">
+		 <td width="2%" valign="bottom" >&nbsp;</td>
+		 <td valign="bottom" align="left" width="90-%" >
+			  <%--<html:button property="saveButton" onclick="saveClientQueryToServer('save');">
+			 <bean:message key="query.saveButton"/>
+			 </html:button>--%>
+			 <img src="images/b_save.gif" width="51" height="25" hspace="3" vspace="3" onclick="saveClientQueryToServer('save')" />
+		 </td>
+	   	 <td align="right" valign="bottom">
+			 <%--<html:button property="Button" onclick="defineSearchResultsView()">
+			 <bean:message key="query.previousButton" />
+			 </html:button>--%>
+			 <img src="images/b_prev.gif" width="72" height="25" hspace="3" vspace="3" onclick="defineSearchResultsView()"/>
+		 </td>
+		 <td align="right" valign="bottom">
+			 <%--<html:button property="Button" onclick="" disabled="true">
+			 <bean:message key="query.nextButton"/>
+			 </html:button>--%>
 		 </td>
 		 <td width="2%">&nbsp;</td>
 </tr>
