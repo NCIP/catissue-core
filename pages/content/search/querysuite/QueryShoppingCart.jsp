@@ -327,12 +327,6 @@ function checkAll(element)
 			</tr>
 			<tr>
 				<td nowrap class="formFieldNoBordersSimpleNotBold">
-					<% 
-							if(role!=null && role.equals(Constants.SCIENTIST))
-							{
-								disabled = "DISABLED";
-							}
-					%>
 					<INPUT TYPE='RADIO' NAME='chkName' value="Specimenpage" <%=disabled%> ><bean:message key="mylist.label.multipleSpecimenPage"/></INPUT>	
 				</td>
 				<td nowrap class="formFieldNoBordersSimple">

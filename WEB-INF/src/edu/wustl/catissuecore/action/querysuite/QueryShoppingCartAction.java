@@ -70,7 +70,7 @@ public class QueryShoppingCartAction extends BaseAction
 		List<String> columnList;
 		
 		//kalpana bug#6248 
-		SessionDataBean sessionLoginInfo = getSessionData(request);
+		/*SessionDataBean sessionLoginInfo = getSessionData(request);
 		Long loggedInUserID = sessionLoginInfo.getUserId();
 		long csmUserId = new Long(sessionLoginInfo.getCsmUserId()).longValue();
 		Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(csmUserId);
@@ -78,7 +78,7 @@ public class QueryShoppingCartAction extends BaseAction
 		if (role.getName().equals(Constants.SCIENTIST))
 		{
 			request.setAttribute("role", role.getName());
-		}
+		}*/
 
 		if (operation == null)
 			operation = "";
