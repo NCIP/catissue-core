@@ -20,7 +20,6 @@
 <%
 	String checkAllPages = (String)session.getAttribute("checkAllPages");
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-	String role = (String)request.getAttribute("role");
 	String isSpecimenIdPresent = (String)request.getAttribute(Constants.IS_SPECIMENID_PRESENT);
 	if(isSpecimenIdPresent==null)
 	 isSpecimenIdPresent = "";
@@ -28,7 +27,6 @@
 	String isSpecimenArrayPresent = (String)request.getAttribute(Constants.IS_SPECIMENARRAY_PRESENT);
 	
 	String disabled = "";
-
 	boolean disabledList = false;
 	if(isSpecimenArrayPresent!= null && isSpecimenArrayPresent.equals("true"))
 	{
@@ -57,7 +55,6 @@
 	   columnList.add(0,"");
       dataList = cart.getCart();
 	}
-
 %>
 <head>
 <script language="javascript">
