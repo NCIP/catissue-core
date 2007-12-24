@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
@@ -33,11 +34,14 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.dbManager.DAOException;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * @author supriya_dankh Handles all the actions related to shopping cart.
@@ -61,8 +65,20 @@ public class QueryShoppingCartAction extends BaseAction
 		HttpSession session = request.getSession();
 		String target = "";
 		String operation = request.getParameter(Constants.OPERATION);
+		
 				
 		List<String> columnList;
+		
+		//kalpana bug#6248 
+		SessionDataBean sessionLoginInfo = getSessionData(request);
+		Long loggedInUserID = sessionLoginInfo.getUserId();
+		long csmUserId = new Long(sessionLoginInfo.getCsmUserId()).longValue();
+		Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(csmUserId);
+				
+		if (role.getName().equals(Constants.SCIENTIST))
+		{
+			request.setAttribute("role", role.getName());
+		}
 
 		if (operation == null)
 			operation = "";
