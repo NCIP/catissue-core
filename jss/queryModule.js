@@ -200,7 +200,7 @@
 			advancedSearchHeaderTd.style.borderBottom = "1px solid #000000";
             imageContainer.style.borderBottom = "1px solid #000000";
 			dataObj.style.display = 'none';				
-			switchObj.innerHTML = '<img src="images/ic_expand.gif" border="0" hspace="3" vspace="3"/>';
+			switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" hspace="3" vspace="3"/>';
 			if(navigator.appName == "Microsoft Internet Explorer")
 			{					
 				resultSetDivObj.height = "530";
@@ -231,7 +231,7 @@
 				resultSetDivObj.height = "420";
 			}
 			resultSetDiv.style.height = "420"+'px'
-			switchObj.innerHTML = '<img src="images/ic_coll.gif" border="0" hspace="3" vspace="3"/>';
+			switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" hspace="3" vspace="3"/>';
 		}
 	}
 	
@@ -472,7 +472,7 @@
 				var id = nameIdDescription[1];				
 				var description = nameIdDescription[2];
 				var functionCall = "addNodeToView('"+id+"')";		
-				var entityName = "<font color=#0055E6>"+name +"</font>";
+				var entityName = "<font color=#0000CC>"+name +"</font>";
 				var tooltipFunction = "Tip('"+description+"', WIDTH, 200)";				
 				row = row+'<tr><td><a  class="entityLink" onmouseover="'+tooltipFunction+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
 				
@@ -503,7 +503,7 @@
 				var id = nameIdDescription[1];				
 				var description = nameIdDescription[2];
 				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+id+"')";		
-				var entityName = "<font color=#0055E6>"+name +"</font>";
+				var entityName = "<font color=#0000CC>"+name +"</font>";
 				var tooltipFunction = "Tip('"+description+"', WIDTH, 200)";				
 				row = row+'<tr><td ><a  class="entityLink"  onmouseover="'+tooltipFunction+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
 			}			
