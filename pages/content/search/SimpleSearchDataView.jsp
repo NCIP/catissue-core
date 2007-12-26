@@ -23,7 +23,7 @@ tr#hiddenCombo
 	
 	int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
 	
-	int totalResults = (Integer)session.getAttribute(Constants.TOTAL_RESULTS);
+	int totalResults = ((Integer)session.getAttribute(Constants.TOTAL_RESULTS)).intValue();
 	int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
 	String pageName = "SpreadsheetView.do";	
 	String checkAllPages = (String)session.getAttribute("checkAllPages");

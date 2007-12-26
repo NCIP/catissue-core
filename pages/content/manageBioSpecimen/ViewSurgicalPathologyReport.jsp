@@ -541,22 +541,22 @@ if(!hasAccess)
 	String consentTier =(String)request.getParameter("consentTierCounter");
 	String submitReviewComments = "submitReviewComments('"+ consentTier+"')";
 	String submitQuarantineComments = "submitQuarantineComments('"+ consentTier+"')";
-	Boolean isReviewDisabled=true;
-	Boolean isQuarantineDisabled=true;
+	Boolean isReviewDisabled = new Boolean(true);
+	Boolean isQuarantineDisabled = new Boolean(true);
 	if((!(formSPR.getIdentifiedReportId().equals("")) || formSPR.getDeIdentifiedReportId()!=0)) 
 	{
-		isReviewDisabled=false;
+		isReviewDisabled=new Boolean(false);
 	}
 	if(formSPR.getDeIdentifiedReportId()!=0)
 	{
-		isQuarantineDisabled=false;
+		isQuarantineDisabled=new Boolean(false);
 	}
 %>
-					<html:button property="action1" styleClass="actionButton" onclick="<%=submitReviewComments%>" disabled="<%=isReviewDisabled%>" >
+					<html:button property="action1" styleClass="actionButton" onclick="<%=submitReviewComments%>" disabled="<%=isReviewDisabled.booleanValue()%>" >
 						<bean:message key="viewSPR.button.requestForReview" />
 					</html:button>
 
-					<html:button property="action2" styleClass="actionButton" onclick="<%=submitQuarantineComments%>" disabled="<%=isQuarantineDisabled%>" >
+					<html:button property="action2" styleClass="actionButton" onclick="<%=submitQuarantineComments%>" disabled="<%=isQuarantineDisabled.booleanValue()%>" >
 						<bean:message key="viewSPR.button.requestForQuarantine" />
 					</html:button>
 <%

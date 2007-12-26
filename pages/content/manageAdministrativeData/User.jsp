@@ -382,7 +382,7 @@ function handleStatus(status)
 						
                                         <autocomplete:AutoCompleteTag property="institutionId"
 										  optionsList = "<%=request.getAttribute("institutionList")%>"
-										  initialValue="<%=userForm.getInstitutionId()%>"
+										  initialValue="<%=new Long(userForm.getInstitutionId())%>"
 										  styleClass="formFieldSized"
                                           staticField="false"
 										  
@@ -410,7 +410,7 @@ function handleStatus(status)
 						
                                         <autocomplete:AutoCompleteTag property="departmentId"
 										  optionsList = "<%=request.getAttribute("departmentList")%>"
-										  initialValue="<%=userForm.getDepartmentId()%>"
+										  initialValue="<%=new Long(userForm.getDepartmentId())%>"
 										  styleClass="formFieldSized"
                                           staticField="false"
 										  
@@ -436,7 +436,7 @@ function handleStatus(status)
 						
 						    <autocomplete:AutoCompleteTag property="cancerResearchGroupId"
 										  optionsList = "<%=request.getAttribute("cancerResearchGroupList")%>"
-										  initialValue="<%=userForm.getCancerResearchGroupId()%>"
+										  initialValue="<%=new Long(userForm.getCancerResearchGroupId())%>"
 										  styleClass="formFieldSized"
                                           staticField="false"
 										  

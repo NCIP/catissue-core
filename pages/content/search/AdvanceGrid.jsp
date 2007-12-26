@@ -111,9 +111,9 @@ function setEditableChkbox(checkAllPages)
 	// Patch ID: 4270_2
 	// getting hyperlinkColumnMap from session instead of request, so that it will persiste when the records per page drop down changed or page number changed.
 	// Value for this map will be set in SimpleSearchAction
-		Map<Integer, QueryResultObjectData> hyperlinkColumnMap = (Map<Integer, QueryResultObjectData>)session.getAttribute(Constants.HYPERLINK_COLUMN_MAP);
+		Map hyperlinkColumnMap = (Map)session.getAttribute(Constants.HYPERLINK_COLUMN_MAP);
 		if (hyperlinkColumnMap==null)
-			hyperlinkColumnMap = new HashMap<Integer, QueryResultObjectData>();
+			hyperlinkColumnMap = new HashMap();
 			
 	%>
 	
@@ -123,12 +123,12 @@ function setEditableChkbox(checkAllPages)
 	// Calling utility method by passing the hyperlink map. 
 	// Changing delimeter for the dhtml grid
 
-						List<String> row = (List<String>)dataList.get(i);
+						List row = (List)dataList.get(i);
 					  	int j;
 					%>
 					<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)+Constants.DHTMLXGRID_DELIMETER%><%}%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)%><%="\""%>,<%}%>
 					<%
-						List<String> row = (List<String>)dataList.get(i);
+						List row = (List)dataList.get(i);
 					  	int j;
 					%>
 					<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)+Constants.DHTMLXGRID_DELIMETER%><%}%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)%><%="\""%>

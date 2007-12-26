@@ -6,12 +6,15 @@ Description : This is the common jsp which will show tooltip for collection prot
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <%
 	String tempIDTitleArray = ""; 
-	Map<Long, String> cpIDTitleMap = (Map<Long, String>)request.getAttribute(Constants.CP_ID_TITLE_MAP);
-	if(cpIDTitleMap!=null)
+	Map cpIDTitleMap = (Map)request.getAttribute(Constants.CP_ID_TITLE_MAP);
+	if(cpIDTitleMap != null)
 	{
-		for(Long key : cpIDTitleMap.keySet())
+		Iterator itr = cpIDTitleMap.keySet().iterator();
+		while(itr.hasNext())
 		{
-			tempIDTitleArray += "[" + "\"" + key + "\""  + "," + "\""  + cpIDTitleMap.get(key) + "\"" + "]," ; 
+			String keyValue = itr.next().toString();
+			String mapValue = (String)cpIDTitleMap.get(new Long(keyValue));
+			tempIDTitleArray += "[" + "\"" + keyValue + "\""  + "," + "\""  + mapValue + "\"" + "]," ; 
 		}
 	}
 	if(tempIDTitleArray != null && tempIDTitleArray.length() != 0)

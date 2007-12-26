@@ -149,7 +149,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					<td class="formFieldNoBordersSimple">
 					 <autocomplete:AutoCompleteTag property="siteId"
 										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
-										  initialValue="<%=form.getSiteId()%>"
+										  initialValue="<%=new Long(form.getSiteId())%>"
 										  styleClass="formFieldSized"
 										  staticField="false"
 										 

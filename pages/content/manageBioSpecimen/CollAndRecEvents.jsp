@@ -54,7 +54,7 @@
 						
 							<autocomplete:AutoCompleteTag property="collectionEventUserId"
 										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
-										  initialValue="<%=form.getCollectionEventUserId()%>"
+										  initialValue="<%=new Long(form.getCollectionEventUserId())%>"
         								  staticField="false"
 							/>		
 							
@@ -72,7 +72,7 @@
 						<td width="220" class="formFieldNoBordersSimple">
 						<autocomplete:AutoCompleteTag property="receivedEventUserId"
 										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
-										  initialValue="<%=form.getReceivedEventUserId()%>"
+										  initialValue="<%=new Long(form.getReceivedEventUserId())%>"
 										  staticField="false"
 					    />	
 						</td>
