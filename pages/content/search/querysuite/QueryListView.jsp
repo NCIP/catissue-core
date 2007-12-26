@@ -47,14 +47,14 @@ int queryCount = 0;%>
 			
 			<tr valign="center" class="bgImage"> 
 				<td width="10" >&nbsp;</td>			
-				<td  align="left" class="bgImage">
+				<td  align="left" width="60%" class="bgImage">
 					<img src="images/ic_saved_queries.gif" alt="Saved Queries"   width="38" height="48" hspace="5" align="absmiddle"/>
 					<span class="savedQueryHeading" > <bean:message key="query.savedQueries.label"/> </span>
 				</td>
-				<td  width="130" align="left" class="bgImage"> 					
+				<td  width="130" align="left" class="bgImage" > 					
 					<span class="savedQueryHeading" ><%= message %> </span>					
 				</td>
-				<td width="1" valign="middle" class="bgImage">
+				<td width="1" valign="middle" class="bgImage" align="right">
 					<img src="images/dot.gif" width="1" height="25" />
 				</td>
 				<td width="130" align="right" valign="middle" class="bgImage">
