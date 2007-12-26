@@ -331,10 +331,7 @@ function checkAllOnThisPageResponse()
 					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS) || pageOf.equals(Constants.PAGEOF_QUERY_MODULE) ){
 						
 					%>
-						<%--<html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
-							<bean:message key="buttons.addToCart"/>
-						</html:button>--%>
-						<img src="images/b_add_list.gif" width="100" height="25" hspace="3" onclick="onAddToCart()"/>&nbsp;
+						<img src="images/b_add_list.gif" width="100" hspace="3" onclick="onAddToCart()"/>&nbsp;
 				                        
 					<%}else
 				       {%>
@@ -342,22 +339,13 @@ function checkAllOnThisPageResponse()
 					<%}%>
 					</td>
 					<td width="5%" nowrap align="right" valign="top">
-						<%--<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
-							<bean:message key="buttons.export"/>
-						</html:button>>--%>
-						<img src="images/b_exp.gif" width="57" height="25" hspace="3" onclick="onExport()"/>&nbsp;
+						<img src="images/b_exp.gif" width="57"  hspace="3" onclick="onExport()"/>&nbsp;
 					</td>
 					<td width="5%" nowrap align="right" valign="top">
-						<%--<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%><%--">
-							<bean:message  key="buttons.configure" />
-						</html:button>--%>
-						<img src="images/b_def_view.gif" width="88" height="25" hspace="3" onclick="<%=configAction%>"/>&nbsp;
+						<img src="images/b_def_view.gif" width="88" hspace="3" onclick="<%=configAction%>"/>&nbsp;
 					</td>
 					<td width="5%" nowrap align="right" valign="top">
-						<%--<html:button styleClass="actionButton" property="redefineButton" onclick="<%=redefineQueryAction%><%--">
-							<bean:message  key="buttons.redefineQuery" />
-						</html:button>--%>
-						<img src="images/b_red_query.gif" width="107" height="25" hspace="3" onclick="<%=redefineQueryAction%>"/>&nbsp;
+						<img src="images/b_red_query.gif" width="107" hspace="3" onclick="<%=redefineQueryAction%>"/>&nbsp;
 					</td>
 			</tr>
 			</table>
