@@ -412,7 +412,9 @@ public abstract class QueryModuleUtil
 				if(isSavedQuery.equalsIgnoreCase(Constants.TRUE))
 				{
 					selectSql = sqlGenerator.generateSQL(query);
+					session.setAttribute(Constants.SAVE_GENERATED_SQL,selectSql);
 					rootOutputTreeNodeList = sqlGenerator.getRootOutputTreeNodeList();
+					session.setAttribute(Constants.SAVE_TREE_NODE_LIST, rootOutputTreeNodeList);
 					uniqueIdNodesMap = QueryObjectProcessor.getAllChildrenNodes(rootOutputTreeNodeList);
 					session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
 					mainEntityMap = QueryCSMUtil.setMainObjectErrorMessage(query, request.getSession(), uniqueIdNodesMap);
