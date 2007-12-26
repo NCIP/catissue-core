@@ -51,26 +51,16 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
 </tr>
 <tr bgcolor="#DFE9F3" height="30" valign="top"> 
 		<td colspan="4" valign="bottom" height="10%">
-		<table border="0"  width="100%" cellspacing="0" cellpadding="0"  background="images/bot_bg_wiz.gif" height="30"  >
+		<table border="0"  width="100%" cellspacing="0" cellpadding="0"  background="images/bot_bg_wiz.gif" height="24"  >
 		<tr height="1%" valign="bottom">
 		 <td width="2%" valign="bottom" >&nbsp;</td>
 		 <td valign="bottom" align="left" width="90-%" >
-			  <%--<html:button property="saveButton" onclick="saveClientQueryToServer('save');">
-			 <bean:message key="query.saveButton"/>
-			 </html:button>--%>
-			 <img src="images/b_save.gif" width="51" height="25" hspace="3" vspace="3" onclick="saveClientQueryToServer('save')" />
-		 </td>
-	   	 <td align="right" valign="bottom">
-			 <%--<html:button property="Button" onclick="defineSearchResultsView()">
-			 <bean:message key="query.previousButton" />
-			 </html:button>--%>
-			 <img src="images/b_prev.gif" width="72" height="25" hspace="3" vspace="3" onclick="defineSearchResultsView()"/>
-		 </td>
-		 <td align="right" valign="bottom">
-			 <%--<html:button property="Button" onclick="" disabled="true">
-			 <bean:message key="query.nextButton"/>
-			 </html:button>--%>
-		 </td>
+		 <img src="images/b_save.gif" width="51"  hspace="3" vspace="3" onclick="saveClientQueryToServer('save')" />
+	 </td>
+   	 <td align="right" valign="bottom">
+		 <img src="images/b_prev.gif" width="72"  hspace="3" vspace="3" onclick="defineSearchResultsView()"/>
+	 </td>	
+		 
 		 <td width="2%">&nbsp;</td>
 </tr>
 

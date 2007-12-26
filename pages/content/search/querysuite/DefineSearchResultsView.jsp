@@ -69,36 +69,29 @@
 		
 				<tr bgcolor="#EAEAEA">
 					<td colspan="4" valign="top">
-						<table border="0" width="100%" cellspacing="0" cellpadding="0"  height="100%" background="images/bot_bg_wiz.gif">
-							<tr height="35" valign="center">
-								<td width="2%" valign="center" >&nbsp;</td>
-								<td valign="top" width="6%" >
-									<%--<html:button property="saveButton" onclick="validateQuery('save');">
-										<bean:message key="query.saveButton"/>
-									</html:button>--%>
-									<img src="images/b_save.gif" width="51" height="25" hspace="3" vspace="3" onclick="validateQuery('save');" />
-								</td>								
-								<td  valign="top" align="left" width="70%" >
-									<%--<html:button property="Button"  onclick="validateQuery('search');">
-										<bean:message key="query.searchButton"/>
-									</html:button>--%>
-									<img src="images/b_search.gif" width="56" height="25" hspace="3" vspace="3" onclick="validateQuery('search');" />
-								</td>
-								<td  align="right" valign="top" >
-									<%--<html:button property="Button" onclick="previousFromDefineResults()">
-										<bean:message key="query.previousButton"/>
-									</html:button>--%>
-									<img src="images/b_prev.gif" width="72" height="25" hspace="3" vspace="3" onclick="previousFromDefineResults()"/>
-								</td>
-								<td align="right" valign="top" >
-									<%--<html:button property="Button" onclick="validateQuery('search');">
-										<bean:message key="query.nextButton"/>
-									</html:button>--%>
-									<img src="images/b_next.gif" width="51" height="25" hspace="3" vspace="3" onclick="validateQuery('search');" />
-								</td>
-								<td width="2%">&nbsp;</td>
+					<table border="0" width="100%" cellspacing="0" cellpadding="0"  height="24" background="images/bot_bg_wiz.gif">
+					<tr valign="center">
+						<td width="2%" valign="center" >&nbsp;</td>
+						<td width="50%" align="left">
+						  <table border="0" cellspacing="0" cellpadding="0">
+							<tr>
+							  <td><img src="images/b_save.gif" width="51"  hspace="3" onclick="validateQuery('save');"/></td>
+							  <td><img src="images/b_search.gif"  hspace="3" onclick="validateQuery('search');"/></td>
 							</tr>
+						  </table>
+						</td>
+						
+						<td width="50%" align="right">
+						  <table border="0" cellspacing="0" cellpadding="0">
+						  <tr>
+							<td><img src="images/b_prev.gif" width="72"  hspace="3" onclick="previousFromDefineResults()"/></td>
+							<td><img src="images/b_next.gif"   hspace="3" onclick="validateQuery('search');" /></td>
+						  </tr>
 						</table>
+					   </td>
+						<td width="2%">&nbsp;</td>
+					</tr>
+				</table>
 					</td>
 				</tr>
 			</table>
