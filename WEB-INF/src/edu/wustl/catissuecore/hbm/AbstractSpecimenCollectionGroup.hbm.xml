@@ -189,7 +189,7 @@
 	        />
 	        
 	        <one-to-one
-	            name="deIdentifiedSurgicalPathologyReport"
+	            name="deidentifiedSurgicalPathologyReport"
 	            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
 	            cascade="none"
 	            outer-join="auto"
