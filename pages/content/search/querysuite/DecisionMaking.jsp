@@ -55,21 +55,25 @@
 				<td class="formMessagewithoutcolor">&nbsp;
 						</td>
 					<td class="formMessagewithoutcolor">
-						<html:radio property="options" value="redefineQuery" /><bean:message key="query.options.redefine.query"/>
+						<%--html:radio property="options" value="redefineQuery" /><bean:message key="query.options.redefine.query"/--%>
+						<input type="radio" name="options"  value="redefineQuery" \>
+						<bean:message key="query.options.redefine.query"/>
 					</td>
 				</tr>
 				<tr>
 				<td class="formMessagewithoutcolor">&nbsp;
 						</td>
 					<td class="formMessagewithoutcolor">
-						<html:radio property="options" value="viewLimitedRecords" /><bean:message key="query.options.view.few.results"/><bean:message key="query.options.note"/> 
+						<%--html:radio property="options" value="viewLimitedRecords" /><bean:message key="query.options.view.few.results"/><bean:message key="query.options.note"/--%>
+						<input type="radio" name="options"  value="viewLimitedRecords" checked="checked"> <bean:message key="query.options.view.few.results"/><bean:message key="query.options.note"/>
 					</td>
 				</tr>
 				<tr>
 				<td class="formMessagewithoutcolor">&nbsp;
 						</td>
 					<td class="formMessagewithoutcolor">
-						<html:radio property="options" value="viewAllRecords" /><bean:message key="query.options.all.records"/>
+						<%--html:radio property="options" value="viewAllRecords" /><bean:message key="query.options.all.records"/--%>
+						<input type="radio" name="options" value="viewAllRecords"> <bean:message key="query.options.all.records"/>
 					</td>
 				</tr>
 			<tr>
