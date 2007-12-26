@@ -12,12 +12,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.SecureAction;
 
 //import edu.wustl.common.action.SecureAction;
 
-public class MultipleSpecimenFlexInitAction extends Action
+public class MultipleSpecimenFlexInitAction extends SecureAction
 {
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);

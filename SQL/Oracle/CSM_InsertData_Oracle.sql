@@ -312,6 +312,15 @@ INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAM
 INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (296,'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup',
 'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup',NULL,NULL,1,to_date('2007-11-27','yyyy-mm-dd'));
 
+/* changes for making Action a secureAction  :kalpana */
+INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE_ID,APPLICATION_ID,UPDATE_DATE) VALUES (297,'edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction',NULL,NULL,1,to_date('2007-12-25','yyyy-mm-dd'));
+INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE_ID,APPLICATION_ID,UPDATE_DATE) VALUES (298,'edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction','edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction','edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction',NULL,NULL,1,to_date('2007-12-25','yyyy-mm-dd'));
+INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE_ID,APPLICATION_ID,UPDATE_DATE) VALUES (299,'edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction',NULL,NULL,1,to_date('2007-12-25','yyyy-mm-dd'));
+
+/* kalpana :end */
+
+
+
 /* done */
 --
 -- Dumping data for table csm_pg_pe
@@ -658,6 +667,12 @@ INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE
 INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (326,17,295,NULL);
 /*Kalpana  12-12-2007 bug#5083*/
 INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (327,6,296,NULL);
+
+/*changes for making Action a secureAction  :kalpana */
+INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (328,19,297,NULL);
+INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (329,19,298,NULL);
+INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (330,19,299,NULL);
+
 
 /* done */
 

@@ -536,6 +536,22 @@ INSERT INTO CSM_PROTECTION_ELEMENT SELECT CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL
 INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,17,(SELECT PROTECTION_ELEMENT_ID FROM csm_protection_element WHERE OBJECT_ID='edu.common.dynamicextensions.domain.integration.EntityMap'),TO_DATE('2007-01-04','yyyy-mm-dd') FROM dual;
 INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,17,(SELECT PROTECTION_ELEMENT_ID FROM csm_protection_element WHERE OBJECT_ID='edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction'),TO_DATE('2007-01-04','yyyy-mm-dd') FROM dual;
 
+
+/*  changes for making Action a secureAction  :kalpana */
+INSERT INTO CSM_PROTECTION_ELEMENT SELECT CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction',NULL,NULL,1,TO_DATE('2007-12-25','yyyy-mm-dd') FROM dual;
+INSERT INTO CSM_PROTECTION_ELEMENT SELECT CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction','edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction','edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction',NULL,NULL,1,TO_DATE('2007-12-25','yyyy-mm-dd') FROM dual;
+INSERT INTO CSM_PROTECTION_ELEMENT SELECT CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction',NULL,NULL,1,TO_DATE('2007-12-25','yyyy-mm-dd') FROM dual;
+
+
+INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,19,(SELECT PROTECTION_ELEMENT_ID FROM csm_protection_element WHERE OBJECT_ID='edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction'),TO_DATE('2007-12-25','yyyy-mm-dd') FROM dual;
+INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,19,(SELECT PROTECTION_ELEMENT_ID FROM csm_protection_element WHERE OBJECT_ID='edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction'),TO_DATE('2007-12-25','yyyy-mm-dd') FROM dual;
+INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,19,(SELECT PROTECTION_ELEMENT_ID FROM csm_protection_element WHERE OBJECT_ID='edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction'),TO_DATE('2007-12-25','yyyy-mm-dd') FROM dual;
+
+
+/* kalpana  end */
+
+
+
 commit;
 
 /* TODO Added in next script CSMUpgrade_3_to_3.2 */

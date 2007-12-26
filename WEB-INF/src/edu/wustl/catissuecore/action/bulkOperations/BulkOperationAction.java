@@ -25,13 +25,14 @@ import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
 
-public abstract class BulkOperationAction extends BaseAction
+public abstract class BulkOperationAction extends SecureAction
 {
 
 	@Override
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// Get Specimen Ids from request. If not there then get all from cart
 		List specimenIds = (List) request.getAttribute(Constants.SPECIMEN_ID);

@@ -1718,6 +1718,72 @@ SELECT MAX(PG_PE_ID) + 1,
 FROM   CSM_PG_PE;
 
 
+/* changes for making Action a secureAction  :kalpana*/
+
+INSERT INTO `CSM_PROTECTION_ELEMENT`
+SELECT MAX(PROTECTION_ELEMENT_ID) + 1,
+       'edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction',
+       'edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction',
+       'edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction',
+       NULL,
+       NULL,
+       1,
+       '2007-12-25'
+FROM   CSM_PROTECTION_ELEMENT;
+
+INSERT INTO `CSM_PROTECTION_ELEMENT`
+SELECT MAX(PROTECTION_ELEMENT_ID) + 1,
+       'edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction',
+       'edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction',
+       'edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction',
+       NULL,
+       NULL,
+       1,
+       '2007-12-25'
+FROM   CSM_PROTECTION_ELEMENT;
+
+INSERT INTO `CSM_PROTECTION_ELEMENT`
+SELECT MAX(PROTECTION_ELEMENT_ID) + 1,
+       'edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction',
+       'edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction',
+       'edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction',
+       NULL,
+       NULL,
+       1,
+       '2007-12-25'
+FROM   CSM_PROTECTION_ELEMENT;
+
+
+
+INSERT INTO `CSM_PG_PE`
+SELECT MAX(PG_PE_ID) + 1,
+       19,
+       (SELECT PROTECTION_ELEMENT_ID
+        FROM   CSM_PROTECTION_ELEMENT
+        WHERE  OBJECT_ID = 'edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction' limit 1),
+       '2007-12-25'
+FROM   CSM_PG_PE;
+
+INSERT INTO `CSM_PG_PE`
+SELECT MAX(PG_PE_ID) + 1,
+       19,
+       (SELECT PROTECTION_ELEMENT_ID
+        FROM   CSM_PROTECTION_ELEMENT
+        WHERE  OBJECT_ID = 'edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction' limit 1),
+      '2007-12-25'
+FROM   CSM_PG_PE;
+
+INSERT INTO `CSM_PG_PE`
+SELECT MAX(PG_PE_ID) + 1,
+       19,
+       (SELECT PROTECTION_ELEMENT_ID
+        FROM   CSM_PROTECTION_ELEMENT
+        WHERE  OBJECT_ID = 'edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction' limit 1),
+       '2007-12-25'
+FROM   CSM_PG_PE;
+
+/*kalpana end */
+
 
 
 /* TODO Added in next script SCG_DbUpgrade */
