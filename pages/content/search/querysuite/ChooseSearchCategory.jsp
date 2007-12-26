@@ -82,7 +82,7 @@ function checkKey()
 							<b><font face="Arial" size="2"><bean:message key="query.advancedSearchHeader"/></font></b>									
 						</td>
 						<th id="imageContainer" valign="center" align="right" height="1%" bgcolor="#EAEAEA" style="border-top:solid 1px;border-bottom:solid 1px;border-right:solid 1px;bordercolorlight:#EAEAEA;">
-							<a id="image" onClick="expand()" style="display:block"> <img src="images/ic_expand.gif" hspace="3" vspace="3"/> </a>
+							<a id="image" onClick="expand()" style="display:block"> <img src="images/nolines_plus.gif" hspace="3" vspace="3"/> </a>
 						</th>
 						<td  height="1%">&nbsp;</td>
 					</tr>
