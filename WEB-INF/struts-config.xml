@@ -657,6 +657,8 @@ PUBLIC
 			<forward name="bulkTransfers" path="/BulkTransferEvents.do?menuSelected=15"/>
 			<forward name="bulkDisposals" path="/BulkDisposalEvents.do?menuSelected=15"/>
 			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=edit"/>
+			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
+			
 			
 		</action>
 		<action path="/QueryMessageAction"
@@ -3767,6 +3769,7 @@ PUBLIC
 			<forward name="success" path=".catissuecore.multipleSpecimenFlexDef" />  
 			<forward name="pageOfMultipleSpWithoutMenu" path=".catissuecore.multipleSpecimenFlexCPQueryDef" />  
 			<forward name="pageOfMultipleSpWithMenu" path=".catissuecore.multipleSpecimenFlexDef" />  
+			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 			
     </action>                        
 	
@@ -4660,6 +4663,7 @@ PUBLIC
 					<forward name="success" path=".catissuecore.bulkTransferEventsDef" />
 					<forward name="bulkTransfers" path=".catissuecore.bulkTransferEventsDef" />
 					<forward name="failure" path=".catissuecore.bulkTransferEventsDef" />
+					<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 		</action>
 		
 		<action path="/BulkDisposalEvents"
@@ -4670,6 +4674,7 @@ PUBLIC
 					<forward name="success" path=".catissuecore.bulkDisposalEventsDef" />
 					<forward name="bulkDisposals" path=".catissuecore.bulkDisposalEventsDef" />
 					<forward name="failure" path=".catissuecore.bulkDisposalEventsDef" />
+					<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 		</action>
 		
 		<action path="/BulkTransferEventsSubmit"
