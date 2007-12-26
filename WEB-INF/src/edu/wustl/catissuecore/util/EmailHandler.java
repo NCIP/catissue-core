@@ -18,7 +18,6 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.SendEmail;
 import edu.wustl.common.util.logger.Logger;
 
@@ -194,7 +193,7 @@ public class EmailHandler
 							.getUserRole(user.getCsmUserId().longValue()).getName();
 			body = body + "\n\n" + ApplicationProperties.getValue("forgotPassword.email.body.start")
 				+ "\n\t "+ ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getLoginName()
-    		    + "\n\t "+ ApplicationProperties.getValue("user.password")+ Constants.SEPARATOR + PasswordManager.decode(csmUser.getPassword())
+    		    + "\n\t "+ ApplicationProperties.getValue("user.password")+ Constants.SEPARATOR + csmUser.getPassword()
 			    + "\n\t "+ ApplicationProperties.getValue("user.role")+ Constants.SEPARATOR + roleOfUser
 			    + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
 			

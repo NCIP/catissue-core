@@ -682,8 +682,8 @@ public class UserForm extends AbstractActionForm
 						gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(UserForm.class).getUserById(this.getCsmUserId().toString());
 						if(csmUser != null)
 			            {
-			            	this.setNewPassword(PasswordManager.decode(csmUser.getPassword()));
-			            	this.setConfirmNewPassword(PasswordManager.decode(csmUser.getPassword()));
+			            	this.setNewPassword(csmUser.getPassword());
+			            	this.setConfirmNewPassword(csmUser.getPassword());
 			            }
 					}
 					else

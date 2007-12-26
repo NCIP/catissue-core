@@ -510,6 +510,7 @@
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MySql/SCG_DB_changes.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/CSMUpgrade_3_to_3.2.sql"/>
 			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
 			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
@@ -530,6 +531,7 @@
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/SCG_DB_changes.sql" />
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/CSMUpgrade_3_to_3.2.sql"/>
 			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
@@ -697,93 +699,99 @@ Thanking You,
 	</target>
 
 	<!--First User Creation. Mandar : 02-May-2006 -->
+	<path id="temp.classpath">
+		<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
 	<target name="firstUser">
 		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
+			<equals arg1="mysql" arg2="${database.type}"/>		
 			<then>
-				<antcall target="mysqlFirstUser" />
+				<antcall target="mysqlFirstUser"/>
 			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
+			<elseif>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
 				<then>
-					<antcall target="oracleFirstUser" />
+					<antcall target="oracleFirstUser"/>
 				</then>
 			</elseif>
 		</if>
 	</target>
+	
 	<target name="oracleFirstUser">
-		<echo message="Encoding Password..." />
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-
+		<echo message="Encoding Password..."/>
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+	
 		<java classname="edu.wustl.common.util.global.PasswordManager" fork="true">
-			<classpath>
-				<pathelement path="${temp.dir}/catissuecore/WEB-INF/lib" />
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/lib/commonpackage.jar" />
-			</classpath>
-			<arg value="${base.dir}/catissuetmp.txt" />
-			<arg value="${first.admin.password}" />
+			
+			<classpath refid="temp.classpath" />
+			
+			<arg value="${base.dir}/catissuetmp.txt"/>
+			<arg value="${first.admin.password}"/>
 		</java>
-
-		<property file="${base.dir}/catissuetmp.txt" />
-		<echo>
+		
+		<property file="${base.dir}/catissuetmp.txt"/>
+			<echo>
 					Encoded Password ${first.admin.encodedPassword}
 			</echo>
 
-		<echo message="Modifying caTISSUECore SQL file for user information..." />
-		<copy file="${oracle.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true" />
+		<echo message="Modifying caTISSUECore SQL file for user information..."/>
+			<copy file="${oracle.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
 
-		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-			<include name="createUser.sql" />
-			<replacefilter token="@@first.admin.department@@" value="${first.admin.department}" />
-			<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}" />
-			<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}" />
-			<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}" />
-			<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}" />
-		</replace>
-
-		<copy todir="${oracle.sql.dir}" overwrite="true">
-			<fileset dir="${temp.dir}">
-				<include name="createUser.sql" />
-			</fileset>
-		</copy>
-		<delete dir="${temp.dir}" />
+			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
+				<include name="createUser.sql"/>
+				<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
+				<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
+				<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}"/>
+				<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
+				<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
+			</replace>
+			
+			<copy todir="${oracle.sql.dir}" overwrite="true">
+				<fileset dir="${temp.dir}">
+					<include name="createUser.sql"/>
+				</fileset>
+			</copy>	
+		<delete dir="${temp.dir}"/>
 	</target>
+	
 	<target name="mysqlFirstUser">
-		<echo message="Encoding Password..." />
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-
+		<echo message="Encoding Password..."/>
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+	
 		<java classname="edu.wustl.common.util.global.PasswordManager" fork="true">
-			<classpath>
-				<pathelement path="${temp.dir}/catissuecore/WEB-INF/lib" />
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/lib/commonpackage.jar" />
-			</classpath>
-			<arg value="${base.dir}/catissuetmp.txt" />
-			<arg value="${first.admin.password}" />
+			
+			<classpath refid="temp.classpath" />
+			
+			<arg value="${base.dir}/catissuetmp.txt"/>
+			<arg value="${first.admin.password}"/>
 		</java>
-
-		<property file="${base.dir}/catissuetmp.txt" />
-		<echo>
+		
+		<property file="${base.dir}/catissuetmp.txt"/>
+			<echo>
 					Encoded Password ${first.admin.encodedPassword}
 			</echo>
 
-		<echo message="Modifying caTISSUECore SQL file for user information..." />
-		<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true" />
+		<echo message="Modifying caTISSUECore SQL file for user information..."/>
+		<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
 
-		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-			<include name="createUser.sql" />
-			<replacefilter token="@@first.admin.department@@" value="${first.admin.department}" />
-			<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}" />
-			<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}" />
-			<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}" />
-			<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}" />
-		</replace>
-
-		<copy todir="${common.sql.dir}" overwrite="true">
-			<fileset dir="${temp.dir}">
-				<include name="createUser.sql" />
-			</fileset>
-		</copy>
-		<delete dir="${temp.dir}" />
+			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
+				<include name="createUser.sql"/>
+				<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
+				<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
+				<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}"/>
+				<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
+				<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
+			</replace>
+			
+			<copy todir="${common.sql.dir}" overwrite="true">
+				<fileset dir="${temp.dir}">
+					<include name="createUser.sql"/>
+				</fileset>
+			</copy>	
+		<delete dir="${temp.dir}"/>
 	</target>
 
 	<!-- Configure titli.properties according to properties in caTissueInstall.properties and other set properties -->
@@ -1008,4 +1016,122 @@ Thanking You,
 		</if>
 	</target>
 	
+	<!--Target for Database Upgrade from 1.2.0.1 to 1.2.1-->
+		
+		<target name="csm_upgrade" depends="db_upgrade_csm, encryptPassword">
+		</target>
+		
+		<!--CSM Upgradation -->
+		<target name="db_upgrade_csm">
+			<if>
+				<equals arg1="mysql" arg2="${database.type}"/>		
+				<then>
+					<antcall target="db_upgrade_csm_mysql"/>
+				</then>
+				<elseif>	
+					<equals arg1="oracle" arg2="${database.type}"/>		
+					<then>
+						<antcall target="db_upgrade_csm_oracle"/>
+					</then>
+				</elseif>
+				<else>
+					<echo message="DATABASE UPGRADATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error"/>
+				</else>
+			</if>
+		</target>
+		
+		<!--MySQL Database CSM Upgradation -->
+		<target name="db_upgrade_csm_mysql">
+			<echo message="Upgrading MySQL Database for CSM 3.2..."/>
+			<sql
+				driver="${mysql.driver.string}"
+			    url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
+			    userid="${database.username}"
+			    password="${database.password}" 
+				onerror="continue">
+				<transaction  src="${dbupgrade.sql.dir}/MySql/CSMUpgrade_3_to_3.2.sql"/>
+				<transaction>commit;</transaction>
+				<classpath>
+				<fileset dir="${lib.dir}">
+				  <include name="*.jar"/>
+				  </fileset>
+				</classpath> 
+			</sql>
+	  	</target>
+			  	
+		<!--Oracle Database CSM Upgradation -->
+		<target name="db_upgrade_csm_oracle">
+			<echo message="Upgrading Oracle Database for CSM 3.2..."/>
+			<sql 
+				driver="${oracle.driver.string}"
+			    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+			    userid="${database.username}"
+			    password="${database.password}" 
+	    		onerror="continue"
+	    		rdbms="oracle">
+				<transaction  src="${dbupgrade.sql.dir}/Oracle/CSMUpgrade_3_to_3.2.sql"/>
+				<transaction>commit;</transaction>
+				<classpath>
+				<fileset dir="${lib.dir}">
+				  <include name="*.jar"/>
+				  </fileset>
+				</classpath> 
+			</sql>
+		</target>
+		
+		
+		<!--Encrypt Password-->
+		<target name="encryptPassword">
+			<if>
+				<equals arg1="mysql" arg2="${database.type}"/>		
+				<then>
+					<antcall target="mysqlEncryptPassword"/>
+				</then>
+				<elseif>	
+					<equals arg1="oracle" arg2="${database.type}"/>		
+					<then>
+						<antcall target="oracleEncryptPassword"/>
+					</then>
+				</elseif>
+			</if>
+		</target>
+		
+		<!--Mysql Encrypt Password-->
+		<target name="mysqlEncryptPassword">
+			<echo message="Encrypting Password for Mysql DB..."/>
+			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+			<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+			<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="true">
+				
+				<classpath refid="temp.classpath" />
+				
+				<arg value="${database.host}"/>
+				<arg value="${database.port}"/>
+				<arg value="${database.type}"/>
+				<arg value="${database.name}"/>
+				<arg value="${database.username}"/>
+				<arg value="${database.password}"/>
+				<arg value="${mysql.driver.string}"/>
+			</java>
+		</target>
+
+		<!--Oracle Encrypt Password-->
+		<target name="oracleEncryptPassword">
+			<echo message="Encrypting Password for Oracle DB..."/>
+			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		
+			<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="true">
+				
+				<classpath refid="temp.classpath" />
+				
+				<arg value="${database.host}"/>
+				<arg value="${database.port}"/>
+				<arg value="${database.type}"/>
+				<arg value="${database.name}"/>
+				<arg value="${database.username}"/>
+				<arg value="${database.password}"/>
+				<arg value="${oracle.driver.string}"/>
+			</java>
+		</target>
+
 </project>

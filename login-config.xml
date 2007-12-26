@@ -23,7 +23,7 @@ The outline of the application-policy is:
   </authentication>
 </application-policy>
 
-$Revision: 1.1 $
+$Revision: 1.1.8.1 $
 -->
 
 <policy>
@@ -179,6 +179,7 @@ $Revision: 1.1 $
 				<module-option name="user">@@username@@</module-option>
 				<module-option name="passwd">@@pasword@@</module-option>
 				<module-option name="query">select * from csm_user where login_name=? and password=?</module-option>
+				<module-option name="encryption-enabled">YES</module-option> 
 			</login-module>
 		</authentication>
 	</application-policy>

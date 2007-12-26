@@ -41,6 +41,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.PasswordEncryptionException;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -105,6 +106,7 @@ public class UserBizLogic extends DefaultBizLogic
 			user.setDepartment(department);
 			user.setInstitution(institution);
 			user.setCancerResearchGroup(cancerResearchGroup);
+			String generatedPassword = PasswordManager.generatePassword();
 
 			// If the page is of signup user don't create the csm user.
 			if (user.getPageOf().equals(Constants.PAGEOF_SIGNUP) == false)
@@ -114,7 +116,7 @@ public class UserBizLogic extends DefaultBizLogic
 				csmUser.setFirstName(user.getFirstName());
 				csmUser.setEmailId(user.getEmailAddress());
 				csmUser.setStartDate(user.getStartDate());
-				csmUser.setPassword(PasswordManager.encode(PasswordManager.generatePassword()));
+				csmUser.setPassword(generatedPassword);
 
 				SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
 
@@ -141,7 +143,7 @@ public class UserBizLogic extends DefaultBizLogic
 		        //End:-  Change for API Search 
 
 				password.setUser(user);
-				password.setPassword(csmUser.getPassword());
+				password.setPassword(PasswordManager.encrypt(generatedPassword));
 				password.setUpdateDate(new Date());
 
 				user.getPasswordCollection().add(password);
@@ -190,6 +192,12 @@ public class UserBizLogic extends DefaultBizLogic
 			// added to format constrainviolation message
 			deleteCSMUser(csmUser);
 			throw handleSMException(e);
+		}
+		catch (PasswordEncryptionException e)
+		{
+			Logger.out.debug(e.getMessage(), e);
+			deleteCSMUser(csmUser);
+			throw new DAOException(e.getMessage(), e);
 		}
 	}
 
@@ -301,20 +309,21 @@ public class UserBizLogic extends DefaultBizLogic
 
 			gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(UserBizLogic.class).getUserById(csmUserId);
 
+			String oldPassword = user.getOldPassword();
 			// If the page is of change password, 
 			// update the password of the user in csm and catissue tables. 
 			if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
 			{
-				if (!user.getOldPassword().equals(PasswordManager.decode(csmUser.getPassword())))
+				if (!oldPassword.equals(csmUser.getPassword()))
 				{
 					throw new DAOException(ApplicationProperties.getValue("errors.oldPassword.wrong"));
 				}
 
 				//Added for Password validation by Supriya Dankh.
 				Validator validator = new Validator();
-				if (!validator.isEmpty(user.getNewPassword()) && !validator.isEmpty(user.getOldPassword()))
+				if (!validator.isEmpty(user.getNewPassword()) && !validator.isEmpty(oldPassword))
 				{
-					int result = validatePassword(oldUser, user.getNewPassword(), user.getOldPassword());
+					int result = validatePassword(oldUser, user.getNewPassword(), oldPassword);
 
 					Logger.out.debug("return from Password validate " + result);
 
@@ -328,21 +337,21 @@ public class UserBizLogic extends DefaultBizLogic
 						throw new DAOException(errorMessage);
 					}
 				}
-				csmUser.setPassword(PasswordManager.encode(user.getNewPassword()));
+				csmUser.setPassword(user.getNewPassword());
 
 				// Set values in password domain object and adds changed password in Password Collection
-				Password password = new Password(csmUser.getPassword(), user);
+				Password password = new Password(PasswordManager.encrypt(user.getNewPassword()), user);
 				user.getPasswordCollection().add(password);
 							
 			}
 			
 			//Bug-1516: Jitendra Administartor should be able to edit the password 
-			else if(user.getPageOf().equals(Constants.PAGEOF_USER_ADMIN) && !user.getNewPassword().equals(PasswordManager.decode(csmUser.getPassword())))
+			else if(user.getPageOf().equals(Constants.PAGEOF_USER_ADMIN) && !user.getNewPassword().equals(csmUser.getPassword()))
 			{				
 				Validator validator = new Validator();
 				if (!validator.isEmpty(user.getNewPassword()))
 				{
-					int result = validatePassword(oldUser, user.getNewPassword(), user.getOldPassword());
+					int result = validatePassword(oldUser, user.getNewPassword(), oldPassword);
 
 					Logger.out.debug("return from Password validate " + result);
 
@@ -356,9 +365,9 @@ public class UserBizLogic extends DefaultBizLogic
 						throw new DAOException(errorMessage);
 					}
 				}
-				csmUser.setPassword(PasswordManager.encode(user.getNewPassword()));
+				csmUser.setPassword(user.getNewPassword());
 				// Set values in password domain object and adds changed password in Password Collection
-				Password password = new Password(csmUser.getPassword(), user);
+				Password password = new Password(PasswordManager.encrypt(user.getNewPassword()), user);
 				user.getPasswordCollection().add(password);
 				user.setFirstTimeLogin(new Boolean(true));
 			}
@@ -409,6 +418,10 @@ public class UserBizLogic extends DefaultBizLogic
 		catch (SMException e)
 		{
 			throw handleSMException(e);
+		}
+		catch (PasswordEncryptionException e)
+		{
+			throw new DAOException(e.getMessage(), e);
 		}
 	}
 
@@ -858,15 +871,17 @@ public class UserBizLogic extends DefaultBizLogic
 	 * @param oldPassword Old Password value
 	 * @return SUCCESS (constant int 0) if all condition passed 
 	 *   else return respective error code (constant int) value  
+	 * @throws PasswordEncryptionException 
 	 */
 
-	private int validatePassword(User oldUser, String newPassword, String oldPassword)
+	private int validatePassword(User oldUser, String newPassword, String oldPassword) throws PasswordEncryptionException
 	{
 		List oldPwdList = new ArrayList(oldUser.getPasswordCollection());
 		Collections.sort(oldPwdList);
 		if (oldPwdList != null && !oldPwdList.isEmpty())
 		{
 			//Check new password is equal to last n password if value
+			String encryptedPassword = PasswordManager.encrypt(newPassword);
 			if (checkPwdNotSameAsLastN(newPassword, oldPwdList))
 			{
 				Logger.out.debug("Password is not valid returning FAIL_SAME_AS_LAST_N");
@@ -977,7 +992,7 @@ public class UserBizLogic extends DefaultBizLogic
 		for (int i = 0; i < loopCount; i++)
 		{
 			Password pasword = (Password) oldPwdList.get(i);
-			if (newPassword.equals(PasswordManager.decode(pasword.getPassword())))
+			if (newPassword.equals(pasword.getPassword()))
 			{
 				isSameFound = true;
 				break;

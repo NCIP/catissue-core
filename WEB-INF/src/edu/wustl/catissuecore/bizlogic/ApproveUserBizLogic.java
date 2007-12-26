@@ -28,6 +28,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.PasswordEncryptionException;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -75,9 +76,11 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 csmUser.setEmailId(user.getEmailAddress());
                 csmUser.setStartDate(Calendar.getInstance().getTime());
                 
+                String generatedPassword = PasswordManager.generatePassword();
+
                 if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
                 {
-                    csmUser.setPassword(PasswordManager.encode(PasswordManager.generatePassword()));
+					csmUser.setPassword(generatedPassword);
                 }
                 
                 
@@ -91,7 +94,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 
                 user.setCsmUserId(csmUser.getUserId());
               
-                Password password = new Password(csmUser.getPassword(),user);
+                Password password = new Password(PasswordManager.encrypt(generatedPassword),user);
 				user.getPasswordCollection().add(password);
                 
                 Logger.out.debug("password stored in passwore table");
@@ -141,6 +144,11 @@ public class ApproveUserBizLogic extends DefaultBizLogic
             deleteCSMUser(csmUser);
             throw new DAOException(exp.getMessage(), exp);
         }
+		catch (PasswordEncryptionException e)
+		{
+			deleteCSMUser(csmUser);
+            throw new DAOException(e.getMessage(), e);
+		}
     }
     
     /**

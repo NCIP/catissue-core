@@ -70,14 +70,14 @@ public class LoginAction extends Action
         Logger.out.info("Inside Login Action, Just before validation");
 
         String loginName = loginForm.getLoginName();
-        String password = PasswordManager.encode(loginForm.getPassword());
+//        String password = PasswordManager.encode(loginForm.getPassword());
         
         try
-        {
+        { 
         	User validUser = getUser(loginName);
-        	
+        	String password = loginForm.getPassword();
         	if (validUser != null)
-        	{
+        	{ 
 	            boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName, password);
 	            if (loginOK) 
 	            {

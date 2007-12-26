@@ -141,8 +141,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	</servlet>	
     
     <servlet>
-    	<servlet-name>HTTPServer</servlet-name>
-    	<servlet-class>gov.nih.nci.system.proxy.HTTPServer</servlet-class>
+		<servlet-name>sdkstartup</servlet-name>
+		<servlet-class>
+			gov.nih.nci.common.util.WebStartupUtil
+		</servlet-class>
     	<load-on-startup>1</load-on-startup>
     </servlet>
     
@@ -170,7 +172,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	</servlet-mapping>
     
     <servlet-mapping>
-        <servlet-name>HTTPServer</servlet-name>
+        <servlet-name>sdkstartup</servlet-name>
         <url-pattern>/server/HTTPServer</url-pattern>
     </servlet-mapping>
     
