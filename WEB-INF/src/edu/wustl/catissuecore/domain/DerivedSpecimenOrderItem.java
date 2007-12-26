@@ -31,44 +31,6 @@ public class DerivedSpecimenOrderItem extends NewSpecimenOrderItem
 	 * Specimen associated with the particular order item.
 	 */
 	protected Specimen parentSpecimen;
-	/**
-	 * Returns the specimen class of the requested new/derived specimen
-	 * @hibernate.property  name="specimenClass" type="string" length="100" column="SPECIMEN_CLASS"
-	 * @return Specimen Class of the new/derived specimen
-	 */
-	public String getSpecimenClass() 
-	{
-		return specimenClass;
-	}
-	
-	/**
-	 * Sets the specimen class of the requested new/derived specimen.
-	 * @param specimenClass String
-	 */
-	public void setSpecimenClass(String specimenClass)
-	{
-		this.specimenClass = specimenClass;
-	}
-
-	/**
-	 * Returns the specimen type of the requested new/derived specimen
-	 * @hibernate.property name="specimenType" length="100" type="string" column="SPECIMEN_TYPE"
-	 * @return Specimen Type of the new/derived specimen
-	 */
-	public String getSpecimenType()
-	{
-		return specimenType;
-	}
-
-	/**
-	 * Sets the specimen type of the new/derived specimens
-	 * @param specimenType String
-	 */
-	public void setSpecimenType(String specimenType)
-	{
-		this.specimenType = specimenType;
-	}
-
 	
 	/**
 	 * The specimen associated with the order item in SpecimenOrderItem.
