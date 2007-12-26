@@ -152,38 +152,30 @@
 			</table>		
 			</td>
 			</tr>
-			<tr bgcolor="#DFE9F3">
+			<tr>
 					<td colspan="4">
-					<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" background="images/bot_bg_wiz.gif">
-					<tr height="35" valign="bottom">
+					<table border="0" width="100%" cellspacing="0" cellpadding="0" height="24" background="images/bot_bg_wiz.gif">
+					<tr valign="bottom">
 					 <td width="2%" valign="bottom">&nbsp;</td>
-						<td valign="top" width="6%">
-						<%--<html:button property="saveButton" onclick="validateQuery('save');">
-							<bean:message key="query.saveButton"/>
-						</html:button>--%>
-						<img src="images/b_save.gif" width="51" height="25" hspace="3" vspace="3" onclick="validateQuery('save');" />						
-						</td>
-						<td  valign="top" align="left" width="75%">
-						<%--<html:button property="searchButton" onclick="validateQuery('search');">
-							<bean:message key="query.searchButton"/>
-						</html:button>--%>
-						<img src="images/b_search.gif" width="56" height="25" hspace="3" vspace="3" onclick="validateQuery('search');" />
-						</td>
-						<td  align="right" valign="top" >
-						<%--<html:button property="previousButton" disabled="true">
-							<bean:message key="query.previousButton"/>
-						</html:button>--%>
-						<!--img src="images/b_prev.gif" width="72" height="25" hspace="3" onclick="previousFromDefineResults()"/-->
-						</td>
-						<td align="right" valign="top">
-						<%--<html:button property="nextButton" onclick="saveClientQueryToServer('next');">
-							<bean:message key="query.nextButton"/>
-						</html:button>--%>
-						<img src="images/b_next.gif" width="51" height="25" hspace="3" vspace="3" onclick="saveClientQueryToServer('next');" />
-						</td>
-						<td width="2%">&nbsp;</td>
+					 <td width="50%" align="left">
+					  <table border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td><img src="images/b_save.gif" width="51"  hspace="3" onclick="validateQuery('save');"/></td>
+							 <td><img src="images/b_search.gif"  hspace="3" onclick="validateQuery('search');"/></td>
+						</tr>
+					 </table>
+					</td>
+							
+					<td width="50%" align="right">
+					 <table border="0" cellspacing="0" cellpadding="0">
+					  <tr>
+							<td><img src="images/b_next.gif"   hspace="3" onclick="saveClientQueryToServer('next');" /></td>
+						</tr>
+					</table>
+					 </td>
+					 <td width="2%">&nbsp;</td>
 					</tr>
-				</table>      
+				</table>   
 				</td>
 					</tr>
 			</table>          
