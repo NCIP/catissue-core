@@ -278,14 +278,14 @@ public class ReportLoader
 			Logger.out.info("inside"+this.scg.getIdentifiedSurgicalPathologyReport().getId());
 			
 			IdentifiedSurgicalPathologyReport existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(IdentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, this.scg.getIdentifiedSurgicalPathologyReport().getId());
-			if(this.scg.getDeIdentifiedSurgicalPathologyReport()!=null)
+			if(this.scg.getDeidentifiedSurgicalPathologyReport()!=null)
 			{
-				DeidentifiedSurgicalPathologyReport existingDeidReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, this.scg.getDeIdentifiedSurgicalPathologyReport().getId());
+				DeidentifiedSurgicalPathologyReport existingDeidReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.getObject(DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER, this.scg.getDeidentifiedSurgicalPathologyReport().getId());
 				existingReport.setDeIdentifiedSurgicalPathologyReport(existingDeidReport);
 			}
 			existingReport.setSpecimenCollectionGroup(null);
 			this.scg.setIdentifiedSurgicalPathologyReport(null);
-			this.scg.setDeIdentifiedSurgicalPathologyReport(null);
+			this.scg.setDeidentifiedSurgicalPathologyReport(null);
 			try 
 			{
 				existingReport=(IdentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(existingReport);

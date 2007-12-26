@@ -330,7 +330,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 * class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
 	 * property-ref="specimenCollectionGroup" not-null="false" cascade="save-update"
 	 */
-    public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport() 
+    public DeidentifiedSurgicalPathologyReport getDeidentifiedSurgicalPathologyReport() 
     {
 		return deidentifiedSurgicalPathologyReport;
 	}
@@ -339,7 +339,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
      * Sets the deidentified surgical pathology report associated with the specimen collection group
      * @param deidentifiedSurgicalPathologyReport deidentified report object
      */
-	public void setDeIdentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport) 
+	public void setDeidentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport) 
 	{
 		this.deidentifiedSurgicalPathologyReport = deidentifiedSurgicalPathologyReport;
 	}	
