@@ -116,7 +116,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			subTypeMap.put(pv.getValue(), innerList);
 		} // class and values set
 
-		if(operation.equals("add")&&pageOf!=null&&!pageOf.equals("error"))
+		if(operation.equals("add")&&pageOf!=null&&!pageOf.equals("error")&&!pageOf.equals("delete"))
 		{
 			// Setting the default values
 			clearFormOnAddSpecimenRequirement(createSpecimenTemplateForm);
