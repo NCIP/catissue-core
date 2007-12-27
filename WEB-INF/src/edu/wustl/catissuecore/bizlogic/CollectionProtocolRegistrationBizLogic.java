@@ -114,7 +114,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			while(collectionProtocolEventIterator.hasNext())
 			{
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolEventIterator.next();
-				SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = (SpecimenCollectionRequirementGroup) collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+				SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = 
+					(SpecimenCollectionRequirementGroup) collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
 				SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup(specimenCollectionRequirementGroup);
 				specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 				specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
@@ -122,15 +123,16 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
 				specimenCollectionGroupLableGenerator.setLabel(specimenCollectionGroup);
 				
-				Collection cloneSpecimenCollection = new LinkedHashSet();
+				Collection cloneSpecimenCollection = null;
 				Collection specimenCollection = specimenCollectionRequirementGroup.getSpecimenCollection();
 				if(specimenCollection != null && !specimenCollection.isEmpty())
 				{
+					cloneSpecimenCollection = new LinkedHashSet();
 					Iterator itSpecimenCollection = specimenCollection.iterator();
 					while(itSpecimenCollection.hasNext())
 					{
 						Specimen specimen = (Specimen)itSpecimenCollection.next();
-						if(specimen.getLineage().equalsIgnoreCase("new"))
+						if(Constants.NEW_SPECIMEN.equals(specimen.getLineage()))
 						{
 							Specimen cloneSpecimen = getCloneSpecimen(specimen,null,specimenCollectionGroup);
 							//kalpana : bug #6224
@@ -147,7 +149,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				
 				specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
 				scgCollection.add(specimenCollectionGroup);
-				specimenBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
+				//specimenBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
+				dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
+				specimenBizLogic.insertAuthData(specimenCollectionGroup);
 				bizLogic.insert(specimenMap, dao,  sessionDataBean);
 			}
 			collectionProtocolRegistration.setSpecimenCollectionGroupCollection(scgCollection);
@@ -160,7 +164,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	
 	private Specimen getCloneSpecimen(Specimen specimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup)
 	{
-		Collection childrenSpecimen = new LinkedHashSet<Specimen>(); 
+ 
 		Specimen newSpecimen = specimen.createClone();
 		newSpecimen.setParentSpecimen(pSpecimen);
 		newSpecimen.setDefaultSpecimenEventCollection(userID);
@@ -172,20 +176,23 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
     	else
     	{
-    		specimenMap.put(newSpecimen, null);
+    		List<Specimen> childrenList = specimenMap.get(pSpecimen);
+    		childrenList.add(newSpecimen);
+    		//specimenMap.put(newSpecimen, null);
     	}
 		
 		Collection childrenSpecimenCollection = specimen.getChildrenSpecimen();
     	if(childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
 		{
-	    	Iterator it = childrenSpecimenCollection.iterator();
+    		Collection<Specimen> childrenSpecimen = new LinkedHashSet<Specimen>();
+    		Iterator<Specimen> it = childrenSpecimenCollection.iterator();
 	    	while(it.hasNext())
 	    	{
-	    		Specimen childSpecimen = (Specimen)it.next();
+	    		Specimen childSpecimen = it.next();
 	    		Specimen newchildSpecimen = getCloneSpecimen(childSpecimen,newSpecimen, specimenCollectionGroup);
 	    		childrenSpecimen.add(newchildSpecimen);
-	    		newSpecimen.setChildrenSpecimen(childrenSpecimen);
 	    	}
+	    	newSpecimen.setChildrenSpecimen(childrenSpecimen);
 		}
 
     	

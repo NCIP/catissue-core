@@ -99,6 +99,15 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
 		
+		insertAuthData(specimenCollectionGroup);
+	}
+
+	/**
+	 * @param specimenCollectionGroup
+	 * @throws DAOException
+	 */
+	public void insertAuthData(SpecimenCollectionGroup specimenCollectionGroup)
+			throws DAOException {
 		try
 		{
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(specimenCollectionGroup),
@@ -121,7 +130,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return protectionObjects;
 	}
 
-	private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
+	protected String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		String[] dynamicGroups = new String[1];
