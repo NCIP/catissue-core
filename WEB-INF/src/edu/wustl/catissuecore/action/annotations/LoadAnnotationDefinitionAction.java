@@ -54,6 +54,7 @@ import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -156,8 +157,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	{
 		if (containerId != null)
 		{
-//			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
-//					.getInstance();
+			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+					.getInstance();
 			List entitymapList = getEntityMapsForDE(new Long(containerId));
 			if (entitymapList != null && !entitymapList.isEmpty())
 			{
@@ -188,9 +189,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 								EntityMapCondition entityMapCondition = (EntityMapCondition) entityMapCondIterator
 										.next();
 								if (entityMapCondition.getTypeId().toString().equals(
-										request.getSession().getAttribute(
-												AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID)
-												.toString()))
+										catissueCoreCacheManager.getObjectFromCache(
+                                                AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID).toString()))
 									whereColumnValue[i++] = entityMapCondition.getStaticRecordId()
 											.toString();
 							}
@@ -826,10 +826,20 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException,
 			CacheException
 	{
+		List systemEntitiesList  = new ArrayList();
 		if (annotationForm != null)
 		{
 			//load list of system entities
-			List systemEntitiesList = AnnotationUtil.getSystemEntityList();
+			if (request.getSession().getAttribute(AnnotationConstants.STATIC_ENTITY_LIST) == null)
+	        {
+				systemEntitiesList = AnnotationUtil.getSystemEntityList();
+				request.getSession().setAttribute(AnnotationConstants.STATIC_ENTITY_LIST, systemEntitiesList);
+	        }
+			else
+			{
+				systemEntitiesList = (List) request.getSession().getAttribute(AnnotationConstants.STATIC_ENTITY_LIST);
+			}
+			
 			annotationForm.setSystemEntitiesList(systemEntitiesList);
 			//Load list of groups
 			loadGroupList(annotationForm, request);
