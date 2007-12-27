@@ -176,12 +176,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		List specimenList = new ArrayList();
 		Iterator specimenIterator = specimenMap.keySet().iterator();
 		int count = 0;
-
+		
 		while (specimenIterator.hasNext())
 		{
 			TaskTimeCalculater mulSpec = TaskTimeCalculater.startTask("Multiple specimen ", NewSpecimenBizLogic.class);
 			count++;
 			Specimen specimen = (Specimen) specimenIterator.next();
+			
+			//kalpana bug #6224
+			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+			{
+				specimen.setLabel(specimen.getSpecimenCollectionGroup().getId()+"_"+count);
+			}
 
 			/**
 			 * Name : Ashish Gupta
@@ -274,6 +280,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				//resetId(derivedSpecimen);
 				derivedSpecimen.setParentSpecimen(specimen);
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
+				
+				//kalpana bug #6224
+				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+				{
+					derivedSpecimen.setLabel(specimen.getSpecimenCollectionGroup().getId()+"_"+specimen.getId()+"_"+(i+1));
+				}
 
 				try
 				{
