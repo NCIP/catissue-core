@@ -1668,7 +1668,7 @@ td.queryModuleTabMenuItem{ /* for the off state of the tab menu (top) cells */
 }*/
   .standardTextQuery{ /* for stand-alone text not affected by any cascading text styles */
   font-family:arial,helvetica,verdana,sans-serif;
-  font-size:0.9em;
+  font-size:0.8em;
   color:#000000; /* constant: black */
 }
 .standardLabelQuery{
@@ -1887,7 +1887,7 @@ td.formFieldNoBordersQuery{ /* for the cell that contains the form elements */
 
 .saveQuery
 {
-	 border-bottom:1px solid #CCCCCC; /* constant: medium gray */
+	 border-bottom:1px solid #CCCCCC; /* constant: black */
  }
 
  .savedQueryHeading
@@ -1920,10 +1920,10 @@ td.formFieldNoBordersQuery{ /* for the cell that contains the form elements */
 	font-family: Arial, Helvetica, sans-serif; 	
 	font-size: .8em;
 	color: #000000; 
-	border-bottom:1px solid #000000; /* constant: dark gray */
-	border-top:1px  solid #000000;/* constant: dark gray */
-	border-left:1px solid #000000; /* constant: dark gray */
-	border-right:1px solid #000000; /* constant: dark gray */
+	border-bottom:1px solid #000000; /* constant: black */
+	border-top:1px  solid #000000;/* constant: black */
+	border-left:1px solid #000000; /* constant: black */
+	border-right:1px solid #000000; /* constant: black */
  }
 
  .bottomBgImage
