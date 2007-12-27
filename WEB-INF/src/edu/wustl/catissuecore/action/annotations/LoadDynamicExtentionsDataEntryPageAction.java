@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -123,6 +124,13 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	private String getDynamicExtensionsDataEntryURL(HttpServletRequest request, AnnotationDataEntryForm annotationDataEntryForm)
 	{
 		String dynExtDataEntryURL = WebUIManager.getLoadDataEntryFormActionURL();
+		 SessionDataBean sessionbean = (SessionDataBean)request.getSession().getAttribute(edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
+         String userId= sessionbean.getUserId().toString();
+		String isAuthenticatedUser = "false";
+		if (userId != null)
+		{
+			isAuthenticatedUser = "true";
+		}
 		
 		//Append container id
 		Logger.out.info("Load data entry page for Dynamic Extension Entity [" + annotationDataEntryForm.getSelectedAnnotation() + "]");
@@ -135,7 +143,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		}
 		//append callback url
 		dynExtDataEntryURL = dynExtDataEntryURL + "&" + WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath()
-				+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DATA_ENTRY;
+				+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DATA_ENTRY + "&isAuthenticatedUser=" + isAuthenticatedUser;
 		return dynExtDataEntryURL;
 	}
 

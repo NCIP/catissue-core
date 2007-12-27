@@ -19,6 +19,7 @@ import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.SessionDataBean;
 
 /**
  * @author preeti_munot
@@ -58,6 +59,15 @@ public class LoadDynamicExtensionsAction extends BaseAction
     {
         //Get Dynamic extensions URL
         String dynamicExtensionsURL = WebUIManager.getCreateContainerURL();
+        
+        SessionDataBean sessionbean = (SessionDataBean)request.getSession().getAttribute(edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
+               
+        String userId= sessionbean.getUserId().toString(); //request.getSession().getAttribute("SESSION_DATA").toString();
+		String isAuthenticatedUser = "false";
+		if (userId != null)
+		{
+			isAuthenticatedUser = "true";
+		}
         //append container id if any
         if(request.getParameter("containerId")!=null)
         {
@@ -67,7 +77,7 @@ public class LoadDynamicExtensionsAction extends BaseAction
         else
         {
         //append callback parameter
-            dynamicExtensionsURL = dynamicExtensionsURL + "?" + WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath() + AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN;
+            dynamicExtensionsURL = dynamicExtensionsURL + "?" + WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath() + AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN + "&isAuthenticatedUser=" + isAuthenticatedUser;
         }
         return dynamicExtensionsURL;
     }
