@@ -133,8 +133,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						if(specimen.getLineage().equalsIgnoreCase("new"))
 						{
 							Specimen cloneSpecimen = getCloneSpecimen(specimen,null,specimenCollectionGroup);
-							LabelGenerator specimenLableGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-							specimenLableGenerator.setLabel(cloneSpecimen);
+							//kalpana : bug #6224
+							if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+							{
+								LabelGenerator specimenLableGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+								specimenLableGenerator.setLabel(cloneSpecimen);
+							}
 							cloneSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 							cloneSpecimenCollection.add(cloneSpecimen);
 						}
