@@ -17,12 +17,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import net.sf.ehcache.CacheException;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.globus.util.http.HTTPRequestParser;
 
 import edu.common.dynamicextensions.exception.DataTypeFactoryInitializationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
@@ -191,11 +195,7 @@ public class AnnotationUtil
         List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
         AnnotationUtil util = new AnnotationUtil();
         List<NameValueBean> staticEntityInformationList = util.populateStaticEntityList("StaticEntityInformation.xml",null);
-        CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
-                .getInstance();
-        if (cacheManager
-                .getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST) == null)
-        {
+     
             systemEntityList.add(new NameValueBean(Constants.SELECT_OPTION,
                     Constants.SELECT_OPTION_VALUE));
             if (staticEntityInformationList != null
@@ -211,15 +211,8 @@ public class AnnotationUtil
                             .getValue())));
                 }
             }
-            cacheManager.addObjectToCache(
-                    AnnotationConstants.STATIC_ENTITY_LIST,
-                    (Serializable) systemEntityList);
-        }
-        else
-        {
-            systemEntityList = (List<NameValueBean>) cacheManager
-                    .getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST);
-        }
+           
+      
         return systemEntityList;
     }
 
