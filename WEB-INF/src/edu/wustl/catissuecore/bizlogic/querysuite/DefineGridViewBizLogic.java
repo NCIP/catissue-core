@@ -337,20 +337,15 @@ public class DefineGridViewBizLogic
 	public String createSQLForSelectedColumn(StringBuffer selectedColumnNames, String sql)
 	{
 		String columnsInSql = selectedColumnNames.toString();
-		if(columnsInSql.lastIndexOf(",") != -1)
-		{
-			//columnsInSql = columnsInSql.substring(0, columnsInSql.lastIndexOf(","));
-			int indexOfSelectDistict = sql.indexOf(Constants.SELECT_DISTINCT);
-			int selectDistictLength = Constants.SELECT_DISTINCT.length();
-			int indexOfFrom = sql.indexOf(Constants.FROM);
-			StringBuffer newSql = new StringBuffer();
-			newSql.append(sql.substring(indexOfSelectDistict,selectDistictLength));
-			newSql.append(" ");
-			newSql.append(columnsInSql);
-			newSql.append(sql.substring(indexOfFrom));
-			return newSql.toString();
-		}
-		return null;
+		int indexOfSelectDistict = sql.indexOf(Constants.SELECT_DISTINCT);
+		int selectDistictLength = Constants.SELECT_DISTINCT.length();
+		int indexOfFrom = sql.indexOf(Constants.FROM);
+		StringBuffer newSql = new StringBuffer();
+		newSql.append(sql.substring(indexOfSelectDistict,selectDistictLength));
+		newSql.append(" ");
+		newSql.append(columnsInSql);
+		newSql.append(sql.substring(indexOfFrom));
+		return newSql.toString();
 	}
 	/**
 	 * returns list of seletced columns
