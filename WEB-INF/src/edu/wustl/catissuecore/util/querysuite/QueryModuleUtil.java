@@ -224,7 +224,7 @@ public abstract class QueryModuleUtil
 				columIndex++;
 				
 			}
-			else if (ifAttributeIsDisplayName(attribute.getName()))
+			else if (isPresentInArray(attribute.getName(),Constants.ATTRIBUTE_NAMES_FOR_TREENODE_LABEL))
 			{
 				index = columnName.substring(Constants.COLUMN_NAME.length(), columnName.length());
 				Vector<Integer> idvector = new Vector<Integer>();
@@ -259,20 +259,18 @@ public abstract class QueryModuleUtil
 	 * @param attrName String
 	 * @return true if the attribute name can be used to form label for tree node otherwise returns false
 	 */
-	public static boolean ifAttributeIsDisplayName(String attrName)
+	public static boolean isPresentInArray(String objectName,String[] stringArray)
 	{
-		String[] attrNamesForLabel = Constants.ATTRIBUTE_NAMES_FOR_TREENODE_LABEL;
-		for (int i = 0; i < attrNamesForLabel.length; i++)
+		for (int i = 0; i < stringArray.length; i++)
 		{
-			String name = attrNamesForLabel[i];
-			if (attrName.equalsIgnoreCase(name))
+			String name = stringArray[i];
+			if (objectName.equalsIgnoreCase(name))
 			{
 				return true;
 			}
 		}
 		return false;
 	}
-
 	/**
 	 * This is used to set the default selections for the UI components when the screen is loaded for the first time.
 	 * @param actionForm form bean

@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+ 
 import javax.servlet.http.HttpSession;
 
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
@@ -182,20 +182,30 @@ public abstract class QueryCSMUtil
 	 */
 	public static  QueryResultObjectDataBean getQueryResulObjectDataBean(
 			OutputTreeDataNode node, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
-	{
+	{ 
 		QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
+		EntityInterface dynamicExtensionsEntity = node.getOutputEntity()
+				.getDynamicExtensionsEntity();
+		String mainEntityName = dynamicExtensionsEntity.getName();
 		queryResultObjectDataBean
 				.setPrivilegeType(edu.wustl.common.querysuite.security.utility.Utility
-						.getPrivilegeType(node.getOutputEntity().getDynamicExtensionsEntity()));
-		queryResultObjectDataBean.setEntity(node.getOutputEntity().getDynamicExtensionsEntity());
+						.getPrivilegeType(dynamicExtensionsEntity));
+		queryResultObjectDataBean.setEntity(dynamicExtensionsEntity);
 
-		List<EntityInterface> mainEntityList = mainEntityMap.get(node.getOutputEntity()
-				.getDynamicExtensionsEntity());
+		boolean presentInArray = QueryModuleUtil.isPresentInArray(mainEntityName,
+				Constants.INHERITED_ENTITY_NAMES);
+		if (presentInArray && dynamicExtensionsEntity.getParentEntity() != null)
+		{
+			mainEntityName = dynamicExtensionsEntity.getParentEntity().getName();
+			dynamicExtensionsEntity.setName(mainEntityName);
+		}
+		List<EntityInterface> mainEntityList = mainEntityMap.get(dynamicExtensionsEntity);
 		if (mainEntityList != null)
 		{
 			EntityInterface mainEntity = getMainEntity(mainEntityList, node);
 			queryResultObjectDataBean.setMainEntity(mainEntity);
 			queryResultObjectDataBean.setMainEntity(false);
+			mainEntity.setName(mainEntityName);
 		}
 		else
 			queryResultObjectDataBean.setMainEntity(true);
@@ -203,6 +213,18 @@ public abstract class QueryCSMUtil
 		return queryResultObjectDataBean;
 	}
 	
+//	/**
+//	 * @param name
+//	 * @return
+//	 */
+//	private static boolean isReadDeniedObject(String entityName)
+//	{
+//		if (Constants.QUERY_READ_DENIED_OBJECT_LIST.contains(entityName))
+//			return true;
+//		else
+//			return false;
+//	}
+
 	/**This method will return main entity for node passed in context of query (i.e. If one texcontent node is associated with Identified and 
 	 * other with deidentified then it will return appropriate main object for textcontent)
 	 * @param mainEntityList
@@ -256,7 +278,7 @@ public abstract class QueryCSMUtil
 	 * @param entity
 	 */
 	public static List<AssociationInterface> getIncomingContainmentAssociations(EntityInterface entity) throws DynamicExtensionsSystemException
-	{  
+	{   
 		EntityManagerInterface entityManager = EntityManager.getInstance();
 		List<Long> allIds = (List<Long>)entityManager.getIncomingAssociationIds(entity);
 		List<AssociationInterface> list = new ArrayList<AssociationInterface>();
@@ -408,4 +430,10 @@ public abstract class QueryCSMUtil
 		}
 		return null;
 	}
-}
+	
+	public List<Integer> getCPPdsForGivenEntityId (EntityInterface entity,int id)
+	{
+		
+		return null;
+	}
+} 

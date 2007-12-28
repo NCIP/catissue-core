@@ -10,7 +10,6 @@
  */
 
 package edu.wustl.catissuecore.util.global;
-
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -21,7 +20,7 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 
-
+ 
 /**
  * This class stores the constants used in the operations in the application.
  * @author gautam_shetty
@@ -2214,4 +2213,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP = "pageOfSpecimenCollectionRequirementGroup";
 	public static final String NO_MAIN_OBJECT_IN_QUERY = "noMainObjectInQuery";
 	public static final String QUERY_ALREADY_DELETED = "queryAlreadyDeleted";
-}
+	
+	public static final String[] INHERITED_ENTITY_NAMES = {
+        FluidSpecimen.class.getName(),
+        MolecularSpecimen.class.getName(),
+        TissueSpecimen.class.getName(),
+        CellSpecimen.class.getName(),
+        SPECIMEN_ARRAY_CLASS_NAME,
+        IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
+        DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
+};
+	
+	}
