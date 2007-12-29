@@ -1,21 +1,12 @@
 package edu.wustl.catissuecore.bizlogic.test;
 
-import java.text.ParseException;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 
-import junit.framework.TestCase;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.ConsentTierResponse;
-import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
@@ -23,12 +14,10 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.test.BaseTestCase;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
@@ -37,6 +26,7 @@ import gov.nih.nci.system.comm.client.ClientSession;
 public class TechnicianRoleTestCases extends BaseTestCase {
 	 static ApplicationService appService = null;
 	  public void setUp(){
+		 Logger.configure("");
 		appService = ApplicationServiceProvider.getApplicationService();
 		ClientSession cs = ClientSession.getInstance();
 		try
@@ -151,21 +141,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	    }
 	} 
     
-  /*  public void testAddUser()
-	 {
-		 try{
-			User user = BaseTestCaseUtility.initUser();
-			user = (User)appService.createObject(user);
-			Logger.out.info("Object created successfully");
-			System.out.println("Object created successfully");
-			assertFalse("Test failed.User successfully added", true);
-		 }
-		 catch(Exception e){
-			 e.printStackTrace();
-			 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		 }
-	 }*/
-    
+     
   public void testAddSiteWithTechnicianLogin()
 	{
 		try{
@@ -449,7 +425,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 	          }
 	}
    
-  /* public void testAddParticipant()
+   public void testAddParticipantWithTechnicianLogin()
 	{
 		try{
 			Participant participant= BaseTestCaseUtility.initParticipant();			
@@ -465,28 +441,7 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 			 
 		 }
 	}
-   
-   public void testAddParticipantWithCPR()
-	{
-		try{
-			Participant participant= BaseTestCaseUtility.initParticipantWithCPR();			
-			System.out.println(participant);
-			participant = (Participant) appService.createObject(participant); 
-			Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
-			Iterator cprItr = collectionProtocolRegistrationCollection.iterator();
-			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)cprItr.next();
-			
-			TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
-			TestCaseUtility.setObjectMap(participant, Participant.class);
-			System.out.println("Object created successfully");
-			assertFalse("Participant registration created successfully", true);
-		 }
-		 catch(Exception e){
-			 e.printStackTrace();
-			 assertTrue("Failed to create Participant registration", true);
-			 
-		 }
-	}*/
+  
    
    public void testUpdateParticipantWithTechnicianLogin()
 	{
@@ -877,5 +832,24 @@ public class TechnicianRoleTestCases extends BaseTestCase {
 		}
 	}
 	
+	public void testAddSpecimenArray()
+	{
+		try
+		{
+			SpecimenArray specimenArray =  BaseTestCaseUtility.initSpecimenArray();
+	    	Logger.out.info("Inserting domain object------->"+specimenArray);
+	    	specimenArray =  (SpecimenArray) appService.createObject(specimenArray);
+	    	TestCaseUtility.setObjectMap(specimenArray, SpecimenArray.class);
+			assertFalse("Security Alert! Authorization denied for user to use container" , true);
+			Logger.out.info(" Specimen Collection Group is successfully added ---->    ID:: " + specimenArray.getId().toString());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			assertTrue("Able to create specimen array in container which supervisor don't have access", true);
+		}
+	}
+	 
 }
    

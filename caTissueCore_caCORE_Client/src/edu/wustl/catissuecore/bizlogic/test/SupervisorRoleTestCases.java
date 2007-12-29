@@ -24,7 +24,9 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.test.BaseTestCase;
@@ -37,6 +39,7 @@ import gov.nih.nci.system.comm.client.ClientSession;
 public class SupervisorRoleTestCases extends BaseTestCase{
 	  static ApplicationService appService = null;
 	  public void setUp(){
+		  Logger.configure("");
 		appService = ApplicationServiceProvider.getApplicationService();
 		ClientSession cs = ClientSession.getInstance();
 		try
@@ -53,7 +56,7 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 		}		
 	}
       
-    public void testAddDepartmentWithSupervisorLogin()
+     public void testAddDepartmentWithSupervisorLogin()
   	  {
   		try{
   			Department dept = BaseTestCaseUtility.initDepartment();			
@@ -152,20 +155,7 @@ public class SupervisorRoleTestCases extends BaseTestCase{
  	    }
  	} 
      
-   /*  public void testAddUser()
-	 {
-		 try{
-			User user = BaseTestCaseUtility.initUser();
-			user = (User)appService.createObject(user);
-			Logger.out.info("Object created successfully");
-			System.out.println("Object created successfully");
-			assertFalse("Test failed.User successfully added", true);
-		 }
-		 catch(Exception e){
-			 e.printStackTrace();
-			 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		 }
-	 }*/
+  
      
    public void testAddSiteWithSupervisorLogin()
  	{
@@ -231,6 +221,32 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 	 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
 	    }
 	}
+	
+	/*public void testSearchBioHazardWithSupervisorLogin()
+	{
+        try {
+        	Biohazard biohazard = new Biohazard();
+    		Biohazard cachedBiohazard = (Biohazard) TestCaseUtility.getObjectMap(Biohazard.class);
+        	Logger.out.info("searching domain object");
+        	//biohazard.setId((Long) cachedBiohazard.getId());
+        	biohazard.setId(new Long(2));
+        	List resultList = appService.search(Biohazard.class,biohazard);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+        	 {
+	    		 Biohazard returnedBiohazard = (Biohazard) resultsIterator.next();
+	    		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
+	    		 System.out.println(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
+	    		 assertTrue("Object added successfully", true);
+             }
+          } 
+          catch (Exception e) {
+           	Logger.out.error(e.getMessage(),e);
+            System.out.println(e.getMessage());
+           	e.printStackTrace();
+           	fail("Does not find Domain Object");
+	 		
+          }
+	}*/
     
      public void testAddCollectionProtocolWithSupervisorLogin()
 	{
@@ -381,29 +397,7 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 		 		
 	          }
 		}
-	 /* public void testSearchBioHazard()
-		{
-	        try {
-	        	Biohazard biohazard = new Biohazard();
-	    	   	Logger.out.info("searching domain object");
-	        	biohazard.setId(new Long(2));
-	        	List resultList = appService.search(Biohazard.class,biohazard);
-	        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
-	        	 {
-		    		 Biohazard returnedBiohazard = (Biohazard) resultsIterator.next();
-		    		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
-		    		 System.out.println(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
-		    		 assertTrue("Object added successfully", true);
-	             }
-	          } 
-	          catch (Exception e) {
-	           	Logger.out.error(e.getMessage(),e);
-	            System.out.println(e.getMessage());
-	           	e.printStackTrace();
-	           	fail("Does not find Domain Object");
-		 		
-	          }
-		}*/
+	 
 	  public void testSearchCollectionProtocolWithSupervisorLogin()
 		{
 	    	CollectionProtocol collectionProtocol = new CollectionProtocol();
@@ -447,42 +441,21 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 		           	assertFalse("Does not find Domain Object", true);
 			 		
 		          }
-		}
+		}  
     
-  /*  public void testAddParticipant()
+   public void testAddParticipant()
 	{
 		try{
 			Participant participant= BaseTestCaseUtility.initParticipant();			
 			System.out.println(participant);
 			participant = (Participant) appService.createObject(participant); 
 			TestCaseUtility.setObjectMap(participant, Participant.class);
-			System.out.println("Object created successfully");
+			System.out.println("Participant"+participant.getFirstName());
 			assertTrue("Participant created successfully", true);
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
 			 assertFalse("Failed to add participant", true);
-		 }
-	}
-    
-    public void testAddParticipantWithCPR()
-	{
-		try{
-			Participant participant= BaseTestCaseUtility.initParticipantWithCPR();			
-			System.out.println(participant);
-			participant = (Participant) appService.createObject(participant); 
-			Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
-			Iterator cprItr = collectionProtocolRegistrationCollection.iterator();
-			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)cprItr.next();
-			
-			TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
-			TestCaseUtility.setObjectMap(participant, Participant.class);
-			System.out.println("Object created successfully");
-			assertTrue("Participant registration created successfully", true);
-		 }
-		 catch(Exception e){
-			 e.printStackTrace();
-			 assertFalse("Failed to create Participant registration", true);
 		 }
 	}
     
@@ -504,7 +477,8 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 	 		assertFalse("Failed to update Participant", true);
 	    }
 	}
-    public void testSearchParticipant()
+    
+    public void testSearchParticipantWithSupervisorLogin()
 	{
 		Participant participant = new Participant();
     	Logger.out.info(" searching domain object");
@@ -524,48 +498,72 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 	 		
           }
 	}
-    */
-	  public void testCreateAndUpdateSpecimenCollectionGroupWithConsentsWithSupervisorLogin()
-		{
-			CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
-			SpecimenCollectionGroup specimenCollGroup = createSCGWithConsents(collectionProtocol); 
-			Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
-			Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
-			Iterator consentTierItr = consentTierCollection.iterator();
-			Collection consentTierStatusCollection = new HashSet();
-			while(consentTierItr.hasNext())
-			{
-				ConsentTier consentTier = (ConsentTier)consentTierItr.next();
-				ConsentTierStatus consentStatus = new ConsentTierStatus();
-				consentStatus.setConsentTier(consentTier);
-				consentStatus.setStatus("Yes");
-				consentTierStatusCollection.add(consentStatus);
-			}
-			specimenCollGroup.setConsentTierStatusCollection(consentTierStatusCollection);
-			specimenCollGroup.getCollectionProtocolRegistration().getCollectionProtocol().setId(collectionProtocol.getId());
-			specimenCollGroup.getCollectionProtocolRegistration().setParticipant(participant);
-			Collection collectionProtocolEventList = new LinkedHashSet();
-			
-			
-			Site site = (Site)TestCaseUtility.getObjectMap(Site.class); 
-			specimenCollGroup.setSpecimenCollectionSite(site);
-			BaseTestCaseUtility.setEventParameters(specimenCollGroup);
-			try
-			{
-				System.out.println("Before Update");
-				specimenCollGroup = (SpecimenCollectionGroup)appService.updateObject(specimenCollGroup);
-				assertTrue("Specimen Collection Group Updated", true);
-		
-		   }catch(Exception e){				
-				Logger.out.error(e.getMessage(),e);
-				e.printStackTrace();
-				assertFalse("Fail to update Specimen Collection Group", true);
-			}
-		}
-		
-		
     
-    public void testAddTissueSpecimenWithSupervisorLogin()
+    public void testParticipantRegistrationWithSupervisorLogin()
+	{
+    	Participant participant = BaseTestCaseUtility.initParticipant();
+		
+		try{
+			participant = (Participant) appService.createObject(participant);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to create collection protocol", true);
+		}
+		TestCaseUtility.setObjectMap(participant, Participant.class);
+		System.out.println("Participant:"+participant.getFirstName());
+		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+		CollectionProtocol cp =(CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+		collectionProtocolRegistration.setCollectionProtocol(cp);
+		collectionProtocolRegistration.setParticipant(participant);
+		collectionProtocolRegistration.setProtocolParticipantIdentifier("");
+		collectionProtocolRegistration.setActivityStatus("Active");
+		try
+		{
+			collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
+					Utility.datePattern("08/15/1975")));
+			collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+			
+		}
+		catch (ParseException e)
+		{			
+			e.printStackTrace();
+		}
+		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+		User user = (User)TestCaseUtility.getObjectMap(User.class);
+		collectionProtocolRegistration.setConsentWitness(user);
+		
+		Collection consentTierResponseCollection = new LinkedHashSet();
+		Collection consentTierCollection = new LinkedHashSet();
+		consentTierCollection = cp.getConsentTierCollection();
+		
+		Iterator consentTierItr = consentTierCollection.iterator();
+		 while(consentTierItr.hasNext())
+		 {
+			 ConsentTier consent= (ConsentTier) consentTierItr.next();
+			 ConsentTierResponse response= new ConsentTierResponse();
+			 response.setResponse("No");
+			 response.setConsentTier(consent);
+			 consentTierResponseCollection.add(response);				 
+		 }
+			
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+	
+		System.out.println("Creating CPR");
+		try{
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to register participant", true);
+		}
+		TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
+	}
+    
+   
+     public void testAddTissueSpecimenWithSupervisorLogin()
 	{
 	   try {
 		    CollectionProtocol cp= (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
@@ -589,7 +587,7 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 			e.printStackTrace();
 			assertFalse("Failed to create Domain Object", true);
 		}
-	}
+	} 
     public void testAddMolecularSpecimenWithSupervisorLogin()
 	{
 	   try {
@@ -688,8 +686,28 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 	 		assertFalse("Couldnot found Specimen", true);  
           }
 
-    }
-    
+    } 
+	 public void testAddSpecimenArrayWithSupervisorLogin()
+		{
+			try
+			{
+				SpecimenArray specimenArray =  BaseTestCaseUtility.initSpecimenArray();
+		    	Logger.out.info("Inserting domain object------->"+specimenArray);
+		    	specimenArray =  (SpecimenArray) appService.createObject(specimenArray);
+		    	TestCaseUtility.setObjectMap(specimenArray, SpecimenArray.class);
+				assertFalse("Security Alert! Authorization denied for user to use container" , true);
+				Logger.out.info(" Specimen Collection Group is successfully added ---->    ID:: " + specimenArray.getId().toString());
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+				assertTrue("Able to create specimen array in container which supervisor don't have access", true);
+			}
+		}
+	 
+	 
+	
     
     
     
@@ -757,6 +775,8 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
 		Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
+//		Site site = new Site();
+//		site.setId(new Long(1));
 		scg.setSpecimenCollectionSite(site);
 		scg.setName("New SCG"+UniqueKeyGeneratorUtil.getUniqueKey());		    
 		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
