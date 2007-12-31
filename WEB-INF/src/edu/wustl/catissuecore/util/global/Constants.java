@@ -2213,7 +2213,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP = "pageOfSpecimenCollectionRequirementGroup";
 	public static final String NO_MAIN_OBJECT_IN_QUERY = "noMainObjectInQuery";
 	public static final String QUERY_ALREADY_DELETED = "queryAlreadyDeleted";
-	
 	public static final String[] INHERITED_ENTITY_NAMES = {
         FluidSpecimen.class.getName(),
         MolecularSpecimen.class.getName(),
@@ -2224,4 +2223,21 @@ public class Constants extends edu.wustl.common.util.global.Constants
         DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
 };
 	
-	}
+	//For enhanced CP
+	public static final String PARENT_CP_TYPE = "Parent";
+	public static final String ARM_CP_TYPE = "Arm" ;
+	public static final String PHASE_CP_TYPE = "Phase" ;
+	public static final String CYCLE_CP_TYPE = "Cycle" ;
+	public  static final String SUB_COLLECTION_PROTOCOL = "SubProtocol";
+	public  static final String CP_TYPE = "cpType";
+	public static final int DAYS_TO_ADD_CP = 1;
+	public static final String REG_DATE="regDate";
+	
+//	Constants required in SubCollectionProtocolRegistration.jsp Page
+	public static final String SUB_COLLECTION_PROTOCOL_REGISTRATION_SEARCH_ACTION = "SubCollectionProtocolRegistrationSearch.do";
+	public static final String SUB_COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION = "SubCollectionProtocolRegistrationAdd.do";
+	public static final String SUB_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION = "SubCollectionProtocolRegistrationEdit.do";
+	public static final String CP_QUERY_SUB_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION = "CPQuerySubCollectionProtocolRegistrationEdit.do";
+	public static final String CP_QUERY_SUB_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION = "CPQuerySubCollectionProtocolRegistrationAdd.do";
+}
+	
