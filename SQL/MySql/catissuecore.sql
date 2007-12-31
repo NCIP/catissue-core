@@ -129,6 +129,10 @@ create table CATISSUE_COLLECTION_PROTOCOL (
    UNSIGNED_CONSENT_DOC_URL text,
    ALIQUOT_IN_SAME_CONTAINER bit,
    CONSENTS_WAIVED bit,
+   CP_TYPE varchar(50) default NULL,
+   PARENT_CP_ID bigint(20) default NULL,
+   SEQUENCE_NUMBER integer,	
+   STUDY_CALENDAR_EVENT_POINT double default NULL,
    primary key (IDENTIFIER)
 );
 
@@ -515,6 +519,7 @@ create table CATISSUE_COLL_PROT_REG (
    CONSENT_SIGN_DATE datetime,
    CONSENT_DOC_URL text,
    CONSENT_WITNESS bigint,
+   DATE_OFFSET integer,	
    primary key (IDENTIFIER)
 );
 create table CATISSUE_FROZEN_EVENT_PARAM (
@@ -613,6 +618,7 @@ CREATE TABLE `catissue_specimen_coll_group`
 	`SURGICAL_PATHOLOGY_NUMBER` varchar(50) default NULL,                                                                                               
 	`COLLECTION_PROTOCOL_EVENT_ID` bigint(20) default NULL,
 	`COLLECTION_STATUS` varchar(50),
+    `DATE_OFFSET` integer,                                                                                           
 	PRIMARY KEY  (`IDENTIFIER`),                                                                                                                        
 	UNIQUE KEY `NAME` (`NAME`),                                                                                                                         
 	KEY `FKDEBAF1677E07C4AC` (`COLLECTION_PROTOCOL_REG_ID`),                                                                                            
@@ -646,6 +652,7 @@ alter table CATISSUE_AUDIT_EVENT_QUERY_LOG add index FK62DC439DBC7298A9 (AUDIT_E
 alter table CATISSUE_COLL_COORDINATORS add index FKE490E33A48304401 (COLLECTION_PROTOCOL_ID), add constraint FKE490E33A48304401 foreign key (COLLECTION_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
 alter table CATISSUE_COLL_COORDINATORS add index FKE490E33A2206F20F (USER_ID), add constraint FKE490E33A2206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
 alter table CATISSUE_COLLECTION_PROTOCOL add index FK32DC439DBC7298A9 (IDENTIFIER), add constraint FK32DC439DBC7298A9 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_PROTOCOL (IDENTIFIER);
+alter table CATISSUE_COLLECTION_PROTOCOL add index FK32DC439DBC7298B9 (PARENT_CP_ID), add constraint FK32DC439DBC7298B9 foreign key (PARENT_CP_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
 alter table CATISSUE_EVENT_PARAM add index FK90C79AECBC7298A9 (IDENTIFIER), add constraint FK90C79AECBC7298A9 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM (IDENTIFIER);
 alter table CATISSUE_TRANSFER_EVENT_PARAM add index FK71F9AC103C2DAC61 (TO_STORAGE_CONTAINER_ID), add constraint FK71F9AC103C2DAC61 foreign key (TO_STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
 alter table CATISSUE_TRANSFER_EVENT_PARAM add index FK71F9AC1099DF0A92 (FROM_STORAGE_CONTAINER_ID), add constraint FK71F9AC1099DF0A92 foreign key (FROM_STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);

@@ -55,10 +55,34 @@
 	  [Bindable]
                  [Embed(source='/images/pendingDerive.gif')]
                  private var pendingDerivedIcon:Class;  
- [Bindable]
+	 [Bindable]
                  [Embed(source='/images/pendingSCG.gif')]
                  private var pendingSCGIcon:Class;  
-
+                 
+	 [Bindable]
+                 [Embed(source='/images/phase.gif')]
+                 private var phaseCPIcon:Class;  
+    
+     [Bindable]
+                 [Embed(source='/images/PendingPhase.gif')]
+                 private var pendingPhaseCPIcon:Class;  
+    
+     [Bindable]
+                 [Embed(source='/images/CollectionProtocol.gif')]
+                 private var cycleCPIcon:Class;  
+    
+     [Bindable]
+                 [Embed(source='/images/CollectionProtocol.gif')]
+                 private var pendingCycleCPIcon:Class;  
+    
+     [Bindable]
+                 [Embed(source='/images/a.gif')]
+                 private var armCPIcon:Class;  
+    
+     [Bindable]
+                 [Embed(source='/images/pendingAliquot.gif')]
+                 private var pendingArmCPIcon:Class;  
+    
     [Bindable]
   	       private var title:String = "Specimen Details for"; 
 
@@ -231,9 +255,12 @@
 	{	  
 	    var bean : NameValueBean = new NameValueBean();
 		tempCollection = pevent.result as ArrayCollection;
-		bean = tempCollection[selectedParticipantIndex] as NameValueBean;
-        pCombo.dataProvider = tempCollection;		
-		pCombo.selectedItem = bean;
+		if(tempCollection.length != 0)
+		{
+			bean = tempCollection[selectedParticipantIndex] as NameValueBean;
+		    pCombo.dataProvider = tempCollection;		
+			pCombo.selectedItem = bean;
+		}
 			
 	}
     /*
@@ -274,7 +301,7 @@
 	}
 	
     
-    /*
+ /*
      Tree Handler  Method
     */
     
@@ -287,61 +314,63 @@
 
 	    specimenTree.dataProvider = treeData;
 	    
-	   /* for(var i:int=0; i<treeData.length; i++)
-    	    {
-    	    var node:XML = treeData.getItemAt(i) as XML;
-    	    var nodeId:String = node.@id;
-    	    
-    	    if(nodeId.match("future"))
-    	    {
-    	    	
-    	        specimenTree.setItemIcon(treeData.getItemAt(i), fscgIcon, fscgIcon);
-    	    }
-    	    else
-    	    {
-    	        specimenTree.setItemIcon(treeData.getItemAt(i),scgIcon,scgIcon);	
-    	    }
-    	 }*/
+	   
 
 	 for(var j:Number=0; j<treeData.length; j++)
 	 {
        		var xmlNode:XML = treeData.getItemAt(j) as XML;
-       		var scgNodeId:String = xmlNode.@scgCollectionStatus;
-		
-		if(scgNodeId.match("Pending"))
-       		{
-       			specimenTree.setItemIcon(treeData.getItemAt(j), pendingSCGIcon, pendingSCGIcon);	  
-		}
-		else
-		{
-			specimenTree.setItemIcon(treeData.getItemAt(j), scgIcon, scgIcon);	  
-		}
-       	 
-       	  	 //check for all descendents of SCG
-       	  	 var descendantsList:XMLList = XMLList(xmlNode.descendants());
-       	  	 
-		 for(var k:Number=0; k<descendantsList.length(); k++)
-       	  	 {
-       	  	 	var childNode:XML = XML(descendantsList[k]);
-			var childNodeId:String = childNode.@collectionStatus; 
-			
-			if(childNodeId.match("Pending"))
-       	  	 	{
-       	  	 		
-				specimenTree.setItemIcon(childNode, pendingSpecimenIcon, pendingSpecimenIcon);	  
-       	  	 	}
-       	  	 }
-       	  
-    	  }
-
-
-    	 
-    	 /* if(selectedNode != null || parentNode != null)
-	      {
-	      	specimenTree.callLater(expandTree, [selectedNode, parentNode]);   
-	      }*/
-    	 
+       		setIcons(xmlNode);    	 
     	
+	    }
+    }
+    
+    private function setIcons(xmlNode:XML) : void
+    {
+		var nodeType:String = xmlNode.@type;
+		if(nodeType.match("Phase"))
+		{
+			specimenTree.setItemIcon(xmlNode, phaseCPIcon, phaseCPIcon);	  
+		}
+		if(nodeType.match("Arm"))
+		{
+			specimenTree.setItemIcon(xmlNode, armCPIcon, armCPIcon);	  
+		}
+		if(nodeType.match("Cycle"))
+		{
+			specimenTree.setItemIcon(xmlNode, cycleCPIcon, cycleCPIcon);	  
+		}
+		if(nodeType.match("SpecimenCollectionGroup"))
+		{
+	    	var scgNodeId:String = xmlNode.@scgCollectionStatus;
+			if(scgNodeId.match("Pending"))
+       		{
+       			specimenTree.setItemIcon(xmlNode, pendingSCGIcon, pendingSCGIcon);	  
+			}
+			else
+			{
+				specimenTree.setItemIcon(xmlNode, scgIcon, scgIcon);	  
+			}
+		}
+		if(nodeType.match("Specimen"))
+		{
+			var childNodeId:String = xmlNode.@collectionStatus;
+			if(childNodeId.match("Pending"))
+       	  	{
+       	  		specimenTree.setItemIcon(xmlNode, pendingSpecimenIcon, pendingSpecimenIcon);	  
+       	  	}
+			
+		}
+    	  	 //check for all descendents of SCG
+    	 var descendantsList:XMLList = XMLList(xmlNode.descendants());
+
+		for(var k:Number=0; k<descendantsList.length(); k++)
+       	 {
+       	   	var childNode:XML = XML(descendantsList[k]);
+       	   	setIcons(childNode);
+		 }
+		
+
+
     }
     /*
       Fuction to be called To refresh Participant Name after edit participant
@@ -396,18 +425,30 @@
 		{
 		    //Retrieving the selected node id 
 		    var id : String = specimenTree.selectedItem.@id;
-
 		    //Selected CP and selected participants
 		    var selectedParticipant:NameValueBean= new NameValueBean();
 	    	selectedParticipant = pCombo.selectedItem as NameValueBean
 		    var selectedParticipantId :String = selectedParticipant.value; 
 		    var selectedCp : NameValueBean = new NameValueBean();
 	    	selectedCp =  cpCombo.selectedItem as NameValueBean;
-		    var selectedCpId :String = selectedCp.value;
-	    
-		    //display name of selected tree node
+			    var selectedCpId :String = selectedCp.value;
+	    	var type:String = specimenTree.selectedItem.@type;
+
+			//display name of selected tree node
 	    	var displayName : String = specimenTree.selectedItem.@name;
-	    
+	    	
+	    	if(type.match("Phase") || type.match("Arm") || type.match("Cycle"))
+	    	{
+	    		var index:int =id.indexOf("_");
+	    		if(index != -1)
+	    		{
+	    			selectedCpId = id.substr(index+1);
+	    			
+	    		}
+	    		displayName = specimenTree.selectedItem.@regDate;
+
+	    	}
+
 		   //invoking java script method
 		    var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
 	    	navigateToURL(url,"_self"); 

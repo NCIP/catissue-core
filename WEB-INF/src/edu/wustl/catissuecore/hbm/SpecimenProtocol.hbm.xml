@@ -234,8 +234,61 @@
                   class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
             />	 
     </set>
+	<set
+            name="childCPCollection"
+            table="CATISSUE_COLLECTION_PROTOCOL"
+            lazy="true"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+         >
 
+            <key
+                column="PARENT_CP_ID"
+            >
+            </key>
 
+            <one-to-many
+                  class="edu.wustl.catissuecore.domain.CollectionProtocol"
+            />
+
+        </set>
+	
+	    <many-to-one
+            name="parentCollectionProtocol"
+            class="edu.wustl.catissuecore.domain.CollectionProtocol"
+            cascade="none"
+            outer-join="false"
+            update="true"
+            insert="true"
+            column="PARENT_CP_ID"
+        />
+        
+		<property
+            name="cpType"
+            type="string"
+            update="true"
+            insert="true"
+            column="CP_TYPE"
+            length="50"
+        />
+          <property
+            name="sequenceNumber"
+            type="int"
+            update="true"
+            insert="true"
+            column="SEQUENCE_NUMBER"
+            length="30"
+        />
+
+	  <property
+            name="studyCalendarEventPoint"
+            type="double"
+            update="true"
+            insert="true"
+            column="STUDY_CALENDAR_EVENT_POINT"
+            length="50"
+        />
 		<property
             name="aliquotInSameContainer"
             type="boolean"

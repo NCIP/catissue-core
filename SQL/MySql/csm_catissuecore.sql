@@ -1409,5 +1409,10 @@ insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(se
 /*--------Query Wizard End---------------*/
 
 
+/* for sub protocol action */
+INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (NULL,'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction','edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction','edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction','edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction',NULL,1,'0000-00-00');
+INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`) VALUES (NULL,18,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction'));
+/* sub protocol action end */
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

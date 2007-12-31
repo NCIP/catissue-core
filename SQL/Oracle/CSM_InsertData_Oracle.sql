@@ -1053,6 +1053,13 @@ INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,24,(select PROTECTIO
 
 /*--------Query Wizard End---------------*/
 
+/* for sub protocol action */
+INSERT into CSM_PROTECTION_ELEMENT 
+values(CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction','edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction','edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction',NULL,NULL,1,to_date('2007-01-04','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,18,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+/* sub protocol action end */
+
+
 /*---- Abhijit:Delete child records whose parent is missing or deleted ---*/
 delete from CSM_PG_PE where PROTECTION_ELEMENT_ID not in
 (select  PROTECTION_ELEMENT_ID from csm_protection_element);

@@ -193,6 +193,17 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						<bean:message key="collectionprotocol.studycalendarcomment"/>
 		        	</td>
 				 </tr>
+				<tr>
+					<td class="formFieldNoBordersSimple" colspan="2" width="5">&nbsp;</td>
+					<td class="formFieldNoBordersSimple" >
+						<label for="offset">
+							<b><bean:message key="specimenCollectionGroup.offset" /></b>
+						</label>
+					</td>
+					<td class="formFieldNoBordersSimple">
+						<html:text styleClass="formFieldSized" size="10"  maxlength="10" styleId="offset" property="offset" />						
+					</td>
+				</tr>
 				 
 				 <tr>
 				     <td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>

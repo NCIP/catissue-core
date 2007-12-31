@@ -134,6 +134,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
     protected CollectionProtocolEvent collectionProtocolEvent;
 
     protected String collectionStatus;
+    protected Integer offset;
     /**
      * Returns the required specimen collection event 
      * associated with a Collection Protocol.
@@ -453,6 +454,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 			{
 				applyEventsToSpecimens = true;
 			}
+			this.offset = new Integer(form.getOffset());
 		}
 		catch(Exception e)
 		{
@@ -671,5 +673,14 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 			maxCollTitle = collectionProtocolTitle.substring(0,Constants.COLLECTION_PROTOCOL_TITLE_LENGTH-1);
 		}
 		setName(maxCollTitle+"_"+ParticipantId+"_"+SCGId);
+	}
+	
+	
+	public Integer getOffset() {
+		return offset;
+	}
+
+	public void setOffset(Integer offset) {
+		this.offset = offset;
 	}
 }

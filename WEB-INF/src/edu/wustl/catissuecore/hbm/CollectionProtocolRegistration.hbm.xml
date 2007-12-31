@@ -135,6 +135,14 @@
                   class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
               />
         </set>
+           <property
+            name="offset"
+            type="int"
+            update="true"
+            insert="true"
+            column="DATE_OFFSET"
+            length="30"
+        />
 
         <!--
             To add non XDoclet property mappings, create a file named

@@ -550,7 +550,24 @@ INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,19,(SELECT PROTECTIO
 
 /* kalpana  end */
 
+/* for CP Enhancements */
+ALTER TABLE catissue_collection_protocol 
+ADD ( CP_TYPE varchar(50),PARENT_CP_ID number(19,0) default NULL,SEQUENCE_NUMBER integer, STUDY_CALENDAR_EVENT_POINT DOUBLE PRECISION default NULL);
 
+alter table CATISSUE_COLLECTION_PROTOCOL  add constraint FK32DC439DBC7298B9 foreign key (PARENT_CP_ID) references CATISSUE_COLLECTION_PROTOCOL;
+
+ALTER TABLE CATISSUE_COLL_PROT_REG 
+ADD ( DATE_OFFSET integer);
+
+ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP 
+ADD ( DATE_OFFSET integer);
+
+INSERT into CSM_PROTECTION_ELEMENT 
+values(CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction','edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction','edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction',NULL,NULL,1,to_date('2007-01-04','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,18,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+
+
+/* CP Enhancements end */
 
 commit;
 

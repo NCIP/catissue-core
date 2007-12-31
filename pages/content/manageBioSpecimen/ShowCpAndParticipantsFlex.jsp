@@ -18,6 +18,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+
   <script language="JavaScript">
     
 	//Added By Baljeet For flex
@@ -134,10 +135,17 @@
 		}
 		else
 		{
+			if(obj1 == "<%=Constants.SUB_COLLECTION_PROTOCOL%>")
+			{
+				 window.parent.frames[1].location = "CPQuerySubCollectionProtocolRegistration.do?pageOf=pageOfCollectionProtocolRegistrationCPQuery&refresh=false&operation=add&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+pId+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&participantId="+pId+"&clickedNodeId="+id+"&regDate="+name;
+			}
+		
+		else
+		{
          
 		   window.parent.frames[1].location = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&id="+id1+"&refresh=false&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+pId+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId;
 		}
-	
+		}
 	};
  </script> 
 

@@ -65,6 +65,7 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 	protected SpecimenCollectionRequirementGroup requiredCollectionSpecimenGroup;
 	
 	protected Collection specimenCollectionGroupCollection;
+	
 	/**
 	 * Returns the id.
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
@@ -218,4 +219,8 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 			Collection specimenCollectionGroupCollection) {
 		this.specimenCollectionGroupCollection = specimenCollectionGroupCollection;
 	}
+
+	
+	
+	
 }

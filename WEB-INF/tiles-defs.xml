@@ -977,6 +977,11 @@
 	<definition name=".catissuecore.collectionProtocolRegistrationCPQueryDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CollectionProtocolRegistration.jsp" />
 	</definition>
+	<!-- Sub Protocol -->
+	<definition name=".catissuecore.subcollectionProtocolRegistrationCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SubCollectionProtocolRegistration.jsp" />
+	</definition>
+	<!-- Sub Protocol -->
 	<definition name=".catissuecore.initMultipleSpecimenCPQueryDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/InitMultipleSpecimen.jsp" />
 	</definition>

@@ -38,6 +38,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	 */
 	private long collectionProtocolID;
     
+	private String collectionProtocolShortTitle="";
 	/**
 	 * System generated unique participant Identifier
 	 */	
@@ -91,6 +92,8 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	 */
 	protected String withdrawlButtonStatus= Constants.WITHDRAW_RESPONSE_NOACTION;
 	
+	protected String studyCalEvtPoint ="";
+	protected int offset =0;
 	
 	//Consent Tracking Module Virneder Mehta 25/11/2006	
 		    
@@ -184,6 +187,9 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	  	}
 	  	this.signedConsentUrl=Utility.toString(registration.getSignedConsentDocumentURL());
 	  	this.consentDate=Utility.parseDateToString(registration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+	  	// Offset changes 27th Dec 2007
+	  	this.setOffset(registration.getOffset().intValue());
+
     }
     
 	/**
@@ -232,6 +238,21 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	public void setCollectionProtocolID(long collectionProtocolID) 
 	{
 		this.collectionProtocolID = collectionProtocolID;
+	}
+
+	
+	/**
+	 * @return Returns the collectionProtocolShortTitle.
+	 */
+	public String getCollectionProtocolShortTitle() {
+		return collectionProtocolShortTitle;
+	}
+
+	/**
+	 * @param collectionProtocolShortTitle The collectionProtocolShortTitle to set.
+	 */
+	public void setCollectionProtocolShortTitle(String collectionProtocolShortTitle) {
+		this.collectionProtocolShortTitle = collectionProtocolShortTitle;
 	}
 
 	/**
@@ -542,4 +563,36 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	}	
 //	Consent Tracking Virender Mehta 	
 
+	/**
+	 * @return Returns the studeCalEvtPoint.
+	 */
+	public String getStudyCalEvtPoint() {
+		return studyCalEvtPoint;
+	}
+
+	/**
+	 * @param studeCalEvtPoint The studeCalEvtPoint to set.
+	 */
+	public void setStudyCalEvtPoint(String studyCalEvtPoint) {
+		this.studyCalEvtPoint = studyCalEvtPoint;
+	}
+
+	/**
+	 * @return Returns the offset.
+	 */
+	public int getOffset() {
+		return offset;
+	}
+
+	/**
+	 * @param offset The offset to set.
+	 */
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+
+	
+	
+	//Sub Protocol 
+	
 }

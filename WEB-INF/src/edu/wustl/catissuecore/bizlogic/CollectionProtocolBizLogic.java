@@ -79,29 +79,47 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		
 		CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
 		checkStatus(dao, collectionProtocol.getPrincipalInvestigator(), "Principal Investigator");
+		validateCollectionProtocol(dao, collectionProtocol, "Principal Investigator");
+		insertCollectionProtocol(dao, sessionDataBean, collectionProtocol);
+		TaskTimeCalculater.endTask(cpInsert);
+	}
 
+	private void insertCollectionProtocol(DAO dao, SessionDataBean sessionDataBean,
+			CollectionProtocol collectionProtocol) throws DAOException, UserNotAuthorizedException
+	{
+		 
 		setPrincipalInvestigator(dao, collectionProtocol);
 		setCoordinatorCollection(dao, collectionProtocol);
 		/**
 		 * Patch Id : FutureSCG_6
 		 * Description : Calling method to validate the CPE against uniqueness
 		 */
-		isCollectionProtocolLabelUnique(collectionProtocol);
+		//isCollectionProtocolLabelUnique(collectionProtocol);
 		System.out.println("ID = " + collectionProtocol.getId());
 		dao.insert(collectionProtocol, sessionDataBean, true, true);
 		
 		TaskTimeCalculater eventInsert = TaskTimeCalculater.startTask
 		("Insert all events in CP", CollectionProtocolBizLogic.class);	
 		insertCPEvents(dao, sessionDataBean, collectionProtocol);
+		//This method will insert Child CP Associated with parent CP.
+		insertchildCollectionProtocol(dao, sessionDataBean, collectionProtocol);
 		TaskTimeCalculater.endTask(eventInsert);
 		HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
 		protectionObjects.add(collectionProtocol);
 
 		authenticate(collectionProtocol, protectionObjects);
-		
-		TaskTimeCalculater.endTask(cpInsert);	
 	}
 
+	private void validateCollectionProtocol(DAO dao, CollectionProtocol collectionProtocol, String errorName) throws DAOException
+	{
+		Collection childCPCollection = collectionProtocol.getChildCPCollection();
+		Iterator cpIterator = childCPCollection.iterator();
+		while(cpIterator.hasNext())
+		{
+			CollectionProtocol cp = (CollectionProtocol)cpIterator.next();
+			checkStatus(dao, cp.getPrincipalInvestigator(), "Principal Investigator");
+		}
+	}
 
 	/**
 	 * This function used to insert collection protocol events and specimens 
@@ -140,7 +158,31 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		}
 	}
+	/**
+	 * This function will insert child Collection Protocol. 
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param collectionProtocol
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private void insertchildCollectionProtocol(DAO dao, SessionDataBean sessionDataBean,
+			CollectionProtocol collectionProtocol) throws 
+			DAOException, UserNotAuthorizedException 
+	{
+		
+		Collection childCPCollection = collectionProtocol.getChildCPCollection();
+		Iterator cpIterator = childCPCollection.iterator();
+		while(cpIterator.hasNext())
+		{
+			CollectionProtocol cp = (CollectionProtocol)cpIterator.next();
+			cp.setParentCollectionProtocol(collectionProtocol);
+			insertCollectionProtocol(dao, sessionDataBean,cp);
+		}
 
+	}
+
+	
 	private Set getProtectionObjects(AbstractDomainObject obj)
 	{
 		Set protectionObjects = new HashSet();
@@ -1107,8 +1149,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		else
 		{
-			throw new DAOException(ApplicationProperties
-					.getValue("collectionProtocol.eventsEmpty.errMsg"));
+			//commented by vaishali... it' not necessary condition
+			//throw new DAOException(ApplicationProperties
+				//	.getValue("collectionProtocol.eventsEmpty.errMsg"));
 		}
 
 		if (operation.equals(Constants.ADD))
@@ -1209,12 +1252,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					CollectionProtocolEvent event = (CollectionProtocolEvent)iterator.next();
 					String label = event.getCollectionPointLabel();
 					if(cpLabelsSet.contains(label))
-					{
+					{ 
 						String arguments[] = null;
 						arguments = new String[]{"Collection Protocol Event", "Collection point label"};
 						String errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
 						Logger.out.debug("Unique Constraint Violated: " + errMsg);
-						throw new DAOException(errMsg);
+						//throw new DAOException(errMsg);
 					}
 					else
 					{

@@ -175,6 +175,12 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		this.vitalStatus = vitalStatus2;
 		this.participantMedicalIdentifierCollection = participantMedicalIdentifierCollection; 
 	}
+	public Participant(Participant participant)
+	{
+		this.id = participant.getId();
+		this.lastName = participant.getLastName();
+		this.firstName = participant.getFirstName();
+	}
 
 	/**
      * Returns System generated unique id.

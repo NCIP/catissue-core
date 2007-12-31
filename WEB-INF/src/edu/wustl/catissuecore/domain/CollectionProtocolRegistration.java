@@ -105,6 +105,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	//Consent Availability for collection protocol
 	protected String isConsentAvailable;
 	
+	protected Integer offset;
 	/**
 	 * @return the consentSignatureDate
 	 * @hibernate.property name="consentSignatureDate" column="CONSENT_SIGN_DATE"  
@@ -189,6 +190,45 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	public CollectionProtocolRegistration(AbstractActionForm form) throws AssignDataException
 	{
 		setAllValues(form);
+	}
+
+	public CollectionProtocolRegistration(CollectionProtocolRegistration cpr) 
+	{  
+		this.activityStatus = cpr.getActivityStatus();
+		this.collectionProtocol = cpr.getCollectionProtocol();
+		this.consentSignatureDate = cpr.getConsentSignatureDate();
+		copyConsentResponseColl(cpr);
+		this.consentWithdrawalOption = cpr.consentWithdrawalOption;
+		this.consentWitness = cpr.getConsentWitness();
+		this.isConsentAvailable = cpr.getIsConsentAvailable();
+		this.participant = cpr.getParticipant();
+		this.protocolParticipantIdentifier = cpr.getProtocolParticipantIdentifier();
+		this.registrationDate = cpr.getRegistrationDate();
+		this.signedConsentDocumentURL = cpr.getSignedConsentDocumentURL();
+		this.specimenCollectionGroupCollection = null;
+		
+		
+		
+	}
+
+	private void copyConsentResponseColl(CollectionProtocolRegistration cpr) {
+		if(cpr.getConsentTierResponseCollection() != null)
+		{ 
+			Collection consentTierResponseCollClone = new HashSet();
+			Iterator itr = cpr.getConsentTierResponseCollection().iterator();
+			while(itr.hasNext())
+			{
+				ConsentTierResponse consentTierResponse = (ConsentTierResponse) itr.next();
+				ConsentTierResponse consentTierResponseClone = new ConsentTierResponse(consentTierResponse);
+				consentTierResponseCollClone.add(consentTierResponseClone);
+			}
+			
+			this.consentTierResponseCollection = consentTierResponseCollClone;
+		}
+		else
+		{
+			this.consentTierResponseCollection = null;
+		}
 	}
 
 	/**
@@ -393,7 +433,9 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			this.consentTierResponseCollection = prepareParticipantResponseCollection(form);
 			
 			//Mandar: 16-jan-07 : - For withdraw options
-			this.consentWithdrawalOption = form.getWithdrawlButtonStatus(); 
+			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();
+			// offset changes 27th 2007
+			this.setOffset(new Integer(form.getOffset()));
 		}
 		catch (Exception e)
 		{
@@ -519,5 +561,14 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	public void setIsConsentAvailable(String isConsentAvailable) {
 		this.isConsentAvailable = isConsentAvailable;
 	}
+
+	public Integer getOffset() {
+		return offset;
+	}
+
+	public void setOffset(Integer offset) {
+		this.offset = offset;
+	}
+	
 	
 }

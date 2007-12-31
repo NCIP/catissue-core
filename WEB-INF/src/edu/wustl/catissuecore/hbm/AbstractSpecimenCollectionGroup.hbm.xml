@@ -167,7 +167,14 @@
 	            column="SURGICAL_PATHOLOGY_NUMBER"
 	            length="50"
 	        />
-	
+	 		<property
+            name="offset"
+            type="int"
+            update="true"
+            insert="true"
+            column="DATE_OFFSET"
+            length="30"
+        />
 	        <many-to-one
 	            name="collectionProtocolRegistration"
 	            class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"

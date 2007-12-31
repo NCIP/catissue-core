@@ -55,6 +55,31 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * Collection of CollectionProtocolEvents associated with the CollectionProtocol.
 	 */
 	protected Collection collectionProtocolEventCollection = new LinkedHashSet();
+
+	/**
+	 *  Collection of CollectionProtocol associated with the Parent CollectionProtocol.
+	 */
+	protected Collection childCPCollection = new LinkedHashSet();
+	
+	/**
+	 * Parent Collection Protocol
+	 */
+	protected CollectionProtocol parentCollectionProtocol;
+	
+	/**
+	 * Sequence Number
+	 */
+	protected Integer sequenceNumber;
+	/**
+	 * Collection Protocol type - Arm, Cycle, Phase
+	 */
+	protected String cpType;
+	
+	/**
+	 * Defines the relative time point in days
+	 */
+	protected Double studyCalendarEventPoint;
+	/**
 	
 	/**
 	 * whether Aliquote in same container
@@ -82,6 +107,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
      * A collection of registration of a Participant to a Collection Protocol. 
      * */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
+	
 	/**
 	 * @return the unsignedConsentDocumentURL
 	 * @hibernate.property name="unsignedConsentDocumentURL" type="string" length="1000" column="UNSIGNED_CONSENT_DOC_URL"
@@ -468,5 +494,82 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	}
 	//-Mandar : 25-Jan-07 ---------- end
 
+
+
+	
+	public String getCpType()
+	{
+		return cpType;
+	}
+
+
+	
+	public void setCpType(String cpType)
+	{
+		this.cpType = cpType;
+	}
+
+
+	
+	public CollectionProtocol getParentCollectionProtocol()
+	{
+		return parentCollectionProtocol;
+	}
+
+
+	
+	public void setParentCollectionProtocol(CollectionProtocol parentCollectionProtocol)
+	{
+		this.parentCollectionProtocol = parentCollectionProtocol;
+	}
+
+
+	
+	public Collection getChildCPCollection()
+	{
+		return childCPCollection;
+	}
+
+
+	
+	public void setChildCPCollection(Collection childCPCollection)
+	{
+		this.childCPCollection = childCPCollection;
+	}
+
+
+	/**
+	 * @return Returns the sequenceNumber.
+	 */
+	public Integer getSequenceNumber() {
+		return sequenceNumber;
+	}
+
+
+	/**
+	 * @param sequenceNumber The sequenceNumber to set.
+	 */
+	public void setSequenceNumber(Integer sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
+	}
+
+
+	/**
+	 * @return Returns the studyCalendarEventPoint.
+	 */
+	public Double getStudyCalendarEventPoint() {
+		return studyCalendarEventPoint;
+	}
+
+
+	/**
+	 * @param studyCalendarEventPoint The studyCalendarEventPoint to set.
+	 */
+	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint) {
+		this.studyCalendarEventPoint = studyCalendarEventPoint;
+	}
+
+	
+	
 
 }

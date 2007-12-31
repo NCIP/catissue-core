@@ -42,6 +42,17 @@ public class ConsentTierResponse extends AbstractDomainObject implements Seriali
 	 * @return the response
 	 * @hibernate.property name="response" type="string" length="10" column="RESPONSE"
 	 */
+	public ConsentTierResponse(ConsentTierResponse consentTierResponse) 
+	{
+		this.response = consentTierResponse.getResponse();
+		this.consentTier = consentTierResponse.getConsentTier();	
+		
+	}
+	public ConsentTierResponse() 
+	{
+	}
+	
+	
 	public String getResponse()
 	{
 		return response;

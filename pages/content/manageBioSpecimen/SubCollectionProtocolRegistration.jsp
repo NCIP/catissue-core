@@ -6,7 +6,6 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>	  
-<%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
 <%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
@@ -26,24 +25,31 @@
 	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
 			CollectionProtocolRegistrationForm form =null;
 			String currentRegistrationDate = "";
-			String signedConsentDate = "";
+
 			String selectProperty="";
 			if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
 			{
 				form = (CollectionProtocolRegistrationForm)obj;
 				currentRegistrationDate = form.getRegistrationDate();  
-				signedConsentDate=form.getConsentDate();
-				
+			
 				if(currentRegistrationDate == null)
 				{
 					currentRegistrationDate = "";
-			}
-				if(signedConsentDate == null)
-				{
-					signedConsentDate = "";
 				}
+				
 					
 			}
+			String cpId = null,participantId=null;
+			
+			if(request.getAttribute(Constants.CP_SEARCH_CP_ID) != null)
+			{
+				cpId = (String)request.getAttribute(Constants.CP_SEARCH_CP_ID);
+			}
+			if(request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID) != null)
+			{
+				participantId = (String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
+			}
+				
 				String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 				boolean isAddNew = false;
 				
@@ -58,19 +64,19 @@
 		        boolean readOnlyValue;
 		        if (operation.equals(Constants.EDIT))
 		        {						
-		            formName = Constants.COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION;
+		            formName = Constants.SUB_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION;
 					if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
 					{
-						formName = Constants.CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION + "?pageOf="+pageOf;
+						formName = Constants.CP_QUERY_SUB_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION + "?pageOf="+pageOf+"&cpSearchCpId="+cpId+"&cpSearchParticipantId="+participantId;
 					}
 		            readOnlyValue = false;
 		        }
 		        else
 		        {
-		            formName = Constants.COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION;
+		            formName = Constants.SUB_COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION;
 					if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
 					{
-						formName = Constants.CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION + "?pageOf="+pageOf;
+						formName = Constants.CP_QUERY_SUB_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION + "?pageOf="+pageOf+"&cpSearchCpId="+cpId+"&cpSearchParticipantId="+participantId;
 					}
 		            readOnlyValue = false;
 		        }
@@ -81,17 +87,10 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <%if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
 	{
-	String participantId = (String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
+
 	%>
 		<script language="javascript">
-			/*var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
-			<%if(participantId != null){%>
-			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId+"&participantId=<%=participantId%>";
-			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=<%=participantId%>";
-			<%} else{%>
-			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId;
-			<%}%>
-			*/
+
 			
 			//Changes made by Baljeet for Flexxxx related
 		    top.frames["cpAndParticipantView"].refreshCpParticipants();
@@ -99,60 +98,7 @@
 		</script>
 	<%}%>
 
-<script language="JavaScript">
-
-//Consent Tracking Virender Mehta
-		function submitform()
-		{
-		  var action ="CollectionProtocolRegistration.do?showConsents=yes&pageOf=pageOfCollectionProtocolRegistration&operation=<%=operation%>";
-		  document.forms[0].action = action;
-		  document.forms[0].submit();
-		}
-//Consent Tracking Virender Mehta
-
-		function onCheckboxButtonClick(element,dropDownList)
-		{
-			// changes as per bug 287
-			var row = document.getElementById("row1");
-			var cell1 = row.cells[0];
-			var cell2 = row.cells[1];
-
-			//	 Changes as per bug id 709
-	    	var row0 = document.getElementById("row0");
-			var cell10 = row0.cells[0];
-			var cell20 = row0.cells[1];
-			
-		    if(element.checked==true)
-		    { 
-		    	cell1.innerHTML=" &nbsp; ";
-			    cell2.className="formLabel";
-			    
-		    	document.forms[0].participantID.disabled = false;
-	           	cell10.innerHTML="*";
-	           	cell20.className="formRequiredLabel";
-      		}
-           	else
-           	{
-	           	cell1.innerHTML="*";
-	           	cell2.className="formRequiredLabel";
-
-		    	cell10.innerHTML=" &nbsp; ";
-			    cell20.className="formLabel";
-	           	
-	           	document.forms[0].participantID.disabled = true;
-      		}
-		}
-		
-		// for add new SpecimenCollectionGroup
-		function onAddSpecimenCollectionGroup(element)
-		{
-			var action ="createSpecimenCollectionGroup";
-			changeSubmitTo(action );
-			document.forms[0].submit();
-		}
-		
-		
-</script>		
+	
 </head>
 <%
 %>
@@ -186,6 +132,7 @@
 						<html:hidden property="forwardTo" value=""/>
 						<html:hidden property="participantID" />
 						<html:hidden property="withdrawlButtonStatus"/>
+						<html:hidden property="collectionProtocolID"/>	
 					</td>
 					<td><html:hidden property="id"/>
 					<td><html:hidden property="onSubmit"/></td>
@@ -213,21 +160,12 @@
   			    	<td class="formRequiredNotice" width="5">*</td>					
 				   	<td class="formRequiredLabel">
 						<label for="name">
-							<bean:message key="collectionProtocolReg.protocolTitle" />
+							<bean:message key="subcollectionProtocolReg.protocolTitle" />
 						</label>
 				   	</td>
 					<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-						<html:select property="collectionProtocolID" styleClass="formFieldSized" styleId="collectionProtocolID" size="1"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="submitform()">
-						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
-					    </html:select>
-						&nbsp;
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
-						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=participantRegistration&addNewFor=collectionProtocolId')">
-							<bean:message key="buttons.addNew" />
-						</html:link>					   
-						</logic:notEqual>
+						<bean:write name="collectionProtocolRegistrationForm" property="collectionProtocolShortTitle"/>
+
 					</td>
 				</tr>
 					
@@ -241,21 +179,11 @@
 						
 					</td>
 					<td class="formField">
-						<html:text styleClass="formFieldSized" maxlength="10"  size="30" styleId="participantName" 
-					     		property="participantName" disabled="true"/>	
-						&nbsp;
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
-						<html:link href="#" styleId="newParticipant" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=participant&forwardTo=participantRegistration&addNewFor=participantId')">
-							<bean:message key="buttons.addNew" />
-						</html:link>			
-						</logic:notEqual>
-						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
-						<html:link href="#" styleId="newParticipant" onclick="addNewAction('CPQueryParticipantRegistrationAddNew.do?addNewForwardTo=participant&forwardTo=participantRegistration&addNewFor=participantId')">
-							<bean:message key="buttons.addNew" />
-						</html:link>			
-						</logic:equal>
-						
-							   
+						<%--<html:text styleClass="formFieldSized" maxlength="10"  size="30" styleId="participantName" 
+					     		property="participantName" disabled="true"/>	--%>
+
+				
+						&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="participantName"/>
 					</td>
 				</tr>
 
@@ -269,10 +197,22 @@
 						</label>
 					</td>
 					<td class="formField">
-						<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="participantProtocolID" property="participantProtocolID" readonly="<%=readOnlyValue%>" />
+					<%--	<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="participantProtocolID" property="participantProtocolID" readonly="<%=readOnlyValue%>" />--%>
+						&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="participantProtocolID"/>
 					</td>
 				</tr>
-	
+				<tr id="row2">					
+						
+						<td class="formRequiredNotice" width="5">&nbsp;</td>					
+						<td class="formLabel">
+						<label for="name">
+							<bean:message key="collectionprotocol.studycalendartitle" />
+						</label>
+					</td>
+					<td class="formField">
+						&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="studyCalEvtPoint"/>
+					</td>
+				</tr>
  				<tr>
             		<td class="formRequiredNotice" width="5">*</td>					
 					<td class="formRequiredLabel">
@@ -282,20 +222,14 @@
 						</label>
 					</td>
 					<td class="formField">
-<!-- 				           <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-				           <html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="registrationDate" property="registrationDate" />
-				           &nbsp;<bean:message key="page.dateFormat" />&nbsp;
-					       <a href="javascript:show_calendar('collectionProtocolRegistrationForm.registrationDate',null,null,'MM-DD-YYYY');">
-						         <img src="images\calendar.gif" width=24 height=22 border=0></a>
--->
-<%
-	 if(currentRegistrationDate.trim().length() > 0)
-	{
-			Integer registrationYear = new Integer(Utility.getYear(currentRegistrationDate ));
-			Integer registrationMonth = new Integer(Utility.getMonth(currentRegistrationDate ));
-			Integer registrationDay = new Integer(Utility.getDay(currentRegistrationDate ));
-%>
-			<ncombo:DateTimeComponent name="registrationDate"
+					<%
+						 if(currentRegistrationDate.trim().length() > 0)
+						 {
+							Integer registrationYear = new Integer(Utility.getYear(currentRegistrationDate ));
+							Integer registrationMonth = new Integer(Utility.getMonth(currentRegistrationDate ));
+							Integer registrationDay = new Integer(Utility.getDay(currentRegistrationDate ));
+					%>
+					<ncombo:DateTimeComponent name="registrationDate"
 									  id="registrationDate"
  									  formName="collectionProtocolRegistrationForm"	
 									  month= "<%=registrationMonth %>"
@@ -304,24 +238,35 @@
 									  value="<%=currentRegistrationDate %>"
 									  styleClass="formDateSized10"
 											 />		
-<% 
-	}
-	else
-	{  
- %>
-			<ncombo:DateTimeComponent name="registrationDate"
+					<% 
+						}
+						else
+						{  
+					 %>
+					<ncombo:DateTimeComponent name="registrationDate"
 									  id="registrationDate"
  									  formName="collectionProtocolRegistrationForm"	
 									  styleClass="formDateSized10" 
 											 />		
-<%
-	}
-%>
-<bean:message key="page.dateFormat" />&nbsp;
+					<%
+						}
+					%>
+					<bean:message key="page.dateFormat" />&nbsp;
 
 				 	</td>
 				</tr>
-	
+			<tr id="row3">					
+						
+						<td class="formRequiredNotice" width="5">&nbsp;</td>					
+						<td class="formLabel">
+						<label for="name">
+							<bean:message key="subprotocolreg.offset" />
+						</label>
+					</td>
+					<td class="formField">
+					<html:text styleClass="formFieldSized" maxlength="25"  size="5" styleId="offset" property="offset"/>
+					</td>
+				</tr>
 				<!-- activitystatus -->	
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 				<tr>
@@ -349,20 +294,6 @@
 				</tr>
 			</table>
 	
-<%--  Consent Tracking Virender Mehta	 --%>
-	<%
-		List responseList =(List)request.getAttribute("responseList");
-    	if(form.getConsentTierCounter()>0)
-		{
-	%>
-   	 
-     <%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %>  
-
-	<%
-		}
-	%>			
-
-<!--  Consent Tracking Virender Mehta	 -->	
 
 		</td>
 		</tr>
@@ -370,6 +301,34 @@
 		<!-- NEW Collection Protocol Registration ENTRY ends-->
 	</table>
 				
-	<%@ include file="CollectionProtocolRegistrationPageButtons.jsp"%>
+	 <table cellpadding="4" cellspacing="0" border="0">
+	
+	<tr>
+		<td nowrap class="formFieldNoBorders">
+
+		
+			<html:button styleClass="actionButton" 
+					property="submitPage" 
+					title="Submit Only"
+					value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>" 
+					onclick="<%=normalSubmit%>">				  				     	    
+	     	</html:button>
+	    
+		</td>
+
+		<td nowrap class="formFieldNoBorders"> 
+			<html:button styleClass="actionButton"  
+					property="submitPage" 
+					title="Submit and Add Specimen collection group"
+					value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][0]%>"
+					disabled="<%=isAddNew%>" 
+					onclick="<%=forwardToSubmit%>">
+	     	</html:button>
+	     	
+		</td>
+
+	</tr>
+</table>
+
 
 </html:form>

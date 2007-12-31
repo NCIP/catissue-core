@@ -4293,6 +4293,52 @@ PUBLIC
 		<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.collectionProtocolRegistrationCPQueryDef" />
 	</action>
 
+	<!-- sub Protocol -->
+    <action path="/CPQuerySubCollectionProtocolRegistration"
+		type="edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction"
+		name="collectionProtocolRegistrationForm"
+		validate="false"
+		scope="request">
+		<forward name="pageOfCollectionProtocolRegistrationCPQuery" path=".catissuecore.subcollectionProtocolRegistrationCPQueryDef" />
+		<forward name="failure" path=".catissuecore.collectionProtocolRegistrationDef" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
+		<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.collectionProtocolRegistrationCPQueryDef" />
+	</action>
+	<action path="/CPQuerySubCollectionProtocolRegistrationAdd"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="collectionProtocolRegistrationForm"
+		validate="true"
+		input="/CPQuerySubCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"
+		scope="request">
+		<forward name="success" path="/CPQuerySubCollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistrationCPQuery" />
+		<forward name="failure" path="/CPQuerySubCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
+		<forward name="createSpecimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />
+		<forward name="specimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />
+		
+	</action>
+	
+	<action path="/CPQuerySubCollectionProtocolRegistrationEdit"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="collectionProtocolRegistrationForm"
+		validate="true"
+		input="/CPQuerySubCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"
+		scope="request">
+		<forward name="success" path="/CPQuerySubCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
+		<forward name="failure" path="/CPQuerySubCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
+		<forward name="createSpecimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />
+		<forward name="specimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />
+		
+	</action>
+	<action path="/CPQuerySubCollectionProtocolRegistrationSearch"
+	    type="edu.wustl.common.action.CommonSearchAction"
+		name="collectionProtocolRegistrationForm"
+		validate="false"
+		input="/CPQuerySubCollectionProtocolRegistrationSearch.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"
+		scope="request">
+		<forward name="pageOfCollectionProtocolRegistrationCPQuery" path="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"/>
+		<forward name="failure" path="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"/>
+	</action>    
+	<!-- Sub Protocol finish -->
 	<action path="/CPQueryCollectionProtocolRegistrationAdd"
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="collectionProtocolRegistrationForm"

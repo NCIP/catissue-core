@@ -98,7 +98,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	private long  collectionProtocolId;
 	
 	private long collectionProtocolEventId;
-		
+
+	protected int offset =0;
 	/**
 	 * Nmae: Vijay Pande
 	 * Reviewer Name: Aarti Sharma
@@ -532,6 +533,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	*/
 		//Populating the events
 		setSCGEvents(specimenCollectionGroup);
+		
+		//For offset
+		if(specimenCollectionGroup.getOffset() != null)
+			this.offset = specimenCollectionGroup.getOffset().intValue();
 	}
 	/**
 	 * @param specimenCollectionGroup Settign Sp Coll Group 
@@ -1486,6 +1491,20 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 
 	public void setPrintCheckbox(String printCheckbox) {
 		this.printCheckbox = printCheckbox;
+	}
+
+
+
+	public int getOffset()
+	{
+		return offset;
+	}
+
+
+
+	public void setOffset(int offset)
+	{
+		this.offset = offset;
 	}
 
 }

@@ -1,4 +1,4 @@
-						 <table cellpadding="4" cellspacing="0" border="0">
+	 <table cellpadding="4" cellspacing="0" border="0">
 	<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
 		<% 
 			isAddNew = true; 

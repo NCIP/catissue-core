@@ -1786,6 +1786,18 @@ FROM   CSM_PG_PE;
 
 
 
+/* For cp Enhancements */
+alter table `catissue_collection_protocol` ,add column `CP_TYPE` varchar (50),add column `PARENT_CP_ID` bigint (20), add column `SEQUENCE_NUMBER` integer,add column `STUDY_CALENDAR_EVENT_POINT` double;
+alter table CATISSUE_COLLECTION_PROTOCOL add index FK32DC439DBC7298B9 (PARENT_CP_ID), add constraint FK32DC439DBC7298B9 foreign key (PARENT_CP_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
+
+alter table `CATISSUE_COLL_PROT_REG` ,add column `DATE_OFFSET` integer;
+alter table `catissue_specimen_coll_group` ,add column `DATE_OFFSET` integer;
+
+
+INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (NULL,'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction','edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction','edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction','edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction',NULL,1,'0000-00-00');
+INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`) VALUES (NULL,18,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction'));
+
+/*CP Enhacements finish */
 /* TODO Added in next script SCG_DbUpgrade */
 
 /* TODO Added in next script CSMUpgrade_3_to_3.2 */
