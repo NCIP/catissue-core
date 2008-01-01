@@ -41,6 +41,8 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 	public void testAddTissueSpecInStorageContainerCanHoldTissueSpecimen()
 	{
 		try{
+			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
+			cp =(CollectionProtocol) appService.createObject(cp);
 			StorageType tissueST = BaseTestCaseUtility.initTissueStorageType();
 			tissueST = (StorageType) appService.createObject(tissueST);
 			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainerHoldsTissueSpec();	
@@ -48,8 +50,9 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			System.out.println(storageContainer);
 			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
-			SpecimenCollectionGroup scg = BaseTestCaseUtility.initSCG();
-			scg = (SpecimenCollectionGroup) appService.createObject(scg);
+			System.out.println("reached");
+		//	SpecimenCollectionGroup scg = BaseTestCaseUtility.initSCG();
+			SpecimenCollectionGroup scg = createSCGWithConsents(cp);
 			TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			ts.setStorageContainer(storageContainer);
@@ -86,7 +89,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			 e.printStackTrace();
 			 assertTrue("Failed to add Mol specimen in container which can only store tissue specimens", true);
 		 }
-	}
+	}  
 	
 /*	public void testAddCellSpecInStorageContainer()
 	{
@@ -129,37 +132,10 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			 assertTrue("Failed to add Mol specimen in SC", true);
 		 }
 	} */
-	/*public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPPositiveTest1()
-	{
-		try {
-			StorageType ST = BaseTestCaseUtility.initStorageType();
-			ST = (StorageType) appService.createObject(ST);
-			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();	
-			storageContainer.setStorageType(ST);
-			System.out.println("Storage Container"+storageContainer.getName()+" successfully created");
-			storageContainer = (StorageContainer) appService.createObject(storageContainer);
-			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
-			SpecimenCollectionGroup scg = BaseTestCaseUtility.initSCG();
-			scg = (SpecimenCollectionGroup) appService.createObject(scg);
-			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-			ts.setStorageContainer(storageContainer);
-			ts.setPositionDimensionOne(new Integer(1));
-			ts.setPositionDimensionTwo(new Integer(1));
-			ts.setSpecimenCollectionGroup(scg);
-			System.out.println("Befor creating Tissue Specimen");
-			ts = (TissueSpecimen) appService.createObject(ts);
-			System.out.println("Tissue Specimen successfully created with Lable"+ ts.getLabel());
-			Logger.out.info("Tissue Specimen successfully created with Lable"+ ts.getLabel());
-			assertTrue("Object added successfully", true);			
-	 }
-	 catch(Exception e){
-		 e.printStackTrace();
-		 assertFalse("Failed to add Tissue specimen in SC", true);
-	 }
-	}  */
 	
 	
-	public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPPositiveTest()
+	
+		public void testAddSpecimenInStorageContainerHavingCPRestrictionPositiveTest()
 	{
 		
 		
@@ -200,7 +176,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
 			System.out.println("Storage Container"+storageContainer.getName()+" successfully created");
 			
-			SpecimenCollectionGroup scg= (SpecimenCollectionGroup)cpRestriction(cp);
+			SpecimenCollectionGroup scg= (SpecimenCollectionGroup)createSCGWithConsents(cp);
 					
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			ts.setStorageContainer(storageContainer);
@@ -221,7 +197,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 	}
 	
 	
-	public void testStorageContainerRestrictionToHoldSpecimensOfParticularCPNegativeTest()
+	public void testAddSpecimenInStorageContainerHavingCPRestrictionNegativeTest()
 	{
 		
 			StorageContainer storageContainer =(StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
@@ -237,7 +213,7 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			}
 			TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
 			System.out.println("CP:"+cp.getTitle());
-			SpecimenCollectionGroup scg= (SpecimenCollectionGroup)cpRestriction(cp);
+			SpecimenCollectionGroup scg= (SpecimenCollectionGroup)createSCGWithConsents(cp);
 							
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			ts.setStorageContainer(storageContainer);
@@ -257,9 +233,9 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			}
 				
 			
-		} 
+		}
 	
-	public SpecimenCollectionGroup cpRestriction(CollectionProtocol cp)
+	public SpecimenCollectionGroup createSCGWithConsents(CollectionProtocol cp)
 	{
 		Participant participant = BaseTestCaseUtility.initParticipant();
 		
@@ -545,6 +521,6 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			
 		}
 		
-	}
+	} 
 	
   }
