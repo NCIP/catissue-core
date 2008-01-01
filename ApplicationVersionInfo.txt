@@ -1,6 +1,9 @@
 /*
- * $Name: RC1 (Date:18-Aug-2007)
+ * $Name: (Date:03-Jan-2008)
  * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.2.8.6  2008/01/01 05:52:48  vijay_pande
+ * Suite Interim Release
+ *
  * Revision 1.2.8.5  2007/10/09 05:24:42  sachin_lale
  * *** empty log message ***
  *
