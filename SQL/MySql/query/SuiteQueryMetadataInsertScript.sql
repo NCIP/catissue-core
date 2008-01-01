@@ -3,7 +3,7 @@ SQLyog - Free MySQL GUI v5.12
 Host - 4.1.10-nt : Database - catissuecoredeepti
 *********************************************************************
 Server version : 4.1.10-nt
-*/
+*/
 
 SET NAMES utf8;
 
@@ -1279,7 +1279,7 @@ insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (581,NULL,NULL,NULL,'comment','1342932195');
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (582,NULL,'The reason for which the specimen is disposed.',NULL,'reason','171271555');
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (583,NULL,'System generated unique identifier.',NULL,'id','954196821');
-insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (584,'2007-10-10',NULL,'2007-10-10','edu.wustl.catissuecore.domain.pathology.ClinicalProcedureEventParameter',NULL);
+insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (584,'2007-10-10',NULL,'2007-10-10','edu.wustl.catissuecore.domain.pathology.ClinicalProcedureEventParameterSet',NULL);
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (585,NULL,NULL,NULL,'AssociationName_6',NULL);
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (586,NULL,NULL,NULL,'AssociationName_5',NULL);
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (587,NULL,NULL,NULL,'AssociationName_4',NULL);
@@ -1313,7 +1313,7 @@ insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (615,NULL,'Method applied on specimen to freeze it.',NULL,'method','-2072430174');
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (616,NULL,NULL,NULL,'comment','1342932195');
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (617,NULL,'System generated unique identifier.',NULL,'id','954196821');
-insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (618,'2007-10-10',NULL,'2007-10-10','edu.wustl.catissuecore.domain.ReturnedEventParameter',NULL);
+insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (618,'2007-10-10',NULL,'2007-10-10','edu.wustl.catissuecore.domain.ReturnEventParameters',NULL);
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (619,NULL,NULL,NULL,'AssociationName_6',NULL);
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (620,NULL,NULL,NULL,'AssociationName_5',NULL);
 insert into `dyextn_abstract_metadata` (`IDENTIFIER`,`CREATED_DATE`,`DESCRIPTION`,`LAST_UPDATED`,`NAME`,`PUBLIC_ID`) values (621,NULL,NULL,NULL,'AssociationName_4',NULL);
@@ -6823,7 +6823,7 @@ insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (982,'DE_E
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (983,'DESCRIPTION');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (984,'STATUS');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (985,'IDENTIFIER');
-insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (986,'DE_E_781');
+insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (986,'CATISSUE_NEW_SPEC_ORD_ITEM');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (987,'DE_E_781');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (988,'DE_E_208');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (989,'DE_E_211');
@@ -6833,10 +6833,10 @@ insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (992,'DE_E
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (993,'DE_E_781');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (994,'DE_E_781');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (995,'DE_AT_789');
-insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (996,'DE_AT_790');
-insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (997,'DE_AT_791');
+insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (996,'SPECIMEN_CLASS');
+insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (997,'SPECIMEN_TYPE');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (998,'DE_AT_792');
-insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (999,'DE_AT_793');
+insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (999,'IDENTIFIER');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1000,'CATISSUE_PATH_CASE_ORDER_ITEM');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1001,'DE_E_794');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1002,'DE_E_208');
@@ -6904,7 +6904,7 @@ insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1063,'SOC
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1064,'ACTIVITY_STATUS');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1065,'DEATH_DATE');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1066,'GENOTYPE');
-insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1067,'DE_E_857');
+insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1067,'CATISSUE_SP_ARRAY_ORDER_ITEM');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1068,'DE_E_208');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1069,'DE_E_211');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1070,'DE_E_214');
@@ -6914,7 +6914,7 @@ insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1073,'DE_
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1074,'DE_E_857');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1075,'DE_AT_865');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1076,'DE_AT_866');
-insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1077,'DE_AT_867');
+insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1077,'IDENTIFIER');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1078,'CATISSUE_NEW_SP_AR_ORDER_ITEM');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1079,'DE_E_208');
 insert into `dyextn_database_properties` (`IDENTIFIER`,`NAME`) values (1080,'DE_E_211');
