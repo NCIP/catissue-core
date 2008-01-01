@@ -26,7 +26,7 @@
 	CategorySearchForm form = (CategorySearchForm)request.getAttribute("categorySearchForm");
 	String currentSelectedNodeInTree = form.getCurrentSelectedNodeInTree();
 	String showSelected = "false";
-	List<NameValueBean> selectedColumnNameValueBeanList = form.getSelectedColumnNameValueBeanList();
+	List selectedColumnNameValueBeanList = form.getSelectedColumnNameValueBeanList();
 %>
 	
 
@@ -367,7 +367,7 @@ if("<%=showSelected%>" == "true")
  <% if(selectedColumnNameValueBeanList!=null)
   {
 	for(int i=0;i<selectedColumnNameValueBeanList.size();i++) {
-	NameValueBean nameValueBean = selectedColumnNameValueBeanList.get(i);
+	NameValueBean nameValueBean = (NameValueBean)selectedColumnNameValueBeanList.get(i);
 	String name = nameValueBean.getName();
 	String value = nameValueBean.getValue();
 	if(nodeId.equalsIgnoreCase(value))
