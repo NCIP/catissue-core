@@ -37,12 +37,12 @@
 	String pageName = "SpreadsheetView.do";		
 	
 	
-	Integer identifierFieldIndex = 1;
-	Integer spnFieldIndex = 2;
-	Integer reportDateFieldIndex = 3;
-	Integer statusFieldIndex = 4;
-	Integer siteNameFieldIndex = 5; 
-	Integer reportColDateFieldIndex = 6; 
+	Integer identifierFieldIndex = new Integer(1);
+	Integer spnFieldIndex =  new Integer(2);
+	Integer reportDateFieldIndex =  new Integer(3);
+	Integer statusFieldIndex =  new Integer(4);
+	Integer siteNameFieldIndex =  new Integer(5);
+	Integer reportColDateFieldIndex =  new Integer(6);
 	
 
 %>
