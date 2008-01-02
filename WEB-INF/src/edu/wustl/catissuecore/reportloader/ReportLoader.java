@@ -88,6 +88,7 @@ public class ReportLoader
 	public ReportLoader(Participant participant,IdentifiedSurgicalPathologyReport report,Site s, SpecimenCollectionGroup scg, String surgicalPathologyNumber) throws DAOException
 	{
 		this.participant=participant;
+		this.participant=(Participant)CaCoreAPIService.getObject(Participant.class, Constants.SYSTEM_IDENTIFIER, this.participant.getId());
 		this.identifiedReport=report;
 		this.site=s;
 		this.scg=scg;
