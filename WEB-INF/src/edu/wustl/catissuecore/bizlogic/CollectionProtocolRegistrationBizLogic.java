@@ -314,7 +314,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			 * If studyeventpointCalendar of CollecttionProtocol is null then
 			 * take the RegistrationDate of last Event.
 			 */
-			countOfStudyCalendarEventPoint = +1;
+			countOfStudyCalendarEventPoint += 1;
 			cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(dateOfLastEvent,
 					countOfStudyCalendarEventPoint));
 		}
@@ -360,6 +360,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	private void createSCG(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
+		dateOfLastEvent = collectionProtocolRegistration.getRegistrationDate();
+        countOfStudyCalendarEventPoint = 0;
+
 		try
 		{
 			NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
