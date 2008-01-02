@@ -355,7 +355,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 	private Long userID;
 
-	private Map<Specimen, List<Specimen>> specimenMap = new LinkedHashMap<Specimen, List<Specimen>>();
+	private Map<Specimen, List<Specimen>> specimenMap = null;
 
 	private void createSCG(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
@@ -374,6 +374,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			Collection scgCollection = new HashSet();
 			while (collectionProtocolEventIterator.hasNext())
 			{
+				specimenMap = new LinkedHashMap<Specimen, List<Specimen>>();
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) collectionProtocolEventIterator.next();
 				
 				countOfStudyCalendarEventPoint = countOfStudyCalendarEventPoint + (collectionProtocolEvent.getStudyCalendarEventPoint()).intValue();
@@ -449,8 +450,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		else
 		{
 			List<Specimen> childrenList = specimenMap.get(pSpecimen);
+			if (childrenList ==null)
+			{
+				childrenList = new ArrayList<Specimen>();
+				specimenMap.put(newSpecimen,childrenList);
+			}
 			childrenList.add(newSpecimen);
-			//specimenMap.put(newSpecimen, null);
 		}
 
 		Collection childrenSpecimenCollection = specimen.getChildrenSpecimen();
