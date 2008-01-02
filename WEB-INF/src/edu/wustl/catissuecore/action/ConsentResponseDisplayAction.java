@@ -36,6 +36,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -198,7 +199,9 @@ public class ConsentResponseDisplayAction extends BaseAction
 				}
 				else
 				{
-					String storageLocation=specimenObj.getStorageContainer().getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
+					//kalpana:
+					StorageContainer storageContainer =	(StorageContainer)bizLogic.retrieveAttribute(Specimen.class.getName(), specimenObj.getId(),"storageContainer");
+					String storageLocation=storageContainer.getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
 					specimenDetailList.add(storageLocation);
 				}
 				specimenDetailList.add(specimenObj.getClassName());
