@@ -105,7 +105,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
 
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
-		
+
 		insertAuthData(specimenCollectionGroup);
 	}
 
@@ -113,8 +113,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param specimenCollectionGroup
 	 * @throws DAOException
 	 */
-	public void insertAuthData(SpecimenCollectionGroup specimenCollectionGroup)
-			throws DAOException {
+	public void insertAuthData(SpecimenCollectionGroup specimenCollectionGroup) throws DAOException
+	{
 		try
 		{
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(specimenCollectionGroup),
@@ -222,13 +222,19 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		if (specimenCollectionGroup.getOffset() != null)
 		{
-			updateOffset(specimenCollectionGroup, sessionDataBean,dao);
-			getDetailsOfCPRForSCG(specimenCollectionGroup.getCollectionProtocolRegistration(),dao);
-			CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
-			cprBizLogic.checkAndUpdateChildOffset(dao, sessionDataBean, oldspecimenCollectionGroup.getCollectionProtocolRegistration(), specimenCollectionGroup.getOffset().intValue());
-			cprBizLogic.updateForOffset(dao, sessionDataBean, specimenCollectionGroup.getCollectionProtocolRegistration(), specimenCollectionGroup.getOffset().intValue());
+			Integer offset = specimenCollectionGroup.getOffset();
+			if (oldspecimenCollectionGroup.getOffset() != null)
+				offset = offset - oldspecimenCollectionGroup.getOffset();
+			if (offset != 0)
+			{
+				updateOffset(offset, specimenCollectionGroup, sessionDataBean, dao);
+				getDetailsOfCPRForSCG(specimenCollectionGroup.getCollectionProtocolRegistration(), dao);
+				CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+				cprBizLogic.checkAndUpdateChildOffset(dao, sessionDataBean, oldspecimenCollectionGroup.getCollectionProtocolRegistration(), offset
+						.intValue());
+				cprBizLogic.updateForOffset(dao, sessionDataBean, specimenCollectionGroup.getCollectionProtocolRegistration(), offset.intValue());
+			}
 
-			
 		}
 
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
@@ -896,7 +902,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 	public void childCPtree(StringBuffer xmlString, Long cpId, Long participantId, Date regDate) throws DAOException, ClassNotFoundException
 	{
-
+	
 		Date evtLastDate = SCGTreeForCPBasedView(xmlString, cpId, participantId, regDate);
 
 		String hql = "select  cp.childCPCollection from " + CollectionProtocol.class.getName() + " as cp where cp.id= " + cpId.toString();
@@ -917,9 +923,13 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					dispName = cp.getShortTitle() + ":" + anticipatoryDate;
 
 				}
+				String participantRegStatus = "Pending";
+				if(chkParticipantRegisteredToCP(participantId,cp.getId()) != null)
+					participantRegStatus = "Registered";
+				
 				xmlString.append("<node id= \"" + Constants.SUB_COLLECTION_PROTOCOL + "_" + cp.getId() + "\" " + "name=\"" + dispName + "\" "
 						+ "toolTip=\"" + cp.getTitle() + "\" " + "type=\"" + cp.getCpType() + "\" " + "cpType=\"" + cp.getCpType() + "\" "
-						+ "regDate=\"" + anticipatoryDate + "\">");
+						+ "regDate=\"" + anticipatoryDate +  "\" " +"participantRegStatus=\"" + participantRegStatus+"\">");
 				childCPtree(xmlString, cp.getId(), participantId, participantRegDate);
 				xmlString.append("</node>");
 			}
@@ -1192,11 +1202,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				if (scgNodeLabel.equalsIgnoreCase("") && receivedDate.equalsIgnoreCase(""))
 				{
 					int noOfDaysToAdd = 0;
-					if(eventPoint != null)
+					if (eventPoint != null)
 						noOfDaysToAdd += eventPoint.intValue();
-					if(offset != null)
-						noOfDaysToAdd+= offset.intValue();
-					
+					if (offset != null)
+						noOfDaysToAdd += offset.intValue();
+
 					Date evtDate = Utility.getNewDateByAdditionOfDays(regDate, noOfDaysToAdd);
 					eventLastDate = evtDate;
 					receivedDate = Utility.parseDateToString(evtDate, "yyyy-MM-dd");
@@ -1783,21 +1793,23 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 	}
 
-	private void updateOffset(SpecimenCollectionGroup specimenCollectionGroup, SessionDataBean sessionDataBean ,DAO dao) throws DAOException,UserNotAuthorizedException
-	{ 
+	private void updateOffset(Integer offset, SpecimenCollectionGroup specimenCollectionGroup, SessionDataBean sessionDataBean, DAO dao)
+			throws DAOException, UserNotAuthorizedException
+	{
 		//CollectionProtocolRegistration cpr = getCollectionProtocolRegForSCG(specimenCollectionGroup, dao);
 		//specimenCollectionGroup.setCollectionProtocolRegistration(cpr);
-		CollectionProtocolEvent event = (CollectionProtocolEvent)specimenCollectionGroup.getCollectionProtocolEvent();
+		CollectionProtocolEvent event = (CollectionProtocolEvent) specimenCollectionGroup.getCollectionProtocolEvent();
 		CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
 		if (cpr != null)
 		{
 			String sourceObjName = SpecimenCollectionGroup.class.getName();
-			String whereColName[] = {"collectionProtocolEvent.id","collectionProtocolRegistration.id"};
-			String whereColCond[] = {">","="};
-			Object whereColVal[] = {event.getId(),cpr.getId()};
-			List specimenCollectionGroupCollection = (List)dao.retrieve(sourceObjName,null,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION); 
+			String whereColName[] = {"collectionProtocolEvent.id", "collectionProtocolRegistration.id"};
+			String whereColCond[] = {">", "="};
+			Object whereColVal[] = {event.getId(), cpr.getId()};
+			List specimenCollectionGroupCollection = (List) dao.retrieve(sourceObjName, null, whereColName, whereColCond, whereColVal,
+					Constants.AND_JOIN_CONDITION);
 			/*Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(), cpr
-					.getId(), Constants.COLUMN_NAME_SCG_COLL);*/
+			 .getId(), Constants.COLUMN_NAME_SCG_COLL);*/
 			if (specimenCollectionGroupCollection != null && !specimenCollectionGroupCollection.isEmpty())
 			{
 				Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
@@ -1806,36 +1818,35 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					SpecimenCollectionGroup scg = (SpecimenCollectionGroup) specimenCollectionGroupIterator.next();
 					//if(scg.getId().longValue() > specimenCollectionGroup.getId().longValue())
 					//{
-						scg.setOffset(specimenCollectionGroup.getOffset());
-						dao.update(scg,sessionDataBean,true,true,false);
+					scg.setOffset(offset);
+					dao.update(scg, sessionDataBean, true, true, false);
 					//}
 				}
 			}
 		}
 
 	}
-	private void getDetailsOfCPRForSCG(CollectionProtocolRegistration cpr,DAO dao) throws DAOException
+
+	private void getDetailsOfCPRForSCG(CollectionProtocolRegistration cpr, DAO dao) throws DAOException
 	{
-		if(cpr != null && cpr.getId() != null)
+		if (cpr != null && cpr.getId() != null)
 		{
 			String sourceObjName = CollectionProtocolRegistration.class.getName();
-			String[] selectColName = {"participant","collectionProtocol"};
+			String[] selectColName = {"participant", "collectionProtocol"};
 			String[] whereColName = {"id"};
 			String[] whereColCond = {"="};
 			Object[] whereColVal = {cpr.getId()};
-			
-			List list = dao.retrieve(sourceObjName,selectColName,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION);
-			if(list!= null && !list.isEmpty())
+
+			List list = dao.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+			if (list != null && !list.isEmpty())
 			{
 				Object[] obj = (Object[]) list.get(0);
-				Participant participant = (Participant)obj[0];
-				CollectionProtocol collectionProtocol = (CollectionProtocol)obj[1];
+				Participant participant = (Participant) obj[0];
+				CollectionProtocol collectionProtocol = (CollectionProtocol) obj[1];
 				cpr.setParticipant(participant);
 				cpr.setCollectionProtocol(collectionProtocol);
 			}
 		}
 	}
-	
 
-	
 }

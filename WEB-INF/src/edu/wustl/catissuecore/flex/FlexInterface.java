@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
@@ -58,6 +59,8 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.metadata.path.Path;
 import edu.wustl.common.querysuite.queryengine.impl.CommonPathFinder;
@@ -1562,5 +1565,36 @@ public class FlexInterface
 		String str = bizlogic.getSCGTreeForCPBasedView(Long.parseLong(cpId), Long.parseLong(pId));
 		return str;
 	}
+	
+	public Boolean chkArmShifting(String cpId,String pId) throws Exception
+	{
+		
+		Long parentCPId = null;
+		// Get the parent Id of cpId;
+		String hql = "select cp.parentCollectionProtocol.id from "+ CollectionProtocol.class.getName() +" as cp where cp.id = "+cpId;
+		List parentCpIdList = executeQuery(hql);
+		if(parentCpIdList != null && !parentCpIdList.isEmpty())
+		{
+			parentCPId = (Long) parentCpIdList.get(0);
+		}
+		if(parentCPId != null)
+		{
+			hql = "select cpr.collectionProtocol.id from "+
+					CollectionProtocolRegistration.class.getName() +" as cpr where " +
+					"cpr.participant.id = "+pId+ " and cpr.collectionProtocol.cpType = '"+edu.wustl.catissuecore.util.global.Constants.ARM_CP_TYPE+"' and cpr.collectionProtocol.parentCollectionProtocol.id = "+parentCPId.toString() + " and cpr.collectionProtocol.id !="+cpId;		//Check if there are other arms registered for participant;
+			List cpList = executeQuery(hql);
+			if(cpList != null && !cpList.isEmpty())
+				return new Boolean(true);
+		}
+		return new Boolean(false);
+	}
 
+	private List executeQuery(String hql) throws DAOException, ClassNotFoundException
+	{
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(null);
+		List list = dao.executeQuery(hql, null, false, null);
+		dao.closeSession();
+		return list;
+	}
 }

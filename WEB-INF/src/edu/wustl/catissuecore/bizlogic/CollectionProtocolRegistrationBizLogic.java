@@ -190,16 +190,194 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 							}
 							insertCPR(childCollectionProtocolRegistration, dao, sessionDataBean);
 						}
+						else
+						{
+							setRegDate(collectionProtocolRegistrationCheck, cp.getStudyCalendarEventPoint(), dateofCP);
+							dao.update(collectionProtocolRegistrationCheck, sessionDataBean, true, true, false);
+							checkAndUpdateChildDate(dao, sessionDataBean, collectionProtocolRegistrationCheck);
+
+						}
 					}
+					/* Here check is done for CPR not to be same and then if another arm is registered SCG's of previous arm which are not collected are disabled*/
+					else if (cp.getSequenceNumber().intValue() == sequenceNumber.intValue())
+					{
+						CollectionProtocolRegistration collectionProtocolRegistrationOfPreviousArm = getCPRbyCollectionProtocolIDAndParticipantID(
+								dao, cp.getId(), collectionProtocolRegistration.getParticipant().getId());
+
+						if (collectionProtocolRegistrationOfPreviousArm != null)
+						{
+							if (!(collectionProtocolRegistrationOfPreviousArm.getId().equals(collectionProtocolRegistration.getId())))
+							{
+								Long id = getIdofCPR(dao, sessionDataBean, collectionProtocolRegistration);
+								if (!(collectionProtocolRegistrationOfPreviousArm.getId().equals(id)))
+								{
+									changeStatusOfEvents(dao, sessionDataBean, collectionProtocolRegistrationOfPreviousArm);
+									checkForChildStatus(dao, sessionDataBean, collectionProtocolRegistrationOfPreviousArm);
+								}
+							}
+						}
+
+					}
+
 				}
 
 			}
 			if (parentCPofArm != null)
 			{
+				//				armCheckandRegistration(CPRofParent, dao, sessionDataBean);
 				armCheckandRegistration(createCloneOfCPR(collectionProtocolRegistration, parentCPofArm), dao, sessionDataBean);
 			}
 		}
 
+	}
+
+	public Long getIdofCPR(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration)
+			throws UserNotAuthorizedException, DAOException
+	{
+		Long id = null;
+		if (collectionProtocolRegistration.getCollectionProtocol() != null && collectionProtocolRegistration.getParticipant().getId() != null)
+		{
+			Long parentCpId = collectionProtocolRegistration.getCollectionProtocol().getId();
+			if (parentCpId != null)
+			{
+				// get the previous cp's offset if present.
+				String hql = "select  cpr.id from " + CollectionProtocolRegistration.class.getName() + " as cpr where cpr.collectionProtocol.id = "
+						+ parentCpId.toString() + " and cpr.participant.id = " + collectionProtocolRegistration.getParticipant().getId().toString();
+				List idList = null;
+				try
+				{
+					idList = dao.executeQuery(hql, null, false, null);
+				}
+				catch (ClassNotFoundException e)
+				{
+					e.printStackTrace();
+				}
+				if (idList != null && !idList.isEmpty())
+				{
+					for (int i = 0; i < idList.size(); i++)
+					{
+						id = (Long) idList.get(i);
+						if (id != null)
+							return id;
+					}
+				}
+			}
+
+		}
+
+		return id;
+	}
+
+	/** The status of all Specimen Collection Group is changed when another arm is registered if they are not collected
+	 * @param collectionProtocolRegistration The CollectionProtocolRegistration Object for currentCollectionProtocol
+	 * @param dao The DAO object
+	 * @param sessionDataBean The session in which the object is saved.
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	public void changeStatusOfEvents(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration)
+			throws UserNotAuthorizedException, DAOException
+	{
+		Collection specimenCollectionGroupCollection = collectionProtocolRegistration.getSpecimenCollectionGroupCollection();
+		if (!specimenCollectionGroupCollection.isEmpty())
+		{
+			Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
+			while (specimenCollectionGroupIterator.hasNext())
+			{
+				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupIterator.next();
+				boolean status = false;
+				Collection specimenCollection = specimenCollectionGroup.getSpecimenCollection();
+				if (!specimenCollection.isEmpty())
+				{
+					Iterator specimenIterator = specimenCollection.iterator();
+					while (specimenIterator.hasNext())
+					{
+						Specimen specimen = (Specimen) specimenIterator.next();
+						String collectionStatus = specimen.getCollectionStatus();
+						if (!(collectionStatus.equalsIgnoreCase("Pending")))
+							status = true;
+					}
+					if (status == false)
+					{
+						specimenCollectionGroup.setCollectionStatus("Not Collected");
+						dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
+					}
+				}
+			}
+		}
+	}
+
+	/**In this method the status of Specimen Collection Group of Child CollectionProtocol is changed if the previous arm has any child 
+	 * The status is changed only when the Specimen is not collected
+	 * @param collectionProtocolRegistration The CollectionProtocolRegistration Object for currentCollectionProtocol
+	 * @param dao The DAO object
+	 * @param sessionDataBean The session in which the object is saved.
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	public void checkForChildStatus(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration)
+			throws DAOException, UserNotAuthorizedException
+	{
+		CollectionProtocol parent = collectionProtocolRegistration.getCollectionProtocol();
+		List childCPColl = getChildColl(parent);
+		if (childCPColl != null && !childCPColl.isEmpty())
+		{
+			Iterator iteratorofchildCP = childCPColl.iterator();
+			while (iteratorofchildCP.hasNext())
+			{
+				CollectionProtocol cp = (CollectionProtocol) iteratorofchildCP.next();
+				if (cp != null)
+				{
+					CollectionProtocolRegistration cpr = getCPRbyCollectionProtocolIDAndParticipantID(dao, cp.getId(), collectionProtocolRegistration
+							.getParticipant().getId());
+					if (cpr != null)
+					{
+						changeStatusOfEvents(dao, sessionDataBean, cpr);
+						if (cp.getChildCPCollection() != null && cp.getChildCPCollection().size() != 0)
+						{
+							checkForChildStatus(dao, sessionDataBean, cpr);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**In this method if there is change in Offset of parent protocol then the offset of child CollectionProtocol 
+	 * also changes.This is basically when upper level Hierarchy Protocol has an offset and below CP's are registered automatically.
+	 * @param collectionProtocolRegistration The CollectionProtocolRegistration Object for currentCollectionProtocol
+	 * @param dao The DAO object
+	 * @param sessionDataBean The session in which the object is saved.
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	public void checkAndUpdateChildDate(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration)
+			throws DAOException, UserNotAuthorizedException
+	{
+		CollectionProtocol parent = collectionProtocolRegistration.getCollectionProtocol();
+		List childCPColl = getChildColl(parent);
+		if (childCPColl != null && !childCPColl.isEmpty())
+		{
+			Iterator iteratorofchildCP = childCPColl.iterator();
+			while (iteratorofchildCP.hasNext())
+			{
+				CollectionProtocol cp = (CollectionProtocol) iteratorofchildCP.next();
+				if (cp != null)
+				{
+					CollectionProtocolRegistration cpr = getCPRbyCollectionProtocolIDAndParticipantID(dao, cp.getId(), collectionProtocolRegistration
+							.getParticipant().getId());
+					if (cpr != null)
+					{
+						setRegDate(cpr, cp.getStudyCalendarEventPoint(), cpr.getRegistrationDate());
+						dao.update(cpr, sessionDataBean, true, true, false);
+						if (cp.getChildCPCollection() != null && cp.getChildCPCollection().size() != 0)
+						{
+							checkAndUpdateChildDate(dao, sessionDataBean, cpr);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private List getChildColl(CollectionProtocol parent)
