@@ -2,6 +2,7 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" preinitialize="getCPData()" height="90%" width="70%" backgroundColor="#FFFFFF" creationComplete="initApp();">
   <mx:Script>
   	<![CDATA[
+  		import mx.events.CloseEvent;
   		import mx.core.Container;
   		import mx.events.MoveEvent;
   		import mx.events.TreeEvent;
@@ -60,27 +61,27 @@
                  private var pendingSCGIcon:Class;  
                  
 	 [Bindable]
-                 [Embed(source='/images/phase.gif')]
+                 [Embed(source='/images/Phase_col.gif')]
                  private var phaseCPIcon:Class;  
     
      [Bindable]
-                 [Embed(source='/images/PendingPhase.gif')]
+                 [Embed(source='/images/Phase_blk.gif')]
                  private var pendingPhaseCPIcon:Class;  
     
      [Bindable]
-                 [Embed(source='/images/CollectionProtocol.gif')]
+                 [Embed(source='/images/Cycle_col.gif')]
                  private var cycleCPIcon:Class;  
     
      [Bindable]
-                 [Embed(source='/images/CollectionProtocol.gif')]
+                 [Embed(source='/images/Cycle_blk.gif')]
                  private var pendingCycleCPIcon:Class;  
     
      [Bindable]
-                 [Embed(source='/images/a.gif')]
+                 [Embed(source='/images/Arm_col.gif')]
                  private var armCPIcon:Class;  
     
      [Bindable]
-                 [Embed(source='/images/pendingAliquot.gif')]
+                 [Embed(source='/images/Arm_blk.gif')]
                  private var pendingArmCPIcon:Class;  
     
     [Bindable]
@@ -96,8 +97,8 @@
     public function initApp():void
     {
     	 ExternalInterface.addCallback("myFlexMethod",refreshTree);
- 	 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
-	 ExternalInterface.addCallback("editParticipant",editParticipant);
+	 	 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
+		 ExternalInterface.addCallback("editParticipant",editParticipant);
     }
     
      /*
@@ -327,22 +328,50 @@
     private function setIcons(xmlNode:XML) : void
     {
 		var nodeType:String = xmlNode.@type;
+		var participantRegStatus:String="";
+
+		if(nodeType.match("Phase") || nodeType.match("Arm") || nodeType.match("Cycle"))
+		{
+			participantRegStatus = xmlNode.@participantRegStatus;;
+
+		}
 		if(nodeType.match("Phase"))
 		{
-			specimenTree.setItemIcon(xmlNode, phaseCPIcon, phaseCPIcon);	  
+			if(participantRegStatus.match("Pending"))
+       		{
+				specimenTree.setItemIcon(xmlNode, pendingPhaseCPIcon, pendingPhaseCPIcon);	  
+       		}
+       		else
+       		{
+				specimenTree.setItemIcon(xmlNode, phaseCPIcon, phaseCPIcon);	  
+       		}
 		}
 		if(nodeType.match("Arm"))
 		{
-			specimenTree.setItemIcon(xmlNode, armCPIcon, armCPIcon);	  
+			if(participantRegStatus.match("Pending"))
+       		{
+       			specimenTree.setItemIcon(xmlNode, pendingArmCPIcon, pendingArmCPIcon);	  
+       		}
+       		else
+       		{
+				specimenTree.setItemIcon(xmlNode, armCPIcon, armCPIcon);	  
+       		}
 		}
 		if(nodeType.match("Cycle"))
 		{
-			specimenTree.setItemIcon(xmlNode, cycleCPIcon, cycleCPIcon);	  
+			if(participantRegStatus.match("Pending"))
+       		{
+       			specimenTree.setItemIcon(xmlNode, pendingCycleCPIcon, pendingCycleCPIcon);	  
+       		}
+       		else
+       		{
+				specimenTree.setItemIcon(xmlNode, cycleCPIcon, cycleCPIcon);	  
+       		}
 		}
 		if(nodeType.match("SpecimenCollectionGroup"))
 		{
 	    	var scgNodeId:String = xmlNode.@scgCollectionStatus;
-			if(scgNodeId.match("Pending"))
+			if(scgNodeId.match("Pending") || scgNodeId.match("Not Collected"))
        		{
        			specimenTree.setItemIcon(xmlNode, pendingSCGIcon, pendingSCGIcon);	  
 			}
@@ -423,39 +452,116 @@
 	 {
 		if(specimenTree.selectedItem != null)
 		{
-		    //Retrieving the selected node id 
-		    var id : String = specimenTree.selectedItem.@id;
+	    	var type:String = specimenTree.selectedItem.@type;
+	    	if(type.match("Phase") || type.match("Arm") || type.match("Cycle"))
+	    	{
+	    		chkForCollectionProtocolType(type);
+	    	}
+	    	else
+	    	{
+		   		//Retrieving the selected node id 
+		 	    var id : String = specimenTree.selectedItem.@id;
+		 	   //Selected CP and selected participants
+		 	   var selectedParticipant:NameValueBean= new NameValueBean();
+	    	   selectedParticipant = pCombo.selectedItem as NameValueBean
+		  	   var selectedParticipantId :String = selectedParticipant.value; 
+		   	   var selectedCp : NameValueBean = new NameValueBean();
+	    	   selectedCp =  cpCombo.selectedItem as NameValueBean;
+			   var selectedCpId :String = selectedCp.value;
+				//display name of selected tree node
+		    	var displayName : String = specimenTree.selectedItem.@name;
+	    	
+	    	   //invoking java script method
+		    	var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
+		    	navigateToURL(url,"_self"); 
+			
+			}
+		 } 
+	}
+          
+     private function chkForCollectionProtocolType(type:String):void
+     {
+	 	var remoteObj1:RemoteObject =  new RemoteObject(); 
+		remoteObj1.destination = "cdeService";
+
+		var id : String = specimenTree.selectedItem.@id;
+		 //Selected CP and selected participants
+		var selectedParticipant:NameValueBean= new NameValueBean();
+	    selectedParticipant = pCombo.selectedItem as NameValueBean
+		var selectedParticipantId :String = selectedParticipant.value; 
+	   	var type:String = specimenTree.selectedItem.@type;
+		var selectedCpId:String = "-1";
+	   	var index:int =id.indexOf("_");
+	   	if(index != -1)
+	   	{
+	   		selectedCpId = id.substr(index+1);
+ 	
+	   	}
+		if(type.match("Arm"))
+		{	
+			remoteObj1.chkArmShifting(selectedCpId,selectedParticipantId);
+			remoteObj1.addEventListener(ResultEvent.RESULT,armChkHandler);
+			remoteObj1.addEventListener("fault",faultHandler);
+		}
+		else
+		{
+			onCollectionProtolcolNodeClick();
+		}
+		
+     }     
+    	/*
+	  Event Handler for Temp Collection
+	*/
+   	public function armChkHandler(pevent:ResultEvent):void
+	{	  
+	    var chk : Boolean = pevent.result as Boolean;
+	    if(chk == true)
+	    {
+	    	Alert.show("Participant is already registered on one arm. You want to create a new registration and change the status of the Specimen collection groups under which no specimen have been collected in the old arm to Not Collected.",
+				"Arm Registration",Alert.OK | Alert.CANCEL,this,armChkHandlerAlertListener,null,Alert.OK);
+	    }
+	    else
+	    {
+	    	onCollectionProtolcolNodeClick();
+	    	
+	    }
+			
+	}
+	private function onCollectionProtolcolNodeClick():void
+	{
+			var id : String = specimenTree.selectedItem.@id;
 		    //Selected CP and selected participants
 		    var selectedParticipant:NameValueBean= new NameValueBean();
 	    	selectedParticipant = pCombo.selectedItem as NameValueBean
 		    var selectedParticipantId :String = selectedParticipant.value; 
-		    var selectedCp : NameValueBean = new NameValueBean();
-	    	selectedCp =  cpCombo.selectedItem as NameValueBean;
-			    var selectedCpId :String = selectedCp.value;
+
+			 var selectedParentCp : NameValueBean = new NameValueBean();
+	    	 selectedParentCp =  cpCombo.selectedItem as NameValueBean;
+			  var selectedParentCpId :String = selectedParentCp.value;
 	    	var type:String = specimenTree.selectedItem.@type;
-
-			//display name of selected tree node
-	    	var displayName : String = specimenTree.selectedItem.@name;
-	    	
-	    	if(type.match("Phase") || type.match("Arm") || type.match("Cycle"))
+			var selectedCpId:String = "-1";
+	    	var index:int =id.indexOf("_");
+	    	if(index != -1)
 	    	{
-	    		var index:int =id.indexOf("_");
-	    		if(index != -1)
-	    		{
-	    			selectedCpId = id.substr(index+1);
-	    			
-	    		}
-	    		displayName = specimenTree.selectedItem.@regDate;
-
+	    		selectedCpId = id.substr(index+1);
+ 		
 	    	}
-
-		   //invoking java script method
-		    var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
-	    	navigateToURL(url,"_self"); 
-		 }
-	       
+	    	var displayName:String = selectedParentCpId+":"+specimenTree.selectedItem.@regDate;
+				
+	    	
+          	var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
+		    navigateToURL(url,"_self"); 
 	}
-          
+	private function armChkHandlerAlertListener(eventObj:CloseEvent):void             
+	{
+         // Check to see if the OK button was pressed.
+          if (eventObj.detail==Alert.OK) 
+          {
+          	 onCollectionProtolcolNodeClick();
+          }
+    }
+
+      
           /*
              To resize the frames
 	  */
