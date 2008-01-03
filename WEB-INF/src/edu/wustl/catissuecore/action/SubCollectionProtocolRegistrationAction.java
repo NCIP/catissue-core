@@ -32,87 +32,84 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.util.dbManager.DAOException;
 
-public class SubCollectionProtocolRegistrationAction extends SecureAction {
+public class SubCollectionProtocolRegistrationAction extends SecureAction
+{
 
-	public ActionForward executeSecureAction(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
+	{
 
 		CollectionProtocolRegistrationForm collectionProtocolRegistrationForm = (CollectionProtocolRegistrationForm) form;
 
 		// Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
-
-		if (request.getParameter(Constants.CP_SEARCH_CP_ID) != null
-				&& request.getParameter(Constants.CP_SEARCH_PARTICIPANT_ID) != null) {
-			Long collectionProtocolId = new Long(request
-					.getParameter(Constants.CP_SEARCH_CP_ID));
-			Long participantId = new Long(request
-					.getParameter(Constants.CP_SEARCH_PARTICIPANT_ID));
-			setAttributesOfCPInForm(collectionProtocolId,
-					collectionProtocolRegistrationForm);
-			setAttributesOfParticipantInForm(participantId,
-					collectionProtocolRegistrationForm);
-			operation = chkOperation(participantId, collectionProtocolId,
-					collectionProtocolRegistrationForm);
-			request.setAttribute(Constants.CP_SEARCH_CP_ID, request
-					.getParameter(Constants.CP_SEARCH_CP_ID));
-			request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, request
-					.getParameter(Constants.CP_SEARCH_PARTICIPANT_ID));
+		Long collectionProtocolId=null,participantId=null;
+		if (request.getParameter(Constants.CP_SEARCH_CP_ID) != null && request.getParameter(Constants.CP_SEARCH_PARTICIPANT_ID) != null)
+		{
+			collectionProtocolId = new Long(request.getParameter(Constants.CP_SEARCH_CP_ID));
+			participantId = new Long(request.getParameter(Constants.CP_SEARCH_PARTICIPANT_ID));
+			
+			
+			setAttributesOfCPInForm(collectionProtocolId, collectionProtocolRegistrationForm);
+			setAttributesOfParticipantInForm(participantId, collectionProtocolRegistrationForm);
+			operation = chkOperation(participantId, collectionProtocolId, collectionProtocolRegistrationForm);
+			request.setAttribute(Constants.CP_SEARCH_CP_ID, request.getParameter(Constants.CP_SEARCH_CP_ID));
+			request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, request.getParameter(Constants.CP_SEARCH_PARTICIPANT_ID));
 		}
 
 		request.setAttribute(Constants.OPERATION, operation);
-		if (operation.equalsIgnoreCase(Constants.ADD)) {
+		if (operation.equalsIgnoreCase(Constants.ADD))
+		{
 			CollectionProtocolRegistrationForm cpform = (CollectionProtocolRegistrationForm) form;
 			cpform.setId(0);
-			if (cpform.getRegistrationDate() == null) {
+			/* setting the PPI of the main COllection protocol Registration if given */
+			if(request.getParameter("parentCPId")!= null && participantId != null)
+			{
+				Long parentCPId = new Long(request.getParameter("parentCPId"));
+				setParticipantMedicalIdentifierInForm(parentCPId,participantId,cpform);
+				System.out.println("ParentCPId:"+parentCPId);
+			}
+			if (cpform.getRegistrationDate() == null)
+			{
 
-				if (request.getParameter("regDate") != null) {
-					Date regDate = Utility.parseDate(request
-							.getParameter(Constants.REG_DATE),
-							Constants.DATE_PATTERN_YYYY_MM_DD);
+				if (request.getParameter("regDate") != null)
+				{
+					Date regDate = Utility.parseDate(request.getParameter(Constants.REG_DATE), Constants.DATE_PATTERN_YYYY_MM_DD);
 					if (regDate != null)
-						cpform.setRegistrationDate(Utility.parseDateToString(
-								regDate, Constants.DATE_PATTERN_MM_DD_YYYY));
+						cpform.setRegistrationDate(Utility.parseDateToString(regDate, Constants.DATE_PATTERN_MM_DD_YYYY));
 				}
-				if (cpform.getRegistrationDate() == null
-						|| cpform.getRegistrationDate().equals("")) {
-					cpform.setRegistrationDate(Utility.parseDateToString(
-							Calendar.getInstance().getTime(),
-							Constants.DATE_PATTERN_MM_DD_YYYY));
+				if (cpform.getRegistrationDate() == null || cpform.getRegistrationDate().equals(""))
+				{
+					cpform.setRegistrationDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
 
 				}
 			}
 		}
-		request.setAttribute(Constants.ACTIVITYSTATUSLIST,
-				Constants.ACTIVITY_STATUS_VALUES);
+		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
 		// Sets the pageOf attribute
 		String pageOf = request.getParameter(Constants.PAGEOF);
 
-		request.setAttribute(Constants.PAGEOF,
-				"pageOfCollectionProtocolRegistrationCPQuery");
+		request.setAttribute(Constants.PAGEOF, "pageOfCollectionProtocolRegistrationCPQuery");
 
 		return mapping.findForward(pageOf);
 	}
 
-	private void setAttributesOfCPInForm(Long cpId,
-			CollectionProtocolRegistrationForm form) throws DAOException {
+	private void setAttributesOfCPInForm(Long cpId, CollectionProtocolRegistrationForm form) throws DAOException
+	{
 		String sourceObjName = CollectionProtocol.class.getName();
-		String[] selectColName = { "shortTitle", "studyCalendarEventPoint" };
-		String[] whereColName = { Constants.SYSTEM_IDENTIFIER };
-		String[] whereColCond = { "=" };
-		Object[] whereColVal = { cpId };
+		String[] selectColName = {"shortTitle", "studyCalendarEventPoint"};
+		String[] whereColName = {Constants.SYSTEM_IDENTIFIER};
+		String[] whereColCond = {"="};
+		Object[] whereColVal = {cpId};
 
-		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(
-						Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
-		List list = bizLogic.retrieve(sourceObjName, selectColName,
-				whereColName, whereColCond, whereColVal,
-				Constants.AND_JOIN_CONDITION);
+		List list = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
 
-		if (list != null && !list.isEmpty()) {
+		if (list != null && !list.isEmpty())
+		{
 
 			Object[] obj = (Object[]) list.get(0);
 			String shortTitle = (String) obj[0];
@@ -127,28 +124,26 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction {
 
 	}
 
-	private void setAttributesOfParticipantInForm(Long participantId,
-			CollectionProtocolRegistrationForm form) throws DAOException {
+	private void setAttributesOfParticipantInForm(Long participantId, CollectionProtocolRegistrationForm form) throws DAOException
+	{
 
-		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(
-						Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		form.setParticipantID(participantId.longValue());
 		// cprForm.setCheckedButton(true);
-		List participantList = bizLogic.retrieve(Participant.class.getName(),
-				Constants.SYSTEM_IDENTIFIER, participantId);
-		if (participantList != null && !participantList.isEmpty()) {
+		List participantList = bizLogic.retrieve(Participant.class.getName(), Constants.SYSTEM_IDENTIFIER, participantId);
+		if (participantList != null && !participantList.isEmpty())
+		{
 			Participant participant = (Participant) participantList.get(0);
 			form.setParticipantName(participant.getMessageLabel());
 		}
 
 	}
 
-	private String chkOperation(Long participantId, Long cpId,
-			CollectionProtocolRegistrationForm form) throws DAOException {
-		boolean isParticipantRegToCP = chkParticipantRegToCP(participantId,
-				cpId, form);
+	private String chkOperation(Long participantId, Long cpId, CollectionProtocolRegistrationForm form) throws DAOException
+	{
+		boolean isParticipantRegToCP = chkParticipantRegToCP(participantId, cpId, form);
 		if (isParticipantRegToCP)
 			return Constants.EDIT;
 		else
@@ -181,39 +176,37 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction {
 	 * return false; }
 	 */
 	/* offset changes 27th dec */
-	private boolean chkParticipantRegToCP(Long participantId, Long cpId,
-			CollectionProtocolRegistrationForm form) throws DAOException {
-		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(
-						Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+	private boolean chkParticipantRegToCP(Long participantId, Long cpId, CollectionProtocolRegistrationForm form) throws DAOException
+	{
+		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		String sourceObjName = CollectionProtocolRegistration.class.getName();
-		String[] selectColName = { "id", "registrationDate", "offset",
-				"protocolParticipantIdentifier" };
-		String[] whereColName = { "participant.id", "collectionProtocol.id" };
-		String[] whereColCond = { "=", "=" };
-		Object[] whereColVal = { participantId, cpId };
+		String[] selectColName = {"id", "registrationDate", "offset", "protocolParticipantIdentifier"};
+		String[] whereColName = {"participant.id", "collectionProtocol.id"};
+		String[] whereColCond = {"=", "="};
+		Object[] whereColVal = {participantId, cpId};
 
-		List regList = bizLogic.retrieve(sourceObjName, selectColName,
-				whereColName, whereColCond, whereColVal,
-				Constants.AND_JOIN_CONDITION);
+		List regList = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
 
-		if (regList != null && !regList.isEmpty()) {
+		if (regList != null && !regList.isEmpty())
+		{
 			Object[] obj = (Object[]) regList.get(0);
 			Long id = (Long) obj[0];
 			Date regDate = (Date) obj[1];
-			if (obj[2] != null) {
+			if (obj[2] != null)
+			{
 				int offset = ((Integer) obj[2]).intValue();
 				form.setOffset(offset);
 			}
-			if (obj[3] != null) {
+			if (obj[3] != null)
+			{
 				String protocolParticipantIdentifier = (String) obj[3];
 				form.setParticipantProtocolID(protocolParticipantIdentifier);
 			}
 			form.setId(id);
 			form.setRegistrationDate(regDate.toString());
-			form.setRegistrationDate(Utility.parseDateToString(regDate,
-					Constants.DATE_PATTERN_MM_DD_YYYY));
+			form.setRegistrationDate(Utility.parseDateToString(regDate, Constants.DATE_PATTERN_MM_DD_YYYY));
 
 			return true;
 		}
@@ -223,4 +216,24 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction {
 
 	/* offset changes end */
 
+	private void setParticipantMedicalIdentifierInForm(Long parentCPId,Long participantId,CollectionProtocolRegistrationForm form) throws DAOException
+	{
+		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+
+		String sourceObjName = CollectionProtocolRegistration.class.getName();
+		String[] selectColName = {"protocolParticipantIdentifier"};
+		String[] whereColName = {"participant.id", "collectionProtocol.id"};
+		String[] whereColCond = {"=", "="};
+		Object[] whereColVal = {participantId, parentCPId};
+
+		List regList = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+
+		if (regList != null && !regList.isEmpty())
+		{
+			String PPI = (String) regList.get(0);
+			if(PPI != null)
+				form.setParticipantProtocolID(PPI);
+		}
+	}
 }

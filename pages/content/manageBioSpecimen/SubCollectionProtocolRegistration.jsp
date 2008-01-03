@@ -197,7 +197,7 @@
 						</label>
 					</td>
 					<td class="formField">
-					<%--	<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="participantProtocolID" property="participantProtocolID" readonly="<%=readOnlyValue%>" />--%>
+						<html:hidden property="participantProtocolID"/>
 						&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="participantProtocolID"/>
 					</td>
 				</tr>

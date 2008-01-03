@@ -137,7 +137,16 @@
 		{
 			if(obj1 == "<%=Constants.SUB_COLLECTION_PROTOCOL%>")
 			{
-				 window.parent.frames[1].location = "CPQuerySubCollectionProtocolRegistration.do?pageOf=pageOfCollectionProtocolRegistrationCPQuery&refresh=false&operation=add&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+pId+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&participantId="+pId+"&clickedNodeId="+id+"&regDate="+name;
+			  var nameIndex = name.indexOf(":");
+			  var parentCPId = "";
+			  var regDate = "";
+				if(nameIndex != -1)
+				{
+					parentCPId = name.substring(0,nameIndex);
+				  	regDate = name.substring(nameIndex+1);
+		    
+				}	
+				 window.parent.frames[1].location = "CPQuerySubCollectionProtocolRegistration.do?pageOf=pageOfCollectionProtocolRegistrationCPQuery&refresh=false&operation=add&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+pId+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&participantId="+pId+"&clickedNodeId="+id+"&regDate="+regDate+"&parentCPId="+parentCPId;
 			}
 		
 		else
