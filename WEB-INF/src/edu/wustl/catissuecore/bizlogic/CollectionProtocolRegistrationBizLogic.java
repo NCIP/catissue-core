@@ -756,20 +756,32 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		/* for offset 27th Dec 2007 */
 		// Check if Offset is present.If it is present then all the below
-		// hierarchy protocols are shifted according to the Offset.
-		if (collectionProtocolRegistration.getOffset()!= null && collectionProtocolRegistration.getOffset().intValue() != 0)
+		// hierarchy protocols are shifted according to the Offset.Integer offsetOld=oldCollectionProtocolRegistration.getOffset();
+		Integer offsetOld=oldCollectionProtocolRegistration.getOffset();
+		Integer offsetNew=collectionProtocolRegistration.getOffset();
+		if(offsetNew!=null)
 		{
-			collectionProtocolRegistration.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(
-					oldCollectionProtocolRegistration.getRegistrationDate(), collectionProtocolRegistration.getOffset().intValue()));
-			updateOffsetForEvents(dao, sessionDataBean, collectionProtocolRegistration, collectionProtocolRegistration.getOffset().intValue());
-			checkAndUpdateChildOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, collectionProtocolRegistration.getOffset().intValue());
-			updateForOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, collectionProtocolRegistration.getOffset().intValue());
-
+			int offset=0;
+			if(offsetOld != null)
+			offset=offsetNew.intValue()- offsetOld.intValue();
+			else
+			offset=offsetNew.intValue()-0;	
+				if(offset!= 0)
+				{
+//				collectionProtocolRegistration.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(oldCollectionProtocolRegistration.getRegistrationDate(), offset));
+				updateOffsetForEvents(dao, sessionDataBean, collectionProtocolRegistration, offset);
+				checkAndUpdateChildOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
+				updateForOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
 		}
 		else
 		{
 			updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
 		}
+		}
+		
+		
+			
+		
 		/* offset changes end */
 		// Mandar 22-Jan-07 To disable consents accordingly in SCG and
 		// Specimen(s) end
@@ -1465,6 +1477,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						{
 							cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cpr.getRegistrationDate(),
 									offset));
+							Integer offsetToSet=cpr.getOffset();
+							if(offsetToSet !=null && offsetToSet.intValue()!= 0)
+							{
+								cpr.setOffset(new Integer(offset + offsetToSet.intValue()));
+							}
+							else
 							cpr.setOffset(new Integer(offset));
 							updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
 							dao.update(cpr, sessionDataBean, true, true, false);
@@ -1523,6 +1541,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 					{
 						cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cpr.getRegistrationDate(),
 								offset));
+						Integer offsetToSet=cpr.getOffset();
+						if(offsetToSet !=null && offsetToSet.intValue()!= 0)
+						{
+							cpr.setOffset(new Integer(offset + offsetToSet.intValue()));
+						}
+						else
 						cpr.setOffset(new Integer(offset));
 						updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
 						dao.update(cpr, sessionDataBean, true, true, false);
@@ -1604,6 +1628,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			while (specimenCollectionGroupIterator.hasNext())
 			{
 				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupIterator.next();
+				Integer offsetToSet=specimenCollectionGroup.getOffset();
+				if(offsetToSet !=null && offsetToSet.intValue()!= 0)
+				{
+					specimenCollectionGroup.setOffset(new Integer(offset + offsetToSet.intValue()));
+				}
+				else
 				specimenCollectionGroup.setOffset(new Integer(offset));
 				dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
 			}
