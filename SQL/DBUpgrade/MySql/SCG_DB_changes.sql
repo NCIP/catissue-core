@@ -496,6 +496,34 @@ alter table `CatIssue_Abs_Speci_coll_Group` drop column `CLINICAL_REPORT_ID`;
 
 UPDATE CATISSUE_SPECIMEN_PROTOCOL SET ENROLLMENT=0 WHERE ENROLLMENT IS NULL;
 
+/* For cp Enhancements */
+alter table `catissue_collection_protocol` ,add column `CP_TYPE` varchar (50),add column `PARENT_CP_ID` bigint (20), add column `SEQUENCE_NUMBER` integer,add column `STUDY_CALENDAR_EVENT_POINT` double;
+alter table CATISSUE_COLLECTION_PROTOCOL add index FK32DC439DBC7298B9 (PARENT_CP_ID), add constraint FK32DC439DBC7298B9 foreign key (PARENT_CP_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
+
+alter table `CATISSUE_COLL_PROT_REG` ,add column `DATE_OFFSET` integer;
+alter table `catissue_specimen_coll_group` ,add column `DATE_OFFSET` integer;
+
+INSERT INTO CSM_PROTECTION_ELEMENT
+           (PROTECTION_ELEMENT_NAME,
+            PROTECTION_ELEMENT_DESCRIPTION,
+            OBJECT_ID,
+            APPLICATION_ID)
+VALUES     ('edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction',
+            'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction',
+            'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction',
+            1);
+
+INSERT INTO CSM_PG_PE
+           (PROTECTION_GROUP_ID,
+            PROTECTION_ELEMENT_ID)
+VALUES     (18,
+            (SELECT PROTECTION_ELEMENT_ID
+             FROM   CSM_PROTECTION_ELEMENT
+             WHERE  OBJECT_ID = 'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction' limit 1));
+
+
+/*CP Enhacements finish */
+
 commit;
 
 
