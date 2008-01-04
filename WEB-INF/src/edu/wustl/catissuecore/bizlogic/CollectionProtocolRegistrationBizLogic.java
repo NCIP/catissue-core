@@ -138,7 +138,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	{
 		Integer sequenceNumber = collectionProtocolRegistration.getCollectionProtocol().getSequenceNumber();
 		CollectionProtocol parentCPofArm = collectionProtocolRegistration.getCollectionProtocol().getParentCollectionProtocol();
-		Integer offset = null;
 		Date dateofCP = new Date();
 		if (parentCPofArm != null)
 		{
@@ -169,29 +168,19 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						{
 							CollectionProtocolRegistration childCollectionProtocolRegistration = createCloneOfCPR(collectionProtocolRegistration, cp);
 							setRegDate(childCollectionProtocolRegistration, cp.getStudyCalendarEventPoint(), dateofCP);
-							try
+							if (childCollectionProtocolRegistration.getOffset() != null)
 							{
-								offset = getOffsetFromPreviousSeqNoCP(dao, sessionDataBean, parentCPofArm, collectionProtocolRegistration
-										.getParticipant().getId());
-							}
-							catch (ClassNotFoundException e)
-							{
-								e.printStackTrace();
-							}
-							if (offset != null)
-							{
-								if (offset.intValue() != 0)
+								if (childCollectionProtocolRegistration.getOffset().intValue() != 0)
 								{
-									childCollectionProtocolRegistration.setOffset(offset);
-									childCollectionProtocolRegistration
-											.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(
-													childCollectionProtocolRegistration.getRegistrationDate(), offset.intValue()));
+									childCollectionProtocolRegistration.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(
+													childCollectionProtocolRegistration.getRegistrationDate(), childCollectionProtocolRegistration.getOffset().intValue()));
 								}
 							}
 							insertCPR(childCollectionProtocolRegistration, dao, sessionDataBean);
 						}
 						else
 						{
+							/* this lines of code is for second arm registered manually*/
 							setRegDate(collectionProtocolRegistrationCheck, cp.getStudyCalendarEventPoint(), dateofCP);
 							dao.update(collectionProtocolRegistrationCheck, sessionDataBean, true, true, false);
 							checkAndUpdateChildDate(dao, sessionDataBean, collectionProtocolRegistrationCheck);
@@ -438,6 +427,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		if (armFound == false)
 		{
 			createSCG(collectionProtocolRegistration, dao, sessionDataBean);
+			
 			chkForChildCP(collectionProtocolRegistration, dao, sessionDataBean);
 		}
 
@@ -464,8 +454,15 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						{
 
 							CollectionProtocolRegistration cloneCPR = createCloneOfCPR(cpr, cp);
-
 							setRegDate(cloneCPR, cp.getStudyCalendarEventPoint(), dateofCP);
+							if (cloneCPR.getOffset() != null)
+							{
+								if (cloneCPR.getOffset().intValue() != 0)
+								{
+									cloneCPR.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(
+											cloneCPR.getRegistrationDate(), cloneCPR.getOffset().intValue()));
+								}
+							}
 							insertCPR(cloneCPR, dao, sessionDataBean);
 						}
 						else
@@ -597,7 +594,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						}
 					}
 				}
-
+				specimenCollectionGroup.setOffset(collectionProtocolRegistration.getOffset());
 				specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
 				scgCollection.add(specimenCollectionGroup);
 				//specimenBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
