@@ -246,6 +246,8 @@
 				<exclude name="**/WEB-INF/classes/edu/wustl/catissuecore/domain/**" />
 				<exclude name="**/WEB-INF/lib/csmapi.jar" />
 				<exclude name="**/META-INF/**" />
+				<exclude name="Happy.jsp" />
+				<exclude name="Criteria.jsp" />
 			</fileset>
 		</war>
 	</target>
@@ -365,8 +367,8 @@
 		<copy todir="${zip.dir}/catissue_de_integration_client" overwrite="true">
 					<fileset dir="${base.dir}/catissue_de_integration_client" />
 				</copy>
-		<copy todir="${zip.dir}/caTissueCore_caCORE_Client" overwrite="true">
-			<fileset dir="${base.dir}/caTissueCore_caCORE_Client" />
+		<copy todir="${zip.dir}/caTissueSuite_Client" overwrite="true">
+			<fileset dir="${base.dir}/caTissueSuite_Client" />
 		</copy>
 		<!--- caTIES related files  start-->
 		<copy todir="${zip.dir}/caTIES_conf" overwrite="true">
@@ -463,8 +465,8 @@
 			<formatter type="xml" />
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.dir}/coverage.ser" />
 			<classpath>				
-				<pathelement path="${base.dir}/caTissueCore_caCORE_Client/conf" />
-				<fileset dir="./caTissueCore_caCORE_Client/lib">
+				<pathelement path="${base.dir}/caTissueSuite_Client/conf" />
+				<fileset dir="./caTissueSuite_Client/lib">
 				<include name="*.jar" />
 				</fileset>
 			</classpath>
@@ -717,13 +719,13 @@
 			</fileset>
 		</jar>
 		
-		<copy todir="${base.dir}/caTissueCore_caCORE_Client/lib" overwrite="true">
+		<copy todir="${base.dir}/caTissueSuite_Client/lib" overwrite="true">
             <fileset dir="${lib.dir}">
             	<include name="commonpackage.jar"/>
             </fileset>
         </copy>
 
-		<copy todir="${base.dir}/caTissueCore_caCORE_Client/lib" overwrite="true">
+		<copy todir="${base.dir}/caTissueSuite_Client/lib" overwrite="true">
             <fileset dir="${temp.dir}">
             	<include name="catissuecore.jar"/>
             </fileset>
