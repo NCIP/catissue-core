@@ -32,7 +32,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -45,7 +44,6 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
-import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -117,8 +115,7 @@ public class CreateSpecimenAction extends SecureAction
 		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance()
 				.getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
 
-		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+	
 		TreeMap containerMap = new TreeMap();
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
@@ -204,6 +201,8 @@ public class CreateSpecimenAction extends SecureAction
 						}
 						if(spClass!=null && createForm.getStContSelection() != Constants.RADIO_BUTTON_VIRTUALLY_LOCATED)
 						{
+						StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
+							.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
 								spClass, 0,exceedingMaxLimit,sessionData,true);
 						ActionErrors errors = (ActionErrors) request
@@ -323,7 +322,7 @@ public class CreateSpecimenAction extends SecureAction
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
 
-		String[] fields = {"id"};
+		//String[] fields = {"id"};
 
 		// Setting the parent specimen list
 		/*List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0], true);
