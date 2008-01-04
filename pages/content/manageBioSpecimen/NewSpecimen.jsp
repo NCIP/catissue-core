@@ -12,7 +12,6 @@
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
@@ -42,16 +41,9 @@
 
 	String staticEntityName=null;
 	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN;	
+	//Falguni:Performance Enhancement.
 	Long specimenEntityId = null;
-	if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
-	{
-		specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
-	}
-	else
-	{
-		specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
-		CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
-	}	
+	specimenEntityId =(Long)request.getAttribute("specimenEntityId");
 	
 	if (form != null) 
 	{
