@@ -182,6 +182,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						{
 							/* this lines of code is for second arm registered manually*/
 							setRegDate(collectionProtocolRegistrationCheck, cp.getStudyCalendarEventPoint(), dateofCP);
+							Integer offset=collectionProtocolRegistration.getOffset();
+							if(offset!=null)
+							{
+								collectionProtocolRegistrationCheck.setOffset(offset);
+								collectionProtocolRegistrationCheck.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(collectionProtocolRegistrationCheck.getRegistrationDate(),offset.intValue()));		
+							}
 							dao.update(collectionProtocolRegistrationCheck, sessionDataBean, true, true, false);
 							checkAndUpdateChildDate(dao, sessionDataBean, collectionProtocolRegistrationCheck);
 
@@ -358,6 +364,14 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 					if (cpr != null)
 					{
 						setRegDate(cpr, cp.getStudyCalendarEventPoint(), cpr.getRegistrationDate());
+						Integer offset=collectionProtocolRegistration.getOffset();
+						{
+							if(offset!=null)
+							{
+								cpr.setOffset(offset);
+								cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cpr.getRegistrationDate(), offset.intValue()));
+							}
+						}
 						dao.update(cpr, sessionDataBean, true, true, false);
 						if (cp.getChildCPCollection() != null && cp.getChildCPCollection().size() != 0)
 						{
