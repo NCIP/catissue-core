@@ -32,8 +32,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
@@ -51,6 +53,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
@@ -656,7 +659,20 @@ public class NewSpecimenAction extends SecureAction
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
-
+		//Falguni:Performance Enhancement.
+		Long specimenEntityId = null;
+		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
+		{
+			specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
+		}
+		else
+		{
+			specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+			CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
+		}	
+		
+		request.setAttribute("specimenEntityId",specimenEntityId);
+		
 		if (specimenForm.isVirtuallyLocated())
 		{
 			request.setAttribute("disabled", "true");
@@ -672,7 +688,7 @@ public class NewSpecimenAction extends SecureAction
 		{
 			reportId=new Long(-2);
 		}
-		HttpSession session = request.getSession();
+		HttpSession session =request.getSession();
 		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 		//Logger.out.debug("End of specimen action");
 
