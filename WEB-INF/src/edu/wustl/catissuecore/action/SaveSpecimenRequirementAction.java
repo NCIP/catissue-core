@@ -181,6 +181,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setStorageContainerForAliquotSpecimem(null);
 		specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
 		specimenRequirementBean.setDeriveSpecimen(null);
+		specimenRequirementBean.setNoOfDeriveSpecimen(0);
 		return quantityPerAliquot;
 	}
 	
@@ -208,6 +209,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			 specimenRequirementBean.setStorageContainerForAliquotSpecimem("");
 			 //Derive
 			 specimenRequirementBean.setDeriveSpecimen(null);
+			 specimenRequirementBean.setNoOfDeriveSpecimen(0);
 			 deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),specimenRequirementBean);
 			 deriveSpecimenCount = deriveSpecimenCount + 1;
 		 }

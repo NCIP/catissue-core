@@ -357,7 +357,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		//Derive
 		LinkedHashMap deriveSpecimenLinkedHashMap = null;
 		
-		if(specimenRequirementBean.getDeriveSpecimenCollection()!=null)
+		if(specimenRequirementBean.getDeriveSpecimenCollection()!=null&&!specimenRequirementBean.getDeriveSpecimenCollection().isEmpty())
 		{
 			deriveSpecimenLinkedHashMap = CollectionProtocolUtil.getDerviredObjectMap(specimenRequirementBean.getDeriveSpecimenCollection().values());
 			createSpecimenTemplateForm.setNoOfDeriveSpecimen(specimenRequirementBean.getDeriveSpecimenCollection().size());
