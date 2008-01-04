@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
+import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
@@ -435,24 +436,35 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		}
 		
 		/* Vaishali - Inserting authorization data */
+		//Falguni :Performance Enhancement Authorize only one time per SCG
 		Iterator itr = aliquotList.iterator();
+		Set protectionObjects = new HashSet();
+		AbstractSpecimenCollectionGroup objSCG =null ;
 		while (itr.hasNext())
 		{
 			Specimen aliquotSpecimen = (Specimen) itr.next();
 
-			Set protectionObjects = new HashSet();
+			
 			protectionObjects.add(aliquotSpecimen);
 			if (aliquotSpecimen.getSpecimenCharacteristics() != null)
 			{
 				protectionObjects.add(aliquotSpecimen.getSpecimenCharacteristics());
 			}
+			if(objSCG == null)
+			{
+				objSCG = aliquotSpecimen.getSpecimenCollectionGroup();
+			}
+		}	
+		if(objSCG!=null)
+		{
 			try
 			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(aliquotSpecimen.getSpecimenCollectionGroup()));
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(objSCG));
 			}
 			catch (SMException e)
 			{
-				throw handleSMException(e);
+					throw handleSMException(e);
+				
 			}
 		}
 
