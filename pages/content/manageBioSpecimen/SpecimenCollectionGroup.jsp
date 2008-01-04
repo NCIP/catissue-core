@@ -2,22 +2,18 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete" %>
-
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
-
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.*"%>
-
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 
 
 <script src="jss/script.js" type="text/javascript"></script>
@@ -37,20 +33,12 @@
 		String signedConsentDate = "";
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 		boolean isAddNew = false;	
-		
+		//Falguni:Performance Enhancement.
 		Long scgEntityId = null;
+		scgEntityId = (Long)request.getAttribute("scgEntityId");
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
 		
-		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId") != null)
-		{
-			scgEntityId = (Long)CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId");
-		}
-		else
-		{
-			scgEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
-			CatissueCoreCacheManager.getInstance().addObjectToCache("scgEntityId",scgEntityId);		
-		}
 				
 		String id = request.getParameter("id");
 		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
