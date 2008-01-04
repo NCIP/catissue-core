@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -47,7 +48,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class table="CATISSUE_SPECIMEN"
  * @hibernate.discriminator column="SPECIMEN_CLASS" 
  */
-public class Specimen extends AbstractDomainObject implements Serializable
+public class Specimen extends AbstractDomainObject implements Serializable, IActivityStatus
 {
 
 	/**

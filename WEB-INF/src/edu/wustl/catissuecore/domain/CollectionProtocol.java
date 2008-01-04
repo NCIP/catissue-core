@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.util.KeyComparator;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -33,7 +34,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Mandar Deshmukh
  */
-public class CollectionProtocol extends SpecimenProtocol implements java.io.Serializable,Comparable
+public class CollectionProtocol extends SpecimenProtocol implements java.io.Serializable,Comparable, IActivityStatus
 {
 	private static final long serialVersionUID = 1234567890L;
 	

@@ -16,6 +16,7 @@ import java.util.HashSet;
 import edu.wustl.catissuecore.actionForm.ContainerForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.global.Validator;
@@ -26,7 +27,7 @@ import edu.wustl.common.util.global.Validator;
  * @author Ashwin Gupta 
  * @hibernate.class table="CATISSUE_CONTAINER"
  */
-public class Container extends AbstractDomainObject implements Serializable 
+public class Container extends AbstractDomainObject implements Serializable, IActivityStatus 
 {
     
     protected static final long serialVersionUID = 1234567890L;

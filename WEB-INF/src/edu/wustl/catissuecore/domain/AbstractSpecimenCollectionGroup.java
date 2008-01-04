@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
@@ -22,7 +23,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author abhijit_naik
  *
  */
-public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObject implements Serializable{
+public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObject implements Serializable, IActivityStatus{
 
     /**
 	 * 

@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
@@ -33,7 +34,7 @@ import edu.wustl.common.util.logger.Logger;
  * processing, or utilization.
  * @hibernate.class table="CATISSUE_USER"
  */
-public class User extends AbstractDomainObject implements Serializable
+public class User extends AbstractDomainObject implements Serializable, IActivityStatus
 {
 
     /**

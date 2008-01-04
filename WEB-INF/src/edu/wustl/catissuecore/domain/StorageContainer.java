@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -29,7 +30,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass table="CATISSUE_STORAGE_CONTAINER"
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
-public class StorageContainer extends Container
+public class StorageContainer extends Container implements IActivityStatus
 {
 
 	protected Double tempratureInCentigrade;

@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
@@ -40,7 +41,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author aniruddha_phadnis
  * @author gautam_shetty
  */
-public class Participant extends AbstractDomainObject implements java.io.Serializable
+public class Participant extends AbstractDomainObject implements java.io.Serializable, IActivityStatus
 {
 	private static final long serialVersionUID = 1234567890L;
 	

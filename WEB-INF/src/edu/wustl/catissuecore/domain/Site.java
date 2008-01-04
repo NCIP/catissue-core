@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
@@ -22,7 +23,7 @@ import edu.wustl.common.util.logger.Logger;
  * A physical location associated with biospecimen collection, storage, processing, or utilization.
  * @hibernate.class table="CATISSUE_SITE"
  */
-public class Site extends AbstractDomainObject implements java.io.Serializable
+public class Site extends AbstractDomainObject implements java.io.Serializable, IActivityStatus
 {
 	private static final long serialVersionUID = 1234567890L;
 
