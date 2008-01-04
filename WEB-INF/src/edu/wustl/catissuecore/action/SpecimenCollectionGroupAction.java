@@ -29,7 +29,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
@@ -52,6 +54,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
@@ -274,7 +277,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 //		loadPaticipants(specimenCollectionGroupForm.getCollectionProtocolId() , bizLogic, request);
 		/**For Migration End**/
 		//Populating the protocol participants id registered to a given protocol
-		loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+		//By Abhishek Mehta -Performance Enhancement
+		//loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 
 		String protocolParticipantId = specimenCollectionGroupForm.getProtocolParticipantIdentifier();
 		//Populating the participants Medical Identifier for a given participant
@@ -358,7 +362,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					/**For Migration Start**/
 //					loadPaticipants(cpID , bizLogic, request);
 					/**For Migration Start**/
-					loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+					//By Abhishek Mehta -Performance Enhancement
+					//loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 					
 					/**
 					 * Name: Vijay Pande
@@ -445,7 +450,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				/**For Migration Start**/
 //				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
 				/**For Migration End**/
-				loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+				//By Abhishek Mehta -Performance Enhancement
+				//loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 
 				specimenCollectionGroupForm.setParticipantId(participantId.longValue());
 				specimenCollectionGroupForm.setRadioButtonForParticipant(1);
@@ -505,7 +511,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				/**For Migration Start**/
 //				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
 				/**For Migration End**/
-				loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+				//By Abhishek Mehta -Performance Enhancement
+				//loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 				specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
 				specimenCollectionGroupForm.setRadioButtonForParticipant(2);
 				String cpParticipantId = getParticipantIdForProtocolId(participantProtocolId,bizLogic);
@@ -609,6 +616,18 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		request.setAttribute(Constants.PAGEOF,pageOf);
 		Logger.out.debug("page of in Specimen coll grp action:"+request.getParameter(Constants.PAGEOF));
 		// -------called from Collection Protocol Registration end -------------------------------
+		//Falguni:Performance Enhancement.
+		Long scgEntityId = null;
+		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId") != null)
+		{
+			scgEntityId = (Long)CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId");
+		}
+		else
+		{
+			scgEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
+			CatissueCoreCacheManager.getInstance().addObjectToCache("scgEntityId",scgEntityId);		
+		}
+		request.setAttribute("scgEntityId",scgEntityId );
 		/**
 		 * Name : Ashish Gupta
 		 * Reviewer Name : Sachin Lale 
@@ -889,14 +908,14 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	}
 */
 	
-	/**
+	/**Commented by Abhishek Mehta	
 	 * Method to load protocol participant identifier number list
 	 * @param protocolID
 	 * @param bizLogic
 	 * @param request
 	 * @throws Exception
 	 */
-	private void loadPaticipantNumberList(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
+	/*private void loadPaticipantNumberList(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
@@ -926,7 +945,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 
 		Logger.out.debug("Paticipant Number List"+list);
 		request.setAttribute(Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST, list);
-	}
+	}*/
 
 	/**
 	 * Method to load list of collection protocol event point
@@ -1047,30 +1066,22 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	private void setCalendarEventPoint(List calendarEventPointList, HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm) throws DAOException
 	{
 //		Patch ID: Bug#3184_27
+		//By Abhishek Mehta 
 		int numberOfSpecimen = 1;
 		if(!calendarEventPointList.isEmpty())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
-			SpecimenCollectionRequirementGroup collectionRequirementGroup = (SpecimenCollectionRequirementGroup)collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
-		
-			IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-			Collection specimenRequirementCollection = (Collection)bizlogic.retrieveAttribute(SpecimenCollectionRequirementGroup.class.getName(),collectionRequirementGroup.getId(),"elements(specimenCollection)");
 			
-			if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
+			//Set checkbox status depending upon the days of study calendar event point. If it is zero, then unset the restrict
+			//checkbox, otherwise set the restrict checkbox
+			Double studyCalendarEventPoint = collectionProtocolEvent.getStudyCalendarEventPoint();
+			if(studyCalendarEventPoint.doubleValue() == 0)
 			{
-				//Populate the number of Specimen Requirements.
-				numberOfSpecimen = specimenRequirementCollection.size();
-				//Set checkbox status depending upon the days of study calendar event point. If it is zero, then unset the restrict
-				//checkbox, otherwise set the restrict checkbox
-				Double studyCalendarEventPoint = collectionProtocolEvent.getStudyCalendarEventPoint();
-				if(studyCalendarEventPoint.doubleValue() == 0)
-				{
-					specimenCollectionGroupForm.setRestrictSCGCheckbox("false");
-				}
-				else
-				{
-					specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
-				}
+				specimenCollectionGroupForm.setRestrictSCGCheckbox("false");
+			}
+			else
+			{
+				specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
 			}
 		}
 		else if(calendarEventPointList.isEmpty())
@@ -1081,7 +1092,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		//Sets the value for number of specimen field on the specimen collection group page. 
 		//Set the number of actual specimen requirements for validation purpose.
 		//This value is used in validate method of SpecimenCollectionGroupForm.java.
-		request.setAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS, numberOfSpecimen + "");
+//		request.setAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS, numberOfSpecimen + "");
 	}
 
 	//Consent Tracking Virender Mehta	
