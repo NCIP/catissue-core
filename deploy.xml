@@ -410,7 +410,7 @@
 		<antcall target="configure_titli" />
 		<antcall target="build_war" />
 		<antcall target="copy_files" />
-		<replace file="${basedir}/caTissueCore_caCORE_Client/conf/remoteService.xml">
+		<replace file="${basedir}/caTissueSuite_Client/conf/remoteService.xml">
            <replacefilter token="@@HOST@@" value="${jboss.server.host}" />
            <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
         </replace>
