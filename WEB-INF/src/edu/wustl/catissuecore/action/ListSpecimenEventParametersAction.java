@@ -28,7 +28,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm;
+import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
@@ -49,6 +51,7 @@ import edu.wustl.catissuecore.domain.ThawEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -255,7 +258,24 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				request.getSession().removeAttribute("CPQuery");
 			}
 		}
-
+		Long specimenEntityId = null;
+		try
+		{
+			if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
+			{
+				specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
+			}
+			else
+			{
+				specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+				CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
+			}
+		}
+		catch (Exception e)
+		{
+			Logger.out.error(e.getMessage(), e);
+		}
+		request.setAttribute("specimenEntityId",specimenEntityId);
 		return mapping.findForward((String) request.getParameter(Constants.PAGEOF));
 	}
 
