@@ -76,17 +76,8 @@
 		}
 //		System.out.println("iframeSrc : "+ iframeSrc);
 	//------------- Mandar 04-july-06 QuickEvents
-	Long specimenEntityId = null;
-	if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
-	{
-		specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
-	}
-	else
-	{
-		specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
-		CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
-	}	
-
+	Long specimenEntityId = null;	
+	specimenEntityId = (Long)request.getAttribute("specimenEntityId");
 	session.setAttribute("EventOrigin", "SpecimenEventParameters");
 %>
 
