@@ -70,7 +70,7 @@ public class PrintAction extends Action
     			HashMap forwardToPrintMap = (HashMap)request.getAttribute("forwardToPrintMap");
     			
     			//Check for Specimen type of object.Retrieve object based on Id and call printerimpl class
-		    	if (forwardToPrintMap != null && forwardToPrintMap.get("specimenId")!=null)
+		    	if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenId")!=null)
 				{
 					String specimenId = (String) forwardToPrintMap.get("specimenId");
 					Specimen objSpecimen = retriveSpecimen(specimenId,request);
@@ -94,7 +94,7 @@ public class PrintAction extends Action
 		        	}
 	    			
 				}
-		    	if(forwardToPrintMap != null &&  request.getParameter("forwardTo")!=null &&( request.getParameter("forwardTo").equals("CPQueryPrintAliquot") || request.getParameter("forwardTo").equals("printAliquot")))
+		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0 && request.getParameter("forwardTo")!=null &&( request.getParameter("forwardTo").equals("CPQueryPrintAliquot") || request.getParameter("forwardTo").equals("printAliquot")))
 		    	{
 		    	  
 		    		List<AbstractDomainObject> listofAliquot = new ArrayList();
