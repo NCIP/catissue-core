@@ -11,7 +11,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
+
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 
@@ -58,17 +58,9 @@ tr#hiddenCombo
 				
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT;
-		
+		//Falguni:Performance Enhancement.
 		Long participantEntityId = null;
-				if (CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId") != null)
-		{
-			participantEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId");
-		}
-		else
-		{
-			participantEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
-			CatissueCoreCacheManager.getInstance().addObjectToCache("participantEntityId",participantEntityId);		
-		}
+		participantEntityId = (Long)request.getAttribute("participantEntityId");
 		
 		String id = request.getParameter("id");
 
