@@ -5,7 +5,6 @@
 
 <%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <script src="jss/javaScript.js" type="text/javascript"></script>
@@ -29,16 +28,9 @@
 	{
  		specimenIdentifier= (String) session.getAttribute(Constants.SPECIMEN_ID);//,specimenIdentifier);
 	}
+//      Falguni:Performance Enhancement.
 	Long specimenEntityId = null;
-	if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
-	{
-		specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
-	}
-	else
-	{
-		specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
-		CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
-	}
+	specimenEntityId = (Long)request.getAttribute("specimenEntityId");
 	
 	String consentTierCounter =(String)request.getParameter("consentTierCounter");
 	String staticEntityName=null;

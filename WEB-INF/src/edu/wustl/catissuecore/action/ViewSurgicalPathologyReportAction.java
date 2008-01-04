@@ -10,7 +10,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
+import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
@@ -24,6 +26,7 @@ import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -77,6 +80,18 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         request.setAttribute(Constants.REQ_PATH, "");
         request.setAttribute(Constants.SUBMITTED_FOR, submittedFor);
         request.setAttribute(Constants.FORWARD_TO, forwardTo);
+//      Falguni:Performance Enhancement.
+		Long specimenEntityId = null;
+        if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
+    	{
+    		specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
+    	}
+    	else
+    	{
+    		specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+    		CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
+    	}
+        request.setAttribute("specimenEntityId",specimenEntityId );
         if(pageOf.equalsIgnoreCase(Constants.PAGEOF_NEW_SPECIMEN)|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
         {
         	request.setAttribute(Constants.ID,id.toString());
