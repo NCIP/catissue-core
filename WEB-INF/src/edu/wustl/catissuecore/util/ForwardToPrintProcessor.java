@@ -12,10 +12,10 @@ package edu.wustl.catissuecore.util;
 
 import java.util.HashMap;
 
+import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -85,8 +85,12 @@ public class ForwardToPrintProcessor extends AbstractForwardToProcessor
 		
 			if (Constants.ALIQUOT.equals(((Specimen) domainObject).getLineage()) && actionForm.getOperation().equals(Constants.ADD))
 			{
-				forwardToPrintMap = (HashMap) ((Specimen) domainObject).getAliqoutMap();
-				return forwardToPrintMap;
+				if (actionForm instanceof AliquotForm && (((AliquotForm)actionForm).getPrintCheckbox() != null))
+				{
+					forwardToPrintMap = (HashMap) ((Specimen) domainObject).getAliqoutMap();
+					return forwardToPrintMap;
+				}
+			
 			} 
 			if (actionForm.getForwardTo().equals("deriveMultiple"))
 			{
