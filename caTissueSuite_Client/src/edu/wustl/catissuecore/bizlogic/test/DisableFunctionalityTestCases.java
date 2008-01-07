@@ -14,6 +14,7 @@ import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -21,6 +22,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.common.util.HQLCriteria;
 
 public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 	public void testCreateStorageContainerUnderClosedSite()
@@ -108,79 +110,98 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 			 assertTrue("Could not create specimen", true);
 			 
 		 }
-	} 
+	}   
 	
-	public void testDisabledStorageContainerHavingSubContainers()
-	{
-		try{
-			
-			Site site= BaseTestCaseUtility.initSite();			
-			site = (Site) appService.createObject(site); 
-			
-			StorageType storageType = BaseTestCaseUtility.initStorageType();
-			storageType = (StorageType) appService.createObject(storageType); 
-			
-			
-			StorageContainer parentContainer = new StorageContainer();
-			parentContainer.setStorageType(storageType);
-			parentContainer.setSite(site);
+	public void testDisableStorageContainerHavingChildContainer()
+    {
+        try
+        {
+            Site site= BaseTestCaseUtility.initSite();            
+            site = (Site) appService.createObject(site);
+            
+            StorageType storageType = BaseTestCaseUtility.initStorageType();
+            storageType = (StorageType) appService.createObject(storageType);
+            
+            
+            StorageContainer parentContainer = new StorageContainer();
+            parentContainer.setStorageType(storageType);
+            parentContainer.setSite(site);
 
-			Integer conts = new Integer(2);
-			parentContainer.setNoOfContainers(conts);
-			parentContainer.setTempratureInCentigrade(new Double(-30));
-			parentContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
+            Integer conts = new Integer(2);
+            parentContainer.setNoOfContainers(conts);
+            parentContainer.setTempratureInCentigrade(new Double(-30));
+            parentContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
-			Capacity capacity = new Capacity();
-			capacity.setOneDimensionCapacity(new Integer(5));
-			capacity.setTwoDimensionCapacity(new Integer(5));
-			parentContainer.setCapacity(capacity);
-			
-			parentContainer.setNoOfContainers(new Integer(3));
-			
-			Collection holdsStorageTypeCollection = new HashSet();
-			holdsStorageTypeCollection.add(storageType);
-			parentContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
-			parentContainer.setActivityStatus("Active");
-			parentContainer.setFull(Boolean.valueOf(false));
-			
-			parentContainer = (StorageContainer) appService.createObject(parentContainer); 
-			System.out.println("Parent:"+parentContainer.getId());
-			TestCaseUtility.setObjectMap(parentContainer, StorageContainer.class);
-		
-			StorageContainer subStorageContainer = new StorageContainer();
-			subStorageContainer.setStorageType(storageType);
-			subStorageContainer.setParent(parentContainer);
-			subStorageContainer.setPositionDimensionOne(new Integer(1));
-			subStorageContainer.setPositionDimensionOne(new Integer(1));
-			subStorageContainer.setNoOfContainers(new Integer(1));
-			subStorageContainer.setActivityStatus("Active");
-			Capacity capacity1 = new Capacity();
-			capacity1.setOneDimensionCapacity(new Integer(5));
-			capacity1.setTwoDimensionCapacity(new Integer(5));
-			subStorageContainer.setCapacity(capacity1);
-			subStorageContainer.setFull(Boolean.valueOf(false));
-			subStorageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
-			
-			subStorageContainer = (StorageContainer) appService.createObject(subStorageContainer);
-			System.out.println("Child container:"+subStorageContainer.getId());
-			System.out.println("ParentC:"+subStorageContainer.getParent().getName());
-			
-			
-			parentContainer.setActivityStatus("Disabled");
-		
-			StorageContainer updatedparentContainer = (StorageContainer) appService.updateObject(parentContainer);
-			System.out.println("disabled Parent Container Name :"+updatedparentContainer.getId());
-			System.out.println("Parent Disabled:"+updatedparentContainer.getName());
-		
-			assertEquals("Disabled", subStorageContainer.getActivityStatus());
-			
-	 }
-		 catch(Exception e){
-			 Logger.out.error(e.getMessage(),e);
-			 e.printStackTrace();
-			 assertFalse("could not add object", true);
-		 }
+            Capacity capacity = new Capacity();
+            capacity.setOneDimensionCapacity(new Integer(5));
+            capacity.setTwoDimensionCapacity(new Integer(5));
+            parentContainer.setCapacity(capacity);
+            
+            parentContainer.setNoOfContainers(new Integer(3));
+            
+            Collection holdsStorageTypeCollection = new HashSet();
+            holdsStorageTypeCollection.add(storageType);
+           
+            parentContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+            
+            CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
+            cp = (CollectionProtocol) appService.createObject(cp);
+            
+            Collection collectionProtocolCollection = new HashSet();
+            collectionProtocolCollection.add(cp);
+           
+            parentContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+            
+            SpecimenArrayType sat = BaseTestCaseUtility.initSpecimenSpecimenArrayType();
+            sat = (SpecimenArrayType) appService.createObject(sat);
+            Collection holdsSpecimenArrayTypeCollection = new HashSet();
+            holdsSpecimenArrayTypeCollection.add(sat);
+           
+            parentContainer.setHoldsSpecimenArrayTypeCollection(holdsSpecimenArrayTypeCollection);
+            
+            parentContainer.setActivityStatus("Active");
+            parentContainer.setFull(Boolean.valueOf(false));
+            
+            parentContainer = (StorageContainer) appService.createObject(parentContainer);
+            System.out.println("Parent:"+parentContainer.getId());
+           
+            System.out.println("Parent:"+parentContainer.getChildren().size());
+            TestCaseUtility.setObjectMap(parentContainer,StorageContainer.class);
+        
+            StorageContainer subStorageContainer = new StorageContainer();
+            subStorageContainer.setStorageType(storageType);
+            subStorageContainer.setParent(parentContainer);
+            subStorageContainer.setPositionDimensionOne(new Integer(1));
+            subStorageContainer.setPositionDimensionOne(new Integer(2));
+            subStorageContainer.setNoOfContainers(new Integer(1));
+            subStorageContainer.setActivityStatus("Active");
+            Capacity capacity1 = new Capacity();
+            capacity1.setOneDimensionCapacity(new Integer(5));
+            capacity1.setTwoDimensionCapacity(new Integer(5));
+            subStorageContainer.setCapacity(capacity1);
+            subStorageContainer.setFull(Boolean.valueOf(false));
+           
+            subStorageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+            
+            subStorageContainer = (StorageContainer) appService.createObject(subStorageContainer);
+            
+            System.out.println("Childcontainer:"+subStorageContainer.getId());
+           
+            System.out.println("ParentC:"+subStorageContainer.getParent().getName());
+           
+            System.out.println("Parent:"+parentContainer.getChildren().size());
+            
+            StorageContainer parentConatiertoUpdate = getStorageContainer(parentContainer.getId());
+            
+            parentConatiertoUpdate.setActivityStatus("Disabled");
+            StorageContainer updatedparentContainer = (StorageContainer) appService.updateObject(parentConatiertoUpdate);
+            
+     }catch(Exception e){
+		 Logger.out.error(e.getMessage(),e);
+		 e.printStackTrace();
+		 assertFalse("Failed to disable storage Container", true);
 	}
+    }
 	
 	 
 	
@@ -333,9 +354,9 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 			 assertTrue("CollectionProtocol is already marked as closed", true);
 		}
 		
-	} 
+	}  
 	
-  public void testParticipantRegistrationUnderDisabledCP()
+/*  public void testParticipantRegistrationUnderDisabledCP()
 	{
 		try{			
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
@@ -408,7 +429,7 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 		}
 			
 		
-	} 
+	} */
 	
 	public void testDisableParticipantHavingSpecimens()
 	{
@@ -419,7 +440,7 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse("Failed to create Collection Protocol", true);
 		}
 		
 		
@@ -431,7 +452,7 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to create collection protocol", true);
+           	assertFalse("Failed to create participant", true);
 		}
 		System.out.println("Participant:"+participant.getFirstName());
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -491,7 +512,7 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse("Failed to create site", true);
 		}
 		scg.setSpecimenCollectionSite(site);
 		scg.setName("New SCG"+UniqueKeyGeneratorUtil.getUniqueKey());		    
@@ -503,7 +524,7 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse("Failed to create SCG", true);
 		}
 		
 		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -517,11 +538,12 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse("Failed to create specimen", true);
 		}
 		
-		participant.setActivityStatus("Disabled");
+		
 		try{
+			participant.setActivityStatus("Disabled");
 			participant = (Participant) appService.updateObject(participant);
 		}
 		catch(Exception e){
@@ -531,7 +553,7 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 		}
 		
 		
-	}
+	}   
 	
 	
 	public SpecimenCollectionGroup createSCGWithConsents(CollectionProtocol cp){
@@ -611,5 +633,64 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 		}
 		return scg;				
 }
+ private StorageContainer getStorageContainer(Long id) throws Exception
+    {
+        StorageContainer stContainer = new StorageContainer ();
+        stContainer.setId(id);
+        
+        List l = (List)appService.search(StorageContainer.class,stContainer);
+        StorageContainer storageContainer = (StorageContainer)l.get(0);
+        
+        Collection collectionProtocolCollection = new HashSet();
+        String hql = "select elements(sc.collectionProtocolCollection)from edu.wustl.catissuecore.domain.StorageContainer as sc where sc.id = "+ id;
+        HQLCriteria criteria = new HQLCriteria(hql);
+        List collectionProtocolCollectionOld = (List)appService.query(criteria, CollectionProtocol.class.getName());
+        Iterator itCollectionProtocolCollectionOld = collectionProtocolCollectionOld.iterator();
+        while(itCollectionProtocolCollectionOld.hasNext())
+        {
+            CollectionProtocol cp = (CollectionProtocol)itCollectionProtocolCollectionOld.next();
+            CollectionProtocol cpN = new CollectionProtocol();
+            cpN.setId(cp.getId());
+            //List list =(List)appService.search(CollectionProtocol.class, cpN);
+            collectionProtocolCollection.add(cpN);
+        }
+       
+        storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+        
+        Collection holdsStorageTypeCollection =  new HashSet();
+        String hql1 = "select elements(sc.holdsStorageTypeCollection)from edu.wustl.catissuecore.domain.StorageContainer as sc where sc.id = "+ id;
+        HQLCriteria criteria1 = new HQLCriteria(hql1);
+        List holdsStorageTypeCollectionOld = (List)appService.query(criteria1, StorageType.class.getName());
+        Iterator itHoldsStorageTypeCollectionOld = holdsStorageTypeCollectionOld.iterator();
+        while(itHoldsStorageTypeCollectionOld.hasNext())
+        {
+            StorageType st = (StorageType)itHoldsStorageTypeCollectionOld.next();
+            StorageType stN = new StorageType();
+            stN.setId(st.getId());
+            //List list = (List)appService.search(StorageType.class, stN);
+            holdsStorageTypeCollection.add(stN);
+        }
+       
+        storageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+        
+        
+        Collection holdsSpecimenArrayTypeCollection = new HashSet();
+        String hql2 = "select elements(sc.holdsSpecimenArrayTypeCollection) from edu.wustl.catissuecore.domain.StorageContainer as sc where sc.id = "+ id; 
+        HQLCriteria criteria2 = new HQLCriteria(hql2);
+        List holdsSpecimenArrayTypeCollectionOld = (List)appService.query(criteria2, SpecimenArrayType.class.getName());
+        Iterator itHoldsSpecimenArrayTypeCollectionOld = holdsSpecimenArrayTypeCollectionOld.iterator();
+        while(itHoldsSpecimenArrayTypeCollectionOld.hasNext())
+        {
+            SpecimenArrayType sat = (SpecimenArrayType)itHoldsSpecimenArrayTypeCollectionOld.next();
+            SpecimenArrayType satN = new SpecimenArrayType();
+            satN.setId(sat.getId());
+            //List list =(List)appService.search(CollectionProtocol.class, satN);
+            holdsSpecimenArrayTypeCollection.add(satN);
+        }
+       
+        storageContainer.setHoldsSpecimenArrayTypeCollection(holdsSpecimenArrayTypeCollection);
+        
+        return storageContainer;
+    }
 }
 
