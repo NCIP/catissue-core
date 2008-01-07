@@ -550,8 +550,8 @@ public class OrderBizLogic extends DefaultBizLogic
 			if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW))
 			{
 				orderStatusNew++;
-			}
-			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+			}//kalpana bug #5839 If the specimens inside the specimen Array and if it's status is ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION then mark it complete.
+			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)|| oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
 			{
 				orderStatusCompleted++;
 			}
