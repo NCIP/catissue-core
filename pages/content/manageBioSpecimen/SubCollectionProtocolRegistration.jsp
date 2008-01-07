@@ -94,7 +94,26 @@
 			
 			//Changes made by Baljeet for Flexxxx related
 		    top.frames["cpAndParticipantView"].refreshCpParticipants();
-		
+		    function showhide()
+			{
+				toggleLayer('wait'); 
+				toggleLayer('summary');
+			}
+			function toggleLayer( whichLayer )
+			{
+			  var elem, vis;
+			  if( document.getElementById ) // this is the way the standards work
+			    elem = document.getElementById( whichLayer );
+			  else if( document.all ) // this is the way old msie versions work
+		    	  elem = document.all[whichLayer];
+			  else if( document.layers ) // this is the way nn4 works
+		  		  elem = document.layers[whichLayer];
+		 	 vis = elem.style;
+			  // if the style.display value is blank we try to figure it out here
+			  if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
+			    vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
+			  vis.display = (vis.display==''||vis.display=='block')?'none':'block';
+		}	
 		</script>
 	<%}%>
 
@@ -108,17 +127,17 @@
 	<%=messageKey%>
 </html:messages>
 
-<html:form action="<%=formName%>">
+<html:form action="<%=formName%>"  onsubmit="showhide()">
 	
 	<%
 			String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][1]+"')";
 			String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][1]+"')";									
 			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+			String normalSubmit = normalSubmitFunctionName + ","+"showhide()"+","+confirmDisableFuncName;
 			String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
 	%>	
 	
-		
+	<div id="summary">	
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
 		<!-- NEW Collection Protocol Registration ENTRY BEGINS-->
@@ -329,6 +348,14 @@
 
 	</tr>
 </table>
-
+</div>
+<div id="wait" style="display:none;" >
+	<logic:equal name="operation" value="<%=Constants.ADD%>">
+		<bean:message key="subCollectionProtocolReg.add.msg"/>
+	</logic:equal>
+	<logic:equal name="operation" value="<%=Constants.EDIT%>">
+		<bean:message key="subCollectionProtocolReg.edit.msg"/>
+	</logic:equal>
+</div>
 
 </html:form>
