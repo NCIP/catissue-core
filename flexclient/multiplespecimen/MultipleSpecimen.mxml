@@ -3,6 +3,7 @@
 	<mx:Style source="../defaltTheme.css"/>
 <mx:Script>
 	<![CDATA[
+		import util.MetadataModel;
 		import mx.messaging.management.Attribute;
 		import util.Constants;
 		import util.Utility;
@@ -176,7 +177,6 @@
 
 		private function addMoreSpecimen(event:Event):void
 		{
-			
 			var spData:SpecimenData = initSpecimenData();
 			specimenColl.addItem(spData);	
 			setPagination();

@@ -17,8 +17,17 @@
 		[Bindable]	public var spData:SpecimenData;
 		[Bindable]	public var mspParameter:MSPParameter;
 		[Bindable]	public var specimenNo:String;
+		
+		[Bindable] public var specimenClassList:ArrayCollection;
+		[Bindable] public var tissueSiteList:ArrayCollection;
+		[Bindable] public var tissueSideList:ArrayCollection;
+		[Bindable] public var pathologicalStatusList:ArrayCollection;
+
+		
 		private function preInit():void
 		{
+			initAllDataProviderList();
+			
 
 
 			spData = parentApplication.spRepeater.currentItem;
@@ -30,7 +39,13 @@
 			
 			
 		}
-		
+		private function initAllDataProviderList() : void
+		{
+			this.specimenClassList = new ArrayCollection(MetadataModel.getInstance().specimenClassPVList.toArray());
+			this.tissueSiteList = new ArrayCollection(MetadataModel.getInstance().tissueSitePVList.toArray());
+			this.tissueSideList = new ArrayCollection(MetadataModel.getInstance().tissueSidePVList.toArray());
+			this.pathologicalStatusList = new ArrayCollection(MetadataModel.getInstance().pathologicalStatusPVList.toArray());
+		}
 		public function creationComp():void
 		{
 			bindData();
@@ -166,7 +181,9 @@
 		}
 		private function switchSpType(event:Event):void
 		{
+			
 			spData.specimenTypePVList = MetadataModel.getInstance().getSpecimenTypeCollection(spData.specimenClass);
+			
 			spData.calcUnit();
 			if(event != null)
 			{
@@ -294,7 +311,8 @@
 		
 
 	<components:MyCanvas>
-		<adobe:AutoComplete id="spClass" dataProvider="{MetadataModel.getInstance().specimenClassPVList}" change="switchSpType(event)"/>
+	<adobe:AutoComplete id="spClass" dataProvider="{specimenClassList}" focusOut="switchSpType(event)" change="switchSpType(event)" dataChange="Alert.show('data change')" lookAhead="true"/>
+<!--		<mx:ComboBox id="spClass" dataProvider="{MetadataModel.getInstance().specimenClassPVList}" focusOut="switchSpType(event)" change="switchSpType(event)"/>-->
 	</components:MyCanvas>
 	
 	<components:MyCanvas>
@@ -302,15 +320,16 @@
 	</components:MyCanvas>
 		
 	<components:MyCanvas id="tissueSiteBox">	
-		<adobe:AutoComplete id="spTissueSite" dataProvider="{MetadataModel.getInstance().tissueSitePVList}" lookAhead="true"/>
+		<adobe:AutoComplete id="spTissueSite" dataProvider="{tissueSiteList}" lookAhead="true"/>
 	</components:MyCanvas>
 	
 	<components:MyCanvas id="tissueSideBox">
-		<adobe:AutoComplete id="spTissueSide" dataProvider="{MetadataModel.getInstance().tissueSidePVList}" lookAhead="true"/>
+	<adobe:AutoComplete id="spTissueSide" dataProvider="{tissueSideList}" lookAhead="true"/>
+
 	</components:MyCanvas>
 	
 	<components:MyCanvas id="pathStatusBox">
-		<adobe:AutoComplete id="spPathologicalStatus" dataProvider="{MetadataModel.getInstance().pathologicalStatusPVList}" lookAhead="true"/>
+		<adobe:AutoComplete id="spPathologicalStatus" dataProvider="{pathologicalStatusList}" lookAhead="true"/>
 	</components:MyCanvas>
 
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">

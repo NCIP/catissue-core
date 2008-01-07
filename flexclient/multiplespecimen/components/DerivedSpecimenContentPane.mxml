@@ -15,12 +15,19 @@
 		import util.MSPParameter;
 		[Bindable]	public var derivedData:SpecimenData ;
 		[Bindable]	public var msParamter:MSPParameter;
+		
+		
+		[Bindable] public var specimenClassList:ArrayCollection;
 
 		private function preInit():void
 		{
+			initAllDataProviderList();
 			
 			
-			
+		}
+		private function initAllDataProviderList() : void
+		{
+			this.specimenClassList = new ArrayCollection(MetadataModel.getInstance().specimenClassPVList.toArray());
 		}
 		private function creationComp():void
 		{
@@ -175,7 +182,7 @@
 	
 	
 	<components:MyCanvas>
-		<adobe:AutoComplete id="spClass" dataProvider="{MetadataModel.getInstance().specimenClassPVList}" change="switchSpType(event)"/>
+		<adobe:AutoComplete id="spClass" dataProvider="{specimenClassList}" change="switchSpType(event)"/>
 	</components:MyCanvas>
 		
 	<components:MyCanvas>
