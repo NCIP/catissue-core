@@ -18,6 +18,8 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationService;
@@ -141,20 +143,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 		    }
 		} 
 	   
-	 /*  public void testAddUser()
-		 {
-			 try{
-				User user = BaseTestCaseUtility.initUser();
-				user = (User)appService.createObject(user);
-				Logger.out.info("Object created successfully");
-				System.out.println("Object created successfully");
-				assertFalse("Test failed.User successfully added", true);
-			 }
-			 catch(Exception e){
-				 e.printStackTrace();
-				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-			 }
-		 }*/
+	 
 	   
 	 public void testAddSiteWithScientistLogin()
 		{
@@ -293,7 +282,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 		{
 			Department dept = new Department();
 	    	Logger.out.info(" searching domain object");
-	  	dept.setId(new Long(1));
+	    	dept.setId(new Long(1));
 	        try {
 	      	 List resultList = appService.search(Department.class,dept);
 	      	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
@@ -369,7 +358,127 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 	         	assertFalse("Does not find Domain Object", true);
 		 		
 	        }
+		} 
+	
+	 public void testAddStorageTypeWithScientistLogin()
+		{
+			try{
+				StorageType storagetype = BaseTestCaseUtility.initStorageType();			
+				System.out.println(storagetype);
+				storagetype = (StorageType) appService.createObject(storagetype);
+				TestCaseUtility.setObjectMap(storagetype, StorageType.class);
+				System.out.println("Object created successfully");	
+				assertFalse("Test failed.StorageType successfully created", true);
+			 }
+			 catch(Exception e){
+				 e.printStackTrace();
+				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+			 }
 		}
+		
+		public void testSearchStorageTypeScientistLogin()
+		{
+			StorageType getStoragetype = (StorageType)TestCaseUtility.getObjectMap(StorageType.class);
+			StorageType storagetype = new StorageType();
+			storagetype.setId(getStoragetype.getId());
+	    	Logger.out.info(" searching domain object");
+	    	try {
+	        	 List resultList = appService.search(StorageType.class,storagetype);
+	        	 StorageType returnedStorageType = (StorageType) resultList.get(0);
+	        	 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedStorageType.getName());
+	        	 System.out.println(" Domain Object is successfully Found ---->  :: " + returnedStorageType.getName());
+	          } 
+	          catch (Exception e) {
+	           	Logger.out.error(e.getMessage(),e);
+	           	e.printStackTrace();
+	        	assertFalse("Does not find Storage Type ", true);	
+	        }
+		}
+		
+		public void testUpdateStorageTypeScientistLogin()
+		{
+			StorageType getStorageType = (StorageType) TestCaseUtility.getObjectMap(StorageType.class);
+			StorageType storagetype =  new  StorageType();
+			storagetype.setId(getStorageType.getId());
+	    	Logger.out.info("updating domain object------->"+storagetype);
+		    try 
+			{
+		    	List resultList = appService.search(StorageType.class,storagetype);
+	        	StorageType returnedStorageType = (StorageType) resultList.get(0);
+		    	BaseTestCaseUtility.updateStorageType(returnedStorageType);	
+		    	StorageType updatedStorageType = (StorageType) appService.updateObject(returnedStorageType);
+		       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageType);
+		       	assertFalse("Storage Type object successfully updated with supervisor login ---->"+updatedStorageType, true);
+		    } 
+		    catch (Exception e) {
+		       	Logger.out.error(e.getMessage(),e);
+		 		e.printStackTrace();
+		 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+		    }
+		}
+		
+		public void testAddStorageContainerScientistLogin()
+		{
+			try{
+				StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
+				System.out.println(storageContainer);
+				storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+				TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
+				System.out.println("Object created successfully");
+				assertFalse("Storage Container added successfully with supervisor login", true);
+			 }
+			 catch(Exception e){
+				 e.printStackTrace();
+				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+			 }
+		}
+		
+		public void testSearchStorageContainerScientistLogin()
+		{
+			StorageContainer getStorageContainer =(StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
+			StorageContainer storageContainer = new StorageContainer();
+	    	Logger.out.info(" searching domain object");
+	    	storageContainer.setId(getStorageContainer.getId());
+	   
+	         try {
+	        	 List resultList = appService.search(StorageContainer.class,storageContainer);        	
+	    		 StorageContainer returnedStorageContainer = (StorageContainer) resultList.get(0);
+	    		 Logger.out.info(" Domain Object is successfully Found ---->  :: " 
+	        				 + returnedStorageContainer.getName());
+	            } 
+	          catch (Exception e) {
+	           	Logger.out.error(e.getMessage(),e);
+	           	e.printStackTrace();
+	           	assertFalse("Does not find Storage Container with Supervisor Login", true);
+		 		
+	          }
+		}
+		
+		/*public void testUpdateStorageContainerScientistLogin()
+		{
+			StorageContainer getStorageContainer = (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
+			StorageContainer storageContainer = new StorageContainer();
+			storageContainer.setId(getStorageContainer.getId());
+			System.out.println("Before Update");
+	    	Logger.out.info("updating domain object------->"+storageContainer);
+		    try 
+			{
+		    	List resultList = appService.search(StorageContainer.class ,storageContainer);
+		    	getStorageContainer =(StorageContainer) resultList.get(0);
+		    	BaseTestCaseUtility.updateStorageContainer(getStorageContainer);
+		    	System.out.println("After Update");
+		    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(getStorageContainer);
+		       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
+		       	assertFalse("Storage Container successfully updated with with Supervisor Login  ---->"+updatedStorageContainer, true);
+		    } 
+		    catch (Exception e) {
+		       	Logger.out.error(e.getMessage(),e);
+		 		e.printStackTrace();
+		 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+		    }
+		}*/
+	    
+	
 /*	public void testSearchBioHazardWithScientistLogin()
 		{
 	      try {
@@ -394,7 +503,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 		 		
 	        }
 		}*/
-	public void testSearchCollectionProtocol()
+	public void testSearchCollectionProtocolWithScientistLogin()
 		{
 	  	CollectionProtocol collectionProtocol = new CollectionProtocol();
 	  	CollectionProtocol cachedCollectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
@@ -416,7 +525,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 	        }
 		}
 	
-	public void testSearchDistributionProtocol()
+	public void testSearchDistributionProtocolWithScientistLogin()
 		{
 			try {		
 			    DistributionProtocol distributionProtocol = new DistributionProtocol();
@@ -438,7 +547,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 		          }
 		}
 	  
-	  public void testAddParticipant()
+	  public void testAddParticipantWithScientistLogin()
 		{
 			try{
 				Participant participant= BaseTestCaseUtility.initParticipant();			
@@ -455,7 +564,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 			 }
 		}
 	  
-	  public void testAddParticipantWithCPR()
+	  public void testAddParticipantWithCPRWithScientistLogin()
 		{
 			try{
 				Participant participant= BaseTestCaseUtility.initParticipantWithCPR();			
@@ -477,7 +586,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 			 }
 		}
 	  
-	  public void testUpdateParticipant()
+	  public void testUpdateParticipantWithScientistLogin()
 		{
 			Participant participant =  BaseTestCaseUtility.initParticipant();
 			Logger.out.info("updating domain object------->"+participant);
@@ -496,7 +605,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 		 		
 		    }
 		}
-	  public void testSearchParticipant()
+	  public void testSearchParticipantWithScientistLogin()
 		{
 			Participant participant = new Participant();
 			Logger.out.info(" searching domain object");
@@ -620,7 +729,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase {
 			}
 		}
 		
-		public void testSearchSpecimen()
+		public void testSearchSpecimenWithScientistLogin()
 		  {
 			Specimen specimen = new TissueSpecimen();
 			Specimen cachedSpecimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);

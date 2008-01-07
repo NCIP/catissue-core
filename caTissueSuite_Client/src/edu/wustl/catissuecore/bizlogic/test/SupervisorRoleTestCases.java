@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
@@ -189,7 +190,127 @@ public class SupervisorRoleTestCases extends BaseTestCase{
  	    }
  	}
     
-     public void testAddBioHazardWithSupervisorLogin()
+    //storage Type and storageContainer Testcases
+    
+    public void testAddStorageTypeWithSupervisorLogin()
+	{
+		try{
+			StorageType storagetype = BaseTestCaseUtility.initStorageType();			
+			System.out.println(storagetype);
+			storagetype = (StorageType) appService.createObject(storagetype);
+			TestCaseUtility.setObjectMap(storagetype, StorageType.class);
+			System.out.println("Object created successfully");	
+			assertFalse("Test failed.StorageType successfully created", true);
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+			 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+		 }
+	}
+	
+	public void testSearchStorageTypeWithSupervisorLogin()
+	{
+		StorageType getStoragetype = (StorageType)TestCaseUtility.getObjectMap(StorageType.class);
+		StorageType storagetype = new StorageType();
+		storagetype.setId(getStoragetype.getId());
+    	Logger.out.info(" searching domain object");
+    	try {
+        	 List resultList = appService.search(StorageType.class,storagetype);
+        	 StorageType returnedStorageType = (StorageType) resultList.get(0);
+        	 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedStorageType.getName());
+        	 System.out.println(" Domain Object is successfully Found ---->  :: " + returnedStorageType.getName());
+          } 
+          catch (Exception e) {
+           	Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+        	assertFalse("Does not find Storage Type ", true);	
+        }
+	}
+	
+	public void testUpdateStorageTypeWithSupervisorLogin()
+	{
+		StorageType getStorageType = (StorageType) TestCaseUtility.getObjectMap(StorageType.class);
+		StorageType storagetype =  new  StorageType();
+		storagetype.setId(getStorageType.getId());
+    	Logger.out.info("updating domain object------->"+storagetype);
+	    try 
+		{
+	    	List resultList = appService.search(StorageType.class,storagetype);
+        	StorageType returnedStorageType = (StorageType) resultList.get(0);
+	    	BaseTestCaseUtility.updateStorageType(returnedStorageType);	
+	    	StorageType updatedStorageType = (StorageType) appService.updateObject(returnedStorageType);
+	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageType);
+	       	assertFalse("Storage Type object successfully updated with supervisor login ---->"+updatedStorageType, true);
+	    } 
+	    catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+	    }
+	}
+	
+	public void testAddStorageContainerSupervisorLogin()
+	{
+		try{
+			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
+			System.out.println(storageContainer);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
+			System.out.println("Object created successfully");
+			assertFalse("Storage Container added successfully with supervisor login", true);
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+			 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+		 }
+	}
+	
+	public void testSearchStorageContainerSupervisorLogin()
+	{
+		StorageContainer getStorageContainer =(StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
+		StorageContainer storageContainer = new StorageContainer();
+    	Logger.out.info(" searching domain object");
+    	storageContainer.setId(getStorageContainer.getId());
+   
+         try {
+        	 List resultList = appService.search(StorageContainer.class,storageContainer);        	
+    		 StorageContainer returnedStorageContainer = (StorageContainer) resultList.get(0);
+    		 Logger.out.info(" Domain Object is successfully Found ---->  :: " 
+        				 + returnedStorageContainer.getName());
+            } 
+          catch (Exception e) {
+           	Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Does not find Storage Container with Supervisor Login", true);
+	 		
+          }
+	}
+	
+	public void testUpdateStorageContainerSupervisorLogin()
+	{
+		StorageContainer storageContainer =  new StorageContainer();
+		storageContainer.setId(new Long(3));
+		System.out.println("Before Update");
+    	Logger.out.info("updating domain object------->"+storageContainer);
+	    try 
+		{
+	    	StorageContainer getStorageContainer = (StorageContainer) appService.search(StorageContainer.class ,storageContainer);
+	    	BaseTestCaseUtility.updateStorageContainer(getStorageContainer);
+	    	System.out.println("After Update");
+	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(getStorageContainer);
+	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
+	       	assertFalse("Storage Container successfully updated with with Supervisor Login  ---->"+updatedStorageContainer, true);
+	    } 
+	    catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+	    }
+	}
+    
+    
+    
+   public void testAddBioHazardWithSupervisorLogin()
 	{
 		try{
 			Biohazard biohazard= BaseTestCaseUtility.initBioHazard();			
@@ -222,32 +343,7 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 	    }
 	}
 	
-	/*public void testSearchBioHazardWithSupervisorLogin()
-	{
-        try {
-        	Biohazard biohazard = new Biohazard();
-    		Biohazard cachedBiohazard = (Biohazard) TestCaseUtility.getObjectMap(Biohazard.class);
-        	Logger.out.info("searching domain object");
-        	//biohazard.setId((Long) cachedBiohazard.getId());
-        	biohazard.setId(new Long(2));
-        	List resultList = appService.search(Biohazard.class,biohazard);
-        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
-        	 {
-	    		 Biohazard returnedBiohazard = (Biohazard) resultsIterator.next();
-	    		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
-	    		 System.out.println(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
-	    		 assertTrue("Object added successfully", true);
-             }
-          } 
-          catch (Exception e) {
-           	Logger.out.error(e.getMessage(),e);
-            System.out.println(e.getMessage());
-           	e.printStackTrace();
-           	fail("Does not find Domain Object");
-	 		
-          }
-	}*/
-    
+	   
      public void testAddCollectionProtocolWithSupervisorLogin()
 	{
 		try
@@ -443,7 +539,7 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 		          }
 		}  
     
-   public void testAddParticipant()
+   public void testAddParticipantWithSupervisorLogin()
 	{
 		try{
 			Participant participant= BaseTestCaseUtility.initParticipant();			
@@ -459,7 +555,7 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 		 }
 	}
     
-    public void testUpdateParticipant()
+    public void testUpdateParticipantWithSupervisorLogin()
 	{
 		Participant participant =  BaseTestCaseUtility.initParticipant();
     	Logger.out.info("updating domain object------->"+participant);
@@ -704,7 +800,7 @@ public class SupervisorRoleTestCases extends BaseTestCase{
 				e.printStackTrace();
 				assertTrue("Able to create specimen array in container which supervisor don't have access", true);
 			}
-		}
+		}  
 	 
 	 
 	
@@ -790,6 +886,6 @@ public class SupervisorRoleTestCases extends BaseTestCase{
            	assertFalse("Failed to register participant", true);
 		}
 		return scg;				
-  }
+  }  
           
 }
