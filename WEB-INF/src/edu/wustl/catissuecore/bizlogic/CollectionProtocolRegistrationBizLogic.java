@@ -1170,7 +1170,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		String errMsg = "";
 		// check for update opeartion and old values equals to new values
 		int count = 0;
-		/*if (oldcollectionProtocolRegistration != null)
+		if (oldcollectionProtocolRegistration != null)
 		{
 			if (collectionProtocolRegistration.getParticipant() != null && oldcollectionProtocolRegistration.getParticipant() != null)
 			{
@@ -1201,7 +1201,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			// if count=0 return i.e. old values equals new values
 			if (count == 2)
 				return;
-		}*/
+		}
 		if (collectionProtocolRegistration.getParticipant() != null)
 		{
 			// build query for collectionProtocol_id AND participant_id
