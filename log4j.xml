@@ -7,7 +7,7 @@
 <!--                                                                       -->
 <!-- ===================================================================== -->
 
-<!-- $Id: log4j.xml,v 1.1 2006/09/27 08:48:16 Poornima Exp $ -->
+<!-- $Id: log4j.xml,v 1.1.8.1 2008/01/07 08:00:13 abhijit_naik Exp $ -->
 
 <!--
    | For more configuration infromation and examples see the Jakarta Log4j
@@ -25,6 +25,7 @@
       <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
       <param name="File" value="${jboss.server.home.dir}/log/server.log"/>
       <param name="Append" value="false"/>
+      <param name="Threshold" value="INFO"/>
 
       <!-- Rollover at midnight each day -->
       <param name="DatePattern" value="'.'yyyy-MM-dd"/>
