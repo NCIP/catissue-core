@@ -189,6 +189,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 								collectionProtocolRegistrationCheck.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(collectionProtocolRegistrationCheck.getRegistrationDate(),offset.intValue()));		
 							}
 							dao.update(collectionProtocolRegistrationCheck, sessionDataBean, true, true, false);
+							updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, collectionProtocolRegistrationCheck);
 							checkAndUpdateChildDate(dao, sessionDataBean, collectionProtocolRegistrationCheck);
 
 						}
@@ -373,6 +374,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 							}
 						}
 						dao.update(cpr, sessionDataBean, true, true, false);
+						updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, cpr);
 						if (cp.getChildCPCollection() != null && cp.getChildCPCollection().size() != 0)
 						{
 							checkAndUpdateChildDate(dao, sessionDataBean, cpr);
@@ -381,6 +383,26 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				}
 			}
 		}
+	}
+	private void updateOffsetForEventsForAlreadyRegisteredCPR(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration) throws UserNotAuthorizedException, DAOException
+	{
+		Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
+				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);
+		if (!specimenCollectionGroupCollection.isEmpty())
+		{
+			Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
+			while (specimenCollectionGroupIterator.hasNext())
+			{
+				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupIterator.next();
+				Integer offset=collectionProtocolRegistration.getOffset();
+				if(offset!=null)
+				{
+				specimenCollectionGroup.setOffset(new Integer(offset));
+				}
+				dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
+			}
+		}
+
 	}
 
 	private List getChildColl(CollectionProtocol parent)
