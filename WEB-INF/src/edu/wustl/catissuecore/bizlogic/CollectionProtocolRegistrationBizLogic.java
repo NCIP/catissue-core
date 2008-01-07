@@ -1420,7 +1420,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			if (userIDList != null && userIDList.size() > 0)
 			{
 				userID = (Long) userIDList.get(0);
+				sessionDataBean.setUserId(userID);
 			}
+			
 		}
 		return userID;
 	}
