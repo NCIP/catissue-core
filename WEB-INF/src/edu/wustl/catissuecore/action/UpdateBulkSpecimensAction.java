@@ -28,16 +28,13 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
@@ -78,6 +75,8 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 			ActionMessages actionMessages = new ActionMessages();
 			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"object.add.successOnly","Specimens"));
+			//specimenSummaryForm.setShowbarCode(true);
+			//specimenSummaryForm.setShowLabel(true);
 			saveMessages(request, actionMessages);
 			specimenSummaryForm.setReadOnly(true);
 			if(request.getParameter("pageOf") != null)
@@ -157,6 +156,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 				specimenDataBean.getPathologicalStatus());
 		specimen.setType(specimenDataBean.getType());
 		specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
+		specimen.setComment(specimenDataBean.getComment());
 		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
 		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());		

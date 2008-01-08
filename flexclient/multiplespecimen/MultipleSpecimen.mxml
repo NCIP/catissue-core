@@ -412,6 +412,7 @@
 				specimenDatForEdit.tissueSide = specimenData.tissueSide;
 				specimenDatForEdit.tissueSite = specimenData.tissueSite;
 				specimenDatForEdit.pathologicalStatus = specimenData.pathologicalStatus;
+				specimenDatForEdit.comment = specimenData.comment;
 				specimenDatForEdit.quantity = specimenData.quantity;
 				specimenDatForEdit.derivedSpColl = specimenData.derivedSpColl;
 				specimenDatForEdit.exIdColl = specimenData.exIdColl;
