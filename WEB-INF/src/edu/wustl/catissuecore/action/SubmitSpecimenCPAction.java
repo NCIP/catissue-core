@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -365,19 +366,24 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		
 		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
-		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
+		
+
 		
 		if(specimenDataBean.getSpecimenEventCollection()!=null && !specimenDataBean.getSpecimenEventCollection().isEmpty())
 		{
 			Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
-
+			HashSet speEventParamSet = new HashSet();
 			while(iterator.hasNext())
 			{
 				SpecimenEventParameters specimenEventParameters =
 					(SpecimenEventParameters) iterator.next();
-				specimenEventParameters.setSpecimen(specimen);
-				
+				if(specimenEventParameters.getUser()!=null)
+				{
+					specimenEventParameters.setSpecimen(specimen);
+					speEventParamSet.add(specimenEventParameters);
+				}
 			}
+			specimen.setSpecimenEventCollection(speEventParamSet);
 		}
 		
 		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());
