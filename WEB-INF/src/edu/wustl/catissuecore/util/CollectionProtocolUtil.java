@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -36,6 +37,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -711,29 +713,31 @@ public class CollectionProtocolUtil {
 		Collection<SpecimenEventParameters> specimenEventCollection = 
 			new LinkedHashSet<SpecimenEventParameters>();
 
-		CollectionEventParameters collectionEvent = new CollectionEventParameters();
-
-		collectionEvent.setCollectionProcedure(specimenRequirementBean.getCollectionEventCollectionProcedure());
-		collectionEvent.setContainer(specimenRequirementBean.getCollectionEventContainer());
-		User collectionEventUser = new User();
-		collectionEventUser.setId(new Long(specimenRequirementBean.getCollectionEventUserId()));
-		collectionEvent.setUser(collectionEventUser);
-		collectionEvent.setSpecimen(specimen);
-		
-		specimenEventCollection.add(collectionEvent);
+		if(specimenRequirementBean.getCollectionEventContainer()!=null)
+		{
+			CollectionEventParameters collectionEvent = new CollectionEventParameters();
+			collectionEvent.setCollectionProcedure(specimenRequirementBean.getCollectionEventCollectionProcedure());
+			collectionEvent.setContainer(specimenRequirementBean.getCollectionEventContainer());
+			User collectionEventUser = new User();
+			collectionEventUser.setId(new Long(specimenRequirementBean.getCollectionEventUserId()));
+			collectionEvent.setUser(collectionEventUser);
+			collectionEvent.setSpecimen(specimen);
+			specimenEventCollection.add(collectionEvent);
+		}
 		
 		//setting received event values
-		ReceivedEventParameters receivedEvent = new ReceivedEventParameters();
 		
-		receivedEvent.setReceivedQuality(specimenRequirementBean.getReceivedEventReceivedQuality());
-
-		User receivedEventUser = new User();
-		receivedEventUser.setId(new Long(specimenRequirementBean.getReceivedEventUserId()));
-		receivedEvent.setUser(receivedEventUser);
-
-		receivedEvent.setSpecimen(specimen);
-		specimenEventCollection.add(receivedEvent);
-	
+		if(specimenRequirementBean.getReceivedEventReceivedQuality()!=null)
+		{
+			ReceivedEventParameters receivedEvent = new ReceivedEventParameters();
+			receivedEvent.setReceivedQuality(specimenRequirementBean.getReceivedEventReceivedQuality());
+			User receivedEventUser = new User();
+			receivedEventUser.setId(new Long(specimenRequirementBean.getReceivedEventUserId()));
+			receivedEvent.setUser(receivedEventUser);
+			receivedEvent.setSpecimen(specimen);
+			specimenEventCollection.add(receivedEvent);
+		}
+		
 		specimen.setSpecimenEventCollection(specimenEventCollection);
 	
 	}
