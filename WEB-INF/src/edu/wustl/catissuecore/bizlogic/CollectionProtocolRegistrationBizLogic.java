@@ -1192,6 +1192,43 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		String errMsg = "";
 		// check for update opeartion and old values equals to new values
 		int count = 0;
+		
+		
+		/**
+		 * Name : kalpana thakur Reviewer Name : Vaishali Bug ID: 4926
+		 * Description: Combination of collection protocol id and protocol
+		 * participant id should be unique.
+		 */
+		if (!(collectionProtocolRegistration.getProtocolParticipantIdentifier() == null)
+				&& !(collectionProtocolRegistration.getProtocolParticipantIdentifier().equals("")))
+		{ // build
+			// query
+			// for
+			// collectionProtocol_id
+			// AND
+			// protocol_participant_id
+			selectColumns = new String[]{"collectionProtocol.id", "protocolParticipantIdentifier"};
+			whereColumnName = new String[]{"collectionProtocol.id", "protocolParticipantIdentifier"};
+			whereColumnValue = new Object[]{objCollectionProtocol.getId(), collectionProtocolRegistration.getProtocolParticipantIdentifier()};
+			arguments = new String[]{"Collection Protocol Registration ", "COLLECTION_PROTOCOL_ID,PROTOCOL_PARTICIPANT_ID"};
+
+			List l = dao.retrieve(sourceObjectName, selectColumns, whereColumnName, whereColumnCondition, whereColumnValue,
+					Constants.AND_JOIN_CONDITION);
+			if (l.size() > 0)
+			{
+				// if list is not empty the Constraint Violation occurs
+				Logger.out.debug("Unique Constraint Violated: " + l.get(0));
+				errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
+				Logger.out.debug("Unique Constraint Violated: " + errMsg);
+				throw new DAOException(errMsg);
+			}
+			else
+			{
+				Logger.out.debug("Unique Constraint Passed");
+			}
+
+		}
+		
 		if (oldcollectionProtocolRegistration != null)
 		{
 			if (collectionProtocolRegistration.getParticipant() != null && oldcollectionProtocolRegistration.getParticipant() != null)
@@ -1248,40 +1285,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				Logger.out.debug("Unique Constraint Passed");
 			}
 		}
-		/**
-		 * Name : kalpana thakur Reviewer Name : Vaishali Bug ID: 4926
-		 * Description: Combination of collection protocol id and protocol
-		 * participant id should be unique.
-		 */
-		if (!(collectionProtocolRegistration.getProtocolParticipantIdentifier() == null)
-				&& !(collectionProtocolRegistration.getProtocolParticipantIdentifier().equals("")))
-		{ // build
-			// query
-			// for
-			// collectionProtocol_id
-			// AND
-			// protocol_participant_id
-			selectColumns = new String[]{"collectionProtocol.id", "protocolParticipantIdentifier"};
-			whereColumnName = new String[]{"collectionProtocol.id", "protocolParticipantIdentifier"};
-			whereColumnValue = new Object[]{objCollectionProtocol.getId(), collectionProtocolRegistration.getProtocolParticipantIdentifier()};
-			arguments = new String[]{"Collection Protocol Registration ", "COLLECTION_PROTOCOL_ID,PROTOCOL_PARTICIPANT_ID"};
-
-			List l = dao.retrieve(sourceObjectName, selectColumns, whereColumnName, whereColumnCondition, whereColumnValue,
-					Constants.AND_JOIN_CONDITION);
-			if (l.size() > 0)
-			{
-				// if list is not empty the Constraint Violation occurs
-				Logger.out.debug("Unique Constraint Violated: " + l.get(0));
-				errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
-				Logger.out.debug("Unique Constraint Violated: " + errMsg);
-				throw new DAOException(errMsg);
-			}
-			else
-			{
-				Logger.out.debug("Unique Constraint Passed");
-			}
-
-		}
+	
 	}
 
 	/**
