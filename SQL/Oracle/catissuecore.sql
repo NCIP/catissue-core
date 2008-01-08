@@ -355,11 +355,11 @@ create table CATISSUE_RACE (
    PARTICIPANT_ID number(19,0) not null,
    RACE_NAME varchar(50)
 );
-create table CATISSUE_COLL_SPECIMEN_REQ (
+/*create table CATISSUE_COLL_SPECIMEN_REQ (
    COLLECTION_PROTOCOL_EVENT_ID number(19,0) not null,
    SPECIMEN_REQUIREMENT_ID number(19,0) not null,
    primary key (COLLECTION_PROTOCOL_EVENT_ID, SPECIMEN_REQUIREMENT_ID)
-);
+);*/
 create table CATISSUE_SPECI_ARRAY_CONTENT (
    IDENTIFIER number(19,0) not null ,
    CONC_IN_MICROGM_PER_MICROLTR double precision,
@@ -455,6 +455,7 @@ create table CATISSUE_COLL_PROT_EVENT (
    COLLECTION_POINT_LABEL varchar(255),
    STUDY_CALENDAR_EVENT_POINT double precision,
    COLLECTION_PROTOCOL_ID number(19,0),
+   SPECIMEN_COLL_REQ_GROUP_ID number(19,0),                                                                                                 
    primary key (IDENTIFIER),
    unique (COLLECTION_PROTOCOL_ID,COLLECTION_POINT_LABEL)
 );
@@ -576,6 +577,8 @@ create table CATISSUE_SPECIMEN (
    QUANTITY double precision,
    CONCENTRATION double precision,
    CREATED_ON_DATE date,
+   IS_COLL_PROT_REQ number(1,0),                                                                                                      
+   COLLECTION_STATUS varchar(50), 
    primary key (IDENTIFIER)
 );
 create table CATISSUE_USER (
@@ -609,20 +612,32 @@ create table CATISSUE_ST_CONT_COLL_PROT_REL (
    COLLECTION_PROTOCOL_ID number(19,0) not null,
    primary key (STORAGE_CONTAINER_ID, COLLECTION_PROTOCOL_ID)
 );
-create table CATISSUE_SPECIMEN_COLL_GROUP (
+create table CATISSUE_ABS_SPECI_COLL_GROUP (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(255) unique,
    CLINICAL_DIAGNOSIS varchar(150),
    CLINICAL_STATUS varchar(50),
    ACTIVITY_STATUS varchar(50),
    SITE_ID number(19,0),
-   COMMENTS varchar2(2000),
-   COLLECTION_PROTOCOL_EVENT_ID number(19,0),
-   COLLECTION_PROTOCOL_REG_ID number(19,0),
-   SURGICAL_PATHOLOGY_NUMBER varchar(50),
-   DATE_OFFSET integer,	
    primary key (IDENTIFIER)
 );
+create table CATISSUE_SPECIMEN_COLL_GROUP (
+   IDENTIFIER number(19,0) not null ,
+   NAME varchar(255) unique,
+   COMMENTS varchar2(2000),
+   COLLECTION_PROTOCOL_REG_ID number(19,0),
+   SURGICAL_PATHOLOGY_NUMBER varchar(50),
+   COLLECTION_PROTOCOL_EVENT_ID number(19,0),
+   COLLECTION_STATUS varchar2(50),
+   DATE_OFFSET integer, 	
+   primary key (IDENTIFIER),
+   CONSTRAINT fkDebaf1677e07c4ac FOREIGN KEY( Collection_Protocol_reg_Id ) REFERENCES CATISSUE_COLL_PROT_REG( IdentIfier ),
+  CONSTRAINT fk_Parent_spec_coll_Group FOREIGN KEY( IdentIfier ) REFERENCES CATISSUE_ABS_SPECI_COLL_GROUP( IdentIfier )
+);
+CREATE TABLE CATISSUE_SPECI_COLL_REQ_GROUP (
+  IdentIfier NUMBER(19,0) NOT NULL ,
+  PRIMARY KEY( IdentIfier ),
+  CONSTRAINT fk_Abs_Speci_coll_Group FOREIGN KEY( IdentIfier ) REFERENCES CATISSUE_ABS_SPECI_COLL_GROUP( IdentIfier ))
+;
 create table CATISSUE_SPECIMEN_TYPE (
    SPECIMEN_ARRAY_TYPE_ID number(19,0) not null,
    SPECIMEN_TYPE varchar(50)
@@ -675,8 +690,8 @@ alter table CATISSUE_FLUID_SPE_EVENT_PARAM  add constraint FK70565D20BC7298A9 fo
 alter table CATISSUE_SPUN_EVENT_PARAMETERS  add constraint FK312D77BCBC7298A9 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM  ;
 alter table CATISSUE_RECEIVED_EVENT_PARAM  add constraint FKA7139D06BC7298A9 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM  ;
 alter table CATISSUE_RACE  add constraint FKB0242ECD87E5ADC7 foreign key (PARTICIPANT_ID) references CATISSUE_PARTICIPANT  ;
-alter table CATISSUE_COLL_SPECIMEN_REQ  add constraint FK860E6ABEBE10F0CE foreign key (SPECIMEN_REQUIREMENT_ID) references CATISSUE_SPECIMEN_REQUIREMENT  ;
-alter table CATISSUE_COLL_SPECIMEN_REQ  add constraint FK860E6ABE53B01F66 foreign key (COLLECTION_PROTOCOL_EVENT_ID) references CATISSUE_COLL_PROT_EVENT  ;
+/*alter table CATISSUE_COLL_SPECIMEN_REQ  add constraint FK860E6ABEBE10F0CE foreign key (SPECIMEN_REQUIREMENT_ID) references CATISSUE_SPECIMEN_REQUIREMENT  ;*/
+/*alter table CATISSUE_COLL_SPECIMEN_REQ  add constraint FK860E6ABE53B01F66 foreign key (COLLECTION_PROTOCOL_EVENT_ID) references CATISSUE_COLL_PROT_EVENT  ;*/
 alter table CATISSUE_SPECI_ARRAY_CONTENT  add constraint FKBEA9D458C4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY  ;
 alter table CATISSUE_SPECI_ARRAY_CONTENT  add constraint FKBEA9D45860773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN  ;
 alter table CATISSUE_SPECI_ARRAY_CONTENT  add constraint FKBEA9D45892AB74B4 foreign key (INITIAL_QUANTITY_ID) references CATISSUE_QUANTITY  ;
@@ -693,6 +708,7 @@ alter table CATISSUE_SPECIMEN_EVENT_PARAM  add constraint FK753F33AD60773DB2 for
 alter table CATISSUE_SPECIMEN_EVENT_PARAM  add constraint FK753F33AD2206F20F foreign key (USER_ID) references CATISSUE_USER  ;
 alter table CATISSUE_STOR_TYPE_SPEC_CLASS  add constraint FK1BCF33BA59A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE  ;
 alter table CATISSUE_COLL_PROT_EVENT  add constraint FK7AE7715948304401 foreign key (COLLECTION_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL  ;
+alter table CATISSUE_COLL_PROT_EVENT  add constraint fk_coll_Event_req_Group foreign key( Specimen_Coll_req_Group_Id) references CATISSUE_SPECI_COLL_REQ_GROUP(IDENTIFIER);
 alter table CATISSUE_CONTAINER_TYPE  add constraint FKCBBC9954DAC76C0 foreign key (CAPACITY_ID) references CATISSUE_CAPACITY  ;
 alter table CATISSUE_PART_MEDICAL_ID  add constraint FK349E77F9A7F77D13 foreign key (SITE_ID) references CATISSUE_SITE  ;
 alter table CATISSUE_PART_MEDICAL_ID  add constraint FK349E77F987E5ADC7 foreign key (PARTICIPANT_ID) references CATISSUE_PARTICIPANT  ;
@@ -724,7 +740,7 @@ alter table CATISSUE_USER  add constraint FKB025CFC7F30C2528 foreign key (DEPART
 alter table CATISSUE_TIS_SPE_EVENT_PARAM  add constraint FKBB9648F4BC7298A9 foreign key (IDENTIFIER) references CATISSUE_EVENT_PARAM  ;
 alter table CATISSUE_ST_CONT_COLL_PROT_REL  add constraint FK3AE9FCA7B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER  ;
 alter table CATISSUE_ST_CONT_COLL_PROT_REL  add constraint FK3AE9FCA748304401 foreign key (COLLECTION_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL  ;
-alter table CATISSUE_SPECIMEN_COLL_GROUP  add constraint FKDEBAF167A7F77D13 foreign key (SITE_ID) references CATISSUE_SITE  ;
+alter table CATISSUE_ABS_SPECI_COLL_GROUP add constraint FKDEBAF167A7F77D13 foreign key (SITE_ID) references CATISSUE_SITE  ;
 alter table CATISSUE_SPECIMEN_COLL_GROUP  add constraint FKDEBAF16753B01F66 foreign key (COLLECTION_PROTOCOL_EVENT_ID) references CATISSUE_COLL_PROT_EVENT  ;
 alter table CATISSUE_SPECIMEN_COLL_GROUP  add constraint FKDEBAF1677E07C4AC foreign key (COLLECTION_PROTOCOL_REG_ID) references CATISSUE_COLL_PROT_REG  ;
 alter table CATISSUE_SPECIMEN_TYPE  add constraint FKFF69C195ECE89343 foreign key (SPECIMEN_ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE  ;
@@ -1130,110 +1146,6 @@ create sequence CATISSUE_CONCEPT_SEQ;
 create sequence CATISSUE_CONCEPT_CLASSFCTN_SEQ;
 
 /****caTIES Realated Tables - end**********/
-
-/*Alteration in parent entity 'catissue_specimen_coll_group' */
-/* Renamed to parent */
-
-ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP RENAME TO CATISSUE_ABS_SPECI_COLL_GROUP;
-
-
-ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP DROP CONSTRAINT FKDEBAF1677E07C4AC;
-
- 
-
-ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP DROP CONSTRAINT FKDEBAF16753B01F66;
-
-/* Creating catissue_specimen_coll_group a child of Abstract SCG*/
-
-CREATE TABLE CATISSUE_SPECIMEN_COLL_GROUP (
-  IdentIfier                 NUMBER(19,0) NOT NULL ,
-  Name                       VARCHAR2(255)  ,
-  Comments                   VARCHAR2(2000),
-  Collection_Protocol_reg_Id NUMBER(19,0)  ,
-  Surgical_Pathology_Number  VARCHAR2(50)  ,
-  PRIMARY KEY( IdentIfier ),
-  UNIQUE ( Name ),
-  CONSTRAINT fkDebaf1677e07c4ac FOREIGN KEY( Collection_Protocol_reg_Id ) REFERENCES CATISSUE_COLL_PROT_REG( IdentIfier ),
-  CONSTRAINT fk_Parent_spec_coll_Group FOREIGN KEY( IdentIfier ) REFERENCES CATISSUE_ABS_SPECI_COLL_GROUP( IdentIfier ))
-;
-
-
-ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP ADD Collection_Protocol_Event_Id NUMBER(19,0);
-
-ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP ADD COLLECTION_STATUS VARCHAR2 (50); 
-
-/* Creating child entities */
-
-/*TODO*/
-
-ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP ADD CONSTRAINT fk_CATISSUE_COLL_PROT_EVENT FOREIGN KEY( Collection_Protocol_Event_Id) REFERENCES CATISSUE_COLL_PROT_EVENT (IDENTIFIER);
-
-CREATE TABLE CATISSUE_SPECI_COLL_REQ_GROUP (
-  IdentIfier NUMBER(19,0) NOT NULL ,
-  PRIMARY KEY( IdentIfier ),
-  CONSTRAINT fk_Abs_Speci_coll_Group FOREIGN KEY( IdentIfier ) REFERENCES CATISSUE_ABS_SPECI_COLL_GROUP( IdentIfier ))
-;
-/* Alteration in catissue_coll_prot_event */
-
-ALTER TABLE CATISSUE_COLL_PROT_EVENT ADD  Specimen_Coll_req_Group_Id NUMBER(19,0);
-
-ALTER TABLE CATISSUE_COLL_PROT_EVENT ADD CONSTRAINT fk_coll_Event_req_Group FOREIGN KEY( Specimen_Coll_req_Group_Id) REFERENCES CATISSUE_SPECI_COLL_REQ_GROUP(IDENTIFIER);
-/* Alter SPECIMEN adding col IS_COLL_PROT_REQ,COLLECTION_STATUS  */
-
-ALTER TABLE CATISSUE_SPECIMEN ADD  (IS_COLL_PROT_REQ NUMBER(1,0)  ,COLLECTION_STATUS VARCHAR (50)  );
-
-			/* Populating table */
-/* Inserting into catissue_abstract_specimen_coll_group */
-
-/*Deleting catissue_specimen_requirement rec those inserted in specimen table TODO*/
-ALTER TABLE CATISSUE_SPECIMEN_REQUIREMENT DROP constraint FK39AFE96861A1C94F;
-ALTER TABLE CATISSUE_COLL_SPECIMEN_REQ DROP constraint FK860E6ABEBE10F0CE;
-/*TODO*/
-DELETE FROM CATISSUE_QUANTITY WHERE identifier IN (SELECT quantity_id FROM CATISSUE_SPECIMEN_REQUIREMENT a join CATISSUE_COLL_SPECIMEN_REQ b ON a.IDENTIFIER=b.specimen_requirement_id);
- 
-
-DELETE FROM  CATISSUE_SPECIMEN_REQUIREMENT WHERE identifier IN (SELECT identifier FROM CATISSUE_SPECIMEN_REQUIREMENT a join CATISSUE_COLL_SPECIMEN_REQ b ON a.IDENTIFIER=b.specimen_requirement_id);
-
-ALTER TABLE CATISSUE_SPECIMEN_REQUIREMENT ADD constraint FK39AFE96861A1C94F foreign key (QUANTITY_ID) REFERENCES CATISSUE_QUANTITY (IDENTIFIER)  ;
-
-/*Entering into CSM table */
-
-INSERT INTO CSM_PROTECTION_ELEMENT
-SELECT CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup',NULL,NULL,1,TO_DATE('2007-01-17','yyyy-mm-dd') FROM dual;
-
-INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,18,(SELECT PROTECTION_ELEMENT_ID
-        FROM   CSM_PROTECTION_ELEMENT
-        WHERE  PROTECTION_ELEMENT_NAME = 'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup' AND ROWNUM<2),TO_DATE('2007-01-17','yyyy-mm-dd') FROM dual;
-
-
-/* Droping obsolate tables catissue_clinical_report... */
-ALTER TABLE CATISSUE_CLINICAL_REPORT DROP constraint FK54A4264515246F7;
-ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP DROP constraint FKDEBAF1674CE21DDA;
-DROP TABLE CATISSUE_CLINICAL_REPORT;
-
-DROP TABLE CATISSUE_COLL_SPECIMEN_REQ;
-
-/*Droping unwanted columns from catissue_abstract_specimen_coll_group which comes from catissue_specimen_coll_group */
-ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP DROP COLUMN name;
-
-ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP DROP COLUMN comments;
-/*TODO*/
-
-/*alter table catissue_abstract_specimen_coll_group drop column SURGICAL_PATHOLOGY_NUMBER */
-
-ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP DROP COLUMN COLLECTION_PROTOCOL_EVENT_ID;
-
-ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP DROP COLUMN COLLECTION_PROTOCOL_REG_ID;
-
-ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP DROP COLUMN CLINICAL_REPORT_ID;
-
-/*ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP DROP COLUMN SURGICAL_PATHOLOGY_NUMBER;*/
-
-
-
-
-
-
 
 
 commit;
