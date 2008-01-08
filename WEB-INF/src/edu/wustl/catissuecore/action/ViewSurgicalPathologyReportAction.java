@@ -92,6 +92,18 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
     		CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
     	}
         request.setAttribute("specimenEntityId",specimenEntityId );
+//      Falguni:Performance Enhancement -User clicks on Report tab then annotation page on Edit participant page
+		Long participantEntityId = null;
+		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId") != null)
+		{
+			participantEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId");
+		}
+		else
+		{
+			participantEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
+			CatissueCoreCacheManager.getInstance().addObjectToCache("participantEntityId",participantEntityId);		
+		}
+		request.setAttribute("participantEntityId",participantEntityId);
         if(pageOf.equalsIgnoreCase(Constants.PAGEOF_NEW_SPECIMEN)|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
         {
         	request.setAttribute(Constants.ID,id.toString());
