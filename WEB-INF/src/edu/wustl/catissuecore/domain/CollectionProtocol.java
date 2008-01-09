@@ -60,7 +60,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 *  Collection of CollectionProtocol associated with the Parent CollectionProtocol.
 	 */
-	protected Collection childCPCollection = new LinkedHashSet();
+	protected Collection childCollectionProtocolCollection = new LinkedHashSet();
 	
 	/**
 	 * Parent Collection Protocol
@@ -526,16 +526,17 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 
 
 	
-	public Collection getChildCPCollection()
+	
+
+	public Collection getChildCollectionProtocolCollection()
 	{
-		return childCPCollection;
+		return childCollectionProtocolCollection;
 	}
 
 
-	
-	public void setChildCPCollection(Collection childCPCollection)
+	public void setChildCollectionProtocolCollection(Collection childCollectionProtocolCollection)
 	{
-		this.childCPCollection = childCPCollection;
+		this.childCollectionProtocolCollection = childCollectionProtocolCollection;
 	}
 
 

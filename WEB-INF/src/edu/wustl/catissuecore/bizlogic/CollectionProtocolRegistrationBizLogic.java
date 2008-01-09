@@ -329,7 +329,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 					if (cpr != null)
 					{
 						changeStatusOfEvents(dao, sessionDataBean, cpr);
-						if (cp.getChildCPCollection() != null && cp.getChildCPCollection().size() != 0)
+						if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 						{
 							checkForChildStatus(dao, sessionDataBean, cpr);
 						}
@@ -375,7 +375,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						}
 						dao.update(cpr, sessionDataBean, true, true, false);
 						updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, cpr);
-						if (cp.getChildCPCollection() != null && cp.getChildCPCollection().size() != 0)
+						if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 						{
 							checkAndUpdateChildDate(dao, sessionDataBean, cpr);
 						}
@@ -407,7 +407,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 	private List getChildColl(CollectionProtocol parent)
 	{
-		Collection childCPcollection = parent.getChildCPCollection();
+		Collection childCPcollection = parent.getChildCollectionProtocolCollection();
 		List childCPColl = new ArrayList();
 		childCPColl.addAll(childCPcollection);
 		CollectionProtocolSeqComprator seqComp = new CollectionProtocolSeqComprator();
@@ -1317,7 +1317,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		// Getting all the CollectionProtocol those do not have activaityStatus
 		// as 'Disabled'.
 		String hql = "select cp.id ,cp.title, cp.shortTitle from " + CollectionProtocol.class.getName() + " as cp where  cp.activityStatus != '"
-				+ Constants.ACTIVITY_STATUS_DISABLED + "' and  (cp.type = '" + Constants.PARENT_CP_TYPE + "' or cp.type = null)";
+				+ Constants.ACTIVITY_STATUS_DISABLED + "' and  (cp."+Constants.CP_TYPE+ "= '" + Constants.PARENT_CP_TYPE + "' or cp.type = null)";
 
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
@@ -1598,7 +1598,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						cpr.setOffset(new Integer(offset));
 						updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
 						dao.update(cpr, sessionDataBean, true, true, false);
-						if (cp.getChildCPCollection() != null && cp.getChildCPCollection().size() != 0)
+						if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 						{
 							checkAndUpdateChildOffset(dao, sessionDataBean, cpr, offset);
 						}

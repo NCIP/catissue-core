@@ -112,7 +112,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 	private void validateCollectionProtocol(DAO dao, CollectionProtocol collectionProtocol, String errorName) throws DAOException
 	{
-		Collection childCPCollection = collectionProtocol.getChildCPCollection();
+		Collection childCPCollection = collectionProtocol.getChildCollectionProtocolCollection();
 		Iterator cpIterator = childCPCollection.iterator();
 		while(cpIterator.hasNext())
 		{
@@ -171,7 +171,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			DAOException, UserNotAuthorizedException 
 	{
 		
-		Collection childCPCollection = collectionProtocol.getChildCPCollection();
+		Collection childCPCollection = collectionProtocol.getChildCollectionProtocolCollection();
 		Iterator cpIterator = childCPCollection.iterator();
 		while(cpIterator.hasNext())
 		{

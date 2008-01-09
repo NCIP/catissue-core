@@ -2230,9 +2230,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PHASE_CP_TYPE = "Phase" ;
 	public static final String CYCLE_CP_TYPE = "Cycle" ;
 	public  static final String SUB_COLLECTION_PROTOCOL = "SubProtocol";
-	public  static final String CP_TYPE = "cpType";
+	public  static final String CP_TYPE = "type";
 	public static final int DAYS_TO_ADD_CP = 1;
 	public static final String REG_DATE="regDate";
+	public static final String CHILD_COLLECTION_PROTOCOL_COLLECTION = "childCollectionProtocolCollection";
 	
 //	Constants required in SubCollectionProtocolRegistration.jsp Page
 	public static final String SUB_COLLECTION_PROTOCOL_REGISTRATION_SEARCH_ACTION = "SubCollectionProtocolRegistrationSearch.do";

@@ -235,7 +235,7 @@
             />	 
     </set>
 	<set
-            name="childCPCollection"
+            name="childCollectionProtocolCollection"
             table="CATISSUE_COLLECTION_PROTOCOL"
             lazy="true"
             inverse="true"

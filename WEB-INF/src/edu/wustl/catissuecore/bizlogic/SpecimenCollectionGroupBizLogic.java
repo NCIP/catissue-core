@@ -911,7 +911,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	
 		Date evtLastDate = SCGTreeForCPBasedView(xmlString, cpId, participantId, regDate);
 
-		String hql = "select  cp.childCPCollection from " + CollectionProtocol.class.getName() + " as cp where cp.id= " + cpId.toString();
+		String hql = "select  cp."+Constants.CHILD_COLLECTION_PROTOCOL_COLLECTION+" from " + CollectionProtocol.class.getName() + " as cp where cp.id= " + cpId.toString();
 		List cpchildList = executeQuery(hql);
 
 		if (cpchildList.size() != 0)

@@ -38,8 +38,8 @@ public class ComplexCollectionProtocolUtility
 	    collectionProtocol.setSequenceNumber(new Integer(0));
 	    collectionProtocol.setStudyCalendarEventPoint(new Double(0));
 		
-		String title = "Osteosarcoma-1";
-		String shortTitle = "Osteosarcoma-1";
+		String title = "Osteosarcoma-2";
+		String shortTitle = "Osteosarcoma-2";
 		collectionProtocol = setAttributesOfCP(collectionProtocol,title,shortTitle,"Parent",null);
 		
 		List specimenEventList = new ArrayList();
@@ -367,10 +367,10 @@ public class ComplexCollectionProtocolUtility
 		
 		
 		
-		phaseCP1.setChildCPCollection(childPhse1Collection);
-		phaseCP2.setChildCPCollection(childPhse2Collection);
-		phaseCP5.setChildCPCollection(childPhse5Collection);
-		collectionProtocol.setChildCPCollection(childCPCollection);
+		phaseCP1.setChildCollectionProtocolCollection(childPhse1Collection);
+		phaseCP2.setChildCollectionProtocolCollection(childPhse2Collection);
+		phaseCP5.setChildCollectionProtocolCollection(childPhse5Collection);
+		collectionProtocol.setChildCollectionProtocolCollection(childCPCollection);
 		return collectionProtocol;
 	}
 	
@@ -385,8 +385,8 @@ public class ComplexCollectionProtocolUtility
 		//Phase 1
 		CollectionProtocol phaseCP1 = new CollectionProtocol();
 		phaseCP1.setSequenceNumber(new Integer(0));
-		title = "Osteo Pre-Surgery-1";
-		shortTitle = "Osteo Pre-Surgery-1";
+		title = "Osteo Pre-Surgery-2";
+		shortTitle = "Osteo Pre-Surgery-2";
 		phaseCP1 = setAttributesOfCP(phaseCP1,title,shortTitle,"Phase","1");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -409,8 +409,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol phaseCP2 = new CollectionProtocol();
 		phaseCP2.setSequenceNumber(new Integer(1));
-		title = "Osteo Pose Surgery-1";
-		shortTitle = "Osteo Post Surgery-1";
+		title = "Osteo Pose Surgery-2";
+		shortTitle = "Osteo Post Surgery-2";
 		phaseCP2 = setAttributesOfCP(phaseCP2,title,shortTitle,"Phase","80");
 		specimenEventList = new ArrayList();
 		studyCalEvtPointList = new ArrayList();
@@ -422,8 +422,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm1 = new CollectionProtocol();
 			arm1.setSequenceNumber(new Integer(0));
-			title = "Post GR MAP-1";
-			shortTitle = "Post GR MAP-1";
+			title = "Post GR MAP-2";
+			shortTitle = "Post GR MAP-2";
 			arm1 = setAttributesOfCP(arm1,title,shortTitle,"Arm","0");
 			specimenEventList = new ArrayList();
 			specimenEventList.add("Wk 12");
@@ -461,8 +461,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm2 = new CollectionProtocol();
 			arm2.setSequenceNumber(new Integer(0));
-			title = "Post GR MAPfin-1";
-			shortTitle = "Post GR MAPfin-1";
+			title = "Post GR MAPfin-2";
+			shortTitle = "Post GR MAPfin-2";
 			arm2 = setAttributesOfCP(arm2,title,shortTitle,"Arm","0");
 			specimenEventList = new ArrayList();
 			specimenEventList.add("Wk 12");
@@ -505,8 +505,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm3 = new CollectionProtocol();
 			arm3.setSequenceNumber(new Integer(0));
-			title = "POST PR MAP-1";
-			shortTitle = "POST PR MAP-1";
+			title = "POST PR MAP-2";
+			shortTitle = "POST PR MAP-2";
 			arm3 = setAttributesOfCP(arm3,title,shortTitle,"Arm","0");
 			specimenEventList = new ArrayList();
 			specimenEventList.add("Wk 12");
@@ -543,8 +543,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm4 = new CollectionProtocol();
 			arm4.setSequenceNumber(new Integer(0));
-			title = "POST PR MAPIE-1";
-			shortTitle = "POST PR MAPIE-1";
+			title = "POST PR MAPIE-2";
+			shortTitle = "POST PR MAPIE-2";
 			arm4 = setAttributesOfCP(arm4,title,shortTitle,"Arm","0");
 			specimenEventList = new ArrayList();
 			studyCalEvtPointList = new ArrayList();
@@ -559,8 +559,8 @@ public class ComplexCollectionProtocolUtility
 			
 				CollectionProtocol cycle1 = new CollectionProtocol();
 				cycle1.setSequenceNumber(new Integer(0));
-				title = "Cycle1-1";
-				shortTitle = "Cycle1-1";
+				title = "Cycle1-2";
+				shortTitle = "Cycle1-2";
 				cycle1 = setAttributesOfCP(cycle1,title,shortTitle,"Cycle","0");
 				specimenEventList = new ArrayList();
 				specimenEventList.add("Wk 12");
@@ -579,8 +579,8 @@ public class ComplexCollectionProtocolUtility
 				
 				CollectionProtocol cycle2 = new CollectionProtocol();
 				cycle2.setSequenceNumber(new Integer(1));
-				title = "Cycle2-1";
-				shortTitle = "Cycle2-1";
+				title = "Cycle2-2";
+				shortTitle = "Cycle2-2";
 				cycle2 = setAttributesOfCP(cycle2,title,shortTitle,"Cycle","52");
 				specimenEventList = new ArrayList();
 				specimenEventList.add("Wk 20");
@@ -599,8 +599,8 @@ public class ComplexCollectionProtocolUtility
 				
 				CollectionProtocol cycle3 = new CollectionProtocol();
 				cycle3.setSequenceNumber(new Integer(2));
-				title = "Cycle3-1";
-				shortTitle = "Cycle3-1";
+				title = "Cycle3-2";
+				shortTitle = "Cycle3-2";
 				cycle3 = setAttributesOfCP(cycle3,title,shortTitle,"Cycle","92");
 				specimenEventList = new ArrayList();
 				specimenEventList.add("Wk 28");
@@ -620,8 +620,8 @@ public class ComplexCollectionProtocolUtility
 				
 				CollectionProtocol cycle4 = new CollectionProtocol();
 				cycle4.setSequenceNumber(new Integer(3));
-				title = "Cycle4-1";
-				shortTitle = "Cycle4-1";
+				title = "Cycle4-2";
+				shortTitle = "Cycle4-2";
 				cycle4 = setAttributesOfCP(cycle4,title,shortTitle,"Cycle","215");
 				specimenEventList = new ArrayList();
 				specimenEventList.add("Wk 36");
@@ -637,8 +637,8 @@ public class ComplexCollectionProtocolUtility
 
 		CollectionProtocol phaseCP3 = new CollectionProtocol();
 		phaseCP3.setSequenceNumber(new Integer(2));
-		title = "Osteo Post ttm Follow UP-1";
-		shortTitle = "Osteo Post ttm Follow UP-1";
+		title = "Osteo Post ttm Follow UP-2";
+		shortTitle = "Osteo Post ttm Follow UP-2";
 		phaseCP3 = setAttributesOfCP(phaseCP3,title,shortTitle,"Phase",null);
 		specimenEventList = new ArrayList();
 		specimenEventList.add("0 months");
@@ -665,8 +665,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol phaseCP4 = new CollectionProtocol();
 		phaseCP4.setSequenceNumber(null);
-		title = "Osteo Relapse-1";
-		shortTitle = "Osteo Relapse-1";
+		title = "Osteo Relapse-2";
+		shortTitle = "Osteo Relapse-2";
 		phaseCP4 = setAttributesOfCP(phaseCP4,title,shortTitle,"Phase","0");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -707,9 +707,9 @@ public class ComplexCollectionProtocolUtility
 		phaseCP4.setParentCollectionProtocol(collectionProtocol);
 		childCPCollection.add(phaseCP4);
 
-		phaseCP2.setChildCPCollection(childPhse2Collection);
-		arm4.setChildCPCollection(childArm4Collection);
-		collectionProtocol.setChildCPCollection(childCPCollection);
+		phaseCP2.setChildCollectionProtocolCollection(childPhse2Collection);
+		arm4.setChildCollectionProtocolCollection(childArm4Collection);
+		collectionProtocol.setChildCollectionProtocolCollection(childCPCollection);
 		return collectionProtocol;
 	}
 	private static CollectionProtocol setCollectionProtocolEventList(CollectionProtocol collectionProtocol,List specimenEventList,List studyCalEvtPointList)
