@@ -2070,6 +2070,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String IS_SPECIMENID_PRESENT = "isSpecimenIdPresent";
     public static final String IS_SPECIMENARRAY_PRESENT = "isSpecimenArrayPresent";
     public static final String VALIDATION_MESSAGE_FOR_ORDERING = "validationMessageForOrdering";
+    public static final String UPDATE_SESSION_DATA = "updateSessionData";
+    public static final String IS_LIST_EMPTY = "isListEmpty";
 
     // Constants for CP Based Entry
     public static final String COLLECTION_PROTOCOL_EVENT_ID = "Event_Id";
