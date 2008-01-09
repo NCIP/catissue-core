@@ -2,8 +2,10 @@
 package edu.wustl.catissuecore.util.querysuite;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -18,7 +20,9 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.DefineGridViewBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
+import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.flex.dag.DAGConstant;
+import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -45,6 +49,7 @@ import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
 import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -535,7 +540,12 @@ public abstract class QueryModuleUtil
 					session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
 					session.setAttribute(Constants.TOTAL_RESULTS,
 									new Integer(totalNumberOfRecords));
-
+					// gets the message and sets it in the session.
+					QueryShoppingCart cart = (QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
+					String message = getMessageIfIdNotPresentForOrderableEntities(selectedColumnsMetadata, cart);
+					session.setAttribute(Constants.VALIDATION_MESSAGE_FOR_ORDERING, message);
+					//session.setAttribute("IsListEmpty", "true");
+					
 //					request.setAttribute(Constants.PAGINATION_DATA_LIST, spreadSheetDatamap
 //							.get(Constants.SPREADSHEET_DATA_LIST));
 					session.setAttribute(Constants.PAGINATION_DATA_LIST, spreadSheetDatamap
@@ -667,6 +677,66 @@ public abstract class QueryModuleUtil
 		else 
 			return null;
 	}
+	
+	
+	/**
+	 * checks if the current view contains any orderable entity and if the 'id' attribute of the entity is 
+	 * included in the view.
+	 * @param selectedColumnsMetadata - gives current entity and attribute list
+	 * @param cart - gives the attribute list of the entities present in the cart.
+	 * @return message if if the 'id' attribute of the orderable entity is not included in view.
+	 */public static String getMessageIfIdNotPresentForOrderableEntities(SelectedColumnsMetadata selectedColumnsMetadata, QueryShoppingCart cart)
+	{
+		String message = null;
+		QueryShoppingCartBizLogic queryShoppingCartBizLogic = new QueryShoppingCartBizLogic();
+		boolean areListsequal = true;
+		boolean isOrderableEntityPresent = false;
+		boolean isAttributeIdIncludedInView = false;
+		List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
+		List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnsMetadata
+				.getSelectedAttributeMetaDataList();
+		List<AttributeInterface> currentAttributeList = selectedColumnsMetadata.getAttributeList();
+		// check if the cart view and the defined view are same
+		if (cart != null)
+		{
+			List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
+			if (cartAttributeList != null)
+			{
+				int indexArray[] = queryShoppingCartBizLogic.getNewAttributeListIndexArray(cartAttributeList,
+						currentAttributeList);
+				if (indexArray == null)
+				{
+					areListsequal = false;
+				}
+			}
+			
+		}
+		
+		if (areListsequal)
+		{		 
+			//if the two views are same checks if orderable entity is present and id attribute is present
+			Iterator<QueryOutputTreeAttributeMetadata> iterator = selectedAttributeMetaDataList.iterator();
+			while (iterator.hasNext())
+			{
+				QueryOutputTreeAttributeMetadata element = (QueryOutputTreeAttributeMetadata) iterator.next();
+				if (orderableEntityNameList.contains(element.getAttribute().getEntity().getName()))
+				{
+					isOrderableEntityPresent = true;
+					if(element.getAttribute().getName().equals(Constants.ID))
+					{
+						isAttributeIdIncludedInView = true;
+						//String gh = null;
+						break;
+					}
+				}
+			}
+			if ((isOrderableEntityPresent) && (!isAttributeIdIncludedInView))
+			{			
+				message = ApplicationProperties.getValue("query.defineGridResultsView.messageForPopup");							
+			}
+		}
+		return message;
+		}
 
 	
 }
