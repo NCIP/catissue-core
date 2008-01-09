@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.querysuite.queryobject.impl.metadata.SelectedColumnsMetadata;
@@ -100,6 +101,8 @@ public class QueryShoppingCartAction extends BaseAction
 		{
 			target = addToCart(request, chkBoxValues, isCheckAllAcrossAllChecked, cart,
 					attributeList, columnList);
+			// if My List is not empty sets the value to false.
+			request.getSession().setAttribute("IsListEmpty", "false");
 
 		}// Check if user wants to delete record from cart.
 		else if (operation.equalsIgnoreCase(Constants.DELETE))
@@ -111,6 +114,8 @@ public class QueryShoppingCartAction extends BaseAction
 				ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
 				errors.add(ActionErrors.GLOBAL_ERROR, error);
 				saveErrors(request, errors);
+				// if My List is empty sets the value to true.
+				request.getSession().setAttribute("IsListEmpty", "true");
 			}
 			target = new String(Constants.SHOPPING_CART_DELETE);
 		}
@@ -194,7 +199,10 @@ public class QueryShoppingCartAction extends BaseAction
 			
 			target = new String(operation);
 		}
-		
+		// sets the message in the session. This message is showed in popup on the result view page if the 
+		//'id' attribute of the orderable entity is not included in view.
+		String message = QueryModuleUtil.getMessageIfIdNotPresentForOrderableEntities( selectedColumnMetaData,  cart);
+		session.setAttribute(Constants.VALIDATION_MESSAGE_FOR_ORDERING, message);
 		request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_QUERY_MODULE);
 		return mapping.findForward(target);
 	}
@@ -348,8 +356,8 @@ public class QueryShoppingCartAction extends BaseAction
 				 * to user.
 				 */
 				List<AttributeInterface> oldAttributeList = cart.getCartAttributeList();
-
-				int indexArray[] = getNewAttributeListIndexArray(oldAttributeList, attributeList);
+				QueryShoppingCartBizLogic queryShoppingCartBizLogic = new QueryShoppingCartBizLogic();
+				int indexArray[] = queryShoppingCartBizLogic.getNewAttributeListIndexArray(oldAttributeList, attributeList);
 				if (indexArray != null)
 				{
 
@@ -389,39 +397,7 @@ public class QueryShoppingCartAction extends BaseAction
 		return tempDataList;
 	}
 
-	/**
-	 * @param oldAttributeList cart attribute list.
-	 * @param attributeList new Spreadsheet attribute list.
-	 * @return
-	 */
-	public int[] getNewAttributeListIndexArray(List<AttributeInterface> oldAttributeList,
-			List<AttributeInterface> attributeList)
-	{
-		int[] indexArray = new int[attributeList.size()];
-		if (oldAttributeList.size() == attributeList.size())
-		{
-			int index;
-
-			for (int i = 0; i < attributeList.size(); i++)
-			{
-				index = (oldAttributeList.indexOf((AttributeInterface) attributeList.get(i)));
-				if (index == -1)
-				{
-					indexArray = null;
-					break;
-				}
-				else
-				{
-					indexArray[i] = index;
-				}
-			}
-
-		}
-		else
-			indexArray = null;
-		return indexArray;
-	}
-
+	
 	/**
 	 * @param request
 	 */
