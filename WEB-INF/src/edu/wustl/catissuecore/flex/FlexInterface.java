@@ -767,7 +767,7 @@ public class FlexInterface
 	 }*/
 
 	private SpecimenDataBean prepareGenericSpecimen(SpecimenBean spBean, SpecimenAutoStorageContainer speicmenAutoStorageCont) throws DAOException
-	{ 
+	{
 		SpecimenDataBean specimenDataBean = new SpecimenDataBean();
 
 		specimenDataBean.setType(spBean.specimenType);
@@ -1558,32 +1558,43 @@ public class FlexInterface
 	 * @return : The XML String for tree data 
 	 * @throws Exception
 	 */
-	public String getTreeData(String cpId, String pId) throws Exception
+	public String getTreeData(String cpId, String pId)
 	{
 		//System.out.println("In get tree data method & cpID is:"+cpId);
-		SpecimenCollectionGroupBizLogic bizlogic = new SpecimenCollectionGroupBizLogic();
-		String str = bizlogic.getSCGTreeForCPBasedView(Long.parseLong(cpId), Long.parseLong(pId));
+		String str = null;
+		try
+		{
+			SpecimenCollectionGroupBizLogic bizlogic = new SpecimenCollectionGroupBizLogic();
+			str = bizlogic.getSCGTreeForCPBasedView(Long.parseLong(cpId), Long.parseLong(pId));
+			//return str;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error while getting tree date :");
+			e.printStackTrace();
+		}
 		return str;
 	}
-	
-	public Boolean chkArmShifting(String cpId,String pId) throws Exception
+
+	public Boolean chkArmShifting(String cpId, String pId) throws Exception
 	{
-		
+
 		Long parentCPId = null;
 		// Get the parent Id of cpId;
-		String hql = "select cp.parentCollectionProtocol.id from "+ CollectionProtocol.class.getName() +" as cp where cp.id = "+cpId;
+		String hql = "select cp.parentCollectionProtocol.id from " + CollectionProtocol.class.getName() + " as cp where cp.id = " + cpId;
 		List parentCpIdList = executeQuery(hql);
-		if(parentCpIdList != null && !parentCpIdList.isEmpty())
+		if (parentCpIdList != null && !parentCpIdList.isEmpty())
 		{
 			parentCPId = (Long) parentCpIdList.get(0);
 		}
-		if(parentCPId != null)
+		if (parentCPId != null)
 		{
-			hql = "select cpr.collectionProtocol.id from "+
-					CollectionProtocolRegistration.class.getName() +" as cpr where " +
-					"cpr.participant.id = "+pId+ " and cpr.collectionProtocol.cpType = '"+edu.wustl.catissuecore.util.global.Constants.ARM_CP_TYPE+"' and cpr.collectionProtocol.parentCollectionProtocol.id = "+parentCPId.toString() + " and cpr.collectionProtocol.id !="+cpId;		//Check if there are other arms registered for participant;
+			hql = "select cpr.collectionProtocol.id from " + CollectionProtocolRegistration.class.getName() + " as cpr where "
+					+ "cpr.participant.id = " + pId + " and cpr.collectionProtocol.type= '"
+					+ edu.wustl.catissuecore.util.global.Constants.ARM_CP_TYPE + "' and cpr.collectionProtocol.parentCollectionProtocol.id = "
+					+ parentCPId.toString() + " and cpr.collectionProtocol.id !=" + cpId; //Check if there are other arms registered for participant;
 			List cpList = executeQuery(hql);
-			if(cpList != null && !cpList.isEmpty())
+			if (cpList != null && !cpList.isEmpty())
 				return new Boolean(true);
 		}
 		return new Boolean(false);

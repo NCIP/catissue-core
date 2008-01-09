@@ -743,7 +743,7 @@ public class ComplexCollectionProtocolUtility
 		collectionProtocol.setTitle(title);
 		collectionProtocol.setShortTitle(shortTitle);
 		collectionProtocol.setEnrollment(2);
-		collectionProtocol.setCpType(type);
+		collectionProtocol.setType(type);
 		if(studyCalEventPoint != null)
 			collectionProtocol.setStudyCalendarEventPoint(new Double(studyCalEventPoint));
 		try

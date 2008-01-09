@@ -110,7 +110,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		collectionProtocolRegistration.setParticipant(participant);
 
 		insertCPR(collectionProtocolRegistration, dao, sessionDataBean);
-		if (armFound == false && Constants.ARM_CP_TYPE.equals(collectionProtocolRegistration.getCollectionProtocol().getCpType()))
+		if (armFound == false && Constants.ARM_CP_TYPE.equals(collectionProtocolRegistration.getCollectionProtocol().getType()))
 		{
 			armCheckandRegistration(collectionProtocolRegistration, dao, sessionDataBean);
 		}
@@ -486,7 +486,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				{
 					if (armFound == false)
 					{
-						if (!Constants.ARM_CP_TYPE.equalsIgnoreCase(cp.getCpType()))
+						if (!Constants.ARM_CP_TYPE.equalsIgnoreCase(cp.getType()))
 						{
 
 							CollectionProtocolRegistration cloneCPR = createCloneOfCPR(cpr, cp);
@@ -1308,7 +1308,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		// Getting all the CollectionProtocol those do not have activaityStatus
 		// as 'Disabled'.
 		String hql = "select cp.id ,cp.title, cp.shortTitle from " + CollectionProtocol.class.getName() + " as cp where  cp.activityStatus != '"
-				+ Constants.ACTIVITY_STATUS_DISABLED + "' and  (cp.cpType = '" + Constants.PARENT_CP_TYPE + "' or cp.cpType = null)";
+				+ Constants.ACTIVITY_STATUS_DISABLED + "' and  (cp.type = '" + Constants.PARENT_CP_TYPE + "' or cp.type = null)";
 
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);

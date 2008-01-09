@@ -935,7 +935,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					participantRegStatus = "Registered";
 				
 				xmlString.append("<node id= \"" + Constants.SUB_COLLECTION_PROTOCOL + "_" + cp.getId() + "\" " + "name=\"" + dispName + "\" "
-						+ "toolTip=\"" + cp.getTitle() + "\" " + "type=\"" + cp.getCpType() + "\" " + "cpType=\"" + cp.getCpType() + "\" "
+						+ "toolTip=\"" + cp.getTitle() + "\" " + "type=\"" + cp.getType() + "\" " + "cpType=\"" + cp.getType() + "\" "
 						+ "regDate=\"" + anticipatoryDate +  "\" " +"participantRegStatus=\"" + participantRegStatus+"\">");
 				if(cpr != null)
 					childCPtree(xmlString, cp.getId(), participantId, participantRegDate,cpr.getOffset());

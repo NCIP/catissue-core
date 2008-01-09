@@ -74,7 +74,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	/**
 	 * Collection Protocol type - Arm, Cycle, Phase
 	 */
-	protected String cpType;
+	protected String type;
 	
 	/**
 	 * Defines the relative time point in days
@@ -498,16 +498,16 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 
 
 	
-	public String getCpType()
+	public String getType()
 	{
-		return cpType;
+		return type;
 	}
 
 
 	
-	public void setCpType(String cpType)
+	public void setType(String type)
 	{
-		this.cpType = cpType;
+		this.type = type;
 	}
 
 

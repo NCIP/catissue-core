@@ -265,7 +265,7 @@
         />
         
 		<property
-            name="cpType"
+            name="type"
             type="string"
             update="true"
             insert="true"
