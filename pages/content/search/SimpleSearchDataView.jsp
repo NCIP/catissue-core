@@ -39,14 +39,49 @@ tr#hiddenCombo
 	String title = pageOf + ".searchResultTitle";
 	boolean isSpecimenData = false;	
 	int IDCount = 0;
-		
+	
 	%>
 		
 
 	<script language="javascript">
 		var colZeroDir='ascending';
 
+		function getData()
+		{	//ajax call to get update data from server
+			var request = newXMLHTTPReq();			
+			var handlerFunction = getReadyStateHandler(request,displayValidationMessage,true);	
+			request.onreadystatechange = handlerFunction;			
+			var actionURL = "updateSessionData=updateSessionData";		
+			var url = "ValidateQuery.do";
+			request.open("POST",url,true);	
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+			request.send(actionURL);		
+		}
 
+		function displayValidationMessage(message)
+		{
+			if (message == "")
+			{
+				onAddToCart();
+			}
+			else
+			{
+				var isChecked = updateHiddenFields(); \\ if atleast one check box is checked.
+				if (isChecked == "true")
+				{
+					var r=confirm(message);
+					if (r==true)
+					{
+						onAddToCart();
+					}
+				}
+				else
+				{
+					alert("Please select at least one checkbox");
+				}
+			}
+		}
+		
 		function onAddToCart()
 		{
 			var isChecked = updateHiddenFields();
@@ -216,12 +251,23 @@ function checkAllOnThisPageResponse()
 			configAction = "onAdvanceConfigure()";
 			redefineQueryAction = "onRedefineAdvanceQuery()";
 		}
+		boolean mac = false;
+		Object os = request.getHeader("user-agent");
+		if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
+		{
+			mac = true;
+		}
+		String height = "100%";		
+		if(mac) \\ mac gives problem if the values aer specified in %
+		{
+		  height="500";
+		}
 	%>
 	<!-- Mandar : 434 : for tooltip -->
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 <body onload="setCheckBoxState()">
-<div style="width:100%; height:100%;overflow:auto " >
+<div style="width:100%; overflow:auto " height="<%=height%>">
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="99%" height="100%" style="overflow:auto;">
 <tr>
 	<td >
@@ -331,7 +377,7 @@ function checkAllOnThisPageResponse()
 					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS) || pageOf.equals(Constants.PAGEOF_QUERY_MODULE) ){
 						
 					%>
-						<img src="images/b_add_list.gif" width="100" hspace="3" onclick="onAddToCart()"/>&nbsp;
+						<img src="images/b_add_list.gif" width="100" hspace="3" onclick="getData()"/>&nbsp;
 				                        
 					<%}else
 				       {%>
