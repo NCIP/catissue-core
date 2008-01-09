@@ -1214,13 +1214,22 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 			List l = dao.retrieve(sourceObjectName, selectColumns, whereColumnName, whereColumnCondition, whereColumnValue,
 					Constants.AND_JOIN_CONDITION);
+			
 			if (l.size() > 0)
 			{
+						
+				if(oldcollectionProtocolRegistration==null ||!(collectionProtocolRegistration.getProtocolParticipantIdentifier().equals(oldcollectionProtocolRegistration.getProtocolParticipantIdentifier())) )
+				{	
 				// if list is not empty the Constraint Violation occurs
 				Logger.out.debug("Unique Constraint Violated: " + l.get(0));
 				errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
 				Logger.out.debug("Unique Constraint Violated: " + errMsg);
 				throw new DAOException(errMsg);
+				}
+				else
+				{
+					Logger.out.debug("Unique Constraint Passed");
+				}
 			}
 			else
 			{
