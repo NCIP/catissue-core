@@ -51,6 +51,17 @@
 			if(obj != null && obj instanceof SpecimenCollectionGroupForm)
 			{
 				form = (SpecimenCollectionGroupForm)obj;
+				/**
+				* Name : Vijay Pande
+ 				* Reviewer Name : Sachin Lale 
+ 				* Bug ID: 6472
+ 				* Patch ID: 6472_1			
+ 				* Description: ID is set from form, while coming back from SpecimenSummaryPage
+				**/
+				if(id==null)
+				{
+					id=String.valueOf(form.getId());
+				}
 			}	
 		String nodeId="";
 		String formName, pageView = operation ,editViewButton="buttons."+Constants.EDIT;
