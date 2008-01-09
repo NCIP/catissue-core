@@ -9,7 +9,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,6 +20,7 @@ import java.util.Set;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
 import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domain.userinterface.Container;
@@ -234,7 +234,7 @@ public class AnnotationUtil
 		PathObject pathObject = new PathObject();
 		pathObject.setSourceEntity(staticEntity);
 		pathObject.setTargetEntity(dynamicEntity);
-		
+
 		if (processedPathList.contains(pathObject))
 		{
 			return;
@@ -242,8 +242,8 @@ public class AnnotationUtil
 		else
 		{
 			processedPathList.add(pathObject);
-		}		
-		
+		}
+
 		Long start = new Long(System.currentTimeMillis());
 
 		AnnotationUtil.addPathsForQuery(staticEntity.getId(), dynamicEntity.getId(), associationId);
@@ -251,11 +251,11 @@ public class AnnotationUtil
 		Collection<AssociationInterface> associationCollection = dynamicEntity
 				.getAssociationCollection();
 		for (AssociationInterface associationInteface : associationCollection)
-		{			
+		{
 			System.out.println("PERSISTING PATH");
 			addQueryPathsForAllAssociatedEntities( associationInteface
 					.getTargetEntity(),dynamicEntity, associationInteface.getId(),processedPathList);
-			
+
 			//			AnnotationUtil.addPathsForQuery(dynamicEntity.getId(), associationInteface
 			//					.getTargetEntity().getId(), associationInteface.getId());
 		}
@@ -423,8 +423,8 @@ public class AnnotationUtil
 
 			executeQuery(conn, list);
 			maxPathId += 1;
-			addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId, intraModelAssociationId,
-					conn);
+			//addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId, intraModelAssociationId,
+					//conn);
 			conn.commit();
 		}
 		catch (Exception e)
@@ -437,7 +437,7 @@ public class AnnotationUtil
 			try
 			{
 				conn.close();
-				DBUtil.closeConnection();				
+				DBUtil.closeConnection();
 			}
 			catch (HibernateException e)
 			{
@@ -453,67 +453,67 @@ public class AnnotationUtil
 
 	}
 
-	/**
-	 * @param maxPathId
-	 * @param staticEntityId
-	 * @param dynamicEntityId
-	 * @param intraModelAssociationId
-	 * @param conn
-	 * @throws SQLException
-	 */
-	private static void addIndirectPaths(Long maxPathId, Long staticEntityId, Long dynamicEntityId,
-			Long intraModelAssociationId, Connection conn)
-
-	{
-		ResultSet resultSet = null;
-		PreparedStatement statement = null;
-		String query = "";
-		try
-		{
-			//resultSet = getIndirectPaths(conn, staticEntityId);
-			query = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
-					+ staticEntityId;
-			statement = conn.prepareStatement(query);
-			resultSet = statement.executeQuery();
-		
-		
-			query = "insert into path (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values (?,?,?,?)";
-			statement = conn.prepareStatement(query);
-			while (resultSet.next())
-			{
-
-				Long firstEntityId = resultSet.getLong(1);
-				String path = resultSet.getString(2);
-				path = path.concat("_").concat(intraModelAssociationId.toString());
-
-				statement.setLong(1, maxPathId);
-				maxPathId++;
-				statement.setLong(2, firstEntityId);
-				statement.setString(3, path);
-				statement.setLong(4, dynamicEntityId);
-				statement.execute();
-				statement.clearParameters();
-			}
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			try
-			{
-				resultSet.close();
-				statement.close();
-			}
-			catch (SQLException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-	}
+//	/**
+//	 * @param maxPathId
+//	 * @param staticEntityId
+//	 * @param dynamicEntityId
+//	 * @param intraModelAssociationId
+//	 * @param conn
+//	 * @throws SQLException
+//	 */
+//	private static void addIndirectPaths(Long maxPathId, Long staticEntityId, Long dynamicEntityId,
+//			Long intraModelAssociationId, Connection conn)
+//
+//	{
+//		ResultSet resultSet = null;
+//		PreparedStatement statement = null;
+//		String query = "";
+//		try
+//		{
+//			//resultSet = getIndirectPaths(conn, staticEntityId);
+//			query = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
+//					+ staticEntityId;
+//			statement = conn.prepareStatement(query);
+//			resultSet = statement.executeQuery();
+//
+//
+//			query = "insert into path (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values (?,?,?,?)";
+//			statement = conn.prepareStatement(query);
+//			while (resultSet.next())
+//			{
+//
+//				Long firstEntityId = resultSet.getLong(1);
+//				String path = resultSet.getString(2);
+//				path = path.concat("_").concat(intraModelAssociationId.toString());
+//
+//				statement.setLong(1, maxPathId);
+//				maxPathId++;
+//				statement.setLong(2, firstEntityId);
+//				statement.setString(3, path);
+//				statement.setLong(4, dynamicEntityId);
+//				statement.execute();
+//				statement.clearParameters();
+//			}
+//		}
+//		catch (SQLException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		finally
+//		{
+//			try
+//			{
+//				resultSet.close();
+//				statement.close();
+//			}
+//			catch (SQLException e)
+//			{
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//		}
+//	}
 
 //	/**
 //	 * @param conn
@@ -627,7 +627,7 @@ public class AnnotationUtil
 				statement.close();
 				conn.close();
 				DBUtil.closeConnection();
-				
+
 			}
 			catch (HibernateException e)
 			{
