@@ -37,6 +37,8 @@ public class Variables extends edu.wustl.common.util.global.Variables
 	// Patch ID: SimpleSearchEdit_7
     public static Map<String, String> aliasAndPageOfMap = new HashMap<String, String>();
     
+    public static List<String> queryReadDeniedObjectList = new ArrayList<String>();
+    
     public static String prepareColTypes(List dataColl)
     {
     	return prepareColTypes(dataColl, false);

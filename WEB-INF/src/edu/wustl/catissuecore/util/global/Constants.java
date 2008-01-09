@@ -10,6 +10,7 @@
  */
 
 package edu.wustl.catissuecore.util.global;
+
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -2219,8 +2220,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
         TissueSpecimen.class.getName(),
         CellSpecimen.class.getName(),
         SPECIMEN_ARRAY_CLASS_NAME,
-        IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
-        DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
+        //IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
+        //DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
 };
 	
 	//For enhanced CP

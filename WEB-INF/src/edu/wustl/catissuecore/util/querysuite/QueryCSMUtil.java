@@ -21,6 +21,7 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
@@ -182,48 +183,65 @@ public abstract class QueryCSMUtil
 	 */
 	public static  QueryResultObjectDataBean getQueryResulObjectDataBean(
 			OutputTreeDataNode node, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
-	{ 
+	{  
 		QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
+		boolean readDeniedObject = false;
+		
 		EntityInterface dynamicExtensionsEntity = node.getOutputEntity()
 				.getDynamicExtensionsEntity();
-		String mainEntityName = dynamicExtensionsEntity.getName();
+		String entityName = dynamicExtensionsEntity.getName();
 		queryResultObjectDataBean
 				.setPrivilegeType(edu.wustl.common.querysuite.security.utility.Utility
 						.getPrivilegeType(dynamicExtensionsEntity));
 		queryResultObjectDataBean.setEntity(dynamicExtensionsEntity);
 
-		boolean presentInArray = QueryModuleUtil.isPresentInArray(mainEntityName,
-				Constants.INHERITED_ENTITY_NAMES);
-		if (presentInArray && dynamicExtensionsEntity.getParentEntity() != null)
-		{
-			mainEntityName = dynamicExtensionsEntity.getParentEntity().getName();
-			dynamicExtensionsEntity.setName(mainEntityName);
-		}
 		List<EntityInterface> mainEntityList = mainEntityMap.get(dynamicExtensionsEntity);
 		if (mainEntityList != null)
 		{
 			EntityInterface mainEntity = getMainEntity(mainEntityList, node);
 			queryResultObjectDataBean.setMainEntity(mainEntity);
 			queryResultObjectDataBean.setMainEntity(false);
-			mainEntity.setName(mainEntityName);
+			String name = mainEntity.getName();
+			readDeniedObject = isReadDeniedObject(name);
+			setEntityName(mainEntity, name);
 		}
 		else
+		{
 			queryResultObjectDataBean.setMainEntity(true);
-
+			readDeniedObject = isReadDeniedObject(dynamicExtensionsEntity.getName());
+			setEntityName(dynamicExtensionsEntity, entityName);
+		}
+		
+		queryResultObjectDataBean.setReadDeniedObject(readDeniedObject);
 		return queryResultObjectDataBean;
 	}
+
+	/**
+	 * @param dynamicExtensionsEntity
+	 * @param name
+	 */
+	private static void setEntityName(EntityInterface dynamicExtensionsEntity, String name)
+	{
+		boolean presentInArray = QueryModuleUtil.isPresentInArray(name,
+				Constants.INHERITED_ENTITY_NAMES);
+		if (presentInArray && dynamicExtensionsEntity.getParentEntity() != null)
+		{
+			name = dynamicExtensionsEntity.getParentEntity().getName();
+			dynamicExtensionsEntity.setName(name);
+		}
+	}
 	
-//	/**
-//	 * @param name
-//	 * @return
-//	 */
-//	private static boolean isReadDeniedObject(String entityName)
-//	{
-//		if (Constants.QUERY_READ_DENIED_OBJECT_LIST.contains(entityName))
-//			return true;
-//		else
-//			return false;
-//	}
+	/**
+	 * @param name
+	 * @return
+	 */
+	private static boolean isReadDeniedObject(String entityName)
+	{  
+		if (Variables.queryReadDeniedObjectList.contains(entityName))
+			return true;
+		else
+			return false;
+	}
 
 	/**This method will return main entity for node passed in context of query (i.e. If one texcontent node is associated with Identified and 
 	 * other with deidentified then it will return appropriate main object for textcontent)
@@ -294,36 +312,7 @@ public abstract class QueryCSMUtil
 		return list;
 	}
 	
-	/**
-	 * @param selectSql
-	 * @param sessionData
-	 * @param queryResulObjectDataMap
-	 * @param root 
-	 * @param hasConditionOnIdentifiedField 
-	 * @return
-	 * @throws DAOException 
-	 * @throws ClassNotFoundException 
-	 */
-	public static List executeCSMQuery(String selectSql, SessionDataBean sessionData,
-			Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap, OutputTreeDataNode root, boolean hasConditionOnIdentifiedField) throws DAOException, ClassNotFoundException
-	{  
-		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-		List<List<String>> dataList = new ArrayList<List<String>>();
-		try
-		{ 
-			dao.openSession(sessionData);
-			dataList = dao.executeQuery(selectSql, sessionData, true, hasConditionOnIdentifiedField, queryResulObjectDataMap);
-			System.out.println("Time after checkPermissions for CSM filtering of tree: " +new java.util.Date());
-			Logger.out.debug("Time after checkPermissions for CSM filtering of tree: " +new java.util.Date());
-			dao.commit();
-		}
-		finally
-		{
-			dao.closeSession();
-		}
-		return dataList;
-	}
-	
+		
 	/**
 	 * @param queryResultObjectDataBean
 	 * @param columnIndex
@@ -431,9 +420,4 @@ public abstract class QueryCSMUtil
 		return null;
 	}
 	
-	public List<Integer> getCPPdsForGivenEntityId (EntityInterface entity,int id)
-	{
-		
-		return null;
-	}
 } 

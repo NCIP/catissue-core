@@ -49,25 +49,6 @@ public class QueryOutputTreeBizLogic
 		QueryModuleUtil.executeCreateTable(tableName, createTableSql, sessionData);
 	}
 	/**
-	 * Returns true if the attribute name can be used to form label for tree node.
-	 * Label can be formed from attributes like 'first name', 'last name', 'title', 'label' ,'name' etc.
-	 * @param attrName String
-	 * @return true if the attribute name can be used to form label for tree node otherwise returns false
-	 */
-	boolean ifAttributeIsDisplayName(String attrName)
-	{
-		String[] attrNamesForLabel = Constants.ATTRIBUTE_NAMES_FOR_TREENODE_LABEL;
-		for (int i = 0; i < attrNamesForLabel.length; i++)
-		{
-			String name = attrNamesForLabel[i];
-			if (attrName.equalsIgnoreCase(name))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	/**
 	 * This method creates first level(Default) output tree data.
 	 * @param tableName name fo the table created
 	 * @param query IQuery obj created out of user inputs to dag view.
@@ -91,8 +72,8 @@ public class QueryOutputTreeBizLogic
 		selectSql = sqlIndex[0];
 		int index = Integer.parseInt(sqlIndex[1]);
 
-		//List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
-		List dataList = QueryCSMUtil.executeCSMQuery(selectSql, sessionData,queryResultObjectDataBeanMap,root,hasConditionOnIdentifiedField);
+		QueryCsmBizLogic queryCsmBizLogic = new QueryCsmBizLogic();
+		List dataList = queryCsmBizLogic.executeCSMQuery(selectSql, sessionData,queryResultObjectDataBeanMap,root,hasConditionOnIdentifiedField);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
 		if (dataList != null && dataList.size() != 0)
 		{

@@ -250,6 +250,8 @@ public abstract class QueryModuleUtil
 	//	columnNames = columnNames.substring(0, columnNames.lastIndexOf(","));
 		columnNames = columnNames + ";" + index;
 		Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
+		if(queryResultObjectDataBean.getIdentifiedDataColumnIds().size()!=0)
+		  queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
 		QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columIndex,columnNames,null,entityIdIndexMap);
 		return columnNames;
 	}
@@ -386,7 +388,8 @@ public abstract class QueryModuleUtil
 	 * @return
 	 */
 	public static int searchQuery(HttpServletRequest request, IQuery query, String option)
-	{     
+	{      
+		System.out.println("Start Time");
 		String isSavedQuery = (String) request.getAttribute(Constants.IS_SAVED_QUERY);
 		if(isSavedQuery == null) 
 			isSavedQuery = Constants.FALSE;

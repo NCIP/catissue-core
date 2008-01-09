@@ -46,7 +46,7 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param sessionData session data bean
 	 * @param idOfClickedNode
 	 * @param recordsPerPage number of recordsPerPage
-	 * @param selectedColumnMetaData metadat for selected columns 
+	 * @param selectedColumnMetaData metadata for selected columns 
 	 * @param queryResultObjectDataMap 
 	 * @param mainEntityMap 
 	 * @return Map for data
@@ -214,7 +214,13 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @throws ClassNotFoundException
 	 * @throws DAOException
 	 */
-	private Map updateSpreadsheetData(SessionDataBean sessionData, String parentData, OutputTreeDataNode node, int recordsPerPage,String randomNumber,Map<String, OutputTreeDataNode> idNodesMap,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap,boolean hasConditionOnIdentifiedField, Map<EntityInterface, List<EntityInterface>> mainEntityMap) throws ClassNotFoundException, DAOException
+	private Map updateSpreadsheetData(SessionDataBean sessionData, String parentData,
+			OutputTreeDataNode node, int recordsPerPage, String randomNumber,
+			Map<String, OutputTreeDataNode> idNodesMap,
+			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap,
+			boolean hasConditionOnIdentifiedField,
+			Map<EntityInterface, List<EntityInterface>> mainEntityMap)
+			throws ClassNotFoundException, DAOException
 	{ 
 		Map spreadSheetDataMap = new HashMap();
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
@@ -262,6 +268,7 @@ public class QueryOutputSpreadsheetBizLogic
 			{
 				identifiedDataColumnIds.add(columnIndex);
 				queryResultObjectDataBean.setIdentifiedDataColumnIds(identifiedDataColumnIds);
+				queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
 			}
 			if(attribute.getName().equals(Constants.ID))
 			{
@@ -400,6 +407,7 @@ public class QueryOutputSpreadsheetBizLogic
 					if (attribute.getIsIdentified() != null && attribute.getIsIdentified())
 					{
 						queryResultObjectDataBean.getIdentifiedDataColumnIds().add(columnIndex);
+						queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
 					}
 					queryResultObjectDataBean.getObjectColumnIds().add(columnIndex);
 					queryResultObjectDataBeanMap.put(metaData.getTreeDataNode().getId(),
