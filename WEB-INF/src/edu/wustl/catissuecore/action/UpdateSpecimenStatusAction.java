@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -12,25 +11,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bean.SpecimenDataBean;
 
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -104,18 +98,19 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			if(!specimenVO.getReadOnly())
 			{
 				specimen = createSpecimenDomainObject(specimenVO);
-				specimen.setChildrenSpecimen(getChildrenSpecimens(specimenVO));
+				specimen.setChildrenSpecimen(getChildrenSpecimens(specimenVO,specimen));
 				specimenDomainCollection.add(specimen);
 			}
 			else
 			{
-				specimenDomainCollection.addAll(getChildrenSpecimens(specimenVO));	
+				specimenDomainCollection.addAll(getChildrenSpecimens(specimenVO,specimen));	
 			}
 		}
 		return specimenDomainCollection;
 	}
 
-	private Collection getChildrenSpecimens(GenericSpecimen specimenVO) throws BizLogicException
+	//Abhishek Mehta : Performance related Changes
+	private Collection getChildrenSpecimens(GenericSpecimen specimenVO, Specimen parentSpecimen) throws BizLogicException
 	{
 		HashSet childrenSpecimens = new HashSet();
 		LinkedHashMap aliquotMap = specimenVO.getAliquotSpecimenCollection();
@@ -131,13 +126,14 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 				if(!aliquotSpecimen.getReadOnly())
 				{
 					specimen = createSpecimenDomainObject(aliquotSpecimen);
+					specimen.setParentSpecimen(parentSpecimen);
 					specimen.setChildrenSpecimen(
-						getChildrenSpecimens(aliquotSpecimen));
+						getChildrenSpecimens(aliquotSpecimen,specimen));
 					childrenSpecimens.add(specimen);
 				}
 				else
 				{
-					childrenSpecimens.addAll(getChildrenSpecimens(aliquotSpecimen));
+					childrenSpecimens.addAll(getChildrenSpecimens(aliquotSpecimen,specimen));
 				}
 			}
 		}
@@ -151,16 +147,18 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			while(iterator.hasNext())
 			{
 				GenericSpecimen derivedSpecimen = (GenericSpecimen) iterator.next();
+				Specimen specimen = null;
 				if(!derivedSpecimen.getReadOnly())
 				{
-					Specimen specimen = createSpecimenDomainObject(derivedSpecimen);
+					specimen = createSpecimenDomainObject(derivedSpecimen);
+					specimen.setParentSpecimen(parentSpecimen);
 					specimen.setChildrenSpecimen(
-							getChildrenSpecimens(derivedSpecimen));
+							getChildrenSpecimens(derivedSpecimen,specimen));
 					childrenSpecimens.add(specimen);
 				}
 				else
 				{
-					childrenSpecimens.addAll(getChildrenSpecimens(derivedSpecimen));	
+					childrenSpecimens.addAll(getChildrenSpecimens(derivedSpecimen,specimen));	
 				}
 			}
 		}

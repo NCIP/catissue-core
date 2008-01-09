@@ -64,7 +64,8 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 			if (ViewSpecimenSummaryForm.ADD_USER_ACTION
 					.equals(specimenSummaryForm.getUserAction()))
 			{
-				bizLogic.insert(createSpecimenMap(specimenDomainCollection), 
+				//Abhishek Mehta : Performance related Changes
+				bizLogic.insert(specimenDomainCollection, 
 					sessionDataBean, Constants.HIBERNATE_DAO);
 			}
 			else

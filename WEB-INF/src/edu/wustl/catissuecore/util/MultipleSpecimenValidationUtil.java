@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.util;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,6 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -36,6 +36,7 @@ import edu.wustl.common.util.global.Validator;
 public final class MultipleSpecimenValidationUtil
 {
 
+	//Abhishek Mehta : Performance related Changes
 	/**
 	 * validate multiple specimens.
 	 * @param specimenMap
@@ -44,11 +45,11 @@ public final class MultipleSpecimenValidationUtil
 	 * @return
 	 * @throws DAOException
 	 */
-	public static boolean validateMultipleSpecimen(Map specimenMap, DAO dao, String operation) throws DAOException
+	public static boolean validateMultipleSpecimen(LinkedHashSet specimenMap, DAO dao, String operation) throws DAOException
 	{ 
 		boolean result = true;
 		setSCGinSpecimen(specimenMap,dao);
-		Iterator specimenIterator = specimenMap.keySet().iterator();
+		Iterator specimenIterator = specimenMap.iterator();
 		int count = 0;
 		while (specimenIterator.hasNext() && result == true)
 		{
@@ -67,18 +68,19 @@ public final class MultipleSpecimenValidationUtil
 				throw daoException;
 			}
 
-			List derivedSpecimens = (List) specimenMap.get(specimen);
+			Collection derivedSpecimens = specimen.getChildrenSpecimen();
 
 			if (derivedSpecimens == null)
 			{
 				continue;
 			}
 
+			Iterator it = derivedSpecimens.iterator();
 			//validate derived specimens
-			for (int i = 0; i < derivedSpecimens.size(); i++)
+			int i = 0;
+			while(it.hasNext())
 			{
-
-				Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
+				Specimen derivedSpecimen = (Specimen)it.next();
 				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 				derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
@@ -100,6 +102,7 @@ public final class MultipleSpecimenValidationUtil
 				{
 					break;
 				}
+				i++;
 			}
 
 		}
@@ -114,9 +117,9 @@ public final class MultipleSpecimenValidationUtil
 	 * @param dao dao
 	 * @throws DAOException dao exception
 	 */
-	public static void setSCGinSpecimen(Map specimenMap, DAO dao) throws DAOException
+	public static void setSCGinSpecimen(LinkedHashSet specimenMap, DAO dao) throws DAOException
 	{
-		Iterator specimenIterator = specimenMap.keySet().iterator();
+		Iterator specimenIterator = specimenMap.iterator();
 		while (specimenIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
@@ -153,7 +156,6 @@ public final class MultipleSpecimenValidationUtil
 			}
 		}
 	}
-	
 	/**
 	 * validates single specimen.
 	 * @param specimen

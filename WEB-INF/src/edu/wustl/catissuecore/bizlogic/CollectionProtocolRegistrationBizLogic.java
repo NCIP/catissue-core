@@ -15,10 +15,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -559,14 +557,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 	}
 
+	//Abhishek Mehta : Performance related Changes
 	/*
 	 * Creating SCG and specimen while creating participant.
 	 */
-	private Collection specimenCollectionNew;
-
+	
 	private Long userID;
-
-	private Map<Specimen, List<Specimen>> specimenMap = null;
 
 	private void createSCG(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
@@ -585,7 +581,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			Collection scgCollection = new HashSet();
 			while (collectionProtocolEventIterator.hasNext())
 			{
-				specimenMap = new LinkedHashMap<Specimen, List<Specimen>>();
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) collectionProtocolEventIterator.next();
 				
 				countOfStudyCalendarEventPoint = countOfStudyCalendarEventPoint + (collectionProtocolEvent.getStudyCalendarEventPoint()).intValue();
@@ -633,10 +628,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				specimenCollectionGroup.setOffset(collectionProtocolRegistration.getOffset());
 				specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
 				scgCollection.add(specimenCollectionGroup);
-				//specimenBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
 				dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
 				specimenBizLogic.insertAuthData(specimenCollectionGroup);
-				bizLogic.insert(specimenMap, dao, sessionDataBean);
+				bizLogic.insert(cloneSpecimenCollection, dao, sessionDataBean);
 			}
 			collectionProtocolRegistration.setSpecimenCollectionGroupCollection(scgCollection);
 		}
@@ -654,20 +648,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		newSpecimen.setDefaultSpecimenEventCollection(userID);
 		newSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		newSpecimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
-		if (newSpecimen.getParentSpecimen() == null)
-		{
-			specimenMap.put(newSpecimen, new ArrayList<Specimen>());
-		}
-		else
-		{
-			List<Specimen> childrenList = specimenMap.get(pSpecimen);
-			if (childrenList ==null)
-			{
-				childrenList = new ArrayList<Specimen>();
-				specimenMap.put(newSpecimen,childrenList);
-			}
-			childrenList.add(newSpecimen);
-		}
 
 		Collection childrenSpecimenCollection = specimen.getChildrenSpecimen();
 		if (childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
@@ -685,7 +665,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		return newSpecimen;
 	}
-
+	
+	
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;

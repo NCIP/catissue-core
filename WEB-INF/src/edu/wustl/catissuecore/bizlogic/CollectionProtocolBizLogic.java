@@ -15,8 +15,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -27,7 +27,6 @@ import edu.wustl.catissuecore.TaskTimeCalculater;
 
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
-import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -213,14 +212,16 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		("Insert specimen for CP", CollectionProtocolBizLogic.class);
 		Iterator<Specimen> specIter = collectionRequirementGroup.getSpecimenCollection().iterator();
 		
-		Map<Specimen, List<Specimen>> specimenMap = new LinkedHashMap<Specimen, List<Specimen>>();
+		//Abhishek Mehta : Performance related Changes
+		
+		Collection specimenMap = new LinkedHashSet();
 
 		while(specIter.hasNext())
 		{
 			Specimen specimen = specIter.next();									
 		
 			specimen.setSpecimenCollectionGroup(collectionRequirementGroup);
-			specimenMap.put(specimen, null);
+			specimenMap.add(specimen);
 		}
 		bizLogic.setCpbased(true);
 		bizLogic.insert(specimenMap, dao, sessionDataBean);
