@@ -18,6 +18,7 @@
 List requestDetailsList = (List) request.getAttribute(Constants.REQUEST_DETAILS_LIST);	
 int disabledStatus;
 int count=0;
+
 if(requestDetailsList!=null && requestDetailsList.size()>0 )
 {
  count=requestDetailsList.size();	
@@ -30,6 +31,28 @@ String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=Forw
 <script language="JavaScript" type="text/javascript" src="jss/OrderingSystem.js"></script>
 <script language="javascript">
 var newWindow;
+
+function changeCreateButtonStatus(noOfItems,arrayRowCounter,assignStatusArraycount)
+{
+	var buttonCreateArrayId = "buttonCreateArrayId"+arrayRowCounter;
+	var obj = document.getElementById(buttonCreateArrayId);
+	obj.disabled=false;
+	var index = assignStatusArraycount-noOfItems;
+	for(i=index;i<assignStatusArraycount;i++)
+	{
+
+		var assignStatusArrayId = "value(DefinedArrayDetailsBean:"+i+"_assignedStatus)"+arrayRowCounter; 	
+		var assignStatusArrayValue =  document.getElementById(assignStatusArrayId).value;
+		if(assignStatusArrayValue!="Ready For Array Preparation")
+		{
+			obj.disabled=true;
+			break;
+		}
+		
+	}
+
+}
+
 function tabToDisplay()
 {
 	var tabIndex = document.getElementById("tabIndexId").value;

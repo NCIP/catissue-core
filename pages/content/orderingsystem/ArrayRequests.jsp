@@ -19,10 +19,12 @@
 			if(definedArrayRequestMapList != null)
 			{
 				int arrayRowCounter = 0;
+				int assignStatusArraycount = 0;
 				session.setAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST,definedArrayRequestMapList);
 		%>
 		<%							
 							int rowNumber =0 ;
+							String disabledCreateButton="false";
 						%>
 			<!-- Iterate the list -->
 		<logic:iterate id="defineArrayMap" collection="<%=definedArrayRequestMapList%>" type="java.util.Map">
@@ -48,7 +50,7 @@
 					String noOfItemsValue = ((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_noOfItems")));
 					Integer items = new Integer(noOfItemsValue);
 					int noOfItems = items.intValue();
-					
+					assignStatusArraycount=assignStatusArraycount+noOfItems;
 					String arrayId = "array_" + arrayRowCounter;
 					boolean disableDefineArray = false;
 		 %>
@@ -115,6 +117,8 @@
 									String dataArray = "dataArray" + arrayRowCounter; 
 									String headerArray = "headerArray" + arrayRowCounter;
 									String btnCreateArrayId = "btnCreateArray" + arrayRowCounter;
+									String buttonCreateArrayId ="buttonCreateArrayId"+arrayRowCounter;
+									
 
 									//String orderItemInBean = definedArrayRequestBean.getOrderItemId();
 									//String arrayIdInBean = definedArrayRequestBean.getArrayId();
@@ -175,6 +179,7 @@
 						<% for(int i=0; i<noOfItems; i++)
 						{
 							//Variables required to set the id of each row.It is used in expandOrderItemsInArray() Js function for expand/collapse purpose.
+							
 							String switchDefinedArray = "switchdefineArray" + rowNumber + "_array" + arrayRowCounter;
 							String dataDefinedArray = "dataDefinedArray" + rowNumber + "_array" + arrayRowCounter;
 							
@@ -199,27 +204,29 @@
 							String actualSpecimenClass = "value(DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenClass)";
 												
 							boolean disableArrayOrderItemRow = false;
+							String assignStatusArrayId = "value(DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus)"+arrayRowCounter; 
+							
 
-							if(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)) 								
+							if(!((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)) 								
 							{
-								//disableArrayOrderItemRow = true;
-						%>
-						<!-- <html:hidden name="requestDetailsForm" property="<%=assignStatusArray%>" /> 
-						<html:hidden name="requestDetailsForm" property="<%= requestForArray %>" />
-						<html:hidden name="requestDetailsForm" property="<%= descriptionArray %>" />  -->
-						
-						<%
-							}
+								disabledCreateButton="true";
+								
 
-							//This is to update available qty for the specimen selected from requestFor drop down.
+							}
+							%>
+						
+							
+						<%	//This is to update available qty for the specimen selected from requestFor drop down.
 							String updateAvaiQtyForItemInArray = "avaiQty" + rowNumber+"A";
 
 							String requestForIdInArray = "requestFor" + rowNumber+"A";
 							String onChangeValueForRequestForInArray = "updateQuantity('"+ requestForIdInArray  +"')";
+							String changeCreateButtonStatus = "changeCreateButtonStatus('"+ noOfItems +"','"+arrayRowCounter+"','"+assignStatusArraycount+"')";
 							if(((requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_specimenId"))) != null && !((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_specimenId"))).equals(""))
 							{
 						%>
 								<html:hidden name="requestDetailsForm" property="<%= specimenIdInMapArray %>"  />
+							
 						  <%}
 				 		    else
 						    {%>
@@ -370,13 +377,15 @@
 													document.write(orderItemUnitInArray);
 												</script>
 											</span>	
-								 	</td-->
+								 	</td   onchange="javascript: var noOfItems='<%=noOfItems%>';changeButtonState(noOfItems,'btnCreateArray');"-->
 								 	<td class="dataCellText" width="30%">
-							 				<html:select property="<%=assignStatusArray%>" name="requestDetailsForm" styleClass="formFieldSized15"  
-								 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableDefineArray %>" ><!-- disabled="<%= disableArrayOrderItemRow %>" -->
-								 			 	<html:options collection="<%=Constants.ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY%>" labelProperty="name" property="value"/>											 				   
+							 				<html:select property="<%=assignStatusArray%>" name="requestDetailsForm" styleClass="formFieldSized15" styleId="<%=assignStatusArrayId%>" 
+								 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableDefineArray %>" onchange="<%= changeCreateButtonStatus %>">
+								 			 	<html:options collection="<%=Constants.ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY%>" labelProperty="name" property="value"/>	
+															
 											</html:select>
 								 	</td>
+										
 							</tr>
 								<!-- Block to display the expanded/collapsed row starts here-->
 							<tr id="<%=dataDefinedArray%>" style="display:none">
@@ -420,7 +429,7 @@
 
 							
 							<% rowNumber++;
-							}
+												}
 							%>
 						
 							<!-- Create Array Button -->								
@@ -429,13 +438,13 @@
 								<table width="100%" style="border-bottom:1px solid #5C5C5C;">
 									<tr> 
 										<td align="right">
-										<% if((((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_createArrayButtonDisabled"))).equals("false")))
+										<% if(disabledCreateButton.equals("false"))
 											{
 										 %>
-											<input type="button" id="btnCreateArray" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>','<%= rowNumber-noOfItems %>')" />
+											<input type="button" id="<%= buttonCreateArrayId%>" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>','<%= rowNumber-noOfItems %>')" />
 										<%  }else{
 										%>
-											<input type="button" id="btnCreateArray" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>')" disabled="disabled"/>
+											<input type="button" id="buttonCreateArrayId" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>')" disabled="disabled"/>
 										<% }
 											String defineArrayName = "defineArrayName_" + arrayRowCounter; 
 											String nameOfArray =((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_arrayName")));
