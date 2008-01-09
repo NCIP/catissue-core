@@ -31,15 +31,15 @@ public class ValidateQueryAction extends BaseAction {
 		
 		String buttonClicked = (String)request.getParameter(Constants.BUTTON_CLICKED);
 		// dataKey defines that ajax call from SimpleSearchDataView.jsp is made to get the updated message.
-		String dataKey = (String)request.getParameter("updateSessionData"); 
+		String dataKey = (String)request.getParameter(Constants.UPDATE_SESSION_DATA); 
 		HttpSession session = request.getSession();
-		if (dataKey != null && dataKey.equals("updateSessionData"))
+		if (dataKey != null && dataKey.equals(Constants.UPDATE_SESSION_DATA))
 		{
 			//if dataKey is not null retrieve the data from the session and send it to the jsp
 			String message = (String) session.getAttribute(Constants.VALIDATION_MESSAGE_FOR_ORDERING);
-			String isListEmpty = (String) session.getAttribute("IsListEmpty");
+			String isListEmpty = (String) session.getAttribute(Constants.IS_LIST_EMPTY);
 			
-			if ((isListEmpty != null && isListEmpty.equals("false")) || message == null)
+			if ((isListEmpty != null && isListEmpty.equals(Constants.FALSE)) || message == null)
 			{
 				message = "";
 			}
