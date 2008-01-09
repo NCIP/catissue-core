@@ -1,5 +1,6 @@
 update dyextn_role set ASSOCIATION_TYPE = 'ASSOCIATION';
 update dyextn_role set association_type="CONTAINTMENT" where identifier in (44,52,66,98,102,106,84,94,613,294,457,465,481,493,505,517,529,541,553,565,823,345,357,369,381,393,407,421,433,445,20,487,499,511,523,535,547,559,817,339,351,363,375,387,399,415,427,439,451,471,475,222,459,467,479,491,503,515,527,539,551,563,821,343,355,367,379,391,409,419,431,443,138,497,509,521,533,545,557,815,349,361,373,385,397,413,425,437,449,461,473,485,264,477,489,501,513,525,537,549,561,819,341,353,365,377,389,411,417,429,441,453,469,180,324,322,320,318,316,326,328,330,332,334,336,312,310,308,306,304,302,300,294,314,845,570,582,596,604,588,576,617,831,842,629,628,744,8,298,110,594,580);
+insert into `dyextn_tagged_value` select Max(`IDENTIFIER`)+1, 'PRIVILEGE_ID','1',4 from `dyextn_tagged_value`;
 insert into `dyextn_tagged_value` select Max(`IDENTIFIER`)+1, 'PRIVILEGE_ID','1',125 from `dyextn_tagged_value`;
 insert into `dyextn_tagged_value` select Max(`IDENTIFIER`)+1, 'PRIVILEGE_ID','1',128 from `dyextn_tagged_value`;
 insert into `dyextn_tagged_value` select Max(`IDENTIFIER`)+1, 'PRIVILEGE_ID','1',131 from `dyextn_tagged_value`;
