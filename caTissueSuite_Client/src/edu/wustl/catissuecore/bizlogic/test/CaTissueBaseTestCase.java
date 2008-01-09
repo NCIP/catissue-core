@@ -41,6 +41,7 @@ public class CaTissueBaseTestCase extends BaseTestCase{
 //		DAOFactory.setDAOFactory(factory);
 		
 
+		System.setProperty("javax.net.ssl.trustStore", "D://jboss_18080//server//default//conf//chap8.keystore");
 		appService = ApplicationServiceProvider.getApplicationService();
 		ClientSession cs = ClientSession.getInstance();
 		try
