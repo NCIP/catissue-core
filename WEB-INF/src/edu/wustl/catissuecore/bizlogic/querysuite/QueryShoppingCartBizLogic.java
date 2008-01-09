@@ -178,4 +178,38 @@ public class QueryShoppingCartBizLogic
 		return idIndexList;
 	}
 	
+	/**
+	 * @param oldAttributeList cart attribute list.
+	 * @param attributeList new Spreadsheet attribute list.
+	 * @return
+	 */
+	public int[] getNewAttributeListIndexArray(List<AttributeInterface> oldAttributeList,
+			List<AttributeInterface> attributeList)
+	{
+		int[] indexArray = new int[attributeList.size()];
+		if (oldAttributeList.size() == attributeList.size())
+		{
+			int index;
+
+			for (int i = 0; i < attributeList.size(); i++)
+			{
+				index = (oldAttributeList.indexOf((AttributeInterface) attributeList.get(i)));
+				if (index == -1)
+				{
+					indexArray = null;
+					break;
+				}
+				else
+				{
+					indexArray[i] = index;
+				}
+			}
+
+		}
+		else
+			indexArray = null;
+		return indexArray;
+	}
+
+	
 }
