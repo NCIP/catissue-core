@@ -1,10 +1,11 @@
 /*
- * $Name: 1.41.2.18 $
+ * $Name: 1.41.2.19 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
+import edu.upmc.opi.caBIG.caTIES.database.domain.IdentifiedPathologyReport;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
@@ -38,7 +40,11 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
+import edu.wustl.catissuecore.reportloader.IdentifiedReportGenerator;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -376,8 +382,67 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			e.printStackTrace();
 		}*/
 		
+		//Added list of objects on which read denied has to be checked while filtration of result for csm-query performance.(Supriya Dankh)
+		setQueryReadDeniedObjectList();
+		
+		//A map that contains entity name as key and sql to get Collection Protocol Ids for that entity id as value for csm-query performance.(Supriya Dankh)
+		setEntityCpSqlMap();
 		
     }
+
+	/**
+	 * A map that contains entity name as key and sql to get Collection Protocol Ids for that 
+     * entity id as value for csm-query performance.(Supriya Dankh)
+	 */
+	private void setEntityCpSqlMap()
+	{ 
+		Map<String,String> entityCPSqlMap = new HashMap<String, String>();
+		entityCPSqlMap.put(Specimen.class.getName(), "SELECT CPR.COLLECTION_PROTOCOL_ID , SP.IDENTIFIER FROM CATISSUE_COLL_PROT_REG CPR,CATISSUE_SPECIMEN SP ,CATISSUE_SPECIMEN_COLL_GROUP " +
+				" WHERE SP.SPECIMEN_COLLECTION_GROUP_ID = CATISSUE_SPECIMEN_COLL_GROUP.IDENTIFIER" +
+				" AND CATISSUE_SPECIMEN_COLL_GROUP.COLLECTION_PROTOCOL_REG_ID = CPR.IDENTIFIER" +
+				" AND SP.IDENTIFIER = ");
+		entityCPSqlMap.put(Participant.class.getName(), "SELECT CPR.COLLECTION_PROTOCOL_ID ,PARTICIPANT.IDENTIFIER " +
+				" FROM CATISSUE_COLL_PROT_REG CPR,CATISSUE_PARTICIPANT PARTICIPANT" +
+				" WHERE CPR.PARTICIPANT_ID =  PARTICIPANT.IDENTIFIER" +
+				" AND PARTICIPANT.IDENTIFIER = ");
+		entityCPSqlMap.put(CollectionProtocolRegistration.class.getName(), "SELECT COLLECTION_PROTOCOL_ID , IDENTIFIER FROM CATISSUE_COLL_PROT_REG " +
+				" WHERE IDENTIFIER = ");
+		entityCPSqlMap.put(SpecimenCollectionGroup.class.getName(),"SELECT CATISSUE_COLL_PROT_REG.COLLECTION_PROTOCOL_ID," +
+				" CATISSUE_SPECIMEN_COLL_GROUP.IDENTIFIER FROM CATISSUE_COLL_PROT_REG,CATISSUE_SPECIMEN_COLL_GROUP " +
+				" WHERE CATISSUE_COLL_PROT_REG.IDENTIFIER = CATISSUE_SPECIMEN_COLL_GROUP.COLLECTION_PROTOCOL_REG_ID " +
+				" AND CATISSUE_SPECIMEN_COLL_GROUP.IDENTIFIER = ");
+		entityCPSqlMap.put(DeidentifiedSurgicalPathologyReport.class.getName(), "SELECT CATISSUE_COLL_PROT_REG.COLLECTION_PROTOCOL_ID,CATISSUE_DEIDENTIFIED_REPORT.IDENTIFIER " +
+				" FROM CATISSUE_COLL_PROT_REG,CATISSUE_DEIDENTIFIED_REPORT,CATISSUE_SPECIMEN_COLL_GROUP " +
+				" WHERE CATISSUE_COLL_PROT_REG.IDENTIFIER = CATISSUE_SPECIMEN_COLL_GROUP.COLLECTION_PROTOCOL_REG_ID  " +
+				" AND CATISSUE_SPECIMEN_COLL_GROUP.IDENTIFIER = CATISSUE_DEIDENTIFIED_REPORT.SCG_ID " +
+				" AND CATISSUE_DEIDENTIFIED_REPORT.IDENTIFIER = ");
+		entityCPSqlMap.put(IdentifiedSurgicalPathologyReport.class.getName(), "SELECT catissue_coll_prot_reg.COLLECTION_PROTOCOL_ID,catissue_identified_report.IDENTIFIER " +
+				" FROM catissue_coll_prot_reg,catissue_identified_report,catissue_specimen_coll_group " +
+				" WHERE catissue_coll_prot_reg.IDENTIFIER = catissue_specimen_coll_group.COLLECTION_PROTOCOL_REG_ID " +
+				" AND catissue_specimen_coll_group.IDENTIFIER = catissue_identified_report.SCG_ID " +
+				" AND catissue_identified_report.IDENTIFIER = ");
+		
+		edu.wustl.common.util.global.Variables.entityCPSqlMap.putAll(entityCPSqlMap);
+	}
+
+	/**
+	 * Added list of objects on which read denied has 
+     * to be checked while filtration of result for csm-query performance.(Supriya Dankh)
+	 */
+	private void setQueryReadDeniedObjectList()
+	{
+		List<String> queryReadDeniedObjectsList = new ArrayList<String>();
+		queryReadDeniedObjectsList.add(Specimen.class.getName());
+		queryReadDeniedObjectsList.add(SpecimenCollectionGroup.class.getName());
+		queryReadDeniedObjectsList.add(CollectionProtocol.class.getName());
+		queryReadDeniedObjectsList.add(CollectionProtocolRegistration.class.getName());
+		queryReadDeniedObjectsList.add(Participant.class.getName());
+		queryReadDeniedObjectsList.add(SurgicalPathologyReport.class.getName());
+		queryReadDeniedObjectsList.add(DeidentifiedSurgicalPathologyReport.class.getName());
+		queryReadDeniedObjectsList.add(IdentifiedSurgicalPathologyReport.class.getName());
+		
+		Variables.queryReadDeniedObjectList.addAll(queryReadDeniedObjectsList);
+	}
     
     /**
      * TO create map of Alias verses corresponding pageOf values. 
