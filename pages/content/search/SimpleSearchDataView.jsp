@@ -66,7 +66,7 @@ tr#hiddenCombo
 			}
 			else
 			{
-				var isChecked = updateHiddenFields(); \\ if atleast one check box is checked.
+				var isChecked = updateHiddenFields(); // if atleast one check box is checked.
 				if (isChecked == "true")
 				{
 					var r=confirm(message);
