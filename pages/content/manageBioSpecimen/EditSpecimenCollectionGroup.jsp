@@ -197,7 +197,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 					<td class="formFieldNoBordersSimple" colspan="2" width="5">&nbsp;</td>
 					<td class="formFieldNoBordersSimple" >
 						<label for="offset">
-							<b><bean:message key="specimenCollectionGroup.offset" /></b>
+							<bean:message key="specimenCollectionGroup.offset" />
 						</label>
 					</td>
 					<td class="formFieldNoBordersSimple">
