@@ -19,10 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-// import java.util.Vector;
 import java.util.Stack;
-
-import com.adobe.asneu.f;
 
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -48,12 +45,10 @@ import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
-import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -959,7 +954,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		if (cpr == null)
 		{
 			int noOfDaysToAdd = 0;
-			if (eventPoint != null)
+			if (eventPoint != null && parentRegDate != null)
 			{
 				noOfDaysToAdd = eventPoint.intValue();
 				// offset logic
@@ -980,7 +975,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			}
 			else if (eventLastDate != null)
 				participantRegDate = Utility.getNewDateByAdditionOfDays(eventLastDate, Constants.DAYS_TO_ADD_CP);
-		}
+			else if(parentRegDate != null)
+				participantRegDate = Utility.getNewDateByAdditionOfDays(parentRegDate, Constants.DAYS_TO_ADD_CP);
+		}	
 		else
 		{
 			participantRegDate = cpr.getRegistrationDate();
