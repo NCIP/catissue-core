@@ -51,6 +51,8 @@ public class AnnotationConstants
     public static final String REQST_PARAM_ENTITY_RECORD_ID = "entityRecordId";
     public static final String COLLECTION_PROTOCOL_ENTITY_ID = "collectionProtocolEntityId";
     public static final String PARTICIPANT_ENTITY_ID =  "participantEntityId";
+    public static final String SPECIMEN_ENTITY_ID =  "specimenEntityId";
+    public static final String SCG_ENTITY_ID =  "scgEntityId";
     
     public static final String REQST_PARAM_CONDITION_ENTITY_ID = "conditionEntityId";
     public static final String REQST_PARAM_CONDITION_ENTITY_RECORD_ID = "conditionEntityRecordId";
