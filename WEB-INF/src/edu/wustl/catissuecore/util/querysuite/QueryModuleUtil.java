@@ -687,6 +687,8 @@ public abstract class QueryModuleUtil
 	 * @return message if if the 'id' attribute of the orderable entity is not included in view.
 	 */public static String getMessageIfIdNotPresentForOrderableEntities(SelectedColumnsMetadata selectedColumnsMetadata, QueryShoppingCart cart)
 	{
+		 if (selectedColumnsMetadata == null)
+			 return null;
 		String message = null;
 		QueryShoppingCartBizLogic queryShoppingCartBizLogic = new QueryShoppingCartBizLogic();
 		boolean areListsequal = true;
