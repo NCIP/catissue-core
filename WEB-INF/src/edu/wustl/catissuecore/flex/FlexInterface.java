@@ -1579,23 +1579,32 @@ public class FlexInterface
 	public Boolean chkArmShifting(String cpId, String pId) throws Exception
 	{
 
-		Long parentCPId = null;
-		// Get the parent Id of cpId;
-		String hql = "select cp.parentCollectionProtocol.id from " + CollectionProtocol.class.getName() + " as cp where cp.id = " + cpId;
-		List parentCpIdList = executeQuery(hql);
-		if (parentCpIdList != null && !parentCpIdList.isEmpty())
+		if (cpId != null && pId != null)
 		{
-			parentCPId = (Long) parentCpIdList.get(0);
-		}
-		if (parentCPId != null)
-		{
-			hql = "select cpr.collectionProtocol.id from " + CollectionProtocolRegistration.class.getName() + " as cpr where "
-					+ "cpr.participant.id = " + pId + " and cpr.collectionProtocol.type= '"
-					+ edu.wustl.catissuecore.util.global.Constants.ARM_CP_TYPE + "' and cpr.collectionProtocol.parentCollectionProtocol.id = "
-					+ parentCPId.toString() + " and cpr.collectionProtocol.id !=" + cpId; //Check if there are other arms registered for participant;
-			List cpList = executeQuery(hql);
-			if (cpList != null && !cpList.isEmpty())
-				return new Boolean(true);
+			SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
+			CollectionProtocolRegistration cpr = bizLogic.chkParticipantRegisteredToCP(new Long(pId), new Long(cpId));
+			if (cpr == null)
+			{
+				Long parentCPId = null;
+				// Get the parent Id of cpId;
+				String hql = "select cp.parentCollectionProtocol.id from " + CollectionProtocol.class.getName() + " as cp where cp.id = " + cpId;
+				List parentCpIdList = executeQuery(hql);
+				if (parentCpIdList != null && !parentCpIdList.isEmpty())
+				{
+					parentCPId = (Long) parentCpIdList.get(0);
+				}
+				if (parentCPId != null)
+				{
+					hql = "select cpr.collectionProtocol.id from " + CollectionProtocolRegistration.class.getName() + " as cpr where "
+							+ "cpr.participant.id = " + pId + " and cpr.collectionProtocol.type= '"
+							+ edu.wustl.catissuecore.util.global.Constants.ARM_CP_TYPE
+							+ "' and cpr.collectionProtocol.parentCollectionProtocol.id = " + parentCPId.toString()
+							+ " and cpr.collectionProtocol.id !=" + cpId; //Check if there are other arms registered for participant;
+					List cpList = executeQuery(hql);
+					if (cpList != null && !cpList.isEmpty())
+						return new Boolean(true);
+				}
+			}
 		}
 		return new Boolean(false);
 	}

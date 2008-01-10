@@ -1016,7 +1016,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return null;
 	}
 
-	private CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId) throws ClassNotFoundException, DAOException
+	public CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId) throws ClassNotFoundException, DAOException
 	{
 		//Date regDate = null;
 		CollectionProtocolRegistration cpr = null;
