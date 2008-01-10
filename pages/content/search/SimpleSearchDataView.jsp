@@ -258,8 +258,9 @@ function checkAllOnThisPageResponse()
 			mac = true;
 		}
 		String height = "100%";		
-		if(mac) \\ mac gives problem if the values aer specified in %
+		if(mac) 
 		{
+			/* mac gives problem if the values aer specified in percentage*/
 		  height="500";
 		}
 	%>
