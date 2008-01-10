@@ -519,7 +519,7 @@
 	<target name="upgrade_1.2_to_Suite" depends="db_upgrade, deploy_app_with_config">
 	</target>
 	
-	<target name="db_upgrade">
+	<target name="db_upgrade" depends="encryptPassword">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -551,7 +551,6 @@
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
 		</if>
-		<antcall target="csm_upgrade" />
 	</target>
 	
 	<!--MySQL Database Upgradation -->
@@ -560,6 +559,7 @@
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MySql/SCG_DB_changes.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/CSMUpgrade_3_to_3.2.sql"/>
 			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
 			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
@@ -582,6 +582,7 @@
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MySql/SCG_DB_changes.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/CSMUpgrade_3_to_3.2.sql"/>
 			<transaction src="${dbupgrade.sql.dir}/MySql/query_de_dump.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
@@ -598,6 +599,7 @@
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/SCG_DB_changes.sql" />
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/CSMUpgrade_3_to_3.2.sql"/>
 			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
