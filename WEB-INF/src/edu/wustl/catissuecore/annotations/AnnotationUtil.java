@@ -195,9 +195,10 @@ public class AnnotationUtil
         List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
         AnnotationUtil util = new AnnotationUtil();
         List<NameValueBean> staticEntityInformationList = util.populateStaticEntityList("StaticEntityInformation.xml",null);
-     
+        CatissueCoreCacheManager cache= CatissueCoreCacheManager.getInstance();
             systemEntityList.add(new NameValueBean(Constants.SELECT_OPTION,
                     Constants.SELECT_OPTION_VALUE));
+            String key="";
             if (staticEntityInformationList != null
                     && !staticEntityInformationList.isEmpty())
             {
@@ -205,15 +206,33 @@ public class AnnotationUtil
                 while (listIterator.hasNext())
                 {
                     NameValueBean nameValueBean = (NameValueBean) listIterator
-                            .next();
-                    systemEntityList.add(new NameValueBean(nameValueBean
-                            .getName(), edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(nameValueBean
-                            .getValue())));
+                            .next();                  
+                    key=getKeyFromEntityName(nameValueBean.getValue());
+                    if(key!=null && !key.equals(""))
+                        systemEntityList.add(new NameValueBean(nameValueBean
+                            .getName(),(Long)cache.getObjectFromCache(key)));                    
                 }
             }
-           
-      
         return systemEntityList;
+    }
+    /**
+     * 
+     * @param entityName
+     * @return
+     */
+    private static String getKeyFromEntityName(String entityName)
+    {
+        String key="";
+        if(entityName!=null)
+        {
+            if(entityName.equals(AnnotationConstants.ENTITY_NAME_PARTICIPANT))
+                key=AnnotationConstants.PARTICIPANT_ENTITY_ID;
+            else   if(entityName.equals(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP))
+                key=AnnotationConstants.SCG_ENTITY_ID;
+            else if(entityName.equals(AnnotationConstants.ENTITY_NAME_SPECIMEN))
+                key=AnnotationConstants.SPECIMEN_ENTITY_ID;
+        }
+        return key;
     }
 
     
