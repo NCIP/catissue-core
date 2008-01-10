@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
+import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
@@ -110,32 +111,79 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			isAuthorise(sessionDataBean.getUserName());
 		}
+		storageContainerIds= new HashSet<String>();
+
 		//Abhishek Mehta : Performance related Changes  
+		HashSet specimenList = new HashSet();
+		Collection insertableSpecimens;
+		try
+		{
+		insertableSpecimens = getInsertableSpecimens(obj, dao, sessionDataBean);
+		
+			Iterator insertSpecIterator = insertableSpecimens.iterator();
+			AbstractSpecimenCollectionGroup scg = null;
+			while (insertSpecIterator.hasNext())
+			{
+				Specimen specimen = (Specimen)insertSpecIterator.next();
+				
+				if (specimen.getSpecimenCharacteristics()!= null)
+				{
+					dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, false, false);
+					specimenList.add(specimen.getSpecimenCharacteristics());
+				}
+				if (scg == null)
+				{
+					scg = specimen.getSpecimenCollectionGroup();
+				}
+				specimenList.add(specimen);
+				dao.insert(specimen, sessionDataBean, false, false);				
+			}
+			
+			securityManager.insertAuthorizationData(null, specimenList, getDynamicGroups(scg));
+		}
+		catch (SMException e)
+		{
+			throw handleSMException(e);
+		}
+		finally
+		{
+			storageContainerIds.clear();
+		}
+
+	}
+
+	/**
+	 * @param obj
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param insertableSpecimens
+	 * @return
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private Collection getInsertableSpecimens(Object obj, DAO dao,
+			SessionDataBean sessionDataBean)
+			throws DAOException, UserNotAuthorizedException {
+		Collection insertableSpecimens;
 		if (obj.getClass().hashCode() == LinkedHashSet.class.hashCode())
 		{
-			insertMultipleSpecimen((LinkedHashSet) obj, dao, sessionDataBean);
+			insertableSpecimens = 
+				insertMultipleSpecimen((LinkedHashSet) obj, dao, sessionDataBean);
 		}
 
 		else if (obj instanceof Specimen)
 		{
-			HashSet<Specimen> specimenList = new HashSet<Specimen>();
-			insertSingleSpecimen((Specimen) obj, dao, sessionDataBean, false, specimenList );
 
-			try
-			{
-				securityManager.insertAuthorizationData(null, specimenList, getDynamicGroups(((Specimen) obj).getSpecimenCollectionGroup()));
-			}
-			catch (SMException e)
-			{
-				throw handleSMException(e);
-			}
-
+			Specimen insertableSpecimen = 
+				insertSingleSpecimen((Specimen) obj, dao, sessionDataBean, false);
+			insertableSpecimens = new LinkedHashSet();
+			insertableSpecimens.add(insertableSpecimen);
 		}
 		else
 		{
 			throw new DAOException("Object should be either specimen or LinkedHashMap " + "of specimen objects.");
 		}
-
+		return insertableSpecimens;
 	}
 
 	private void isAuthorise(String userName) throws UserNotAuthorizedException
@@ -163,11 +211,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
 	 */
-	private void insertMultipleSpecimen(LinkedHashSet specimenCollection, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	private Collection insertMultipleSpecimen(LinkedHashSet specimenCollection, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Iterator specimenIterator = specimenCollection.iterator();
 		int count = 0;
-		AbstractSpecimenCollectionGroup collectionGroup = null;
+
+		Collection insertSpecimenCollection = new LinkedHashSet();
 		try
 		{
 			while (specimenIterator.hasNext())
@@ -180,33 +229,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				{
 					specimen.setLabel(specimen.getSpecimenCollectionGroup().getId()+"_"+count);
 				}
-			
-				
-					HashSet specimenList = new HashSet();
-					insertSingleSpecimen(specimen, dao, sessionDataBean, true,specimenList);
-					collectionGroup = specimen.getSpecimenCollectionGroup();
-					//inserting authorization data
-					authenticateSpecimens(specimenList,collectionGroup);
+
+				Specimen insertSpecimen = insertSingleSpecimen(
+											specimen, dao, sessionDataBean, true);
+				insertSpecimenCollection.add(insertSpecimen);
 			}
+			return insertSpecimenCollection;
 		}
 		catch (DAOException daoException)
 		{
 			String message = " (This message is for Specimen number " + count + ")";
 			daoException.setSupportingMessage(message);
 			throw daoException;
-		}
-		catch (SMException e)
-		{
-			String message = " (This message is for Specimen number " + count + ")";
-			e.printStackTrace();
-			DAOException daoException = new DAOException(e);
-			daoException.setSupportingMessage(message);
-			throw daoException;
-	
-		}
-		finally
-		{
-			storageContainerIds.clear();
 		}
 	}
 	
@@ -423,14 +457,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException 
 	 */
-	private void insertSingleSpecimen(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, 
-			boolean partOfMulipleSpecimen , HashSet<Specimen> specimenList)
+	private Specimen insertSingleSpecimen(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, 
+			boolean partOfMulipleSpecimen )
 			throws DAOException, UserNotAuthorizedException
 	{
 		try
 		{
 
-			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, false, false);
 			ApiSearchUtil.setSpecimenDefault(specimen);
 			Specimen parentSpecimen = specimen.getParentSpecimen();
 			//kalpana bug #6224
@@ -453,10 +486,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			setParentSCG(specimen, dao, parentSpecimen);
 			allocatePositionForSpecimen(specimen);
 			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
-			setSpecimenData(specimen, dao, sessionDataBean,partOfMulipleSpecimen,specimenList);
+			setSpecimenData(specimen, dao, sessionDataBean,partOfMulipleSpecimen);
 			generateLabel(specimen);
 			generateBarCode(specimen);
-			dao.insert(specimen, sessionDataBean, false, false);
+			return specimen;
 		}
 		catch (Exception e)
 		{
@@ -466,7 +499,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 	}
 
-	private void setSpecimenData(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, boolean partOfMulipleSpecimen, HashSet<Specimen> specimenList) throws Exception
+	private void setSpecimenData(Specimen specimen, DAO dao, 
+			SessionDataBean sessionDataBean, boolean partOfMulipleSpecimen)
+			throws SMException,DAOException
 	{
 		Collection specimenEventColl = specimen.getSpecimenEventCollection();
 		if (sessionDataBean != null && (specimenEventColl == null || specimenEventColl.isEmpty()))
@@ -503,14 +538,19 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 		setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
 
-		if(specimenList != null)
-		{
-			specimenList.add(specimen);
-		}
-		insertChildSpecimens(specimen, dao, sessionDataBean,partOfMulipleSpecimen,specimenList);
+		insertChildSpecimens(specimen, dao, sessionDataBean,partOfMulipleSpecimen);
 	}
 	
-	private void insertChildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, boolean partOfMulipleSpecimen, HashSet<Specimen> specimenList) throws Exception
+	/**
+	 * @param specimen
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param partOfMulipleSpecimen
+	 * @throws Exception
+	 */
+	private void insertChildSpecimens(Specimen specimen, DAO dao, 
+			SessionDataBean sessionDataBean, boolean partOfMulipleSpecimen) 
+			throws SMException,DAOException
 	{
 		Collection<Specimen> childSpecimenCollection = specimen.getChildrenSpecimen();
 		Iterator it = childSpecimenCollection.iterator();
@@ -524,7 +564,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			childSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 			childSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
 			childSpecimen.setCreatedOn(specimen.getCreatedOn());
-			setSpecimenData(childSpecimen, dao, sessionDataBean,partOfMulipleSpecimen,specimenList);
+			setSpecimenData(childSpecimen, dao, sessionDataBean,partOfMulipleSpecimen);
 		}
 	}
 	/**
@@ -586,7 +626,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	private void setParentSCG(Specimen specimen, DAO dao, Specimen parentSpecimen) throws DAOException
 	{
-		if (parentSpecimen != null)
+		if (parentSpecimen == null)
+		{
+			if (specimen.getSpecimenCollectionGroup().getGroupName() != null)
+			{
+				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup()
+						.getGroupName());
+				specimen.setSpecimenCollectionGroup((AbstractSpecimenCollectionGroup) spgList.get(0));
+			}
+		}
+		else
 		{
 			if (parentSpecimen.getId() == null)
 			{
@@ -1351,32 +1400,23 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		//Load & set Specimen Collection Group if present
 		if (specimen.getSpecimenCollectionGroup() != null)
 		{
-			SpecimenCollectionGroup specimenCollectionGroupObj = null;
+			AbstractSpecimenCollectionGroup specimenCollectionGroupObj = null;
 			if (partOfMultipleSpecimen)
 			{
-				/*String sourceObjectName = SpecimenCollectionGroup.class.getName();
-				 String[] selectColumnName = {"id"};
-				 String[] whereColumnName = {"name"}; 
-				 String[] whereColumnCondition = {"="};
-				 Object[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getName()};
-				 String joinCondition = null;
-
-				 List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-
-				 specimenCollectionGroupObj = new SpecimenCollectionGroup();
-				 specimenCollectionGroupObj.setId((Long)list.get(0));*/
 				Collection consentTierStatusCollection = null;
 
 				if (specimen.getSpecimenCollectionGroup().getGroupName() != null
 						&& !Constants.COLLECTION_STATUS_PENDING.equalsIgnoreCase(specimen.getCollectionStatus()))
 				{
-					List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup()
-							.getGroupName());
-					SpecimenCollectionGroup scg = (SpecimenCollectionGroup) spgList.get(0);
-					specimenCollectionGroupObj = (SpecimenCollectionGroup) HibernateMetaData.getProxyObjectImpl(scg);
+//					List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup()
+//							.getGroupName());
+//					SpecimenCollectionGroup scg = (SpecimenCollectionGroup) spgList.get(0);
+					specimenCollectionGroupObj =  specimen.getSpecimenCollectionGroup();
+					//	(SpecimenCollectionGroup) HibernateMetaData.getProxyObjectImpl(scg);
 
 					//Resolved lazy ----  specimenCollectionGroupObj.getConsentTierStatusCollection();
-					consentTierStatusCollection = specimenCollectionGroupObj.getConsentTierStatusCollection();
+					consentTierStatusCollection = ((SpecimenCollectionGroup)specimenCollectionGroupObj)
+														.getConsentTierStatusCollection();
 					//consentTierStatusCollection= (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroupObj.getId(), "elements(consentTierStatusCollection)" );
 				}
 
@@ -1397,8 +1437,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				specimenCollectionGroupObj = new SpecimenCollectionGroup();
-				specimenCollectionGroupObj.setId(specimen.getSpecimenCollectionGroup().getId());
+				specimenCollectionGroupObj = specimen.getSpecimenCollectionGroup();
+				//new SpecimenCollectionGroup();
+				//specimenCollectionGroupObj.setId(specimen.getSpecimenCollectionGroup().getId());
 
 			}
 			if (specimenCollectionGroupObj != null)
@@ -1419,8 +1460,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			//			Object parentSpecimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getId());
 			//			if (parentSpecimenObj != null)
 			//			{
-			Specimen parentSpecimen = new Specimen();
-			parentSpecimen.setId(specimen.getParentSpecimen().getId());
+			Specimen parentSpecimen =specimen.getParentSpecimen();
+			//parentSpecimen.setId(specimen.getParentSpecimen().getId());
 			// check for closed Parent Specimen
 			if (specimen.getParentSpecimen().getActivityStatus() == null)
 			{
@@ -1459,12 +1500,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		}
 		specimen.setBiohazardCollection(set);
-
-		//Load & set Storage Container
-		if (!partOfMultipleSpecimen)
-		{
-			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, partOfMultipleSpecimen);
-		}
 
 	}
 
@@ -1514,6 +1549,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					throw new DAOException("Storage container is closed!");
 				}
 				chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
+				validateUserForContainer(sessionDataBean, storageContainerObj);
 			}
 			
 			if (specimen.getPositionDimensionOne() == null || specimen.getPositionDimensionTwo() == null)
@@ -1553,6 +1589,36 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			setChildrenSpecimenStorage(specimen.getChildrenSpecimen(), dao, sessionDataBean, partOfMultipleSpecimen);
 		}
 
+	}
+
+	/**
+	 * @param sessionDataBean
+	 * @param storageContainerObj
+	 * @throws SMException
+	 * @throws DAOException
+	 */
+	private void validateUserForContainer(SessionDataBean sessionDataBean,
+			Container storageContainerObj) throws SMException,
+			DAOException {
+		
+		
+		Container parentStorageContainer = storageContainerObj.getParent();
+		
+		if (parentStorageContainer!=null)
+		{
+			validateUserForContainer(sessionDataBean, parentStorageContainer);
+		}
+		Object o = HibernateMetaData.getProxyObjectImpl(storageContainerObj);
+		String storageContainerSecObj = o.getClass().getName() + "_"+ storageContainerObj.getId();
+		boolean userAuthorize = SecurityManager.getInstance(this.getClass())
+		    			.isAuthorized(sessionDataBean.getUserName(),
+		            storageContainerSecObj, Permissions.USE);
+
+		if (!userAuthorize)
+		{
+			throw new DAOException("User is not authorized to use " +
+					"storage container " + storageContainerObj.getName() );
+		}
 	}
 
 	/**
@@ -2699,7 +2765,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 						Specimen childSpecimen = (Specimen) childIterator.next();
 						childSpecimen.setParentSpecimen(specimenDO);
 						//Abhishek Mehta : Performance related Changes
-						insertSingleSpecimen(childSpecimen, dao, sessionDataBean, false,null);
+						insert( childSpecimen, dao, sessionDataBean);
 
 					}
 					childSpecimenCtr = 0;
