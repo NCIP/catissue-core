@@ -818,7 +818,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		Collection holdsSpecimenClassColl = containerHoldsSpecimenClasses.get(container.getId());
 		if (holdsSpecimenClassColl == null)
 		{
-			if (container.getHoldsSpecimenClassCollection() == null)
+			if (container.getHoldsSpecimenClassCollection() == null || container.getHoldsSpecimenClassCollection().size()==0)
 			{
 			holdsSpecimenClassColl = (Collection) dao.retrieveAttribute(StorageContainer.class.getName(), container.getId(),
 					"elements(holdsSpecimenClassCollection)");
