@@ -85,7 +85,7 @@
 		if(operation.equals(Constants.EDIT)|| operation.equals("viewAnnotations"))
 		{
 			editViewButton="buttons."+Constants.VIEW;
-			formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION;
+			formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION +"?";
 			readOnlyValue=true;
 			if(pageOf.equals(Constants.QUERY))
 				formName = Constants.QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
