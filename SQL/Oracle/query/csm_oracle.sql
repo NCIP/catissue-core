@@ -60,5 +60,5 @@ insert into dyextn_tagged_value select Max(IDENTIFIER)+1, 'PRIVILEGE_ID','2',722
 insert into dyextn_tagged_value select Max(IDENTIFIER)+1, 'PRIVILEGE_ID','2',844 from dyextn_tagged_value;
 insert into dyextn_tagged_value select Max(IDENTIFIER)+1, 'PRIVILEGE_ID','2',944 from dyextn_tagged_value;
 insert into dyextn_tagged_value select Max(IDENTIFIER)+1, 'PRIVILEGE_ID','2',830 from dyextn_tagged_value;
-UPDATE dyextn_primitive_attribute SET IS_IDENTIFIED =1 where IDENTIFIER in (839,855,853,851,850,847,846,947,394,646,647,648,649);
+UPDATE dyextn_primitive_attribute SET IS_IDENTIFIED =1 where IDENTIFIER in (839,855,853,851,850,847,846,947,394,681,682,683,684,646,647,648,649);
    
