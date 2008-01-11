@@ -603,7 +603,6 @@
 			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
-			<transaction src="${oracle.sql.dir}/query/csm_oracle.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -641,7 +640,7 @@
 			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
-			<transaction src="${oracle.sql.dir}/query/csm_oracle.sql" />
+			
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -681,6 +680,7 @@
 			<transaction src="${oracle.sql.dir}/query/PopulateTable.sql" />
 			<transaction src="${oracle.sql.dir}/query/enableCons.sql" />
 			<transaction src="${oracle.sql.dir}/query/UpdateTable.sql" />
+			<transaction src="${oracle.sql.dir}/query/csm_oracle.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
