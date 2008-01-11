@@ -221,7 +221,22 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			Specimen specimen = specIter.next();									
 		
 			specimen.setSpecimenCollectionGroup(collectionRequirementGroup);
-			specimenMap.add(specimen);
+			if (specimen.getParentSpecimen() != null)
+			{
+				if (specimenMap.contains(specimen.getParentSpecimen()))
+				{
+					Collection childrenCollection= specimen.getParentSpecimen().getChildrenSpecimen();
+					if (childrenCollection == null)
+					{
+						childrenCollection = new HashSet();
+					}
+					childrenCollection.add(specimen);
+				}
+			}
+			else
+			{
+				specimenMap.add(specimen);
+			}
 		}
 		bizLogic.setCpbased(true);
 		bizLogic.insert(specimenMap, dao, sessionDataBean);
