@@ -20,7 +20,7 @@
 	String withdrawAll = request.getParameter(Constants.WITHDRAW_ALL);
 	String getConsentResponse = request.getParameter(Constants.RESPONSE);
 	String pageOf = request.getParameter("pageOf");
-	Integer identifierFieldIndex = 4;
+	Integer identifierFieldIndex = new Integer(4);
 %>
 <script language="JavaScript">
 
