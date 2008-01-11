@@ -904,7 +904,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	public void childCPtree(StringBuffer xmlString, Long cpId, Long participantId, Date regDate,Integer offset) throws DAOException, ClassNotFoundException
 	{
 	
-		Date evtLastDate = SCGTreeForCPBasedView(xmlString, cpId, participantId, regDate);
+		Date evtLastDate = SCGTreeForCPBasedView(xmlString, cpId, participantId, regDate,offset);
 
 		String hql = "select  cp."+Constants.CHILD_COLLECTION_PROTOCOL_COLLECTION+" from " + CollectionProtocol.class.getName() + " as cp where cp.id= " + cpId.toString();
 		List cpchildList = executeQuery(hql);
@@ -1058,7 +1058,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws ClassNotFoundException
 	 *             classNotFoundException
 	 */
-	public Date SCGTreeForCPBasedView(StringBuffer xmlString, Long cpId, Long participantId, Date regDate) throws DAOException,
+	public Date SCGTreeForCPBasedView(StringBuffer xmlString, Long cpId, Long participantId, Date regDate,Integer cpOffset) throws DAOException,
 			ClassNotFoundException
 	{
 
@@ -1076,7 +1076,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			List scgList = getSCGsForCPRAndEventId(eventId, cpId, participantId);
 			if (scgList != null && !scgList.isEmpty())
 			{
-				eventLastDate = createTreeNodeForExistingSCG(xmlString, eventPoint, collectionPointLabel, scgList, regDate);
+				eventLastDate = createTreeNodeForExistingSCG(xmlString, eventPoint, collectionPointLabel, scgList, regDate,cpOffset);
 			}
 
 		}
@@ -1184,7 +1184,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @throws ClassNotFoundException
 	 *             ClassNotFoundException
 	 */
-	private Date createTreeNodeForExistingSCG(StringBuffer xmlString, Double eventPoint, String collectionPointLabel, List scgList, Date regDate)
+	private Date createTreeNodeForExistingSCG(StringBuffer xmlString, Double eventPoint, String collectionPointLabel, List scgList, Date regDate,Integer cpOffset)
 			throws DAOException, ClassNotFoundException
 	{
 		Date eventLastDate = null;
@@ -1232,10 +1232,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 						noOfDaysToAdd += eventPoint.intValue();
 					if (offset != null)
 					{
-						if(offsetForCPOrEvent != null && offsetForCPOrEvent.intValue() < offset.intValue())
+						/*if(offsetForCPOrEvent != null && offsetForCPOrEvent.intValue() < offset.intValue())
 							noOfDaysToAdd += (offset.intValue()-offsetForCPOrEvent.intValue());
 						else
-							offsetForCPOrEvent = offset;
+							offsetForCPOrEvent = offset;*/
+						if(cpOffset != null && offset.intValue() >= cpOffset.intValue())
+							noOfDaysToAdd += (offset.intValue()-cpOffset.intValue());
+						else
+							noOfDaysToAdd += offset.intValue();
+						
+						offsetForCPOrEvent = offset;
 					}		
 					Date evtDate = Utility.getNewDateByAdditionOfDays(regDate, noOfDaysToAdd);
 					eventLastDate = evtDate;
