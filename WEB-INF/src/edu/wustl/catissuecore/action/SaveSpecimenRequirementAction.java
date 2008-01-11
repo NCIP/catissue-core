@@ -151,7 +151,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 		else
 		{
-			aliquotQuantity=Double.parseDouble(quantityPerAliquot); ;
+			aliquotQuantity=Double.parseDouble(quantityPerAliquot);
 			parentQuantity = parentQuantity - (aliquotQuantity*aliquotCount);
 		}
 		for(int iCount = 1; iCount<= aliquotCount; iCount++)
@@ -264,7 +264,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				SpecimenRequirementBean aliquotBean = 					
 					createSpecimen(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), iCount);
 				
-				createAliquot(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), createSpecimenTemplateForm.getNoOfAliquots(), iCount, aliquotBean);
+				createAliquot(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), createSpecimenTemplateForm.getQuantityPerAliquot(), iCount, aliquotBean);
 				newAliquotSpecimenMap.put(aliquotBean.getUniqueIdentifier(), aliquotBean);
 			}
 			specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
