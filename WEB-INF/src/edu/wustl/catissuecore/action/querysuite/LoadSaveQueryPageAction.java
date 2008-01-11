@@ -79,6 +79,12 @@ public class LoadSaveQueryPageAction extends BaseAction
 			setActionError(request, errorMsg);
 			request.setAttribute(Constants.IS_QUERY_SAVED,Constants.IS_QUERY_SAVED);
 		}
+		String errorMessage = (String) request.getSession().getAttribute("errorMessageForEditQuery");
+		if (errorMessage != null)
+		{
+			setActionError(request, errorMessage);
+			request.getSession().removeAttribute("errorMessageForEditQuery");
+		}
 		
 		return mapping.findForward(target);
 	}
