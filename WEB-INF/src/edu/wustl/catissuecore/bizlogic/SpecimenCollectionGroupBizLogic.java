@@ -1232,8 +1232,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 						noOfDaysToAdd += eventPoint.intValue();
 					if (offset != null)
 					{
-						noOfDaysToAdd += offset.intValue();
-						offsetForCPOrEvent = offset;
+						if(offsetForCPOrEvent != null && offsetForCPOrEvent.intValue() < offset.intValue())
+							noOfDaysToAdd += (offset.intValue()-offsetForCPOrEvent.intValue());
+						else
+							offsetForCPOrEvent = offset;
 					}		
 					Date evtDate = Utility.getNewDateByAdditionOfDays(regDate, noOfDaysToAdd);
 					eventLastDate = evtDate;
