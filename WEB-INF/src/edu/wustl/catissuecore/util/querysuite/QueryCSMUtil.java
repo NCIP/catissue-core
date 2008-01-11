@@ -183,10 +183,11 @@ public abstract class QueryCSMUtil
 	 */
 	public static  QueryResultObjectDataBean getQueryResulObjectDataBean(
 			OutputTreeDataNode node, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
-	{  
+	{   
 		QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
 		boolean readDeniedObject = false;
-		
+		if(node!=null)
+		{
 		EntityInterface dynamicExtensionsEntity = node.getOutputEntity()
 				.getDynamicExtensionsEntity();
 		String entityName = dynamicExtensionsEntity.getName();
@@ -213,6 +214,7 @@ public abstract class QueryCSMUtil
 		}
 		
 		queryResultObjectDataBean.setReadDeniedObject(readDeniedObject);
+		}
 		return queryResultObjectDataBean;
 	}
 
@@ -287,7 +289,7 @@ public abstract class QueryCSMUtil
 
 		return null;
 
-	}
+	} 
 
 
 
@@ -322,42 +324,50 @@ public abstract class QueryCSMUtil
 	 */
 	public static String updateEntityIdIndexMap(QueryResultObjectDataBean queryResultObjectDataBean,
 			int columnIndex, String selectSql, List<EntityInterface> defineViewNodeList, Map<EntityInterface, Integer> entityIdIndexMap)
-	{  
+	{
 		String[] split = selectSql.split(",");
-		if(defineViewNodeList!=null)
+		if (defineViewNodeList != null)
 		{
-			for (EntityInterface entity : defineViewNodeList)
+			Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryModuleUtil.uniqueIdNodesMap;
+			Set<String> keySet = uniqueIdNodesMap.keySet();
+			for (Iterator iterator = keySet.iterator(); iterator.hasNext();)
 			{
-				 OutputTreeDataNode outputTreeDataNode = getMatchingEntityNode(entity);
-				if (outputTreeDataNode != null)
+				String key = "";
+				Object nextObject = iterator.next();
+				if (nextObject instanceof String)
 				{
-					List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
-							.getAttributes();
-					for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
+					key = (String) nextObject;
+					OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(key);
+					if (outputTreeDataNode != null)
 					{
-						AttributeInterface attribute = attributeMetaData.getAttribute();
-						String sqlColumnName = attributeMetaData.getColumnName().trim();
-						if (attribute.getName().equals(Constants.ID))
+						List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
+								.getAttributes();
+						for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 						{
-							if(selectSql.contains(sqlColumnName))
+							AttributeInterface attribute = attributeMetaData.getAttribute();
+							String sqlColumnName = attributeMetaData.getColumnName().trim();
+							if (attribute.getName().equals(Constants.ID))
 							{
-								for(int i=0;i<split.length;i++)
+								if (selectSql.contains(sqlColumnName))
 								{
-									String string = split[i].trim();
-									if(string.equals(sqlColumnName))
+									for (int i = 0; i < split.length; i++)
 									{
-										entityIdIndexMap.put(attribute.getEntity(), i);
-										break;
+										String string = split[i].trim();
+										if (string.equals(sqlColumnName))
+										{
+											entityIdIndexMap.put(attribute.getEntity(), i);
+											break;
+										}
 									}
 								}
-							}
-							else
-							{
-								selectSql += ", " + sqlColumnName;
-	
-								entityIdIndexMap.put(attribute.getEntity(), columnIndex);
-								columnIndex++;
-								break;
+								else
+								{
+									selectSql += ", " + sqlColumnName;
+
+									entityIdIndexMap.put(attribute.getEntity(), columnIndex);
+									columnIndex++;
+									break;
+								}
 							}
 						}
 					}
@@ -366,39 +376,40 @@ public abstract class QueryCSMUtil
 		}
 		else
 		{
-				OutputTreeDataNode outputTreeDataNode = getMatchingEntityNode(queryResultObjectDataBean.getMainEntity());
-				if (outputTreeDataNode!=null)
+			OutputTreeDataNode outputTreeDataNode = getMatchingEntityNode(queryResultObjectDataBean
+					.getMainEntity());
+			if (outputTreeDataNode != null)
+			{
+				List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
+						.getAttributes();
+				for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 				{
-					List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
-							.getAttributes();
-					for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
+					AttributeInterface attribute = attributeMetaData.getAttribute();
+					String sqlColumnName = attributeMetaData.getColumnName();
+					if (attribute.getName().equals(Constants.ID))
 					{
-						AttributeInterface attribute = attributeMetaData.getAttribute();
-						String sqlColumnName = attributeMetaData.getColumnName();
-						if (attribute.getName().equals(Constants.ID))
+						if (selectSql.contains(sqlColumnName.trim()))
 						{
-							if(selectSql.contains(sqlColumnName.trim()))
+							for (int i = 0; i < split.length; i++)
 							{
-								for(int i=0;i<split.length;i++)
+								if (split[i].equals(sqlColumnName))
 								{
-									if(split[i].equals(sqlColumnName))
-									{
-										entityIdIndexMap.put(attribute.getEntity(), i);
-										break;
-									}
+									entityIdIndexMap.put(attribute.getEntity(), i);
+									break;
 								}
 							}
-							else
-							{
-								selectSql += ", " + sqlColumnName;
-								entityIdIndexMap.put(attribute.getEntity(), columnIndex);
-								columnIndex++;
-								break;
-							}
+						}
+						else
+						{
+							selectSql += ", " + sqlColumnName;
+							entityIdIndexMap.put(attribute.getEntity(), columnIndex);
+							columnIndex++;
+							break;
 						}
 					}
 				}
 			}
+		}
 		if (queryResultObjectDataBean != null)
 			queryResultObjectDataBean.setEntityIdIndexMap(entityIdIndexMap);
 		return selectSql;
