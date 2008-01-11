@@ -141,6 +141,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction {
 				GenericSpecimenVO specimenBean = getSpecimenBean(childSpecimen, specimen.getLabel());
 				specimenBean.setUniqueIdentifier("al_" + specimen.getId() +"_"+ childSpecimen.getId());
 				aliquotMap.put("al_" + specimen.getId() +"_"+ childSpecimen.getId(), specimenBean);
+				specimenBean.setCollectionProtocolId(cpId);
 			}
 		}
 		return aliquotMap;
@@ -160,6 +161,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction {
 				GenericSpecimenVO specimenBean = getSpecimenBean(childSpecimen, specimen.getLabel());
 				specimenBean.setUniqueIdentifier("dr_" + specimen.getId() +"_"+ childSpecimen.getId());
 				derivedMap.put("dr_" + specimen.getId() +"_"+ childSpecimen.getId(), specimenBean);
+				specimenBean.setCollectionProtocolId(cpId);
+
 			}
 		}
 		return derivedMap;
