@@ -101,9 +101,11 @@ public class AnnotationUtil
 			dynamicEntity = (EntityInterface) ((Container) session.load(Container.class,
 					dynamicEntityId)).getEntity();
 //			Get entitygroup that is used by caB2B for path finder purpose.
-			EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
-			List<EntityInterface> processedEntityList = new ArrayList<EntityInterface>();
-			//Commented this line since performance issue for Bug 6433
+
+//			Commented this line since performance issue for Bug 6433
+			//EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
+			//List<EntityInterface> processedEntityList = new ArrayList<EntityInterface>();
+
 			//addCatissueGroup(dynamicEntity, entityGroupInterface,processedEntityList);
 
 			//Create source role and target role for the association
