@@ -274,23 +274,25 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				throw new BizLogicException("", e1);
 			}
 			ContainerInterface dynamicContainer = null;
-			EntityInterface staticEntity = null;
+//			EntityInterface staticEntity = null;
 			try
 			{
-				staticEntity = (EntityInterface) session.load(Entity.class, new Long(staticEntityId));
+				//staticEntity = (EntityInterface) session.load(Entity.class, new Long(staticEntityId));
 				dynamicContainer = (Container) session.load(Container.class,new Long(dynExtContainerId));
 
-				AssociationInterface association = getAssociationForEntity(staticEntity,dynamicContainer.getEntity());
+				//AssociationInterface association = getAssociationForEntity(staticEntity,dynamicContainer.getEntity());
 				//	Get entitygroup that is used by caB2B for path finder purpose.
-				EntityGroupInterface entityGroupInterface = edu.wustl.cab2b.common.util.Utility.getEntityGroup(staticEntity);
-				List<EntityInterface> processedEntityList = new ArrayList<EntityInterface>();
-				edu.wustl.catissuecore.bizlogic.AnnotationUtil.addCatissueGroup(dynamicContainer.getEntity(), entityGroupInterface, processedEntityList);
-				staticEntity = EntityManager.getInstance().persistEntityMetadataForAnnotation(
-						staticEntity, true, false, association);
+//				Commented this line since performance issue for Bug 6433
+				//EntityGroupInterface entityGroupInterface = edu.wustl.cab2b.common.util.Utility.getEntityGroup(staticEntity);
+				//List<EntityInterface> processedEntityList = new ArrayList<EntityInterface>();
+
+				//edu.wustl.catissuecore.bizlogic.AnnotationUtil.addCatissueGroup(dynamicContainer.getEntity(), entityGroupInterface, processedEntityList);
+//				staticEntity = EntityManager.getInstance().persistEntityMetadataForAnnotation(
+//						staticEntity, true, false, association);
 
 				Set<PathObject> processedPathList = new HashSet<PathObject>();
 				//Adding paths from second level as first level paths between static entity and top level dynamic entity have already been added
-				addQueryPathsForEntityHierarchy(dynamicContainer.getEntity()/*,entityGroupInterface*/,processedPathList );
+				addQueryPathsForEntityHierarchy(dynamicContainer.getEntity(),new Long(staticEntityId),processedPathList );
 			}
 			catch (HibernateException e1)
 			{
@@ -340,7 +342,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws DynamicExtensionsApplicationException
 	 * @throws BizLogicException
 	 */
-	private void addQueryPathsForEntityHierarchy(EntityInterface dynamicEntity/*,EntityGroupInterface entityGroupInterface*/,Set<PathObject> processedPathList) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, BizLogicException
+	private void addQueryPathsForEntityHierarchy(EntityInterface dynamicEntity, Long staticEntityId,Set<PathObject> processedPathList) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, BizLogicException
 	{
 		Collection<AssociationInterface> associationCollection = dynamicEntity.getAllAssociations();
 		for(AssociationInterface association : associationCollection)
@@ -361,25 +363,13 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			boolean ispathAdded = isPathAdded(dynamicEntity.getId(),association.getTargetEntity().getId());
 			if(!ispathAdded)
 			{
-				//Add the entity group to the dynamic entity and all it's associated entities.
-//				if(!edu.wustl.catissuecore.bizlogic.AnnotationUtil.checkBaseEntityGroup(dynamicEntity.getEntityGroupCollection()))
-//				{
-//					dynamicEntity.addEntityGroupInterface(entityGroupInterface);
-//				}
-//				if(!edu.wustl.catissuecore.bizlogic.AnnotationUtil.checkBaseEntityGroup(association.getTargetEntity().getEntityGroupCollection()))
-//				{
-//					association.getTargetEntity().addEntityGroupInterface(entityGroupInterface);
-//				}
-//
-//				dynamicEntity = EntityManager.getInstance().persistEntityMetadata(
-//						dynamicEntity, true, false);
 				if(dynamicEntity.getId() != null)
 				{
-					edu.wustl.catissuecore.bizlogic.AnnotationUtil.addPathsForQuery(dynamicEntity.getId(), association.getTargetEntity().getId(), association.getId());
+					edu.wustl.catissuecore.bizlogic.AnnotationUtil.addPathsForQuery(dynamicEntity.getId(), association.getTargetEntity().getId(),staticEntityId, association.getId());
 					edu.wustl.catissuecore.bizlogic.AnnotationUtil.addEntitiesToCache(false, association.getTargetEntity(), dynamicEntity);
 				}
 			}
-			addQueryPathsForEntityHierarchy(association.getTargetEntity()/*,entityGroupInterface*/,processedPathList);
+			addQueryPathsForEntityHierarchy(association.getTargetEntity(),staticEntityId,processedPathList);
 		}
 	}
 
@@ -497,7 +487,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	{
 		String 	staticEntityId = (String) request.getSession().getAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID);
 		 request.getSession().removeAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID);
-		
+
 		return staticEntityId;
 	}
 
@@ -785,7 +775,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		if (entityId != null)
 		{
 			EntityManagerInterface entityManager = EntityManager.getInstance();
-			
+
 			List staticEntityList = (List) request.getSession().getAttribute(AnnotationConstants.STATIC_ENTITY_LIST);
 			if (staticEntityList != null && !staticEntityList.isEmpty())
 			{
@@ -839,7 +829,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			{
 				systemEntitiesList = (List) request.getSession().getAttribute(AnnotationConstants.STATIC_ENTITY_LIST);
 			}
-			
+
 			annotationForm.setSystemEntitiesList(systemEntitiesList);
 			//Load list of groups
 			loadGroupList(annotationForm, request);
