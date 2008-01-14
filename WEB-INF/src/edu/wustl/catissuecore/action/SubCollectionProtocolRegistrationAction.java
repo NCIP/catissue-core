@@ -74,9 +74,15 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 
 				if (request.getParameter("regDate") != null)
 				{
-					Date regDate = Utility.parseDate(request.getParameter(Constants.REG_DATE), Constants.DATE_PATTERN_YYYY_MM_DD);
-					if (regDate != null)
-						cpform.setRegistrationDate(Utility.parseDateToString(regDate, Constants.DATE_PATTERN_MM_DD_YYYY));
+//					Date regDate = Utility.parseDate(request.getParameter(Constants.REG_DATE), Constants.DATE_PATTERN_YYYY_MM_DD);
+//					if (regDate != null)
+//						cpform.setRegistrationDate(Utility.parseDateToString(regDate, Constants.DATE_PATTERN_MM_DD_YYYY));
+					
+					
+					//bug no:6526 Date  of format yyyy-dd-mm was parsed in format mm-dd-yyyy and then set in CPR.
+					//Now the Date received is of format mm--dd-yyyy.So no need to parse it.
+
+					cpform.setRegistrationDate(request.getParameter(Constants.REG_DATE));
 				}
 				if (cpform.getRegistrationDate() == null || cpform.getRegistrationDate().equals(""))
 				{
