@@ -1258,7 +1258,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			// creating SCG node
 			xmlString.append("<node id= \"" + Constants.SPECIMEN_COLLECTION_GROUP + "_" + scgId.toString() + "\" " + "name=\"" + scgNodeLabel + "\" "
 					+ "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN_COLLECTION_GROUP + "\" " + "scgCollectionStatus=\""
-					+ scgCollectionStatus + "\">");
+					+ scgCollectionStatus +  "\" " + "evtDate=\"" + receivedDate +"\">");
 
 			// Adding specimen Nodes to SCG tree
 			addSpecimenNodesToSCGTree(xmlString, scgId);

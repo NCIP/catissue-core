@@ -114,22 +114,30 @@
 		
 		if(obj1 == "<%=Constants.SPECIMEN_COLLECTION_GROUP%>")
 		{
-
+			 var nameIndex1 = name.indexOf("@");
+			  var name1 = "";
+			  var evtDate = "";
+				if(nameIndex1 != -1)
+				{
+					name1 = name.substring(0,nameIndex1);
+				  	evtDate = name.substring(nameIndex1+1);
+		    
+				}	
 			<%if(access != null && access.equals("Denied"))
 			{%>
 			
-			window.parent.frames[1].location = "CPQuerySpecimenCollectionGroupForTech.do?pageOf=pageOfSpecimenCollectionGroupCPQuery&operation=edit&id="+id1+"&name="+name;
+			window.parent.frames[1].location = "CPQuerySpecimenCollectionGroupForTech.do?pageOf=pageOfSpecimenCollectionGroupCPQuery&operation=edit&id="+id1+"&name="+name1+"&evtDate="+evtDate;
 			<%}else {%>
 				if(isFuture != "")
 				{
 				   var ind = isFuture.indexOf(":");
 				   var eventId = isFuture.substring(0,ind);
                  	
-					window.parent.frames[1].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupAdd&operation=add&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+pId+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.QUERY_RESULTS_COLLECTION_PROTOCOL_EVENT_ID%>="+eventId+"&clickedNodeId="+id;
+					window.parent.frames[1].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupAdd&operation=add&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+pId+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.QUERY_RESULTS_COLLECTION_PROTOCOL_EVENT_ID%>="+eventId+"&clickedNodeId="+id+"&evtDate="+evtDate;
                  }else
 				 {
 					
-					 window.parent.frames[1].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&refresh=false&operation=edit&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+pId+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&clickedNodeId="+id;
+					 window.parent.frames[1].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&refresh=false&operation=edit&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+pId+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&clickedNodeId="+id+"&evtDate="+evtDate;
                   }
 			<%}%>
 		}

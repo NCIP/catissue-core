@@ -470,7 +470,10 @@
 			   var selectedCpId :String = selectedCp.value;
 				//display name of selected tree node
 		    	var displayName : String = specimenTree.selectedItem.@name;
+		    	if(type.match("SpecimenCollectionGroup"))
+			    	displayName = displayName+"@"+specimenTree.selectedItem.@evtDate;
 	    	
+
 	    	   //invoking java script method
 		    	var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
 		    	navigateToURL(url,"_self"); 
