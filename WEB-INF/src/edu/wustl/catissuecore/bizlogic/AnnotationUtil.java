@@ -103,7 +103,8 @@ public class AnnotationUtil
 //			Get entitygroup that is used by caB2B for path finder purpose.
 			EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
 			List<EntityInterface> processedEntityList = new ArrayList<EntityInterface>();
-			addCatissueGroup(dynamicEntity, entityGroupInterface,processedEntityList);
+			//Commented this line since performance issue for Bug 6433
+			//addCatissueGroup(dynamicEntity, entityGroupInterface,processedEntityList);
 
 			//Create source role and target role for the association
 			String roleName = staticEntityId.toString().concat("_").concat(
