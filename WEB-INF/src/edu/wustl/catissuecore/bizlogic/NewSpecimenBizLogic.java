@@ -175,7 +175,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 
 			Specimen insertableSpecimen = 
-				insertSingleSpecimen((Specimen) obj, dao, sessionDataBean, false);
+				insertSingleSpecimen((Specimen) obj, dao, sessionDataBean, false,1);
 			insertableSpecimens = new LinkedHashSet();
 			insertableSpecimens.add(insertableSpecimen);
 		}
@@ -224,14 +224,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				TaskTimeCalculater mulSpec = TaskTimeCalculater.startTask("Multiple specimen ", NewSpecimenBizLogic.class);
 				count++;
 				Specimen specimen = (Specimen) specimenIterator.next();
-				
-				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
-				{
-					specimen.setLabel(specimen.getSpecimenCollectionGroup().getId()+"_"+count);
-				}
-
 				Specimen insertSpecimen = insertSingleSpecimen(
-											specimen, dao, sessionDataBean, true);
+									specimen, dao, sessionDataBean, true, count);
 				insertSpecimenCollection.add(insertSpecimen);
 			}
 			return insertSpecimenCollection;
@@ -458,13 +452,19 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException 
 	 */
 	private Specimen insertSingleSpecimen(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, 
-			boolean partOfMulipleSpecimen )
+			boolean partOfMulipleSpecimen, int count )
 			throws DAOException, UserNotAuthorizedException
 	{
 		try
 		{
 
 			ApiSearchUtil.setSpecimenDefault(specimen);
+
+			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+			{
+				specimen.setLabel(specimen.getSpecimenCollectionGroup().getId()+"_"+count);
+			}
+			
 			Specimen parentSpecimen = specimen.getParentSpecimen();
 			//kalpana bug #6224
 			
@@ -554,6 +554,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		Collection<Specimen> childSpecimenCollection = specimen.getChildrenSpecimen();
 		Iterator it = childSpecimenCollection.iterator();
+		int ctr=1;
 		while (it.hasNext())
 		{
 			Specimen childSpecimen = (Specimen) it.next();
@@ -561,6 +562,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				childSpecimen.setParentSpecimen(specimen);
 			}
+			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+			{
+				specimen.setLabel(specimen.getLabel()+ "_"+ ctr++);
+			}
+		
 			childSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 			childSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
 			childSpecimen.setCreatedOn(specimen.getCreatedOn());
@@ -1578,8 +1584,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					Constants.STORAGE_CONTAINER_FORM_ID);
 
 			// --- check for all validations on the storage container.
-			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
-					specimen.getPositionDimensionTwo().toString(), sessionDataBean, partOfMultipleSpecimen);
+			storageContainerBizLogic.checkContainer(dao,  specimen.getPositionDimensionOne().toString(),
+					specimen.getPositionDimensionTwo().toString(), sessionDataBean, storageContainerObj);
 			
 			specimen.setStorageContainer(storageContainerObj);
 		}
