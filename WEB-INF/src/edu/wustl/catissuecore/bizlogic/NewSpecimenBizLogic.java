@@ -564,7 +564,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 			{
-				specimen.setLabel(specimen.getLabel()+ "_"+ ctr++);
+				childSpecimen.setLabel(specimen.getLabel()+ "_"+ ctr++);
 			}
 		
 			childSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
@@ -1584,8 +1584,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					Constants.STORAGE_CONTAINER_FORM_ID);
 
 			// --- check for all validations on the storage container.
-			storageContainerBizLogic.checkContainer(dao,  specimen.getPositionDimensionOne().toString(),
-					specimen.getPositionDimensionTwo().toString(), sessionDataBean, storageContainerObj);
+			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
+					specimen.getPositionDimensionTwo().toString(), sessionDataBean, partOfMultipleSpecimen);
 			
 			specimen.setStorageContainer(storageContainerObj);
 		}
