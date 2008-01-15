@@ -60,7 +60,8 @@ tr#hiddenCombo
 
 		function displayValidationMessage(message)
 		{
-			if (message == "")
+			//var message contains space " " if the message is not to be shown.   
+			if (message != null && message == " ") 		// do not show popup
 			{
 				onAddToCart();
 			}
