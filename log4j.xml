@@ -7,7 +7,7 @@
 <!--                                                                       -->
 <!-- ===================================================================== -->
 
-<!-- $Id: log4j.xml,v 1.1.8.1 2008/01/07 08:00:13 abhijit_naik Exp $ -->
+<!-- $Id: log4j.xml,v 1.1.8.2 2008/01/15 12:48:21 abhijit_naik Exp $ -->
 
 <!--
    | For more configuration infromation and examples see the Jakarta Log4j
@@ -25,8 +25,8 @@
       <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
       <param name="File" value="${jboss.server.home.dir}/log/server.log"/>
       <param name="Append" value="false"/>
-      <param name="Threshold" value="INFO"/>
-
+      <param name="Threshold" value="WARN"/>
+	  <param name="MaxBackupIndex" value="2"/>
       <!-- Rollover at midnight each day -->
       <param name="DatePattern" value="'.'yyyy-MM-dd"/>
 
@@ -77,7 +77,9 @@
 		<param name="File" value="${jboss.server.home.dir}/log/catissuecore.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10000KB"/>
-		<param name="MaxBackupIndex" value="10"/>
+		<param name="MaxBackupIndex" value="2"/>
+		<param name="Threshold" value="WARN"/>
+		
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{dd MMM yyy HH:mm:ss}, %-6p %C:%M:%L %m %n" />
 		</layout>
