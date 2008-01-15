@@ -17,6 +17,7 @@
 </style>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/scwcalendar.js"></script>
 </head>
 <%
 	String[] attributeConditionArray = (String[])request.getAttribute(Constants.ATTRIBUTE_CONDITION_LIST);
@@ -115,9 +116,9 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,ov
 			txtField.readOnly="";
 			calendarShow.value = "Show";
 			var innerStr = "<div id='"+ overDiv +"' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
-			innerStr = innerStr + "<a href=\"javascript:show_calendar('"+fieldValue+"',null,null,'MM-DD-YYYY');\">";
-			innerStr = innerStr + "<img src=\"images\\calendar.gif\" width=24 height=22 border=0>";
-			innerStr = innerStr + "</a>";
+			//innerStr = innerStr + "<a href=\"javascript:show_calendar('"+fieldValue+"',null,null,'MM-DD-YYYY');\">";
+			innerStr = innerStr + "<img src=\"images\\calendar.gif\" width=24 height=22 border=0 onclick='scwShow("+ fieldValue + ",event);'>";
+			//innerStr = innerStr + "</a>";
 			td.innerHTML = innerStr;
 		}
 		else
