@@ -41,9 +41,8 @@ public class ValidateQueryAction extends BaseAction {
 			
 			if ((isListEmpty != null && isListEmpty.equals(Constants.FALSE)) || message == null)
 			{
-				message = "";
+				message = " ";		//if empty string is returned mac+safari gives problem and if message is set to null mozilla gives problem.
 			}
-			
 			response.setContentType("text/html");
 			response.getWriter().write(message);
 			return null;
