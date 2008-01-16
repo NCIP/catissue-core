@@ -855,6 +855,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 *             classNotFoundException
 	 */
 	Integer offsetForCPOrEvent = null;
+	Integer offsetForArmCP = null;
 
 	public String getSCGTreeForCPBasedView(Long cpId, Long participantId) throws DAOException, ClassNotFoundException
 	{
@@ -909,7 +910,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		Date evtLastDate = SCGTreeForCPBasedView(xmlString, cpId, participantId, regDate, offset);
 
 		String hql = "select  cp." + Constants.CHILD_COLLECTION_PROTOCOL_COLLECTION + " from " + CollectionProtocol.class.getName()
-				+ " as cp where cp.id= " + cpId.toString();
+				+ " as cp where cp.id= " + cpId.toString() ;
 		List cpchildList = executeQuery(hql);
 
 		if (cpchildList.size() != 0)
@@ -928,7 +929,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					dispName = cp.getShortTitle() + ":" + anticipatoryDate;
 
 				}
-				CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, cp.getId());
+				CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, cp.getId(),cp.getType());
 				String participantRegStatus = "Pending";
 				if (cpr != null)
 					participantRegStatus = "Registered";
@@ -956,7 +957,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			Long cpId = cp.getId();
 			Double eventPoint = cp.getStudyCalendarEventPoint();
-			CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, cpId);
+			CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, cpId,cp.getType());
 
 			if (cpr == null)
 			{
@@ -975,12 +976,16 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 						 if (offset != null)
 						 noOfDaysToAdd = noOfDaysToAdd + offset.intValue();*/
 
-						if (offsetForCPOrEvent != null && offset != null && offsetForCPOrEvent.intValue() > offset.intValue())
-							noOfDaysToAdd = noOfDaysToAdd + offsetForCPOrEvent.intValue() - offset.intValue();
+						if (Constants.ARM_CP_TYPE.equals(cp.getType()))
+							noOfDaysToAdd = noOfDaysToAdd + getNoOfDaysAccordingToOffset(offset, offsetForArmCP);
+						else
+							noOfDaysToAdd = noOfDaysToAdd + getNoOfDaysAccordingToOffset(offset, offsetForCPOrEvent);
+						/*if (offsetForCPOrEvent != null && offset != null && offsetForCPOrEvent.intValue() > offset.intValue())
+						 noOfDaysToAdd = noOfDaysToAdd + offsetForCPOrEvent.intValue() - offset.intValue();
 
-						if (offsetForCPOrEvent != null && offset == null)
-							noOfDaysToAdd = noOfDaysToAdd + offsetForCPOrEvent.intValue();
-
+						 if (offsetForCPOrEvent != null && offset == null)
+						 noOfDaysToAdd = noOfDaysToAdd + offsetForCPOrEvent.intValue();
+						 */
 						participantRegDate = Utility.getNewDateByAdditionOfDays(parentRegDate, noOfDaysToAdd);
 
 					}
@@ -997,6 +1002,18 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		}
 		return participantRegDate;
+	}
+
+	private int getNoOfDaysAccordingToOffset(Integer offset, Integer offsetForCPOrEvent)
+	{
+		int noOfDays = 0;
+		if (offsetForCPOrEvent != null && offset != null && offsetForCPOrEvent.intValue() > offset.intValue())
+			noOfDays = offsetForCPOrEvent.intValue() - offset.intValue();
+
+		if (offsetForCPOrEvent != null && offset == null)
+			noOfDays = offsetForCPOrEvent.intValue();
+
+		return noOfDays;
 	}
 
 	private Integer getOffsetFromPreviousSeqNoCP(CollectionProtocol cp, Long participantId) throws DAOException, ClassNotFoundException
@@ -1030,7 +1047,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return null;
 	}
 
-	public CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId) throws ClassNotFoundException,
+	public CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId,String type) throws ClassNotFoundException,
 			DAOException
 	{
 		//Date regDate = null;
@@ -1049,6 +1066,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			{
 				Integer offset = (Integer) obj[2];
 				offsetForCPOrEvent = offset;
+				if(!Constants.ARM_CP_TYPE.equals(type))
+					offsetForArmCP = offsetForCPOrEvent;
 				cpr.setOffset(offset);
 			}
 			return cpr;
