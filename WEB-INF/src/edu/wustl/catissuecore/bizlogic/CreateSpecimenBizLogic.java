@@ -47,7 +47,7 @@ import edu.wustl.common.util.logger.Logger;
  * CreateSpecimenHDAO is used to add new specimen information into the database using Hibernate.
  * @author aniruddha_phadnis
  */
-public class CreateSpecimenBizLogic extends DefaultBizLogic
+public class CreateSpecimenBizLogic extends NewSpecimenBizLogic
 {
 	
 	
@@ -350,7 +350,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			
 			//Inserting data for Authorization
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
-					protectionObjects, getDynamicGroups(specimen));
+					protectionObjects, getDynamicGroups(specimen.getSpecimenCollectionGroup()));
 		}
 		catch (SMException e)
 		{
@@ -379,16 +379,16 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 
 	}
 
-	private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
-	{
-		Specimen specimen = (Specimen) obj;
-		String[] dynamicGroups = new String[1];
-
-		dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
-				specimen.getParentSpecimen(), Constants.getCollectionProtocolPGName(null));
-		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
-		return dynamicGroups;
-	}
+//	private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
+//	{
+//		Specimen specimen = (Specimen) obj;
+//		String[] dynamicGroups = new String[1];
+//
+//		dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
+//				specimen.getParentSpecimen(), Constants.getCollectionProtocolPGName(null));
+//		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
+//		return dynamicGroups;
+//	}
 	
 	// added by Ashwin for bug id# 2476 
 	/**

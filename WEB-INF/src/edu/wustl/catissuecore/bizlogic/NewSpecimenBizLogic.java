@@ -479,11 +479,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				TaskTimeCalculater setParentData = TaskTimeCalculater.startTask("Set parent Data", NewSpecimenBizLogic.class);
 				parentSpecimen = (Specimen) dao.retrieve( Specimen.class.getName(), specimen.getParentSpecimen().getId()  );
 				specimen.setParentSpecimen(parentSpecimen);
-				setParentSpecimenData(specimen, dao);
 				TaskTimeCalculater.endTask(setParentData);
 			}
 			
 			setParentSCG(specimen, dao, parentSpecimen);
+			if(specimen.getParentSpecimen()!=null)
+			{
+				setParentSpecimenData(specimen, dao);
+			}
 			allocatePositionForSpecimen(specimen);
 			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
 			setSpecimenData(specimen, dao, sessionDataBean,partOfMulipleSpecimen);
@@ -533,7 +536,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 		if (specimen.getLineage() == null)
 		{
-			specimen.setLineage(Constants.NEW_SPECIMEN);
+			if (specimen.getParentSpecimen()==null)
+			{
+				specimen.setLineage(Constants.NEW_SPECIMEN);
+			}
 		}
 		
 		setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
@@ -1969,7 +1975,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		else
 		{
-			throw new DAOException(ApplicationProperties.getValue("error.specimen.noevents"));
+			if(specimen.getParentSpecimen()==null)
+			{
+				throw new DAOException(ApplicationProperties.getValue("error.specimen.noevents"));
+			}
 		}
 
 		//Validations for Biohazard Add-More Block
@@ -2052,7 +2061,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 				if (!Validator.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
 				{
-					throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+					if(specimen.getParentSpecimen() == null)
+					{
+						throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+					}
 				}
 
 				//		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
@@ -2060,14 +2072,20 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 				if (!Validator.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
 				{
-					throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
+					if(specimen.getParentSpecimen() == null)
+					{
+						throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
+					}
 				}
 
 				List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 
 				if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen.getPathologicalStatus()))
 				{
-					throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+					if(specimen.getParentSpecimen() == null)
+					{
+						throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+					}
 				}
 			}
 		}
