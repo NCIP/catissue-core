@@ -117,6 +117,8 @@ public class QueryShoppingCartAction extends BaseAction
 				// if My List is empty sets the value to true.
 				request.getSession().setAttribute("IsListEmpty", "true");
 			}
+			// set the options 
+			setCartView(request, cart);
 			target = new String(Constants.SHOPPING_CART_DELETE);
 		}
 		// Check if user wants to export cart.
@@ -263,7 +265,8 @@ public class QueryShoppingCartAction extends BaseAction
 		return entityIdsMap;
 	}
 
-	/**
+	/** sets the options enabled or disabled depending on the entities and their attributes present 
+	 * in the cart.
 	 * @param request
 	 * @param cart
 	 */
