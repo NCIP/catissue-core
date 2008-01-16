@@ -274,13 +274,13 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				throw new BizLogicException("", e1);
 			}
 			ContainerInterface dynamicContainer = null;
-//			EntityInterface staticEntity = null;
+			EntityInterface staticEntity = null;
 			try
 			{
-				//staticEntity = (EntityInterface) session.load(Entity.class, new Long(staticEntityId));
+				staticEntity = (EntityInterface) session.load(Entity.class, new Long(staticEntityId));
 				dynamicContainer = (Container) session.load(Container.class,new Long(dynExtContainerId));
 
-				//AssociationInterface association = getAssociationForEntity(staticEntity,dynamicContainer.getEntity());
+				AssociationInterface association = getAssociationForEntity(staticEntity,dynamicContainer.getEntity());
 				//	Get entitygroup that is used by caB2B for path finder purpose.
 //				Commented this line since performance issue for Bug 6433
 				//EntityGroupInterface entityGroupInterface = edu.wustl.cab2b.common.util.Utility.getEntityGroup(staticEntity);
@@ -292,7 +292,11 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 
 				Set<PathObject> processedPathList = new HashSet<PathObject>();
 				//Adding paths from second level as first level paths between static entity and top level dynamic entity have already been added
-				addQueryPathsForEntityHierarchy(dynamicContainer.getEntity(),new Long(staticEntityId),processedPathList );
+				addQueryPathsForEntityHierarchy(dynamicContainer.getEntity(), staticEntity,
+						association.getId(), staticEntity.getId(), processedPathList);
+
+				edu.wustl.catissuecore.bizlogic.AnnotationUtil.addEntitiesToCache(false,
+						dynamicContainer.getEntity(), staticEntity);
 			}
 			catch (HibernateException e1)
 			{
@@ -342,35 +346,45 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws DynamicExtensionsApplicationException
 	 * @throws BizLogicException
 	 */
-	private void addQueryPathsForEntityHierarchy(EntityInterface dynamicEntity, Long staticEntityId,Set<PathObject> processedPathList) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, BizLogicException
+	private void addQueryPathsForEntityHierarchy(EntityInterface dynamicEntity,
+			EntityInterface staticEntity, Long associationId, Long staticEntityId,
+			Set<PathObject> processedPathList) throws DynamicExtensionsSystemException,
+			DynamicExtensionsApplicationException, BizLogicException
 	{
-		Collection<AssociationInterface> associationCollection = dynamicEntity.getAllAssociations();
+		PathObject pathObject = new PathObject();
+		pathObject.setSourceEntity(staticEntity);
+		pathObject.setTargetEntity(dynamicEntity);
+
+		if (processedPathList.contains(pathObject))
+		{
+			return;
+		}
+		else
+		{
+			processedPathList.add(pathObject);
+		}
+
+		Long start = new Long(System.currentTimeMillis());
+		boolean ispathAdded = isPathAdded(staticEntity.getId(),dynamicEntity.getId());
+		if(!ispathAdded)
+		{
+			if(dynamicEntity.getId() != null)
+			{
+				edu.wustl.catissuecore.bizlogic.AnnotationUtil.addPathsForQuery(staticEntity
+						.getId(), dynamicEntity.getId(), staticEntityId, associationId);
+			}
+		}
+		Collection<AssociationInterface> associationCollection = dynamicEntity
+		.getAssociationCollection();
 		for(AssociationInterface association : associationCollection)
 		{
-			PathObject pathObject = new PathObject();
-			pathObject.setSourceEntity(dynamicEntity);
-			pathObject.setTargetEntity(association.getTargetEntity());
-
-			if (processedPathList.contains(pathObject))
-			{
-				return;
-			}
-			else
-			{
-				processedPathList.add(pathObject);
-			}
-
-			boolean ispathAdded = isPathAdded(dynamicEntity.getId(),association.getTargetEntity().getId());
-			if(!ispathAdded)
-			{
-				if(dynamicEntity.getId() != null)
-				{
-					edu.wustl.catissuecore.bizlogic.AnnotationUtil.addPathsForQuery(dynamicEntity.getId(), association.getTargetEntity().getId(),staticEntityId, association.getId());
-					edu.wustl.catissuecore.bizlogic.AnnotationUtil.addEntitiesToCache(false, association.getTargetEntity(), dynamicEntity);
-				}
-			}
-			addQueryPathsForEntityHierarchy(association.getTargetEntity(),staticEntityId,processedPathList);
+			System.out.println("PERSISTING PATH");
+			addQueryPathsForEntityHierarchy(association.getTargetEntity(), dynamicEntity,
+					association.getId(), staticEntityId, processedPathList);
 		}
+		Long end = new Long(System.currentTimeMillis());
+		System.out.println("Time required to add complete paths is" + (end - start) / 1000
+				+ "seconds");
 	}
 
 

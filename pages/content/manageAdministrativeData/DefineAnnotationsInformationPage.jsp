@@ -1,6 +1,6 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
-	
-<html:form styleId="thisform" action="DefineAnnotations.do">
+
+<form id="thisform" name="thisform">
 	<p>&nbsp;</p>
 	<p><table summary="" cellpadding="5" cellspacing="0" border="0" width="620" height="160">
 		<tr>
@@ -14,18 +14,18 @@
 		<tr>
 			<td align="justify" colspan="2" height="60" style="font-family:arial,helvetica,verdana,sans-serif; font-size:0.8em; padding-left:0.6em; background-color:#F4F4F5; color:#000000;">As a good database administration practice, we suggest that you take a backup of the database before creating any new Dynamic Extensions or editing the existing Dynamic Extensions.</td>
 		</tr>
-		
+
 		<tr>
 			<td align="right" height="*" width="50%" bgcolor="#F4F4F5">
 				<input type="button" class="actionButton" value="Back" onClick="setAction('thisform', 'ManageAdministrativeData.do?dummy=dummy')"/>
 			</td>
 			<td align="left" height="*" width="50%" bgcolor="#F4F4F5">
-				<html:submit styleClass="actionButton">Next</html:submit>
+				<input type="button" class="actionButton" value="Next" onClick="setAction('thisform', 'DefineAnnotations.do')"/>
 			</td>
 		</tr>
 	</table>
 	</p>
-</html:form>
+</form>
 
 
 <script>
