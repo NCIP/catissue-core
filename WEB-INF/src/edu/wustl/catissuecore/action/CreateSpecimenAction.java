@@ -41,9 +41,12 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.AbstractBizLogic;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -112,10 +115,7 @@ public class CreateSpecimenAction extends SecureAction
 		 request.setAttribute(Constants.PAGEOF,pageOf);
 		 */
 		request.setAttribute(Constants.PAGEOF,pageOf);
-		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance()
-				.getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
-
-	
+		DefaultBizLogic dao = new DefaultBizLogic(); 
 		TreeMap containerMap = new TreeMap();
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
@@ -436,7 +436,7 @@ public class CreateSpecimenAction extends SecureAction
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
-	TreeMap getContainerMap(String specimenId, String className, CreateSpecimenBizLogic dao,
+	TreeMap getContainerMap(String specimenId, String className, DefaultBizLogic dao,
 			StorageContainerBizLogic scbizLogic,String exceedingMaxLimit, HttpServletRequest request) throws DAOException,SMException
 	{
 		TreeMap containerMap = new TreeMap();
@@ -457,7 +457,7 @@ public class CreateSpecimenAction extends SecureAction
 		return containerMap;
 	}
 	
-	private long getCpId(CreateSpecimenBizLogic dao, Long scgId) throws DAOException
+	private long getCpId(DefaultBizLogic dao, Long scgId) throws DAOException
 	{
 		long cpId = -1;
 		String []columnName = new String[1];
