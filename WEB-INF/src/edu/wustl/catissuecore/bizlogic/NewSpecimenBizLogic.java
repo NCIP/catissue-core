@@ -877,11 +877,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen, DAO dao) throws DAOException
 	{
 		Collection holdsSpecimenClassColl = containerHoldsSpecimenClasses.get(container.getId());
-		if (holdsSpecimenClassColl == null)
+		if (holdsSpecimenClassColl == null || holdsSpecimenClassColl.isEmpty())
 		{
-			if (container.getHoldsSpecimenClassCollection() == null || container.getHoldsSpecimenClassCollection().size()==0)
+			if (container.getHoldsSpecimenClassCollection() == null || container.getHoldsSpecimenClassCollection().isEmpty())
 			{
-			holdsSpecimenClassColl = (Collection) dao.retrieveAttribute(StorageContainer.class.getName(), container.getId(),
+			 holdsSpecimenClassColl = (Collection) dao.retrieveAttribute(StorageContainer.class.getName(), container.getId(),
 					"elements(holdsSpecimenClassCollection)");
 			}
 			else
@@ -890,8 +890,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			containerHoldsSpecimenClasses.put(container.getId(), holdsSpecimenClassColl);
 		}
-		boolean aa = holdsSpecimenClassColl.contains(specimen.getClassName());
-		if (!aa)
+		if (!holdsSpecimenClassColl.contains(specimen.getClassName()))
 		{
 			throw new DAOException("This Storage Container cannot hold " + specimen.getClassName() + " Specimen ");
 		}
