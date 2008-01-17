@@ -138,27 +138,15 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	
 	private Map getAliquots(CreateSpecimenTemplateForm createSpecimenTemplateForm,String uniqueIdentifier)
 	{
-		String noOfAliquotes = createSpecimenTemplateForm.getNoOfAliquots();
-		String quantityPerAliquot = createSpecimenTemplateForm.getQuantityPerAliquot();
 		Map aliquotMap = new LinkedHashMap();
+		String noOfAliquotes = createSpecimenTemplateForm.getNoOfAliquots();
 		Double aliquotCount = Double.parseDouble(noOfAliquotes);
-		Double parentQuantity = Double.parseDouble(createSpecimenTemplateForm.getQuantity());
-		Double aliquotQuantity=0D;
-		if(quantityPerAliquot==null||quantityPerAliquot.equals(""))
-		{
-			aliquotQuantity = parentQuantity/aliquotCount;
-			parentQuantity = parentQuantity - (aliquotQuantity * aliquotCount);
-		}
-		else
-		{
-			aliquotQuantity=Double.parseDouble(quantityPerAliquot);
-			parentQuantity = parentQuantity - (aliquotQuantity*aliquotCount);
-		}
+		Double aliquotQuantity = calculateQuantity(createSpecimenTemplateForm);
 		for(int iCount = 1; iCount<= aliquotCount; iCount++)
 		{
 			SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,iCount);
 			createAliquot(createSpecimenTemplateForm, uniqueIdentifier,
-					quantityPerAliquot, iCount, specimenRequirementBean);
+					aliquotQuantity.toString(), iCount, specimenRequirementBean);
 			aliquotMap.put(specimenRequirementBean.getUniqueIdentifier(), specimenRequirementBean);
 		}
 		return aliquotMap;
@@ -262,9 +250,9 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			{
 				int iCount = ++noOfBeanAliquots;
 				SpecimenRequirementBean aliquotBean = 					
-					createSpecimen(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), iCount);
-				
-				createAliquot(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), createSpecimenTemplateForm.getQuantityPerAliquot(), iCount, aliquotBean);
+				createSpecimen(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), iCount);
+				Double aliquotQuantity = calculateQuantity(createSpecimenTemplateForm);
+				createAliquot(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), aliquotQuantity.toString(), iCount, aliquotBean);
 				newAliquotSpecimenMap.put(aliquotBean.getUniqueIdentifier(), aliquotBean);
 			}
 			specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
@@ -320,4 +308,24 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			}
 			specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
 	 }
+
+	private Double calculateQuantity(CreateSpecimenTemplateForm createSpecimenTemplateForm)
+	{
+		String noOfAliquotes = createSpecimenTemplateForm.getNoOfAliquots();
+		String quantityPerAliquot = createSpecimenTemplateForm.getQuantityPerAliquot();
+		Double aliquotCount = Double.parseDouble(noOfAliquotes);
+		Double parentQuantity = Double.parseDouble(createSpecimenTemplateForm.getQuantity());
+		Double aliquotQuantity=0D;
+		if(quantityPerAliquot==null||quantityPerAliquot.equals(""))
+		{
+			aliquotQuantity = parentQuantity/aliquotCount;
+			parentQuantity = parentQuantity - (aliquotQuantity * aliquotCount);
+		}
+		else
+		{
+			aliquotQuantity=Double.parseDouble(quantityPerAliquot);
+			parentQuantity = parentQuantity - (aliquotQuantity*aliquotCount);
+		}
+		return aliquotQuantity;
+	}
 }
