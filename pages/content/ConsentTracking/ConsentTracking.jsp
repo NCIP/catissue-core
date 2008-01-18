@@ -576,20 +576,6 @@ function popupWindow(nofConsentTiers)
 							<%
 							if(pageOf.equals("pageOfCollectionProtocolRegistration")||pageOf.equals("pageOfCollectionProtocolRegistrationCPQuery")  || pageOf.equals("pageOfConsent"))
 							{
-								if(operation.equals(Constants.EDIT)&&responseDisplay.equals(Constants.WITHDRAWN))
-								{
-							%>
-								<td align="left" class="formField">
-								<html:hidden property="<%=participantResponseIDKey%>"/>
-								<html:select property="<%=participantResponseKey%>" styleClass="formFieldSized10" styleId="<%=participantResponseKey%>" size="1"
-											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-									<html:option value="Withdrawn"><bean:message key="consent.withdrawn" /></html:option>
-								</html:select>
-								</td>
-							<%
-								}
-								else
-								{
 							%>
 								<td align="left" class="formField">
 									<html:hidden property="<%=participantResponseIDKey%>"/>
@@ -598,9 +584,6 @@ function popupWindow(nofConsentTiers)
 									<html:options collection="<%=collection%>" labelProperty="name" property="value"/>
 									</html:select>
 								</td>
-								<%
-								}
-								%>
 							<%-- If Page of SCG or New Specimen or Distribution then show participant Response. --%>																			
 							<%
 							}

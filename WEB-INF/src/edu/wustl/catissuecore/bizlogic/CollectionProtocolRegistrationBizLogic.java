@@ -780,7 +780,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		if (!collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
 		{
 			verifyAndUpdateConsentWithdrawn(collectionProtocolRegistration, oldCollectionProtocolRegistration, dao, sessionDataBean);
-			collectionProtocolRegistration.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+			//kalpana bug #5911
+			//collectionProtocolRegistration.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 		}
 
 		/* for offset 27th Dec 2007 */
@@ -819,7 +820,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		// Disable all specimen Collection group under this registration.
 		Logger.out.debug("collectionProtocolRegistration.getActivityStatus() " + collectionProtocolRegistration.getActivityStatus());
-		if (collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		if (!collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
 		{
 			Logger.out.debug("collectionProtocolRegistration.getActivityStatus() " + collectionProtocolRegistration.getActivityStatus());
 			Long collectionProtocolRegistrationIDArr[] = {collectionProtocolRegistration.getId()};
