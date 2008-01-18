@@ -52,6 +52,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			target =request.getParameter("target");
 			String submitAction = request.getParameter("submitAction");
 			
+			
 			if (target == null)
 			{
 				target = Constants.SUCCESS;
@@ -92,7 +93,15 @@ public class ViewSpecimenSummaryAction extends Action {
 				}
 
 				resetToken(request);
-				return mapping.findForward(summaryForm.getSubmitAction());
+				if((summaryForm.getSubmitAction().equals("bulkUpdateSpecimens") || summaryForm.getSubmitAction().equals("pageOfbulkUpdateSpecimens")) && (request.getParameter("printflag")!=null && request.getParameter("printflag").equals("1")))
+				{
+					request.setAttribute("printflag","1");
+					return mapping.findForward(summaryForm.getSubmitAction() );
+				}
+				else
+				{
+					return mapping.findForward(summaryForm.getSubmitAction());
+				}
 			}
 			else
 			{

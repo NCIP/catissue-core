@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -80,8 +81,19 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 			//specimenSummaryForm.setShowLabel(true);
 			saveMessages(request, actionMessages);
 			specimenSummaryForm.setReadOnly(true);
-			if(request.getParameter("pageOf") != null)
-				return mapping.findForward(request.getParameter("pageOf"));
+			//if(request.getParameter("pageOf") != null)
+			//	return mapping.findForward(request.getParameter("pageOf"));
+			
+			if(request.getAttribute("printflag")!=null && request.getAttribute("printflag").equals("1"))
+			{
+				HashMap forwardToPrintMap = new HashMap();
+				forwardToPrintMap.put("printMultipleSpecimen",specimenDomainCollection );
+				request.setAttribute("forwardToPrintMap",forwardToPrintMap);
+				request.setAttribute("printMultiple","1");
+				if(request.getParameter("pageOf") != null)
+					request.setAttribute("pageOf",request.getParameter("pageOf"));
+				return mapping.findForward("printMultiple");
+			}
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception exception)

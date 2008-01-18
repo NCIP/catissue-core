@@ -49,7 +49,8 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	private boolean showbarCode = true;
 	private boolean showLabel = true;
 	private boolean readOnly = false;
-	
+	private String printCheckbox; 
+       
 	public boolean getReadOnly(){
 		return this.readOnly;
 	}
@@ -261,6 +262,14 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 
 	public void setShowParentStorage(boolean showParentStorage) {
 		this.showParentStorage = showParentStorage;
+	}
+
+	public String getPrintCheckbox() {
+		return printCheckbox;
+	}
+
+	public void setPrintCheckbox(String printCheckbox) {
+		this.printCheckbox = printCheckbox;
 	}
 	
 }

@@ -164,6 +164,21 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				}while(chkCount>0);
 			}		
 		}
+		function pageSubmit()
+		{
+			alert("page submit");
+			var printFlag = document.getElementById("printCheckbox");
+			if(printFlag.checked)
+			{
+				document.forms[0].action ='GenericSpecimenSummary.do?save=SCGSpecimens&printflag=1'; 
+				document.forms[0].submit();
+			}
+			else
+			{
+				document.forms[0].action ='GenericSpecimenSummary.do?save=SCGSpecimens&printflag=0'; 
+				document.forms[0].submit();
+			}
+		}
 	</script>
 </head>
 <body onload="UpdateCheckBoxStatus()">
@@ -184,9 +199,16 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		<td>
 		<table summary="" cellpadding="0" cellspacing="0" border="0">
 		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
+		<tr>					
+				<td class="formFieldNoBorders" colspan="5"  height="20" >
+				<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+						<bean:message key="print.checkboxLabel"/>
+				</html:checkbox>
+		    	</td>
+		</tr>
 		<tr>
 		<td>
-		<input type="button" value="Submit" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
+		<input type="button" value="Submit" onclick="pageSubmit()" />
 		</td>
 		</tr>
 		</logic:equal>
@@ -834,7 +856,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
 		 <tr>
 			<td>
-			<input type="button" value="Submit" onclick="form.action='GenericSpecimenSummary.do?save=SCGSpecimens'; submit()" />
+			<input type="button" value="Submit" onclick="pageSubmit()" />
 			</td>
 		 </tr>
 		</logic:equal>
