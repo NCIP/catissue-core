@@ -166,7 +166,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		}
 		function pageSubmit()
 		{
-			alert("page submit");
+			
 			var printFlag = document.getElementById("printCheckbox");
 			if(printFlag.checked)
 			{
