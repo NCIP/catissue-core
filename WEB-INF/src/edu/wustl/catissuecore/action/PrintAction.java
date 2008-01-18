@@ -3,8 +3,10 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -132,6 +134,56 @@ public class PrintAction extends Action
 		        	}
 		    		//String specimenId = (String) forwardToPrintMap.get("specimenId");Specimen:1_id
 		    	}
+		    	//For multiple specimen page
+		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0  && request.getAttribute("printMultiple")!=null  &&   request.getAttribute("printMultiple").equals("1"))
+		    	{
+		    		
+	    			
+		    		LinkedHashSet specimenDomainCollection =  (LinkedHashSet) forwardToPrintMap.get("printMultipleSpecimen");
+		    		Iterator iterator = specimenDomainCollection.iterator();
+		    		List<AbstractDomainObject> specimenList = new ArrayList();
+		    		while (iterator.hasNext()) 
+		    		  {
+		    			Specimen objSpecimen = (Specimen) iterator.next();
+		    			specimenList.add(objSpecimen);
+		    			Collection childSpecimen =  objSpecimen.getChildrenSpecimen();
+		    			if(childSpecimen!=null && childSpecimen.size()>0)
+		    			{
+		    				
+		    				Iterator itr = childSpecimen.iterator();
+		    				while(itr.hasNext())
+		    				{
+		    					Specimen objchildSpecimen = (Specimen) itr.next();
+		    					specimenList.add(objchildSpecimen);
+		    				}
+		    				
+		    			}
+		    				    			
+		    		 }
+		    		SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+			        boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser);
+			        	
+			        if(printStauts)
+		    			{
+			        		//printservice returns true ,Printed Successfully
+			        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
+			        		messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.success"));
+			    			saveMessages(request,messages);
+		    			}
+			        else
+			        	{
+			        		
+			        		//If any case print service return false ,it means error while printing.
+			        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
+			    			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.failure"));
+			    			saveMessages(request,messages);
+			        	}
+			        if(request.getAttribute("pageOf")!=null)
+			        	nextforwardTo = request.getAttribute("pageOf").toString();
+			        else
+			        	nextforwardTo = Constants.SUCCESS;
+		    	}
+		    	
 		    	
     	
     		}
