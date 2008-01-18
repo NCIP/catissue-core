@@ -190,7 +190,7 @@ public abstract class QueryCSMUtil
 		{
 		EntityInterface dynamicExtensionsEntity = node.getOutputEntity()
 				.getDynamicExtensionsEntity();
-		String entityName = dynamicExtensionsEntity.getName();
+		String entityName;
 		queryResultObjectDataBean
 				.setPrivilegeType(edu.wustl.common.querysuite.security.utility.Utility
 						.getPrivilegeType(dynamicExtensionsEntity));
@@ -201,39 +201,44 @@ public abstract class QueryCSMUtil
 		{
 			EntityInterface mainEntity = getMainEntity(mainEntityList, node);
 			queryResultObjectDataBean.setMainEntity(mainEntity);
-			queryResultObjectDataBean.setMainEntity(false);
-			String name = mainEntity.getName();
-			readDeniedObject = isReadDeniedObject(name);
-			setEntityName(mainEntity, name);
+			entityName = mainEntity.getName();
 		}
 		else
 		{
-			queryResultObjectDataBean.setMainEntity(true);
-			readDeniedObject = isReadDeniedObject(dynamicExtensionsEntity.getName());
-			setEntityName(dynamicExtensionsEntity, entityName);
+			entityName = dynamicExtensionsEntity.getName();
 		}
 		
+		queryResultObjectDataBean.setCsmEntityName(entityName);
+		setEntityName(queryResultObjectDataBean, entityName);
+		readDeniedObject = isReadDeniedObject(queryResultObjectDataBean.getCsmEntityName());
 		queryResultObjectDataBean.setReadDeniedObject(readDeniedObject);
 		}
 		return queryResultObjectDataBean;
 	}
 
-	/**
-	 * @param dynamicExtensionsEntity
+	/**If main entity is inherited from an entity (e.g. Fluid Specimen is inherited from Specimen) and present in INHERITED_ENTITY_NAMES  
+	 * then csmEntityName of queryResultObjectDataBean will be set to it's parent entity name.(as Sql for getting CP ids id retrived 
+	 * according to parent entity name from entityCPSqlMap in Variables class).
+	 * @param queryResultObjectDataBean
 	 * @param name
 	 */
-	private static void setEntityName(EntityInterface dynamicExtensionsEntity, String name)
+	private static void setEntityName(QueryResultObjectDataBean queryResultObjectDataBean, String name)
 	{
 		boolean presentInArray = QueryModuleUtil.isPresentInArray(name,
 				Constants.INHERITED_ENTITY_NAMES);
-		if (presentInArray && dynamicExtensionsEntity.getParentEntity() != null)
+		
+		if (presentInArray)
 		{
-			name = dynamicExtensionsEntity.getParentEntity().getName();
-			dynamicExtensionsEntity.setName(name);
+			EntityInterface parentEntity = queryResultObjectDataBean.getEntity().getParentEntity();
+			if (parentEntity != null)
+			{
+				queryResultObjectDataBean.setCsmEntityName(parentEntity.getName());
+			}
 		}
 	}
 	
-	/**
+	/**This method will check if for an entity read denied has to checked or not. All theses entities are present in 
+	 * Variables.queryReadDeniedObjectList list.
 	 * @param name
 	 * @return
 	 */
