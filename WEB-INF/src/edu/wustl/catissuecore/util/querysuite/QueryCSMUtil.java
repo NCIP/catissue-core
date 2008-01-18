@@ -3,6 +3,7 @@
  */
 package edu.wustl.catissuecore.util.querysuite;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,7 +57,7 @@ public abstract class QueryCSMUtil
 		int status;
 		Map<EntityInterface ,List<EntityInterface>> mainEntityMap = getMainEntitiesForAllQueryNodes(uniqueIdNodesMap);
 		List<Long> queryDeEntities = getAllDEEntities(query);
-		String errorMessg = getErrorMessage(queryDeEntities, mainEntityMap);
+		String errorMessg = getErrorMessage(mainEntityMap, uniqueIdNodesMap);
 		if(!errorMessg.equals(""))
 		{
 			session.setAttribute(Constants.NO_MAIN_OBJECT_IN_QUERY, errorMessg);
@@ -66,13 +67,16 @@ public abstract class QueryCSMUtil
 			session.setAttribute(Constants.MAIN_ENTITY_MAP, mainEntityMap);
 		return mainEntityMap;
 	}
-
-	/**This method will return error message for main object.
+	
+	/**
+	 * This method will return error message for main object.
 	 * @param queryDeEntities list of ids of all the DE entities present in query.
 	 * @param mainEntityMap main entity map.
+	 * @param uniqueIdNodesMap contains all the entities in the query 
+	 * @return
 	 */
-	private static String getErrorMessage(List<Long> queryDeEntities,
-			Map<EntityInterface, List<EntityInterface>> mainEntityMap)
+	private static String getErrorMessage(Map<EntityInterface, List<EntityInterface>> mainEntityMap, 
+			Map<String, OutputTreeDataNode> uniqueIdNodesMap)
 	{
 		String errorMsg = "";
 		
@@ -94,18 +98,25 @@ public abstract class QueryCSMUtil
 				if(mainEntityName!=null && !mainEntityName.equals(""))
 					mainEntityName = mainEntityName.substring(mainEntityName.lastIndexOf(".")+1,mainEntityName.length());
 				mainEntityNames = mainEntityNames + mainEntityName+" or ";
-				if(queryDeEntities.contains(mainEntity.getId()))
-				{
-					isMainEntityPresent = true;
-					break;
+				// iterate through uniqueIdNodesMap and check if main entity is present.
+				for (Iterator idMapIterator = uniqueIdNodesMap.entrySet().iterator(); idMapIterator.hasNext();)
+				{	
+					Map.Entry<String, OutputTreeDataNode> IdmapValue = (Map.Entry<String, OutputTreeDataNode>) idMapIterator.next();
+					OutputTreeDataNode node = IdmapValue.getValue();				
+					EntityInterface mapEntity = node.getOutputEntity().getDynamicExtensionsEntity();
+					if (mainEntity.getName().equals(mapEntity.getName()))
+					{
+						isMainEntityPresent = true;
+						break;
+					}
 				}
 			} 
 			if(!isMainEntityPresent)
 			{
 				mainEntityNames = mainEntityNames.substring(0, mainEntityNames.lastIndexOf("r")-1);
-				errorMsg = entityName+" "
-						+ ApplicationProperties.getValue("query.mainObjectErrorPartPre")
-						+ " "+mainEntityNames + ApplicationProperties.getValue("query.mainObjectErrorPartPost");
+				String message = ApplicationProperties.getValue("query.mainObjectError");
+				Object[] arguments = new Object[]{entityName,mainEntityNames};
+				errorMsg = MessageFormat.format(message, arguments);
 				break;
 			}
 		}
