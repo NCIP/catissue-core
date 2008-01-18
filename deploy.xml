@@ -1187,7 +1187,8 @@ Thanking You,
 		<target name="oracleEncryptPassword">
 			<echo message="Encrypting Password for Oracle DB..."/>
 			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		
+			<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+			
 			<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="true">
 				
 				<classpath refid="temp.classpath" />
