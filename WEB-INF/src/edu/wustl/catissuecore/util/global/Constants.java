@@ -2222,7 +2222,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
         MolecularSpecimen.class.getName(),
         TissueSpecimen.class.getName(),
         CellSpecimen.class.getName(),
-        SPECIMEN_ARRAY_CLASS_NAME,
         //IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
         //DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
 };
