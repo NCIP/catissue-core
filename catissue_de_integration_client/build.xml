@@ -152,4 +152,28 @@
 
 		<delete file="${base.dir}/temp/deintegration.war" />
 	</target>
+		
+	<target name="modifyProjectWar">
+			<unwar src="../catissuecore.war" dest="${base.dir}/temp/catissuecore" />
+			<unwar src="${caCORE.jBoss.home.dir}/server/default/deploy/${caCORE.project.name}.war" dest="${base.dir}/temp/${caCORE.project.name}" />
+			<copy file="${base.dir}/temp/catissuecore/WEB-INF/lib/hibernate3.jar" todir="${base.dir}/temp/${caCORE.project.name}/WEB-INF/lib" overwrite="true" />
+
+
+			<war destfile="${base.dir}/temp/${caCORE.project.name}.war" webxml="${base.dir}/temp/${caCORE.project.name}/WEB-INF/web.xml">
+				<fileset dir="${base.dir}/temp/${caCORE.project.name}">
+					<include name="**/**/**.*" />
+				</fileset>
+			</war>
+
+			<copy todir="${caCORE.jBoss.home.dir}/server/default/deploy" file="${base.dir}/temp/${caCORE.project.name}.war" overwrite="true" />
+
+		<!--	<delete includeemptydirs="true">
+				<fileset dir="${base.dir}/temp">
+					<include name="**/*" />
+				</fileset>
+			</delete>
+
+			<delete file="${base.dir}/temp/deintegration.war" />   -->
+		</target>
+	
 </project>
