@@ -4655,6 +4655,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />
 			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />	
+			<forward name="printAntiSuccess" path="/redirecttoSCG.do" />	
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />			
 	   </action>
        <action path="/updateSpecimenStatus"
@@ -4663,6 +4664,7 @@ PUBLIC
                 validate="false"
                 scope="request">
 					<forward name="success" path="/redirecttoSCG.do" />	
+					<forward name="printAnticipatorySpecimens" path="/printMultiple.do" />	
 					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
        </action>    
 
