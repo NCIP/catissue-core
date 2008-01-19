@@ -789,7 +789,10 @@ public class CollectionProtocolUtil {
 				specimenRequirementBean.getPathologicalStatus());		
 		specimen.setType(specimenRequirementBean.getType());
 		String storageType = specimenRequirementBean.getStorageContainerForSpecimen();
-		
+		if(specimenRequirementBean.getClassName().equalsIgnoreCase(Constants.MOLECULAR))
+		{
+			((MolecularSpecimen)specimen).setConcentrationInMicrogramPerMicroliter(new Double(specimenRequirementBean.getConcentration()));
+		}
 		specimen.setPositionDimensionOne(CollectionProtocolUtil.getStorageTypeValue(storageType));
 		
 		return specimen;
