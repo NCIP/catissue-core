@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -57,6 +58,15 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			
 			Object obj = request.getAttribute("SCGFORM");
 			request.setAttribute("SCGFORM", obj);		
+			if(specimenSummaryForm.getPrintCheckbox()!=null && specimenSummaryForm.getPrintCheckbox().equals("true"))
+			{
+				HashMap forwardToPrintMap = new HashMap();
+				forwardToPrintMap.put("printAntiSpecimen",specimenDomainCollection );
+				request.setAttribute("forwardToPrintMap",forwardToPrintMap);
+				request.setAttribute("AntiSpecimen","1");
+				return mapping.findForward("printAnticipatorySpecimens");
+			}
+			
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception exception)

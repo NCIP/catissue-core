@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -23,12 +22,12 @@ import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.print.SpecimenCollectionGroupLabelPrinterImpl;
 import edu.wustl.catissuecore.print.SpecimenLabelPrinterImpl;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -61,40 +60,81 @@ public class PrintAction extends Action
     	String printerClassName = XMLPropertyHandler.getValue("SpecimenlabelPrinterClass");
     	if(printerClassName!= null)
     	{
-    		
     		SessionDataBean objBean = (SessionDataBean) request.getSession().getAttribute("sessionData");
     		String strIpAddress = objBean.getIpAddress();
     		String strUserId = objBean.getUserId().toString();
     		gov.nih.nci.security.authorization.domainobjects.User objUser = null;
     		try 
     		{
-    			gov.nih.nci.security.authorization.domainobjects.User user = SecurityManager.getInstance(this.getClass()).getUserById(strUserId);    			
+    			objUser = SecurityManager.getInstance(this.getClass()).getUserById(strUserId);    			
     			HashMap forwardToPrintMap = (HashMap)request.getAttribute("forwardToPrintMap");
-    			
+    			//SCG Label printing
+    			if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenCollectionGroupId")!=null)
+				{
+    				String scgId = (String) forwardToPrintMap.get("specimenCollectionGroupId");
+    				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+    				SpecimenCollectionGroup objSCG =null;
+        			boolean printStauts  =false;
+    				try
+    				{
+    					dao.openSession(null);
+    					List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), "id", scgId);
+
+    					if (scgList != null && !scgList.isEmpty())
+    					{
+   						objSCG = (SpecimenCollectionGroup) scgList.get(0);
+    					}
+    					SpecimenCollectionGroupLabelPrinterImpl labelPrinter =   new SpecimenCollectionGroupLabelPrinterImpl();
+    					printStauts = labelPrinter.printLabel(objSCG, strIpAddress, objUser);
+        				
+    				}
+    				catch (DAOException exception)
+    				{
+    					throw exception;
+    				}
+    				finally
+    				{
+    					dao.commit();
+    					dao.closeSession();
+    				}
+    				setStatusMessage(printStauts,request);
+    				
+    				
+				}
+				//For Specimen 
     			//Check for Specimen type of object.Retrieve object based on Id and call printerimpl class
 		    	if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenId")!=null)
 				{
 					String specimenId = (String) forwardToPrintMap.get("specimenId");
-					Specimen objSpecimen = retriveSpecimen(specimenId,request);
-		        	SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
-		        	boolean printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, objUser);
+					AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+    				Specimen objSpecimen = null;
+    				boolean printStauts  =false;
+    				try
+    				{
+    					dao.openSession(null);
+    					List specimenList = dao.retrieve(Specimen.class.getName(), "id", new Long(specimenId));
+
+    					if (specimenList != null && !specimenList.isEmpty())
+    					{
+    						objSpecimen = (Specimen) specimenList.get(0);
+    					}
+    					SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+    		        	printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, objUser);
+        				
+    				}
+    				catch (DAOException exception)
+    				{
+    					throw exception;
+    				}
+    				finally
+    				{
+    					dao.commit();
+    					dao.closeSession();
+    				}
+    				
 		        	
-		        	if(printStauts)
-	    			{
-		        		//printservice returns true ,Printed Successfully
-		        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
-		        		messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.success"));
-		    			saveMessages(request,messages);
-	    			}
-		        	else
-		        	{
-		        		
-		        		//If any case print service return false ,it means error while printing.
-		        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
-		    			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.failure"));
-		    			saveMessages(request,messages);
-		        	}
-	    			
+		        	
+		        	setStatusMessage(printStauts,request);
 				}
 		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0 && request.getParameter("forwardTo")!=null &&( request.getParameter("forwardTo").equals("CPQueryPrintAliquot") || request.getParameter("forwardTo").equals("printAliquot")))
 		    	{
@@ -102,37 +142,44 @@ public class PrintAction extends Action
 		    		List<AbstractDomainObject> listofAliquot = new ArrayList();
 		    		HashMap aliquotMap = forwardToPrintMap;
 		    		Iterator it =  aliquotMap.keySet().iterator();
-		    		
-		    	    while (it.hasNext()) {
-		    	        
-		    	        String  key = (String)it.next();
-		    	        if(key.endsWith("_id"))
-		    	        {
-		    	        	String idValue = (String) aliquotMap.get(key);
-		    	        	Specimen objSpecimen = retriveSpecimen(idValue,request);
-		    	        	listofAliquot.add(objSpecimen);
-		    	        }
-		    	    }
-		    	  
-		    	    SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
-		        	boolean printStauts = labelPrinter.printLabel(listofAliquot, strIpAddress, objUser);
+		    		Specimen objSpecimen = null;
+		    		boolean printStauts  =false;
+		    		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		    		try
+		    		{  
+		    			
+		    			while (it.hasNext()) 
+		    			{
+		    			 	dao.openSession(null);
+				    	    String  key = (String)it.next();
+				    	    if(key.endsWith("_id"))
+				    	        {
+				    	        	String idValue = (String) aliquotMap.get(key);      	
+				    	        	List specimenList = dao.retrieve(Specimen.class.getName(), "id", new Long(idValue));
+
+				    	        	if (specimenList != null && !specimenList.isEmpty())
+				    	        	{
+				    	        		objSpecimen = (Specimen) specimenList.get(0);
+				    	        	}
+				    	        	listofAliquot.add(objSpecimen);
+				    	        }
+		    			  }     
+		    		    	SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+		    		    	printStauts = labelPrinter.printLabel(listofAliquot, strIpAddress, objUser);	
+		    		}
+		    		catch (DAOException exception)
+		    		{
+		    			throw exception;
+		    		}
+		    		finally
+		    		{
+		    			dao.commit();
+		    			dao.closeSession();
+		    		}
+		    	        	
 		        	
-		        	if(printStauts)
-	    			{
-		        		//printservice returns true ,Printed Successfully
-		        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
-		        		messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.success"));
-		    			saveMessages(request,messages);
-	    			}
-		        	else
-		        	{
-		        		
-		        		//If any case print service return false ,it means error while printing.
-		        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
-		    			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.failure"));
-		    			saveMessages(request,messages);
-		        	}
-		    		//String specimenId = (String) forwardToPrintMap.get("specimenId");Specimen:1_id
+		        	setStatusMessage(printStauts,request);
+		    		
 		    	}
 		    	//For multiple specimen page
 		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0  && request.getAttribute("printMultiple")!=null  &&   request.getAttribute("printMultiple").equals("1"))
@@ -146,52 +193,52 @@ public class PrintAction extends Action
 		    		  {
 		    			Specimen objSpecimen = (Specimen) iterator.next();
 		    			specimenList.add(objSpecimen);
-		    			Collection childSpecimen =  objSpecimen.getChildrenSpecimen();
-		    			if(childSpecimen!=null && childSpecimen.size()>0)
-		    			{
-		    				
-		    				Iterator itr = childSpecimen.iterator();
-		    				while(itr.hasNext())
-		    				{
-		    					Specimen objchildSpecimen = (Specimen) itr.next();
-		    					specimenList.add(objchildSpecimen);
-		    				}
-		    				
-		    			}
+//		    			
 		    				    			
 		    		 }
 		    		SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
 			        boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser);
-			        	
-			        if(printStauts)
-		    			{
-			        		//printservice returns true ,Printed Successfully
-			        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
-			        		messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.success"));
-			    			saveMessages(request,messages);
-		    			}
-			        else
-			        	{
-			        		
-			        		//If any case print service return false ,it means error while printing.
-			        		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
-			    			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.failure"));
-			    			saveMessages(request,messages);
-			        	}
+			    	setStatusMessage(printStauts,request);
+			        
 			        if(request.getAttribute("pageOf")!=null)
 			        	nextforwardTo = request.getAttribute("pageOf").toString();
 			        else
 			        	nextforwardTo = Constants.SUCCESS;
 		    	}
-		    	
+//		    	For Anti. specimen page
+		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0  && request.getAttribute("AntiSpecimen")!=null  &&   request.getAttribute("AntiSpecimen").equals("1"))
+		    	{
+		    		
+	    			
+		    		LinkedHashSet specimenDomainCollection =  (LinkedHashSet) forwardToPrintMap.get("printAntiSpecimen");
+		    		Iterator iterator = specimenDomainCollection.iterator();
+		    		List<AbstractDomainObject> specimenList = new ArrayList();
+		    		while (iterator.hasNext()) 
+		    		  {
+		    			Specimen objSpecimen = (Specimen) iterator.next();
+		    			specimenList.add(objSpecimen);
+//		    			
+		    				    			
+		    		 }
+		    		SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+			        boolean printStauts = labelPrinter.printLabel(specimenList, strIpAddress, objUser);
+			    	setStatusMessage(printStauts,request);
+			        
+			       	nextforwardTo = "printAntiSuccess";
+		    	}	    	
 		    	
     	
     		}
     		catch (Exception e) 
     		{
     			//Any other exception
-    			e.printStackTrace();
+    			//e.printStackTrace();
         		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
+        		if(messages == null)
+        		{
+        			messages = new ActionMessages();		
+        			
+        		}
     			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.failure"));
     			saveMessages(request,messages);
     		}
@@ -200,6 +247,11 @@ public class PrintAction extends Action
     	{
     		//Get old actionmessage object from request and append print message to it.
     		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
+    		if(messages == null)
+    		{
+    			messages = new ActionMessages();		
+    			
+    		}
 			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.failure"));
 			saveMessages(request,messages);
     	}
@@ -208,62 +260,37 @@ public class PrintAction extends Action
     }
    
     /**
-     * @param scgId
+     * @param printStauts
      * @param request
-     * @return
-     * @throws DAOException
      */
-    public SpecimenCollectionGroup  retriveSCG(String scgId ,HttpServletRequest request)  	throws DAOException
-	{
-    	try 
+    private void setStatusMessage(boolean printStauts, HttpServletRequest request) 
+    {
+    	if(printStauts)
 		{
-    		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-        	SessionDataBean sessionDataBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
-    		((HibernateDAO)dao).openSession(sessionDataBean);
-		
-    		if(scgId!= null && !scgId.equals(""))
+    		//printservice returns true ,Printed Successfully
+    		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
+    		if(messages == null)
     		{
-    			List scgList = null;    			
-				scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), "id", new Long(scgId));
-				((HibernateDAO)dao).closeSession();			
-				if(scgList!=null && !scgList.isEmpty())
-				{
-					SpecimenCollectionGroup objSCG  = (SpecimenCollectionGroup)scgList.get(0);
-					return objSCG;
-				}
+    			messages = new ActionMessages();		
+    			
     		}
-    	
+    		messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.success"));
+			saveMessages(request,messages);
 		}
-    	catch (Exception e) {
-			throw new DAOException(e.getMessage());
-		}
-    	return null;
-	}
-    
-    public Specimen  retriveSpecimen(String specimenId ,HttpServletRequest request)  	throws DAOException
-	{
-    	try 
-		{
-    		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-        	SessionDataBean sessionDataBean = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
-    		((HibernateDAO)dao).openSession(sessionDataBean);
-		
-    		if(specimenId!= null && !specimenId.equals(""))
+    	else
+    	{
+    		
+    		//If any case print service return false ,it means error while printing.
+    		ActionMessages messages =(ActionMessages) request.getAttribute(MESSAGE_KEY);
+    		if(messages == null)
     		{
-    			List specimenList = null;    			
-				specimenList = dao.retrieve(Specimen.class.getName(), "id", new Long(specimenId));
-				((HibernateDAO)dao).closeSession();			
-				if(specimenList!=null && !specimenList.isEmpty())
-				{
-					Specimen objSpecimen  = (Specimen)specimenList.get(0);
-					return objSpecimen;
-				}
+    			messages = new ActionMessages();		
+    			
     		}
-    	
-		}
-    	catch (Exception e) {
-			throw new DAOException(e.getMessage());
-		}
-    	return null;
+			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("print.failure"));
+			saveMessages(request,messages);
+    	}
+		
 	}
+
 }
