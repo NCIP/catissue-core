@@ -457,20 +457,7 @@ if(form != null)
 		     	</label>
 		    </td>
 		    <td class="formFieldNoBordersSimple">
-			    <autocomplete:AutoCompleteTag property="className"
-						  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
-						  initialValue="<%=form.getClassName()%>"
-						  onChange="onTypeChange(this);clearTypeCombo()"
-				/>
-	       	</td>
-		    <td class="formFieldNoBordersSimple" width="5">*</td>
-		    <td class="formFieldNoBordersSimple">
-		     	<label for="type">
-		     		<b><bean:message key="specimen.subType"/></b>
-		     	</label>
-		    </td>				    
-		    <td class="formFieldNoBordersSimple" >
-		    <%
+			<%
 				String classValue = (String)form.getClassName();
 				specimenTypeList = (List)specimenTypeMap.get(classValue);
 				boolean subListEnabled = false;
@@ -491,6 +478,21 @@ if(form != null)
 				      readOnlyForAliquot = "true";
 				}
 			%>
+			    <autocomplete:AutoCompleteTag property="className"
+						  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
+						  initialValue="<%=form.getClassName()%>"
+						  readOnly="<%=readOnlyForAliquot%>"
+						  onChange="onTypeChange(this);clearTypeCombo()"
+				/>
+	       	</td>
+		    <td class="formFieldNoBordersSimple" width="5">*</td>
+		    <td class="formFieldNoBordersSimple">
+		     	<label for="type">
+		     		<b><bean:message key="specimen.subType"/></b>
+		     	</label>
+		    </td>				    
+		    <td class="formFieldNoBordersSimple" >
+		    
 		   <autocomplete:AutoCompleteTag property="type"
 						  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 						  initialValue="<%=form.getType()%>"
