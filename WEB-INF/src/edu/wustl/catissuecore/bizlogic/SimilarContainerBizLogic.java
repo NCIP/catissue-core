@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
+import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -179,7 +180,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					storagecontLblGenerator = LabelGeneratorFactory.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
 					storagecontLblGenerator.setLabel(cont);
 				}
-				catch (BizLogicException e) 
+				catch (NameGeneratorException e) 
 				{
 					throw new DAOException(e.getMessage());
 				}

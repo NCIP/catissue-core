@@ -1,22 +1,24 @@
 package edu.wustl.catissuecore.namegenerator;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.dbManager.DAOException;
 
 /**
- * SpecimenLabelGenerator for Michgam University.
+ * SpecimenLabelGenerator for Michgan University.
  * Format for specimen: site_yy_ddd_4DigitAutoIncrementingNumber
  * Format for derived specimen: parentSpecimenLabel_childCount+1
  * Format for derived specimen: parentSpecimenLabel_childCount+1
@@ -37,24 +39,50 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	protected void init() 
 	{
 		String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
-		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(
-				Constants.JDBC_DAO);
+		Connection conn = null;
 		currentLabel = new Long("0");
 		try {
-			jdbcDao.openSession(null);
-			List resultList = jdbcDao.executeQuery(sql, null, false, null);
-			if (resultList != null && !resultList.isEmpty()) {
-				String number = (String) ((List) resultList.get(0)).get(0);
-				if (number != null && !number.equals("")) {
-					currentLabel = Long.parseLong(number);
-				}
-			}
-			jdbcDao.closeSession();
-		} catch (DAOException daoexception) {
-			daoexception.printStackTrace();
-		} catch (ClassNotFoundException classnotfound) {
-			classnotfound.printStackTrace();
+        	conn = getConnection();
+        	ResultSet resultSet= conn.createStatement().executeQuery(sql);
+        	
+        	if(resultSet.next())
+        	{
+        		currentLabel = new Long (resultSet.getLong(1));
+        	}	        
 		}
+        catch(NamingException e){
+        	e.printStackTrace();
+        }
+        catch(SQLException ex)
+        {
+        	ex.printStackTrace();
+        }
+        finally
+        {
+        	if (conn!=null)
+        	{
+        		try {
+					conn.close();
+				} catch (SQLException exception) {
+					// TODO Auto-generated catch block
+					exception.printStackTrace();
+				}
+        	}
+        }
+
+	}
+
+	/**
+	 * @return
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
+	private Connection getConnection() throws NamingException, SQLException {
+		Connection conn;
+		InitialContext ctx = new InitialContext();
+		DataSource ds = (DataSource)ctx.lookup(PropertyHandler.DATASOURCE_JNDI_NAME);
+		conn = ds.getConnection();
+		return conn;
 	}
 
 	
@@ -70,19 +98,16 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		String sql = "update CATISSUE_SPECIMEN_LABEL_COUNT SET LABEL_COUNT='"
 				+ currentLabel + "'";
 
-		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(
-				Constants.JDBC_DAO);
 		try {
-			jdbcDao.openSession(null);
-			jdbcDao.executeUpdate(sql);
-			jdbcDao.closeSession();
-		} catch (DAOException daoexception) {
+			Connection conn = getConnection();
+			conn.createStatement().executeUpdate(sql);
+		} catch (Exception daoexception) {
 			daoexception.printStackTrace();
 		}
 	}
 
 	
-	public void setLabel(AbstractDomainObject obj) {
+	public void setLabel(Object obj) {
 		
 		Specimen objSpecimen = (Specimen)obj;
 

@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
+import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
@@ -291,7 +292,7 @@ public class CreateSpecimenBizLogic extends NewSpecimenBizLogic
 					specimenGenerator.setLabel(specimen);
 					
 				} 
-				catch (BizLogicException e)
+				catch (NameGeneratorException e)
 				{
 					throw new DAOException(e.getMessage());
 					
@@ -306,7 +307,7 @@ public class CreateSpecimenBizLogic extends NewSpecimenBizLogic
 					barcodeGenerator.setBarcode(specimen);
 					
 				} 
-				catch (BizLogicException e)
+				catch (NameGeneratorException e)
 				{
 					throw new DAOException(e.getMessage());
 					

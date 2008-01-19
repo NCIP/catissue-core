@@ -36,6 +36,7 @@ import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
+import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
@@ -392,9 +393,9 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			
 			try {
 				LabelGenerator specimenGenerator  = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-				specimenGenerator.setLabel(aliquotList);
+ 				specimenGenerator.setLabel(aliquotList);
 			
-			} catch (BizLogicException e1) {
+			} catch (NameGeneratorException e1) {
 				throw new DAOException(e1.getMessage());
 			
 			}
@@ -407,7 +408,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 				BarcodeGenerator barcodeGenerator  = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
 				barcodeGenerator.setBarcode(aliquotList);
 			
-			} catch (BizLogicException e1) {
+			} catch (NameGeneratorException e1) {
 				throw new DAOException(e1.getMessage());
 			
 			}

@@ -1,15 +1,18 @@
 package edu.wustl.catissuecore.namegenerator;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.dbManager.DAOException;
 
 
 /**
@@ -53,39 +56,46 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	private Long getLastAvailableSCGLabel(String databaseConstant)  
 	{
 		Long noOfRecords = new Long("0");
-		String sourceObjectName = "CATISSUE_ABS_SPECI_COLL_GROUP";
-		String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-
+		String sql = "Select max(IDENTIFIER) as MAX_IDENTIFIER from CATISSUE_ABS_SPECI_COLL_GROUP";
+ 		Connection conn = null;
 		try
 		{
-			dao.openSession(null);
-			List list = dao.retrieve(sourceObjectName, selectColumnName);
-			dao.closeSession();
-		
-			if (!list.isEmpty())
-			{
-				List columnList = (List) list.get(0);
-				if (!columnList.isEmpty())
-				{
-					String str = (String) columnList.get(0);
-					if (!str.equals(""))
-					{
-						noOfRecords = Long.parseLong(str);
-					}
-				}
-			}
+        	InitialContext ctx = new InitialContext();
+        	DataSource ds = (DataSource)ctx.lookup(PropertyHandler.DATASOURCE_JNDI_NAME);
+        	conn = ds.getConnection();
+        	ResultSet resultSet= conn.createStatement().executeQuery(sql);
+        	
+        	if(resultSet.next())
+        	{
+        		return new Long (resultSet.getLong(1));
+        	}	        
+
 		}	
-	 	catch(DAOException daoexception)
-		{
-        	daoexception.printStackTrace();
-		}
+        catch(NamingException e){
+        	e.printStackTrace();
+        }
+        catch(SQLException ex)
+        {
+        	ex.printStackTrace();
+        }
+        finally
+        {
+        	if (conn!=null)
+        	{
+        		try {
+					conn.close();
+				} catch (SQLException exception) {
+					// TODO Auto-generated catch block
+					exception.printStackTrace();
+				}
+        	}
+        }
  
 		return noOfRecords;
 	}
 
 	
-	public void setLabel(AbstractDomainObject obj) 
+	public void setLabel(Object obj) 
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)obj;
 		CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroup.getCollectionProtocolRegistration();
@@ -104,7 +114,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.List)
 	 */
-	public void setLabel(List<AbstractDomainObject> objSpecimenList) {
+	public void setLabel(List objSpecimenList) {
 
 		
 	}
@@ -112,7 +122,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	/**
 	 * Returns label for the given domain object
 	 */
-	public String getLabel(AbstractDomainObject obj) 
+	public String getLabel(Object obj) 
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)obj;
 		setLabel(specimenCollectionGroup);

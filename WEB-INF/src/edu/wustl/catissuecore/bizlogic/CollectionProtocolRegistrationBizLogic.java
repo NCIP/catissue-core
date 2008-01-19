@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
+import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
@@ -650,7 +651,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			}
 			collectionProtocolRegistration.setSpecimenCollectionGroupCollection(scgCollection);
 		}
-		catch (BizLogicException e)
+		catch (NameGeneratorException e)
 		{
 			throw new DAOException(e);
 		}

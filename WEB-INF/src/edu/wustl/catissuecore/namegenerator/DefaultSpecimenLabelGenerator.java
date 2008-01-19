@@ -1,19 +1,20 @@
 package edu.wustl.catissuecore.namegenerator;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.dbManager.DAOException;
-
 
 /**
  * DefaultSpecimenLabelGenerator is a class which contains the default 
@@ -43,13 +44,19 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 */
 	protected void init()
 	{
-		if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
+		try
 		{
-			currentLabel = getLastAvailableSpecimenLabel(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
-		}
-		else
+			if(Constants.ORACLE_DATABASE.equals((String)(PropertyHandler.getValue("database"))))
+			{
+				currentLabel = getLastAvailableSpecimenLabel(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+			}
+			else
+			{
+				currentLabel = getLastAvailableSpecimenLabel(Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+			}
+		}catch(Exception ex)
 		{
-			currentLabel = getLastAvailableSpecimenLabel(Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+			ex.printStackTrace();
 		}
 	}
 	
@@ -62,29 +69,38 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	private Long getLastAvailableSpecimenLabel(String databaseConstant)  
 	{
 		String sql = "select MAX("+databaseConstant+") from CATISSUE_SPECIMEN";
- 		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+ 		Connection conn = null;
         Long noOfRecords = new Long("0");
         try
 		{
-        	jdbcDao.openSession(null);
-        	List resultList = jdbcDao.executeQuery(sql,null,false,null);
-        	if(resultList!=null&&!resultList.isEmpty())
+        	InitialContext ctx = new InitialContext();
+        	DataSource ds = (DataSource)ctx.lookup(PropertyHandler.DATASOURCE_JNDI_NAME);
+        	conn = ds.getConnection();
+        	ResultSet resultSet= conn.createStatement().executeQuery(sql);
+        	
+        	if(resultSet.next())
         	{
-        		String number = (String)((List)resultList.get(0)).get(0);
-	        	if(number!=null && !number.equals(""))
-	        	{
-	        		noOfRecords = Long.parseLong(number);
-	        	}
-        	}
-	        jdbcDao.closeSession();
+        		return new Long (resultSet.getLong(1));
+        	}	        
 		}
-        catch(DAOException daoexception)
-		{
-        	daoexception.printStackTrace();
-		}
-        catch(ClassNotFoundException classnotfound)
+        catch(NamingException e){
+        	e.printStackTrace();
+        }
+        catch(SQLException ex)
         {
-        	classnotfound.printStackTrace();
+        	ex.printStackTrace();
+        }
+        finally
+        {
+        	if (conn!=null)
+        	{
+        		try {
+					conn.close();
+				} catch (SQLException exception) {
+					// TODO Auto-generated catch block
+					exception.printStackTrace();
+				}
+        	}
         }
         return noOfRecords;
 	}
@@ -136,7 +152,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(edu.wustl.common.domain.AbstractDomainObject)
 	 */
-	public synchronized void setLabel(AbstractDomainObject obj) {
+	public synchronized void setLabel(Object obj) {
 		
 		Specimen objSpecimen = (Specimen)obj;
 
@@ -175,7 +191,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.List)
 	 */
-	public synchronized void setLabel(List<AbstractDomainObject> objSpecimenList) {
+	public synchronized void setLabel(List objSpecimenList) {
 
 		List specimenList = objSpecimenList;
 		for (int index=0;index <specimenList.size();index++) 
@@ -189,7 +205,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	/**
 	 * Returns label for the given domain object
 	 */
-	public String getLabel(AbstractDomainObject obj) 
+	public String getLabel(Object obj) 
 	{
 		Specimen objSpecimen = (Specimen)obj;
 		setLabel(objSpecimen);

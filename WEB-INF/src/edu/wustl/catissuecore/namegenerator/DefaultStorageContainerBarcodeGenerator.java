@@ -1,11 +1,15 @@
 package edu.wustl.catissuecore.namegenerator;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.dbManager.DAOException;
 
 
 /**
@@ -37,24 +41,56 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 	 */
 	protected void init()
 	{
+		Connection conn = null;
 		try 
 		{
 			
-			currentBarcode = new StorageContainerBizLogic().getNextContainerNumber();
+			currentBarcode = new Long(0);
+			String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
+			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
+			conn = getConnection();
+			ResultSet resultSet = conn.createStatement().executeQuery(sql);
+			
+			if(resultSet.next())
+				currentBarcode = new Long (resultSet.getLong(1));
 		}
-		catch (DAOException daoException) 
+		catch (Exception daoException) 
 		{
 			daoException.printStackTrace();
 			
+		} finally
+		{
+			if (conn != null)
+			{
+				try {
+					conn.close();
+				} catch (SQLException exception) {
+					// TODO Auto-generated catch block
+					exception.printStackTrace();
+				}
+			}
 		}
+		
 		
 	}
 
+	/**
+	 * @return
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
+	private Connection getConnection() throws NamingException, SQLException {
+		Connection conn;
+		InitialContext ctx = new InitialContext();
+		DataSource ds = (DataSource)ctx.lookup(PropertyHandler.DATASOURCE_JNDI_NAME);
+		conn = ds.getConnection();
+		return conn;
+	}
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(edu.wustl.common.domain.AbstractDomainObject)
 	 */
-	public void setBarcode(AbstractDomainObject obj )
+	public void setBarcode(Object obj )
 	{
 		StorageContainer objStorageContainer = (StorageContainer)obj;
 		//TODO :Write a logic to generate barcode.
@@ -67,7 +103,7 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.List)
 	 */
-	public void setBarcode(List<AbstractDomainObject> storageContainerList) {
+	public void setBarcode(List storageContainerList) {
 		
 		for(int i=0; i< storageContainerList.size(); i++)
 		{

@@ -2,8 +2,6 @@ package edu.wustl.catissuecore.namegenerator;
 
 import java.util.List;
 
-import edu.wustl.common.domain.AbstractDomainObject;
-
 /**
  * Interface for  label generation.
  *  
@@ -13,7 +11,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public interface LabelGenerator
 {
-	public void setLabel(AbstractDomainObject obj);
-	public void setLabel(List<AbstractDomainObject> obj);
-	public String getLabel(AbstractDomainObject obj);
+	public void setLabel(Object obj);
+	public void setLabel(List obj);
+	public String getLabel(Object obj);
 }

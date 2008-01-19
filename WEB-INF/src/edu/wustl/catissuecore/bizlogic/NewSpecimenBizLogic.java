@@ -21,9 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import org.hibernate.HibernateException;
-
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
@@ -57,6 +55,7 @@ import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
+import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
@@ -170,7 +169,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			insertableSpecimens = 
 				insertMultipleSpecimen((LinkedHashSet) obj, dao, sessionDataBean);
 		}
-
+		
 		else if (obj instanceof Specimen)
 		{
 
@@ -596,7 +595,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					BarcodeGenerator spBarcodeGenerator = BarcodeGeneratorFactory.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
 					spBarcodeGenerator.setBarcode(specimen);
 				}
-				catch (BizLogicException e)
+				catch (NameGeneratorException e)
 				{
 					throw new DAOException(e.getMessage());
 				}
@@ -690,7 +689,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					spLblGenerator.setLabel(specimen);
 					TaskTimeCalculater.endTask(labelGen);
 				}
-				catch (BizLogicException e)
+				catch (NameGeneratorException e)
 				{
 					throw new DAOException(e.getMessage());
 				}

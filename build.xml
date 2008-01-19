@@ -77,6 +77,39 @@
 		<!-- Create the temp directory for caCORE CSM war file-->
 		<mkdir dir="${temp.dir}"/>
 	</target>
+	<target name="Label_BarCode_Generator_Client">
+		<delete file="label_barcode_gen_client.jar" />
+
+	<jar destfile="label_barcode_gen_client.jar">
+		<fileset dir="${target.dir}" >
+    		<include name="**/LabelGenerator.class"/>
+			<include name="**/LabelGeneratorFactory.class"/>
+    		<include name="**/BarcodeGenerator.class"/>
+			<include name="**/BarcodeGeneratorFactory.class"/>
+		</fileset>		
+	</jar>
+	</target>
+
+	<target name="Default_Label_BarCode_Generator"  depends ="Label_BarCode_Generator_Client,build_client_jar">
+		<delete file="Default_label_barcode_gen.jar" />
+	<jar destfile="Default_label_barcode_gen.jar">
+		<fileset dir="./catissuecore-properties" >
+			<include  name="LabelGenerator.Properties" />
+		</fileset>
+		<!-- fileset dir="." >
+			<include name="label_barcode_gen_client.jar"/>
+		</fileset -->
+		
+		<fileset dir="${target.dir}" >
+			<include name="**/namegenerator/*"/>
+			
+    		<exclude name="**/LabelGenerator.class"/>
+			<exclude name="**/LabelGeneratorFactory.class"/>
+    		<exclude name="**/BarcodeGenerator.class"/>
+			<exclude name="**/BarcodeGeneratorFactory.class"/>
+		</fileset>
+	</jar>
+	</target>
 
 	<target name="clean" description="clean up">
 		<delete includeemptydirs="true">
@@ -198,12 +231,27 @@
 	</target>
 	
 	<!-- build catissuecore war file which is common to above both targets -->
-	<target name="common_build_war">
+	<target name="common_build_war" depends ="Default_Label_BarCode_Generator">
 		<delete file="catissuecore.war" />
 		<!-- Here duplicate="preserver" is used skip copying duplicate-->
+		<delete>
+			<fileset dir="${base.dir}/WEB-INF/lib">
+		
+				<include name="Default_label_barcode_gen.jar" />
+				<include name="label_barcode_gen_client.jar" />
+			</fileset>
+		</delete>
+
+		<copy todir="WEB-INF/lib" overwrite="true">
+			<fileset dir="${base.dir}"  >
+				<include name="Default_label_barcode_gen.jar" />
+				<include name="label_barcode_gen_client.jar" />
+			</fileset>
+		</copy>
+		
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml" duplicate="preserve">
 			<fileset dir="${base.dir}">
-				<include name="Applet/**" />
+				<!--include name="Applet/**" / -->
 				<include name="css/**" />
 				<include name="images/**" />
 				<include name="jss/**" />
@@ -216,8 +264,14 @@
 				<include name="CDEConfig.xsd" />
 				<include name="ApplicationVersionInfo.txt" />
 				<include name="client-config.wsdd" />
-
+				<include name="Applet/**" />
+	    		<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
+				
+				
 				<exclude name="**/WEB-INF/src*/**" />
+				<exclude name="**/WEB-INF/lib/*.zip" />
+				<exclude name="**/WEB-INF/lib/ant*.jar" />
+				<exclude name="**/WEB-INF/lib/junit*.jar" />
 				<exclude name="**/*servlet.jar*" />
 				
 				<exclude name="**/*hibernate2.jar*" />
@@ -237,7 +291,7 @@
 			
 			<!-- change for csm related war -->
 			<fileset dir="${temp.dir}/catissuecorecsm">
-				<include name="**/WEB-INF/**" />
+				<include name="**/WEB-INF/**"  />
 				<include name="**/images/**" />
 				<include name="**/log/**" />
 				<include name="**/*" />
@@ -329,6 +383,8 @@
 		<mkdir dir="${zip.dir}" />
 
 		<copy file="catissuecore.war" todir="${zip.dir}" overwrite="true" />
+		<copy file="label_barcode_gen_client.jar" todir="${zip.dir}" overwrite="true" />
+		<copy file="Default_label_barcode_gen.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="dynamicExtensions.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissuePrintWebService.war" todir="${zip.dir}" overwrite="true" />
 		<!-- only single war file is being used so comment it -->

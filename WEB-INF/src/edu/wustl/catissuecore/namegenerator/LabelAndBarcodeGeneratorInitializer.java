@@ -54,7 +54,7 @@ public class LabelAndBarcodeGeneratorInitializer {
 		
 			LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
 		} 
-		catch (BizLogicException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}

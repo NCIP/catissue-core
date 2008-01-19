@@ -1,17 +1,20 @@
 package edu.wustl.catissuecore.namegenerator;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.dbManager.DAOException;
+
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.global.Constants;
 import java.util.Collection;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 /**
  * DefaultSpecimenBarcodeGenerator is a class which contains the default 
  * implementations AbstractSpecimenGenerator classe.
@@ -40,15 +43,22 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 * lable from int to String
 	 */
 	protected void init()
-	{
-		if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
+	{		
+		try
 		{
-			currentBarcode = getLastAvailableSpecimenBarcode(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
-		}
-		else
+			if(Constants.ORACLE_DATABASE.equals((String)(PropertyHandler.getValue("database"))))
+			{
+				currentBarcode = getLastAvailableSpecimenBarcode(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+			}
+			else
+			{
+				currentBarcode = getLastAvailableSpecimenBarcode(Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+			}
+		}catch(Exception ex)
 		{
-			currentBarcode = getLastAvailableSpecimenBarcode(Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
+			ex.printStackTrace();
 		}
+		
 	}
 	
 	/**
@@ -60,29 +70,38 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	private Long getLastAvailableSpecimenBarcode(String databaseConstant)  
 	{
 		String sql = "select MAX("+databaseConstant+") from CATISSUE_SPECIMEN";
- 		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-        Long noOfRecords = new Long("0");
+ 		Connection conn = null;
+		Long noOfRecords = new Long("0");
         try
 		{
-        	jdbcDao.openSession(null);
-        	List resultList = jdbcDao.executeQuery(sql,null,false,null);
-        	if(resultList!=null&&!resultList.isEmpty())
+        	InitialContext ctx = new InitialContext();
+        	DataSource ds = (DataSource)ctx.lookup(PropertyHandler.DATASOURCE_JNDI_NAME);
+        	conn = ds.getConnection();
+        	ResultSet resultSet= conn.createStatement().executeQuery(sql);
+        	
+        	if(resultSet.next())
         	{
-        		String number = (String)((List)resultList.get(0)).get(0);
-	        	if(number!=null && !number.equals(""))
-	        	{
-	        		noOfRecords = Long.parseLong(number);
-	        	}
-        	}
-	        jdbcDao.closeSession();
+        		return new Long (resultSet.getLong(1));
+        	}	        
 		}
-        catch(DAOException daoexception)
-		{
-        	daoexception.printStackTrace();
-		}
-        catch(ClassNotFoundException classnotfound)
+        catch(NamingException e){
+        	e.printStackTrace();
+        }
+        catch(SQLException ex)
         {
-        	classnotfound.printStackTrace();
+        	ex.printStackTrace();
+        }
+        finally
+        {
+        	if (conn!=null)
+        	{
+        		try {
+					conn.close();
+				} catch (SQLException exception) {
+					// TODO Auto-generated catch block
+					exception.printStackTrace();
+				}
+        	}
         }
         return noOfRecords;
 	}
@@ -134,7 +153,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.BarcodeGenerator#setBarcode(edu.wustl.common.domain.AbstractDomainObject)
 	 */
-	synchronized public void setBarcode(AbstractDomainObject obj) {
+	synchronized public void setBarcode(Object obj) {
 		
 		Specimen objSpecimen = (Specimen)obj;
 
@@ -173,7 +192,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setBarcode(java.util.List)
 	 */
-	synchronized public void setBarcode(List<AbstractDomainObject> objSpecimenList) {
+	synchronized public void setBarcode(List objSpecimenList) {
 
 		List specimenList = objSpecimenList;
 		for (int index=0;index <specimenList.size();index++) 

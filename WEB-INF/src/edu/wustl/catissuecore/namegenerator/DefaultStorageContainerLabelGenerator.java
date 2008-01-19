@@ -1,11 +1,15 @@
 package edu.wustl.catissuecore.namegenerator;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.dbManager.DAOException;
 
 
 /**
@@ -37,24 +41,54 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	 */
 	protected void init()
 	{
+		Connection conn = null;
 		try 
 		{
 			
-			currentLabel = new StorageContainerBizLogic().getNextContainerNumber();
+			currentLabel = new Long(0);
+			String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
+			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
+			conn = getConnection();
+			ResultSet resultSet = conn.createStatement().executeQuery(sql);
+			
+			if(resultSet.next())
+			currentLabel = new Long (resultSet.getLong(1));
 		}
-		catch (DAOException daoException) 
+		catch (Exception daoException) 
 		{
 			daoException.printStackTrace();
 			
+		} finally
+		{
+			if (conn != null)
+			{
+				try {
+					conn.close();
+				} catch (SQLException exception) {
+					// TODO Auto-generated catch block
+					exception.printStackTrace();
+				}
+			}
 		}
 		
 	}
 
-
+	/**
+	 * @return
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
+	private Connection getConnection() throws NamingException, SQLException {
+		Connection conn;
+		InitialContext ctx = new InitialContext();
+		DataSource ds = (DataSource)ctx.lookup(PropertyHandler.DATASOURCE_JNDI_NAME);
+		conn = ds.getConnection();
+		return conn;
+	}
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(edu.wustl.common.domain.AbstractDomainObject)
 	 */
-	public void setLabel(AbstractDomainObject obj )
+	public void setLabel(Object obj )
 	{
 		StorageContainer objStorageContainer = (StorageContainer)obj;
 		currentLabel= currentLabel+1;
@@ -78,7 +112,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.List)
 	 */
-	public void setLabel(List<AbstractDomainObject> storageContainerList) {
+	public void setLabel(List storageContainerList) {
 		
 		for(int i=0; i< storageContainerList.size(); i++)
 		{
@@ -92,7 +126,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	/**
 	 * Returns label for the given domain object
 	 */
-	public String getLabel(AbstractDomainObject obj) 
+	public String getLabel(Object obj) 
 	{
 		StorageContainer objStorageContainer = (StorageContainer)obj;
 		setLabel(objStorageContainer);
