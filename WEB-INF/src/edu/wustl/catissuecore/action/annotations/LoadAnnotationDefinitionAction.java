@@ -712,7 +712,9 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					Constants.DATE_PATTERN_MM_DD_YYYY));
 			entityMapXML.append("<cell>" + entityMapObj.getCreatedBy() + "</cell>");
 			String name = entityMapObj.getCreatedBy();
-			if (name.contains(","))
+			if (name==null)
+				name =",";
+			if (name!=null && name.contains(","))
 			{
 				name = name.replace(',', ' ');
 				innerList.add(name);
