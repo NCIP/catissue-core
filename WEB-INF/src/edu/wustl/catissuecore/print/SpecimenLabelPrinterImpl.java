@@ -1,6 +1,8 @@
 package edu.wustl.catissuecore.print;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -16,9 +18,8 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 
 	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj) {
 		
-		LinkedHashMap dataMap = createObjectMap(abstractDomainObject);
 		ArrayList listMap = new ArrayList ();
-		listMap.add(dataMap);
+		createObjectMap(abstractDomainObject,listMap);		
 		try
 		{
 			  PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
@@ -43,8 +44,8 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		for(int cnt=0;cnt < abstractDomainObjectList.size();cnt++)
 		{
 			AbstractDomainObject abstractDomainObject = abstractDomainObjectList.get(cnt); 
-			LinkedHashMap dataMap = createObjectMap(abstractDomainObject);
-			listMap.add(dataMap);
+			createObjectMap(abstractDomainObject,listMap);
+			
 		}
 		try
 		{
@@ -61,26 +62,59 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		
 	}
 	
-	
 	/**
 	 * @param abstractDomainObject
 	 * @return
 	 */
-	LinkedHashMap createObjectMap(AbstractDomainObject abstractDomainObject)
+	void createObjectMap(AbstractDomainObject abstractDomainObject,ArrayList listMap)
 	{
-		LinkedHashMap dataMap = new LinkedHashMap();
+		
+		
+		
 		if(abstractDomainObject instanceof Specimen)
 		{
-			
-			Specimen objSpecimen = (Specimen)abstractDomainObject;
-			String label= objSpecimen.getLabel();
-			String barcode = objSpecimen.getBarcode();
+					
+			Specimen objSpecimen = (Specimen)abstractDomainObject;			
+			Collection specimenCollection  = objSpecimen.getChildrenSpecimen();
+			Iterator itr = specimenCollection.iterator();
+			ArrayList specimenList = new ArrayList();
+			specimenList.add(objSpecimen);
+			getAllSpecimenList(objSpecimen,specimenList);
+			for(int cnt=0;cnt < specimenList.size();cnt++)
+			{
+				Specimen obj = (Specimen)specimenList.get(cnt);
+				LinkedHashMap dataMap = new LinkedHashMap();
+				String label= obj.getLabel();
+				String barcode = obj.getBarcode();
 		
-			dataMap.put("class", objSpecimen.getClassName());
-			dataMap.put("id",objSpecimen.getId().toString());
-			dataMap.put("label", label);
-			dataMap.put("barcode",barcode);
+				dataMap.put("class", obj.getClassName());
+				dataMap.put("id",obj.getId().toString());
+				dataMap.put("label", label);
+				dataMap.put("barcode",barcode);
+				listMap.add(dataMap);
+			}
 		}
-		return dataMap;
+	
 	}
+	/**
+	 * @param objSpecimen
+	 * @param specimenList
+	 */
+	void getAllSpecimenList(Specimen objSpecimen,List specimenList)
+	{
+		
+		Collection childSpecimen = objSpecimen.getChildrenSpecimen();
+		if(childSpecimen!= null && childSpecimen.size() >0)
+		{
+			
+			Iterator itr = childSpecimen.iterator();
+			while(itr.hasNext())
+			{
+				Specimen specimen = (Specimen)itr.next();
+				specimenList.add(specimen);
+				getAllSpecimenList(specimen,specimenList);
+			}
+		}
+	}
+	
 }
