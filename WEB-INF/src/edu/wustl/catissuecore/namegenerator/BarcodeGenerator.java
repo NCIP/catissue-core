@@ -10,7 +10,13 @@ import java.util.List;
  */
 public interface BarcodeGenerator
 {
-	public void setBarcode(Object obj);
-	public void setBarcode(List<Object> obj);
+	/**
+	 * @param object
+	 */
+	public void setBarcode(Object object);
+	/**
+	 * @param object
+	 */
+	public void setBarcode(List<Object> object);
 	
 }

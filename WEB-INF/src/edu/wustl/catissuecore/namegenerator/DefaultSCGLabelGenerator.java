@@ -16,9 +16,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 
 /**
- * DefaultSpecimenLabelGenerator is a class which contains the default 
- * implementations AbstractSpecimenGenerator classe.
- * @author virender_mehta
+ * DefaultSCGLabelGenerator is a class which contains the default implementation.  
+ * @author Abhijit_Naik
  */
 public class DefaultSCGLabelGenerator implements LabelGenerator
 {
@@ -50,11 +49,10 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 		currentLabel = getLastAvailableSCGLabel(null);
 	}
 	
+	
 	/**
-	 * This method will retrive unique specimen Lable.
-	 * @return Total No of Specimen
-	 * @throws ClassNotFoundException
-	 * @throws DAOException 
+	 * @param databaseConstant
+	 * @return noOfRecords
 	 */
 	private Long getLastAvailableSCGLabel(String databaseConstant)  
 	{

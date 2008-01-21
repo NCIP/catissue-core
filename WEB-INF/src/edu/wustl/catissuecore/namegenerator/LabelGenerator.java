@@ -11,7 +11,20 @@ import java.util.List;
  */
 public interface LabelGenerator
 {
-	public void setLabel(Object obj);
-	public void setLabel(List obj);
-	public String getLabel(Object obj);
+	
+	/**
+	 * @param object
+	 */
+	public void setLabel(Object object);
+	
+	/**
+	 * @param object
+	 */
+	public void setLabel(List object);
+	
+	/**
+	 * @param object
+	 * @return label
+	 */
+	public String getLabel(Object object);
 }
