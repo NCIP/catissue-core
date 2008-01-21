@@ -68,60 +68,58 @@ public abstract class QueryCSMUtil
 		return mainEntityMap;
 	}
 	
+	
+	
 	/**
 	 * This method will return error message for main object.
-	 * @param queryDeEntities list of ids of all the DE entities present in query.
 	 * @param mainEntityMap main entity map.
 	 * @param uniqueIdNodesMap contains all the entities in the query 
-	 * @return
-	 */
-	private static String getErrorMessage(Map<EntityInterface, List<EntityInterface>> mainEntityMap, 
+	 * @return error message if main entity of node not present.
+	 */private static String getErrorMessage(Map<EntityInterface, List<EntityInterface>> mainEntityMap, 
 			Map<String, OutputTreeDataNode> uniqueIdNodesMap)
 	{
-		String errorMsg = "";
-		
-		for (Iterator iterator = mainEntityMap.entrySet().iterator(); iterator.hasNext();)
-		{
-			String mainEntityName = "";
-			String entityName = "";
-			String mainEntityNames = "";
-			Map.Entry<EntityInterface ,List<EntityInterface>> mapValue = (Map.Entry<EntityInterface ,List<EntityInterface>>) iterator.next();
-			String name = mapValue.getKey().getName();
-			if(name!=null && !name.equals(""))
+		String errorMsg = ""; 
+		//iterate through the uniqueIdNodesMap and check if main entities of all the nodes are present
+		for (Iterator idMapIterator = uniqueIdNodesMap.entrySet().iterator(); idMapIterator.hasNext();)
+		{	
+			Map.Entry<String, OutputTreeDataNode> IdmapValue = (Map.Entry<String, OutputTreeDataNode>) idMapIterator.next();
+			// get the node
+			OutputTreeDataNode node = IdmapValue.getValue();
+			//get the entity
+			EntityInterface mapEntity = node.getOutputEntity().getDynamicExtensionsEntity();
+			// get the main entities list for the entity
+			List<EntityInterface> mainEntityList = (List<EntityInterface>)mainEntityMap.get(mapEntity);
+			//mainEntityList is null if the entity itself is main entity;
+			EntityInterface mainEntity = null;
+			if (mainEntityList != null)
 			{
-			  entityName = name.substring(name.lastIndexOf(".")+1,name.length());
-			}
-			boolean isMainEntityPresent = false;
-			for(EntityInterface mainEntity : mapValue.getValue())
-			{
-				mainEntityName = mainEntity.getName();
-				if(mainEntityName!=null && !mainEntityName.equals(""))
-					mainEntityName = mainEntityName.substring(mainEntityName.lastIndexOf(".")+1,mainEntityName.length());
-				mainEntityNames = mainEntityNames + mainEntityName+" or ";
-				// iterate through uniqueIdNodesMap and check if main entity is present.
-				for (Iterator idMapIterator = uniqueIdNodesMap.entrySet().iterator(); idMapIterator.hasNext();)
-				{	
-					Map.Entry<String, OutputTreeDataNode> IdmapValue = (Map.Entry<String, OutputTreeDataNode>) idMapIterator.next();
-					OutputTreeDataNode node = IdmapValue.getValue();				
-					EntityInterface mapEntity = node.getOutputEntity().getDynamicExtensionsEntity();
-					if (mainEntity.getName().equals(mapEntity.getName()))
+				//check if main entity of the dependent entity is present in the query
+				mainEntity = getMainEntity(mainEntityList, node);
+				if (mainEntity == null) // if main entity is not present
+				{
+					//set the error message 
+					String mainEntityNames = "";
+					for (EntityInterface entity : mainEntityList)
 					{
-						isMainEntityPresent = true;
-						break;
+						//get the names of all the main entities for the dependent entity
+						String name = entity.getName();
+						name = name.substring(name.lastIndexOf(".")+1, name.length()); //TODO: use Utility Method for getting className
+						mainEntityNames = mainEntityNames + name + " or ";
 					}
+					mainEntityNames = mainEntityNames.substring(0, mainEntityNames.lastIndexOf("r")-1);
+					String message = ApplicationProperties.getValue("query.mainObjectError");
+					String entityName = mapEntity.getName();
+					entityName = entityName.substring(entityName.lastIndexOf(".")+1, entityName.length());//TODO: use Utility Method for getting className
+					Object[] arguments = new Object[]{entityName, mainEntityNames};
+					errorMsg = MessageFormat.format(message, arguments);
+					break;
 				}
-			} 
-			if(!isMainEntityPresent)
-			{
-				mainEntityNames = mainEntityNames.substring(0, mainEntityNames.lastIndexOf("r")-1);
-				String message = ApplicationProperties.getValue("query.mainObjectError");
-				Object[] arguments = new Object[]{entityName,mainEntityNames};
-				errorMsg = MessageFormat.format(message, arguments);
-				break;
 			}
 		}
 		return errorMsg;
-	}
+}
+
+	
 	/**
 	 * @param query
 	 * @return
@@ -210,6 +208,7 @@ public abstract class QueryCSMUtil
 		List<EntityInterface> mainEntityList = mainEntityMap.get(dynamicExtensionsEntity);
 		if (mainEntityList != null)
 		{
+			//
 			EntityInterface mainEntity = getMainEntity(mainEntityList, node);
 			queryResultObjectDataBean.setMainEntity(mainEntity);
 			entityName = mainEntity.getName();
@@ -261,53 +260,95 @@ public abstract class QueryCSMUtil
 			return false;
 	}
 
-	/**This method will return main entity for node passed in context of query (i.e. If one texcontent node is associated with Identified and 
-	 * other with deidentified then it will return appropriate main object for textcontent)
-	 * @param mainEntityList
-	 * @param node
+	
+	/**
+	 * Searches for main entity in parent hierarchy or child hierarchy
+	 * @param mainEntityList - list of all main Entities
+	 * @param node - current node
+	 * @return - main Entiy if found in parent or child hierarchy. Returns null if not found
 	 */
-	private static EntityInterface getMainEntity(List<EntityInterface> mainEntityList, OutputTreeDataNode node)
-
+	private static EntityInterface getMainEntity(List<EntityInterface> mainEntityList, 
+			 OutputTreeDataNode node)
 	{
-
-		if (node != null)
-
-		{ 
-
-			EntityInterface dynamicExtensionsEntity = node.getOutputEntity()
+		 //check if node itself is main entity
+		EntityInterface entity = null;
+		 	
+		 	
+		// check if main entity is present in parent hierarchy
+		if (node.getParent() != null)
+			entity = getMainEntityFromParentHierarchy(mainEntityList, node.getParent()); 
+		if (entity != null)
+			return entity;	
+		 	
+		 //check if main entity is present in child hierarchy
+		 	
+		entity = getMainEntityFromChildHierarchy(mainEntityList, node);
+			
+		return entity;
+	}
+		 
+	 /**
+	  * To check whether the given Entity in OutputTreeDataNode is mainEntity or not 
+	  * @param mainEntityList the list of main entities.
+	  * @param node the OutputTreeDataNode
+	  * @return The reference to entity in the OutputTreeDataNode, if its present in the mainEntityList.
+	  */
+	 private static EntityInterface isMainEntity(List<EntityInterface> mainEntityList, OutputTreeDataNode node)
+	 {
+		 EntityInterface dynamicExtensionsEntity = node.getOutputEntity()
 					.getDynamicExtensionsEntity();
-
-			if (mainEntityList.contains(dynamicExtensionsEntity))
-
-				return dynamicExtensionsEntity;
-
-			else if (node.getParent() != null)
-
-				return getMainEntity(mainEntityList, node.getParent());
-
-		}
-
-		if (node != null)
-
-		{
-
-			List<OutputTreeDataNode> children = node.getChildren();
-
-			for (OutputTreeDataNode childNode : children)
-
+		 if (mainEntityList.contains(dynamicExtensionsEntity))
+			 return dynamicExtensionsEntity;
+		 else 
+			 return null;
+	 }
+		 
+	 /**
+	  * recursively checks in parent hierarchy for main entity
+	  * @param mainEntityList
+	  * @param node
+	  * @return main Entiy if found in parent Hierarchy
+	  */
+	 private static EntityInterface  getMainEntityFromParentHierarchy(
+		 		List<EntityInterface> mainEntityList, OutputTreeDataNode node)
+	 {
+		 
+		EntityInterface entity = isMainEntity(mainEntityList, node);
+	 	if (entity == null)
+	 	{
+	 		if (node.getParent() != null)
+	 		 	return getMainEntityFromParentHierarchy(mainEntityList, node.getParent());
+	 	}
+	 	return entity;
+	 }
+	 
+	 /**
+	  * recursively checks in child hierarchy for main entity
+	  * @param mainEntityList
+	  * @param node
+	  * @return main Entiy if found in child Hierarchy
+	  */
+	 private static EntityInterface getMainEntityFromChildHierarchy(
+	 		List<EntityInterface> mainEntityList, OutputTreeDataNode node)
+	 {
+		EntityInterface entity = isMainEntity(mainEntityList, node);
+	 	if (entity != null)
+	 	{
+		 	List<OutputTreeDataNode> children = node.getChildren();
+		 	
+		 	for (OutputTreeDataNode childNode : children)
 			{
-
-				return getMainEntity(mainEntityList, childNode);
-
+				entity = getMainEntityFromChildHierarchy(mainEntityList, childNode);
+				if (entity != null)
+				{
+		 			return entity;	
+		 		}
 			}
-
 		}
-
-		return null;
-
-	} 
-
-
+		return entity;	
+	 }
+		
+	
 
 	/**This method will internally call  getIncomingAssociationIds of DE which will return all incoming associations 
 	 * for entities passed.This method will filter out all incoming containment associations and return list of them.
@@ -328,8 +369,7 @@ public abstract class QueryCSMUtil
 				list.add(associationById);
 		}
 		return list;
-	}
-	
+	}	
 		
 	/**
 	 * @param queryResultObjectDataBean
