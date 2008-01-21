@@ -468,9 +468,12 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                 innerList.add(Utility.parseDateToString(entityMapRecord
                         .getCreatedDate(),
                         Constants.DATE_PATTERN_MM_DD_YYYY));
+                String creator = entityMapRecord.getCreatedBy();
+                if(creator==null || creator.equals("null"))
+                    creator ="";
                 entityMapRecordXML.append("<cell>"
-                        + entityMapRecord.getCreatedBy() + "</cell>");
-                innerList.add(entityMapRecord.getCreatedBy());
+                        + creator + "</cell>");
+                innerList.add(creator);
                 entityMapRecordXML.append("<cell>" + "Edit" + "^"
                         + strURLForEditRecord + "</cell>");
                 innerList.add(entityMapRecord.getId().toString());
