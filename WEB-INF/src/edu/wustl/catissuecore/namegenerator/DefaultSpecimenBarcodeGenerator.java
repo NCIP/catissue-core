@@ -10,6 +10,8 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
+
 import java.util.Collection;
 
 import javax.naming.InitialContext;
@@ -49,7 +51,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	{		
 		try
 		{
-			if(Constants.ORACLE_DATABASE.equals((String)(PropertyHandler.getValue("database"))))
+			if(Constants.ORACLE_DATABASE.equals(Variables.databaseName))
 			{
 				currentBarcode = getLastAvailableSpecimenBarcode(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
 			}

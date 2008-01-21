@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 
 /**
  * DefaultSpecimenLabelGenerator is a class which contains the default 
@@ -49,7 +50,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	{
 		try
 		{
-			if(Constants.ORACLE_DATABASE.equals((String)(PropertyHandler.getValue("database"))))
+			if(Constants.ORACLE_DATABASE.equals(Variables.databaseName))
 			{
 				currentLabel = getLastAvailableSpecimenLabel(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
 			}
