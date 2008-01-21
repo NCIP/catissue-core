@@ -661,11 +661,11 @@
 				{
 					textId = document.getElementById(textBoxId).value;		
 				}
-				if(textId != "")
+				if(textId != "" && textId1 == "")
 				{
 					strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+"missingTwoValues"+";";
 				}
-				if(textId1 != "")
+				if(textId1 != "" && textId == "")
 				{
 					strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + "missingTwoValues" +"!*=*!"+"textId1"+";";
 				}
