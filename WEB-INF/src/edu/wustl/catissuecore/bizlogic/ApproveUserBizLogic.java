@@ -35,6 +35,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
+import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * ApproveUserBizLogic is the bizLogic class for approve users.
@@ -99,6 +100,14 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 
                 Logger.out.debug("password stored in passwore table");
             }
+
+            if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+            {
+                Set protectionObjects=new HashSet();
+                protectionObjects.add(user);
+                	SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+                    		getAuthorizationData(user), protectionObjects, null);
+            }
             
             //Update the user record in catissue table.
             dao.update(user.getAddress(), sessionDataBean, true, false, false);
@@ -109,13 +118,6 @@ public class ApproveUserBizLogic extends DefaultBizLogic
             dao.audit(user.getAddress(), oldUser.getAddress(),sessionDataBean,true);
             dao.audit(obj, oldObj,sessionDataBean,true);
             
-            if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
-            {
-                Set protectionObjects=new HashSet();
-                protectionObjects.add(user);
-                SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
-                    		getAuthorizationData(user), protectionObjects, null);
-            }
             
             EmailHandler emailHandler = new EmailHandler(); 
             

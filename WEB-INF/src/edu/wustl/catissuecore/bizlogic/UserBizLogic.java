@@ -169,7 +169,7 @@ public class UserBizLogic extends DefaultBizLogic
 			// Send the user registration email to user and the administrator.
 			if (Constants.PAGEOF_SIGNUP.equals(user.getPageOf()))
 			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, null);
+				//SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, null);
 
 				emailHandler.sendUserSignUpEmail(user);
 			}
@@ -412,7 +412,14 @@ public class UserBizLogic extends DefaultBizLogic
 			{
 				Set protectionObjects = new HashSet();
 				protectionObjects.add(user);
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user), protectionObjects, null);
+				try{
+					SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user), protectionObjects, null);
+				}
+				catch (SMException e)
+				{
+						//digest exception
+				}
+				
 			}
 		}
 		catch (SMException e)
