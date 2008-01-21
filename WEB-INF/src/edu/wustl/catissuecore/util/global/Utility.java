@@ -10,6 +10,8 @@
 package edu.wustl.catissuecore.util.global;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -490,10 +492,10 @@ public class Utility extends edu.wustl.common.util.Utility {
 	}
 
 	public static void main(String[] args) {
-		String s = "ds fsbsdjf hsfsdfdsh f,sd fsdfjbhsdj sdf,sdf s,sd fds,sd ffs,sd f\"sd fs \"sd fsdF \"sf";
+		/*String s = "ds fsbsdjf hsfsdfdsh f,sd fsdfjbhsdj sdf,sdf s,sd fds,sd ffs,sd f\"sd fs \"sd fsdF \"sf";
 		Object s1 = toNewGridFormat(s);
 		System.out.println("Original String : " + s);
-		System.out.println("Updated String : " + s1);
+		System.out.println("Updated String : " + s1);*/
 
 		// // Utility u = new Utility();
 		// String dt = "18-10-06";
@@ -520,6 +522,9 @@ public class Utility extends edu.wustl.common.util.Utility {
 		// System.out.println(Utility.getMonth(dt, pt) + "/" +
 		// Utility.getDay(dt, pt) + "/"
 		// + Utility.getYear(dt, pt));
+		ArrayList<String> attributeValuesInProperOrder = 
+			getAttributeValuesInProperOrder("date","13-02-2006","12-02-2006");
+		System.out.println(attributeValuesInProperOrder);
 	}
 
 	/**
@@ -1184,32 +1189,30 @@ public class Utility extends edu.wustl.common.util.Utility {
 	 */
 	public static ArrayList<String> getAttributeValuesInProperOrder(
 			String dataType, String value1, String value2) {
-		ArrayList<String> attributeValues = new ArrayList<String>();
-
 		String v1 = value1;
 		String v2 = value2;
-		if (dataType
-				.equalsIgnoreCase(EntityManagerConstantsInterface.DATE_ATTRIBUTE_TYPE)) {
-			if (getYear(value1) > getYear(value2)) {
-				v1 = value2;
-				v2 = value1;
-
-			} else {
-				if (getMonth(value1) > getMonth(value2)) {
+		ArrayList<String> attributeValues = new ArrayList<String>();
+		if (dataType.equalsIgnoreCase(EntityManagerConstantsInterface.DATE_ATTRIBUTE_TYPE)) 
+		{
+			SimpleDateFormat df =new SimpleDateFormat(pattern);
+			try {
+				Date date1 = df.parse(value1);
+				Date date2 = df.parse(value2);
+				if(date1.after(date2))
+				{
 					v1 = value2;
 					v2 = value1;
-				} else {
-					if (getDay(value1) > getDay(value2)) {
-						v1 = value2;
-						v2 = value1;
-					}
 				}
+			} catch (ParseException e) {
+				Logger.out.error("Can not parse the given date in getAttributeValuesInProperOrder() method :"+e.getMessage());
+				e.printStackTrace();
 			}
-		} else {
+		}
+		else {
 			if (dataType
 					.equalsIgnoreCase(EntityManagerConstantsInterface.INTEGER_ATTRIBUTE_TYPE)
 					|| dataType
-							.equalsIgnoreCase(EntityManagerConstantsInterface.LONG_ATTRIBUTE_TYPE)) {
+					.equalsIgnoreCase(EntityManagerConstantsInterface.LONG_ATTRIBUTE_TYPE)) {
 				if (Long.parseLong(value1) > Long.parseLong(value2)) {
 					v1 = value2;
 					v2 = value1;
