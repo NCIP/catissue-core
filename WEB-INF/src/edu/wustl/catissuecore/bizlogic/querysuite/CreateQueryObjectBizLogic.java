@@ -67,7 +67,7 @@ public class CreateQueryObjectBizLogic
 		Map conditionsMap = createConditionsMap(strToCreateQueryObject);
 		if (entity != null)
 		{
-			Collection<AttributeInterface> attrCollection = entity.getAttributeCollection();
+			Collection<AttributeInterface> attrCollection = entity.getEntityAttributesForQuery();
 			if (conditionsMap != null && !conditionsMap.isEmpty() && attrCollection != null
 					&& !attrCollection.isEmpty())
 			{
