@@ -23,7 +23,10 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 	 * Current label 
 	 */
 	protected Long currentBarcode ;
-	
+	/**
+	 * Datasource Name
+	 */
+	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 	/**
 	 * Default Constructor
 	 */
@@ -82,7 +85,7 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 	private Connection getConnection() throws NamingException, SQLException {
 		Connection conn;
 		InitialContext ctx = new InitialContext();
-		DataSource ds = (DataSource)ctx.lookup(PropertyHandler.DATASOURCE_JNDI_NAME);
+		DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
 		conn = ds.getConnection();
 		return conn;
 	}

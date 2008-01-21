@@ -27,7 +27,10 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 		//init();//TODO :Commented by Falguni because we are not using separate table for Michigan ,as not able to persist barcode count. 
 		super();
 	}
-
+	/**
+	 * Datasource Name
+	 */
+	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 	/**
 	 * This is a init() function it is called from the default constructor of
 	 * Base class. When getInstance of base class called then this init function
@@ -78,7 +81,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	private Connection getConnection() throws NamingException, SQLException {
 		Connection conn;
 		InitialContext ctx = new InitialContext();
-		DataSource ds = (DataSource)ctx.lookup(PropertyHandler.DATASOURCE_JNDI_NAME);
+		DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
 		conn = ds.getConnection();
 		return conn;
 	}

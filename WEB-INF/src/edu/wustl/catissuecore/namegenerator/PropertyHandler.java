@@ -12,15 +12,14 @@ import java.util.Properties;
 public class PropertyHandler {
 
 	private static Properties nameGeneratorProperties = null;
-	public static String DATASOURCE_JNDI_NAME;
+
 
 	public static void init(String path) throws Exception
 	{
 		nameGeneratorProperties = new Properties();
 		nameGeneratorProperties.load(
 			PropertyHandler.class.getClassLoader().getResourceAsStream(path)										);
-		DATASOURCE_JNDI_NAME = nameGeneratorProperties.getProperty("dataSource");
-		System.out.println("datasource" + DATASOURCE_JNDI_NAME);
+		
 	}
 	/**
 	 * <p>

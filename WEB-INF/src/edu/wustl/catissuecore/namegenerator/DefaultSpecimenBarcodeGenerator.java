@@ -26,7 +26,10 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 * Current Barcode 
 	 */
 	protected Long currentBarcode;
-	
+	/**
+	 * Datasource Name
+	 */
+	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 	/**
 	 * Default Constructor
 	 */
@@ -75,7 +78,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
         try
 		{
         	InitialContext ctx = new InitialContext();
-        	DataSource ds = (DataSource)ctx.lookup(PropertyHandler.DATASOURCE_JNDI_NAME);
+        	DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
         	conn = ds.getConnection();
         	ResultSet resultSet= conn.createStatement().executeQuery(sql);
         	
