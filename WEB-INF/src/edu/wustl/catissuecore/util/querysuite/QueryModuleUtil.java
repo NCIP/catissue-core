@@ -169,17 +169,13 @@ public abstract class QueryModuleUtil
 	 */
 	public static String getSQLForRootNode(OutputTreeDataNode root, String tableName, Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap)
 	{
-		String columnNames = getColumnNamesForSelectpart(root,queryResulObjectDataMap);
-		String indexStr = columnNames.substring(columnNames.lastIndexOf(";") + 1, columnNames
-				.length());
+		Map<String,String> columnNameIndexMap = getColumnNamesForSelectpart(root,queryResulObjectDataMap); 
+		String columnNames = columnNameIndexMap.get(Constants.COLUMN_NAMES);
+		String indexStr = columnNameIndexMap.get(Constants.INDEX);
 		int index = -1;
-		if (!indexStr.equalsIgnoreCase("null"))
+		if (indexStr!= null && !indexStr.equalsIgnoreCase("null"))
 		{
 			index = new Integer(indexStr);
-		}
-		if (columnNames.lastIndexOf(";") != -1)
-		{
-			columnNames = columnNames.substring(0, columnNames.lastIndexOf(";"));
 		}
 		String idColumnName = columnNames;
 		if (columnNames.indexOf(",") != -1)
@@ -199,9 +195,10 @@ public abstract class QueryModuleUtil
 	 * @param columnMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @return String having all columnnames for select part.
 	 */
-	public static String getColumnNamesForSelectpart(OutputTreeDataNode node, Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap)
+	public static Map<String,String> getColumnNamesForSelectpart(OutputTreeDataNode node, Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap)
 	{  
 		String columnNames = "";
+		Map<String,String> columnNameIndexMap = new HashMap<String,String>();
 		String idColumnName = null;
 		String displayNameColumnName = null;
 		String index = null;
@@ -253,12 +250,13 @@ public abstract class QueryModuleUtil
 			columnNames = idColumnName;
 		}
 	//	columnNames = columnNames.substring(0, columnNames.lastIndexOf(","));
-		columnNames = columnNames + ";" + index;
 		Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
 		if(queryResultObjectDataBean.getIdentifiedDataColumnIds().size()!=0)
 		  queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
 		QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columIndex,columnNames,null,entityIdIndexMap);
-		return columnNames;
+		columnNameIndexMap.put(Constants.COLUMN_NAMES, columnNames);
+		columnNameIndexMap.put(Constants.INDEX, index);
+		return columnNameIndexMap;
 	}
 
 	/**
