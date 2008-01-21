@@ -1044,6 +1044,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MULTI_ENUMERATED_OPERATORS = "MultiEnumeratedOperators";
 	public static final int CHARACTERS_IN_ONE_LINE = 110;
 	public static final String SINGLE_QUOTE_ESCAPE_SEQUENCE = "&#096;";
+	public static final String COLUMN_NAMES = "columnNames";
+	public static final String INDEX = "index";
 	
 	public static final String [] STORAGE_STATUS_ARRAY = {
 	        SELECT_OPTION,
