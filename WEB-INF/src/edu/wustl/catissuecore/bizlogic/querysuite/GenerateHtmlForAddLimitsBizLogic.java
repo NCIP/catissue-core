@@ -158,7 +158,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		StringBuffer generatedHTML = new StringBuffer();
 		StringBuffer generatedPreHTML = new StringBuffer();
 		String nameOfTheEntity = entity.getName();
-		Collection<AttributeInterface> attributeCollection = entity.getAttributeCollection();
+		Collection<AttributeInterface> attributeCollection = entity.getEntityAttributesForQuery();
 		Collection<AttributeInterface> collection = new ArrayList<AttributeInterface>();
 		// String attributesList = "";
 		boolean isEditLimits = false;
