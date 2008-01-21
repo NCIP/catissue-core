@@ -474,14 +474,20 @@ if(form != null)
 				pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 				String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
 				String readOnlyForAliquot = "false";
-				if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT)) {
+				String readOnlyForSpecimen = "false";
+				if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT)) 
+				{
 				      readOnlyForAliquot = "true";
+				}
+				if(operation.equals(Constants.EDIT)) 
+				{
+				      readOnlyForSpecimen = "true";
 				}
 			%>
 			    <autocomplete:AutoCompleteTag property="className"
 						  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
 						  initialValue="<%=form.getClassName()%>"
-						  readOnly="<%=readOnlyForAliquot%>"
+						  readOnly="<%=readOnlyForSpecimen%>"
 						  onChange="onTypeChange(this);clearTypeCombo()"
 				/>
 	       	</td>
