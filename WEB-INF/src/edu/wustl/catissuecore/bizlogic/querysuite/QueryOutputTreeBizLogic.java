@@ -318,13 +318,14 @@ public class QueryOutputTreeBizLogic
 			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(currentNode,mainEntityMap);
 		    queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 			queryResultObjectDataBeanMap.put(currentNode.getId(), queryResulObjectDataBean);
-			columnNames = QueryModuleUtil.getColumnNamesForSelectpart(currentNode,queryResultObjectDataBeanMap);
-			String indexStr = columnNames.substring(columnNames.lastIndexOf(";") + 1, columnNames.length());
-			if (!indexStr.equalsIgnoreCase(Constants.NULL))
+			Map<String,String> columnNameIndexMap = QueryModuleUtil.getColumnNamesForSelectpart(currentNode,queryResultObjectDataBeanMap);
+			columnNames = columnNameIndexMap.get(Constants.COLUMN_NAMES);
+			String indexStr = columnNameIndexMap.get(Constants.INDEX);
+			if ((indexStr != null) && (!indexStr.equalsIgnoreCase(Constants.NULL)))
 			{
 				index = new Integer(indexStr);
 			}
-			columnNames = columnNames.substring(0, columnNames.lastIndexOf(";"));
+			//columnNames = columnNames.substring(0, columnNames.lastIndexOf(";"));
 			selectSql = "select distinct " + columnNames;
 			String idColumnOfCurrentNode = columnNames;
 			if(columnNames.indexOf(",") != -1)
