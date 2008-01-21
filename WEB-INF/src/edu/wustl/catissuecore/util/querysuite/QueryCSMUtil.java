@@ -340,8 +340,8 @@ public abstract class QueryCSMUtil
 	 */
 	public static String updateEntityIdIndexMap(QueryResultObjectDataBean queryResultObjectDataBean,
 			int columnIndex, String selectSql, List<EntityInterface> defineViewNodeList, Map<EntityInterface, Integer> entityIdIndexMap)
-	{
-		String[] split = selectSql.split(",");
+	{ 
+		List<String> selectSqlColumnList = getListOfSelectedColumns(selectSql);
 		if (defineViewNodeList != null)
 		{
 			Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryModuleUtil.uniqueIdNodesMap;
@@ -354,39 +354,8 @@ public abstract class QueryCSMUtil
 				{
 					key = (String) nextObject;
 					OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(key);
-					if (outputTreeDataNode != null)
-					{
-						List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
-								.getAttributes();
-						for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
-						{
-							AttributeInterface attribute = attributeMetaData.getAttribute();
-							String sqlColumnName = attributeMetaData.getColumnName().trim();
-							if (attribute.getName().equals(Constants.ID))
-							{
-								if (selectSql.contains(sqlColumnName))
-								{
-									for (int i = 0; i < split.length; i++)
-									{
-										String string = split[i].trim();
-										if (string.equals(sqlColumnName))
-										{
-											entityIdIndexMap.put(attribute.getEntity(), i);
-											break;
-										}
-									}
-								}
-								else
-								{
-									selectSql += ", " + sqlColumnName;
-
-									entityIdIndexMap.put(attribute.getEntity(), columnIndex);
-									columnIndex++;
-									break;
-								}
-							}
-						}
-					}
+					selectSql = putIdColumnsInSql(columnIndex, selectSql, entityIdIndexMap,
+							selectSqlColumnList, outputTreeDataNode);
 				}
 			}
 		}
@@ -394,44 +363,73 @@ public abstract class QueryCSMUtil
 		{
 			OutputTreeDataNode outputTreeDataNode = getMatchingEntityNode(queryResultObjectDataBean
 					.getMainEntity());
-			if (outputTreeDataNode != null)
-			{
-				List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
-						.getAttributes();
-				for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
-				{
-					AttributeInterface attribute = attributeMetaData.getAttribute();
-					String sqlColumnName = attributeMetaData.getColumnName();
-					if (attribute.getName().equals(Constants.ID))
-					{
-						if (selectSql.contains(sqlColumnName.trim()))
-						{
-							for (int i = 0; i < split.length; i++)
-							{
-								if (split[i].equals(sqlColumnName))
-								{
-									entityIdIndexMap.put(attribute.getEntity(), i);
-									break;
-								}
-							}
-						}
-						else
-						{
-							selectSql += ", " + sqlColumnName;
-							entityIdIndexMap.put(attribute.getEntity(), columnIndex);
-							columnIndex++;
-							break;
-						}
-					}
-				}
-			}
+			selectSql = putIdColumnsInSql(columnIndex, selectSql, entityIdIndexMap,
+					selectSqlColumnList, outputTreeDataNode);
 		}
 		if (queryResultObjectDataBean != null)
 			queryResultObjectDataBean.setEntityIdIndexMap(entityIdIndexMap);
 		return selectSql;
 	}
+
+	/**
+	 * To add the Id columns of MainEntities in the SQL if its not present. 
+	 * It will also populate entityIdIndexMap passes it. 
+	 * @param columnIndex
+	 * @param selectSql
+	 * @param entityIdIndexMap
+	 * @param selectSqlColumnList
+	 * @param outputTreeDataNode
+	 * @return The modified SQL string.
+	 */
+	private static String putIdColumnsInSql(int columnIndex, String selectSql,
+			Map<EntityInterface, Integer> entityIdIndexMap,
+			List<String> selectSqlColumnList,
+			OutputTreeDataNode outputTreeDataNode) {
+		if (outputTreeDataNode != null)
+		{
+			List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
+					.getAttributes();
+			for (QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
+			{
+				AttributeInterface attribute = attributeMetaData.getAttribute();
+				String sqlColumnName = attributeMetaData.getColumnName().trim();
+				if (attribute.getName().equals(Constants.ID))
+				{
+					int index = selectSqlColumnList.indexOf(sqlColumnName);
+					
+					if (index>=0)
+					{
+						entityIdIndexMap.put(attribute.getEntity(), index);
+						break;
+					}
+					else
+					{
+						selectSql += ", " + sqlColumnName;
+						entityIdIndexMap.put(attribute.getEntity(), columnIndex);
+						columnIndex++;
+						break;
+					}
+				}
+			}
+		}
+		return selectSql;
+	}
+	/**
+	 * TO the list of selectColumn Names in the selectSql.
+	 * @param selectSql the Select part of SQL.
+	 * @return The list of selectColumn Names in the selectSql.
+	 */
+	private static List<String> getListOfSelectedColumns(String selectSql) {
+		String[] selectSqlColumnArray = selectSql.split(","); 
+		List<String> selectSqlColumnList = new ArrayList<String>();
+		for (int i = 0; i < selectSqlColumnArray.length; i++)
+		{
+			selectSqlColumnList.add(selectSqlColumnArray[i].trim());
+		}
+		return selectSqlColumnList;
+	}
  
-	/**This method will return node currosponding to an entity from query.
+	/**This method will return node corresponding to an entity from query.
 	 * @param entity
 	 * @return outputTreeDataNode
 	 */
