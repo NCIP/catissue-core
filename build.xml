@@ -110,6 +110,30 @@
 		</fileset>
 	</jar>
 	</target>
+	<target name="PrintService_Client">
+			<delete file="printservice_client.jar" />
+
+		<jar destfile="printservice_client.jar">
+			<fileset dir="${target.dir}" >
+	    		<include name="**/LabelPrinter.class"/>
+				<include name="**/LabelPrinterFactory.class"/>
+	    		<include name="**/PropertyHandler.class"/>
+			</fileset>		
+		</jar>
+		</target>
+
+		<target name="PrintService_Module"  depends ="PrintService_Client,build_client_jar">
+			<delete file="printservice_module.jar" />
+		<jar destfile="printservice_module.jar">
+			<fileset dir="${target.dir}" >
+				<include name="**/printservicemodule/*"/>	
+				<exclude name="**/printservicemodule/PrintServiceImplementor.properties"/>	
+			</fileset>
+			<fileset dir="${target.dir}/edu/wustl/catissuecore/printservicemodule" >
+						<include  name="PrintServiceImplementor.properties" />
+			</fileset>
+		</jar>
+		</target>
 
 	<target name="clean" description="clean up">
 		<delete includeemptydirs="true">
@@ -231,21 +255,15 @@
 	</target>
 	
 	<!-- build catissuecore war file which is common to above both targets -->
-	<target name="common_build_war" depends ="Default_Label_BarCode_Generator">
+	<target name="common_build_war" depends ="Default_Label_BarCode_Generator,PrintService_Module">
 		<delete file="catissuecore.war" />
-		<!-- Here duplicate="preserver" is used skip copying duplicate-->
-		<delete>
-			<fileset dir="${base.dir}/WEB-INF/lib">
 		
-				<include name="Default_label_barcode_gen.jar" />
-				<include name="label_barcode_gen_client.jar" />
-			</fileset>
-		</delete>
-
 		<copy todir="WEB-INF/lib" overwrite="true">
 			<fileset dir="${base.dir}"  >
 				<include name="Default_label_barcode_gen.jar" />
 				<include name="label_barcode_gen_client.jar" />
+				<include name="printservice_client.jar" />
+				<include name="printservice_module.jar" />
 			</fileset>
 		</copy>
 		
@@ -385,6 +403,8 @@
 		<copy file="catissuecore.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="label_barcode_gen_client.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="Default_label_barcode_gen.jar" todir="${zip.dir}" overwrite="true" />
+		<copy file="printservice_module.jar" todir="${zip.dir}" overwrite="true" />
+		<copy file="printservice_client.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="dynamicExtensions.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissuePrintWebService.war" todir="${zip.dir}" overwrite="true" />
 		<!-- only single war file is being used so comment it -->
