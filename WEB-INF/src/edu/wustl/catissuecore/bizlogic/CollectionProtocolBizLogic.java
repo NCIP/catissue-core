@@ -230,7 +230,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					{
 						childrenCollection = new HashSet();
 					}
-					childrenCollection.add(specimen);
+					if (!childrenCollection.contains(specimen) )
+					{
+						childrenCollection.add(specimen);
+					}
+				}
+				else
+				{
+					
 				}
 			}
 			else

@@ -683,12 +683,13 @@ public class CollectionProtocolUtil {
 			}
 			specimen.setLineage(specimenRequirementBean.getLineage());
 			specimenCollection.add(specimen);
-
+			Collection childCollection = specimen.getChildrenSpecimen();
 			if(specimenRequirementBean.getAliquotSpecimenCollection()!=null)
 			{
 				Collection aliquotCollection= specimenRequirementBean.getAliquotSpecimenCollection().values();
 				Collection childSpecimens = 
 					getSpecimens(aliquotCollection, specimen, requirementGroup);
+				childCollection.addAll(childSpecimens);
 				specimenCollection.addAll(childSpecimens);
 			}
 
@@ -697,6 +698,7 @@ public class CollectionProtocolUtil {
 				Collection derivedCollection= specimenRequirementBean.getDeriveSpecimenCollection().values();
 				Collection childSpecimens = 
 					getSpecimens(derivedCollection, specimen, requirementGroup);
+				childCollection.addAll(childSpecimens);
 				specimenCollection.addAll(childSpecimens);
 			}
 			
