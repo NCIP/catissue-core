@@ -117,7 +117,7 @@ public abstract class QueryCSMUtil
 			}
 		}
 		return errorMsg;
-}
+	}
 
 	
 	/**
@@ -332,7 +332,7 @@ public abstract class QueryCSMUtil
 	 		List<EntityInterface> mainEntityList, OutputTreeDataNode node)
 	 {
 		EntityInterface entity = isMainEntity(mainEntityList, node);
-	 	if (entity != null)
+	 	if (entity == null)
 	 	{
 		 	List<OutputTreeDataNode> children = node.getChildren();
 		 	
@@ -379,7 +379,8 @@ public abstract class QueryCSMUtil
 	 * @param defineViewEntityList 
 	 */
 	public static String updateEntityIdIndexMap(QueryResultObjectDataBean queryResultObjectDataBean,
-			int columnIndex, String selectSql, List<EntityInterface> defineViewNodeList, Map<EntityInterface, Integer> entityIdIndexMap)
+			int columnIndex, String selectSql, List<EntityInterface> defineViewNodeList, 
+			Map<EntityInterface, Integer> entityIdIndexMap)
 	{ 
 		List<String> selectSqlColumnList = getListOfSelectedColumns(selectSql);
 		if (defineViewNodeList != null)
