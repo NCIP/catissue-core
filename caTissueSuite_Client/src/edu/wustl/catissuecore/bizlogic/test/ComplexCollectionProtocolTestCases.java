@@ -9,15 +9,15 @@ public class ComplexCollectionProtocolTestCases extends CaTissueBaseTestCase
 	{
 		try
 		 {
-			CollectionProtocol collectionProtocol = ComplexCollectionProtocolUtility.initComplexCollectionProtocol1();			
+			CollectionProtocol collectionProtocol = ComplexCollectionProtocolUtility.initComplexCollectionProtocol();			
 			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 			TestCaseUtility.setObjectMap(collectionProtocol, CollectionProtocol.class);
 			assertTrue("Object added successfully", true);
 			
-			/**CollectionProtocol collectionProtocol1 = ComplexCollectionProtocolUtility.initComplexCollectionProtocol1();			
+			CollectionProtocol collectionProtocol1 = ComplexCollectionProtocolUtility.initComplexCollectionProtocol1();			
 			collectionProtocol1 = (CollectionProtocol) appService.createObject(collectionProtocol1);
 			TestCaseUtility.setObjectMap(collectionProtocol1, CollectionProtocol.class);
-			assertTrue("Object added successfully", true);*/
+			assertTrue("Object added successfully", true);
 		 }
 		 catch(Exception e)
 		 {
