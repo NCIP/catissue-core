@@ -185,15 +185,14 @@ public class ReportLoader
 				collProtocolReg.setCollectionProtocol(collectionProtocol);
 				try
 				{
-					CaCoreAPIService.createObject(collProtocolReg);
+					collProtocolReg=(CollectionProtocolRegistration)CaCoreAPIService.createObject(collProtocolReg);
 				}
 				catch(Exception ex)
 				{
 					Logger.out.error("Error: Could not save object of CollectionProtocolRegistration",ex);
 					throw new Exception("Could not save object of CollectionProtocolRegistration :"+ex.getMessage());
 				}		
-			}
-			collProtocolReg.setCollectionProtocol(collectionProtocol);
+			}	
 			scg.setCollectionProtocolEvent(collProtocolEvent);
 			scg.setCollectionProtocolRegistration(collProtocolReg);
 			scg.setSpecimenEventParametersCollection(getDefaultEvents(scg));
@@ -231,7 +230,10 @@ public class ReportLoader
 			{
 				// cpr exist then return existing cpr
 				Logger.out.info("Existing CPR found for participant id="+participant.getId()+" collectionProtocol id="+cp.getId());
-				return (CollectionProtocolRegistration)cprList.get(0);
+				CollectionProtocolRegistration collProtocolReg=(CollectionProtocolRegistration)cprList.get(0);
+				collProtocolReg.setParticipant(participant);	
+				collProtocolReg.setCollectionProtocol(cp);
+				return collProtocolReg;
 			}
 		} 
 		catch (ApplicationException appEx) 
