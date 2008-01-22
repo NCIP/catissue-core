@@ -1,8 +1,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
@@ -52,9 +50,10 @@ public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
 		{
 			Logger.out.info("Review Role not found!");
 		}
-		dao.insert(reviewParam, sessionDataBean, true, true);
+		dao.insert(reviewParam, sessionDataBean, true, false);
 		
-		Set protectionObjects = new HashSet();
+		// Since  PathologyReportReviewParameter is in PUBLIC_DATA_GROUP protection objects not required
+		/*Set protectionObjects = new HashSet();
 		protectionObjects.add(reviewParam);
 		try
 		{
@@ -63,7 +62,7 @@ public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
 		catch (SMException e)
 		{
 			throw handleSMException(e);
-		}
+		}*/
 	}
 
 	/**

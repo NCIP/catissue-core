@@ -1,8 +1,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
@@ -11,8 +9,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
-import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -44,7 +40,10 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 		className=User.class.getName();
 		List userList=dao.retrieve(className, colName, sessionDataBean.getUserId());
 		quarantineParam.setUser((User)userList.get(0));
-		dao.insert(quarantineParam, sessionDataBean, true, true);
+		dao.insert(quarantineParam, sessionDataBean, true, false);
+		
+		// Since  QuarantineEventParameter is in PUBLIC_DATA_GROUP protection objects not required
+		/*
 		Set protectionObjects = new HashSet();
 		protectionObjects.add(quarantineParam);
 		try
@@ -54,7 +53,7 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 		catch (SMException e)
 		{
 			throw handleSMException(e);
-		}
+		}*/
 	}
 
 	/**
