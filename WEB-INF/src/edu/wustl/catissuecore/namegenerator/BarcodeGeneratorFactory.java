@@ -2,7 +2,7 @@ package edu.wustl.catissuecore.namegenerator;
 
 import java.util.HashMap;
 /**
- * Factory Class to retrieve singleton instance of BarcodeGenerator 
+ * This is the factory Class to retrieve singleton instance of BarcodeGenerator 
  * 
  * @author Falguni_Sachde
  */
@@ -16,7 +16,7 @@ public class BarcodeGeneratorFactory
 	
 	/**
 	 * Get singleton instance of BarcodeGenerator. The class name of an instance is picked up from properties file
-	 * @param generatorType 
+	 * @param generatorType  Property key name for specific Object's  Barcode generator class (eg.specimenBarcodeGeneratorClass)
 	 * @return BarcodeGenerator
 	 * @throws NameGeneratorException 
 	 */

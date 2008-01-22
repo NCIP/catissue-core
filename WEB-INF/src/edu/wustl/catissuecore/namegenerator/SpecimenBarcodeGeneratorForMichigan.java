@@ -18,11 +18,15 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- * SpecimenBarcodeGenerator for Michgan University.
- * 
+ * This is the Specimen Barcode Generator for Michigan University.
+ * @author falguni_sachde
+ *
  */
 public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeGenerator {
 
+	/**
+	 * 
+	 */
 	public SpecimenBarcodeGeneratorForMichigan() {
 		//init();//TODO :Commented by Falguni because we are not using separate table for Michigan ,as not able to persist barcode count. 
 		super();
@@ -74,7 +78,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	}
 
 	/**
-	 * @return
+	 * @return conn
 	 * @throws NamingException
 	 * @throws SQLException
 	 */
@@ -90,7 +94,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	/**
 	 * @param input
 	 * @param pattern
-	 * @return
+	 * @return String
 	 */
 	private String format(long input, String pattern) 
 	{
@@ -99,19 +103,22 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	}
 
 	
-	private void persistLabelCount() 
-	{
-		String sql = "update CATISSUE_SPECIMEN_LABEL_COUNT SET LABEL_COUNT='"
-				+ currentBarcode + "'";
-
-		try {
-			Connection conn = getConnection();
-			conn.createStatement().executeUpdate(sql);
-		} catch (Exception daoexception) {
-			daoexception.printStackTrace();
-		}
-
-	}
+	/**
+	 * 
+	 */
+//	private void persistLabelCount() 
+//	{
+//		String sql = "update CATISSUE_SPECIMEN_LABEL_COUNT SET LABEL_COUNT='"
+//				+ currentBarcode + "'";
+//
+//		try {
+//			Connection conn = getConnection();
+//			conn.createStatement().executeUpdate(sql);
+//		} catch (Exception daoexception) {
+//			daoexception.printStackTrace();
+//		}
+//
+//	}
 	/**
 	 * This function is overridden as per Michgam requirement. 
 	 */
@@ -182,7 +189,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	}
 
 	/**
-	 * This function is overridden as per Michgam requirement. 
+	 * This function is overridden as per Michigan requirement. 
 	 */
 	synchronized void setNextAvailableAliquotSpecimenBarcode(Specimen parentObject, Specimen specimenObject) 
 	{

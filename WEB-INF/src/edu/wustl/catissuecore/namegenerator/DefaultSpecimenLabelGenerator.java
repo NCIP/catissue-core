@@ -18,9 +18,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 
 /**
- * DefaultSpecimenLabelGenerator is a class which contains the default 
- * implementations AbstractSpecimenGenerator classe.
- * @author virender_mehta
+ * This  class which contains the default  implementation for Specimen label generation.
+ * @author falguni_sachde
+ *
  */
 public class DefaultSpecimenLabelGenerator implements LabelGenerator
 {
@@ -38,8 +38,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	public DefaultSpecimenLabelGenerator()
 	{
 		init();
-	}
-	
+	}	
 	/**
 	 * This is a init() function it is called from the default constructor of Base class.When getInstance of base class
 	 * called then this init function will be called.
@@ -66,9 +65,8 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	
 	/**
 	 * This method will retrive unique specimen Lable.
-	 * @return Total No of Specimen
-	 * @throws ClassNotFoundException
-	 * @throws DAOException 
+	 * @param databaseConstant
+	 * @return noOfRecords
 	 */
 	private Long getLastAvailableSpecimenLabel(String databaseConstant)  
 	{
@@ -109,11 +107,9 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
         return noOfRecords;
 	}
 
-	
-	
-	/**Functions for Tree base new specimen entry 's label generation***/
-	//Falguni...
-	
+	/**
+	 * Map forr Tree base specimen entry 
+	 */
 	Map labelCountTreeMap = new HashMap();
 	
 	

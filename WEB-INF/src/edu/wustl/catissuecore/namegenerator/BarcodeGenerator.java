@@ -2,7 +2,7 @@ package edu.wustl.catissuecore.namegenerator;
 
 import java.util.List;
 /**
- * Interface for  Barcode generation.
+ * This is the base interface for  Barcode generation.
  *  
  * @author Falguni_Sachde
  * 
@@ -11,11 +11,13 @@ import java.util.List;
 public interface BarcodeGenerator
 {
 	/**
-	 * @param object
+	 * Set Barcode for given Object
+	 * @param object Object for which barcode will be generated 
 	 */
 	public void setBarcode(Object object);
 	/**
-	 * @param object
+	 * Set Barcode for given Object
+	 * @param object Object for which barcode will be generated 
 	 */
 	public void setBarcode(List<Object> object);
 	

@@ -3,14 +3,22 @@ package edu.wustl.catissuecore.printserviceclient;
 import java.util.Properties;
 
 /**
- * @author abhijit_naik
+ * This class has functions to read PrintServiceImplementor Properties file.
+ * @author falguni sachde
  *
  */
 public class PropertyHandler {
 
+	/**
+	 * 
+	 */
 	private static Properties printimplClassProperties = null;
 
 
+	/**
+	 * @param path
+	 * @throws Exception
+	 */
 	public static void init(String path) throws Exception
 	{
 		try{
@@ -27,15 +35,15 @@ public class PropertyHandler {
 	}
 	
 	/**
-	 * <p>
 	 * Description:This method takes the property name as String argument and
 	 * returns the properties value as String. 
-	 * </p>
+	 * @param propertyName  name of property Key  
+	 * @return String	property value
+	 * @throws Exception
 	 */
-
 	public static String getValue(String propertyName) throws Exception
 	{
-		System.out.println("Inside PropertyHandler.init factory..");
+		
 		if (printimplClassProperties == null)
 		{
 			init("PrintServiceImplementor.properties");

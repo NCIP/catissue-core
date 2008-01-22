@@ -18,9 +18,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 /**
- * DefaultSpecimenBarcodeGenerator is a class which contains the default 
- * implementations AbstractSpecimenGenerator classe.
- * @author virender_mehta
+ * This class  contains the default  implementation for Specimen Barcode generation.
+ * @author falguni_sachde
+ *
  */
 public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 {
@@ -68,9 +68,8 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	
 	/**
 	 * This method will retrive unique specimen Barcode.
-	 * @return Total No of Specimen
-	 * @throws ClassNotFoundException
-	 * @throws DAOException 
+	 * @param databaseConstant
+	 * @return noOfRecords
 	 */
 	private Long getLastAvailableSpecimenBarcode(String databaseConstant)  
 	{
@@ -113,9 +112,9 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 
 	
 	
-	/**Functions for Tree base new specimen entry 's Barcode generation***/
-	//Falguni...
-	
+	/**
+	 * Map of objects.
+	 */
 	Map barcodeCountTreeMap = new HashMap();
 	
 	

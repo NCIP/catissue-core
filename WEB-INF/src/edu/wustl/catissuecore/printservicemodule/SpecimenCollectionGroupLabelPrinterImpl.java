@@ -11,12 +11,15 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.domain.AbstractDomainObject;
 import gov.nih.nci.security.authorization.domainobjects.User;
 /**
- * This Class is used to define method for Specimen label printing
+ * This class is used to define method for Specimen label printing
  * @author falguni_sachde
  */
 public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.printserviceclient.LabelPrinter#printLabel(edu.wustl.common.domain.AbstractDomainObject, java.lang.String, gov.nih.nci.security.authorization.domainobjects.User)
+	 */
 	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj) {
 		
 		ArrayList listMap = (ArrayList) createObjectMap(abstractDomainObject);
@@ -24,7 +27,7 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 		try
 		{
 			  PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
-			  return objParser.callPrintWebService(listMap);
+			  return objParser.callPrintService(listMap);
 			
 		}
 		catch(Exception exp)
@@ -48,8 +51,8 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 	
 	
 	/**
-	 * @param abstractDomainObject
-	 * @return
+	 * @param abstractDomainObject Specimen Collection group
+	 * @return List List of all Specimen including child Specimen
 	 */
 	List createObjectMap(AbstractDomainObject abstractDomainObject)
 	{

@@ -3,7 +3,7 @@ package edu.wustl.catissuecore.namegenerator;
 import java.util.List;
 
 /**
- * Interface for  label generation.
+ * This is the base interface for  Label generation.
  *  
  * @author Falguni_Sachde
  * 
@@ -13,18 +13,21 @@ public interface LabelGenerator
 {
 	
 	/**
-	 * @param object
+	 * Set Label for given Object
+	 * @param object Object for which label will be generated 
 	 */
 	public void setLabel(Object object);
 	
 	/**
-	 * @param object
+	 * Set Label for given Object
+	 * @param object Object for which label will be generated 
 	 */
 	public void setLabel(List object);
 	
 	/**
-	 * @param object
-	 * @return label
+	 * Returns Label for given Object
+	 * @param object -Object for which label will be returned 
+	 * @return label- Label of object
 	 */
 	public String getLabel(Object object);
 }

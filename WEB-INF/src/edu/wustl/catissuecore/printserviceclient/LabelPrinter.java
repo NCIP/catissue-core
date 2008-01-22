@@ -11,7 +11,21 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public interface LabelPrinter {
 
+	/**
+	 * This method has implemenation for printing  AbstractDomainObject .
+	 * @param abstractDomainObject This is the object to be print
+	 * @param ipAddress This is the IP address of calling application.
+	 * @param userObj This is the User object of the current loggedin User.
+	 * @return boolean
+	 */
 	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj);	
 	
+	/**
+	 * This method has implemenation for printing  list of AbstractDomainObject .
+	 * @param abstractDomainObject This is the List of objects to be print
+	 * @param ipAddress This is the IP address of calling application.
+	 * @param userObj This is the User object of the current loggedin User.
+	 * @return boolean
+	 */
 	public boolean printLabel(List<AbstractDomainObject> abstractDomainObject, String ipAddress, User userObj);	
 }

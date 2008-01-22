@@ -17,6 +17,9 @@ import gov.nih.nci.security.authorization.domainobjects.User;
 public class SpecimenLabelPrinterImpl implements LabelPrinter {
 
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.printserviceclient.LabelPrinter#printLabel(edu.wustl.common.domain.AbstractDomainObject, java.lang.String, gov.nih.nci.security.authorization.domainobjects.User)
+	 */
 	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj) {
 		
 		ArrayList listMap = new ArrayList ();
@@ -24,7 +27,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		try
 		{
 			  PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
-			  return objParser.callPrintWebService(listMap);
+			  return objParser.callPrintService(listMap);
 			
 		}
 		catch(Exception exp)
@@ -51,7 +54,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		try
 		{
 			 PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
-			 return objParser.callPrintWebService(listMap);
+			 return objParser.callPrintService(listMap);
 			
 		}
 		catch(Exception exp)
@@ -64,8 +67,8 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 	}
 	
 	/**
-	 * @param abstractDomainObject
-	 * @return
+	 * @param abstractDomainObject Specimen Object
+	 * @param listMap List of Specimen details including all child specimen.
 	 */
 	void createObjectMap(AbstractDomainObject abstractDomainObject,ArrayList listMap)
 	{
@@ -98,8 +101,8 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 	
 	}
 	/**
-	 * @param objSpecimen
-	 * @param specimenList
+	 * @param objSpecimen Specimen Object
+	 * @param specimenList List of Specimen including all child specimen.
 	 */
 	void getAllSpecimenList(Specimen objSpecimen,List specimenList)
 	{

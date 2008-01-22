@@ -13,9 +13,9 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 
 
 /**
- * DefaultSpecimenLabelGenerator is a class which contains the default 
- * implementations AbstractSpecimenGenerator classe.
- * @author virender_mehta
+ * This  class which contains the default StorageContainer barcode implementation.
+ * @author falguni_sachde
+ *
  */
 public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 {
@@ -68,7 +68,7 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 				try {
 					conn.close();
 				} catch (SQLException exception) {
-					// TODO Auto-generated catch block
+				
 					exception.printStackTrace();
 				}
 			}
@@ -77,8 +77,9 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 		
 	}
 
+	
 	/**
-	 * @return
+	 * @return connection
 	 * @throws NamingException
 	 * @throws SQLException
 	 */

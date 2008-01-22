@@ -16,7 +16,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 
 /**
- * DefaultSCGLabelGenerator is a class which contains the default implementation.  
+ * This  class contains the default implementation for SpecimenCollectionGroup Label generation.  
  * @author Abhijit_Naik
  */
 public class DefaultSCGLabelGenerator implements LabelGenerator
@@ -86,7 +86,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
         		try {
 					conn.close();
 				} catch (SQLException exception) {
-					// TODO Auto-generated catch block
+					
 					exception.printStackTrace();
 				}
         	}
@@ -96,6 +96,9 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.lang.Object)
+	 */
 	public void setLabel(Object obj) 
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)obj;
@@ -117,7 +120,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	 */
 	public void setLabel(List objSpecimenList) {
 
-		
+		//Not required in case of SCG -As only individual SCG will be labelled.
 	}
 	
 	/**

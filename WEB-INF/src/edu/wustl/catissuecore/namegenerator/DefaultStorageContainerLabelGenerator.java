@@ -13,9 +13,9 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 
 
 /**
- * DefaultSpecimenLabelGenerator is a class which contains the default 
- * implementations AbstractSpecimenGenerator classe.
- * @author virender_mehta
+ * This class contains the default  Storage container label  implementation.
+ * @author falguni_sachde
+ *
  */
 public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 {
@@ -77,7 +77,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	}
 
 	/**
-	 * @return
+	 * @return connection
 	 * @throws NamingException
 	 * @throws SQLException
 	 */

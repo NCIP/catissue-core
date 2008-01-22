@@ -2,10 +2,9 @@ package edu.wustl.catissuecore.namegenerator;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.exception.BizLogicException;
 
 /**
- * Class for initializing  label and barcode generator
+ * This class initialize  label and barcode generator depending upon configuration.
  *  
  * @author Falguni_Sachde
  * 
@@ -15,7 +14,7 @@ public class LabelAndBarcodeGeneratorInitializer {
 	
 	
 	/**
-	 * 
+	 * This method reads configuration file and set the conditions whether automatic label ,barcode generation configured or not. 
 	 *
 	 */
 	public static void init()	

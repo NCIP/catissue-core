@@ -25,14 +25,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import edu.wustl.catissuecore.printserviceclient.PropertyHandler;
-
-
-
-/*
- * this class used to generate the xml document for the client to send to
- * the web service method
+/**
+ * This class used to generate the xml document of given Object and calling print webservice as per configuration. 
+ * @author falguni_sachde
+ *
  */
-
 public class PrintServiceInputXMLParser implements PrintServiceInputParserInterface 
 {
 	private Document document;
@@ -42,7 +39,7 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 	String key = null;
 
 	
-	public boolean callPrintWebService(Object listData) throws Exception 
+	public boolean callPrintService(Object listData) throws Exception 
 	{
 		try
 		{
@@ -74,6 +71,10 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 		}
 	}
 	
+	/**
+	 * @param doc
+	 * @return String
+	 */
 	public String getStringFromDocument(Document doc) {
 		try {
 			DOMSource domSource = new DOMSource(doc);
@@ -89,7 +90,12 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 			return null;
 		}
 	}
-	// return the documet type object of the Map
+
+	/**
+	 * return the documet type object of the Map
+	 * @param mapList
+	 * @return Document
+	 */
 	public Document generateXMLDoc(ArrayList mapList) {
 		
 		
@@ -141,7 +147,14 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 		return document;
 	}
 
-	// create object node for the the doucment
+	
+	/**
+	 * create object node for the the doucment
+	 * @param document
+	 * @param classname
+	 * @param id
+	 * @return Node
+	 */
 	public Node createObjectNode(Document document, String classname, String id) {
 
 		// create object element
@@ -161,7 +174,14 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 		return object;
 	}
 
-	// create the subchild of the object node
+	
+	/**
+	 * create the subchild of the object node
+	 * @param document
+	 * @param nodename
+	 * @param nodevalue
+	 * @return Node
+	 */
 	public Node createPropertyNode(Document document, String nodename,
 			String nodevalue) {
 

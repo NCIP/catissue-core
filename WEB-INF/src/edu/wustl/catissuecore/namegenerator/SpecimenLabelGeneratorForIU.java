@@ -3,14 +3,16 @@ package edu.wustl.catissuecore.namegenerator;
 import edu.wustl.catissuecore.domain.Specimen;
 
 /**
- * Temporary label name maker for IU specifically. This will be enhanced in the
- * future to come from the database if even necessary.
+ * This is the Specimen Label Generator for Indiana University.
  * 
  * @author falguni_sachde
  */
 public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 {
 	
+	/**
+	 * 
+	 */
 	public SpecimenLabelGeneratorForIU()
 	{
 		super();
@@ -35,8 +37,7 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 		 
 			aliquotChildCount = parentObject.getChildrenSpecimen().size();	
 			
-		}		
-
+		}
 		
 		StringBuffer buffy = null;
 		StringBuffer prefixBuffy = new StringBuffer();

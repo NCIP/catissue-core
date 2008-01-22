@@ -18,13 +18,15 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- * SpecimenLabelGenerator for Michgan University.
- * Format for specimen: site_yy_ddd_4DigitAutoIncrementingNumber
- * Format for derived specimen: parentSpecimenLabel_childCount+1
- * Format for derived specimen: parentSpecimenLabel_childCount+1
+ * This is the Specimen Label Generator for Michigan University.
+ *
+ *
  */
 public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGenerator {
 
+	/**
+	 * 
+	 */
 	public SpecimenLabelGeneratorForMichigan() {
 		//init();//TODO :Commented by Falguni because we are not using separate table for Michigan ,as not able to persist label count. 
 		super();
@@ -76,7 +78,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	}
 
 	/**
-	 * @return
+	 * @return conn
 	 * @throws NamingException
 	 * @throws SQLException
 	 */
@@ -89,6 +91,11 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	}
 
 	
+	/**
+	 * @param input
+	 * @param pattern
+	 * @return String
+	 */
 	private String format(long input, String pattern) 
 	{
 		DecimalFormat df = new DecimalFormat(pattern);
@@ -96,6 +103,9 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	}
 
 	
+	/**
+	 * 
+	 */
 	private void persistLabelCount() 
 	{
 		String sql = "update CATISSUE_SPECIMEN_LABEL_COUNT SET LABEL_COUNT='"
@@ -108,7 +118,9 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 			daoexception.printStackTrace();
 		}
 	}
-
+	/**
+	 * Format for specimen: site_AutoIncrementingNumber
+	 */
 	
 	public void setLabel(Object obj) {
 		
@@ -161,6 +173,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	
 	/**
 	 * This function is overridden as per Michgam requirement. 
+	 * Format for derived specimen: parentSpecimenLabel_childCount+1
 	 */
 	
 	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject,Specimen specimenObject)

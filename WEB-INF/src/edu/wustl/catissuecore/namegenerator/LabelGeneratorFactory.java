@@ -3,7 +3,7 @@ package edu.wustl.catissuecore.namegenerator;
 import java.util.HashMap;
 
 /**
- * Factory Class to retrieve singleton instance of label generator
+ * This is the factory Class to retrieve singleton instance of LabelGenerator
  * 
  * @author Falguni_Sachde
  */
@@ -17,7 +17,9 @@ public class LabelGeneratorFactory
 	
 	/**
 	 * Get singleton instance of SpecimenLabelGenerator. The class name of an instance is picked up from properties file
-	 * @return SpecimenLabelGenerator
+	 * @param generatorType Property key name for specific Object's  Label generator class (eg.specimenLabelGeneratorClass)
+	 * @return LabelGenerator
+	 * @throws NameGeneratorException
 	 */
 	public static LabelGenerator getInstance(String generatorType) throws NameGeneratorException
 	{
