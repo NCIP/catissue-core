@@ -149,14 +149,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			insertCollectionProtocolEvent(dao, sessionDataBean, collectionProtocolEvent,
 					collectionRequirementGroup);
 			
-			
-			Collection specimenCollection = collectionRequirementGroup.getSpecimenCollection();
-			
 			insertSpecimens(bizLogic, dao,  collectionRequirementGroup,
-					specimenCollection, sessionDataBean);
-
+					 sessionDataBean);
 		}
 	}
+	
 	/**
 	 * This function will insert child Collection Protocol. 
 	 * @param dao
@@ -194,11 +191,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 	
 	/**
+	 * 
 	 * @param bizLogic used to call business logic of Specimen.
 	 * @param dao Data access object to insert Specimen Collection groups
 	 * and specimens.
 	 * @param collectionRequirementGroup 
-	 * @param specimenCollection	specimen objects to be inserted.
 	 * @param sessionDataBean object containing session information which 
 	 * is required for authorization.
 	 * @throws DAOException
@@ -206,11 +203,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 */
 	private void insertSpecimens(NewSpecimenBizLogic  bizLogic, DAO dao,
 			SpecimenCollectionRequirementGroup collectionRequirementGroup,
-			Collection specimenCollection, SessionDataBean sessionDataBean) throws DAOException,
+			 SessionDataBean sessionDataBean) throws DAOException,
 			UserNotAuthorizedException {
 		TaskTimeCalculater specimenInsert = TaskTimeCalculater.startTask
 		("Insert specimen for CP", CollectionProtocolBizLogic.class);
-		Iterator<Specimen> specIter = collectionRequirementGroup.getSpecimenCollection().iterator();
+		Collection specimenCollection = collectionRequirementGroup.getSpecimenCollection();
+		Iterator<Specimen> specIter = specimenCollection.iterator();
 		
 		//Abhishek Mehta : Performance related Changes
 		
@@ -223,22 +221,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			specimen.setSpecimenCollectionGroup(collectionRequirementGroup);
 			if (specimen.getParentSpecimen() != null)
 			{
-				if (specimenMap.contains(specimen.getParentSpecimen()))
-				{
-					Collection childrenCollection= specimen.getParentSpecimen().getChildrenSpecimen();
-					if (childrenCollection == null)
-					{
-						childrenCollection = new HashSet();
-					}
-					if (!childrenCollection.contains(specimen) )
-					{
-						childrenCollection.add(specimen);
-					}
-				}
-				else
-				{
-					
-				}
+				addToParentSpecimen(specimen);				
 			}
 			else
 			{
@@ -248,6 +231,26 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		bizLogic.setCpbased(true);
 		bizLogic.insert(specimenMap, dao, sessionDataBean);
 		TaskTimeCalculater.endTask(specimenInsert);
+	}
+
+	/**
+	 * This function adds specimen object to its parent's childrenCollection
+	 * if not already added.
+	 * 
+	 * @param specimen The object to be added to it's parent childrenCollection
+	 */
+	private void addToParentSpecimen(Specimen specimen) {
+		Collection childrenCollection = 
+			specimen.getParentSpecimen().getChildrenSpecimen();
+		
+		if (childrenCollection == null)
+		{
+			childrenCollection = new HashSet();
+		}
+		if (!childrenCollection.contains(specimen) )
+		{
+			childrenCollection.add(specimen);
+		}
 	}
 
 

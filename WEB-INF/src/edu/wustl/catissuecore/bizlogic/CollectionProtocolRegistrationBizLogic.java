@@ -899,8 +899,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		protectionObjects.add(collectionProtocolRegistration);
-
-		Participant participant = null;
 		// Case of registering Participant on its participant ID
 		if (collectionProtocolRegistration.getParticipant() != null)
 		{
