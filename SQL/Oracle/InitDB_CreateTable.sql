@@ -1,4 +1,3 @@
-drop table CATISSUE_QUERY_TABLE_DATA cascade constraints;
 
 CREATE TABLE CATISSUE_QUERY_TABLE_DATA
 (
@@ -10,7 +9,7 @@ CREATE TABLE CATISSUE_QUERY_TABLE_DATA
       FOR_SQI number(1,0),                                                                        
       primary key (TABLE_ID)
 );
-drop table CATISSUE_INTERFACE_COLUMN_DATA cascade constraints;
+
 CREATE TABLE CATISSUE_INTERFACE_COLUMN_DATA
 (
       IDENTIFIER number(30) not null,
@@ -20,7 +19,7 @@ CREATE TABLE CATISSUE_INTERFACE_COLUMN_DATA
       primary key (IDENTIFIER)
 );
 
-drop TABLE CATISSUE_TABLE_RELATION;
+
 CREATE TABLE CATISSUE_TABLE_RELATION
 (
       RELATIONSHIP_ID number(30),
@@ -33,7 +32,7 @@ CREATE TABLE CATISSUE_TABLE_RELATION
 /*  Name: Shital Lawhale Bug ID: 3549 */
 /*  Description : A ATTRIBUTE_ORDER field in CATISSUE_SEARCH_DISPLAY_DATA .*/
 
-drop table CATISSUE_SEARCH_DISPLAY_DATA;
+
 CREATE TABLE CATISSUE_SEARCH_DISPLAY_DATA
 (
       RELATIONSHIP_ID number(30) not null,
@@ -42,7 +41,7 @@ CREATE TABLE CATISSUE_SEARCH_DISPLAY_DATA
       DEFAULT_VIEW_ATTRIBUTE number(1,0),
       ATTRIBUTE_ORDER number(5,0)
 );
-drop table CATISSUE_RELATED_TABLES_MAP;
+
 CREATE TABLE CATISSUE_RELATED_TABLES_MAP
 (
       FIRST_TABLE_ID number(30),
@@ -56,7 +55,7 @@ alter table CATISSUE_SEARCH_DISPLAY_DATA add constraint SEARCH_DATA_KEY unique (
 /*Patch ID: SimpleSearchEdit_14*/
 /*Adding Metadata table required for the Simple search edit feature.*/
 /*This table contains information about the columns to be hyperlinked for the given table.*/
-drop table CATISSUE_QUERY_EDITLINK_COLS;
+
 CREATE TABLE CATISSUE_QUERY_EDITLINK_COLS
 (
       TABLE_ID number(30), 

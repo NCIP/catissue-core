@@ -1,113 +1,3 @@
-drop table  CATISSUE_PERMISSIBLE_VALUE cascade constraints;
-drop table  CATISSUE_CDE cascade constraints;
-drop table  CATISSUE_COLL_COORDINATORS cascade constraints;
-drop table  CATISSUE_CANCER_RESEARCH_GROUP cascade constraints;
-drop table  CATISSUE_COLLECTION_PROTOCOL cascade constraints;
-
-drop table CATISSUE_ABS_SPECI_COLL_GROUP cascade constraints;
-drop table CATISSUE_SPECI_COLL_REQ_GROUP cascade constraints;
-
-drop table  CATISSUE_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_TRANSFER_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_STOR_CONT_SPEC_CLASS cascade constraints;
-drop table  CATISSUE_COLL_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_PASSWORD cascade constraints;
-drop table  CATISSUE_SPECIMEN_BIOHZ_REL cascade constraints;
-drop table  CATISSUE_MOL_SPE_REVIEW_PARAM cascade constraints;
-drop table  CATISSUE_STOR_TYPE_HOLDS_TYPE cascade constraints;
-drop table  CATISSUE_STORAGE_TYPE cascade constraints;
-drop table  CATISSUE_CONTAINER cascade constraints;
-drop table  CATISSUE_DISTRIBUTION_SPE_REQ cascade constraints;
-drop table  CATISSUE_SITE cascade constraints;
-drop table  CATISSUE_EMBEDDED_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_IN_OUT_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_COLL_DISTRIBUTION_REL cascade constraints;
-drop table  CATISSUE_DISPOSAL_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_SPECIMEN_REQUIREMENT cascade constraints;
-drop table  CATISSUE_INSTITUTION cascade constraints;
-drop table  CATISSUE_ST_CONT_ST_TYPE_REL cascade constraints;
-drop table  CATISSUE_SPECIMEN_PROTOCOL cascade constraints;
-drop table  CATISSUE_FLUID_SPE_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_BIOHAZARD cascade constraints;
-drop table  CATISSUE_QUANTITY cascade constraints;
-drop table  CATISSUE_SPUN_EVENT_PARAMETERS cascade constraints;
-drop table  CATISSUE_RECEIVED_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_RACE cascade constraints;
-drop table  CATISSUE_COLL_SPECIMEN_REQ cascade constraints;
-drop table  CATISSUE_SPECI_ARRAY_CONTENT cascade constraints;
-drop table  CATISSUE_ADDRESS cascade constraints;
-drop table  CATISSUE_REPORTED_PROBLEM cascade constraints;
-drop table  CATISSUE_SPECIMEN_ARRAY cascade constraints;
-drop table  CATISSUE_SPECIMEN_ARRAY_TYPE cascade constraints;
-drop table  CATISSUE_DISTRIBUTED_ITEM cascade constraints;
-drop table  CATISSUE_PARTICIPANT cascade constraints;
-drop table  CATISSUE_SPECIMEN_CHAR cascade constraints;
-drop table  CATISSUE_SPECIMEN_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_STOR_TYPE_SPEC_CLASS cascade constraints;
-drop table  CATISSUE_COLL_PROT_EVENT cascade constraints;
-drop table  CATISSUE_CONTAINER_TYPE cascade constraints;
-drop table  CATISSUE_CAPACITY cascade constraints;
-drop table  CATISSUE_PART_MEDICAL_ID cascade constraints;
-drop table  CATISSUE_STORAGE_CONTAINER cascade constraints;
-drop table  CATISSUE_CELL_SPE_REVIEW_PARAM cascade constraints;
-drop table  CATISSUE_DISTRIBUTION cascade constraints;
-drop table  CATISSUE_PROCEDURE_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_DISTRIBUTION_PROTOCOL cascade constraints;
-drop table  CATISSUE_EXTERNAL_IDENTIFIER cascade constraints;
-drop table  CATISSUE_DEPARTMENT cascade constraints;
-drop table  CATISSUE_FIXED_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_THAW_EVENT_PARAMETERS cascade constraints;
-drop table  CATISSUE_COLL_PROT_REG cascade constraints;
-drop table  CATISSUE_FROZEN_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_SPECIMEN cascade constraints;
-drop table  CATISSUE_USER cascade constraints;
-drop table  CATISSUE_TIS_SPE_EVENT_PARAM cascade constraints;
-drop table  CATISSUE_ST_CONT_COLL_PROT_REL cascade constraints;
-drop table  CATISSUE_STORTY_HOLDS_SPARRTY cascade constraints;
-drop table  CATISSUE_CONT_HOLDS_SPARRTYPE cascade constraints;
-drop table  CATISSUE_SPECIMEN_COLL_GROUP cascade constraints;
-drop table  CATISSUE_SPECIMEN_TYPE cascade constraints;
-drop table  CATISSUE_AUDIT_EVENT_QUERY_LOG cascade constraints;
-drop table  CATISSUE_AUDIT_EVENT cascade constraints;
-drop table  CATISSUE_AUDIT_EVENT_LOG cascade constraints;
-drop table  CATISSUE_AUDIT_EVENT_DETAILS cascade constraints;
-drop table CATISSUE_SPECIMEN_LABEL_COUNT;
-drop sequence CATISSUE_CANCER_RES_GRP_SEQ;
-drop   sequence CATISSUE_USER_SEQ;
-drop   sequence CATISSUE_SPECIMEN_PROTOCOL_SEQ;
-drop   sequence CATISSUE_CAPACITY_SEQ;
-drop   sequence CATISSUE_COLL_PROT_REG_SEQ;
-drop   sequence CATISSUE_SPEC_EVENT_PARAM_SEQ;
-drop   sequence CATISSUE_SITE_SEQ;
-drop   sequence CATISSUE_ADDRESS_SEQ;
-drop   sequence CATISSUE_CONTAINER_TYPE_SEQ;
-drop   sequence CATISSUE_AUDIT_EVENT_LOG_SEQ;
-drop   sequence CATISSUE_INTF_COLUMN_DATA_SEQ;
-drop   sequence CATISSUE_DISTRIBUTED_ITEM_SEQ;
-drop   sequence CATISSUE_DEPARTMENT_SEQ;
-drop   sequence CATISSUE_QUERY_TABLE_DATA_SEQ;
-drop   sequence CATISSUE_AUDIT_EVENT_DET_SEQ;
-drop   sequence CATISSUE_EXTERNAL_ID_SEQ;
-drop   sequence CATISSUE_REPORTED_PROBLEM_SEQ;
-drop   sequence CATISSUE_SPECIMEN_CHAR_SEQ;
-drop   sequence CATISSUE_AUDIT_EVENT_PARAM_SEQ;
-drop   sequence CATISSUE_PARTICIPANT_SEQ;
-drop   sequence CATISSUE_STORAGE_CONTAINER_SEQ;
-drop   sequence CATISSUE_PART_MEDICAL_ID_SEQ;
-drop   sequence CATISSUE_COLL_PROT_EVENT_SEQ;
-drop   sequence CATISSUE_BIOHAZARD_SEQ;
-drop   sequence CATISSUE_INSTITUTION_SEQ;
-drop   sequence CATISSUE_SPECIMEN_REQ_SEQ;
-drop   sequence CATISSUE_SPECIMEN_COLL_GRP_SEQ;
-drop   sequence CATISSUE_SPECIMEN_SEQ;
-drop   sequence CATISSUE_PERMISSIBLE_VALUE_SEQ;
-drop   sequence CATISSUE_QUANTITY_SEQ;
-drop   sequence CATISSUE_AUDIT_EVENT_SEQ;
-drop   sequence CATISSUE_PASSWORD_SEQ;
-drop   sequence CATISSUE_CONTAINER_SEQ;
-drop   sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
-drop   sequence CATISSUE_DISTRIBUTION_SEQ;
-drop   sequence CATISSUE_AUDIT_EVENT_QUERY_SEQ;
 
 create table CATISSUE_PERMISSIBLE_VALUE (
    IDENTIFIER number(19,0) not null ,
@@ -742,7 +632,6 @@ alter table CATISSUE_ST_CONT_COLL_PROT_REL  add constraint FK3AE9FCA7B3DFB11D fo
 alter table CATISSUE_ST_CONT_COLL_PROT_REL  add constraint FK3AE9FCA748304401 foreign key (COLLECTION_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL  ;
 alter table CATISSUE_ABS_SPECI_COLL_GROUP add constraint FKDEBAF167A7F77D13 foreign key (SITE_ID) references CATISSUE_SITE  ;
 alter table CATISSUE_SPECIMEN_COLL_GROUP  add constraint FKDEBAF16753B01F66 foreign key (COLLECTION_PROTOCOL_EVENT_ID) references CATISSUE_COLL_PROT_EVENT  ;
-alter table CATISSUE_SPECIMEN_COLL_GROUP  add constraint FKDEBAF1677E07C4AC foreign key (COLLECTION_PROTOCOL_REG_ID) references CATISSUE_COLL_PROT_REG  ;
 alter table CATISSUE_SPECIMEN_TYPE  add constraint FKFF69C195ECE89343 foreign key (SPECIMEN_ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE  ;
 alter table CATISSUE_PERMISSIBLE_VALUE  add constraint FK57DDCE153B5435E foreign key (PARENT_IDENTIFIER) references CATISSUE_PERMISSIBLE_VALUE  ;
 alter table CATISSUE_PERMISSIBLE_VALUE  add constraint FK57DDCE1FC56C2B1 foreign key (PUBLIC_ID) references CATISSUE_CDE ;
@@ -751,7 +640,7 @@ alter table CATISSUE_AUDIT_EVENT_LOG  add constraint FK8BB672DF77F0B904 foreign 
 alter table CATISSUE_AUDIT_EVENT_DETAILS  add constraint FK5C07745D34FFD77F foreign key (AUDIT_EVENT_LOG_ID) references CATISSUE_AUDIT_EVENT_LOG  ;
 
 alter table CATISSUE_COLL_PROT_REG add constraint FK5EB25F13A0FF79D4 foreign key (CONSENT_WITNESS) references CATISSUE_USER;
-alter table CATISSUE_DISTRIBUTED_ITEM add constraint FKA7C3ED4BC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY;
+
 
 create sequence CATISSUE_CANCER_RES_GRP_SEQ;
 create sequence CATISSUE_USER_SEQ;
@@ -790,10 +679,7 @@ create sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
 create sequence CATISSUE_DISTRIBUTION_SEQ;
 create sequence CATISSUE_AUDIT_EVENT_QUERY_SEQ;
 
-#------ Consent Tracking related drop, create and add foreign key scripts.
-drop table CATISSUE_CONSENT_TIER_RESPONSE cascade constraints;
-drop table CATISSUE_CONSENT_TIER_STATUS cascade constraints;
-drop table CATISSUE_CONSENT_TIER cascade constraints;
+/* Consent Tracking related drop, create and add foreign key scripts. */
 
 create table CATISSUE_CONSENT_TIER_RESPONSE (
    IDENTIFIER number(19,0) not null,
@@ -831,21 +717,7 @@ create sequence CATISSUE_CONSENT_TIER_SEQ;
 create sequence CATISSUE_ORDER_SEQ;
 create sequence CATISSUE_ORDER_ITEM_SEQ;
 
-#---- Specimen Order
-drop table CATISSUE_PATH_CASE_ORDER_ITEM cascade constraints;
-drop table CATISSUE_DERIEVED_SP_ORD_ITEM cascade constraints;
-drop table CATISSUE_NEW_SPEC_ORD_ITEM cascade constraints;
-drop table CATISSUE_EXISTING_SP_ORD_ITEM cascade constraints;
-drop table CATISSUE_SPECIMEN_ORDER_ITEM cascade constraints;
-
-#---- Specimen Array Order
-drop table CATISSUE_EXIST_SP_AR_ORD_ITEM cascade constraints;
-drop table CATISSUE_NEW_SP_AR_ORDER_ITEM cascade constraints;
-drop table CATISSUE_SP_ARRAY_ORDER_ITEM cascade constraints;
-
-drop table CATISSUE_ORDER_ITEM cascade constraints;
-drop table CATISSUE_ORDER cascade constraints;
-
+/* Specimen Order */
 
 create table CATISSUE_PATH_CASE_ORDER_ITEM (
    IDENTIFIER number(19,0) not null,
@@ -965,34 +837,6 @@ create table CATISSUE_SPECIMEN_LABEL_COUNT (
 INSERT INTO CATISSUE_SPECIMEN_LABEL_COUNT (LABEL_COUNT) VALUES ('0');
 
 /****caTIES Realated Tables - start**********/
-
-drop table CATISSUE_REPORT_TEXTCONTENT cascade constraints;
-drop table CATISSUE_IDENTIFIED_REPORT cascade constraints;
-drop table CATISSUE_CONCEPT_REFERENT cascade constraints;
-drop table CATISSUE_REPORT_CONTENT cascade constraints;
-drop table CATISSUE_REVIEW_PARAMS cascade constraints;
-drop table CATISSUE_REPORT_BICONTENT cascade constraints;
-drop table CATISSUE_REPORT_SECTION cascade constraints;
-drop table CATISSUE_DEIDENTIFIED_REPORT cascade constraints;
-drop table CATISSUE_QUARANTINE_PARAMS cascade constraints;
-drop table CATISSUE_PATHOLOGY_REPORT cascade constraints;
-drop table CATISSUE_REPORT_XMLCONTENT cascade constraints;
-drop table CATISSUE_REPORT_QUEUE cascade constraints;
-drop table CATISSUE_REPORT_PARTICIP_REL cascade constraints;
-drop table CATISSUE_CONCEPT cascade constraints;
-drop table CATISSUE_SEMANTIC_TYPE cascade constraints;
-drop table CATISSUE_CONCEPT_CLASSIFICATN cascade constraints;
-
-drop sequence CATISSUE_CONCEPT_REFERENT_SEQ;
-drop sequence CATISSUE_PATHOLOGY_REPORT_SEQ;
-drop sequence CATISSUE_QUARANTINE_PARAMS_SEQ;
-drop sequence CATISSUE_REPORT_SECTION_SEQ;
-drop sequence CATISSUE_REVIEW_PARAMS_SEQ;
-drop sequence CATISSUE_REPORT_CONTENT_SEQ;
-drop sequence CATISSUE_REPORT_QUEUE_SEQ;
-drop sequence CATISSUE_SEMANTIC_TYPE_SEQ;
-drop sequence CATISSUE_CONCEPT_SEQ;
-drop sequence CATISSUE_CONCEPT_CLASSFCTN_SEQ;
 
 create table CATISSUE_REPORT_TEXTCONTENT (
    IDENTIFIER number(19,0) not null,

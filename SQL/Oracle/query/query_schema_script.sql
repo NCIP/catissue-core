@@ -1,37 +1,3 @@
-drop table QUERY_PARAMETERIZED_QUERY cascade constraints;
-drop table CATEGORIAL_CLASS cascade constraints;
-drop table QUERY_INTRA_MODEL_ASSOCIATION cascade constraints;
-drop table QUERY_CONSTRAINTS cascade constraints;
-drop table QUERY_PARAMETERIZED_CONDITION cascade constraints;
-drop table QUERY_QUERY_ENTITY cascade constraints;
-drop table QUERY_CONDITION cascade constraints;
-drop table QUERY_RULE cascade constraints;
-drop table QUERY cascade constraints;
-drop table QUERY_LOGICAL_CONNECTOR cascade constraints;
-drop table QUERY_EXPRESSION cascade constraints;
-drop table QUERY_MODEL_ASSOCIATION cascade constraints;
-drop table QUERY_CONDITION_VALUES cascade constraints;
-drop table QUERY_JOIN_GRAPH cascade constraints;
-drop table CATEGORIAL_ATTRIBUTE cascade constraints;
-drop table QUERY_OUTPUT_ATTRIBUTE cascade constraints;
-drop table QUERY_INTER_MODEL_ASSOCIATION cascade constraints;
-drop table QUERY_EXPRESSION_OPERAND cascade constraints;
-drop table QUERY_GRAPH_ENTRY cascade constraints;
-drop table CATEGORY cascade constraints;
-drop table QUERY_EXPRESSIONID cascade constraints;
-drop sequence EXPRESSION_OPERAND_SEQ;
-drop sequence CONDITION_SEQ;
-drop sequence OUTPUT_ATTRIBUTE_SEQ;
-drop sequence CONSTRAINT_SEQ;
-drop sequence GRAPH_ENTRY_SEQ;
-drop sequence JOIN_GRAPH_SEQ;
-drop sequence LOGICAL_CONNECTOR_SEQ;
-drop sequence CATEGORIAL_ATTRIBUTE_SEQ;
-drop sequence MODEL_ASSOCIATION_SEQ;
-drop sequence EXPRESSION_SEQ;
-drop sequence CATEGORIAL_CLASS_SEQ;
-drop sequence CATEGORY_SEQ;
-drop sequence QUERY_ENTITY_SEQ;
 create table QUERY_PARAMETERIZED_QUERY (
    IDENTIFIER number(19,0) not null,
    QUERY_NAME varchar2(255) unique,
