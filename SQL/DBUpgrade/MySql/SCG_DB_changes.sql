@@ -305,7 +305,7 @@ SELECT a.IdentIfier,
        a.Comments,
        a.Collection_Protocol_reg_Id,
        b.Surgical_Pathological_Number,
-       'Collected',
+       'Complete',
        a.Collection_Protocol_Event_Id
 FROM   CatIssue_Abs_Speci_coll_Group a
        JOIN CatIssue_Clinical_Report b
