@@ -364,31 +364,16 @@
 			</fileset>
 		</copy>
 	</target>
-	<!--Changes for v 1.0.1 - Start-->
-	<target name="config_jboss_files">
-		<copy todir="${jboss.home.dir}/server/default/conf" overwrite="true">
-			<fileset dir="${temp.dir}">
-				<include name="login-config.xml" />
-				<include name="log4j.xml" />
-			</fileset>
-		</copy>
-
-		<replace dir="${temp.dir}">
-			<include name="properties-service.xml" />
-			<replacefilter token="@@app-security-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/ApplicationSecurityConfig.xml" />
-			<replacefilter token="@@app-properties-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/caTissueCore_Properties.xml" />
-			<replacefilter token="@@app-dynamicuixml-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/dynamicUI.xml" />
-		</replace>
-
-
-		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
-			<fileset dir="${temp.dir}">
-				<include name="properties-service.xml" />
-			</fileset>
-		</copy>
-		<delete file="${jboss.home.dir}/server/default/lib/hibernate2.jar" />
+	
+	<!--Target call for both fresh deployment and database creation-->
+	<target name="deploy_all">
+		<antcall target="deploy_app" />
+		<antcall target="deploy_db" />
 	</target>
+	
+	<!--Target for fresh deployment of caTissue application-->
 	<target name="deploy_app">
+		<antcall target="clean_server" />
 		<antcall target="assert" />
 		<delete dir="${temp.dir}" />
 		<antcall target="init" />
@@ -415,49 +400,47 @@
            <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
         </replace>
 		<antcall target="send_mail" />
-	</target>
-
-
-	<!--Target for Deployment with jboss config-->
-	<target name="deploy_app_with_config">
-		<antcall target="deploy_app" />
 		<antcall target="config_jboss_files" />
 		<delete dir="${temp.dir}" />
 	</target>
+			
+	<!--Target for deployment with jboss config-->
+	<target name="config_jboss_files">
+		<copy todir="${jboss.home.dir}/server/default/conf" overwrite="true">
+			<fileset dir="${temp.dir}">
+				<include name="login-config.xml" />
+				<include name="log4j.xml" />
+			</fileset>
+		</copy>
 
-	<!--Target call for both Deployment and Database Creation-->
-	<target name="deploy_all_with_config">
-		<antcall target="deploy_app_with_config" />
-		<antcall target="db_initialize" />
+		<replace dir="${temp.dir}">
+			<include name="properties-service.xml" />
+			<replacefilter token="@@app-security-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/ApplicationSecurityConfig.xml" />
+			<replacefilter token="@@app-properties-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/caTissueCore_Properties.xml" />
+			<replacefilter token="@@app-dynamicuixml-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/dynamicUI.xml" />
+		</replace>
+
+
+		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
+			<fileset dir="${temp.dir}">
+				<include name="properties-service.xml" />
+			</fileset>
+		</copy>
+		<delete file="${jboss.home.dir}/server/default/lib/hibernate2.jar" />
 	</target>
+	
 	<!--Target for Database Creation-->
-	<target name="db_initialize">
+	<target name="deploy_db">
 		<antcall target="firstUser" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<if>
-					<equals arg1="yes" arg2="${db.with.caModel}" />
-					<then>
-						<antcall target="db_initialize_with_CA_model_mysql" />
-					</then>
-					<else>
-						<antcall target="db_initialize_mysql" />
-					</else>
-				</if>
+				<antcall target="deploy_db_mysql" />
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<if>
-						<equals arg1="yes" arg2="${db.with.caModel}" />
-						<then>
-							<antcall target="db_initialize_oracle" />
-						</then>
-						<else>
-							<antcall target="db_initialize_oracle" />
-						</else>
-					</if>
+					<antcall target="deploy_db_oracle" />
 				</then>
 			</elseif>
 			<else>
@@ -465,16 +448,9 @@
 			</else>
 		</if>
 	</target>
-	<!--Changes for v 1.0.1 - End-->
-
-	<!--Target call for both Deployment and Database Creation-->
-	<target name="deploy_all">
-		<antcall target="deploy_app" />
-		<antcall target="db_initialize" />
-	</target>
-
+	
 	<!--MySQL Database Creation -->
-	<target name="db_initialize_mysql">
+	<target name="deploy_db_mysql">
 		<echo message="Initializing MySQL Database for caTISSUECore Application..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${mysql.sql.dir}/catissuecore.sql" />
@@ -489,9 +465,8 @@
 			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
 			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
-			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql" />
-			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql" />
-			<transaction src="${mysql.sql.dir}/query/csm.sql" />
+			<!-- <transaction src="${mysql.sql.dir}/query/csm.sql" /> -->
+			<transaction  src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -499,133 +474,11 @@
 				</fileset>
 			</classpath>
 		</sql>
-	</target>
-
-	<!--MySQL Database Creation With CA Models-->
-		<target name="db_initialize_with_CA_model_mysql">
-			<echo message="Initializing MySQL Database for caTISSUECore Application with CA models..." />
-			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-				<transaction src="${mysql.sql.dir}/suitedump.sql" />
-				<transaction>commit;</transaction>
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-			</sql>
-		</target>
-	
-	<!--Target for Database Upgrade from 1.2 to suite-->
-	<target name="upgrade_1.2_to_Suite" depends="db_upgrade, deploy_app_with_config">
-	</target>
-	
-	<target name="db_upgrade" depends="encryptPassword">
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<if>
-					<equals arg1="yes" arg2="${db.with.caModel}" />
-					<then>
-						<antcall target="db_upgrade_with_CA_model_mysql" />
-					</then>
-					<else>
-						<antcall target="db_upgrade_mysql" />
-					</else>
-				</if>
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<if>
-						<equals arg1="yes" arg2="${db.with.caModel}" />
-						<then>
-							<antcall target="db_upgrade_oracle" />
-						</then>
-						<else>
-							<antcall target="db_upgrade_oracle" />
-						</else>
-					</if>
-				</then>
-			</elseif>
-			<else>
-				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-			</else>
-		</if>
-	</target>
-	
-	<!--MySQL Database Upgradation -->
-	<target name="db_upgrade_mysql">
-		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..." />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/SCG_DB_changes.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/CSMUpgrade_3_to_3.2.sql"/>
-			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
-			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
-			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
-			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataInsertScript.sql" />
-			<transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql" />
-			<transaction src="${mysql.sql.dir}/query/csm.sql" />
-			<transaction>commit;</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-	</target>
-	
-	
-	<!--MySQL Database Upgradation With CA Model-->
-	<target name="db_upgrade_with_CA_model_mysql">
-		<echo message="Upgrading MySQL Database for caTISSUE Suite Application with CA models ..." />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/SCG_DB_changes.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/CSMUpgrade_3_to_3.2.sql"/>
-			<transaction src="${dbupgrade.sql.dir}/MySql/query_de_dump.sql" />
-			<transaction>commit;</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-	</target>
-	
-	<!--Oracle Database Upgradation -->
-	<target name="db_upgrade_oracle">
-		<echo message="Upgrading Oracle Database for caTISSUE Suite Application ..." />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
-			<transaction src="${dbupgrade.sql.dir}/Oracle/SCG_DB_changes.sql" />
-			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql" />
-			<transaction src="${dbupgrade.sql.dir}/Oracle/CSMUpgrade_3_to_3.2.sql"/>
-			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
-			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
-			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
-			<transaction>commit;</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-
-		<antcall target="insertQueryMetadata" />
-
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle" delimiter="/" delimitertype="row">
-			<transaction src="${oracle.sql.dir}/DBUtility.sql" />
-			<!--transaction  src="${oracle.sql.dir}/DESeqChangeForDataDump.sql"/-->
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
+		<antcall target="CAModel_import_data" />
 	</target>
 
 	<!--Oracle Database Creation -->
-	<target name="db_initialize_oracle">
+	<target name="deploy_db_oracle">
 		<echo message="Initializing Oracle Database for caTISSUECore Application..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/catissuecore.sql" />
@@ -640,7 +493,6 @@
 			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
-			
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -663,7 +515,6 @@
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/CSM_InsertData_Oracle.sql" />
 			<transaction src="${oracle.sql.dir}/CSM_AddConstraints_Oracle.sql" />
-			<transaction src="${oracle.sql.dir}/createUser.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -671,16 +522,26 @@
 				</fileset>
 			</classpath>
 		</sql>
-
 	</target>
 
 	<target name="insertQueryMetadata">
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction  src="${dbupgrade.sql.dir}/Oracle/CAModel.sql"/>
 			<transaction src="${oracle.sql.dir}/query/DisableConstraints.sql" />
-			<transaction src="${oracle.sql.dir}/query/PopulateTable.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>	
+		
+		<antcall target="CAModel_import_data" />
+		
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">	
 			<transaction src="${oracle.sql.dir}/query/enableCons.sql" />
 			<transaction src="${oracle.sql.dir}/query/UpdateTable.sql" />
-			<transaction src="${oracle.sql.dir}/query/csm_oracle.sql" />
+			<!-- <transaction src="${oracle.sql.dir}/query/csm_oracle.sql" /> -->
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -688,6 +549,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+		
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction>
 			DROP SEQUENCE DE_ATTR_REC_SEQ ;                              
@@ -732,6 +594,208 @@
 		</sql>
 	</target>
 
+	<!--Target for Database Upgrade from 1.2 to suite-->
+	<target name="upgrade_all" depends="upgrade_app, upgrade_db">
+	</target>
+	
+	<target name="upgrade_app" depends="deploy_app">
+	</target>
+	
+	<target name="upgrade_db" depends="encryptPassword">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_db_mysql" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_db_oracle" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	</target>
+	
+	<!--MySQL Database Upgradation -->
+	<target name="upgrade_db_mysql">
+		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..." />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.2_to_CatissueSuite.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/SCG_DB_changes.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/CSMUpgrade_3_to_3.2.sql"/>
+			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
+			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
+			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
+			<!-- <transaction src="${mysql.sql.dir}/query/SuiteQueryMetadataUpdateScript.sql" />
+			<transaction src="${mysql.sql.dir}/query/csm.sql" /> -->
+			<transaction  src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<antcall target="CAModel_import_data" />
+	</target>
+	
+	
+	<!--Oracle Database Upgradation -->
+	<target name="upgrade_db_oracle">
+		<echo message="Upgrading Oracle Database for caTISSUE Suite Application ..." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Oracle/SCG_DB_changes.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.2_to_CatissueSuite.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/CSMUpgrade_3_to_3.2.sql"/>
+			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
+			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
+			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+
+		<antcall target="insertQueryMetadata" />
+
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle" delimiter="/" delimitertype="row">
+			<transaction src="${oracle.sql.dir}/DBUtility.sql" />
+			<!--transaction  src="${oracle.sql.dir}/DESeqChangeForDataDump.sql"/-->
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
+
+	<!--Data import for CAModel -->
+	<target name="CAModel_import_data">
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="CAModel_import_data_mysql" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="CAModel_import_data_oracle" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+		<delete dir="${temp.dir}" />
+	</target>
+	
+	<target name="CAModel_import_data_mysql">
+		<echo message="Importing CA models data for caTISSUE Suite Application to MySQL Database ..." />
+		<java classname="edu.wustl.common.util.global.AutomateImport" fork="true">
+			
+			<classpath refid="temp.classpath" />
+			
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${mysql.driver.string}"/>
+			<arg value="import"/>
+			<arg value="${dbupgrade.sql.dir}/Common/dumpFileColumnInfo.txt"/>
+			<arg value="${basedir}/SQL/DBUpgrade/Common/CAModelCSVs/"/>
+		</java>
+	</target>
+	
+	<target name="CAModel_import_data_oracle">
+		<echo message="Importing CA models data for caTISSUE Suite Application to Oracle Database ..." />
+		<java classname="edu.wustl.common.util.global.AutomateImport" fork="true">
+			
+			<classpath refid="temp.classpath" />
+			
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${oracle.driver.string}"/>
+			<arg value="import"/>
+			<arg value="${dbupgrade.sql.dir}/Common/dumpFileColumnInfo.txt"/>
+			<arg value="${basedir}/SQL/DBUpgrade/Common/CAModelCSVs/"/>
+			<arg value="${basedir}/SQL/DBUpgrade/Oracle/CAModelCTLs/"/>
+			<arg value="${oracle.tns.name}"/>
+		</java>
+	</target>
+		
+	<!--Data export for CAModel -->
+	<target name="CAModel_export_data">
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="CAModel_export_data_mysql" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="CAModel_export_data_oracle" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+		<delete dir="${temp.dir}" />
+	</target>
+	
+	<target name="CAModel_export_data_mysql">
+		<echo message="Exporting data of CA models for MySQL Database..." />
+		<java classname="edu.wustl.common.util.global.AutomateImport" fork="true">
+			<classpath refid="temp.classpath" />
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${mysql.driver.string}"/>
+			<arg value="export"/>
+			<arg value="${dbupgrade.sql.dir}/Common/dumpFileColumnInfo.txt"/>
+			<arg value="${basedir}/SQL/DBUpgrade/Common/CAModelCSVs/"/>
+		</java>
+		<delete dir="${temp.dir}" />
+	</target>
+	
+	<target name="CAModel_export_data_oracle">
+		<echo message="Exporting data of CA models for Oracle Database..." />
+		<java classname="edu.wustl.common.util.global.AutomateImport" fork="true">
+			<classpath refid="temp.classpath" />
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${oracle.driver.string}"/>
+			<arg value="export"/>
+			<arg value="${dbupgrade.sql.dir}/Common/dumpFileColumnInfo.txt"/>
+			<arg value="${basedir}/SQL/DBUpgrade/Common/CAModelCSVs/"/>
+			<arg value="${basedir}/SQL/DBUpgrade/Oracle/CAModelCTLs/"/>
+			<arg value="${oracle.tns.name}"/>
+		</java>
+	</target>
+	
+	<!--Send mail to user-->
 	<target name="send_mail">
 		<echo message="Sending mail to: ${email.administrative.emailAddress}" />
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}" />
@@ -777,18 +841,18 @@ Thanking You,
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>		
 			<then>
-				<antcall target="mysqlFirstUser"/>
+				<antcall target="firstUser_mysql"/>
 			</then>
 			<elseif>	
 				<equals arg1="oracle" arg2="${database.type}"/>		
 				<then>
-					<antcall target="oracleFirstUser"/>
+					<antcall target="firstUser_oracle"/>
 				</then>
 			</elseif>
 		</if>
 	</target>
 	
-	<target name="oracleFirstUser">
+	<target name="firstUser_oracle">
 		<echo message="Encoding Password..."/>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 	
@@ -825,7 +889,7 @@ Thanking You,
 		<delete dir="${temp.dir}"/>
 	</target>
 	
-	<target name="mysqlFirstUser">
+	<target name="firstUser_mysql">
 		<echo message="Encoding Password..."/>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 	
@@ -858,8 +922,64 @@ Thanking You,
 				<fileset dir="${temp.dir}">
 					<include name="createUser.sql"/>
 				</fileset>
-			</copy>	
-		<delete dir="${temp.dir}"/>
+			</copy>
+		<delete dir="${temp.dir}" />
+	</target>
+
+	<!--Encrypt Password-->
+	<target name="encryptPassword">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>		
+			<then>
+				<antcall target="encryptPassword_mysql"/>
+			</then>
+			<elseif>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
+				<then>
+					<antcall target="encryptPassword_oracle"/>
+				</then>
+			</elseif>
+		</if>
+	</target>
+	
+	<!--Mysql Encrypt Password-->
+	<target name="encryptPassword_mysql">
+		<echo message="Encrypting Password for Mysql DB..."/>
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+		<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="true">
+			
+			<classpath refid="temp.classpath" />
+			
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${mysql.driver.string}"/>
+		</java>
+		<delete dir="${temp.dir}" />
+	</target>
+
+	<!--Oracle Encrypt Password-->
+	<target name="encryptPassword_oracle">
+		<echo message="Encrypting Password for Oracle DB..."/>
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+		<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="true">
+			
+			<classpath refid="temp.classpath" />
+			
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${oracle.driver.string}"/>
+		</java>
+		<delete dir="${temp.dir}" />
 	</target>
 
 	<!-- Configure titli.properties according to properties in caTissueInstall.properties and other set properties -->
@@ -1083,123 +1203,4 @@ Thanking You,
 			</then>
 		</if>
 	</target>
-	
-	<!--Target for Database Upgrade from 1.2.0.1 to 1.2.1-->
-	<!--This target is added for CSM upgrade from 3 to 3.2-->	
-		<target name="csm_upgrade" depends="db_upgrade_csm, encryptPassword">
-		</target>
-		
-		<!--CSM Upgradation -->
-		<target name="db_upgrade_csm">
-			<if>
-				<equals arg1="mysql" arg2="${database.type}"/>		
-				<then>
-					<antcall target="db_upgrade_csm_mysql"/>
-				</then>
-				<elseif>	
-					<equals arg1="oracle" arg2="${database.type}"/>		
-					<then>
-						<antcall target="db_upgrade_csm_oracle"/>
-					</then>
-				</elseif>
-				<else>
-					<echo message="DATABASE UPGRADATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error"/>
-				</else>
-			</if>
-		</target>
-		
-		<!--MySQL Database CSM Upgradation -->
-		<target name="db_upgrade_csm_mysql">
-			<echo message="Upgrading MySQL Database for CSM 3.2..."/>
-			<sql
-				driver="${mysql.driver.string}"
-			    url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
-			    userid="${database.username}"
-			    password="${database.password}" 
-				onerror="continue">
-				<transaction  src="${dbupgrade.sql.dir}/MySql/CSMUpgrade_3_to_3.2.sql"/>
-				<transaction>commit;</transaction>
-				<classpath>
-				<fileset dir="${lib.dir}">
-				  <include name="*.jar"/>
-				  </fileset>
-				</classpath> 
-			</sql>
-	  	</target>
-			  	
-		<!--Oracle Database CSM Upgradation -->
-		<target name="db_upgrade_csm_oracle">
-			<echo message="Upgrading Oracle Database for CSM 3.2..."/>
-			<sql 
-				driver="${oracle.driver.string}"
-			    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
-			    userid="${database.username}"
-			    password="${database.password}" 
-	    		onerror="continue"
-	    		rdbms="oracle">
-				<transaction  src="${dbupgrade.sql.dir}/Oracle/CSMUpgrade_3_to_3.2.sql"/>
-				<transaction>commit;</transaction>
-				<classpath>
-				<fileset dir="${lib.dir}">
-				  <include name="*.jar"/>
-				  </fileset>
-				</classpath> 
-			</sql>
-		</target>
-		
-		
-		<!--Encrypt Password-->
-		<target name="encryptPassword">
-			<if>
-				<equals arg1="mysql" arg2="${database.type}"/>		
-				<then>
-					<antcall target="mysqlEncryptPassword"/>
-				</then>
-				<elseif>	
-					<equals arg1="oracle" arg2="${database.type}"/>		
-					<then>
-						<antcall target="oracleEncryptPassword"/>
-					</then>
-				</elseif>
-			</if>
-		</target>
-		
-		<!--Mysql Encrypt Password-->
-		<target name="mysqlEncryptPassword">
-			<echo message="Encrypting Password for Mysql DB..."/>
-			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-			<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
-			<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="true">
-				
-				<classpath refid="temp.classpath" />
-				
-				<arg value="${database.host}"/>
-				<arg value="${database.port}"/>
-				<arg value="${database.type}"/>
-				<arg value="${database.name}"/>
-				<arg value="${database.username}"/>
-				<arg value="${database.password}"/>
-				<arg value="${mysql.driver.string}"/>
-			</java>
-		</target>
-
-		<!--Oracle Encrypt Password-->
-		<target name="oracleEncryptPassword">
-			<echo message="Encrypting Password for Oracle DB..."/>
-			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-			<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
-			
-			<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="true">
-				
-				<classpath refid="temp.classpath" />
-				
-				<arg value="${database.host}"/>
-				<arg value="${database.port}"/>
-				<arg value="${database.type}"/>
-				<arg value="${database.name}"/>
-				<arg value="${database.username}"/>
-				<arg value="${database.password}"/>
-				<arg value="${oracle.driver.string}"/>
-			</java>
-		</target>
 </project>
