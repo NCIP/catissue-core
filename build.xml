@@ -2,7 +2,7 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 <project name="caTissue Core" default="compile">
-	
+	<import file="build-properties.xml"/>	
 	<!--define require dir and Properties for <if> </if> tag-->	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 	<classpath>
@@ -10,9 +10,9 @@
 	  </classpath>
 	</taskdef>
 	
-	
+
 	<!--define require dir and Properties -->
-	<property file="caTissueInstall.properties" />
+	
 	<property file="JMeterTest.properties" />
 	<property name="base.dir" value="." />
 	<property name="src.dir" value="${base.dir}/WEB-INF/src" />
@@ -23,16 +23,12 @@
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm" />
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib" />
 	<property name="generateforce" value="true" />
-	<property name="application.name" value="catissueSuite" />
-	<property name="application.version" value="1.0" />
 	<property name="junit.jar" value="${lib.dir}/junit-3.8.1.jar" />
 	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
 	<property name="report.dir" value="${base.dir}/WEB-INF" />
 	<property name="catissue.applet.dir" value="${base.dir}/Applet/catissue" />
 	<property name="test.src.dir" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/bizlogic/test" />
 	<property name="test.class.dir" value="${base.dir}/WEB-INF/classes/edu/wustl/catissuecore/bizlogic/test" />
-	<property name="cacore.version" value="3.2" />
-	<property name="csm.version" value="3.2" />
 	<!-- csm related properties -->
 	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>

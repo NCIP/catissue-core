@@ -10,13 +10,12 @@
 		</classpath>
 	</taskdef>
 
-	<property file="caTissueInstall.properties" />
-
+	<import file="build-properties.xml"/>
+	
 	<property name="base.dir" value="." />
 	<property name="temp.dir" value="./tempCatissuecore" />
 	<property name="csm.dir" value="${temp.dir}/tempcsm" />
 	<property name="lib.dir" value="${base.dir}/lib" />
-
 	<property name="mysql.sql.dir" value="${base.dir}/SQL/MySql" />
 	<property name="dbupgrade.sql.dir" value="${base.dir}/SQL/DBUpgrade" />
 	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle" />
@@ -274,7 +273,8 @@
 		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war" />
 		<delete file="${jboss.home.dir}/server/default/deploy/dynamicExtensions.war" />
 		<delete file="${jboss.home.dir}/server/default/deploy/caTissuePrintWebService.war" />
-		
+		<mkdir dir="${jboss.home.dir}/server/default/work"/>
+		<mkdir dir="${jboss.home.dir}/server/default/tmp"/>
 		<delete includeemptydirs="true">
 			<fileset dir="${jboss.home.dir}/server/default/work">
 				<include name="**/*" />
@@ -294,7 +294,18 @@
 		<delete file="${temp.dir}/dynamicExtensions.war" />
 		<delete file="${temp.dir}/caTissuePrintWebService.war" />
 
-		<war destfile="${temp.dir}/catissuecore.war" webxml="${temp.dir}/catissuecore/WEB-INF/web.xml">
+		<!-- delete file="${base.dir}/MANIFEST.MF"/>
+		
+		<manifest file="${base.dir}/MANIFEST.MF"> 	
+	        <attribute name="Built-By" value="${user.name}"/>
+	     	<attribute name="Version" value="${application.name} ${application.version}"/>
+	     	<attribute name="CSM-Version" value="${csm.version}"/>
+	     	<attribute name="caCore-Version" value="${cacore.version}"/>
+	     	<attribute name="Build-on" value="${TODAY}"/>
+	    </manifest -->		
+
+		<war destfile="${temp.dir}/catissuecore.war" 
+			webxml="${temp.dir}/catissuecore/WEB-INF/web.xml" manifest="${base.dir}/MANIFEST.MF">
 			<fileset dir="${temp.dir}/catissuecore">
 				<exclude name="**/*build*" />
 				<exclude name="**/*WEB-INF*" />
