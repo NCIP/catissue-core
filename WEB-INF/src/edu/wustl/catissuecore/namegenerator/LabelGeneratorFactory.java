@@ -25,10 +25,10 @@ public class LabelGeneratorFactory
 	{
 		try
 		{
-			System.out.println("Inside LabelGenerator factory..");
+
 			if(labelgeneratorMap.get(generatorType) == null)
 			{
-				System.out.println("Inside LabelGenerator factory..");
+				
 				String className = PropertyHandler.getValue(generatorType);
 				if(className!=null)
 				{
