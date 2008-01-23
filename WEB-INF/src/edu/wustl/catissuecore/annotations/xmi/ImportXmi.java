@@ -84,6 +84,10 @@ public class ImportXmi
 			{
 				throw new Exception("Please Specify the main container csv file name");
 			}
+			if(args.length < 4)
+			{
+				throw new Exception("Please Specify the name of the Package to be imported");
+			}
 			
 			//Ist parameter is fileName
 	//		Fully qualified Name of the xmi file to be imported
@@ -136,12 +140,17 @@ public class ImportXmi
 			}
 			if(args.length > 3)
 			{
-				conditionRecordObjectCsvFileName = args[3];
+				packageName = args[3];
 			}
 			if(args.length > 4)
-			{
-				packageName = args[4];
+			{				
+				conditionRecordObjectCsvFileName = args[4];
 			}
+			if(packageName.equals(""))
+			{
+				throw new Exception("Package name is mandatory parameter. If no package is present please specify 'Default'.");
+			}
+			
 			List<Long> conditionObjectIds = new ArrayList<Long>();
 			if(!conditionRecordObjectCsvFileName.equals(""))
 			{
@@ -185,7 +194,9 @@ public class ImportXmi
 		catch (Exception e)
 		{
 			System.out.println("Fatal error reading XMI.");
+			System.out.println("------------------------ERROR:--------------------------------\n");
 			System.out.println(e.getMessage());
+			System.out.println("\n--------------------------------------------------------------");
 		}
 		finally
 		{
