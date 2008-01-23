@@ -776,12 +776,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 			if (childSpecimens != null)
 			{
-				Iterator childSpecimenIterator = childSpecimens.iterator();
-				while (childSpecimenIterator.hasNext())
-				{
-					Specimen derivedSpecimen = (Specimen) childSpecimenIterator.next();
-					updateStorageLocations((TreeMap) containerMap, derivedSpecimen);
-				}
+				postInsert(childSpecimens, dao, sessionDataBean);
 			}
 		}
 
