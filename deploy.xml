@@ -829,6 +829,41 @@
 		<delete dir="${temp.dir}" />
 	</target>
 	
+	<target name="metadata_cleanup" description="To remove the corrupted path from the database.">
+			<echo message="Cleaning up Corrupted paths...." />
+			<delete dir="${temp.dir}" failonerror="false"/>
+	 		<mkdir dir="${temp.dir}" />
+			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+			<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+			<if>
+				<equals arg1="mysql" arg2="${database.type}" />
+				<then>
+					<java classname="edu.wustl.common.util.global.QueryMetadataCleanup" fork="true">
+						<classpath refid="temp.classpath" />
+						<arg value="${database.username}"/>
+						<arg value="${database.password}"/>
+						<arg value="${mysql.driver.string}"/>
+						<arg value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
+					</java>
+				</then>
+				<elseif>
+					<equals arg1="oracle" arg2="${database.type}" />
+					<then>
+						<java classname="edu.wustl.common.util.global.QueryMetadataCleanup" fork="true">
+							<classpath refid="temp.classpath" />
+							<arg value="${database.username}"/>
+							<arg value="${database.password}"/>
+							<arg value="${oracle.driver.string}"/>
+							<arg value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
+						</java>
+					</then>
+				</elseif>
+				<else>
+					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+				</else>
+			</if>
+			<delete dir="${temp.dir}" />
+	</target>
 	<target name="CAModel_export_data_oracle">
 		<echo message="Exporting data of CA models for Oracle Database..." />
 		<java classname="edu.wustl.common.util.global.AutomateImport" fork="true">
