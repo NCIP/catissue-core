@@ -590,7 +590,8 @@
 		
 		<antcall target="CAModel_import_data" />
 		
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">	
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${oracle.sql.dir}/dynamic_extn_date_info.sql" />
 			<transaction src="${oracle.sql.dir}/query/enableCons.sql" />
 			<transaction src="${oracle.sql.dir}/query/UpdateTable.sql" />
 			<!-- <transaction src="${oracle.sql.dir}/query/csm_oracle.sql" /> -->
