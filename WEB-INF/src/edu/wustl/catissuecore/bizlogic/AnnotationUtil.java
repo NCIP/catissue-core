@@ -397,7 +397,7 @@ public class AnnotationUtil
 	 * @param hookEntityId
 	 */
 	private static void addPathFromStaticEntity(Long maxPathId, Long hookEntityId, Long previousDynamicEntity,Long dynamicEntityId,
-			Long intraModelAssociationId)
+			Long deAssociationId)
 	{
 		ResultSet resultSet = null;
 		PreparedStatement statement = null;
@@ -406,6 +406,14 @@ public class AnnotationUtil
 		try
 		{
 			conn = DBUtil.getConnection();
+			query = "select ASSOCIATION_ID from INTRA_MODEL_ASSOCIATION where DE_ASSOCIATION_ID="
+				+ deAssociationId;
+			statement = conn.prepareStatement(query);
+			resultSet = statement.executeQuery();
+			resultSet.next();
+			Long intraModelAssociationId = resultSet.getLong(1);
+
+
 			query = "select INTERMEDIATE_PATH from path where FIRST_ENTITY_ID="
 					+ hookEntityId + " and LAST_ENTITY_ID=" + previousDynamicEntity;
 			statement = conn.prepareStatement(query);
@@ -413,6 +421,8 @@ public class AnnotationUtil
 			resultSet.next();
 			String path = resultSet.getString(1);
 			path = path.concat("_").concat(intraModelAssociationId.toString());
+
+
 
 			query = "insert into path (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values (?,?,?,?)";
 			statement = conn.prepareStatement(query);
