@@ -97,9 +97,11 @@ public class ImportXmi
 			
 				//"C://Documents and Settings//ashish_gupta//Desktop//XMLs//caTissueCore_1.4_Edited.xmi";	
 			
-			fileName = fileName.replaceAll("\\\\", "//");		
+			fileName = fileName.replaceAll("\\\\", "//");	
+			System.out.println("--------------------------------------------------\n");
 			System.out.println("Filename = " +fileName);
 			System.out.println("Hook Entity = " +hookEntity);
+			
 			String packageName = "";			
 			String conditionRecordObjectCsvFileName = "";
 			String pathCsvFileName = "";
@@ -118,7 +120,7 @@ public class ImportXmi
 			}
 			
 			System.out.println("Name of the file = " +domainModelName);
-			
+			System.out.println("\n--------------------------------------------------\n");
 			// get the default repository
 			rep = MDRManager.getDefault().getDefaultRepository();
 			// create an XMIReader
@@ -180,11 +182,12 @@ public class ImportXmi
 			List<ContainerInterface> mainContainerList = xmiImportProcessor.processXmi(uml, domainModelName,packageName, containerNames);
 			
 			boolean isEditedXmi = xmiImportProcessor.isEditedXmi;
+			System.out.println("\n--------------------------------------------------\n");
 			System.out.println("Package name = " +packageName);
 			System.out.println("isEditedXmi = "+isEditedXmi);
 			System.out.println("Forms have been created !!!!");
 			System.out.println("Associating with hook entity.");
-			
+			System.out.println("\n--------------------------------------------------\n");
 			//List<ContainerInterface> mainContainerList = getMainContainerList(pathCsvFileName,entityNameVsContainers);
 			//Integrating with hook entity
 			associateHookEntity(mainContainerList,conditionObjectIds,staticEntity,isEditedXmi);
