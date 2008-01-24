@@ -41,8 +41,8 @@
 "41",\N,"AdditionalFinding","1454",\N,"*","indicates required fields.",\N,\N,\N,\N
 "42",\N,"BasePathologyAnnotation","1440",\N,"*","indicates required fields.",\N,\N,"1436",\N
 "43",\N,"ImmunoPhenotyping","1584",\N,"","",\N,\N,\N,\N
-"44",\N,"Cytogenetics","1589",\N,"","",\N,\N,\N,\N
-"45",\N,"BaseHaematologyPathologyAnnotation","1577",\N,"","",\N,"42","1436",\N
+"44",\N,"Cytogenetics","1589",\N,"*","indicates required fields.",\N,\N,\N,\N
+"45",\N,"BaseHaematologyPathologyAnnotation","1577",\N,"*","indicates required fields.",\N,"42","1436",\N
 "46",\N,"Invasion","1468",\N,"*","indicates required fields.",\N,\N,\N,\N
 "47",\N,"TumorSize","1473",\N,"*","indicates required fields.",\N,\N,\N,\N
 "48",\N,"HistologicGrade","1479",\N,"*","indicates required fields.",\N,\N,\N,\N

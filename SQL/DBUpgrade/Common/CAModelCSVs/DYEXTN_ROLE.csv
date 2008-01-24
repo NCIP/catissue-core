@@ -1290,3 +1290,13 @@
 "1306","CONTAINTMENT","100","1","TreatmentOrder"
 "1307","CONTAINTMENT","1","1",\N
 "1308","CONTAINTMENT","100","1","Chemotherapy"
+"1309","CONTAINTMENT","1","1",\N
+"1310","CONTAINTMENT","100","1","HistologicType"
+"1311","CONTAINTMENT","1","1",\N
+"1312","CONTAINTMENT","100","1","HistologicVariantType"
+"1313","CONTAINTMENT","1","1",\N
+"1314","CONTAINTMENT","100","1","GeneralHealthDiagnosis"
+"1315","CONTAINTMENT","1","1",\N
+"1316","CONTAINTMENT","100","1","DirectExtensionOfTumor"
+"1317","CONTAINTMENT","1","1",\N
+"1318","CONTAINTMENT","1","1","Cytogenetics"

@@ -1227,13 +1227,13 @@
 "1227","2008-01-21","Treatment Regimen","2008-01-22","TreatmentRegimen",\N
 "1228",\N,\N,\N,"id",\N
 "1229",\N,"",\N,"TreatmentRegimen",\N
-"1230","2008-01-21","EnvironmentalExposuresHealthAnnotation","2008-01-22","EnvironmentalExposuresHealthAnnotation",\N
+"1230","2008-01-21","EnvironmentalExposuresHealthAnnotation","2008-01-24","EnvironmentalExposuresHealthAnnotation",\N
 "1231",\N,\N,\N,"id",\N
 "1232",\N,\N,\N,"Duration",\N
 "1233",\N,"",\N,"YearsAgentFree",\N
 "1234",\N,"",\N,"OtherAgent",\N
 "1235",\N,"",\N,"Agent",\N
-"1236","2008-01-21","Duration","2008-01-22","Duration",\N
+"1236","2008-01-21","Duration","2008-01-24","Duration",\N
 "1237",\N,\N,\N,"id",\N
 "1238",\N,"",\N,"DurationInDays",\N
 "1239",\N,"",\N,"EndDate",\N
@@ -1246,12 +1246,12 @@
 "1246",\N,\N,\N,"ageAtDiagnosis",\N
 "1247",\N,\N,\N,"otherClinicalDiagnosis",\N
 "1248",\N,\N,\N,"clinicalDiagnosis",\N
-"1249","2008-01-21","HealthExaminationAnnotation","2008-01-22","HealthExaminationAnnotation",\N
+"1249","2008-01-21","HealthExaminationAnnotation","2008-01-23","HealthExaminationAnnotation",\N
 "1250",\N,\N,\N,"id",\N
 "1251",\N,"",\N,"DateOfExamination",\N
 "1252",\N,"",\N,"OtherProcedure",\N
 "1253",\N,"",\N,"NameOfProcedure",\N
-"1254","2008-01-21","RecurrenceHealthExaminationAnnotation","2008-01-22","RecurrenceHealthExaminationAnnotation",\N
+"1254","2008-01-21","RecurrenceHealthExaminationAnnotation","2008-01-23","RecurrenceHealthExaminationAnnotation",\N
 "1255",\N,\N,\N,"id",\N
 "1256",\N,"",\N,"OtherClinicalDiagnosis",\N
 "1257",\N,"",\N,"ClinicalDiagnosis",\N
@@ -1261,7 +1261,7 @@
 "1261",\N,\N,\N,"Chemo RX Annotation",\N
 "1262",\N,\N,\N,"Rad RX Annotation",\N
 "1263",\N,\N,\N,"cycle",\N
-"1264","2008-01-21","Treatment Annotation","2008-01-22","TreatmentAnnotation",\N
+"1264","2008-01-21","Treatment Annotation","2008-01-23","TreatmentAnnotation",\N
 "1265",\N,\N,\N,"id",\N
 "1266",\N,\N,\N,"Duration",\N
 "1267",\N,"",\N,"DoseUnits",\N
@@ -1274,18 +1274,18 @@
 "1275",\N,\N,\N,"id",\N
 "1277","2008-01-21","LocalRecurrenceHealthExaminationAnnotation","2008-01-22","LocalRecurrenceHealthExaminationAnnotation",\N
 "1278",\N,\N,\N,"id",\N
-"1279","2008-01-21","DistantRecurrenceHealthExaminationAnnotation","2008-01-22","DistantRecurrenceHealthExaminationAnnotation",\N
+"1279","2008-01-21","DistantRecurrenceHealthExaminationAnnotation","2008-01-23","DistantRecurrenceHealthExaminationAnnotation",\N
 "1280",\N,\N,\N,"id",\N
 "1281",\N,"",\N,"OtherTissueSite",\N
 "1282",\N,"",\N,"TissueSite",\N
-"1283","2008-01-21","Lab Annotation","2008-01-22","LabAnnotation",\N
+"1283","2008-01-21","Lab Annotation","2008-01-23","LabAnnotation",\N
 "1284",\N,\N,\N,"id",\N
 "1285",\N,"",\N,"TestDate",\N
 "1286",\N,"",\N,"ResultUnits",\N
 "1287",\N,"",\N,"Result",\N
 "1288",\N,"",\N,"OtherLabTestName",\N
 "1289",\N,"",\N,"LabTestName",\N
-"1290","2008-01-21","Family History Annotation","2008-01-22","FamilyHistoryAnnotation",\N
+"1290","2008-01-21","Family History Annotation","2008-01-23","FamilyHistoryAnnotation",\N
 "1291",\N,\N,\N,"id",\N
 "1293",\N,"",\N,"OtherRelation",\N
 "1294",\N,"",\N,"Relation",\N
@@ -1412,7 +1412,7 @@
 "1418",\N,"",\N,"NuclearPleomorphismScore",\N
 "1419",\N,"",\N,"TubuleFormationScore",\N
 "1420",\N,\N,\N,"GeneralHealthDiagnosis",\N
-"1421","2008-01-21","","2008-01-22","GeneralHealthDiagnosis",\N
+"1421","2008-01-21","","2008-01-23","GeneralHealthDiagnosis",\N
 "1422",\N,\N,\N,"id",\N
 "1423",\N,"",\N,"AgeAtDiagnosis",\N
 "1424",\N,"",\N,"OtherClinicalDiagnosis",\N
@@ -1431,56 +1431,56 @@
 "1437","2008-01-22","CarcinomaInSituStatus","2008-01-22","CarcinomaInSituStatus",\N
 "1438",\N,\N,\N,"id",\N
 "1439",\N,"",\N,"Status",\N
-"1440","2008-01-22","BasePathologyAnnotation","2008-01-22","BasePathologyAnnotation",\N
+"1440","2008-01-22","BasePathologyAnnotation","2008-02-23","BasePathologyAnnotation",\N
 "1441",\N,\N,\N,"id",\N
 "1442",\N,\N,\N,"Additional Finding",\N
 "1443",\N,\N,\N,"HistologicType",\N
 "1444",\N,"",\N,"Comment",\N
 "1445",\N,"",\N,"OtherSpecimenProcedure",\N
 "1446",\N,"",\N,"SpecimenProcedure",\N
-"1447","2008-01-22","HistologicType","2008-01-22","HistologicType",\N
+"1447","2008-01-22","HistologicType","2008-02-23","HistologicType",\N
 "1448",\N,\N,\N,"id",\N
 "1449",\N,\N,\N,"HistologicVariantType",\N
 "1450",\N,"",\N,"Type",\N
-"1451","2008-01-22","HistologicVariantType","2008-01-22","HistologicVariantType",\N
+"1451","2008-01-22","HistologicVariantType","2008-02-23","HistologicVariantType",\N
 "1452",\N,\N,\N,"id",\N
 "1453",\N,"",\N,"OtherHistologicType",\N
-"1454","2008-01-22","AdditionalFinding","2008-01-22","AdditionalFinding",\N
+"1454","2008-01-22","AdditionalFinding","2008-02-23","AdditionalFinding",\N
 "1455",\N,\N,\N,"id",\N
 "1456",\N,\N,\N,"Details",\N
 "1457",\N,"",\N,"PathologicFinding",\N
-"1458","2008-01-22","Details","2008-01-22","Details",\N
+"1458","2008-01-22","Details","2008-02-23","Details",\N
 "1459",\N,\N,\N,"id",\N
 "1460",\N,"",\N,"Detail",\N
-"1461","2008-01-22","BaseSolidTissuePathologyAnnotation","2008-01-22","BaseSolidTissuePathologyAnnotation",\N
+"1461","2008-01-22","BaseSolidTissuePathologyAnnotation","2008-01-23","BaseSolidTissuePathologyAnnotation",\N
 "1462",\N,\N,\N,"id",\N
 "1463",\N,\N,\N,"Tumor Tissue Site",\N
 "1464",\N,\N,\N,"Pathologic Staging",\N
 "1465",\N,\N,\N,"HistologicGrade",\N
 "1466",\N,\N,\N,"Tumor Size",\N
 "1467",\N,\N,\N,"Invasion",\N
-"1468","2008-01-22","Invasion","2008-01-22","Invasion",\N
+"1468","2008-01-22","Invasion","2008-01-23","Invasion",\N
 "1469",\N,\N,\N,"id",\N
 "1470",\N,"",\N,"PerineuralInvasion",\N
 "1471",\N,"",\N,"VenousInvasion",\N
 "1472",\N,"",\N,"LymphaticInvasion",\N
-"1473","2008-01-22","Size","2008-01-22","TumorSize",\N
+"1473","2008-01-22","Size","2008-01-23","TumorSize",\N
 "1474",\N,\N,\N,"id",\N
 "1475",\N,"",\N,"GreatestDimension(cm)",\N
 "1476",\N,"",\N,"AdditionalDimensionTwo(cm)",\N
 "1477",\N,"",\N,"AdditionalDimensionOne(cm)",\N
 "1478",\N,"",\N,"CannotBeDetermined",\N
-"1479","2008-01-22","HistologicGrade","2008-01-22","HistologicGrade",\N
+"1479","2008-01-22","HistologicGrade","2008-01-23","HistologicGrade",\N
 "1480",\N,\N,\N,"id",\N
 "1481",\N,"",\N,"Grade",\N
 "1482",\N,"",\N,"OtherGradingSystemName",\N
 "1483",\N,"",\N,"GradingSystemName",\N
-"1484","2008-01-22","PathologicalStaging","2008-01-22","PathologicalStaging",\N
+"1484","2008-01-22","PathologicalStaging","2008-01-23","PathologicalStaging",\N
 "1485",\N,\N,\N,"id",\N
 "1486",\N,\N,\N,"PrimaryTumorStage",\N
 "1487",\N,\N,\N,"Distant Metastasis",\N
 "1488",\N,\N,\N,"Regional Lymph Node",\N
-"1489","2008-01-22","RegionalLymphNode","2008-01-22","RegionalLymphNode",\N
+"1489","2008-01-22","RegionalLymphNode","2008-01-23","RegionalLymphNode",\N
 "1490",\N,\N,\N,"id",\N
 "1491",\N,"",\N,"MattedNodes",\N
 "1492",\N,"",\N,"NumberPositiveMicroscopically",\N
@@ -1488,43 +1488,43 @@
 "1494",\N,"",\N,"NumberInvolved",\N
 "1495",\N,"",\N,"NumberExamined",\N
 "1496",\N,"",\N,"LymphNodeStage",\N
-"1497","2008-01-22","DistantMetastasis","2008-01-22","DistantMetastasis",\N
+"1497","2008-01-22","DistantMetastasis","2008-01-23","DistantMetastasis",\N
 "1498",\N,\N,\N,"id",\N
 "1499",\N,\N,\N,"MetastasisTissueSite",\N
 "1500",\N,"",\N,"MetastasisStage",\N
-"1501","2008-01-22","MetastasisTissueSite","2008-01-22","MetastasisTissueSite",\N
+"1501","2008-01-22","MetastasisTissueSite","2008-01-23","MetastasisTissueSite",\N
 "1502",\N,\N,\N,"id",\N
 "1503",\N,"",\N,"OtherTissueSite",\N
 "1504",\N,"",\N,"TissueSite",\N
-"1505","2008-01-22","PrimaryTumorStage","2008-01-22","PrimaryTumorStage",\N
+"1505","2008-01-22","PrimaryTumorStage","2008-01-23","PrimaryTumorStage",\N
 "1506",\N,\N,\N,"id",\N
 "1507",\N,"",\N,"PrimaryTumorStage",\N
-"1508","2008-01-22","TumorTissueSite","2008-01-22","TumorTissueSite",\N
+"1508","2008-01-22","TumorTissueSite","2008-01-23","TumorTissueSite",\N
 "1509",\N,\N,\N,"id",\N
 "1510",\N,\N,\N,"TissueSide",\N
 "1511",\N,"",\N,"OtherSite",\N
 "1512",\N,"",\N,"Site",\N
-"1513","2008-01-22","TissueSide","2008-01-22","TissueSide",\N
+"1513","2008-01-22","TissueSide","2008-01-23","TissueSide",\N
 "1514",\N,\N,\N,"id",\N
 "1515",\N,"",\N,"Side",\N
-"1516","2008-01-22","LungPathologyAnnotation","2008-01-22","LungPathologyAnnotation",\N
+"1516","2008-01-22","LungPathologyAnnotation","2008-01-23","LungPathologyAnnotation",\N
 "1517",\N,\N,\N,"id",\N
-"1518","2008-01-22","LungResectionBasedPathologyAnnotation","2008-01-22","LungResectionBasedPathologyAnnotation",\N
+"1518","2008-01-22","LungResectionBasedPathologyAnnotation","2008-01-23","LungResectionBasedPathologyAnnotation",\N
 "1519",\N,\N,\N,"id",\N
 "1520",\N,\N,\N,"LungResectionMargin",\N
 "1521",\N,\N,\N,"DirectExtensionOfTumor",\N
 "1522",\N,"",\N,"ArterialInvasion",\N
 "1523",\N,"",\N,"OtherTumorExtensions",\N
-"1524","2008-01-22","DirectExtensionOfTumor","2008-01-22","DirectExtensionOfTumor",\N
+"1524","2008-01-22","DirectExtensionOfTumor","2008-01-23","DirectExtensionOfTumor",\N
 "1525",\N,\N,\N,"id",\N
 "1526",\N,"",\N,"ExtensionOfTumor",\N
-"1527","2008-01-22","LungResectionMargin","2008-01-22","LungResectionMargin",\N
+"1527","2008-01-22","LungResectionMargin","2008-01-23","LungResectionMargin",\N
 "1528",\N,\N,\N,"id",\N
 "1529",\N,\N,\N,"LungResectionMarginsUninvolved",\N
 "1530",\N,"",\N,"OtherLocation",\N
 "1531",\N,"",\N,"MarginLocation",\N
 "1532",\N,"",\N,"MarginStatus",\N
-"1533","2008-01-22","LungResectionMarginsUninvolved","2008-01-22","LungResectionMarginsUninvolved",\N
+"1533","2008-01-22","LungResectionMarginsUninvolved","2008-01-23","LungResectionMarginsUninvolved",\N
 "1534",\N,\N,\N,"id",\N
 "1535",\N,"",\N,"ClosestDistanceToTumor",\N
 "1536","2008-01-22","KidneyPathologyAnnotation","2008-01-22","KidneyPathologyAnnotation",\N
@@ -1568,19 +1568,19 @@
 "1574","2008-01-22","MacroscopicExtentOfTumor","2008-01-22","MacroscopicExtentOfTumor",\N
 "1575",\N,\N,\N,"id",\N
 "1576",\N,"",\N,"ExtentOfTumor",\N
-"1577","2008-01-22","BaseHaematologyPathologyAnnotation","2008-01-22","BaseHaematologyPathologyAnnotation",\N
+"1577","2008-01-22","BaseHaematologyPathologyAnnotation","2008-02-23","BaseHaematologyPathologyAnnotation",\N
 "1578",\N,\N,\N,"id",\N
 "1579",\N,\N,\N,"Cytogenetics",\N
 "1580",\N,\N,\N,"Immunophenotyping",\N
-"1581",\N,\N,\N,"adequacyOfSpecimen",\N
-"1582",\N,\N,\N,"otherBiopsyOrAspirateSite",\N
-"1583",\N,\N,\N,"biopsyOrAspirateSite",\N
-"1584","2008-01-22","ImmunoPhenotyping","2008-01-22","ImmunoPhenotyping",\N
+"1581",\N,"",\N,"AdequacyOfSpecimen",\N
+"1582",\N,"",\N,"OtherBiopsyOrAspirateSite",\N
+"1583",\N,"",\N,"BiopsyOrAspirateSite",\N
+"1584","2008-01-22","ImmunoPhenotyping","2008-02-23","ImmunoPhenotyping",\N
 "1585",\N,\N,\N,"id",\N
 "1586",\N,\N,\N,"status",\N
 "1587",\N,\N,\N,"result",\N
 "1588",\N,\N,\N,"methodUsed",\N
-"1589","2008-01-22","Cytogenetics","2008-01-22","Cytogenetics",\N
+"1589","2008-01-22","Cytogenetics","2008-02-23","Cytogenetics",\N
 "1590",\N,\N,\N,"id",\N
 "1591",\N,\N,\N,"result",\N
 "1592",\N,\N,\N,"status",\N
