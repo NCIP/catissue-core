@@ -68,7 +68,7 @@ public abstract class QueryModuleUtil
 	public static final int CLASS_NOT_FOUND = 6;
 	public static final int RESULTS_MORE_THAN_LIMIT = 10;
 	public static final int NO_MAIN_OBJECT_IN_QUERY = 11;
-	public static Map<String, OutputTreeDataNode> uniqueIdNodesMap;
+	//public static Map<String, OutputTreeDataNode> uniqueIdNodesMap;
 	
 	
 	/**
@@ -164,12 +164,13 @@ public abstract class QueryModuleUtil
 	 * @param root root node of the tree
 	 * @param tableName name of the temp table created
 	 * @param queryResulObjectDataMap 
+	 * @param uniqueIdNodesMap2 
 	 * @param uniqueIdNodesMap 
 	 * @return String sql for root node
 	 */
-	public static String getSQLForRootNode(OutputTreeDataNode root, String tableName, Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap)
+	public static String getSQLForRootNode(OutputTreeDataNode root, String tableName, Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap, Map<String, OutputTreeDataNode> uniqueIdNodesMap2)
 	{
-		Map<String,String> columnNameIndexMap = getColumnNamesForSelectpart(root,queryResulObjectDataMap); 
+		Map<String,String> columnNameIndexMap = getColumnNamesForSelectpart(root,queryResulObjectDataMap,uniqueIdNodesMap2); 
 		String columnNames = columnNameIndexMap.get(Constants.COLUMN_NAMES);
 		String indexStr = columnNameIndexMap.get(Constants.INDEX);
 		int index = -1;
@@ -192,10 +193,11 @@ public abstract class QueryModuleUtil
 	 * Forms select part of the query.
 	 * @param node Node of Uotput tree .
 	 * @param queryResulObjectDataMap 
+	 * @param idNodeMap 
 	 * @param columnMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @return String having all columnnames for select part.
 	 */
-	public static Map<String,String> getColumnNamesForSelectpart(OutputTreeDataNode node, Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap)
+	public static Map<String,String> getColumnNamesForSelectpart(OutputTreeDataNode node, Map<Long, QueryResultObjectDataBean> queryResulObjectDataMap, Map<String, OutputTreeDataNode> idNodeMap)
 	{  
 		String columnNames = "";
 		Map<String,String> columnNameIndexMap = new HashMap<String,String>();
@@ -253,7 +255,7 @@ public abstract class QueryModuleUtil
 		Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
 		if(queryResultObjectDataBean.getIdentifiedDataColumnIds().size()!=0)
 		  queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
-		QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columIndex,columnNames,null,entityIdIndexMap);
+		QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columIndex,columnNames,null,entityIdIndexMap,idNodeMap);
 		columnNameIndexMap.put(Constants.COLUMN_NAMES, columnNames);
 		columnNameIndexMap.put(Constants.INDEX, index);
 		return columnNameIndexMap;
@@ -423,7 +425,7 @@ public abstract class QueryModuleUtil
 					session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
 					mainEntityMap = QueryCSMUtil.setMainObjectErrorMessage(query, request.getSession(), uniqueIdNodesMap);
 				}
-				QueryModuleUtil.uniqueIdNodesMap = uniqueIdNodesMap;
+				//QueryModuleUtil.uniqueIdNodesMap = uniqueIdNodesMap;
 				Object obj = session.getAttribute(Constants.SESSION_DATA);
 				if (obj != null)
 				{
@@ -452,7 +454,7 @@ public abstract class QueryModuleUtil
 					for (OutputTreeDataNode outnode : rootOutputTreeNodeList)
 					{
 						Vector<QueryTreeNodeData> treeData = outputTreeBizLogic
-								.createDefaultOutputTreeData(i, outnode, sessionData,randomNumber,hasConditionOnIdentifiedField,mainEntityMap);
+								.createDefaultOutputTreeData(i, outnode, sessionData,randomNumber,hasConditionOnIdentifiedField,mainEntityMap,uniqueIdNodesMap);
 						
 						int resultsSize = treeData.size();
 						if(option == null)

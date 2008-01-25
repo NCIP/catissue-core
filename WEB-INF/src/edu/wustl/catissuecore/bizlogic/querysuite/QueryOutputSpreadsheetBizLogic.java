@@ -104,7 +104,7 @@ public class QueryOutputSpreadsheetBizLogic
 			
 			if(!selectedColumnMetaData.isDefinedView())
 				 defineGridViewBizLogic.getColumnsMetadataForSelectedNode(currentTreeNode,this.selectedColumnMetaData);
-			List resultList = createSQL(spreadSheetDataMap, currentTreeNode,parentIdColumnName,parentData,tableName,queryResultObjectDataBeanMap,mainEntityMap);
+			List resultList = createSQL(spreadSheetDataMap, currentTreeNode,parentIdColumnName,parentData,tableName,queryResultObjectDataBeanMap,mainEntityMap,idNodesMap);
 			
 			String selectSql = (String)resultList.get(0);
 			queryResultObjectDataBeanMap = (Map<Long, QueryResultObjectDataBean>)resultList.get(1);
@@ -225,7 +225,7 @@ public class QueryOutputSpreadsheetBizLogic
 		Map spreadSheetDataMap = new HashMap();
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
 		String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(node);
-		String selectSql = createSQL(parentData, tableName, spreadSheetDataMap, parentIdColumnName, node,queryResultObjectDataBeanMap,mainEntityMap);
+		String selectSql = createSQL(parentData, tableName, spreadSheetDataMap, parentIdColumnName, node,queryResultObjectDataBeanMap,mainEntityMap,idNodesMap);
 		int startIndex = 0;
 		QuerySessionData querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField);
 		spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
@@ -241,9 +241,10 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param spreadSheetDataMap map to store data list
 	 * @param parentIdColumnName String column name of id of parents node
 	 * @param node OutputTreeDataNode
+	 * @param idNodesMap 
 	 * @return String sql
 	 */
-	private String createSQL(String parentData, String tableName, Map spreadSheetDataMap, String parentIdColumnName, OutputTreeDataNode node,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap, Map<EntityInterface, List<EntityInterface>> mainEntityMap )
+	private String createSQL(String parentData, String tableName, Map spreadSheetDataMap, String parentIdColumnName, OutputTreeDataNode node,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap, Map<EntityInterface, List<EntityInterface>> mainEntityMap, Map<String, OutputTreeDataNode> idNodesMap )
 	{     
 		String selectSql = "";
 		String idColumnOfCurrentNode = "";
@@ -299,8 +300,8 @@ public class QueryOutputSpreadsheetBizLogic
 		}
 		else
 		{ 
-			queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
-			selectSql = getSQLForSelectedColumns(spreadSheetDataMap,queryResultObjectDataBeanMap,mainEntityMap);
+			queryResultObjectDataBeanMap.clear();
+			selectSql = getSQLForSelectedColumns(spreadSheetDataMap,queryResultObjectDataBeanMap,mainEntityMap,idNodesMap);
 		} 
 		if(parentData != null && parentData.equals(Constants.HASHED_NODE_ID) && false)
 		{
@@ -310,7 +311,7 @@ public class QueryOutputSpreadsheetBizLogic
 		if(!selectedColumnMetaData.isDefinedView() && queryResultObjectDataBean.getMainEntityIdentifierColumnId()==-1)
 		{ 
 			Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
-		    selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columnIndex,selectSql,null,entityIdIndexMap);
+		    selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columnIndex,selectSql,null,entityIdIndexMap,idNodesMap);
 		    entityIdIndexMap = queryResultObjectDataBean.getEntityIdIndexMap();
 		    if(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity())!=null)
 			{
@@ -355,9 +356,10 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param spreadSheetDataMap map to store data list
 	 * @param queryResultObjectDataBeanMap 
 	 * @param mainEntityMap 
+	 * @param idNodesMap 
 	 * @return String sql
 	 */
-	private String getSQLForSelectedColumns(Map spreadSheetDataMap, Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
+	private String getSQLForSelectedColumns(Map spreadSheetDataMap, Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap, Map<EntityInterface, List<EntityInterface>> mainEntityMap, Map<String, OutputTreeDataNode> idNodesMap)
 	{ 
 		String selectSql = "";
 		List<String> definedColumnsList = new ArrayList<String>();
@@ -369,7 +371,7 @@ public class QueryOutputSpreadsheetBizLogic
 		int columnIndex = 0;
 		List<EntityInterface> defineViewNodeList = new ArrayList<EntityInterface>();
 		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
-		QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
+		//QueryResultObjectDataBean queryResultObjectDataBean = new QueryResultObjectDataBean();
 		for (IOutputAttribute at : selectedOutputAttributeList)
 		{
 			for (QueryOutputTreeAttributeMetadata metaData : selectedAttributeMetaDataList)
@@ -378,6 +380,7 @@ public class QueryOutputSpreadsheetBizLogic
 				if (metaData.getAttribute().equals(attribute))
 				{
 					NameValueBean nameValueBean = new NameValueBean();
+					QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(metaData.getTreeDataNode().getId());
 					String attributeWithClassName = metaData.getDisplayName();
 					String treeAttributeNodeId = metaData.getUniqueId();
 					nameValueBean.setName(attributeWithClassName);
@@ -389,8 +392,7 @@ public class QueryOutputSpreadsheetBizLogic
 					sqlColumnNames.append(", ");
 					String columnDisplayName = metaData.getDisplayName();
 					definedColumnsList.add(columnDisplayName);
-					System.out.println("Entity : "+attribute.getEntity());
-					if (!defineViewNodeList.contains(attribute.getEntity()))
+					if (queryResultObjectDataBean==null && !defineViewNodeList.contains(attribute.getEntity()))
 					{
 						queryResultObjectDataBean = QueryCSMUtil
 								.getQueryResulObjectDataBean(metaData.getTreeDataNode(),mainEntityMap);
@@ -424,7 +426,7 @@ public class QueryOutputSpreadsheetBizLogic
 			String columnsInSql = sqlColumnNames.substring(0, lastindexOfComma).toString();
 			Map<EntityInterface, Integer> entityIdIndexMap = new HashMap<EntityInterface, Integer>();
 			columnsInSql = QueryCSMUtil.updateEntityIdIndexMap(null, columnIndex, columnsInSql,
-					defineViewNodeList, entityIdIndexMap);
+					defineViewNodeList, entityIdIndexMap,idNodesMap);
 			Iterator<QueryResultObjectDataBean> iterator = queryResultObjectDataBeanMap.values()
 					.iterator();
 			while (iterator.hasNext())
@@ -487,7 +489,7 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param mainEntityMap 
 	 * @return
 	 */
-	private List createSQL(Map spreadSheetDataMap, OutputTreeDataNode node, String parentIdColumnName, String parentData, String tableName,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
+	private List createSQL(Map spreadSheetDataMap, OutputTreeDataNode node, String parentIdColumnName, String parentData, String tableName,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap, Map<EntityInterface, List<EntityInterface>> mainEntityMap,Map<String, OutputTreeDataNode> idNodesMap)
 	{  
 		String selectSql = Constants.SELECT_DISTINCT;
 		List<String> columnsList = new ArrayList<String>();
@@ -535,12 +537,12 @@ public class QueryOutputSpreadsheetBizLogic
 		else 
 		{
 			queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
-			selectSql = getSQLForSelectedColumns(spreadSheetDataMap,queryResultObjectDataBeanMap,mainEntityMap);
+			selectSql = getSQLForSelectedColumns(spreadSheetDataMap,queryResultObjectDataBeanMap,mainEntityMap,idNodesMap);
 		}
 		if(!selectedColumnMetaData.isDefinedView() && queryResultObjectDataBean.getMainEntityIdentifierColumnId() == -1)
 		{
 			Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
-		    selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex, selectSql,null,entityIdIndexMap);
+		    selectSql = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean, columnIndex, selectSql,null,entityIdIndexMap,idNodesMap);
 		    entityIdIndexMap = queryResultObjectDataBean.getEntityIdIndexMap();
 			 if(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity())!=null)
 				  queryResultObjectDataBean.setMainEntityIdentifierColumnId(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity()));

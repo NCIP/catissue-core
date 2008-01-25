@@ -84,7 +84,7 @@ public class ConfigureGridViewAction extends BaseAction
 			Map<Long, QueryResultObjectDataBean> queryResultObjecctDataMap = new HashMap<Long, QueryResultObjectDataBean>();
 			defineGridViewBizLogic.getSelectedColumnsMetadata(categorySearchForm, uniqueIdNodesMap,selectedColumnsMetadata);
 			StringBuffer selectedColumnNames = new StringBuffer();
-			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm, selectedColumnsMetadata, selectedColumnNames,queryResultObjecctDataMap,mainEntityMap);
+			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm, selectedColumnsMetadata, selectedColumnNames,queryResultObjecctDataMap,mainEntityMap,uniqueIdNodesMap);
 			QueryShoppingCart cart = (QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
 			// gets the message and sets it in the session.
 			String message = QueryModuleUtil.getMessageIfIdNotPresentForOrderableEntities(selectedColumnsMetadata,cart);
@@ -116,7 +116,7 @@ public class ConfigureGridViewAction extends BaseAction
 			StringBuffer selectedColumnNames = new StringBuffer();
 			//Restoring to the default view.
 			selectedColumnsMetadata.setSelectedOutputAttributeList(new ArrayList<IOutputAttribute>());
-			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm, selectedColumnsMetadata, selectedColumnNames,queryResultObjecctDataMap,mainEntityMap);
+			definedColumnsList = defineGridViewBizLogic.getSelectedColumnList(categorySearchForm, selectedColumnsMetadata, selectedColumnNames,queryResultObjecctDataMap,mainEntityMap,uniqueIdNodesMap);
 			String SqlForSelectedColumns = defineGridViewBizLogic.createSQLForSelectedColumn(selectedColumnNames, sql);
 			querySessionData = queryOutputSpreadsheetBizLogic.getQuerySessionData(sessionData, recordsPerPage, 0, spreadSheetDataMap,
 					SqlForSelectedColumns,queryResultObjecctDataMap,hasConditionOnIdentifiedField);

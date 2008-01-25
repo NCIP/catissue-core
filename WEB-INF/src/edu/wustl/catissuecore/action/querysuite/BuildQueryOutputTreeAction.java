@@ -41,7 +41,7 @@ public class BuildQueryOutputTreeAction extends BaseAction
 	throws Exception
 	{
 		HttpSession session = request.getSession();
-		Map<Long,OutputTreeDataNode> idNodesMap = (Map<Long,OutputTreeDataNode>)session.getAttribute(Constants.ID_NODES_MAP);
+		Map<String,OutputTreeDataNode> idNodesMap = (Map<String,OutputTreeDataNode>)session.getAttribute(Constants.ID_NODES_MAP);
 		boolean hasConditionOnIdentifiedField = (Boolean)session.getAttribute(Constants.HAS_CONDITION_ON_IDENTIFIED_FIELD);
 		Map<EntityInterface ,List<EntityInterface>> mainEntityMap =(Map<EntityInterface ,List<EntityInterface>>)session.getAttribute(Constants.MAIN_ENTITY_MAP);
 		CategorySearchForm actionForm = (CategorySearchForm)form;

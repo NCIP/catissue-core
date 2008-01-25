@@ -55,18 +55,19 @@ public class QueryOutputTreeBizLogic
 	 * @param sessionData session data to get the user id.
 	 * @param hasConditionOnIdentifiedField 
 	 * @param mainEntityMap 
+	 * @param uniqueIdNodesMap 
 	 * @param nodeAttributeColumnNameMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @return Vector<QueryTreeNodeData> data structure to form tree out of it.
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(int treeNo,OutputTreeDataNode root, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField, Map<EntityInterface, List<EntityInterface>> mainEntityMap) throws DAOException, ClassNotFoundException
+	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(int treeNo,OutputTreeDataNode root, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField, Map<EntityInterface, List<EntityInterface>> mainEntityMap, Map<String, OutputTreeDataNode> uniqueIdNodesMap) throws DAOException, ClassNotFoundException
 			{ 
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId()+randomNumber;
 		QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(root,mainEntityMap);
 		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 		queryResultObjectDataBeanMap.put(root.getId(), queryResulObjectDataBean);
-		String selectSql = QueryModuleUtil.getSQLForRootNode(root, tableName,queryResultObjectDataBeanMap);
+		String selectSql = QueryModuleUtil.getSQLForRootNode(root, tableName,queryResultObjectDataBeanMap,uniqueIdNodesMap);
 		
 		String[] sqlIndex = selectSql.split(Constants.NODE_SEPARATOR);
 		selectSql = sqlIndex[0];
@@ -281,7 +282,7 @@ public class QueryOutputTreeBizLogic
 	 * String for one node is comma seperated for its id, display name, object name , parentId, parent Object name.
 	 * Such string elements for child nodes are seperated by "|".
 	 */
-	public String updateTreeForLabelNode(String nodeId, Map<Long, OutputTreeDataNode> idNodeMap, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
+	public String updateTreeForLabelNode(String nodeId, Map<String, OutputTreeDataNode> idNodeMap, SessionDataBean sessionData,String randomNumber, boolean hasConditionOnIdentifiedField, Map<EntityInterface, List<EntityInterface>> mainEntityMap)
 	throws ClassNotFoundException, DAOException
 	{ 
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
@@ -318,7 +319,7 @@ public class QueryOutputTreeBizLogic
 			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(currentNode,mainEntityMap);
 		    queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 			queryResultObjectDataBeanMap.put(currentNode.getId(), queryResulObjectDataBean);
-			Map<String,String> columnNameIndexMap = QueryModuleUtil.getColumnNamesForSelectpart(currentNode,queryResultObjectDataBeanMap);
+			Map<String,String> columnNameIndexMap = QueryModuleUtil.getColumnNamesForSelectpart(currentNode,queryResultObjectDataBeanMap,idNodeMap);
 			columnNames = columnNameIndexMap.get(Constants.COLUMN_NAMES);
 			String indexStr = columnNameIndexMap.get(Constants.INDEX);
 			if ((indexStr != null) && (!indexStr.equalsIgnoreCase(Constants.NULL)))
@@ -338,7 +339,7 @@ public class QueryOutputTreeBizLogic
 		if (parentNodeId.contains(Constants.NULL_ID))
 		{
 			
-			selectSql = QueryModuleUtil.getSQLForRootNode(currentNode, tableName,queryResultObjectDataBeanMap);
+			selectSql = QueryModuleUtil.getSQLForRootNode(currentNode, tableName,queryResultObjectDataBeanMap,idNodeMap);
 
 			String indexStr = selectSql.substring(selectSql.indexOf(Constants.NODE_SEPARATOR)+2,selectSql.length());
 			if (!indexStr.equalsIgnoreCase(Constants.NULL))
@@ -366,7 +367,7 @@ public class QueryOutputTreeBizLogic
 	 * Such string elements for child nodes are seperated by "|".
 	 **/
 	String buildOutputTreeString(int index, List dataList, OutputTreeDataNode currentNode, String parentNodeId, OutputTreeDataNode parentNode,
-			Map<Long, OutputTreeDataNode> idNodeMap)
+			Map<String, OutputTreeDataNode> idNodeMap)
 	{
 		Iterator dataListIterator = dataList.iterator();
 		List<String> existingNodesList = new ArrayList<String>();
@@ -411,7 +412,7 @@ public class QueryOutputTreeBizLogic
 			if (!existingNodesList.contains(nodeIdToSet))
 			{
 				existingNodesList.add(nodeIdToSet);
-				idNodeMap.put(currentNode.getId(), currentNode);
+				idNodeMap.put(String.valueOf(currentNode.getId()), currentNode);
 				outputTreeStr = outputTreeStr + nodeIdToSet + "," + displayName + "," + objectname + "," + parentNodeId + "," + parentObjectName
 				+ "|";
 			}

@@ -75,9 +75,10 @@ public abstract class QueryCSMUtil
 	 * @param mainEntityMap main entity map.
 	 * @param uniqueIdNodesMap contains all the entities in the query 
 	 * @return error message if main entity of node not present.
-	 */private static String getErrorMessage(Map<EntityInterface, List<EntityInterface>> mainEntityMap, 
+	 */
+	private static String getErrorMessage(Map<EntityInterface, List<EntityInterface>> mainEntityMap, 
 			Map<String, OutputTreeDataNode> uniqueIdNodesMap)
-	{
+	{ 
 		String errorMsg = ""; 
 		//iterate through the uniqueIdNodesMap and check if main entities of all the nodes are present
 		for (Iterator idMapIterator = uniqueIdNodesMap.entrySet().iterator(); idMapIterator.hasNext();)
@@ -376,16 +377,17 @@ public abstract class QueryCSMUtil
 	 * @param columnIndex
 	 * @param selectSql 
 	 * @param entityIdIndexMap 
+	 * @param uniqueIdNodesMap2 
 	 * @param defineViewEntityList 
 	 */
 	public static String updateEntityIdIndexMap(QueryResultObjectDataBean queryResultObjectDataBean,
 			int columnIndex, String selectSql, List<EntityInterface> defineViewNodeList, 
-			Map<EntityInterface, Integer> entityIdIndexMap)
+			Map<EntityInterface, Integer> entityIdIndexMap, Map<String, OutputTreeDataNode> uniqueIdNodesMap)
 	{ 
 		List<String> selectSqlColumnList = getListOfSelectedColumns(selectSql);
 		if (defineViewNodeList != null)
 		{
-			Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryModuleUtil.uniqueIdNodesMap;
+			//Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryModuleUtil.uniqueIdNodesMap;
 			Set<String> keySet = uniqueIdNodesMap.keySet();
 			for (Iterator iterator = keySet.iterator(); iterator.hasNext();)
 			{
@@ -395,17 +397,21 @@ public abstract class QueryCSMUtil
 				{
 					key = (String) nextObject;
 					OutputTreeDataNode outputTreeDataNode = uniqueIdNodesMap.get(key);
-					selectSql = putIdColumnsInSql(columnIndex, selectSql, entityIdIndexMap,
+					Map sqlIndexMap = putIdColumnsInSql(columnIndex, selectSql, entityIdIndexMap,
 							selectSqlColumnList, outputTreeDataNode);
+					selectSql = (String) sqlIndexMap.get(Constants.SQL);
+					columnIndex = (Integer) sqlIndexMap.get(Constants.ID_COLUMN_ID);
 				}
 			}
 		}
 		else
 		{
 			OutputTreeDataNode outputTreeDataNode = getMatchingEntityNode(queryResultObjectDataBean
-					.getMainEntity());
-			selectSql = putIdColumnsInSql(columnIndex, selectSql, entityIdIndexMap,
+					.getMainEntity(),uniqueIdNodesMap);
+			Map sqlIndexMap = putIdColumnsInSql(columnIndex, selectSql, entityIdIndexMap,
 					selectSqlColumnList, outputTreeDataNode);
+			selectSql = (String) sqlIndexMap.get(Constants.SQL);
+			columnIndex = (Integer) sqlIndexMap.get(Constants.ID_COLUMN_ID);
 		}
 		if (queryResultObjectDataBean != null)
 			queryResultObjectDataBean.setEntityIdIndexMap(entityIdIndexMap);
@@ -422,10 +428,11 @@ public abstract class QueryCSMUtil
 	 * @param outputTreeDataNode
 	 * @return The modified SQL string.
 	 */
-	private static String putIdColumnsInSql(int columnIndex, String selectSql,
+	private static Map putIdColumnsInSql(int columnIndex, String selectSql,
 			Map<EntityInterface, Integer> entityIdIndexMap,
 			List<String> selectSqlColumnList,
 			OutputTreeDataNode outputTreeDataNode) {
+		Map sqlIndexMap = new HashMap();
 		if (outputTreeDataNode != null)
 		{
 			List<QueryOutputTreeAttributeMetadata> attributes = outputTreeDataNode
@@ -453,7 +460,9 @@ public abstract class QueryCSMUtil
 				}
 			}
 		}
-		return selectSql;
+		sqlIndexMap.put(Constants.SQL,selectSql);
+		sqlIndexMap.put(Constants.ID_COLUMN_ID, columnIndex);
+		return sqlIndexMap;
 	}
 	/**
 	 * TO the list of selectColumn Names in the selectSql.
@@ -472,11 +481,12 @@ public abstract class QueryCSMUtil
  
 	/**This method will return node corresponding to an entity from query.
 	 * @param entity
+	 * @param uniqueIdNodesMap 
 	 * @return outputTreeDataNode
 	 */
-	private static OutputTreeDataNode getMatchingEntityNode(EntityInterface entity)
+	private static OutputTreeDataNode getMatchingEntityNode(EntityInterface entity, Map<String, OutputTreeDataNode> uniqueIdNodesMap)
 	{
-		Iterator<OutputTreeDataNode> iterator = QueryModuleUtil.uniqueIdNodesMap.values().iterator(); 
+		Iterator<OutputTreeDataNode> iterator = uniqueIdNodesMap.values().iterator(); 
 		while (iterator.hasNext())
 		{
 			OutputTreeDataNode outputTreeDataNode = (OutputTreeDataNode) iterator.next();
