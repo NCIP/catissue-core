@@ -775,6 +775,13 @@ public class FlexInterface
 		//specimenDataBean.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		//sp.setAvailable(true);
 		specimenDataBean.setQuantity(String.valueOf(spBean.quantity));
+		if(edu.wustl.catissuecore.util.global.Constants.MOLECULAR.equals(spBean.specimenClass))
+		{
+			if(spBean.concentration != null && spBean.concentration.toString()!="")
+			{
+				specimenDataBean.setConcentration(String.valueOf(spBean.concentration));
+			}
+		}
 		//sp.setAvailableQuantity(qt);
 		specimenDataBean.setClassName(spBean.specimenClass);
 		if (Variables.isSpecimenBarcodeGeneratorAvl)
