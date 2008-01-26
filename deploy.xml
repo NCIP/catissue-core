@@ -1217,7 +1217,7 @@ Thanking You,
 			<!--<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>  -->
 		</replace>
 
-		<java classname="edu.wustl.catissuecore.annotations.xmi.XMIExporter" fork="true">
+		<java classname="edu.wustl.catissuecore.annotations.xmi.XMIExporter" fork="true" maxmemory="1024m">
 			<arg value="${groupname}" />
 			<arg value="${filename}" />
 			<arg value="${version}" />
