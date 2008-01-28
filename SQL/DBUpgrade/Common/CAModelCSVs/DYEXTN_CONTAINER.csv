@@ -40,7 +40,7 @@
 "40",\N,"Details","1458",\N,"*","indicates required fields.",\N,\N,\N,\N
 "41",\N,"AdditionalFinding","1454",\N,"*","indicates required fields.",\N,\N,\N,\N
 "42",\N,"BasePathologyAnnotation","1440",\N,"*","indicates required fields.",\N,\N,"1436",\N
-"43",\N,"ImmunoPhenotyping","1584",\N,"","",\N,\N,\N,\N
+"43",\N,"ImmunoPhenotyping","1584",\N,"*","indicates required fields.",\N,\N,\N,\N
 "44",\N,"Cytogenetics","1589",\N,"*","indicates required fields.",\N,\N,\N,\N
 "45",\N,"BaseHaematologyPathologyAnnotation","1577",\N,"*","indicates required fields.",\N,"42","1436",\N
 "46",\N,"Invasion","1468",\N,"*","indicates required fields.",\N,\N,\N,\N
@@ -56,11 +56,11 @@
 "56",\N,"BaseSolidTissuePathologyAnnotation","1461",\N,"*","indicates required fields.",\N,"42","1436",\N
 "57",\N,"GleasonScore","1551",\N,"*","indicates required fields.",\N,\N,\N,\N
 "58",\N,"ProstatePathologyAnnotation","1545",\N,"*","indicates required fields.",\N,"56","1436",\N
-"59",\N,"ProstateMarginLocation","1663",\N,"","",\N,\N,\N,\N
-"60",\N,"RadicalProstatectomyMargin","1680",\N,"","",\N,\N,\N,\N
-"61",\N,"ExtraprostaticExtensionTissueSites","1690",\N,"","",\N,\N,\N,\N
-"62",\N,"ExtraprostaticExtension","1685",\N,"","",\N,\N,\N,\N
-"63",\N,"RadicalProstatectomyPathologyAnnotation","1676",\N,"","",\N,"58","1436",\N
+"59",\N,"ProstateMarginLocation","1663",\N,"*","indicates required fields.",\N,\N,\N,\N
+"60",\N,"RadicalProstatectomyMargin","1680",\N,"*","indicates required fields.",\N,\N,\N,\N
+"61",\N,"ExtraprostaticExtensionTissueSites","1690",\N,"*","indicates required fields.",\N,\N,\N,\N
+"62",\N,"ExtraprostaticExtension","1685",\N,"*","indicates required fields.",\N,\N,\N,\N
+"63",\N,"RadicalProstatectomyPathologyAnnotation","1676",\N,"*","indicates required fields.",\N,"58","1436",\N
 "64",\N,"NeedleBiopsyProstatePathologyAnnotation","1652",\N,"*","indicates required fields.",\N,"58","1436",\N
 "65",\N,"RetropubicEnucleationPathologyAnnotation","1794",\N,"*","indicates required fields.",\N,"58","1436",\N
 "66",\N,"TransurethralProstaticResectionPathologyAnnotation","1625",\N,"*","indicates required fields.",\N,"58","1436",\N

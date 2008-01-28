@@ -1385,3 +1385,6 @@
 "1431","caB2BEntityGroup","caB2BEntityGroup","1226"
 "1432","caB2BEntityGroup","caB2BEntityGroup","1317"
 "1433","caB2BEntityGroup","caB2BEntityGroup","1436"
+"1434","PackageName","clinical_annotation","1226"
+"1435","PackageName","pathology_specimen","1317"
+"1436","PackageName","pathology_scg","1436"
