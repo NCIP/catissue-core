@@ -479,7 +479,7 @@ if(form != null)
 				{
 				      readOnlyForAliquot = "true";
 				}
-				if(operation.equals(Constants.EDIT)) 
+				if(!Constants.DERIVED_SPECIMEN.equals(form.getLineage())&&operation.equals(Constants.EDIT)) 
 				{
 				      readOnlyForSpecimen = "true";
 				}
