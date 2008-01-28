@@ -1,6 +1,9 @@
 /*
- * $Name: Release Candidate 1 (Date:30-Jan-2008)
+ * $Name: RC1
  * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.2.8.8  2008/01/28 10:50:56  abhijit_naik
+ * version no changed to RC1
+ *
  * Revision 1.2.8.7  2008/01/28 07:47:29  abhijit_naik
  * For Release RC1
  *
