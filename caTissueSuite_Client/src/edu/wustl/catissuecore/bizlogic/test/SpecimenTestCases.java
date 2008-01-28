@@ -349,6 +349,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 			assertFalse("Failed to create", true);
 		}
 	}
+
 	public void testVerifyConsentResopnseAndConsentStatusForUpadatedCP(){
 		System.out.println("Inside ConsentsVerificationTestCases:");
         CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
@@ -561,6 +562,144 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 	}
 
 	
+	public void testVerifyConsentsWithdrawnWithReturnOption(){
+		System.out.println("Inside ConsentsVerificationTestCases:");
+		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
+		try{
+			cp = (CollectionProtocol) appService.createObject(cp);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to create collection protocol", true);
+		}
+		System.out.println("CP:"+cp.getTitle());
+		Participant participant = BaseTestCaseUtility.initParticipant();
+		
+		try{
+			participant = (Participant) appService.createObject(participant);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to create collection protocol", true);
+		}
+		System.out.println("Participant:"+participant.getFirstName());
+		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+		collectionProtocolRegistration.setCollectionProtocol(cp);
+		collectionProtocolRegistration.setParticipant(participant);
+		collectionProtocolRegistration.setProtocolParticipantIdentifier("");
+		collectionProtocolRegistration.setActivityStatus("Active");
+		try
+		{
+			collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
+					Utility.datePattern("08/15/1975")));
+			collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+			
+		}
+		catch (ParseException e)
+		{			
+			e.printStackTrace();
+		}
+		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+		User user = (User)TestCaseUtility.getObjectMap(User.class);
+		collectionProtocolRegistration.setConsentWitness(user);
+		
+		Collection consentTierResponseCollection = new HashSet();
+		Collection consentTierCollection = cp.getConsentTierCollection();
+		Iterator consentTierItr = consentTierCollection.iterator();
+		
+		while(consentTierItr.hasNext())
+		{
+			ConsentTier consentTier = (ConsentTier)consentTierItr.next();
+			ConsentTierResponse consentResponse = new ConsentTierResponse();
+			consentResponse.setConsentTier(consentTier);
+			consentResponse.setResponse("Yes");
+			consentTierResponseCollection.add(consentResponse);
+		}
+		
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+		
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+		System.out.println("Creating CPR");
+		try{
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to register participant", true);
+		}
+		
+		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+		scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
+		Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
+		scg.setSpecimenCollectionSite(site);
+		scg.setName("New SCG"+UniqueKeyGeneratorUtil.getUniqueKey());		    
+		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
+		System.out.println("Creating SCG");
+		
+					
+		try{
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
+			
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to rcreate SCG", true);
+		}
+		
+		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+		ts.setStorageContainer(null);
+		ts.setSpecimenCollectionGroup(scg);
+		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
+		System.out.println("Befor creating Tissue Specimen");
+		
+		try{
+			ts = (TissueSpecimen) appService.createObject(ts);
+		}
+		catch(Exception e){
+			assertFalse("Failed to create specimen", true);
+		}
+			
+		Collection consentTierCollection1 = cp.getConsentTierCollection();
+		Iterator consentTierItr1 = consentTierCollection1.iterator();
+		Collection newConStatusCol = new HashSet();
+		Collection consentTierStatusCollection = scg.getConsentTierStatusCollection();
+	
+		Iterator conStatusItr =  consentTierStatusCollection.iterator();
+		ConsentTier c1 = (ConsentTier)consentTierItr1.next();
+		ConsentTierStatus consentStatus1 = new ConsentTierStatus();
+		consentStatus1.setStatus("Withdrawn");
+		consentStatus1.setConsentTier(c1);
+		newConStatusCol.add(consentStatus1);
+		ConsentTier c2 = (ConsentTier)consentTierItr1.next();
+		ConsentTierStatus consentStatus2 = new ConsentTierStatus();
+		consentStatus2.setStatus("Withdrawn");
+		consentStatus2.setConsentTier(c2);
+		newConStatusCol.add(consentStatus2);
+		ConsentTier c3 = (ConsentTier)consentTierItr1.next();
+		ConsentTierStatus consentStatus3 = new ConsentTierStatus();
+		consentStatus3.setStatus("Withdrawn");
+		consentStatus3.setConsentTier(c3);
+		newConStatusCol.add(consentStatus3);
+		
+	    scg.setConsentTierStatusCollection(newConStatusCol);
+ 		scg.setConsentWithdrawalOption("Return");
+		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(collectionProtocolRegistration.getId());
+		scg.getCollectionProtocolRegistration().setParticipant(participant);
+		try{
+			scg = (SpecimenCollectionGroup) appService.updateObject(scg);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to update SCG", true);
+		}	
+		
+	}
+	
 	public void testVerifyConsentWithdrawnWithDiscardOption(){
 		System.out.println("Inside ConsentsVerificationTestCases:");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
@@ -698,144 +837,6 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}		
 		
 	}
-	
-	public void testVerifyConsentsWithdrawnWithReturnOption(){
-		System.out.println("Inside ConsentsVerificationTestCases:");
-		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-		try{
-			cp = (CollectionProtocol) appService.createObject(cp);
-		}
-		catch(Exception e){
-			Logger.out.error(e.getMessage(),e);
-           	e.printStackTrace();
-           	assertFalse("Failed to create collection protocol", true);
-		}
-		System.out.println("CP:"+cp.getTitle());
-		Participant participant = BaseTestCaseUtility.initParticipant();
-		
-		try{
-			participant = (Participant) appService.createObject(participant);
-		}
-		catch(Exception e){
-			Logger.out.error(e.getMessage(),e);
-           	e.printStackTrace();
-           	assertFalse("Failed to create collection protocol", true);
-		}
-		System.out.println("Participant:"+participant.getFirstName());
-		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
-		collectionProtocolRegistration.setCollectionProtocol(cp);
-		collectionProtocolRegistration.setParticipant(participant);
-		collectionProtocolRegistration.setProtocolParticipantIdentifier("");
-		collectionProtocolRegistration.setActivityStatus("Active");
-		try
-		{
-			collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
-					Utility.datePattern("08/15/1975")));
-			collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
-			
-		}
-		catch (ParseException e)
-		{			
-			e.printStackTrace();
-		}
-		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
-		User user = (User)TestCaseUtility.getObjectMap(User.class);
-		collectionProtocolRegistration.setConsentWitness(user);
-		
-		Collection consentTierResponseCollection = new HashSet();
-		Collection consentTierCollection = cp.getConsentTierCollection();
-		Iterator consentTierItr = consentTierCollection.iterator();
-		
-		while(consentTierItr.hasNext())
-		{
-			ConsentTier consentTier = (ConsentTier)consentTierItr.next();
-			ConsentTierResponse consentResponse = new ConsentTierResponse();
-			consentResponse.setConsentTier(consentTier);
-			consentResponse.setResponse("Yes");
-			consentTierResponseCollection.add(consentResponse);
-		}
-		
-		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
-		
-		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
-		System.out.println("Creating CPR");
-		try{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
-		}
-		catch(Exception e){
-			Logger.out.error(e.getMessage(),e);
-           	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
-		}
-		
-		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
-		scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
-		Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
-		scg.setSpecimenCollectionSite(site);
-		scg.setName("New SCG"+UniqueKeyGeneratorUtil.getUniqueKey());		    
-		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
-		System.out.println("Creating SCG");
-		
-					
-		try{
-			scg = (SpecimenCollectionGroup) appService.createObject(scg);
-			
-		}
-		catch(Exception e){
-			Logger.out.error(e.getMessage(),e);
-           	e.printStackTrace();
-           	assertFalse("Failed to rcreate SCG", true);
-		}
-		
-		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-		ts.setStorageContainer(null);
-		ts.setSpecimenCollectionGroup(scg);
-		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
-		System.out.println("Befor creating Tissue Specimen");
-		
-		try{
-			ts = (TissueSpecimen) appService.createObject(ts);
-		}
-		catch(Exception e){
-			assertFalse("Failed to create specimen", true);
-		}
-			
-		Collection consentTierCollection1 = cp.getConsentTierCollection();
-		Iterator consentTierItr1 = consentTierCollection1.iterator();
-		Collection newConStatusCol = new HashSet();
-		Collection consentTierStatusCollection = scg.getConsentTierStatusCollection();
-	
-		Iterator conStatusItr =  consentTierStatusCollection.iterator();
-		ConsentTier c1 = (ConsentTier)consentTierItr1.next();
-		ConsentTierStatus consentStatus1 = new ConsentTierStatus();
-		consentStatus1.setStatus("Withdrawn");
-		consentStatus1.setConsentTier(c1);
-		newConStatusCol.add(consentStatus1);
-		ConsentTier c2 = (ConsentTier)consentTierItr1.next();
-		ConsentTierStatus consentStatus2 = new ConsentTierStatus();
-		consentStatus2.setStatus("Withdrawn");
-		consentStatus2.setConsentTier(c2);
-		newConStatusCol.add(consentStatus2);
-		ConsentTier c3 = (ConsentTier)consentTierItr1.next();
-		ConsentTierStatus consentStatus3 = new ConsentTierStatus();
-		consentStatus3.setStatus("Withdrawn");
-		consentStatus3.setConsentTier(c3);
-		newConStatusCol.add(consentStatus3);
-		
-	    scg.setConsentTierStatusCollection(newConStatusCol);
- 		scg.setConsentWithdrawalOption("Return");
-		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(collectionProtocolRegistration.getId());
-		scg.getCollectionProtocolRegistration().setParticipant(participant);
-		try{
-			scg = (SpecimenCollectionGroup) appService.updateObject(scg);
-		}
-		catch(Exception e){
-			Logger.out.error(e.getMessage(),e);
-           	e.printStackTrace();
-           	assertFalse("Failed to update SCG", true);
-		}	
-		
-	}	
 	
 	
 
