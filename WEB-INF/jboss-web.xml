@@ -1,0 +1,13 @@
+<jboss-web>
+
+ <!-- class-loading java2ClassLoadingCompliance="false">
+
+      <loader-repository>
+            de.core:archive=de.war
+            <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
+            <loader-repository-config>UseJBossWebLoader=true</loader-repository-config>
+      </loader-repository>
+ </class-loading -->
+ 	<context-root>/catissuesuite </context-root>
+</jboss-web> 
+
