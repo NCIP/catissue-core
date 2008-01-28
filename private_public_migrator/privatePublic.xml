@@ -1,0 +1,152 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for caTIES-->
+
+<project name="Private_Public" >
+	<property file="privatePublic.properties" />
+	<!--define require dir and Properties -->	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="${basedir}/lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+	
+	<property name="base.dir" value="."/>	
+	<property name="classes.dir" value="./classes" />
+	
+	<property name="drop.oracle.staging.db" value="sqlplus ${stagingDBAUserName}/${stagingDBAPassword}@${privateDBName} as sysdba @.//sql//drop_staging_db_oracle.sql" />
+	<property name="create.oracle.staging.db" value="impdp ${stagingDBUserName}/${stagingDBPassword}@${stagingDBName} remap_schema=${privateDBUserName}:${stagingDBUserName} directory=data_pump_dir dumpfile=catissue.dmp logfile=imp parallel=4 transform=oid:n remap_tablespace=catissuecore:users remap_tablespace=catissuecore_indx:users" />
+	<property name="create.oracle.private.dump" value="expdp ${privateDBUserName}/${privateDBPassword}@${privateDBName} schemas=${privateDBUserName} directory=data_pump_dir dumpfile=catissue.dmp logfile=catissueexp.log" />
+	
+	<property name="drop.mysql.staging.db" value="cmd /c mysql -u ${privateDBUserName} -p${privateDBPassword} -h ${privateDBHost} &lt;./sql/drop_staging_db_mysql.sql" />
+	<property name="create.mysql.staging.db" value="cmd /c mysql -u ${stagingDBUserName} -p${stagingDBPassword} -h ${stagingDBHost}  ${stagingDBName}&lt;privatedump.sql" />
+	<property name="create.mysql.private.dump" value="cmd /c mysqldump -u ${privateDBUserName} -p${privateDBPassword} ${privateDBName}&gt;privatedump.sql" />
+	
+	<property name="drop.oracle.public.db" value="sqlplus ${publicDBAUserName}/${publiceDBAPassword}@${publicDBName} as sysdba @.//sql//drop_public_db_oracle.sql" />
+	<property name="create.oracle.public.db" value="impdp ${publicDBUserName}/${publicDBPassword}@${publicDBName} remap_schema=${stagingDBUserName}:${publicDBUserName} directory=data_pump_dir dumpfile=public.dmp logfile=impcatissue.log parallel=4 transform=oid:n remap_tablespace=catissuecore:users remap_tablespace=catissuecore_indx:users" />
+	<property name="create.oracle.public.dump" value="expdp ${stagingDBUserName}/${stagingDBPassword}@${stagingDBName} schemas=${stagingDBUserName} directory=data_pump_dir dumpfile=public.dmp logfile=privateexp.log" />
+	
+	<property name="drop.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} &lt;./sql/drop_public_db_mysql.sql" />
+	<property name="create.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost}  ${publicDBName}&lt;publicdump.sql" />
+	<property name="create.mysql.public.dump" value="cmd /c mysqldump -u ${stagingDBUserName} -p${stagingDBPassword} -h ${stagingDBHost} ${stagingDBName}&gt;publicdump.sql" />
+	
+	
+	<target name="generate_command_file" depends="replaceToken">
+		<copy file="./conf/commands.properties" todir="${basedir}" overwrite="true"/>
+		<if>
+			<equals arg1="${privateDBType}" arg2="oracle" />
+			<then>
+				<replace file="${basedir}/commands.properties">
+					<replacefilter token="@@DROP_STAGING_DB@@" value="${drop.oracle.staging.db}" />
+					<replacefilter token="@@CREATE_PRIVATE_DUMP@@" value="${create.oracle.private.dump}" />
+					<replacefilter token="@@CREATE_STAGING_DB@@" value="${create.oracle.staging.db}" />
+				</replace>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${privateDBType}" arg2="mysql" />
+			<then>
+				<replace file="${basedir}/commands.properties">
+					<replacefilter token="@@DROP_STAGING_DB@@" value="${drop.mysql.staging.db}" />
+					<replacefilter token="@@CREATE_PRIVATE_DUMP@@" value="${create.mysql.private.dump}" />
+					<replacefilter token="@@CREATE_STAGING_DB@@" value="${create.mysql.staging.db}" />
+				</replace>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${publicDBType}" arg2="oracle" />
+			<then>
+				<replace file="${basedir}/commands.properties">
+					<replacefilter token="@@DROP_PUBLIC_DB@@" value="${drop.oracle.public.db}" />
+					<replacefilter token="@@CREATE_STAGING_DUMP@@" value="${create.oracle.public.dump}" />
+					<replacefilter token="@@CREATE_PUBLIC_DB@@" value="${create.oracle.public.db}" />
+				</replace>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${publicDBType}" arg2="mysql" />
+			<then>
+				<replace file="${basedir}/commands.properties">
+					<replacefilter token="@@DROP_PUBLIC_DB@@" value="${drop.mysql.public.db}" />
+					<replacefilter token="@@CREATE_STAGING_DUMP@@" value="${create.mysql.public.dump}" />
+					<replacefilter token="@@CREATE_PUBLIC_DB@@" value="${create.mysql.public.db}" />
+				</replace>
+			</then>
+		</if>
+	</target>
+	
+	<target name="compile">
+		<javac destdir="${classes.dir}" includes="**/*.java" includeAntRuntime="false">
+			<src path="${basedir}"/>
+			<classpath>
+			  <fileset dir="${basedir}">
+					<include name="**/*.jar"/>
+			  </fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<path id="cp1">
+		<fileset dir="${basedir}/lib">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="migrate" depends="compile" > 
+		<java classname="PrivateToPublicMigrator" fork="true">
+			<classpath>
+				<pathelement location="${classes.dir}"/>
+				<pathelement location="."/>
+			</classpath>
+			<classpath refid="cp1"/>
+		</java>
+	</target>
+
+	<target name="replaceToken" >
+		<copy file="./conf/hibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
+		<copy file="./conf/DynamicExtensionsHibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
+		<echo message="${stagingDBType}" />
+		<if>
+			<equals arg1="${stagingDBType}" arg2="mysql"/>
+			<then>
+				<replace dir="${classes.dir}">
+						<replacefilter token="@@JDBC_DRIVER@@" value="com.mysql.jdbc.Driver" />
+						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:mysql://${stagingDBHost}:${stagingDBPort}/${stagingDBName}" />
+						<replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}" />
+						<replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}" />
+				</replace>
+				<copy file="./conf/drop_staging_db_mysql.sql" todir="${basedir}/sql" overwrite="true" />
+				<copy file="./conf/drop_public_db_mysql.sql" todir="${basedir}/sql" overwrite="true" />
+			</then>
+		</if>
+		<echo message="${stagingDBType}" />
+		<mkdir dir="${basedir}/sql"/>
+		<if>
+			<equals arg1="${stagingDBType}" arg2="oracle"/>
+			
+			<then>
+				<replace dir="${classes.dir}">
+						<replacefilter token="org.hibernate.dialect.MySQLDialect" value="org.hibernate.dialect.Oracle9Dialect" />
+						<replacefilter token="@@JDBC_DRIVER@@" value="oracle.jdbc.driver.OracleDriver" />
+						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:oracle:thin:@${stagingDBHost}:${stagingDBPort}:${stagingDBName}" />
+						<replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}" />
+						<replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}" />
+				</replace>
+				<copy file="./conf/drop_staging_db_oracle.sql" todir="${basedir}/sql" overwrite="true" />
+				<copy file="./conf/drop_public_db_oracle.sql" todir="${basedir}/sql" overwrite="true" />
+			</then>
+		</if>
+		<replace dir="${basedir}/sql">
+			<include name="**/*.sql" />
+				<replacefilter token="@@STAGING_DB_NAME@@" value="${stagingDBName}" />
+				<replacefilter token="@@STAGING_DB_USER_NAME@@" value="${stagingDBUserName}" />
+				<replacefilter token="@@STAGING_DB_PASSWORD@@" value="${stagingDBPassword}" />
+				<replacefilter token="@@STAGING_DB_HOST@@" value="${stagingDBHost}" />
+
+				<replacefilter token="@@PUBLIC_DB_NAME@@" value="${publicDBName}" />
+				<replacefilter token="@@PUBLIC_DB_USER_NAME@@" value="${publicDBUserName}" />
+				<replacefilter token="@@PUBLIC_DB_PASSWORD@@" value="${publicDBPassword}" />
+				<replacefilter token="@@PUBLIC_DB_HOST@@" value="${publicDBHost}" />
+			</replace>
+	</target>
+</project>
