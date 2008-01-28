@@ -51,10 +51,12 @@
               <!-- link 2 ends -->
 			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>	
   		      <!-- link 5 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInHelp.do?dummy=dummy'">
-                <html:link styleClass="mainMenuLink" page="/LoggedInHelp.do?dummy=dummy">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" >
+                <html:link styleClass="mainMenuLink" target="_NEW"
+				href="http://gforge.nci.nih.gov/plugins/scmcvs/cvsweb.php/catissuecore/caTissueSuite%20Phase%202/TrainingMaterials/?cvsroot=cacorecvs">
                 	<bean:message key="app.help" />
                 </html:link>
+
               </td>
               <!-- link 5 ends -->
               

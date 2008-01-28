@@ -21,7 +21,7 @@
               <!-- link 2 ends -->
 			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>	
   		      <!-- link 5 begins -->
-              <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='Help.do'">
+              <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='http://gforge.nci.nih.gov/plugins/scmcvs/cvsweb.php/catissuecore/caTissueSuite/TrainingMaterial/?cvsroot=cacorecvs'">
                 <html:link styleClass="mainMenuLink" page="/Help.do">
                 	<bean:message key="app.help" />
                 </html:link>

@@ -72,10 +72,11 @@
 			 <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  
              <!-- link 6 begins -->
-             <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInHelp.do?dummy=dummy'">
-               <html:link styleClass="mainMenuLink" page="/LoggedInHelp.do?dummy=dummy">
-               		<bean:message key="app.help" />
-               </html:link>
+             <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()">
+                 <html:link styleClass="mainMenuLink" target="_NEW"
+				href="http://gforge.nci.nih.gov/plugins/scmcvs/cvsweb.php/catissuecore/caTissueSuite%20Phase%202/TrainingMaterials/?cvsroot=cacorecvs">
+                	<bean:message key="app.help" />
+                </html:link>
              </td>
              <!-- link 6 ends -->
              
@@ -107,8 +108,9 @@
 			<td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  
             <!-- link 3 begins -->
-            <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Help.do'">
-                <html:link styleClass="mainMenuLink" page="/Help.do">
+            <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" >
+                  <html:link styleClass="mainMenuLink" target="_NEW"
+				href="http://gforge.nci.nih.gov/plugins/scmcvs/cvsweb.php/catissuecore/caTissueSuite%20Phase%202/TrainingMaterials/?cvsroot=cacorecvs">
                 	<bean:message key="app.help" />
                 </html:link>
             </td>
