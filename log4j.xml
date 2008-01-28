@@ -7,7 +7,7 @@
 <!--                                                                       -->
 <!-- ===================================================================== -->
 
-<!-- $Id: log4j.xml,v 1.1.8.3 2008/01/28 07:58:57 abhijit_naik Exp $ -->
+<!-- $Id: log4j.xml,v 1.1.8.4 2008/01/28 10:51:13 abhijit_naik Exp $ -->
 
 <!--
    | For more configuration infromation and examples see the Jakarta Log4j
@@ -26,7 +26,6 @@
       <param name="File" value="${jboss.server.home.dir}/log/server.log"/>
       <param name="Append" value="false"/>
       <param name="Threshold" value="WARN"/>
-	  <param name="MaxBackupIndex" value="2"/>
       <!-- Rollover at midnight each day -->
       <param name="DatePattern" value="'.'yyyy-MM-dd"/>
 
