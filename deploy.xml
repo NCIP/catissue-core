@@ -1238,55 +1238,39 @@ Thanking You,
 		</delete>
 	</target>
 	
-	<target name="deploy_gate" depends="assertforgate">
-		<if>
-			<equals arg1="yes" arg2="${deploy.gate}" />
-			<then>
-				<echo message="Deploying gate...." />
-				<unzip src="gate.zip" dest="${jboss.home.dir}/server/default/deploy/gate.war" /> 
-				<replace file="${jboss.home.dir}/server/default/deploy/gate.war/gate_3_1/application/plugins/CaTIES/creole.xml">
-					<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
-					<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
-					<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
-				</replace>
-			</then>
-		</if>
+	<target name="deploy_gate" depends="assertforgate">		
+		<echo message="Deploying gate...." />
+		<unzip src="gate.zip" dest="${jboss.home.dir}/server/default/deploy/gate.war" /> 
+		<replace file="${jboss.home.dir}/server/default/deploy/gate.war/gate_3_1/application/plugins/CaTIES/creole.xml">
+			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
+			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
+			<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
+		</replace>
 	</target>
 	
 	<target name="assertforgate">
 		<if>
-			<equals arg1="" arg2="${deploy.gate}" />
+			<equals arg1="" arg2="${caties.mmtx.home}" />
 			<then>
-				<fail message="The property 'deploy.gate' can not be empty" />
+				<fail message="The property 'caties.mmtx.home' can not be empty" />
 			</then>
 		</if>
 		<if>
-			<equals arg1="yes" arg2="${deploy.gate}" />
+			<equals arg1="" arg2="${jboss.home.dir}" />
 			<then>
-				<if>
-					<equals arg1="" arg2="${caties.mmtx.home}" />
-					<then>
-						<fail message="The property 'caties.mmtx.home' can not be empty" />
-					</then>
-				</if>
-				<if>
-					<equals arg1="" arg2="${jboss.home.dir}" />
-					<then>
-						<fail message="The property 'jboss.home.dir' can not be empty" />
-					</then>
-				</if>
-				<if>
-					<equals arg1="" arg2="${jboss.server.host}" />
-					<then>
-						<fail message="The property 'jboss.server.host' can not be empty" />
-					</then>
-				</if>
-				<if>
-					<equals arg1="" arg2="${jboss.server.port}" />
-					<then>
-						<fail message="The property 'jboss.server.port' can not be empty" />
-					</then>
-				</if>
+				<fail message="The property 'jboss.home.dir' can not be empty" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${jboss.server.host}" />
+			<then>
+				<fail message="The property 'jboss.server.host' can not be empty" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="" arg2="${jboss.server.port}" />
+			<then>
+				<fail message="The property 'jboss.server.port' can not be empty" />
 			</then>
 		</if>
 	</target>
