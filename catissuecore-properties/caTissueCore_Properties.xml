@@ -250,7 +250,7 @@
  -->	
 	<property>
 		<name>containers_max_limit</name>
-		<value>200</value>
+		<value>5</value>
 	</property>
 <!-- Constant for limiting number of storage containers shown in dropdowns on UI-->		
 
