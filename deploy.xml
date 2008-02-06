@@ -41,6 +41,13 @@
 			</then>
 		</if>
 		<if>
+			<equals arg1="" arg2="${jboss.server.name}" />
+			<then>
+				<fail message="The property 'jboss.server.name' can not be empty" />
+			</then>
+		</if>
+
+		<if>
 			<or>
 				<equals arg1="mysql" arg2="${database.type}" />
 				<equals arg1="oracle" arg2="${database.type}" />
@@ -152,8 +159,6 @@
 			<fileset dir="${base.dir}/images" />
 		</copy>
 	</target>
-
-
 
 	<!--Modify Configuration For MySQL-->
 	<target name="mysql_config">
@@ -294,19 +299,20 @@
 
 	</target>
 	<!--Server clean-up-->
+	
 	<target name="clean_server" description="deletes the WAR file and cache from server ">
-		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war" />
-		<delete file="${jboss.home.dir}/server/default/deploy/dynamicExtensions.war" />
-		<delete file="${jboss.home.dir}/server/default/deploy/caTissuePrintWebService.war" />
-		<mkdir dir="${jboss.home.dir}/server/default/work"/>
-		<mkdir dir="${jboss.home.dir}/server/default/tmp"/>
+		<delete file="${jboss.server.url}/deploy/catissuecore.war" />
+		<delete file="${jboss.server.url}/deploy/dynamicExtensions.war" />
+		<delete file="${jboss.server.url}/deploy/caTissuePrintWebService.war" />
+		<mkdir dir="${jboss.server.url}/work"/>
+		<mkdir dir="${jboss.server.url}/tmp"/>
 		<delete includeemptydirs="true">
-			<fileset dir="${jboss.home.dir}/server/default/work">
+			<fileset dir="${jboss.server.url}/work">
 				<include name="**/*" />
 			</fileset>
 		</delete>
 		<delete includeemptydirs="true">
-			<fileset dir="${jboss.home.dir}/server/default/tmp">
+			<fileset dir="${jboss.server.url}/tmp">
 				<include name="**/*" />
 			</fileset>
 		</delete>
@@ -380,12 +386,12 @@
 	<target name="copy_files">
 		<echo message="Copying caTISSUECore Application Components..." />
 
-		<copy todir="${jboss.home.dir}/server/default/catissuecore-properties" overwrite="true">
+		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
 			<fileset dir="${temp.dir}/catissuecore-properties">
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
+		<copy todir="${jboss.server.url}/deploy" overwrite="true">
 			<fileset dir="${temp.dir}">
 				<include name="catissuecore.war" />
 				<include name="catissuecore-ds.xml" />
@@ -394,11 +400,11 @@
 				<include name="caTissuePrintWebService.war" />
 			</fileset>
 		</copy>
-		<replace dir="${jboss.home.dir}/server/default/catissuecore-properties">
+		<replace dir="${jboss.server.url}/catissuecore-properties">
 			<include name="ApplicationSecurityConfig.xml" />
-			<replacefilter token="@@hibernate-config-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/catissuecore.hibernate.cfg.xml" />
+			<replacefilter token="@@hibernate-config-file@@" value="${jboss.server.url}/catissuecore-properties/catissuecore.hibernate.cfg.xml" />
 		</replace>
-		<copy todir="${jboss.home.dir}/server/default/lib">
+		<copy todir="${jboss.server.url}/lib">
 			<fileset dir="${lib.dir}">
 				<include name="${mysql.lib}" />
 				<include name="${oracle.lib}" />
@@ -452,7 +458,7 @@
 			
 	<!--Target for deployment with jboss config-->
 	<target name="config_jboss_files">
-		<copy todir="${jboss.home.dir}/server/default/conf" overwrite="true">
+		<copy todir="${jboss.server.url}/conf" overwrite="true">
 			<fileset dir="${temp.dir}">
 				<include name="login-config.xml" />
 				<include name="log4j.xml" />
@@ -461,18 +467,18 @@
 
 		<replace dir="${temp.dir}">
 			<include name="properties-service.xml" />
-			<replacefilter token="@@app-security-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/ApplicationSecurityConfig.xml" />
-			<replacefilter token="@@app-properties-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/caTissueCore_Properties.xml" />
-			<replacefilter token="@@app-dynamicuixml-file@@" value="${jboss.home.dir}/server/default/catissuecore-properties/dynamicUI.xml" />
+			<replacefilter token="@@app-security-file@@" value="${jboss.server.url}/catissuecore-properties/ApplicationSecurityConfig.xml" />
+			<replacefilter token="@@app-properties-file@@" value="${jboss.server.url}/catissuecore-properties/caTissueCore_Properties.xml" />
+			<replacefilter token="@@app-dynamicuixml-file@@" value="${jboss.server.url}/catissuecore-properties/dynamicUI.xml" />
 		</replace>
 
 
-		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
+		<copy todir="${jboss.server.url}/deploy" overwrite="true">
 			<fileset dir="${temp.dir}">
 				<include name="properties-service.xml" />
 			</fileset>
 		</copy>
-		<delete file="${jboss.home.dir}/server/default/lib/hibernate2.jar" />
+		<delete file="${jboss.server.url}/lib/hibernate2.jar" />
 	</target>
 	
 	<!--Target for Database Creation-->
@@ -1075,7 +1081,7 @@ Thanking You,
 			<include name="titli.properties" />
 			<replacefilter token="@@username@@" value="${database.username}" />
 			<replacefilter token="@@password@@" value="${database.password}" />
-			<replacefilter token="@@titliindexlocation@@" value="${jboss.home.dir}/server/default/catissuecore-properties/titli-index" />
+			<replacefilter token="@@titliindexlocation@@" value="${jboss.server.url}/catissuecore-properties/titli-index" />
 			<replacefilter token="@@databasename@@" value="${database.name}" />
 			<replacefilter token="@@databasetype@@" value="${database.type}" />
 		</replace>
@@ -1240,8 +1246,8 @@ Thanking You,
 	
 	<target name="deploy_gate" depends="assertforgate">		
 		<echo message="Deploying gate...." />
-		<unzip src="gate.zip" dest="${jboss.home.dir}/server/default/deploy/gate.war" /> 
-		<replace file="${jboss.home.dir}/server/default/deploy/gate.war/gate_3_1/application/plugins/CaTIES/creole.xml">
+		<unzip src="gate.zip" dest="${jboss.server.url}/deploy/gate.war" /> 
+		<replace file="${jboss.server.url}/deploy/gate.war/gate_3_1/application/plugins/CaTIES/creole.xml">
 			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
 			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 			<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
