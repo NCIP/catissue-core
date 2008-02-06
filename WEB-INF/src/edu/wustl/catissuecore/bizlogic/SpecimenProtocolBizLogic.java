@@ -112,19 +112,23 @@ public class SpecimenProtocolBizLogic extends DefaultBizLogic
 	public String getEndDate(long specimenProtocolIdentifier ) throws DAOException 
 	{
 		String endDate="";
-    	SpecimenProtocol specimenProtocol = (SpecimenProtocol)
-    		retrieveAttribute(SpecimenProtocol.class.getName(), 
-    				specimenProtocolIdentifier, Constants.SYSTEM_IDENTIFIER);
+		
+	   	String sourceObjectName = SpecimenProtocol.class.getName() ;
+    	String[] selectColumnName = null;
+    	String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER };
+    	String[] whereColumnCondition = {"="};
+    	Object[] whereColumnValue = {new Long(specimenProtocolIdentifier) };
+    	String joinCondition = null ;
     	
-    	if (specimenProtocol != null)
-    	{
-    		if(specimenProtocol.getEndDate()!= null)
-    			endDate = 
-    				Utility.parseDateToString(
-    						specimenProtocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY
-    										);
-    	}
+//          Retrieve the endates 
+            List protocolList = retrieve(sourceObjectName, selectColumnName, whereColumnName,
+                    whereColumnCondition, whereColumnValue, joinCondition);
             
-		return endDate ;
-	}
+            if(protocolList != null && !protocolList.isEmpty()   )
+            {
+            	SpecimenProtocol tmpObject = (SpecimenProtocol ) protocolList.get(0 );
+            	endDate = Utility.parseDateToString(tmpObject.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY); 
+            }
+            
+		return endDate ;	}
 }
