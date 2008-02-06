@@ -1161,8 +1161,9 @@ Thanking You,
 			<arg value="${filename}" />
 			<arg value="${hookentity}" />
 			<arg value="${mainContainerList}" />
-			<arg value="${condition}" />
 			<arg value="${package}" />
+			<arg value="${condition}" />
+			
 			<classpath>
 				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
 				<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
