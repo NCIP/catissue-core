@@ -1648,7 +1648,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	// Checks for whether the user is trying to use a container without privilege to use it
 	// This is needed since now users can enter the values in the edit box
-	private boolean validateContainerAccess(StorageContainer container, SessionDataBean sessionDataBean) throws SMException
+	public boolean validateContainerAccess(StorageContainer container, SessionDataBean sessionDataBean) throws SMException
 	{
 		Logger.out.debug("validateContainerAccess..................");
 		String userName = sessionDataBean.getUserName();
@@ -3266,7 +3266,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @return true if the given continer can hold the CollectionProtocol.
      * @throws DAOException 
 	 */
-	public boolean canHoldCollectionProtocol(int collectionProtocolId, StorageContainer storageContainer) throws DAOException
+	public boolean canHoldCollectionProtocol(long collectionProtocolId, StorageContainer storageContainer) throws DAOException
 	{
 		boolean canHold = true;
 		Collection collectionProtocols = (Collection)retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "elements(collectionProtocolCollection)");//storageContainer.getCollectionProtocolCollection();
@@ -3280,6 +3280,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				if (cp.getId().longValue()==collectionProtocolId)
 				{
 					return true;
+					
 				}
 			}
 		}

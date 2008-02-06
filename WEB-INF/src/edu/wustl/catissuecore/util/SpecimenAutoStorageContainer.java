@@ -8,12 +8,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import net.sf.ehcache.CacheException;
+
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -119,62 +123,130 @@ public class SpecimenAutoStorageContainer {
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance()
 		.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		
-		TreeMap containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(
+		Map containerMap;
+		try {
+			containerMap = StorageContainerUtil.getContainerMapFromCache();
+			populateStorageLocations(specimenDataBeanList,
+					collectionProtocolId.longValue(), containerMap, bean, className);
+
+		} catch (Exception exception) {
+			// TODO Auto-generated catch block
+			throw new DAOException(exception.getMessage(),exception);
+		}
+		
+			/*bizLogic.getAllocatedContaienrMapForSpecimen(
 				collectionProtocolId.longValue(), className, 0, "false", bean, true);
-	
-		populateStorageLocations(specimenDataBeanList, containerMap);
+	*/
 	}
 	
-	protected void populateStorageLocations(List specimenDataBeanList, Map containerMap)
+	protected void populateStorageLocations(List specimenDataBeanList, Long cpId, 
+			Map containerMap, SessionDataBean bean, String classType)throws SMException,DAOException
 	{
 		
 		int counter = 0;
 
-		if (!containerMap.isEmpty())
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance()
+		.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		if (containerMap.isEmpty())
 		{
-			Object[] containerId = containerMap.keySet().toArray();
+			return;
+		}
+		Object[] containerId = containerMap.keySet().toArray();
 
-			for (int i = 0; i < containerId.length; i++)
+		for (int i = 0; i < containerId.length; i++)
+		{
+			if(counter >= specimenDataBeanList.size())
 			{
-				Map xDimMap = (Map) containerMap.get(containerId[i]);
+				break;
+			}
 
-				if (!xDimMap.isEmpty())
-				{
-					Object[] xDim = xDimMap.keySet().toArray();
+			String storageId = ((NameValueBean) containerId[i]).getValue();
+			StorageContainer sc = new StorageContainer();
+			sc.setId( new Long(storageId));
+			sc.setName(((NameValueBean) containerId[i]).getName());
 
-					for (int j = 0; j < xDim.length; j++)
-					{
-						List yDimList = (List) xDimMap.get(xDim[j]);
+			if (!checkStorageContainerRules(bizLogic, sc, bean, classType))
+			{
+				continue;
+			}
+			
 
-						for (int k = 0; k < yDimList.size(); k++)
-						{
-							if(counter < specimenDataBeanList.size())
-							{
-								GenericSpecimen specimenDataBean = (GenericSpecimen)specimenDataBeanList.get(counter);
-								String stName = ((NameValueBean) containerId[i]).getName();
-								String posOne = ((NameValueBean) xDim[j]).getValue();
-								String posTwo = ((NameValueBean) yDimList.get(k)).getValue();
-								String storageValue = stName+":"+posOne+" ,"+posTwo; 
-								if(!storageContainerIds.contains(storageValue))
-								{													
-									specimenDataBean.setContainerId(((NameValueBean) containerId[i]).getValue());
-									specimenDataBean.setSelectedContainerName(stName);
-									specimenDataBean.setPositionDimensionOne(posOne);
-									specimenDataBean.setPositionDimensionTwo(posTwo);
-									storageContainerIds.add(storageValue);
-									counter++;									
-								}
-							}
-							else
-							{
-								break;
-							}
-						}
-					}
-				}
+			Map xDimMap = (Map) containerMap.get(containerId[i]);
+			if (!xDimMap.isEmpty())
+			{
+				counter = populateStoragePositions(specimenDataBeanList,  counter,
+						 sc, xDimMap);
 			}
 		}
 
+
+	}
+
+	private boolean checkStorageContainerRules(StorageContainerBizLogic bizLogic
+			, StorageContainer sc, SessionDataBean bean, String classType) 
+				throws DAOException,SMException
+	{
+		if (!bizLogic.canHoldCollectionProtocol(cpId, sc))
+		{
+			return false;
+		}
+
+		if (!bizLogic.canHoldSpecimenClass(classType, sc))
+		{
+			return false;
+		}
+		if (!bizLogic.validateContainerAccess(sc , bean))
+		{
+			return false;
+		}
+		return true;
+	}
+	/**
+	 * @param specimenDataBeanList
+	 * @param counter
+	 * @param sc
+	 * @param xDimMap
+	 * @return
+	 */
+	private int populateStoragePositions(List specimenDataBeanList, int counter,
+			StorageContainer sc, Map xDimMap)
+	{
+		
+		Object[] xDim = xDimMap.keySet().toArray();
+		
+		for (int j = 0; j < xDim.length; j++)
+		{
+			List yDimList = (List) xDimMap.get(xDim[j]);
+			if(counter >= specimenDataBeanList.size())
+			{
+				break;
+			}
+
+			for (int k = 0; k < yDimList.size(); k++)
+			{
+				if(counter >= specimenDataBeanList.size())
+				{
+					break;
+				}
+				GenericSpecimen specimenDataBean = 
+					(GenericSpecimen)specimenDataBeanList.get(counter);
+				String stName = sc.getName();
+				String posOne = ((NameValueBean) xDim[j]).getValue();
+				String posTwo = ((NameValueBean) yDimList.get(k)).getValue();
+				String storageValue = stName+":"+posOne+" ,"+posTwo; 
+
+				if(!storageContainerIds.contains(storageValue))
+				{													
+					specimenDataBean.setContainerId(String.valueOf(sc.getId()));
+					specimenDataBean.setSelectedContainerName(stName);
+					specimenDataBean.setPositionDimensionOne(posOne);
+					specimenDataBean.setPositionDimensionTwo(posTwo);
+					storageContainerIds.add(storageValue);
+					counter++;									
+				}
+			}
+		}
+		return counter;
 	}
 
 }
