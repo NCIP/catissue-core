@@ -725,9 +725,9 @@ public class Utility extends edu.wustl.common.util.Utility {
 		 * width of the grid. Now the width of each column is set to 80.
 		 */
 		String columnWidth = null;
-		if (columnName.trim().equals("ID")) {
+		if ("ID".equals(columnName.trim())) {
 			columnWidth = "0";
-		} else if (columnName.trim().equals("")) {
+		} else if ("".equals(columnName.trim())) {
 			columnWidth = "20";
 		} else {
 			columnWidth = "80";
