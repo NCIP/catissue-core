@@ -785,6 +785,11 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			//collectionProtocolRegistration.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 		}
 
+		Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
+				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);
+		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
+		
+		updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
 		/* for offset 27th Dec 2007 */
 		// Check if Offset is present.If it is present then all the below
 		// hierarchy protocols are shifted according to the Offset.Integer offsetOld=oldCollectionProtocolRegistration.getOffset();
@@ -799,15 +804,14 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				offset = offsetNew.intValue() - 0;
 			if (offset != 0)
 			{
-				//				collectionProtocolRegistration.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(oldCollectionProtocolRegistration.getRegistrationDate(), offset));
 				updateOffsetForEvents(dao, sessionDataBean, collectionProtocolRegistration, offset);
 				checkAndUpdateChildOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
 				updateForOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
 			}
-			else
+			/*else
 			{
-				updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
-			}
+				//updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
+			}*/
 		}
 
 		/* offset changes end */
@@ -835,8 +839,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	private void updateConsentResponseForSCG(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
-		Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
-				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);
+		/*Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
+				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);*/
+		Collection specimenCollectionGroupCollection = collectionProtocolRegistration.getSpecimenCollectionGroupCollection();
 		Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
 		while (specimenCollectionGroupIterator.hasNext())
 		{
@@ -1662,8 +1667,10 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	private void updateOffsetForEvents(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration,
 			int offset) throws UserNotAuthorizedException, DAOException
 	{
-		Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
-				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);
+		/*Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
+				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);*/
+		Collection specimenCollectionGroupCollection = collectionProtocolRegistration.getSpecimenCollectionGroupCollection();
+		
 		if (!specimenCollectionGroupCollection.isEmpty())
 		{
 			Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
