@@ -75,6 +75,7 @@ public class SpecimenAutoStorageContainer {
 	public void setCollectionProtocolSpecimenStoragePositions(
 			SessionDataBean sessionDataBean) throws DAOException
 	{
+		
  
 		storageContainerIds.clear();
 		Set<Long> keySet = collectionProtocolSpecimenMap.keySet();
@@ -122,7 +123,7 @@ public class SpecimenAutoStorageContainer {
  
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance()
 		.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		
+
 		Map containerMap;
 		try {
 			containerMap = StorageContainerUtil.getContainerMapFromCache();
@@ -139,7 +140,7 @@ public class SpecimenAutoStorageContainer {
 	*/
 	}
 	
-	protected void populateStorageLocations(List specimenDataBeanList, Long cpId, 
+	protected void populateStorageLocations(List specimenDataBeanList, Long collectionProtocolId, 
 			Map containerMap, SessionDataBean bean, String classType)throws SMException,DAOException
 	{
 		
@@ -165,7 +166,7 @@ public class SpecimenAutoStorageContainer {
 			sc.setId( new Long(storageId));
 			sc.setName(((NameValueBean) containerId[i]).getName());
 
-			if (!checkStorageContainerRules(bizLogic, sc, bean, classType))
+			if (!checkStorageContainerRules(bizLogic, sc, bean, classType, collectionProtocolId))
 			{
 				continue;
 			}
@@ -183,10 +184,11 @@ public class SpecimenAutoStorageContainer {
 	}
 
 	private boolean checkStorageContainerRules(StorageContainerBizLogic bizLogic
-			, StorageContainer sc, SessionDataBean bean, String classType) 
-				throws DAOException,SMException
+			, StorageContainer sc, SessionDataBean bean, String classType, 
+			long collectionProtocolId)throws DAOException,SMException
 	{
-		if (!bizLogic.canHoldCollectionProtocol(cpId, sc))
+		
+		if (!bizLogic.canHoldCollectionProtocol(collectionProtocolId, sc))
 		{
 			return false;
 		}
