@@ -171,9 +171,11 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 							{
 								if (childCollectionProtocolRegistration.getOffset().intValue() != 0)
 								{
-									childCollectionProtocolRegistration.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility
-											.getNewDateByAdditionOfDays(childCollectionProtocolRegistration.getRegistrationDate(),
-													childCollectionProtocolRegistration.getOffset().intValue()));
+									//bug 6500 so that CP with null studyCalendarEventPoint inherits Appropriate date
+									if(cp.getStudyCalendarEventPoint()!= null)
+									{
+									childCollectionProtocolRegistration.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(childCollectionProtocolRegistration.getRegistrationDate(),childCollectionProtocolRegistration.getOffset().intValue()));
+									}
 								}
 							}
 							insertCPR(childCollectionProtocolRegistration, dao, sessionDataBean);
@@ -186,8 +188,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 							if (offset != null)
 							{
 								collectionProtocolRegistrationCheck.setOffset(offset);
+								//bug 6500 so that CP with null studyCalendarEventPoint inherits Appropriate date
+								if(cp.getStudyCalendarEventPoint()!= null)
+								{
 								collectionProtocolRegistrationCheck.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility
 										.getNewDateByAdditionOfDays(collectionProtocolRegistrationCheck.getRegistrationDate(), offset.intValue()));
+								}
 							}
 							dao.update(collectionProtocolRegistrationCheck, sessionDataBean, true, true, false);
 							updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, collectionProtocolRegistrationCheck);
