@@ -910,7 +910,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		Date evtLastDate = SCGTreeForCPBasedView(xmlString, cpId, participantId, regDate, offset);
 
 		String hql = "select  cp." + Constants.CHILD_COLLECTION_PROTOCOL_COLLECTION + " from " + CollectionProtocol.class.getName()
-				+ " as cp where cp.id= " + cpId.toString() ;
+				+ " as cp where cp.id= " + cpId.toString();
 		List cpchildList = executeQuery(hql);
 
 		if (cpchildList.size() != 0)
@@ -929,7 +929,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					dispName = cp.getShortTitle() + ":" + anticipatoryDate;
 
 				}
-				CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, cp.getId(),cp.getType());
+				CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, cp.getId(), cp.getType());
 				String participantRegStatus = "Pending";
 				if (cpr != null)
 					participantRegStatus = "Registered";
@@ -940,7 +940,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				if (cpr != null)
 					childCPtree(xmlString, cp.getId(), participantId, participantRegDate, cpr.getOffset());
 				else
-					childCPtree(xmlString, cp.getId(), participantId, participantRegDate, null);
+					childCPtree(xmlString, cp.getId(), participantId, participantRegDate, offsetForCPOrEvent);
 				xmlString.append("</node>");
 			}
 
@@ -953,13 +953,14 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	{
 		Date participantRegDate = null;
 		//		bug 6560 fix
-		if (cp.getSequenceNumber() != null)
-		{
-			Long cpId = cp.getId();
-			Double eventPoint = cp.getStudyCalendarEventPoint();
-			CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, cpId,cp.getType());
 
-			if (cpr == null)
+		Long cpId = cp.getId();
+		Double eventPoint = cp.getStudyCalendarEventPoint();
+		CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, cpId, cp.getType());
+
+		if (cpr == null)
+		{
+			if (cp.getSequenceNumber() != null)
 			{
 				int noOfDaysToAdd = 0;
 				if (eventPoint != null)
@@ -995,12 +996,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 						participantRegDate = Utility.getNewDateByAdditionOfDays(parentRegDate, Constants.DAYS_TO_ADD_CP);
 				}
 			}
-			else
-			{
-				participantRegDate = cpr.getRegistrationDate();
-			}
-
 		}
+		else
+		{
+			participantRegDate = cpr.getRegistrationDate();
+		}
+
 		return participantRegDate;
 	}
 
@@ -1047,8 +1048,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		return null;
 	}
 
-	public CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId,String type) throws ClassNotFoundException,
-			DAOException
+	public CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId, String type)
+			throws ClassNotFoundException, DAOException
 	{
 		//Date regDate = null;
 		CollectionProtocolRegistration cpr = null;
@@ -1066,10 +1067,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			{
 				Integer offset = (Integer) obj[2];
 				offsetForCPOrEvent = offset;
-				if(!Constants.ARM_CP_TYPE.equals(type))
+				if (!Constants.ARM_CP_TYPE.equals(type))
 					offsetForArmCP = offsetForCPOrEvent;
 				cpr.setOffset(offset);
 			}
+			
 			return cpr;
 		}
 		return null;
