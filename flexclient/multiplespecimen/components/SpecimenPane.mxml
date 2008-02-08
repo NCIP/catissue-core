@@ -262,10 +262,9 @@
 	    	var pop1:DerivedSpecimenPane = DerivedSpecimenPane(
 	        PopUpManager.createPopUp(this, DerivedSpecimenPane, true));
     		pop1.derivedSpColl = spData.derivedSpColl;
-    		//Alert.show("msParameter in createPopup function:"+mspParameter);
-    		pop1.msParameter = mspParameter;
-			pop1.title = "Create Derived Specimen";
 
+//    		pop1.msParameter = mspParameter;
+			pop1.title = "Create Derived Specimen";
 			/* creating a new derived sp array collection in case of cancel button pressed on derived sp page */
 			var tempDerivedSpColl:ArrayCollection = new ArrayCollection();
 			for(var i:int=0;i<spData.derivedSpColl.length;i++)

@@ -33,8 +33,9 @@
 
 
 		private var counter:int = 1;
-		private var mspParameter:MSPParameter ;
-		
+//		private var mspParameter:MSPParameter ;
+		[Bindable]
+		public var mspParameter:MSPParameter = new MSPParameter();	
 		[Bindable]
 		public var specimenColl:ArrayCollection = new ArrayCollection();
 	
