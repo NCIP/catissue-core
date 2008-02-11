@@ -305,7 +305,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 				}
 				 
 				 double dblValue = Double.parseDouble(this.studyCalendarEventPoint.toString());
-				 if (dblValue < 0  || Double.isNaN(dblValue)) 
+				 if (Double.isNaN(dblValue)) 
 		         {
 					 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
 								ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
