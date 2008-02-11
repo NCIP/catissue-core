@@ -66,7 +66,7 @@ window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageO
 	<%=messageKey%>
 </html:messages>
 
-<html:form action="ProtocolEventsDetails.do">
+<html:form action="SaveProtocolEvents.do?pageOf=defineEvents&operation=add">
 <table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="600">
 	<tr>
 		<td height="20" width="9%" nowrap class="tabMenuItemSelected" onclick="defineEvents()" id="collectionProtocolTab">Protocol Event Details</td>
