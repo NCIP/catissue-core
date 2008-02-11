@@ -46,6 +46,7 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -121,6 +122,108 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 	}
 
+	/**
+	 * This function used to get specimenCollectionGroup object from id and 
+	 * populate all its associated entities.
+	 * @param scgId 				SpecimenCollectionGroup id
+	 * @param bean 					SessionDataBean
+	 * @param retrieveAssociates	flag for retrieve associated entities or not.
+	 * @return object of CollectionProtocol
+	 * @throws BizLogicException If fails to retrieve any of the required entity.
+	 */
+	public SpecimenCollectionGroup getSCGFromId(
+			Long scgId, SessionDataBean bean,boolean retrieveAssociates)
+		throws BizLogicException
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		try
+		{
+			dao.openSession(bean);
+
+			List cpList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
+					Constants.SYSTEM_IDENTIFIER, scgId);
+
+			if(cpList == null || cpList.isEmpty())
+			{
+				throw new BizLogicException("Cannot find CP. Failed to find " +
+						"SCG for id " + scgId);
+			}
+			SpecimenCollectionGroup specCollGroup = 
+							(SpecimenCollectionGroup) cpList.get(0);
+			if(retrieveAssociates)
+			{
+				retreiveAssociates(scgId, specCollGroup);
+			}
+			return specCollGroup;
+		}
+		catch(DAOException exception)
+		{
+			throw new BizLogicException(exception.getMessage(),exception);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoException)
+			{
+				Logger.out.fatal("Failed to close session due to "
+						+ daoException.getMessage(), daoException);
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param scgId
+	 * @param specCollGroup
+	 * @throws BizLogicException
+	 */
+	private void retreiveAssociates(Long scgId, SpecimenCollectionGroup specCollGroup)
+			throws BizLogicException
+	{
+		CollectionProtocolRegistration collProtReg = 
+			specCollGroup.getCollectionProtocolRegistration();
+		
+		if(collProtReg == null)
+		{
+			throw new BizLogicException("Cannot find CP. CPR for " +
+					"SCG id " + scgId + " is unexpectedly null.");
+		}
+		CollectionProtocol collProt = collProtReg.getCollectionProtocol();
+		if(collProt == null)
+		{
+			throw new BizLogicException("Cannot find CP. for SCG id " + scgId);
+		}
+		Long id =collProt.getId();
+		
+		Collection<Specimen> specimenCollection = specCollGroup.getSpecimenCollection();
+		retrieveSpecimens(specimenCollection);
+		
+		
+	}
+
+	/**
+	 * @param specimenCollection
+	 */
+	private void retrieveSpecimens(Collection<Specimen> specimenCollection)
+	{
+		if (specimenCollection == null)
+		{
+			return;
+		}
+		
+		Iterator<Specimen> specIterator = specimenCollection.iterator();
+		while(specIterator.hasNext())
+		{
+			Specimen specimen = specIterator.next();
+			Collection<Specimen> childSpecimenCollection = 
+				specimen.getChildrenSpecimen();
+			retrieveSpecimens(childSpecimenCollection);
+		}
+	}
+	
 	private Set getProtectionObjects(AbstractDomainObject obj)
 	{
 		Set protectionObjects = new HashSet();
