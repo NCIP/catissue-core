@@ -281,8 +281,9 @@
 	     	<attribute name="CSM-Version" value="${csm.version}"/>
 	     	<attribute name="caCore-Version" value="${cacore.version}"/>
 	     	<attribute name="Build-on" value="${TODAY}"/>
-	    </manifest>		
-		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml" duplicate="preserve" manifest="${base.dir}/MANIFEST.MF" >
+	    </manifest>
+		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml" 
+			duplicate="preserve" manifest="${base.dir}/MANIFEST.MF" >
 			<fileset dir="${base.dir}">
 				<!--include name="Applet/**" / -->
 				<include name="css/**" />
@@ -321,7 +322,8 @@
 				<exclude name="**/caTissue_Core_Installable/**"/>
 				<exclude name="**/caTISSUECore caCORE Client/**"/-->
 			</fileset>
-			
+<!-- Excluding unwanted jars -->
+
 			<!-- change for csm related war -->
 			<fileset dir="${temp.dir}/catissuecorecsm">
 				<include name="**/WEB-INF/**"  />
