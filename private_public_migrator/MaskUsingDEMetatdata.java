@@ -65,8 +65,16 @@ public class MaskUsingDEMetatdata
                 }
             }
 			
-			// hql String to update ParticipantMedicalIdentifier table
-			String sqlString="delete from CATISSUE_PART_MEDICAL_ID";
+			// sql String to update ParticipantMedicalIdentifier table
+			String sqlString="truncate table CATISSUE_PART_MEDICAL_ID";
+			executeQuery(sqlString, session);
+			
+			// sql String to delete  ReportQueue table
+			sqlString="truncate table CATISSUE_REPORT_QUEUE";
+			executeQuery(sqlString, session);
+			
+			// sql String to delete ReportQueue table
+			sqlString="truncate table CATISSUE_REPORT_PARTICIP_REL";
 			executeQuery(sqlString, session);
 			
 			maskReportText(session);
