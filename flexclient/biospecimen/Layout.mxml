@@ -641,7 +641,7 @@
         
         <mx:VBox width="100%" height="95%">
             <mx:VDividedBox width="100%" height="100%">
-                <mx:VBox width="100%" height="13.5%" id="pVbox" borderSides="black">
+                <mx:VBox width="100%" height="30%" id="pVbox" borderSides="black">
                    	<mx:HBox backgroundColor="#FFFFFF" width="100%"> 
                      	<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/> 	
                      	<mx:Button toolTip="Click to  register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
@@ -649,7 +649,7 @@
                    	 </mx:HBox>
                    	 <mx:List id="pCombo" width="100%" rowCount="1" height="100%"  labelField="name" click="onParticipantClick()"/>
                  </mx:VBox>
-        	     <mx:VBox height="86.5%" width="100%" id="spDetailVbox">
+        	     <mx:VBox height="70%" width="100%" id="spDetailVbox">
                    	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="100%" height="15" fontWeight="bold" />
                    	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" click="onNodeClick()" folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
                    		 defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')" disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true" dataTipFunction="addToolTip"/>
