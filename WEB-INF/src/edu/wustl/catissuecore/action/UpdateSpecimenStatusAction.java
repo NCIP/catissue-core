@@ -23,9 +23,11 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -34,6 +36,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
 
 public class UpdateSpecimenStatusAction extends BaseAction {
 
@@ -56,15 +59,28 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			bizLogic.updateAnticipatorySpecimens
 			(specimenDomainCollection, sessionDataBean);
 			
-			Object obj = request.getAttribute("SCGFORM");
-			request.setAttribute("SCGFORM", obj);		
-			if(specimenSummaryForm.getPrintCheckbox()!=null && specimenSummaryForm.getPrintCheckbox().equals("true"))
+			Object obj = session.getAttribute("SCGFORM");			
+			if(specimenSummaryForm.getPrintCheckbox()!=null && specimenSummaryForm.getPrintCheckbox().equals("true") )
 			{
-				HashMap forwardToPrintMap = new HashMap();
-				forwardToPrintMap.put("printAntiSpecimen",specimenDomainCollection );
-				request.setAttribute("forwardToPrintMap",forwardToPrintMap);
-				request.setAttribute("AntiSpecimen","1");
-				return mapping.findForward("printAnticipatorySpecimens");
+				//By Falguni Sachde
+				//Code Reviewer:Abhijit Naik
+				//Bug :6569 : In case of collected SCG ,the specimenDomainCollection not contains all specimen.
+				//To get all specimen related with give SCG ,query with SCG id and get SpecimenCollection 
+				if(obj == null)
+				{
+				 Logger.out.fatal("SCG id is null failed to execute print of scg -UpdateSpecimenStatusAction"); 
+				}
+				else
+				{
+					HashSet specimenprintCollection = getSpecimensToPrint((Long)obj, sessionDataBean);
+					HashMap forwardToPrintMap = new HashMap();
+					forwardToPrintMap.put("printAntiSpecimen",specimenprintCollection );
+					request.setAttribute("forwardToPrintMap",forwardToPrintMap);
+					request.setAttribute("AntiSpecimen","1");
+					return mapping.findForward("printAnticipatorySpecimens");
+				}
+				
+				
 			}
 			
 			return mapping.findForward(Constants.SUCCESS);
@@ -319,6 +335,22 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 		}
 		Long id = new Long(uniqueId);
 		return id;
+	}
+	
+	/**
+	 * @param scgId
+	 * @param sessionDataBean
+	 * @return
+	 * @throws BizLogicException
+	 */
+	protected HashSet getSpecimensToPrint(Long scgId, SessionDataBean sessionDataBean)	throws BizLogicException {
+		
+		 SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();					 
+		 SpecimenCollectionGroup objSCG = bizLogic.getSCGFromId(scgId ,sessionDataBean,true);
+		 HashSet specimenCollection = new HashSet(objSCG.getSpecimenCollection());
+		 
+		 return specimenCollection;
+		 
 	}
 
 }

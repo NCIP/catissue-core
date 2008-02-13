@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.action;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -30,7 +31,6 @@ import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
-
 import edu.wustl.common.util.dbManager.DAOException;
 
 
@@ -207,7 +207,7 @@ public class PrintAction extends Action
 		    	{
 		    		
 	    			
-		    		LinkedHashSet specimenDomainCollection =  (LinkedHashSet) forwardToPrintMap.get("printAntiSpecimen");
+		    		HashSet specimenDomainCollection =  (HashSet) forwardToPrintMap.get("printAntiSpecimen");
 		    		Iterator iterator = specimenDomainCollection.iterator();
 		    		List<AbstractDomainObject> specimenList = new ArrayList();
 		    		while (iterator.hasNext()) 
