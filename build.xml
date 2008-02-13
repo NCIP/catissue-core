@@ -471,7 +471,7 @@
 			<fileset dir="${base.dir}/caTissueSuite_Client" />
 		</copy>
 		<!--- caTIES related files  start-->
-		<copy todir="${zip.dir}/CaTIES_conf" overwrite="true">
+		<copy todir="${zip.dir}/caTIES_conf" overwrite="true">
 			<fileset dir="${base.dir}/CaTIES_conf" />
 		</copy>
 		<copy file="Dataset.dtd" todir="${zip.dir}" overwrite="true" />
