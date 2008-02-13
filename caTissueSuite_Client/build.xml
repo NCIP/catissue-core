@@ -15,6 +15,7 @@
 	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
 	<property name="report.dir" value="." />
 	<property name="project.src" value="../WEB-INF/classes/"/>
+	<property name="project.src.domain" value="../WEB-INF/src/edu/wustl/catissuecore/domain/"/>
 	
 	<path id="cp">
 		<fileset dir="lib">
@@ -97,15 +98,26 @@
 		
 			<batchtest todir="${report.dir}/Nightly_Build_Report">
 				<fileset dir="${test.src.dir}">
-					<!-- <include name="**/CaTissueTestSuite.java" /> -->
 					<include name="**/CaTissueTestSuite.java" />
 				</fileset>				
 			</batchtest>
 		</junit>
 	</target>
 	
+  <target name= "createJavaDoc">
+  	<javadoc destdir="${report.dir}/JavaDoc"
+  	  	           			author="true"
+  	  	           			version="true"
+  	  	           			use="true"
+  	  	           			windowtitle="JavaDoc">
 
-  <target name="runNightlyBuild" depends="runJunitTestCases">
+  			  	 	<fileset dir="${project.src.domain}">
+  			  	 		<include name="**/*.java" />
+  			  	    </fileset>
+  	  	    </javadoc>
+  </target>	
+	
+  <target name="runNightlyBuild" depends="runJunitTestCases,createJavaDoc">
 		
 		<junitreport todir="${report.dir}/Nightly_Build_Report">
 			<fileset dir="${report.dir}/Nightly_Build_Report">
