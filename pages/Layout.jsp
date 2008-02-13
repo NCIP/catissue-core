@@ -44,6 +44,8 @@
 <script language="JavaScript">
 	var timeOut;
 	var advanceTime;
+	var lastRefreshTime;//timestamp in millisecond of last accessed through child page
+	var pageLoadTime;
 	<%
 		int timeOut = -1;
 		int advanceTime = Integer.parseInt(XMLPropertyHandler.getValue(Constants.SESSION_EXPIRY_WARNING_ADVANCE_TIME));
@@ -62,31 +64,47 @@
 
 	timeOut = "<%= timeOut%>";	
 	advanceTime = "<%= advanceTime%>";
-
+	pageLoadTime = new Date().getTime(); //timestamp in millisecond of last pageload
+	lastRefreshTime = pageLoadTime ; // last refreshtime in millisecond
 	setAdvanceSessionTimeout(timeOut);
 	
 	function warnBeforeSessionExpiry()
-	{			
-		var defTimeout = setTimeout('sendToHomePage()', advanceTime*60*1000);
-		var choice = confirm("<%= advanceTimeoutMesg %>");
-		
-		if(choice == 0) //cancel pressed, extend session
+	{	
+		//check for the last refresh time,whether page is refreshed in child frame after first load.		
+		if(lastRefreshTime > pageLoadTime)
 		{
-			clearTimeout(defTimeout);
-			sendBlankRequest();
-			setAdvanceSessionTimeout();
+			
+			var newTimeout = (lastRefreshTime - pageLoadTime)*0.001;
+			newTimeout = newTimeout + (advanceTime*60.0);
+			
+			pageLoadTime = lastRefreshTime ;
+			setAdvanceSessionTimeout(newTimeout);
+			
+		}
+		else
+		{
+			var defTimeout = setTimeout('sendToHomePage()', advanceTime*60*1000);
+			var choice = confirm("<%= advanceTimeoutMesg %>");
+		
+			if(choice == 0) //cancel pressed, extend session
+			{
+				clearTimeout(defTimeout);
+				sendBlankRequest();
+				setAdvanceSessionTimeout(timeOut);
+    		}
     	}
 	}
 	
-	function setAdvanceSessionTimeout() 
+	function setAdvanceSessionTimeout(ptimeOut) 
 	{
 		
-		if(timeOut > 0)
+		if(ptimeOut > 0)
 		{
-			var time = (timeOut - (advanceTime*60)) * 1000;
+			var time = (ptimeOut - (advanceTime*60)) * 1000;
 			setTimeout('warnBeforeSessionExpiry()', time); //if session timeout, then redirect to Home page
 		}
 	}
+	
 	
 	function sendToHomePage()
 	{			
