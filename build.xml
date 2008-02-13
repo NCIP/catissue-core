@@ -33,10 +33,11 @@
 	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
 	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect"/>
-	
+	<property name="client.dir" value="${base.dir}/caTissueSuite_Client" />
 	<property name="FLEX_HOME" value="${basedir}/WEB-INF/flex"/>
 	<property name="APP_ROOT" value="flexclient"/>
-	
+	<property name="project.src.domain" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/domain/"/>
+
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
@@ -412,8 +413,20 @@
 			<fileset dir="${src.dir}/edu/wustl/common/cde" includes="*.hbm.xml" />
 		</delete>
 	</target>
-
-	<target name="create_zip" depends="installable_build_war">
+	
+	<target name="createJavaDoc">
+		<javadoc destdir="${client.dir}/JavaDoc"
+   			author="true"
+   			version="true"
+   			use="true"
+   			windowtitle="JavaDoc">
+	  	 	<fileset dir="${project.src.domain}">
+	  	 		<include name="**/*.java" />
+	  	    </fileset>
+	    </javadoc>
+	</target>
+	
+	<target name="create_zip" depends="createJavaDoc,installable_build_war">
 		<property name="zip.dir" value="${base.dir}/caTISSUE_Suite_Installable_v${application.version}" />
 		<property name="zip.file" value="${base.dir}/caTissue_Suite_Installable_v${application.version}.zip" />
 
