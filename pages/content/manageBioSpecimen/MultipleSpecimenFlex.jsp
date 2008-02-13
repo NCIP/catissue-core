@@ -21,6 +21,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <script src="jss/queryModule.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script> 
+<script language="JavaScript" >
+		//Set last refresh time
+		if(window.parent!=null)
+		{
+			if(window.parent.lastRefreshTime!=null)
+			{
+				window.parent.lastRefreshTime = new Date().getTime();
+			}
+		}	
+</script>
 <script language="JavaScript">
 function callSubmitSpecimen()
 {

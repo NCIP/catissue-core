@@ -45,7 +45,16 @@ if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
 <script src="jss/Hashtable.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-
+<script language="JavaScript" >
+		//Set last refresh time
+		if(window.parent!=null)
+		{
+			if(window.parent.lastRefreshTime!=null)
+			{
+				window.parent.lastRefreshTime = new Date().getTime();
+			}
+		}	
+</script>
 
 <%if(CPQuery!= null)
 {

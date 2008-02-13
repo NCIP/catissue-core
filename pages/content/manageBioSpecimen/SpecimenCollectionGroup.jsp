@@ -158,7 +158,17 @@
 	%>
 
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-     <script language="JavaScript">
+	<script language="JavaScript" >
+		//Set last refresh time
+		if(window.parent!=null)
+		{
+			if(window.parent.lastRefreshTime!=null)
+			{
+				window.parent.lastRefreshTime = new Date().getTime();
+			}
+		}	
+	</script>
+	<script language="JavaScript">
      
      	function showAnnotations()
 		{

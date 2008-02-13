@@ -126,6 +126,16 @@ tr#hiddenCombo
 
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+	<script language="JavaScript" >
+		//Set last refresh time
+		if(window.parent!=null)
+		{
+			if(window.parent.lastRefreshTime!=null)
+			{
+				window.parent.lastRefreshTime = new Date().getTime();
+			}
+		}	
+	</script>
 	
 	<%
 	String participantIdentifier="0";
