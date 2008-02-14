@@ -1588,6 +1588,8 @@ SELECT MAX(PG_PE_ID) +1 ,
         '2006-11-27'
 FROM CSM_PG_PE;
 
+insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 90, 'CATISSUE_REVIEW_PARAMS', 'Pathology Report Review Parameter', 'PathologyReportReviewParameter', 2);
+insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 91, 'CATISSUE_QUARANTINE_PARAMS', 'Quarantine Event Parameter', 'QuarantineEventParameter', 2);
 
 
 
