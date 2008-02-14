@@ -30,15 +30,17 @@ public class DeidReportThread extends Thread
 {
 	public static final Object obj=new Object();
 	private IdentifiedSurgicalPathologyReport identifiedReport;
+	private static boolean doNothingDeID;
 	
 	/**
 	 * constructor for the DeidReportThread thread 
 	 * @param identifiedReport identified Surgical Pathology Report
 	 * @throws Exception Generic excpetion
 	 */
-	public DeidReportThread(IdentifiedSurgicalPathologyReport ispr) throws Exception
+	public DeidReportThread(IdentifiedSurgicalPathologyReport ispr, boolean doNothingDeID) throws Exception
 	{
-		this.identifiedReport=ispr;	
+		this.identifiedReport=ispr;
+		this.doNothingDeID=doNothingDeID;
 	}
 	
 	/**
@@ -68,30 +70,37 @@ public class DeidReportThread extends Thread
 			// get textcontent
 			TextContent textContent=(TextContent)CaCoreAPIService.getObject(TextContent.class, Constants.SYSTEM_IDENTIFIER, identifiedReport.getTextContent().getId());
 			
-			// build report element using report text
-			Element reportElement = DeidUtils.buildReportElement(participant, identifiedReport, textContent.getData());
-			// add report element to root of the document
-			currentRequestDocument.getRootElement().addContent(reportElement);
+			String deidText="";
+			if(doNothingDeID)
+			{
+				deidText=textContent.getData();
+			}
+			else
+			{
+				// build report element using report text
+				Element reportElement = DeidUtils.buildReportElement(participant, identifiedReport, textContent.getData());
+				// add report element to root of the document
+				currentRequestDocument.getRootElement().addContent(reportElement);
+		        
+				// convert document into string
+		        String deidRequest = DeidUtils.convertDocumentToString(currentRequestDocument, Format.getPrettyFormat()); 
+		        
+		        String deidReportText=null;
 	        
-			// convert document ino string
-	        String deidRequest = DeidUtils.convertDocumentToString(currentRequestDocument, Format.getPrettyFormat()); 
-	        Logger.out.info("Calling native call for report "+identifiedReport.getId().toString());
-	        // function call which contains the actual native call for deidentification
-	        String deidReportText=deIdentify(deidRequest);
-	        Logger.out.info("Calling native finished successfully for report "+identifiedReport.getId().toString());
-	        String deidText="";
-	        Logger.out.info("Extracting report text for report "+identifiedReport.getId().toString());
-	        // extract the report text
-	        deidText=DeidUtils.extractReport(deidReportText, CaTIESProperties.getValue(CaTIESConstants.DEID_DTD_FILENAME));
-	        Logger.out.info("Extracting report text finished for report "+identifiedReport.getId().toString());
-	        Date deidCollectionDate=null;
-	   
-	        // ectract collection date and time
-	        deidCollectionDate=DeidUtils.extractDate(deidText);	
-	        deidText = deidText.substring(0, deidText.lastIndexOf("||-"));
+		        Logger.out.info("Calling native call for report "+identifiedReport.getId().toString());
+		        // function call which contains the actual native call for deidentification
+		        deidReportText=deIdentify(deidRequest);
+		        Logger.out.info("Calling native finished successfully for report "+identifiedReport.getId().toString());
+		        Logger.out.info("Extracting report text for report "+identifiedReport.getId().toString());
+		        // extract the report text
+		        deidText=DeidUtils.extractReport(deidReportText, CaTIESProperties.getValue(CaTIESConstants.DEID_DTD_FILENAME));
+		        Logger.out.info("Extracting report text finished for report "+identifiedReport.getId().toString());
+
+		        deidText = deidText.substring(0, deidText.lastIndexOf("||-"));
+			}
 	        Logger.out.info("Creating deidentified report for identified report id="+identifiedReport.getId().toString());
 	        // Create object of deidentified report
-	        DeidentifiedSurgicalPathologyReport pathologyReport = createDeidPathologyReport(identifiedReport, deidText, deidCollectionDate);
+	        DeidentifiedSurgicalPathologyReport pathologyReport = createDeidPathologyReport(identifiedReport, deidText);
 	        Logger.out.info("De-identification process finished for "+identifiedReport.getId().toString());
 	        saveReports(pathologyReport);
 	        Long endTime = new Date().getTime();
@@ -120,12 +129,10 @@ public class DeidReportThread extends Thread
 	 * Method to create and initialize object of DeidentifiedSurgicalPathologyReport
 	 * @param identifiedReport identified surgical pathology report
 	 * @param deidText de-intified text
-	 * @param deidCollectedDate collection date and time of report
 	 * @return DeidentifiedSurgicalPathologyReport
 	 * @throws Exception a generic exception oocured while creating de-identified report instance.
 	 */
-	private DeidentifiedSurgicalPathologyReport createDeidPathologyReport(IdentifiedSurgicalPathologyReport ispr, String deidText,
-            Date deidCollectedDate) throws Exception
+	private DeidentifiedSurgicalPathologyReport createDeidPathologyReport(IdentifiedSurgicalPathologyReport ispr, String deidText) throws Exception
 	{
 		Logger.out.info("Creating deid report for identifiedReport id="+ispr.getId());
 		// instnatiate deidentified report

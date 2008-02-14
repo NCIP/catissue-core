@@ -38,6 +38,7 @@ public class DeIDPipelineManager
 	private int corePoolSize;
 	private int maxPoolSize;
 	private int keepAliveSeconds;
+	private static boolean doNothingDeID;
 
 	/**
 	 * Default constructor of the class
@@ -77,13 +78,17 @@ public class DeIDPipelineManager
 		
 		// To store path of the directory for the config files, here 'catissue-properties' directory
 		pathToConfigFiles=new String(Variables.applicationHome + System.getProperty("file.separator")+"caTIES_conf"+System.getProperty("file.separator"));
-		// Function call to store name of config file name required for de-identification native call, deid.cfg
-		setConfigFileName();
+		doNothingDeID=new Boolean(CaTIESProperties.getValue(CaTIESConstants.DO_NOTHING_DEID));
 
-		// Instantiates wrapper class for deid native call
-		deid=new JniDeID(); 
-		// set path of the directionary that is required by native call for deidentification 
-		deid.setDictionaryLocation(CaTIESProperties.getValue(CaTIESConstants.DEID_DCTIONARY_FOLDER));	
+		if(!doNothingDeID)
+		{
+			// Function call to store name of config file name required for de-identification native call, deid.cfg
+			setConfigFileName();
+			// Instantiates wrapper class for deid native call
+			deid=new JniDeID();
+			// set path of the directionary that is required by native call for deidentification 
+			deid.setDictionaryLocation(CaTIESProperties.getValue(CaTIESConstants.DEID_DCTIONARY_FOLDER));
+		}
 	}
 		
 	/**
@@ -142,9 +147,12 @@ public class DeIDPipelineManager
 			// if report list contains more than or equal to one reports then process reports
 			try
 			{
-				Logger.out.info("Loading deid library");
-				// load deidLibrary required for native call
-				JniDeID.loadDeidLibrary();	
+				if(!doNothingDeID)
+				{
+					Logger.out.info("Loading deid library");
+					// load deidLibrary required for native call
+					JniDeID.loadDeidLibrary();
+				}
 				try
 				{
 					CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_IDENTIFIED_REPORT+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
@@ -161,7 +169,7 @@ public class DeIDPipelineManager
 						identifiedReport=(IdentifiedSurgicalPathologyReport)identifiedReportList.get(0);
 						// instantiate a thread to process the report
 						Logger.out.info("Instantiating thread for report id="+identifiedReport.getId());
-						Thread th = new DeidReportThread(identifiedReport);
+						Thread th = new DeidReportThread(identifiedReport, doNothingDeID);
 						// add thread to thread pool manager
 						deidExecutor.execute(th);
 					}					
@@ -171,9 +179,12 @@ public class DeIDPipelineManager
 					Logger.out.error("Deidentification pipeline is failed:",ex);
 					// shut down the thread pool manager
 					deidExecutor.shutdown();
-					Logger.out.info("Unloading deid library");
-					// unload deid library
-					JniDeID.unloadDeidLibrary();
+					if(!doNothingDeID)
+					{
+						Logger.out.info("Unloading deid library");
+						// unload deid library
+						JniDeID.unloadDeidLibrary();
+					}
 					throw ex;
 				}
 				// check to wait until all active theads finish their task before shutting down the thread pool manager

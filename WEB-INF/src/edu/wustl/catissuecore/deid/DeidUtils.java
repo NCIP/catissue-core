@@ -164,59 +164,6 @@ public class DeidUtils
 
 	}
 
-
-	/**
-	 * This method removes the collection date and time of the report from the deidentified text before saving it
-	 * @param deidText deidentified text
-	 * @return Date collection date and time
-	 * @throws Exception a generic exception occured while extracting date from report
-	 */
-	protected static Date extractDate(String deidText) throws Exception
-	{
-		Date deidDate = null;
-
-		if(deidText!=null && deidText.length()>0)
-		{
-			try 
-			{
-				// search pattern
-				String sentinal = "**DATE[";
-				// extract text containing date
-				String dateText = deidText.substring(deidText.lastIndexOf("||-") + new String("||-").length(), deidText.lastIndexOf("-||"));
-				// separate text preceding date
-				String preDate = dateText.substring(0, dateText.lastIndexOf(sentinal));
-				//separate text that is appended to date
-				String postDate = dateText.substring(dateText.lastIndexOf(sentinal)
-						+ sentinal.length(), dateText.length());
-				postDate = postDate.replaceAll("]", "");
-	
-				StringTokenizer st = new StringTokenizer(preDate + postDate);
-				String date = "";
-				// parse date
-				for (int x = 0; st.hasMoreTokens(); x++) 
-				{
-					String token = st.nextToken();
-					if (x == 1)
-					{
-						token += ",";
-					}
-					date += token + " ";
-				}
-				
-				// convert string into date object
-				DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,DateFormat.MEDIUM);
-				deidDate = df.parse(date.trim());
-	
-			}
-			catch (Exception ex) 
-			{
-				Logger.out.error("Extracting date from deidentified text is failed",ex);
-			}
-		}
-		return deidDate;
-	}
-
-
 	/**
 	 * This method removes all the illegal XML characters from the input text
 	 * @param sprText synthesized text
