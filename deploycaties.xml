@@ -172,13 +172,24 @@
 			<replacefilter token="@@ADMIN_EMAIL@@" value="${first.admin.emailAddress}" />
 			<replacefilter token="@@ADMIN_PASSWORD@@" value="${first.admin.password}" />
 			<replacefilter token="@@GATE_HOME@@" value="${concept.code.installation.dir}/gate/gate_3_1" />
-			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
-			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 		</replace>
 		<replace file="${temp.caties.dir}/caTIES_conf/remoteService.xml">
 			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
 			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 		</replace>
+		<if>
+			<equals arg1="${jboss.container.secure}" arg2="yes" />
+			<then>
+				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
+					<replacefilter token="@@HOST:PORT@@" value="https://${jboss.server.host}:${jboss.server.port}" />
+				</replace>
+			</then>
+			<else>
+				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
+					<replacefilter token="@@HOST:PORT@@" value="http://${jboss.server.host}:${jboss.server.port}" />
+				</replace>
+			</else>
+		</if>
 	</target>
 	
 	<target name="deploy_caties_internal">

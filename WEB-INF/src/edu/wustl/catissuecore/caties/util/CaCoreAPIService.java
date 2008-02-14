@@ -39,6 +39,7 @@ public class CaCoreAPIService
 	{
 		try
 		{
+			System.setProperty("javax.net.ssl.trustStore", CaTIESProperties.getValue(CaTIESConstants.KEYSTORE_FILE_PATH));
 			appService = ApplicationServiceProvider.getRemoteInstance();
 			cs = ClientSession.getInstance();
 			try
