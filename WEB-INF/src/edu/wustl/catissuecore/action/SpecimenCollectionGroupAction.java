@@ -70,7 +70,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * SpecimenCollectionGroupAction initializes the fields in the 
+ * SpecimenCollectionGroupAction initializes the fields in the
  * New Specimen Collection Group page.
  * @author ajay_sharma
  */
@@ -84,7 +84,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	public ActionForward executeSecureAction(ActionMapping mapping,
+			final ActionForm form, final HttpServletRequest request,
+			final HttpServletResponse response)
 			throws Exception
 	{
 
@@ -385,7 +387,6 @@ public class SpecimenCollectionGroupAction extends SecureAction
 						request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, cprParticipant.getId().toString());
 					}
 					String firstName = Utility.toString(cprParticipant.getFirstName());
-					;
 					String lastName = Utility.toString(cprParticipant.getLastName());
 					String birthDate = Utility.toString(cprParticipant.getBirthDate());
 					String ssn = Utility.toString(cprParticipant.getSocialSecurityNumber());
@@ -799,14 +800,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//Collection Event fields
 		if (specimenForm.getCollectionEventdateOfEvent() == null)
 		{
-			if (request.getParameter("evtDate") != null)
-			{
-				specimenForm.setCollectionEventdateOfEvent(request.getParameter("evtDate"));
-			}
-			else
-			{
 				specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
-			}
 		}
 		if (specimenForm.getCollectionEventTimeInHours() == null)
 		{
