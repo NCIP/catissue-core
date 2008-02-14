@@ -1308,11 +1308,21 @@ Thanking You,
 	<target name="deploy_gate" depends="assertforgate">		
 		<echo message="Deploying gate...." />
 		<unzip src="gate.zip" dest="${jboss.server.url}/deploy/gate.war" /> 
-		<replace file="${jboss.server.url}/deploy/gate.war/gate_3_1/application/plugins/caTIES/creole.xml">
-			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
-			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
-			<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
-		</replace>
+		<if>
+			<equals arg1="${jboss.container.secure}" arg2="yes" />
+			<then>
+				<replace file="${jboss.server.url}/deploy/gate.war/gate_3_1/application/plugins/caTIES/creole.xml">
+					<replacefilter token="@@HOST:PORT@@" value="https://${jboss.server.host}:${jboss.server.port}" />
+					<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
+				</replace>
+			</then>
+			<else>
+				<replace file="${jboss.server.url}/deploy/gate.war/gate_3_1/application/plugins/caTIES/creole.xml">
+					<replacefilter token="@@HOST:PORT@@" value="http://${jboss.server.host}:${jboss.server.port}" />
+					<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
+				</replace>
+			</else>
+		</if>
 	</target>
 	
 	<target name="assertforgate">
