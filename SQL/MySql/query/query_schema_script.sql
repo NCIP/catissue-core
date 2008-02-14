@@ -1,3 +1,5 @@
+SET FOREIGN_KEY_CHECKS=0;
+
 drop table if exists QUERY_PARAMETERIZED_QUERY;
 drop table if exists CATEGORIAL_CLASS;
 drop table if exists QUERY_INTRA_MODEL_ASSOCIATION;
@@ -19,6 +21,8 @@ drop table if exists QUERY_EXPRESSION_OPERAND;
 drop table if exists QUERY_GRAPH_ENTRY;
 drop table if exists CATEGORY;
 drop table if exists QUERY_EXPRESSIONID;
+
+SET FOREIGN_KEY_CHECKS=1;
 create table QUERY_PARAMETERIZED_QUERY (
    IDENTIFIER bigint not null,
    QUERY_NAME varchar(255) unique,

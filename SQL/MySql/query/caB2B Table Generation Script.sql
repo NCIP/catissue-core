@@ -1,3 +1,4 @@
+SET FOREIGN_KEY_CHECKS=0;
 drop table if exists CURATED_PATH; 
 drop table if exists CURATED_PATH_TO_PATH;
 drop table if exists PATH;
@@ -6,6 +7,7 @@ drop table if exists INTRA_MODEL_ASSOCIATION;
 drop table if exists ASSOCIATION;
 drop table if exists ID_TABLE;
 
+SET FOREIGN_KEY_CHECKS=1;
 /*INTERMEDIATE_PATH contains  ASSOCIATION(ASSOCIATION_ID) connected by underscore */
 create table PATH(
      PATH_ID           bigint         not null,

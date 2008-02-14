@@ -67,6 +67,8 @@ drop table if exists DYEXTN_CONTAINER;
 drop table if exists DYEXTN_RADIOBUTTON;
 drop table if exists DYEXTN_DATEPICKER;
 
+SET FOREIGN_KEY_CHECKS=1;
+
 create table DYEXTN_OBJECT_TYPE_INFO (
    IDENTIFIER bigint not null,
    primary key (IDENTIFIER)
