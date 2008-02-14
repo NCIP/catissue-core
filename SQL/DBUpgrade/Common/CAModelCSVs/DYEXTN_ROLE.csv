@@ -614,7 +614,7 @@
 "614","ASSOCIATION","1","0","collectionProtocol"
 "615","ASSOCIATION","2","0","abstractSpecimenCollectionGroupCollection"
 "616","ASSOCIATION","1","0","specimenCollectionSite"
-"617","CONTAINTMENT","1","0","requiredCollectionSpecimenGroup"
+"617","ASSOCIATION","1","0","requiredCollectionSpecimenGroup"
 "618","ASSOCIATION","1","0","collectionProtocolEvent"
 "619","ASSOCIATION","1","0","edu.wustl.catissuecore.domain.OrderItem"
 "620","ASSOCIATION","1","0","requestedQuantity"
@@ -1096,7 +1096,7 @@
 "1096","CONTAINTMENT","1","0","uninvolvedMargin"
 "1097","CONTAINTMENT","1","1","resectionColorectalDistalMargin"
 "1098","CONTAINTMENT","1","0","uninvolvedMargin"
-"1099","CONTAINTMENT","100","0","resectionColorectalRadialMargin"
+"1099","CONTAINTMENT","1","1","resectionColorectalRadialMargin"
 "1100","CONTAINTMENT","1","0","uninvolvedMargin"
 "1101","CONTAINTMENT","1","1","melanomaPathologyAnnotation"
 "1102","CONTAINTMENT","100","0","lateralMarginCollection"
@@ -1308,3 +1308,17 @@
 "1324","CONTAINTMENT","100","1","ProstateMarginLocation"
 "1325","CONTAINTMENT","1","1","ExtraprostaticExtension"
 "1326","CONTAINTMENT","100","1","ExtraprostaticExtensionTissueSites"
+"1327","CONTAINTMENT","1","1",\N
+"1328","CONTAINTMENT","1","1","PathologicalStaging"
+"1329","CONTAINTMENT","1","1",\N
+"1330","CONTAINTMENT","1","1","DistantMetastasis"
+"1331","CONTAINTMENT","1","1",\N
+"1332","CONTAINTMENT","100","1","MetastasisTissueSite"
+"1333","CONTAINTMENT","1","1",\N
+"1334","CONTAINTMENT","1","1","RadicalProstatectomyMargin"
+"1335","CONTAINTMENT","1","1",\N
+"1336","CONTAINTMENT","100","1","ProstateMarginLocation"
+"1337","CONTAINTMENT","1","1",\N
+"1338","CONTAINTMENT","100","1","LocalExcisionColorectalLateralMargin"
+"1339","CONTAINTMENT","1","1",\N
+"1340","CONTAINTMENT","1","1","ColorectalLocalExcisionMarginUninvolved"
