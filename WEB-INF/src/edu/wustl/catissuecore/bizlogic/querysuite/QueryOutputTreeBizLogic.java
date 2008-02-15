@@ -412,7 +412,7 @@ public class QueryOutputTreeBizLogic
 			if (!existingNodesList.contains(nodeIdToSet))
 			{
 				existingNodesList.add(nodeIdToSet);
-				idNodeMap.put(String.valueOf(currentNode.getId()), currentNode);
+				idNodeMap.put(String.valueOf(currentNode.getUniqueNodeId()), currentNode);
 				outputTreeStr = outputTreeStr + nodeIdToSet + "," + displayName + "," + objectname + "," + parentNodeId + "," + parentObjectName
 				+ "|";
 			}
