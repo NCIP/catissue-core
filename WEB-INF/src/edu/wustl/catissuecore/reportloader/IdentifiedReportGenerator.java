@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
@@ -216,6 +217,12 @@ public class IdentifiedReportGenerator
 				// format for section header and section text
 				docText += "\n[" + sectionHeader + "]" + "\n\n" + sectionText + "\n\n";
 			}
+		}
+		if(CaTIESProperties.getValue(CaTIESConstants.DATABASE_TYPE).equalsIgnoreCase(Constants.ORACLE_DATABASE) && docText.length()>3900)
+		{
+			Logger.out.info("Large report text found for oracle. Trimming report text");
+			docText=docText.trim().substring(0,3800);
+			Logger.out.info("Text size after Trimming is :"+docText.length());
 		}
 		return docText.trim();
 	}

@@ -139,6 +139,7 @@ public abstract class CaTIESConstants
 	public static final String PASSWORD="password";
 	public static final String KEYSTORE_FILE_PATH="keystore.file.path";
 	public static final String DO_NOTHING_DEID="dont.de-identify";
+	public static final String DATABASE_TYPE="databaseType";
 	
 	public static final String DEID_HOME="deidHome";
 	public static final String DEID_DCTIONARY_FOLDER="deidDnyFolder";
