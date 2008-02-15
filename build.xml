@@ -459,8 +459,8 @@
 
 		<copy todir="${zip.dir}/lib" overwrite="true">
 			<fileset file="${base.dir}/extra_lib/ant-contrib.jar" />
-			<fileset file="${base.dir}/extra_lib/mysql-connector-java-3.0.16-ga-bin.jar" />
-			<fileset file="${base.dir}/extra_lib/oracleDriver.jar" />
+			<fileset file="${base.dir}/WEB-INF/mysql-connector-java-3.0.16-ga-bin.jar" />
+			<fileset file="${base.dir}/WEB-INF/oracleDriver.jar" />
 		</copy>
 
 		<copy todir="${zip.dir}/SQL" overwrite="true">
