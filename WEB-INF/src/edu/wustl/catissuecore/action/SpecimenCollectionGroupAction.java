@@ -800,7 +800,14 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//Collection Event fields
 		if (specimenForm.getCollectionEventdateOfEvent() == null)
 		{
+			if (request.getParameter("evtDate") != null)
+			{
+				specimenForm.setCollectionEventdateOfEvent(request.getParameter("evtDate"));
+			}
+			else
+			{
 				specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+			}
 		}
 		if (specimenForm.getCollectionEventTimeInHours() == null)
 		{
