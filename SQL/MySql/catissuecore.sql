@@ -1,3 +1,4 @@
+SET storage_engine=InnoDB;
 SET FOREIGN_KEY_CHECKS=0;
 drop table if exists CATISSUE_PERMISSIBLE_VALUE;
 drop table if exists CATISSUE_CDE;

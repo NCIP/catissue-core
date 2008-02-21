@@ -1,3 +1,4 @@
+SET storage_engine=InnoDB;
 SET FOREIGN_KEY_CHECKS=0;
 drop table if exists DYEXTN_OBJECT_TYPE_INFO;
 drop table if exists DYEXTN_COLUMN_PROPERTIES;

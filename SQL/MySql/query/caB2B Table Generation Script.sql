@@ -1,3 +1,4 @@
+SET storage_engine=InnoDB;
 SET FOREIGN_KEY_CHECKS=0;
 drop table if exists CURATED_PATH; 
 drop table if exists CURATED_PATH_TO_PATH;
