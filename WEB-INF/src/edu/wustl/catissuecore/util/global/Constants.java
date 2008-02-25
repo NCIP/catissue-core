@@ -230,6 +230,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SAVE_GENERATED_SQL = "sql";
 	public static final String POPUP_MESSAGE = "popupMessage";
 	public static final String BUTTON_CLICKED = "buttonClicked";
+	public static final String KEY_CODE = "key";
+	public static final String ENTITY_SEPARATOR = ";";
+	public static final String ATTRIBUTE_SEPARATOR = "|";
+	public static final String KEY_SEPARATOR = "*&*";
 	
 	/**
 	 * Name: Abhishek Mehta
