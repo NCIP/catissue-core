@@ -86,13 +86,27 @@ public class CategorySearchAction extends BaseAction
 				EntityInterface entity = (EntityInterface) resultList.get(i);
 				String fullyQualifiedEntityName = entity.getName();
 				String entityName = Utility.parseClassName(fullyQualifiedEntityName);
+				entityName = Utility.getDisplayLabel(entityName);
 				String entityId = entity.getId().toString();
 				String description = entity.getDescription();
-				entitiesString = entitiesString + ";" + entityName + "|" + entityId + "|" + description;
+				entitiesString = entitiesString
+						+ edu.wustl.catissuecore.util.global.Constants.ENTITY_SEPARATOR
+						+ entityName
+						+ edu.wustl.catissuecore.util.global.Constants.ATTRIBUTE_SEPARATOR
+						+ entityId
+						+ edu.wustl.catissuecore.util.global.Constants.ATTRIBUTE_SEPARATOR
+						+ description;
 			}
+			
 			if (entitiesString.equals(""))
 			{
 				entitiesString = ApplicationProperties.getValue("query.noResultFoundMessage");
+			}
+			else
+			{
+				String KeySeparator = edu.wustl.catissuecore.util.global.Constants.KEY_CODE;
+				String key = request.getParameter(KeySeparator);
+				entitiesString = entitiesString + edu.wustl.catissuecore.util.global.Constants.KEY_SEPARATOR + key;
 			}
 			response.setContentType("text/html");
 			response.getWriter().write(entitiesString);
