@@ -13,6 +13,8 @@
 String height = "";
 String currentPage = (String)request.getAttribute(Constants.CURRENT_PAGE);
 System.out.println("currentPage         "+currentPage);
+	String formName = Constants.categorySearchForm ;
+	String SearchCategory = Constants.SearchCategory ;
 %>
 	if(navigator.appName == "Microsoft Internet Explorer")
 		{
@@ -27,28 +29,58 @@ System.out.println("currentPage         "+currentPage);
 			%>
 		}
 
-function checkKey() 
-{
-	var platform = navigator.platform.toLowerCase();
-	if (platform.indexOf("mac") != -1)
-	{		
-		var key = event.keyCode; 
-		if (key == 13) { event.returnValue=false; } 
-	}
-	else
+	function checkKey(event) 
 	{
-		event.returnValue=true;
+		var platform = navigator.platform.toLowerCase();
+		var key;
+		if (event.keyCode) key = event.keyCode;
+			else if (event.which) key = event.which;
+		if (platform.indexOf("mac") != -1)
+		{				
+			if (key == 13) { event.returnValue=false; } 
+		}
+		else
+		{
+			event.returnValue=true;
+		}
+		retrieveEntities(key);
 	}
-}
+
+	function retrieveEntities(key)
+	{
+		var string = document.forms[0].textField.value;
+		if (string == "")
+		{
+			var element = document.getElementById('resultSet');
+			element.innerHTML = string;
+			return ;
+		}
+		retriveSearchedEntities('<%= SearchCategory %>','<%=formName%>','<%=currentPage%>', key);
+		return ;
+	}
 
 </script>
 </head>
-<body onKeyPress="checkKey()" >
-<html:errors />
 <%
-	String formName = Constants.categorySearchForm ;
-	String SearchCategory = Constants.SearchCategory ;
+boolean mac = false;
+Object os = request.getHeader("user-agent");
+if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
+{
+	mac = true;
+}
+if (mac)
+{
 %>
+<body onkeypress="checkKey(event)" >
+<%
+}
+else
+{
+%>
+<body onkeyup="checkKey(event)" >
+<% } %>
+<html:errors />
+
 <html:form method="GET" action="SearchCategory.do" focus="textField">
 <html:hidden property="currentPage" value=""/>
 	<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" id="table11">
@@ -100,7 +132,7 @@ function checkKey()
 									<td class="standardTextQuery"><html:checkbox property="permissibleValuesChecked" onclick="permissibleValuesSelected(this)" value="on" > <bean:message key="query.permissibleValues"/></html:checkbox></td>
 								</tr>
 								<tr id="description_view" >
-									<td class="standardTextQuery"><html:checkbox  property="includeDescriptionChecked" value="off" ><bean:message key="query.includeDescription"/> </html:checkbox></td>
+									<td class="standardTextQuery"><html:checkbox  property="includeDescriptionChecked" value="on" ><bean:message key="query.includeDescription"/> </html:checkbox></td>
 								</tr>
 								<tr><td>&nbsp;</td></tr>
 								<tr id="radio_view" >

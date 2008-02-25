@@ -400,9 +400,9 @@
 		else return true;
 		
 	}
-	function retriveSearchedEntities(url,nameOfFormToPost,currentPage) 
+	function retriveSearchedEntities(url,nameOfFormToPost,currentPage, key) 
 	{
-		waitCursor();
+		waitCursor();		
 		
 		var request = newXMLHTTPReq();		
 		var textFieldValue = document.forms[0].textField.value;
@@ -421,7 +421,7 @@
 		if(currentPage == 'null')
 		{
 			var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
-			actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&includeDescriptionChecked="+includeDescriptionCheckedStatus+ "&selected=" + radioCheckStatus+"&currentPage=AddLimits";
+			actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&includeDescriptionChecked="+includeDescriptionCheckedStatus+ "&selected=" + radioCheckStatus+"&currentPage=AddLimits&key="+key;
 		}
 		else
 		{
@@ -485,6 +485,7 @@
 	
 	function onResponseUpdate(text)
 	{
+		
 		var element = document.getElementById('resultSet');
 		if(text.indexOf("No result found") != -1)
 		{
@@ -494,6 +495,9 @@
 		{
 		
 			var listOfEntities = text.split(";");
+			var length = listOfEntities.length;
+			var temp = listOfEntities[length-1].split("*&*");
+			var key = temp[1];
 			var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
 			for(i=1; i<listOfEntities.length; i++)
 			{
@@ -509,6 +513,14 @@
 			}			
 			row = row+'</table>';		
 			element.innerHTML =row;
+			
+			if (key != null && key == 13 && listOfEntities.length == 2)
+			{
+				var e = listOfEntities[1];	
+				var nameIdDescription = e.split("|");	
+				var id = nameIdDescription[1];		
+				retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm', id);	
+			}
 		}
 		hideCursor();
 	}
@@ -1193,6 +1205,7 @@ var jsReady = false;
 		{
 			if (text == "search")
 			{
+				showValidationMessages("We are searching for your query. Please wait...");
 				viewSearchResults();
 			}			
 			else 
