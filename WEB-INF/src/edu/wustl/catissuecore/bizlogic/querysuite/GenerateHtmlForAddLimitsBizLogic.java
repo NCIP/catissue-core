@@ -136,7 +136,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		StringBuffer generatedPreHTML = new StringBuffer();
 		generatedPreHTML
-				.append("<table border=\"0\" width=\"100%\"  callspacing=\"0\" cellpadding=\"0\">");
+				.append("<table border=\"0\" width=\"100%\"  cellspacing=\"0\" cellpadding=\"0\">");
 		return generatedPreHTML;
 	}
 
@@ -186,7 +186,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			if (forPage.equalsIgnoreCase(Constants.ADD_EDIT_PAGE))
 			{
 				generatedHTML
-						.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\">");
+						.append("<table border=\"0\" width=\"100%\" height=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
 				generatedHTML.append("\n<tr>");
 				generatedHTML.append("\n<td valign=\"top\">");
 				generatedHTML.append("\n</td>");
@@ -238,7 +238,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 							+ "<input type=\"textbox\"  class=\"formFieldSized20\"  name='"
 							+ componentId + "_displayName'     id='" + componentId
 							+ "_displayName' value='" + DAGNodeId + name + "." + attrLabel
-							+ "' disabled='true'> " + "</label></td>");
+							+ "' disabled='true'/> " + "</label></td>");
 				}
 				if (!forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE))
 					generatedHTML
@@ -584,7 +584,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String entityName = Utility.parseClassName(nameOfTheEntity);
 		StringBuffer generatedPreHTML = new StringBuffer();
 		generatedPreHTML
-				.append("<table border=\"0\" width=\"100%\" height=\"30%\" callspacing=\"0\" cellpadding=\"0\">");
+				.append("<table border=\"0\" width=\"100%\" height=\"30%\" cellspacing=\"0\" cellpadding=\"0\">");
 		generatedPreHTML.append("\n<tr height=\"2%\"> ");
 		generatedPreHTML
 				.append("<td valign='top' height=\"2%\" colspan=\"8\" bgcolor=\"#EAEAEA\" ><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
@@ -610,13 +610,14 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String nameOfTheEntity = entity.getName();
 		String entityId = entity.getId().toString();
 		String entityName = Utility.parseClassName(nameOfTheEntity);//nameOfTheEntity.substring(nameOfTheEntity.lastIndexOf(".")+1,nameOfTheEntity.length());
+		entityName = Utility.getDisplayLabel(entityName);
 		Collection<AttributeInterface> attributeCollection = entity.getEntityAttributesForQuery();
 		boolean isEditLimits = false;
 		String header = Constants.DEFINE_SEARCH_RULES;
 		//ApplicationProperties.getValue("query.defineSearchRulesFor");//"\nDefine Search Rules For";//
 		String attributesList = "";
 		generatedPreHTML
-				.append("<table border=\"0\" width=\"100%\" height=\"30%\" callspacing=\"0\" cellpadding=\"0\" bgcolor=\"#EAEAEA\" >");
+				.append("<table border=\"0\" width=\"100%\" height=\"30%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#EAEAEA\" >");
 		generatedPreHTML.append("\n<tr height=\"2%\" bgcolor=\"#EAEAEA\" > ");
 		generatedPreHTML
 				.append("<td class='standardLabelQuery' valign='top' height=\"2%\" colspan=\"8\" bgcolor=\"#EAEAEA\" ><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
@@ -632,7 +633,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				getAttributesString(attributeCollection), isEditLimits, isTopButton));
 		generatedPreHTML.append("\n</tr></table>");
 		generatedHTML
-				.append("<table valign='top' border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\" class='rowBGWhiteColor'>");
+				.append("<table valign='top' border=\"0\" width=\"100%\" height=\"100%\" cellspacing=\"0\" cellpadding=\"0\" class='rowBGWhiteColor'>");
 		boolean isBGColor = false;
 		generatedHTML.append("\n<tr>");
 		generatedHTML.append("\n<td valign=\"top\">");
