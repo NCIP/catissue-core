@@ -25,7 +25,7 @@ import edu.wustl.common.exception.AssignDataException;
  * @hibernate.class table="CATISSUE_EXTERNAL_IDENTIFIER"
  * @author gautam_shetty
  */
-public class ExternalIdentifier extends AbstractDomainObject implements Externalizable
+public class ExternalIdentifier extends AbstractDomainObject
 {
     private static final long serialVersionUID = 1234567890L;
 
@@ -139,35 +139,7 @@ public class ExternalIdentifier extends AbstractDomainObject implements External
 		
 	}
 	
-	public void writeExternal(ObjectOutput out) throws IOException 
-	{
-        // Write out the client properties from the server representation
-		if(id!=null)
-		{
-			out.writeInt(id.intValue());
-		}
-		else
-		{
-			out.writeInt(-1);
-		}
-		if(name==null)
-		{
-			name="";
-		}
-		out.writeUTF(name);
-		if(value==null)
-		{
-			value="";
-		}
-        out.writeUTF(value);
-    }
-    
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
-	{	
-		id = new Long(in.readInt());
-		name = in.readUTF();
-		value = in.readUTF();
-	}
+	
 	
 	public String toString()
 	{

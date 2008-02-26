@@ -3074,6 +3074,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			specimenDO.setBiohazardCollection(specimenVO.getBiohazardCollection());
 		}
 
+		// external identifer not set while editing multiple specimen
+		if (specimenVO.getExternalIdentifierCollection() != null && !specimenVO.getExternalIdentifierCollection().isEmpty())
+		{
+			Iterator itr = specimenVO.getExternalIdentifierCollection().iterator();
+			while(itr.hasNext())
+			{
+				ExternalIdentifier ex = (ExternalIdentifier) itr.next();
+				ex.setSpecimen(specimenVO);
+			}
+			specimenDO.setExternalIdentifierCollection(specimenVO.getExternalIdentifierCollection());
+		}
+		
 		if (Constants.MOLECULAR.equals(specimenVO.getClassName()))
 		{
 			Double concentration = ((MolecularSpecimen) specimenVO).getConcentrationInMicrogramPerMicroliter();

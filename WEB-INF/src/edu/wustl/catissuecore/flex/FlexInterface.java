@@ -16,6 +16,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import com.sun.tools.xjc.reader.dtd.bindinfo.BIInterface;
+
 import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
@@ -666,13 +668,56 @@ public class FlexInterface
 		if (specimen.getComment() != null)
 			sb.comment = specimen.getComment();
 		if (specimen.getBiohazardCollection() != null)
-			sb.biohazardColl = new ArrayList(specimen.getBiohazardCollection());
+		{
+			//sb.biohazardColl = new ArrayList(specimen.getBiohazardCollection());
+			sb.biohazardColl = getBiohazardBeanCollection(specimen.getBiohazardCollection());
+		}
 		if (specimen.getExternalIdentifierCollection() != null)
-			sb.exIdColl = new ArrayList(specimen.getExternalIdentifierCollection());
+		{
+		//	sb.exIdColl = new ArrayList(specimen.getExternalIdentifierCollection());
+			sb.exIdColl = getExternalIdentiferBeanCollection(specimen.getExternalIdentifierCollection());
+		}
 
 		return sb;
 	}
 
+	private List getBiohazardBeanCollection(Collection biohazardColl)
+	{
+		List<BiohazardBean> biozardBeanColl = new ArrayList<BiohazardBean>();
+		if(biohazardColl != null)
+		{
+			Iterator biohazardItr = biohazardColl.iterator();
+			while(biohazardItr.hasNext())
+			{
+				Biohazard biohazard = (Biohazard) biohazardItr.next();
+				BiohazardBean biohazardBean = new BiohazardBean();
+				biohazardBean.setId(biohazard.getId());
+				biohazardBean.setName(biohazard.getName());
+				biohazardBean.setType(biohazard.getType());
+				biozardBeanColl.add(biohazardBean);
+			}
+		}
+		return biozardBeanColl;
+	}
+	
+	private List getExternalIdentiferBeanCollection(Collection externalIdentiferColl)
+	{
+		List<ExternalIdentifierBean> externalIdentiferBeanColl = new ArrayList<ExternalIdentifierBean>();
+		if(externalIdentiferColl != null)
+		{
+			Iterator externalIdItr = externalIdentiferColl.iterator();
+			while(externalIdItr.hasNext())
+			{
+				ExternalIdentifier externalIdentifer = (ExternalIdentifier) externalIdItr.next();
+				ExternalIdentifierBean externalIdBean = new ExternalIdentifierBean();
+				externalIdBean.setId(externalIdentifer.getId());
+				externalIdBean.setName(externalIdentifer.getName());
+				externalIdBean.setValue(externalIdentifer.getValue());
+				externalIdentiferBeanColl.add(externalIdBean);
+			}
+		}
+		return externalIdentiferBeanColl;
+	}
 	private Specimen getSpecimenInstance(String specimenClass)
 	{
 		System.out.println("specimenClass <" + specimenClass + ">");
@@ -1033,19 +1078,23 @@ public class FlexInterface
 		Iterator itr = exIdColl.iterator();
 		while (itr.hasNext())
 		{
-			ExternalIdentifier ex = (ExternalIdentifier) itr.next();
-			if ((ex.getName() == null || ex.getName().equals("")) && (ex.getValue() == null || ex.getValue().equals("")))
+			ExternalIdentifierBean exBean = (ExternalIdentifierBean) itr.next();
+			if ((exBean.getName() == null || exBean.getName().equals("")) && (exBean.getValue() == null || exBean.getValue().equals("")))
 			{
 				continue;
 			}
-			if (ex.getId() == -1)
+			if (exBean.getId() == -1)
 			{
-				ex.setId(null);
+				exBean.setId(null);
 			}
 			else
 			{
-				ex.setId(ex.getId());
+				exBean.setId(exBean.getId());
 			}
+			ExternalIdentifier ex = new ExternalIdentifier();
+			ex.setId(exBean.getId());
+			ex.setName(exBean.getName());
+			ex.setValue(exBean.getValue());
 			exIdSet.add(ex);
 		}
 		return exIdSet;
@@ -1057,11 +1106,14 @@ public class FlexInterface
 		Iterator itr = biohazardColl.iterator();
 		while (itr.hasNext())
 		{
-			Biohazard biohazard = (Biohazard) itr.next();
-			if (!biohazard.getName().equals(Constants.SELECT_OPTION) && !biohazard.getType().equals(Constants.SELECT_OPTION))
+			BiohazardBean biohazardBean = (BiohazardBean) itr.next();
+			if (!biohazardBean.getName().equals(Constants.SELECT_OPTION) && !biohazardBean.getType().equals(Constants.SELECT_OPTION))
 			{
-				Long id = getBiohazardIdentifier(biohazard.getType(), biohazard.getName());
+				Long id = getBiohazardIdentifier(biohazardBean.getType(), biohazardBean.getName());
+				Biohazard biohazard = new Biohazard();
 				biohazard.setId(id);
+				biohazard.setType(biohazardBean.getType());
+				biohazard.setName(biohazardBean.getName());
 				biohazardSet.add(biohazard);
 			}
 		}
