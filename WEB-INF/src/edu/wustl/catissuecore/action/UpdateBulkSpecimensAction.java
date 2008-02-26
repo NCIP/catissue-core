@@ -94,6 +94,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 					request.setAttribute("pageOf",request.getParameter("pageOf"));
 				return mapping.findForward("printMultiple");
 			}
+			if(request.getParameter("pageOf") != null)
+				return mapping.findForward(request.getParameter("pageOf"));
+			
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception exception)
