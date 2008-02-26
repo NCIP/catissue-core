@@ -7,7 +7,7 @@ package valueobjects
 	import mx.controls.Alert;
 	
 	[Bindable]
-	[RemoteClass(alias="edu.wustl.catissuecore.domain.ExternalIdentifier")]	
+	[RemoteClass(alias="edu.wustl.catissuecore.flex.ExternalIdentifierBean")]	
 	public class ExternalIdentifierBean implements IExternalizable
 	{
 		public var isSelected:Boolean;

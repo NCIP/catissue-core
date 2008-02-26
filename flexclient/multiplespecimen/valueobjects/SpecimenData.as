@@ -109,7 +109,6 @@ package valueobjects
 			
 			this.specimenLabel = spData.specimenLabel;
 			this.specimenBarcode = spData.specimenBarcode;
-			
 			this.specimenClass = spData.specimenClass;
 			this.specimenType = spData.specimenType;
 			

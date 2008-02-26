@@ -6,7 +6,7 @@ package valueobjects
 	import mx.controls.Alert;
 	import util.Constants;
 	[Bindable]
-	[RemoteClass(alias="edu.wustl.catissuecore.domain.Biohazard")]	
+	[RemoteClass(alias="edu.wustl.catissuecore.flex.BiohazardBean")]	
 
 	public class BiohazardBean implements IExternalizable
 	{
