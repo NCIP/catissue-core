@@ -408,7 +408,22 @@ public class OrderBizLogic extends DefaultBizLogic
 								distribution.setOrderDetails(orderOld);
 								//Setting the user for distribution.
 								User user = new User();
-								user.setId(sessionDataBean.getUserId());
+								try
+								{
+									if(sessionDataBean.getUserId()!=null)
+									{
+										user.setId(sessionDataBean.getUserId());
+									}
+							        else
+							        {
+							        	//Change for API
+							        	user.setId(distribution.getDistributedBy().getId());
+							        }
+								}
+								catch(NullPointerException npe)
+								{
+									throw new UserNotAuthorizedException("Please mention distributedBy attribute");
+								}
 								distribution.setDistributedBy(user);
 								//Setting activity status
 								distribution.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
