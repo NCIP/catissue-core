@@ -312,22 +312,22 @@
 			element.options[i].selected=true;
 		}
 	}
-	function onSubmit(theSelTo,operation)
+    function onSubmit(theSelTo,operation)
 	{		
-		if(theSelTo.length==0)
+		
+		
+		if(operation == 'finish')
 		{
-			alert("We need to add atleast one column to define view");
-		}
-		else
-		{
-			if(operation == 'finish')
+			if(theSelTo.length==0)
 			{
-				selectOptions(document.forms[0].selectedColumnNames);
+				alert("We need to add atleast one column to define view");
+				return ;
 			}
-			document.forms[0].operation.value = operation;
-			document.forms[0].action =  "ConfigureGridView.do";	
-			document.forms[0].submit();
+			selectOptions(document.forms[0].selectedColumnNames);
 		}
+		document.forms[0].operation.value = operation;
+		document.forms[0].action =  "ConfigureGridView.do";	
+		document.forms[0].submit();		
 	}
 	
 </script>
