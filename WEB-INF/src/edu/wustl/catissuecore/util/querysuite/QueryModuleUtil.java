@@ -395,7 +395,7 @@ public abstract class QueryModuleUtil
 	public static int searchQuery(HttpServletRequest request, IQuery query, String option)
 	{      
 		System.out.println("Start Time");
-		String isSavedQuery = (String) request.getAttribute(Constants.IS_SAVED_QUERY);
+		String isSavedQuery = (String) request.getSession().getAttribute(Constants.IS_SAVED_QUERY);
 		if(isSavedQuery == null) 
 			isSavedQuery = Constants.FALSE;
 		HttpSession session = request.getSession();  
