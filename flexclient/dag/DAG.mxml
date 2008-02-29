@@ -6,6 +6,7 @@ xmlns:Components="Components.*" xmlns:display="flash.display.*"
 creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingBottom="0" paddingLeft="0" paddingRight="0">
 <mx:Script>
 <![CDATA[
+	import Util.Utility;
 	import mx.controls.Label;
 	import mx.utils.StringUtil;
 	import Components.DAGPath;
@@ -235,6 +236,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGPath", DAGPath);
 		rpcService= new RemoteObject();
+		rpcService.channelSet = Utility.getChannelSet();
 		rpcService.destination="cdeService";
 		isQuery =Application.application.parameters.isQuery;
 		view= Application.application.parameters.view;

@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" preinitialize="getCPData()" height="90%" width="70%" backgroundColor="#FFFFFF" creationComplete="initApp();">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:adobe="http://www.adobe.com/2006/fc" layout="absolute" preinitialize="preInit()" height="90%" width="70%" backgroundColor="#FFFFFF" creationComplete="initApp();">
   <mx:Script>
   	<![CDATA[
+		import util.Utility;
+  		import mx.messaging.channels.SecureAMFChannel;
+  		import mx.messaging.channels.AMFChannel;
+  		import mx.messaging.ChannelSet;
   		import mx.events.CloseEvent;
   		import mx.core.Container;
   		import mx.events.MoveEvent;
@@ -20,14 +24,9 @@
 
     [Bindable]
 		public var cpCollection:ArrayCollection = new ArrayCollection();
-  
-                public var pCollection:ArrayCollection = new ArrayCollection(); 
-  
-   
-                 private var xmlString:XML = new XML();
-   
-    
-                 private var treeData:XMLListCollection = new XMLListCollection();
+        public var pCollection:ArrayCollection = new ArrayCollection(); 
+        private var xmlString:XML = new XML();
+        private var treeData:XMLListCollection = new XMLListCollection();
 
       [Bindable]
                  [Embed(source='/images/nolines_minus.gif')]
@@ -94,12 +93,16 @@
 	          public var selectedParticipantIndex:Number = 0;
 		      public var tempCollection:ArrayCollection = new ArrayCollection();
 	  
-    public function initApp():void
-    {
-    	 ExternalInterface.addCallback("myFlexMethod",refreshTree);
-	 	 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
-		 ExternalInterface.addCallback("editParticipant",editParticipant);
-    }
+	  		  public var myChannelSet:ChannelSet = new ChannelSet();
+	
+
+
+    		public function initApp():void
+		    {
+		    	 ExternalInterface.addCallback("myFlexMethod",refreshTree);
+	 			 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
+				 ExternalInterface.addCallback("editParticipant",editParticipant);
+		    }
     
      /*
        This method is invoked from javaScript function when a new Participant is registered 
@@ -111,8 +114,6 @@
 		//Alert.show("In refresh Participants Method");    	
 		var selectedCp : NameValueBean = new NameValueBean();
 		selectedCp =  cpCombo.selectedItem as NameValueBean;
-		var remoteObj1:RemoteObject =  new RemoteObject(); 
-		remoteObj1.destination = "cdeService";
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
 		{
@@ -121,10 +122,8 @@
 		}
 		else
 		{
-			remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name);
+			remoteObj.getParticipantsList(selectedCp.value,selectedCp.name);
 		}
-		remoteObj1.addEventListener(ResultEvent.RESULT,participantHandler);
-		remoteObj1.addEventListener("fault",faultHandler);
     }
 
     /*
@@ -145,15 +144,7 @@
 
 
         //Here we can get data for updating specimen tree details for particular SCG/specimen instead of retrieving whole data 
-         var remoteObj2:RemoteObject =  new RemoteObject(); 
-	 	 remoteObj2.destination = "cdeService"; 
-	 	 
-         var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
-		 remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
-        
-	     // specimenTree.validateNow();
-         // specimenTree.dataProvider = treeData;
-	     remoteObj2.addEventListener("fault",faultHandler);
+         var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);  
       
         //Making a selected node appear when tree is displayed when dataProvider changes in cases of refresh 
 
@@ -193,17 +184,40 @@
    	   	specimenTree.selectedItem = node;
   	}
   
+    private function getContextRootUrl():String {
+		 var urlStr:Array = Application.application.url.split("/");
+		 var contextRootUrl:String = urlStr[0]+"//"+urlStr[2]+"/"+urlStr[3];
+		  return contextRootUrl;
+	}
+	private function getProtocolType():String
+	{
+		 var urlStr:Array = Application.application.url.split(":");
+		if(urlStr != null)
+		{
+			if(urlStr.length >0)
+			{
+				return urlStr[0];
+			}
+		}
+		return null;
+	}
+  	private function setChannel() : void
+  	{
+		 remoteObj.channelSet= Utility.getChannelSet();
+		 remoteObj1.channelSet = Utility.getChannelSet();
+
+  	}
+  	private function preInit() : void
+  	{
+  		setChannel();
+  		getCPData();
+  	}
     /*
         getCpData()  method retrieves the Collection protocols before application initializes
     */
    	private function getCPData():void
   	{
-  		
-		var remoteObj:RemoteObject =  new RemoteObject(); 
-		remoteObj.destination = "cdeService";
 		remoteObj.getCpList();
-		remoteObj.addEventListener(ResultEvent.RESULT,cpEventHandler); 		
-  		remoteObj.addEventListener("fault",faultHandler);
   	}
   	
   	/*
@@ -222,8 +236,6 @@
 	{
 		var selectedCp : NameValueBean = new NameValueBean();
 		selectedCp =  cpCombo.selectedItem as NameValueBean;
-		var remoteObj1:RemoteObject =  new RemoteObject(); 
-		remoteObj1.destination = "cdeService";
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
 		{
@@ -232,10 +244,9 @@
 		}
 		else
 		{
-			remoteObj1.getParticipantsList(selectedCp.value, selectedCp.name);
+			remoteObj.getParticipantsList(selectedCp.value, selectedCp.name);
 		}
-		remoteObj1.addEventListener(ResultEvent.RESULT,participantHandler);
-		remoteObj1.addEventListener("fault",faultHandler);
+
 		specimenTree.dataProvider = null;
 		spDetailsLabel.text = title;
 	}
@@ -285,11 +296,8 @@
           
 		   //Here we can get data for specimen tree details 
 	
-             var remoteObj2:RemoteObject =  new RemoteObject(); 
-		     remoteObj2.destination = "cdeService"; 
-    	     var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
-	    	 remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
-             remoteObj2.addEventListener("fault",faultHandler);
+
+    	     var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);  
 
 		     var refreshParticipants:String = "false";  
 	   
@@ -409,8 +417,6 @@
     	
     	var selectedCp : NameValueBean = new NameValueBean();
  		selectedCp =  cpCombo.selectedItem as NameValueBean;
-		var remoteObj1:RemoteObject =  new RemoteObject(); 
-		remoteObj1.destination = "cdeService";
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
 		{
@@ -421,8 +427,6 @@
 		{
 	
 			remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name)
-			remoteObj1.addEventListener(ResultEvent.RESULT,tempHandler);
-			remoteObj1.addEventListener("fault",faultHandler);
    
         }       
         
@@ -484,9 +488,6 @@
           
      private function chkForCollectionProtocolType(type:String):void
      {
-	 	var remoteObj1:RemoteObject =  new RemoteObject(); 
-		remoteObj1.destination = "cdeService";
-
 		var id : String = specimenTree.selectedItem.@id;
 		 //Selected CP and selected participants
 		var selectedParticipant:NameValueBean= new NameValueBean();
@@ -502,9 +503,7 @@
 	   	}
 		if(type.match("Arm"))
 		{	
-			remoteObj1.chkArmShifting(selectedCpId,selectedParticipantId);
-			remoteObj1.addEventListener(ResultEvent.RESULT,armChkHandler);
-			remoteObj1.addEventListener("fault",faultHandler);
+			remoteObj.chkArmShifting(selectedCpId,selectedParticipantId);
 		}
 		else
 		{
@@ -631,11 +630,22 @@
   	]]>
   </mx:Script>
 
-  
+  <mx:RemoteObject id="remoteObj" destination="cdeService" showBusyCursor="true" >
+		<mx:method name="getParticipantsList" result="participantHandler(event)"/>
+		<mx:method name="getTreeData" result="treeHandler(event)"/>
+		<mx:method name="getCpList" result="cpEventHandler(event)"/>
+		<mx:method name="chkArmShifting" result="armChkHandler(event)"/>
+
+	</mx:RemoteObject>
+	
+  <mx:RemoteObject id="remoteObj1" destination="cdeService" showBusyCursor="true">
+		<mx:method name="getParticipantsList" result="tempHandler(event)"/>
+	</mx:RemoteObject>
 
      <mx:Box direction="vertical" borderThickness="10" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" paddingLeft="0" paddingBottom="0" width="100%" height="100%">
       	<mx:VBox backgroundAlpha="0.1" width="100%" height="5%" backgroundColor="#FFFFFF"  >
              <mx:Label text="Collection Protocol:" width="100%" height="14" color="black" fontWeight="bold"/>
+
               <mx:ComboBox width="100%" id="cpCombo" dataProvider="{cpCollection}"  labelField="name" change="onCpChange()" prompt="--Select--"/>
         </mx:VBox>
         

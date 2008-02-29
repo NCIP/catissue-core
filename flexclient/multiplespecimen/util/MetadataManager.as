@@ -8,17 +8,21 @@ package util
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import valueobjects.SpecimenData;
+	import util.Utility;
+	
 	
 	[Event(name="initCompleteEvent", type="flash.events.Event")]
 	public class MetadataManager extends EventDispatcher
 	{
 		private var remoteObj:RemoteObject = new RemoteObject("cdeService");
+
 		private var counter:int = 0;
 		private var counterEndVal:int = 8;
 		
 		public var spDataList:ArrayCollection;
 		public function init(mode:String):void
 		{
+			remoteObj.channelSet = Utility.getChannelSet();
 			if(mode==MSPParameter.MODE_PARAM_VAL_EDIT)	
 			{
 				counterEndVal = 9;
@@ -175,5 +179,6 @@ package util
 		}
 		
 		
+	 
 	}
 }

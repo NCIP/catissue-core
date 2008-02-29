@@ -1,4 +1,4 @@
-package util
+package Util
 {
 	import mx.binding.utils.BindingUtils;
 	import mx.messaging.ChannelSet;

@@ -3,6 +3,7 @@
 	<mx:Style source="../defaltTheme.css"/>
 <mx:Script>
 	<![CDATA[
+		import util.Utility;
 		import util.MetadataModel;
 		import mx.messaging.management.Attribute;
 		import util.Constants;
@@ -59,6 +60,8 @@
 
 		private function preInit():void
 		{
+			myRemoteObject.channelSet = Utility.getChannelSet();
+			
 			model.collection = specimenColl;
 			model.filteredCollection = specimenColl;
 			mspParameter = MSPParameterReader.processParam(Application.application.parameters);
