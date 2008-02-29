@@ -35,12 +35,13 @@ public class ExecuteQueryAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping actionMapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String target = Constants.FAILURE;
-        request.setAttribute(Constants.IS_SAVED_QUERY, Constants.TRUE);
+		String target = Constants.FAILURE;        
+		//request.setAttribute(Constants.IS_SAVED_QUERY, Constants.TRUE);
 		HttpSession session = request.getSession();
 		session.removeAttribute(Constants.SELECTED_COLUMN_META_DATA);
 		IParameterizedQuery parameterizedQuery = (IParameterizedQuery) session.getAttribute(AppletConstants.QUERY_OBJECT);
 		String conditionstr = request.getParameter("conditionList");
+		session.setAttribute(Constants.IS_SAVED_QUERY, Constants.TRUE);
 		
 		if (conditionstr != null) 
 		{
