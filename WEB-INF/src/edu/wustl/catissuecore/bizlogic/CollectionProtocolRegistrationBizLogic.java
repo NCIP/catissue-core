@@ -75,12 +75,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	private static boolean armFound = false;
 
 	private Date dateOfLastEvent = null;
-
+	private static int offset = 0;
 	private int countOfStudyCalendarEventPoint = 0;
 
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-
+		offset = 0;
 		armFound = false;
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		// check for closed Collection Protocol
@@ -167,36 +167,52 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						{
 							CollectionProtocolRegistration childCollectionProtocolRegistration = createCloneOfCPR(collectionProtocolRegistration, cp);
 							setRegDate(childCollectionProtocolRegistration, cp.getStudyCalendarEventPoint(), dateofCP);
-							if (childCollectionProtocolRegistration.getOffset() != null)
-							{
-								if (childCollectionProtocolRegistration.getOffset().intValue() != 0)
+							getTotalOffset(childCollectionProtocolRegistration, dao, sessionDataBean);
+							//							if (childCollectionProtocolRegistration.getOffset() != null)
+							//							{
+							//								if (childCollectionProtocolRegistration.getOffset().intValue() != 0)
+							//								{
+							if (offset != 0)
+							{ //bug 6500 so that CP with null studyCalendarEventPoint inherits Appropriate date
+								if (cp.getStudyCalendarEventPoint() != null)
 								{
-									//bug 6500 so that CP with null studyCalendarEventPoint inherits Appropriate date
-									if(cp.getStudyCalendarEventPoint()!= null)
-									{
-									childCollectionProtocolRegistration.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(childCollectionProtocolRegistration.getRegistrationDate(),childCollectionProtocolRegistration.getOffset().intValue()));
-									}
+									childCollectionProtocolRegistration.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility
+											.getNewDateByAdditionOfDays(childCollectionProtocolRegistration.getRegistrationDate(), offset));
 								}
 							}
+							//								}
+							//						}
 							insertCPR(childCollectionProtocolRegistration, dao, sessionDataBean);
 						}
 						else
 						{
 							/* this lines of code is for second arm registered manually*/
 							setRegDate(collectionProtocolRegistrationCheck, cp.getStudyCalendarEventPoint(), dateofCP);
-							Integer offset = collectionProtocolRegistration.getOffset();
-							if (offset != null)
+							//if registered CPR has offset on itself
+							if (collectionProtocolRegistrationCheck.getOffset() != null)
 							{
-								collectionProtocolRegistrationCheck.setOffset(offset);
-								//bug 6500 so that CP with null studyCalendarEventPoint inherits Appropriate date
-								if(cp.getStudyCalendarEventPoint()!= null)
+								if (collectionProtocolRegistrationCheck.getOffset().intValue() != 0)
 								{
-								collectionProtocolRegistrationCheck.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility
-										.getNewDateByAdditionOfDays(collectionProtocolRegistrationCheck.getRegistrationDate(), offset.intValue()));
+									collectionProtocolRegistrationCheck.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility
+											.getNewDateByAdditionOfDays(collectionProtocolRegistrationCheck.getRegistrationDate(),
+													collectionProtocolRegistrationCheck.getOffset().intValue()));
 								}
 							}
+							//total offset of all the previously registered ColectionProtocols and SCGs
+							getTotalOffset(collectionProtocolRegistrationCheck, dao, sessionDataBean);
+							if (offset != 0)//if before registration of second arm the registered CP has offset on itself.this condition is taken into consideration here.
+							{
+								//								collectionProtocolRegistrationCheck.setOffset(offset);
+								//bug 6500 so that CP with null studyCalendarEventPoint inherits Appropriate date
+								if (cp.getStudyCalendarEventPoint() != null)
+								{
+									collectionProtocolRegistrationCheck.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility
+											.getNewDateByAdditionOfDays(collectionProtocolRegistrationCheck.getRegistrationDate(), offset));
+								}
+
+							}
 							dao.update(collectionProtocolRegistrationCheck, sessionDataBean, true, true, false);
-							updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, collectionProtocolRegistrationCheck);
+							//							updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, collectionProtocolRegistrationCheck);
 							checkAndUpdateChildDate(dao, sessionDataBean, collectionProtocolRegistrationCheck);
 
 						}
@@ -234,6 +250,98 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 	}
 
+	/**This method is called for the protocols that are automatically registered after registration of an arm.In this 
+	 * method the total offset of upper level hierarchy up to that protocol is calculated for proper recalculation of the 
+	 * registration date
+	 * @param collectionProtocolRegistrationThe CollectionProtocolRegistration Object for current CollectionProtocol
+	 * @param dao The DAO object
+	 * @param sessionDataBean  The session in which the object is saved.
+	 * @throws DAOException
+	 */
+	public void getTotalOffset(CollectionProtocolRegistration collectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean)
+			throws DAOException
+	{
+		offset = 0;
+		CollectionProtocol collectionProtocol = collectionProtocolRegistration.getCollectionProtocol();
+		Long participantId = collectionProtocolRegistration.getParticipant().getId();
+		CollectionProtocol mainParent = null;
+		if (collectionProtocol.getParentCollectionProtocol() != null)
+		{
+			mainParent = getMainParentCP(collectionProtocol.getParentCollectionProtocol());
+		}
+		else
+			mainParent = collectionProtocol;
+		calculationOfTotalOffset(mainParent, dao, sessionDataBean, participantId, collectionProtocol);
+	}
+
+	public void calculationOfTotalOffset(CollectionProtocol collectionProtocol, DAO dao, SessionDataBean sessionDataBean, Long participantId,
+			CollectionProtocol collectionProtocolToRegister) throws DAOException
+	{
+		if (collectionProtocol.getId() != collectionProtocolToRegister.getId())
+		{
+			CollectionProtocolRegistration cpr = getCPRbyCollectionProtocolIDAndParticipantID(dao, collectionProtocol.getId(), participantId);
+			if (cpr != null)
+			{
+				Integer offsetFromCP = cpr.getOffset();
+				if (offsetFromCP != null)
+				{
+					if (offsetFromCP.intValue() != 0)
+						offset = offset + offsetFromCP.intValue();
+				}
+				offsetFromSCG(cpr);
+				if (collectionProtocol.getChildCollectionProtocolCollection() != null)
+				{
+					List childCollectionCP = getChildColl(collectionProtocol);
+					if (!(childCollectionCP.isEmpty()))
+					{
+						Iterator childCollectionCPIterator = childCollectionCP.iterator();
+						while (childCollectionCPIterator.hasNext())
+						{
+							CollectionProtocol cp = (CollectionProtocol) childCollectionCPIterator.next();
+							calculationOfTotalOffset(cp, dao, sessionDataBean, participantId, collectionProtocolToRegister);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**This method is called so as to calculate total offset of SCG for currentCPR.
+	 * This method is called when an CP is automatically registered after an arm.All SCG's of upper level hierarchy which carry offset 
+	 * are added together for total offset,So that registration date is correct
+	 * @param cpr the CollectionProtocol object which has SCG's
+	 */
+	public void offsetFromSCG(CollectionProtocolRegistration cpr)
+	{
+		Collection specimenCollectionGroupCollection = cpr.getSpecimenCollectionGroupCollection();
+		if (specimenCollectionGroupCollection != null)
+		{
+			if (!specimenCollectionGroupCollection.isEmpty())
+			{
+				Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
+				while (specimenCollectionGroupIterator.hasNext())
+				{
+					SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupIterator.next();
+					Integer offsetFromSCG = specimenCollectionGroup.getOffset();
+					if (offsetFromSCG != null)
+					{
+						if (offsetFromSCG.intValue() != 0)
+							offset = offset + offsetFromSCG.intValue();
+					}
+				}
+			}
+		}
+	}
+
+	/**The id of CPR is extracted from database with respect to CollectionProtocol id and Participant id
+	 * 
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param collectionProtocolRegistration
+	 * @return
+	 * @throws UserNotAuthorizedException
+	 * @throws DAOException
+	 */
 	public Long getIdofCPR(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration)
 			throws UserNotAuthorizedException, DAOException
 	{
@@ -371,18 +479,18 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 							.getParticipant().getId());
 					if (cpr != null)
 					{
-						setRegDate(cpr, cp.getStudyCalendarEventPoint(), cpr.getRegistrationDate());
-						Integer offset = collectionProtocolRegistration.getOffset();
+						setRegDate(cpr, cp.getStudyCalendarEventPoint(), collectionProtocolRegistration.getRegistrationDate());
+						Integer offsetOfCurrentCPR = cpr.getOffset();
 						{
-							if (offset != null)
+							if (offsetOfCurrentCPR != null)
 							{
-								cpr.setOffset(offset);
+								cpr.setOffset(offsetOfCurrentCPR);
 								cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cpr
-										.getRegistrationDate(), offset.intValue()));
+										.getRegistrationDate(), offsetOfCurrentCPR.intValue()));
 							}
 						}
 						dao.update(cpr, sessionDataBean, true, true, false);
-						updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, cpr);
+						//						updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, cpr);
 						if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 						{
 							checkAndUpdateChildDate(dao, sessionDataBean, cpr);
@@ -393,27 +501,27 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
 	}
 
-	private void updateOffsetForEventsForAlreadyRegisteredCPR(DAO dao, SessionDataBean sessionDataBean,
-			CollectionProtocolRegistration collectionProtocolRegistration) throws UserNotAuthorizedException, DAOException
-	{
-		Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
-				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);
-		if (!specimenCollectionGroupCollection.isEmpty())
-		{
-			Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
-			while (specimenCollectionGroupIterator.hasNext())
-			{
-				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupIterator.next();
-				Integer offset = collectionProtocolRegistration.getOffset();
-				if (offset != null)
-				{
-					specimenCollectionGroup.setOffset(new Integer(offset));
-				}
-				dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
-			}
-		}
-
-	}
+	//	private void updateOffsetForEventsForAlreadyRegisteredCPR(DAO dao, SessionDataBean sessionDataBean,
+	//			CollectionProtocolRegistration collectionProtocolRegistration) throws UserNotAuthorizedException, DAOException
+	//	{
+	//		Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
+	//				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);
+	//		if (!specimenCollectionGroupCollection.isEmpty())
+	//		{
+	//			Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
+	//			while (specimenCollectionGroupIterator.hasNext())
+	//			{
+	//				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupIterator.next();
+	//				Integer offset = collectionProtocolRegistration.getOffset();
+	//				if (offset != null)
+	//				{
+	//					specimenCollectionGroup.setOffset(new Integer(offset));
+	//				}
+	//				dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
+	//			}
+	//		}
+	//
+	//	}
 
 	private List getChildColl(CollectionProtocol parent)
 	{
@@ -439,6 +547,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
 		return regDate;
 	}
+
+	/**The main parent(Collection Protocol) of the Collection Protocol is returned through this method.
+	 * the main parent is the topmost level collection Protocol in the hierarchy
+	 * @param cp CP whose main parent is to be found out
+	 * @return Main parent collection Protocol
+	 */
 
 	private CollectionProtocol getMainParentCP(CollectionProtocol cp)
 	{
@@ -479,6 +593,15 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 	}
 
+	/** In this method if parent CP has any child which can be automatically registered,then these child are registered
+	 * 
+	 * @param cpr The CollectionProtocol Registration Object of current Collection Protocol
+	 * @param dao The DAO object
+	 * @param sessionDataBean the SessionDataBean
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+
 	public void chkForChildCP(CollectionProtocolRegistration cpr, DAO dao, SessionDataBean sessionDataBean) throws DAOException,
 			UserNotAuthorizedException
 	{
@@ -501,14 +624,15 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 							CollectionProtocolRegistration cloneCPR = createCloneOfCPR(cpr, cp);
 							setRegDate(cloneCPR, cp.getStudyCalendarEventPoint(), dateofCP);
-							if (cloneCPR.getOffset() != null)
-							{
-								if (cloneCPR.getOffset().intValue() != 0)
-								{
-									cloneCPR.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cloneCPR
-											.getRegistrationDate(), cloneCPR.getOffset().intValue()));
-								}
-							}
+							//The offset for child is calculated twice...bug 6843
+							//							if (cloneCPR.getOffset() != null)
+							//							{
+							//								if (cloneCPR.getOffset().intValue() != 0)
+							//								{
+							//									cloneCPR.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cloneCPR
+							//											.getRegistrationDate(), cloneCPR.getOffset().intValue()));
+							//								}
+							//							}
 							insertCPR(cloneCPR, dao, sessionDataBean);
 						}
 						else
@@ -586,7 +710,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		{
 			NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
 			SpecimenCollectionGroupBizLogic specimenBizLogic = new SpecimenCollectionGroupBizLogic();
-			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
+			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol()
+					.getCollectionProtocolEventCollection();
 			Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
 			userID = getUserID(dao, sessionDataBean);
 			Collection scgCollection = new HashSet();
@@ -594,18 +719,17 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			{
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) collectionProtocolEventIterator.next();
 
-				
-				int temporaryCountOfStudyCalendarEventPointForComparison=(collectionProtocolEvent.getStudyCalendarEventPoint()).intValue();
-				if(countOfStudyCalendarEventPoint!=0)
+				int temporaryCountOfStudyCalendarEventPointForComparison = (collectionProtocolEvent.getStudyCalendarEventPoint()).intValue();
+				if (countOfStudyCalendarEventPoint != 0)
 				{
-					if(temporaryCountOfStudyCalendarEventPointForComparison > countOfStudyCalendarEventPoint)
-						{
-						countOfStudyCalendarEventPoint=temporaryCountOfStudyCalendarEventPointForComparison;
-						}
+					if (temporaryCountOfStudyCalendarEventPointForComparison > countOfStudyCalendarEventPoint)
+					{
+						countOfStudyCalendarEventPoint = temporaryCountOfStudyCalendarEventPointForComparison;
+					}
 				}
-				if(countOfStudyCalendarEventPoint==0)
+				if (countOfStudyCalendarEventPoint == 0)
 				{
-					countOfStudyCalendarEventPoint=temporaryCountOfStudyCalendarEventPointForComparison;
+					countOfStudyCalendarEventPoint = temporaryCountOfStudyCalendarEventPointForComparison;
 				}
 
 				/**
@@ -648,7 +772,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						}
 					}
 				}
-				specimenCollectionGroup.setOffset(collectionProtocolRegistration.getOffset());
+				//				specimenCollectionGroup.setOffset(collectionProtocolRegistration.getOffset());
 				specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
 				scgCollection.add(specimenCollectionGroup);
 				dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
@@ -794,7 +918,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
 				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);
 		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
-		
+
 		updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
 		/* for offset 27th Dec 2007 */
 		// Check if Offset is present.If it is present then all the below
@@ -810,7 +934,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				offset = offsetNew.intValue() - 0;
 			if (offset != 0)
 			{
-				updateOffsetForEvents(dao, sessionDataBean, collectionProtocolRegistration, offset);
+				//				updateOffsetForEvents(dao, sessionDataBean, collectionProtocolRegistration, offset);
 				checkAndUpdateChildOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
 				updateForOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
 			}
@@ -1530,14 +1654,14 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						{
 							cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cpr.getRegistrationDate(),
 									offset));
-							Integer offsetToSet = cpr.getOffset();
-							if (offsetToSet != null && offsetToSet.intValue() != 0)
-							{
-								cpr.setOffset(new Integer(offset + offsetToSet.intValue()));
-							}
-							else
-								cpr.setOffset(new Integer(offset));
-							updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
+							//							Integer offsetToSet = cpr.getOffset();
+							//							if (offsetToSet != null && offsetToSet.intValue() != 0)
+							//							{
+							//								cpr.setOffset(new Integer(offset + offsetToSet.intValue()));
+							//							}
+							//							else
+							//								cpr.setOffset(new Integer(offset));
+							//							updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
 							dao.update(cpr, sessionDataBean, true, true, false);
 
 							checkAndUpdateChildOffset(dao, sessionDataBean, cpr, offset);
@@ -1594,14 +1718,14 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 					{
 						cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cpr.getRegistrationDate(),
 								offset));
-						Integer offsetToSet = cpr.getOffset();
-						if (offsetToSet != null && offsetToSet.intValue() != 0)
-						{
-							cpr.setOffset(new Integer(offset + offsetToSet.intValue()));
-						}
-						else
-							cpr.setOffset(new Integer(offset));
-						updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
+						//						Integer offsetToSet = cpr.getOffset();
+						//						if (offsetToSet != null && offsetToSet.intValue() != 0)
+						//						{
+						//							cpr.setOffset(new Integer(offset + offsetToSet.intValue()));
+						//						}
+						//						else
+						//							cpr.setOffset(new Integer(offset));
+						//						updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
 						dao.update(cpr, sessionDataBean, true, true, false);
 						if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 						{
@@ -1670,32 +1794,31 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	 *             DAOException
 	 */
 
-	private void updateOffsetForEvents(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration,
-			int offset) throws UserNotAuthorizedException, DAOException
-	{
-		/*Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
-				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);*/
-		Collection specimenCollectionGroupCollection = collectionProtocolRegistration.getSpecimenCollectionGroupCollection();
-		
-		if (!specimenCollectionGroupCollection.isEmpty())
-		{
-			Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
-			while (specimenCollectionGroupIterator.hasNext())
-			{
-				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupIterator.next();
-				Integer offsetToSet = specimenCollectionGroup.getOffset();
-				if (offsetToSet != null && offsetToSet.intValue() != 0)
-				{
-					specimenCollectionGroup.setOffset(new Integer(offset + offsetToSet.intValue()));
-				}
-				else
-					specimenCollectionGroup.setOffset(new Integer(offset));
-				dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
-			}
-		}
-
-	}
-
+	//	private void updateOffsetForEvents(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration,
+	//			int offset) throws UserNotAuthorizedException, DAOException
+	//	{
+	//		/*Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
+	//				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);*/
+	//		Collection specimenCollectionGroupCollection = collectionProtocolRegistration.getSpecimenCollectionGroupCollection();
+	//		
+	//		if (!specimenCollectionGroupCollection.isEmpty())
+	//		{
+	//			Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
+	//			while (specimenCollectionGroupIterator.hasNext())
+	//			{
+	//				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupIterator.next();
+	//				Integer offsetToSet = specimenCollectionGroup.getOffset();
+	//				if (offsetToSet != null && offsetToSet.intValue() != 0)
+	//				{
+	//					specimenCollectionGroup.setOffset(new Integer(offset + offsetToSet.intValue()));
+	//				}
+	//				else
+	//					specimenCollectionGroup.setOffset(new Integer(offset));
+	//				dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
+	//			}
+	//		}
+	//
+	//	}
 	private Integer getOffsetFromPreviousSeqNoCP(DAO dao, SessionDataBean sessionDataBean, CollectionProtocol cp, Long participantId)
 			throws DAOException, ClassNotFoundException
 	{
