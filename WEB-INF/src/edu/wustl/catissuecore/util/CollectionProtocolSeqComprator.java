@@ -18,10 +18,13 @@ public class CollectionProtocolSeqComprator implements Comparator {
 			{
 				return seq1.compareTo(seq2);
 			}
+			if(seq1 == null && seq2 == null)
+				return 0;
+			
 			if(seq1 ==null)
-				return -1;
-			if(seq2 == null)
 				return 1;
+			if(seq2 == null)
+				return -1;
 						
 		}
 		// TODO Auto-generated method stub
@@ -29,3 +32,5 @@ public class CollectionProtocolSeqComprator implements Comparator {
 	}
 
 }
+
+
