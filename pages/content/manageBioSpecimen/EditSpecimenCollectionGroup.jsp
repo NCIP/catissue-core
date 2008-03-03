@@ -67,6 +67,30 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
 	}
 	%>
+	<%
+	    //for Offset change we need Receieved and collected date.So as to change them when any offset is applied.
+		Integer received_Year = new Integer(Utility.getYear(currentReceivedDate ));
+		Integer received_Month = new Integer(Utility.getMonth(currentReceivedDate ));
+		Integer received_Date = new Integer(Utility.getDay(currentReceivedDate ));
+		Integer collection_Year = new Integer(Utility.getYear(currentCollectionDate ));
+		Integer collection_Month = new Integer(Utility.getMonth(currentCollectionDate ));
+		Integer collection_Day = new Integer(Utility.getDay(currentCollectionDate ));
+	
+	%>
+	<script language="javascript">
+	function registrationDateChange(newOffsetObject)
+		 {
+		 	
+     		var originalcollectedDate= <%=collection_Month.intValue()%> +"/"+<%=collection_Day.intValue()%> +"/"+<%=collection_Year.intValue()%>;
+			var newCollectedDate=dateChange(newOffsetObject,<%=form.getOffset()%>,originalcollectedDate);
+			document.getElementById("collectionEventdateOfEvent").value=newCollectedDate;
+			
+			
+			var originalReceiveddate= <%=received_Month.intValue()%> +"/"+<%=received_Date.intValue()%> +"/"+<%=received_Year.intValue()%>;
+			var newReceivedDate=dateChange(newOffsetObject,<%=form.getOffset()%>,originalReceiveddate);
+			document.getElementById("receivedEventDateOfEvent").value=newReceivedDate;
+		 }
+			</script>
 		
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="650" >
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
@@ -201,10 +225,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						</label>
 					</td>
 					<td class="formFieldNoBordersSimple">
-						<html:text styleClass="formFieldSized" size="10"  maxlength="10" styleId="offset" property="offset" />						
+						<html:text styleClass="formFieldSized" size="10"  maxlength="10" styleId="offset" property="offset" onblur="registrationDateChange(this)"/>						
 					</td>
 				</tr>
-				 
 				 <tr>
 				     <td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
 				     <td class="formFieldNoBordersSimple">
