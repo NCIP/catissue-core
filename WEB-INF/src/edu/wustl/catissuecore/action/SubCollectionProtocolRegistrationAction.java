@@ -90,7 +90,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 
 				}
 			}
-			setOffsetInForm(collectionProtocolId,participantId,collectionProtocolRegistrationForm);
+//			setOffsetInForm(collectionProtocolId,participantId,collectionProtocolRegistrationForm);
 		}
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
@@ -244,46 +244,46 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 		}
 	}
 	
-	private void setOffsetInForm(Long collectionProtocolId,Long participantId,CollectionProtocolRegistrationForm form) throws DAOException
-	{
-		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
-				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-		Long parentCpId = getImmidateParentCpId(collectionProtocolId);
-			
-		if(parentCpId != null)
-		{
-			String sourceObjName = CollectionProtocolRegistration.class.getName();
-			String[] selectColName = {"offset"};
-			String[] whereColName = {"collectionProtocol.id","participant.id"};
-			String[] whereColCond = {"=","="};
-			Object[] whereColVal = {parentCpId,participantId};
-			List offsetList = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
-			if(offsetList != null && !offsetList.isEmpty())
-			{
-				Integer offset = (Integer) offsetList.get(0);
-				if(offset!=null)
-				{
-					form.setOffset(offset.intValue());
-				}
-			}
-		}
-	}
-	private Long getImmidateParentCpId(Long collectionProtocolId) throws DAOException
-	{
-		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
-				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-		Long parentCpId = null;
-
-		String sourceObjName = CollectionProtocol.class.getName();
-		String[] selectColName = {"parentCollectionProtocol.id"};
-		String[] whereColName = {"id"};
-		String[] whereColCond = {"="};
-		Object[] whereColVal = {collectionProtocolId};
-
-		List parentCPIdList = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
-		if(parentCPIdList != null && !parentCPIdList.isEmpty())
-			parentCpId = (Long) parentCPIdList.get(0);
-		
-		return parentCpId;
-	}
+//	private void setOffsetInForm(Long collectionProtocolId,Long participantId,CollectionProtocolRegistrationForm form) throws DAOException
+//	{
+//		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+//				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+//		Long parentCpId = getImmidateParentCpId(collectionProtocolId);
+//			
+//		if(parentCpId != null)
+//		{
+//			String sourceObjName = CollectionProtocolRegistration.class.getName();
+//			String[] selectColName = {"offset"};
+//			String[] whereColName = {"collectionProtocol.id","participant.id"};
+//			String[] whereColCond = {"=","="};
+//			Object[] whereColVal = {parentCpId,participantId};
+//			List offsetList = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+//			if(offsetList != null && !offsetList.isEmpty())
+//			{
+//				Integer offset = (Integer) offsetList.get(0);
+//				if(offset!=null)
+//				{
+//					form.setOffset(offset.intValue());
+//				}
+//			}
+//		}
+//	}
+//	private Long getImmidateParentCpId(Long collectionProtocolId) throws DAOException
+//	{
+//		CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
+//				Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+//		Long parentCpId = null;
+//
+//		String sourceObjName = CollectionProtocol.class.getName();
+//		String[] selectColName = {"parentCollectionProtocol.id"};
+//		String[] whereColName = {"id"};
+//		String[] whereColCond = {"="};
+//		Object[] whereColVal = {collectionProtocolId};
+//
+//		List parentCPIdList = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+//		if(parentCPIdList != null && !parentCPIdList.isEmpty())
+//			parentCpId = (Long) parentCPIdList.get(0);
+//		
+//		return parentCpId;
+//	}
 }
