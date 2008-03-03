@@ -821,7 +821,15 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//ReceivedEvent Fields
 		if (specimenForm.getReceivedEventDateOfEvent() == null)
 		{
+			if (request.getParameter("evtDate") != null)
+			{
+				//received date should be same as collected if its anticipated date.
+				specimenForm.setReceivedEventDateOfEvent(request.getParameter("evtDate"));
+			}
+			else
+			{
 			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+			}
 		}
 		if (specimenForm.getReceivedEventTimeInHours() == null)
 		{
