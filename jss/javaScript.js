@@ -1181,3 +1181,40 @@ function viewAnnotations(specimenEntityId,ID,consentTierCounter,staticEntityName
 
 
 // DE script end
+
+//DateChange by Offset
+function dateChange(newoffset,originaloffset,originalRegistrationDate)
+		 {
+			var newValueofOffset=newoffset.value;
+			var originalOffsetvalue=originaloffset;
+			var differenceInoffset=newValueofOffset-originalOffsetvalue;
+			//alert(differenceInoffset);
+			var newdate=new Date(originalRegistrationDate);
+			//alert(newdate);
+			newdate.setDate(newdate.getDate()+differenceInoffset);
+			//alert(newdate);
+			var curr_date = newdate.getDate();
+			if(curr_date < 10)
+			 {
+				var appendzero="0";
+				curr_date=appendzero.concat(curr_date);//it returns only 1,2,..and so on.We need to append 0 for proper mm-dd-yyyy format
+				//alert(curr_date);
+			 }
+			var curr_month = newdate.getMonth();
+			var curr_year = newdate.getFullYear();
+			var month=curr_month + 1;//since january is 0(month starts from 0 and ends at 11)
+			if(month < 10)
+			 {
+				var appendzero="0";
+				month=appendzero.concat(month);//it returns only 1,2,..and so on.We need to append 0 for proper mm-dd-yyyy format
+				//alert(month);
+			 }
+			//alert(curr_date + "-" + month + "-" + curr_year);
+			var returndate=month + "-" + curr_date + "-" + curr_year;//date in format of mm-dd-yyyy
+			//alert(returndate);
+			return returndate;
+		}
+
+
+
+
