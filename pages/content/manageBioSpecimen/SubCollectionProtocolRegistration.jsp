@@ -24,6 +24,7 @@
 			String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
 			CollectionProtocolRegistrationForm form =null;
+			Integer registrationYear = null,registrationMonth=null,registrationDay=null;
 			String currentRegistrationDate = "";
 
 			String selectProperty="";
@@ -35,6 +36,12 @@
 				if(currentRegistrationDate == null)
 				{
 					currentRegistrationDate = "";
+				}
+				else
+				{
+					registrationYear = new Integer(Utility.getYear(currentRegistrationDate ));
+					registrationMonth = new Integer(Utility.getMonth(currentRegistrationDate ));
+					registrationDay = new Integer(Utility.getDay(currentRegistrationDate ));
 				}
 				
 					
@@ -113,7 +120,13 @@
 			  if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
 			    vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
 			  vis.display = (vis.display==''||vis.display=='block')?'none':'block';
-		}	
+		}
+		 function registrationDateChange(newOffsetObject)
+		 {
+		  var originalDateOfRegistration= <%=registrationMonth.intValue()%> +"/"+<%=registrationDay.intValue()%> +"/"+<%=registrationYear.intValue()%>;
+		var newRegistrationDate=dateChange(newOffsetObject,<%=form.getOffset()%>,originalDateOfRegistration);
+		document.getElementById("registrationDate").value=newRegistrationDate;
+		 }
 		</script>
 	<%}%>
 
@@ -126,7 +139,6 @@
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
-
 <html:form action="<%=formName%>"  onsubmit="showhide()">
 	
 	<%
@@ -151,7 +163,8 @@
 						<html:hidden property="forwardTo" value=""/>
 						<html:hidden property="participantID" />
 						<html:hidden property="withdrawlButtonStatus"/>
-						<html:hidden property="collectionProtocolID"/>	
+						<html:hidden property="collectionProtocolID"/>
+												
 					</td>
 					<td><html:hidden property="id"/>
 					<td><html:hidden property="onSubmit"/></td>
@@ -232,7 +245,20 @@
 						&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="studyCalEvtPoint"/>
 					</td>
 				</tr>
- 				<tr>
+				<tr id="row3">					
+						
+						<td class="formRequiredNotice" width="5">&nbsp;</td>					
+						<td class="formLabel">
+						<label for="name">
+							<bean:message key="subprotocolreg.offset" />
+						</label>
+					</td>
+					
+					<td class="formField">
+					<html:text styleClass="formFieldSized" maxlength="25"  size="5" styleId="offset" property="offset" onblur="registrationDateChange(this)"/>
+					</td>
+				</tr>
+ 				<tr >
             		<td class="formRequiredNotice" width="5">*</td>					
 					<td class="formRequiredLabel">
 					    
@@ -244,9 +270,7 @@
 					<%
 						 if(currentRegistrationDate.trim().length() > 0)
 						 {
-							Integer registrationYear = new Integer(Utility.getYear(currentRegistrationDate ));
-							Integer registrationMonth = new Integer(Utility.getMonth(currentRegistrationDate ));
-							Integer registrationDay = new Integer(Utility.getDay(currentRegistrationDate ));
+							
 					%>
 					<ncombo:DateTimeComponent name="registrationDate"
 									  id="registrationDate"
@@ -274,19 +298,8 @@
 
 				 	</td>
 				</tr>
-			<tr id="row3">					
-						
-						<td class="formRequiredNotice" width="5">&nbsp;</td>					
-						<td class="formLabel">
-						<label for="name">
-							<bean:message key="subprotocolreg.offset" />
-						</label>
-					</td>
-					<td class="formField">
-					<html:text styleClass="formFieldSized" maxlength="25"  size="5" styleId="offset" property="offset"/>
-					</td>
-				</tr>
-				<!-- activitystatus -->	
+			
+			<!-- activitystatus -->	
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 				<tr>
 					<td class="formRequiredNotice" width="5">*</td>
