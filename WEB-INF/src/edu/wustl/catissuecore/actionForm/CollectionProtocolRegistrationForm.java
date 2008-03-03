@@ -188,7 +188,8 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	  	this.signedConsentUrl=Utility.toString(registration.getSignedConsentDocumentURL());
 	  	this.consentDate=Utility.parseDateToString(registration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
 	  	// Offset changes 27th Dec 2007
-	  	this.setOffset(registration.getOffset().intValue());
+//	  	this.setOffset(registration.getOffset().intValue());
+	  	this.setOffset(0);
 
     }
     
@@ -590,6 +591,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	public void setOffset(int offset) {
 		this.offset = offset;
 	}
+
 
 	
 	
