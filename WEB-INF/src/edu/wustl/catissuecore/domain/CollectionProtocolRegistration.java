@@ -207,7 +207,8 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		this.registrationDate = cpr.getRegistrationDate();
 		this.signedConsentDocumentURL = cpr.getSignedConsentDocumentURL();
 		this.specimenCollectionGroupCollection = null;
-		this.offset=cpr.getOffset();
+		//no need to carry forward the offset.
+//		this.offset=cpr.getOffset();
 		
 		
 	}
