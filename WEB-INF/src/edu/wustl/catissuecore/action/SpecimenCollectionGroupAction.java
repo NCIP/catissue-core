@@ -217,6 +217,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				collectionProtocolRegistration.getId(), "elements(consentTierResponseCollection)");
 		Set participantResponseSet = (Set) consentTierResponseCollection;
 		List participantResponseList = new ArrayList(participantResponseSet);
+		specimenCollectionGroupForm.setCollectionProtocolRegistrationId(collectionProtocolRegistration.getId());
 		if (operation.equalsIgnoreCase(Constants.ADD))
 		{
 			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
