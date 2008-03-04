@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.19 $
+ * $Name: 1.41.2.20 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -16,7 +16,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
-import edu.upmc.opi.caBIG.caTIES.database.domain.IdentifiedPathologyReport;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
@@ -44,7 +43,6 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
-import edu.wustl.catissuecore.reportloader.IdentifiedReportGenerator;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -112,45 +110,14 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         {
         	Logger.out.error(ex.getMessage(), ex);
         }
-        
-        
+
         //All users should be able to view all data by default
         Map protectionGroupsForObjectTypes = new HashMap();
-        protectionGroupsForObjectTypes.put(Site.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(Address.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(StorageContainer.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(DistributionProtocol.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(Distribution.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(User.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(Participant.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(CollectionProtocol.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(CollectionProtocolRegistration.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(SpecimenCollectionGroup.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(Specimen.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(FluidSpecimen.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(TissueSpecimen.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(MolecularSpecimen.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(CellSpecimen.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
-                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        
-        Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES.putAll(protectionGroupsForObjectTypes);
-        
+        addDefaultProtectionGroupsToMap(protectionGroupsForObjectTypes);
+
+        Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
+        								.putAll(protectionGroupsForObjectTypes);
+
         Variables.applicationName = ApplicationProperties.getValue("app.name");
         Variables.applicationVersion = ApplicationProperties.getValue("app.version");
 
@@ -188,35 +155,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         Logger.out.info("CVS TAG: "+Variables.applicationCvsTag);
         Logger.out.info("Path: "+ Variables.applicationHome);
         Logger.out.info("Database Name: "+Variables.databaseName);
-        Logger.out.info("========================================================");                
-        
-        try
-        {
-            if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
-            {
-            	//set string/function for oracle
-            	Variables.datePattern = "mm-dd-yyyy";
-            	Variables.timePattern = "hh-mi-ss";
-            	Variables.dateFormatFunction="TO_CHAR";
-            	Variables.timeFormatFunction="TO_CHAR";
-            	Variables.dateTostrFunction = "TO_CHAR";
-            	Variables.strTodateFunction = "TO_DATE";
-            }
-            else
-            {
-            	Variables.datePattern = "%m-%d-%Y";
-            	Variables.timePattern = "%H:%i:%s";
-            	Variables.dateFormatFunction="DATE_FORMAT";
-            	Variables.timeFormatFunction="TIME_FORMAT";
-            	Variables.dateTostrFunction = "TO_CHAR";
-            	Variables.strTodateFunction = "STR_TO_DATE";
-            }
-        }
-        catch (Exception ex)
-        {
-        	Logger.out.error(ex.getMessage(), ex);
-        }  
+        Logger.out.info("========================================================");
 
+        setDBFunctionNamesConstants();
+        
         // Patch ID: SimpleSearchEdit_8 
         // Creating Map of Alias verses Page of values. 
         createAliasAndPageOfMap();
@@ -253,11 +195,11 @@ public class CatissueCoreServletContextListener implements ServletContextListene
              * Description : This Factory initialize and set the Label and Barcode generator instance for Storage container and Specimen.
              */
         	LabelAndBarcodeGeneratorInitializer.init();
-        		
+
         	File propetiesDirPath = new File(path);
         	Variables.propertiesDirPath = propetiesDirPath.getParent();
         	Logger.out.debug("propetiesDirPath "+Variables.propertiesDirPath);
-        	
+
         	String propertyValue = XMLPropertyHandler.getValue("server.port");
             Logger.out.debug("property Value "+propertyValue);
 		}
@@ -389,6 +331,71 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		setEntityCpSqlMap();
 		
     }
+
+	/**
+	 * 
+	 */
+	private void setDBFunctionNamesConstants()
+	{
+		if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
+		{
+			//set string/function for oracle
+			Variables.datePattern = "mm-dd-yyyy";
+			Variables.timePattern = "hh-mi-ss";
+			Variables.dateFormatFunction="TO_CHAR";
+			Variables.timeFormatFunction="TO_CHAR";
+			Variables.dateTostrFunction = "TO_CHAR";
+			Variables.strTodateFunction = "TO_DATE";
+		}
+		else
+		{
+			Variables.datePattern = "%m-%d-%Y";
+			Variables.timePattern = "%H:%i:%s";
+			Variables.dateFormatFunction="DATE_FORMAT";
+			Variables.timeFormatFunction="TIME_FORMAT";
+			Variables.dateTostrFunction = "TO_CHAR";
+			Variables.strTodateFunction = "STR_TO_DATE";
+		}
+	}
+
+	/**
+	 * @param protectionGroupsForObjectTypes
+	 */
+	private void addDefaultProtectionGroupsToMap(Map protectionGroupsForObjectTypes)
+	{
+		protectionGroupsForObjectTypes.put(Site.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(Address.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(StorageContainer.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(DistributionProtocol.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(Distribution.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(User.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(Participant.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(CollectionProtocol.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(CollectionProtocolRegistration.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(SpecimenCollectionGroup.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(Specimen.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(FluidSpecimen.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(TissueSpecimen.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(MolecularSpecimen.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(CellSpecimen.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
+                new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+	}
 
 	/**
 	 * A map that contains entity name as key and sql to get Collection Protocol Ids for that 
