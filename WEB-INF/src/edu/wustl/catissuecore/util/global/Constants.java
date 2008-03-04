@@ -2251,5 +2251,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_QUERY_SUB_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION = "CPQuerySubCollectionProtocolRegistrationAdd.do";
 	public static final String ID_COLUMN_ID = "ID_COLUMN_ID";
 	public static final String SQL = "SQL";
+	/**
+	 * 
+	 */
+	public static final String SCGFORM = "SCGFORM";
 }
 	
