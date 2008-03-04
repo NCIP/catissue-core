@@ -215,7 +215,11 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 		this.collectionProtocolId = collectionProtocolId;
 	}
 
-	public long getId() {
+	/** (non-Javadoc)
+	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getId()
+	 */
+	public long getId()
+	{
 		return id;
 	}
 
