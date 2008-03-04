@@ -5,16 +5,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -24,8 +19,7 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -35,73 +29,85 @@ import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
-public class AnticipatorySpecimenViewAction extends BaseAction {
-
-	private String globalSpecimenId = null;
-	private SessionDataBean bean;
-	protected LinkedHashMap<String, ArrayList<GenericSpecimenVO>> autoStorageSpecimenMap =new LinkedHashMap<String, ArrayList<GenericSpecimenVO>> ();
+/**
+ * @author abhijit_naik
+ *
+ */
+public class AnticipatorySpecimenViewAction extends BaseAction
+{
 	Long cpId = null;
-	protected HashSet<String> storageContainerIds = new HashSet<String>();
-	String target = null;
-	SpecimenAutoStorageContainer autoStorageContainer; 
+	private SpecimenAutoStorageContainer autoStorageContainer;
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-
-		target=Constants.SUCCESS;
+			throws Exception
+		{
+		String target=Constants.SUCCESS;
 		SpecimenCollectionGroupForm specimenCollectionGroupForm=
 			(SpecimenCollectionGroupForm)form;
 		HttpSession session = request.getSession();
 		Long id = specimenCollectionGroupForm.getId();
-		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		bean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-		((AbstractDAO)dao).openSession(bean);
+		SessionDataBean bean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+		SpecimenCollectionGroupBizLogic scgBizLogic = 
+			new SpecimenCollectionGroupBizLogic();
+		autoStorageContainer = new SpecimenAutoStorageContainer ();
+		
 		try{
 			target=Constants.SUCCESS;
-			session.setAttribute("SCGFORM", specimenCollectionGroupForm.getId());
-			List cpList = dao.retrieve(SpecimenCollectionGroup.class.getName(), "id", id);
-			if(cpList != null && !cpList.isEmpty())
+			session.setAttribute(Constants.SCGFORM, specimenCollectionGroupForm.getId());
+			SpecimenCollectionGroup specimencollectionGroup =
+				scgBizLogic.getSCGFromId(id, bean,true);
+			if(specimencollectionGroup.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
 			{
-				autoStorageContainer = new SpecimenAutoStorageContainer ();
-				SpecimenCollectionGroup specimencollectionGroup = (SpecimenCollectionGroup) cpList.get(0);
-				if(specimencollectionGroup.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
-				{
-					target=Constants.ACTIVITY_STATUS_DISABLED;
-				}
-				LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = new LinkedHashMap<String, CollectionProtocolEventBean> ();
-				cpId = specimencollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
-				CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
-	
-				eventBean.setUniqueIdentifier(String.valueOf(specimencollectionGroup.getId().longValue()));
-
-				eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
-						specimencollectionGroup.getSpecimenCollection(),cpId ));
-				globalSpecimenId = "E"+eventBean.getUniqueIdentifier() + "_";
-				cpEventMap.put(globalSpecimenId, eventBean);			
-				session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-				session
-				.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);			
-			
-				request.setAttribute("RequestType",ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
-				((AbstractDAO)dao).closeSession();
-				autoStorageContainer.setCollectionProtocol(cpId);
-				autoStorageContainer.setSpecimenStoragePositions(bean);				
-				return mapping.findForward(target);
+				target=Constants.ACTIVITY_STATUS_DISABLED;
 			}
+			cpId = specimencollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+
+			addSCGSpecimensToSession(session, specimencollectionGroup);			
+		
+			request.setAttribute("RequestType",ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
+			autoStorageContainer.setCollectionProtocol(cpId);
+			autoStorageContainer.setSpecimenStoragePositions(bean);
+			return mapping.findForward(target);
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			((AbstractDAO)dao).closeSession();
+			autoStorageContainer = null;
 		}
 		return null;
+	}
+
+	/**
+	 * @param session
+	 * @param specimencollectionGroup
+	 * @throws DAOException
+	 */
+	private void addSCGSpecimensToSession(HttpSession session,
+			SpecimenCollectionGroup specimencollectionGroup) throws DAOException
+	{
+		LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap 
+		= new LinkedHashMap<String, CollectionProtocolEventBean> ();
+
+		CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
+
+		eventBean.setUniqueIdentifier(String.valueOf(specimencollectionGroup.getId().longValue()));
+
+		eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
+				specimencollectionGroup.getSpecimenCollection(),cpId ));
+
+		String globalSpecimenId = "E"+eventBean.getUniqueIdentifier() + "_";
+		cpEventMap.put(globalSpecimenId, eventBean);			
+		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+		session
+		.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);
 	}
 
 	protected LinkedHashMap<String, GenericSpecimen> getSpecimensMap(
@@ -110,7 +116,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction {
 	{
 		LinkedHashMap<String, GenericSpecimen> specimenMap = 
 						new LinkedHashMap<String, GenericSpecimen>();
-		autoStorageSpecimenMap.clear();
+
 		Iterator specimenIterator = specimenCollection.iterator();
 		while(specimenIterator.hasNext())
 		{
