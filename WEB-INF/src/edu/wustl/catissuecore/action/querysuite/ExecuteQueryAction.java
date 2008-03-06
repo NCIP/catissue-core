@@ -108,11 +108,11 @@ public class ExecuteQueryAction extends BaseAction
 			case QueryModuleUtil.DAO_EXCEPTION :
 			case QueryModuleUtil.CLASS_NOT_FOUND :
 				errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+				break;
 			case QueryModuleUtil.RESULTS_MORE_THAN_LIMIT :
 				errorMessage = Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS;
+				break;
 		}
-
 		return errorMessage;
 	}
-
 }
