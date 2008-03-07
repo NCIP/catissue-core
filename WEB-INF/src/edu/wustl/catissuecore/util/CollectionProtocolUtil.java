@@ -21,11 +21,13 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
@@ -34,6 +36,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -747,20 +750,36 @@ public class CollectionProtocolUtil {
 	 * @param specimenRequirementBean
 	 * @return
 	 */
-	private static Specimen getSpecimenDomainObject(SpecimenRequirementBean specimenRequirementBean){
-
+	private static Specimen getSpecimenDomainObject(SpecimenRequirementBean specimenRequirementBean)
+	{
 		NewSpecimenForm form = new NewSpecimenForm();
 		form.setClassName(specimenRequirementBean.getClassName());
-		
-		
-		Specimen specimen;
-		try {
-			specimen = (Specimen) new DomainObjectFactory()
-				.getDomainObject(Constants.NEW_SPECIMEN_FORM_ID, form);
-		} catch (AssignDataException e1) {
+		Specimen specimen=null;
+		try
+		{
+			if(form.getClassName().equals("Tissue"))
+        	{
+				specimen = new TissueSpecimen();
+        	}
+        	else if(form.getClassName().equals("Fluid"))
+        	{
+        		specimen = new FluidSpecimen();
+        	}
+        	else if(form.getClassName().equals("Cell"))
+        	{
+        		specimen = new CellSpecimen();
+        	}
+        	else if(form.getClassName().equals("Molecular"))
+        	{
+        		specimen = new MolecularSpecimen();
+        	}
+		} 
+		catch (Exception e1) 
+		{
 			e1.printStackTrace();
 			return null;
 		}
+		
 		if (specimenRequirementBean.getId()==-1)
 		{
 			specimen.setId(null);
