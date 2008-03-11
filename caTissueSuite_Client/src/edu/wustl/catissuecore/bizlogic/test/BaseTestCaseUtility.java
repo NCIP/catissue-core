@@ -91,8 +91,10 @@ public class BaseTestCaseUtility {
 		collectionProtocol.setEndDate(null);
 		collectionProtocol.setEnrollment(null);
 		collectionProtocol.setIrbIdentifier("77777");
-		collectionProtocol.setTitle("coll proto"+UniqueKeyGeneratorUtil.getUniqueKey());
-		collectionProtocol.setShortTitle("pc"+UniqueKeyGeneratorUtil.getUniqueKey());
+//		collectionProtocol.setTitle("coll proto"+UniqueKeyGeneratorUtil.getUniqueKey());
+//		collectionProtocol.setShortTitle("pc"+UniqueKeyGeneratorUtil.getUniqueKey());
+		collectionProtocol.setTitle("ColProt"+UniqueKeyGeneratorUtil.getUniqueKey());
+		collectionProtocol.setShortTitle("cp"+UniqueKeyGeneratorUtil.getUniqueKey());
 		collectionProtocol.setEnrollment(2);
 		
 		System.out.println("reached setUp");
@@ -671,28 +673,7 @@ public class BaseTestCaseUtility {
 		sprObj.setSpecimenCollectionSite(site);
 		sprObj = setEventParameters(sprObj);
 		return sprObj;
-		
 	
-		/*try
-		{
-			System.out.println("Before Update");
-			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)appService.updateObject(sprObj);
-			System.out.println(scg.getCollectionStatus().equals("Complete"));
-			if(scg.getCollectionStatus().equals("Complete"))
-			{
-			//	assertTrue("Specimen Collected ---->", true);
-			}
-			else
-			{
-		//		assertFalse("Anticipatory Specimen", true);
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-
-	}*/
 }
 	
 	public static SpecimenCollectionGroup setEventParameters(SpecimenCollectionGroup sprObj)
@@ -915,9 +896,9 @@ public class BaseTestCaseUtility {
 	public static Site initSite()
 	{
 		Site siteObj = new Site();
-		User userObj = (User)TestCaseUtility.getObjectMap(User.class);
-//		User userObj = new User();
-//		userObj.setId(new Long(1));
+	//	User userObj = (User)TestCaseUtility.getObjectMap(User.class);
+		User userObj = new User();
+		userObj.setId(new Long(1));
 
 		siteObj.setEmailAddress("admin@admin.com");
 		siteObj.setName("sit" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -1030,9 +1011,12 @@ public class BaseTestCaseUtility {
 		Participant participant = new Participant();
 		participant.setLastName("lname"+UniqueKeyGeneratorUtil.getUniqueKey());
 		participant.setFirstName("fname"+UniqueKeyGeneratorUtil.getUniqueKey());
+		participant.setMiddleName("mname"+UniqueKeyGeneratorUtil.getUniqueKey());
 		participant.setGender("Male Gender");
 		participant.setEthnicity("Unknown");
 		participant.setSexGenotype("XX");
+		
+		
 
 		Collection raceCollection = new HashSet();
 		raceCollection.add("White");
@@ -1137,8 +1121,8 @@ public class BaseTestCaseUtility {
 		parent.setId(new Long(2));
 		storageContainer.setParent(parent);    
 */
-		storageContainer.setPositionDimensionOne(new Integer(1));
-		storageContainer.setPositionDimensionTwo(new Integer(2));
+//		storageContainer.setPositionDimensionOne(new Integer(1));
+//		storageContainer.setPositionDimensionTwo(new Integer(2));
 
 		storageContainer.setActivityStatus("Active");
 		storageContainer.setFull(Boolean.valueOf(false));
@@ -2060,9 +2044,9 @@ public class BaseTestCaseUtility {
 		specimenArray.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
 		specimenArray.setName("sa" + UniqueKeyGeneratorUtil.getUniqueKey()); 
 		
-		User createdBy = (User)TestCaseUtility.getObjectMap(User.class);
-//		User createdBy = new User();
-//		createdBy.setId(new Long(1));
+//		User createdBy = (User)TestCaseUtility.getObjectMap(User.class);
+		User createdBy = new User();
+		createdBy.setId(new Long(1));
 		specimenArray.setCreatedBy(createdBy);
 		
 		Capacity capacity = new Capacity();
@@ -2072,8 +2056,8 @@ public class BaseTestCaseUtility {
 		
 		specimenArray.setComment("");
 		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
-		
-		//storageContainer.setId(new Long(1));	
+//		StorageContainer storageContainer = new StorageContainer();
+//		storageContainer.setId(new Long(3));	
 		
 		specimenArray.setStorageContainer(storageContainer);
 		specimenArray.setPositionDimensionOne(new Integer(1));
@@ -2086,7 +2070,7 @@ public class BaseTestCaseUtility {
 	//	specimen.setId(new Long(50));
 		
 		specimenArrayContent.setSpecimen(specimen);
-		specimenArrayContent.setPositionDimensionOne(new Integer(2));
+		specimenArrayContent.setPositionDimensionOne(new Integer(1));
 		specimenArrayContent.setPositionDimensionTwo(new Integer(1));
 		
 //		Quantity quantity = new Quantity();
