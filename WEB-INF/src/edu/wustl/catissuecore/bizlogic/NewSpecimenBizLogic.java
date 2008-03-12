@@ -3020,8 +3020,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			availableQuantity.setValue(newAvailQty);
 			if(specimenDO.getParentSpecimen()!=null)
 			{
-				double parentAvl = specimenDO.getParentSpecimen().getAvailableQuantity().getValue() - newAvailQty;
-				specimenDO.getParentSpecimen().getAvailableQuantity().setValue(parentAvl);
+				if(specimenDO.getLineage().equals("Aliquot"))
+				{
+					double parentAvl = specimenDO.getParentSpecimen().getAvailableQuantity().getValue() - newAvailQty;
+					specimenDO.getParentSpecimen().getAvailableQuantity().setValue(parentAvl);
+				}
 			}
 			
 			if(specimenDO.getChildrenSpecimen()==null ||specimenDO.getChildrenSpecimen().isEmpty())
