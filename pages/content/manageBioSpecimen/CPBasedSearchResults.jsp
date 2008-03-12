@@ -22,7 +22,7 @@
 	{
 		frame1Ysize = "180";
 		frame2Ysize = "180";
-		frame3Ysize = "550";
+		frame3Ysize = "650";
 	 
 
 		if(access != null && access.equals("Denied"))
