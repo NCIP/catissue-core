@@ -726,9 +726,17 @@
 			}
 		
 		}
+	    function setSize()
+	    {
+	
+		    var container = document.getElementById("Container");
+			var tempWidth =document.body.clientWidth;
+		
+    	     container.style.width=tempWidth-50;
+        }
 	</script>
 </head>
-<body onload="newSpecimenInit();showConsents();">
+<body onload="setSize();newSpecimenInit();showConsents();">
 <% 
 		int exIdRows=1;
 		int bhRows=1;
@@ -854,7 +862,7 @@
 	if(pageView.equals("edit"))
 	{
 	%>
-		<table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="750">
+		<table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" id="Container">
 			<tr>
 				<td height="20" class="tabMenuItemSelected" onclick="newspecimenPage()" id="newSpecimenTab">
 					<bean:message key="tab.specimen.details"/>
