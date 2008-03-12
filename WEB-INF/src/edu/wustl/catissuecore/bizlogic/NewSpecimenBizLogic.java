@@ -2871,7 +2871,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			((HibernateDAO) dao).closeSession();
 		}
 	}
-
+	
 	public Specimen updateSignleSpecimen(DAO dao, Specimen newSpecimen, SessionDataBean sessionDataBean, boolean updateChildrens) throws DAOException
 	{
 		try
@@ -2996,45 +2996,55 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			Quantity quantity = specimenVO.getInitialQuantity();
 			Quantity availableQuantity = specimenVO.getAvailableQuantity();
-			Double quantityValue = quantity.getValue();
-			Double availableQuantityValue = availableQuantity.getValue();
-			if (specimenDO.getInitialQuantity() == null)
+			if (availableQuantity == null)
 			{
-				quantity = new Quantity();
-				specimenDO.setInitialQuantity(quantity);
-			}
-			else
-			{
-				quantity = specimenDO.getInitialQuantity();
-			}
-
-			if (specimenDO.getAvailableQuantity() == null)
-			{
-				quantity = new Quantity();
-				specimenDO.setAvailableQuantity(quantity);
-			}
-			else
-			{
-				/**
-				 * Name: Abhishek Mehta 
-				 * Bug ID: 5558
-				 * Patch ID: 5558_3
-				 * See also: 1-3 
-				 * Description : Earlier the available quantity for specimens that haven't been collected yet is greater than 0.
-				 */
-				if ((specimenDO.getAvailableQuantity().getValue().doubleValue() == 0 && Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase(
-						specimenVO.getCollectionStatus())))
-				{
-					specimenDO.setAvailableQuantity(specimenVO.getInitialQuantity());
-				}
-				else
-				{
-					availableQuantity = specimenDO.getAvailableQuantity();
-					availableQuantity.setValue(availableQuantityValue);
-				}
+				availableQuantity = new Quantity("0");
+				specimenDO.setAvailableQuantity(availableQuantity);
 			}
 			
-			quantity.setValue(quantityValue);
+			double modifiedInitQty = quantity.getValue();
+			double oldInitQty = specimenDO.getInitialQuantity().getValue();
+			double newAvailQty = (modifiedInitQty - oldInitQty) + availableQuantity.getValue();
+			
+			if (newAvailQty <0)
+			{
+				newAvailQty =0;
+			}
+			
+			availableQuantity = specimenDO.getAvailableQuantity();
+			if (availableQuantity == null)
+			{
+				availableQuantity = new Quantity("0");
+				specimenDO.setAvailableQuantity(availableQuantity);
+			}
+			availableQuantity.setValue(newAvailQty);
+			if(specimenDO.getParentSpecimen()!=null)
+			{
+				double parentAvl = specimenDO.getParentSpecimen().getAvailableQuantity().getValue() - newAvailQty;
+				specimenDO.getParentSpecimen().getAvailableQuantity().setValue(parentAvl);
+			}
+			
+			if(specimenDO.getChildrenSpecimen()==null ||specimenDO.getChildrenSpecimen().isEmpty())
+			{
+				availableQuantity.setValue(newAvailQty);
+			}
+			
+			if((specimenDO.getAvailableQuantity()!=null && specimenDO.getAvailableQuantity().getValue().doubleValue() > 0))
+			{
+				specimenDO.setAvailable(Boolean.TRUE);
+			}
+			
+			Quantity oldInitialQty = null;
+			if (specimenDO.getInitialQuantity() == null)
+			{
+				oldInitialQty = new Quantity();
+				specimenDO.setInitialQuantity(oldInitialQty);
+			}
+			else
+			{
+				oldInitialQty = specimenDO.getInitialQuantity();
+			}
+			oldInitialQty.setValue(modifiedInitQty);
 		}
 		if (specimenVO.getCollectionStatus() != null)
 		{
@@ -3185,7 +3195,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			throw new BizLogicException("The Specimen is Added as Requirement, this can not be edited!!");
 
 		}
-
+			
 	}
 
 }

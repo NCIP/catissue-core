@@ -21,7 +21,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -230,18 +229,18 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 		/* end bug 6015 */
 		
 		String initialQuantity = specimenVO.getQuantity();
-		 
+		Quantity quantity = null;
 		if(initialQuantity != null )
 		{
-			Quantity quantity = new Quantity();
+			quantity = new Quantity();
 			if(!initialQuantity.equals(""))
 				quantity.setValue(new Double(initialQuantity));
 			specimen.setInitialQuantity(quantity);
-			specimen.setAvailableQuantity(quantity);
 		}
 		if(specimenVO.getCheckedSpecimen())
 		{
 			specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+			specimen.setAvailableQuantity(quantity);
 			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() > 0))
 			{
 				specimen.setAvailable(Boolean.TRUE);
