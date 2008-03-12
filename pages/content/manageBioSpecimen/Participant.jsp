@@ -26,6 +26,7 @@
 <script src="jss/titli.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<link rel="stylesheet" type="text/css" href="ie.hack.css" />
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 
 <style>
@@ -504,7 +505,21 @@ tr#hiddenCombo
 			if(!fwdPage=="pageOfParticipantCPQuery")
 				document.forms[0].target = '_top';
 		}
+	
+	function setSize()
+	  {
+	
+		var container = document.getElementById("tablecontainer");
+		var tempWidth =document.body.clientWidth;
+		var tempHeight=document.body.clientHeight;
+         container.style.height=tempHeight-50;
+         container.style.width=tempWidth-50;
+	    
+		container = document.getElementById("identifier");
+		 container.style.width=tempWidth-100;
 		
+	    
+	  }
 	</script>
 </head>
 

@@ -1,5 +1,4 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
 <%
       String access = (String)session.getAttribute("Access");
 	  boolean mac = false;
@@ -23,8 +22,8 @@
 	{
 		frame1Ysize = "180";
 		frame2Ysize = "180";
-		frame3Ysize = "420";
-		
+		frame3Ysize = "550";
+	 
 
 		if(access != null && access.equals("Denied"))
 		{

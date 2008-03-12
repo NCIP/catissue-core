@@ -24,7 +24,7 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-
+<link rel="stylesheet" type="text/css" href="ie.hack.css" />
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
@@ -609,7 +609,17 @@ function editSCG()
 			}
 		
 		}
-		
+	function setSize() {
+		var container = document.getElementById("Container");
+          var width =document.body.clientWidth;
+		     container.style.width=width-50;
+          container = document.getElementById("multiplespecimenTable");
+          container.style.width=width-100;
+
+		  container = document.getElementById("collAndRecEvents");
+          container.style.width=width-100;
+		  
+		}
  </script>
 </head>
 			<!-- 
@@ -630,7 +640,7 @@ function editSCG()
 	if(pageView != null && !pageView.equals("viewAnnotations") && !pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 	{
 %>
-	<body onload="disablebuttons();initializeSCGForm();showConsents();">
+	<body onload="setSize();disablebuttons();initializeSCGForm();showConsents();">
 <%}else{%> 
 	<body>
  <%}%>

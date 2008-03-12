@@ -91,8 +91,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			document.getElementById("receivedEventDateOfEvent").value=newReceivedDate;
 		 }
 			</script>
-		
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="650" >
+	<div style="width:100%">	
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" id="Container" >
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
 		
 	    <tr><td>
@@ -399,7 +399,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	<!--  Consent Tracking Module Virender mehta -->	
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
-		class="contentPage" width="650">
+		class="contentPage" id="collAndRecEvents">
 		<tr>
 			<td>
 				<%@ include file="CollAndRecEvents.jsp" %>
@@ -416,7 +416,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	-->
 
 	<!-- For Multiple Specimen-----Ashish -->
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="650" id="multiplespecimenTable">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage"  id="multiplespecimenTable">
 		<tr>
 			<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0"
@@ -470,3 +470,4 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	</table>
 	
 	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
+	</div>

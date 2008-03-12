@@ -1,4 +1,5 @@
 
+
 <%
 	String[] activityStatusList = (String[])request.getAttribute(Constants.ACTIVITYSTATUSLIST);
 %>
@@ -240,11 +241,13 @@ function participantRegRow(subdivtag)
 			}
 		}
 
-
+ 
 </script>
 
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+ <body onload="setSize()">
+  <div style="width:100%">
+	<table summary="" cellpadding="0" cellspacing="0" border="0"  id="tablecontainer" >
 	   		   
 			
 		<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
@@ -632,9 +635,9 @@ function participantRegRow(subdivtag)
 				</logic:equal>
 				
 				 <!-- Medical Identifiers Begin here -->
-				   <tr>
+				<tr>
 				 	<td align="left" colspan="7" valign="top">
-					<table summary="" cellpadding="3" cellspacing="0" border="0">
+					<table summary="" cellpadding="3" cellspacing="0" border="0" id="identifier">
 				 <tr>
 				     <td class="formTitle" height="20" colspan="5">
 				     	<bean:message key="participant.medicalIdentifier"/>
@@ -1025,3 +1028,5 @@ function participantRegRow(subdivtag)
 			</table>
 		</td></tr>
 	</table>			
+	</div>
+</body>
