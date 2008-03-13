@@ -344,32 +344,32 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 		
 		Collection oldCollectionProtocolRegistrationCollection = oldParticipant.getCollectionProtocolRegistrationCollection();
-		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+		Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
 		
-		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
-		while (itCollectionProtocolRegistrationCollection.hasNext())
+		Iterator itCPRColl = cprCollection.iterator();
+		while (itCPRColl.hasNext())
 		{
-			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();
+			CollectionProtocolRegistration collectionProtReg = (CollectionProtocolRegistration) itCPRColl.next();
 			
-			ApiSearchUtil.setCollectionProtocolRegistrationDefault(collectionProtocolRegistration);
+			ApiSearchUtil.setCollectionProtocolRegistrationDefault(collectionProtReg);
 	        
-	        collectionProtocolRegistration.setParticipant(participant);
+	        collectionProtReg.setParticipant(participant);
 	        
 	        //Audit of CollectionProtocolRegistration.
 			CollectionProtocolRegistration oldcollectionProtocolRegistration = (CollectionProtocolRegistration) getCorrespondingOldObject(
-					oldCollectionProtocolRegistrationCollection, collectionProtocolRegistration.getId());
+					oldCollectionProtocolRegistrationCollection, collectionProtReg.getId());
 			
-	        if(collectionProtocolRegistration.getId() == null) // If Collection Protocol Registration is not happened for given participant
+	        if(collectionProtReg.getId() == null) // If Collection Protocol Registration is not happened for given participant
 			{
-	        	collectionProtocolRegistration.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-	        	cprBizLogic.insert(collectionProtocolRegistration, dao, sessionDataBean);
+	        	collectionProtReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+	        	cprBizLogic.insert(collectionProtReg, dao, sessionDataBean);
 	        	continue;
 			}
 	        
 	       
 			
 			
-			cprBizLogic.update(dao, collectionProtocolRegistration, oldcollectionProtocolRegistration, sessionDataBean);
+			cprBizLogic.update(dao, collectionProtReg, oldcollectionProtocolRegistration, sessionDataBean);
 		}
 		
 		//Disable the associate collection protocol registration
