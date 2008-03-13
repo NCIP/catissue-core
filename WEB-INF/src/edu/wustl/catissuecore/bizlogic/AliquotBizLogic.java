@@ -354,7 +354,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			
 			if(aliquotSpecimen.getAvailableQuantity().getValue().doubleValue() == 0)
 			{
-				aliquotSpecimen.setAvailable(new Boolean(false));
+				aliquotSpecimen.setAvailable(Boolean.FALSE);
 			}
              /**
              * Patch ID: 3835_1_7
@@ -421,6 +421,11 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		while (itrList.hasNext())
 		{
 			Specimen aliquotSpecimen = (Specimen) itrList.next();
+			if (aliquotSpecimen.getIsCollectionProtocolRequirement() ==null)
+			{
+				aliquotSpecimen.setIsCollectionProtocolRequirement(Boolean.FALSE);
+			}
+
 		    dao.insert(aliquotSpecimen, sessionDataBean, true, false);//NEEDS TO BE FIXED FOR SECURE INSERT
 		    String idKey = specimenKey + countLabel + "_id";
 		    aliquotMap.put(idKey, String.valueOf(aliquotSpecimen.getId()));

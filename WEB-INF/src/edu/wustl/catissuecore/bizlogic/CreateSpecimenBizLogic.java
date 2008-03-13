@@ -150,6 +150,12 @@ public class CreateSpecimenBizLogic extends NewSpecimenBizLogic
 		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 		 */
 		ApiSearchUtil.setSpecimenDefault(specimen);
+    	
+		if (specimen.getIsCollectionProtocolRequirement() ==null)
+		{
+			specimen.setIsCollectionProtocolRequirement(Boolean.FALSE);
+		}
+
 		//End:-Change for API Search
 
 		specimen.setSpecimenCollectionGroup(null);

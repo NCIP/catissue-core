@@ -203,7 +203,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	protected String applyChangesTo = Constants.APPLY_NONE;
 
 	protected String collectionStatus;
-	protected Boolean isCollectionProtocolRequirement;
+	protected Boolean isCollectionProtocolRequirement = null;
 
 	public Boolean getIsCollectionProtocolRequirement()
 	{
@@ -247,7 +247,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 
 	public Specimen()
 	{
-		isCollectionProtocolRequirement = false;
+		
 	}
 
 	//Constructor
@@ -755,6 +755,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 					{
 						this.collectionStatus = form.getCollectionStatus();
 					}
+					
 					if (!validator.isEmpty(form.getBarcode()))
 						this.barcode = form.getBarcode();
 					else
@@ -939,7 +940,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 					if (form.isParentPresent())
 					{
 						parentSpecimen = new CellSpecimen();
-						//parentSpecimen.setId(new Long(form.getParentSpecimenId()));
+						parentSpecimen.setId(new Long(form.getParentSpecimenId()));
 						parentSpecimen.setLabel(form.getParentSpecimenName());
 
 					}
@@ -1493,16 +1494,41 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 
 	public void setConsentTierStatusCollectionFromSCG(SpecimenCollectionGroup specimenCollectionGroup)
 	{
-		Collection consentTierStatusCollectionN = new HashSet();
-		Collection consentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
+    	Collection consentTierStatusCollectionN = this.getConsentTierStatusCollection();
+    	if (consentTierStatusCollectionN ==null)
+    	{
+    		consentTierStatusCollectionN = new HashSet();
+    	}
+
+    	Collection consentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
+		Collection specConsTierColl = this.getConsentTierStatusCollection();
+		boolean hasMoreConsents =false;
 		if (consentTierStatusCollection != null && !consentTierStatusCollection.isEmpty())
 		{
 			Iterator it = consentTierStatusCollection.iterator();
+			Iterator specCoIterator = null;
+			if (specConsTierColl !=null)
+			{	
+				specCoIterator = specConsTierColl.iterator();
+				hasMoreConsents =specCoIterator.hasNext();
+			}
 			while (it.hasNext())
 			{
 				ConsentTierStatus consentTierStatus = (ConsentTierStatus) it.next();
-				ConsentTierStatus consentTierstatusN = new ConsentTierStatus(consentTierStatus);
-				consentTierStatusCollectionN.add(consentTierstatusN);
+				ConsentTierStatus consentTierstatusN = null;
+				
+				if (hasMoreConsents)
+				{
+					consentTierstatusN = (ConsentTierStatus) specCoIterator.next();
+					consentTierstatusN.setConsentTier(consentTierStatus.getConsentTier());
+					hasMoreConsents =specCoIterator.hasNext();
+				}
+				else
+				{
+					consentTierstatusN = new ConsentTierStatus(consentTierStatus);
+					consentTierStatusCollectionN.add(consentTierstatusN);
+				}
+
 			}
 		}
 		setConsentTierStatusCollection(consentTierStatusCollectionN);

@@ -135,6 +135,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					scg = specimen.getSpecimenCollectionGroup();
 				}
 				specimenList.add(specimen);
+				
 				dao.insert(specimen, sessionDataBean, false, false);				
 			}
 			
@@ -542,7 +543,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		
 		setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
-
+		if (specimen.getIsCollectionProtocolRequirement() ==null)
+		{
+			specimen.setIsCollectionProtocolRequirement(Boolean.FALSE);
+		}
 		insertChildSpecimens(specimen, dao, sessionDataBean,partOfMulipleSpecimen);
 	}
 	
