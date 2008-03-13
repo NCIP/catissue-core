@@ -7,6 +7,7 @@ import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
+import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.catissuecore.caties.util.StopServer;
 import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.common.util.logger.Logger;
@@ -33,6 +34,8 @@ public class FilePoller implements Observable
 			poller = new FilePoller();
 			// Initializing file poller
 			Utility.init();
+			// initializing SiteInfoHandler to read site names from site configuration file
+			SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
 			// Configuring CSV logger
 			CSVLogger.configure(CaTIESConstants.LOGGER_FILE_POLLER);
 			//Initializing caCoreAPI instance
