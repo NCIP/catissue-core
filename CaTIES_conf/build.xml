@@ -29,7 +29,7 @@
 	
 	<!-- run DeIDPipelineManager java file -->
 	<target name="run_deid_server">
-		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager" maxmemory="1024m" fork="true">
+		<java classname="edu.wustl.catissuecore.deidentifier.DeIDPipelineManager" maxmemory="1024m" fork="true">
 			<classpath>
 				<pathelement location="caties.jar"/>
 			</classpath>
