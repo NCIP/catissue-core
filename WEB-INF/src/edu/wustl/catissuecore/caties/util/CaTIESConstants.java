@@ -142,11 +142,11 @@ public abstract class CaTIESConstants
 	
 	public static final String DEID_HOME="deidHome";
 	public static final String DEID_DCTIONARY_FOLDER="deidDnyFolder";
-	public static final String DEID_SLEEPTIME="deidSleepTime";
+	public static final String DEID_SLEEPTIME="deidentifierSleepTime";
 	public static final String DEID_CONFIG_FILE_NAME="deidConfigFilename";
 	public static final String DEID_DTD_FILENAME="deidDTDFilename";
 	public static final String MAX_THREADPOOL_SIZE="maxThreadPoolSize";
-	public static final String DEID_PORT="deidPort";
+	public static final String DEID_PORT="deidentifierPort";
 	public static final String CONCEPT_CODER_SLEEPTIME="conceptCoderSleepTime";
 	public static final String CONCEPT_CODER_PORT="conceptCoderPort";
 	
