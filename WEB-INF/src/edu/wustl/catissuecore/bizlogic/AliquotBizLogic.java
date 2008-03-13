@@ -444,13 +444,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		while (itr.hasNext())
 		{
 			Specimen aliquotSpecimen = (Specimen) itr.next();
-
-			
 			protectionObjects.add(aliquotSpecimen);
-			if (aliquotSpecimen.getSpecimenCharacteristics() != null)
-			{
-				protectionObjects.add(aliquotSpecimen.getSpecimenCharacteristics());
-			}
 			if(objSCG == null)
 			{
 				objSCG = aliquotSpecimen.getSpecimenCollectionGroup();

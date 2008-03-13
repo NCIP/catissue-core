@@ -337,23 +337,8 @@ public class CreateSpecimenBizLogic extends NewSpecimenBizLogic
 			{
 				specimen.setAvailable(new Boolean(false));
 			}
-
-/*			if (specimen.getSpecimenCharacteristics() != null)
-			{
-				if(specimen.getSpecimenCharacteristics().getId()== null)
-				{
-					protectionObjects.add(specimen.getSpecimenCharacteristics());
-				}
-			}
-*/
 			dao.insert(specimen, sessionDataBean, true, true);
 			protectionObjects.add(specimen);
-
-
-			
-
-					
-			
 			//Inserting data for Authorization
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
 					protectionObjects, getDynamicGroups(specimen.getSpecimenCollectionGroup()));
