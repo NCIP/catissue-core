@@ -553,6 +553,36 @@ INSERT INTO CSM_PG_PE SELECT CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,19,(SELECT PROTECTIO
 
 /* kalpana  end */
 
+/* Supriya :Changes to run Query on SCG in simple search Added metadata related to Abstract SCG.*/
+
+INSERT INTO CATISSUE_QUERY_TABLE_DATA values (92, 'CATISSUE_ABS_SPECI_COLL_GROUP', 'Abstract Specimen Coll Group', 'AbstractScg',2,NULL) ;
+
+
+UPDATE catissue_interface_column_data SET table_id = 92 WHERE identifier IN (210,211,212,213);
+
+
+INSERT INTO catissue_interface_column_data (IDENTIFIER,TABLE_ID,COLUMN_NAME,ATTRIBUTE_TYPE) VALUES (331,92,'IDENTIFIER','bigint');
+
+
+INSERT INTO catissue_table_relation values(131,35,92,NULL);
+
+
+INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME, DEFAULT_VIEW_ATTRIBUTE,ATTRIBUTE_ORDER) VALUES (131, 210, 'Clinical Diagnosis',1,7);
+
+INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME, DEFAULT_VIEW_ATTRIBUTE,ATTRIBUTE_ORDER) VALUES (131, 211, 'Clinical Status',1,8);
+
+
+UPDATE CATISSUE_RELATED_TABLES_MAP SET second_table_id = 92 WHERE second_table_id = 35 AND first_table_id=3;
+
+
+INSERT INTO CATISSUE_RELATED_TABLES_MAP VALUES ( 92 , 35 , 'IDENTIFIER','IDENTIFIER');
+
+
+ 
+
+/*Supriya end*/
+
+
 /* TODO Added in next script CSMUpgrade_3_to_3.2 */
 
 commit;
