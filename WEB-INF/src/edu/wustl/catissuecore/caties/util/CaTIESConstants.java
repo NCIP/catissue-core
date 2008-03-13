@@ -126,7 +126,6 @@ public abstract class CaTIESConstants
 	public static final String COLUMN_NAME_REPORT_STATUS="reportStatus";
 	public static final String PARSER_CLASS="edu.wustl.catissuecore.reportloader.HL7Parser";
 	
-	//Constants for catissuecore_properties.xml properties
 	public static final String INPUT_DIR="inputDir";
 	public static final String BAD_FILE_DIR="badFilesDir";
 	public static final String PROCESSED_FILE_DIR="processFileDir";
@@ -137,9 +136,9 @@ public abstract class CaTIESConstants
 	public static final String SECTION_HEADER_FILENAME="sectionHeaderPriorityFilename";
 	public static final String USER_NAME="userName";
 	public static final String PASSWORD="password";
-	public static final String KEYSTORE_FILE_PATH="keystore.file.path";
-	public static final String DO_NOTHING_DEID="dont.de-identify";
+	public static final String KEYSTORE_FILE_PATH="keystoreFilePath";
 	public static final String DATABASE_TYPE="databaseType";
+	public static final String DEIDENTIFIER_CLASSNAME="deidentifierClassName";
 	
 	public static final String DEID_HOME="deidHome";
 	public static final String DEID_DCTIONARY_FOLDER="deidDnyFolder";
@@ -162,6 +161,32 @@ public abstract class CaTIESConstants
 	public static final String CATIES_CONCEPT_NEG_EX_URL_NAME="caties.neg.ex.url.name";
 	public static final String CATIES_CONCEPT_CATEGORIZER_URL_NAME="caties.concept.categorizer.url.name";
 	
-	public static final String CATIES_SAVE_BI_CONTENT="save.binary.content";
-	public static final String CATIES_SAVE_XML_CONTENT="save.xml.content";
+	public static final String CATIES_SAVE_BI_CONTENT="saveBinaryContent";
+	public static final String CATIES_SAVE_XML_CONTENT="saveXMLContent";
+	
+	public static final String DEID_XPATH="//Report";
+	public static final String DEID_REPORT_TEXT_TAG_NAME="Report_Text";
+	public static final String HARVARD_SCRUBBER_XPATH="//Envelope/Body/PathologyCase";
+	public static final String HARVARD_SCRUBBER_DTD_FILENAME="harvardScrubberDTDFilename";
+	public static final String HARVARD_SCRUBBER_CONFIG_FILENAME="harvardScrubberConfigFilename";
+	
+	public static final String TAG_HEADER="Header";
+	public static final String TAG_IDENTIFIERS="Identfiers";
+	public static final String TAG_FIRST_NAME="FirstName";
+	public static final String TAG_LAST_NAME="LastName";
+	public static final String TAG_DATE_OF_BIRTH="DateOfBirth";
+	public static final String TAG_SSN="SSN";
+	public static final String TAG_ACCESSION_NUMBER="AccessionNumber";
+	public static final String TAG_LOCALMRN="LocalMRN";
+	public static final String TAG_SOURCE="Source";
+	public static final String TAG_BODY="Body";
+	public static final String TAG_PATHOLOGY_CASE="PathologyCase";
+	public static final String TAG_TISSUE_ACQUISITION_DATE="TissueAcquisitionDate";
+	public static final String TAG_CODES="Codes";
+	public static final String TAG_CLINICAL="Clinical";
+	public static final String TAG_PATIENT="Patient";
+	public static final String TAG_AGE="age";
+	public static final String TAG_GENDER="Gender";
+	public static final String TAG_FULL_REPORT_TEXT="FullReportText";
+		
 }

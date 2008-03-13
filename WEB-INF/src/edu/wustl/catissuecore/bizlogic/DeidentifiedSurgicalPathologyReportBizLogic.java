@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -37,14 +39,20 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-		DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) obj;
-
-		dao.insert(report, sessionDataBean, false, false);
-		Set protectionObjects = new HashSet();
-		protectionObjects.add(report);
+			DeidentifiedSurgicalPathologyReport deidentifiedReport = (DeidentifiedSurgicalPathologyReport) obj;
+			dao.insert(deidentifiedReport, sessionDataBean, false, false);
+			
+			
+			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), deidentifiedReport.getSpecimenCollectionGroup().getId(), "identifiedSurgicalPathologyReport");
+			identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
+			identifiedSurgicalPathologyReport.setDeIdentifiedSurgicalPathologyReport(deidentifiedReport);
+			dao.update(identifiedSurgicalPathologyReport, sessionDataBean, true, false, false);
+			
+			Set protectionObjects = new HashSet();
+			protectionObjects.add(deidentifiedReport);
 		try
 		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(dao, report));
+			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(dao, deidentifiedReport));
 		}
 		catch (SMException e)
 		{
@@ -66,7 +74,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 	private String[] getDynamicGroups(DAO dao, AbstractDomainObject obj) throws SMException, DAOException
 	{
 		DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport= (DeidentifiedSurgicalPathologyReport)obj;
-		CollectionProtocolRegistration collectionProtocolRegistration=deIdentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
+		CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),deIdentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getId(),Constants.COLUMN_NAME_CPR);
 		String[] dynamicGroups = new String[1];
 
 		dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
