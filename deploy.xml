@@ -835,7 +835,7 @@
 	
 	<target name="CAModel_import_data_oracle">
 		<echo message="Importing CA models data for caTISSUE Suite Application to Oracle Database ..." />
-		<java classname="edu.wustl.common.util.global.AutomateImport" fork="true">
+		<java classname="edu.wustl.common.util.global.AutomateImport"  fork="false" >
 			
 			<classpath refid="temp.classpath" />
 			
@@ -931,7 +931,7 @@
 	</target>
 	<target name="CAModel_export_data_oracle">
 		<echo message="Exporting data of CA models for Oracle Database..." />
-		<java classname="edu.wustl.common.util.global.AutomateImport" fork="true">
+		<java classname="edu.wustl.common.util.global.AutomateImport" fork="false">
 			<classpath refid="temp.classpath" />
 			<arg value="${database.host}"/>
 			<arg value="${database.port}"/>
@@ -1120,7 +1120,7 @@ Thanking You,
 		<echo message="Encrypting Password for Oracle DB..."/>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
-		<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="true">
+		<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="false">
 			
 			<classpath refid="temp.classpath" />
 			
