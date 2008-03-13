@@ -337,13 +337,18 @@ public class CreateSpecimenBizLogic extends NewSpecimenBizLogic
 			{
 				specimen.setAvailable(new Boolean(false));
 			}
+
+/*			if (specimen.getSpecimenCharacteristics() != null)
+			{
+				if(specimen.getSpecimenCharacteristics().getId()== null)
+				{
+					protectionObjects.add(specimen.getSpecimenCharacteristics());
+				}
+			}
+*/
 			dao.insert(specimen, sessionDataBean, true, true);
 			protectionObjects.add(specimen);
 
-			if (specimen.getSpecimenCharacteristics() != null)
-			{
-				protectionObjects.add(specimen.getSpecimenCharacteristics());
-			}
 
 			
 
