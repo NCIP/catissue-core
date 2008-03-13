@@ -115,20 +115,30 @@ public class ConceptCoder
 		Logger.out.info("*********************Inside update report***************");
 		 try 
 		 {
-			/* if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_BI_CONTENT)).equalsIgnoreCase("true"))
+			 if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_BI_CONTENT)).equalsIgnoreCase("true"))
 			 {
 				 BinaryContent binaryContent=new BinaryContent();
-				 binaryContent.setData(this.gateXML);
+				 String data=this.gateXML;
+				 if(data.length()>3900)
+				 {
+					 data=data.substring(0,3900);
+				 }
+				 binaryContent.setData(data);
 				 binaryContent.setSurgicalPathologyReport(this.deidPathologyReport);
 				 this.deidPathologyReport.setBinaryContent(binaryContent);
 			 }
 			 if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_XML_CONTENT)).equalsIgnoreCase("true"))
 			 {
 				 XMLContent xmlContent=new XMLContent();
-				 xmlContent.setData(this.chirpsXML);
+				 String data=this.chirpsXML;
+				 if(data.length()>3900)
+				 {
+					 data=data.substring(0,3900);
+				 }
+				 xmlContent.setData(data);
 				 xmlContent.setSurgicalPathologyReport(this.deidPathologyReport);
 				 this.deidPathologyReport.setXmlContent(xmlContent);
-			 }*/
+			 }
 			 this.deidPathologyReport.setReportStatus(CaTIESConstants.CONCEPT_CODED);
 		}
 		 catch (Exception ex) 
