@@ -83,6 +83,24 @@
 						<fail message="The property 'collection.protocol.title' can not be empty" />
 					</then>
 				</if>
+				<if>
+					<equals arg1="" arg2="${input.files.dir}" />
+					<then>
+						<fail message="The property 'input.files.dir' can not be empty" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${bad.files.dir}" />
+					<then>
+						<fail message="The property 'bad.files.dir' can not be empty" />
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${process.file.dir}" />
+					<then>
+						<fail message="The property 'process.file.dir' can not be empty" />
+					</then>
+				</if>
 			</then>
 		</if>
 		
@@ -188,6 +206,9 @@
 			<replacefilter token="@@COLL_PROT_TITLE@@" value="${collection.protocol.title}" />
 			<replacefilter token="@@ADMIN_EMAIL@@" value="${first.admin.emailAddress}" />
 			<replacefilter token="@@ADMIN_PASSWORD@@" value="${first.admin.password}" />
+			<replacefilter token="@@INPUT_FILES_DIR@@" value="${input.files.dir}" />
+			<replacefilter token="@@BAD_FILES_DIR@@" value="${bad.files.dir}" />
+			<replacefilter token="@@PROCESS_FILES_DIR@@" value="${process.file.dir}" />
 			<replacefilter token="@@GATE_HOME@@" value="${concept.code.installation.dir}/gate/gate_3_1" />
 			<replacefilter token="@@DB_TYPE@@" value="${database.type}" />
 		</replace>
@@ -225,12 +246,12 @@
 			<then>
 				<copy file="${basedir}/caTIES_conf/ScrubberConfiguration.xml" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
 				<replace file="${temp.caties.dir}/caTIES_conf/ScrubberConfiguration.xml">
-					<replacefilter token="@@CONTEXT_FOLDER@@" value="${basedir}\caTIES_conf" />
+					<replacefilter token="@@CONTEXT_FOLDER@@" value="${deidentifier.installation.dir}\caTIES_conf" />
 				</replace>	
 				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
 					<replacefilter token="@@DEIDENTIFIER_CLASS_NAME@@" value="edu.wustl.catissuecore.deidentifier.harvardscrubber.HarvardSrubberDeidentifier" />
-					<replacefilter token="@@DEIDENTIFIER_PROP_1@@" value="harvardScrubberDTDFilename=${basedir}/Scrubber.dtd" />
-					<replacefilter token="@@DEIDENTIFIER_PROP_2@@" value="harvardScrubberConfigFilename=${basedir}/caTIES_conf/ScrubberConfiguration.xml" />
+					<replacefilter token="@@DEIDENTIFIER_PROP_1@@" value="harvardScrubberDTDFilename=${deidentifier.installation.dir}/Scrubber.dtd" />
+					<replacefilter token="@@DEIDENTIFIER_PROP_2@@" value="harvardScrubberConfigFilename=${deidentifier.installation.dir}/caTIES_conf/ScrubberConfiguration.xml" />
 				</replace>	
 			</then>
 		</if>
