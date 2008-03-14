@@ -399,6 +399,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 			this.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
 
 			collectionProtocolRegistration = new CollectionProtocolRegistration();
+			collectionProtocolRegistration.setId(form.getCollectionProtocolRegistrationId());
 			/**
 			* Name: Vijay Pande
 			* Reviewer Name: Aarti Sharma
@@ -646,22 +647,44 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	
 	public void setConsentTierStatusCollectionFromCPR(CollectionProtocolRegistration collectionProtocolRegistration)
     {
-    	Collection consentTierStatusCollectionN = new HashSet();
+    	Collection consentTierStatusCollectionN = this.getConsentTierStatusCollection();
+    	if (consentTierStatusCollectionN ==null)
+    	{
+    		consentTierStatusCollectionN = new HashSet();
+    	}
     	Collection consentTierResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
+		Collection scgConsTierColl = this.getConsentTierStatusCollection();
+		boolean hasMoreConsents =false;
+
     	if(consentTierResponseCollection != null && !consentTierResponseCollection.isEmpty())
 		{
 	    	Iterator it = consentTierResponseCollection.iterator();
+	    	Iterator scgIterator = null;
+	    	if (scgConsTierColl != null)
+	    	{
+	    		 scgIterator = scgConsTierColl.iterator();
+	    		 hasMoreConsents =  scgIterator.hasNext();
+	    	}
 	    	while(it.hasNext())
 	    	{
 	    		ConsentTierResponse consentTierResponse = (ConsentTierResponse)it.next();
-	    		ConsentTierStatus consentTierstatusN = new ConsentTierStatus();
+	    		ConsentTierStatus consentTierstatusN;
+	    		if (hasMoreConsents)
+	    		{
+	    			consentTierstatusN = (ConsentTierStatus) scgIterator.next();
+	    		}
+	    		else
+	    		{
+	    			consentTierstatusN = new ConsentTierStatus();
+	    			consentTierStatusCollectionN.add(consentTierstatusN);
+	    		}
 	    		ConsentTier consentTier = new ConsentTier(consentTierResponse.getConsentTier());
 	    		consentTierstatusN.setConsentTier(consentTier);
 	    		consentTierstatusN.setStatus(consentTierResponse.getResponse());
-	    		consentTierStatusCollectionN.add(consentTierstatusN);
+	    		
 	    	}
 		}
-    	setConsentTierStatusCollection(consentTierStatusCollectionN);
+    	this.setConsentTierStatusCollection(consentTierStatusCollectionN);
     }
 	
 	public void setDefaultSpecimenGroupName(CollectionProtocol collectionProtocol, int ParticipantId , int SCGId)
