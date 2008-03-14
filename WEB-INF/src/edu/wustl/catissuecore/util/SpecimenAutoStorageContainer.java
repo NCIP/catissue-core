@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,8 @@ import edu.wustl.common.util.dbManager.DAOException;
  */
 public class SpecimenAutoStorageContainer {
 
-	private HashMap<String, ArrayList<GenericSpecimen>> specimenMap = new HashMap<String, ArrayList<GenericSpecimen>> ();
+	private HashMap<String, ArrayList<GenericSpecimen>> specimenMap = 
+		new HashMap<String, ArrayList<GenericSpecimen>> ();
 	private Long cpId = null;
 	private HashMap<Long, HashMap<String, ArrayList<GenericSpecimen>>> collectionProtocolSpecimenMap = 
 						new HashMap<Long, HashMap<String,ArrayList<GenericSpecimen>>> ();
@@ -121,33 +123,32 @@ public class SpecimenAutoStorageContainer {
 			String className, SessionDataBean bean, Long collectionProtocolId ) throws DAOException
 	{
  
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance()
-		.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
 		Map containerMap;
 		try {
-			containerMap = StorageContainerUtil.getContainerMapFromCache();
+			StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) 
+			BizLogicFactory.getInstance()
+							.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+
+			containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(
+					collectionProtocolId.longValue(), className, 0, "false", bean, true);
 			populateStorageLocations(specimenDataBeanList,
 					collectionProtocolId.longValue(), containerMap, bean, className);
 
 		} catch (Exception exception) {
-			// TODO Auto-generated catch block
+
 			throw new DAOException(exception.getMessage(),exception);
 		}
 		
-			/*bizLogic.getAllocatedContaienrMapForSpecimen(
-				collectionProtocolId.longValue(), className, 0, "false", bean, true);
-	*/
 	}
 	
-	protected void populateStorageLocations(List specimenDataBeanList, Long collectionProtocolId, 
-			Map containerMap, SessionDataBean bean, String classType)throws SMException,DAOException
+	protected void populateStorageLocations(List specimenDataBeanList, 
+							Long collectionProtocolId, Map containerMap, 
+							SessionDataBean bean, String classType)
+			throws SMException,DAOException
 	{
-		
+
 		int counter = 0;
 
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance()
-		.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		if (containerMap.isEmpty())
 		{
 			return;
@@ -165,11 +166,6 @@ public class SpecimenAutoStorageContainer {
 			StorageContainer sc = new StorageContainer();
 			sc.setId( new Long(storageId));
 			sc.setName(((NameValueBean) containerId[i]).getName());
-
-			if (!checkStorageContainerRules(bizLogic, sc, bean, classType, collectionProtocolId))
-			{
-				continue;
-			}
 			
 
 			Map xDimMap = (Map) containerMap.get(containerId[i]);
@@ -180,29 +176,9 @@ public class SpecimenAutoStorageContainer {
 			}
 		}
 
-
 	}
 
-	private boolean checkStorageContainerRules(StorageContainerBizLogic bizLogic
-			, StorageContainer sc, SessionDataBean bean, String classType, 
-			long collectionProtocolId)throws DAOException,SMException
-	{
-		
-		if (!bizLogic.canHoldCollectionProtocol(collectionProtocolId, sc))
-		{
-			return false;
-		}
-
-		if (!bizLogic.canHoldSpecimenClass(classType, sc))
-		{
-			return false;
-		}
-		if (!bizLogic.validateContainerAccess(sc , bean))
-		{
-			return false;
-		}
-		return true;
-	}
+	
 	/**
 	 * @param specimenDataBeanList
 	 * @param counter
