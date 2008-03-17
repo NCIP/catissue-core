@@ -295,6 +295,15 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				addQueryPathsForEntityHierarchy(dynamicContainer.getEntity(), staticEntity,
 						association.getId(), staticEntity.getId(), processedPathList);
 
+				String deletedAssociationIds = request.getParameter("deletedAssociationIds");
+				String[] deletedAssociationIdArray = null;
+				if (deletedAssociationIds != null && deletedAssociationIds.length() > 0)
+				{
+					deletedAssociationIdArray = deletedAssociationIds.split("_");
+				}
+				//Added by Rajesh to remove deleted associations from query tables.
+				removeQueryPathsForEntityHierarchy(deletedAssociationIdArray);
+
 				edu.wustl.catissuecore.bizlogic.AnnotationUtil.addEntitiesToCache(false,
 						dynamicContainer.getEntity(), staticEntity);
 			}
@@ -316,6 +325,68 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					e.printStackTrace();
 					throw new BizLogicException("", e);
 				}
+			}
+		}
+	}
+	/**
+	 *
+	 *
+	 */
+	private void removeQueryPathsForEntityHierarchy(String[] deletedAssociationIdArray) throws BizLogicException
+	{
+		if (deletedAssociationIdArray != null && deletedAssociationIdArray.length > 0)
+		{
+			Connection conn = null;
+			try
+			{
+				conn = DBUtil.getConnection();
+			}
+			catch (HibernateException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				throw new BizLogicException("", e1);
+			}
+			PreparedStatement statement = null;
+			try
+			{
+				String deleteQuery = "delete from intra_model_association where de_association_id = ?";
+				statement = conn.prepareStatement(deleteQuery);
+				for (String id : deletedAssociationIdArray)
+				{
+					statement.setLong(1, new Long(id));
+					statement.executeUpdate();
+					statement.clearParameters();
+				}
+				conn.commit();
+			}
+			catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new BizLogicException("", e);
+			}
+			finally
+			{
+				try
+				{
+					statement.close();
+					conn.close();
+					DBUtil.closeConnection();
+				}
+				catch (HibernateException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					throw new BizLogicException("", e);
+				}
+				catch (SQLException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					throw new BizLogicException("", e);
+				}
+
 			}
 		}
 	}
