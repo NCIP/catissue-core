@@ -836,14 +836,19 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	 *            The session in which the object is saved.
 	 * @throws DAOException
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+		protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
+		
+		
+		
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		CollectionProtocolRegistration oldCollectionProtocolRegistration = (CollectionProtocolRegistration) oldObj;
 
+		List persistentCPRList  =dao.retrieve(CollectionProtocolRegistration.class.getName(),Constants.ID, oldCollectionProtocolRegistration.getId());
+		CollectionProtocolRegistration persistentCPR=(CollectionProtocolRegistration) persistentCPRList.get(0);
 		// Check for different Collection Protocol
 		if (!collectionProtocolRegistration.getCollectionProtocol().getId().equals(oldCollectionProtocolRegistration.getCollectionProtocol().getId()))
-		{
+		{	
 			checkStatus(dao, collectionProtocolRegistration.getCollectionProtocol(), "Collection Protocol");
 		}
 
@@ -855,6 +860,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		{
 			if (!collectionProtocolRegistration.getParticipant().getId().equals(oldCollectionProtocolRegistration.getParticipant().getId()))
 			{
+				
 				checkStatus(dao, collectionProtocolRegistration.getParticipant(), "Participant");
 			}
 		}
@@ -864,6 +870,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		{
 			if (collectionProtocolRegistration.getParticipant().getId() != null)
 			{
+				
 				checkStatus(dao, collectionProtocolRegistration.getParticipant(), "Participant");
 			}
 		}
@@ -888,13 +895,13 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				String ssn = Utility.toString(oldParticipant.getSocialSecurityNumber());
 				if (firstName.trim().length() == 0 && lastName.trim().length() == 0 && birthDate.trim().length() == 0 && ssn.trim().length() == 0)
 				{
-					collectionProtocolRegistration.setParticipant(oldParticipant);
+					persistentCPR.setParticipant(oldParticipant);
 				}
 				else
 				{
 					// create dummy participant.
 					Participant participant = addDummyParticipant(dao, sessionDataBean);
-					collectionProtocolRegistration.setParticipant(participant);
+					persistentCPR.setParticipant(participant);
 				}
 
 			} // oldpart != null
@@ -902,10 +909,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			{
 				// create dummy participant.
 				Participant participant = addDummyParticipant(dao, sessionDataBean);
-				collectionProtocolRegistration.setParticipant(participant);
+				persistentCPR.setParticipant(participant);
 			}
 		}
+		
 		checkUniqueConstraint(dao, collectionProtocolRegistration, oldCollectionProtocolRegistration);
+		
 		// Mandar 22-Jan-07 To disable consents accordingly in SCG and
 		// Specimen(s) start
 		if (!collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
@@ -915,11 +924,15 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			//collectionProtocolRegistration.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 		}
 
-		Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
+		/*lazy change */
+		
+		/*Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
 				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);
 		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
-
-		updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
+		
+		updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);*/
+		
+		persistentCPR.setSpecimenCollectionGroupCollection(collectionProtocolRegistration.getSpecimenCollectionGroupCollection());
 		/* for offset 27th Dec 2007 */
 		// Check if Offset is present.If it is present then all the below
 		// hierarchy protocols are shifted according to the Offset.Integer offsetOld=oldCollectionProtocolRegistration.getOffset();
@@ -934,7 +947,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				offset = offsetNew.intValue() - 0;
 			if (offset != 0)
 			{
-				//				updateOffsetForEvents(dao, sessionDataBean, collectionProtocolRegistration, offset);
+				//updateOffsetForEvents(dao, sessionDataBean, collectionProtocolRegistration, offset);
 				checkAndUpdateChildOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
 				updateForOffset(dao, sessionDataBean, oldCollectionProtocolRegistration, offset);
 			}
@@ -948,7 +961,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		// Mandar 22-Jan-07 To disable consents accordingly in SCG and
 		// Specimen(s) end
 		// Update registration
-		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
+		dao.update(persistentCPR, sessionDataBean, true, true, false);
+		
+		
 
 		// Audit.
 		dao.audit(obj, oldObj, sessionDataBean, true);
