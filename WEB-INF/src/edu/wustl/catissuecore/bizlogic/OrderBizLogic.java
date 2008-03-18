@@ -117,10 +117,11 @@ public class OrderBizLogic extends DefaultBizLogic
 		OrderDetails orderNew = updateObject(orderImplObj, obj, dao, sessionDataBean);
 
 		dao.update(orderNew, sessionDataBean, true, true, false);
+		
 		//Sending Email only if atleast one order item is updated.
-		if (numberItemsUpdated > 0 && orderNew.getMailNotification())
+	   if (numberItemsUpdated > 0 && orderNew.getMailNotification())
 		{
-			sendEmailOnOrderUpdate(orderNew, sessionDataBean);
+			sendEmailOnOrderUpdate(dao, orderNew, sessionDataBean);
 		}
 	}
 
@@ -485,13 +486,13 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @param order object
 	 * @param sessionDataBean object
 	 */
-	private void sendEmailOnOrderUpdate(OrderDetails order, SessionDataBean sessionDataBean)
+	private void sendEmailOnOrderUpdate(DAO dao, OrderDetails order, SessionDataBean sessionDataBean)
 	{
 		EmailHandler emailHandler = new EmailHandler();
 		String toEmailAddress = order.getDistributionProtocol().getPrincipalInvestigator().getEmailAddress();
 		String fromEmailAddress = sessionDataBean.getUserName();
 		String subject = "Update on Order " + order.getName();
-		String body = makeEmailBodyForOrderUpdate(order);
+		String body = makeEmailBodyForOrderUpdate(dao, order);
 		emailHandler.sendEmailForOrderDistribution(body, toEmailAddress, fromEmailAddress, subject);
 	}
 
@@ -499,7 +500,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @param order object
 	 * @return String object
 	 */
-	private String makeEmailBodyForOrderUpdate(OrderDetails order)
+	private String makeEmailBodyForOrderUpdate(DAO dao, OrderDetails order)
 	{
 		Collection orderItemColl = order.getOrderItemCollection();
 		String emailFormat = "";
@@ -513,20 +514,21 @@ public class OrderBizLogic extends DefaultBizLogic
 		String emailBody = "";
 		while (iter.hasNext())
 		{
-			OrderItem orderItem = (OrderItem) iter.next();
-			if (orderItem instanceof ExistingSpecimenOrderItem)
-			{
-				ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
-				emailBody = emailBody + serialNo + ". " + existingSpecimenOrderItem.getSpecimen().getLabel() + "--"
-						+ existingSpecimenOrderItem.getStatus() + "\n";
-			}
+		    OrderItem orderItem = (OrderItem) iter.next();
+		    
+		    if (orderItem instanceof ExistingSpecimenOrderItem)
+				{
+					ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
+					emailBody = emailBody + serialNo + ". " + existingSpecimenOrderItem.getSpecimen().getLabel() + "--"
+							+ existingSpecimenOrderItem.getStatus() + "\n";
+				}
 			else if (orderItem instanceof DerivedSpecimenOrderItem)
-			{
-				DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
-				emailBody = emailBody + serialNo + ". " + derivedSpecimenOrderItem.getParentSpecimen().getLabel() + "--"
-						+ derivedSpecimenOrderItem.getSpecimenClass() + "--" + derivedSpecimenOrderItem.getSpecimenType() + "--"
-						+ derivedSpecimenOrderItem.getStatus() + "\n";
-			}
+				{
+					DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
+					emailBody = emailBody + serialNo + ". " + derivedSpecimenOrderItem.getParentSpecimen().getLabel() + "--"
+							+ derivedSpecimenOrderItem.getSpecimenClass() + "--" + derivedSpecimenOrderItem.getSpecimenType() + "--"
+							+ derivedSpecimenOrderItem.getStatus() + "\n";
+				}
 			else if (orderItem instanceof PathologicalCaseOrderItem)
 			{
 				PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) orderItem;
