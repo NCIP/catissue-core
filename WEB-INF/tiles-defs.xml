@@ -1151,7 +1151,11 @@
 
 	<definition name=".catissuecore.defineSearchResultsWizard" path="/pages/content/search/querysuite/DefineSearchResultsView.jsp">
 		<put name="content" value="/pages/content/search/querysuite/DefineSearchResultsViewDefineTree.jsp"/>
-	</definition>	
+	</definition>			
+	
+	<definition name=".catissuecore.gridViewReport" path="/pages/content/search/querysuite/GridViewReport.jsp">
+		<put name="content" value="/pages/content/search/querysuite/GridViewReport.jsp"/>
+	</definition>
 	
 	<definition name=".catissuecore.defineSearchResultsViewBNT" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/querysuite/DefineSearchResultsViewBuildNewTree.jsp" />
