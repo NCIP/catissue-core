@@ -69,8 +69,8 @@
             cascade="none"
             outer-join="auto"
             update="true"
-            insert="true"
-            column="CONSENT_WITNESS"
+            insert="true" 
+            column="CONSENT_WITNESS"  
         />
 
         <property
@@ -79,7 +79,7 @@
             update="true"
             insert="true"
             column="PROTOCOL_PARTICIPANT_ID"
-            length="255"
+            length="255" 
         />
 
         <property
@@ -97,7 +97,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="PARTICIPANT_ID"
+            column="PARTICIPANT_ID"  lazy="false"
         />
 
         <many-to-one
@@ -107,7 +107,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="COLLECTION_PROTOCOL_ID"
+            column="COLLECTION_PROTOCOL_ID" lazy="false"
         />
 
         <property

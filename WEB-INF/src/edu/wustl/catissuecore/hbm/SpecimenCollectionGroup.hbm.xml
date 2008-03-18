@@ -59,7 +59,8 @@
               />
 
               <one-to-many
-                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"  
+
               />
         </set>
 
@@ -130,7 +131,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="SITE_ID"
+            column="SITE_ID"   lazy="false"
         />
 
         <many-to-one
@@ -170,7 +171,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="COLLECTION_PROTOCOL_REG_ID"
+            column="COLLECTION_PROTOCOL_REG_ID" lazy="false"
         />
         
         <one-to-one

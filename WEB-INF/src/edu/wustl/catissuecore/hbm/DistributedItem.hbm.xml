@@ -34,7 +34,7 @@
             update="true"
             insert="true"
             column="QUANTITY"
-            length="30"
+            length="30" 
         />
 
         <many-to-one

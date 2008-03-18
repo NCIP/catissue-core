@@ -64,7 +64,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="USER_ID"
+            column="USER_ID"  lazy="false"
         />
 
         <property

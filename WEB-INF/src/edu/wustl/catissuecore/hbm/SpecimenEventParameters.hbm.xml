@@ -268,7 +268,7 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.CollectionEventParameters"
             table="CATISSUE_COLL_EVENT_PARAM"
-			lazy="true"
+			lazy="false"
         >
             <key
                 column="IDENTIFIER"
@@ -295,7 +295,7 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.ReceivedEventParameters"
             table="CATISSUE_RECEIVED_EVENT_PARAM"
-			lazy="true"
+			lazy="false"
         >
             <key
                 column="IDENTIFIER"

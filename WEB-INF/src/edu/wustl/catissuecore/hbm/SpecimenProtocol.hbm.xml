@@ -35,7 +35,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="PRINCIPAL_INVESTIGATOR_ID"
+            column="PRINCIPAL_INVESTIGATOR_ID" lazy="false"
         />
 
         <property
@@ -157,7 +157,7 @@
         <set
             name="consentTierCollection"
             table="CATISSUE_CONSENT_TIER"
-            lazy="true"
+            lazy="false"
             inverse="false"
             cascade="save-update"
             sort="unsorted"
@@ -197,7 +197,7 @@
         <set
             name="coordinatorCollection"
             table="CATISSUE_COLL_COORDINATORS"
-            lazy="true"
+            lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -219,10 +219,10 @@
         <set
             name="collectionProtocolEventCollection"
             table="CATISSUE_COLL_PROT_EVENT"
-            lazy="true"
+         
             inverse="true"
             cascade="save-update"
-            sort="unsorted"
+            sort="unsorted"     lazy="false"
         >
 
             <key
@@ -231,13 +231,13 @@
             </key>
 
             <one-to-many
-                  class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+                  class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"   
             />	 
     </set>
 	<set
             name="childCollectionProtocolCollection"
             table="CATISSUE_COLLECTION_PROTOCOL"
-            lazy="true"
+            lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
@@ -319,10 +319,10 @@
         <set
             name="specimenRequirementCollection"
             table="CATISSUE_DISTRIBUTION_SPE_REQ"
-            lazy="true"
+           
             inverse="false"
             cascade="save-update"
-            sort="unsorted"
+            sort="unsorted"   lazy="false"
         >
 
             <key
@@ -333,7 +333,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.SpecimenRequirement"
                 column="SPECIMEN_REQUIREMENT_ID"
-                outer-join="auto"
+                outer-join="auto"  lazy="false"
              />
 
         </set>

@@ -251,6 +251,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
+		//lazy false change
+		List persistentSCGList =dao.retrieve(SpecimenCollectionGroup.class.getName(),Constants.ID,oldspecimenCollectionGroup.getId());
+		SpecimenCollectionGroup persistentSCG=(SpecimenCollectionGroup) persistentSCGList.get(0);
+		persistentSCG.setComment(specimenCollectionGroup.getComment());
 
 		// Adding default events if they are null from API
 		Collection spEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
@@ -296,6 +300,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		if (!specimenCollectionGroup.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
 		{
 			verifyAndUpdateConsentWithdrawn(specimenCollectionGroup, oldspecimenCollectionGroup, dao, sessionDataBean);
+			persistentSCG.setConsentTierStatusCollection(specimenCollectionGroup.getConsentTierStatusCollection());
 
 		}
 		// Mandar 22-Jan-07 To disable consents accordingly in SCG and
@@ -326,7 +331,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		}
 
-		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
+		dao.update(persistentSCG, sessionDataBean, true, true, false);
 		/**
 		 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch
 		 * ID: 2741_6 Description: Method to update events in all specimens

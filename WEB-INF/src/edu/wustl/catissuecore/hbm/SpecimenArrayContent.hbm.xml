@@ -44,7 +44,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="INITIAL_QUANTITY_ID"
+            column="INITIAL_QUANTITY_ID"  lazy="false"
         />
 
         <property
@@ -72,7 +72,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="SPECIMEN_ID"
+            column="SPECIMEN_ID"  lazy="false"
         />
 
         <many-to-one

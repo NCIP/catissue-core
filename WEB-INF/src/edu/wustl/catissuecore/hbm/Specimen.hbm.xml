@@ -145,7 +145,8 @@
             outer-join="false"
             update="true"
             insert="true"
-            column="PARENT_SPECIMEN_ID"
+            column="PARENT_SPECIMEN_ID"  
+            lazy="false"
         />
 
         <set
@@ -173,7 +174,7 @@
         <set
             name="specimenEventCollection"
             table="CATISSUE_SPECIMEN_EVENT"
-            lazy="true"
+            lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
@@ -218,13 +219,13 @@
             lazy="false"
             update="true"
             insert="true"
-            column="STORAGE_CONTAINER_IDENTIFIER"
+            column="STORAGE_CONTAINER_IDENTIFIER" 
         />
 
         <set
             name="externalIdentifierCollection"
             table="CATISSUE_EXTERNAL_IDENTIFIER"
-            lazy="true"
+            lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
@@ -249,6 +250,7 @@
             update="true"
             insert="true"
             column="SPECIMEN_COLLECTION_GROUP_ID"
+            lazy="false"
         />
 
 
@@ -265,7 +267,7 @@
 
         <component
             name="availableQuantity"
-            class="edu.wustl.catissuecore.domain.Quantity"
+            class="edu.wustl.catissuecore.domain.Quantity"  lazy="false"
         >
 
         <property
@@ -281,7 +283,7 @@
 
         <component
             name="initialQuantity"
-            class="edu.wustl.catissuecore.domain.Quantity"
+            class="edu.wustl.catissuecore.domain.Quantity" lazy="false"
         >
 
         <property

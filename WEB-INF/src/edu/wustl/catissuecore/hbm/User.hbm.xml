@@ -8,7 +8,7 @@
     <class
         name="edu.wustl.catissuecore.domain.User"
         table="CATISSUE_USER"
-		lazy="true"
+        lazy="true"
     >
 
         <id
@@ -98,7 +98,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="DEPARTMENT_ID"
+            column="DEPARTMENT_ID"  lazy="false"
         />
 
         <many-to-one
@@ -108,7 +108,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="CANCER_RESEARCH_GROUP_ID"
+            column="CANCER_RESEARCH_GROUP_ID"  lazy="false"
         />
 
         <many-to-one
@@ -118,7 +118,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="INSTITUTION_ID"
+            column="INSTITUTION_ID" lazy="false"
         />
 
         <many-to-one
@@ -191,6 +191,8 @@
 
         </set>
 
+<!-- 
+
 		<set
             name="clinicalStudyCollection"
             table="CATISSUE_CLINICAL_STUDY_COORDINATORS"
@@ -212,13 +214,13 @@
              />
 
         </set>
+ -->
 
-        <!--
+           <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-User.xml
             containing the additional properties and place it in your merge dir.
         -->
-
     </class>
 
 </hibernate-mapping>

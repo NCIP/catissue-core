@@ -43,7 +43,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="SITE_ID"
+            column="SITE_ID"  lazy="false"
         />
 
         <many-to-one
@@ -53,7 +53,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="PARTICIPANT_ID"
+            column="PARTICIPANT_ID"  
         />
 
         <!--

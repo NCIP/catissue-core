@@ -77,7 +77,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="PARENT_CONTAINER_ID"
+            column="PARENT_CONTAINER_ID" lazy="false"
         />
 
         <property
@@ -166,7 +166,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="CREATED_BY_ID"
+            column="CREATED_BY_ID"   	lazy="false"
         />
 
         <set
@@ -194,7 +194,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="SPECIMEN_ARRAY_TYPE_ID"
+            column="SPECIMEN_ARRAY_TYPE_ID"  lazy="false"
         />
 
         <many-to-one
@@ -204,7 +204,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="STORAGE_CONTAINER_ID"
+            column="STORAGE_CONTAINER_ID"   lazy="false"
         />
 
         <property
@@ -230,7 +230,7 @@
         <set
             name="collectionProtocolCollection"
             table="CATISSUE_ST_CONT_COLL_PROT_REL"
-            lazy="true"
+            lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -243,7 +243,7 @@
               <many-to-many
                   class="edu.wustl.catissuecore.domain.CollectionProtocol"
                   column="COLLECTION_PROTOCOL_ID"
-                  outer-join="auto"
+                  outer-join="auto"  
               />
 
         </set>
@@ -267,7 +267,7 @@
         <set
             name="holdsStorageTypeCollection"
             table="CATISSUE_ST_CONT_ST_TYPE_REL"
-            lazy="true"
+            lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -280,14 +280,14 @@
               <many-to-many
                   class="edu.wustl.catissuecore.domain.StorageType"
                   column="STORAGE_TYPE_ID"
-                  outer-join="auto"
+                  outer-join="auto" lazy="false"
               />
 
         </set>
         <set
             name="holdsSpecimenArrayTypeCollection"
             table="CATISSUE_CONT_HOLDS_SPARRTYPE"
-            lazy="true"
+            lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -330,7 +330,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="SITE_ID"
+            column="SITE_ID" lazy="false"
         />
 
         <property
@@ -349,7 +349,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="STORAGE_TYPE_ID"
+            column="STORAGE_TYPE_ID"   lazy="false"
         />
 
         </joined-subclass>

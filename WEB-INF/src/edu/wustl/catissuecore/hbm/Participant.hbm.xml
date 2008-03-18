@@ -80,7 +80,7 @@
         <set
             name="raceCollection"
             table="CATISSUE_RACE"
-            lazy="true"
+            lazy="false"
             inverse="false"
             cascade="save-update"
             sort="unsorted"
@@ -141,7 +141,7 @@
         <set
             name="participantMedicalIdentifierCollection"
             table="CATISSUE_PART_MEDICAL_ID"
-            lazy="true"
+            lazy="false"
             inverse="true"
             cascade="all"
             sort="unsorted"
@@ -159,7 +159,7 @@
         <set
             name="collectionProtocolRegistrationCollection"
             table="CATISSUE_COLL_PROT_REG"
-            lazy="true"
+            lazy="false"
             inverse="true"
             cascade="none"
             sort="unsorted"
@@ -174,6 +174,7 @@
               />
         </set>
 
+<!--  
  		<set
             name="clinicalStudyRegistrationCollection"
             table="CATISSUE_CLINICAL_STUDY_REG"
@@ -191,6 +192,7 @@
                   class="edu.wustl.catissuecore.domain.ClinicalStudyRegistration"
               />
         </set>
+  -->
 
         <!--
             To add non XDoclet property mappings, create a file named

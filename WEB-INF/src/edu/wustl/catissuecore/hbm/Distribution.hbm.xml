@@ -46,13 +46,13 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="DISTRIBUTION_PROTOCOL_ID"
+            column="DISTRIBUTION_PROTOCOL_ID" lazy="false"
         />
 
         <set
             name="distributedItemCollection"
             table="CATISSUE_DISTRIBUTED_ITEM"
-            lazy="true"
+            lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
@@ -123,7 +123,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="USER_ID"
+            column="USER_ID" lazy="false"
         />
 
         <property

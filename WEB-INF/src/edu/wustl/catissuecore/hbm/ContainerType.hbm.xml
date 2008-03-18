@@ -108,7 +108,7 @@
         <set
             name="specimenTypeCollection"
             table="CATISSUE_SPECIMEN_TYPE"
-            lazy="true"
+            lazy="false"
             inverse="false"
             cascade="save-update"
             sort="unsorted"
@@ -127,7 +127,7 @@
             table="CATISSUE_STORAGE_TYPE"
             dynamic-update="false"
             dynamic-insert="false"
-			lazy="true"
+			lazy="false"
         >
         <key
             column="IDENTIFIER"
@@ -162,7 +162,7 @@
         <set
             name="holdsStorageTypeCollection"
             table="CATISSUE_STOR_TYPE_HOLDS_TYPE"
-            lazy="true"
+            lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -175,13 +175,13 @@
               <many-to-many
                   class="edu.wustl.catissuecore.domain.StorageType"
                   column="STORAGE_TYPE_ID"
-                  outer-join="auto"
+                  outer-join="auto" 
               />
         </set>
         <set
             name="holdsSpecimenArrayTypeCollection"
             table="CATISSUE_STORTY_HOLDS_SPARRTY"
-            lazy="true"
+            lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"

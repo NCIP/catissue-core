@@ -61,7 +61,7 @@
             update="true"
             insert="true"
             column="SPECIMEN_COLL_REQ_GROUP_ID"
-            not-null="false"
+            not-null="false"   lazy="false"
         />
 
         <many-to-one
@@ -71,7 +71,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="COLLECTION_PROTOCOL_ID"
+            column="COLLECTION_PROTOCOL_ID" 
         />
 
 	        <set

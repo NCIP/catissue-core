@@ -40,7 +40,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="DISTRIBUTION_PROTOCOL_ID"
+            column="DISTRIBUTION_PROTOCOL_ID"  
         />
 
         <property
@@ -57,7 +57,7 @@
       <set
             name="orderItemCollection"
             table="CATISSUE_ORDER_ITEM"
-            lazy="true"
+            lazy="false"
             cascade="save-update"
             sort="unsorted"
         >
@@ -74,7 +74,7 @@
         <set
             name="distributionCollection"
             table="CATISSUE_DISTRIBUTION"
-            lazy="true"            
+            lazy="false"            
             cascade="save-update"
             sort="unsorted"
         >

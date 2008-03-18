@@ -63,7 +63,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="SITE_ID"
+            column="SITE_ID"  lazy="false"
         />
 
 
@@ -90,7 +90,7 @@
 	    <joined-subclass
 	        name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
 	        table="CATISSUE_SPECIMEN_COLL_GROUP"
-			lazy="true"
+			
 	    >
 
             <key
@@ -182,7 +182,7 @@
 	            outer-join="auto"
 	            update="true"
 	            insert="true"
-	            column="COLLECTION_PROTOCOL_REG_ID"
+	            column="COLLECTION_PROTOCOL_REG_ID"  lazy="false"
 	        />
 
 	        <many-to-one
@@ -222,8 +222,8 @@
 
 	    <joined-subclass
 	        name="edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup"
-	        table="CATISSUE_SPECI_COLL_REQ_GROUP"
-			lazy="true"
+	        table="CATISSUE_SPECI_COLL_REQ_GROUP"    lazy="false"
+			
 	    >
 
             <key
@@ -236,7 +236,7 @@
 	            cascade="save-update"
 	            outer-join="auto"
 	            constrained="false"
-		     	property-ref="requiredCollectionSpecimenGroup"  
+		     	property-ref="requiredCollectionSpecimenGroup"   lazy="false"
 	        />
             
 		</joined-subclass>

@@ -7,7 +7,8 @@
 >
     <class
         name="edu.wustl.catissuecore.domain.SpecimenRequirement"
-        table="CATISSUE_SPECIMEN_REQUIREMENT"
+        table="CATISSUE_SPECIMEN_REQUIREMENT" 
+        	lazy="true"
     >
 
         <id
@@ -93,7 +94,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
                 column="COLLECTION_PROTOCOL_EVENT_ID"
-                outer-join="auto"
+                outer-join="auto"  lazy="false"
              />
 
         </set>
