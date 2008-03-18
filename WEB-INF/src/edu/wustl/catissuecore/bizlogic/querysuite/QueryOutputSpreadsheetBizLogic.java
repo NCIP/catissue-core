@@ -3,10 +3,16 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.Vector;
+
+import com.sun.java_cup.internal.internal_error;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
@@ -77,14 +83,20 @@ public class QueryOutputSpreadsheetBizLogic
 				queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 				queryResultObjectDataBeanMap.put(root.getId(), queryResulObjectDataBean);
 				if(!selectedColumnMetaData.isDefinedView())
+				{
 				    spreadSheetDataMap = createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage,this.selectedColumnMetaData,randomNumber,idNodesMap,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField,mainEntityMap);
+				    spreadSheetDataMap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataBeanMap);
+				    
+				}
 				else
 				{
 					if(queryResultObjectDataMap==null)
 						queryResultObjectDataMap = new HashMap<Long, QueryResultObjectDataBean>();
 					 spreadSheetDataMap = createSpreadsheetData(treeNo,root, sessionData,null,recordsPerPage,this.selectedColumnMetaData,randomNumber,idNodesMap,queryResultObjectDataMap,hasConditionOnIdentifiedField,mainEntityMap);
+					 spreadSheetDataMap.put(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP, queryResultObjectDataMap);
 				}
 			this.selectedColumnMetaData.setCurrentSelectedObject(root);
+			//spreadSheetDataMap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataMap);
 		} else
 		{ 
 			String parentData = spiltParentNodeId[2];
@@ -116,9 +128,10 @@ public class QueryOutputSpreadsheetBizLogic
 				querySessionData = getQuerySessionData(sessionData, recordsPerPage,startIndex, spreadSheetDataMap, selectSql,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField);
 			spreadSheetDataMap.put(Constants.QUERY_SESSION_DATA, querySessionData);
 			this.selectedColumnMetaData.setCurrentSelectedObject(currentTreeNode);
+			spreadSheetDataMap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataBeanMap);
 		}
 		spreadSheetDataMap.put(Constants.SELECTED_COLUMN_META_DATA,this.selectedColumnMetaData);
-		spreadSheetDataMap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataBeanMap);
+		//spreadSheetDataMap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataBeanMap);
 		return spreadSheetDataMap;
 	}
 	/**
@@ -150,19 +163,25 @@ public class QueryOutputSpreadsheetBizLogic
 		String uniqueNodeId = treeNo+"_"+parentId;
 		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
 		if(! selectedColumnMetaData.isDefinedView())
+		{
 			 defineGridViewBizLogic.getColumnsMetadataForSelectedNode(parentNode,this.selectedColumnMetaData);
+		}
 		
 		QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(parentNode,mainEntityMap);
 		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 		queryResultObjectDataBeanMap.put(parentNode.getId(), queryResulObjectDataBean);
 		
 		if(!selectedColumnMetaData.isDefinedView())
+		{
 		  spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage,this.selectedColumnMetaData,randomNumber,idNodesMap,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField,mainEntityMap);
+		  spreadSheetDatamap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataBeanMap);
+		}
 		else
 		{
 			if(queryResultObjectDataMap==null)
 				queryResultObjectDataMap = new HashMap<Long, QueryResultObjectDataBean>();
 			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage,this.selectedColumnMetaData,randomNumber,idNodesMap,queryResultObjectDataMap,hasConditionOnIdentifiedField,mainEntityMap);
+			spreadSheetDatamap.put(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP, queryResultObjectDataMap);
 		}
 		/*if (parentNode.getChildren().isEmpty())
 		{
@@ -174,7 +193,7 @@ public class QueryOutputSpreadsheetBizLogic
 		}*/
 		this.selectedColumnMetaData.setCurrentSelectedObject(parentNode);
 		spreadSheetDatamap.put(Constants.SELECTED_COLUMN_META_DATA,this.selectedColumnMetaData);
-		spreadSheetDatamap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataBeanMap);
+		//spreadSheetDatamap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP, queryResultObjectDataBeanMap);
 		return spreadSheetDatamap;
 	}
 
@@ -247,6 +266,8 @@ public class QueryOutputSpreadsheetBizLogic
 	private String createSQL(String parentData, String tableName, Map spreadSheetDataMap, String parentIdColumnName, OutputTreeDataNode node,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap, Map<EntityInterface, List<EntityInterface>> mainEntityMap, Map<String, OutputTreeDataNode> idNodesMap )
 	{     
 		String selectSql = "";
+		List<Integer> clobTypeEntityIdIndexList = new ArrayList<Integer>();
+		boolean isClobTypeEntity = false;
 		String idColumnOfCurrentNode = "";
 		List<String> columnsList = new ArrayList<String>();
 		List<IOutputAttribute> selectedOutputAttributeList = new ArrayList<IOutputAttribute>();
@@ -255,7 +276,9 @@ public class QueryOutputSpreadsheetBizLogic
 		   queryResultObjectDataBean = queryResultObjectDataBeanMap.get(node.getId());
 		Vector<Integer> identifiedDataColumnIds = new Vector<Integer>();
 		Vector<Integer> objectDataColumnIds = new Vector<Integer>();
+		Map<Integer, QueryOutputTreeAttributeMetadata> fileTypeAtrributeIndexMetadataMap = new HashMap<Integer, QueryOutputTreeAttributeMetadata>();
 		int columnIndex = 0;
+		int totalFileTypeAttributes = 0;
 		
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
@@ -266,7 +289,7 @@ public class QueryOutputSpreadsheetBizLogic
 			String className = attribute.getEntity().getName();
 			className = Utility.parseClassName(className);
 			if( !selectedColumnMetaData.isDefinedView() && (attribute.getIsIdentified()!=null && attribute.getIsIdentified()))
-			{
+			{ 
 				identifiedDataColumnIds.add(columnIndex);
 				queryResultObjectDataBean.setIdentifiedDataColumnIds(identifiedDataColumnIds);
 				queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
@@ -282,15 +305,31 @@ public class QueryOutputSpreadsheetBizLogic
 				   queryResultObjectDataBean.setEntityId(columnIndex);
 				}
 			}
-			selectSql = selectSql + sqlColumnName + ",";
-			
-			String attrLabel = Utility.getDisplayLabel(attribute.getName());
-			columnsList.add(attrLabel + " : " + className);
-			IOutputAttribute attr = new OutputAttribute(node.getExpressionId(),attribute);
-			selectedOutputAttributeList.add(attr);
-			objectDataColumnIds.add(columnIndex);
-			columnIndex++;
-		}  
+			if(!attribute.getAttributeTypeInformation().getDataType().equalsIgnoreCase("file"))
+
+			{
+				selectSql = selectSql + sqlColumnName + ",";
+				String attrLabel = Utility.getDisplayLabel(attribute.getName());
+				columnsList.add(attrLabel + " : " + className);
+				IOutputAttribute attr = new OutputAttribute(node
+						.getExpressionId(), attribute);
+				selectedOutputAttributeList.add(attr);
+				objectDataColumnIds.add(columnIndex);
+				columnIndex++;
+			}
+			else
+			{
+				int fileTypeIndex = columnIndex + fileTypeAtrributeIndexMetadataMap.size();
+				queryResultObjectDataBean.setClobeType(true);
+				fileTypeAtrributeIndexMetadataMap.put(fileTypeIndex, attributeMetaData);
+			}
+		}
+		if (queryResultObjectDataBean.isClobeType()) 
+		{
+			totalFileTypeAttributes = fileTypeAtrributeIndexMetadataMap.size();
+			queryResultObjectDataBean.setFileTypeAtrributeIndexMetadataMap(fileTypeAtrributeIndexMetadataMap);
+			//spreadSheetDataMap.put(Constants.TOTAL_FILE_TYPE_ATTRIBUTES, totalFileTypeAttributes);
+		}
 		if(!selectedColumnMetaData.isDefinedView())
 		{
 			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
@@ -387,11 +426,7 @@ public class QueryOutputSpreadsheetBizLogic
 					nameValueBean.setValue(treeAttributeNodeId);
 					selectedColumnNameValue.add(nameValueBean);
 										
-					String sqlColumnName = metaData.getColumnName();
-					sqlColumnNames.append(sqlColumnName);
-					sqlColumnNames.append(", ");
-					String columnDisplayName = metaData.getDisplayName();
-					definedColumnsList.add(columnDisplayName);
+					
 					if (queryResultObjectDataBean==null && !defineViewNodeList.contains(attribute.getEntity()))
 					{
 						queryResultObjectDataBean = QueryCSMUtil
@@ -411,14 +446,32 @@ public class QueryOutputSpreadsheetBizLogic
 						queryResultObjectDataBean.getIdentifiedDataColumnIds().add(columnIndex);
 						queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
 					}
+					if(attribute.getDataType().equalsIgnoreCase("file"))
+					{
+						queryResultObjectDataBean.setClobeType(true);
+						Map beanMetadataMap = queryResultObjectDataBean.getFileTypeAtrributeIndexMetadataMap();
+						int fileTypeIndex = columnIndex + beanMetadataMap.size();
+						beanMetadataMap.put(fileTypeIndex, metaData);
+						queryResultObjectDataBean.setFileTypeAtrributeIndexMetadataMap(beanMetadataMap);
+					}
+					else{
+					 
+					String sqlColumnName = metaData.getColumnName();
+					sqlColumnNames.append(sqlColumnName);
+					sqlColumnNames.append(", ");
+					String columnDisplayName = metaData.getDisplayName();
+					definedColumnsList.add(columnDisplayName);
 					queryResultObjectDataBean.getObjectColumnIds().add(columnIndex);
+					columnIndex++;
+					}
+					
 					queryResultObjectDataBeanMap.put(metaData.getTreeDataNode().getId(),
 							queryResultObjectDataBean);
-					columnIndex++;
 					break;
 				}
 			}
 		}
+		
 		this.selectedColumnMetaData.setSelectedColumnNameValueBeanList(selectedColumnNameValue);
 		int lastindexOfComma = sqlColumnNames.lastIndexOf(",");
 		if (lastindexOfComma != -1)
@@ -467,6 +520,19 @@ public class QueryOutputSpreadsheetBizLogic
 		querySessionData.setRecordsPerPage(recordsPerPage);
 		QueryBizLogic qBizLogic = new QueryBizLogic(); 
 		PagenatedResultData pagenatedResultData = qBizLogic.execute(sessionData, querySessionData, startIndex);
+		List<List <String>> dataList = pagenatedResultData.getResult();
+		
+		for (Iterator<Long> beanMapIterator = queryResultObjectDataBeanMap.keySet().iterator(); beanMapIterator.hasNext(); )
+		{
+			Long id = beanMapIterator.next();
+			QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(id);
+			if (queryResultObjectDataBean.isClobeType())
+			{	
+				updateSpreadSheetColumnList(spreadSheetDataMap, queryResultObjectDataBeanMap);	
+				updateDataList(dataList, queryResultObjectDataBeanMap);				
+				break;
+			}
+		}
 		spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, pagenatedResultData.getResult());
 		/**
 		 * Name: Prafull
@@ -478,6 +544,106 @@ public class QueryOutputSpreadsheetBizLogic
 		querySessionData.setTotalNumberOfRecords(pagenatedResultData.getTotalRecords());
 		
 		return querySessionData;
+	}
+	
+	/**
+	 * if file type attribute column is present in the spreadsheet view add the column to the datalist
+	 * @param dataList
+	 * @param queryResultObjectDataBeanMap
+	 */
+	public static void updateDataList(List<List<String>> dataList, Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap)
+	{
+		// stores the column indexes and the main entity id columns
+		Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = new TreeMap<Integer, Integer>();
+		// iterate the beanMap to get the file type attribute columns
+		for (Iterator<Long> beanMapIterator = queryResultObjectDataBeanMap.keySet().iterator(); beanMapIterator.hasNext(); )
+		{
+			Long id = beanMapIterator.next();
+			QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(id);
+			// if any of the entities has the file type attribute
+			if (queryResultObjectDataBean.isClobeType())
+			{	
+				//get the list of the file type attribute columns
+				Map fileTypeAtrributeIndexMetadataMap = queryResultObjectDataBean.getFileTypeAtrributeIndexMetadataMap();
+				int mainEntityIdColumn = queryResultObjectDataBean.getMainEntityIdentifierColumnId();
+				for (Iterator<Integer> iterator = fileTypeAtrributeIndexMetadataMap.keySet().iterator(); iterator.hasNext(); )
+				{
+					int fileTypeColumnId = iterator.next();
+					QueryOutputTreeAttributeMetadata metaData = (QueryOutputTreeAttributeMetadata)fileTypeAtrributeIndexMetadataMap
+														.get(fileTypeColumnId);					
+					fileTypeIndexMainEntityIndexMap.put(fileTypeColumnId, mainEntityIdColumn);
+				}				
+			}
+		}
+				
+		//manipulating the dataList
+		Map<Integer, String> entityIdIndexMainEntityIdMap = new HashMap<Integer, String>();
+		for (Iterator dataListIterator = dataList.iterator(); dataListIterator.hasNext(); ) 
+		{
+			List<String> row = (List<String>) dataListIterator.next();
+			// retrives the values from the row
+			for (Iterator<Integer> fileTypeIterator = fileTypeIndexMainEntityIndexMap.keySet().iterator(); fileTypeIterator.hasNext(); )
+			{
+				// get the index at which new column is to be added
+				int fileTypeIndex = fileTypeIterator.next();
+				// get the index of 'id' attribute of its main entity
+				int mainEntityIdIndex = fileTypeIndexMainEntityIndexMap.get(fileTypeIndex);
+				// get the id of the main entity
+				String mainEntityId = row.get(mainEntityIdIndex);
+				// store the main entity id in the map 
+				entityIdIndexMainEntityIdMap.put(fileTypeIndex, mainEntityId);					
+			}
+			// add new columns to the row
+			for (Iterator<Integer> fileTypeIterator = fileTypeIndexMainEntityIndexMap.keySet().iterator(); fileTypeIterator.hasNext(); )
+			{
+				// get the index at which new column is to be added
+				int fileTypeIndex = fileTypeIterator.next();
+				// get the id of the main entity
+				String mainEntityId = entityIdIndexMainEntityIdMap.get(fileTypeIndex);
+				String newColumn = "<img src='images/ic_view_up_file.gif' onclick='javascript:viewSPR(\""+ mainEntityId +"\")' alt='click here' style='cursor:hand;'>";
+				row.add(fileTypeIndex, newColumn);
+			}
+		}	
+	}
+	
+	private void updateSpreadSheetColumnList(Map spreadSheetDataMap,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap)
+	{
+		//List<String> spreadsheetColumnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
+		Map<Integer, String> fileTypeIndexColumnNameMap = new TreeMap<Integer, String>();
+		// Stores all the file type attribute column names of all the entities in the map i.e. indexDisplayNameMap
+		for (Iterator<Long> beanMapIterator = queryResultObjectDataBeanMap.keySet().iterator(); beanMapIterator.hasNext(); )
+		{
+			Long id = beanMapIterator.next();
+			QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(id);
+			if (queryResultObjectDataBean.isClobeType())
+			{	
+				Map fileTypeAtrributeIndexMetadataMap = queryResultObjectDataBean.getFileTypeAtrributeIndexMetadataMap();
+				for (Iterator<Integer> iterator = fileTypeAtrributeIndexMetadataMap.keySet().iterator(); iterator.hasNext(); )
+				{
+					int fileTypeColumnId = iterator.next();
+					QueryOutputTreeAttributeMetadata metaData = (QueryOutputTreeAttributeMetadata)fileTypeAtrributeIndexMetadataMap.get(fileTypeColumnId);
+					String displayName = metaData.getDisplayName();
+					fileTypeIndexColumnNameMap.put(fileTypeColumnId, displayName);
+				}
+			}
+		}
+		//for setting the columnList
+		List<String> spreadsheetColumnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
+		for (Iterator<Integer> columnNameIterator = fileTypeIndexColumnNameMap.keySet().iterator(); columnNameIterator.hasNext(); )
+		{
+			int index = (Integer)columnNameIterator.next();
+			String displayName = (String)fileTypeIndexColumnNameMap.get(index);
+			if (!spreadsheetColumnsList.contains(displayName))
+			{
+				spreadsheetColumnsList.add(index, displayName);
+			}
+			else
+			{
+				int indexOfColumn = spreadsheetColumnsList.indexOf(displayName);
+				if (index != indexOfColumn)
+					spreadsheetColumnsList.add(index, displayName);
+			}
+		}
 	}
 	
 	/**
@@ -494,12 +660,15 @@ public class QueryOutputSpreadsheetBizLogic
 		String selectSql = Constants.SELECT_DISTINCT;
 		List<String> columnsList = new ArrayList<String>();
 		String idColumnOfCurrentNode = "";
+		List<Integer> clobTypeEntityIdIndexList = new ArrayList<Integer>();
+		boolean isClobTypeEntity = false; 
 		QueryResultObjectDataBean queryResultObjectDataBean = queryResultObjectDataBeanMap.get(node.getId());
 		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
 		Vector<Integer> identifiedDataColumnIds = new Vector<Integer>();
 		Vector<Integer> objectColumnIds = new Vector<Integer>();
 		List resultList = new ArrayList();
 		int columnIndex =0;
+		Map<Integer, QueryOutputTreeAttributeMetadata> fileTypeAtrributeIndexMetadataMap = new HashMap<Integer, QueryOutputTreeAttributeMetadata>();
 		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
 			AttributeInterface attribute = attributeMetaData.getAttribute();
@@ -520,13 +689,35 @@ public class QueryOutputSpreadsheetBizLogic
 				identifiedDataColumnIds.add(columnIndex);
 				queryResultObjectDataBean.setIdentifiedDataColumnIds(identifiedDataColumnIds);
 			}
-			objectColumnIds.add(columnIndex);
+			if(!attribute.getAttributeTypeInformation().getDataType().equalsIgnoreCase("file"))
 
-			selectSql = selectSql + sqlColumnName + ",";
-			sqlColumnName = sqlColumnName.substring(SqlGenerator.COLUMN_NAME.length(), sqlColumnName.length());
-			String attrLabel = Utility.getDisplayLabel(attribute.getName());
-			columnsList.add(attrLabel + " : " + className);
-			columnIndex++;
+			{
+				objectColumnIds.add(columnIndex);
+				selectSql = selectSql + sqlColumnName + ",";
+				sqlColumnName = sqlColumnName.substring(
+						SqlGenerator.COLUMN_NAME.length(), sqlColumnName
+								.length());
+				String attrLabel = Utility.getDisplayLabel(attribute.getName());
+				columnsList.add(attrLabel + " : " + className);
+				columnIndex++;
+			}
+			else 
+			{
+				queryResultObjectDataBean.setClobeType(true);
+				int fileTypeIndex = columnIndex + fileTypeAtrributeIndexMetadataMap.size();
+				fileTypeAtrributeIndexMetadataMap.put(fileTypeIndex, attributeMetaData);
+			}
+		}
+		/*if(isClobTypeEntity)
+		{
+			clobTypeEntityIdIndexList.add(queryResultObjectDataBean.getEntityId());
+			spreadSheetDataMap.put(Constants.CLOBTYPE_ID_LIST, clobTypeEntityIdIndexList);
+		}*/
+		if (queryResultObjectDataBean.isClobeType())
+		{
+			//totalFileTypeAttributes = fileTypeAtrributeIndexMetadataMap.size();
+			queryResultObjectDataBean.setFileTypeAtrributeIndexMetadataMap(fileTypeAtrributeIndexMetadataMap);
+			//spreadSheetDataMap.put(Constants.TOTAL_FILE_TYPE_ATTRIBUTES, totalFileTypeAttributes);
 		}
 		if(! selectedColumnMetaData.isDefinedView())
 		{
