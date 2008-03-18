@@ -267,6 +267,7 @@ public class DefineGridViewBizLogic
 		Vector<Integer> objectColumnIds = null;
 		List<EntityInterface> defineViewNodeList = new ArrayList<EntityInterface>();
 		int columnIndex = 0;
+		int totalFileTypeAttributes = 0;
 		Iterator<QueryOutputTreeAttributeMetadata> iterator = selectedAttributeMetaDataList.iterator();
 		while (iterator.hasNext())
 		{
@@ -292,6 +293,17 @@ public class DefineGridViewBizLogic
 				else
 					queryResulObjectDataBean.setEntityId(columnIndex);
 			}
+			if(element.getAttribute().getDataType().equalsIgnoreCase("file"))
+			{
+				queryResulObjectDataBean.setClobeType(true);
+				Map beanMetadataMap = queryResulObjectDataBean.getFileTypeAtrributeIndexMetadataMap();
+				int fileTypeIndex = columnIndex + totalFileTypeAttributes;
+				beanMetadataMap.put(fileTypeIndex, element);
+				queryResulObjectDataBean.setFileTypeAtrributeIndexMetadataMap(beanMetadataMap);
+				totalFileTypeAttributes++;
+			}
+			else
+			{
 			//objectColumnIds.add(columnIndex);
 			//queryResulObjectDataBean.setIdentifiedDataColumnIds(identifiedColumnIds);
 			//queryResulObjectDataBean.setObjectColumnIds(objectColumnIds);
@@ -300,13 +312,16 @@ public class DefineGridViewBizLogic
 			selectedColumnNames.append(element.getColumnName());
 			selectedColumnNames.append(", ");
 			definedColumnsList.add(element.getDisplayName());
+			
+			columnIndex++;
+			}
 			NameValueBean nameValueBean = new NameValueBean(element.getDisplayName(),element.getUniqueId());
 			selectedColumnNameValue.add(nameValueBean);
-			columnIndex++;
 		}
 		Iterator<Long> mapItr = queryResultObjecctDataMap.keySet().iterator();
 		String sql="";
-		sql = selectedColumnNames.substring(0, selectedColumnNames.lastIndexOf(","));
+		if (selectedColumnNames.lastIndexOf(",") != -1)
+			sql = selectedColumnNames.substring(0, selectedColumnNames.lastIndexOf(","));
 		selectedColumnNames.replace(0, selectedColumnNames.length(), sql);
 		while(mapItr.hasNext())
 		{
@@ -391,7 +406,7 @@ public class DefineGridViewBizLogic
 		{
 			for(IOutputAttribute outAttr :selectedAttributeList)
 			{
-				if(outAttr.getExpressionId().equals(node.getExpressionId()))
+				if(outAttr.getAttribute().getEntity().getId().equals(node.getOutputEntity().getDynamicExtensionsEntity().getId()))
 				{
 					List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
 					for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
