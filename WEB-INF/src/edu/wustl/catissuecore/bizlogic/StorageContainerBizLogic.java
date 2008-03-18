@@ -353,6 +353,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		StorageContainer container = (StorageContainer) obj;
 		StorageContainer oldContainer = (StorageContainer) oldObj;
+		
+		//lazy change
+		StorageContainer persistentOldContainerForChange = null;
+		List persistentStorageContainer  =dao.retrieve(StorageContainer.class.getName(),Constants.ID, oldContainer.getId());
+		persistentOldContainerForChange=(StorageContainer)persistentStorageContainer.get(0);
 		Logger.out.debug("container.isParentChanged() : " + container.isParentChanged());
 
 		if (container.isParentChanged())
@@ -397,8 +402,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 //				container.setParent(pc);
 				
-				Site site=getSite(dao,container.getParent().getId());
+//				Site site=getSite(dao,container.getParent().getId());
 				
+				Site site=((StorageContainer)container.getParent()).getSite();
 				//check for closed Site
 				checkStatus(dao, site, "Parent Container Site");
 
@@ -546,36 +552,38 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 
 		}
+		setValuesinPersistentObject(persistentOldContainerForChange,container);
 
-		dao.update(container, sessionDataBean, true, true, false);
-		dao.update(container.getCapacity(), sessionDataBean, true, true, false);
+		dao.update(persistentOldContainerForChange, sessionDataBean, true, true, false);
+		//dao.update(container.getCapacity(), sessionDataBean, true, true, false);
 		//Audit of update of storage container.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		dao.audit(container.getCapacity(), oldContainer.getCapacity(), sessionDataBean, true);
 
 		Logger.out.debug("container.getActivityStatus() " + container.getActivityStatus());
-		if (container.getParent() != null)
+		//lazy  change
+		/*if (container.getParent() != null)
 		{
 
 			StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParent().getId());
 			container.setParent(pc);
-		}
+		}*/
 		if (container.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
 			Long containerIDArr[] = {container.getId()};
 			if (isContainerAvailableForDisabled(dao, containerIDArr))
 			{
 				List disabledConts = new ArrayList();
-				addEntriesInDisabledMap(container, disabledConts);
+				addEntriesInDisabledMap(persistentOldContainerForChange, disabledConts);
 				//disabledConts.add(new StorageContainer(container));
-				setDisableToSubContainer(container, disabledConts,dao);
+				setDisableToSubContainer(persistentOldContainerForChange, disabledConts,dao);
 				Logger.out.debug("container.getActivityStatus() " + container.getActivityStatus());
 
 				disableSubStorageContainer(dao, sessionDataBean, containerIDArr);
-				container.setParent(null);
-				container.setPositionDimensionOne(null);
-				container.setPositionDimensionTwo(null);
-				dao.update(container, sessionDataBean, true, true, false);
+				persistentOldContainerForChange.setParent(null);
+				persistentOldContainerForChange.setPositionDimensionOne(null);
+				persistentOldContainerForChange.setPositionDimensionTwo(null);
+				dao.update(persistentOldContainerForChange, sessionDataBean, true, true, false);
 
 				try
 				{
@@ -593,6 +601,33 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				throw new DAOException(ApplicationProperties.getValue("errors.container.contains.specimen"));
 			}
 		}
+	}
+	public void setValuesinPersistentObject(StorageContainer persistentobject,StorageContainer newObject)
+	{
+	persistentobject.setActivityStatus(newObject.getActivityStatus());
+	persistentobject.setBarcode(newObject.getBarcode());
+	persistentobject.setCapacity(newObject.getCapacity());
+	persistentobject.setChildren(newObject.getChildren());
+	persistentobject.setCollectionProtocolCollection(newObject.getCollectionProtocolCollection());
+	persistentobject.setComment(newObject.getComment());
+	persistentobject.setFull(newObject.isFull());
+	persistentobject.setHoldsSpecimenArrayTypeCollection(newObject.getHoldsSpecimenArrayTypeCollection());
+	persistentobject.setHoldsSpecimenClassCollection(newObject.getHoldsSpecimenClassCollection());
+	persistentobject.setHoldsStorageTypeCollection(newObject.getHoldsStorageTypeCollection());
+	persistentobject.setName(newObject.getName());
+	persistentobject.setNoOfContainers(newObject.getNoOfContainers());
+	persistentobject.setParent(newObject.getParent());
+	persistentobject.setParentChanged(newObject.isParentChanged());
+	persistentobject.setPositionChanged(newObject.isPositionChanged());
+	persistentobject.setPositionDimensionOne(newObject.getPositionDimensionOne());
+	persistentobject.setPositionDimensionTwo(newObject.getPositionDimensionTwo());
+	persistentobject.setSimilarContainerMap(newObject.getSimilarContainerMap());
+	persistentobject.setSite(newObject.getSite());
+	persistentobject.setSpecimenCollection(newObject.getSpecimenCollection());
+	persistentobject.setStartNo(newObject.getStartNo());
+	persistentobject.setStorageType(newObject.getStorageType());
+	persistentobject.setTempratureInCentigrade(newObject.getTempratureInCentigrade());
+	
 	}
 
 	private void addEntriesInDisabledMap(StorageContainer container, List disabledConts)
@@ -1637,7 +1672,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					//cont.setParent(null);
 					cont.setPositionDimensionOne(null);
 					cont.setPositionDimensionTwo(null);
-					dao.update(cont, sessionDataBean, true, true, false);
+					//dao.update(cont, sessionDataBean, true, true, false);
 				}
 
 			}
@@ -1774,22 +1809,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				else
 				{
 					sourceObjectName = SpecimenArray.class.getName();
-					list = dao
-							.retrieve(sourceObjectName, selectColumnName, whereColumnName1, whereColumnCondition1, whereColumnValue1, joinCondition);
+					list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName1, whereColumnCondition1, whereColumnValue1, joinCondition);
 					// check if Specimen exists with the given storageContainer information
 					if (list.size() != 0)
 					{
 						return false;
 					}
-					else
+				/*	else
 					{
 						sourceObjectName = StorageContainer.class.getName();
 						String[] whereColumnName = {"parent.id"};
 						containerList = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition1, whereColumnValue1,
 								joinCondition);
 
-					}
-
+					}*/
 				}
 
 			}
