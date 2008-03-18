@@ -169,6 +169,22 @@ function setEditableChkbox(checkAllPages)
 		%>
 		return hiddenColumnNumbers;
 	}
+	
+		
+	function viewSPR(id)
+	{	
+		var url = "<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=gridViewReport&id="+id+"&flow=viewReport";
+			platform = navigator.platform.toLowerCase();
+		    if (platform.indexOf("mac") != -1)
+			{
+		    	NewWindow(url,'name',screen.width,screen.height,'yes');
+		    }
+		    else
+		    {
+		    	NewWindow(url,'name','700','600','yes');
+		    }
+			hideCursor();		
+	}
 </script>
 
 <table width="100%" valign="top" border="0">
@@ -227,7 +243,7 @@ function setEditableChkbox(checkAllPages)
 	<% 
 	} %>
 	mygrid.init();
-
+	//mygrid.splitAt(1);
 	/*
 	mygrid.loadXML("dhtmlxgrid/grid.xml");
 	//clears the dummy data and refreshes the grid.
