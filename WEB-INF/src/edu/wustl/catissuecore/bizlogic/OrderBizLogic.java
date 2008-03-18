@@ -100,6 +100,19 @@ public class OrderBizLogic extends DefaultBizLogic
 			}
 		}
 	}
+	//to set the values to persistent object
+	private OrderDetails setAllValueToPersistentObj(OrderDetails orderDetails, OrderDetails orderNew)
+	{
+		orderDetails.setComment(orderNew.getComment());
+		orderDetails.setDistributionCollection(orderNew.getDistributionCollection());
+		orderDetails.setDistributionProtocol(orderNew.getDistributionProtocol());
+		orderDetails.setMailNotification(orderNew.getMailNotification());
+		orderDetails.setName(orderNew.getName());
+		orderNew.setOrderItemCollection(orderNew.getOrderItemCollection());
+		orderNew.setRequestedDate(orderNew.getRequestedDate());
+		orderNew.setStatus(orderNew.getStatus());		
+		return orderDetails;
+	}
 
 	/**
 	 * Updates the persistent object in the database.
@@ -110,14 +123,18 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @throws DAOException object
 	 * @throws UserNotAuthorizedException object
 	 */
+	
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		this.validate(obj, oldObj, dao, Constants.EDIT);
 		OrderDetails orderImplObj = (OrderDetails) HibernateMetaData.getProxyObjectImpl(oldObj);
 		OrderDetails orderNew = updateObject(orderImplObj, obj, dao, sessionDataBean);
-
-		dao.update(orderNew, sessionDataBean, true, true, false);
+		List  orderDetailsList=dao.retrieve(OrderDetails.class.getName(),Constants.ID,((OrderDetails)oldObj).getId());
+		OrderDetails orderDetails=(OrderDetails) orderDetailsList.get(0);
 		
+		orderDetails=setAllValueToPersistentObj(orderDetails,orderNew);
+
+		dao.update(orderDetails, sessionDataBean, true, true, false);
 		//Sending Email only if atleast one order item is updated.
 	   if (numberItemsUpdated > 0 && orderNew.getMailNotification())
 		{
