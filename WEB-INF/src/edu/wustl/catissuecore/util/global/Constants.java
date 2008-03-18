@@ -234,6 +234,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ENTITY_SEPARATOR = ";";
 	public static final String ATTRIBUTE_SEPARATOR = "|";
 	public static final String KEY_SEPARATOR = "*&*";
+	public static final String TOTAL_FILE_TYPE_ATTRIBUTES = "totalFileTypeAttributes";
+	public static final String CLOBTYPE_ID_LIST = "clobTypeIdList"; 
+	public static final String GETREPORTID = "getReportID.do";
 	
 	/**
 	 * Name: Abhishek Mehta
@@ -2255,5 +2258,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	 * 
 	 */
 	public static final String SCGFORM = "SCGFORM";
+	public static final String FILE_TYPE = "file";	
 }
 	
