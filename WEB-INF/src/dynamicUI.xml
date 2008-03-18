@@ -160,5 +160,26 @@
 				<no>No</no>
 			</values>
 		</boolean>
+		<file>
+			<conditions>
+				<startswith>
+					<displayname>Starts With</displayname>
+				</startswith>
+				<endswith>
+					<displayname>Ends With</displayname>
+				</endswith>
+				<contains>
+					<displayname>Contains</displayname>
+				</contains>
+				<isnull>
+					<displayname>Is Null</displayname>
+				</isnull>
+				<isnotnull>
+					<displayname>Is Not Null</displayname>
+				</isnotnull>
+			</conditions>
+			<!-- components>edu.wustl.cab2b.client.ui.main.Components</components -->
+			<components>edu.wustl.cab2b.client.ui.main.StringTypePanel</components>
+		</file>
 	</non-enumerated>	
 </data-type-control>
