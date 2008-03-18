@@ -452,7 +452,14 @@ public abstract class QueryCSMUtil
 					}
 					else
 					{
-						selectSql += ", " + sqlColumnName;
+						if(selectSql.equals(""))
+						{
+							selectSql += sqlColumnName;
+						}
+						else
+						{
+							selectSql += ", " + sqlColumnName;
+						}
 						entityIdIndexMap.put(attribute.getEntity(), columnIndex);
 						columnIndex++;
 						break;
