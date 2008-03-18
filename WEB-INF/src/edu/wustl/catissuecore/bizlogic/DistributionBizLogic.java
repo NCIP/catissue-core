@@ -124,13 +124,13 @@ public class DistributionBizLogic extends DefaultBizLogic
 		protectionObjects.add(distribution);
 
 		Iterator distributedItemIterator = distribution.getDistributedItemCollection().iterator();
-		while (distributedItemIterator.hasNext())
+		/*while (distributedItemIterator.hasNext())
 		{
 			DistributedItem distributedItem = (DistributedItem) distributedItemIterator.next();
 			if (distributedItem.getSpecimen() != null)
 				protectionObjects.add(distributedItem.getSpecimen());
-		}
-
+		}*/
+      
 		return protectionObjects;
 	}
 
