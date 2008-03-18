@@ -19,29 +19,26 @@
 		[Bindable]	public var specimenNo:String;
 		
 		[Bindable] public var specimenClassList:ArrayCollection;
+		[Bindable] public var specimenTypeList:ArrayCollection;
 		[Bindable] public var tissueSiteList:ArrayCollection;
 		[Bindable] public var tissueSideList:ArrayCollection;
 		[Bindable] public var pathologicalStatusList:ArrayCollection;
-
+		[Bindable] public var prevSpecimenClassValue:String;
 		
 		private function preInit():void
 		{
-			initAllDataProviderList();
-			
-
-
 			spData = parentApplication.spRepeater.currentItem;
-
+			initAllDataProviderList();
 			var index:int = parentApplication.specimenColl.getItemIndex(spData)+1;
 			specimenNo = "Specimen "+index;
-			
 			switchSpType(null);
-			
-			
+		
 		}
 		private function initAllDataProviderList() : void
 		{
 			this.specimenClassList = new ArrayCollection(MetadataModel.getInstance().specimenClassPVList.toArray());
+			this.prevSpecimenClassValue = spData.specimenClass;
+			this.specimenTypeList = new ArrayCollection(MetadataModel.getInstance().getSpecimenTypeCollection(spData.specimenClass).toArray());
 			this.tissueSiteList = new ArrayCollection(MetadataModel.getInstance().tissueSitePVList.toArray());
 			this.tissueSideList = new ArrayCollection(MetadataModel.getInstance().tissueSidePVList.toArray());
 			this.pathologicalStatusList = new ArrayCollection(MetadataModel.getInstance().pathologicalStatusPVList.toArray());
@@ -182,8 +179,10 @@
 		private function switchSpType(event:Event):void
 		{
 			
-			spData.specimenTypePVList = MetadataModel.getInstance().getSpecimenTypeCollection(spData.specimenClass);
-			
+//			spData.specimenTypePVList = MetadataModel.getInstance().getSpecimenTypeCollection(spData.specimenClass);
+				
+			specimenTypeList = new ArrayCollection(MetadataModel.getInstance().getSpecimenTypeCollection(spData.specimenClass).toArray());
+			prevSpecimenClassValue = spData.specimenClass; 
 			spData.calcUnit();
 			if(event != null)
 			{
@@ -196,6 +195,19 @@
 					spConcentration.enabled = false;
 				}
 			}
+		}
+		private function focusChangeFunct(event:Event) : void
+		{
+			if(spClass.selectedItem != prevSpecimenClassValue)
+			{
+				switchSpType(event);
+			}
+			
+		}
+		private function calculateUnit(event:Event) : void
+		{
+				spData.calcUnit();
+			
 		}
 		
 		private function printSpDetails(spData:SpecimenData):void
@@ -310,12 +322,11 @@
 		
 
 	<components:MyCanvas>
-	<adobe:AutoComplete id="spClass" dataProvider="{specimenClassList}" focusOut="switchSpType(event)" change="switchSpType(event)" dataChange="Alert.show('data change')" lookAhead="true"/>
-<!--		<mx:ComboBox id="spClass" dataProvider="{MetadataModel.getInstance().specimenClassPVList}" focusOut="switchSpType(event)" change="switchSpType(event)"/>-->
+	<adobe:AutoComplete id="spClass" dataProvider="{specimenClassList}" change="switchSpType(event)" focusOut="focusChangeFunct(event)" lookAhead="true"/>
 	</components:MyCanvas>
 	
 	<components:MyCanvas>
-		<adobe:AutoComplete id="spType" dataProvider="{spData.specimenTypePVList}" lookAhead="true"/>
+		<adobe:AutoComplete id="spType" dataProvider="{specimenTypeList}" lookAhead="true" change="calculateUnit(event)" focusOut="calculateUnit(event)"/>
 	</components:MyCanvas>
 		
 	<components:MyCanvas id="tissueSiteBox">	

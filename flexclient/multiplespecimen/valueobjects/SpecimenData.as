@@ -10,6 +10,7 @@ package valueobjects
 	import util.Constants;
 	import util.SpecimenValidator;
 	import util.MSPParameter;
+
 	[Bindable]
 	[RemoteClass(alias="edu.wustl.catissuecore.flex.SpecimenBean")]
 	public class SpecimenData implements IExternalizable
@@ -352,6 +353,7 @@ package valueobjects
 			}
 			else if (specimenClass == Constants.TISSUE)
 			{
+				
 				if (specimenType == Constants.FIXED_TISSUE_BLOCK  || 
 					specimenType == Constants.FROZEN_TISSUE_BLOCK || 
 					specimenType == Constants.FIXED_TISSUE_SLIDE  ||
@@ -471,8 +473,30 @@ package valueobjects
 			}	
 			else
 			{
-				this.quantityErrStr = null;
-				isValid = true && isValid;
+						
+				if(this.specimenClass == Constants.CELL || 
+					(this.specimenClass == Constants.TISSUE && 
+						( this.specimenType == Constants.FIXED_TISSUE_BLOCK || this.specimenType == Constants.FIXED_TISSUE_SLIDE || 
+						this.specimenType == Constants.FROZEN_TISSUE_BLOCK || this.specimenType == Constants.FROZEN_TISSUE_SLIDE || 
+						this.specimenType == Constants.MICRODISSECTED || this.specimenType == Constants.NOT_SPECIFIED)))
+				{
+					if(this.quantity.toString().indexOf(".") != -1)
+					{
+						this.quantityErrStr = "Please enter valid quantity";
+						isValid = false && isValid;
+					}
+					else
+					{
+						this.quantityErrStr = null;
+						isValid = true && isValid;
+
+					}
+				}		
+				else
+				{														
+					this.quantityErrStr = null;
+					isValid = true && isValid;
+				}
 				 	
 			}
 			var i:int=0;
