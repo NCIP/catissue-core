@@ -381,6 +381,8 @@ public abstract class QueryModuleUtil
 		session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
 		session.setAttribute(Constants.SELECTED_COLUMN_META_DATA, selectedColumnsMetadata);
 		session.setAttribute(Constants.QUERY_REASUL_OBJECT_DATA_MAP, spreadSheetDatamap.get(Constants.QUERY_REASUL_OBJECT_DATA_MAP));
+		session.setAttribute(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP,spreadSheetDatamap
+				.get(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP));
 		session.setAttribute(Constants.MAIN_ENTITY_MAP, spreadSheetDatamap.get(Constants.MAIN_ENTITY_MAP));
 		String pageOf = (String) request.getParameter(Constants.PAGEOF);
 		if (pageOf == null)
@@ -398,7 +400,7 @@ public abstract class QueryModuleUtil
 	public static int searchQuery(HttpServletRequest request, IQuery query, String option)
 	{      
 		System.out.println("Start Time");
-		String isSavedQuery = (String) request.getAttribute(Constants.IS_SAVED_QUERY);
+		String isSavedQuery = (String) request.getSession().getAttribute(Constants.IS_SAVED_QUERY);
 		if(isSavedQuery == null) 
 			isSavedQuery = Constants.FALSE;
 		HttpSession session = request.getSession();  
@@ -565,6 +567,8 @@ public abstract class QueryModuleUtil
 							.get(Constants.SELECTED_COLUMN_META_DATA));
 					session.setAttribute(Constants.QUERY_REASUL_OBJECT_DATA_MAP, spreadSheetDatamap
 							.get(Constants.QUERY_REASUL_OBJECT_DATA_MAP));
+					session.setAttribute(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP,spreadSheetDatamap
+											.get(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP));
 				}
 				
 			}
