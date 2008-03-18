@@ -718,6 +718,7 @@ PUBLIC
 			<forward name="pageOfParticipantCPQuery" path=".catissuecore.participantEditDef" />
 			<forward name="pageOfListSpecimenEventParameters" path=".catissuecore.newSpecimenViewSPRDef"/>
 			<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.newSpecimenEditViewSPRDef"/>
+			<forward name="gridViewReport" path=".catissuecore.gridViewReport" />
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
 		
