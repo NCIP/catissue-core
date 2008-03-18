@@ -238,7 +238,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 							+ "<input type=\"textbox\"  class=\"formFieldSized20\"  name='"
 							+ componentId + "_displayName'     id='" + componentId
 							+ "_displayName' value='" + DAGNodeId + name + "." + attrLabel
-							+ "' disabled='true'/> " + "</label></td>");
+							+ "' disabled='true'> " + "</label></td>");
 				}
 				if (!forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE))
 					generatedHTML
@@ -916,6 +916,10 @@ public class GenerateHtmlForAddLimitsBizLogic
 				else if (dataType.equalsIgnoreCase("date"))
 				{
 					operatorsList = parseFile.getNonEnumConditionList("date");
+				}
+				else if (dataType.equalsIgnoreCase(Constants.FILE_TYPE))
+				{
+					operatorsList = parseFile.getNonEnumConditionList(Constants.FILE_TYPE);
 				}
 			}
 			strObj = new ArrayList<String>(operatorsList);;
