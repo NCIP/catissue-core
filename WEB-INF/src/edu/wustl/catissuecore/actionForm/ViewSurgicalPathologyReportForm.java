@@ -405,16 +405,25 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	{
 		try
 		{
-			IdentifiedSurgicalPathologyReport identifiedReport=(IdentifiedSurgicalPathologyReport)abstractDomain;
-			if(identifiedReport!=null)
+			if(abstractDomain instanceof IdentifiedSurgicalPathologyReport)
 			{
-				setIdentifiedReport(identifiedReport);
-				setDeIdentifiedReport(identifiedReport.getDeIdentifiedSurgicalPathologyReport());
-				setParticipant(identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant());
-				this.surgicalPathologyNumber=identifiedReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber();
+				IdentifiedSurgicalPathologyReport identifiedReport=(IdentifiedSurgicalPathologyReport)abstractDomain;
+				if(identifiedReport!=null)
+				{
+					setIdentifiedReport(identifiedReport);
+					setDeIdentifiedReport(identifiedReport.getDeIdentifiedSurgicalPathologyReport());
+					setParticipant(identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant());
+					this.surgicalPathologyNumber=identifiedReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber();
+				}
+			}
+			else
+			{
+				DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)abstractDomain;
+				setDeIdentifiedReport(deidReport);
 			}
 			this.comments=null;
 			this.hasAccess=false;
+			
 		}
 		catch (Exception e) 
 		{
@@ -435,7 +444,6 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			{
 				this.deIdentifiedReportTextContent=deidentifiedSurgicalPathologyReport.getTextContent().getData();
 			}
-			this.deIdentifiedReportSite=deidentifiedSurgicalPathologyReport.getReportSource().getName();
 		}
 		catch(Exception ex)
 		{

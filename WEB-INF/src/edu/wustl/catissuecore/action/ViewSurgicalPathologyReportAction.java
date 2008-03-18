@@ -16,8 +16,8 @@ import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
-import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
@@ -25,7 +25,6 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -34,11 +33,11 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.querysuite.security.PrivilegeType;
 import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.security.authorization.domainobjects.Role;
 /**
  * @author vijay_pande
  * Action class to show Surgical Pathology  Report
@@ -74,7 +73,14 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         {
             retrieveAndSetObject(pageOf, id, request, viewSPR);
         }
-		viewSPR.setHasAccess(isAuthorized(getSessionBean(request)));
+		String aliasName = "";
+		
+		viewSPR.setHasAccess(isAuthorized(getSessionBean(request), id, aliasName));
+		// If request is from Query to view Deidentfied report
+		if (viewSPR.getIdentifiedReportId() == null || viewSPR.getIdentifiedReportId() == "")
+		{
+			viewSPR.setHasAccess(false);
+		}
         request.setAttribute(Constants.PAGEOF, pageOf);
         request.setAttribute(Constants.OPERATION, Constants.VIEW_SURGICAL_PATHOLOGY_REPORT);
         request.setAttribute(Constants.REQ_PATH, "");
@@ -108,6 +114,11 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         {
         	request.setAttribute(Constants.ID,id.toString());
         }
+        String flow = request.getParameter("flow");
+        if (flow != null && flow.equals("viewReport"))
+        {
+        	pageOf = "gridViewReport";
+        }
         return mapping.findForward(pageOf);
         
 	}
@@ -123,28 +134,27 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 */
 	private void retrieveAndSetObject(String pageOf, long id, HttpServletRequest request, ViewSurgicalPathologyReportForm viewSPR) throws DAOException
 	{
-		Long identifiedReportId=id;
-		
+		Long reportId=id;
 		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT) || pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 		{
 			
-			Long participantId=getParticipantId(identifiedReportId);
+			Long participantId=getParticipantId(reportId);
 			ParticipantBizLogic bizLogic=(ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
 			List scgList=bizLogic.getSCGList(participantId);
 
 			viewSPR.setReportIdList(getReportIdList(scgList));
 		}
 
-		if(identifiedReportId!=null)
+		if(reportId!=null)
 		{
 			IdentifiedSurgicalPathologyReportBizLogic bizLogic=(IdentifiedSurgicalPathologyReportBizLogic)BizLogicFactory.getInstance().getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
-			IdentifiedSurgicalPathologyReport identifiedReport=new IdentifiedSurgicalPathologyReport();
-			identifiedReport.setId(identifiedReportId);
+			SurgicalPathologyReport report=new SurgicalPathologyReport();
+			report.setId(reportId);
 			try
 			{
-				bizLogic.populateUIBean(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), viewSPR);
-				filterObjects(identifiedReportId, viewSPR, request);
-				DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)bizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_DEID_REPORT);
+				bizLogic.populateUIBean(SurgicalPathologyReport.class.getName(), report.getId(), viewSPR);
+				DeidentifiedSurgicalPathologyReport deidReport=new DeidentifiedSurgicalPathologyReport();
+				deidReport.setId(viewSPR.getDeIdentifiedReportId());				
 				List conceptBeanList=ViewSPRUtil.getConceptBeanList(deidReport);
 				request.setAttribute(Constants.CONCEPT_BEAN_LIST, conceptBeanList);
 			}
@@ -255,57 +265,6 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	}
 	
 	/**
-	 * 
-	 * @param identifiedReportId
-	 * @param viewSPR
-	 * @param request
-	 * @throws Exception
-	 */
-	public void filterObjects(Long identifiedReportId, ViewSurgicalPathologyReportForm viewSPR, HttpServletRequest request) throws Exception
-	{
-		//For PHI
-		SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
-		CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
-		String userName = edu.wustl.common.util.Utility.toString(sessionDataBean.getUserName());
-		
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		List reportList=(List)defaultBizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), Constants.SYSTEM_IDENTIFIER, identifiedReportId);
-		IdentifiedSurgicalPathologyReport identifiedReport=(IdentifiedSurgicalPathologyReport)reportList.get(0);
-		TextContent textContent=null;
-		if(identifiedReport.getTextContent()!=null)
-		{
-			textContent=(TextContent)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReportId, Constants.COLUMN_NAME_TEXT_CONTENT);
-			identifiedReport.setTextContent(textContent);
-			List<IdentifiedSurgicalPathologyReport> identifiedReportList=new ArrayList<IdentifiedSurgicalPathologyReport>();
-			identifiedReportList.add(identifiedReport);
-			identifiedReportList=caCoreAppServicesDelegator.delegateSearchFilter(userName, identifiedReportList);
-			if(identifiedReport.getTextContent().getData()==null)
-			{
-				viewSPR.setIdentifiedReportTextContent(Constants.HASHED_OUT);
-				viewSPR.setSurgicalPathologyNumber(Constants.HASHED_OUT);
-				viewSPR.setIdentifiedReportSite(Constants.HASHED_OUT);
-			}
-			
-		}
-		Long participantId=getParticipantId(identifiedReportId);
-		List participantList=(List)defaultBizLogic.retrieve(Participant.class.getName(), Constants.SYSTEM_IDENTIFIER, participantId);
-		participantList=caCoreAppServicesDelegator.delegateSearchFilter(userName, participantList);
-		Participant participant=(Participant)participantList.get(0);
-		if(participant.getFirstName()==null && participant.getLastName()==null)
-		{
-			viewSPR.setParticipantName(Constants.HASHED_OUT);
-			if(participant.getBirthDate()==null)
-			{
-				viewSPR.setBirthDate(Constants.HASHED_OUT);
-			}
-			if(participant.getSocialSecurityNumber()==null)
-			{
-				viewSPR.setSocialSecurityNumber(Constants.HASHED_OUT);
-			}
-		}
-	}
-	
-	/**
 	 * This method is to retrieve sessionDataBean from request object
 	 * @param request HttpServletRequest object
 	 * @return sessionBean SessionDataBean object
@@ -329,22 +288,29 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 * @return
 	 * @throws Exception
 	 */
-	private boolean isAuthorized(SessionDataBean sessionBean) throws Exception
-	{
-		SecurityManager sm=SecurityManager.getInstance(this.getClass());
-		try
+	private boolean isAuthorized(SessionDataBean sessionBean, Object identifier, String aliasName) throws Exception
+	{ 
+		if(sessionBean.isSecurityRequired())
 		{
-			Role role=sm.getUserRole(sessionBean.getUserId());
-			if(role.getName().equalsIgnoreCase(Constants.ADMINISTRATOR))
+			SecurityManager sm=SecurityManager.getInstance(this.getClass());
+			aliasName = SurgicalPathologyReport.class.getName();
+			
+			String userName = sessionBean.getUserName();
+			boolean isAuthorized  = SecurityManager.getInstance(ViewSurgicalPathologyReportAction.class).checkPermission(userName, aliasName, identifier, Permissions.READ_DENIED, PrivilegeType.ObjectLevel);
+			if(!isAuthorized)
 			{
-				return true;
-			}		
+				//Check the permission of the user on the identified data of the object.
+				boolean hasPrivilegeOnIdentifiedData  = SecurityManager.getInstance(ViewSurgicalPathologyReportAction.class).checkPermission(userName, aliasName, identifier, Permissions.IDENTIFIED_DATA_ACCESS, PrivilegeType.ObjectLevel); 
+
+				if(!hasPrivilegeOnIdentifiedData)
+				{
+					isAuthorized = false;
+				}
+			}
+					
+			return isAuthorized;
 		}
-		catch(SMException ex)
-		{
-			Logger.out.info("Reviewer's Role not found!");
-		}
-		return false;
+		return true;
 	}
 }
 
