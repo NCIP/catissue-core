@@ -3,6 +3,8 @@ package edu.wustl.catissuecore.bean;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
+import edu.wustl.catissuecore.domain.Specimen;
+
 /**
  * @author abhijit_naik
  *
@@ -94,7 +96,10 @@ public interface GenericSpecimen extends Serializable
 	public void setId(long id);
 	public Long getCollectionProtocolId();
 	public void setCollectionProtocolId(Long collectionProtocolId);
-	
+	public GenericSpecimen getFormSpecimenVo();
+	public void setFormSpecimenVo(GenericSpecimen formSpecimenVo);
+	public Specimen getCorresSpecimen();
+	public void setCorresSpecimen(Specimen corresSpecimen);
 
 /*
 	public String getUniqueIdentifier();

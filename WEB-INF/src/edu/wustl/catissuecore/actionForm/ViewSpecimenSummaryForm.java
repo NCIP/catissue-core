@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.actionForm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
@@ -58,6 +59,7 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	public void setReadOnly(boolean readOnly)
 	{
 		this.readOnly  = readOnly;
+		setReadOnlyModeToAll();
 	}
 	
 	private HashMap<String, String> titleMap = new HashMap<String, String>();
@@ -272,4 +274,26 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 		this.printCheckbox = printCheckbox;
 	}
 	
+	private void setReadOnlyModeToAll()
+	{
+		Iterator<GenericSpecimen> specIterator = specimenList.iterator();
+		setReadOnlyMode(specIterator);
+		specIterator = aliquotList.iterator();
+		setReadOnlyMode(specIterator);
+		specIterator = derivedList.iterator();
+		setReadOnlyMode(specIterator);
+	}
+
+	/**
+	 * @param readOnlyMode
+	 * @param specIterator
+	 */
+	private void setReadOnlyMode(Iterator<GenericSpecimen> specIterator)
+	{
+		while(specIterator.hasNext())
+		{
+			GenericSpecimen genericSpecimen = specIterator.next();
+			genericSpecimen.setReadOnly(this.readOnly);
+		}
+	}
 }

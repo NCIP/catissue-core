@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import edu.wustl.catissuecore.domain.Specimen;
+
 
 public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 {
@@ -132,6 +134,28 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	private long id = -1;
 	
 	private long specimenCharsId = -1;
+	private GenericSpecimen formSpecimenVo;
+	private Specimen corresSpecimen;
+	public GenericSpecimen getFormSpecimenVo()
+	{
+		return this.formSpecimenVo;
+	}
+
+	public void setFormSpecimenVo(GenericSpecimen formSpecimenVo)
+	{
+		this.formSpecimenVo = formSpecimenVo;
+	}
+
+	public Specimen getCorresSpecimen()
+	{
+		return this.corresSpecimen;
+	}
+
+	public void setCorresSpecimen(Specimen corresSpecimen)
+	{
+		this.corresSpecimen = corresSpecimen;
+	}
+
 	public long getId() {
 		return id;
 	}

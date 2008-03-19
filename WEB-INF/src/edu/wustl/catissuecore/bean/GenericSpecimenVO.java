@@ -5,6 +5,8 @@ package edu.wustl.catissuecore.bean;
 
 import java.util.LinkedHashMap;
 
+import edu.wustl.catissuecore.domain.Specimen;
+
 /**
  * @author abhijit_naik
  *
@@ -34,6 +36,29 @@ public final class GenericSpecimenVO implements GenericSpecimen {
 	private String containerId;
 	private Long collectionProtocolId = -1l;
 	private long id =-1;
+	private Specimen corresSpecimen;
+	private GenericSpecimen formSpecimenVo;
+
+	public GenericSpecimen getFormSpecimenVo()
+	{
+		return this.formSpecimenVo;
+	}
+
+	public void setFormSpecimenVo(GenericSpecimen formSpecimenVo)
+	{
+		this.formSpecimenVo = formSpecimenVo;
+	}
+
+	public Specimen getCorresSpecimen()
+	{
+		return this.corresSpecimen;
+	}
+
+	public void setCorresSpecimen(Specimen corresSpecimen)
+	{
+		this.corresSpecimen = corresSpecimen;
+	}
+
 	public LinkedHashMap<String, GenericSpecimen> getAliquotSpecimenCollection() {
 		return aliquotSpecimenCollection;
 	}

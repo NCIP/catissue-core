@@ -211,7 +211,7 @@ public class ViewSpecimenSummaryAction extends Action {
 
 				if(specimenSessionVO!=null)
 				{
-					setFormValuesToSession(specimenFormVO, specimenSessionVO);					
+					setFormValuesToSession(specimenFormVO, specimenSessionVO);
 				}
 
 		}
@@ -255,7 +255,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			{
 				setFormValuesToSession(derivedFormVO, derivedSessionVO);
 			}
-			
+
 		}
 	}
 
@@ -275,6 +275,7 @@ public class ViewSpecimenSummaryAction extends Action {
 		derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
 		derivedSessionVO.setQuantity(derivedFormVO.getQuantity());
 		derivedSessionVO.setConcentration(derivedFormVO.getConcentration());
+		derivedSessionVO.setFormSpecimenVo(derivedFormVO);
 	}
 	
 	private GenericSpecimen getDerivedSessionObject(GenericSpecimen parentSessionObject, String derivedKey)

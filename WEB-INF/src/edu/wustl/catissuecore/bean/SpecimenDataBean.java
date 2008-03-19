@@ -98,8 +98,19 @@ public class SpecimenDataBean implements GenericSpecimen
 	private String selectedContainerName;
 	private String containerId;
 	private boolean checkedSpecimen = true;
-	
+	private Specimen corresSpecimen;
 	private Long collectionProtocolId = -1l;
+	private GenericSpecimen formSpecimenVo;
+
+	public GenericSpecimen getFormSpecimenVo()
+	{
+		return this.formSpecimenVo;
+	}
+
+	public void setFormSpecimenVo(GenericSpecimen formSpecimenVo)
+	{
+		this.formSpecimenVo = formSpecimenVo;
+	}
 
 	/**
 	 * @return Returns the biohazardCollection.
@@ -109,6 +120,7 @@ public class SpecimenDataBean implements GenericSpecimen
 		return biohazardCollection;
 	}
 
+	
 	/**
 	 * @param biohazardCollection The biohazardCollection to set.
 	 */
@@ -117,6 +129,16 @@ public class SpecimenDataBean implements GenericSpecimen
 		this.biohazardCollection = biohazardCollection;
 	}
 
+	public Specimen getCorresSpecimen()
+	{
+		return this.corresSpecimen;
+	}
+
+	public void setCorresSpecimen(Specimen corresSpecimen)
+	{
+		this.corresSpecimen = corresSpecimen;
+	}
+	
 	/**
 	 * @return Returns the className.
 	 */
