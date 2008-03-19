@@ -271,7 +271,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		//lazy false change
 		List persistentSCGList =dao.retrieve(SpecimenCollectionGroup.class.getName(),Constants.ID,oldspecimenCollectionGroup.getId());
 		SpecimenCollectionGroup persistentSCG=(SpecimenCollectionGroup) persistentSCGList.get(0);
-		persistentSCG.setComment(specimenCollectionGroup.getComment());
+		
 
 		// Adding default events if they are null from API
 		Collection spEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
@@ -347,7 +347,9 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			}
 
 		}
-
+		persistentSCG.setCollectionStatus(specimenCollectionGroup.getCollectionStatus());
+		persistentSCG.setComment(specimenCollectionGroup.getComment());
+		
 		dao.update(persistentSCG, sessionDataBean, true, true, false);
 		/**
 		 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch
