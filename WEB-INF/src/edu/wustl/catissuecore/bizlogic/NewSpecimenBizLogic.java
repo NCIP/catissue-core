@@ -1320,6 +1320,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		persistentSpecimen.setLineage(specimen.getLineage());
 		persistentSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
 		persistentSpecimen.setType(specimen.getType());
+		persistentSpecimen.setCollectionStatus(specimen.getCollectionStatus());
 		
 	
 
