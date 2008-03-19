@@ -180,31 +180,32 @@ public class ConflictResolverAction extends BaseAction
 		
 		//Participant Object		
 		Participant participant = HL7ParserUtil.parserParticipantInformation(pidLine,site);
-		
-		Collection participantColl = new HashSet();
-		
-		//Adding the new participant
-		participantColl.add(participant);		
-		reportLoaderQueue.setParticipantCollection(participantColl);
-		
-		//The new SCG for this participant will be inserted by the FileProcessorThread
-		
-		//Setting the status to NEW
-		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
-		
+	
 		ParticipantBizLogic participantBizLogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
 		try
 		{
-		 participantBizLogic.insert(participant,getSessionData(request),Constants.HIBERNATE_DAO);
-		}catch(Exception e)
+			participantBizLogic.insert(participant,getSessionData(request),Constants.HIBERNATE_DAO);
+		}
+		catch(Exception e)
 		{
-			System.out.println("Error Occurred !!!!!");
+			//System.out.println("Error Occurred !!!!!");
 			errorMessage = ApplicationProperties.getValue("errors.caTies.conflict.genericmessage");
-			
+			//Setting the status to NEW
+			reportLoaderQueue.setParticipantCollection(null);
+			reportLoaderQueue.setStatus(CaTIESConstants.PARTICIPANT_CREATION_ERROR);
+			updateReportLoaderQueue(reportLoaderQueue,request);
+			return errorMessage;
 		}
 		
+		Collection participantColl = new HashSet();
+		// Adding the new participant
+		participantColl.add(participant); 
+		reportLoaderQueue.setParticipantCollection(participantColl);
+		//The new SCG for this participant will be inserted by the FileProcessorThread
+	
+		//Setting the status to NEW
+		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
 		reportLoaderQueue.setSpecimenCollectionGroup(null);
-		
 		updateReportLoaderQueue(reportLoaderQueue,request);
 		
 		return errorMessage;
