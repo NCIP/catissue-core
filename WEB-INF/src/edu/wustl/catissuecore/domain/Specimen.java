@@ -939,10 +939,12 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 
 					if (form.isParentPresent())
 					{
+						/*lazy change parent Specimen link is set to false so not required to set*/
+						/*
 						parentSpecimen = new CellSpecimen();
 						parentSpecimen.setId(new Long(form.getParentSpecimenId()));
 						parentSpecimen.setLabel(form.getParentSpecimenName());
-
+						*/
 					}
 					else
 					{
@@ -950,18 +952,19 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 						//specimenCollectionGroup = null;
 						this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
 
-						//						this.specimenCollectionGroup.setGroupName(form.getSpecimenCollectionGroupName());
-						IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-
+						//this.specimenCollectionGroup.setGroupName(form.getSpecimenCollectionGroupName());
 						/*lazy change */
-						/*List scgList = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "name", form.getSpecimenCollectionGroupName());
+						/*IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+
+						
+						List scgList = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "name", form.getSpecimenCollectionGroupName());
 						
 						
 						if (!scgList.isEmpty())
 						{
 							this.specimenCollectionGroup = (SpecimenCollectionGroup) scgList.get(0);
-						}*/
-						/*if(parentSpecimen.getSpecimenCollectionGroup()!=null)
+						}
+						if(parentSpecimen.getSpecimenCollectionGroup()!=null)
 						{
 							this.specimenCollectionGroup = parentSpecimen.getSpecimenCollectionGroup();
 						}*/
