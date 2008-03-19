@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +33,10 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.namegenerator.LabelGenerator;
+import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -90,6 +94,10 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 		Object collectionProtocolEventObj = dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup
 				.getCollectionProtocolEvent().getId());
+
+		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+		Collection specimenCollection = null;
+		Long userId = new CollectionProtocolRegistrationBizLogic().getUserID(dao, sessionDataBean);
 		if (collectionProtocolEventObj != null)
 		{
 			CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
@@ -98,13 +106,22 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
 
 			specimenCollectionGroup.setCollectionProtocolEvent(cpe);
+			
+			SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = (SpecimenCollectionRequirementGroup) cpe
+			.getRequiredCollectionSpecimenGroup(); 
+			
+			specimenCollection = cprBizLogic.getCollectionSpecimen(specimenCollectionGroup, specimenCollectionRequirementGroup, userId );
+			
 		}
 
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
-
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
-
 		insertAuthData(specimenCollectionGroup);
+		if (specimenCollection != null)
+		{
+	       new NewSpecimenBizLogic().insert(specimenCollection, dao, sessionDataBean);
+		}
+
 	}
 
 	/**
@@ -2048,5 +2065,17 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			}
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

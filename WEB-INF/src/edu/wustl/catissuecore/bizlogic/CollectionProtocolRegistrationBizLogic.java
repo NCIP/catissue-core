@@ -705,6 +705,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	{
 		dateOfLastEvent = collectionProtocolRegistration.getRegistrationDate();
 		countOfStudyCalendarEventPoint = 0;
+	    Long userId = null ;
 
 		try
 		{
@@ -713,7 +714,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol()
 					.getCollectionProtocolEventCollection();
 			Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
-			userID = getUserID(dao, sessionDataBean);
+			userId = getUserID(dao, sessionDataBean);
 			Collection scgCollection = new HashSet();
 			while (collectionProtocolEventIterator.hasNext())
 			{
@@ -748,7 +749,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
 				specimenCollectionGroupLableGenerator.setLabel(specimenCollectionGroup);
 
-				Collection cloneSpecimenCollection = null;
+				/*Collection cloneSpecimenCollection = null;
 				Collection specimenCollection = specimenCollectionRequirementGroup.getSpecimenCollection();
 				if (specimenCollection != null && !specimenCollection.isEmpty())
 				{
@@ -759,7 +760,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						Specimen specimen = (Specimen) itSpecimenCollection.next();
 						if (Constants.NEW_SPECIMEN.equals(specimen.getLineage()))
 						{
-							Specimen cloneSpecimen = getCloneSpecimen(specimen, null, specimenCollectionGroup);
+							Specimen cloneSpecimen = getCloneSpecimen(specimen, null, specimenCollectionGroup, userId);
 							//kalpana : bug #6224
 							if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 							{
@@ -773,6 +774,11 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 					}
 				}
 				//				specimenCollectionGroup.setOffset(collectionProtocolRegistration.getOffset());
+				 * */
+				
+				
+				
+				Collection cloneSpecimenCollection = getCollectionSpecimen(specimenCollectionGroup, specimenCollectionRequirementGroup, userId);
 				specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
 				scgCollection.add(specimenCollectionGroup);
 				dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
@@ -787,12 +793,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
 	}
 
-	private Specimen getCloneSpecimen(Specimen specimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup)
+	private Specimen getCloneSpecimen(Specimen specimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup, Long userId)
 	{
 
 		Specimen newSpecimen = specimen.createClone();
 		newSpecimen.setParentSpecimen(pSpecimen);
-		newSpecimen.setDefaultSpecimenEventCollection(userID);
+		newSpecimen.setDefaultSpecimenEventCollection(userId);
 		newSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		newSpecimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
 
@@ -804,7 +810,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			while (it.hasNext())
 			{
 				Specimen childSpecimen = it.next();
-				Specimen newchildSpecimen = getCloneSpecimen(childSpecimen, newSpecimen, specimenCollectionGroup);
+				Specimen newchildSpecimen = getCloneSpecimen(childSpecimen, newSpecimen, specimenCollectionGroup, userId);
 				childrenSpecimen.add(newchildSpecimen);
 			}
 			newSpecimen.setChildrenSpecimen(childrenSpecimen);
@@ -1584,7 +1590,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	 * @param sessionDataBean
 	 *            object of class SessionDataBean
 	 */
-	private Long getUserID(DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	protected Long getUserID(DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
 		Long userID = sessionDataBean.getUserId();
 		if (userID == null)
@@ -1866,4 +1872,53 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	}
 	/* offset changes finish */
 
+	
+	
+	
+	
+	
+	protected Collection getCollectionSpecimen(SpecimenCollectionGroup specimenCollectionGroup,
+			SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup, Long userId) {
+
+		
+		Collection cloneSpecimenCollection = null;
+		//Long userId = null;
+        try {
+		
+		Collection specimenCollection = specimenCollectionRequirementGroup.getSpecimenCollection();
+		if (specimenCollection != null && !specimenCollection.isEmpty())
+		{
+			//userId = getUserID(dao, sessionDataBean);
+			cloneSpecimenCollection = new LinkedHashSet();
+			Iterator itSpecimenCollection = specimenCollection.iterator();
+			while (itSpecimenCollection.hasNext())
+			{
+				Specimen specimen = (Specimen) itSpecimenCollection.next();
+				if (Constants.NEW_SPECIMEN.equals(specimen.getLineage()))
+				{
+					Specimen cloneSpecimen = getCloneSpecimen(specimen, null, specimenCollectionGroup, userId);
+					//kalpana : bug #6224
+					if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+					{
+						LabelGenerator specimenLableGenerator = LabelGeneratorFactory
+								.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+						specimenLableGenerator.setLabel(cloneSpecimen);
+					}
+					cloneSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+					cloneSpecimenCollection.add(cloneSpecimen);
+				}
+			}
+		}
+		//				specimenCollectionGroup.setOffset(collectionProtocolRegistration.getOffset());
+	//	specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
+		
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+        }
+        
+        return cloneSpecimenCollection;
+
+}
+	
+	
 }

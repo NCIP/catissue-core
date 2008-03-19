@@ -94,8 +94,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	
 	protected String studyCalEvtPoint ="";
 	protected int offset =0;
-	
-	//Consent Tracking Module Virneder Mehta 25/11/2006	
+		//Consent Tracking Module Virneder Mehta 25/11/2006	
 		    
 	/**
 	 * Default Constructor
