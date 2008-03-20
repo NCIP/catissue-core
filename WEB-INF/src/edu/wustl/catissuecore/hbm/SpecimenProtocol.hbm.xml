@@ -35,7 +35,8 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="PRINCIPAL_INVESTIGATOR_ID" lazy="false"
+            column="PRINCIPAL_INVESTIGATOR_ID" 
+            lazy="false"
         />
 
         <property
