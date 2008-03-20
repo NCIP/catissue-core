@@ -11,21 +11,21 @@
 <script src="jss/queryModule.js">
 	</script>
 </head>
-<body onload="checkItDefault()">
+<body onload="checkItDefault()" onunload='closeWaitPage()'>
 <html:form method="GET" action="OpenDecisionMakingPage.do">
 <html:hidden property="noOfResults" value="" />
 
 <input type="hidden" name="isQuery" value="true">
 <table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table2" >		
-	<tr height="5%">
-		<td width="23%" height="5%" class="queryModuleTabMenuItem" >
-			<bean:message key="query.addLimits"/>
+	<tr>	
+		<td width="33%" align="center" class="bgWizardImage">
+			<img src="images/1_inactive.gif" /> 
 		</td>
-		<td width="23%" height="5%" class="queryModuleTabMenuItem" >
-			<bean:message key="query.defineSearchResultsViews"/>
+		<td width="33%" align="center" class="bgWizardImage">
+			<img src="images/2_inactive.gif" /> 
 		</td>
-		<td width="23%" height="5%" class="queryTabMenuItemSelected">
-			<bean:message key="query.viewSearchResults"/>
+		<td width="33%" align="center" class="bgWizardImage">
+			<img src="images/3_active.gif" /> 
 		</td>
 	</tr>
 	<tr height="5%" >

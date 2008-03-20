@@ -31,7 +31,7 @@
 
 
 
-<body>
+<body onunload='closeWaitPage()'>
 <html:errors />
 <html:form styleId='saveQueryForm'
 	action='<%=Constants.EXECUTE_QUERY_ACTION%>'>

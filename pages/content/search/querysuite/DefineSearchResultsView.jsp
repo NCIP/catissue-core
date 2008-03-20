@@ -16,7 +16,7 @@
 <script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmlXTree.js"></script>
 
 </head>
-<body>
+<body onunload='closeWaitPage()'>
 <!-- Make the Ajax javascript available -->
 <script type="text/javascript" src="jss/ajax.js"></script> 
 <html:errors />

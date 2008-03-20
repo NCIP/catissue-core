@@ -13,7 +13,7 @@
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script> 
 </head>
-<body>
+<body onunload='closeWaitPage()'>
 <script type='text/JavaScript' src='jss/scwcalendar.js'></script>
 <html:errors />
 <%

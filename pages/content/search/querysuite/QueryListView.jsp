@@ -22,7 +22,7 @@
 	
 </head>
 
-<body >
+<body onunload='closeWaitPage()'>
 
 <% 
 boolean mac = false;
