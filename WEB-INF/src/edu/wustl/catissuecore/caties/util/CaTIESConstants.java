@@ -137,7 +137,6 @@ public abstract class CaTIESConstants
 	public static final String USER_NAME="userName";
 	public static final String PASSWORD="password";
 	public static final String KEYSTORE_FILE_PATH="keystoreFilePath";
-	public static final String DATABASE_TYPE="databaseType";
 	public static final String DEIDENTIFIER_CLASSNAME="deidentifierClassName";
 	
 	public static final String DEID_HOME="deidHome";

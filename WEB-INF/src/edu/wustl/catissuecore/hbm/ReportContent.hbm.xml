@@ -26,7 +26,7 @@
 
         <property
             name="data"
-            type="string"
+            type="gov.nih.nci.common.util.StringClobType"
             update="true"
             insert="true"
             column="REPORT_DATA"

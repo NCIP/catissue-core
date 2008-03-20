@@ -210,7 +210,6 @@
 			<replacefilter token="@@BAD_FILES_DIR@@" value="${bad.files.dir}" />
 			<replacefilter token="@@PROCESS_FILES_DIR@@" value="${process.file.dir}" />
 			<replacefilter token="@@GATE_HOME@@" value="${concept.code.installation.dir}/gate/gate_3_1" />
-			<replacefilter token="@@DB_TYPE@@" value="${database.type}" />
 		</replace>
 		<if>
 			<equals arg1="${jboss.container.secure}" arg2="yes" />

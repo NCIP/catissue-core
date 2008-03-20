@@ -118,24 +118,14 @@ public class ConceptCoder
 			 if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_BI_CONTENT)).equalsIgnoreCase("true"))
 			 {
 				 BinaryContent binaryContent=new BinaryContent();
-				 String data=this.gateXML;
-				 if(data.length()>3900)
-				 {
-					 data=data.substring(0,3900);
-				 }
-				 binaryContent.setData(data);
+				 binaryContent.setData(this.gateXML);
 				 binaryContent.setSurgicalPathologyReport(this.deidPathologyReport);
 				 this.deidPathologyReport.setBinaryContent(binaryContent);
 			 }
 			 if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_XML_CONTENT)).equalsIgnoreCase("true"))
 			 {
 				 XMLContent xmlContent=new XMLContent();
-				 String data=this.chirpsXML;
-				 if(data.length()>3900)
-				 {
-					 data=data.substring(0,3900);
-				 }
-				 xmlContent.setData(data);
+				 xmlContent.setData(this.chirpsXML);
 				 xmlContent.setSurgicalPathologyReport(this.deidPathologyReport);
 				 this.deidPathologyReport.setXmlContent(xmlContent);
 			 }
