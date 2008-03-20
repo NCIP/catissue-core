@@ -770,6 +770,7 @@
 		var textBoxId1 = document.getElementById("rowMsg");
 		var element = document.getElementById('validationMessages');
 		var row = document.getElementById(rowId);
+		closeWaitPage();
 		row.innerHTML = "";
 		if(text == "")
 		{
@@ -839,6 +840,7 @@
 	
 	function ExecuteSavedQuery()
 	{
+		  showWaitPage();
 	   	  var entityName="";
 		  var frmName = document.forms[0].name;
           var list = document.getElementById('attributesList').value;
@@ -1104,6 +1106,7 @@ var jsReady = false;
 	/*This function is called form QueryListView.jsp. It invokes the FetchAndExecuteQueryAction*/
 	function executeQuery(queryId)
 	{
+		showWaitPage();
 		document.getElementById('queryId').value=queryId;
 		document.forms[0].submit();
 	} 
@@ -1133,7 +1136,7 @@ var jsReady = false;
 		document.forms[0].submit();
 	}
 	function proceedClicked()
-	{
+	{		
 		var radioObj = document.forms[0].options;
 		var option = "";
 		var radioLength = radioObj.length;
@@ -1151,11 +1154,12 @@ var jsReady = false;
 		}
 		else if(option == 'redefineQuery')
 		{
-			onRedefineQueryOption();
+			onRedefineQueryOption();			
 		}
 		else
 		{
-			document.forms[0].submit();
+			showWaitPage();
+			document.forms[0].submit();			
 		}
 	}	
 	
@@ -1184,7 +1188,11 @@ var jsReady = false;
 	}
 	
 	function validateQuery(text)
-	{
+	{	
+		if (text != "save")
+		{
+			showWaitPage();
+		}
 		var request = newXMLHTTPReq();			
 		var handlerFunction = getReadyStateHandler(request,displayValidationMessage,true);	
 		request.onreadystatechange = handlerFunction;			
@@ -1205,7 +1213,7 @@ var jsReady = false;
 		{
 			if (text == "search")
 			{
-				showValidationMessages("We are searching for your query. Please wait...");
+				//showValidationMessages("We are searching for your query. Please wait...");
 				viewSearchResults();
 			}			
 			else 
@@ -1215,5 +1223,22 @@ var jsReady = false;
 					showValidationMessages(text);
 				}		
 			}
+		}
+	}
+
+	var myWindow;
+	function showWaitPage()
+	{			
+		var popupContent = "<table width='400' height='200' border='0' align='center' cellpadding='0' cellspacing='0' bgcolor='#FFFFFF'><tr><td height='85' align='center' valign='top'><img src='images/loading_bg.jpg' alt='Query Search' width='400' height='85' /></td></tr><tr><td align='center' valign='top'><img src='images/loading.gif' alt='Loading...' width='50' height='50' vspace='5' /></td></tr></table>";
+		myWindow=window.open('','','left=400,top=400,width=420,height=200,modal=yes');
+		myWindow.document.write(popupContent);
+		myWindow.focus();
+	}
+
+	function closeWaitPage()
+	{
+		if ((myWindow != null) && (!myWindow.closed))
+		{
+			myWindow.close();
 		}
 	}
