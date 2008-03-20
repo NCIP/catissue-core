@@ -136,7 +136,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				}
 				specimenList.add(specimen);
 				
-				dao.insert(specimen, sessionDataBean, false, false);				
+				dao.insert(specimen, sessionDataBean, false, false);
 			}
 			
 			securityManager.insertAuthorizationData(null, specimenList, getDynamicGroups(scg));
@@ -238,33 +238,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	//Abhishek Mehta : Performance related Changes
-	/**
-	 * @param specimenList
-	 * @throws DAOException
-	 */
-	private void authenticateSpecimens(HashSet protectionObjects, AbstractSpecimenCollectionGroup collectionGroup) throws DAOException
-	{
-		TaskTimeCalculater specAuth = TaskTimeCalculater.startTask("Specimen insert Authenticate (" + protectionObjects.size() + ")",
-				NewSpecimenBizLogic.class);
-		String dynamicGroups[] = null;
-		try
-		{
-			if (collectionGroup != null)
-			{
-				dynamicGroups = getDynamicGroups(collectionGroup);
-				securityManager.insertAuthorizationData(null, protectionObjects, dynamicGroups);
-			}
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
-		finally
-		{
-			TaskTimeCalculater.endTask(specAuth);
-		}
-	}
 
 	/**
 	 * @param specimen
@@ -275,42 +248,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void setParentSpecimenData(Specimen specimen, DAO dao) throws DAOException
 	{
 		Specimen parent = specimen.getParentSpecimen();
-
-		//		retrieving the parent specimen events
-		if (parent.getSpecimenEventCollection() != null)
-		{
-
-			String sourceObjectName = SpecimenEventParameters.class.getName();
-			String columnName = Constants.COLUMN_NAME_SPECIMEN;
-			long whereColumnValue = parent.getId().longValue();
-			/*List parentSpecimenEventColl = dao.retrieve(sourceObjectName, columnName, whereColumnValue);
-			 
-			 if(parentSpecimenEventColl == null || parent.getSpecimenEventCollection().isEmpty())
-			 {
-			 parent.setSpecimenEventCollection(new HashSet());
-			 }
-			 else
-			 {	//Converting list to hashset
-			 Collection tempColl = new HashSet();    		
-			 tempColl.addAll(parentSpecimenEventColl);        		
-			 parent.setSpecimenEventCollection(tempColl);
-			 }*/
-		}
-		else
-		{
-			parent.setSpecimenEventCollection(new HashSet());
-		}
-
-		//Added by Poornima
-		specimen.setParentSpecimen(parent);
-		specimen.setSpecimenCharacteristics(parent.getSpecimenCharacteristics());
-
-		//Ashish - 8/6/07 - retriving parent scg for performance improvement
-		//		AbstractSpecimenCollectionGroup parentSCG = (AbstractSpecimenCollectionGroup)dao.retrieveAttribute(Specimen.class.getName(),parent.getId() , Constants.COLUMN_NAME_SCG);
-		//		specimen.setSpecimenCollectionGroup(parent.getSpecimenCollectionGroup());
-		// set event parameters from parent specimen - added by Ashwin for bug id# 2476
-		//		specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(parent,specimen));
-		specimen.setPathologicalStatus(parent.getPathologicalStatus());
+		setParentCharacteristics(parent, specimen);
 		if (parent != null)
 		{
 			Set set = new HashSet();
@@ -583,10 +521,32 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 		
 			childSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
-			childSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
+			setParentCharacteristics(specimen, childSpecimen);
 			childSpecimen.setCreatedOn(specimen.getCreatedOn());
 			setSpecimenData(childSpecimen, dao, sessionDataBean,partOfMulipleSpecimen);
 		}
+	}
+
+	/**
+	 * @param parentSpecimen
+	 * @param childSpecimen
+	 */
+	private void setParentCharacteristics(Specimen parentSpecimen,
+			Specimen childSpecimen)
+	{
+		SpecimenCharacteristics characteristics  = null;
+		
+		 
+		SpecimenCharacteristics parentSpecChar = parentSpecimen.getSpecimenCharacteristics();
+		
+		if (parentSpecChar != null)
+		{
+			characteristics = new SpecimenCharacteristics();
+			characteristics.setTissueSide(parentSpecChar.getTissueSide());
+			characteristics.setTissueSite(parentSpecChar.getTissueSite());
+		}
+		
+		childSpecimen.setSpecimenCharacteristics(characteristics);
 	}
 	/**
 	 * @param specimen
@@ -1588,7 +1548,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				checkStatus(dao, parentSpecimen, "Parent Specimen");
 			}
-			else if (!specimen.getParentSpecimen().getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_ACTIVE))
+			else if (!specimen.getParentSpecimen().getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
 			{
 				throw new DAOException("Parent Specimen " + ApplicationProperties.getValue("error.object.closed"));
 			}
