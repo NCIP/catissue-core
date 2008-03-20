@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.action.querysuite;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -46,6 +47,8 @@ public class DefineQueryResultsViewAction extends BaseAction
 		HttpSession session  = request.getSession();
 		SelectedColumnsMetadata selectedColumnsMetadata = (SelectedColumnsMetadata)session.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
 		List<NameValueBean> prevSelectedColumnNameValueBeanList= selectedColumnsMetadata.getSelectedColumnNameValueBeanList();
+		if(!selectedColumnsMetadata.isDefinedView())
+			prevSelectedColumnNameValueBeanList = null;
 		OutputTreeDataNode currentSelectedObject = selectedColumnsMetadata.getCurrentSelectedObject();
 		request.setAttribute(Constants.categorySearchForm,categorySearchForm);
 		Map<Long,OutputTreeDataNode> uniqueIdNodesMap = (Map<Long,OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);

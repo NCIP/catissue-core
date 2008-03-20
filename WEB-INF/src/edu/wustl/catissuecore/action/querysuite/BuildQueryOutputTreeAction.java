@@ -58,7 +58,6 @@ public class BuildQueryOutputTreeAction extends BaseAction
 		String randomNumber =(String)session.getAttribute("randomNumber");
 		if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
 		{
-			
 			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(nodeId,idNodesMap,sessionData,randomNumber,hasConditionOnIdentifiedField,mainEntityMap);
 		}
 		else

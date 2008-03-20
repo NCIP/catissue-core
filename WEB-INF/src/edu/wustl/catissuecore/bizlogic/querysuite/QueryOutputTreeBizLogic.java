@@ -259,7 +259,8 @@ public class QueryOutputTreeBizLogic
 			{
 				idColumnOfCurrentNode  = sqlColumnName;
 			}
-			selectSql = selectSql + sqlColumnName + ",";
+			if(!attribute.getAttributeTypeInformation().getDataType().equalsIgnoreCase(Constants.FILE_TYPE))
+				selectSql = selectSql + sqlColumnName + ",";
 		}
 		selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
 		selectSql = selectSql + Constants.FROM + tableName;
