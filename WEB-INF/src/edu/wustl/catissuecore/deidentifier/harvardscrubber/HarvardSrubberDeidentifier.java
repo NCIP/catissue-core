@@ -35,9 +35,14 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 	public DeidentifiedSurgicalPathologyReport deidentify(
 			IdentifiedSurgicalPathologyReport identifiedReport) throws Exception 
 	{
-		File fileTosScrub=getFileToScrub(identifiedReport);
-		String scrubbed=scrubber.scrub(fileTosScrub);
-		fileTosScrub.delete();
+		String scrubbed;
+		synchronized (scrubber) 
+		{
+			File fileTosScrub=getFileToScrub(identifiedReport);
+			scrubbed=scrubber.scrub(fileTosScrub);
+			fileTosScrub.delete();
+		}
+		
 		
 		String deidReportText=Utility.extractReport(scrubbed, CaTIESProperties.getValue(CaTIESConstants.HARVARD_SCRUBBER_DTD_FILENAME), CaTIESConstants.HARVARD_SCRUBBER_XPATH, CaTIESConstants.TAG_FULL_REPORT_TEXT);
 		
@@ -50,7 +55,7 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		return deidentifiedSurgicalPathologyReport;
 	}
 
-	private synchronized File getFileToScrub(IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
+	private File getFileToScrub(IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
 	{
 		org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element(CaTIESConstants.TAG_ENVELOPE));
 		Element reportHeader=buildReportHeader(identifiedReport);
