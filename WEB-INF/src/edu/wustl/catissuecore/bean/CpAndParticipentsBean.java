@@ -72,8 +72,6 @@ public class CpAndParticipentsBean implements Externalizable
  	
 	public void writeExternal(ObjectOutput out) throws IOException
 	{
-		System.out.println("In Cp & Participants bean class");
-		System.out.println("Cp written is:"+ name);
 		out.writeUTF(name);
 		out.writeUTF(value);
 		
