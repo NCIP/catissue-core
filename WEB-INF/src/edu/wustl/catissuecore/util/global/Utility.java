@@ -1070,7 +1070,10 @@ public class Utility extends edu.wustl.common.util.Utility {
 				sessionData, querySessionData, startIndex);
 		paginationDataList = pagenatedResultData.getResult();
 		Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap = querySessionData.getQueryResultObjectDataMap();
-		QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, queryResultObjectDataBeanMap);
+		List<String> columnsList = (List<String>)request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+		QueryOutputSpreadsheetBizLogic queryBizLogic = new QueryOutputSpreadsheetBizLogic();
+		Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = queryBizLogic.updateSpreadSheetColumnList(columnsList, queryResultObjectDataBeanMap);
+		QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
 		return paginationDataList;
 	}
 
