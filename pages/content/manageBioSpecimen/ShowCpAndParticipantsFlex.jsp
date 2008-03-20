@@ -48,26 +48,32 @@
 	function pageInit(nodeId)
 	{
        
-		//alert("Node id is:"+nodeId);
+	//	alert("Node id is:"+nodeId);
         jsReady = true;
 		callFlexMethod();
 		
 		//Invoking the Action script method passing the Selected Tree node Id 
 		interfaceObj.myFlexMethod(nodeId);
+	//	interfaceObj.initTree();
 	}
-	function refreshCpParticipants()
+	function refreshCpParticipants(participantId)
 	{
-         callFlexMethod();
-	     interfaceObj.editParticipant();
+        
+		 callFlexMethod();
+	     interfaceObj.editParticipant(participantId,"");
+
 	}
 
-	function editParticipant()
+	/**
+	Added treeNode so that on node from tree is selected 
+	*/
+	function editParticipant(participantId,treeNodeId)
 	{
-		
 		 callFlexMethod();
-	     interfaceObj.editParticipant();
+	     interfaceObj.editParticipant(participantId,treeNodeId);
 	
 	}
+
 	function onParticipantClick(pId,cpId,refParticipants)
 	{
 	  window.parent.frames[1].location ="QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=edit&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&id="+pId;

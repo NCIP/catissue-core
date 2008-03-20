@@ -298,7 +298,7 @@
 			     }
 			     else
 			    {
-				   setSubmitted('ForwardTo','<%=printAction%>','eventParameters');
+				   setSubmitted('ForwardTo','<%=printAction%>','newSpecimenEdit');
 			     }  
 				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 			

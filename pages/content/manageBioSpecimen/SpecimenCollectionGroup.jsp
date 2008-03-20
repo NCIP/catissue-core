@@ -24,7 +24,7 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-<link rel="stylesheet" type="text/css" href="ie.hack.css" />
+
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
@@ -38,19 +38,25 @@
 		scgEntityId = (Long)request.getAttribute("scgEntityId");
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
+		String participantId=null;
 		
-				
+		// getting specimenCollectionGroupForm from request was called twice on this page.
+		// Thus make it common
+		Object obj = request.getAttribute("specimenCollectionGroupForm");
+		SpecimenCollectionGroupForm form =null;
+		if(obj != null && obj instanceof SpecimenCollectionGroupForm)
+		{
+			form=(SpecimenCollectionGroupForm)obj;
+			participantId=""+form.getParticipantId();
+		}
 		String id = request.getParameter("id");
 		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
 		if (reqPath != null)
 			appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
 	
-	   		Object obj = request.getAttribute("specimenCollectionGroupForm");
-			SpecimenCollectionGroupForm form =null;
-	
-			if(obj != null && obj instanceof SpecimenCollectionGroupForm)
+	   		if(form  != null)
 			{
-				form = (SpecimenCollectionGroupForm)obj;
+			//	form = (SpecimenCollectionGroupForm)obj;
 				/**
 				* Name : Vijay Pande
  				* Reviewer Name : Sachin Lale 
@@ -68,14 +74,14 @@
 		boolean readOnlyValue=false,readOnlyForAll=false;
 	   	if(!operation.equals("add") )
 	   	{
-	   		obj = request.getAttribute("specimenCollectionGroupForm");
 	   		
-			if(obj != null && obj instanceof SpecimenCollectionGroupForm)
+	   		
+			if(form != null)
 			{
-				form = (SpecimenCollectionGroupForm)obj;
-		   		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf="+pageOf+"&id="+form.getId() ;
+				appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf="+pageOf+"&id="+form.getId() ;
 		   		int radioButtonForParticipant1 = form.getRadioButtonForParticipant();
 				nodeId= "SpecimenCollectionGroup_"+form.getId();
+				
 		   	}
 			
 	   	}
@@ -150,8 +156,14 @@
 	%>
 		<script language="javascript">
 		//Added by Falguni to refresh participant tree 
-		top.frames["cpAndParticipantView"].editParticipant();
-	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');	
+		var nodeid =  "<%=nodeId%>";
+		top.frames["cpAndParticipantView"].editParticipant(<%=participantId%>,nodeid);
+/*		
+		if(nodeid!=""&&nodeid!="1")
+		{
+		alert("nodeid: "+nodeid);	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');	
+		}
+*/
 		</script>
 	<%}
 	
@@ -609,17 +621,7 @@ function editSCG()
 			}
 		
 		}
-	function setSize() {
-		var container = document.getElementById("Container");
-          var width =document.body.clientWidth;
-		     container.style.width=width-50;
-          container = document.getElementById("multiplespecimenTable");
-          container.style.width=width-100;
-
-		  container = document.getElementById("collAndRecEvents");
-          container.style.width=width-100;
-		  
-		}
+		
  </script>
 </head>
 			<!-- 
@@ -640,7 +642,7 @@ function editSCG()
 	if(pageView != null && !pageView.equals("viewAnnotations") && !pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 	{
 %>
-	<body onload="setSize();disablebuttons();initializeSCGForm();showConsents();">
+	<body onload="disablebuttons();initializeSCGForm();showConsents();">
 <%}else{%> 
 	<body>
  <%}%>

@@ -26,7 +26,6 @@
 <script src="jss/titli.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-<link rel="stylesheet" type="text/css" href="ie.hack.css" />
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 
 <style>
@@ -44,9 +43,10 @@ tr#hiddenCombo
 		String cpId = null;
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
 		List collectionProtocolList = (List)request.getAttribute(Constants.PROTOCOL_LIST);
-		
+
+		// participantId used to pass to flex method to show currenr particpant as selected
 		String participantId=(String)request.getAttribute("participantId");
-		
+
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);		
 		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);		
 		boolean isRegisterButton = false;
@@ -101,6 +101,7 @@ tr#hiddenCombo
 		if(obj != null && obj instanceof ParticipantForm)
 		{
 			ParticipantForm form = (ParticipantForm)obj;
+			
 			map = form.getValues();
 			mapCollectionProtocolRegistration = form.getCollectionProtocolRegistrationValues();
 			noOfRows = form.getValueCounter();
@@ -505,21 +506,7 @@ tr#hiddenCombo
 			if(!fwdPage=="pageOfParticipantCPQuery")
 				document.forms[0].target = '_top';
 		}
-	
-	function setSize()
-	  {
-	
-		var container = document.getElementById("tablecontainer");
-		var tempWidth =document.body.clientWidth;
-		var tempHeight=document.body.clientHeight;
-         container.style.height=tempHeight-50;
-         container.style.width=tempWidth-50;
-	    
-		container = document.getElementById("identifier");
-		 container.style.width=tempWidth-100;
 		
-	    
-	  }
 	</script>
 </head>
 
@@ -634,18 +621,21 @@ tr#hiddenCombo
 	<%
 	
 	String refreshTree = (String)request.getAttribute("refresh");
-   
+   System.out.println("refreshTree: "+refreshTree);
 	if(refreshTree==null || refreshTree.equalsIgnoreCase("true"))
 	{
 	%>
+	
 	<script language="javascript">
 	//Modified for flex by Baljeet
 	//Modified by Falguni Sachde
 	//Bug:6072 In case of LHS menu selection this property will not available.	
+
 	 if(top.frames["cpAndParticipantView"] != undefined)
 	 {
-	 	top.frames["cpAndParticipantView"].refreshCpParticipants();
-	     refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','');
+	
+		top.frames["cpAndParticipantView"].refreshCpParticipants(<%=participantId%>);
+	   
 	 }
 	</script>
 

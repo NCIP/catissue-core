@@ -1,11 +1,7 @@
 <?xml version="1.0"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:adobe="http://www.adobe.com/2006/fc" layout="absolute" preinitialize="preInit()" height="90%" width="70%" backgroundColor="#FFFFFF" creationComplete="initApp();">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" preinitialize="getCPData()" height="90%" width="70%" backgroundColor="#FFFFFF" creationComplete="initApp();">
   <mx:Script>
   	<![CDATA[
-		import util.Utility;
-  		import mx.messaging.channels.SecureAMFChannel;
-  		import mx.messaging.channels.AMFChannel;
-  		import mx.messaging.ChannelSet;
   		import mx.events.CloseEvent;
   		import mx.core.Container;
   		import mx.events.MoveEvent;
@@ -24,9 +20,14 @@
 
     [Bindable]
 		public var cpCollection:ArrayCollection = new ArrayCollection();
-        public var pCollection:ArrayCollection = new ArrayCollection(); 
-        private var xmlString:XML = new XML();
-        private var treeData:XMLListCollection = new XMLListCollection();
+  
+                public var pCollection:ArrayCollection = new ArrayCollection(); 
+  
+   
+                 private var xmlString:XML = new XML();
+   
+    
+                 private var treeData:XMLListCollection = new XMLListCollection();
 
       [Bindable]
                  [Embed(source='/images/nolines_minus.gif')]
@@ -84,26 +85,121 @@
                  private var pendingArmCPIcon:Class;  
     
     [Bindable]
-  	       private var title:String = "Specimen Details for"; 
-
-              public var selectedNode:Object = new Object;
- 
-              public var parentNode :Object = new Object;
-              public var isEventHandled:Boolean = false;
-	          public var selectedParticipantIndex:Number = 0;
-		      public var tempCollection:ArrayCollection = new ArrayCollection();
+			private var title:String = "Specimen Details for"; 
+			// Store the specified node id to show as selected
+			private var nodeIdToSelect:String; 
+			// Store the inode id of previously selected node
+			private var previouslySelectednodeId:String; 
+			// Store previously Selected Particiapnt ID
+			private var previouslySelectedParticipantId:String; 
+			private var previouslySelectedParticipantBean:NameValueBean; 
+			
+			public var selectedNode:Object = new Object;
+			 
+			public var parentNode :Object = new Object;
+			public var isEventHandled:Boolean = false;
+			public var selectedParticipantIndex:Number = 0;
+			public var tempCollection:ArrayCollection = new ArrayCollection();
 	  
-	  		  public var myChannelSet:ChannelSet = new ChannelSet();
-	
-
-
-    		public function initApp():void
-		    {
-		    	 ExternalInterface.addCallback("myFlexMethod",refreshTree);
-	 			 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
-				 ExternalInterface.addCallback("editParticipant",editParticipant);
-		    }
+    public function initApp():void
+    {
+    	 ExternalInterface.addCallback("myFlexMethod",refreshTree);
+	 	 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
+		 ExternalInterface.addCallback("editParticipant",editParticipant);
+    }
     
+    
+    /**
+     iterateTreeNode function iterate over the childrens of cuurentNode recursively, 
+     in Depth First search pattern
+    */
+
+    private function iterateTreeNode(currentNode:XML,currentParentNode:XML):Boolean
+    {
+	if(currentNode.@id == nodeIdToSelect)
+	{
+		// return true if node found
+		selectedNode=currentNode;
+		parentNode=currentParentNode;
+		return true;
+	 }
+
+	//Get all descendents of curretnNode and recursively call same method
+	 var descendantsList:XMLList = XMLList(currentNode.descendants());
+	 for(var j:Number=0; j<descendantsList.length(); j++)
+	 {
+		if(iterateTreeNode(descendantsList[j],currentNode))
+		{
+			// expand the cuurentNode. this is required because to show the selected node all parent nodes 
+			//has to be expanded
+			specimenTree.expandItem(currentNode,true);
+			return true;
+		}
+		
+	 }
+	return false;
+    }
+
+	/**
+	This function iterated opver all SCG in tree. GEt one SCG and then call itereateode to iterate and find the 
+	appropriate node to select. This function also expand teh Root paretn node, This is require to show the 
+	seleceted node on UI else teh parent will not get expand but internally the node is in select state
+	*/
+    private function selectTreeNode():void
+    {
+		selectedNode=null;
+		parentNode=null;
+		/*
+		nodeIdToSelect==""||nodeIdToSelect=="1" this case occurs when user goes from SCg page 
+		to Speciemn summary page. IN this case select the SCG
+		*/
+		if((nodeIdToSelect==""||nodeIdToSelect=="1")&&previouslySelectednodeId!=null)
+		{
+			nodeIdToSelect=previouslySelectednodeId
+		}
+		if(nodeIdToSelect!=null)
+		{
+		      // get the treeData all childrens of ROOT
+		      var xmlList:XMLListCollection = specimenTree.dataProvider as XMLListCollection;
+		      for(var i:Number=0; i<xmlList.length; i++)
+		      {
+				  var xmlNode:XML = xmlList.getItemAt(i) as XML;
+				  // call iterateNode to iterate all nodes fall under this Node
+				  if(iterateTreeNode(xmlNode,xmlNode))
+				  {
+					// expand the parent node
+					specimenTree.expandItem(xmlNode,true);
+					break;
+				  }
+		       }
+		       if(selectedNode!=null&&parentNode!=null)
+		       {
+					 // expand the seletedNode
+					 specimenTree.expandItem(selectedNode,true);
+					 previouslySelectednodeId=selectedNode.@id;
+					 specimenTree.selectedItem=selectedNode;
+		       }
+		}
+    }
+
+    private function treeHandler(tevent:ResultEvent):void
+    {  
+		var str:String = tevent.result as String;
+		xmlString = new XML(str);
+		treeData =  new XMLListCollection(xmlString.node);
+		specimenTree.dataProvider = treeData;
+		// validate the tree after changing teh dataProvider
+		specimenTree.validateNow();
+	
+		for(var j:Number=0; j<treeData.length; j++)
+		{
+		var xmlNode:XML = treeData.getItemAt(j) as XML;
+		setIcons(xmlNode);    	 
+		}
+		// call methid to show specidifed node selected
+		selectTreeNode();
+}
+
      /*
        This method is invoked from javaScript function when a new Participant is registered 
      
@@ -114,6 +210,8 @@
 		//Alert.show("In refresh Participants Method");    	
 		var selectedCp : NameValueBean = new NameValueBean();
 		selectedCp =  cpCombo.selectedItem as NameValueBean;
+		var remoteObj1:RemoteObject =  new RemoteObject(); 
+		remoteObj1.destination = "cdeService";
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
 		{
@@ -122,59 +220,54 @@
 		}
 		else
 		{
-			remoteObj.getParticipantsList(selectedCp.value,selectedCp.name);
+			remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name);
 		}
+		remoteObj1.addEventListener(ResultEvent.RESULT,participantHandler);
+		remoteObj1.addEventListener("fault",faultHandler);
     }
 
     /*
-     This method is invoked when ever tree refreshes
+     Sachin : This method is invoked when ever tree refreshes
     */
     public function refreshTree(nodeId:String):void
     {
-   	   
-   	    var selectedParticipant:NameValueBean= new NameValueBean();
-	    selectedParticipant = pCombo.selectedItem as NameValueBean;
-	
-        var selectedCp : NameValueBean = new NameValueBean();
+   	  // set nodeIdToSelect to Id got from javaScript call. 
+   	  // This nodeIdToSelect is used in selectNode and iterateNode function
+
+   	   nodeIdToSelect = nodeId;
+	   var selectedParticipant:NameValueBean= new NameValueBean();
+	   // IF NodelID is empty then try to select previouslySelectedParticipant
+	   // this case is handele for user goes form Pariticpant page to SCG
+   	   if(nodeId==""&&previouslySelectedParticipantBean!=null)
+   	   {
+	    	selectedParticipant = previouslySelectedParticipantBean;
+	   } 
+	   else
+	   {
+	   		selectedParticipant = pCombo.selectedItem as NameValueBean;
+	   }
+	    var selectedCp : NameValueBean = new NameValueBean();
 	    selectedCp =  cpCombo.selectedItem as NameValueBean;
+
 		if(selectedParticipant != null && selectedCp != null)
 		{
         var selectedParticipantId :String = selectedParticipant.value; 
 	    var selectedCpId :String = selectedCp.value;
-
-
         //Here we can get data for updating specimen tree details for particular SCG/specimen instead of retrieving whole data 
-         var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);  
+         var remoteObj2:RemoteObject =  new RemoteObject(); 
+	 	 remoteObj2.destination = "cdeService"; 
+	 	 
+         var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
+		 remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
+        
+	     // specimenTree.validateNow();
+         // specimenTree.dataProvider = treeData;
+	     remoteObj2.addEventListener("fault",faultHandler);
       
         //Making a selected node appear when tree is displayed when dataProvider changes in cases of refresh 
 
        //Selecting a particular tree node on the basis of "id" attribute of  previously selected node  
-       for(var i:Number=0; i<treeData.length; i++)
-       {
-       	  var xmlNode:XML = treeData.getItemAt(i) as XML;
-       	  if(xmlNode.@id == nodeId)
-       	  {
-       	  	  selectedNode = xmlNode;
-		  	  parentNode = xmlNode; 
-       	   	  break;
-       	  }
-       	  else
-       	  {
-       	  	 //check for all descendents
-       	  	 var descendantsList:XMLList = XMLList(xmlNode.descendants());
-       	  	 for(var j:Number=0; j<descendantsList.length(); j++)
-       	  	 {
-       	  	 	if(descendantsList[j].@id == nodeId)
-       	  	 	{
-       	  	 		selectedNode = XML(descendantsList[j]);
-       	  	 		parentNode = treeData.getItemAt(i) as XML;
-				
-       	  	 		break;
-       	  	 	}
-       	  	 }
-       	  }
-       	} 
-        specimenTree.callLater(expandTree, [selectedNode, parentNode]); 
+  //        specimenTree.callLater(expandTree, [selectedNode, parentNode]); 
   }
    	}
 
@@ -184,40 +277,17 @@
    	   	specimenTree.selectedItem = node;
   	}
   
-    private function getContextRootUrl():String {
-		 var urlStr:Array = Application.application.url.split("/");
-		 var contextRootUrl:String = urlStr[0]+"//"+urlStr[2]+"/"+urlStr[3];
-		  return contextRootUrl;
-	}
-	private function getProtocolType():String
-	{
-		 var urlStr:Array = Application.application.url.split(":");
-		if(urlStr != null)
-		{
-			if(urlStr.length >0)
-			{
-				return urlStr[0];
-			}
-		}
-		return null;
-	}
-  	private function setChannel() : void
-  	{
-		 remoteObj.channelSet= Utility.getChannelSet();
-		 remoteObj1.channelSet = Utility.getChannelSet();
-
-  	}
-  	private function preInit() : void
-  	{
-  		setChannel();
-  		getCPData();
-  	}
     /*
         getCpData()  method retrieves the Collection protocols before application initializes
     */
    	private function getCPData():void
   	{
+  		
+		var remoteObj:RemoteObject =  new RemoteObject(); 
+		remoteObj.destination = "cdeService";
 		remoteObj.getCpList();
+		remoteObj.addEventListener(ResultEvent.RESULT,cpEventHandler); 		
+  		remoteObj.addEventListener("fault",faultHandler);
   	}
   	
   	/*
@@ -236,6 +306,8 @@
 	{
 		var selectedCp : NameValueBean = new NameValueBean();
 		selectedCp =  cpCombo.selectedItem as NameValueBean;
+		var remoteObj1:RemoteObject =  new RemoteObject(); 
+		remoteObj1.destination = "cdeService";
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
 		{
@@ -244,9 +316,10 @@
 		}
 		else
 		{
-			remoteObj.getParticipantsList(selectedCp.value, selectedCp.name);
+			remoteObj1.getParticipantsList(selectedCp.value, selectedCp.name);
 		}
-
+		remoteObj1.addEventListener(ResultEvent.RESULT,participantHandler);
+		remoteObj1.addEventListener("fault",faultHandler);
 		specimenTree.dataProvider = null;
 		spDetailsLabel.text = title;
 	}
@@ -265,13 +338,46 @@
 	*/
    	public function tempHandler(pevent:ResultEvent):void
 	{	  
-	    var bean : NameValueBean = new NameValueBean();
+	    var bean : NameValueBean = null;
 		tempCollection = pevent.result as ArrayCollection;
+		var isRefresTree:Boolean = false;
 		if(tempCollection.length != 0)
 		{
-			bean = tempCollection[selectedParticipantIndex] as NameValueBean;
-		    pCombo.dataProvider = tempCollection;		
-			pCombo.selectedItem = bean;
+			if(previouslySelectedParticipantId==null)
+			{
+				// Sachin : this case occurs if user selects the particpant on UI ie. onPartcipantClick()
+				bean = tempCollection[selectedParticipantIndex] as NameValueBean;
+		    }
+		    else
+		    {
+		    	// Sachin : this case will ocur when user edit or register particpant
+		    	for(var i:Number=0; i<tempCollection.length; i++)
+	 			{
+	 				bean = tempCollection[i] as NameValueBean;
+	 				if(bean.value==previouslySelectedParticipantId)
+	 				{
+	 					selectedParticipantIndex=i;
+	 					isRefresTree=true;
+	 					break;	
+	 				}
+	 			}
+		    }
+		    pCombo.dataProvider = tempCollection;
+		    pCombo.validateNow();
+		    if(bean!=null)
+		    {
+				// Sachin : select particpant in the list and scorl the list position
+				pCombo.selectedItem = bean;
+				pCombo.scrollToIndex(selectedParticipantIndex);
+				if(isRefresTree)
+				{
+					previouslySelectedParticipantBean=bean;
+					spDetailsLabel.text = title+"  "+previouslySelectedParticipantBean.name;
+					// nodeIdToSelect is obtainer from editParticipant() fucntion
+					refreshTree(nodeIdToSelect);
+				}	
+			}	
+			pCombo.validateNow();
 		}
 			
 	}
@@ -286,6 +392,12 @@
 		if(selectedParticipant != null)
 		{
 	 	   var selectedParticipantId :String = selectedParticipant.value; 
+	 	 
+	 	   // Sachin : on particpant click set previosly selcetd node and participant to NULL
+	 	   previouslySelectedParticipantId = null;
+	 	   previouslySelectedParticipantBean=null;
+	 	   previouslySelectednodeId=null;
+	  	 
 	  	   var selectedCp : NameValueBean = new NameValueBean();
 	  	  	selectedCp =  cpCombo.selectedItem as NameValueBean;
 		    var selectedCpId :String = selectedCp.value;
@@ -296,8 +408,11 @@
           
 		   //Here we can get data for specimen tree details 
 	
-
-    	     var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);  
+             var remoteObj2:RemoteObject =  new RemoteObject(); 
+		     remoteObj2.destination = "cdeService"; 
+    	     var str:String = remoteObj2.getTreeData(selectedCpId,selectedParticipantId);  
+	    	 remoteObj2.addEventListener(ResultEvent.RESULT,treeHandler);
+             remoteObj2.addEventListener("fault",faultHandler);
 
 		     var refreshParticipants:String = "false";  
 	   
@@ -314,24 +429,7 @@
      Tree Handler  Method
     */
     
-    private function treeHandler(tevent:ResultEvent):void
-    {
-	  
-	    var str:String = tevent.result as String;
-	    xmlString = new XML(str);
-	    treeData =  new XMLListCollection(xmlString.node);
-
-	    specimenTree.dataProvider = treeData;
-	    
-	   
-
-	 for(var j:Number=0; j<treeData.length; j++)
-	 {
-       		var xmlNode:XML = treeData.getItemAt(j) as XML;
-       		setIcons(xmlNode);    	 
-    	
-	    }
-    }
+   
     
     private function setIcons(xmlNode:XML) : void
     {
@@ -410,13 +508,23 @@
 
     }
     /*
-      Fuction to be called To refresh Participant Name after edit participant
+      Sachin: Fuction to be called To refresh Participant Name after edit participant
     */
-    public function editParticipant():void 
+    public function editParticipant(selectedParticipantId:String,treeNodeId:String):void 
     {
+    	// store participant id which is occurred by registering  or editing particpant selected by user
+    	if(selectedParticipantId!=null && selectedParticipantId !="")
+    	{
+    		previouslySelectedParticipantId=selectedParticipantId;
+    	}
+    	// treeNodeId will be "" when user submit particpant OR click on register New Participant
+    	// treeNodeId will conatind nodeid to select when user submit on SCG page 
+    	nodeIdToSelect=treeNodeId;
     	
     	var selectedCp : NameValueBean = new NameValueBean();
  		selectedCp =  cpCombo.selectedItem as NameValueBean;
+		var remoteObj1:RemoteObject =  new RemoteObject(); 
+		remoteObj1.destination = "cdeService";
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
 		{
@@ -427,6 +535,8 @@
 		{
 	
 			remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name)
+			remoteObj1.addEventListener(ResultEvent.RESULT,tempHandler);
+			remoteObj1.addEventListener("fault",faultHandler);
    
         }       
         
@@ -441,7 +551,9 @@
 	     var selectedCp : NameValueBean = new NameValueBean();       
 	     selectedCp =  cpCombo.selectedItem as NameValueBean;
 	     var selectedCpId :String = selectedCp.value;         
-            
+
+	     // Set previosly node select to null.
+         previouslySelectednodeId=null;   
 	     var refreshParticipants:String = "true";
 	    //invoking the java script method
 	    var url : URLRequest = new URLRequest("javascript: RegisterParticipants('"+ selectedCpId +"','"+refreshParticipants+"')");
@@ -465,6 +577,7 @@
 	    	{
 		   		//Retrieving the selected node id 
 		 	    var id : String = specimenTree.selectedItem.@id;
+		 	    previouslySelectednodeId=id;
 		 	   //Selected CP and selected participants
 		 	   var selectedParticipant:NameValueBean= new NameValueBean();
 	    	   selectedParticipant = pCombo.selectedItem as NameValueBean
@@ -488,6 +601,9 @@
           
      private function chkForCollectionProtocolType(type:String):void
      {
+	 	var remoteObj1:RemoteObject =  new RemoteObject(); 
+		remoteObj1.destination = "cdeService";
+
 		var id : String = specimenTree.selectedItem.@id;
 		 //Selected CP and selected participants
 		var selectedParticipant:NameValueBean= new NameValueBean();
@@ -503,7 +619,9 @@
 	   	}
 		if(type.match("Arm"))
 		{	
-			remoteObj.chkArmShifting(selectedCpId,selectedParticipantId);
+			remoteObj1.chkArmShifting(selectedCpId,selectedParticipantId);
+			remoteObj1.addEventListener(ResultEvent.RESULT,armChkHandler);
+			remoteObj1.addEventListener("fault",faultHandler);
 		}
 		else
 		{
@@ -630,22 +748,11 @@
   	]]>
   </mx:Script>
 
-  <mx:RemoteObject id="remoteObj" destination="cdeService" showBusyCursor="true" >
-		<mx:method name="getParticipantsList" result="participantHandler(event)"/>
-		<mx:method name="getTreeData" result="treeHandler(event)"/>
-		<mx:method name="getCpList" result="cpEventHandler(event)"/>
-		<mx:method name="chkArmShifting" result="armChkHandler(event)"/>
-
-	</mx:RemoteObject>
-	
-  <mx:RemoteObject id="remoteObj1" destination="cdeService" showBusyCursor="true">
-		<mx:method name="getParticipantsList" result="tempHandler(event)"/>
-	</mx:RemoteObject>
+  
 
      <mx:Box direction="vertical" borderThickness="10" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" paddingLeft="0" paddingBottom="0" width="100%" height="100%">
       	<mx:VBox backgroundAlpha="0.1" width="100%" height="5%" backgroundColor="#FFFFFF"  >
              <mx:Label text="Collection Protocol:" width="100%" height="14" color="black" fontWeight="bold"/>
-
               <mx:ComboBox width="100%" id="cpCombo" dataProvider="{cpCollection}"  labelField="name" change="onCpChange()" prompt="--Select--"/>
         </mx:VBox>
         
