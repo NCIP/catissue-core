@@ -862,7 +862,7 @@ create table CATISSUE_CONCEPT_REFERENT (
 );
 create table CATISSUE_REPORT_CONTENT (
    IDENTIFIER number(19,0) not null,
-   REPORT_DATA varchar2(4000),
+   REPORT_DATA clob,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REVIEW_PARAMS (
