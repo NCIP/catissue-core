@@ -399,7 +399,6 @@ public abstract class QueryModuleUtil
 	 */
 	public static int searchQuery(HttpServletRequest request, IQuery query, String option)
 	{      
-		System.out.println("Start Time");
 		String isSavedQuery = (String) request.getSession().getAttribute(Constants.IS_SAVED_QUERY);
 		if(isSavedQuery == null) 
 			isSavedQuery = Constants.FALSE;
@@ -430,7 +429,6 @@ public abstract class QueryModuleUtil
 					session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
 					mainEntityMap = QueryCSMUtil.setMainObjectErrorMessage(query, request.getSession(), uniqueIdNodesMap);
 				}
-				//QueryModuleUtil.uniqueIdNodesMap = uniqueIdNodesMap;
 				Object obj = session.getAttribute(Constants.SESSION_DATA);
 				if (obj != null)
 				{
@@ -452,7 +450,7 @@ public abstract class QueryModuleUtil
 							{
 								randomNumber = (String)session.getAttribute(Constants.RANDOM_NUMBER);
 							}
-					}
+					} 
 					// auditing query execution : Deepti
 					QueryBizLogic queryBizLogic = (QueryBizLogic)AbstractBizLogicFactory.getBizLogic(
 					    	ApplicationProperties.getValue("app.bizLogicFactory"),
@@ -544,21 +542,16 @@ public abstract class QueryModuleUtil
 							.createSpreadsheetData(treeNo, node, sessionData, parentNodeId,
 									recordsPerPage, selectedColumnsMetadata,randomNumber,uniqueIdNodesMap,queryResultObjectDataBeanMap,hasConditionOnIdentifiedField,mainEntityMap);
 
-					// Changes added by deepti for performance change
 					QuerySessionData querySessionData = (QuerySessionData) spreadSheetDatamap
 							.get(Constants.QUERY_SESSION_DATA);
 					int totalNumberOfRecords = querySessionData.getTotalNumberOfRecords();
 					session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
 					session.setAttribute(Constants.TOTAL_RESULTS,
 									new Integer(totalNumberOfRecords));
-					// gets the message and sets it in the session.
 					QueryShoppingCart cart = (QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
 					String message = getMessageIfIdNotPresentForOrderableEntities(selectedColumnsMetadata, cart);
 					session.setAttribute(Constants.VALIDATION_MESSAGE_FOR_ORDERING, message);
-					//session.setAttribute("IsListEmpty", "true");
 					
-//					request.setAttribute(Constants.PAGINATION_DATA_LIST, spreadSheetDatamap
-//							.get(Constants.SPREADSHEET_DATA_LIST));
 					session.setAttribute(Constants.PAGINATION_DATA_LIST, spreadSheetDatamap
 							.get(Constants.SPREADSHEET_DATA_LIST));
 					session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap
@@ -570,7 +563,6 @@ public abstract class QueryModuleUtil
 					session.setAttribute(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP,spreadSheetDatamap
 											.get(Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP));
 				}
-				
 			}
 			else
 			{
@@ -603,10 +595,6 @@ public abstract class QueryModuleUtil
 		}
 		return status;
 	}
-
-	
-
-	
 
 	/**
 	 * 
