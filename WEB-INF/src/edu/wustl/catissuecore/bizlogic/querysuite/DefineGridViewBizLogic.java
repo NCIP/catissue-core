@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -401,6 +402,7 @@ public class DefineGridViewBizLogic
 	{
 		Collection<OutputTreeDataNode> values = uniqueIdNodesMap.values();
 		List<QueryOutputTreeAttributeMetadata> attribureMetadataList = new ArrayList<QueryOutputTreeAttributeMetadata>();
+		Set newSet = new HashSet<QueryOutputTreeAttributeMetadata>();
 		List<NameValueBean> selectedColumnNameValue = new ArrayList<NameValueBean>();
 		for(OutputTreeDataNode node:values)
 		{
@@ -413,10 +415,14 @@ public class DefineGridViewBizLogic
 					{
 						if(outAttr.getAttribute().equals(attributeMetaData.getAttribute()))
 						{
-							attribureMetadataList.add(attributeMetaData);
-							NameValueBean nameValueBean = new NameValueBean(attributeMetaData.getDisplayName(),attributeMetaData.getUniqueId());
-							selectedColumnNameValue.add(nameValueBean);
-							break;
+							boolean add = newSet.add(attributeMetaData);
+							if(add)
+							{
+								attribureMetadataList.add(attributeMetaData);
+								NameValueBean nameValueBean = new NameValueBean(attributeMetaData.getDisplayName(),attributeMetaData.getUniqueId());
+								selectedColumnNameValue.add(nameValueBean);
+								break;
+							}
 						}
 					}
 				}
