@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -1316,6 +1317,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param className 
 	 * @param colName Column name
 	 * @param colValue
+	 * @param CollectionProtocol 
 	 * @return list with collection protocol object and hashmap of collection protocol events
 	 * @throws DAOException 
 	 */
@@ -1344,9 +1346,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					CollectionProtocolUtil.getCollectionProtocolBean(collectionProtocol);
 				Collection collectionProtocolEventColl = 
 					collectionProtocol.getCollectionProtocolEventCollection();
-				
+				List cpEventList = new LinkedList(collectionProtocolEventColl);
+				CollectionProtocolUtil.getSortedCPEventList(cpEventList);
 				LinkedHashMap<String, CollectionProtocolEventBean> eventMap = 
-						CollectionProtocolUtil.getCollectionProtocolEventMap(collectionProtocolEventColl);
+						CollectionProtocolUtil.getCollectionProtocolEventMap(cpEventList);
 				
 				cpList = new ArrayList<Object>();
 				cpList.add(collectionProtocolBean);

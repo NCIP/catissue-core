@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -35,6 +36,7 @@ import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
@@ -751,10 +753,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 				/*Collection cloneSpecimenCollection = null;
 				Collection specimenCollection = specimenCollectionRequirementGroup.getSpecimenCollection();
-				if (specimenCollection != null && !specimenCollection.isEmpty())
+				List specimenList = new LinkedList(specimenCollection);
+				CollectionProtocolUtil.getSortedCPEventList(specimenList);
+				if (specimenList != null && !specimenList.isEmpty())
 				{
 					cloneSpecimenCollection = new LinkedHashSet();
-					Iterator itSpecimenCollection = specimenCollection.iterator();
+					Iterator itSpecimenCollection = specimenList.iterator();
 					while (itSpecimenCollection.hasNext())
 					{
 						Specimen specimen = (Specimen) itSpecimenCollection.next();

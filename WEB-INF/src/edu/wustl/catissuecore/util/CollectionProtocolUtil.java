@@ -1,11 +1,15 @@
 package edu.wustl.catissuecore.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -170,13 +174,52 @@ public class CollectionProtocolUtil {
 		return eventBean;
 	}
 	
-
+	public static List getSortedCPEventList(List genericList)
+	{
+		//Comparator to sort the List of Map chronologically.
+		final Comparator identifierComparator = new Comparator()
+		{
+			public int compare(Object object1, Object object2)
+			{
+				Long identifier1 = null;
+				Long identifier2 = null;
+				
+				if(object1 instanceof CollectionProtocolEvent)
+				{
+					identifier1 = ((CollectionProtocolEvent)object1).getId();
+					identifier2 = ((CollectionProtocolEvent)object2).getId();
+				}
+				else if(object1 instanceof Specimen)
+				{
+					identifier1 = ((Specimen)object1).getId();
+					identifier2 = ((Specimen)object2).getId();
+				}
+				
+				if(identifier1!= null && identifier2 != null)
+				{
+					return identifier1.compareTo(identifier2);
+				}
+				if(identifier1 ==null)
+				{
+					return -1;
+				}
+				if(identifier2 == null)
+				{
+					return 1;
+				}
+				return 0;
+			}
+		};
+		Collections.sort(genericList, identifierComparator);
+		return genericList;
+	}
 	public static LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection specimenCollection,
 			String parentUniqueId)
 	{
 		LinkedHashMap<String, GenericSpecimen> specimenMap = new LinkedHashMap<String, GenericSpecimen>();
-		
-		Iterator specimenIterator = specimenCollection.iterator();
+		List specimenList = new LinkedList(specimenCollection);
+		getSortedCPEventList(specimenList);
+		Iterator specimenIterator = specimenList.iterator();
 		int specCtr=0;
 		while(specimenIterator.hasNext())
 		{
@@ -196,7 +239,9 @@ public class CollectionProtocolUtil {
 			String parentuniqueId, String parentName)
 	{
 		Collection specimenChildren = specimen.getChildrenSpecimen();
-		Iterator iterator = specimenChildren.iterator();
+		List specimenList = new LinkedList(specimenChildren);
+		getSortedCPEventList(specimenList);
+		Iterator iterator = specimenList.iterator();
 		LinkedHashMap<String, GenericSpecimen>  aliquotMap = new
 			LinkedHashMap<String, GenericSpecimen> ();
 		int aliqCtr =1;
@@ -221,7 +266,9 @@ public class CollectionProtocolUtil {
 			String parentuniqueId, String parentName)
 	{
 		Collection specimenChildren = specimen.getChildrenSpecimen();
-		Iterator iterator = specimenChildren.iterator();
+		List specimenList = new LinkedList(specimenChildren);
+		getSortedCPEventList(specimenList);
+		Iterator iterator = specimenList.iterator();
 		LinkedHashMap<String, GenericSpecimen>  derivedMap = new
 			LinkedHashMap<String, GenericSpecimen> ();
 		int deriveCtr=1;
