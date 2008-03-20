@@ -333,21 +333,27 @@ public class EmailHandler
     	
     	SendEmail email = new SendEmail();
     	boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress,null,
-					sendFromEmailAddress, mailServer, subject, emailBody);
+					sendFromEmailAddress, mailServer, subject, emailBody); 
     	return emailStatus;
     }
     /**
      * Sends email to Scientist and cc to Admin on distribution of the order. 
      * @return
      */
-    public boolean sendEmailForOrderDistribution(String body,String toEmailAddress,String fromEmailAddress,String subject)
+    public boolean sendEmailForOrderDistribution(String body,String toEmailAddress,String fromEmailAddress, String ccEmailAddress, String bccEmailAddress,  String subject)
     {
     	String mailServer = XMLPropertyHandler.getValue("email.mailServer");
     	
     	SendEmail email = new SendEmail();
     	
-    	boolean emailStatus = email.sendmail(toEmailAddress, null,null,
+    	Logger.out.info("pratha.......... email body..........  \n"  + body);
+    	System.out.println("pratha.......... email body.......... \n "  + body);
+    	
+    	boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress, bccEmailAddress,
     			fromEmailAddress, mailServer, subject, body);
+    	
+    	Logger.out.info("pratha.......... email emailStatus..........  "  + emailStatus);
+    	System.out.println("pratha.......... email emailStatus..........  "  + emailStatus);
 	
     	return emailStatus;
     }
