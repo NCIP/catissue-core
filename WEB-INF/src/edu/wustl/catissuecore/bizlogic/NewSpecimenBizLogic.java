@@ -119,25 +119,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 		insertableSpecimens = getInsertableSpecimens(obj, dao, sessionDataBean);
 		
-			Iterator insertSpecIterator = insertableSpecimens.iterator();
-			AbstractSpecimenCollectionGroup scg = null;
-			while (insertSpecIterator.hasNext())
-			{
-				Specimen specimen = (Specimen)insertSpecIterator.next();
-				
-				if (specimen.getSpecimenCharacteristics()!= null)
-				{
-					dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, false, false);
-					specimenList.add(specimen.getSpecimenCharacteristics());
-				}
-				if (scg == null)
-				{
-					scg = specimen.getSpecimenCollectionGroup();
-				}
-				specimenList.add(specimen);
-				
-				dao.insert(specimen, sessionDataBean, false, false);
-			}
+			AbstractSpecimenCollectionGroup scg = insertSpecimens(dao,
+					sessionDataBean, specimenList, insertableSpecimens);
 			
 			securityManager.insertAuthorizationData(null, specimenList, getDynamicGroups(scg));
 		}
@@ -150,6 +133,45 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			storageContainerIds.clear();
 		}
 
+	}
+
+	/**
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param specimenList
+	 * @param insertableSpecimens
+	 * @return
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private AbstractSpecimenCollectionGroup insertSpecimens(DAO dao,
+			SessionDataBean sessionDataBean, HashSet specimenList,
+			Collection insertableSpecimens) throws DAOException,
+			UserNotAuthorizedException
+	{
+		Iterator insertSpecIterator = insertableSpecimens.iterator();
+		AbstractSpecimenCollectionGroup scg = null;
+		while (insertSpecIterator.hasNext())
+		{
+			Specimen specimen = (Specimen)insertSpecIterator.next();
+			
+			if (specimen.getSpecimenCharacteristics()!= null)
+			{
+				dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, false, false);
+				specimenList.add(specimen.getSpecimenCharacteristics());
+			}
+			if (scg == null)
+			{
+				scg = specimen.getSpecimenCollectionGroup();
+			}
+			specimenList.add(specimen);
+			dao.insert(specimen, sessionDataBean, false, false);
+			if(specimen.getChildrenSpecimen()!= null)
+			{
+				insertSpecimens(dao, sessionDataBean, specimenList, specimen.getChildrenSpecimen());
+			}
+		}
+		return scg;
 	}
 
 	/**
@@ -651,8 +673,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 		{
 			//Setting Name from Id
-			if ((specimen.getLabel() == null || specimen.getLabel().equals("")) && !specimen.getIsCollectionProtocolRequirement())
-			{
 
 				try
 				{
@@ -666,7 +686,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				{
 					throw new DAOException(e.getMessage());
 				}
-			}
+			
 		}
 	}
 
