@@ -208,6 +208,20 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     </servlet-mapping>
 <!--  End caCore like system entries -->
 
+<!-- Filter for accessing flex components -->	
+   <filter>
+        <filter-name>FlexComponentFilter</filter-name>
+        <filter-class>edu.wustl.catissuecore.filter.FlexComponentFilter</filter-class>
+        <description>
+          
+        </description>
+    </filter>
+    <filter-mapping>
+      <filter-name>FlexComponentFilter</filter-name>
+      <url-pattern>/flexclient/*</url-pattern>
+    </filter-mapping>
+<!-- Filter configuration finish -->
+ 
 <!-- FLEX Configuration START-->
 
 <context-param>
