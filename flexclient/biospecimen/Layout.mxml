@@ -147,6 +147,7 @@
 	*/
     private function selectTreeNode():void
     {
+		var scrollToTreeIndex:Number = 0;
 		selectedNode=null;
 		parentNode=null;
 		/*
@@ -169,6 +170,7 @@
 				  {
 					// expand the parent node
 					specimenTree.expandItem(xmlNode,true);
+					scrollToTreeIndex=i;
 					break;
 				  }
 		       }
@@ -178,6 +180,7 @@
 					 specimenTree.expandItem(selectedNode,true);
 					 previouslySelectednodeId=selectedNode.@id;
 					 specimenTree.selectedItem=selectedNode;
+					 specimenTree.scrollToIndex(scrollToTreeIndex);
 		       }
 		}
     }
