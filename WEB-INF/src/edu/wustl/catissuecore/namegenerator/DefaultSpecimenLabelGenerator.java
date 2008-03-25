@@ -155,21 +155,23 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	public synchronized void setLabel(Object obj) {
 		
 		Specimen objSpecimen = (Specimen)obj;
-
-		if(!labelCountTreeMap.containsKey(objSpecimen) &&	objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
+		
+		if (objSpecimen.getLabel() != null || 
+				objSpecimen.getIsCollectionProtocolRequirement())
 		{
-			currentLabel= currentLabel+1;
+			return;
+		}
+		
+		if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
+		{
+			currentLabel ++;
 			objSpecimen.setLabel(currentLabel.toString());
 			labelCountTreeMap.put(objSpecimen,0);
 		}
-	
-	
 		else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
 		{
 			this.setNextAvailableAliquotSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen);
 		}
-	
-	
 		else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
 		{
 			setNextAvailableDeriveSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen);
