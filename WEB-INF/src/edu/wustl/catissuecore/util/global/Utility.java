@@ -66,6 +66,7 @@ import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.dao.JDBCDAO;
@@ -1257,4 +1258,35 @@ public class Utility extends edu.wustl.common.util.Utility {
 		calendar.add(calendar.DAY_OF_MONTH, daysToBeAdded);
 		return calendar.getTime();
 	}
+
+	/**
+	 * Method to get userID, retriev userId using loginName in case of API call
+	 * @param dao
+	 * @param sessionDataBean
+	 * @return
+	 * @throws DAOException
+	 */
+	public static Long getUserID(DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	{
+		Long userID = sessionDataBean.getUserId();
+		if (userID == null)
+		{
+			String sourceObjectName = User.class.getName();
+			String[] selectColumnName = new String[]{Constants.SYSTEM_IDENTIFIER};
+			String[] whereColumnName = new String[]{Constants.LOGINNAME};
+			String[] whereColumnCondition = new String[]{"="};
+			String[] whereColumnValue = new String[]{sessionDataBean.getUserName()};
+			String joinCondition = "";
+			List userIDList = (List) dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+					joinCondition);
+			if (userIDList != null && userIDList.size() > 0)
+			{
+				userID = (Long) userIDList.get(0);
+				sessionDataBean.setUserId(userID);
+			}
+
+		}
+		return userID;
+	}
+
 }
