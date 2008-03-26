@@ -371,7 +371,6 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				try
 				{
 					statement.close();
-					conn.close();
 					DBUtil.closeConnection();
 				}
 				catch (HibernateException e)

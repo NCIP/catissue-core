@@ -445,7 +445,6 @@ public class AnnotationUtil
 			{
 				resultSet.close();
 				statement.close();
-				conn.close();
 				DBUtil.closeConnection();
 			}
 			catch (SQLException e)
@@ -508,7 +507,6 @@ public class AnnotationUtil
 		{
 			try
 			{
-				conn.close();
 				DBUtil.closeConnection();
 			}
 			catch (HibernateException e)
@@ -516,13 +514,7 @@ public class AnnotationUtil
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			catch (SQLException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
-
 	}
 
 	/**
@@ -697,7 +689,6 @@ public class AnnotationUtil
 			{
 				resultSet.close();
 				statement.close();
-				conn.close();
 				DBUtil.closeConnection();
 
 			}
