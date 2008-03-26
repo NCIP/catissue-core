@@ -1349,7 +1349,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		try
 		{
 			list = dao.executeQuery(queryStr, null, false, null);
-			printRecords(list);
+			//printRecords(list);
 		}
 		catch (Exception ex)
 		{
