@@ -46,7 +46,9 @@ public class SpreadsheetExportAction  extends BaseAction
     {
     	AdvanceSearchForm searchForm = (AdvanceSearchForm)form;
     	HttpSession session = request.getSession();
-    	String fileName = Variables.applicationHome + System.getProperty("file.separator") + session.getId() + ".csv";
+    	String path = Variables.applicationHome + System.getProperty("file.separator");
+		String csvfileName = path + Constants.SEARCH_RESULT;// + ".csv";
+		String zipFileName = path + session.getId() + ".zip";
     	String isCheckAllAcrossAllChecked = (String)request.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
     	
     	//Extracting map from formbean which gives the serial numbers of selected rows
@@ -78,7 +80,9 @@ public class SpreadsheetExportAction  extends BaseAction
 			pageNum = 1;
     	}
 		QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
-        List dataList = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
+        List dataList1 = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
+        List<List<String>> dataList = (List<List<String>>) session.getAttribute("exportDataList");
+        List<String> entityIdsList = (List<String>) session.getAttribute("entityIdsList");
     	//Mandar 06-Apr-06 Bugid:1165 : Extra ID columns displayed.  start
     	
     	Logger.out.debug("---------------------------------------------------------------------------------");
@@ -131,15 +135,27 @@ public class SpreadsheetExportAction  extends BaseAction
     	dataList = tmpDataList ;
     	//    	Mandar 06-Apr-06 Bugid:1165 : Extra ID columns end  
     	
-    	List exportList = new ArrayList();
+    	List<List<String>> exportList = new ArrayList();
     	
     	//Adding first row(column names) to exportData
     	exportList.add(columnList);
+    	List<String> idIndexList = new ArrayList<String>();
+    	int columnsSize = columnList.size();
+    	List<String> exportFileNames= new ArrayList<String>();
     	if(isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equalsIgnoreCase("true"))
     	{
     		for(int i=0;i<dataList.size();i++)
         	{
-        		exportList.add(dataList.get(i));
+        		List<String> list = dataList.get(i);
+        		List<String> subList = list.subList(0,columnsSize);
+				exportList.add(subList);
+				if(!entityIdsList.isEmpty())
+		    	{
+					String entityId = entityIdsList.get(i);
+					idIndexList.add(entityId);
+		    		String fileName = path+ Constants.EXPORT_FILE_NAME_START +entityId+".txt";
+		    		exportFileNames.add(fileName);
+	    		}
         	}
     	}
     	else
@@ -148,17 +164,24 @@ public class SpreadsheetExportAction  extends BaseAction
 	    	{
 	    		int indexOf = obj[i].toString().indexOf("_") + 1;
 	    		int index = Integer.parseInt(obj[i].toString().substring(indexOf));
-	    		exportList.add((List)dataList.get(index));
+	    		List<String> list = dataList.get(index);
+	    		List<String> subList = list.subList(0,columnsSize);
+	    		if(!entityIdsList.isEmpty())
+	    		{
+		    		String entityId = entityIdsList.get(index);
+					idIndexList.add(entityId );
+					String fileName = path+ Constants.EXPORT_FILE_NAME_START +entityId+".txt";
+		    		exportFileNames.add(fileName);
+	    		}
+	    		exportList.add(subList);
 	    	}
     	}
-    	String delimiter = Constants.DELIMETER;
+    	String delimiter = Constants.DELIMETER; 
     	//Exporting the data to the given file & sending it to user
-    	ExportReport report = new ExportReport(fileName);
-		report.writeData(exportList,delimiter);
-		report.closeFile();
-    	 
-    	SendFile.sendFileToClient(response,fileName,Constants.SEARCH_RESULT,"application/download");
-    	
+    	ExportReport report = new ExportReport(path,csvfileName,zipFileName);
+		report.writeDataToZip(exportList,delimiter,idIndexList);
+		SendFile.sendFileToClient(response,zipFileName,Constants.EXPORT_ZIP_NAME,"application/download");
+		
     	return null;
     }
 }

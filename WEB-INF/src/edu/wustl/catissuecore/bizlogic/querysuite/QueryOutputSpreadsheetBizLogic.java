@@ -576,7 +576,9 @@ public class QueryOutputSpreadsheetBizLogic
 			{	
 				List<String> columnList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
 				Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = updateSpreadSheetColumnList(columnList, queryResultObjectDataBeanMap);	
-				updateDataList(dataList, fileTypeIndexMainEntityIndexMap);				
+				Map exportMetataDataMap = updateDataList(dataList, fileTypeIndexMainEntityIndexMap);	
+				spreadSheetDataMap.put("entityIdsList",exportMetataDataMap.get("entityIdsList"));
+				spreadSheetDataMap.put("exportDataList",exportMetataDataMap.get("exportDataList"));
 				break;
 			}
 		}
@@ -598,36 +600,45 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param dataList
 	 * @param fileTypeIndexMainEntityIndexMap
 	 */
-	public static void updateDataList(List<List<String>> dataList, Map<Integer, Integer> fileTypeIndexMainEntityIndexMap)
+	public static Map updateDataList(List<List<String>> dataList, Map<Integer, Integer> fileTypeIndexMainEntityIndexMap)
 	{
-		//manipulating the dataList
 		Map<Integer, String> entityIdIndexMainEntityIdMap = new HashMap<Integer, String>();
+		Map exportMetataDataMap = new HashMap();
+		List<List<String>> newDataList = new ArrayList<List<String>>();
+		List<String> exportRow = new ArrayList<String>();
+		List<String> entityIdsList = new ArrayList<String>();
+		int i = 0;
 		for(List<String> row : dataList)
 		{
-			// retrives the values from the row
+			exportRow = new ArrayList<String>();
+			exportRow.addAll(row);
 			for (Iterator<Integer> fileTypeIterator = fileTypeIndexMainEntityIndexMap.keySet().iterator(); fileTypeIterator.hasNext(); )
 			{
-				// get the index at which new column is to be added
 				int fileTypeIndex = fileTypeIterator.next();
-				// get the index of 'id' attribute of its main entity
 				int mainEntityIdIndex = fileTypeIndexMainEntityIndexMap.get(fileTypeIndex);
-				// get the id of the main entity
 				String mainEntityId = row.get(mainEntityIdIndex);
-				// store the main entity id in the map 
 				entityIdIndexMainEntityIdMap.put(fileTypeIndex, mainEntityId);					
 			}
-			// add new columns to the row
+			int fileTypeIndex = 0;
 			for (Iterator<Integer> fileTypeIterator = fileTypeIndexMainEntityIndexMap.keySet().iterator(); fileTypeIterator.hasNext(); )
 			{
-				// get the index at which new column is to be added
-				int fileTypeIndex = fileTypeIterator.next();
-				// get the id of the main entity
+				fileTypeIndex = fileTypeIterator.next();
 				String mainEntityId = entityIdIndexMainEntityIdMap.get(fileTypeIndex);
 				String newColumn = "<img src='images/ic_view_up_file.gif' onclick='javascript:viewSPR(\""+ mainEntityId
 				+"\")' alt='click here' style='cursor:pointer;'>";
+				String fileName =  Constants.EXPORT_FILE_NAME_START +mainEntityId+".txt";
 				row.add(fileTypeIndex, newColumn);
+				exportRow.add(fileTypeIndex,fileName);
+				entityIdsList.add(mainEntityId);
+				i++;
 			}
+			newDataList.add(exportRow);
 		}	
+		
+		exportMetataDataMap.put("entityIdsList", entityIdsList);
+		exportMetataDataMap.put("exportDataList", newDataList);
+		
+		return exportMetataDataMap;
 	}
 	/**
 	 * 

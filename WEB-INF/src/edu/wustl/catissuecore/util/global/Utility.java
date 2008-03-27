@@ -1074,7 +1074,10 @@ public class Utility extends edu.wustl.common.util.Utility {
 		List<String> columnsList = (List<String>)request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 		QueryOutputSpreadsheetBizLogic queryBizLogic = new QueryOutputSpreadsheetBizLogic();
 		Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = queryBizLogic.updateSpreadSheetColumnList(columnsList, queryResultObjectDataBeanMap);
-		QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
+		//QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
+		Map exportMetataDataMap = QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
+		request.getSession().setAttribute("entityIdsList",exportMetataDataMap.get("entityIdsList"));
+		request.getSession().setAttribute("exportDataList",exportMetataDataMap.get("exportDataList"));
 		return paginationDataList;
 	}
 
