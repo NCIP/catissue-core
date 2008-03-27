@@ -621,7 +621,15 @@ function editSCG()
 			}
 		
 		}
-		
+		function setSize() {
+			var container = document.getElementById("Container");
+            var width =document.body.clientWidth;
+		      container.style.width=width-50;
+              container = document.getElementById("multiplespecimenTable");
+              container.style.width=width-100;
+		      container = document.getElementById("collAndRecEvents");
+              container.style.width=width-100;		  
+		}
  </script>
 </head>
 			<!-- 
@@ -642,7 +650,7 @@ function editSCG()
 	if(pageView != null && !pageView.equals("viewAnnotations") && !pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 	{
 %>
-	<body onload="disablebuttons();initializeSCGForm();showConsents();">
+	<body onload="setSize();disablebuttons();initializeSCGForm();showConsents();">
 <%}else{%> 
 	<body>
  <%}%>
