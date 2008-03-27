@@ -146,7 +146,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Constants added for Catissuecore V1.2
 	public static final String MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION= "cast(label as signed)";
 	public static final String ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION = "catissue_label_to_num(label)";
-	
+	public static final String ORACLE_MAX_BARCODE_COL = "catissue_label_to_num(barcode)";
+	public static final String MYSQL_MAX_BARCODE_COL= "cast(barcode as signed)";
 	// Query Module Interface UI constants
 	public static final String ViewSearchResultsAction = "ViewSearchResultsAction.do";
 	public static final String categorySearchForm = "categorySearchForm";
@@ -2259,5 +2260,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	 */
 	public static final String SCGFORM = "SCGFORM";
 	public static final String FILE_TYPE = "file";	
+	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_DISPOSE="orderRequestStatusAndDistributedAndDispose";
 }
 	

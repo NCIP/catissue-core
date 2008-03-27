@@ -22,7 +22,7 @@ import javax.sql.DataSource;
  * @author falguni_sachde
  *
  */
-public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
+public class DefaultSpecimenBarcodeGeneratorForWashu implements BarcodeGenerator
 {
 	/**
 	 * Current Barcode 
@@ -35,7 +35,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	/**
 	 * Default Constructor
 	 */
-	public DefaultSpecimenBarcodeGenerator()
+	public DefaultSpecimenBarcodeGeneratorForWashu()
 	{
 		super();
 		init();
@@ -126,9 +126,10 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 				
 		String parentSpecimenBarcode = (String) parentObject.getBarcode();
 		long aliquotChildCount = 0;
-		if(barcodeCountTreeMap.containsKey(parentObject))
+		
+		if(barcodeCountTreeMap.containsKey(parentSpecimenBarcode))
 		{
-			 aliquotChildCount= Long.parseLong(barcodeCountTreeMap.get(parentObject).toString());	
+			 aliquotChildCount= Long.parseLong(barcodeCountTreeMap.get(parentSpecimenBarcode).toString());	
 		}
 		else
 		{
@@ -138,8 +139,8 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 		}
 		
 		specimenObject.setBarcode( parentSpecimenBarcode + "_" + (++aliquotChildCount) );
-		barcodeCountTreeMap.put(parentObject,aliquotChildCount);	
-		barcodeCountTreeMap.put(specimenObject,0);
+		barcodeCountTreeMap.put(parentSpecimenBarcode,aliquotChildCount);	
+		
 	}
 	/**
 	 * @param parentObject
@@ -160,12 +161,19 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	synchronized public void setBarcode(Object obj) {
 		
 		Specimen objSpecimen = (Specimen)obj;
-
+		if (objSpecimen.getIsCollectionProtocolRequirement())
+		{
+			return;
+		}
+		if(!Constants.COLLECTION_STATUS_COLLECTED.equals(objSpecimen.getCollectionStatus()))
+		{
+			return;
+		}
 		if(!barcodeCountTreeMap.containsKey(objSpecimen) &&	objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
 		{
 			currentBarcode= currentBarcode+1;
 			objSpecimen.setBarcode(currentBarcode.toString());
-			barcodeCountTreeMap.put(objSpecimen,0);
+			barcodeCountTreeMap.put(objSpecimen.getBarcode(),0);
 		}
 	
 	

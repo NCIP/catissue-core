@@ -1114,7 +1114,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	public void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 
-		Specimen specimen = (Specimen) obj;
+		Specimen specimen = (Specimen) obj;		
 		Specimen specimenOld = (Specimen) HibernateMetaData.getProxyObjectImpl(oldObj);
 		//Specimen specimenOld = (Specimen) oldObj;
 
@@ -1269,6 +1269,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 
 		/*transient instance problem */
+		
 		List persistentSpecimenList =dao.retrieve(Specimen.class.getName(),Constants.ID,specimenOld.getId());
 		Specimen persistentSpecimen=(Specimen) persistentSpecimenList.get(0);
 		
@@ -1293,7 +1294,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		persistentSpecimen.setNoOfAliquots(specimen.getNoOfAliquots());
 		persistentSpecimen.setActivityStatus(specimen.getActivityStatus());
 		persistentSpecimen.setAliqoutMap(specimen.getAliqoutMap());
-		persistentSpecimen.setChildrenSpecimen(specimen.getChildrenSpecimen());
+		//persistentSpecimen.setChildrenSpecimen(specimen.getChildrenSpecimen());
 		persistentSpecimen.setComment(specimen.getComment());
 		persistentSpecimen.setDisposeParentSpecimen(specimen.getDisposeParentSpecimen());
 		persistentSpecimen.setInitialQuantity(specimen.getInitialQuantity());
@@ -1301,10 +1302,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		persistentSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
 		persistentSpecimen.setType(specimen.getType());
 		persistentSpecimen.setCollectionStatus(specimen.getCollectionStatus());
-		
-	
+		String oldStatus = specimenOld.getCollectionStatus(); 
 
-		
+		if (!Constants.COLLECTION_STATUS_COLLECTED.equals(oldStatus))
+		{
+			generateLabel(persistentSpecimen);
+			generateBarCode(persistentSpecimen);
+		}	
+
 		Collection oldExternalIdentifierCollection = specimenOld.getExternalIdentifierCollection();
 
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
@@ -1342,8 +1347,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			persistentSpecimen.setExternalIdentifierCollection(perstExIdColl);
 			
 		}
-		
-		
 		dao.update(persistentSpecimen, sessionDataBean, true, false, false);//dao.update(specimen, sessionDataBean, true, true, false);
 		//Audit of Specimen.
 		
@@ -3083,8 +3086,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			specimenVO.setBarcode(null);
 		}
 		checkDuplicateSpecimenFields(specimenVO, dao);
+		
 		specimenDO.setLabel(specimenVO.getLabel());
 		specimenDO.setBarcode(specimenVO.getBarcode());
+		
 		specimenDO.setAvailable(specimenVO.getAvailable());
 
 		if (specimenVO.getStorageContainer() != null)
@@ -3153,11 +3158,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			oldInitialQty.setValue(modifiedInitQty);
 		}
+		String oldStatus = specimenDO.getCollectionStatus();
 		if (specimenVO.getCollectionStatus() != null)
 		{
 			specimenDO.setCollectionStatus(specimenVO.getCollectionStatus());
 		}
-
+		if (!Constants.COLLECTION_STATUS_COLLECTED.equals(oldStatus))
+		{
+			generateLabel(specimenDO);
+			generateBarCode(specimenDO);
+		}
 		// code for multiple specimen edit
 		if (specimenVO.getCreatedOn() != null)
 		{

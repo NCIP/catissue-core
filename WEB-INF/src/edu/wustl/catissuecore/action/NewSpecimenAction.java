@@ -313,6 +313,7 @@ public class NewSpecimenAction extends SecureAction
 				Specimen specimenObject = getSpecimenObj(specimenID);
 				//Added by Falguni=To set Specimen label in Form.
 				specimenForm.setLabel(specimenObject.getLabel());
+				specimenForm.setBarcode(specimenObject.getBarcode());
 				//List added for grid
 				List specimenDetails= new ArrayList();
 				getSpecimenDetails(specimenObject,specimenDetails);

@@ -382,6 +382,10 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			exId.setSpecimen(aliquotSpecimen);
 			externalIdentifierCollection.add(exId);   
 			dao.insert(exId, sessionDataBean, true, true); */
+			if (aliquotSpecimen.getIsCollectionProtocolRequirement() ==null)
+			{
+				aliquotSpecimen.setIsCollectionProtocolRequirement(Boolean.FALSE);
+			}			
 			aliquotList.add(aliquotSpecimen);
 		}
 		
