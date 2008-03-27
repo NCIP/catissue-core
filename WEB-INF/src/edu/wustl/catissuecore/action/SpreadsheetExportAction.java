@@ -81,8 +81,10 @@ public class SpreadsheetExportAction  extends BaseAction
     	}
 		QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
         List dataList1 = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
-        List<List<String>> dataList = (List<List<String>>) session.getAttribute("exportDataList");
-        List<String> entityIdsList = (List<String>) session.getAttribute("entityIdsList");
+        List<List<String>> dataList = (List<List<String>>) session.getAttribute(Constants.EXPORT_DATA_LIST);
+        if(dataList == null )
+        	dataList = dataList1;
+        List<String> entityIdsList = (List<String>) session.getAttribute(Constants.ENTITY_IDS_LIST);
     	//Mandar 06-Apr-06 Bugid:1165 : Extra ID columns displayed.  start
     	
     	Logger.out.debug("---------------------------------------------------------------------------------");
@@ -149,7 +151,7 @@ public class SpreadsheetExportAction  extends BaseAction
         		List<String> list = dataList.get(i);
         		List<String> subList = list.subList(0,columnsSize);
 				exportList.add(subList);
-				if(!entityIdsList.isEmpty())
+				if(entityIdsList != null && !entityIdsList.isEmpty())
 		    	{
 					String entityId = entityIdsList.get(i);
 					idIndexList.add(entityId);
@@ -166,7 +168,7 @@ public class SpreadsheetExportAction  extends BaseAction
 	    		int index = Integer.parseInt(obj[i].toString().substring(indexOf));
 	    		List<String> list = dataList.get(index);
 	    		List<String> subList = list.subList(0,columnsSize);
-	    		if(!entityIdsList.isEmpty())
+	    		if(entityIdsList != null && !entityIdsList.isEmpty())
 	    		{
 		    		String entityId = entityIdsList.get(index);
 					idIndexList.add(entityId );
