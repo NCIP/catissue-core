@@ -2261,5 +2261,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SCGFORM = "SCGFORM";
 	public static final String FILE_TYPE = "file";	
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_DISPOSE="orderRequestStatusAndDistributedAndDispose";
+	public static final String EXPORT_FILE_NAME_START = "Report_Content_";
+	public static final String EXPORT_ZIP_NAME = "SearchResult.zip";
+
 }
 	
