@@ -93,6 +93,9 @@ public class ShowGridAction extends BaseAction
 						hasConditionOnIdentifiedField, queryResultObjectDataMap, mainEntityMap);
 			}
 			spreadSheetDatamap.put(Constants.MAIN_ENTITY_MAP, mainEntityMap);
+			request.getSession().setAttribute("entityIdsList",spreadSheetDatamap.get("entityIdsList"));
+			request.getSession().setAttribute("exportDataList",spreadSheetDatamap.get("exportDataList"));
+			
 			QueryModuleUtil.setGridData(request, spreadSheetDatamap);
 		}
 		
