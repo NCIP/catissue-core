@@ -1070,14 +1070,18 @@ public class Utility extends edu.wustl.common.util.Utility {
 		PagenatedResultData pagenatedResultData = qBizLogic.execute(
 				sessionData, querySessionData, startIndex);
 		paginationDataList = pagenatedResultData.getResult();
-		Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap = querySessionData.getQueryResultObjectDataMap();
-		List<String> columnsList = (List<String>)request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-		QueryOutputSpreadsheetBizLogic queryBizLogic = new QueryOutputSpreadsheetBizLogic();
-		Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = queryBizLogic.updateSpreadSheetColumnList(columnsList, queryResultObjectDataBeanMap);
-		//QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
-		Map exportMetataDataMap = QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
-		request.getSession().setAttribute("entityIdsList",exportMetataDataMap.get("entityIdsList"));
-		request.getSession().setAttribute("exportDataList",exportMetataDataMap.get("exportDataList"));
+		String isSimpleSearch = (String)request.getSession().getAttribute(edu.wustl.common.util.global.Constants.IS_SIMPLE_SEARCH);
+		if (isSimpleSearch == null || (!isSimpleSearch.equalsIgnoreCase(Constants.TRUE)))
+		{
+			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap = querySessionData.getQueryResultObjectDataMap();
+			List<String> columnsList = (List<String>)request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+			QueryOutputSpreadsheetBizLogic queryBizLogic = new QueryOutputSpreadsheetBizLogic();
+			Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = queryBizLogic.updateSpreadSheetColumnList(columnsList, queryResultObjectDataBeanMap);
+			//QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
+			Map exportMetataDataMap = QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
+			request.getSession().setAttribute(Constants.ENTITY_IDS_LIST,exportMetataDataMap.get(Constants.ENTITY_IDS_LIST));
+			request.getSession().setAttribute(Constants.EXPORT_DATA_LIST,exportMetataDataMap.get(Constants.EXPORT_DATA_LIST));
+		}
 		return paginationDataList;
 	}
 
