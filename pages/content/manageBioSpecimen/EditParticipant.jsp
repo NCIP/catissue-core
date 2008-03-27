@@ -240,7 +240,10 @@ function participantRegRow(subdivtag)
 				document.forms[0].submit();
 			}
 		}
-
+    function showMessage(titleMessage)
+		{
+     		 Tip(titleMessage,BGCOLOR,'#FFFFFF',BORDERCOLOR,'#000000',FONTCOLOR,'#000000',WIDTH,'30',FOLLOWMOUSE,'FALSE');
+    	}
  
 </script>
 
@@ -1003,9 +1006,9 @@ function participantRegRow(subdivtag)
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
-											title="Submit and Create Extra Specimen Collection Group"
 											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>"
-											onclick="<%=forwardToSCG%>">
+											onclick="<%=forwardToSCG%>"
+											onmouseover="showMessage('Create additional Specimen Collection Group to collect specimens which were  not anticipated as per protocol')">
 									</html:button>
 								</td>
 								</logic:equal>

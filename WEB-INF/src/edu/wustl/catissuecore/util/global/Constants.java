@@ -1256,7 +1256,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	};
 
 	public static final String [][] PARTICIPANT_FORWARD_TO_LIST = {
-			{"Submit",					"success"},
+			{"Register Participant","success"},
 			{"Submit",	"createParticipantRegistration"},
 			{"Specimen Collection Group", "specimenCollectionGroup"},
 			{"Submit", "pageOfParticipantCPQuery"}

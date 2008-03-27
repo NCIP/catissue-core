@@ -24,6 +24,7 @@
 <script src="jss/calendar.js"></script>
 <script src="jss/calendarComponent.js"></script>
 <script src="jss/titli.js"></script>
+<script src="jss/wz_tooltip.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
