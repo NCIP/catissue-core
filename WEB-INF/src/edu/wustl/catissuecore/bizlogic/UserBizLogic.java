@@ -408,6 +408,7 @@ public class UserBizLogic extends DefaultBizLogic
 			//Audit of user.
 			dao.audit(obj, oldObj, sessionDataBean, true);
 
+			/* pratha commented for bug# 7304 
 			if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
 			{
 				Set protectionObjects = new HashSet();
@@ -420,7 +421,7 @@ public class UserBizLogic extends DefaultBizLogic
 						//digest exception
 				}
 				
-			}
+			}  */
 		}
 		catch (SMException e)
 		{
