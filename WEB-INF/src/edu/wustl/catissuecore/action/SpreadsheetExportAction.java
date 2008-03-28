@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,7 @@ public class SpreadsheetExportAction  extends BaseAction
     	String path = Variables.applicationHome + System.getProperty("file.separator");
 		String csvfileName = path + Constants.SEARCH_RESULT;// + ".csv";
 		String zipFileName = path + session.getId() + ".zip";
+		String fileName = path + session.getId() + ".csv";
     	String isCheckAllAcrossAllChecked = (String)request.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
     	
     	//Extracting map from formbean which gives the serial numbers of selected rows
@@ -56,7 +58,7 @@ public class SpreadsheetExportAction  extends BaseAction
     	Object [] obj = map.keySet().toArray();
     	
     	//Getting column data & grid data from session
-    	List columnList = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+    	List<String> columnList = (List<String>)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
     	//List dataList = (List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
     	/**
 		 * Name: Deepti
@@ -84,7 +86,8 @@ public class SpreadsheetExportAction  extends BaseAction
         List<List<String>> dataList = (List<List<String>>) session.getAttribute(Constants.EXPORT_DATA_LIST);
         if(dataList == null )
         	dataList = dataList1;
-        List<String> entityIdsList = (List<String>) session.getAttribute(Constants.ENTITY_IDS_LIST);
+        //List<String> entityIdsList = (List<String>) session.getAttribute(Constants.ENTITY_IDS_LIST);
+        Map<Integer, List<String>> entityIdsMap = (Map<Integer, List<String>>)session.getAttribute(Constants.ENTITY_IDS_MAP);
     	//Mandar 06-Apr-06 Bugid:1165 : Extra ID columns displayed.  start
     	
     	Logger.out.debug("---------------------------------------------------------------------------------");
@@ -151,12 +154,11 @@ public class SpreadsheetExportAction  extends BaseAction
         		List<String> list = dataList.get(i);
         		List<String> subList = list.subList(0,columnsSize);
 				exportList.add(subList);
-				if(entityIdsList != null && !entityIdsList.isEmpty())
+				if(entityIdsMap != null && !entityIdsMap.isEmpty())
 		    	{
-					String entityId = entityIdsList.get(i);
-					idIndexList.add(entityId);
-		    		String fileName = path+ Constants.EXPORT_FILE_NAME_START +entityId+".txt";
-		    		exportFileNames.add(fileName);
+					List<String> entityIdList = entityIdsMap.get(i);
+					idIndexList.addAll(entityIdList);
+					
 	    		}
         	}
     	}
@@ -168,22 +170,30 @@ public class SpreadsheetExportAction  extends BaseAction
 	    		int index = Integer.parseInt(obj[i].toString().substring(indexOf));
 	    		List<String> list = dataList.get(index);
 	    		List<String> subList = list.subList(0,columnsSize);
-	    		if(entityIdsList != null && !entityIdsList.isEmpty())
+	    		if(entityIdsMap != null && !entityIdsMap.isEmpty())
 	    		{
-		    		String entityId = entityIdsList.get(index);
-					idIndexList.add(entityId );
-					String fileName = path+ Constants.EXPORT_FILE_NAME_START +entityId+".txt";
-		    		exportFileNames.add(fileName);
+		    		List<String> entityIdList = entityIdsMap.get(index);
+		    		idIndexList.addAll(entityIdList);
 	    		}
 	    		exportList.add(subList);
 	    	}
     	}
     	String delimiter = Constants.DELIMETER; 
+    	ExportReport report = null;
     	//Exporting the data to the given file & sending it to user
-    	ExportReport report = new ExportReport(path,csvfileName,zipFileName);
-		report.writeDataToZip(exportList,delimiter,idIndexList);
-		SendFile.sendFileToClient(response,zipFileName,Constants.EXPORT_ZIP_NAME,"application/download");
-		
+    	if (entityIdsMap != null && !entityIdsMap.isEmpty())
+    	{
+    		report = new ExportReport(path,csvfileName,zipFileName);
+    		report.writeDataToZip(exportList,delimiter,idIndexList);
+    		SendFile.sendFileToClient(response,zipFileName,Constants.EXPORT_ZIP_NAME,"application/download");
+    	}
+    	else
+    	{
+    		report = new ExportReport(fileName);
+    		report.writeData(exportList,delimiter);   	
+        	SendFile.sendFileToClient(response,fileName,Constants.SEARCH_RESULT,"application/download");
+    	}    	
+    	
     	return null;
     }
 }
