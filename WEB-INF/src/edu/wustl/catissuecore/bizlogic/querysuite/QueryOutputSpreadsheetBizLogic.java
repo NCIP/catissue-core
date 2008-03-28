@@ -577,7 +577,7 @@ public class QueryOutputSpreadsheetBizLogic
 				List<String> columnList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
 				Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = updateSpreadSheetColumnList(columnList, queryResultObjectDataBeanMap);	
 				Map exportMetataDataMap = updateDataList(dataList, fileTypeIndexMainEntityIndexMap);	
-				spreadSheetDataMap.put(Constants.ENTITY_IDS_LIST,exportMetataDataMap.get(Constants.ENTITY_IDS_LIST));
+				spreadSheetDataMap.put(Constants.ENTITY_IDS_MAP,exportMetataDataMap.get(Constants.ENTITY_IDS_MAP));
 				spreadSheetDataMap.put(Constants.EXPORT_DATA_LIST,exportMetataDataMap.get(Constants.EXPORT_DATA_LIST));
 				break;
 			}
@@ -603,13 +603,15 @@ public class QueryOutputSpreadsheetBizLogic
 	public static Map updateDataList(List<List<String>> dataList, Map<Integer, Integer> fileTypeIndexMainEntityIndexMap)
 	{
 		Map<Integer, String> entityIdIndexMainEntityIdMap = new HashMap<Integer, String>();
-		Map exportMetataDataMap = new HashMap();
+		Map<String, Object> exportMetataDataMap = new HashMap<String, Object>();
 		List<List<String>> newDataList = new ArrayList<List<String>>();
 		List<String> exportRow = new ArrayList<String>();
-		List<String> entityIdsList = new ArrayList<String>();
-		int i = 0;
+		Map<Integer, List> entityIdsMap = new HashMap<Integer, List>();
+		//int i = 0;
+		int rowNo = 0;
 		for(List<String> row : dataList)
 		{
+			List<String> entityIdsList = new ArrayList<String>();
 			exportRow = new ArrayList<String>();
 			exportRow.addAll(row);
 			for (Iterator<Integer> fileTypeIterator = fileTypeIndexMainEntityIndexMap.keySet().iterator(); fileTypeIterator.hasNext(); )
@@ -630,12 +632,13 @@ public class QueryOutputSpreadsheetBizLogic
 				row.add(fileTypeIndex, newColumn);
 				exportRow.add(fileTypeIndex,fileName);
 				entityIdsList.add(mainEntityId);
-				i++;
+				//i++;
 			}
 			newDataList.add(exportRow);
-		}	
-		
-		exportMetataDataMap.put(Constants.ENTITY_IDS_LIST, entityIdsList);
+			entityIdsMap.put(rowNo, entityIdsList);
+			rowNo++;
+		}			
+		exportMetataDataMap.put(Constants.ENTITY_IDS_MAP, entityIdsMap);
 		exportMetataDataMap.put(Constants.EXPORT_DATA_LIST, newDataList);
 		
 		return exportMetataDataMap;
@@ -683,9 +686,17 @@ public class QueryOutputSpreadsheetBizLogic
 			}
 			else
 			{
-				int indexOfColumn = spreadsheetColumnsList.indexOf(displayName);
-				if (index != indexOfColumn)
+				int indexOfColumn = spreadsheetColumnsList.lastIndexOf(displayName);
+				if(index == spreadsheetColumnsList.size())
+				{
 					spreadsheetColumnsList.add(index, displayName);
+				}
+				else
+				{
+					if ((indexOfColumn != index) && (!spreadsheetColumnsList.get(index).equals(displayName)))
+						spreadsheetColumnsList.add(index, displayName);
+				}
+										
 			}
 		}
 		return fileTypeIndexMainEntityIndexMap;
