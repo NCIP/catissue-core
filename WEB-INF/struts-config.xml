@@ -4746,6 +4746,11 @@ PUBLIC
 					<forward name="bulkDisposals" path="/BulkDisposalEvents.do?menuSelected=15" />
 		</action>
 		
+		<action path="/ShowChildNodes" 
+			 type="edu.wustl.catissuecore.action.ShowChildNodes"		 
+			 scope="request">	 
+		</action>
+		
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
