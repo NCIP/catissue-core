@@ -1282,7 +1282,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return true;
 
 	}
-
+	
 	/**
 	 * Returns the data for generation of storage container tree view.
 	 * @return the vector of tree nodes for the storage containers. 
@@ -1514,7 +1514,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Utility.sortTreeVector(parentNodeVector);
 		return parentNodeVector;
 	}
-
+	
 	private Vector getContainersUnderSite() throws DAOException
 	{
 		//		String sql = " SELECT sc.IDENTIFIER, sc.CONTAINER_NAME, scType.TYPE, site.IDENTIFIER, site.NAME, site.TYPE "
@@ -1602,6 +1602,147 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 
 		return siteTreeNode;
+	}
+
+	
+	/**
+	 * This method will add all the node into the vector that contains any container node and add a dummy container 
+	 * node to show [+] sign on the UI, so that on clicking expand sign ajax call will retrieve child container node under the site node. 
+	 */
+	public Vector getSiteWithDummyContainer() throws DAOException
+	{
+		String sql ="select site.IDENTIFIER, site.NAME,count(site.NAME) from catissue_site site join catissue_storage_container sc"+
+					" on sc.site_id = site.identifier"+
+					" group by site.IDENTIFIER, site.NAME";
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		List resultList = new ArrayList();
+		Vector containerNodeVector = new Vector();
+		try
+		{
+			dao.openSession(null);
+			resultList = dao.executeQuery(sql, null, false, null);
+			dao.closeSession();
+		}
+		catch (Exception daoExp)
+		{
+			throw new DAOException(daoExp.getMessage(), daoExp);
+		}
+
+		Iterator iterator = resultList.iterator();
+		while (iterator.hasNext())
+		{
+			List rowList = (List) iterator.next();
+			
+			StorageContainerTreeNode siteNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)), (String) rowList.get(1),
+					(String) rowList.get(1));
+
+			StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)),"Loading...",
+						"Loading...");
+			dummyContainerNode.setParentNode(siteNode);
+			siteNode.getChildNodes().add(dummyContainerNode);
+			containerNodeVector.add(siteNode);
+		}
+
+		return containerNodeVector;
+	}
+
+	/**
+	 * @param identifier Identifier of the container or site node
+	 * @param nodeName   Name of the site or container
+	 * @param parentId   parent identifier of the selected node
+	 * @return containerNodeVector This vector contains all the containers
+	 * @throws DAOException
+	 * @Description This method will retrieve all the containers under the selected node   
+	 */
+	public Vector getStorageContainers(Long identifier, String nodeName,String parentId) throws DAOException
+	{
+		String sql = createSql(identifier, parentId);
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		List resultList = new ArrayList();
+		Vector containerNodeVector = new Vector();
+		try
+		{
+			dao.openSession(null);
+			resultList = dao.executeQuery(sql, null, false, null);
+			dao.closeSession();
+		}
+		catch (Exception daoExp)
+		{
+			throw new DAOException(daoExp.getMessage(), daoExp);
+		}
+		Iterator iterator = resultList.iterator();
+		while (iterator.hasNext())
+		{
+			List rowList = (List) iterator.next();
+			StorageContainerTreeNode containerNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)), (String) rowList.get(1),
+					(String) rowList.get(1));
+			StorageContainerTreeNode parneContainerNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(2)),nodeName,
+					nodeName);
+			createChildNodes(containerNodeVector, rowList, containerNode, parneContainerNode);
+		}
+		return containerNodeVector;
+	}
+
+	/**
+	 * @param identifier  Identifier of the container or site node
+	 * @param parentId    Parent identifier of the selected node
+	 * @return String sql This method with return the sql depending on the node clicked (i.e parent Node or child node) 
+	 */
+	private String createSql(Long identifier, String parentId)
+	{
+		String sql;
+		if(!parentId.equals("0"))
+		{
+			sql = " SELECT cn.IDENTIFIER, cn.NAME,cn.PARENT_CONTAINER_ID,count(cn_c.IDENTIFIER)" +
+					 " from catissue_container cn left outer join catissue_container cn_c" +
+					 " on cn_c.PARENT_CONTAINER_ID=cn.IDENTIFIER join catissue_storage_container sc" +
+					 " on sc.IDENTIFIER=cn.IDENTIFIER"  + 
+					 " where cn.PARENT_CONTAINER_ID ="+identifier+" group by cn.IDENTIFIER, cn.NAME,cn.PARENT_CONTAINER_ID";
+		}
+		else
+		{
+			sql = "SELECT cn.IDENTIFIER, cn.NAME,site.identifier,COUNT(cn_c.IDENTIFIER)"+
+			" FROM CATISSUE_CONTAINER cn left outer join CATISSUE_CONTAINER cn_c"+
+			" ON cn_c.PARENT_CONTAINER_ID=cn.IDENTIFIER join CATISSUE_STORAGE_CONTAINER sc"+
+			" ON sc.IDENTIFIER=cn.IDENTIFIER join catissue_site site"+ 
+			" on sc.site_id = site.identifier"+
+			" WHERE cn.PARENT_CONTAINER_ID is null and site.identifier="+identifier+
+			" GROUP BY cn.IDENTIFIER, cn.NAME,site.identifier";
+		}
+		return sql;
+	}
+
+	/**
+	 * 
+	 * @param containerNodeVector This vector contains all the containers
+	 * @param rowList This this contains all the records after firing query
+	 * @param containerNode This is child node 
+	 * @param parneContainerNode This is parent node
+	 * @description This method will add container nodes in the vector and if container node have
+	 * 				any child node then it will add dummy node as child node
+	 */
+	private void createChildNodes(Vector containerNodeVector, List rowList,
+			StorageContainerTreeNode containerNode, StorageContainerTreeNode parneContainerNode)
+	{
+		Long noOfChild = new Long((String)rowList.get(3));
+		if(rowList.get(3)!=null &&  noOfChild > 0 )
+		{
+			StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)),"Loading...",
+					"Loading...");
+			dummyContainerNode.setParentNode(containerNode);
+			containerNode.getChildNodes().add(dummyContainerNode);
+		}
+
+		if (containerNodeVector.contains(parneContainerNode))
+		{
+			containerNode = (StorageContainerTreeNode) containerNodeVector.get(containerNodeVector.indexOf(containerNode));
+		}
+		else
+		{
+			containerNodeVector.add(containerNode);
+		}
+		containerNode.setParentNode(parneContainerNode);
+		parneContainerNode.getChildNodes().add(containerNode);
 	}
 
 	public boolean[][] getStorageContainerFullStatus(DAO dao, Long id) throws DAOException
@@ -3372,5 +3513,4 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		return canHold;
 	}
-
 }

@@ -91,7 +91,7 @@ public class TreeNodeDataAction extends BaseAction
             if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN) || pageOf.equals(Constants.PAGEOF_SPECIMEN) ||
             		pageOf.equals(Constants.PAGEOF_ALIQUOT))
             {
-                dataList = bizLogic.getTreeViewData();
+                dataList = bizLogic.getSiteWithDummyContainer();
             }
             
             if(dataList!=null)

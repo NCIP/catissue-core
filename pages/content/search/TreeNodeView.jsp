@@ -6,7 +6,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.tree.StorageContainerTreeNode"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
+<script src="jss/ajax.js"></script>	   
 <% 	String reload =request.getParameter(Constants.RELOAD);
 	String pageOf = request.getParameter(Constants.PAGEOF);
 	String storageContainerType = null;
@@ -71,6 +71,79 @@ platform = navigator.platform.toLowerCase();
 
 	<script language="javascript">
 	
+	function expand(id,mode)
+	{
+		var iCountCount=tree.hasChildren(id);
+		if(mode ==1 || mode==0 || iCountCount>1)
+		{
+			return true;
+		}
+		
+		var parentId=tree.getUserData(id,'parentId');
+		var nodeId=tree.getUserData(id,'nodeId');
+		var nodeName=tree.getUserData(id,'nodeName');
+		var list=tree.getSubItems(nodeName)
+		var listIndex = list.indexOf("Loading...");
+		if(listIndex<0)
+		{
+			return true;
+		}
+		var parameter='containerId='+nodeId+'&parentId='+parentId+'&nodeName='+nodeName;
+		ajaxCall(parameter);
+		return true;
+	}
+
+	function ajaxCall(parameter)
+	{
+		var request = newXMLHTTPReq();
+		request.onreadystatechange=function(){childNode(request)};
+		//send data to ActionServlet
+		//Open connection to servlet
+		request.open("POST","ShowChildNodes.do",true);
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		request.send(parameter);
+	}
+	
+	function childNode(request)
+	{
+		if(request.readyState == 4)
+		{  
+			//Response is ready
+			if(request.status == 200)
+			{
+				var responseString = request.responseText;
+				addNode(responseString);
+			}
+		}
+	}
+
+	function addNode(responseString)
+	{
+		var rowList=responseString.split("#");
+		var flag=1;
+		for(var i=0;i<rowList.length-1;i++)
+		{
+			var childList=rowList[i].split(",");
+			if(flag==1)
+			{
+				flag=flag+1;
+				tree.deleteChildItems(childList[2]);
+			}
+			tree.insertNewChild(childList[2],childList[4],childList[4],0,"bluebox.gif","bluebox.gif","bluebox.gif","");
+			tree.setUserData(childList[4],'nodeId',childList[0]);	
+			tree.setUserData(childList[4],'activityStatus',childList[3]);
+			tree.setUserData(childList[4],'parentId',childList[2]);
+			tree.setUserData(childList[4],'nodeName',childList[4]);
+			if(childList[5]=="[Loading...]")
+			{
+				tree.insertNewChild(childList[4],"Loading...","Loading...",0,"bluebox.gif","bluebox.gif","bluebox.gif","");
+				tree.closeAllItems(childList[4]);
+			}
+		}
+		tree.closeAllItems(childList[2]);
+		tree.openItem(childList[2]);
+	}
+
 		//This function is called when any of the node is selected in the tree 
 		function tonclick(id)
 			{				
@@ -100,6 +173,7 @@ platform = navigator.platform.toLowerCase();
 			tree=new dhtmlXTreeObject("treeboxbox_tree","100%","100%",0);
 			tree.setImagePath("dhtml_comp/imgs/");
 			tree.setOnClickHandler(tonclick);
+			tree.setOnOpenHandler(expand);
 
 			<%		 	//Iterating over the tree-vector and inserting into the dhtmlx-tree one by one
 						Vector treeData = (Vector)request.getAttribute("treeData");
@@ -115,11 +189,13 @@ platform = navigator.platform.toLowerCase();
 										parentId=data.getParentNode().toString();
 									String DisplayName=data.getValue();
 									String img = "bluebox.gif";
-			%>
+			%>			
 									tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=DisplayName%>",0,"<%=img%>","<%=img%>","<%=img%>","");
 									tree.setUserData("<%=nodeId%>",'nodeId',"<%=data.getIdentifier()%>");	
 									tree.setUserData("<%=nodeId%>",'activityStatus',"<%=data.getActivityStatus()%>");
 									tree.setUserData("<%=nodeId%>",'parentId',"<%=parentId%>");
+									tree.setUserData("<%=nodeId%>",'nodeName',"<%=data.getValue()%>");
+									
 					<%	
 								}
 							}
