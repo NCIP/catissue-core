@@ -1616,6 +1616,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					" group by site.IDENTIFIER, site.NAME";
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List resultList = new ArrayList();
+		Long nodeIdentifier;
+		String nodeName = null;
+		String dummyNodeName=null;
+		
 		Vector containerNodeVector = new Vector();
 		try
 		{
@@ -1633,11 +1637,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			List rowList = (List) iterator.next();
 			
-			StorageContainerTreeNode siteNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)), (String) rowList.get(1),
-					(String) rowList.get(1));
-
-			StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)),"Loading...",
-						"Loading...");
+			nodeIdentifier = Long.valueOf((String) rowList.get(0));
+			nodeName = (String) rowList.get(1);
+			dummyNodeName=Constants.DUMMY_NODE_NAME;
+			
+			StorageContainerTreeNode siteNode = new StorageContainerTreeNode(nodeIdentifier,nodeName,
+					nodeName);
+			StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(nodeIdentifier,dummyNodeName,
+					dummyNodeName);
 			dummyContainerNode.setParentNode(siteNode);
 			siteNode.getChildNodes().add(dummyContainerNode);
 			containerNodeVector.add(siteNode);
@@ -1654,12 +1661,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @throws DAOException
 	 * @Description This method will retrieve all the containers under the selected node   
 	 */
-	public Vector getStorageContainers(Long identifier, String nodeName,String parentId) throws DAOException
+	public Vector<StorageContainerTreeNode> getStorageContainers(Long identifier, String nodeName,String parentId) throws DAOException
 	{
 		String sql = createSql(identifier, parentId);
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		String dummyNodeName=Constants.DUMMY_NODE_NAME;
+		String containerName = null;
+		Long nodeIdentifier;
+		Long parentContainerId;
+		Long childCount;
+		
 		List resultList = new ArrayList();
-		Vector containerNodeVector = new Vector();
+		Vector<StorageContainerTreeNode> containerNodeVector = new Vector<StorageContainerTreeNode>();
 		try
 		{
 			dao.openSession(null);
@@ -1674,11 +1687,33 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		while (iterator.hasNext())
 		{
 			List rowList = (List) iterator.next();
-			StorageContainerTreeNode containerNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)), (String) rowList.get(1),
-					(String) rowList.get(1));
-			StorageContainerTreeNode parneContainerNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(2)),nodeName,
+			nodeIdentifier = Long.valueOf((String) rowList.get(0));
+			containerName = (String) rowList.get(1);
+			parentContainerId = Long.valueOf((String) rowList.get(2));
+			childCount = Long.valueOf((String) rowList.get(3));
+			
+			StorageContainerTreeNode containerNode = new StorageContainerTreeNode(nodeIdentifier, containerName,containerName);
+			StorageContainerTreeNode parneContainerNode = new StorageContainerTreeNode(parentContainerId,nodeName,
 					nodeName);
-			createChildNodes(containerNodeVector, rowList, containerNode, parneContainerNode);
+
+			if(childCount!=null &&  childCount > 0 )
+			{
+				StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)),dummyNodeName,
+						dummyNodeName);
+				dummyContainerNode.setParentNode(containerNode);
+				containerNode.getChildNodes().add(dummyContainerNode);
+			}
+
+			if (containerNodeVector.contains(parneContainerNode))
+			{
+				containerNode = (StorageContainerTreeNode) containerNodeVector.get(containerNodeVector.indexOf(containerNode));
+			}
+			else
+			{
+				containerNodeVector.add(containerNode);
+			}
+			containerNode.setParentNode(parneContainerNode);
+			parneContainerNode.getChildNodes().add(containerNode);
 		}
 		return containerNodeVector;
 	}
@@ -1691,7 +1726,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	private String createSql(Long identifier, String parentId)
 	{
 		String sql;
-		if(!parentId.equals("0"))
+		if(!Constants.ZERO_ID.equals(parentId))
 		{
 			sql = " SELECT cn.IDENTIFIER, cn.NAME,cn.PARENT_CONTAINER_ID,count(cn_c.IDENTIFIER)" +
 					 " from catissue_container cn left outer join catissue_container cn_c" +
@@ -1710,39 +1745,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			" GROUP BY cn.IDENTIFIER, cn.NAME,site.identifier";
 		}
 		return sql;
-	}
-
-	/**
-	 * 
-	 * @param containerNodeVector This vector contains all the containers
-	 * @param rowList This this contains all the records after firing query
-	 * @param containerNode This is child node 
-	 * @param parneContainerNode This is parent node
-	 * @description This method will add container nodes in the vector and if container node have
-	 * 				any child node then it will add dummy node as child node
-	 */
-	private void createChildNodes(Vector containerNodeVector, List rowList,
-			StorageContainerTreeNode containerNode, StorageContainerTreeNode parneContainerNode)
-	{
-		Long noOfChild = new Long((String)rowList.get(3));
-		if(rowList.get(3)!=null &&  noOfChild > 0 )
-		{
-			StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)),"Loading...",
-					"Loading...");
-			dummyContainerNode.setParentNode(containerNode);
-			containerNode.getChildNodes().add(dummyContainerNode);
-		}
-
-		if (containerNodeVector.contains(parneContainerNode))
-		{
-			containerNode = (StorageContainerTreeNode) containerNodeVector.get(containerNodeVector.indexOf(containerNode));
-		}
-		else
-		{
-			containerNodeVector.add(containerNode);
-		}
-		containerNode.setParentNode(parneContainerNode);
-		parneContainerNode.getChildNodes().add(containerNode);
 	}
 
 	public boolean[][] getStorageContainerFullStatus(DAO dao, Long id) throws DAOException
