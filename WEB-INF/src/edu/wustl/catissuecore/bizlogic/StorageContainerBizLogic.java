@@ -1704,7 +1704,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				containerNode.getChildNodes().add(dummyContainerNode);
 			}
 
-			if (containerNodeVector.contains(parneContainerNode))
+			if (containerNodeVector.contains(containerNode))
 			{
 				containerNode = (StorageContainerTreeNode) containerNodeVector.get(containerNodeVector.indexOf(containerNode));
 			}
