@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.tree.StorageContainerTreeNode;
 import edu.wustl.common.tree.TreeNodeImpl;
@@ -27,11 +28,11 @@ public class ShowChildNodes extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		PrintWriter out = response.getWriter();
-		Vector containerNodeVector = new Vector();
+		Vector<StorageContainerTreeNode> containerNodeVector = new Vector<StorageContainerTreeNode>();
 		StringBuffer xmlData = new StringBuffer();
-		String nodeName = request.getParameter("nodeName");
-		Long identifier =  new Long(request.getParameter("containerId"));
-		String parentId = request.getParameter("parentId");
+		String nodeName = request.getParameter(Constants.NODE_NAME);
+		Long identifier =  new Long(request.getParameter(Constants.CONTAINER_IDENTIFIER));
+		String parentId = request.getParameter(Constants.PARENT_IDENTIFIER);
 		StorageContainerBizLogic sc = new StorageContainerBizLogic();
 		containerNodeVector = sc.getStorageContainers(identifier,nodeName,parentId);
 		response.setContentType("text/xml");
@@ -42,18 +43,17 @@ public class ShowChildNodes extends BaseAction
 	
 	/**
 	 * 
-	 * @param childVector This vector contains all the nodes, when user clics on [+] sign then ajax call retrieve
+	 * @param childVector This vector contains all the nodes, when user clicks on [+] sign then ajax call retrieve
 	 * all the child node. 
 	 * @param xmlData This is a string buffer and have all the information of the node that is to be transfered to jsp.
 	 * @return xmlData
 	 */
-	private StringBuffer makeXMLData(Vector childVector,StringBuffer xmlData)
+	private StringBuffer makeXMLData(Vector<StorageContainerTreeNode> childVector,StringBuffer xmlData)
 	{		
-		Iterator childItr = childVector.iterator();
+		Iterator<StorageContainerTreeNode> childItr = childVector.iterator();
 		while(childItr.hasNext())
 		{
-			StorageContainerTreeNode childNode = (StorageContainerTreeNode)childItr.next();
-			
+			StorageContainerTreeNode childNode = childItr.next();
 			xmlData.append(childNode.getIdentifier());
 			xmlData.append(",");
 			xmlData.append(((TreeNodeImpl)childNode.getParentNode()).getIdentifier());
