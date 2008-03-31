@@ -28,7 +28,7 @@
 	</target>
 	
 	<!-- run DeIDPipelineManager java file -->
-	<target name="run_deid_server">
+	<target name="run_deidentifier_server">
 		<java classname="edu.wustl.catissuecore.deidentifier.DeIDPipelineManager" maxmemory="1024m" fork="true">
 			<classpath>
 				<pathelement location="caties.jar"/>
