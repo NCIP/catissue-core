@@ -136,10 +136,8 @@ public class CollectionProtocolUtil {
 			{
 				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
 				String statement = "ConsentBean:"+i+"_statement";
-				String preDefinedStatementkey = "ConsentBean:"+i+"_predefinedConsents";
 				String statementkey = "ConsentBean:"+i+"_consentTierID";
 				tempMap.put(statement, consent.getStatement());
-				tempMap.put(preDefinedStatementkey, consent.getStatement());
 				tempMap.put(statementkey, String.valueOf(consent.getId()));
 				i++;
 			}
