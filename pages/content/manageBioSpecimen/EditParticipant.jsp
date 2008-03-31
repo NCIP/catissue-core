@@ -984,7 +984,7 @@ function participantRegRow(subdivtag)
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
-											title="Submit Only"
+											title="Register Participant"
 											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>"
 											onclick="<%=forwardToSubmit%>">
 									</html:button>
