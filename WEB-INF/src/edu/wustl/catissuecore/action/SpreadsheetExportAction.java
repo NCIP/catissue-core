@@ -48,9 +48,9 @@ public class SpreadsheetExportAction  extends BaseAction
     	AdvanceSearchForm searchForm = (AdvanceSearchForm)form;
     	HttpSession session = request.getSession();
     	String path = Variables.applicationHome + System.getProperty("file.separator");
-		String csvfileName = path + Constants.SEARCH_RESULT;// + ".csv";
-		String zipFileName = path + session.getId() + ".zip";
-		String fileName = path + session.getId() + ".csv";
+		String csvfileName = path + Constants.SEARCH_RESULT;
+		String zipFileName = path + session.getId() + Constants.ZIP_FILE_EXTENTION;
+		String fileName = path + session.getId() + Constants.CSV_FILE_EXTENTION;
     	String isCheckAllAcrossAllChecked = (String)request.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
     	
     	//Extracting map from formbean which gives the serial numbers of selected rows
@@ -59,7 +59,6 @@ public class SpreadsheetExportAction  extends BaseAction
     	
     	//Getting column data & grid data from session
     	List<String> columnList = (List<String>)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-    	//List dataList = (List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
     	/**
 		 * Name: Deepti
 		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
@@ -146,7 +145,6 @@ public class SpreadsheetExportAction  extends BaseAction
     	exportList.add(columnList);
     	List<String> idIndexList = new ArrayList<String>();
     	int columnsSize = columnList.size();
-    	List<String> exportFileNames= new ArrayList<String>();
     	if(isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equalsIgnoreCase("true"))
     	{
     		for(int i=0;i<dataList.size();i++)
@@ -158,7 +156,6 @@ public class SpreadsheetExportAction  extends BaseAction
 		    	{
 					List<String> entityIdList = entityIdsMap.get(i);
 					idIndexList.addAll(entityIdList);
-					
 	    		}
         	}
     	}
