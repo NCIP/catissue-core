@@ -140,7 +140,7 @@ public class CollectionProtocolUtil {
 				String statementkey = "ConsentBean:"+i+"_consentTierID";
 				tempMap.put(statement, consent.getStatement());
 				tempMap.put(preDefinedStatementkey, consent.getStatement());
-				tempMap.put(statementkey, consent.getId());
+				tempMap.put(statementkey, String.valueOf(consent.getId()));
 				i++;
 			}
 		}
