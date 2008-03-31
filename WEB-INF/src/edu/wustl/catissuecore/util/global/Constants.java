@@ -2265,6 +2265,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String EXPORT_ZIP_NAME = "SearchResult.zip";
 	public static final String EXPORT_DATA_LIST = "exportDataList"; 
 	public static final String ENTITY_IDS_MAP = "entityIdsMap";
+	
+	public static final String DUMMY_NODE_NAME = "Loading...";
+	public static final String NODE_NAME = "nodeName";
+	public static final String CONTAINER_IDENTIFIER = "containerId";
+	public static final String PARENT_IDENTIFIER = "parentId";
 
 }
 	
