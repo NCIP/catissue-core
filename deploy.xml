@@ -513,9 +513,80 @@
         </replace>
 		<antcall target="send_mail" />
 		<antcall target="config_jboss_files" />
-		<delete dir="${temp.dir}" />
+		
+		<antcall target="CopyCAModelWars"/>	
+		<delete dir="${temp.dir}" />				
 	</target>
-			
+	
+	<target name="CopyCAModelWars">
+		<antcall target="modifyDEWars">
+			<param name="warName" value="CA"/>
+		</antcall>
+		<antcall target="modifyDEWars">
+			<param name="warName" value="pathologySCG"/>
+		</antcall>
+		<antcall target="modifyDEWars">
+			<param name="warName" value="pathologySpecimen"/>
+		</antcall>
+		<antcall target="modifyDEWars">
+			<param name="warName" value="deintegration"/>
+		</antcall>
+		
+	</target>
+	
+	<target name="modifyDEWars">
+		<echo>Modifying ${warName}.war....</echo>
+			<unwar src="${basedir}/${warName}.war" dest="${temp.dir}/${warName}" />
+			<copy file="${basedir}/DE_conf/hibernate.properties" todir="${temp.dir}/${warName}/WEB-INF/classes" overwrite="true" />
+
+			<if>
+				<equals arg1="mysql" arg2="${database.type}" />
+				<then>
+					<replace dir="${temp.dir}/${warName}/WEB-INF/classes">
+						<include name="hibernate.properties" />
+						<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+						<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+					</replace>
+				</then>
+
+				<elseif>
+					<equals arg1="oracle" arg2="${database.type}" />
+					<then>
+						<replace dir="${temp.dir}/${warName}/WEB-INF/classes">
+							<include name="hibernate.properties" />
+							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+							<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+						</replace>
+					</then>
+				</elseif>
+			</if>
+			<replace dir="${temp.dir}/${warName}/WEB-INF/classes">
+				<include name="hibernate.properties" />
+				<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+				<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+
+			</replace>
+
+			<war destfile="${temp.dir}/${warName}.war" webxml="${temp.dir}/${warName}/WEB-INF/web.xml">
+				<fileset dir="${temp.dir}/${warName}">
+					<include name="**/**/**.*" />
+				</fileset>
+			</war>
+		<echo>Copying ${warName}.war....</echo>
+			<copy todir="${jboss.home.dir}/server/default/deploy" file="${temp.dir}/${warName}.war" overwrite="true" />
+			<delete file="${temp.dir}/${warName}.war" />
+			<delete includeemptydirs="true">
+				<fileset dir="${temp.dir}/${warName}">
+					<include name="**/*" />
+				</fileset>
+			</delete>
+		
+		
+			<delete dir="${temp.dir}/${warName}" />
+		</target>
+	
 	<!--Target for deployment with jboss config-->
 	<target name="config_jboss_files">
 		<copy todir="${jboss.server.url}/conf" overwrite="true">
