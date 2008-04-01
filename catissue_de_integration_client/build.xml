@@ -135,15 +135,35 @@
 	</target>
 
 	<target name="copyDeIntegrationWar">
-		
-		<!-- deIntegration.war -->
-		<unwar src="${unzip.dir}/deintegration.war" dest="${base.dir}/temp/deintegration" />
-		<copy file="${unzip.dir}/DE_conf/hibernate.properties" todir="${base.dir}/temp/deintegration/WEB-INF/classes" overwrite="true" />
+		<antcall target="updateDBProperties">
+			<param name="warName" value="CA"/>
+		</antcall>
+		<antcall target="updateDBProperties">
+			<param name="warName" value="pathologySCG"/>
+		</antcall>
+		<antcall target="updateDBProperties">
+			<param name="warName" value="pathologySpecimen"/>
+		</antcall>
+		<antcall target="updateDBProperties">
+			<param name="warName" value="deintegration"/>
+		</antcall>
+			
+		<delete includeemptydirs="true">
+			<fileset dir="${base.dir}/temp">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+
+	</target>
+	
+	<target name="updateDBProperties">
+		<unwar src="${unzip.dir}/${warName}.war" dest="${base.dir}/temp/${warName}" />
+		<copy file="${unzip.dir}/DE_conf/hibernate.properties" todir="${base.dir}/temp/${warName}/WEB-INF/classes" overwrite="true" />
 
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<replace dir="${base.dir}/temp/deintegration/WEB-INF/classes">
+				<replace dir="${base.dir}/temp/${warName}/WEB-INF/classes">
 					<include name="hibernate.properties" />
 					<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.MySQLDialect" />
 					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
@@ -154,7 +174,7 @@
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<replace dir="${base.dir}/temp/deintegration/WEB-INF/classes">
+					<replace dir="${base.dir}/temp/${warName}/WEB-INF/classes">
 						<include name="hibernate.properties" />
 						<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.Oracle9Dialect" />
 						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
@@ -163,165 +183,41 @@
 				</then>
 			</elseif>
 		</if>
-		<replace dir="${base.dir}/temp/deintegration/WEB-INF/classes">
+		<replace dir="${base.dir}/temp/${warName}/WEB-INF/classes">
 			<include name="hibernate.properties" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
 			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
 
 		</replace>
 
-		<war destfile="${base.dir}/temp/deintegration.war" webxml="${base.dir}/temp/deintegration/WEB-INF/web.xml">
-			<fileset dir="${base.dir}/temp/deintegration">
+		<war destfile="${base.dir}/temp/${warName}.war" webxml="${base.dir}/temp/${warName}/WEB-INF/web.xml">
+			<fileset dir="${base.dir}/temp/${warName}">
 				<include name="**/**/**.*" />
 			</fileset>
 		</war>
 
-		<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/temp/deintegration.war" overwrite="true" />
+		<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/temp/${warName}.war" overwrite="true" />
+		<delete file="${base.dir}/temp/${warName}.war" />
 
-		<!-- CA.war -->
-		
-		<unwar src="${unzip.dir}/CA.war" dest="${base.dir}/temp/CA" />
-				<copy file="${unzip.dir}/DE_conf/hibernate.properties" todir="${base.dir}/temp/CA/WEB-INF/classes" overwrite="true" />
-
-				<if>
-					<equals arg1="mysql" arg2="${database.type}" />
-					<then>
-						<replace dir="${base.dir}/temp/CA/WEB-INF/classes">
-							<include name="hibernate.properties" />
-							<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.MySQLDialect" />
-							<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-							<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
-						</replace>
-					</then>
-
-					<elseif>
-						<equals arg1="oracle" arg2="${database.type}" />
-						<then>
-							<replace dir="${base.dir}/temp/CA/WEB-INF/classes">
-								<include name="hibernate.properties" />
-								<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.Oracle9Dialect" />
-								<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-								<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-							</replace>
-						</then>
-					</elseif>
-				</if>
-				<replace dir="${base.dir}/temp/CA/WEB-INF/classes">
-					<include name="hibernate.properties" />
-					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-					<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
-
-				</replace>
-
-				<war destfile="${base.dir}/temp/CA.war" webxml="${base.dir}/temp/CA/WEB-INF/web.xml">
-					<fileset dir="${base.dir}/temp/CA">
-						<include name="**/**/**.*" />
-					</fileset>
-				</war>
-
-				<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/temp/CA.war" overwrite="true" />
-
-		<!-- Specimen war-->
-		<unwar src="${unzip.dir}/pathologySpecimen.war" dest="${base.dir}/temp/pathologySpecimen" />
-						<copy file="${unzip.dir}/DE_conf/hibernate.properties" todir="${base.dir}/temp/pathologySpecimen/WEB-INF/classes" overwrite="true" />
-
-						<if>
-							<equals arg1="mysql" arg2="${database.type}" />
-							<then>
-								<replace dir="${base.dir}/temp/pathologySpecimen/WEB-INF/classes">
-									<include name="hibernate.properties" />
-									<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.MySQLDialect" />
-									<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-									<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
-								</replace>
-							</then>
-
-							<elseif>
-								<equals arg1="oracle" arg2="${database.type}" />
-								<then>
-									<replace dir="${base.dir}/temp/pathologySpecimen/WEB-INF/classes">
-										<include name="hibernate.properties" />
-										<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.Oracle9Dialect" />
-										<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-										<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-									</replace>
-								</then>
-							</elseif>
-						</if>
-						<replace dir="${base.dir}/temp/pathologySpecimen/WEB-INF/classes">
-							<include name="hibernate.properties" />
-							<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-							<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
-
-						</replace>
-
-						<war destfile="${base.dir}/temp/pathologySpecimen.war" webxml="${base.dir}/temp/pathologySpecimen/WEB-INF/web.xml">
-							<fileset dir="${base.dir}/temp/pathologySpecimen">
-								<include name="**/**/**.*" />
-							</fileset>
-						</war>
-
-						<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/temp/pathologySpecimen.war" overwrite="true" />
-
-		<!-- SCG war-->		
-		
-		<unwar src="${unzip.dir}/pathologySCG.war" dest="${base.dir}/temp/pathologySCG" />
-						<copy file="${unzip.dir}/DE_conf/hibernate.properties" todir="${base.dir}/temp/pathologySCG/WEB-INF/classes" overwrite="true" />
-
-						<if>
-							<equals arg1="mysql" arg2="${database.type}" />
-							<then>
-								<replace dir="${base.dir}/temp/pathologySCG/WEB-INF/classes">
-									<include name="hibernate.properties" />
-									<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.MySQLDialect" />
-									<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-									<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
-								</replace>
-							</then>
-
-							<elseif>
-								<equals arg1="oracle" arg2="${database.type}" />
-								<then>
-									<replace dir="${base.dir}/temp/pathologySCG/WEB-INF/classes">
-										<include name="hibernate.properties" />
-										<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.Oracle9Dialect" />
-										<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-										<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-									</replace>
-								</then>
-							</elseif>
-						</if>
-						<replace dir="${base.dir}/temp/pathologySCG/WEB-INF/classes">
-							<include name="hibernate.properties" />
-							<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-							<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
-
-						</replace>
-
-						<war destfile="${base.dir}/temp/pathologySCG.war" webxml="${base.dir}/temp/pathologySCG/WEB-INF/web.xml">
-							<fileset dir="${base.dir}/temp/pathologySCG">
-								<include name="**/**/**.*" />
-							</fileset>
-						</war>
-
-						<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/temp/pathologySCG.war" overwrite="true" />
-
-		
-		
-		
-		
-		
-		<delete includeemptydirs="true">
-			<fileset dir="${base.dir}/temp">
-				<include name="**/*" />
-			</fileset>
-		</delete>
-
-		<delete file="${base.dir}/temp/deintegration.war" />
-		<delete file="${base.dir}/temp/CA.war" />
-		<delete file="${base.dir}/temp/pathologySpecimen.war" />
-		<delete file="${base.dir}/temp/pathologySCG.war" />
-	</target>
+		</target>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		
 	<target name="modifyProjectWar">
 			<unwar src="../catissuecore.war" dest="${base.dir}/temp/catissuecore" />
