@@ -199,26 +199,9 @@
 		<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/temp/${warName}.war" overwrite="true" />
 		<delete file="${base.dir}/temp/${warName}.war" />
 
-		</target>
+	</target>
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
 	<target name="modifyProjectWar">
 			<unwar src="../catissuecore.war" dest="${base.dir}/temp/catissuecore" />
 			<unwar src="${caCORE.jBoss.home.dir}/server/default/deploy/${caCORE.project.name}.war" dest="${base.dir}/temp/${caCORE.project.name}" />
