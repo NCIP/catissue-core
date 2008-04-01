@@ -184,6 +184,7 @@ public class OrderBizLogic extends DefaultBizLogic
 				Distribution distribution = (Distribution) distributionCollectionIterator.next();
 				if (distribution.getToSite().getId().compareTo(new Long(-1)) == 0)
 				{
+					
 					throw new DAOException(ApplicationProperties.getValue("orderdistribution.site.required.errmsg"));
 				}
 			}
@@ -565,7 +566,7 @@ public class OrderBizLogic extends DefaultBizLogic
 				emailBody = emailBody + serialNo + ". " + existingSpecimenOrderItem.getSpecimen().getLabel() + ": "
 						+ existingSpecimenOrderItem.getStatus() + "\n   Order Description: "+ existingSpecimenOrderItem.getDescription() + "\n\n";
 		    	
-		    	
+				serialNo++;
 				}
 			else if (orderItem instanceof DerivedSpecimenOrderItem)
 				{
@@ -574,10 +575,11 @@ public class OrderBizLogic extends DefaultBizLogic
 							+ derivedSpecimenOrderItem.getSpecimenClass() + "--" + derivedSpecimenOrderItem.getSpecimenType() + "--"
 							+ derivedSpecimenOrderItem.getStatus() + "\n";*/
 					
-					
-					DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
+				   DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
 					emailBody = emailBody + serialNo + ". " + derivedSpecimenOrderItem.getParentSpecimen().getLabel() + ": "
 					+ derivedSpecimenOrderItem.getStatus() + "\n   Order Description: "+ derivedSpecimenOrderItem.getDescription() + "\n\n";
+					
+					serialNo++;
 	    	
 			}
 			else if (orderItem instanceof PathologicalCaseOrderItem)
@@ -589,6 +591,8 @@ public class OrderBizLogic extends DefaultBizLogic
 			 	
 				emailBody = emailBody + serialNo + ". " + pathologicalCaseOrderItem.getSpecimenCollectionGroup().getName()  + ": "
 				+ pathologicalCaseOrderItem.getStatus() + "\n   Order Description: "+ pathologicalCaseOrderItem.getDescription() + "\n\n";
+				
+				serialNo++;
     	
 			}
 			else if (orderItem instanceof NewSpecimenArrayOrderItem)
@@ -598,6 +602,8 @@ public class OrderBizLogic extends DefaultBizLogic
 				
 				emailBody = emailBody + serialNo + ". " + newSpecimenArrayOrderItem.getName()  + ": "
 				+ newSpecimenArrayOrderItem.getStatus() + "\n   Order Description: "+ newSpecimenArrayOrderItem.getDescription() + "\n\n";
+				
+				serialNo++;
     		
 		}
 			else if (orderItem instanceof ExistingSpecimenArrayOrderItem)
@@ -609,9 +615,9 @@ public class OrderBizLogic extends DefaultBizLogic
 				emailBody = emailBody + serialNo + ". " + existingSpecimenArrayOrderItem.getSpecimenArray().getName()  + ": "
 				+ existingSpecimenArrayOrderItem.getStatus() + "\n   Order Description: "+ existingSpecimenArrayOrderItem.getDescription() + "\n\n";
     		
-				
+				serialNo++;
 			}
-			serialNo++;
+			
 		}
 		String emailMsgFooterRegards = "\n" + "Regards, ";
 		String emailMsgFooterSign = "\n" + "caTissueSuite Administrator";
