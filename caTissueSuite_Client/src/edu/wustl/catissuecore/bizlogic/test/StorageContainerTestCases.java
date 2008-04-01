@@ -10,6 +10,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -74,6 +75,30 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		{
 	    	storageContainer = (StorageContainer) appService.createObject(storageContainer);
 	    	BaseTestCaseUtility.updateStorageContainer(storageContainer);
+	    	System.out.println("After Update");
+	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
+	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
+	       	assertTrue("Domain object successfully updated ---->"+updatedStorageContainer, true);
+	    } 
+	    catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("failed to update Object", true);
+	    }
+	}
+	
+	public void testUpdateStorageContainerWithParentChanged()
+	{
+		StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
+		System.out.println("Before Update");
+    	Logger.out.info("updating domain object------->"+storageContainer);
+	    try 
+		{
+	    	storageContainer = (StorageContainer) appService.createObject(storageContainer);
+	    	storageContainer.setParentChanged(true);
+	    	Container parent = new Container();
+			parent.setId(new Long(2));
+			storageContainer.setParent(parent);    
 	    	System.out.println("After Update");
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
