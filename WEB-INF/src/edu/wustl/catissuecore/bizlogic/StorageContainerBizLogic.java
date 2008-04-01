@@ -402,9 +402,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 //				container.setParent(pc);
 				
-//				Site site=getSite(dao,container.getParent().getId());
+				Site site=getSite(dao,container.getParent().getId());
 				
-				Site site=((StorageContainer)container.getParent()).getSite();
+				//Site site=((StorageContainer)container.getParent()).getSite();
 				//check for closed Site
 				checkStatus(dao, site, "Parent Container Site");
 
@@ -592,7 +592,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				}
 				catch (CacheException e)
 				{
-
+						
 				}
 
 			}
@@ -604,30 +604,29 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}
 	public void setValuesinPersistentObject(StorageContainer persistentobject,StorageContainer newObject)
 	{
-	persistentobject.setActivityStatus(newObject.getActivityStatus());
-	persistentobject.setBarcode(newObject.getBarcode());
-	persistentobject.setCapacity(newObject.getCapacity());
-	persistentobject.setChildren(newObject.getChildren());
-	persistentobject.setCollectionProtocolCollection(newObject.getCollectionProtocolCollection());
-	persistentobject.setComment(newObject.getComment());
-	persistentobject.setFull(newObject.isFull());
-	persistentobject.setHoldsSpecimenArrayTypeCollection(newObject.getHoldsSpecimenArrayTypeCollection());
-	persistentobject.setHoldsSpecimenClassCollection(newObject.getHoldsSpecimenClassCollection());
-	persistentobject.setHoldsStorageTypeCollection(newObject.getHoldsStorageTypeCollection());
-	persistentobject.setName(newObject.getName());
-	persistentobject.setNoOfContainers(newObject.getNoOfContainers());
-	persistentobject.setParent(newObject.getParent());
-	persistentobject.setParentChanged(newObject.isParentChanged());
-	persistentobject.setPositionChanged(newObject.isPositionChanged());
-	persistentobject.setPositionDimensionOne(newObject.getPositionDimensionOne());
-	persistentobject.setPositionDimensionTwo(newObject.getPositionDimensionTwo());
-	persistentobject.setSimilarContainerMap(newObject.getSimilarContainerMap());
-	persistentobject.setSite(newObject.getSite());
-	persistentobject.setSpecimenCollection(newObject.getSpecimenCollection());
-	persistentobject.setStartNo(newObject.getStartNo());
-	persistentobject.setStorageType(newObject.getStorageType());
-	persistentobject.setTempratureInCentigrade(newObject.getTempratureInCentigrade());
-	
+		persistentobject.setActivityStatus(newObject.getActivityStatus());
+		persistentobject.setBarcode(newObject.getBarcode());
+		persistentobject.setCapacity(newObject.getCapacity());
+		persistentobject.setChildren(newObject.getChildren());
+		persistentobject.setCollectionProtocolCollection(newObject.getCollectionProtocolCollection());
+		persistentobject.setComment(newObject.getComment());
+		persistentobject.setFull(newObject.isFull());
+		persistentobject.setHoldsSpecimenArrayTypeCollection(newObject.getHoldsSpecimenArrayTypeCollection());
+		persistentobject.setHoldsSpecimenClassCollection(newObject.getHoldsSpecimenClassCollection());
+		persistentobject.setHoldsStorageTypeCollection(newObject.getHoldsStorageTypeCollection());
+		persistentobject.setName(newObject.getName());
+		persistentobject.setNoOfContainers(newObject.getNoOfContainers());
+		persistentobject.setParent(newObject.getParent());
+		persistentobject.setParentChanged(newObject.isParentChanged());
+		persistentobject.setPositionChanged(newObject.isPositionChanged());
+		persistentobject.setPositionDimensionOne(newObject.getPositionDimensionOne());
+		persistentobject.setPositionDimensionTwo(newObject.getPositionDimensionTwo());
+		persistentobject.setSimilarContainerMap(newObject.getSimilarContainerMap());
+		persistentobject.setSite(newObject.getSite());
+		persistentobject.setSpecimenCollection(newObject.getSpecimenCollection());
+		persistentobject.setStartNo(newObject.getStartNo());
+		persistentobject.setStorageType(newObject.getStorageType());
+		persistentobject.setTempratureInCentigrade(newObject.getTempratureInCentigrade());
 	}
 
 	private void addEntriesInDisabledMap(StorageContainer container, List disabledConts)
@@ -1056,8 +1055,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
  		
 		if (storageContainer != null && storageContainer.getId()!=null)
 		{
-			Logger.out.debug("site() " + site.getId());
-			
 			Collection children = (Collection) dao.retrieveAttribute(storageContainer.getClass().getName(), storageContainer.getId(), "elements(children)");
 			
 //			Collection children = storageContainer.getChildren();
