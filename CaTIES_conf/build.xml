@@ -70,9 +70,9 @@
 		</target>
 	
 	<!-- stop DeIDPipelineManager  -->
-	<target name="stop_deid_server">
+	<target name="stop_deidentifier_server">
 		<java classname="edu.wustl.catissuecore.caties.util.StopServerThread">
-			<arg value="${deidPort}" />
+			<arg value="${deidentifierPort}" />
 			<classpath>
 				<pathelement location="caties.jar"/>
 			</classpath>
