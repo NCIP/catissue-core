@@ -470,10 +470,11 @@
 
 		<copy file="MySql_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
 		<copy file="Oracle_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
+		<copy file="DBValidate.sql" todir="${zip.dir}" overwrite="true" />
 		<copy file="Sample-log4j.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="Sample-login-config.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="Sample-properties-service.xml" todir="${zip.dir}" overwrite="true" />
-
+		
 		<copy todir="${zip.dir}/images" overwrite="true">
 			<fileset file="${base.dir}/images/InstitutionLogo.gif" />
 		</copy>
