@@ -711,7 +711,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		Iterator iter = beanObjSet.iterator();
 		Collection<OrderItem> domainObjSet = new HashSet<OrderItem>();
 		Collection distributionObjectCollection = new HashSet();
-		Distribution distribution = new Distribution();		
+		Distribution distribution = new Distribution();	
+		// set by pratha
+		distribution.setComment(requestDetailsForm.getAdministratorComments());
 		Collection<DistributedItem> distributedItemCollection = new HashSet<DistributedItem>();
 		while(iter.hasNext())
 		{
@@ -856,7 +858,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		if(requestDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && requestDetailsBean.getDistributedItemId().equals(""))
 		{	
 			//Setting the Site for distribution.
-			distribution = setSiteInDistribution(distribution,requestDetailsForm);			
+			distribution = setSiteInDistribution(distribution,requestDetailsForm);		
+			//distribution.setComment(requestDetailsForm.getAdministratorComments());
 			DistributedItem distributedItem = new DistributedItem();
 			
 			Specimen specimen = new Specimen();
