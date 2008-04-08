@@ -68,7 +68,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	
 	public var readyTimer:Timer;
 	public var isOutputView:Boolean=false;
-	public var rpcService: RemoteObject;
+
 	public var view:String ="";
 	public var dagPathUIMap:HashMap;
 	public var totalNodes:ArrayCollection;
@@ -235,7 +235,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	{
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGNode", DAGNode);
 		registerClassAlias("edu.wustl.catissuecore.flex.dag.DAGPath", DAGPath);
-		rpcService= new RemoteObject();
+//		rpcService= new RemoteObject();
 		rpcService.channelSet = Utility.getChannelSet();
 		rpcService.destination="cdeService";
 		isQuery =Application.application.parameters.isQuery;
@@ -1041,6 +1041,9 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 
 ]]>
 </mx:Script>
+<mx:RemoteObject id="rpcService" destination="cdeService">
+</mx:RemoteObject>
+
 <mx:VBox width="100%" height="100%" backgroundColor="#f9e886">
 	<mx:Panel backgroundColor="white" id="mainPanel" width="100%" height="100%" layout="absolute" title="Diagrammatic View" fontSize="11">
 		<mx:HBox  borderStyle="none" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="190" height="39" x="0" y="0">
