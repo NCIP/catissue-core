@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" preinitialize="preInit()" height="90%" width="70%" backgroundColor="#FFFFFF" creationComplete="initApp();">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" preinitialize="preInit()" height="90%" backgroundColor="#FFFFFF" creationComplete="initApp();">
   <mx:Script>
   	<![CDATA[
 		import util.Utility;
@@ -18,15 +18,21 @@
 		import mx.rpc.remoting.RemoteObject;
 		import mx.validators.ValidationResult;
 		import flash.utils.getQualifiedClassName;
-	    import mx.collections.XMLListCollection;
+	        import mx.collections.XMLListCollection;
 		import flash.xml.*;
 		import mx.events.FlexEvent;
 
     [Bindable]
 		public var cpCollection:ArrayCollection = new ArrayCollection();
-        public var pCollection:ArrayCollection = new ArrayCollection(); 
-        private var xmlString:XML = new XML();
-        private var treeData:XMLListCollection = new XMLListCollection();
+       
+	        public var pCollection:ArrayCollection = new ArrayCollection(); 
+        
+	        private var xmlString:XML = new XML();
+        
+	       private var treeData:XMLListCollection = new XMLListCollection();
+
+       [Bindable]
+     		private var myDropdownFactory:ClassFactory;
 
       [Bindable]
                  [Embed(source='/images/nolines_minus.gif')]
@@ -747,10 +753,45 @@
     
     public function addToolTip(item:Object):String
     {
-    	
-	     var node:XML = XML(item);
-       	 return node.@toolTip; 
+    	 var node:XML = XML(item);
+         var s:String = node.@toolTip;       	 
+       	 if(s != null && s.length >0)
+	     {
+	        var toolTipArray :Array = s.split(";");	
+	        var toolTip:String = "";
+	        for(var i:int=0; i<toolTipArray.length; i++)
+	    	{
+	    		toolTip = toolTip + toolTipArray[i] + "\n";
+	    	}
+	    	return toolTip;
+	     }
+       	 else
+       	 {
+       	 	return null;
+       	 }
+       	
     }
+
+    private function initClassFactory():void
+    {
+	/**
+	  Creating the Drop down factory
+	*/
+				
+	myDropdownFactory = new ClassFactory(List);
+	myDropdownFactory.properties = {showDataTips:true, dataTipFunction:myDataTipFunction};
+    }
+	
+    private function myDataTipFunction(item:Object):String
+    {
+	var nameValueBean:NameValueBean = NameValueBean(item);
+	var toolTopString1:String = nameValueBean.name.slice(0,40);
+	var toolTopString2:String = nameValueBean.name.slice(41,nameValueBean.name.length);
+		
+	//Alert.show("The tooltip lenght is:"+name.length);
+	//return nameValueBean.name.slice(0,40);
+	return toolTopString1 + "\n" +toolTopString2;
+   }
   		
   	]]>
   </mx:Script>
@@ -767,14 +808,14 @@
 		<mx:method name="getParticipantsList" result="tempHandler(event)"/>
 	</mx:RemoteObject>
 
-     <mx:Box direction="vertical" borderThickness="10" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" paddingLeft="0" paddingBottom="0" width="100%" height="100%">
-      	<mx:VBox backgroundAlpha="0.1" width="100%" height="5%" backgroundColor="#FFFFFF"  >
+     <mx:Box direction="vertical" borderThickness="10" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" paddingLeft="0" paddingBottom="0" height="100%">
+      	<mx:VBox backgroundAlpha="0.1" height="5%" backgroundColor="#FFFFFF"  >
              <mx:Label text="Collection Protocol:" width="100%" height="14" color="black" fontWeight="bold"/>
 
-              <mx:ComboBox width="100%" id="cpCombo" dataProvider="{cpCollection}"  labelField="name" change="onCpChange()" prompt="--Select--"/>
+              <mx:ComboBox id="cpCombo"  width="260" dataProvider="{cpCollection}"  labelField="name" change="onCpChange()" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
         </mx:VBox>
         
-        <mx:VBox width="100%" height="95%">
+        <mx:VBox width="50%" height="95%">
             <mx:VDividedBox width="100%" height="100%">
                 <mx:VBox width="100%" height="30%" id="pVbox" borderSides="black">
                    	<mx:HBox backgroundColor="#FFFFFF" width="100%"> 
