@@ -2272,6 +2272,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String NODE_NAME = "nodeName";
 	public static final String CONTAINER_IDENTIFIER = "containerId";
 	public static final String PARENT_IDENTIFIER = "parentId";
+	/**
+	 * 
+	 * Constant required for Specimen Array Delete Action
+	 */
+	public static final String DELETE_SPECIMEN_ARRAY="DeleteSpecimenArray.do";
+	
 
 }
 	
