@@ -96,7 +96,20 @@
 															styleId="submitAndAddMultiple">
 											     	</html:button>
 												</td>
-												</logic:notEqual>		
+												</logic:notEqual>	
+												<!-- delete button added for disabling the objects -->
+												<td>
+													<%
+														String deleteAction="deleteObject('" + formName +"','" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
+													%>
+													<html:button styleClass="actionButton"
+														property="disableRecord"
+														title="Delete or Disable Record"
+														value="Delete"
+														onclick="<%=deleteAction%>">
+													</html:button>
+												</td>
+
 											</tr>
 										</table>
 									</td>					

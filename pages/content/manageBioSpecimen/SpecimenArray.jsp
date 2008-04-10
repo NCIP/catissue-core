@@ -3,11 +3,12 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
+
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.Map,java.util.List"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenArrayForm"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
-
+<script src="jss/javaScript.js" type="text/javascript"></script>
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
@@ -30,6 +31,7 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
+
 
 <html:form action="<%=formAction%>">
 <html:hidden property="id" />
@@ -367,9 +369,21 @@
 				<!-- action buttons begins -->
 					<table cellpadding="4" cellspacing="0" border="0">
 						<tr>
+							<td><html:hidden property="onSubmit" />
+							</td>
 							<td>
-								<html:button property="uploadSpecimenArrayButton" styleClass="actionButton" onclick="doUploadSpecimenArray();" disabled="<%=disabled%>">
+								<html:button property="uploadSpecimenArrayButton" styleClass="actionButton"						onclick="doUploadSpecimenArray();" disabled="<%=disabled%>">
 									<bean:message  key="buttons.uploadSpecimenArray" />
+								</html:button>
+							</td>
+							<!-- delete button added for deleting the specimen array -->
+							<td>
+								<%	
+									String deleteAction="deleteSpecimenArray('" + Constants.DELETE_SPECIMEN_ARRAY +"','" + Constants.BIO_SPECIMEN + "')";
+								%>
+								<html:button styleClass="actionButton" property="disableSpecimenArray"
+											onclick="<%=deleteAction%>">
+									<bean:message key="buttons.delete"/>
 								</html:button>
 							</td>
 						</tr>

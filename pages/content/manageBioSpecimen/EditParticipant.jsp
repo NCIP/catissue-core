@@ -978,8 +978,20 @@ function participantRegRow(subdivtag)
 								%>
 																
 								<!-- PUT YOUR COMMENT HERE -->
-
+								<!-- delete button added for deleting the objects -->
+								<td nowrap class="formFieldNoBorders">
+									<% 	
+										String deleteAction="deleteObject('" + formName +"','" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
+									%>
+									<html:button styleClass="actionButton"
+											property="disableRecord"
+											title="Delete"
+											value="Delete"
+											onclick="<%=deleteAction%>">
+									</html:button>
+								</td>
 								
+
 								<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  

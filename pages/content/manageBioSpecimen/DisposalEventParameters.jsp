@@ -10,6 +10,7 @@
 <script src="jss/script.js" type="text/javascript"></script>
 
 <%
+		
         String operation = (String) request.getAttribute(Constants.OPERATION);
 		String formName,specimenId=null;
 
@@ -50,6 +51,9 @@
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 <script language="javascript" >
 
+
+	
+	
 	function confirmAction(form)
 	{
 		if(form.activityStatus.value == "<%=Constants.ACTIVITY_STATUS_DISABLED%>")
@@ -79,6 +83,7 @@
 		}
 		
 	}
+	
 </script>	
 </head>
 	
@@ -278,6 +283,13 @@
 			%> 
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
+				<!-- delete button added for deleting the objects : Nitesh-->
+					<td>
+						<%
+							String deleteAction="deleteObject('" + formName+"?disposal=true" +"','" + Constants.BIO_SPECIMEN + "')";
+						%>
+						<html:button styleClass="actionButton" value="Delete" property="disable" onclick="<%=deleteAction%>"/>
+					</td>
 					<td>
 						<html:button styleClass="actionButton" value="Submit" property="Submit" onclick="return confirmAction(this.form)"/>
 						<!--<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>"/>-->
