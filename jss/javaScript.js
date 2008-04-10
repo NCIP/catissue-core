@@ -1,4 +1,21 @@
 
+/* for deleting or disabling the objects*/
+function deleteObject(action,onSubmitAction)
+{
+	document.forms[0].onSubmit.value = onSubmitAction;
+	document.forms[0].activityStatus.value = "Disabled";
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
+/* for deleting or disabling the SpecimenArray objects*/
+function deleteSpecimenArray(action,onSubmitAction)
+{	
+	document.forms[0].onSubmit.value = onSubmitAction;
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
+
+
 
 /* section for outer block start */
 function replaceSpeChar(div,d1,searchChar)
