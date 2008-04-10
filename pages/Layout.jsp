@@ -134,10 +134,29 @@
 <!-- For Favicon -->
 <link rel="shortcut icon" href="images/favicon.ico" type="image/vnd.microsoft.icon"/>
 <link rel="icon" href="images/favicon.ico" type="image/vnd.microsoft.icon"/>
+<script>
+function setFocusOnFirstElement()
+{
+	frm = document.forms[0];
+	if (frm != null)
+	{
+		for (i = 0 ; i < frm.elements.length; i++)
+			{
+			if (frm.elements[i].type != null &&  frm.elements[i].type != "hidden") 	
+			{
+				frm.elements[i].focus();	
+				break;
+			} 
+			else {
+				continue;
+			}
+		}
+	}
+}
 
-
+</script>
 </head>
-<body>
+<body onload="setFocus()">
 <table summary="" cellpadding="0" cellspacing="0" border="0"
 	width="100%" height="99%">
 
