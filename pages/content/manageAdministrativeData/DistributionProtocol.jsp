@@ -669,6 +669,14 @@ function insRow(subdivtag)
 							</html:submit>
 						</td-->
 						<td>
+						<%	
+							String deleteAction = "deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
+						%>
+						<html:button styleClass="actionButton" property="deletePage" onclick="<%=deleteAction%>">
+							<bean:message key="buttons.delete"/>
+						</html:button>
+						</td>
+						<td>
 						<%
 						   	String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 						%>

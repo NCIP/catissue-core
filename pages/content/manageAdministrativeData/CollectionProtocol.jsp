@@ -70,6 +70,8 @@
 
 <SCRIPT LANGUAGE="JavaScript">
 
+
+
 //Consent Tracking Module Virender Mehta(Start)
 	//This Function will add more consent Tier 
 	function addConsentTier()
@@ -562,7 +564,15 @@ if(pageView.equals("add") || pageView.equals("edit"))
 						<bean:message key="aliquots.storeAllAliquotes" />
 					</html:checkbox>
 				</td>
-						   
+						
+				<td align="center">
+					<%	
+						String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
+					%>
+					<html:button styleClass="actionButton" property="deletePage" onclick="<%=deleteAction%>">
+						<bean:message key="buttons.delete"/>
+					</html:button>
+				</td>
 				<td align="right">
 					<html:button styleClass="actionButton" property="submitPage" onclick="consentPage()">
 						<bean:message key="consent.addconsents" /> >>

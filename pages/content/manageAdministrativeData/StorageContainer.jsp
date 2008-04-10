@@ -946,6 +946,16 @@ function onEditChange()
 						</td>
 					</tr>
 					<tr>
+					<!-- delete button added for disabling the objects :Nitesh -->
+						<td colspan="1" align="right">
+						<%
+							String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
+						%>
+								<html:button styleClass="actionButton" property="deletePage"
+								onclick="<%=deleteAction%>">
+									<bean:message key="buttons.delete"/>
+									</html:button>
+						</td>
 						<td colspan="5" align="right">
 								<%
 						   			String action = "validate('" + formName +"',document.forms[0].activityStatus)";
