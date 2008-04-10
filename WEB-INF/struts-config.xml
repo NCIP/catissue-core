@@ -4751,6 +4751,26 @@ PUBLIC
 			 scope="request">	 
 		</action>
 		
+		
+		<action path="/ShowChildNodes" 
+					type="edu.wustl.catissuecore.action.ShowChildNodesAction"
+					scope="request">
+		</action>
+		
+		
+		<!-- Action mapping for disabling the SpecimenArray -->
+	  	<action path="/DeleteSpecimenArray"
+				type="edu.wustl.catissuecore.action.DeleteSpecimenArrayAction"
+				name="specimenArrayForm"
+				validate="true"
+				input="/SpecimenArray.do?operation=edit&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20"
+				scope="request">
+				<forward name="success" path="/SpecimenArray.do?operation=edit&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20"/>
+				<forward name="failure" path="/SpecimenArray.do?operation=edit&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20" />
+				<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		</action>
+		<!--  Delete Action Ends : Nitesh-->
+	
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
