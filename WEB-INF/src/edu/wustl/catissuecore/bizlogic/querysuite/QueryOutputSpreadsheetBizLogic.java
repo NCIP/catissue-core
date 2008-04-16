@@ -76,24 +76,22 @@ public class QueryOutputSpreadsheetBizLogic
 		if(parentNode.contains("NULL"))
 		{
 			OutputTreeDataNode root = QueryModuleUtil.getRootNodeOfTree(rootOutputTreeNodeList,treeNo);
-			
-			    QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(root,mainEntityMap);
-				queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
-				queryResultObjectDataBeanMap.put(root.getId(), queryResulObjectDataBean);
-				if(!selectedColumnMetaData.isDefinedView())
-				{
-				    spreadSheetDataMap = createSpreadsheetData(treeNo, root,
+			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(root,mainEntityMap);
+			queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
+			queryResultObjectDataBeanMap.put(root.getId(), queryResulObjectDataBean);
+			if(!selectedColumnMetaData.isDefinedView())
+			{
+				spreadSheetDataMap = createSpreadsheetData(treeNo, root,
 						sessionData, null, recordsPerPage,
 						this.selectedColumnMetaData, randomNumber, idNodesMap,
 						queryResultObjectDataBeanMap,
 						hasConditionOnIdentifiedField, mainEntityMap);
 				spreadSheetDataMap.put(Constants.QUERY_REASUL_OBJECT_DATA_MAP,
 						queryResultObjectDataBeanMap);
-				    
-				}
-				else
-				{
-					if (queryResultObjectDataMap == null) {
+			}
+			else
+			{
+				if (queryResultObjectDataMap == null) {
 					queryResultObjectDataMap = new HashMap<Long, QueryResultObjectDataBean>();
 				}
 				spreadSheetDataMap = createSpreadsheetData(treeNo, root,
@@ -104,7 +102,7 @@ public class QueryOutputSpreadsheetBizLogic
 				spreadSheetDataMap.put(
 						Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP,
 						queryResultObjectDataMap);
-				}
+			}
 			this.selectedColumnMetaData.setCurrentSelectedObject(root);
 		} 
 		else
@@ -112,26 +110,26 @@ public class QueryOutputSpreadsheetBizLogic
 			String parentData = spiltParentNodeId[2];
 			String uniqueParentNodeId = treeNo+"_"+parentNodeId;
 			OutputTreeDataNode parentTreeNode = idNodesMap.get(uniqueParentNodeId);
-					
+
 			String parentIdColumnName = QueryModuleUtil.getParentIdColumnName(parentTreeNode);
 			String currentNode = nodeIds[1];//label
 			String[] spiltCurrentNodeId = currentNode.split(Constants.UNDERSCORE);
 			String currentNodeId = spiltCurrentNodeId[1];
 			String uniqueCurrentNodeId = treeNo+"_"+currentNodeId;
 			OutputTreeDataNode currentTreeNode = idNodesMap.get(uniqueCurrentNodeId);
-			
+
 			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(currentTreeNode,mainEntityMap);
 			queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 			queryResultObjectDataBeanMap.put(currentTreeNode.getId(), queryResulObjectDataBean);
-			
+
 			if(!selectedColumnMetaData.isDefinedView())
 			{
-				 defineGridViewBizLogic.getColumnsMetadataForSelectedNode(currentTreeNode,this.selectedColumnMetaData);
+				defineGridViewBizLogic.getColumnsMetadataForSelectedNode(currentTreeNode,this.selectedColumnMetaData);
 			}
 			List resultList = createSQL(spreadSheetDataMap, currentTreeNode,
 					parentIdColumnName, parentData, tableName,
 					queryResultObjectDataBeanMap, mainEntityMap, idNodesMap);
-			
+
 			String selectSql = (String)resultList.get(0);
 			queryResultObjectDataBeanMap = (Map<Long, QueryResultObjectDataBean>)resultList.get(1);
 			int startIndex = 0;
@@ -215,14 +213,6 @@ public class QueryOutputSpreadsheetBizLogic
 					Constants.DEFINE_VIEW_QUERY_REASULT_OBJECT_DATA_MAP,
 					queryResultObjectDataMap);
 		}
-		/*if (parentNode.getChildren().isEmpty())
-		{
-			spreadSheetDatamap = createSpreadsheetData(treeNo,parentNode,  sessionData,parentData,recordsPerPage);
-		}
-		else
-		{
-			spreadSheetDatamap = updateSpreadsheet(treeNo,parentNode, rootOutputTreeNodeList, sessionData,parentData,recordsPerPage);
-		}*/
 		this.selectedColumnMetaData.setCurrentSelectedObject(parentNode);
 		spreadSheetDatamap.put(Constants.SELECTED_COLUMN_META_DATA,this.selectedColumnMetaData);
 		return spreadSheetDatamap;
@@ -651,7 +641,6 @@ public class QueryOutputSpreadsheetBizLogic
 	 */
 	public Map<Integer, Integer> updateSpreadSheetColumnList(List<String> spreadsheetColumnsList,Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap)
 	{
-		//List<String> spreadsheetColumnsList = (List<String>)spreadSheetDataMap.get(Constants.SPREADSHEET_COLUMN_LIST);
 		Map<Integer, String> fileTypeIndexColumnNameMap = new TreeMap<Integer, String>();
 		Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = new TreeMap<Integer, Integer>();
 		// Stores all the file type attribute column names of all the entities in the map i.e. indexDisplayNameMap
@@ -674,8 +663,6 @@ public class QueryOutputSpreadsheetBizLogic
 				}
 			}
 		}
-		//for setting the columnList
-		// = 
 		for (Iterator<Integer> columnNameIterator = fileTypeIndexColumnNameMap.keySet().iterator(); columnNameIterator.hasNext(); )
 		{
 			int index = (Integer)columnNameIterator.next();
