@@ -577,15 +577,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		// insertConsentTiers(collectionProtocolRegistration.getConsentTierResponseCollection(),dao,sessionDataBean);
 		dao.insert(collectionProtocolRegistration, sessionDataBean, true, true);
-		try
-		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(collectionProtocolRegistration),
-					getDynamicGroups(collectionProtocolRegistration));
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
+		
 		if (armFound == false)
 		{
 			createSCG(collectionProtocolRegistration, dao, sessionDataBean);

@@ -476,19 +476,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		TaskTimeCalculater eventAuth = TaskTimeCalculater.startTask
 		("CP: Specimen collection req. group insert Authenticatge", CollectionProtocolBizLogic.class);
 
-		try
-		{
-
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
-					null, getProtectionObjects(collectionRequirementGroup),
-					getDynamicGroups(collectionRequirementGroup));
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}finally{
-			TaskTimeCalculater.endTask(eventAuth);
-		}
 	}
 
 

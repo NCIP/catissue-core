@@ -176,8 +176,6 @@ public class UserBizLogic extends DefaultBizLogic
 			else
 			// Send the user creation email to user and the administrator.
 			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user), protectionObjects, null);
-
 				emailHandler.sendApprovalEmail(user);
 			}
 		}

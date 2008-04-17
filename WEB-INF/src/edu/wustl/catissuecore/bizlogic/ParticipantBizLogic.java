@@ -116,14 +116,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		
 		Set protectionObjects = new HashSet();
 		protectionObjects.add(participant);
-		try
-		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, null);
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
+		
 	}
 	
 	/**

@@ -41,14 +41,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 		dao.insert(report, sessionDataBean, false, true);
 		Set protectionObjects = new HashSet();
 		protectionObjects.add(report);
-		try
-		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(dao, report));
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
+		
 	}
 
 	/**

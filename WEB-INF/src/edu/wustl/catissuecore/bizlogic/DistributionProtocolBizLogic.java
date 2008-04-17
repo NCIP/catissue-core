@@ -70,15 +70,6 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
         Set protectionObjects=new HashSet();
         protectionObjects.add(distributionProtocol);
         
-	    try
-        {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
-            		getAuthorizationData(distributionProtocol), protectionObjects, null);
-        }
-	    catch (SMException e)
-        {
-	    	throw handleSMException(e);
-        }
 	}
 	
 	/**

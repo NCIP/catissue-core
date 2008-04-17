@@ -459,19 +459,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 				objSCG = aliquotSpecimen.getSpecimenCollectionGroup();
 			}
 		}	
-		if(objSCG!=null)
-		{
-			try
-			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(objSCG));
-			}
-			catch (SMException e)
-			{
-					throw handleSMException(e);
-				
-			}
-		}
-
+		
 		//Setting the no. of aliquots in the map
 		aliquotMap.put(Constants.SPECIMEN_COUNT, String.valueOf(aliquot.getNoOfAliquots()));
 

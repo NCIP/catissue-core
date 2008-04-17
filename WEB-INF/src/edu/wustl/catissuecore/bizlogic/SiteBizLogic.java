@@ -58,15 +58,7 @@ public class SiteBizLogic extends DefaultBizLogic
 		dao.insert(site, sessionDataBean, true, true);
 		protectionObjects.add(site);
 		protectionObjects.add(site.getAddress());
-		try
-		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
-					protectionObjects, null);
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
+		
 	}
 
 	/**

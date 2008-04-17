@@ -122,7 +122,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			AbstractSpecimenCollectionGroup scg = insertSpecimens(dao,
 					sessionDataBean, specimenList, insertableSpecimens);
 			
-			securityManager.insertAuthorizationData(null, specimenList, getDynamicGroups(scg));
+			//securityManager.insertAuthorizationData(null, specimenList, getDynamicGroups(scg));
 		}
 		catch (SMException e)
 		{
@@ -673,7 +673,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 		{
 			//Setting Name from Id
-
+		
 				try
 				{
 					TaskTimeCalculater labelGen = TaskTimeCalculater.startTask("Time required for label Generator", NewSpecimenBizLogic.class);
@@ -1269,7 +1269,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 
 		/*transient instance problem */
-		
 		List persistentSpecimenList =dao.retrieve(Specimen.class.getName(),Constants.ID,specimenOld.getId());
 		Specimen persistentSpecimen=(Specimen) persistentSpecimenList.get(0);
 		

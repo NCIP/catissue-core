@@ -50,14 +50,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 			
 			Set protectionObjects = new HashSet();
 			protectionObjects.add(deidentifiedReport);
-		try
-		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(dao, deidentifiedReport));
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
+		
 		}catch (Exception e)
 		{
 			e.printStackTrace();

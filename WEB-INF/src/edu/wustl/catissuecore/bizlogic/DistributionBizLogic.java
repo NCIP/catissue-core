@@ -80,15 +80,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		}
 
 		dao.insert(dist, sessionDataBean, Constants.IS_AUDITABLE_TRUE, Constants.IS_SECURE_UPDATE_TRUE);
-
-		try
-		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(dist), getDynamicGroups(dist));
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
+		
 	}
 
 	public boolean isSpecimenArrayDistributed(Long specimenArrayId) throws DAOException

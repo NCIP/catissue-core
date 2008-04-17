@@ -345,9 +345,7 @@ public class CreateSpecimenBizLogic extends NewSpecimenBizLogic
 			}
 			dao.insert(specimen, sessionDataBean, true, true);
 			protectionObjects.add(specimen);
-			//Inserting data for Authorization
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
-					protectionObjects, getDynamicGroups(specimen.getSpecimenCollectionGroup()));
+			
 		}
 		catch (SMException e)
 		{

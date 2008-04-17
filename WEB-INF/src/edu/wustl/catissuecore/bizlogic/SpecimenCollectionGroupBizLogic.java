@@ -123,7 +123,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
 		generateSCGLabel(specimenCollectionGroup);
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
-		insertAuthData(specimenCollectionGroup);
+		
 		if (specimenCollection != null)
 		{
 	       new NewSpecimenBizLogic().insert(specimenCollection, dao, sessionDataBean);
@@ -147,6 +147,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
         try {
 		
 		Collection specimenCollection = specimenCollectionRequirementGroup.getSpecimenCollection();
+		//Collection specimenList = CollectionProtocolUtil.sortJuber(specimenCollection);
 		List specimenList = new LinkedList(specimenCollection);
 		CollectionProtocolUtil.getSortedCPEventList(specimenList);
 
@@ -237,23 +238,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 	}
 
-	/**
-	 * @param specimenCollectionGroup
-	 * @throws DAOException
-	 */
-	public void insertAuthData(SpecimenCollectionGroup specimenCollectionGroup) throws DAOException
-	{
-		try
-		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(specimenCollectionGroup),
-					getDynamicGroups(specimenCollectionGroup));
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
-	}
-
+	
 	/**
 	 * This function used to get specimenCollectionGroup object from id and 
 	 * populate all its associated entities.
