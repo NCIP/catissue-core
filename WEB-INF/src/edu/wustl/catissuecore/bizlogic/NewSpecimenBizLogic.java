@@ -556,17 +556,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Specimen childSpecimen)
 	{
 		SpecimenCharacteristics characteristics  = null;
-		
-		 
+		if(Constants.ALIQUOT.equals(childSpecimen.getLineage()))
+		{
+			childSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
+			return;
+		}
 		SpecimenCharacteristics parentSpecChar = parentSpecimen.getSpecimenCharacteristics();
-		
 		if (parentSpecChar != null)
 		{
 			characteristics = new SpecimenCharacteristics();
 			characteristics.setTissueSide(parentSpecChar.getTissueSide());
 			characteristics.setTissueSite(parentSpecChar.getTissueSite());
 		}
-		
 		childSpecimen.setSpecimenCharacteristics(characteristics);
 	}
 	/**
@@ -672,7 +673,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 		{
 			//Setting Name from Id
-		
+
 				try
 				{
 					TaskTimeCalculater labelGen = TaskTimeCalculater.startTask("Time required for label Generator", NewSpecimenBizLogic.class);
@@ -803,7 +804,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		/**
 		 * Bug 3094 --> This jdbc query updates all the aliquots of a specimen, saperate query is written to improve the performance
 		 */
+		//updateChildAttributes(currentObj, oldObj);
+	}
 
+	private void updateChildAttributes(Object currentObj, Object oldObj)
+	{
 		Specimen currentSpecimen = (Specimen) currentObj;
 		Specimen oldSpecimen = (Specimen) oldObj;
 		String type = currentSpecimen.getType();
@@ -821,7 +826,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 						+ "' WHERE LINEAGE = 'ALIQUOT' AND PARENT_SPECIMEN_ID ='" + id + "';";
 
 				jdbcDao.executeUpdate(queryStr);
-				jdbcDao.closeSession();
+				//jdbcDao.closeSession();
 			}
 			catch (Exception e)
 			{
@@ -909,21 +914,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			//protocol = scg.getCollectionProtocolRegistration().getCollectionProtocol();
 			protocol = (CollectionProtocol) dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), scg.getId(),
 					"collectionProtocolRegistration.collectionProtocol");
-		if (protocol != null)
+		if (protocol == null)
 		{
-			boolean bb = collectionProtColl.isEmpty();
-			if (!bb)
-			{
-				bb = collectionProtColl.contains(protocol);
-			}
-			if (!bb)
+			throw new DAOException("This Collection Protocol not found");
+		}
+		if (collectionProtColl != null)	
+		{
+			if (getCorrespondingOldObject(collectionProtColl, protocol.getId())==null)
 			{
 				throw new DAOException("This Storage Container cannot hold specimen of collection protocol " + protocol.getTitle());
 			}
-		}
-		else
-		{
-			throw new DAOException("This Collection Protocol not found");
 		}
 	}
 
@@ -1119,27 +1119,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 		boolean isInitQtyChange = false;
 		boolean isInitAvlChange = false;
-		/**
-		 * Name:Virender Mehta
-		 * Reviewer: Sachin lale
-		 * This methos will retrive and set SCG Id from SCG name.
-		 */
-		if (specimen.getLineage().equals(Constants.NEW_SPECIMEN))
-		{
-			//retriveSCGIdFromSCGName(specimen,dao);
-		}
-		
-		
-		//retrive and set parentSpecimenId
-		/*lazy false change*/
-		
-		/*	if (specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId() == null)
-		{
-			Long parentSpecimenId = (Long) dao.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "parentSpecimen.id");
-			specimen.getParentSpecimen().setId(parentSpecimenId);
-
-		}*/
-
 		ApiSearchUtil.setSpecimenDefault(specimen);
 
 		//Added for api Search 
@@ -1156,18 +1135,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		 * Reviewer: Sachin lale
 		 * Calling Domain object from Proxy Object
 		 */
-		Specimen specimenImplObj = (Specimen) HibernateMetaData.getProxyObjectImpl(specimenOld);
-		if (!specimenImplObj.getClassName().equals(specimen.getClassName()))
+		if (!specimenOld.getClassName().equals(specimen.getClassName()))
 		{
 			throw new DAOException("Class should not be changed while updating the specimen");
 		}
-		//		 if(specimenOld.getAvailableQuantity().getValue().longValue() != specimen.getAvailableQuantity().getValue().longValue())
-		//		 {
-		//		 	throw new DAOException("Available Quantity should not be changed while updating the specimen");
-		//		 }
-
-		//End:- Change for API Search
-
 		// get old qunatity from database			
 		double oldAvailableQty = Double.parseDouble(specimenOld.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
 		double oldQty = Double.parseDouble(specimenOld.getInitialQuantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
@@ -1197,50 +1168,22 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				throw new DAOException(ApplicationProperties.getValue("errors.specimen.under.subspecimen"));
 			}
 			Logger.out.debug("Loading ParentSpecimen: " + specimen.getParentSpecimen().getId());
-
-			// check for closed ParentSpecimen
-			/*lazy false change*/
-			//checkStatus(dao, specimen.getParentSpecimen(), "Parent Specimen");
-
-			/*lazy false change*/
-			
 			SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getId(), dao);
-
 			specimen.setSpecimenCollectionGroup(scg);
 		}
-
-		//check for closed Specimen Collection Group
-		if (!specimen.getSpecimenCollectionGroup().getId().equals(specimenOld.getSpecimenCollectionGroup().getId()))
-			/*lazy false change*/
-			//checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
-
-		/**
-		 * Name:Virender Mehta
-		 * Reviewer: Aarti Sharma
-		 * */
-			
-			
-		 /*lazy change */
-		if (!Constants.ALIQUOT.equals(specimen.getLineage()))//specimen instanceof OriginalSpecimen)
+		if (!Constants.ALIQUOT.equals(specimen.getLineage()))
 		{
 			dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		}
 			
-		 /*lazy change */
-		//setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup(), dao);
-
-		//Consent Tracking
-		if (!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
+		 if (!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
 		{
-			updateConsentWithdrawStatus(specimen, specimenImplObj, dao, sessionDataBean);
+			updateConsentWithdrawStatus(specimen, specimenOld, dao, sessionDataBean);
 		}
 		else if (!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
 		{
-			updateConsentStatus(specimen, dao, specimenImplObj);
+			updateConsentStatus(specimen, dao, specimenOld);
 		}
-		//Consent Tracking	
-		//Mandar: 16-Jan-07
-
 		/**
 		 * Refer bug 3269 
 		 * 1. If quantity of old object > 0 and it is unavailable, it was marked 
@@ -1264,25 +1207,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			specimen.setAvailable(new Boolean(true));
 		}
 
-		
-		
-
 		/*transient instance problem */
 		List persistentSpecimenList =dao.retrieve(Specimen.class.getName(),Constants.ID,specimenOld.getId());
 		Specimen persistentSpecimen=(Specimen) persistentSpecimenList.get(0);
-		
-		/*persistentSpecimen.setAvailableQuantity(specimen.getAvailableQuantity());
-		persistentSpecimen.setAvailable(specimen.getAvailable());
-		persistentSpecimen.setPositionDimensionOne(specimen.getPositionDimensionOne());
-		persistentSpecimen.setPositionDimensionTwo(specimen.getPositionDimensionTwo());
-		persistentSpecimen.setLabel(specimen.getLabel());
-		persistentSpecimen.setBarcode(specimen.getBarcode());
-		persistentSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
-		persistentSpecimen.setCreatedOn(specimen.getCreatedOn());
-		persistentSpecimen.setAvailable(specimen.getAvailable());
-		persistentSpecimen.setBiohazardCollection(specimen.getBiohazardCollection());
-		persistentSpecimen.setNoOfAliquots(specimen.getNoOfAliquots());*/
-		
 		persistentSpecimen.setAvailableQuantity(specimen.getAvailableQuantity());
 		persistentSpecimen.setLabel(specimen.getLabel());
 		persistentSpecimen.setBarcode(specimen.getBarcode());
@@ -1300,8 +1227,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		persistentSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
 		persistentSpecimen.setType(specimen.getType());
 		persistentSpecimen.setCollectionStatus(specimen.getCollectionStatus());
-		String oldStatus = specimenOld.getCollectionStatus(); 
-
+		persistentSpecimen.setConsentTierStatusCollection(specimen.getConsentTierStatusCollection());
+		Double conc = 0D;
+		if(Constants.MOLECULAR.equals(specimen.getLineage()))
+		{
+			conc = ((MolecularSpecimen)specimen).getConcentrationInMicrogramPerMicroliter();
+			((MolecularSpecimen)persistentSpecimen).setConcentrationInMicrogramPerMicroliter(conc);
+		}
+		String oldStatus = specimenOld.getCollectionStatus(); 		
 		if (!Constants.COLLECTION_STATUS_COLLECTED.equals(oldStatus))
 		{
 			generateLabel(persistentSpecimen);
@@ -1335,58 +1268,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					ExternalIdentifier oldExId = (ExternalIdentifier) getCorrespondingOldObject(oldExternalIdentifierCollection, exId.getId());
 					dao.audit(exId, oldExId, sessionDataBean, true);
 				}
-				
-				//dao.update(persistExId, sessionDataBean, true, true, false);
-
-				//ExternalIdentifier oldExId = (ExternalIdentifier) getCorrespondingOldObject(oldExternalIdentifierCollection, exId.getId());
-				//dao.audit(exId, oldExId, sessionDataBean, true);
 			}
-			
 			persistentSpecimen.setExternalIdentifierCollection(perstExIdColl);
-			
 		}
 		dao.update(persistentSpecimen, sessionDataBean, true, false, false);//dao.update(specimen, sessionDataBean, true, true, false);
+		updateChildAttributes(specimen, specimenOld);
 		//Audit of Specimen.
-		
 		dao.audit(persistentSpecimen, oldObj, sessionDataBean, true);//dao.audit(obj, oldObj, sessionDataBean, true);
-
 		//Audit of Specimen Characteristics.
 		dao.audit(persistentSpecimen.getSpecimenCharacteristics(), specimenOld.getSpecimenCharacteristics(), sessionDataBean, true);
-		
-		
-		
-		
-	
-		
-		
-		
-		
-		
-		//dao.retrieve(ExternalIdentifier.class.getName(),"specimen",specimenOld.getId()); 
-		
-		// Collection oldExternalIdentifierCollection = specimenOld.getExternalIdentifierCollection();
-		/*
-		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
-		if (externalIdentifierCollection != null)
-		{
-			Iterator it = externalIdentifierCollection.iterator();
-			while (it.hasNext())
-			{
-				ExternalIdentifier exId = (ExternalIdentifier) it.next();
-				exId.setSpecimen(specimen);
-				dao.update(exId, sessionDataBean, true, true, false);
-
-				ExternalIdentifier oldExId = (ExternalIdentifier) getCorrespondingOldObject(oldExternalIdentifierCollection, exId.getId());
-				dao.audit(exId, oldExId, sessionDataBean, true);
-			}
-		}*/
-		
-	
-
-		
-		
-		
-		
 		//Disable functionality
 		Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
 		if (specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION))
@@ -1415,7 +1305,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
 				Long specimenIDArr[] = new Long[1];
 				specimenIDArr[0] = specimen.getId();
-
 				disableSubSpecimens(dao, specimenIDArr);
 			}
 		}
