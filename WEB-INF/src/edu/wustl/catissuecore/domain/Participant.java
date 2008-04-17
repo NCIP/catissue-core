@@ -737,10 +737,8 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	private Collection getConsentList(String collectionProtocolID) throws DAOException
     {   	
     	CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-		List collProtList  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), Constants.ID, collectionProtocolID);		
-		CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
-		Collection consentTierCollection = (Collection)collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");
-		return consentTierCollection;
+		Collection consentTierCollection = (Collection)collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), new Long(collectionProtocolID), "elements(consentTierCollection)");
+    	return consentTierCollection;
     }
 	 /**
      * Returns message label to display on success add or edit
