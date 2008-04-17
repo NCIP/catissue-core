@@ -218,7 +218,7 @@ public class CaCoreAppServicesDelegator
         SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
         try
         {
-              Role role=securityManager.getUserRole(validUser.getId());
+              Role role=securityManager.getUserRole(validUser.getCsmUserId());
               reviewerRole=role.getName();
         }
         catch(SMException ex)
