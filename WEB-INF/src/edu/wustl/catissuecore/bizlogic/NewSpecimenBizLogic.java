@@ -122,7 +122,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			AbstractSpecimenCollectionGroup scg = insertSpecimens(dao,
 					sessionDataBean, specimenList, insertableSpecimens);
 			
-			//securityManager.insertAuthorizationData(null, specimenList, getDynamicGroups(scg));
 		}
 		catch (SMException e)
 		{
