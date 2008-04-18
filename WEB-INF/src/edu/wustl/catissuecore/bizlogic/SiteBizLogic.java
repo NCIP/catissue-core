@@ -41,7 +41,7 @@ public class SiteBizLogic extends DefaultBizLogic
 	 * Saves the storageType object in the database.
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException  
+	 * @throws DAOException 
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
@@ -58,7 +58,15 @@ public class SiteBizLogic extends DefaultBizLogic
 		dao.insert(site, sessionDataBean, true, true);
 		protectionObjects.add(site);
 		protectionObjects.add(site.getAddress());
-		
+		try
+		{
+			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
+					protectionObjects, null);
+		}
+		catch (SMException e)
+		{
+			throw handleSMException(e);
+		}
 	}
 
 	/**
