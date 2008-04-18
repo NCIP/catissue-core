@@ -451,8 +451,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			else
 			{
 				collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
-				dao.update(collectionRequirementGroup, sessionDataBean, true, true, false);
-				dao.update(collectionProtocolEvent, sessionDataBean, true, true, false);
+				dao.update(collectionRequirementGroup, sessionDataBean, false, false, false);
+				dao.update(collectionProtocolEvent, sessionDataBean, true, false, false);
 				oldCollectionProtocolEvent = (CollectionProtocolEvent) getCorrespondingOldObject(
 						oldCollectionProtocolEventCollection, collectionProtocolEvent.getId());
 				dao.audit(collectionProtocolEvent, oldCollectionProtocolEvent, sessionDataBean, true);
@@ -517,7 +517,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			else
 			{
 				Specimen oldSpecimen =(Specimen) getCorrespondingOldObject(oldSpecimenCollection, specimen.getId()); 
-				dao.update(specimen, sessionDataBean, true, true, false);
+				dao.update(specimen, sessionDataBean, true, false, false);
 				dao.audit(specimen, oldSpecimen, sessionDataBean, true);
 
 			}						

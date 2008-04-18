@@ -213,7 +213,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 								}
 
 							}
-							dao.update(collectionProtocolRegistrationCheck, sessionDataBean, true, true, false);
+							dao.update(collectionProtocolRegistrationCheck, sessionDataBean, true, false, false);
 							//							updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, collectionProtocolRegistrationCheck);
 							checkAndUpdateChildDate(dao, sessionDataBean, collectionProtocolRegistrationCheck);
 
@@ -413,7 +413,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 					if (status == false)
 					{
 						specimenCollectionGroup.setCollectionStatus("Not Collected");
-						dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
+						dao.update(specimenCollectionGroup, sessionDataBean, true, false, false);
 					}
 				}
 			}
@@ -491,7 +491,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 										.getRegistrationDate(), offsetOfCurrentCPR.intValue()));
 							}
 						}
-						dao.update(cpr, sessionDataBean, true, true, false);
+						dao.update(cpr, sessionDataBean, true, false, false);
 						//						updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, cpr);
 						if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 						{
@@ -895,7 +895,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		// Mandar 22-Jan-07 To disable consents accordingly in SCG and
 		// Specimen(s) end
 		// Update registration
-		dao.update(persistentCPR, sessionDataBean, true, true, false);
+		dao.update(persistentCPR, sessionDataBean, true, false, false);
 		
 		
 
@@ -938,7 +938,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				}
 			}
 
-			dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
+			dao.update(specimenCollectionGroup, sessionDataBean, true, false, false);
 		}
 	}
 
@@ -1582,7 +1582,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 							//							else
 							//								cpr.setOffset(new Integer(offset));
 							//							updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
-							dao.update(cpr, sessionDataBean, true, true, false);
+							dao.update(cpr, sessionDataBean, true, false, false);
 
 							checkAndUpdateChildOffset(dao, sessionDataBean, cpr, offset);
 						}
@@ -1646,7 +1646,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 						//						else
 						//							cpr.setOffset(new Integer(offset));
 						//						updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
-						dao.update(cpr, sessionDataBean, true, true, false);
+						dao.update(cpr, sessionDataBean, true, false, false);
 						if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 						{
 							checkAndUpdateChildOffset(dao, sessionDataBean, cpr, offset);

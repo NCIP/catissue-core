@@ -85,7 +85,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 		ApiSearchUtil.setContainerTypeDefault(type);
 		//End:-  Change for API Search 
 
-		dao.update(type.getCapacity(), sessionDataBean, true, true, false);
+		dao.update(type.getCapacity(), sessionDataBean, true, false, false);
 		dao.update(type, sessionDataBean, true, true, false);
 
 		//Audit of update.

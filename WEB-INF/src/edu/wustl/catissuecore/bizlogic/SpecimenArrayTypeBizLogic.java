@@ -78,8 +78,8 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
         ApiSearchUtil.setContainerTypeDefault(arrayType);
         //End:-  Change for API Search 
         
-		dao.update(arrayType.getCapacity(), sessionDataBean, true, true, false);
-		dao.update(arrayType, sessionDataBean, true, true, false);
+		dao.update(arrayType.getCapacity(), sessionDataBean, true, false, false);
+		dao.update(arrayType, sessionDataBean, true, false, false);
 
 		//Audit of update.
 		SpecimenArrayType oldArrayType = (SpecimenArrayType) oldObj;

@@ -393,7 +393,7 @@ public class UserBizLogic extends DefaultBizLogic
 			{
 			    user.setFirstTimeLogin(new Boolean(false));
 			}
-			dao.update(user, sessionDataBean, true, true, true);  
+			dao.update(user, sessionDataBean, true, true, false);  
 			
 			//Modify the csm user.
 			SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
@@ -610,7 +610,7 @@ public class UserBizLogic extends DefaultBizLogic
 					user.setFirstTimeLogin(new Boolean(true));
 					AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 					dao.openSession(sessionData);
-			    	dao.update(user, sessionData, true, true, true);
+			    	dao.update(user, sessionData, true, true, false);
 					dao.commit();
 			        dao.closeSession();
 					statusMessageKey = "password.send.success";

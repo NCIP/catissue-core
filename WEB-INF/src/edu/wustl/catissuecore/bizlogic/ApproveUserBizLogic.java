@@ -103,7 +103,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 
             //Update the user record in catissue table.
             dao.update(user.getAddress(), sessionDataBean, true, false, false);
-	        dao.update(user, sessionDataBean, true, true, true);
+	        dao.update(user, sessionDataBean, true, true, false);
 	        
             //Audit of User Update during approving user.
             User oldUser = (User) oldObj;
