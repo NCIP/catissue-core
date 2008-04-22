@@ -4750,14 +4750,7 @@ PUBLIC
 			 type="edu.wustl.catissuecore.action.ShowChildNodes"		 
 			 scope="request">	 
 		</action>
-		
-		
-		<action path="/ShowChildNodes" 
-					type="edu.wustl.catissuecore.action.ShowChildNodesAction"
-					scope="request">
-		</action>
-		
-		
+			
 		<!-- Action mapping for disabling the SpecimenArray -->
 	  	<action path="/DeleteSpecimenArray"
 				type="edu.wustl.catissuecore.action.DeleteSpecimenArrayAction"
