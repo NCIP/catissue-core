@@ -176,6 +176,8 @@ public class UserBizLogic extends DefaultBizLogic
 			else
 			// Send the user creation email to user and the administrator.
 			{
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user), protectionObjects, null);
+
 				emailHandler.sendApprovalEmail(user);
 			}
 		}
@@ -393,7 +395,7 @@ public class UserBizLogic extends DefaultBizLogic
 			{
 			    user.setFirstTimeLogin(new Boolean(false));
 			}
-			dao.update(user, sessionDataBean, true, true, false);  
+			dao.update(user, sessionDataBean, true, true, true);  
 			
 			//Modify the csm user.
 			SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
@@ -610,7 +612,7 @@ public class UserBizLogic extends DefaultBizLogic
 					user.setFirstTimeLogin(new Boolean(true));
 					AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 					dao.openSession(sessionData);
-			    	dao.update(user, sessionData, true, true, false);
+			    	dao.update(user, sessionData, true, true, true);
 					dao.commit();
 			        dao.closeSession();
 					statusMessageKey = "password.send.success";
