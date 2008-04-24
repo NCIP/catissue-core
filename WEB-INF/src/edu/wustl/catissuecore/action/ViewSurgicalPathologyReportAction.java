@@ -294,7 +294,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	{ 
 		String userName = sessionBean.getUserName();
 		
-		// @Ravindra : to get privilegeCache through 
+		// To get privilegeCache through 
 		// Singleton instance of PrivilegeCacheManager, requires User LoginName		
 		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
 		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
@@ -306,7 +306,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			
 //			String userName = sessionBean.getUserName();
 			
-			// @Ravindra : Call to SecurityManager.checkPermission bypassed &
+			// Call to SecurityManager.checkPermission bypassed &
 			// instead, call redirected to privilegeCache.hasPrivilege			
 			boolean isAuthorized  = privilegeCache.hasPrivilege(aliasName+"_"+String.valueOf(identifier), Permissions.READ_DENIED);
 //			boolean isAuthorized  = SecurityManager.getInstance(ViewSurgicalPathologyReportAction.class).
@@ -314,7 +314,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			if(!isAuthorized)
 			{
 				//Check the permission of the user on the identified data of the object.
-				// @Ravindra : Call to SecurityManager.checkPermission bypassed &
+				// Call to SecurityManager.checkPermission bypassed &
 				// instead, call redirected to privilegeCache.hasPrivilege				
 				boolean hasPrivilegeOnIdentifiedData  = privilegeCache.hasPrivilege(aliasName+"_"+identifier, Permissions.IDENTIFIED_DATA_ACCESS); 
 //				boolean hasPrivilegeOnIdentifiedData  = SecurityManager.getInstance(ViewSurgicalPathologyReportAction.class).

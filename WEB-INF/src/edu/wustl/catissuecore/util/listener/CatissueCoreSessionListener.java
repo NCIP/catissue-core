@@ -37,7 +37,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 		if(sessionData!=null)
 			cleanUp(sessionData,(String)session.getAttribute(Constants.RANDOM_NUMBER));
 		
-		// @Ravindra : To remove PrivilegeCache from the session, requires user LoginName
+		// To remove PrivilegeCache from the session, requires user LoginName
 		// Singleton instance of PrivilegeCacheManager	
 		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
 		privilegeCacheManager.removePrivilegeCache(sessionData.getUserName());

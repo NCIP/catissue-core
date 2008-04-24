@@ -267,7 +267,7 @@ public class CaCoreAppServicesDelegator
 		boolean hasPrivilegeOnIdentifiedData = false;
 		List filteredObjects = new ArrayList();
 		
-		// @Ravindra : to get privilegeCache through 
+		// To get privilegeCache through 
 		// Singleton instance of PrivilegeCacheManager, requires User LoginName		
 		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
 		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
@@ -286,7 +286,7 @@ public class CaCoreAppServicesDelegator
             String aliasName = getAliasName(abstractDomainObject);
             
             // Check the permission of the user on the main object.
-			// @Ravindra : Call to SecurityManager.checkPermission bypassed &
+			// Call to SecurityManager.checkPermission bypassed &
 			// instead, call redirected to privilegeCache.hasPrivilege            
             hasReadDeniedForMain = privilegeCache.hasPrivilege((AbstractDomainObject)abstractDomainObject, Permissions.READ_DENIED);
             
@@ -307,7 +307,7 @@ public class CaCoreAppServicesDelegator
 		    if (!hasReadDeniedForMain)// In case of no READ_DENIED privilege, check for privilege on identified data. 
 		    {
 		        //Check the permission of the user on the identified data of the object.
-				// @Ravindra : Call to SecurityManager.checkPermission bypassed &
+				// Call to SecurityManager.checkPermission bypassed &
 				// instead, call redirected to privilegeCache.hasPrivilege		    	
 		    	hasPrivilegeOnIdentifiedData = privilegeCache.
 		    					hasPrivilege((AbstractDomainObject)abstractDomainObject, Permissions.IDENTIFIED_DATA_ACCESS);
