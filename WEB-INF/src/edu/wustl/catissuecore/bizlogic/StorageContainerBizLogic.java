@@ -923,7 +923,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			userName = SecurityManager.getInstance(StorageContainerBizLogic.class).getUserById(userId.toString()).getLoginName();
 		}
 
-		// @Ravindra : to get privilegeCache through 
+		// To get privilegeCache through 
 		// Singleton instance of PrivilegeCacheManager, requires User LoginName
 		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
 		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
@@ -950,7 +950,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			//Check the permission on the parent container or site.
 			if (assignToUser == true)//If the privilege is assigned/deassigned to a user.
 			{
-				// @Ravindra : Call to SecurityManager.checkPermission bypassed &
+				// Call to SecurityManager.checkPermission bypassed &
 				// instead, call redirected to privilegeCache.hasPrivilege				
 				permission = privilegeCache.hasPrivilege(containerObject.toString(), privilegeName);
 				
@@ -1839,7 +1839,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Logger.out.debug("validateContainerAccess..................");
 		String userName = sessionDataBean.getUserName();
 	
-		// @Ravindra : to get privilegeCache through 
+		// To get privilegeCache through 
 		// Singleton instance of PrivilegeCacheManager, requires User LoginName
 		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
 		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
@@ -1847,7 +1847,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 //		if (!SecurityManager.getInstance(this.getClass()).isAuthorized(userName, StorageContainer.class.getName() + "_" + container.getId(),
 //				Permissions.USE))
 		
-		// @Ravindra : Call to SecurityManager.isAuthorized bypassed &
+		// Call to SecurityManager.isAuthorized bypassed &
 		// instead, call redirected to privilegeCache.hasPrivilege		
 		if (!privilegeCache.hasPrivilege(StorageContainer.class.getName() + "_" + container.getId(), Permissions.USE))	
 		{
