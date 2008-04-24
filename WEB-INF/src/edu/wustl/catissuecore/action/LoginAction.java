@@ -118,7 +118,7 @@ public class LoginAction extends Action
 					Long end = System.currentTimeMillis();
 					
 					Long startTime = System.currentTimeMillis();
-					// @Ravindra : to add privilegeCache to
+					// To add privilegeCache to
 					// Singleton instance of PrivilegeCacheManager, requires User LoginName & privilegeCache object	
 					PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
 					privilegeCacheManager.addPrivlegeCache(loginName,privilegeCache);

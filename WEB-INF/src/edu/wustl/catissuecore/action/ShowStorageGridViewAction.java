@@ -63,7 +63,7 @@ public class ShowStorageGridViewAction  extends BaseAction
     {
         String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
         
-        // @Ravindra : to get privilegeCache through 
+        // To get privilegeCache through 
 		// Singleton instance of PrivilegeCacheManager, requires User LoginName
         PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
 		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(getUserLoginName(request));
@@ -73,7 +73,7 @@ public class ShowStorageGridViewAction  extends BaseAction
 //        if(!SecurityManager.getInstance(this.getClass()).isAuthorized(getUserLoginName(request)
 //        		,StorageContainer.class.getName()+"_"+id,Permissions.USE))
 		
-		// @Ravindra : Call to SecurityManager.isAuthorized bypassed &
+		// Call to SecurityManager.isAuthorized bypassed &
 		// instead, call redirected to privilegeCache.hasPrivilege		
 		if(!privilegeCache.hasPrivilege(StorageContainer.class.getName()+"_"+id,Permissions.USE))
 		{

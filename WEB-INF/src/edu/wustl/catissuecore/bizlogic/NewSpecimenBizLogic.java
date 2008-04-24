@@ -211,7 +211,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 	private void isAuthorise(String userName) throws UserNotAuthorizedException
 	{
-		// @Ravindra : to get privilegeCache through 
+		// To get privilegeCache through 
 		// Singleton instance of PrivilegeCacheManager, requires User LoginName
 		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
 		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
@@ -220,7 +220,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 //			if (!securityManager.isAuthorized(userName, Specimen.class.getName(), Permissions.CREATE))
 			
-			// @Ravindra : Call to SecurityManager.isAuthorized bypassed &
+			// Call to SecurityManager.isAuthorized bypassed &
 			// instead, call redirected to privilegeCache.hasPrivilege			
 			if (!privilegeCache.hasPrivilege(Specimen.class, Permissions.CREATE))
 			{
@@ -1606,7 +1606,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 		Container parentStorageContainer = storageContainerObj.getParent();
 		
-		// @Ravindra : to get privilegeCache through 
+		// To get privilegeCache through 
 		// Singleton instance of PrivilegeCacheManager, requires User LoginName
 		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
 		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(sessionDataBean.getUserName());
@@ -1621,7 +1621,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 //		    			.isAuthorized(sessionDataBean.getUserName(),
 //		            storageContainerSecObj, Permissions.USE);
 		
-		// @Ravindra : Call to SecurityManager.isAuthorized bypassed &
+		// Call to SecurityManager.isAuthorized bypassed &
 		// instead, call redirected to privilegeCache.hasPrivilege		
 		boolean userAuthorize = privilegeCache.hasPrivilege(storageContainerSecObj, Permissions.USE);
 

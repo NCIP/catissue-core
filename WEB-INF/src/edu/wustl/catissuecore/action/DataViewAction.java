@@ -96,7 +96,7 @@ public class DataViewAction extends BaseAction {
 		// Retrieve the columnIdsMap from session
 		Map columnIdsMap = (Map) session.getAttribute(Constants.COLUMN_ID_MAP);
 		
-		// @Ravindra : to get privilegeCache through 
+		// To get privilegeCache through 
 		// Singleton instance of PrivilegeCacheManager, requires User LoginName
 		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
 		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(getUserLoginName(request));
@@ -256,7 +256,7 @@ public class DataViewAction extends BaseAction {
 //					getUserLoginName(request),
 //					Constants.PACKAGE_DOMAIN + "." + name, Permissions.UPDATE))
 			
-			// @Ravindra : Call to SecurityManager.isAuthorized bypassed &
+			// Call to SecurityManager.isAuthorized bypassed &
 			// instead, call redirected to privilegeCache.hasPrivilege
 			if (!privilegeCache.hasPrivilege(Constants.PACKAGE_DOMAIN + "." + name, Permissions.UPDATE))
 			{
