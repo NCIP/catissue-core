@@ -223,7 +223,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
      * @return the collection Specimens in this SpecimenCollectionGroup.
      * @see #setSpecimenCollection(Collection)
      */
-    public Collection getSpecimenCollection()
+    public Collection<Specimen> getSpecimenCollection()
     {
         return specimenCollection;
     }
@@ -233,7 +233,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
      * @param specimenCollection the collection Specimens in this SpecimenCollectionGroup.
      * @see #getSpecimenCollection()
      */
-    public void setSpecimenCollection(Collection specimenCollection)
+    public void setSpecimenCollection(Collection<Specimen> specimenCollection)
     {
         this.specimenCollection = specimenCollection;
     }

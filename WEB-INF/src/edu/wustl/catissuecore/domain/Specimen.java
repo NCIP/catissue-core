@@ -121,7 +121,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	/**
 	 * Collection of children specimens derived from this specimen. 
 	 */
-	protected Collection childrenSpecimen = new HashSet();
+	protected Collection<Specimen> childrenSpecimen = new HashSet<Specimen>();
 
 	/**
 	 * Collection of a pre-existing, externally defined id associated with a specimen.
@@ -521,7 +521,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * @return the collection of children specimens derived from this specimen.
 	 * @see #setChildrenSpecimen(Set)
 	 */
-	public Collection getChildrenSpecimen()
+	public Collection<Specimen> getChildrenSpecimen()
 	{
 		return childrenSpecimen;
 	}
@@ -532,7 +532,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * derived from this specimen.
 	 * @see #getChildrenSpecimen()
 	 */
-	public void setChildrenSpecimen(Collection childrenSpecimen)
+	public void setChildrenSpecimen(Collection<Specimen> childrenSpecimen)
 	{
 		this.childrenSpecimen = childrenSpecimen;
 	}

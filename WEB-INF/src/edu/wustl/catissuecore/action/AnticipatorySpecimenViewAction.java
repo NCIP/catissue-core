@@ -1,8 +1,6 @@
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -39,6 +37,10 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class AnticipatorySpecimenViewAction extends BaseAction
 {
+	/**
+	 * 
+	 */
+	private static final String SPECIMEN_KEY_PREFIX = "S_";
 	Long cpId = null;
 	private SpecimenAutoStorageContainer autoStorageContainer;
 
@@ -111,75 +113,103 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	}
 
 	protected LinkedHashMap<String, GenericSpecimen> getSpecimensMap(
-			Collection specimenCollection, long collectionProtocolId)
+			Collection<Specimen> specimenCollection, long collectionProtocolId)
 				throws DAOException
 	{
 		LinkedHashMap<String, GenericSpecimen> specimenMap = 
 						new LinkedHashMap<String, GenericSpecimen>();
 
-		Iterator specimenIterator = specimenCollection.iterator();
+		Iterator<Specimen> specimenIterator = specimenCollection.iterator();
 		while(specimenIterator.hasNext())
 		{
-			Specimen specimen = (Specimen)specimenIterator.next();
+			Specimen specimen = specimenIterator.next();
 			if (specimen.getParentSpecimen() == null)
 			{
 				GenericSpecimenVO specBean =getSpecimenBean(specimen, null);
-				specBean.setUniqueIdentifier("S_"+specimen.getId());
+				specBean.setUniqueIdentifier(SPECIMEN_KEY_PREFIX+specimen.getId());
 				specBean.setCollectionProtocolId(collectionProtocolId);
-				specimenMap.put("S_"+specimen.getId(), specBean);				
+				specimenMap = getOrderedMap(
+						specimenMap, specimen.getId(), specBean, SPECIMEN_KEY_PREFIX);			
 			}
 			
 		}
 		return specimenMap;
 	}
 	
-	protected LinkedHashMap<String, GenericSpecimen> getChildAliquots(Specimen specimen) throws DAOException
+	private LinkedHashMap<String, GenericSpecimen>getOrderedMap(
+					LinkedHashMap<String, GenericSpecimen> specimenMap, 
+					Long id,GenericSpecimenVO specBean, String prefix) 
 	{
-		Collection specimenChildren = specimen.getChildrenSpecimen();
-		Iterator iterator = specimenChildren.iterator();
-		LinkedHashMap<String, GenericSpecimen>  aliquotMap = new
-			LinkedHashMap<String, GenericSpecimen> ();
-		while(iterator.hasNext())
-		{
-			Specimen childSpecimen = (Specimen) iterator.next();
-			if(Constants.ALIQUOT.equals(childSpecimen.getLineage()))
+		LinkedHashMap<String, GenericSpecimen> orderedMap = new 
+				LinkedHashMap<String, GenericSpecimen>();
+		Object [] keyArray = specimenMap.keySet().toArray();
+			for(int ctr=0;ctr<keyArray.length;ctr++)
 			{
-				GenericSpecimenVO specimenBean = getSpecimenBean(childSpecimen, specimen.getLabel());
-				specimenBean.setUniqueIdentifier("al_" + specimen.getId() +"_"+ childSpecimen.getId());
-				aliquotMap.put("al_" + specimen.getId() +"_"+ childSpecimen.getId(), specimenBean);
-				specimenBean.setCollectionProtocolId(cpId);
+				String keyVal =(String) keyArray[ctr];
+				String keyId = keyVal.substring(prefix.length());
+				if(Long.parseLong(keyId)>id)
+				{
+					orderedMap.put(keyVal, specimenMap.get(keyVal));
+					specimenMap.remove(keyVal);
+				}
 			}
-		}
-		return aliquotMap;
+			specimenMap.put(prefix+id, specBean);
+			if (!orderedMap.isEmpty())
+			{
+				specimenMap.putAll(orderedMap);
+			}
+		return specimenMap;
 	}
 
-	protected LinkedHashMap<String, GenericSpecimen> getChildDerived(Specimen specimen) throws DAOException
+
+	protected void setChildren(Specimen specimen, GenericSpecimen parentSpecimenVO) 
+	throws DAOException
 	{
-		Collection specimenChildren = specimen.getChildrenSpecimen();
-		Iterator iterator = specimenChildren.iterator();
-		LinkedHashMap<String, GenericSpecimen>  derivedMap = new
+		Collection<Specimen> specimenChildren = specimen.getChildrenSpecimen();
+		
+		if(specimenChildren == null ||specimenChildren.isEmpty())
+		{
+			return;
+		}
+		
+		Iterator<Specimen> iterator = specimenChildren.iterator();
+		
+		LinkedHashMap<String, GenericSpecimen>  aliquotMap = new
 			LinkedHashMap<String, GenericSpecimen> ();
+		LinkedHashMap<String, GenericSpecimen>  derivedMap = new
+		LinkedHashMap<String, GenericSpecimen> ();
+		
 		while(iterator.hasNext())
 		{
-			Specimen childSpecimen = (Specimen) iterator.next();
-			if(Constants.DERIVED_SPECIMEN.equals(childSpecimen.getLineage()))
+			Specimen childSpecimen = iterator.next();
+			String lineage = childSpecimen.getLineage();
+				
+			GenericSpecimenVO specimenBean = getSpecimenBean(childSpecimen, specimen.getLabel());
+			String prefix = lineage + specimen.getId() +"_";
+			specimenBean.setUniqueIdentifier(prefix + childSpecimen.getId());
+		
+			if(Constants.ALIQUOT.equals(childSpecimen.getLineage()))
 			{
-				GenericSpecimenVO specimenBean = getSpecimenBean(childSpecimen, specimen.getLabel());
-				specimenBean.setUniqueIdentifier("dr_" + specimen.getId() +"_"+ childSpecimen.getId());
-				derivedMap.put("dr_" + specimen.getId() +"_"+ childSpecimen.getId(), specimenBean);
-				specimenBean.setCollectionProtocolId(cpId);
-
+				aliquotMap = getOrderedMap(
+						aliquotMap, childSpecimen.getId(), specimenBean, prefix);	
 			}
+			else
+			{
+				derivedMap = getOrderedMap(
+						derivedMap, childSpecimen.getId(), specimenBean, prefix);
+			}
+			specimenBean.setCollectionProtocolId(cpId);
+			
 		}
-		return derivedMap;
-	}	
-	
+		parentSpecimenVO.setAliquotSpecimenCollection(aliquotMap);
+		parentSpecimenVO.setDeriveSpecimenCollection(derivedMap);
+	}
+
 	protected GenericSpecimenVO getSpecimenBean(Specimen specimen, String parentName) throws DAOException
 	{
 		GenericSpecimenVO specimenDataBean = new GenericSpecimenVO();
 		specimenDataBean.setBarCode(specimen.getBarcode());
 		specimenDataBean.setClassName(specimen.getClassName());
-//		specimenDataBean.setCreatedOn(specimen.getCreatedOn());
 		specimenDataBean.setDisplayName(specimen.getLabel());
 		specimenDataBean.setPathologicalStatus(specimen.getPathologicalStatus());
 		specimenDataBean.setId(specimen.getId().longValue());
@@ -188,10 +218,6 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		{	
 			specimenDataBean.setQuantity(specimen.getInitialQuantity().getValue().toString());
 		}
-//		specimenDataBean.setAvailable(Boolean.TRUE);
-//		specimenDataBean.setAvailableQuantity(availableQuantity);
-//		specimenDataBean.setInitialQuantity(availableQuantity);
-		//specimenDataBean.setConcentration(specimen.get);
 	
 		specimenDataBean.setCheckedSpecimen(true);
 		if (Constants.SPECIMEN_COLLECTED.equals(specimen.getCollectionStatus()))
@@ -199,7 +225,6 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setReadOnly(true);
 		}
 		specimenDataBean.setType(specimen.getType());
-//		specimenDataBean.setStorageContainerForSpecimen("Virtual");
 		SpecimenCharacteristics characteristics = specimen.getSpecimenCharacteristics();
 		if (characteristics != null)
 		{
@@ -254,8 +279,9 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			autoStorageContainer.addSpecimen(specimenDataBean, specimenDataBean.getClassName());
 			
 		}
-		specimenDataBean.setAliquotSpecimenCollection(getChildAliquots(specimen));
-		specimenDataBean.setDeriveSpecimenCollection(getChildDerived(specimen));
+		setChildren(specimen, specimenDataBean);
+		//specimenDataBean.setAliquotSpecimenCollection(getChildren(specimen, Constants.ALIQUOT));
+		//specimenDataBean.setDeriveSpecimenCollection(getChildren(specimen, Constants.ALIQUOT));
 		return specimenDataBean;
 	}
 		
