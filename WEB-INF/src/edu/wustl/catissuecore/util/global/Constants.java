@@ -2270,7 +2270,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String EXPORT_ZIP_NAME = "SearchResult.zip";	
 	public static final String ZIP_FILE_EXTENTION = ".zip";
 	public static final String CSV_FILE_EXTENTION = ".csv";
-	
+	public static final String EXPORT_DATA_LIST = "exportDataList"; 
+	public static final String ENTITY_IDS_MAP = "entityIdsMap";
 	public static final String DUMMY_NODE_NAME = "Loading...";
 	public static final String NODE_NAME = "nodeName";
 	public static final String CONTAINER_IDENTIFIER = "containerId";
@@ -2280,7 +2281,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	 * Constant required for Specimen Array Delete Action
 	 */
 	public static final String DELETE_SPECIMEN_ARRAY="DeleteSpecimenArray.do";
-	
-
 }
 	
