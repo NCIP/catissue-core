@@ -15,8 +15,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -30,13 +28,8 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
-import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.namegenerator.LabelGenerator;
-import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
-import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
-import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
@@ -770,16 +763,17 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	 *            The session in which the object is saved.
 	 * @throws DAOException
 	 */
-		protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		
-		
-		
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		CollectionProtocolRegistration oldCollectionProtocolRegistration = (CollectionProtocolRegistration) oldObj;
-
+		CollectionProtocolRegistration persistentCPR = null;
 		List persistentCPRList  =dao.retrieve(CollectionProtocolRegistration.class.getName(),Constants.ID, oldCollectionProtocolRegistration.getId());
-		CollectionProtocolRegistration persistentCPR=(CollectionProtocolRegistration) persistentCPRList.get(0);
+		if(persistentCPRList!=null & !persistentCPRList.isEmpty())
+		{
+			persistentCPR=(CollectionProtocolRegistration) persistentCPRList.get(0);	
+		}
+		
 		// Check for different Collection Protocol
 		if (!collectionProtocolRegistration.getCollectionProtocol().getId().equals(oldCollectionProtocolRegistration.getCollectionProtocol().getId()))
 		{	
@@ -865,8 +859,17 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
 		
 		updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);*/
-		
-		persistentCPR.setSpecimenCollectionGroupCollection(collectionProtocolRegistration.getSpecimenCollectionGroupCollection());
+		Collection specimenCollectionGroupCollection = persistentCPR.getSpecimenCollectionGroupCollection();
+		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
+		updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
+		persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration.getConsentTierResponseCollection());
+		persistentCPR.setConsentWitness(collectionProtocolRegistration.getConsentWitness());
+		persistentCPR.setConsentSignatureDate(collectionProtocolRegistration.getConsentSignatureDate());
+		persistentCPR.setSignedConsentDocumentURL(collectionProtocolRegistration.getSignedConsentDocumentURL());
+		persistentCPR.setProtocolParticipantIdentifier(collectionProtocolRegistration.getProtocolParticipantIdentifier());
+		persistentCPR.setRegistrationDate(collectionProtocolRegistration.getRegistrationDate());
+		persistentCPR.setActivityStatus(collectionProtocolRegistration.getActivityStatus());
+		//persistentCPR.setSpecimenCollectionGroupCollection(collectionProtocolRegistration.getSpecimenCollectionGroupCollection());
 		/* for offset 27th Dec 2007 */
 		// Check if Offset is present.If it is present then all the below
 		// hierarchy protocols are shifted according to the Offset.Integer offsetOld=oldCollectionProtocolRegistration.getOffset();
@@ -935,9 +938,10 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				{
 					Specimen specimen = (Specimen) itSpecimenCollection.next();
 					specimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
+					dao.update(specimen, sessionDataBean, false, false, false);
 				}
 			}
-
+			
 			dao.update(specimenCollectionGroup, sessionDataBean, true, false, false);
 		}
 	}
@@ -976,24 +980,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		}
 
 	}
-
-	private Set getProtectionObjects(AbstractDomainObject obj)
-	{
-		Set protectionObjects = new HashSet();
-
-		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
-		protectionObjects.add(collectionProtocolRegistration);
-		// Case of registering Participant on its participant ID
-		// Resolved bug# 7003
-		/*if (collectionProtocolRegistration.getParticipant() != null)
-		{
-			protectionObjects.add(collectionProtocolRegistration.getParticipant());
-		}*/
-
-		Logger.out.debug(protectionObjects.toString());
-		return protectionObjects;
-	}
-
+	
 	private String[] getDynamicGroups(AbstractDomainObject obj)
 	{
 		String[] dynamicGroups = null;

@@ -133,12 +133,14 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
 		    duplicateSCG = (SpecimenCollectionGroup)appService.createObject(duplicateSCG);
 		    System.out.println("After Creating SCG");
-			fail("Test Failed. Duplicate SCG name should throw exception");
+		    assertTrue("Submission doe not fail since label generator already present" , true);
+		    TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
 		}
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			assertTrue("Submission failed since a Collection Protocol with the same NAME already exists" , true);
+			fail("Test Failed. Duplicate SCG name should not throw exception");
+			
 			 
 		 }
     	
@@ -185,14 +187,15 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		    scg.getCollectionProtocolRegistration().setParticipant(participant);
 		    scg.setActivityStatus("Disabled");
 		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
-		    assertTrue("Should throw Exception", true);
+		    assertFalse("SCG contains specimen so should fail", true);
+		    
 			
 		}
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			System.out.println(e);
 			e.printStackTrace();
-			assertFalse("While adding SCG Activity status should be Active", true);
+			assertTrue("Should not throw Exception", true);
 			 
 		 }
     	

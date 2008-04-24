@@ -95,7 +95,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		distributionData = createList("eventparameters.comments",distributionReportForm.getComments(),distributionData);
 		String delimiter = Constants.DELIMETER;
 		ExportReport report = new ExportReport(fileName);
-		report.writeData(distributionData,delimiter);
+		//report.writeData(distributionData,delimiter);
 		List distributedItemsColumns = new ArrayList();
 		List columns = new ArrayList();
 		for(int k=0;k<columnNames.length;k++)
@@ -104,7 +104,10 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 			Logger.out.debug("Selected columns in save action "+columnNames[k]);
 		}
 		distributedItemsColumns.add(columns);
-		report.writeData(distributedItemsColumns,delimiter);
+		distributionData.addAll(distributedItemsColumns);
+		
+		//report.writeData(distributedItemsColumns,delimiter);
+		
     	Iterator dataListItr = listOfData.iterator();
     	while(dataListItr.hasNext())
     	{
@@ -124,10 +127,10 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
     					size--;
     				}
     			}
-    		}	
-			report.writeData(rowList,delimiter);
+    		}
+    		distributionData.addAll(rowList);
     	}
-    	
+    	report.writeData(distributionData,delimiter);
 		report.closeFile();
 	}
 }

@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
@@ -367,16 +368,39 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
 		//lazy false change
-		SpecimenCollectionGroup persistentSCG=(SpecimenCollectionGroup)
-						dao.retrieve(SpecimenCollectionGroup.class.getName(),
+		
+		List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.ID,
 								oldspecimenCollectionGroup.getId());
-
+		SpecimenCollectionGroup persistentSCG = null;
+		if(scgList!=null && !scgList.isEmpty())
+		{
+			persistentSCG = (SpecimenCollectionGroup)scgList.get(0);
+		}
+		
 		// Adding default events if they are null from API
 		Collection spEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
 		if (spEventColl == null || spEventColl.isEmpty())
 		{
 			setDefaultEvents(specimenCollectionGroup, sessionDataBean);
 		}
+		else
+		{
+			Collection pEvtPrmColl = persistentSCG.getSpecimenEventParametersCollection();
+			Iterator evntIterator = pEvtPrmColl.iterator();
+			if(pEvtPrmColl==null || pEvtPrmColl.isEmpty())
+			{
+				persistentSCG.setSpecimenEventParametersCollection(spEventColl);
+			}
+			while(evntIterator.hasNext())
+			{
+				SpecimenEventParameters event= (SpecimenEventParameters) evntIterator.next();
+				SpecimenEventParameters newEvent =(SpecimenEventParameters)
+												getCorrespondingObject(spEventColl, event.getClass());
+				updateEvent(event, newEvent);
+				//spEventColl.remove(newEvent);
+				
+			}
+		}		
 		// Check for different closed site
 		Site oldSite = oldspecimenCollectionGroup.getSpecimenCollectionSite();
 		Site site = specimenCollectionGroup.getSpecimenCollectionSite();
@@ -451,18 +475,17 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			}
 
 		}
+		
 		persistentSCG.setSpecimenCollectionSite(site);
 		persistentSCG.setOffset(offset);
 		persistentSCG.setCollectionStatus(specimenCollectionGroup.getCollectionStatus());
 		persistentSCG.setComment(specimenCollectionGroup.getComment());
-		persistentSCG.setCollectionProtocolEvent(specimenCollectionGroup.getCollectionProtocolEvent());
 		persistentSCG.setActivityStatus(specimenCollectionGroup.getActivityStatus());
 		persistentSCG.setSurgicalPathologyNumber(specimenCollectionGroup.getSurgicalPathologyNumber());
 		persistentSCG.setClinicalDiagnosis(specimenCollectionGroup.getClinicalDiagnosis());
 		persistentSCG.setClinicalStatus(specimenCollectionGroup.getClinicalStatus());
 		persistentSCG.setName(specimenCollectionGroup.getName());
-		persistentSCG =(SpecimenCollectionGroup)
-					HibernateMetaData.getProxyObjectImpl(persistentSCG);
+		persistentSCG.setConsentTierStatusCollection(specimenCollectionGroup.getConsentTierStatusCollection());
 		dao.update(persistentSCG, sessionDataBean, true, true, false);
 		/**
 		 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch
@@ -490,7 +513,49 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 
 	}
+	
+	private Object getCorrespondingObject(Collection objectCollection, Class eventClass)
+	{
+		Iterator iterator = objectCollection.iterator();
+		while (iterator.hasNext())
+		{
+			AbstractDomainObject abstractDomainObject = (AbstractDomainObject) iterator.next();
+			if (abstractDomainObject.getClass().hashCode()== eventClass.hashCode())
+			{
+				return abstractDomainObject;
+			}
+		}
 
+		return null;
+	}
+	
+	private void updateEvent(SpecimenEventParameters event , SpecimenEventParameters newEvent)
+	{
+		if(event instanceof CollectionEventParameters)
+		{
+			CollectionEventParameters toChangeCollectionEventParameters = (CollectionEventParameters)event;
+			CollectionEventParameters newCollectionEventParameters = (CollectionEventParameters)newEvent;
+			
+			toChangeCollectionEventParameters.setUser(newCollectionEventParameters.getUser());
+			toChangeCollectionEventParameters.setTimestamp(newCollectionEventParameters.getTimestamp());
+			toChangeCollectionEventParameters.setCollectionProcedure(newCollectionEventParameters.getCollectionProcedure());
+			toChangeCollectionEventParameters.setComment(newCollectionEventParameters.getComment());
+			toChangeCollectionEventParameters.setContainer(newCollectionEventParameters.getContainer());
+			
+		}
+		else
+		{
+			ReceivedEventParameters toChanagereceivedEventParameters = (ReceivedEventParameters)event;
+			ReceivedEventParameters newreceivedEventParameters = (ReceivedEventParameters)newEvent;
+			
+			toChanagereceivedEventParameters.setComment(newreceivedEventParameters.getComment());
+			toChanagereceivedEventParameters.setReceivedQuality(newreceivedEventParameters.getReceivedQuality());
+			toChanagereceivedEventParameters.setTimestamp(newreceivedEventParameters.getTimestamp());
+			toChanagereceivedEventParameters.setUser(newreceivedEventParameters.getUser());
+			
+		}
+	}
+	
 	/**
 	 * @param specimenCollectionGroup
 	 * @param sessionDataBean

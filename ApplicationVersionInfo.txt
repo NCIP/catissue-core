@@ -1,8 +1,14 @@
 /*
- * $Name: RC2
+ * $Name: RC3
  * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.2.8.10  2008/04/24 04:55:37  abhijit_naik
+ * RC3 branch merged into 09_JAN_07_V11 branch
+ *
+ * Revision 1.2.8.9.6.1  2008/04/07 08:32:17  virender_mehta
+ * *** empty log message ***
+ *
  * Revision 1.2.8.9  2008/02/18 06:55:33  abhijit_naik
- * changed tag from rc1 to rc2
+ * changed tag from rc2 to rc3
  *
  * Revision 1.2.8.8  2008/01/28 10:50:56  abhijit_naik
  * version no changed to RC1

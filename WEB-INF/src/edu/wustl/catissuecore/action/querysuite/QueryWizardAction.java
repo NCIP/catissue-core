@@ -37,6 +37,8 @@ public class QueryWizardAction extends BaseAction
 		session.removeAttribute(Constants.SELECTED_COLUMN_META_DATA);
 		session.removeAttribute(Constants.IS_SAVED_QUERY);
 		session.removeAttribute(edu.wustl.common.util.global.Constants.IS_SIMPLE_SEARCH);
+		session.removeAttribute(Constants.EXPORT_DATA_LIST);
+		session.removeAttribute(Constants.ENTITY_IDS_MAP);
 		searchForm = QueryModuleUtil.setDefaultSelections(searchForm);
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}

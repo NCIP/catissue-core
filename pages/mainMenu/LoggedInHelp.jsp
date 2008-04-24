@@ -52,7 +52,7 @@
   		      <!-- link 5 begins -->
               <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" >
                  <html:link styleClass="mainMenuLink" target="_NEW"
-				href="http://gforge.nci.nih.gov/plugins/scmcvs/cvsweb.php/catissuecore/caTissueSuite%20Phase%202/TrainingMaterials/?cvsroot=cacorecvs">
+				href="RedirectToHelp.do">
                 	<bean:message key="app.help" />
                 </html:link>              </td>
               <!-- link 5 ends -->

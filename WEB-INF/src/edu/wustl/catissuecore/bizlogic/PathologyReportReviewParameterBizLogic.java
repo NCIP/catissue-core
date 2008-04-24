@@ -42,7 +42,7 @@ public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
 		SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
 		try
 		{
-			Role role=securityManager.getUserRole(sessionDataBean.getUserId());
+			Role role=securityManager.getUserRole(new Long(sessionDataBean.getCsmUserId()).longValue());
 			reviewerRole=role.getName();
 			reviewParam.setReviewerRole(reviewerRole);
 		}

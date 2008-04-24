@@ -98,25 +98,56 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		//Inserting collection Protocol Registration info in the database after setting the participant associated.
 		//Abhishek Mehta
 		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
-		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 		
-		if(collectionProtocolRegistrationCollection == null ) 
+		
+		if(collectionProtocolRegistrationCollection != null ) 
 		{
-			collectionProtocolRegistrationCollection = new LinkedHashSet();
-		}
-		
-		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
-		while (itCollectionProtocolRegistrationCollection.hasNext())
+			
+			registerToCPR(dao, sessionDataBean, participant);
+		}		
+		else
 		{
-			CollectionProtocolRegistration collectionProtocolRegistrationIdentifier = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection.next();	        
-			collectionProtocolRegistrationIdentifier.setParticipant(participant);
-			collectionProtocolRegistrationIdentifier.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-			cprBizLogic.insert(collectionProtocolRegistrationIdentifier, dao, sessionDataBean);
+			insertAuthData(participant);
 		}
-		
+	}
+
+	/**
+	 * @param participant
+	 * @throws DAOException
+	 */
+	private void insertAuthData(Participant participant) throws DAOException
+	{
 		Set protectionObjects = new HashSet();
 		protectionObjects.add(participant);
 		
+	}
+
+	/**
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param participant
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private void registerToCPR(DAO dao, SessionDataBean sessionDataBean,
+			Participant participant)
+			throws DAOException, UserNotAuthorizedException
+	{
+		CollectionProtocolRegistrationBizLogic cprBizLogic = 
+									new CollectionProtocolRegistrationBizLogic();
+		Collection cprCollection = 
+						participant.getCollectionProtocolRegistrationCollection();
+
+		Iterator itcprCollection = cprCollection.iterator();
+		
+		while (itcprCollection.hasNext())
+		{
+			CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) 
+													itcprCollection.next();	        
+			cpr.setParticipant(participant);
+			cpr.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			cprBizLogic.insert(cpr, dao, sessionDataBean);
+		}
 	}
 	
 	/**

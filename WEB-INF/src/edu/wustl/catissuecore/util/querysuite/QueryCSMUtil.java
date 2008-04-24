@@ -414,7 +414,13 @@ public abstract class QueryCSMUtil
 			columnIndex = (Integer) sqlIndexMap.get(Constants.ID_COLUMN_ID);
 		}
 		if (queryResultObjectDataBean != null)
+		{
 			queryResultObjectDataBean.setEntityIdIndexMap(entityIdIndexMap);
+			if (entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity()) != null)
+			{
+				queryResultObjectDataBean.setMainEntityIdentifierColumnId(entityIdIndexMap.get(queryResultObjectDataBean.getMainEntity()));
+			}
+		}
 		return selectSql;
 	}
 

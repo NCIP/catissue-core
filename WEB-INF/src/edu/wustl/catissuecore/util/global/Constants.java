@@ -617,6 +617,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String SPECIMENARRAY_ADD_ACTION = "SpecimenArrayAdd.do";
 	public static final String SPECIMENARRAY_EDIT_ACTION = "SpecimenArrayEdit.do";
+    
+	//Constants required in Main menu
+	
+	public static final String HELP_FILE= "caTissue_Suite_User_Manual.pdf";
+	
 	//Spreadsheet Export Action
 	public static final String SPREADSHEET_EXPORT_ACTION = "SpreadsheetExport.do";
 	
@@ -2262,9 +2267,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FILE_TYPE = "file";	
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_DISPOSE="orderRequestStatusAndDistributedAndDispose";
 	public static final String EXPORT_FILE_NAME_START = "Report_Content_";
-	public static final String EXPORT_ZIP_NAME = "SearchResult.zip";
-	public static final String EXPORT_DATA_LIST = "exportDataList"; 
-	public static final String ENTITY_IDS_MAP = "entityIdsMap";
+	public static final String EXPORT_ZIP_NAME = "SearchResult.zip";	
 	public static final String ZIP_FILE_EXTENTION = ".zip";
 	public static final String CSV_FILE_EXTENTION = ".csv";
 	

@@ -258,7 +258,8 @@ public abstract class QueryModuleUtil
 		Map<EntityInterface, Integer> entityIdIndexMap =new HashMap<EntityInterface, Integer>();
 		if(queryResultObjectDataBean.getIdentifiedDataColumnIds().size()!=0)
 		  queryResultObjectDataBean.setHasAssociatedIdentifiedData(true);
-		QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columIndex,columnNames,null,entityIdIndexMap,idNodeMap);
+		if (!queryResultObjectDataBean.isMainEntity())
+			columnNames = QueryCSMUtil.updateEntityIdIndexMap(queryResultObjectDataBean,columIndex,columnNames,null,entityIdIndexMap,idNodeMap);
 		columnNameIndexMap.put(Constants.COLUMN_NAMES, columnNames);
 		columnNameIndexMap.put(Constants.INDEX, index);
 		return columnNameIndexMap;

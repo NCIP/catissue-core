@@ -68,6 +68,8 @@ public class ConfigureGridViewAction extends BaseAction
 
 		String sql = querySessionData.getSql();
 		SessionDataBean sessionData = getSessionData(request);
+		session.removeAttribute(Constants.EXPORT_DATA_LIST);
+		session.removeAttribute(Constants.ENTITY_IDS_MAP);
 
 		Map spreadSheetDataMap = new HashMap();
 		List<String> definedColumnsList = new ArrayList<String>();

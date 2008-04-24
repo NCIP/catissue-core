@@ -95,9 +95,10 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	    try 
 		{
 	    	storageContainer = (StorageContainer) appService.createObject(storageContainer);
+	    	StorageContainer cachedContainer = (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
+	    	Container parent = new StorageContainer(); 
+	    	parent.setId(cachedContainer.getId());
 	    	storageContainer.setParentChanged(true);
-	    	Container parent = new Container();
-			parent.setId(new Long(2));
 			storageContainer.setParent(parent);    
 	    	System.out.println("After Update");
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);

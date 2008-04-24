@@ -93,8 +93,8 @@ public class ShowGridAction extends BaseAction
 						hasConditionOnIdentifiedField, queryResultObjectDataMap, mainEntityMap);
 			}
 			spreadSheetDatamap.put(Constants.MAIN_ENTITY_MAP, mainEntityMap);
-			request.getSession().setAttribute("entityIdsList",spreadSheetDatamap.get("entityIdsList"));
-			request.getSession().setAttribute("exportDataList",spreadSheetDatamap.get("exportDataList"));
+			request.getSession().setAttribute(Constants.ENTITY_IDS_MAP,spreadSheetDatamap.get(Constants.ENTITY_IDS_MAP));
+			request.getSession().setAttribute(Constants.EXPORT_DATA_LIST,spreadSheetDatamap.get(Constants.EXPORT_DATA_LIST));
 			
 			QueryModuleUtil.setGridData(request, spreadSheetDatamap);
 		}

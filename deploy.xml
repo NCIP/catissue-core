@@ -304,6 +304,10 @@
 		<delete file="${jboss.server.url}/deploy/catissuecore.war" />
 		<delete file="${jboss.server.url}/deploy/dynamicExtensions.war" />
 		<delete file="${jboss.server.url}/deploy/caTissuePrintWebService.war" />
+		<delete file="${jboss.server.url}/deploy/pathologySCG.war" />
+		<delete file="${jboss.server.url}/deploy/pathologySpecimen.war" />
+		<delete file="${jboss.server.url}/deploy/CA.war" />
+		<delete file="${jboss.server.url}/deploy/deintegration.war" />
 		<mkdir dir="${jboss.server.url}/work"/>
 		<mkdir dir="${jboss.server.url}/tmp"/>
 		<delete includeemptydirs="true">

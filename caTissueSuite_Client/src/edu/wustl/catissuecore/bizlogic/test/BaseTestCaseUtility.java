@@ -2061,7 +2061,7 @@ public class BaseTestCaseUtility {
 		
 		specimenArray.setStorageContainer(storageContainer);
 		specimenArray.setPositionDimensionOne(new Integer(1));
-		specimenArray.setPositionDimensionTwo(new Integer(1));
+		specimenArray.setPositionDimensionTwo(new Integer(2));
 		
 		Collection specimenArrayContentCollection = new HashSet();
 		SpecimenArrayContent specimenArrayContent = new SpecimenArrayContent();

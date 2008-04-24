@@ -218,6 +218,6 @@ public class IdentifiedReportGenerator
 				docText += "\n\n[" + sectionHeader + "]" + "\n\n" + sectionText + "\n\n";
 			}
 		}
-		return docText.trim();
+		return docText;
 	}
 }

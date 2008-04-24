@@ -705,7 +705,6 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		Long orderId = new Long(requestDetailsForm.getId());
 		this.setId(orderId); 
 		
-		
 		Collection beanObjSet = parseValuesMap(requestDetailsForm.getValues());
 		
 		Iterator iter = beanObjSet.iterator();
@@ -848,11 +847,12 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	private OrderItem populateOrderItemForSpecimenOrderItems(RequestDetailsBean requestDetailsBean,OrderDetails order,Collection distributedItemCollection,Distribution distribution,RequestDetailsForm requestDetailsForm,Collection distributionObjectCollection)
 	{
 		OrderItem orderItem = new OrderItem();
-		
-		// modified by pratha for bug# 5663	and 7355
-		
-		DerivedSpecimenOrderItem derivedOrderItem = new DerivedSpecimenOrderItem();
-		ExistingSpecimenOrderItem existingOrderItem = new ExistingSpecimenOrderItem();
+		//Updating Description and Status.
+		orderItem.setId(new Long(requestDetailsBean.getOrderItemId()));
+		orderItem.setStatus(requestDetailsBean.getAssignedStatus());
+		orderItem.setDescription(requestDetailsBean.getDescription());			
+		//Setting the order id 
+		orderItem.setOrderDetails(order);	
 		
 		//For Distribution.
 		if(requestDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && requestDetailsBean.getDistributedItemId().equals(""))
@@ -868,23 +868,17 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				if(requestDetailsBean.getRequestFor() == null || requestDetailsBean.getRequestFor().trim().equalsIgnoreCase(""))
 				{//for existing Specimen.
 					if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Existing"))
-					{   
-						existingOrderItem = new ExistingSpecimenOrderItem();
+					{
 						specimen.setId(new Long(requestDetailsBean.getSpecimenId()));
-						specimen.setLabel(requestDetailsBean.getRequestedItem());
-						existingOrderItem.setSpecimen(specimen);
-						orderItem = existingOrderItem;
 					}
 				}
 				else
 				{//For derived specimen.
-					derivedOrderItem = new  DerivedSpecimenOrderItem();
 					specimen.setId(new Long(requestDetailsBean.getRequestFor()));
-			        orderItem = derivedOrderItem;
 				}
 			//}
 			distributedItem.setSpecimen(specimen);
-		
+	
 			//For setting assigned quantity in Distribution.
 			if(requestDetailsBean.getAssignedQty() != null && !requestDetailsBean.getAssignedQty().trim().equalsIgnoreCase(""))
 			{
@@ -898,22 +892,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			
 			distributionObjectCollection.add(distribution);	
 		}	
-	
-	   //Updating Description and Status.
-		orderItem.setId(new Long(requestDetailsBean.getOrderItemId()));
-		orderItem.setStatus(requestDetailsBean.getAssignedStatus());
-		orderItem.setDescription(requestDetailsBean.getDescription());
-        //Setting the order id 
-		orderItem.setOrderDetails(order);
-		
-	    return orderItem;
+		return orderItem;
 	}
-	
-	
-	
-	
-	
-	
 	/**
 	 * @param distribution object
 	 * @param requestDetailsForm object

@@ -17,12 +17,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
+
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
@@ -218,7 +218,7 @@ public class CaCoreAppServicesDelegator
         SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
         try
         {
-              Role role=securityManager.getUserRole(validUser.getCsmUserId());
+              Role role=securityManager.getUserRole(validUser.getCsmUserId().longValue());
               reviewerRole=role.getName();
         }
         catch(SMException ex)

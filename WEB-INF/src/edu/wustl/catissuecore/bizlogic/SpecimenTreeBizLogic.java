@@ -92,9 +92,12 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 			
 			//The list consists of only one element that is:- specimencollecitongroup instance
 			SpecimenCollectionGroup specimenCollGrpObj = (SpecimenCollectionGroup) specimenCollGrp.get(0);
+			Long scgId = specimenCollGrpObj.getId();
+			Collection specimenSet = (Collection) 
+			defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),scgId,"elements(specimenCollection)");
 			
 			//Get the list of specimens for this group(SCG)
-			Set specimenSet = (Set)specimenCollGrpObj.getSpecimenCollection();
+//			Set specimenSet = (Set)specimenCollGrpObj.getSpecimenCollection();
 			Iterator specimenSetItr = specimenSet.iterator();
 			while(specimenSetItr.hasNext())
 			{
@@ -125,8 +128,13 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 		rootNode.setParentValue("");
 		
 		specimenTreeVector.add(rootNode);
+		
+		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		specimenSet = (Collection) defaultBizLogic .retrieveAttribute(Specimen.class.getName(),specimenObj.getId(),"elements(childCollection)");
+		//specimenObj.setChildrenSpecimen(childColl);
+		
 		//Get the list of specimens derived from this specimen.
-		specimenSet = (Set)specimenObj.getChildrenSpecimen();
+		//specimenSet = (Set)specimenObj.getChildrenSpecimen();
 		
 		//formSpecimenTree() constructs tree form of specimens and returns the nodes in vector form.
 		Vector allNodes = formSpecimenTree(specimenTreeVector,rootNode,specimenSet);
@@ -149,7 +157,7 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 		//If no childNodes present then tree will contain only the root node.
 		if(childNodes == null)
 		{
-			return null;
+			return specimenTreeVector;
 		}
 		//Otherwise
 		Iterator specimenItr = childNodes.iterator();

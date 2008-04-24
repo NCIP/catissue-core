@@ -39,6 +39,8 @@ public class ExecuteQueryAction extends BaseAction
 		//request.setAttribute(Constants.IS_SAVED_QUERY, Constants.TRUE);
 		HttpSession session = request.getSession();
 		session.removeAttribute(Constants.SELECTED_COLUMN_META_DATA);
+		session.removeAttribute(Constants.EXPORT_DATA_LIST);
+		session.removeAttribute(Constants.ENTITY_IDS_MAP);
 		IParameterizedQuery parameterizedQuery = (IParameterizedQuery) session.getAttribute(AppletConstants.QUERY_OBJECT);
 		String conditionstr = request.getParameter("conditionList");
 		session.setAttribute(Constants.IS_SAVED_QUERY, Constants.TRUE);

@@ -244,7 +244,16 @@ function participantRegRow(subdivtag)
 		{
      		 Tip(titleMessage,BGCOLOR,'#FFFFFF',BORDERCOLOR,'#000000',FONTCOLOR,'#000000',WIDTH,'30',FOLLOWMOUSE,'FALSE');
     	}
- 
+    function setSize()
+	    {
+			var container = document.getElementById("tablecontainer");
+			var tempWidth =document.body.clientWidth;
+		    var tempHeight=document.body.clientHeight;
+            container.style.height=tempHeight-50;
+            container.style.width=tempWidth-50;
+	   		container = document.getElementById("identifier");
+		    container.style.width=tempWidth-100;
+	    }
 </script>
 
 
@@ -978,20 +987,8 @@ function participantRegRow(subdivtag)
 								%>
 																
 								<!-- PUT YOUR COMMENT HERE -->
-								<!-- delete button added for deleting the objects -->
-								<td nowrap class="formFieldNoBorders">
-									<% 	
-										String deleteAction="deleteObject('" + formName +"','" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
-									%>
-									<html:button styleClass="actionButton"
-											property="disableRecord"
-											title="Delete"
-											value="Delete"
-											onclick="<%=deleteAction%>">
-									</html:button>
-								</td>
-								
 
+								
 								<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  

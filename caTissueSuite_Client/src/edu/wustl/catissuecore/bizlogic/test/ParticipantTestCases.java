@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.common.util.HQLCriteria;
 
 
 public class ParticipantTestCases extends CaTissueBaseTestCase {
@@ -122,11 +123,24 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			TestCaseUtility.setObjectMap(sprObj, SpecimenCollectionGroup.class);
 			TestCaseUtility.setObjectMap(participant, Participant.class);
 			
-			Iterator itr = sprObj.getSpecimenCollection().iterator();
+			String hqlQuery2="select elements(scg.specimenCollection)" +
+			" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg" +
+	    	" where scg.id="+sprObj.getId();
+        	
+            System.out.println("-------------------");
+        	HQLCriteria hqlCriteria2= new HQLCriteria(hqlQuery2);
+        	List specimenCollection = appService.query(hqlCriteria2, SpecimenCollectionGroup.class.getName());
+        	System.out.println("-------------------"+specimenCollection);
+        	
+        	System.out.println("Criteria executed");
+			
+			//Iterator itr = sprObj.getSpecimenCollection().iterator();
+        	Iterator itr =specimenCollection.iterator();
 			Specimen sp = null;
 			while(itr.hasNext())
 			{
 				sp = (Specimen)itr.next();
+				System.out.println("This is Specimen"+sp.getId());
 			}
 			TestCaseUtility.setObjectMap(sp, Specimen.class);
 			if(sp==null)

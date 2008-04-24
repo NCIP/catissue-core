@@ -24,7 +24,7 @@
 		<equals arg1="${install.harvardscrubber.deidentfier}" arg2="yes" casesensitive="false" />
 	</condition>
 	<condition property="deidentifier.selected" value="deploy_donothing_server" >
-		<equals arg1="${install.donothing.deidemtifier}" arg2="yes" casesensitive="false" />
+		<equals arg1="${install.donothing.deidentifier}" arg2="yes" casesensitive="false" />
 	</condition>
 	<condition property="deidentifier.selected" value="deploy_custom_server" >
 		<equals arg1="${install.custom.deidentifier}" arg2="yes" casesensitive="false" />
@@ -255,7 +255,7 @@
 			</then>
 		</if>
 		<if>
-			<equals arg1="${install.donothing.deidemtifier}" arg2="yes" />
+			<equals arg1="${install.donothing.deidentifier}" arg2="yes" />
 			<then>
 				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
 					<replacefilter token="@@DEIDENTIFIER_CLASS_NAME@@" value="edu.wustl.catissuecore.deidentifier.DoNothingDeidentifier" />

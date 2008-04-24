@@ -212,7 +212,10 @@ PUBLIC
          <action path="/LoggedInHelp"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.helpLoggedInDef" />
-
+                   
+        <action path="/RedirectToHelp"  type="edu.wustl.catissuecore.action.RedirectToHelpAction" />
+                    
+       
 		<!--Suite-->		
 			
 	<!-- Ordering System -->

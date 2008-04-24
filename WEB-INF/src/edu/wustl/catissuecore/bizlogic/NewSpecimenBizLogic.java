@@ -918,7 +918,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			throw new DAOException("This Collection Protocol not found");
 		}
-		if (collectionProtColl != null)	
+		if (collectionProtColl != null && !collectionProtColl.isEmpty())
 		{
 			if (getCorrespondingOldObject(collectionProtColl, protocol.getId())==null)
 			{
