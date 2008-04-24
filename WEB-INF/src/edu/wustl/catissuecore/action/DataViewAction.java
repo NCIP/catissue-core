@@ -39,6 +39,8 @@ import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.query.AdvancedQuery;
 import edu.wustl.common.query.Query;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeCacheManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
@@ -93,7 +95,12 @@ public class DataViewAction extends BaseAction {
 		}
 		// Retrieve the columnIdsMap from session
 		Map columnIdsMap = (Map) session.getAttribute(Constants.COLUMN_ID_MAP);
-
+		
+		// @Ravindra : to get privilegeCache through 
+		// Singleton instance of PrivilegeCacheManager, requires User LoginName
+		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(getUserLoginName(request));
+		
 		if (!name.equals(Constants.ROOT)) {
 			id = str.nextToken().trim();
 		}
@@ -244,9 +251,15 @@ public class DataViewAction extends BaseAction {
 			// Aarti: Check whether user has use permission to update this
 			// object
 			// or not
-			if (!SecurityManager.getInstance(this.getClass()).isAuthorized(
-					getUserLoginName(request),
-					Constants.PACKAGE_DOMAIN + "." + name, Permissions.UPDATE)) {
+			
+//			if (!SecurityManager.getInstance(this.getClass()).isAuthorized(
+//					getUserLoginName(request),
+//					Constants.PACKAGE_DOMAIN + "." + name, Permissions.UPDATE))
+			
+			// @Ravindra : Call to SecurityManager.isAuthorized bypassed &
+			// instead, call redirected to privilegeCache.hasPrivilege
+			if (!privilegeCache.hasPrivilege(Constants.PACKAGE_DOMAIN + "." + name, Permissions.UPDATE))
+			{
 				ActionErrors errors = new ActionErrors();
 				ActionError error = new ActionError(
 						"access.edit.object.denied", getUserLoginName(request),

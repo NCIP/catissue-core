@@ -17,12 +17,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
-
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
@@ -36,6 +36,8 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeCacheManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.Permissions;
@@ -45,6 +47,7 @@ import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
  * This class contains the basic methods that are required for HTTP APIs. 
@@ -218,7 +221,7 @@ public class CaCoreAppServicesDelegator
         SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
         try
         {
-              Role role=securityManager.getUserRole(validUser.getCsmUserId().longValue());
+              Role role=securityManager.getUserRole(validUser.getCsmUserId());
               reviewerRole=role.getName();
         }
         catch(SMException ex)
@@ -264,6 +267,11 @@ public class CaCoreAppServicesDelegator
 		boolean hasPrivilegeOnIdentifiedData = false;
 		List filteredObjects = new ArrayList();
 		
+		// @Ravindra : to get privilegeCache through 
+		// Singleton instance of PrivilegeCacheManager, requires User LoginName		
+		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
+		
 		Logger.out.debug("Total Objects>>>>>>>>>>>>>>>>>>>>>"+objectList.size());
 		Iterator iterator = objectList.iterator();
 		while(iterator.hasNext())
@@ -278,9 +286,13 @@ public class CaCoreAppServicesDelegator
             String aliasName = getAliasName(abstractDomainObject);
             
             // Check the permission of the user on the main object.
-		    hasReadDeniedForMain = SecurityManager.getInstance(CaCoreAppServicesDelegator.class)
-		    							.checkPermission(userName, aliasName,
-		    							        identifier, Permissions.READ_DENIED);
+			// @Ravindra : Call to SecurityManager.checkPermission bypassed &
+			// instead, call redirected to privilegeCache.hasPrivilege            
+            hasReadDeniedForMain = privilegeCache.hasPrivilege((AbstractDomainObject)abstractDomainObject, Permissions.READ_DENIED);
+            
+//		    hasReadDeniedForMain = SecurityManager.getInstance(CaCoreAppServicesDelegator.class)
+//		    							.checkPermission(userName, aliasName,
+//		    							        identifier, Permissions.READ_DENIED);
 		    
 		    Logger.out.debug("Main object:" + aliasName + " Has READ_DENIED privilege:" + hasReadDeniedForMain);
 		    
@@ -295,9 +307,14 @@ public class CaCoreAppServicesDelegator
 		    if (!hasReadDeniedForMain)// In case of no READ_DENIED privilege, check for privilege on identified data. 
 		    {
 		        //Check the permission of the user on the identified data of the object.
-		        hasPrivilegeOnIdentifiedData = SecurityManager.getInstance(CaCoreAppServicesDelegator.class) 
-													.checkPermission(userName, aliasName,
-													     identifier, Permissions.IDENTIFIED_DATA_ACCESS);
+				// @Ravindra : Call to SecurityManager.checkPermission bypassed &
+				// instead, call redirected to privilegeCache.hasPrivilege		    	
+		    	hasPrivilegeOnIdentifiedData = privilegeCache.
+		    					hasPrivilege((AbstractDomainObject)abstractDomainObject, Permissions.IDENTIFIED_DATA_ACCESS);
+		    	
+//		        hasPrivilegeOnIdentifiedData = SecurityManager.getInstance(CaCoreAppServicesDelegator.class) 
+//													.checkPermission(userName, aliasName,
+//													     identifier, Permissions.IDENTIFIED_DATA_ACCESS);
 		        
 				Logger.out.debug("hasPrivilegeOnIdentifiedData:" + hasPrivilegeOnIdentifiedData);
 				// If has no read privilege on identified data, set the identified attributes as NULL. 

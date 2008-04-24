@@ -38,6 +38,8 @@ import edu.wustl.catissuecore.storage.StorageContainerGridObject;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeCacheManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -61,10 +63,19 @@ public class ShowStorageGridViewAction  extends BaseAction
     {
         String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
         
+        // @Ravindra : to get privilegeCache through 
+		// Singleton instance of PrivilegeCacheManager, requires User LoginName
+        PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(getUserLoginName(request));
+		
         // Aarti: Check whether user has use permission on the storage container
 		// or not
-        if(!SecurityManager.getInstance(this.getClass()).isAuthorized(getUserLoginName(request)
-        		,StorageContainer.class.getName()+"_"+id,Permissions.USE))
+//        if(!SecurityManager.getInstance(this.getClass()).isAuthorized(getUserLoginName(request)
+//        		,StorageContainer.class.getName()+"_"+id,Permissions.USE))
+		
+		// @Ravindra : Call to SecurityManager.isAuthorized bypassed &
+		// instead, call redirected to privilegeCache.hasPrivilege		
+		if(!privilegeCache.hasPrivilege(StorageContainer.class.getName()+"_"+id,Permissions.USE))
 		{
         	ActionErrors errors = new ActionErrors();
          	ActionError error = new ActionError("access.use.object.denied");

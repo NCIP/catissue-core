@@ -34,6 +34,8 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.querysuite.security.PrivilegeType;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeCacheManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -290,17 +292,33 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 */
 	private boolean isAuthorized(SessionDataBean sessionBean, Object identifier, String aliasName) throws Exception
 	{ 
+		String userName = sessionBean.getUserName();
+		
+		// @Ravindra : to get privilegeCache through 
+		// Singleton instance of PrivilegeCacheManager, requires User LoginName		
+		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
+		
 		if(sessionBean.isSecurityRequired())
 		{
 			SecurityManager sm=SecurityManager.getInstance(this.getClass());
 			aliasName = SurgicalPathologyReport.class.getName();
 			
-			String userName = sessionBean.getUserName();
-			boolean isAuthorized  = SecurityManager.getInstance(ViewSurgicalPathologyReportAction.class).checkPermission(userName, aliasName, identifier, Permissions.READ_DENIED, PrivilegeType.ObjectLevel);
+//			String userName = sessionBean.getUserName();
+			
+			// @Ravindra : Call to SecurityManager.checkPermission bypassed &
+			// instead, call redirected to privilegeCache.hasPrivilege			
+			boolean isAuthorized  = privilegeCache.hasPrivilege(aliasName+"_"+String.valueOf(identifier), Permissions.READ_DENIED);
+//			boolean isAuthorized  = SecurityManager.getInstance(ViewSurgicalPathologyReportAction.class).
+//			checkPermission(userName, aliasName, identifier, Permissions.READ_DENIED, PrivilegeType.ObjectLevel);
 			if(!isAuthorized)
 			{
 				//Check the permission of the user on the identified data of the object.
-				boolean hasPrivilegeOnIdentifiedData  = SecurityManager.getInstance(ViewSurgicalPathologyReportAction.class).checkPermission(userName, aliasName, identifier, Permissions.IDENTIFIED_DATA_ACCESS, PrivilegeType.ObjectLevel); 
+				// @Ravindra : Call to SecurityManager.checkPermission bypassed &
+				// instead, call redirected to privilegeCache.hasPrivilege				
+				boolean hasPrivilegeOnIdentifiedData  = privilegeCache.hasPrivilege(aliasName+"_"+identifier, Permissions.IDENTIFIED_DATA_ACCESS); 
+//				boolean hasPrivilegeOnIdentifiedData  = SecurityManager.getInstance(ViewSurgicalPathologyReportAction.class).
+//				checkPermission(userName, aliasName, identifier, Permissions.IDENTIFIED_DATA_ACCESS, PrivilegeType.ObjectLevel); 
 
 				if(!hasPrivilegeOnIdentifiedData)
 				{

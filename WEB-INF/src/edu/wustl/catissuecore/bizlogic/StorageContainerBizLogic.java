@@ -50,6 +50,8 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeCacheManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -921,6 +923,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			userName = SecurityManager.getInstance(StorageContainerBizLogic.class).getUserById(userId.toString()).getLoginName();
 		}
 
+		// @Ravindra : to get privilegeCache through 
+		// Singleton instance of PrivilegeCacheManager, requires User LoginName
+		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
+		
 		Iterator iterator = listOfSubElement.iterator();
 		while (iterator.hasNext())
 		{
@@ -943,8 +950,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			//Check the permission on the parent container or site.
 			if (assignToUser == true)//If the privilege is assigned/deassigned to a user.
 			{
-				permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(userName, className,
-						containerObject.toString(), privilegeName);
+				// @Ravindra : Call to SecurityManager.checkPermission bypassed &
+				// instead, call redirected to privilegeCache.hasPrivilege				
+				permission = privilegeCache.hasPrivilege(containerObject.toString(), privilegeName);
+				
+//				permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(userName, className,
+//						containerObject.toString(), privilegeName);
 			}
 			else
 			//If the privilege is assigned/deassigned to a user group.
@@ -1827,8 +1838,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		Logger.out.debug("validateContainerAccess..................");
 		String userName = sessionDataBean.getUserName();
-		if (!SecurityManager.getInstance(this.getClass()).isAuthorized(userName, StorageContainer.class.getName() + "_" + container.getId(),
-				Permissions.USE))
+	
+		// @Ravindra : to get privilegeCache through 
+		// Singleton instance of PrivilegeCacheManager, requires User LoginName
+		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
+		
+//		if (!SecurityManager.getInstance(this.getClass()).isAuthorized(userName, StorageContainer.class.getName() + "_" + container.getId(),
+//				Permissions.USE))
+		
+		// @Ravindra : Call to SecurityManager.isAuthorized bypassed &
+		// instead, call redirected to privilegeCache.hasPrivilege		
+		if (!privilegeCache.hasPrivilege(StorageContainer.class.getName() + "_" + container.getId(), Permissions.USE))	
 		{
 			return false;
 		}

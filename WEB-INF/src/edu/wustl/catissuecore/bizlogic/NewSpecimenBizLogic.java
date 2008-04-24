@@ -74,6 +74,8 @@ import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeCacheManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -209,9 +211,18 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 	private void isAuthorise(String userName) throws UserNotAuthorizedException
 	{
+		// @Ravindra : to get privilegeCache through 
+		// Singleton instance of PrivilegeCacheManager, requires User LoginName
+		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
+	
 		try
 		{
-			if (!securityManager.isAuthorized(userName, Specimen.class.getName(), Permissions.CREATE))
+//			if (!securityManager.isAuthorized(userName, Specimen.class.getName(), Permissions.CREATE))
+			
+			// @Ravindra : Call to SecurityManager.isAuthorized bypassed &
+			// instead, call redirected to privilegeCache.hasPrivilege			
+			if (!privilegeCache.hasPrivilege(Specimen.class, Permissions.CREATE))
 			{
 				throw new UserNotAuthorizedException("User is not authorised to create specimens");
 			}
@@ -1595,15 +1606,24 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 		Container parentStorageContainer = storageContainerObj.getParent();
 		
+		// @Ravindra : to get privilegeCache through 
+		// Singleton instance of PrivilegeCacheManager, requires User LoginName
+		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(sessionDataBean.getUserName());
+		
 		if (parentStorageContainer!=null)
 		{
 			validateUserForContainer(sessionDataBean, parentStorageContainer);
 		}
 		Object o = HibernateMetaData.getProxyObjectImpl(storageContainerObj);
 		String storageContainerSecObj = o.getClass().getName() + "_"+ storageContainerObj.getId();
-		boolean userAuthorize = SecurityManager.getInstance(this.getClass())
-		    			.isAuthorized(sessionDataBean.getUserName(),
-		            storageContainerSecObj, Permissions.USE);
+//		boolean userAuthorize = SecurityManager.getInstance(this.getClass())
+//		    			.isAuthorized(sessionDataBean.getUserName(),
+//		            storageContainerSecObj, Permissions.USE);
+		
+		// @Ravindra : Call to SecurityManager.isAuthorized bypassed &
+		// instead, call redirected to privilegeCache.hasPrivilege		
+		boolean userAuthorize = privilegeCache.hasPrivilege(storageContainerSecObj, Permissions.USE);
 
 		if (!userAuthorize)
 		{
