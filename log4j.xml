@@ -7,7 +7,7 @@
 <!--                                                                       -->
 <!-- ===================================================================== -->
 
-<!-- $Id: log4j.xml,v 1.1.8.4 2008/01/28 10:51:13 abhijit_naik Exp $ -->
+<!-- $Id: log4j.xml,v 1.1.8.5 2008/04/25 13:16:05 abhijit_naik Exp $ -->
 
 <!--
    | For more configuration infromation and examples see the Jakarta Log4j
@@ -64,7 +64,7 @@
    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
       <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
       <param name="Target" value="System.out"/>
-      <param name="Threshold" value="WARN"/>
+      <param name="Threshold" value="INFO"/>
 
       <layout class="org.apache.log4j.PatternLayout">
          <!-- The default pattern: Date Priority [Category] Message\n -->
