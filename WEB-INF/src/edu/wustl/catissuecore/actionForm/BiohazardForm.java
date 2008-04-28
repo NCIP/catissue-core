@@ -176,7 +176,7 @@ public class BiohazardForm extends AbstractActionForm
      * */
     protected void reset()
     {
-        this.name = null;
+       
         /**
 	     * Name : Virender Mehta
 	     * Reviewer:Sachin Lale
@@ -184,8 +184,8 @@ public class BiohazardForm extends AbstractActionForm
 	     * Patch ID:defaultValueConfiguration_BugID_8
 	     * Description: Configuration for default value Biohazard type
 	     */
-        this.type = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_BIOHAZARD);
-        this.comments = null;
+//        this.type = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_BIOHAZARD);
+        
     }
 
     /**
