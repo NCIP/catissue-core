@@ -22,11 +22,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
@@ -52,26 +54,102 @@ public class UserAction extends SecureAction
     protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
         
-        //Sets the operation attribute to be used in the Add/Edit User Page. 
-        request.setAttribute(Constants.OPERATION, operation);
-
-        //Sets the countryList attribute to be used in the Add/Edit User Page.
+    	//Gets the value of the operation parameter.
+        String operation =request.getParameter(Constants.OPERATION);
+        String pageOf = (String)request.getParameter(Constants.PAGEOF);
+        String reqPath = (String)request.getParameter(Constants.REQ_PATH);
+        String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+        
+        UserForm userForm=(UserForm)form;
+        
+        String formName,prevPage=null,nextPage=null;
+        boolean roleStatus=false;
+		if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+		{
+			Long identifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
+			prevPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
+			identifier = (Long)request.getAttribute(Constants.NEXT_PAGE);
+			nextPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
+		}
+        if (operation.equals(Constants.EDIT))
+        {
+			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+			{
+				formName = Constants.APPROVE_USER_EDIT_ACTION;
+			}
+			else if (pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+			{
+				formName = Constants.USER_EDIT_PROFILE_ACTION;
+			}
+			else
+			{
+            	formName = Constants.USER_EDIT_ACTION;
+			}
+          }
+        else
+        {
+			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
+			{
+				formName = Constants.APPROVE_USER_ADD_ACTION;
+			}
+			else
+			{
+            	formName = Constants.USER_ADD_ACTION;
+				if (pageOf.equals(Constants.PAGEOF_SIGNUP))
+				{
+					formName = Constants.SIGNUP_USER_ADD_ACTION;
+				}
+			}
+          }
+       	if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) &&(userForm.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS) || 
+				userForm.getStatus().equals(Constants.APPROVE_USER_REJECT_STATUS) ||userForm.getStatus().equals(Constants.SELECT_OPTION)))
+			{
+				roleStatus = true;
+				if (userForm.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS))
+				{
+					operation = Constants.EDIT;
+				}
+			}
+		if (pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+		{
+				roleStatus = true;
+		}
+		if(operation.equalsIgnoreCase(Constants.ADD))
+		{
+			if(userForm.getCountry()==null)
+			{
+				userForm.setCountry((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY));
+			}
+		}
+		if (pageOf.equals(Constants.PAGEOF_SIGNUP))
+		{
+			userForm.setStatus(Constants.ACTIVITY_STATUS_NEW);
+			userForm.setActivityStatus(Constants.ACTIVITY_STATUS_NEW);
+		}
+		userForm.setOperation(operation);
+        userForm.setPageOf(pageOf);
+        userForm.setSubmittedFor(submittedFor);
+        userForm.setRedirectTo(reqPath);
+        
+        String roleStatusforJSP=roleStatus+"";
+        
+        request.setAttribute("roleStatus", roleStatusforJSP);
+        request.setAttribute("formName", formName);
+        request.setAttribute("prevPage", prevPage);
+        request.setAttribute("nextPage", nextPage);
+               
+         //Sets the countryList attribute to be used in the Add/Edit User Page.
         List countryList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COUNTRY_LIST,null);
-        request.setAttribute(Constants.COUNTRYLIST, countryList);
+        request.setAttribute("countryList", countryList);
         
         //Sets the stateList attribute to be used in the Add/Edit User Page.
         List stateList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_STATE_LIST,null);
-        request.setAttribute(Constants.STATELIST, stateList);
+        request.setAttribute("stateList", stateList);
         
         
         //Sets the pageOf attribute (for Add,Edit or Query Interface).
-        String pageOf  = request.getParameter(Constants.PAGEOF);
-        request.setAttribute(Constants.PAGEOF,pageOf);
         String target = pageOf;
-        
         IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
         
         //Sets the instituteList attribute to be used in the Add/Edit User Page.
@@ -80,47 +158,88 @@ public class UserAction extends SecureAction
         String valueField = Constants.SYSTEM_IDENTIFIER;
         
         List instituteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
-        request.setAttribute(Constants.INSTITUTIONLIST, instituteList);
+        request.setAttribute("instituteList", instituteList);
         
         //Sets the departmentList attribute to be used in the Add/Edit User Page.
         sourceObjectName = Department.class.getName();
         List departmentList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
-        request.setAttribute(Constants.DEPARTMENTLIST, departmentList);
+        request.setAttribute("departmentList", departmentList);
         	
         //Sets the cancerResearchGroupList attribute to be used in the Add/Edit User Page.
         sourceObjectName = CancerResearchGroup.class.getName();
         List cancerResearchGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
-        request.setAttribute(Constants.CANCER_RESEARCH_GROUP_LIST, cancerResearchGroupList);
+        request.setAttribute("cancerResearchGroupList", cancerResearchGroupList);
         
         //Populate the activity status dropdown if the operation is edit 
         //and the user page is of administrative tab.
         if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_ADMIN))
         {
-            request.setAttribute(Constants.ACTIVITYSTATUSLIST,
-                    			 Constants.USER_ACTIVITY_STATUS_VALUES);
+            String activityStatusList=Constants.ACTIVITYSTATUSLIST;
+        	request.setAttribute("activityStatusList",Constants.USER_ACTIVITY_STATUS_VALUES);
         }
         
         //Populate the role dropdown if the page is of approve user or (Add/Edit) user page of adminitraive tab. 
-        if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN) ||
-        		pageOf.equals(Constants.PAGEOF_USER_PROFILE ))
+        if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN) ||pageOf.equals(Constants.PAGEOF_USER_PROFILE ))
         {
             List roleNameValueBeanList = getRoles();
-            
-            request.setAttribute(Constants.ROLELIST, roleNameValueBeanList);
+            request.setAttribute("roleList", roleNameValueBeanList);
         }
         
         //Populate the status dropdown for approve user page.(Approve,Reject,Pending)
         if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
         {
-            request.setAttribute(Constants.APPROVE_USER_STATUS_LIST,Constants.APPROVE_USER_STATUS_VALUES);
+            request.setAttribute("statusList",Constants.APPROVE_USER_STATUS_VALUES);
         }
         
         Logger.out.debug("pageOf :---------- "+ pageOf );
         
-        // ------------- add new
-        String reqPath = request.getParameter(Constants.REQ_PATH);
         
-		request.setAttribute(Constants.REQ_PATH, reqPath);
+        //Parameters for JSP
+        
+        
+        int SELECT_OPTION_VALUE=Constants.SELECT_OPTION_VALUE;
+        String Approve=Constants.APPROVE_USER_APPROVE_STATUS;
+        String pageOfforJSP=Constants.PAGEOF;
+        String pageOfApproveUser=Constants.PAGEOF_APPROVE_USER;
+        String backPage = Constants.APPROVE_USER_SHOW_ACTION+"?"+Constants.PAGE_NUMBER+"="+Constants.START_PAGE; 
+        String redirectTo=Constants.REQ_PATH;
+        String operationforJSP=Constants.OPERATION;
+        String addforJSP=Constants.ADD;
+        String editforJSP=Constants.EDIT;
+        String searchforJSP=Constants.SEARCH;
+        boolean readOnlyEmail = false;
+		if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+		{
+			readOnlyEmail = true;
+		}
+		String pageOfUserProfile=Constants.PAGEOF_USER_PROFILE;
+		String pageOfUserAdmin=Constants.PAGEOF_USER_ADMIN;
+		String pageOfSignUp=Constants.PAGEOF_SIGNUP;
+		Long institutionId=new Long(userForm.getInstitutionId());
+		Long departmentId=new Long(userForm.getDepartmentId());
+		Long cancerResearchGroupId=new Long(userForm.getCancerResearchGroupId());
+		
+		request.setAttribute("SELECT_OPTION_VALUE", SELECT_OPTION_VALUE);
+		request.setAttribute("Approve", Approve);
+		request.setAttribute("pageOfforJSP", pageOfforJSP);
+		request.setAttribute("pageOfApproveUser", pageOfApproveUser);
+		request.setAttribute("backPage", backPage);
+		request.setAttribute("redirectTo", redirectTo);
+		request.setAttribute("operationforJSP", operationforJSP);
+		request.setAttribute("addforJSP", addforJSP);
+		request.setAttribute("editforJSP", editforJSP);
+		request.setAttribute("searchforJSP", searchforJSP);
+		request.setAttribute("readOnlyEmail", readOnlyEmail);
+		request.setAttribute("pageOfUserProfile", pageOfUserProfile);
+		request.setAttribute("pageOfUserAdmin", pageOfUserAdmin);
+		request.setAttribute("pageOfSignUp", pageOfSignUp);
+		request.setAttribute("institutionId", institutionId);
+		request.setAttribute("departmentId", departmentId);
+		request.setAttribute("cancerResearchGroupId", cancerResearchGroupId);
+		request.setAttribute("pageOf", pageOf);
+		request.setAttribute("operation", operation);
+        
+        // ------------- add new
         
         AbstractActionForm aForm = (AbstractActionForm )form;
         if(reqPath != null && aForm !=null )

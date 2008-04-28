@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 
@@ -41,11 +42,34 @@ public class CancerResearchGroupAction extends SecureAction
             throws Exception
     {
         //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
-        
-        //Sets the operation attribute to be used in the Add/Edit Department Page. 
-        request.setAttribute(Constants.OPERATION,operation);
-        
-        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
+		 String operation = request.getParameter(Constants.OPERATION);
+	        CancerResearchGroupForm cancerResearchGroupForm=(CancerResearchGroupForm)form;
+	        String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+	        cancerResearchGroupForm.setOperation(operation);
+	        cancerResearchGroupForm.setSubmittedFor(submittedFor);
+
+	        String formName;
+	        boolean readOnlyValue;
+	        if (operation.equals(Constants.EDIT))
+	        {
+	               	
+	        	formName = Constants.CANCER_RESEARCH_GROUP_EDIT_ACTION;
+	            readOnlyValue = false;
+	        }
+	        else
+	        {
+	            formName = Constants.CANCER_RESEARCH_GROUP_ADD_ACTION;;
+	            readOnlyValue = false;
+	        }
+	        String operationAdd=Constants.ADD;
+	    	String operationEdit=Constants.EDIT;
+	    	
+	    	request.setAttribute("operationAdd", operationAdd);
+	    	request.setAttribute("operationEdit", operationEdit);
+	        
+	        request.setAttribute("formName",formName);
+	        request.setAttribute("readOnlyValue",readOnlyValue );
+	               
+	        return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

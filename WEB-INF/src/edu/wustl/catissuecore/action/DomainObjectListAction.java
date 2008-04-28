@@ -150,6 +150,19 @@ public class DomainObjectListAction extends SecureAction
         session.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(list.size()));
         
         session.setAttribute(Constants.RESULTS_PER_PAGE,recordsPerPage+"");
+    	String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"=";
+        String problemDetailsLink = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"=";
+        int totalResults = Integer.parseInt((String)request.getSession().getAttribute(Constants.TOTAL_RESULTS));
+  	  	int numResultsPerPage = Integer.parseInt((String)request.getSession().getAttribute(Constants.RESULTS_PER_PAGE));
+  	  	int []RESULT_PERPAGE_OPTIONS=Constants.RESULT_PERPAGE_OPTIONS;
+  
+        request.setAttribute("userDetailsLink", userDetailsLink);
+  	  	request.setAttribute("RESULT_PERPAGE_OPTIONS", RESULT_PERPAGE_OPTIONS);
+  	  	request.setAttribute("pageNum", pageNum);
+  	  	request.setAttribute("totalResults", totalResults);
+  	  	request.setAttribute("numResultsPerPage", numResultsPerPage);
+  	  	request.setAttribute("problemDetailsLink", problemDetailsLink);
+  	  	
         //Saves the number of results per page in the request.
         //Prafull:Commented this can be retrived directly from constants on jsp, so no need to save it in request.
 //        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE));

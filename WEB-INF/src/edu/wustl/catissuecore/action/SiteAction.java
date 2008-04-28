@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -52,11 +50,31 @@ public class SiteAction  extends SecureAction
         String operation = request.getParameter(Constants.OPERATION);
 
         //Sets the operation attribute to be used in the Add/Edit User Page.
-        if (operation != null)
+           
+        String pageOf = (String) request.getParameter(Constants.PAGEOF);
+        String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+        
+        siteForm.setSubmittedFor(submittedFor);
+        siteForm.setOperation(operation);
+        String formName;
+        if (operation.equals(Constants.EDIT))
         {
-            request.setAttribute(Constants.OPERATION, operation);
+            formName = Constants.SITE_EDIT_ACTION;
         }
-
+        else
+        {
+            formName = Constants.SITE_ADD_ACTION;
+        }
+        request.setAttribute("formName", formName);
+        
+        String operationAdd=Constants.ADD;
+    	String operationEdit=Constants.EDIT;
+    	String operationForActivityStatus=Constants.OPERATION;
+    	
+    	request.setAttribute("operationAdd", operationAdd);
+    	request.setAttribute("operationEdit", operationEdit);
+    	request.setAttribute("operationForActivityStatus", operationForActivityStatus);
+        
         //Sets the countryList attribute to be used in the Add/Edit User Page.
         List countryList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COUNTRY_LIST,null);
         request.setAttribute(Constants.COUNTRYLIST, countryList);
@@ -132,13 +150,8 @@ public class SiteAction  extends SecureAction
         		}
     	    }
 		}
-        String pageOf = (String)request.getParameter(Constants.PAGEOF);
-        
-        if (pageOf != null)
-        {
-            request.setAttribute(Constants.PAGEOF, pageOf);
-        }
-        return mapping.findForward(pageOf);
+ 		
+ 		return mapping.findForward(pageOf);
     }
 
 

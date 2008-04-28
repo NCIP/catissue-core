@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.BiohazardForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.cde.CDEManager;
@@ -40,10 +41,34 @@ public class BiohazardAction  extends SecureAction
     {
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
+        BiohazardForm biohazardForm=(BiohazardForm)form;
+        String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+        biohazardForm.setOperation(operation);
+        biohazardForm.setSubmittedFor(submittedFor);
         
-        //Sets the operation attribute to be used in the Add/Edit Institute Page. 
-        request.setAttribute(Constants.OPERATION, operation);
+        String operationAdd=Constants.ADD;
+    	String operationEdit=Constants.EDIT;
+    	String search=Constants.SEARCH;
+        String biohazard_Type_List=Constants.BIOHAZARD_TYPE_LIST;
         
+        request.setAttribute("operationAdd", operationAdd);
+    	request.setAttribute("operationEdit", operationEdit);
+        request.setAttribute("biohazard_Type_List", biohazard_Type_List);
+        request.setAttribute("search", search);
+        
+
+        String formName;
+        if (operation.equals(Constants.EDIT))
+        {
+        	formName = Constants.BIOHAZARD_EDIT_ACTION;
+        }
+        else
+        {
+            formName = Constants.BIOHAZARD_ADD_ACTION;
+        }
+        
+        request.setAttribute("formName",formName);
+                      
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
         List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
     	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);

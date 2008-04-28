@@ -42,6 +42,70 @@ public class StorageTypeAction  extends SecureAction
             throws Exception
     {
     	StorageTypeForm storageTypeForm=(StorageTypeForm)form;
+        String operation = (String) request.getAttribute(Constants.OPERATION);
+        storageTypeForm.setOperation(operation);
+        String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+        storageTypeForm.setSubmittedFor(submittedFor);
+		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);
+		storageTypeForm.setForwardTo(forwardTo);
+		String reqPath = request.getParameter(Constants.REQ_PATH);
+		storageTypeForm.setRedirectTo(reqPath);
+        String formName;
+       if (operation.equals(Constants.EDIT))
+        {
+            formName = Constants.STORAGE_TYPE_EDIT_ACTION;
+        }
+        else
+        {
+            formName = Constants.STORAGE_TYPE_ADD_ACTION;
+        }
+       request.setAttribute("formName", formName);
+       
+       String operationAdd=Constants.ADD;
+   	   String operationEdit=Constants.EDIT;
+   	   String holds_List_1=Constants.HOLDS_LIST1;
+   	   String holds_List_2=Constants.HOLDS_LIST2;
+   	   String holds_List_3=Constants.HOLDS_LIST3;
+   	      	   
+   	   request.setAttribute("operationAdd", operationAdd);
+   	   request.setAttribute("operationEdit", operationEdit);
+   	   request.setAttribute("holds_List_1", holds_List_1);
+   	   request.setAttribute("holds_List_2", holds_List_2);
+   	   request.setAttribute("holds_List_3", holds_List_3);
+   	   	
+	//Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label
+	int dimTwoCapacity = 0;
+	if(storageTypeForm!=null)
+	{
+		dimTwoCapacity = storageTypeForm.getTwoDimensionCapacity();
+	}
+	String tdClassName ="formLabel";
+	String strStar = "&nbsp;";
+	if(dimTwoCapacity > 1)
+	{
+		tdClassName="formRequiredLabel";
+		strStar = "*";
+	}
+	request.setAttribute("tdClassName", tdClassName);
+	request.setAttribute("strStar", strStar);
+ 
+	
+	String normalSubmit = "validate('" + submittedFor+ "','" + Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][1]+"')";
+	String forwardToSubmit = "validate('ForwardTo','" + Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][1]+"')";
+	request.setAttribute("normalSubmit", normalSubmit);
+	request.setAttribute("forwardToSubmit", forwardToSubmit);
+	
+	String submit=Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][0];
+	request.setAttribute("submit", submit);
+	
+	String addContainer=Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][0];
+	request.setAttribute("addContainer", addContainer);
+	
+	
+
+	//Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label end	
+
+	
     	
     	Logger.out.info("SpecimenArray/specimen:"+storageTypeForm.getSpecimenOrArrayType());
     	if(storageTypeForm.getSpecimenOrArrayType() == null)
@@ -50,11 +114,9 @@ public class StorageTypeAction  extends SecureAction
     	}
     	StorageTypeBizLogic bizLogic = (StorageTypeBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
         //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
+        
         
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
-        request.setAttribute(Constants.OPERATION, operation);
- 
         //Gets the Storage Type List and sets it in request
         List list1=bizLogic.retrieve(StorageType.class.getName());
     	List storageTypeList=Utility.getStorageTypeList(list1);
@@ -80,8 +142,7 @@ public class StorageTypeAction  extends SecureAction
 	  		storageTypeForm.setTwoDimensionCapacity(0);
 	  	}
 	    // ------------- add new
-        String reqPath = request.getParameter(Constants.REQ_PATH);
-		request.setAttribute(Constants.REQ_PATH, reqPath);
+       
 		
         AbstractActionForm aForm = (AbstractActionForm )form; 
         if(reqPath != null  && aForm !=null)

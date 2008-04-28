@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 
@@ -37,11 +38,31 @@ public class InstitutionAction extends SecureAction
             throws Exception
     {
         //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
+    	String operation = request.getParameter(Constants.OPERATION);
+    	
+    	String operationAdd=Constants.ADD;
+    	String operationEdit=Constants.EDIT;
+    	request.setAttribute("operationAdd", operationAdd);
+    	request.setAttribute("operationEdit", operationEdit);
         
-        //Sets the operation attribute to be used in the Add/Edit Institution Page. 
-        request.setAttribute(Constants.OPERATION, operation);
-        
+    	InstitutionForm institutionForm=(InstitutionForm)form;
+        institutionForm.setOperation(operation);
+         //Sets the operation attribute to be used in the Add/Edit Institution Page. 
+        String formName = Constants.INSTITUTION_ADD_ACTION;
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+		institutionForm.setSubmittedFor(submittedFor);
+       
+        if (operation.equals(Constants.EDIT))
+        {
+            formName = Constants.INSTITUTION_EDIT_ACTION;
+            
+        }
+        else//Add
+        {
+           formName = Constants.INSTITUTION_ADD_ACTION;
+            
+        }
+        request.setAttribute("formName", formName);
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 }

@@ -37,8 +37,7 @@ public class ReportProblemAction extends Action
      * Overrides the execute method of Action class.
      * Sets the various in ReportProblem webpage.
      */
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
 		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
@@ -69,9 +68,7 @@ public class ReportProblemAction extends Action
             Long nextIdentifier = (Long)request.getAttribute(Constants.NEXT_PAGE);
             request.setAttribute(Constants.NEXT_PAGE,nextIdentifier);
         }
-        
-        request.setAttribute(Constants.ACTIVITYSTATUSLIST,
-                Constants.REPORTED_PROBLEM_ACTIVITY_STATUS_VALUES);
+        request.setAttribute(Constants.ACTIVITYSTATUSLIST,Constants.REPORTED_PROBLEM_ACTIVITY_STATUS_VALUES);
         return mapping.findForward(Constants.SUCCESS);
     }
     
