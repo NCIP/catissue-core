@@ -1,7 +1,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <head>
 <!-- Mandar : 434 : for tooltip -->
@@ -10,24 +11,6 @@
 		
 	</script>
 </head>
-	
-<%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName;
-
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.BIOHAZARD_EDIT_ACTION;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.BIOHAZARD_ADD_ACTION;
-            readOnlyValue = false;
-        }
-%>	
-			
 <html:errors/>
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
@@ -35,31 +18,31 @@
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=formName%>">
+<html:form action='${requestScope.formName}'>
 <!-- NEW Biohazard REGISTRATION BEGINS-->
 	<tr>
 	<td>
 	
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
-			<td><html:hidden property="operation" value="<%=operation%>"/></td>
+			<td><html:hidden property="operation"/></td>
 		</tr>
 
 		<tr>
 			<td><html:hidden property="id" /></td>
 		</tr>
 		
-		<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
+		<logic:notEqual name="operation" value='requestScope.search'>
 		<tr>
 			 <td class="formMessage" colspan="3">* indicates a required field</td>
 		</tr>
 
 		<tr>
 			 <td class="formTitle" height="20" colspan="3">
-				<logic:equal name="operation" value="<%=Constants.ADD%>">
+				<logic:equal name="operation" value='${requestScope.operationAdd}'>
 					<bean:message key="biohazard.title"/>
 				</logic:equal>
-				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+				<logic:equal name="operation" value='${requestScope.operationEdit}'>
 					<bean:message key="biohazard.editTitle"/>
 				</logic:equal>
 			 </td>
@@ -91,7 +74,7 @@
 <!-- Mandar : 434 : for tooltip -->
 				<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<%--html:options name="biohazardTypeList" labelName="biohazardTypeList" /--%>
-					<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
+					<html:options collection='${requestScope.biohazard_Type_List}' labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>

@@ -2,62 +2,12 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.actionForm.SiteForm"%>
-
-
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
-<%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-		String pageOf = (String) request.getAttribute(Constants.PAGEOF);
-
-		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-		
-        String formName;
-
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.SITE_EDIT_ACTION;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.SITE_ADD_ACTION;
-            readOnlyValue = false;
-        }
-		SiteForm form = new SiteForm();
-		Object obj = request.getAttribute("siteForm");
-		if(obj != null && obj instanceof SiteForm)
-			{
-				form = (SiteForm)obj;
-		}
-    
-//****************  Delete below commented code later  ***********************
-    // ----------- add new    
-       	//String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-		//String appendingPath = "/Site.do?operation=add&pageOf=pageOfSite";
-		//if (reqPath != null)
-		//	appendingPath = reqPath + "|/Site.do?operation=add&pageOf=pageOfSite";
-	
-	   	//if(!operation.equals("add") )
-	   	//{
-	   	//	Object obj = request.getAttribute("siteForm");
-		//	if(obj != null && obj instanceof SiteForm)
-		//	{
-		//		SiteForm form = (SiteForm)obj;
-		//  		appendingPath = "/SiteSearch.do?operation=search&pageOf=pageOfSite&id="+form.getId() ;
-		//   		System.out.println("---------- Site JSP appendingPath -------- : "+ appendingPath);
-		//   	}
-	   	//}
-		
-        
-%>
-
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 <script>
-
-
 function onCoordinatorChange()
 {
 	var submittedForValue = document.forms[0].submittedFor.value;
@@ -76,7 +26,7 @@ function onCoordinatorChange()
 </html:messages>
 
 
-<html:form action="<%=formName%>">
+<html:form action='${requestScope.formName}'>
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">	
 	<!-- NEW SITE REGISTRATION BEGINS-->
 		<tr>
@@ -84,8 +34,8 @@ function onCoordinatorChange()
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:hidden property="operation" value="<%=operation%>" />
-						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>	
+						<html:hidden property="operation"/>
+						<html:hidden property="submittedFor"/>	
 					</td>
 				</tr>
 				
@@ -95,7 +45,7 @@ function onCoordinatorChange()
 				</tr>
 
 				<tr>
-					<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
+					<td><html:hidden property="pageOf"/></td>
 				</tr>
 
 					<tr>
@@ -104,10 +54,10 @@ function onCoordinatorChange()
 					
 					<tr>
 						<td class="formTitle" height="20" colspan="3">
-							<logic:equal name="operation" value="<%=Constants.ADD%>">
+							<logic:equal name="operation" value='${requestScope.operationAdd}'>
 								<bean:message key="site.title"/>
 							</logic:equal>
-							<logic:equal name="operation" value="<%=Constants.EDIT%>">
+							<logic:equal name="operation" value='${requestScope.operationEdit}'>
 								<bean:message key="site.editTitle"/>
 							</logic:equal>
 						</td>
@@ -135,9 +85,10 @@ function onCoordinatorChange()
 
 						<td class="formField">
 						
+							 
 							 <autocomplete:AutoCompleteTag property="type"
-										  optionsList = "<%=request.getAttribute(Constants.SITETYPELIST)%>"
-										  initialValue="<%=form.getType()%>"
+										  optionsList = '${siteTypeList}'
+										  initialValue='${siteForm.type}'
 										  styleClass="formFieldSized"
 									    />
 							
@@ -212,8 +163,8 @@ function onCoordinatorChange()
 						<td class="formField">
 						
 						 <autocomplete:AutoCompleteTag property="state"
-										  optionsList = "<%=request.getAttribute(Constants.STATELIST)%>"
-										  initialValue="<%=form.getState()%>"
+										  optionsList ='${stateList}'
+										  initialValue='${siteForm.state}'
 										  styleClass="formFieldSized"
 									    />
 
@@ -231,8 +182,8 @@ function onCoordinatorChange()
 						<td class="formField">
 						
 						 <autocomplete:AutoCompleteTag property="country"
-										  optionsList = "<%=request.getAttribute(Constants.COUNTRYLIST)%>"
-										  initialValue="<%=form.getCountry()%>"
+										  optionsList ='${countryList}'
+										  initialValue='${siteForm.country}'
 										  styleClass="formFieldSized"
 									    />
 
@@ -276,7 +227,7 @@ function onCoordinatorChange()
 						</td>
 					</tr>
 					
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					<logic:equal name='${requestScope.operationForActivityStatus}' value='${requestScope.operationEdit}'>
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 							<td class="formRequiredLabel">
@@ -287,10 +238,10 @@ function onCoordinatorChange()
 						<td class="formField">
 						
 						<autocomplete:AutoCompleteTag property="activityStatus"
-										  optionsList = "<%=request.getAttribute("activityStatusList")%>"
-										  initialValue="<%=form.getActivityStatus()%>"
+										  optionsList ='${activityStatusList}'
+										  initialValue='${siteForm.activityStatus}'
 										  styleClass="formFieldSized"
-										  onChange="<%=strCheckStatus%>"
+										  onChange='${strCheckStatus}'
 									    />
 
 						</td>

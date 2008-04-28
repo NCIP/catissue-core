@@ -2,16 +2,9 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom" %>
-<%@ page import="edu.wustl.catissuecore.domain.ReportedProblem,edu.wustl.catissuecore.util.global.Constants"%>
-
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html:errors/>
-
-<%
-	  int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
-	  int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
-	  int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
-%>
-
 </br>
 <!-- target of anchor to skip menus -->
 <table summary="" cellpadding="0" cellspacing="0" border="0"
@@ -29,7 +22,7 @@
 				<!-- paging begins -->
 				<tr>
 					<td colspan = "8" class="dataPagingSection">
-						<custom:test name=" Reported Problem Search Results " pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="ReportedProblemShow.do" showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>"/>
+						<custom:test name=" Reported Problem Search Results " pageNum='${requestScope.pageNum}' totalResults='${requestScope.totalResults}' numResultsPerPage='${requestScope.numResultsPerPage}' pageName="ReportedProblemShow.do" showPageSizeCombo="<%=true%>" recordPerPageList='${requestScope.RESULT_PERPAGE_OPTIONS}'/>
 					</td>
 				</tr>
 				
@@ -65,20 +58,17 @@
 								</td>
 							</tr>
 						</logic:empty>
-						<%int i=1;%>
+						
+						
+						<c:set var="count" value="1" scope="page"/>
 						<logic:iterate id="problem" name="showDomainObjectList">
 							<tr class="dataRowLight">
-								<%
-        								ReportedProblem reportedProblem = (ReportedProblem) problem;
-										String identifier = reportedProblem.getId().toString();
-										String problemDetailsLink = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;				
-        						%>
-        						<td class="dataCellText">
-									<%=i%>
+								<td class="dataCellText">
+								<c:out value='${pageScope.count}'/>
 								</td>
 <!-- Mandar : 10-Apr-06 Bug id:1291 : Display Problem ID -->
 								<td class="dataCellText">
-									<%=identifier %>
+									<bean:write name="problem" property="id"/>
 								</td>
 <!-- Mandar : 10-Apr-06 Bug id:1291 : Display Problem ID end -->
 
@@ -86,7 +76,7 @@
 										<bean:write	name="problem" property="from" /> 
 								</td>
 								<td class="dataCellText">
-									<a href="<%=problemDetailsLink%>">
+									<a href="${requestScope.problemDetailsLink}${problem.id}">
 										<bean:write name="problem" property="subject" />
 									</a>
 								</td>
@@ -94,8 +84,8 @@
 									<bean:write name="problem" property="reportedDate" />
 								</td>
 							</tr>
-							<%i++;%>
-						</logic:iterate>
+							<c:set var="count" value='${pageScope.count+1}' scope="page"/>
+							</logic:iterate>
 					 </table>
 					</td>
 				</tr>

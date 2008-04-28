@@ -1,9 +1,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.actionForm.StorageTypeForm"%>
-
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <head>
 	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 	<script language="javascript">
@@ -104,40 +103,7 @@
 
 </head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>	
-<%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);  
-		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);
-        String formName;
 
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.STORAGE_TYPE_EDIT_ACTION;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.STORAGE_TYPE_ADD_ACTION;
-            readOnlyValue = false;
-        }
-		
-	//Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label
-	StorageTypeForm form = null;
-	int dimTwoCapacity = 0;
-	Object obj = request.getAttribute("storageTypeForm");
-	if(obj != null && obj instanceof StorageTypeForm)
-	{
-		 form = (StorageTypeForm)obj;
-	}
-	if(form!=null)
-	{
-		dimTwoCapacity = form.getTwoDimensionCapacity();  
-	}
-	//Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label end	
-
-%>	
 			
 <html:errors/>
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
@@ -146,22 +112,22 @@
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="720">
 
-<html:form action="<%=formName%>" method="post">	
+<html:form action='${requestScope.formName}'method="post">	
 <!-- NEW Institute REGISTRATION BEGINS-->
 	<tr>
 	<td>
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
 			<td>
-				<html:hidden property="operation" value="<%=operation%>"/>
-				<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
-				<html:hidden property="forwardTo" value="<%=forwardTo%>"/>
+				<html:hidden property="operation"/>
+				<html:hidden property="submittedFor"/>
+				<html:hidden property="forwardTo"/>
 			</td>
 		</tr>
 		
 		<tr>
 			<td><html:hidden property="id" />
-				<html:hidden property="<%=Constants.REQ_PATH%>" value="<%=reqPath%>" />
+				<html:hidden property="redirectTo"/>
 			</td>
 		</tr>
 
@@ -171,10 +137,10 @@
 
 		<tr>
 			 <td class="formTitle" height="20" colspan="3">
-				<logic:equal name="operation" value="<%=Constants.ADD%>">
+				<logic:equal name="operation" value='${requestScope.operationAdd}'>
 					<bean:message key="storageType.title"/>
 				</logic:equal>
-				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+				<logic:equal name="operation" value='${requestScope.operationEdit}'>
 					<bean:message key="storageType.editTitle"/>
 				</logic:equal>
 			 </td>
@@ -226,21 +192,21 @@
 				<td class="formField" nowrap align="center">
 				<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="holdStorageTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-				<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
+				<html:options collection='${requestScope.holds_List_1}'labelProperty="name" property="value"/>
 				</html:select>
 				</td>
 				<td class="formField" nowrap align="center">
 				<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="Specimen">
 				<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdSpecimenClassTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-				<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
+				<html:options collection='${requestScope.holds_List_2}' labelProperty="name" property="value"/>
 				</html:select>
 				</logic:equal>
 				
 				<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="SpecimenArray">
 				<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdSpecimenClassTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
-				<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
+				<html:options collection='${requestScope.holds_List_2}' labelProperty="name" property="value"/>
 				</html:select>
 				</logic:equal>
 				</td>
@@ -248,13 +214,13 @@
 				<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="SpecimenArray">
 				<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-				<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
+				<html:options collection='${requestScope.holds_List_3}' labelProperty="name" property="value"/>
 				</html:select>
 				</logic:equal>
 				<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="Specimen">
 				<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
-				<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
+				<html:options collection='${requestScope.holds_List_3}' labelProperty="name" property="value"/>
 				</html:select>
 				</logic:equal>
 				</td>
@@ -322,18 +288,10 @@
 			</td>
 		</tr>
 <!--  Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label -->
-<% 
-	String tdClassName ="formLabel";
-	String strStar = "&nbsp;";
-	if(dimTwoCapacity > 1)
-	{
-		tdClassName="formRequiredLabel";
-		strStar = "*";
-	}
- %>
+
 		<tr>
-			<td class="formRequiredNotice" width="5" id="col1"><%=strStar%></td>
-			<td class="<%=tdClassName%>" id="col2">
+			<td class="formRequiredNotice" width="5" id="col1">${requestScope.strStar}</td>
+			<td class='${requestScope.tdClassName}'id="col2">
 <!--  Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label end -->
 				<label for="twoDimensionLabel">
 					<bean:message key="storageType.twoDimensionLabel"/>
@@ -348,26 +306,21 @@
 			<!-- action buttons begins -->
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
-					<%
-						String normalSubmit = "validate('" + submittedFor+ "','" + Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][1]+"')";
-						String forwardToSubmit = "validate('ForwardTo','" + Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][1]+"')";																				
-						System.out.println("-------normal submit" + normalSubmit);
-						System.out.println("-------forwardTo Submit" + forwardToSubmit);
-					%>				
+									
 					<td nowrap class="formFieldNoBorders">
 								<html:button styleClass="actionButton"
 										property="submitPage" 
 										title="Submit Only"
-										value="<%=Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][0]%>"										
-										onclick="<%=normalSubmit%>"> 
+										value='${requestScope.submit}'										
+										onclick='${requestScope.normalSubmit}'> 
 								</html:button>
 					</td>
 					<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="storageContainerPage" 
 											title="Submit and Add Container"
-											value="<%=Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][0]%>" 											
-					  						onclick="<%=forwardToSubmit%>">
+											value='${requestScope.addContainer}' 											
+					  						onclick='${requestScope.forwardToSubmit}'>
 									</html:button>
 					</td>
 				</tr>

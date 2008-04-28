@@ -1,25 +1,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName;
-		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.CANCER_RESEARCH_GROUP_EDIT_ACTION;
-            readOnlyValue = false;
-        }
-        else
-        {
-            formName = Constants.CANCER_RESEARCH_GROUP_ADD_ACTION;
-            readOnlyValue = false;
-        }
-        %>
-
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html:errors />
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
@@ -27,15 +10,15 @@
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
-	<html:form action="<%=formName%>">
+	<html:form action='${requestScope.formName}'>
 		<!-- NEW Cancer Research Group ENTRY BEGINS-->
 		<tr>
 		<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:hidden property="operation" value="<%=operation%>" />
-						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+						<html:hidden property="operation"/>
+						<html:hidden property="submittedFor"/>
 					</td>
 				</tr>
 				
@@ -51,10 +34,10 @@
 					
 					<tr>
 						<td class="formTitle" height="20" colspan="3">
-							<logic:equal name="operation" value="<%=Constants.ADD%>">
+							<logic:equal name="operation" value='${requestScope.operationAdd}'>
 								<bean:message key="cancerResearchGroup.title"/>
 							</logic:equal>
-							<logic:equal name="operation" value="<%=Constants.EDIT%>">
+							<logic:equal name="operation" value='${requestScope.operationEdit}'>
 								<bean:message key="cancerResearchGroup.editTitle"/>
 							</logic:equal>
 						</td>
@@ -68,7 +51,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="name" property="name" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="name" property="name" readonly='${requestScope.readOnlyValue}' />
 						</td>
 					</tr>
 					

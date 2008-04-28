@@ -1,86 +1,9 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.actionForm.UserForm"%>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
-
-<%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName,prevPage=null,nextPage=null;
-		
-		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);   
-		
-		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);  
-
-        boolean readOnlyValue,roleStatus=false;
-
-		if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
-		{
-			Long identifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
-			prevPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
-			identifier = (Long)request.getAttribute(Constants.NEXT_PAGE);
-			nextPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
-		}
-
-        if (operation.equals(Constants.EDIT))
-        {
-			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
-			{
-				formName = Constants.APPROVE_USER_EDIT_ACTION;
-			}
-			else if (pageOf.equals(Constants.PAGEOF_USER_PROFILE))
-			{
-				formName = Constants.USER_EDIT_PROFILE_ACTION;
-			}
-			else
-			{
-            	formName = Constants.USER_EDIT_ACTION;
-			}
-            readOnlyValue = true;
-        }
-        else
-        {
-			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
-			{
-				formName = Constants.APPROVE_USER_ADD_ACTION;
-			}
-			else
-			{
-            	formName = Constants.USER_ADD_ACTION;
-				if (pageOf.equals(Constants.PAGEOF_SIGNUP))
-				{
-					formName = Constants.SIGNUP_USER_ADD_ACTION;
-				}
-			}
-
-            readOnlyValue = false;
-        }
-        UserForm userForm = new UserForm();
-		Object obj = request.getAttribute("userForm");
-		if(obj != null && obj instanceof UserForm)
-		{
-		
-			userForm = (UserForm)obj;
-			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) &&
-			   (userForm.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS) || 
-				userForm.getStatus().equals(Constants.APPROVE_USER_REJECT_STATUS) ||
-				userForm.getStatus().equals(Constants.SELECT_OPTION)))
-			{
-				roleStatus = true;
-				if (userForm.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS))
-				{
-					operation = Constants.EDIT;
-				}
-			}
-		}
-		
-		if (pageOf.equals(Constants.PAGEOF_USER_PROFILE))
-		{
-				roleStatus = true;
-		}
-%>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>	
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -88,10 +11,10 @@
 //If the administrator keeps the user status pending update the user record and disable role.
 function handleStatus(status)
 {
-	document.forms[0].role.value=<%=Constants.SELECT_OPTION_VALUE%>;
+	document.forms[0].role.value='${requestScope.SELECT_OPTION_VALUE}';
 	document.forms[0].role.readOnly=true;
 	document.getElementById("displayrole").readOnly=true;
-	if (status.value == "<%=Constants.APPROVE_USER_APPROVE_STATUS%>")
+	if (status.value == '${requestScope.Approve}')
 	{
     	document.forms[0].role.readOnly=false;
 	   	document.getElementById("displayrole").readOnly=false;
@@ -110,30 +33,26 @@ function handleStatus(status)
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="620">
 	
-	<html:form action="<%=formName%>">
-	
-	   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_APPROVE_USER%>">
+	<html:form action='${requestScope.formName}'>
+	  <logic:equal name='${requestScope.pageOfforJSP}' value='${pageOfApproveUser}'>
   	    	  <tr>
 			  	<td align="right" colspan="3">
 
 					<!-- action buttons begins -->
 					<table cellpadding="6" cellspacing="2" border="0">
 						<tr>
-							<% 
-								String backPage = Constants.APPROVE_USER_SHOW_ACTION+"?"+Constants.PAGE_NUMBER+"="+Constants.START_PAGE; 
-							%>
 							<td>
-								<a class="contentLink" href="<%=backPage%>">Approve User Home</a>
+							<a class="contentLink" href='${requestScope.backPage}'>Approve User Home</a>
 							</td>
 							&nbsp;
 							<td>
 								<logic:notEmpty name="prevpage">
-								&nbsp;&nbsp;|&nbsp;<a class="contentLink" href="<%=prevPage%>">
+								&nbsp;&nbsp;|&nbsp;<a class="contentLink" href='${requestScope.prevPage}'>
 										<bean:message key="approveUser.previous"/>
 									</a>&nbsp;
 								</logic:notEmpty>
 								<logic:notEmpty name="nextPage">
-								&nbsp;&nbsp;|&nbsp;<a class="contentLink" href="<%=nextPage%>">
+								&nbsp;&nbsp;|&nbsp;<a class="contentLink" href='${requestScope.nextPage}'>
 										<bean:message key="approveUser.next"/>
 									</a>&nbsp;
 								</logic:notEmpty> 
@@ -152,8 +71,9 @@ function handleStatus(status)
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:hidden property="operation" value="<%=operation%>" />
-						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>	
+						<html:hidden property="operation"/>
+						<html:hidden property="submittedFor"/>
+						<html:hidden property="activityStatus"/>
 					</td>
 				</tr>
 				
@@ -161,39 +81,31 @@ function handleStatus(status)
 					<td>
 						<html:hidden property="id" />
 						<html:hidden property="csmUserId" />
-						<html:hidden property="<%=Constants.REQ_PATH%>" value="<%=reqPath%>" />
+						<html:hidden property='${requestScope.redirectTo}'/>
 					</td>
 				</tr>
 				
 				<tr>
 					<td>
-						<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>" />
+						<html:hidden property='${requestScope.pageOfforJSP}'/>
 					</td>
 				</tr>
 
-				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
+				<logic:notEqual name='${requestScope.operationforJSP}' value='${requestScope.searchforJSP}'>
 					<tr>
 						<td class="formMessage" colspan="3">* indicates a required field</td>
 					</tr>
 					
 					<tr>
 						<td class="formTitle" height="20" colspan="3">
-							<logic:equal name="operation" value="<%=Constants.ADD%>">
+							<logic:equal name="operation" value='${requestScope.addforJSP}'>
 								<bean:message key="user.title"/>
 							</logic:equal>
-							<logic:equal name="operation" value="<%=Constants.EDIT%>">
+							<logic:equal name="operation" value='${requestScope.editforJSP}'>
 								<bean:message key="user.editTitle"/>
 							</logic:equal>
 						</td>
 					</tr>
-					
-					<%
-						boolean readOnlyEmail = false;
-						if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_PROFILE))
-						{
-							readOnlyEmail = true;
-						}
-					%>
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
@@ -202,11 +114,11 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="emailAddress" property="emailAddress" readonly="<%=readOnlyEmail%>" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="emailAddress" property="emailAddress" readonly='${requestScope.readOnlyEmail}'/>
 						</td>
 					</tr>
 <!-- Mandar 24-Apr-06 : bugid 972 : Confirm Email address -->
-				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_PROFILE%>">				
+				<logic:notEqual name='${requestScope.pageOfforJSP}' value='${requestScope.pageOfUserProfile}'>				
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
@@ -215,7 +127,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="confirmEmailAddress" property="confirmEmailAddress" readonly="<%=readOnlyEmail%>" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="confirmEmailAddress" property="confirmEmailAddress" readonly='${requestScope.readOnlyEmail}'/>
 						</td>
 					</tr>
 				</logic:notEqual>
@@ -245,8 +157,8 @@ function handleStatus(status)
 						</td>
 					</tr>
 					
-					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_ADMIN%>">
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					<logic:equal name='${requestScope.pageOfforJSP}' value='${requestScope.pageOfUserAdmin}'>
+					<logic:equal name='${requestScope.operationforJSP}'value='${requestScope.editforJSP}'>
 					<tr>
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel">
@@ -307,8 +219,8 @@ function handleStatus(status)
 						<td class="formField">
 						
 							 <autocomplete:AutoCompleteTag property="state"
-										  optionsList = "<%=request.getAttribute(Constants.STATELIST)%>"
-										  initialValue="<%=userForm.getState()%>"
+										  optionsList ='${requestScope.stateList}'
+										  initialValue='${userForm.state}'
 										  styleClass="formFieldSized"
 									    />
 
@@ -338,8 +250,8 @@ function handleStatus(status)
 						<td class="formField">
 						
 						 <autocomplete:AutoCompleteTag property="country"
-										  optionsList = "<%=request.getAttribute(Constants.COUNTRYLIST)%>"
-										  initialValue="<%=userForm.getCountry()%>"
+										  optionsList = '${requestScope.countryList}'
+										  initialValue='${userForm.country}'
 										  styleClass="formFieldSized"
 									    />
 
@@ -381,15 +293,15 @@ function handleStatus(status)
 						
 						
                                         <autocomplete:AutoCompleteTag property="institutionId"
-										  optionsList = "<%=request.getAttribute("institutionList")%>"
-										  initialValue="<%=new Long(userForm.getInstitutionId())%>"
+										  optionsList ='${requestScope.instituteList}'
+										  initialValue='${requestScope.institutionId}'
 										  styleClass="formFieldSized"
                                           staticField="false"
 										  
 									    />
 					
 							&nbsp;
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
+						<logic:notEqual name='${requestScope.pageOfforJSP}'value='${requestScope.pageOfSignUp}'>
 							<html:link href="#" styleId="newInstitution" onclick="addNewAction('UserAddNew.do?addNewForwardTo=institution&forwardTo=user&addNewFor=institution')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
@@ -409,15 +321,15 @@ function handleStatus(status)
 						
 						
                                         <autocomplete:AutoCompleteTag property="departmentId"
-										  optionsList = "<%=request.getAttribute("departmentList")%>"
-										  initialValue="<%=new Long(userForm.getDepartmentId())%>"
+										  optionsList ='${requestScope.departmentList}'
+										  initialValue='${requestScope.departmentId}'
 										  styleClass="formFieldSized"
                                           staticField="false"
 										  
 									    />
 
 							&nbsp;
-							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
+							<logic:notEqual name='${requestScope.pageOfforJSP}'value='${requestScope.pageOfSignUp}'>
 							<html:link href="#" styleId="newDepartment" onclick="addNewAction('UserAddNew.do?addNewForwardTo=department&forwardTo=user&addNewFor=department')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
@@ -435,14 +347,14 @@ function handleStatus(status)
 						<td class="formField">
 						
 						    <autocomplete:AutoCompleteTag property="cancerResearchGroupId"
-										  optionsList = "<%=request.getAttribute("cancerResearchGroupList")%>"
-										  initialValue="<%=new Long(userForm.getCancerResearchGroupId())%>"
+										  optionsList ='${requestScope.cancerResearchGroupList}'
+										  initialValue='${requestScope.cancerResearchGroupId}'
 										  styleClass="formFieldSized"
                                           staticField="false"
 										  
 									    />
 							&nbsp;
-							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
+							<logic:notEqual name='${requestScope.pageOfforJSP}'value='${requestScope.pageOfSignUp}'>
 							<html:link href="#" styleId="newCancerResearchGroup" onclick="addNewAction('UserAddNew.do?addNewForwardTo=cancerResearchGroup&forwardTo=user&addNewFor=cancerResearchGroup')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
@@ -450,7 +362,7 @@ function handleStatus(status)
 						</td>
 					</tr>
 					
-					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_PROFILE%>">
+					<logic:equal name='${requestScope.pageOfforJSP}' value='${requestScope.pageOfUserProfile}'>
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel" width="140">
@@ -461,11 +373,11 @@ function handleStatus(status)
 						<td class="formField">
 						
 								 <autocomplete:AutoCompleteTag property="role"
-										  optionsList = "<%=request.getAttribute("roleList")%>"
-										  initialValue="<%=userForm.getRole()%>"
+										  optionsList ='${requestScope.roleList}'
+										  initialValue='${userForm.role}'
 										  styleClass="formFieldSized"
 										  staticField="false"
-										  readOnly="<%=roleStatus + ""%>"
+										  readOnly='${requestScope.roleStatus}'
 									    />
 						</td>
 					</tr>
@@ -481,15 +393,15 @@ function handleStatus(status)
 			    <br>
 				<table summary="" cellpadding="3" cellspacing="0" border="0" width="480">
 					
-					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
-					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_PROFILE%>">
+					<logic:notEqual name='${requestScope.pageOfforJSP}'value='${requestScope.pageOfSignUp}'>
+					<logic:notEqual name='${requestScope.pageOfforJSP}' value='${requestScope.pageOfUserProfile}'>
 					<tr>
 						<td class="formTitle" height="20" colspan="3">
 							<bean:message key="user.administrativeDetails.title" />
 						</td>
 					</tr>
 					
-					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_APPROVE_USER%>">
+					<logic:equal name='${requestScope.pageOfforJSP}' value='${pageOfApproveUser}'>
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 							<td class="formRequiredLabel" width="140">
@@ -515,11 +427,11 @@ function handleStatus(status)
 						</td>
 						<td class="formField">
                                         <autocomplete:AutoCompleteTag property="role"
-										  optionsList = "<%=request.getAttribute("roleList")%>"
-										  initialValue="<%=userForm.getRole()%>"
+										  optionsList ='${requestScope.roleList}'
+										  initialValue='${userForm.role}'
 										  styleClass="formFieldSized"
                                           staticField="false"
-										  readOnly="<%=roleStatus + ""%>"
+										  readOnly='${requestScope.roleStatus}'
 									    />
 						</td>
 					</tr>
@@ -538,8 +450,8 @@ function handleStatus(status)
 					</logic:notEqual>
 					</logic:notEqual>
 					
-					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_ADMIN%>">
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					<logic:equal name='${requestScope.pageOfforJSP}' value='${requestScope.pageOfUserAdmin}'>
+					<logic:equal name='${requestScope.operationforJSP}' value='${requestScope.editforJSP}'>
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 							<td class="formRequiredLabel" width="140">
@@ -550,8 +462,8 @@ function handleStatus(status)
 						<td class="formField">
 						
 						 <autocomplete:AutoCompleteTag property="activityStatus"
-										  optionsList = "<%=request.getAttribute("activityStatusList")%>"
-										  initialValue="<%=userForm.getActivityStatus()%>"
+										  optionsList = '${requestScope.activityStatusList}'
+										  initialValue='${userForm.activityStatus}'
 										  styleClass="formFieldSized"
 				 
 									    />
