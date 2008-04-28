@@ -920,8 +920,7 @@
 	
 	<target name="CAModel_import_data_mysql">
 		<echo message="Importing CA models data for caTISSUE Suite Application to MySQL Database ..." />
-		<java classname="edu.wustl.common.util.global.AutomateImport" fork="true">
-			
+		<java classname="edu.wustl.common.util.global.AutomateImport"  fork="true" maxmemory="512m">
 			<classpath refid="temp.classpath" />
 			
 			<arg value="${database.host}"/>
