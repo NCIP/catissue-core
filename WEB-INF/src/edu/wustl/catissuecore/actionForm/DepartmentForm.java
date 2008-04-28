@@ -89,7 +89,6 @@ public class DepartmentForm extends AbstractActionForm
      * */
     protected void reset()
     {
-        this.name = null;
     }
 
     /**

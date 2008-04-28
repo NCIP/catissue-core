@@ -567,31 +567,32 @@ public class UserForm extends AbstractActionForm
 	 * */
 	protected void reset()
 	{
-		this.lastName = null;
-		this.firstName = null;
-		this.institutionId = -1;
-		this.emailAddress = null;
-		this.departmentId = -1;
-		this.street = null;
-		this.city = null;
-		/**
-	     * Name : Virender Mehta
-	     * Reviewer: Sachin Lale
-	     * Bug ID: defaultValueConfiguration_BugID
-	     * Patch ID:defaultValueConfiguration_BugID_5
-	     * Description: Configuration for default value for State and country
-	    */
-		this.state = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_STATES);
-		this.country =(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY);
-		this.zipCode = null;
-		this.phoneNumber = null;
-		this.faxNumber = null;
-		this.role = null;
-		this.cancerResearchGroupId = -1;
-		this.status = Constants.ACTIVITY_STATUS_NEW;
-		this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
-		//Mandar : 24-Apr-06 : bug 972:
-		this.confirmEmailAddress = null;
+//		this.lastName = null;
+//		this.firstName = null;
+//		this.institutionId = -1;
+//		this.emailAddress = null;
+//		this.departmentId = -1;
+//		this.street = null;
+//		this.city = null;
+//		/**
+//	     * Name : Virender Mehta
+//	     * Reviewer: Sachin Lale
+//	     * Bug ID: defaultValueConfiguration_BugID
+//	     * Patch ID:defaultValueConfiguration_BugID_5
+//	     * Description: Configuration for default value for State and country
+//	    */
+//		this.state = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_STATES);
+//		this.country =(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY);
+//		this.zipCode = null;
+//		this.phoneNumber = null;
+//		this.faxNumber = null;
+//		this.role = null;
+//		this.cancerResearchGroupId = -1;
+//		this.status = Constants.ACTIVITY_STATUS_NEW;
+//		this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
+//		//Mandar : 24-Apr-06 : bug 972:
+//		this.confirmEmailAddress = null;
+		
 	}
 
 	/**
