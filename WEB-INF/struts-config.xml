@@ -881,6 +881,8 @@ PUBLIC
         
         <action path="/SignUp"
 			type="edu.wustl.catissuecore.action.UserAction"
+			name="userForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfSignUp" path=".catissuecore.userSignUpDef" />
 			<forward name="failure" path=".catissuecore.userSignUpDef" />
@@ -1073,6 +1075,8 @@ PUBLIC
 		<!-- Institution Actions Begins-->
 		<action path="/Institution"
 			type="edu.wustl.catissuecore.action.InstitutionAction"
+			name="institutionForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfInstitution" path=".catissuecore.institutionDef" />
 			<forward name="failure" path=".catissuecore.institutionDef" />
@@ -1115,6 +1119,8 @@ PUBLIC
 		<!-- User Actions Begins-->
 		<action path="/User"
 			type="edu.wustl.catissuecore.action.UserAction"
+			name="userForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfUserAdmin" path=".catissuecore.userDef" />
 			<forward name="pageOfApproveUser" path=".catissuecore.userDef" />
@@ -1222,6 +1228,8 @@ PUBLIC
 		<!-- Department Actions Begins-->
 		<action path="/Department"
 			type="edu.wustl.catissuecore.action.DepartmentAction"
+			name="departmentForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfDepartment" path=".catissuecore.departmentDef" />
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchDepartmentDef" />
@@ -1265,6 +1273,8 @@ PUBLIC
 		<!-- CancerResearchGroup Actions Begins-->
 		<action path="/CancerResearchGroup"
 			type="edu.wustl.catissuecore.action.CancerResearchGroupAction"
+			name="cancerResearchGroupForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfCancerResearchGroup" path=".catissuecore.cancerResearchGroupDef" />
 			<forward name="failure" path=".catissuecore.cancerResearchGroupDef" />
@@ -1968,6 +1978,8 @@ PUBLIC
 		<!-- Biohazard Actions Begins -->
         <action path="/Biohazard"
 			type="edu.wustl.catissuecore.action.BiohazardAction"
+			name="biohazardForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfBioHazard" path=".catissuecore.biohazardDef" />
 			<forward name="failure" path=".catissuecore.biohazardDef" />
