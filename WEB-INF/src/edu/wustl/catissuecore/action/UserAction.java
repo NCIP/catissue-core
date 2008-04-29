@@ -198,55 +198,36 @@ public class UserAction extends SecureAction
         
         
         int SELECT_OPTION_VALUE=Constants.SELECT_OPTION_VALUE;
-        String Approve=Constants.APPROVE_USER_APPROVE_STATUS;
-        String pageOfforJSP=Constants.PAGEOF;
-        String pageOfApproveUser=Constants.PAGEOF_APPROVE_USER;
-        String backPage = Constants.APPROVE_USER_SHOW_ACTION+"?"+Constants.PAGE_NUMBER+"="+Constants.START_PAGE; 
-        String redirectTo=Constants.REQ_PATH;
-        String operationforJSP=Constants.OPERATION;
-        String addforJSP=Constants.ADD;
-        String editforJSP=Constants.EDIT;
-        String searchforJSP=Constants.SEARCH;
         boolean readOnlyEmail = false;
 		if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_PROFILE))
 		{
 			readOnlyEmail = true;
 		}
-		String pageOfUserProfile=Constants.PAGEOF_USER_PROFILE;
-		String pageOfUserAdmin=Constants.PAGEOF_USER_ADMIN;
-		String pageOfSignUp=Constants.PAGEOF_SIGNUP;
 		Long institutionId=new Long(userForm.getInstitutionId());
 		Long departmentId=new Long(userForm.getDepartmentId());
 		Long cancerResearchGroupId=new Long(userForm.getCancerResearchGroupId());
 		
 		request.setAttribute("SELECT_OPTION_VALUE", SELECT_OPTION_VALUE);
-		request.setAttribute("Approve", Approve);
-		request.setAttribute("pageOfforJSP", pageOfforJSP);
-		request.setAttribute("pageOfApproveUser", pageOfApproveUser);
-		request.setAttribute("backPage", backPage);
-		request.setAttribute("redirectTo", redirectTo);
-		request.setAttribute("operationforJSP", operationforJSP);
-		request.setAttribute("addforJSP", addforJSP);
-		request.setAttribute("editforJSP", editforJSP);
-		request.setAttribute("searchforJSP", searchforJSP);
+		request.setAttribute("Approve", Constants.APPROVE_USER_APPROVE_STATUS);
+		request.setAttribute("pageOfforJSP", Constants.PAGEOF);
+		request.setAttribute("pageOfApproveUser",Constants.PAGEOF_APPROVE_USER);
+		request.setAttribute("backPage", Constants.APPROVE_USER_SHOW_ACTION+"?"+Constants.PAGE_NUMBER+"="+Constants.START_PAGE);
+		request.setAttribute("redirectTo", Constants.REQ_PATH);
+		request.setAttribute("operationforJSP", Constants.OPERATION);
+		request.setAttribute("addforJSP", Constants.ADD);
+		request.setAttribute("editforJSP", Constants.EDIT);
+		request.setAttribute("searchforJSP", Constants.SEARCH);
 		request.setAttribute("readOnlyEmail", readOnlyEmail);
-		request.setAttribute("pageOfUserProfile", pageOfUserProfile);
-		request.setAttribute("pageOfUserAdmin", pageOfUserAdmin);
-		request.setAttribute("pageOfSignUp", pageOfSignUp);
+		request.setAttribute("pageOfUserProfile",Constants.PAGEOF_USER_PROFILE);
+		request.setAttribute("pageOfUserAdmin", Constants.PAGEOF_USER_ADMIN);
+		request.setAttribute("pageOfSignUp", Constants.PAGEOF_SIGNUP);
 		request.setAttribute("institutionId", institutionId);
 		request.setAttribute("departmentId", departmentId);
 		request.setAttribute("cancerResearchGroupId", cancerResearchGroupId);
 		request.setAttribute("pageOf", pageOf);
 		request.setAttribute("operation", operation);
-        
-        // ------------- add new
-        
-        AbstractActionForm aForm = (AbstractActionForm )form;
-        if(reqPath != null && aForm !=null )
-        	aForm.setRedirectTo(reqPath);
-        
+		// ------------- add new
         Logger.out.debug("USerAction redirect :---------- "+ reqPath  );
-            
         return mapping.findForward(target);
     }
     

@@ -46,18 +46,17 @@ public class BiohazardAction  extends SecureAction
         biohazardForm.setOperation(operation);
         biohazardForm.setSubmittedFor(submittedFor);
         
-        String operationAdd=Constants.ADD;
-    	String operationEdit=Constants.EDIT;
-    	String search=Constants.SEARCH;
-        String biohazard_Type_List=Constants.BIOHAZARD_TYPE_LIST;
         
-        request.setAttribute("operationAdd", operationAdd);
-    	request.setAttribute("operationEdit", operationEdit);
+    	String biohazard_Type_List=Constants.BIOHAZARD_TYPE_LIST;
+    	String formName;
+    	
+        request.setAttribute("operationAdd", Constants.ADD);
+    	request.setAttribute("operationEdit", Constants.EDIT);
         request.setAttribute("biohazard_Type_List", biohazard_Type_List);
-        request.setAttribute("search", search);
+        request.setAttribute("search", Constants.SEARCH);
         
 
-        String formName;
+        
         if (operation.equals(Constants.EDIT))
         {
         	formName = Constants.BIOHAZARD_EDIT_ACTION;

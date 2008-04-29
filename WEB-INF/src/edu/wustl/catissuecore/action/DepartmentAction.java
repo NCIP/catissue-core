@@ -60,11 +60,8 @@ public class DepartmentAction extends SecureAction
             formName = Constants.DEPARTMENT_ADD_ACTION;
             readOnlyValue = false;
         }
-        String operationAdd=Constants.ADD;
-    	String operationEdit=Constants.EDIT;
-    	
-    	request.setAttribute("operationAdd", operationAdd);
-    	request.setAttribute("operationEdit", operationEdit);
+        request.setAttribute("operationAdd", Constants.ADD);
+    	request.setAttribute("operationEdit", Constants.EDIT);
         
         request.setAttribute("formName",formName);
         request.setAttribute("readOnlyValue",readOnlyValue );

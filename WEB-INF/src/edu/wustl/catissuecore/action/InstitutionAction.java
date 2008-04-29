@@ -40,10 +40,8 @@ public class InstitutionAction extends SecureAction
         //Gets the value of the operation parameter.
     	String operation = request.getParameter(Constants.OPERATION);
     	
-    	String operationAdd=Constants.ADD;
-    	String operationEdit=Constants.EDIT;
-    	request.setAttribute("operationAdd", operationAdd);
-    	request.setAttribute("operationEdit", operationEdit);
+    	request.setAttribute("operationAdd", Constants.ADD);
+    	request.setAttribute("operationEdit", Constants.EDIT);
         
     	InstitutionForm institutionForm=(InstitutionForm)form;
         institutionForm.setOperation(operation);
