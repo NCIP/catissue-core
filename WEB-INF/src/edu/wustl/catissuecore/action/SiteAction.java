@@ -66,14 +66,9 @@ public class SiteAction  extends SecureAction
             formName = Constants.SITE_ADD_ACTION;
         }
         request.setAttribute("formName", formName);
-        
-        String operationAdd=Constants.ADD;
-    	String operationEdit=Constants.EDIT;
-    	String operationForActivityStatus=Constants.OPERATION;
-    	
-    	request.setAttribute("operationAdd", operationAdd);
-    	request.setAttribute("operationEdit", operationEdit);
-    	request.setAttribute("operationForActivityStatus", operationForActivityStatus);
+        request.setAttribute("operationAdd", Constants.ADD);
+    	request.setAttribute("operationEdit", Constants.EDIT);
+    	request.setAttribute("operationForActivityStatus",Constants.OPERATION);
         
         //Sets the countryList attribute to be used in the Add/Edit User Page.
         List countryList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COUNTRY_LIST,null);

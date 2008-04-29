@@ -60,18 +60,11 @@ public class StorageTypeAction  extends SecureAction
             formName = Constants.STORAGE_TYPE_ADD_ACTION;
         }
        request.setAttribute("formName", formName);
-       
-       String operationAdd=Constants.ADD;
-   	   String operationEdit=Constants.EDIT;
-   	   String holds_List_1=Constants.HOLDS_LIST1;
-   	   String holds_List_2=Constants.HOLDS_LIST2;
-   	   String holds_List_3=Constants.HOLDS_LIST3;
-   	      	   
-   	   request.setAttribute("operationAdd", operationAdd);
-   	   request.setAttribute("operationEdit", operationEdit);
-   	   request.setAttribute("holds_List_1", holds_List_1);
-   	   request.setAttribute("holds_List_2", holds_List_2);
-   	   request.setAttribute("holds_List_3", holds_List_3);
+       request.setAttribute("operationAdd", Constants.ADD);
+   	   request.setAttribute("operationEdit", Constants.EDIT);
+   	   request.setAttribute("holds_List_1", Constants.HOLDS_LIST1);
+   	   request.setAttribute("holds_List_2", Constants.HOLDS_LIST2);
+   	   request.setAttribute("holds_List_3", Constants.HOLDS_LIST3);
    	   	
 	//Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label
 	int dimTwoCapacity = 0;
@@ -95,11 +88,9 @@ public class StorageTypeAction  extends SecureAction
 	request.setAttribute("normalSubmit", normalSubmit);
 	request.setAttribute("forwardToSubmit", forwardToSubmit);
 	
-	String submit=Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][0];
-	request.setAttribute("submit", submit);
 	
-	String addContainer=Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][0];
-	request.setAttribute("addContainer", addContainer);
+	request.setAttribute("submit", Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][0]);
+	request.setAttribute("addContainer", Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][0]);
 	
 	
 
