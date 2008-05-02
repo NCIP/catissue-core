@@ -4,7 +4,6 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-<%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
 <%@ page import="java.util.*"%>
 
 <%

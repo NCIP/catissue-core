@@ -10,7 +10,6 @@
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-<%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
 <%@ page import="edu.wustl.catissuecore.bean.CollectionProtocolBean"%>
 <%@ page import="java.util.*"%>
 

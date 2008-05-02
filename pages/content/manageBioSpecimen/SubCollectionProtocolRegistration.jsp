@@ -6,7 +6,6 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>	  
-<%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes -->

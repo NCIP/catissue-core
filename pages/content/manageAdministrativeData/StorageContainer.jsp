@@ -10,8 +10,6 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
-<%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
-
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <%
 		//StorageContainerForm form = (StorageContainerForm)request.getAttribute("storageContainerForm");
