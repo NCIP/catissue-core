@@ -274,9 +274,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 		List list = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
-		Map<Long, String> cpIDTitleMap = Utility.getCPIDTitleMap();
-		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
-
+		
 		//Populating the Site Type bean
 		sourceObjectName = Site.class.getName();
 		String[] siteDisplaySiteFields = {"name"};
@@ -1318,8 +1316,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			}
 			else
 			{
-				StorageContainer storageContainer = (StorageContainer) bizLogic.retrieveAttribute(Specimen.class.getName(), specimenObj.getId(),
-						"storageContainer");
+				
+//				StorageContainer storageContainer = (StorageContainer) bizLogic.retrieveAttribute(Specimen.class.getName(), specimenObj.getId(),
+//						"storageContainer");
+				StorageContainer storageContainer = specimenObj.getStorageContainer();
+				
 				//specimenObj.getStorageContainer().getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
 				String storageLocation = storageContainer.getName() + ": X-Axis-" + specimenObj.getPositionDimensionOne() + ", Y-Axis-"
 						+ specimenObj.getPositionDimensionTwo();

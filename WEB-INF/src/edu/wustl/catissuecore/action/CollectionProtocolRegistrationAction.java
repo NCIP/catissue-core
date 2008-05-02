@@ -176,8 +176,6 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 		List list = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
-		Map<Long, String> cpIDTitleMap = Utility.getCPIDTitleMap();
-		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
 		
 		Logger.out.debug("SubmittedFor on CPRAction====>"+request.getAttribute(Constants.SUBMITTED_FOR));
 		if((request.getAttribute(Constants.SUBMITTED_FOR) != null) && (request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")))
