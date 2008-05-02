@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeCacheManager;
 import edu.wustl.common.security.SecurityManager;
@@ -87,7 +88,10 @@ public class LoginAction extends Action
 	            boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName, password);
 	            if (loginOK) 
 	            {
-	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
+	                DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+	            	defaultBizLogic.cachePrivileges(loginName);
+	            	
+	            	Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 	                HttpSession session = request.getSession(true);
 	                
 	                Long userId = validUser.getId();
@@ -107,22 +111,6 @@ public class LoginAction extends Action
 	                String result = userBizLogic.checkFirstLoginAndExpiry(validUser);
 													
 					setSecurityParamsInSessionData(validUser, sessionData);
-					
-					Long start = System.currentTimeMillis();
-					// @Ravindra : storing PrivilegeCache for the user in session
-					// A privilegeCache object is created for a user during Login & 
-					// this cache contains the Classes, objects,... & corresponding Privileges
-					// which user has on these classes, objects, etc.
-					// All later Security checks are done through the cache & no call to the database is made
-					PrivilegeCache privilegeCache = new PrivilegeCache(loginName);
-					Long end = System.currentTimeMillis();
-					
-					Long startTime = System.currentTimeMillis();
-					// To add privilegeCache to
-					// Singleton instance of PrivilegeCacheManager, requires User LoginName & privilegeCache object	
-					PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
-					privilegeCacheManager.addPrivlegeCache(loginName,privilegeCache);
-					Long endTime = System.currentTimeMillis();
 					
 					if(!result.equals(Constants.SUCCESS)) 
 					{
