@@ -25,6 +25,7 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -62,6 +63,10 @@ public class SiteBizLogic extends DefaultBizLogic
 		{
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
 					protectionObjects, null);
+			
+			String objectId = site.getObjectId();
+			Utility.addObjectToPrivilegeCaches(objectId);
+			
 		}
 		catch (SMException e)
 		{

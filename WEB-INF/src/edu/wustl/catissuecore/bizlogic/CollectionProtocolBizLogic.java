@@ -267,6 +267,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
 					getAuthorizationData(collectionProtocol), protectionObjects,
 					getDynamicGroups(collectionProtocol));
+			
+			String objectId = collectionProtocol.getObjectId();
+			edu.wustl.common.util.Utility.addObjectToPrivilegeCaches(objectId);
+			
 		}
 		catch (SMException e)
 		{
