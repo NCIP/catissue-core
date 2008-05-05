@@ -1,8 +1,6 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -241,7 +239,7 @@ function onCoordinatorChange()
 										  optionsList ='${activityStatusList}'
 										  initialValue='${siteForm.activityStatus}'
 										  styleClass="formFieldSized"
-										  onChange='${strCheckStatus}'
+										  onChange="checkActivityStatus(this,'/ManageAdministrativeData.do')"
 									    />
 
 						</td>
