@@ -40,6 +40,7 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.PasswordEncryptionException;
 import edu.wustl.common.security.exceptions.SMException;
@@ -176,7 +177,12 @@ public class UserBizLogic extends DefaultBizLogic
 			else
 			// Send the user creation email to user and the administrator.
 			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user), protectionObjects, null);
+//				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user), protectionObjects, null);
+				
+				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+
+				privilegeManager.insertAuthorizationData(getAuthorizationData(user), 
+						protectionObjects, null, user.getObjectId());
 
 				emailHandler.sendApprovalEmail(user);
 			}

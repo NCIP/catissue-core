@@ -249,7 +249,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			protectionObjects.add(cont);
 			try
 			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(cont));
+//				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(cont));
+				
+				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+
+				privilegeManager.insertAuthorizationData(null, 
+						protectionObjects, getDynamicGroups(cont), cont.getObjectId());
 			}
 			catch (SMException e)
 			{

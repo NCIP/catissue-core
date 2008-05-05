@@ -31,6 +31,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -207,7 +208,12 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 			protectionObjects.add(cont);
 			try
 			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(cont));
+//				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(cont));
+				
+				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+
+				privilegeManager.insertAuthorizationData(null, 
+						protectionObjects, getDynamicGroups(cont), cont.getObjectId());
 			}
 			catch (SMException e)
 			{
