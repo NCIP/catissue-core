@@ -5,9 +5,9 @@ YAHOO.widget.Calendar.prototype.render=function(x,y,obj,val){
     if (obj)
     {
         this.onSelect=function(){
-            if (!obj._skip_detach)
-                obj.grid.editStop();//detach(this);
-            else obj._skip_detach=false;
+        	if (obj._skip_detach==-1) return;
+			obj._skip_detach=false;        	
+            obj.grid.editStop();//detach(this);
         }
     }
 
@@ -16,8 +16,9 @@ YAHOO.widget.Calendar.prototype.render=function(x,y,obj,val){
         this.setYear(z[2]);
         this.setMonth(z[0]-1);
 
-        obj._skip_detach=true;
+        obj._skip_detach=-1;
         this.select((z[0])+"/"+z[1]+"/"+z[2]);
+        obj._skip_detach=true;
         }
     this._arender();
     if (x){

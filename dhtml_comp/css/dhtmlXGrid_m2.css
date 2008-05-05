@@ -1,6 +1,9 @@
 #box2 div.gridbox{
 	overflow:hidden;
 }
+#box2 div.gridbox .xhdr{
+	background-Color:white;
+}
 #box2 div.gridbox table.hdr td {
 	font-family:arial;
 	font-size:12px;
