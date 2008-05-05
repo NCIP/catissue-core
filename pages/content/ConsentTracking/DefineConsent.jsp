@@ -2,6 +2,8 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!-- 
 	 @author Virender Mehta 
@@ -73,86 +75,59 @@
 										</div>
 									</td>	
 									
-									<%-- Title CheckBox --%>	
-									<%
-									if(operation.equals(Constants.EDIT))
-									{
-									%>
+									<%-- Title CheckBox --%>
+									<logic:equal name="operation" value='${requestScope.edit}'>	
 									<td class="formLeftSubTableTitle" width="5%">
 										<div align="center">
 											<input type=checkbox name="selectAll" onclick="checkAll(this)" disabled="disabled"/>
 										</div>	
-									</td>	
-									<%
-									}
-									else
-									{
-									%>
+									</td>
+									</logic:equal>
+									<logic:notEqual name="operation" value='${requestScope.edit}'>
 									<td class="formLeftSubTableTitle" width="5%">
 										<div align="center">
 											<input type=checkbox name="selectAll" onclick="checkAll(this)"/>
 										</div>	
 									</td>	
-									<%
-									}
-									%>
+									</logic:notEqual>
 									<%-- Title Statements --%>
 									<td class="formLeftSubTableTitle" width="90%">
 										<html:hidden property="consentTierCounter"/>
 										<bean:message key="consent.statements" />
 									</td>
 								</tr>
-								<%-- If Operation=Edit then get Consents from DB and Operation=Add then show one ConsentTier --%>								
-								<%
-								CollectionProtocolForm collectionProtocolForm = null;
-								collectionProtocolForm =(CollectionProtocolForm)request.getAttribute("collectionProtocolForm");
-								int noOfConsents=1;
-								if(collectionProtocolForm != null && collectionProtocolForm instanceof CollectionProtocolForm)
-								{
-									noOfConsents = collectionProtocolForm.getConsentTierCounter();								
-								}
-								for(int counter=0;counter<noOfConsents;counter++)
-								{		
-									String consentName="consentValue(ConsentBean:"+counter+"_statement)";
-									String consentKey="consentValue(ConsentBean:"+counter+"_consentTierID)";
-									boolean readonly=false;
-								%>
+								<c:forEach var="counter" begin="0" end='${requestScope.noOfConsents-1}' step="1">
+								<c:set var="consentName" value="consentValue(ConsentBean:${counter}_statement)" scope="request"/>
+								<c:set var="consentKey" value="consentValue(ConsentBean:${counter}_consentTierID)" scope="request" />
+								<c:set var="readonly" value="false" scope="page"/>
 								<tr>
 									<td class="tabrightmostcell" width="3%" align="right" width="5%">
-										<%=(noOfConsents-counter)%>.
+										${requestScope.noOfConsents-counter}
 									</td>
 									<td class="formField" width="10%" align="center" width="5%">
-									<%
-									if(operation.equals(Constants.EDIT))
-									{
-										readonly=true;
-									%>
-									<input type="checkbox" name="consentcheckBoxs" Id="check1" disabled="disabled"/>	
-									<%
-									}
-									else
-									{
-									%>
+									<logic:equal name='${requestScope.operationforJSP}' value='${requestScope.edit}'>
+									<c:set var="readonly" value="true" scope="page"/>
+									<input type="checkbox" name="consentcheckBoxs" Id="check1" disabled="disabled"/>
+									</logic:equal>
+									<logic:notEqual name="operation" value='${requestScope.edit}'>
 									<input type="checkbox" name="consentcheckBoxs" Id="check1"/>
-									<%
-									}
-									%>
+									</logic:notEqual>
 									</td>
-									<html:hidden property="<%=consentKey%>"/>
+									</td>
+									
+									<html:hidden property='${requestScope.consentKey}'/>
 									<td class="formField" width="90%">
-										<html:textarea styleClass="formFieldSized"  style="width:90%;" rows="2" property="<%=consentName%>" readonly="<%=readonly%>"/>
+										<html:textarea styleClass="formFieldSized"  style="width:90%;" rows="2" property='${requestScope.consentName}' readonly='${pageScope.readonly}'/>
 									</td>
 								</tr>
-								<%
-								}
-								%>						
+								</c:forEach>
 							</table>
-						<%-- Inner Table for Add Consents  End --%>										
+						<%-- Inner Table for Add Consents  End --%>					
 						</div>
 					</td>
 				</tr>
 				<%-- Outer Table for Add Consents End --%>
-			</table>	
+			</table>
 			<table cellpadding="0" cellspacing="0" border="0" width = "100%" id="submittable">
 				<tr>
 					<td align="right">
