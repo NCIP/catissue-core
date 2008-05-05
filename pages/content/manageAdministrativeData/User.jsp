@@ -73,7 +73,6 @@ function handleStatus(status)
 					<td>
 						<html:hidden property="operation"/>
 						<html:hidden property="submittedFor"/>
-						<html:hidden property="activityStatus"/>
 					</td>
 				</tr>
 				
@@ -449,7 +448,10 @@ function handleStatus(status)
 				 	 </tr>
 					</logic:notEqual>
 					</logic:notEqual>
-					
+					<logic:equal name='${requestScope.pageOfforJSP}' value='${requestScope.pageOfSignUp}'>
+                    <html:hidden property="activityStatus"/>
+                    </logic:equal>
+		
 					<logic:equal name='${requestScope.pageOfforJSP}' value='${requestScope.pageOfUserAdmin}'>
 					<logic:equal name='${requestScope.operationforJSP}' value='${requestScope.editforJSP}'>
 					<tr>
