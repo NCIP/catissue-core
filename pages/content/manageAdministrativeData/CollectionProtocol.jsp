@@ -2,66 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-<%@ page import="java.util.*"%>
-<%@ page import="edu.wustl.common.beans.NameValueBean"%>
-<%@ page import="edu.wustl.catissuecore.domain.CollectionProtocol"%>
-
-
-<%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <head>
-
-<%
-	List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-	List pathologyStatusList = (List) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
-	List predefinedConsentsList =(List)request.getAttribute(Constants.PREDEFINED_CADSR_CONSENTS);
-    String operation = (String) request.getAttribute(Constants.OPERATION);
-	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-   	String tab = (String)request.getParameter("tab");
-    String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
-	String currentCollectionProtocolDate="";
-	CollectionProtocolForm form = (CollectionProtocolForm) request.getAttribute("collectionProtocolForm");
-	if(form != null)
-	{	
-		currentCollectionProtocolDate = form.getStartDate();
-		if(currentCollectionProtocolDate == null)
-			currentCollectionProtocolDate = "";				
-	}
-	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-	String appendingPath = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
-	if (reqPath != null)
-		appendingPath = reqPath + "|/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";	
-	if(!operation.equals("add"))
-	{
-		if(form != null)
-		{
-			appendingPath = "/CollectionProtocolSearch.do?operation=search&pageOf=pageOfCollectionProtocol&id="+form.getId() ;
-		}
-	}		
-		
-    boolean readOnlyValue, readOnlyForAll=false;
-    if (operation.equals(Constants.EDIT))
-    {
-    	editViewButton="buttons."+Constants.VIEW;
-    	formName = Constants.COLLECTIONPROTOCOL_EDIT_ACTION;
-        readOnlyValue = false;
-		if(pageOf.equals(Constants.QUERY))
-			formName = Constants.QUERY_COLLECTION_PROTOCOL_EDIT_ACTION + "?pageOf="+pageOf;
-
-    }
-    else
-    {
-        formName = Constants.COLLECTIONPROTOCOL_ADD_ACTION;
-        readOnlyValue = false;
-    }
-%>
-
-<%@ include file="/pages/content/common/CommonScripts.jsp" %>
-
 <SCRIPT LANGUAGE="JavaScript">
 	var search1='`';
 </script>
@@ -207,7 +148,6 @@
 	//On calling this function the tab will be switched to Consent Page	
 	function consentPage()
 	{
-		
 		switchToTab("consentTab");
 	}
 //	Consent Tracking Module Virender Mehta (End)
@@ -216,14 +156,14 @@
 //Add Bulk Specimen Virender(Start)
 function defineEvents()
 {
-	var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=<%=operation%>";
+	var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}";
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
 
 function viewSummary()
 {
-	var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=<%=operation%>";
+	var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=${requestScope.operation}";
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
@@ -244,21 +184,13 @@ function viewSummary()
 	}
 </style>
 </head>
-<%
-if(tab==null)
-{
-%>
-	<body>
-<%
-}
-else
-{
-%>
 
-	<body onload="consentPage();">
-<%
-}
-%>
+<logic:equal name="tab" value="null">
+<body>
+</logic:equal>
+<logic:notEqual name="tab" value="null">
+<body onload="consentPage()">
+</logic:notEqual>
 
         
 <html:errors />
@@ -266,12 +198,10 @@ else
 	<%=messageKey%>
 </html:messages>
 
-<html:form action="<%=formName%>">
+<html:form action='${requestScope.formName}'>
 
-<%
-if(pageView.equals("add") || pageView.equals("edit"))
-{
-%>
+
+<logic:equal name="flagforPageView" value="true">
  <table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="700">
 	<tr>
  		<td height="20" width="9%" nowrap class="tabMenuItemSelected" id="collectionProtocolTab" onclick="collectionProtocolPage()">
@@ -281,7 +211,6 @@ if(pageView.equals("add") || pageView.equals("edit"))
         <td height="20" width="10%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="consentPage()" id="consentTab">
 		    <bean:message key="consents.consents" />        
         </td>
-
 		<td height="20" width="10%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="defineEvents()" id="consentTab">
 	    	<bean:message key="cpbasedentry.defineevents" /> 
         </td>
@@ -291,39 +220,32 @@ if(pageView.equals("add") || pageView.equals("edit"))
      <td width="600" class="tabMenuSeparator" colspan="1">&nbsp;</td>
    </tr>
    <tr>
-   <td class="tabField" colspan="6">
-<%
-}
-%>
-
+   <td class="tabField" colspan="6"/>
+</logic:equal>
 <!-- table 1 -->
 <table summary="" cellpadding="0" cellspacing="0" border="0" id="table1" class="contentPage" width="100%">
 <!-- NEW COLLECTIONPROTOCOL ENTRY BEGINS-->
 
-<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
-
-	<%--logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>"--%>
 		<tr>
 		<td colspan="3">
 		<!-- table 4 -->
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
 					<td>
-						<html:hidden property="operation" value="<%=operation%>" />
-						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+						<html:hidden property="operation"/>
+						<html:hidden property="submittedFor"/>
 					</td>
 					<td><html:hidden property="onSubmit"/></td>
 				</tr>
 				
 				<tr>
 					<td><html:hidden property="id" />
-					<html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
+					<html:hidden property="redirectTo"/></td>
 				</tr>
 <!-- page title -->	
 					<tr>
 						<td class="formTitle" height="20" width="100%" colspan="6">
-							<%String title = "collectionprotocol."+pageView+".title";%>
-							<bean:message key="<%=title%>"/>							
+							<bean:message key='${requestScope.title}'/>							
 						</td>
 					</tr>
 
@@ -338,13 +260,12 @@ if(pageView.equals("add") || pageView.equals("edit"))
 						</td>
 						
 						<td class="formFieldNoBordersSimple">
-<!-- Mandar : 434 : for tooltip -->
 							<html:select property="principalInvestigatorId" styleClass="formFieldSized" styleId="principalInvestigatorId" size="1"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+								<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+							<logic:notEqual name="pageOf" value='${requestScope.query}'>
 							<html:link href="#" styleId="newUser" onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
@@ -362,13 +283,12 @@ if(pageView.equals("add") || pageView.equals("edit"))
 						</td>
 						
 						<td class="formFieldNoBordersSimple">
-<!-- Mandar : 434 : for tooltip -->
 							<html:select property="protocolCoordinatorIds" styleClass="formFieldSized" styleId="protocolCoordinatorIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+								<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+							<logic:notEqual name="pageOf" value='requestScope.query'>
 							<html:link href="#" styleId="newUser" onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=protocolCoordinator&forwardTo=collectionProtocol&addNewFor=protocolCoordinator')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
@@ -386,10 +306,7 @@ if(pageView.equals("add") || pageView.equals("edit"))
 						</td>
 						<td class="formFieldNoBordersSimple" colspan=2>
 						<!--Mandar 26-apr-06 Bug 874 : increase the width of title -->
-						<%
-							String fieldWidth = Utility.getColumnWidth(CollectionProtocol.class,"title" );
-						%>
-							<html:text styleClass="formFieldSized" maxlength="<%= fieldWidth %>"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
+						<html:text styleClass="formFieldSized" maxlength='${requestScope.fieldWidth}'  size="30" styleId="title" property="title" readonly='${requestScope.readOnlyValue}' />
 						</td>
 					</tr>
 
@@ -402,7 +319,7 @@ if(pageView.equals("add") || pageView.equals("edit"))
 							</label>
 						</td>
 						<td class="formFieldNoBordersSimple" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="shortTitle" property="shortTitle" readonly='${requestScope.readOnlyValue}' />
 						</td>
 					</tr>
 					
@@ -415,7 +332,7 @@ if(pageView.equals("add") || pageView.equals("edit"))
 							</label>
 						</td>
 						<td class="formFieldNoBordersSimple" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="irbID" property="irbID" readonly='${requestScope.readOnlyValue}' />
 						</td>
 					</tr>
 
@@ -429,36 +346,15 @@ if(pageView.equals("add") || pageView.equals("edit"))
 						</td>
 			
 						<td class="formFieldNoBordersSimple" colspan=2>
-				<%
-				if(currentCollectionProtocolDate.trim().length() > 0)
-				{
-					Integer collectionProtocolYear = new Integer(Utility.getYear(currentCollectionProtocolDate ));
-					Integer collectionProtocolMonth = new Integer(Utility.getMonth(currentCollectionProtocolDate ));
-					Integer collectionProtocolDay = new Integer(Utility.getDay(currentCollectionProtocolDate ));
-										
-				%>
-				<ncombo:DateTimeComponent name="startDate"
+				<ncombo:DateTimeComponent name="startDate" 
 							  id="startDate"
 							  formName="collectionProtocolForm"
-							  month= "<%= collectionProtocolMonth %>"
-							  year= "<%= collectionProtocolYear %>"
-							  day= "<%= collectionProtocolDay %>"
-							  value="<%=currentCollectionProtocolDate %>"
+							  month= '${requestScope.collectionProtocolMonth}'
+							  year= '${requestScope.collectionProtocolYear}'
+							  day= '${requestScope.collectionProtocolDay}'
+							  value='${requestScope.currentCollectionProtocolDate}'
 							  styleClass="formDateSized10"
 				/>
-				<% 
-					}
-					else
-					{  
-				 %>
-				<ncombo:DateTimeComponent name="startDate"
-							  id="startDate"
-							  formName="collectionProtocolForm"
-							  styleClass="formDateSized10"
-									/>
-				<% 
-					} 
-				%> 
 				<bean:message key="page.dateFormat" />&nbsp;
 				
 						</td>
@@ -466,7 +362,7 @@ if(pageView.equals("add") || pageView.equals("edit"))
 
 <!-- enddate: Should be displayed only in case of edit -->
 				<!-- bug id: 1565   -->	
-				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">					
+				<logic:equal name="operation" value='${requestScope.edit}'>					
 					<tr>
 						<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
 						<td class="formFieldNoBordersSimple">
@@ -479,10 +375,7 @@ if(pageView.equals("add") || pageView.equals("edit"))
   						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 <html:text styleClass="formDateSized15" maxlength="10"  size="35" styleId="endDate" property="endDate" readonly="true" />
 						 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
-							<!-- a href="javascript:show_calendar('collectionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
-								<img src="images\calendar.gif" width=24 height=22 border=0></a -->
-
-						 </td>
+						</td>
 					</tr>
 				</logic:equal>
 <!-- Consent waived radio button -->
@@ -514,7 +407,7 @@ if(pageView.equals("add") || pageView.equals("edit"))
 							</label>
 						</td>
 						<td class="formFieldNoBordersSimple" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="10"  size="30" styleId="enrollment" property="enrollment" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="10"  size="30" styleId="enrollment" property="enrollment" readonly='${requestScope.readOnlyValue}' />
 						</td>
 					</tr>
 
@@ -527,12 +420,12 @@ if(pageView.equals("add") || pageView.equals("edit"))
 							</label>
 						</td>
 						<td class="formFieldNoBordersSimple" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="200"  size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="200"  size="30" styleId="descriptionURL" property="descriptionURL" readonly='${requestScope.readOnlyValue}' />
 						</td>
 					</tr>
 
 <!-- activitystatus -->	
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					<logic:equal name="operation" value='${requestScope.edit}'>
 					<tr>
 						<td class="formFieldNoBordersSimple" width="5">*</td>
 						<td class="formFieldNoBordersSimple" >
@@ -542,9 +435,9 @@ if(pageView.equals("add") || pageView.equals("edit"))
 						</td>
 						<td class="formFieldNoBordersSimple">
 <!-- Mandar : 434 : for tooltip -->
-							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1"  onchange="<%=strCheckStatus%>"
+							<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1"  onchange="checkActivityStatus(this,'/ManageAdministrativeData.do')"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
+								<html:options name='${requestScope.activityStatusforJSP}' labelName='${requestScope.activityStatusforJSP}' />
 							</html:select>
 						</td>
 					</tr>
@@ -566,10 +459,8 @@ if(pageView.equals("add") || pageView.equals("edit"))
 				</td>
 						
 				<td align="center">
-					<%	
-						String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
-					%>
-					<html:button styleClass="actionButton" property="deletePage" onclick="<%=deleteAction%>">
+					
+					<html:button styleClass="actionButton" property="deletePage" onclick='${requestScope.deleteAction}'>
 						<bean:message key="buttons.delete"/>
 					</html:button>
 				</td>
