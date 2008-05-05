@@ -14,7 +14,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.security.PrivilegeCacheManager;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -38,9 +38,9 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 			cleanUp(sessionData,(String)session.getAttribute(Constants.RANDOM_NUMBER));
 		
 		// To remove PrivilegeCache from the session, requires user LoginName
-		// Singleton instance of PrivilegeCacheManager	
-		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
-		privilegeCacheManager.removePrivilegeCache(sessionData.getUserName());
+		// Singleton instance of PrivilegeManager	
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		privilegeManager.removePrivilegeCache(sessionData.getUserName());
 		System.out.println("Privilege Cache removed..");
 	}
     private void cleanUp(SessionDataBean sessionData,String randomNumber)

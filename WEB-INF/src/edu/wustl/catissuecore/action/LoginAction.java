@@ -2,8 +2,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -25,16 +23,11 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeCacheManager;
 import edu.wustl.common.security.SecurityManager;
-import edu.wustl.common.security.dao.AuthorizationDAOImpl;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.Roles;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
-import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
 
 /**
  * 

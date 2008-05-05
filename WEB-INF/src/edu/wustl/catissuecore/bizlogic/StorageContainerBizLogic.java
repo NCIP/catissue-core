@@ -51,7 +51,7 @@ import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeCacheManager;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -904,11 +904,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @param userId The user identifier.
 	 * @param roleId The roleId in case privilege is assigned/deassigned to a role.
 	 * @param assignToUser boolean which determines whether privilege is assigned/deassigned to a user or role. 
-	 * @throws DAOException
-	 * @throws SMException
+	 * @throws Exception 
 	 */
 	private void isDeAssignable(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser)
-			throws DAOException, SMException
+			throws Exception
 	{
 		// Aarti: Bug#2364 - Error while assigning privileges since attribute parentContainer changed to parent
 		String[] selectColumnNames = {"parent.id", "site.id"};
@@ -924,9 +923,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 
 		// To get privilegeCache through 
-		// Singleton instance of PrivilegeCacheManager, requires User LoginName
-		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
+		// Singleton instance of PrivilegeManager, requires User LoginName
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
 		
 		Iterator iterator = listOfSubElement.iterator();
 		while (iterator.hasNext())
@@ -952,7 +951,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				// Call to SecurityManager.checkPermission bypassed &
 				// instead, call redirected to privilegeCache.hasPrivilege				
-				permission = privilegeCache.hasPrivilege(containerObject.toString(), privilegeName);
+				permission = privilegeCache.hasPrivilege(className+"_"+containerObject.toString(), privilegeName);
 				
 //				permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(userName, className,
 //						containerObject.toString(), privilegeName);
@@ -960,8 +959,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			else
 			//If the privilege is assigned/deassigned to a user group.
 			{
-				permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(roleId, className,
-						containerObject.toString());
+				permission = privilegeManager.hasGroupPrivilege(roleId, className+"_"+containerObject.toString(), privilegeName);
+//				permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(roleId, className,
+//						containerObject.toString());
 			}
 
 			//If the parent is a Site.
@@ -1840,9 +1840,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		String userName = sessionDataBean.getUserName();
 	
 		// To get privilegeCache through 
-		// Singleton instance of PrivilegeCacheManager, requires User LoginName
-		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
+		// Singleton instance of PrivilegeManager, requires User LoginName
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
 		
 //		if (!SecurityManager.getInstance(this.getClass()).isAuthorized(userName, StorageContainer.class.getName() + "_" + container.getId(),
 //				Permissions.USE))

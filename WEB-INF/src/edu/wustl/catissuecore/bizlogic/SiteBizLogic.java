@@ -22,10 +22,9 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
-import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -58,20 +57,14 @@ public class SiteBizLogic extends DefaultBizLogic
 		dao.insert(site.getAddress(), sessionDataBean, true, true);
 		dao.insert(site, sessionDataBean, true, true);
 		protectionObjects.add(site);
-		protectionObjects.add(site.getAddress());
-		try
-		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
-					protectionObjects, null);
-			
-			String objectId = site.getObjectId();
-			Utility.addObjectToPrivilegeCaches(objectId);
-			
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
+		
+//		SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
+//				protectionObjects, null);
+		
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+
+		privilegeManager.insertAuthorizationData(null, 
+				protectionObjects, null, site.getObjectId());
 	}
 
 	/**

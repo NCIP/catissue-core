@@ -35,7 +35,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.querysuite.security.PrivilegeType;
 import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeCacheManager;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -295,9 +295,9 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		String userName = sessionBean.getUserName();
 		
 		// To get privilegeCache through 
-		// Singleton instance of PrivilegeCacheManager, requires User LoginName		
-		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
+		// Singleton instance of PrivilegeManager, requires User LoginName		
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
 		
 		if(sessionBean.isSecurityRequired())
 		{

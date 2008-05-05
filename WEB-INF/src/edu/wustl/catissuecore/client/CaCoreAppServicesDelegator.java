@@ -37,7 +37,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeCacheManager;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.Permissions;
@@ -268,9 +268,9 @@ public class CaCoreAppServicesDelegator
 		List filteredObjects = new ArrayList();
 		
 		// To get privilegeCache through 
-		// Singleton instance of PrivilegeCacheManager, requires User LoginName		
-		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
+		// Singleton instance of PrivilegeManager, requires User LoginName		
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
 		
 		Logger.out.debug("Total Objects>>>>>>>>>>>>>>>>>>>>>"+objectList.size());
 		Iterator iterator = objectList.iterator();

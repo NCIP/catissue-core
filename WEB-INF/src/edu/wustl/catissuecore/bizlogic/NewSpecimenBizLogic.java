@@ -75,7 +75,7 @@ import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeCacheManager;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -212,9 +212,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void isAuthorise(String userName) throws UserNotAuthorizedException
 	{
 		// To get privilegeCache through 
-		// Singleton instance of PrivilegeCacheManager, requires User LoginName
-		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(userName);
+		// Singleton instance of PrivilegeManager, requires User LoginName
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
 	
 		try
 		{
@@ -1607,9 +1607,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		Container parentStorageContainer = storageContainerObj.getParent();
 		
 		// To get privilegeCache through 
-		// Singleton instance of PrivilegeCacheManager, requires User LoginName
-		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(sessionDataBean.getUserName());
+		// Singleton instance of PrivilegeManager, requires User LoginName
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionDataBean.getUserName());
 		
 		if (parentStorageContainer!=null)
 		{

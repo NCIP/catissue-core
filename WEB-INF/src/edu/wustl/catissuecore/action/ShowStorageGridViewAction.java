@@ -39,8 +39,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeCacheManager;
-import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
@@ -64,9 +63,9 @@ public class ShowStorageGridViewAction  extends BaseAction
         String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
         
         // To get privilegeCache through 
-		// Singleton instance of PrivilegeCacheManager, requires User LoginName
-        PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(getUserLoginName(request));
+		// Singleton instance of PrivilegeManager, requires User LoginName
+        PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(getUserLoginName(request));
 		
         // Aarti: Check whether user has use permission on the storage container
 		// or not

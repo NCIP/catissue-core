@@ -40,8 +40,7 @@ import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.query.AdvancedQuery;
 import edu.wustl.common.query.Query;
 import edu.wustl.common.security.PrivilegeCache;
-import edu.wustl.common.security.PrivilegeCacheManager;
-import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -97,9 +96,9 @@ public class DataViewAction extends BaseAction {
 		Map columnIdsMap = (Map) session.getAttribute(Constants.COLUMN_ID_MAP);
 		
 		// To get privilegeCache through 
-		// Singleton instance of PrivilegeCacheManager, requires User LoginName
-		PrivilegeCacheManager privilegeCacheManager = PrivilegeCacheManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeCacheManager.getPrivilegeCache(getUserLoginName(request));
+		// Singleton instance of PrivilegeManager, requires User LoginName
+		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(getUserLoginName(request));
 		
 		if (!name.equals(Constants.ROOT)) {
 			id = str.nextToken().trim();
