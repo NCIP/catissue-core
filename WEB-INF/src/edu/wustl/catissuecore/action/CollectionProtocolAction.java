@@ -64,10 +64,15 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	super.executeSecureAction(mapping, form, request, response);
     	//pageOf required for Advance Search Object View.
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
+    	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
     	String invokeFunction = (String)request.getParameter("invokeFunction");
+    	String operation = (String)request.getParameter(Constants.OPERATION);
+    	
+    	
+    	
     	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
         //Gets the value of the operation attribute.
-    	String operation = (String)request.getParameter(Constants.OPERATION);
+    	
     	
     	HttpSession newSession = request.getSession();
     	CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)newSession.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
@@ -93,9 +98,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	
         Logger.out.debug("operation in coll prot action"+operation);
         //Sets the operation attribute to be used in the Edit/View Collection Protocol Page in Advance Search Object View. 
-        request.setAttribute(Constants.OPERATION,operation);
-
-    	
+           	
     	CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form; 
     	String cp_id = String.valueOf(collectionProtocolForm.getId());
     	if(!cp_id.equalsIgnoreCase("0"))
@@ -154,7 +157,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 //			request.setAttribute(Constants.REQ_PATH, reqPath);
 //		Logger.out.debug("CP Action reqPath : " + reqPath ); 
 		Logger.out.debug("page of in collectionProtocol action:"+pageOf);
-		request.setAttribute(Constants.PAGEOF,pageOf);
+		request.setAttribute("pageOf",pageOf);
 
 //		// Mandar : code for Addnew PI data 24-Jan-06
 //		String addNewUserTo = request.getParameter(Constants.ADD_NEW_USER_TO);
@@ -181,8 +184,102 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 //			}
 //		}
 //		// -- 24-Jan-06 end
-        return mapping.findForward(pageOf);
+		
+		
+		
+		List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
+		
+		
+		List pathologyStatusList = (List) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
+		List predefinedConsentsList =(List)request.getAttribute(Constants.PREDEFINED_CADSR_CONSENTS);
+	   
+	   	String tab = (String)request.getParameter("tab");
+	    String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
+		String currentCollectionProtocolDate="";
+		
+		if(collectionProtocolForm != null)
+		{	
+			currentCollectionProtocolDate = collectionProtocolForm.getStartDate();
+			if(currentCollectionProtocolDate == null)
+				currentCollectionProtocolDate = "";				
+		}
+		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+		String appendingPath = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
+		if (reqPath != null)
+			appendingPath = reqPath + "|/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";	
+		if(!operation.equals("add"))
+		{
+			if(collectionProtocolForm != null)
+			{
+				appendingPath = "/CollectionProtocolSearch.do?operation=search&pageOf=pageOfCollectionProtocol&id="+collectionProtocolForm.getId() ;
+			}
+		}		
+			
+	    boolean readOnlyValue=false;
+	    if (operation.equals(Constants.EDIT))
+	    {
+	    	editViewButton="buttons."+Constants.VIEW;
+	    	formName = Constants.COLLECTIONPROTOCOL_EDIT_ACTION;
+	        if(pageOf.equals(Constants.QUERY))
+				formName = Constants.QUERY_COLLECTION_PROTOCOL_EDIT_ACTION + "?pageOf="+pageOf;
+
+	    }
+	    else
+	    {
+	        formName = Constants.COLLECTIONPROTOCOL_ADD_ACTION;
+	    }
+	    boolean flagforPageView=false;
+	        
+	    if(pageView.equals("add") || pageView.equals("edit"))
+		{
+	    	flagforPageView=true;
+		}
+	    Integer collectionProtocolYear = new Integer(Utility.getYear(currentCollectionProtocolDate ));
+		Integer collectionProtocolMonth = new Integer(Utility.getMonth(currentCollectionProtocolDate ));
+		Integer collectionProtocolDay = new Integer(Utility.getDay(currentCollectionProtocolDate ));
+		
+		request.setAttribute("collectionProtocolYear", collectionProtocolYear);
+		request.setAttribute("collectionProtocolDay", collectionProtocolDay);
+		request.setAttribute("collectionProtocolMonth", collectionProtocolMonth);
+	    int noOfConsents=1;
+		noOfConsents = collectionProtocolForm.getConsentTierCounter();								
+		request.setAttribute("noOfConsents", noOfConsents);
+	      
+	    String title = "collectionprotocol."+pageView+".title";
+	
+		collectionProtocolForm.setPageOf(pageOf);
+		collectionProtocolForm.setOperation(operation);
+		collectionProtocolForm.setSubmittedFor(submittedFor);
+		collectionProtocolForm.setRedirectTo(reqPath);
+		
+		String fieldWidth = Utility.getColumnWidth(CollectionProtocol.class,"title" );
+		String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
+		
+		 
+		request.setAttribute("pageOf", pageOf);
+		request.setAttribute("operation", operation);
+		request.setAttribute("edit", Constants.EDIT);
+		request.setAttribute("activityStatusforJSP", Constants.ACTIVITYSTATUSLIST);
+		request.setAttribute("deleteAction", deleteAction);
+		request.setAttribute("fieldWidth", fieldWidth);
+		request.setAttribute("queryforJSP", Constants.QUERY);
+		request.setAttribute("readOnlyValue", readOnlyValue);
+		request.setAttribute("formName", formName);
+		request.setAttribute("editViewButton", editViewButton);
+		request.setAttribute("appendingPath", appendingPath);
+		request.setAttribute("currentCollectionProtocolDate", currentCollectionProtocolDate);
+		request.setAttribute("pageView", pageView);
+		request.setAttribute("flagforPageView", flagforPageView);
+		request.setAttribute("tab", tab);
+		request.setAttribute("tissueSiteList", tissueSiteList);
+		request.setAttribute("pathologyStatusList", pathologyStatusList);
+		request.setAttribute("predefinedConsentsList", predefinedConsentsList);
+		request.setAttribute("title", title);
+		request.setAttribute("userListforJSP", Constants.USERLIST);
+		
+		return mapping.findForward(pageOf);
     }
+  
     /**
 	 * This function will return CollectionProtocolRegistration object 
 	 * @param cp_id Selected SpecimenCollectionGroup ID
