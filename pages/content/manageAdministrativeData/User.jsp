@@ -34,7 +34,7 @@ function handleStatus(status)
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="620">
 	
 	<html:form action='${requestScope.formName}'>
-	  <logic:equal name='${requestScope.pageOfforJSP}' value='${pageOfApproveUser}'>
+	  <logic:equal name="pageOf" value='${pageOfApproveUser}'>
   	    	  <tr>
 			  	<td align="right" colspan="3">
 
@@ -90,7 +90,7 @@ function handleStatus(status)
 					</td>
 				</tr>
 
-				<logic:notEqual name='${requestScope.operationforJSP}' value='${requestScope.searchforJSP}'>
+				<logic:notEqual name="operation" value='${requestScope.searchforJSP}'>
 					<tr>
 						<td class="formMessage" colspan="3">* indicates a required field</td>
 					</tr>
@@ -117,7 +117,7 @@ function handleStatus(status)
 						</td>
 					</tr>
 <!-- Mandar 24-Apr-06 : bugid 972 : Confirm Email address -->
-				<logic:notEqual name='${requestScope.pageOfforJSP}' value='${requestScope.pageOfUserProfile}'>				
+				<logic:notEqual name="pageOf" value='${requestScope.pageOfUserProfile}'>				
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel">
@@ -156,8 +156,8 @@ function handleStatus(status)
 						</td>
 					</tr>
 					
-					<logic:equal name='${requestScope.pageOfforJSP}' value='${requestScope.pageOfUserAdmin}'>
-					<logic:equal name='${requestScope.operationforJSP}'value='${requestScope.editforJSP}'>
+					<logic:equal name="pageOf" value='${requestScope.pageOfUserAdmin}'>
+					<logic:equal name="operation" value='${requestScope.editforJSP}'>
 					<tr>
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel">
@@ -293,14 +293,14 @@ function handleStatus(status)
 						
                                         <autocomplete:AutoCompleteTag property="institutionId"
 										  optionsList ='${requestScope.instituteList}'
-										  initialValue='${requestScope.institutionId}'
+										  initialValue='${userForm.institutionId}'
 										  styleClass="formFieldSized"
                                           staticField="false"
 										  
 									    />
 					
 							&nbsp;
-						<logic:notEqual name='${requestScope.pageOfforJSP}'value='${requestScope.pageOfSignUp}'>
+						<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>
 							<html:link href="#" styleId="newInstitution" onclick="addNewAction('UserAddNew.do?addNewForwardTo=institution&forwardTo=user&addNewFor=institution')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
@@ -321,14 +321,14 @@ function handleStatus(status)
 						
                                         <autocomplete:AutoCompleteTag property="departmentId"
 										  optionsList ='${requestScope.departmentList}'
-										  initialValue='${requestScope.departmentId}'
+										  initialValue='${userForm.departmentId}'
 										  styleClass="formFieldSized"
                                           staticField="false"
 										  
 									    />
 
 							&nbsp;
-							<logic:notEqual name='${requestScope.pageOfforJSP}'value='${requestScope.pageOfSignUp}'>
+							<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>
 							<html:link href="#" styleId="newDepartment" onclick="addNewAction('UserAddNew.do?addNewForwardTo=department&forwardTo=user&addNewFor=department')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
@@ -347,13 +347,13 @@ function handleStatus(status)
 						
 						    <autocomplete:AutoCompleteTag property="cancerResearchGroupId"
 										  optionsList ='${requestScope.cancerResearchGroupList}'
-										  initialValue='${requestScope.cancerResearchGroupId}'
+										  initialValue='${userForm.cancerResearchGroupId}'
 										  styleClass="formFieldSized"
                                           staticField="false"
 										  
 									    />
 							&nbsp;
-							<logic:notEqual name='${requestScope.pageOfforJSP}'value='${requestScope.pageOfSignUp}'>
+							<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>
 							<html:link href="#" styleId="newCancerResearchGroup" onclick="addNewAction('UserAddNew.do?addNewForwardTo=cancerResearchGroup&forwardTo=user&addNewFor=cancerResearchGroup')">
 								<bean:message key="buttons.addNew" />
 							</html:link>
@@ -361,7 +361,7 @@ function handleStatus(status)
 						</td>
 					</tr>
 					
-					<logic:equal name='${requestScope.pageOfforJSP}' value='${requestScope.pageOfUserProfile}'>
+					<logic:equal name="pageOf" value='${requestScope.pageOfUserProfile}'>
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel" width="140">
