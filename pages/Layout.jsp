@@ -15,6 +15,7 @@
 <head>
 <title><tiles:getAsString name="title" ignore="true" /></title>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <script src="jss/script.js" type="text/javascript"></script>
 <script src="jss/overlib_mini.js" type="text/javascript"></script>
 <script src="jss/calender.js" type="text/javascript"></script>
@@ -158,7 +159,7 @@ function setFocusOnFirstElement()
 </head>
 <body onload="setFocusOnFirstElement()">
 <table summary="" cellpadding="0" cellspacing="0" border="0"
-	width="100%" height="99%">
+	width="100%" height="99%" class="maintable">
 
 	<!-- caBIG hdr begins -->
 	<tr>
