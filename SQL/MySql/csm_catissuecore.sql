@@ -1413,5 +1413,15 @@ INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMEN
 INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`) VALUES (NULL,18,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction'));
 /* sub protocol action end */
 
+
+/*---- Abhijit:Delete child records whose parent is missing or deleted ---*/
+delete from CSM_PG_PE where PROTECTION_ELEMENT_ID not in
+(select  PROTECTION_ELEMENT_ID from csm_protection_element);
+delete from CSM_PG_PE where protection_group_id not in (select
+protection_group_id from csm_protection_group);
+delete from CSM_USER_GROUP_ROLE_PG where protection_group_id not in (select
+protection_group_id from csm_protection_group);
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=1;
