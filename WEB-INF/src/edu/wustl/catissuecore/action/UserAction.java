@@ -203,17 +203,11 @@ public class UserAction extends SecureAction
 		{
 			readOnlyEmail = true;
 		}
-		Long institutionId=new Long(userForm.getInstitutionId());
-		Long departmentId=new Long(userForm.getDepartmentId());
-		Long cancerResearchGroupId=new Long(userForm.getCancerResearchGroupId());
-		
 		request.setAttribute("SELECT_OPTION_VALUE", SELECT_OPTION_VALUE);
 		request.setAttribute("Approve", Constants.APPROVE_USER_APPROVE_STATUS);
-		request.setAttribute("pageOfforJSP", Constants.PAGEOF);
 		request.setAttribute("pageOfApproveUser",Constants.PAGEOF_APPROVE_USER);
 		request.setAttribute("backPage", Constants.APPROVE_USER_SHOW_ACTION+"?"+Constants.PAGE_NUMBER+"="+Constants.START_PAGE);
 		request.setAttribute("redirectTo", Constants.REQ_PATH);
-		request.setAttribute("operationforJSP", Constants.OPERATION);
 		request.setAttribute("addforJSP", Constants.ADD);
 		request.setAttribute("editforJSP", Constants.EDIT);
 		request.setAttribute("searchforJSP", Constants.SEARCH);
@@ -221,9 +215,6 @@ public class UserAction extends SecureAction
 		request.setAttribute("pageOfUserProfile",Constants.PAGEOF_USER_PROFILE);
 		request.setAttribute("pageOfUserAdmin", Constants.PAGEOF_USER_ADMIN);
 		request.setAttribute("pageOfSignUp", Constants.PAGEOF_SIGNUP);
-		request.setAttribute("institutionId", institutionId);
-		request.setAttribute("departmentId", departmentId);
-		request.setAttribute("cancerResearchGroupId", cancerResearchGroupId);
 		request.setAttribute("pageOf", pageOf);
 		request.setAttribute("operation", operation);
 		// ------------- add new

@@ -86,7 +86,7 @@ function handleStatus(status)
 				
 				<tr>
 					<td>
-						<html:hidden property='${requestScope.pageOfforJSP}'/>
+						<html:hidden property="pageOf"/>
 					</td>
 				</tr>
 
