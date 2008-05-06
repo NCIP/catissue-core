@@ -23,7 +23,7 @@
 				<b> <bean:message key="app.user" /> </b>
 		</div>		
 		<div>
-			<a class="subMenuPrimary" href="User.do?operation=add&amp;pageOf=pageOfUserAdmin&menuSelected=1"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="User.do?operation=add&pageOf=pageOfUserAdmin&menuSelected=1"><bean:message key="app.add" /></a> | 
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&menuSelected=1" >
 				<bean:message key="app.edit" />
 			</a> | 
