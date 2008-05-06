@@ -98,9 +98,9 @@ function handleStatus(status)
 											<logic:equal name="operation"
 													value='${requestScope.editforJSP}'>
 													<td width="6%" valign="bottom"
-													background="images/uIEnhancementImages/tab_bg.gif"><img
+													background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/User.do?operation=add&pageOf=pageOfUserAdmin&menuSelected=1"><img
 													src="images/uIEnhancementImages/tab_add_user1.jpg" alt="Add" width="57"
-													height="22" hspace="1" border="0" onclick="addNewUser()" /></td>
+													height="22" hspace="1" border="0" /></html:link></td>
 													<td width="6%" valign="bottom"
 													background="images/uIEnhancementImages/tab_bg.gif"><img
 													src="images/uIEnhancementImages/tab_edit_user1.jpg" alt="Edit" width="59"
