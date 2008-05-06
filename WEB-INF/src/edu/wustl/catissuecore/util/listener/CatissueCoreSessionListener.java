@@ -41,7 +41,6 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 		// Singleton instance of PrivilegeManager	
 		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 		privilegeManager.removePrivilegeCache(sessionData.getUserName());
-		System.out.println("Privilege Cache removed..");
 	}
     private void cleanUp(SessionDataBean sessionData,String randomNumber)
     {
