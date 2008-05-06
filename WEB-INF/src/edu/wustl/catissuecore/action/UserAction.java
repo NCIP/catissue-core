@@ -68,9 +68,12 @@ public class UserAction extends SecureAction
 		if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
 		{
 			Long identifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
+			request.setAttribute("prevPageId", identifier);
 			prevPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
 			identifier = (Long)request.getAttribute(Constants.NEXT_PAGE);
 			nextPage = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
+		    request.setAttribute("nextPageId", identifier);
+		     
 		}
         if (operation.equals(Constants.EDIT))
         {
@@ -136,9 +139,9 @@ public class UserAction extends SecureAction
         
         request.setAttribute("roleStatus", roleStatusforJSP);
         request.setAttribute("formName", formName);
-        request.setAttribute("prevPage", prevPage);
-        request.setAttribute("nextPage", nextPage);
-               
+        request.setAttribute("prevPageURL", prevPage);
+        request.setAttribute("nextPageURL", nextPage);
+                 
          //Sets the countryList attribute to be used in the Add/Edit User Page.
         List countryList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COUNTRY_LIST,null);
         request.setAttribute("countryList", countryList);
@@ -174,7 +177,7 @@ public class UserAction extends SecureAction
         //and the user page is of administrative tab.
         if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGEOF_USER_ADMIN))
         {
-            String activityStatusList=Constants.ACTIVITYSTATUSLIST;
+         	String activityStatusList=Constants.ACTIVITYSTATUSLIST;
         	request.setAttribute("activityStatusList",Constants.USER_ACTIVITY_STATUS_VALUES);
         }
         
