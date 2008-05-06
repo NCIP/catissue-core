@@ -1936,3 +1936,32 @@ td.formFieldNoBordersQuery{ /* for the cell that contains the form elements */
 	/*background-image: url(../images/bg_dv.gif);*/
 	background-color:#F1F2F7; 
  }
+ 
+ .formFieldSized12{ /* for the autocomplete tag */
+	font-family:verdana;
+	border:1px solid #6E81A6; 
+  font-size:11px;
+	width:16em;
+}
+
+.formFieldSizedNew{ /* for the autocomplete tag */
+	font-family:verdana;
+	border:1px solid #6E81A6; 
+  font-size:11px;
+	width:18em;
+}
+
+
+.formFieldSized18{ /* for the autocomplete tag */
+	font-family:verdana;
+	border:1px solid #6E81A6; 
+  font-size:11px;
+	width:20em;
+}
+
+.formFieldSized8{ /* for the autocomplete tag */
+	font-family:verdana;
+	border:1px solid #6E81A6; 
+  font-size:11px;
+	width:8em;
+}
