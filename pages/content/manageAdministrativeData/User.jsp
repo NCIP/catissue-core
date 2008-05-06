@@ -5,6 +5,7 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head>
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript"

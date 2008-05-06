@@ -1965,3 +1965,11 @@ td.formFieldNoBordersQuery{ /* for the cell that contains the form elements */
   font-size:11px;
 	width:8em;
 }
+
+.maintable {
+	background-color:#FFFFFF;
+	border-bottom:1px solid #000000;
+	border-top:1px solid #000000;
+	border-left:1px solid #000000;
+	border-right:1px solid #000000;
+}	

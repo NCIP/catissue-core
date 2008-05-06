@@ -5,6 +5,7 @@
 <%@ page language="java" isELIgnored="false" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <link href="css/mktree.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <SCRIPT LANGUAGE="JavaScript" SRC="jss/javaScript.js"></SCRIPT>
 
 <html:errors/>

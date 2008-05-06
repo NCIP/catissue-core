@@ -9,6 +9,7 @@
 
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 <script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar : 434 : for tooltip -->
