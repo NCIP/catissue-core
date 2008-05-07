@@ -3795,19 +3795,6 @@ PUBLIC
 	</action>
 	
 	<!--  End Applet Actions -->
-	<action path="/NewMultipleSpecimenAction" type="edu.wustl.catissuecore.action.NewMultipleSpecimenAction" parameter="method" 
-	   name="multipleSpecimenForm"
-	   scope="request" validate="true" input="/InitMultipleSpecimen.do?menuSelected=15">
-		<forward name="comments" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
-		<forward name="externalIdentifier" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
-		<forward name="bioHazard" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
-		<forward name="events" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
-		<forward name="derivedSpecimen" path="/CreateMultipleSpecimen.do" />
-		<forward name="derivedSpecimenEdit" path="/CreateMultipleSpecimen.do?derivedOperation=edit" />
-		<forward name="showDerivedSpecimenDialog" path="/NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog" />
-		<forward name="specimen" path=".catissuecore.multipleSpecimenDef" />
-		
-	</action>
 	
 		<action path="/DerivedMultipleSpecimenAdd"
 			type="edu.wustl.catissuecore.action.DerivedMultipleSpecimenAddAction"
@@ -4428,20 +4415,7 @@ PUBLIC
 		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 	
-	<action path="/CPQueryNewMultipleSpecimenAction"
-	     type="edu.wustl.catissuecore.action.NewMultipleSpecimenAction" parameter="method" 
-	     name="multipleSpecimenForm"
-	     scope="request" validate="true" input="/CPQueryInitMultipleSpecimen.do?menuSelected=15">
-		<forward name="comments" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
-		<forward name="externalIdentifier" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
-		<forward name="bioHazard" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
-		<forward name="events" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
-		<forward name="derivedSpecimen" path="/CreateMultipleSpecimen.do" />
-		<forward name="derivedSpecimenEdit" path="/CreateMultipleSpecimen.do?derivedOperation=edit" />
-		<forward name="showDerivedSpecimenDialog" path="/NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog" />
-		<forward name="specimen" path=".catissuecore.multipleSpecimenCPQueryDef" />
-		
-	</action>
+	
 	<!-- Patch ID: Bug#4129_3 -->
 	<action path="/CPQuerySpecimenCollectionGroupForTech"
 		type="edu.wustl.catissuecore.action.SpecimenCollectionGroupForTechAction"
