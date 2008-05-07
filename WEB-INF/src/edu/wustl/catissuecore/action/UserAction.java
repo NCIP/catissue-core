@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
@@ -24,11 +25,14 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
@@ -75,6 +79,26 @@ public class UserAction extends SecureAction
 		    request.setAttribute("nextPageId", identifier);
 		     
 		}
+      if(operation.equals(Constants.EDIT))
+      {
+      	if(userForm.getCsmUserId().longValue()==0)
+      	{
+      		UserBizLogic bizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+      		String sourceObjName = User.class.getName();
+      		String[] selectColName = {"csmUserId"};
+      		String[] whereColName = {"id"};
+      		String[] whereColCond = {"="};
+      		Object[] whereColVal = {userForm.getId()};
+
+      		List regList = bizLogic.retrieve(sourceObjName, selectColName, whereColName, whereColCond, whereColVal,Constants.AND_JOIN_CONDITION);
+      		if (regList != null && !regList.isEmpty())
+      		{
+      			Object obj = (Object) regList.get(0);
+      			Long id = (Long) obj;
+      			userForm.setCsmUserId(id);
+      		}
+      	}
+      }
         if (operation.equals(Constants.EDIT))
         {
 			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
