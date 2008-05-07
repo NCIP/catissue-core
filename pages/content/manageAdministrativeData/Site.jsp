@@ -25,7 +25,8 @@
       <tr>
         <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
           <tr>
-            <td width="100%" colspan="2" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <td width="100%" colspan="2
+            " valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
 
               <tr>
                 <td colspan="3" valign="top" class="td_color_bfdcf3"><table width="10%" border="0" cellpadding="0" cellspacing="0" background="images/uIEnhancementImages/table_title_bg.gif">
@@ -117,7 +118,7 @@
 						  <html:text styleClass="black_ar" maxlength="255" size="30" styleId="name" property="name"/></label></td>
                           <td width="12%" align="left">&nbsp;</td>
                           <td width="1%" align="left"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
-                          <td width="15%" align="left">
+                          <td width="15%" align="left" class="black_ar">
 								<label for="type">
 								<bean:message key="site.type"/>
 							</label></td>
