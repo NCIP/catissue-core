@@ -27,6 +27,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.PasswordEncryptionException;
 import edu.wustl.common.security.exceptions.SMException;
@@ -99,11 +100,23 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 				user.getPasswordCollection().add(password);
                 
                 Logger.out.debug("password stored in passwore table");
-            }
+                
+                PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+                
+                Set protectionObjects=new HashSet();
+                protectionObjects.add(user);
+                
+                privilegeManager.insertAuthorizationData(
+                		getAuthorizationData(user), protectionObjects, null, user.getObjectId());
+                
+//                	SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+//                    		getAuthorizationData(user), protectionObjects, null);
 
+            }
+            
             //Update the user record in catissue table.
-            dao.update(user.getAddress(), sessionDataBean, true, false, false);
-	        dao.update(user, sessionDataBean, true, true, false);
+            dao.update(user.getAddress(), sessionDataBean, true, true, false);
+	        dao.update(user, sessionDataBean, true, true, true);
 	        
             //Audit of User Update during approving user.
             User oldUser = (User) oldObj;
