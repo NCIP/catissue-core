@@ -78,7 +78,7 @@ public class UserAction extends SecureAction
 		}
 		if (!pageOf.equals(Constants.PAGEOF_APPROVE_USER))
 		{
-			if(operation.equals(Constants.EDIT))
+			if(operation.equals(Constants.EDIT) && (userForm.getCsmUserId()!=null))
 			{
 				if(userForm.getCsmUserId().longValue()==0)
 				{

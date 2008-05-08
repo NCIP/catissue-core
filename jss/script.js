@@ -1,57 +1,4 @@
-	/* methods for the storage type jsp */
-function capacityChanged(element)
-{
-	var elementValue = element.value;
-	if(elementValue.length>0)
-	{
-		try
-		{
-			var num = parseInt(elementValue);
-			col1= document.getElementById("col1");
-			if(num>1)
-			{
-				col1.innerHTML="<span class="+"blue_ar_b"+"><img src="+"images/star.gif"+" alt="+"Mandatory"+" width="+"6" +" height="+"6"+" hspace="+"0"+" vspace="+"0"+" /></span>";
-			}
-			else
-			{
-				col1.innerHTML="&nbsp;";
-			}
-		}
-		catch(err)
-		{
-			//alert("Please enter a valid number.");
-		}
-	}
-}
 	
-function onRadioButtonClick(element)
-{
-	var specimenClass = document.getElementById("holdSpecimenClassTypeIds");
-	var specimenArray = document.getElementById("holdsSpecimenArrTypeIds");
-	if(element == "Specimen")
-	{
-		specimenClass.disabled = false;
-		specimenArray.disabled = true;
-		var len = specimenArray.length;
-		for (var i = 0; i < len; i++) 
-		{
-			specimenArray.options[i].selected = false;
-		}
-	}
-	if(element == "SpecimenArray")
-	{
-		specimenClass.disabled = true;
-		specimenArray.disabled = false;
-		var len = specimenClass.length;
-		for (var i = 0; i < len; i++) 
-		{
-			specimenClass.options[i].selected = false;
-		}
-	}
-}
-
-/* Methods for storage type ends */
-
 function showHide(elementid){
 if (document.getElementById(elementid).style.display == 'none'){
 document.getElementById(elementid).style.display = '';
@@ -67,43 +14,6 @@ function onCoordinatorChange()
 	document.forms[0].action = action;
 	document.forms[0].submit();
 }
-
-function callAction(action)
-{
-	document.forms[0].action = action;
-	document.forms[0].submit();
-}
-
-function onObjectChange(element,action)
-{
-	var index = element.name.indexOf("(");
-	var lastIndex = element.name.lastIndexOf(")");
-	
-	var saveObject = document.getElementById("objectChanged");	
-	saveObject.value = element.name.substring(index+1,lastIndex);
-	
-	callAction(action);
-}
-
-function setPropertyValue(propertyName, value)
-{
-	for (var i=0;i < document.forms[0].elements.length;i++)
-    {
-    	var e = document.forms[0].elements[i];
-        if (e.name == propertyName)
-        {
-        	document.forms[0].elements[i].value = value;
-        }
-    }
-}
-function incrementCounter()
-{
-	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) + 1;
-}
-function decrementCounter()
-{
-	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) - 1;
-} 
 
 function enableLastCheckbox()
 {
