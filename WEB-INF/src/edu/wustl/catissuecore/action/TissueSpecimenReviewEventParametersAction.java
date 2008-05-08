@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
 
@@ -25,10 +26,11 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class TissueSpecimenReviewEventParametersAction extends SpecimenEventParametersAction
 {
-	protected void setRequestParameters(HttpServletRequest request) throws Exception
+	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 //		set array of histological quality
 		List histologicalQualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY,null);
 		request.setAttribute(Constants.HISTOLOGICAL_QUALITY_LIST , histologicalQualityList);
 	}
+	
 }

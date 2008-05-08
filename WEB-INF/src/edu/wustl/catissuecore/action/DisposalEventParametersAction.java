@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -25,7 +26,7 @@ public class DisposalEventParametersAction extends SpecimenEventParametersAction
 	 * @param request object of HttpServletRequest
 	 * @throws Exception generic exception
 	 */
-	protected void setRequestParameters(HttpServletRequest request) throws Exception
+	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 		/*DisposalEventParametersForm form = (DisposalEventParametersForm) request
 				.getAttribute("disposalEventParametersForm");*/
@@ -34,4 +35,5 @@ public class DisposalEventParametersAction extends SpecimenEventParametersAction
 				Constants.DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES);
 
 	}
+	
 }

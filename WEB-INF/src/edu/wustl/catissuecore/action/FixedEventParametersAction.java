@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
 
@@ -27,10 +28,11 @@ public class FixedEventParametersAction extends SpecimenEventParametersAction
 	 * @param request object of HttpServletRequest
 	 * @throws Exception generic exception
 	 */
-	protected void setRequestParameters(HttpServletRequest request) throws Exception
+	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 		// SETS THE FIXATION LIST
 		List fixationList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_FIXATION_TYPE,null);
     	request.setAttribute(Constants.FIXATION_LIST, fixationList);
 	}
+	
 }

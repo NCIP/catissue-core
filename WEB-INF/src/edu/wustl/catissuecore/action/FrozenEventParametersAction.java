@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
 
@@ -27,10 +28,11 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 	 * @param request object of HttpServletRequest
 	 * @throws Exception generic exception
 	 */
-	protected void setRequestParameters(HttpServletRequest request) throws Exception
+	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 		//set array of methods
         List methodList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_METHOD,null);
     	request.setAttribute(Constants.METHOD_LIST, methodList);
 	}
+	
 }

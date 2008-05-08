@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
 
@@ -24,10 +25,11 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 {
-	protected void setRequestParameters(HttpServletRequest request) throws Exception
+	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 		// set the ReceivedQuality List.
 		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY,null);
     	request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 	}
+	
 }

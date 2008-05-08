@@ -24,6 +24,7 @@ import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
@@ -45,7 +46,7 @@ import edu.wustl.common.util.logger.Logger;
 public class TransferEventParametersAction extends SpecimenEventParametersAction
 {
 
-	protected void setRequestParameters(HttpServletRequest request) throws Exception
+	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 		TransferEventParametersForm transferEventParametersForm = (TransferEventParametersForm) request
 				.getAttribute("transferEventParametersForm");
@@ -263,4 +264,5 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		Long collectionProtocolId = (Long)collectionProtocolIdList.get(0);
 		return collectionProtocolId;
 	}
+	
 }

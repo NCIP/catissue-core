@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -30,7 +31,7 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 	 * @param request object of HttpServletRequest
 	 * @throws Exception generic exception
 	 */
-	protected void setRequestParameters(HttpServletRequest request) throws Exception
+	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 		/** 
 		* Sets the isRNA attribute. It is used to display "Ratio 28S To 18S" field
@@ -63,4 +64,5 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
         	request.setAttribute(Constants.IS_RNA, Constants.FALSE);
         }
 	}
+	
 }
