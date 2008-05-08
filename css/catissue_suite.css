@@ -180,6 +180,7 @@ form {
 	color: #000000;
 	font-weight: bold;
 	text-decoration:none;
+	text-decoration:underline;
 }
 .cancellink a:link{
 	font-family: verdana;
