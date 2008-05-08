@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 
 
@@ -26,9 +27,10 @@ public class CheckInCheckOutEventParametersAction extends SpecimenEventParameter
 	 * @param  request object of HttpServletRequest
 	 * @throws Exception generic exception
 	 */
-	protected void setRequestParameters(HttpServletRequest request) throws Exception
+	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 		//set array of CheckInCheckOutEventParameters
 		request.setAttribute(Constants.STORAGE_STATUS_LIST, Constants.STORAGE_STATUS_ARRAY);
 	}
+	
 }
