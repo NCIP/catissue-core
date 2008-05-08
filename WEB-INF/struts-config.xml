@@ -2146,7 +2146,7 @@ PUBLIC
 		
 		<!-- FluidSpecimenReviewEventParameters Actions Begins -->
         <action path="/FluidSpecimenReviewEventParameters"
-			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.FluidSpecimenReviewEventParametersAction"
 			name="fluidSpecimenReviewEventParametersForm"
 			validate="false"
 			scope="request">
@@ -2188,7 +2188,7 @@ PUBLIC
 		
 		<!-- CellSpecimenReviewParameters Actions Begins -->
         <action path="/CellSpecimenReviewParameters"
-			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.CellSpecimenReviewParametersAction"
 			name="cellSpecimenReviewParametersForm"
 			validate="false"
 			scope="request">
@@ -2314,7 +2314,7 @@ PUBLIC
 				
 		<!--ThawEventParameters Actions Begins -->
         <action path="/ThawEventParameters"
-			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.ThawEventParametersAction"
 			name="thawEventParametersForm"
 			validate="false"
 			scope="request">
@@ -2482,7 +2482,7 @@ PUBLIC
 		
 		<!-- SpunEventParameters Actions Begins -->
         <action path="/SpunEventParameters"
-			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.SpunEventParametersAction"
 			name="spunEventParametersForm"
 			validate="false"
 			scope="request">
@@ -2608,7 +2608,7 @@ PUBLIC
 			
 			<!-- ProcedureEventParameters Actions Begins -->
         <action path="/ProcedureEventParameters"
-			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.ProcedureEventParametersAction"
 			name="procedureEventParametersForm"
 			validate="false"
 			scope="request">
