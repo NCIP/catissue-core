@@ -25,7 +25,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
 
@@ -35,7 +35,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author mandar deshmukh
  */
 
-public class SpecimenEventParametersAction  extends SecureAction
+public class SpecimenEventParametersAction  extends BaseAction
 {
 	/**
 	 * This method sets all the common parameters for the SpecimenEventParameter pages
@@ -45,16 +45,16 @@ public class SpecimenEventParametersAction  extends SecureAction
 	private void setCommonRequestParameters(HttpServletRequest request) throws Exception
 	{
         //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
-
+       
+		String operation = request.getParameter(Constants.OPERATION);
         //Sets the operation attribute to be used in the Add/Edit FrozenEventParameters Page. 
         request.setAttribute(Constants.OPERATION, operation);
         
         //Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
-        request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
+        request.setAttribute("minutesList", Constants.MINUTES_ARRAY);
 
         //Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
-        request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
+        request.setAttribute("hourList", Constants.HOUR_ARRAY);
          
         //The id of specimen of this event.
         String specimenId = request.getParameter(Constants.SPECIMEN_ID); 
@@ -66,14 +66,12 @@ public class SpecimenEventParametersAction  extends SecureAction
     	
     	request.setAttribute(Constants.USERLIST, userCollection);
     	
-    	// This method will be overridden by the sub classes
-    	setRequestParameters( request);
+    	
+    	
         	
 	}
-    /**
-     * Overrides the executeSecureAction method of SecureAction class.
-     * */
-    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+    
+    protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
@@ -109,7 +107,34 @@ public class SpecimenEventParametersAction  extends SecureAction
 			}
 	
     	}
+    	//Changes by Anup
     	
+        String operation = (String) request.getAttribute(Constants.OPERATION);
+        String pageOf=(String)request.getAttribute(Constants.PAGE_OF);
+        eventParametersForm.setPageOf(pageOf);
+        eventParametersForm.setOperation(operation);
+        
+        
+		String currentEventParametersDate = "";
+		currentEventParametersDate = eventParametersForm.getDateOfEvent();
+		if(currentEventParametersDate == null)
+		{
+			currentEventParametersDate = "";
+		}
+		
+		Integer eventParametersYear = new Integer(Utility.getYear(currentEventParametersDate ));
+		Integer eventParametersMonth = new Integer(Utility.getMonth(currentEventParametersDate ));
+		Integer eventParametersDay = new Integer(Utility.getDay(currentEventParametersDate ));
+		request.setAttribute("eventParametersYear", eventParametersYear);
+		request.setAttribute("eventParametersDay", eventParametersDay);
+		request.setAttribute("eventParametersMonth", eventParametersMonth);
+		request.setAttribute("addForJSP", Constants.ADD);
+		request.setAttribute("editForJSP", Constants.EDIT);
+		request.setAttribute("currentEventParametersDate", currentEventParametersDate);
+		request.setAttribute("userListforJSP", Constants.USERLIST);
+		// This method will be overridden by the sub classes
+		setRequestParameters(request, eventParametersForm);
+		
     	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
     
@@ -117,7 +142,9 @@ public class SpecimenEventParametersAction  extends SecureAction
      * It is called from setCommonRequestParameters().
      * It will be used to set the SubClass specific parameters.
      */  
-    protected void setRequestParameters(HttpServletRequest request) throws Exception
+    protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
 	}
+    
+	
 }
