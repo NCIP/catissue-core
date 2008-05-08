@@ -86,7 +86,7 @@
 	<tr valign='top'>
 		<td class="formField" nowrap valign='top' width="150">
 			<html:select property="cpId" styleClass="formFieldSized22" styleId="cpId" size="1" onchange="onCpChange(this)"
-			  onmouseover="showToolTip(this)" onmouseout="hideTip(this.id)">
+			  onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.CP_LIST%>" labelProperty="name" property="value" />
 			</html:select>
 			
