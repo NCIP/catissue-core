@@ -300,7 +300,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		 </table>
 		    <table summary="" cellpadding="3"
 						cellspacing="0" border="0" class="dataTable" >
-			<md:specimenDetailsTag columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" displayOnly="true" displayStatusListName="dispStatusList1" />
+			<md:specimenDetailsTag columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" displayOnly="false" displayStatusListName="dispStatusList" />
 			<%-- custom tag for specimen list by mandar --- Derived --%>					
 		    </table>
 		</logic:notEmpty>		
