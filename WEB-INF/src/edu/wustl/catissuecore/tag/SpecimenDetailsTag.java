@@ -95,6 +95,20 @@ public class SpecimenDetailsTag extends TagSupport
      */
 	public int doEndTag() throws JspException
 	{
+		columnHeaderList = null;
+		formName = "";
+		dataList = null;
+		showParentId = false;
+		elementPrefixPart1="";
+		displayOnly ="";
+		displayStatusList = null;
+		
+		specimenSummaryForm = null;
+		columnHeaderListName = "";
+		dataListName = "";
+		dataListType = "";
+		displayStatusListName = "";
+
 		return EVAL_PAGE;
 	}
 	
@@ -230,7 +244,7 @@ public class SpecimenDetailsTag extends TagSupport
 				 sb.append("<tr>");
 				 sb.append("<input type=\"hidden\" name=\""+elementNamePrefix+"containerId\" value=\""+getFormattedValue(specimen.getContainerId())+"\">");
 
-				 if(!showParentId)
+				 if(showParentId == false)
 				 {
 					 if(specimenSummaryForm.getSelectedSpecimenId().equalsIgnoreCase(specimen.getUniqueIdentifier()))
 						 sb.append("<td class=\"dataCellText\"> <input type=\"radio\" name=\"selectedSpecimenId\" value=\""+getFormattedValue(specimen.getUniqueIdentifier())+"\" checked=\"checked\" onclick=\" form.action=\'GenericSpecimenSummary.do\'; submit()\">");	 
@@ -696,7 +710,7 @@ public class SpecimenDetailsTag extends TagSupport
 //			 } //	storageContainerForSpecimen != virtual
 
 			 //-----------
-			 if(showParentId)
+			 if(showParentId == true)
 				 generateTDForDisplay(sb, getFormattedValue(specimen.getParentName(),1), 0);
 			 else
 				 generateTDForDisplay(sb, getFormattedValue("",1), 0);
