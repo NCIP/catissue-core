@@ -42,9 +42,12 @@ public class ViewSpecimenSummaryAction extends Action {
 			throws Exception {
 			String target = Constants.SUCCESS; 
 		try {
+			ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 			HttpSession session = request.getSession();
 			
-			ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
+
+			
+			
 			String eventId = summaryForm.getEventId();
 
 			Object obj = request.getAttribute("SCGFORM");
@@ -155,6 +158,40 @@ public class ViewSpecimenSummaryAction extends Action {
 				return mapping.findForward(target);
 			}
 			
+			//Mandar: 8May2008 : For specimenDetails customtag --- start ---
+			List colHeaderList = new ArrayList();
+			colHeaderList.add("");	colHeaderList.add("specimen.label");	colHeaderList.add("specimen.barcode");
+			colHeaderList.add("specimen.subType");	colHeaderList.add("anticipatorySpecimen.Quantity");	colHeaderList.add("anticipatorySpecimen.Concentration");
+			colHeaderList.add("anticipatorySpecimen.Location");	colHeaderList.add("anticipatorySpecimen.Collected");
+			request.setAttribute("columnHeaderList",colHeaderList);
+			
+			List subSpecimenColHeaderList = new ArrayList();
+			subSpecimenColHeaderList.add("anticipatorySpecimen.Parent");	subSpecimenColHeaderList.add("specimen.label");	subSpecimenColHeaderList.add("specimen.barcode");
+			subSpecimenColHeaderList.add("specimen.subType");	subSpecimenColHeaderList.add("anticipatorySpecimen.Quantity");	subSpecimenColHeaderList.add("anticipatorySpecimen.Concentration");
+			subSpecimenColHeaderList.add("anticipatorySpecimen.Location");	subSpecimenColHeaderList.add("anticipatorySpecimen.Collected");
+			request.setAttribute("subSpecimenColHeaderList",subSpecimenColHeaderList);
+
+			request.setAttribute("specimenList",summaryForm.getSpecimenList());
+			request.setAttribute("aliquotList",summaryForm.getAliquotList());
+			request.setAttribute("derivedList",summaryForm.getDerivedList());
+			
+			List dispStatusList = new ArrayList();
+			dispStatusList.add(Constants.TRUE);	dispStatusList.add(Constants.TRUE);	dispStatusList.add(Constants.TRUE);
+			dispStatusList.add(Constants.TRUE);	dispStatusList.add(Constants.TRUE);	dispStatusList.add(Constants.TRUE);	
+			dispStatusList.add(Constants.TRUE);
+			dispStatusList.add(Constants.TRUE);
+
+			request.setAttribute("dispStatusList",dispStatusList);
+
+			List dispStatusList1 = new ArrayList();
+			dispStatusList1.add(Constants.TRUE);	dispStatusList1.add(Constants.TRUE);	dispStatusList1.add(Constants.TRUE);
+			dispStatusList1.add(Constants.TRUE);	dispStatusList1.add(Constants.TRUE);	dispStatusList1.add(Constants.TRUE);	
+			dispStatusList1.add(Constants.TRUE);
+			dispStatusList1.add(Constants.FALSE);
+
+			request.setAttribute("dispStatusList1",dispStatusList1);
+			//Mandar: 8May2008 : For specimenDetails customtag --- end ---
+
 			return mapping.findForward(target);
 		} catch (Exception exception) {
 			exception.printStackTrace();
