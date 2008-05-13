@@ -2537,9 +2537,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		//Retrieving all the occupied positions by child containers
 		String sourceObjectName = StorageContainer.class.getName();
 		String[] selectColumnName = {"positionDimensionOne", "positionDimensionTwo"};
-		String[] whereColumnName = {"parent"};
+		String[] whereColumnName = {"parent.id"};
 		String[] whereColumnCondition = {"="};
-		Object[] whereColumnValue = {containerId};
+		Object[] whereColumnValue = {new Long(containerId)};
 
 		List list = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
 		//Logger.out.debug("all the occupied positions by child containers"+list);
@@ -2559,7 +2559,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		//Retrieving all the occupied positions by specimens
 		sourceObjectName = Specimen.class.getName();
-		whereColumnName[0] = "storageContainer";
+		whereColumnName[0] = "storageContainer.id";
 
 		list = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
 		//Logger.out.debug("all the occupied positions by specimens"+list);
@@ -2579,7 +2579,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		//Retrieving all the occupied positions by specimens array 
 		sourceObjectName = SpecimenArray.class.getName();
-		whereColumnName[0] = "storageContainer";
+		whereColumnName[0] = "storageContainer.id";
 
 		list = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
 		//Logger.out.debug("all the occupied positions by specimen array"+list);	
