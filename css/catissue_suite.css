@@ -7,20 +7,21 @@ body {
 }
 
 a {
-	color: #3366CC;
+/*	color: #3366CC;*/
+	color: #333333;
 	text-decoration: none;
 }
 
 form {
-	background-color: #CCCC99;
+	background-color: #FFFFFF;
 }
 
-.maintable {
+.newMaintable {
 	background-color:#FFFFFF;
-	border-bottom:1px solid #000000;
-	border-top:1px solid #000000;
-	border-left:1px solid #000000;
-	border-right:1px solid #000000;
+	border-bottom:1px solid #87bbe4;
+	border-top:1px solid #87bbe4;
+	border-left:1px solid #87bbe4;
+	border-right:1px solid #87bbe4;
 }	
 
 .whitetable_bg {
@@ -179,7 +180,6 @@ form {
 	font-size: 12px;
 	color: #000000;
 	font-weight: bold;
-	text-decoration:none;
 	text-decoration:underline;
 }
 .cancellink a:link{
@@ -258,7 +258,7 @@ A.orange:hover {color: #0099FF;
 
 A.white:link {
 	color: #FFFFFF;
-	Text-Decoration: underline;
+	Text-Decoration: none;
 	font-family: verdana;
 	font-size: 10px;
 	font-weight: bold;
@@ -267,17 +267,17 @@ A.white:active {color: #FFFFFF;
 	font-family: verdana;
 	font-size: 10px;
 	font-weight: bold;
-	text-decoration: underline}
+	text-decoration: none}
 A.white:visited {color: #FFFFFF; 
 	font-family: verdana;
 	font-size: 10px;
 	font-weight: bold;
-	Text-Decoration: underline}
-A.white:hover {color: #0099FF; 
+	Text-Decoration: none}
+A.white:hover {color: #d4e6f9; 
 	font-family: verdana;
 	font-size: 10px;
 	font-weight: bold;
-	Text-Decoration: none}
+	Text-Decoration: underline}
 
 .link {
 	font-family: verdana;
@@ -482,6 +482,14 @@ visibility: hidden;
 }
 
 /* End Tooltip css */
+
+
+
+
+
+
+
+
 
 
 

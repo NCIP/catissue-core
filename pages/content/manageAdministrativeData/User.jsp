@@ -5,7 +5,6 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head>
-<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript"
@@ -38,7 +37,7 @@ function handleStatus(status)
 </html:messages>
 <!--new style code begins-->
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
 <html:form action='${requestScope.formName}'>
     <tr>
     <td>
@@ -224,8 +223,7 @@ function handleStatus(status)
 														</td>
 													</tr>
 													<tr>
-														<td width="4" height="25" align="left"							bgcolor="#f3f8fb"class="black_ar">&nbsp;
-														</td>
+														
 														<td colspan="8" align="left" bgcolor="#f3f8fb"
 															class="blue_ar_b">
 								<logic:equal name="operation" value='${requestScope.addforJSP}'>

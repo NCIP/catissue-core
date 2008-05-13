@@ -5,12 +5,12 @@
 <%@ page language="java" isELIgnored="false" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <link href="css/mktree.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
+
 <SCRIPT LANGUAGE="JavaScript" SRC="jss/javaScript.js"></SCRIPT>
 
 <html:errors/>
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
 <html:form action="/ApproveUser">
   <tr>
     <td>
@@ -185,9 +185,6 @@
 				</tr>
 			</table>
 		</td>
-	</tr>
-	<tr>
-		<td align="center" valign="top">&nbsp;</td>
 	</tr>
 	</html:form>
 </table>

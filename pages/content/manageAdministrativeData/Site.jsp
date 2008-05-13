@@ -18,7 +18,7 @@
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
 <html:form action='${requestScope.formName}'>
   <tr>
     <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="td_color_bfdcf3">
