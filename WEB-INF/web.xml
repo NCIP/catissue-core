@@ -25,7 +25,14 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
   <listener>
   	<listener-class>edu.wustl.catissuecore.util.listener.CatissueCoreSessionListener</listener-class>
   </listener>
-  
+
+<!--Environment entry for datasource JNDI name -->
+   <env-entry> 
+            <env-entry-name>DataSource</env-entry-name> 
+            <env-entry-value>java:/catissuecore</env-entry-value> 
+            <env-entry-type>java.lang.String</env-entry-type> 
+        </env-entry>
+     
  <!-- Standard Action Servlet Configuration (with debugging) -->
 
    <servlet>
