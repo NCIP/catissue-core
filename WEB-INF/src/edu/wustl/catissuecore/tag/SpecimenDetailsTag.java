@@ -132,13 +132,13 @@ public class SpecimenDetailsTag extends TagSupport
 		if(columnHeaderListName == null || columnHeaderListName.trim().length()<1)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("Column Header List Name is null or empty"));
-			System.out.println("Column Header List Name is null or empty");
+			// System.out.println("Column Header List Name is null or empty");
 			result =  false;
 		}
 		if(displayOnly == null || displayOnly.trim().length()<1)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("DisplayOnly parameter is null or empty"));
-			System.out.println("DisplayOnly parameter is null or empty");
+			// System.out.println("DisplayOnly parameter is null or empty");
 			result =  false;
 		}
 		else if(!displayOnly.equalsIgnoreCase(Constants.TRUE))
@@ -146,32 +146,32 @@ public class SpecimenDetailsTag extends TagSupport
 			if(formName == null || formName.trim().length()<1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("Form name is null or empty"));
-				System.out.println("Form name is null or empty");
+				// System.out.println("Form name is null or empty");
 				result =  false;
 			}
 		}
 		if(dataListName == null || dataListName.trim().length()<1)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("Data List Name is null or empty"));
-			System.out.println("Data List Name is null or empty");
+			// System.out.println("Data List Name is null or empty");
 			result =  false;
 		}
 		if(dataListType == null || dataListType.trim().length()<1)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("Data List Type is null or empty"));
-			System.out.println("Data List Type is null or empty");
+			// System.out.println("Data List Type is null or empty");
 			result =  false;
 		}
 		else if(!isListDataTypeOK())
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("Data List Type is invalid"));
-			System.out.println("Data List Type is invalid");
+			// System.out.println("Data List Type is invalid");
 			result =  false;
 		}
 		if(displayStatusListName == null || displayStatusListName.trim().length()<1)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("Display Status List Name is null or empty"));
-			System.out.println("Display Status List Name is null or empty");
+			// System.out.println("Display Status List Name is null or empty");
 			result =  false;
 		}
 		
@@ -214,7 +214,7 @@ public class SpecimenDetailsTag extends TagSupport
 		sb.append("</tr>");
 		
 		String output =sb.toString();		
-		System.out.println(output);
+		// System.out.println(output);
 		return output;
 	}
 	
@@ -294,7 +294,7 @@ public class SpecimenDetailsTag extends TagSupport
 					 sb.append("<input type=\"text\" name=\""+elementNamePrefix+"concentration\" value=\"" +getFormattedValue(specimen.getConcentration())+"\" class=\"formFieldSized3\">"); 
 					 sb.append("</td>");
 
-					 if(specimen.getStorageContainerForSpecimen()!= null && specimen.getStorageContainerForSpecimen().equalsIgnoreCase("Virtual"))
+					 if(specimen.getStorageContainerForSpecimen()!= null && "Virtual".equalsIgnoreCase(specimen.getStorageContainerForSpecimen()))
 					 {
 						 sb.append("<td class=\"dataCellText\" >");
 						 sb.append(getFormattedValue(specimen.getStorageContainerForSpecimen(),1));
@@ -403,7 +403,7 @@ public class SpecimenDetailsTag extends TagSupport
 				 	 sb.append("<input type=\"hidden\" name=\""+elementNamePrefix+"concentration\" value=\""+getFormattedValue(specimen.getConcentration())+"\">");	
 					 sb.append("</td>");
 
-					 if(specimen.getStorageContainerForSpecimen().equalsIgnoreCase("Virtual"))
+					 if("Virtual".equalsIgnoreCase(specimen.getStorageContainerForSpecimen()))
 					 {
 						 sb.append("<td class=\"dataCellText\" >");
 						 sb.append(getFormattedValue(specimen.getStorageContainerForSpecimen(),1));	
@@ -444,7 +444,7 @@ public class SpecimenDetailsTag extends TagSupport
 
 
 		String output =sb.toString();		
-		System.out.println(output);
+		// System.out.println(output);
 		return output;
 	}
 
@@ -458,7 +458,7 @@ public class SpecimenDetailsTag extends TagSupport
 
 		SpecimenDetailsTag obj = new SpecimenDetailsTag();
 		obj.setColumnHeaderList(colHeaderList);
-		System.out.println(obj.generateHeaderRowOutput());
+		// System.out.println(obj.generateHeaderRowOutput());
 	}
 
 
@@ -650,7 +650,7 @@ public class SpecimenDetailsTag extends TagSupport
 		sb.append("</tr>");
 		
 		String output =sb.toString();		
-		System.out.println(output);
+		// System.out.println(output);
 		return output;
 	}
 
@@ -740,7 +740,7 @@ public class SpecimenDetailsTag extends TagSupport
 		 } // outer most loop for specimenList
 		 sb.append("");
 		 String output =sb.toString();				
-		 System.out.println(output);
+		 // System.out.println(output);
 		 return output;
 	}
 
