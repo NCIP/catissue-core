@@ -2287,5 +2287,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FROM_PRINT_ACTION="fromPrintAction";
 	public static final String PRINT_ALIQUOT="printAliquot";
 	
+	//constant required for setting the participant id on pathReport
+	public static final String PARTICIPANTIDFORREPORT="participantIdForReport";
+	
 }
 	
