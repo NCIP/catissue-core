@@ -68,9 +68,11 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		}
 		else if (domainObject instanceof SpecimenCollectionGroup)
 		{
-			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) actionForm;
+			/* bug 7476*/
+			//SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) actionForm;
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) domainObject;
 			forwardToHashMap.put("specimenCollectionGroupId", domainObject.getId().toString());
-			forwardToHashMap.put("specimenCollectionGroupName", specimenCollectionGroupForm.getName());
+			forwardToHashMap.put("specimenCollectionGroupName", scg.getName());
 		}
 		else if (domainObject instanceof Specimen)
 		{
