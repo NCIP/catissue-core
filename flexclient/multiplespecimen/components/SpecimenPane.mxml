@@ -13,7 +13,8 @@
 		import mx.controls.Alert;
 		import mx.collections.ArrayCollection;
 		import mx.managers.PopUpManager;
-		
+		import flash.xml.*;
+		import mx.controls.List;
 		[Bindable]	public var spData:SpecimenData;
 		[Bindable]	public var mspParameter:MSPParameter;
 		[Bindable]	public var specimenNo:String;
@@ -24,6 +25,9 @@
 		[Bindable] public var tissueSideList:ArrayCollection;
 		[Bindable] public var pathologicalStatusList:ArrayCollection;
 		[Bindable] public var prevSpecimenClassValue:String;
+		
+
+
 		
 		private function preInit():void
 		{
@@ -79,6 +83,8 @@
 			{
 				specimenParentChanges(mspParameter.parentType,false);	
 			}
+			initClassFactory();
+		
 		}
 		public function specimenParentChanges(parentType:String,accordianChanges:Boolean=true):void
 		{
@@ -302,6 +308,8 @@
 	//		spStorage.selectedItem = "Virtual"
 			
 		}
+
+
 	]]>
 </mx:Script>
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">
@@ -322,24 +330,24 @@
 		
 
 	<components:MyCanvas>
-	<adobe:AutoComplete id="spClass" dataProvider="{specimenClassList}" change="switchSpType(event)" focusOut="focusChangeFunct(event)" lookAhead="true"/>
+	<adobe:AutoComplete id="spClass" dataProvider="{specimenClassList}" change="switchSpType(event)" focusOut="focusChangeFunct(event)" lookAhead="true" dropdownFactory="{myDropdownFactory}"/>
 	</components:MyCanvas>
 	
 	<components:MyCanvas>
-		<adobe:AutoComplete id="spType" dataProvider="{specimenTypeList}" lookAhead="true" change="calculateUnit(event)" focusOut="calculateUnit(event)"/>
+		<adobe:AutoComplete id="spType" dataProvider="{specimenTypeList}" lookAhead="true" change="calculateUnit(event)" focusOut="calculateUnit(event)" dropdownFactory="{myDropdownFactory}"/>
 	</components:MyCanvas>
 		
 	<components:MyCanvas id="tissueSiteBox">	
-		<adobe:AutoComplete id="spTissueSite" dataProvider="{tissueSiteList}" lookAhead="true"/>
+		<adobe:AutoComplete id="spTissueSite" dataProvider="{tissueSiteList}" lookAhead="true" dropdownFactory="{myDropdownFactory}"/>
 	</components:MyCanvas>
 	
 	<components:MyCanvas id="tissueSideBox">
-	<adobe:AutoComplete id="spTissueSide" dataProvider="{tissueSideList}" lookAhead="true"/>
+	<adobe:AutoComplete id="spTissueSide" dataProvider="{tissueSideList}" lookAhead="true" dropdownFactory="{myDropdownFactory}"/>
 
 	</components:MyCanvas>
 	
 	<components:MyCanvas id="pathStatusBox">
-		<adobe:AutoComplete id="spPathologicalStatus" dataProvider="{pathologicalStatusList}" lookAhead="true"/>
+		<adobe:AutoComplete id="spPathologicalStatus" dataProvider="{pathologicalStatusList}" lookAhead="true" dropdownFactory="{myDropdownFactory}"/>
 	</components:MyCanvas>
 
 	<mx:VBox backgroundColor="#E2EFFF" width="100%">
@@ -362,7 +370,7 @@
 			</mx:HBox>
 		</components:MyCanvas>
 		<components:MyCanvas id="storageContBox">
-			<adobe:AutoComplete id="spStorage" dataProvider="{MetadataModel.getInstance().storageList}" lookAhead="true" change="chkStorage()"/>
+			<adobe:AutoComplete id="spStorage" dataProvider="{MetadataModel.getInstance().storageList}" lookAhead="true" change="chkStorage()" dropdownFactory="{myDropdownFactory}"/>
 		</components:MyCanvas>
 
 	</mx:VBox>

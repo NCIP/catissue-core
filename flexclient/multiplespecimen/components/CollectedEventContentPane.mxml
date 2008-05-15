@@ -7,6 +7,7 @@
 		import util.MetadataModel;
 		import util.Utility;
 		import valueobjects.EventBean;
+		import mx.controls.List;
 		[Bindable]
 		public var collEvent:EventBean;
 		import mx.controls.Alert;
@@ -14,6 +15,7 @@
 		{
 			collEvent = new EventBean();
 		}*/
+
 		
 		public function createComp():void
 		{
@@ -36,6 +38,7 @@
 			
 			Utility.bindData(comment, "text", collEvent, "comment");
 			
+			initClassFactory();
 		}
 		
 		public function validateCollEvent(index:int):Boolean
@@ -46,11 +49,13 @@
 			isValid = validateComboBoxField(containerName,"selectedItem","Please select container") && isValid;			
 			return isValid;
 		}
+		
+
 	]]>
 </mx:Script>
 <components:MyCanvas>
 <mx:HBox>
-	<adobe:AutoComplete id="collectorName" dataProvider="{MetadataModel.getInstance().userList}"/>
+	<adobe:AutoComplete id="collectorName" dataProvider="{MetadataModel.getInstance().userList}" dropdownFactory="{myDropdownFactory}"/>
 </mx:HBox>
 </components:MyCanvas>
 <components:MyCanvas>
@@ -64,10 +69,10 @@
 </components:MyCanvas>
 
 <components:MyCanvas>
-	<adobe:AutoComplete id="procedureName" dataProvider="{MetadataModel.getInstance().procedureList}"/>
+	<adobe:AutoComplete id="procedureName" dataProvider="{MetadataModel.getInstance().procedureList}" dropdownFactory="{myDropdownFactory}"/>
 </components:MyCanvas>
 <components:MyCanvas>
-		<adobe:AutoComplete id="containerName" dataProvider="{MetadataModel.getInstance().containerList}"/>
+		<adobe:AutoComplete id="containerName" dataProvider="{MetadataModel.getInstance().containerList}" dropdownFactory="{myDropdownFactory}"/>
 </components:MyCanvas>
 <components:MyCanvas>
 	<mx:TextArea id="comment">

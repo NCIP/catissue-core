@@ -177,6 +177,8 @@
 				spParent.selectedValue = "New Specimen";
 				spLabelPane.spOrScg.text = "* Specimen Group Name";
 			}
+			
+
 		}
 
 		private function addMoreSpecimen(event:Event):void

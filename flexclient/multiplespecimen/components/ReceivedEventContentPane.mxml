@@ -30,7 +30,7 @@
 			Utility.bindData(recievedQuality, "errorString", receivedEvent, "receivedQualityErrStr"); 
 			
 			Utility.bindData(comment, "text", receivedEvent, "comment");
-			
+			initClassFactory();
 		}
 	/*	public function validateRecvEvent(index:int):Boolean
 		{
@@ -43,7 +43,7 @@
 </mx:Script>
 <components:MyCanvas>
 <mx:HBox>
-	<adobe:AutoComplete id="receiverName" dataProvider="{MetadataModel.getInstance().userList}"/>
+	<adobe:AutoComplete id="receiverName" dataProvider="{MetadataModel.getInstance().userList}" dropdownFactory="{myDropdownFactory}"/>
 </mx:HBox>
 </components:MyCanvas>
 <components:MyCanvas>
@@ -57,7 +57,7 @@
 </components:MyCanvas>
 
 <components:MyCanvas>
-	<adobe:AutoComplete id="recievedQuality" dataProvider="{MetadataModel.getInstance().receivedQualityList}" />
+	<adobe:AutoComplete id="recievedQuality" dataProvider="{MetadataModel.getInstance().receivedQualityList}" dropdownFactory="{myDropdownFactory}" />
 </components:MyCanvas>
 <components:MyCanvas>
 	<mx:TextArea id="comment">
