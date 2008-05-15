@@ -47,7 +47,7 @@ tr#hiddenCombo
 
 		// participantId used to pass to flex method to show currenr particpant as selected
 		String participantId=(String)request.getAttribute("participantId");
-
+		
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);		
 		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);		
 		boolean isRegisterButton = false;
@@ -65,7 +65,7 @@ tr#hiddenCombo
 		participantEntityId = (Long)request.getAttribute("participantEntityId");
 		
 		String id = request.getParameter("id");
-
+	
 		 pageView=operation;
 		if(operation.equals(Constants.EDIT))
 		{
@@ -144,7 +144,7 @@ tr#hiddenCombo
 	String participantIdentifier="0";
 	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-
+	
 		
 	String title = "ParticipantList";
 
@@ -483,9 +483,14 @@ tr#hiddenCombo
 				document.forms[0].submit();
 			}
 		}
-        function editParticipant()
+		function editParticipant()
 		{
-			var tempId=document.forms[0].id.value;
+			//bug 7530 .Report id becomes the participant id thats why extra field PARTICIPANTIDFORREPORT added in the report.
+			var tempId=<%=request.getAttribute(Constants.PARTICIPANTIDFORREPORT)%>;
+			if(tempId==null)
+			{
+				tempId=document.forms[0].id.value;
+			}
 			var action="SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+tempId;
 			if('<%=pageOf%>'=='<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>')
 			{
@@ -580,7 +585,7 @@ tr#hiddenCombo
 
 			<tr>
 				<td class="tabField" colspan="6">
-				<%@   include file="ViewSurgicalPathologyReport.jsp" %>
+				<%@include file="ViewSurgicalPathologyReport.jsp" %>
 				</td>
 			</tr>
 		</table>
