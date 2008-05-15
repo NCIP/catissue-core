@@ -13,6 +13,8 @@ package edu.wustl.catissuecore.actionForm;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -54,6 +57,10 @@ public class AliquotForm extends AbstractActionForm
      * An identifier of Specimen Collection Group.
      */
     private long spCollectionGroupId;
+    /**
+     * Specimen Collection Group Name
+     */
+    private String scgName;
     
     /**
      * A class of the specimen. e.g. Tissue, Molecular, Cell, Fluid
@@ -145,21 +152,26 @@ public class AliquotForm extends AbstractActionForm
 	 * print checkbox
 	 */
 	private String printCheckbox; 
+	
+	private List<Specimen> specimenList = new LinkedList<Specimen>();
     
-    
-    public String getNextForwardTo() {
+    public String getNextForwardTo() 
+    {
 		return nextForwardTo;
 	}
 
-	public void setNextForwardTo(String nextForwardTo) {
+	public void setNextForwardTo(String nextForwardTo)
+	{
 		this.nextForwardTo = nextForwardTo;
 	}
 
-	public String getPrintCheckbox() {
+	public String getPrintCheckbox()
+	{
 		return printCheckbox;
 	}
 
-	public void setPrintCheckbox(String printCheckbox) {
+	public void setPrintCheckbox(String printCheckbox) 
+	{
 		this.printCheckbox = printCheckbox;
 	}
 
@@ -230,6 +242,10 @@ public class AliquotForm extends AbstractActionForm
 	 */
 	public String getConcentration()
 	{
+		if(concentration == null)
+		{
+			concentration = "";
+		}
 		return concentration;
 	}
 	
@@ -425,6 +441,7 @@ public class AliquotForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
+    	
     }
     
     /**
@@ -674,4 +691,31 @@ public class AliquotForm extends AbstractActionForm
      {
          this.createdDate = createdDate;
      }
+
+	
+	public List<Specimen> getSpecimenList()
+	{
+		return specimenList;
+	}
+
+	
+	public void setSpecimenList(List<Specimen> specimenList)
+	{
+		if(specimenList!=null)
+		{
+			this.specimenList = specimenList;
+		}
+	}
+
+	
+	public String getScgName()
+	{
+		return scgName;
+	}
+
+	
+	public void setScgName(String scgName)
+	{
+		this.scgName = scgName;
+	}
 }

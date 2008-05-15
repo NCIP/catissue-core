@@ -129,7 +129,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
         		break;
 
           	case Constants.CREATE_SPECIMEN_FORM_ID:
-          		bizLogic = new CreateSpecimenBizLogic();
+          		bizLogic = new NewSpecimenBizLogic();
         		break;
         		
         	case Constants.SHOPPING_CART_FORM_ID:
@@ -155,7 +155,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     			break;
     		
     		case Constants.ALIQUOT_FORM_ID:
-    			bizLogic = new AliquotBizLogic();
+    			bizLogic = new NewSpecimenBizLogic();
     			break;
     			
     		case Constants.SIMILAR_CONTAINERS_FORM_ID :

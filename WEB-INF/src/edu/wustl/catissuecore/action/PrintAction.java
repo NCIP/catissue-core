@@ -128,55 +128,18 @@ public class PrintAction extends Action
     					dao.commit();
     					dao.closeSession();
     				}
-    				
-		        	
-		        	
 		        	setStatusMessage(printStauts,request);
 				}
-		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0 && request.getParameter("forwardTo")!=null &&( request.getParameter("forwardTo").equals("CPQueryPrintAliquot") || request.getParameter("forwardTo").equals("printAliquot")))
+		    	
+		    	if(request.getAttribute("forwardTo")!=null && (request.getAttribute("forwardTo").equals("CPQueryAliquotAdd")
+		    			||request.getAttribute("forwardTo").equals("printAliquot")))
 		    	{
-		    	  
-		    		List<AbstractDomainObject> listofAliquot = new ArrayList();
-		    		HashMap aliquotMap = forwardToPrintMap;
-		    		Iterator it =  aliquotMap.keySet().iterator();
-		    		Specimen objSpecimen = null;
+		    		List<AbstractDomainObject> listofAliquot = (List<AbstractDomainObject>)request.getAttribute("specimenList");
 		    		boolean printStauts  =false;
-		    		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		    		try
-		    		{  
-		    			
-		    			while (it.hasNext()) 
-		    			{
-		    			 	dao.openSession(null);
-				    	    String  key = (String)it.next();
-				    	    if(key.endsWith("_id"))
-				    	        {
-				    	        	String idValue = (String) aliquotMap.get(key);      	
-				    	        	List specimenList = dao.retrieve(Specimen.class.getName(), "id", new Long(idValue));
-
-				    	        	if (specimenList != null && !specimenList.isEmpty())
-				    	        	{
-				    	        		objSpecimen = (Specimen) specimenList.get(0);
-				    	        	}
-				    	        	listofAliquot.add(objSpecimen);
-				    	        }
-		    			  }     
-		    				LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
-		    		    	printStauts = labelPrinter.printLabel(listofAliquot, strIpAddress, objUser);	
-		    		}
-		    		catch (DAOException exception)
-		    		{
-		    			throw exception;
-		    		}
-		    		finally
-		    		{
-		    			dao.commit();
-		    			dao.closeSession();
-		    		}
-		    	        	
-		        	
-		        	setStatusMessage(printStauts,request);
-		    		
+		    		LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
+		    	  	printStauts = labelPrinter.printLabel(listofAliquot, strIpAddress, objUser);	
+	    		   	setStatusMessage(printStauts,request);
+	    		   	nextforwardTo = (String)request.getAttribute("forwardTo");
 		    	}
 		    	//For multiple specimen page
 		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0  && request.getAttribute("printMultiple")!=null  &&   request.getAttribute("printMultiple").equals("1"))

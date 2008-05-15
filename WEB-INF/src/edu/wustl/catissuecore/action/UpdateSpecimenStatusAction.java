@@ -55,9 +55,9 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			
 			SessionDataBean sessionDataBean =(SessionDataBean)
 			session.getAttribute(Constants.SESSION_DATA);
-			bizLogic.updateAnticipatorySpecimens
-			(specimenDomainCollection, sessionDataBean);
 			
+			//bizLogic.updaupdateAnticipatorySpecimens(specimenDomainCollection, sessionDataBean);
+			bizLogic.update(specimenDomainCollection,specimenDomainCollection,Constants.HIBERNATE_DAO,sessionDataBean);
 			Object obj = session.getAttribute("SCGFORM");			
 			if(specimenSummaryForm.getPrintCheckbox()!=null && specimenSummaryForm.getPrintCheckbox().equals("true") )
 			{
@@ -218,9 +218,9 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			((MolecularSpecimen)specimen)
 				.setConcentrationInMicrogramPerMicroliter(concentration);
 		}
-		
 		Long id = getSpecimenId(specimenVO);
 		specimen.setId(id);
+		specimen.setType(specimenVO.getType());
 		specimen.setLabel(specimenVO.getDisplayName() );
 		specimen.setBarcode(specimenVO.getBarCode());
 		

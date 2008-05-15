@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -48,6 +49,7 @@ public final class MultipleSpecimenValidationUtil
 	public static boolean validateMultipleSpecimen(LinkedHashSet specimenMap, DAO dao, String operation) throws DAOException
 	{ 
 		boolean result = true;
+		
 		setSCGinSpecimen(specimenMap,dao);
 		Iterator specimenIterator = specimenMap.iterator();
 		int count = 0;
@@ -176,20 +178,16 @@ public final class MultipleSpecimenValidationUtil
 		}
 
 		Validator validator = new Validator();
-
-		if (specimen.getSpecimenCollectionGroup() == null || specimen.getSpecimenCollectionGroup().getId() == null
-				|| specimen.getSpecimenCollectionGroup().getId().equals("-1"))
+		if(operation.equals(Constants.ADD))
 		{
-			String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+
+			if (specimen.getSpecimenCollectionGroup() == null || specimen.getSpecimenCollectionGroup().getId() == null
+					|| specimen.getSpecimenCollectionGroup().getId().longValue()==-1)
+			{
+				String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			}
 		}
-
-		/*if (specimen.getParentSpecimen() == null && !Constants.NEW_SPECIMEN.equals(specimen.getLineage()))
-		{
-			String message = ApplicationProperties.getValue("createSpecimen.parent");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-		}*/
-
 		if(!Variables.isSpecimenLabelGeneratorAvl){
 			if (validator.isEmpty(specimen.getLabel()))
 			{
@@ -363,36 +361,38 @@ public final class MultipleSpecimenValidationUtil
 				}
 			}
 			SpecimenCharacteristics characters = specimen.getSpecimenCharacteristics();
-	
-			if (characters == null)
+			if(specimen.getParentSpecimen() == null)
 			{
-				throw new DAOException(ApplicationProperties.getValue("specimen.characteristics.errMsg"));
-			}
-			else
-			{
-				if (specimen.getSpecimenCollectionGroup() != null)
+				if (characters == null)
 				{
-					//				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-					List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
-	
-					if (!Validator.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
+					throw new DAOException(ApplicationProperties.getValue("specimen.characteristics.errMsg"));
+				}
+				else
+				{
+					if (specimen.getSpecimenCollectionGroup() != null)
 					{
-						throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
-					}
-	
-					//		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-					List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
-	
-					if (!Validator.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
-					{
-						throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
-					}
-	
-					List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
-	
-					if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen.getPathologicalStatus()))
-					{
-						throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+						//				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+						List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
+		
+						if (!Validator.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
+						{
+							throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+						}
+		
+						//		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+						List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
+		
+						if (!Validator.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
+						{
+							throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
+						}
+		
+						List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+		
+						if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen.getPathologicalStatus()))
+						{
+							throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+						}
 					}
 				}
 			}
@@ -435,20 +435,16 @@ public final class MultipleSpecimenValidationUtil
 
 		if (partOfMulipleSpecimen)
 		{
-
-			if (specimen.getSpecimenCollectionGroup() == null || validator.isEmpty(specimen.getSpecimenCollectionGroup().getGroupName()))
+			AbstractSpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+			if (scg == null || validator.isEmpty(scg.getGroupName()))
 			{
-				String quantityString = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
+				if(scg.getId()== null)
+				{
+					String quantityString = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
+					throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
+				}
 			}
 
-			List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
-
-			if (spgList.size() == 0)
-			{
-				throw new DAOException(ApplicationProperties.getValue("errors.item.unknown", "Specimen Collection Group "
-						+ specimen.getSpecimenCollectionGroup().getGroupName()));
-			}
 		}
 		if  (!Variables.isSpecimenLabelGeneratorAvl)
 		{

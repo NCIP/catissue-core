@@ -2281,5 +2281,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	 * Constant required for Specimen Array Delete Action
 	 */
 	public static final String DELETE_SPECIMEN_ARRAY="DeleteSpecimenArray.do";
+	public static final String LIST_SPECIMEN="specimenList";
+	public static final String CP_QUERY_PRINT_ALIQUOT="CPQueryPrintAliquot";
+	public static final String CP_QUERY_ALIQUOT_ADD="CPQueryAliquotAdd";
+	public static final String FROM_PRINT_ACTION="fromPrintAction";
+	public static final String PRINT_ALIQUOT="printAliquot";
+	
 }
 	

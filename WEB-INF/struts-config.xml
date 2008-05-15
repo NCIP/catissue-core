@@ -1526,8 +1526,8 @@ PUBLIC
 		<action path="/CPQueryPrintAliquot"
 			type="edu.wustl.catissuecore.action.PrintAction"
 			scope="request">
-			<forward name="success" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;menuSelected=15" />
-			<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfCreateAliquot&amp;CPQuery=true&amp;menuSelected=15" />
+			<forward name="CPQueryAliquotAdd" path="/CPQueryAliquotAdd.do?fromPrintAction=true" />
+			<forward name="failure" path="/CPQueryAliquotAdd.do?fromPrintAction=true" />
 		</action>
 		
 		<action path="/CPQueryPrintAliquotSummary"
@@ -1541,7 +1541,7 @@ PUBLIC
 		<action path="/printAliquot"
 			type="edu.wustl.catissuecore.action.PrintAction"
 			scope="request">
-			<forward name="success" path="/Aliquots.do?pageOf=pageOfAliquotSummary&amp;menuSelected=15" />
+			<forward name="CPQueryAliquotAdd" path="/AliquotAdd.do?fromPrintAction=true" />
 			<forward name="failure" path="/Aliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 		</action>
 		
@@ -3550,17 +3550,15 @@ PUBLIC
 	</action>
 	
 	<action path="/AliquotAdd"
-		type="edu.wustl.common.action.CommonAddEditAction"
+		type="edu.wustl.catissuecore.action.CreateAliquotAction"
 		name="aliquotForm"
 		validate="true"
 		input="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15"
 		scope="request">
 		<forward name="printAliquot" path="/printAliquot.do" />	
-		<forward name="success" path="/Aliquots.do?pageOf=pageOfAliquotSummary&amp;menuSelected=15" />
+		<forward name="success" path=".catissuecore.aliquotSummaryDef" />
 		<forward name="failure" path="/Aliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 	</action>
-	
-	
 	
 	<action path="/AliquotSummary"
 		type="edu.wustl.catissuecore.action.AliquotSummaryAction"
@@ -4266,13 +4264,13 @@ PUBLIC
 		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 	<action path="/CPQueryAliquotAdd"
-		type="edu.wustl.common.action.CommonAddEditAction"
+		type="edu.wustl.catissuecore.action.CreateAliquotAction"
 		name="aliquotForm"
 		validate="true"
 		input="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15"
 		scope="request">
 		<forward name="CPQueryPrintAliquot" path="/CPQueryPrintAliquot.do" />	
-		<forward name="success" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;menuSelected=15" />
+		<forward name="success" path=".catissuecore.aliquotSummaryCpQueryDef" />
 		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfCreateAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 	</action>
 			

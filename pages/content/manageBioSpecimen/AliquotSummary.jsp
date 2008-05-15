@@ -12,6 +12,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.AliquotForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
 
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
@@ -74,6 +75,11 @@
 <%
 	AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");
 	String unit = "";
+	String conc = "";
+	if(form.getConcentration()!=null)
+	{
+		conc = form.getConcentration();
+	}
 
 	if(form != null)
 	{
@@ -191,7 +197,9 @@
 				<bean:message key="specimen.concentration"/> 
 			</label>
 		</td>
-		<td class="formField"><%=form.getConcentration()%>&nbsp;<bean:message key="specimen.concentrationUnit"/>
+		<td class="formField">
+		<bean:write name="aliquotForm" property="concentration"/> &nbsp;
+		<bean:message key="specimen.concentrationUnit"/>
 			<html:hidden styleId="concentration" property="concentration" />		
 		</td>
 	</tr>
@@ -211,6 +219,8 @@
 		</td>
 		<td class="formField"><%=form.getCreatedDate()%>&nbsp;<bean:message key="scecimen.dateformat"/>
 			<html:hidden styleId="createdDate" property="createdDate" />	
+			<html:hidden styleId="spCollectionGroupId" property="spCollectionGroupId" />
+			<html:hidden styleId="scgName" property="scgName" />
 		</td>
 	</tr>
 </table>
@@ -235,91 +245,50 @@
 	</tr>
 	
 	<%
-		Map aliquotMap = new HashMap();
 		int counter=0;
-
-		if(form != null)
-		{
-			counter = Integer.parseInt(form.getNoOfAliquots());
-			aliquotMap = form.getAliquotMap();
-		}
-
-		for(int i=1;i<=counter;i++)
-		{
-			String labelKey = "value(Specimen:" + i + "_label)";
-			String qtyKey = "value(Specimen:" + i + "_quantity)";
-			String barKey = "value(Specimen:" + i + "_barcode)";
-			String containerKey = "value(Specimen:" + i + "_StorageContainer_id)";
-			String containerNameKey = "value(Specimen:" + i + "_stContainerName)";
-			String pos1Key = "value(Specimen:" + i + "_positionDimensionOne)";
-			String pos2Key = "value(Specimen:" + i + "_positionDimensionTwo)";
-			String idKey = "Specimen:" + i + "_id";
-			String specimenLabelKey = "Specimen:" + i + "_label";
-			String virtuallyLocatedKey = "Specimen:" + i + "_virtuallyLocated";
-			String id = Utility.toString(aliquotMap.get(idKey));
-			String onClickSpecimenFunction = "showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id=" + id + "')";
-			if(CPQuery != null)
-			{
-				onClickSpecimenFunction = "CPQueryAliquot('QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&id=" + id + "')";
-			}
-
-			String specimenQtyKey = "Specimen:" + i + "_quantity";
-			String specimenBarKey = "Specimen:" + i + "_barcode";
-
-			String specimenContainerNameKey = "Specimen:" + i + "_stContainerName";
-			String specimenPos1Key = "Specimen:" + i + "_positionDimensionOne";
-			String specimenPos2Key = "Specimen:" + i + "_positionDimensionTwo";
-			
-
 	%>
+		<logic:iterate name="aliquotForm" property="specimenList" id="aliquot">
+		<bean:define id="specimenId" name="aliquot" property="id"/> 
+			<% 
+				String onClickSpecimenFunction = "showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id=" + specimenId + "')";
+				if(CPQuery != null)
+				{
+					onClickSpecimenFunction = "CPQueryAliquot('QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&id=" + specimenId + "')";
+				}
+			%>
+			
 		<tr>
 			<td class="formSerialNumberField" width="5">
-		     	<%=i%>.
+		     	<%=++counter%>.
 		    </td>
 		    <td class="formField" width="5">
-			
 				<html:link href="#" styleId="label" onclick="<%=onClickSpecimenFunction%>">
-				<%=aliquotMap.get(specimenLabelKey)%>			
+					<bean:write name="aliquot" property="label"/>
+					<html:hidden styleId="label" property="createdDate" />
 				</html:link>
-			     <html:hidden property="<%=labelKey%>"/>	
 		    </td>
 		    <td class="formField" nowrap>
-				<%=aliquotMap.get(specimenQtyKey)%>		
+				<bean:write name="aliquot" property="initialQuantity"/>		
 					&nbsp; <%=unit%>
-				<html:hidden  styleId="quantity" property="<%=qtyKey%>"/>	
 			</td>
 			<td class="formField">
-				<%=aliquotMap.get(specimenBarKey)%>	&nbsp;					
-				<html:hidden  styleId="barcodes" property="<%=barKey%>"/>
+				<bean:write name="aliquot" property="barcode"/>			&nbsp;					
 			</td>
 			<td class="formField" nowrap>
-				<%if(aliquotMap.get(virtuallyLocatedKey) != null){%>
-				Virtually Located
-				<%}else{ %>
-				      <%if(aliquotMap.get(specimenContainerNameKey) != null){  %>
-					<%=aliquotMap.get(specimenContainerNameKey)%>
-					<%}%>
-					&nbsp;						
-					<html:hidden   property="<%=containerNameKey%>"/>
-
-					<%if(aliquotMap.get(specimenPos1Key) != null ){  %>
-					<%=aliquotMap.get(specimenPos1Key)%>
-					<%}%>
-					&nbsp;					
-					<html:hidden   property="<%=pos1Key%>"/>
-
-					<%if(aliquotMap.get(specimenPos2Key) != null ){  %>
-					<%=aliquotMap.get(specimenPos2Key)%>
-					<%}%>
-					&nbsp;				
-					<html:hidden   property="<%=pos2Key%>"/>
-				<%}%>
+				<logic:empty name="aliquot" property="positionDimensionOne">
+					Virtually Located 
+				</logic:empty>
+				
+				<logic:notEmpty name="aliquot" property="positionDimensionOne">
+					<bean:define id="sc" name="aliquot" property="storageContainer"/> &nbsp;
+					<bean:write name="sc" property="name"/> &nbsp;
+					<bean:write name="aliquot" property="positionDimensionOne"/> &nbsp;
+					<bean:write name="aliquot" property="positionDimensionTwo"/>
+				</logic:notEmpty>
 			</td>
 		</tr>
-	<%
-		} //For
-	%>
-	</table>
+	</logic:iterate>
+</table>
 </td>
 </tr>
 <tr colspan="5">
@@ -342,8 +311,6 @@
 							value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>"
 							onclick="<%=addMoreSubmit%>">
 						</html:button>
-						
-				
 					</td>
 				<tr>
 			</table>

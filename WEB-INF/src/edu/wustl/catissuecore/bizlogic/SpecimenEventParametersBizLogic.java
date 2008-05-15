@@ -244,7 +244,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					 * Calling Domain object from Proxy Object
 					 */
 					//Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
-					dao.update(proxySpecimen, sessionDataBean, true, true, false);
+					dao.update(specimen, sessionDataBean, true, true, false);
 
 					try
 					{

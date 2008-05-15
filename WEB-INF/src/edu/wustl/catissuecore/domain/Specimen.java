@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,7 +26,6 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -35,7 +33,6 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.MapDataParser;
@@ -697,6 +694,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 				this.noOfAliquots = Integer.parseInt(form.getNoOfAliquots());
 				this.parentSpecimen = new Specimen();
 				this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
+				this.lineage = Constants.ALIQUOT;
 
 				/**            
 				 * Patch ID: 3835_1_2

@@ -49,44 +49,11 @@ public class AliquotSummaryAction extends BaseAction
 		String target = Constants.FAILURE;
 		if(aliquotForm.getForwardTo() != null && aliquotForm.getForwardTo().equals("sameCollectionGroup"))
 		{
-			String labelKey = "Specimen:1_label";
-			String label = (String) aliquotMap.get(labelKey);
-			String sourceObjectName = Specimen.class.getName();
-			String[] whereColumnName = new String[1];
-			Object[] whereColumnValue = new Object[1];		
-			whereColumnName[0] = Constants.SYSTEM_LABEL;
-			whereColumnValue[0] = label;
-			String[] whereColumnCondition = {"="};
-			String joinCondition = null;
-			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-			List list = bizLogic.retrieve(sourceObjectName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-
-			/**
-			 *  If list is not empty, set the Parent specimen Id and forward to success. 
-			 *  If list is null or empty, forward to failure.
-			 */
-			if (list != null && !list.isEmpty())
-			{
-				Object obj = list.get(0);
-				Specimen specimen = (Specimen) obj;
 				Map forwardToHashMap = new HashMap();
-				/**
-				 * Name: Virender Mehta
-				 * Reviewer name: Prafull
-				 * Description: Resolved Performance Issue,retrive SpecimenCollectionGroup Object  
-				 * 				 forwardToHashMap.put("specimenCollectionGroupId", specimen.getSpecimenCollectionGroup().getId().toString());
-				 *				 forwardToHashMap.put("specimenCollectionGroupName", specimen.getSpecimenCollectionGroup().getName());
-				 */
-				SpecimenCollectionGroup scgObj = (SpecimenCollectionGroup)bizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup");
-				forwardToHashMap.put("specimenCollectionGroupId", scgObj.getId().toString());
-				forwardToHashMap.put("specimenCollectionGroupName", scgObj.getName());
+				forwardToHashMap.put("specimenCollectionGroupId", (new Long(aliquotForm.getSpCollectionGroupId())).toString());
+				forwardToHashMap.put("specimenCollectionGroupName", aliquotForm.getScgName());
 				request.setAttribute("forwardToHashMap", forwardToHashMap);
 				target= aliquotForm.getForwardTo();
-			}
-			else
-			{
-				target = Constants.FAILURE;
-			}
 		}
 		else if(aliquotForm.getForwardTo() != null && aliquotForm.getForwardTo().equals("distribution"))
 		{		
