@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -57,6 +58,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		String submittedFor=viewSPR.getSubmittedFor();
 		String forwardTo=viewSPR.getForwardTo();
 		String strId =(String)request.getParameter(Constants.SYSTEM_IDENTIFIER);
+		
 		Long id=null;
 		if(strId!=null)
 		{
@@ -76,7 +78,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
             retrieveAndSetObject(pageOf, id, request, viewSPR);
         }
 		String aliasName = "";
-		
+		request.setAttribute(Constants.PARTICIPANTIDFORREPORT, viewSPR.getParticipantIdForReport());
 		viewSPR.setHasAccess(isAuthorized(getSessionBean(request), id, aliasName));
 		// If request is from Query to view Deidentfied report
 		if (viewSPR.getIdentifiedReportId() == null || viewSPR.getIdentifiedReportId() == "")
@@ -120,7 +122,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         if (flow != null && flow.equals("viewReport"))
         {
         	pageOf = "gridViewReport";
-        }
+        }  
         return mapping.findForward(pageOf);
         
 	}
