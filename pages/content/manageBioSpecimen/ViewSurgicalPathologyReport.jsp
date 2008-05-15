@@ -124,6 +124,7 @@ if(!hasAccess)
 			<html:hidden property="forwardTo"/>
 			<html:hidden property="pageOf"/>
 			<html:hidden property="acceptReject"/>
+			<html:hidden property="participantIdForReport"/>
 			
 		</td>
 	</tr>
