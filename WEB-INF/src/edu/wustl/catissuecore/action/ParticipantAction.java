@@ -349,6 +349,8 @@ public class ParticipantAction extends SecureAction
 		List list = participantBizlogic.getList(cpSourceObjectName, cpDisplayNameFields, cpValueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
 		
+		//report id from session
+		Long reportIdFormSession=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);
 		// set associated identified report id
 		Long reportId=getAssociatedIdentifiedReportId(participantBizlogic,participantForm.getId());
 		if(reportId==null)
@@ -359,7 +361,16 @@ public class ParticipantAction extends SecureAction
 		{
 			reportId=new Long(-2);
 		}
-		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
+		//while switching form view annotation tab to view path report tab report id is reset to -1 in session 
+		//to omit this report is  retrieved from session and then compared with the new value.
+		if((reportIdFormSession!=reportId)&&reportIdFormSession!=null)
+		{
+			session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportIdFormSession);
+		}
+		else
+		{
+			session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
+		}
 		//Falguni:Performance Enhancement.
 		Long participantEntityId = null;
 		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId") != null)
