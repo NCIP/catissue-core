@@ -406,7 +406,7 @@ function enablePreviousCheckBox(element)
 							String attributeType = null;	
 							List columnNameValueBeanList = (List) request.getAttribute(attributeNameList);		
 							System.out.println("---------"+objectChanged);
-							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty() && i==Integer.parseInt(noOfRows) && (objectChanged == null || !objectChanged.equals("")))
+							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty() && i==Integer.parseInt(noOfRows) && attributeNameValue == null && (objectChanged == null || !objectChanged.equals("")))
 							{								
 								NameValueBean nameValueBean = (NameValueBean) columnNameValueBeanList.get(0);
 								attributeNameValue = nameValueBean.getValue();
