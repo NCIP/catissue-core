@@ -3209,7 +3209,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		if (returnList.isEmpty())
 		{
-			returnList.add(new String(Constants.ALL));
+			//bug id 7438
+			//returnList.add(new String(Constants.ALL));
+			returnList.add(new String(Constants.NONE));
 		}
 		return returnList;
 	}

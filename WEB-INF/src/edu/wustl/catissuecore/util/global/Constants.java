@@ -1500,6 +1500,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 //	    return "DISTRIBUTION_PROTOCOL_"+identifier;
 //	}
 	public static final String ALL = "All";
+	public static final String NONE = "None";
 	
 	//constant for pagination data list
 	public static final String PAGINATION_DATA_LIST = "paginationDataList";
