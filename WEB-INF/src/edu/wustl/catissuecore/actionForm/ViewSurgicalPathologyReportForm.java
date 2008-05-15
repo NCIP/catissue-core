@@ -26,6 +26,8 @@ import edu.wustl.common.util.logger.Logger;
 public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 {
 	
+	
+	protected long participantIdForReport;
 	/**
 	 * Default serial version ID
 	 */
@@ -486,6 +488,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	{
 		try
 		{
+			this.participantIdForReport=participant.getId();
 			this.participantName=participant.getLastName()+","+participant.getFirstName();
 			this.vitalStatus=participant.getVitalStatus();
 			if(participant.getBirthDate()!=null)
@@ -865,5 +868,15 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	public void setHasAccess(boolean hasAccess) 
 	{
 		this.hasAccess = hasAccess;
+	}
+
+	public long getParticipantIdForReport() 
+	{
+		return participantIdForReport;
+	}
+
+	public void setParticipantIdForReport(long participantIdForReport) 
+	{
+		this.participantIdForReport = participantIdForReport;
 	}
 }
