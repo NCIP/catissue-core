@@ -231,6 +231,31 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		sprObj.setSpecimenEventParametersCollection(specimenEventParametersCollection);
 	}
 	
+	public void testAddScgTroughApi()
+	{
+		SpecimenCollectionGroup specimenCollectionGroup= BaseTestCaseUtility.initSpecimenCollectionGroup();	
+		String scgName="scg added through api";
+		specimenCollectionGroup.setName(scgName);
+		setEventParameters(specimenCollectionGroup);
+		try{
+			specimenCollectionGroup=(SpecimenCollectionGroup)appService.createObject(specimenCollectionGroup);
+		
+			if(specimenCollectionGroup.getName().equals(scgName))
+			{
+				assertTrue("SCG name is retained while inserting through api", true);
+			}
+			else{
+				assertFalse("SCG name is not retained while inserting through api", true);
+			}
+		}catch(Exception e)
+		{
+			Logger.out.error(e.getMessage(),e);
+			assertFalse("Not able to create scg", true);
+		}
+		
+		
+	}
+	
 	/*public void testVerifyConsentResponseAndConsentStatusAtSCG()
 	{	
         System.out.println("Inside ConsentsVerificationTestCases:");
