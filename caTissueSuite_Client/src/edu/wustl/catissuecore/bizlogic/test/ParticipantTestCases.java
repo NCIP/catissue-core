@@ -75,6 +75,25 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
           }
 	}
 	
+	public void testMatchingParticipant() {
+		List<?> resultList1 = null;
+		Participant  participant=new Participant();
+		try {
+			resultList1=appService.getParticipantMatchingObects(participant);
+			for(int i=0;i<resultList1.size();i++)
+			{
+				System.out.println(resultList1.get(i));
+			}
+			assertTrue("Macthing participant list is retrieved using API", true);
+			
+		}catch(Exception e)
+		{
+			assertFalse("Not able to retrieve mating participant list using API", true);
+		}
+		
+	}
+	
+	
 	public void testUpdateParticipant()
 	{
 		Participant participant =  BaseTestCaseUtility.initParticipantWithCPR();

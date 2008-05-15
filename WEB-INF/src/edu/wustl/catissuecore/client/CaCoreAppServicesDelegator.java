@@ -694,7 +694,10 @@ public class CaCoreAppServicesDelegator
 		// not null check for Id
 		//checkNullObject(abstractDomainObject.getId(),"Identifier");
 		matchingObjects = bizLogic.getListOfMatchingParticipants((Participant)domainObject);
-		return matchingObjects;
+		/*bug 7561*/
+		List filteredMatchingObjects=delegateSearchFilter(userName, matchingObjects);
+		return filteredMatchingObjects;
+		//return matchingObjects;
     }
     
     /**
