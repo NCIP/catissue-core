@@ -2290,10 +2290,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			if (specList != null && !specList.isEmpty())
 			{
 				Specimen specimenDO = (Specimen) specList.get(0);
-				updateSpecimenDomainObject(dao, newSpecimen, specimenDO);
+				updateSpecimenDomainObject(dao, newSpecimen, specimenDO,sessionDataBean);
 				if (updateChildrens)
 				{
-					updateChildrenSpecimens(dao, newSpecimen, specimenDO);
+					updateChildrenSpecimens(dao, newSpecimen, specimenDO,sessionDataBean);
 				}
 				dao.update(specimenDO, sessionDataBean, false, false, false);
 				return specimenDO;
@@ -2317,10 +2317,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @param dao DAO object
 	 * @param specimenVO New Object
 	 * @param specimenDO Persistent object
+	 * @param sessionDataBean Session Details
 	 * @throws DAOException Database exception
 	 * @throws SMException Security exception
 	 */
-	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO, Specimen specimenDO) throws DAOException, SMException
+	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO, Specimen specimenDO,SessionDataBean sessionDataBean) throws DAOException, SMException
 	{
 		Collection<Specimen> childrenSpecimens = specimenDO.getChildrenSpecimen();
 		if (childrenSpecimens == null || childrenSpecimens.isEmpty())
@@ -2334,8 +2335,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Specimen relatedSpecimen = getCorelatedSpecimen(specimen.getId(), specimenVO.getChildrenSpecimen());
 			if (relatedSpecimen != null)
 			{
-				updateSpecimenDomainObject(dao, relatedSpecimen, specimen);
-				updateChildrenSpecimens(dao, relatedSpecimen, specimen);
+				updateSpecimenDomainObject(dao, relatedSpecimen, specimen,sessionDataBean);
+				updateChildrenSpecimens(dao, relatedSpecimen, specimen,sessionDataBean);
 			}
 		}
 	}
@@ -2399,10 +2400,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @param dao DAO object
 	 * @param specimenVO New Object
 	 * @param specimenDO Persistent object
+	 * @param sessionDataBean session details
 	 * @throws DAOException Database exception
 	 * @throws SMException Security exception
 	 */
-	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO, Specimen specimenDO) throws DAOException, SMException
+	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO, Specimen specimenDO,SessionDataBean sessionDataBean) throws DAOException, SMException
 	{
 		if (specimenVO.getBarcode() != null && specimenVO.getBarcode().trim().length() == 0)
 		{
@@ -2436,7 +2438,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimenDO.setCreatedOn(specimenVO.getCreatedOn());
 		}
-		setSpecimenData(specimenVO, specimenDO);
+		setSpecimenData(dao,specimenVO, specimenDO,sessionDataBean);
 		if (Constants.MOLECULAR.equals(specimenVO.getClassName()))
 		{
 			Double concentration = ((MolecularSpecimen) specimenVO).getConcentrationInMicrogramPerMicroliter();
@@ -2445,16 +2447,19 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 	}
 	/**
+	 * @param dao DAO object
 	 * @param specimenVO New Object
 	 * @param specimenDO Persistent object
+	 * @param sessionDataBean session details
+	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 * @throws DAOException  Database exception
 	 */
-	private void setSpecimenData(Specimen specimenVO, Specimen specimenDO)
+	private void setSpecimenData(DAO dao,Specimen specimenVO, Specimen specimenDO,SessionDataBean sessionDataBean)throws UserNotAuthorizedException,DAOException
 	{
 		if (specimenVO.getPathologicalStatus() != null)
 		{
 			specimenDO.setPathologicalStatus(specimenVO.getPathologicalStatus());
 		}
-
 		if (specimenVO.getSpecimenCharacteristics() != null)
 		{
 			SpecimenCharacteristics characteristics = specimenVO.getSpecimenCharacteristics();
@@ -2476,16 +2481,51 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimenDO.setBiohazardCollection(specimenVO.getBiohazardCollection());
 		}
-		// external identifier not set while editing multiple specimen
+		updateExtenalIdentifier(dao, specimenVO, specimenDO, sessionDataBean);
+	}
+	/**
+	 * @param dao DAO object
+	 * @param specimenVO New Object
+	 * @param specimenDO Persistent object
+	 * @param sessionDataBean session details
+	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 * @throws DAOException  Database exception
+	 */
+	private void updateExtenalIdentifier(DAO dao, Specimen specimenVO,Specimen specimenDO, SessionDataBean sessionDataBean)throws UserNotAuthorizedException, DAOException {
 		if (specimenVO.getExternalIdentifierCollection() != null && !specimenVO.getExternalIdentifierCollection().isEmpty())
 		{
 			Iterator<ExternalIdentifier> itr = specimenVO.getExternalIdentifierCollection().iterator();
 			while(itr.hasNext())
 			{
-				ExternalIdentifier ex = (ExternalIdentifier) itr.next();
+				ExternalIdentifier ex = itr.next();
 				ex.setSpecimen(specimenVO);
+				try
+				{
+					if(ex.getId()==null)
+					{
+						dao.insert(ex,sessionDataBean , false, false);
+					}
+					else 
+					{
+						ExternalIdentifier persistetnExt= (ExternalIdentifier) getCorrespondingOldObject(specimenDO.getExternalIdentifierCollection(), ex.getId());
+						if((persistetnExt.getName()!=ex.getName())||(persistetnExt.getValue()!=ex.getValue()))
+						{
+							persistetnExt.setName(ex.getName());
+							persistetnExt.setValue(ex.getValue());
+							dao.update(persistetnExt, sessionDataBean, false, false, false);
+							dao.audit(persistetnExt, ex, sessionDataBean, true);
+						}
+					}
+				}
+				catch(UserNotAuthorizedException e)
+				{
+					throw new UserNotAuthorizedException("User is not authozrized to perform the operation");
+				}
+				catch (DAOException e)
+				{
+					throw new DAOException("External identifier on multiple Specimen can not be inserted or updated");
+				}
 			}
-			specimenDO.setExternalIdentifierCollection(specimenVO.getExternalIdentifierCollection());
 		}
 	}
 	/**
