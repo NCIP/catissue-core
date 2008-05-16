@@ -106,6 +106,9 @@
 </script>
 
 <html:form action="<%=formName%>">
+	<html:hidden property="operation" value="<%=operation%>" />
+	<html:hidden property="id" />
+	<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
   <tr>
@@ -138,7 +141,7 @@
 						if(operation.equals(Constants.ADD))
 						{ 
 					%>
-		                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/tab_add_user.jpg" alt="Add" width="57" height="22" /></td>
+		                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add" width="57" height="22" /></td>
 
                     <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&amp;aliasName=SpecimenArrayType&amp;menuSelected=21"><img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
                     <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
@@ -175,17 +178,7 @@
 					</span>
 				  </td>
 	            </tr>
-				<tr>
-					<td>
-						<html:hidden property="operation" value="<%=operation%>" />
-						<html:hidden property="id" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
-					</td>
-				</tr>
+				
 		        <tr>
 				    <td align="left" class="tr_bg_blue1">
 						<span class="blue_ar_b">

@@ -12,6 +12,8 @@
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
 <html:form action="/ApproveUser">
+	<html:hidden property="id" />
+	<html:hidden property="operation" />							
   <tr>
     <td>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="td_color_bfdcf3">
@@ -69,36 +71,32 @@
 												</td>
 											</tr>
 
-											<tr>
-												<td align="left">&nbsp;
-												</td>
-												<td colspan="3" align="left">&nbsp;
-												</td>
+											
+											<c:if test='${requestScope.totalResults <= 10}'>
+													<tr>
+												<td align="left">&nbsp;</td>
+												<td colspan="3" align="left">&nbsp;</td>
 											</tr>
-											<tr>
-												<td><html:hidden property="operation" /></td>
-												<td><html:hidden property="id" /></td>
-											</tr>
+											</c:if>
 							<!-- paging begins -->
 											<tr>
-												<td align="left">&nbsp;</td>
-												<td height="25" align="right" colspan="2" class="black_ar">
-													<c:if test='${pageScope.count > 10}'>
-														<custom:test name="New User Search Results"
+												
+												<td align="right" colspan = "2" >
+													<c:if test='${requestScope.totalResults > 10}'>
+														<custom:test name=" "
 															pageNum='${requestScope.pageNum}'
 															totalResults='${requestScope.totalResults}'
 															numResultsPerPage='${requestScope.numResultsPerPage}'
 															pageName="ApproveUserShow.do" showPageSizeCombo="<%=true%>"
 															recordPerPageList='${requestScope.RESULT_PERPAGE_OPTIONS}' />
 													</c:if>
+													
+
 												</td>
-												<td width="438" align="left">&nbsp;</td>
+												
 											</tr>
 							<!-- paging ends -->
-											<tr>
-												<td align="left">&nbsp;</td>
-												<td colspan="3" align="left">&nbsp;</td>
-											</tr>
+											
 											<tr class="td_color_F7F7F7">
 												<td>&nbsp;</td>
 												<td colspan="3">
@@ -129,7 +127,8 @@
 													</tr>
 												</logic:empty>
 									<!-- For showing the results -->
-									<c:set var="count" value="1" scope="page" />
+									<c:set var="count" value='${param.numResultsPerPage * (param.pageNum - 1) + 1}' scope="page"/>
+									
 										<logic:notEmpty name="showDomainObjectList">
 											<logic:iterate id="currentUser" name="showDomainObjectList">
 												<c:set var="style" value="black_ar" scope="page" />

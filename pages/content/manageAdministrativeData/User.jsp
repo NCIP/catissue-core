@@ -35,10 +35,20 @@ function handleStatus(status)
 	footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
+
 <!--new style code begins-->
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
 <html:form action='${requestScope.formName}'>
+	<html:hidden property="operation" />
+	<html:hidden property="submittedFor" />
+	<html:hidden property="pageOf" />
+	<html:hidden property="id" />
+	<html:hidden property="csmUserId" />
+	<html:hidden property='${requestScope.redirectTo}' />
+<logic:equal name="pageOf" value='${requestScope.pageOfSignUp}'>
+	<html:hidden property="activityStatus" />
+</logic:equal>
     <tr>
     <td>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="td_color_bfdcf3">
@@ -161,31 +171,34 @@ function handleStatus(status)
 													<!-- action buttons begins -->
 															<table cellpadding="0" cellspacing="0" border="0">
 																<tr>
-																	<td>
+																	<td >
+																		<span class="smalllink">
 																		<a class="blue_ar_s_b"
 																			href='${requestScope.backPage}'>
 																			<bean:message
 																			key="buttons.approveUserHome" />
-																		</a>&nbsp;
+																		</a></span>&nbsp;
 																	</td>
 								<logic:notEmpty name="prevpage">
 																	<td>
 																		|&nbsp;
+																		<span class="smalllink">
 																		<a class="blue_ar_s_b"
 																			href='${requestScope.prevPageURL}'>
 																			<bean:message
 																			key="approveUser.previous" /> 
-																		</a>&nbsp;
+																		</a></span>&nbsp;
 																	</td>
 								</logic:notEmpty>
 								<logic:notEmpty name="nextPage">
 																	<td>
 																		|&nbsp;
+																			<span class="smalllink">
 																			<a class="blue_ar_s_b"
 																			href='${requestScope.nextPageURL}'>
 																				<bean:message
 																				key="approveUser.next" /> 
-																			</a>&nbsp;
+																			</a></span>&nbsp;
 																	</td>
 								</logic:notEmpty>
 																</tr>
@@ -194,46 +207,24 @@ function handleStatus(status)
 														</td>
 													</tr>
 								</logic:equal>
-													<tr>
-														<td>
-															<table summary="" cellpadding="0" cellspacing="0"			border="0">
-																<tr>
-																	<td>
-																		<html:hidden property="operation" />
-																		<html:hidden property="submittedFor" />
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<html:hidden property="id" />
-																		<html:hidden property="csmUserId" />
-																		<html:hidden
-																			property='${requestScope.redirectTo}' />
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<html:hidden property="pageOf" />
-											<logic:equal name="pageOf" value='${requestScope.pageOfSignUp}'>
-																		<html:hidden property="activityStatus" />
-											</logic:equal>
-																	</td>
-																</tr>
-															</table>
-														</td>
-													</tr>
+													
 													<tr>
 														
 														<td colspan="8" align="left" bgcolor="#f3f8fb"
 															class="blue_ar_b">
 								<logic:equal name="operation" value='${requestScope.addforJSP}'>
-															<bean:message key="user.title" />
+															<bean:message key="user.details.title" />
 								</logic:equal>
 								<logic:equal name="operation" value='${requestScope.editforJSP}'>
 															<bean:message key="user.editTitle" />
 								</logic:equal>
 														</td>
 													</tr>
+													<tr height="1">
+													<td>
+													</td>
+													</tr>
+											
 													<tr>
 														<td width="1%" align="left" class="black_ar">
 															<span class="blue_ar_b">
@@ -466,14 +457,16 @@ function handleStatus(status)
 															initialValue='${userForm.departmentId}'
 															styleClass="formFieldSized12" staticField="false" />
 														</td>
-														<td align="left" class="smalllink">
-							<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>&nbsp;
+														<td align="left" >&nbsp;
+														<span class="smalllink">
+							<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>
 															<html:link href="#" styleClass="blue_ar_s_b"
 																styleId="newDepartment"
 																onclick="addNewAction('UserAddNew.do?addNewForwardTo=department&forwardTo=user&addNewFor=department')">
 																<bean:message key="buttons.addNew" />
 															</html:link>
 							</logic:notEqual>
+															</span>
 														</td>
 														<td align="left" class="black_ar"><span
 															class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif"
@@ -521,14 +514,10 @@ function handleStatus(status)
 										</td>
 									</tr>
 									<tr>
-										<td colspan="3">
+										<td colspan="3" style="padding-top:10px;">
 											<div id="add_id" style="display: none">
 												<table width="100%" border="0" cellpadding="2" cellspacing="0">
-													<tr>
-														<td align="left" class="black_ar">&nbsp;</td>
-														<td align="left" class="black_ar">&nbsp;</td>
-														<td colspan="4" align="left" valign="top">&nbsp;</td>
-													</tr>
+
 								<logic:equal name="pageOf" value='${pageOfApproveUser}'>
 													<tr>
 														<td width="1%" height="25" align="left" class="black_ar">
@@ -608,6 +597,9 @@ function handleStatus(status)
 									</tr>
 							</logic:notEqual>
 								</logic:notEqual>
+									<tr class="td_color_F7F7F7">
+										<td colspan="3">&nbsp;</td>
+						            </tr>
 									<tr class="td_color_F7F7F7">
 										<td colspan="3" class="buttonbg"><html:submit
 												styleClass="blue_ar_b">

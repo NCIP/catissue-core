@@ -18,15 +18,17 @@
    
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
 <html:form action='${requestScope.formName}'>
+	<html:hidden property="operation"/>
+	<html:hidden property="id" />
   <tr>
     <td class="td_color_bfdcf3"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
 		<tr  class="td_color_bfdcf3">
         <td width="100%" colspan="3" valign="top" class="td_color_bfdcf3">
 					
-							<table width="15%" border="0" cellpadding="0" cellspacing="0" background="images/table_title_bg.gif">
+							<table width="15%" border="0" cellpadding="0" cellspacing="0" background="images/uIEnhancementImages/table_title_bg.gif">
 									<tr >
                     <td width="82%" ><span class="wh_ar_b">&nbsp;&nbsp;&nbsp;<bean:message key="Biohazard.header" /></span></td>
-                    <td width="18%" align="right"><img src="images/table_title_corner2.gif" width="31" height="24" /></td>
+                    <td width="18%" align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" /></td>
                   </tr>
 								</table>
 							</td>
@@ -43,14 +45,14 @@
 									</td>
 							<!-- for tabs selection -->
 							<logic:equal name="operation" value="add">
-								    <td width="6%" valign="bottom" background="images/tab_bg.gif" ><img src="images/tab_add_user.jpg" alt="Add" width="57" height="22" /></td>
+								    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add" width="57" height="22" /></td>
 
-                    <td width="6%" valign="bottom" background="images/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard&menuSelected=8" ><img src="images/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
+                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard&menuSelected=8" ><img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
 							</logic:equal>
 							<logic:equal name="operation" value="edit">
-									<td width="6%" valign="bottom" background="images/tab_bg.gif" ><html:link page="/Biohazard.do?operation=add&pageOf=pageOfBioHazard&menuSelected=8"><img src="images/tab_add_user1.jpg" alt="Add" width="57" height="22" border="0" /></html:link></td>
+									<td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/Biohazard.do?operation=add&pageOf=pageOfBioHazard&menuSelected=8"><img src="images/uIEnhancementImages/tab_add_user1.jpg" alt="Add" width="57" height="22" border="0" /></html:link></td>
 
-                    <td width="6%" valign="bottom" background="images/tab_bg.gif"><img src="images/tab_edit_user1.jpg" alt="Edit" width="59" height="22" /></td>
+                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_edit_user1.jpg" alt="Edit" width="59" height="22" /></td>
 							</logic:equal>
 									<td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;
 									</td>
@@ -72,14 +74,7 @@
 								</span>
 							</td>
 						</tr>
-						<tr>
-							<td><html:hidden property="operation"/>
-							</td>
-						</tr>
-						<tr>
-							<td><html:hidden property="id" />
-							</td>
-						</tr>
+						
 						<tr>
 							<td align="left" class="tr_bg_blue1">
 								<span class="blue_ar_b">

@@ -20,6 +20,11 @@
 </html:messages>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
 <html:form action='${requestScope.formName}'>
+	<html:hidden property="operation" />
+	<html:hidden property="submittedFor" />
+	<html:hidden property="id" />
+	<html:hidden property="onSubmit"/>
+	<html:hidden property="pageOf" />
   <tr>
     <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="td_color_bfdcf3">
       <tr>
@@ -45,7 +50,7 @@
                     <tr>
                       <td width="4%" class="td_tab_bg" >&nbsp;</td>
 					   <!-- for tabs selection -->
-										<logic:equal name="operation" value="add">
+				<logic:equal name="operation" value="add">
                       <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add" width="57" height="22" /></td>
                       <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site&menuSelected=5"><img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
                       <td width="15%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
@@ -68,23 +73,7 @@
                 <td colspan="3" align="left"><table width="99%" border="0" cellpadding="1" cellspacing="0">
                     <tr>
                       <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="td_color_ffffff">
-							
-							<tr>
-					<td>
-						<html:hidden property="operation" />
-						<html:hidden property="submittedFor" />	
-					</td>
-				</tr>
-				
-				<tr>
-					<td><html:hidden property="id" /></td>
-					<td><html:hidden property="onSubmit"/></td>
-				</tr>
-
-				<tr>
-					<td><html:hidden property="pageOf" /></td>
-				</tr>
-                          <tr>
+				              <tr>
                             <td class=" grey_ar_s"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> 
 							<bean:message key="commonRequiredField.message" />
 							</td>
