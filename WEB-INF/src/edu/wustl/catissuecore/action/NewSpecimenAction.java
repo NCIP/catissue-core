@@ -191,7 +191,7 @@ public class NewSpecimenAction extends SecureAction
 			String initialWitnessValue="";
 			String initialSignedConsentDateValue="";
 			//Lazy - specimenCollectionGroup.getCollectionProtocolRegistration()
-			CollectionProtocolRegistration collectionProtocolRegistration = getCPRObj(scg_id);
+			CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroup.getCollectionProtocolRegistration();
 			if(collectionProtocolRegistration ==null  || collectionProtocolRegistration.getSignedConsentDocumentURL()==null)
 			{
 				initialURLValue=Constants.NULL;
@@ -318,11 +318,6 @@ public class NewSpecimenAction extends SecureAction
 				List specimenDetails= new ArrayList();
 				getSpecimenDetails(specimenObject,specimenDetails);
 				List columnList=columnNames();
-				//Resolved lazy
-				//specimenObject.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getConsentTierResponseCollection()
-				//specimenObject.getConsentTierStatusCollection();
-				//Collection consentResponse = (Collection)bizLogicObj.retrieveAttribute(Specimen.class.getName(),specimenObject.getId(), "elements(specimenCollectionGroup.collectionProtocolRegistration.consentTierResponseCollection)");
-				
 				String consentResponseHql ="select elements(scg.collectionProtocolRegistration.consentTierResponseCollection)"+ 
 				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
 				" edu.wustl.catissuecore.domain.Specimen as spec " +
@@ -942,19 +937,6 @@ public class NewSpecimenAction extends SecureAction
 			specimenCollectionGroupObject = (SpecimenCollectionGroup)getSCGIdFromDB.get(0);
 		}
 		return specimenCollectionGroupObject;
-	}
-	
-	/**
-	 * This function will return SpecimenCollectionGroup object 
-	 * @param scg_id Selected SpecimenCollectionGroup ID
-	 * @return collectionProtocolRegistrationObject
-	 */
-	private CollectionProtocolRegistration getCPRObj(String scg_id) throws DAOException
-	{
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String colName = "collectionProtocolRegistration";			
-		CollectionProtocolRegistration collectionProtocolRegistrationObject =(CollectionProtocolRegistration)bizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),new Long(scg_id) ,colName);
-		return collectionProtocolRegistrationObject;
 	}
 	/**
 	* For ConsentTracking Preparing consentResponseForScgValues for populating Dynamic contents on the UI  

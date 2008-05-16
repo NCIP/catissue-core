@@ -31,7 +31,9 @@ import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
+import gov.nih.nci.security.authorization.domainobjects.User;
 
 
 /**
@@ -59,11 +61,9 @@ public class PrintAction extends Action
     	String nextforwardTo = request.getParameter("nextForwardTo");
     	SessionDataBean objBean = (SessionDataBean) request.getSession().getAttribute("sessionData");
     	String strIpAddress = objBean.getIpAddress();
-    	String strUserId = objBean.getUserId().toString();
-    	gov.nih.nci.security.authorization.domainobjects.User objUser = null;
     	try 
     	{
-    		objUser = SecurityManager.getInstance(this.getClass()).getUserById(strUserId);    			
+    		gov.nih.nci.security.authorization.domainobjects.User objUser = getUserObject(request,objBean);
     		HashMap forwardToPrintMap = (HashMap)request.getAttribute("forwardToPrintMap");
     		//SCG Label printing
     		if (forwardToPrintMap != null && forwardToPrintMap.size() >0 && forwardToPrintMap.get("specimenCollectionGroupId")!=null)
@@ -131,16 +131,7 @@ public class PrintAction extends Action
 		        	setStatusMessage(printStauts,request);
 				}
 		    	
-		    	if(request.getAttribute("forwardTo")!=null && (request.getAttribute("forwardTo").equals("CPQueryAliquotAdd")
-		    			||request.getAttribute("forwardTo").equals("printAliquot")))
-		    	{
-		    		List<AbstractDomainObject> listofAliquot = (List<AbstractDomainObject>)request.getAttribute("specimenList");
-		    		boolean printStauts  =false;
-		    		LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
-		    	  	printStauts = labelPrinter.printLabel(listofAliquot, strIpAddress, objUser);	
-	    		   	setStatusMessage(printStauts,request);
-	    		   	nextforwardTo = (String)request.getAttribute("forwardTo");
-		    	}
+		    	nextforwardTo = printAliquotLabel(form, request, nextforwardTo,objBean);
 		    	//For multiple specimen page
 		    	if(forwardToPrintMap != null &&  forwardToPrintMap.size() >0  && request.getAttribute("printMultiple")!=null  &&   request.getAttribute("printMultiple").equals("1"))
 		    	{
@@ -205,6 +196,48 @@ public class PrintAction extends Action
     	
         return mapping.findForward(nextforwardTo);
     }
+
+	/**
+	 * @param form
+	 * @param request
+	 * @param nextforwardTo
+	 * @param strIpAddress
+	 * @param objUser
+	 * @return
+	 * @throws Exception
+	 */
+	public String printAliquotLabel(ActionForm form, HttpServletRequest request,
+			String nextforwardTo, SessionDataBean objBean) throws Exception
+	{
+		gov.nih.nci.security.authorization.domainobjects.User objUser = null;
+		try
+		{
+			objUser = getUserObject(request, objBean);
+		}
+		catch (SMException e)
+		{
+			e.printStackTrace();
+			throw new SMException("Error while Creating User Object");
+		}   
+		
+		List<AbstractDomainObject> listofAliquot = (List<AbstractDomainObject>)request.getAttribute("specimenList");
+		boolean printStauts  =false;
+		LabelPrinter labelPrinter = null;
+		try
+		{
+			labelPrinter = LabelPrinterFactory.getInstance("specimen");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new Exception("Error Printing label");
+		}
+	  	printStauts = labelPrinter.printLabel(listofAliquot, objBean.getIpAddress(), objUser);	
+	   	setStatusMessage(printStauts,request);
+	   	nextforwardTo = (String)request.getAttribute("forwardTo");
+		
+		return nextforwardTo;
+	}
    
     /**
      * @param printStauts
@@ -239,5 +272,13 @@ public class PrintAction extends Action
     	}
 		
 	}
+    
+    private User getUserObject(HttpServletRequest request,SessionDataBean objBean) throws SMException
+    {
+    	String strUserId = objBean.getUserId().toString();
+    	gov.nih.nci.security.authorization.domainobjects.User objUser  = 
+    		SecurityManager.getInstance(this.getClass()).getUserById(strUserId); 
+    	return objUser;
+    }
 
 }

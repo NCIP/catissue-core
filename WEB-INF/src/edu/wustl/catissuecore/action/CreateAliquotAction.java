@@ -64,23 +64,20 @@ public class CreateAliquotAction extends BaseAction
 		SpecimenCollectionGroup scg = createSCG(aliquotForm);
 		//Create ParentSpecimen Object
 		Specimen parentSpecimen = createParentSpecimen(aliquotForm);
-		if(fromPrintAction==null)
+		//Create Specimen Map
+		specimenMap = createAliquotDomainObject(aliquotForm, scg, parentSpecimen);
+		//Insert Specimen Map
+		insertAliquotSpecimen = insertAliquotSpecimen(request, sessionDataBean, specimenMap);
+		//Convert Specimen HashSet to List
+		specimenList= new LinkedList<Specimen>();
+		specimenList.addAll(specimenMap);
+		Specimen specimen = specimenList.get(0);
+		if(specimen!=null)
 		{
-			//Create Specimen Map
-			specimenMap = createAliquotDomainObject(aliquotForm, scg, parentSpecimen);
-			//Insert Specimen Map
-			insertAliquotSpecimen = insertAliquotSpecimen(request, sessionDataBean, specimenMap);
-			//Convert Specimen HashSet to List
-			specimenList= new LinkedList<Specimen>();
-			specimenList.addAll(specimenMap);
-			Specimen specimen = specimenList.get(0);
-			if(specimen!=null)
-			{
-				aliquotForm.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
-				aliquotForm.setScgName(specimen.getSpecimenCollectionGroup().getGroupName());
-			}
-			aliquotForm.setSpecimenList(specimenList);
+			aliquotForm.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
+			aliquotForm.setScgName(specimen.getSpecimenCollectionGroup().getGroupName());
 		}
+		aliquotForm.setSpecimenList(specimenList);
 		//mapping.findforward
 		return getFindForward(mapping, request, aliquotForm, fromPrintAction,
 				insertAliquotSpecimen, specimenList);
@@ -94,23 +91,18 @@ public class CreateAliquotAction extends BaseAction
 	 * @param insertAliquotSpecimen
 	 * @param specimenList
 	 * @return
+	 * @throws Exception 
 	 */
 	private ActionForward getFindForward(ActionMapping mapping, HttpServletRequest request,
 			AliquotForm aliquotForm, String fromPrintAction, boolean insertAliquotSpecimen,
-			List<Specimen> specimenList)
+			List<Specimen> specimenList) throws Exception
 	{
-		if(aliquotForm.getPrintCheckbox()!=null && fromPrintAction==null)
+		if(aliquotForm.getPrintCheckbox()!=null)
 		{
 			request.setAttribute(Constants.LIST_SPECIMEN, specimenList);
-			request.setAttribute(Constants.FORWARD_TO,Constants.CP_QUERY_ALIQUOT_ADD);
-			if(aliquotForm.getForwardTo().equals(Constants.PRINT_ALIQUOT))
-			{
-				return mapping.findForward(Constants.PRINT_ALIQUOT);
-			}
-			else
-			{
-				return mapping.findForward(Constants.CP_QUERY_PRINT_ALIQUOT);
-			}
+			PrintAction printActionObj = new PrintAction();
+			SessionDataBean objBean = (SessionDataBean) request.getSession().getAttribute("sessionData");
+			printActionObj.printAliquotLabel(aliquotForm, request,null,objBean);
 		}
 		if(insertAliquotSpecimen)
 		{
