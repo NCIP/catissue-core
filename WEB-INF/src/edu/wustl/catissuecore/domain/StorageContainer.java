@@ -39,11 +39,11 @@ public class StorageContainer extends Container implements IActivityStatus
 
 	protected Site site;
 
-	protected Collection collectionProtocolCollection = new HashSet();
+	protected Collection<CollectionProtocol> collectionProtocolCollection = new HashSet<CollectionProtocol>();
 
-	protected Collection holdsStorageTypeCollection = new HashSet();
+	protected Collection<StorageType> holdsStorageTypeCollection = new HashSet<StorageType>();
 
-	protected Collection holdsSpecimenClassCollection = new HashSet();
+	protected Collection<String> holdsSpecimenClassCollection = new HashSet<String>();
 
 	protected Collection holdsSpecimenArrayTypeCollection = new HashSet();
 
@@ -106,7 +106,7 @@ public class StorageContainer extends Container implements IActivityStatus
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"
 	 */
-	public Collection getCollectionProtocolCollection()
+	public Collection<CollectionProtocol> getCollectionProtocolCollection()
 	{
 		return collectionProtocolCollection;
 	}
@@ -126,7 +126,7 @@ public class StorageContainer extends Container implements IActivityStatus
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
 	 * @hibernate.element type="string" column="NAME" length="30"
 	 */
-	public Collection getHoldsSpecimenClassCollection()
+	public Collection<String> getHoldsSpecimenClassCollection()
 	{
 		return holdsSpecimenClassCollection;
 	}

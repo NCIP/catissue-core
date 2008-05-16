@@ -102,7 +102,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	/**
 	 * Collection of attributes of a Specimen that renders it potentially harmful to a User.
 	 */
-	protected Collection biohazardCollection = new HashSet();
+	protected Collection<Biohazard> biohazardCollection = new HashSet<Biohazard>();
 
 	//Change for API Search   --- Ashwin 04/10/2006
 	/**
@@ -113,7 +113,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	/**
 	 * Collection of Specimen Event Parameters associated with this specimen. 
 	 */
-	protected Collection specimenEventCollection = new HashSet();
+	protected Collection<SpecimenEventParameters> specimenEventCollection = new HashSet<SpecimenEventParameters>();
 
 	/**
 	 * Collection of children specimens derived from this specimen. 
@@ -123,7 +123,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	/**
 	 * Collection of a pre-existing, externally defined id associated with a specimen.
 	 */
-	protected Collection externalIdentifierCollection = new HashSet();
+	protected Collection<ExternalIdentifier> externalIdentifierCollection = new HashSet();
 
 	//Change for API Search   --- Ashwin 04/10/2006
 	/**
@@ -183,7 +183,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	/**
 	 * The consent tier status for multiple participants for a particular specimen.
 	 */
-	protected Collection consentTierStatusCollection;
+	protected Collection<ConsentTierStatus> consentTierStatusCollection;
 
 	//Mandar 15-jan-07 
 	/*
@@ -218,7 +218,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * @hibernate.set name="consentTierStatusCollection" table="CATISSUE_CONSENT_TIER_STATUS"
 	 * @hibernate.collection-key column="SPECIMEN_ID"
 	 */
-	public Collection getConsentTierStatusCollection()
+	public Collection<ConsentTierStatus> getConsentTierStatusCollection()
 	{
 		return consentTierStatusCollection;
 	}
@@ -467,7 +467,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * that renders it potentially harmful to a User.
 	 * @see #setBiohazardCollection(Set)
 	 */
-	public Collection getBiohazardCollection()
+	public Collection<Biohazard> getBiohazardCollection()
 	{
 		return biohazardCollection;
 	}
@@ -493,7 +493,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * @return the collection of Specimen Event Parameters associated with this specimen.
 	 * @see #setSpecimenEventCollection(Set)
 	 */
-	public Collection getSpecimenEventCollection()
+	public Collection<SpecimenEventParameters> getSpecimenEventCollection()
 	{
 		return specimenEventCollection;
 	}
@@ -566,7 +566,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * @return the collection of a pre-existing, externally defined id associated with a specimen.
 	 * @see #setExternalIdentifierCollection(Set)
 	 */
-	public Collection getExternalIdentifierCollection()
+	public Collection<ExternalIdentifier> getExternalIdentifierCollection()
 	{
 		return externalIdentifierCollection;
 	}

@@ -90,7 +90,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
     /**
      * The consent tier status by multiple participants for a particular specimen collection group.
      */
-    protected Collection consentTierStatusCollection;
+    protected Collection<ConsentTierStatus> consentTierStatusCollection;
     
 	//Mandar 15-jan-07 
 	/*
@@ -188,7 +188,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 * @hibernate.set table="CATISSUE_CONSENT_TIER_STATUS" name="consentTierStatusCollection"
 	 * @hibernate.collection-key column="SPECIMEN_COLL_GROUP_ID"
 	 */
-	public Collection getConsentTierStatusCollection()
+	public Collection<ConsentTierStatus> getConsentTierStatusCollection()
 	{
 		return consentTierStatusCollection;
 	}
