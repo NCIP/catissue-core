@@ -79,7 +79,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 		//Remove old list of specimen from Session.
 		session.removeAttribute(Constants.SPECIMEN_LIST);
 		//As per the collection protocol registration id of Participant set All Participant's Specimen List to Session
-		if(collectionProtocolRegIdValue!=null)
+		if(collectionProtocolRegIdValue!=null && !(collectionProtocolRegIdValue.equals("")))
 		{	
 			List columnList=columnNames();		
 			session.setAttribute(Constants.COLUMNLIST,columnList);		
