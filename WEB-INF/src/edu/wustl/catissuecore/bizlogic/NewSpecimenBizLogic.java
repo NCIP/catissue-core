@@ -410,7 +410,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				specimen.setLabel(specimen.getSpecimenCollectionGroup().getId()+"_"+count);
 			}
 			Specimen parentSpecimen = specimen.getParentSpecimen();
-			if ((specimen.getParentSpecimen() == null))
+			if ((specimen.getParentSpecimen() == null)&& (specimen.getCreatedOn() == null))
 			{
 				setCreatedOnDate(specimen);
 			}
