@@ -126,20 +126,18 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		
 		try{
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();		    
-		    	
-		  //  TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
 		    SpecimenCollectionGroup duplicateSCG = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();
 		    duplicateSCG.setName(scg.getName());
 		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
 		    duplicateSCG = (SpecimenCollectionGroup)appService.createObject(duplicateSCG);
 		    System.out.println("After Creating SCG");
-		    assertTrue("Submission doe not fail since label generator already present" , true);
+		    assertFalse("Test Failed. Duplicate SCG name should not throw exception" , true);
 		    TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
 		}
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			fail("Test Failed. Duplicate SCG name should not throw exception");
+			assertTrue("Submission failed due to scg with same label already exist" , true);
 			
 			 
 		 }
@@ -231,12 +229,82 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		sprObj.setSpecimenEventParametersCollection(specimenEventParametersCollection);
 	}
 	
-	public void testAddScgTroughApi()
+	public void testAddSCGWithName()
 	{
-		SpecimenCollectionGroup specimenCollectionGroup= BaseTestCaseUtility.initSpecimenCollectionGroup();	
-		String scgName="scg added through api";
+		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
+		try{
+			cp = (CollectionProtocol) appService.createObject(cp);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to create collection protocol", true);
+		}
+		System.out.println("CP:"+cp.getTitle());
+		Participant participant = BaseTestCaseUtility.initParticipant();
+		
+		try{
+			participant = (Participant) appService.createObject(participant);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to create collection protocol", true);
+		}
+		System.out.println("Participant:"+participant.getFirstName());
+		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+		collectionProtocolRegistration.setCollectionProtocol(cp);
+		collectionProtocolRegistration.setParticipant(participant);
+		collectionProtocolRegistration.setProtocolParticipantIdentifier("");
+		collectionProtocolRegistration.setActivityStatus("Active");
+		try
+		{
+			collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
+					Utility.datePattern("08/15/1975")));
+			collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+			
+		}
+		catch (ParseException e)
+		{			
+			e.printStackTrace();
+		}
+		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+		User user = (User)TestCaseUtility.getObjectMap(User.class);
+		collectionProtocolRegistration.setConsentWitness(user);
+		
+		Collection consentTierResponseCollection = new HashSet();
+		Collection consentTierCollection = cp.getConsentTierCollection();
+		Iterator consentTierItr = consentTierCollection.iterator();
+		
+		while(consentTierItr.hasNext())
+		{
+			ConsentTier consentTier = (ConsentTier)consentTierItr.next();
+			ConsentTierResponse consentResponse = new ConsentTierResponse();
+			consentResponse.setConsentTier(consentTier);
+			consentResponse.setResponse("Yes");
+			consentTierResponseCollection.add(consentResponse);
+		}
+		
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+		
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+		System.out.println("Creating CPR");
+		try{
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
+		}
+		catch(Exception e){
+			Logger.out.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Failed to register participant", true);
+		}
+		
+		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+		specimenCollectionGroup =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
+		Site site = (Site)TestCaseUtility.getObjectMap(Site.class);
+		specimenCollectionGroup.setSpecimenCollectionSite(site);
+		String scgName="scg added through api"+UniqueKeyGeneratorUtil.getUniqueKey();
 		specimenCollectionGroup.setName(scgName);
-		setEventParameters(specimenCollectionGroup);
+		specimenCollectionGroup = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(specimenCollectionGroup);
 		try{
 			specimenCollectionGroup=(SpecimenCollectionGroup)appService.createObject(specimenCollectionGroup);
 		
@@ -250,7 +318,8 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		}catch(Exception e)
 		{
 			Logger.out.error(e.getMessage(),e);
-			assertFalse("Not able to create scg", true);
+			e.printStackTrace();
+			assertFalse("SCG name is not retained while inserting through api ", true);
 		}
 		
 		
