@@ -235,7 +235,7 @@
                           <td align="left" class="black_ar">&nbsp;</td>
                           <td align="left" class="black_ar"></td>
                           <td align="left">&nbsp;</td>
-                          <td align="left" class="smalllink">&nbsp;</td>
+                          <td align="left" >&nbsp;</td>
 						  </logic:notEqual>
                         </tr> </table>
                 </div></td>

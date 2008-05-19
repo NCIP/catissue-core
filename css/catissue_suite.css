@@ -46,6 +46,14 @@ form {
 	color: #000000;
 }
 
+.black_arNew {
+	font-family: verdana;
+	font-size: 13px;
+	color: #000000;
+	font-weight: bold;
+}
+
+
 .blue_ar_b {
 	font-family: verdana;
 	font-size: 12px;
@@ -144,7 +152,7 @@ form {
 	font-size: 10px;
 	color: #054281;
 	font-weight: bold;
-	text-decoration:none;
+	text-decoration:underline;
 }
 .smalllink a:link{
 	font-family: verdana;
@@ -351,11 +359,11 @@ A.white:hover {color: #d4e6f9;
 }
 
 .td_table_head {
-	background-image: url(../images/table_title_bg.gif);
+	background-image: url(../images/uIEnhancementImages/table_title_bg.gif);
 }
 
 .td_orange_line {
-	background-image: url(../images/or_dot.gif);
+	background-image: url(../images/uIEnhancementImages/or_dot.gif);
 }
 
 .td_boxborder {
@@ -445,7 +453,7 @@ vertical-align:top;
 
 #interVeil{ /*CSS for veil that covers entire page while modal window is visible*/
 position: absolute;
-background: url(../images/blackdot.gif);
+background: url(../images/uIEnhancementImages/blackdot.gif);
 width: 10px;
 left: 0;
 top: 0;

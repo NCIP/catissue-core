@@ -305,3 +305,42 @@ function getHyperlinkLable(link)
 	}
 	return link;
 }
+
+// methods of simple query interface
+function onObjectChange(element,action)
+{
+	var index = element.name.indexOf("(");
+	var lastIndex = element.name.lastIndexOf(")");
+	
+	var saveObject = document.getElementById("objectChanged");	
+	saveObject.value = element.name.substring(index+1,lastIndex);
+	
+	callSerachAction(action);
+}
+
+function setPropertyValue(propertyName, value)
+{
+	for (var i=0;i < document.forms[0].elements.length;i++)
+    {
+    	var e = document.forms[0].elements[i];
+        if (e.name == propertyName)
+        {
+        	document.forms[0].elements[i].value = value;
+		}
+    }
+}
+
+function callSerachAction(action)
+{
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
+
+function incrementCounter()
+{
+	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) + 1;
+}
+function decrementCounter()
+{
+	document.forms[0].counter.value = parseInt(document.forms[0].counter.value) - 1;
+} 
