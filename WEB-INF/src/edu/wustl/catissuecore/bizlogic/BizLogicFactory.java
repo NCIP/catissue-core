@@ -284,7 +284,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.AliquotSpecimen"))
     	{
-    		bizLogic = new AliquotBizLogic();
+    		bizLogic = new NewSpecimenBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.Specimen"))
     	{
