@@ -4734,7 +4734,26 @@ PUBLIC
 				<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		<!--  Delete Action Ends : Nitesh-->
-	
+		
+		<action path="/CommonTab"
+				type="edu.wustl.catissuecore.action.CommonTabAction"
+				name="simpleQueryInterfaceForm"
+				validate="false"
+				scope="request">
+				<forward name="pageOfUserAdmin" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1"/>
+				<forward name="pageOfInstitution" path="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2"/>
+				<forward name="pageOfDepartment" path="/Department.do?operation=add&amp;pageOf=pageOfDepartment&amp;menuSelected=3"/>
+				<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4"/>
+				<forward name="pageOfSite" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5"/>
+				<forward name="pageOfStorageType" path="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType&amp;menuSelected=6"/>
+				<forward name="pageOfStorageContainer" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7"/>
+				<forward name="pageOfSpecimenArrayType" path="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"/>
+				<forward name="pageOfBioHazard" path="/Biohazard.do?operation=add&amp;pageOf=pageOfBioHazard&amp;menuSelected=8"/>
+				<forward name="pageOfCollectionProtocol" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9"/>
+				<forward name="pageOfDistributionProtocol" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10"/>
+				<forward name="pageOfSpecimenArray" path="/SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20"/>
+				<forward name="pageOfParticipant" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12&amp;clearConsentSession=true"/>
+		</action>
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
