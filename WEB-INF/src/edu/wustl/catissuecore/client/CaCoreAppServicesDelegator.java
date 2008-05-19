@@ -288,7 +288,12 @@ public class CaCoreAppServicesDelegator
             // Check the permission of the user on the main object.
 			// Call to SecurityManager.checkPermission bypassed &
 			// instead, call redirected to privilegeCache.hasPrivilege            
-            hasReadDeniedForMain = privilegeCache.hasPrivilege((AbstractDomainObject)abstractDomainObject, Permissions.READ_DENIED);
+        //     hasReadDeniedForMain = privilegeCache.hasPrivilege((AbstractDomainObject)abstractDomainObject, Permissions.READ_DENIED);
+            
+            /*
+			 * this issue, as to whose privileges are to be checked, will be resolved later
+			 */
+			hasReadDeniedForMain = false;
             
 //		    hasReadDeniedForMain = SecurityManager.getInstance(CaCoreAppServicesDelegator.class)
 //		    							.checkPermission(userName, aliasName,
@@ -309,8 +314,13 @@ public class CaCoreAppServicesDelegator
 		        //Check the permission of the user on the identified data of the object.
 				// Call to SecurityManager.checkPermission bypassed &
 				// instead, call redirected to privilegeCache.hasPrivilege		    	
-		    	hasPrivilegeOnIdentifiedData = privilegeCache.
-		    					hasPrivilege((AbstractDomainObject)abstractDomainObject, Permissions.IDENTIFIED_DATA_ACCESS);
+		  //  	hasPrivilegeOnIdentifiedData = privilegeCache.
+		  //  					hasPrivilege((AbstractDomainObject)abstractDomainObject, Permissions.IDENTIFIED_DATA_ACCESS);
+		    	
+		    	/*
+				 * this issue, as to whose privileges are to be checked, will be resolved later
+				 */
+				hasPrivilegeOnIdentifiedData = true;
 		    	
 //		        hasPrivilegeOnIdentifiedData = SecurityManager.getInstance(CaCoreAppServicesDelegator.class) 
 //													.checkPermission(userName, aliasName,
