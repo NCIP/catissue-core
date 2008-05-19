@@ -446,7 +446,7 @@ font-size: 0;
 
 .drag-handle{ /*Overwrite default drag handle bar background color with below*/
 /*background-color: #990000;*/
-background-image: url(../../../caTissue_suite_new/HTML/images/top_bg.jpg);
+background-image: url(../../../caTissue_suite_new/HTML/images/uIEnhancementImages/top_bg.jpg);
 vertical-align:top;
 
 }
