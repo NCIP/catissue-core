@@ -122,10 +122,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
-		/*bug 7539*/
-		if(specimenCollectionGroup.getName()==null)
+		String label=specimenCollectionGroup.getName();
+		generateSCGLabel(specimenCollectionGroup);
+		if((label!=specimenCollectionGroup.getName())&&label!=null)
 		{
-			generateSCGLabel(specimenCollectionGroup);
+			specimenCollectionGroup.setName(label);
 		}
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
 		
