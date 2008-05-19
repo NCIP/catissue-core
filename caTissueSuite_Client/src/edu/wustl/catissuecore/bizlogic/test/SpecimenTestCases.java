@@ -99,27 +99,16 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 	public void testAddTissueSpecimen()
 	{
 	   try {
-		    System.out.println("Before Creating SCG");
-		    CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) TestCaseUtility.getObjectMap(CollectionProtocolRegistration.class);
-		    
-		    SpecimenCollectionGroup scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(cpr);
-		    Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
-		    scg.setSpecimenCollectionSite(site);
-		    scg.setName("SCG1"+UniqueKeyGeneratorUtil.getUniqueKey());		    
-		    scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);		    
-		    scg = (SpecimenCollectionGroup)appService.createObject(scg);	
-		    TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
-		    System.out.println("After Creating SCG");
-		    
-			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();				
-			specimenObj.setSpecimenCollectionGroup(scg);
-			Logger.out.info("Inserting domain object------->"+specimenObj);
-			System.out.println("Before Creating Tissue Specimen");
-			specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
-			TestCaseUtility.setObjectMap(specimenObj, TissueSpecimen.class);
-			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
-			Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-			assertTrue(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);			
+		   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();		
+		   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+		   specimenObj.setSpecimenCollectionGroup(scg);
+		   Logger.out.info("Inserting domain object------->"+specimenObj);
+		   System.out.println("Before Creating Tissue Specimen");
+		   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
+		   TestCaseUtility.setObjectMap(specimenObj, TissueSpecimen.class);
+		   Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
+		   Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
+		   assertTrue(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);			
 		}
 		catch(Exception e)
 		{
@@ -233,8 +222,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 
     } 
 	
-	
-	/*public void testUpdateTissueSpecimen()
+	public void testUpdateTissueSpecimen()
 	{
 	   try {
 		   TissueSpecimen ts = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
@@ -242,6 +230,13 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		   ts.setLabel("upadated TS"+UniqueKeyGeneratorUtil.getUniqueKey());
 		   ts.setAvailable(new Boolean(true));
 		   ts.setCollectionStatus("Collected");
+		   Collection externalIdentifierCollection = new HashSet();
+		   ExternalIdentifier externalIdentifier = new ExternalIdentifier();
+		   externalIdentifier.setName("eid" + UniqueKeyGeneratorUtil.getUniqueKey());
+		   externalIdentifier.setValue(""+ UniqueKeyGeneratorUtil.getUniqueKey());
+		   externalIdentifier.setSpecimen(ts);
+		   externalIdentifierCollection.add(externalIdentifier);
+		   ts.setExternalIdentifierCollection(externalIdentifierCollection);
 		   ts = (TissueSpecimen) appService.updateObject(ts);
 		   Logger.out.info(" Domain Object is successfully updated ---->  :: " + ts.getLabel());		   
 		   assertTrue(" Domain Object is successfully added ---->    Name:: " + ts.getLabel(), true);			
@@ -284,7 +279,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 			assertFalse("Failed to create Domain Object", true);
 		}
 	  }
-	*/
+	
 	
 	public void testVerifyConsentResponseAndConsentStatusAtSCG()
 	{	
@@ -837,9 +832,5 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}		
 		
 	}
-	
-	
-
-	
 
 }
