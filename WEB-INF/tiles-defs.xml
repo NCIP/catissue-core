@@ -9,27 +9,19 @@
 	<!-- Home tab pages definitions start -->
 	<definition name=".catissuecore.mainTitlePageDef" path="/pages/Layout.jsp">
 		<put name="title" value="caTissue Suite v 1.0" />
-		<put name="header" value="/pages/MainHeader.jsp" />
-		<put name="applicationheader" value="/pages/ApplicationHeader.jsp" />
-		<put name="commonmenu" value="/pages/subMenu/Common.jsp" />
-		<put name="submenu" value="/pages/subMenu/Home.jsp" />
-		<put name="mainmenu" value="/pages/mainMenu/Home.jsp" />
+		<put name="header" value="/pages/MainHeaderLogin.jsp" />
+		<put name="applicationheader" value="/pages/ApplicationHeaderLogin.jsp" />
+		<put name="mainmenu" value="/pages/mainMenu/HomeLogo.jsp" />
 		<put name="content" value="/pages/content/home/Home.jsp" />
-		<put name="applicationfooter" value="/pages/ApplicationFooter.jsp" />
-		<put name="mainfooter" value="/pages/MainFooter.jsp" />
 	</definition>
 
 	<!-- Home tab pages definitions start -->
 	<definition name=".catissuecore.homePageDef" path="/pages/Layout.jsp">
 		<put name="title" value="caTissue Suite v 1.0" />
-		<put name="header" value="/pages/blank.jsp" />
-		<put name="applicationheader" value="/pages/blank.jsp" /> 
-		<put name="commonmenu" value="/pages/subMenu/Common.jsp" />
-		<put name="submenu" value="/pages/subMenu/Home.jsp" />
+		<put name="header" value="/pages/MainHeader.jsp" />
+		<put name="applicationheader" value="/pages/ApplicationHeader.jsp"/> 
 		<put name="mainmenu" value="/pages/mainMenu/Home.jsp" />
 		<put name="content" value="/pages/content/home/Home.jsp" />
-		<put name="applicationfooter" value="/pages/ApplicationFooter.jsp" />
-		<put name="mainfooter" value="/pages/blank.jsp" />
 	</definition>
 	
 	
@@ -46,14 +38,17 @@
 	</definition>
 
 	<definition name=".catissuecore.forgotPasswordDef" extends=".catissuecore.homePageDef">
+		
 		<put name="content" value="/pages/content/common/ForgotPassword.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.forgotPasswordSuccessDef" extends=".catissuecore.homePageDef">
+		
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.userSignUpDef" extends=".catissuecore.homePageDef">
+		
 		<put name="content" value="/pages/content/manageAdministrativeData/User.jsp" />
 	</definition>
 	
@@ -102,166 +97,164 @@
 
 	<!-- Manage Administrative Data tab pages definitions start -->
 	<definition name=".catissuecore.manageAdminDataHomeDef" extends=".catissuecore.homePageDef">
-		<put name="submenu" value="/pages/subMenu/ManageAdminData.jsp" />
-		<put name="mainmenu" value="/pages/mainMenu/ManageAdminData.jsp" />
 		<put name="content" value="/pages/content/manageAdministrativeData/Home.jsp"/>
 	</definition>
 	
-	<definition name=".catissuecore.userDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.userDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/User.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.userAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.userAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.userEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.userEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.institutionDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.institutionDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/Institution.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.institutionAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.institutionAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.institutionEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.institutionEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.approveUserDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.approveUserDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ApproveUser.jsp" />
 	</definition>
-	<definition name=".catissuecore.userDetailsDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.userDetailsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/UserDetails.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.reportedProblemDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.reportedProblemDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ReportedProblem.jsp" />
 	</definition>
-	<definition name=".catissuecore.problemDetailsDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.problemDetailsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ProblemDetails.jsp" />
 	</definition>
 
 	<!-- Storage Type -->
-	<definition name=".catissuecore.storageTypeDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.storageTypeDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/StorageType.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.storageTypeAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.storageTypeAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.storageTypeEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.storageTypeEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- Storage Type -->
 	
 	<!-- Storage Container -->
-	<definition name=".catissuecore.storageContainerDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.storageContainerDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainer.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.arrayTypeDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.arrayTypeDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/SpecimenArrayType.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.storageContainerAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.storageContainerAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.storageContainerEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.storageContainerEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- Storage Container -->
 	
 	<!-- Site -->
-	<definition name=".catissuecore.siteDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.siteDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/Site.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.siteAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.siteAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.siteEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.siteEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- Site -->
 	
 	<!-- Biohazard -->
-	<definition name=".catissuecore.biohazardDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.biohazardDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/Biohazard.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.biohazardAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.biohazardAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.biohazardEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.biohazardEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- Biohazard -->
 	
-	<definition name=".catissuecore.collectionProtocolDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.collectionProtocolDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.collectionProtocolAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.collectionProtocolAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.collectionProtocolEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.collectionProtocolEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.departmentDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.departmentDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/Department.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.departmentAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.departmentAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.departmentEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.departmentEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.cancerResearchGroupDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.cancerResearchGroupDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/CancerResearchGroup.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.cancerResearchGroupAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.cancerResearchGroupAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.cancerResearchGroupEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.cancerResearchGroupEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.distributionProtocolDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.distributionProtocolDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DistributionProtocol.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.distributionProtocolAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.distributionProtocolAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.distributionProtocolEditSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.distributionProtocolEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.reportProblemEditDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.reportProblemEditDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/ReportProblem.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.editSearchPageDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.editSearchPageDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/search/SimpleQueryInterface.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.editSearchResultsFrameDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.editSearchResultsFrameDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DataViewFrame.jsp" />
 	</definition>
 	
@@ -275,7 +268,7 @@
 		<put name="content" value="/pages/content/common/ErrorDetails.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.editSearchResultsDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.editSearchResultsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/search/DataView.jsp" />
 	</definition>
 	
@@ -283,41 +276,40 @@
 
 	<!-- Manage BioSpecimen tab pages definitions start -->
 	<definition name=".catissuecore.manageBioSpecimenHomeDef" extends=".catissuecore.homePageDef">
-		<put name="submenu" value="/pages/subMenu/ManageBioSpecimen.jsp" />
-		<put name="mainmenu" value="/pages/mainMenu/ManageBioSpecimen.jsp" />
 		<put name="content" value="/pages/content/manageBioSpecimen/Home.jsp" />
 	</definition>
 
 	<!-- Bulk operations pages definitions start -->
 	
-	<definition name=".catissuecore.bulkTransferEventsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.bulkTransferEventsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/bulkOperations/BulkTransferEvents.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.bulkDisposalEventsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.bulkDisposalEventsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/bulkOperations/BulkDisposalEvents.jsp" />
 	</definition>
 	
 	<!-- Bulk operations pages definitions end -->
 	
-	<definition name=".catissuecore.participantDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.participantDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.participantAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.participantAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.participantEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.participantEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.viewParticipantSurgicalPathologyReportDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.viewParticipantSurgicalPathologyReportDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ViewParticipantSPR.jsp" />
 	</definition>
 
+
 	<!--Ajay For collection protocol reg-->
-	<definition name=".catissuecore.collectionProtocolRegistrationDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.collectionProtocolRegistrationDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CollectionProtocolRegistration.jsp" />
 	</definition>
 	<!--Deepti  For collection protocol reg from CP based view -->
@@ -325,29 +317,29 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/CollectionProtocolRegistration.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.collectionProtocolRegistrationAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.collectionProtocolRegistrationAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.collectionProtocolRegistrationEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.collectionProtocolRegistrationEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
 	
-	<definition name=".catissuecore.accessionDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.accessionDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Accession.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.accessionAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.accessionAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.accessionEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.accessionEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
 	<!-- NEW SPECIMEN EVENT PARAMETERS -->
-	<definition name=".catissuecore.newSpecimenEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.newSpecimenEventParametersDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenEventParameters.jsp" />
 	</definition>
 
@@ -358,50 +350,50 @@
 	<!-- NEW SPECIMEN EVENT PARAMETERS -->
 	
 	<!-- NEW SPECIMEN -->
-	<definition name=".catissuecore.newSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.newSpecimenDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.newSpecimenAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.newSpecimenAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.newSpecimenEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.newSpecimenEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- NEW SPECIMEN -->
 	
 	
 	<!-- CREATE SPECIMEN -->
-	<definition name=".catissuecore.createSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.createSpecimenDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CreateSpecimen.jsp" />
 	</definition>
 
 
-	<definition name=".catissuecore.createSpecimenAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.createSpecimenAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.createSpecimenEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.createSpecimenEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- CREATE SPECIMEN -->
 	
 	
 	<!-- SpecimenCollectionGroup Parameters -->
-	<definition name=".catissuecore.specimenCollectionGroupDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.specimenCollectionGroupDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroup.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.specimenCollectionGroupAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.specimenCollectionGroupAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.specimenCollectionGroupEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.specimenCollectionGroupEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.viewSurgicalPathologyReportDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.viewSurgicalPathologyReportDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ViewSPR.jsp" />
 	</definition>
 	<!-- SpecimenCollectionGroup Parameters -->
@@ -616,16 +608,16 @@
 	<!-- MolecularSpecimenReviewEventParameters end -->
 	
 	<!-- Distribution -->
-	<definition name=".catissuecore.distributionDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.distributionDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Distribution.jsp" />
 	</definition>
 
 
-	<definition name=".catissuecore.distributionAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.distributionAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.distributionEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.distributionEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	
@@ -634,11 +626,11 @@
 	</definition>
 
 
-	<definition name=".catissuecore.distributionReportSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.distributionReportSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/search/DistributionReport.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.multipleSpecimenFlexDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.multipleSpecimenFlexDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimenFlex.jsp" />
 	</definition>
 
@@ -647,48 +639,48 @@
 	</definition>
 
 
-	<definition name=".catissuecore.initMultipleSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.initMultipleSpecimenDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/InitMultipleSpecimen.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.multipleSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.multipleSpecimenDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimen.jsp" />
 	</definition>
 <!-- Mandar: 07Nov06: Entryfor MultipleSpecimen StorageLocation. -->
-	<definition name=".catissuecore.multipleSpecimenStorageLocationDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.multipleSpecimenStorageLocationDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimenStorageLocation.jsp" />
 	</definition>
 
 	
-	<definition name=".catissuecore.multipleSpecimenAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.multipleSpecimenAddSuccessDef" extends=".catissuecore.homePageDef">
             <put name="content" value="/pages/content/manageBioSpecimen/SpecimenReport.jsp" />
     </definition>
 	
 	<!-- Distribution end -->
 
 	<!-- specimenEventParameters -->
-	<definition name=".catissuecore.specimenEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.specimenEventParametersDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenEventParameterLinks.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.specimenEventParametersAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.specimenEventParametersAddSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.specimenEventParametersEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.specimenEventParametersEditSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 	<!-- specimenEventParameters end -->
 	
-	<definition name=".catissuecore.editBioSpecimenSearchPageDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.editBioSpecimenSearchPageDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/search/SimpleQueryInterface.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.editBioSpecimenSearchResultsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.editBioSpecimenSearchResultsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/search/DataView.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.editSpecimenArrayTypeSearchPageDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.editSpecimenArrayTypeSearchPageDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/search/DataView.jsp" />
 	</definition>
 	
@@ -705,8 +697,6 @@
 	</definition>
 			
 	<definition name=".catissuecore.searchHomeDef" extends=".catissuecore.homePageDef">
-		<put name="submenu" value="/pages/subMenu/Search.jsp" />
-		<put name="mainmenu" value="/pages/mainMenu/Search.jsp" />
 		<put name="content" value="/pages/content/search/Home.jsp" />
 	</definition>
 	
@@ -715,7 +705,7 @@
 	</definition>
 
 	
-	<definition name=".catissuecore.conflictResolverDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.conflictResolverDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ConflictView.jsp" />
 	</definition>
 	
@@ -873,79 +863,72 @@
 	
 	<!-- Summary tab pages definitions Begin -->
 	<definition name=".catissuecore.summaryHomeDef" extends=".catissuecore.homePageDef">
-		<put name="submenu" value="/pages/subMenu/Summary.jsp" />
-		<put name="mainmenu" value="/pages/mainMenu/Summary.jsp" />
+		
 		<put name="content" value="/pages/content/summary/Home.jsp" />
 	</definition>
 	<!-- Summary tab pages definitions End -->
 	
 	<!-- Help tab pages definitions Begin -->
 	<definition name=".catissuecore.helpHomeDef" extends=".catissuecore.homePageDef">
-		<put name="submenu" value="/pages/subMenu/Help.jsp" />
-		<put name="mainmenu" value="/pages/mainMenu/Help.jsp" />
 		<put name="content" value="/pages/content/help/Home.jsp" />
 	</definition>
 	<!-- Help tab pages definitions End -->
 	
 	<!-- Summary tab pages definitions Begin -->
 	<definition name=".catissuecore.summaryLoggedInDef" extends=".catissuecore.homePageDef">
-		<put name="submenu" value="/pages/subMenu/Summary.jsp" />
-		<put name="mainmenu" value="/pages/mainMenu/LoggedInSummary.jsp" />
 		<put name="content" value="/pages/content/summary/Home.jsp" />
 	</definition>
 	<!-- Summary tab pages definitions End -->
 	
 	<!-- Help tab pages definitions Begin -->
 	<definition name=".catissuecore.helpLoggedInDef" extends=".catissuecore.homePageDef">
-		<put name="submenu" value="/pages/subMenu/Help.jsp" />
-		<put name="mainmenu" value="/pages/mainMenu/LoggedInHelp.jsp" />
 		<put name="content" value="/pages/content/help/Home.jsp" />
 	</definition>
 	<!-- Help tab pages definitions End -->
 	
 	<!-- CREATE SPECIMEN -->
-	<definition name=".catissuecore.aliquotDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.aliquotDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Aliquots.jsp" />
 	</definition>
 	
 
 	<!-- ALIQUOT SUMMARY -->
-	<definition name=".catissuecore.aliquotSummaryDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.aliquotSummaryDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/AliquotSummary.jsp" />
 	</definition>
 
 	
 	<!-- CREATE SPECIMEN ARRAY ALIQUOTS -->
-	<definition name=".catissuecore.specimenArrayAliquotDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.specimenArrayAliquotDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArrayAliquots.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.specimenArrayAliquotSummaryDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.specimenArrayAliquotSummaryDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArrayAliquotsSummary.jsp" />
 	</definition>
 
 	<!--  QuickEvents -->
-	<definition name=".catissuecore.quickEventsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.quickEventsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/QuickEvents.jsp" />
 	</definition>
 	
 	<!-- SIMILAR CONTAINERS -->
-	<definition name=".catissuecore.similarContainersDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.similarContainersDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/SimilarContainers.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.similarContainersList" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.similarContainersList" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/SimilarContainersList.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.arrayDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.arrayDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArray.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.cpBasedSearchDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.cpBasedSearchDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CPBasedSearchResults.jsp" />
 	</definition>
-	<definition name=".participantAddSuccess" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".participantAddSuccess" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CPBasedSearchResultsDirect.jsp" />
 	</definition>
 
@@ -1008,7 +991,7 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/Home.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.managehomedef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.managehomedef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Home.jsp" />
 	</definition>
 <!--bug #5013. - End -->
@@ -1054,15 +1037,15 @@
 	</definition>
 	
 
-	<definition name=".catissuecore.requestListDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.requestListDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/orderingsystem/RequestListView.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.requestDetailsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.requestDetailsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/orderingsystem/RequestDetails.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.arrayRequestsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.arrayRequestsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/orderingsystem/ArrayRequests.jsp" />
 	</definition>
 
@@ -1085,11 +1068,11 @@
 	</definition>
 	
 <!-- Conflict Resolver :kalpana -->
-	<definition name=".catissuecore.conflictViewDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.conflictViewDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ConflictView.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.conflictDetailsViewDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.conflictDetailsViewDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ConflictDetailsView.jsp" />
 	</definition>
 	
@@ -1125,7 +1108,7 @@
 <!--Conflict Resolver :end -->
 	
 	<!-- For ViewSpr on Specimen Page -->
-	<definition name=".catissuecore.newSpecimenViewSPRDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.newSpecimenViewSPRDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenViewSPR.jsp" />
 	</definition>	
 	<definition name=".catissuecore.newSpecimenEditViewSPRDef" extends=".catissuecore.queryDataViewDef">
@@ -1182,16 +1165,16 @@
 	</definition> -->
 
 	<!--Annotation defs-->
-	<definition name=".catissuecore.annotationDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.annotationDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DefineAnnotations.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.DefineAnnotationsInformationPage" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.DefineAnnotationsInformationPage" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DefineAnnotationsInformationPage.jsp" />
 	</definition>
 	
 	
-	<definition name=".catissuecore.dynamicFormDef" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.dynamicFormDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DynamicExtensionsHome.jsp" />
 	</definition>
 	
@@ -1199,11 +1182,11 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenAnnotation.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.viewSpecimenAnnotation" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.viewSpecimenAnnotation" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenAnnotation.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.specimenCollectionGroupViewSPRDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.specimenCollectionGroupViewSPRDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SCGViewSPR.jsp" />
 	</definition>	
 	<definition name=".catissuecore.specimenCollectionGroupEditViewSPRDef" extends=".catissuecore.queryDataViewDef">
@@ -1215,7 +1198,7 @@
 	</definition>
 	<!--Annotation defs End-->
 	
-	<definition name=".catissuecore.DefineEvents" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.DefineEvents" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DefineEvents.jsp" />
 	</definition>
 	
@@ -1228,15 +1211,15 @@
 	</definition>
 	
 	<!-- for specimen summary -->
-	<definition name=".catissuecore.viewSpecimenSummary" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.viewSpecimenSummary" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/AnticipatorySpecimens.jsp" />
 	</definition>
 	
 	<!-- For Admini View -->
-	<definition name=".catissuecore.ReviewQuarantineRequests" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.ReviewQuarantineRequests" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ReviewQuarantineRequests.jsp" />
 	</definition>
-	<definition name=".catissuecore.ViewSPR" extends=".catissuecore.manageAdminDataHomeDef">
+	<definition name=".catissuecore.ViewSPR" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/AdministratorViewSPR.jsp" />
 	</definition>
 	<definition name=".catissuecore.NoPendingSPRRequest" extends=".catissuecore.manageAdminDataHomeDef">
