@@ -2548,7 +2548,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			double modifiedInitQty = quantity.getValue();
 			double oldInitQty = specimenDO.getInitialQuantity().getValue();
 			double differenceQty = modifiedInitQty - oldInitQty;
-			double newAvailQty  =  differenceQty + availableQuantity.getValue();
+			double newAvailQty  = 0.0;
+			if(differenceQty == 0 || !specimenDO.getCollectionStatus().equals("Pending"))
+			{
+				newAvailQty  =  differenceQty + availableQuantity.getValue();
+			}
+			else
+			{
+				newAvailQty  =  availableQuantity.getValue();
+			}
 			if (newAvailQty <0)
 			{
 				newAvailQty =0;
@@ -2560,7 +2568,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				specimenDO.setAvailableQuantity(availableQuantity);
 			}
 			availableQuantity.setValue(newAvailQty);
-			calculateParentQuantity(specimenDO, differenceQty, newAvailQty);
+			if(specimenDO.getParentSpecimen()!=null)
+			{
+				calculateParentQuantity(specimenDO, differenceQty, newAvailQty);
+			}
 			if(specimenDO.getChildrenSpecimen()==null ||specimenDO.getChildrenSpecimen().isEmpty())
 			{
 				availableQuantity.setValue(newAvailQty);
@@ -2591,25 +2602,22 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void calculateParentQuantity(Specimen specimenDO, double differenceQty,
 			double newAvailQty) throws DAOException
 	{
-		if(specimenDO.getParentSpecimen()!=null)
+		if(specimenDO.getLineage().equals("Aliquot"))
 		{
-			if(specimenDO.getLineage().equals("Aliquot"))
+			double parentAvl=0.0;
+			if(!specimenDO.getCollectionStatus().equals("Pending"))
 			{
-				double parentAvl=0.0;
-				if(!specimenDO.getCollectionStatus().equals("Pending"))
-				{
-					parentAvl = specimenDO.getParentSpecimen().getAvailableQuantity().getValue() - differenceQty;
-				}
-				else
-				{
-					parentAvl = specimenDO.getParentSpecimen().getAvailableQuantity().getValue() - newAvailQty;
-				}
-				if(parentAvl < 0)
-				{
-					throw new DAOException("Insufficient Parent's Available Quantity");
-				}
-				specimenDO.getParentSpecimen().getAvailableQuantity().setValue(parentAvl);
+				parentAvl = specimenDO.getParentSpecimen().getAvailableQuantity().getValue() - differenceQty;
 			}
+			else
+			{
+				parentAvl = specimenDO.getParentSpecimen().getAvailableQuantity().getValue() - newAvailQty;
+			}
+			if(parentAvl < 0)
+			{
+				throw new DAOException("Insufficient Parent's Available Quantity");
+			}
+			specimenDO.getParentSpecimen().getAvailableQuantity().setValue(parentAvl);
 		}
 	}
 	/**
