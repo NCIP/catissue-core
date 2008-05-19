@@ -8,7 +8,7 @@
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
     <tr>
-    	<td>
+    	<td colspan="2" valign="top">
           	<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="40%">
             	<tr>
               		<td class="welcomeTitle" ><bean:message key="summary.page.welcome"/></td>

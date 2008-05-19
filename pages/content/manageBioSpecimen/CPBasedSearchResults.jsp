@@ -34,7 +34,7 @@
 %>
 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-<table border="0" height="100%" width="100%" cellpadding="0" cellspacing="0">
+<table border="0" height="450" width="100%" cellpadding="0" cellspacing="0">
 	<tr height="100%">
 		<td width="25%" valign="top">
 			<table border="0" width="275" height="100%">

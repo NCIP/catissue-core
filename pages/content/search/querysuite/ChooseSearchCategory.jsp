@@ -4,8 +4,6 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <html>
 <head>
-<meta http-equiv="Content-Language" content="en-us">
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <script src="jss/queryModule.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script> 
 <script>
@@ -25,7 +23,7 @@ System.out.println("currentPage         "+currentPage);
 		else
 		{
 			<%
-				height ="530" ;
+				height ="600" ;
 			%>
 		}
 
@@ -87,14 +85,6 @@ else
 		<tr>
 			<td valign="top"> 
 				<table border="0" width="100%" valign="top" cellspacing="0" height="100%">
-					<!--<tr valign="top" valign="top"  width="100%">
-						<th height="5%"  valign="top" colspan="4">
-							<b><font face="Arial" size="2"><bean:message key="query.categorySearchHeader"/></font></b>									
-						</th>
-						<!--th valign="top" height="5%" width="20%" colspan="2">
-							<a id="imageCategorySearch" style="display:block"><img src="images/nolines_plus.gif" /></a>
-						</th>
-					</tr>-->
 					
 					<tr bordercolorlight="#000000" >
 						<td  height="1%">&nbsp;</td>
@@ -157,10 +147,10 @@ else
 						</td>
 						<td  height="1%">&nbsp;</td>
 					</tr>
-					<tr valign="top" class="row" width="98%" height="100%">
-						<td width="100%">&nbsp;</td>
-						<td  width="100%" colspan="2" id='resultSetTd' class="tdWithoutTopBorder">
-							<div id="resultSet" style="overflow:auto;height:530;width:227"></div>
+					<tr valign="top" class="row" width="100" height="400">
+						<td width="100" height="400">&nbsp;</td>
+						<td height="400" width="100" colspan="2" id='resultSetTd' class="tdWithoutTopBorder">
+							<div id="resultSet"  style="border : padding : 4px; width : 230px; height : 550px; overflow : auto; "></div>
 						</td>
 						<td >&nbsp;</td>
 					</tr>

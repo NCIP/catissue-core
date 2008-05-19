@@ -33,7 +33,7 @@
 	<html:hidden property="stringToCreateQueryObject" value="" />
 	<html:hidden property="nextOperation" value="" />
 
-<table border="0" width="100%" cellspacing="0" cellpadding="0"  height="100%" >	
+<table border="0" width="100%" cellspacing="0" cellpadding="0"  height="450" >	
 		
 		<tr>	
 			<td width="33%" align="center" class="bgWizardImage" valign="top">
@@ -89,11 +89,7 @@
 						</table>
 							</td>
 							</tr>
-							<%--<tr >
-								<td height="5px">
-								&nbsp;
-								</td>
-								</tr>--%>
+							
 							<tr>
 							<td  height="40%" valign="top">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
@@ -110,7 +106,8 @@
 												<embed src="flexclient/dag/DAG.swf?view=AddLimit&isQuery=<%=isQuery%>" quality="high" bgcolor="#869ca7"
 													width="100%" height="100%" name="DAG" align="middle"
 													play="true"
-													loop="false"
+													loop="false" 
+													
 													quality="high"
 													allowScriptAccess="sameDomain"
 													type="application/x-shockwave-flash"
@@ -118,21 +115,7 @@
 												</embed>
 
 											</object>
-											<!--
-												<APPLET
-													CODEBASE = "<%=Constants.APPLET_CODEBASE%>"
-													ARCHIVE = "dagViewApplet.jar, cab2bStandAlone.jar,commonpackage.jar,swingx-2006_10_08.jar,org-netbeans-graph-vmd.jar,org-netbeans-graph.jar,org-openide-util.jar,DynamicExtensions.jar,struts.jar,hibernate2.1.7c.jar,odmg.jar,log4j-1.2.9.jar"
-													CODE = "<%=Constants.QUERY_DAG_VIEW_APPLET%>"
-													ALT = "Dag view Applet"
-													NAME = "<%=Constants.QUERY_DAG_VIEW_APPLET_NAME%>"
-													width="100%" height="100%" MAYSCRIPT>
-													<PARAM name="type" value="application/x-java-applet;jpi-version=1.5.0_08">
-													<PARAM name="name" value="<%=Constants.QUERY_DAG_VIEW_APPLET_NAME%>">
-													<PARAM name="session_id" value="<%=session.getId()%>">
-													<PARAM name="isForView" value="false">">
-													
-													<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value="<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
-												</APPLET> -->
+											
 											</div>
 										</td>
 									</tr>

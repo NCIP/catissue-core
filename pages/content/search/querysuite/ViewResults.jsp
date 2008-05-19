@@ -11,10 +11,10 @@ String formAction = Constants.DefineSearchResultsViewJSPAction;
 			{
 			    mac = true;
 			}
-	String height = "100%";		
+	String height = "480";		
 	if(mac)
 	{
-	  height="500";
+	  height="100%";
     }
 %>
 

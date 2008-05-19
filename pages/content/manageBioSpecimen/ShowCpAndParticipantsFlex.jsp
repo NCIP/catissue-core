@@ -189,6 +189,7 @@
 			play="true"
 			loop="false"
 			quality="high"
+			wmode="transparent"
 			allowScriptAccess="sameDomain"
 			type="application/x-shockwave-flash"
 			pluginspage="http://www.adobe.com/go/getflashplayer">

@@ -1,10 +1,8 @@
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="subhdrBG">
-	<tr>
-		<td height="50" align="left">
-			<a href="#">
-				<img src="images/appLogo.jpg" alt="Application Logo" height="55" hspace="5" border="0">
-			</a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" height="75">
+     <tr>
+		<td valign="top">
+			 <img src="images/uIEnhancementImages/logo_small.gif" width="187" height="66" />
 		</td>
-        </tr>
-	</tr>
-</table>
+		
+	  </tr>
+  </table>

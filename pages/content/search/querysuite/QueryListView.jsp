@@ -12,7 +12,14 @@
 %>
 <%@ page import="org.apache.struts.action.ActionMessages, edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
+<script>
+function QueryWizard()
+{
+	var rand_no = Math.random();
+	document.forms[0].action='QueryWizard.do?random='+rand_no;
+	document.forms[0].submit();
+}
+</script>
 
 <head>
 	
@@ -43,7 +50,7 @@ int queryCount = 0;%>
 <% message = messageKey;    %>
 </html:messages>
 	<html:form styleId='saveQueryForm' action='<%=Constants.FETCH_QUERY_ACTION%>' style="margin:0;padding:0;">
-		<table cellpadding='0' cellspacing='0' border='0' height="<%=height%>"  align='center' style="width:100%;"> 
+		<table cellpadding='0' cellspacing='0' border='0' height="500"  align='center' style="width:100%;"> 
 			
 			<tr valign="center" class="bgImage"> 
 				<td width="10" >&nbsp;</td>			

@@ -1,122 +1,42 @@
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<!--
- Kapil: For splitter UI. A dummy parameter added to the URL to have forcefully execution of the JSP, otherwise browser uses
- page from cache. This is required to do since because of cache splitter was not working correctly. 
- This is added to main menu pages.
--->
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20">
-            <tr>
-              <td width="1"><!-- anchor to skip main menu -->
-              	<a href="#content"><img src="images/shim.gif" alt="Skip Menu" width="1" height="1" border="0" /></a>
-              </td>
-             
-              <!-- link 1 begins -->
-			  <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-				onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='Home.do?dummy=dummy'">
-				<html:link styleClass="mainMenuLink" page="/Home.do?dummy=dummy">
-					<bean:message key="app.home" />
-				</html:link>
-			  </td>
-			  <!-- link 1 ends -->
-			  
-			  <!-- Links that need to be shown when user is logged in -->
-			  <logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">	
-			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16"
-				   alt="" /></td>
-				   
-			  <!-- link 2 begins -->
-			  <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-				onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageAdministrativeData.do?dummy=dummy'">
-				<html:link styleClass="mainMenuLink" page="/ManageAdministrativeData.do?dummy=dummy">
-					<bean:message key="app.administrativeData" />
-				</html:link>
-			  </td>
-			  <!-- link 2 ends -->
-			
-			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
-			  <!-- link 3 begins -->
-			  <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-				onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageBioSpecimen.do?dummy=dummy'">
-				<html:link styleClass="mainMenuLink" page="/ManageBioSpecimen.do?dummy=dummy">
-					<bean:message key="app.biospecimen" />
-				</html:link>
-			  </td>
-			  <!-- link 3 ends -->
-			  
-			 <td><img src="images/mainMenuSeparator.gif" width="1" height="16"
-			 	 	alt="" /></td>
-			 	 	
-			 <!-- link 4 begins -->
-			 <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()">
-				<html:link styleClass="mainMenuLink" page="/RetrieveQueryAction.do">
-					<bean:message key="app.search" />
-				</html:link>
-			 </td>
-			 <!-- link 4 ends -->
-		
-		
-			<td><img src="images/mainMenuSeparator.gif" width="1" height="16"
-				alt="" /></td>
-			
-			 <!-- link 5 begins -->
-			 <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInSummary.do?dummy=dummy'">
-                <html:link styleClass="mainMenuLink" page="/LoggedInSummary.do?dummy=dummy">
-                	<bean:message key="app.summary" />
-                </html:link>
-             </td>
-             <!-- link 5 ends -->
-			 
-			 <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
-			  
-             <!-- link 6 begins -->
-             <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()">
-                 <html:link styleClass="mainMenuLink" target="_NEW"
-				href="RedirectToHelp.do">
-                	<bean:message key="app.help" />
-                </html:link>
-             </td>
-             <!-- link 6 ends -->
-             
-             <!--
-              <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>	
-			  <td height="20" class="mainMenuItem mainMenuLink" >
-			  <script src="<%=request.getContextPath()%>/jss/titli.js"></script>
-              <input style = "font-size:0.9em" value = "TiTLi Search" onclick = "this.value = ''" onblur = "if(this.value=='') {this.value = 'TiTLi Search';}" type ="text" name = "searchString" id = "searchString" onkeypress="return titliOnEnter(event, this, document.getElementById('go'))" />
-				<a class = "mainMenuLink"  id="go" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value">Go</a>	
-              </td> -->
-            
-             
-             <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
-			 </logic:notEmpty>
-			<!-- End of links that need to be shown when user is logged in -->
-		
-			<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">	
-			<!-- link 1 ends -->
-			<td><img src="images/mainMenuSeparator.gif" width="1" height="16"
-				alt="" /></td>
-			
-			<!-- link 2 begins -->
-			<td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Summary.do'">
-                <html:link styleClass="mainMenuLink" page="/Summary.do">
-                	<bean:message key="app.summary" />
-                </html:link>
-              </td>
-              <!-- link 2 ends -->
-			<td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
-			  
-            <!-- link 3 begins -->
-            <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" >
-                  <html:link styleClass="mainMenuLink" target="_NEW"
-				href="RedirectToHelp.do">
-                	<bean:message key="app.help" />
-                </html:link>
-            </td>
-            <!-- link 3 ends -->
-            
-            <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
-             </logic:empty> 
-			</tr>
-          </table>
+<%@ page language="java" isELIgnored="false"%>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="css/menus.css" />
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlxtabbar.css">
+<link rel="stylesheet" type="text/css" href="css/examples.css" />
+<link rel="stylesheet" type="text/css" href="css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
+
+<script type="text/javascript"></script>
+<script type="text/javascript" src="jss/ext-base.js"></script>
+<script type="text/javascript" src="jss/ext-all.js"></script>
+<script type="text/javascript" src="jss/states.js"></script>
+<script type="text/javascript" src="js/dhtmlxcommon.js"></script>
+<script type="text/javascript" src="js/dhtmlxtabbar.js"></script>
+</head>
+
+<body>
+<html:form>
+	<table width="95%" cellspacing="0" cellpadding="0" border="0">
+		<tr>
+			<td width="6%" valign="top"><img width="48" height="24"
+				src="images/uIEnhancementImages/menustartimg.gif" /></td>
+			<td width="94%" align="left"><logic:notEmpty scope="session"
+				name="<%=Constants.SESSION_DATA%>">
+				<script type="text/javascript" src="jss/menus.js"></script>
+				<div id="toolbarLoggedIn"></div>
+			</logic:notEmpty> <logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
+				<script type="text/javascript" src="jss/menu_home.js"></script>
+				<div id="toolbarLoggedOut"></div>
+			</logic:empty></td>
+		</tr>
+
+	</table>
+</html:form>
+</body>
+
+</html>
+
