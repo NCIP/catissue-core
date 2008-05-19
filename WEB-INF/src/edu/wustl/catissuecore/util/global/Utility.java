@@ -1045,21 +1045,23 @@ public class Utility extends edu.wustl.common.util.Utility {
 		if (isSimpleSearch == null || (!isSimpleSearch.equalsIgnoreCase(Constants.TRUE)))
 		{
 			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap = querySessionData.getQueryResultObjectDataMap();
-			
-			for (Iterator<Long> beanMapIterator = queryResultObjectDataBeanMap.keySet().iterator() ; beanMapIterator.hasNext() ; )
-			{
-				Long id = beanMapIterator.next();
-				QueryResultObjectDataBean bean = queryResultObjectDataBeanMap.get(id);
-				if (bean.isClobeType())
+			if(queryResultObjectDataBeanMap!=null)
+			{	
+				for (Iterator<Long> beanMapIterator = queryResultObjectDataBeanMap.keySet().iterator() ; beanMapIterator.hasNext() ; )
 				{
-					List<String> columnsList = (List<String>)request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-					QueryOutputSpreadsheetBizLogic queryBizLogic = new QueryOutputSpreadsheetBizLogic();
-					Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = queryBizLogic.updateSpreadSheetColumnList(columnsList, queryResultObjectDataBeanMap);
-					//QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
-					Map exportMetataDataMap = QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
-					request.getSession().setAttribute(Constants.ENTITY_IDS_MAP,exportMetataDataMap.get(Constants.ENTITY_IDS_MAP));
-					request.getSession().setAttribute(Constants.EXPORT_DATA_LIST,exportMetataDataMap.get(Constants.EXPORT_DATA_LIST));
-					break;
+					Long id = beanMapIterator.next();
+					QueryResultObjectDataBean bean = queryResultObjectDataBeanMap.get(id);
+					if (bean.isClobeType())
+					{
+						List<String> columnsList = (List<String>)request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+						QueryOutputSpreadsheetBizLogic queryBizLogic = new QueryOutputSpreadsheetBizLogic();
+						Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = queryBizLogic.updateSpreadSheetColumnList(columnsList, queryResultObjectDataBeanMap);
+						//	QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
+						Map exportMetataDataMap = QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
+						request.getSession().setAttribute(Constants.ENTITY_IDS_MAP,exportMetataDataMap.get(Constants.ENTITY_IDS_MAP));
+						request.getSession().setAttribute(Constants.EXPORT_DATA_LIST,exportMetataDataMap.get(Constants.EXPORT_DATA_LIST));
+						break;
+					}
 				}
 			}
 		}
