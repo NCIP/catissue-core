@@ -8,6 +8,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.TransferEventParametersForm"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ page language="java" isELIgnored="false" %>
 
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
@@ -19,49 +20,13 @@
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 </head>
 
-<%
-		TransferEventParametersForm form = (TransferEventParametersForm)request.getAttribute("transferEventParametersForm");
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName, specimenId=null , fromPositionData =null;
-        String posOne = null, posTwo = null, storContId = null;
 
-		specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
-		fromPositionData = (String) request.getAttribute(Constants.FROM_POSITION_DATA);
-		posOne = (String) request.getAttribute(Constants.POS_ONE);
-		posTwo = (String) request.getAttribute(Constants.POS_TWO);
-		storContId = (String) request.getAttribute(Constants.STORAGE_CONTAINER_ID);
-	
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.TRANSFER_EVENT_PARAMETERS_EDIT_ACTION;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.TRANSFER_EVENT_PARAMETERS_ADD_ACTION;
-			
-            readOnlyValue = false;
-        }
-
-		Object obj = request.getAttribute("transferEventParametersForm");
-		String currentEventParametersDate = ""; 
-		if(obj != null && obj instanceof TransferEventParametersForm)
-		{
-			form = (TransferEventParametersForm)obj;
-			currentEventParametersDate = form.getDateOfEvent();
-			if(currentEventParametersDate == null)
-				currentEventParametersDate = "";
-		}
-
-		
-%>	
 			
 <html:errors/>
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=Constants.TRANSFER_EVENT_PARAMETERS_ADD_ACTION%>">
+<html:form action='${requestScope.formName}'>
 
 
 	<!-- NEW TRANSFER_EVENT_PARAMETERS REGISTRATION BEGINS-->
@@ -70,7 +35,7 @@
 	
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
-			<td><html:hidden property="operation" value="<%=operation%>"/></td>
+			<td><html:hidden property="operation" /></td>
 		</tr>
 		
 		<tr>
@@ -83,16 +48,16 @@
 		
 		<tr>
 			<td>
-				<html:hidden property="specimenId" value="<%=specimenId%>"/>
+				<html:hidden property="specimenId" value='${requestScope.specimenId}'/>
 			</td>
 		</tr>
 
 		<tr>
 			<td class="formTitle" height="20" colspan="3">
-				<logic:equal name="operation" value="<%=Constants.ADD%>">
+				<logic:equal name="operation" value='${requestScope.addForJSP}'>
 					<bean:message key="transfereventparameters.title"/>
 				</logic:equal>
-				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+				<logic:equal name="operation" value='${requestScope.editForJSP}'>
 					<bean:message key="transfereventparameters.edittitle"/>
 				</logic:equal>
 			</td>
@@ -111,7 +76,7 @@
 <!-- Mandar : 434 : for tooltip -->
 				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+					<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>
@@ -125,35 +90,27 @@
 				</label>
 			</td>
 			<td class="formField">
-<%
-if(currentEventParametersDate.trim().length() > 0)
-{
-	Integer eventParametersYear = new Integer(Utility.getYear(currentEventParametersDate ));
-	Integer eventParametersMonth = new Integer(Utility.getMonth(currentEventParametersDate ));
-	Integer eventParametersDay = new Integer(Utility.getDay(currentEventParametersDate ));
-%>
+
+<logic:notEmpty name="currentEventParametersDate">
 <ncombo:DateTimeComponent name="dateOfEvent"
 			  id="dateOfEvent"
 			  formName="transferEventParametersForm"
-			  month= "<%= eventParametersMonth %>"
-			  year= "<%= eventParametersYear %>"
-			  day= "<%= eventParametersDay %>"
-			  value="<%=currentEventParametersDate %>"
+			                  month='${requestScope.eventParametersMonth}'
+							  year='${requestScope.eventParametersYear}'
+							  day='${requestScope.eventParametersDay}'
+							  value='${requestScope.currentEventParametersDate}'
 			  styleClass="formDateSized10"
 					/>
-<% 
-	}
-	else
-	{  
- %>
+</logic:notEmpty>
+<logic:empty name="currentEventParametersDate">
 <ncombo:DateTimeComponent name="dateOfEvent"
 			  id="dateOfEvent"
 			  formName="transferEventParametersForm"
 			  styleClass="formDateSized10"
 					/>
-<% 
-	} 
-%> 
+</logic:empty>
+
+
 <bean:message key="page.dateFormat" />&nbsp;
 
 
@@ -175,8 +132,8 @@ if(currentEventParametersDate.trim().length() > 0)
 			</td>
 			<td class="formField">
 				<autocomplete:AutoCompleteTag property="timeInHours"
-					  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
-					  initialValue="<%=form.getTimeInHours()%>"
+					   optionsList = '${requestScope.hourList}'
+					   initialValue='${transferEventParametersForm.timeInHours}'
 					  styleClass="formFieldSized5"
 					  staticField="false"
 			    />	
@@ -185,8 +142,8 @@ if(currentEventParametersDate.trim().length() > 0)
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 				</label>
                    <autocomplete:AutoCompleteTag property="timeInMinutes"
-						  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
-						  initialValue="<%=form.getTimeInMinutes()%>"
+						  optionsList = '${requestScope.minutesList}'
+						  initialValue='${transferEventParametersForm.timeInMinutes}'
 						  styleClass="formFieldSized5"
 						  staticField="false"
 				    />	
@@ -207,24 +164,18 @@ if(currentEventParametersDate.trim().length() > 0)
 				</label>
 			</td>
 			<td class="formField">
-				<html:hidden property="fromPositionDimensionOne" value="<%=posOne%>" />
-				<html:hidden property="fromPositionDimensionTwo" value="<%=posTwo%>" />
-				<html:hidden property="fromStorageContainerId" value="<%=storContId%>" />
+				<html:hidden property="fromPositionDimensionOne" value='${requestScope.posOne}'/>
+				<html:hidden property="fromPositionDimensionTwo" value='${requestScope.posTwo}' />
+				<html:hidden property="fromStorageContainerId" value='${requestScope.storContId}' />
 				<html:hidden property="containerId" styleId="containerId"/>
-				<%
-					if(fromPositionData == null)
-					{
-				%>
+				<!-- Checking the fromPositionData is null -->
+				<logic:empty name="transferEventParametersForm" property="fromPositionData" >
 				<html:text styleClass="formDateSized" size="35" styleId="fromPosition" property="fromPosition" readonly="true" />
-				<%
-					}
-					else
-					{
-				%>
-				<html:text styleClass="formDateSized" size="35" styleId="fromPosition" property="fromPosition" value="<%=fromPositionData%>" readonly="true" />
-				<%
-					}
-				%>
+				</logic:empty>
+				
+				<logic:notEmpty name="transferEventParametersForm" property="fromPositionData" >
+				<html:text styleClass="formDateSized" size="35" styleId="fromPositionData" property="fromPositionData" readonly="true" />
+				</logic:notEmpty>
 			</td>
 		</tr>
 
@@ -236,128 +187,44 @@ if(currentEventParametersDate.trim().length() > 0)
 					<bean:message key="transfereventparameters.toposition"/> 
 				</label>
 			</td>
-<%--			<td class="formField">
-			<%
-				boolean isReadOnly = true ;
-					if(operation.equals("add"))
-					{
-						isReadOnly = false ;
-					}
-					
-			
-			%>
-				&nbsp;<bean:message key="storageContainer.parentID" />
-     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="storageContainer" property="storageContainer" readonly="<%=isReadOnly%>" />
-     			&nbsp;<bean:message key="storageContainer.positionOne" />
-     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionOne" property="positionDimensionOne" readonly="<%=isReadOnly%>" />
-     			&nbsp;<bean:message key="storageContainer.positionTwo" />
-     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" readonly="<%=isReadOnly%>" />
-
-				<html:hidden property="positionInStorageContainer" />
-				<%
-					if(operation.equals("add"))
-					{
-				%>
-					<!-- Patch ID: Bug#3090_23 -->
-					<html:button property="mapButton" styleClass="actionButton" styleId="Map"
-								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
-						<bean:message key="buttons.map"/>
-					</html:button>
-				<%
-					}
-				%>				
-				&nbsp;
-			</td>  --%>
-		
 			<%-- n-combo-box start --%>
-			<%
-				Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
-									
-				String[] labelNames = {"ID","Pos1","Pos2"};
-				labelNames = Constants.STORAGE_CONTAINER_LABEL;
-				String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
-				String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
-				String[] initValues = new String[3];
-				List initValuesList = (List)request.getAttribute("initValues");
-				if(initValuesList != null)
-				{
-					initValues = (String[])initValuesList.get(0);
-				}
-									
-				String rowNumber = "1";
-				String styClass = "formFieldSized5";
-				String tdStyleClass = "customFormField";
-				boolean disabled = true;
-				String onChange = "onCustomListBoxChange(this)";
-				
-				boolean buttonDisabled = true;
-				
-				String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME);
-				if (className==null)
-					className="";
-				
-				String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
-				if (collectionProtocolId==null)
-					collectionProtocolId="";
-
-				String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
-						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
-						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;		
-
-                String buttonOnClicked = "mapButtonClickedOnNewSpecimen('"+url+"','transferEvents')";						
-				// String buttonOnClicked  = "javascript:NewWindow('"+url+"','name','810','320','yes');return false";
-				String noOfEmptyCombos = "3";
-				
-				int radioSelected = form.getStContSelection();
-				boolean dropDownDisable = false;
-				boolean textBoxDisable = false;					
-				if(radioSelected == 1)
-				{						
-					textBoxDisable = true;
-				}
-				else if(radioSelected == 2)
-				{				
-					dropDownDisable = true;									
-				}		
-				
-			%>
+			${requestScope.getJSForOutermostDataTable}
+			${requestScope.getJSEquivalentFor }
 			
-			<%=ScriptGenerator.getJSForOutermostDataTable()%>
-			<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 			
 			<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 			
 			<td class="formField" colSpan="2">							
 				<table border="0">	
 					<tr>
-						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+						<logic:equal name="operation" value='${requestScope.add}'>
 						<td ><html:radio value="1" onclick="onRadioButtonGroupClickForTransfer(this)" styleId="stContSelection" property="stContSelection" /></td>
 						</logic:equal>
 						<td>
-							<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
-								attributeNames="<%=attrNames%>" 
-								initialValues="<%=initValues%>"  
-								styleClass = "<%=styClass%>" 
-								tdStyleClass = "<%=tdStyleClass%>" 
-								labelNames="<%=labelNames%>" 
-								rowNumber="<%=rowNumber%>" 
-								onChange = "<%=onChange%>"
-								disabled = "<%=dropDownDisable%>"
-								tdStyleClassArray="<%=tdStyleClassArray%>"
+							<ncombo:nlevelcombo dataMap='${requestScope.dataMap}'
+								attributeNames='${requestScope.attrNames}'
+								initialValues='${requestScope.initValues}'
+								styleClass ='${requestScope.styClass}' 
+								tdStyleClass ='${requestScope.tdStyleClass}' 
+								labelNames='${requestScope.labelNames}'
+								rowNumber='${requestScope.rowNumber}'
+								onChange ='${requestScope.onChange}' 
+								disabled = '${requestScope.dropDownDisable}'
+								tdStyleClassArray='${requestScope.tdStyleClassArray}'
 								formLabelStyle="formLabelBorderless"							
-								noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+								noOfEmptyCombos = '${requestScope.noOfEmptyCombos}'/>
 								</tr>
 								</table>
 						</td>
 					</tr>
-					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+					<logic:equal name="operation" value='${requestScope.add}'>
 					<tr>
 						<td ><html:radio value="2" onclick="onRadioButtonGroupClickForTransfer(this)" styleId="stContSelection" property="stContSelection"/></td>
 						<td class="formLabelBorderlessLeft">
-							<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
-							<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
-							<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
-							<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+							<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= '${requestScope.textBoxDisable}'/>
+							<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled='${requestScope.textBoxDisable}' />
+							<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= '${requestScope.textBoxDisable}'/>
+							<html:button styleClass="actionButton" property="containerMap" onclick='${requestScope.buttonOnClicked}' disabled='${requestScope.textBoxDisable}'>
 								<bean:message key="buttons.map"/>
 							</html:button>
 						</td>
@@ -392,13 +259,11 @@ if(currentEventParametersDate.trim().length() > 0)
 		<tr>
 		  <td align="right" colspan="3">
 			<!-- action buttons begins -->
-			<%
-        		String changeAction = "setFormAction('" + formName + "');";
-			%> 
+			
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
+						<html:submit styleClass="actionButton" value="Submit" onclick='${requestScope.changeAction}' />
 					</td>
 					<%-- td><html:reset styleClass="actionButton"/></td --%> 
 				</tr>

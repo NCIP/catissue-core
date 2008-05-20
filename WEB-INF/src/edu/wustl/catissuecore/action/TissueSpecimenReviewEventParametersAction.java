@@ -15,6 +15,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
+import edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
 
@@ -28,9 +29,32 @@ public class TissueSpecimenReviewEventParametersAction extends SpecimenEventPara
 {
 	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
+
+        String operation = (String) request.getAttribute(Constants.OPERATION);
+        String formName, specimenId = null;
+
+        boolean readOnlyValue;
+        TissueSpecimenReviewEventParametersForm tissueSpecimenReviewEventParametersForm=(TissueSpecimenReviewEventParametersForm)eventParametersForm;
+        if (tissueSpecimenReviewEventParametersForm.getOperation().equals(Constants.EDIT))
+        {
+            formName = Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION;
+            readOnlyValue = true;
+        }
+        else
+        {
+            formName = Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION;
+			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
+            readOnlyValue = false;
+        }
+        String changeAction = "setFormAction('" + formName + "');";
+	    request.setAttribute("formName", formName);
+		request.setAttribute("readOnlyValue", readOnlyValue);
+		request.setAttribute("changeAction", changeAction);
+		
+
 //		set array of histological quality
 		List histologicalQualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY,null);
-		request.setAttribute(Constants.HISTOLOGICAL_QUALITY_LIST , histologicalQualityList);
+		request.setAttribute("histologicalQualityList" , histologicalQualityList);
 	}
 	
 }

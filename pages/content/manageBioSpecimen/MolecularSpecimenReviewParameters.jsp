@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ page language="java" isELIgnored="false" %>
 <head>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -20,44 +21,12 @@
 
 </head>
 	
-<%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName,specimenId=null;
-        String isRNA = null;
-        
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
-			isRNA = (String) request.getAttribute(Constants.IS_RNA);
-			
-            readOnlyValue = false;
-        }
-        
-        Object obj =(Object)request.getAttribute("molecularSpecimenReviewParametersForm");
-        	MolecularSpecimenReviewParametersForm form = null;
-		String currentEventParametersDate = ""; 
-		if(obj != null && obj instanceof MolecularSpecimenReviewParametersForm)
-		{
-			form = (MolecularSpecimenReviewParametersForm)obj;
-			currentEventParametersDate = form.getDateOfEvent();
-			if(currentEventParametersDate == null)
-				currentEventParametersDate = "";
-		}
 		
-%>	
-			
 <html:errors/>
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION%>">
+<html:form action='${requestScope.formName}'>
 
 
 	<!-- NEW MOLECULAR_SPECIMEN_REVIEW_PARAMETERS REGISTRATION BEGINS-->
@@ -66,7 +35,7 @@
 	
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
-			<td><html:hidden property="operation" value="<%=operation%>"/></td>
+			<td><html:hidden property="operation" /></td>
 		</tr>
 		
 		<tr>
@@ -75,8 +44,8 @@
 
 		<tr>
 			<td>
-				<html:hidden property="specimenId" value="<%=specimenId%>"/>
-				<html:hidden property="isRNA" value="<%=isRNA%>"/>
+				<html:hidden property="specimenId" value='${requestScope.specimenId}'/>
+				<html:hidden property="isRNA" value='${requestScope.isRNA}'/>
 			</td>
 		</tr>
 		
@@ -86,10 +55,10 @@
 
 		<tr>
 			<td class="formTitle" height="20" colspan="3">
-				<logic:equal name="operation" value="<%=Constants.ADD%>">
+				<logic:equal name="operation" value='${requestScope.addForJSP}'>
 					<bean:message key="molecularspecimenreviewparameters.title"/>
 				</logic:equal>
-				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+				<logic:equal name="operation" value='${requestScope.editForJSP}'>
 					<bean:message key="molecularspecimenreviewparameters.edittitle"/>
 				</logic:equal>
 			</td>
@@ -107,7 +76,7 @@
 <!-- Mandar : 434 : for tooltip -->
 				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+					<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>
@@ -121,35 +90,25 @@
 				</label>
 			</td>
 			<td class="formField">
-<%
-if(currentEventParametersDate.trim().length() > 0)
-{
-	Integer eventParametersYear = new Integer(Utility.getYear(currentEventParametersDate ));
-	Integer eventParametersMonth = new Integer(Utility.getMonth(currentEventParametersDate ));
-	Integer eventParametersDay = new Integer(Utility.getDay(currentEventParametersDate ));
-%>
+
+<logic:notEmpty name="currentEventParametersDate">
 <ncombo:DateTimeComponent name="dateOfEvent"
 			  id="dateOfEvent"
 			  formName="molecularSpecimenReviewParametersForm"
-			  month= "<%= eventParametersMonth %>"
-			  year= "<%= eventParametersYear %>"
-			  day= "<%= eventParametersDay %>"
-			  value="<%=currentEventParametersDate %>"
+			                  month='${requestScope.eventParametersMonth}'
+							  year='${requestScope.eventParametersYear}'
+							  day='${requestScope.eventParametersDay}'
+							  value='${requestScope.currentEventParametersDate}'
 			  styleClass="formDateSized10"
 					/>
-<% 
-	}
-	else
-	{  
- %>
+</logic:notEmpty>
+<logic:empty name="currentEventParametersDate">
 <ncombo:DateTimeComponent name="dateOfEvent"
 			  id="dateOfEvent"
 			  formName="molecularSpecimenReviewParametersForm"
 			  styleClass="formDateSized10"
 					/>
-<% 
-	} 
-%> 
+</logic:empty>
 <bean:message key="page.dateFormat" />&nbsp;
 
 
@@ -171,8 +130,8 @@ if(currentEventParametersDate.trim().length() > 0)
 			</td>
 			<td class="formField">
 				<autocomplete:AutoCompleteTag property="timeInHours"
-					  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
-					  initialValue="<%=form.getTimeInHours()%>"
+					  optionsList = '${requestScope.hourList}'
+					   initialValue='${molecularSpecimenReviewParametersForm.timeInHours}'
 					  styleClass="formFieldSized5"
 					  staticField="false"
 			    />	
@@ -181,8 +140,8 @@ if(currentEventParametersDate.trim().length() > 0)
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 				</label>
                    <autocomplete:AutoCompleteTag property="timeInMinutes"
-						  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
-						  initialValue="<%=form.getTimeInMinutes()%>"
+						  optionsList = '${requestScope.minutesList}'
+						  initialValue='${molecularSpecimenReviewParametersForm.timeInMinutes}'
 						  styleClass="formFieldSized5"
 						  staticField="false"
 				    />	
@@ -272,12 +231,8 @@ if(currentEventParametersDate.trim().length() > 0)
 		</tr>
 
 <!-- ratio28STo18S -->		
+<logic:equal name="molecularSpecimenReviewParametersForm" property="checkRNA" value="true">
 
-	<%
-		if(((isRNA != null) && (isRNA.equals("true"))) || ((form != null) && !(form.getIsRNA() == null) && (form.getIsRNA().equals("true"))))
-		{
-			
-	%>
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formLabel">
@@ -289,9 +244,8 @@ if(currentEventParametersDate.trim().length() > 0)
 				<html:text styleClass="formDateSized" maxlength="10"  size="35" styleId="ratio28STo18S" property="ratio28STo18S" />
 			</td>
 		</tr>
-	<%
-	}
-	%>
+		</logic:equal>>
+	
 <!-- comments -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -309,13 +263,11 @@ if(currentEventParametersDate.trim().length() > 0)
 		<tr>
 		  <td align="right" colspan="3">
 			<!-- action buttons begins -->
-			<%
-        		String changeAction = "setFormAction('" + formName + "');";
-			%> 
+			
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
+						<html:submit styleClass="actionButton" value="Submit" onclick='${requestScope.changeAction}' />
 					</td>
 					<%-- td><html:reset styleClass="actionButton"/></td --%> 
 				</tr>

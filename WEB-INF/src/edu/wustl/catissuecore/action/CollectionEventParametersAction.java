@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
@@ -31,13 +32,31 @@ public class CollectionEventParametersAction extends SpecimenEventParametersActi
 	 */
 	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
+		String formName=null;
+	    boolean readOnlyValue;
+		CollectionEventParametersForm collectionEventParametersForm =(CollectionEventParametersForm)eventParametersForm;
+		if (collectionEventParametersForm.getOperation().equals(Constants.EDIT))
+	    {
+	        formName = Constants.COLLECTION_EVENT_PARAMETERS_EDIT_ACTION;
+	        readOnlyValue = true;
+	    }
+	    else
+	    {
+	        formName = Constants.COLLECTION_EVENT_PARAMETERS_ADD_ACTION;
+	        readOnlyValue = false;
+	    }
+		    String changeAction = "setFormAction('" + formName + "');";
+		    request.setAttribute("formName", formName);
+			request.setAttribute("readOnlyValue", readOnlyValue);
+			request.setAttribute("changeAction", changeAction);
 		// set the procedure lists
 		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE,null);
-    	request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
+    	request.setAttribute("procedureList", procedureList);
 	    
 	    // set the container lists
     	List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER,null);
-    	request.setAttribute(Constants.CONTAINER_LIST, containerList);
+    	request.setAttribute("containerList", containerList);
+    	request.setAttribute("collectionEventParametersAction",Constants.COLLECTION_EVENT_PARAMETERS_ADD_ACTION);
 	}
 	
 }

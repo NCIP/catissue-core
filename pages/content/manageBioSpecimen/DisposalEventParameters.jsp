@@ -7,39 +7,9 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
+<%@ page language="java" isELIgnored="false" %>
 <script src="jss/script.js" type="text/javascript"></script>
 
-<%
-		
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-		String formName,specimenId=null;
-
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
-            readOnlyValue = false;
-        }
-		
-			Object obj = request.getAttribute("disposalEventParametersForm");
-			String currentEventParametersDate = ""; 
-			DisposalEventParametersForm form = null; 
-			if(obj != null && obj instanceof DisposalEventParametersForm)
-			{
-				form = (DisposalEventParametersForm)obj;
-			currentEventParametersDate = form.getDateOfEvent();
-			if(currentEventParametersDate == null)
-				currentEventParametersDate = "";
-			}
-
-
-%>	
 
 <head>
 <!-- Mandar : 434 : for tooltip -->
@@ -49,18 +19,17 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 21-Aug-06 : calendar changes end -->
+
+
 <script language="javascript" >
 
-
-	
-	
-	function confirmAction(form)
+function confirmAction(form)
 	{
-		if(form.activityStatus.value == "<%=Constants.ACTIVITY_STATUS_DISABLED%>")
+		if(form.activityStatus.value == '${requestScope.activityStatusDisabled}')
 		{
 			if(confirm("Are you sure you want to disable the specimen ?"))
 			{
-				form.action="<%=formName%>?disposal=true";
+				form.action='${requestScope.formName}?disposal=true';
 				form.submit();
 			}
 			else
@@ -68,11 +37,11 @@
 				return false;
 			}
 		}
-		else if(form.activityStatus.value == "<%=Constants.ACTIVITY_STATUS_CLOSED%>")
+		else if(form.activityStatus.value == '${requestScope.activityStatusClosed}')
 		{
 			if(confirm("Are you sure you want to close the specimen ?"))
 			{
-				form.action="<%=formName%>";
+				form.action='${requestScope.formName}';
 				form.submit();
 			}
 			else
@@ -92,7 +61,7 @@
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION%>">
+<html:form action='${requestScope.formName}'>
 
 
 	<!-- NEW disposalEventParameter REGISTRATION BEGINS-->
@@ -101,7 +70,7 @@
 	
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
-			<td><html:hidden property="operation" value="<%=operation%>"/></td>
+			<td><html:hidden property="operation" /></td>
 		</tr>
 		<tr>
 			<td><html:hidden property="id" /></td>
@@ -110,7 +79,7 @@
 
 		<tr>
 			<td>
-				<html:hidden property="specimenId" value="<%=specimenId%>"/>
+				<html:hidden property="specimenId" value='${requestScope.specimenId}'/>
 			</td>
 		</tr>
 		
@@ -120,10 +89,10 @@
 
 		<tr>
 			<td class="formTitle" height="20" colspan="3">
-				<logic:equal name="operation" value="<%=Constants.ADD%>">
+				<logic:equal name="operation" value='${requestScope.addForJSP}'>
 					<bean:message key="disposaleventparameters.title"/>
 				</logic:equal>
-				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+				<logic:equal name="operation" value='${requestScope.editForJSP}'>
 					<bean:message key="disposaleventparameters.EDITtitle"/>
 				</logic:equal>
 			</td>
@@ -142,7 +111,7 @@
 <!-- Mandar : 434 : for tooltip -->
 				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+					<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>
@@ -156,35 +125,26 @@
 				</label>
 			</td>
 			<td class="formField">
-				<%
-				if(currentEventParametersDate.trim().length() > 0)
-				{
-					Integer eventParametersYear = new Integer(Utility.getYear(currentEventParametersDate ));
-					Integer eventParametersMonth = new Integer(Utility.getMonth(currentEventParametersDate ));
-					Integer eventParametersDay = new Integer(Utility.getDay(currentEventParametersDate ));
-				%>
-				<ncombo:DateTimeComponent name="dateOfEvent"
-							  id="dateOfEvent"
-							  formName="disposalEventParametersForm"
-							  month= "<%= eventParametersMonth %>"
-							  year= "<%= eventParametersYear %>"
-							  day= "<%= eventParametersDay %>"
-							  value="<%=currentEventParametersDate %>"
-							  styleClass="formDateSized10"
-									/>
-				<% 
-					}
-					else
-					{  
-				 %>
-				<ncombo:DateTimeComponent name="dateOfEvent"
-							  id="dateOfEvent"
-							  formName="disposalEventParametersForm"
-							  styleClass="formDateSized10"
-									/>
-				<% 
-					} 
-				%> 
+				
+				<logic:notEmpty name="currentEventParametersDate">
+<ncombo:DateTimeComponent name="dateOfEvent"
+			  id="dateOfEvent"
+			  formName="disposalEventParametersForm"
+			                  month='${requestScope.eventParametersMonth}'
+							  year='${requestScope.eventParametersYear}'
+							  day='${requestScope.eventParametersDay}'
+							  value='${requestScope.currentEventParametersDate}'
+			  styleClass="formDateSized10"
+					/>
+</logic:notEmpty>
+<logic:empty name="currentEventParametersDate">
+<ncombo:DateTimeComponent name="dateOfEvent"
+			  id="dateOfEvent"
+			  formName="disposalEventParametersForm"
+			  styleClass="formDateSized10"
+					/>
+</logic:empty>
+				
 				<bean:message key="page.dateFormat" />&nbsp;
 				
 
@@ -207,8 +167,8 @@
 			</td>
 			<td class="formField">
 			 <autocomplete:AutoCompleteTag property="timeInHours"
-					  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
-					  initialValue="<%=form.getTimeInHours()%>"
+					  optionsList = '${requestScope.hourList}'
+					   initialValue='${disposalEventParametersForm.timeInHours}'
 					  styleClass="formFieldSized5"
 					  staticField="false"
 			    />	
@@ -217,8 +177,8 @@
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 				</label>
                    <autocomplete:AutoCompleteTag property="timeInMinutes"
-						  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
-						  initialValue="<%=form.getTimeInMinutes()%>"
+						 optionsList = '${requestScope.minutesList}'
+						  initialValue='${disposalEventParametersForm.timeInMinutes}'
 						  styleClass="formFieldSized5"
 						  staticField="false"
 				    />	
@@ -238,9 +198,9 @@
 			</td>
 			<td class="formField">
 			 <autocomplete:AutoCompleteTag property="activityStatus"
-						  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
-						  onChange="<%=strCheckStatus%>"
-						  initialValue="<%=form.getActivityStatus()%>"
+						  optionsList = '${requestScope.activityStatusList}'
+						  onChange='${requestScope.strCheckStatus}'
+						  initialValue='${disposalEventParametersForm.activityStatus}'
 			 />	
 			</td>
 		</tr>				
@@ -278,21 +238,17 @@
 		<tr>
 		  <td align="right" colspan="3">
 			<!-- action buttons begins -->
-			<%
-        		String changeAction = "setFormAction('" + formName + "');";
-			%> 
+			
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
 				<!-- delete button added for deleting the objects : Nitesh-->
 					<td>
-						<%
-							String deleteAction="deleteObject('" + formName+"?disposal=true" +"','" + Constants.BIO_SPECIMEN + "')";
-						%>
-						<html:button styleClass="actionButton" value="Delete" property="disable" onclick="<%=deleteAction%>"/>
+						
+						<html:button styleClass="actionButton" value="Delete" property="disable" onclick='${requestScope.deleteAction}'/>
 					</td>
 					<td>
 						<html:button styleClass="actionButton" value="Submit" property="Submit" onclick="return confirmAction(this.form)"/>
-						<!--<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>"/>-->
+						<!--<html:submit styleClass="actionButton" value="Submit" onclick='${requestScope.changeAction}'/>-->
 						
 					</td>
 					<%-- td><html:reset styleClass="actionButton"/></td --%> 

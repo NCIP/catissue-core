@@ -75,6 +75,8 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
      * @return A reference to the location of an electrophoretic gel image of the specimen.
      * @see #setGelImageURL(String)
      */
+	protected String checkRNA;
+	
 	public String getGelImageURL()
 	{
 		return gelImageURL;
@@ -351,5 +353,13 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	public void setIsRNA(String isRNA) 
 	{
 		this.isRNA = isRNA;
+	}
+
+	public String getCheckRNA() {
+		return checkRNA;
+	}
+
+	public void setCheckRNA(String checkRNA) {
+		this.checkRNA = checkRNA;
 	}
 }

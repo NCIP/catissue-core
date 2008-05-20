@@ -88,9 +88,10 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * Storage Id selected from map
 	 */
+	protected String fromPositionData;
 	private String containerId;
 	/**
-
+	
 
 	/**
 	 * Returns the Reference to dimensional position one of the specimen in previous storage container before transfer.
@@ -508,5 +509,13 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	public void setStContSelection(int stContSelection)
 	{
 		this.stContSelection = stContSelection;
+	}
+
+	public String getFromPositionData() {
+		return fromPositionData;
+	}
+
+	public void setFromPositionData(String fromPositionData) {
+		this.fromPositionData = fromPositionData;
 	}
 }

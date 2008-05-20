@@ -27,6 +27,7 @@ public class CellSpecimenReviewParametersAction extends SpecimenEventParametersA
 		request.setAttribute("readOnlyValue", readOnlyValue);
 		request.setAttribute("changeAction", changeAction);
 		request.setAttribute("CellSpecimenReviewParametersAdd",Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION);
+		request.setAttribute("containerList", Constants.CONTAINER_LIST);
 	}
 		
 }

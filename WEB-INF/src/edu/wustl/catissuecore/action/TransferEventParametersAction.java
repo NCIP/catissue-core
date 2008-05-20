@@ -28,7 +28,6 @@ import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
-
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -38,6 +37,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.tag.ScriptGenerator;
 
 /**
  * @author mandar_deshmukh
@@ -48,9 +48,9 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
-		TransferEventParametersForm transferEventParametersForm = (TransferEventParametersForm) request
-				.getAttribute("transferEventParametersForm");
-		String operation = request.getParameter(Constants.OPERATION);
+		TransferEventParametersForm transferEventParametersForm = (TransferEventParametersForm)eventParametersForm ;
+				
+		
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		TreeMap containerMap = new TreeMap();
@@ -58,8 +58,36 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
 		Vector initialValues = null;
+		
+		
+		  boolean readOnlyValue; 
+		  String operation = (String) request.getAttribute(Constants.OPERATION);
+		  String formName=null;
+	        if (operation.equals(Constants.EDIT))
+	        {
+	            formName = Constants.TRANSFER_EVENT_PARAMETERS_EDIT_ACTION;
+	            readOnlyValue = true;
+	        }
+	        else
+	        {
+	            formName = Constants.TRANSFER_EVENT_PARAMETERS_ADD_ACTION;
+				
+	            readOnlyValue = false;
+	        }
+	        request.setAttribute("formName",formName);
+	    String getJSForOutermostDataTable= ScriptGenerator.getJSForOutermostDataTable();
+	    request.setAttribute("getJSForOutermostDataTable",getJSForOutermostDataTable);
+	    
+	    System.out.println("************"+getJSForOutermostDataTable);
+	    
+	    
+		request.setAttribute("posOne",Constants.POS_ONE);
+		request.setAttribute("posTwo",Constants.POS_TWO);
+		request.setAttribute("storContId",Constants.STORAGE_CONTAINER_ID );
+		request.setAttribute("add", Constants.ADD);
+		
 		//    	
-		if (operation.equals(Constants.ADD))
+		if (transferEventParametersForm.getOperation().equals(Constants.ADD))
 		{
 			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
 					Constants.DEFAULT_BIZ_LOGIC);
@@ -99,7 +127,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 					fromPositionData = stContainer.getName()+":" + " Pos(" + positionOne + "," + positionTwo + ")";
 				}
 				//The fromPositionData(storageContainer Info) of specimen of this event.
-				request.setAttribute(Constants.FROM_POSITION_DATA, fromPositionData);
+				transferEventParametersForm.setFromPositionData(fromPositionData);
 
 				//POSITION 1
 				request.setAttribute(Constants.POS_ONE, positionOne);
@@ -202,7 +230,81 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		}
 		request.setAttribute("initValues", initialValues);
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+		request.setAttribute("dataMap", containerMap);
+		request.setAttribute("transeferEventParametersAddAction", Constants.TRANSFER_EVENT_PARAMETERS_ADD_ACTION);
+		
+		// scriplet shifted from TransferEventParameters.jsp
+//		Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+		
+	
+		request.setAttribute("labelNames",Constants.STORAGE_CONTAINER_LABEL);
+		
+		String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
+		request.setAttribute("attrNames",attrNames);
+		String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
+		request.setAttribute("tdStyleClassArray",tdStyleClassArray);
+		String[] initValues = new String[3];
+		List initValuesList = (List)request.getAttribute("initValues");
+		if(initValuesList != null)
+		{
+			initValues = (String[])initValuesList.get(0);
+		}
+		
+		request.setAttribute("initValues",initValues);
+		
+							
+		String rowNumber = "1";
+		String styClass = "formFieldSized5";
+		String tdStyleClass = "customFormField";
+		boolean disabled = true;
+		String onChange = "onCustomListBoxChange(this)";
+		
+		request.setAttribute("onChange",onChange);
+		request.setAttribute("rowNumber",rowNumber);
+		request.setAttribute("styClass",styClass);
+		request.setAttribute("tdStyleClass",tdStyleClass);
+		
+		String getJSEquivalentFor = ScriptGenerator.getJSEquivalentFor(containerMap,rowNumber);
+		request.setAttribute("getJSEquivalentFor",getJSEquivalentFor);
+		
+		
+		System.out.println("###########################"+containerMap);
+		System.out.println("###########################"+getJSEquivalentFor);
+		
+		boolean buttonDisabled = true;
+		
+		String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME);
+		if (className==null)
+			className="";
+		
+		String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
+		if (collectionProtocolId==null)
+			collectionProtocolId="";
+
+		String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
+				+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
+				+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;		
+
+        String buttonOnClicked = "mapButtonClickedOnNewSpecimen('"+url+"','transferEvents')";						
+		// String buttonOnClicked  = "javascript:NewWindow('"+url+"','name','810','320','yes');return false";
+        request.setAttribute("buttonOnClicked", buttonOnClicked);
+		String noOfEmptyCombos = "3";
+		
+		request.setAttribute("noOfEmptyCombos", noOfEmptyCombos);
+		
+		int radioSelected = transferEventParametersForm.getStContSelection();
+		boolean dropDownDisable = false;
+		boolean textBoxDisable = false;					
+		if(radioSelected == 1)
+		{						
+			textBoxDisable = true;
+		}
+		else if(radioSelected == 2)
+		{				
+			dropDownDisable = true;									
+		}		
+		request.setAttribute("dropDownDisable",dropDownDisable);
+		request.setAttribute("textBoxDisable",textBoxDisable);
 	}
 
 	Vector checkForInitialValues(Map containerMap)
@@ -264,5 +366,8 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		Long collectionProtocolId = (Long)collectionProtocolIdList.get(0);
 		return collectionProtocolId;
 	}
+	
+	
+
 	
 }

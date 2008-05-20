@@ -14,6 +14,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
+import edu.wustl.catissuecore.actionForm.FixedEventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
 
@@ -30,9 +31,27 @@ public class FixedEventParametersAction extends SpecimenEventParametersAction
 	 */
 	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
 	{
+		String formName=null;
+	    boolean readOnlyValue;
+		FixedEventParametersForm fixedEventParametersForm=(FixedEventParametersForm)eventParametersForm;
+		
+		 if (fixedEventParametersForm.getOperation().equals(Constants.EDIT))
+		    {
+		        formName = Constants.FIXED_EVENT_PARAMETERS_EDIT_ACTION;
+		        readOnlyValue = true;
+		    }
+		    else
+		    {
+		        formName = Constants.FIXED_EVENT_PARAMETERS_ADD_ACTION;
+		        readOnlyValue = false;
+		    }
+		    String changeAction = "setFormAction('" + formName + "');";
+		   	request.setAttribute("formName", formName);
+			request.setAttribute("readOnlyValue", readOnlyValue);
+			request.setAttribute("fixedEventParametersAddAction", Constants.FIXED_EVENT_PARAMETERS_ADD_ACTION);
 		// SETS THE FIXATION LIST
 		List fixationList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_FIXATION_TYPE,null);
-    	request.setAttribute(Constants.FIXATION_LIST, fixationList);
+    	request.setAttribute("fixationList", fixationList);
 	}
 	
 }

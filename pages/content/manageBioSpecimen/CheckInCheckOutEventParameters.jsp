@@ -2,10 +2,9 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-<%@ page import="edu.wustl.catissuecore.actionForm.CheckInCheckOutEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ page language="java" isELIgnored="false" %>
 
 <head>
 <!-- Mandar : 434 : for tooltip -->
@@ -20,41 +19,13 @@
 	</script>
 </head>
 	
-<%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName,specimenId=null;
 
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_EDIT_ACTION;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
-            readOnlyValue = false;
-        }
-
-		Object obj = request.getAttribute("checkInCheckOutEventParametersForm");
-		String currentEventParametersDate = ""; 
-		CheckInCheckOutEventParametersForm form = null;
-		if(obj != null && obj instanceof CheckInCheckOutEventParametersForm)
-		{
-			form = (CheckInCheckOutEventParametersForm)obj;
-		currentEventParametersDate = form.getDateOfEvent();
-		if(currentEventParametersDate == null)
-			currentEventParametersDate = "";
-		}		
-
-%>	
 			
 <html:errors/>
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_ADD_ACTION%>">
+<html:form action='${requestScope.formName}'>
 
 
 	<!-- NEW CHECKIN_CHECKOUTEventParameter REGISTRATION BEGINS-->
@@ -63,7 +34,7 @@
 	
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
-			<td><html:hidden property="operation" value="<%=operation%>"/></td>
+			<td><html:hidden property="operation" /></td>
 		</tr>
 		
 		<tr>
@@ -72,21 +43,21 @@
 
 		<tr>
 			<td>
-				<html:hidden property="specimenId" value="<%=specimenId%>"/>
+				<html:hidden property="specimenId" value='${requestScope.specimenId}'/>
 			</td>
 		</tr>
 		
 		
 		<tr>
-			 <td class="formMessage" colspan="3">* indicates a required field</td>
+			 <td class="formMessage" colspan="3">*indicates a required field</td>
 		</tr>
 
 		<tr>
 			<td class="formTitle" height="20" colspan="3">
-				<logic:equal name="operation" value="<%=Constants.ADD%>">
+				<logic:equal name="operation" value='${requestScope.addForJSP}'>
 					<bean:message key="checkincheckouteventparameter.title"/>
 				</logic:equal>
-				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+				<logic:equal name="operation" value='${requestScope.editForJSP}'>
 					<bean:message key="checkincheckouteventparameter.edittitle"/>
 				</logic:equal>
 			</td>
@@ -105,7 +76,7 @@
 <!-- Mandar : 434 : for tooltip -->
 				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+					<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>
@@ -119,35 +90,27 @@
 				</label>
 			</td>
 			<td class="formField">
-				<%
-				if(currentEventParametersDate.trim().length() > 0)
-				{
-					Integer eventParametersYear = new Integer(Utility.getYear(currentEventParametersDate ));
-					Integer eventParametersMonth = new Integer(Utility.getMonth(currentEventParametersDate ));
-					Integer eventParametersDay = new Integer(Utility.getDay(currentEventParametersDate ));
-				%>
-				<ncombo:DateTimeComponent name="dateOfEvent"
-							  id="dateOfEvent"
-							  formName="checkInCheckOutEventParametersForm"
-							  month= "<%= eventParametersMonth %>"
-							  year= "<%= eventParametersYear %>"
-							  day= "<%= eventParametersDay %>"
-							  value="<%=currentEventParametersDate %>"
-							  styleClass="formDateSized10"
-									/>
-				<% 
-					}
-					else
-					{  
-				 %>
-				<ncombo:DateTimeComponent name="dateOfEvent"
-							  id="dateOfEvent"
-							  formName="checkInCheckOutEventParametersForm"
-							  styleClass="formDateSized10"
-									/>
-				<% 
-					} 
-				%> 
+				
+	<logic:notEmpty name="currentEventParametersDate">
+<ncombo:DateTimeComponent name="dateOfEvent"
+			  id="dateOfEvent"
+			  formName="checkInCheckOutEventParametersForm"
+			                  month='${requestScope.eventParametersMonth}'
+							  year='${requestScope.eventParametersYear}'
+							  day='${requestScope.eventParametersDay}'
+							  value='${requestScope.currentEventParametersDate}'
+			  styleClass="formDateSized10"
+					/>
+</logic:notEmpty>
+<logic:empty name="currentEventParametersDate">
+<ncombo:DateTimeComponent name="dateOfEvent"
+			  id="dateOfEvent"
+			  formName="checkInCheckOutEventParametersForm"
+			  styleClass="formDateSized10"
+					/>
+</logic:empty>
+				
+				
 				<bean:message key="page.dateFormat" />&nbsp;
 
 			</td>
@@ -170,8 +133,8 @@
 			</td>
 			<td class="formField">
 				 <autocomplete:AutoCompleteTag property="timeInHours"
-					  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
-					  initialValue="<%=form.getTimeInHours()%>"
+					   optionsList = '${requestScope.hourList}'
+					   initialValue='${checkInCheckOutEventParametersForm.timeInHours}'
 					  styleClass="formFieldSized5"
 					  staticField="false"
 			    />	
@@ -180,8 +143,8 @@
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 				</label>
                    <autocomplete:AutoCompleteTag property="timeInMinutes"
-						  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
-						  initialValue="<%=form.getTimeInMinutes()%>"
+						  optionsList = '${requestScope.minutesList}'
+						  initialValue='${checkInCheckOutEventParametersForm.timeInMinutes}'
 						  styleClass="formFieldSized5"
 						  staticField="false"
 				    />	
@@ -190,8 +153,6 @@
 				</label>
 			</td>
 		</tr>
-		
-		
 
 <!-- checkincheckouteventparameter.storagestatus -->	
 	
@@ -204,8 +165,8 @@
 			</td>
 			<td class="formField">
 				<autocomplete:AutoCompleteTag property="storageStatus"
-					  optionsList = "<%=request.getAttribute(Constants.STORAGE_STATUS_LIST)%>"
-					  initialValue="<%=form.getStorageStatus()%>"
+					  optionsList ='${requestScope.storageStatusList}'
+					  initialValue='${checkInCheckOutEventParametersForm.storageStatus}'
 			    />	
 			</td>
 		</tr>
@@ -227,13 +188,11 @@
 		<tr>
 		  <td align="right" colspan="3">
 			<!-- action buttons begins -->
-			<%
-        		String changeAction = "setFormAction('" + formName + "');";
-			%> 
+			
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
+						<html:submit styleClass="actionButton" value="Submit" onclick='${requestScope.changeAction}'/>
 					</td>
 					<%-- td><html:reset styleClass="actionButton"/></td --%> 
 				</tr>

@@ -6,6 +6,8 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
 <head>
@@ -22,42 +24,12 @@
 
 </head>
 	
-<%
-        String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName, specimenId=null;
-
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.RECEIVED_EVENT_PARAMETERS_EDIT_ACTION;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.RECEIVED_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
-            readOnlyValue = false;
-        }
-
-		Object obj = request.getAttribute("receivedEventParametersForm");
-		String currentEventParametersDate = ""; 
-		ReceivedEventParametersForm form = null;
-		if(obj != null && obj instanceof ReceivedEventParametersForm)
-		{
-		form = (ReceivedEventParametersForm)obj;
-		currentEventParametersDate = form.getDateOfEvent();
-		if(currentEventParametersDate == null)
-			currentEventParametersDate = "";
-		}
-
-		
-%>	
 			
 <html:errors/>
     
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
-<html:form action="<%=Constants.RECEIVED_EVENT_PARAMETERS_ADD_ACTION%>">
+<html:form action='${requestScope.formName}'>
 
 
 	<!-- NEW RECEIVEDEventParameter REGISTRATION BEGINS-->
@@ -67,7 +39,7 @@
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
 			<td>
-				<html:hidden property="operation" value="<%=operation%>"/>
+				<html:hidden property="operation" />
 			</td>
 		</tr>
 		
@@ -79,7 +51,7 @@
 
 		<tr>
 			<td>
-				<html:hidden property="specimenId" value="<%=specimenId%>"/>
+				<html:hidden property="specimenId" value='${requestScope.specimenId}'/>
 			</td>
 		</tr>
 
@@ -89,10 +61,10 @@
 
 		<tr>
 			<td class="formTitle" height="20" colspan="3">
-				<logic:equal name="operation" value="<%=Constants.ADD%>">
+				<logic:equal name="operation" value='${requestScope.addForJSP}'>
 					<bean:message key="receivedeventparameters.title"/>
 				</logic:equal>
-				<logic:equal name="operation" value="<%=Constants.EDIT%>">
+				<logic:equal name="operation" value='${requestScope.editForJSP}'>
 					<bean:message key="receivedeventparameters.edittitle"/>
 				</logic:equal>
 			</td>
@@ -111,7 +83,7 @@
 <!-- Mandar : 434 : for tooltip -->
 				<html:select property="userId" styleClass="formFieldSized" styleId="userId" size="1"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+					<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
 				</html:select>
 			</td>
 		</tr>
@@ -125,35 +97,26 @@
 				</label>
 			</td>
 			<td class="formField">
-<%
-if(currentEventParametersDate.trim().length() > 0)
-{
-	Integer eventParametersYear = new Integer(Utility.getYear(currentEventParametersDate ));
-	Integer eventParametersMonth = new Integer(Utility.getMonth(currentEventParametersDate ));
-	Integer eventParametersDay = new Integer(Utility.getDay(currentEventParametersDate ));
-%>
+
+<logic:notEmpty name="currentEventParametersDate">
 <ncombo:DateTimeComponent name="dateOfEvent"
 			  id="dateOfEvent"
 			  formName="receivedEventParametersForm"
-			  month= "<%= eventParametersMonth %>"
-			  year= "<%= eventParametersYear %>"
-			  day= "<%= eventParametersDay %>"
-			  value="<%=currentEventParametersDate %>"
+			                  month='${requestScope.eventParametersMonth}'
+							  year='${requestScope.eventParametersYear}'
+							  day='${requestScope.eventParametersDay}'
+							  value='${requestScope.currentEventParametersDate}'
 			  styleClass="formDateSized10"
 					/>
-<% 
-	}
-	else
-	{  
- %>
+</logic:notEmpty>
+<logic:empty name="currentEventParametersDate">
 <ncombo:DateTimeComponent name="dateOfEvent"
 			  id="dateOfEvent"
 			  formName="receivedEventParametersForm"
 			  styleClass="formDateSized10"
 					/>
-<% 
-	} 
-%> 
+</logic:empty>
+
 <bean:message key="page.dateFormat" />&nbsp;
 			</td>
 		</tr>			
@@ -174,8 +137,8 @@ if(currentEventParametersDate.trim().length() > 0)
 			<td class="formField">
 			
 			<autocomplete:AutoCompleteTag property="timeInHours"
-										  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
-										  initialValue="<%=form.getTimeInHours()%>"
+										  optionsList = '${requestScope.hourList}'
+										  initialValue='${receivedEventParametersForm.timeInHours}'
 										  styleClass="formFieldSized5"
 										  staticField="false"
 					    />	
@@ -184,8 +147,8 @@ if(currentEventParametersDate.trim().length() > 0)
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 				</label>
                          <autocomplete:AutoCompleteTag property="timeInMinutes"
-										  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
-										  initialValue="<%=form.getTimeInMinutes()%>"
+										 optionsList = '${requestScope.minutesList}'
+										  initialValue='${receivedEventParametersForm.timeInMinutes}'
 										  styleClass="formFieldSized5"
 										  staticField="false"
 					    />	
@@ -206,8 +169,8 @@ if(currentEventParametersDate.trim().length() > 0)
 			<td class="formField">
 			
 			<autocomplete:AutoCompleteTag property="receivedQuality"
-										  optionsList = "<%=request.getAttribute(Constants.RECEIVED_QUALITY_LIST)%>"
-										  initialValue="<%=form.getReceivedQuality()%>"
+										  optionsList ='${requestScope.receivedQualityList}'
+										  initialValue='${receivedEventParametersForm.receivedQuality}'
 			/>
 
 			</td>
@@ -230,13 +193,11 @@ if(currentEventParametersDate.trim().length() > 0)
 		<tr>
 		  <td align="right" colspan="3">
 			<!-- action buttons begins -->
-			<%
-        		String changeAction = "setFormAction('" + formName + "');";
-			%> 
+			
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
+						<html:submit styleClass="actionButton" value="Submit" onclick='${requestScope.changeAction}' />
 					</td>
 					<%-- td><html:reset styleClass="actionButton"/></td --%> 
 				</tr>
