@@ -12,12 +12,18 @@
 			style="background-repeat:repeat-x;">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tr>
-				<td width="67%" align="left" valign="middle"><span
+				<td width="40%" align="left" valign="middle"><span
 					class="wh_ar_b"><bean:message key="app.welcomeNote"
 					arg0="<%=ApplicationProperties.getValue("app.name")%>"
 					arg1="<%=ApplicationProperties.getValue("app.version")%>"
 					arg2="<%=Variables.applicationCvsTag%>" /> </span></td>
-				<td width="33%" align="right" valign="top"><img
+				<td width="60%" align="right" valign="top"><a
+					href="ReportProblem.do?operation=add" class="white">Report
+				Problems</a> <img src="images/uIEnhancementImages/ic_male.gif"
+					alt="Help" width="12" height="12" hspace="5" vspace="2"
+					align="absmiddle" /> <a
+					href="ContactUs.do?PAGE_TITLE_KEY=app.contactUs&FILE_NAME_KEY=app.contactUs.file"
+					class="white">Contact Us</a> <img
 					src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
 					width="12" height="12" hspace="5" vspace="2" border="0"
 					align="absmiddle" /><a href="/catissuecore/Summary.do"
