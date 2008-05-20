@@ -42,8 +42,8 @@
               <stringProp name="9AF7D4145A73BF71B5B350AC16E96ACD">9AF7D4145A73BF71B5B350AC16E96ACD</stringProp>
             </collectionProp>
           </collectionProp>
-          <boolProp name="UserParameters.per_iteration">false</boolProp>
           <boolProp name="TestElement.per_iteration">true</boolProp>
+          <boolProp name="UserParameters.per_iteration">false</boolProp>
         </UserParameters>
         <hashTree/>
         <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Change Password and Login" enabled="true">
@@ -379,8 +379,8 @@
                     <stringProp name="1363616355">Department successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -494,8 +494,8 @@
                     <stringProp name="1965068297">Institution successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -609,8 +609,8 @@
                     <stringProp name="-1906811349">Cancer Research Group successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -830,8 +830,8 @@
                     <stringProp name="1270632584">Site successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1026,8 +1026,8 @@
                     <stringProp name="-1419323152">Storage Type successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1501,8 +1501,8 @@
                     <stringProp name="423828019">Storage Container successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1670,8 +1670,8 @@
                     <stringProp name="-677639594">Specimen Array Type successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -1796,8 +1796,8 @@
                     <stringProp name="-111862059">Biohazard successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -2942,8 +2942,8 @@
                     <stringProp name="-467975463">Collection Protocol successfully created.</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -3232,8 +3232,8 @@
                     <stringProp name="471465307">Distribution Protocol successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -3454,8 +3454,8 @@
                     <stringProp name="582118192">Department successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -3676,8 +3676,8 @@
                     <stringProp name="-1061048118">Institution successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -3898,8 +3898,8 @@
                     <stringProp name="338073192">Cancer Research Group successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -4235,8 +4235,8 @@
                     <stringProp name="7647835">Site successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -4545,8 +4545,8 @@
                     <stringProp name="1612659395">Storage Type successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -4931,8 +4931,8 @@
                     <stringProp name="-839156730">Storage Container successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -5164,8 +5164,8 @@
                     <stringProp name="-1374846808">Biohazard successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -5540,8 +5540,8 @@
                     <stringProp name="1232701106">Distribution Protocol successfully updated </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -6032,8 +6032,8 @@
                     <stringProp name="-1133686692">Participant successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -6527,8 +6527,8 @@
                     <stringProp name="-1133686692">Participant successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -7671,8 +7671,8 @@
                     <stringProp name="148749094">Specimen Collection Group successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -9977,8 +9977,8 @@
                     <stringProp name="236310375">Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -11984,8 +11984,8 @@
                     <stringProp name="236310375">Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -14102,8 +14102,8 @@
                     <stringProp name="236310375">Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -15694,8 +15694,8 @@
                     <stringProp name="236310375">Specimen successfully created</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -17170,8 +17170,8 @@
                     <stringProp name="-1264312935">Specimen successfully created </stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -17241,8 +17241,8 @@
                       <stringProp name="Argument.value">dummy</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">dummy</stringProp>
-                      <stringProp name="HTTPArgument.always_encode">true</stringProp>
                       <stringProp name="HTTPArgument.encoded_name">dummy</stringProp>
+                      <stringProp name="HTTPArgument.always_encode">true</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">dummy</stringProp>
                     </elementProp>
                   </collectionProp>
@@ -17269,8 +17269,8 @@
                       <stringProp name="Argument.value">pageOfCpQueryResults</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">pageOf</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">pageOfCpQueryResults</stringProp>
                     </elementProp>
                   </collectionProp>
@@ -17315,8 +17315,8 @@
                       <stringProp name="Argument.value">pageOfAliquot</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">pageOf</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">pageOfAliquot</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17324,8 +17324,8 @@
                       <stringProp name="Argument.value">15</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">menuSelected</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">15</stringProp>
                     </elementProp>
                   </collectionProp>
@@ -17475,8 +17475,8 @@
                       <stringProp name="Argument.value">pageOfCreateAliquot</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">pageOf</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">pageOf</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">pageOfCreateAliquot</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17484,8 +17484,8 @@
                       <stringProp name="Argument.value">add</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">operation</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">add</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17493,8 +17493,8 @@
                       <stringProp name="Argument.value">15</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">menuSelected</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">menuSelected</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">15</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17502,8 +17502,8 @@
                       <stringProp name="Argument.value">create</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">buttonClicked</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">buttonClicked</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">buttonClicked</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">create</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17511,8 +17511,8 @@
                       <stringProp name="Argument.value">1</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">checkedButton</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">checkedButton</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">checkedButton</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17520,8 +17520,8 @@
                       <stringProp name="Argument.value">10</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">specimenLabel</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">specimenLabel</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">specimenLabel</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">10</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17529,8 +17529,8 @@
                       <stringProp name="Argument.value">2</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">noOfAliquots</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">noOfAliquots</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">noOfAliquots</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">2</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17538,8 +17538,8 @@
                       <stringProp name="Argument.value">1</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">quantityPerAliquot</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">quantityPerAliquot</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">quantityPerAliquot</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17547,8 +17547,8 @@
                       <stringProp name="Argument.value">0</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">id</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">id</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">0</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17556,8 +17556,8 @@
                       <stringProp name="Argument.value">operation</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">operation</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">operation</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">operation</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17565,8 +17565,8 @@
                       <stringProp name="Argument.value">ForwardTo</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">submittedFor</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">submittedFor</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">ForwardTo</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17574,8 +17574,8 @@
                       <stringProp name="Argument.value">Fluid</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">specimenClass</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">specimenClass</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">specimenClass</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">Fluid</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17583,8 +17583,8 @@
                       <stringProp name="Argument.value">Amniotic Fluid</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">type</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">type</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">type</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">Amniotic+Fluid</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17592,8 +17592,8 @@
                       <stringProp name="Argument.value">Not Specified</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">tissueSite</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">tissueSite</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">tissueSite</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">Not+Specified</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17601,8 +17601,8 @@
                       <stringProp name="Argument.value">Not Specified</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">tissueSide</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">tissueSide</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">tissueSide</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">Not+Specified</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17610,8 +17610,8 @@
                       <stringProp name="Argument.value">Not Specified</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">pathologicalStatus</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">pathologicalStatus</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">pathologicalStatus</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">Not+Specified</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17619,8 +17619,8 @@
                       <stringProp name="Argument.value">20.0</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">initialAvailableQuantity</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">initialAvailableQuantity</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">initialAvailableQuantity</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">20.0</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17628,8 +17628,8 @@
                       <stringProp name="Argument.value">18.0</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">availableQuantity</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">availableQuantity</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">availableQuantity</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">18.0</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17637,8 +17637,8 @@
                       <stringProp name="Argument.value">03-25-2008</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">createdDate</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">createdDate</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">createdDate</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">03-25-2008</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17646,8 +17646,8 @@
                       <stringProp name="Argument.value">0</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">calmoiscreatedDate</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">calmoiscreatedDate</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">calmoiscreatedDate</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">0</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17655,15 +17655,15 @@
                       <stringProp name="Argument.value">1.0</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">value(Specimen:1_quantity)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A1_quantity%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A1_quantity%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">1.0</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
                       <stringProp name="Argument.value"></stringProp>
                       <stringProp name="Argument.name">value(Specimen:1_StorageContainer_id_fromMap)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A1_StorageContainer_id_fromMap%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A1_StorageContainer_id_fromMap%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value"></stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17671,8 +17671,8 @@
                       <stringProp name="Argument.value">2</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">value(radio_1)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28radio_1%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28radio_1%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">2</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17680,8 +17680,8 @@
                       <stringProp name="Argument.value">1</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">value(Specimen:1_StorageContainer_id)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A1_StorageContainer_id%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A1_StorageContainer_id%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17689,8 +17689,8 @@
                       <stringProp name="Argument.value">1</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">value(Specimen:1_positionDimensionOne)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A1_positionDimensionOne%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A1_positionDimensionOne%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17698,8 +17698,8 @@
                       <stringProp name="Argument.value">2</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">value(Specimen:1_positionDimensionTwo)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A1_positionDimensionTwo%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A1_positionDimensionTwo%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">2</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17707,15 +17707,15 @@
                       <stringProp name="Argument.value">1.0</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">value(Specimen:2_quantity)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A2_quantity%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A2_quantity%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">1.0</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
                       <stringProp name="Argument.value"></stringProp>
                       <stringProp name="Argument.name">value(Specimen:2_StorageContainer_id_fromMap)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A2_StorageContainer_id_fromMap%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A2_StorageContainer_id_fromMap%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value"></stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17723,8 +17723,8 @@
                       <stringProp name="Argument.value">2</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">value(radio_2)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28radio_2%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28radio_2%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">2</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17732,8 +17732,8 @@
                       <stringProp name="Argument.value">1</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">value(Specimen:2_StorageContainer_id)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A2_StorageContainer_id%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A2_StorageContainer_id%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17741,8 +17741,8 @@
                       <stringProp name="Argument.value">1</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">value(Specimen:2_positionDimensionOne)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A2_positionDimensionOne%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A2_positionDimensionOne%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17750,8 +17750,8 @@
                       <stringProp name="Argument.value">3</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">value(Specimen:2_positionDimensionTwo)</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A2_positionDimensionTwo%29</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">value%28Specimen%3A2_positionDimensionTwo%29</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">3</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17759,8 +17759,8 @@
                       <stringProp name="Argument.value">10</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">specimenID</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">specimenID</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">specimenID</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">10</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17768,8 +17768,8 @@
                       <stringProp name="Argument.value">1</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">spCollectionGroupId</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">spCollectionGroupId</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">spCollectionGroupId</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">1</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17777,8 +17777,8 @@
                       <stringProp name="Argument.value">success</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">nextForwardTo</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">nextForwardTo</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">nextForwardTo</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">success</stringProp>
                     </elementProp>
                     <elementProp name="" elementType="HTTPArgument">
@@ -17786,8 +17786,8 @@
                       <stringProp name="Argument.value">printAliquot</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">forwardTo</stringProp>
-                      <stringProp name="HTTPArgument.encoded_name">forwardTo</stringProp>
                       <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                      <stringProp name="HTTPArgument.encoded_name">forwardTo</stringProp>
                       <stringProp name="HTTPArgument.encoded_value">printAliquot</stringProp>
                     </elementProp>
                   </collectionProp>
@@ -17799,17 +17799,7 @@
                 <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
                 <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
               </HTTPSampler>
-              <hashTree>
-                <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-                  <collectionProp name="Asserion.test_strings">
-                    <stringProp name="-819614477">have been created successfully.</stringProp>
-                  </collectionProp>
-                  <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
-                </ResponseAssertion>
-                <hashTree/>
-              </hashTree>
+              <hashTree/>
             </hashTree>
             <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Edit Cell Specimen" enabled="true">
               <stringProp name="LoopController.loops">1</stringProp>
@@ -18549,8 +18539,8 @@
                     <stringProp name="-1026674374">Specimen successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -19695,8 +19685,8 @@
                     <stringProp name="-467975463">Collection Protocol successfully created.</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -23602,8 +23592,8 @@
                     <stringProp name="1047729582">Submission failed since a Department with the same NAME already exists</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -23717,8 +23707,8 @@
                     <stringProp name="-1073312724">Submission failed since a Institution with the same NAME already exists</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -23832,8 +23822,8 @@
                     <stringProp name="-230854578">Submission failed since a Cancer Research Group with the same NAME already exists</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -24053,8 +24043,8 @@
                     <stringProp name="-391259293">Submission failed since a Site with the same NAME already exists</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -24249,8 +24239,8 @@
                     <stringProp name="-1578895819">Submission failed since a Container Type with the same NAME already exists</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -24418,8 +24408,8 @@
                     <stringProp name="-1578895819">Submission failed since a Container Type with the same NAME already exists</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -24544,8 +24534,8 @@
                     <stringProp name="-1131048946">Submission failed since a Biohazard with the same NAME already exists</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -25690,8 +25680,8 @@
                     <stringProp name="-517167999">Submission failed since a Specimen Protocol with the same TITLE already exists</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -25980,8 +25970,8 @@
                     <stringProp name="-517167999">Submission failed since a Specimen Protocol with the same TITLE already exists</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -27124,8 +27114,8 @@
                     <stringProp name="584103625">Submission failed since a Specimen Collection Group with the same NAME already exists</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -27243,8 +27233,8 @@
                     <stringProp name="1104420832">Name is required</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -27356,8 +27346,8 @@
                     <stringProp name="1104420832">Name is required</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -27469,8 +27459,8 @@
                     <stringProp name="1104420832">Name is required</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -27777,8 +27767,8 @@
                       <stringProp name="-1211006747">Email Address is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -28080,8 +28070,8 @@
                       <stringProp name="-434933904">First Name is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -28387,8 +28377,8 @@
                       <stringProp name="783806144">City is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -28694,8 +28684,8 @@
                       <stringProp name="783806144">City is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -29001,8 +28991,8 @@
                       <stringProp name="295603366">State is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -29308,8 +29298,8 @@
                       <stringProp name="1754887041">Zip Code is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -29615,8 +29605,8 @@
                       <stringProp name="1990584240">Phone Number is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -29920,8 +29910,8 @@
                       <stringProp name="-1863154867">Institution is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -30227,8 +30217,8 @@
                       <stringProp name="-475963865">Department is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -30534,8 +30524,8 @@
                       <stringProp name="-1894960145">Cancer Research Group is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -30841,8 +30831,8 @@
                       <stringProp name="215662275">Role is invalid.</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -31247,8 +31237,8 @@
                     <stringProp name="1104420832">Name is required</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -31450,8 +31440,8 @@
                     <stringProp name="1104420832">Name is required</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -31617,8 +31607,8 @@
                     <stringProp name="1104420832">Name is required</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -31746,8 +31736,8 @@
                       <stringProp name="1104420832">Name is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -31872,8 +31862,8 @@
                       <stringProp name="-1260874914">Please select the valid Type from the list</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -32141,8 +32131,8 @@
                       <stringProp name="1298036717">Title is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -32397,8 +32387,8 @@
                       <stringProp name="1637577001">Short Title is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -32653,8 +32643,8 @@
                       <stringProp name="1935978657">Start Date is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -32911,8 +32901,8 @@
                       <stringProp name="2073903775">Please select the valid Principal Investigator from the list</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -33612,8 +33602,8 @@
                       <stringProp name="599674637">Class is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -34354,8 +34344,8 @@
                       <stringProp name="-1869649606">Storage location for specimen is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -35098,8 +35088,8 @@
                       <stringProp name="-1972807332">Initial Quantity is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -35381,8 +35371,8 @@
                       <stringProp name="1298036717">Title is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <intProp name="Assertion.test_type">2</intProp>
                     <stringProp name="Assertion.assume_success">false</stringProp>
+                    <intProp name="Assertion.test_type">2</intProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -35625,8 +35615,8 @@
                       <stringProp name="2073903775">Please select the valid Principal Investigator from the list</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -35867,8 +35857,8 @@
                       <stringProp name="1637577001">Short Title is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -36109,8 +36099,8 @@
                       <stringProp name="1935978657">Start Date is required</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -36353,8 +36343,8 @@
                       <stringProp name="2145692292">Please select the valid Tissue Site from the list</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -36597,8 +36587,8 @@
                       <stringProp name="255761241">Please select the valid Pathological Status from the list.</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -37087,8 +37077,8 @@
                       <stringProp name="783610297">Either Site or Medical Record Number is missing in Medical Identifier</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -37573,8 +37563,8 @@
                       <stringProp name="783610297">Either Site or Medical Record Number is missing in Medical Identifier</stringProp>
                     </collectionProp>
                     <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                    <stringProp name="Assertion.assume_success">false</stringProp>
                     <intProp name="Assertion.test_type">2</intProp>
+                    <stringProp name="Assertion.assume_success">false</stringProp>
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
@@ -37967,8 +37957,8 @@
                   <stringProp name="-839156730">Storage Container successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <intProp name="Assertion.test_type">2</intProp>
                 <stringProp name="Assertion.assume_success">false</stringProp>
+                <intProp name="Assertion.test_type">2</intProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -38691,8 +38681,8 @@
                   <stringProp name="797508486">Unable to disable Participant : Before disabling it,dispose all the associated Specimens.</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -39078,8 +39068,8 @@
                   <stringProp name="1418263777">Can not disable specimen. Specimen contains sub-specimen.</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -39269,8 +39259,8 @@
                   <stringProp name="842136300">Specimen with given Specimen Label does not exist.</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">6</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -39479,8 +39469,8 @@
                   <stringProp name="-384626859">&lt;li&gt;&lt;font color=&quot;red&quot;&gt;Specimen is already marked as closed.&lt;/font&gt;&lt;/li&gt;</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">6</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -39859,8 +39849,8 @@
                   <stringProp name="-384626859">&lt;li&gt;&lt;font color=&quot;red&quot;&gt;Specimen is already marked as closed.&lt;/font&gt;&lt;/li&gt;</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">6</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -40084,8 +40074,8 @@
                   <stringProp name="1527196546">Specimen is already marked as closed.</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <intProp name="Assertion.test_type">2</intProp>
                 <stringProp name="Assertion.assume_success">false</stringProp>
+                <intProp name="Assertion.test_type">2</intProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -40426,8 +40416,8 @@
                     <stringProp name="7647835">Site successfully updated</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -41570,8 +41560,8 @@
                     <stringProp name="1270432235">Site is already marked as closed</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -42320,8 +42310,8 @@
                     <stringProp name="-965797018">Collection Protocol successfully updated.</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <stringProp name="Assertion.assume_success">false</stringProp>
                   <intProp name="Assertion.test_type">2</intProp>
+                  <stringProp name="Assertion.assume_success">false</stringProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -42854,8 +42844,8 @@
                     <stringProp name="-47764976">Collection Protocol is already marked as closed.</stringProp>
                   </collectionProp>
                   <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                  <intProp name="Assertion.test_type">2</intProp>
                   <stringProp name="Assertion.assume_success">false</stringProp>
+                  <intProp name="Assertion.test_type">2</intProp>
                 </ResponseAssertion>
                 <hashTree/>
               </hashTree>
@@ -43231,8 +43221,8 @@
                   <stringProp name="-791519442">Distribution Protocol successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -43817,8 +43807,8 @@
                   <stringProp name="1898295855">Participant successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -44537,8 +44527,8 @@
                   <stringProp name="1898295855">Participant successfully updated</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
@@ -46246,8 +46236,8 @@
                   <stringProp name="1411199400">Unable to disable Participant : Before disabling it,dispose all the associated Specimens</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <stringProp name="Assertion.assume_success">false</stringProp>
                 <intProp name="Assertion.test_type">2</intProp>
+                <stringProp name="Assertion.assume_success">false</stringProp>
               </ResponseAssertion>
               <hashTree/>
             </hashTree>
