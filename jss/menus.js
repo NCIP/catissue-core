@@ -19,10 +19,8 @@ Ext.onReady(function(){
         }
     });
 
-
-
-
-     var menuHome = new Ext.menu.Menu({
+	// for Home link
+    var menuHome = new Ext.menu.Menu({
         id: 'menuHome',
          items: [
             {
@@ -37,21 +35,14 @@ Ext.onReady(function(){
                 }
             },
               {
-                text: 'Privileges',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                       {
-                            text: 'Assign',
-                            href:'AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage'
-                        }
-                    ]
-                }
+                text: 'Assign Privileges',
+                href:'AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage'
+                       
             }
         ]
     });
 
-
+	// For Admin Data
     var menu = new Ext.menu.Menu({
         id: 'mainMenu',
         items: [
@@ -101,7 +92,7 @@ Ext.onReady(function(){
                         // stick any markup in a menu
                        {
                             text: 'Add',
-			    href:'Department.do?operation=add&pageOf=pageOfDepartment&menuSelected=3'
+			   				href:'Department.do?operation=add&pageOf=pageOfDepartment&menuSelected=3'
 
                         }, {
                             text: 'Edit',
@@ -139,8 +130,7 @@ Ext.onReady(function(){
                             href:'Site.do?operation=add&pageOf=pageOfSite&menuSelected=5'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
+                           
                              href:'SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site&menuSelected=5' 
                         }
                     ]
@@ -156,8 +146,7 @@ Ext.onReady(function(){
                             href:'StorageType.do?operation=add&pageOf=pageOfStorageType&menuSelected=6'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
+                            
                               href:'SimpleQueryInterface.do?pageOf=pageOfStorageType&aliasName=StorageType&menuSelected=6' 
                         }
                     ]
@@ -173,13 +162,13 @@ Ext.onReady(function(){
                             href:'StorageContainer.do?operation=add&pageOf=pageOfStorageContainer&menuSelected=7'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
+                           
+                           
                             href:'SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer&menuSelected=7'
                         }, {
                             text: 'View Map',
-                            checked: false,
-                            group: 'theme',
+                          
+                           
                             checkHandler: showStorageContainerMap
                         }
                     ]
@@ -195,8 +184,7 @@ Ext.onReady(function(){
                             href:'SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
+                            
                              href:'SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&aliasName=SpecimenArrayType&amp;menuSelected=21' 
                         }
                     ]
@@ -212,8 +200,7 @@ Ext.onReady(function(){
                             href:'Biohazard.do?operation=add&pageOf=pageOfBioHazard&menuSelected=8'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
+                           
                               href:'SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard&menuSelected=8' 
                         }
                     ]
@@ -229,8 +216,7 @@ Ext.onReady(function(){
                             href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&menuSelected=9"'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
+                            
                              href:'SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol&menuSelected=9' 
                         }
                     ]
@@ -246,48 +232,26 @@ Ext.onReady(function(){
                             href:'DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol&menuSelected=10'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
-                              href:'SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol&menuSelected=10' 
+                            
+                            href:'SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol&menuSelected=10' 
                         }
                     ]
                 }
             },
 			{
                 text: 'Reported Problems',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                       {
-                            text: 'View',
-                            href:'ReportedProblemShow.do?pageNum=1&menuSelected=11'
-                        }
-                    ]
-                }
+				href:'ReportedProblemShow.do?pageNum=1&menuSelected=11'
+                       
             },
 			{
                 text: 'Local Extensions',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                       {
-                            text: 'Define',
-                            href:'DefineAnnotationsInformationPage.do'
-                        }
-                    ]
-                }
+                href:'DefineAnnotationsInformationPage.do'
+                       
             },
 			{
                 text: 'Conflicting Reports',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                       {
-                            text: 'View',
-                            href:'ConflictView.do?pageNum=1&menuSelected=13'
-                        }
-                    ]
-                }
+                href:'ConflictView.do?pageNum=1&menuSelected=13'
+                        
             }
 			
 			
@@ -328,6 +292,7 @@ Ext.onReady(function(){
 		]
     });
 
+	// For Bio Specimen Data
     var menu_bio = new Ext.menu.Menu({
         id: 'menu_bio',
         items: [
@@ -346,8 +311,6 @@ Ext.onReady(function(){
                             href:'Participant.do?operation=add&pageOf=pageOfParticipant&menuSelected=12&clearConsentSession=true'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
                             href:'SimpleQueryInterface.do?pageOf=pageOfParticipant&aliasName=Participant&menuSelected=12'
                         }
                     ]
@@ -360,28 +323,18 @@ Ext.onReady(function(){
                         // stick any markup in a menu
                         {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
                             href:'SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen&menuSelected=15'
                         }, {
                             text: 'Derive',
-                            checked: false,
-                            group: 'theme',
                             href:'CreateSpecimen.do?operation=add&amp;pageOf=&menuSelected=15&virtualLocated=true'
                         }, {
                             text: 'Aliquot',
-                            checked: false,
-                            group: 'theme',
                             href:'Aliquots.do?pageOf=pageOfAliquot&menuSelected=15'
                         }, {
                             text: 'Events',
-                            checked: false,
-                            group: 'theme',
-                           href:'QuickEvents.do?operation=add&menuSelected=15'
+                           	href:'QuickEvents.do?operation=add&menuSelected=15'
                         }, {
                             text: 'Multiple',
-                            checked: false,
-                            group: 'theme',
                             href:'MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu'
                         }
                     ]
@@ -397,13 +350,9 @@ Ext.onReady(function(){
                             href:'SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
                             href:'SimpleQueryInterface.do?pageOf=pageOfSpecimenArray&aliasName=SpecimenArray&amp;menuSelected=20'
                         }, {
                             text: 'Aliquot',
-                            checked: false,
-                            group: 'theme',
                             href:'SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot&menuSelected=20'
                         }
                     ]
@@ -419,28 +368,20 @@ Ext.onReady(function(){
                             href:'SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution&menuSelected=16'
                         }, {
                             text: 'Array Report',
-                            checked: false,
-                            group: 'theme',
                             href:'SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array&menuSelected=16'
                         }
                     ]
                 }
             },
 			  {
-                text: 'Order',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                       {
-                            text: 'Order View',
-                            href:'RequestListView.do?pageNum=1&menuSelected=17'
-                        }
-                    ]
-                }
+                    text: 'Order View',
+                    href:'RequestListView.do?pageNum=1&menuSelected=17'
+                        
             }
         ]
     });
 
+	// For Search link
     var menu_search = new Ext.menu.Menu({
         id: 'menu_search',
         items: [
@@ -460,27 +401,21 @@ Ext.onReady(function(){
                             text: 'Advanced',
                             checked: false,
                             group: 'theme',
-			    href : 'QueryWizard.do?'
+							href : 'QueryWizard.do?'
                            
                         }
                     ]
                 }
             },
               {
-                text: 'My List',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                       {
-                            text: 'View',
-                            href:'QueryAddToCart.do?operation=view'
-                        }
-                    ]
-                }
+                text: 'My List View',
+               href:'QueryAddToCart.do?operation=view'
+					// <-- submenu by nested config object                
             }
         ]
     });
 
+	// For Other Link
     var menu_other = new Ext.menu.Menu({
         id: 'menu_other',
         items: [
@@ -516,7 +451,6 @@ Ext.onReady(function(){
 
     var tb = new Ext.Toolbar();
     tb.render('toolbarLoggedIn');
-
     
 	tb.add({ 
             text: 'Home',
