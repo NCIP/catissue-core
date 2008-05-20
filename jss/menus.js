@@ -19,8 +19,7 @@ Ext.onReady(function(){
         }
     });
 
-	// for Home link
-    var menuHome = new Ext.menu.Menu({
+     var menuHome = new Ext.menu.Menu({
         id: 'menuHome',
          items: [
             {
@@ -34,354 +33,312 @@ Ext.onReady(function(){
                     ]
                 }
             },
+
               {
+
                 text: 'Assign Privileges',
                 href:'AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage'
-                       
             }
         ]
     });
 
-	// For Admin Data
     var menu = new Ext.menu.Menu({
         id: 'mainMenu',
         items: [
             {
                 text: 'User',
+					href:'User.do?operation=add&pageOf=pageOfUserAdmin',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-							href:'User.do?operation=add&pageOf=pageOfUserAdmin&menuSelected=1'
+							href:'User.do?operation=add&pageOf=pageOfUserAdmin'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
-                              href:'SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&menuSelected=1' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User' 
                         }, {
                             text: 'Approve New Users',
-                            checked: false,
-                            group: 'theme',
-                              href:'ApproveUserShow.do?pageNum=1&menuSelected=1' 
-                        }
+                            href:'ApproveUserShow.do?pageNum=1' 
+	                       }
                     ]
                 }
             },
               {
                 text: 'Institution',
+					href:'Institution.do?operation=add&pageOf=pageOfInstitution',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'Institution.do?operation=add&pageOf=pageOfInstitution&menuSelected=2'
+                            href:'Institution.do?operation=add&pageOf=pageOfInstitution'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
-                           href:'SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution&menuSelected=2' 
+	                        href:'SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution' 
                         }
                     ]
                 }
             },
             {
                 text: 'Department',
+					 href:'Department.do?operation=add&pageOf=pageOfDepartment',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-			   				href:'Department.do?operation=add&pageOf=pageOfDepartment&menuSelected=3'
-
+						    href:'Department.do?operation=add&pageOf=pageOfDepartment'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
-                              href:'SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department&menuSelected=3' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department' 
                         }
                     ]
                 }
             }, 
 			  {
                 text: 'Cancer Research Group',
+				href:'CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup&menuSelected=4'
+                            href:'CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup'
                         }, {
                             text: 'Edit',
-                            checked: false,
-                            group: 'theme',
-                              href:'SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup&menuSelected=4' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup' 
                         }
                     ]
                 }
             },
 			  {
                 text: 'Site',
+				 href:'Site.do?operation=add&pageOf=pageOfSite',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'Site.do?operation=add&pageOf=pageOfSite&menuSelected=5'
+                            href:'Site.do?operation=add&pageOf=pageOfSite'
                         }, {
                             text: 'Edit',
-                           
-                             href:'SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site&menuSelected=5' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site' 
                         }
                     ]
                 }
             },
 			  {
                 text: 'Storage Type',
+				href:'StorageType.do?operation=add&pageOf=pageOfStorageType',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'StorageType.do?operation=add&pageOf=pageOfStorageType&menuSelected=6'
+                             href:'StorageType.do?operation=add&pageOf=pageOfStorageType'
                         }, {
                             text: 'Edit',
-                            
-                              href:'SimpleQueryInterface.do?pageOf=pageOfStorageType&aliasName=StorageType&menuSelected=6' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfStorageType&aliasName=StorageType' 
                         }
                     ]
                 }
             },
 			{
                 text: 'Storage Container',
+					href:'StorageContainer.do?operation=add&pageOf=pageOfStorageContainer',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'StorageContainer.do?operation=add&pageOf=pageOfStorageContainer&menuSelected=7'
+                            href:'StorageContainer.do?operation=add&pageOf=pageOfStorageContainer'
                         }, {
                             text: 'Edit',
-                           
-                           
-                            href:'SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer&menuSelected=7'
+                             href:'SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer'
                         }, {
                             text: 'View Map',
-                          
-                           
-                            checkHandler: showStorageContainerMap
+                            handler: showStorageContainerMap
                         }
                     ]
                 }
             },
 			{
                 text: 'Specimen Array Type',
+					href:'SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21'
+                            href:'SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType'
                         }, {
                             text: 'Edit',
-                            
-                             href:'SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&aliasName=SpecimenArrayType&amp;menuSelected=21' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&aliasName=SpecimenArrayType' 
                         }
                     ]
                 }
             },
 			{
                 text: 'Biohazard',
+					href:'Biohazard.do?operation=add&pageOf=pageOfBioHazard',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'Biohazard.do?operation=add&pageOf=pageOfBioHazard&menuSelected=8'
+                            href:'Biohazard.do?operation=add&pageOf=pageOfBioHazard'
                         }, {
                             text: 'Edit',
-                           
-                              href:'SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard&menuSelected=8' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard' 
                         }
                     ]
                 }
             },
 			{
                 text: 'Collection Protocol',
+					href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&menuSelected=9"'
+                            href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol'
                         }, {
                             text: 'Edit',
-                            
-                             href:'SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol&menuSelected=9' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol' 
                         }
                     ]
                 }
             },
 			{
                 text: 'Distribution Protocol',
+					href:'DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol&menuSelected=10'
+                            href:'DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol'
                         }, {
                             text: 'Edit',
-                            
-                            href:'SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol&menuSelected=10' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol' 
                         }
                     ]
                 }
             },
 			{
                 text: 'Reported Problems',
-				href:'ReportedProblemShow.do?pageNum=1&menuSelected=11'
-                       
+                href:'ReportedProblemShow.do?pageNum=1'
             },
 			{
                 text: 'Local Extensions',
                 href:'DefineAnnotationsInformationPage.do'
-                       
             },
 			{
                 text: 'Conflicting Reports',
-                href:'ConflictView.do?pageNum=1&menuSelected=13'
-                        
+                href:'ConflictView.do?pageNum=1'
             }
 			
-			
-//			'-', {
-//                text: 'Radio Options',
-//                menu: {        // <-- submenu by nested config object
-//                    items: [
-                        // stick any markup in a menu
-//                        '<b class="menu-title">Choose a Theme</b>',
-//                        {
-//                            text: 'Aero Glass',
-//                            checked: true,
-//                            group: 'theme',
-//                            checkHandler: onItemCheck
-//                        }, {
-//                            text: 'Vista Black',
-//                            checked: false,
-//                            group: 'theme',
-//                            checkHandler: onItemCheck
-//                        }, {
-//                            text: 'Gray Theme',
-//                            checked: false,
-//                            group: 'theme',
-//                            checkHandler: onItemCheck
-//                        }, {
-//                            text: 'Default Theme',
-//                            checked: false,
-//                            group: 'theme',
-//                            checkHandler: onItemCheck
-//                        }
-//                    ]
-//                }
-//            },{
-//                text: 'Choose a Color',
-//                menu: colorMenu // <-- submenu by reference
-//            }
-
 		]
     });
+            // For Bio Specimen Data
 
-	// For Bio Specimen Data
     var menu_bio = new Ext.menu.Menu({
         id: 'menu_bio',
         items: [
             {
                 text: 'Collection Protocol Based View',
-                href:'CpBasedSearch.do?menuSelected=22'
+                href:'CpBasedSearch.do'
 
             },
 			{
                 text: 'Participant',
+					href:'Participant.do?operation=add&pageOf=pageOfParticipant&clearConsentSession=true',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'Participant.do?operation=add&pageOf=pageOfParticipant&menuSelected=12&clearConsentSession=true'
+                            href:'Participant.do?operation=add&pageOf=pageOfParticipant&clearConsentSession=true'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfParticipant&aliasName=Participant&menuSelected=12'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfParticipant&aliasName=Participant'
                         }
                     ]
                 }
             },
               {
                 text: 'Specimen',
+					href:'SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                         {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen&menuSelected=15'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen'
                         }, {
                             text: 'Derive',
-                            href:'CreateSpecimen.do?operation=add&amp;pageOf=&menuSelected=15&virtualLocated=true'
+                            href:'CreateSpecimen.do?operation=add&amp;pageOf=&virtualLocated=true'
                         }, {
                             text: 'Aliquot',
-                            href:'Aliquots.do?pageOf=pageOfAliquot&menuSelected=15'
+                            href:'Aliquots.do?pageOf=pageOfAliquot'
                         }, {
                             text: 'Events',
-                           	href:'QuickEvents.do?operation=add&menuSelected=15'
+                            href:'QuickEvents.do?operation=add'
                         }, {
                             text: 'Multiple',
-                            href:'MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu'
+                             href:'MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu'
                         }
                     ]
                 }
             },
             {
                 text: 'Specimen Array',
+					href:'SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20'
+                            href:'SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfSpecimenArray&aliasName=SpecimenArray&amp;menuSelected=20'
+                             href:'SimpleQueryInterface.do?pageOf=pageOfSpecimenArray&aliasName=SpecimenArray'
                         }, {
                             text: 'Aliquot',
-                            href:'SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot&menuSelected=20'
+                            href:'SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot'
                         }
                     ]
                 }
             }, 
 			  {
                 text: 'Distribution',
+					href:'SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Specimen Report',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution&menuSelected=16'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution'
                         }, {
                             text: 'Array Report',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array&menuSelected=16'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array'
                         }
                     ]
                 }
             },
-			  {
-                    text: 'Order View',
-                    href:'RequestListView.do?pageNum=1&menuSelected=17'
-                        
+
+                                      {
+
+                            text: 'Order View',
+		                    href:'RequestListView.do?pageNum=1'
+
             }
         ]
     });
+            // For Search link
 
-	// For Search link
     var menu_search = new Ext.menu.Menu({
         id: 'menu_search',
         items: [
@@ -391,66 +348,37 @@ Ext.onReady(function(){
             },
             {
                 text: 'Search',
+					href:'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Simple',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface'
                         }, {
                             text: 'Advanced',
-                            checked: false,
-                            group: 'theme',
-							href : 'QueryWizard.do?'
-                           
-                        }
+						    href : 'QueryWizard.do?'
+                           }
                     ]
                 }
             },
+
               {
+
                 text: 'My List View',
-               href:'QueryAddToCart.do?operation=view'
-					// <-- submenu by nested config object                
-            }
-        ]
-    });
+                href:'QueryAddToCart.do?operation=view'
 
-	// For Other Link
-    var menu_other = new Ext.menu.Menu({
-        id: 'menu_other',
-        items: [
-            {
-                text: 'Contact us',
-                checked:false,
-                href:'ContactUs.do?PAGE_TITLE_KEY=app.contactUs&FILE_NAME_KEY=app.contactUs.file'
-            }, 
-			  {
-                text: 'Privacy Notice',
-                checked:false,
-                href:'PrivacyNotice.do?PAGE_TITLE_KEY=app.privacyNotice&FILE_NAME_KEY=app.privacyNotice.file'
-            },
-			  {
-                text: 'Disclaimer',
-                checked:false,
-                href:'Disclaimer.do?PAGE_TITLE_KEY=app.disclaimer&FILE_NAME_KEY=app.disclaimer.file'
-            },
-			  {
-                text: 'Accessibility',
-                checked:false,
-                href:'Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file'
-            },
-			  {
-                text: 'Report Problems',
-                checked:false,
-                href:'ReportProblem.do?operation=add'
-            }
-        ]
-    });
+                 // <-- submenu by nested config object                
 
-    
+            }
+
+        ]
+
+    });
 
     var tb = new Ext.Toolbar();
     tb.render('toolbarLoggedIn');
+
     
 	tb.add({ 
             text: 'Home',
@@ -478,16 +406,12 @@ Ext.onReady(function(){
             iconCls: '#',  // <-- icon
 			//iconCls: 'bmenu',  // <-- icon
             menu: menu_search  // assign menu by instance
-    },
-	{
-            text:'Other Link',
-            //handler: onButtonClick,
-            //tooltip: {text:'This is a QuickTip with autoHide set to false and a title', title:'Tip Title', autoHide:false},
-            iconCls: '#',
-            // Menus can be built/referenced by using nested menu config objects
-            menu: menu_other  // assign menu by instance
 
         });
+
+ 
+
+ 
 
 
 
@@ -501,7 +425,7 @@ Ext.onReady(function(){
 
     function showStorageContainerMap()
     {	
-	//Patch ID: Bug#4116_5
+		//Patch ID: Bug#4116_5
         var frameUrl='ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1';
 	//openPopupWindow(frameUrl);
 	platform = navigator.platform.toLowerCase();
@@ -512,7 +436,8 @@ Ext.onReady(function(){
 	else
 	{
 	    NewWindow(frameUrl,'name','800','600','no');
-	}
-     }
 
+            }
+
+     }
 });
