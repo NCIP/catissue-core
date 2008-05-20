@@ -364,12 +364,8 @@ Ext.onReady(function(){
             },
 
               {
-
-                text: 'My List View',
+                text: 'View My List',
                 href:'QueryAddToCart.do?operation=view'
-
-                 // <-- submenu by nested config object                
-
             }
 
         ]
@@ -399,7 +395,6 @@ Ext.onReady(function(){
             iconCls: '#',
             // Menus can be built/referenced by using nested menu config objects
             menu: menu_bio  // assign menu by instance
-
         },
 		{
         text: 'Search',
