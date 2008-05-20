@@ -13,16 +13,16 @@
 
 <logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-	
-		 <tr>
-			<td align="right" valign="middle" width="100%">
-				<img src="images/uIEnhancementImages/siteman_logo.gif" alt="Siteman Cancer Center" width="198" height="54" vspace="5" />
-				<img src="images/uIEnhancementImages/or_dot.gif" width="1" height="50" hspace="10" vspace="5" />
-				<img src="images/uIEnhancementImages/cabig_logo.jpg" alt="caBIG" width="182" height="62" />
-			</td>
+		<tr>
+			<td align="right" valign="middle" width="100%"><a
+				href="http://bioinformatics.wustl.edu"><img
+				src="images/uIEnhancementImages/siteman_logo.gif"
+				alt="Siteman Cancer Center" width="198" height="54" vspace="5" /></a> <img
+				src="images/uIEnhancementImages/or_dot.gif" width="1" height="50"
+				hspace="10" vspace="5" /> <a href="http://cabig.nci.nih.gov/"><img
+				src="images/uIEnhancementImages/cabig_logo.jpg" alt="caBIG"
+				width="182" height="62" /></a></td>
 		</tr>
-	
-	
 	</table>
 </logic:empty>
 <logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
@@ -31,7 +31,8 @@
 			<td width="6%" valign="top"><img width="48" height="24"
 				src="images/uIEnhancementImages/menustartimg.gif" /></td>
 			<td width="94%" align="left">
-				<div id="toolbarLoggedIn"></div></td>
+			<div id="toolbarLoggedIn"></div>
+			</td>
 		</tr>
 	</table>
-	</logic:notEmpty>
+</logic:notEmpty>
