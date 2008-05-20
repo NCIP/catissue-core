@@ -3,19 +3,14 @@
 <%@ page language="java" isELIgnored="false"%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="css/menus.css" />
-<link rel="STYLESHEET" type="text/css" href="css/dhtmlxtabbar.css">
 <link rel="stylesheet" type="text/css" href="css/examples.css" />
 <link rel="stylesheet" type="text/css" href="css/ext-all.css" />
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
-
 <script type="text/javascript"></script>
 <script type="text/javascript" src="jss/ext-base.js"></script>
 <script type="text/javascript" src="jss/ext-all.js"></script>
-<script type="text/javascript" src="jss/states.js"></script>
-<script type="text/javascript" src="js/dhtmlxcommon.js"></script>
-<script type="text/javascript" src="js/dhtmlxtabbar.js"></script>
+
 </head>
 
 <body>
