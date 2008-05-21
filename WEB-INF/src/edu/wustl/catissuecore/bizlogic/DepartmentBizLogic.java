@@ -8,7 +8,10 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.List;
+
 import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -38,5 +41,28 @@ public class DepartmentBizLogic extends DefaultBizLogic
 		}
 		return true;
 	}
-
-}
+	
+	/**
+	 * @author Baljeet Singh
+	 * This method returns the Id of the latest department corresponding to the name
+	 * @param departmentName
+	 * @return
+	 * @throws DAOException
+	 */
+	public String getLatestDepartment(String departmentName)throws DAOException
+	{
+		String sourceObjectName = Department.class.getName();
+    	String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+    	String[] whereColumnName = {Constants.NAME};
+    	String[] whereColumnCondition = {Constants.EQUALS}; 
+    	String[] whereColumnValue = {departmentName};
+		
+    	List departmentList = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
+    	Long departmentId = null;
+    	if((departmentList != null) && (departmentList.size()>0))
+    	{
+    		departmentId =(Long)departmentList.get(0);
+    	}
+    	return departmentId.toString();
+	}
+ }
