@@ -99,6 +99,7 @@ public class NewSpecimenAction extends SecureAction
         	return mapping.findForward(pageOf);
 	    }
 		IBizLogic bizLogicObj = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		
 		String treeRefresh = request.getParameter("refresh");
 		request.setAttribute("refresh",treeRefresh);
@@ -310,20 +311,20 @@ public class NewSpecimenAction extends SecureAction
 			{
 				String specimenID = null;
 				specimenID = String.valueOf(specimenForm.getId());
-				Specimen specimenObject = getSpecimenObj(specimenID);
-				//Added by Falguni=To set Specimen label in Form.
-				specimenForm.setLabel(specimenObject.getLabel());
-				specimenForm.setBarcode(specimenObject.getBarcode());
-				//List added for grid
+								//List added for grid
 				List specimenDetails= new ArrayList();
-				getSpecimenDetails(specimenObject,specimenDetails);
+				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+				Specimen specimen = bizLogic.getSpecimen(specimenID,specimenDetails, sessionData);
+				//Added by Falguni=To set Specimen label in Form.
+				specimenForm.setLabel(specimen.getLabel());
+				specimenForm.setBarcode(specimen.getBarcode());
 				List columnList=columnNames();
 				String consentResponseHql ="select elements(scg.collectionProtocolRegistration.consentTierResponseCollection)"+ 
 				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
 				" edu.wustl.catissuecore.domain.Specimen as spec " +
-				" where spec.specimenCollectionGroup.id=scg.id and spec.id="+ specimenObject.getId();
+				" where spec.specimenCollectionGroup.id=scg.id and spec.id="+ specimen.getId();
 				Collection consentResponse = Utility.executeQuery(consentResponseHql);
-				Collection consentResponseStatuslevel=(Collection)bizLogicObj.retrieveAttribute(Specimen.class.getName(),specimenObject.getId(), "elements(consentTierStatusCollection)"); 
+				Collection consentResponseStatuslevel=(Collection)bizLogicObj.retrieveAttribute(Specimen.class.getName(),specimen.getId(), "elements(consentTierStatusCollection)");
 				Map tempMap=prepareSCGResponseMap(consentResponseStatuslevel, consentResponse);
 				specimenForm.setConsentResponseForSpecimenValues(tempMap);
 				specimenForm.setConsentTierCounter(participantResponseList.size()) ;
@@ -344,7 +345,7 @@ public class NewSpecimenAction extends SecureAction
 		//Sets the collectionStatusList attribute to be used in the Site Add/Edit Page.
 		request.setAttribute(Constants.COLLECTIONSTATUSLIST, Constants.SPECIMEN_COLLECTION_STATUS_VALUES);
 
-		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		//NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 
 		if (specimenForm.isParentPresent())//If parent specimen is present then
 		{
@@ -1047,24 +1048,6 @@ public class NewSpecimenAction extends SecureAction
 			return null;
 		}
 	}	
-	/**
-	 * This function will return CollectionProtocolRegistration object 
-	 * @param scg_id Selected SpecimenCollectionGroup ID
-	 * @return collectionProtocolRegistration
-	 */
-	private Specimen getSpecimenObj(String specimenID) throws DAOException
-	{
-		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		//SpecimenCollectionGroupBizLogic specimenCollectionBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		String colName = "id";			
-		List getNewSpecimenIdFromDB = newSpecimenBizLogic.retrieve(Specimen.class.getName(), colName, specimenID);
-		Specimen SpecimenObject = null;
-		if(getNewSpecimenIdFromDB!=null && !getNewSpecimenIdFromDB.isEmpty())
-		{
-			SpecimenObject = (Specimen)getNewSpecimenIdFromDB.get(0);
-		}
-		return SpecimenObject;
-	}
 	//Consent Tracking (Virender Mehta)	
 
 	/**
@@ -1353,44 +1336,6 @@ public class NewSpecimenAction extends SecureAction
 			specimenForm.setReceivedEventTimeInMinutes(specimenCollectionGroupForm.getReceivedEventTimeInMinutes());		
 		}
     /**
-	 * This function is used for retriving specimen and sub specimen's attributes
-	 * @param specimenObj
-	 * @param finalDataList
-     * @throws DAOException 
-	 */
-	private void getSpecimenDetails(Specimen specimenObj, List finalDataList) throws DAOException
-	{
-		List specimenDetailList=new ArrayList();
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		specimenDetailList.add(specimenObj.getLabel());
-		specimenDetailList.add(specimenObj.getType());
-		if(specimenObj.getStorageContainer()==null)
-		{
-			specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
-		}
-		else
-		{
-			StorageContainer storageContainer = (StorageContainer) bizLogic.retrieveAttribute(Specimen.class.getName(), specimenObj.getId(), "storageContainer");
-			//specimenObj.getStorageContainer().getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
-			String storageLocation=storageContainer.getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
-			specimenDetailList.add(storageLocation);
-		}
-		specimenDetailList.add(specimenObj.getClassName());
-		finalDataList.add(specimenDetailList);
-		Collection childrenSpecimen = (Collection)bizLogic.retrieveAttribute(Specimen.class.getName(),specimenObj.getId(),"elements(childrenSpecimen)");
-		//if(specimenObj.getChildrenSpecimen().size()>0)
-		if(childrenSpecimen.size()>0)
-		{
-			Collection childSpecimenCollection = childrenSpecimen;
-			Iterator itr = childSpecimenCollection.iterator();
-			while(itr.hasNext())
-			{
-				Specimen childSpecimen = (Specimen) itr.next();
-				getSpecimenDetails(childSpecimen,finalDataList);
-			}			
-		}		
-	}
-	/**
 	 * This function adds the columns to the List
 	 * @return columnList 
 	 */
