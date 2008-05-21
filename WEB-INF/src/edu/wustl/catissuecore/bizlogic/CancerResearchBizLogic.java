@@ -9,7 +9,11 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.List;
+
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -37,6 +41,29 @@ public class CancerResearchBizLogic extends DefaultBizLogic
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
 		return true;
+	}
+	
+	/**
+	 * This method returns the Id of the CRG corresponding to the CRG name 
+	 * @param crgName CancerResearchGroup name
+	 * @return the id of the CancerResearchGroup
+	 * @throws DAOException
+	 */
+	public String getLatestCRG(String crgName)throws DAOException
+	{
+		String sourceObjectName = CancerResearchGroup.class.getName();
+    	String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+    	String[] whereColumnName = {Constants.NAME};
+    	String[] whereColumnCondition = {Constants.EQUALS}; 
+    	String[] whereColumnValue = {crgName};
+		
+    	List crgList = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
+    	Long crgId = null;
+    	if((crgList != null) && (crgList.size()>0))
+    	{
+    		crgId =(Long)crgList.get(0);
+    	}
+    	return crgId.toString();
 	}
 
 }
