@@ -52,6 +52,11 @@ function setDepartmentValues(response)
 	}
 
 }
+
+function cancelWindow()
+{
+  parent.departmentWindow.hide();
+}
 </script>
 
 <!--begin content -->
@@ -137,7 +142,7 @@ function setDepartmentValues(response)
       </html:button>
   
      
-      &nbsp;| <span class="cancellink"><html:link href="#" styleClass="blue_ar_s_b">
+      &nbsp;| <span class="cancellink"><html:link href="#" styleClass="blue_ar_s_b" onclick= "cancelWindow();">
 													<bean:message key="buttons.cancel" />
 												</html:link></span></td>
   </tr>

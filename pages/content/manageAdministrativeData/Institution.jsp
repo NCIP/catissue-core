@@ -49,6 +49,10 @@ function setInstitutionValues(response)
     }
 }
 
+function cancelWindow()
+{
+  parent.institutionwindow.hide();
+}
 </script>
 
 <!--begin content -->
@@ -135,7 +139,7 @@ function setInstitutionValues(response)
       </html:button>
   
      
-      &nbsp;| <span class="cancellink"><html:link href="#" styleClass="blue_ar_s_b">
+      &nbsp;| <span class="cancellink"><html:link href="#" styleClass="blue_ar_s_b" onclick= "cancelWindow()">
 													<bean:message key="buttons.cancel" />
 												</html:link></span></td>
   </tr>

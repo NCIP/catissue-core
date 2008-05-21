@@ -52,6 +52,10 @@ function setCRGValues(response)
  
 }
 
+function cancelWindow()
+{
+  parent.crgWindow.hide();
+}
 
 </script>
 
@@ -138,7 +142,7 @@ function setCRGValues(response)
       </html:button>
   
      
-      &nbsp;| <span class="cancellink"><html:link href="#" styleClass="blue_ar_s_b">
+      &nbsp;| <span class="cancellink"><html:link href="#" styleClass="blue_ar_s_b" onclick= "cancelWindow();">
 													<bean:message key="buttons.cancel" />
 												</html:link></span></td>
   </tr>
