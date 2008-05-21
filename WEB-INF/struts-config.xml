@@ -1078,7 +1078,8 @@ PUBLIC
 			name="institutionForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfInstitution" path=".catissuecore.institutionDef" />
+			<!-- <forward name="pageOfInstitution" path=".catissuecore.institutionDef" /> -->
+			<forward name="pageOfInstitution" path="/pages/content/manageAdministrativeData/Institution.jsp" />
 			<forward name="failure" path=".catissuecore.institutionDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -1092,8 +1093,21 @@ PUBLIC
 			<!-- forward name="success" path="/Institution.do?operation=edit&amp;pageOf=pageOfInstitution&amp;menuSelected=2" /-->
 			<forward name="success" path="/InstitutionSearch.do?pageOf=pageOfInstitution" />
 			<forward name="failure" path="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2" />
-			<forward name="user" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin" />
+			<forward name="user" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;refresh=true" />
 		</action>
+		
+		<!--Added By Baljeet  -->
+		<action path="/AddInstitution"
+		   type="edu.wustl.catissuecore.action.AddInstitutionAction"
+		   name="institutionForm"
+		   validate="false"
+		   input="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2"
+		   scope="request">
+		  <!-- <forward name="success" path=".catissuecore.userDef" /> -->
+	   	   <forward name="failure" path="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2" />
+		</action>
+		
+		<!--Baljeet's changes ends here  -->
 		
 		<action path="/InstitutionEdit"
 			type="edu.wustl.common.action.CommonAddEditAction"
@@ -1127,6 +1141,7 @@ PUBLIC
 			<forward name="pageOfUserProfile" path=".catissuecore.userProfileDef" />
 			<forward name="failure" path=".catissuecore.userDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
+			
 		</action>
 		
 		<action path="/UserAdd"
@@ -1231,7 +1246,8 @@ PUBLIC
 			name="departmentForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfDepartment" path=".catissuecore.departmentDef" />
+          <!-- <forward name="pageOfDepartment" path=".catissuecore.departmentDef" /> -->
+			<forward name="pageOfDepartment" path="/pages/content/manageAdministrativeData/Department.jsp" />
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchDepartmentDef" />
 			<forward name="failure" path=".catissuecore.departmentDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
@@ -1247,6 +1263,19 @@ PUBLIC
 			<forward name="failure" path="/Department.do?operation=add&amp;pageOf=pageOfDepartment&amp;menuSelected=3" />
 			<forward name="user" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin" />
 		</action>
+		
+		<!--Added By Baljeet  -->
+		<action path="/AddDepartment"
+		   type="edu.wustl.catissuecore.action.AddDepartmentAction"
+		   name="departmentForm"
+		   validate="false"
+		   input="/Department.do?operation=edit&amp;pageOf=pageOfDepartment&amp;menuSelected=3"
+		   scope="request">
+		  <!-- <forward name="success" path=".catissuecore.userDef" /> -->
+	   	   <forward name="failure" path="/Department.do?operation=edit&amp;pageOf=pageOfDepartment&amp;menuSelected=3"/>
+		</action>
+		
+		<!--Baljeet's changes ends here  -->
 		
 		<action path="/DepartmentEdit"
 			type="edu.wustl.common.action.CommonAddEditAction"
@@ -1276,7 +1305,8 @@ PUBLIC
 			name="cancerResearchGroupForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfCancerResearchGroup" path=".catissuecore.cancerResearchGroupDef" />
+			 <!-- <forward name="pageOfCancerResearchGroup" path=".catissuecore.cancerResearchGroupDef" /> -->
+			 <forward name="pageOfCancerResearchGroup" path="/pages/content/manageAdministrativeData/CancerResearchGroup.jsp" />
 			<forward name="failure" path=".catissuecore.cancerResearchGroupDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -1292,6 +1322,19 @@ PUBLIC
 			<forward name="failure" path="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4" />
 			<forward name="user" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin" />
 		</action>
+		
+		<!--Added By Baljeet  -->
+		<action path="/AddCancerResearchGroup"
+		   type="edu.wustl.catissuecore.action.AddCRGAction"
+		   name="cancerResearchGroupForm"
+		   validate="false"
+		   input="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4"
+		   scope="request">
+		  <!--  <forward name="success" path=".catissuecore.userDef" /> -->
+	   	   <forward name="failure" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4"/>
+		</action>
+		
+		<!--Baljeet's changes ends here  -->
 
 		<action path="/CancerResearchGroupEdit"
 			type="edu.wustl.common.action.CommonAddEditAction"
@@ -3432,6 +3475,7 @@ PUBLIC
 			<forward name="department" path="/Department.do?operation=add&amp;pageOf=pageOfDepartment&amp;menuSelected=3" />
 			<forward name="cancerResearchGroup" path="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
+			<forward name="addNew" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin" />
 		</action>
 
 		<action path="/SiteAddNew"
