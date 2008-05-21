@@ -10,7 +10,10 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.List;
+
 import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -19,7 +22,7 @@ import edu.wustl.common.util.global.Validator;
 
 public class InstitutionBizLogic extends DefaultBizLogic
 {
-
+    
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		// comment by Ashwin
@@ -40,5 +43,26 @@ public class InstitutionBizLogic extends DefaultBizLogic
 		}
 		return true;
 	}
+
+    /**
+     * @author Baljeet Singh
+     * This method returns the id of the Institution given the name 
+     * @param institutionName
+     * @return
+     * @throws DAOException
+     */
+	public String getLatestInstitution(String institutionName)throws DAOException
+    {
+    	String sourceObjectName = Institution.class.getName();
+    	String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+    	String[] whereColumnName = {Constants.NAME};
+    	String[] whereColumnCondition = {Constants.EQUALS}; 
+    	String[] whereColumnValue = {institutionName};
+    	
+    	List institutionList = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
+    	
+    	Long institutionId =(Long)institutionList.get(0);
+    	return institutionId.toString();
+    }
 
 }
