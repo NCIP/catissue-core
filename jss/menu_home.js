@@ -19,6 +19,18 @@ Ext.onReady(function(){
         }
     });
 
+
+
+var menuHome = new Ext.menu.Menu({
+        id: 'menuHome',
+         items: [
+			{
+                           text: 'My Home',
+                           href :'RedirectHome.do'
+                       }
+        ]
+    });
+
     var menu = new Ext.menu.Menu({
         id: 'mainMenu',
         items: [
@@ -444,56 +456,18 @@ Ext.onReady(function(){
         ]
     });
 
-    var menu_other = new Ext.menu.Menu({
-        id: 'menu_other',
-        items: [
-            {
-                text: 'Contact us',
-                checked:false,
-                href:'ContactUs.do?PAGE_TITLE_KEY=app.contactUs&FILE_NAME_KEY=app.contactUs.file'
-            }, 
-			  {
-                text: 'Privacy Notice',
-                checked:false,
-                href:'PrivacyNotice.do?PAGE_TITLE_KEY=app.privacyNotice&FILE_NAME_KEY=app.privacyNotice.file'
-            },
-			  {
-                text: 'Disclaimer',
-                checked:false,
-                href:'Disclaimer.do?PAGE_TITLE_KEY=app.disclaimer&FILE_NAME_KEY=app.disclaimer.file'
-            },
-			  {
-                text: 'Accessibility',
-                checked:false,
-                href:'Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file'
-            },
-			  {
-                text: 'Report Problems',
-                checked:false,
-                href:'ReportProblem.do?operation=add'
-            }
-        ]
-    });
-
-
+    
 
     var tb = new Ext.Toolbar();
     tb.render('toolbarLoggedOut');
 
     
 	tb.add({
-            text:'Home',
-            href:'/Home.do?dummy=dummy'
-        }, 
-		{
-            text:'Other Link',
-            //handler: onButtonClick,
-            //tooltip: {text:'This is a QuickTip with autoHide set to false and a title', title:'Tip Title', autoHide:false},
-            iconCls: '#',
-            // Menus can be built/referenced by using nested menu config objects
-            menu: menu_other  // assign menu by instance
-
-        });
+            text: 'Home',
+			iconCls: '#',
+			
+            menu: menuHome
+         });
 
 
 
