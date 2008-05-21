@@ -14,12 +14,12 @@
 			<tr>
 				<td width="2%" align="left" valign="middle">&nbsp;</td>
 				<td width="83%" align="right" valign="top"><a
-					href="ReportProblem.do?operation=add" class="white">Report
-				Problems</a> <img src="images/uIEnhancementImages/ic_male.gif"
-					alt="Help" width="12" height="12" hspace="5" vspace="2"
-					align="absmiddle" /> <a
+					href="ReportProblem.do?operation=add" class="white"><bean:message
+					key="app.reportedProblems" /></a> <img
+					src="images/uIEnhancementImages/ic_male.gif" alt="Help" width="12"
+					height="12" hspace="5" vspace="2" align="absmiddle" /> <a
 					href="ContactUs.do?PAGE_TITLE_KEY=app.contactUs&FILE_NAME_KEY=app.contactUs.file"
-					class="white">Contact Us</a> <img
+					class="white"><bean:message key="app.contactUs" /></a> <img
 					src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
 					width="12" height="12" hspace="5" vspace="2" border="0"
 					align="absmiddle" /><a href="/catissuecore/Summary.do"
