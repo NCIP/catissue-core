@@ -95,9 +95,9 @@ function cancelWindow()
     </table></td>
   </tr>
   <tr>
-    <td height="25" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
+    <td height="25" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;					<bean:message key="user.cancerResearchGroup"/>
 				<!--<logic:equal name="operation" value='${requestScope.operationAdd}'>
-					<bean:message key="institution.title"/>
+					<bean:message key="user.cancerResearchGroup"/>
 				</logic:equal>
 				<logic:equal name="operation" value='${requestScope.operationEdit}'>
 					<bean:message key="institution.editTitle"/>
