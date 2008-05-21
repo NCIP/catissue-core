@@ -1,8 +1,6 @@
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -26,15 +24,11 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-
+import edu.wustl.catissuecore.exception.CatissueException;
+import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.ApplicationProperties;
 
 public class ViewSpecimenSummaryAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -44,7 +38,7 @@ public class ViewSpecimenSummaryAction extends Action {
 		try {
 			ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 			HttpSession session = request.getSession();
-			
+			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
 
 			
 			
@@ -71,6 +65,7 @@ public class ViewSpecimenSummaryAction extends Action {
 				summaryForm.setTargetSuccess(target);
 			}
 			target = summaryForm.getTargetSuccess();
+
 			if (request.getAttribute("RequestType")!=null)
 			{
 				summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
@@ -92,7 +87,7 @@ public class ViewSpecimenSummaryAction extends Action {
 				if (!isTokenValid(request))
 				{
 					summaryForm.setReadOnly(true);
-					throw new Exception ("cannot submit duplicate request.");
+					throw new CatissueException ("cannot submit duplicate request.");
 				}
 
 				resetToken(request);
@@ -151,46 +146,24 @@ public class ViewSpecimenSummaryAction extends Action {
 				}
 			}
 			String pageOf = request.getParameter(Constants.PAGEOF);
-			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
+			//Mandar: 16May2008 : For specimenDetails customtag --- start ---
+			if(target.equalsIgnoreCase("anticipatory") || target.equalsIgnoreCase("pageOfMultipleSpWithMenu"))
+			{
+				SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, summaryForm);
+			}
+			else 
+			{
+				SpecimenDetailsTagUtil.setSpecimenSummaryDetails(request, summaryForm);
+			}
+			
+			//Mandar: 16May2008 : For specimenDetails customtag --- end ---
+			
 			if(pageOf != null && ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(summaryForm.getRequestType()))
 			{
 				request.setAttribute(Constants.PAGEOF,pageOf);
 				return mapping.findForward(target);
 			}
 			
-			//Mandar: 8May2008 : For specimenDetails customtag --- start ---
-			List colHeaderList = new ArrayList();
-			colHeaderList.add("");	colHeaderList.add("specimen.label");	colHeaderList.add("specimen.barcode");
-			colHeaderList.add("specimen.subType");	colHeaderList.add("anticipatorySpecimen.Quantity");	colHeaderList.add("anticipatorySpecimen.Concentration");
-			colHeaderList.add("anticipatorySpecimen.Location");	colHeaderList.add("anticipatorySpecimen.Collected");
-			request.setAttribute("columnHeaderList",colHeaderList);
-			
-			List subSpecimenColHeaderList = new ArrayList();
-			subSpecimenColHeaderList.add("anticipatorySpecimen.Parent");	subSpecimenColHeaderList.add("specimen.label");	subSpecimenColHeaderList.add("specimen.barcode");
-			subSpecimenColHeaderList.add("specimen.subType");	subSpecimenColHeaderList.add("anticipatorySpecimen.Quantity");	subSpecimenColHeaderList.add("anticipatorySpecimen.Concentration");
-			subSpecimenColHeaderList.add("anticipatorySpecimen.Location");	subSpecimenColHeaderList.add("anticipatorySpecimen.Collected");
-			request.setAttribute("subSpecimenColHeaderList",subSpecimenColHeaderList);
-
-			request.setAttribute("specimenList",summaryForm.getSpecimenList());
-			request.setAttribute("aliquotList",summaryForm.getAliquotList());
-			request.setAttribute("derivedList",summaryForm.getDerivedList());
-			
-			List dispStatusList = new ArrayList();
-			dispStatusList.add(Constants.TRUE);	dispStatusList.add(Constants.TRUE);	dispStatusList.add(Constants.TRUE);
-			dispStatusList.add(Constants.TRUE);	dispStatusList.add(Constants.TRUE);	dispStatusList.add(Constants.TRUE);	
-			dispStatusList.add(Constants.TRUE);
-			dispStatusList.add(Constants.TRUE);
-
-			request.setAttribute("dispStatusList",dispStatusList);
-
-			List dispStatusList1 = new ArrayList();
-			dispStatusList1.add(Constants.TRUE);	dispStatusList1.add(Constants.TRUE);	dispStatusList1.add(Constants.TRUE);
-			dispStatusList1.add(Constants.TRUE);	dispStatusList1.add(Constants.TRUE);	dispStatusList1.add(Constants.TRUE);	
-			dispStatusList1.add(Constants.TRUE);
-			dispStatusList1.add(Constants.FALSE);
-
-			request.setAttribute("dispStatusList1",dispStatusList1);
-			//Mandar: 8May2008 : For specimenDetails customtag --- end ---
 
 			return mapping.findForward(target);
 		} catch (Exception exception) {
@@ -655,6 +628,4 @@ public class ViewSpecimenSummaryAction extends Action {
 		}
 		
 	}
-	
-	
 }

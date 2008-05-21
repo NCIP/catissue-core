@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -84,6 +85,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction {
 			specimenSummaryForm.setReadOnly(true);
 			//if(request.getParameter("pageOf") != null)
 			//	return mapping.findForward(request.getParameter("pageOf"));
+			
+			//19May08 : Mandar : For GenericSpecimen
+			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
 			
 			if(request.getAttribute("printflag")!=null && request.getAttribute("printflag").equals("1"))
 			{
