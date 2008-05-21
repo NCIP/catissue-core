@@ -159,7 +159,7 @@ PUBLIC
 		
 		<action path="/Home"
 					type="edu.wustl.catissuecore.action.ForwardAction">
-		 			<forward name="success" path=".catissuecore.mainTitlePageDef" /> 
+		 			<forward name="success" path=".catissuecore.homePageDef" /> 
 		</action>
 		
 		<action path="/RedirectHome"
