@@ -2290,5 +2290,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//constant required for setting the participant id on pathReport
 	public static final String PARTICIPANTIDFORREPORT="participantIdForReport";
 	public static final int FIRST_COUNT_1 = 1;
+	
+	public static final String INSTITUTION_NAME = "instituteName";
+	public static final String DEPARTMENT_NAME = "departmentName";
+	public static final String CRG_NAME ="crgName"; 
+	
+	public static final String RESPONSE_SEPARATOR = "#@#";
 }
 	
