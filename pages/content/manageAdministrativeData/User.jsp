@@ -6,9 +6,12 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head>
 <script src="jss/script.js" type="text/javascript"></script>
+<script type="text/javascript" src="jss/dhtmlwindow.js"></script>
+<script type="text/javascript" src="jss/modal.js"></script>
 <!-- Mandar : 434 : for tooltip -->
-<script language="JavaScript" type="text/javascript"
-	src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
+
 <script type="text/javascript">
 
 function handleStatus(status)
@@ -435,7 +438,7 @@ function handleStatus(status)
 							<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>
 															<html:link href="#" styleClass="blue_ar_s_b"
 																styleId="newInstitution"
-																onclick="addNewAction('UserAddNew.do?addNewForwardTo=institution&forwardTo=user&addNewFor=institution')">
+																onclick="openInstitutionWindow();">
 																<bean:message key="buttons.addNew" />
 															</html:link>
 							</logic:notEqual>
@@ -462,7 +465,7 @@ function handleStatus(status)
 							<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>
 															<html:link href="#" styleClass="blue_ar_s_b"
 																styleId="newDepartment"
-																onclick="addNewAction('UserAddNew.do?addNewForwardTo=department&forwardTo=user&addNewFor=department')">
+																onclick="openDepartmentWindow();">
 																<bean:message key="buttons.addNew" />
 															</html:link>
 							</logic:notEqual>
@@ -487,7 +490,7 @@ function handleStatus(status)
 							<logic:notEqual name="pageOf" value='${requestScope.pageOfSignUp}'>
 															<html:link href="#" styleClass="blue_ar_s_b"
 																styleId="newCancerResearchGroup"
-																onclick="addNewAction('UserAddNew.do?addNewForwardTo=cancerResearchGroup&forwardTo=user&addNewFor=cancerResearchGroup')">
+																onclick="openCRGWindow();">
 																<bean:message key="buttons.addNew" />
 															</html:link>
 							</logic:notEqual>
