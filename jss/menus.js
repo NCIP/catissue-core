@@ -22,10 +22,16 @@ Ext.onReady(function(){
      var menuHome = new Ext.menu.Menu({
         id: 'menuHome',
          items: [
+			{
+                           text: 'My Home',
+                           href :'Home.do'
+                       },
             {
                 text: 'User Profile',
                 menu: {        // <-- submenu by nested config object
                     items: [
+						
+
                       {
                            text: 'Change Password',
                            href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'
@@ -158,6 +164,7 @@ Ext.onReady(function(){
                              href:'SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer'
                         }, {
                             text: 'View Map',
+                            
                             handler: showStorageContainerMap
                         }
                     ]
@@ -364,8 +371,12 @@ Ext.onReady(function(){
             },
 
               {
-                text: 'View My List',
+
+                text: 'My List View',
                 href:'QueryAddToCart.do?operation=view'
+
+                 // <-- submenu by nested config object                
+
             }
 
         ]
@@ -395,6 +406,7 @@ Ext.onReady(function(){
             iconCls: '#',
             // Menus can be built/referenced by using nested menu config objects
             menu: menu_bio  // assign menu by instance
+
         },
 		{
         text: 'Search',
