@@ -3,6 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ taglib uri="/WEB-INF/specimenDetails.tld" prefix="md" %>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <html>
 <head>
