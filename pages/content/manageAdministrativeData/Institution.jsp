@@ -3,84 +3,143 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page language="java" isELIgnored="false" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>	
-<html:errors/> 
+
+<%@ page import="edu.wustl.catissuecore.actionForm.InstitutionForm"%>
+
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />	
+<script src="jss/ajax.js" type="text/javascript"></script>
+<script type="text/javascript">
+function addInstitution()
+{
+    var name = document.getElementById("name").value;
+    var request = newXMLHTTPReq();
+	if(request == null)
+    {
+		alert ("Your browser does not support AJAX!");
+		return;
+	}
+	var handlerFunction = getReadyStateHandler(request,setInstitutionValues,true);
+    request.onreadystatechange = handlerFunction;
+	var param = "instituteName="+name;
+    var url = "AddInstitution.do";
+ 	request.open("POST",url,true);
+	
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+	request.send(param);
+
+}
+function setInstitutionValues(response)
+{
+	var values = response.split("#@#");
+	if(values.length == 1)
+	{
+        var divTag = document.getElementById("errorDiv");
+        divTag.innerHTML = "<font size='3' color='red'>"+values[0]  +"</font>"; 
+	}
+	else
+	{
+		institutionCtrl = window.parent.document.getElementById("institutionId");
+        institutionCtrl.value = values[0];
+	
+		displayInstitutionCtrl = window.parent.document.getElementById("displayinstitutionId");    
+	    displayInstitutionCtrl.value =values[1];
+
+		//To hide the Modal Window opened from 
+		parent.institutionwindow.hide();
+    }
+}
+
+</script>
+
+<!--begin content -->
+<table width="100%" border="0" cellpadding="1" cellspacing="0" bgcolor="#FFFFFF">
+		<tr>
+          <td> <div id="errorDiv"> </div></td>
+	    </tr>
+		
+		<tr>
+    <td colspan="3" align="left"><table width="99%" border="0" cellpadding="1" cellspacing="0">
+      
+	  <tr>
+        <td><table width="100%" border="0" cellpadding="2" cellspacing="2" class="td_color_ffffff">
+		<html:errors/> 
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
-    
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
-
-<html:form action='${requestScope.formName}'>
-<!-- NEW Institution REGISTRATION BEGINS-->
-	<tr>
-	<td>
-	
-	<table summary="" cellpadding="3" cellspacing="0" border="0">
-		<tr>
+   
+	<html:form action='/InstitutionAdd.do'>  
+	 <tr>
 			<td>
-				<html:hidden property="operation"/>
+				<html:hidden property="operation" />
 				<html:hidden property="submittedFor"/>
 			</td>
 		</tr>
+		
 		<tr>
 			<td><html:hidden property="id" /></td>
 		</tr>
+          <tr>
+            <td class=" grey_ar_s">&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0"		vspace="0" />&nbsp; <bean:message key="commonRequiredField.message" />
+			</td>
 
-		<tr>
-			 <td class="formMessage" colspan="3">* indicates a required field</td>
-		</tr>
-
-		<tr>
-			 <td class="formTitle" height="20" colspan="3">
-			 	<logic:equal name="operation" value='${requestScope.operationAdd}'>
+          </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td height="25" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
+				<!--<logic:equal name="operation" value='${requestScope.operationAdd}'>
 					<bean:message key="institution.title"/>
 				</logic:equal>
 				<logic:equal name="operation" value='${requestScope.operationEdit}'>
 					<bean:message key="institution.editTitle"/>
-				</logic:equal>
-			 </td>
-		</tr>
+				</logic:equal> -->
+			</span></td>
+    <td align="right" class="tr_bg_blue1">&nbsp;</td>
 
-		<!-- Name of the institution -->
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
+  </tr>
+  <tr>
+    <td colspan="3" align="left"><div id="part_det" >
+      <table width="100%" border="0" cellpadding="5" cellspacing="2">
+                 
+          <tr>
+            <td width="2%" align="right" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
+            <td width="14%" align="left" class="black_ar">
 				<label for="name">
 					<bean:message key="institution.name"/>
 				</label>
 			</td>
-			<td class="formField">
-				<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="name" property="name"/>
-			</td>
-		</tr>
 
-		<tr>
-		  <td align="right" colspan="3">
-			<!-- action buttons begins -->
-			<table cellpadding="4" cellspacing="0" border="0">
-				<tr>
-					<td>
-						<html:submit styleClass="actionButton">
-							<bean:message  key="buttons.submit" />
-						</html:submit>
-					</td>
-					<%-- td>
-						<html:reset styleClass="actionButton" >
-							<bean:message  key="buttons.reset" />
-						</html:reset>
-					</td --%>
-				</tr>
-			</table>
-			<!-- action buttons end -->
-			</td>
-		</tr>
+            <td width="80%" align="left"><label>
+				<html:text styleClass="black_ar" maxlength="255"  size="50" styleId="name" property="name"/>
+            </label></td>
+            <td width="4%" align="left">&nbsp;</td>
+          </tr>
+       
+      </table>
+    </div></td>
+  </tr>
 
-		</table>
-		
-	  </td>
-	 </tr>
+  <tr>
+    <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr class="td_color_F7F7F7">
+    <td height="35" colspan="3" class="buttonbg">&nbsp;
+		<!--<html:submit styleClass="blue_ar_b">
+			<bean:message  key="buttons.submit" />
+		</html:submit> -->
 
-	 <!-- NEW institution REGISTRATION ends-->
-	 
-	 </html:form>
- </table>
+      <html:button property="clickButton" styleClass="blue_ar_b" onclick="addInstitution();" >
+	      <bean:message  key="buttons.submit" /> 
+      </html:button>
+  
+     
+      &nbsp;| <span class="cancellink"><html:link href="#" styleClass="blue_ar_s_b">
+													<bean:message key="buttons.cancel" />
+												</html:link></span></td>
+  </tr>
+ </html:form>
+
+</table>
+<!--end content -->
