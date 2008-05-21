@@ -36,3 +36,34 @@ function setFocusOnFirstElement()
 	  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
 	   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
 	}
+
+
+function openInstitutionWindow()
+{
+	institutionwindow=dhtmlmodal.open('Institution', 'iframe', 'Institution.do?operation=add&pageOf=pageOfInstitution','Administrative Data', 'width=530px,height=175px,center=1,resize=0,scrolling=1')
+
+    institutionwindow.onclose=function()
+	{ 
+		return true;
+	}
+}
+
+function openDepartmentWindow()
+{
+    departmentWindow=dhtmlmodal.open('Department', 'iframe', 'Department.do?operation=add&pageOf=pageOfDepartment&menuSelected=3&submittedFor=AddNew','Administrative Data', 'width=530px,height=175px,center=1,resize=0,scrolling=1')
+    
+    departmentWindow.onclose=function()
+	{
+       return true;
+	}
+}
+
+function openCRGWindow()
+{
+    crgWindow=dhtmlmodal.open('Cancer Research Group', 'iframe', 'CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup&menuSelected=4&submittedFor=AddNew','Administrative Data', 'width=530px,height=175px,center=1,resize=0,scrolling=1')
+
+    crgWindow.onclose=function()
+	{
+	   return true;
+	}
+}
