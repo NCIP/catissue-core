@@ -109,7 +109,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				<tr>	
 				<td>
 					<table summary="" cellpadding="3" cellspacing="0" border="0"  class="dataTable" width="100%">
-						<tr>
+			<md:genericSpecimenDetails columnHeaderListName="colHeaderListP" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="colOrderListP" isReadOnly="true" displayColumnListName="displayColumnListP" />
+			<%-- Custom tag By Mandar for specimen display --%>
+<%-- 						<tr>
 								<th class="formSerialNumberLabelForTable" scope="col" > &nbsp </th>
 								<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="anticipatory specimens">
 								<th class="formSerialNumberLabelForTable" scope="col">Received</th>
@@ -179,6 +181,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						
 					</tr>
 				  </logic:iterate>	
+--%>	  
 				</table>
 				</td>
 			</tr>
@@ -207,7 +210,10 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				<tr>
 					<td>
 						<table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
-							<tr>	
+			<md:genericSpecimenDetails columnHeaderListName="colHeaderListA" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="colOrderListA" isReadOnly="true" displayColumnListName="displayColumnListA" />
+			<%-- Custom tag By Mandar for specimen display --%>
+						
+<%-- 							<tr>	
 								<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
 								<th class="formSerialNumberLabelForTable" scope="col">Label</th>
 								<th class="formSerialNumberLabelForTable" scope="col">Storage</th>
@@ -221,6 +227,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 								<td class="dataCellText">&nbsp; <bean:write name="aliquot" property="quantity" /></td>
 							</tr>
 						  </logic:iterate>	
+--%>													  
 					 </table>			
 				 </td>
 			 </tr>
@@ -242,6 +249,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		</tr>
 			 <td>
 			    <table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
+		<md:genericSpecimenDetails columnHeaderListName="colHeaderListD" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="colOrderListD" isReadOnly="true" displayColumnListName="displayColumnListD" />
+			<%-- Custom tag By Mandar for specimen display --%>
+<%--
 					<tr>
 						<th class="formSerialNumberLabelForTable" scope="col">Parent</th>
 						<th class="formSerialNumberLabelForTable" scope="col">Label</th>
@@ -262,6 +272,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						<td class="dataCellText"> <bean:write name="derived" property="concentration" /></td>
 			      	</tr>
 					  </logic:iterate>	
+--%>					  
 				</table>
 			</td>
 		</tr>

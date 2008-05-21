@@ -239,7 +239,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="specimenList" >	
 				<table summary="" cellpadding="3"
 								cellspacing="0" border="0" class="dataTable" >
-					<md:specimenDetailsTag columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" displayOnly="false" displayStatusListName="dispStatusList" />
+<%-- 					<md:specimenDetailsTag columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" displayOnly="false" displayStatusListName="dispStatusList" />
+ --%>
+			<md:genericSpecimenDetails columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
 			<%-- custom tag for specimen list by mandar ---  --%>					
 				  
 				</table>
@@ -284,7 +286,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			</table>
 			<table summary="" cellpadding="3"
 							cellspacing="0" border="0" class="dataTable" >
-			<md:specimenDetailsTag columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" displayOnly="false" displayStatusListName="dispStatusList" />
+			<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
 			<%-- custom tag for specimen list by mandar --- Aliquot  --%>						
 				</table>				
 			</logic:notEmpty>
@@ -300,7 +302,10 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		 </table>
 		    <table summary="" cellpadding="3"
 						cellspacing="0" border="0" class="dataTable" >
-			<md:specimenDetailsTag columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" displayOnly="false" displayStatusListName="dispStatusList" />
+		<%--
+		 	<md:specimenDetailsTag columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" displayOnly="false" displayStatusListName="dispStatusList" />
+		--%>
+		<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
 			<%-- custom tag for specimen list by mandar --- Derived --%>					
 		    </table>
 		</logic:notEmpty>		
