@@ -31,7 +31,11 @@ Ext.onReady(function(){
                 menu: {        // <-- submenu by nested config object
                     items: [
 						
-
+						{
+                           text: 'Edit',
+                           
+						   handler: onItemCheck
+                       },
                       {
                            text: 'Change Password',
                            href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'
@@ -401,8 +405,6 @@ Ext.onReady(function(){
         }, 
         {
             text:'Biospecimen Data',
-            //handler: onButtonClick,
-            //tooltip: {text:'This is a QuickTip with autoHide set to false and a title', title:'Tip Title', autoHide:false},
             iconCls: '#',
             // Menus can be built/referenced by using nested menu config objects
             menu: menu_bio  // assign menu by instance
@@ -425,16 +427,16 @@ Ext.onReady(function(){
     // functions to display feedback
 
 
-    function onItemCheck(item, checked){
+    function onItemCheck(){
 		alert("This Page is under construction");
       //  Ext.example.msg('Item Check', 'You {1} the "{0}" menu item.', item.text, checked ? 'checked' : 'unchecked');
     }
 
     function showStorageContainerMap()
     {	
-		//Patch ID: Bug#4116_5
+		
         var frameUrl='ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1';
-	//openPopupWindow(frameUrl);
+	
 	platform = navigator.platform.toLowerCase();
 	if (platform.indexOf("mac") != -1)
 	{
