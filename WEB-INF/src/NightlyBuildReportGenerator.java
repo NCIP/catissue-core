@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Date;
+import java.io.File;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,8 +31,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-
-
 /**
  * This class used to generate nightly build report
  * 
@@ -40,68 +40,83 @@ public class NightlyBuildReportGenerator
 {
 
 	private static Document document = null;
-	public static String TOTAL_NO_OF_FAILURES =null;
-	public static String TOTAL_NO_OF_TESTS =null;
+	public static String TOTAL_NO_OF_FAILURES ="0";
+	public static String TOTAL_NO_OF_TESTS ="0";
+	public static String JUNIT_TEST_MYSQL_FRESH_FILE = "";
+	public static String JUNIT_TEST_MYSQL_UPGRADE_FILE = ""; 
+	public static String JUNIT_TEST_ORACLE_FRESH_FILE = "";
+	public static String JUNIT_TEST_ORACLE_UPGRADE_FILE = "";
+	public static String JMETER_TEST_MYSQL_FRESH_FILE = "";
+	public static String JMETER_TEST_MYSQL_UPGRADE_FILE = ""; 
+	public static String JMETER_TEST_ORACLE_FRESH_FILE = "";
+	public static String JMETER_TEST_ORACLE_UPGRADE_FILE = "";
 	public static String JMETER_TEST_FILE = "";
-	public static String JUNIT_TEST_FILE = ""; 
 	public static String MAIL_SETTING_PROPERTY_FILE ="";
 	public static String KEY_EMAIL_MESSAGE = "email.message";
 	public static String DATABASE_ORACLE = "Oracle";
 	public static String DATABASE_MYSQL = "MySQL";
-	
+	public static String TestResult="./XmlReport/TestResult.txt" ;
+	public static String date="";
 	static StringBuffer nightlyBuildReport=null;
-	
+	public static boolean FileExist=true;
 
 	public static void main(String[] args) throws Exception
 	{
 		
 		if (args.length>0)
 		{
-			JMETER_TEST_FILE=args[0];
-			JUNIT_TEST_FILE=args[1];
-			MAIL_SETTING_PROPERTY_FILE=args[2];
+			
+			JUNIT_TEST_MYSQL_FRESH_FILE=args[0];
+			JUNIT_TEST_MYSQL_UPGRADE_FILE=args[1];
+			JUNIT_TEST_ORACLE_FRESH_FILE=args[2];
+			JUNIT_TEST_ORACLE_UPGRADE_FILE=args[3];
+			JMETER_TEST_MYSQL_FRESH_FILE=args[4];
+			JMETER_TEST_MYSQL_UPGRADE_FILE=args[5];
+			JMETER_TEST_ORACLE_FRESH_FILE=args[6];
+			JMETER_TEST_ORACLE_UPGRADE_FILE=args[7];
 					
 		}
 		nightlyBuildReport = new StringBuffer("");
-		Properties property =new Properties();
-		FileInputStream fileInputStream = new FileInputStream(MAIL_SETTING_PROPERTY_FILE);
-		property.load(fileInputStream);
+				
+		FileOutputStream  fileOutputStream = new FileOutputStream(TestResult);
+		fileOutputStream.flush();
 		
-		//to update the report
-		if(property.getProperty(KEY_EMAIL_MESSAGE).equals("") || property.getProperty(KEY_EMAIL_MESSAGE).contains(DATABASE_ORACLE))
-		{
-			nightlyBuildReport.append(DATABASE_MYSQL+"\n\n");
-			
-		}
-		else
-		{
-			nightlyBuildReport.append(property.getProperty(KEY_EMAIL_MESSAGE));
-			nightlyBuildReport.append("\n\n"+DATABASE_ORACLE+"\n\n");
-		}
+		NightlyBuildReportGenerator.init(JUNIT_TEST_MYSQL_FRESH_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream);
+		NightlyBuildReportGenerator.init(JUNIT_TEST_MYSQL_UPGRADE_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream);
+		NightlyBuildReportGenerator.init(JUNIT_TEST_ORACLE_FRESH_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream);
+		NightlyBuildReportGenerator.init(JUNIT_TEST_ORACLE_UPGRADE_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream);
 		
-		NightlyBuildReportGenerator.init(JUNIT_TEST_FILE);
-		NightlyBuildReportGenerator.getJUnitTestResults();
-		NightlyBuildReportGenerator.init(JMETER_TEST_FILE);
-		NightlyBuildReportGenerator.getJMeterTestResults();
-	
-		property.setProperty(KEY_EMAIL_MESSAGE, nightlyBuildReport.toString());
-		fileInputStream.close();	
-		FileOutputStream fileOutputStream = new FileOutputStream(MAIL_SETTING_PROPERTY_FILE);
-		property.store(fileOutputStream, "");
-		
-		
+		NightlyBuildReportGenerator.init(JMETER_TEST_MYSQL_FRESH_FILE);
+		NightlyBuildReportGenerator.getJMeterTestResults(fileOutputStream);
+		NightlyBuildReportGenerator.init(JMETER_TEST_MYSQL_UPGRADE_FILE);
+		NightlyBuildReportGenerator.getJMeterTestResults(fileOutputStream);
+		NightlyBuildReportGenerator.init(JMETER_TEST_ORACLE_FRESH_FILE);
+		NightlyBuildReportGenerator.getJMeterTestResults(fileOutputStream);
+		NightlyBuildReportGenerator.init(JMETER_TEST_ORACLE_UPGRADE_FILE);
+		NightlyBuildReportGenerator.getJMeterTestResults(fileOutputStream);
+				
 	}
 
 	public static void init(String path) throws Exception
 	{
+		FileExist=true;
 		DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
 		try
 		{
 			DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();// throws
 			// ParserConfigurationException
+			
 			if (path != null)
 			{
 				document = dbuilder.parse(path);
+				File fin=new File(path);
+				Date d=new Date(fin.lastModified());
+				java.text.SimpleDateFormat format= new java.text.SimpleDateFormat("MM/dd/yyyy");
+				date=format.format(d);
 				// throws SAXException,IOException,IllegalArgumentException(if path is null
 			}
 		}
@@ -111,7 +126,7 @@ public class NightlyBuildReportGenerator
 		}
 		catch (IOException e)
 		{
-			throw e;
+			FileExist=false;
 		}
 		catch (ParserConfigurationException e)
 		{
@@ -127,10 +142,11 @@ public class NightlyBuildReportGenerator
 	 * </p>
 	 */
 
-	public static void getJUnitTestResults()
+	public static void getJUnitTestResults(FileOutputStream fileOutputStream)throws IOException
 	{
-		
-		
+		if(FileExist)
+		{
+		int TOTAL_NO_OF_PASS=0;
 		// it gives the rootNode of the xml file
 		Element root = document.getDocumentElement();
 		int totalNoOfFailures=0;
@@ -158,8 +174,7 @@ public class NightlyBuildReportGenerator
 						nightlyBuildReport.append("\n\tFailed Junit Testcases :  "+TOTAL_NO_OF_FAILURES+"/"+TOTAL_NO_OF_TESTS );
 						System.out.println("\nFailed Junit Testcases: !!!!!!!! ---->  "+TOTAL_NO_OF_FAILURES+"/"+TOTAL_NO_OF_TESTS);
 					}
-					
-								
+									
 				}
 			}	
 		
@@ -207,11 +222,25 @@ public class NightlyBuildReportGenerator
 			
 		}
 		
+		// Add pass fail result to Result file 
+		TOTAL_NO_OF_PASS=Integer.parseInt(TOTAL_NO_OF_TESTS)-Integer.parseInt(TOTAL_NO_OF_FAILURES);
+		String name="JUnitTest"+",";
+		name=name+TOTAL_NO_OF_TESTS+","+TOTAL_NO_OF_PASS+","+TOTAL_NO_OF_FAILURES+","+date+","+"-"+"\r\n";
+		fileOutputStream.write(name.getBytes());
+		}
+		else // If XML file does not exists
+		{
+			String name="JUnitTest"+","+"-"+","+"-"+","+"-"+","+"-"+","+"XML Report File does not exists"+"\r\n";
+			fileOutputStream.write(name.getBytes());
+		}
+		
 	}
 	
-	public static void getJMeterTestResults()
+	public static void getJMeterTestResults(FileOutputStream fileOutputStream)throws IOException
 	{
-
+		if(FileExist)
+		{
+		int TOTAL_NO_OF_PASS=0;
 		// it gives the rootNode of the xml file
 		Element root = document.getDocumentElement();
 		int totalNoOfTest=0;
@@ -284,9 +313,19 @@ public class NightlyBuildReportGenerator
 				}
 			}
 			
+			// Add pass fail result to Result file 
+			TOTAL_NO_OF_PASS=totalNoOfTest-totalNoOfFailures;
+			String name="JMeterTest"+",";
+			name=name+totalNoOfTest+","+TOTAL_NO_OF_PASS+","+totalNoOfFailures+","+date+","+"-"+"\r\n";
+			fileOutputStream.write(name.getBytes());
+		}
+		else // If XML file does not exists
+		{
+			String name="JMeterTest"+","+"-"+","+"-"+","+"-"+","+"-"+","+"XML Report File does not exists"+"\r\n";
+			fileOutputStream.write(name.getBytes());
+		}
+			
 	}
 	
-	
-	
-	
+		
 }
