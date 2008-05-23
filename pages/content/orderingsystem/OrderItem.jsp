@@ -524,12 +524,7 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 									</script>
 
 									<html:hidden property="<%=availableQuantity%>" value="<%=obj.getId().toString()%>"/>
-									<span id="availableQuantity">		
-										<script>
-											var v= getUnit('<%=obj.getClassName()%>','<%=obj.getType()%>');
-											document.write(v);
-										</script>
-									</span>	
+										
 								</td>
 
 									<td class="dataCellText" width="20%">
