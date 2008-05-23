@@ -1078,8 +1078,9 @@ PUBLIC
 			name="institutionForm"
 			validate="false"
 			scope="request">
-			<!-- <forward name="pageOfInstitution" path=".catissuecore.institutionDef" /> -->
-			<forward name="pageOfInstitution" path="/pages/content/manageAdministrativeData/Institution.jsp" />
+			<!-- <forward name="pageOfInstitution" path="/pages/content/manageAdministrativeData/Institution.jsp" /> -->
+			<forward name="pageOfInstitution" path=".catissuecore.institutionDef" />
+			<forward name="pageOfPopUpInstitution" path="/pages/content/manageAdministrativeData/PopUpInstitution.jsp" />
 			<forward name="failure" path=".catissuecore.institutionDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -1246,8 +1247,9 @@ PUBLIC
 			name="departmentForm"
 			validate="false"
 			scope="request">
-          <!-- <forward name="pageOfDepartment" path=".catissuecore.departmentDef" /> -->
-			<forward name="pageOfDepartment" path="/pages/content/manageAdministrativeData/Department.jsp" />
+          <!-- <forward name="pageOfDepartment" path="/pages/content/manageAdministrativeData/Department.jsp" /> -->
+			<forward name="pageOfDepartment" path=".catissuecore.departmentDef" />
+			<forward name="pageOfPopUpDepartment" path="/pages/content/manageAdministrativeData/PopUpDepartment.jsp" />
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchDepartmentDef" />
 			<forward name="failure" path=".catissuecore.departmentDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
@@ -1305,12 +1307,13 @@ PUBLIC
 			name="cancerResearchGroupForm"
 			validate="false"
 			scope="request">
-			 <!-- <forward name="pageOfCancerResearchGroup" path=".catissuecore.cancerResearchGroupDef" /> -->
-			 <forward name="pageOfCancerResearchGroup" path="/pages/content/manageAdministrativeData/CancerResearchGroup.jsp" />
+			 <!-- <forward name="pageOfCancerResearchGroup" path="/pages/content/manageAdministrativeData/CancerResearchGroup.jsp" /> -->
+			<forward name="pageOfCancerResearchGroup" path=".catissuecore.cancerResearchGroupDef" />
+			<forward name="pageOfPopUpCancerResearchGroup" path="/pages/content/manageAdministrativeData/PopUpCRG.jsp" />
 			<forward name="failure" path=".catissuecore.cancerResearchGroupDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
-
+		
 		<action path="/CancerResearchGroupAdd"
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="cancerResearchGroupForm"
