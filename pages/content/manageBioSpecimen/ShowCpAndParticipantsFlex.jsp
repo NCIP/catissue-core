@@ -183,7 +183,7 @@
 		<param name=movie value="flexclient/biospecimen/Layout.swf"> 
 		<param name=quality value=high>
 		<param name="swliveconnect" value="true">
-				 
+		<param name="wmode" value="transparent" />				 
 		<embed src="flexclient/biospecimen/Layout.swf" quality="high" bgcolor="#ffffff"
 			width="100%" height="99.9%" id="Layout" name="Layout" align="middle"
 			play="true"

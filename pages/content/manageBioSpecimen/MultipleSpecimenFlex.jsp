@@ -73,6 +73,7 @@ function callUpdateSpecimen()
 						codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
 						<param name="movie" value="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>"/>
 						<param name="quality" value="high" />
+						<param name="wmode" value="transparent" />						
 						<param name="bgcolor" value="#869ca7" />
 						<param name="allowScriptAccess" value="sameDomain"/>
 							<embed src="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>" quality="high" bgcolor="#869ca7"
