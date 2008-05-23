@@ -186,10 +186,10 @@ function viewSummary()
 </head>
 
 <logic:equal name="tab" value="null">
-<body>
+<body onload="consentPage()">
 </logic:equal>
 <logic:notEqual name="tab" value="null">
-<body onload="consentPage()">
+<body >
 </logic:notEqual>
 
         
