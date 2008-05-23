@@ -7,46 +7,26 @@ Ext.onReady(function(){
     Ext.QuickTips.init();
 
     // Menus can be prebuilt and passed by reference
-    var dateMenu = new Ext.menu.DateMenu({
-        handler : function(dp, date){
-            Ext.example.msg('Date Selected', 'You chose {0}.', date.format('M j, Y'));
-        }
-    });
-
-    var colorMenu = new Ext.menu.ColorMenu({
-        handler : function(cm, color){
-            Ext.example.msg('Color Selected', 'You chose {0}.', color);
-        }
-    });
-
-     var menuHome = new Ext.menu.Menu({
+    var menuHome = new Ext.menu.Menu({
         id: 'menuHome',
          items: [
 			{
-                           text: 'My Home',
-                           href :'Home.do'
-                       },
-            {
                 text: 'User Profile',
                 menu: {        // <-- submenu by nested config object
                     items: [
-						
 						{
                            text: 'Edit',
-                           
-						   handler: onItemCheck
+                    	   handler: editUserProfile
                        },
-                      {
+                       {
                            text: 'Change Password',
                            href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'
                        }
                     ]
                 }
             },
-
-              {
-
-                text: 'Assign Privileges',
+            {
+           		text: 'Assign Privileges',
                 href:'AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage'
             }
         ]
@@ -57,7 +37,7 @@ Ext.onReady(function(){
         items: [
             {
                 text: 'User',
-					href:'User.do?operation=add&pageOf=pageOfUserAdmin',
+				href:'User.do?operation=add&pageOf=pageOfUserAdmin',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -74,9 +54,10 @@ Ext.onReady(function(){
                     ]
                 }
             },
+             
 			  {
                 text: 'Site',
-				 href:'Site.do?operation=add&pageOf=pageOfSite',
+				href:'Site.do?operation=add&pageOf=pageOfSite',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -108,7 +89,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Storage Container',
-					href:'StorageContainer.do?operation=add&pageOf=pageOfStorageContainer',
+				href:'StorageContainer.do?operation=add&pageOf=pageOfStorageContainer',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -128,7 +109,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Specimen Array Type',
-					href:'SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType',
+				href:'SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -144,7 +125,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Biohazard',
-					href:'Biohazard.do?operation=add&pageOf=pageOfBioHazard',
+				href:'Biohazard.do?operation=add&pageOf=pageOfBioHazard',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -160,7 +141,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Collection Protocol',
-					href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol',
+				href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -176,7 +157,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Distribution Protocol',
-					href:'DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol',
+				href:'DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -217,7 +198,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Participant',
-					href:'Participant.do?operation=add&pageOf=pageOfParticipant&clearConsentSession=true',
+				href:'Participant.do?operation=add&pageOf=pageOfParticipant&clearConsentSession=true',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -233,7 +214,7 @@ Ext.onReady(function(){
             },
               {
                 text: 'Specimen',
-					href:'SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen',
+				href:'SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -258,7 +239,7 @@ Ext.onReady(function(){
             },
             {
                 text: 'Specimen Array',
-					href:'SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray',
+				href:'SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -277,7 +258,7 @@ Ext.onReady(function(){
             }, 
 			  {
                 text: 'Distribution',
-					href:'SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution',
+				href:'SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -311,7 +292,7 @@ Ext.onReady(function(){
             },
             {
                 text: 'Search',
-					href:'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface',
+				href:'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -331,7 +312,7 @@ Ext.onReady(function(){
                 text: 'My List View',
                 href:'QueryAddToCart.do?operation=view'
 
-                 // <-- submenu by nested config object                
+                
 
             }
 
@@ -341,39 +322,21 @@ Ext.onReady(function(){
 
     var tb = new Ext.Toolbar();
     tb.render('toolbarLoggedIn');
-
-    
-	tb.add({ 
-            text: 'Home',
-			iconCls: '#',
-            menu: menuHome
-         },
-            
+        
+	tb.add(new Ext.Toolbar.MenuButton({text: 'Home',link:'Home.do',handler: handleMenu,menu: menuHome}),
+	        
 		{
-            text:'Administrative Data',
-			iconCls: '#',  // <-- icon
-			//iconCls: 'bmenu',  // <-- icon
+            text:'Administrative Data',	
             menu: menu  // assign menu by instance
         }, 
         {
             text:'Biospecimen Data',
-            iconCls: '#',
-            // Menus can be built/referenced by using nested menu config objects
             menu: menu_bio  // assign menu by instance
-
         },
 		{
-        text: 'Search',
-            iconCls: '#',  // <-- icon
-			//iconCls: 'bmenu',  // <-- icon
+       		text: 'Search',
             menu: menu_search  // assign menu by instance
-
         });
-
- 
-
- 
-
 
 
     // functions to display feedback
@@ -383,22 +346,10 @@ Ext.onReady(function(){
 		alert("This Page is under construction");
       //  Ext.example.msg('Item Check', 'You {1} the "{0}" menu item.', item.text, checked ? 'checked' : 'unchecked');
     }
-
-    function showStorageContainerMap()
-    {	
-		
-        var frameUrl='ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1';
-	
-	platform = navigator.platform.toLowerCase();
-	if (platform.indexOf("mac") != -1)
+	function handleMenu(item)
 	{
-	    NewWindow(frameUrl,'name',screen.width,screen.height,'no');
+	document.location.href = item.link;
 	}
-	else
-	{
-	    NewWindow(frameUrl,'name','800','600','no');
-
-            }
-
-     }
+	
+    
 });
