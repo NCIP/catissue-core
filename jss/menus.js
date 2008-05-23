@@ -54,6 +54,54 @@ Ext.onReady(function(){
                     ]
                 }
             },
+				{
+                text: 'Institution',
+				href:'Institution.do?operation=add&pageOf=pageOfInstitution',
+                menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                       {
+                            text: 'Add',
+							href:'Institution.do?operation=add&pageOf=pageOfInstitution'
+                        }, {
+                            text: 'Edit',
+                            href:'SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution' 
+                        }, 
+                    ]
+                }
+            },
+				{
+                text: 'Department',
+				href:'Department.do?operation=add&pageOf=pageOfDepartment',
+                menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                       {
+                            text: 'Add',
+							href:'Department.do?operation=add&pageOf=pageOfDepartment'
+                        }, {
+                            text: 'Edit',
+                            href:'SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department' 
+                        }, 
+                    ]
+                }
+            },
+				{
+                text: 'Cancer Research Group',
+				href:'CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup',
+                menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                       {
+                            text: 'Add',
+							href:'CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup'
+                        }, {
+                            text: 'Edit',
+                            href:'SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup' 
+                        }, 
+                    ]
+                }
+            },
              
 			  {
                 text: 'Site',
