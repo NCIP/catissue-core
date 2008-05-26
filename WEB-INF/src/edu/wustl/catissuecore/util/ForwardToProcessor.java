@@ -77,6 +77,13 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		else if (domainObject instanceof Specimen)
 		{
 			Specimen specimen = (Specimen) domainObject;
+			// this if loop has been added as a fix for bug no.7439
+			//Bug description: the derivatives of derivatives are not created it gives error SpecimenCollectionGroupName is null
+			if(!forwardToHashMap.containsKey("specimenCollectionGroupName") && specimen.getSpecimenCollectionGroup().getGroupName()!= null)
+			{
+				forwardToHashMap.put("specimenCollectionGroupName", specimen.getSpecimenCollectionGroup().getGroupName().toString());
+			}
+			//end of fix for bug no.7439
 			//Derive New from This Specimen
 			if (actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit"))
 			{
