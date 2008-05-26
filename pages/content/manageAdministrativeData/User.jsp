@@ -33,12 +33,7 @@ function handleStatus(status)
 	}
 	
 }
-function closeUserWindow()
-{     
-	  if(window.opener)
-		 window.parent.close();
-		
-}
+
 </script>
 </head>
 
