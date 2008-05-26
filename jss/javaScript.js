@@ -1231,12 +1231,6 @@ function dateChange(newoffset,originaloffset,originalRegistrationDate)
 			//alert(returndate);
 			return returndate;
 		}
-//to close window
-function closeUserWindow()
-{     
-	  if(window.opener)
-		 window.parent.close();
-		
-}
+
 
 

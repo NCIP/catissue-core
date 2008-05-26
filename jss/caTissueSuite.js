@@ -86,3 +86,10 @@ function openCRGWindow()
             }
 
      }
+     //to close window
+function closeUserWindow()
+{     
+	  if(window.opener)
+		 window.parent.close();
+		
+}
