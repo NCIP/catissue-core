@@ -66,7 +66,7 @@ Ext.onReady(function(){
                         }, {
                             text: 'Edit',
                             href:'SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution' 
-                        }, 
+                        } 
                     ]
                 }
             },
@@ -82,7 +82,7 @@ Ext.onReady(function(){
                         }, {
                             text: 'Edit',
                             href:'SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department' 
-                        }, 
+                        } 
                     ]
                 }
             },
@@ -98,7 +98,7 @@ Ext.onReady(function(){
                         }, {
                             text: 'Edit',
                             href:'SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup' 
-                        }, 
+                        } 
                     ]
                 }
             },
