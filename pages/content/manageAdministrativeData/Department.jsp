@@ -111,7 +111,7 @@
 			<bean:message  key="buttons.submit" />
 		</html:submit>
      
-      &nbsp;| <span class="cancellink"><html:link href="#"  styleClass="blue_ar_s_b">
+      &nbsp;| <span class="cancellink"><html:link page="/ManageAdministrativeData.do"  styleClass="blue_ar_s_b">
 													<bean:message key="buttons.cancel" />
 												</html:link></span></td>
   </tr>
