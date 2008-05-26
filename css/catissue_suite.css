@@ -491,21 +491,6 @@ visibility: hidden;
 
 /* End Tooltip css */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .black_new{
 	font-family: verdana;
 	font-size: 11px;
@@ -517,20 +502,3 @@ visibility: hidden;
 	color: #074180;
 	font-weight: bold;
 }
-.drag-handle{ /*Overwrite default drag handle bar background color with below*/
-background-color: #03277C;
-}
-
-#interVeil{ /*CSS for veil that covers entire page while modal window is visible*/
-position: absolute;
-background: black url(blackdot.gif);
-width: 10px;
-left: 0;
-top: 0;
-z-index: 5;
-visibility: hidden;
-filter:progid:DXImageTransform.Microsoft.alpha(opacity=80);
-opacity: 0.8;
-}
-
-/* End Tooltip css */
