@@ -31,6 +31,13 @@ function handleStatus(status)
 		document.getElementById("displayrole").value="";
 		document.getElementById("role").value="";
 	}
+	
+}
+function closeUserWindow()
+{     
+	  if(window.opener)
+		 window.parent.close();
+		
 }
 </script>
 </head>
@@ -542,7 +549,7 @@ function handleStatus(status)
 										<bean:message key="buttons.submit" />
 									</html:submit> &nbsp;| <span class="cancellink"> <logic:notEqual
 										name="pageOf" value='${requestScope.pageOfSignUp}'>
-										<html:link page="/ManageAdministrativeData.do"
+										<html:link onclick="closeUserWindow()" page="/ManageAdministrativeData.do"
 											styleClass="blue_ar_s_b">
 											<bean:message key="buttons.cancel" />
 										</html:link>
