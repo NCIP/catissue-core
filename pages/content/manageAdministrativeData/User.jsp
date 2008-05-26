@@ -460,7 +460,7 @@ function handleStatus(status)
 										</tr>
 										<tr>
 											<td colspan="3" style="padding-top:10px;">
-											<div id="add_id" style="display: none">
+											<div id="add_id" style="display: ">
 											<table width="100%" border="0" cellpadding="2"
 												cellspacing="0">
 
