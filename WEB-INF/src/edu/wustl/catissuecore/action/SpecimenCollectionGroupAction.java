@@ -331,7 +331,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 		//Sets the collectionStatusList attribute to be used in the Site Add/Edit Page.
 		request.setAttribute(Constants.COLLECTIONSTATUSLIST, Constants.SCG_COLLECTION_STATUS_VALUES);
-
+		//fix for bug no.7390
+		if(specimenCollectionGroupForm.getCollectionStatus()==null)
+		{
+			specimenCollectionGroupForm.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
+		}
+		//end for fix. Bug no.7390
 		Logger.out.debug("CP ID in SCG Action======>" + specimenCollectionGroupForm.getCollectionProtocolId());
 		Logger.out.debug("Participant ID in SCG Action=====>" + specimenCollectionGroupForm.getParticipantId() + "  "
 				+ specimenCollectionGroupForm.getProtocolParticipantIdentifier());

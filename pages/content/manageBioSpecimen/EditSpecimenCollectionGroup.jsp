@@ -354,6 +354,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 							/>
 					</td>
 				</tr>
+				</logic:equal>
 				<!-- collectionstatus -->	
 				<tr>
 					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
@@ -370,7 +371,6 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 							/>
 					</td>
 				</tr>
-				</logic:equal>
 					
 				 		<tr>
 				  		<td align="right" colspan="3">
