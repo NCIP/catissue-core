@@ -467,6 +467,7 @@ function showDatafield(element,txtFieldID)
 													if (columnNameValueBeanList != null
 													&& !columnNameValueBeanList.isEmpty()
 													&& i == Integer.parseInt(noOfRows)
+													&& attributeNameValue == null
 													&& (objectChanged == null || !objectChanged.equals(""))) {
 														NameValueBean nameValueBean = (NameValueBean) columnNameValueBeanList
 														.get(0);
