@@ -2988,7 +2988,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @param finalDataList the data list to be populated
 	 * @throws DAOException 
 	 */
-	public Specimen getSpecimen(String specimenID, List finalDataList, SessionDataBean sessionData) throws DAOException
+	public Specimen getSpecimen(String specimenID, List finalDataList, SessionDataBean sessionData)
+			throws DAOException
 	{
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(sessionData);
@@ -2997,7 +2998,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Specimen specimen = getSpecimenObj(specimenID, dao);
 			getSpecimenInternal(specimen, finalDataList);
 			specimen.getConsentTierStatusCollection();
-			specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getConsentTierResponseCollection();
+			specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+					.getConsentTierResponseCollection();
 			return specimen;
 		}
 		catch (Exception exception)
@@ -3009,8 +3011,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			((HibernateDAO) dao).closeSession();
 		}
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param specimenID
@@ -3020,7 +3021,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	private void getSpecimenInternal(Specimen specimen, List finalDataList) throws DAOException
 	{
-			
+
 		List specimenDetailList = new ArrayList();
 		specimenDetailList.add(specimen.getLabel());
 		specimenDetailList.add(specimen.getType());
@@ -3039,20 +3040,16 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		finalDataList.add(specimenDetailList);
 		Collection childrenSpecimen = specimen.getChildrenSpecimen();
 		//if(specimenObj.getChildrenSpecimen().size()>0)
-		if (childrenSpecimen.size() > 0)
+
+		Iterator itr = childrenSpecimen.iterator();
+		while (itr.hasNext())
 		{
-			Collection childSpecimenCollection = childrenSpecimen;
-			Iterator itr = childSpecimenCollection.iterator();
-			while (itr.hasNext())
-			{
-				Specimen childSpecimen = (Specimen) itr.next();
-				getSpecimenInternal(childSpecimen, finalDataList);
-			}
+			Specimen childSpecimen = (Specimen) itr.next();
+			getSpecimenInternal(childSpecimen, finalDataList);
 		}
-		
+
 	}
-	
-	
+
 	/**
 	 * return the specimen object
 	 * @param specimenID
@@ -3063,14 +3060,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private Specimen getSpecimenObj(String specimenID, DAO dao) throws DAOException
 	{
 
-		List specimenList = dao.retrieve(Specimen.class.getName(),
-				Constants.SYSTEM_IDENTIFIER, new Long(specimenID));
-		
-		if (specimenList==null || specimenList.size()==0)
+		List specimenList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER,
+				new Long(specimenID));
+
+		if (specimenList == null || specimenList.size() == 0)
 		{
 			throw new DAOException("no specimen returned by hibernate");
 		}
-			
+
 		return (Specimen) (specimenList.get(0));
 	}
 
