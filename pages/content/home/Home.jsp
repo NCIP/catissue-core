@@ -16,15 +16,18 @@ table#browserDetailsContainer
 <table summary="" cellpadding="0" border="0" cellspacing="0"
 	width="100%" height="100%">
 	<tr>
-		<td colspan="5" class="td_orange_line" height="1">
-		</td>
+		<td colspan="5" class="td_orange_line" height="1"></td>
 	</tr>
 	<tr height="100%">
-		<td valign="top"><jsp:include page="/pages/subMenu/Home.jsp" /></td>
-		<td valign="top"><img src="images/uIEnhancementImages/sep_left.gif" width="8" /></td>
+		<td valign="top" width="230"><jsp:include
+			page="/pages/subMenu/Home.jsp" /></td>
+		<td valign="top"><img
+			src="images/uIEnhancementImages/sep_left.gif" width="8" /></td>
 		<td align="center" valign="top"><img
-			src="images/uIEnhancementImages/concept_image_s.jpg" alt="caTissue Suite" /></td>
-		<td valign="top"><img src="images/uIEnhancementImages/sep_right.gif" width="8" /></td>
+			src="images/uIEnhancementImages/concept_image_s.jpg"
+			alt="caTissue Suite" /></td>
+		<td valign="top"><img
+			src="images/uIEnhancementImages/sep_right.gif" width="8" /></td>
 		<td valign="top" align="center" height="100%" width="250">
 		<table width="100%" height="100%" cellpadding="0" cellspacing="0"
 			border="0">
@@ -44,7 +47,8 @@ table#browserDetailsContainer
 									class="wh_ar_b"><bean:message key="app.loginMessage" /></span>
 								</td>
 								<td align="right" class="td_table_head"><img
-									src="images/uIEnhancementImages/table_title_corner.gif" width="31" height="24" /></td>
+									src="images/uIEnhancementImages/table_title_corner.gif"
+									width="31" height="24" /></td>
 								<td width="20">&nbsp;</td>
 							</tr>
 							<tr>
@@ -74,8 +78,8 @@ table#browserDetailsContainer
 														<td><input name="Submit" type="submit"
 															class="button_main" value="Login" /> <a href="#"
 															class="blue"><span class="wh_ar_b"></span></a></td>
-														<td><img src="images/uIEnhancementImages/or_dot.gif" width="1"
-															height="15" hspace="5" /></td>
+														<td><img src="images/uIEnhancementImages/or_dot.gif"
+															width="1" height="15" hspace="5" /></td>
 														<td><a
 															href="SignUp.do?operation=add&amp;pageOf=pageOfSignUp"
 															class="blue"><bean:message key="app.signup" /></a></td>
@@ -114,13 +118,15 @@ table#browserDetailsContainer
 							</tr>
 						</table>
 						</td>
-						<td height="1%" width="5" background="images/uIEnhancementImages/shadow_right.gif">
+						<td height="1%" width="5"
+							background="images/uIEnhancementImages/shadow_right.gif">
 					</tr>
 
 
 					<tr>
 						<td background="images/uIEnhancementImages/shadow_down.gif"></td>
-						<td height="5"><img src="images/uIEnhancementImages/shadow_corner.gif" width="5"
+						<td height="5"><img
+							src="images/uIEnhancementImages/shadow_corner.gif" width="5"
 							height="5" /></td>
 
 					</tr>
@@ -145,15 +151,18 @@ table#browserDetailsContainer
 					<tr height="39%">
 
 						<td colspan="2" height="39%" class="black_ar"><img
-							src="images/uIEnhancementImages/logo_ie.gif" alt="Internet Explorer 6.0" width="16"
-							height="16" hspace="3" vspace="3" align="absmiddle" /><bean:message
+							src="images/uIEnhancementImages/logo_ie.gif"
+							alt="Internet Explorer 7.0" width="16" height="16" hspace="3"
+							vspace="3" align="absmiddle" /><bean:message
 							key="app.certified.ie" /><br />
 
-						<img src="images/uIEnhancementImages/logo_firefox.gif" alt="Mozilla Firefox-2.0.0.3 "
-							width="16" height="16" hspace="3" vspace="3" align="absmiddle" /><bean:message
+						<img src="images/uIEnhancementImages/logo_firefox.gif"
+							alt="Mozilla Firefox-2.0.0.14 " width="16" height="16" hspace="3"
+							vspace="3" align="absmiddle" /><bean:message
 							key="app.certified.mozilla" /><br />
-						<img src="images/uIEnhancementImages/logo_safari.gif" alt="Mac Safari 2.0.3 "
-							width="16" height="16" hspace="3" vspace="3" align="absmiddle" /><bean:message
+						<img src="images/uIEnhancementImages/logo_safari.gif"
+							alt="Mac Safari 3.1 " width="16" height="16" hspace="3"
+							vspace="3" align="absmiddle" /><bean:message
 							key="app.certified.mac" /></td>
 					</tr>
 					<tr height="13%">
@@ -166,11 +175,11 @@ table#browserDetailsContainer
 					</tr>
 					<tr height="26%">
 						<td colspan="2" height="26%" class="black_ar"><img
-							src="images/uIEnhancementImages/logo_windows.gif" alt="Windows " width="16"
-							height="16" hspace="3" vspace="3" align="absmiddle" /><bean:message
+							src="images/uIEnhancementImages/logo_windows.gif" alt="Windows "
+							width="16" height="16" hspace="3" vspace="3" align="absmiddle" /><bean:message
 							key="app.optimal.resolutions.win" /> <br />
-						<img src="images/uIEnhancementImages/logo_mac.gif" alt="Mac" width="16" height="16"
-							hspace="3" vspace="3" align="absmiddle" /><bean:message
+						<img src="images/uIEnhancementImages/logo_mac.gif" alt="Mac"
+							width="16" height="16" hspace="3" vspace="3" align="absmiddle" /><bean:message
 							key="app.optimal.resolutions.mac" /> <br />
 						</td>
 					</tr>
@@ -179,6 +188,10 @@ table#browserDetailsContainer
 			</tr>
 		</table>
 		</td>
+	</tr>
+	<tr>
+		<td colspan="5" align="center" valign="top" bgcolor="#bcbcbc"><img
+			src="images/spacer.gif" width="1" height="1" /></td>
 	</tr>
 </table>
 
