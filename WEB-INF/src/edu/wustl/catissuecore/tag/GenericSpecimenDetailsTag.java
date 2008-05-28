@@ -505,7 +505,9 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			}
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[6].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
-				if(specimen.getStorageContainerForSpecimen()!= null && specimen.getStorageContainerForSpecimen().equalsIgnoreCase("Virtual"))
+				//if(specimen.getStorageContainerForSpecimen()!= null && specimen.getStorageContainerForSpecimen().equalsIgnoreCase("Virtual"))
+				//if((specimen.getStorageContainerForSpecimen()!= null && "Virtual".equalsIgnoreCase(specimen.getStorageContainerForSpecimen())) || (getFormattedValue(specimen.getSelectedContainerName()).trim().length() ==0))
+				if(specimen.getStorageContainerForSpecimen()!= null && "Virtual".equalsIgnoreCase(specimen.getStorageContainerForSpecimen()))
 				{
 					createVirtualStorageComponent( sb, nameValue);
 				}
@@ -562,7 +564,8 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			{	s[0] = elementNamePrefix+"concentration";	s[1] =getFormattedValue(specimen.getConcentration()); }
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[6].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
-				if((specimen.getStorageContainerForSpecimen()!= null && specimen.getStorageContainerForSpecimen().equalsIgnoreCase("Virtual")) || (getFormattedValue(specimen.getSelectedContainerName()).trim().length() ==0))
+				//if((specimen.getStorageContainerForSpecimen()!= null && specimen.getStorageContainerForSpecimen().equalsIgnoreCase("Virtual")) || (getFormattedValue(specimen.getSelectedContainerName()).trim().length() ==0))
+				if((specimen.getStorageContainerForSpecimen()!= null && "Virtual".equalsIgnoreCase(specimen.getStorageContainerForSpecimen())))
 				{
 					s[0] = elementNamePrefix+"storageContainerForSpecimen";	s[1] =getFormattedValue(specimen.getStorageContainerForSpecimen());
 				}
@@ -716,7 +719,14 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				sb.append("<td class=\"dataCellText\" >");
 				if(nameValue.length > 2)
 				{
-					sb.append(nameValue[1]);sb.append(":");sb.append(nameValue[3]);sb.append(",");sb.append(nameValue[5]);
+					if(nameValue[1].trim().length()>0)
+					{
+						sb.append(nameValue[1]);sb.append(":");sb.append(nameValue[3]);sb.append(",");sb.append(nameValue[5]);
+					}
+					else
+					{
+						sb.append(getFormattedValue(specimen.getStorageContainerForSpecimen(),1));
+					}
 				}
 				else
 					sb.append(getFormattedValue(nameValue[1],1));
