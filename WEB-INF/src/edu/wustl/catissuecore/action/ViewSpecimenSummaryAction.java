@@ -38,7 +38,7 @@ public class ViewSpecimenSummaryAction extends Action {
 		try {
 			ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 			HttpSession session = request.getSession();
-			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
+//			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
 
 			
 			
@@ -81,7 +81,7 @@ public class ViewSpecimenSummaryAction extends Action {
 				updateSessionBean(summaryForm, session);
 				
 			}
-			
+		
 			if(request.getParameter("save")!=null)
 			{
 				if (!isTokenValid(request))
@@ -157,7 +157,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			}
 			
 			//Mandar: 16May2008 : For specimenDetails customtag --- end ---
-			
+			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
 			if(pageOf != null && ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(summaryForm.getRequestType()))
 			{
 				request.setAttribute(Constants.PAGEOF,pageOf);
@@ -183,7 +183,8 @@ public class ViewSpecimenSummaryAction extends Action {
 	private void updateSessionBean(ViewSpecimenSummaryForm summaryForm, HttpSession session)
 	{
 		String eventId = summaryForm.getEventId();
-		if (eventId == null)
+		if (eventId == null || session
+				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP) == null)
 		{
 			return;
 		}
@@ -191,15 +192,17 @@ public class ViewSpecimenSummaryAction extends Action {
 		Map collectionProtocolEventMap = (Map) session
 		.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);		
 		CollectionProtocolEventBean eventBean =(CollectionProtocolEventBean)
-							collectionProtocolEventMap.get(eventId);
+							collectionProtocolEventMap.get(eventId);	// get nullpointer sometimes
 		LinkedHashMap specimenMap = (LinkedHashMap)eventBean.getSpecimenRequirementbeanMap();
 		String selectedItem = summaryForm.getLastSelectedSpecimenId();
 		GenericSpecimen selectedSpecimen=(GenericSpecimen) specimenMap.get(selectedItem);
 		
-		updateSpecimenToSession(summaryForm, specimenMap);	
-		updateAliquotToSession(summaryForm, selectedSpecimen);
-		updateDerivedToSession(summaryForm, selectedSpecimen);
-		
+		updateSpecimenToSession(summaryForm, specimenMap);
+		if(selectedSpecimen != null)
+		{
+			updateAliquotToSession(summaryForm, selectedSpecimen);
+			updateDerivedToSession(summaryForm, selectedSpecimen);
+		}
 	}
 
 	/**
