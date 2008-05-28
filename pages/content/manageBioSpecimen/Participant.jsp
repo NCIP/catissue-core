@@ -432,7 +432,7 @@ tr#hiddenCombo
 			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
 			document.forms[0].forwardTo.value="ForwardTo";
 			document.forms[0].participantId.value="";
-			document.forms[0].id.value="";
+			document.forms[0].id.value="0";
 			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 			{%>
 				document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
