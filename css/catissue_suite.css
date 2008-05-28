@@ -377,6 +377,16 @@ A.white:hover {color: #d4e6f9;
 	border-right:1px solid #bfdcf3;
 	border-left:1px solid #bfdcf3;
 }
+
+.tdPartition {
+	border-bottom:2px solid #ffffff;
+	background-color:#f6f6f6;
+	font-family: verdana;
+	font-size: 11px;
+	color: #000000;
+
+}
+
 /*End td/tr css*/
 
 
