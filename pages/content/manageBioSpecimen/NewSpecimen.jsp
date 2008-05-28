@@ -87,7 +87,7 @@
 
 	
 	String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
-	boolean readOnlyValue=false,readOnlyForAll=true;
+	boolean readOnlyValue=false,readOnlyForAll=false;
 
 	if(operation.equals(Constants.EDIT))
 	{
@@ -1287,7 +1287,10 @@
 										boolean concentrationDisabled = true;
 										
 										if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
+										{
 											concentrationDisabled = false;
+											readOnlyForAll = true;	
+										}
 									%>
 							     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="concentration" property="concentration" 
 							     		readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>
