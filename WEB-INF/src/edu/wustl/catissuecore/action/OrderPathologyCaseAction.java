@@ -35,6 +35,7 @@ import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.catissuecore.util.global.Utility;
 
 /**
  * Action for ordering specimen
@@ -216,65 +217,101 @@ public class OrderPathologyCaseAction extends BaseAction
 		List pathologicalCaseList = new ArrayList();
 		//retriving the id list from session.
 		String [] className = {IdentifiedSurgicalPathologyReport.class.getName(),DeidentifiedSurgicalPathologyReport.class.getName(),SurgicalPathologyReport.class.getName()};
-		int [] size = new int[3];
+		//int [] size = new int[3];
 		
 		if(request.getSession().getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
 		{
-			size[0] = getList(request, Constants.PATHALOGICAL_CASE_ID , className[0], pathologicalCaseList, bizLogic);
+			getList(request, Constants.PATHALOGICAL_CASE_ID , className[0],Constants.IDENTIFIED_SURGPATH_REPORT, pathologicalCaseList, bizLogic);
 		}
 		if(request.getSession().getAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID) != null)
 		{
-			size[1] = size[0] + getList(request , Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID ,className[1], pathologicalCaseList, bizLogic);
+			getList(request , Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID ,className[1], Constants.DEIDENTIFIED_SURGPATH_REPORT,pathologicalCaseList, bizLogic);
 		}
 		if(request.getSession().getAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID) != null)
 		{
-			size[2] = size[1] + getList(request, Constants.SURGICAL_PATHALOGY_CASE_ID , className[2], pathologicalCaseList, bizLogic);
+			getList(request, Constants.SURGICAL_PATHALOGY_CASE_ID , className[2],Constants.SURGPATH_REPORT, pathologicalCaseList, bizLogic);
 		}
-		
-		if (pathologicalCaseList != null && !pathologicalCaseList.isEmpty())
-		{
-			for(int i = 0 ; i < pathologicalCaseList.size() ; i++)
-			{
-				String[] selectColName = {"specimenCollectionGroup"};
-				String[] whereColName = {Constants.SYSTEM_IDENTIFIER};
-				String[] whereColCond = {"="};
-				String sourceObjectName;
-				SurgicalPathologyReport identifiedSurPathReport = (SurgicalPathologyReport) pathologicalCaseList.get(i);
-				Object[] whereColVal = {identifiedSurPathReport.getId()};
 				
-				if (identifiedSurPathReport instanceof IdentifiedSurgicalPathologyReport) {
-					sourceObjectName = className[0];  ;
-				}
-				else if(identifiedSurPathReport instanceof DeidentifiedSurgicalPathologyReport)
-				{
-					sourceObjectName = className[1];
-				}
-				else
-				{
-					continue;
-				}
-				List specimenCollList = bizLogic.retrieve(sourceObjectName,selectColName,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION);
-				if(specimenCollList != null && !specimenCollList.isEmpty())
-				{
-					SpecimenCollectionGroup specimenColGroup = (SpecimenCollectionGroup) specimenCollList.get(0);
-					identifiedSurPathReport.setSpecimenCollectionGroup(specimenColGroup);
-				}
-			}
-		}
-		
 		return pathologicalCaseList;
 	}
 	
-	private int getList(HttpServletRequest request , String attr , String className , List pathologicalCaseList, IBizLogic bizLogic)throws DAOException
+	private void getList(HttpServletRequest request , String attr , String className ,int pathologicalType, List pathologicalCaseList, IBizLogic bizLogic)throws DAOException
 	{
-		String columnName="id";
-		List idList = (List)request.getSession().getAttribute(attr);
-		int size = idList.size();
-		for(int i=0;i<idList.size();i++)
-		{
-			List pathologicalListFromDb = bizLogic.retrieve(className, columnName, (String)idList.get(i));
-			pathologicalCaseList.add(pathologicalListFromDb.get(0));
-		}
-		return size;
+		List pathologyCaseIds = (List)request.getSession().getAttribute(attr);
+						
+		if(pathologyCaseIds!=null && !pathologyCaseIds.isEmpty())
+		{	
+			String ids =Utility.getCommaSeparatedIds(pathologyCaseIds);
+			
+			String hql =" select pathoCase.id ,pathoCase.specimenCollectionGroup.id, pathoCase.specimenCollectionGroup.surgicalPathologyNumber" +
+			" from "+className+" as pathoCase " +
+			" where pathoCase.id in ("+ids+")";
+			
+			try {
+				List list = Utility.executeQuery(hql);
+						
+				for(int i=0;i<list.size();i++)
+				{
+					Object[] obj = (Object[]) list.get(i);
+					
+					switch(pathologicalType)
+					{
+						 case Constants.IDENTIFIED_SURGPATH_REPORT:
+							 
+							 	IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = 
+							 		new IdentifiedSurgicalPathologyReport();
+								identifiedSurgicalPathologyReport.setId((Long)obj[0]);
+								identifiedSurgicalPathologyReport.setSpecimenCollectionGroup(
+										getSpecimenCollectionGroup((Long)obj[1],(String)obj[2]));
+								pathologicalCaseList.add(identifiedSurgicalPathologyReport);
+							 
+							 break;
+						
+						 case Constants.DEIDENTIFIED_SURGPATH_REPORT:
+							 	
+							 	DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = 
+							 		new DeidentifiedSurgicalPathologyReport();
+								deidentifiedSurgicalPathologyReport.setId((Long)obj[0]);
+								deidentifiedSurgicalPathologyReport.setSpecimenCollectionGroup(
+										getSpecimenCollectionGroup((Long)obj[1],(String)obj[2]));
+								pathologicalCaseList.add(deidentifiedSurgicalPathologyReport);
+								
+								break;
+							 
+						 case Constants.SURGPATH_REPORT:
+							 	
+							 	SurgicalPathologyReport surgicalPathologyReport = new SurgicalPathologyReport();
+								surgicalPathologyReport.setId((Long)obj[0]);
+								surgicalPathologyReport.setSpecimenCollectionGroup(
+										getSpecimenCollectionGroup((Long)obj[1],(String)obj[2]));
+								pathologicalCaseList.add(surgicalPathologyReport);
+								
+								break;
+							 
+				         default:
+				        	 break;
+					}
+					
+				}
+							
+			} catch (ClassNotFoundException e) {
+				
+				e.printStackTrace();
+			}
+		}	
+		
+	
+	}
+	/**This will give the object of specimen collection group
+	 * @param id
+	 * @param surgicalPathologyNumber
+	 * @return
+	 */
+	private SpecimenCollectionGroup getSpecimenCollectionGroup(Long id , String surgicalPathologyNumber)
+	{
+		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+		specimenCollectionGroup.setId(id);
+		specimenCollectionGroup.setSurgicalPathologyNumber(surgicalPathologyNumber);
+		return specimenCollectionGroup;
 	}
 }

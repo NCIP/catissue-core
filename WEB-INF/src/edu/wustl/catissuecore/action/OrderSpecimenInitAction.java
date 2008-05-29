@@ -19,7 +19,12 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderSpecimenForm;
 import edu.wustl.catissuecore.actionForm.OrderForm;
+import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.Quantity;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -32,6 +37,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.Utility;
 
 
 
@@ -195,37 +201,69 @@ public class  OrderSpecimenInitAction  extends BaseAction
 	/** function for getting data from database
 	 * @param request HttpServletRequest object
 	 * @return List of specimen objects
+	 * @throws ClassNotFoundException 
+	 * @throws DAOException 
 	 */
-	private List getDataFromDatabase(HttpServletRequest request)
+	private List getDataFromDatabase(HttpServletRequest request) throws DAOException, ClassNotFoundException
 	{
 		//to get data from database when specimen id is given
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		HttpSession session = request.getSession(true);
-		
-		try
-    	{
-    		
-	    	String sourceObjectName = Specimen.class.getName();
-	    	String columnName="id";
-	    	
-			List valueField=(List)session.getAttribute("specimenId");
-	    	List specimen=new ArrayList();
-	    	if(valueField != null && valueField.size() >0)
-	    	{
-				for(int i=0;i<valueField.size();i++)
+		List specimenObjects=new ArrayList();
+		List specimenIds=(List)session.getAttribute("specimenId");
+				
+		if(specimenIds != null && specimenIds.size() >0)
+		{
+						
+			List specimenList = retrieveSpecimenObjects(specimenIds);	
+			for(int i=0;i<specimenList.size();i++)
+			{
+			
+				Specimen specimen ;
+				Object[] obj = (Object[]) specimenList.get(i);	
+								
+				if(Constants.CELL.equals(obj[5]))
 				{
-					List specimenList = bizLogic.retrieve(sourceObjectName, columnName, (String)valueField.get(i));
-					Specimen speclist=(Specimen)specimenList.get(0);
-					specimen.add(speclist);
+					specimen = new CellSpecimen();
+				} else if (Constants.MOLECULAR.equals(obj[5]))
+				{
+					specimen = new MolecularSpecimen();
+				} else if(Constants.FLUID.equals(obj[5]))
+				{
+					specimen = new FluidSpecimen();
+				} else
+				{
+					specimen = new TissueSpecimen();
 				}
-	    	}
-			return specimen;
-    	}
-    	catch(DAOException e)
-    	{
-    		Logger.out.error(e.getMessage(), e);
-    		return null;
-    	}
+				
+				specimen.setId((Long) obj[0]);
+				specimen.setType((String)obj[1]);
+				specimen.setLabel((String)obj[2]);
+				specimen.setInitialQuantity((Quantity)obj[3]);
+				specimen.setAvailableQuantity((Quantity)obj[4]);
+				
+				specimenObjects.add(specimen);
+			}
+		}
+		return specimenObjects;
+	}
+	/** Returns the list of objects retrieved from database
+	 * @param specimenIds
+	 * @return
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	protected List retrieveSpecimenObjects(List specimenIds) throws DAOException, ClassNotFoundException
+	{
+		String ids =Utility.getCommaSeparatedIds(specimenIds);
+			
+		String hqlString=" select spec.id ,spec.type ,spec.label,spec.initialQuantity,spec.availableQuantity,spec.class " +
+		" from edu.wustl.catissuecore.domain.Specimen as spec " +
+		" where spec.id in ("+ids+")";
+		
+		List specimenObjects = Utility.executeQuery(hqlString);
+			
+		return specimenObjects;
+		
 	}
 }
     

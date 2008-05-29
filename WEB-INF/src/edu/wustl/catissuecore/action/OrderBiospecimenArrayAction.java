@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -103,81 +104,37 @@ public class OrderBiospecimenArrayAction extends BaseAction
 	 */
 	private List getDataFromDatabase(HttpServletRequest request) throws DAOException
 	{
-		//		// to get data from database when specimen id is given
-		//		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		//		HttpSession session = request.getSession(true);
-		//		
-		//		List arrayList = new ArrayList();
-		//		//retriving the id list from session.
-		//		if(session.getAttribute("arrayIdList") != null)
-		//		{
-		//			List idList = (List)session.getAttribute("arrayIdList");	    	
-		//			for(int i=0;i<idList.size();i++)
-		//			{
-		//				List arrayListFromDb = bizLogic.retrieve(SpecimenArray.class.getName(), "id", (String)idList.get(i));
-		//				SpecimenArray specimenArray = (SpecimenArray)arrayListFromDb.get(0);
-		//				arrayList.add(specimenArray);
-		//			}
-		//		}
-		//		return arrayList;
-
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		HttpSession session = request.getSession(true);
-		
-		String sourceObjectName = SpecimenArray.class.getName();
-		String columnName="id";
-    	List valueField=(List)session.getAttribute(Constants.SPECIMEN_ARRAY_ID);
-    	
+		List specimenArrayIds = (List)session.getAttribute(Constants.SPECIMEN_ARRAY_ID);
     	List specimenArrayList=new ArrayList();
-    	if(valueField != null && valueField.size() >0)
-    	{
-			for(int i=0;i<valueField.size();i++)
-			{
-				List SpecimenArray = bizLogic.retrieve(sourceObjectName, columnName, (String)valueField.get(i));
-				SpecimenArray specArray=(SpecimenArray)SpecimenArray.get(0);
-				specimenArrayList.add(specArray);
-			}
-    	}
     	
-    	
-    	
-    	
-    	
-    	
-	//	String[] columnName = {"name"};
-	//	List specimenArrayList = bizLogic.retrieve(sourceObjectName);
-		if (specimenArrayList != null && specimenArrayList.size() > 0)
-		{
-			Iterator itr = specimenArrayList.iterator();
-			while (itr.hasNext())
-			{
-				SpecimenArray specimenArray = (SpecimenArray)itr.next();
-				String[] whereColumnName = {"id"};
-				String[] whereColumnCond = {"="};
-				String[] selectColumnName =  {"specimenArrayType"};
-				Object[] whereColumnValue = {specimenArray.getId()};
-
-				List specimenTypeList = bizLogic.retrieve(sourceObjectName,selectColumnName, whereColumnName, whereColumnCond,
-						whereColumnValue, Constants.AND_JOIN_CONDITION);
-				if(specimenTypeList != null && specimenTypeList.size()>0)
-				{
-					SpecimenArrayType specimenArrayType = (SpecimenArrayType) specimenTypeList.get(0);
-					
-					Collection specimenTypeCollection = (Collection) bizLogic.retrieveAttribute(SpecimenArrayType.class.getName(),specimenArrayType.getId(),"elements(specimenTypeCollection)");
-					if(specimenTypeCollection != null)
-					{
-						specimenArrayType.setSpecimenTypeCollection(specimenTypeCollection);
-					}
-					specimenArray.setSpecimenArrayType(specimenArrayType);
-				}
+    	if(specimenArrayIds!=null && !specimenArrayIds.isEmpty())
+		{	
+			String ids = Utility.getCommaSeparatedIds(specimenArrayIds);
+						
+			String hql =" select specimenArray.id , specimenArray.name ,specimenArray.specimenArrayType " +//,elements(specimenArray.specimenArrayContentCollection)" +
+			" from edu.wustl.catissuecore.domain.SpecimenArray as specimenArray " +
+			" where specimenArray.id in ("+ids+")";
+			
+			try {
 				
-				Collection specimenArrayContentCollection = (Collection)bizLogic.retrieveAttribute(sourceObjectName,specimenArray.getId(),"elements(specimenArrayContentCollection)");
-				if(specimenArrayContentCollection != null)
+				List list = Utility.executeQuery(hql);
+				System.out.println("list  "+list);
+				for(int i=0;i<list.size();i++)
 				{
-					specimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
+					Object[] obj = (Object[])list.get(i);
+					SpecimenArray specimenArray = new SpecimenArray();
+					specimenArray.setId((Long)obj[0]);
+					specimenArray.setName((String)obj[1]);
+					specimenArray.setSpecimenArrayType((SpecimenArrayType)obj[2]);
+					specimenArrayList.add(specimenArray);
 				}
+							
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			}
-		}
-		return specimenArrayList;
+		}	
+    	
+    	return specimenArrayList;
 	}
 }

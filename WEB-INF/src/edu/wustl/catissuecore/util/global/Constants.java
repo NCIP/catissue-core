@@ -2296,5 +2296,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CRG_NAME ="crgName"; 
 	
 	public static final String RESPONSE_SEPARATOR = "#@#";
+	
+//	Constants required to differentiate between patological cases.
+	public static final int IDENTIFIED_SURGPATH_REPORT = 1;
+	public static final int DEIDENTIFIED_SURGPATH_REPORT = 2;
+	public static final int SURGPATH_REPORT = 3;
+	
 }
 	

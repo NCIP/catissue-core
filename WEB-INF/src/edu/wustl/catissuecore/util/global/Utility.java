@@ -1278,5 +1278,26 @@ public class Utility extends edu.wustl.common.util.Utility {
 		}
 		return userID;
 	}
+	
+	/**
+	 * This will return the comma separated ids string
+	 * @param orderItemIds
+	 * @return
+	 */
+	public static String getCommaSeparatedIds(List orderItemIds)
+	{
+		int counter = 1;
+		Iterator orderItemIdsIterator = orderItemIds.iterator();
+		String ids="";
+		
+		while(orderItemIdsIterator.hasNext())
+		{
+			ids = ids + orderItemIdsIterator.next();
+			if(counter<orderItemIds.size())
+				ids = ids +",";
+			counter++;
+		}
+		return ids;
+	}
 
 }
