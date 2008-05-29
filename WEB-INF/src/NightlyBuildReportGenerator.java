@@ -149,7 +149,9 @@ public class NightlyBuildReportGenerator
 		int TOTAL_NO_OF_PASS=0;
 		// it gives the rootNode of the xml file
 		Element root = document.getDocumentElement();
-		int totalNoOfFailures=0;
+		int totalNoOfFailures=0,TotalFailures=0; 
+		String TotalErrors="0";
+		
 		
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++)
@@ -166,6 +168,11 @@ public class NightlyBuildReportGenerator
 					if(attributeNode.getNodeName().equals("failures"))
 					{
 						TOTAL_NO_OF_FAILURES=(String)attributeNode.getNodeValue();
+					
+					}
+					if(attributeNode.getNodeName().equals("errors"))
+					{
+						TotalErrors=(String)attributeNode.getNodeValue();
 					
 					}
 					if(attributeNode.getNodeName().equals("tests"))
@@ -221,11 +228,12 @@ public class NightlyBuildReportGenerator
 				}
 			
 		}
-		
+		TotalFailures = Integer.parseInt(TOTAL_NO_OF_FAILURES)+ Integer.parseInt(TotalErrors);
+		System.out.println("TotalFailures"+TotalFailures);
 		// Add pass fail result to Result file 
-		TOTAL_NO_OF_PASS=Integer.parseInt(TOTAL_NO_OF_TESTS)-Integer.parseInt(TOTAL_NO_OF_FAILURES);
+		TOTAL_NO_OF_PASS=Integer.parseInt(TOTAL_NO_OF_TESTS) - TotalFailures;
 		String name="JUnitTest"+",";
-		name=name+TOTAL_NO_OF_TESTS+","+TOTAL_NO_OF_PASS+","+TOTAL_NO_OF_FAILURES+","+date+","+"-"+"\r\n";
+		name=name+TOTAL_NO_OF_TESTS+","+TOTAL_NO_OF_PASS+","+TotalFailures+","+date+","+"-"+"\r\n";
 		fileOutputStream.write(name.getBytes());
 		}
 		else // If XML file does not exists
@@ -245,6 +253,7 @@ public class NightlyBuildReportGenerator
 		Element root = document.getDocumentElement();
 		int totalNoOfTest=0;
 		int totalNoOfFailures=0;
+				
 		List listOfFailedTestCases = new ArrayList();
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++)
@@ -288,7 +297,9 @@ public class NightlyBuildReportGenerator
 									}	
 									
 								}	
-							}
+							}// end of the failure
+							
+							
 						}
 					}
 					
@@ -301,7 +312,7 @@ public class NightlyBuildReportGenerator
 		nightlyBuildReport.append("\n\n\tFailed Jmeter Tests :  "+totalNoOfFailures+"/"+totalNoOfTest);
 		System.out.println("----------------------------------------------------\n\nFailed Jmeter Tests !!!!!!! ->     "+totalNoOfFailures+"/"+totalNoOfTest);
 		
-		
+	
 			if(listOfFailedTestCases!=null && listOfFailedTestCases.size()>0)
 			{
 				Iterator listIter = listOfFailedTestCases.iterator();
@@ -314,7 +325,8 @@ public class NightlyBuildReportGenerator
 			}
 			
 			// Add pass fail result to Result file 
-			TOTAL_NO_OF_PASS=totalNoOfTest-totalNoOfFailures;
+			
+			TOTAL_NO_OF_PASS = totalNoOfTest - totalNoOfFailures;
 			String name="JMeterTest"+",";
 			name=name+totalNoOfTest+","+TOTAL_NO_OF_PASS+","+totalNoOfFailures+","+date+","+"-"+"\r\n";
 			fileOutputStream.write(name.getBytes());
