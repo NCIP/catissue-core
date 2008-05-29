@@ -25,6 +25,14 @@ import edu.wustl.common.util.global.ApplicationProperties;
 /**
  * This tag will accept the list of specimens and display them in 
  * editable or readonly mode.
+ * It accepts following attributes:
+ * 	columnHeaderListName
+ * 	formName
+ * 	dataListName
+ * 	dataListType
+ * 	columnListName
+ * 	isReadOnly
+ * 	displayColumnListName
  * 
  * @author mandar_deshmukh
  *
