@@ -29,15 +29,12 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
-import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
-import edu.wustl.catissuecore.reportloader.HL7ParserUtil;
-import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -120,30 +117,6 @@ public class ConflictResolverAction extends BaseAction
 	}	
 	
 	/**
-	 * To retrive the reportLoaderQueueObject
-	 * @param reportQueueId
-	 * @return
-	 * @throws DAOException
-	 */
-	private ReportLoaderQueue getReportQueueObject(String reportQueueId) throws DAOException
-	{
-		
-		ReportLoaderQueue reportLoaderQueue =null;
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
-	    List reportQueueList = (List)reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, reportQueueId);
-	    if((reportQueueList!=null) && reportQueueList.size()>0)
-		{
-			reportLoaderQueue = (ReportLoaderQueue)reportQueueList.get(0);
-		}
-	    
-	    
-	    return reportLoaderQueue;		
-	}
-	
-
-	
-	
-	/**
 	 * To create new participant and associate it to the report:
 	 * @param request
 	 * @param reportQueueId
@@ -154,25 +127,10 @@ public class ConflictResolverAction extends BaseAction
 	{
 		
 		String errorMessage = null;
-		Site site =null;
 		ReportLoaderQueue reportLoaderQueue =null;
-		reportLoaderQueue = getReportQueueObject(reportQueueId);
+		reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
 		
-		//retrieve site
-		String siteName = reportLoaderQueue.getSiteName();
-		SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Site.class.getName());
-		List siteList = (List)siteBizLogic.retrieve(Site.class.getName(),Constants.SYSTEM_NAME, siteName);
-		
-		if((siteList!=null) && siteList.size()>0)
-		{
-			site = (Site)siteList.get(0);
-		}
-				
-		//retrive the PID		
-		String pidLine = ReportLoaderUtil.getLineFromReport(reportLoaderQueue.getReportText(), CaTIESConstants.PID);
-		
-		//Participant Object		
-		Participant participant = HL7ParserUtil.parserParticipantInformation(pidLine,site);
+		Participant participant = Utility.getParticipantFromReportLoaderQueue(reportQueueId);
 	
 		ParticipantBizLogic participantBizLogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
 		try
@@ -216,7 +174,7 @@ public class ConflictResolverAction extends BaseAction
 	{
 		
 		ReportLoaderQueue reportLoaderQueue =null;
-		reportLoaderQueue = getReportQueueObject(reportQueueId);
+		reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
 		
 		//Changing the status of the report in the queue to NEW
 		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
@@ -257,7 +215,7 @@ public class ConflictResolverAction extends BaseAction
 	{
 		Long cprId =null;
 		ReportLoaderQueue reportLoaderQueue =null;
-		reportLoaderQueue = getReportQueueObject(reportQueueId);
+		reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
 		
 		//Changing the status of the report in the queue to NEW
 		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
@@ -380,7 +338,7 @@ public class ConflictResolverAction extends BaseAction
 	  {
 		   	Long cprId =null;
 			ReportLoaderQueue reportLoaderQueue =null;
-			reportLoaderQueue = getReportQueueObject(reportQueueId);
+			reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
 			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
 			
 			//deleting the reportloaderQueue object
@@ -397,7 +355,7 @@ public class ConflictResolverAction extends BaseAction
 	protected void overwriteReport(HttpServletRequest request,String reportQueueId) throws DAOException
 	  {
 		   ReportLoaderQueue reportLoaderQueue =null;
-		   reportLoaderQueue = getReportQueueObject(reportQueueId);
+		   reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
 			
 			//Changing the status of the report in the queue to NEW
 			reportLoaderQueue.setStatus(CaTIESConstants.OVERWRITE_REPORT);
