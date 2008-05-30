@@ -301,7 +301,7 @@
 					                </div>
 								</td>
 				             </tr>
-				             <tr onclick="showHide('add_id')">
+				             <tr onclick="showHide('add_default_capacity')">
 								 <td height="20" align="left" class="tr_bg_blue1">
 									<span class="blue_ar_b">
 										<label for="defaultCapacity">
@@ -309,13 +309,14 @@
 										</label>
 									</span>
 								</td>
-				                <td height="20" align="right" class="tr_bg_blue1" >
+				                <td height="20" align="right" class="tr_bg_blue1" ><a id="imgArrow_add_default_capacity">
 									<img src="images/uIEnhancementImages/dwn_arrow1.gif" width="7" height="8" hspace="10" border="0" class="tr_bg_blue1" />
+								</a>
 								</td>
 				              </tr>
 							  <tr>
 				                <td colspan="3" style="padding-top:10px;">
-									<div id="add_id" style="display:none" >
+									<div id="add_default_capacity" style="display:none" >
 					                  <table width="100%" border="0" cellpadding="2" cellspacing="0">
 										<tr>
 					                      <td width="1%" align="left" valign="top" class="tdPartition">

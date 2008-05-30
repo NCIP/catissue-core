@@ -481,20 +481,20 @@ function insRow(subdivtag)
 					</div>
 				</td>
 			</tr>
-            <tr onclick="javascript:showHide('add_id')">
+            <tr onclick="javascript:showHide('add_specimen_requirements')">
 	           <td height="20" align="left" class="tr_bg_blue1">
 					<span class="blue_ar_b">
 						<bean:message key="distributionprotocol.specimenreq" />
 					</span>
 					<html:hidden property="counter"/>
 				</td>
-                <td width="2%" align="right" class="tr_bg_blue1"><a href="#">
+                <td width="2%" align="right" class="tr_bg_blue1"><a href="#" id="imgArrow_add_specimen_requirements">
 					<img src="images/uIEnhancementImages/dwn_arrow1.gif" width="7" height="8" hspace="10" border="0" class="tr_bg_blue1" /></a>
 				</td>
              </tr>
              <tr>
                 <td colspan="3" style="padding-top:10px;">
-					<div id="add_id" style="display:none" >
+					<div id="add_specimen_requirements" style="display:none" >
 						<table width="100%" border="0" cellspacing="0" cellpadding="4">
 							<tbody id="SpecimenRequirementData">
 							    <tr>
