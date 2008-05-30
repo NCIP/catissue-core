@@ -6,6 +6,18 @@
 Ext.onReady(function(){
     Ext.QuickTips.init();
 
+	// for toolTip
+	Ext.menu.BaseItem.prototype.onRender = function(container){
+		this.el = Ext.get(this.el);
+		container.dom.appendChild(this.el.dom);
+		if (this.tooltip) {
+		this.el.dom.qtip = this.tooltip;
+		}
+	};
+	
+	// end Here
+
+
     // Menus can be prebuilt and passed by reference
     var menuHome = new Ext.menu.Menu({
         id: 'menuHome',
@@ -38,6 +50,7 @@ Ext.onReady(function(){
             {
                 text: 'User',
 				href:'User.do?operation=add&pageOf=pageOfUserAdmin',
+				tooltip:'Add User',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
@@ -56,6 +69,7 @@ Ext.onReady(function(){
             },
 				{
                 text: 'Institution',
+				tooltip:'Add Institution',
 				href:'Institution.do?operation=add&pageOf=pageOfInstitution',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -72,6 +86,7 @@ Ext.onReady(function(){
             },
 				{
                 text: 'Department',
+				tooltip:'Add Department',
 				href:'Department.do?operation=add&pageOf=pageOfDepartment',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -88,6 +103,7 @@ Ext.onReady(function(){
             },
 				{
                 text: 'Cancer Research Group',
+				tooltip:'Add Cancer Research Group',
 				href:'CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -98,13 +114,14 @@ Ext.onReady(function(){
                         }, {
                             text: 'Edit',
                             href:'SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup' 
-                        } 
+                        }
                     ]
                 }
             },
              
 			  {
                 text: 'Site',
+				tooltip:'Add Site',
 				href:'Site.do?operation=add&pageOf=pageOfSite',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -121,6 +138,7 @@ Ext.onReady(function(){
             },
 			  {
                 text: 'Storage Type',
+				tooltip:'Add Storage Type',
 				href:'StorageType.do?operation=add&pageOf=pageOfStorageType',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -137,6 +155,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Storage Container',
+				tooltip:'Add Storage Container',
 				href:'StorageContainer.do?operation=add&pageOf=pageOfStorageContainer',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -157,6 +176,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Specimen Array Type',
+				tooltip:'Add Specimen Array Type',
 				href:'SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -173,6 +193,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Biohazard',
+				tooltip:'Add Biohazard',
 				href:'Biohazard.do?operation=add&pageOf=pageOfBioHazard',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -189,6 +210,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Collection Protocol',
+				tooltip:'Add Collection Protocol',
 				href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -205,6 +227,7 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Distribution Protocol',
+				tooltip:'Add Distribution Protocol',
 				href:'DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -221,14 +244,17 @@ Ext.onReady(function(){
             },
 			{
                 text: 'Reported Problems',
+				tooltip:'Shows Reported Problems',
                 href:'ReportedProblemShow.do?pageNum=1'
             },
 			{
                 text: 'Local Extensions',
+				tooltip:'Shows Local Extensions',
                 href:'DefineAnnotationsInformationPage.do'
             },
 			{
                 text: 'Conflicting Reports',
+				tooltip:'Shows Conflicting Reports',
                 href:'ConflictView.do?pageNum=1'
             }
 			
@@ -241,11 +267,13 @@ Ext.onReady(function(){
         items: [
             {
                 text: 'Collection Protocol Based View',
+				tooltip:'Collection Protocol Based View',
                 href:'CpBasedSearch.do'
 
             },
 			{
                 text: 'Participant',
+				tooltip:'Add Participant',
 				href:'Participant.do?operation=add&pageOf=pageOfParticipant&clearConsentSession=true',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -262,6 +290,7 @@ Ext.onReady(function(){
             },
               {
                 text: 'Specimen',
+				tooltip:'Edit Specimen',
 				href:'SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -287,6 +316,7 @@ Ext.onReady(function(){
             },
             {
                 text: 'Specimen Array',
+				tooltip:'Add Specimen Array',
 				href:'SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -306,6 +336,7 @@ Ext.onReady(function(){
             }, 
 			  {
                 text: 'Distribution',
+				tooltip:'Specimen Report',
 				href:'SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -324,6 +355,7 @@ Ext.onReady(function(){
                                       {
 
                             text: 'Order View',
+							tooltip:'Order View',
 		                    href:'RequestListView.do?pageNum=1'
 
             }
@@ -336,10 +368,12 @@ Ext.onReady(function(){
         items: [
 			{
                 text: 'Saved Queries',
+				tooltip:'Saved Queries',
 			    href : 'RetrieveQueryAction.do'                       
             },
             {
                 text: 'Search',
+				tooltip:'Simple Search',
 				href:'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface',
                 menu: {        // <-- submenu by nested config object
                     items: [
@@ -358,12 +392,9 @@ Ext.onReady(function(){
               {
 
                 text: 'My List View',
+				tooltip:'My List View',
                 href:'QueryAddToCart.do?operation=view'
-
-                
-
             }
-
         ]
 
     });
