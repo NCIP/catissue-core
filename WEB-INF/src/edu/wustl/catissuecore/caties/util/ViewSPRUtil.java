@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.bean.ConceptHighLightingBean;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
@@ -108,6 +110,36 @@ public class ViewSPRUtil
 		
 	}
 	
-	
-	
+	public static Map getMedicalIdentifierNumbers(Collection medicalIdentifierNumbers)
+	{
+		HashMap values= new HashMap();
+		int i = 1;
+    	
+    	Iterator it = medicalIdentifierNumbers.iterator();
+    	while(it.hasNext())
+    	{
+    		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
+    		
+    		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_id";
+			String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
+			String key3 = "ParticipantMedicalIdentifier:" + i  +"_id";
+
+			Site site =participantMedicalIdentifier.getSite();
+			if(site!=null)
+			{
+				values.put(key1,edu.wustl.catissuecore.util.global.Utility.toString(site.getName()));
+			}
+			else
+			{
+				values.put(key1,edu.wustl.catissuecore.util.global.Utility.toString(Constants.SELECT_OPTION));
+			}					
+			
+			values.put(key2,edu.wustl.catissuecore.util.global.Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
+			values.put(key3,edu.wustl.catissuecore.util.global.Utility.toString(participantMedicalIdentifier.getId()));
+			
+			i++;
+    	}
+    	return values;
+	}
+
 }
