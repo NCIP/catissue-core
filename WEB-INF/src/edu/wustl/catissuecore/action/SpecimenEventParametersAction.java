@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
+import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -106,6 +107,16 @@ public class SpecimenEventParametersAction  extends BaseAction
 				eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
 			}
 	
+    	}
+    	else
+    	{
+    		String specimenId = (String)request.getAttribute(Constants.SPECIMEN_ID);
+            if(specimenId == null)
+            {
+            	SpecimenEventParametersForm sepF =((SpecimenEventParametersForm)eventParametersForm); 
+            	specimenId = ""+sepF.getSpecimenId();
+            	request.setAttribute(Constants.SPECIMEN_ID, specimenId);
+            }
     	}
     	//Changes by Anup
     	
