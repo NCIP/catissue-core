@@ -24,6 +24,16 @@ import org.jdom.xpath.XPath;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.ReportLoaderQueueBizLogic;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
+import edu.wustl.catissuecore.reportloader.HL7ParserUtil;
+import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
@@ -183,4 +193,62 @@ public class Utility
         }
         return deidSprText;
     }
+	
+	/**
+	 * To retrive the reportLoaderQueueObject
+	 * @param reportQueueId
+	 * @return
+	 * @throws DAOException
+	 */
+	public static ReportLoaderQueue getReportQueueObject(String reportQueueId) throws DAOException
+	{
+		
+		ReportLoaderQueue reportLoaderQueue =null;
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
+	    List reportQueueList = (List)reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, reportQueueId);
+	    if((reportQueueList!=null) && reportQueueList.size()>0)
+		{
+			reportLoaderQueue = (ReportLoaderQueue)reportQueueList.get(0);
+		}
+	    
+	    
+	    return reportLoaderQueue;		
+	}
+	
+	/**
+	 * To retrieve the participant present in the report
+	 * @param reportQueueId
+	 * @return
+	 * @throws Exception
+	 * 
+	 */
+	public static Participant getParticipantFromReportLoaderQueue(String reportQueueId) throws Exception
+	{
+		Participant participant = null;
+	
+		Site site =null;
+		ReportLoaderQueue reportLoaderQueue =null;
+		reportLoaderQueue = getReportQueueObject(reportQueueId);
+
+		//retrieve site
+		String siteName = reportLoaderQueue.getSiteName();
+		SiteBizLogic siteBizLogic = (SiteBizLogic)BizLogicFactory.getInstance().getBizLogic(Site.class.getName());
+		List siteList = (List)siteBizLogic.retrieve(Site.class.getName(),Constants.SYSTEM_NAME, siteName);
+		
+		
+		if((siteList!=null) && siteList.size()>0)
+		{
+			site = (Site)siteList.get(0);
+		}
+		
+		
+		//retrive the PID		
+		String pidLine = ReportLoaderUtil.getLineFromReport(reportLoaderQueue.getReportText(), CaTIESConstants.PID);
+		
+		//Participant Object		
+		 participant = HL7ParserUtil.parserParticipantInformation(pidLine,site);
+			 
+		return participant;
+	}
+
 }
