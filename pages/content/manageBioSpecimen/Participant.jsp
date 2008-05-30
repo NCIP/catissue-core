@@ -167,16 +167,25 @@ tr#hiddenCombo
 			var x=document.getElementById(subdivtag).insertRow(q);
 			
 			// First Cell
+			var checkb=x.insertCell(0);
+			checkb.className="black_ar";
+			checkb.colSpan=1;
+			sname="";
+			
+			var identifier = "value(ParticipantMedicalIdentifier:" + (q+1) +"_id)";
+			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 
+			var name = "chk_"+(q+1);
+			sname = sname +"<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteMedicalIdentifierValue,document.forms[0].valueCounter,'chk_')\">";
+			checkb.innerHTML=""+sname;
 			//Second Cell
-			var spreqtype=x.insertCell(0);
-			spreqtype.className="formFieldWithoutBorder";
+			var spreqtype=x.insertCell(1);
+			spreqtype.className="black_ar_s";
 			sname="";
 			var identifier = "value(ParticipantMedicalIdentifier:" + (q+1) +"_id)";
 			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 			var name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_Site_id)";
-// Mandar : 434 : for tooltip 
-			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized10' id='" + name + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
+			sname = sname +"<select name='" + name + "' size='1' class='formFieldSized12' id='" + name + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 			<%
 				if(siteList!=null)
 				{
@@ -193,28 +202,19 @@ tr#hiddenCombo
 			spreqtype.innerHTML="" + sname;
 		
 			//Second Cellvalue(ParticipantMedicalIdentifier:1_medicalRecordNumber)
-			var spreqsubtype=x.insertCell(1);
-			spreqsubtype.className="formFieldWithoutBorder";
-			spreqsubtype.colSpan=3;
+			//Third Cell
+			var spreqsubtype=x.insertCell(2);
+			spreqsubtype.className="black_ar";
+			spreqsubtype.colSpan=1;
 			sname="";
 		
 			name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_medicalRecordNumber)";
 			sname= "";
-			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized10' id='" + name + "'>";
+			sname="<input type='text' name='" + name + "' maxlength='50' size='15' class='black_ar' id='" + name + "'>";
 			spreqsubtype.innerHTML="" + sname;
 			
-			//Third Cell
-			var checkb=x.insertCell(2);
-			checkb.className="formFieldWithoutBorder";
-			checkb.colSpan=3;
-			sname="";
 			
-			var identifier = "value(ParticipantMedicalIdentifier:" + (q+1) +"_id)";
-			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-
-			var name = "chk_"+(q+1);
-			sname = sname +"<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteMedicalIdentifierValue,document.forms[0].valueCounter,'chk_')\">";
-			checkb.innerHTML=""+sname;
+			
 		}
 		
 		
@@ -536,7 +536,7 @@ tr#hiddenCombo
 	if(pageView.equals("edit"))
 	{
 	%>
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="100%">
 			<tr>
 				<td height="20" class="tabMenuItemSelected">
 					<bean:message key="edit.tab.participant"/>
