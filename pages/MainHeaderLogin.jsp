@@ -6,7 +6,7 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td width="6%" valign="top"><img
-			src="images/uIEnhancementImages/top_bg1.jpg" width="60" height="20" /></td>
+			src="images/uIEnhancementImages/top_bg1.jpg" width="70" height="20" /></td>
 		<td width="94%" valign="top"
 			background="images/uIEnhancementImages/top_bg.jpg"
 			style="background-repeat:repeat-x;">
