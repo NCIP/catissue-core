@@ -83,19 +83,10 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 	{
 		//Save the report data in a CSV file at server side
 		Logger.out.debug("Save action");
-		List distributionData = new ArrayList();
-		distributionData = createList("distribution.protocol",distributionReportForm.getDistributionProtocolTitle(),distributionData);
-		distributionData = createList("eventparameters.user",distributionReportForm.getUserName(),distributionData);
-		distributionData = createList("eventparameters.dateofevent",distributionReportForm.getDateOfEvent(),distributionData);
-		distributionData = createList("eventparameters.time",distributionReportForm.getTimeInHours()
-				+":"+distributionReportForm.getTimeInMinutes(),distributionData);
-//		distributionData = createList("distribution.fromSite",distributionReportForm.getFromSite(),distributionData);
-		distributionData = createList("distribution.toSite",distributionReportForm.getToSite(),distributionData);
-		
-		distributionData = createList("eventparameters.comments",distributionReportForm.getComments(),distributionData);
-		String delimiter = Constants.DELIMETER;
 		ExportReport report = new ExportReport(fileName);
-		//report.writeData(distributionData,delimiter);
+		List distributionData = new ArrayList();
+		addDistributionHeader(distributionData, distributionReportForm,report);
+		String delimiter = Constants.DELIMETER;
 		List distributedItemsColumns = new ArrayList();
 		List columns = new ArrayList();
 		for(int k=0;k<columnNames.length;k++)
@@ -105,10 +96,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		}
 		distributedItemsColumns.add(columns);
 		distributionData.addAll(distributedItemsColumns);
-		
-		//report.writeData(distributedItemsColumns,delimiter);
-		
-    	Iterator dataListItr = listOfData.iterator();
+		Iterator dataListItr = listOfData.iterator();
     	while(dataListItr.hasNext())
     	{
     		List rowList = (List)dataListItr.next();

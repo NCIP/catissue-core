@@ -641,92 +641,33 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 						String message = ApplicationProperties.getValue("transfereventparameters.toposition");
 						throw new DAOException(ApplicationProperties.getValue("errors.invalid", message+" for specimen: "+specimen.getLabel()));
 					}
-					
-//					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic("edu.wustl.catissuecore.domain.StorageContainer");
-//					boolean canHoldSpecimen = storageContainerBizLogic.canHoldSpecimenClass(specimen.getClassName(), storageContainerObj);
-//					if(!canHoldSpecimen)
-//					{
-//						String message = ApplicationProperties.getValue("transfereventparameters.toposition");
-//						throw new DAOException(ApplicationProperties.getValue("errors.invalid", message+" for specimen: "+specimen.getLabel()+" Container cannot hold this type of Specimen"));
-//					}
-					
-						//Long storageContainerId = specimen.getStorageContainer().getId();
-						Integer xPos = parameter.getToPositionDimensionOne();
-						Integer yPos = parameter.getToPositionDimensionTwo();
-						boolean isContainerFull = false;
-						/**
-						 *  Following code is added to set the x and y dimension in case only storage container is given 
-						 *  and x and y positions are not given 
-						 */
-						
-						if (xPos == null || yPos == null)
-						{
+
+					Integer xPos = parameter.getToPositionDimensionOne();
+					Integer yPos = parameter.getToPositionDimensionTwo();
+					boolean isContainerFull = false;
+					/**
+					 *  Following code is added to set the x and y dimension in case only storage container is given 
+					 *  and x and y positions are not given 
+					 */
+					if (yPos == null || xPos == null)
+					{
 						isContainerFull = true;
 						Map containerMapFromCache = null;
-						try
-						{
-							containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
-						}
-						catch (CacheException e)
-						{
-							e.printStackTrace();
-						}
-						
-						if (containerMapFromCache != null)
-						{
-							Iterator itr = containerMapFromCache.keySet().iterator();
-							while (itr.hasNext())
-							{
-								NameValueBean nvb = (NameValueBean) itr.next();
-								if(nvb.getValue().toString().equals(storageContainerObj.getId().toString()))
-								{
-								
-									Map tempMap = (Map) containerMapFromCache.get(nvb);
-									Iterator tempIterator = tempMap.keySet().iterator();
-									
-									while (tempIterator.hasNext())
-									{
-										NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-										
-										list = (List) tempMap.get(nvb1);
-										NameValueBean nvb2;
-										
-										//To get the next available location for this event number assuming the pervious ones were allocated to previous events in the list
-										if(numberOfEvent >= list.size())
-										{
-											numberOfEvent= numberOfEvent - list.size();
-											continue;
-										}
-										nvb2 = (NameValueBean) list.get(numberOfEvent);
-										
-										parameter.setToPositionDimensionOne(new Integer(nvb1.getValue()));
-										parameter.setToPositionDimensionTwo(new Integer(nvb2.getValue()));
-									    isContainerFull = false;
-									    break;
-									}
-	
-									break;
-								}
-								
-							}
-						}
-						
-						xPos = parameter.getToPositionDimensionOne();
-					    yPos = parameter.getToPositionDimensionTwo();
-						}
-
-						if(isContainerFull)
-						{
-							throw new DAOException("The Storage Container you specified is full");
-						}
-						else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
-						{
-							throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
-									.getValue("transfereventparameters.toposition")));
-						}
-					
-				
-				
+						containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+						isContainerFull = setPositions(numberOfEvent, parameter,
+								storageContainerObj, isContainerFull, containerMapFromCache);
+							xPos = parameter.getToPositionDimensionOne();
+						    yPos = parameter.getToPositionDimensionTwo();
+					}
+					if(isContainerFull)
+					{
+						throw new DAOException("The Storage Container you specified is full");
+					}
+					else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
+								.getValue("transfereventparameters.toposition")));
+					}
 				}
 				if (Constants.EDIT.equals(operation))
 				{
@@ -735,6 +676,52 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				break;
 		}
 		return true;
+	}
+
+	/**
+	 * @param numberOfEvent
+	 * @param parameter
+	 * @param storageContainerObj
+	 * @param isContainerFull
+	 * @param containerMapFromCache
+	 * @return
+	 */
+	private boolean setPositions(int numberOfEvent, TransferEventParameters parameter,
+			StorageContainer storageContainerObj, boolean isContainerFull, Map containerMapFromCache)
+	{
+		List list;
+		if (containerMapFromCache != null)
+		{
+				Iterator itr = containerMapFromCache.keySet().iterator();
+				while (itr.hasNext())
+				{
+					NameValueBean nvb = (NameValueBean) itr.next();
+					if(nvb.getValue().toString().equals(storageContainerObj.getId().toString()))
+					{
+						Map tempMap = (Map) containerMapFromCache.get(nvb);
+						Iterator tempIterator = tempMap.keySet().iterator();
+						while (tempIterator.hasNext())
+						{
+							NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+							list = (List) tempMap.get(nvb1);
+							NameValueBean nvb2;
+							//To get the next available location for this event number assuming the pervious ones were allocated to previous events in the list
+							if(numberOfEvent >= list.size())
+							{
+								numberOfEvent= numberOfEvent - list.size();
+								continue;
+							}
+							nvb2 = (NameValueBean) list.get(numberOfEvent);
+							parameter.setToPositionDimensionOne(new Integer(nvb1.getValue()));
+							parameter.setToPositionDimensionTwo(new Integer(nvb2.getValue()));
+						    isContainerFull = false;
+						    break;
+						}
+						break;
+					}
+				}
+			}
+		return isContainerFull;
 	}
 
 	private void validateTransferEventParameters(SpecimenEventParameters eventParameter) throws DAOException

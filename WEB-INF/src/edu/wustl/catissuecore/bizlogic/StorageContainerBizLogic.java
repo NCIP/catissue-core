@@ -1592,19 +1592,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		Logger.out.debug("Site Query........................." + sql);
 
-		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-		List resultList = new ArrayList();
-
-		try
-		{
-			dao.openSession(null);
-			resultList = dao.executeQuery(sql, null, false, null);
-			dao.closeSession();
-		}
-		catch (Exception daoExp)
-		{
-			throw new DAOException(daoExp.getMessage(), daoExp);
-		}
+		List resultList = executeSQL(sql);
 
 		TreeNodeImpl siteTreeNode = null;
 		if (resultList.isEmpty() == false)
@@ -2543,46 +2531,33 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		List list = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
 		//Logger.out.debug("all the occupied positions by child containers"+list);
-		if (!list.isEmpty())
-		{
-			int x, y;
-
-			for (int i = 0; i < list.size(); i++)
-			{
-				Object[] object = (Object[]) list.get(i);
-				x = Integer.parseInt(object[0].toString());
-				y = Integer.parseInt(object[1].toString());
-
-				positions[x][y] = false;
-			}
-		}
+		setPositions(positions, list);
 
 		//Retrieving all the occupied positions by specimens
 		sourceObjectName = Specimen.class.getName();
 		whereColumnName[0] = "storageContainer.id";
 
 		list = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
-		//Logger.out.debug("all the occupied positions by specimens"+list);
-		if (!list.isEmpty())
-		{
-			int x, y;
-
-			for (int i = 0; i < list.size(); i++)
-			{
-				Object[] object = (Object[]) list.get(i);
-				x = Integer.parseInt(object[0].toString());
-				y = Integer.parseInt(object[1].toString());
-
-				positions[x][y] = false;
-			}
-		}
+		setPositions(positions, list);
 
 		//Retrieving all the occupied positions by specimens array 
 		sourceObjectName = SpecimenArray.class.getName();
 		whereColumnName[0] = "storageContainer.id";
 
 		list = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
-		//Logger.out.debug("all the occupied positions by specimen array"+list);	
+		setPositions(positions, list);
+
+		return positions;
+	}
+
+
+
+	/**
+	 * @param positions
+	 * @param list
+	 */
+	private void setPositions(boolean[][] positions, List list)
+	{
 		if (!list.isEmpty())
 		{
 			int x, y;
@@ -2596,8 +2571,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				positions[x][y] = false;
 			}
 		}
-
-		return positions;
 	}
 
 	/**
@@ -3141,33 +3114,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 */
 	public List getCollectionProtocolList(String id) throws DAOException
 	{
-
 		// Query to return titles of collection protocol related to given storagecontainer. 29-Aug-06 Mandar.
 		String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
 				+ " WHERE SP.IDENTIFIER = SC.COLLECTION_PROTOCOL_ID AND SC.STORAGE_CONTAINER_ID = " + id;
-
-		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-		List resultList = new ArrayList();
-		try
-		{
-			dao.openSession(null);
-			resultList = dao.executeQuery(sql, null, false, null);
-			dao.closeSession();
-		}
-		catch (Exception daoExp)
-		{
-			throw new DAOException(daoExp.getMessage(), daoExp);
-		}
-
+		List resultList = executeSQL(sql);
 		Iterator iterator = resultList.iterator();
-		//System.out.println("\nCollectionProtocol :");
 		List returnList = new ArrayList();
 		while (iterator.hasNext())
 		{
 			List list = (List) iterator.next();
 			String data = (String) list.get(0);
 			returnList.add(data);
-			//System.out.println(data);
 		}
 
 		if (returnList.isEmpty())
@@ -3187,7 +3144,36 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		// Query to return specimen classes related to given storagecontainer. 29-Aug-06 Mandar.
 		String sql = " SELECT SP.SPECIMEN_CLASS CLASS FROM CATISSUE_STOR_CONT_SPEC_CLASS SP " + "WHERE SP.STORAGE_CONTAINER_ID = " + id;
+		List resultList = executeSQL(sql);
+		Iterator iterator = resultList.iterator();
+		List returnList = new ArrayList();
+		while (iterator.hasNext())
+		{
+			List list = (List) iterator.next();
+			for (int cnt = 0; cnt < list.size(); cnt++)
+			{
+				String data = (String) list.get(cnt);
+				returnList.add(data);
+			}
+		}
+		if (returnList.isEmpty())
+		{
+			//bug id 7438
+			//returnList.add(new String(Constants.ALL));
+			returnList.add(new String(Constants.NONE));
+		}
+		return returnList;
+	}
 
+
+
+	/**
+	 * @param sql
+	 * @return
+	 * @throws DAOException
+	 */
+	private List executeSQL(String sql) throws DAOException
+	{
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List resultList = new ArrayList();
 		try
@@ -3200,27 +3186,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			throw new DAOException(daoExp.getMessage(), daoExp);
 		}
-
-		Iterator iterator = resultList.iterator();
-		//System.out.println("\nSpecimenClass :");
-		List returnList = new ArrayList();
-		while (iterator.hasNext())
-		{
-			List list = (List) iterator.next();
-			for (int cnt = 0; cnt < list.size(); cnt++)
-			{
-				String data = (String) list.get(cnt);
-				returnList.add(data);
-				//System.out.println(data);
-			}
-		}
-		if (returnList.isEmpty())
-		{
-			//bug id 7438
-			//returnList.add(new String(Constants.ALL));
-			returnList.add(new String(Constants.NONE));
-		}
-		return returnList;
+		return resultList;
 	}
 
 	//prints results returned from DAO executeQuery  To comment after debug 
@@ -3246,29 +3212,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 		}
 	}
-
-	// Method to print the relationMap and treeNode vector. To delete after debug
-	/*private void printVectorMap(Vector v, Map m)
-	 {
-	 //System.out.println("\n");
-	 System.out.println("\nVector Data\n");
-	 Iterator itr = v.iterator();
-	 while (itr.hasNext())
-	 {
-	 TreeNodeImpl obj = (TreeNodeImpl) itr.next();
-	 System.out.println(obj);
-	 }
-	 System.out.println("\n-------------------\n");
-	 System.out.println("\nMap\n");
-	 Iterator key = m.keySet().iterator();
-	 while (key.hasNext())
-	 {
-	 Long k = (Long) key.next();
-	 Object val = m.get(k);
-	 System.out.println(k + " : " + val.toString());
-	 }
-	 }*/
-
 	//Method to fetch ToolTipData for a given Container
 	private String getToolTipData(String containerID) throws DAOException
 	{

@@ -212,7 +212,7 @@ public class UserBizLogic extends DefaultBizLogic
 	 * @param csmUser The csm user to be deleted.
 	 * @throws DAOException
 	 */
-	private void deleteCSMUser(gov.nih.nci.security.authorization.domainobjects.User csmUser) throws DAOException
+	public void deleteCSMUser(gov.nih.nci.security.authorization.domainobjects.User csmUser) throws DAOException
 	{
 		try
 		{
@@ -235,8 +235,6 @@ public class UserBizLogic extends DefaultBizLogic
 	 */
 	private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException
 	{
-		Logger.out.debug("--------------- In here ---------------");
-
 		Vector authorizationData = new Vector();
 		Set group = new HashSet();
 		User aUser = (User) obj;

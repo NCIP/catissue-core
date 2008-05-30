@@ -38,13 +38,12 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
-import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * CreateArrayInitAction populates specimenarrayform object to display pre-populated data in specimenarray.jsp when 
@@ -184,51 +183,17 @@ public class CreateArrayInitAction extends BaseAction
 		    	request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
 		    	
 		    	List initialValues = null;
-	    		String[] startingPoints = new String[]{"-1", "-1", "-1"};
-	    		
-	    		String containerName = null;
-				if (specimenArrayForm.getStorageContainer() != null
-						&& !specimenArrayForm.getStorageContainer().equals("-1"))
-				{
-					startingPoints[0] = specimenArrayForm.getStorageContainer();
-		        	String[] selectColumnName = {"name"}; 
-		        	String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
-		        	String[] whereColumnCondition = {"="};
-		        	Object[] whereColumnValue = {Long.valueOf(startingPoints[0])};
-		        	String joinCondition = Constants.AND_JOIN_CONDITION;		        			
-		    		List containerList = specimenArrayBizLogic.retrieve(StorageContainer.class.getName(),selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,joinCondition);
-		    		if ((containerList != null) && (!containerList.isEmpty())) 
-		    		{
-		    			containerName = (String) containerList.get(0);
-		    		}							
-				}		
-				if (specimenArrayForm.getPositionDimensionOne() != -1)
-				{
-					startingPoints[1] = String.valueOf(specimenArrayForm.getPositionDimensionOne());
-				}
-				
-				if (specimenArrayForm.getPositionDimensionTwo() != -1)
-				{
-					startingPoints[2] = String.valueOf(specimenArrayForm.getPositionDimensionTwo());
-				}
-				initialValues = new ArrayList();
-				initialValues.add(startingPoints);
-				// if not null
-				if (containerName != null)
-				{
-					addPostions(containerMap,Long.valueOf(startingPoints[0]),containerName,Integer.valueOf(startingPoints[1]),Integer.valueOf(startingPoints[2]));
-				}
+	    		initialValues = StorageContainerUtil.setInitialValue(specimenArrayBizLogic, specimenArrayForm,
+						containerMap);
 		    	request.setAttribute("initValues", initialValues);
 				
 				break;
 			}//End if(definedArrayRequestBean.getArrayName().equals(arrayName))
 		}//End Outer While
-	SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm)form;
-	specimenArrayForm.setForwardTo("orderDetails");
-	
+		SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm)form;
+		specimenArrayForm.setForwardTo("orderDetails");
 		return mapping.findForward("success");
 	}
-	
 	/**
 	 * This function retrieves specimens given the id and populates them in the arraylist
 	 * @param definedArrayDetailsBeanList List containing definedArrayDetailsBean instances
@@ -335,135 +300,5 @@ public class CreateArrayInitAction extends BaseAction
 		specimenArrayForm.setSpecimenTypes(specimenTypeArr);
 		return specimenTypeList;
 	}
-	
-    /**
-     * @param specimenArrayForm array Form
-     * @return map
-     */
-    private Map createSpecimenArrayMap(SpecimenArrayForm specimenArrayForm) 
-    {
-    	Map arrayContentMap = new HashMap();
-    	String value = "";
-    	int rowCount = specimenArrayForm.getOneDimensionCapacity();
-    	int columnCount = specimenArrayForm.getTwoDimensionCapacity();
-    	
-		for (int i=0; i < rowCount ; i++) 
-		{
-			  for (int j=0;j < columnCount; j++) 
-			  {
-				for(int k=0; k < AppletConstants.ARRAY_CONTENT_ATTRIBUTE_NAMES.length; k++) 
-				{
-/*					if ((k == AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX) || (k == AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX)) {
-						value = "20";
-					} else {
-						value = "";
-					}
-*/
-					value = "";	
-					if(k == AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX) {
-						value = String.valueOf(i + 1);
-					}
-					if(k == AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX) {
-						value = String.valueOf(j + 1);
-					}
-					arrayContentMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i,j,columnCount,k),value);
-				}
-			  }
-		}
-		return arrayContentMap;
-    }
-    
-    /**
-	 * check for initial values for storage container.
-	 * @param containerMap container map
-	 * @return list of initial values
-	 */
-	private List checkForInitialValues(Map containerMap)
-	{
-		List initialValues = null;
-
-		if (containerMap.size() > 0)
-		{
-			String[] startingPoints = new String[3];
-
-			Set keySet = containerMap.keySet();
-			Iterator itr = keySet.iterator();
-			NameValueBean nvb = (NameValueBean) itr.next();
-			startingPoints[0] = nvb.getValue();
-
-			Map map1 = (Map) containerMap.get(nvb);
-			keySet = map1.keySet();
-			itr = keySet.iterator();
-			nvb = (NameValueBean) itr.next();
-			startingPoints[1] = nvb.getValue();
-
-			List list = (List) map1.get(nvb);
-			nvb = (NameValueBean) list.get(0);
-			startingPoints[2] = nvb.getValue();
-
-			Logger.out.info("Starting points[0]" + startingPoints[0]);
-			Logger.out.info("Starting points[1]" + startingPoints[1]);
-			Logger.out.info("Starting points[2]" + startingPoints[2]);
-			initialValues = new ArrayList();
-			initialValues.add(startingPoints);
-		}
-		return initialValues;
-	}
-	
-	/**
-	 * add positions while in edit mode
-	 * @param containerMap 
-	 * @param id
-	 * @param containerName
-	 * @param pos1
-	 * @param pos2
-	 */
-	private void addPostions(Map containerMap, Long id, String containerName, Integer pos1, Integer pos2)
-	{
-		int flag = 0;
-		NameValueBean xpos = new NameValueBean(pos1, pos1);
-		NameValueBean ypos = new NameValueBean(pos2, pos2);
-		NameValueBean parentId = new NameValueBean(containerName, id);
-
-		Set keySet = containerMap.keySet();
-		Iterator itr = keySet.iterator();
-		while (itr.hasNext())
-		{
-			NameValueBean nvb = (NameValueBean) itr.next();
-			if (nvb.getValue().equals(id.toString()))
-			{
-				Map pos1Map = (Map) containerMap.get(nvb);
-				Set keySet1 = pos1Map.keySet();
-				Iterator itr1 = keySet1.iterator();
-				while (itr1.hasNext())
-				{
-					NameValueBean nvb1 = (NameValueBean) itr1.next();
-					if (nvb1.getValue().equals(pos1.toString()))
-					{
-						List pos2List = (List) pos1Map.get(nvb1);
-						pos2List.add(ypos);
-						flag = 1;
-						break;
-					}
-				}
-				if (flag != 1)
-				{
-					List pos2List = new ArrayList();
-					pos2List.add(ypos);
-					pos1Map.put(xpos, pos2List);
-					flag = 1;
-				}
-			}
-		}
-		if (flag != 1)
-		{
-			List pos2List = new ArrayList();
-			pos2List.add(ypos);
-
-			Map pos1Map = new TreeMap();
-			pos1Map.put(xpos, pos2List);
-			containerMap.put(parentId, pos1Map);
-
-		}
-	}
+   
 }

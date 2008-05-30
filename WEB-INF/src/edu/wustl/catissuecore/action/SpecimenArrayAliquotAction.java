@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.bizlogic.SpecimenArrayAliquotsBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -315,25 +316,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		}
 		else
 		{
-			Object[] containerId = containerMap.keySet().toArray();
-			for (int i = 0; i < containerId.length; i++)
-			{
-				Map xDimMap = (Map) containerMap.get(containerId[i]);
-				if (!xDimMap.isEmpty())
-				{
-					Object[] xDim = xDimMap.keySet().toArray();
-					for (int j = 0; j < xDim.length; j++)
-					{
-						List yDimList = (List) xDimMap.get(xDim[j]);
-						counter = counter + yDimList.size();
-						if (counter >= aliquotCount)
-						{
-							i = containerId.length;
-							break;
-						}
-					}
-				}
-			}
+			counter = StorageContainerUtil.checkForLocation(containerMap, aliquotCount, counter);
 		}
 		if (counter >= aliquotCount)
 		{
@@ -346,7 +329,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			saveErrors(request, errors);
 			return Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT;
 		}		 
-	}	
+	}
 
 	/**
 	 * This function populates the availability map with available storage locations
@@ -356,49 +339,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	private void populateAliquotsStorageLocations(SpecimenArrayAliquotForm form, Map containerMap)
 	{
 		Map aliquotMap = form.getSpecimenArrayAliquotMap();
-		int counter = 1;
-
-		if (!containerMap.isEmpty())
-		{
-			Object[] containerId = containerMap.keySet().toArray();
-
-			for (int i = 0; i < containerId.length; i++)
-			{
-				Map xDimMap = (Map) containerMap.get(containerId[i]);
-
-				if (!xDimMap.isEmpty())
-				{
-					Object[] xDim = xDimMap.keySet().toArray();
-
-					for (int j = 0; j < xDim.length; j++)
-					{
-						List yDimList = (List) xDimMap.get(xDim[j]);
-
-						for (int k = 0; k < yDimList.size(); k++)
-						{
-							if (counter <= Integer.parseInt(form.getAliquotCount()))
-							{
-								String containerKey = "SpecimenArray:" + counter + "_StorageContainer_id";
-								String pos1Key = "SpecimenArray:" + counter + "_positionDimensionOne";
-								String pos2Key = "SpecimenArray:" + counter + "_positionDimensionTwo";
-
-								aliquotMap.put(containerKey, ((NameValueBean) containerId[i]).getValue());
-								aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
-								aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k)).getValue());
-
-								counter++;
-							}
-							else
-							{
-								j = xDim.length;
-								i = containerId.length;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
+		String noOfAliquots = form.getAliquotCount();
+		StorageContainerUtil.populateAliquotMap(containerMap, aliquotMap,noOfAliquots);
 		form.setSpecimenArrayAliquotMap(aliquotMap);
 
 	}

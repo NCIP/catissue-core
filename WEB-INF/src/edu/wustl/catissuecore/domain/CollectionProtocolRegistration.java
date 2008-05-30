@@ -17,6 +17,7 @@ import java.util.Iterator;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
+import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -467,22 +468,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		}
         Iterator iter = beanObjColl.iterator();
         Collection consentResponseColl = new HashSet();
-        while(iter.hasNext())
-        {
-        	ConsentBean consentBean = (ConsentBean)iter.next();
-        	ConsentTierResponse consentTierResponse = new ConsentTierResponse();
-        	//Setting response
-        	consentTierResponse.setResponse(consentBean.getParticipantResponse());
-        	if(consentBean.getParticipantResponseID()!=null&&consentBean.getParticipantResponseID().trim().length()>0)
-        	{
-        		consentTierResponse.setId(Long.parseLong(consentBean.getParticipantResponseID()));
-        	}
-        	//Setting consent tier
-        	ConsentTier consentTier = new ConsentTier();
-        	consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
-        	consentTierResponse.setConsentTier(consentTier);
-        	consentResponseColl.add(consentTierResponse);
-        }
+        ConsentUtil.createConsentResponseColl(consentResponseColl, iter);
         return consentResponseColl;
 	}
 //Consent Tracking

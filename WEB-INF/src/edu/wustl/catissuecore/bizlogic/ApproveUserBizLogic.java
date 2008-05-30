@@ -37,7 +37,6 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
-import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * ApproveUserBizLogic is the bizLogic class for approve users.
@@ -105,18 +104,18 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			Logger.out.debug(daoExp.getMessage(), daoExp);
-			deleteCSMUser(csmUser);
+			new UserBizLogic().deleteCSMUser(csmUser);
 			throw new DAOException(daoExp.getMessage(), daoExp);
 		}
 		catch (SMException exp)
 		{
 			Logger.out.debug(exp.getMessage(), exp);
-			deleteCSMUser(csmUser);
+			new UserBizLogic().deleteCSMUser(csmUser);
 			throw new DAOException(exp.getMessage(), exp);
 		}
 		catch (PasswordEncryptionException e)
 		{
-			deleteCSMUser(csmUser);
+			new UserBizLogic().deleteCSMUser(csmUser);
 			throw new DAOException(e.getMessage(), e);
 		}
 	}
@@ -177,27 +176,6 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	}
 
 	/**
-	 * Deletes the csm user from the csm user table.
-	 * @param csmUser The csm user to be deleted.
-	 * @throws DAOException
-	 */
-	private void deleteCSMUser(gov.nih.nci.security.authorization.domainobjects.User csmUser) throws DAOException
-	{
-		try
-		{
-			if (csmUser.getUserId() != null)
-			{
-				SecurityManager.getInstance(ApproveUserBizLogic.class)
-				.removeUser(csmUser.getUserId().toString());
-			}
-		}
-		catch(SMException smExp)
-		{
-			throw handleSMException(smExp);
-		}
-	}
-
-	/**
 	 * This method returns collection of UserGroupRoleProtectionGroup objects that speciefies the 
 	 * user group protection group linkage through a role. It also specifies the groups the protection  
 	 * elements returned by this class should be added to.
@@ -205,7 +183,6 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	 */
 	private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException
 	{
-		Logger.out.debug("--------------- In here ---------------");
 		Vector authorizationData = new Vector();
 		Set group = new HashSet();
 		SecurityDataBean userGroupRoleProtectionGroupBean;

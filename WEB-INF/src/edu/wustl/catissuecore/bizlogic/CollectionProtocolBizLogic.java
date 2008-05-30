@@ -231,7 +231,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 		}
 		bizLogic.setCpbased(true);
-		bizLogic.insert(specimenMap, dao, sessionDataBean);
+		bizLogic.insertMultiple(specimenMap, (AbstractDAO)dao, sessionDataBean);
 		TaskTimeCalculater.endTask(specimenInsert);
 	}
 

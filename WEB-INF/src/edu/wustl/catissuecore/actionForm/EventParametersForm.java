@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -173,25 +174,8 @@ public abstract class EventParametersForm extends AbstractActionForm
          
          try
          {
-         	// checks the userid
-           	if ((userId) == -1L)
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.user")));
-            }
-           	if (!validator.checkDate(dateOfEvent))
-           	{
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.dateofevent")));
-           	}
-           	
-         	if (!validator.isNumeric( timeInMinutes,0))
-           	{
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("eventparameters.timeinminutes")));
-           	}
-         	
-         	if (!validator.isNumeric( timeInHours,0))
-           	{
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("eventparameters.timeinhours")));
-           	}
+         	MultipleSpecimenValidationUtil.validateDate(errors, validator,
+         				this.userId, this.dateOfEvent, this.timeInHours,this.timeInMinutes);
          }
          catch(Exception excp)
          {
@@ -199,6 +183,8 @@ public abstract class EventParametersForm extends AbstractActionForm
          }
          return errors;
       }
+
+	
 	
      /** 
  	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)

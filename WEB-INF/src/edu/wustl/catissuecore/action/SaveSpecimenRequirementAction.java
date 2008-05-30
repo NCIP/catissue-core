@@ -105,6 +105,30 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN+totalNoOfSpecimen);
 		specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN+totalNoOfSpecimen);
 		specimenRequirementBean.setLineage(Constants.NEW_SPECIMEN);
+		setSessionDataBean(createSpecimenTemplateForm, specimenRequirementBean);
+		
+		//Aliquot
+		specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
+		specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm.getQuantityPerAliquot());
+		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
+		
+		//Derive
+		if(createSpecimenTemplateForm.getNoOfDeriveSpecimen() == 0)
+		{
+			createSpecimenTemplateForm.setDeriveSpecimenValues(null);
+		}
+		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
+		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.deriveSpecimenMap());
+		return specimenRequirementBean;
+	}
+
+	/**
+	 * @param createSpecimenTemplateForm
+	 * @param specimenRequirementBean
+	 */
+	private void setSessionDataBean(CreateSpecimenTemplateForm createSpecimenTemplateForm,
+			SpecimenRequirementBean specimenRequirementBean)
+	{
 		specimenRequirementBean.setClassName(createSpecimenTemplateForm.getClassName());
 		specimenRequirementBean.setType(createSpecimenTemplateForm.getType());
 		specimenRequirementBean.setTissueSide(createSpecimenTemplateForm.getTissueSide());
@@ -120,20 +144,6 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setCollectionEventContainer(createSpecimenTemplateForm.getCollectionEventContainer());
 		specimenRequirementBean.setReceivedEventReceivedQuality(createSpecimenTemplateForm.getReceivedEventReceivedQuality());
 		specimenRequirementBean.setCollectionEventCollectionProcedure(createSpecimenTemplateForm.getCollectionEventCollectionProcedure());
-		
-		//Aliquot
-		specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
-		specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm.getQuantityPerAliquot());
-		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
-		
-		//Derive
-		if(createSpecimenTemplateForm.getNoOfDeriveSpecimen() == 0)
-		{
-			createSpecimenTemplateForm.setDeriveSpecimenValues(null);
-		}
-		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
-		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.deriveSpecimenMap());
-		return specimenRequirementBean;
 	}
 	
 	private Map getAliquots(CreateSpecimenTemplateForm createSpecimenTemplateForm,String uniqueIdentifier)
@@ -209,21 +219,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	 {
 		 	HttpSession session = request.getSession();
 		 	SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean)session.getAttribute(Constants.EDIT_SPECIMEN_REQUIREMENT_BEAN);
-		 	specimenRequirementBean.setClassName(createSpecimenTemplateForm.getClassName());
-		 	specimenRequirementBean.setType(createSpecimenTemplateForm.getType());
-			specimenRequirementBean.setTissueSide(createSpecimenTemplateForm.getTissueSide());
-			specimenRequirementBean.setTissueSite(createSpecimenTemplateForm.getTissueSite());
-			specimenRequirementBean.setPathologicalStatus(createSpecimenTemplateForm.getPathologicalStatus());
-			specimenRequirementBean.setConcentration(createSpecimenTemplateForm.getConcentration());
-			specimenRequirementBean.setQuantity(createSpecimenTemplateForm.getQuantity());
-			specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm.getStorageLocationForSpecimen());
-			specimenRequirementBean.setCollectionEventUserId(createSpecimenTemplateForm.getCollectionEventUserId());
-			specimenRequirementBean.setReceivedEventUserId(createSpecimenTemplateForm.getReceivedEventUserId());
-			//Collected and received events
-			specimenRequirementBean.setCollectionEventContainer(createSpecimenTemplateForm.getCollectionEventContainer());
-			specimenRequirementBean.setReceivedEventReceivedQuality(createSpecimenTemplateForm.getReceivedEventReceivedQuality());
-			specimenRequirementBean.setCollectionEventCollectionProcedure(createSpecimenTemplateForm.getCollectionEventCollectionProcedure());
-			//Aliquot
+		 	setSessionDataBean(createSpecimenTemplateForm, specimenRequirementBean);
 			
 			int noOfAliquots = 0;
 			if(createSpecimenTemplateForm.getNoOfAliquots()!=null&&!createSpecimenTemplateForm.getNoOfAliquots().equals(""))

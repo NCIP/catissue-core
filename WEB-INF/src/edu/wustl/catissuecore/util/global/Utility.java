@@ -10,7 +10,6 @@
 package edu.wustl.catissuecore.util.global;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,12 +27,16 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 
 import edu.common.dynamicextensions.entitymanager.EntityManagerConstantsInterface;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
@@ -41,6 +44,7 @@ import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
@@ -56,16 +60,17 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.CDEBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
@@ -85,47 +90,59 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class Utility extends edu.wustl.common.util.Utility {
 
-	public static Map getSpecimenTypeMap() {
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
-				Constants.CDE_NAME_SPECIMEN_CLASS);
+	public static Set getSpecimenClassCDE()
+	{
+		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
 		Set setPV = specimenClassCDE.getPermissibleValues();
+		return setPV;
+	}
+	public static List getSpecimenClassList()
+	{
+		List specimenClassList= new ArrayList();
+		Set setPV = getSpecimenClassCDE();
 		Iterator itr = setPV.iterator();
-
-		List specimenClassList = CDEManager.getCDEManager()
-				.getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,
-						null);
-		Map subTypeMap = new HashMap();
 		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-
-		while (itr.hasNext()) {
-			List innerList = new ArrayList();
+		while (itr.hasNext()) 
+		{
 			Object obj = itr.next();
 			PermissibleValue pv = (PermissibleValue) obj;
 			String tmpStr = pv.getValue();
 			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
-
+		}	
+		return specimenClassList;
+		
+	}
+	public static Map getSpecimenTypeMap()
+	{
+		Set setPV = getSpecimenClassCDE();
+		Iterator itr = setPV.iterator();
+		Map subTypeMap = new HashMap();
+		while (itr.hasNext()) 
+		{
+			List<NameValueBean> innerList = new ArrayList<NameValueBean>();
+			Object obj = itr.next();
+			PermissibleValue pv = (PermissibleValue) obj;
 			Set list1 = pv.getSubPermissibleValues();
 			Iterator itr1 = list1.iterator();
 			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-
-			while (itr1.hasNext()) {
+			while (itr1.hasNext()) 
+			{
 				Object obj1 = itr1.next();
 				PermissibleValue pv1 = (PermissibleValue) obj1;
 				// Setting Specimen Type
 				String tmpInnerStr = pv1.getValue();
 				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
 			}
-
 			subTypeMap.put(pv.getValue(), innerList);
 		}
-
 		return subTypeMap;
 	}
+	
+	public static List getSpecimenTypes(String specimenClass) 
+	{
 
-	public static List getSpecimenTypes(String specimenClass) {
 		Map specimenTypeMap = getSpecimenTypeMap();
 		List typeList = (List) specimenTypeMap.get(specimenClass);
-
 		return typeList;
 	}
 
@@ -274,60 +291,39 @@ public class Utility extends edu.wustl.common.util.Utility {
 		return specimenClassTypeList;
 
 	}
-
 	/*
 	 * this Function gets the list of all storage types as argument and create a
 	 * list in which nameValueBean is stored with Type and Identifier of storage
 	 * type. and returns this list
 	 */
-	public static List getStorageTypeList(List list) {
+	public static List getStorageTypeList(List list, boolean includeAny)
+	{
 		NameValueBean typeAny = null;
 		List storageTypeList = new ArrayList();
 		Iterator typeItr = list.iterator();
-
-		while (typeItr.hasNext()) {
+		while (typeItr.hasNext()) 
+		{
 			StorageType type = (StorageType) typeItr.next();
-			if (type.getId().longValue() == 1) {
+			if (type.getId().longValue() == 1) 
+			{
 				typeAny = new NameValueBean(Constants.HOLDS_ANY, type.getId());
-			} else {
-				storageTypeList.add(new NameValueBean(type.getName(), type
-						.getId()));
+			}
+			else
+			{
+				storageTypeList.add(new NameValueBean(type.getName(), type.getId()));
 			}
 		}
 		Collections.sort(storageTypeList);
-		if (typeAny != null) {
-			storageTypeList.add(0, typeAny);
-		}
-		return storageTypeList;
-
-	}
-
-	/*
-	 * this Function gets the list of all storage types as argument and create a
-	 * list in which nameValueBean is stored with Type and Identifier of storage
-	 * type. and returns this list
-	 */
-	public static List getStorageTypeList(List list, boolean includeAny) {
-		NameValueBean typeAny = null;
-		List storageTypeList = new ArrayList();
-		Iterator typeItr = list.iterator();
-		while (typeItr.hasNext()) {
-			StorageType type = (StorageType) typeItr.next();
-			if (type.getId().longValue() == 1) {
-				typeAny = new NameValueBean(Constants.HOLDS_ANY, type.getId());
-			} else {
-				storageTypeList.add(new NameValueBean(type.getName(), type
-						.getId()));
-			}
-		}
-		Collections.sort(storageTypeList);
-		if (includeAny) {
-			if (typeAny != null) {
+		if (includeAny) 
+		{
+			if (typeAny != null) 
+			{
 				storageTypeList.add(0, typeAny);
 			}
-		} else {
-			storageTypeList.add(0, new NameValueBean(Constants.SELECT_OPTION,
-					"-1"));
+		}
+		else 
+		{
+			storageTypeList.add(0, new NameValueBean(Constants.SELECT_OPTION,"-1"));
 		}
 		return storageTypeList;
 
@@ -613,17 +609,15 @@ public class Utility extends edu.wustl.common.util.Utility {
 	 *            If Operation = Edit then "Withdraw" is added in the List
 	 * @return listOfResponces
 	 */
-	public static List responceList(String addeditOperation) {
-		List listOfResponces = new ArrayList();
-		listOfResponces.add(new NameValueBean(Constants.NOT_SPECIFIED,
-				Constants.NOT_SPECIFIED));
-		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_YES,
-				Constants.BOOLEAN_YES));
-		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_NO,
-				Constants.BOOLEAN_NO));
-		if (addeditOperation.equalsIgnoreCase(Constants.EDIT)) {
-			listOfResponces.add(new NameValueBean(Constants.WITHDRAWN,
-					Constants.WITHDRAWN));
+	public static List<NameValueBean> responceList(String addeditOperation) 
+	{
+		List<NameValueBean> listOfResponces = new ArrayList<NameValueBean>();
+		listOfResponces.add(new NameValueBean(Constants.NOT_SPECIFIED,Constants.NOT_SPECIFIED));
+		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_YES,Constants.BOOLEAN_YES));
+		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_NO,Constants.BOOLEAN_NO));
+		if (addeditOperation.equalsIgnoreCase(Constants.EDIT)) 
+		{
+			listOfResponces.add(new NameValueBean(Constants.WITHDRAWN,Constants.WITHDRAWN));
 		}
 		return listOfResponces;
 	}
@@ -1278,7 +1272,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 		}
 		return userID;
 	}
-	
+
 	/**
 	 * This will return the comma separated ids string
 	 * @param orderItemIds
@@ -1299,5 +1293,134 @@ public class Utility extends edu.wustl.common.util.Utility {
 		}
 		return ids;
 	}
+	/**
+	 * This function will return CollectionProtocolRegistration object 
+	 * @param scg_id Selected SpecimenCollectionGroup ID
+	 * @return collectionProtocolRegistration
+	 */
+	public static CollectionProtocolRegistration getcprObj(String cpr_id) throws DAOException
+	{
+		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		String colName = "id";			
+		List getCPRIdFromDB = collectionProtocolRegistrationBizLogic.retrieve(CollectionProtocolRegistration.class.getName(), colName, cpr_id);		
+		CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration)getCPRIdFromDB.get(0);
+		return collectionProtocolRegistrationObject;
+	}
+	
+	/**
+	 * This function will return SpecimenCollectionGroup object 
+	 * @param scg_id Selected SpecimenCollectionGroup ID
+	 * @return specimenCollectionGroupObject
+	 */
+	public static SpecimenCollectionGroup getSCGObj(String scg_id) throws DAOException
+	{
+		SpecimenCollectionGroupBizLogic specimenCollectionBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+		String colName = "id";			
+		List getSCGIdFromDB = specimenCollectionBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), colName, scg_id);
+		SpecimenCollectionGroup specimenCollectionGroupObject = null;
+		if(getSCGIdFromDB!=null && !getSCGIdFromDB.isEmpty())
+		{
+			specimenCollectionGroupObject = (SpecimenCollectionGroup)getSCGIdFromDB.get(0);
+		}
+		return specimenCollectionGroupObject;
+	}
+	
+	/**
+	 * @param request
+	 * @param operation
+	 * @param specimenCollectionGroupForm
+	 * @throws DAOException
+	 */
+	public static long setUserInForm(HttpServletRequest request, String operation)
+			throws DAOException
+	{
+		long collectionEventUserId =  0 ;
+		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+		Collection userCollection = userBizLogic.getUsers(operation);
+		request.setAttribute(Constants.USERLIST, userCollection);
+		SessionDataBean sessionData = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+		if (sessionData != null)
+		{
+			String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
+			collectionEventUserId = EventsUtil.getIdFromCollection(userCollection, user);
+		}
+		return collectionEventUserId;
+	}
+	
+	/**
+	 * @param sourceObjectName
+	 * @param selectColumnName
+	 * @return
+	 * @throws DAOException
+	 */
+	public static int getNextUniqueNo(String sourceObjectName, String[] selectColumnName)
+			throws DAOException
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		dao.openSession(null);
+		List list = dao.retrieve(sourceObjectName, selectColumnName);
+		dao.closeSession();
 
+		if (!list.isEmpty())
+		{
+			List columnList = (List) list.get(0);
+			if (!columnList.isEmpty())
+			{
+				String str = (String) columnList.get(0);
+				if (!str.equals(""))
+				{
+					int no = Integer.parseInt(str);
+					return no + 1;
+				}
+			}
+		}
+		return 1;
+	}
+
+	/**
+	 * @return
+	 */
+	public static String getlLabel(String lastName,String firstName)
+	{
+		if (lastName!= null && !lastName.equals("") && firstName != null && !firstName.equals("")) 
+		{
+			return lastName + "," + firstName;
+		} 
+		else if(lastName!= null && !lastName.equals(""))
+		{
+			return lastName;
+		}
+		else if(firstName!= null && !firstName.equals(""))
+		{
+			return firstName;
+		}		
+		return null;
+	}
+	
+	/**
+	 * @param request
+	 * @param responseString
+	 * @return
+	 */
+	public static String getResponseString(HttpServletRequest request, String responseString)
+	{
+		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+		Logger.out.info("Errors:" + errors);
+		if (errors != null || errors.size() != 0)
+		{
+			Iterator iterator = errors.get();
+			while (iterator.hasNext())
+			{
+				ActionError next = (ActionError)iterator.next();
+				Object[] values = next.getValues();
+				for(int j=0;j<values.length;j++)
+				{
+					responseString = (String)values[j];
+				}
+			}
+		}
+		return responseString;
+	}
+
+	
 }

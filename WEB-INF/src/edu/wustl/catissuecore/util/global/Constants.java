@@ -2302,5 +2302,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int DEIDENTIFIED_SURGPATH_REPORT = 2;
 	public static final int SURGPATH_REPORT = 3;
 	
+	public static final String CHILD_STATUS = "Child_Status";
+	public static final String CHILD_DATE   = "Child_Date";
+	public static final String CHILD_OFFSET = "Child_Offset";
+	
 }
 	

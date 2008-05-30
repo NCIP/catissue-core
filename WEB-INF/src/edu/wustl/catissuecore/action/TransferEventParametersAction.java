@@ -11,12 +11,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,6 +27,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
@@ -57,7 +55,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
-		Vector initialValues = null;
+		List initialValues = null;
 		
 		
 		  boolean readOnlyValue; 
@@ -152,32 +150,9 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				Logger.out.info("Spcimen Class:" + className);
 				
 				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+				
 				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,exceedingMaxLimit,sessionData,true);
-				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-				if (containerMap.isEmpty())
-				{
-					
-					if (errors == null || errors.size() == 0)
-					{
-						errors = new ActionErrors();
-					}
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-							"storageposition.not.available"));
-					saveErrors(request, errors);
-				}
-				if(errors == null || errors.size() == 0)
-				{
-				      initialValues = checkForInitialValues(containerMap);
-				} else
-				{
-					String[] startingPoints = new String[3];
-					startingPoints[0] = transferEventParametersForm.getStorageContainer();
-					startingPoints[1] = transferEventParametersForm.getPositionDimensionOne();
-					startingPoints[2] = transferEventParametersForm.getPositionDimensionTwo() ;
-					initialValues = new Vector();
-					initialValues.add(startingPoints);
-					
-				}
+				initialValues = setInitialValue(request, transferEventParametersForm, containerMap);
 				
 			}
 		} // operation=add
@@ -221,7 +196,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 			{
 				startingPoints[2] = transferEventParametersForm.getPositionDimensionTwo();
 			}
-			initialValues = new Vector();
+			initialValues = new ArrayList();
 			Logger.out.info("Starting points[0]" + startingPoints[0]);
 			Logger.out.info("Starting points[1]" + startingPoints[1]);
 			Logger.out.info("Starting points[2]" + startingPoints[2]);
@@ -306,40 +281,41 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		request.setAttribute("dropDownDisable",dropDownDisable);
 		request.setAttribute("textBoxDisable",textBoxDisable);
 	}
-
-	Vector checkForInitialValues(Map containerMap)
+	/**
+	 * @param request
+	 * @param transferEventParametersForm
+	 * @param containerMap
+	 * @return
+	 */
+	private List setInitialValue(HttpServletRequest request,
+			TransferEventParametersForm transferEventParametersForm, TreeMap containerMap)
 	{
-		Vector initialValues = null;
-
-		if (containerMap.size() > 0)
+		List initialValues = null;
+		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+		if (containerMap.isEmpty())
+		{
+			if (errors == null || errors.size() == 0)
+			{
+				errors = new ActionErrors();
+			}
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
+			saveErrors(request, errors);
+		}
+		if(errors == null || errors.size() == 0)
+		{
+			initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
+		} 
+		else
 		{
 			String[] startingPoints = new String[3];
-
-			Set keySet = containerMap.keySet();
-			Iterator itr = keySet.iterator();
-			NameValueBean nvb = (NameValueBean) itr.next();
-			startingPoints[0] = nvb.getValue();
-
-			Map map1 = (Map) containerMap.get(nvb);
-			keySet = map1.keySet();
-			itr = keySet.iterator();
-			nvb = (NameValueBean) itr.next();
-			startingPoints[1] = nvb.getValue();
-
-			List list = (List) map1.get(nvb);
-			nvb = (NameValueBean) list.get(0);
-			startingPoints[2] = nvb.getValue();
-
-			Logger.out.info("Starting points[0]" + startingPoints[0]);
-			Logger.out.info("Starting points[1]" + startingPoints[1]);
-			Logger.out.info("Starting points[2]" + startingPoints[2]);
-			initialValues = new Vector();
+			startingPoints[0] = transferEventParametersForm.getStorageContainer();
+			startingPoints[1] = transferEventParametersForm.getPositionDimensionOne();
+			startingPoints[2] = transferEventParametersForm.getPositionDimensionTwo() ;
+			initialValues = new ArrayList();
 			initialValues.add(startingPoints);
-
+			
 		}
 		return initialValues;
-
-		//request.setAttribute("initValues", initialValues);
 	}
 /**
  * @param specimenId

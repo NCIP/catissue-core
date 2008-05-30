@@ -40,6 +40,7 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -142,7 +143,7 @@ public class AliquotAction extends SecureAction
 	private void populateStorageLocationsOnContainerChange(AliquotForm aliquotForm, TreeMap containerMap, HttpServletRequest request)
 	{
 		Map aliquotMap = aliquotForm.getAliquotMap();
-		int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
+		String aliquotCount = aliquotForm.getNoOfAliquots();
 		int counter = Integer.parseInt(request.getParameter("rowNo"));
 		String containerKey = "Specimen:" + counter + "_StorageContainer_id";
 		String containerName = (String) aliquotMap.get(containerKey);
@@ -154,7 +155,6 @@ public class AliquotAction extends SecureAction
 		if (!containerMap.isEmpty())
 		{
 			Object[] containerId = containerMap.keySet().toArray();
-
 			for (int i = 0; i < containerId.length; i++)
 			{
 				NameValueBean containerNvb = (NameValueBean) containerId[i];
@@ -163,45 +163,15 @@ public class AliquotAction extends SecureAction
 					flag = false;
 				}
 				if (flag)
-					continue;
-				Map xDimMap = (Map) containerMap.get(containerId[i]);
-
-				if (!xDimMap.isEmpty())
 				{
-					Object[] xDim = xDimMap.keySet().toArray();
-
-					for (int j = 0; j < xDim.length; j++)
-					{
-						List yDimList = (List) xDimMap.get(xDim[j]);
-
-						for (int k = 0; k < yDimList.size(); k++)
-						{
-							if (counter <= aliquotCount)
-							{
-								containerKey = "Specimen:" + counter + "_StorageContainer_id";
-								String pos1Key = "Specimen:" + counter + "_positionDimensionOne";
-								String pos2Key = "Specimen:" + counter + "_positionDimensionTwo";
-
-								aliquotMap.put(containerKey, ((NameValueBean) containerId[i]).getValue());
-								aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
-								aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k)).getValue());
-
-								counter++;
-							}
-							else
-							{
-								j = xDim.length;
-								i = containerId.length;
-								break;
-							}
-						}
-					}
+					continue;
 				}
+				Map xDimMap = (Map) containerMap.get(containerId[i]);
+				StorageContainerUtil.setAliquotMap(xDimMap, containerId, aliquotCount, counter, aliquotMap, i);
 			}
 		}
-
 		aliquotForm.setAliquotMap(aliquotMap);
-		if (counter < aliquotCount)
+		if (counter < Integer.parseInt(aliquotCount))
 		{
 			ActionErrors errors = getActionErrors(request);
 
@@ -768,31 +738,8 @@ public class AliquotAction extends SecureAction
 		}
 		else
 		{
-			Object[] containerId = containerMap.keySet().toArray();
-
-			for (int i = 0; i < containerId.length; i++)
-			{
-				Map xDimMap = (Map) containerMap.get(containerId[i]);
-
-				if (!xDimMap.isEmpty())
-				{
-					Object[] xDim = xDimMap.keySet().toArray();
-
-					for (int j = 0; j < xDim.length; j++)
-					{
-						List yDimList = (List) xDimMap.get(xDim[j]);
-						counter = counter + yDimList.size();
-
-						if (counter >= aliquotCount)
-						{
-							i = containerId.length;
-							break;
-						}
-					}
-				}
-			}
+			counter = StorageContainerUtil.checkForLocation(containerMap, aliquotCount, counter);
 		}
-
 		if (counter >= aliquotCount)
 		{
 			return Constants.PAGEOF_CREATE_ALIQUOT;
@@ -800,10 +747,8 @@ public class AliquotAction extends SecureAction
 		else
 		{
 			ActionErrors errors = getActionErrors(request);
-
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.locations.notSufficient"));
 			saveErrors(request, errors);
-
 			return Constants.PAGEOF_ALIQUOT;
 		}
 	}
@@ -1013,50 +958,8 @@ public class AliquotAction extends SecureAction
 	private void populateAliquotsStorageLocations(AliquotForm form, Map containerMap)
 	{
 		Map aliquotMap = form.getAliquotMap();
-		int counter = 1;
-
-		if (!containerMap.isEmpty())
-		{
-			Object[] containerId = containerMap.keySet().toArray();
-
-			for (int i = 0; i < containerId.length; i++)
-			{
-				Map xDimMap = (Map) containerMap.get(containerId[i]);
-
-				if (!xDimMap.isEmpty())
-				{
-					Object[] xDim = xDimMap.keySet().toArray();
-
-					for (int j = 0; j < xDim.length; j++)
-					{
-						List yDimList = (List) xDimMap.get(xDim[j]);
-
-						for (int k = 0; k < yDimList.size(); k++)
-						{
-							if (counter <= Integer.parseInt(form.getNoOfAliquots()))
-							{
-								String containerKey = "Specimen:" + counter + "_StorageContainer_id";
-								String pos1Key = "Specimen:" + counter + "_positionDimensionOne";
-								String pos2Key = "Specimen:" + counter + "_positionDimensionTwo";
-
-								aliquotMap.put(containerKey, ((NameValueBean) containerId[i]).getValue());
-								aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
-								aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k)).getValue());
-
-								counter++;
-							}
-							else
-							{
-								j = xDim.length;
-								i = containerId.length;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-
+		String noOfAliquots = form.getNoOfAliquots();
+		StorageContainerUtil.populateAliquotMap(containerMap, aliquotMap,noOfAliquots);
 		form.setAliquotMap(aliquotMap);
 	}
 

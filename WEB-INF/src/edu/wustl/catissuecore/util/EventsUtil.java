@@ -20,8 +20,23 @@ import java.util.List;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
+import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
+import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.DisposalEventParameters;
+import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
+import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.domain.FixedEventParameters;
+import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
+import edu.wustl.catissuecore.domain.FrozenEventParameters;
+import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
+import edu.wustl.catissuecore.domain.ProcedureEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpunEventParameters;
+import edu.wustl.catissuecore.domain.ThawEventParameters;
+import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
+import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -120,6 +135,7 @@ public class EventsUtil
 		if (eventObject instanceof CollectionEventParameters)
 		{
 			CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
+			Specimen specimen = collectionEventParameters.getSpecimen();
 			collectionEventParameters.getUser();
 			/* Bug id: 4179
 			patch id: 4179_3*/  
@@ -129,12 +145,15 @@ public class EventsUtil
 				String message = ApplicationProperties.getValue("specimen.collection.event.user");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
-			//Date validation
-			if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+			if(specimen!=null && specimen.getIsCollectionProtocolRequirement()!=null && !specimen.getIsCollectionProtocolRequirement())
 			{
-
-				String message = ApplicationProperties.getValue("specimen.collection.event.date");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				//Date validation
+				if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+				{
+	
+					String message = ApplicationProperties.getValue("specimen.collection.event.date");
+					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				}
 			}
 			// checks the collectionProcedure
 			if (!validator.isValidOption(collectionEventParameters.getCollectionProcedure()))
@@ -164,6 +183,7 @@ public class EventsUtil
 		else if (eventObject instanceof ReceivedEventParameters)
 		{
 			ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
+			Specimen specimen = receivedEventParameters.getSpecimen();
 			/* Bug id: 4179
 			patch id: 4179_4*/  
 			if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null || receivedEventParameters.getUser().getId() == 0)
@@ -171,12 +191,19 @@ public class EventsUtil
 				String message = ApplicationProperties.getValue("specimen.recieved.event.user");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
-			if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+			if(specimen!=null && specimen.getIsCollectionProtocolRequirement()!=null && !specimen.getIsCollectionProtocolRequirement())
 			{
-				String message = ApplicationProperties.getValue("specimen.recieved.event.date");
+				if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+				{
+					String message = ApplicationProperties.getValue("specimen.recieved.event.date");
+					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				}
+			}
+			if (!validator.isValidOption(receivedEventParameters.getReceivedQuality()))
+			{
+				String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
-	
 			List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
 			if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
 			{
@@ -251,5 +278,88 @@ public class EventsUtil
 		receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
 		receivedEventParameters.setUser(user);
 		return receivedEventParameters;
+	}
+	
+	public static String[] getEvent(EventParameters eventParameters)
+	{
+			String [] events = new String[2];
+					
+			if(eventParameters instanceof CellSpecimenReviewParameters)
+			{
+				events[0] = "Cell Specimen Review";
+				events[1] = "pageOfCellSpecimenReviewParameters";
+			}
+			else if(eventParameters instanceof CheckInCheckOutEventParameter)
+			{
+				events[0] = "Check In Check Out";
+				events[1] = "pageOfCheckInCheckOutEventParameters";
+			}
+			else if(eventParameters instanceof CollectionEventParameters)
+			{
+				events[0] = "Collection";
+				events[1] = "pageOfCollectionEventParameters";
+			}
+			else if(eventParameters instanceof DisposalEventParameters)
+			{
+				events[0] = "Disposal";
+				events[1] = "pageOfDisposalEventParameters";
+			}
+			else if(eventParameters instanceof EmbeddedEventParameters)
+			{
+				events[0] = "Embedded";
+				events[1] = "pageOfEmbeddedEventParameters";
+			}
+			else if(eventParameters instanceof FixedEventParameters)
+			{
+				events[0] = "Fixed";
+				events[1] = "pageOfFixedEventParameters";
+			}
+			else if(eventParameters instanceof FluidSpecimenReviewEventParameters)
+			{
+				events[0] = "Fluid Specimen Review";
+				events[1] = "pageOfFluidSpecimenReviewParameters";
+			}
+			else if(eventParameters instanceof FrozenEventParameters)
+			{
+				events[0] = "Frozen";
+				events[1] = "pageOfFrozenEventParameters";
+			}
+			else if(eventParameters instanceof MolecularSpecimenReviewParameters)
+			{
+				events[0] = "Molecular Specimen Review";
+				events[1] = "pageOfMolecularSpecimenReviewParameters";
+			}
+			else if(eventParameters instanceof ProcedureEventParameters)
+			{
+				events[0] = "Procedure Event";
+				events[1] = "pageOfProcedureEventParameters";
+			}
+			else if(eventParameters instanceof ReceivedEventParameters)
+			{
+				events[0] = "Received Event";
+				events[1] = "pageOfReceivedEventParameters";
+			}
+			else if(eventParameters instanceof SpunEventParameters)
+			{
+				events[0] = "Spun";
+				events[1] = "pageOfSpunEventParameters";
+			}
+			else if(eventParameters instanceof ThawEventParameters)
+			{
+				events[0] = "Thaw";
+				events[1] = "pageOfThawEventParameters";
+			}
+			else if(eventParameters instanceof TissueSpecimenReviewEventParameters)
+			{
+				events[0] = "Tissue Specimen Review";
+				events[1] = "pageOfTissueSpecimenReviewParameters";
+			}
+			else if(eventParameters instanceof TransferEventParameters)
+			{
+				events[0] = "Transfer";
+				events[1] = "pageOfTransferEventParameters";
+			}
+		
+			return events;
 	}
 }

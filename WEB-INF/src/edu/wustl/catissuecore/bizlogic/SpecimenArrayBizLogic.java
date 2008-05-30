@@ -35,11 +35,8 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -419,63 +416,45 @@ catch (Exception e)
 	{
 		if (specimenArray.getStorageContainer() != null)
 		{
-			if (specimenArray.getStorageContainer() != null && specimenArray.getStorageContainer().getName() != null)
-			{
-				StorageContainer storageContainerObj = specimenArray.getStorageContainer();
-				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"id"};
-				String[] whereColumnName = {"name"};
-				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {specimenArray.getStorageContainer().getName()};
-				String joinCondition = null;
-
-				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-
-				if (!list.isEmpty())
-				{
-					storageContainerObj.setId((Long) list.get(0));
-					specimenArray.setStorageContainer(storageContainerObj);
-				}
-				else
-				{
-					String message = ApplicationProperties.getValue("specimen.storageContainer");
-					throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
-				}
-			}
-
-			if (specimenArray.getStorageContainer().getId() != null)
-			{
-				StorageContainer storageContainerObj = new StorageContainer();
-				storageContainerObj.setId(specimenArray.getStorageContainer().getId());
-				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"name"};
-				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {specimenArray.getStorageContainer().getId()};
-				String joinCondition = null;
-
-				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-
-				if (!list.isEmpty())
-				{
-					storageContainerObj.setName((String) list.get(0));
-					specimenArray.setStorageContainer(storageContainerObj);
-				}
-			}
-
+			retriveScId(dao, specimenArray);
+			retriveScName(specimenArray, dao);
 			StorageContainer storageContainerObj = specimenArray.getStorageContainer();
-
 			//check for closed Storage Container
 			checkStatus(dao, storageContainerObj, "Storage Container");
-
 			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
-
 			// --- check for all validations on the storage container.
 			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getPositionDimensionOne().toString(),
 					specimenArray.getPositionDimensionTwo().toString(), sessionDataBean, false);
-
 			specimenArray.setStorageContainer(storageContainerObj);
+		}
+	}
+
+	/**
+	 * @param specimenArray
+	 * @param dao
+	 * @throws DAOException
+	 */
+	private void retriveScName(SpecimenArray specimenArray, DAO dao) throws DAOException
+	{
+		if (specimenArray.getStorageContainer().getId() != null)
+		{
+			StorageContainer storageContainerObj = new StorageContainer();
+			storageContainerObj.setId(specimenArray.getStorageContainer().getId());
+			String sourceObjectName = StorageContainer.class.getName();
+			String[] selectColumnName = {"name"};
+			String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+			String[] whereColumnCondition = {"="};
+			Object[] whereColumnValue = {specimenArray.getStorageContainer().getId()};
+			String joinCondition = null;
+
+			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+			if (!list.isEmpty())
+			{
+				storageContainerObj.setName((String) list.get(0));
+				specimenArray.setStorageContainer(storageContainerObj);
+			}
 		}
 	}
 
@@ -684,31 +663,9 @@ catch (Exception e)
 
 		if (specimenArray.getStorageContainer() != null)
 		{
-			if (specimenArray.getStorageContainer() != null && specimenArray.getStorageContainer().getName() != null)
-			{
-				StorageContainer storageContainerObj = specimenArray.getStorageContainer();
-				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"id"};
-				String[] whereColumnName = {"name"};
-				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {specimenArray.getStorageContainer().getName()};
-				String joinCondition = null;
-
-				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-
-				if (!list.isEmpty())
-				{
-					storageContainerObj.setId((Long) list.get(0));
-					specimenArray.setStorageContainer(storageContainerObj);
-				}
-				else
-				{
-					message = ApplicationProperties.getValue("array.positionInStorageContainer");
-					throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
-				}
-			}
+			retriveScId(dao, specimenArray);
 		}
-		//		Long storageContainerId = specimen.getStorageContainer().getId();
+	
 		Integer xPos = specimenArray.getPositionDimensionOne();
 		Integer yPos = specimenArray.getPositionDimensionTwo();
 		boolean isContainerFull = false;
@@ -716,46 +673,12 @@ catch (Exception e)
 		 *  Following code is added to set the x and y dimension in case only storage container is given 
 		 *  and x and y positions are not given 
 		 */
-
 		if (xPos == null || yPos == null)
 		{
 			isContainerFull = true;
 			Map containerMapFromCache = null;
-			try
-			{
-				containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
-			}
-			catch (CacheException e)
-			{
-				e.printStackTrace();
-			}
-
-			if (containerMapFromCache != null)
-			{
-				Iterator itr = containerMapFromCache.keySet().iterator();
-				while (itr.hasNext())
-				{
-					NameValueBean nvb = (NameValueBean) itr.next();
-					if (nvb.getValue().toString().equals(specimenArray.getStorageContainer().getId().toString()))
-					{
-
-						Map tempMap = (Map) containerMapFromCache.get(nvb);
-						Iterator tempIterator = tempMap.keySet().iterator();
-						;
-						NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-
-						List list = (List) tempMap.get(nvb1);
-						NameValueBean nvb2 = (NameValueBean) list.get(0);
-
-						specimenArray.setPositionDimensionOne(new Integer(nvb1.getValue()));
-						specimenArray.setPositionDimensionTwo(new Integer(nvb2.getValue()));
-						isContainerFull = false;
-						break;
-					}
-
-				}
-			}
-
+			containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+			isContainerFull = setPositions(specimenArray, isContainerFull, containerMapFromCache);
 			xPos = specimenArray.getPositionDimensionOne();
 			yPos = specimenArray.getPositionDimensionTwo();
 		}
@@ -818,6 +741,72 @@ catch (Exception e)
 		return true;
 	}
 
+	/**
+	 * @param specimenArray
+	 * @param isContainerFull
+	 * @param containerMapFromCache
+	 * @return
+	 */
+	private boolean setPositions(SpecimenArray specimenArray, boolean isContainerFull,
+			Map containerMapFromCache)
+	{
+		if (containerMapFromCache != null)
+		{
+			Iterator itr = containerMapFromCache.keySet().iterator();
+			while (itr.hasNext())
+			{
+				NameValueBean nvb = (NameValueBean) itr.next();
+				if (nvb.getValue().toString().equals(specimenArray.getStorageContainer().getId().toString()))
+				{
+					Map tempMap = (Map) containerMapFromCache.get(nvb);
+					Iterator tempIterator = tempMap.keySet().iterator();
+					NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+					List list = (List) tempMap.get(nvb1);
+					NameValueBean nvb2 = (NameValueBean) list.get(0);
+					specimenArray.setPositionDimensionOne(new Integer(nvb1.getValue()));
+					specimenArray.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+					isContainerFull = false;
+					break;
+				}
+
+			}
+		}
+		return isContainerFull;
+	}
+
+	/**
+	 * @param dao
+	 * @param specimenArray
+	 * @throws DAOException
+	 */
+	private void retriveScId(DAO dao, SpecimenArray specimenArray) throws DAOException
+	{
+		String message = null;
+		if (specimenArray.getStorageContainer() != null && specimenArray.getStorageContainer().getName() != null)
+		{
+			StorageContainer storageContainerObj = specimenArray.getStorageContainer();
+			String sourceObjectName = StorageContainer.class.getName();
+			String[] selectColumnName = {"id"};
+			String[] whereColumnName = {"name"};
+			String[] whereColumnCondition = {"="};
+			Object[] whereColumnValue = {specimenArray.getStorageContainer().getName()};
+			String joinCondition = null;
+
+			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+			if (!list.isEmpty())
+			{
+				storageContainerObj.setId((Long) list.get(0));
+				specimenArray.setStorageContainer(storageContainerObj);
+			}
+			else
+			{
+				message = ApplicationProperties.getValue("array.positionInStorageContainer");
+				throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+			}
+		}
+	}
+
 	private boolean isValidClassName(String className)
 	{
 		if ((className != null) && (className.equalsIgnoreCase(Constants.CELL)) || (className.equalsIgnoreCase(Constants.MOLECULAR))
@@ -837,26 +826,7 @@ catch (Exception e)
 	{
 		String sourceObjectName = "CATISSUE_CONTAINER";
 		String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-
-		dao.openSession(null);
-		List list = dao.retrieve(sourceObjectName, selectColumnName);
-		dao.closeSession();
-
-		if (!list.isEmpty())
-		{
-			List columnList = (List) list.get(0);
-			if (!columnList.isEmpty())
-			{
-				String str = (String) columnList.get(0);
-				if (!str.equals(""))
-				{
-					int no = Integer.parseInt(str);
-					return no + 1;
-				}
-			}
-		}
-		return 1;
+		return Utility.getNextUniqueNo(sourceObjectName, selectColumnName);
 	}
 	//END
 }

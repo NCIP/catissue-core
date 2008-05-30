@@ -161,91 +161,6 @@ public class StorageContainerAction extends SecureAction
 
 		return mapping.findForward((String) request.getParameter(Constants.PAGEOF));
 	}
-
-	Vector checkForInitialValues(TreeMap containerMap)
-	{
-		Vector initialValues = null;
-
-		if (containerMap.size() > 0)
-		{
-			String[] startingPoints = new String[3];
-
-			Set keySet = containerMap.keySet();
-			Iterator itr = keySet.iterator();
-			NameValueBean nvb = (NameValueBean) itr.next();
-			startingPoints[0] = nvb.getValue();
-
-			Map map1 = (Map) containerMap.get(nvb);
-			keySet = map1.keySet();
-			itr = keySet.iterator();
-			nvb = (NameValueBean) itr.next();
-			startingPoints[1] = nvb.getValue();
-
-			List list = (List) map1.get(nvb);
-			nvb = (NameValueBean) list.get(0);
-			startingPoints[2] = nvb.getValue();
-
-			Logger.out.info("Starting points[0]" + startingPoints[0]);
-			Logger.out.info("Starting points[1]" + startingPoints[1]);
-			Logger.out.info("Starting points[2]" + startingPoints[2]);
-			initialValues = new Vector();
-			initialValues.add(startingPoints);
-
-		}
-		return initialValues;
-
-	}
-
-	private void addPostions(Map containerMap, Long id, String containerName, Integer pos1, Integer pos2)
-	{
-		int flag = 0;
-		NameValueBean xpos = new NameValueBean(pos1, pos1);
-		NameValueBean ypos = new NameValueBean(pos2, pos2);
-		NameValueBean parentId = new NameValueBean(containerName, id);
-
-		Set keySet = containerMap.keySet();
-		Iterator itr = keySet.iterator();
-		while (itr.hasNext())
-		{
-			NameValueBean nvb = (NameValueBean) itr.next();
-			if (nvb.getValue().equals(id.toString()))
-			{
-				Map pos1Map = (Map) containerMap.get(nvb);
-				Set keySet1 = pos1Map.keySet();
-				Iterator itr1 = keySet1.iterator();
-				while (itr1.hasNext())
-				{
-					NameValueBean nvb1 = (NameValueBean) itr1.next();
-					if (nvb1.getValue().equals(pos1.toString()))
-					{
-						List pos2List = (List) pos1Map.get(nvb1);
-						pos2List.add(ypos);
-						flag = 1;
-						break;
-					}
-				}
-				if (flag != 1)
-				{
-					List pos2List = new ArrayList();
-					pos2List.add(ypos);
-					pos1Map.put(xpos, pos2List);
-					flag = 1;
-				}
-			}
-		}
-		if (flag != 1)
-		{
-			List pos2List = new ArrayList();
-			pos2List.add(ypos);
-
-			Map pos1Map = new TreeMap();
-			pos1Map.put(xpos, pos2List);
-			containerMap.put(parentId, pos1Map);
-
-		}
-
-	}
-
 	private void setStorageType(HttpServletRequest request, StorageContainerForm storageContainerForm)
 	{
 		//*************Start Bug:1938  ForwardTo implementation *************
@@ -446,9 +361,9 @@ public class StorageContainerAction extends SecureAction
 	private void SetParentStorageContainersForAdd(TreeMap containerMap, StorageContainerForm storageContainerForm, HttpServletRequest request)
 			throws DAOException
 	{ 
-		Vector initialValues = null;
+		List initialValues = null;
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		initialValues = checkForInitialValues(containerMap);
+		initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
 		if (initialValues != null)
 		{
 			//Getting the default values in add case
@@ -478,12 +393,11 @@ public class StorageContainerAction extends SecureAction
 	private void SetParentStorageCOntainersForEdit(TreeMap containerMap, StorageContainerForm storageContainerForm, HttpServletRequest request)
 			throws DAOException
 	{
-		Vector initialValues = null;
+		List initialValues = null;
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		if (storageContainerForm.getCheckedButton() == 2)
 		{
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
-
 			String valueField = "id";
 			List containerList = bizLogic.retrieve(StorageContainer.class.getName(), valueField, new Long(storageContainerForm.getId()));
 			if (!containerList.isEmpty())
@@ -497,8 +411,7 @@ public class StorageContainerAction extends SecureAction
 					Integer pos1 = cont.getPositionDimensionOne();
 					Integer pos2 = cont.getPositionDimensionTwo();
 					String parentContainerName = parent.getName();
-
-					addPostions(containerMap, id, parentContainerName, pos1, pos2);
+					StorageContainerUtil.addPostions(containerMap, id, parentContainerName, pos1, pos2);
 				}
 			}
 			if (storageContainerForm.getParentContainerId() != -1)
@@ -519,9 +432,7 @@ public class StorageContainerAction extends SecureAction
 		}
 		else if (storageContainerForm.getCheckedButton() == 1)
 		{
-
-			initialValues = checkForInitialValues(containerMap);
-
+			initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
 			//falguni
 			//get container name by getting storage container object from db.
 			if (storageContainerForm.getContainerName() == null)

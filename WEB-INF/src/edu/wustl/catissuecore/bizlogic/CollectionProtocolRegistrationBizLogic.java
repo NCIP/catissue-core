@@ -32,7 +32,7 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
-import edu.wustl.catissuecore.util.WithdrawConsentUtil;
+import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -42,7 +42,7 @@ import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
-import edu.wustl.common.security.SecurityManager;
+
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.Utility;
@@ -424,29 +424,27 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	public void checkForChildStatus(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration)
 			throws DAOException, UserNotAuthorizedException
 	{
-		CollectionProtocol parent = collectionProtocolRegistration.getCollectionProtocol();
-		List childCPColl = getChildColl(parent);
-		if (childCPColl != null && !childCPColl.isEmpty())
+		String status = Constants.CHILD_STATUS;
+		getCpAndCpr(dao, sessionDataBean, collectionProtocolRegistration, status);
+	}
+
+	/**
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param cp
+	 * @param cpr
+	 * @throws UserNotAuthorizedException
+	 * @throws DAOException
+	 */
+	private boolean checkChildStatus(DAO dao, SessionDataBean sessionDataBean, CollectionProtocol cp,
+			CollectionProtocolRegistration cpr) throws UserNotAuthorizedException, DAOException
+	{
+		changeStatusOfEvents(dao, sessionDataBean, cpr);
+		if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 		{
-			Iterator iteratorofchildCP = childCPColl.iterator();
-			while (iteratorofchildCP.hasNext())
-			{
-				CollectionProtocol cp = (CollectionProtocol) iteratorofchildCP.next();
-				if (cp != null)
-				{
-					CollectionProtocolRegistration cpr = getCPRbyCollectionProtocolIDAndParticipantID(dao, cp.getId(), collectionProtocolRegistration
-							.getParticipant().getId());
-					if (cpr != null)
-					{
-						changeStatusOfEvents(dao, sessionDataBean, cpr);
-						if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
-						{
-							checkForChildStatus(dao, sessionDataBean, cpr);
-						}
-					}
-				}
-			}
+			return true;
 		}
+		return false;
 	}
 
 	/**In this method if there is change in Offset of parent protocol then the offset of child CollectionProtocol 
@@ -460,6 +458,22 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	public void checkAndUpdateChildDate(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration)
 			throws DAOException, UserNotAuthorizedException
 	{
+		String status = Constants.CHILD_DATE;
+		getCpAndCpr(dao, sessionDataBean, collectionProtocolRegistration,status);
+	}
+
+	/**
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param collectionProtocolRegistration
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private void getCpAndCpr(DAO dao, SessionDataBean sessionDataBean,
+			CollectionProtocolRegistration collectionProtocolRegistration, String callMethod) throws DAOException,
+			UserNotAuthorizedException
+	{
+		
 		CollectionProtocol parent = collectionProtocolRegistration.getCollectionProtocol();
 		List childCPColl = getChildColl(parent);
 		if (childCPColl != null && !childCPColl.isEmpty())
@@ -474,26 +488,60 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 							.getParticipant().getId());
 					if (cpr != null)
 					{
-						setRegDate(cpr, cp.getStudyCalendarEventPoint(), collectionProtocolRegistration.getRegistrationDate());
-						Integer offsetOfCurrentCPR = cpr.getOffset();
+						boolean callRecursive = false;
+						if(callMethod.equals(Constants.CHILD_STATUS))
 						{
-							if (offsetOfCurrentCPR != null)
-							{
-								cpr.setOffset(offsetOfCurrentCPR);
-								cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cpr
-										.getRegistrationDate(), offsetOfCurrentCPR.intValue()));
-							}
+							callRecursive = checkChildStatus(dao, sessionDataBean, cp, cpr);
 						}
-						dao.update(cpr, sessionDataBean, true, false, false);
-						//						updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, cpr);
-						if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
+						else if(callMethod.equals(Constants.CHILD_DATE))
 						{
-							checkAndUpdateChildDate(dao, sessionDataBean, cpr);
+							callRecursive = checkUpdateChildDate(dao, sessionDataBean, collectionProtocolRegistration,cp, cpr);
+						}
+						else if(callMethod.equals(Constants.CHILD_OFFSET))
+						{
+							callRecursive = checkUpdateChildOffset(dao, sessionDataBean, offset, cp, cpr);
+						}
+						if(callRecursive)
+						{
+							getCpAndCpr(dao, sessionDataBean, collectionProtocolRegistration,callMethod);
 						}
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param collectionProtocolRegistration
+	 * @param cp
+	 * @param cpr
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private boolean checkUpdateChildDate(DAO dao, SessionDataBean sessionDataBean,
+			CollectionProtocolRegistration collectionProtocolRegistration, CollectionProtocol cp,
+			CollectionProtocolRegistration cpr) throws DAOException, UserNotAuthorizedException
+	{
+		setRegDate(cpr, cp.getStudyCalendarEventPoint(), collectionProtocolRegistration.getRegistrationDate());
+		Integer offsetOfCurrentCPR = cpr.getOffset();
+		{
+			if (offsetOfCurrentCPR != null)
+			{
+				cpr.setOffset(offsetOfCurrentCPR);
+				cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cpr
+						.getRegistrationDate(), offsetOfCurrentCPR.intValue()));
+			}
+		}
+		dao.update(cpr, sessionDataBean, true, false, false);
+		//						updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, cpr);
+		if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
+		{
+			return true;
+			//checkAndUpdateChildDate(dao, sessionDataBean, cpr);
+		}
+		return false;
 	}
 
 	//	private void updateOffsetForEventsForAlreadyRegisteredCPR(DAO dao, SessionDataBean sessionDataBean,
@@ -1489,7 +1537,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		{
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) scgItr.next();
 			String cprWithdrawOption = collectionProtocolRegistration.getConsentWithdrawalOption();
-			WithdrawConsentUtil.updateSCG(scg, consentTierID, cprWithdrawOption, dao, sessionDataBean);
+			ConsentUtil.updateSCG(scg, consentTierID, cprWithdrawOption, dao, sessionDataBean);
 			newScgCollection.add(scg); // set updated scg in cpr
 		}
 		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(newScgCollection);
@@ -1609,39 +1657,31 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	public void checkAndUpdateChildOffset(DAO dao, SessionDataBean sessionDataBean, CollectionProtocolRegistration collectionProtocolRegistration,
 			int offset) throws DAOException, UserNotAuthorizedException
 	{
-		CollectionProtocol parent = collectionProtocolRegistration.getCollectionProtocol();
-		List childCPColl = getChildColl(parent);
-		if (childCPColl != null && !childCPColl.isEmpty())
+		String status = Constants.CHILD_OFFSET;
+		getCpAndCpr(dao, sessionDataBean, collectionProtocolRegistration,status);
+	}
+
+	/**
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param offset
+	 * @param cp
+	 * @param cpr
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private boolean checkUpdateChildOffset(DAO dao, SessionDataBean sessionDataBean, int offset,
+			CollectionProtocol cp, CollectionProtocolRegistration cpr) throws DAOException,
+			UserNotAuthorizedException
+	{
+		cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cpr.getRegistrationDate(),
+				offset));
+		dao.update(cpr, sessionDataBean, true, false, false);
+		if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
 		{
-			Iterator iteratorofchildCP = childCPColl.iterator();
-			while (iteratorofchildCP.hasNext())
-			{
-				CollectionProtocol cp = (CollectionProtocol) iteratorofchildCP.next();
-				if (cp != null)
-				{
-					CollectionProtocolRegistration cpr = getCPRbyCollectionProtocolIDAndParticipantID(dao, cp.getId(), collectionProtocolRegistration
-							.getParticipant().getId());
-					if (cpr != null)
-					{
-						cpr.setRegistrationDate(edu.wustl.catissuecore.util.global.Utility.getNewDateByAdditionOfDays(cpr.getRegistrationDate(),
-								offset));
-						//						Integer offsetToSet = cpr.getOffset();
-						//						if (offsetToSet != null && offsetToSet.intValue() != 0)
-						//						{
-						//							cpr.setOffset(new Integer(offset + offsetToSet.intValue()));
-						//						}
-						//						else
-						//							cpr.setOffset(new Integer(offset));
-						//						updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
-						dao.update(cpr, sessionDataBean, true, false, false);
-						if (cp.getChildCollectionProtocolCollection() != null && cp.getChildCollectionProtocolCollection().size() != 0)
-						{
-							checkAndUpdateChildOffset(dao, sessionDataBean, cpr, offset);
-						}
-					}
-				}
-			}
+			return true; 
 		}
+		return false;
 	}
 
 	/**

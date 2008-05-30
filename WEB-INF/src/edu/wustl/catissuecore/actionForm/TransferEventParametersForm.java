@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.TransferEventParameters;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -323,65 +324,12 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			}
 			else if (stContSelection == 2)
 			{
-				
-				
-				boolean flag = false;
-				if(pos1!=null&&!pos1.trim().equals(""))
-				{
-					long l = 1;
-	                  try 
-					  {
-	                    	l = Long.parseLong(pos1);
-					  }
-					 catch(Exception e)
-					 {
-					 	flag = true;
-						
-					 }
-					 if(l<=0)
-					 {
-					 	flag = true;
-					 }
-				}
-				if(pos2!=null&&!pos2.trim().equals(""))
-				{
-					long l = 1;
-	                  try 
-					  {
-	                    	l = Long.parseLong(pos2);
-					  }
-					 catch(Exception e)
-					 {
-					 	flag = true;
-						
-					 }
-					 if(l<=0)
-					 {
-					 	flag = true;
-					 }
-				}
-				
+				boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1 , this.pos2);
 				if(flag)
 				{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-									ApplicationProperties.getValue("transfereventparameters.toposition")));
-	    		}
-			/*	if (validator.isEmpty(pos1) || validator.isEmpty(pos2)
-						|| validator.isEmpty(selectedContainerName))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("transfereventparameters.toposition")));
-				}
-				else
-				{
-					if (!validator.isNumeric(pos1, 1)
-							|| !validator.isNumeric(pos2, 1))
-					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-								ApplicationProperties.getValue("transfereventparameters.toposition")));
-					}
-	
-				}  */
+	    		}
 			}
 				
 		}

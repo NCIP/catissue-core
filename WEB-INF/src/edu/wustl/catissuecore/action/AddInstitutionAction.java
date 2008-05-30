@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.bizlogic.InstitutionBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -44,21 +45,7 @@ public class AddInstitutionAction extends CommonAddEditAction
 		
 		if((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
-			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-			Logger.out.info("Errors:" + errors);
-			if (errors != null || errors.size() != 0)
-			{
-				Iterator iterator = errors.get();
-				while (iterator.hasNext())
-				{
-					ActionError next = (ActionError)iterator.next();
-					Object[] values = next.getValues();
-					for(int j=0;j<values.length;j++)
-					{
-						responseString = (String)values[j];
-					}
-				}
-			}
+			responseString = Utility.getResponseString(request, responseString);
 		}
 		else
 		{

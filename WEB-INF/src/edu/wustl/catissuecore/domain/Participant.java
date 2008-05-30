@@ -16,14 +16,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
-import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
@@ -695,24 +694,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 			if(isResponse)
 			{
 				Iterator iter = consentResponse.iterator();
-		        while(iter.hasNext())
-		        {
-		        	ConsentBean consentBean = (ConsentBean)iter.next();
-		        	ConsentTierResponse consentTierResponse = new ConsentTierResponse();
-		        	//Setting response
-		        	consentTierResponse.setResponse(consentBean.getParticipantResponse());
-		        	if(consentBean.getParticipantResponseID()!=null&&consentBean.getParticipantResponseID().trim().length()>0)
-		        	{
-		        		consentTierResponse.setId(Long.parseLong(consentBean.getParticipantResponseID()));
-		        	}
-		        	//Setting consent tier
-		        	ConsentTier consentTier = new ConsentTier();
-		        	consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
-		        	consentTier.setStatement(consentBean.getStatement());
-		        	
-		        	consentTierResponse.setConsentTier(consentTier);
-		        	consentTierResponseCollection.add(consentTierResponse);
-		        }
+		       ConsentUtil.createConsentResponseColl(consentTierResponseCollection, iter);
 			}
 			else
 			{
@@ -740,24 +722,13 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		Collection consentTierCollection = (Collection)collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), new Long(collectionProtocolID), "elements(consentTierCollection)");
     	return consentTierCollection;
     }
-	 /**
+	 
+	/**
      * Returns message label to display on success add or edit
      * @return String
      */
-	public String getMessageLabel() {		
-		
-		if (this.lastName!= null && !this.lastName.equals("") && this.firstName != null && !this.firstName.equals("")) 
-		{
-			return this.lastName + "," + this.firstName;
-		} 
-		else if(this.lastName!= null && !this.lastName.equals(""))
-		{
-			return this.lastName;
-		}
-		else if(this.firstName!= null && !this.firstName.equals(""))
-		{
-			return this.firstName;
-		}		
-		return null; 
+	public String getMessageLabel() 
+	{		
+		return edu.wustl.catissuecore.util.global.Utility.getlLabel(this.lastName,this.firstName); 
 	}
 }

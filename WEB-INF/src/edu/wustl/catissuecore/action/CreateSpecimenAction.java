@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +34,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -114,7 +114,7 @@ public class CreateSpecimenAction extends SecureAction
 		request.setAttribute(Constants.PAGEOF,pageOf);
 		DefaultBizLogic dao = new DefaultBizLogic(); 
 		TreeMap containerMap = new TreeMap();
-		Vector initialValues = null;
+		List initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
 			//if this action bcos of delete external identifier then validation should not happen.
@@ -198,38 +198,35 @@ public class CreateSpecimenAction extends SecureAction
 						}
 						if(spClass!=null && createForm.getStContSelection() != Constants.RADIO_BUTTON_VIRTUALLY_LOCATED)
 						{
-						StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
-							.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
-								spClass, 0,exceedingMaxLimit,sessionData,true);
-						ActionErrors errors = (ActionErrors) request
-						.getAttribute(Globals.ERROR_KEY);
-						if (containerMap.isEmpty())
-						{
 						
+							StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
+								.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
+									spClass, 0,exceedingMaxLimit,sessionData,true);
+							ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+							if (containerMap.isEmpty())
+							{
+								if (errors == null || errors.size() == 0)
+								{
+									errors = new ActionErrors();
+								}
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+										"storageposition.not.available"));
+								saveErrors(request, errors);
+							}
 							if (errors == null || errors.size() == 0)
 							{
-								errors = new ActionErrors();
+								initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
 							}
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-									"storageposition.not.available"));
-							saveErrors(request, errors);
-						}
-						
-					
-						if (errors == null || errors.size() == 0)
-						{
-							initialValues = checkForInitialValues(containerMap);
-						}
-						else
-						{
-							String[] startingPoints = new String[3];
-							startingPoints[0] = createForm.getStorageContainer();
-							startingPoints[1] = createForm.getPositionDimensionOne();
-							startingPoints[2] = createForm.getPositionDimensionTwo() ;
-							initialValues = new Vector();
-							initialValues.add(startingPoints);
-						}
+							else
+							{
+								String[] startingPoints = new String[3];
+								startingPoints[0] = createForm.getStorageContainer();
+								startingPoints[1] = createForm.getPositionDimensionOne();
+								startingPoints[2] = createForm.getPositionDimensionTwo() ;
+								initialValues = new ArrayList();
+								initialValues.add(startingPoints);
+							}
 					
 						}
 						/**
@@ -241,7 +238,7 @@ public class CreateSpecimenAction extends SecureAction
 						if(spClass!=null && createForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP)
 						{
 							String[] startingPoints = new String[]{"-1", "-1", "-1"};
-							initialValues = new Vector();
+							initialValues = new ArrayList();
 							initialValues.add(startingPoints);
 							request.setAttribute("initValues", initialValues);
 						}
@@ -311,69 +308,25 @@ public class CreateSpecimenAction extends SecureAction
 			{
 				startingPoints[2] = createForm.getPositionDimensionTwo();
 			}
-			initialValues = new Vector();
+			initialValues = new ArrayList();
 			initialValues.add(startingPoints);
 
 		}
 		request.setAttribute("initValues", initialValues);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
-
-		//String[] fields = {"id"};
-
-		// Setting the parent specimen list
-		/*List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0], true);
-		 request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);*/
-
-		//Setting the specimen class list
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_SPECIMEN_CLASS, null);
-		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
-
 		//Setting the specimen type list
 		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-
-		//Setting biohazard list
+				//Setting biohazard list
 		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
-
-		// get the Specimen class and type from the cde
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-		Set setPV = specimenClassCDE.getPermissibleValues();
-		Iterator itr = setPV.iterator();
-
-		specimenClassList = new ArrayList();
-		Map subTypeMap = new HashMap();
-		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-
-		while (itr.hasNext())
-		{
-			List innerList = new ArrayList();
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			String tmpStr = pv.getValue();
-			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
-
-			Set list1 = pv.getSubPermissibleValues();
-			Iterator itr1 = list1.iterator();
-			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-			while (itr1.hasNext())
-			{
-				Object obj1 = itr1.next();
-				PermissibleValue pv1 = (PermissibleValue) obj1;
-				// set specimen type
-				String tmpInnerStr = pv1.getValue();
-				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
-			}
-			subTypeMap.put(pv.getValue(), innerList);
-		} // class and values set
-
-		// sets the Class list
+		
+		Map subTypeMap = Utility.getSpecimenTypeMap();	
+		List specimenClassList = Utility.getSpecimenClassList();
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
-
 		// set the map to subtype
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
 
@@ -471,37 +424,5 @@ public class CreateSpecimenAction extends SecureAction
 			cpId = (Long)cpList.get(0);
 		}
 		return cpId;
-	}
-	
-	Vector checkForInitialValues(Map containerMap)
-	{
-		Vector initialValues = null;
-
-		if (containerMap.size() > 0)
-		{
-			String[] startingPoints = new String[3];
-
-			Set keySet = containerMap.keySet();
-			Iterator itr = keySet.iterator();
-			NameValueBean nvb = (NameValueBean) itr.next();
-			startingPoints[0] = nvb.getValue();
-
-			Map map1 = (Map) containerMap.get(nvb);
-			keySet = map1.keySet();
-			itr = keySet.iterator();
-			nvb = (NameValueBean) itr.next();
-			startingPoints[1] = nvb.getValue();
-
-			List list = (List) map1.get(nvb);
-			nvb = (NameValueBean) list.get(0);
-			startingPoints[2] = nvb.getValue();
-
-			initialValues = new Vector();
-			initialValues.add(startingPoints);
-
-		}
-		return initialValues;
-
-		//request.setAttribute("initValues", initialValues);
 	}
 }

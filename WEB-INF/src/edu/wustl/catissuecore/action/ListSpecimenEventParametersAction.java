@@ -52,6 +52,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -212,7 +213,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 						Map<String, Object> rowDataMap = new HashMap<String, Object>();
 						if (eventParameters != null)
 						{
-							String[] events = getEvent(eventParameters);
+							String[] events = EventsUtil.getEvent(eventParameters);
 							rowDataMap.put(Constants.ID, String.valueOf(eventParameters.getId()));
 							rowDataMap.put(Constants.EVENT_NAME, events[0]);//Event Name
 
@@ -349,89 +350,6 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			gridDataList.add(rowData);
 		}
 		return gridDataList;
-	}
-
-	private String[] getEvent(EventParameters eventParameters)
-	{
-		String[] events = new String[2];
-
-		if (eventParameters instanceof CellSpecimenReviewParameters)
-		{
-			events[0] = "Cell Specimen Review";
-			events[1] = "pageOfCellSpecimenReviewParameters";
-		}
-		else if (eventParameters instanceof CheckInCheckOutEventParameter)
-		{
-			events[0] = "Check In Check Out";
-			events[1] = "pageOfCheckInCheckOutEventParameters";
-		}
-		else if (eventParameters instanceof CollectionEventParameters)
-		{
-			events[0] = "Collection";
-			events[1] = "pageOfCollectionEventParameters";
-		}
-		else if (eventParameters instanceof DisposalEventParameters)
-		{
-			events[0] = "Disposal";
-			events[1] = "pageOfDisposalEventParameters";
-		}
-		else if (eventParameters instanceof EmbeddedEventParameters)
-		{
-			events[0] = "Embedded";
-			events[1] = "pageOfEmbeddedEventParameters";
-		}
-		else if (eventParameters instanceof FixedEventParameters)
-		{
-			events[0] = "Fixed";
-			events[1] = "pageOfFixedEventParameters";
-		}
-		else if (eventParameters instanceof FluidSpecimenReviewEventParameters)
-		{
-			events[0] = "Fluid Specimen Review";
-			events[1] = "pageOfFluidSpecimenReviewParameters";
-		}
-		else if (eventParameters instanceof FrozenEventParameters)
-		{
-			events[0] = "Frozen";
-			events[1] = "pageOfFrozenEventParameters";
-		}
-		else if (eventParameters instanceof MolecularSpecimenReviewParameters)
-		{
-			events[0] = "Molecular Specimen Review";
-			events[1] = "pageOfMolecularSpecimenReviewParameters";
-		}
-		else if (eventParameters instanceof ProcedureEventParameters)
-		{
-			events[0] = "Procedure Event";
-			events[1] = "pageOfProcedureEventParameters";
-		}
-		else if (eventParameters instanceof ReceivedEventParameters)
-		{
-			events[0] = "Received Event";
-			events[1] = "pageOfReceivedEventParameters";
-		}
-		else if (eventParameters instanceof SpunEventParameters)
-		{
-			events[0] = "Spun";
-			events[1] = "pageOfSpunEventParameters";
-		}
-		else if (eventParameters instanceof ThawEventParameters)
-		{
-			events[0] = "Thaw";
-			events[1] = "pageOfThawEventParameters";
-		}
-		else if (eventParameters instanceof TissueSpecimenReviewEventParameters)
-		{
-			events[0] = "Tissue Specimen Review";
-			events[1] = "pageOfTissueSpecimenReviewParameters";
-		}
-		else if (eventParameters instanceof TransferEventParameters)
-		{
-			events[0] = "Transfer";
-			events[1] = "pageOfTransferEventParameters";
-		}
-
-		return events;
 	}
 
 	/**

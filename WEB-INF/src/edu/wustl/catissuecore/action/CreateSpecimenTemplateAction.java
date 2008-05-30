@@ -2,12 +2,9 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +29,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.dbManager.DAOException;
 
 
@@ -75,7 +70,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		List tissueSiteList = new ArrayList();
 		List tissueSideList = new ArrayList();
 		List pathologicalStatusList = new ArrayList();
-		List specimenClassList = new ArrayList();
+		List specimenClassList = null;
 		
 		tissueSiteList.addAll(Utility.tissueSiteList());
     	
@@ -84,38 +79,8 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		
 		//Getting pathological status list
 		pathologicalStatusList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
-		
-		// get the Specimen class and type from the cde
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-		Set setPV = specimenClassCDE.getPermissibleValues();
-		Iterator itr = setPV.iterator();
-
-		specimenClassList = new ArrayList();
-		Map subTypeMap = new HashMap();
-		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-
-		while (itr.hasNext())
-		{
-			List innerList = new ArrayList();
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			String tmpStr = pv.getValue();
-			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
-
-			Set list1 = pv.getSubPermissibleValues();
-			Iterator itr1 = list1.iterator();
-			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-			while (itr1.hasNext())
-			{
-				Object obj1 = itr1.next();
-				PermissibleValue pv1 = (PermissibleValue) obj1;
-				// set specimen type
-				String tmpInnerStr = pv1.getValue();
-				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
-			}
-			subTypeMap.put(pv.getValue(), innerList);
-		} // class and values set
-
+		Map subTypeMap = Utility.getSpecimenTypeMap();
+		specimenClassList = Utility.getSpecimenClassList();
 		if(operation.equals("add")&&pageOf!=null&&!pageOf.equals("error")&&!pageOf.equals("delete"))
 		{
 			// Setting the default values

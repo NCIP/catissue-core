@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.action;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -15,13 +14,10 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ProtocolEventDetailsForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -29,7 +25,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 public class ProtocolEventDetailsAction extends BaseAction
 {
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
+			HttpServletRequest request, HttpServletResponse response) throws DAOException
 	{
 		ProtocolEventDetailsForm protocolEventDetailsForm =(ProtocolEventDetailsForm)form;
 		String operation = (String)request.getParameter(Constants.OPERATION);
@@ -39,7 +35,16 @@ public class ProtocolEventDetailsAction extends BaseAction
 		String nodeId = (String)request.getParameter(Constants.TREE_NODE_ID);
 		session.setAttribute(Constants.TREE_NODE_ID,nodeId);
 		String pageOf = request.getParameter(Constants.PAGE_OF);
-		setUserInForm(request,operation,protocolEventDetailsForm);
+		long collectionEventUserId = 0;
+		collectionEventUserId = Utility.setUserInForm(request,operation);
+		if(protocolEventDetailsForm.getCollectionEventUserId() == 0)
+		{
+			protocolEventDetailsForm.setCollectionEventUserId(collectionEventUserId);
+		}
+		if(protocolEventDetailsForm.getReceivedEventUserId() == 0)
+		{
+			protocolEventDetailsForm.setReceivedEventUserId(collectionEventUserId);
+		}
 		if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_DEFINE_EVENTS))
 		{
 			initSpecimenrequirementForm(mapping, protocolEventDetailsForm, request);
@@ -77,44 +82,6 @@ public class ProtocolEventDetailsAction extends BaseAction
 		
     	request.setAttribute("protocolEventDetailsForm", protocolEventDetailsForm);
 		return (mapping.findForward(Constants.SUCCESS));
-	}
-	
-	/**
-	 * @param request
-	 * @param operation
-	 * @param specimenCollectionGroupForm
-	 * @throws DAOException
-	 */
-	private void setUserInForm(HttpServletRequest request,String operation,ProtocolEventDetailsForm protocolEventDetailsForm) 
-	{
-		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
-		Collection userCollection = null;
-		try
-		{
-			userCollection = userBizLogic.getUsers(operation);
-		}
-		catch (DAOException e)
-		{
-			e.printStackTrace();
-		}
-
-		request.setAttribute(Constants.USERLIST, userCollection);
-
-		SessionDataBean sessionData = getSessionData(request);
-		if (sessionData != null)
-		{
-			String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
-			long collectionEventUserId = EventsUtil.getIdFromCollection(userCollection, user);
-
-			if(protocolEventDetailsForm.getCollectionEventUserId() == 0)
-			{
-				protocolEventDetailsForm.setCollectionEventUserId(collectionEventUserId);
-			}
-			if(protocolEventDetailsForm.getReceivedEventUserId() == 0)
-			{
-				protocolEventDetailsForm.setReceivedEventUserId(collectionEventUserId);
-			}
-		}
 	}
 	
 	private void initSpecimenrequirementForm(ActionMapping mapping, ProtocolEventDetailsForm protocolEventDetailsForm, HttpServletRequest request)

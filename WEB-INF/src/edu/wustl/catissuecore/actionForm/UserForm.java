@@ -733,47 +733,7 @@ public class UserForm extends AbstractActionForm
 
 				if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
 				{
-					if (validator.isEmpty(oldPassword))
-					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-								.getValue("user.oldPassword")));
-					}
-
-					if (validator.isEmpty(newPassword))
-					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-								.getValue("user.newPassword")));
-					}
-
-					if (validator.isEmpty(confirmNewPassword))
-					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-								.getValue("user.confirmNewPassword")));
-					}
-
-					if (!validator.isEmpty(newPassword) && !validator.isEmpty(confirmNewPassword))
-					{
-						if (!newPassword.equals(confirmNewPassword))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
-						}
-					}
-
-					if (!validator.isEmpty(newPassword) && !validator.isEmpty(oldPassword))
-					{
-						// Call static method PasswordManager.validatePasswordOnFormBean() where params are
-						// new password,old password,user name
-						int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
-							
-						if (result != PasswordManager.SUCCESS)
-						{
-							// get error message of validation failure where param is result of validate() method
-						    String errorMessage = PasswordManager.getErrorMessage(result);
-							Logger.out.debug("error from Password validate " + errorMessage);
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
-						}
-					}
-				
+					validatePassword(request, errors, validator);
 				}
 				else
 				{
@@ -939,35 +899,7 @@ public class UserForm extends AbstractActionForm
 						String pageFrom = request.getParameter("pageFrom");
 						if(!"ApproveUser".equals(pageFrom))
 						{
-							if (validator.isEmpty(newPassword))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-										.getValue("user.newPassword")));
-							}
-	
-							if (validator.isEmpty(confirmNewPassword))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-										.getValue("user.confirmNewPassword")));
-							}
-	
-							if (!validator.isEmpty(newPassword) && !validator.isEmpty(confirmNewPassword))
-							{
-								if (!newPassword.equals(confirmNewPassword))
-								{
-									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
-								}
-							}
-							
-							int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
-							
-							if (result != PasswordManager.SUCCESS)
-							{
-								// get error message of validation failure where param is result of validate() method
-							    String errorMessage = PasswordManager.getErrorMessage(result);
-								Logger.out.debug("error from Password validate " + errorMessage);
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
-							}
+							validatePassword(request, errors, validator);
 						}
 					}
 					// Mandar 10-apr-06 : bugid :353 end 
@@ -979,6 +911,56 @@ public class UserForm extends AbstractActionForm
 			Logger.out.error(excp.getMessage(), excp);
 		}
         return errors;
+	}
+
+	/**
+	 * @param request
+	 * @param errors
+	 * @param validator
+	 */
+	private void validatePassword(HttpServletRequest request, ActionErrors errors,
+			Validator validator)
+	{
+		if (validator.isEmpty(oldPassword))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+					.getValue("user.oldPassword")));
+		}
+
+		if (validator.isEmpty(newPassword))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+					.getValue("user.newPassword")));
+		}
+
+		if (validator.isEmpty(confirmNewPassword))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+					.getValue("user.confirmNewPassword")));
+		}
+
+		if (!validator.isEmpty(newPassword) && !validator.isEmpty(confirmNewPassword))
+		{
+			if (!newPassword.equals(confirmNewPassword))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
+			}
+		}
+
+		if (!validator.isEmpty(newPassword) && !validator.isEmpty(oldPassword))
+		{
+			// Call static method PasswordManager.validatePasswordOnFormBean() where params are
+			// new password,old password,user name
+			int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+				
+			if (result != PasswordManager.SUCCESS)
+			{
+				// get error message of validation failure where param is result of validate() method
+			    String errorMessage = PasswordManager.getErrorMessage(result);
+				Logger.out.debug("error from Password validate " + errorMessage);
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
+			}
+		}
 	}
 
 	/**

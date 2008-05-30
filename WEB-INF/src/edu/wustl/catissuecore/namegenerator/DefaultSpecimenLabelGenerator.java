@@ -156,7 +156,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		
 		Specimen objSpecimen = (Specimen)obj;
 		
-		if (objSpecimen.getLabel() != null || 
+		if (objSpecimen.getLabel() != null || objSpecimen.getIsCollectionProtocolRequirement()!=null &&
 				objSpecimen.getIsCollectionProtocolRequirement())
 		{
 			return;

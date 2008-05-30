@@ -153,7 +153,7 @@ public class AliquotForm extends AbstractActionForm
 	 */
 	private String printCheckbox; 
 	
-	private List<Specimen> specimenList = new LinkedList<Specimen>();
+	private List<AbstractDomainObject> specimenList = new LinkedList<AbstractDomainObject>();
     
     public String getNextForwardTo() 
     {
@@ -693,13 +693,13 @@ public class AliquotForm extends AbstractActionForm
      }
 
 	
-	public List<Specimen> getSpecimenList()
+	public List<AbstractDomainObject> getSpecimenList()
 	{
 		return specimenList;
 	}
 
 	
-	public void setSpecimenList(List<Specimen> specimenList)
+	public void setSpecimenList(List<AbstractDomainObject> specimenList)
 	{
 		if(specimenList!=null)
 		{

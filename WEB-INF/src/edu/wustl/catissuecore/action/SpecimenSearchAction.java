@@ -86,55 +86,13 @@ public class SpecimenSearchAction extends AdvanceSearchUIAction
         request.setAttribute(Constants.DATE_NUMERIC_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_NUMERIC));
         request.setAttribute(Constants.ENUMERATED_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_ENUMERATED));
         request.setAttribute(Constants.MULTI_ENUMERATED_OPERATORS,SearchUtil.getOperatorList(SearchUtil.DATATYPE_MULTI_ENUMERATED));
-
     	//TO DO : To be moved to common utility class
-        try
-		{
-        	// get the Specimen class and type from the cde
-        	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-	    	Set setPV = specimenClassCDE.getPermissibleValues();
-	    	Iterator itr = setPV.iterator();
-	    
-	    	List specimenClassList =  new ArrayList();
-	    	Map subTypeMap = new HashMap();
-	    	specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-	    	
-	    	//Creating a map of subtypes against their types (class names)
-	    	while(itr.hasNext())
-	    	{
-	    		List innerList =  new ArrayList();
-	    		Object obj = itr.next();
-	    		PermissibleValue pv = (PermissibleValue)obj;
-	    		String tmpStr = pv.getValue();
-	    		Logger.out.debug(tmpStr);
-	    		specimenClassList.add(new NameValueBean( tmpStr,tmpStr));
-	    		
-				Set list1 = pv.getSubPermissibleValues();
-	        	Iterator itr1 = list1.iterator();
-	        	innerList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-	        	
-	        	while(itr1.hasNext())
-	        	{
-	        		Object obj1 = itr1.next();
-	        		PermissibleValue pv1 = (PermissibleValue)obj1;
-	        		//Setting the specimen type
-	        		String tmpInnerStr = pv1.getValue();
-	        		innerList.add(new NameValueBean( tmpInnerStr,tmpInnerStr));  
-	        	}
-	        	subTypeMap.put(pv.getValue(),innerList);
-	    	}
-	    	
-	    	//Setting the class list
-	    	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
-
-	    	//Setting the map of subtypes
-	    	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
-		}
-        catch(Exception excp)
-		{
-        	Logger.out.error(excp.getMessage(),excp);
-        	return mapping.findForward(Constants.FAILURE);
-		}
+        Map subTypeMap = Utility.getSpecimenTypeMap();	
+		List specimenClassList = Utility.getSpecimenClassList();
+        //Setting the class list
+	    request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
+    	//Setting the map of subtypes
+    	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
        
         //Preparing the data for Specimen Event Parameters
         QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);

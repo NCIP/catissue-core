@@ -110,7 +110,7 @@ public class StorageTypeAction  extends SecureAction
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
         //Gets the Storage Type List and sets it in request
         List list1=bizLogic.retrieve(StorageType.class.getName());
-    	List storageTypeList=Utility.getStorageTypeList(list1);
+    	List storageTypeList=Utility.getStorageTypeList(list1,true);
     	//Collections.sort(storageTypeList);
     	request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
     	

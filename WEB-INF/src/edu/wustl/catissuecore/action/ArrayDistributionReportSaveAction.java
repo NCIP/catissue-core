@@ -84,10 +84,10 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 			String []arrayColumnNames,String[] specimenColumnNames) throws IOException {
 		ExportReport report = new ExportReport(fileName);
 		String[] gridInfoLabel = {"Array Grid"};
-		
-		
-		addDistributionHeader(distributionReportForm,report);
-		
+		String delimiter = Constants.DELIMETER;
+		List distributionData = new ArrayList();
+		addDistributionHeader(distributionData,distributionReportForm,report);
+		report.writeData(distributionData, delimiter);
 		Iterator itr = listOfData.iterator();
 		while(itr.hasNext())
 		{
@@ -101,25 +101,6 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 		}
 		report.closeFile();
 	}
-	
-	/**
-	 * Adds Distribution header
-	 * @param distributionReportForm
-	 * @param report
-	 * @throws IOException
-	 */
-	protected void addDistributionHeader(DistributionReportForm distributionReportForm, ExportReport report)throws IOException {
-		List distributionData = new ArrayList();
-		distributionData = createList("distribution.protocol",distributionReportForm.getDistributionProtocolTitle(),distributionData);
-		distributionData = createList("eventparameters.user",distributionReportForm.getUserName(), distributionData);
-		distributionData = createList("eventparameters.dateofevent",distributionReportForm.getDateOfEvent(), distributionData);
-		distributionData = createList("eventparameters.time",distributionReportForm.getTimeInHours() + ":"+ distributionReportForm.getTimeInMinutes(),distributionData);
-		distributionData = createList("distribution.toSite",distributionReportForm.getToSite(), distributionData);
-		distributionData = createList("eventparameters.comments",distributionReportForm.getComments(), distributionData);
-		String delimiter = Constants.DELIMETER;
-		report.writeData(distributionData, delimiter);
-	}
-	
 	/**
 	 * Adds a section to report
 	 * @param report

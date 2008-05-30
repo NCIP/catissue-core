@@ -1,7 +1,9 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +23,7 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -29,12 +32,15 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractForwardToFactory;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.AbstractForwardToProcessor;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 
 /**
@@ -56,8 +62,8 @@ public class CreateAliquotAction extends BaseAction
 	{
 		AliquotForm aliquotForm = (AliquotForm)form;
 		boolean insertAliquotSpecimen= true;
-		LinkedHashSet<Specimen> specimenMap =null;
-		List<Specimen> specimenList = null;
+		Collection<AbstractDomainObject> specimenCollection =null;
+		List<AbstractDomainObject> specimenList = null;
 		String fromPrintAction = request.getParameter(Constants.FROM_PRINT_ACTION);
 		SessionDataBean sessionDataBean = getSessionData(request);
 		//Create SpecimenCollectionGroup Object
@@ -65,13 +71,13 @@ public class CreateAliquotAction extends BaseAction
 		//Create ParentSpecimen Object
 		Specimen parentSpecimen = createParentSpecimen(aliquotForm);
 		//Create Specimen Map
-		specimenMap = createAliquotDomainObject(aliquotForm, scg, parentSpecimen);
+		specimenCollection = createAliquotDomainObject(aliquotForm, scg, parentSpecimen);
 		//Insert Specimen Map
-		insertAliquotSpecimen = insertAliquotSpecimen(request, sessionDataBean, specimenMap);
+		insertAliquotSpecimen = insertAliquotSpecimen(request, sessionDataBean, specimenCollection);
 		//Convert Specimen HashSet to List
-		specimenList= new LinkedList<Specimen>();
-		specimenList.addAll(specimenMap);
-		Specimen specimen = specimenList.get(0);
+		specimenList= new LinkedList<AbstractDomainObject>();
+		specimenList.addAll(specimenCollection);
+		Specimen specimen = (Specimen)specimenList.get(0);
 		if(specimen!=null)
 		{
 			aliquotForm.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
@@ -95,7 +101,7 @@ public class CreateAliquotAction extends BaseAction
 	 */
 	private ActionForward getFindForward(ActionMapping mapping, HttpServletRequest request,
 			AliquotForm aliquotForm, String fromPrintAction, boolean insertAliquotSpecimen,
-			List<Specimen> specimenList) throws Exception
+			List<AbstractDomainObject> specimenList) throws Exception
 	{
 		if(aliquotForm.getPrintCheckbox()!=null)
 		{
@@ -119,24 +125,54 @@ public class CreateAliquotAction extends BaseAction
 	 * @param specimenMap
 	 * @return
 	 * @throws UserNotAuthorizedException
+	 * @throws DAOException 
+	 * @throws DAOException 
 	 */
 	private boolean insertAliquotSpecimen(HttpServletRequest request, SessionDataBean sessionDataBean,
-			LinkedHashSet<Specimen> specimenMap) throws UserNotAuthorizedException
+			Collection<AbstractDomainObject> specimenCollection) throws UserNotAuthorizedException, DAOException
 	{
-		NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
+		HibernateDAO dao = (HibernateDAO)DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		try
 		{
-			bizLogic.insert(specimenMap,sessionDataBean,Constants.HIBERNATE_DAO);
+			dao.openSession(sessionDataBean);
+			new NewSpecimenBizLogic().insertMultiple(specimenCollection, dao, sessionDataBean);
+			disposeParentSpecimen(sessionDataBean, specimenCollection, dao);
+			dao.commit();
+			new NewSpecimenBizLogic().postInsert(specimenCollection, dao, sessionDataBean);
 		}
-		catch(BizLogicException ex)
+		catch (Exception exception)
 		{
+			dao.rollback();
 			ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",ex.getMessage()));
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",exception.getMessage()));
 			saveErrors(request, actionErrors);
 			saveToken(request);
 			return false;
 		}
+		finally
+		{
+			dao.closeSession();
+		}
 		return true;
+	}
+
+	/**
+	 * @param sessionDataBean
+	 * @param specimenCollection
+	 * @param dao
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private void disposeParentSpecimen(SessionDataBean sessionDataBean,
+			Collection<AbstractDomainObject> specimenCollection, HibernateDAO dao)
+			throws DAOException, UserNotAuthorizedException
+	{
+		Iterator<AbstractDomainObject> spItr = specimenCollection.iterator();
+		Specimen specimen =(Specimen)spItr.next();
+		if(specimen!=null && specimen.getDisposeParentSpecimen())
+		{
+			new NewSpecimenBizLogic().disposeSpecimen(dao, sessionDataBean, specimen.getParentSpecimen());
+		}
 	}
 	/**
 	 * @param aliquotForm
@@ -168,10 +204,10 @@ public class CreateAliquotAction extends BaseAction
 	 * @param parentSpecimen
 	 * @return
 	 */
-	private LinkedHashSet<Specimen> createAliquotDomainObject(AliquotForm aliquotForm, SpecimenCollectionGroup scg,
+	private Collection<AbstractDomainObject> createAliquotDomainObject(AliquotForm aliquotForm, SpecimenCollectionGroup scg,
 			Specimen parentSpecimen)
 	{
-		LinkedHashSet<Specimen> specimenMap = new LinkedHashSet<Specimen>();
+		Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
 		boolean disposeParentSpecimen = aliquotForm.getDisposeParentSpecimen();
 		Map aliquotMap = aliquotForm.getAliquotMap();
 		String specimenKey = "Specimen:";
@@ -232,10 +268,14 @@ public class CreateAliquotAction extends BaseAction
 			aliquotSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			aliquotSpecimen.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
 			aliquotSpecimen.setDisposeParentSpecimen(disposeParentSpecimen);
-			specimenMap.add(aliquotSpecimen);
+			SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+			specimenCharacteristics.setTissueSide(aliquotForm.getTissueSide());
+			specimenCharacteristics.setTissueSite(aliquotForm.getTissueSite());
+			aliquotSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+			specimenCollection.add(aliquotSpecimen);
 		}
 
-		return specimenMap;
+		return specimenCollection;
 	}
 	/**
 	 * @param abstractForm

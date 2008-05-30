@@ -38,7 +38,6 @@ import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
@@ -54,7 +53,9 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -186,7 +187,7 @@ public class NewSpecimenAction extends SecureAction
 				request.setAttribute(Constants.SELECTED_TAB,tabSelected);
 			}
 			String scg_id=String.valueOf(specimenForm.getSpecimenCollectionGroupId());
-			SpecimenCollectionGroup specimenCollectionGroup= getSCGObj(scg_id);
+			SpecimenCollectionGroup specimenCollectionGroup= Utility.getSCGObj(scg_id);
 			//PHI Data
 			String initialURLValue="";
 			String initialWitnessValue="";
@@ -299,7 +300,6 @@ public class NewSpecimenAction extends SecureAction
 					String scgDropDown = request.getParameter(Constants.SCG_DROPDOWN);
 					if(scgDropDown==null||scgDropDown.equalsIgnoreCase(Constants.TRUE))
 					{
-						//Resolved lazy ------- = specimenCollectionGroup.getConsentTierStatusCollection();
 						Collection consentResponseStatuslevel=(Collection)bizLogicObj.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroup.getId(), "elements(consentTierStatusCollection)");
 						Map tempMap=prepareConsentMap(participantResponseList,consentResponseStatuslevel);
 						specimenForm.setConsentResponseForSpecimenValues(tempMap);
@@ -325,7 +325,9 @@ public class NewSpecimenAction extends SecureAction
 				" where spec.specimenCollectionGroup.id=scg.id and spec.id="+ specimen.getId();
 				Collection consentResponse = Utility.executeQuery(consentResponseHql);
 				Collection consentResponseStatuslevel=(Collection)bizLogicObj.retrieveAttribute(Specimen.class.getName(),specimen.getId(), "elements(consentTierStatusCollection)");
-				Map tempMap=prepareSCGResponseMap(consentResponseStatuslevel, consentResponse);
+				String specimenResponse = "_specimenLevelResponse";
+				String specimenResponseId = "_specimenLevelResponseID";
+				Map tempMap=ConsentUtil.prepareSCGResponseMap(consentResponseStatuslevel, consentResponse,specimenResponse,specimenResponseId);
 				specimenForm.setConsentResponseForSpecimenValues(tempMap);
 				specimenForm.setConsentTierCounter(participantResponseList.size()) ;
 				HttpSession session =request.getSession();
@@ -520,7 +522,7 @@ public class NewSpecimenAction extends SecureAction
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 				Constants.STORAGE_CONTAINER_FORM_ID);
 		TreeMap containerMap = new TreeMap();
-		Vector initialValues = null;
+		List initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
 			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA); 
@@ -584,7 +586,7 @@ public class NewSpecimenAction extends SecureAction
 					Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
 					if (errors == null || errors.size() == 0)
 					{
-						initialValues = checkForInitialValues(containerMap);
+						initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
 					}
 					else
 					{
@@ -885,112 +887,8 @@ public class NewSpecimenAction extends SecureAction
 		specimenForm.setReceivedEventTimeInMinutes("");
 		specimenForm.setReceivedEventUserId(-1);
 	}
-
-	Vector checkForInitialValues(TreeMap containerMap)
-	{
-		Vector initialValues = null;
-
-		if (containerMap.size() > 0)
-		{
-			String[] startingPoints = new String[3];
-
-			Set keySet = containerMap.keySet();
-			Iterator itr = keySet.iterator();
-			NameValueBean nvb = (NameValueBean) itr.next();
-			startingPoints[0] = nvb.getValue();
-
-			Map map1 = (Map) containerMap.get(nvb);
-			keySet = map1.keySet();
-			itr = keySet.iterator();
-			nvb = (NameValueBean) itr.next();
-			startingPoints[1] = nvb.getValue();
-
-			List list = (List) map1.get(nvb);
-			nvb = (NameValueBean) list.get(0);
-			startingPoints[2] = nvb.getValue();
-
-			Logger.out.info("Starting points[0]" + startingPoints[0]);
-			Logger.out.info("Starting points[1]" + startingPoints[1]);
-			Logger.out.info("Starting points[2]" + startingPoints[2]);
-			initialValues = new Vector();
-			initialValues.add(startingPoints);
-
-		}
-		return initialValues;
-
-		//request.setAttribute("initValues", initialValues);
-	}
-
      	//Consent Tracking (Virender Mehta)	
-	/**
-	 * This function will return SpecimenCollectionGroup object 
-	 * @param scg_id Selected SpecimenCollectionGroup ID
-	 * @return specimenCollectionGroupObject
-	 */
-	private SpecimenCollectionGroup getSCGObj(String scg_id) throws DAOException
-	{
-		SpecimenCollectionGroupBizLogic specimenCollectionBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		String colName = "id";			
-		List getSCGIdFromDB = specimenCollectionBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), colName, scg_id);
-		SpecimenCollectionGroup specimenCollectionGroupObject = null;
-		if(getSCGIdFromDB!=null && !getSCGIdFromDB.isEmpty())
-		{
-			specimenCollectionGroupObject = (SpecimenCollectionGroup)getSCGIdFromDB.get(0);
-		}
-		return specimenCollectionGroupObject;
-	}
-	/**
-	* For ConsentTracking Preparing consentResponseForScgValues for populating Dynamic contents on the UI  
-	* @param partiResponseCollection This Containes the collection of ConsentTier Response at CPR level
-	* @param statusResponseCollection This Containes the collection of ConsentTier Response at Specimen level 
-	* @return tempMap
-	*/
-    private Map prepareSCGResponseMap(Collection statusResponseCollection, Collection partiResponseCollection)
-	   {
-	    	Map tempMap = new HashMap();
-	    	Long consentTierID;
-			Long consentID;
-			if(partiResponseCollection!=null ||statusResponseCollection!=null)
-			{
-				int i = 0;
-				Iterator statusResponsIter = statusResponseCollection.iterator();			
-				while(statusResponsIter.hasNext())
-				{
-					ConsentTierStatus consentTierstatus=(ConsentTierStatus)statusResponsIter.next();
-					consentTierID=consentTierstatus.getConsentTier().getId();
-					Iterator participantResponseIter = partiResponseCollection.iterator();
-					while(participantResponseIter.hasNext())
-					{
-						ConsentTierResponse consentTierResponse=(ConsentTierResponse)participantResponseIter.next();
-						consentID=consentTierResponse.getConsentTier().getId();
-						if(consentTierID.longValue()==consentID.longValue())						
-						{
-							ConsentTier consent = consentTierResponse.getConsentTier();
-							String idKey="ConsentBean:"+i+"_consentTierID";
-							String statementKey="ConsentBean:"+i+"_statement";
-							String participantResponsekey = "ConsentBean:"+i+"_participantResponse";
-							String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
-							String specimenResponsekey  = "ConsentBean:"+i+"_specimenLevelResponse";
-							String specimenResponseIDkey ="ConsentBean:"+i+"_specimenLevelResponseID";
-							
-							tempMap.put(idKey, consent.getId());
-							tempMap.put(statementKey,consent.getStatement());
-							tempMap.put(participantResponsekey, consentTierResponse.getResponse());
-							tempMap.put(participantResponceIdKey, consentTierResponse.getId());
-							tempMap.put(specimenResponsekey, consentTierstatus.getStatus());
-							tempMap.put(specimenResponseIDkey, consentTierstatus.getId());
-							i++;
-							break;
-						}
-					}
-				}
-				return tempMap;
-			}		
-			else
-			{
-				return null;
-			}
-	   }
+	
 	
 	
 	/**

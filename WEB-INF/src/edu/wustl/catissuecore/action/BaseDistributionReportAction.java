@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import edu.wustl.common.query.Query;
 import edu.wustl.common.query.QueryFactory;
 import edu.wustl.common.query.SimpleConditionsNode;
 import edu.wustl.common.query.SimpleQuery;
+import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
@@ -261,5 +263,21 @@ public abstract class BaseDistributionReportAction extends BaseAction
 		newList.add(value);
 		list.add(newList);
 		return list;
+	}
+	
+	/**
+	 * Adds Distribution header
+	 * @param distributionReportForm
+	 * @param report
+	 * @throws IOException
+	 */
+	protected void addDistributionHeader(List distributionData,DistributionReportForm distributionReportForm, ExportReport report)throws IOException 
+	{
+		distributionData = createList("distribution.protocol",distributionReportForm.getDistributionProtocolTitle(),distributionData);
+		distributionData = createList("eventparameters.user",distributionReportForm.getUserName(), distributionData);
+		distributionData = createList("eventparameters.dateofevent",distributionReportForm.getDateOfEvent(), distributionData);
+		distributionData = createList("eventparameters.time",distributionReportForm.getTimeInHours() + ":"+ distributionReportForm.getTimeInMinutes(),distributionData);
+		distributionData = createList("distribution.toSite",distributionReportForm.getToSite(), distributionData);
+		distributionData = createList("eventparameters.comments",distributionReportForm.getComments(), distributionData);
 	}
 }

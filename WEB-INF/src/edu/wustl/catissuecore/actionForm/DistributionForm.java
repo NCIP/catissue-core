@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -276,32 +277,9 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 		Logger.out.debug("Inside validate function");
 		try
 		{
-
-			if ((userId) == -1L)
-			{
-				errors
-						.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-								.getValue("eventparameters.user")));
-			}
-			if (!validator.checkDate(dateOfEvent))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-						.getValue("eventparameters.dateofevent")));
-			}
-
-			if (!validator.isNumeric(timeInMinutes, 0))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid", ApplicationProperties
-						.getValue("eventparameters.timeinminutes")));
-			}
-
-			if (!validator.isNumeric(timeInHours, 0))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid", ApplicationProperties
-						.getValue("eventparameters.timeinhours")));
-			}
-
-			if (specimenId == -1L)
+			MultipleSpecimenValidationUtil.validateDate(errors, validator,
+     				this.userId, this.dateOfEvent, this.timeInHours,this.timeInMinutes);
+						if (specimenId == -1L)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", "Specimen Id"));
 			}
@@ -313,7 +291,6 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 				errors.add(ActionErrors.GLOBAL_ERROR,
 						new ActionError("errors.item.required", ApplicationProperties.getValue("distribution.protocol")));
 			}
-
 			if (!validator.isValidOption("" + userId))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
@@ -326,13 +303,6 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey, ApplicationProperties.getValue("eventparameters.dateofevent")));
 			}
-
-			//		if(!validator.isValidOption(fromSite))
-			//		{
-			//			Logger.out.debug("from site");
-			//			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.fromSite")));
-			//		}
-
 			if (validator.isEmpty(toSite) || toSite.equalsIgnoreCase("undefined"))
 			{
 				Logger.out.debug("to site");
