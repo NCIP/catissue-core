@@ -255,7 +255,7 @@ public abstract class QueryCSMUtil
 	 */
 	private static boolean isReadDeniedObject(String entityName)
 	{  
-		if (Variables.queryReadDeniedObjectList.contains(entityName))
+		if (edu.wustl.common.util.global.Variables.queryReadDeniedObjectList.contains(entityName))
 			return true;
 		else
 			return false;
