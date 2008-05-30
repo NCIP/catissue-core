@@ -516,33 +516,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			
 			if(medicalIdentifierNumbers != null)
 	        {
-	        	values = new HashMap();
-	        	int i = 1;
-	        	
-	        	Iterator it = medicalIdentifierNumbers.iterator();
-	        	while(it.hasNext())
-	        	{
-	        		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
-	        		
-	        		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_id";
-					String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
-					String key3 = "ParticipantMedicalIdentifier:" + i  +"_id";
-	
-					Site site =participantMedicalIdentifier.getSite();
-					if(site!=null)
-					{
-						values.put(key1,Utility.toString(site.getName()));
-					}
-					else
-					{
-						values.put(key1,Utility.toString(Constants.SELECT_OPTION));
-					}					
-					
-					values.put(key2,Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
-					values.put(key3,Utility.toString(participantMedicalIdentifier.getId()));
-					
-					i++;
-	        	}
+	        	values=edu.wustl.catissuecore.caties.util.ViewSPRUtil.getMedicalIdentifierNumbers(medicalIdentifierNumbers);
 	        	counter = medicalIdentifierNumbers.size();
 	        }
 		}
