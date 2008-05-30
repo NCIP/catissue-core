@@ -11,8 +11,6 @@
 
 <SCRIPT LANGUAGE="JavaScript">
 
-
-
 //Consent Tracking Module Virender Mehta(Start)
 	//This Function will add more consent Tier 
 	function addConsentTier()
@@ -112,7 +110,6 @@
 		var display5=document.getElementById('submittable');
 		display5.style.display=tabSelected;
 
-
 		var collectionTab=document.getElementById('collectionProtocolTab');
 		var consentTab=document.getElementById('consentTab');
 		
@@ -124,7 +121,6 @@
 		{
 			updateTab(consentTab,collectionTab);
 		}
-		
 	}
 	
 	//This function is for changing the behaviour of TABs
@@ -152,7 +148,6 @@
 	}
 //	Consent Tracking Module Virender Mehta (End)
 
-
 //Add Bulk Specimen Virender(Start)
 function defineEvents()
 {
@@ -168,9 +163,6 @@ function viewSummary()
 	document.forms[0].submit();
 }
 
-//Add Bulk Specimen
-
-//-->
 </SCRIPT>
 
 <style>
@@ -191,7 +183,6 @@ function viewSummary()
 <logic:notEqual name="tab" value="null">
 <body >
 </logic:notEqual>
-
         
 <html:errors />
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
@@ -199,7 +190,6 @@ function viewSummary()
 </html:messages>
 
 <html:form action='${requestScope.formName}'>
-
 
 <logic:equal name="flagforPageView" value="true">
  <table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="700">
@@ -248,8 +238,6 @@ function viewSummary()
 							<bean:message key='${requestScope.title}'/>							
 						</td>
 					</tr>
-
-					
 <!-- principal investigator -->	
 					<tr>
 						<td class="formFieldNoBordersSimple" width="5">*</td>
@@ -295,7 +283,6 @@ function viewSummary()
 	 						</logic:notEqual>
 						</td>
 					</tr>
-
 <!-- title -->						
 					<tr>
 						<td class="formFieldNoBordersSimple" width="5">*</td>
@@ -457,9 +444,7 @@ function viewSummary()
 						<bean:message key="aliquots.storeAllAliquotes" />
 					</html:checkbox>
 				</td>
-						
 				<td align="center">
-					
 					<html:button styleClass="actionButton" property="deletePage" onclick='${requestScope.deleteAction}'>
 						<bean:message key="buttons.delete"/>
 					</html:button>
@@ -469,7 +454,6 @@ function viewSummary()
 						<bean:message key="consent.addconsents" /> >>
 					</html:button>
 				</td>
-
 			</tr>
 			<tr>
 				<td>
@@ -478,13 +462,11 @@ function viewSummary()
 			</tr>
 </table>
 
-
 <!-- Define Consent Page start  Virender Mehta-->
 
 <%@ include file="/pages/content/ConsentTracking/DefineConsent.jsp" %>
 
 <!-- Define Consent Page end Virender Mehta-->
-
 </td></tr></table>
 	
 </html:form>
