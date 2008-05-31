@@ -2647,6 +2647,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void calculateAvailableQunatity(Specimen specimenVO, Specimen specimenDO)
 			throws DAOException
 	{
+
+		/*fix for bug no. 7347
+		bug description: the available quantity was not calculated correctly*/
+		if(specimenVO.getLineage()==null)
+		{
+			validateSpecimenUpdated(specimenVO,specimenDO);
+		}
 		if (specimenVO.getInitialQuantity() != null)
 		{
 			Quantity quantity = specimenVO.getInitialQuantity();
@@ -2912,6 +2919,79 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 
 		return (Specimen) (specimenList.get(0));
+	}
+	/*fix for bug no. 7347
+	bug description: the available quantity was not calculated correctly*/
+	protected void validateSpecimenUpdated(Specimen specimenObj,Specimen specimenDO)throws DAOException
+	{
+
+		if (specimenObj!=null)
+		{
+			Double specimenQuantity=0D;
+			Double aliquotQuantity=0D;
+			List idCollectionDO = new ArrayList();
+
+			if (specimenObj.getInitialQuantity().getValue() != null)
+			{
+				specimenQuantity = specimenObj.getInitialQuantity().getValue();
+
+			}
+			// this loop gets ids of all the aliquots of a specimens in the database
+			if (specimenDO != null)
+			{
+				Collection aliquotCollectionDO = specimenDO.getChildrenSpecimen();
+
+				if (!aliquotCollectionDO.isEmpty())
+				{
+					Iterator iterator = aliquotCollectionDO.iterator();
+					while (iterator.hasNext())
+					{
+						Object tempObj = iterator.next();
+						if (tempObj instanceof Specimen)
+						{
+							Specimen aliquotSpecimenDO = (Specimen) tempObj;
+							if (aliquotSpecimenDO.getLineage().equalsIgnoreCase("Aliquot") && aliquotSpecimenDO.getId() != null)
+							{
+								idCollectionDO.add(aliquotSpecimenDO.getId());
+							}
+						}
+					}
+				}
+			}
+			Collection aliquotsCollection = specimenObj.getChildrenSpecimen();
+			if (!aliquotsCollection.isEmpty())
+			{
+				Iterator aliquotsIterator = aliquotsCollection.iterator();
+				while (aliquotsIterator.hasNext())
+				{
+					Object obj = aliquotsIterator.next();
+					if (obj instanceof Specimen)
+					{
+						Specimen aliquotSpecimen = (Specimen) obj;
+						if (aliquotSpecimen.getInitialQuantity().getValue() != null && !idCollectionDO.isEmpty())
+						{
+							Iterator idIterator = idCollectionDO.iterator();
+							//This while is for a check that the aliquotQuantity is updated only for the Aliquots and not the derivatives
+							while (idIterator.hasNext())
+							{
+								Long tempId = Long.valueOf(idIterator.next().toString());
+								if (tempId.equals(aliquotSpecimen.getId()))
+								{
+									aliquotQuantity += aliquotSpecimen.getInitialQuantity().getValue();
+								}
+							}
+
+						}
+
+					}
+				}
+			}
+
+			if (aliquotQuantity > specimenQuantity) 
+			{
+				throw new DAOException(ApplicationProperties.getValue("errors.item.format", "specimen.quantity"));
+			}
+		}
 	}
 
 }
