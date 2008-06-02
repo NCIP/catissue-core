@@ -17,21 +17,27 @@
 					arg0="<%=ApplicationProperties.getValue("app.name")%>"
 					arg1="<%=ApplicationProperties.getValue("app.version")%>"
 					arg2="<%=Variables.applicationCvsTag%>" /> </span></td>
-				<td width="60%" align="right" valign="top"><a
-					href="ReportProblem.do?operation=add" class="white"><bean:message
-					key="app.reportedProblems" /></a> <img
-					src="images/uIEnhancementImages/ic_male.gif" alt="Help" width="12"
-					height="12" hspace="5" vspace="2" align="absmiddle" /> <a
-					href="ContactUs.do?PAGE_TITLE_KEY=app.contactUs&FILE_NAME_KEY=app.contactUs.file"
-					class="white"><bean:message key="app.contactUs" /></a> <img
-					src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
-					width="12" height="12" hspace="5" vspace="2" border="0"
-					align="absmiddle" /><a href="/catissuecore/Summary.do"
-					class="white"><bean:message key="app.summary" /></a>&nbsp;<img
-					src="images/uIEnhancementImages/ic_help.gif" alt="Help" width="12"
-					height="12" hspace="5" vspace="2" align="absmiddle" /><a
-					target="_NEW" href="RedirectToHelp.do" class="white"><bean:message
-					key="app.help" /></a>&nbsp;&nbsp;</td>
+				
+				<td width="60%" align="right" valign="top">
+					<a href="ReportProblem.do?operation=add" class="white">
+					  <img src="images/uIEnhancementImages/ic_report.gif" alt="Reported 		Problems" width="15" hspace="5" vspace="2" height="12" border="0"
+						align="absmiddle"> 
+					  <bean:message key="app.reportedProblems" />
+					</a>
+					<a href="ContactUs.do?PAGE_TITLE_KEY=app.contactUs&FILE_NAME_KEY=app.contactUs.file" class="white">
+					  <img src="images/uIEnhancementImages/ic_mail.gif" alt="Summary" width="16" height="12" hspace="5" vspace="2" border="0" align="absmiddle" />
+					  <bean:message key="app.contactUs" />
+					</a>&nbsp;
+					<a href="/catissuecore/Summary.do" class="white">
+						<img src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
+							width="12" height="12" hspace="5" vspace="2" border="0"
+							align="absmiddle" /><bean:message key="app.summary" />
+					</a>
+					<a target="_NEW" href="RedirectToHelp.do" class="white">
+						<img src="images/uIEnhancementImages/ic_help.gif" alt="Help" width="12"
+						height="12" hspace="5" vspace="2" align="absmiddle" border="0"/><bean:message
+						key="app.help" /></a>&nbsp;&nbsp;
+				</td>
 			</tr>
 		</table>
 		</td>
