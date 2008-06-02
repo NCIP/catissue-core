@@ -57,7 +57,7 @@ public class FetchAndExecuteQueryAction extends BaseAction
 				HttpSession session = request.getSession();
 				session.setAttribute(AppletConstants.QUERY_OBJECT, parameterizedQuery);
 
-				String errorMessage = executeQuery(request, parameterizedQuery);
+				String errorMessage = QueryModuleUtil.executeQuery(request, parameterizedQuery);
 				if (errorMessage == null)
 				{
 					target = Constants.SUCCESS;
@@ -95,33 +95,6 @@ public class FetchAndExecuteQueryAction extends BaseAction
 		ActionError error = new ActionError("errors.item", errorMessage);
 		errors.add(ActionErrors.GLOBAL_ERROR, error);
 		saveErrors(request, errors);
-	}
-
-	private String executeQuery(HttpServletRequest request, IParameterizedQuery parameterizedQuery)
-	{
-		String errorMessage = null;
-
-		int errorCode = QueryModuleUtil.searchQuery(request , parameterizedQuery,null);
-		switch (errorCode)
-		{
-			case QueryModuleUtil.EMPTY_DAG :
-				errorMessage = ApplicationProperties.getValue("query.empty.dag");
-				break;
-			case QueryModuleUtil.MULTIPLE_ROOT :
-				errorMessage = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
-				break;
-			case QueryModuleUtil.NO_RESULT_PRESENT :
-				errorMessage = ApplicationProperties.getValue("query.zero.records.present");
-				break;
-			case QueryModuleUtil.SQL_EXCEPTION :
-			case QueryModuleUtil.DAO_EXCEPTION :
-			case QueryModuleUtil.CLASS_NOT_FOUND :
-				errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
-			case QueryModuleUtil.RESULTS_MORE_THAN_LIMIT :
-				errorMessage = Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS;
-		}
-
-		return errorMessage;
 	}
 
 }

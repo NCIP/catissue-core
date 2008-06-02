@@ -20,7 +20,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
-import edu.wustl.common.util.global.ApplicationProperties;
 
 /**
  * @author chetan_patil
@@ -62,7 +61,7 @@ public class ExecuteQueryAction extends BaseAction
 			
 		}
 		
-		String errorMessage = executeQuery(request, parameterizedQuery);
+		String errorMessage = QueryModuleUtil.executeQuery(request, parameterizedQuery);
 		if (errorMessage == null)
 		{
 			target = Constants.SUCCESS;
@@ -81,40 +80,5 @@ public class ExecuteQueryAction extends BaseAction
 		}
 		
 		return actionMapping.findForward(target);
-	}
-
-	
-/**
- * This method executes the query
- * @param request
- * @param parameterizedQuery
- * @return
- */
-	private String executeQuery(HttpServletRequest request, IParameterizedQuery parameterizedQuery)
-	{
-		String errorMessage = null;
-
-		int errorCode = QueryModuleUtil.searchQuery(request , parameterizedQuery,null);
-		switch (errorCode)
-		{
-			case QueryModuleUtil.EMPTY_DAG :
-				errorMessage = ApplicationProperties.getValue("query.empty.dag");
-				break;
-			case QueryModuleUtil.MULTIPLE_ROOT :
-				errorMessage = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
-				break;
-			case QueryModuleUtil.NO_RESULT_PRESENT :
-				errorMessage = ApplicationProperties.getValue("query.zero.records.present");
-				break;
-			case QueryModuleUtil.SQL_EXCEPTION :
-			case QueryModuleUtil.DAO_EXCEPTION :
-			case QueryModuleUtil.CLASS_NOT_FOUND :
-				errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
-				break;
-			case QueryModuleUtil.RESULTS_MORE_THAN_LIMIT :
-				errorMessage = Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS;
-				break;
-		}
-		return errorMessage;
 	}
 }

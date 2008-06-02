@@ -44,7 +44,11 @@ public class OpenDecisionMakingPageAction extends BaseAction
 		
 		if(option != null)
 		{
-			QueryModuleUtil.searchQuery(request, query,option);
+			boolean isRulePresentInDag = QueryModuleUtil.checkIfRulePresentInDag(query) ;
+			if (isRulePresentInDag)
+			{
+				QueryModuleUtil.searchQuery(request, query,option);
+			}
 			return mapping.findForward(Constants.VIEW_ALL_RECORDS);
 		}
 		ActionErrors errors = new ActionErrors();
