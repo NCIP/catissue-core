@@ -277,108 +277,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				{
 					isBetween = true;
 				}
-				List<PermissibleValueInterface> permissibleValues = getPermissibleValuesList(attribute);
-				if (conditions != null)
-				{
-					if (attributeNameConditionMap.containsKey(attrName))
-					{
-						ICondition condition = attributeNameConditionMap.get(attrName);
-						if (forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE)
-								&& !(condition instanceof ParameterizedCondition))
-							continue;
-
-						List<String> values = condition.getValues();
-						String operator = condition.getRelationalOperator().getStringRepresentation();
-						generatedHTML.append("\n"
-								+ generateHTMLForOperators(attribute, operatorsList, operator,
-										"PermissibleValuesQuery"));
-						if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
-						{
-							isBetween = true;
-						}
-						else
-						{
-							isBetween = false;
-						}
-						if (!permissibleValues.isEmpty())
-						{
-							generatedHTML.append("\n"
-									+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
-											values, "PermissibleValuesQuery"));
-						}
-						else
-						{
-							if (attribute.getDataType().equalsIgnoreCase("boolean"))
-							{
-								generatedHTML.append("\n"
-										+ generateHTMLForRadioButton(attribute, values,
-												"standardTextQuery"));
-							}
-							else
-							{
-								generatedHTML.append("\n"
-										+ generateHTMLForTextBox(attribute, isBetween, values,
-												operator, "standardTextQuery"));
-							}
-						}
-
-					}
-					else
-					{
-						generatedHTML.append("\n"
-								+ generateHTMLForOperators(attribute, operatorsList, null,
-										"PermissibleValuesQuery"));
-						if (!permissibleValues.isEmpty())
-						{
-							generatedHTML.append("\n"
-									+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
-											null, "PermissibleValuesQuery"));
-						}
-						else
-						{
-							if (attribute.getDataType().equalsIgnoreCase("boolean"))
-							{
-								generatedHTML.append("\n"
-										+ generateHTMLForRadioButton(attribute, null, "standardTextQuery"));
-							}
-							else
-							{
-								generatedHTML.append("\n"
-										+ generateHTMLForTextBox(attribute, isBetween, null, null,
-												"standardTextQuery"));
-							}
-						}
-					}
-
-				}
-				if (conditions == null)
-				{
-					generatedHTML.append("\n"
-							+ generateHTMLForOperators(attribute, operatorsList, null,
-									"PermissibleValuesQuery"));
-					if (!permissibleValues.isEmpty())
-					{
-						generatedHTML.append("\n"
-								+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
-										null, "PermissibleValuesQuery"));
-					}
-					else
-					{
-						if (attribute.getDataType().equalsIgnoreCase("boolean"))
-						{
-							generatedHTML
-									.append("\n"
-											+ generateHTMLForRadioButton(attribute, null,
-													"standardTextQuery"));
-						}
-						else
-						{
-							generatedHTML.append("\n"
-									+ generateHTMLForTextBox(attribute, isBetween, null, null,
-											"standardTextQuery"));
-						}
-					}
-				}
+				generateHTMLForConditions(generatedHTML, attribute, operatorsList, isBetween, conditions, attributeNameConditionMap, attrName, forPage);
 				generatedHTML.append("\n</tr>");
 
 			}
@@ -682,104 +581,11 @@ public class GenerateHtmlForAddLimitsBizLogic
 				{
 					isBetween = true;
 				}
-				List<PermissibleValueInterface> permissibleValues = getPermissibleValuesList(attribute);
-				if (conditions != null)
-				{
-					Map<String, ICondition> attributeNameConditionMap = getMapOfConditions(conditions);
-					isEditLimits = true;
-					if (attributeNameConditionMap.containsKey(attrName))
-					{
-						ICondition condition = attributeNameConditionMap.get(attrName);
-						List<String> values = (List<String>) condition.getValues();
-						String operator = condition.getRelationalOperator().getStringRepresentation();
-						generatedHTML.append("\n"
-								+ generateHTMLForOperators(attribute, operatorsList, operator,
-										"PermissibleValuesQuery"));
-						if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
-						{
-							isBetween = true;
-						}
-						else
-						{
-							isBetween = false;
-						}
-						if (!permissibleValues.isEmpty())
-						{
-							generatedHTML.append("\n"
-									+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
-											values, "PermissibleValuesQuery"));
-						}
-						else
-						{
-							if (attribute.getDataType().equalsIgnoreCase("boolean"))
-							{
-								generatedHTML.append("\n"
-										+ generateHTMLForRadioButton(attribute, values,
-												"standardTextQuery"));
-							}
-							else
-							{
-								generatedHTML.append("\n"
-										+ generateHTMLForTextBox(attribute, isBetween, values,
-												operator, "standardTextQuery"));
-							}
-						}
-					}
-					else
-					{
-						generatedHTML.append("\n"
-								+ generateHTMLForOperators(attribute, operatorsList, null,
-										"PermissibleValuesQuery"));
-						if (!permissibleValues.isEmpty())
-						{
-							generatedHTML.append("\n"
-									+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
-											null, "PermissibleValuesQuery"));
-						}
-						else
-						{
-							if (attribute.getDataType().equalsIgnoreCase("boolean"))
-							{
-								generatedHTML.append("\n"
-										+ generateHTMLForRadioButton(attribute, null,
-												"standardTextQuery"));
-							}
-							else
-							{
-								generatedHTML.append("\n"
-										+ generateHTMLForTextBox(attribute, isBetween, null, null,
-												"standardTextQuery"));
-							}
-						}
-					}
-				}
-				if (conditions == null)
-				{
-					generatedHTML.append("\n"
-							+ generateHTMLForOperators(attribute, operatorsList, null,
-									"PermissibleValuesQuery"));
-					if (!permissibleValues.isEmpty())
-					{
-						generatedHTML.append("\n"
-								+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
-										null, "PermissibleValuesQuery"));
-					}
-					else
-					{
-						if (attribute.getDataType().equalsIgnoreCase("boolean"))
-						{
-							generatedHTML.append("\n"
-									+ generateHTMLForRadioButton(attribute, null,
-											"standardTextQuery"));
-						}
-						else
-						{
-							generatedHTML.append("\n"
-									+ generateHTMLForTextBox(attribute, isBetween, null, null,
-											"standardTextQuery"));
-						}
-					}
-				}
+				Map<String, ICondition> attributeNameConditionMap = getMapOfConditions(conditions);
+				isEditLimits = true;
+				String forPage="";
+				generateHTMLForConditions(generatedHTML, attribute, operatorsList, isBetween, conditions, attributeNameConditionMap, attrName, forPage);
+			
 				generatedHTML.append("\n</tr>");
 			}
 		}
@@ -1322,6 +1128,115 @@ public class GenerateHtmlForAddLimitsBizLogic
 		html.append("\n</td>");
 
 		return html.toString();
+	}
+
+	/**
+	 * Method to generate HTML for condition NULL
+	 * @param generatedHTML
+	 * @param attribute
+	 * @param operatorsList
+	 * @param permissibleValues
+	 * @param isBetween
+	 */
+	private void geberateHTMLForConditionNull(StringBuffer generatedHTML,AttributeInterface attribute, List<String> operatorsList, List<PermissibleValueInterface> permissibleValues, boolean isBetween)
+	{
+		generatedHTML.append("\n"
+				+ generateHTMLForOperators(attribute, operatorsList, null,
+						"PermissibleValuesQuery"));
+		if (!permissibleValues.isEmpty())
+		{
+			generatedHTML.append("\n"
+					+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
+							null, "PermissibleValuesQuery"));
+		}
+		else
+		{
+			if (attribute.getDataType().equalsIgnoreCase("boolean"))
+			{
+				generatedHTML
+						.append("\n"
+								+ generateHTMLForRadioButton(attribute, null,
+										"standardTextQuery"));
+			}
+			else
+			{
+				generatedHTML.append("\n"
+						+ generateHTMLForTextBox(attribute, isBetween, null, null,
+								"standardTextQuery"));
+			}
+		}
+	}
+
+	/**
+	 * Method for generating HTML depending on condition
+	 * @param generatedHTML
+	 * @param attribute
+	 * @param operatorsList
+	 * @param isBetween
+	 * @param conditions
+	 * @param attributeNameConditionMap
+	 * @param attrName
+	 * @param forPage
+	 */
+	private void generateHTMLForConditions(StringBuffer generatedHTML, AttributeInterface attribute, List<String> operatorsList, boolean isBetween, List<ICondition> conditions, Map<String, ICondition> attributeNameConditionMap, String attrName, String forPage)
+	{
+		List<PermissibleValueInterface> permissibleValues = getPermissibleValuesList(attribute);
+		if (conditions != null)
+		{
+			if (attributeNameConditionMap.containsKey(attrName))
+			{
+				ICondition condition = attributeNameConditionMap.get(attrName);
+				if (forPage.equalsIgnoreCase(Constants.EXECUTE_QUERY_PAGE)
+						&& !(condition instanceof ParameterizedCondition))
+					return;
+
+				List<String> values = condition.getValues();
+				String operator = condition.getRelationalOperator().getStringRepresentation();
+				generatedHTML.append("\n"
+						+ generateHTMLForOperators(attribute, operatorsList, operator,
+								"PermissibleValuesQuery"));
+				if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
+				{
+					isBetween = true;
+				}
+				else
+				{
+					isBetween = false;
+				}
+				if (!permissibleValues.isEmpty())
+				{
+					generatedHTML.append("\n"
+							+ generateHTMLForEnumeratedValues(attribute, permissibleValues,
+									values, "PermissibleValuesQuery"));
+				}
+				else
+				{
+					if (attribute.getDataType().equalsIgnoreCase("boolean"))
+					{
+						generatedHTML.append("\n"
+								+ generateHTMLForRadioButton(attribute, values,
+										"standardTextQuery"));
+					}
+					else
+					{
+						generatedHTML.append("\n"
+								+ generateHTMLForTextBox(attribute, isBetween, values,
+										operator, "standardTextQuery"));
+					}
+				}
+
+			}
+			else
+			{
+				geberateHTMLForConditionNull(generatedHTML, attribute, operatorsList, permissibleValues, isBetween);
+			}
+
+		}
+		if (conditions == null)
+		{
+			geberateHTMLForConditionNull(generatedHTML, attribute, operatorsList, permissibleValues, isBetween);
+		}
+		
 	}
 
 }
