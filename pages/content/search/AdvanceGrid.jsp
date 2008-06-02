@@ -199,7 +199,7 @@ function setEditableChkbox(checkAllPages)
 							 screen, the div runs out of the frame, and there was no way to scroll
 							 down, as we had disabled the scrollbar.
 			-->
-			<div id="gridbox" width="100%" height="330px" style="border-left:solid 1px;border-right:solid 1px;border-top:solid 1px;border-bottom:solid 1px;background-color:white;overflow:hidden"></div>
+			<div id="gridbox" width="100%" height="330px" style="border-left:solid 1px;border-right:solid 1px;border-top:solid 1px;border-bottom:solid 1px;background-color:td_color_bfdcf3;overflow:hidden"></div>
 		</td>
 	</tr>
 </table>
@@ -237,6 +237,7 @@ function setEditableChkbox(checkAllPages)
 	//mygrid.setColAlign("left,left")
 	mygrid.setColSorting(colTypes);
 	//mygrid.enableMultiselect(true)
+	mygrid.setSkin("light");
     mygrid.setEditable(true);
 	<% if(checkAllPagesSession != null && checkAllPagesSession.equals("true")){ %>
 			mygrid.setEditable(false);
