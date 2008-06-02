@@ -1002,6 +1002,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimen.setAvailable(new Boolean(true));
 		}
+	    //bug #7594	
+		if (Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase(specimen.getCollectionStatus()) &&
+				(Constants.COLLECTION_STATUS_PENDING).equals(specimenOld.getCollectionStatus()))
+		{
+		    specimen.setAvailable(true);
+			specimen.setAvailableQuantity(specimenOld.getInitialQuantity());
+        }
 	}
 
 	/**
@@ -1026,7 +1033,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			throw new DAOException("Class should not be changed while updating the specimen");
 		}
-		if (specimen.isParentChanged())
+		// bug # 7495
+		if (((Constants.COLLECTION_STATUS_COLLECTED).equals(specimen.getCollectionStatus()) && 
+				   (Constants.COLLECTION_STATUS_COLLECTED).equals(specimenOld.getCollectionStatus()) &&
+					 (!(specimen.getAvailable().booleanValue()) || new Double(0.0).equals(Double.parseDouble(specimen.getAvailableQuantity().toString())))))
+		{
+			throw new DAOException(ApplicationProperties.getValue("specimen.available.operation"));
+		}
+	   if (specimen.isParentChanged())
 		{
 			//Check whether container is moved to one of its sub container.
 			if (isUnderSubSpecimen(specimen, specimen.getParentSpecimen().getId()))
@@ -1666,7 +1680,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
 		}
-		if (operation.equals(Constants.EDIT))
+		/*bug # 7594 if (operation.equals(Constants.EDIT))
 		{
 			if (specimen.getCollectionStatus() != null
 					&& specimen.getCollectionStatus().equals("Collected")
@@ -1675,7 +1689,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				throw new DAOException(ApplicationProperties
 						.getValue("specimen.available.operation"));
 			}
-		}
+		}*/
 		if (operation.equals(Constants.ADD))
 		{
 			if (!specimen.getAvailable().booleanValue()
