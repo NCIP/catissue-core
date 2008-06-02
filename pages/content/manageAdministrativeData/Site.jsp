@@ -67,12 +67,12 @@
 											<logic:equal name="operation" value="add">
 												<td width="6%" valign="bottom"
 													background="images/uIEnhancementImages/tab_bg.gif"><img
-													src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add"
+													src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add"
 													width="57" height="22" /></td>
 												<td width="6%" valign="bottom"
 													background="images/uIEnhancementImages/tab_bg.gif"><html:link
 													page="/SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site&menuSelected=5">
-													<img src="images/uIEnhancementImages/tab_edit_user.jpg"
+													<img src="images/uIEnhancementImages/tab_edit_notSelected.jpg"
 														alt="Edit" width="59" height="22" border="0" />
 												</html:link></td>
 												<td width="15%" valign="bottom"
@@ -82,12 +82,12 @@
 												<td width="6%" valign="bottom"
 													background="images/uIEnhancementImages/tab_bg.gif"><html:link
 													page="/Site.do?operation=add&pageOf=pageOfSite&menuSelected=5">
-													<img src="images/uIEnhancementImages/tab_add_user1.jpg"
+													<img src="images/uIEnhancementImages/tab_add_notSelected.jpg"
 														alt="Add" width="57" height="22" border="0" />
 												</html:link></td>
 												<td width="6%" valign="bottom"
 													background="images/uIEnhancementImages/tab_bg.gif"><img
-													src="images/uIEnhancementImages/tab_edit_user1.jpg"
+													src="images/uIEnhancementImages/tab_edit_selected.jpg"
 													alt="Edit" width="59" height="22" /></td>
 												<td width="15%" valign="bottom"
 													background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>

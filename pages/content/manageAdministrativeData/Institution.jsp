@@ -46,13 +46,13 @@ function closeWindow()
                       <td width="4%" class="td_tab_bg" >&nbsp;</td>
 					   <!-- for tabs selection -->
 				<logic:equal name="operation" value="add">
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add" width="57" height="22" /></td>
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution"><img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
+                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
+                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
                       <td width="15%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
 					  </logic:equal>
 					  <logic:equal name="operation" value="edit">
-						<td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/Institution.do?operation=add&pageOf=pageOfInstitution"><img src="images/uIEnhancementImages/tab_add_user1.jpg" alt="Add" width="57" height="22" border ="0" /></html:link></td>
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_edit_user1.jpg" alt="Edit" width="59" height="22"/></td>
+						<td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/Institution.do?operation=add&pageOf=pageOfInstitution"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border ="0" /></html:link></td>
+                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22"/></td>
                       <td width="15%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
 					 </logic:equal>
                       <td width="65%" valign="bottom" class="td_tab_bg" >&nbsp;</td>

@@ -262,19 +262,18 @@ function participantRegRow(subdivtag)
 <table width="100%" border="0" cellpadding="0" cellspacing="0"
 	class="newMaintable">
 	<tr>
-		<td>
-			<input type="hidden" name="participantId" value="<%=participantId%>" />
-			<input type="hidden" name="cpId" id="cpId" /> <input type="hidden" name="radioValue" /> 
-			<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>" /> 
-			<html:hidden property="submittedFor" value="<%=submittedFor%>" /> 
-			<html:hidden property="forwardTo" value="<%=forwardTo%>" />
-		</td>
+		<td><input type="hidden" name="participantId"
+			value="<%=participantId%>" /> <input type="hidden" name="cpId"
+			id="cpId" /> <input type="hidden" name="radioValue" /> <html:hidden
+			property="<%=Constants.OPERATION%>" value="<%=operation%>" /> <html:hidden
+			property="submittedFor" value="<%=submittedFor%>" /> <html:hidden
+			property="forwardTo" value="<%=forwardTo%>" /></td>
 		<td><html:hidden property="valueCounter" /></td>
-		<td><html:hidden property="collectionProtocolRegistrationValueCounter" /></td>
+		<td><html:hidden
+			property="collectionProtocolRegistrationValueCounter" /></td>
 		<td><html:hidden property="onSubmit" /></td>
-		<td><html:hidden property="id" /> 
-			<html:hidden property="redirectTo" />
-		</td>
+		<td><html:hidden property="id" /> <html:hidden
+			property="redirectTo" /></td>
 		<td><html:hidden property="pageOf" value="<%=pageOf%>" /></td>
 	</tr>
 	<tr>
@@ -282,23 +281,19 @@ function participantRegRow(subdivtag)
 		<table width="100%" border="0" cellpadding="0" cellspacing="0"
 			class="whitetable_bg">
 			<logic:equal name="operation" value="add">
-			<tr>
-				<td width="100%" colspan="2" valign="top">
-				<table width="100%" border="0" cellspacing="0" cellpadding="0">					
+				<tr>
+					<td width="100%" colspan="2" valign="top">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
 							<td colspan="3" valign="top" class="td_color_bfdcf3">
 							<table width="15%" border="0" cellpadding="0" cellspacing="0"
 								background="images/uIEnhancementImages/table_title_bg.gif">
 								<tr>
-									<td width="74%">
-										<span class="wh_ar_b">&nbsp;&nbsp;&nbsp;
-										<bean:message key="app.participant" />
-										</span>
-									</td>
-									<td width="26%" align="right">
-										<img src="images/uIEnhancementImages/table_title_corner2.gif"
-										width="31" height="24" />
-									</td>
+									<td width="74%"><span class="wh_ar_b">&nbsp;&nbsp;&nbsp;
+									<bean:message key="app.participant" /> </span></td>
+									<td width="26%" align="right"><img
+										src="images/uIEnhancementImages/table_title_corner2.gif"
+										width="31" height="24" /></td>
 								</tr>
 							</table>
 							</td>
@@ -306,41 +301,39 @@ function participantRegRow(subdivtag)
 						<tr>
 							<td width="1%" valign="top" class="td_color_bfdcf3">&nbsp;</td>
 							<td width="9%" valign="top" class="td_tab_bg">&nbsp;</td>
-							<td width="90%" valign="bottom" class="td_color_bfdcf3"	style="padding-top:4px;">
+							<td width="90%" valign="bottom" class="td_color_bfdcf3"
+								style="padding-top:4px;">
 							<table width="100%" border="0" cellpadding="0" cellspacing="0">
 								<tr>
 									<td width="4%" class="td_tab_bg">&nbsp;</td>
 									<!-- for tabs selection -->
 									<logic:equal name="operation" value="add">
 										<td width="6%" valign="bottom"
-											background="images/uIEnhancementImages/tab_bg.gif">
-											<img src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add"
-											width="57" height="22" />
-										</td>
+											background="images/uIEnhancementImages/tab_bg.gif"><img
+											src="images/uIEnhancementImages/tab_add_selected.jpg"
+											alt="Add" width="57" height="22" /></td>
 										<td width="6%" valign="bottom"
-											background="images/uIEnhancementImages/tab_bg.gif">
-											<html:link page="/SimpleQueryInterface.do?pageOf=pageOfParticipant&aliasName=Participant&menuSelected=5">
-												<img src="images/uIEnhancementImages/tab_edit_user.jpg"
-													 alt="Edit" width="59" height="22" border="0" />
-											</html:link>
-										</td>
+											background="images/uIEnhancementImages/tab_bg.gif"><html:link
+											page="/SimpleQueryInterface.do?pageOf=pageOfParticipant&aliasName=Participant&menuSelected=5">
+											<img
+												src="images/uIEnhancementImages/tab_edit_notSelected.jpg"
+												alt="Edit" width="59" height="22" border="0" />
+										</html:link></td>
 										<td width="15%" valign="bottom"
 											background="images/uIEnhancementImages/tab_bg.gif">&nbsp;
 										</td>
 									</logic:equal>
 									<logic:equal name="operation" value="edit">
 										<td width="6%" valign="bottom"
-											background="images/uIEnhancementImages/tab_bg.gif">
-											<html:link page="/Site.do?operation=add&pageOf=pageOfSite&menuSelected=5">
-												<img src="images/uIEnhancementImages/tab_add_user1.jpg"
-													 alt="Add" width="57" height="22" border="0" />
-											</html:link>
-										</td>
+											background="images/uIEnhancementImages/tab_bg.gif"><html:link
+											page="/Site.do?operation=add&pageOf=pageOfSite&menuSelected=5">
+											<img src="images/uIEnhancementImages/tab_add_notSelected.jpg"
+												alt="Add" width="57" height="22" border="0" />
+										</html:link></td>
 										<td width="6%" valign="bottom"
-											background="images/uIEnhancementImages/tab_bg.gif">
-											<img src="images/uIEnhancementImages/tab_edit_user1.jpg"
-												 alt="Edit" width="59" height="22" />
-										</td>
+											background="images/uIEnhancementImages/tab_bg.gif"><img
+											src="images/uIEnhancementImages/tab_edit_selected.jpg"
+											alt="Edit" width="59" height="22" /></td>
 										<td width="15%" valign="bottom"
 											background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
 									</logic:equal>
@@ -350,10 +343,10 @@ function participantRegRow(subdivtag)
 								</tr>
 							</table>
 							</td>
-						</tr>					
-				</table>
-				</td>
-			</tr>
+						</tr>
+					</table>
+					</td>
+				</tr>
 			</logic:equal>
 			<tr>
 				<td colspan="2" class="td_color_bfdcf3"
@@ -364,9 +357,9 @@ function participantRegRow(subdivtag)
 						<td height="15" colspan="2" align="left"></td>
 					</tr>
 					<tr>
-						<td height="25" align="left" class="tr_bg_blue1">
-							<span class="blue_ar_b">&nbsp;<bean:message key="participant.details" /></span>
-						</td>
+						<td height="25" align="left" class="tr_bg_blue1"><span
+							class="blue_ar_b">&nbsp;<bean:message
+							key="participant.details" /></span></td>
 						<td height="25" align="left" class="tr_bg_blue1">&nbsp;</td>
 					</tr>
 					<tr>
@@ -375,13 +368,10 @@ function participantRegRow(subdivtag)
 						<table width="100%" border="0" cellspacing="0" cellpadding="3">
 							<tr>
 								<td class=" grey_ar_s" width="1%">&nbsp;</td>
-								<td valign="middle" width="17%">
-									<label for="socialSecurityNumber" class="black_ar">
-										<bean:message key="participant.socialSecurityNumber" /> 
-									</label>
-								</td>
-								<td width="82%">
-								<html:text styleClass="black_ar" size="3"
+								<td valign="middle" width="17%"><label
+									for="socialSecurityNumber" class="black_ar"> <bean:message
+									key="participant.socialSecurityNumber" /> </label></td>
+								<td width="82%"><html:text styleClass="black_ar" size="3"
 									maxlength="3" styleId="socialSecurityNumberPartA"
 									property="socialSecurityNumberPartA"
 									readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);"
@@ -397,63 +387,47 @@ function participantRegRow(subdivtag)
 									styleId="socialSecurityNumberPartC"
 									property="socialSecurityNumberPartC"
 									readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);"
-									onchange="intOnly(this);" onkeyup="intOnly(this);" />
-									</td>
+									onchange="intOnly(this);" onkeyup="intOnly(this);" /></td>
 							</tr>
 							<tr>
 								<td class=" grey_ar_s" width="1%">&nbsp;</td>
-								<td valign="middle">
-									<label for="Name" class="black_ar">
-										<bean:message	key="participant.Name" /> 
-									</label>
-								</td>
+								<td valign="middle"><label for="Name" class="black_ar">
+								<bean:message key="participant.Name" /> </label></td>
 								<td>
 								<table border="0" cellspacing="0" cellpadding="0">
 									<tr>
-										<td width="90" align="center" class="black_ar">
-											<bean:message	key="participant.lastName" />
-										</td>
+										<td width="90" align="center" class="black_ar"><bean:message
+											key="participant.lastName" /></td>
 
 										<td width="10" align="center" class="black_ar"></td>
-										<td width="90" align="center" class="black_ar">
-											<bean:message key="participant.firstName" />
-										</td>
+										<td width="90" align="center" class="black_ar"><bean:message
+											key="participant.firstName" /></td>
 										<td width="10" align="left" class="black_ar"></td>
-										<td width="90" align="center" class="black_ar">
-											<bean:message key="participant.middleName" />
-										</td>
+										<td width="90" align="center" class="black_ar"><bean:message
+											key="participant.middleName" /></td>
 									</tr>
 									<tr>
-										<td>
-											<html:text styleClass="black_ar" maxlength="255"
-												size="15" styleId="lastName" name="participantForm"
-												property="lastName" readonly="<%=readOnlyForAll%>"
-												onkeyup="moveToNext(this,this.value,'firstName')" />
-										</td>
+										<td><html:text styleClass="black_ar" maxlength="255"
+											size="15" styleId="lastName" name="participantForm"
+											property="lastName" readonly="<%=readOnlyForAll%>"
+											onkeyup="moveToNext(this,this.value,'firstName')" /></td>
 										<td width="1"></td>
-										<td>
-											<html:text styleClass="black_ar" maxlength="255"
-												size="15" styleId="firstName" property="firstName"
-												readonly="<%=readOnlyForAll%>"
-												onkeyup="moveToNext(this,this.value,'middleName')" />
-										</td>
+										<td><html:text styleClass="black_ar" maxlength="255"
+											size="15" styleId="firstName" property="firstName"
+											readonly="<%=readOnlyForAll%>"
+											onkeyup="moveToNext(this,this.value,'middleName')" /></td>
 										<td width="1"></td>
-										<td>
-											<html:text styleClass="black_ar" maxlength="255"
-												size="15" styleId="middleName" property="middleName"
-												readonly="<%=readOnlyForAll%>" />
-										</td>
+										<td><html:text styleClass="black_ar" maxlength="255"
+											size="15" styleId="middleName" property="middleName"
+											readonly="<%=readOnlyForAll%>" /></td>
 									</tr>
 								</table>
 								</td>
 							</tr>
 							<tr>
 								<td class=" grey_ar_s" width="1%">&nbsp;</td>
-								<td valign="middle">
-									<label for="birthDate" class="black_ar">
-										<bean:message	key="participant.birthDate" /> 
-									</label>
-								</td>
+								<td valign="middle"><label for="birthDate" class="black_ar">
+								<bean:message key="participant.birthDate" /> </label></td>
 								<td align="left" valign="top">
 								<%
 										if (currentBirthDate.trim().length() > 0) {
@@ -462,52 +436,38 @@ function participantRegRow(subdivtag)
 										Integer birthMonth = new Integer(Utility
 										.getMonth(currentBirthDate));
 										Integer birthDay = new Integer(Utility.getDay(currentBirthDate));
-								%>
-								 <ncombo:DateTimeComponent name="birthDate" id="birthDate"
+								%> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
 									formName="participantForm" month="<%=birthMonth %>"
 									year="<%=birthYear %>" day="<%= birthDay %>"
-									value="<%=currentBirthDate %>" styleClass="black_ar" /> 
-								<%
+									value="<%=currentBirthDate %>" styleClass="black_ar" /> <%
 									 } else {
-								%>
-								  <ncombo:DateTimeComponent name="birthDate" id="birthDate"
-																	formName="participantForm" styleClass="black_ar" /> 
-								<%
+								%> <ncombo:DateTimeComponent name="birthDate" id="birthDate"
+									formName="participantForm" styleClass="black_ar" /> <%
 								 }
-								 %> 
-									 <span class="grey_ar_s"> 
-									 	<bean:message key="page.dateFormat" />
-									 </span>&nbsp;
-								</td>
+								 %> <span class="grey_ar_s"> <bean:message
+									key="page.dateFormat" /> </span>&nbsp;</td>
 							</tr>
 							<tr>
 								<td class=" grey_ar_s" width="1%">&nbsp;</td>
-								<td valign="middle">
-									<label for="vitalStatus" class="black_ar">
-										<bean:message	key="participant.vitalStatus" /> 
-									</label>
-								</td>
-								<td valign="middle" class="black_ar">
-									<logic:iterate
-										id="nvb" name="<%=Constants.VITAL_STATUS_LIST%>">
-										<%
+								<td valign="middle"><label for="vitalStatus"
+									class="black_ar"> <bean:message
+									key="participant.vitalStatus" /> </label></td>
+								<td valign="middle" class="black_ar"><logic:iterate
+									id="nvb" name="<%=Constants.VITAL_STATUS_LIST%>">
+									<%
 										NameValueBean nameValueBean = (NameValueBean) nvb;
 										%>
-										<html:radio property="vitalStatus"
-											onclick="onVitalStatusRadioButtonClick(this)"
-											value="<%=nameValueBean.getValue()%>">
-											<%=nameValueBean.getName()%>
-										</html:radio>
-									</logic:iterate>
-								</td>
+									<html:radio property="vitalStatus"
+										onclick="onVitalStatusRadioButtonClick(this)"
+										value="<%=nameValueBean.getValue()%>">
+										<%=nameValueBean.getName()%>
+									</html:radio>
+								</logic:iterate></td>
 							</tr>
 							<tr>
 								<td class=" grey_ar_s" width="1%">&nbsp;</td>
-								<td valign="middle">
-									<span class="black_ar">
-										<bean:message key="participant.deathDate" /> 
-									</span>
-								</td>
+								<td valign="middle"><span class="black_ar"> <bean:message
+									key="participant.deathDate" /> </span></td>
 								<td valign="middle">
 								<%
 									ParticipantForm form = (ParticipantForm) request
@@ -526,112 +486,83 @@ function participantRegRow(subdivtag)
 									formName="participantForm" month="<%=deathMonth %>"
 									year="<%=deathYear %>" day="<%= deathDay %>"
 									value="<%=currentDeathDate %>" styleClass="black_ar"
-									disabled="<%=deathDisable%>" /> 
-								<%
+									disabled="<%=deathDisable%>" /> <%
 									 } else {
 									 %> <ncombo:DateTimeComponent name="deathDate" id="deathDate"
-																		formName="participantForm" styleClass="black_ar"
-																		disabled="<%=deathDisable%>" />
-								 <%
+									formName="participantForm" styleClass="black_ar"
+									disabled="<%=deathDisable%>" /> <%
 									 }
-								  %>
-									  <span class="grey_ar_s">
-									 	 <bean:message key="page.dateFormat" />
-									  </span>&nbsp;
-								</td>
+								  %> <span class="grey_ar_s"> <bean:message
+									key="page.dateFormat" /> </span>&nbsp;</td>
 							</tr>
 							<tr>
 								<td class=" grey_ar_s" width="1%">&nbsp;</td>
-								<td valign="middle" >
-									<label for="gender" class="black_ar">
-										<bean:message key="participant.gender" />
-									</label>
-								</td>
-								<td valign="middle" class="black_ar">
-									<logic:iterate
-										id="nvb" name="<%=Constants.GENDER_LIST%>">
-										<%
+								<td valign="middle"><label for="gender" class="black_ar">
+								<bean:message key="participant.gender" /> </label></td>
+								<td valign="middle" class="black_ar"><logic:iterate
+									id="nvb" name="<%=Constants.GENDER_LIST%>">
+									<%
 										NameValueBean nameValueBean = (NameValueBean) nvb;
 										%>
-										<html:radio property="gender"
-											value="<%=nameValueBean.getValue()%>">
-											<%=nameValueBean.getName()%>
-										</html:radio>
-									</logic:iterate>
-								</td>
+									<html:radio property="gender"
+										value="<%=nameValueBean.getValue()%>">
+										<%=nameValueBean.getName()%>
+									</html:radio>
+								</logic:iterate></td>
 							</tr>
 							<tr>
 								<td class=" grey_ar_s" width="1%">&nbsp;</td>
-								<td valign="middle">
-									<label for="genotype" class="black_ar">
-										<bean:message	key="participant.genotype" />
-									</label>
-								</td>
-								<td valign="middle" class="black_ar_s">
-									<autocomplete:AutoCompleteTag
-										property="genotype"
-										optionsList="<%=request.getAttribute(Constants.GENOTYPE_LIST)%>"
-										initialValue="<%=form.getGenotype()%>"
-										styleClass="formFieldSized12" />
-								</td>
+								<td valign="middle"><label for="genotype" class="black_ar">
+								<bean:message key="participant.genotype" /> </label></td>
+								<td valign="middle" class="black_ar_s"><autocomplete:AutoCompleteTag
+									property="genotype"
+									optionsList="<%=request.getAttribute(Constants.GENOTYPE_LIST)%>"
+									initialValue="<%=form.getGenotype()%>"
+									styleClass="formFieldSized12" /></td>
 							</tr>
 							<tr>
 								<td class=" grey_ar_s" width="1%">&nbsp;</td>
-								<td valign="middle" >
-									<label for="race" class="black_ar">
-										<bean:message key="participant.race" />
-									</label>
-								</td>
-								<td valign="middle" class="black_ar">
-									<html:select
-										property="raceTypes" styleClass="formFieldSized18"
-										styleId="race" size="4" multiple="true"
-										disabled="<%=readOnlyForAll%>" onmouseover="showTip(this.id)"
-										onmouseout="hideTip(this.id)">
-										<html:options collection="<%=Constants.RACELIST%>"
-											labelProperty="name" property="value" />
-									</html:select>
-								</td>
+								<td valign="middle"><label for="race" class="black_ar">
+								<bean:message key="participant.race" /> </label></td>
+								<td valign="middle" class="black_ar"><html:select
+									property="raceTypes" styleClass="formFieldSized18"
+									styleId="race" size="4" multiple="true"
+									disabled="<%=readOnlyForAll%>" onmouseover="showTip(this.id)"
+									onmouseout="hideTip(this.id)">
+									<html:options collection="<%=Constants.RACELIST%>"
+										labelProperty="name" property="value" />
+								</html:select></td>
 							</tr>
 							<tr>
 								<td class="grey_ar_s" width="1%">&nbsp;</td>
-								<td valign="middle" >
-									<label for="ethnicity" class="black_ar"> 
-										<bean:message key="participant.ethnicity" />
-									 </label>
-								</td>
-								<td valign="middle" class="black_ar_s">
-									<autocomplete:AutoCompleteTag
-										property="ethnicity"
-										optionsList="<%=request.getAttribute(Constants.ETHNICITY_LIST)%>"
-										initialValue="<%=form.getEthnicity()%>"
-										styleClass="formFieldSized12" />
-								</td>
+								<td valign="middle"><label for="ethnicity"
+									class="black_ar"> <bean:message
+									key="participant.ethnicity" /> </label></td>
+								<td valign="middle" class="black_ar_s"><autocomplete:AutoCompleteTag
+									property="ethnicity"
+									optionsList="<%=request.getAttribute(Constants.ETHNICITY_LIST)%>"
+									initialValue="<%=form.getEthnicity()%>"
+									styleClass="formFieldSized12" /></td>
 							</tr>
 
 							<!-- activitystatus -->
 							<logic:equal name="<%=Constants.OPERATION%>"
 								value="<%=Constants.EDIT%>">
 								<tr>
-									<td class="grey_ar_s" width="1%">
-										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory"
-											 width="6" height="6" hspace="0" vspace="0" />
-									</td>
-									<td valign="middle">
-										<label for="activityStatus"
-											   class="black_ar"> 
-											<b><bean:message key="participant.activityStatus" /></b> 
-										</label>
-									</td>
-									<td class="black_ar_s">
-										<html:select property="activityStatus"
-											styleClass="formFieldSized12" styleId="activityStatus"
-											size="1" onchange="<%=strCheckStatus%>"
-											 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-											<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>"
-												labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
-										</html:select>
-									</td>
+									<td class="grey_ar_s" width="1%"><img
+										src="images/uIEnhancementImages/star.gif" alt="Mandatory"
+										width="6" height="6" hspace="0" vspace="0" /></td>
+									<td valign="middle"><label for="activityStatus"
+										class="black_ar"> <b><bean:message
+										key="participant.activityStatus" /></b> </label></td>
+									<td class="black_ar_s"><html:select
+										property="activityStatus" styleClass="formFieldSized12"
+										styleId="activityStatus" size="1"
+										onchange="<%=strCheckStatus%>" onmouseover="showTip(this.id)"
+										onmouseout="hideTip(this.id)">
+										<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>"
+											labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
+									</html:select></td>
 								</tr>
 							</logic:equal>
 						</table>
@@ -639,30 +570,25 @@ function participantRegRow(subdivtag)
 					</tr>
 					<!-- Medical Identifiers Begin here -->
 					<tr onclick="javascript:showHide('add_medical_identifier')">
-						<td height="25" align="left" class="tr_bg_blue1">
-							<span class="blue_ar_b">&nbsp;
-								<bean:message key="participant.medicalIdentifier" />
-							 </span>
-						</td>
-						<td height="25" align="right" class="tr_bg_blue1">
-							<a href="#" id="imgArrow_add_medical_identifier">
-								<img src="images/uIEnhancementImages/dwn_arrow1.gif" width="7"
-								height="8" hspace="10" border="0" class="tr_bg_blue1" />
-							</a>
-						</td>
+						<td height="25" align="left" class="tr_bg_blue1"><span
+							class="blue_ar_b">&nbsp; <bean:message
+							key="participant.medicalIdentifier" /> </span></td>
+						<td height="25" align="right" class="tr_bg_blue1"><a href="#"
+							id="imgArrow_add_medical_identifier"> <img
+							src="images/uIEnhancementImages/dwn_arrow1.gif" width="7"
+							height="8" hspace="10" border="0" class="tr_bg_blue1" /> </a></td>
 					</tr>
 					<tr>
 						<td colspan="2" style="padding-top:10px;">
 						<div id="add_medical_identifier" style="display:none">
 						<table width="100%" border="0" cellspacing="0" cellpadding="3">
 							<tr class="tableheading">
-								<td width="9%" align="left" class="black_ar_b"><bean:message key="app.select" /></td>
-								<td width="23%" align="left" class="black_ar_b">
-									<bean:message key="medicalrecord.source" />
-								</td>
-								<td class="black_ar_b">
-									<bean:message key="medicalrecord.number" />
-								</td>
+								<td width="9%" align="left" class="black_ar_b"><bean:message
+									key="app.select" /></td>
+								<td width="23%" align="left" class="black_ar_b"><bean:message
+									key="medicalrecord.source" /></td>
+								<td class="black_ar_b"><bean:message
+									key="medicalrecord.number" /></td>
 							</tr>
 
 							<script> document.forms[0].valueCounter.value = <%=noOfRows%> </script>
@@ -685,29 +611,23 @@ function participantRegRow(subdivtag)
 											if (bool)
 												condition = "disabled='disabled'";
 									%>
-									<td class="black_ar" width="5">
-									<html:hidden
-										property="<%=identifier%>" /> 
-										<input type=checkbox
+									<td class="black_ar" width="5"><html:hidden
+										property="<%=identifier%>" /> <input type=checkbox
 										name="<%=check %>" id="<%=check %>" <%=condition%>
 										onClick="enableButton(document.forms[0].deleteMedicalIdentifierValue,document.forms[0].valueCounter,'chk_')">
 									</td>
-									<td class="black_ar_s">
-										<html:select
-											property="<%=siteName%>" styleClass="formFieldSized12"
-											styleId="<%=siteName%>" size="1"
-											disabled="<%=readOnlyForAll%>" onmouseover="showTip(this.id)"
-											onmouseout="hideTip(this.id)">
-											<html:options collection="<%=Constants.SITELIST%>"
-												labelProperty="name" property="value" />
-										</html:select>
-									</td>
-									<td class="black_ar">
-										<html:text styleClass="black_ar"
-											size="15" maxlength="50" styleId="<%=medicalRecordNumber%>"
-											property="<%=medicalRecordNumber%>"
-											readonly="<%=readOnlyForAll%>" />
-									</td>
+									<td class="black_ar_s"><html:select
+										property="<%=siteName%>" styleClass="formFieldSized12"
+										styleId="<%=siteName%>" size="1"
+										disabled="<%=readOnlyForAll%>" onmouseover="showTip(this.id)"
+										onmouseout="hideTip(this.id)">
+										<html:options collection="<%=Constants.SITELIST%>"
+											labelProperty="name" property="value" />
+									</html:select></td>
+									<td class="black_ar"><html:text styleClass="black_ar"
+										size="15" maxlength="50" styleId="<%=medicalRecordNumber%>"
+										property="<%=medicalRecordNumber%>"
+										readonly="<%=readOnlyForAll%>" /></td>
 								</tr>
 								<%
 								}
@@ -718,21 +638,17 @@ function participantRegRow(subdivtag)
 
 
 							<tr>
-								<td align="left" class="black_ar">
-								<html:button
+								<td align="left" class="black_ar"><html:button
 									property="addKeyValue" styleClass="blue_ar_b"
 									onclick="insRow('addMore')">
 									<bean:message key="buttons.addMore" />
-								</html:button>
-								</td>
-								<td class="black_ar">
-								<html:button
+								</html:button></td>
+								<td class="black_ar"><html:button
 									property="deleteMedicalIdentifierValue" styleClass="blue_ar_b"
 									onclick="deleteCheckedNoSubmit('addMore','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true',document.forms[0].valueCounter,'chk_',false)"
 									disabled="true">
 									<bean:message key="buttons.delete" />
-								</html:button>
-								</td>
+								</html:button></td>
 								<td class="black_ar">&nbsp;</td>
 							</tr>
 						</table>
@@ -742,18 +658,14 @@ function participantRegRow(subdivtag)
 						<td height="20" colspan="2"></td>
 
 					</tr>
-					<tr class="td_color_F7F7F7" onclick="javascript:showHide('add_participant_registeration')">
-						<td height="25" class="tr_bg_blue1">
-							<span class="blue_ar_b">&nbsp;
-								<bean:message key="participant.collectionProtocolReg" />
-							</span>
-						</td>
-						<td align="right" class="tr_bg_blue1">
-							<a href="#" id="imgArrow_add_participant_registeration"><img
-								src="images/uIEnhancementImages/dwn_arrow1.gif" width="7"
-								height="8" hspace="10" border="0" class="tr_bg_blue1" />
-							</a>
-						</td>
+					<tr class="td_color_F7F7F7"
+						onclick="javascript:showHide('add_participant_registeration')">
+						<td height="25" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
+						<bean:message key="participant.collectionProtocolReg" /> </span></td>
+						<td align="right" class="tr_bg_blue1"><a href="#"
+							id="imgArrow_add_participant_registeration"><img
+							src="images/uIEnhancementImages/dwn_arrow1.gif" width="7"
+							height="8" hspace="10" border="0" class="tr_bg_blue1" /> </a></td>
 					</tr>
 					<tr class="td_color_F7F7F7">
 						<td colspan="2" style="padding-top:10px;">
@@ -761,21 +673,18 @@ function participantRegRow(subdivtag)
 						<table width="100%" border="0" cellspacing="0" cellpadding="3">
 							<tr class="tableheading">
 								<td width="9%" align="left" class="black_ar_b">Select</td>
-								<td width="23%" align="left" class="black_ar_b">
-									<bean:message key="participant.collectionProtocolReg.protocolTitle" />
+								<td width="23%" align="left" class="black_ar_b"><bean:message
+									key="participant.collectionProtocolReg.protocolTitle" /></td>
+								<td width="18%" align="left" class="black_ar_b"><bean:message
+									key="participant.collectionProtocolReg.participantProtocolID" />
 								</td>
-								<td width="18%" align="left" class="black_ar_b">
-									<bean:message  key="participant.collectionProtocolReg.participantProtocolID" />
+								<td width="15%" align="left" class="black_ar_b"><bean:message
+									key="participant.collectionProtocolReg.participantRegistrationDate" />
 								</td>
-								<td width="15%" align="left" class="black_ar_b">
-									<bean:message key="participant.collectionProtocolReg.participantRegistrationDate" />
-								</td>
-								<td width="15%" align="left" class="black_ar_b">
-									<bean:message key="participant.activityStatus" />
-								</td>
-								<td width="20%" align="left" class="black_ar_b">
-									<bean:message key="participant.collectionProtocolReg.consent" />
-								</td>
+								<td width="15%" align="left" class="black_ar_b"><bean:message
+									key="participant.activityStatus" /></td>
+								<td width="20%" align="left" class="black_ar_b"><bean:message
+									key="participant.collectionProtocolReg.consent" /></td>
 							</tr>
 
 							<script> document.forms[0].collectionProtocolRegistrationValueCounter.value = <%=noOrRowsCollectionProtocolRegistration%> </script>
@@ -845,57 +754,46 @@ function participantRegRow(subdivtag)
 											if (CollectionProtocolRegConditionBoolean)
 												CollectionProtocolRegCondition = "disabled='disabled'";
 									%>
-									<td class="black_ar" width="5">
-										<html:hidden
-											property="<%=collectionProtocolIdentifier%>" /> 
-											<input
-											type=checkbox name="<%=collectionProtocolCheck %>"
-											id="<%=collectionProtocolCheck %>"
-											<%=CollectionProtocolRegCondition%>
-											onClick="javascript:enableButton(document.forms[0].deleteParticipantRegistrationValue,document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_')">
+									<td class="black_ar" width="5"><html:hidden
+										property="<%=collectionProtocolIdentifier%>" /> <input
+										type=checkbox name="<%=collectionProtocolCheck %>"
+										id="<%=collectionProtocolCheck %>"
+										<%=CollectionProtocolRegCondition%>
+										onClick="javascript:enableButton(document.forms[0].deleteParticipantRegistrationValue,document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_')">
 									</td>
 									<td class="black_ar_s">
 									<%
 									if (CollectionProtocolRegConditionBoolean) {
-									%>
-									 <html:text styleClass="black_ar" maxlength="50"
+									%> <html:text styleClass="black_ar" maxlength="50"
 										styleId="<%=collectionProtocolTitle%>"
 										property="<%=collectionProtocolTitle%>"
-										readonly="<%=readOnlyValue%>" />
-										 <input type="hidden"
+										readonly="<%=readOnlyValue%>" /> <input type="hidden"
 										id="<%=collectionProtocolId%>"
 										name="<%=collectionProtocolId%>"
 										value="<%=collectionProtocolIdValue%>" /> <%
  } else {
- %> <html:select
-										property="<%=collectionProtocolId%>"
+ %> <html:select property="<%=collectionProtocolId%>"
 										styleClass="formFieldSized12"
 										styleId="<%=collectionProtocolId%>"
 										onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"
 										onchange="<%=onChangeFun%>">
 										<html:options collection="<%=Constants.PROTOCOL_LIST%>"
 											labelProperty="name" property="value" />
-									</html:select> 
-									<input type="hidden" id="<%=collectionProtocolTitle%>"
+									</html:select> <input type="hidden" id="<%=collectionProtocolTitle%>"
 										name="<%=collectionProtocolTitle%>"
 										value="<%=collectionProtocolTitleValue%>" /> <%
  }
  %>
 									</td>
-									<td class="black_ar">
-									<html:text styleClass="black_ar"
+									<td class="black_ar"><html:text styleClass="black_ar"
 										size="15" maxlength="50"
 										styleId="<%=collectionProtocolParticipantId%>"
-										property="<%=collectionProtocolParticipantId%>" />
-										</td>
-									<td class="black_ar">
-									<html:text styleClass="black_ar"
+										property="<%=collectionProtocolParticipantId%>" /></td>
+									<td class="black_ar"><html:text styleClass="black_ar"
 										size="10" maxlength="50"
 										styleId="<%=collectionProtocolRegistrationDate%>"
-										property="<%=collectionProtocolRegistrationDate%>" />
-										</td>
-									<td class="black_ar_s">
-									<html:select
+										property="<%=collectionProtocolRegistrationDate%>" /></td>
+									<td class="black_ar_s"><html:select
 										property="<%=collectionProtocolRegistrationActivityStatus%>"
 										styleClass="formFieldSized8"
 										styleId="<%=collectionProtocolRegistrationActivityStatus%>"
@@ -903,10 +801,8 @@ function participantRegRow(subdivtag)
 										onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 										<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>"
 											labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
-									</html:select>
-									</td>
-									<td class="black_ar">
-									<span id="<%=consentCheckStatus%>">
+									</html:select></td>
+									<td class="black_ar"><span id="<%=consentCheckStatus%>">
 									<%
 											if (!consentResponseDisplayValue
 											.equals(Constants.NO_CONSENTS_DEFINED)) {
@@ -924,8 +820,7 @@ function participantRegRow(subdivtag)
 										 } else {
 										 %> <%=consentResponseDisplayValue%> <input type='hidden'
 										name="<%=collectionProtocolConsentCheck%>" value='Consent'
-										id="<%=collectionProtocolConsentCheck%>">
-										 <input
+										id="<%=collectionProtocolConsentCheck%>"> <input
 										type='hidden' name="<%=consentResponseDisplay%>"
 										value="<%=consentResponseDisplayValue%>"
 										id="<%=consentResponseDisplay%>"> <%
@@ -938,22 +833,18 @@ function participantRegRow(subdivtag)
 								%>
 							</tbody>
 							<tr>
-								<td align="left" class="black_ar">
-									<html:button
-										property="addKeyValue" styleClass="blue_ar_b"
-										onclick="participantRegRow('addMoreParticipantRegistration')">
-										<bean:message key="buttons.addMore" />
-									</html:button>
-								</td>
-								<td class="black_ar">
-									<html:button
-										property="deleteParticipantRegistrationValue"
-										styleClass="blue_ar_b"
-										onclick="deleteCheckedNoSubmit('addMoreParticipantRegistration','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true&deleteRegistration=true',document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_',false)"
-										disabled="true">
-										<bean:message key="buttons.delete" />
-									</html:button>
-								</td>
+								<td align="left" class="black_ar"><html:button
+									property="addKeyValue" styleClass="blue_ar_b"
+									onclick="participantRegRow('addMoreParticipantRegistration')">
+									<bean:message key="buttons.addMore" />
+								</html:button></td>
+								<td class="black_ar"><html:button
+									property="deleteParticipantRegistrationValue"
+									styleClass="blue_ar_b"
+									onclick="deleteCheckedNoSubmit('addMoreParticipantRegistration','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true&deleteRegistration=true',document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_',false)"
+									disabled="true">
+									<bean:message key="buttons.delete" />
+								</html:button></td>
 								<td class="black_ar">&nbsp;</td>
 								<td class="black_ar">&nbsp;</td>
 								<td class="black_ar">&nbsp;</td>
@@ -986,10 +877,8 @@ function participantRegRow(subdivtag)
 						<td colspan="2">
 						<table summary="" cellpadding="0" cellspacing="0" border="0">
 							<tr>
-								<td class="formTitle" height="25">
-								<bean:message
-									key="participant.lookup" />
-									</td>
+								<td class="tableheading" height="25"><bean:message
+									key="participant.lookup" /></td>
 							</tr>
 							<tr height=110 valign=top>
 								<td valign=top class="formFieldAllBorders"><!--  **************  Code for New Grid  *********************** -->
@@ -1034,17 +923,11 @@ function participantRegRow(subdivtag)
 							<tr>
 								<td align="center" colspan="7" class="formFieldWithNoTopBorder">
 								<INPUT TYPE='RADIO' NAME='chkName' value="Add"
-									onclick="CreateNewClick()">
-									<font size="2">Ignore
-								matches and create new participant 
-								</font>
-								</INPUT>&nbsp;&nbsp; 
-								<INPUT
+									onclick="CreateNewClick()"> <font size="2">Ignore
+								matches and create new participant </font> </INPUT>&nbsp;&nbsp; <INPUT
 									TYPE='RADIO' NAME='chkName' value="Lookup"
-									onclick="LookupAgain()" checked=true>
-									<font size="2">Lookup
-								again </font>
-								</INPUT></td>
+									onclick="LookupAgain()" checked=true> <font size="2">Lookup
+								again </font> </INPUT></td>
 							</tr>
 						</table>
 						</td>
@@ -1093,8 +976,7 @@ function participantRegRow(subdivtag)
 
 								<logic:equal name="<%=Constants.PAGEOF%>"
 									value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-									<td nowrap>
-									<html:button styleClass="blue_ar_b"
+									<td nowrap><html:button styleClass="blue_ar_b"
 										property="registratioPage" title="Register Participant"
 										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>"
 										onclick="<%=forwardToSubmit%>">
@@ -1103,31 +985,24 @@ function participantRegRow(subdivtag)
 
 								<logic:notEqual name="<%=Constants.PAGEOF%>"
 									value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-									<td nowrap>
-										<html:button styleClass="blue_ar_b"
-											property="registratioPage" title="Submit Only"
-											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>"
-											onclick="<%=normalSubmit%>">
-										</html:button>&nbsp;&nbsp;|&nbsp; 
-										<span class="cancellink">
-										<html:link
-											page="/ManageAdministrativeData.do" styleClass="blue_ar_s_b">
-											<bean:message key="buttons.cancel" />
-										</html:link>
-										</span>
-									</td>
+									<td nowrap><html:button styleClass="blue_ar_b"
+										property="registratioPage" title="Submit Only"
+										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>"
+										onclick="<%=normalSubmit%>">
+									</html:button>&nbsp;&nbsp;|&nbsp; <span class="cancellink"> <html:link
+										page="/ManageAdministrativeData.do" styleClass="blue_ar_s_b">
+										<bean:message key="buttons.cancel" />
+									</html:link> </span></td>
 								</logic:notEqual>
 
 								<logic:equal name="<%=Constants.PAGEOF%>"
 									value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-									<td nowrap>
-										<html:button styleClass="blue_ar_b"
-											property="registratioPage"
-											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>"
-											onclick="<%=forwardToSCG%>"
-											onmouseover="showMessage('Create additional Specimen Collection Group to collect specimens which were  not anticipated as per protocol')">
-										</html:button>&nbsp;&nbsp;
-									</td>
+									<td nowrap><html:button styleClass="blue_ar_b"
+										property="registratioPage"
+										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>"
+										onclick="<%=forwardToSCG%>"
+										onmouseover="showMessage('Create additional Specimen Collection Group to collect specimens which were  not anticipated as per protocol')">
+									</html:button>&nbsp;&nbsp;</td>
 								</logic:equal>
 							</tr>
 						</table>

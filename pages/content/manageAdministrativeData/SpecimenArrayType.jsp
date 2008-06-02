@@ -141,18 +141,18 @@
 						if(operation.equals(Constants.ADD))
 						{ 
 					%>
-		                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add" width="57" height="22" /></td>
+		                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
 
-                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&amp;aliasName=SpecimenArrayType&amp;menuSelected=21"><img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
+                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&amp;aliasName=SpecimenArrayType&amp;menuSelected=21"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
                     <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
 					<% 
 						}
 						   if(operation.equals(Constants.EDIT))
 						{
 					%>
-		                   <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"><img src="images/uIEnhancementImages/tab_add_user1.jpg" alt="Add" width="57" height="22" border="0" /> </html:link></td>
+		                   <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border="0" /> </html:link></td>
 
-                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_edit_user1.jpg" alt="Edit" width="59" height="22" /></td>
+                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" /></td>
                     <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
 						<%
 							}

@@ -104,12 +104,12 @@ function handleStatus(status)
 													value='${requestScope.addforJSP}'>
 													<td width="6%" valign="bottom"
 														background="images/uIEnhancementImages/tab_bg.gif"><img
-														src="images/uIEnhancementImages/tab_add_user.jpg"
+														src="images/uIEnhancementImages/tab_add_selected.jpg"
 														alt="Add" width="57" height="22" /></td>
 													<td width="6%" valign="bottom"
 														background="images/uIEnhancementImages/tab_bg.gif"><html:link
 														page="/SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&menuSelected=1">
-														<img src="images/uIEnhancementImages/tab_edit_user.jpg"
+														<img src="images/uIEnhancementImages/tab_edit_notSelected.jpg"
 															alt="Edit" width="59" height="22" border="0" />
 													</html:link></td>
 													<td width="15%" valign="bottom"
@@ -125,12 +125,12 @@ function handleStatus(status)
 													<td width="6%" valign="bottom"
 														background="images/uIEnhancementImages/tab_bg.gif"><html:link
 														page="/User.do?operation=add&pageOf=pageOfUserAdmin&menuSelected=1">
-														<img src="images/uIEnhancementImages/tab_add_user1.jpg"
+														<img src="images/uIEnhancementImages/tab_add_notSelected.jpg"
 															alt="Add" width="57" height="22" hspace="1" border="0" />
 													</html:link></td>
 													<td width="6%" valign="bottom"
 														background="images/uIEnhancementImages/tab_bg.gif"><img
-														src="images/uIEnhancementImages/tab_edit_user1.jpg"
+														src="images/uIEnhancementImages/tab_edit_selected.jpg"
 														alt="Edit" width="59" height="22" hspace="1" /></td>
 													<td width="6%" valign="bottom"
 														background="images/uIEnhancementImages/tab_bg.gif"><html:link
@@ -460,7 +460,7 @@ function handleStatus(status)
 										</tr>
 										<tr>
 											<td colspan="3" style="padding-top:10px;">
-											<div id="add_admin_details" style="display: ">
+											<div id="add_admin_details" style="display:block">
 											<table width="100%" border="0" cellpadding="2"
 												cellspacing="0">
 

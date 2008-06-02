@@ -231,12 +231,12 @@ function showDatafield(element,txtFieldID)
 													<td width="6%" valign="bottom"
 														background="images/uIEnhancementImages/tab_bg.gif"><html:link
 														href="#" onclick="callSerachAction('CommonTab.do')">
-														<img src="images/uIEnhancementImages/tab_add_user1.jpg"
+														<img src="images/uIEnhancementImages/tab_add_notSelected.jpg"
 															alt="Add" width="57" height="22" border="0" />
 													</html:link></td>
 													<td width="6%" valign="bottom"
 														background="images/uIEnhancementImages/tab_bg.gif"><img
-														src="images/uIEnhancementImages/tab_edit_user1.jpg"
+														src="images/uIEnhancementImages/tab_edit_selected.jpg"
 														alt="Edit" width="59" height="22" border="0" /></td>
 													<logic:equal name="pageOf"
 														value="<%=Constants.PAGEOF_USER_ADMIN%>">

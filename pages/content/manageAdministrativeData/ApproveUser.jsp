@@ -41,8 +41,8 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td width="4%" class="td_tab_bg" >&nbsp;</td>
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/User.do?operation=add&pageOf=pageOfUserAdmin&menuSelected=1"><img src="images/uIEnhancementImages/tab_add_user1.jpg" alt="Add" width="57" height="22" border="0" /></html:link></td>
-                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&menuSelected=1"><img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
+                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" ><html:link page="/User.do?operation=add&pageOf=pageOfUserAdmin&menuSelected=1"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border="0" /></html:link></td>
+                      <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&menuSelected=1"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
                       <td width="15%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif"><img src="images/uIEnhancementImages/tab_approve_user1.jpg" alt="Approve New Users" width="139" height="22" border="0" /></td>
                       <td width="65%" valign="bottom" class="td_tab_bg" >&nbsp;</td>
                       <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" >&nbsp;</td>		</tr>
