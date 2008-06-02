@@ -15,9 +15,7 @@ import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.dao.QuerySessionData;
-import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
@@ -67,7 +65,7 @@ public class QueryOutputTreeBizLogic
 		QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(root,mainEntityMap);
 		Map<Long,QueryResultObjectDataBean> queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 		queryResultObjectDataBeanMap.put(root.getId(), queryResulObjectDataBean);
-		String selectSql = QueryModuleUtil.getSQLForRootNode(root, tableName,queryResultObjectDataBeanMap,uniqueIdNodesMap);
+		String selectSql = QueryModuleUtil.getSQLForRootNode(tableName,QueryModuleUtil.getColumnNamesForSelectpart(root.getAttributes(),uniqueIdNodesMap, queryResultObjectDataBeanMap.get(root.getId())));
 		
 		String[] sqlIndex = selectSql.split(Constants.NODE_SEPARATOR);
 		selectSql = sqlIndex[0];
@@ -320,7 +318,7 @@ public class QueryOutputTreeBizLogic
 			QueryResultObjectDataBean queryResulObjectDataBean = QueryCSMUtil.getQueryResulObjectDataBean(currentNode,mainEntityMap);
 		    queryResultObjectDataBeanMap = new HashMap<Long, QueryResultObjectDataBean>();
 			queryResultObjectDataBeanMap.put(currentNode.getId(), queryResulObjectDataBean);
-			Map<String,String> columnNameIndexMap = QueryModuleUtil.getColumnNamesForSelectpart(currentNode,queryResultObjectDataBeanMap,idNodeMap);
+			Map<String,String> columnNameIndexMap = QueryModuleUtil.getColumnNamesForSelectpart(currentNode.getAttributes(),idNodeMap, queryResultObjectDataBeanMap.get(currentNode.getId()));
 			columnNames = columnNameIndexMap.get(Constants.COLUMN_NAMES);
 			String indexStr = columnNameIndexMap.get(Constants.INDEX);
 			if ((indexStr != null) && (!indexStr.equalsIgnoreCase(Constants.NULL)))
@@ -340,7 +338,7 @@ public class QueryOutputTreeBizLogic
 		if (parentNodeId.contains(Constants.NULL_ID))
 		{
 			
-			selectSql = QueryModuleUtil.getSQLForRootNode(currentNode, tableName,queryResultObjectDataBeanMap,idNodeMap);
+			selectSql = QueryModuleUtil.getSQLForRootNode(tableName,QueryModuleUtil.getColumnNamesForSelectpart(currentNode.getAttributes(),idNodeMap, queryResultObjectDataBeanMap.get(currentNode.getId())));
 
 			String indexStr = selectSql.substring(selectSql.indexOf(Constants.NODE_SEPARATOR)+2,selectSql.length());
 			if (!indexStr.equalsIgnoreCase(Constants.NULL))

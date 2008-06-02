@@ -439,8 +439,6 @@ public class QueryOutputSpreadsheetBizLogic
 		StringBuffer sqlColumnNames = new StringBuffer();
 		List<QueryOutputTreeAttributeMetadata> selectedAttributeMetaDataList = selectedColumnMetaData
 				.getSelectedAttributeMetaDataList();
-		List<IOutputAttribute> selectedOutputAttributeList = selectedColumnMetaData
-				.getSelectedOutputAttributeList();
 		int columnIndex = 0;
 		int addedFileTypeAttributes = 0;
 		List<EntityInterface> defineViewNodeList = new ArrayList<EntityInterface>();

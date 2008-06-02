@@ -24,6 +24,8 @@ import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleError;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.querysuite.exceptions.CyclicException;
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
@@ -44,6 +46,7 @@ import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
 import edu.wustl.common.querysuite.queryobject.locator.Position;
 import edu.wustl.common.querysuite.queryobject.locator.QueryNodeLocator;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -354,11 +357,19 @@ public class DAGPanel {
 	 */
 	public int search()
 	{
-		int status =0;
+		QueryModuleError status = QueryModuleError.SUCCESS;
 		IQuery query = m_queryObject.getQuery();
 		HttpServletRequest request = flex.messaging.FlexContext.getHttpRequest();
-		status=QueryModuleUtil.searchQuery(request, query,null);
-		return status;
+		boolean isRulePresentInDag = QueryModuleUtil.checkIfRulePresentInDag(query) ;
+		if (isRulePresentInDag)
+		{
+			status=QueryModuleUtil.searchQuery(request, query,null);
+		}
+		else
+		{
+			status = QueryModuleError.EMPTY_DAG;
+		}		
+		return status.getErrorCode();
 	}
 	/**
 	 * Repaints DAG
