@@ -51,10 +51,10 @@ import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
-import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.IValueObject;
@@ -144,7 +144,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			storageContainerIds.clear();
 		}
 	}
-
 	/**
 	 * @param userName Logged in User
 	 * @throws UserNotAuthorizedException User is not authorized
@@ -309,9 +308,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @param specimen parent specimen object
 	 * @throws DAOException Database related Exception
 	 * @throws UserNotAuthorizedException User is not Authorized
+	 * @throws BizLogicException 
 	 */
-	public void disposeSpecimen(DAO dao, SessionDataBean sessionDataBean, Specimen specimen)
-			throws DAOException, UserNotAuthorizedException
+	public void disposeSpecimen(SessionDataBean sessionDataBean, Specimen specimen)
+			throws DAOException, UserNotAuthorizedException, BizLogicException
 	{
 		DisposalEventParameters disposalEvent = new DisposalEventParameters();
 		disposalEvent.setSpecimen(specimen);
@@ -322,8 +322,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		disposalEvent.setUser(user);
 		disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
 		SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
-		specimenEventParametersBizLogic.insert(disposalEvent, dao, sessionDataBean);
-		specimenEventParametersBizLogic.postInsert(disposalEvent, dao, sessionDataBean);
+		specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean,  Constants.HIBERNATE_DAO);
 		specimen.setAvailable(new Boolean(false));
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
 	}
@@ -641,18 +640,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 *@throws DAOException Database related Exception
 	 *@throws UserNotAuthorizedException User Not Authorized Exception
 	 */
-	public void postInsert(Collection<AbstractDomainObject> speCollection, DAO dao, SessionDataBean sessionDataBean)
+	protected void postInsert(Collection<AbstractDomainObject> speCollection, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
 		Iterator<AbstractDomainObject> specimenIterator = speCollection.iterator();
 		while (specimenIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
-			if (specimen.getDisposeParentSpecimen()&&
-					specimen.getParentSpecimen().getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
-			{
-				disposeSpecimen(dao, sessionDataBean, specimen.getParentSpecimen());
-			}
 			postInsert(specimen, dao, sessionDataBean);
 			Collection childSpecimens = specimen.getChildrenSpecimen();
 			if (childSpecimens != null)
@@ -2661,13 +2655,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void calculateAvailableQunatity(Specimen specimenVO, Specimen specimenDO)
 			throws DAOException
 	{
-
-		/*fix for bug no. 7347
-		bug description: the available quantity was not calculated correctly*/
-		if(specimenVO.getLineage()==null)
-		{
-			validateSpecimenUpdated(specimenVO,specimenDO);
-		}
 		if (specimenVO.getInitialQuantity() != null)
 		{
 			Quantity quantity = specimenVO.getInitialQuantity();
@@ -2934,78 +2921,4 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 		return (Specimen) (specimenList.get(0));
 	}
-	/*fix for bug no. 7347
-	bug description: the available quantity was not calculated correctly*/
-	protected void validateSpecimenUpdated(Specimen specimenObj,Specimen specimenDO)throws DAOException
-	{
-
-		if (specimenObj!=null)
-		{
-			Double specimenQuantity=0D;
-			Double aliquotQuantity=0D;
-			List idCollectionDO = new ArrayList();
-
-			if (specimenObj.getInitialQuantity().getValue() != null)
-			{
-				specimenQuantity = specimenObj.getInitialQuantity().getValue();
-
-			}
-			// this loop gets ids of all the aliquots of a specimens in the database
-			if (specimenDO != null)
-			{
-				Collection aliquotCollectionDO = specimenDO.getChildrenSpecimen();
-
-				if (!aliquotCollectionDO.isEmpty())
-				{
-					Iterator iterator = aliquotCollectionDO.iterator();
-					while (iterator.hasNext())
-					{
-						Object tempObj = iterator.next();
-						if (tempObj instanceof Specimen)
-						{
-							Specimen aliquotSpecimenDO = (Specimen) tempObj;
-							if (aliquotSpecimenDO.getLineage().equalsIgnoreCase("Aliquot") && aliquotSpecimenDO.getId() != null)
-							{
-								idCollectionDO.add(aliquotSpecimenDO.getId());
-							}
-						}
-					}
-				}
-			}
-			Collection aliquotsCollection = specimenObj.getChildrenSpecimen();
-			if (!aliquotsCollection.isEmpty())
-			{
-				Iterator aliquotsIterator = aliquotsCollection.iterator();
-				while (aliquotsIterator.hasNext())
-				{
-					Object obj = aliquotsIterator.next();
-					if (obj instanceof Specimen)
-					{
-						Specimen aliquotSpecimen = (Specimen) obj;
-						if (aliquotSpecimen.getInitialQuantity().getValue() != null && !idCollectionDO.isEmpty())
-						{
-							Iterator idIterator = idCollectionDO.iterator();
-							//This while is for a check that the aliquotQuantity is updated only for the Aliquots and not the derivatives
-							while (idIterator.hasNext())
-							{
-								Long tempId = Long.valueOf(idIterator.next().toString());
-								if (tempId.equals(aliquotSpecimen.getId()))
-								{
-									aliquotQuantity += aliquotSpecimen.getInitialQuantity().getValue();
-								}
-							}
-
-						}
-
-					}
-				}
-			}
-
-			if (aliquotQuantity > specimenQuantity) 
-			{
-				throw new DAOException(ApplicationProperties.getValue("errors.item.format", "specimen.quantity"));
-			}
-		}
-	}
-
 }

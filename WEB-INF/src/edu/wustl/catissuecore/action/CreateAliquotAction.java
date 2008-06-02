@@ -32,8 +32,6 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
@@ -126,54 +124,57 @@ public class CreateAliquotAction extends BaseAction
 	 * @return
 	 * @throws UserNotAuthorizedException
 	 * @throws DAOException 
+	 * @throws  
+	 * @throws DAOException 
 	 * @throws DAOException 
 	 */
 	private boolean insertAliquotSpecimen(HttpServletRequest request, SessionDataBean sessionDataBean,
-			Collection<AbstractDomainObject> specimenCollection) throws UserNotAuthorizedException, DAOException
+			Collection<AbstractDomainObject> specimenCollection) throws UserNotAuthorizedException
 	{
-		HibernateDAO dao = (HibernateDAO)DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		try
 		{
-			dao.openSession(sessionDataBean);
-			new NewSpecimenBizLogic().insertMultiple(specimenCollection, dao, sessionDataBean);
-			disposeParentSpecimen(sessionDataBean, specimenCollection, dao);
-			dao.commit();
-			new NewSpecimenBizLogic().postInsert(specimenCollection, dao, sessionDataBean);
+			new NewSpecimenBizLogic().insert(specimenCollection, sessionDataBean,Constants.HIBERNATE_DAO , false);
+			disposeParentSpecimen(sessionDataBean, specimenCollection);
 		}
-		catch (Exception exception)
+		catch (BizLogicException e)
 		{
-			dao.rollback();
-			ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",exception.getMessage()));
+		    ActionErrors actionErrors = new ActionErrors();
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",e.getMessage()));
 			saveErrors(request, actionErrors);
 			saveToken(request);
 			return false;
 		}
-		finally
+		catch(DAOException e)
 		{
-			dao.closeSession();
+			ActionErrors actionErrors = new ActionErrors();
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",e.getMessage()));
+			saveErrors(request, actionErrors);
+			saveToken(request);
+			return false;	
 		}
 		return true;
 	}
-
+	
 	/**
 	 * @param sessionDataBean
 	 * @param specimenCollection
 	 * @param dao
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
+	 * @throws BizLogicException 
 	 */
 	private void disposeParentSpecimen(SessionDataBean sessionDataBean,
-			Collection<AbstractDomainObject> specimenCollection, HibernateDAO dao)
-			throws DAOException, UserNotAuthorizedException
+			Collection<AbstractDomainObject> specimenCollection)
+			throws DAOException, UserNotAuthorizedException, BizLogicException
 	{
 		Iterator<AbstractDomainObject> spItr = specimenCollection.iterator();
 		Specimen specimen =(Specimen)spItr.next();
 		if(specimen!=null && specimen.getDisposeParentSpecimen())
 		{
-			new NewSpecimenBizLogic().disposeSpecimen(dao, sessionDataBean, specimen.getParentSpecimen());
+			new NewSpecimenBizLogic().disposeSpecimen(sessionDataBean, specimen.getParentSpecimen());
 		}
 	}
+
 	/**
 	 * @param aliquotForm
 	 * @return
