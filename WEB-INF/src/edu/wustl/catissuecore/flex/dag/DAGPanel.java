@@ -429,7 +429,7 @@ public class DAGPanel {
 			int numOperator = numOperands-1;
 			for(int i=0;i<numOperator;i++)
 			{
-				String operator  = exp.getLogicalConnector(i, i+1).getLogicalOperator().toString();
+				String operator  = exp.getConnector(i, i+1).getOperator().toString();
 				dagNode.setOperatorList(operator.toUpperCase());
 			}
 
@@ -508,7 +508,7 @@ public class DAGPanel {
 		IExpression parentExpression = query.getConstraints().getExpression(parentExpressionId);
 		LogicalOperator logicOperator = edu.wustl.cab2b.client.ui.query.Utility.getLogicalOperator(operator);
 		int childIndex = parentIndex +1;
-		parentExpression.setLogicalConnector(parentIndex, childIndex,QueryObjectFactory.createLogicalConnector(logicOperator));
+		parentExpression.setConnector(parentIndex, childIndex,QueryObjectFactory.createLogicalConnector(logicOperator));
 		m_queryObject.setQuery(query);
 
 	}
