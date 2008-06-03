@@ -76,6 +76,9 @@ public class CreateAliquotAction extends BaseAction
 		specimenList= new LinkedList<AbstractDomainObject>();
 		specimenList.addAll(specimenCollection);
 		Specimen specimen = (Specimen)specimenList.get(0);
+		
+		request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimen.getId().toString());
+		
 		if(specimen!=null)
 		{
 			aliquotForm.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
