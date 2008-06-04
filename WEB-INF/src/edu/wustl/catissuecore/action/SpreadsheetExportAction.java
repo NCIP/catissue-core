@@ -187,6 +187,7 @@ public class SpreadsheetExportAction  extends BaseAction
     	{
     		report = new ExportReport(fileName);
     		report.writeData(exportList,delimiter);   	
+    		report.closeFile();
         	SendFile.sendFileToClient(response,fileName,Constants.SEARCH_RESULT,"application/download");
     	}    	
     	
