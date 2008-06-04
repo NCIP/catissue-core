@@ -40,9 +40,7 @@
 		document.forms[0].reportAction.value="false";
 		selectOptions(document.forms[0].selectedColumnNames);
 		setFormAction("<%=reportSaveAction%>");
-		//document.forms[0].action = "<%=Constants.DISTRIBUTION_REPORT_ACTION%>";
-		//document.forms[0].submit();
-	}
+   }
 	
 	function changeActionOnConfig()
 	{
@@ -55,8 +53,7 @@
 		else{%>
 		setFormAction("<%=Constants.CONFIGURE_DISTRIBUTION_ACTION%>");
 		<%}%>
-		//document.forms[0].action = "<%=Constants.DISTRIBUTION_REPORT_ACTION%>";
-		//document.forms[0].submit();
+			document.forms[0].submit();
 	}
 	
 	function selectOptions(element)
@@ -77,8 +74,68 @@
 </style>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
 
 <html:form action="<%=Constants.CONFIGURE_DISTRIBUTION_ACTION%>">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+ <td width="100%" colspan="2" valign="top">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td colspan="3" valign="top" class="td_color_bfdcf3"><table width="15%" border="0" cellpadding="0" cellspacing="0" background="images/uIEnhancementImages/table_title_bg.gif">
+                  <tr>
+                    <td width="74%"><span class="wh_ar_b"><bean:message key="distribution.name"/></span></td>
+                    <td width="26%" align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" /></td>
+                  </tr>
+              </table>
+			  </td>
+			  </tr>
+			  	<logic:equal name="pageOf"
+														value="<%=Constants.PAGE_OF_DISTRIBUTION%>">
+			    <tr>
+              <td width="1%" valign="top" class="td_color_bfdcf3">&nbsp;</td>
+              <td width="9%" valign="top" class="td_tab_bg">&nbsp;</td>
+              <td width="90%" valign="bottom" class="td_color_bfdcf3" style="padding-top:4px;">
+			  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td width="4%" class="td_tab_bg" >&nbsp;</td>
+                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" >
+				
+					<a href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution"><img src="images/uIEnhancementImages/tab_specimen_user_selected.gif" alt="Specimen Report" width="126" height="22" border="0" /></a>
+			
+					</td>
+                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">
+					<a href="SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array"><img src="images/uIEnhancementImages/tab_array_user.gif" alt="Array Report" width="107" height="22" /></td>
+                    <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
+                    <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" >&nbsp;</td>
+                  </tr>
+              </table>
+			  </td>
+            </tr>
+		</logic:equal>
+		<logic:equal name="pageOf"
+														value="<%=Constants.PAGE_OF_DISTRIBUTION_ARRAY%>">
+			    <tr>
+              <td width="1%" valign="top" class="td_color_bfdcf3">&nbsp;</td>
+              <td width="9%" valign="top" class="td_tab_bg">&nbsp;</td>
+              <td width="90%" valign="bottom" class="td_color_bfdcf3" style="padding-top:4px;">
+			  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td width="4%" class="td_tab_bg" >&nbsp;</td>
+                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif" >
+				
+					<a href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution"><img src="images/uIEnhancementImages/tab_specimen_user.gif" alt="Specimen Report" width="126" height="22" border="0" /></a>
+			
+					</td>
+                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">
+					<a href="SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array"><img src="images/uIEnhancementImages/tab_array_user_selected.gif" alt="Array Report" width="107" height="22" /></td>
+                    <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">&nbsp;</td>
+                    <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" >&nbsp;</td>
+                  </tr>
+              </table>
+			  </td>
+            </tr>
+		</logic:equal>
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 	<tr>
 		<td align="right" colspan="3">
@@ -96,121 +153,56 @@
 	<!-- NEW distribution REGISTRATION BEGINS-->
 	<tr> 
 	<td>
+	  <tr>
+        <td colspan="2" class="td_color_bfdcf3" style="padding-left:10px; padding-right:10px; padding-bottom:10px;">
+		<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
+            <tr>
+              <td height="15" colspan="3" align="left"></td>
+              </tr>
+            <tr>
+              <td width="80%" height="25" align="left" class="tr_bg_blue1"><span class="blue_ar_b">	
+			  <bean:message key="distribution.reportTitle"/></span></td>
+              <td width="16%" align="left" class="tr_bg_blue1">&nbsp;</td>
+              <td width="4%" height="25" align="left" class="tr_bg_blue1">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" align="left" style="padding-top:10px; padding-bottom:15px; padding-left:6px;"><table width="100%" border="0" cellspacing="0" cellpadding="3" bgcolor="#f6f6f6">
+                <tr>
+                  <td width="17%" class="black_noneditable"><label for="type" class="black_noneditable"><bean:message key="distribution.identifier"/>  </label></td>
+                  <td class="black_noneditable2">- <%=distForm.getDistributionId()%></td>
+                </tr>
+                <tr>
+                  <td class="black_noneditable"><label for="type" class="black_noneditable"><bean:message key="distribution.protocol"/> </label></td>
+                  <td class="black_noneditable2">- <%=distForm.getDistributionProtocolTitle()%></td>
+                </tr>
+                <tr>
+                  <td class="black_noneditable"><label for="User" class="black_noneditable"><bean:message key="eventparameters.user"/>  </label></td>
+                  <td class="black_noneditable2">- <%=distForm.getUserName()%></td>
+                </tr>
+                <tr>
+                  <td class="black_noneditable"><bean:message key="eventparameters.dateofevent"/></td>
+                  <td class="black_noneditable2">- <%=distForm.getDateOfEvent()%></td>
+                </tr>
+                <tr>
+                  <td class="black_noneditable"><bean:message key="eventparameters.time"/></td>
+                  <td class="black_noneditable2">- <%=distForm.getTimeInHours()%>:<%=distForm.getTimeInMinutes()%></td>
+                </tr>
+                <tr>
+                  <td class="black_noneditable"><bean:message key="distribution.toSite"/></td>
+                  <td class="black_noneditable2">- <%=distForm.getToSite()%> </td>
+                </tr>
+                <tr>
+                  <td class="black_noneditable"><bean:message key="eventparameters.comments"/></td>
+                  <td class="black_noneditable2"><%=distForm.getComments()%></td>
+                </tr>
+                
+              </table></td>
+            </tr>
 	
-	<TABLE cellSpacing=0 cellPadding=3 summary="" border=1 width="100%">
-		
-		<tr>
-			 <td class="formTitle" height="20" colspan="3">
-					<bean:message key="distribution.reportTitle"/>
-			 </td>
-		</tr>
-
-		<!-- Name of the distribution -->
-<!-- Distribution Protocol Identifier -->		
-		<tr>
-			
-			<td class="formRequiredLabel" width="200">
-				<label for="type">
-					<bean:message key="distribution.identifier"/> 
-				</label>	
-			</td>	
-			<td class="formField" width="300">
-				<%=distForm.getDistributionId()%>				
-			</td>	
-		</tr>		
-<!-- Distribution Protocol Title -->		
-		<tr>
-			
-			<td class="formRequiredLabel" width="200">
-				<label for="type">
-					<bean:message key="distribution.protocol"/> 
-				</label>	
-			</td>	
-			<td class="formField" width="300">
-				<%=distForm.getDistributionProtocolTitle()%>				
-			</td>	
-		</tr>
-
-<!-- User -->		
-		<tr>
-			
-			<td class="formRequiredLabel" width="200">
-				<label for="User">
-					<bean:message key="eventparameters.user"/> 
-				</label>	
-			</td>	
-			<td class="formField" width="300">
-				<%=distForm.getUserName()%>		
-			</td>	
-		</tr>
-
-<!-- date -->		
-		<tr>
-			
-			<td class="formRequiredLabel" width="200">
-				<label for="date">
-					<bean:message key="eventparameters.dateofevent"/> 
-				</label>
-			</td>
-			<td class="formField" width="300">
-				 <%=distForm.getDateOfEvent()%>
-			</td>
-		</tr>
-
-<!-- hours & minutes -->		
-		<tr>
-			
-			<td class="formLabel" width="200">
-				<label for="time">
-					<bean:message key="eventparameters.time"/>&nbsp; 
-					
-				</label>
-			</td>
-			<td class="formField" width="300">
-				&nbsp;<%=distForm.getTimeInHours()%>:<%=distForm.getTimeInMinutes()%>
-			</td>
-		</tr>
-<!-- fromSite -->		
-		<%--tr>
-			
-			<td class="formRequiredLabel" width="200">
-				<label for="fromSite">
-					<bean:message key="distribution.fromSite"/> 
-				</label>
-			</td>
-			<td class="formField" width="300">
-				<%=distForm.getFromSite()%>
-			</td>
-		</tr--%>
-<!-- toSite -->		
-		<tr>
-			
-			<td class="formRequiredLabel" width="200">
-				<label for="toSite">
-					<bean:message key="distribution.toSite"/> 
-				</label>
-			</td>
-			<td class="formField" width="300">
-				
-				<%=distForm.getToSite()%>
-			</td>
-		</tr>				
-
-<!-- comments -->		
-		<tr>
-			
-			<td class="formLabel" width="200">
-				<label for="type">
-					<bean:message key="eventparameters.comments"/> 
-				</label>
-			</td>
-			<td class="formField" width="300">
-				&nbsp;<%=distForm.getComments()%>
-			</td>
-		</tr>
-		
-	</table>
 	
+	<tr>
+
+	   <td colspan="3" align="left" style="padding-top:10px; padding-bottom:15px; padding-left:6px;">
 	<table cellpadding="3" cellspacing="0" border="0">
 		<tr id="hiddenCombo" rowspan="4">
 			<td class="formField" colspan="4">
@@ -235,49 +227,43 @@
 			<td>&nbsp;</td>									
 		</tr>
 	</table>
-	
-	
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-<!--  Distributed Item begin here -->
-				 <tr>
-				     <td class="formTitle" height="20" colspan="<%=columnNames.length+1%>">
-				     	<bean:message key="distribution.distributedItem"/>
-				     </td>
-				     
-				  </tr>
-				 <tr>
-				 	<td class="formSerialNumberLabel" width="5">
-				     	#
-				    </td>
-				 	<% 
+
+	 <tr onclick="javascript:showHide('distributedItems')">
+              <td width="80%" height="25" align="left" class="tr_bg_blue1" ><span class="blue_ar_b"><bean:message key="distribution.distributedItem"/> </span></td>
+			  	
+				
+              <td height="25" align="right" class="tr_bg_blue1" colspan="2"><a href="#" id="imgArrow_distributedItems"><img   src="images/uIEnhancementImages/dwn_arrow1.gif" width="7" height="8" hspace="10" border="0" class="tr_bg_blue1" alt="Show Details" /></a></td>
+       </tr>
+	     <tr>
+              <td colspan="3" style="padding-top:10px;">
+			  <div id="distributedItems" style="display:none" >
+                <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                  <tr class="tableheading">
+                    <td width="3%" align="left" class="black_ar_b">#</td>
+					<% 
 				 		for(int i=0;i<columnNames.length;i++)
 				 		{
 				 	%>
-						    <td class="formLeftSubTitle" >
-								<%=columnNames[i]%>		
-							</td>
-					<%
+                    <td width="15%" align="left" class="black_ar_b"><%=columnNames[i]%></td>
+						<%
 						}
 					%>
-					
-				 </tr>
-				 <%
+                  </tr>
+				  	 <%
 				 	Iterator itr= dataList.iterator();
-				 	int i=1;
+				 	int i1=1;
 				 	while(itr.hasNext())
 				 	{
 				 %>
-				 	<tr>
-				 <%						
+                  <tr>
+				   <%						
 				 		List rowData = (List)itr.next();					
 				 		Iterator innerItr= rowData.iterator();
 				 		while(innerItr.hasNext())
 				 		{
 				 %>
-				 		<tr>
-				 			<td class="formSerialNumberField" width="5"><%=i%>
-				 			</td>
-				 <%			
+                    <td align="left" class="black_ar" ><%=i1%></td>
+						 <%			
 							
 				 			List rowElements = (List)innerItr.next();							
 				 			Iterator elementItr= rowElements.iterator();
@@ -285,61 +271,50 @@
 				 			while(elementItr.hasNext() && j<columnNames.length)
 				 			{
 				 %>
-				 				<td class="formField">
-				 					&nbsp;<%=elementItr.next()%>	
-				 				</td>
-				 	<%
+                    <td class="black_ar"><label><%=elementItr.next()%></label></td>
+						<%
 								j++;
 				 			}
-				 			i++;
+				 			i1++;
 				 	%>
-				 		</tr>
-				 	<%
+                  </tr>
+				<%
 				 		}
 				 	%>
 				 	</tr>
 				 <%
 					}
 				%>
-			<!-- Distributed item End here -->
-<!-- buttons -->
-		
-		<tr>
-		  <td align="right" colspan="6">
-			<!-- action buttons begins -->
-			
-			<table cellpadding="4" cellspacing="0" border="0">
-				<tr>
-					<%--
-						String changeAction = "setFormAction('"+Constants.DISTRIBUTION_REPORT_ACTION+"')";
-				 	--%>
-					<td>
-						<html:submit property="expButton" styleClass="actionButton" onclick="changeAction()" >
+                </table>
+				</div></td>
+              </tr>
+			    <tr class="td_color_F7F7F7">
+              <td height="20" colspan="3"></td>
+              </tr>
+            
+            <tr  class="td_color_F7F7F7">
+              <td  class="buttonbg" style="padding-left:10px;">
+					<html:submit property="expButton"  onclick="changeAction()" >
 							<bean:message  key="buttons.export" />
-						</html:submit>
-					
-					</td>
-					
-					<%
+					</html:submit>
+			 </td>
+            
+              <td  class="buttonbg" style="padding-left:10px;" colspan="2"><span class="viewlink2">
+			  	<%
 						if(distForm.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) 
 						{
 					%>
-							<td>
-								<html:submit styleClass="actionButton" onclick="changeActionOnConfig()">
-									<bean:message  key="buttons.configure" />
-								</html:submit>
-							</td>
-					<%
+						<a href="#" onclick="changeActionOnConfig()"><bean:message  key="buttons.configure" /></a></span>
+						<%
 						}
 					%>
-				</tr>
-			</table>
-			<!-- action buttons end -->
-			</td>
-		</tr>
-		</table>
+			  </td>
+					
+            </tr>
 	  </td>
 	 </tr>
-	 <!-- NEW Distribution ends-->
 	 </table>
+	 </td>
+   </tr>
+</table>
 </html:form>			
