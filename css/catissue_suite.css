@@ -512,3 +512,22 @@ visibility: hidden;
 	color: #074180;
 	font-weight: bold;
 }
+
+.black_noneditable {
+	font-family: verdana;
+	font-size: 11px;
+	color: #575656;
+	font-weight:bold;
+}
+.black_noneditable2 {
+	font-family: verdana;
+	font-size: 11px;
+	color: #575656;
+}
+.viewlink2 {
+	font-family: verdana;
+	font-size: 12px;
+	color: #000000;
+	font-weight: bold;
+	text-decoration:underline;
+}
