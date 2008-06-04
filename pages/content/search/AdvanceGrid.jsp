@@ -1,8 +1,11 @@
 <!-- dataList and columnList are to be set in the main JSP file -->
 <link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXGrid.css"/>
+<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
+
 <script  src="dhtml_comp/js/dhtmlXCommon.js"></script>
 <script  src="dhtml_comp/js/dhtmlXGrid.js"></script>		
-<script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>	
+<script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>
+
 <%@ page import="java.util.HashMap,java.util.Map,edu.wustl.common.beans.QueryResultObjectData"%>
 <script>
 <%
@@ -199,7 +202,7 @@ function setEditableChkbox(checkAllPages)
 							 screen, the div runs out of the frame, and there was no way to scroll
 							 down, as we had disabled the scrollbar.
 			-->
-			<div id="gridbox" width="100%" height="330px" style="border-left:solid 1px;border-right:solid 1px;border-top:solid 1px;border-bottom:solid 1px;background-color:td_color_bfdcf3;overflow:hidden"></div>
+			<div id="gridbox" width="100%" height="330px" style="border-left:solid 1px;border-right:solid 1px;border-top:solid 1px;border-bottom:solid 1px;background-color:#bfdcf3;overflow:hidden"></div>
 		</td>
 	</tr>
 </table>
@@ -232,12 +235,15 @@ function setEditableChkbox(checkAllPages)
 	mygrid.enableAutoHeigth(false);
 	mygrid.setInitWidths(colWidth);
 	mygrid.setColTypes(colDataTypes);
+    mygrid.enableRowsHover(true,'grid_hover')
 	mygrid.enableMultiselect(true);
 	//mygrid.chNoState = "0";
 	//mygrid.setColAlign("left,left")
 	mygrid.setColSorting(colTypes);
 	//mygrid.enableMultiselect(true)
 	mygrid.setSkin("light");
+	mygrid.enableAlterCss("even","uneven");
+
     mygrid.setEditable(true);
 	<% if(checkAllPagesSession != null && checkAllPagesSession.equals("true")){ %>
 			mygrid.setEditable(false);
