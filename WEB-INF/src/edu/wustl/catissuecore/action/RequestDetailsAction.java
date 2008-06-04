@@ -29,7 +29,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
 import edu.wustl.catissuecore.bean.DefinedArrayDetailsBean;
 import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
@@ -41,28 +40,36 @@ import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.NewSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
+import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.util.dbManager.DAOException;
 
 public class RequestDetailsAction extends BaseAction
@@ -151,8 +158,9 @@ public class RequestDetailsAction extends BaseAction
 	 * @param requestDetailsForm RequestDetailsForm object
 	 * @param request HttpServletRequest object
 	 * @throws DAOException object
+	 * @throws ClassNotFoundException 
 	 */
-	private void getRequestDetailsList(String id, RequestDetailsForm requestDetailsForm, HttpServletRequest request) throws DAOException
+	private void getRequestDetailsList(String id, RequestDetailsForm requestDetailsForm, HttpServletRequest request) throws DAOException, ClassNotFoundException
 	{
 		//fetching the order object corresponding to obtained id.
 		List orderList = getOrderListFromDB(id);
@@ -813,14 +821,14 @@ public class RequestDetailsAction extends BaseAction
 			
 		requestDetailsBean.setInstanceOf("Existing");
 	
-		if(existingSpecimenorderItem.getConsentTierStatusCollection().isEmpty())
+		if(existingSpecimenorderItem.getConsentTierStatusCollection()!=null && !existingSpecimenorderItem.getConsentTierStatusCollection().isEmpty())
 		{	
-			requestDetailsBean.setConsentVerificationkey(Constants.NO_CONSENTS);
+			requestDetailsBean.setConsentVerificationkey(Constants.VIEW_CONSENTS);
 			
 		}	
 		else
 		{
-			requestDetailsBean.setConsentVerificationkey(Constants.VIEW_CONSENTS);
+			requestDetailsBean.setConsentVerificationkey(Constants.NO_CONSENTS);
 			
 		}		
 
@@ -1065,147 +1073,604 @@ public class RequestDetailsAction extends BaseAction
 		}
 	}
 
-	private void getDetailedDataForOrderItemCollection(Collection orderItemColl) throws DAOException
+	
+	/**This will retrieve the distributedItem and set to orderItem  
+	 * @param orderItemIds
+	 * @param orderItemMap
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setDistributedItemToOrderItem(List orderItemIds,Map orderItemMap) throws DAOException, ClassNotFoundException
 	{
-		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		Iterator itr1 = orderItemColl.iterator();
-		String[] whereColumnName = {"id"};
-		String[] whereColumnCond = {"="};
-		while (itr1.hasNext())
+		String ids = Utility.getCommaSeparatedIds(orderItemIds);
+		
+		if(orderItemIds!=null && !orderItemIds.isEmpty())
 		{
-			OrderItem orderItem = (OrderItem) itr1.next();
-			String[] selectColumnName = {"distributedItem"};
-			Object[] whereColumnValue = {orderItem.getId()};
-
-			//Getting distributed Item for each order Item
-			List distributedItemList = orderBizLogic.retrieve(OrderItem.class.getName(), selectColumnName, whereColumnName, whereColumnCond,
-					whereColumnValue, Constants.AND_JOIN_CONDITION);
-			if (distributedItemList != null && distributedItemList.size() > 0)
-			{
-				DistributedItem distributedItem = (DistributedItem) distributedItemList.get(0);
-				orderItem.setDistributedItem(distributedItem);
-			}
-
-			//If orderItem is of type SpecimenOrderItem then get the newSPecimenArrayOrderItem.
-			if (orderItem instanceof SpecimenOrderItem)
-			{
-				SpecimenOrderItem spOrderItem = (SpecimenOrderItem) orderItem;
-				String[] selectColumnName3 = {"newSpecimenArrayOrderItem"};
-
-				Object[] whereColumnValue3 = {orderItem.getId()};
-
-				List newSpArrayOrderItemList = orderBizLogic.retrieve(SpecimenOrderItem.class.getName(), selectColumnName3, whereColumnName,
-						whereColumnCond, whereColumnValue3, Constants.AND_JOIN_CONDITION);
-
-				if (newSpArrayOrderItemList != null && newSpArrayOrderItemList.size() > 0)
+			String hqlString=" select orderItem.id ,orderItem.distributedItem" +
+			" from edu.wustl.catissuecore.domain.OrderItem as orderItem " +
+			" where orderItem.id in ("+ids+")";
+			
+			List distributedItemList = Utility.executeQuery(hqlString);
+			
+			if(distributedItemList!=null && !distributedItemList.isEmpty())
+			{	
+				for(int i=0;i<distributedItemList.size();i++)
 				{
-					NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) newSpArrayOrderItemList.get(0);
-					//getNewSPecimenArrayOrderItemDetails(newSpecimenArrayOrderItem);				
-					spOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayOrderItem);
-
+					Object[] obj = (Object[])distributedItemList.get(i);
+					OrderItem orderItem = (OrderItem)orderItemMap.get((Long)obj[0]);
+					orderItem.setDistributedItem((DistributedItem)obj[1]);
 				}
-			}
-
-			if (orderItem instanceof edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem)
-			{
-				ExistingSpecimenOrderItem existingSpOrderItem = (ExistingSpecimenOrderItem) orderItem;
-				getSpecimenForExSpOrderItem(existingSpOrderItem, orderBizLogic);
-
-			}
-			else if (orderItem instanceof DerivedSpecimenOrderItem)
-			{
-				DerivedSpecimenOrderItem derivedSpOrderItem = (DerivedSpecimenOrderItem) orderItem;
-				getParentSpForDericedSpOrderItem(derivedSpOrderItem, orderBizLogic);
-
-			}
-			else if (orderItem instanceof edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem)
-			{
-				getNewSpecimenArrayOrderItemDetails(orderItem);
-
-			}
-			else if(orderItem instanceof ExistingSpecimenArrayOrderItem)
-			{
-				ExistingSpecimenArrayOrderItem existingSpArrayOrderItem = (ExistingSpecimenArrayOrderItem)orderItem;
-				String[] selectColumnName1 = {"specimenArray"};
-
-				Object[] whereColumnValue1 = {orderItem.getId()};
-
-				List specimenArrayList = orderBizLogic.retrieve(ExistingSpecimenArrayOrderItem.class.getName(), selectColumnName1, whereColumnName, whereColumnCond,
-						whereColumnValue1, Constants.AND_JOIN_CONDITION);
-				if(specimenArrayList != null && specimenArrayList.size()>0)
-				{
-					existingSpArrayOrderItem.setSpecimenArray((SpecimenArray)specimenArrayList.get(0));
-				}
-				System.out.println("SpecimenArrayList:"+specimenArrayList);
-				
-			}
-			else if(orderItem instanceof PathologicalCaseOrderItem)
-			{
-				getSpecimenCollectionGroup(orderItem);
 			}
 		}
+			
+	}
+	/**
+	 * This will retrieve and set NewSpecimenArrayOrderItem to SpecimenOrderItem
+	 * @param specimenOrderItemIds
+	 * @param orderItemMap
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setNewSpecimenArrayOrderItemToSpecimenOrderItem(List specimenOrderItemIds,Map orderItemMap) throws DAOException, ClassNotFoundException
+	{
+		String ids = Utility.getCommaSeparatedIds(specimenOrderItemIds);
+		if(specimenOrderItemIds!=null && !specimenOrderItemIds.isEmpty())
+		{
+			String hqlString=" select spOrderItem.id ,spOrderItem.newSpecimenArrayOrderItem" +
+			" from edu.wustl.catissuecore.domain.SpecimenOrderItem as spOrderItem " +
+			" where spOrderItem.id in ("+ids+")";
+			
+			List newSpecimenArrayOrderItemList = Utility.executeQuery(hqlString);
+			if(newSpecimenArrayOrderItemList !=null && !newSpecimenArrayOrderItemList.isEmpty())
+			{
+				for(int i=0; i<newSpecimenArrayOrderItemList.size();i++)
+				{
+					Object[] obj = (Object[])newSpecimenArrayOrderItemList.get(i);
+					SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem)orderItemMap.get((Long)obj[0]);
+					specimenOrderItem.setNewSpecimenArrayOrderItem((NewSpecimenArrayOrderItem)obj[1]);
+				}
+			}
+		}
+		
+	}
+	
+	/**
+	 * This will retrieve the consentTierStatusCollection for each specimen
+	 * and set it ExistingSpecimenOrderItem 
+	 * @param ids
+	 * @param orderItemMap
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setConsentTierCollectionToExistingSpecimenOrderItem(String ids, Map orderItemMap) throws DAOException, ClassNotFoundException
+	{
+		
+		Map consentierMap = new HashMap();
+		String hqlString="select extOrderItem.id ,elements(extOrderItem.specimen.consentTierStatusCollection)" +
+		" from edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem as extOrderItem  " +
+		" where extOrderItem.id in ("+ids+") ";
+		
+		List consentTierStatusCollectionList =  Utility.executeQuery(hqlString);
+		if(consentTierStatusCollectionList!=null && !consentTierStatusCollectionList.isEmpty())
+		{	
+			for(int i=0;i<consentTierStatusCollectionList.size();i++)
+			{
+				Object[] obj = (Object[]) consentTierStatusCollectionList.get(i);
+				if(consentierMap.containsKey((Long)obj[0]))
+				{
+					List list = (List)consentierMap.get((Long)obj[0]);
+					list.add(obj[1]);
+					consentierMap.put((Long)obj[0], list);
+									
+				} else {
+					List list = new ArrayList();
+					list.add(obj[1]);
+					consentierMap.put((Long)obj[0], list);
+					
+				}
+			}	
+		}
+		
+		Iterator keyIterator = consentierMap.keySet().iterator();
+		while(keyIterator.hasNext())
+		{
+			Long existingSpecimenOrderItemId = (Long)keyIterator.next();
+			ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem)orderItemMap.get(existingSpecimenOrderItemId);
+			existingSpecimenOrderItem.setConsentTierStatusCollection((Collection)consentierMap.get(existingSpecimenOrderItemId));
+		}
+			
+	}
+	
+	/**
+	 * This will retrieve the required attributes of specimen,create the specimen object
+	 * and set it ExistingSpecimenOrderItem. 
+	 * @param existingSpecimenOrderItemIds
+	 * @param orderItemMap
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setSpecimenToExistingSpecimenOrderItem(List existingSpecimenOrderItemIds,Map orderItemMap) throws DAOException, ClassNotFoundException
+	{
+		String ids = Utility.getCommaSeparatedIds(existingSpecimenOrderItemIds);
+		if(existingSpecimenOrderItemIds!=null && !existingSpecimenOrderItemIds.isEmpty())
+		{
+						
+			String hqlString = "select extOrderItem.id,extOrderItem.specimen.id ,extOrderItem.specimen.type ," +
+			" extOrderItem.specimen.label,extOrderItem.specimen.initialQuantity," +
+			" extOrderItem.specimen.availableQuantity,extOrderItem.specimen.class " +
+			" from edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem as extOrderItem  " +
+			" where extOrderItem.id in ("+ids+") ";
+			
+			List specimenList =  Utility.executeQuery(hqlString);
+			if(specimenList!=null && !specimenList.isEmpty())
+			{	
+				for(int i=0;i<specimenList.size();i++)
+				{
+								
+					Object[] obj = (Object[]) specimenList.get(i);	
+					
+					ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem)orderItemMap.get((Long)obj[0]);
+					
+					Specimen specimen =(Specimen)Utility.getSpecimenObject((String)obj[6]);
+								
+					specimen.setId((Long) obj[1]);
+					specimen.setType((String)obj[2]);
+					specimen.setLabel((String)obj[3]);
+					specimen.setInitialQuantity((Quantity)obj[4]);
+					specimen.setAvailableQuantity((Quantity)obj[5]);
+					
+					existingSpecimenOrderItem.setSpecimen(specimen);
+				}
+				setConsentTierCollectionToExistingSpecimenOrderItem(ids,orderItemMap);
+			}	
+			
+		}
+	}
+	
+	/**
+	 * This will retrieve the required attribute of all the specimens associated to SCG,create the specimen object and 
+	 * hierarchy of specimen ,created the specimen collection and set it SCG.
+	 * @param scg
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setSpecimenToSCG(SpecimenCollectionGroup scg) throws DAOException, ClassNotFoundException
+	{
+		Map specimenMap = new HashMap();
+		String hql = " select spec.label,spec.id ,spec.parentSpecimen.id ,spec.type,spec.initialQuantity," +
+				" spec.availableQuantity,spec.class " +
+				" from edu.wustl.catissuecore.domain.Specimen as spec " +
+				" where spec.specimenCollectionGroup.id ="+(Long)scg.getId()+" ";
+		
+		List list = Utility.executeQuery(hql);
+		List listOfAllSpecimen = new ArrayList();
+		if(list!=null && !list.isEmpty())
+		{
+			/**
+			 * create the specimen object and map having key as
+			 * parentSpecimenId and value as the list of child specimens
+			**/ 
+			for(int i=0;i<list.size();i++)
+			{
+				  Object[] obj = (Object[])list.get(i);
+				  Specimen specimen =(Specimen)Utility.getSpecimenObject((String)obj[6]);
+				  			 
+				  specimen.setLabel((String)obj[0]);
+				  specimen.setId((Long)obj[1]);
+				  specimen.setType((String)obj[3]);
+				  specimen.setInitialQuantity((Quantity)obj[4]);
+				  specimen.setAvailableQuantity((Quantity)obj[5]);
+				  
+				  Specimen parentSpecimen = new Specimen();
+				  parentSpecimen.setId((Long)obj[2]);
+				  specimen.setParentSpecimen(parentSpecimen);
+				  
+				  listOfAllSpecimen.add(specimen);
+				  if(specimenMap.containsKey((Long)obj[2]) && specimen.getParentSpecimen().getId()!=null)
+				  {
+						List specimenList = (List)specimenMap.get((Long)obj[2]);
+						specimenList.add(specimen);
+						specimenMap.put((Long)obj[2], specimenList);
+										
+				  } else if(specimen.getParentSpecimen().getId()!=null){
+						List specimenList = new ArrayList();
+						specimenList.add(specimen);
+						specimenMap.put((Long)obj[2], specimenList);
+						
+				 }
+				
+			}
+			
+			/**
+			 * created the specimenCollection and set the
+			 * specimenCollection to SCG
+			 */
+			List specimenCollection = new ArrayList();
+			for(int i=0;i<listOfAllSpecimen.size();i++)
+			{
+				Specimen specimen = (Specimen)listOfAllSpecimen.get(i);
+				if(specimenMap.containsKey((Long)specimen.getId()))
+				{
+					
+					specimen.setChildrenSpecimen((Collection)specimenMap.get((Long)specimen.getId()));
+					specimenCollection.add(specimen);
+				} else if(specimen.getParentSpecimen().getId()==null || specimen.getParentSpecimen().getId().equals(""))
+				{
+					
+					specimen.setChildrenSpecimen(new ArrayList());
+					specimenCollection.add(specimen);
+				} else {
+					specimen.setChildrenSpecimen(new ArrayList());
+				}
+				
+			}
+			scg.setSpecimenCollection(specimenCollection);
+			
+		} else {
+			
+			scg.setSpecimenCollection(list);
+		}
+			
+	}
+	
+	
+	
+	/**
+	 * This retrieve the required attributes SCG and creats the SCG object
+	 * @param pathologicalCaseOrderItemIds
+	 * @param orderItemMap
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setSCGToPathologicalCaseOrderItem(List pathologicalCaseOrderItemIds,Map orderItemMap) throws DAOException, ClassNotFoundException
+	{
+		String ids = Utility.getCommaSeparatedIds(pathologicalCaseOrderItemIds);
+		if(pathologicalCaseOrderItemIds!=null && !pathologicalCaseOrderItemIds.isEmpty())
+		{
+			String hql =" select pathoCase.id ,pathoCase.specimenCollectionGroup.id, pathoCase.specimenCollectionGroup.surgicalPathologyNumber " +
+			" from edu.wustl.catissuecore.domain.PathologicalCaseOrderItem as pathoCase " +
+			" where pathoCase.id in ("+ids+")";
+					
+			List specimenCollectionGroupList = Utility.executeQuery(hql);
+			if(specimenCollectionGroupList!=null && !specimenCollectionGroupList.isEmpty())
+			{
+				for(int i=0 ; i<specimenCollectionGroupList.size();i++)
+				{	
+					Object[] obj = (Object[])specimenCollectionGroupList.get(i);
+					PathologicalCaseOrderItem  pathologicalCaseOrderItem = (PathologicalCaseOrderItem)orderItemMap.get((Long)obj[0]);
+					SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+					specimenCollectionGroup.setId((Long)obj[1]);
+					specimenCollectionGroup.setSurgicalPathologyNumber((String)obj[2]);
+					pathologicalCaseOrderItem.setSpecimenCollectionGroup(specimenCollectionGroup);
+					
+					setSpecimenToSCG(specimenCollectionGroup);
+					
+										
+				}	
+					
+			}
+			
+		}
+	}
 
+	
+	/**
+	 * This will retrieve SpecimenArray and set it to ExistingSpecimenArrayOrderItem
+	 * @param existingSpecimenArrayOrderItemIds
+	 * @param orderItemMap
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setSpecimenArrayToExistingSpecimenArrayOrderItem(List existingSpecimenArrayOrderItemIds,Map orderItemMap) throws DAOException, ClassNotFoundException
+	{
+		String ids = Utility.getCommaSeparatedIds(existingSpecimenArrayOrderItemIds);
+		if(existingSpecimenArrayOrderItemIds!=null && !existingSpecimenArrayOrderItemIds.isEmpty())
+		{
+			String hql =" select exSpArrayOrItm.id ,exSpArrayOrItm.specimenArray " +//,elements(specimenArray.specimenArrayContentCollection)" +
+			" from edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem as exSpArrayOrItm " +
+			" where exSpArrayOrItm.id in ("+ids+")";
+			
+			List specimenArrayList = Utility.executeQuery(hql);
+			if(specimenArrayList!=null && !specimenArrayList.isEmpty())
+			{
+				for(int i=0;i<specimenArrayList.size();i++)
+				{
+					Object[] obj = (Object[])specimenArrayList.get(i);
+					ExistingSpecimenArrayOrderItem existingSpecimenArrayOrderItem = (ExistingSpecimenArrayOrderItem)orderItemMap.get((Long)obj[0]);
+					existingSpecimenArrayOrderItem.setSpecimenArray((SpecimenArray)obj[1]);
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * This will recursively retrieves the required attributes of
+	 * specimens and creates the specimen Object
+	 * @param parentSpecimen
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setChildSpecimen(Specimen parentSpecimen) throws DAOException, ClassNotFoundException
+	{
+		
+		String hql =" select spec.label,spec.id,spec.type,spec.initialQuantity," +
+		" spec.availableQuantity,spec.class" +
+		" from edu.wustl.catissuecore.domain.Specimen as spec " +
+		" where spec.parentSpecimen.id ="+(Long)parentSpecimen.getId() +" ";
+		
+		//List list = dao.executeQuery(hql, null, false, null);
+		List list = Utility.executeQuery(hql);
+		List specimenCol = new ArrayList();
+		if(list!=null && !list.isEmpty())
+		{
+			for(int i=0;i<list.size();i++)
+			{
+				  Object[] obj = (Object[])list.get(i);
+				  Specimen specimen = (Specimen)Utility.getSpecimenObject((String)obj[5]);
+				  specimen.setLabel((String)obj[0]);
+				  specimen.setId((Long)obj[1]);
+				  specimen.setType((String)obj[2]);
+				  specimen.setInitialQuantity((Quantity)obj[3]);
+				  specimen.setAvailableQuantity((Quantity)obj[4]);
+				  specimenCol.add(specimen);
+				  setChildSpecimen(specimen);
+			}
+			
+		}
+		parentSpecimen.setChildrenSpecimen(specimenCol);
+		
+	}
+		
+	/**
+	 * This method will retrieve the required attributes of ParentSpecimen associated to DerivedSpecimenOrderItem
+	 * and creates the object of ParentSpecimen and set it to DerivedSpecimenOrderItem
+	 * @param derivedSpecimenOrderItemIds
+	 * @param orderItemMap
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setParentSpecimenToDerivedSpecimenOrderItem(List derivedSpecimenOrderItemIds,Map orderItemMap) throws DAOException, ClassNotFoundException
+	{
+		String ids = Utility.getCommaSeparatedIds(derivedSpecimenOrderItemIds);
+		if(derivedSpecimenOrderItemIds!=null && !derivedSpecimenOrderItemIds.isEmpty())
+		{
+			String hql =" select deSpecOrdrItm.id ,deSpecOrdrItm.parentSpecimen.label ,deSpecOrdrItm.parentSpecimen.id," +
+						" deSpecOrdrItm.parentSpecimen.type ,deSpecOrdrItm.parentSpecimen.availableQuantity, " +
+						" deSpecOrdrItm.parentSpecimen.initialQuantity, deSpecOrdrItm.parentSpecimen.class  " +
+						" from edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem as deSpecOrdrItm " +
+						" where deSpecOrdrItm.id in ("+ids+")";
+		
+			List list = Utility.executeQuery(hql);
+			if(list!=null && !list.isEmpty())
+			{
+				for(int i=0 ; i<list.size();i++)
+				{
+				   Object[] obj = (Object[])list.get(i);
+				   Specimen parentSpecimen = (Specimen)Utility.getSpecimenObject((String)obj[6]);
+				   
+				   parentSpecimen.setLabel((String)obj[1]);
+				   parentSpecimen.setId((Long)obj[2]);
+				   parentSpecimen.setType((String)obj[3]);
+				   parentSpecimen.setAvailableQuantity((Quantity)obj[4]);
+				   parentSpecimen.setInitialQuantity((Quantity)obj[5]);
+				   
+				  			   
+				   DerivedSpecimenOrderItem DerivedSpecimenOrderItem = (DerivedSpecimenOrderItem)orderItemMap.get((Long)obj[0]);
+				   DerivedSpecimenOrderItem.setParentSpecimen(parentSpecimen);
+				   setChildSpecimen(parentSpecimen) ;
+				   
+				}
+				
+				
+			}
+									
+		}
+		
+	}
+	
+	/**
+	 * This method iterates the list of specimenOrderItemIds get the specimenOrderItem 
+	 * and check if it has NewSpecimenArrayOrderItem associated to it.
+	 * It checks wheather specimenOrderItem is instance of DerivedSpecimenOrderItem or 
+	 * ExistingSpecimenOrderItem and creates list of ids for each and 
+	 * accrodingly it sets the necessary fields of specimenOrderItem
+	 * @param ids
+	 * @param specimenOrderItemIds
+	 * @param orderItemMap
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setSpecimenOrderItemsToNewSpecOrderItem(String ids,List specimenOrderItemIds,Map orderItemMap)
+	throws DAOException, ClassNotFoundException
+	{
+		/**
+		 * specimenOrderItemMap Map holds OrderItem Id as key and collection of SpecimenOrderItem
+		 * to that OrderItem as value
+		 */
+		HashMap<Long, List<Object>>specimenOrderItemMap = new HashMap<Long, List<Object>>();
+		/**
+		 * specOrderItemsMap holds SpecimenOrderItem Id as key 
+		 * and value as SpecimenOrderItem
+		 */
+		Map<Long,Object> specOrderItemsMap = new HashMap<Long, Object>();
+		List <Long> derivedSpecimenOrderItemIds = new ArrayList<Long>();
+		List <Long> existingSpecimenOrderItemIds = new ArrayList<Long>();
+		
+		/*String hql="select newSpecArrOrdrItm.id ,elements(newSpecArrOrdrItm.specimenOrderItemCollection)" +
+		" from edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem as newSpecArrOrdrItm  " +
+		" where newSpecArrOrdrItm.id in ("+ids+") ";
+		
+		List specimenOrderItemsList = Utility.executeQuery(hql);
+		System.out.println("List prev "+specimenOrderItemsList.size());
+		*/
+		if(specimenOrderItemIds!=null && !specimenOrderItemIds.isEmpty())
+		{
+			for(int i=0;i<specimenOrderItemIds.size();i++)
+			{
+				//Object[] obj = (Object[]) specimenOrderItemIds.get(i);
+				SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem)orderItemMap.get((Long)specimenOrderItemIds.get(i));
+				
+				if(specimenOrderItem.getNewSpecimenArrayOrderItem()!=null && specimenOrderItem.getNewSpecimenArrayOrderItem().getId()!=null
+						&& specimenOrderItem.getNewSpecimenArrayOrderItem() instanceof NewSpecimenArrayOrderItem)
+				{	
+					
+					specOrderItemsMap.put((Long)specimenOrderItem.getId(), specimenOrderItem);
+					
+					/**
+					 * Creats ids list of DerivedSpecimenOrderItem
+					 * and ExistingSpecimenOrderItem 
+					 */
+					if(specimenOrderItem instanceof DerivedSpecimenOrderItem)
+					{
+						derivedSpecimenOrderItemIds.add(specimenOrderItem.getId());
+					}
+					if(specimenOrderItem instanceof ExistingSpecimenOrderItem)
+					{
+						existingSpecimenOrderItemIds.add(specimenOrderItem.getId());
+					}
+					
+					
+					if(specimenOrderItemMap.containsKey((Long)specimenOrderItem.getNewSpecimenArrayOrderItem().getId()))
+					{
+						List specimenOrderItems = (List)specimenOrderItemMap.get((Long)specimenOrderItem.getNewSpecimenArrayOrderItem().getId());
+						specimenOrderItems.add(specimenOrderItem);
+						//specimenOrderItemMap.put((Long)specimenOrderItem.getId(), specimenOrderItems);
+															
+					} else {
+						List specimenOrderItems = new ArrayList();
+						specimenOrderItems.add(specimenOrderItem);
+						specimenOrderItemMap.put((Long)specimenOrderItem.getNewSpecimenArrayOrderItem().getId(), specimenOrderItems);
+						
+					}
+				}	
+			}
+			setSpecimenToExistingSpecimenOrderItem(existingSpecimenOrderItemIds,specOrderItemsMap);
+			setParentSpecimenToDerivedSpecimenOrderItem(derivedSpecimenOrderItemIds,specOrderItemsMap);
+			
+			Iterator keyIterator = specimenOrderItemMap.keySet().iterator();
+			while(keyIterator.hasNext())
+			{
+				Long newSpecimenArrayOrderItemId = (Long)keyIterator.next();
+				NewSpecimenArrayOrderItem  newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)orderItemMap.get(newSpecimenArrayOrderItemId);
+				newSpecimenArrayOrderItem.setSpecimenOrderItemCollection((Collection)specimenOrderItemMap.get(newSpecimenArrayOrderItemId));
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * This method retrieves the SpecimenArrayType and 
+	 * set it to NewSpecimenArrayOrderItem
+	 * @param newSpecimenArrayOrderItemIds
+	 * @param specimenOrderItemIds
+	 * @param orderItemMap
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void setSpecimenArrayTypeToNewSpecimenArrayOrderItem(List newSpecimenArrayOrderItemIds,List specimenOrderItemIds,Map orderItemMap) throws DAOException, ClassNotFoundException
+	{
+		String ids = Utility.getCommaSeparatedIds(newSpecimenArrayOrderItemIds);
+		if(newSpecimenArrayOrderItemIds!=null && !newSpecimenArrayOrderItemIds.isEmpty())
+		{
+			String hql =" select newSpecArrOrdrItm.id ,newSpecArrOrdrItm.specimenArrayType " +//,elements(specimenArray.specimenArrayContentCollection)" +
+			" from edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem as newSpecArrOrdrItm " +
+			" where newSpecArrOrdrItm.id in ("+ids+")";
+			
+			List list = Utility.executeQuery(hql);
+			if(list!=null && !list.isEmpty())
+			{
+				for(int i=0 ; i<list.size();i++)
+				{
+				   Object[] obj = (Object[])list.get(i);
+				   NewSpecimenArrayOrderItem  newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)orderItemMap.get((Long)obj[0]);
+				   newSpecimenArrayOrderItem.setSpecimenArrayType((SpecimenArrayType)obj[1]);
+				   
+				}
+							
+			}
+			setSpecimenOrderItemsToNewSpecOrderItem(ids,specimenOrderItemIds,orderItemMap);
+			
+		}	
+		
+		
+	}
+	
+	private void getDetailedDataForOrderItemCollection(Collection orderItemColl) throws DAOException, ClassNotFoundException
+	{
+		/**orderItemMap holds key as id of orderItem and orderItem as value **/
+		Map <Long ,Object>orderItemMap = new HashMap<Long, Object>();
+		/**List of ids orderItems **/
+		List <Long>orderItemIds = new ArrayList<Long>();
+		List <Long> specimenOrderItemIds = new ArrayList<Long>();
+		List <Long> newSpecimenArrayOrderItemIds = new ArrayList<Long>();
+		List <Long> existingSpecimenArrayOrderItemIds = new ArrayList<Long>();
+		List <Long> derivedSpecimenOrderItemIds = new ArrayList<Long>();
+		List <Long> existingSpecimenOrderItemIds = new ArrayList<Long>();
+		List <Long> pathologicalCaseOrderItemIds = new ArrayList<Long>();
+		Iterator iterateOrderItemColl = orderItemColl.iterator();
+	
+		while (iterateOrderItemColl.hasNext())
+		{
+			OrderItem orderItem = (OrderItem) iterateOrderItemColl.next();
+			orderItemIds.add(orderItem.getId());
+			orderItemMap.put((Long)orderItem.getId(), orderItem);
+			if (orderItem instanceof SpecimenOrderItem)
+			{
+				specimenOrderItemIds.add(orderItem.getId());
+			} 
+			if(orderItem instanceof NewSpecimenArrayOrderItem)
+			{
+				newSpecimenArrayOrderItemIds.add(orderItem.getId());
+			}
+			if(orderItem instanceof ExistingSpecimenArrayOrderItem)
+			{
+				existingSpecimenArrayOrderItemIds.add(orderItem.getId());
+			}
+			if(orderItem instanceof DerivedSpecimenOrderItem)
+			{
+				derivedSpecimenOrderItemIds.add(orderItem.getId());
+			}
+			if(orderItem instanceof ExistingSpecimenOrderItem)
+			{
+				existingSpecimenOrderItemIds.add(orderItem.getId());
+			}
+			if(orderItem instanceof PathologicalCaseOrderItem)
+			{
+				pathologicalCaseOrderItemIds.add(orderItem.getId());
+			}
+						
+		}
+		/**This method is for setting DistributedItem to OrderItem **/	
+		setDistributedItemToOrderItem(orderItemIds,orderItemMap);
+		
+		/**This method is for setting NewSpecimenArrayOrderItem to SpecimenOrderItem **/	
+		setNewSpecimenArrayOrderItemToSpecimenOrderItem(specimenOrderItemIds,orderItemMap);
+		
+		/**This method is for setting Specimen and ConsentTierCollection to ExistingSpecimenOrderItem **/
+		setSpecimenToExistingSpecimenOrderItem(existingSpecimenOrderItemIds,orderItemMap);
+		
+		/**This method is for setting SpecimenArray to ExistingSpecimenArrayOrderItem **/
+		setSpecimenArrayToExistingSpecimenArrayOrderItem(existingSpecimenArrayOrderItemIds,orderItemMap);
+		
+		/**This method is for setting SCG and specimens to PathologicalCaseOrderItem **/
+		setSCGToPathologicalCaseOrderItem(pathologicalCaseOrderItemIds,orderItemMap);
+		
+		/**This method is for setting ParentSpecimen and specimens to DerivedSpecimenOrderItem **/
+		setParentSpecimenToDerivedSpecimenOrderItem(derivedSpecimenOrderItemIds,orderItemMap);
+		
+		/**This method is for setting SpecimenArrayType and specimens to NewSpecimenArrayOrderItem **/
+		setSpecimenArrayTypeToNewSpecimenArrayOrderItem(newSpecimenArrayOrderItemIds,specimenOrderItemIds,orderItemMap);
+		
 		//This function is for setting the same instace of newSpecimenArrayOrderItem to specimenOrderItem.
 		setNewSpArrayOrderItemToSPOrderItem(orderItemColl);
 
 	}
-
-	private void getNewSpecimenArrayOrderItemDetails(OrderItem orderItem) throws DAOException
-	{
-		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-
-		String[] whereColumnName = {"id"};
-		String[] whereColumnCond = {"="};
-
-		NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) orderItem;
-		String[] selectColumnName1 = {"specimenArrayType"};
-
-		Object[] whereColumnValue1 = {orderItem.getId()};
-
-		List orderItemList = orderBizLogic.retrieve(NewSpecimenArrayOrderItem.class.getName(), selectColumnName1, whereColumnName, whereColumnCond,
-				whereColumnValue1, Constants.AND_JOIN_CONDITION);
-		if (orderItemList != null && orderItemList.size() > 0)
-		{
-			SpecimenArrayType specimenArrayType = (SpecimenArrayType) orderItemList.get(0);
-			newSpecimenArrayOrderItem.setSpecimenArrayType(specimenArrayType);
-		}
-
-		Collection specimenOrderItemCollection = (Collection) orderBizLogic.retrieveAttribute(NewSpecimenArrayOrderItem.class.getName(), orderItem
-				.getId(), "elements(specimenOrderItemCollection)");
-		if (specimenOrderItemCollection != null && specimenOrderItemCollection.size() > 0)
-		{
-			Iterator itr3 = specimenOrderItemCollection.iterator();
-			//Collection existingSpOrderItemColl = new HashSet();
-			while (itr3.hasNext())
-			{
-				OrderItem spOrderItem = (OrderItem) itr3.next();
-
-				if (spOrderItem instanceof edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem)
-				{
-					ExistingSpecimenOrderItem existingSpOrderItem = (ExistingSpecimenOrderItem) spOrderItem;
-					// setitng bidirectional relationship
-					existingSpOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayOrderItem);
-
-					getSpecimenForExSpOrderItem(existingSpOrderItem, orderBizLogic);
-				}
-				else if (spOrderItem instanceof DerivedSpecimenOrderItem)
-				{
-					DerivedSpecimenOrderItem derivedSpOrderItem = (DerivedSpecimenOrderItem) spOrderItem;
-					//Setting bi-directional relationship
-					derivedSpOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayOrderItem);
-
-					getParentSpForDericedSpOrderItem(derivedSpOrderItem, orderBizLogic);
-
-				}
-
-			}
-			//newSpecimenArrayOrderItem.setSpecimenOrderItemCollection(existingSpOrderItemColl);
-		}
-
-		newSpecimenArrayOrderItem.setSpecimenOrderItemCollection(specimenOrderItemCollection);
-
-	}
-
+	
 	private void setNewSpArrayOrderItemToSPOrderItem(Collection orderItemColl)
 	{
 		Iterator itr2 = orderItemColl.iterator();
@@ -1231,44 +1696,6 @@ public class RequestDetailsAction extends BaseAction
 					}
 				}
 			}
-		}
-	}
-
-	private void getSpecimenForExSpOrderItem(ExistingSpecimenOrderItem existingSpOrderItem, OrderBizLogic orderBizLogic) throws DAOException
-	{
-		String[] whereColumnName = {"id"};
-		String[] whereColumnCond = {"="};
-		String[] selectColumnName1 = {"specimen"};
-		Object[] whereColumnValue1 = {existingSpOrderItem.getId()};
-
-		List orderItemList = orderBizLogic.retrieve(ExistingSpecimenOrderItem.class.getName(), selectColumnName1, whereColumnName, whereColumnCond,
-				whereColumnValue1, Constants.AND_JOIN_CONDITION);
-		if (orderItemList != null && orderItemList.size() > 0)
-		{
-			Specimen specimen = (Specimen) orderItemList.get(0);
-			existingSpOrderItem.setSpecimen(specimen);
-			Collection consentTierStatusCollection =(Collection)orderBizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"elements(consentTierStatusCollection)");
-			existingSpOrderItem.setConsentTierStatusCollection(consentTierStatusCollection);
-		}
-
-	}
-
-	private void getParentSpForDericedSpOrderItem(DerivedSpecimenOrderItem derivedSpOrderItem, OrderBizLogic orderBizLogic) throws DAOException
-	{
-		String[] whereColumnName = {"id"};
-		String[] whereColumnCond = {"="};
-		String[] selectColumnName1 = {"parentSpecimen"};
-
-		Object[] whereColumnValue1 = {derivedSpOrderItem.getId()};
-
-		List orderItemList = orderBizLogic.retrieve(DerivedSpecimenOrderItem.class.getName(), selectColumnName1, whereColumnName, whereColumnCond,
-				whereColumnValue1, Constants.AND_JOIN_CONDITION);
-		if (orderItemList != null && orderItemList.size() > 0)
-		{
-			Specimen specimen = (Specimen) orderItemList.get(0);
-			derivedSpOrderItem.setParentSpecimen(specimen);
-			getChildrenSpecimen(specimen);
-
 		}
 	}
 

@@ -1421,6 +1421,29 @@ public class Utility extends edu.wustl.common.util.Utility {
 		}
 		return responseString;
 	}
+	/**
+	 * Checks the class of specimen and returns the object of specific type.
+	 * @param classType
+	 * @return
+	 */
+	public static Specimen getSpecimenObject(String classType)
+	{
+		Specimen specimen;
+		if(Constants.CELL.equals(classType))
+		{
+			specimen = new CellSpecimen();
+		} else if (Constants.MOLECULAR.equals(classType))
+		{
+			specimen = new MolecularSpecimen();
+		} else if(Constants.FLUID.equals(classType))
+		{
+			specimen = new FluidSpecimen();
+		} else
+		{
+			specimen = new TissueSpecimen();
+		}
+		 return specimen;
+	}
 
 	
 }

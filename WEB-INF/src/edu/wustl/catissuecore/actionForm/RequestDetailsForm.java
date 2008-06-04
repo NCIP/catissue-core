@@ -536,13 +536,13 @@ public class RequestDetailsForm extends AbstractActionForm
 			values.put(specimenId, existingSpecimenOrderItem.getSpecimen().getId().toString());
 			values.put(instanceOf, "Existing");
 			
-			if(existingSpecimenOrderItem.getConsentTierStatusCollection().isEmpty())
+			if(existingSpecimenOrderItem.getConsentTierStatusCollection()!=null && !existingSpecimenOrderItem.getConsentTierStatusCollection().isEmpty())
 			{	
-				values.put(consentVerificationkey, Constants.NO_CONSENTS);
+				values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
 			}	
 			else
 			{
-				values.put(consentVerificationkey, Constants.VIEW_CONSENTS);
+				values.put(consentVerificationkey,Constants.NO_CONSENTS);
 			}
 			//values.put(consentVerificationkey, "No Consents");
 			//Fix me second condition added by vaishali
