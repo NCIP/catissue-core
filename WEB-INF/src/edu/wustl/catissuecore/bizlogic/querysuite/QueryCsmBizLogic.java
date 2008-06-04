@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;

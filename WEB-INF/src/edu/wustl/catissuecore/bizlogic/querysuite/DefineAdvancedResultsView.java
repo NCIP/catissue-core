@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import edu.common.dynamicextensions.domain.DomainObjectFactory;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
@@ -157,95 +156,5 @@ public class DefineAdvancedResultsView
 			e.printStackTrace();
 		}
 		return (List<List<String>>) entityList;
-			}
-	/**
-	 * Creates ParticipantEntity : DUmmy data
-	 * @return 
-	 */
-	private List<EntityInterface> createParticipantEntity()
-	{
-		List<EntityInterface> eList = new ArrayList<EntityInterface>();
-		DomainObjectFactory factory = DomainObjectFactory.getInstance();
-		EntityInterface e = factory.createEntity();
-		e.setName("edu.wustl.catissuecore.domain.Participant");
-		e.setDescription("This is a participant entity");
-		e.setId(new Long(2));
-		eList.add(e);
-		EntityInterface e1 = factory.createEntity();
-		e1.setName("edu.wustl.catissuecore.domain.SpecimenCollectionGroup");
-		e1.setId(new Long(14));
-		e1.setDescription("This is a specimen collection group entity");
-		//eList.add(e1);
-		return eList;
-	}
-	/**
-	 * 
-	 * @return
-	 * @throws DynamicExtensionsSystemException
-	 * @throws DynamicExtensionsApplicationException
-	 */
-	/*
-	 private List<EntityInterface>createPreDefinedEntities() throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
-	 {
-	 EntityManagerInterface entityManager = EntityManager.getInstance();
-	 List<EntityInterface> preDefinedEntities = new ArrayList<EntityInterface>();
-	 DomainObjectFactory factory = DomainObjectFactory.getInstance();
-	 EntityInterface user = factory.createEntity();		
-	 user.setName("Query_User");
-	 EntityInterface study = factory.createEntity();
-	 study.setName("Query_Study");
-	 AssociationInterface association = factory.createAssociation();
-	 association.setTargetEntity(study);
-	 association.setAssociationDirection(AssociationDirection.SRC_DESTINATION);
-	 association.setName("primaryInvestigator");
-	 association.setSourceRole(getRole(AssociationType.ASSOCIATION, "primaryInvestigator",Cardinality.ONE, Cardinality.ONE));
-	 association.setTargetRole(getRole(AssociationType.ASSOCIATION, "study", Cardinality.ZERO,Cardinality.MANY));
-	 user.addAbstractAttribute(association);	
-	 EntityInterface experiment = factory.createEntity();
-	 experiment.setName("Query_Experiment");		
-	 entityManager.persistEntity(experiment);
-	 AssociationInterface association1 = factory.createAssociation();
-	 association1.setTargetEntity(experiment);
-	 association1.setAssociationDirection(AssociationDirection.SRC_DESTINATION);
-	 association1.setName("primaryInvestigator1");
-	 association1.setSourceRole(getRole(AssociationType.ASSOCIATION, "primaryInvestigator1",	Cardinality.ONE, Cardinality.ONE));
-	 association1.setTargetRole(getRole(AssociationType.ASSOCIATION, "experiment", Cardinality.ZERO,Cardinality.MANY));
-	 user.addAbstractAttribute(association1);
-	 entityManager.persistEntity(user);
-	 EntityInterface study_child = factory.createEntity();
-	 study_child.setName("Query_Study_child");
-	 entityManager.persistEntity(study_child);
-	 AssociationInterface association2 = factory.createAssociation();
-	 association2.setTargetEntity(study_child);
-	 association2.setAssociationDirection(AssociationDirection.SRC_DESTINATION);
-	 association2.setName("primaryInvestigator2");
-	 association2.setSourceRole(getRole(AssociationType.ASSOCIATION, "primaryInvestigator2",Cardinality.ONE, Cardinality.ONE));
-	 association2.setTargetRole(getRole(AssociationType.ASSOCIATION, "study_child", Cardinality.ZERO,Cardinality.MANY));
-	 study.addAbstractAttribute(association2);	
-	 entityManager.persistEntity(study);
-	 preDefinedEntities.add(user);
-	 preDefinedEntities.add(study);
-	 preDefinedEntities.add(experiment);
-	 preDefinedEntities.add(study_child);
-	 return preDefinedEntities;
-	 }
-	 *//**
-	 * @param associationType associationType
-	 * @param name name
-	 * @param minCard  minCard
-	 * @param maxCard maxCard
-	 * @return  RoleInterface
-	 */
-	/*
-	 private RoleInterface getRole(AssociationType associationType, String name,
-	 Cardinality minCard, Cardinality maxCard)
-	 {
-	 RoleInterface role = DomainObjectFactory.getInstance().createRole();
-	 role.setAssociationsType(associationType);
-	 role.setName(name);
-	 role.setMinimumCardinality(minCard);
-	 role.setMaximumCardinality(maxCard);
-	 return role;
-	 }
-	 */
+		}
 }

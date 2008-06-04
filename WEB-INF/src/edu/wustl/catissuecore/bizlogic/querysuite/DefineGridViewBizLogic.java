@@ -1,8 +1,8 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +15,6 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryCSMUtil;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectDataBean;
 import edu.wustl.common.querysuite.queryobject.IOutputAttribute;

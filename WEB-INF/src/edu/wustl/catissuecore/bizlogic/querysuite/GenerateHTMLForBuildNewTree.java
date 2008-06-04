@@ -2,7 +2,6 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +11,8 @@ import edu.wustl.cab2b.common.util.EntityInterfaceComparator;
 
 
 
-public class GenerateHTMLForBuildNewTree {
+public class GenerateHTMLForBuildNewTree 
+{
 
 	
 	public String generateHTMLToDisplayList(Set entityCollection, String selectTagName, String functionName)

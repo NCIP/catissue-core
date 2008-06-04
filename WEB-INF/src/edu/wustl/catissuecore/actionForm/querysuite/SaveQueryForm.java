@@ -16,7 +16,6 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.querysuite.queryobject.IParameterizedQuery;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.global.ApplicationProperties;
 /**
  * @author chetan_patil
  * @created Sep 12, 2007, 10:28:02 PM
