@@ -2236,21 +2236,22 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	public AbstractSpecimenCollectionGroup retrieveSCG(DAO dao, AbstractSpecimenCollectionGroup scg) throws DAOException
 	{
 		List scgList = null;
+		AbstractSpecimenCollectionGroup absScg = null;
 		if (scg.getId()!= null)
 		{
-			scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
-					Constants.SYSTEM_IDENTIFIER, scg.getId());
+			absScg = (AbstractSpecimenCollectionGroup)dao.retrieve(SpecimenCollectionGroup.class.getName(),	scg.getId());
 		}
-		if (scg.getGroupName() != null)
+		else if (scg.getGroupName() != null)
 		{
 			scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
 					Constants.NAME, scg.getGroupName());
+			if(scgList==null || scgList.isEmpty())
+			{
+				throw new DAOException("Failed to retrieve SCG, either Name or Identifier is required");
+			}
+			absScg = ((AbstractSpecimenCollectionGroup)(scgList.get(0)));
 		}
-		if(scgList==null || scgList.isEmpty())
-		{
-			throw new DAOException("Failed to retrieve SCG, either Name or Identifier is required");
-		}
-		return ((AbstractSpecimenCollectionGroup)(scgList.get(0)));
+		return absScg;
 	}
 	
 }
