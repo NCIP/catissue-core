@@ -235,8 +235,9 @@ public class RequestDetailsAction extends BaseAction
 	/**
 	 * @param requestDetailsForm
 	 * @param orderItemsListFromDB
+	 * @throws ClassNotFoundException 
 	 */
-	private void populateRequestForMap(RequestDetailsForm requestDetailsForm) throws DAOException
+	private void populateRequestForMap(RequestDetailsForm requestDetailsForm) throws DAOException, ClassNotFoundException
 	{
 		Map valuesMap = requestDetailsForm.getValues();
 		Set keySet = valuesMap.keySet();
@@ -284,7 +285,8 @@ public class RequestDetailsAction extends BaseAction
 					//Fetching the specimen object from db.
 					List specimenList = getSpecimenFromDB(specimenId);
 					Specimen specimen = (Specimen) specimenList.get(0);
-					getChildrenSpecimen(specimen);
+					//getChildrenSpecimen(specimen);
+					setChildSpecimen(specimen);
 					Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(specimen, specimen.getChildrenSpecimen());
 
 					if (orderItem instanceof DerivedSpecimenOrderItem)
@@ -333,7 +335,8 @@ public class RequestDetailsAction extends BaseAction
 								while(itr.hasNext())
 								{
 									Specimen specimen = (Specimen)itr.next();
-									getChildrenSpecimen(specimen);
+									//getChildrenSpecimen(specimen);
+									setChildSpecimen(specimen);
 								}
 							}
 						}
@@ -471,7 +474,7 @@ public class RequestDetailsAction extends BaseAction
 			}
 			else if (specimenOrderItem instanceof PathologicalCaseOrderItem)
 			{
-				getSpecimenCollectionGroup(specimenOrderItem);
+				//getSpecimenCollectionGroup(specimenOrderItem);
 				arrayDetailsBean = populatePathologicalCasesForArrayDetails(arrayDetailsBean, specimenOrderItem);
 			}
 			//arrayDetailsBean.setArrayRequestBean(arrayRequestBean);
@@ -1499,6 +1502,7 @@ public class RequestDetailsAction extends BaseAction
 		Map<Long,Object> specOrderItemsMap = new HashMap<Long, Object>();
 		List <Long> derivedSpecimenOrderItemIds = new ArrayList<Long>();
 		List <Long> existingSpecimenOrderItemIds = new ArrayList<Long>();
+		List <Long> pathologicalCaseOrderItemIds = new ArrayList<Long>();
 		
 		/*String hql="select newSpecArrOrdrItm.id ,elements(newSpecArrOrdrItm.specimenOrderItemCollection)" +
 		" from edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem as newSpecArrOrdrItm  " +
@@ -1532,6 +1536,10 @@ public class RequestDetailsAction extends BaseAction
 					{
 						existingSpecimenOrderItemIds.add(specimenOrderItem.getId());
 					}
+					if(specimenOrderItem instanceof PathologicalCaseOrderItem)
+					{
+						pathologicalCaseOrderItemIds.add(specimenOrderItem.getId());
+					}
 					
 					
 					if(specimenOrderItemMap.containsKey((Long)specimenOrderItem.getNewSpecimenArrayOrderItem().getId()))
@@ -1548,8 +1556,14 @@ public class RequestDetailsAction extends BaseAction
 					}
 				}	
 			}
+			/**This method is for setting Specimen and ConsentTierCollection to ExistingSpecimenOrderItem **/
 			setSpecimenToExistingSpecimenOrderItem(existingSpecimenOrderItemIds,specOrderItemsMap);
+			
+			/**This method is for setting ParentSpecimen and specimens to DerivedSpecimenOrderItem **/
 			setParentSpecimenToDerivedSpecimenOrderItem(derivedSpecimenOrderItemIds,specOrderItemsMap);
+			
+			/**This method is for setting SCG and specimens to PathologicalCaseOrderItem **/
+			setSCGToPathologicalCaseOrderItem(pathologicalCaseOrderItemIds,specOrderItemsMap);
 			
 			Iterator keyIterator = specimenOrderItemMap.keySet().iterator();
 			while(keyIterator.hasNext())
@@ -1699,7 +1713,7 @@ public class RequestDetailsAction extends BaseAction
 		}
 	}
 
-	private void getChildrenSpecimen(Specimen specimen) throws DAOException
+	/*private void getChildrenSpecimen(Specimen specimen) throws DAOException
 	{
 		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		if (specimen != null)
@@ -1753,7 +1767,7 @@ public class RequestDetailsAction extends BaseAction
 		}
 		
 		
-	}
+	}*/
 	
 	
 }
