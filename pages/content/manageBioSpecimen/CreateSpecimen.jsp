@@ -951,7 +951,19 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				        name="quantityPerAliquot" class = "formFieldSized5" disabled="true"
 				         />
 	    				</td>
-					</tr>								
+					</tr>	
+					<!-- 
+						bug no. 4265
+						adding the dispose parent specimen check box
+					 -->
+					<tr>
+						<td colspan="3" class="formLabelNoBackGround" width="40%"><html:checkbox
+							property="disposeParentSpecimen">
+							<bean:message key="aliquots.disposeParentSpecimen" />
+							</html:checkbox>
+						</td>
+					</tr>
+												
 					<tr>					
 						<td class="formFieldNoBorders" colspan="5"  height="20" >
 							<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">

@@ -972,7 +972,12 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 				else if (abstractForm instanceof CreateSpecimenForm)
 				{
 					CreateSpecimenForm form = (CreateSpecimenForm) abstractForm;
-
+					//bug no.4265
+					this.setDisposeParentSpecimen(form.getDisposeParentSpecimen());
+					if(this.getLineage()==null)
+					{
+						this.setLineage("Derived");					
+					}
 					this.activityStatus = form.getActivityStatus();
 					this.collectionStatus = Constants.COLLECTION_STATUS_COLLECTED;
 
