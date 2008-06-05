@@ -374,14 +374,18 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		try
 		{
 			this.setName(form.getName());
-			if (form.isAddOperation())
-			{
-				this.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
-			}
-			else
+			// Bug no. 7390
+			// adding the collection status in the add specimen collection group page
+			// removed the addOperation() if loop
+			if(form.getCollectionStatus() != null)
 			{
 				this.setCollectionStatus(form.getCollectionStatus());
 			}
+			else
+			{
+				this.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
+			}
+			
 			/**
              * Name: Sachin Lale
              * Bug ID: 3052

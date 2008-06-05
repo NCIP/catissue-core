@@ -834,10 +834,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 			{
 				applyEventsToSpecimens = true;
 			}
-			if (isAddOperation())
-			{
-				this.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
-			}	
+			
 		}
 		catch (Exception excp)
 		{
