@@ -23,6 +23,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
@@ -119,6 +122,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			Specimen specimen = (Specimen) obj;
 			setSpecimenCreatedOnDate(specimen);
 			setSpecimenParent(specimen, dao);
+			//bug no. 4265
+			if(specimen.getLineage()!=null && specimen.getLineage().equalsIgnoreCase("Derived") && specimen.getDisposeParentSpecimen()==true)
+			{
+			checkParentSpecimenDisposal(sessionDataBean,specimen, dao);
+			}
 			allocatePositionForSpecimen(specimen);
 			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
 			setSpecimenAttributes(dao, specimen, sessionDataBean);
@@ -303,29 +311,63 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param sessionDataBean Session details
-	 * @param specimen parent specimen object
-	 * @throws DAOException Database related Exception
-	 * @throws UserNotAuthorizedException User is not Authorized
-	 * @throws BizLogicException 
-	 */
-	public void disposeSpecimen(SessionDataBean sessionDataBean, Specimen specimen)
-			throws DAOException, UserNotAuthorizedException, BizLogicException
-	{
-		DisposalEventParameters disposalEvent = new DisposalEventParameters();
-		disposalEvent.setSpecimen(specimen);
-		disposalEvent.setReason("Specimen is Aliquoted");
-		disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
-		User user = new User();
-		user.setId(sessionDataBean.getUserId());
-		disposalEvent.setUser(user);
-		disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
-		SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
-		specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean,  Constants.HIBERNATE_DAO);
-		specimen.setAvailable(new Boolean(false));
-		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
-	}
+     * @param dao DAO object
+     * @param sessionDataBean Session details
+     * @param specimen parent specimen object
+     * @throws DAOException Database related Exception
+     * @throws UserNotAuthorizedException User is not Authorized
+     * @throws BizLogicException 
+     */
+    public void disposeSpecimen(SessionDataBean sessionDataBean, Specimen specimen)
+                throws DAOException, UserNotAuthorizedException, BizLogicException
+    {
+          DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen);
+          SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
+          specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean,  Constants.HIBERNATE_DAO);
+          ((Specimen)specimen).setAvailable(new Boolean(false));
+          specimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+    }
+
+    /**
+     * @param dao DAO object
+     * @param sessionDataBean Session details
+     * @param specimen parent specimen object
+     * @throws DAOException Database related Exception
+     * @throws UserNotAuthorizedException User is not Authorized
+     * @throws BizLogicException 
+     */
+    public void disposeSpecimen(SessionDataBean sessionDataBean, Specimen specimen, DAO dao)
+                throws DAOException, UserNotAuthorizedException, BizLogicException
+    {
+          DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen);
+          SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
+          specimenEventParametersBizLogic.insert(disposalEvent, dao, sessionDataBean);
+          ((Specimen)specimen).setAvailable(new Boolean(false));
+          specimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+    }
+
+
+
+    /**
+     * @param sessionDataBean
+     * @param specimen
+     * @return
+     */
+
+    private DisposalEventParameters createDisposeEvent(SessionDataBean sessionDataBean,
+                Specimen specimen)
+    {
+          DisposalEventParameters disposalEvent = new DisposalEventParameters();
+          disposalEvent.setSpecimen(specimen);
+          disposalEvent.setReason("Specimen is Aliquoted");
+          disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
+          User user = new User();
+          user.setId(sessionDataBean.getUserId());
+          disposalEvent.setUser(user);
+          disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+          return disposalEvent;
+    }
+
 
 	/**
 	 * @param specimen
@@ -996,7 +1038,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimen.setAvailable(new Boolean(true));
 		}
-	    //bug #7594	
+	   //bug #7594	
 		if (Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase(specimen.getCollectionStatus()) &&
 				(Constants.COLLECTION_STATUS_PENDING).equals(specimenOld.getCollectionStatus()))
 		{
@@ -2920,5 +2962,27 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 
 		return (Specimen) (specimenList.get(0));
+	}
+	/**
+	 * @param sessionDataBean
+	 * @param specimen
+	 * @param dao
+	 * @throws UserNotAuthorizedException
+	 * @throws DAOException
+	 */
+	public void checkParentSpecimenDisposal(SessionDataBean sessionDataBean, Specimen specimen, DAO dao) throws UserNotAuthorizedException, DAOException
+	{
+		if(specimen.getParentSpecimen()!=null)
+		{
+			try
+			{
+				disposeSpecimen(sessionDataBean, specimen.getParentSpecimen(), dao);
+			}
+			catch(BizLogicException ex)
+			{
+				ActionErrors actionErrors = new ActionErrors();
+				actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",ex.getMessage()));
+			}
+		}
 	}
 }
