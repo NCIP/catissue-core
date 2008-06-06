@@ -513,6 +513,7 @@ visibility: hidden;
 	font-weight: bold;
 }
 
+
 .black_noneditable {
 	font-family: verdana;
 	font-size: 11px;
@@ -531,3 +532,19 @@ visibility: hidden;
 	font-weight: bold;
 	text-decoration:underline;
 }
+/* to set color of row in mygrid-for skin */
+.even
+{
+	background-color:#FFFFFF;
+}
+.uneven
+{
+	background-color:#f6f6f6;
+}
+
+.grid_hover 
+{  
+  background-color:#bfdcf3;	
+  font-size:20px;
+}
+	/* end */
