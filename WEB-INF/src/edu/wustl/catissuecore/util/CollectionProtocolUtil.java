@@ -92,19 +92,7 @@ public class CollectionProtocolUtil {
 		Long id = new Long (collectionProtocol.getId().longValue());
 		collectionProtocolBean.setIdentifier(id);
 		
-		Collection userCollection = collectionProtocol.getCoordinatorCollection();
-		if(userCollection != null)
-		{
-			protocolCoordinatorIds = new long[userCollection.size()];
-			int i=0;
-			Iterator it = userCollection.iterator();
-			while(it.hasNext())
-			{
-				User user = (User)it.next();
-				protocolCoordinatorIds[i] = user.getId().longValue();
-				i++;
-			}
-		}
+		protocolCoordinatorIds = getProtocolCordnateIds(collectionProtocol, protocolCoordinatorIds);
 		
 		collectionProtocolBean.setProtocolCoordinatorIds(protocolCoordinatorIds);
 		collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocol.getPrincipalInvestigator().getId().longValue());
@@ -123,6 +111,30 @@ public class CollectionProtocolUtil {
 		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
 		collectionProtocolBean.setEndDate(endDate);
 		return collectionProtocolBean;
+	}
+
+	/**
+	 * @param collectionProtocol
+	 * @param protocolCoordinatorIds
+	 * @return
+	 */
+	private static long[] getProtocolCordnateIds(CollectionProtocol collectionProtocol,
+			long[] protocolCoordinatorIds)
+	{
+		Collection userCollection = collectionProtocol.getCoordinatorCollection();
+		if(userCollection != null)
+		{
+			protocolCoordinatorIds = new long[userCollection.size()];
+			int i=0;
+			Iterator it = userCollection.iterator();
+			while(it.hasNext())
+			{
+				User user = (User)it.next();
+				protocolCoordinatorIds[i] = user.getId().longValue();
+				i++;
+			}
+		}
+		return protocolCoordinatorIds;
 	}
 
 	public static Map prepareConsentTierMap(Collection consentTierColl)

@@ -25,7 +25,7 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	/**
 	 * Unique Serial verson uid.
 	 */
-	private static final long serialVersionUID = -7978857673984149449L;	
+	private static final long serialVersionUID = -7978857673984149449L;
 	public static final String ADD_USER_ACTION = "ADD";
 	public static final String UPDATE_USER_ACTION = "UPDATE";
 	public static final String REQUEST_TYPE_MULTI_SPECIMENS= "Multiple Specimen";
@@ -33,8 +33,8 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	public static final String REQUEST_TYPE_ANTICIPAT_SPECIMENS= "anticipatory specimens";
 	
 	private List<GenericSpecimen> specimenList = null;
-	private List<GenericSpecimen> aliquotList = null; 
-	private List<GenericSpecimen> derivedList = null; 
+	private List<GenericSpecimen> aliquotList = null;
+	private List<GenericSpecimen> derivedList = null;
 	private String eventId= null;
 	private String selectedSpecimenId= null;
 	private String userAction = ADD_USER_ACTION;
