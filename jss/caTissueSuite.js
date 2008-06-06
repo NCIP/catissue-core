@@ -72,24 +72,21 @@ function openCRGWindow()
 
 	function showStorageContainerMap()
     {	
-        var frameUrl='ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1';
-	
-	platform = navigator.platform.toLowerCase();
-	if (platform.indexOf("mac") != -1)
-	{
-	    NewWindow(frameUrl,'name',screen.width,screen.height,'no');
-	}
-	else
-	{
-	    NewWindow(frameUrl,'name','800','600','no');
-
-            }
-
+        var frameUrl='ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1';	
+		platform = navigator.platform.toLowerCase();
+		if (platform.indexOf("mac") != -1)
+		{
+		    NewWindow(frameUrl,'name',screen.width,screen.height,'no');
+		}
+		else
+		{
+		    NewWindow(frameUrl,'name','800','600','no');
+	     }     
      }
      //to close window
-function closeUserWindow()
-{     
-	  if(window.opener)
-		 window.parent.close();
-		
-}
+	function closeUserWindow()
+	{     
+		  if(window.opener)
+			 window.parent.close();
+			
+	}
