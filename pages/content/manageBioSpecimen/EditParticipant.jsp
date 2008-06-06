@@ -877,7 +877,7 @@ function participantRegRow(subdivtag)
 						<td colspan="2">
 						<table summary="" cellpadding="0" cellspacing="0" border="0">
 							<tr>
-								<td class="tableheading" height="25"><bean:message
+								<td class="black_ar_b" height="25"><bean:message
 									key="participant.lookup" /></td>
 							</tr>
 							<tr height=110 valign=top>
