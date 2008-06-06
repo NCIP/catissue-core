@@ -766,12 +766,12 @@ public class StorageContainerUtil
 				for (int i = 0; i < containerId.length; i++)
 				{
 					Map xDimMap = (Map) containerMap.get(containerId[i]);
-					setAliquotMap(xDimMap,containerId, noOfAliquots,counter,aliquotMap, i);
+					counter = setAliquotMap(xDimMap,containerId, noOfAliquots,counter,aliquotMap, i);
 				}
 			}
 		}
 		
-		public static void setAliquotMap(Map xDimMap, Object[] containerId, String noOfAliquots, int counter, Map aliquotMap, int i)
+		public static int setAliquotMap(Map xDimMap, Object[] containerId, String noOfAliquots, int counter, Map aliquotMap, int i)
 		{
 			if (!xDimMap.isEmpty())
 			{
@@ -802,6 +802,7 @@ public class StorageContainerUtil
 					}
 				}
 			}
+			return counter;
 		}
 	
 		/**
