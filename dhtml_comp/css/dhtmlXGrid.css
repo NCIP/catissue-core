@@ -618,16 +618,3 @@ div.gridbox_sbdark .ev_sbdark {
 div.gridbox_sbdark .odd_sbdark {
     background-color:#EDF3F0;
 } 
-/* to set color of row in mygrid-for skin */
-.even{
-background-color:#EDEDED;
-}
-.uneven{
-background-color:#E5F2F8;
-}
-
-.grid_hover {  
-		  background-color:#BFDCF3;	
-        font-size:20px;
-    }
-	/* end */
