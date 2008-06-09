@@ -1,6 +1,9 @@
 /*
- * $Name: S1_21_May_2008
+ * $Name: S2
  * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.2.8.12  2008/06/09 07:34:58  deepti_shelar
+ * Build Name : S2
+ *
  * Revision 1.2.8.11  2008/05/21 12:42:50  virender_mehta
  * Added Tag Name
  *
