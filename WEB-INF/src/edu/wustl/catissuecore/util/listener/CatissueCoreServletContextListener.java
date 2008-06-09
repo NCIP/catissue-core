@@ -1,19 +1,20 @@
 /*
- * $Name: 1.41.2.22 $
+ * $Name: 1.41.2.23 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
 import net.sf.ehcache.CacheException;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
@@ -38,9 +39,6 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
@@ -76,6 +74,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
     	try{
     		logger.info("Initializing catissue application");
 	    	ServletContext servletContext = sce.getServletContext();
+	    	Variables.applicationHome = sce.getServletContext().getRealPath("");
 	    	Logger.configDefaultLogger(servletContext);
 	        ApplicationProperties.initBundle(servletContext.getInitParameter("resourcebundleclass"));
 	        addDefaultProtectionGroupsToMap();
