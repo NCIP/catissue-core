@@ -17,9 +17,13 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
-
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<link href="css/styleSheet.css" rel="stylesheet" type="text/css" /> 
 <%
 	Object obj = request.getAttribute("protocolEventDetailsForm");
+	String operation = "add";
 	ProtocolEventDetailsForm form =null;
 	if(obj != null && obj instanceof ProtocolEventDetailsForm)
 	{
@@ -38,6 +42,7 @@
 <head>
 <script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script src="jss/caTissueSuite.js" language="JavaScript" type="text/javascript"></script>
 <script language="JavaScript">
 
 function specimenRequirements()
@@ -53,8 +58,25 @@ function submitAllEvents()
 	document.forms[0].action = action;
 	document.forms[0].submit();
 }
-
-window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage";
+function collectionProtocolPage()
+{
+	var action ="CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage";
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}		
+function consentPage()
+{
+	var action ="CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage&tab=consentTab";
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
+function viewSummary()
+{
+	var action="GenericSpecimenSummary.do?Event_Id=dummyId";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=${requestScope.operation}";
 
 </script>
 </head>
@@ -66,96 +88,121 @@ window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageO
 </html:messages>
 
 <html:form action="SaveProtocolEvents.do?pageOf=defineEvents&operation=add">
-<table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="600">
+
+<table summary="" cellpadding="0" cellspacing="0" height="20"   width="700">
+  
+    <tr >
+      <td colspan="4" align="right">
+		<span class="smalllink">
+		  	<html:link href="#"  styleId="newUser" onclick="viewSummary()">
+				<bean:message key="cpbasedentry.viewsummary" /> 
+		    </html:link>
+		</span>
+       </td>   
+   </tr>
 	<tr>
-		<td height="20" width="9%" nowrap class="tabMenuItemSelected" onclick="defineEvents()" id="collectionProtocolTab">Protocol Event Details</td>
-	
-		<td width="600" class="tabMenuSeparator" colspan="1">&nbsp;</td>
+		
+		<td height="20" width="9%" nowrap valign="bottom" id="eventTab" background="images/empty.GIF">
+			<img src="images/uIEnhancementImages/cp_event1.gif"	alt="Consents" width="95" height="22" />
+		</td>
+		<td height="20"  valign="bottom" width="10%"  onclick="defineEvents()" id="privilegesTab">
+	    	<img src="images/uIEnhancementImages/cp_privileges1.gif" name="Image2"	width="94" height="22"					id="Image2"/>
+        </td>
+		<td width="600" class="cp_tabbg" colspan="1">&nbsp;</td>
 	</tr>
 	<tr>
-	 <td class="tabField" colspan="3">
-		<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
-		<tr>
-			<td class="formTitle" height="20" width="100%" colspan="7">
-				<bean:message key="cpbasedentry.defineevents" />						
-			</td>
-		</tr>
+	 <td class="cp_tabtable" colspan="3">
+		<table summary="" cellpadding="3" cellspacing="0" border="0" width="700" >
+		   <tr><td width="700" class="buttonbg" colspan="3">&nbsp;</td></tr>
 			<tr>
-				<td class="formFieldNoBordersSimple" width="5">*</td>
-				<td colspan="1" class="formFieldNoBordersSimple">
-					<label for="studyCalendarEventPoint">
-						<b><bean:message key="collectionprotocol.studycalendartitle" /></b>
-					</label>
-				</td>
-				<td class="formFieldNoBordersSimple" colspan="5">
-					<html:text styleClass="formFieldSized5" size="30" 
-							styleId="studyCalendarEventPoint"  maxlength="10" 
-							property="studyCalendarEventPoint" 
-							/>
+			   <td width="1%" align="left" valign="top" class="black_ar">
+				 <span class="blue_ar_b">
+				    	<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" />
+				 </span>
+			   </td>
+			   <td width="22%" align="left" class="black_ar">
+					<bean:message key="collectionprotocol.studycalendartitle" />
+			   </td>
+				<td align="left">
+		        <html:text styleClass="black_ar_s" size="12" styleId="studyCalendarEventPoint"  maxlength="10" 
+						property="studyCalendarEventPoint" />
+	            &nbsp; 
+				<span class="grey_ar">
 					<bean:message key="collectionprotocol.studycalendarcomment"/>
-				</td>
+				</span>
+			</td>
 			</tr>	
 			<tr>
-				<td class="formFieldNoBordersSimple" width="5">*</td>
-				<td colspan="1" class="formFieldNoBordersSimple">
-					<label for="collectionPointLabel">
-	                   <b><bean:message key="collectionprotocol.collectionpointlabel" /></b>
-					</label>
-				</td>
-				<td class="formFieldNoBordersSimple" colspan="5">
-					<html:text styleClass="formFieldSized" size="30" 
-							styleId="collectionPointLabel" maxlength="255" 
-							property="collectionPointLabel"/> 
-				</td>
+				 <td align="left" class="black_ar">
+				<span class="blue_ar_b">
+					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+				</span>
+			  </td>
+	          <td align="left" class="black_ar">
+				<bean:message key="collectionprotocol.collectionpointlabel" />
+			  </td>
+			  <td align="left">
+				<html:text styleClass="black_ar" size="30" styleId="collectionPointLabel" maxlength="255" 
+							property="collectionPointLabel"/>
+			  </td>
 			</tr>
 			<tr>
-				<td class="formFieldNoBordersSimple" width="5">*</td>
-				<td colspan="1" class="formFieldNoBordersSimple">
+			  <td align="left" class="black_ar">
+				<span class="blue_ar_b">
+					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+				</span>
+			  </td>
+	          <td align="left" class="black_ar">
 					<label for="clinicalDiagnosis">
-						<b><bean:message key="specimenCollectionGroup.clinicalDiagnosis"/></b>
+						<bean:message key="specimenCollectionGroup.clinicalDiagnosis"/>
 					</label>
-				</td>
-				<td class="formFieldNoBordersSimple" colspan="5">
-					 <autocomplete:AutoCompleteTag property="clinicalDiagnosis"
+			  </td>
+	          <td align="left" class="black_new">
+					<autocomplete:AutoCompleteTag property="clinicalDiagnosis"
 						optionsList = "<%=request.getAttribute(Constants.CLINICAL_DIAGNOSIS_LIST)%>"
 						initialValue="<%=form.getClinicalDiagnosis()%>"
-						styleClass="formFieldSized"
+						styleClass="formFieldSized12"
 						size="30"
-				/>
-				<%
-					String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";			
-				%>
+					/> &nbsp;
+	<%
+			String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";	
+	%>
 					<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
-						<img src="images\Tree.gif" border="0" width="26" height="22" title='Clinical Diagnosis Selector'>
+						<img title='Clinical Diagnosis Selector' src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0">
 					</a>
 				</td>
-			</tr>
+	        </tr>
 
-			<tr>
-				 <td class="formFieldNoBordersSimple" width="5">*</td>
-				 <td class="formFieldNoBordersSimple">
-					<label for="clinicalStatus">
-						<b><bean:message key="specimenCollectionGroup.clinicalStatus"/></b>
-					</label>
-				 </td>
-				 <td class="formFieldNoBordersSimple" colspan="5">
-					 <autocomplete:AutoCompleteTag property="clinicalStatus"
+			 <tr>
+			  <td align="left" class="black_ar">
+				<span class="blue_ar_b">
+					<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+				</span>
+			  </td>
+	          <td align="left" class="black_ar">
+				<label for="clinicalStatus">
+						<bean:message key="specimenCollectionGroup.clinicalStatus"/>
+				</label>
+			  </td>
+	          <td align="left" class="black_new">
+					<autocomplete:AutoCompleteTag property="clinicalStatus"
 							  optionsList = "<%=request.getAttribute(Constants.CLINICAL_STATUS_LIST)%>"
 							  initialValue="<%=form.getClinicalStatus()%>"
-							  styleClass="formFieldSized"
+							  styleClass="formFieldSized12"
 							 
 					/>
-				</td>
-			</tr>
-		<table>
+			  </td>
+	        </tr>
+		</table>
 		&nbsp;
 		<table>
 			<tr>
-				<td>
-					<html:button styleClass="actionButton" property="submitPage" onclick="submitAllEvents()" disabled="<%=disabled%>">
+				<td class="buttonbg" width="700">
+					<html:button styleClass="blue_ar_b" property="submitPage" onclick="submitAllEvents()" disabled="<%=disabled%>">
 						<bean:message key="buttons.submit"/>
 					</html:button>
-					<html:button styleClass="actionButton" property="submitPage" onclick="specimenRequirements()" disabled="<%=disabled%>">
+					&nbsp;|
+					<html:button styleClass="blue_ar_b" property="submitPage" onclick="specimenRequirements()" disabled="<%=disabled%>">
 						<bean:message key="cpbasedentry.addspecimenrequirements"/>
 					</html:button>
 				</td>
@@ -164,6 +211,7 @@ window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageO
 	</td>
   </tr>
 </table>
+
 </html:form>
 </body>
 

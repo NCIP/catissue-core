@@ -272,7 +272,7 @@ if(form != null)
 	}
 	function addNewEvent()
 	{
-			window.parent.frames['SpecimenRequirementView'].location="ProtocolEventsDetails.do?pageOf=newEvent";
+			window.parent.frames['CPTreeView'].location="ProtocolEventsDetails.do?pageOf=newEvent";
 	}
 	
 	function ViewSummary()
@@ -405,7 +405,7 @@ if(form != null)
 		checkb.innerHTML=""+sname;
 	}
 
-	window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>";
+	window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>";
 </script>
 
 </head>

@@ -36,7 +36,8 @@ function handleStatus(status)
 
 </script>
 </head>
-
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
 <html:errors />
 <html:messages id="messageKey" message="true" header="messages.header"
 	footer="messages.footer">
@@ -106,6 +107,7 @@ function handleStatus(status)
 														background="images/uIEnhancementImages/tab_bg.gif"><img
 														src="images/uIEnhancementImages/tab_add_selected.jpg"
 														alt="Add" width="57" height="22" /></td>
+													 <logic:notEqual parameter="openInCPFrame"	value='yes'>	
 													<td width="6%" valign="bottom"
 														background="images/uIEnhancementImages/tab_bg.gif"><html:link
 														page="/SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User&menuSelected=1">
@@ -119,6 +121,7 @@ function handleStatus(status)
 															alt="Approve New Users" width="139" height="22"
 															border="0" />
 													</html:link></td>
+													</logic:notEqual>
 												</logic:equal>
 												<logic:equal name="operation"
 													value='${requestScope.editforJSP}'>
@@ -544,10 +547,17 @@ function handleStatus(status)
 										<bean:message key="buttons.submit" />
 									</html:submit> &nbsp;| <span class="cancellink"> <logic:notEqual
 										name="pageOf" value='${requestScope.pageOfSignUp}'>
+										 <logic:notEqual parameter="openInCPFrame"	value='yes'>			
 										<html:link onclick="closeUserWindow()" page="/ManageAdministrativeData.do"
 											styleClass="blue_ar_s_b">
 											<bean:message key="buttons.cancel" />
 										</html:link>
+										</logic:notEqual>
+										 <logic:equal parameter="openInCPFrame"	value='yes'>			
+										<html:link  page="/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" styleClass="blue_ar_s_b">
+											<bean:message key="buttons.cancel" />
+										</html:link>
+										</logic:equal>
 									</logic:notEqual> <logic:equal name="pageOf"
 										value='${requestScope.pageOfSignUp}'>
 										<html:link page="/RedirectHome.do" styleClass="blue_ar_s_b">
