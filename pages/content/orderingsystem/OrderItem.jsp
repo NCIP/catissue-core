@@ -518,10 +518,10 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 
 								<td class="dataCellText" width="18%">
 									<%=obj.getAvailableQuantity()%>&nbsp;
-									<!--<script>
+									<script>
 										var v= getUnit('<%=obj.getClassName() %>','<%=obj.getType() %>');
 										document.write(v);
-									</script>-->
+									</script>
 
 									<html:hidden property="<%=availableQuantity%>" value="<%=obj.getId().toString()%>"/>
 										
@@ -529,10 +529,10 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 
 									<td class="dataCellText" width="20%">
 										<html:text styleClass="formFieldSized3" maxlength="8"  size="5"  styleId="requestedQuantity" property="<%=requestedQuantity%>"/>&nbsp;
-										<!--<script>
+									<script>
 										var v= getUnit('<%=obj.getClassName() %>','<%=obj.getType() %>');
 										document.write(v);
-									</script>-->
+									</script>
 										<span id="requnitSpan"></span>		
 										<html:hidden property="<%=unitRequestedQuantity%>" value="" styleId="unitRequestedQuantity"/>
 										<html:hidden property="<%=isDerived%>" styleId="isDerived" value=""/>
