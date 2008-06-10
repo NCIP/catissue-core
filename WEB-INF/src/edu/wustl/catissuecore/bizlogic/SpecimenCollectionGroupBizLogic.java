@@ -709,11 +709,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			throw new DAOException("CPR cannot be null for SCG");
 		}
-		Serializable id = null;
+		Long id = null;
 
 		if(cpr.getId()!=null && cpr.getId().longValue()>0)
 		{
-			id = (Serializable)(cpr.getId());
+			id = cpr.getId();
 		}
 		else
 		{
