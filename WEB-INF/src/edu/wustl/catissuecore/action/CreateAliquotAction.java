@@ -221,11 +221,31 @@ public class CreateAliquotAction extends BaseAction
 		{
 			Specimen aliquotSpecimen = Utility.getSpecimen(parentSpecimen);
 			StorageContainer sc = new StorageContainer();
-			String quantityKey = specimenKey + i + "_quantity";
-			String containerIdKey = specimenKey + i + "_StorageContainer_id";
-			String posDim1Key = specimenKey + i + "_positionDimensionOne";
-			String posDim2Key = specimenKey + i + "_positionDimensionTwo";
-
+			String fromMapsuffixKey = "_fromMap";
+			boolean booleanfromMap = false;
+			
+			String quantityKey = null;
+			String containerIdKey = null;
+			String posDim1Key = null;
+			String posDim2Key = null;
+			String radioButton = (String)aliquotMap.get("radio_"+i);
+			// if radio button =2 else conatiner selected from Combo box
+			if(radioButton!=null&&radioButton.equals("2"))
+			{
+				quantityKey = specimenKey + i + "_quantity";
+				containerIdKey = specimenKey + i + "_StorageContainer_id";
+				posDim1Key = specimenKey + i + "_positionDimensionOne";
+				posDim2Key = specimenKey + i + "_positionDimensionTwo";
+			}
+			else if(radioButton!=null&&radioButton.equals("3"))
+			{
+				// Container selected from Map button
+				quantityKey = specimenKey + i + "_quantity";
+				containerIdKey = specimenKey + i + "_StorageContainer_id"+fromMapsuffixKey;
+				posDim1Key = specimenKey + i + "_positionDimensionOne"+fromMapsuffixKey;
+				posDim2Key = specimenKey + i + "_positionDimensionTwo"+fromMapsuffixKey;
+			}
+			
 			String quantity = (String) aliquotMap.get(quantityKey);
 			String containerId  = (String) aliquotMap.get(containerIdKey);
 			String posDim1  = (String) aliquotMap.get(posDim1Key);
