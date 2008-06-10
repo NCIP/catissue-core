@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -32,14 +33,37 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			throws Exception
 	{
 		HttpSession session = request.getSession();
+		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		Map collectionProtocolEventMap = (Map)session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		String pageOf = request.getParameter(Constants.PAGE_OF);
 		String operation = request.getParameter(Constants.OPERATION);
-		request.setAttribute(Constants.OPERATION, operation);
-		Vector treeData=null;
-		if(collectionProtocolEventMap!=null)
-		{
-			treeData = new Vector(); 
+		
+		Vector<QueryTreeNodeData> treeData= new Vector<QueryTreeNodeData>();
+		String cpName=null;
+		String displayName=null;
+		String parentIdentifier=null;
+		String identifier=null;
+	
+		if(collectionProtocolBean != null )
+		 {
+			
+		    cpName=Constants.OBJECTNAME_FOR_CP;
+		    displayName=collectionProtocolBean.getShortTitle();
+		    parentIdentifier = Constants.ZERO_ID;
+		    identifier=collectionProtocolBean.getTitle(); 
+		    addNode(cpName, displayName, parentIdentifier,identifier,"",treeData);			
+		     			
+		 }
+		else
+		 {   
+			cpName=Constants.OBJECTNAME_FOR_CP;
+			displayName=Constants.ROOTNODE_FOR_CPTREE;
+			parentIdentifier= Constants.ZERO_ID;
+			identifier=Constants.ROOTNODE_FOR_CPTREE; 
+	
+			addNode(cpName, displayName, parentIdentifier,identifier,"",treeData);
+		 }
+		if(collectionProtocolEventMap!=null && collectionProtocolBean != null)
+		{			 
 			Integer iEventCount = new Integer(1);
 			Collection collectionProtocolEventBeanCollection = (Collection)collectionProtocolEventMap.values();
 			Iterator collectionProtocolEventBeanCollectionItr = collectionProtocolEventBeanCollection.iterator();
@@ -51,11 +75,11 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 				{
 					objectName=Constants.VIEW_SUMMARY;
 				}
-				String displayName = collectionProtocolEventBean.getStudyCalenderEventPoint().toString()+" "+ collectionProtocolEventBean.getCollectionPointLabel();
-				String parentIdentifier= Constants.ZERO_ID;
-				String identifier = collectionProtocolEventBean.getUniqueIdentifier();
-				String parentIdentifierForSpecimens = identifier; 
-				addNode(objectName, displayName, parentIdentifier,identifier,"",treeData);
+				
+				displayName = collectionProtocolEventBean.getStudyCalenderEventPoint().toString()+" "+ collectionProtocolEventBean.getCollectionPointLabel();
+				parentIdentifier= collectionProtocolBean.getTitle();
+				identifier = collectionProtocolEventBean.getUniqueIdentifier();
+				addNode(objectName, displayName, parentIdentifier,identifier,cpName,treeData);
 				
 				Map SpecimenRequirementMap = collectionProtocolEventBean.getSpecimenRequirementbeanMap();
 				
@@ -72,9 +96,14 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 				iEventCount++;
 			}
 		}
+		request.setAttribute(Constants.OPERATION, operation);
 		request.setAttribute(Constants.TREE_DATA, treeData);
+		request.getSession().setAttribute("nodeId", identifier);
+		request.getSession().setAttribute("parentIdentifier", parentIdentifier);
+					    
 		return mapping.findForward(Constants.SUCCESS);
 	}
+	
 	
 	/**
 	 * This is a recursive method for getting node data.
@@ -138,7 +167,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 	 * @param parentObjectname
 	 * @param treeData
 	 */
-	private void addNode(String objectName ,String displayName, String parentIdentifier, String identifier, String parentObjectname, Vector treeData)
+	private void addNode(String objectName ,String displayName, String parentIdentifier, String identifier, String parentObjectname, Vector<QueryTreeNodeData> treeData)
 	{
 		QueryTreeNodeData treeNode = new QueryTreeNodeData();
 		treeNode.setParentIdentifier(parentIdentifier);
@@ -148,8 +177,6 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		treeNode.setParentObjectName(parentObjectname);
 		treeNode.setToolTipText(displayName);
 		treeData.add(treeNode);
-	}
-	
-	
+	}	
 	
 }

@@ -21,17 +21,16 @@ public class DefineEventsAction extends BaseAction
 	{
 		CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form;
 		CollectionProtocolBean collectionProtocolBean=null;
+		String pageOf=request.getParameter(Constants.PAGEOF);
 		HttpSession session = request.getSession();
 		if(session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN)!=null)
 		{
 			collectionProtocolBean = (CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-			
 		}
 		else
 		{	
 			collectionProtocolBean = new CollectionProtocolBean();
 		}
-		
 		if(collectionProtocolForm.getShortTitle()!=null)
 		{
 			collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocolForm.getPrincipalInvestigatorId());
@@ -51,6 +50,6 @@ public class DefineEventsAction extends BaseAction
 			collectionProtocolBean.setUnsignedConsentURLName(collectionProtocolForm.getUnsignedConsentURLName());
 		}
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN, collectionProtocolBean);
-		return (mapping.findForward(Constants.SUCCESS));
+		return (mapping.findForward(pageOf));
 	}
 }

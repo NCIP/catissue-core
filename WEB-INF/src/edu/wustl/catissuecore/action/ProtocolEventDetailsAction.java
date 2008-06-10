@@ -79,7 +79,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		//setting the quality for received events
 		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
 		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
-		
+		request.setAttribute(Constants.OPERATION, operation);
     	request.setAttribute("protocolEventDetailsForm", protocolEventDetailsForm);
 		return (mapping.findForward(Constants.SUCCESS));
 	}

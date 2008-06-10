@@ -198,6 +198,10 @@
 	</definition>
 	<!-- Biohazard -->
 	
+	<definition name=".catissuecore.mainCollectionProtocolDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocolBase.jsp" />
+	</definition>
+	
 	<definition name=".catissuecore.collectionProtocolDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
 	</definition>

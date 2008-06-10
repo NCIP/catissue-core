@@ -1140,6 +1140,7 @@ PUBLIC
 			<forward name="pageOfUserAdmin" path=".catissuecore.userDef" />
 			<forward name="pageOfApproveUser" path=".catissuecore.userDef" />
 			<forward name="pageOfUserProfile" path=".catissuecore.userProfileDef" />
+			<forward name="openInCPFrame" path="/pages/content/manageAdministrativeData/User.jsp" />
 			<forward name="failure" path=".catissuecore.userDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 			
@@ -1374,12 +1375,20 @@ PUBLIC
 			name="collectionProtocolForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfCollectionProtocol" path=".catissuecore.collectionProtocolDef" />
+			<forward name="pageOfCollectionProtocol" path="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
 			<forward name="pageOfCollectionProtocolQuery" path=".catissuecore.collectionProtocolEditDef" />
 			<forward name="failure" path=".catissuecore.collectionProtocolDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
-
+        
+        <action path="/OpenCollectionProtocol"
+			type="edu.wustl.catissuecore.action.OpenCollectionProtocolAction"
+			name="collectionProtocolForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.mainCollectionProtocolDef"/>
+		</action>
+		
 		<action path="/CollectionProtocolAdd"
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="collectionProtocolForm"
@@ -3505,8 +3514,8 @@ PUBLIC
 			name="collectionProtocolForm"
 			validate="false"
 			scope="request">
-			<forward name="principalInvestigator" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
-			<forward name="protocolCoordinator" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
+			<forward name="principalInvestigator" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;openInCPFrame=true" />
+			<forward name="protocolCoordinator" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;openInCPFrame=true" />
 		</action>
 		
 		<action path="/DistributionProtocolAddNew"
@@ -4584,7 +4593,8 @@ PUBLIC
 			scope="request"
 			validate="true"
 			input="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol&amp;menuSelected=9">
-			<forward name="success" path=".catissuecore.DefineEvents" />
+			<forward name="pageOfDefineEvents" path="/ProtocolEventsDetails.do?&amp;operation=add&amp;pageOf=newEvent" />
+			<forward name="ViewSummary" path="/GenericSpecimenSummary.do?Event_Id=dummyId" />
 		</action>
 		
 		<action path="/ProtocolEventsDetails" 
@@ -4637,8 +4647,8 @@ PUBLIC
        <action path="/ShowCollectionProtocol"
 				type="edu.wustl.catissuecore.action.ShowCollectionProtocolTreeAction"
 				scope="request">
-				<forward name="success" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
-				<forward name="failure" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
+				<forward name="success" path="/pages/content/manageAdministrativeData/CpTreeView.jsp"/>
+				<forward name="failure" path="/pages/content/manageAdministrativeData/CpTreeView.jsp"/>
 		</action>
 		<action path="/AnticipatorySpecimenView"
                 type="edu.wustl.catissuecore.action.AnticipatorySpecimenViewAction"
@@ -4728,7 +4738,7 @@ PUBLIC
 			name="collectionProtocolForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;invokeFunction=cp" />
+			<forward name="success" path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=pageOfEditCP" />
 		</action>
             
             	
@@ -4796,10 +4806,12 @@ PUBLIC
 				<forward name="pageOfStorageContainer" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7"/>
 				<forward name="pageOfSpecimenArrayType" path="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"/>
 				<forward name="pageOfBioHazard" path="/Biohazard.do?operation=add&amp;pageOf=pageOfBioHazard&amp;menuSelected=8"/>
-				<forward name="pageOfCollectionProtocol" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9"/>
+				<forward name="pageOfCollectionProtocol" path="/OpenCollectionProtocol.do?pageOf=pageOfmainCP&amp;operation=add"/>
 				<forward name="pageOfDistributionProtocol" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10"/>
 				<forward name="pageOfSpecimenArray" path="/SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20"/>
 				<forward name="pageOfParticipant" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12&amp;clearConsentSession=true"/>
+				<forward name="success" path=".catissuecore.mainCollectionProtocolDef" />
+				
 		</action>
 	</action-mappings>
 	

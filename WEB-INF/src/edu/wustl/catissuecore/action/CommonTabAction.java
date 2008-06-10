@@ -22,6 +22,10 @@ public class CommonTabAction extends Action{
 			HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException
 	{
 		String page=(String)request.getParameter(Constants.PAGE_OF);
+		if(page== null)
+		{
+			return mapping.findForward(Constants.SUCCESS);
+		}
 		return mapping.findForward(page);
 	}
 }

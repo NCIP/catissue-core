@@ -61,7 +61,7 @@ public class UserAction extends SecureAction
         String pageOf = (String)request.getParameter(Constants.PAGEOF);
         String reqPath = (String)request.getParameter(Constants.REQ_PATH);
         String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-        
+        String openInCPFrame=(String)request.getParameter(Constants.OPEN_PAGE_IN_CPFRAME);
         UserForm userForm=(UserForm)form;
         
         String formName,prevPage=null,nextPage=null;
@@ -244,8 +244,11 @@ public class UserAction extends SecureAction
 		request.setAttribute("pageOfSignUp", Constants.PAGEOF_SIGNUP);
 		request.setAttribute("pageOf", pageOf);
 		request.setAttribute("operation", operation);
+		request.setAttribute("openInCPFrame",openInCPFrame);
 		// ------------- add new
         Logger.out.debug("USerAction redirect :---------- "+ reqPath  );
+        if(openInCPFrame != null && Constants.TRUE.equalsIgnoreCase(openInCPFrame))
+        	target=Constants.OPEN_PAGE_IN_CPFRAME;
         return mapping.findForward(target);
     }
     

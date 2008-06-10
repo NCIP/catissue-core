@@ -438,7 +438,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SIGNUP_USER_ADD_ACTION = "SignUpUserAdd.do";
 	public static final String USER_EDIT_PROFILE_ACTION = "UserEditProfile.do";
 	public static final String UPDATE_PASSWORD_ACTION = "UpdatePassword.do";
-	
+	public static final String OPEN_PAGE_IN_CPFRAME ="openInCPFrame";
 	//Constants required in Accession.jsp Page
 	public static final String ACCESSION_SEARCH_ACTION = "AccessionSearch.do";
 	public static final String ACCESSION_ADD_ACTION = "AccessionAdd.do";
@@ -2305,6 +2305,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CHILD_STATUS = "Child_Status";
 	public static final String CHILD_DATE   = "Child_Date";
 	public static final String CHILD_OFFSET = "Child_Offset";
-	
+// COnstants required for Collection Protocol Tree 
+	public static final String ROOTNODE_FOR_CPTREE="rootnode";
+	public static final String OBJECTNAME_FOR_CP="cpName";
 }
 	

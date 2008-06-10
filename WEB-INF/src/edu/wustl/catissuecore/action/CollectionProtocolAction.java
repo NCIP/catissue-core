@@ -66,14 +66,11 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
     	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
     	String invokeFunction = (String)request.getParameter("invokeFunction");
-    	String operation = (String)request.getParameter(Constants.OPERATION);
-    	
-    	
-    	
+    	String operation = (String)request.getParameter(Constants.OPERATION);    	
     	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
         //Gets the value of the operation attribute.
     	
-    	
+			
     	HttpSession newSession = request.getSession();
     	CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)newSession.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
     	
@@ -86,12 +83,12 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     		operation = Constants.ADD;
     	}
     
-    	if(invokeFunction!=null)
+    	if(invokeFunction!=null &&  collectionProtocolBean != null)
     	{
     		initCollectionProtocolPage(request, form, pageOf, mapping);	
     	}
     	
-    	if(operation.equals("add")&&invokeFunction==null)
+    	if(operation.equals("add")&& invokeFunction==null)
     	{
     		initCleanSession(request);
     	}
@@ -147,48 +144,13 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
          	}
         }
     	
-//    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
     	List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);
     	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
-	    	
-    	 // ---------- Used for Add new
-//		String reqPath = request.getParameter(Constants.REQ_PATH);
-//		if (reqPath != null)
-//			request.setAttribute(Constants.REQ_PATH, reqPath);
-//		Logger.out.debug("CP Action reqPath : " + reqPath ); 
+
 		Logger.out.debug("page of in collectionProtocol action:"+pageOf);
 		request.setAttribute("pageOf",pageOf);
 
-//		// Mandar : code for Addnew PI data 24-Jan-06
-//		String addNewUserTo = request.getParameter(Constants.ADD_NEW_USER_TO);
-//		if (addNewUserTo != null)
-//		{
-//			if(addNewUserTo.trim().length() > 0 && addNewUserTo.equalsIgnoreCase("PI" ))
-//			{
-//				String principalInvestigatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID);
-//				if(principalInvestigatorID != null && principalInvestigatorID.trim().length() > 0 )
-//				{
-//					Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in CP for PI : "+ principalInvestigatorID  );
-//					collectionProtocolForm.setPrincipalInvestigatorId(Long.parseLong(principalInvestigatorID ) ); 
-//				}
-//			}
-//			if(addNewUserTo.trim().length() > 0 && addNewUserTo.equalsIgnoreCase("PC" ))
-//			{
-//				String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID);
-//				if(coordinatorID != null && coordinatorID.trim().length() > 0 )
-//				{
-//					Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in CP for PI : "+ coordinatorID  );
-//					long pcoordIDs[] = {Long.parseLong(coordinatorID )};
-//					collectionProtocolForm.setProtocolCoordinatorIds(pcoordIDs ); 
-//				}
-//			}
-//		}
-//		// -- 24-Jan-06 end
-		
-		
-		
 		List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
-		
 		
 		List pathologyStatusList = (List) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
 		List predefinedConsentsList =(List)request.getAttribute(Constants.PREDEFINED_CADSR_CONSENTS);
@@ -242,7 +204,10 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		request.setAttribute("collectionProtocolDay", collectionProtocolDay);
 		request.setAttribute("collectionProtocolMonth", collectionProtocolMonth);
 	    int noOfConsents=1;
-		noOfConsents = collectionProtocolForm.getConsentTierCounter();								
+		noOfConsents = collectionProtocolForm.getConsentTierCounter();
+		 if(noOfConsents != 0)
+			 noOfConsents=noOfConsents-1;
+		  
 		request.setAttribute("noOfConsents", noOfConsents);
 	      
 	    String title = "collectionprotocol."+pageView+".title";
@@ -254,8 +219,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		
 		String fieldWidth = Utility.getColumnWidth(CollectionProtocol.class,"title" );
 		String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
-		
-		 
+				
 		request.setAttribute("pageOf", pageOf);
 		request.setAttribute("operation", operation);
 		request.setAttribute("edit", Constants.EDIT);
