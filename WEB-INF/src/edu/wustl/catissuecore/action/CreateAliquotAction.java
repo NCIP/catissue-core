@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -235,18 +236,31 @@ public class CreateAliquotAction extends BaseAction
 			aliquotSpecimen.setType(aliquotForm.getType());
 			aliquotSpecimen.setInitialQuantity(new Quantity(quantity));
 			aliquotSpecimen.setAvailableQuantity(new Quantity(quantity));
-			if (containerId != null)
+			
+			SpecimenPosition specPos = aliquotSpecimen.getSpecimenPosition();
+			
+			if(specPos == null)
 			{
-				aliquotSpecimen.setPositionDimensionOne(new Integer(posDim1));
-				aliquotSpecimen.setPositionDimensionTwo(new Integer(posDim2));
+				specPos = new SpecimenPosition();
+			}
+			
+			if (containerId != null && posDim1 != null && posDim2 != null)
+			{
+				specPos.setPositionDimensionOne(new Integer(posDim1));
+				specPos.setPositionDimensionTwo(new Integer(posDim2));				
 				sc.setId(new Long(containerId));
-				aliquotSpecimen.setStorageContainer(sc);
+				specPos.setStorageContainer(sc);
+//				aliquotSpecimen.setStorageContainer(sc);
 			}
 			else
 			{
-				aliquotSpecimen.setPositionDimensionOne(null);
-				aliquotSpecimen.setPositionDimensionTwo(null);
+				//specPos.setPositionDimensionOne(null);
+				//specPos.setPositionDimensionTwo(null);
+				specPos = null;
 			}
+			specPos.setSpecimen(aliquotSpecimen);
+
+			aliquotSpecimen.setSpecimenPosition(specPos);
 
 			if (aliquotSpecimen instanceof MolecularSpecimen)
 			{

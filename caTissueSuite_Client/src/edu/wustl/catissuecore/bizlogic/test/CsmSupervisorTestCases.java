@@ -7,6 +7,7 @@ import java.util.HashSet;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -14,6 +15,7 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
@@ -66,9 +68,12 @@ public class CsmSupervisorTestCases extends BaseTestCase {
 				specimenObj.setSpecimenCollectionGroup(scg);
 				StorageContainer sc = new StorageContainer();
 				sc.setId(new Long(TestCaseUtility.STORAGECONTAINER_WITH_ALLOWUSE_PRIV));
-				specimenObj.setStorageContainer(sc);
-				specimenObj.setPositionDimensionOne(new Integer(1));
-				specimenObj.setPositionDimensionTwo(new Integer(1));
+				SpecimenPosition specPosition = new SpecimenPosition();
+				specPosition.setStorageContainer(sc);
+				specPosition.setSpecimen(specimenObj);
+				specPosition.setPositionDimensionOne(new Integer(1));
+				specPosition.setPositionDimensionTwo(new Integer(1));
+				specimenObj.setSpecimenPosition(specPosition);
 				Logger.out.info("Inserting domain object------->"+specimenObj);
 				specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
 				System.out.println("Specimen name"+specimenObj.getLabel());
@@ -101,9 +106,12 @@ public class CsmSupervisorTestCases extends BaseTestCase {
 				specimenObj.setSpecimenCollectionGroup(scg);
 				StorageContainer sc = new StorageContainer();
 				sc.setId(new Long(TestCaseUtility.STORAGECONTAINER_WITH_DISALLOWUSE_PRIV));
-				specimenObj.setStorageContainer(sc);
-				specimenObj.setPositionDimensionOne(new Integer(1));
-				specimenObj.setPositionDimensionTwo(new Integer(1));
+				SpecimenPosition specPosition = new SpecimenPosition();
+				specPosition.setStorageContainer(sc);
+				specPosition.setSpecimen(specimenObj);
+				specPosition.setPositionDimensionOne(new Integer(1));
+				specPosition.setPositionDimensionTwo(new Integer(1));
+				specimenObj.setSpecimenPosition(specPosition);
 				Logger.out.info("Inserting domain object------->"+specimenObj);
 				System.out.println("Before Creating Tissue Specimen");
 				specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
@@ -154,10 +162,13 @@ public class CsmSupervisorTestCases extends BaseTestCase {
 				
 				System.out.println("reached");
 				
-				specimenArray.setStorageContainer(storageContainer);
-				specimenArray.setPositionDimensionOne(new Integer(1));
-				specimenArray.setPositionDimensionTwo(new Integer(1));
-				
+	//			specimenArray.setStorageContainer(storageContainer);
+				ContainerPosition cntPos = new ContainerPosition();
+				cntPos.setPositionDimensionOne(new Integer(1));
+				cntPos.setPositionDimensionTwo(new Integer(1));
+				cntPos.setOccupiedContainer(specimenArray);
+				cntPos.setParentContainer(storageContainer);
+				specimenArray.setLocatedAtPosition(cntPos);
 				System.out.println("reached");
 				
 				Collection specimenArrayContentCollection = new HashSet();

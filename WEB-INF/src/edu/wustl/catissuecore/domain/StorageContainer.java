@@ -32,7 +32,8 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StorageContainer extends Container implements IActivityStatus
 {
-
+	protected Collection<SpecimenPosition> specimenPositionCollection;
+	
 	protected Double tempratureInCentigrade;
 
 	protected StorageType storageType;
@@ -64,7 +65,7 @@ public class StorageContainer extends Container implements IActivityStatus
 	// -------- To check for changed position in the same container.
 	private boolean positionChanged = false;
 	
-	private Collection specimenCollection;
+//	private Collection specimenCollection;
 	public StorageContainer()
 	{
 	}
@@ -73,16 +74,26 @@ public class StorageContainer extends Container implements IActivityStatus
 	{
 		this.setId(oldContainer.getId());
 		this.setActivityStatus(oldContainer.getActivityStatus());
-		this.setParent(oldContainer.getParent());
+		//this.setParent(oldContainer.getLocatedAtPosition().getParentContainer());
 		//this.setNumber(oldContainer.getNumber());
 		this.setName(oldContainer.getName());
-		this.setPositionDimensionOne(oldContainer.getPositionDimensionOne());
-		this.setPositionDimensionTwo(oldContainer.getPositionDimensionTwo());
-		this.setFull(oldContainer.isFull());
-		if ((parent != null) && (parent.getChildren() != null))
+				
+		if(oldContainer.getLocatedAtPosition() != null)
 		{
-			parent.getChildren().add(this);
+			if(this.locatedAtPosition == null)
+			{
+				this.locatedAtPosition = new ContainerPosition();
+			}
+			this.locatedAtPosition.setParentContainer(oldContainer.getLocatedAtPosition().getParentContainer());
+			this.locatedAtPosition.setPositionDimensionOne(oldContainer.getLocatedAtPosition().getPositionDimensionOne());
+			this.locatedAtPosition.setPositionDimensionTwo(oldContainer.getLocatedAtPosition().getPositionDimensionTwo());
+			this.locatedAtPosition.occupiedContainer = this;
 		}
+		this.setFull(oldContainer.isFull());
+//		if ((this.locatedAtPosition != null) && (this.locatedAtPosition.parentContainer != null) && (this.locatedAtPosition.parentContainer.getChildren() != null))
+//		{			
+//			this.locatedAtPosition.parentContainer.getChildren().add(this);
+//		}
 		this.setSite(oldContainer.getSite());
 		capacity = new Capacity(oldContainer.getCapacity());
 
@@ -358,7 +369,7 @@ public class StorageContainer extends Container implements IActivityStatus
 			if (!form.isAddOperation())
 			{
 				//Previously Container was in a site
-				if (parent == null)
+				if (this.locatedAtPosition != null && this.locatedAtPosition.getParentContainer() == null)
 				{
 					if (form.getStContSelection() == 1)
 					{
@@ -381,72 +392,82 @@ public class StorageContainer extends Container implements IActivityStatus
 				{
 					if (form.getStContSelection() == 1)
 					{
-						if (parent.getId().longValue() != form.getParentContainerId())
+						if (this.locatedAtPosition != null && this.locatedAtPosition.getParentContainer() != null && this.locatedAtPosition.parentContainer.getId().longValue() != form.getParentContainerId())
 						{
 							isParentChanged = true;
 						}
 					}
-					else if (parent.getId().equals(form.getContainerId()))
+					else if (this.locatedAtPosition != null && this.locatedAtPosition.parentContainer != null && this.locatedAtPosition.parentContainer.getId().equals(form.getContainerId()))
 					{
 						isParentChanged = true;
 					}
 
 					// code to check if the position of the container is changed
+
+					if (form.getStContSelection() == 1)
+					{
+						if (locatedAtPosition != null && locatedAtPosition.positionDimensionOne.intValue() != form.getPositionDimensionOne()
+								|| locatedAtPosition.positionDimensionTwo.intValue() != form.getPositionDimensionOne())
+						{
+							positionChanged = true;
+						}
+					}
 					else
 					{
-						if (form.getStContSelection() == 1)
+						if (locatedAtPosition != null && locatedAtPosition.positionDimensionOne.equals(form.getPos1()) || locatedAtPosition.positionDimensionTwo.equals(form.getPos2()))
 						{
-							if (positionDimensionOne.intValue() != form.getPositionDimensionOne()
-									|| positionDimensionTwo.intValue() != form.getPositionDimensionOne())
-							{
-								positionChanged = true;
-							}
+							positionChanged = true;
 						}
-						else
-						{
-							if (positionDimensionOne.equals(form.getPos1()) || positionDimensionTwo.equals(form.getPos2()))
-							{
-								positionChanged = true;
-							}
-						}
-
 					}
+
+				
 				}
 			}
 
 			Logger.out.debug("isParentChanged " + isParentChanged);
 			if (form.getCheckedButton() == Constants.CONTAINER_IN_ANOTHER_CONTAINER)
 			{
-				if (form.getStContSelection() == 1)
+				if(this.locatedAtPosition == null)
 				{
-					parent = new StorageContainer();
-					parent.setId(new Long(form.getParentContainerId()));
-					this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
-					this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+					this.locatedAtPosition = new ContainerPosition();
+				}
+				if (form.getStContSelection() == 1)
+				{					
+					
+					this.locatedAtPosition.parentContainer = new StorageContainer();
+					this.locatedAtPosition.parentContainer.setId(new Long(form.getParentContainerId()));
+					
+					this.locatedAtPosition.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
+					this.locatedAtPosition.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+					this.locatedAtPosition.occupiedContainer = this;
 				}
 				else
 				{
-					parent = new StorageContainer();
+					this.locatedAtPosition.parentContainer = new StorageContainer();
 					if (form.getContainerId() != null && !form.getContainerId().trim().equals(""))
 					{
-						parent.setId(new Long(form.getContainerId()));
+						this.locatedAtPosition.parentContainer.setId(new Long(form.getContainerId()));
 					}
 					else
 					{
-						parent.setName(form.getSelectedContainerName());
+						this.locatedAtPosition.parentContainer.setName(form.getSelectedContainerName());
 					}
 					if (form.getPos1() != null && !form.getPos1().trim().equals("") && form.getPos2() != null && !form.getPos2().trim().equals(""))
 					{
-						this.setPositionDimensionOne(new Integer(form.getPos1().trim()));
-						this.setPositionDimensionTwo(new Integer(form.getPos2().trim()));
+						if(this.locatedAtPosition == null)
+						{
+							this.locatedAtPosition = new ContainerPosition();
+						}						
+						this.locatedAtPosition.setPositionDimensionOne(new Integer(form.getPos1().trim()));
+						this.locatedAtPosition.setPositionDimensionTwo(new Integer(form.getPos2().trim()));
+						this.locatedAtPosition.occupiedContainer = this;
 					}
 				}
 			}
 			else
 			{
-				parent = null;
-				this.setPositionDimensionOne(null);
-				this.setPositionDimensionTwo(null);
+				this.locatedAtPosition = null;
+				
 				site = new Site();
 				site.setId(new Long(form.getSiteId()));
 				site.setName(form.getSiteName());
@@ -540,11 +561,33 @@ public class StorageContainer extends Container implements IActivityStatus
 		}
 	}
 
-	public Collection getSpecimenCollection() {
-		return specimenCollection;
+	
+	/**
+	 * @return the specimenPositionCollection
+	 */
+	public Collection<SpecimenPosition> getSpecimenPositionCollection()
+	{
+		return specimenPositionCollection;
 	}
 
-	public void setSpecimenCollection(Collection specimenCollection) {
-		this.specimenCollection = specimenCollection;
+	
+	/**
+	 * @param specimenPositionCollection the specimenPositionCollection to set
+	 */
+	public void setSpecimenPositionCollection(Collection<SpecimenPosition> specimenPositionCollection)
+	{
+		this.specimenPositionCollection = specimenPositionCollection;
 	}
+
+//	public Collection getSpecimenCollection() {
+//		return specimenCollection;
+//	}
+//
+//	public void setSpecimenCollection(Collection specimenCollection) {
+//		this.specimenCollection = specimenCollection;
+//	}
+
+	
+
+	
 }

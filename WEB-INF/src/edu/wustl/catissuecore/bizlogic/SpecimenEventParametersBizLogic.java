@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
@@ -188,9 +189,11 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					{
 						storageContainerObj = null;
 					}
-					specimen.setStorageContainer(storageContainerObj);
-					specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
-					specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
+					
+					SpecimenPosition specimenPosition = specimen.getSpecimenPosition();
+					specimenPosition.setStorageContainer(storageContainerObj);
+					specimenPosition.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
+					specimenPosition.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
 					
 					
 					dao.update(proxySpecimen, sessionDataBean, true, true, false);
@@ -223,18 +226,20 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					 * Retrive Storage Container from specimen
 					 */
 					List storageContainerList =null;
-					if(specimen.getStorageContainer()!=null&&specimen.getStorageContainer().getId()!=null)
+					if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer()!=null&&specimen.getSpecimenPosition().getStorageContainer().getId()!=null)
 					{
-						storageContainerList = dao.retrieve(StorageContainer.class.getName(),Constants.ID, specimen.getStorageContainer().getId());
+						storageContainerList = dao.retrieve(StorageContainer.class.getName(),Constants.ID, specimen.getSpecimenPosition().getStorageContainer().getId());
 					}
 					if(storageContainerList!=null && !storageContainerList.isEmpty())
 					{
 						StorageContainer storageContainer = (StorageContainer)storageContainerList.get(0);
 						addEntriesInDisabledMap(specimen, storageContainer, disabledCont);
 					}
-					specimen.setPositionDimensionOne(null);
-					specimen.setPositionDimensionTwo(null);
-					specimen.setStorageContainer(null);
+					SpecimenPosition prevPosition = specimen.getSpecimenPosition(); 
+					specimen.setSpecimenPosition(null);
+//					specimen.setPositionDimensionOne(null);
+//					specimen.setPositionDimensionTwo(null);
+//					specimen.setStorageContainer(null);
 
 					specimen.setAvailable(new Boolean(false));
 					specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
@@ -245,7 +250,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					 */
 					//Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
 					dao.update(specimen, sessionDataBean, true, true, false);
-
+					dao.delete(prevPosition);	
 					try
 					{
 						CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
@@ -277,8 +282,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		Map containerDetails = new TreeMap();
 		containerDetails.put(contNameKey, container.getName());
 		containerDetails.put(contIdKey, container.getId());
-		containerDetails.put(pos1Key, specimen.getPositionDimensionOne());
-		containerDetails.put(pos2Key, specimen.getPositionDimensionTwo());
+		containerDetails.put(pos1Key, specimen.getSpecimenPosition().getPositionDimensionOne());
+		containerDetails.put(pos2Key, specimen.getSpecimenPosition().getPositionDimensionTwo());
 
 		disabledConts.put(specimen.getId().toString(), containerDetails);
 
@@ -604,9 +609,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
 				TransferEventParameters parameter = (TransferEventParameters) eventParameter;
 				Specimen specimen= (Specimen)dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, parameter.getSpecimen().getId()).get(0);
-				Long fromContainerId = (Long) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"storageContainer.id");
-				Integer pos1 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"positionDimensionOne");
-				Integer pos2 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"positionDimensionTwo");
+//				Long fromContainerId = (Long) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition");
+//				Integer pos1 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition.positionDimensionOne");
+//				Integer pos2 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPositionpositionDimensionTwo");
+				Long fromContainerId = specimen.getSpecimenPosition().getStorageContainer().getId();
+				Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
+				Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+
 				if((fromContainerId == null && parameter.getFromStorageContainer() != null) || (fromContainerId != null && parameter.getFromStorageContainer() == null))
 				{
 					throw new DAOException("Specimen "+specimen.getLabel()+" had been moved to another location! Updated the locations. Please redo the transfers.");

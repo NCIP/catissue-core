@@ -18,6 +18,8 @@ import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.CellSpecimen;
+import edu.wustl.catissuecore.domain.Container;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
@@ -42,6 +44,7 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.common.util.dbManager.HibernateUtility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 
@@ -89,12 +92,15 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		SpecimenArray specimenArray = (SpecimenArray) obj;
 		try
 		{
-			if (specimenArray.getStorageContainer() != null)
+			if (specimenArray.getLocatedAtPosition() != null && specimenArray.getLocatedAtPosition().getParentContainer() != null)
 			{
 
 				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-				StorageContainerUtil.deleteSinglePositionInContainerMap(specimenArray.getStorageContainer(), containerMap, specimenArray
-						.getPositionDimensionOne().intValue(), specimenArray.getPositionDimensionTwo().intValue());
+//				if(specimenArray.getLocatedAtPosition() != null)
+//				{
+					StorageContainerUtil.deleteSinglePositionInContainerMap((StorageContainer)specimenArray.getLocatedAtPosition().getParentContainer(), containerMap, specimenArray.getLocatedAtPosition()
+						.getPositionDimensionOne().intValue(), specimenArray.getLocatedAtPosition().getPositionDimensionTwo().intValue());
+//				}
 
 			}
 		}
@@ -115,20 +121,22 @@ try
 	SpecimenArray specimenArrayOldObject = (SpecimenArray) oldObj;
 
 	
-    
-	//If capacity of container gets increased then insert all the new positions in map ..........
-	int xOld = specimenArrayOldObject.getPositionDimensionOne().intValue();
-	int xNew = specimenArrayCurrentObject.getPositionDimensionOne().intValue();
-	int yOld = specimenArrayOldObject.getPositionDimensionTwo().intValue();
-	int yNew = specimenArrayCurrentObject.getPositionDimensionTwo().intValue();
-	long containerIdOld = specimenArrayCurrentObject.getStorageContainer().getId().longValue();
-	long containerIdNew = specimenArrayOldObject.getStorageContainer().getId().longValue();
-	if (xNew != xOld || yNew != yOld || containerIdOld!=containerIdNew)
-	{
-		StorageContainerUtil.insertSinglePositionInContainerMap(specimenArrayOldObject.getStorageContainer(), containerMap, xOld,yOld);
-		StorageContainerUtil.deleteSinglePositionInContainerMap(specimenArrayCurrentObject.getStorageContainer(), containerMap, xNew,yNew);
-	}
-
+ //   if(specimenArrayOldObject != null && specimenArrayOldObject.getLocatedAtPosition() != null
+ //   && specimenArrayCurrentObject != null && specimenArrayCurrentObject.getLocatedAtPosition() != null)
+ //   {
+		//If capacity of container gets increased then insert all the new positions in map ..........
+		int xOld = specimenArrayOldObject.getLocatedAtPosition().getPositionDimensionOne().intValue();
+		int xNew = specimenArrayCurrentObject.getLocatedAtPosition().getPositionDimensionOne().intValue();
+		int yOld = specimenArrayOldObject.getLocatedAtPosition().getPositionDimensionTwo().intValue();
+		int yNew = specimenArrayCurrentObject.getLocatedAtPosition().getPositionDimensionTwo().intValue();
+		long containerIdOld = specimenArrayCurrentObject.getLocatedAtPosition().getParentContainer().getId().longValue();
+		long containerIdNew = specimenArrayOldObject.getLocatedAtPosition().getParentContainer().getId().longValue();
+		if (xNew != xOld || yNew != yOld || containerIdOld!=containerIdNew)
+		{
+			StorageContainerUtil.insertSinglePositionInContainerMap((StorageContainer)specimenArrayOldObject.getLocatedAtPosition().getParentContainer(), containerMap, xOld,yOld);
+			StorageContainerUtil.deleteSinglePositionInContainerMap((StorageContainer)specimenArrayCurrentObject.getLocatedAtPosition().getParentContainer(), containerMap, xNew,yNew);
+		}
+//    }
 }
 catch (Exception e)
 {
@@ -154,9 +162,11 @@ catch (Exception e)
 		//		}
 
 		boolean flag = true;
-		if (specimenArray.getStorageContainer().getId().longValue() == oldSpecimenArray.getStorageContainer().getId().longValue()
-				&& specimenArray.getPositionDimensionOne().longValue() == oldSpecimenArray.getPositionDimensionOne().longValue()
-				&& specimenArray.getPositionDimensionTwo().longValue() == oldSpecimenArray.getPositionDimensionTwo().longValue())
+		if (specimenArray.getLocatedAtPosition().getParentContainer().getId().longValue() == oldSpecimenArray.getLocatedAtPosition().getParentContainer().getId().longValue()
+			//	&& specimenArray.getLocatedAtPosition() != null 
+				&& oldSpecimenArray.getLocatedAtPosition() != null
+				&& specimenArray.getLocatedAtPosition().getPositionDimensionOne().longValue() == oldSpecimenArray.getLocatedAtPosition().getPositionDimensionOne().longValue()
+				&& specimenArray.getLocatedAtPosition().getPositionDimensionTwo().longValue() == oldSpecimenArray.getLocatedAtPosition().getPositionDimensionTwo().longValue())
 		{
 			flag = false;
 		}
@@ -168,8 +178,11 @@ catch (Exception e)
 				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 						Constants.STORAGE_CONTAINER_FORM_ID);
 				//check for all validations on the storage container.
-				storageContainerBizLogic.checkContainer(dao, specimenArray.getStorageContainer().getId().toString(), specimenArray
-						.getPositionDimensionOne().toString(), specimenArray.getPositionDimensionTwo().toString(), sessionDataBean, false);
+//				if(specimenArray.getLocatedAtPosition() != null)
+//				{
+					storageContainerBizLogic.checkContainer(dao, specimenArray.getLocatedAtPosition().getParentContainer().getId().toString(), specimenArray.getLocatedAtPosition()
+						.getPositionDimensionOne().toString(), specimenArray.getLocatedAtPosition().getPositionDimensionTwo().toString(), sessionDataBean, false);
+//				}
 			}
 			catch (SMException sme)
 			{
@@ -414,19 +427,19 @@ catch (Exception e)
 	private void checkStorageContainerAvailablePos(SpecimenArray specimenArray, DAO dao, SessionDataBean sessionDataBean) throws DAOException,
 			SMException
 	{
-		if (specimenArray.getStorageContainer() != null)
+		if (specimenArray.getLocatedAtPosition() != null && specimenArray.getLocatedAtPosition().getParentContainer() != null)
 		{
 			retriveScId(dao, specimenArray);
 			retriveScName(specimenArray, dao);
-			StorageContainer storageContainerObj = specimenArray.getStorageContainer();
+			StorageContainer storageContainerObj = (StorageContainer)specimenArray.getLocatedAtPosition().getParentContainer();
 			//check for closed Storage Container
 			checkStatus(dao, storageContainerObj, "Storage Container");
 			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
 			// --- check for all validations on the storage container.
-			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getPositionDimensionOne().toString(),
-					specimenArray.getPositionDimensionTwo().toString(), sessionDataBean, false);
-			specimenArray.setStorageContainer(storageContainerObj);
+			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getLocatedAtPosition().getPositionDimensionOne().toString(),
+					specimenArray.getLocatedAtPosition().getPositionDimensionTwo().toString(), sessionDataBean, false);
+			specimenArray.getLocatedAtPosition().setParentContainer((Container)storageContainerObj);
 		}
 	}
 
@@ -437,15 +450,15 @@ catch (Exception e)
 	 */
 	private void retriveScName(SpecimenArray specimenArray, DAO dao) throws DAOException
 	{
-		if (specimenArray.getStorageContainer().getId() != null)
+		if (specimenArray.getLocatedAtPosition().getParentContainer().getId() != null)
 		{
 			StorageContainer storageContainerObj = new StorageContainer();
-			storageContainerObj.setId(specimenArray.getStorageContainer().getId());
+			storageContainerObj.setId(specimenArray.getLocatedAtPosition().getParentContainer().getId());
 			String sourceObjectName = StorageContainer.class.getName();
 			String[] selectColumnName = {"name"};
 			String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 			String[] whereColumnCondition = {"="};
-			Object[] whereColumnValue = {specimenArray.getStorageContainer().getId()};
+			Object[] whereColumnValue = {specimenArray.getLocatedAtPosition().getParentContainer().getId()};
 			String joinCondition = null;
 
 			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
@@ -453,7 +466,7 @@ catch (Exception e)
 			if (!list.isEmpty())
 			{
 				storageContainerObj.setName((String) list.get(0));
-				specimenArray.setStorageContainer(storageContainerObj);
+				specimenArray.getLocatedAtPosition().setParentContainer(storageContainerObj);
 			}
 		}
 	}
@@ -654,20 +667,25 @@ catch (Exception e)
 		 || !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionOne()), 1)
 		 || !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionTwo()), 1)
 		 || (!validator.isNumeric(String.valueOf(specimenArray.getStorageContainer().getId()), 1) && validator.isEmpty(specimenArray.getStorageContainer().getName())))*/
-		if ((!validator.isNumeric(String.valueOf(specimenArray.getStorageContainer().getId()), 1) && validator.isEmpty(specimenArray
-				.getStorageContainer().getName())))
+		if ((!validator.isNumeric(String.valueOf(specimenArray.getLocatedAtPosition().getParentContainer().getId()), 1) && validator.isEmpty(specimenArray.
+				getLocatedAtPosition().getParentContainer().getName())))
 		{
 			message = ApplicationProperties.getValue("array.positionInStorageContainer");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
 		}
 
-		if (specimenArray.getStorageContainer() != null)
+		if (specimenArray.getLocatedAtPosition() != null && specimenArray.getLocatedAtPosition().getParentContainer() != null)
 		{
 			retriveScId(dao, specimenArray);
 		}
 	
-		Integer xPos = specimenArray.getPositionDimensionOne();
-		Integer yPos = specimenArray.getPositionDimensionTwo();
+		Integer xPos = null; 
+		Integer yPos = null;
+		if(specimenArray.getLocatedAtPosition() != null)
+		{
+			xPos = specimenArray.getLocatedAtPosition().getPositionDimensionOne();
+			yPos = specimenArray.getLocatedAtPosition().getPositionDimensionTwo();
+		}
 		boolean isContainerFull = false;
 		/**
 		 *  Following code is added to set the x and y dimension in case only storage container is given 
@@ -679,8 +697,8 @@ catch (Exception e)
 			Map containerMapFromCache = null;
 			containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
 			isContainerFull = setPositions(specimenArray, isContainerFull, containerMapFromCache);
-			xPos = specimenArray.getPositionDimensionOne();
-			yPos = specimenArray.getPositionDimensionTwo();
+			xPos = specimenArray.getLocatedAtPosition().getPositionDimensionOne();
+			yPos = specimenArray.getLocatedAtPosition().getPositionDimensionTwo();			
 		}
 
 		if (isContainerFull)
@@ -756,15 +774,16 @@ catch (Exception e)
 			while (itr.hasNext())
 			{
 				NameValueBean nvb = (NameValueBean) itr.next();
-				if (nvb.getValue().toString().equals(specimenArray.getStorageContainer().getId().toString()))
+				if (nvb.getValue().toString().equals(specimenArray.getLocatedAtPosition().getParentContainer().getId().toString()))
 				{
 					Map tempMap = (Map) containerMapFromCache.get(nvb);
 					Iterator tempIterator = tempMap.keySet().iterator();
 					NameValueBean nvb1 = (NameValueBean) tempIterator.next();
 					List list = (List) tempMap.get(nvb1);
 					NameValueBean nvb2 = (NameValueBean) list.get(0);
-					specimenArray.setPositionDimensionOne(new Integer(nvb1.getValue()));
-					specimenArray.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+					ContainerPosition locatedAtPos = specimenArray.getLocatedAtPosition();
+					locatedAtPos.setPositionDimensionOne(new Integer(nvb1.getValue()));
+					locatedAtPos.setPositionDimensionTwo(new Integer(nvb2.getValue()));
 					isContainerFull = false;
 					break;
 				}
@@ -782,14 +801,15 @@ catch (Exception e)
 	private void retriveScId(DAO dao, SpecimenArray specimenArray) throws DAOException
 	{
 		String message = null;
-		if (specimenArray.getStorageContainer() != null && specimenArray.getStorageContainer().getName() != null)
+		if (specimenArray.getLocatedAtPosition() != null && specimenArray.getLocatedAtPosition().getParentContainer() != null && specimenArray.getLocatedAtPosition().getParentContainer().getName() != null)
 		{
-			StorageContainer storageContainerObj = specimenArray.getStorageContainer();
+			
+			StorageContainer storageContainerObj = (StorageContainer)HibernateMetaData.getProxyObjectImpl(specimenArray.getLocatedAtPosition().getParentContainer());
 			String sourceObjectName = StorageContainer.class.getName();
 			String[] selectColumnName = {"id"};
 			String[] whereColumnName = {"name"};
 			String[] whereColumnCondition = {"="};
-			Object[] whereColumnValue = {specimenArray.getStorageContainer().getName()};
+			Object[] whereColumnValue = {specimenArray.getLocatedAtPosition().getParentContainer().getName()};
 			String joinCondition = null;
 
 			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
@@ -797,7 +817,7 @@ catch (Exception e)
 			if (!list.isEmpty())
 			{
 				storageContainerObj.setId((Long) list.get(0));
-				specimenArray.setStorageContainer(storageContainerObj);
+				specimenArray.getLocatedAtPosition().setParentContainer(storageContainerObj);
 			}
 			else
 			{

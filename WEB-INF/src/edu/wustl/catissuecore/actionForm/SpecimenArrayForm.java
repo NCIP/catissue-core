@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -258,7 +259,11 @@ public class SpecimenArrayForm extends ContainerForm
     	SpecimenArray specimenArray = (SpecimenArray) domainObject;
     	this.specimenArrayTypeId = specimenArray.getSpecimenArrayType().getId().longValue();
     	this.createdBy = specimenArray.getCreatedBy().getId().longValue();
-        StorageContainer container = specimenArray.getStorageContainer();
+        Container container = null;
+        if(specimenArray.getLocatedAtPosition() != null)
+        {
+        	container = specimenArray.getLocatedAtPosition().getParentContainer();
+        }
 
         if (container != null)
         {
@@ -266,21 +271,27 @@ public class SpecimenArrayForm extends ContainerForm
                     .getId());
             if(this.stContSelection == 1)
             {
-            this.positionDimensionOne = specimenArray
+            	if(specimenArray != null && specimenArray.getLocatedAtPosition() != null)
+            	{
+            		this.positionDimensionOne = specimenArray.getLocatedAtPosition()
                     .getPositionDimensionOne().intValue();
-            this.positionDimensionTwo = specimenArray
+            		this.positionDimensionTwo = specimenArray.getLocatedAtPosition()
                     .getPositionDimensionTwo().intValue();
+            	}
             }
             else
             {
-            	this.pos1 = specimenArray
-                .getPositionDimensionOne().toString();
-                this.pos2 = specimenArray
-                .getPositionDimensionTwo().toString();
+            	if(specimenArray != null && specimenArray.getLocatedAtPosition() != null)
+            	{
+            		this.pos1 = specimenArray.getLocatedAtPosition()
+               		 .getPositionDimensionOne().toString();
+               		 this.pos2 = specimenArray.getLocatedAtPosition()
+               		 .getPositionDimensionTwo().toString();
+               	}
             }
-            this.positionInStorageContainer = container.getStorageType().getName() + " : " 
-			+ container.getId() + " Pos(" + this.positionDimensionOne + ","
-			+ this.positionDimensionTwo + ")";
+//            this.positionInStorageContainer = container.getStorageType().getName() + " : " 
+//			+ container.getId() + " Pos(" + this.positionDimensionOne + ","
+//			+ this.positionDimensionTwo + ")";
         }
         
         // this.setStContSelection(1);

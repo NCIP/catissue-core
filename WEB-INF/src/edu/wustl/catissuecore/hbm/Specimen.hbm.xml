@@ -58,7 +58,15 @@
             column="TYPE"
             length="50"
         />
-
+			<one-to-one
+            name="specimenPosition"
+	            class="edu.wustl.catissuecore.domain.SpecimenPosition"
+	            cascade="save-update"
+	            outer-join="auto"
+	            constrained="false"
+		     	property-ref="specimen"
+		     	
+	       />
         <property
             name="available"
             type="boolean"
@@ -67,22 +75,13 @@
             column="AVAILABLE"
         />
 
-        <property
+       <property
             name="positionDimensionOne"
             type="int"
             update="true"
             insert="true"
             column="POSITION_DIMENSION_ONE"
             length="30"
-        />
-
-        <property
-            name="positionDimensionTwo"
-            type="int"
-            update="true"
-            insert="true"
-            column="POSITION_DIMENSION_TWO"
-            length="50"
         />
 
         <property
@@ -210,17 +209,6 @@
             />
 
         </set>
-
-        <many-to-one
-            name="storageContainer"
-            class="edu.wustl.catissuecore.domain.StorageContainer"
-            cascade="none"
-            outer-join="false"
-            lazy="false"
-            update="true"
-            insert="true"
-            column="STORAGE_CONTAINER_IDENTIFIER" 
-        />
 
         <set
             name="externalIdentifierCollection"
@@ -389,6 +377,7 @@
 	    -->
 
         </subclass>
+        
 
     </class>
 

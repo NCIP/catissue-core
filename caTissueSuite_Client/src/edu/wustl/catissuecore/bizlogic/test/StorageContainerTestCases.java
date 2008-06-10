@@ -6,16 +6,20 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
+import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Container;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
@@ -99,7 +103,8 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	    	Container parent = new StorageContainer(); 
 	    	parent.setId(cachedContainer.getId());
 	    	storageContainer.setParentChanged(true);
-			storageContainer.setParent(parent);    
+	    	ContainerPosition cntPos = new ContainerPosition();
+	    	cntPos.setParentContainer(parent);    
 	    	System.out.println("After Update");
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
@@ -314,9 +319,14 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		}
 		
 		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-		ts.setStorageContainer(storageContainer);
-		ts.setPositionDimensionOne(new Integer(1));
-		ts.setPositionDimensionTwo(new Integer(2));
+		SpecimenPosition sp = new SpecimenPosition();
+		sp.setStorageContainer(storageContainer);
+		sp.setSpecimen(ts);
+		sp.setPositionDimensionOne(new Integer(1));
+		sp.setPositionDimensionTwo(new Integer(2));
+		ts.setSpecimenPosition(sp);
+		
+		
 		ts.setSpecimenCollectionGroup(scg);
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 		System.out.println("Befor creating Tissue Specimen");

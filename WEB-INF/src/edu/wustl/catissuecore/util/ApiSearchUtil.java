@@ -12,6 +12,7 @@ import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Container;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.ContainerType;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DistributedItem;
@@ -125,10 +126,10 @@ public class ApiSearchUtil
 	
 	public static void setSpecimenDefault(Specimen specimen)
 	{			
-    	if (SearchUtil.isNullobject(specimen.getStorageContainer()))
-    	{
-    		//TODO specimen.setStorageContainer(new StorageContainer());
-    	}		
+//    	if (SearchUtil.isNullobject(specimen.getStorageContainer()))
+//    	{
+//    		//TODO specimen.setStorageContainer(new StorageContainer());
+//    	}		
 		
     	if (SearchUtil.isNullobject(specimen.getSpecimenCollectionGroup()))
     	{
@@ -251,10 +252,13 @@ public class ApiSearchUtil
     	{
     		specimenArray.setCreatedBy(new User());
     	}
-    	
-    	if (SearchUtil.isNullobject(specimenArray.getStorageContainer()))
+    	if (SearchUtil.isNullobject(specimenArray.getLocatedAtPosition()))
     	{
-    		specimenArray.setStorageContainer(new StorageContainer());
+    		specimenArray.setLocatedAtPosition(new ContainerPosition());
+    	}
+    	if (SearchUtil.isNullobject(specimenArray.getLocatedAtPosition().getParentContainer()))
+    	{
+    		specimenArray.getLocatedAtPosition().setParentContainer(new StorageContainer());
     	}
     	
     	if (SearchUtil.isNullobject(specimenArray.getAvailable()))

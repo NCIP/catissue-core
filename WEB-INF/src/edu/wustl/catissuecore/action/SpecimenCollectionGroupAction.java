@@ -1222,7 +1222,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		{
 			specimenDetailList.add(specimenObj.getLabel());
 			specimenDetailList.add(specimenObj.getType());
-			if (specimenObj.getStorageContainer() == null)
+			if (specimenObj.getSpecimenPosition() == null)
 			{
 				specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
 			}
@@ -1231,12 +1231,15 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				
 //				StorageContainer storageContainer = (StorageContainer) bizLogic.retrieveAttribute(Specimen.class.getName(), specimenObj.getId(),
 //						"storageContainer");
-				StorageContainer storageContainer = specimenObj.getStorageContainer();
+				StorageContainer storageContainer = specimenObj.getSpecimenPosition().getStorageContainer();
 				
 				//specimenObj.getStorageContainer().getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
-				String storageLocation = storageContainer.getName() + ": X-Axis-" + specimenObj.getPositionDimensionOne() + ", Y-Axis-"
-						+ specimenObj.getPositionDimensionTwo();
-				specimenDetailList.add(storageLocation);
+				if(specimenObj != null && specimenObj.getSpecimenPosition() != null)
+				{
+					String storageLocation = storageContainer.getName() + ": X-Axis-" + specimenObj.getSpecimenPosition().getPositionDimensionOne() + ", Y-Axis-"
+						+ specimenObj.getSpecimenPosition().getPositionDimensionTwo();
+					specimenDetailList.add(storageLocation);
+				}
 			}
 			specimenDetailList.add(specimenObj.getClassName());
 			finalDataList.add(specimenDetailList);

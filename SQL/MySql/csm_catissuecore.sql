@@ -1422,6 +1422,15 @@ protection_group_id from csm_protection_group);
 delete from CSM_USER_GROUP_ROLE_PG where protection_group_id not in (select
 protection_group_id from csm_protection_group);
 
+/* Suite 1.1 Model changes */
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'AbstractPosition','AbstractPosition Object','edu.wustl.catissuecore.domain.AbstractPosition',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'SpecimenPosition','SpecimenPosition Object','edu.wustl.catissuecore.domain.SpecimenPosition',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'ContainerPosition','ContainerPosition Object','edu.wustl.catissuecore.domain.ContainerPosition',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
+
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='AbstractPosition'),'2008-05-28' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='SpecimenPosition'),'2008-05-28' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ContainerPosition'),'2008-05-28' from CSM_PG_PE;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=1;

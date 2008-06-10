@@ -2,9 +2,11 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +14,16 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
+
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.domain.Container;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -142,11 +148,11 @@ public class StorageContainerUtil
 			continersMap.put(storageContainerId, availabelPositionsMap);
 		}
 
-		if (storageContainer.getParent() != null)
+		if (storageContainer.getLocatedAtPosition() != null && storageContainer.getLocatedAtPosition().getParentContainer() != null)
 		{
-			Container parentContainer = storageContainer.getParent();
-			int x = storageContainer.getPositionDimensionOne().intValue();
-			int y = storageContainer.getPositionDimensionTwo().intValue();
+			Container parentContainer = storageContainer.getLocatedAtPosition().getParentContainer();
+			int x = storageContainer.getLocatedAtPosition().getPositionDimensionOne().intValue();
+			int y = storageContainer.getLocatedAtPosition().getPositionDimensionTwo().intValue();
 			deleteSinglePositionInContainerMap((StorageContainer) parentContainer, continersMap, x, y);
 		}
 
@@ -164,11 +170,11 @@ public class StorageContainerUtil
 		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
 		continersMap.remove(storageContainerId);
 
-		if (storageContainer.getParent() != null)
+		if (storageContainer.getLocatedAtPosition() != null && storageContainer.getLocatedAtPosition().getParentContainer() != null)
 		{
-			Container parentContainer = storageContainer.getParent();
-			int x = storageContainer.getPositionDimensionOne().intValue();
-			int y = storageContainer.getPositionDimensionTwo().intValue();
+			Container parentContainer = storageContainer.getLocatedAtPosition().getParentContainer();
+			int x = storageContainer.getLocatedAtPosition().getPositionDimensionOne().intValue();
+			int y = storageContainer.getLocatedAtPosition().getPositionDimensionTwo().intValue();
 			insertSinglePositionInContainerMap((StorageContainer) parentContainer, continersMap, x, y);
 		}
 
@@ -451,11 +457,16 @@ public class StorageContainerUtil
 	 */
 	public static void validateStorageLocationForSpecimen(Specimen specimen) throws DAOException
 	{
-		if (specimen.getStorageContainer() != null)
+		if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null)
 		{
 			//Long storageContainerId = specimen.getStorageContainer().getId();
-			Integer xPos = specimen.getPositionDimensionOne();
-			Integer yPos = specimen.getPositionDimensionTwo();
+			Integer xPos = null;
+			Integer yPos = null;
+			if(specimen.getSpecimenPosition() != null)
+			{
+				xPos = specimen.getSpecimenPosition().getPositionDimensionOne();
+				yPos = specimen.getSpecimenPosition().getPositionDimensionTwo();
+			}
 			boolean isContainerFull = false;
 			/**
 			 *  Following code is added to set the x and y dimension in case only storage container is given 
@@ -482,7 +493,7 @@ public class StorageContainerUtil
 					while (itr.hasNext())
 					{
 						NameValueBean nvb = (NameValueBean) itr.next();
-						if(nvb.getValue().toString().equals(specimen.getStorageContainer().getId().toString()))
+						if(nvb.getValue().toString().equals(specimen.getSpecimenPosition().getStorageContainer().getId().toString()))
 						{
 						
 							Map tempMap = (Map) containerMapFromCache.get(nvb);
@@ -491,18 +502,24 @@ public class StorageContainerUtil
 							
 							List list = (List) tempMap.get(nvb1);
 							NameValueBean nvb2 = (NameValueBean) list.get(0);
-											
-							specimen.setPositionDimensionOne(new Integer(nvb1.getValue()));
-						    specimen.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+									
+							SpecimenPosition specPos = specimen.getSpecimenPosition();							
+							specPos.setPositionDimensionOne(new Integer(nvb1.getValue()));
+						    specPos.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+						  
+						    specPos.setSpecimen(specimen);
+						    
 						    isContainerFull = false;
 						    break;
 						}
 						
 					}
 				}
-			
-				xPos = specimen.getPositionDimensionOne();
-			    yPos = specimen.getPositionDimensionTwo();
+				if(specimen.getSpecimenPosition() != null)
+				{
+					xPos = specimen.getSpecimenPosition().getPositionDimensionOne();
+					yPos = specimen.getSpecimenPosition().getPositionDimensionTwo();
+				}
 			}
 
 			if(isContainerFull)
@@ -607,7 +624,7 @@ public class StorageContainerUtil
 			}
 			return true;
 		}
-		
+			
 		/**
 		 * @param dao
 		 * @param similarContainerMap
@@ -1030,5 +1047,42 @@ public class StorageContainerUtil
 				 }
 			}
 			return flag;
+		}
+		/**
+		 * @param dao
+		 * @param containerId
+		 * @return
+		 * @throws DAOException
+		 * @throws ClassNotFoundException 
+		 */
+		public static Collection getChildren(DAO dao,Long containerId) throws DAOException
+		{
+			String hql = "select cntPos.occupiedContainer from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id ="+containerId;
+			List childrenColl = new ArrayList();
+			try
+			{
+				childrenColl = dao.executeQuery(hql, null, false, null);
+			}
+			catch (ClassNotFoundException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		      return childrenColl;
+		}
+		  
+		  /**
+		 * @param children
+		 * @param dao
+		 * @param containerId
+		 * @throws DAOException
+		 */
+		public static void setChildren(Collection children, DAO dao, Long containerId) throws DAOException
+		{
+			  if(children != null)
+			  {
+				  getChildren(dao, containerId).addAll(children);
+			  }
 		}
 }

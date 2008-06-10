@@ -12,14 +12,17 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.common.util.HQLCriteria;
@@ -93,9 +96,13 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 			SpecimenCollectionGroup scg = createSCGWithConsents(cp);
 			
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-			ts.setStorageContainer(storageContainer);
-			ts.setPositionDimensionOne(new Integer(1));
-			ts.setPositionDimensionTwo(new Integer(2));
+			
+			SpecimenPosition cpos = new SpecimenPosition();
+			cpos.setStorageContainer(storageContainer);
+			cpos.setPositionDimensionOne(new Integer(1));
+			cpos.setPositionDimensionTwo(new Integer(2));
+			cpos.setSpecimen(ts);
+			ts.setSpecimenPosition(cpos);
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			ts.setAvailable(new Boolean("true"));
@@ -165,14 +172,19 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
             parentContainer = (StorageContainer) appService.createObject(parentContainer);
             System.out.println("Parent:"+parentContainer.getId());
            
-            System.out.println("Parent:"+parentContainer.getChildren().size());
+           // System.out.println("Parent:"+StorageContainerUtil.getChildren(dao, containerId).getChildren().size());
             TestCaseUtility.setObjectMap(parentContainer,StorageContainer.class);
         
             StorageContainer subStorageContainer = new StorageContainer();
             subStorageContainer.setStorageType(storageType);
-            subStorageContainer.setParent(parentContainer);
-            subStorageContainer.setPositionDimensionOne(new Integer(1));
-            subStorageContainer.setPositionDimensionOne(new Integer(2));
+            
+            ContainerPosition cPos = new ContainerPosition();
+            cPos.setParentContainer(parentContainer);
+            cPos.setPositionDimensionOne(new Integer(1));
+            cPos.setPositionDimensionOne(new Integer(2));
+            cPos.setOccupiedContainer(subStorageContainer);
+            subStorageContainer.setLocatedAtPosition(cPos);
+            
             subStorageContainer.setNoOfContainers(new Integer(1));
             subStorageContainer.setActivityStatus("Active");
             Capacity capacity1 = new Capacity();
@@ -187,9 +199,9 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
             
             System.out.println("Childcontainer:"+subStorageContainer.getId());
            
-            System.out.println("ParentC:"+subStorageContainer.getParent().getName());
+ //           System.out.println("ParentC:"+subStorageContainer.getParent().getName());
            
-            System.out.println("Parent:"+parentContainer.getChildren().size());
+    //        System.out.println("Parent:"+parentContainer.getChildren().size());
             
             StorageContainer parentConatiertoUpdate = getStorageContainer(parentContainer.getId());
             
@@ -231,9 +243,13 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 			SpecimenCollectionGroup scg = createSCGWithConsents(cp);
 			
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-			ts.setStorageContainer(storageContainer);
-			ts.setPositionDimensionOne(new Integer(1));
-			ts.setPositionDimensionTwo(new Integer(2));
+			
+			SpecimenPosition spPos = new SpecimenPosition();
+			spPos.setStorageContainer(storageContainer);
+			spPos.setPositionDimensionOne(new Integer(1));
+			spPos.setPositionDimensionTwo(new Integer(2));
+			spPos.setSpecimen(ts);
+			ts.setSpecimenPosition(spPos);
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			ts.setAvailable(new Boolean("true"));
@@ -268,9 +284,12 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 			SpecimenCollectionGroup scg = createSCGWithConsents(cp);
 			
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-			ts.setStorageContainer(storageContainer);
-			ts.setPositionDimensionOne(new Integer(1));
-			ts.setPositionDimensionTwo(new Integer(2));
+			SpecimenPosition spPos = new SpecimenPosition();
+			spPos.setStorageContainer(storageContainer);
+			spPos.setSpecimen(ts);
+			spPos.setPositionDimensionOne(new Integer(1));
+			spPos.setPositionDimensionTwo(new Integer(2));
+			ts.setSpecimenPosition(spPos);
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			ts.setAvailable(new Boolean("true"));
@@ -528,7 +547,8 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 		}
 		
 		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-		ts.setStorageContainer(null);
+		
+//		ts.setStorageContainer(null);
 		ts.setSpecimenCollectionGroup(scg);
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts.setAvailable(new Boolean("true"));

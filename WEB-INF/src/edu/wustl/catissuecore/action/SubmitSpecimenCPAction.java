@@ -392,7 +392,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		storageContainer.setName(
 				specimenDataBean.getStorageContainerForSpecimen());
 		
-		specimen.setStorageContainer(null);
+	//	specimen.setStorageContainer(null);
+		specimen.setSpecimenPosition(null);
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 		specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
 		specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());

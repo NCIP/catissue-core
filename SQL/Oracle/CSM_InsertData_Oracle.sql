@@ -1067,4 +1067,14 @@ delete from CSM_PG_PE where protection_group_id not in (select
 protection_group_id from csm_protection_group);
 delete from CSM_USER_GROUP_ROLE_PG where protection_group_id not in (select
 protection_group_id from csm_protection_group);
+
+/* Suite 1.1 Model changes */
+INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'AbstractPosition','AbstractPosition Object','edu.wustl.catissuecore.domain.AbstractPosition',NULL,NULL,1,to_date('2008-05-28','yyyy-mm-dd'));
+INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES  (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'SpecimenPosition','SpecimenPosition Object','edu.wustl.catissuecore.domain.SpecimenPosition',NULL,NULL,1,to_date('2008-05-28','yyyy-mm-dd'));
+INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'ContainerPosition','ContainerPosition Object','edu.wustl.catissuecore.domain.ContainerPosition',NULL,NULL,1,to_date('2008-05-28','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='AbstractPosition'),to_date('2008-05-28','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='SpecimenPosition'),to_date('2008-05-28','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ContainerPosition'),to_date('2008-05-28','yyyy-mm-dd'));
+
+
 COMMIT;

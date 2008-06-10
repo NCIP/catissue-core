@@ -404,14 +404,18 @@ public class StorageContainerAction extends SecureAction
 			{
 				StorageContainer cont = (StorageContainer) containerList.get(0);
 
-				Container parent = (Container) bizLogic.retrieveAttribute(StorageContainer.class.getName(), cont.getId(), "parent");
+				Container parent = (Container) bizLogic.retrieveAttribute(StorageContainer.class.getName(), cont.getId(), "locatedAtPosition.parentContainer");
 				if (parent != null)
 				{
 					Long id = parent.getId();
-					Integer pos1 = cont.getPositionDimensionOne();
-					Integer pos2 = cont.getPositionDimensionTwo();
-					String parentContainerName = parent.getName();
-					StorageContainerUtil.addPostions(containerMap, id, parentContainerName, pos1, pos2);
+					if(cont != null && cont.getLocatedAtPosition() != null)
+					{
+						Integer pos1 = cont.getLocatedAtPosition().getPositionDimensionOne();
+						Integer pos2 = cont.getLocatedAtPosition().getPositionDimensionTwo();
+						String parentContainerName = parent.getName();
+
+						StorageContainerUtil.addPostions(containerMap, id, parentContainerName, pos1, pos2);
+					}
 				}
 			}
 			if (storageContainerForm.getParentContainerId() != -1)

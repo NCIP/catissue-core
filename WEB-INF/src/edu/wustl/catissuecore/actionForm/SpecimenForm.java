@@ -582,21 +582,25 @@ public class SpecimenForm extends AbstractActionForm
 			this.available = specimen.getAvailable().booleanValue();
 		}
 
-		StorageContainer container = specimen.getStorageContainer();
-		Logger.out.info("-----------Container while getting from domain--:"+container);
-		if (container != null)
-		{
-			this.storageContainer = String.valueOf(container.getId());
-			this.selectedContainerName = container.getName();
-			this.positionDimensionOne = String.valueOf(specimen.getPositionDimensionOne());
-			this.positionDimensionTwo = String.valueOf(specimen.getPositionDimensionTwo());
+		
+		
+		
+			if(specimen != null && specimen.getSpecimenPosition() != null)
+			{
+				StorageContainer container = specimen.getSpecimenPosition().getStorageContainer();
+				Logger.out.info("-----------Container while getting from domain--:"+container);
+				this.storageContainer = String.valueOf(container.getId());
+				this.selectedContainerName = container.getName();
+				this.positionDimensionOne = String.valueOf(specimen.getSpecimenPosition().getPositionDimensionOne());
+				this.positionDimensionTwo = String.valueOf(specimen.getSpecimenPosition().getPositionDimensionTwo());
+				this.positionInStorageContainer = container.getStorageType().getName() + " : "
+				+ container.getId() + " Pos(" + this.positionDimensionOne + ","
+				+ this.positionDimensionTwo + ")";
+				this.setStContSelection(2);
+			}
 
-			this.positionInStorageContainer = container.getStorageType().getName() + " : "
-					+ container.getId() + " Pos(" + this.positionDimensionOne + ","
-					+ this.positionDimensionTwo + ")";
-			this.setStContSelection(2);
+			
 
-		}
 		else
 		{
 			this.setStContSelection(1);

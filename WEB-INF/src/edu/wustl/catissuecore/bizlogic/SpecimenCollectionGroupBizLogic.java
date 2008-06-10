@@ -205,7 +205,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		newSpecimen.setDefaultSpecimenEventCollection(userId);
 		newSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		newSpecimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
-
+		
 		Collection childrenSpecimenCollection = specimen.getChildrenSpecimen();
 		if (childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
 		{

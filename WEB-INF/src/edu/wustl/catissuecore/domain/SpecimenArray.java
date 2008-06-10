@@ -34,7 +34,7 @@ public class SpecimenArray extends Container
     protected User createdBy;
 
     //Change for API Search   --- Ashwin 04/10/2006
-    protected StorageContainer storageContainer;
+ //   protected StorageContainer storageContainer;
 
     protected Collection specimenArrayContentCollection = new HashSet();
     
@@ -143,23 +143,23 @@ public class SpecimenArray extends Container
         this.specimenArrayType = specimenArrayType;
     }
 
-    /**
-     * @return Returns the storageContainer.
-     * @hibernate.many-to-one column="STORAGE_CONTAINER_ID" class="edu.wustl.catissuecore.domain.StorageContainer" 
-     * constrained="true"
-     */
-    public StorageContainer getStorageContainer()
-    {
-        return storageContainer;
-    }
-
-    /**
-     * @param storageContainer The storageContainer to set.
-     */
-    public void setStorageContainer(StorageContainer storageContainer)
-    {
-        this.storageContainer = storageContainer;
-    }
+//    /**
+//     * @return Returns the storageContainer.
+//     * @hibernate.many-to-one column="STORAGE_CONTAINER_ID" class="edu.wustl.catissuecore.domain.StorageContainer" 
+//     * constrained="true"
+//     */
+//    public StorageContainer getStorageContainer()
+//    {
+//        return storageContainer;
+//    }
+//
+//    /**
+//     * @param storageContainer The storageContainer to set.
+//     */
+//    public void setStorageContainer(StorageContainer storageContainer)
+//    {
+//        this.storageContainer = storageContainer;
+//    }
 
 	/**
 	 * @return Returns the available.
@@ -192,9 +192,13 @@ public class SpecimenArray extends Container
     		createdBy = new User();
     	}
     	//Change for API Search   --- Ashwin 04/10/2006
-    	if (SearchUtil.isNullobject(storageContainer))
+    	if (SearchUtil.isNullobject(locatedAtPosition))
     	{
-    		storageContainer = new StorageContainer();
+    		locatedAtPosition = new ContainerPosition();
+    	}
+    	if (SearchUtil.isNullobject(locatedAtPosition.parentContainer))
+    	{
+    		locatedAtPosition.parentContainer = new StorageContainer();
     	}
     	//Change for API Search   --- Ashwin 04/10/2006
     	if (SearchUtil.isNullobject(available))
@@ -216,20 +220,28 @@ public class SpecimenArray extends Container
 	    	SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) actionForm;
 	    	specimenArrayType.setId(new Long(specimenArrayForm.getSpecimenArrayTypeId()));
 	    	
+	    	if(this.locatedAtPosition == null)
+			{
+				this.locatedAtPosition = new ContainerPosition();
+			}
 	    	if(specimenArrayForm.getStContSelection() == 1)
 	    	{
-	    		this.storageContainer.setId(new Long(specimenArrayForm.getStorageContainer()));
-				this.positionDimensionOne = new Integer(specimenArrayForm.getPositionDimensionOne());
-				this.positionDimensionTwo = new Integer(specimenArrayForm.getPositionDimensionTwo());
+	    		this.locatedAtPosition.parentContainer.setId(new Long(specimenArrayForm.getStorageContainer()));
+	    			    		
+				this.locatedAtPosition.positionDimensionOne = new Integer(specimenArrayForm.getPositionDimensionOne());
+				this.locatedAtPosition.positionDimensionTwo = new Integer(specimenArrayForm.getPositionDimensionTwo());
+				this.locatedAtPosition.occupiedContainer = this;
+				
 	    	}
 	    	else
 	    	{   		
-	    		this.storageContainer.setName(specimenArrayForm.getSelectedContainerName());
+	    		this.locatedAtPosition.parentContainer.setName(specimenArrayForm.getSelectedContainerName());
 	    		if (specimenArrayForm.getPos1() != null && !specimenArrayForm.getPos1().trim().equals("")
 						&& specimenArrayForm.getPos2() != null && !specimenArrayForm.getPos2().trim().equals(""))
 				{
-				this.positionDimensionOne = new Integer(specimenArrayForm.getPos1());
-				this.positionDimensionTwo = new Integer(specimenArrayForm.getPos2());
+				this.locatedAtPosition.positionDimensionOne = new Integer(specimenArrayForm.getPos1());
+				this.locatedAtPosition.positionDimensionTwo = new Integer(specimenArrayForm.getPos2());
+				this.locatedAtPosition.occupiedContainer = this;
 				}
 	    	}
 	    	

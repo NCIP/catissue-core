@@ -329,7 +329,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 					
 		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-		ts.setStorageContainer(null);
+//		ts.setStorageContainer(null);
 		ts.setSpecimenCollectionGroup(scg);
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts.setAvailable(new Boolean("true"));
@@ -362,7 +362,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		SpecimenCollectionGroup scg = (SpecimenCollectionGroup) createSCGWithConsents(cp);
 		
 		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-		ts.setStorageContainer(null);
+//		ts.setStorageContainer(null);
 		ts.setSpecimenCollectionGroup(scg);
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts.setAvailable(new Boolean("true"));
@@ -383,7 +383,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		SpecimenCollectionGroup newSCG = (SpecimenCollectionGroup) createSCGWithConsents(updatedCP);
 		
 		TissueSpecimen ts1 =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-		ts1.setStorageContainer(null);
+//		ts1.setStorageContainer(null);
 		ts1.setSpecimenCollectionGroup(newSCG);
 		ts1.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts1.setAvailable(new Boolean("true"));
@@ -646,7 +646,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		
 		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-		ts.setStorageContainer(null);
+//		ts.setStorageContainer(null);
 		ts.setSpecimenCollectionGroup(scg);
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 		System.out.println("Befor creating Tissue Specimen");
@@ -784,7 +784,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		
 		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-		ts.setStorageContainer(null);
+//		ts.setStorageContainer(null);
 		ts.setSpecimenCollectionGroup(scg);
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 		System.out.println("Befor creating Tissue Specimen");

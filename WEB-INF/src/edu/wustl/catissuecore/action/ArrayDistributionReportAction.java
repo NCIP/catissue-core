@@ -246,8 +246,11 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		SpecimenArrayType specimenArrayType = (SpecimenArrayType) bizLogic.retrieveAttribute(SpecimenArray.class.getName(), array.getId(),
 				"specimenArrayType");
 		arrayDetails.add(Utility.toString(specimenArrayType.getName()));
-		arrayDetails.add(Utility.toString(array.getPositionDimensionOne()));
-		arrayDetails.add(Utility.toString(array.getPositionDimensionTwo()));
+		if(array != null && array.getLocatedAtPosition() != null)
+		{
+			arrayDetails.add(Utility.toString(array.getLocatedAtPosition().getPositionDimensionOne()));
+			arrayDetails.add(Utility.toString(array.getLocatedAtPosition().getPositionDimensionTwo()));
+		}
 		arrayDetails.add(Utility.toString(array.getCapacity().getOneDimensionCapacity()));
 		arrayDetails.add(Utility.toString(array.getCapacity().getTwoDimensionCapacity()));
 		arrayDetails.add(Utility.toString(specimenArrayType.getSpecimenClass()));

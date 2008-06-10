@@ -275,15 +275,17 @@
 				<bean:write name="aliquot" property="barcode"/>			&nbsp;					
 			</td>
 			<td class="formField" nowrap>
-				<logic:empty name="aliquot" property="positionDimensionOne">
+			<bean:define id="position" name="aliquot" property="specimenPosition"/>
+				<logic:empty name="position" property="positionDimensionOne">
 					Virtually Located 
 				</logic:empty>
 				
-				<logic:notEmpty name="aliquot" property="positionDimensionOne">
-					<bean:define id="sc" name="aliquot" property="storageContainer"/> &nbsp;
+				<logic:notEmpty name="position" property="positionDimensionOne">
+					<bean:define id="sc" name="position" property="storageContainer"/> &nbsp;
 					<bean:write name="sc" property="name"/> &nbsp;
-					<bean:write name="aliquot" property="positionDimensionOne"/> &nbsp;
-					<bean:write name="aliquot" property="positionDimensionTwo"/>
+					
+					<bean:write name="position" property="positionDimensionOne"/> &nbsp;
+					<bean:write name="position" property="positionDimensionTwo"/>
 				</logic:notEmpty>
 			</td>
 		</tr>

@@ -113,16 +113,19 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				//Ashish - 7/6/06 - Retriving Storage container for performance improvement.
 				String sourceObjectName = Specimen.class.getName();
 				Long id = specimen.getId();
-				String attributeName = Constants.COLUMN_NAME_STORAGE_CONTAINER;
+				String attributeName = "specimenPosition.storageContainer";//Constants.COLUMN_NAME_STORAGE_CONTAINER;
 				StorageContainer stContainer = (StorageContainer)bizLogic.retrieveAttribute(sourceObjectName, id, attributeName);
 				
 				if (stContainer != null)
 				{
-					positionOne = specimen.getPositionDimensionOne().toString();
-					positionTwo = specimen.getPositionDimensionTwo().toString();
-					//StorageContainer container = specimen.getStorageContainer();
-					storageContainerID = stContainer.getId().toString();
-					fromPositionData = stContainer.getName()+":" + " Pos(" + positionOne + "," + positionTwo + ")";
+					if(specimen != null && specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getPositionDimensionOne() != null && specimen.getSpecimenPosition().getPositionDimensionTwo() != null)
+					{
+						positionOne = specimen.getSpecimenPosition().getPositionDimensionOne().toString();
+						positionTwo = specimen.getSpecimenPosition().getPositionDimensionTwo().toString();
+						//StorageContainer container = specimen.getStorageContainer();
+						storageContainerID = stContainer.getId().toString();
+						fromPositionData = stContainer.getName()+":" + " Pos(" + positionOne + "," + positionTwo + ")";
+					}
 				}
 				//The fromPositionData(storageContainer Info) of specimen of this event.
 				transferEventParametersForm.setFromPositionData(fromPositionData);

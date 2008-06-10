@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -94,12 +95,15 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 	    	
 	    	//End: Change for API Search
 			
-
+			ContainerPosition cntPos = aliquotSpecimenArray.getLocatedAtPosition();
+			if(cntPos == null)
+				cntPos = new ContainerPosition();
 			if (parentSpecimenArray != null)
 			{
 				//check for closed ParentSpecimenArray
 				checkStatus(dao, parentSpecimenArray, "Parent SpecimenArray");
-				aliquotSpecimenArray.setParent(parentSpecimenArray);
+				cntPos.setParentContainer(parentSpecimenArray);
+		//		aliquotSpecimenArray.setParent(parentSpecimenArray);
 				aliquotSpecimenArray.setSpecimenArrayType(parentSpecimenArray.getSpecimenArrayType());				
 				aliquotSpecimenArray.setCreatedBy(parentSpecimenArray.getCreatedBy());
 				aliquotSpecimenArray.setCapacity(parentSpecimenArray.getCapacity());
@@ -123,12 +127,11 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 				label = null;
 			}
 			aliquotSpecimenArray.setName(label);
-
+			StorageContainer storageContainerObj = new StorageContainer();
 			try
 			{
 				if (containerId != null)
-				{
-					StorageContainer storageContainerObj = new StorageContainer();
+				{					
 					storageContainerObj.setId(new Long(containerId));
 
 						//check for closed Storage Container
@@ -141,7 +144,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,
 								sessionDataBean,false);
 
-						aliquotSpecimenArray.setStorageContainer(storageContainerObj);
+						aliquotSpecimenArray.getLocatedAtPosition().setParentContainer(storageContainerObj);
 						String sourceObjectName = StorageContainer.class.getName();
 						String[] selectColumnName = {"name"};
 						String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
@@ -160,7 +163,8 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 				}
 				else
 				{
-					aliquotSpecimenArray.setStorageContainer(null);
+					aliquotSpecimenArray.setLocatedAtPosition(null);
+			//		aliquotSpecimenArray.setStorageContainer(null);
 				}
 			}
 			catch (SMException sme)
@@ -169,17 +173,23 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 				throw handleSMException(sme);
 			}
 
+			
 			//Setting the attributes - storage positions, available, acivity status & lineage
 			if (containerId != null)
-			{
-				aliquotSpecimenArray.setPositionDimensionOne(new Integer(posDim1));
-				aliquotSpecimenArray.setPositionDimensionTwo(new Integer(posDim2));
+			{				
+				cntPos.setPositionDimensionOne(new Integer(posDim1));
+				cntPos.setPositionDimensionTwo(new Integer(posDim2));
+				cntPos.setOccupiedContainer(storageContainerObj);
 			}
 			else
 			{
-				aliquotSpecimenArray.setPositionDimensionOne(null);
-				aliquotSpecimenArray.setPositionDimensionTwo(null);
+//				cntPos.setPositionDimensionOne(null);
+//				cntPos.setPositionDimensionTwo(null);
+				cntPos = null;
 			}
+			
+			aliquotSpecimenArray.setLocatedAtPosition(cntPos);
+			
 			aliquotSpecimenArray.setAvailable(Boolean.TRUE);
 			aliquotSpecimenArray.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			//aliquotSpecimenArray.setLineage(Constants.ALIQUOT);

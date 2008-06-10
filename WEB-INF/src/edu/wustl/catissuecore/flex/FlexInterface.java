@@ -972,12 +972,15 @@ public class FlexInterface
 		specimenDataBean.setSpecimenCollectionGroup((SpecimenCollectionGroup) sp.getSpecimenCollectionGroup());
 		specimenDataBean.setSpecimenEventCollection(sp.getSpecimenEventCollection());
 
-		if (sp.getStorageContainer() != null)
+		if (sp.getSpecimenPosition() != null && sp.getSpecimenPosition().getStorageContainer() != null)
 		{
-			specimenDataBean.setStorageContainerForSpecimen(sp.getStorageContainer().getName());
-			specimenDataBean.setSelectedContainerName(sp.getStorageContainer().getName());
-			specimenDataBean.setPositionDimensionOne(sp.getPositionDimensionOne().toString());
-			specimenDataBean.setPositionDimensionTwo(sp.getPositionDimensionTwo().toString());
+			specimenDataBean.setStorageContainerForSpecimen(sp.getSpecimenPosition().getStorageContainer().getName());
+			specimenDataBean.setSelectedContainerName(sp.getSpecimenPosition().getStorageContainer().getName());
+			if(sp.getSpecimenPosition() != null)
+			{
+				specimenDataBean.setPositionDimensionOne(sp.getSpecimenPosition().getPositionDimensionOne().toString());
+				specimenDataBean.setPositionDimensionTwo(sp.getSpecimenPosition().getPositionDimensionTwo().toString());
+			}
 		}
 		else
 		{
@@ -1226,7 +1229,7 @@ public class FlexInterface
 			if (!list.isEmpty())
 			{
 				StorageContainer storageCont = (StorageContainer) list.get(0);
-				specimen.setStorageContainer(storageCont);
+				specimen.getSpecimenPosition().setStorageContainer(storageCont);
 				return specimen;
 			}
 		}

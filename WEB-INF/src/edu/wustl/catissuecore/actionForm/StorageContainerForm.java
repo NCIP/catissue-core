@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -221,25 +222,33 @@ public class StorageContainerForm extends AbstractActionForm
 		this.typeId = container.getStorageType().getId().longValue();
 		this.typeName = container.getStorageType().getName();
 		
-
-		Container parent = container.getParent();
+		ContainerPosition cntPos = container.getLocatedAtPosition();
+		Container parent = null;
+		if(cntPos != null)
+		{
+			parent = cntPos.getParentContainer();
+		}
 		if (parent != null)
 		{
 			this.parentContainerId = parent.getId().longValue();
 			this.checkedButton = 2;
 			
 			StorageContainer parentContainer = (StorageContainer)HibernateMetaData.getProxyObjectImpl(parent); 
-			this.positionInParentContainer = parentContainer.getStorageType().getName()
+			if(container != null && container.getLocatedAtPosition() != null)
+			{
+				this.positionInParentContainer = parentContainer.getStorageType().getName()
 					+ " : "
 					+ parentContainer.getId()
 					+ " Pos("
-					+ container.getPositionDimensionOne()
+					+ container.getLocatedAtPosition().getPositionDimensionOne()
 					+ ","
-					+ container.getPositionDimensionTwo() + ")";
+					+ container.getLocatedAtPosition().getPositionDimensionTwo() + ")";
 
 			//Sri: Fix for bug #
-			this.positionDimensionOne = container.getPositionDimensionOne().intValue();
-			this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+			
+				this.positionDimensionOne = container.getLocatedAtPosition().getPositionDimensionOne().intValue();
+				this.positionDimensionTwo = container.getLocatedAtPosition().getPositionDimensionTwo().intValue();
+			}
 			
 			this.siteName = parentContainer.getSite().getName();
 		}

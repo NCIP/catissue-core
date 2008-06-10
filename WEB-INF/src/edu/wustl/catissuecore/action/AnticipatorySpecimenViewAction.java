@@ -246,32 +246,25 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 					);
 		}
 		specimenDataBean.setConcentration(concentration);
-		StorageContainer container = specimen.getStorageContainer();
-		Logger.out.info("-----------Container while getting from domain--:"+container);
+		
 		String storageType = null;
-		if (container != null)
+		
+		if(specimen != null && specimen.getSpecimenPosition() != null)
 		{
-			specimenDataBean.setContainerId( String.valueOf(container.getId()));
-			specimenDataBean.setSelectedContainerName(container.getName());
-			specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getPositionDimensionOne()));
-			specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen.getPositionDimensionTwo()));
-
-			specimenDataBean.setStorageContainerForSpecimen("Auto");
-
+				StorageContainer container = specimen.getSpecimenPosition().getStorageContainer();
+				Logger.out.info("-----------Container while getting from domain--:"+container);
+				specimenDataBean.setContainerId( String.valueOf(container.getId()));
+				specimenDataBean.setSelectedContainerName(container.getName());
+				specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionOne()));
+				specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionTwo()));
+				specimenDataBean.setStorageContainerForSpecimen("Auto");
 		}
 		else
 		{
 			//TODO:After model change 
-			if(specimen.getPositionDimensionOne() == null)
-			{
-				specimenDataBean.setStorageContainerForSpecimen("Virtual");
-			}
-			else
-			{
-				storageType = 
-					CollectionProtocolUtil.getStorageTypeValue(specimen.getPositionDimensionOne());
-				specimenDataBean.setStorageContainerForSpecimen(storageType);
-			}
+			storageType = CollectionProtocolUtil.getStorageTypeValue(specimen.getPositionDimensionOne());
+			specimenDataBean.setStorageContainerForSpecimen(storageType);				
+
 		}
 		if ("Auto".equals(storageType))
 		{

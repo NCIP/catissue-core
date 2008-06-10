@@ -47,6 +47,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class Specimen extends AbstractDomainObject implements Serializable, IActivityStatus
 {
+	protected SpecimenPosition specimenPosition; 
 
 	/**
 	 * 
@@ -72,11 +73,11 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * Reference to dimensional position one of the specimen in Storage Container.
 	 */
 	protected Integer positionDimensionOne;
-
-	/**
-	 * Reference to dimensional position two of the specimen in Storage Container.
-	 */
-	protected Integer positionDimensionTwo;
+//
+//	/**
+//	 * Reference to dimensional position two of the specimen in Storage Container.
+//	 */
+//	protected Integer positionDimensionTwo;
 
 	/**
 	 * Barcode assigned to the specimen.
@@ -108,7 +109,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	/**
 	 * A physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
 	 */
-	protected StorageContainer storageContainer;
+//	protected StorageContainer storageContainer;
 
 	/**
 	 * Collection of Specimen Event Parameters associated with this specimen. 
@@ -344,27 +345,27 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 		this.positionDimensionOne = positionDimensionOne;
 	}
 
-	/**
-	 * Returns the reference to dimensional position two of the specimen in Storage Container.
-	 * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="50"  
-	 * @return the reference to dimensional position two of the specimen in Storage Container.
-	 * @see #setPositionDimensionOne(Integer)
-	 */
-	public Integer getPositionDimensionTwo()
-	{
-		return positionDimensionTwo;
-	}
-
-	/**
-	 * Sets the reference to dimensional position two of the specimen in Storage Container.
-	 * @param positionDimensionTwo the reference to dimensional position two of the specimen 
-	 * in Storage Container.
-	 * @see #getPositionDimensionTwo()
-	 */
-	public void setPositionDimensionTwo(Integer positionDimensionTwo)
-	{
-		this.positionDimensionTwo = positionDimensionTwo;
-	}
+//	/**
+//	 * Returns the reference to dimensional position two of the specimen in Storage Container.
+//	 * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="50"  
+//	 * @return the reference to dimensional position two of the specimen in Storage Container.
+//	 * @see #setPositionDimensionOne(Integer)
+//	 */
+//	public Integer getPositionDimensionTwo()
+//	{
+//		return positionDimensionTwo;
+//	}
+//
+//	/**
+//	 * Sets the reference to dimensional position two of the specimen in Storage Container.
+//	 * @param positionDimensionTwo the reference to dimensional position two of the specimen 
+//	 * in Storage Container.
+//	 * @see #getPositionDimensionTwo()
+//	 */
+//	public void setPositionDimensionTwo(Integer positionDimensionTwo)
+//	{
+//		this.positionDimensionTwo = positionDimensionTwo;
+//	}
 
 	/**
 	 * Returns the barcode assigned to the specimen.
@@ -541,21 +542,21 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * @return the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
 	 * @see #setStorageContainer(StorageContainer)
 	 */
-	public StorageContainer getStorageContainer()
-	{
-		return storageContainer;
-	}
-
-	/**
-	 * Sets the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
-	 * @param storageContainer the physically discreet container that is used to store a specimen  
-	 * e.g. Box, Freezer etc.
-	 * @see #getStorageContainer()
-	 */
-	public void setStorageContainer(StorageContainer storageContainer)
-	{
-		this.storageContainer = storageContainer;
-	}
+//	public StorageContainer getStorageContainer()
+//	{
+//		return storageContainer;
+//	}
+//
+//	/**
+//	 * Sets the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+//	 * @param storageContainer the physically discreet container that is used to store a specimen  
+//	 * e.g. Box, Freezer etc.
+//	 * @see #getStorageContainer()
+//	 */
+//	public void setStorageContainer(StorageContainer storageContainer)
+//	{
+//		this.storageContainer = storageContainer;
+//	}
 
 	/**
 	 * Returns the collection of a pre-existing, externally defined id associated with a specimen.
@@ -647,9 +648,9 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	{
 		//Change for API Search   --- Ashwin 04/10/2006
 		AbstractActionForm abstractForm = (AbstractActionForm) valueObject;
-		if (SearchUtil.isNullobject(storageContainer))
+		if (SearchUtil.isNullobject(specimenPosition))
 		{
-			storageContainer = null;
+			specimenPosition = null;
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
@@ -889,49 +890,69 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 
 					if (form.isAddOperation())
 					{
-						if (this.storageContainer == null)
+						if (this.specimenPosition == null || this.specimenPosition.storageContainer == null)
 						{
-							this.storageContainer = new StorageContainer();
+							this.specimenPosition = new SpecimenPosition();
+							this.specimenPosition.storageContainer = new StorageContainer();
 						}
 						if (form.getStContSelection() == 1)
 						{
-							this.storageContainer = null;
-							this.positionDimensionOne = null;
-							this.positionDimensionTwo = null;
+						//	this.storageContainer = null;
+							
+							this.specimenPosition = null;
+							
 						}
 						if (form.getStContSelection() == 2)
 						{
 							long stContainerId = Long.parseLong(form.getStorageContainer());
-							this.storageContainer.setId(stContainerId);
-							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+							this.specimenPosition.storageContainer.setId(stContainerId);
+							if(this.specimenPosition == null)
+							{
+								this.specimenPosition = new SpecimenPosition();
+							}
+							this.specimenPosition.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+							this.specimenPosition.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+							this.specimenPosition.specimen = this;
+						//	this.specimenPosition.storageContainer = this.storageContainer;
 						}
 						else if (form.getStContSelection() == 3)
 						{
-							this.storageContainer.setName(form.getSelectedContainerName());
+							this.specimenPosition.storageContainer.setName(form.getSelectedContainerName());
 							if (form.getPos1() != null && !form.getPos1().trim().equals("") && form.getPos2() != null
 									&& !form.getPos2().trim().equals(""))
 							{
-								this.positionDimensionOne = new Integer(form.getPos1());
-								this.positionDimensionTwo = new Integer(form.getPos2());
+								if(this.specimenPosition == null)
+								{
+									this.specimenPosition = new SpecimenPosition();
+								}
+								this.specimenPosition.positionDimensionOne = new Integer(form.getPos1());
+								this.specimenPosition.positionDimensionTwo = new Integer(form.getPos2());
+								this.specimenPosition.specimen = this;
+						//		this.specimenPosition.storageContainer = this.storageContainer;
 							}
 
 						}
 					}
 					else
 					{
+						if(this.specimenPosition == null)
+						{
+							this.specimenPosition = new SpecimenPosition();
+						}
 						if (!validator.isEmpty(form.getSelectedContainerName()))
 						{
 							//this.storageContainer = new StorageContainer();
-							this.storageContainer.setName(form.getSelectedContainerName());
-							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+							this.specimenPosition.storageContainer.setName(form.getSelectedContainerName());
+							this.specimenPosition.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+							this.specimenPosition.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+							this.specimenPosition.specimen = this;
+					//		this.specimenPosition.storageContainer = this.storageContainer;
 						}
 						else
 						{
-							this.storageContainer = null;
-							this.positionDimensionOne = null;
-							this.positionDimensionTwo = null;
+						//	this.storageContainer = null;
+							this.specimenPosition = null;
+						
 						}
 					}
 
@@ -1039,30 +1060,35 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 					//setting the value of storage container
 					if (form.isAddOperation())
 					{
-						if (this.storageContainer == null)
+						if (this.specimenPosition == null || this.specimenPosition.storageContainer == null)
 						{
-							this.storageContainer = new StorageContainer();
+							this.specimenPosition = new SpecimenPosition();
+							this.specimenPosition.storageContainer = new StorageContainer();
 						}
+						
 						if (form.getStContSelection() == 1)
 						{
-							this.storageContainer = null;
-							this.positionDimensionOne = null;
-							this.positionDimensionTwo = null;
+						//	this.storageContainer = null;
+							this.specimenPosition = null;							
 						}
 						if (form.getStContSelection() == 2)
 						{
-							this.storageContainer.setId(new Long(form.getStorageContainer()));
-							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+							this.specimenPosition.storageContainer.setId(new Long(form.getStorageContainer()));
+							this.specimenPosition.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+							this.specimenPosition.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+							this.specimenPosition.specimen = this;
+				//			this.specimenPosition.storageContainer = this.storageContainer;
 						}
 						else if (form.getStContSelection() == 3)
 						{
-							this.storageContainer.setName(form.getSelectedContainerName());
+							this.specimenPosition.storageContainer.setName(form.getSelectedContainerName());
 							if (form.getPos1() != null && !form.getPos1().trim().equals("") && form.getPos2() != null
 									&& !form.getPos2().trim().equals(""))
 							{
-								this.positionDimensionOne = new Integer(form.getPos1());
-								this.positionDimensionTwo = new Integer(form.getPos2());
+								this.specimenPosition.positionDimensionOne = new Integer(form.getPos1());
+								this.specimenPosition.positionDimensionTwo = new Integer(form.getPos2());
+								this.specimenPosition.specimen = this;
+				//				this.specimenPosition.storageContainer = this.storageContainer;
 							}
 
 						}
@@ -1464,6 +1490,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 		this.type = specimen.getType();
 		this.isCollectionProtocolRequirement = new Boolean(false);
 		this.positionDimensionOne = specimen.positionDimensionOne;
+		
 	}
 
 	private Collection setBiohazardCollection(Specimen specimen)
@@ -1544,5 +1571,23 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 			}
 		}
 		setConsentTierStatusCollection(consentTierStatusCollectionN);
+	}
+	
+	/**
+	 * @return the specimenPosition
+	 * @hibernate.one-to-one class="edu.wustl.catissuecore.domain.SpecimenPosition" cascade="save-update" 
+	 */
+	public SpecimenPosition getSpecimenPosition()
+	{
+		return specimenPosition;
+	}
+
+	
+	/**
+	 * @param specimenPosition the specimenPosition to set
+	 */
+	public void setSpecimenPosition(SpecimenPosition specimenPosition)
+	{
+		this.specimenPosition = specimenPosition;
 	}
 }

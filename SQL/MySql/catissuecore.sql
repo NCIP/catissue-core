@@ -235,12 +235,9 @@ create table CATISSUE_CONTAINER (
    ACTIVITY_STATUS varchar(50),
    BARCODE varchar(255) unique,
    CAPACITY_ID bigint,
-   PARENT_CONTAINER_ID bigint,
    COMMENTS text,
    FULL bit,
-   NAME varchar(255) unique not null,
-   POSITION_DIMENSION_ONE integer,
-   POSITION_DIMENSION_TWO integer,
+   NAME varchar(255) unique not null, 
    primary key (IDENTIFIER)
 );
 create table CATISSUE_DISTRIBUTION_SPE_REQ (
@@ -398,7 +395,6 @@ create table CATISSUE_SPECIMEN_ARRAY (
    IDENTIFIER bigint not null,
    CREATED_BY_ID bigint,
    SPECIMEN_ARRAY_TYPE_ID bigint,
-   STORAGE_CONTAINER_ID bigint,
    DISTRIBUTION_ID bigint,
    AVAILABLE bit,
    primary key (IDENTIFIER)
@@ -613,13 +609,11 @@ CREATE TABLE `catissue_specimen`
      `LINEAGE` varchar(50) default NULL,                                                                                                              
      `PATHOLOGICAL_STATUS` varchar(50) default NULL,                                                                                                  
      `AVAILABLE` tinyint(1) default NULL,                                                                                                             
-     `POSITION_DIMENSION_ONE` int(11) default NULL,                                                                                                   
-     `POSITION_DIMENSION_TWO` int(11) default NULL,                                                                                                   
+     `POSITION_DIMENSION_ONE` int(11) default NULL,
      `BARCODE` varchar(255) default NULL,                                                                                                             
      `COMMENTS` text,                                                                                                                                 
      `ACTIVITY_STATUS` varchar(50) default NULL,                                                                                                      
-     `PARENT_SPECIMEN_ID` bigint(20) default NULL,                                                                                                    
-     `STORAGE_CONTAINER_IDENTIFIER` bigint(20) default NULL,                                                                                          
+     `PARENT_SPECIMEN_ID` bigint(20) default NULL,                                                                                       
      `SPECIMEN_COLLECTION_GROUP_ID` bigint(20) default NULL,                                                                                          
      `SPECIMEN_CHARACTERISTICS_ID` bigint(20) default NULL,                                                                                           
      `AVAILABLE_QUANTITY` double default NULL,                                                                                                        
@@ -634,8 +628,6 @@ CREATE TABLE `catissue_specimen`
      KEY `FK1674810456906F39` (`SPECIMEN_CHARACTERISTICS_ID`),                                                                                        
      KEY `FK1674810433BF33C5` (`SPECIMEN_COLLECTION_GROUP_ID`),                                                                                       
      KEY `FK16748104B189E99D` (`PARENT_SPECIMEN_ID`),                                                                                                 
-     KEY `FK1674810432B31EAB` (`STORAGE_CONTAINER_IDENTIFIER`),                                                                                       
-     CONSTRAINT `FK1674810432B31EAB` FOREIGN KEY (`STORAGE_CONTAINER_IDENTIFIER`) REFERENCES `catissue_storage_container` (`IDENTIFIER`),             
      CONSTRAINT `FK1674810433BF33C5` FOREIGN KEY (`SPECIMEN_COLLECTION_GROUP_ID`) REFERENCES `catissue_abs_speci_coll_group` (`IDENTIFIER`),  
      CONSTRAINT `FK1674810456906F39` FOREIGN KEY (`SPECIMEN_CHARACTERISTICS_ID`) REFERENCES `catissue_specimen_char` (`IDENTIFIER`),                  
      CONSTRAINT `FK16748104B189E99D` FOREIGN KEY (`PARENT_SPECIMEN_ID`) REFERENCES `catissue_specimen` (`IDENTIFIER`)                                 
@@ -703,7 +695,6 @@ alter table CATISSUE_SPECIMEN_BIOHZ_REL add index FK7A3F553960773DB2 (SPECIMEN_I
 alter table CATISSUE_MOL_SPE_REVIEW_PARAM add index FK5280ECEBC7298A9 (IDENTIFIER), add constraint FK5280ECEBC7298A9 foreign key (IDENTIFIER) references CATISSUE_EVENT_PARAM (IDENTIFIER);
 #--alter table CATISSUE_STORAGE_TYPE add index FKE9A0629A81236791 (HOLDS_STORAGE_TYPE_ID), add constraint FKE9A0629A81236791 foreign key (HOLDS_STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
 alter table CATISSUE_STORAGE_TYPE add index FKE9A0629ABC7298A9 (IDENTIFIER), add constraint FKE9A0629ABC7298A9 foreign key (IDENTIFIER) references CATISSUE_CONTAINER_TYPE (IDENTIFIER);
-alter table CATISSUE_CONTAINER add index FK49B8DE5DB097B2E (PARENT_CONTAINER_ID), add constraint FK49B8DE5DB097B2E foreign key (PARENT_CONTAINER_ID) references CATISSUE_CONTAINER (IDENTIFIER);
 alter table CATISSUE_CONTAINER add index FK49B8DE5DAC76C0 (CAPACITY_ID), add constraint FK49B8DE5DAC76C0 foreign key (CAPACITY_ID) references CATISSUE_CAPACITY (IDENTIFIER);
 alter table CATISSUE_DISTRIBUTION_SPE_REQ add index FKE34A3688BE10F0CE (SPECIMEN_REQUIREMENT_ID), add constraint FKE34A3688BE10F0CE foreign key (SPECIMEN_REQUIREMENT_ID) references CATISSUE_SPECIMEN_REQUIREMENT (IDENTIFIER);
 alter table CATISSUE_DISTRIBUTION_SPE_REQ add index FKE34A36886B1F36E7 (DISTRIBUTION_PROTOCOL_ID), add constraint FKE34A36886B1F36E7 foreign key (DISTRIBUTION_PROTOCOL_ID) references CATISSUE_DISTRIBUTION_PROTOCOL (IDENTIFIER);
@@ -734,7 +725,6 @@ alter table CATISSUE_SPECI_ARRAY_CONTENT add index FKBEA9D45892AB74B4 (INITIAL_Q
 alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3E64B129CC (CREATED_BY_ID), add constraint FKECBF8B3E64B129CC foreign key (CREATED_BY_ID) references CATISSUE_USER (IDENTIFIER);
 alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3EF8278B6 (DISTRIBUTION_ID), add constraint FKECBF8B3EF8278B6 foreign key (DISTRIBUTION_ID) references CATISSUE_DISTRIBUTION (IDENTIFIER);
 alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3EBC7298A9 (IDENTIFIER), add constraint FKECBF8B3EBC7298A9 foreign key (IDENTIFIER) references CATISSUE_CONTAINER (IDENTIFIER);
-alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3EB3DFB11D (STORAGE_CONTAINER_ID), add constraint FKECBF8B3EB3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
 alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3EECE89343 (SPECIMEN_ARRAY_TYPE_ID), add constraint FKECBF8B3EECE89343 foreign key (SPECIMEN_ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE (IDENTIFIER);
 alter table CATISSUE_SPECIMEN_ARRAY_TYPE add index FKD36E0B9BBC7298A9 (IDENTIFIER), add constraint FKD36E0B9BBC7298A9 foreign key (IDENTIFIER) references CATISSUE_CONTAINER_TYPE (IDENTIFIER);
 alter table CATISSUE_DISTRIBUTED_ITEM add index FKA7C3ED4B60773DB2 (SPECIMEN_ID), add constraint FKA7C3ED4B60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
@@ -1065,6 +1055,8 @@ create table CATISSUE_CONCEPT_CLASSIFICATN (
    primary key (IDENTIFIER)
 );
 
+
+
 alter table CATISSUE_REPORT_TEXTCONTENT add index FKD74882FD91092806 (REPORT_ID), add constraint FKD74882FD91092806 foreign key (REPORT_ID) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
 alter table CATISSUE_REPORT_TEXTCONTENT add index FKD74882FDBC7298A9 (IDENTIFIER), add constraint FKD74882FDBC7298A9 foreign key (IDENTIFIER) references CATISSUE_REPORT_CONTENT (IDENTIFIER);
 alter table CATISSUE_IDENTIFIED_REPORT add index FK6A2246DCBC7298A9 (IDENTIFIER), add constraint FK6A2246DCBC7298A9 foreign key (IDENTIFIER) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
@@ -1097,3 +1089,54 @@ alter table catissue_identified_report drop foreign key FK6A2246DC91741663;
 alter table catissue_identified_report add CONSTRAINT `FK6A2246DC91741663` FOREIGN KEY (`SCG_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);  
 alter table catissue_deidentified_report drop foreign key FKCDD0DF7B91741663;
 alter table catissue_deidentified_report add CONSTRAINT `FKCDD0DF7B91741663` FOREIGN KEY (`SCG_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`);  
+
+
+
+/* Suite 1.1 model changes */
+drop table if exists CATISSUE_ABSTRACT_POSITION;
+drop table if exists CATISSUE_SPECIMEN_POSITION;
+drop table if exists CATISSUE_CONTAINER_POSITION;
+
+create table CATISSUE_ABSTRACT_POSITION (
+	IDENTIFIER BIGINT not null auto_increment,
+	POSITION_DIMENSION_ONE INTEGER,
+	POSITION_DIMENSION_TWO INTEGER,
+	primary key (IDENTIFIER)
+)ENGINE = INNODB DEFAULT CHARSET = utf8;
+
+
+create table CATISSUE_SPECIMEN_POSITION(
+	IDENTIFIER BIGINT not null auto_increment,
+	SPECIMEN_ID BIGINT,
+	CONTAINER_ID BIGINT,
+	primary key (IDENTIFIER),
+	index FK_SPECIMEN_POSITION (IDENTIFIER),
+	constraint FK_SPECIMEN_POSITION foreign key (IDENTIFIER) references CATISSUE_ABSTRACT_POSITION (IDENTIFIER),
+	index FK_SPECIMEN (SPECIMEN_ID),
+	constraint FK_SPECIMEN foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER),
+	index FK_STORAGE_CONTAINER (CONTAINER_ID),
+	constraint FK_STORAGE_CONTAINER foreign key (CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER)
+)ENGINE = INNODB DEFAULT CHARSET = utf8;
+
+
+create table CATISSUE_CONTAINER_POSITION(
+	IDENTIFIER BIGINT not null auto_increment,
+	PARENT_CONTAINER_ID bigint,
+	CONTAINER_ID BIGINT,
+	primary key (IDENTIFIER),
+	index FK_CONTAINER_POSITION (IDENTIFIER), 
+	constraint FK_CONTAINER_POSITION foreign key (IDENTIFIER) references CATISSUE_ABSTRACT_POSITION (IDENTIFIER),
+	index FK_CONTAINER (CONTAINER_ID),
+	constraint FK_CONTAINER foreign key (CONTAINER_ID) references CATISSUE_CONTAINER (IDENTIFIER),
+	index FK_OCCUPIED_CONTAINER (PARENT_CONTAINER_ID),
+	constraint FK_OCCUPIED_CONTAINER foreign key (PARENT_CONTAINER_ID) references CATISSUE_CONTAINER (IDENTIFIER)
+)ENGINE = INNODB DEFAULT CHARSET = utf8;
+
+/**Added a workaround so that edit of Container,specimen should work. NEED TO REMOVE */
+ALTER TABLE CATISSUE_SPECIMEN ADD POSITION_DIMENSION_TWO integer;
+ALTER TABLE CATISSUE_SPECIMEN ADD STORAGE_CONTAINER_IDENTIFIER bigint;
+ALTER TABLE CATISSUE_CONTAINER ADD POSITION_DIMENSION_ONE integer;
+ALTER TABLE CATISSUE_CONTAINER ADD POSITION_DIMENSION_TWO integer;
+ALTER TABLE CATISSUE_CONTAINER ADD PARENT_CONTAINER_ID bigint;
+ALTER TABLE CATISSUE_SPECIMEN_ARRAY ADD STORAGE_CONTAINER_ID bigint;
+

@@ -16,7 +16,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
+import net.sf.ehcache.CacheException;
+
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
@@ -25,10 +29,12 @@ import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.PrivilegeManager;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.tree.TreeDataInterface;
@@ -136,10 +142,20 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 				//		StorageContainer parentContainer = new StorageContainer();
 				//	parentContainer.setId(new Long(parentId));
-				cont.setPositionDimensionOne(new Integer(posOne));
-				cont.setPositionDimensionTwo(new Integer(posTwo));
+				
+				ContainerPosition cntPos = cont.getLocatedAtPosition();
+				if(cntPos == null)
+					cntPos = new ContainerPosition();
+				
+				cntPos.setPositionDimensionOne(new Integer(posOne));
+				cntPos.setPositionDimensionTwo(new Integer(posTwo));
+				cntPos.setOccupiedContainer(cont);
+				cntPos.setParentContainer(parentContainer);
+				
+				cont.setLocatedAtPosition(cntPos);
 
-				cont.setParent(parentContainer); // <<----
+				
+			//	cont.setParent(parentContainer); // <<----
 
 				//chk for positions 
 				// check for availability of position
@@ -156,8 +172,11 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 				// Have to set Site object for parentContainer
 				loadSite(dao, parentContainer); // 17-07-2006
 				loadSiteFromContainerId(dao, parentContainer);
-				cont.setPositionDimensionOne(new Integer(posOne));
-				cont.setPositionDimensionTwo(new Integer(posTwo));
+				
+				cntPos.setPositionDimensionOne(new Integer(posOne));
+				cntPos.setPositionDimensionTwo(new Integer(posTwo));
+				cntPos.setOccupiedContainer(cont);
+				cont.setLocatedAtPosition(cntPos);
 				cont.setSite(parentContainer.getSite()); // 16-07-2006 chetan
 				Logger.out.debug("^^>> " + parentContainer.getSite());
 				simMap.put(parentContNameKey, parentContainer.getName());
@@ -184,7 +203,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 			}
 			
 			simMap.put(simContPrefix + "name",cont.getName());
-			Logger.out.debug(cont.getParent() + " <<<<---- parentContainer");
+
 			Logger.out.debug("cont.getCollectionProtocol().size() " + cont.getCollectionProtocolCollection().size());
 			cont.setActivityStatus("Active");
 			dao.insert(cont.getCapacity(), sessionDataBean, true, true);
@@ -248,10 +267,15 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					StorageContainer parentContainer = new StorageContainer();
 					parentContainer.setId(new Long(parentId));
 					parentContainer.setName(parentContName);
-					cont.setPositionDimensionOne(new Integer(posOne));
-					cont.setPositionDimensionTwo(new Integer(posTwo));
+					
+					ContainerPosition cntPos = cont.getLocatedAtPosition();
+					
+					cntPos.setPositionDimensionOne(new Integer(posOne));
+					cntPos.setPositionDimensionTwo(new Integer(posTwo));
+					cntPos.setOccupiedContainer(cont);
+					cntPos.setParentContainer(parentContainer);					
 
-					cont.setParent(parentContainer); // <<----
+		//			cont.setParent(parentContainer); // <<----
 
 				}
 
@@ -277,17 +301,17 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		String parentContainerId = "_parentContainerId";
 		List positionsToBeAllocatedList = new ArrayList();
 		List usedPositionsList = new ArrayList();
-		
+
 		for (int i = 1; i <= container.getNoOfContainers().intValue(); i++)
 		{
 			StorageContainerUtil.prepareContainerMap(dao, similarContainerMap, containerPrefixKey,
 					positionsToBeAllocatedList, usedPositionsList, i,parentContainerId);
-		}
+		}		
 		for (int i = 0; i < positionsToBeAllocatedList.size(); i++)
 		{
-			StorageContainerUtil.allocatePositionToSingleContainerOrSpecimen(positionsToBeAllocatedList.get(i), similarContainerMap, 
-					usedPositionsList,containerPrefixKey,parentContainerId);
-		} 
+			StorageContainerUtil.allocatePositionToSingleContainerOrSpecimen(positionsToBeAllocatedList.get(i), similarContainerMap,
+				usedPositionsList,containerPrefixKey,parentContainerId);
+		} 		
 		if (container.getNoOfContainers().intValue() > 1 && similarContainerMap.size() > 0)
 		{
 			for (int i = 1; i <= container.getNoOfContainers().intValue(); i++)
@@ -317,6 +341,6 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 			}
 		}
 		return true;
-	}
-	
+	}	
+
 }

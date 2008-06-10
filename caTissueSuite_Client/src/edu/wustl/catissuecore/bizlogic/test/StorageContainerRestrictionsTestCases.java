@@ -16,12 +16,14 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -55,9 +57,12 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			SpecimenCollectionGroup scg = createSCGWithConsents(cp);
 			TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-			ts.setStorageContainer(storageContainer);
-			ts.setPositionDimensionOne(new Integer(1));
-			ts.setPositionDimensionTwo(new Integer(1));
+			SpecimenPosition spPos = new SpecimenPosition();
+			spPos.setStorageContainer(storageContainer);
+			spPos.setSpecimen(ts);
+			spPos.setPositionDimensionOne(new Integer(1));
+			spPos.setPositionDimensionTwo(new Integer(1));
+			ts.setSpecimenPosition(spPos);
 			ts.setSpecimenCollectionGroup(scg);
 			System.out.println("Befor creating Tissue Specimen");
 			ts = (TissueSpecimen) appService.createObject(ts);
@@ -77,9 +82,12 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			StorageContainer storageContainer= (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);				
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);			
 			MolecularSpecimen ts =(MolecularSpecimen) BaseTestCaseUtility.initMolecularSpecimen();
-			ts.setStorageContainer(storageContainer);
-			ts.setPositionDimensionOne(new Integer(1));
-			ts.setPositionDimensionTwo(new Integer(2));
+			SpecimenPosition spPos = new SpecimenPosition();
+			spPos.setStorageContainer(storageContainer);
+			spPos.setSpecimen(ts);
+			spPos.setPositionDimensionOne(new Integer(1));
+			spPos.setPositionDimensionTwo(new Integer(2));
+			ts.setSpecimenPosition(spPos);
 			ts.setSpecimenCollectionGroup(scg);
 			System.out.println("Befor creating Mol Specimen");
 			ts = (MolecularSpecimen) appService.createObject(ts);
@@ -179,9 +187,12 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			SpecimenCollectionGroup scg= (SpecimenCollectionGroup)createSCGWithConsents(cp);
 					
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-			ts.setStorageContainer(storageContainer);
-			ts.setPositionDimensionOne(new Integer(1));
-			ts.setPositionDimensionTwo(new Integer(1));
+			SpecimenPosition spPos = new SpecimenPosition();
+			spPos.setStorageContainer(storageContainer);
+			spPos.setSpecimen(ts);
+			spPos.setPositionDimensionOne(new Integer(1));
+			spPos.setPositionDimensionTwo(new Integer(1));
+			ts.setSpecimenPosition(spPos);
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("CPTisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			System.out.println("Befor creating Tissue Specimen");
@@ -216,9 +227,12 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 			SpecimenCollectionGroup scg= (SpecimenCollectionGroup)createSCGWithConsents(cp);
 							
 			TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-			ts.setStorageContainer(storageContainer);
-			ts.setPositionDimensionOne(new Integer(1));
-			ts.setPositionDimensionTwo(new Integer(2));
+			SpecimenPosition spPos = new SpecimenPosition();
+			spPos.setStorageContainer(storageContainer);
+			spPos.setSpecimen(ts);
+			spPos.setPositionDimensionOne(new Integer(1));
+			spPos.setPositionDimensionTwo(new Integer(2));
+			ts.setSpecimenPosition(spPos);
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("WithDiffCPTisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			System.out.println("Befor creating Tissue Specimen");
@@ -427,9 +441,13 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 		
 		rackContainer = new StorageContainer();
 		rackContainer.setStorageType(rack);
-		rackContainer.setParent(freezerContainer);	
-		rackContainer.setPositionDimensionOne(new Integer(1));
-		rackContainer.setPositionDimensionOne(new Integer(1));
+		
+		ContainerPosition cp = new ContainerPosition();
+		cp.setParentContainer(freezerContainer);	
+		cp.setPositionDimensionOne(new Integer(1));
+		cp.setPositionDimensionOne(new Integer(1));
+		cp.setOccupiedContainer(rackContainer);
+		rackContainer.setLocatedAtPosition(cp);
 		rackContainer.setNoOfContainers(3);
 		rackContainer.setActivityStatus("Active");
 		rackContainer.setCapacity(capacity1);
@@ -448,9 +466,11 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 
 		boxContainer = new StorageContainer();
 		boxContainer.setStorageType(box);
-		boxContainer.setParent(rackContainer);
-		boxContainer.setPositionDimensionOne(new Integer(1));
-		boxContainer.setPositionDimensionOne(new Integer(2));
+		cp.setParentContainer(rackContainer);
+		cp.setOccupiedContainer(boxContainer);
+		cp.setPositionDimensionOne(new Integer(1));
+		cp.setPositionDimensionOne(new Integer(2));
+		boxContainer.setLocatedAtPosition(cp);
 		boxContainer.setActivityStatus("Active");
 		boxContainer.setCapacity(capacity1);
 		boxContainer.setFull(Boolean.valueOf(false));
@@ -471,9 +491,14 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 		createStorageContainers();
 		StorageContainer sc = new StorageContainer();
 		sc.setStorageType(box);
-		sc.setParent(rackContainer);
-		sc.setPositionDimensionOne(new Integer(1));
-		sc.setPositionDimensionOne(new Integer(1));
+		
+		ContainerPosition cp = new ContainerPosition();
+		cp.setParentContainer(rackContainer);
+		cp.setPositionDimensionOne(new Integer(1));
+		cp.setPositionDimensionOne(new Integer(1));
+		cp.setOccupiedContainer(sc);
+		sc.setLocatedAtPosition(cp);
+		
 		sc.setNoOfContainers(1);
 		sc.setActivityStatus("Active");
 		Capacity capacity1 = new Capacity();
@@ -499,9 +524,15 @@ public class StorageContainerRestrictionsTestCases extends CaTissueBaseTestCase 
 		createStorageContainers();
 		StorageContainer sc = new StorageContainer();
 		sc.setStorageType(box);
-		sc.setParent(freezerContainer);
-		sc.setPositionDimensionOne(new Integer(1));
-		sc.setPositionDimensionOne(new Integer(2));
+	//	sc.setParent(freezerContainer);
+		
+		ContainerPosition cp = new ContainerPosition();
+		cp.setPositionDimensionOne(new Integer(1));
+		cp.setPositionDimensionOne(new Integer(2));
+		cp.setParentContainer(freezerContainer);
+		cp.setOccupiedContainer(sc);
+		sc.setLocatedAtPosition(cp);
+		
 		sc.setNoOfContainers(1);
 		sc.setActivityStatus("Active");
 		Capacity capacity1 = new Capacity();

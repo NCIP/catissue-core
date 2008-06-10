@@ -29,7 +29,10 @@ import edu.wustl.common.util.global.Validator;
  */
 public class Container extends AbstractDomainObject implements Serializable, IActivityStatus 
 {
-    
+	protected ContainerPosition locatedAtPosition;
+	
+	protected Collection<ContainerPosition> occupiedPositions = new HashSet<ContainerPosition>();
+	
     protected static final long serialVersionUID = 1234567890L;
     
 	protected Long id;
@@ -42,18 +45,18 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	
 	protected String activityStatus;
 	
-	protected Integer positionDimensionOne;
-	
-	protected Integer positionDimensionTwo;
+//	protected Integer positionDimensionOne;
+//	
+//	protected Integer positionDimensionTwo;
 	
 	protected String comment;
 	
     // Change for API Search   --- Ashwin 04/10/2006
 	protected Capacity capacity;
 	 
-	protected Collection children = new HashSet();
+//	protected Collection children = new HashSet();
 	
-	protected Container parent;
+//	protected Container parent;
 	
 	public Container()
 	{
@@ -130,43 +133,43 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
         this.capacity = capacity;
     }
     
-    /**
-     * @return Returns the children.
-     * @hibernate.set name="children" table="CATISSUE_CONTAINER" cascade="save-update" 
-	 * @hibernate.collection-key column="PARENT_CONTAINER_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Container"
-     */
-    public Collection getChildren()
-    {
-        return children;
-    }
+//    /**
+//     * @return Returns the children.
+//     * @hibernate.set name="children" table="CATISSUE_CONTAINER" cascade="save-update" 
+//	 * @hibernate.collection-key column="PARENT_CONTAINER_ID"
+//	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Container"
+//     */
+//    public Collection getChildren()
+//    {
+//        return children;
+//    }
+//    
+//    /**
+//     * @param children The children to set.
+//     */
+//    public void setChildren(Collection children)
+//    {
+//        this.children = children;
+//    }
     
-    /**
-     * @param children The children to set.
-     */
-    public void setChildren(Collection children)
-    {
-        this.children = children;
-    }
-    
-    /**
-     * @return Returns the parent.
-     * @hibernate.many-to-one column="PARENT_CONTAINER_ID" 
-     * class="edu.wustl.catissuecore.domain.Container" constrained="true"
-     */
-    public Container getParent()
-    {
-        return parent;
-    }
-    
-    /**
-     * @param parent The parent to set.
-     */
-    public void setParent(Container parent)
-    {
-        this.parent = parent;
-    }
-    
+//    /**
+//     * @return Returns the parent.
+//     * @hibernate.many-to-one column="PARENT_CONTAINER_ID" 
+//     * class="edu.wustl.catissuecore.domain.Container" constrained="true"
+//     */
+//    public Container getParent()
+//    {
+//        return parent;
+//    }
+//    
+//    /**
+//     * @param parent The parent to set.
+//     */
+//    public void setParent(Container parent)
+//    {
+//        this.parent = parent;
+//    }
+	  
     /**
      * @return Returns the comment.
      * @hibernate.property name="comment" type="string" column="COMMENTS" length="2000"
@@ -218,39 +221,39 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
         this.name = name;
     }
     
-    /**
-     * @return Returns the positionDimensionOne.
-     * @hibernate.property name="positionDimensionOne" type="int" column="POSITION_DIMENSION_ONE" length="30"
-     */
-    public Integer getPositionDimensionOne()
-    {
-        return positionDimensionOne;
-    }
-    
-    /**
-     * @param positionDimensionOne The positionDimensionOne to set.
-     */
-    public void setPositionDimensionOne(Integer positionDimensionOne)
-    {
-        this.positionDimensionOne = positionDimensionOne;
-    }
-    
-    /**
-     * @return Returns the positionDimensionTwo.
-     * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="30"
-     */
-    public Integer getPositionDimensionTwo()
-    {
-        return positionDimensionTwo;
-    }
-    
-    /**
-     * @param positionDimensionTwo The positionDimensionTwo to set.
-     */
-    public void setPositionDimensionTwo(Integer positionDimensionTwo)
-    {
-        this.positionDimensionTwo = positionDimensionTwo;
-    }
+//    /**
+//     * @return Returns the positionDimensionOne.
+//     * @hibernate.property name="positionDimensionOne" type="int" column="POSITION_DIMENSION_ONE" length="30"
+//     */
+//    public Integer getPositionDimensionOne()
+//    {
+//        return positionDimensionOne;
+//    }
+//    
+//    /**
+//     * @param positionDimensionOne The positionDimensionOne to set.
+//     */
+//    public void setPositionDimensionOne(Integer positionDimensionOne)
+//    {
+//        this.positionDimensionOne = positionDimensionOne;
+//    }
+//    
+//    /**
+//     * @return Returns the positionDimensionTwo.
+//     * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="30"
+//     */
+//    public Integer getPositionDimensionTwo()
+//    {
+//        return positionDimensionTwo;
+//    }
+//    
+//    /**
+//     * @param positionDimensionTwo The positionDimensionTwo to set.
+//     */
+//    public void setPositionDimensionTwo(Integer positionDimensionTwo)
+//    {
+//        this.positionDimensionTwo = positionDimensionTwo;
+//    }
     
     /**
      * (non-Javadoc)
@@ -295,4 +298,41 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
     public String getMessageLabel() {
     	return this.name; 
     }
+    
+    /**
+	 * @return the occupiedPositions
+	 * @hibernate.many-to-one column="" class="edu.wustl.catissuecore.domain.ContainerPosition"  
+	 */
+	public Collection<ContainerPosition> getOccupiedPositions()
+	{
+		return occupiedPositions;
+	}
+
+	
+	/**
+	 * @param occupiedPositions the occupiedPositions to set
+	 */
+	public void setOccupiedPositions(Collection<ContainerPosition> occupiedPositions)
+	{
+		this.occupiedPositions = occupiedPositions;
+	}
+
+	
+	/**
+	 * @return the locatedAtPosition
+	 * @hibernate.one-to-one class="edu.wustl.catissuecore.domain.ContainerPosition" cascade="save-update"
+	 */
+	public ContainerPosition getLocatedAtPosition()
+	{
+		return locatedAtPosition;
+	}
+
+	
+	/**
+	 * @param locatedAtPosition the locatedAtPosition to set
+	 */
+	public void setLocatedAtPosition(ContainerPosition locatedAtPosition)
+	{
+		this.locatedAtPosition = locatedAtPosition;
+	}
 }

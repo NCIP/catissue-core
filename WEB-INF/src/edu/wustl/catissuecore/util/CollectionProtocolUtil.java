@@ -40,6 +40,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -361,8 +362,11 @@ public class CollectionProtocolUtil {
 			}
 		}
 		
+		if(specimen.getSpecimenPosition() != null)
+		{
 		speRequirementBean.setStorageContainerForSpecimen( 
-				getStorageTypeValue(specimen.getPositionDimensionOne()) );
+				getStorageTypeValue(specimen.getSpecimenPosition().getPositionDimensionOne()) );
+		}
 		setSpecimenEventParameters(specimen,speRequirementBean );
 		
 		speRequirementBean.setParentName(parentName);
@@ -870,6 +874,13 @@ public class CollectionProtocolUtil {
 		{
 			((MolecularSpecimen)specimen).setConcentrationInMicrogramPerMicroliter(new Double(specimenRequirementBean.getConcentration()));
 		}
+		
+//		SpecimenPosition specPos = new SpecimenPosition();
+//		specPos.setPositionDimensionOne(CollectionProtocolUtil.getStorageTypeValue(storageType));
+//		specPos.setSpecimen(specimen);
+//
+//		specimen.setSpecimenPosition(specPos);
+		
 		specimen.setPositionDimensionOne(CollectionProtocolUtil.getStorageTypeValue(storageType));
 		
 		return specimen;

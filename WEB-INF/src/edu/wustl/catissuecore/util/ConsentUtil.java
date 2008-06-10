@@ -18,6 +18,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -27,6 +28,7 @@ import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.ReturnEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -162,7 +164,7 @@ public class ConsentUtil
 			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 			specimen.setAvailable(new Boolean(false) );
 
-			if(specimen.getStorageContainer() !=null)		// locations cleared
+			if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() !=null)		// locations cleared
 			{
 				Map containerMap = null;
 				try
@@ -173,11 +175,12 @@ public class ConsentUtil
 				{
 					e.printStackTrace();
 				}
-				StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getStorageContainer(),containerMap,specimen.getPositionDimensionOne().intValue(), specimen.getPositionDimensionTwo().intValue()    );
+				StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getSpecimenPosition().getStorageContainer(),containerMap,specimen.getSpecimenPosition().getPositionDimensionOne().intValue(), specimen.getSpecimenPosition().getPositionDimensionTwo().intValue()    );
 			}
-			specimen.setPositionDimensionOne(null);
-			specimen.setPositionDimensionTwo(null);
-			specimen.setStorageContainer(null);
+			specimen.setSpecimenPosition(null);
+//			specimen.setPositionDimensionOne(null);
+//			specimen.setPositionDimensionTwo(null);
+//			specimen.setStorageContainer(null);
 			specimen.setAvailableQuantity(null);
 			specimen.setInitialQuantity(null);
 		}
@@ -214,14 +217,7 @@ public class ConsentUtil
 			Collection eventCollection = specimen.getSpecimenEventCollection();
 			if(!isEventAdded(eventCollection, "DisposalEventParameters"))
 			{
-				DisposalEventParameters disposalEvent = new DisposalEventParameters();
-				disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED );
-				disposalEvent.setReason(Constants.WITHDRAW_RESPONSE_REASON);
-				disposalEvent.setSpecimen(specimen );
-				dao.insert(disposalEvent,sessionDataBean,true,true) ;
-				
-				eventCollection.add(disposalEvent);
-				specimen.setSpecimenEventCollection(eventCollection);
+				new NewSpecimenBizLogic().disposeSpecimen(sessionDataBean, specimen, dao);
 			}
 		}
 		catch(Exception excp)
@@ -508,14 +504,14 @@ public class ConsentUtil
 			{
 				specimenDetailList.add(specimenObj.getLabel());
 				specimenDetailList.add(specimenObj.getType());
-				if(specimenObj.getStorageContainer()==null)
+				if(specimenObj.getSpecimenPosition().getStorageContainer()==null)
 				{
 					specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
 				}
 				else
 				{
-					StorageContainer storageContainer =	(StorageContainer)bizLogic.retrieveAttribute(Specimen.class.getName(), specimenObj.getId(),"storageContainer");
-					String storageLocation=storageContainer.getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
+					SpecimenPosition position=	(SpecimenPosition)bizLogic.retrieveAttribute(Specimen.class.getName(), specimenObj.getId(),"specimenPosition");
+					String storageLocation=position.getStorageContainer().getName()+": X-Axis-"+position.getPositionDimensionOne()+", Y-Axis-"+position.getPositionDimensionTwo();
 					specimenDetailList.add(storageLocation);
 				}
 				specimenDetailList.add(specimenObj.getClassName());

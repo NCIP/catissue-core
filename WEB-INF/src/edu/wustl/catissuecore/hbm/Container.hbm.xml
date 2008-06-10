@@ -32,7 +32,32 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
-
+			<one-to-one
+            name="locatedAtPosition"
+	            class="edu.wustl.catissuecore.domain.ContainerPosition"
+	            cascade="save-update"
+	            outer-join="auto"
+	            constrained="false"
+		     	property-ref="occupiedContainer"
+	       />
+	       
+	        <set
+	            name="occupiedPositions"
+	            table="CATISSUE_CONTAINER_POSITION"
+	            lazy="true"
+	            inverse="true"
+	            cascade="delete-orphan"
+	            sort="unsorted"
+	        >
+	
+	              <key
+	                  column="PARENT_CONTAINER_ID"
+	              />
+	
+	              <one-to-many
+	                  class="edu.wustl.catissuecore.domain.ContainerPosition"
+	              />
+	        </set>
         <property
             name="barcode"
             type="string"
@@ -50,34 +75,6 @@
             update="true"
             insert="true"
             column="CAPACITY_ID"
-        />
-
-        <set
-            name="children"
-            table="CATISSUE_CONTAINER"
-            lazy="true"
-            inverse="false"
-            cascade="save-update"
-            sort="unsorted"
-        >
-
-              <key
-                  column="PARENT_CONTAINER_ID"
-              />
-
-              <one-to-many
-                  class="edu.wustl.catissuecore.domain.Container"
-              />
-        </set>
-
-        <many-to-one
-            name="parent"
-            class="edu.wustl.catissuecore.domain.Container"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="PARENT_CONTAINER_ID" lazy="false"
         />
 
         <property
@@ -104,24 +101,6 @@
             insert="true"
             column="NAME"
             length="255"
-        />
-
-        <property
-            name="positionDimensionOne"
-            type="int"
-            update="true"
-            insert="true"
-            column="POSITION_DIMENSION_ONE"
-            length="30"
-        />
-
-        <property
-            name="positionDimensionTwo"
-            type="int"
-            update="true"
-            insert="true"
-            column="POSITION_DIMENSION_TWO"
-            length="30"
         />
 
         <!--
@@ -197,17 +176,7 @@
             column="SPECIMEN_ARRAY_TYPE_ID"  lazy="false"
         />
 
-        <many-to-one
-            name="storageContainer"
-            class="edu.wustl.catissuecore.domain.StorageContainer"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="STORAGE_CONTAINER_ID"   lazy="false"
-        />
-
-        <property
+       <property
             name="available"
             type="boolean"
             update="true"
@@ -226,7 +195,24 @@
         <key
             column="IDENTIFIER"
         />
+        
+ 		<set
+            name="specimenPositionCollection"
+            table="CATISSUE_SPECIMEN_POSITION"
+            lazy="true"
+            inverse="true"
+            cascade="none"
+            sort="unsorted"
+        >
 
+              <key
+                  column="CONTAINER_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenPosition"
+              />
+        </set>
         <set
             name="collectionProtocolCollection"
             table="CATISSUE_ST_CONT_COLL_PROT_REL"
@@ -304,25 +290,6 @@
               />
         </set>
         
-        <set
-            name="specimenCollection"
-            table="CATISSUE_SPECIMEN"
-            lazy="true"
-            inverse="false"
-            cascade="none"
-            sort="unsorted"
-        >
-
-              <key
-                  column="STORAGE_CONTAINER_IDENTIFIER"
-              />
-
-              <one-to-many
-                  class="edu.wustl.catissuecore.domain.Specimen"
-              />
-        </set>
-
-
         <many-to-one
             name="site"
             class="edu.wustl.catissuecore.domain.Site"
@@ -353,6 +320,8 @@
         />
 
         </joined-subclass>
+        
+         
 
     </class>
 

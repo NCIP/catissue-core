@@ -23,12 +23,15 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import net.sf.ehcache.CacheException;
+import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
@@ -98,19 +101,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		int noOfContainers = container.getNoOfContainers().intValue();
 
-		if (container.getParent() != null)
+		if (container.getLocatedAtPosition() != null && container.getLocatedAtPosition().getParentContainer() != null)
 		{
-			List list = dao.retrieve(StorageContainer.class.getName(), "id", container.getParent().getId());
+			List list = dao.retrieve(StorageContainer.class.getName(), "id", container.getLocatedAtPosition().getParentContainer().getId());
 
 			if (list.size() != 0)
 			{
-				StorageContainer pc = (StorageContainer) list.get(0);
+				StorageContainer parentContainer = (StorageContainer) list.get(0);
 
 				// check for closed ParentContainer
-				checkStatus(dao, pc, "Parent Container");
+				checkStatus(dao, parentContainer, "Parent Container");
 
-				int totalCapacity = pc.getCapacity().getOneDimensionCapacity().intValue() * pc.getCapacity().getTwoDimensionCapacity().intValue();
-				if ((noOfContainers + pc.getChildren().size()) > totalCapacity)
+				int totalCapacity = parentContainer.getCapacity().getOneDimensionCapacity().intValue() * parentContainer.getCapacity().getTwoDimensionCapacity().intValue();
+				Collection children = StorageContainerUtil.getChildren(dao, parentContainer.getId());
+				if ((noOfContainers + children.size()) > totalCapacity)
 				{
 					throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.overflow"));
 				}
@@ -120,16 +124,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					//Check if position specified is within the parent
 					// container's
 					//capacity  
-					if (false == validatePosition(pc, container))
+					if (false == validatePosition(parentContainer, container))
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.dimensionOverflow"));
 					}
 
 					try
 					{
-						//check for all validations on the storage container.
-						checkContainer(dao, container.getParent().getId().toString(), container.getPositionDimensionOne().toString(), container
+						//check for all validations on the storage container.						
+							checkContainer(dao, container.getLocatedAtPosition().getParentContainer().getId().toString(), container.getLocatedAtPosition().getPositionDimensionOne().toString(), container.getLocatedAtPosition()
 								.getPositionDimensionTwo().toString(), sessionDataBean, false);
+						
 					}
 					catch (SMException sme)
 					{
@@ -146,23 +151,25 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					 } */
 
 					//Check weather parent container is valid container to use 
-					boolean parentContainerValidToUSe = isParentContainerValidToUSe(container, pc);
+					boolean parentContainerValidToUSe = isParentContainerValidToUSe(container, parentContainer);
 
 					if (!parentContainerValidToUSe)
 					{
 						throw new DAOException("Parent Container is not valid for this container type");
 					}
-					container.setParent(pc);
+					ContainerPosition cntPos = container.getLocatedAtPosition();
+				
+					cntPos.setParentContainer(parentContainer);
 			
-					container.setSite(pc.getSite());
+					container.setSite(parentContainer.getSite());
 
-					posOneCapacity = pc.getCapacity().getOneDimensionCapacity().intValue();
-					posTwoCapacity = pc.getCapacity().getTwoDimensionCapacity().intValue();
+					posOneCapacity = parentContainer.getCapacity().getOneDimensionCapacity().intValue();
+					posTwoCapacity = parentContainer.getCapacity().getTwoDimensionCapacity().intValue();
 
-					fullStatus = getStorageContainerFullStatus(dao, container.getParent().getId());
-					positionDimensionOne = container.getPositionDimensionOne().intValue();
-					positionDimensionTwo = container.getPositionDimensionTwo().intValue();
-					
+					fullStatus = getStorageContainerFullStatus(dao, parentContainer, children);
+					positionDimensionOne = cntPos.getPositionDimensionOne().intValue();
+					positionDimensionTwo = cntPos.getPositionDimensionTwo().intValue();
+					container.setLocatedAtPosition(cntPos);
 				
 				}
 			}
@@ -181,10 +188,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		for (int i = 0; i < noOfContainers; i++)
 		{
 			StorageContainer cont = new StorageContainer(container);
-			if (cont.getParent() != null)
+			if (cont.getLocatedAtPosition() != null && cont.getLocatedAtPosition().getParentContainer() != null)
 			{
-				cont.setPositionDimensionOne(new Integer(positionDimensionOne));
-				cont.setPositionDimensionTwo(new Integer(positionDimensionTwo));
+				ContainerPosition cntPos = cont.getLocatedAtPosition(); 
+					
+				cntPos.setPositionDimensionOne(new Integer(positionDimensionOne));
+				cntPos.setPositionDimensionTwo(new Integer(positionDimensionTwo));
+				cntPos.setOccupiedContainer(cont);
+				cont.setLocatedAtPosition(cntPos);
 			}
 
 			Logger.out.debug("Collection protocol size:" + container.getCollectionProtocolCollection().size());
@@ -219,7 +230,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			container.setId(cont.getId());
 			container.setCapacity(cont.getCapacity());
 
-			if (container.getParent() != null)
+			if (container.getLocatedAtPosition() != null && container.getLocatedAtPosition().getParentContainer() != null)
 			{
 				Logger.out.debug("In if: ");
 				do
@@ -321,9 +332,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		String[] dynamicGroups = null;
 		StorageContainer storageContainer = (StorageContainer) obj;
 
-		if (storageContainer.getParent() != null)
+		if (storageContainer.getLocatedAtPosition() != null && storageContainer.getLocatedAtPosition().getParentContainer() != null)
 		{
-			dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getParent());
+			dynamicGroups = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(storageContainer.getLocatedAtPosition().getParentContainer());
 		}
 		else
 		{
@@ -365,18 +376,27 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		StorageContainer persistentOldContainerForChange = null;
 		List persistentStorageContainer  =dao.retrieve(StorageContainer.class.getName(),Constants.ID, oldContainer.getId());
 		persistentOldContainerForChange=(StorageContainer)persistentStorageContainer.get(0);
+		
+		// retrive parent container
+		if(container.getLocatedAtPosition()!=null)
+		{
+			StorageContainer parentStorageContainer  = (StorageContainer)dao.retrieve(StorageContainer.class.getName(), container.getLocatedAtPosition().getParentContainer().getId());
+			container.getLocatedAtPosition().setParentContainer(parentStorageContainer);
+		}	
+		
+		
 		Logger.out.debug("container.isParentChanged() : " + container.isParentChanged());
 
 		if (container.isParentChanged())
 		{
-			if (container.getParent() != null)
+			if (container.getLocatedAtPosition() != null && container.getLocatedAtPosition().getParentContainer() != null)
 			{
 				//Check whether continer is moved to one of its sub container.
-				if (isUnderSubContainer(container, container.getParent().getId(),dao))
+				if (isUnderSubContainer(container, container.getLocatedAtPosition().getParentContainer().getId(),dao))
 				{
 					throw new DAOException(ApplicationProperties.getValue("errors.container.under.subcontainer"));
 				}
-				Logger.out.debug("Loading ParentContainer: " + container.getParent().getId());
+				Logger.out.debug("Loading ParentContainer: " + container.getLocatedAtPosition().getParentContainer().getId());
 
 				/**
 				 * Name : Vijay_Pande
@@ -405,11 +425,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				// Mandar : code added for validation bug id 666. 24-11-2005 end
 
 				//check for closed ParentContainer
-				checkStatus(dao, container.getParent(), "Parent Container");
+				checkStatus(dao, container.getLocatedAtPosition().getParentContainer(), "Parent Container");
 
 //				container.setParent(pc);
 				
-				Site site=getSite(dao,container.getParent().getId());
+				Site site=getSite(dao,container.getLocatedAtPosition().getParentContainer().getId());
 				
 				//Site site=((StorageContainer)container.getParent()).getSite();
 				//check for closed Site
@@ -430,7 +450,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				String[] selectColumnName = {"id", "capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity"};
 				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {container.getParent().getId()};
+				Object[] whereColumnValue = {container.getLocatedAtPosition().getParentContainer().getId()};
 				String joinCondition = null;
 
 				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
@@ -472,8 +492,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				 *  check for availability of position
 				 */
 
-				if (oldContainer.getPositionDimensionOne().intValue() != container.getPositionDimensionOne().intValue()
-						|| oldContainer.getPositionDimensionTwo().intValue() != container.getPositionDimensionTwo().intValue())
+				if (oldContainer.getLocatedAtPosition() != null && oldContainer.getLocatedAtPosition().getPositionDimensionOne() != null && oldContainer.getLocatedAtPosition().getPositionDimensionOne().intValue() != container.getLocatedAtPosition().getPositionDimensionOne().intValue()
+						|| oldContainer.getLocatedAtPosition().getPositionDimensionTwo().intValue() != container.getLocatedAtPosition().getPositionDimensionTwo().intValue())
 				{
 					boolean canUse = isContainerAvailableForPositions(dao, container);
 					Logger.out.debug("canUse : " + canUse);
@@ -490,10 +510,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		boolean flag = true;
 
-		if (container.getParent() != null && oldContainer.getParent() != null
-				&& container.getParent().getId().longValue() == oldContainer.getParent().getId().longValue()
-				&& container.getPositionDimensionOne().longValue() == oldContainer.getPositionDimensionOne().longValue()
-				&& container.getPositionDimensionTwo().longValue() == oldContainer.getPositionDimensionTwo().longValue())
+		if (container.getLocatedAtPosition() != null && container.getLocatedAtPosition().getParentContainer() != null && oldContainer.getLocatedAtPosition() != null
+				&& container.getLocatedAtPosition().getParentContainer().getId().longValue() == oldContainer.getLocatedAtPosition().getParentContainer().getId().longValue()
+				&& container.getLocatedAtPosition().getPositionDimensionOne().longValue() == oldContainer.getLocatedAtPosition().getPositionDimensionOne().longValue()
+				&& container.getLocatedAtPosition().getPositionDimensionTwo().longValue() == oldContainer.getLocatedAtPosition().getPositionDimensionTwo().longValue())
 		{
 			flag = false;
 		}
@@ -503,9 +523,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			try
 			{
 				//check for all validations on the storage container.
-				if (container.getParent() != null)
+				if (container.getLocatedAtPosition() != null && container.getLocatedAtPosition().getParentContainer() != null)
 				{
-					checkContainer(dao, container.getParent().getId().toString(), container.getPositionDimensionOne().toString(), container
+					checkContainer(dao, container.getLocatedAtPosition().getParentContainer().getId().toString(), container.getLocatedAtPosition().getPositionDimensionOne().toString(), container.getLocatedAtPosition()
 							.getPositionDimensionTwo().toString(), sessionDataBean, false);
 				}
 			}
@@ -559,7 +579,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 
 		}
-		setValuesinPersistentObject(persistentOldContainerForChange,container);
+		Collection<SpecimenPosition> specimenPosColl = getSpecimenPositionCollForContainer(dao,container.getId());
+		container.setSpecimenPositionCollection(specimenPosColl);
+		setValuesinPersistentObject(persistentOldContainerForChange,container, dao);
 
 		dao.update(persistentOldContainerForChange, sessionDataBean, true, true, false);
 		//dao.update(container.getCapacity(), sessionDataBean, true, true, false);
@@ -581,15 +603,27 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			if (isContainerAvailableForDisabled(dao, containerIDArr))
 			{
 				List disabledConts = new ArrayList();
+				
+				/**
+				 *  Preapare list of parent/child containers to disable
+				 * 
+				 */
+				List<StorageContainer> disabledContainerList = new ArrayList<StorageContainer>();
+				disabledContainerList.add(persistentOldContainerForChange);
+				persistentOldContainerForChange.setLocatedAtPosition(null);
+				
 				addEntriesInDisabledMap(persistentOldContainerForChange, disabledConts);
 				//disabledConts.add(new StorageContainer(container));
-				setDisableToSubContainer(persistentOldContainerForChange, disabledConts,dao);
+				setDisableToSubContainer(persistentOldContainerForChange, disabledConts,dao,disabledContainerList);
+				
+				persistentOldContainerForChange.getOccupiedPositions().clear();
+				
 				Logger.out.debug("container.getActivityStatus() " + container.getActivityStatus());
 
-				disableSubStorageContainer(dao, sessionDataBean, containerIDArr);
-				persistentOldContainerForChange.setParent(null);
-				persistentOldContainerForChange.setPositionDimensionOne(null);
-				persistentOldContainerForChange.setPositionDimensionTwo(null);
+				disableSubStorageContainer(dao, sessionDataBean, disabledContainerList);
+				
+				persistentOldContainerForChange.setLocatedAtPosition(null);
+				
 				dao.update(persistentOldContainerForChange, sessionDataBean, true, true, false);
 
 				try
@@ -608,13 +642,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				throw new DAOException(ApplicationProperties.getValue("errors.container.contains.specimen"));
 			}
 		}
+
 	}
-	public void setValuesinPersistentObject(StorageContainer persistentobject,StorageContainer newObject)
+	public void setValuesinPersistentObject(StorageContainer persistentobject,StorageContainer newObject, DAO dao) throws DAOException
 	{
 		persistentobject.setActivityStatus(newObject.getActivityStatus());
 		persistentobject.setBarcode(newObject.getBarcode());
 		persistentobject.setCapacity(newObject.getCapacity());
-		persistentobject.setChildren(newObject.getChildren());
+		
+		Collection children = StorageContainerUtil.getChildren(dao, newObject.getId());
+		StorageContainerUtil.setChildren(children, dao, persistentobject.getId());
+	//	persistentobject.setChildren(newObject.getChildren());
 		persistentobject.setCollectionProtocolCollection(newObject.getCollectionProtocolCollection());
 		persistentobject.setComment(newObject.getComment());
 		persistentobject.setFull(newObject.isFull());
@@ -622,15 +660,36 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		persistentobject.setHoldsSpecimenClassCollection(newObject.getHoldsSpecimenClassCollection());
 		persistentobject.setHoldsStorageTypeCollection(newObject.getHoldsStorageTypeCollection());
 		persistentobject.setName(newObject.getName());
-		persistentobject.setNoOfContainers(newObject.getNoOfContainers());
-		persistentobject.setParent(newObject.getParent());
+		persistentobject.setNoOfContainers(newObject.getNoOfContainers());		
 		persistentobject.setParentChanged(newObject.isParentChanged());
-		persistentobject.setPositionChanged(newObject.isPositionChanged());
-		persistentobject.setPositionDimensionOne(newObject.getPositionDimensionOne());
-		persistentobject.setPositionDimensionTwo(newObject.getPositionDimensionTwo());
+		persistentobject.setPositionChanged(newObject.isPositionChanged());		
+		if(newObject.getLocatedAtPosition() != null)
+		{
+			ContainerPosition cntPos = persistentobject.getLocatedAtPosition();
+			if(cntPos == null)
+			{
+				cntPos = new ContainerPosition();
+			}			
+			cntPos.setPositionDimensionOne(newObject.getLocatedAtPosition().getPositionDimensionOne());
+			cntPos.setPositionDimensionTwo(newObject.getLocatedAtPosition().getPositionDimensionTwo());
+			cntPos.setParentContainer(newObject.getLocatedAtPosition().getParentContainer());
+			cntPos.setOccupiedContainer(persistentobject);
+//			persistentobject.setLocatedAtPosition(cntPos);
+		}		
 		persistentobject.setSimilarContainerMap(newObject.getSimilarContainerMap());
 		persistentobject.setSite(newObject.getSite());
-		persistentobject.setSpecimenCollection(newObject.getSpecimenCollection());
+		if(newObject.getSpecimenPositionCollection() != null)
+		{
+			Collection<SpecimenPosition> specPosColl = persistentobject.getSpecimenPositionCollection();
+//			if(specPosColl == null)
+//			{
+//				specPosColl = new HashSet<SpecimenPosition>();
+//			}
+			specPosColl.addAll(newObject.getSpecimenPositionCollection());
+//			specPos.setSpecimen(newObject.getSpecimenPosition().getSpecimen());
+//			specPos.setStorageContainer(newObject);
+//			persistentobject.setSpecimenPosition(specPos);
+		}
 		persistentobject.setStartNo(newObject.getStartNo());
 		persistentobject.setStorageType(newObject.getStorageType());
 		persistentobject.setTempratureInCentigrade(newObject.getTempratureInCentigrade());
@@ -647,12 +706,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Map containerDetails = new TreeMap();
 		containerDetails.put(contNameKey, container.getName());
 		containerDetails.put(contIdKey, container.getId());
-		if (container.getParent() != null)
+		if (container != null && container.getLocatedAtPosition() != null && container.getLocatedAtPosition().getParentContainer() != null)
 		{
-			containerDetails.put(parentContNameKey, container.getParent().getName());
-			containerDetails.put(parentContIdKey, container.getParent().getId());
-			containerDetails.put(pos1Key, container.getPositionDimensionOne());
-			containerDetails.put(pos2Key, container.getPositionDimensionTwo());
+			containerDetails.put(parentContNameKey, container.getLocatedAtPosition().getParentContainer().getName());
+			containerDetails.put(parentContIdKey, container.getLocatedAtPosition().getParentContainer().getId());
+			containerDetails.put(pos1Key, container.getLocatedAtPosition().getPositionDimensionOne());
+			containerDetails.put(pos2Key, container.getLocatedAtPosition().getPositionDimensionTwo());
 		}
 
 		disabledConts.add(containerDetails);
@@ -685,17 +744,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 			}
 			//finish 
-			if (oldContainer.getParent() != null)
+			if (oldContainer != null && oldContainer.getLocatedAtPosition() != null && oldContainer.getLocatedAtPosition().getParentContainer() != null)
 			{
-				StorageContainer oldParentCont = (StorageContainer) oldContainer.getParent();
-				StorageContainerUtil.insertSinglePositionInContainerMap(oldParentCont, containerMap, oldContainer.getPositionDimensionOne()
-						.intValue(), oldContainer.getPositionDimensionTwo().intValue());
+				StorageContainer oldParentCont = (StorageContainer)HibernateMetaData.getProxyObjectImpl(oldContainer.getLocatedAtPosition().getParentContainer());
+				StorageContainerUtil.insertSinglePositionInContainerMap(oldParentCont, containerMap, oldContainer.getLocatedAtPosition().getPositionDimensionOne()
+						.intValue(), oldContainer.getLocatedAtPosition().getPositionDimensionTwo().intValue());
 			}
-			if (currentContainer.getParent() != null)
+			if (currentContainer != null && currentContainer.getLocatedAtPosition() != null && currentContainer.getLocatedAtPosition().getParentContainer() != null)
 			{
-				StorageContainer currentParentCont = (StorageContainer) currentContainer.getParent();
-				StorageContainerUtil.deleteSinglePositionInContainerMap(currentParentCont, containerMap, currentContainer.getPositionDimensionOne()
-						.intValue(), currentContainer.getPositionDimensionTwo().intValue());
+				StorageContainer currentParentCont = (StorageContainer) currentContainer.getLocatedAtPosition().getParentContainer();
+				StorageContainerUtil.deleteSinglePositionInContainerMap(currentParentCont, containerMap, currentContainer.getLocatedAtPosition().getPositionDimensionOne()
+						.intValue(), currentContainer.getLocatedAtPosition().getPositionDimensionTwo().intValue());
 			}
 
 			if (currentContainer.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
@@ -728,9 +787,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						StorageContainer parent = new StorageContainer();
 						parent.setName((String) disabledContDetails.get(parentContNameKey));
 						parent.setId((Long) disabledContDetails.get(parentContIdKey));
-						cont.setParent(parent);
-						cont.setPositionDimensionOne((Integer) disabledContDetails.get(pos1Key));
-						cont.setPositionDimensionTwo((Integer) disabledContDetails.get(pos2Key));
+					//	cont.setParent(parent);
+						
+						ContainerPosition cntPos = cont.getLocatedAtPosition(); 
+						
+						cntPos.setPositionDimensionOne((Integer) disabledContDetails.get(pos1Key));
+						cntPos.setPositionDimensionTwo((Integer) disabledContDetails.get(pos2Key));
+						cntPos.setParentContainer(parent);
+						cntPos.setOccupiedContainer(cont);
+						cont.setLocatedAtPosition(cntPos);
 					}
 
 					StorageContainerUtil.removeStorageContainerInContainerMap(cont, containerMap);
@@ -741,6 +806,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		catch (Exception e)
 		{
+			Logger.out.error(e.getMessage(), e);
+			throw new BizLogicException(e.getMessage(), e);
 		}
 	}
 
@@ -915,7 +982,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			throws Exception
 	{
 		// Aarti: Bug#2364 - Error while assigning privileges since attribute parentContainer changed to parent
-		String[] selectColumnNames = {"parent.id", "site.id"};
+		String[] selectColumnNames = {"locatedAtPosition.parentContainer.id", "site.id"};
 		String[] whereColumnNames = {"id"};
 		List listOfSubElement = super.getRelatedObjects(dao, StorageContainer.class, selectColumnNames, whereColumnNames, objectIds);
 
@@ -998,7 +1065,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		// Aarti: Bug#2364 - Error while assigning privileges since attribute parentContainer changed to parent
 		//Get list of sub container identifiers.
-		List listOfSubStorageContainerId = super.getRelatedObjects(dao, StorageContainer.class, "parent", storageContainerIDArr);
+		List listOfSubStorageContainerId = super.getRelatedObjects(dao, StorageContainer.class, "locatedAtPosition.parentContainer", storageContainerIDArr);
 
 		if (listOfSubStorageContainerId.isEmpty())
 			return;
@@ -1071,9 +1138,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
  		
 		if (storageContainer != null && storageContainer.getId()!=null)
 		{
-			Collection children = (Collection) dao.retrieveAttribute(storageContainer.getClass().getName(), storageContainer.getId(), "elements(children)");
+//			Collection children = (Collection) dao.retrieveAttribute(storageContainer.getClass().getName(), storageContainer.getId(), "elements(children)");
 			
-//			Collection children = storageContainer.getChildren();
+			Collection children = StorageContainerUtil.getChildren(dao, storageContainer.getId());
 			Logger.out.debug("storageContainer.getChildrenContainerCollection() " + children.size());
 
 			Iterator iterator = children.iterator();
@@ -1091,7 +1158,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		if (storageContainer != null)
 		{
 			//Ashish - 11/6/07 - Retriving children containers for performance improvement.
-			Collection childrenColl = (Collection)dao.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(),Constants.COLUMN_NAME_CHILDREN );
+		//	Collection childrenColl = (Collection)dao.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(),Constants.COLUMN_NAME_CHILDREN );
+
+			Collection childrenColl = StorageContainerUtil.getChildren(dao, storageContainer.getId());
 			Iterator iterator = childrenColl.iterator();
 			//storageContainer.getChildren()
 			while (iterator.hasNext())
@@ -1111,27 +1180,30 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}
 	
 	//  TODO TO BE REMOVED
-	private void setDisableToSubContainer(StorageContainer storageContainer, List disabledConts, DAO dao)throws DAOException
+	private void setDisableToSubContainer(StorageContainer storageContainer, List disabledConts, DAO dao,List disabledContainerList)throws DAOException
 	{
 		if (storageContainer != null)
 		{
 //			Ashish - 11/6/07 - Retriving children containers for performance improvement.
-			Collection childrenColl = (Collection)dao.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(),Constants.COLUMN_NAME_CHILDREN );			
+		//	Collection childrenColl = (Collection)dao.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(),Constants.COLUMN_NAME_CHILDREN );
+			
+			Collection childrenColl = StorageContainerUtil.getChildren(dao, storageContainer.getId());
+			
 			Iterator iterator = childrenColl.iterator();
 			while (iterator.hasNext())
 			{
 				StorageContainer container = (StorageContainer) iterator.next();
+
 				container.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 				addEntriesInDisabledMap(container, disabledConts);
 				/* whenever container is disabled free it's used positions */
 
-				container.setParent(null);
-				container.setPositionDimensionOne(null);
-				container.setPositionDimensionTwo(null);
-
-				setDisableToSubContainer(container, disabledConts,dao);
+				container.setLocatedAtPosition(null);
+				disabledContainerList.add(container);	
+				setDisableToSubContainer(container, disabledConts,dao,disabledContainerList);
 			}
 		}
+		storageContainer.getOccupiedPositions().clear();
 	}
 	//This method is called from labelgenerator.
 	public long getNextContainerNumber() throws DAOException
@@ -1252,8 +1324,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		//Retrieving all the occupied positions by child containers
 		String sourceObjectName = StorageContainer.class.getName();
-		String[] selectColumnName = {"positionDimensionOne", "positionDimensionTwo"};
-		String[] whereColumnName = {"parent"};
+		String[] selectColumnName = {"locatedAtPosition.positionDimensionOne", "locatedAtPosition.positionDimensionTwo"};
+		String[] whereColumnName = {"locatedAtPosition.parentContainer"};
 		String[] whereColumnCondition = {"="};
 		Object[] whereColumnValue = {container.getId()};
 
@@ -1267,8 +1339,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			//			Retrieving all the occupied positions by specimens
 			sourceObjectName = Specimen.class.getName();
-			whereColumnName[0] = "storageContainer";
-
+			whereColumnName[0] = "specimenPosition.storageContainer";
+			selectColumnName[0] = "specimenPosition.positionDimensionOne";
+			selectColumnName[1]	= "specimenPosition.positionDimensionTwo";
 			list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
 
 			if (!list.isEmpty())
@@ -1279,8 +1352,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				//				Retrieving all the occupied positions by specimens array type
 				sourceObjectName = SpecimenArray.class.getName();
-				whereColumnName[0] = "storageContainer";
-
+				whereColumnName[0] = "locatedAtPosition.parentContainer";
+				selectColumnName[0] = "locatedAtPosition.positionDimensionOne";
+				selectColumnName[1]	= "locatedAtPosition.positionDimensionTwo";
+				
 				list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
 
 				if (!list.isEmpty())
@@ -1535,10 +1610,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		//				+ " where sc.SITE_ID = site.IDENTIFIER AND sc.STORAGE_TYPE_ID = scType.IDENTIFIER "
 		//				+ " and sc.PARENT_CONTAINER_ID is NULL";
 
-		String sql = " SELECT sc.IDENTIFIER, cn.NAME, scType.NAME, site.IDENTIFIER, site.NAME, site.TYPE "
-				+ " from catissue_storage_container sc, catissue_site site, catissue_container_type scType, " + " catissue_container cn  "
-				+ " where sc.SITE_ID = site.IDENTIFIER AND sc.STORAGE_TYPE_ID = scType.IDENTIFIER " + " and sc.IDENTIFIER = cn.IDENTIFIER "
-				+ " and cn.PARENT_CONTAINER_ID is NULL ";
+		String sql =  "SELECT sc.IDENTIFIER, cn.NAME, scType.NAME, site.IDENTIFIER," +
+		"site.NAME, site.TYPE from catissue_storage_container sc, " +
+		"catissue_site site, catissue_container_type scType, " +
+		"catissue_container cn where sc.SITE_ID = site.IDENTIFIER " +
+		"AND sc.STORAGE_TYPE_ID = scType.IDENTIFIER " +
+		"and sc.IDENTIFIER = cn.IDENTIFIER " +
+		"and cn.IDENTIFIER not in (select pos.CONTAINER_ID from catissue_container_position pos)";
 
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List resultList = new ArrayList();
@@ -1716,6 +1794,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			containerNode.setParentNode(parneContainerNode);
 			parneContainerNode.getChildNodes().add(containerNode);
 		}
+		if(containerNodeVector.isEmpty())
+		{
+			StorageContainerTreeNode containerNode = new StorageContainerTreeNode(identifier, nodeName,nodeName);
+			containerNodeVector.add(containerNode);
+		}
 		return containerNodeVector;
 	}
 
@@ -1729,53 +1812,118 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		String sql;
 		if(!Constants.ZERO_ID.equals(parentId))
 		{
-			sql = " SELECT cn.IDENTIFIER, cn.NAME,cn.PARENT_CONTAINER_ID,count(cn_c.IDENTIFIER)" +
-					 " from catissue_container cn left outer join catissue_container cn_c" +
-					 " on cn_c.PARENT_CONTAINER_ID=cn.IDENTIFIER join catissue_storage_container sc" +
-					 " on sc.IDENTIFIER=cn.IDENTIFIER"  + 
-					 " where cn.PARENT_CONTAINER_ID ="+identifier+" group by cn.IDENTIFIER, cn.NAME,cn.PARENT_CONTAINER_ID";
+			
+			sql  = "SELECT cn.IDENTIFIER, cn.name, pos.PARENT_CONTAINER_ID,count(p2.IDENTIFIER) " +
+					"FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc ON sc.IDENTIFIER=cn.IDENTIFIER " +
+					"left outer join catissue_container_position pos on pos.CONTAINER_ID=cn.IDENTIFIER left outer join " +
+					"catissue_container_position p2 on p2.PARENT_CONTAINER_ID=cn.IDENTIFIER " +
+					"WHERE pos.PARENT_CONTAINER_ID="+identifier+" AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME,pos.PARENT_CONTAINER_ID";
+		
 		}
 		else
 		{
-			sql = "SELECT cn.IDENTIFIER, cn.NAME,site.identifier,COUNT(cn_c.IDENTIFIER)"+
-			" FROM CATISSUE_CONTAINER cn left outer join CATISSUE_CONTAINER cn_c"+
-			" ON cn_c.PARENT_CONTAINER_ID=cn.IDENTIFIER join CATISSUE_STORAGE_CONTAINER sc"+
-			" ON sc.IDENTIFIER=cn.IDENTIFIER join catissue_site site"+ 
-			" on sc.site_id = site.identifier"+
-			" WHERE cn.PARENT_CONTAINER_ID is null and site.identifier="+identifier+
-			" GROUP BY cn.IDENTIFIER, cn.NAME,site.identifier";
+			
+			sql = "SELECT cn.IDENTIFIER, cn.NAME,site.identifier,count(pos.IDENTIFIER) " +
+					"FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc " +
+					"ON sc.IDENTIFIER=cn.IDENTIFIER join catissue_site site " +
+					"on sc.site_id = site.identifier left outer join catissue_container_position pos " +
+					"on pos.PARENT_CONTAINER_ID=cn.IDENTIFIER WHERE site.identifier="+identifier+
+					" and cn.ACTIVITY_STATUS!='Disabled' and cn.IDENTIFIER not in (select p2.CONTAINER_ID from catissue_container_position p2) " +
+					"GROUP BY cn.IDENTIFIER, cn.NAME,site.identifier";
+			
+			
 		}
 		return sql;
 	}
 
-	public boolean[][] getStorageContainerFullStatus(DAO dao, Long id) throws DAOException
+	private boolean[][] getStorageContainerFullStatus(DAO dao, StorageContainer parentContainer, Collection children) throws DAOException
 	{
-		List list = dao.retrieve(StorageContainer.class.getName(), "id", id);
+		//List list = dao.retrieve(StorageContainer.class.getName(), "id", id);
 		boolean[][] fullStatus = null;
 
-		if (!list.isEmpty())
-		{
-			StorageContainer storageContainer = (StorageContainer) list.get(0);
-			Integer oneDimensionCapacity = storageContainer.getCapacity().getOneDimensionCapacity();
-			Integer twoDimensionCapacity = storageContainer.getCapacity().getTwoDimensionCapacity();
-			fullStatus = new boolean[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity.intValue() + 1];
+	
+		Integer oneDimensionCapacity = parentContainer.getCapacity().getOneDimensionCapacity();
+		Integer twoDimensionCapacity = parentContainer.getCapacity().getTwoDimensionCapacity();
+		fullStatus = new boolean[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity.intValue() + 1];
 
-			if (storageContainer.getChildren() != null)
+//		Collection children = StorageContainerUtil.getChildren(dao, storageContainer.getId());
+		
+		if (children != null)
+		{
+			Iterator iterator = children.iterator();
+			Logger.out.debug("storageContainer.getChildrenContainerCollection().size(): " + children.size());
+			while (iterator.hasNext())
 			{
-				Iterator iterator = storageContainer.getChildren().iterator();
-				Logger.out.debug("storageContainer.getChildrenContainerCollection().size(): " + storageContainer.getChildren().size());
-				while (iterator.hasNext())
+				StorageContainer childStorageContainer = (StorageContainer) iterator.next();
+				if(childStorageContainer.getLocatedAtPosition() != null)
 				{
-					StorageContainer childStorageContainer = (StorageContainer) iterator.next();
-					Integer positionDimensionOne = childStorageContainer.getPositionDimensionOne();
-					Integer positionDimensionTwo = childStorageContainer.getPositionDimensionTwo();
+					Integer positionDimensionOne = childStorageContainer.getLocatedAtPosition().getPositionDimensionOne();
+					Integer positionDimensionTwo = childStorageContainer.getLocatedAtPosition().getPositionDimensionTwo();
 					Logger.out.debug("positionDimensionOne : " + positionDimensionOne.intValue());
 					Logger.out.debug("positionDimensionTwo : " + positionDimensionTwo.intValue());
 					fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = true;
 				}
 			}
 		}
+
 		return fullStatus;
+	}
+	
+	/**
+	 * @param containerId
+	 * @return
+	 * @throws DAOException
+	 */
+	public Collection getContainerChildren(Long containerId) throws DAOException
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+
+		Collection<Container> children = null;
+
+		try
+		{
+			dao.openSession(null);
+			children = StorageContainerUtil.getChildren(dao, containerId);
+		}
+		catch (DAOException daoExp)
+		{
+			daoExp.printStackTrace();
+			Logger.out.error(daoExp.getMessage(), daoExp);
+		}
+		finally
+		{
+			dao.closeSession();
+		}
+		return children;
+	}
+	private void disableSubStorageContainer(DAO dao, SessionDataBean sessionDataBean, List<StorageContainer> disabledContainerList) throws DAOException,
+	UserNotAuthorizedException
+	{
+		
+		// adding updated participantMap to cache
+		//catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, participantMap);
+		int count = disabledContainerList.size();
+		List containerIdList  = new ArrayList();
+		for(int i=0;i<count;i++)
+		{
+			StorageContainer container = disabledContainerList.get(i);
+			containerIdList.add(container.getId());
+		}
+		
+		List listOfSpecimenIDs = getRelatedObjects(dao, Specimen.class, "specimenPosition.storageContainer", Utility.toLongArray(containerIdList));
+		
+		if (!listOfSpecimenIDs.isEmpty())
+		{
+			throw new DAOException(ApplicationProperties.getValue("errors.container.contains.specimen"));
+		}
+		// Uodate containers to disabled
+		for(int i=0;i<count;i++)
+		{
+			StorageContainer container = disabledContainerList.get(i);
+			dao.update(container, sessionDataBean, true, true, false);
+		}
+		
+		auditDisabledObjects(dao, "CATISSUE_CONTAINER", containerIdList);
 	}
 
 	private void disableSubStorageContainer(DAO dao, SessionDataBean sessionDataBean, Long storageContainerIDArr[]) throws DAOException,
@@ -1784,14 +1932,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		// adding updated participantMap to cache
 		//catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, participantMap);
-		List listOfSpecimenIDs = getRelatedObjects(dao, Specimen.class, "storageContainer", storageContainerIDArr);
+		List listOfSpecimenIDs = getRelatedObjects(dao, Specimen.class, "specimenPosition.storageContainer", storageContainerIDArr);
 
 		if (!listOfSpecimenIDs.isEmpty())
 		{
 			throw new DAOException(ApplicationProperties.getValue("errors.container.contains.specimen"));
 		}
 
-		List listOfSubStorageContainerId = super.disableObjects(dao, Container.class, "parent", "CATISSUE_CONTAINER", "PARENT_CONTAINER_ID",
+		List listOfSubStorageContainerId = super.disableObjects(dao, Container.class, "locatedAtPosition.parentContainer", "CATISSUE_CONTAINER", "PARENT_CONTAINER_ID",
 				storageContainerIDArr);
 
 		if (listOfSubStorageContainerId.isEmpty())
@@ -1808,14 +1956,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				String whereColumnName = "id"; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 				Object whereColumnValue = contId;
 
-				List containerList = retrieve(sourceObjectName, whereColumnName, whereColumnValue);
+				List containerList = dao.retrieve(sourceObjectName, whereColumnName, whereColumnValue);
 				if (!containerList.isEmpty())
 				{
 					StorageContainer cont = (StorageContainer) containerList.get(0);
 
 					//cont.setParent(null);
-					cont.setPositionDimensionOne(null);
-					cont.setPositionDimensionTwo(null);
+
+					cont.setLocatedAtPosition(null);
 					//dao.update(cont, sessionDataBean, true, true, false);
 				}
 
@@ -1859,9 +2007,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		int posOneCapacity = parent.getCapacity().getOneDimensionCapacity().intValue();
 		int posTwoCapacity = parent.getCapacity().getTwoDimensionCapacity().intValue();
-
-		int positionDimensionOne = current.getPositionDimensionOne().intValue();
-		int positionDimensionTwo = current.getPositionDimensionTwo().intValue();
+		
+		int positionDimensionOne = current.getLocatedAtPosition().getPositionDimensionOne().intValue();
+		int positionDimensionTwo = current.getLocatedAtPosition().getPositionDimensionTwo().intValue();
 
 		Logger.out.debug("validatePosition C : " + positionDimensionOne + " : " + positionDimensionTwo);
 		Logger.out.debug("validatePosition P : " + posOneCapacity + " : " + posTwoCapacity);
@@ -1877,8 +2025,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	private boolean validatePosition(int posOneCapacity, int posTwoCapacity, StorageContainer current)
 	{
-		int positionDimensionOne = current.getPositionDimensionOne().intValue();
-		int positionDimensionTwo = current.getPositionDimensionTwo().intValue();
+		int positionDimensionOne = current.getLocatedAtPosition().getPositionDimensionOne().intValue();
+		int positionDimensionTwo = current.getLocatedAtPosition().getPositionDimensionTwo().intValue();
 
 		Logger.out.debug("validatePosition C : " + positionDimensionOne + " : " + positionDimensionTwo);
 		Logger.out.debug("validatePosition P : " + posOneCapacity + " : " + posTwoCapacity);
@@ -1909,7 +2057,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		String[] selectColumnName = {"id", "capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity"};
 		String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 		String[] whereColumnCondition = {"="};
-		Object[] whereColumnValue = {container.getParent().getId()};
+		Object[] whereColumnValue = {container.getLocatedAtPosition().getParentContainer().getId()};
 		String joinCondition = null;
 	
 		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
@@ -1923,8 +2071,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		}
 		
-		int positionDimensionOne = container.getPositionDimensionOne().intValue();
-		int positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+		int positionDimensionOne = container.getLocatedAtPosition().getPositionDimensionOne().intValue();
+		int positionDimensionTwo = container.getLocatedAtPosition().getPositionDimensionTwo().intValue();
 
 		Logger.out.debug("validatePosition C : " + positionDimensionOne + " : " + positionDimensionTwo);
 		Logger.out.debug("validatePosition P : " + pcCapacityOne + " : " + pcCapacityTwo);
@@ -1947,7 +2095,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				String sourceObjectName = Specimen.class.getName();
 				String[] selectColumnName = {"id"};
-				String[] whereColumnName1 = {"storageContainer.id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+				String[] whereColumnName1 = {"specimenPosition.storageContainer.id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 				String[] whereColumnCondition1 = {"in"};
 				Object[] whereColumnValue1 = {containerIds};
 				String joinCondition = Constants.AND_JOIN_CONDITION;
@@ -1963,6 +2111,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				else
 				{
 					sourceObjectName = SpecimenArray.class.getName();
+					whereColumnName1[0] = "locatedAtPosition.parentContainer.id"; 
 					list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName1, whereColumnCondition1, whereColumnValue1, joinCondition);
 					// check if Specimen exists with the given storageContainer information
 					if (list.size() != 0)
@@ -2001,13 +2150,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			String sourceObjectName = StorageContainer.class.getName();
 			String[] selectColumnName = {"id"};
-			String[] whereColumnName = {"positionDimensionOne", "positionDimensionTwo", "parent"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+			String[] whereColumnName = {"locatedAtPosition.positionDimensionOne", "locatedAtPosition.positionDimensionTwo", "locatedAtPosition.parentContainer"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 			String[] whereColumnCondition = {"=", "=", "="};
-			Object[] whereColumnValue = {current.getPositionDimensionOne(), current.getPositionDimensionTwo(), current.getParent()};
+			Object[] whereColumnValue = {current.getLocatedAtPosition().getPositionDimensionOne(), current.getLocatedAtPosition().getPositionDimensionTwo(), current.getLocatedAtPosition().getParentContainer()};
 			String joinCondition = Constants.AND_JOIN_CONDITION;
 
 			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-			Logger.out.debug("current.getParentContainer() :" + current.getParent());
+			Logger.out.debug("current.getParentContainer() :" + current.getLocatedAtPosition().getParentContainer());
 			// check if StorageContainer exists with the given storageContainer information
 			if (list.size() != 0)
 			{
@@ -2018,9 +2167,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			else
 			{
 				sourceObjectName = Specimen.class.getName();
-				String[] whereColumnName1 = {"positionDimensionOne", "positionDimensionTwo", "storageContainer.id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+				String[] whereColumnName1 = {"specimenPosition.positionDimensionOne", "specimenPosition.positionDimensionTwo", "specimenPosition.storageContainer.id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 				String[] whereColumnCondition1 = {"=", "=", "="};
-				Object[] whereColumnValue1 = {current.getPositionDimensionOne(), current.getPositionDimensionTwo(), current.getParent().getId()};
+				Object[] whereColumnValue1 = {current.getLocatedAtPosition().getPositionDimensionOne(), current.getLocatedAtPosition().getPositionDimensionTwo(), current.getLocatedAtPosition().getParentContainer().getId()};
 
 				list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName1, whereColumnCondition1, whereColumnValue1, joinCondition);
 				// check if Specimen exists with the given storageContainer information
@@ -2033,7 +2182,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				else
 				{
 					sourceObjectName = SpecimenArray.class.getName();
-
+					whereColumnName1[0] = "locatedAtPosition.positionDimensionOne";
+					whereColumnName1[1] = "locatedAtPosition.positionDimensionTwo";
+					whereColumnName1[2] = "locatedAtPosition.parentContainer.id";
 					list = dao
 							.retrieve(sourceObjectName, selectColumnName, whereColumnName1, whereColumnCondition1, whereColumnValue1, joinCondition);
 					// check if Specimen exists with the given storageContainer information
@@ -2061,15 +2212,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		try
 		{
-			Logger.out.debug("storageContainer.getPositionDimensionOne() : " + storageContainer.getPositionDimensionOne());
-			Logger.out.debug("storageContainer.getPositionDimensionTwo() : " + storageContainer.getPositionDimensionTwo());
-			int positionDimensionOne = (storageContainer.getPositionDimensionOne() != null
-					? storageContainer.getPositionDimensionOne().intValue()
+			Logger.out.debug("storageContainer.getCapacity().getOneDimensionCapacity() : " + storageContainer.getCapacity().getOneDimensionCapacity());
+			Logger.out.debug("storageContainer.getCapacity().getTwoDimensionCapacity() : " + storageContainer.getCapacity().getTwoDimensionCapacity());
+			int oneDimensionCapacity = (storageContainer.getCapacity().getOneDimensionCapacity() != null
+					? storageContainer.getCapacity().getOneDimensionCapacity().intValue()
 					: -1);
-			int positionDimensionTwo = (storageContainer.getPositionDimensionTwo() != null
-					? storageContainer.getPositionDimensionTwo().intValue()
+			int twoDimensionCapacity = (storageContainer.getCapacity().getTwoDimensionCapacity() != null
+					? storageContainer.getCapacity().getTwoDimensionCapacity().intValue()
 					: -1);
-			if (((positionDimensionOne) < Integer.parseInt(posOne)) || ((positionDimensionTwo) < Integer.parseInt(posTwo)))
+			if (((oneDimensionCapacity) < Integer.parseInt(posOne)) || ((twoDimensionCapacity) < Integer.parseInt(posTwo)))
 			{
 				return false;
 			}
@@ -2089,7 +2240,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			String sourceObjectName = Specimen.class.getName();
 			String[] selectColumnName = {"id"};
-			String[] whereColumnName = {"positionDimensionOne", "positionDimensionTwo", "storageContainer.id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+			String[] whereColumnName = {"specimenPosition.positionDimensionOne", "specimenPosition.positionDimensionTwo", "specimenPosition.storageContainer.id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 			String[] whereColumnCondition = {"=", "=", "="};
 			Object[] whereColumnValue = {posOne, posTwo, storageContainer.getId()};
 			String joinCondition = Constants.AND_JOIN_CONDITION;
@@ -2110,7 +2261,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			else
 			{
 				sourceObjectName = StorageContainer.class.getName();
-				String[] whereColumnName1 = {"positionDimensionOne", "positionDimensionTwo", "parent"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+				String[] whereColumnName1 = {"locatedAtPosition.positionDimensionOne", "locatedAtPosition.positionDimensionTwo", "locatedAtPosition.parentContainer"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 				String[] whereColumnCondition1 = {"=", "=", "="};
 				Object[] whereColumnValue1 = {posOne, posTwo, storageContainer.getId()};
 
@@ -2126,7 +2277,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				else
 				{
 					sourceObjectName = SpecimenArray.class.getName();
-					String[] whereColumnName2 = {"positionDimensionOne", "positionDimensionTwo", "storageContainer.id"};
+					String[] whereColumnName2 = {"locatedAtPosition.positionDimensionOne", "locatedAtPosition.positionDimensionTwo", "locatedAtPosition.parentContainer.id"};
 					String[] whereColumnCondition2 = {"=", "=", "="};
 					Object[] whereColumnValue2 = {posOne, posTwo, storageContainer.getId()};
 
@@ -2180,10 +2331,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			StorageContainer pc = new StorageContainer();
 			pc.setId((Long) obj[0]);
 			pc.setName((String) obj[3]);
-			if (obj[1] != null)
-				pc.setPositionDimensionOne((Integer) obj[1]);
-			if (obj[2] != null)
-				pc.setPositionDimensionTwo((Integer) obj[2]);
+			
+			Capacity cntPos = new Capacity();
+			if (obj[1] != null && obj[2] != null)
+			{
+				cntPos.setOneDimensionCapacity((Integer) obj[1]);
+				cntPos.setTwoDimensionCapacity((Integer) obj[2]);
+				pc.setCapacity(cntPos);
+			}	
 
 			//check if user has privilege to use the container
 			boolean hasAccess = validateContainerAccess(pc, sessionDataBean);
@@ -2201,10 +2356,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			 * Bug ID: 4922
 			 * Description:Storage container will not be added to closed site :check for closed site
 		    */
-			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
-					Constants.STORAGE_CONTAINER_FORM_ID);
 
-			storageContainerBizLogic.checkClosedSite(dao, pc.getId(), "Container Site");
+			checkClosedSite(dao, pc.getId(), "Container Site");
 			
 			// check for valid position
 			boolean isValidPosition = validatePosition(pc, positionOne, positionTwo);
@@ -2312,7 +2465,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
 		}
 
-		if (container.getParent() == null)
+		if (container.getLocatedAtPosition() != null && container.getLocatedAtPosition().getParentContainer() == null)
 		{
 			if (container.getSite() == null || container.getSite().getId() == null || container.getSite().getId() <= 0)
 			{
@@ -2345,23 +2498,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		}
 
-		if (container.getParent() != null)
+		if (container.getLocatedAtPosition() != null && container.getLocatedAtPosition().getParentContainer() != null)
 		{
 
-			if (container.getParent().getId() == null)
+			if (container.getLocatedAtPosition().getParentContainer().getId() == null)
 			{
 				String sourceObjectName = StorageContainer.class.getName();
 				String[] selectColumnName = {"id"};
 				String[] whereColumnName = {"name"};
 				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {container.getParent().getName()};
+				Object[] whereColumnValue = {container.getLocatedAtPosition().getParentContainer().getName()};
 				String joinCondition = null;
 
 				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
 
 				if (!list.isEmpty())
 				{
-					container.getParent().setId((Long) list.get(0));
+					container.getLocatedAtPosition().getParentContainer().setId((Long) list.get(0));
 				}
 				else
 				{
@@ -2371,8 +2524,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 
 			//Long storageContainerId = specimen.getStorageContainer().getId();
-			Integer xPos = container.getPositionDimensionOne();
-			Integer yPos = container.getPositionDimensionTwo();
+			Integer xPos = container.getLocatedAtPosition().getPositionDimensionOne();
+			Integer yPos = container.getLocatedAtPosition().getPositionDimensionTwo();
 			boolean isContainerFull = false;
 			/**
 			 *  Following code is added to set the x and y dimension in case only storage container is given 
@@ -2398,7 +2551,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					while (itr.hasNext())
 					{
 						NameValueBean nvb = (NameValueBean) itr.next();
-						if (nvb.getValue().toString().equals(container.getParent().getId().toString()))
+						if (container.getLocatedAtPosition() != null 
+								&& container.getLocatedAtPosition().getParentContainer() != null
+								&& nvb.getValue().toString().equals(container.getLocatedAtPosition().getParentContainer().getId().toString()))
 						{
 
 							Map tempMap = (Map) containerMapFromCache.get(nvb);
@@ -2409,8 +2564,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 							List list = (List) tempMap.get(nvb1);
 							NameValueBean nvb2 = (NameValueBean) list.get(0);
 
-							container.setPositionDimensionOne(new Integer(nvb1.getValue()));
-							container.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+							ContainerPosition cntPos = container.getLocatedAtPosition();
+														
+							cntPos.setPositionDimensionOne(new Integer(nvb1.getValue()));
+							cntPos.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+							cntPos.setOccupiedContainer(container);							
 							isContainerFull = false;
 							break;
 						}
@@ -2425,14 +2583,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 
 			//VALIDATIONS FOR DIMENSION 1.
-			if (validator.isEmpty(String.valueOf(container.getPositionDimensionOne())))
+			if (container.getLocatedAtPosition() != null 
+					&& container.getLocatedAtPosition().getPositionDimensionOne() != null
+					&& validator.isEmpty(String.valueOf(container.getLocatedAtPosition().getPositionDimensionOne())))
 			{
 				message = ApplicationProperties.getValue("storageContainer.oneDimension");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
 			else
 			{
-				if (!validator.isNumeric(String.valueOf(container.getPositionDimensionOne())))
+				if (container.getLocatedAtPosition() != null 
+						&& container.getLocatedAtPosition().getPositionDimensionOne() != null
+						&& !validator.isNumeric(String.valueOf(container.getLocatedAtPosition().getPositionDimensionOne())))
 				{
 					message = ApplicationProperties.getValue("storageContainer.oneDimension");
 					throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
@@ -2440,8 +2602,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 
 			//Validations for dimension 2
-			if (!validator.isEmpty(String.valueOf(container.getPositionDimensionTwo()))
-					&& (!validator.isNumeric(String.valueOf(container.getPositionDimensionTwo()))))
+			if (container.getLocatedAtPosition() != null 
+					&& container.getLocatedAtPosition().getPositionDimensionTwo() != null
+					&& !validator.isEmpty(String.valueOf(container.getLocatedAtPosition().getPositionDimensionTwo()))
+					&& (!validator.isNumeric(String.valueOf(container.getLocatedAtPosition().getPositionDimensionTwo()))))
 			{
 				message = ApplicationProperties.getValue("storageContainer.twoDimension");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
@@ -2524,8 +2688,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		//Retrieving all the occupied positions by child containers
 		String sourceObjectName = StorageContainer.class.getName();
-		String[] selectColumnName = {"positionDimensionOne", "positionDimensionTwo"};
-		String[] whereColumnName = {"parent.id"};
+		String[] selectColumnName = {"locatedAtPosition.positionDimensionOne", "locatedAtPosition.positionDimensionTwo"};
+		String[] whereColumnName = {"locatedAtPosition.parentContainer.id"};
 		String[] whereColumnCondition = {"="};
 		Object[] whereColumnValue = {new Long(containerId)};
 
@@ -2535,15 +2699,19 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		//Retrieving all the occupied positions by specimens
 		sourceObjectName = Specimen.class.getName();
-		whereColumnName[0] = "storageContainer.id";
-
+		whereColumnName[0] = "specimenPosition.storageContainer.id";
+		selectColumnName[0] = "specimenPosition.positionDimensionOne";
+		selectColumnName[1] = "specimenPosition.positionDimensionTwo";
+		
 		list = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
 		setPositions(positions, list);
 
 		//Retrieving all the occupied positions by specimens array 
 		sourceObjectName = SpecimenArray.class.getName();
-		whereColumnName[0] = "storageContainer.id";
-
+		whereColumnName[0] = "locatedAtPosition.parentContainer.id";
+		selectColumnName[0] = "locatedAtPosition.positionDimensionOne";
+		selectColumnName[1] = "locatedAtPosition.positionDimensionTwo";
+		
 		list = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, null);
 		setPositions(positions, list);
 
@@ -3484,5 +3652,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 		}
 		return canHold;
+	}
+	public Collection<SpecimenPosition> getSpecimenPositionCollForContainer(DAO dao,Long containerId) throws DAOException
+	{
+		if(containerId != null)
+		{
+			List specimenPosColl = dao.retrieve(SpecimenPosition.class.getName(), "storageContainer.id", containerId);
+			return specimenPosColl;
+		}
+		return null;
 	}
 }

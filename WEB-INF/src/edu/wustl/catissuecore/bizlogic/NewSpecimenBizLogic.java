@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Container;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
@@ -46,6 +47,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
@@ -754,11 +756,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			if (specimen.getStorageContainer() != null)
+			if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null)
 			{
-				StorageContainerUtil.deleteSinglePositionInContainerMap(specimen
-						.getStorageContainer(), containerMap, specimen.getPositionDimensionOne()
-						.intValue(), specimen.getPositionDimensionTwo().intValue());
+				StorageContainerUtil.deleteSinglePositionInContainerMap(specimen.getSpecimenPosition()
+						.getStorageContainer(), containerMap, specimen.getSpecimenPosition().getPositionDimensionOne()
+						.intValue(), specimen.getSpecimenPosition().getPositionDimensionTwo().intValue());
 			}
 		}
 		catch (Exception e)
@@ -1307,7 +1309,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen) throws DAOException,
 			SMException
 	{
-		if (specimen.getStorageContainer() != null)
+		if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null)
 		{
 			StorageContainer storageContainerObj = null;
 			if (specimen.getParentSpecimen() != null)
@@ -1316,11 +1318,11 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			if (storageContainerObj == null)
 			{
-				if (specimen.getStorageContainer().getId() != null)
+				if (specimen.getSpecimenPosition().getStorageContainer().getId() != null)
 				{
 					String sourceObjectName = StorageContainer.class.getName();
 					storageContainerObj = (StorageContainer) dao.retrieve(sourceObjectName,
-							specimen.getStorageContainer().getId());
+							specimen.getSpecimenPosition().getStorageContainer().getId());
 				}
 				else
 				{
@@ -1334,18 +1336,26 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
 				validateUserForContainer(sessionDataBean, storageContainerObj);
 			}
-			if (specimen.getPositionDimensionOne() == null
-					|| specimen.getPositionDimensionTwo() == null)
+			SpecimenPosition specPos= specimen.getSpecimenPosition();
+			if (specPos.getPositionDimensionOne() == null
+					|| specPos.getPositionDimensionTwo() == null)
 			{
 				LinkedList<Integer> positionValues = StorageContainerUtil
 						.getFirstAvailablePositionsInContainer(storageContainerObj,
 								getStorageContainerMap(), storageContainerIds);
-				specimen.setPositionDimensionOne(positionValues.get(0));
-				specimen.setPositionDimensionTwo(positionValues.get(1));
+				
+				specPos = new SpecimenPosition();
+								
+				specPos.setPositionDimensionOne(positionValues.get(0));
+				specPos.setPositionDimensionTwo(positionValues.get(1));
 			}
+			specPos.setSpecimen(specimen);
+			specPos.setStorageContainer(storageContainerObj);		
+			specimen.setSpecimenPosition(specPos);
+
 			String storageValue = storageContainerObj.getName() + ":"
-					+ specimen.getPositionDimensionOne() + " ,"
-					+ specimen.getPositionDimensionTwo();
+					+ specimen.getSpecimenPosition().getPositionDimensionOne() + " ,"
+					+ specimen.getSpecimenPosition().getPositionDimensionTwo();
 			if (!storageContainerIds.contains(storageValue))
 			{
 				storageContainerIds.add(storageValue);
@@ -1353,10 +1363,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory
 					.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(),
-					specimen.getPositionDimensionOne().toString(), specimen
+					specimen.getSpecimenPosition().getPositionDimensionOne().toString(), specimen.getSpecimenPosition()
 							.getPositionDimensionTwo().toString(), sessionDataBean,
 					partOfMultipleSpecimen);
-			specimen.setStorageContainer(storageContainerObj);
+	//		specimen.setStorageContainer(storageContainerObj);
 		}
 	}
 
@@ -1369,7 +1379,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void validateUserForContainer(SessionDataBean sessionDataBean,
 			Container storageContainerObj) throws SMException, DAOException
 	{
-		Container parentStorageContainer = storageContainerObj.getParent();
+		Container parentStorageContainer = null;
+		ContainerPosition cntPos = storageContainerObj.getLocatedAtPosition();
+		if(cntPos != null)
+		{
+			parentStorageContainer = cntPos.getParentContainer();
+		}
 		// To get privilegeCache through
 		// Singleton instance of PrivilegeManager, requires User LoginName
 		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
@@ -1400,10 +1415,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			StorageContainer storageContainerObj)
 	{
 		Specimen parent = specimen.getParentSpecimen();
-		if (parent.getStorageContainer() != null)
+		if (parent.getSpecimenPosition() != null && parent.getSpecimenPosition().getStorageContainer() != null)
 		{
-			StorageContainer parentContainer = parent.getStorageContainer();
-			StorageContainer specimenContainer = specimen.getStorageContainer();
+			StorageContainer parentContainer = parent.getSpecimenPosition().getStorageContainer();
+			StorageContainer specimenContainer = specimen.getSpecimenPosition().getStorageContainer();
 			if (parentContainer.getId().equals(specimenContainer.getId())
 					|| parentContainer.getName().equals(specimenContainer.getName()))
 			{
@@ -1423,7 +1438,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		String sourceObjectName = StorageContainer.class.getName();
 		List list = dao
-				.retrieve(sourceObjectName, "name", specimen.getStorageContainer().getName());
+				.retrieve(sourceObjectName, "name", specimen.getSpecimenPosition().getStorageContainer().getName());
 		if (!list.isEmpty())
 		{
 			return (StorageContainer) list.get(0);
@@ -1460,15 +1475,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	private void allocatePositionForSpecimen(Specimen specimen) throws DAOException
 	{
-		if (specimen.getPositionDimensionOne() != null
-				|| specimen.getPositionDimensionTwo() != null)
-		{
-			if (specimen.getStorageContainer() != null)
+		if (specimen != null && specimen.getSpecimenPosition() != null && (specimen.getSpecimenPosition().getPositionDimensionOne() != null ||
+				specimen.getSpecimenPosition().getPositionDimensionTwo() != null))
 			{
-				String storageValue = specimen.getStorageContainer().getName() + ":"
-						+ specimen.getPositionDimensionOne() + " ,"
-						+ specimen.getPositionDimensionTwo();
-				if (!storageContainerIds.contains(storageValue))
+			if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null)
+			{
+				String storageValue = specimen.getSpecimenPosition().getStorageContainer().getName()+":"+specimen.getSpecimenPosition().getPositionDimensionOne()+" ,"+
+				specimen.getSpecimenPosition().getPositionDimensionTwo();
+				 if (!storageContainerIds.contains(storageValue))
 				{
 					storageContainerIds.add(storageValue);
 				}
@@ -1883,29 +1897,29 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	private void validateStorageContainer(Specimen specimen, DAO dao) throws DAOException
 	{
-		if (specimen.getStorageContainer() != null
-				&& (specimen.getStorageContainer().getId() == null && specimen
+		if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null
+				&& (specimen.getSpecimenPosition().getStorageContainer().getId() == null && specimen.getSpecimenPosition()
 						.getStorageContainer().getName() == null))
 		{
 			String message = ApplicationProperties.getValue("specimen.storageContainer");
 			throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 		}
-		if (specimen.getStorageContainer() != null
-				&& specimen.getStorageContainer().getName() != null)
+		if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() != null
+				&& specimen.getSpecimenPosition().getStorageContainer().getName() != null)
 		{
-			StorageContainer storageContainerObj = specimen.getStorageContainer();
+			StorageContainer storageContainerObj = specimen.getSpecimenPosition().getStorageContainer();
 			String sourceObjectName = StorageContainer.class.getName();
 			String[] selectColumnName = {"id"};
 			String[] whereColumnName = {"name"};
 			String[] whereColumnCondition = {"="};
-			Object[] whereColumnValue = {specimen.getStorageContainer().getName()};
+			Object[] whereColumnValue = {specimen.getSpecimenPosition().getStorageContainer().getName()};
 			String joinCondition = null;
 			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName,
 					whereColumnCondition, whereColumnValue, joinCondition);
 			if (!list.isEmpty())
 			{
 				storageContainerObj.setId((Long) list.get(0));
-				specimen.setStorageContainer(storageContainerObj);
+				specimen.getSpecimenPosition().setStorageContainer(storageContainerObj);
 			}
 			else
 			{
@@ -2042,8 +2056,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private boolean isStoragePositionChanged(Specimen oldSpecimen, Specimen newSpecimen)
 	{
 		boolean isEqual = true;
-		StorageContainer oldContainer = oldSpecimen.getStorageContainer();
-		StorageContainer newContainer = newSpecimen.getStorageContainer();
+		StorageContainer oldContainer = null;
+		StorageContainer newContainer = null;
+		if(oldSpecimen.getSpecimenPosition() != null)
+			oldContainer = oldSpecimen.getSpecimenPosition().getStorageContainer();
+		if(newSpecimen.getSpecimenPosition() != null)
+			newContainer = newSpecimen.getSpecimenPosition().getStorageContainer();
 		if (oldContainer == null && newContainer == null)
 		{
 			return false;
@@ -2055,15 +2073,21 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		if (oldContainer.getId().longValue() == newContainer.getId().longValue())
 		{
-			int oldConatinerPos1 = oldSpecimen.getPositionDimensionOne();
-			int newConatinerPos1 = newSpecimen.getPositionDimensionOne();
-			int oldConatinerPos2 = oldSpecimen.getPositionDimensionTwo();
-			int newConatinerPos2 = newSpecimen.getPositionDimensionTwo();
-			if (oldConatinerPos1 == newConatinerPos1 && oldConatinerPos2 == newConatinerPos2)
+			if(oldSpecimen != null && oldSpecimen.getSpecimenPosition() != null
+					&& newSpecimen != null && newSpecimen.getSpecimenPosition()!= null)
 			{
-				isEqual = false;
+				int oldConatinerPos1 = oldSpecimen.getSpecimenPosition().getPositionDimensionOne();
+				int newConatinerPos1 = newSpecimen.getSpecimenPosition().getPositionDimensionOne();
+				int oldConatinerPos2 = oldSpecimen.getSpecimenPosition().getPositionDimensionTwo();
+				int newConatinerPos2 = newSpecimen.getSpecimenPosition().getPositionDimensionTwo();
+					
+				if (oldConatinerPos1 == newConatinerPos1 && oldConatinerPos2 == newConatinerPos2)
+				{
+					isEqual = false;
+				}
 			}
 		}
+			
 		return isEqual;
 	}
 
@@ -2267,10 +2291,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
-				if (newSpecimen.getStorageContainer() != null
-						&& newSpecimen.getStorageContainer().getId() == null)
+				if (newSpecimen.getSpecimenPosition() != null && newSpecimen.getSpecimenPosition().getStorageContainer() != null
+						&& newSpecimen.getSpecimenPosition().getStorageContainer().getId() == null)
 				{
-					newSpecimen.setStorageContainer(setStorageContainerId(dao, newSpecimen));
+					newSpecimen.getSpecimenPosition().setStorageContainer(setStorageContainerId(dao, newSpecimen));
 				}
 			}
 			iterator = newSpecimenCollection.iterator();
@@ -2556,13 +2580,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		specimenDO.setLabel(specimenVO.getLabel());
 		specimenDO.setBarcode(specimenVO.getBarcode());
 		specimenDO.setAvailable(specimenVO.getAvailable());
-		if (specimenVO.getStorageContainer() != null)
+		if (specimenVO.getSpecimenPosition()!= null && specimenVO.getSpecimenPosition().getStorageContainer() != null)
 		{
 			setStorageContainer(dao, specimenVO, specimenDO);
 		}
 		else
 		{
-			specimenDO.setStorageContainer(null);
+			specimenDO.setSpecimenPosition(null);
+			//specimenDO.setStorageContainer(null);
 		}
 		calculateAvailableQunatity(specimenVO, specimenDO);
 		String oldStatus = specimenDO.getCollectionStatus();
@@ -2829,11 +2854,26 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 */
 	private void setStorageContainer(DAO dao, Specimen specimenVO, Specimen specimenDO)
 			throws DAOException, SMException
-	{
-		StorageContainer storageContainer = specimenVO.getStorageContainer();
-		specimenDO.setPositionDimensionOne(specimenVO.getPositionDimensionOne());
-		specimenDO.setPositionDimensionTwo(specimenVO.getPositionDimensionTwo());
-		specimenDO.setStorageContainer(storageContainer);
+	{		
+		SpecimenPosition specPos = specimenDO.getSpecimenPosition();
+		if(specimenVO != null && specimenVO.getSpecimenPosition() != null)
+		{
+			StorageContainer storageContainer = specimenVO.getSpecimenPosition().getStorageContainer();
+
+			if(specPos == null)
+			{
+				specPos = new SpecimenPosition();
+			}
+		
+			specPos.setPositionDimensionOne(specimenVO.getSpecimenPosition().getPositionDimensionOne());
+			specPos.setPositionDimensionTwo(specimenVO.getSpecimenPosition().getPositionDimensionTwo());
+			specPos.setSpecimen(specimenDO);
+			specPos.setStorageContainer(storageContainer);
+		}
+		
+		specimenDO.setSpecimenPosition(specPos);
+		
+//		specimenDO.setStorageContainer(storageContainer);	
 	}
 
 	/**
@@ -2920,16 +2960,19 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		List specimenDetailList = new ArrayList();
 		specimenDetailList.add(specimen.getLabel());
 		specimenDetailList.add(specimen.getType());
-		if (specimen.getStorageContainer() == null)
+		if (specimen.getSpecimenPosition() == null || specimen.getSpecimenPosition().getStorageContainer() == null)
 		{
 			specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
 		}
 		else
 		{
-			String storageLocation = specimen.getStorageContainer().getName() + ": X-Axis-"
-					+ specimen.getPositionDimensionOne() + ", Y-Axis-"
-					+ specimen.getPositionDimensionTwo();
-			specimenDetailList.add(storageLocation);
+			if(specimen.getSpecimenPosition() != null)
+			{
+				String storageLocation = specimen.getSpecimenPosition().getStorageContainer().getName() + ": X-Axis-"
+						+ specimen.getSpecimenPosition().getPositionDimensionOne() + ", Y-Axis-"
+						+ specimen.getSpecimenPosition().getPositionDimensionTwo();
+				specimenDetailList.add(storageLocation);
+			}
 		}
 		specimenDetailList.add(specimen.getClassName());
 		finalDataList.add(specimenDetailList);

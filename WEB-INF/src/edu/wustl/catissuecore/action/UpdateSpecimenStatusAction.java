@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -254,7 +255,8 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 		if ("Virtual".equals(
 				specimenVO.getStorageContainerForSpecimen()))
 		{
-			specimen.setStorageContainer(null);
+		//	specimen.setStorageContainer(null);
+			specimen.setSpecimenPosition(null);
 		}
 		else
 		{
@@ -283,31 +285,40 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			
 			return;
 		}
+		SpecimenPosition specPos = specimen.getSpecimenPosition();
 		
-		if (pos1!=null)
+		if(specPos == null)
 		{
+			specPos = new SpecimenPosition();
+		}
+		if (pos1!=null)
+		{			
 			try
-			{
-				specimen.setPositionDimensionOne( Integer.parseInt(pos1) );
+			{				
+				specPos.setPositionDimensionOne( Integer.parseInt(pos1) );
 			}
 			catch(NumberFormatException exception)
 			{
-				specimen.setPositionDimensionOne(null);
-			}
+				specPos.setPositionDimensionOne(null);
+			}			
 		}
 		if (pos2!=null)
 		{
 			try
 			{
-				specimen.setPositionDimensionTwo( Integer.parseInt(pos2) );
+				specPos.setPositionDimensionTwo( Integer.parseInt(pos2) );
 			}
 			catch(NumberFormatException exception)
 			{
-				specimen.setPositionDimensionOne(null);
-			}
-				
+				specPos.setPositionDimensionTwo(null);
+			}				
 		}
 		StorageContainer storageContainer = new StorageContainer();
+		specPos.setSpecimen(specimen);
+		specPos.setStorageContainer(storageContainer);
+		specimen.setSpecimenPosition(specPos);
+				
+		
 		String containerId = specimenVO.getContainerId();
 		
 		if(containerId !=null && containerId.trim().length()>0)
@@ -319,7 +330,7 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			throw new BizLogicException("Container name is missing for specimen :" +specimenVO.getDisplayName());
 		}
 		storageContainer.setName(specimenVO.getSelectedContainerName());
-		specimen.setStorageContainer(storageContainer);
+	//	specimen.setStorageContainer(storageContainer);
 	}
 
 	/**

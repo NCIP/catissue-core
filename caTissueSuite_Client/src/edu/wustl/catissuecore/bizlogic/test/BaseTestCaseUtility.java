@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -1178,9 +1179,6 @@ public class BaseTestCaseUtility {
 		parent.setId(new Long(2));
 		storageContainer.setParent(parent);    
 */
-		storageContainer.setPositionDimensionOne(new Integer(1));
-		storageContainer.setPositionDimensionTwo(new Integer(2));
-
 		storageContainer.setActivityStatus("Active");
 		storageContainer.setFull(Boolean.valueOf(false));
 		return storageContainer;
@@ -1224,9 +1222,6 @@ public class BaseTestCaseUtility {
 		holdsSpecimenClassCollection.add("Cell");
 		storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
 		
-		storageContainer.setPositionDimensionOne(new Integer(1));
-		storageContainer.setPositionDimensionTwo(new Integer(2));
-
 		storageContainer.setActivityStatus("Active");
 		storageContainer.setFull(Boolean.valueOf(false));		
 	}
@@ -1668,11 +1663,12 @@ public class BaseTestCaseUtility {
 		molecularSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
 		molecularSpecimen.setComment("");
 		// Is virtually located
-		molecularSpecimen.setStorageContainer(null);
-		molecularSpecimen.setPositionDimensionOne(null);
-		molecularSpecimen.setPositionDimensionTwo(null);
+//		molecularSpecimen.setStorageContainer(null);
 		
-
+//		molecularSpecimen.setPositionDimensionOne(null);
+//		molecularSpecimen.setPositionDimensionTwo(null);
+		
+		molecularSpecimen.setSpecimenPosition(null);
 //		Collection externalIdentifierCollection = new HashSet();
 //		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
 //		externalIdentifier.setName("Specimen 1 ext id");
@@ -1789,10 +1785,11 @@ public class BaseTestCaseUtility {
 		//cellSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
 		cellSpecimen.setComment("");
 		// Is virtually located
-		cellSpecimen.setStorageContainer(null);
-		cellSpecimen.setPositionDimensionOne(null);
-		cellSpecimen.setPositionDimensionTwo(null);
-		
+//		cellSpecimen.setStorageContainer(null);
+		cellSpecimen.setSpecimenPosition(null);
+//		cellSpecimen.setPositionDimensionOne(null);
+//		cellSpecimen.setPositionDimensionTwo(null);
+//		
 
 //		Collection externalIdentifierCollection = new HashSet();
 //		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
@@ -1910,9 +1907,10 @@ public class BaseTestCaseUtility {
 		//cellSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
 		cellSpecimen.setComment("");
 		// Is virtually located
-		cellSpecimen.setStorageContainer(null);
-		cellSpecimen.setPositionDimensionOne(null);
-		cellSpecimen.setPositionDimensionTwo(null);
+//		cellSpecimen.setStorageContainer(null);
+		cellSpecimen.setSpecimenPosition(null);
+//		cellSpecimen.setPositionDimensionOne(null);
+//		cellSpecimen.setPositionDimensionTwo(null);
 		
 
 //		Collection externalIdentifierCollection = new HashSet();
@@ -2059,9 +2057,13 @@ public class BaseTestCaseUtility {
 //		StorageContainer storageContainer = new StorageContainer();
 //		storageContainer.setId(new Long(3));	
 		
-		specimenArray.setStorageContainer(storageContainer);
-		specimenArray.setPositionDimensionOne(new Integer(1));
-		specimenArray.setPositionDimensionTwo(new Integer(2));
+//	specimenArray.setStorageContainer(storageContainer);
+		ContainerPosition containerPosition = new ContainerPosition();
+		containerPosition.setPositionDimensionOne(new Integer(1));
+		containerPosition.setPositionDimensionTwo(new Integer(2));
+		containerPosition.setOccupiedContainer(specimenArray);
+		containerPosition.setParentContainer(storageContainer);
+		specimenArray.setLocatedAtPosition(containerPosition);
 		
 		Collection specimenArrayContentCollection = new HashSet();
 		SpecimenArrayContent specimenArrayContent = new SpecimenArrayContent();
