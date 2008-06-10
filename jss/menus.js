@@ -211,13 +211,14 @@ Ext.onReady(function(){
 			{
                 text: 'Collection Protocol',
 				tooltip:'Add Collection Protocol',
-				href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol',
+//				href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol',
+					                href:'OpenCollectionProtocol.do?pageOf=pageOfmainCP&operation=add',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add',
-                            href:'CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol'
+                            href:'OpenCollectionProtocol.do?pageOf=pageOfmainCP&operation=add'
                         }, {
                             text: 'Edit',
                             href:'SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol' 
@@ -257,7 +258,6 @@ Ext.onReady(function(){
 				tooltip:'Shows Conflicting Reports',
                 href:'ConflictView.do?pageNum=1'
             }
-			
 		]
     });
             // For Bio Specimen Data

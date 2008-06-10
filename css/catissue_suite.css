@@ -547,4 +547,23 @@ visibility: hidden;
   background-color:#bfdcf3;	
   font-size:20px;
 }
+.cp_tabbg {
+	border-bottom:1px solid #61a1e3;
+}
+
+.cp_tabtable {
+	border-left:1px solid #61a1e3;
+	border-right:1px solid #61a1e3;
+	border-bottom:1px solid #61a1e3;
+	
+}
+
+
+
+.black_noneditable {
+	font-family: verdana;
+	font-size: 11px;
+	color: #575656;
+	font-weight:bold;
+}
 	/* end */
