@@ -3,10 +3,12 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +22,7 @@ import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
@@ -104,7 +107,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
 		String[] specimenColumnNames = getColumnNames(specimenColumns);
 
-		List listOfData = getListOfArrayData(dist, configForm, sessionData, selectedColumns, specimenColumns);
+		List listOfData = getListOfArrayData(dist);
 
 		//Set the request attributes for the Distribution report data
 		request.setAttribute(Constants.DISTRIBUTION_REPORT_FORM, distributionReportForm);
@@ -266,6 +269,115 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		arrayDetails.add(Utility.toString(array.getComment()));
 		return arrayDetails;
 	}
+	
+	
+	/**
+	 * Retrived specimenTypeCollection and prepared the SpecimenArrayDetails list
+	 * @param specimenArrayMap
+	 * @param specimenArrayTypeList
+	 * @param arrayEntries
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private void getArrayDetails(Map specimenArrayMap,Set specimenArrayTypeList,List arrayEntries) throws DAOException, ClassNotFoundException
+	{
+		String ids = Utility.getCommaSeparatedIds(specimenArrayTypeList);
+		Map specimenTypeMap = new HashMap();		
+		String hql = "select specArrayType.id ,elements(specArrayType.specimenTypeCollection) " +
+					 "from edu.wustl.catissuecore.domain.SpecimenArrayType as specArrayType " +
+					 " where specArrayType.id in ( "+ids+")";
+		List specimenTypeCollection = Utility.executeQuery(hql);
+		
+		if(specimenTypeCollection!=null && !specimenTypeCollection.isEmpty())
+		{	
+			for(int i=0;i<specimenTypeCollection.size();i++)
+			{
+				Object[] obj = (Object[]) specimenTypeCollection.get(i);
+				if(specimenTypeMap.containsKey((Long)obj[0]))
+				{
+					List list = (List)specimenTypeMap.get((Long)obj[0]);
+					list.add(obj[1]);
+					specimenTypeMap.put((Long)obj[0], list);
+									
+				} else {
+					List list = new ArrayList();
+					list.add(obj[1]);
+					specimenTypeMap.put((Long)obj[0], list);
+					
+				}
+			}	
+		}
+		
+		Iterator keyIterator = specimenArrayMap.keySet().iterator();
+		while(keyIterator.hasNext())
+		{
+			Long specimenArrayId = (Long)keyIterator.next();
+			SpecimenArray specimenArray = (SpecimenArray)specimenArrayMap.get(specimenArrayId);
+			SpecimenArrayType specimenArrayType = (SpecimenArrayType)specimenArray.getSpecimenArrayType();
+			
+			
+			List arrayDetails = new ArrayList();
+			arrayDetails.add(specimenArray.getName());
+			arrayDetails.add(Utility.toString(specimenArray.getBarcode()));
+			arrayDetails.add(Utility.toString(specimenArrayType.getName()));
+
+			if(specimenArray != null && specimenArray.getLocatedAtPosition() != null)
+			{
+				arrayDetails.add(Utility.toString(specimenArray.getLocatedAtPosition().getPositionDimensionOne()));
+				arrayDetails.add(Utility.toString(specimenArray.getLocatedAtPosition().getPositionDimensionTwo()));
+			}
+			arrayDetails.add(Utility.toString(specimenArray.getCapacity().getOneDimensionCapacity()));
+			arrayDetails.add(Utility.toString(specimenArray.getCapacity().getTwoDimensionCapacity()));
+			arrayDetails.add(Utility.toString(specimenArrayType.getSpecimenClass()));
+						
+			List specimenTypeColl = (List)specimenTypeMap.get(specimenArrayType.getId());
+			if(specimenTypeColl!=null && !specimenTypeColl.isEmpty())
+				arrayDetails.add(Utility.toString(specimenTypeColl));
+			arrayDetails.add(Utility.toString(specimenArray.getComment()));
+						
+			arrayEntries.add(arrayDetails);
+		
+		}
+		
+	}
+	
+	
+	/**
+	 * Retrieved specimenArrayType and set it to specimen array
+	 * @param specimenArrayMap
+	 * @param specimenArrayIdsList
+	 * @param arrayEntries
+	 * @throws Exception
+	 */
+	private void setSpecimenArrayType(Map specimenArrayMap,List specimenArrayIdsList,List arrayEntries) throws Exception
+	{
+		String ids = Utility.getCommaSeparatedIds(specimenArrayIdsList);
+		List specimenArrayTypeIdsList = new ArrayList();
+		Set<Long> specimenArrayTypeIdsSet = new HashSet<Long>(); 
+			
+		String hql = "select specArray.id ,specArray.specimenArrayType from edu.wustl.catissuecore.domain.SpecimenArray specArray " +
+					 " where specArray.id in ( "+ids+")";
+		List specimenArrayTypeList = Utility.executeQuery(hql);
+		
+		if(specimenArrayTypeList!=null && !specimenArrayTypeList.isEmpty())
+		{
+			for(int i=0 ; i<specimenArrayTypeList.size() ; i++)
+			{
+				Object[] obj = (Object[])specimenArrayTypeList.get(i);
+				SpecimenArray array = (SpecimenArray)specimenArrayMap.get((Long)obj[0]);
+				SpecimenArrayType specimenArrayType = (SpecimenArrayType)obj[1];
+				array.setSpecimenArrayType(specimenArrayType);
+				specimenArrayTypeIdsSet.add(specimenArrayType.getId());
+				//specimenArrayTypeIdsList.add(specimenArrayType.getId());
+										
+			}
+			getArrayDetails(specimenArrayMap,specimenArrayTypeIdsSet,arrayEntries);
+			
+		}
+		
+	
+	}
+	
 
 	/**
 	 * @param dist
@@ -302,18 +414,19 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	 * @return
 	 * @throws Exception
 	 */
-	protected List getListOfArrayData(Distribution dist, ConfigureResultViewForm configForm, SessionDataBean sessionData, String[] arrayColumns,
-			String[] specimenColumns) throws Exception
+	protected List getListOfArrayData(Distribution dist) throws Exception
 	{
 		List arrayEntries = new ArrayList();
+		Map<Long,Object> specimenArrayMap = new HashMap<Long, Object>();
+		List<Long> specimenArrayIdsList = new ArrayList<Long>();
 		Iterator itr = getSpecimenArrayCollection(dist).iterator();
 		while (itr.hasNext())
 		{
 			SpecimenArray array = (SpecimenArray) itr.next();
-			List arrayEntry = new ArrayList();
-			arrayEntry.add(getArrayDetails(array, arrayColumns, sessionData));
-			arrayEntries.add(arrayEntry);
+			specimenArrayMap.put(array.getId(), array);
+			specimenArrayIdsList.add(array.getId());
 		}
+		setSpecimenArrayType(specimenArrayMap,specimenArrayIdsList,arrayEntries);
 		return arrayEntries;
 	}
 
@@ -323,35 +436,36 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	 * Retrive SpecimenArrayCollection from parent Specimen
 	 * Replaced Iterator itr = dist.getSpecimenArrayCollection().iterator();
 	 * @throws DAOException 
+	 * @throws ClassNotFoundException 
 	 */
-	private Collection getSpecimenArrayCollection(Distribution dist) throws DAOException
+	private Collection getSpecimenArrayCollection(Distribution dist) throws DAOException, ClassNotFoundException
 	{
 		Collection specimenArrayCollection = new HashSet();
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 		Collection distributedItemCollection = (Collection) bizLogic.retrieveAttribute(Distribution.class.getName(), dist.getId(),
 				"elements(distributedItemCollection)");
 		Iterator itr = distributedItemCollection.iterator();
+		List distributedItemIds = new ArrayList();
 		while (itr.hasNext())
 		{
 			DistributedItem distributedItem = (DistributedItem) itr.next();
-			String[] selectColumnName = {"specimenArray"};
-			String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
-			Object[] whereColumnValue = {distributedItem.getId()};
-			String[] whereColumnCond = {"="};
-			List list = bizLogic.retrieve(DistributedItem.class.getName(), selectColumnName, whereColumnName, whereColumnCond, whereColumnValue,
-					Constants.AND_JOIN_CONDITION);
-			if (list != null && list.size() > 0)
-			{
-				Iterator listItr = list.iterator();
-				while (listItr.hasNext())
-				{
-					SpecimenArray array = (SpecimenArray) listItr.next();
-					if (array != null)
-						specimenArrayCollection.add(array);
-				}
+			distributedItemIds.add(distributedItem.getId());
 			}
-		}
-
+		String ids = Utility.getCommaSeparatedIds(distributedItemIds);
+		String hql = "select distItem.specimenArray from edu.wustl.catissuecore.domain.DistributedItem distItem where distItem.id in ("+ ids +")";
+		List specimenArrayList = Utility.executeQuery(hql);
+		
+		if(specimenArrayList!=null && !specimenArrayList.isEmpty())
+		{	
+			for(int i=0;i<specimenArrayList.size();i++)
+			{
+				SpecimenArray array = (SpecimenArray) specimenArrayList.get(i);
+				if (array != null)
+					specimenArrayCollection.add(array);
+				
+			}
+		}	
+		
 		return specimenArrayCollection;
 	}
 }

@@ -1278,7 +1278,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 	 * @param orderItemIds
 	 * @return
 	 */
-	public static String getCommaSeparatedIds(List orderItemIds)
+	public static String getCommaSeparatedIds(Collection orderItemIds)
 	{
 		int counter = 1;
 		Iterator orderItemIdsIterator = orderItemIds.iterator();

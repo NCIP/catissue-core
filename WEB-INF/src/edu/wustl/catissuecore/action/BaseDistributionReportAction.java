@@ -221,9 +221,10 @@ public abstract class BaseDistributionReportAction extends BaseAction
 			identifierColumnNames = simpleQueryBizLogic
 						.addObjectIdentifierColumnsToQuery(queryResultObjectDataMap, query);
 			simpleQueryBizLogic.setDependentIdentifiedColumnIds(queryResultObjectDataMap, query);
-			List list = query.execute(sessionData, true,queryResultObjectDataMap, false);
-    		listOfData.add(list);
-    	return listOfData;
+			//List list = query.execute(sessionData, true,queryResultObjectDataMap, false);
+    		//listOfData.add(list);
+    	//return listOfData;
+			return (List)query.execute(sessionData, true,queryResultObjectDataMap, false);
     }
     
     protected String [] getSelectedColumns(String action,ConfigureResultViewForm form,boolean specimenArrayDistribution)

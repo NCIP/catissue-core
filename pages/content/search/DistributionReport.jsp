@@ -249,16 +249,12 @@
 						}
 					%>
                   </tr>
-				  	 <%
-				 	Iterator itr= dataList.iterator();
-				 	int i1=1;
-				 	while(itr.hasNext())
-				 	{
-				 %>
+				  	
                   <tr>
 				   <%						
-				 		List rowData = (List)itr.next();					
-				 		Iterator innerItr= rowData.iterator();
+				 		//List rowData = (List)itr.next();					
+				 		Iterator innerItr= dataList.iterator();
+						int i1=1;
 				 		while(innerItr.hasNext())
 				 		{
 				 %>
@@ -282,9 +278,7 @@
 				 		}
 				 	%>
 				 	</tr>
-				 <%
-					}
-				%>
+				
                 </table>
 				</div></td>
               </tr>
