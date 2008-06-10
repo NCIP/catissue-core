@@ -9,6 +9,8 @@
         name="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
         table="CATISSUE_PART_MEDICAL_ID"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -40,17 +42,17 @@
             name="site"
             class="edu.wustl.catissuecore.domain.Site"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="SITE_ID"  lazy="false"
+            column="SITE_ID" lazy="false" 
         />
 
         <many-to-one
             name="participant"
             class="edu.wustl.catissuecore.domain.Participant"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="PARTICIPANT_ID"  

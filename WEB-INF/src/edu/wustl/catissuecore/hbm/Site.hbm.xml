@@ -10,6 +10,8 @@
         table="CATISSUE_SITE"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -61,10 +63,10 @@
             name="coordinator"
             class="edu.wustl.catissuecore.domain.User"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="USER_ID"  lazy="false"
+            column="USER_ID" lazy="false" 
         />
 
         <property
@@ -80,7 +82,7 @@
             name="address"
             class="edu.wustl.catissuecore.domain.Address"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="ADDRESS_ID"
@@ -94,6 +96,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="SITE_ID"

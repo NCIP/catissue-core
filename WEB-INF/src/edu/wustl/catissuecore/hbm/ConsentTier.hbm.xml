@@ -9,8 +9,10 @@
         table="CATISSUE_CONSENT_TIER"
         dynamic-update="false"
         dynamic-insert="false"
-        lazy="false"
+        lazy="false" 
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"

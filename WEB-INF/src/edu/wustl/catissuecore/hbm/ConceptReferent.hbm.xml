@@ -3,13 +3,15 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping default-lazy="false">
+<hibernate-mapping default-lazy="false" >
     <class
         name="edu.wustl.catissuecore.domain.pathology.ConceptReferent"
         table="CATISSUE_CONCEPT_REFERENT"
         dynamic-update="false"
         dynamic-insert="false"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -27,18 +29,18 @@
             name="concept"
             class="edu.wustl.catissuecore.domain.pathology.Concept"
             cascade="save-update"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="CONCEPT_ID"
-            lazy="false"
+            lazy="false" 
         />
 
         <many-to-one
             name="conceptReferentClassification"
             class="edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification"
             cascade="save-update"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="CONCEPT_CLASSIFICATION_ID"
@@ -48,7 +50,7 @@
             name="deIdentifiedSurgicalPathologyReport"
             class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="DEIDENTIFIED_REPORT_ID"

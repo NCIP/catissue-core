@@ -9,8 +9,10 @@
         table="CATISSUE_CONSENT_TIER_STATUS"
         dynamic-update="false"
         dynamic-insert="false"
-        lazy="false"
+        lazy="false" 
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -27,7 +29,7 @@
             name="consentTier"
             class="edu.wustl.catissuecore.domain.ConsentTier"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="CONSENT_TIER_ID"          

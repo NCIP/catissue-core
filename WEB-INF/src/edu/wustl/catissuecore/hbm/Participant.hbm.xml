@@ -11,6 +11,8 @@
         dynamic-insert="false"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -80,11 +82,13 @@
         <set
             name="raceCollection"
             table="CATISSUE_RACE"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="PARTICIPANT_ID"
@@ -141,11 +145,13 @@
         <set
             name="participantMedicalIdentifierCollection"
             table="CATISSUE_PART_MEDICAL_ID"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="true"
             cascade="all"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="PARTICIPANT_ID"
@@ -159,11 +165,13 @@
         <set
             name="collectionProtocolRegistrationCollection"
             table="CATISSUE_COLL_PROT_REG"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="true"
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="PARTICIPANT_ID"

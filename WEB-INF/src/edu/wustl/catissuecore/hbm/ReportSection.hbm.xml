@@ -11,6 +11,8 @@
         dynamic-insert="false"
         lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -64,7 +66,7 @@
             name="textContent"
             class="edu.wustl.catissuecore.domain.pathology.TextContent"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="TEXT_CONTENT_ID"

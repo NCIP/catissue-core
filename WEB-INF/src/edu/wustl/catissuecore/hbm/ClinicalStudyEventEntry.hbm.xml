@@ -10,6 +10,8 @@
         dynamic-update="false"
         dynamic-insert="false"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -36,7 +38,7 @@
             name="clinicalStudyEvent"
             class="edu.wustl.catissuecore.domain.ClinicalStudyEvent"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="CLINICAL_STUDY_EVENT_ID"

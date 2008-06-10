@@ -10,6 +10,8 @@
         table="CATISSUE_REPORTED_PROBLEM"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"

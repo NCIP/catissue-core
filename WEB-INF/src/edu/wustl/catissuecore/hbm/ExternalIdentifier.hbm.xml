@@ -10,6 +10,8 @@
         table="CATISSUE_EXTERNAL_IDENTIFIER"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -50,7 +52,7 @@
             name="specimen"
             class="edu.wustl.catissuecore.domain.Specimen"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SPECIMEN_ID"

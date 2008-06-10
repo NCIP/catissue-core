@@ -10,6 +10,8 @@
         table="CATISSUE_USER"
         lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -95,37 +97,37 @@
             name="department"
             class="edu.wustl.catissuecore.domain.Department"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="DEPARTMENT_ID"  lazy="false"
+            column="DEPARTMENT_ID"  lazy="false" 
         />
 
         <many-to-one
             name="cancerResearchGroup"
             class="edu.wustl.catissuecore.domain.CancerResearchGroup"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="CANCER_RESEARCH_GROUP_ID"  lazy="false"
+            column="CANCER_RESEARCH_GROUP_ID"  lazy="false" 
         />
 
         <many-to-one
             name="institution"
             class="edu.wustl.catissuecore.domain.Institution"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="INSTITUTION_ID" lazy="false"
+            column="INSTITUTION_ID"  lazy="false" 
         />
 
         <many-to-one
             name="address"
             class="edu.wustl.catissuecore.domain.Address"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="ADDRESS_ID"
@@ -139,6 +141,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="USER_ID"
@@ -148,7 +152,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.CollectionProtocol"
                 column="COLLECTION_PROTOCOL_ID"
-                outer-join="auto"
+                 
              />
 
         </set>
@@ -174,11 +178,13 @@
         <set
             name="passwordCollection"
             table="CATISSUE_PASSWORD"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="true"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="USER_ID"
@@ -210,7 +216,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.ClinicalStudy"
                 column="CLINICAL_STUDY_ID"
-                outer-join="auto"
+                 
              />
 
         </set>

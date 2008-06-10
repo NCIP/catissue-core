@@ -10,6 +10,8 @@
         table="CATISSUE_SPECIMEN_PROTOCOL"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -32,11 +34,11 @@
             name="principalInvestigator"
             class="edu.wustl.catissuecore.domain.User"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="PRINCIPAL_INVESTIGATOR_ID" 
-            lazy="false"
+            lazy="false" 
         />
 
         <property
@@ -145,6 +147,8 @@
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="COLLECTION_PROTOCOL_ID"
@@ -158,11 +162,15 @@
         <set
             name="consentTierCollection"
             table="CATISSUE_CONSENT_TIER"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
+        
+        
 
               <key
                   column="COLL_PROTOCOL_ID"
@@ -181,6 +189,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="COLLECTION_PROTOCOL_ID"
@@ -190,7 +200,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.DistributionProtocol"
                 column="DISTRIBUTION_PROTOCOL_ID"
-                outer-join="auto"
+                 
              />
 
         </set>
@@ -198,11 +208,13 @@
         <set
             name="coordinatorCollection"
             table="CATISSUE_COLL_COORDINATORS"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="COLLECTION_PROTOCOL_ID"
@@ -212,7 +224,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.User"
                 column="USER_ID"
-                outer-join="auto"
+                 
              />
 
         </set>
@@ -223,8 +235,10 @@
          
             inverse="true"
             cascade="save-update"
-            sort="unsorted"     lazy="false"
+            sort="unsorted"     fetch="subselect" lazy="false" 
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="COLLECTION_PROTOCOL_ID"
@@ -238,11 +252,13 @@
 	<set
             name="childCollectionProtocolCollection"
             table="CATISSUE_COLLECTION_PROTOCOL"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="true"
             cascade="save-update"
             sort="unsorted"
          >
+         
+         <cache usage="read-write" />
 
             <key
                 column="PARENT_CP_ID"
@@ -259,7 +275,6 @@
             name="parentCollectionProtocol"
             class="edu.wustl.catissuecore.domain.CollectionProtocol"
             cascade="none"
-            outer-join="false"
             update="true"
             insert="true"
             column="PARENT_CP_ID"
@@ -323,8 +338,10 @@
            
             inverse="false"
             cascade="save-update"
-            sort="unsorted"   lazy="false"
+            sort="unsorted"   fetch="subselect" lazy="false" 
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="DISTRIBUTION_PROTOCOL_ID"
@@ -334,7 +351,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.SpecimenRequirement"
                 column="SPECIMEN_REQUIREMENT_ID"
-                outer-join="auto"  lazy="false"
+                lazy="false" 
              />
 
         </set>
@@ -347,6 +364,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="DISTRIBUTION_PROTOCOL_ID"
@@ -356,7 +375,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.CollectionProtocol"
                 column="COLLECTION_PROTOCOL_ID"
-                outer-join="auto"
+                 
              />
 
         </set>
@@ -380,6 +399,8 @@
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="CLINICAL_STUDY_ID"
@@ -388,7 +409,7 @@
               <many-to-many
                   class="edu.wustl.catissuecore.domain.User"
                   column="USER_ID"
-                  outer-join="auto"
+                   
               />
 
         </set>
@@ -400,6 +421,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="CLINICAL_STUDY_ID"
@@ -418,6 +441,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="CLINICAL_STUDY_ID"

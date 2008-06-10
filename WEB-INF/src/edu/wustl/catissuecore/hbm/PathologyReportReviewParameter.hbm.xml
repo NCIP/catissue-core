@@ -11,6 +11,8 @@
         dynamic-insert="false"
         lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -37,7 +39,7 @@
             name="surgicalPathologyReport"
             class="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="REPORT_ID"
@@ -65,7 +67,7 @@
             name="user"
             class="edu.wustl.catissuecore.domain.User"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="USER_ID"

@@ -10,6 +10,8 @@
         dynamic-update="false"
         dynamic-insert="false"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -25,11 +27,13 @@
         <set
             name="conceptReferentCollection"
             table="CATISSUE_CONCEPT_REFERENT"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="CONCEPT_ID"
@@ -62,7 +66,7 @@
             name="semanticType"
             class="edu.wustl.catissuecore.domain.pathology.SemanticType"
             cascade="save-update"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SEMANTIC_TYPE_ID"

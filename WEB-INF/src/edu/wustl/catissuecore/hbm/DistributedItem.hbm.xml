@@ -10,6 +10,10 @@
         table="CATISSUE_DISTRIBUTED_ITEM"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
+    
+    
 
         <id
             name="id"
@@ -41,7 +45,7 @@
             name="specimen"
             class="edu.wustl.catissuecore.domain.Specimen"
             cascade="all"
-            outer-join="auto"
+             
             update="true"
 		    insert="true"
             column="SPECIMEN_ID"
@@ -50,7 +54,7 @@
             name="specimenArray"
             class="edu.wustl.catissuecore.domain.SpecimenArray"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SPECIMEN_ARRAY_ID"
@@ -59,7 +63,7 @@
             name="distribution"
             class="edu.wustl.catissuecore.domain.Distribution"
             cascade="all"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="DISTRIBUTION_ID"

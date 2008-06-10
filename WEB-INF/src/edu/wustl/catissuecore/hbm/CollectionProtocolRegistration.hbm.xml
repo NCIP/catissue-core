@@ -9,6 +9,8 @@
         table="CATISSUE_COLL_PROT_REG"
 		lazy="true"
      >
+     
+     <cache usage="read-write" />
 
 
         <id
@@ -53,6 +55,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="COLL_PROT_REG_ID"
@@ -67,7 +71,7 @@
             name="consentWitness"
             class="edu.wustl.catissuecore.domain.User"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true" 
             column="CONSENT_WITNESS"  
@@ -94,20 +98,20 @@
             name="participant"
             class="edu.wustl.catissuecore.domain.Participant"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="PARTICIPANT_ID"  lazy="false"
+            column="PARTICIPANT_ID" lazy="false" 
         />
 
         <many-to-one
             name="collectionProtocol"
             class="edu.wustl.catissuecore.domain.CollectionProtocol"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="COLLECTION_PROTOCOL_ID" lazy="false"
+            column="COLLECTION_PROTOCOL_ID" lazy="false" 
         />
 
         <property
@@ -126,6 +130,8 @@
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="COLLECTION_PROTOCOL_REG_ID"

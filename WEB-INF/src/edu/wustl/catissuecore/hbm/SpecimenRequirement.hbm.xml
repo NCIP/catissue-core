@@ -10,6 +10,8 @@
         table="CATISSUE_SPECIMEN_REQUIREMENT" 
         	lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -63,6 +65,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="SPECIMEN_REQUIREMENT_ID"
@@ -72,7 +76,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.DistributionProtocol"
                 column="DISTRIBUTION_PROTOCOL_ID"
-                outer-join="auto"
+                 
              />
 
         </set>
@@ -85,6 +89,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="SPECIMEN_REQUIREMENT_ID"
@@ -94,7 +100,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
                 column="COLLECTION_PROTOCOL_EVENT_ID"
-                outer-join="auto"  lazy="false"
+                   lazy="false" 
              />
 
         </set>
@@ -103,7 +109,7 @@
             name="quantity"
             class="edu.wustl.catissuecore.domain.Quantity"
             cascade="save-update"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="QUANTITY_ID"

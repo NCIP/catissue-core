@@ -10,6 +10,8 @@
         table="CATISSUE_SPECIMEN_EVENT_PARAM"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -31,7 +33,7 @@
             name="specimenCollectionGroup"
             class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SPECIMEN_COLL_GRP_ID"
@@ -40,7 +42,7 @@
             name="specimen"
             class="edu.wustl.catissuecore.domain.Specimen"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SPECIMEN_ID"
@@ -58,7 +60,7 @@
             name="user"
             class="edu.wustl.catissuecore.domain.User"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="USER_ID"
@@ -248,7 +250,7 @@
             name="toStorageContainer"
             class="edu.wustl.catissuecore.domain.StorageContainer"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="TO_STORAGE_CONTAINER_ID"
@@ -258,7 +260,7 @@
             name="fromStorageContainer"
             class="edu.wustl.catissuecore.domain.StorageContainer"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="FROM_STORAGE_CONTAINER_ID"
@@ -268,7 +270,7 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.CollectionEventParameters"
             table="CATISSUE_COLL_EVENT_PARAM"
-			lazy="false"
+			lazy="false" 
         >
             <key
                 column="IDENTIFIER"
@@ -295,7 +297,7 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.ReceivedEventParameters"
             table="CATISSUE_RECEIVED_EVENT_PARAM"
-			lazy="false"
+			lazy="false" 
         >
             <key
                 column="IDENTIFIER"

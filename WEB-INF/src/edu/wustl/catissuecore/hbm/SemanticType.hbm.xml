@@ -10,6 +10,8 @@
         dynamic-update="false"
         dynamic-insert="false"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"

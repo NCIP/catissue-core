@@ -10,6 +10,8 @@
         table="CATISSUE_COLL_PROT_EVENT"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -57,18 +59,18 @@
             name="requiredCollectionSpecimenGroup"
             class="edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SPECIMEN_COLL_REQ_GROUP_ID"
-            not-null="false"   lazy="false"
+            not-null="false" lazy="false" 
         />
 
         <many-to-one
             name="collectionProtocol"
             class="edu.wustl.catissuecore.domain.CollectionProtocol"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="COLLECTION_PROTOCOL_ID" 
@@ -82,6 +84,8 @@
 	            cascade="save-update"
 	            sort="unsorted"
 	        >
+	        
+	        <cache usage="read-write" />
 	
 	              <key
 	                  column="COLLECTION_PROTOCOL_EVENT_ID"

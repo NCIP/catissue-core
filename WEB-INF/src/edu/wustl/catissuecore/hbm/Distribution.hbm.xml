@@ -10,6 +10,8 @@
         table="CATISSUE_DISTRIBUTION"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -33,7 +35,7 @@
             name="toSite"
             class="edu.wustl.catissuecore.domain.Site"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="TO_SITE_ID"
@@ -43,20 +45,22 @@
             name="distributionProtocol"
             class="edu.wustl.catissuecore.domain.DistributionProtocol"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="DISTRIBUTION_PROTOCOL_ID" lazy="false"
+            column="DISTRIBUTION_PROTOCOL_ID" lazy="false" 
         />
 
         <set
             name="distributedItemCollection"
             table="CATISSUE_DISTRIBUTED_ITEM"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="true"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="DISTRIBUTION_ID"
@@ -81,11 +85,13 @@
         <set
             name="specimenArrayCollection"
             table="CATISSUE_SPECIMEN_ARRAY"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="DISTRIBUTION_ID"
@@ -102,7 +108,7 @@
             name="specimen"
             class="edu.wustl.catissuecore.domain.Specimen"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SPECIMEN_ID"
@@ -120,10 +126,10 @@
             name="distributedBy"
             class="edu.wustl.catissuecore.domain.User"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="USER_ID" lazy="false"
+            column="USER_ID" lazy="false" 
         />
 
         <property
@@ -139,7 +145,7 @@
             name="orderDetails"
             class="edu.wustl.catissuecore.domain.OrderDetails"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="ORDER_ID"

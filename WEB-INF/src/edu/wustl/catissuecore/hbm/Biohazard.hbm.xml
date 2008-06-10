@@ -8,8 +8,10 @@
     <class
         name="edu.wustl.catissuecore.domain.Biohazard"
         table="CATISSUE_BIOHAZARD"
-		lazy="false"
+		lazy="false" 
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -65,6 +67,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="BIOHAZARD_ID"
@@ -74,7 +78,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.Specimen"
                 column="SPECIMEN_ID"
-                outer-join="auto"
+                 
              />
 
         </set>

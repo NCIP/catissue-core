@@ -10,6 +10,8 @@
         table="CATISSUE_INSTITUTION"
         lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"

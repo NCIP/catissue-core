@@ -10,6 +10,8 @@
         table="CATISSUE_SPECI_ARRAY_CONTENT"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -41,10 +43,10 @@
             name="initialQuantity"
             class="edu.wustl.catissuecore.domain.Quantity"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="INITIAL_QUANTITY_ID"  lazy="false"
+            column="INITIAL_QUANTITY_ID" lazy="false" 
         />
 
         <property
@@ -69,17 +71,17 @@
             name="specimen"
             class="edu.wustl.catissuecore.domain.Specimen"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="SPECIMEN_ID"  lazy="false"
+            column="SPECIMEN_ID" lazy="false" 
         />
 
         <many-to-one
             name="specimenArray"
             class="edu.wustl.catissuecore.domain.SpecimenArray"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SPECIMEN_ARRAY_ID"

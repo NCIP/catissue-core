@@ -11,6 +11,8 @@
         table="CATISSUE_ABS_SPECI_COLL_GROUP"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -60,10 +62,10 @@
             name="specimenCollectionSite"
             class="edu.wustl.catissuecore.domain.Site"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
-            column="SITE_ID"  lazy="false"
+            column="SITE_ID" lazy="false" 
         />
 
 
@@ -75,6 +77,8 @@
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="SPECIMEN_COLLECTION_GROUP_ID"
@@ -107,6 +111,8 @@
 	            cascade="save-update"
 	            sort="unsorted"
 	        >
+	        
+	        <cache usage="read-write" />
 	
 	              <key
 	                  column="SPECIMEN_COLL_GROUP_ID"
@@ -119,11 +125,13 @@
 	        <set
 	            name="specimenEventParametersCollection"
 	            table="CATISSUE_SPECIMEN_EVENT_PARAM"
-	            lazy="false"
+	            fetch="subselect" lazy="false" 
 	            inverse="true"
 	            cascade="save-update"
 	            sort="unsorted"
 	        >
+	        
+	        <cache usage="read-write" />
 	
 	              <key
 	                  column="SPECIMEN_COLL_GRP_ID"
@@ -179,17 +187,17 @@
 	            name="collectionProtocolRegistration"
 	            class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
 	            cascade="none"
-	            outer-join="auto"
+	             
 	            update="true"
 	            insert="true"
-	            column="COLLECTION_PROTOCOL_REG_ID"  lazy="false"
+	            column="COLLECTION_PROTOCOL_REG_ID" lazy="false" 
 	        />
 
 	        <many-to-one
 	            name="collectionProtocolEvent"
 	            class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
 	            cascade="none"
-	            outer-join="auto"
+	             
 	            update="true"
 	            insert="true"
 	            column="COLLECTION_PROTOCOL_EVENT_ID"
@@ -199,7 +207,7 @@
 	            name="deidentifiedSurgicalPathologyReport"
 	            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
 	            cascade="none"
-	            outer-join="auto"
+	             
 	            constrained="false"
 		     	property-ref="specimenCollectionGroup"
 	        />
@@ -208,7 +216,7 @@
 	            name="identifiedSurgicalPathologyReport"
 	            class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
 	            cascade="none"
-	            outer-join="auto"
+	             
 	            constrained="false"
 		     	property-ref="specimenCollectionGroup"
 	        />
@@ -222,7 +230,7 @@
 
 	    <joined-subclass
 	        name="edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup"
-	        table="CATISSUE_SPECI_COLL_REQ_GROUP"    lazy="false"
+	        table="CATISSUE_SPECI_COLL_REQ_GROUP"  lazy="false" 
 			
 	    >
 
@@ -234,9 +242,9 @@
 	            name="collectionProtocolEvent"
 	            class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
 	            cascade="save-update"
-	            outer-join="auto"
+	             
 	            constrained="false"
-		     	property-ref="requiredCollectionSpecimenGroup"   lazy="false"
+		     	property-ref="requiredCollectionSpecimenGroup"   lazy="false" 
 	        />
             
 		</joined-subclass>

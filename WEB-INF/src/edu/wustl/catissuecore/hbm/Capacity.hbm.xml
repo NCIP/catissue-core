@@ -8,8 +8,10 @@
     <class
         name="edu.wustl.catissuecore.domain.Capacity"
         table="CATISSUE_CAPACITY"
-        lazy="false"
+        lazy="false" 
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"

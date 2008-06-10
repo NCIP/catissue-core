@@ -11,6 +11,8 @@
         dynamic-insert="false"
         lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -37,7 +39,7 @@
             name="distributionProtocol"
             class="edu.wustl.catissuecore.domain.DistributionProtocol"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="DISTRIBUTION_PROTOCOL_ID"
@@ -61,6 +63,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="ORDER_ID"
@@ -78,6 +82,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="ORDER_ID"

@@ -11,6 +11,8 @@
         dynamic-insert="false"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -28,11 +30,11 @@
             name="capacity"
             class="edu.wustl.catissuecore.domain.Capacity"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="CAPACITY_ID"
-            lazy="false"
+            lazy="false" 
         />
 
         <property
@@ -108,11 +110,13 @@
         <set
             name="specimenTypeCollection"
             table="CATISSUE_SPECIMEN_TYPE"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="SPECIMEN_ARRAY_TYPE_ID"
@@ -127,7 +131,7 @@
             table="CATISSUE_STORAGE_TYPE"
             dynamic-update="false"
             dynamic-insert="false"
-			lazy="false"
+			lazy="false" 
         >
         <key
             column="IDENTIFIER"
@@ -144,11 +148,13 @@
         <set
             name="holdsSpecimenClassCollection"
             table="CATISSUE_STOR_TYPE_SPEC_CLASS"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="STORAGE_TYPE_ID"
@@ -162,11 +168,13 @@
         <set
             name="holdsStorageTypeCollection"
             table="CATISSUE_STOR_TYPE_HOLDS_TYPE"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="HOLDS_STORAGE_TYPE_ID"
@@ -175,17 +183,19 @@
               <many-to-many
                   class="edu.wustl.catissuecore.domain.StorageType"
                   column="STORAGE_TYPE_ID"
-                  outer-join="auto" 
+                    
               />
         </set>
         <set
             name="holdsSpecimenArrayTypeCollection"
             table="CATISSUE_STORTY_HOLDS_SPARRTY"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="STORAGE_TYPE_ID"
@@ -194,7 +204,7 @@
               <many-to-many
                   class="edu.wustl.catissuecore.domain.SpecimenArrayType"
                   column="SPECIMEN_ARRAY_TYPE_ID"
-                  outer-join="auto"
+                   
               />
         </set>
         

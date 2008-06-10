@@ -9,8 +9,10 @@
         table="CATISSUE_CONCEPT_CLASSIFICATN"
         dynamic-update="false"
         dynamic-insert="false"
-        lazy="false"
+        lazy="false" 
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -26,11 +28,13 @@
         <set
             name="conceptReferentCollection"
             table="CATISSUE_CONCEPT_REFERENT"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="CONCEPT_CLASSIFICATION_ID"

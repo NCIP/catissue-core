@@ -11,6 +11,8 @@
         dynamic-insert="false"
         lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -37,7 +39,7 @@
             name="distributedItem"
             class="edu.wustl.catissuecore.domain.DistributedItem"
             cascade="save-update"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="DISTRIBUTED_ITEM_ID"
@@ -73,7 +75,7 @@
             name="orderDetails"
             class="edu.wustl.catissuecore.domain.OrderDetails"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="ORDER_ID"
@@ -94,7 +96,7 @@
             name="newSpecimenArrayOrderItem"
             class="edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="ARRAY_ORDER_ITEM_ID"
@@ -160,7 +162,7 @@
 	            name="specimenCollectionGroup"
 	            class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
 	            cascade="none"
-	            outer-join="auto"
+	             
 	            update="true"
 	            insert="true"
 	            column="SPECIMEN_COLL_GROUP_ID"
@@ -184,7 +186,7 @@
 		            name="parentSpecimen"
 		            class="edu.wustl.catissuecore.domain.Specimen"
 		            cascade="none"
-		            outer-join="auto"
+		             
 		            update="true"
 		            insert="true"
 		            column="SPECIMEN_ID"
@@ -207,7 +209,7 @@
 	            name="specimen"
 	            class="edu.wustl.catissuecore.domain.Specimen"
 	            cascade="none"
-	            outer-join="auto"
+	             
 	            update="true"
 	            insert="true"
 	            column="SPECIMEN_ID"
@@ -243,7 +245,7 @@
             name="specimenArray"
             class="edu.wustl.catissuecore.domain.SpecimenArray"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SPECIMEN_ARRAY_ID"
@@ -266,7 +268,7 @@
             name="specimenArray"
             class="edu.wustl.catissuecore.domain.SpecimenArray"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SPECIMEN_ARRAY_ID"
@@ -276,7 +278,7 @@
             name="specimenArrayType"
             class="edu.wustl.catissuecore.domain.SpecimenArrayType"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="ARRAY_TYPE_ID"
@@ -297,6 +299,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="ARRAY_ORDER_ITEM_ID"

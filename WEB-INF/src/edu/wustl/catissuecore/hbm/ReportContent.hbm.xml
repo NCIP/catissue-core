@@ -11,6 +11,8 @@
         dynamic-insert="false"
         lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -52,11 +54,13 @@
         <set
             name="reportSectionCollection"
             table="REPORT_SECTION"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="true"
             cascade="all"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="TEXT_CONTENT_ID"
@@ -71,7 +75,7 @@
             name="surgicalPathologyReport"
             class="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="REPORT_ID"
@@ -94,7 +98,7 @@
             name="surgicalPathologyReport"
             class="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="REPORT_ID"
@@ -117,7 +121,7 @@
             name="surgicalPathologyReport"
             class="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="REPORT_ID"

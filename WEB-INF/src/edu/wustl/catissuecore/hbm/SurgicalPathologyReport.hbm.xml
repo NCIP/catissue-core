@@ -11,6 +11,8 @@
         dynamic-insert="false"
         lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -37,7 +39,7 @@
             name="binaryContent"
             class="edu.wustl.catissuecore.domain.pathology.BinaryContent"
             cascade="save-update"
-            outer-join="auto"
+             
             constrained="false"
             property-ref="surgicalPathologyReport"
         />
@@ -60,6 +62,8 @@
             cascade="all"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="REPORT_ID"
@@ -74,7 +78,7 @@
             name="reportSource"
             class="edu.wustl.catissuecore.domain.Site"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SOURCE_ID"
@@ -85,7 +89,7 @@
             name="textContent"
             class="edu.wustl.catissuecore.domain.pathology.TextContent"
             cascade="save-update"
-            outer-join="auto"
+             
             constrained="false"
             property-ref="surgicalPathologyReport"
         />
@@ -94,7 +98,7 @@
             name="xmlContent"
             class="edu.wustl.catissuecore.domain.pathology.XMLContent"
             cascade="save-update"
-            outer-join="auto"
+             
             constrained="false"
             property-ref="surgicalPathologyReport"
         />
@@ -136,11 +140,13 @@
         <set
             name="conceptReferentCollection"
             table="CATISSUE_CONCEPT_REFERENT"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="all"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="DEIDENTIFIED_REPORT_ID"
@@ -162,11 +168,13 @@
         <set
             name="quarantineEventParameterCollection"
             table="CATISSUE_QUARANTINE_PARAMS"
-            lazy="false"
+            fetch="subselect" lazy="false" 
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="DEID_REPORT_ID"
@@ -181,7 +189,7 @@
             name="specimenCollectionGroup"
             class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SCG_ID"
@@ -204,7 +212,7 @@
             name="deIdentifiedSurgicalPathologyReport"
             class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="DEID_REPORT"
@@ -215,7 +223,7 @@
             name="specimenCollectionGroup"
             class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
             cascade="none"
-            outer-join="auto"
+             
             update="true"
             insert="true"
             column="SCG_ID"
