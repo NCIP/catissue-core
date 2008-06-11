@@ -504,7 +504,7 @@ public class ConsentUtil
 			{
 				specimenDetailList.add(specimenObj.getLabel());
 				specimenDetailList.add(specimenObj.getType());
-				if(specimenObj.getSpecimenPosition().getStorageContainer()==null)
+				if(specimenObj.getSpecimenPosition()==null)
 				{
 					specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
 				}
