@@ -4,7 +4,8 @@
 <%@ page language="java" isELIgnored="false" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>	
 <script src="jss/ajax.js" type="text/javascript"></script>
-
+<script language="JavaScript" type="text/javascript"
+	src="jss/caTissueSuite.js"></script>
 
 <html:errors/> 
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
@@ -111,7 +112,7 @@
 			<bean:message  key="buttons.submit" />
 		</html:submit>
      
-      &nbsp;| <span class="cancellink"><html:link page="/ManageAdministrativeData.do"  styleClass="blue_ar_s_b">
+      &nbsp;| <span class="cancellink"><html:link page="/ManageAdministrativeData.do"  onclick="closeUserWindow()" styleClass="blue_ar_s_b">
 													<bean:message key="buttons.cancel" />
 												</html:link></span></td>
   </tr>
