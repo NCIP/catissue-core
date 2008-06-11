@@ -406,8 +406,8 @@ public class StorageContainer extends Container implements IActivityStatus
 
 					if (form.getStContSelection() == 1)
 					{
-						if (locatedAtPosition != null && locatedAtPosition.positionDimensionOne.intValue() != form.getPositionDimensionOne()
-								|| locatedAtPosition.positionDimensionTwo.intValue() != form.getPositionDimensionOne())
+						if ((locatedAtPosition != null && locatedAtPosition.positionDimensionOne.intValue() != form.getPositionDimensionOne())
+							|| (locatedAtPosition != null && locatedAtPosition.positionDimensionTwo.intValue() != form.getPositionDimensionOne()))
 						{
 							positionChanged = true;
 						}
