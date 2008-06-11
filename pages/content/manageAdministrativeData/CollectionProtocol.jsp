@@ -359,7 +359,7 @@ function openEventPage()
 							  year= '${requestScope.collectionProtocolYear}'
 							  day= '${requestScope.collectionProtocolDay}'
 							  value='${requestScope.currentCollectionProtocolDate}'
-							  styleClass="formDateSized10"
+							  styleClass="black_ar"
 				/>
 
 
@@ -381,11 +381,11 @@ function openEventPage()
 	<ncombo:DateTimeComponent name="endDate" 
 							  id="endDate"
 							  formName="collectionProtocolForm"
-							  month= '${requestScope.collectionProtocolMonth}'
-							  year= '${requestScope.collectionProtocolYear}'
-							  day= '${requestScope.collectionProtocolDay}'
-							  value='${requestScope.currentCollectionProtocolDate}'
-							  styleClass="formDateSized10"
+							  month= '${requestScope.collectionProtocolEndDateMonth}'
+							  year= '${requestScope.collectionProtocolEndDateYear}'
+							  day= '${requestScope.collectionProtocolEndDateDay}'
+							  value='${requestScope.collectionProtocolEndDate}'
+							  styleClass="black_ar"
 				/>
 
 

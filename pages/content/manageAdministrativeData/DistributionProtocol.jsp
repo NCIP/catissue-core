@@ -36,6 +36,7 @@
         readOnlyValue = false;
     }
 	    String currentDistributionProtocolDate="";
+		String distributionProtocolEndDate="";
 		Object obj = request.getAttribute("distributionProtocolForm");
 		int noOfRows=1;
 		Map map = null;
@@ -49,6 +50,9 @@
 			currentDistributionProtocolDate = form.getStartDate();
 			if(currentDistributionProtocolDate == null)
 				currentDistributionProtocolDate = "";
+			distributionProtocolEndDate=form.getEndDate();
+			 if(distributionProtocolEndDate == null)
+				 distributionProtocolEndDate="";
 		}
 		
 		
@@ -383,6 +387,7 @@ function insRow(subdivtag)
 								</td>
 		                        <td colspan="2" align="left" valign="top">
 					<%
+							
 						if(currentDistributionProtocolDate.trim().length() > 0)
 						{
 							Integer distributionProtocolYear = new Integer(Utility.getYear(currentDistributionProtocolDate ));
@@ -425,11 +430,22 @@ function insRow(subdivtag)
 										<bean:message key="distributionprotocol.enddate" />
 									</label>
 								</td>
-			   				    <td colspan=2>
-									 <div id="enddateDiv" style="position:absolute; visibility:hidden; index:1000;">
-									 </div>
-									 <html:text styleClass="black_ar" maxlength="10"  size="20" styleId="endDate" property="endDate" readonly="true" />
-									 &nbsp;<span class="grey_ar_s"><bean:message key="page.dateFormat" /> </span>&nbsp;
+					<%
+							Integer distributionProtocolEndDateYear = new Integer(Utility.getYear(distributionProtocolEndDate ));
+							Integer distributionProtocolEndDateMonth = new Integer(Utility.getMonth(distributionProtocolEndDate ));
+							Integer distributionProtocolEndDateDay = new Integer(Utility.getDay(distributionProtocolEndDate ));
+					%>
+			   				    <td colspan="2" align="left" valign="top">
+									<ncombo:DateTimeComponent name="endDate" 
+											 id="endDate"
+											 formName="distributionProtocolForm"
+											month= "<%= distributionProtocolEndDateMonth %>"
+								  			year= "<%= distributionProtocolEndDateYear %>"
+								  			day= "<%= distributionProtocolEndDateDay %>"
+								  			value="<%=distributionProtocolEndDate %>"
+								  			styleClass="black_ar"
+										/>
+									 <span class="grey_ar_s"><bean:message key="page.dateFormat" /> </span>&nbsp;
 								 </td>
 				  			  </tr>
 				</logic:equal>
