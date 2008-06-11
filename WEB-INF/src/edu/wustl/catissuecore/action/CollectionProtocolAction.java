@@ -158,12 +158,15 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	   	String tab = (String)request.getParameter("tab");
 	    String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		String currentCollectionProtocolDate="";
-		
+		String collectionProtocolEndDate="";
 		if(collectionProtocolForm != null)
 		{	
 			currentCollectionProtocolDate = collectionProtocolForm.getStartDate();
 			if(currentCollectionProtocolDate == null)
-				currentCollectionProtocolDate = "";				
+				currentCollectionProtocolDate = "";	
+			collectionProtocolEndDate = collectionProtocolForm.getEndDate();
+			if(collectionProtocolEndDate == null)
+				collectionProtocolEndDate = "";
 		}
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		String appendingPath = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
@@ -200,9 +203,18 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		Integer collectionProtocolMonth = new Integer(Utility.getMonth(currentCollectionProtocolDate ));
 		Integer collectionProtocolDay = new Integer(Utility.getDay(currentCollectionProtocolDate ));
 		
+		Integer collectionProtocolEndDateYear = new Integer(Utility.getYear(collectionProtocolEndDate ));
+		Integer collectionProtocolEndDateMonth = new Integer(Utility.getMonth(collectionProtocolEndDate ));
+		Integer collectionProtocolEndDateDay = new Integer(Utility.getDay(collectionProtocolEndDate ));
+		
 		request.setAttribute("collectionProtocolYear", collectionProtocolYear);
 		request.setAttribute("collectionProtocolDay", collectionProtocolDay);
 		request.setAttribute("collectionProtocolMonth", collectionProtocolMonth);
+		
+		request.setAttribute("collectionProtocolEndDateYear", collectionProtocolEndDateYear);
+		request.setAttribute("collectionProtocolEndDateDay", collectionProtocolEndDateDay);
+		request.setAttribute("collectionProtocolEndDateMonth", collectionProtocolEndDateMonth);
+		
 	    int noOfConsents=1;
 		noOfConsents = collectionProtocolForm.getConsentTierCounter();
 		 if(noOfConsents != 0)
@@ -232,6 +244,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		request.setAttribute("editViewButton", editViewButton);
 		request.setAttribute("appendingPath", appendingPath);
 		request.setAttribute("currentCollectionProtocolDate", currentCollectionProtocolDate);
+		request.setAttribute("collectionProtocolEndDate", collectionProtocolEndDate);
 		request.setAttribute("pageView", pageView);
 		request.setAttribute("flagforPageView", flagforPageView);
 		request.setAttribute("tab", tab);
