@@ -191,6 +191,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					}
 					
 					SpecimenPosition specimenPosition = specimen.getSpecimenPosition();
+					if(specimenPosition==null)
+					{
+						// trasfering from virtual location
+						specimenPosition = new SpecimenPosition();
+						specimenPosition.setSpecimen(specimen);
+						specimen.setSpecimenPosition(specimenPosition);
+					}
 					specimenPosition.setStorageContainer(storageContainerObj);
 					specimenPosition.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
 					specimenPosition.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
@@ -612,10 +619,16 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 //				Long fromContainerId = (Long) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition");
 //				Integer pos1 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition.positionDimensionOne");
 //				Integer pos2 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPositionpositionDimensionTwo");
-				Long fromContainerId = specimen.getSpecimenPosition().getStorageContainer().getId();
-				Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
-				Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
-
+				Long fromContainerId=null;
+				Integer pos1=null;
+				Integer pos2=null;
+				if(specimen.getSpecimenPosition()!=null)
+				{
+					fromContainerId = specimen.getSpecimenPosition().getStorageContainer().getId();
+					pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
+					pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+				}
+				
 				if((fromContainerId == null && parameter.getFromStorageContainer() != null) || (fromContainerId != null && parameter.getFromStorageContainer() == null))
 				{
 					throw new DAOException("Specimen "+specimen.getLabel()+" had been moved to another location! Updated the locations. Please redo the transfers.");
