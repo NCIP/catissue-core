@@ -10,6 +10,8 @@
         table="CATISSUE_SPECIMEN"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -40,6 +42,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="SPECIMEN_ID"
@@ -151,11 +155,13 @@
         <set
             name="biohazardCollection"
             table="CATISSUE_SPECIMEN_BIOHZ_REL"
-            lazy="false"
+            lazy="false" fetch="subselect"
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="SPECIMEN_ID"
@@ -173,11 +179,13 @@
         <set
             name="specimenEventCollection"
             table="CATISSUE_SPECIMEN_EVENT"
-            lazy="false"
+            lazy="false" fetch="subselect"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="SPECIMEN_ID"
@@ -198,6 +206,8 @@
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="PARENT_SPECIMEN_ID"
@@ -213,11 +223,13 @@
         <set
             name="externalIdentifierCollection"
             table="CATISSUE_EXTERNAL_IDENTIFIER"
-            lazy="false"
+            lazy="false" fetch="subselect"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
             <key
                 column="SPECIMEN_ID"
@@ -255,7 +267,7 @@
 
         <component
             name="availableQuantity"
-            class="edu.wustl.catissuecore.domain.Quantity"  lazy="false"
+            class="edu.wustl.catissuecore.domain.Quantity"  lazy="false" 
         >
 
         <property
@@ -271,7 +283,7 @@
 
         <component
             name="initialQuantity"
-            class="edu.wustl.catissuecore.domain.Quantity" lazy="false"
+            class="edu.wustl.catissuecore.domain.Quantity" lazy="false" 
         >
 
         <property

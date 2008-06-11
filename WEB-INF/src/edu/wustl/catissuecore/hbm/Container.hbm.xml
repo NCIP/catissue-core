@@ -11,6 +11,8 @@
         dynamic-insert="false"
 		lazy="true"
     >
+    
+    <cache usage="read-write" />
 
         <id
             name="id"
@@ -49,6 +51,8 @@
 	            cascade="delete-orphan"
 	            sort="unsorted"
 	        >
+	        
+	        <cache usage="read-write" />
 	
 	              <key
 	                  column="PARENT_CONTAINER_ID"
@@ -76,8 +80,8 @@
             insert="true"
             column="CAPACITY_ID"
         />
-
-        <property
+        
+         <property
             name="comment"
             type="string"
             update="true"
@@ -116,6 +120,7 @@
             dynamic-insert="false"
 			lazy="true"
         >
+        
         <key
             column="IDENTIFIER"
         />
@@ -128,6 +133,8 @@
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="SPECIMEN_ARRAY_ID"
@@ -145,7 +152,7 @@
             outer-join="auto"
             update="true"
             insert="true"
-            column="CREATED_BY_ID"   	lazy="false"
+            column="CREATED_BY_ID"   	lazy="false" 
         />
 
         <set
@@ -156,6 +163,8 @@
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="SPECIMEN_ARRAY_ID"
@@ -204,6 +213,8 @@
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="CONTAINER_ID"
@@ -213,14 +224,17 @@
                   class="edu.wustl.catissuecore.domain.SpecimenPosition"
               />
         </set>
+        
         <set
             name="collectionProtocolCollection"
             table="CATISSUE_ST_CONT_COLL_PROT_REL"
-            lazy="false"
+            lazy="false" fetch="subselect"
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="STORAGE_CONTAINER_ID"
@@ -237,11 +251,13 @@
         <set
             name="holdsSpecimenClassCollection"
             table="CATISSUE_STOR_CONT_SPEC_CLASS"
-            lazy="false"
+            lazy="false" fetch="subselect"
             inverse="false"
             cascade="save-update"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="STORAGE_CONTAINER_ID"
@@ -253,11 +269,13 @@
         <set
             name="holdsStorageTypeCollection"
             table="CATISSUE_ST_CONT_ST_TYPE_REL"
-            lazy="false"
+            lazy="false" fetch="subselect"
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="STORAGE_CONTAINER_ID"
@@ -273,11 +291,13 @@
         <set
             name="holdsSpecimenArrayTypeCollection"
             table="CATISSUE_CONT_HOLDS_SPARRTYPE"
-            lazy="false"
+            lazy="false" fetch="subselect"
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
+        
+        <cache usage="read-write" />
 
               <key
                   column="STORAGE_CONTAINER_ID"
