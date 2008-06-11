@@ -257,7 +257,10 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					 */
 					//Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
 					dao.update(specimen, sessionDataBean, true, true, false);
-					dao.delete(prevPosition);	
+					if(prevPosition!=null)
+					{
+						dao.delete(prevPosition);
+					}	
 					try
 					{
 						CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
