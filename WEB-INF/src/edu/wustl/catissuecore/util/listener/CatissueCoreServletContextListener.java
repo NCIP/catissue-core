@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.23 $
+ * $Name: 1.41.2.24 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -310,6 +310,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
                 new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
                 new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
+        
+        Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
+		.putAll(protectionGroupsForObjectTypes);
+
 	}
 
     /**
