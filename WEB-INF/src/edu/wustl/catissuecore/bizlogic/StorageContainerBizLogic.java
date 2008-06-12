@@ -789,7 +789,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						parent.setId((Long) disabledContDetails.get(parentContIdKey));
 					//	cont.setParent(parent);
 						
-						ContainerPosition cntPos = cont.getLocatedAtPosition(); 
+						ContainerPosition cntPos = new ContainerPosition(); 
 						
 						cntPos.setPositionDimensionOne((Integer) disabledContDetails.get(pos1Key));
 						cntPos.setPositionDimensionTwo((Integer) disabledContDetails.get(pos2Key));
