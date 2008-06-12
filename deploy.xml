@@ -851,6 +851,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 	</target>
 	
 	
@@ -866,6 +867,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="temp_update_metadata_for_clob_support_oracle" />
 	</target>
 
 	<!--Data import for CAModel -->
