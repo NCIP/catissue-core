@@ -96,11 +96,11 @@ public class SiteBizLogic extends DefaultBizLogic
 	// This method sets the cordinator for a particular site.
 	private void setCordinator(DAO dao, Site site) throws DAOException
 	{
-		List list = dao.retrieve(User.class.getName(), "id", site.getCoordinator().getId());
+		Object object = dao.retrieve(User.class.getName(), site.getCoordinator().getId());
 
-		if (list.size() != 0)
+		if (object != null)
 		{
-			User user = (User) list.get(0);
+			User user = (User)object;
 			site.setCoordinator(user);
 		}
 	}

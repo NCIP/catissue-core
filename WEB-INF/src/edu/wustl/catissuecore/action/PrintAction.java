@@ -75,12 +75,13 @@ public class PrintAction extends Action
     				try
     				{
     					dao.openSession(null);
-    					List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), "id", scgId);
+    					Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), new Long(scgId));
 
-    					if (scgList != null && !scgList.isEmpty())
+    					if (object != null)
     					{
-   						objSCG = (SpecimenCollectionGroup) scgList.get(0);
+    						objSCG = (SpecimenCollectionGroup) object;
     					}
+    					
     					LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimencollectiongroup");
     					printStauts = labelPrinter.printLabel(objSCG, strIpAddress, objUser);
         				
@@ -104,17 +105,12 @@ public class PrintAction extends Action
 				{
 					String specimenId = (String) forwardToPrintMap.get("specimenId");
 					AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-    				Specimen objSpecimen = null;
     				boolean printStauts  =false;
     				try
     				{
     					dao.openSession(null);
-    					List specimenList = dao.retrieve(Specimen.class.getName(), "id", new Long(specimenId));
+    					Specimen objSpecimen = (Specimen)dao.retrieve(Specimen.class.getName(), new Long(specimenId));
 
-    					if (specimenList != null && !specimenList.isEmpty())
-    					{
-    						objSpecimen = (Specimen) specimenList.get(0);
-    					}
     					LabelPrinter  labelPrinter= LabelPrinterFactory.getInstance("specimen");
     		        	printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, objUser);
         				

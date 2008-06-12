@@ -62,6 +62,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -260,13 +261,13 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			dao.openSession(bean);
 
-			List cpList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.SYSTEM_IDENTIFIER, scgId);
+			Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), scgId);
 
-			if (cpList == null || cpList.isEmpty())
+			if (object == null)
 			{
 				throw new BizLogicException("Cannot find CP. Failed to find " + "SCG for id " + scgId);
 			}
-			SpecimenCollectionGroup specCollGroup = (SpecimenCollectionGroup) cpList.get(0);
+			SpecimenCollectionGroup specCollGroup = (SpecimenCollectionGroup) object;
 			if (retrieveAssociates)
 			{
 				retreiveAssociates(scgId, specCollGroup);
@@ -373,12 +374,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
 		//lazy false change
 		
-		List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.ID,
-								oldspecimenCollectionGroup.getId());
+		Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), oldspecimenCollectionGroup.getId());
+		
 		SpecimenCollectionGroup persistentSCG = null;
-		if(scgList!=null && !scgList.isEmpty())
+		if(object != null)
 		{
-			persistentSCG = (SpecimenCollectionGroup)scgList.get(0);
+			persistentSCG = (SpecimenCollectionGroup)object;
 		}
 		
 		// Adding default events if they are null from API
@@ -423,17 +424,17 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		if (oldEventId.longValue() != eventId.longValue())
 		{
 			// -- check for closed CollectionProtocol
-			List list = dao.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup
+			Object proxyObject = dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup
 					.getCollectionProtocolEvent().getId());
-			if (!list.isEmpty())
+			if (proxyObject!=null)
 			{
 				// check for closed CollectionProtocol
-				CollectionProtocolEvent cpe = (CollectionProtocolEvent) list.get(0);
+				CollectionProtocolEvent cpe = (CollectionProtocolEvent) proxyObject;
 				if (!cpe.getCollectionProtocol().getId().equals(
 						oldspecimenCollectionGroup.getCollectionProtocolEvent().getCollectionProtocol().getId()))
 					checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
 
-				specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent) list.get(0));
+				specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent) proxyObject);
 			}
 		}
 		// CollectionProtocol check complete.
@@ -2150,11 +2151,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		try
 		{
 			dao.openSession(null);
-			List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), "id", id);
-
-			if (scgList != null && !scgList.isEmpty())
+			Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), id);
+			
+			if (object != null)
 			{
-				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) scgList.get(0);
+				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
 				Collection specimenCollection = specimenCollectionGroup.getSpecimenCollection();
 				return CollectionProtocolUtil.getSpecimensMap(specimenCollection, "E1");
 			}

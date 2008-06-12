@@ -33,10 +33,10 @@ public class RedirectToSCGAction extends Action {
 
 		((HibernateDAO)dao).openSession(sessionDataBean);
 		
-		List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), "id", id);
-		if (scgList != null && !scgList.isEmpty())
+		Object object = dao.retrieve(SpecimenCollectionGroup.class.getName(), new Long(id));
+		if (object != null)
 		{
-			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) scgList.get(0);
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
 			specimenCollectionGroupForm.setAllValues(specimenCollectionGroup);
 		}
 		((HibernateDAO)dao).closeSession();

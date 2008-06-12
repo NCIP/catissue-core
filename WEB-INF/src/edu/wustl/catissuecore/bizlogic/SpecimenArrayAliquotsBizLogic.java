@@ -298,7 +298,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			// Due to Lazy loading instanceOf method was returning false everytime. Fix for bug id:4864
 			// Object is explicitly retrieved from DB
 			Specimen specimen=(Specimen)dao.retrieve(Specimen.class.getName(), parentSpecimenArrayContent.getSpecimen().getId());
-			specimen=(Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
+			
 			Quantity quantity = null;
 			if (specimen instanceof MolecularSpecimen) 
 			{

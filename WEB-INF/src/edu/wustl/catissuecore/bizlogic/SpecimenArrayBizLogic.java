@@ -296,13 +296,13 @@ catch (Exception e)
 		{
 			double quantity = 0.0;
 			// fetch array type to check specimen class
-			List arrayTypes = dao.retrieve(SpecimenArrayType.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenArray.getSpecimenArrayType()
+			Object object = dao.retrieve(SpecimenArrayType.class.getName(), specimenArray.getSpecimenArrayType()
 					.getId());
 			SpecimenArrayType arrayType = null;
 
-			if ((arrayTypes != null) && (!arrayTypes.isEmpty()))
+			if (object != null)
 			{
-				arrayType = (SpecimenArrayType) arrayTypes.get(0);
+				arrayType = (SpecimenArrayType) object;
 			}
 
 			for (Iterator iter = specimenArrayContentCollection.iterator(); iter.hasNext();)
@@ -642,12 +642,12 @@ catch (Exception e)
 		}
 
 		//fetch array type to check specimen class
-		List arrayTypes = dao.retrieve(SpecimenArrayType.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenArray.getSpecimenArrayType().getId());
+		Object object = dao.retrieve(SpecimenArrayType.class.getName(), specimenArray.getSpecimenArrayType().getId());
 		SpecimenArrayType specimenArrayType = null;
 
-		if ((arrayTypes != null) && (!arrayTypes.isEmpty()))
+		if (object != null)
 		{
-			specimenArrayType = (SpecimenArrayType) arrayTypes.get(0);
+			specimenArrayType = (SpecimenArrayType) object;
 		}
 		else
 		{

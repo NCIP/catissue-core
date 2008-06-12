@@ -91,10 +91,10 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		{
 			SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
 
-			List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenEventParametersObject.getUser().getId());
-			if (!list.isEmpty())
+			Object object = dao.retrieve(User.class.getName(), specimenEventParametersObject.getUser().getId());
+			if (object != null)
 			{
-				User user = (User) list.get(0);
+				User user = (User) object;
 
 				// check for closed User
 				checkStatus(dao, user, "User");
@@ -102,13 +102,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				specimenEventParametersObject.setUser(user);
 			}
 //			Ashish - 6/6/07 - performance improvement
-			List specimenList=dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenEventParametersObject.getSpecimen().getId());
-			Specimen specimen = (Specimen)specimenList.get(0); //(Specimen) dao.retrieveAttribute(SpecimenEventParameters.class.getName(), specimenEventParametersObject.getSpecimen().getId(),"specimen");
+			Object Object = dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
+			Specimen specimen = (Specimen) object;
+			//(Specimen) dao.retrieveAttribute(SpecimenEventParameters.class.getName(), specimenEventParametersObject.getSpecimen().getId(),"specimen");
 			//(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId(),Constants.SYSTEM_IDENTIFIER);
 			// check for closed Specimen
-			Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
-			specimen = proxySpecimen;
-			checkStatus(dao, proxySpecimen, "Specimen");
+			
+			checkStatus(dao, specimen, "Specimen");
 
 			if (specimen != null)
 			{
@@ -203,7 +203,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					specimenPosition.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
 					
 					
-					dao.update(proxySpecimen, sessionDataBean, true, true, false);
+					dao.update(specimen, sessionDataBean, true, true, false);
 					transferEventParameters.setToStorageContainer(storageContainerObj);
 				}
 				if (specimenEventParametersObject instanceof DisposalEventParameters)
@@ -232,14 +232,14 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					 * Reviewer: Sachin
 					 * Retrive Storage Container from specimen
 					 */
-					List storageContainerList =null;
+					
 					if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer()!=null&&specimen.getSpecimenPosition().getStorageContainer().getId()!=null)
 					{
-						storageContainerList = dao.retrieve(StorageContainer.class.getName(),Constants.ID, specimen.getSpecimenPosition().getStorageContainer().getId());
+						object = dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
 					}
-					if(storageContainerList!=null && !storageContainerList.isEmpty())
+					if(object != null)
 					{
-						StorageContainer storageContainer = (StorageContainer)storageContainerList.get(0);
+						StorageContainer storageContainer = (StorageContainer)object;
 						addEntriesInDisabledMap(specimen, storageContainer, disabledCont);
 					}
 					SpecimenPosition prevPosition = specimen.getSpecimenPosition(); 
@@ -618,7 +618,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
 				TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-				Specimen specimen= (Specimen)dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, parameter.getSpecimen().getId()).get(0);
+				Specimen specimen = (Specimen)dao.retrieve(Specimen.class.getName(), parameter.getSpecimen().getId());
 //				Long fromContainerId = (Long) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition");
 //				Integer pos1 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition.positionDimensionOne");
 //				Integer pos2 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPositionpositionDimensionTwo");

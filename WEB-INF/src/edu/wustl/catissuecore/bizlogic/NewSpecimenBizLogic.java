@@ -940,9 +940,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		ApiSearchUtil.setSpecimenDefault(specimen);
 		validateSpecimen(dao, specimen, specimenOld);
 		updateSpecimenData(dao, sessionDataBean, specimen, specimenOld);
-		List persistentSpecimenList = dao.retrieve(Specimen.class.getName(), Constants.ID,
-				specimenOld.getId());
-		Specimen persistentSpecimen = (Specimen) persistentSpecimenList.get(0);
+		Specimen persistentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimenOld.getId());
 		//Calculate Quantity
 		calculateAvailableQunatity(specimen, persistentSpecimen);
 		//Set Specimen Domain Object
@@ -2441,10 +2439,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			List specList = dao.retrieve(Specimen.class.getName(), "id", newSpecimen.getId());
-			if (specList != null && !specList.isEmpty())
+			Object object = dao.retrieve(Specimen.class.getName(), newSpecimen.getId());
+			if (object != null)
 			{
-				Specimen specimenDO = (Specimen) specList.get(0);
+				Specimen specimenDO = (Specimen) object;
 				updateSpecimenDomainObject(dao, newSpecimen, specimenDO, sessionDataBean);
 				if (updateChildrens)
 				{
@@ -2996,15 +2994,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private Specimen getSpecimenObj(String specimenID, DAO dao) throws DAOException
 	{
 
-		List specimenList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER,
-				new Long(specimenID));
+		Object object = dao.retrieve(Specimen.class.getName(), new Long(specimenID));
 
-		if (specimenList == null || specimenList.size() == 0)
+		if (object == null)
 		{
 			throw new DAOException("no specimen returned by hibernate");
 		}
 
-		return (Specimen) (specimenList.get(0));
+		return (Specimen) object;
 	}
 	/**
 	 * @param sessionDataBean

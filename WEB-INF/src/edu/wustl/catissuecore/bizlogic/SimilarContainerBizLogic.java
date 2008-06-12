@@ -117,11 +117,11 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 				String posOne = (String) simMap.get(simContPrefix + "positionDimensionOne");
 				String posTwo = (String) simMap.get(simContPrefix + "positionDimensionTwo");
 
-				List list = dao.retrieve(StorageContainer.class.getName(), Constants.SYSTEM_IDENTIFIER, parentId);
-				if (list.size() != 0)
+				Object object = dao.retrieve(StorageContainer.class.getName(), new Long(parentId));
+				if (object != null)
 				{
 
-					parentContainer = (StorageContainer) list.get(0);
+					parentContainer = (StorageContainer) object;
 
 					cont.setSite(parentContainer.getSite());
 

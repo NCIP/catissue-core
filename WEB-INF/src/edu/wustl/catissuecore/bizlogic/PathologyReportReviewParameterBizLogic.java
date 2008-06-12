@@ -34,10 +34,9 @@ public class PathologyReportReviewParameterBizLogic extends DefaultBizLogic
 		PathologyReportReviewParameter reviewParam = (PathologyReportReviewParameter) obj;
 		
 		String className;
-		String colName=new String(Constants.SYSTEM_IDENTIFIER);
 		className=User.class.getName();
-		List userList=dao.retrieve(className, colName, sessionDataBean.getUserId());
-		reviewParam.setUser((User)userList.get(0));
+		Object object = dao.retrieve(className, sessionDataBean.getUserId());
+		reviewParam.setUser((User)object);
 		String reviewerRole;
 		SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
 		try

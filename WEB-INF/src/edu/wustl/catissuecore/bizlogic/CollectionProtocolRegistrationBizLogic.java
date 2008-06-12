@@ -816,10 +816,10 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		CollectionProtocolRegistration oldCollectionProtocolRegistration = (CollectionProtocolRegistration) oldObj;
 		CollectionProtocolRegistration persistentCPR = null;
-		List persistentCPRList  =dao.retrieve(CollectionProtocolRegistration.class.getName(),Constants.ID, oldCollectionProtocolRegistration.getId());
-		if(persistentCPRList!=null & !persistentCPRList.isEmpty())
+		Object object = dao.retrieve(CollectionProtocolRegistration.class.getName(), oldCollectionProtocolRegistration.getId());
+		if(object !=null)
 		{
-			persistentCPR=(CollectionProtocolRegistration) persistentCPRList.get(0);	
+			persistentCPR=(CollectionProtocolRegistration) object;	
 		}
 		
 		// Check for different Collection Protocol

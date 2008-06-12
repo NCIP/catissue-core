@@ -459,10 +459,10 @@ public class OrderBizLogic extends DefaultBizLogic
 				}
 				else if ((oldOrderItem.getId().compareTo(newOrderItem.getId()) == 0) && oldOrderItem.getDistributedItem() != null)
 				{
-					List list = dao.retrieve(DistributedItem.class.getName(), Constants.SYSTEM_IDENTIFIER, oldOrderItem.getDistributedItem().getId());
-					if (list != null && list.size() > 0)
+					Object object = dao.retrieve(DistributedItem.class.getName(), oldOrderItem.getDistributedItem().getId());
+					if (object != null)
 					{
-						DistributedItem distributedItem = (DistributedItem) list.get(0);
+						DistributedItem distributedItem = (DistributedItem) object;
 						newOrderItem.setDistributedItem(distributedItem);
 					}
 
@@ -622,10 +622,10 @@ public class OrderBizLogic extends DefaultBizLogic
 	private String makeEmailBodyForOrderPlacement(User userObj, OrderDetails order, DAO dao) throws DAOException
 	{
 		String emailBodyHeader = "Dear caTissue Administrator ,";
-		String colName = "id";
-		List distributionProtocolList = dao.retrieve(DistributionProtocol.class.getName(), colName, order.getDistributionProtocol().getId());
+		
+		Object object = dao.retrieve(DistributionProtocol.class.getName(), order.getDistributionProtocol().getId());
 		String messageLine1 = "This is to notify that the Order " + order.getName() + " requested by " + userObj.getFirstName() + " "
-				+ userObj.getLastName() + " under Distribution Protocol " + ((DistributionProtocol) distributionProtocolList.get(0)).getTitle()
+				+ userObj.getLastName() + " under Distribution Protocol " + ((DistributionProtocol) object).getTitle()
 				+ " have been placed successfully.";
 
 		//String messageLine2 = "The details of the Order are as follows:";

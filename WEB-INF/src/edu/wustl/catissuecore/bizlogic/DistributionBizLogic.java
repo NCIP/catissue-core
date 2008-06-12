@@ -450,7 +450,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 					}
 					Specimen specimenObj = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getId());
-					specimenObj = (Specimen) HibernateMetaData.getProxyObjectImpl(specimenObj);
+					
 
 					if (specimenObj == null)
 					{

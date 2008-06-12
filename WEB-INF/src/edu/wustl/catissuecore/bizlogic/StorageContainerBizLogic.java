@@ -103,11 +103,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		if (container.getLocatedAtPosition() != null && container.getLocatedAtPosition().getParentContainer() != null)
 		{
-			List list = dao.retrieve(StorageContainer.class.getName(), "id", container.getLocatedAtPosition().getParentContainer().getId());
+			Object object = dao.retrieve(StorageContainer.class.getName(), container.getLocatedAtPosition().getParentContainer().getId());
 
-			if (list.size() != 0)
+			if (object != null)
 			{
-				StorageContainer parentContainer = (StorageContainer) list.get(0);
+				StorageContainer parentContainer = (StorageContainer) object;
 
 				// check for closed ParentContainer
 				checkStatus(dao, parentContainer, "Parent Container");
@@ -374,8 +374,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		
 		//lazy change
 		StorageContainer persistentOldContainerForChange = null;
-		List persistentStorageContainer  =dao.retrieve(StorageContainer.class.getName(),Constants.ID, oldContainer.getId());
-		persistentOldContainerForChange=(StorageContainer)persistentStorageContainer.get(0);
+		Object object  =dao.retrieve(StorageContainer.class.getName(), oldContainer.getId());
+		persistentOldContainerForChange=(StorageContainer) object;
 		
 		// retrive parent container
 		if(container.getLocatedAtPosition()!=null)
@@ -1107,7 +1107,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 // Commenting dao.retrive() call as retrived object is not realy required for further processing -Prafull			
 			Site siteObj = (Site)dao.retrieve(Site.class.getName(), container.getSite().getId());
-			siteObj=(Site)HibernateMetaData.getProxyObjectImpl(siteObj);
+			
 			if (siteObj != null)
 			{
 				
@@ -1953,13 +1953,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				Long contId = (Long) itr.next();
 				String sourceObjectName = StorageContainer.class.getName();
-				String whereColumnName = "id"; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-				Object whereColumnValue = contId;
-
-				List containerList = dao.retrieve(sourceObjectName, whereColumnName, whereColumnValue);
-				if (!containerList.isEmpty())
+				
+				Object object = dao.retrieve(sourceObjectName, contId);
+				if (object != null)
 				{
-					StorageContainer cont = (StorageContainer) containerList.get(0);
+					StorageContainer cont = (StorageContainer) object;
 
 					//cont.setParent(null);
 
@@ -2874,9 +2872,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		if (container != null)
 		{
 			Long sysId = container.getId();
-			List siteIdList = dao.retrieve(StorageContainer.class.getName(), Constants.SYSTEM_IDENTIFIER, sysId);
+			Object object = dao.retrieve(StorageContainer.class.getName(), sysId);
 			//System.out.println("siteIdList " + siteIdList);
-			StorageContainer sc = (StorageContainer) siteIdList.get(0);
+			StorageContainer sc = (StorageContainer) object;
 			//System.out.println("siteId " + sc.getSite().getId());
 			container.setSite(sc.getSite());
 		}

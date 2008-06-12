@@ -36,10 +36,9 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 		deidentifiedSurgicalPathologyReport.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 		dao.update(deidentifiedSurgicalPathologyReport, sessionDataBean, true, false, false);
 		String className;
-		String colName=new String(Constants.SYSTEM_IDENTIFIER);
 		className=User.class.getName();
-		List userList=dao.retrieve(className, colName, sessionDataBean.getUserId());
-		quarantineParam.setUser((User)userList.get(0));
+		Object object = dao.retrieve(className, sessionDataBean.getUserId());
+		quarantineParam.setUser((User)object);
 		dao.insert(quarantineParam, sessionDataBean, true, false);
 		
 		// Since  QuarantineEventParameter is in PUBLIC_DATA_GROUP protection objects not required
