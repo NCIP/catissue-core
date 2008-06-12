@@ -5,6 +5,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ taglib uri="/WEB-INF/specimenDetails.tld" prefix="md" %>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <html>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -81,16 +82,14 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		</html:messages>
 	<div id="summary">	
 		<html:form action="<%=formAction%>" onsubmit="showhide()">		
-		<table summary="" cellpadding="0" cellspacing="0" border="0">
-		<tr>
-				<td>			
-					&nbsp;&nbsp;
-				</td>
-			</tr>
-			<tr>
-				<td class="dataTablePrimaryLabel" height="20">
-					<bean:write name="viewSpecimenSummaryForm" property="title" />
-				</td>				
+		<table summary="" cellpadding="3" cellspacing="0" border="0" bgcolor="#FFFFFF" width="100%">
+		 <tr class="td_color_F7F7F7">
+				 <td height="20" colspan="2" align="left"></td>
+	     </tr>
+		 <tr class="td_color_F7F7F7">
+			<td height="25" colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b">
+					<bean:write name="viewSpecimenSummaryForm" property="title" /></span>
+			</td>				
 				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
 					<script language="javascript">
 							refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');	
@@ -99,7 +98,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			</tr>
 			<logic:empty name="viewSpecimenSummaryForm" property="specimenList" >
 				<tr>
-					<td class="dataTableWhiteCenterHeader" colspan="9">  
+					<td colspan="9">  
 							No specimens to display for current action!!
 					</td>
 				</tr>		
@@ -107,9 +106,9 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="specimenList" >	
 			
-				<tr>	
-				<td>
-					<table summary="" cellpadding="3" cellspacing="0" border="0"  class="dataTable" width="100%">
+				<tr class="td_color_F7F7F7">	
+				<td colspan="2" style="padding-top:10px; padding-bottom:15px;">
+					<table summary="" cellpadding="4" cellspacing="0" border="0"  width="100%">
 			<md:genericSpecimenDetails columnHeaderListName="colHeaderListP" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="colOrderListP" isReadOnly="true" displayColumnListName="displayColumnListP" />
 			<%-- Custom tag By Mandar for specimen display --%>
 <%-- 						<tr>
@@ -202,15 +201,17 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 					</td>
 				</tr>				
 
-				<tr>
-					<td class="dataTablePrimaryLabel" height="20">			
-						<p>Aliquot details
+				  <tr class="td_color_F7F7F7">
+					<td height="25" colspan="2" align="left" class="tr_bg_blue1">
+					  <span class="blue_ar_b">			
+						Aliquot details
+					  </span>
 					</td>
 				</tr>
 				
 				<tr>
 					<td>
-						<table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
+						<table summary="" cellpadding="4" cellspacing="0" border="0"  width="100%">
 			<md:genericSpecimenDetails columnHeaderListName="colHeaderListA" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="colOrderListA" isReadOnly="true" displayColumnListName="displayColumnListA" />
 			<%-- Custom tag By Mandar for specimen display --%>
 						
@@ -243,13 +244,15 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			</td>
 		</tr>				
 
-		<tr>
-			<td class="dataTablePrimaryLabel" height="20">
-				<p>Derived details
-			 </td>
+		<tr class="td_color_F7F7F7">
+		 <td height="25" colspan="2" align="left" class="tr_bg_blue1">
+		   <span class="blue_ar_b">
+				 Derived details
+             </span>
+        	</td>
 		</tr>
 			 <td>
-			    <table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
+			    <table summary="" cellpadding="4" cellspacing="0" border="0"  width="100%">
 		<md:genericSpecimenDetails columnHeaderListName="colHeaderListD" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="colOrderListD" isReadOnly="true" displayColumnListName="displayColumnListD" />
 			<%-- Custom tag By Mandar for specimen display --%>
 <%--

@@ -200,16 +200,8 @@ function openEventPage()
 
 <html:form action='${requestScope.formName}'>
 
- <table summary="" cellpadding="0" cellspacing="0" border="0"  style="padding-left:0;padding-right:0;" width="700">
-   <tr >
-      <td colspan="4" align="right">
-		<span class="smalllink">
-		  	<html:link href="#"  styleId="newUser" onclick="updateCPTree();viewSummary()">
-				<bean:message key="cpbasedentry.viewsummary" /> 
-		    </html:link>
-		</span>
-       </td>   
-   </tr>
+ <table summary="" cellpadding="0" cellspacing="0" border="0"  style="padding-left:0;padding-right:0;" width="720">
+  
 	<tr>
  		
 	<td><table width="100%" border="0" cellspacing="0" cellpadding="0" >
@@ -222,10 +214,18 @@ function openEventPage()
 					       <img src="images/uIEnhancementImages/cp_consents1.gif" alt="Consents" width="94" height="20" border="0" /></td>
                       <td width="10%" valign="bottom"  id="consentTab"><a>
 					  <img src="images/uIEnhancementImages/cp_privileges1.gif" alt="Privileges" width="94" height="20" border="0"></a></td>
-                      <td width="70%" valign="bottom" class="cp_tabbg">&nbsp;</td>
-                    </tr>
+					  <td width="100%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+					 </tr>
                   </table></td>
-		<td width="70%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+				    
+					<td width="70%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+						 <td align="right" valign="top" class="cp_tabbg" border="1">
+							<span class="smalllink">
+									<html:link href="#"  styleId="newUser" onclick="updateCPTree();viewSummary()">
+										<bean:message key="cpbasedentry.viewsummary" /> 
+									 </html:link>
+							</span>
+						 </td>  
    </tr>
 
 
@@ -236,7 +236,7 @@ function openEventPage()
 <!-- NEW COLLECTIONPROTOCOL ENTRY BEGINS-->
 		
 		<tr>
-		<td colspan="3">
+		<td colspan="4">
 		<!-- table 4 -->
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
@@ -495,12 +495,8 @@ function openEventPage()
 					</html:button> -->
 			  </td>
 			</tr>
-			<tr>
-				<td>
-					&nbsp;
-				</td>
-			</tr>
-</table>
+			<tr width="5">&nbsp;</tr>
+		</table>
 
 <!-- Define Consent Page start  Virender Mehta-->
 

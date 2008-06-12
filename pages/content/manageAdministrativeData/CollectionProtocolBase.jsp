@@ -64,7 +64,7 @@
 		     </tr>
 			
 		     <tr>
-				<td colspan="2" class="td_color_bfdcf3" style="padding-left:10px; padding-right:10px; padding-bottom:10px;">
+				<td colspan="2" class="td_color_bfdcf3" style="padding-left:10px; padding-right:10px;padding-bottom:10px; ">
 					<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
 						
 						 <tr>
@@ -72,19 +72,19 @@
 						 </span></td>
 						</tr>
 						<tr>
-							<td width="25%" colspan="1" valign="top" height="100%">
-								<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="420" >
+							<td width="25%"  valign="top" height="100%">
+								<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="410" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 							 </td>
 							 <td width="75%" colspan="3" valign="top" height="100%">
 							 <logic:equal name="operation" value="add">
-								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" scrolling="auto" frameborder="0" width="100%" height="420" >
+								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" scrolling="auto" frameborder="0" width="100%" height="410" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 							</logic:equal>
 							 <logic:equal name="operation" value="edit">
-								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" frameborder="0" width="100%" height="420" >
+								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" frameborder="0" width="100%" height="410" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 							 </logic:equal>	
