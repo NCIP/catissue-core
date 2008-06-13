@@ -558,12 +558,148 @@ visibility: hidden;
 	
 }
 
+.toptd {
+	height:18px;
+}
+/*End td/tr css*/
 
 
-.black_noneditable {
+
+
+
+/* Start Popup css */
+
+.dhtmlwindow{
+position: absolute;
+border: 1px solid #05509b;
+visibility: hidden;
+background-color: white;
+}
+
+.drag-handle{ /*CSS for Drag Handle*/
+padding: 2px;
+text-indent: 3px;
+font: bold 12px verdana;
+background-color: #CA0000;
+border-bottom:1px solid #05509b;
+color: white;
+cursor: move;
+overflow: hidden;
+width: auto;
+filter:progid:DXImageTransform.Microsoft.alpha(opacity=100);
+-moz-opacity: 1;
+opacity: 1;
+}
+
+.drag-handle .drag-controls{ /*CSS for controls (min, close etc) within Drag Handle*/
+position: absolute;
+right: 3px;
+top: 1px;
+cursor: hand;
+cursor: pointer;
+vertical-align:top;
+}
+
+* html .drag-handle{ /*IE6 and below CSS hack. Width must be set to 100% in order for opaque title bar to render*/
+width: 100%;
+}
+
+
+.drag-contentarea{ /*CSS for Content Display Area div*/
+/*border-top: 1px solid brown;*/
+background-color: white;
+color: #ffffff;
+height: 150px;
+padding: 0px;
+overflow: auto;
+border:none;
+}
+
+.drag-statusarea{ /*CSS for Status Bar div (includes resizearea)*/
+/*border-top: 1px solid gray;*/
+background-color: #F8F8F8;
+height: 13px; /*height of resize image*/
+}
+
+
+.drag-resizearea{ /*CSS for Resize Area itself*/
+float: right;
+width: 13px; /*width of resize image*/
+height: 13px; /*height of resize image*/
+cursor: nw-resize;
+font-size: 0;
+}
+
+.drag-handle{ /*Overwrite default drag handle bar background color with below*/
+background-color: #377dc3;
+/*background-image: url(../../../caTissue_suite_new/HTML/images/top_bg.jpg);*/
+vertical-align:top;
+
+}
+
+
+#interVeil{ /*CSS for veil that covers entire page while modal window is visible*/
+position: absolute;
+background: url(../images/blackdot.gif);
+width: 10px;
+left: 0;
+top: 0;
+z-index: 5;
+visibility: hidden;
+filter:progid:DXImageTransform.Microsoft.alpha(opacity=85);
+opacity: 0.8;
+}
+
+/* End Popup css */
+/* css_Anil */
+td.showhide{
+padding-top:10px; padding-bottom:15px;
+}
+td.showhide1{
+padding-top:10px;
+}
+
+.noneditable {
 	font-family: verdana;
 	font-size: 11px;
 	color: #575656;
-	font-weight:bold;
+	background-color:#f6f6f6;
 }
-	/* end */
+a.pagenumbers:link{
+	font-family: verdana;
+	font-size: 11px;
+	color: #323232;
+	font-weight: bold;
+	text-decoration:underline;
+}
+a.pagenumbers:visited{
+	font-family: verdana;
+	font-size: 11px;
+	color: #323232;
+	font-weight: bold;
+	text-decoration:underline;
+}
+a.pagenumbers:active{
+	font-family: verdana;
+	font-size: 11px;
+	color: #323232;
+	font-weight: bold;
+	text-decoration:underline;
+}
+a.pagenumbers:hover{
+	font-family: verdana;
+	font-size: 11px;
+	color:#990000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.subtd {
+	border-bottom:1px solid #d7d7d7;
+	background-color: #ebeaea;
+	height:15px;
+	font-family:Verdana;
+	font-size:11px;
+	font-weight:bold;
+	color:#323232;
+}
+
