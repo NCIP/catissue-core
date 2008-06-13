@@ -37,7 +37,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		{
 			Specimen sp = new Specimen();
 			sp = (Specimen)TestCaseUtility.getObjectMap(Specimen.class);
-			System.out.println("Get Object Sp"+sp.getId());
+			System.out.println("testUpdateCollectionStatusOfSpecimen Get Object Sp"+sp.getId());
 			List spCollection = appService.getObjects(sp);
 			sp = (Specimen)spCollection.get(0);
 			System.out.println("Get Object Sp");
@@ -51,7 +51,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		catch(Exception e)
 		{
-			Logger.out.error(e.getMessage(),e);
+			Logger.out.error("testUpdateCollectionStatusOfSpecimen"+ e.getMessage(),e);
+			System.out.println("SpecimenTestCases.testUpdateCollectionStatusOfSpecimen():"+e.getMessage());
 			e.printStackTrace();
 			assertFalse("Failed to create Domain Object", true);
 		}
@@ -90,7 +91,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		catch(Exception e)
 		{
-			Logger.out.error(e.getMessage(),e);
+			Logger.out.error("testUpdateSpecimenWithConsents"+e.getMessage(),e);
+			System.out.println("SpecimenTestCases.testUpdateSpecimenWithConsents():"+e.getMessage());
 			e.printStackTrace();
 			assertFalse("Failed to create Domain Object", true);
 		}

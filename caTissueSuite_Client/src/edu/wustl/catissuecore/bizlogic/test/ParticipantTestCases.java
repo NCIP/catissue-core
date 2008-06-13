@@ -167,19 +167,13 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 				assertFalse("No Specimens created under SCG", true);
 			}
 			
-			if(sp.getChildrenSpecimen().size()>0)
-			{
-				assertTrue("Correct no of Specimens inserted ---->"+participant, true);
-			}
-			else
-			{
-				assertFalse("Child Specimen not found ", true);
-			}
 		}
 		catch(Exception e)
 		{
 			Logger.out.error(e.getMessage(),e);
-	 		e.printStackTrace();
+	 		System.out.println("ParticipantTestCases.testCollectedSCGAndNoOfChildSpecimens() "+e.getMessage());
+			e.printStackTrace();
+	 		assertFalse("Error occured in executing test case", true);
 		}
 	}
 	
