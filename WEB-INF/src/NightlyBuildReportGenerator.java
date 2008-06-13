@@ -252,18 +252,41 @@ public class NightlyBuildReportGenerator
 		// it gives the rootNode of the xml file
 		Element root = document.getDocumentElement();
 		int totalNoOfTest=0;
-		int totalNoOfFailures=0;
+		int totalNoOfFailures=0,totalNoOfPasses=0;
 				
 		List listOfFailedTestCases = new ArrayList();
 		NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++)
 		{
 			Node child = children.item(i);
+					
+			
 			if(child.getNodeName().equals("httpSample"))//iterate total tests "httpSample" tag specifies the test
 			{
+				NamedNodeMap attributeMap =child.getAttributes();
+				
+				//to retrieve the total no of failures and count of test cases.
+				if(attributeMap!=null)
+				{
+					for(int l=0;l<attributeMap.getLength();l++)
+					{
+						Node attributeNode =attributeMap.item(l);
+						if(attributeNode.getNodeName().equals("s"))//this is to retrieve the name of the test case which is failed.
+						{
+							if(attributeNode.getNodeValue().equals("true"))
+								totalNoOfPasses++;
+							if(attributeNode.getNodeValue().equals("false"))
+								totalNoOfFailures++;
+							
+						}
+															
+									
+					}
+				}	
+				
 				totalNoOfTest++;
 				NodeList subChildNodes = child.getChildNodes();
-				for (int j = 0; j < subChildNodes.getLength(); j++)
+				/*for (int j = 0; j < subChildNodes.getLength(); j++)
 				{
 					Node subchildNode = subChildNodes.item(j);
 					if(subchildNode.getNodeName().equals("assertionResult"))
@@ -303,7 +326,7 @@ public class NightlyBuildReportGenerator
 						}
 					}
 					
-				}	
+				}	*/
 				
 			}
 		}
@@ -313,22 +336,13 @@ public class NightlyBuildReportGenerator
 		System.out.println("----------------------------------------------------\n\nFailed Jmeter Tests !!!!!!! ->     "+totalNoOfFailures+"/"+totalNoOfTest);
 		
 	
-			if(listOfFailedTestCases!=null && listOfFailedTestCases.size()>0)
-			{
-				Iterator listIter = listOfFailedTestCases.iterator();
-				while(listIter.hasNext())
-				{
-					String nextTestCase = (String)listIter.next();
-					nightlyBuildReport.append("\n\t\t"+nextTestCase);
-					System.out.println("Failed Test case ---->"+nextTestCase);
-				}
-			}
 			
 			// Add pass fail result to Result file 
-			
+			System.out.println("Total No of Pass->"+totalNoOfPasses);
+			System.out.println("Total No of Failure->"+totalNoOfFailures);
 			TOTAL_NO_OF_PASS = totalNoOfTest - totalNoOfFailures;
 			String name="JMeterTest"+",";
-			name=name+totalNoOfTest+","+TOTAL_NO_OF_PASS+","+totalNoOfFailures+","+date+","+"-"+"\r\n";
+			name=name+totalNoOfTest+","+totalNoOfPasses+","+totalNoOfFailures+","+date+","+"-"+"\r\n";
 			fileOutputStream.write(name.getBytes());
 		}
 		else // If XML file does not exists
