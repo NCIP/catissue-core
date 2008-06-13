@@ -756,6 +756,30 @@ catch (Exception e)
 				}
 			}
 		}
+		/*Bug no. 7810
+		Bug Description : Incompatible specimen gets added to the specimen array*/
+		Collection specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
+		if(!specimenArrayContentCollection.isEmpty()) {
+			Iterator iterator = specimenArrayContentCollection.iterator();
+			while(iterator.hasNext()) {
+				SpecimenArrayContent tempSpecimenArrayContent = (SpecimenArrayContent)iterator.next();
+				Specimen tempSpecimen = getSpecimen(dao , tempSpecimenArrayContent);
+				if(specimenClass != null && tempSpecimen != null && !specimenClass.equalsIgnoreCase(tempSpecimen.getClassName())) {
+					message = getMessage(tempSpecimenArrayContent);
+					throw new DAOException(ApplicationProperties.getValue("class.name.different", message));
+				}
+				if(specimenTypes != null && !specimenTypes.isEmpty() && tempSpecimen != null) {
+					if(!specimenTypes.contains(tempSpecimen.getType()))
+					{
+						message = getMessage(tempSpecimenArrayContent);
+						throw new DAOException(ApplicationProperties.getValue("type.different", message));
+					}
+				}
+			}
+		}
+		else {
+			throw new DAOException("Specimen Array for uploading is null");
+		}
 		return true;
 	}
 
@@ -847,6 +871,28 @@ catch (Exception e)
 		String sourceObjectName = "CATISSUE_CONTAINER";
 		String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
 		return Utility.getNextUniqueNo(sourceObjectName, selectColumnName);
+	}
+	
+	/**
+	 * @param tempSpecimenArrayContent
+	 * @return the message to be displayed when exception occurs
+	 */
+	public String getMessage(SpecimenArrayContent tempSpecimenArrayContent)
+	{
+		Specimen specimen = tempSpecimenArrayContent.getSpecimen();
+		String msg = " ";
+		if (specimen != null)
+		{
+			if ((specimen.getLabel() != null) && (!specimen.getLabel().trim().equals("")))
+			{
+				msg = "label "+specimen.getLabel();
+			}
+			else if ((specimen.getBarcode() != null) && (!specimen.getBarcode().trim().equals("")))
+			{
+				msg = "barcode "+specimen.getBarcode();
+			}
+		}
+		return msg;
 	}
 	//END
 }
