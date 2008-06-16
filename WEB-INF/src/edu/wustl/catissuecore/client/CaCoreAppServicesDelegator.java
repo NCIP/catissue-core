@@ -705,7 +705,11 @@ public class CaCoreAppServicesDelegator
 		//checkNullObject(abstractDomainObject.getId(),"Identifier");
 		matchingObjects = bizLogic.getListOfMatchingParticipants((Participant)domainObject);
 		/*bug 7561*/
-		List filteredMatchingObjects=delegateSearchFilter(userName, matchingObjects);
+		List filteredMatchingObjects=null;
+		if(matchingObjects!=null)
+		{
+			filteredMatchingObjects=delegateSearchFilter(userName, matchingObjects);
+		}
 		return filteredMatchingObjects;
 		//return matchingObjects;
     }
