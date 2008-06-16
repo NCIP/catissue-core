@@ -34,6 +34,7 @@ import edu.wustl.common.util.logger.Logger;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
+import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 
 
@@ -69,9 +70,10 @@ public class  OrderSpecimenInitAction  extends BaseAction
 	    		getProtocolName(request,spec,orderForm);
 	    	}
 	        
-		    Collection specimen;
-		    specimen=(List)getDataFromDatabase(request);
-	    	try
+		    OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+			Collection specimen =(List)orderBizLogic.getSpecimenDataFromDatabase(request);
+	    	
+			try
 		    {
 		        request.setAttribute("specimen",specimen);
 		        

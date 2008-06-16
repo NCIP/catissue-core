@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,6 +37,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
@@ -52,6 +54,10 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * DistributionHDAO is used to add distribution information into the database using Hibernate.
  * @author aniruddha_phadnis
+ */
+/**
+ * @author kalpana_thakur
+ *
  */
 public class DistributionBizLogic extends DefaultBizLogic
 {
@@ -637,5 +643,84 @@ public class DistributionBizLogic extends DefaultBizLogic
 		}
 
 		return false;
+	}
+	
+	/**
+	 * Created the list of Specimen Array details 
+	 * @param distribution
+	 * @param arrayEntries
+	 */
+	protected void setSpecimenArrayDetails(Distribution distribution , List arrayEntries)
+	{
+		
+		distribution.getDistributedItemCollection();
+		Iterator itr = distribution.getDistributedItemCollection().iterator();
+		while (itr.hasNext())
+		{
+			DistributedItem distributedItem = (DistributedItem) itr.next();
+			SpecimenArray specimenArray = (SpecimenArray)distributedItem.getSpecimenArray();
+			List arrayDetails = new ArrayList();
+			arrayDetails.add(specimenArray.getName());
+			arrayDetails.add(Utility.toString(specimenArray.getBarcode()));
+			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getName()));
+			if(specimenArray != null && specimenArray.getLocatedAtPosition() != null)
+			{
+				arrayDetails.add(Utility.toString(specimenArray.getLocatedAtPosition().getPositionDimensionOne()));
+				arrayDetails.add(Utility.toString(specimenArray.getLocatedAtPosition().getPositionDimensionTwo()));
+			}
+			arrayDetails.add(Utility.toString(specimenArray.getCapacity().getOneDimensionCapacity()));
+			arrayDetails.add(Utility.toString(specimenArray.getCapacity().getTwoDimensionCapacity()));
+			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getSpecimenClass()));
+			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getSpecimenTypeCollection()));
+			arrayDetails.add(Utility.toString(specimenArray.getComment()));
+			arrayEntries.add(arrayDetails);
+		}
+		
+		
+	}
+	
+	/**
+	 * Get the data for distribution
+	 * @param dist
+	 * @return
+	 * @throws Exception
+	 */
+	public List getListOfArray(Distribution dist) throws Exception
+	{
+		List arrayEntries = new ArrayList();
+		long startTime = System.currentTimeMillis();
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				
+		try
+    	{
+			dao.openSession(null);
+			
+			Object object = dao.retrieve(Distribution.class.getName(), dist.getId());
+			Distribution distribution = (Distribution)object;
+			setSpecimenArrayDetails(distribution , arrayEntries);
+			
+			long endTime = System.currentTimeMillis();
+			System.out.println("Execute time of getRequestDetailsList :" + (endTime-startTime));
+			return arrayEntries;
+			
+    	}
+    	catch(DAOException e)
+    	{
+    		Logger.out.error(e.getMessage(), e);
+    		return null;	
+    	}
+    	finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+				return null;
+			}
+		}	
+		
 	}
 }

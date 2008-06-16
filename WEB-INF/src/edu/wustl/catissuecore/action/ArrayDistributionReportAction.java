@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -107,8 +108,10 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
 		String[] specimenColumnNames = getColumnNames(specimenColumns);
 
-		//List listOfData = getListOfArrayData(dist, configForm, sessionData, selectedColumns, specimenColumns);
-		List listOfData = getListOfArray(dist);
+		DistributionBizLogic bizLogic = (DistributionBizLogic) BizLogicFactory
+		.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+	
+		List listOfData = bizLogic.getListOfArray(dist);
 
 		//Set the request attributes for the Distribution report data
 		request.setAttribute(Constants.DISTRIBUTION_REPORT_FORM, distributionReportForm);
@@ -322,80 +325,6 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		return arrayEntries;
 	}
 	
-	protected void setSpecimenArrayDetails(Distribution distribution , List arrayEntries)
-	{
-		
-		distribution.getDistributedItemCollection();
-		Iterator itr = distribution.getDistributedItemCollection().iterator();
-		while (itr.hasNext())
-		{
-			DistributedItem distributedItem = (DistributedItem) itr.next();
-			SpecimenArray specimenArray = (SpecimenArray)distributedItem.getSpecimenArray();
-			List arrayDetails = new ArrayList();
-			arrayDetails.add(specimenArray.getName());
-			arrayDetails.add(Utility.toString(specimenArray.getBarcode()));
-			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getName()));
-			if(specimenArray != null && specimenArray.getLocatedAtPosition() != null)
-			{
-				arrayDetails.add(Utility.toString(specimenArray.getLocatedAtPosition().getPositionDimensionOne()));
-				arrayDetails.add(Utility.toString(specimenArray.getLocatedAtPosition().getPositionDimensionTwo()));
-			}
-			arrayDetails.add(Utility.toString(specimenArray.getCapacity().getOneDimensionCapacity()));
-			arrayDetails.add(Utility.toString(specimenArray.getCapacity().getTwoDimensionCapacity()));
-			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getSpecimenClass()));
-			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getSpecimenTypeCollection()));
-			arrayDetails.add(Utility.toString(specimenArray.getComment()));
-			arrayEntries.add(arrayDetails);
-		}
-		
-		
-	}
-	
-	protected List getListOfArray(Distribution dist) throws Exception
-	{
-		List arrayEntries = new ArrayList();
-		long startTime = System.currentTimeMillis();
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-				
-		try
-    	{
-			dao.openSession(null);
-			
-			Object object = dao.retrieve(Distribution.class.getName(), dist.getId());
-			Distribution distribution = (Distribution)object;
-			setSpecimenArrayDetails(distribution , arrayEntries);
-			
-			long endTime = System.currentTimeMillis();
-			System.out.println("Execute time of getRequestDetailsList :" + (endTime-startTime));
-			return arrayEntries;
-			
-    	}
-    	catch(DAOException e)
-    	{
-    		Logger.out.error(e.getMessage(), e);
-    		return null;	
-    	}
-    	finally
-		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-				return null;
-			}
-		}	
-		
-	}
-
-	
-	
-	
-	
-	
-
 	/**
 	 * Name: Virender Mehta
 	 * Reviewer: Prafull

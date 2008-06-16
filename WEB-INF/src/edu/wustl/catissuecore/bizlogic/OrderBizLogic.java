@@ -17,6 +17,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -28,16 +31,22 @@ import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
@@ -762,5 +771,197 @@ public class OrderBizLogic extends DefaultBizLogic
 		OrderDetails OrderDetails = (OrderDetails)object;
 		return OrderDetails;
 	}
+	
+	
+	/**
+	 * @param request HttpServletRequest object
+	 * @return List specimen array objects
+	 */
+	public List getSpecimenArrayDataFromDatabase(HttpServletRequest request) throws DAOException
+	{
+		long startTime = System.currentTimeMillis();
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+    	try
+    	{
+   		
+    		HttpSession session = request.getSession(true);
+    		
+    		String sourceObjectName = SpecimenArray.class.getName();
+        	List valueField=(List)session.getAttribute(Constants.SPECIMEN_ARRAY_ID);
+        	
+        	List specimenArrayList=new ArrayList();
+    		dao.openSession(null);
+	    	if(valueField != null && valueField.size() >0)
+	    	{
+				for(int i=0;i<valueField.size();i++)
+				{
+					//List SpecimenArray = bizLogic.retrieve(sourceObjectName, columnName, (String)valueField.get(i));
+					Object object = dao.retrieve(sourceObjectName, Long.parseLong((String)valueField.get(i)));
+					SpecimenArray specArray=(SpecimenArray)object;
+					specArray.getSpecimenArrayType();
+					specArray.getSpecimenArrayType().getSpecimenTypeCollection();
+					specimenArrayList.add(specArray);
+				}
+	    	}
+	    	
+	    	long endTime = System.currentTimeMillis();
+			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
+	    	return specimenArrayList;	
+    	}
+    	catch(DAOException e)
+    	{
+    		Logger.out.error(e.getMessage(), e);
+    		return null;
+    	}
+    	finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+	    		return null;
+			}
+		}	
+    	
+    	  
+		
+	}
+	
+	/** function for getting data from database
+	 * @param request HttpServletRequest object
+	 * @return List of specimen objects
+	 * @throws BizLogicException 
+	 */
+	public List getSpecimenDataFromDatabase(HttpServletRequest request)
+	{
+		//to get data from database when specimen id is given
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		HttpSession session = request.getSession(true);
+		
+		long startTime = System.currentTimeMillis();
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				
+		try
+    	{
+    		
+	    	String sourceObjectName = Specimen.class.getName();
+	    	String columnName="id";
+	    	List valueField=(List)session.getAttribute("specimenId");
+	    	List specimen=new ArrayList();
+	    	dao.openSession(null);
+	    	if(valueField != null && valueField.size() >0)
+	    	{
+	    		
+				for(int i=0;i<valueField.size();i++)
+				{
+					Object object = dao.retrieve(sourceObjectName, Long.parseLong((String)valueField.get(i)));
+					Specimen speclist=(Specimen)object;
+					specimen.add(speclist);
+				}
+				
+	    	}
+	    	long endTime = System.currentTimeMillis();
+			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
+			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
+			return specimen;
+    	}
+    	catch(DAOException e)
+    	{
+    		Logger.out.error(e.getMessage(), e);
+    		return null;
+    	}
+    	finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+	    		return null;
+			}
+		}
+    	
+	}
+	
+	/**
+	 * @param request HttpServletRequest object
+	 * @return List of Pathology Case objects
+	 */
+	public List getPathologyDataFromDatabase(HttpServletRequest request) throws DAOException
+	{
+		
+		// to get data from database when specimen id is given
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_PATHOLOGY_FORM_ID);
+		List pathologicalCaseList = new ArrayList();
+		
+		long startTime = System.currentTimeMillis();
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				
+		try
+    	{
+			dao.openSession(null);
+			//retriving the id list from session.
+			String [] className = {IdentifiedSurgicalPathologyReport.class.getName(),DeidentifiedSurgicalPathologyReport.class.getName(),SurgicalPathologyReport.class.getName()};
+					
+			if(request.getSession().getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
+			{
+				getList(request, Constants.PATHALOGICAL_CASE_ID , className[0], pathologicalCaseList, bizLogic ,dao);
+			}
+			if(request.getSession().getAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID) != null)
+			{
+				getList(request , Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID ,className[1], pathologicalCaseList, bizLogic ,dao);
+			}
+			if(request.getSession().getAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID) != null)
+			{
+				 getList(request, Constants.SURGICAL_PATHALOGY_CASE_ID , className[2], pathologicalCaseList, bizLogic ,dao);
+			}
+			
+			long endTime = System.currentTimeMillis();
+			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
+			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
+			return pathologicalCaseList;
+    	}
+    	catch(DAOException e)
+    	{
+    		Logger.out.error(e.getMessage(), e);
+    		return null;
+    	}
+    	finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+	    		return null;
+			}
+		}	
+		
+	}
+	
+	private void getList(HttpServletRequest request , String attr , String className , List pathologicalCaseList,
+			IBizLogic bizLogic,AbstractDAO dao)throws DAOException
+	{
+		List idList = (List)request.getSession().getAttribute(attr);
+		int size = idList.size();
+		for(int i=0;i<idList.size();i++)
+		{
+			Object object = dao.retrieve(className, Long.parseLong((String)idList.get(i)));
+			SurgicalPathologyReport surgicalPathologyReport = (SurgicalPathologyReport)object;
+			surgicalPathologyReport.getSpecimenCollectionGroup();
+			surgicalPathologyReport.getSpecimenCollectionGroup().getSpecimenCollection();
+			pathologicalCaseList.add(surgicalPathologyReport);
+		}
+		
+	}
+	
+	
 	
 }
