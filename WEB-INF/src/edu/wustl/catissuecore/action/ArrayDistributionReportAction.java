@@ -322,15 +322,16 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		return arrayEntries;
 	}
 	
-	protected List setSpecimenArrayDetails(Distribution distribution)
+	protected void setSpecimenArrayDetails(Distribution distribution , List arrayEntries)
 	{
-		List arrayDetails = new ArrayList();
+		
 		distribution.getDistributedItemCollection();
 		Iterator itr = distribution.getDistributedItemCollection().iterator();
 		while (itr.hasNext())
 		{
 			DistributedItem distributedItem = (DistributedItem) itr.next();
 			SpecimenArray specimenArray = (SpecimenArray)distributedItem.getSpecimenArray();
+			List arrayDetails = new ArrayList();
 			arrayDetails.add(specimenArray.getName());
 			arrayDetails.add(Utility.toString(specimenArray.getBarcode()));
 			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getName()));
@@ -344,9 +345,10 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getSpecimenClass()));
 			arrayDetails.add(Utility.toString(specimenArray.getSpecimenArrayType().getSpecimenTypeCollection()));
 			arrayDetails.add(Utility.toString(specimenArray.getComment()));
+			arrayEntries.add(arrayDetails);
 		}
 		
-		return arrayDetails;
+		
 	}
 	
 	protected List getListOfArray(Distribution dist) throws Exception
@@ -361,7 +363,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			
 			Object object = dao.retrieve(Distribution.class.getName(), dist.getId());
 			Distribution distribution = (Distribution)object;
-			arrayEntries.add(setSpecimenArrayDetails(distribution));
+			setSpecimenArrayDetails(distribution , arrayEntries);
 			
 			long endTime = System.currentTimeMillis();
 			System.out.println("Execute time of getRequestDetailsList :" + (endTime-startTime));
