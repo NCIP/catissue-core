@@ -69,14 +69,21 @@ public class GetSpecimenForArrayAction extends BaseAction
 					if (values.get(instanceOfKey).equals("Derived"))
 					{
 						String requestedForKey = "DefinedArrayDetailsBean:" + i + "_requestFor";
-						Long specimenId = new Long((String) values.get(requestedForKey));
-						specimenIdList.add(specimenId);
+						
+						if(values.get(requestedForKey)!=null)
+						{	
+							Long specimenId = new Long((String) values.get(requestedForKey));
+							specimenIdList.add(specimenId);
+						}	
 					}
 					else
 					{
 						String specimenIdKey = "DefinedArrayDetailsBean:" + i + "_specimenId";
-						Long specimenId = new Long((String) values.get(specimenIdKey));
-						specimenIdList.add(specimenId);
+						if(values.get(specimenIdKey)!=null)
+						{	
+							Long specimenId = new Long((String) values.get(specimenIdKey));
+							specimenIdList.add(specimenId);
+						}	
 					}
 				}
 				
