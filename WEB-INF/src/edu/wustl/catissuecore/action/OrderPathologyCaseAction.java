@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
@@ -34,8 +35,10 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * Action for ordering specimen
@@ -212,106 +215,71 @@ public class OrderPathologyCaseAction extends BaseAction
 	 */
 	private List getDataFromDatabase(HttpServletRequest request) throws DAOException
 	{
+		
 		// to get data from database when specimen id is given
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_PATHOLOGY_FORM_ID);
 		List pathologicalCaseList = new ArrayList();
-		//retriving the id list from session.
-		String [] className = {IdentifiedSurgicalPathologyReport.class.getName(),DeidentifiedSurgicalPathologyReport.class.getName(),SurgicalPathologyReport.class.getName()};
-		//int [] size = new int[3];
 		
-		if(request.getSession().getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
-		{
-			getList(request, Constants.PATHALOGICAL_CASE_ID , className[0],Constants.IDENTIFIED_SURGPATH_REPORT, pathologicalCaseList, bizLogic);
-		}
-		if(request.getSession().getAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID) != null)
-		{
-			getList(request , Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID ,className[1], Constants.DEIDENTIFIED_SURGPATH_REPORT,pathologicalCaseList, bizLogic);
-		}
-		if(request.getSession().getAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID) != null)
-		{
-			getList(request, Constants.SURGICAL_PATHALOGY_CASE_ID , className[2],Constants.SURGPATH_REPORT, pathologicalCaseList, bizLogic);
-		}
+		long startTime = System.currentTimeMillis();
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 				
-		return pathologicalCaseList;
-	}
-	
-	private void getList(HttpServletRequest request , String attr , String className ,int pathologicalType, List pathologicalCaseList, IBizLogic bizLogic)throws DAOException
-	{
-		List pathologyCaseIds = (List)request.getSession().getAttribute(attr);
-						
-		if(pathologyCaseIds!=null && !pathologyCaseIds.isEmpty())
-		{	
-			String ids =Utility.getCommaSeparatedIds(pathologyCaseIds);
-			
-			String hql =" select pathoCase.id ,pathoCase.specimenCollectionGroup.id, pathoCase.specimenCollectionGroup.surgicalPathologyNumber" +
-			" from "+className+" as pathoCase " +
-			" where pathoCase.id in ("+ids+")";
-			
-			try {
-				List list = Utility.executeQuery(hql);
-						
-				for(int i=0;i<list.size();i++)
-				{
-					Object[] obj = (Object[]) list.get(i);
+		try
+    	{
+			dao.openSession(null);
+			//retriving the id list from session.
+			String [] className = {IdentifiedSurgicalPathologyReport.class.getName(),DeidentifiedSurgicalPathologyReport.class.getName(),SurgicalPathologyReport.class.getName()};
 					
-					switch(pathologicalType)
-					{
-						 case Constants.IDENTIFIED_SURGPATH_REPORT:
-							 
-							 	IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = 
-							 		new IdentifiedSurgicalPathologyReport();
-								identifiedSurgicalPathologyReport.setId((Long)obj[0]);
-								identifiedSurgicalPathologyReport.setSpecimenCollectionGroup(
-										getSpecimenCollectionGroup((Long)obj[1],(String)obj[2]));
-								pathologicalCaseList.add(identifiedSurgicalPathologyReport);
-							 
-							 break;
-						
-						 case Constants.DEIDENTIFIED_SURGPATH_REPORT:
-							 	
-							 	DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = 
-							 		new DeidentifiedSurgicalPathologyReport();
-								deidentifiedSurgicalPathologyReport.setId((Long)obj[0]);
-								deidentifiedSurgicalPathologyReport.setSpecimenCollectionGroup(
-										getSpecimenCollectionGroup((Long)obj[1],(String)obj[2]));
-								pathologicalCaseList.add(deidentifiedSurgicalPathologyReport);
-								
-								break;
-							 
-						 case Constants.SURGPATH_REPORT:
-							 	
-							 	SurgicalPathologyReport surgicalPathologyReport = new SurgicalPathologyReport();
-								surgicalPathologyReport.setId((Long)obj[0]);
-								surgicalPathologyReport.setSpecimenCollectionGroup(
-										getSpecimenCollectionGroup((Long)obj[1],(String)obj[2]));
-								pathologicalCaseList.add(surgicalPathologyReport);
-								
-								break;
-							 
-				         default:
-				        	 break;
-					}
-					
-				}
-							
-			} catch (ClassNotFoundException e) {
-				
-				e.printStackTrace();
+			if(request.getSession().getAttribute(Constants.PATHALOGICAL_CASE_ID) != null)
+			{
+				getList(request, Constants.PATHALOGICAL_CASE_ID , className[0], pathologicalCaseList, bizLogic ,dao);
+			}
+			if(request.getSession().getAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID) != null)
+			{
+				getList(request , Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID ,className[1], pathologicalCaseList, bizLogic ,dao);
+			}
+			if(request.getSession().getAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID) != null)
+			{
+				 getList(request, Constants.SURGICAL_PATHALOGY_CASE_ID , className[2], pathologicalCaseList, bizLogic ,dao);
+			}
+			
+			long endTime = System.currentTimeMillis();
+			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
+			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
+			return pathologicalCaseList;
+    	}
+    	catch(DAOException e)
+    	{
+    		Logger.out.error(e.getMessage(), e);
+    		return null;
+    	}
+    	finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+	    		return null;
 			}
 		}	
 		
-	
 	}
-	/**This will give the object of specimen collection group
-	 * @param id
-	 * @param surgicalPathologyNumber
-	 * @return
-	 */
-	private SpecimenCollectionGroup getSpecimenCollectionGroup(Long id , String surgicalPathologyNumber)
+	
+	private void getList(HttpServletRequest request , String attr , String className , List pathologicalCaseList,
+			IBizLogic bizLogic,AbstractDAO dao)throws DAOException
 	{
-		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
-		specimenCollectionGroup.setId(id);
-		specimenCollectionGroup.setSurgicalPathologyNumber(surgicalPathologyNumber);
-		return specimenCollectionGroup;
+		List idList = (List)request.getSession().getAttribute(attr);
+		int size = idList.size();
+		for(int i=0;i<idList.size();i++)
+		{
+			Object object = dao.retrieve(className, Long.parseLong((String)idList.get(i)));
+			SurgicalPathologyReport surgicalPathologyReport = (SurgicalPathologyReport)object;
+			surgicalPathologyReport.getSpecimenCollectionGroup();
+			surgicalPathologyReport.getSpecimenCollectionGroup().getSpecimenCollection();
+			pathologicalCaseList.add(surgicalPathologyReport);
+		}
+		
 	}
 }

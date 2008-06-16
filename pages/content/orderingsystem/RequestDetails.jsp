@@ -15,7 +15,16 @@
 
 <head>
 <%
-List requestDetailsList = (List) request.getAttribute(Constants.REQUEST_DETAILS_LIST);	
+
+List requestDetailsList = new ArrayList();
+
+
+if(request.getAttribute(Constants.REQUEST_DETAILS_LIST) != null )
+	requestDetailsList = (List) request.getAttribute(Constants.REQUEST_DETAILS_LIST);	
+else 
+	requestDetailsList = (List) session.getAttribute(Constants.REQUEST_DETAILS_LIST);	
+
+
 int disabledStatus;
 int count=0;
 

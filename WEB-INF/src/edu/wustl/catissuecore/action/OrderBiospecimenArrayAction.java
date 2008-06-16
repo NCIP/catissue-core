@@ -23,11 +23,13 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 public class OrderBiospecimenArrayAction extends BaseAction
 {
@@ -104,37 +106,92 @@ public class OrderBiospecimenArrayAction extends BaseAction
 	 */
 	private List getDataFromDatabase(HttpServletRequest request) throws DAOException
 	{
-		HttpSession session = request.getSession(true);
-		List specimenArrayIds = (List)session.getAttribute(Constants.SPECIMEN_ARRAY_ID);
-    	List specimenArrayList=new ArrayList();
-    	
-    	if(specimenArrayIds!=null && !specimenArrayIds.isEmpty())
-		{	
-			String ids = Utility.getCommaSeparatedIds(specimenArrayIds);
-						
-			String hql =" select specimenArray.id , specimenArray.name ,specimenArray.specimenArrayType " +//,elements(specimenArray.specimenArrayContentCollection)" +
-			" from edu.wustl.catissuecore.domain.SpecimenArray as specimenArray " +
-			" where specimenArray.id in ("+ids+")";
-			
-			try {
-				
-				List list = Utility.executeQuery(hql);
-				System.out.println("list  "+list);
-				for(int i=0;i<list.size();i++)
+		long startTime = System.currentTimeMillis();
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+    	try
+    	{
+   		
+    		HttpSession session = request.getSession(true);
+    		
+    		String sourceObjectName = SpecimenArray.class.getName();
+        	List valueField=(List)session.getAttribute(Constants.SPECIMEN_ARRAY_ID);
+        	
+        	List specimenArrayList=new ArrayList();
+    		dao.openSession(null);
+	    	if(valueField != null && valueField.size() >0)
+	    	{
+				for(int i=0;i<valueField.size();i++)
 				{
-					Object[] obj = (Object[])list.get(i);
-					SpecimenArray specimenArray = new SpecimenArray();
-					specimenArray.setId((Long)obj[0]);
-					specimenArray.setName((String)obj[1]);
-					specimenArray.setSpecimenArrayType((SpecimenArrayType)obj[2]);
-					specimenArrayList.add(specimenArray);
+					//List SpecimenArray = bizLogic.retrieve(sourceObjectName, columnName, (String)valueField.get(i));
+					Object object = dao.retrieve(sourceObjectName, Long.parseLong((String)valueField.get(i)));
+					SpecimenArray specArray=(SpecimenArray)object;
+					specArray.getSpecimenArrayType();
+					specArray.getSpecimenArrayType().getSpecimenTypeCollection();
+					specimenArrayList.add(specArray);
 				}
-							
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+	    	}
+	    	
+	    	long endTime = System.currentTimeMillis();
+			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
+	    	return specimenArrayList;	
+    	}
+    	catch(DAOException e)
+    	{
+    		Logger.out.error(e.getMessage(), e);
+    		return null;
+    	}
+    	finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+	    		return null;
 			}
 		}	
     	
-    	return specimenArrayList;
+    	
+    	
+    	
+    	
+    	
+	/*//	String[] columnName = {"name"};
+	//	List specimenArrayList = bizLogic.retrieve(sourceObjectName);
+		if (specimenArrayList != null && specimenArrayList.size() > 0)
+		{
+			Iterator itr = specimenArrayList.iterator();
+			while (itr.hasNext())
+			{
+				SpecimenArray specimenArray = (SpecimenArray)itr.next();
+				String[] whereColumnName = {"id"};
+				String[] whereColumnCond = {"="};
+				String[] selectColumnName =  {"specimenArrayType"};
+				Object[] whereColumnValue = {specimenArray.getId()};
+
+				List specimenTypeList = bizLogic.retrieve(sourceObjectName,selectColumnName, whereColumnName, whereColumnCond,
+						whereColumnValue, Constants.AND_JOIN_CONDITION);
+				if(specimenTypeList != null && specimenTypeList.size()>0)
+				{
+					SpecimenArrayType specimenArrayType = (SpecimenArrayType) specimenTypeList.get(0);
+					
+					Collection specimenTypeCollection = (Collection) bizLogic.retrieveAttribute(SpecimenArrayType.class.getName(),specimenArrayType.getId(),"elements(specimenTypeCollection)");
+					if(specimenTypeCollection != null)
+					{
+						specimenArrayType.setSpecimenTypeCollection(specimenTypeCollection);
+					}
+					specimenArray.setSpecimenArrayType(specimenArrayType);
+				}
+				
+				Collection specimenArrayContentCollection = (Collection)bizLogic.retrieveAttribute(sourceObjectName,specimenArray.getId(),"elements(specimenArrayContentCollection)");
+				if(specimenArrayContentCollection != null)
+				{
+					specimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
+				}
+			}
+		}*/
+		
 	}
 }

@@ -321,6 +321,7 @@ public class RequestDetailsForm extends AbstractActionForm
 				}
 				else
 				{
+					
 					List defineArrayContentsList = null;
 					if (definedArrayMap.get(specimenOrderItem.getNewSpecimenArrayOrderItem()) == null)
 					{
@@ -353,7 +354,7 @@ public class RequestDetailsForm extends AbstractActionForm
 
 				existingArrayBeanCounter++;
 			}
-			else if (orderItem instanceof NewSpecimenArrayOrderItem)
+			/*else if (orderItem instanceof NewSpecimenArrayOrderItem)
 			{
 				NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) orderItem;
 				List defineArrayContentsList = null;
@@ -362,7 +363,7 @@ public class RequestDetailsForm extends AbstractActionForm
 					defineArrayContentsList = new ArrayList();
 					definedArrayMap.put(newSpecimenArrayOrderItem, defineArrayContentsList);
 				}
-			}
+			}*/
 			putCommonValuesInValuesMap(orderItem, assignStatus, description, requestedQty, assignQty, orderItemId, distributedItemId);
 		}
 		// Putting defined array values in Values map
@@ -422,6 +423,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		String distributedItemId = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_distributedItemId";
 		String createArrayCondition = "DefinedArrayRequestBean:" + arrayRequestBeanCounter + "_createArrayButtonDisabled";
 
+		
 		values.put(requestedItem, newSpecimenArrayOrderItem.getName());
 		values.put(positionDimensionOne, newSpecimenArrayOrderItem.getSpecimenArrayType().getCapacity().getOneDimensionCapacity().toString());
 		values.put(positionDimensionTwo, newSpecimenArrayOrderItem.getSpecimenArrayType().getCapacity().getTwoDimensionCapacity().toString());

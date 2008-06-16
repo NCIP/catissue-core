@@ -15,7 +15,14 @@
 	 	
 		<%
 			//Retrieve List from request attribute for order items in defined arrays
-			List definedArrayRequestMapList = (ArrayList)request.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST);
+
+			List definedArrayRequestMapList = new ArrayList();
+			
+			if(request.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST)!= null)
+				definedArrayRequestMapList = (ArrayList)request.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST);
+			else
+				definedArrayRequestMapList = (ArrayList)session.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST);	
+			
 			if(definedArrayRequestMapList != null)
 			{
 				int arrayRowCounter = 0;
@@ -526,9 +533,15 @@
 						 </tr>
 				 	<%
 						int rowCounter = 0;
-						if(request.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST) != null)
+						if(request.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST) != null || session.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST)!= null)
 						{
-							List arrayRequestList = (ArrayList)request.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST);
+							List arrayRequestList = new ArrayList();
+							
+							if(request.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST) != null)
+								arrayRequestList = (ArrayList)request.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST);
+							else
+								arrayRequestList = (ArrayList)session.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST);
+							
 							session.setAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST,arrayRequestList);
 					%>
 				<logic:iterate id="existingArrayRequestObj"	collection="<%=arrayRequestList%>" type="edu.wustl.catissuecore.bean.ExistingArrayDetailsBean">
@@ -648,7 +661,7 @@
 				 		}//End If
 						else
 						{
-							session.removeAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST);
+							//session.removeAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST);
 						}
 				 %>
 				</table> <!-- table with id='existingArrayId' ends here -->

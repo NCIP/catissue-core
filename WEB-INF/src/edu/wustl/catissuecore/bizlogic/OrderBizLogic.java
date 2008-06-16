@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
@@ -745,4 +746,21 @@ public class OrderBizLogic extends DefaultBizLogic
 		}
 		return orderList;
 	};
+	
+	
+	
+	/**
+	 * @param id
+	 * @param dao
+	 * @return to retrieve the orderDetails object. 
+	 * @throws NumberFormatException
+	 * @throws DAOException
+	 */
+	public OrderDetails getOrderListFromDB(String id,AbstractDAO dao) throws NumberFormatException, DAOException
+	{
+		Object object = dao.retrieve(OrderDetails.class.getName(),Long.parseLong(id));
+		OrderDetails OrderDetails = (OrderDetails)object;
+		return OrderDetails;
+	}
+	
 }
