@@ -362,13 +362,13 @@ public class GenericSpecimenDetailsTag extends TagSupport
 	private String generateHeaderForDisplay() //throws IOException
 	{
 		StringBuffer sb = new StringBuffer();
-		sb.append("<tr class=\"tableheading\" width=\"100%\">");
+		sb.append("<tr>");
 		for(int cnt=0;cnt < columnHeaderList.size(); cnt++ )
 		{
 				if(((String)columnHeaderList.get(cnt)).trim().length()>0)
-					sb.append("<th class=\"black_ar_b\" align=\"left\" scope=\"col\">"+ApplicationProperties.getValue((String)columnHeaderList.get(cnt))+"</th>");
+					sb.append("<th class=\"formSerialNumberLabelForTable\" scope=\"col\">"+ApplicationProperties.getValue((String)columnHeaderList.get(cnt))+"</th>");
 				else
-					sb.append("<th class=\"black_ar_b\" scope=\"col\">&nbsp;</th>");
+					sb.append("<th class=\"formSerialNumberLabelForTable\" scope=\"col\">&nbsp;</th>");
 		}
 		sb.append("</tr>");
 		
@@ -602,7 +602,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 
 		private void createTextComponent(StringBuffer sb, String[] nameValue, String styleClass)
 		{
-			 sb.append("<td class=\"black_ar\" >"); 
+			 sb.append("<td class=\"dataCellText\" >"); 
 			 sb.append("<input type=\"text\" name=\""+nameValue[0]+"\" value=\""+nameValue[1]+"\" class=\""+styleClass+"\">");
 			 sb.append("</td>");
 		}
@@ -610,7 +610,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		private void createStorageComponent(StringBuffer sb, String[] nameValue, GenericSpecimen specimen)
 		{
 
-			 sb.append("<td class=\"black_ar\" >");
+			 sb.append("<td class=\"dataCellText\" >");
 			 sb.append(getFormattedValue(specimen.getStorageContainerForSpecimen(),1));
 
 			 String specimenId = getFormattedValue(specimen.getUniqueIdentifier());
@@ -655,7 +655,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 
 		private void createVirtualStorageComponent(StringBuffer sb, String[] nameValue)
 		{
-			 sb.append("<td class=\"black_ar\" >");
+			 sb.append("<td class=\"dataCellText\" >");
 			 sb.append(getFormattedValue(nameValue[1],1));
 			 sb.append("<input type=\"hidden\" name=\""+nameValue[0]+"\" value=\""+nameValue[1]+"\">");
 			 sb.append("</td>");
@@ -693,7 +693,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				 }	// end of show element
 				 getHiddenElement(columnCounter,hiddenElements, specimen, elementNamePrefix);
 			 }
-			 sb.append("<td  class=\"black_ar\">");
+			 sb.append("<td class=\"dataCellText\" width='0' >");
 			 sb.append(hiddenElements.toString());
 			 addRemainingSpecimenElements(sb, elementNamePrefix, specimen);
 			 sb.append("</td>");
@@ -713,7 +713,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				}
 				else
 				{
-					sb.append("<td class=\"black_ar\">");
+					sb.append("<td class=\"dataCellText\" >");
 						sb.append(getFormattedValue(nameValue[1],1));
 					sb.append("</td>");
 				}
@@ -724,7 +724,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			}
 			else
 			{
-				sb.append("<td class=\"black_ar\" >");
+				sb.append("<td class=\"dataCellText\" >");
 				if(nameValue.length > 2)
 				{
 					if(nameValue[1].trim().length()>0)
@@ -746,7 +746,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		// Generic for testing to be deleted if not used later.
 		private void createRadioComponent(StringBuffer sb, String[] nameValue, String elementNamePrefix)
 		{
-			 sb.append("<td class=\"black_ar\" >");
+			 sb.append("<td class=\"dataCellText\" >");
 			 if(specimenSummaryForm.getSelectedSpecimenId().equalsIgnoreCase(nameValue[1]))
 				 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" checked=\"checked\" onclick=\" form.action=\'GenericSpecimenSummary.do\'; submit()\">");	 
 			 else
@@ -756,7 +756,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 
 		private void createParentRadioComponent(StringBuffer sb, String[] nameValue)
 		{
-			 sb.append("<td class=\"black_ar\" >");
+			 sb.append("<td class=\"dataCellText\" >");
 			 if(specimenSummaryForm.getSelectedSpecimenId().equalsIgnoreCase(nameValue[1]))
 				 sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\""+nameValue[1]+"\" checked=\"checked\" onclick=\" form.action=\'GenericSpecimenSummary.do\'; submit()\">");	 
 			 else
@@ -767,7 +767,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 
 		private void createCollectedComponent(StringBuffer sb, String[] nameValue, String calledFrom)
 		{
-			 sb.append("<td class=\"black_ar\" >");
+			 sb.append("<td class=\"dataCellText\" >");
 			 if(specimenSummaryForm.getShowCheckBoxes() == true)
 			 {
 				 if("getTextElement".equalsIgnoreCase(calledFrom))
@@ -789,7 +789,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 
 		private void createEmptyCell(StringBuffer sb)
 		{
-			 sb.append("<td class=\"black_ar\" >"); 
+			 sb.append("<td class=\"dataCellText\" >"); 
 			 sb.append("&nbsp;");
 			 sb.append("</td>");
 		}
