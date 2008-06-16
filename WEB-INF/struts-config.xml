@@ -3219,10 +3219,18 @@ PUBLIC
 			validate="false"						
 			scope="request">
 			<forward name="pageOfSpecimenQueryEdit" path="/QuerySpecimen.do?operation=edit&amp;pageOf=query"/>
-			<forward name="pageOfNewSpecimenCPQuery" path="/QuerySpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery"/>
+			<forward name="pageOfNewSpecimenCPQuery" path="/QuerySpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery"/> 	
 			<forward name="failure" path="/QuerySpecimen.do?pageOf=query"/>
 		</action>
 			
+		<action path="/QuerySpecimenArraySearch"
+		    type="edu.wustl.common.action.CommonSearchAction"
+			name="specimenArrayForm"
+			validate="false"						
+			scope="request">
+			<forward name="pageOfSpecimenArray" path="/SpecimenArray.do?operation=edit&amp;pageOf=pageOfSpecimenArrayCPQuery"/>
+			<forward name="failure" path="/SpecimenArray.do?pageOf=query"/>
+		</action>
 		<action path="/QuerySpecimenEdit"
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="newSpecimenForm"
@@ -3681,6 +3689,7 @@ PUBLIC
 		<forward name="success" path=".catissuecore.arrayDef" />
 		<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchSpecimenArrayDef" />
 		<forward name="pageOfSpecimenArray" path=".catissuecore.arrayDef" />
+		<forward name="pageOfSpecimenArrayCPQuery" path=".catissuecore.querySpecimenArrayViewDef" />
 		<forward name="failure" path=".catissuecore.arrayDef" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
