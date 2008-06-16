@@ -216,6 +216,7 @@
 			<then>
 				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
 					<replacefilter token="@@HOST:PORT@@" value="https://${jboss.server.host}:${jboss.server.port}" />
+					<replacefilter token="@@KEYSTORE_FILE_PATH@@" value="${keystore.file.path}" />
 				</replace>
 			</then>
 			<else>
