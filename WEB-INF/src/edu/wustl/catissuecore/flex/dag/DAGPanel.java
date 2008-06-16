@@ -147,7 +147,7 @@ public class DAGPanel {
 					}
 					else
 					{
-						expressionId = m_queryObject.addRule(attributes, attributeOperators, conditionValues);
+						expressionId = m_queryObject.addRule(attributes, attributeOperators, conditionValues,entity);
 						node = createNode(expressionId,false);
 					}
 					node.setErrorMsg(errMsg);
