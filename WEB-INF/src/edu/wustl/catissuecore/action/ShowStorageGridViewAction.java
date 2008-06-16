@@ -64,7 +64,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             throws Exception
     {
         String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
-        
+        String contentOfContainer = null;
         // To get privilegeCache through 
 		// Singleton instance of PrivilegeManager, requires User LoginName
         PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
@@ -214,6 +214,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             list = specimenBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
                     whereColumnCondition, whereColumnValue, joinCondition);
             
+           
 			
             if (list != null)
             {
@@ -233,6 +234,8 @@ public class ShowStorageGridViewAction  extends BaseAction
                                                    = specimenID.intValue();
                     childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
                                                                         = Constants.SPECIMEN_LABEL_CONTAINER_MAP + specimenLable;
+                    
+                    request.setAttribute(Constants.CONTENT_OF_CONTAINNER, "Specimen");
                 }
             }
             
@@ -264,10 +267,13 @@ public class ShowStorageGridViewAction  extends BaseAction
                                                    = specimenID.intValue();
                     childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
                                                                         = Constants.SPECIMEN_ARRAY_LABEL_CONTAINER_MAP + specimenArrayLable;
+                  request.setAttribute(Constants.CONTENT_OF_CONTAINNER, "SpecimenArray");
+                    
                 }
             }
         }
         
+        request.setAttribute(Constants.CONTENT_OF_CONTAINNER, contentOfContainer);
         if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
         {
         	String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);

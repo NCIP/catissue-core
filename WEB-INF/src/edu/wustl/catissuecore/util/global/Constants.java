@@ -388,6 +388,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int STORAGE_CONTAINER_FIRST_COLUMN = 1;
 	public static final String MAP_COLLECTION_PROTOCOL_LIST = "collectionProtocolList";
 	public static final String MAP_SPECIMEN_CLASS_LIST = "specimenClassList";
+	public static final String CONTENT_OF_CONTAINNER="contentOfContainer";
 	
 	//event parameters lists
 	public static final String METHOD_LIST = "methodList";

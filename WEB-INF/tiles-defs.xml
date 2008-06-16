@@ -928,6 +928,12 @@
 	<definition name=".catissuecore.arrayDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArray.jsp" />
 	</definition>
+	
+		
+	<definition name=".catissuecore.querySpecimenArrayViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArray.jsp" />
+	</definition>
+	
 
 	<definition name=".catissuecore.cpBasedSearchDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CPBasedSearchResults.jsp" />
