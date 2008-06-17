@@ -31,7 +31,7 @@
 		%>
 		<%							
 							int rowNumber =0 ;
-							String disabledCreateButton="false";
+							String disabledCreateButton="true";
 						%>
 			<!-- Iterate the list -->
 		<logic:iterate id="defineArrayMap" collection="<%=definedArrayRequestMapList%>" type="java.util.Map">
@@ -216,7 +216,7 @@
 
 							if(!((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)) 								
 							{
-								disabledCreateButton="true";
+								disabledCreateButton="false";
 								
 
 							}
@@ -448,10 +448,10 @@
 										<% if(disabledCreateButton.equals("false"))
 											{
 										 %>
-											<input type="button" id="<%= buttonCreateArrayId%>" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>','<%= rowNumber-noOfItems %>')" />
+											<input type="button" id="<%= buttonCreateArrayId%>" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>','<%= rowNumber-noOfItems %>')" disabled="disabled" />
 										<%  }else{
 										%>
-											<input type="button" id="buttonCreateArrayId" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>')" disabled="disabled"/>
+											<input type="button" id="<%= buttonCreateArrayId%>" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>','<%= rowNumber-noOfItems %>')" />
 										<% }
 											String defineArrayName = "defineArrayName_" + arrayRowCounter; 
 											String nameOfArray =((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_arrayName")));
