@@ -102,8 +102,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				specimenEventParametersObject.setUser(user);
 			}
 //			Ashish - 6/6/07 - performance improvement
-			Object Object = dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
-			Specimen specimen = (Specimen) object;
+			Object specimenObject = dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
+			Specimen specimen = (Specimen) specimenObject;
 			//(Specimen) dao.retrieveAttribute(SpecimenEventParameters.class.getName(), specimenEventParametersObject.getSpecimen().getId(),"specimen");
 			//(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId(),Constants.SYSTEM_IDENTIFIER);
 			// check for closed Specimen
@@ -232,14 +232,15 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					 * Reviewer: Sachin
 					 * Retrive Storage Container from specimen
 					 */
-					
-					if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer()!=null&&specimen.getSpecimenPosition().getStorageContainer().getId()!=null)
+					Object objectContainer = null;
+					if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer()!=null && specimen.getSpecimenPosition().getStorageContainer().getId()!=null)
 					{
-						object = dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
+						objectContainer = dao.retrieve(StorageContainer.class.getName(), specimen.getSpecimenPosition().getStorageContainer().getId());
 					}
-					if(object != null)
+					if(objectContainer != null)
 					{
-						StorageContainer storageContainer = (StorageContainer)object;
+						
+						StorageContainer storageContainer = (StorageContainer)objectContainer;
 						addEntriesInDisabledMap(specimen, storageContainer, disabledCont);
 					}
 					SpecimenPosition prevPosition = specimen.getSpecimenPosition(); 
