@@ -786,7 +786,7 @@
     {
 	var nameValueBean:NameValueBean = NameValueBean(item);
 	var toolTopString1:String = nameValueBean.name.slice(0,40);
-	var toolTopString2:String = nameValueBean.name.slice(41,nameValueBean.name.length);
+	var toolTopString2:String = nameValueBean.name.slice(40,nameValueBean.name.length);
 		
 	//Alert.show("The tooltip lenght is:"+name.length);
 	//return nameValueBean.name.slice(0,40);
