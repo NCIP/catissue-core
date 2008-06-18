@@ -39,8 +39,8 @@ import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.common.dynamicextensions.domain.userinterface.Container;
+import edu.common.dynamicextensions.domaininterface.AbstractEntityInterface;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
-import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
@@ -280,7 +280,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				staticEntity = (EntityInterface) session.load(Entity.class, new Long(staticEntityId));
 				dynamicContainer = (Container) session.load(Container.class,new Long(dynExtContainerId));
 
-				AssociationInterface association = getAssociationForEntity(staticEntity,dynamicContainer.getEntity());
+				AssociationInterface association = getAssociationForEntity(staticEntity,dynamicContainer.getAbstractEntity());
 				//	Get entitygroup that is used by caB2B for path finder purpose.
 //				Commented this line since performance issue for Bug 6433
 				//EntityGroupInterface entityGroupInterface = edu.wustl.cab2b.common.util.Utility.getEntityGroup(staticEntity);
@@ -292,7 +292,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 
 				Set<PathObject> processedPathList = new HashSet<PathObject>();
 				//Adding paths from second level as first level paths between static entity and top level dynamic entity have already been added
-				addQueryPathsForEntityHierarchy(dynamicContainer.getEntity(), staticEntity,
+				addQueryPathsForEntityHierarchy((EntityInterface)dynamicContainer.getAbstractEntity(), staticEntity,
 						association.getId(), staticEntity.getId(), processedPathList);
 
 				String deletedAssociationIds = request.getParameter("deletedAssociationIds");
@@ -305,7 +305,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				removeQueryPathsForEntityHierarchy(deletedAssociationIdArray);
 
 				edu.wustl.catissuecore.bizlogic.AnnotationUtil.addEntitiesToCache(false,
-						dynamicContainer.getEntity(), staticEntity);
+						(EntityInterface)dynamicContainer.getAbstractEntity(), staticEntity);
 			}
 			catch (HibernateException e1)
 			{
@@ -395,7 +395,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @param dynamicEntity
 	 * @return
 	 */
-	private AssociationInterface getAssociationForEntity(EntityInterface staticEntity,EntityInterface dynamicEntity)
+	private AssociationInterface getAssociationForEntity(EntityInterface staticEntity,AbstractEntityInterface dynamicEntity)
 	{
 		Collection<AssociationInterface> associationCollection = staticEntity
 				.getAssociationCollection();

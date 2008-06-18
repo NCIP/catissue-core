@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 
 import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
+import edu.common.dynamicextensions.domaininterface.AbstractEntityInterface;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
@@ -70,7 +71,7 @@ public class XMIUtility
 							if(staticEntity!=null)
 							{
 								EntityInterface xmiStaticEntity = null;
-								AssociationInterface association = getHookEntityAssociation(staticEntity,mainContainer.getEntity());
+								AssociationInterface association = getHookEntityAssociation(staticEntity,mainContainer.getAbstractEntity());
 								Collection<EntityInterface> entityColl = entityGroup.getEntityCollection();
 								for(EntityInterface entity : entityColl)
 								{
@@ -87,7 +88,7 @@ public class XMIUtility
 								}
 								else
 								{
-									xmiStaticEntity = getHookEntityDetailsForXMI(staticEntity,mainContainer.getEntity());
+									xmiStaticEntity = getHookEntityDetailsForXMI(staticEntity,mainContainer.getAbstractEntity());
 									entityGroup.addEntity(xmiStaticEntity);
 								}
 							}
@@ -105,7 +106,7 @@ public class XMIUtility
 	 * @throws DynamicExtensionsApplicationException 
 	 * @throws DynamicExtensionsSystemException 
 	 */
-	public static EntityInterface getHookEntityDetailsForXMI(EntityInterface srcEntity,EntityInterface targetEntity) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+	public static EntityInterface getHookEntityDetailsForXMI(EntityInterface srcEntity,AbstractEntityInterface targetEntity) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
 		//For XMI : add only id , name and table properties
 		EntityInterface xmiEntity = new Entity();
@@ -142,7 +143,7 @@ public class XMIUtility
 	 * @throws DynamicExtensionsApplicationException 
 	 * @throws DynamicExtensionsSystemException 
 	 */
-	private static AssociationInterface getHookEntityAssociation(EntityInterface srcEntity, EntityInterface targetEntity) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+	private static AssociationInterface getHookEntityAssociation(EntityInterface srcEntity,AbstractEntityInterface targetEntity) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
 		if((srcEntity!=null)&&(targetEntity!=null))
 		{

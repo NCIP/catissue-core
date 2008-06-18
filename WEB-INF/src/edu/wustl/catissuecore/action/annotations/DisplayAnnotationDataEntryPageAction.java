@@ -28,6 +28,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationExcept
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
+import edu.common.dynamicextensions.util.DynamicExtensionsUtility;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
@@ -402,7 +403,7 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		if(deContainerId!=null)
 		{
 			EntityManagerInterface entityManager = EntityManager.getInstance();
-			ContainerInterface container = entityManager.getContainerByIdentifier(deContainerId+"");
+			ContainerInterface container = DynamicExtensionsUtility.getContainerByIdentifier(deContainerId.toString());
 			if(container!=null)
 			{
 				containerName = container.getCaption();
