@@ -332,6 +332,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ACTIVITYSTATUSLIST = "activityStatusList";
 	public static final String COLLECTIONSTATUSLIST = "collectionStatusList";
 	public static final String USERLIST = "userList";
+	public static final String ACTIONLIST = "actionsList";
 	public static final String SITETYPELIST = "siteTypeList";
 	public static final String STORAGETYPELIST="storageTypeList";
 	public static final String STORAGECONTAINERLIST="storageContainerList";
@@ -822,6 +823,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	// Assign Privilege Constants.
 	public static final boolean PRIVILEGE_DEASSIGN = false;
 	public static final String OPERATION_DISALLOW = "Disallow";
+	public static final String ROW_ID_OBJECT_BEAN_MAP = "rowIdObjectBeanMap";
+	public static final String OPERATION_GET_USER_FORTHIS_SITES = "getUsersForThisSites";
+	public static final String OPERATION_GET_ACTION_FORTHIS_ROLE = "getActionsForThisRole";
+	public static final String OPERATION_ADD_PRIVILEDGE = "addPriviledge";
+	public static final String OPERATION_DELETE_ROW = "deleteRow";
+	public static final String SELECTED_ACTION_IDS = "selectedActionIds";
+	public static final String SELECTED_USER_IDS= "selectedUserIds";
+	public static final String SELECTED_SITE_IDS = "selectedSiteIds";
+	public static final String SELECTED_ROLE_IDS = "selectedRoleIds";
 	
 	//Constants for default column names to be shown for query result.
 	public static final String[] DEFAULT_SPREADSHEET_COLUMNS = {
