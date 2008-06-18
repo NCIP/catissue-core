@@ -19,6 +19,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -99,7 +102,7 @@ public class AnnotationUtil
 		{
 			staticEntity = (EntityInterface) session.load(Entity.class, staticEntityId);
 			dynamicEntity = (EntityInterface) ((Container) session.load(Container.class,
-					dynamicEntityId)).getEntity();
+					dynamicEntityId)).getAbstractEntity();
 //			Get entitygroup that is used by caB2B for path finder purpose.
 
 //			Commented this line since performance issue for Bug 6433
@@ -194,9 +197,9 @@ public class AnnotationUtil
 		}
 
 		//Add the entity group to the dynamic entity and all it's associated entities.
-		if (!checkBaseEntityGroup(dynamicEntity.getEntityGroupCollection()))
+		if (!checkBaseEntityGroup(dynamicEntity.getEntityGroup()))
 		{
-			dynamicEntity.addEntityGroupInterface(entityGroupInterface);
+			dynamicEntity.setEntityGroup(entityGroupInterface);
 		}
 		Collection<AssociationInterface> associationCollection = dynamicEntity
 				.getAssociationCollection();
@@ -212,15 +215,13 @@ public class AnnotationUtil
 	 * @param entityGroupColl
 	 * @return
 	 */
-	public static boolean checkBaseEntityGroup(Collection<EntityGroupInterface> entityGroupColl)
+	public static boolean checkBaseEntityGroup(EntityGroupInterface entityGroup)
 	{
-		for (EntityGroupInterface eg : entityGroupColl)
+		if (entityGroup.getId().intValue() == Constants.CATISSUE_ENTITY_GROUP)
 		{
-			if (eg.getId().intValue() == Constants.CATISSUE_ENTITY_GROUP)
-			{
-				return true;
-			}
+			return true;
 		}
+	
 		return false;
 	}
 
@@ -292,8 +293,11 @@ public class AnnotationUtil
 			Connection conn = null;
 			try
 			{
-				conn = DBUtil.getConnection();
-				PathFinder.getInstance(conn).refreshCache(conn);
+				InitialContext ctx = new InitialContext();
+				String DATASOURCE_JNDI_NAME = "java:/catissuecore";
+		        DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
+		        conn = ds.getConnection();
+				PathFinder.getInstance(conn).refreshCache(conn,true);
 			}
 			catch (Exception e)
 			{
@@ -304,9 +308,17 @@ public class AnnotationUtil
 			{
 				try
 				{
-					DBUtil.closeConnection();
+					if(conn!=null)
+					{
+						conn.close();
+					}
 				}
 				catch (HibernateException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				catch (SQLException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -328,10 +340,11 @@ public class AnnotationUtil
 			EntityInterface staticEntity, EntityInterface dynamicEntity)
 	{
 		ConstraintPropertiesInterface cp = DomainObjectFactory.getInstance()
-				.createConstraintProperties();
+		.createConstraintProperties();
 		cp.setName(dynamicEntity.getTableProperties().getName());
 		cp.setTargetEntityKey("DYEXTN_AS_" + staticEntity.getId().toString() + "_"
-				+ dynamicEntity.getId().toString());
+		+ dynamicEntity.getId().toString());
+		cp.setSourceEntityKey(null);		
 		return cp;
 	}
 
