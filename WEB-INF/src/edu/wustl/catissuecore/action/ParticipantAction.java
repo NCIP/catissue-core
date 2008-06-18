@@ -457,8 +457,8 @@ public class ParticipantAction extends SecureAction
 	 */
 	private Collection getConsentList(IBizLogic bizLogic,String collectionProtocolID) throws DAOException
     {   	
-    	List collProtList  = bizLogic.retrieve(CollectionProtocol.class.getName(), Constants.ID, collectionProtocolID);		
-		CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
+		Object object  = bizLogic.retrieve(CollectionProtocol.class.getName(), new Long(collectionProtocolID));		
+		CollectionProtocol collectionProtocol = (CollectionProtocol) object;
 		//Setting consent tiers
 		//Resolved lazy --- collectionProtocol.getConsentTierCollection()
 		Collection consentTierCollection = (Collection)bizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");

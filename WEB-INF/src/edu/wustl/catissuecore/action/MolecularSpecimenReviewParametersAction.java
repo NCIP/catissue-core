@@ -76,10 +76,10 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
         if(specimenID != null)
         {
             DefaultBizLogic  specimenBizLogic = (DefaultBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-            List specimenList = specimenBizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,specimenID);
-            if(!specimenList.isEmpty() )
+            Object object = specimenBizLogic.retrieve(Specimen.class.getName(), new Long(specimenID));
+            if(object != null)
             {
-	            Specimen specimen =(Specimen)specimenList.get(0);
+	            Specimen specimen =(Specimen)object;
 	            String strClass = specimen.getClassName();
 	            String strType = specimen.getType();
 	            

@@ -137,14 +137,13 @@ public class CaCoreAppServicesDelegator
 			AbstractDomainObject abstractDomainObject = (AbstractDomainObject) domainObject;
 			// not null check for Id
 			checkNullObject(abstractDomainObject.getId(),"Identifier");
-            List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
-					  abstractDomainObject.getId());
+			Object object = bizLogic.retrieve(objectName, abstractDomainObject.getId());
             
-			if ((list == null) || (list.isEmpty()))
+			if (object == null)
 			{
 				throw new Exception("No such domain object found for update !! Please enter valid domain object for edit");
 			}
-			AbstractDomainObject abstractDomainOld = (AbstractDomainObject) list.get(0);
+			AbstractDomainObject abstractDomainOld = (AbstractDomainObject) object;
 			Session sessionClean = DBUtil.getCleanSession();
 			abstractDomainOld = (AbstractDomainObject) sessionClean.load(Class.forName(objectName), new Long(abstractDomainObject.getId()));
 			bizLogic.update(abstractDomainObject, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionDataBean(userName));
@@ -454,15 +453,14 @@ public class CaCoreAppServicesDelegator
 	    // call Biz logic for change in our objects
 	    SpecimenCollectionGroup specimenCollectionGroup=null;
 		IBizLogic bizLogic = getBizLogic(SpecimenCollectionGroup.class.getName());
-		List  specimenCollectionGroupList =(List) bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),Constants.SYSTEM_IDENTIFIER,specimen.getSpecimenCollectionGroup().getId());
-		if(specimenCollectionGroupList!=null && specimenCollectionGroupList.size()>0)
+		Object SCGobject =  bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), specimen.getSpecimenCollectionGroup().getId());
+		if(SCGobject != null)
 		{
-			specimenCollectionGroup = (SpecimenCollectionGroup)specimenCollectionGroupList.get(0);
+			specimenCollectionGroup = (SpecimenCollectionGroup) SCGobject;
 		}
-	    if (specimenCollectionGroup != null)
-	    {	
-	    	removeSpecimenCollectionGroupIdentifiedData(specimenCollectionGroup);
-	    }	
+	    
+		removeSpecimenCollectionGroupIdentifiedData(specimenCollectionGroup);
+	    	
 	}
 	
 	/**

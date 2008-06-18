@@ -46,9 +46,9 @@ public class ConflictSCGDataDetailsAction extends BaseAction{
 	
 		//Retrieved the SCG and populated the bean 	
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		List specimenCollectionGroupObject = (List)defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(),Constants.ID,SCGId );
+		Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(SCGId));
 	
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupObject.get(0);
+		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
 		defaultBizLogic.populateUIBean(SpecimenCollectionGroup.class.getName(),(Long)specimenCollectionGroup.getId(), specimenCollectionGroupForm);
 					
 		return mapping.findForward(Constants.SUCCESS);

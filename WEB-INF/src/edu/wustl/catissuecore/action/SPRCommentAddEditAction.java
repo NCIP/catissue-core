@@ -34,8 +34,8 @@ public class SPRCommentAddEditAction extends BaseAction
 	    	IBizLogic bizLogic= BizLogicFactory.getInstance().getBizLogic(viewSurgicalPathologyReportForm.getFormId());
 			if(abstractDomain!=null)
 			{
-				List listOld = bizLogic.retrieve(abstractDomain.getClass().getName(), Constants.SYSTEM_IDENTIFIER, new Long(viewSurgicalPathologyReportForm.getId()));
-				AbstractDomainObject abstractDomainOld = (AbstractDomainObject) listOld.get(0);
+				Object object = bizLogic.retrieve(abstractDomain.getClass().getName(), new Long(viewSurgicalPathologyReportForm.getId()));
+				AbstractDomainObject abstractDomainOld = (AbstractDomainObject) object;
 				if(abstractDomainOld instanceof QuarantineEventParameter)
 				{
 					QuarantineEventParameter quarantineEventParamanter=(QuarantineEventParameter)abstractDomainOld;

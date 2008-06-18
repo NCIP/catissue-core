@@ -272,12 +272,12 @@ public class CreateSpecimenAction extends SecureAction
 			containerMap = new TreeMap();
 			Integer id = new Integer(createForm.getStorageContainer());
 			String parentContainerName = "";
-			String valueField1 = "id";
-			List list = dao.retrieve(StorageContainer.class.getName(), valueField1, new Long(
+			
+			Object object = dao.retrieve(StorageContainer.class.getName(), new Long(
 					createForm.getStorageContainer()));
-			if (!list.isEmpty())
+			if (object != null)
 			{
-				StorageContainer container = (StorageContainer) list.get(0);
+				StorageContainer container = (StorageContainer) object;
 				parentContainerName = container.getName();
 
 			}
@@ -391,12 +391,12 @@ public class CreateSpecimenAction extends SecureAction
 	{
 		TreeMap containerMap = new TreeMap();
 
-		List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
+		Object object = dao.retrieve(Specimen.class.getName(), new Long(
 				specimenId));
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-		if (!spList.isEmpty())
+		if (object != null)
 		{
-			Specimen sp = (Specimen) spList.get(0);
+			Specimen sp = (Specimen) object;
 			long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
 					.getCollectionProtocol().getId().longValue();
 			String spClass = className;

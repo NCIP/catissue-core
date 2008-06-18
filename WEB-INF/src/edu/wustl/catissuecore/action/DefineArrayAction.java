@@ -70,9 +70,9 @@ public class DefineArrayAction extends BaseAction
 	        		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 	
 	        		String sourceObjectName = SpecimenArrayType.class.getName();
-	    	    	String columnName="id";
-	    			List containerType = bizLogic.retrieve(sourceObjectName, columnName, request.getParameter("arrayType"));
-	    			SpecimenArrayType containerTyperow=(SpecimenArrayType)containerType.get(0);
+	    	    	
+	    			Object object = bizLogic.retrieve(sourceObjectName, new Long(request.getParameter("arrayType")));
+	    			SpecimenArrayType containerTyperow=(SpecimenArrayType)object;
 	    			//SpecimenArrayType spec=(SpecimenArrayType)containerType.get(0);
 	    			
 	    			Capacity capacityobj=(Capacity)containerTyperow.getCapacity();

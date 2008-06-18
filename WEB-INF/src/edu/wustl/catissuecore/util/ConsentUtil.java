@@ -528,9 +528,9 @@ public class ConsentUtil
 	public static List witnessNameList(String collProtId) throws DAOException
 	{		
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String colName = Constants.ID;
-		List collProtList = bizLogic.retrieve(CollectionProtocol.class.getName(), colName, collProtId);		
-		CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
+		
+		Object object = bizLogic.retrieve(CollectionProtocol.class.getName(), new Long(collProtId));		
+		CollectionProtocol collectionProtocol = (CollectionProtocol) object;
 		//Setting the consent witness
 		String witnessFullName="";
 		List consentWitnessList = new ArrayList();
@@ -575,8 +575,8 @@ public class ConsentUtil
 	public static Collection getConsentList(String collectionProtocolID) throws DAOException
     {   	
     	CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-		List collProtList  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), Constants.ID, collectionProtocolID);		
-		CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
+    	Object object  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), new Long(collectionProtocolID));		
+		CollectionProtocol collectionProtocol = (CollectionProtocol) object;
 		Collection consentTierCollection = (Collection)collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");
 		return consentTierCollection;
     }

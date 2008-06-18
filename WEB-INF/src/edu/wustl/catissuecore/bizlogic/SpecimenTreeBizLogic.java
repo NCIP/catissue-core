@@ -78,20 +78,20 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 		//If specimenId is sent (Incase of biospecimen in orderlist or in defined array)
 		if(specimenCollGroup == false) 
 		{
-			List specimen = defaultBizLogic.retrieve(Specimen.class.getName(),Constants.ID,id);
+			Object object = defaultBizLogic.retrieve(Specimen.class.getName(), id);
 			
 			//The list consists of only one element that is:- specimen instance
-			Specimen specimenObj = (Specimen) specimen.get(0);
+			Specimen specimenObj = (Specimen) object;
 			Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(Specimen.class.getName(),id,"elements(childrenSpecimen)");
 			specimenObj.setChildrenSpecimen(childColl);
 			allNodes = formTreeNode(specimenObj);
 		}
 		else //If specimenCollectiongroupId is sent(Incase of pathological case)
 		{
-			List specimenCollGrp = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(),Constants.ID,id);
+			Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), id);
 			
 			//The list consists of only one element that is:- specimencollecitongroup instance
-			SpecimenCollectionGroup specimenCollGrpObj = (SpecimenCollectionGroup) specimenCollGrp.get(0);
+			SpecimenCollectionGroup specimenCollGrpObj = (SpecimenCollectionGroup) object;
 			Long scgId = specimenCollGrpObj.getId();
 			Collection specimenSet = (Collection) 
 			defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),scgId,"elements(specimenCollection)");

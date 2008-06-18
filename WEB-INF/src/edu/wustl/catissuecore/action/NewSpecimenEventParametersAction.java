@@ -65,11 +65,11 @@ public class NewSpecimenEventParametersAction  extends SecureAction
 	    	if(identifier == null)
 	    		identifier = (String)request.getParameter("specimenIdentifier");
 	    	
-	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
+	    	Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
 	    	
-	    	if(specimenList!=null && specimenList.size() != 0)
+	    	if(object !=null)
 	    	{
-	    		Specimen specimen = (Specimen)specimenList.get(0);
+	    		Specimen specimen = (Specimen) object;
 	    		
 	    		//Setting Specimen Event Parameters' Grid            
 	            Collection specimenEventCollection = specimen.getSpecimenEventCollection();

@@ -78,8 +78,8 @@ public class TextReportContentBizLogic extends DefaultBizLogic
 			String sourceObjectName = TextContent.class.getName();
 
 			// getting all the participants from the database 
-			List textContentList = bizLogic.retrieve(sourceObjectName, Constants.ID, identifier);
-			TextContent textContent = (TextContent) textContentList.get(0);
+			Object object = bizLogic.retrieve(sourceObjectName, identifier);
+			TextContent textContent = (TextContent) object;
 			return textContent;
 
 		}

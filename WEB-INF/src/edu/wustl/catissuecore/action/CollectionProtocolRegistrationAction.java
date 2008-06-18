@@ -277,10 +277,10 @@ public class CollectionProtocolRegistrationAction extends SecureAction
                 cprForm.setParticipantID(participantId.longValue());
                 //cprForm.setCheckedButton(true);
                 //Bug-2819: Performance issue due to participant drop down: Jitendra
-                List participantList = bizLogic.retrieve(sourceObjectName, Constants.SYSTEM_IDENTIFIER, participantId);               
-                if(participantList != null && !participantList.isEmpty())
+                Object object = bizLogic.retrieve(sourceObjectName, participantId);               
+                if(object != null) 
                 {
-                	Participant participant = (Participant) participantList.get(0);
+                	Participant participant = (Participant) object;
                 	cprForm.setParticipantName(participant.getMessageLabel());
                 }           
                 
@@ -296,10 +296,10 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         		CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
                 //cprForm.setCheckedButton(true);
-                 List participantList = bizLogic.retrieve(sourceObjectName, Constants.SYSTEM_IDENTIFIER, participantId);               
-                if(participantList != null && !participantList.isEmpty())
+                 Object object = bizLogic.retrieve(sourceObjectName, participantId);               
+                if(object != null )
                 {
-                	Participant participant = (Participant) participantList.get(0);
+                	Participant participant = (Participant) object;
                 	cprForm.setParticipantName(participant.getMessageLabel());
                 }
         		}
@@ -318,10 +318,10 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         		CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
                 //cprForm.setCheckedButton(true);                
-                List participantList = bizLogic.retrieve(sourceObjectName, Constants.SYSTEM_IDENTIFIER, participantId);               
-                if(participantList != null && !participantList.isEmpty())
+                Object object = bizLogic.retrieve(sourceObjectName, participantId);               
+                if(object != null)
                 {
-                	Participant participant = (Participant) participantList.get(0);
+                	Participant participant = (Participant) object;
                 	cprForm.setParticipantName(participant.getMessageLabel());
                 }
         		}

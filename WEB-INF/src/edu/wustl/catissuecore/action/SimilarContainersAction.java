@@ -106,29 +106,26 @@ public class SimilarContainersAction extends SecureAction
 
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
-		List containerTypeList = ibizLogic.retrieve(StorageType.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(similarContainersForm
+		Object object = ibizLogic.retrieve(StorageType.class.getName(), new Long(similarContainersForm
 				.getTypeId()));
-		Iterator iter = containerTypeList.iterator();
+		
 		String typeName = "", siteName = "";
-		while (iter.hasNext())
-		{
-			StorageType storageType = (StorageType) iter.next();
-			String containerType = storageType.getName();
-			similarContainersForm.setTypeName(containerType);
-			typeName = containerType;
-			similarContainersForm.setOneDimensionLabel(storageType.getOneDimensionLabel());
-			similarContainersForm.setTwoDimensionLabel(storageType.getTwoDimensionLabel());
+		StorageType storageType = (StorageType) object;
+		String containerType = storageType.getName();
+		similarContainersForm.setTypeName(containerType);
+		typeName = containerType;
+		similarContainersForm.setOneDimensionLabel(storageType.getOneDimensionLabel());
+		similarContainersForm.setTwoDimensionLabel(storageType.getTwoDimensionLabel());
 
-		}
 
 		long siteId = similarContainersForm.getSiteId();
-		String valueField1 = "id";
+		
 		if (similarContainersForm.getCheckedButton() == 1)
 		{
-			List siteList = ibizLogic.retrieve(Site.class.getName(), valueField1, new Long(similarContainersForm.getSiteId()));
-			if (!siteList.isEmpty())
+			Object siteObject = ibizLogic.retrieve(Site.class.getName(), new Long(similarContainersForm.getSiteId()));
+			if (siteObject != null)
 			{
-				Site site = (Site) siteList.get(0);
+				Site site = (Site) siteObject;
 				similarContainersForm.setSiteName(site.getName());
 				siteName = site.getName();
 				siteId = site.getId().longValue();
@@ -248,10 +245,10 @@ public class SimilarContainersAction extends SecureAction
 			}
 			if (parentContId != null)
 			{
-				List containerList = ibizLogic.retrieve(StorageContainer.class.getName(), valueField1, new Long(parentContId));
-				if (!containerList.isEmpty())
+				Object containerObject = ibizLogic.retrieve(StorageContainer.class.getName(), new Long(parentContId));
+				if (containerObject != null)
 				{
-					StorageContainer container = (StorageContainer) containerList.get(0);
+					StorageContainer container = (StorageContainer) containerObject;
 					
 					Site site = (Site)bizLogic.retrieveAttribute(StorageContainer.class.getName(), container.getId(), "site");//container.getSite();
 					similarContainersForm.setSiteName(site.getName());
@@ -383,10 +380,10 @@ public class SimilarContainersAction extends SecureAction
 			if (similarContainersForm.getCheckedButton() == 1)
 			{
 				String Id = (String) similarContainersForm.getSimilarContainerMapValue("simCont:" + i + "_siteId");
-				List siteList = ibizLogic.retrieve(Site.class.getName(), valueField1, Id);
-				if (!siteList.isEmpty())
+				Object siteObject2 = ibizLogic.retrieve(Site.class.getName(), new Long(Id));
+				if (siteObject2 != null)
 				{
-					Site site = (Site) siteList.get(0);
+					Site site = (Site) siteObject2;
 					similarContainersForm.setSiteName(site.getName());
 					siteName = site.getName();
 					siteId = site.getId().longValue();

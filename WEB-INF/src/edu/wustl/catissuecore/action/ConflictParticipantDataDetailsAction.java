@@ -46,11 +46,11 @@ public class ConflictParticipantDataDetailsAction extends BaseAction{
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 		
 		//retrieved the participant object and populated the bean
-		List participantObjectList = (List)defaultBizLogic.retrieve(Participant.class.getName(),Constants.ID,participantId );
+		Object object = defaultBizLogic.retrieve(Participant.class.getName(), new Long(participantId));
 		Participant participant = null;
-		if(participantObjectList!=null && participantObjectList.size()>0)
+		if(object != null)
 		{
-			participant = (Participant)participantObjectList.get(0);
+			participant = (Participant)object;
 			defaultBizLogic.populateUIBean(Participant.class.getName(), participant.getId(), conflictParticipantDataDetailsForm);
 		}
 			

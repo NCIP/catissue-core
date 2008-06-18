@@ -202,13 +202,13 @@ public class AnnotationBizLogic extends DefaultBizLogic
      */
     private void associateRecords(Long entityMapId, Long staticEntityRecordId, Long dynamicEntityRecordId) throws DAOException
     {
-        List entityMapList = new DefaultBizLogic().retrieve(EntityMap.class.getName(),edu.wustl.catissuecore.util.global.Constants.ID,entityMapId);
+    	Object object = new DefaultBizLogic().retrieve(EntityMap.class.getName(), entityMapId);
         EntityManagerInterface entityManager = EntityManager.getInstance();
-        if (entityMapList != null && !entityMapList.isEmpty())
+        if (object != null)
         {
             try
             {
-                EntityMap entityMap = (EntityMap) entityMapList.get(0);
+                EntityMap entityMap = (EntityMap) object;
                 Long dynamicEntityId = entityManager.getEntityIdByContainerId(entityMap.getContainerId());
                 EntityInterface dynamicEntity = EntityCache.getInstance().getEntityById(dynamicEntityId);
                 EntityInterface staticEntity = EntityCache.getInstance().getEntityById(entityMap.getStaticEntityId());

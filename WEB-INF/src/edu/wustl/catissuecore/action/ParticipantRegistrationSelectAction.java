@@ -55,8 +55,8 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 		  	
 			Logger.out.info("Participant Id-------------------"+request.getParameter("participantId"));
 			
-			List participants = bizLogic.retrieve(objectName,Constants.SYSTEM_IDENTIFIER,new Long(request.getParameter("participantId")));
-			abstractDomain = (AbstractDomainObject)participants.get(0);
+			Object object = bizLogic.retrieve(objectName, new Long(request.getParameter("participantId")));
+			abstractDomain = (AbstractDomainObject) object;
 			Participant participant=(Participant)abstractDomain;
 			
 			Logger.out.info("Last name in ParticipantSelectAction:"+participant.getLastName());

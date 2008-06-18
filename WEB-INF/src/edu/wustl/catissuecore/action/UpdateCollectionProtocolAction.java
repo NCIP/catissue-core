@@ -43,11 +43,11 @@ public class UpdateCollectionProtocolAction extends BaseAction {
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 			
 			IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-			List cpList =bizLogic.retrieve(CollectionProtocol.class.getName(), "id", collectionProtocolBean.getIdentifier());
+			Object object =bizLogic.retrieve(CollectionProtocol.class.getName(), collectionProtocolBean.getIdentifier());
 
-			if (cpList != null && !cpList.isEmpty())
+			if (object != null)
 			{
-				CollectionProtocol oldCollectionProtocol = (CollectionProtocol) cpList.get(0);
+				CollectionProtocol oldCollectionProtocol = (CollectionProtocol) object;
 				HttpSession session = request.getSession();
 				SessionDataBean sessionDataBean = (SessionDataBean)
 								session.getAttribute(Constants.SESSION_DATA);

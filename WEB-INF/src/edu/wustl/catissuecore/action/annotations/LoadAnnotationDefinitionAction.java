@@ -261,6 +261,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			EntityMap baseLevelEntityMap = entityMapList.get(0);
 			staticEntityId = baseLevelEntityMap.getStaticEntityId().toString();
 
+			
 			//Retriving the container
 			Session session = null;
 			try

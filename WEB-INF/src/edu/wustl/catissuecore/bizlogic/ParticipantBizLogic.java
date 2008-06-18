@@ -959,8 +959,8 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		String sourceObjectName = Participant.class.getName();
 
 		// getting all the participants from the database 
-		List participantList = bizLogic.retrieve(sourceObjectName, Constants.ID, identifier);
-		Participant participant = (Participant) participantList.get(0);
+		Object object = bizLogic.retrieve(sourceObjectName, identifier);
+		Participant participant = (Participant) object;
 		return participant;
 
 	}

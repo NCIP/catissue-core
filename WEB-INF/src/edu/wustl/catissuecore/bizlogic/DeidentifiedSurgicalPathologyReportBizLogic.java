@@ -135,8 +135,8 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends DefaultBizLogic
 		String sourceObjectName = DeidentifiedSurgicalPathologyReport.class.getName();
 
 		// getting all the deidentified reports from the database 
-		List reportList = bizLogic.retrieve(sourceObjectName, Constants.ID, identifier);
-		DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) reportList.get(0);
+		Object object = bizLogic.retrieve(sourceObjectName, identifier);
+		DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) object;
 		return report;
 
 	}

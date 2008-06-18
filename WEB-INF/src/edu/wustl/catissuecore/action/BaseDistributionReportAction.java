@@ -91,8 +91,8 @@ public abstract class BaseDistributionReportAction extends BaseAction
     {
     	//For a given Distribution ID retrieve the distribution object
     	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
-    	List list = bizLogic.retrieve(Distribution.class.getName(),Constants.SYSTEM_IDENTIFIER,distributionId);
-    	Distribution dist = (Distribution) list.get(0);
+    	Object object = bizLogic.retrieve(Distribution.class.getName(), distributionId);
+    	Distribution dist = (Distribution) object;
     	return dist;
     }
     	

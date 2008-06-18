@@ -122,8 +122,8 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends DefaultBizLogic
 		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 
 		// getting all the identified reports from the database 
-		List reportList = bizLogic.retrieve(sourceObjectName, Constants.ID, identifier);
-		IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) reportList.get(0);
+		Object object = bizLogic.retrieve(sourceObjectName, identifier);
+		IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) object;
 		return report;
 
 	}

@@ -157,12 +157,12 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				{
 					Logger.out.debug("Event ID added===>" + eventId);
 					//Retrieving list of SpecimenEvents for added SpecimenEventId
-					List specimenEventList = bizLogic.retrieve(SpecimenEventParameters.class.getName(), Constants.SYSTEM_IDENTIFIER, eventId);
+					Object object = bizLogic.retrieve(SpecimenEventParameters.class.getName(), new Long(eventId));
 	
-					if (specimenEventList != null && specimenEventList.size() != 0)
+					if (object != null)
 					{
 						//Getting object of specimenEventParameters from the list of SepcimenEvents
-						SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) specimenEventList.get(0);
+						SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) object;
 	
 						//getting SpecimenId of SpecimenEventParameters
 						Specimen specimen = specimenEventParameters.getSpecimen();
@@ -182,11 +182,11 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 				
 
-			List specimenList = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenId);
+			Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(specimenId));
 
-			if (specimenList != null && specimenList.size() != 0)
+			if (object != null)
 			{
-				Specimen specimen = (Specimen) specimenList.get(0);
+				Specimen specimen = (Specimen) object;
 				if(specimenLabel == null)
 				{
 					specimenLabel = specimen.getLabel();					

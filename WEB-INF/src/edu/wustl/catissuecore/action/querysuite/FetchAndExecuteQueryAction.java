@@ -49,11 +49,11 @@ public class FetchAndExecuteQueryAction extends BaseAction
 			IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
 					.getValue("app.bizLogicFactory"), "getBizLogic",
 					Constants.CATISSUECORE_QUERY_INTERFACE_ID);
-			queryList = bizLogic.retrieve(ParameterizedQuery.class.getName(), "id", queryId);
+			Object object = bizLogic.retrieve(ParameterizedQuery.class.getName(), queryId);
 
-			if (queryList != null && !queryList.isEmpty())
+			if (object != null)
 			{
-				IParameterizedQuery parameterizedQuery = queryList.get(0);
+				IParameterizedQuery parameterizedQuery = (ParameterizedQuery)object;
 				HttpSession session = request.getSession();
 				session.setAttribute(AppletConstants.QUERY_OBJECT, parameterizedQuery);
 

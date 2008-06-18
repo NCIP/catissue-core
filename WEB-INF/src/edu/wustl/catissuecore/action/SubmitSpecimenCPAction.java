@@ -243,9 +243,8 @@ public class SubmitSpecimenCPAction extends BaseAction {
 						parentSpeciemn.getSpecimenCollectionGroup().getId();
 					
 					IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-					List list =iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(),
-							"id", scgId);
-					specimen.setSpecimenCollectionGroup((AbstractSpecimenCollectionGroup) list.get(0));
+					Object object = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), scgId);
+					specimen.setSpecimenCollectionGroup((AbstractSpecimenCollectionGroup) object);
 					
 
 				}

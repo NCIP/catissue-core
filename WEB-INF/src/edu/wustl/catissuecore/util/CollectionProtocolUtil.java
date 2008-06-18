@@ -508,8 +508,7 @@ public class CollectionProtocolUtil {
 	public static void updateSession(HttpServletRequest request,  Long id)
 			throws DAOException{
 		
-		List sessionCpList = new CollectionProtocolBizLogic().retrieveCP(
-				CollectionProtocol.class.getName(), "id",id);
+		List sessionCpList = new CollectionProtocolBizLogic().retrieveCP(id);
 
 		if (sessionCpList == null || sessionCpList.size()<2){
 			

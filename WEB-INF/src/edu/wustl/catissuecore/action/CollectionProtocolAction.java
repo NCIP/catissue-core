@@ -265,9 +265,9 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	private CollectionProtocol getCPObj(String cp_id) throws DAOException
 	{
 		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-		String colName = "id";			
-		List getCPFromDB = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), colName, cp_id);		
-		CollectionProtocol collectionProtocolObject = (CollectionProtocol)getCPFromDB.get(0);
+					
+		Object object = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), new Long(cp_id));		
+		CollectionProtocol collectionProtocolObject = (CollectionProtocol) object;
 		return collectionProtocolObject;
 	}
 

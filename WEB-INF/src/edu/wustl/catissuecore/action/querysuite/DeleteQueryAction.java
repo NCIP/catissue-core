@@ -45,10 +45,10 @@ public class DeleteQueryAction extends BaseAction{
 						Constants.CATISSUECORE_QUERY_INTERFACE_ID);
 				try
 				{
-					List<IParameterizedQuery> queryList = bizLogic.retrieve(ParameterizedQuery.class.getName(), Constants.ID, queryId);
-					if (!queryList.isEmpty())
+					Object object = bizLogic.retrieve(ParameterizedQuery.class.getName(), queryId);
+					if (object != null)
 					{
-						IParameterizedQuery parameterizedQuery = queryList.get(0);
+						IParameterizedQuery parameterizedQuery = (ParameterizedQuery)object;
 						bizLogic.delete(parameterizedQuery,Constants.HIBERNATE_DAO);
 						target = Constants.SUCCESS; 
 						setActionError(request, ApplicationProperties.getValue("query.deletedSuccessfully.message"));

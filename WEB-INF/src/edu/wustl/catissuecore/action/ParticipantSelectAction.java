@@ -71,10 +71,9 @@ public class ParticipantSelectAction extends BaseAction
 	  	
 		Logger.out.info("Participant Id-------------------"+request.getParameter("participantId"));
 		
-		List participants = bizLogic.retrieve(objectName,Constants.SYSTEM_IDENTIFIER,new Long(request.getParameter("participantId")));
+		Object object = bizLogic.retrieve(objectName, new Long(request.getParameter("participantId")));
 		request.removeAttribute("participantForm");
-		abstractDomain = (AbstractDomainObject)participants.get(0);
-		Participant participant=(Participant)abstractDomain;
+		Participant participant=(Participant) object;
 		
 		Logger.out.info("Last name in ParticipantSelectAction:"+participant.getLastName());
 		/**

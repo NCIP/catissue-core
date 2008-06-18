@@ -94,16 +94,15 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				identifier = (String) request.getParameter(Constants.SPECIMEN_ID);
 
 			Logger.out.debug("\t\t*******************************SpecimenID : " + identifier);
-			List specimenList = bizLogic.retrieve(Specimen.class.getName(),
-					Constants.SYSTEM_IDENTIFIER, identifier);
+			Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
 
 			//	 ---- chetan 15-06-06 ----
 
 			// -------------------------
 
-			if (specimenList != null && specimenList.size() != 0)
+			if (object != null)
 			{
-				Specimen specimen = (Specimen) specimenList.get(0);
+				Specimen specimen = (Specimen) object;
 
 				String positionOne = null;
 				String positionTwo = null;

@@ -199,18 +199,18 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	public void retriveFromReportId(Long identifier,HttpServletRequest request, ViewSurgicalPathologyReportForm viewSPR) throws DAOException, BizLogicException
 	{   	
 		IBizLogic bizLogic=null;
-		List objectList=null;
+		
 		String witnessFullName=null;
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 		String pageOf = request.getParameter(Constants.PAGEOF);
-		String colName = new String(Constants.SYSTEM_IDENTIFIER);
+		
 		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_REVIEW_SPR))
 		{
 			request.setAttribute(Constants.OPERATION, Constants.REVIEW);
 			viewSPR.setOperation(Constants.REVIEW);
 			bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID);
-			objectList= bizLogic.retrieve(PathologyReportReviewParameter.class.getName(), colName, identifier);
-			PathologyReportReviewParameter pathologyReportReviewParameter = (PathologyReportReviewParameter)objectList.get(0);
+			Object object = bizLogic.retrieve(PathologyReportReviewParameter.class.getName(), identifier);
+			PathologyReportReviewParameter pathologyReportReviewParameter = (PathologyReportReviewParameter) object;
 			viewSPR.setUserComments(pathologyReportReviewParameter.getComment());
 			User user = (User)defaultBizLogic.retrieveAttribute(PathologyReportReviewParameter.class.getName(), pathologyReportReviewParameter.getId(), "user");
 			witnessFullName = user.getFirstName()+", "+user.getLastName()+"'s";
@@ -232,8 +232,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			request.setAttribute(Constants.OPERATION, Constants.QUARANTINE);
 			viewSPR.setOperation(Constants.QUARANTINE);
 			bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID);
-			objectList  = bizLogic.retrieve(QuarantineEventParameter.class.getName(), colName, identifier);
-			QuarantineEventParameter quarantineEventParameter =(QuarantineEventParameter)objectList.get(0);
+			Object object  = bizLogic.retrieve(QuarantineEventParameter.class.getName(), identifier);
+			QuarantineEventParameter quarantineEventParameter =(QuarantineEventParameter) object;
 			viewSPR.setUserComments(quarantineEventParameter.getComment());
 			User user = (User)defaultBizLogic.retrieveAttribute(QuarantineEventParameter.class.getName(), quarantineEventParameter.getId(), "user");
 			witnessFullName = user.getLastName()+", "+user.getFirstName();

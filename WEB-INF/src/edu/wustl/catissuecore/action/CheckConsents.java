@@ -69,9 +69,8 @@ public class CheckConsents extends BaseAction
 				else
 				{
 					CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-					String colName = "id";		
-					List collProtList  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), colName, collectionProtocolId);		
-					CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
+					Object object  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), new Long(collectionProtocolId));		
+					CollectionProtocol collectionProtocol = (CollectionProtocol)object;
 					Collection consentTierCollection = (Collection)collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");
 					
 					if(consentTierCollection.isEmpty())
