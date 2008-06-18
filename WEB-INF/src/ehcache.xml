@@ -130,17 +130,16 @@
     created programmtically using CacheManager.add(String cacheName)
     -->
     <defaultCache
-            maxElementsInMemory="10000"
+            maxElementsInMemory="40000"
             eternal="false"
             timeToIdleSeconds="120"
             timeToLiveSeconds="120"
             overflowToDisk="true"
             diskPersistent="false"
             diskExpiryThreadIntervalSeconds="120"
-           />
-
-   
-	
+    />
+    
+    
     <!--
     cache named cacheForParticipantLookUp 
     This cache has a maximum of 1000 elements in memory. There is no overflow to disk, so 1000
@@ -152,6 +151,18 @@
            eternal="true"
            overflowToDisk="false"
            />
+    
+    
+    <cache
+		name="edu.wustl.catissuecore.domain.Participant"
+		maxElementsInMemory="30000" eternal="true" overflowToDisk="true" /> 
 
+	<!--  <cache
+		name="edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup.specimenCollection"
+		maxElementsInMemory="100" eternal="true" overflowToDisk="true" /> -->
+    
 
+   
+	
+    
 </ehcache>
