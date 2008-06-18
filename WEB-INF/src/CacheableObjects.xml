@@ -159,7 +159,7 @@
 		<ObjectType pattern="edu.wustl.catissuecore.domain.User*"/>
 		<ObjectType pattern="edu.wustl.catissuecore.domain.Site*"/>
 		<ObjectType pattern="edu.wustl.catissuecore.domain.CollectionProtocol*"/> 
-		<ObjectType pattern="edu.wustl.catissuecore.domain.StorageContainer*" lookInDatabase="true"/> 		
+		<ObjectType pattern="edu.wustl.catissuecore.domain.StorageContainer*" cacheLazily="true"/> 		
 	</Objects>
 </CacheableObjects>
 
