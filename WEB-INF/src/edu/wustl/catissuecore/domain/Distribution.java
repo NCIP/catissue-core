@@ -105,9 +105,9 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 		this.orderDetails = orderDetails;
 	}
 
-	//Default Constructor
 	public Distribution()
 	{
+		// Default Constructor, required for Hibernate
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 			//super.setAllValues(abstractForm);
 			this.specimen = null;
 			// Change for API Search   --- Ashwin 04/10/2006
-			DistributionForm form = (DistributionForm) abstractForm;
+			final DistributionForm form = (DistributionForm) abstractForm;
 			try
 			{
 				if (SearchUtil.isNullobject(distributedBy))
@@ -332,9 +332,9 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 
 				if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length() != 0)
 				{
-					Calendar calendar = Calendar.getInstance();
+					final Calendar calendar = Calendar.getInstance();
 
-					Date date = Utility.parseDate(form.getDateOfEvent(), Utility.datePattern(form.getDateOfEvent()));
+					final Date date = Utility.parseDate(form.getDateOfEvent(), Utility.datePattern(form.getDateOfEvent()));
 					calendar.setTime(date);
 					this.timestamp = calendar.getTime();
 					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(form.getTimeInHours()));
@@ -372,18 +372,22 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 			Logger.out.debug("map " + map);
 			map = fixMap(map);
 			Logger.out.debug("fixedMap " + map);
-			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-			Collection itemCollectionMap = parser.generateData(map);
+			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+			final Collection itemCollectionMap = parser.generateData(map);
 			Collection finalItemCollecitonMap = new HashSet();
 			Iterator itr = itemCollectionMap.iterator();
 			while (itr.hasNext())
 			{
 				DistributedItem distributedItem = (DistributedItem) itr.next();
 				if (distributedItem.getSpecimen() != null)
+				{
 					finalItemCollecitonMap.add(distributedItem);
+				}
 				//Added by Ashish
 				if (distributedItem.getSpecimenArray() != null)
+				{
 					finalItemCollecitonMap.add(distributedItem);
+				}
 			}
 			distributedItemCollection = finalItemCollecitonMap;
 			Logger.out.debug("distributedItemCollection " + distributedItemCollection);
@@ -453,16 +457,16 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 			{
 				message = message + this.distributedBy.lastName + "," + this.distributedBy.firstName;
 			}
-			else if (this.distributedBy.lastName != null && !this.distributedBy.lastName.equals(""))
+			if (this.distributedBy.lastName != null && !this.distributedBy.lastName.equals(""))
 			{
 				message = message + this.distributedBy.lastName;
 			}
-			else if (this.distributedBy.firstName != null && !this.distributedBy.firstName.equals(""))
+			if (this.distributedBy.firstName != null && !this.distributedBy.firstName.equals(""))
 			{
 				message = message + this.distributedBy.firstName;
 			}
 		}
-		else if (this.distributedBy != null)
+		if (this.distributedBy != null)
 		{
 			message = message + this.distributedBy;
 		}

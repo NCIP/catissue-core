@@ -153,6 +153,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	public CollectionProtocol()
 	{
 		super();
+		// Default Constructor, required for Hibernate
 	}
 	
 	/**
@@ -284,7 +285,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         {
         	super.setAllValues(abstractForm);
         	
-        	CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
+        	final CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
         	
         	coordinatorCollection.clear();
         	this.collectionProtocolEventCollection.clear();
@@ -302,7 +303,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 				}
         	}
         	aliquotInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
-	        Map map = cpForm.getValues();
+	        final Map map = cpForm.getValues();
 	        
 	        /**
 	         * Name : Abhishek Mehta
@@ -313,12 +314,12 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	         * Description: To get the collection event protocols in their insertion order. 
 	         */
 	        Logger.out.debug("PRE FIX MAP "+map);
-	        Map sortedMap = sortMapOnKey(map);
+	        final Map sortedMap = sortMapOnKey(map);
 	        Logger.out.debug("POST FIX MAP "+map);
 	        
-	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+	        final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        
-	        ArrayList cpecList = (ArrayList)parser.generateData(sortedMap,true);
+	        final ArrayList cpecList = (ArrayList)parser.generateData(sortedMap,true);
 	        for(int i = 0 ; i < cpecList.size() ; i++)
 	        {
 	        	this.collectionProtocolEventCollection.add(cpecList.get(i));
@@ -351,8 +352,8 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 */
     private LinkedHashMap sortMapOnKey(Map map)
     {
-    	Object[] mapKeySet = map.keySet().toArray();
-    	int size = mapKeySet.length;
+    	final Object[] mapKeySet = map.keySet().toArray();
+    	final int size = mapKeySet.length;
     	ArrayList <String> mList = new ArrayList <String>();
     	for(int i = 0 ; i < size ; i++)
 		{
@@ -360,7 +361,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     		mList.add(key);
 		}
     	
-    	KeyComparator keyComparator = new KeyComparator();
+    	final KeyComparator keyComparator = new KeyComparator();
 		Collections.sort(mList, keyComparator);
 		
     	LinkedHashMap <String, String> sortedMap = new LinkedHashMap<String, String>();
@@ -380,8 +381,8 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
      */
     public Collection prepareConsentTierCollection(Map consentTierMap) throws Exception 
     {
-    	MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
-    	Collection beanObjColl = mapdataParser.generateData(consentTierMap);
+    	final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+    	final Collection beanObjColl = mapdataParser.generateData(consentTierMap);
     	
     	Collection<ConsentTier> consentStatementColl = new HashSet<ConsentTier>();
     	Iterator iter = beanObjColl.iterator();        
@@ -417,18 +418,17 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * @return boolean
 	 */
 	public boolean equals(Object object)
-    {
-		
-    	
+	{
+		boolean equals = false;
     	if(this.getClass().getName().equals(object.getClass().getName()))
     	{
-    		CollectionProtocol collectionProtocol = (CollectionProtocol)object;
+    		final CollectionProtocol collectionProtocol = (CollectionProtocol)object;
     		if(this.getId().longValue() == collectionProtocol.getId().longValue())
     		{
-    			return true;
+    			equals = true;
+    	    }
     	}
-    	}
-    	return false;
+    	return equals;
     }
 	/**
 	 * 
@@ -437,13 +437,13 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 */
 	public int compareTo(Object object)
 	{
-		
+		int result = 0;
     	if(this.getClass().getName().equals(object.getClass().getName()))
     	{
-    		CollectionProtocol collectionProtocol = (CollectionProtocol)object;
-    		return this.getId().compareTo(collectionProtocol.getId());
+    		final CollectionProtocol collectionProtocol = (CollectionProtocol)object;
+    		result = this.getId().compareTo(collectionProtocol.getId());
     	}
-    	return 0;
+    	return result;
 	}
 	/**
 	 * Method overridden to return hashcode of Id if available.
@@ -451,11 +451,13 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 */
 	public int hashCode()
 	{
+		int hashCode = super.hashCode();
+
 		if(this.getId() != null)
 		{
-			return this.getId().hashCode();
+			hashCode = this.getId().hashCode();
 		}
-		return super.hashCode();
+		return hashCode;
 	}
 
 
@@ -494,38 +496,28 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		this.consentsWaived = consentsWaived;
 	}
 	//-Mandar : 25-Jan-07 ---------- end
-
-
-
 	
 	public String getType()
 	{
 		return type;
 	}
 
-
-	
 	public void setType(String type)
 	{
 		this.type = type;
 	}
 
 
-	
 	public CollectionProtocol getParentCollectionProtocol()
 	{
 		return parentCollectionProtocol;
 	}
 
 
-	
 	public void setParentCollectionProtocol(CollectionProtocol parentCollectionProtocol)
 	{
 		this.parentCollectionProtocol = parentCollectionProtocol;
 	}
-
-
-	
 	
 
 	public Collection getChildCollectionProtocolCollection()
@@ -570,8 +562,5 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint) {
 		this.studyCalendarEventPoint = studyCalendarEventPoint;
 	}
-
-	
-	
 
 }

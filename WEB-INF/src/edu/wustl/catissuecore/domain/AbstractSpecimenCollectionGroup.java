@@ -73,7 +73,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
     
 	public AbstractSpecimenCollectionGroup()
     {
-    
+		// Default Constructor, required for Hibernate
     }
  
 	/**
@@ -242,8 +242,8 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	@Override
 	public void setAllValues(IValueObject valueObject)
 			throws AssignDataException {
-		AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
-		SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm)abstractForm;
+		final AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
+		final SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm)abstractForm;
 		try
 		{
 			this.setClinicalDiagnosis(form.getClinicalDiagnosis());

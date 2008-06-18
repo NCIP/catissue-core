@@ -65,9 +65,10 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	private Address address;
 
 	private Collection<AbstractSpecimenCollectionGroup> abstractSpecimenCollectionGroupCollection;
-	//Default Constructor Required by hibernate
+	
 	public Site()
 	{
+		// Default Constructor, Required by hibernate 
 	}
 	
 	//Parameterized constructor
@@ -249,7 +250,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
         		address = new Address();
         	}        	 
         	
-            SiteForm form 	= (SiteForm) abstractForm;
+            final SiteForm form 	= (SiteForm) abstractForm;
             this.id = new Long(form.getId());
             this.name 		= form.getName().trim() ;
             this.type 		= form.getType();

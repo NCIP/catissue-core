@@ -39,6 +39,7 @@ public class StorageType extends ContainerType
 
 	public StorageType()
 	{
+		// Default Constructor, required for Hibernate
 	}
 
 	public StorageType(AbstractActionForm abstractActionForm) throws AssignDataException
@@ -133,15 +134,17 @@ public class StorageType extends ContainerType
 	{
 		try
 		{
-			StorageTypeForm storageTypeForm = (StorageTypeForm) abstractForm;
+			final StorageTypeForm storageTypeForm = (StorageTypeForm) abstractForm;
 
 			this.id = new Long(storageTypeForm.getId());
 			this.name = storageTypeForm.getType().trim();
 
 			if (storageTypeForm.getDefaultTemperature() != null
 					&& storageTypeForm.getDefaultTemperature().trim().length() > 0)
+			{
 				this.defaultTempratureInCentigrade = new Double(storageTypeForm
 						.getDefaultTemperature());
+			}
 
 			this.oneDimensionLabel = storageTypeForm.getOneDimensionLabel();
 			this.twoDimensionLabel = storageTypeForm.getTwoDimensionLabel();
@@ -226,23 +229,27 @@ public class StorageType extends ContainerType
 	
 	public boolean equals(Object object)
     {
-		
-    	if(object!=null && object instanceof StorageType)
+		boolean equals = false;
+    	if((object!=null) && object instanceof StorageType)
     	{
     		StorageType storageType = (StorageType)object;
     		if(this.getId().longValue() == storageType.getId().longValue())
-    			return true;
+    		{
+    			equals = true;
+    		}
     	}
-    	return false;
+    	return equals;
     }
 	public int hashCode()
 	{
-		if(this.getId() != null)
-			return this.getId().hashCode();
+		int hashCode = super.hashCode();
 		
-		return super.hashCode();
+		if(this.getId() != null)
+		{
+			hashCode = this.getId().hashCode();
+		}
+		
+		return hashCode;
 	}
 	
-
-
 }

@@ -97,6 +97,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	public OrderDetails()
 	{
+		// Default Constructor, required for Hibernate
 	}
 	
 	/**
@@ -117,8 +118,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
      * @see #setId(Long)
      * */
 	public Long getId()
-	{
-		
+	{		
 		return id;
 	}
 	/**
@@ -152,7 +152,6 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	{
 		this.comment = comment;
 	}
-	
 	
 	
 	/**
@@ -280,7 +279,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
-		AbstractActionForm abstractActionForm = (AbstractActionForm) abstractForm;
+		final AbstractActionForm abstractActionForm = (AbstractActionForm) abstractForm;
 		if(abstractActionForm.isAddOperation()) //insert
 		{
 			operationAdd = true;
@@ -305,26 +304,26 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 
 		if(abstractActionForm.getPageOf().equals(Constants.SPECIMEN_ORDER_FORM_TYPE))
 		{
-			OrderSpecimenForm orderSpecimenForm = (OrderSpecimenForm) abstractActionForm;
+			final OrderSpecimenForm orderSpecimenForm = (OrderSpecimenForm) abstractActionForm;
 			orderItemsMap=(HashMap)putOrderDetailsForSpecimen(orderSpecimenForm);
 			newSpecimenArrayObjList=(List)putnewArrayDetailsforArray(orderSpecimenForm.getDefineArrayObj());
 		}
 		
 		if(abstractActionForm.getPageOf().equals(Constants.ARRAY_ORDER_FORM_TYPE))
 		{
-			OrderBiospecimenArrayForm orderBiospecimenArrayForm = (OrderBiospecimenArrayForm) abstractActionForm;
+			final OrderBiospecimenArrayForm orderBiospecimenArrayForm = (OrderBiospecimenArrayForm) abstractActionForm;
 			orderItemsMap=(HashMap)putOrderDetailsForArray(orderBiospecimenArrayForm);
 			newSpecimenArrayObjList=(List)putnewArrayDetailsforArray(orderBiospecimenArrayForm.getDefineArrayObj());
 			
 		}
 		if(abstractActionForm.getPageOf().equals(Constants.PATHOLOGYCASE_ORDER_FORM_TYPE))
 		{
-			OrderPathologyCaseForm orderPathologyCaseForm = (OrderPathologyCaseForm) abstractActionForm;
+			final OrderPathologyCaseForm orderPathologyCaseForm = (OrderPathologyCaseForm) abstractActionForm;
 			orderItemsMap=(HashMap)putOrderDetailsForPathologyCase(orderPathologyCaseForm);
 			newSpecimenArrayObjList=(List)putnewArrayDetailsforArray(orderPathologyCaseForm.getDefineArrayObj());
 		}
 		//Obtain orderItemCollection .
-		MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
+		final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
 		try
 		{
 			orderItemsCollection = (HashSet)parser.generateData(orderItemsMap);
@@ -363,6 +362,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 							if(newSpecimenArrayObj.getName().equals(orderSpecimenBean.getArrayName()))
 							{
 								Collection orderItemCollection = (Set)newSpecimenArrayObj.getSpecimenOrderItemCollection();
+								
 								if(orderItemCollection == null)
 								{
 									orderItemCollection = new HashSet();
@@ -811,16 +811,18 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
      * @return String object
      */
 	public String getMessageLabel()
-	{ 
+	{
+		String messageLabel;
 		if(operationAdd)
 		{
-			return this.name ;
+			messageLabel = this.name ;
 		}
 		else
 		{
 			int i = OrderBizLogic.numberItemsUpdated;
-			return (" "+i+" OrderItems.");
+			messageLabel = " "+i+" OrderItems.";
 		}
+		return messageLabel;
 	}
 	/**
 	 * @param distribution object
@@ -1033,11 +1035,13 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			}
 			distributedItem.setSpecimenArray(specimenArray);
 			
-			//For setting assigned quantity in Distribution.	
+			//For setting assigned quantity in Distribution.
+			distributedItem.setQuantity(new Double(existingArrayDetailsBean.getRequestedQuantity()));
+			
 			if(existingArrayDetailsBean.getRequestedQuantity().equals("0.0"))
+			{
 				distributedItem.setQuantity(new Double("1"));
-			else
-				distributedItem.setQuantity(new Double(existingArrayDetailsBean.getRequestedQuantity()));
+			}
 			
 			distribution = setDistributedItemCollectionInDistribution(orderItem,distributedItem,distribution,distributedItemCollection);
 			
@@ -1054,7 +1058,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	private Collection parseValuesMap(Map map)
 	{
-		MapDataParser mapDataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+		final MapDataParser mapDataParser = new MapDataParser("edu.wustl.catissuecore.bean");
 		Collection beanObjSet = null;
 		try
 		{

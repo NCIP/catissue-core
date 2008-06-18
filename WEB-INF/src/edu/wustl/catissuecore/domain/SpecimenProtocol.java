@@ -86,6 +86,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	public SpecimenProtocol()
 	{
 		super();
+		// Default Constructor, required for Hibernate
 	}
 	
 	/**
@@ -284,7 +285,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
         		principalInvestigator = new User();
         	}
         	
-        	SpecimenProtocolForm spForm = (SpecimenProtocolForm) abstractForm;
+        	final SpecimenProtocolForm spForm = (SpecimenProtocolForm) abstractForm;
         	
         	this.title = spForm.getTitle();
         	this.shortTitle = spForm.getShortTitle();
@@ -294,7 +295,9 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
         	this.endDate = Utility.parseDate(spForm.getEndDate(),Utility.datePattern(spForm.getEndDate()));        		
 
         	if(spForm.getEnrollment() != null && spForm.getEnrollment().trim().length()>0 )
+        	{
         		this.enrollment = new Integer(spForm.getEnrollment());
+        	}
         	
         	this.descriptionURL = spForm.getDescriptionURL();
         	this.activityStatus = spForm.getActivityStatus();

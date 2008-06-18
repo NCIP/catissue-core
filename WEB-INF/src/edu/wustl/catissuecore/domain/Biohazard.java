@@ -63,9 +63,9 @@ public class Biohazard extends AbstractDomainObject
     
     protected Collection specimenCollection = new HashSet();
 
-    //Default Constructor
     public Biohazard()
-    {    	
+    {
+    	// Default Constructor, required for Hibernate
     }
     
     public Biohazard(AbstractActionForm form)
@@ -202,7 +202,7 @@ public class Biohazard extends AbstractDomainObject
     {
         try
         {
-            BiohazardForm form 	= (BiohazardForm) abstractForm;
+            final BiohazardForm form 	= (BiohazardForm) abstractForm;
             this.comment = form.getComments();
             this.name = form.getName().trim() ;
             this.type = form.getType();

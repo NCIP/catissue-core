@@ -39,6 +39,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	 * */
 	public CancerResearchGroup()
 	{
+		// Default Constructor, required for Hibernate
 	}
 	
 	public CancerResearchGroup(AbstractActionForm form)
@@ -92,7 +93,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
      */
     public void setAllValues(IValueObject abstractForm)
     {
-    	CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm)abstractForm;
+    	final CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm)abstractForm;
 		this.name = cancerResearchGroupForm.getName().trim();
     }
     
