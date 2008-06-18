@@ -219,6 +219,15 @@ PUBLIC
 		<!--Suite-->		
 			
 	<!-- Ordering System -->
+	<!-- for assign priviledge -->
+	<action path="/ShowAssignPrivilegePage"
+		type="edu.wustl.catissuecore.action.ShowAssignPrivilegePageAction"		
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.showAssignPriviledgeDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		
+	</action>
 	<action path="/RequestListView"
 		type="edu.wustl.catissuecore.action.RequestListAction"
 		name="requestListForm"
