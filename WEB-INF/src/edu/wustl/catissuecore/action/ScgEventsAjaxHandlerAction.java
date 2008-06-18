@@ -53,11 +53,11 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
     	if(scgId != null && !scgId.equals(""))
     	{
     		SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-    		String colName = "id";	
-    		List scgListFromDB = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), colName, scgId);
-    		if(scgListFromDB != null && !scgListFromDB.isEmpty())
+    		
+    		Object object = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(scgId));
+    		if(object != null)
     		{
-    			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)scgListFromDB.get(0);
+    			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)object;
     			Collection eventsColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
     			if(eventsColl != null && !eventsColl.isEmpty())
     			{

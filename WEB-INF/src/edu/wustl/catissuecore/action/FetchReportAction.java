@@ -47,11 +47,11 @@ public class FetchReportAction extends BaseAction
     	if(reportId != null && !reportId.equals(""))
     	{
     		IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic = (IdentifiedSurgicalPathologyReportBizLogic)BizLogicFactory.getInstance().getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
-    		String colName = Constants.SYSTEM_IDENTIFIER;	
-    		List reportListFromDB = identifiedReportBizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), colName, reportId);
-    		if(reportListFromDB != null && !reportListFromDB.isEmpty())
+    		
+    		Object object = identifiedReportBizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), new Long(reportId));
+    		if(object != null)
     		{
-    			IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport)reportListFromDB.get(0);
+    			IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport) object;
     			if(identifiedReport.getSpecimenCollectionGroup() != null) 
     			{
     				xmlData = makeXMLData(xmlData, identifiedReport);

@@ -146,8 +146,8 @@ public class ShowAssignPrivilegePageAction extends BaseAction {
 				long userId = userIdsList.get(k);
 				List<Site> userRelatedSites = assignPrivilegePageBizLogic.getUserSiteRelation(userId, siteIdsList);
 
-				List objectList = assignPrivilegePageBizLogic.retrieve(User.class.getName(), Constants.ID, userId);
-				User user = (User) objectList.get(0);
+				Object object = assignPrivilegePageBizLogic.retrieve(User.class.getName(), userId);
+				User user = (User) object;
 				SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = assignPrivilegePageBizLogic.setUserPriviledgeSummary(user, userRelatedSites, roleId, actionIdsList);
 
 				String rowId = "" + userId;

@@ -753,10 +753,10 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	private void validateTransferEventParameters(SpecimenEventParameters eventParameter) throws DAOException
 	{
 		TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-		List list = (List) retrieve(TransferEventParameters.class.getName(), Constants.SYSTEM_IDENTIFIER, parameter.getId());
-		if (list.size() != 0)
+		Object object =  retrieve(TransferEventParameters.class.getName(), parameter.getId());
+		if (object != null)
 		{
-			TransferEventParameters parameterCopy = (TransferEventParameters) list.get(0);
+			TransferEventParameters parameterCopy = (TransferEventParameters) object;
 			String positionDimensionOne = parameterCopy.getToPositionDimensionOne().toString();
 			String positionDimensionTwo = parameterCopy.getToPositionDimensionTwo().toString();
 			String storageContainer = parameterCopy.getToStorageContainer().getId().toString();

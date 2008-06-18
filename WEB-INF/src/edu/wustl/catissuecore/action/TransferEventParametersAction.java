@@ -163,12 +163,11 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 			Integer id = new Integer(transferEventParametersForm.getStorageContainer());
 			String parentContainerName = "";
-			String valueField1 = "id";
-			List list = scbizLogic.retrieve(StorageContainer.class.getName(), valueField1,
-					new Long(transferEventParametersForm.getStorageContainer()));
-			if (!list.isEmpty())
+			
+			Object object = scbizLogic.retrieve(StorageContainer.class.getName(), new Long(transferEventParametersForm.getStorageContainer()));
+			if (object != null)
 			{
-				StorageContainer container = (StorageContainer) list.get(0);
+				StorageContainer container = (StorageContainer) object;
 				parentContainerName = container.getName();
 
 			}

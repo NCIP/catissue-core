@@ -139,10 +139,10 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 
 		form.setParticipantID(participantId.longValue());
 		// cprForm.setCheckedButton(true);
-		List participantList = bizLogic.retrieve(Participant.class.getName(), Constants.SYSTEM_IDENTIFIER, participantId);
-		if (participantList != null && !participantList.isEmpty())
+		Object object = bizLogic.retrieve(Participant.class.getName(), participantId);
+		if (object != null)
 		{
-			Participant participant = (Participant) participantList.get(0);
+			Participant participant = (Participant) object;
 			form.setParticipantName(participant.getMessageLabel());
 		}
 

@@ -64,8 +64,8 @@ public class ReportLoaderQueueBizLogic extends DefaultBizLogic
 	 */
 	public ReportLoaderQueue getReportLoaderQueueById(Long identifier) throws Exception
 	{
-		List reportLoaderQueueList = retrieve(ReportLoaderQueue.class.getName(), Constants.ID, identifier);
-		ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) reportLoaderQueueList.get(0);
+		Object object = retrieve(ReportLoaderQueue.class.getName(), identifier);
+		ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) object;
 		return reportLoaderQueue;
 	}
 	

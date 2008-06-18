@@ -116,8 +116,7 @@ public class ShowStorageGridViewAction  extends BaseAction
         StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory
         .getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         
-        List list = bizLogic.retrieve(StorageContainer.class.getName(),
-                "id", id);
+        Object containerObject = bizLogic.retrieve(StorageContainer.class.getName(), new Long(id));
         StorageContainerGridObject storageContainerGridObject = null;
         int [][]fullStatus = null;
         int [][] childContainerIds = null;
@@ -125,10 +124,10 @@ public class ShowStorageGridViewAction  extends BaseAction
         String [][] childContainerName=null;
         Object a=request.getAttribute("tree");
         
-        if ((list != null) && (list.size() > 0))
+        if (containerObject != null)
         {
         	storageContainerGridObject = new StorageContainerGridObject();
-            StorageContainer storageContainer = (StorageContainer) list.get(0);
+            StorageContainer storageContainer = (StorageContainer) containerObject;
 
             setEnablePageAttributeIfRequired(request, storageContainer, bizLogic);
             
@@ -211,6 +210,7 @@ public class ShowStorageGridViewAction  extends BaseAction
 			Object[] whereColumnValue = {id};
             String joinCondition = Constants.AND_JOIN_CONDITION;
 			
+            List list = null;
             list = specimenBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
                     whereColumnCondition, whereColumnValue, joinCondition);
             

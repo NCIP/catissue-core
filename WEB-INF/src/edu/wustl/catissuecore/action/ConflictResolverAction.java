@@ -225,10 +225,10 @@ public class ConflictResolverAction extends BaseAction
 		{		
 			SpecimenCollectionGroup scg=null;
 			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
-			List scgList = (List)reportLoaderQueueBizLogic.retrieve(SpecimenCollectionGroup.class.getName(),Constants.SYSTEM_IDENTIFIER, specimenCollGrpId);
-			if((scgList!=null) && scgList.size()>0)
+			Object object = reportLoaderQueueBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(specimenCollGrpId));
+			if(object != null)
 			{
-				scg = (SpecimenCollectionGroup)scgList.get(0);
+				scg = (SpecimenCollectionGroup) object;
 			}
 			cprId = (Long) scg.getCollectionProtocolRegistration().getId();
 			reportLoaderQueue.setSpecimenCollectionGroup(scg);

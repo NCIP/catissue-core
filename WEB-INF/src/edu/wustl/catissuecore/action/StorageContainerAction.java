@@ -281,17 +281,16 @@ public class StorageContainerAction extends SecureAction
 	{
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		long typeSelected = -1;
-		String valueField = "id";
+		
 		String selectedType = String.valueOf(storageContainerForm.getTypeId());
 		Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> ST : " + selectedType);
 		if (selectedType != null && !selectedType.equals("-1"))
 		{
 
-			typeSelected = Long.parseLong(selectedType);
-			List list = bizLogic.retrieve(StorageType.class.getName(), valueField, new Long(typeSelected));
-			if (!list.isEmpty())
+			Object object = bizLogic.retrieve(StorageType.class.getName(), storageContainerForm.getTypeId());
+			if (object != null)
 			{
-				StorageType type = (StorageType) list.get(0);
+				StorageType type = (StorageType) object;
 				//setFormAttributesForSelectedType(type,storageContainerForm);
 				if (type.getDefaultTempratureInCentigrade() != null)
 					storageContainerForm.setDefaultTemperature(type.getDefaultTempratureInCentigrade().toString());
@@ -371,13 +370,13 @@ public class StorageContainerAction extends SecureAction
 			initValues = (String[]) initialValues.get(0);
 
 			//getting collection protocol list and name of the container for default selected parent container
-			String valueField = "id";
-			List containerList = bizLogic.retrieve(StorageContainer.class.getName(), valueField, new Long(initValues[0]));
-			if (!containerList.isEmpty())
+			
+			Object object = bizLogic.retrieve(StorageContainer.class.getName(), new Long(initValues[0]));
+			if (object != null)
 			{
 				if (storageContainerForm.getCheckedButton() == 2 && storageContainerForm.getStContSelection() == 1)
 				{
-					StorageContainer container = (StorageContainer) containerList.get(0);
+					StorageContainer container = (StorageContainer) object;
 					storageContainerForm.setCollectionIds(bizLogic.getDefaultHoldCollectionProtocolList(container));
 				}
 				else
@@ -398,11 +397,11 @@ public class StorageContainerAction extends SecureAction
 		if (storageContainerForm.getCheckedButton() == 2)
 		{
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
-			String valueField = "id";
-			List containerList = bizLogic.retrieve(StorageContainer.class.getName(), valueField, new Long(storageContainerForm.getId()));
-			if (!containerList.isEmpty())
+			
+			Object object = bizLogic.retrieve(StorageContainer.class.getName(), storageContainerForm.getId());
+			if (object != null)
 			{
-				StorageContainer cont = (StorageContainer) containerList.get(0);
+				StorageContainer cont = (StorageContainer) object;
 
 				Container parent = (Container) bizLogic.retrieveAttribute(StorageContainer.class.getName(), cont.getId(), "locatedAtPosition.parentContainer");
 				if (parent != null)
@@ -441,11 +440,10 @@ public class StorageContainerAction extends SecureAction
 			//get container name by getting storage container object from db.
 			if (storageContainerForm.getContainerName() == null)
 			{
-				String valueField = "id";
-				List containerList = bizLogic.retrieve(StorageContainer.class.getName(), valueField, new Long(storageContainerForm.getId()));
-				if (!containerList.isEmpty())
+				Object object = bizLogic.retrieve(StorageContainer.class.getName(), storageContainerForm.getId());
+				if (object != null)
 				{
-					StorageContainer cont = (StorageContainer) containerList.get(0);
+					StorageContainer cont = (StorageContainer) object;
 					storageContainerForm.setContainerName(cont.getName());
 				}
 			}
@@ -506,14 +504,14 @@ public class StorageContainerAction extends SecureAction
 	private long[] parentContChange(HttpServletRequest request) throws DAOException
 	{
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		String valueField = "id";
+		
 		String parentContId = request.getParameter("parentContainerId");
 		if (parentContId != null)
 		{
-			List list = bizLogic.retrieve(StorageContainer.class.getName(), valueField, new Long(parentContId));
-			if (!list.isEmpty())
+			Object object = bizLogic.retrieve(StorageContainer.class.getName(), new Long(parentContId));
+			if (object != null)
 			{
-				StorageContainer container = (StorageContainer) list.get(0);
+				StorageContainer container = (StorageContainer) object;
 				return bizLogic.getDefaultHoldCollectionProtocolList(container);
 			}
 		}

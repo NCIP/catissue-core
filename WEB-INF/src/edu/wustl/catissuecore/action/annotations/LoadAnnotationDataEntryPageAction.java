@@ -156,22 +156,20 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         List<Long> list = new ArrayList(recordArray.length);
         for (String record : recordArray)
         {
-            List entityMapRecordList;
+        	 Object object = null;
             try
             {
-                entityMapRecordList = annotationBizLogic.retrieve(
-                        EntityMapRecord.class.getName(), "id", record);
+                object = annotationBizLogic.retrieve(EntityMapRecord.class.getName(), new Long(record));
 
-                if (entityMapRecordList != null
-                        && !entityMapRecordList.isEmpty())
+                if (object != null )
                 {
-                    EntityMapRecord entityMapRecord = (EntityMapRecord) entityMapRecordList
-                            .get(0);
-                    List entityMapList = annotationBizLogic.retrieve(
-                            EntityMap.class.getName(), "id", entityMapRecord.getFormContext().getEntityMap().getId());
-                    EntityMap entityMap = entityMapList == null
+                    EntityMapRecord entityMapRecord = (EntityMapRecord) object;
+                            
+                    Object entityMapObject = annotationBizLogic.retrieve(
+                            EntityMap.class.getName(), entityMapRecord.getFormContext().getEntityMap().getId());
+                    EntityMap entityMap = entityMapObject == null
                             ? null
-                            : (EntityMap) entityMapList.get(0);
+                            : (EntityMap) entityMapObject;
                     if (entityMap != null)
                     {
                         List recordList = new ArrayList();
@@ -339,10 +337,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
     private FormContext getFormContext( Long entityMapId )
     {
         AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-        List entityMapList = bizLogic.getEntityMap(entityMapId);
-        if(entityMapList!=null && !entityMapList.isEmpty())
+        Object object = bizLogic.getEntityMap(entityMapId);
+        if(object != null)
         {
-            EntityMap entityMap=(EntityMap)entityMapList.get(0);
+            EntityMap entityMap=(EntityMap) object;
             Iterator formIt= entityMap.getFormContextCollection().iterator();
             while(formIt.hasNext())
             {
@@ -501,7 +499,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         String urlForEditRecord = "";
         try
         {
-            EntityMap entityMap = (EntityMap)(new AnnotationBizLogic().retrieve(EntityMap.class.getName(),"id",entityMapRecord.getFormContext().getEntityMap().getId())).get(0);
+            EntityMap entityMap = (EntityMap)(new AnnotationBizLogic().retrieve(EntityMap.class.getName(), entityMapRecord.getFormContext().getEntityMap().getId()));
 
 
         urlForEditRecord = request.getContextPath()
@@ -532,10 +530,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         if (entityMapId != null)
         {
             AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-            List entityMapList = annotationBizLogic.getEntityMap(entityMapId);
-            if ((entityMapList != null) && (entityMapList.size() > 0))
+            Object object = annotationBizLogic.getEntityMap(entityMapId);
+            if (object != null)
             {
-                EntityMap entityMap = (EntityMap) entityMapList.get(0);
+                EntityMap entityMap = (EntityMap) object;
                 if (entityMap != null)
                 {
                     dynamicEntity = new NameValueBean(entityMap

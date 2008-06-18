@@ -123,17 +123,15 @@ public class SpecimenArrayAction extends SecureAction
     	TreeMap containerMap = new TreeMap();
     	String subOperation = specimenArrayForm.getSubOperation();
     	boolean isChangeArrayType = false;
-    	String idColumnName = "id";
-    	
+    	    	
     	if (subOperation != null) 
     	{
     		SpecimenArrayType arrayType = null;
         	if (specimenArrayForm.getSpecimenArrayTypeId() > 0) 
         	{
-        		String columnVal = "" + specimenArrayForm.getSpecimenArrayTypeId();
-        		List specimenArrayTypes = specimenArrayBizLogic.retrieve(SpecimenArrayType.class.getName(),idColumnName,columnVal);
-        		if ((specimenArrayTypes != null) && (!specimenArrayTypes.isEmpty())) {
-        			arrayType = (SpecimenArrayType) specimenArrayTypes.get(0);
+        		Object object = specimenArrayBizLogic.retrieve(SpecimenArrayType.class.getName(), specimenArrayForm.getSpecimenArrayTypeId());
+        		if (object != null) {
+        			arrayType = (SpecimenArrayType) object;
         		}	
         	}
         	specimenTypeList = doSetClassAndType(specimenArrayForm,specimenArrayBizLogic,arrayType);

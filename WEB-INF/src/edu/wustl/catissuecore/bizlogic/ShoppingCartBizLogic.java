@@ -32,11 +32,11 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 		{
 			for(int i=0;i<obj.length;i++)
 			{
-				List list = retrieve(Specimen.class.getName(),"id",obj[i].toString());
+				Object object = retrieve(Specimen.class.getName(), new Long(obj[i].toString()));
 				
-				if (list!=null && list.size()!= 0)
+				if (object != null)
 				{
-					Specimen specimen = (Specimen)list.get(0);
+					Specimen specimen = (Specimen) object;
 					cart.add(specimen);
 				}
 			}

@@ -342,14 +342,13 @@ public class AnnotationBizLogic extends DefaultBizLogic
      * @param entityMapId
      * @return EntityMap object for its given id
      */
-    public List getEntityMap(long entityMapId)
+    public EntityMap getEntityMap(long entityMapId)
     {
-        List dynamicList = new ArrayList();
+        EntityMap map = null;
 
         try
         {
-            dynamicList = retrieve(EntityMap.class.getName(), "id", new Long(
-                    entityMapId));
+            map  = (EntityMap)retrieve(EntityMap.class.getName(), entityMapId);
         }
         catch (DAOException e)
         {
@@ -357,7 +356,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
             e.printStackTrace();
         }
 
-        return dynamicList;
+        return map;
     }
 
     public List getEntityMapRecordList(List entityMapids, long staticRecordId)

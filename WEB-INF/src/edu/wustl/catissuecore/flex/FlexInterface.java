@@ -607,10 +607,10 @@ public class FlexInterface
 			while (itr.hasNext())
 			{
 				String specimenId = (String) itr.next();
-				List specimenList = bizLogic.retrieve(Specimen.class.getName(), "id", specimenId);
-				if (specimenList != null)
+				Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(specimenId));
+				if (object != null)
 				{
-					Specimen specimen = (Specimen) specimenList.get(0);
+					Specimen specimen = (Specimen) object;
 					Collection exIdColl = (Collection) bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
 							"elements(externalIdentifierCollection)");
 					specimen.setExternalIdentifierCollection(exIdColl);

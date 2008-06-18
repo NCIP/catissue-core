@@ -348,8 +348,8 @@ public class ConsentVerificationAction extends BaseAction
 	 {
 	    	
 	    	NewSpecimenBizLogic  newSpecimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-	    	List specimenList  = newSpecimenBizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenId);
-	    	Specimen specimen = (Specimen)specimenList.get(0);
+	    	Object object  = newSpecimenBizLogic.retrieve(Specimen.class.getName(), specimenId);
+	    	Specimen specimen = (Specimen)object;
 			return specimen;
 	  }
 

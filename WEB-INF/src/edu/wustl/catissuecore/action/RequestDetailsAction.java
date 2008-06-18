@@ -690,11 +690,11 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	 * @return
 	 * @throws DAOException
 	 */
-	private List getSpecimenFromDB(String id) throws DAOException
+	private Specimen getSpecimenFromDB(String id) throws DAOException
 	{
 		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		List specimenListFromDB = newSpecimenBizLogic.retrieve(Specimen.class.getName(), "id", id);
-		return specimenListFromDB;
+		Object object = newSpecimenBizLogic.retrieve(Specimen.class.getName(), new Long(id));
+		return (Specimen) object;
 	}
 
 	/**
@@ -702,13 +702,13 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	 * @return
 	 * @throws DAOException
 	 */
-	private List getSpecimenCollGrpFromDB(String id) throws DAOException
+	private SpecimenCollectionGroup getSpecimenCollGrpFromDB(String id) throws DAOException
 	{
 		SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance()
 				.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		List specimenCollGrpListFromDB = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "id", id);
+		Object object = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(id));
 		
-		return specimenCollGrpListFromDB;
+		return (SpecimenCollectionGroup) object;
 	}
 
 	/**
@@ -716,11 +716,11 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	 * @return
 	 * @throws DAOException
 	 */
-	private List getOrderItemFromDB(String id) throws DAOException
+	private OrderItem getOrderItemFromDB(String id) throws DAOException
 	{
 		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		List orderItemListFromDB = orderBizLogic.retrieve(OrderItem.class.getName(), "id", id);
-		return orderItemListFromDB;
+		Object object = orderBizLogic.retrieve(OrderItem.class.getName(), new Long(id));
+		return (OrderItem) object;
 	}
 
 	/**

@@ -295,24 +295,23 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 		//Load Clinical status for a given study calander event point
 		String changeOn = request.getParameter(Constants.CHANGE_ON);
-		List calendarEventPointList = null;
+		
 		if (changeOn != null && changeOn.equals(Constants.COLLECTION_PROTOCOL_ID))
 		{
-			calendarEventPointList = new ArrayList();
 			specimenCollectionGroupForm.setCollectionProtocolEventId(new Long(-1));
 		}
 
 		//Populating the Collection Protocol Events
 		loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(), bizLogic, request, specimenCollectionGroupForm);
 
-		calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
+		Object CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
 				specimenCollectionGroupForm.getCollectionProtocolEventId()));
 
 		// The values of restrict checkbox and the number of specimen must alos populate in edit mode.
 		if ((isOnChange || operation.equalsIgnoreCase(Constants.EDIT)))
 		{
 			// Added by Vijay Pande. Method is created since code was repeating for SUBMITTED_FOR= "AddNew" || "Default" value.
-			setCalendarEventPoint(calendarEventPointList, request, specimenCollectionGroupForm);
+			setCalendarEventPoint(CPEObject, request, specimenCollectionGroupForm);
 		}
 
 		// populating clinical Diagnosis field 
@@ -358,12 +357,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 			if (cprId != null)
 			{
-				List collectionProtocolRegistrationList = bizLogic.retrieve(CollectionProtocolRegistration.class.getName(),
-						Constants.SYSTEM_IDENTIFIER, cprId);
-				if (!collectionProtocolRegistrationList.isEmpty())
+				Object CPRObject = bizLogic.retrieve(CollectionProtocolRegistration.class.getName(), cprId);
+				if (CPRObject != null)
 				{
-					Object obj = collectionProtocolRegistrationList.get(0);
-					CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) obj;
+					CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) CPRObject;
 
 					long cpID = cpr.getCollectionProtocol().getId().longValue();
 					long pID = cpr.getParticipant().getId().longValue();
@@ -413,11 +410,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(), bizLogic, request, specimenCollectionGroupForm);
 
 					//Load Clinical status for a given study calander event point
-					calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
+					CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
 							specimenCollectionGroupForm.getCollectionProtocolEventId()));
-					if (isOnChange && !calendarEventPointList.isEmpty())
+					if (isOnChange && CPEObject != null)
 					{
-						setCalendarEventPoint(calendarEventPointList, request, specimenCollectionGroupForm);
+						setCalendarEventPoint(CPEObject, request, specimenCollectionGroupForm);
 					}
 				}
 			}
@@ -470,11 +467,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, participantId.toString());
 				/**For Migration Start**/
 
-				List participantList = bizLogic.retrieve(Participant.class.getName(), Constants.SYSTEM_IDENTIFIER, Utility.toString(participantId));
-				if (participantList != null)
+				Object participantObject = bizLogic.retrieve(Participant.class.getName(), participantId);
+				if (participantObject != null)
 				{
 
-					Participant participant = (Participant) participantList.get(0);
+					Participant participant = (Participant) participantObject;
 					String firstName = "";
 					String lastName = "";
 					if (participant.getFirstName() != null)
@@ -556,11 +553,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(), bizLogic, request, specimenCollectionGroupForm);
 
 			//Load Clinical status for a given study calander event point
-			calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
+			CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
 					specimenCollectionGroupForm.getCollectionProtocolEventId()));
-			if (!calendarEventPointList.isEmpty())
+			if (CPEObject != null)
 			{
-				setCalendarEventPoint(calendarEventPointList, request, specimenCollectionGroupForm);
+				setCalendarEventPoint(CPEObject, request, specimenCollectionGroupForm);
 			}
 
 			Logger.out.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>" + collectionProtocolId);
@@ -575,7 +572,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//Get the collection protocol title for the collection protocol Id selected
 		String collectionProtocolTitle = "";
 		String collectionProtocolName = "";
-		list = bizLogic.retrieve(CollectionProtocol.class.getName(), valueField, new Long(specimenCollectionGroupForm.getCollectionProtocolId()));
+		Object CPObject  = bizLogic.retrieve(CollectionProtocol.class.getName(), specimenCollectionGroupForm.getCollectionProtocolId());
 
 		if (!list.isEmpty())
 		{
@@ -683,11 +680,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 */
 	private void setEventsId(SpecimenCollectionGroupForm specimenCollectionGroupForm, SpecimenCollectionGroupBizLogic bizLogic) throws DAOException
 	{
-		String scgId = "" + specimenCollectionGroupForm.getId();
-		List scglist = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "id", scgId);
-		if (scglist != null && !scglist.isEmpty())
+		Object object = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), specimenCollectionGroupForm.getId());
+		if (object != null)
 		{
-			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) scglist.get(0);
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) object;
 			Collection eventsColl = scg.getSpecimenEventParametersCollection();
 			CollectionEventParameters collectionEventParameters = null;
 			ReceivedEventParameters receivedEventParameters = null;
@@ -1080,15 +1076,15 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @param specimenCollectionGroupForm object of specimenCollectionGroup action form
 	 * @throws DAOException 
 	 */
-	private void setCalendarEventPoint(List calendarEventPointList, HttpServletRequest request,
+	private void setCalendarEventPoint(Object object, HttpServletRequest request,
 			SpecimenCollectionGroupForm specimenCollectionGroupForm) throws DAOException
 	{
 		//		Patch ID: Bug#3184_27
 		//By Abhishek Mehta 
 		int numberOfSpecimen = 1;
-		if (!calendarEventPointList.isEmpty())
+		if (object != null)
 		{
-			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) calendarEventPointList.get(0);
+			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) object;
 
 			//Set checkbox status depending upon the days of study calendar event point. If it is zero, then unset the restrict
 			//checkbox, otherwise set the restrict checkbox
@@ -1102,7 +1098,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
 			}
 		}
-		else if (calendarEventPointList.isEmpty())
+		else if (object == null)
 		{
 			//Set checkbox status
 			specimenCollectionGroupForm.setRestrictSCGCheckbox("false");

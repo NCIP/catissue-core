@@ -205,10 +205,10 @@ public class Utility
 		
 		ReportLoaderQueue reportLoaderQueue =null;
 		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)BizLogicFactory.getInstance().getBizLogic(ReportLoaderQueue.class.getName());
-	    List reportQueueList = (List)reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, reportQueueId);
-	    if((reportQueueList!=null) && reportQueueList.size()>0)
+		Object object = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), new Long(reportQueueId));
+	    if(object != null)
 		{
-			reportLoaderQueue = (ReportLoaderQueue)reportQueueList.get(0);
+			reportLoaderQueue = (ReportLoaderQueue) object;
 		}
 	    
 	    

@@ -615,11 +615,11 @@ public class NewSpecimenAction extends SecureAction
 			{
 				Integer id = new Integer(specimenForm.getStorageContainer());
 				String parentContainerName = "";
-				String valueField1 = "id";
-				List list = bizLogic.retrieve(StorageContainer.class.getName(), valueField1, new Long(specimenForm.getStorageContainer()));
-				if (!list.isEmpty())
+				
+				Object object = bizLogic.retrieve(StorageContainer.class.getName(), new Long(specimenForm.getStorageContainer()));
+				if (object != null)
 				{
-					StorageContainer container = (StorageContainer) list.get(0);
+					StorageContainer container = (StorageContainer) object;
 					parentContainerName = container.getName();
 
 				}

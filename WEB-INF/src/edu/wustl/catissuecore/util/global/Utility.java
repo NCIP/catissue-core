@@ -946,17 +946,15 @@ public class Utility extends edu.wustl.common.util.Utility {
 	public static SpecimenCollectionGroup getSpecimenCollectionGroup(
 			String specimenCollectionGroupId) throws DAOException {
 		String sourceObjectName = SpecimenCollectionGroup.class.getName();
-		String valueField = Constants.SYSTEM_IDENTIFIER;
-
+		
 		SpecimenCollectionGroupBizLogic scgbizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(
 						Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		List specimenCollectionObjectGroupList = scgbizLogic.retrieve(
-				sourceObjectName, valueField, specimenCollectionGroupId);
+		Object object = scgbizLogic.retrieve(
+				sourceObjectName, new Long(specimenCollectionGroupId));
 		SpecimenCollectionGroup specimenCollectionGroup = null;
-		if (specimenCollectionObjectGroupList.size() > 0) {
-			specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionObjectGroupList
-					.get(0);
+		if (object != null) {
+			specimenCollectionGroup = (SpecimenCollectionGroup) object;
 		}
 
 		return specimenCollectionGroup;
@@ -1301,9 +1299,9 @@ public class Utility extends edu.wustl.common.util.Utility {
 	public static CollectionProtocolRegistration getcprObj(String cpr_id) throws DAOException
 	{
 		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-		String colName = "id";			
-		List getCPRIdFromDB = collectionProtocolRegistrationBizLogic.retrieve(CollectionProtocolRegistration.class.getName(), colName, cpr_id);		
-		CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration)getCPRIdFromDB.get(0);
+		
+		Object object = collectionProtocolRegistrationBizLogic.retrieve(CollectionProtocolRegistration.class.getName(), new Long(cpr_id));		
+		CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration) object;
 		return collectionProtocolRegistrationObject;
 	}
 	
@@ -1315,12 +1313,12 @@ public class Utility extends edu.wustl.common.util.Utility {
 	public static SpecimenCollectionGroup getSCGObj(String scg_id) throws DAOException
 	{
 		SpecimenCollectionGroupBizLogic specimenCollectionBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		String colName = "id";			
-		List getSCGIdFromDB = specimenCollectionBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), colName, scg_id);
+			
+		Object object = specimenCollectionBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(scg_id));
 		SpecimenCollectionGroup specimenCollectionGroupObject = null;
-		if(getSCGIdFromDB!=null && !getSCGIdFromDB.isEmpty())
+		if(object != null)
 		{
-			specimenCollectionGroupObject = (SpecimenCollectionGroup)getSCGIdFromDB.get(0);
+			specimenCollectionGroupObject = (SpecimenCollectionGroup) object;
 		}
 		return specimenCollectionGroupObject;
 	}

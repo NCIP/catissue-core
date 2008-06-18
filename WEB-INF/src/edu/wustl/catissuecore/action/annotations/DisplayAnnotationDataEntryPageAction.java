@@ -283,15 +283,12 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		if(entityMapId!=null)
 		{
 			AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-			List entityMapList  = annotationBizLogic.getEntityMap(entityMapId);
-			if((entityMapList!=null)&&(entityMapList.size()>0))
+			EntityMap entityMap  = annotationBizLogic.getEntityMap(entityMapId);
+			if(entityMap!=null)
 			{
-				EntityMap entityMap = (EntityMap)entityMapList.get(0);
-				if(entityMap!=null)
-				{
-					dynamicEntity = new NameValueBean(entityMap.getContainerId(),getDEContainerName(entityMap.getContainerId()));
-				}
+				dynamicEntity = new NameValueBean(entityMap.getContainerId(),getDEContainerName(entityMap.getContainerId()));
 			}
+		
 		}
 		return dynamicEntity;
 	}

@@ -161,17 +161,15 @@ public class CreateArrayInitAction extends BaseAction
 		    	String subOperation = specimenArrayForm.getSubOperation();
 		    	TreeMap containerMap = new TreeMap();
 		    	//boolean isChangeArrayType = false;
-		    	String idColumnName = "id";
-		    	
+		    			    	
 		    	if (subOperation != null) 
 		    	{
 		    		SpecimenArrayType arrayType = null;
 		        	if (specimenArrayForm.getSpecimenArrayTypeId() > 0) 
 		        	{
-		        		String columnVal = "" + specimenArrayForm.getSpecimenArrayTypeId();
-		        		List specimenArrayTypes = specimenArrayBizLogic.retrieve(SpecimenArrayType.class.getName(),idColumnName,columnVal);
-		        		if ((specimenArrayTypes != null) && (!specimenArrayTypes.isEmpty())) {
-		        			arrayType = (SpecimenArrayType) specimenArrayTypes.get(0);
+		        		Object object = specimenArrayBizLogic.retrieve(SpecimenArrayType.class.getName(), specimenArrayForm.getSpecimenArrayTypeId());
+		        		if (object != null) {
+		        			arrayType = (SpecimenArrayType) object;
 		        		}	
 		        	}
 		        	specimenTypeList = setClassAndtype(specimenArrayForm,arrayType);
@@ -210,9 +208,9 @@ public class CreateArrayInitAction extends BaseAction
 		{
 			//DefinedArrayDetailsBean definedArrayDetailsBean = (DefinedArrayDetailsBean)definedArrayDetailsBeanListItr.next();
 			Long specimenId = (Long) itr.next();
-			List specimenListFromDb=orderBizLogic.retrieve(Specimen.class.getName(),"id",specimenId);
+			Object object = orderBizLogic.retrieve(Specimen.class.getName(), specimenId);
 			//Set the specimen domain instances in the specimens object list.
-			specimensObjList.add(specimenListFromDb.get(0));
+			specimensObjList.add(object);
 		}
 		return specimensObjList;
 	}
