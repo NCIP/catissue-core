@@ -572,11 +572,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//Get the collection protocol title for the collection protocol Id selected
 		String collectionProtocolTitle = "";
 		String collectionProtocolName = "";
+		
 		Object CPObject  = bizLogic.retrieve(CollectionProtocol.class.getName(), specimenCollectionGroupForm.getCollectionProtocolId());
 
-		if (!list.isEmpty())
+		if (CPObject != null)
 		{
-			CollectionProtocol collectionProtocol = (CollectionProtocol) list.get(0);
+			CollectionProtocol collectionProtocol = (CollectionProtocol) CPObject;
 			collectionProtocolTitle = collectionProtocol.getTitle();
 			collectionProtocolName = (String) collectionProtocol.getShortTitle();
 			specimenCollectionGroupForm.setCollectionProtocolName(collectionProtocolName);
