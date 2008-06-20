@@ -25,15 +25,12 @@
 </html:messages>
 <html:errors/>
 <head>
-
-<title>caTissue Suite v 1.0. RC1</title>
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 </head>
 <body >
   <html:form action="RequestListView.do"> 
   	 <jsp:useBean id="requestListForm" class="edu.wustl.catissuecore.actionForm.RequestListFilterationForm" scope="request"/>
 	 
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
   <tr>
     <td class="td_color_bfdcf3"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
       <tr>
@@ -65,12 +62,14 @@
             <tr>
               <td align="left" class="tr_bg_blue1">&nbsp;</td>
               <td height="25" colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"><bean:message key='header.requestList.label'/> &nbsp;</span><span class="black_ar_s">
-			  <bean:message key='order.totalRequests'/> :<% int totalRequests=requestListForm.getNewRequests()+requestListForm.getPendingRequests();%>
-							<%= totalRequests %>
+			  (<% int totalRequests=requestListForm.getNewRequests()+requestListForm.getPendingRequests();%>
+							<%= totalRequests %> <bean:message key='order.totalRequests'/>
 							&nbsp;&nbsp;&nbsp;&nbsp;
-							<bean:message key='order.totalRequestsNew'/> : <bean:write name="requestListForm" property="newRequests"/>
-							&nbsp;&nbsp;&nbsp;&nbsp;
-							<bean:message key='order.totalRequestsPending'/> : <bean:write name="requestListForm" property="pendingRequests"/>
+							<bean:write name="requestListForm" property="newRequests"/>&nbsp;
+							<bean:message key='order.totalRequestsNew'/>,
+							
+							<bean:write name="requestListForm" property="pendingRequests"/>&nbsp;
+							<bean:message key='order.totalRequestsPending'/> )
 							&nbsp;&nbsp;&nbsp;&nbsp;
 			  </span></td>
 			
@@ -78,7 +77,7 @@
             <tr>
               <td align="left">&nbsp;</td>
               <td height="25" align="right"><label>
-                <span class="black_ar">Show&nbsp;</span>
+                <span class="black_ar"><bean:message key="request.status.show.label" />&nbsp;</span>
                <html:select property="requestStatusSelected" name="requestListForm" styleClass="black_ar"  styleId="requestStatusSelected" size="1"   
 									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="filteringAction()">
 								<html:options collection="<%= Constants.REQUEST_LIST %>" labelProperty="name" property="value"/>		
@@ -91,11 +90,11 @@
             <tr class="td_color_F7F7F7">
               <td>&nbsp;</td>
               <td colspan="2" style="padding-top:10px; padding-bottom:15px;"><table width="99%" border="0" cellspacing="0" cellpadding="4">
-                  <tr>
-                    <td height="20" colspan="5" class="black_ar_b"><custom:test name=" Request List Queue: " pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="RequestListView.do"/></td>
+                  <tr align="left" >
+                    <td align="left" colspan="5" class="black_ar"><custom:test name=" Request List Queue: " pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="RequestListView.do"/></td>
                     </tr>
                   <tr>
-                    <td width="2%" class="tableheading">#</td>
+                    <td width="2%" class="tableheading"><bean:message key="requestlist.dataTabel.serialNo.label" /></td>
                     <td width="21%" class="tableheading"><strong><bean:message key='requestlist.dataTabel.OrderName.label'/></strong></td>
                     <td width="18%" class="tableheading"><strong><bean:message key='requestlist.dataTabel.DistributionProtocol.label'/></strong></td>
                     <td width="12%" class="tableheading"><strong><bean:message key='requestlist.dataTabel.label.RequestedBy'/></strong></td>
@@ -107,7 +106,7 @@
 					%>	
 					<logic:iterate id="rowDataString" collection="<%=requestListData%>" type="edu.wustl.catissuecore.bean.RequestViewBean">
          			 <% 
-					 String style1 = "black_ar_b";
+					 String style1 = "black_ar";
 					 if (count%2 ==0) { 
 						 style1 = "tabletd1";
    					 } %>
