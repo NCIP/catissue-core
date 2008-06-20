@@ -155,7 +155,7 @@
 	<td>
 	  <tr>
         <td colspan="2" class="td_color_bfdcf3" style="padding-left:10px; padding-right:10px; padding-bottom:10px;">
-		<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
+		<table width="100%" border="0" cellpadding="3" cellspacing="0">
             <tr>
               <td height="15" colspan="3" align="left"></td>
               </tr>
@@ -168,32 +168,32 @@
             <tr>
               <td colspan="3" align="left" style="padding-top:10px; padding-bottom:15px; padding-left:6px;"><table width="100%" border="0" cellspacing="0" cellpadding="3" bgcolor="#f6f6f6">
                 <tr>
-                  <td width="17%" class="black_noneditable"><label for="type" class="black_noneditable"><bean:message key="distribution.identifier"/>  </label></td>
-                  <td class="black_noneditable2">- <%=distForm.getDistributionId()%></td>
+                  <td width="17%" class="noneditable"><label for="type" class="noneditable"><bean:message key="distribution.identifier"/>  </label></td>
+                  <td class="noneditable">- <%=distForm.getDistributionId()%></td>
                 </tr>
                 <tr>
-                  <td class="black_noneditable"><label for="type" class="black_noneditable"><bean:message key="distribution.protocol"/> </label></td>
-                  <td class="black_noneditable2">- <%=distForm.getDistributionProtocolTitle()%></td>
+                  <td class="noneditable"><label for="type" class="noneditable"><bean:message key="distribution.protocol"/> </label></td>
+                  <td class="noneditable">- <%=distForm.getDistributionProtocolTitle()%></td>
                 </tr>
                 <tr>
-                  <td class="black_noneditable"><label for="User" class="black_noneditable"><bean:message key="eventparameters.user"/>  </label></td>
-                  <td class="black_noneditable2">- <%=distForm.getUserName()%></td>
+                  <td class="noneditable"><label for="User" class="noneditable"><bean:message key="eventparameters.user"/>  </label></td>
+                  <td class="noneditable">- <%=distForm.getUserName()%></td>
                 </tr>
                 <tr>
-                  <td class="black_noneditable"><bean:message key="eventparameters.dateofevent"/></td>
-                  <td class="black_noneditable2">- <%=distForm.getDateOfEvent()%></td>
+                  <td class="noneditable"><bean:message key="eventparameters.dateofevent"/></td>
+                  <td class="noneditable">- <%=distForm.getDateOfEvent()%></td>
                 </tr>
                 <tr>
-                  <td class="black_noneditable"><bean:message key="eventparameters.time"/></td>
-                  <td class="black_noneditable2">- <%=distForm.getTimeInHours()%>:<%=distForm.getTimeInMinutes()%></td>
+                  <td class="noneditable"><bean:message key="eventparameters.time"/></td>
+                  <td class="noneditable">- <%=distForm.getTimeInHours()%>:<%=distForm.getTimeInMinutes()%></td>
                 </tr>
                 <tr>
-                  <td class="black_noneditable"><bean:message key="distribution.toSite"/></td>
-                  <td class="black_noneditable2">- <%=distForm.getToSite()%> </td>
+                  <td class="noneditable"><bean:message key="distribution.toSite"/></td>
+                  <td class="noneditable">- <%=distForm.getToSite()%> </td>
                 </tr>
                 <tr>
-                  <td class="black_noneditable"><bean:message key="eventparameters.comments"/></td>
-                  <td class="black_noneditable2"><%=distForm.getComments()%></td>
+                  <td class="noneditable"><bean:message key="eventparameters.comments"/></td>
+                  <td class="noneditable"><%=distForm.getComments()%></td>
                 </tr>
                 
               </table></td>
