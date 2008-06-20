@@ -208,7 +208,7 @@
 			<td>&nbsp;</td>									
 		</tr>
 	</table>
-
+	
 	 <tr onclick="javascript:showHide('distributedItems')">
               <td width="80%" height="25" align="left" class="tr_bg_blue1" ><span class="blue_ar_b"><bean:message key="distribution.distributedItem"/> </span></td>
 			  	
@@ -219,6 +219,19 @@
               <td colspan="3" style="padding-top:10px;">
 			  <div id="distributedItems" style="display:none" >
                 <table width="100%" border="0" cellspacing="0" cellpadding="3">
+					<tr>
+						<td colspan="7" class="link" align="right">
+		<%
+						if(distForm.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) 
+						{
+					%>
+						<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />&nbsp;
+						<a href="#" onclick="changeActionOnConfig()"><bean:message  key="buttons.configure" /></a></span>
+						<%
+						}
+					%>
+		</td>
+					</tr>
                   <tr class="tableheading">
                     <td width="3%" align="left" class="black_ar_b">#</td>
 					<% 
@@ -238,8 +251,11 @@
 						int i1=1;
 				 		while(innerItr.hasNext())
 				 		{
+							String fontStyle="black_ar";
+								if(i1%2==0)
+									fontStyle="tabletd1";
 				 %>
-                    <td align="left" class="black_ar" ><%=i1%></td>
+                    <td align="left" class="<%=fontStyle%>" ><%=i1%></td>
 						 <%			
 							
 				 			List rowElements = (List)innerItr.next();							
@@ -247,8 +263,10 @@
 				 			int j=0;
 				 			while(elementItr.hasNext() && j<columnNames.length)
 				 			{
+								
+
 				 %>
-                    <td class="black_ar"><label><%=elementItr.next()%></label></td>
+                    <td class="<%=fontStyle%>"><label><%=elementItr.next()%></label></td>
 						<%
 								j++;
 				 			}
@@ -268,22 +286,13 @@
               </tr>
             
             <tr  class="td_color_F7F7F7">
-              <td  class="buttonbg" style="padding-left:10px;">
+              <td colspan="3" class="buttonbg" style="padding-left:10px;">
 					<html:submit property="expButton"  onclick="changeAction()" >
 							<bean:message  key="buttons.export" />
 					</html:submit>
 			 </td>
             
-              <td  class="buttonbg" style="padding-left:10px;" colspan="2"><span class="viewlink2">
-			  	<%
-						if(distForm.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) 
-						{
-					%>
-						<a href="#" onclick="changeActionOnConfig()"><bean:message  key="buttons.configure" /></a></span>
-						<%
-						}
-					%>
-			  </td>
+              
 					
             </tr>
 	  </td>
