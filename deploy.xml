@@ -825,7 +825,7 @@
 	<target name="upgrade_app" depends="deploy_app">
 	</target>
 	
-	<target name="upgrade_db" depends="encryptPassword">
+	<target name="upgrade_db">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -855,7 +855,6 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 	</target>
 	
 	
@@ -871,7 +870,6 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="temp_update_metadata_for_clob_support_oracle" />
 	</target>
 
 	<!--Data import for CAModel -->
