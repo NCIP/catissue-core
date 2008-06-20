@@ -794,7 +794,8 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 		        </tr>
 	            <tr  class="td_color_F7F7F7">
 			      <td colspan="3" class="buttonbg" style="padding-left:10px;">
-					<input type="button" class="blue_ar_b" value="Submit" onclick="submitAndNotify()">
+					<input type="button" class="blue_ar_b" value="Submit" onclick="submitPage()">
+					<input type="button" class="blue_ar_b" value="Submit And Notify" onclick="submitAndNotify()">
 					 &nbsp;&nbsp;|&nbsp; 
 						<span class="cancellink">
 							<html:link page="/ManageAdministrativeData.do"
