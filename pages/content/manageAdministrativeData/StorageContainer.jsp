@@ -21,10 +21,11 @@
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
         boolean readOnlyValue;
+        
         if (operation.equals(Constants.EDIT))
         {
             formName = Constants.STORAGE_CONTAINER_EDIT_ACTION;
-            readOnlyValue = true;
+            readOnlyValue = true;            
         }
         else
         {
@@ -401,19 +402,19 @@ function validate(action,formField)
 	
 	if(validateAny(document.forms[0].collectionIds)==false)
 	{
-		alert("Please select Proper Collection Protocols");
+		alert("Please select valid Collection Protocols");
 	}
 	else
 	{
 		if(validateAny(document.forms[0].holdsStorageTypeIds)==false)
 		{
-			alert("Please select Proper Storage Types");
+			alert("Selecting All and Other Container Type is not allowed");
 		}
 		else
 		{	
 			if(validateAny(document.forms[0].holdsSpecimenClassTypes)==false)
 			{
-				alert("please select Proper Specimen Classes");
+				alert("Selecting All and Other Specimen Class is not allowed");
 			}
 			else
 			{	
@@ -508,7 +509,7 @@ function onEditChange()
 					<td><html:hidden property="onSubmit" />
 						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 							<html:hidden property="isFull" />
-						</logic:equal>
+						</logic:equal>					
 					</td>
 				</tr>
 					<tr>
@@ -541,9 +542,15 @@ function onEditChange()
 								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							&nbsp;
-							<html:link href="#" styleId="newStorageType" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=storageType&forwardTo=storageContainer&addNewFor=storageType')">
-								<bean:message key="buttons.addNew" />
-							</html:link>
+							
+							<%if(operation.equals(Constants.ADD))
+							{
+							%>
+								<html:link href="#" styleId="newStorageType" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=storageType&forwardTo=storageContainer&addNewFor=storageType')">
+									<bean:message key="buttons.addNew" />
+								</html:link>
+							<% } %>										
+												
 						</td>
 					</tr>
 <!-- New row 1 -->
