@@ -67,11 +67,11 @@ public class FetchQueryAction extends BaseAction
 					Constants.CATISSUECORE_QUERY_INTERFACE_ID);
 			try
 			{
-				Object object = bizLogic.retrieve(ParameterizedQuery.class
-						.getName(), queryId);
-				if (object != null)
+				List<IParameterizedQuery> queryList = bizLogic.retrieve(ParameterizedQuery.class
+						.getName(), "id", queryId);
+				if (!queryList.isEmpty())
 				{
-					IParameterizedQuery parameterizedQuery = (ParameterizedQuery) object;
+					IParameterizedQuery parameterizedQuery = queryList.get(0);
 					request.getSession().setAttribute(AppletConstants.QUERY_OBJECT,
 							parameterizedQuery);
 					Map<IExpressionId, Collection<IParameterizedCondition>> expressionIdConditionCollectionMap = QueryUtility
