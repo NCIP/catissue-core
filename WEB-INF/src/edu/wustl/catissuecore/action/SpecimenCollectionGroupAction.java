@@ -410,7 +410,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(), bizLogic, request, specimenCollectionGroupForm);
 
 					//Load Clinical status for a given study calander event point
-					CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
+					CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
 							specimenCollectionGroupForm.getCollectionProtocolEventId()));
 					if (isOnChange && CPEObject != null)
 					{
@@ -553,7 +553,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(), bizLogic, request, specimenCollectionGroupForm);
 
 			//Load Clinical status for a given study calander event point
-			CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
+			CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
 					specimenCollectionGroupForm.getCollectionProtocolEventId()));
 			if (CPEObject != null)
 			{
