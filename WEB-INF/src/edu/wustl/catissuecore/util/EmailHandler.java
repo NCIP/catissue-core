@@ -340,15 +340,19 @@ public class EmailHandler
      * Sends email to Scientist and cc to Admin on distribution of the order. 
      * @return
      */
-    public boolean sendEmailForOrderDistribution(String body,String toEmailAddress,String fromEmailAddress,String subject)
+    
+    public boolean sendEmailForOrderDistribution(String body,String toEmailAddress,String fromEmailAddress, String ccEmailAddress, String bccEmailAddress,  String subject)
     {
     	String mailServer = XMLPropertyHandler.getValue("email.mailServer");
-    	
-    	SendEmail email = new SendEmail();
-    	
-    	boolean emailStatus = email.sendmail(toEmailAddress, null,null,
+        SendEmail email = new SendEmail();
+        Logger.out.info("Email body..........  \n"  + body);
+        System.out.println("Email body..........  \n"  + body);
+        boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress, bccEmailAddress,
     			fromEmailAddress, mailServer, subject, body);
-	
-    	return emailStatus;
+    	
+    	Logger.out.info("EmailStatus  "  + emailStatus);
+        return emailStatus;
     }
+    
+    
 }

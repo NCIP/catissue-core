@@ -846,56 +846,74 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * @param distributionObjectCollection object
 	 * @return OrderItem object
 	 */
-	private OrderItem populateOrderItemForSpecimenOrderItems(RequestDetailsBean requestDetailsBean,OrderDetails order,Collection distributedItemCollection,Distribution distribution,RequestDetailsForm requestDetailsForm,Collection distributionObjectCollection)
+ private OrderItem populateOrderItemForSpecimenOrderItems(RequestDetailsBean requestDetailsBean, OrderDetails order,Collection distributedItemCollection,Distribution distribution,RequestDetailsForm requestDetailsForm,Collection distributionObjectCollection)
 	{
-		OrderItem orderItem = new OrderItem();
-		//Updating Description and Status.
-		orderItem.setId(new Long(requestDetailsBean.getOrderItemId()));
-		orderItem.setStatus(requestDetailsBean.getAssignedStatus());
-		orderItem.setDescription(requestDetailsBean.getDescription());			
-		//Setting the order id 
-		orderItem.setOrderDetails(order);	
+		OrderItem orderItem = new OrderItem(); 
+		
+		// modified by pratha for bug# 5663	and 7355
+	    DerivedSpecimenOrderItem derivedOrderItem = null;
+		ExistingSpecimenOrderItem existingOrderItem = null;
+		PathologicalCaseOrderItem pathologicalCaseOrderItem = null;
 		
 		//For Distribution.
 		if(requestDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && requestDetailsBean.getDistributedItemId().equals(""))
 		{	
 			//Setting the Site for distribution.
 			distribution = setSiteInDistribution(distribution,requestDetailsForm);		
-			//distribution.setComment(requestDetailsForm.getAdministratorComments());
-			DistributedItem distributedItem = new DistributedItem();
+		    DistributedItem distributedItem = new DistributedItem();
 			
 			Specimen specimen = new Specimen();
-//			if(!requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("DerivedPathological"))
-//			{
-				if(requestDetailsBean.getRequestFor() == null || requestDetailsBean.getRequestFor().trim().equalsIgnoreCase(""))
+        	if(requestDetailsBean.getRequestFor() == null || requestDetailsBean.getRequestFor().trim().equalsIgnoreCase(""))
 				{//for existing Specimen.
 					if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Existing"))
-					{
+					{   
+						existingOrderItem =  new ExistingSpecimenOrderItem();
 						specimen.setId(new Long(requestDetailsBean.getSpecimenId()));
+						specimen.setLabel(requestDetailsBean.getRequestedItem());
+						existingOrderItem.setSpecimen(specimen);
+						orderItem = existingOrderItem;
 					}
-				}
-				else
-				{//For derived specimen.
+				} 
+			else  if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("DerivedPathological"))
+				{//For pathologicalcase Specimen .
+					pathologicalCaseOrderItem =  new PathologicalCaseOrderItem();
 					specimen.setId(new Long(requestDetailsBean.getRequestFor()));
+			        specimen.setLabel(requestDetailsBean.getRequestedItem());
+				    orderItem = pathologicalCaseOrderItem;
 				}
-			//}
-			distributedItem.setSpecimen(specimen);
+            else  
+			    {//For derived specimen.
+					derivedOrderItem = new DerivedSpecimenOrderItem();
+					specimen.setId(new Long(requestDetailsBean.getRequestFor()));
+				    specimen.setLabel(requestDetailsBean.getRequestedItem());
+					derivedOrderItem.setParentSpecimen(specimen);
+                    orderItem = derivedOrderItem;
+               }
+	     distributedItem.setSpecimen(specimen);
 	
-			//For setting assigned quantity in Distribution.
-			if(requestDetailsBean.getAssignedQty() != null && !requestDetailsBean.getAssignedQty().trim().equalsIgnoreCase(""))
-			{
-				distributedItem.setQuantity(new Double(requestDetailsBean.getAssignedQty()));
-			}
-			
-			distribution = setDistributedItemCollectionInDistribution(orderItem,distributedItem,distribution,distributedItemCollection);
-			
-			//Setting the distribution protocol in Distribution.
-			distribution = setDistributionProtocolInDistribution(distribution,requestDetailsForm);
-			
-			distributionObjectCollection.add(distribution);	
-		}	
-		return orderItem;
+		//For setting assigned quantity in Distribution.
+		if(requestDetailsBean.getAssignedQty() != null && !requestDetailsBean.getAssignedQty().trim().equalsIgnoreCase(""))
+		{
+			distributedItem.setQuantity(new Double(requestDetailsBean.getAssignedQty()));
+		}
+		
+		distribution = setDistributedItemCollectionInDistribution(orderItem,distributedItem,distribution,distributedItemCollection);
+		
+		//Setting the distribution protocol in Distribution.
+		distribution = setDistributionProtocolInDistribution(distribution,requestDetailsForm);
+		
+		distributionObjectCollection.add(distribution);	
+	}	
+    //Updating Description and Status.
+		orderItem.setId(new Long(requestDetailsBean.getOrderItemId()));
+		orderItem.setStatus(requestDetailsBean.getAssignedStatus());
+		orderItem.setDescription(requestDetailsBean.getDescription());
+        //Setting the order id 
+		orderItem.setOrderDetails(order);
+		
+	   return orderItem;
 	}
+
 	/**
 	 * @param distribution object
 	 * @param requestDetailsForm object
@@ -913,15 +931,11 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * @param definedArrayDetailsBean object
 	 * @return OrderItem object
 	 */
-	private OrderItem setOrderForDefineArrayDetails(OrderDetails order,DefinedArrayDetailsBean definedArrayDetailsBean)
+	 
+	private OrderItem  setOrderForDefineArrayDetails( OrderDetails order, DefinedArrayDetailsBean definedArrayDetailsBean)
 	{
-		OrderItem orderItem = new OrderItem();
-		//Updating Description and Status.
-		orderItem.setId(new Long(definedArrayDetailsBean.getOrderItemId()));
-		orderItem.setStatus(definedArrayDetailsBean.getAssignedStatus());
-		orderItem.setDescription(definedArrayDetailsBean.getDescription());			
-		//Setting the order id 
-		orderItem.setOrderDetails(order);
+		ExistingSpecimenOrderItem existingSpecOrderItem = new ExistingSpecimenOrderItem();
+	
 //		For READY FOR ARRAY PREPARATION
 		if(definedArrayDetailsBean.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
 		{					
@@ -929,22 +943,36 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			Specimen specimen = new Specimen();
 
 				if(definedArrayDetailsBean.getRequestFor() == null || definedArrayDetailsBean.getRequestFor().trim().equalsIgnoreCase(""))
-				{//for existing Specimen.
-					if(definedArrayDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Existing"))
-					{
-						specimen.setId(new Long(definedArrayDetailsBean.getSpecimenId()));
+				{
+					// for existing Specimen.
+					if (definedArrayDetailsBean.getInstanceOf().trim()
+							.equalsIgnoreCase("Existing")) {
+						specimen.setId(new Long(definedArrayDetailsBean
+								.getSpecimenId()));
+					} else {// For derived specimen.
+						specimen.setId(new Long(definedArrayDetailsBean
+								.getRequestFor()));
 					}
-				}
-				else
-				{//For derived specimen.
-					specimen.setId(new Long(definedArrayDetailsBean.getRequestFor()));
-				}
-		
-			distributedItem.setSpecimen(specimen);				
-			orderItem.setDistributedItem(distributedItem);				
-		}	
-		return orderItem;
+	
+					distributedItem.setSpecimen(specimen);
+					// Updating Description and Status.
+					// orderItem = newSpecimenArrayOrderItem;
+					existingSpecOrderItem.setId(new Long(definedArrayDetailsBean
+							.getOrderItemId()));
+					existingSpecOrderItem.setStatus(definedArrayDetailsBean
+							.getAssignedStatus());
+					existingSpecOrderItem.setDescription(definedArrayDetailsBean
+							.getDescription());
+					// Setting the order id
+					existingSpecOrderItem.setOrderDetails(order);
+					existingSpecOrderItem.setDistributedItem(distributedItem);
+					existingSpecOrderItem.setSpecimen(specimen);
+			}	
+	  }
+	  return existingSpecOrderItem;
 	}
+	
+	
 	/**
 	 * @param orderId object
 	 * @return OrderDetails object
@@ -966,9 +994,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * @param distributionObjectCollection object
 	 * @return OrderItem object
 	 */
-	private OrderItem populateOrderItemForArrayHeader(DefinedArrayRequestBean definedArrayRequestBean,OrderDetails order,Collection distributedItemCollection,Distribution distribution,RequestDetailsForm requestDetailsForm,Collection distributionObjectCollection)
+  private OrderItem populateOrderItemForArrayHeader(DefinedArrayRequestBean definedArrayRequestBean,OrderDetails order,Collection distributedItemCollection,Distribution distribution,RequestDetailsForm requestDetailsForm,Collection distributionObjectCollection)
 	{
-		OrderItem orderItem = new OrderItem();
+	     OrderItem orderItem = new NewSpecimenArrayOrderItem();
 		//Updating Description and Status.
 		orderItem.setId(new Long(definedArrayRequestBean.getOrderItemId()));
 		orderItem.setStatus(definedArrayRequestBean.getAssignedStatus());						
@@ -990,10 +1018,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			distributedItem.setSpecimenArray(specimenArray);
 	
 			//For setting assigned quantity in Distribution.
-			
-			distributedItem.setQuantity(new Double("1"));
-			
-			distribution = setDistributedItemCollectionInDistribution(orderItem,distributedItem,distribution,distributedItemCollection);
+	        distributedItem.setQuantity(new Double("1"));
+	        
+		    distribution = setDistributedItemCollectionInDistribution(orderItem,distributedItem,distribution,distributedItemCollection);
 			
 			//Setting the distribution protocol in Distribution.
 			distribution = setDistributionProtocolInDistribution(distribution,requestDetailsForm);
@@ -1002,6 +1029,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		}
 		return orderItem;
 	}
+
 	/**
 	 * @param existingArrayDetailsBean object
 	 * @param order object
@@ -1011,22 +1039,23 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * @param distributionObjectCollection object
 	 * @return OrderItem object
 	 */
-	private OrderItem populateOrderItemForExistingArray(ExistingArrayDetailsBean existingArrayDetailsBean,OrderDetails order,Collection distributedItemCollection,Distribution distribution,RequestDetailsForm requestDetailsForm,Collection distributionObjectCollection)
+  private OrderItem populateOrderItemForExistingArray(ExistingArrayDetailsBean existingArrayDetailsBean, OrderDetails order,Collection distributedItemCollection,Distribution distribution,RequestDetailsForm requestDetailsForm,Collection distributionObjectCollection)
 	{
-		OrderItem orderItem = new OrderItem();
+		ExistingSpecimenArrayOrderItem existingSpecArrOrderItem = new ExistingSpecimenArrayOrderItem();
 		//Updating Description and Status.
-		orderItem.setId(new Long(existingArrayDetailsBean.getOrderItemId()));
-		orderItem.setStatus(existingArrayDetailsBean.getAssignedStatus());
-		orderItem.setDescription(existingArrayDetailsBean.getAddDescription());			
+
+		existingSpecArrOrderItem.setId(new Long(existingArrayDetailsBean.getOrderItemId()));
+		existingSpecArrOrderItem.setStatus(existingArrayDetailsBean.getAssignedStatus());
+		existingSpecArrOrderItem.setDescription(existingArrayDetailsBean.getAddDescription());			
 		//Setting the order id 
-		orderItem.setOrderDetails(order);			
+		existingSpecArrOrderItem.setOrderDetails(order);
+		
 		//For Distribution.
 		if(existingArrayDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && existingArrayDetailsBean.getDistributedItemId().equals(""))
 		{	
 			//Setting the Site for distribution.
 			distribution = setSiteInDistribution(distribution,requestDetailsForm);
-			
-			//Making distributed items
+		    //Making distributed items
 			DistributedItem distributedItem = new DistributedItem();			
 			SpecimenArray specimenArray = new SpecimenArray();
 			if(existingArrayDetailsBean.getArrayId() != null && !existingArrayDetailsBean.getArrayId().trim().equalsIgnoreCase(""))
@@ -1034,24 +1063,28 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				specimenArray.setId(new Long(existingArrayDetailsBean.getArrayId()));
 			}
 			distributedItem.setSpecimenArray(specimenArray);
-			
-			//For setting assigned quantity in Distribution.
-			distributedItem.setQuantity(new Double(existingArrayDetailsBean.getRequestedQuantity()));
-			
+			specimenArray.setName(existingArrayDetailsBean.getBioSpecimenArrayName());
+			//For setting assigned quantity in Distribution.	
 			if(existingArrayDetailsBean.getRequestedQuantity().equals("0.0"))
 			{
 				distributedItem.setQuantity(new Double("1"));
 			}
-			
-			distribution = setDistributedItemCollectionInDistribution(orderItem,distributedItem,distribution,distributedItemCollection);
-			
-			//Setting the distribution protocol in Distribution.
+			else
+			{
+				distributedItem.setQuantity(new Double(existingArrayDetailsBean.getRequestedQuantity()));
+			}
+			distribution = setDistributedItemCollectionInDistribution(existingSpecArrOrderItem,distributedItem,distribution,distributedItemCollection);
+		    //Setting the distribution protocol in Distribution.
 			distribution = setDistributionProtocolInDistribution(distribution,requestDetailsForm);
 			
 			distributionObjectCollection.add(distribution);	
-		}	
-		return orderItem;
+			existingSpecArrOrderItem.setSpecimenArray(specimenArray);
+		}
+		
+		return existingSpecArrOrderItem;
 	}
+
+	
 	/**
 	 * @param map object
 	 * @return Collection object

@@ -48,6 +48,7 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -120,6 +121,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @throws DAOException object
 	 * @throws UserNotAuthorizedException object
 	 */
+	
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		this.validate(obj, oldObj, dao, Constants.EDIT);
@@ -130,21 +132,11 @@ public class OrderBizLogic extends DefaultBizLogic
 		//Sending Email only if atleast one order item is updated.
 		if (numberItemsUpdated > 0 && orderNew.getMailNotification())
 		{
-			sendEmailOnOrderUpdate(orderNew, sessionDataBean);
+			sendEmailOnOrderUpdate(dao, orderNew, sessionDataBean);
 		}
 	}
-
-	//	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
-	//	{
-	//		OrderDetails order = (OrderDetails) obj;
-	//		if(!order.getStatus().trim().equalsIgnoreCase("New"))
-	//		{			
-	//			throw new DAOException("Initial OrderDetails Status has to be 'New'.");
-	//		}
-	//		
-	//		return true;
-	//	}
-	/**
+	
+   /**
 	 * @param obj object
 	 * @param oldObj object
 	 * @param dao object
@@ -449,7 +441,7 @@ public class OrderBizLogic extends DefaultBizLogic
 						 {
 						 oldOrderItem.setDistributedItem(newOrderItem.getDistributedItem());
 						 }*/
-					}
+				}
 					//Setting Description and Status.
 					if (newOrderItem.getDescription() != null)
 					{
@@ -457,13 +449,7 @@ public class OrderBizLogic extends DefaultBizLogic
 						{
 							newOrderItem.setDescription(oldOrderItem.getDescription() + " " + newOrderItem.getDescription());
 						}
-						/*else
-						 {
-						 oldOrderItem.setDescription(newOrderItem.getDescription());
-						 }*/
 					}
-
-					//	oldOrderItem.setStatus(newOrderItem.getStatus());												
 					//The number of Order Items updated.
 					numberItemsUpdated++;
 				}
@@ -494,66 +480,82 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @param order object
 	 * @param sessionDataBean object
 	 */
-	private void sendEmailOnOrderUpdate(OrderDetails order, SessionDataBean sessionDataBean)
+	private void sendEmailOnOrderUpdate(DAO dao, OrderDetails order, SessionDataBean sessionDataBean)
 	{
 		EmailHandler emailHandler = new EmailHandler();
-		String toEmailAddress = order.getDistributionProtocol().getPrincipalInvestigator().getEmailAddress();
-		String fromEmailAddress = sessionDataBean.getUserName();
-		String subject = "Update on Order " + order.getName();
-		String body = makeEmailBodyForOrderUpdate(order);
-		emailHandler.sendEmailForOrderDistribution(body, toEmailAddress, fromEmailAddress, subject);
+		String ccEmailAddress = order.getDistributionProtocol().getPrincipalInvestigator().getEmailAddress(); // cc
+		String toEmailAddress = sessionDataBean.getUserName();  // to person ordering 
+		String fromEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress"); // from bcc
+		//ccEmailAddress += ccEmailAddress +" "+fromEmailAddress;
+		String bccEmailAddress = fromEmailAddress;
+		String subject = "Notification on Order " + order.getName() + " Status from caTissue Administrator";
+		String body = makeEmailBodyForOrderUpdate(dao, order);
+		emailHandler.sendEmailForOrderDistribution(body, toEmailAddress, fromEmailAddress, ccEmailAddress, bccEmailAddress, subject);
 	}
 
 	/**
 	 * @param order object
 	 * @return String object
 	 */
-	private String makeEmailBodyForOrderUpdate(OrderDetails order)
+	private String makeEmailBodyForOrderUpdate(DAO dao, OrderDetails order)
 	{
 		Collection orderItemColl = order.getOrderItemCollection();
 		String emailFormat = "";
-		String emailBodyHeader = "Hello " + order.getDistributionProtocol().getPrincipalInvestigator().getLastName() + ", "
-				+ order.getDistributionProtocol().getPrincipalInvestigator().getFirstName() + "\n"
-				+ "Following is the update on the order placed by you." + "\n" + "#" + "\t" + "OrderItemName" + "\t" + "Previous Status" + "\t"
-				+ "\t" + "Current Status" + "\t" + "\t" + "Description" + "\n";
-
-		Iterator iter = orderItemColl.iterator();
+		
+	    String emailBodyHeader = "Hello " + order.getDistributionProtocol().getPrincipalInvestigator().getFirstName() + " "
+		+ order.getDistributionProtocol().getPrincipalInvestigator().getLastName() +",  \n\n"
+		+ "This is in relation with the order you placed with us. Please find below the details on its status. \n\n" ;
+	  
+	    Iterator iter = orderItemColl.iterator();
 		int serialNo = 1;
 		String emailBody = "";
 		while (iter.hasNext())
 		{
-			OrderItem orderItem = (OrderItem) iter.next();
-			if (orderItem instanceof ExistingSpecimenOrderItem)
+		    OrderItem orderItem = (OrderItem) iter.next();
+		    
+		    if (orderItem instanceof ExistingSpecimenOrderItem)
 			{
-				ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
-				emailBody = emailBody + serialNo + ". " + existingSpecimenOrderItem.getSpecimen().getLabel() + "--"
-						+ existingSpecimenOrderItem.getStatus() + "\n";
+			    ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
+				emailBody = emailBody + serialNo + ". " + existingSpecimenOrderItem.getSpecimen().getLabel() + ": "
+						+ existingSpecimenOrderItem.getStatus() + "\n   Order Description: "+ existingSpecimenOrderItem.getDescription() + "\n\n";
+		    	
+				serialNo++;
 			}
 			else if (orderItem instanceof DerivedSpecimenOrderItem)
 			{
-				DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
-				emailBody = emailBody + serialNo + ". " + derivedSpecimenOrderItem.getParentSpecimen().getLabel() + "--"
-						+ derivedSpecimenOrderItem.getSpecimenClass() + "--" + derivedSpecimenOrderItem.getSpecimenType() + "--"
-						+ derivedSpecimenOrderItem.getStatus() + "\n";
-			}
+				 DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
+					emailBody = emailBody + serialNo + ". " + derivedSpecimenOrderItem.getParentSpecimen().getLabel() + ": "
+					+ derivedSpecimenOrderItem.getStatus() + "\n   Order Description: "+ derivedSpecimenOrderItem.getDescription() + "\n\n";
+					
+					serialNo++;
+	    	
+			 }
 			else if (orderItem instanceof PathologicalCaseOrderItem)
 			{
 				PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) orderItem;
-				emailBody = emailBody + serialNo + ". " + pathologicalCaseOrderItem.getSpecimenCollectionGroup().getName() + "--"
-						+ pathologicalCaseOrderItem.getStatus() + "\n";
-			}
+			    emailBody = emailBody + serialNo + ". " + pathologicalCaseOrderItem.getDistributedItem().getDistribution().getOrderDetails().getName()  + ": "
+				+ pathologicalCaseOrderItem.getStatus() + "\n   Order Description: "+ pathologicalCaseOrderItem.getDescription() + "\n\n";
+				
+				serialNo++; 
+    	
+			 }
 			else if (orderItem instanceof NewSpecimenArrayOrderItem)
 			{
 				NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) orderItem;
-				emailBody = emailBody + serialNo + ". " + newSpecimenArrayOrderItem.getName() + "--" + newSpecimenArrayOrderItem.getStatus() + "\n";
-			}
+			    emailBody = emailBody + serialNo + ". " + newSpecimenArrayOrderItem.getName()  + ": "
+				+ newSpecimenArrayOrderItem.getStatus() + "\n   Order Description: "+ newSpecimenArrayOrderItem.getDescription() + "\n\n";
+				
+				serialNo++;
+    		
+		    }
 			else if (orderItem instanceof ExistingSpecimenArrayOrderItem)
 			{
 				ExistingSpecimenArrayOrderItem existingSpecimenArrayOrderItem = (ExistingSpecimenArrayOrderItem) orderItem;
-				emailBody = emailBody + serialNo + ". " + existingSpecimenArrayOrderItem.getSpecimenArray().getName() + "--"
-						+ existingSpecimenArrayOrderItem.getStatus() + "\n";
+				emailBody = emailBody + serialNo + ". " + existingSpecimenArrayOrderItem.getSpecimenArray().getName()  + ": "
+				+ existingSpecimenArrayOrderItem.getStatus() + "\n   Order Description: "+ existingSpecimenArrayOrderItem.getDescription() + "\n\n";
+    		
+				serialNo++;
 			}
-			serialNo++;
 		}
 		String emailMsgFooterRegards = "\n" + "Regards, ";
 		String emailMsgFooterSign = "\n" + "caTissueSuite Administrator";
@@ -562,6 +564,7 @@ public class OrderBizLogic extends DefaultBizLogic
 		return emailFormat;
 	}
 
+	
 	/**
 	 * @param oldOrderItem object
 	 */
