@@ -15,24 +15,17 @@
 
 <head>
 <%
-
 List requestDetailsList = new ArrayList();
-
-
 if(request.getAttribute(Constants.REQUEST_DETAILS_LIST) != null )
 	requestDetailsList = (List) request.getAttribute(Constants.REQUEST_DETAILS_LIST);	
 else 
 	requestDetailsList = (List) session.getAttribute(Constants.REQUEST_DETAILS_LIST);	
-
-
 int disabledStatus;
 int count=0;
-
 if(requestDetailsList!=null && requestDetailsList.size()>0 )
 {
  count=requestDetailsList.size();	
 }
-
 String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=ForwardTo&noOfRecords="+count;;
 %>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -183,242 +176,325 @@ function showAllSpecimen(count)
 		var url= 'ConsentVerification.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
 		window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
 	}
-				
-		
-	
 }
-
-
-
 //This function called to view the consent page
 function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificationkey)
 {	
-	
 	var status = document.getElementById(consentVerificationkey).value;
 	var specimenIdentifier= document.getElementById(specimenIdentifierkey).value;
-		
 	var url ='ConsentVerification.do?operation=&pageOf=pageOfOrdering&status='+status+'&labelStatusId='+labelStatus+'&consentVerificationkey='+consentVerificationkey+'&showConsents=yes&specimenId='+specimenIdentifier;
 
-	
 	if(status!="No Consents")
 	{
 		window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
 	}
-	
 }
-	
 </script>
 </head>  
 <body onload="tabToDisplay()">
 	<html:form action="<%=form_action%>">
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" id="table1_OrderRequestHeader">
-		<tr>
-			<td>
-				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">				
-				<tr>
-				    <jsp:useBean id="requestDetailsForm" class="edu.wustl.catissuecore.actionForm.RequestDetailsForm" scope="request"/>	
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+  <tr>
+    <td class="td_color_bfdcf3">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
+			<tr>
+		        <td colspan="3" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td height="31" valign="top" class="td_color_bfdcf3">
+				<table width="10%" border="0" cellpadding="0" cellspacing="0" background="images/uIEnhancementImages/table_title_bg.gif">
+					<tr>
+						<td width="80%">
+							<span class="wh_ar_b">&nbsp;&nbsp;&nbsp;
+								<bean:message key="requestdetails.header" />
+							</span>
+						</td>
+						<td width="20%" align="right">
+							<img src="images/uIEnhancementImages/table_title_corner2.gif" width="31" height="24" /></td>
+					</tr>
+				</table>
+			 </td>
+            </tr>
+						  
+			</table>
+			</td>
+			</tr>
+		    <tr>
+				<td class="td_color_bfdcf3" ></td>
+		        <td height="15"  class="td_tab_bg">&nbsp;
+				</td>
+		        <td class="td_color_bfdcf3" ></td>
+			</tr>
+			<tr>
+		        <td width="1%" class="td_color_bfdcf3" ></td>
+				<td width="98%" height="15" style="padding:3px;" >
+					<span class=" grey_ar_s">&nbsp;
+						<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+						<bean:message key="commonRequiredField.message" />
+					</span>
+				</td>
+		        <td width="1%" class="td_color_bfdcf3" ></td>
+			</tr>
+			<tr>
+				<td class="td_color_bfdcf3" >&nbsp;
+				</td>
+		        <td height="25" class="tr_bg_blue1" >&nbsp;
+					<span class="blue_ar_b">&nbsp;
+						<bean:message key="requestdetails.name" />
+					</span>
+				</td>
+		        <td class="td_color_bfdcf3" >&nbsp;
+				</td>
+		     </tr>
+			 <tr>
+	         <td class="td_color_bfdcf3" >&nbsp;</td>
+			 <td style="padding-top:10px; padding-bottom:20px; padding-left:6px; padding-right:3px;">
+				<table width="100%" border="0" cellspacing="0" cellpadding="3" >
+					<tr>
+						  <jsp:useBean id="requestDetailsForm" class="edu.wustl.catissuecore.actionForm.RequestDetailsForm" scope="request"/>	
 				    <% 
 				    	session.setAttribute("REQUEST_DETAILS_FORM",requestDetailsForm);%>
-				  	<!-- Order Request Header Begins -->
-					<td class="dataTablePrimaryLabel" height="20" colspan="5">
-						<bean:message key='requestdetails.header.orderRequestName.label'/> <bean:write name="<%= Constants.REQUEST_HEADER_OBJECT  %>" property="orderName" scope="request" />
-					</td>
-					
-				</tr>
-				<tr>
-					<td class="formMessage" colspan="5">
-						<bean:message key="requiredfield.message"/>  
-					</td>
-				</tr>
-				
-				<tr>
-					<td colspan="5" width="100%">
-						<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">				
-							<tr>
-								<td class="formFieldNoBordersSimple"><b><bean:message key='requestdetails.header.label.RequestorName'/> :</b><a href='mailto:<bean:write name='<%=  Constants.REQUEST_HEADER_OBJECT  %>' property='email' scope='request'/>' ><bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT %>" property="requestedBy" scope="request"/> </a>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><bean:message key='requestlist.dataTabel.label.RequestDate'/> :</b><bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="requestedDate" scope="request"/> 
+						<td width="17%" class="noneditable">
+							<strong>
+								<bean:message key='requestdetails.header.label.RequestorName'/>
+							</strong>
+						</td>
+			            <td class="noneditable">- 
+							<span class="link">
+								<a class="view" href='mailto:<bean:write name='<%=  Constants.REQUEST_HEADER_OBJECT  %>'  property='email' scope='request' />' >
+									<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT %>" property="requestedBy" scope="request"/> 
+								</a>
+							</span>
+						</td>
+					</tr>
+			        <tr>
+						<td class="noneditable">
+							<strong>
+								<bean:message key='requestlist.dataTabel.label.RequestDate'/>
+							</strong>
+						</td>
+			            <td class="noneditable">-
+							<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="requestedDate" scope="request"/>
+						</td>
+			          </tr>
+					  <tr>
+			            <td class="noneditable">
+							<strong>
+								<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
+							</strong>
+						</td>
+			            <td class="noneditable">-
+							<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="distributionProtocol" scope="request"/>
+						</td>
+			          </tr>
+			          <tr>
+						<td class="noneditable">
+							<strong>
+								<bean:message key='requestdetails.header.label.Comments'/> 
+								<bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>"  property="comments"  scope="request" />
+							</strong>
+						</td>
+			            <td class="noneditable">&nbsp;
+						</td>
+			          </tr>
+				</table>
+			</td>
+	        <td class="td_color_bfdcf3" >&nbsp;</td>
+		 </tr>
+	     <tr>
+		    <td class="td_color_bfdcf3" >&nbsp;</td>
+			<td >
+		<!-----------------------table for the tabs------------>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+			            <td width="13%" style="border-bottom:1px solid #61a1e3" >&nbsp;
+						</td>
+			            <td width="6%" valign="bottom" onclick="gotoSpecimenRequestTab()" id="specimenRequestTab" >
+							<img src="images/uIEnhancementImages/tab_specimentR2_user.gif" alt="Specimen Request" width="124" height="20" />
+						</td>
+			            <td width="6%" valign="bottom" onClick="gotoArrayRequestTab()" id="arrayRequestTab" >
+							<img src="images/uIEnhancementImages/tab_arrayR2_user1.gif" alt="Array Request" width="101" height="20" />
+						</td>
+			            <td valign="bottom" style="border-bottom:1px solid #61a1e3">&nbsp;
+						</td>
+		            </tr>
+				</table>
+			</td>
+			<td class="td_color_bfdcf3" >&nbsp;
+			</td>
+	     </tr>
+		 <tr>
+			<td class="td_color_bfdcf3" style="padding-bottom:10px;">&nbsp;
+			</td>
+	        <td class="td_color_bfdcf3" style="padding-bottom:10px;">
+				<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF" >
+				  <tr>
+		            <td colspan="3" align="left" style="padding-bottom:15px; border-bottom:1px solid #e3e2e2 ">
+						<div id="specimenDataTab" >
+			<!------------- heading for the specimen request tab------------>
+							<table width="100%" border="0" cellspacing="0" cellpadding="4" >
+				              <tr>
+					            <td colspan="10" align="right" valign="top" >
+				<!------table for te view all consents link------------>
+									<table width="100%" border="0" cellspacing="0" cellpadding="2">
+					                    <tr>
+										  <td width="88%" align="right" >
+											<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
+										  </td>
+					                      <td align="left" nowrap="nowrap" >
+											<span class="link">
+												<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
+													<bean:message key="requestdetails.link.ViewAllConsents" />
+							                    </a>
+											  </span>
+											</td>
+					                    </tr>
+					                </table>
 								</td>
-							</tr>
-							<tr><td colspan="2" class="formFieldNoBordersSimple"><b><bean:message key='requestlist.dataTabel.DistributionProtocol.label'/> :</b> <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="distributionProtocol" scope="request"/></td></tr>
-							<tr><td colspan="2" class="formFieldNoBordersSimple"><b><bean:message key='requestdetails.header.label.Comments'/> :</b> <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>"  property="comments"  scope="request" /> </td><tr>
-						</table>
-					</td>
-					
-				</tr>
-			</table>	
-			    <!-- Order Request Header Ends -->
-		     </td>
-	    </tr>
-        </table> 
-        <!-- Tab Page For Specimen requests-->
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="100%" id="table2_TabPage">
-		<tr>
-			<td height="20" class="tabMenuItemSelected" onclick="gotoSpecimenRequestTab()" id="specimenRequestTab">
-				<bean:message key='requestdetails.tabname.label.specimenRequests'/>
-			</td>
-			<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="gotoArrayRequestTab()" id="arrayRequestTab">
-				<bean:message key='requestdetails.tabname.label.arrayRequests'/>
-			</td>	
-			<td width="450" class="tabMenuSeparator" colspan="3" >
-				&nbsp;
-			</td>
-			
-		</tr>
-		<!-- Request Details List  -->
-		
-		<tr>
-			<td class="tabField" colspan="6">
-			<table summary="" cellpadding="3" cellspacing="0" border="0" class="contentPage" width="100%" id="table3_specimenDataTab">
-				<tr>
-					<td>
-					<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" >
-						<tr>
-							<td>
-						 	<table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
-								 <% 
-													
+				              </tr>
+							  <tr>
+						  <% 
 									if(requestDetailsList != null)
 									{
 									    session.setAttribute(Constants.REQUEST_DETAILS_LIST,requestDetailsList);
-			
 									 	int i = 0; 
 										String rowStatusValue ="";
-										
-								 %>
-							 	 <tr>
-								 	<th class="dataTableHeader" scope="col" align="center"  colspan='5'>
-								 	Requested specimen details
-								 	</th>
-								 	<th class="dataTableHeader" scope="col" align="left" width="10%" colspan="2" rowspan="2" scope="col">
+						 %>
+					             <td colspan="5" align="center" valign="top" class="tableheading">
+									<strong>
+										<bean:message key="requestdetails.header.RequestedSpecimenDetails" />
+									</strong>
+								 </td>
+								 <!--<td width="3" class="tableheading">&nbsp;
+				                 </td>-->
+				                 <td width="13%" colspan="2" rowspan="2" align="left" valign="top" class="tableheading">
+									<strong>
 										<bean:message key='requestdetails.datatable.label.AvailableQty'/>
-									</th>
-								
-									<th class="dataTableHeader" scope="col" align="left" width="10%" rowspan="2" scope="col">
+									</strong>
+								 </td>
+				                 <td width="13%" rowspan="2" valign="top" class="tableheading">
+									<span class=" grey_ar_s">
+										<img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
+									</span>
+									<strong>
 										<bean:message key='requestdetails.datatable.label.AssignQty'/>
-									</th>
-								
-					
-									<th class="dataTableHeader" colspan="2" align="left" width="20%" rowspan="2" scope="col">
-																	
-										<div>
-										<label align="center">
+									</strong>
+								</td>
+				                <td width="9%" rowspan="2" valign="top" class="tableheading">
+									<div>
+										<strong>
 											<bean:message key="consent.consentforspecimen"/>
-										</label>
-										</div>
-
-										<div style="float:right;">
-										<a  href="javascript:showAllSpecimen('<%=count%>')">
-											<bean:message key="consent.viewall"/>
-										 </a>
-										</div>
-									</th>
-
-					
-
-									<th class="dataTableHeader" scope="col" align="left" width="20%" rowspan="2" scope="col">
+											</br>
+										</strong>	
+									</div>
+								</td>
+				                <td width="16%" rowspan="2" valign="top" class="tableheading">
+									<strong>
 										<bean:message key='requestdetails.datatable.label.AssignStatus'/>
-										<html:select property="status" name="requestDetailsForm" styleClass="formFieldSized15" styleId="nextStatusId" size="1" 
-						 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="updateAllStatus()">
+									</strong>
+									</br>
+					                <span class="black_new">
+									     <html:select property="status" name="requestDetailsForm" styleClass="formFieldSized11" styleId="nextStatusId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="updateAllStatus()">
 											<html:options collection="<%= Constants.REQUESTED_ITEMS_STATUS_LIST %>" labelProperty="name" property="value"/>		
-										</html:select> 
-										<!--<html:button value="All" property="changeStatusButton" styleClass="actionButton" onclick="updateAllStatus()" 
-										title="<%= ApplicationProperties.getValue("requestdetails.tooltip.updateAllRequestStatus") %>">
-										</html:button>-->
-									</th>		
-								 </tr>
-								 <tr>	
-									<th class="dataTableHeader2" scope="col" align="left" width="20%" colspan='2'>
-										<bean:message key='requestdetails.datatable.label.RequestItem'/>
-									</th>
-								
-									<th class="dataTableHeader2" scope="col" align="left" width="20%">
-										<bean:message key='requestdetails.datatable.label.RequestFor'/>
-									</th>
-									<th class="dataTableHeader2" scope="col" align="left" width="15%">
-										Type
-									</th>
-								
-									<th class="dataTableHeader2" scope="col" align="left" width="5%">
-										<bean:message key='requestdetails.datatable.label.RequestedQty'/>
-									</th>
-								
-												
-							 	 </tr>						 									
-								<tbody id="tbody">									 	
-								 <logic:iterate id="requestDetailsBeanObj"  collection="<%= requestDetailsList%>" type="edu.wustl.catissuecore.bean.RequestDetailsBean">
-								 <% 
-								 	String requestFor = "value(RequestDetailsBean:"+i+"_requestFor)"; 
-								 	String assignQty = "value(RequestDetailsBean:"+i+"_assignedQty)"; 
-								 	String assignStatus = "value(RequestDetailsBean:"+i+"_assignedStatus)"; 	
-									String description = "value(RequestDetailsBean:"+i+"_description)";
-									String instanceOf = "value(RequestDetailsBean:"+i+"_instanceOf)";
-									String orderItemId = "value(RequestDetailsBean:"+i+"_orderItemId)";
-									String specimenIdInMap = "value(RequestDetailsBean:"+i+"_specimenId)";
-									String consentVerificationkey = "value(RequestDetailsBean:"+i+"_consentVerificationkey)";
-									String rowStatuskey = "value(RequestDetailsBean:"+i+"_rowStatuskey)";
-									String labelStatus="labelStatus"+i;
-									
-
-									
-									String requestedItem = "value(RequestDetailsBean:"+i+"_requestedItem)";
-									String requestedQty = "value(RequestDetailsBean:"+i+"_requestedQty)";
-									String availableQty = "value(RequestDetailsBean:"+i+"_availableQty)";
-									String spClass = "value(RequestDetailsBean:"+i+"_className)";
-									String spType = "value(RequestDetailsBean:"+i+"_type)";
-									
-									String distributedItemId = "value(RequestDetailsBean:"+i+"_distributedItemId)"; 
-									String specimenList = "requestFor(RequestForDropDownList:"+i+")";
-									String specimenCollGroupId = "value(RequestDetailsBean:"+i+"_specimenCollGroupId)";
-									String actualSpecimenType = "value(RequestDetailsBean:"+i+"_actualSpecimenType)";
-									String actualSpecimenClass = "value(RequestDetailsBean:"+i+"_actualSpecimenClass)";
-									String specimenClickFunction = "showSpecimenDetails("+requestDetailsBeanObj.getSpecimenId()+")";
-
+									     </html:select>
+								</td>
+				                <td rowspan="2" valign="top" class="tableheading">
+									<strong>
+										<bean:message key="requestdetails.header.label.Comments" />
+									</strong>
+								</td>
+				              </tr>
+				              <tr>
+								<td width="7%" class="subtd">
+									<bean:message key='requestdetails.datatable.label.RequestItem'/>
+								</td>
+				                <td width="13%" class="subtd">
+									<bean:message key='requestdetails.datatable.label.RequestFor'/>
+								</td>
+								<td width="8%" class="subtd">
+									<bean:message key="orderingSystem.tableheader.label.type" />
+								</td>
+				                <td width="7%" class="subtd">
+									<bean:message key='requestdetails.datatable.label.RequestedQty'/>
+								</td>
+				                <td width="3" align="left" bgcolor="#d7d7d7" >&nbsp;
+								</td>
+				              </tr>
+   <!----------------rows for the specimen request tab------------------>
+							  <tbody id="tbody">	
+				<%          int rows=0;
+				%>
+			<logic:iterate id="requestDetailsBeanObj" collection="<%= requestDetailsList%>" type="edu.wustl.catissuecore.bean.RequestDetailsBean">
+				<%			String fontStyle="black_ar";
+							rows++;
+							if(rows<=count)
+							if(rows%2 == 0)
+							{
+								fontStyle="tabletd1";
+							}
+							
+						 	String requestFor = "value(RequestDetailsBean:"+i+"_requestFor)"; 
+						 	String assignQty = "value(RequestDetailsBean:"+i+"_assignedQty)"; 
+						 	String assignStatus = "value(RequestDetailsBean:"+i+"_assignedStatus)"; 	
+							String description = "value(RequestDetailsBean:"+i+"_description)";
+							String instanceOf = "value(RequestDetailsBean:"+i+"_instanceOf)";
+							String orderItemId = "value(RequestDetailsBean:"+i+"_orderItemId)";
+							String specimenIdInMap = "value(RequestDetailsBean:"+i+"_specimenId)";
+							String consentVerificationkey = "value(RequestDetailsBean:"+i+"_consentVerificationkey)";
+							String rowStatuskey = "value(RequestDetailsBean:"+i+"_rowStatuskey)";
+							String labelStatus="labelStatus"+i;
+							String requestedItem = "value(RequestDetailsBean:"+i+"_requestedItem)";
+							String requestedQty = "value(RequestDetailsBean:"+i+"_requestedQty)";
+							String availableQty = "value(RequestDetailsBean:"+i+"_availableQty)";
+							String spClass = "value(RequestDetailsBean:"+i+"_className)";
+							String spType = "value(RequestDetailsBean:"+i+"_type)";
+							String distributedItemId = "value(RequestDetailsBean:"+i+"_distributedItemId)"; 
+							String specimenList = "requestFor(RequestForDropDownList:"+i+")";
+							String specimenCollGroupId = "value(RequestDetailsBean:"+i+"_specimenCollGroupId)";
+							String actualSpecimenType = "value(RequestDetailsBean:"+i+"_actualSpecimenType)";
+							String actualSpecimenClass = "value(RequestDetailsBean:"+i+"_actualSpecimenClass)";
+							String specimenClickFunction = "showSpecimenDetails("+requestDetailsBeanObj.getSpecimenId()+")";
 									//added for consent page:	
-									String showNewConsentPageFunction = "showNewConsentPage("+requestDetailsBeanObj.getSpecimenId()+")";
-									
-									boolean disableRow = false;
-									if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
-										&& (!((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals("")))
-									{
+							String showNewConsentPageFunction = "showNewConsentPage("+requestDetailsBeanObj.getSpecimenId()+")";
+							boolean disableRow = false;
+							if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+							&& (!((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals("")))
+							{
 										disableRow=true;
 										disabledStatus=i;
 										rowStatusValue =	"disable";	
+				%>
 									
-
-										
-										%>
-									
-									
-									
-									<html:hidden name="requestDetailsForm" property="<%= assignStatus %>" />
-									<html:hidden name="requestDetailsForm" property="<%= requestFor %>" />
-									<html:hidden name="requestDetailsForm" property="<%= description %>" />
-									<html:hidden name="requestDetailsForm" property="<%= assignQty %>" />
+								<html:hidden name="requestDetailsForm" property="<%= assignStatus %>" />
+								<html:hidden name="requestDetailsForm" property="<%= requestFor %>" />
+								<html:hidden name="requestDetailsForm" property="<%= description %>" />
+								<html:hidden name="requestDetailsForm" property="<%= assignQty %>" />
 								<!--	<html:hidden name="requestDetailsForm" property="<%= consentVerificationkey %>"/>	-->
-									<%
-									}
-									else{ rowStatusValue =	"enable";	}
+				<%
+							}
+							else{ rowStatusValue =	"enable";
+							}
 								 	//Added By Ramya.Construct corresponding rowids for request row expansion purpose.								 	
-									String data = "data" + i;
-									String switchText = "switch" + i;
-
-									
-									//Added By Ramya.Construct select element ids for corresponding rows.
+							String data = "data" + i;
+							String switchText = "switch" + i;
+							//Added By Ramya.Construct select element ids for corresponding rows.
 									//This is to update all rows' status in one shot.
-									String select = "select_" +	i;
+							String select = "select_" +	i;
 									//This is to update available qty for the specimen selected from requestFor drop down.
-									String updateAvaiQty = "avaiQty" + i;
-									String requestForId = "requestFor" + i;
-									String onChangeValueForRequestFor = "updateQuantity('"+ requestForId  +"')";
-									if(((requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenId"))) != null && !((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenId"))).equals(""))
-									{%>
-										<html:hidden name="requestDetailsForm" property="<%= specimenIdInMap %>" />
-									<%}
-							 		else
-									{%>
-										<html:hidden name="requestDetailsForm" property="<%= specimenCollGroupId %>" />
-									<%}
-								 %>	<!-- Html hidden variables for all static fields -->	 
+							String updateAvaiQty = "avaiQty" + i;
+							String requestForId = "requestFor" + i;
+							String onChangeValueForRequestFor = "updateQuantity('"+ requestForId  +"')";
+							if(((requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenId"))) != null && !((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenId"))).equals(""))
+							{
+				%>
+								<html:hidden name="requestDetailsForm" property="<%= specimenIdInMap %>" />
+				<%			}
+							else
+							{
+				%>
+								<html:hidden name="requestDetailsForm" property="<%= specimenCollGroupId %>" />
+				<%			}
+			    %>	<!-- Html hidden variables for all static fields -->	 
 								
 								 <html:hidden name="requestDetailsForm" property="<%= requestedItem %>" />	
 								 <html:hidden name="requestDetailsForm" property="<%= requestedQty %>" />	
@@ -427,135 +503,135 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 								 <html:hidden name="requestDetailsForm" property="<%= spType %>" />	
 								 <html:hidden name="requestDetailsForm" property="<%= actualSpecimenClass %>" />	
 								 <html:hidden name="requestDetailsForm" property="<%= actualSpecimenType %>" />	
-								
-								 
-								  <tr class="dataRowLight">
-									 	<td class="dataCellText">
-											<a id="<%=switchText%>" style="text-decoration:none" href="javascript:switchOrderList('<%=i%>');">  
-									 		<img src="images/nolines_plus.gif" alt="Add Description" border="0"/>
-									 	</td> 
-										<td class="dataCellText" width="20%" >
-										<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Derived"))
-											{%>											
-											<img src="images\Distribution.GIF" border="0"/>
-											
-											
+
+								<tr>
+									<td class="<%=fontStyle%>" width="20%" >
+					<%													                                                     if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim(            ).equalsIgnoreCase("Derived"))
+								{
+					%>											
+										<img src="images\Distribution.GIF" border="0"/>
+
 									 		<!-- bean:write name="requestDetailsBeanObj" property="requestedItem" /-->
-									 		<%}
-										else if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
-												|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))
-										{%>
-											<img src="images\Participant.GIF" border="0"/>
-										<%}String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType"))); %>
-									 		<span title="<%= toolTipTypeClass %>">
+			 		<%			}
+								else																					if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))			).trim().equalsIgnoreCase("DerivedPathological")
+										|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))
+									{
+					%>
+										<img src="images\Participant.GIF" border="0"/>
+					<%				}
+										String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType"))); %>
+									 	<span title="<%= toolTipTypeClass %>">
 									 		<%--Bug :6010- Hide link to Specimen Label in case of Pathological case report. 
 									 		    Modified by:Falguni Sachde
 									 		  --%>
-									 		<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
-												|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological")) {%>
+					<%	if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
+												|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological")) 
+									{
+					%>
 												
-												<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />									 	
-											<%
-												}
-												else
-												{
-										    %>
-												<html:link href="#" styleId="label" onclick="<%=specimenClickFunction%>">
-										 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />									 	
-												</html:link>
-											<%
-												}
-											%>
-									 		</span>
-									 	</td>
-									 	<%
-									 		if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
-									 		{
-									 			disableRow=true;
-									 		}%>
+											<bean:write name="requestDetailsForm" property="<%= requestedItem%>" />									 	
+					<%
+									}
+									else
+									{
+					%>
+										<html:link href="#" styleClass="view" styleId="label" onclick="<%=specimenClickFunction%>">
+									 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />	
+										</html:link>
+					<%
+									}
+					%>
+							 		</span>
+		  					 	</td>
+				 	<%
+						 		if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
+						 		{
+						 			disableRow=true;
+						 		}
+					%>
 									 	<!-- Added By Ramya for Tree View -->
-									 	<td class="dataCellText" width="20%" style="border-right:1px solid #5C5C5C;border-bottom:1px solid #5C5C5C">
-									 	<%if(!((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
-									 			{%>
-									 		<html:select property="<%= requestFor %>" name="requestDetailsForm" styleClass="formFieldSized10" styleId="<%= requestForId %>" 					 								
-									 		 	onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableRow%>" onchange="<%= onChangeValueForRequestFor %>">
-									 			<html:optionsCollection property="<%=specimenList%>" name="requestDetailsForm" label="name" value="value"/>
-									 				<!-- html:options collection="<%=Constants.REQUEST_FOR_LIST%>" labelProperty="name" property="value"/-->											 				   
-									 		</html:select>
-									 		<bean:define id="specimenType" name="requestDetailsForm" property="<%=spType %>" type="java.lang.String"/>
-											<bean:define id="specimenClass" name="requestDetailsForm" property="<%=spClass %>" type="java.lang.String"/>
-											<!-- bean:define id="specimenObjId" name="requestDetailsForm" property="<%=specimenIdInMap %>" type="java.lang.String"/-->
-											<!-- bean:define id="specimenCollGrpId" name="requestDetailsForm" property="<%=specimenCollGroupId %>" type="java.lang.String" /-->
-									 		<%
-									 		String url ="";
-									 		
-									 			if(((requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenId"))) != null && !((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenId"))).equals(""))
-												{
-									 				String specimenObjId = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenId")));
-													url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&" + Constants.PROPERTY_NAME + "=" + requestFor + "&" + Constants.SPECIMEN_TYPE + "=" + specimenType + "&" + Constants.SPECIMEN_CLASS + "=" + specimenClass + "&" + Constants.SPECIMEN_TREE_SPECIMEN_ID + "=" + specimenObjId;
+					   		 	<td class="<%=fontStyle%>" width="20%">
+					<%																										if(!((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim(				).equalsIgnoreCase("Existing"))
+							{
+					%>
+									<html:select property="<%= requestFor %>" name="requestDetailsForm" styleClass="formFieldSized6" styleId="<%= requestForId %>" 					 	onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableRow%>" onchange="<%= onChangeValueForRequestFor %>">
+										<html:optionsCollection property="<%=specimenList%>" name="requestDetailsForm" label="name" value="value"/>
+									 				<!-- html:options collection="<%=Constants.REQUEST_FOR_LIST%>" labelProperty="name" property="value"/-->						
+							 		</html:select>
+								 	<bean:define id="specimenType" name="requestDetailsForm" property="<%=spType %>" type="java.lang.String"/>
+									<bean:define id="specimenClass" name="requestDetailsForm" property="<%=spClass %>" type="java.lang.String"/>
+									
+			 		<%
+								 	String url ="";
+					 			if(((requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenId"))) != null && !((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenId"))).equals(""))
+								{
+						 				String specimenObjId = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenId")));
+										url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&" + Constants.PROPERTY_NAME + "=" + requestFor + "&" + Constants.SPECIMEN_TYPE + "=" + specimenType + "&" + Constants.SPECIMEN_CLASS + "=" + specimenClass + "&" + Constants.SPECIMEN_TREE_SPECIMEN_ID + "=" + specimenObjId;
 													//session.setAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID,specimenObjId);
-													%>
-													
-												<%}
-										 		else
-												{
-										 			String specimenCollGrpId = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenCollGroupId")));
-													url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&" + Constants.PROPERTY_NAME + "=" + requestFor + "&" + Constants.SPECIMEN_TYPE + "=" + specimenType + "&" + Constants.SPECIMEN_CLASS + "=" + specimenClass + "&" + Constants.SPECIMEN_TREE_SPECCOLLGRP_ID + "=" + specimenCollGrpId;
-										 			//session.setAttribute(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID,specimenCollGrpId);
-										 			%>
-	 											
-												<%}
-												
-												String appletVar = "";
-												if(disableRow == false)
-													appletVar = "javascript:NewWindow('"+url+"','name','375','330','yes');return false";
-											%>
-											<a href="#" onclick="<%= appletVar %>">
-												<img src="images\Tree.gif" border="0" width="24" height="18" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.specimenTreeTooltip") %>" />
+					%>
+					<%
+								}
+								else
+								{
+										String specimenCollGrpId = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_specimenCollGroupId")));
+										url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&" + Constants.PROPERTY_NAME + "=" + requestFor + "&" + Constants.SPECIMEN_TYPE + "=" + specimenType + "&" + Constants.SPECIMEN_CLASS + "=" + specimenClass + "&" + Constants.SPECIMEN_TREE_SPECCOLLGRP_ID + "=" + specimenCollGrpId;
+									
+					%>
+	 				<%
+								}
+										String appletVar = "";
+										if(disableRow == false)
+											appletVar = "javascript:NewWindow('"+url+"','name','375','330','yes');return false";
+					%>
+											<a href="#" class="fontStyle" onclick="<%= appletVar %>">
+												<img src="images\uIEnhancementImages\ic_cl_diag.gif" border="0" height="16" width="16" alt="Clinical Diagnosis" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.specimenTreeTooltip") %>" />
 											</a>
 											<!-- Displaying add new link if specimen does not exist -->
-												<% if(((requestDetailsForm.getRequestFor("RequestForDropDownList:"+i)) == null) || (((List)(requestDetailsForm.getRequestFor("RequestForDropDownList:"+i))).size() == 0))
-													{
-														if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")) || (((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological")))
-												 		{												 			
-													%>
-														 <a href="createSpecimenFromOrder.do?rowNumber=<%=i%>">
-														 	<bean:message key="orderingSystem.label.create" />
-														</a> 
-												  <%	}
-														else
-														{ %>
-														<a href="createDerivedSpecimen.do?rowNumber=<%=i%>">
+				<%			if(((requestDetailsForm.getRequestFor("RequestForDropDownList:"+i)) == null) ||						(((List)(requestDetailsForm.getRequestFor("RequestForDropDownList:"+i))).size() == 0))
+							{
+									if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")) || (((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological")))
+							 		{												 			
+				%>
+										 <a href="createSpecimenFromOrder.do?rowNumber=<%=i%>">
+										 	<bean:message key="orderingSystem.label.create" />
+										</a> 
+				<%					}
+									else
+									{
+				%>
+										<a href="createDerivedSpecimen.do?rowNumber=<%=i%>">
 														 <!-- OrderingSystemAddNew.do?addNewForwardTo=deriveSpecimen&forwardTo=orderDetails&addNewFor=specimenId -->
-															<bean:message key="orderingSystem.label.create" />
-														</a> 
-												    <%}
-												    }														
-										    	}
-									 			else
-									 			{%>
-										    		<span title="<%= toolTipTypeClass %>">
-												 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />									 	
-												 	</span>
-										      <%}%> 
-									 	</td>
-									 	<td class="dataCellText" width="15%">
-											<bean:write name="requestDetailsForm" property="<%= spType %>" />
-									 	</td>
-									 	<%
-									 	if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing")
-									 		|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))
-									 		&& (((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals(""))
-									 		)
-									 		{
-									 			disableRow=false;												
-									 		}
-									 		String className = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_className")));
-									 		String type = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_type")));
-									 	%>
-									 	<td class="dataCellText" width="5%">
-									 		<!-- bean:write name="requestDetailsBeanObj" property="requestedQty" /-->										 		
-									 		<bean:write name="requestDetailsForm" property="<%= requestedQty %>" />
+											<bean:message key="orderingSystem.label.create" />
+										</a> 
+				<%					}
+							}														
+						}
+						else
+						{
+				%>
+							    		<span title="<%= toolTipTypeClass %>">
+									 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />	
+									 	</span>
+				<%		
+						}
+				%> 
+								 	</td>
+								 	<td class="<%=fontStyle%>" width="15%">
+										<bean:write name="requestDetailsForm" property="<%= spType %>" />
+								 	</td>
+				<%
+					 	if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing")
+					 		|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))
+					 		&& (((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals("")))
+				 		{
+				 			disableRow=false;												
+				 		}
+					 		String className = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_className")));
+					 		String type = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_type")));
+			 	%>
+								 	<td class="<%=fontStyle%>" >
+							 		<!-- bean:write name="requestDetailsBeanObj" property="requestedQty" /-->		
+								 		<bean:write name="requestDetailsForm" property="<%= requestedQty %>" />
 									 		<span>		
 												<script>
 													var v= getUnit('<%= className %>','<%= type %>');
@@ -563,32 +639,22 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 												</script>
 											</span>	
 									 	</td>
-									 	<td class="dataCellText" style="border-right:0px" width="5%">	
-										 					
-											<div id="<%= updateAvaiQty %>">	
-										 		<!-- bean:write name="requestDetailsBeanObj" property="availableQty" /-->								 		
+										<td class="<%=fontStyle%>"></td>
+									 	<td class="<%=fontStyle%>" align="left">
+											<div id="<%= updateAvaiQty %>" >
 										 		<bean:write name="requestDetailsForm" property="<%= availableQty %>" />
-										 	</div>
-										 </td>
-									<!--	<script>
-												changeStatus('<%= updateAvaiQty %>');
-										</script>-->
-
 												
-
-										 <td class="dataCellText">
-									 		<span>		
-												<script>													
+										 	</div></td>
+											<td class="<%=fontStyle%>">
+									 		<span>
+												<script>
 													var v= getUnit('<%= className %>','<%= type %>');
 													document.write(v);
 												</script>
 											</span>	
 									 	</td>
-									 	<%									 		
-									 		//String assignedQtyValue = requestDetailsBeanObj.getAssignedQty() ;									 		
-									 	%>	
-									 	<td class="dataCellText"> 										 		
-									 		<html:text name="requestDetailsForm" styleClass="formFieldSized3" maxlength="10"  styleId="<%=assignQty%>" property="<%=assignQty %>" disabled="<%= disableRow %>" />
+									 	<td class="<%=fontStyle%>" > 										 		
+									 		<html:text name="requestDetailsForm" styleClass="black_ar" maxlength="3" size="3" styleId="<%=assignQty%>" property="<%=assignQty %>" disabled="<%= disableRow %>" style="text-align:right" />
 									 		<span>		
 												<script>
 													var v= getUnit('<%= className %>','<%= type %>');
@@ -597,206 +663,157 @@ function showNewConsentPage(specimenIdentifierkey,labelStatus,consentVerificatio
 											</span>	
 									 	</td>
 
-					   <%
-												
+			   <%
 						String consentVerificationStatus=((String)(requestDetailsForm.getValue("value(RequestDetailsBean:"+i+"_consentVerificationkey)")));
 						String specimenIdValue=((String)(requestDetailsForm.getValue("value(RequestDetailsBean:"+i+"_specimenId)")));
 									
-						%>
+				%>
 					
 							
-							<td class="dataCellText"  colspan="2" width="20%"> 
+										<td class="<%=fontStyle%>"  width="20%"> 
 											<html:hidden property="<%=specimenIdInMap%>" styleId="<%=specimenIdInMap%>"  value="<%=specimenIdValue%>"/>
 											<html:hidden property="<%=rowStatuskey%>" styleId="<%=rowStatuskey%>"  value="<%=rowStatusValue%>"/>		
 
 											
-							<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Derived") ||
+				<%																										if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Derived") ||
 							((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological") ||
 							((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological"))
-							{
-							
-							%>
+						{
+					
+				%>
 														
-										<%=Constants.NO_CONSENTS%>
-										<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.NO_CONSENTS%>"/>
+											<%=Constants.NO_CONSENTS%>
+											<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.NO_CONSENTS%>"/>
 							
-							<%}%>
+				<%		}
+				%>
 
-							<% if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
-							{%>
+				<%																											if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
+						{
+				%>
 
-											<%
-											if(!disableRow)
-											{
-												
-											%>	
-											<logic:equal name="requestDetailsForm" property="<%=consentVerificationkey%>" value="<%=Constants.NO_CONSENTS%>">
-												<%=Constants.NO_CONSENTS%>
-												<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.NO_CONSENTS%>"/>
-											</logic:equal>
-											<%
-							
-											%>
-											<logic:notEqual name="requestDetailsForm" property="<%=consentVerificationkey%>" value="<%=Constants.NO_CONSENTS%>">
-												<a  id="<%=labelStatus%>" href="javascript:showNewConsentPage('<%=specimenIdInMap%>','<%=labelStatus%>','<%=consentVerificationkey%>')">
-													<logic:notEmpty name="requestDetailsForm" property="<%=consentVerificationkey%>">
-														<bean:write name="requestDetailsForm" property="<%=consentVerificationkey%>"/>
-													</logic:notEmpty>
-																				
-													<logic:empty name="requestDetailsForm" property="<%=consentVerificationkey%>">
-														<%=Constants.VIEW_CONSENTS %>
-													</logic:empty>
-													<logic:notEmpty name="requestDetailsForm" property="<%=consentVerificationkey%>">
-														<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=consentVerificationStatus%>"/>
-														</logic:notEmpty>
-													<logic:empty name="requestDetailsForm" property="<%=consentVerificationkey%>">
-														<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.VIEW_CONSENTS %>"/>
-													</logic:empty>
-
-												</a>
-
-											</logic:notEqual>
-											<%}else{ 
-											
-													
-											%>
-										
-												<%=Constants.VERIFIED%>
-												<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.VERIFIED%>"/>
-											<%}%>
-													
-
+				<%
+							if(!disableRow)
+							{
+				%>	
+						<logic:equal name="requestDetailsForm" property="<%=consentVerificationkey%>" value="<%=Constants.NO_CONSENTS%>">
+											<%=Constants.NO_CONSENTS%>
+											<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.NO_CONSENTS%>"/>
+						</logic:equal>
+						<logic:notEqual name="requestDetailsForm" property="<%=consentVerificationkey%>" value="<%=Constants.NO_CONSENTS%>">
+											<a  id="<%=labelStatus%>" href="javascript:showNewConsentPage('<%=specimenIdInMap%>','<%=labelStatus%>','<%=consentVerificationkey%>')">
+						<logic:notEmpty name="requestDetailsForm" property="<%=consentVerificationkey%>">
+												<bean:write name="requestDetailsForm" property="<%=consentVerificationkey%>"/>
+						</logic:notEmpty>
+						<logic:empty name="requestDetailsForm" property="<%=consentVerificationkey%>">
+												<%=Constants.VIEW_CONSENTS %>
+						</logic:empty>
+						<logic:notEmpty name="requestDetailsForm" property="<%=consentVerificationkey%>">
+												<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=consentVerificationStatus%>"/>
+						</logic:notEmpty>
+						<logic:empty name="requestDetailsForm" property="<%=consentVerificationkey%>">
+												<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.VIEW_CONSENTS %>"/>
+						</logic:empty>
+											</a>
+						</logic:notEqual>
+				<%
+						}
+						else
+						{ 
+				%>
+											<%=Constants.VERIFIED%>
+											<html:hidden property="<%=consentVerificationkey%>" styleId="<%=consentVerificationkey%>"  value="<%=Constants.VERIFIED%>"/>
+				<%
+						}
+				%>
 										</td>
-
-							<%}%>
+				<%		}
+				%>
 									 	
-									 	<td class="dataCellText" width="20%">									 											 		
-									 		<html:select property="<%=assignStatus %>" name="requestDetailsForm" styleClass="formFieldSized15" styleId="<%=select%>"  
+									 	<td class="<%=fontStyle%>" width="20%">									 		<span class="black_new">
+									 		<html:select property="<%=assignStatus %>" name="requestDetailsForm" styleClass="formFieldSized11" styleId="<%=select%>"  
 					 								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableRow %>">
-					 									
-						 								<html:options collection="<%=Constants.ITEM_STATUS_LIST%>" labelProperty="name" property="value"/>											 				   
-					 							
+					 								<html:options collection="<%=Constants.ITEM_STATUS_LIST%>" labelProperty="name" property="value"/>							
 									 		</html:select>
+											</span>
 									 	</td>
+										<td class="<%=fontStyle%>" >												 
+											<html:textarea styleId="description" styleClass="black_ar"  property="<%= description%>" cols='20' rows='2' disabled="<%= disableRow %>"/>
+										</td>
 									 </tr>
-									 
-									<!-- Added By Ramya -->
-									<!-- Block for row expansion starts here -->
-									
-									 <tr id="<%=data%>" style="display:none">
-									   <td colspan='9'>
-									   	<table class="rowExpansionTable" width="100%"> 
-									   		
-									   		<tr>
-									   			<!-- td width="15%" nowrap>
-									   				<label for="LabelType">
-									   					<bean:message key="specimen.type" />
-									   				</label> : <!-- bean:write name="requestDetailsBeanObj" property="className" />
-									   							<bean:write name="requestDetailsForm" property="<%= actualSpecimenClass %>" />
-									   			</td-->
-									   			<td width="10%" nowrap>
-									   				<label for="LabelDescription">
-									    				<bean:message key="requestdetails.header.label.Comments" />
-									   				</label> : 				
-									   			</td>
-												<td rowspan='2' nowrap>												 
-													<html:textarea styleId="description" styleClass="formFieldSized2"  property="<%= description%>" cols='60' rows='2' disabled="<%= disableRow %>"/>
-												</td>
-									   		</tr>
-									   		<tr>
-									   			<!-- td width="15%" nowrap>
-									   				<label for="LabelSubType">
-									    				<bean:message key="specimen.subType" />
-									   				</label> :  <!-- bean:write name="requestDetailsBeanObj" property="type" />
-									   							<bean:write name="requestDetailsForm" property="<%= actualSpecimenType %>" />
-									   			</td-->									   												   			
-									   		</tr>	
 
-									   	</table>									   		
-									   </td> 									 									  
-									</tr>
-									
 								  <!-- Block for row expansion ends here -->
 								  <!--  Flag for instanceOf  -->
-								  <% //String itemId = requestDetailsBeanObj.getOrderItemId();
-								  	 //String instanceOfObj = requestDetailsBeanObj.getInstanceOf();
-								  	 //String specimenId = requestDetailsBeanObj.getSpecimenId();
-								  %>
-								<html:hidden name="requestDetailsForm" property="<%= instanceOf %>" />
-								<html:hidden name="requestDetailsForm" property="<%= orderItemId %>" />
-
-								<html:hidden name="requestDetailsForm" property="<%= distributedItemId %>" />
-
+	
+										<html:hidden name="requestDetailsForm" property="<%= instanceOf %>" />
+										<html:hidden name="requestDetailsForm" property="<%= orderItemId %>" />
+										<html:hidden name="requestDetailsForm" property="<%= distributedItemId %>" />
 									 <% i++; %>
-								 </logic:iterate>
-								 <% } //End Outer IF %>
+					 </logic:iterate>
+				<%	 } //End Outer IF 
+				%>
 							</table>
-							</td>
-						</tr>
-					</table> <!-- table3_specimenDataTab ends here -->
-				</td>
-			</tr>
-		</table> <!-- table2_TabPage ends here -->
-		
+						</div>
+						<div id="arrayDataTable" style="display:none" width="100%">
 		<%-- Include ArrayRequest page for ArrayRequests tab --%>
-				<%@ include file="/pages/content/orderingsystem/ArrayRequests.jsp" %>
-		
-		<table summary="" border="0" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="100%" id="table4_pageFooter">
-			<tr>
- 				<td class="formLabelNoBackGroundWithSize6" width="10%" style="border-right:0px;border-bottom:0px ">
- 					<bean:message key="requestdetails.header.label.Comments" />
- 				</td>
- 				<td class="formFieldWithoutBackground" style="border-right:0px;border-bottom:0px ">
- 					<html:textarea name="requestDetailsForm" styleClass="formFieldSized" cols="300" rows="2" property="administratorComments"  />
-		 		</td>
-				<td class="formRequiredLabelWithoutBackgrnd" width="10%" style="border-right:0px;border-bottom:0px " nowrap>
- 					&nbsp;&nbsp;&nbsp;*<bean:message key='requestlist.dataTabel.label.Site'/> : 
- 				</td>
-				<td class="formRequiredLabelWithoutBackgrnd" align="right" width="30%" style="border-right:0px;border-bottom:0px">
-						
-						<html:select property="site" name="requestDetailsForm" styleClass="formFieldSized10" styleId="siteId" size="1" 
-						 			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						<%@ include file="/pages/content/orderingsystem/ArrayRequests.jsp" %>
+						</div>
+					</td>
+				</tr>
+				<tr class="td_color_F7F7F7">
+ 					<td width="13%" height="20" valign="middle" class="black_ar">&nbsp;<br />&nbsp;
+ 						<bean:message key="requestdetails.header.label.Comments" />
+	 				</td>
+ 					<td width="20%" height="20" valign="middle" class="black_ar"><br />
+ 						<html:textarea name="requestDetailsForm" styleClass="black_ar" cols="32" rows="3" property="administratorComments"  />
+		 			</td>
+					<td height="20" valign="top" class="black_ar"></td>
+				</tr>
+				<tr class="td_color_F7F7F7">
+					<td height="20" valign="top" class="black_ar">&nbsp;
+						<bean:message key='requestlist.dataTabel.label.Site'/> 
+ 					</td>
+					<td height="20" valign="top" class="black_new">
+						<html:select property="site" name="requestDetailsForm" styleClass="formFieldSized12" styleId="siteId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%= Constants.SITE_LIST_OBJECT  %>" labelProperty="name" property="value"/>		
 						</html:select> 						
-				</td>
-				
-		 		<td class="" align="right" >
-			
-				</td>	
-					<html:hidden name="requestDetailsForm" property="id" />
-					<%							
-						String operationUpdate = "update";
-						String distributionProtocol = ((RequestViewBean)request.getAttribute(Constants.REQUEST_HEADER_OBJECT)).getDistributionProtocolId();  
-					%>
-					<html:hidden name="requestDetailsForm" property="operation" value="<%= operationUpdate %>"/>
-					<html:hidden name="requestDetailsForm" property="distributionProtocolId" value="<%= distributionProtocol %>"/>							
-					<html:hidden name="requestDetailsForm" property="tabIndex" styleId="tabIndexId"/>							
-					<html:hidden name="requestDetailsForm" property="mailNotification" styleId="mailNotification"/>							
-				
-			</tr>
-			
-			<tr width="100%">
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td class="" align="right" >
-					<input type="button" value="Submit" onclick="submitAndNotify()">
-				</td>
-				<%-- <td>	
-					<input type="button" value="Submit And Notify" onclick="submitAndNotify()">
-				</td> --%>	
-				
-			</tr>
-			<tr></tr>
-			<tr></tr>
-			<tr></tr>
-			<tr></tr>
-			<tr></tr>
-			<tr></tr>
-		</table> <!-- table4_pageFooter ends here -->
+					</td>
+					<td height="20" valign="top" class="black_ar"></td>
+        				<html:hidden name="requestDetailsForm" property="id" />
+		<%							
+			  String operationUpdate = "update";
+			  String distributionProtocol = ((RequestViewBean)request.getAttribute(Constants.REQUEST_HEADER_OBJECT)).getDistributionProtocolId(); 
+		%>
+						<html:hidden name="requestDetailsForm" property="operation" value="<%= operationUpdate %>"/>
+						<html:hidden name="requestDetailsForm" property="distributionProtocolId" value="<%= distributionProtocol %>"/>							
+						<html:hidden name="requestDetailsForm" property="tabIndex" styleId="tabIndexId"/>			
+						<html:hidden name="requestDetailsForm" property="mailNotification" styleId="mailNotification"/>							
+				</tr>
+				<tr class="td_color_F7F7F7">
+			        <td height="20" colspan="3" valign="top" class="black_ar"></td>
+		        </tr>
+	            <tr  class="td_color_F7F7F7">
+			      <td colspan="3" class="buttonbg" style="padding-left:10px;">
+					<input type="button" class="blue_ar_b" value="Submit" onclick="submitAndNotify()">
+					 &nbsp;&nbsp;|&nbsp; 
+						<span class="cancellink">
+							<html:link page="/ManageAdministrativeData.do"
+											styleClass="blue_ar_s_b">
+								<bean:message key="orderingsystem.button.cancel" />
+				            </html:link>
+						</span>
+					</td>
+				</tr>
+			</table> <!-- table4_pageFooter ends here -->
 		</td>
+		<td class="td_color_bfdcf3" style="padding-bottom: 10px;"/>
 	  </tr>
-	  
-   </table>		<!-- table1_OrderRequestHeader ends here -->
- </html:form>
+   </table>	
+  </td>
+ </tr>
+</table>
+   <!-- main table ends here -->
+</html:form>
 </body>
+
+<!----------------------------------------------->	

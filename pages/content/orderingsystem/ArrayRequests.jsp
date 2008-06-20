@@ -11,7 +11,7 @@
 <%@ page import="java.util.Iterator"%>
 
 			<!--Tab page for Array Requests -->
-	<table summary="Display Tabbed page" cellpadding="0" cellspacing="0" border="0" width="100%" id="table5_arrayDataTable" style="display:none;border-right:1px solid #5C5C5C;">
+	<table summary="Display Tabbed page" cellpadding="0" cellspacing="0" border="0" width="100%" >
 	 	
 		<%
 			//Retrieve List from request attribute for order items in defined arrays

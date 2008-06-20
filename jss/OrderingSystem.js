@@ -228,6 +228,7 @@
 	{			
 		switchObj = document.getElementById('switch'+rowid);
 		dataObj = document.getElementById('data'+rowid);
+
 		switchBlock(switchObj,dataObj);		
 	}
 	
@@ -274,21 +275,13 @@
 		document.getElementById("tabIndexId").value=2;
 		pageDisplayed=2;
 		//Hide the table containing biospecimen  order items
-		document.getElementById('table3_specimenDataTab').style.display="none";
+		document.getElementById('specimenDataTab').style.display="none";
+		document.getElementById('arrayDataTable').style.display="block";
+		var selectedTab = document.getElementById('arrayRequestTab');
+		var unSelectedTab = document.getElementById('specimenRequestTab');
+		selectedTab.innerHTML="<img src=images/uIEnhancementImages/tab_arrayR2_user.gif alt=Array Requests width=101 height=20 border=0 />"
+		unSelectedTab.innerHTML="<img src=images/uIEnhancementImages/tab_specimentR2_user1.gif alt=Specimen Requests  width=124 height=20 border=0 />"
 	
-		if(navigator.appName == "Microsoft Internet Explorer")
-		{
-			//Display the table containing ArrayRequests.jsp
-			document.getElementById('table5_arrayDataTable').style.display="block";
-			expandTableForIE();			
-		}
-		else
-		{
-			//Display the table containing ArrayRequests.jsp
-			document.getElementById('table5_arrayDataTable').style.display="table-row";
-			expandTableForOtherBrowsers();			
-		}
-		changeCssForTab('arrayRequestTab','specimenRequestTab');		
 	}
 	
 	/**
@@ -299,20 +292,13 @@
 		document.getElementById("tabIndexId").value=1;
 		pageDisplayed=1;
 		//Hide the table containing ArrayRequests.jsp
-		document.getElementById('table5_arrayDataTable').style.display="none";
-		if(navigator.appName == "Microsoft Internet Explorer")
-		{
-			//Display the table containing the data of RequestDetails.jsp
-			document.getElementById('table3_specimenDataTab').style.display="block";
-			expandTableForIE();			
-		}
-		else
-		{
-			//Display the table containing the data of RequestDetails.jsp
-			document.getElementById('table3_specimenDataTab').style.display="table-row";
-			expandTableForOtherBrowsers();			
-		}
-		changeCssForTab('specimenRequestTab','arrayRequestTab');
+		document.getElementById('arrayDataTable').style.display="none";
+		document.getElementById('specimenDataTab').style.display="block";
+		var selectedTab = document.getElementById('specimenRequestTab');
+		var unSelectedTab = document.getElementById('arrayRequestTab');
+		selectedTab.innerHTML="<img src=images/uIEnhancementImages/tab_specimentR2_user.gif alt=Specimen Requests  width=124 height=20 border=0 />"
+		unSelectedTab.innerHTML="<img src=images/uIEnhancementImages/tab_arrayR2_user1.gif alt=Array Requests width=101 height=20 border=0 />"
+	
 	}
 		
 	
@@ -348,7 +334,8 @@
 	{
 		var selectedTab = document.getElementById(strSelectedTab);
 		var unSelectedTab = document.getElementById(strUnSelectedTab);
-		
+		selectedTab.innerHTML="<img src=images/uIEnhancementImages/tab_specimentR2_user1.gif alt=Specimen Requests  width=124 height=20 border=0 />"
+		unSelectedTab.innerHTML="<img src=images/uIEnhancementImages/tab_arrayR2_user.gif alt=Array Requests width=101 height=20 border=0 />"
 		selectedTab.onmouseover=null;
 		selectedTab.onmouseout=null;
 		selectedTab.className="tabMenuItemSelected";
