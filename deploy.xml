@@ -1158,62 +1158,6 @@ Thanking You,
 		<delete dir="${temp.dir}" />
 	</target>
 
-	<!--Encrypt Password-->
-	<target name="encryptPassword">
-		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>		
-			<then>
-				<antcall target="encryptPassword_mysql"/>
-			</then>
-			<elseif>	
-				<equals arg1="oracle" arg2="${database.type}"/>		
-				<then>
-					<antcall target="encryptPassword_oracle"/>
-				</then>
-			</elseif>
-		</if>
-	</target>
-	
-	<!--Mysql Encrypt Password-->
-	<target name="encryptPassword_mysql">
-		<echo message="Encrypting Password for Mysql DB..."/>
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
-		<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="true">
-			
-			<classpath refid="temp.classpath" />
-			
-			<arg value="${database.host}"/>
-			<arg value="${database.port}"/>
-			<arg value="${database.type}"/>
-			<arg value="${database.name}"/>
-			<arg value="${database.username}"/>
-			<arg value="${database.password}"/>
-			<arg value="${mysql.driver.string}"/>
-		</java>
-		<delete dir="${temp.dir}" />
-	</target>
-
-	<!--Oracle Encrypt Password-->
-	<target name="encryptPassword_oracle">
-		<echo message="Encrypting Password for Oracle DB..."/>
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
-		<java classname="edu.wustl.common.util.global.PasswordEncrypter" fork="false">
-			
-			<classpath refid="temp.classpath" />
-			
-			<arg value="${database.host}"/>
-			<arg value="${database.port}"/>
-			<arg value="${database.type}"/>
-			<arg value="${database.name}"/>
-			<arg value="${database.username}"/>
-			<arg value="${database.password}"/>
-			<arg value="${oracle.driver.string}"/>
-		</java>
-		<delete dir="${temp.dir}" />
-	</target>
-
 	<!-- Configure titli.properties according to properties in caTissueInstall.properties and other set properties -->
 	<target name="configure_titli">
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
