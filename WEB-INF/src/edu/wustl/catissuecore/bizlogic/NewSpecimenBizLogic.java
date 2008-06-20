@@ -943,17 +943,34 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		Specimen persistentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimenOld.getId());
 		//Calculate Quantity
 		calculateAvailableQunatity(specimen, persistentSpecimen);
-		//Set Specimen Domain Object
-		createPersistentSpecimenObj(dao, sessionDataBean, specimen, specimenOld, persistentSpecimen);
-		dao.update(persistentSpecimen, sessionDataBean, true, false, false);
-		updateChildAttributes(specimen, specimenOld);
-		//Audit of Specimen
-		dao.audit(persistentSpecimen, oldObj, sessionDataBean, true);
-		//Audit of Specimen Characteristics
-		dao.audit(persistentSpecimen.getSpecimenCharacteristics(), specimenOld
+		try {
+				//To assign storage locations to anticipated specimen
+				if(specimenOld.getCollectionStatus().equals("Pending")&&specimen.getCollectionStatus().equals("Collected")&&
+						!(specimen.getSpecimenPosition().getStorageContainer().equals(null)&&specimen.getPositionDimensionOne().equals(null)
+								&&specimen.getSpecimenPosition().getPositionDimensionTwo().equals(null)))
+				{
+					allocatePositionForSpecimen(specimen);
+					setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
+					persistentSpecimen.setSpecimenPosition(specimen.getSpecimenPosition());
+				}
+					//Set Specimen Domain Object
+				createPersistentSpecimenObj(dao, sessionDataBean, specimen, specimenOld, persistentSpecimen);
+				dao.update(persistentSpecimen, sessionDataBean, true, false, false);
+				updateChildAttributes(specimen, specimenOld);
+				//Audit of Specimen
+				dao.audit(persistentSpecimen, oldObj, sessionDataBean, true);
+				//Audit of Specimen Characteristics
+				dao.audit(persistentSpecimen.getSpecimenCharacteristics(), specimenOld
 				.getSpecimenCharacteristics(), sessionDataBean, true);
-		//Disable functionality
-		disableSpecimen(dao, specimen, persistentSpecimen);
+				//Disable functionality
+				disableSpecimen(dao, specimen, persistentSpecimen);
+			} catch (SMException e) {
+			
+				throw handleSMException(e);
+			}
+			finally{
+				storageContainerIds.clear();
+			}
 	}
 
 	/**
@@ -1058,6 +1075,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		if (isStoragePositionChanged(specimenOld, specimen))
 		{
+			if(specimenOld.getCollectionStatus().equals("Pending")&&specimen.getCollectionStatus().equals("Pending")&&
+				!( specimen.getSpecimenPosition().getStorageContainer().equals(null)&&specimen.getSpecimenPosition().getPositionDimensionOne().equals(null)
+					&&specimen.getSpecimenPosition().getPositionDimensionTwo().equals(null)))
+			{
+				throw new DAOException(
+				"Collection Status should be collected to allocat storage locations");
+			}
 			throw new DAOException(
 					"Storage Position should not be changed while updating the specimen");
 		}
@@ -2067,6 +2091,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if ((oldContainer == null && newContainer != null)
 				|| (oldContainer != null && newContainer == null))
 		{
+			if(oldSpecimen.getCollectionStatus().equals("Pending")&&newSpecimen.getCollectionStatus().equals("Collected")&&!(newSpecimen.getSpecimenPosition().getStorageContainer().equals(null)&&newSpecimen.getPositionDimensionOne().equals(null)&&newSpecimen.getSpecimenPosition().getPositionDimensionTwo().equals(null)))
+			{
+				return false;
+			}
 			return isEqual;
 		}
 		if (oldContainer.getId().longValue() == newContainer.getId().longValue())
