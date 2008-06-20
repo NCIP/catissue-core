@@ -3005,8 +3005,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			while (itr.hasNext())
 			{
 				List list1 = (List) itr.next();
-				String Id = (String) list1.get(0);
-				String Name = (String) list1.get(1);
+				String Id = (String) list1.get(1);
+				String Name = (String) list1.get(2);
 				NameValueBean nvb = new NameValueBean(Name, Id, new Long(relevenceCounter));
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
@@ -3076,57 +3076,59 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		String[] queryArray = new String[6];
 		// category # 1
 		//Gets all container which stores just specified collection protocol and specified specimen class
-		String equalToOne = " = 1";
-		String greaterThanOne = " > 1";
+		String equalToOne = " = 1 ";
+		String greaterThanOne = " > 1 ";
 
-		String equalToFour = " = 4";
-		String notEqualToFour = " !=4";
+		String equalToFour = " = 4 ";
+		String notEqualToFour = " !=4 " ;
+		String endQry = " and t1.IDENTIFIER = t6.STORAGE_CONTAINER_ID  "+
+									" group by t6.STORAGE_CONTAINER_ID, t1.NAME "+ 
+										" order by co asc ";
 
 		String cpRestrictionCountQuery = "(select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER)";
 		String specimenClassRestrictionQuery = "(select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER)";
-		String mainQuery = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1" + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
+		String mainQuery = " SELECT count(*) co, t6.STORAGE_CONTAINER_ID, t1.NAME FROM CATISSUE_CONTAINER t1 , CATISSUE_STOR_CONT_SPEC_CLASS t6 " + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
 				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')" + " AND t1.ACTIVITY_STATUS='Active'"
 				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
 				+ specimenClass + "')" + " AND t1.ACTIVITY_STATUS='Active'";
-		String defaultRestrictionQuery = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1"
+		String defaultRestrictionQuery = " SELECT  count(*) co, t6.STORAGE_CONTAINER_ID, t1.NAME FROM CATISSUE_CONTAINER t1 , CATISSUE_STOR_CONT_SPEC_CLASS t6 "
 				+ " WHERE t1.IDENTIFIER NOT IN (SELECT t2.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t2)"
 				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
 				+ specimenClass + "') " + " AND t1.ACTIVITY_STATUS='Active'";
 
-		String queryStr1 = mainQuery + " and " + cpRestrictionCountQuery + equalToOne + " and " + specimenClassRestrictionQuery + equalToOne + ")";
+		String queryStr1 = mainQuery + " and " + cpRestrictionCountQuery + equalToOne + " and " + specimenClassRestrictionQuery + equalToOne + endQry ;
 		//		 category # 2
 		//Gets all containers which holds just specified container and any specimen class
-		String queryStr2 = mainQuery + " and " + cpRestrictionCountQuery + equalToOne + " and " + specimenClassRestrictionQuery + greaterThanOne
-				+ ")";
+		String queryStr2 = mainQuery + " and " + cpRestrictionCountQuery + equalToOne + " and " + specimenClassRestrictionQuery + greaterThanOne + endQry ;
 
 		// catgory # 3
 		//Gets all the containers which holds other than specified collection protocol and only specified specimen class
-		String queryStr3 = mainQuery + " and " + cpRestrictionCountQuery + greaterThanOne + " and " + specimenClassRestrictionQuery + equalToOne
-				+ ")";
-
-		// catgory # 4
+		String queryStr3 = mainQuery + " and " + cpRestrictionCountQuery + greaterThanOne + " and " + specimenClassRestrictionQuery + equalToOne + endQry ;
+				
+    	// catgory # 4
 		//Gets all the containers which holds specified cp and other than specified collection protocol and specified specimen class and other than specified specimen class
-		String queryStr4 = mainQuery + " and " + cpRestrictionCountQuery + greaterThanOne + " and " + specimenClassRestrictionQuery + greaterThanOne
-				+ ")";
+		String queryStr4 = mainQuery + " and " + cpRestrictionCountQuery + greaterThanOne + " and " + specimenClassRestrictionQuery + greaterThanOne + endQry ;
 
 		// catgory # 5
 		//Gets all the containers which holds any collection protocol and specified specimen class and other than specified specimen class
 
-		String queryStr5 = defaultRestrictionQuery + " and " + specimenClassRestrictionQuery + notEqualToFour + ")";
+		String queryStr5 = defaultRestrictionQuery + " and " + specimenClassRestrictionQuery + notEqualToFour + endQry ;
 		// catgory # 6
 		//Gets all the containers which holds any collection protocol and any specimen class
-		String queryStr6 = defaultRestrictionQuery + " and " + specimenClassRestrictionQuery + equalToFour + ")";
+		String queryStr6 = defaultRestrictionQuery + " and " + specimenClassRestrictionQuery + equalToFour + endQry ;
 
-		queryArray[0] = queryStr1;
+	    queryArray[0] = queryStr1;
 		queryArray[1] = queryStr2;
 		queryArray[2] = queryStr3;
 		queryArray[3] = queryStr4;
 		queryArray[4] = queryStr5;
 		queryArray[5] = queryStr6;
+		
 
 		for (int i = 0; i < 6; i++)
 		{
 			Logger.out.debug("Storage Container query......................" + queryArray[i]);
+			System.out.println("Storage Container query......................" + queryArray[i]);
 			List queryResultList = executeStorageContQuery(queryArray[i], dao);
 			list.addAll(queryResultList);
 		}
@@ -3137,7 +3139,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		return list;
 	}
-
+	
 	
 
 	/**
