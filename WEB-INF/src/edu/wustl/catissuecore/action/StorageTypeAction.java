@@ -124,14 +124,18 @@ public class StorageTypeAction  extends SecureAction
     	List spArrayTypeList=Utility.getSpecimenArrayTypeList(list2);
     	request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
     	
-	  	
-	  	if(operation.equals(Constants.ADD))
-	  	{
-	  		// new model storageTypeForm.setHoldsSpecimenClassTypeIds(new long[]{1});
-	  		//storageTypeForm.setHoldsStorageTypeIds(new long[]{1});
-	  		storageTypeForm.setOneDimensionCapacity(0);
-	  		storageTypeForm.setTwoDimensionCapacity(0);
-	  	}
+    	//Bug #4297
+//	  	if(operation.equals(Constants.ADD))
+//	  	{
+//	  		// new model storageTypeForm.setHoldsSpecimenClassTypeIds(new long[]{1});
+//	  		//storageTypeForm.setHoldsStorageTypeIds(new long[]{1});
+//	  		if(storageTypeForm.getOneDimensionCapacity() == 0 &&
+//	  				storageTypeForm.getTwoDimensionCapacity() == 0)
+//	  		{
+//	  			storageTypeForm.setOneDimensionCapacity(0);
+//	  			storageTypeForm.setTwoDimensionCapacity(0);
+//	  		}
+//	  	}
 	    // ------------- add new
        
 		
