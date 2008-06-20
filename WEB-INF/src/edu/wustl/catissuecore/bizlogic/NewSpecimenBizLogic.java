@@ -1145,7 +1145,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		persistentSpecimen
 				.setConsentTierStatusCollection(specimen.getConsentTierStatusCollection());
 		Double conc = 0D;
-		if (Constants.MOLECULAR.equals(specimen.getLineage()))
+		if (Constants.MOLECULAR.equals(specimen.getClassName()))
 		{
 			conc = ((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter();
 			((MolecularSpecimen) persistentSpecimen).setConcentrationInMicrogramPerMicroliter(conc);
