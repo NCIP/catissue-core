@@ -96,7 +96,9 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		}
 		distributedItemsColumns.add(columns);
 		distributionData.addAll(distributedItemsColumns);
-		Iterator dataListItr = listOfData.iterator();
+		List newDataList = new ArrayList();
+		newDataList.add(listOfData);
+		Iterator dataListItr = newDataList.iterator();		
     	while(dataListItr.hasNext())
     	{
     		List rowList = (List)dataListItr.next();
