@@ -17,7 +17,10 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
@@ -30,41 +33,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenProtocolBizLogic extends DefaultBizLogic
 {
-	//Added by Ashish
-	/*
-	protected Map values = new HashMap();
-	protected Map setSpecimenRequirement(String [] key, SpecimenRequirement requirement)
-	{
-		
-	    values.put(key[0] , requirement.getSpecimenClass());
-		values.put(key[1] , Utility.getUnit(requirement.getSpecimenClass() , requirement.getSpecimenType()));
-		values.put(key[2] , requirement.getSpecimenType());
-		values.put(key[3] , requirement.getTissueSite());
-		values.put(key[4] , requirement.getPathologyStatus());
-		values.put(key[5] , Utility.toString(requirement.getQuantity().getValue()));
-		values.put(key[6] , Utility.toString(requirement.getId()));
-		
-		if(requirement.getSpecimenClass().equals(edu.wustl.catissuecore.util.global.Constants.TISSUE))
-		{
-			String tissueType = requirement.getSpecimenType();
-			if(tissueType.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.FROZEN_TISSUE_SLIDE) || 
-			        tissueType.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.FIXED_TISSUE_BLOCK) || 
-			        tissueType.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.FROZEN_TISSUE_BLOCK)  || 
-			        tissueType.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.FIXED_TISSUE_SLIDE))
-			{
-				values.put(key[5] , Utility.toString(new Integer(requirement.getQuantity().getValue().intValue())));
-			}
-		}
-		
-		return values;
-	}
-	public Object getValue(String key)
-	{
-		return values.get(key);
-	}
-	*/
-	//END
-    
     /**
 	 * This method checks for the change in the Activity status of the object. If change is found
 	 *  then it calls the setClosedDate() to update the End date.
@@ -106,29 +74,26 @@ public class SpecimenProtocolBizLogic extends DefaultBizLogic
 	
 	/**
 	 * @param specimenProtocolIdentifier ID of the specimen protocol whose end date is to be searched.
-	 * @return end date of the specimen protocol refered by the given ID. Empty string if enddate is null.
+	 * @param sessionBean Object of SessionDataBean
+	 * @return end date of the specimen protocol referred by the given ID. Empty string if enddate is null.
 	 * @throws DAOException
+	 * @throws ClassNotFoundException 
 	 */
-	public String getEndDate(long specimenProtocolIdentifier ) throws DAOException 
+	public String getEndDate(long specimenProtocolIdentifier, SessionDataBean sessionBean) throws DAOException, ClassNotFoundException 
 	{
 		String endDate="";
 		
-	   	String sourceObjectName = SpecimenProtocol.class.getName() ;
-    	String[] selectColumnName = null;
-    	String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER };
-    	String[] whereColumnCondition = {"="};
-    	Object[] whereColumnValue = {new Long(specimenProtocolIdentifier) };
-    	String joinCondition = null ;
-    	
-//      Retrieve the endates 
-        List protocolList = retrieve(sourceObjectName, selectColumnName, whereColumnName,
-                whereColumnCondition, whereColumnValue, joinCondition);
-            
-        if(protocolList != null && !protocolList.isEmpty()   )
+        String hqlQuery="select endDate from edu.wustl.catissuecore.domain.SpecimenProtocol where id="+specimenProtocolIdentifier;
+        AbstractDAO dao=DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+        dao.openSession(sessionBean);
+        List endDateList = dao.executeQuery(hqlQuery, null, false, null);
+        dao.closeSession();
+        if(endDateList != null && !endDateList.isEmpty()   )
         {
-         	SpecimenProtocol tmpObject = (SpecimenProtocol ) protocolList.get(0 );
-           	endDate = Utility.parseDateToString(tmpObject.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY); 
-        }    
+         	Date tmpDate = (Date) endDateList.get(0);
+           	endDate = Utility.parseDateToString(tmpDate,Constants.DATE_PATTERN_MM_DD_YYYY); 
+        }  
+        
 		return endDate ;	
 	}
 }
