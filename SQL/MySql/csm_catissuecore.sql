@@ -1445,5 +1445,8 @@ INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID fro
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='CellReqSpecimen'),'2008-05-28' from CSM_PG_PE;
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='TissueReqSpecimen'),'2008-05-28' from CSM_PG_PE;
 
+INSERT INTO `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'DistributionSpecimenRequirement','DistributionSpecimenRequirement Object','edu.wustl.catissuecore.domain.DistributionSpecimenRequirement',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='DistributionSpecimenRequirement'),'2008-05-28' from CSM_PG_PE;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=1;
