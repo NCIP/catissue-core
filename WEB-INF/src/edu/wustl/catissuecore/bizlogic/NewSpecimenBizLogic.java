@@ -2757,7 +2757,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			double newAvailQty = 0.0;
 			if (differenceQty == 0 || !specimenDO.getCollectionStatus().equals("Pending"))
 			{
-				if(differenceQty < 0)
+				if(differenceQty != 0)
 				{
 					newAvailQty = availableQuantity.doubleValue();
 				}
