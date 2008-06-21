@@ -38,7 +38,7 @@
 	    String currentDistributionProtocolDate="";
 		String distributionProtocolEndDate="";
 		Object obj = request.getAttribute("distributionProtocolForm");
-		int noOfRows=1;
+		int noOfRows=0;
 		Map map = null;
 		DistributionProtocolForm form = null;
 		if(obj != null && obj instanceof DistributionProtocolForm)
@@ -107,12 +107,12 @@ function insRow(subdivtag)
 	spreqtype.className="black_ar";
 	var rowno=(q-1);
 	sname="";
-	objname = "value(SpecimenRequirement:" + rowno + "_specimenClass)";
+	objname = "value(DistributionSpecimenRequirement:" + rowno + "_specimenClass)";
 	var specimenClassName = objname;
-//value(SpecimenRequirement:`_quantity_value)	
+//value(SpecimenRequirement:`_quantity)	
 	
-	var objunit = "value(SpecimenRequirement:"+rowno+"_unitspan)";
-	var subtypename =  "value(SpecimenRequirement:"+rowno+"_specimenType)";
+	var objunit = "value(DistributionSpecimenRequirement:"+rowno+"_unitspan)";
+	var subtypename =  "value(DistributionSpecimenRequirement:"+rowno+"_specimenType)";
 	sname = "<select name='" + objname + "' size='1' onchange=changeUnit('" + objname + "','" + objunit +"','" + subtypename + "') class='formFieldSized8' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 	<%for(int i=0;i<specimenClassList.size();i++)
 	{
@@ -129,7 +129,7 @@ function insRow(subdivtag)
 	var spreqsubtype=x.insertCell(1)
 	spreqsubtype.className="black_ar";
 	sname="";
-	objname = "value(SpecimenRequirement:"+rowno+"_specimenType)";
+	objname = "value(DistributionSpecimenRequirement:"+rowno+"_specimenType)";
 	var functionName = "onSubTypeChangeUnit('" + specimenClassName + "',this,'" + objunit + "')" ;
 	
 	sname= "<select name='" + objname + "' size='1' class='formFieldSized8' id='" + objname + "' onChange=" + functionName + " onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
@@ -143,7 +143,7 @@ function insRow(subdivtag)
 	var spreqtissuesite=x.insertCell(2)
 	spreqtissuesite.className="black_new";
 	sname="";
-	objname = "value(SpecimenRequirement:"+rowno+"_tissueSite)";
+	objname = "value(DistributionSpecimenRequirement:"+rowno+"_tissueSite)";
 	
 	sname = "<select name='" + objname + "' size='1' class='formFieldSizedNew' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 	<%for(int i=0;i<tissueSiteList.size();i++)
@@ -163,7 +163,7 @@ function insRow(subdivtag)
 	spreqpathologystatus.className="black_ar";
 	
 	sname="";
-	objname = "value(SpecimenRequirement:"+rowno+"_pathologyStatus)";
+	objname = "value(DistributionSpecimenRequirement:"+rowno+"_pathologyStatus)";
 	
 	sname="<select name='" + objname + "' size='1' class='formFieldSized8' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 	<%for(int i=0;i<pathologyStatusList.size();i++)
@@ -178,7 +178,7 @@ function insRow(subdivtag)
 	var spreqqty=x.insertCell(4)
 	spreqqty.className="black_ar";
 	sname="";
-	objname = "value(SpecimenRequirement:"+rowno+"_quantity_value)";
+	objname = "value(DistributionSpecimenRequirement:"+rowno+"_quantity)";
 
 	sname="<input type='text' name='" + objname + "' value='0'  size='12'  class='black_ar' id='" + objname + "'>"        	
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
@@ -546,16 +546,16 @@ function insRow(subdivtag)
 				int maxcount=1;
 				for(int counter=noOfRows;counter>=1;counter--)
 				{		
-					String objname = "value(SpecimenRequirement:" + counter + "_specimenClass)";
-					String srCommonName = "SpecimenRequirement:" + counter;
+					String objname = "value(DistributionSpecimenRequirement:" + counter + "_specimenClass)";
+					String srCommonName = "DistributionSpecimenRequirement:" + counter;
 					String srKeyName = srCommonName + "_specimenClass";
 					String srSubTypeKeyName = srCommonName + "_specimenType";
 					
-					String objunit = "value(SpecimenRequirement:"+ counter +"_unitspan)";
-					String objsubTypeName = "value(SpecimenRequirement:" + counter + "_specimenType)";
-					String identifier = "value(SpecimenRequirement:"+ counter +"_id)";
+					String objunit = "value(DistributionSpecimenRequirement:"+ counter +"_unitspan)";
+					String objsubTypeName = "value(DistributionSpecimenRequirement:" + counter + "_specimenType)";
+					String identifier = "value(DistributionSpecimenRequirement:"+ counter +"_id)";
 					String check = "chk_"+counter;
-					String mapIdKey = "SpecimenRequirement:" + counter + "_id";
+					String mapIdKey = "DistributionSpecimenRequirement:" + counter + "_id";
 
 					String idValue = String.valueOf((map.get(mapIdKey)));
 					int sysId = 0;
@@ -614,7 +614,7 @@ function insRow(subdivtag)
 						String tmpSpecimenClass = objname;
 						
 						objname="";
-						objname = "value(SpecimenRequirement:" + counter + "_specimenType)";
+						objname = "value(DistributionSpecimenRequirement:" + counter + "_specimenType)";
 						
 						
 						
@@ -628,7 +628,7 @@ function insRow(subdivtag)
 									<td class="black_new">
 			<%
 						objname="";
-						objname = "value(SpecimenRequirement:" + counter + "_tissueSite)";
+						objname = "value(DistributionSpecimenRequirement:" + counter + "_tissueSite)";
 			%>
 									<html:select property="<%=objname%>" styleClass="formFieldSizedNew" styleId="<%=objname%>" size="1" 
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -644,7 +644,7 @@ function insRow(subdivtag)
 									<td class="black_ar">
 			<%
 						objname="";
-						objname = "value(SpecimenRequirement:" + counter + "_pathologyStatus)";
+						objname = "value(DistributionSpecimenRequirement:" + counter + "_pathologyStatus)";
 			%>						
 									<html:select property="<%=objname%>" styleClass="formFieldSized8" styleId="<%=objname%>" size="1" 
 									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -654,10 +654,10 @@ function insRow(subdivtag)
                       <td class="black_ar">
 			<%
 						objname="";
-						objname = "value(SpecimenRequirement:"+ counter +"_quantity_value)";
+						objname = "value(DistributionSpecimenRequirement:"+ counter +"_quantity)";
 						String typeclassValue = (String)form.getValue(srSubTypeKeyName);
 						String strHiddenUnitValue = "" + changeUnit(classValue,typeclassValue);
-						String srQtyKeyName = srCommonName + "_quantity_value";
+						String srQtyKeyName = srCommonName + "_quantity";
 						String qtyValue = (String)form.getValue(srQtyKeyName);
 						if(qtyValue == null)
 							qtyValue="0";
@@ -674,7 +674,7 @@ function insRow(subdivtag)
 					</td>
 			<%
 					
-					String key = "SpecimenRequirement:"+ counter +"_id";
+					String key = "DistributionSpecimenRequirement:"+ counter +"_id";
 					boolean bool = Utility.isPersistedValue(map,key);
 					String condition = "";
 					if(bool)

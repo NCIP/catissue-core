@@ -22,7 +22,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	protected Integer positionDimensionTwo;
 	
 	//Change for API Search   --- Ashwin 04/10/2006
-	protected Quantity initialQuantity;
+	protected Double initialQuantity;
 	
 	//Change for API Search   --- Ashwin 04/10/2006
 	protected SpecimenArray specimenArray;
@@ -75,10 +75,10 @@ public class SpecimenArrayContent extends AbstractDomainObject
     
     /**
      * @return Returns the initialQuantity.
-     * @hibernate.many-to-one column="INITIAL_QUANTITY_ID" class="edu.wustl.catissuecore.domain.Quantity"
-     * constrained="true"
+     * @hibernate.property name="initialQuantity" type="double"
+     * column="INITIAL_QUANTITY" length="50"
      */
-    public Quantity getInitialQuantity()
+    public Double getInitialQuantity()
     {
         return initialQuantity;
     }
@@ -86,7 +86,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     /**
      * @param initialQuantity The initialQuantity to set.
      */
-    public void setInitialQuantity(Quantity initialQuantity)
+    public void setInitialQuantity(Double initialQuantity)
     {
         this.initialQuantity = initialQuantity;
     }
@@ -172,7 +172,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
     	//Change for API Search   --- Ashwin 04/10/2006
     	if (SearchUtil.isNullobject(initialQuantity))
     	{
-    		initialQuantity = new Quantity();
+    		initialQuantity = new Double(0);
     	}
     	
     	//Change for API Search   --- Ashwin 04/10/2006

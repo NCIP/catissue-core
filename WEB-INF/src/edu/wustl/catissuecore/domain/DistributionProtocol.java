@@ -33,7 +33,7 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	/**
 	 * Collection of specimenRequirements associated with the DistributionProtocol.
 	 */
-	protected Collection specimenRequirementCollection = new HashSet();
+	protected Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection = new HashSet<DistributionSpecimenRequirement>();
 	
 	/**
 	 * Collection of protocols(CollectionProtocols) associated with the DistributionProtocol.
@@ -52,24 +52,24 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	// ---- Method section
 	/**
 	 * Returns the collection of SpecimenRequirements for this Protocol.
-	 * @hibernate.set name="specimenRequirementCollection" table="CATISSUE_DISTRIBUTION_SPE_REQ" 
+	 * @hibernate.set name="specimenRequirementCollection" table="CATISSUE_DISTRIBUTION_SPEC_REQ" 
 	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="DISTRIBUTION_PROTOCOL_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="SPECIMEN_REQUIREMENT_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenRequirement" column="DISTRIBUTION_SPECIMEN_REQ_ID"
 	 * @return Returns the collection of SpecimenRequirements for this Protocol.
 	 */
-	public Collection getSpecimenRequirementCollection()
+	public Collection<DistributionSpecimenRequirement> getDistributionSpecimenRequirementCollection()
 	{
-		return specimenRequirementCollection;
+		return distributionSpecimenRequirementCollection;
 	}
 
 	/**
 	 * @param specimenRequirementCollection
 	 *  The specimenRequirementCollection to set.
 	 */
-	public void setSpecimenRequirementCollection(Collection specimenRequirementCollection)
+	public void setDistributionSpecimenRequirementCollection(Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection)
 	{
-		this.specimenRequirementCollection = specimenRequirementCollection;
+		this.distributionSpecimenRequirementCollection = distributionSpecimenRequirementCollection;
 	}
 
 	/**
@@ -110,8 +110,8 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	        //map = fixMap(map);
 	        Logger.out.debug("MAP "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        this.specimenRequirementCollection = new HashSet(parser.generateData(map));
-	        Logger.out.debug("specimenRequirementCollection "+this.specimenRequirementCollection);
+	        this.distributionSpecimenRequirementCollection = new HashSet(parser.generateData(map));
+	        Logger.out.debug("specimenRequirementCollection "+this.distributionSpecimenRequirementCollection);
         }
         catch (Exception excp)
         {
@@ -121,7 +121,7 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
     
     public String toString()
     {
-    	return title+" "+specimenRequirementCollection ;
+    	return title+" "+distributionSpecimenRequirementCollection ;
     }
     
     /**

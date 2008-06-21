@@ -113,11 +113,7 @@ public class SpecimenArraySearchAction extends CommonSearchAction {
 						if (arrayContent.getInitialQuantity() != null) 
 						{
 							key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo,columnNo,columnCount,AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX);
-							value = arrayContent.getInitialQuantity().getValue().toString();
-							arrayContentMap.put(key,value);
-							
-							key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo,columnNo,columnCount,AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX);
-							value = arrayContent.getInitialQuantity().getId().toString();
+							value = arrayContent.getInitialQuantity().toString();
 							arrayContentMap.put(key,value);
 						}
 						

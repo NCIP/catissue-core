@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,7 +26,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.DomainBeanIdentifierComparator;
@@ -46,7 +45,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * Counter that contains number of rows in the 'Add More' functionality.
 	 */
-	private int counter=1;
+	private int counter=0;
 	
 	/**
 	 * @return Returns the counter.
@@ -90,10 +89,10 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		
 		DistributionProtocol dProtocol = (DistributionProtocol)abstractDomain;
 		
-		Collection spcimenProtocolCollection = dProtocol.getSpecimenRequirementCollection();
+		Collection<DistributionSpecimenRequirement> distSpcimenReqquirementCollection = dProtocol.getDistributionSpecimenRequirementCollection();
 		
 		//Added by Abhishek
-		List spcimenProtocolCollectionList = new ArrayList(spcimenProtocolCollection);
+		List<DistributionSpecimenRequirement> spcimenProtocolCollectionList = new ArrayList<DistributionSpecimenRequirement>(distSpcimenReqquirementCollection);
 		DomainBeanIdentifierComparator domainBeanIdentifierComparator = new DomainBeanIdentifierComparator();
 		Collections.sort(spcimenProtocolCollectionList, domainBeanIdentifierComparator);
 		
@@ -106,18 +105,18 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 			Iterator it = spcimenProtocolCollectionList.iterator();
 			while(it.hasNext())
 			{
-				SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
+				DistributionSpecimenRequirement distSpecimenRequirement = (DistributionSpecimenRequirement)it.next();
 
 				String[] key = {
-				        "SpecimenRequirement:" + i +"_specimenClass",
-				        "SpecimenRequirement:" + i +"_unitspan",
-				        "SpecimenRequirement:" + i +"_specimenType",
-				        "SpecimenRequirement:" + i +"_tissueSite",
-				        "SpecimenRequirement:" + i +"_pathologyStatus",
-				        "SpecimenRequirement:" + i +"_quantity_value",
-				        "SpecimenRequirement:" + i +"_id"
+				        "DistributionSpecimenRequirement:" + i +"_specimenClass",
+				        "DistributionSpecimenRequirement:" + i +"_unitspan",
+				        "DistributionSpecimenRequirement:" + i +"_specimenType",
+				        "DistributionSpecimenRequirement:" + i +"_tissueSite",
+				        "DistributionSpecimenRequirement:" + i +"_pathologyStatus",
+				        "DistributionSpecimenRequirement:" + i +"_quantity",
+				        "DistributionSpecimenRequirement:" + i +"_id"
 					};
-				setSpecimenRequirement(key , specimenRequirement);
+				setSpecimenRequirement(key , distSpecimenRequirement);
 				i++;
 				counter++;
 			}
@@ -143,25 +142,6 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		Validator validator = new Validator();
 		try
 		{
-//                if(this.principalInvestigatorId == -1)
-//				{
-//					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.principalinvestigator")));
-//				}
-//                if (validator.isEmpty(this.title))
-//                {
-//                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.protocoltitle")));
-//                }
-//                
-//                // as per bug 326
-//                // check for valid enrollments if present
-//                if (!validator.isEmpty(this.enrollment) && !validator.isNumeric(this.enrollment ))
-//                {
-//                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.participants")));
-//                }
-				if (this.values.keySet().isEmpty())
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("distributionprotocol.specimenreq")));
-				}
                 
 				boolean bSpecimenClass = false;
 				boolean bSpecimenType = false;
@@ -214,7 +194,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
     					
     				if(!bQuantity )
     				{
-	    				if((key.indexOf("_quantity_value"))!=-1)
+	    				if((key.indexOf("_quantity"))!=-1)
 	    				{
 	    					// check for empty quantity
 //	    					if(validator.isEmpty(value))

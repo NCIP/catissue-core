@@ -38,15 +38,14 @@
             column="CONC_IN_MICROGM_PER_MICROLTR"
             length="50"
         />
-
-        <many-to-one
+        
+        <property
             name="initialQuantity"
-            class="edu.wustl.catissuecore.domain.Quantity"
-            cascade="none"
-             
+            type="double"
             update="true"
             insert="true"
-            column="INITIAL_QUANTITY_ID" lazy="false" 
+            column="INITIAL_QUANTITY"
+            length="50"
         />
 
         <property

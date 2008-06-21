@@ -333,12 +333,13 @@
             />
 
         <set
-            name="specimenRequirementCollection"
-            table="CATISSUE_DISTRIBUTION_SPE_REQ"
-           
-            inverse="false"
-            cascade="save-update"
-            sort="unsorted"   fetch="subselect" lazy="false" 
+            name="distributionSpecimenRequirementCollection"
+            table="CATISSUE_DISTRIBUTION_SPEC_REQ"
+            inverse="true"
+            cascade="none"
+            sort="unsorted"
+            fetch="subselect"
+            lazy="false"
         >
         
         <cache usage="read-write" />
@@ -348,10 +349,8 @@
             >
             </key>
 
-            <many-to-many
-                class="edu.wustl.catissuecore.domain.SpecimenRequirement"
-                column="SPECIMEN_REQUIREMENT_ID"
-                lazy="false" 
+            <one-to-many
+                class="edu.wustl.catissuecore.domain.DistributionSpecimenRequirement"
              />
 
         </set>

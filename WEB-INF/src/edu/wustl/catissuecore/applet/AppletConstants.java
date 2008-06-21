@@ -54,19 +54,15 @@ public interface AppletConstants
 	/**
 	 * Array specimen prefix
 	 */
-	String ARRAY_CONTENT_QUANTITY_PREFIX = "initialQuantity_value";
+	String ARRAY_CONTENT_QUANTITY_PREFIX = "initialQuantity";
 
-	/**
-	 * Array specimen prefix
-	 */
-	String ARRAY_CONTENT_QUANTITY_ID_PREFIX = "initialQuantity_id";
 	
 	String VIRTUALLY_LOCATED_CHECKBOX = "virtuallyLocatedCheckBox";
 	
 	/**
 	 * array attributes name
 	 */
-	String[] ARRAY_CONTENT_ATTRIBUTE_NAMES = {ARRAY_CONTENT_SPECIMEN_PREFIX + "label",ARRAY_CONTENT_SPECIMEN_PREFIX + "barcode",ARRAY_CONTENT_QUANTITY_PREFIX,"concentrationInMicrogramPerMicroliter","positionDimensionOne","positionDimensionTwo","id",ARRAY_CONTENT_QUANTITY_ID_PREFIX};
+	String[] ARRAY_CONTENT_ATTRIBUTE_NAMES = {ARRAY_CONTENT_SPECIMEN_PREFIX + "label",ARRAY_CONTENT_SPECIMEN_PREFIX + "barcode",ARRAY_CONTENT_QUANTITY_PREFIX,"concentrationInMicrogramPerMicroliter","positionDimensionOne","positionDimensionTwo","id"};
 	// ,ARRAY_CONTENT_SPECIMEN_PREFIX + "id"
 	
 	/**

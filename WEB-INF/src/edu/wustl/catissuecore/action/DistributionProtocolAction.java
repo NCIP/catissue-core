@@ -59,11 +59,11 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
     	}
     	//List of keys used in map of ActionForm
 		List key = new ArrayList();
-    	key.add("SpecimenRequirement:i_specimenClass");
-    	key.add("SpecimenRequirement:i_specimenType");
-    	key.add("SpecimenRequirement:i_tissueSite");
-    	key.add("SpecimenRequirement:i_pathologyStatus");
-    	key.add("SpecimenRequirement:i_quantity_value");
+    	key.add("DistributionSpecimenRequirement:i_specimenClass");
+    	key.add("DistributionSpecimenRequirement:i_specimenType");
+    	key.add("DistributionSpecimenRequirement:i_tissueSite");
+    	key.add("DistributionSpecimenRequirement:i_pathologyStatus");
+    	key.add("DistributionSpecimenRequirement:i_quantity");
     	
     	//Gets the map from ActionForm
     	Map map = distributionProtocolForm.getValues();

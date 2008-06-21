@@ -332,7 +332,7 @@ catch (Exception e)
 					// set quantity object to null when there is no value.. [due to Hibernate exception]
 					if (specimenArrayContent.getInitialQuantity() != null)
 					{
-						if (specimenArrayContent.getInitialQuantity().getValue() == null)
+						if (specimenArrayContent.getInitialQuantity() == null)
 						{
 							specimenArrayContent.setInitialQuantity(null);
 						}
@@ -343,7 +343,7 @@ catch (Exception e)
 					{
 						if (specimenArrayContent.getInitialQuantity() != null)
 						{
-							quantity = specimenArrayContent.getInitialQuantity().getValue().doubleValue();
+							quantity = specimenArrayContent.getInitialQuantity().doubleValue();
 							double tempQuantity = quantity;
 							SpecimenArrayContent oldArrayContent = null;
 							// incase if specimenArray is created from aliquot page, then skip the Available quantity of specimen. 
@@ -356,7 +356,7 @@ catch (Exception e)
 									oldArrayContent = checkExistSpecimenArrayContent(specimenArrayContent, oldSpecimenArrayContentCollection);
 									if (oldArrayContent != null)
 									{
-										quantity = quantity - oldArrayContent.getInitialQuantity().getValue().doubleValue();
+										quantity = quantity - oldArrayContent.getInitialQuantity().doubleValue();
 									}
 								}
 
@@ -365,14 +365,6 @@ catch (Exception e)
 									throw new DAOException(" Quantity '" + tempQuantity + "' should be less than current Distributed Quantity '"
 											+ specimen.getAvailableQuantity().doubleValue() + "' of specimen :: " + specimen.getLabel());
 								}
-							}
-							if (specimenArrayContent.getInitialQuantity().getId() == null)
-							{
-								dao.insert(specimenArrayContent.getInitialQuantity(), sessionDataBean, true, false);
-							}
-							else
-							{
-								dao.update(specimenArrayContent.getInitialQuantity(), sessionDataBean, true, false, false);
 							}
 						}
 						else
@@ -411,7 +403,7 @@ catch (Exception e)
 					Specimen oldSpecimen = getSpecimen(dao, oldSpecimenArrayContent);
 					if (oldSpecimen != null && oldSpecimen instanceof MolecularSpecimen)
 					{
-						Double oldQuantity = oldSpecimenArrayContent.getInitialQuantity().getValue();
+						Double oldQuantity = oldSpecimenArrayContent.getInitialQuantity();
 						Double quantity = oldSpecimen.getAvailableQuantity();
 						double newQuantity = quantity.doubleValue() + oldQuantity.doubleValue();
 						quantity= newQuantity;

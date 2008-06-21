@@ -34,7 +34,7 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -100,11 +100,11 @@ public class ApiSearchUtil
     		user.setActivityStatus(Constants.ACTIVITY_STATUS_NEW);
     	}	
 	}
-	public static void setSpecimenRequirementDefault(SpecimenRequirement specimenRequirement)
+	public static void setSpecimenRequirementDefault(DistributionSpecimenRequirement specimenRequirement)
 	{		
     	if (SearchUtil.isNullobject(specimenRequirement.getQuantity()))
     	{
-    		specimenRequirement.setQuantity(new Quantity());
+    		specimenRequirement.setQuantity(new Double(0));
     	}
 	}
 	
@@ -112,7 +112,7 @@ public class ApiSearchUtil
 	{		
     	if (SearchUtil.isNullobject(specimenArrayContent.getInitialQuantity()))
     	{
-    		specimenArrayContent.setInitialQuantity(new Quantity());
+    		specimenArrayContent.setInitialQuantity(new Double(0));
     	}
     	
     	if (SearchUtil.isNullobject(specimenArrayContent.getSpecimen()))

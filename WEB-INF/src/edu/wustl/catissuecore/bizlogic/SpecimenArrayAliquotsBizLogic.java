@@ -226,7 +226,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 				SpecimenArrayContent arrayContent = (SpecimenArrayContent) itr.next();
 				if (arrayContent.getSpecimen() instanceof MolecularSpecimen) 
 				{
-					arrayContent.getInitialQuantity().setValue(Double.valueOf("0"));
+					arrayContent.setInitialQuantity(Double.valueOf("0"));
 				}
 			}
 		}
@@ -304,11 +304,9 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			{
 				if(aliquotCount > 0)
 				{
-					Double parentInitialQuantity = parentSpecimenArrayContent.getInitialQuantity().getValue();
-					double initialQuantity = parentInitialQuantity.doubleValue()/aliquotCount;		
-					quantity = new Quantity();
-					quantity.setValue(new Double(initialQuantity));	
-					specimenArrayContent.setInitialQuantity(quantity);
+					Double parentInitialQuantity = parentSpecimenArrayContent.getInitialQuantity();
+					Double initialQuantity = parentInitialQuantity.doubleValue()/aliquotCount;
+					specimenArrayContent.setInitialQuantity(initialQuantity);
 					// reset quantity value of parent array content to 0.0
 					//parentSpecimenArrayContent.getInitialQuantity().setValue(Double.valueOf("0"));
 				}

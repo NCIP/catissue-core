@@ -16,8 +16,8 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -400,7 +400,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 * @param key Atring Array of Key
 	 * @param requirement Specimen Requirement
 	 */
-	protected void setSpecimenRequirement(String [] key, SpecimenRequirement requirement)
+	protected void setSpecimenRequirement(String [] key, DistributionSpecimenRequirement requirement)
 	{
 	    values.put(key[0] , requirement.getSpecimenClass());
 		values.put(key[1] , Utility.getUnit(requirement.getSpecimenClass() , requirement.getSpecimenType()));
@@ -411,7 +411,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		
 		if(!Utility.isQuantityDouble(requirement.getSpecimenClass(),requirement.getSpecimenType()))
 		{
-			Double doubleQuantity = requirement.getQuantity().getValue();
+			Double doubleQuantity = requirement.getQuantity();
 			if(doubleQuantity == null)
 			{
 				values.put(key[5] , "0"); 
@@ -430,7 +430,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		}
 		else
 		{
-			if(requirement.getQuantity().getValue() == null)
+			if(requirement.getQuantity() == null)
 			{
 				values.put(key[5] , "0"); 
 			}
@@ -442,7 +442,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		
 		values.put(key[6] , Utility.toString(requirement.getId()));
 		
-		if(requirement.getSpecimenClass().equals(Constants.TISSUE) && requirement.getQuantity().getValue() != null)
+		if(requirement.getSpecimenClass().equals(Constants.TISSUE) && requirement.getQuantity() != null)
 		{
 			String tissueType = requirement.getSpecimenType();
 			if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE)
@@ -450,7 +450,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 					||tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)  
 			        ||tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
 			{
-				values.put(key[5] , Utility.toString(new Integer(requirement.getQuantity().getValue().intValue())));
+				values.put(key[5] , Utility.toString(new Integer(requirement.getQuantity().intValue())));
 			}
 		}
 	}

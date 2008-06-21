@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.Roles;
@@ -58,12 +58,10 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		setPrincipalInvestigator(dao,distributionProtocol);
 		dao.insert(distributionProtocol,sessionDataBean, true, true);
 
-		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
-		while(it.hasNext())
+		for(DistributionSpecimenRequirement distributionSpecimenRequirement : distributionProtocol.getDistributionSpecimenRequirementCollection())
 		{
-			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
-			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
-			dao.insert(specimenRequirement,sessionDataBean, true, true);
+			distributionSpecimenRequirement.setDistributionProtocol(distributionProtocol);
+			dao.insert(distributionSpecimenRequirement,sessionDataBean, true, true);
 		}
 		
 		//Inserting authorization data
@@ -94,21 +92,19 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		//Audit of Distribution Protocol.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		
-		Collection oldSpecimenRequirementCollection = distributionProtocolOld.getSpecimenRequirementCollection();
+		Collection<DistributionSpecimenRequirement> oldDistributionSpecimenRequirementCollection = distributionProtocolOld.getDistributionSpecimenRequirementCollection();
 		
-		Iterator it = distributionProtocol.getSpecimenRequirementCollection().iterator();
-		while(it.hasNext())
+		for(DistributionSpecimenRequirement distributionSpecimenRequirement : oldDistributionSpecimenRequirementCollection)
 		{
-			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
-			Logger.out.debug("SpecimenRequirement Id ............... : "+specimenRequirement.getId());
-			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
-			dao.update(specimenRequirement, sessionDataBean, true, true, false);
+			Logger.out.debug("DistributionSpecimenRequirement Id ............... : "+distributionSpecimenRequirement.getId());
+			distributionSpecimenRequirement.setDistributionProtocol(distributionProtocol);
+			dao.update(distributionSpecimenRequirement, sessionDataBean, true, true, false);
 			
-			SpecimenRequirement oldSpecimenRequirement 
-				= (SpecimenRequirement)getCorrespondingOldObject(oldSpecimenRequirementCollection, 
-				        specimenRequirement.getId());
+			DistributionSpecimenRequirement oldDistributionSpecimenRequirement 
+				= (DistributionSpecimenRequirement)getCorrespondingOldObject(oldDistributionSpecimenRequirementCollection, 
+				        distributionSpecimenRequirement.getId());
 			
-			dao.audit(specimenRequirement, oldSpecimenRequirement, sessionDataBean, true);
+			dao.audit(distributionSpecimenRequirement, oldDistributionSpecimenRequirement, sessionDataBean, true);
 		}
 		
 		Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
@@ -232,7 +228,6 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		//setAllValues(obj);
 		//END
 		DistributionProtocol protocol = (DistributionProtocol)obj;	
-		Collection spReqCollection = protocol.getSpecimenRequirementCollection();
 		
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
@@ -295,7 +290,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		}	
 			
 		//END
-
+		Collection<DistributionSpecimenRequirement> spReqCollection = protocol.getDistributionSpecimenRequirementCollection();
 		if(spReqCollection != null && spReqCollection.size() != 0)
 		{
 			List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);			
@@ -306,10 +301,8 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 	    	
 			Iterator it = spReqCollection.iterator();
 			
-			while(it.hasNext())
+			for(DistributionSpecimenRequirement requirement : spReqCollection)
 			{
-				SpecimenRequirement requirement = (SpecimenRequirement)it.next();
-				
 				if(requirement == null)
 				{
 					throw new DAOException(ApplicationProperties.getValue("protocol.spReqEmpty.errMsg"));
@@ -351,10 +344,6 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 					}
 				}
 			}
-		}
-		else
-		{
-			throw new DAOException(ApplicationProperties.getValue("protocol.spReqEmpty.errMsg"));
 		}
 		
 		if(operation.equals(Constants.ADD))
