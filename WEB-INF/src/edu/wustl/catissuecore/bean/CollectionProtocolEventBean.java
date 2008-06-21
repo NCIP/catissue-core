@@ -130,7 +130,9 @@ public class CollectionProtocolEventBean implements Serializable
 	public Map getSpecimenRequirementbeanMap()
 	{
 		if(specimenRequirementbeanMap==null)
+		{
 			specimenRequirementbeanMap = new LinkedHashMap();
+		}
 		return specimenRequirementbeanMap;
 	}
 
