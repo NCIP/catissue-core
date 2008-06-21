@@ -855,6 +855,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="upgrade_db_demodel_mysql" />
 	</target>
 	
 	
@@ -870,6 +871,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="upgrade_db_demodel_oracle" />
 	</target>
 
 	<!--Data import for CAModel -->
