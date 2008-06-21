@@ -68,6 +68,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenEventParameters.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenProtocol.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenRequirement.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/DistributionSpecimenRequirement.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Container.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Password.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
