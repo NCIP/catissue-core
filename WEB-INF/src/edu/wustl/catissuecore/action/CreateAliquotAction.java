@@ -224,9 +224,9 @@ public class CreateAliquotAction extends BaseAction
 			String posDim2Key = null;
 			String radioButton = (String)aliquotMap.get("radio_"+i);
 			// if radio button =2 else conatiner selected from Combo box
+			quantityKey = specimenKey + i + "_quantity";
 			if(radioButton!=null&&radioButton.equals("2"))
 			{
-				quantityKey = specimenKey + i + "_quantity";
 				containerIdKey = specimenKey + i + "_StorageContainer_id";
 				posDim1Key = specimenKey + i + "_positionDimensionOne";
 				posDim2Key = specimenKey + i + "_positionDimensionTwo";
@@ -234,7 +234,6 @@ public class CreateAliquotAction extends BaseAction
 			else if(radioButton!=null&&radioButton.equals("3"))
 			{
 				// Container selected from Map button
-				quantityKey = specimenKey + i + "_quantity";
 				containerIdKey = specimenKey + i + "_StorageContainer_id"+fromMapsuffixKey;
 				posDim1Key = specimenKey + i + "_positionDimensionOne"+fromMapsuffixKey;
 				posDim2Key = specimenKey + i + "_positionDimensionTwo"+fromMapsuffixKey;
@@ -251,31 +250,20 @@ public class CreateAliquotAction extends BaseAction
 			aliquotSpecimen.setInitialQuantity(new Double(quantity));
 			aliquotSpecimen.setAvailableQuantity(new Double(quantity));
 			
-			SpecimenPosition specPos = aliquotSpecimen.getSpecimenPosition();
 			
-			if(specPos == null)
-			{
-				specPos = new SpecimenPosition();
-			}
+			
 			
 			if (containerId != null && posDim1 != null && posDim2 != null)
 			{
+				SpecimenPosition specPos = new SpecimenPosition();
 				specPos.setPositionDimensionOne(new Integer(posDim1));
 				specPos.setPositionDimensionTwo(new Integer(posDim2));				
 				sc.setId(new Long(containerId));
 				specPos.setStorageContainer(sc);
-//				aliquotSpecimen.setStorageContainer(sc);
+				specPos.setSpecimen(aliquotSpecimen);
+				aliquotSpecimen.setSpecimenPosition(specPos);
 			}
-			else
-			{
-				//specPos.setPositionDimensionOne(null);
-				//specPos.setPositionDimensionTwo(null);
-				specPos = null;
-			}
-			specPos.setSpecimen(aliquotSpecimen);
-
-			aliquotSpecimen.setSpecimenPosition(specPos);
-
+			
 			if (aliquotSpecimen instanceof MolecularSpecimen)
 			{
 				if(aliquotForm.getConcentration().equals(""))
