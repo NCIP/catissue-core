@@ -810,9 +810,9 @@ public class BaseTestCaseUtility {
 		specimenRequirement.setQuantity(quantity);
 		*/
 			
-		Collection specimenRequirementCollection = new HashSet();
-		specimenRequirementCollection.add(specimenRequirement);
-		distributionProtocol.setSpecimenRequirementCollection(distributionSpecimenRequirement);
+		Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection = new HashSet<DistributionSpecimenRequirement>();
+		distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
+		distributionProtocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);
 
 		distributionProtocol.setActivityStatus("Active");
 		return distributionProtocol;
@@ -820,13 +820,13 @@ public class BaseTestCaseUtility {
 	
 	public static DistributionSpecimenRequirement initDistributionSpecimenRequirement()
 	{
-		DistributionSpecimenRequirement specimenRequirement = new DistributionSpecimenRequirement();
+		DistributionSpecimenRequirement distributionSpecimenRequirement = new DistributionSpecimenRequirement();
 		distributionSpecimenRequirement.setSpecimenClass("Molecular");
 		distributionSpecimenRequirement.setSpecimenType("DNA");
 		distributionSpecimenRequirement.setTissueSite("Placenta");
 		distributionSpecimenRequirement.setPathologyStatus("Malignant");
 		distributionSpecimenRequirement.setQuantity(new Double(10));
-		return specimenRequirement;
+		return distributionSpecimenRequirement;
 	}
 	
 	public static SpecimenRequirement initSpecimenRequirement()
@@ -869,18 +869,16 @@ public class BaseTestCaseUtility {
 		distributionProtocol.setDescriptionURL("");
 		distributionProtocol.setEnrollment(new Integer(20)); //10
 
-		SpecimenRequirement specimenRequirement = initSpecimenRequirement();
-		specimenRequirement.setPathologyStatus("Non-Malignant"); //Malignant
-		specimenRequirement.setTissueSite("Anal canal"); //Placenta
-		specimenRequirement.setSpecimenType("Bile"); //DNA
-		specimenRequirement.setSpecimenClass("Fluid"); //Molecular
-		Quantity quantity = new Quantity();
-		quantity.setValue(new Double(20)); //10
-		specimenRequirement.setQuantity(quantity);
+		DistributionSpecimenRequirement distributionSpecimenRequirement = initDistributionSpecimenRequirement();
+		distributionSpecimenRequirement.setPathologyStatus("Non-Malignant"); //Malignant
+		distributionSpecimenRequirement.setTissueSite("Anal canal"); //Placenta
+		distributionSpecimenRequirement.setSpecimenType("Bile"); //DNA
+		distributionSpecimenRequirement.setSpecimenClass("Fluid"); //Molecular
+		distributionSpecimenRequirement.setQuantity(new Double(20));
 			
-		Collection specimenRequirementCollection = new HashSet();
-		specimenRequirementCollection.add(specimenRequirement);
-		distributionProtocol.setSpecimenRequirementCollection(specimenRequirementCollection);
+		Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection = new HashSet<DistributionSpecimenRequirement>();
+		distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
+		distributionProtocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);
 
 		distributionProtocol.setActivityStatus("Active"); //Active
 	}

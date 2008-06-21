@@ -156,7 +156,7 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 		    	
 	    try 
 	  	{
-	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionSpecimenRequirement();
+	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
 	    	distributionprotocol.setActivityStatus("Invalid");
 	    		    	
 	    	Logger.out.info("updating domain object------->"+distributionprotocol);
