@@ -125,7 +125,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			//bug no. 4265
 			if(specimen.getLineage()!=null && specimen.getLineage().equalsIgnoreCase("Derived") && specimen.getDisposeParentSpecimen()==true)
 			{
-			checkParentSpecimenDisposal(sessionDataBean,specimen, dao);
+			    checkParentSpecimenDisposal(sessionDataBean,specimen, dao);
 			}
 			allocatePositionForSpecimen(specimen);
 			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
@@ -1901,7 +1901,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		else
 		{
-			if (specimen.getParentSpecimen() == null)
+			if (specimen.getParentSpecimen() == null && !specimen.getCollectionStatus().equals("Pending"))
 			{
 				throw new DAOException(ApplicationProperties.getValue("error.specimen.noevents"));
 			}
