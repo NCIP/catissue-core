@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
 import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.Institution;
@@ -797,7 +798,7 @@ public class BaseTestCaseUtility {
 		distributionProtocol.setDescriptionURL("distribution protocol");
 		distributionProtocol.setEnrollment(new Integer(10));
 
-		SpecimenRequirement specimenRequirement = initSpecimenRequirement();
+		DistributionSpecimenRequirement distributionSpecimenRequirement = initDistributionSpecimenRequirement();
 		/*	
 		new SpecimenRequirement();
 		specimenRequirement.setPathologyStatus("Malignant");
@@ -811,10 +812,21 @@ public class BaseTestCaseUtility {
 			
 		Collection specimenRequirementCollection = new HashSet();
 		specimenRequirementCollection.add(specimenRequirement);
-		distributionProtocol.setSpecimenRequirementCollection(specimenRequirementCollection);
+		distributionProtocol.setSpecimenRequirementCollection(distributionSpecimenRequirement);
 
 		distributionProtocol.setActivityStatus("Active");
 		return distributionProtocol;
+	}
+	
+	public static DistributionSpecimenRequirement initDistributionSpecimenRequirement()
+	{
+		DistributionSpecimenRequirement specimenRequirement = new DistributionSpecimenRequirement();
+		distributionSpecimenRequirement.setSpecimenClass("Molecular");
+		distributionSpecimenRequirement.setSpecimenType("DNA");
+		distributionSpecimenRequirement.setTissueSite("Placenta");
+		distributionSpecimenRequirement.setPathologyStatus("Malignant");
+		distributionSpecimenRequirement.setQuantity(new Double(10));
+		return specimenRequirement;
 	}
 	
 	public static SpecimenRequirement initSpecimenRequirement()

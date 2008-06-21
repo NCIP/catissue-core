@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
@@ -156,7 +156,7 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 		    	
 	    try 
 	  	{
-	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
+	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionSpecimenRequirement();
 	    	distributionprotocol.setActivityStatus("Invalid");
 	    		    	
 	    	Logger.out.info("updating domain object------->"+distributionprotocol);
@@ -178,12 +178,12 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 	  	{
 	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
 	    	
-	    	SpecimenRequirement specimenRequirement = BaseTestCaseUtility.initSpecimenRequirement();
-	    	specimenRequirement.setSpecimenClass("Invalid class");
+	    	DistributionSpecimenRequirement distributionSpecimenRequirement = BaseTestCaseUtility.initDistributionSpecimenRequirement();
+	    	distributionSpecimenRequirement.setSpecimenClass("Invalid class");
 	    	
-	    	Collection specimenRequirementCollection = new HashSet();
-			specimenRequirementCollection.add(specimenRequirement);
-			distributionprotocol.setSpecimenRequirementCollection(specimenRequirementCollection);	    
+	    	Collection distributionSpecimenRequirementCollection = new HashSet();
+	    	distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
+			distributionprotocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);	    
 			
 	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with invalid specimen class ---->"+distributionprotocol);
@@ -203,13 +203,13 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 	  	{
 	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
 	    	
-	    	SpecimenRequirement specimenRequirement = BaseTestCaseUtility.initSpecimenRequirement();
-	    	specimenRequirement.setSpecimenClass("Tissue");
-	    	specimenRequirement.setSpecimenType("Invalid type");
+	    	DistributionSpecimenRequirement distributionSpecimenRequirement = BaseTestCaseUtility.initDistributionSpecimenRequirement();
+	    	distributionSpecimenRequirement.setSpecimenClass("Tissue");
+	    	distributionSpecimenRequirement.setSpecimenType("Invalid type");
 	    	
-	    	Collection specimenRequirementCollection = new HashSet();
-			specimenRequirementCollection.add(specimenRequirement);
-			distributionprotocol.setSpecimenRequirementCollection(specimenRequirementCollection);	    
+	    	Collection distributionSpecimenRequirementCollection = new HashSet();
+	    	distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
+			distributionprotocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);	    
 			
 	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with SpecimenClass Tissue and invalid specimen class ---->"+distributionprotocol);
@@ -229,12 +229,12 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 	  	{
 	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
 	    	
-	    	SpecimenRequirement specimenRequirement = BaseTestCaseUtility.initSpecimenRequirement();
-	    	specimenRequirement.setTissueSite("Invalid Tissue site");
+	    	DistributionSpecimenRequirement distributionSpecimenRequirement = BaseTestCaseUtility.initDistributionSpecimenRequirement();
+	    	distributionSpecimenRequirement.setTissueSite("Invalid Tissue site");
 	    		    	
-	    	Collection specimenRequirementCollection = new HashSet();
-			specimenRequirementCollection.add(specimenRequirement);
-			distributionprotocol.setSpecimenRequirementCollection(specimenRequirementCollection);	    
+	    	Collection distributionSpecimenRequirementCollection = new HashSet();
+	    	distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
+			distributionprotocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);	    
 			
 	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with SpecimenClass Tissue and invalid specimen class ---->"+distributionprotocol);
@@ -254,12 +254,12 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 	  	{
 	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
 	    	
-	    	SpecimenRequirement specimenRequirement = BaseTestCaseUtility.initSpecimenRequirement();
-	    	specimenRequirement.setPathologyStatus("Invalid Pathological status");
+	    	DistributionSpecimenRequirement distributionSpecimenRequirement = BaseTestCaseUtility.initDistributionSpecimenRequirement();
+	    	distributionSpecimenRequirement.setPathologyStatus("Invalid Pathological status");
 	    		    	
-	    	Collection specimenRequirementCollection = new HashSet();
-			specimenRequirementCollection.add(specimenRequirement);
-			distributionprotocol.setSpecimenRequirementCollection(specimenRequirementCollection);	    
+	    	Collection distributionSpecimenRequirementCollection = new HashSet();
+	    	distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
+			distributionprotocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);	    
 			
 	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with invalid Pathological status ---->"+distributionprotocol);
