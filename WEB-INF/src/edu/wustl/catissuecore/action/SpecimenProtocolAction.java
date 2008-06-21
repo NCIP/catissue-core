@@ -33,7 +33,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
@@ -135,7 +134,7 @@ public class SpecimenProtocolAction  extends SecureAction
    			{
 	    		//Mandar: 25-july-06 bizlogic call updated.
 	    		SpecimenProtocolBizLogic bizLogic = (SpecimenProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(spForm.getFormId());	
-	    		String tmpEndDate = bizLogic.getEndDate( spForm.getId() );
+	    		String tmpEndDate = bizLogic.getEndDate( spForm.getId(), getSessionData(request) );
 	    		Logger.out.debug("tmpendDate : " + tmpEndDate);
 	    		spForm.setEndDate(tmpEndDate );
    			}
