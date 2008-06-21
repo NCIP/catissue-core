@@ -1570,7 +1570,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		Map countOfChildSpecimenMap = new HashMap<Long, Integer>();
 		Integer countOfChildSpecimen = 1;
-		System.out.println("--");
+		
 		for (int i = 0; i < childrenList.size(); i++)
 		{
 			Specimen specimen = (Specimen)childrenList.get(i);

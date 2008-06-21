@@ -169,7 +169,7 @@
 	            lazy="true"
 	            inverse="true"
 	            cascade="none"
-	            sort="unsorted"
+	            order-by="LABEL asc"
 	        >
 					
 				 <cache usage="read-write" />

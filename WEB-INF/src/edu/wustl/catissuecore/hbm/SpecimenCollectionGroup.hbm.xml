@@ -156,7 +156,9 @@
             lazy="true"
             inverse="true"
             cascade="save-update"
-            sort="unsorted"
+            
+            order-by="LABEL asc"
+          
         >
         
         <cache usage="read-write" />
