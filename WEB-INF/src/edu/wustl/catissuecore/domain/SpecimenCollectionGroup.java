@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
@@ -24,7 +25,6 @@ import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
-import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;
@@ -44,6 +44,11 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 */
 	private static final long serialVersionUID = 8543074529678284997L;
 	
+	  /**
+     * The Specimens in this SpecimenCollectionGroup.
+     */
+    protected Collection<Specimen> specimenCollection = new LinkedHashSet<Specimen>();
+
 	/**
 	 * Name : Ashish Gupta
 	 * Reviewer Name : Sachin Lale 
@@ -60,7 +65,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 */
 	protected String surgicalPathologyNumber;
 
-    protected String name;
+   
     /**
      * Name: Sachin Lale 
      * Bug ID: 3052
@@ -258,22 +263,6 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	{
 		this.surgicalPathologyNumber = surgicalPathologyNumber;
 	} 
-	/**
-	 * Returns the system generated unique Specimen Collection Group name.
-	 * @hibernate.property name="name" column="NAME" type="string" length="255"
-	 * @return the system generated unique name.
-	 * @see #setName(String)
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * @param name The name to set.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
     /**
      * Returns the registration of a Participant to a Collection Protocol.
      * @hibernate.many-to-one column="COLLECTION_PROTOCOL_REG_ID" 
@@ -640,12 +629,12 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		this.collectionStatus = collectionStatus;
 	}
 	
-	public SpecimenCollectionGroup(SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup)
+	public SpecimenCollectionGroup(CollectionProtocolEvent collectionProtocolEvent)
 	{
-		this.collectionProtocolEvent = specimenCollectionRequirementGroup.getCollectionProtocolEvent();
-		this.activityStatus = specimenCollectionRequirementGroup.getActivityStatus();
-		this.clinicalDiagnosis = specimenCollectionRequirementGroup.getClinicalDiagnosis();
-		this.clinicalStatus = specimenCollectionRequirementGroup.getClinicalStatus();
+		this.collectionProtocolEvent = collectionProtocolEvent;
+		this.activityStatus = collectionProtocolEvent.getActivityStatus();
+		this.clinicalDiagnosis = collectionProtocolEvent.getClinicalDiagnosis();
+		this.clinicalStatus = collectionProtocolEvent.getClinicalStatus();
 		this.collectionStatus = Constants.COLLECTION_STATUS_PENDING;
 	}
 	
@@ -710,4 +699,28 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	public void setOffset(Integer offset) {
 		this.offset = offset;
 	}
+	 /**
+     * Returns the collection Specimens in this SpecimenCollectionGroup.
+     * @hibernate.set name="specimenCollection" table="CATISSUE_SPECIMEN"
+	 * cascade="none" inverse="true" lazy="false"
+	 * @hibernate.collection-key column="SPECIMEN_COLLECTION_GROUP_ID"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Specimen"
+     * @return the collection Specimens in this SpecimenCollectionGroup.
+     * @see #setSpecimenCollection(Collection)
+     */
+    public Collection<Specimen> getSpecimenCollection()
+    {
+        return specimenCollection;
+    }
+
+    /**
+     * Sets the collection Specimens in this SpecimenCollectionGroup.
+     * @param specimenCollection the collection Specimens in this SpecimenCollectionGroup.
+     * @see #getSpecimenCollection()
+     */
+    public void setSpecimenCollection(Collection<Specimen> specimenCollection)
+    {
+        this.specimenCollection = specimenCollection;
+    }
+
 }

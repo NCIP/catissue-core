@@ -6,7 +6,7 @@
 <hibernate-configuration>
 	
     <session-factory>
-    
+     
     	<property name="show_sql">false</property>
     	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="connection.datasource">java:/catissuecore</property>
@@ -14,15 +14,16 @@
 		<property name="transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>
     	<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
 		<property name="hibernate.jdbc.batch_size">0</property>
+		
   <!--
      	<property name="show_sql">false</property>
-    	<property name="dialect">net.sf.hibernate.dialect.MySQLDialect</property>	
-    	<property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</property>
+    	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>	
+    	<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
         <property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-	    <property name="connection.url">jdbc:mysql://localhost:3306/catissuecore</property>
-	    <property name="connection.username">root</property>
-	    <property name="connection.password">root</property>   
+	    <property name="connection.url">jdbc:mysql://localhost:3306/suite</property>
+	    <property name="connection.username">virender</property>
+	    <property name="connection.password">virender</property>   
 	    <property name="hibernate.jdbc.batch_size">0</property>   
   -->
     	<!--Consent Tracking Suite-->
@@ -52,7 +53,6 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/Biohazard.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Capacity.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/CancerResearchGroup.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/CollectionProtocolEvent.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/CollectionProtocolRegistration.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Department.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/DistributedItem.hbm.xml"/>
@@ -62,7 +62,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ParticipantMedicalIdentifier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ReportedProblem.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Site.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Specimen.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/AbstractSpecimen.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCharacteristics.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractSpecimenCollectionGroup.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenEventParameters.hbm.xml"/>

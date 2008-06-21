@@ -41,7 +41,6 @@ import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.LookupLogic;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.Utility;

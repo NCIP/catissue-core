@@ -1,11 +1,11 @@
 /**
- * <p>Title: FluidSpecimen Class>
+ * <p>Title: FluidRequirementSpecimen Class>
  * <p>Description:  A single unit of body fluid specimen that is 
  * collected or created from a Participant.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
- * @version 1.00
+ * @author virender_mehta
+ * @version caTissueSuite V1.1
  */
 
 package edu.wustl.catissuecore.domain;
@@ -18,23 +18,21 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * A single unit of body fluid specimen that is collected or created from a Participant.
- * @hibernate.subclass name="FluidSpecimen" discriminator-value="Fluid" 
+ * @hibernate.subclass name="FluidRequirementSpecimen" discriminator-value="Fluid" 
  */
-public class FluidSpecimen extends Specimen implements Serializable
+public class FluidRequirementSpecimen extends RequirementSpecimen implements Serializable
 {
-    private static final long serialVersionUID = 1234567890L;
-
-    public FluidSpecimen()
+    private static final long serialVersionUID = 12345678923230L;
+    public FluidRequirementSpecimen()
     {
     	
     }
-    public FluidSpecimen(AbstractActionForm form)
+    public FluidRequirementSpecimen(AbstractActionForm form)
     {
     	setAllValues(form);
     }
-   
     /**
-     * This function Copies the data from an NewSpecimenForm object to a FluidSpecimen object.
+     * This function Copies the data from an NewSpecimenForm object to a TissueSpecimen object.
      * @param siteForm An SiteForm object containing the information about the site.  
      * */
     public void setAllValues(IValueObject abstractForm)
@@ -48,10 +46,14 @@ public class FluidSpecimen extends Specimen implements Serializable
             Logger.out.error(excp.getMessage());
         }
     }
-    
-    public FluidSpecimen(RequirementSpecimen fluidReqSpecimen)
+    public FluidRequirementSpecimen(FluidRequirementSpecimen fluidRequirementSpecimen)
     {
-    	super(fluidReqSpecimen);
+    	//super(fluidRequirementSpecimen);
     }
-   
+    
+    public FluidRequirementSpecimen createClone()
+    {
+    	FluidRequirementSpecimen cloneFluidRequirementSpecimen = new FluidRequirementSpecimen(this);
+    	return cloneFluidRequirementSpecimen;
+    }
 }

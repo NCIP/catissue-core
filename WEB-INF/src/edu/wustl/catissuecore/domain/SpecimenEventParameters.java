@@ -25,7 +25,7 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 {
 	private static final long serialVersionUID = 1234567890L;
 	
-	protected Specimen specimen;
+	protected AbstractSpecimen abstractSpecimen;
 	/**
 	 * Name : Ashish Gupta
 	 * Reviewer Name : Sachin Lale 
@@ -68,17 +68,17 @@ public abstract class SpecimenEventParameters extends EventParameters implements
      * @hibernate.many-to-one column="SPECIMEN_ID"  class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
 	 * @see #setParticipant(Site)
      */
-	public Specimen getSpecimen() 
+	public AbstractSpecimen getAbstractSpecimen() 
 	{
-		return specimen;
+		return abstractSpecimen;
 	}
 	
 	/**
 	 * @param specimen The specimen to set.
 	 */
-	public void setSpecimen(Specimen specimen) 
+	public void setAbstractSpecimen(AbstractSpecimen absSpecimen) 
 	{
-		this.specimen = specimen;
+		this.abstractSpecimen = absSpecimen;
 	}
 	
 	
@@ -94,12 +94,12 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 		//Temporary fix.
 		if(abstractForm.isAddOperation())
 		{
-			specimen = new Specimen();
+			abstractSpecimen = new Specimen();
 		}
 		SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
 		Logger.out.debug("specimenEventParametersForm.getSpecimenId()............................."+specimenEventParametersForm.getSpecimenId());
-		if(specimen!=null)
-			specimen.setId(new Long(specimenEventParametersForm.getSpecimenId()));
+		if(abstractSpecimen!=null)
+			abstractSpecimen.setId(new Long(specimenEventParametersForm.getSpecimenId()));
 	}
 	
 	public Object clone() throws CloneNotSupportedException
@@ -111,11 +111,9 @@ public abstract class SpecimenEventParameters extends EventParameters implements
      * Returns message label to display on success add or edit
      * @return String
      */
-	public String getMessageLabel() {
-		
-		
-		return "specimen with label '"+getSpecimen().getLabel()+"'";
-		
+	public String getMessageLabel() 
+	{
+		return "specimen with label '"+getAbstractSpecimen().getLabel()+"'";
 	}
  	
 }

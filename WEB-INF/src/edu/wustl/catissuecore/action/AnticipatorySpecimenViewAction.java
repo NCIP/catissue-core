@@ -18,7 +18,9 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.RequirementSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -165,14 +167,14 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	protected void setChildren(Specimen specimen, GenericSpecimen parentSpecimenVO) 
 	throws DAOException
 	{
-		Collection<Specimen> specimenChildren = specimen.getChildrenSpecimen();
+		Collection<AbstractSpecimen> specimenChildren = specimen.getChildrenSpecimen();
 		
 		if(specimenChildren == null ||specimenChildren.isEmpty())
 		{
 			return;
 		}
 		
-		Iterator<Specimen> iterator = specimenChildren.iterator();
+		Iterator<AbstractSpecimen> iterator = specimenChildren.iterator();
 		
 		LinkedHashMap<String, GenericSpecimen>  aliquotMap = new
 			LinkedHashMap<String, GenericSpecimen> ();
@@ -181,7 +183,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		
 		while(iterator.hasNext())
 		{
-			Specimen childSpecimen = iterator.next();
+			Specimen childSpecimen = (Specimen)iterator.next();
 			String lineage = childSpecimen.getLineage();
 				
 			GenericSpecimenVO specimenBean = getSpecimenBean(childSpecimen, specimen.getLabel());
@@ -216,7 +218,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		specimenDataBean.setParentName(parentName);
 		if(specimen.getInitialQuantity()!=null)
 		{	
-			specimenDataBean.setQuantity(specimen.getInitialQuantity().getValue().toString());
+			specimenDataBean.setQuantity(specimen.getInitialQuantity().toString());
 		}
 	
 		specimenDataBean.setCheckedSpecimen(true);
@@ -224,7 +226,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		{
 			specimenDataBean.setReadOnly(true);
 		}
-		specimenDataBean.setType(specimen.getType());
+		specimenDataBean.setType(specimen.getSpecimenType());
 		SpecimenCharacteristics characteristics = specimen.getSpecimenCharacteristics();
 		if (characteristics != null)
 		{
@@ -262,7 +264,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		else
 		{
 			//TODO:After model change 
-			storageType = CollectionProtocolUtil.getStorageTypeValue(specimen.getPositionDimensionOne());
+			storageType = getStorageType(specimen);
 			specimenDataBean.setStorageContainerForSpecimen(storageType);				
 
 		}
@@ -276,6 +278,21 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		//specimenDataBean.setAliquotSpecimenCollection(getChildren(specimen, Constants.ALIQUOT));
 		//specimenDataBean.setDeriveSpecimenCollection(getChildren(specimen, Constants.ALIQUOT));
 		return specimenDataBean;
+	}
+
+	private String getStorageType(Specimen specimen)
+	{
+		String storageType;
+		RequirementSpecimen reqSpecimen = specimen.getRequirementSpecimen();
+		if(reqSpecimen==null)
+		{
+			storageType = "Virtual";
+		}
+		else
+		{
+			storageType = reqSpecimen.getStorageType();
+		}
+		return storageType;
 	}
 		
 }

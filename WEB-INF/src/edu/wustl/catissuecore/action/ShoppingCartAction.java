@@ -314,8 +314,8 @@ public class ShoppingCartAction  extends BaseAction
 					rowData.add(String.valueOf(specimen.getId()));
 					rowData.add(specimen.getClassName());
 					
-					if(specimen.getType() != null)
-						rowData.add(specimen.getType());
+					if(specimen.getSpecimenType() != null)
+						rowData.add(specimen.getSpecimenType());
 					else
 						rowData.add("");
 					

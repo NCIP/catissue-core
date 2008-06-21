@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -648,12 +649,12 @@ public class FlexInterface
 			sb.specimenBarcode = specimen.getBarcode();
 		if (specimen.getClassName() != null)
 			sb.specimenClass = specimen.getClassName();
-		if (specimen.getType() != null)
-			sb.specimenType = specimen.getType();
+		if (specimen.getSpecimenType() != null)
+			sb.specimenType = specimen.getSpecimenType();
 		if (specimen.getPathologicalStatus() != null)
 			sb.pathologicalStatus = specimen.getPathologicalStatus();
 		if (specimen.getInitialQuantity() != null)
-			sb.quantity = specimen.getInitialQuantity().getValue();
+			sb.quantity = specimen.getInitialQuantity();
 		if (specimen.getCreatedOn() != null)
 			sb.creationDate = specimen.getCreatedOn();
 
@@ -953,7 +954,7 @@ public class FlexInterface
 	{
 		SpecimenDataBean specimenDataBean = new SpecimenDataBean();
 		specimenDataBean.setId(sp.getId());
-		specimenDataBean.setType(sp.getType());
+		specimenDataBean.setType(sp.getSpecimenType());
 		specimenDataBean.setStorageContainerForSpecimen("Auto");
 		specimenDataBean.setQuantity(String.valueOf(sp.getInitialQuantity()));
 		specimenDataBean.setClassName(sp.getClassName());
@@ -963,7 +964,8 @@ public class FlexInterface
 		specimenDataBean.setExternalIdentifierCollection(sp.getExternalIdentifierCollection());
 		specimenDataBean.setBiohazardCollection(sp.getBiohazardCollection());
 		specimenDataBean.setLabel(sp.getLabel());
-		specimenDataBean.setParentSpecimen(sp.getParentSpecimen());
+		Specimen parentSpecimen = (Specimen)sp.getParentSpecimen();
+		specimenDataBean.setParentSpecimen(parentSpecimen);
 		specimenDataBean.setPathologicalStatus(sp.getPathologicalStatus());
 
 		specimenDataBean.setTissueSide(sp.getSpecimenCharacteristics().getTissueSide());
@@ -1013,13 +1015,12 @@ public class FlexInterface
 	private Specimen prepareSpecimen(SpecimenBean spBean)
 	{
 		Specimen specimen = getSpecimenInstance(spBean.specimenClass);
-		specimen.setType(spBean.specimenType);
+		specimen.setSpecimenType(spBean.specimenType);
 		specimen.setId(spBean.spID);
 		specimen.setCreatedOn(spBean.creationDate);
 		//specimenDataBean.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		//sp.setAvailable(true);
-		Quantity qt = new Quantity();
-		qt.setValue(spBean.quantity);
+		Double qt = new Double(spBean.quantity);
 		specimen.setInitialQuantity(qt);
 		specimen.setAvailableQuantity(qt);
 		//if(edu.wustl.catissuecore.util.global.Constants.MOLECULAR.equals(spBean.specimenClass))
@@ -1052,7 +1053,7 @@ public class FlexInterface
 
 		if (spBean.derivedColl != null)
 		{
-			LinkedHashSet<Specimen> derivedSpecimenSet = new LinkedHashSet<Specimen>();
+			LinkedHashSet<AbstractSpecimen> derivedSpecimenSet = new LinkedHashSet<AbstractSpecimen>();
 			Iterator itr = spBean.derivedColl.iterator();
 			int i = 1;
 			while (itr.hasNext())

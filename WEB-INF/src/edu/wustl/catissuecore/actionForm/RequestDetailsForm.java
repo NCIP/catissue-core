@@ -532,9 +532,9 @@ public class RequestDetailsForm extends AbstractActionForm
 			ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
 			
 			values.put(requestedItem, existingSpecimenOrderItem.getSpecimen().getLabel());
-			values.put(availableQty, existingSpecimenOrderItem.getSpecimen().getAvailableQuantity().getValue());
+			values.put(availableQty, existingSpecimenOrderItem.getSpecimen().getAvailableQuantity());
 			values.put(specimenClass, existingSpecimenOrderItem.getSpecimen().getClassName());
-			values.put(specimenType, existingSpecimenOrderItem.getSpecimen().getType());
+			values.put(specimenType, existingSpecimenOrderItem.getSpecimen().getSpecimenType());
 			values.put(specimenId, existingSpecimenOrderItem.getSpecimen().getId().toString());
 			values.put(instanceOf, "Existing");
 			
@@ -553,7 +553,7 @@ public class RequestDetailsForm extends AbstractActionForm
 				values.put(assignQty, existingSpecimenOrderItem.getDistributedItem().getQuantity().toString());
 			}
 			values.put(actualSpecimenClass, existingSpecimenOrderItem.getSpecimen().getClassName());
-			values.put(actualSpecimenType, existingSpecimenOrderItem.getSpecimen().getType());
+			values.put(actualSpecimenType, existingSpecimenOrderItem.getSpecimen().getSpecimenType());
 			
 			// setting default status
 			if (existingSpecimenOrderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_NEW))
@@ -584,7 +584,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(finalChildrenSpecimenList);
 			if (childrenSpecimenListToDisplay.size() != 0)
 			{
-				values.put(availableQty, (((Specimen) finalChildrenSpecimenList.get(0)).getAvailableQuantity().getValue().toString()));
+				values.put(availableQty, (((Specimen) finalChildrenSpecimenList.get(0)).getAvailableQuantity().toString()));
 				if (orderItem.getStatus().equals(Constants.ORDER_REQUEST_STATUS_NEW))
 					values.put(assignStatus, Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION);
 			}
@@ -606,7 +606,7 @@ public class RequestDetailsForm extends AbstractActionForm
 				values.put(requestFor, derivedSpecimenOrderItem.getDistributedItem().getSpecimen().getId());
 			}
 			values.put(actualSpecimenClass, derivedSpecimenOrderItem.getParentSpecimen().getClassName());
-			values.put(actualSpecimenType, derivedSpecimenOrderItem.getParentSpecimen().getType());
+			values.put(actualSpecimenType, derivedSpecimenOrderItem.getParentSpecimen().getSpecimenType());
 			requestForDropDownMap.put(specimenList, childrenSpecimenListToDisplay);
 		}
 		else if (orderItem instanceof PathologicalCaseOrderItem)
@@ -626,7 +626,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			values.put(specimenCollGrpId, pathologicalCaseOrderItem.getSpecimenCollectionGroup().getId().toString());
 			if (childrenSpecimenListToDisplay.size() != 0)
 			{
-				values.put(availableQty, (((Specimen) totalChildrenSpecimenColl.get(0)).getAvailableQuantity().getValue().toString()));
+				values.put(availableQty, (((Specimen) totalChildrenSpecimenColl.get(0)).getAvailableQuantity().toString()));
 			}
 			else
 			{

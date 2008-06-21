@@ -81,7 +81,7 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
             {
 	            Specimen specimen =(Specimen)object;
 	            String strClass = specimen.getClassName();
-	            String strType = specimen.getType();
+	            String strType = specimen.getSpecimenType();
 	            
 	            if(strClass.equals(Constants.MOLECULAR) && strType.equals(Constants.RNA))
 	            {

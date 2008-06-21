@@ -33,7 +33,6 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
-import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.Validator;
@@ -45,173 +44,105 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class table="CATISSUE_SPECIMEN"
  * @hibernate.discriminator column="SPECIMEN_CLASS" 
  */
-public class Specimen extends AbstractDomainObject implements Serializable, IActivityStatus
+public class Specimen extends AbstractSpecimen implements Serializable, IActivityStatus
 {
 	protected SpecimenPosition specimenPosition; 
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -905954650055370532L;
-
+	
 	/**
-	 * System generated unique id.
+	 * A label name of this specimen.
 	 */
-	protected Long id;
-
-	/**
-	 * Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
-	 */
-	protected String type;
-
-	/**
-	 * Is this specimen still physically available in the tissue bank?
-	 */
-	protected Boolean available;
-
-	/**
-	 * Reference to dimensional position one of the specimen in Storage Container.
-	 */
-	protected Integer positionDimensionOne;
-//
-//	/**
-//	 * Reference to dimensional position two of the specimen in Storage Container.
-//	 */
-//	protected Integer positionDimensionTwo;
-
-	/**
-	 * Barcode assigned to the specimen.
-	 */
-	protected String barcode;
-
-	/**
-	 * Comment on specimen.
-	 */
-	protected String comment;
-
+	private String label;
 	/**
 	 * Defines whether this Specimen record can be queried (Active) 
 	 * or not queried (Inactive) by any actor.
 	 */
-	protected String activityStatus;
+	private String activityStatus;
 
 	/**
-	 * Parent specimen from which this specimen is derived. 
+	 * Is this specimen still physically available in the tissue bank?
 	 */
-	protected Specimen parentSpecimen;
-
+	private Boolean available;
+	
 	/**
-	 * Collection of attributes of a Specimen that renders it potentially harmful to a User.
+	 * Barcode assigned to the specimen.
 	 */
-	protected Collection<Biohazard> biohazardCollection = new HashSet<Biohazard>();
-
-	//Change for API Search   --- Ashwin 04/10/2006
+	protected String barcode;
 	/**
-	 * A physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+	 * Comment on specimen.
 	 */
-//	protected StorageContainer storageContainer;
-
+	private String comment;
+	
 	/**
-	 * Collection of Specimen Event Parameters associated with this specimen. 
+	 * Comment on specimen.
 	 */
-	protected Collection<SpecimenEventParameters> specimenEventCollection = new HashSet<SpecimenEventParameters>();
-
-	/**
-	 * Collection of children specimens derived from this specimen. 
-	 */
-	protected Collection<Specimen> childrenSpecimen = new HashSet<Specimen>();
-
-	/**
-	 * Collection of a pre-existing, externally defined id associated with a specimen.
-	 */
-	protected Collection<ExternalIdentifier> externalIdentifierCollection = new HashSet();
-
-	//Change for API Search   --- Ashwin 04/10/2006
-	/**
-	 * An event that results in the collection of one or more specimen from a participant.
-	 */
-	protected AbstractSpecimenCollectionGroup specimenCollectionGroup;
-
-	//Change for API Search   --- Ashwin 04/10/2006
-	/**
-	 * The combined anatomic state and pathological disease classification of a specimen.
-	 */
-	protected SpecimenCharacteristics specimenCharacteristics;
-
-	/**
-	 * A boolean variable which contains a true value if this specimen object is an aliquot 
-	 * else it contains false value.
-	 */
-	//    protected Boolean isAliquot = Boolean.FALSE;
-	/**
-	 * Histoathological character of specimen.
-	 * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
-	 */
-	protected String pathologicalStatus;
-
-	/**
-	 * A historical information about the specimen i.e. whether the specimen is a new specimen
-	 * or a derived specimen or an aliquot.
-	 */
-	protected String lineage;
-
-	/**
-	 * A label name of this specimen.
-	 */
-	protected String label;
-
-	//Change for API Search   --- Ashwin 04/10/2006
-	/**
-	 * The quantity of a specimen.
-	 */
-	protected Quantity initialQuantity;
-
-	//Change for API Search   --- Ashwin 04/10/2006
+	private Date createdOn;
+	
 	/**
 	 * The available quantity of a specimen.
 	 */
-	protected Quantity availableQuantity;
+	private Double availableQuantity;
+	/**
+	 * The status of Specimen
+	 */
+	private String collectionStatus;
+	/**
+	 * Collection of attributes of a Specimen that renders it potentially harmful to a User.
+	 */
+	private Collection<Biohazard> biohazardCollection = new HashSet<Biohazard>();
+	/**
+	 * Specimen Position i.e position dimention one and  position dimention two
+	 */
+	//protected SpecimenPosition specimenPosition; 
+	/**
+	 * Collection of a pre-existing, externally defined id associated with a specimen.
+	 */
+	private Collection<ExternalIdentifier> externalIdentifierCollection = new HashSet<ExternalIdentifier>();
 
+	/**
+	 * An event that results in the collection of one or more specimen from a participant.
+	 */
+	private SpecimenCollectionGroup specimenCollectionGroup;
+	
+	
+	private RequirementSpecimen requirementSpecimen;
+	/**
+	 * Parent is changed or not
+	 */
 	protected transient boolean isParentChanged = false;
 
+	/**
+	 * Total number of aliquot Specimen
+	 */
 	private transient int noOfAliquots;
-
+	
+	/**
+	 * map of aliquot specimen 
+	 */
 	private transient Map aliqoutMap = new HashMap();
+	
+	/**
+	 * After creating aliquot specimen, dispose parent specimen or not 
+	 */
+	private transient boolean disposeParentSpecimen = false;
 
-	protected transient boolean disposeParentSpecimen = false;
-
-	//-----For Consent Tracking. Ashish 21/11/06
 	/**
 	 * The consent tier status for multiple participants for a particular specimen.
 	 */
-	protected Collection<ConsentTierStatus> consentTierStatusCollection;
+	private Collection<ConsentTierStatus> consentTierStatusCollection;
 
-	//Mandar 15-jan-07 
-	/*
+	/**
 	 * To perform operation based on withdraw button clicked.
-	 * Default No Action to allow normal behaviour. 
+	 * Default No Action to allow normal flow. 
 	 */
-	protected String consentWithdrawalOption = Constants.WITHDRAW_RESPONSE_NOACTION;
+	private String consentWithdrawalOption = Constants.WITHDRAW_RESPONSE_NOACTION;
 
-	//Mandar 23-jan-07 
-	/*
+	/**
 	 * To apply changes to child specimen based on consent status changes.
-	 * Default Apply none to allow normal behaviour. 
+	 * Default Apply none to allow normal flow. 
 	 */
-	protected String applyChangesTo = Constants.APPLY_NONE;
-
-	protected String collectionStatus;
-	protected Boolean isCollectionProtocolRequirement = null;
-
-	public Boolean getIsCollectionProtocolRequirement()
-	{
-		return isCollectionProtocolRequirement;
-	}
-
-	public void setIsCollectionProtocolRequirement(Boolean collectionProtocolRequirement)
-	{
-		this.isCollectionProtocolRequirement = collectionProtocolRequirement;
-	}
+	private String applyChangesTo = Constants.APPLY_NONE;
 
 	/**
 	 * @return the consentTierStatusCollection
@@ -227,76 +158,19 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	/**
 	 * @param consentTierStatusCollection the consentTierStatusCollection to set
 	 */
-	public void setConsentTierStatusCollection(Collection consentTierStatusCollection)
+	public void setConsentTierStatusCollection(Collection<ConsentTierStatus> consentTierStatusCollection)
 	{
 		this.consentTierStatusCollection = consentTierStatusCollection;
 	}
-
-	//-----Consent Tracking end.
-
-	/**
-	 * Name: Sachin Lale 
-	 * Bug ID: 3835
-	 * Patch ID: 3835_1
-	 * See also: 1-4 
-	 * Description : Addeed createdOn field for derived and aliqut Specimen.
-	 */
-	protected Date createdOn;
 
 	public Specimen()
 	{
 		
 	}
 
-	//Constructor
 	public Specimen(AbstractActionForm form) throws AssignDataException
 	{
-		this();
 		setAllValues(form);
-	}
-
-	/**
-	 * Returns the system generated unique id.
-	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30" 
-	 * unsaved-value="null" generator-class="native"
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_SEQ"
-	 * @return the system generated unique id.
-	 * @see #setId(Long)
-	 */
-	public Long getId()
-	{
-		return id;
-	}
-
-	/**
-	 * Sets the system generated unique id.
-	 * @param id the system generated unique id.
-	 * @see #getId()
-	 * */
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	/**
-	 * Returns the type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
-	 * @hibernate.property name="type" type="string" column="TYPE" length="50"
-	 * @return The type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
-	 * @see #setType(String)
-	 */
-	public String getType()
-	{
-		return type;
-	}
-
-	/**
-	 * Sets the type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
-	 * @param type The type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
-	 * @see #getType()
-	 */
-	public void setType(String type)
-	{
-		this.type = type;
 	}
 
 	/**
@@ -322,50 +196,6 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	{
 		this.available = available;
 	}
-
-	/**
-	 * Returns the reference to dimensional position one of the specimen in Storage Container.
-	 * @hibernate.property name="positionDimensionOne" type="int" column="POSITION_DIMENSION_ONE" length="30"  
-	 * @return the reference to dimensional position one of the specimen in Storage Container.
-	 * @see #setPositionDimensionOne(Integer)
-	 */
-	public Integer getPositionDimensionOne()
-	{
-		return positionDimensionOne;
-	}
-
-	/**
-	 * Sets the reference to dimensional position one of the specimen in Storage Container.
-	 * @param positionDimensionOne the reference to dimensional position one of the specimen 
-	 * in Storage Container.
-	 * @see #getPositionDimensionOne()
-	 */
-	public void setPositionDimensionOne(Integer positionDimensionOne)
-	{
-		this.positionDimensionOne = positionDimensionOne;
-	}
-
-//	/**
-//	 * Returns the reference to dimensional position two of the specimen in Storage Container.
-//	 * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="50"  
-//	 * @return the reference to dimensional position two of the specimen in Storage Container.
-//	 * @see #setPositionDimensionOne(Integer)
-//	 */
-//	public Integer getPositionDimensionTwo()
-//	{
-//		return positionDimensionTwo;
-//	}
-//
-//	/**
-//	 * Sets the reference to dimensional position two of the specimen in Storage Container.
-//	 * @param positionDimensionTwo the reference to dimensional position two of the specimen 
-//	 * in Storage Container.
-//	 * @see #getPositionDimensionTwo()
-//	 */
-//	public void setPositionDimensionTwo(Integer positionDimensionTwo)
-//	{
-//		this.positionDimensionTwo = positionDimensionTwo;
-//	}
 
 	/**
 	 * Returns the barcode assigned to the specimen.
@@ -436,28 +266,6 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	}
 
 	/**
-	 * Returns the parent specimen from which this specimen is derived.
-	 * @hibernate.many-to-one column="PARENT_SPECIMEN_ID"
-	 * class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
-	 * @return the parent specimen from which this specimen is derived.
-	 * @see #setParentSpecimen(SpecimenNew)
-	 */
-	public Specimen getParentSpecimen()
-	{
-		return parentSpecimen;
-	}
-
-	/**
-	 * Sets the parent specimen from which this specimen is derived.
-	 * @param parentSpecimen the parent specimen from which this specimen is derived.
-	 * @see #getParentSpecimen()
-	 */
-	public void setParentSpecimen(Specimen parentSpecimen)
-	{
-		this.parentSpecimen = parentSpecimen;
-	}
-
-	/**
 	 * Returns the collection of attributes of a Specimen 
 	 * that renders it potentially harmful to a User.
 	 * @hibernate.set name="biohazardCollection" table="CATISSUE_SPECIMEN_BIOHZ_REL"
@@ -480,59 +288,9 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * that renders it potentially harmful to a User.
 	 * @see #getBiohazardCollection()
 	 */
-	public void setBiohazardCollection(Collection biohazardCollection)
+	public void setBiohazardCollection(Collection<Biohazard> biohazardCollection)
 	{
 		this.biohazardCollection = biohazardCollection;
-	}
-
-	/**
-	 * Returns the collection of Specimen Event Parameters associated with this specimen.  
-	 * @hibernate.set name="specimenEventCollection" table="CATISSUE_SPECIMEN_EVENT"
-	 * cascade="save-update" inverse="true" lazy="false"
-	 * @hibernate.collection-key column="SPECIMEN_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
-	 * @return the collection of Specimen Event Parameters associated with this specimen.
-	 * @see #setSpecimenEventCollection(Set)
-	 */
-	public Collection<SpecimenEventParameters> getSpecimenEventCollection()
-	{
-		return specimenEventCollection;
-	}
-
-	/**
-	 * Sets the collection of Specimen Event Parameters associated with this specimen.
-	 * @param specimenEventCollection the collection of Specimen Event Parameters 
-	 * associated with this specimen.
-	 * @see #getSpecimenEventCollection()
-	 */
-	public void setSpecimenEventCollection(Collection specimenEventCollection)
-	{
-		this.specimenEventCollection = specimenEventCollection;
-	}
-
-	/**
-	 * Returns the collection of children specimens derived from this specimen.
-	 * @hibernate.set name="childrenSpecimen" table="CATISSUE_SPECIMEN"
-	 * cascade="save-update" inverse="true" lazy="false"
-	 * @hibernate.collection-key column="PARENT_SPECIMEN_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Specimen"
-	 * @return the collection of children specimens derived from this specimen.
-	 * @see #setChildrenSpecimen(Set)
-	 */
-	public Collection<Specimen> getChildrenSpecimen()
-	{
-		return childrenSpecimen;
-	}
-
-	/**
-	 * Sets the collection of children specimens derived from this specimen.
-	 * @param childrenSpecimen the collection of children specimens 
-	 * derived from this specimen.
-	 * @see #getChildrenSpecimen()
-	 */
-	public void setChildrenSpecimen(Collection<Specimen> childrenSpecimen)
-	{
-		this.childrenSpecimen = childrenSpecimen;
 	}
 
 	/**
@@ -591,7 +349,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * @return the event that results in the collection of one or more specimen from a participant.
 	 * @see #setSpecimenCollectionGroup(SpecimenCollectionGroup)
 	 */
-	public AbstractSpecimenCollectionGroup getSpecimenCollectionGroup()
+	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
 		return specimenCollectionGroup;
 	}
@@ -602,39 +360,24 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * specimen from a participant.
 	 * @see #getSpecimenCollectionGroup()
 	 */
-	public void setSpecimenCollectionGroup(AbstractSpecimenCollectionGroup specimenCollectionGroup)
+	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
-
+	
 	/**
-	 * Returns the combined anatomic state and pathological disease classification of a specimen.
-	 * @hibernate.many-to-one column="SPECIMEN_CHARACTERISTICS_ID" 
-	 * class="edu.wustl.catissuecore.domain.SpecimenCharacteristics" constrained="true"
-	 * @return the combined anatomic state and pathological disease classification of a specimen.
-	 * @see #setSpecimenCharacteristics(SpecimenCharacteristics)
+	 * 
+	 * @return isParentChanged boolean true or false
 	 */
-	public SpecimenCharacteristics getSpecimenCharacteristics()
-	{
-		return specimenCharacteristics;
-	}
-
-	/**
-	 * Sets the combined anatomic state and pathological disease classification of a specimen.
-	 * @param specimenCharacteristics the combined anatomic state and pathological disease 
-	 * classification of a specimen.
-	 * @see #getSpecimenCharacteristics()
-	 */
-	public void setSpecimenCharacteristics(SpecimenCharacteristics specimenCharacteristics)
-	{
-		this.specimenCharacteristics = specimenCharacteristics;
-	}
-
 	public boolean isParentChanged()
 	{
 		return isParentChanged;
 	}
-
+	
+	/**
+	 * 
+	 * @param isParentChanged boolean true or false
+	 */
 	public void setParentChanged(boolean isParentChanged)
 	{
 		this.isParentChanged = isParentChanged;
@@ -668,22 +411,17 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 		//Change for API Search   --- Ashwin 04/10/2006
 		if (SearchUtil.isNullobject(initialQuantity))
 		{
-			initialQuantity = new Quantity();
+			initialQuantity = new Double(0);
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
 		if (SearchUtil.isNullobject(availableQuantity))
 		{
-			availableQuantity = new Quantity();
+			availableQuantity = new Double(0);
 		}
 
 		try
 		{
-			if (abstractForm.isAddOperation())
-			{
-				this.isCollectionProtocolRequirement = new Boolean(false);
-			}
-
 			if (abstractForm instanceof AliquotForm)
 			{
 				AliquotForm form = (AliquotForm) abstractForm;
@@ -713,37 +451,31 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 				else if (!validator.isEmpty(form.getBarcode()))
 				{
 					parentSpecimen.setId(new Long(form.getSpecimenID()));
-					parentSpecimen.setBarcode(form.getBarcode());
+					((Specimen)this.parentSpecimen).setBarcode(form.getBarcode());
 				}
 			}
 			else
 			{
 				String qty = ((SpecimenForm) abstractForm).getQuantity();
 				if (qty != null && qty.trim().length() > 0)
-					this.initialQuantity = new Quantity(((SpecimenForm) abstractForm).getQuantity());
+					this.initialQuantity = new Double(((SpecimenForm) abstractForm).getQuantity());
 				else
-					this.initialQuantity = new Quantity("0");
+					this.initialQuantity = new Double(0);
 				this.label = ((SpecimenForm) abstractForm).getLabel();
 
 				if (abstractForm.isAddOperation())
 				{
-					this.availableQuantity = new Quantity(this.initialQuantity);
+					this.availableQuantity = new Double(this.initialQuantity);
 				}
 				else
 				{
-					this.availableQuantity = new Quantity(((SpecimenForm) abstractForm).getAvailableQuantity());
+					this.availableQuantity = new Double(((SpecimenForm) abstractForm).getAvailableQuantity());
 				}
 
 				Validator validator = new Validator();
 				if (abstractForm instanceof NewSpecimenForm)
 				{
 					NewSpecimenForm form = (NewSpecimenForm) abstractForm;
-					/**For Migration Start**/
-					//					This case is handled in Biz logic.
-					//					if(form.getSpecimenCollectionGroupName()!=null&&!form.getSpecimenCollectionGroupName().trim().equals(""))
-					//					{
-					//						form.setSpecimenCollectionGroupId(Utility.getSCGId(form.getSpecimenCollectionGroupName().trim()));
-					//					}
 					/**For Migration End**/
 					this.activityStatus = form.getActivityStatus();
 					if (form.isAddOperation())
@@ -761,7 +493,8 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 						this.barcode = null;
 
 					this.comment = form.getComments();
-					this.type = form.getType();
+					this.specimenClass = form.getClassName();
+					this.specimenType = form.getType();
 
 					if (form.isAddOperation())
 					{
@@ -849,7 +582,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 						CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 						collectionEventParameters.setAllValues(collectionEvent);
 
-						collectionEventParameters.setSpecimen(this);
+						collectionEventParameters.setAbstractSpecimen(this);
 						Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 						specimenEventCollection.add(collectionEventParameters);
 						Logger.out.debug("After specimenEventCollection.size(): " + specimenEventCollection.size());
@@ -869,7 +602,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 
 						ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 						receivedEventParameters.setAllValues(receivedEvent);
-						receivedEventParameters.setSpecimen(this);
+						receivedEventParameters.setAbstractSpecimen(this);
 
 						/**                         
 						 * Patch ID: 3835_1_4
@@ -1010,7 +743,8 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 					this.comment = form.getComments();
 					//this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 					//this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-					this.type = form.getType();
+					this.specimenType = form.getType();
+					this.specimenClass = form.getClassName();
 
 					/**                  
 					 * Patch ID: 3835_1_5
@@ -1033,7 +767,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 
 					//this.parentSpecimen.setId(new Long(form.getParentSpecimenId()));
 					this.parentSpecimen.setLabel(form.getParentSpecimenLabel());
-					this.parentSpecimen.setBarcode(form.getParentSpecimenBarcode());
+					((Specimen)this.parentSpecimen).setBarcode(form.getParentSpecimenBarcode());
 					//Getting the Map of External Identifiers
 					Map extMap = form.getExternalIdentifier();
 
@@ -1041,21 +775,6 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 
 					Collection extCollection = parser.generateData(extMap);
 					this.externalIdentifierCollection = extCollection;
-
-					//					if (form.isVirtuallyLocated())
-					//					{
-					//						Logger.out.info("------------------Virtually located--------------");
-					//						this.storageContainer = null;
-					//						this.positionDimensionOne = null;
-					//						this.positionDimensionTwo = null;
-					//					}
-					//					else
-					//					{
-					//						this.storageContainer.setId(new Long(form.getStorageContainer()));
-					//						this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-					//						this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-					//
-					//					}
 
 					//setting the value of storage container
 					if (form.isAddOperation())
@@ -1170,34 +889,6 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 		}
 		return newMap;
 	}
-
-	/**
-	 * This function returns the actual type of the specimen i.e Cell / Fluid / Molecular / Tissue.
-	 */
-
-	public final String getClassName()
-	{
-		String className = null;
-
-		if (this instanceof CellSpecimen)
-		{
-			className = Constants.CELL;
-		}
-		else if (this instanceof MolecularSpecimen)
-		{
-			className = Constants.MOLECULAR;
-		}
-		else if (this instanceof FluidSpecimen)
-		{
-			className = Constants.FLUID;
-		}
-		else if (this instanceof TissueSpecimen)
-		{
-			className = Constants.TISSUE;
-		}
-		return className;
-	}
-
 	public String getObjectId()
 	{
 		Logger.out.debug(this.getClass().getName() + " is an instance of Specimen class");
@@ -1210,7 +901,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * @hibernate.component class="edu.wustl.catissuecore.domain.Quantity"
 	 * @see #setAvailableQuantity(Quantity)
 	 */
-	public Quantity getAvailableQuantity()
+	public Double getAvailableQuantity()
 	{
 		return availableQuantity;
 	}
@@ -1220,7 +911,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * @param availableQuantity the available quantity of a specimen.
 	 * @see #getAvailableQuantity()
 	 */
-	public void setAvailableQuantity(Quantity availableQuantity)
+	public void setAvailableQuantity(Double availableQuantity)
 	{
 		this.availableQuantity = availableQuantity;
 	}
@@ -1231,7 +922,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * @hibernate.component class="edu.wustl.catissuecore.domain.Quantity"
 	 * @see #setinitialQuantity(Quantity)
 	 */
-	public Quantity getInitialQuantity()
+	public Double getInitialQuantity()
 	{
 		return initialQuantity;
 	}
@@ -1241,7 +932,7 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	 * @param quantity The quantity of a specimen.
 	 * @see #getInitialQuantity()
 	 */
-	public void setInitialQuantity(Quantity initialQuantity)
+	public void setInitialQuantity(Double initialQuantity)
 	{
 		this.initialQuantity = initialQuantity;
 	}
@@ -1269,27 +960,6 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	{
 		this.pathologicalStatus = pathologicalStatus;
 	}
-
-	/*
-	 * Returns true if this specimen object is an aliquot else false.
-	 * @hibernate.property name="isAliquot" type="boolean" column="IS_ALIQUOT"
-	 * @return the Histoathological character of specimen.
-	 * @see #setIsAliquot(Boolean)
-	 
-	 public Boolean getIsAliquot()
-	 {
-	 return isAliquot;
-	 }*/
-
-	/*
-	 * Sets true if this specimen object is an aliquot else false.
-	 * @param isAliquot true if this specimen object is an aliquot else false.
-	 * @see #getIsAliquot()
-	 
-	 public void setIsAliquot(Boolean isAliquot)
-	 {
-	 this.isAliquot = isAliquot;
-	 }*/
 
 	/**
 	 * Returns the map that contains distinguished fields per aliquots.
@@ -1460,60 +1130,22 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 		this.collectionStatus = collectionStatus;
 	}
 
-	public Specimen(Specimen specimen)
+	public Specimen(RequirementSpecimen reqSpecimen)
 	{
-		this.activityStatus = specimen.getActivityStatus();
-		this.applyChangesTo = specimen.getApplyChangesTo();
-		this.available = specimen.getAvailable();
-		if (specimen.getInitialQuantity() != null)
-		{
-			/**
-			 * Name: Abhishek Mehta 
-			 * Bug ID: 5558
-			 * Patch ID: 5558_1
-			 * See also: 1-3 
-			 * Description : Earlier the available quantity for specimens that haven't been collected yet is greater than 0.
-			 */
-			this.availableQuantity = new Quantity("0");
-			this.initialQuantity = new Quantity(specimen.getInitialQuantity());
-		}
-		this.biohazardCollection = setBiohazardCollection(specimen);
-		this.createdOn = specimen.getCreatedOn();
-		this.comment = specimen.getComment();
-		this.lineage = specimen.getLineage();
-		this.pathologicalStatus = specimen.getPathologicalStatus();
+		this.activityStatus  = Constants.ACTIVITY_STATUS_ACTIVE;
+		this.initialQuantity = new Double(reqSpecimen.getInitialQuantity());
+		this.availableQuantity = new Double(0);
+		this.lineage = reqSpecimen.getLineage();
+		this.pathologicalStatus = reqSpecimen.getPathologicalStatus();
 		this.collectionStatus = Constants.COLLECTION_STATUS_PENDING;
-		if (specimen.getSpecimenCharacteristics() != null)
+		if (reqSpecimen.getSpecimenCharacteristics() != null)
 		{
-			this.specimenCharacteristics = new SpecimenCharacteristics(specimen.getSpecimenCharacteristics());
+			this.specimenCharacteristics = new SpecimenCharacteristics(reqSpecimen.getSpecimenCharacteristics());
 		}
-		this.type = specimen.getType();
-		this.isCollectionProtocolRequirement = new Boolean(false);
-		this.positionDimensionOne = specimen.positionDimensionOne;
-		
-	}
-
-	private Collection setBiohazardCollection(Specimen specimen)
-	{
-		Collection biohazardCollectionN = new HashSet();
-		Collection biohazardCollection = specimen.getBiohazardCollection();
-		if (biohazardCollection != null && !biohazardCollection.isEmpty())
-		{
-			Iterator it = biohazardCollection.iterator();
-			while (it.hasNext())
-			{
-				Biohazard bio = (Biohazard) it.next();
-				Biohazard bioN = new Biohazard(bio);
-				biohazardCollectionN.add(bioN);
-			}
-		}
-		return biohazardCollectionN;
-	}
-
-	public Specimen createClone()
-	{
-		Specimen cloneSpecimen = new Specimen(this);
-		return cloneSpecimen;
+		this.specimenType = reqSpecimen.getSpecimenType();
+		this.specimenClass = reqSpecimen.getClassName();
+		this.available = new Boolean(false);
+		this.requirementSpecimen = reqSpecimen;
 	}
 
 	public void setDefaultSpecimenEventCollection(Long userID)
@@ -1522,11 +1154,11 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 		User user = new User();
 		user.setId(userID);
 		CollectionEventParameters collectionEventParameters = EventsUtil.populateCollectionEventParameters(user);
-		collectionEventParameters.setSpecimen(this);
+		collectionEventParameters.setAbstractSpecimen(this);
 		specimenEventCollection.add(collectionEventParameters);
 
 		ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);
-		receivedEventParameters.setSpecimen(this);
+		receivedEventParameters.setAbstractSpecimen(this);
 		specimenEventCollection.add(receivedEventParameters);
 		setSpecimenEventCollection(specimenEventCollection);
 	}
@@ -1589,5 +1221,17 @@ public class Specimen extends AbstractDomainObject implements Serializable, IAct
 	public void setSpecimenPosition(SpecimenPosition specimenPosition)
 	{
 		this.specimenPosition = specimenPosition;
+	}
+
+	
+	public RequirementSpecimen getRequirementSpecimen()
+	{
+		return requirementSpecimen;
+	}
+
+	
+	public void setRequirementSpecimen(RequirementSpecimen requirementSpecimen)
+	{
+		this.requirementSpecimen = requirementSpecimen;
 	}
 }

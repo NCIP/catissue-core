@@ -120,7 +120,7 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 		
 		SpecimenTreeNode rootNode = new SpecimenTreeNode();
 		rootNode.setIdentifier(specimenObj.getId());
-		rootNode.setType(specimenObj.getType());
+		rootNode.setType(specimenObj.getSpecimenType());
 		rootNode.setValue(specimenObj.getLabel());
 		rootNode.setSpecimenClass(specimenObj.getClassName());
 		
@@ -167,7 +167,7 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 			SpecimenTreeNode treeNode = new SpecimenTreeNode();
 			
 			treeNode.setIdentifier(specimen.getId());
-			treeNode.setType(specimen.getType());
+			treeNode.setType(specimen.getSpecimenType());
 			treeNode.setValue(specimen.getLabel());
 			treeNode.setSpecimenClass(specimen.getClassName());
 			

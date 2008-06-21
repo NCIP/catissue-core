@@ -687,7 +687,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 		 }*/
 
 		//Aniruddha : NEEDS TO TAKE CARE OFF CALLING METHOD
-		Quantity availableQuantity = specimen.getAvailableQuantity();
+		Double availableQuantity = specimen.getAvailableQuantity();
 		return availableQuantity;
 
 		//return null;
@@ -700,7 +700,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public Object getDomainObjectAvailableQty(Specimen specimen)
 	{
-		return specimen.getAvailableQuantity().getValue();
+		return specimen.getAvailableQuantity();
 	}
 
 	/**

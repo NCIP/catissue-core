@@ -20,6 +20,7 @@ import java.util.List;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -135,7 +136,7 @@ public class EventsUtil
 		if (eventObject instanceof CollectionEventParameters)
 		{
 			CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
-			Specimen specimen = collectionEventParameters.getSpecimen();
+			AbstractSpecimen specimen = collectionEventParameters.getAbstractSpecimen();
 			collectionEventParameters.getUser();
 			/* Bug id: 4179
 			patch id: 4179_3*/  
@@ -145,7 +146,7 @@ public class EventsUtil
 				String message = ApplicationProperties.getValue("specimen.collection.event.user");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
-			if(specimen!=null && specimen.getIsCollectionProtocolRequirement()!=null && !specimen.getIsCollectionProtocolRequirement())
+			if(specimen!=null)
 			{
 				//Date validation
 				if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
@@ -183,7 +184,7 @@ public class EventsUtil
 		else if (eventObject instanceof ReceivedEventParameters)
 		{
 			ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
-			Specimen specimen = receivedEventParameters.getSpecimen();
+			AbstractSpecimen specimen = receivedEventParameters.getAbstractSpecimen();
 			/* Bug id: 4179
 			patch id: 4179_4*/  
 			if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null || receivedEventParameters.getUser().getId() == 0)
@@ -191,7 +192,7 @@ public class EventsUtil
 				String message = ApplicationProperties.getValue("specimen.recieved.event.user");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
-			if(specimen!=null && specimen.getIsCollectionProtocolRequirement()!=null && !specimen.getIsCollectionProtocolRequirement())
+			if(specimen!=null)
 			{
 				if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
 				{

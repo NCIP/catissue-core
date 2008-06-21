@@ -204,7 +204,7 @@ public final class MultipleSpecimenValidationUtil
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
-		if (validator.isEmpty(specimen.getType()))
+		if (validator.isEmpty(specimen.getSpecimenType()))
 		{
 			String message = ApplicationProperties.getValue("specimen.subType");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
@@ -259,7 +259,7 @@ public final class MultipleSpecimenValidationUtil
 			throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
 		}
 
-		if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass), specimen.getType()))
+		if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass), specimen.getSpecimenType()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
 		}
@@ -392,7 +392,7 @@ public final class MultipleSpecimenValidationUtil
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
 			}
 		}
-		if (specimen.getInitialQuantity() == null || specimen.getInitialQuantity().getValue() == null)
+		if (specimen.getInitialQuantity() == null || specimen.getInitialQuantity() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));

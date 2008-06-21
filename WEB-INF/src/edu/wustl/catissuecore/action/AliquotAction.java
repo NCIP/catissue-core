@@ -766,7 +766,7 @@ public class AliquotAction extends SecureAction
 		//SpecimenCharacteristics chars= null;
 		Long cpID=null;
 		form.setSpecimenClass(specimen.getClassName());
-		form.setType(specimen.getType());
+		form.setType(specimen.getSpecimenType());
 		SpecimenCharacteristics chars = specimen.getSpecimenCharacteristics();
 		form.setTissueSite(chars.getTissueSite());
 		form.setTissueSide(chars.getTissueSide());

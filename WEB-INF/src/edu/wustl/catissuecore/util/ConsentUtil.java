@@ -194,7 +194,7 @@ public class ConsentUtil
 			if(!isEventAdded(eventCollection, "ReturnEventParameters"))
 			{
 				ReturnEventParameters returnEvent = new ReturnEventParameters();
-				returnEvent.setSpecimen(specimen );
+				returnEvent.setAbstractSpecimen(specimen );
 				dao.insert(returnEvent,sessionDataBean,true,true) ;
 				
 				eventCollection.add(returnEvent);
@@ -503,7 +503,7 @@ public class ConsentUtil
 			if(specimenObj.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
 			{
 				specimenDetailList.add(specimenObj.getLabel());
-				specimenDetailList.add(specimenObj.getType());
+				specimenDetailList.add(specimenObj.getSpecimenType());
 				if(specimenObj.getSpecimenPosition()==null)
 				{
 					specimenDetailList.add(Constants.VIRTUALLY_LOCATED);

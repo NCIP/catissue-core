@@ -39,8 +39,8 @@
             column="SPECIMEN_COLL_GRP_ID"
         />
         <many-to-one
-            name="specimen"
-            class="edu.wustl.catissuecore.domain.Specimen"
+            name="abstractSpecimen"
+            class="edu.wustl.catissuecore.domain.AbstractSpecimen"
             cascade="none"
              
             update="true"

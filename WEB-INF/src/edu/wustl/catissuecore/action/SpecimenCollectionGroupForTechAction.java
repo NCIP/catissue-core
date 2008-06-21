@@ -77,9 +77,10 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 			{
 				SpecimenCollectionGroup specimenCollectionGroup = Utility.getSpecimenCollectionGroup(specimenCollectionGroupId);
 				collectionProtocolEvent = specimenCollectionGroup.getCollectionProtocolEvent();
-				SpecimenCollectionRequirementGroup collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+				//SpecimenCollectionRequirementGroup collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
 				
-				specimenRequirementCollection =collectionRequirementGroup.getSpecimenCollection(); 
+				specimenRequirementCollection =collectionProtocolEvent.getRequirementSpecimenCollection();
+					//collectionRequirementGroup.getSpecimenCollection(); 
 
 				
 				//Populate the number of Specimen Requirements.

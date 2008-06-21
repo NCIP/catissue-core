@@ -181,10 +181,6 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 		Long temporaryLabel= null;
 		Specimen objSpecimen = (Specimen)obj;
 		
-		if (objSpecimen.getIsCollectionProtocolRequirement())
-		{
-			return;
-		}
 	   if ((Constants.COLLECTION_STATUS_COLLECTED).equals(objSpecimen.getCollectionStatus()))
 		{
 			currentLabel = generateLabel(objSpecimen,currentLabel,"");
@@ -212,9 +208,9 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 	
 	private Long generateLabel(Specimen objSpecimen, Long labelCtr, String prefix )
 	{
-       if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
+		Specimen parentSpecimen = (Specimen)objSpecimen.getParentSpecimen();
+		if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))				
 		{
-    	   
     	   	labelCtr= labelCtr+1;
 			objSpecimen.setLabel(prefix + labelCtr.toString());
 			labelCountTreeMap.put(objSpecimen.getLabel(),0);
@@ -222,13 +218,13 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 		}
 	   else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
 		{
-			setNextAvailableAliquotSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen,prefix);
+			setNextAvailableAliquotSpecimenlabel(parentSpecimen,objSpecimen,prefix);
 		}
 	
 	
 	   else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
 		{
-		   labelCtr = setNextAvailableDeriveSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen, labelCtr,prefix);
+		   labelCtr = setNextAvailableDeriveSpecimenlabel(parentSpecimen,objSpecimen, labelCtr,prefix);
 		}
 		
 		return labelCtr;

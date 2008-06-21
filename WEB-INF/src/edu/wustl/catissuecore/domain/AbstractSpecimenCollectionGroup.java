@@ -35,10 +35,11 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
      */
     protected Long id;
     
+    
     /**
      * name assigned to Specimen Collection Group
      */
-
+    protected String name;
     
     /**
      * Participant's clinical diagnosis at 
@@ -64,13 +65,6 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
      */
 	protected Site specimenCollectionSite;
 
-
-    /**
-     * The Specimens in this SpecimenCollectionGroup.
-     */
-    protected Collection<Specimen> specimenCollection = new LinkedHashSet<Specimen>();
-
-    
 	public AbstractSpecimenCollectionGroup()
     {
 		// Default Constructor, required for Hibernate
@@ -113,7 +107,23 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	{
 		this.id = id;
 	}
-	
+	/**
+	 * Returns the system generated unique Specimen Collection Group name.
+	 * @hibernate.property name="name" column="NAME" type="string" length="255"
+	 * @return the system generated unique name.
+	 * @see #setName(String)
+	 */
+	public String getName()
+	{
+		return name;
+	}
+	/**
+	 * @param name The name to set.
+	 */
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
     /**
      * Returns the participant's clinical diagnosis at 
      * this collection event (e.g. Prostate Adenocarcinoma).
@@ -214,32 +224,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
         this.specimenCollectionSite = specimenCollectionSite;
     }
 
-    /**
-     * Returns the collection Specimens in this SpecimenCollectionGroup.
-     * @hibernate.set name="specimenCollection" table="CATISSUE_SPECIMEN"
-	 * cascade="none" inverse="true" lazy="false"
-	 * @hibernate.collection-key column="SPECIMEN_COLLECTION_GROUP_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Specimen"
-     * @return the collection Specimens in this SpecimenCollectionGroup.
-     * @see #setSpecimenCollection(Collection)
-     */
-    public Collection<Specimen> getSpecimenCollection()
-    {
-        return specimenCollection;
-    }
-
-    /**
-     * Sets the collection Specimens in this SpecimenCollectionGroup.
-     * @param specimenCollection the collection Specimens in this SpecimenCollectionGroup.
-     * @see #getSpecimenCollection()
-     */
-    public void setSpecimenCollection(Collection<Specimen> specimenCollection)
-    {
-        this.specimenCollection = specimenCollection;
-    }
-
-
-	@Override
+    @Override
 	public void setAllValues(IValueObject valueObject)
 			throws AssignDataException {
 		final AbstractActionForm abstractForm = (AbstractActionForm)valueObject;

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -122,9 +123,9 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 * @param parentObject
 	 * @param specimenObject
 	 */
-	 synchronized  void setNextAvailableAliquotSpecimenBarcode(Specimen parentObject,Specimen specimenObject) {
+	 synchronized  void setNextAvailableAliquotSpecimenBarcode(AbstractSpecimen parentObject,Specimen specimenObject) {
 				
-		String parentSpecimenBarcode = (String) parentObject.getBarcode();
+		String parentSpecimenBarcode = (String) ((Specimen)parentObject).getBarcode();
 		long aliquotChildCount = 0;
 		if(barcodeCountTreeMap.containsKey(parentObject))
 		{
@@ -145,7 +146,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 * @param parentObject
 	 * @param specimenObject
 	 */
-	synchronized void setNextAvailableDeriveSpecimenBarcode(Specimen parentObject, Specimen specimenObject) {
+	synchronized void setNextAvailableDeriveSpecimenBarcode(AbstractSpecimen parentObject, Specimen specimenObject) {
 		
 		currentBarcode= currentBarcode+1;
 		specimenObject.setBarcode(currentBarcode.toString());

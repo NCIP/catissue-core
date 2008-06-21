@@ -25,12 +25,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import edu.wustl.catissuecore.TaskTimeCalculater;
-
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.RequirementSpecimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -140,19 +140,18 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 
 		Iterator it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
-		NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
-
+		RequirementSpecimenBizLogic bizLogic = new RequirementSpecimenBizLogic();
 		while (it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) it.next();
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			SpecimenCollectionRequirementGroup collectionRequirementGroup = collectionProtocolEvent
-					.getRequiredCollectionSpecimenGroup();
+			Collection<RequirementSpecimen> reqSpecimenCollection = collectionProtocolEvent
+					.getRequirementSpecimenCollection();
 
-			insertCollectionProtocolEvent(dao, sessionDataBean, collectionProtocolEvent,
-					collectionRequirementGroup);
+			insertCollectionProtocolEvent(dao, sessionDataBean, collectionProtocolEvent);
 
-			insertSpecimens(bizLogic, dao, collectionRequirementGroup, sessionDataBean);
+			insertSpecimens(bizLogic, dao, reqSpecimenCollection, sessionDataBean,
+					collectionProtocolEvent);
 		}
 	}
 
@@ -201,34 +200,29 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
 	 */
-	private void insertSpecimens(NewSpecimenBizLogic bizLogic, DAO dao,
-			SpecimenCollectionRequirementGroup collectionRequirementGroup,
-			SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	private void insertSpecimens(RequirementSpecimenBizLogic bizLogic, DAO dao,
+			Collection<RequirementSpecimen> reqSpecimenCollection, SessionDataBean sessionDataBean,
+			CollectionProtocolEvent collectionProtocolEvent) throws DAOException,
+			UserNotAuthorizedException
 	{
 		TaskTimeCalculater specimenInsert = TaskTimeCalculater.startTask("Insert specimen for CP",
 				CollectionProtocolBizLogic.class);
-		Collection specimenCollection = collectionRequirementGroup.getSpecimenCollection();
-		Iterator<Specimen> specIter = specimenCollection.iterator();
-
-		//Abhishek Mehta : Performance related Changes
-
+		Iterator<RequirementSpecimen> specIter = reqSpecimenCollection.iterator();
 		Collection specimenMap = new LinkedHashSet();
-
 		while (specIter.hasNext())
 		{
-			Specimen specimen = specIter.next();
-
-			specimen.setSpecimenCollectionGroup(collectionRequirementGroup);
-			if (specimen.getParentSpecimen() != null)
+			RequirementSpecimen requirementSpecimen = specIter.next();
+			requirementSpecimen.setCollectionProtocolEvent(collectionProtocolEvent);
+			if (requirementSpecimen.getParentSpecimen() != null)
 			{
-				addToParentSpecimen(specimen);
+				addToParentSpecimen(requirementSpecimen);
 			}
 			else
 			{
-				specimenMap.add(specimen);
+				specimenMap.add(requirementSpecimen);
 			}
 		}
-		bizLogic.setCpbased(true);
+		//bizLogic.setCpbased(true);
 		bizLogic.insertMultiple(specimenMap, (AbstractDAO) dao, sessionDataBean);
 		TaskTimeCalculater.endTask(specimenInsert);
 	}
@@ -237,19 +231,19 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * This function adds specimen object to its parent's childrenCollection
 	 * if not already added.
 	 * 
-	 * @param specimen The object to be added to it's parent childrenCollection
+	 * @param requirementSpecimen The object to be added to it's parent childrenCollection
 	 */
-	private void addToParentSpecimen(Specimen specimen)
+	private void addToParentSpecimen(RequirementSpecimen requirementSpecimen)
 	{
-		Collection childrenCollection = specimen.getParentSpecimen().getChildrenSpecimen();
-
+		Collection<AbstractSpecimen> childrenCollection = requirementSpecimen.getParentSpecimen()
+				.getChildrenSpecimen();
 		if (childrenCollection == null)
 		{
-			childrenCollection = new HashSet();
+			childrenCollection = new HashSet<AbstractSpecimen>();
 		}
-		if (!childrenCollection.contains(specimen))
+		if (!childrenCollection.contains(requirementSpecimen))
 		{
-			childrenCollection.add(specimen);
+			childrenCollection.add(requirementSpecimen);
 		}
 	}
 
@@ -330,15 +324,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		checkForChangedStatus(collectionProtocol, collectionProtocolOld);
 
-		Collection oldCollectionProtocolEventCollection = collectionProtocolOld
+/*		
+ *      Right Now we are not suporting EDIT Collection protocol thus commenting event and specimen update
+ *      Collection oldCollectionProtocolEventCollection = collectionProtocolOld
 				.getCollectionProtocolEventCollection();
-		Logger.out
-				.debug("collectionProtocol.getCollectionProtocolEventCollection Size................ : "
-						+ collectionProtocol.getCollectionProtocolEventCollection().size());
-
 		updateCollectionProtocolEvents(dao, sessionDataBean, collectionProtocol,
 				oldCollectionProtocolEventCollection);
-
+*/
 		dao.update(collectionProtocol, sessionDataBean, true, true, false);
 
 		//Audit of Collection Protocol.
@@ -452,21 +444,18 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			Logger.out.debug("CollectionProtocolEvent Id ............... : "
 					+ collectionProtocolEvent.getId());
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			SpecimenCollectionRequirementGroup collectionRequirementGroup;
+			//SpecimenCollectionRequirementGroup collectionRequirementGroup;
 			CollectionProtocolEvent oldCollectionProtocolEvent = null;
 
 			if (collectionProtocolEvent.getId() == null || collectionProtocolEvent.getId() <= 0)
 			{
-				collectionRequirementGroup = collectionProtocolEvent
-						.getRequiredCollectionSpecimenGroup();
-				insertCollectionProtocolEvent(dao, sessionDataBean, collectionProtocolEvent,
-						collectionRequirementGroup);
+				//collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+				insertCollectionProtocolEvent(dao, sessionDataBean, collectionProtocolEvent);
 			}
 			else
 			{
-				collectionRequirementGroup = collectionProtocolEvent
-						.getRequiredCollectionSpecimenGroup();
-				dao.update(collectionRequirementGroup, sessionDataBean, false, false, false);
+				//collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+				//dao.update(collectionRequirementGroup, sessionDataBean, false, false, false);
 				dao.update(collectionProtocolEvent, sessionDataBean, true, false, false);
 				oldCollectionProtocolEvent = (CollectionProtocolEvent) getCorrespondingOldObject(
 						oldCollectionProtocolEventCollection, collectionProtocolEvent.getId());
@@ -476,22 +465,20 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 
 			//Audit of collectionProtocolEvent
-			updateSpecimens(dao, sessionDataBean, collectionRequirementGroup,
-					oldCollectionProtocolEvent);
+			updateSpecimens(dao, sessionDataBean, oldCollectionProtocolEvent,
+					collectionProtocolEvent);
 		}
 	}
 
 	private void insertCollectionProtocolEvent(DAO dao, SessionDataBean sessionDataBean,
-			CollectionProtocolEvent collectionProtocolEvent,
-			SpecimenCollectionRequirementGroup collectionRequirementGroup) throws DAOException,
+			CollectionProtocolEvent collectionProtocolEvent) throws DAOException,
 			UserNotAuthorizedException
 	{
 		dao.insert(collectionProtocolEvent, sessionDataBean, true, false);
-		dao.insert(collectionRequirementGroup, sessionDataBean, true, false);
+		//dao.insert(reqSpecimenCollection, sessionDataBean, true, false);
 		TaskTimeCalculater eventAuth = TaskTimeCalculater.startTask(
 				"CP: Specimen collection req. group insert Authenticatge",
 				CollectionProtocolBizLogic.class);
-
 	}
 
 	/**
@@ -503,38 +490,37 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @throws UserNotAuthorizedException
 	 */
 	private void updateSpecimens(DAO dao, SessionDataBean sessionDataBean,
-			SpecimenCollectionRequirementGroup collectionRequirementGroup,
-			CollectionProtocolEvent oldCollectionProtocolEvent) throws DAOException,
+			CollectionProtocolEvent oldCollectionProtocolEvent,
+			CollectionProtocolEvent collectionProtocolEvent) throws DAOException,
 			UserNotAuthorizedException
 	{
-		Iterator srIt = collectionRequirementGroup.getSpecimenCollection().iterator();
-		NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
-		Collection oldSpecimenCollection = null;
-
+		Iterator<RequirementSpecimen> srIt = oldCollectionProtocolEvent
+				.getRequirementSpecimenCollection().iterator();
+		RequirementSpecimenBizLogic reqSpecimenBizLogic = new RequirementSpecimenBizLogic();
+		Collection<RequirementSpecimen> oldReqspecimenCollection = null;
 		if (oldCollectionProtocolEvent != null)
 		{
-			oldSpecimenCollection = oldCollectionProtocolEvent.getRequiredCollectionSpecimenGroup()
-					.getSpecimenCollection();
+			oldReqspecimenCollection = oldCollectionProtocolEvent
+					.getRequirementSpecimenCollection();
 		}
 		while (srIt.hasNext())
 		{
-			Specimen specimen = (Specimen) srIt.next();
-			if (specimen.getSpecimenCollectionGroup() == null)
+			RequirementSpecimen requirementSpecimen = srIt.next();
+			if (requirementSpecimen.getCollectionProtocolEvent() == null)
 			{
-				specimen.setSpecimenCollectionGroup(collectionRequirementGroup);
+				requirementSpecimen.setCollectionProtocolEvent(collectionProtocolEvent);
 			}
-			specimen.setSpecimenCollectionGroup(collectionRequirementGroup);
-			Logger.out.debug("specimenRequirement " + specimen);
-			if (specimen.getId() == null || specimen.getId() <= 0)
+			requirementSpecimen.setCollectionProtocolEvent(collectionProtocolEvent);
+			if (requirementSpecimen.getId() == null || requirementSpecimen.getId() <= 0)
 			{
-				specimenBizLogic.insert(specimen, dao, sessionDataBean);
+				reqSpecimenBizLogic.insert(requirementSpecimen, dao, sessionDataBean);
 			}
 			else
 			{
-				Specimen oldSpecimen = (Specimen) getCorrespondingOldObject(oldSpecimenCollection,
-						specimen.getId());
-				dao.update(specimen, sessionDataBean, true, false, false);
-				dao.audit(specimen, oldSpecimen, sessionDataBean, true);
+				RequirementSpecimen oldRequirementSpecimen = (RequirementSpecimen) getCorrespondingOldObject(
+						oldReqspecimenCollection, requirementSpecimen.getId());
+				dao.update(requirementSpecimen, sessionDataBean, true, false, false);
+				dao.audit(requirementSpecimen, oldRequirementSpecimen, sessionDataBean, true);
 
 			}
 		}
@@ -1108,48 +1094,32 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 								"errors.item.required", message));
 					}
 
-					SpecimenCollectionRequirementGroup collectionRequirementGroup = event
-							.getRequiredCollectionSpecimenGroup();
-
-					Collection<Specimen> reqCollection = collectionRequirementGroup
-							.getSpecimenCollection();
+					Collection<RequirementSpecimen> reqCollection = event
+							.getRequirementSpecimenCollection();
 
 					if (reqCollection != null && reqCollection.size() != 0)
 					{
-						Iterator<Specimen> reqIterator = reqCollection.iterator();
+						Iterator<RequirementSpecimen> reqIterator = reqCollection.iterator();
 
 						while (reqIterator.hasNext())
 						{
 
-							Specimen specimen = (Specimen) reqIterator.next();
-							if (specimen == null)
+							RequirementSpecimen requirementSpecimen = reqIterator.next();
+							if (requirementSpecimen == null)
 							{
 								throw new DAOException(ApplicationProperties
 										.getValue("protocol.spReqEmpty.errMsg"));
 							}
-
-							/**
-							 * Start: Change for API Search   --- Jitendra 06/10/2006
-							 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
-							 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
-							 * So we removed default class level initialization on domain object and are initializing in method
-							 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
-							 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
-							 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
-							 */
-							ApiSearchUtil.setSpecimenDefault(specimen);
-							//End:- Change for API Search 
-
-							String specimenClass = specimen.getClassName();
-
+							ApiSearchUtil.setReqSpecimenDefault(requirementSpecimen);
+							String specimenClass = requirementSpecimen.getClassName();
 							if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
 							{
 								throw new DAOException(ApplicationProperties
 										.getValue("protocol.class.errMsg"));
 							}
-
 							if (!Validator.isEnumeratedValue(Utility
-									.getSpecimenTypes(specimenClass), specimen.getType()))
+									.getSpecimenTypes(specimenClass), requirementSpecimen
+									.getSpecimenType()))
 							{
 								throw new DAOException(ApplicationProperties
 										.getValue("protocol.type.errMsg"));
@@ -1324,6 +1294,69 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	/**
 	 * this function retrieves collection protocol and all nested child objects and 
 	 * populates bean objects.
+	 * @param className 
+	 * @param colName Column name
+	 * @param colValue
+	 * @param CollectionProtocol 
+	 * @return list with collection protocol object and hashmap of collection protocol events
+	 * @throws DAOException 
+	 */
+	public List retrieveCP(String className, String colName, Object colValue) throws DAOException
+	{
+
+		List cpList;
+		if (!(CollectionProtocol.class.getName().equals(className)))
+		{
+			throw new DAOException("Cannot retrieve Collection protocol from class " + className);
+		}
+
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		try
+		{
+			dao.openSession(null);
+
+			cpList = dao.retrieve(className, colName, colValue);
+			if (cpList == null || cpList.isEmpty())
+			{
+				throw new DAOException("Cannot retrieve Collection protocol incorrect parameter "
+						+ colName + " = " + colValue);
+			}
+			CollectionProtocol collectionProtocol = (CollectionProtocol) cpList.get(0);
+			CollectionProtocolBean collectionProtocolBean = CollectionProtocolUtil
+					.getCollectionProtocolBean(collectionProtocol);
+			Collection collectionProtocolEventColl = collectionProtocol
+					.getCollectionProtocolEventCollection();
+			List cpEventList = new LinkedList(collectionProtocolEventColl);
+			CollectionProtocolUtil.getSortedCPEventList(cpEventList);
+			LinkedHashMap<String, CollectionProtocolEventBean> eventMap = CollectionProtocolUtil
+					.getCollectionProtocolEventMap(cpEventList, dao);
+
+			cpList = new ArrayList<Object>();
+			cpList.add(collectionProtocolBean);
+			cpList.add(eventMap);
+
+			return cpList;
+		}
+		catch (DAOException daoExp)
+		{
+			throw daoExp;
+		}
+		finally
+		{
+			dao.commit();
+			dao.closeSession();
+		}
+	}
+	/**
+	 * this function retrieves collection protocol and all nested child objects and 
+	 * populates bean objects.
+	 * @param id id of CP
+	 * @return list with collection protocol object and hashmap of collection protocol events
+	 * @throws DAOException 
+	 */
+	/**
+	 * this function retrieves collection protocol and all nested child objects and 
+	 * populates bean objects.
 	 * @param id id of CP
 	 * @return list with collection protocol object and hashmap of collection protocol events
 	 * @throws DAOException 
@@ -1351,7 +1384,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			List cpEventList = new LinkedList(collectionProtocolEventColl);
 			CollectionProtocolUtil.getSortedCPEventList(cpEventList);
 			LinkedHashMap<String, CollectionProtocolEventBean> eventMap = CollectionProtocolUtil
-					.getCollectionProtocolEventMap(cpEventList);
+					.getCollectionProtocolEventMap(cpEventList,dao);
 
 			List cpList = new ArrayList<Object>();
 			cpList.add(collectionProtocolBean);
@@ -1459,10 +1492,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		while (cpIterator.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = cpIterator.next();
-			SpecimenCollectionRequirementGroup requirementGroup = collectionProtocolEvent
-					.getRequiredCollectionSpecimenGroup();
-			Collection specimenCollection = requirementGroup.getSpecimenCollection();
-			Iterator<Specimen> specimenIterator = specimenCollection.iterator();
+			
+			Collection specimenCollection = collectionProtocolEvent.getRequirementSpecimenCollection();
+			Iterator<RequirementSpecimen> specimenIterator = specimenCollection.iterator();
 			while (specimenIterator.hasNext())
 			{
 				specimenIterator.next();

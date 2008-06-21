@@ -87,13 +87,9 @@ public class AddCollectionProtocol
 		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));
 		collectionProtocolEvent.setCollectionPointLabel("Collection Point Label 1");
 		collectionProtocolEvent.setClinicalStatus((String)CaCoreAPIService.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS));
-		
-		SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = new SpecimenCollectionRequirementGroup();
-	
-		specimenCollectionRequirementGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		specimenCollectionRequirementGroup.setClinicalDiagnosis((String)CaCoreAPIService.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS));
-		specimenCollectionRequirementGroup.setClinicalStatus((String)CaCoreAPIService.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS));
-		collectionProtocolEvent.setRequiredCollectionSpecimenGroup(specimenCollectionRequirementGroup);
+		collectionProtocolEvent.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		collectionProtocolEvent.setClinicalDiagnosis((String)CaCoreAPIService.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS));
+
 		
 		Collection specimenCollection =null;
 		CollectionProtocolEventBean cpEventBean = new CollectionProtocolEventBean();
@@ -103,11 +99,11 @@ public class AddCollectionProtocol
 		Map specimenMap =(Map)cpEventBean.getSpecimenRequirementbeanMap();
 		if (specimenMap!=null && !specimenMap.isEmpty())
 		{
-			specimenCollection =edu.wustl.catissuecore.util.CollectionProtocolUtil.getSpecimens(
+			specimenCollection =edu.wustl.catissuecore.util.CollectionProtocolUtil.getReqSpecimens(
 					specimenMap.values()
-					,null, specimenCollectionRequirementGroup);	
+					,null, collectionProtocolEvent);	
 		}
-		specimenCollectionRequirementGroup.setSpecimenCollection(specimenCollection);
+		collectionProtocolEvent.setRequirementSpecimenCollection(specimenCollection);
 	}
 	
 	/**

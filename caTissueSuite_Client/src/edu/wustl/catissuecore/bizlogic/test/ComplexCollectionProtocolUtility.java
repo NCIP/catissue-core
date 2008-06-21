@@ -770,12 +770,9 @@ public class ComplexCollectionProtocolUtility
 		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(studyCalEvtPoint));
 		collectionProtocolEvent.setCollectionPointLabel(collectionPointLabel);
 		collectionProtocolEvent.setClinicalStatus("Operative");		
-		SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = new SpecimenCollectionRequirementGroup();
-		specimenCollectionRequirementGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		specimenCollectionRequirementGroup.setClinicalDiagnosis("Abdominal fibromatosis");
-		specimenCollectionRequirementGroup.setClinicalStatus("Operative");
-		collectionProtocolEvent.setRequiredCollectionSpecimenGroup(specimenCollectionRequirementGroup);
-		
+		collectionProtocolEvent.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		collectionProtocolEvent.setClinicalDiagnosis("Abdominal fibromatosis");
+
 		Collection specimenCollection =null;
 		CollectionProtocolEventBean cpEventBean = new CollectionProtocolEventBean();
 		SpecimenRequirementBean specimenRequirementBean = createSpecimenBean();
@@ -784,11 +781,11 @@ public class ComplexCollectionProtocolUtility
 		Map specimenMap =(Map)cpEventBean.getSpecimenRequirementbeanMap();
 		if (specimenMap!=null && !specimenMap.isEmpty())
 		{
-			specimenCollection =edu.wustl.catissuecore.util.CollectionProtocolUtil.getSpecimens(
+			specimenCollection =edu.wustl.catissuecore.util.CollectionProtocolUtil.getReqSpecimens(
 					specimenMap.values()
-					,null, specimenCollectionRequirementGroup);	
+					,null, collectionProtocolEvent);	
 		}
-		specimenCollectionRequirementGroup.setSpecimenCollection(specimenCollection);
+		collectionProtocolEvent.setRequirementSpecimenCollection(specimenCollection);
 	}
 	
 	private static SpecimenRequirementBean createSpecimenBean()

@@ -2,7 +2,6 @@ package edu.wustl.catissuecore.action;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -21,7 +20,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -31,16 +29,12 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.factory.AbstractForwardToFactory;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
-import edu.wustl.common.util.AbstractForwardToProcessor;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.ApplicationProperties;
 
 /**
  * @author virender_mehta
@@ -251,11 +245,11 @@ public class CreateAliquotAction extends BaseAction
 			String posDim1  = (String) aliquotMap.get(posDim1Key);
 			String posDim2  = (String) aliquotMap.get(posDim2Key);
 
-			aliquotSpecimen.setType(aliquotForm.getType());
+			aliquotSpecimen.setSpecimenClass(aliquotForm.getSpecimenClass());
+			aliquotSpecimen.setSpecimenType(aliquotForm.getType());
 			aliquotSpecimen.setPathologicalStatus(aliquotForm.getPathologicalStatus());
-			aliquotSpecimen.setType(aliquotForm.getType());
-			aliquotSpecimen.setInitialQuantity(new Quantity(quantity));
-			aliquotSpecimen.setAvailableQuantity(new Quantity(quantity));
+			aliquotSpecimen.setInitialQuantity(new Double(quantity));
+			aliquotSpecimen.setAvailableQuantity(new Double(quantity));
 			
 			SpecimenPosition specPos = aliquotSpecimen.getSpecimenPosition();
 			
@@ -315,21 +309,4 @@ public class CreateAliquotAction extends BaseAction
 
 		return specimenCollection;
 	}
-	/**
-	 * @param abstractForm
-	 * @param abstractDomain
-	 * @return
-	 * @throws BizLogicException
-	 */
-	private HashMap generateForwardToPrintMap(AbstractActionForm abstractForm, AbstractDomainObject abstractDomain)throws BizLogicException
-    {
-        HashMap forwardToPrintMap = null;
-        AbstractForwardToProcessor forwardToProcessor=AbstractForwardToFactory.getForwardToProcessor(
-				ApplicationProperties.getValue("app.forwardToFactory"),
-				"getForwardToPrintProcessor");
-
-        //Populating HashMap of the data required to be forwarded on next page
-        forwardToPrintMap = (HashMap)forwardToProcessor.populateForwardToData(abstractForm,abstractDomain);
-        return forwardToPrintMap;
-    }
 }

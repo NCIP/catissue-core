@@ -13,15 +13,9 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.IValueObject;
-import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.dao.AbstractDAO;
-import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.exception.BizLogicException;
 
 /**
  * A required specimen collection event associated with a Collection Protocol.
@@ -29,7 +23,7 @@ import edu.wustl.common.util.dbManager.DAOException;
  * @hibernate.class table="CATISSUE_COLL_PROT_EVENT"
  * @author Mandar Deshmukh
  */
-public class CollectionProtocolEvent extends AbstractDomainObject implements java.io.Serializable, Comparable
+public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup implements java.io.Serializable, Comparable
 {
 	private static final long serialVersionUID = 1234567890L;
 
@@ -62,7 +56,8 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 	 * CollectionProtocol associated with the CollectionProtocolEvent.
 	 */
 	protected CollectionProtocol collectionProtocol;
-	protected SpecimenCollectionRequirementGroup requiredCollectionSpecimenGroup;
+	
+	protected Collection<RequirementSpecimen> requirementSpecimenCollection  = new LinkedHashSet<RequirementSpecimen>();
 	
 	protected Collection specimenCollectionGroupCollection;
 	
@@ -85,23 +80,7 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 	{
 		this.id = id;
 	}
-
-	/**	
-	 * @return specimen collection requirement group.
-	 * @hibernate.many-to-one name="requiredCollectionSpecimenGroup"
-	 * class="edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup"
-	 * column="SPECIMEN_COLL_REQ_GROUP_ID" not-null="false"
-	 */
-
-	public SpecimenCollectionRequirementGroup getRequiredCollectionSpecimenGroup() {
-		return requiredCollectionSpecimenGroup;
-	}
-
-	public void setRequiredCollectionSpecimenGroup(
-			SpecimenCollectionRequirementGroup requiredCollectionSpecimenGroup) {
-		this.requiredCollectionSpecimenGroup = requiredCollectionSpecimenGroup;
-	}
-
+	
 	/**
 	 * Returns the clinicalStatus.
 	 * @hibernate.property name="clinicalStatus" type="string"
@@ -211,16 +190,47 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 		this.collectionPointLabel = collectionPointLabel;
 	}
 
-	public Collection getSpecimenCollectionGroupCollection() {
+	public Collection getSpecimenCollectionGroupCollection()
+	{
 		return specimenCollectionGroupCollection;
 	}
 
-	public void setSpecimenCollectionGroupCollection(
-			Collection specimenCollectionGroupCollection) {
+	public void setSpecimenCollectionGroupCollection(Collection specimenCollectionGroupCollection) 
+	{
 		this.specimenCollectionGroupCollection = specimenCollectionGroupCollection;
 	}
 
 	
+	public Collection<RequirementSpecimen> getRequirementSpecimenCollection()
+	{
+		return requirementSpecimenCollection;
+	}
+
 	
+	public void setRequirementSpecimenCollection(Collection<RequirementSpecimen> requirementSpecimenCollection)
+	{
+		this.requirementSpecimenCollection = requirementSpecimenCollection;
+	}
+
+	@Override
+	public CollectionProtocolRegistration getCollectionProtocolRegistration()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getGroupName()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void setGroupName(String name) throws BizLogicException
+	{
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

@@ -149,7 +149,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			{
 				SpecimenEventParameters specimenEventParameters =
 					(SpecimenEventParameters) iterator.next();
-				specimenEventParameters.setSpecimen(specimen);
+				specimenEventParameters.setAbstractSpecimen(specimen);
 				
 			}
 		} 
@@ -168,7 +168,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		specimen.setAvailable(Boolean.TRUE);
 		specimen.setPathologicalStatus(
 				specimenDataBean.getPathologicalStatus());
-		specimen.setType(specimenDataBean.getType());
+		specimen.setSpecimenType(specimenDataBean.getType());
 		specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
 		specimen.setComment(specimenDataBean.getComment());
 		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
@@ -223,8 +223,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	private void setParentLabelToFormSpecimen(Specimen specimen,
 			GenericSpecimen formSpecimen)
 	{
-		Specimen parentSpecimen = specimen.getParentSpecimen();
-		
+		Specimen parentSpecimen = (Specimen)specimen.getParentSpecimen();
 		if (parentSpecimen != null)
 		{
 			formSpecimen.setParentName(parentSpecimen.getLabel());

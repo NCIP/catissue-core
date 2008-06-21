@@ -4,8 +4,8 @@
  * obtained from a specimen.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
- * @version 1.00
+ * @author virender_mehta
+ * @version caTissueSuite V1.1
  */
 
 package edu.wustl.catissuecore.domain;
@@ -19,22 +19,25 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * A molecular derivative (I.e. RNA / DNA / Protein Lysate) obtained from a specimen.
- * @hibernate.subclass name="MolecularSpecimen" discriminator-value="Molecular"
+ * @hibernate.subclass name="MolecularRequirementSpecimen" discriminator-value="Molecular"
  */
-public class MolecularSpecimen extends Specimen implements Serializable
+public class MolecularRequirementSpecimen extends RequirementSpecimen implements Serializable
 {
-    private static final long serialVersionUID = 1234567890L;
+    private static final long serialVersionUID = 123456789000L;
 
     /**
      * Concentration of liquid molecular specimen measured in microgram per microlitter.
      */
     protected Double concentrationInMicrogramPerMicroliter;
 
-    public MolecularSpecimen()
-	{
+    public MolecularRequirementSpecimen()
+    {
     	
-	}
-    public MolecularSpecimen(AbstractActionForm form)
+    }
+    /**
+     * Initial amount of specimen created from another specimen.
+     */
+    public MolecularRequirementSpecimen(AbstractActionForm form)
     {
     	setAllValues(form);
     }
@@ -84,15 +87,14 @@ public class MolecularSpecimen extends Specimen implements Serializable
         	{
         		Logger.out.debug("Concentration is "+form.getConcentration());
         	}
-        }
+       }
         catch (Exception excp)
         {
             Logger.out.error(excp.getMessage());
         }
     }
-    public MolecularSpecimen(RequirementSpecimen molecularReqSpecimen)
+    public MolecularRequirementSpecimen(MolecularRequirementSpecimen molecularRequirementSpecimen)
     {
-    	super(molecularReqSpecimen);
-    	this.concentrationInMicrogramPerMicroliter = ((MolecularRequirementSpecimen)molecularReqSpecimen).concentrationInMicrogramPerMicroliter;
+    	this.concentrationInMicrogramPerMicroliter = molecularRequirementSpecimen.concentrationInMicrogramPerMicroliter;
     }
 }

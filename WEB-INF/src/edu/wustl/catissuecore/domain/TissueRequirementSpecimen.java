@@ -4,8 +4,8 @@
  * that is collected or created from a Participant.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
- * @author Gautam Shetty
- * @version 1.00
+ * @author virender_mehta
+ * @version caTissueSuite V1.1
  */
 
 package edu.wustl.catissuecore.domain;
@@ -19,23 +19,20 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * A single unit of tissue specimen 
  * that is collected or created from a Participant.
- * @hibernate.subclass name="TissueSpecimen" discriminator-value="Tissue"
+ * @hibernate.subclass name="TissueRequirementSpecimen" discriminator-value="Tissue"
  */
-public class TissueSpecimen extends Specimen implements Serializable
+public class TissueRequirementSpecimen extends RequirementSpecimen implements Serializable
 {
-    private static final long serialVersionUID = 1234567890L;
-
-    public TissueSpecimen()
-    {
-    	
-    }
-    
-    public TissueSpecimen(AbstractActionForm form)
+	private static final long serialVersionUID = 12345673333230L;
+	public TissueRequirementSpecimen()
+	{
+		
+	}
+	public TissueRequirementSpecimen(AbstractActionForm form)
     {
     	setAllValues(form);
     }
-    
-    /**
+	/**
      * This function Copies the data from an NewSpecimenForm object to a TissueSpecimen object.
      * @param siteForm An SiteForm object containing the information about the site.  
      * */
@@ -50,8 +47,14 @@ public class TissueSpecimen extends Specimen implements Serializable
             Logger.out.error(excp.getMessage());
         }
     }
-    public TissueSpecimen(RequirementSpecimen tissueReqSpecimen)
+    public TissueRequirementSpecimen(TissueRequirementSpecimen tissueRequirementSpecimen)
     {
-    	super(tissueReqSpecimen);
+    	//super(tissueRequirementSpecimen);
+    }
+    
+    public TissueRequirementSpecimen createClone()
+    {
+    	TissueRequirementSpecimen cloneTissueRequirementSpecimen = new TissueRequirementSpecimen(this);
+    	return cloneTissueRequirementSpecimen;
     }
 }

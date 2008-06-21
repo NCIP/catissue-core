@@ -221,7 +221,8 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 		}
 		Long id = getSpecimenId(specimenVO);
 		specimen.setId(id);
-		specimen.setType(specimenVO.getType());
+		specimen.setSpecimenClass(specimenVO.getClassName());
+		specimen.setSpecimenType(specimenVO.getType());
 		specimen.setLabel(specimenVO.getDisplayName() );
 		specimen.setBarcode(specimenVO.getBarCode());
 		
@@ -230,19 +231,18 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 		/* end bug 6015 */
 		
 		String initialQuantity = specimenVO.getQuantity();
-		Quantity quantity = null;
 		if(initialQuantity != null )
 		{
-			quantity = new Quantity();
 			if(!initialQuantity.equals(""))
-				quantity.setValue(new Double(initialQuantity));
-			specimen.setInitialQuantity(quantity);
+			{
+				specimen.setInitialQuantity(new Double(initialQuantity));
+			}
 		}
 		if(specimenVO.getCheckedSpecimen())
 		{
 			specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
-			specimen.setAvailableQuantity(quantity);
-			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().getValue().doubleValue() > 0))
+			specimen.setAvailableQuantity(new Double(initialQuantity));
+			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().doubleValue() > 0))
 			{
 				specimen.setAvailable(Boolean.TRUE);
 			}

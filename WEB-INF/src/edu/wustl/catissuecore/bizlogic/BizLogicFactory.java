@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.bizlogic.bulkOperations.BulkOperationsBizlogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.CatissuecoreQueryBizLogic;
+import edu.wustl.catissuecore.domain.RequirementSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -370,6 +371,10 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	{
     		bizLogic = new ParticipantMedicalIdentifierBizLogic();
     	}//kalpana:Bug#5941
+    	else if(className.equals("edu.wustl.catissuecore.domain.RequirementSpecimen"))
+    	{
+    		bizLogic = new RequirementSpecimenBizLogic();
+    	}
     	else
     	{
     		bizLogic = new DefaultBizLogic();

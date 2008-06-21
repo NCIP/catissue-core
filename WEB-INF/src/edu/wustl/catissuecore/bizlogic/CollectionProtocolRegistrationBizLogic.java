@@ -768,21 +768,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			 * CollectionProtocol which is registered is incremented as per
 			 * StudyCalendarEventPoint of Events.
 			 */
-
-			SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = (SpecimenCollectionRequirementGroup) collectionProtocolEvent
-					.getRequiredCollectionSpecimenGroup();
-			SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup(specimenCollectionRequirementGroup);
+			SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup(collectionProtocolEvent);
 			specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 			specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
 
 			specimenBizLogic.insert(specimenCollectionGroup,dao,sessionDataBean);
 			scgCollection.add(specimenCollectionGroup);
-//				Collection cloneSpecimenCollection = getCollectionSpecimen(specimenCollectionGroup, specimenCollectionRequirementGroup, userId);
-//				specimenCollectionGroup.setSpecimenCollection(cloneSpecimenCollection);
-//				scgCollection.add(specimenCollectionGroup);
-//				dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
-//				specimenBizLogic.insertAuthData(specimenCollectionGroup);
-//				bizLogic.insert(cloneSpecimenCollection, dao, sessionDataBean);
 		}
 		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(scgCollection);
 	}
@@ -794,12 +785,6 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
 		participantRegCacheManager.registerParticipant(collectionProtocolRegistration.getCollectionProtocol().getId(), collectionProtocolRegistration
 				.getParticipant().getId(), collectionProtocolRegistration.getProtocolParticipantIdentifier());
-		/*
-		 * ParticipantCacheUtil.addParticipantRegInfo(collectionProtocolRegistration.getCollectionProtocol().getId(),
-		 * collectionProtocolRegistration .getCollectionProtocol().getTitle(),
-		 * collectionProtocolRegistration.getParticipant().getId());
-		 */
-
 	}
 
 	/**

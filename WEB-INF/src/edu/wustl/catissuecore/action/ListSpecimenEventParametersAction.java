@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -165,10 +166,10 @@ public class ListSpecimenEventParametersAction extends SecureAction
 						SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) object;
 	
 						//getting SpecimenId of SpecimenEventParameters
-						Specimen specimen = specimenEventParameters.getSpecimen();
+						AbstractSpecimen specimen = specimenEventParameters.getAbstractSpecimen();
 						specimenId = specimen.getId().toString();
 					//	specimenLabel = specimen.getLabel();
-						Logger.out.debug("Specimen of Event Added====>" + (specimenEventParameters.getSpecimen()).getId());
+						Logger.out.debug("Specimen of Event Added====>" + (specimenEventParameters.getAbstractSpecimen()).getId());
 					}
 				}
 			}
@@ -384,7 +385,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	private Collection getSpecimenEventParametersColl(String specimenId,IBizLogic bizLogic)throws DAOException
 	{
 		String className = SpecimenEventParameters.class.getName();
-		String columnName = Constants.COLUMN_NAME_SPECIMEN_ID;
+		String columnName =Constants.COLUMN_NAME_SPECIMEN_ID;
 		Object columnValue = specimenId;
 		Collection<EventParameters> specimenEventCollection = bizLogic.retrieve(className,columnName, columnValue);
 		

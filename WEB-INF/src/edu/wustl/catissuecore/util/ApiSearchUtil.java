@@ -10,6 +10,7 @@ import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
@@ -24,6 +25,7 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReportedProblem;
+import edu.wustl.catissuecore.domain.RequirementSpecimen;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -143,15 +145,32 @@ public class ApiSearchUtil
 		
     	if (SearchUtil.isNullobject(specimen.getInitialQuantity()))
     	{
-    		specimen.setInitialQuantity(new Quantity());
+    		specimen.setInitialQuantity(new Double(0));
     	}		
 		
     	if (SearchUtil.isNullobject(specimen.getAvailableQuantity()))
     	{
-    		specimen.setAvailableQuantity(new Quantity());
+    		specimen.setAvailableQuantity(new Double(0));
     	}
 	}
 	
+	public static void setReqSpecimenDefault(RequirementSpecimen requirementSpecimen)
+	{			
+    	if (SearchUtil.isNullobject(requirementSpecimen.getCollectionProtocolEvent()))
+    	{
+    		requirementSpecimen.setCollectionProtocolEvent(new CollectionProtocolEvent());
+    	}		
+		
+    	if (SearchUtil.isNullobject(requirementSpecimen.getSpecimenCharacteristics()))
+    	{
+    		requirementSpecimen.setSpecimenCharacteristics(new SpecimenCharacteristics());
+    	}		
+		
+    	if (SearchUtil.isNullobject(requirementSpecimen.getInitialQuantity()))
+    	{
+    		requirementSpecimen.setInitialQuantity(new Double(0));
+    	}		
+ 	}
 	public static void setSiteDefault(Site site)
 	{		
     	if (SearchUtil.isNullobject(site.getCoordinator()))

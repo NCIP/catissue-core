@@ -536,10 +536,10 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		arrayDetailsBean.setSpecimenList(new ArrayList());
 		arrayDetailsBean.setSpecimenId((existingSpecimenOrderItem.getSpecimen().getId()).toString());
 		arrayDetailsBean.setRequestedQuantity(existingSpecimenOrderItem.getRequestedQuantity().getValue().toString());
-		arrayDetailsBean.setAvailableQuantity(existingSpecimenOrderItem.getSpecimen().getAvailableQuantity().getValue().toString());
+		arrayDetailsBean.setAvailableQuantity(existingSpecimenOrderItem.getSpecimen().getAvailableQuantity().toString());
 		arrayDetailsBean.setAssignedStatus(existingSpecimenOrderItem.getStatus());
 		arrayDetailsBean.setClassName(existingSpecimenOrderItem.getSpecimen().getClassName());
-		arrayDetailsBean.setType(existingSpecimenOrderItem.getSpecimen().getType());
+		arrayDetailsBean.setType(existingSpecimenOrderItem.getSpecimen().getSpecimenType());
 		arrayDetailsBean.setDescription(existingSpecimenOrderItem.getDescription());
 		arrayDetailsBean.setOrderItemId(existingSpecimenOrderItem.getId().toString());
 		arrayDetailsBean.setInstanceOf("Existing");
@@ -568,7 +568,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		arrayDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 
 		arrayDetailsBean.setRequestedQuantity(derivedSpecimenOrderItem.getRequestedQuantity().getValue().toString());
-		arrayDetailsBean.setAvailableQuantity(derivedSpecimenOrderItem.getParentSpecimen().getAvailableQuantity().getValue().toString());
+		arrayDetailsBean.setAvailableQuantity(derivedSpecimenOrderItem.getParentSpecimen().getAvailableQuantity().toString());
 		arrayDetailsBean.setAssignedStatus(derivedSpecimenOrderItem.getStatus());
 		arrayDetailsBean.setClassName(derivedSpecimenOrderItem.getSpecimenClass());
 		arrayDetailsBean.setType(derivedSpecimenOrderItem.getSpecimenType());
@@ -645,7 +645,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		//Displaying the quantity of the first specimen in the request for drop down.
 		if (childrenSpecimenListToDisplay.size() != 0)
 		{
-			arrayDetailsBean.setAvailableQuantity(((Specimen) totalChildrenSpecimenColl.get(0)).getAvailableQuantity().getValue().toString());
+			arrayDetailsBean.setAvailableQuantity(((Specimen) totalChildrenSpecimenColl.get(0)).getAvailableQuantity().toString());
 		}
 		else
 		{
@@ -775,11 +775,11 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 	
 		if (existingSpecimenorderItem.getRequestedQuantity() != null)
 			requestDetailsBean.setRequestedQty(existingSpecimenorderItem.getRequestedQuantity().getValue().toString());
-		requestDetailsBean.setAvailableQty(existingSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString());
+		requestDetailsBean.setAvailableQty(existingSpecimenorderItem.getSpecimen().getAvailableQuantity().toString());
 
 		requestDetailsBean.setAssignedStatus(existingSpecimenorderItem.getStatus());
 		requestDetailsBean.setClassName(existingSpecimenorderItem.getSpecimen().getClassName());
-		requestDetailsBean.setType(existingSpecimenorderItem.getSpecimen().getType());
+		requestDetailsBean.setType(existingSpecimenorderItem.getSpecimen().getSpecimenType());
 		requestDetailsBean.setDescription(existingSpecimenorderItem.getDescription());
 		requestDetailsBean.setOrderItemId(existingSpecimenorderItem.getId().toString());
 		//	  Assigned Quantity
@@ -825,7 +825,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		//Displaying the quantity of the first specimen in the request for drop down.
 		if (childrenSpecimenListToDisplay.size() != 0)
 		{
-			requestDetailsBean.setAvailableQty(((Specimen) finalChildrenSpecimenList.get(0)).getAvailableQuantity().getValue().toString());
+			requestDetailsBean.setAvailableQty(((Specimen) finalChildrenSpecimenList.get(0)).getAvailableQuantity().toString());
 		}
 		else
 		{
@@ -918,7 +918,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		//Displaying the quantity of the first specimen in the request for drop down.
 		if (childrenSpecimenListToDisplay.size() != 0)
 		{
-			requestDetailsBean.setAvailableQty(((Specimen) totalChildrenSpecimenColl.get(0)).getAvailableQuantity().getValue().toString());
+			requestDetailsBean.setAvailableQty(((Specimen) totalChildrenSpecimenColl.get(0)).getAvailableQuantity().toString());
 		}
 		else
 		{

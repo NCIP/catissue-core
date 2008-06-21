@@ -363,7 +363,7 @@ catch (Exception e)
 								if (!isAvailableQty(specimen, quantity))
 								{
 									throw new DAOException(" Quantity '" + tempQuantity + "' should be less than current Distributed Quantity '"
-											+ specimen.getAvailableQuantity().getValue().doubleValue() + "' of specimen :: " + specimen.getLabel());
+											+ specimen.getAvailableQuantity().doubleValue() + "' of specimen :: " + specimen.getLabel());
 								}
 							}
 							if (specimenArrayContent.getInitialQuantity().getId() == null)
@@ -412,9 +412,9 @@ catch (Exception e)
 					if (oldSpecimen != null && oldSpecimen instanceof MolecularSpecimen)
 					{
 						Double oldQuantity = oldSpecimenArrayContent.getInitialQuantity().getValue();
-						Quantity quantity = oldSpecimen.getAvailableQuantity();
-						double newQuantity = quantity.getValue().doubleValue() + oldQuantity.doubleValue();
-						quantity.setValue(new Double(newQuantity));
+						Double quantity = oldSpecimen.getAvailableQuantity();
+						double newQuantity = quantity.doubleValue() + oldQuantity.doubleValue();
+						quantity= newQuantity;
 						oldSpecimen.setAvailableQuantity(quantity);
 						dao.update(oldSpecimen, sessionDataBean, true, false, false);
 					}
@@ -488,7 +488,7 @@ catch (Exception e)
 			else
 			{
 				availabeQty = availabeQty - quantity;
-				molecularSpecimen.setAvailableQuantity(new QuantityInMicrogram(availabeQty));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
+				molecularSpecimen.setAvailableQuantity(new Double(availabeQty));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
 			}
 		}
 		return true;
@@ -769,7 +769,7 @@ catch (Exception e)
 					throw new DAOException(ApplicationProperties.getValue("class.name.different", message));
 				}
 				if(specimenTypes != null && !specimenTypes.isEmpty() && tempSpecimen != null) {
-					if(!specimenTypes.contains(tempSpecimen.getType()))
+					if(!specimenTypes.contains(tempSpecimen.getSpecimenType()))
 					{
 						message = getMessage(tempSpecimenArrayContent);
 						throw new DAOException(ApplicationProperties.getValue("type.different", message));

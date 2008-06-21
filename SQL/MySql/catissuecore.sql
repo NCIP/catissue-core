@@ -56,7 +56,6 @@ drop table if exists CATISSUE_FIXED_EVENT_PARAM;
 drop table if exists CATISSUE_THAW_EVENT_PARAMETERS;
 drop table if exists CATISSUE_COLL_PROT_REG;
 drop table if exists CATISSUE_FROZEN_EVENT_PARAM;
-drop table if exists CATISSUE_SPECIMEN;
 drop table if exists CATISSUE_USER;
 drop table if exists CATISSUE_TIS_SPE_EVENT_PARAM;
 drop table if exists CATISSUE_ST_CONT_COLL_PROT_REL;
@@ -111,6 +110,21 @@ drop table if exists CATISSUE_SP_ARRAY_ORDER_ITEM;
 drop table if exists CATISSUE_ORDER_ITEM;
 drop table if exists CATISSUE_ORDER;
 
+#--Specimen Model change
+drop table if exists CATISSUE_ABSTRACT_SPECIMEN;
+drop table if exists CATISSUE_SPECIMEN;
+drop table if exists CATISSUE_CP_REQ_SPECIMEN;
+drop table if exists catissue_fluid_req_specimen;
+drop table if exists catissue_fluid_specimen;
+
+drop table if exists catissue_cell_specimen;
+drop table if exists catissue_cell_req_specimen;
+
+drop table if exists catissue_tissue_specimen;
+drop table if exists catissue_tissue_req_specimen;
+
+drop table if exists catissue_mol_req_specimen;
+drop table if exists catissue_molecular_specimen;
 
 SET FOREIGN_KEY_CHECKS=1;
 
@@ -446,40 +460,8 @@ create table CATISSUE_STOR_TYPE_SPEC_CLASS (
    STORAGE_TYPE_ID bigint not null,
    SPECIMEN_CLASS varchar(50)
 );
-CREATE TABLE `catissue_abs_speci_coll_group` 
-(                                               
-	 `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                   
-	 `CLINICAL_DIAGNOSIS` varchar(150) default NULL,                                                    
-	 `CLINICAL_STATUS` varchar(50) default NULL,                                                        
-	 `ACTIVITY_STATUS` varchar(50) default NULL,                                                        
-	 `SITE_ID` bigint(20) default NULL,                                                                 
-	 PRIMARY KEY  (`IDENTIFIER`),                                                                       
-	 KEY `FKDEBAF167A7F77D13` (`SITE_ID`),                                                              
-	 CONSTRAINT `FKDEBAF167A7F77D13` FOREIGN KEY (`SITE_ID`) REFERENCES `catissue_site` (`IDENTIFIER`)  
-);
 
-CREATE TABLE `catissue_speci_coll_req_group`
-(                                                                                        
-    `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                               
-    PRIMARY KEY  (`IDENTIFIER`),                                                                                                                   
-    CONSTRAINT `FK_PARENT_SPEC_COLL_GROUP_REQ_GROUP` FOREIGN KEY (`IDENTIFIER`) REFERENCES `catissue_abs_speci_coll_group` (`IDENTIFIER`)  
-);
 
-CREATE TABLE `catissue_coll_prot_event`
-(                                                                                                                     
-    `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                                            
-    `CLINICAL_STATUS` varchar(50) default NULL,                                                                                                                 
-    `COLLECTION_POINT_LABEL` varchar(255) default NULL,                                                                                                         
-    `STUDY_CALENDAR_EVENT_POINT` double default NULL,                                                                                                           
-    `COLLECTION_PROTOCOL_ID` bigint(20) default NULL,                                                                                                           
-    `SPECIMEN_COLL_REQ_GROUP_ID` bigint(20) default NULL,                                                                                                 
-    PRIMARY KEY  (`IDENTIFIER`),                                                                                                                                
-    UNIQUE KEY `COLLECTION_PROTOCOL_ID` (`COLLECTION_PROTOCOL_ID`,`COLLECTION_POINT_LABEL`),                                                                    
-    KEY `FK7AE7715948304401` (`COLLECTION_PROTOCOL_ID`),                                                                                                        
-    KEY `FK_COLL_EVENT_REQ_GROUP` (`SPECIMEN_COLL_REQ_GROUP_ID`),                                                                                         
-    CONSTRAINT `FK7AE7715948304401` FOREIGN KEY (`COLLECTION_PROTOCOL_ID`) REFERENCES `catissue_collection_protocol` (`IDENTIFIER`),                            
-    CONSTRAINT `FK_COLL_EVENT_REQ_GROUP` FOREIGN KEY (`SPECIMEN_COLL_REQ_GROUP_ID`) REFERENCES `catissue_speci_coll_req_group` (`IDENTIFIER`)  
-);
 
 create table CATISSUE_COLL_PROT_REG (
    IDENTIFIER bigint not null auto_increment,
@@ -495,18 +477,44 @@ create table CATISSUE_COLL_PROT_REG (
    primary key (IDENTIFIER)
 );
 
+CREATE TABLE `catissue_abs_speci_coll_group` 
+(                                               
+	 `IDENTIFIER` bigint(20) NOT NULL auto_increment,   
+	 `NAME` varchar(255) default NULL,         
+	 `CLINICAL_DIAGNOSIS` varchar(150) default NULL,                                                    
+	 `CLINICAL_STATUS` varchar(50) default NULL,                                                        
+	 `ACTIVITY_STATUS` varchar(50) default NULL,                                                        
+	 `SITE_ID` bigint(20) default NULL,                                                                 
+	 PRIMARY KEY  (`IDENTIFIER`),
+     UNIQUE KEY `NAME` (`NAME`),
+	 KEY `FKDEBAF167A7F77D13` (`SITE_ID`),                                                              
+	 CONSTRAINT `FKDEBAF167A7F77D13` FOREIGN KEY (`SITE_ID`) REFERENCES `catissue_site` (`IDENTIFIER`)  
+);
+
+CREATE TABLE `catissue_coll_prot_event`
+(                                                                                                                     
+    `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                                            
+    `CLINICAL_STATUS` varchar(50) default NULL,                                                                                                                 
+    `COLLECTION_POINT_LABEL` varchar(255) default NULL,                                                                                                         
+    `STUDY_CALENDAR_EVENT_POINT` double default NULL,                                                                                                           
+    `COLLECTION_PROTOCOL_ID` bigint(20) default NULL,                                                                                                           
+    PRIMARY KEY  (`IDENTIFIER`),                                                                                                                                
+    UNIQUE KEY `COLLECTION_PROTOCOL_ID` (`COLLECTION_PROTOCOL_ID`,`COLLECTION_POINT_LABEL`),                                                                    
+    KEY `FK7AE7715948304401` (`COLLECTION_PROTOCOL_ID`),                                                                                                        
+    CONSTRAINT `FK7AE7715948304401` FOREIGN KEY (`COLLECTION_PROTOCOL_ID`) REFERENCES `catissue_collection_protocol` (`IDENTIFIER`),
+    CONSTRAINT `FK_PARENT_COLL_PROT_EVENT` FOREIGN KEY (`IDENTIFIER`) REFERENCES `catissue_abs_speci_coll_group` (`IDENTIFIER`)
+);
+
 CREATE TABLE `catissue_specimen_coll_group` 
 (                                                                                                         
 	`IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                                    
-	`NAME` varchar(255) default NULL,                                                                                                                   
 	`COMMENTS` text,                                                                                                                                    
 	`COLLECTION_PROTOCOL_REG_ID` bigint(20) default NULL,                                                                                               
 	`SURGICAL_PATHOLOGY_NUMBER` varchar(50) default NULL,                                                                                               
 	`COLLECTION_PROTOCOL_EVENT_ID` bigint(20) default NULL,
 	`COLLECTION_STATUS` varchar(50),
     `DATE_OFFSET` integer,                                                                                           
-	PRIMARY KEY  (`IDENTIFIER`),                                                                                                                        
-	UNIQUE KEY `NAME` (`NAME`),                                                                                                                         
+	PRIMARY KEY  (`IDENTIFIER`),
 	KEY `FKDEBAF1677E07C4AC` (`COLLECTION_PROTOCOL_REG_ID`),                                                                                            
 	KEY `FK_COLL_PROT_EVENT_SPEC_COLL_GROUP` (`COLLECTION_PROTOCOL_EVENT_ID`),                                                                          
 	CONSTRAINT `FK_COLL_PROT_EVENT_SPEC_COLL_GROUP` FOREIGN KEY (`COLLECTION_PROTOCOL_EVENT_ID`) REFERENCES `catissue_coll_prot_event` (`IDENTIFIER`),  
@@ -600,38 +608,108 @@ create table CATISSUE_FROZEN_EVENT_PARAM (
    primary key (IDENTIFIER)
 );
 
-CREATE TABLE `catissue_specimen`
+#-- Specimen Model Change
+
+CREATE TABLE `CATISSUE_ABSTRACT_SPECIMEN`
 (                                                                                                                 
-     `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                                 
-     `SPECIMEN_CLASS` varchar(255) NOT NULL default '',                                                                                               
-     `TYPE` varchar(50) default NULL,                                                                                                                 
-     `LABEL` varchar(255) default NULL,                                                                                                               
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,       
+	 `SPECIMEN_CLASS` varchar(50) NOT NULL default '',
+     `SPECIMEN_TYPE` varchar(50) default NULL,                                                                                                                
      `LINEAGE` varchar(50) default NULL,                                                                                                              
      `PATHOLOGICAL_STATUS` varchar(50) default NULL,                                                                                                  
-     `AVAILABLE` tinyint(1) default NULL,                                                                                                             
-     `POSITION_DIMENSION_ONE` int(11) default NULL,
-     `BARCODE` varchar(255) default NULL,                                                                                                             
-     `COMMENTS` text,                                                                                                                                 
-     `ACTIVITY_STATUS` varchar(50) default NULL,                                                                                                      
-     `PARENT_SPECIMEN_ID` bigint(20) default NULL,                                                                                       
-     `SPECIMEN_COLLECTION_GROUP_ID` bigint(20) default NULL,                                                                                          
+     `PARENT_SPECIMEN_ID` bigint(20) default NULL,                                                                                                    
      `SPECIMEN_CHARACTERISTICS_ID` bigint(20) default NULL,                                                                                           
+     `INITIAL_QUANTITY` double default NULL,                                                                                                        
+     PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+     KEY `FK1674810456906F39` (`SPECIMEN_CHARACTERISTICS_ID`),                                                                                        
+     CONSTRAINT `FK1674810456906F39` FOREIGN KEY (`SPECIMEN_CHARACTERISTICS_ID`) REFERENCES `catissue_specimen_char` (`IDENTIFIER`)                 
+); 
+
+CREATE TABLE `CATISSUE_CP_REQ_SPECIMEN`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,      
+     `STORAGE_TYPE` varchar(255) NOT NULL default '',      
+	 `COLLECTION_PROTOCOL_EVENT_ID` bigint(20) default NULL,
+     PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+     KEY `FK111110456906F39` (`COLLECTION_PROTOCOL_EVENT_ID`),                                                                                        
+     CONSTRAINT `FK111110456906F39` FOREIGN KEY (`COLLECTION_PROTOCOL_EVENT_ID`) REFERENCES `catissue_coll_prot_event` (`IDENTIFIER`),
+	 CONSTRAINT `FK_PARENT_CP_REQ_SPECIMEN` FOREIGN KEY (`IDENTIFIER`) REFERENCES `CATISSUE_ABSTRACT_SPECIMEN` (`IDENTIFIER`)
+);
+
+CREATE TABLE `CATISSUE_MOL_REQ_SPECIMEN`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,   
+	 `CONCENTRATION` double default NULL,
+      PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+      CONSTRAINT `FK_MOL_REQ_SPECIMEN` FOREIGN KEY (`IDENTIFIER`) REFERENCES `CATISSUE_CP_REQ_SPECIMEN` (`IDENTIFIER`)                 
+);
+CREATE TABLE `CATISSUE_FLUID_REQ_SPECIMEN`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,       
+      PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+      CONSTRAINT `FK_FLUID_REQ_SPECIMEN` FOREIGN KEY (`IDENTIFIER`) REFERENCES `CATISSUE_CP_REQ_SPECIMEN` (`IDENTIFIER`)                 
+);
+CREATE TABLE `CATISSUE_CELL_REQ_SPECIMEN`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,       
+      PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+      CONSTRAINT `FK_CELL_REQ_SPECIMEN` FOREIGN KEY (`IDENTIFIER`) REFERENCES `CATISSUE_CP_REQ_SPECIMEN` (`IDENTIFIER`)                 
+);
+CREATE TABLE `CATISSUE_TISSUE_REQ_SPECIMEN`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,       
+      PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+      CONSTRAINT `FK_TISSUE_REQ_SPECIMEN` FOREIGN KEY (`IDENTIFIER`) REFERENCES `CATISSUE_CP_REQ_SPECIMEN` (`IDENTIFIER`)                 
+);
+
+CREATE TABLE `CATISSUE_SPECIMEN`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,   
+     `LABEL` varchar(255) default NULL,                                                                                                               
+     `AVAILABLE` tinyint(1) default NULL,                                                                                                             
+     `BARCODE` varchar(255) default NULL,
+     `COMMENTS` text,                   
+     `ACTIVITY_STATUS` varchar(50) default NULL,                                                                                                      
+	 `SPECIMEN_COLLECTION_GROUP_ID` bigint(20) default NULL,  
+	 `REQ_SPECIMEN_ID` bigint(20) default NULL,
      `AVAILABLE_QUANTITY` double default NULL,                                                                                                        
-     `QUANTITY` double default NULL,                                                                                                                  
-     `CONCENTRATION` double default NULL,                                                                                                             
      `CREATED_ON_DATE` date default NULL,                                                                                                             
-     `IS_COLL_PROT_REQ` tinyint(1) default NULL,                                                                                                      
      `COLLECTION_STATUS` varchar(50) default NULL,                                                                                                    
      PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
      UNIQUE KEY `LABEL` (`LABEL`),                                                                                                                    
      UNIQUE KEY `BARCODE` (`BARCODE`),                                                                                                                
-     KEY `FK1674810456906F39` (`SPECIMEN_CHARACTERISTICS_ID`),                                                                                        
      KEY `FK1674810433BF33C5` (`SPECIMEN_COLLECTION_GROUP_ID`),                                                                                       
-     KEY `FK16748104B189E99D` (`PARENT_SPECIMEN_ID`),                                                                                                 
-     CONSTRAINT `FK1674810433BF33C5` FOREIGN KEY (`SPECIMEN_COLLECTION_GROUP_ID`) REFERENCES `catissue_abs_speci_coll_group` (`IDENTIFIER`),  
-     CONSTRAINT `FK1674810456906F39` FOREIGN KEY (`SPECIMEN_CHARACTERISTICS_ID`) REFERENCES `catissue_specimen_char` (`IDENTIFIER`),                  
-     CONSTRAINT `FK16748104B189E99D` FOREIGN KEY (`PARENT_SPECIMEN_ID`) REFERENCES `catissue_specimen` (`IDENTIFIER`)                                 
+     KEY `FK_REQ_SPECIMEN_ID` (`REQ_SPECIMEN_ID`),
+     CONSTRAINT `FK1674810433BF33C5` FOREIGN KEY (`SPECIMEN_COLLECTION_GROUP_ID`) REFERENCES `catissue_specimen_coll_group` (`IDENTIFIER`),
+     CONSTRAINT `FK_REQ_SPECIMEN_ID` FOREIGN KEY (`REQ_SPECIMEN_ID`) REFERENCES `CATISSUE_CP_REQ_SPECIMEN` (`IDENTIFIER`),
+ 	 CONSTRAINT `FK_PARENT_SPECIMEN` FOREIGN KEY (`IDENTIFIER`) REFERENCES `CATISSUE_ABSTRACT_SPECIMEN` (`IDENTIFIER`)
    ); 
+
+CREATE TABLE `CATISSUE_MOLECULAR_SPECIMEN`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,  
+     `CONCENTRATION` double default NULL,
+      PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+      CONSTRAINT `FK_MOLECULAR_SPECIMEN` FOREIGN KEY (`IDENTIFIER`) REFERENCES `CATISSUE_SPECIMEN` (`IDENTIFIER`)                 
+);
+CREATE TABLE `CATISSUE_FLUID_SPECIMEN`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,       
+      PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+      CONSTRAINT `FK_FLUID_SPECIMEN` FOREIGN KEY (`IDENTIFIER`) REFERENCES `CATISSUE_SPECIMEN` (`IDENTIFIER`)                 
+);
+CREATE TABLE `CATISSUE_CELL_SPECIMEN`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,       
+      PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+      CONSTRAINT `FK_CELL_SPECIMEN` FOREIGN KEY (`IDENTIFIER`) REFERENCES `CATISSUE_SPECIMEN` (`IDENTIFIER`)                 
+);
+CREATE TABLE `CATISSUE_TISSUE_SPECIMEN`
+(                                                                                                                 
+     `IDENTIFIER` bigint(20) NOT NULL auto_increment,       
+      PRIMARY KEY  (`IDENTIFIER`),                                                                                                                     
+      CONSTRAINT `FK_TISSUE_SPECIMEN` FOREIGN KEY (`IDENTIFIER`) REFERENCES `CATISSUE_SPECIMEN` (`IDENTIFIER`)                 
+); 
 
 create table CATISSUE_USER (
    IDENTIFIER bigint not null auto_increment,
@@ -729,7 +807,7 @@ alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3EECE89343 (SPECIMEN_ARRAY
 alter table CATISSUE_SPECIMEN_ARRAY_TYPE add index FKD36E0B9BBC7298A9 (IDENTIFIER), add constraint FKD36E0B9BBC7298A9 foreign key (IDENTIFIER) references CATISSUE_CONTAINER_TYPE (IDENTIFIER);
 alter table CATISSUE_DISTRIBUTED_ITEM add index FKA7C3ED4B60773DB2 (SPECIMEN_ID), add constraint FKA7C3ED4B60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
 alter table CATISSUE_DISTRIBUTED_ITEM add index FKA7C3ED4BF8278B6 (DISTRIBUTION_ID), add constraint FKA7C3ED4BF8278B6 foreign key (DISTRIBUTION_ID) references CATISSUE_DISTRIBUTION (IDENTIFIER);
-alter table CATISSUE_SPECIMEN_EVENT_PARAM add index FK753F33AD60773DB2 (SPECIMEN_ID), add constraint FK753F33AD60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_EVENT_PARAM add index FK753F33AD60773DB2 (SPECIMEN_ID), add constraint FK753F33AD60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_ABSTRACT_SPECIMEN (IDENTIFIER);
 alter table CATISSUE_SPECIMEN_EVENT_PARAM add index FK753F33AD2206F20F (USER_ID), add constraint FK753F33AD2206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
 alter table CATISSUE_SPECIMEN_EVENT_PARAM add index FK753F33AD8CA560D1 (SPECIMEN_COLL_GRP_ID), add constraint FK753F33AD8CA560D1 foreign key (SPECIMEN_COLL_GRP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
 alter table CATISSUE_STOR_TYPE_SPEC_CLASS add index FK1BCF33BA59A3CE5C (STORAGE_TYPE_ID), add constraint FK1BCF33BA59A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
@@ -753,10 +831,6 @@ alter table CATISSUE_COLL_PROT_REG add index FK5EB25F1387E5ADC7 (PARTICIPANT_ID)
 alter table CATISSUE_COLL_PROT_REG add index FK5EB25F13A0FF79D4 (CONSENT_WITNESS), add constraint FK5EB25F13A0FF79D4 foreign key (CONSENT_WITNESS) references CATISSUE_USER (IDENTIFIER);
 alter table CATISSUE_COLL_PROT_REG add index FK5EB25F1348304401 (COLLECTION_PROTOCOL_ID), add constraint FK5EB25F1348304401 foreign key (COLLECTION_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
 alter table CATISSUE_FROZEN_EVENT_PARAM add index FK52627245BC7298A9 (IDENTIFIER), add constraint FK52627245BC7298A9 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM (IDENTIFIER);
---alter table CATISSUE_SPECIMEN add index FK1674810456906F39 (SPECIMEN_CHARACTERISTICS_ID);
---alter table CATISSUE_SPECIMEN add index FK1674810433BF33C5 (SPECIMEN_COLLECTION_GROUP_ID);
---alter table CATISSUE_SPECIMEN add index FK16748104B189E99D (PARENT_SPECIMEN_ID);
---alter table CATISSUE_SPECIMEN add index FK1674810432B31EAB (STORAGE_CONTAINER_IDENTIFIER);
 alter table CATISSUE_USER add index FKB025CFC71792AD22 (INSTITUTION_ID), add constraint FKB025CFC71792AD22 foreign key (INSTITUTION_ID) references CATISSUE_INSTITUTION (IDENTIFIER);
 alter table CATISSUE_USER add index FKB025CFC7FFA96920 (CANCER_RESEARCH_GROUP_ID), add constraint FKB025CFC7FFA96920 foreign key (CANCER_RESEARCH_GROUP_ID) references CATISSUE_CANCER_RESEARCH_GROUP (IDENTIFIER);
 alter table CATISSUE_USER add index FKB025CFC76CD94566 (ADDRESS_ID), add constraint FKB025CFC76CD94566 foreign key (ADDRESS_ID) references CATISSUE_ADDRESS (IDENTIFIER);
@@ -1133,6 +1207,7 @@ create table CATISSUE_CONTAINER_POSITION(
 )ENGINE = INNODB DEFAULT CHARSET = utf8;
 
 /**Added a workaround so that edit of Container,specimen should work. NEED TO REMOVE */
+ALTER TABLE CATISSUE_SPECIMEN ADD POSITION_DIMENSION_ONE integer;
 ALTER TABLE CATISSUE_SPECIMEN ADD POSITION_DIMENSION_TWO integer;
 ALTER TABLE CATISSUE_SPECIMEN ADD STORAGE_CONTAINER_IDENTIFIER bigint;
 ALTER TABLE CATISSUE_CONTAINER ADD POSITION_DIMENSION_ONE integer;
@@ -1140,3 +1215,4 @@ ALTER TABLE CATISSUE_CONTAINER ADD POSITION_DIMENSION_TWO integer;
 ALTER TABLE CATISSUE_CONTAINER ADD PARENT_CONTAINER_ID bigint;
 ALTER TABLE CATISSUE_SPECIMEN_ARRAY ADD STORAGE_CONTAINER_ID bigint;
 
+                                                                                

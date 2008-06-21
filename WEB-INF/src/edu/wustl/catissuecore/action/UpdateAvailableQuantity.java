@@ -57,7 +57,7 @@ public class UpdateAvailableQuantity extends BaseAction
 			Specimen specimen = (Specimen)iter.next();
 			if(specimen.getId().compareTo(new Long(specimenId)) == 0)
 			{
-				quantity = specimen.getAvailableQuantity().getValue().toString();
+				quantity = specimen.getAvailableQuantity().toString();
 				break;
 			}				
 		}		

@@ -149,7 +149,7 @@ public class OrderingSystemUtil
 		while(childrenSpecimenListIterator.hasNext())
 		{
 			Specimen childrenSpecimen = (Specimen)childrenSpecimenListIterator.next();
-			if(childrenSpecimen.getClassName().trim().equalsIgnoreCase(className) && childrenSpecimen.getType().trim().equalsIgnoreCase(type) && childrenSpecimen.getAvailableQuantity().getValue() > 0)
+			if(childrenSpecimen.getClassName().trim().equalsIgnoreCase(className) && childrenSpecimen.getSpecimenType().trim().equalsIgnoreCase(type) && childrenSpecimen.getAvailableQuantity() > 0)
 			{
 				finalChildrenSpecimenList.add(childrenSpecimen);
 			}
@@ -199,7 +199,7 @@ public class OrderingSystemUtil
 		    	finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childSpecimenCollection,"Tissue","Block");
 		    }
     		//adding specimen to the collection
-    		if(specimen.getClassName().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenClass()) && specimen.getType().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenType()))
+    		if(specimen.getClassName().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenClass()) && specimen.getSpecimenType().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenType()))
 			{
     			finalChildrenSpecimenCollection.add(specimen);
 			}

@@ -8,11 +8,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
@@ -35,7 +35,6 @@ import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
-import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -43,6 +42,7 @@ import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.RequirementSpecimen;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -50,7 +50,7 @@ import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
+import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -63,6 +63,7 @@ import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
@@ -142,25 +143,20 @@ public class BaseTestCaseUtility {
 		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1.0));
 		collectionProtocolEvent.setCollectionPointLabel("PreStudy1"+ Math.random());
 		collectionProtocolEvent.setClinicalStatus("Operative");		
-		SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = new SpecimenCollectionRequirementGroup();
-		specimenCollectionRequirementGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		specimenCollectionRequirementGroup.setClinicalDiagnosis("Abdominal fibromatosis");
-		specimenCollectionRequirementGroup.setClinicalStatus("Operative");
-		collectionProtocolEvent.setRequiredCollectionSpecimenGroup(specimenCollectionRequirementGroup);
-		
+		collectionProtocolEvent.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		collectionProtocolEvent.setClinicalDiagnosis("Abdominal fibromatosis");
 		Collection specimenCollection =null;
 		CollectionProtocolEventBean cpEventBean = new CollectionProtocolEventBean();
 		SpecimenRequirementBean specimenRequirementBean = createSpecimenBean();
-		
 		cpEventBean.addSpecimenRequirementBean(specimenRequirementBean);
 		Map specimenMap =(Map)cpEventBean.getSpecimenRequirementbeanMap();
 		if (specimenMap!=null && !specimenMap.isEmpty())
 		{
-			specimenCollection =edu.wustl.catissuecore.util.CollectionProtocolUtil.getSpecimens(
+			specimenCollection =edu.wustl.catissuecore.util.CollectionProtocolUtil.getReqSpecimens(
 					specimenMap.values()
-					,null, specimenCollectionRequirementGroup);	
+					,null, collectionProtocolEvent);	
 		}
-		specimenCollectionRequirementGroup.setSpecimenCollection(specimenCollection);
+		collectionProtocolEvent.setRequirementSpecimenCollection(specimenCollection);
 	}
 	
 	private static SpecimenRequirementBean createSpecimenBean()
@@ -255,7 +251,6 @@ public class BaseTestCaseUtility {
 		collectionProtocol.setShortTitle("PC1"+UniqueKeyGeneratorUtil.getUniqueKey());
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active"); //Active
-		//collectionProtocol.setEndDate(null);
 		collectionProtocol.setTitle("cp updated title" + UniqueKeyGeneratorUtil.getUniqueKey());
 		try
 		{
@@ -561,27 +556,6 @@ public class BaseTestCaseUtility {
 			consentResponse.setResponse("Yes");
 			consentTierResponseCollection.add(consentResponse);
 		}
-//		ConsentTierResponse r1 = new ConsentTierResponse();
-//		ConsentTier consentTier = new ConsentTier();
-//		consentTier.setId(new Long(1));
-//		r1.setConsentTier(consentTier);
-//		r1.setResponse("Yes");
-//		consentTierResponseCollection.add(r1);
-//		
-//		ConsentTierResponse r2 = new ConsentTierResponse();
-//		ConsentTier consentTier2 = new ConsentTier();
-//		consentTier2.setId(new Long(2));
-//		r2.setConsentTier(consentTier2);
-//		r2.setResponse("Yes");
-//		consentTierResponseCollection.add(r2);
-//		
-//		ConsentTierResponse r3 = new ConsentTierResponse();
-//		ConsentTier consentTier3 = new ConsentTier();
-//		consentTier3.setId(new Long(3));
-//		r3.setConsentTier(consentTier3);
-//		r3.setResponse("No");
-//		consentTierResponseCollection.add(r3);
-//		
 		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);		
 		SpecimenCollectionGroup specimenCollectionGroup = createSCG(collectionProtocolRegistration);
 		
@@ -601,13 +575,10 @@ public class BaseTestCaseUtility {
 			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
 			Iterator collectionProtocolEventIterator = collectionProtocolEventCollection.iterator();
 			User user = (User)TestCaseUtility.getObjectMap(User.class);
-			//User user = new User();
-			//user.setId(new Long(1));
 			while(collectionProtocolEventIterator.hasNext())
 			{
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolEventIterator.next();
-				SpecimenCollectionRequirementGroup specimenCollectionRequirementGroup = (SpecimenCollectionRequirementGroup) collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
-				specimenCollectionGroup = new SpecimenCollectionGroup(specimenCollectionRequirementGroup);
+				specimenCollectionGroup = new SpecimenCollectionGroup(collectionProtocolEvent);
 				specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 				specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
 				
@@ -615,16 +586,16 @@ public class BaseTestCaseUtility {
 				specimenCollectionGroupLableGenerator.setLabel(specimenCollectionGroup);
 				
 				Collection cloneSpecimenCollection = new LinkedHashSet();
-				Collection specimenCollection = specimenCollectionRequirementGroup.getSpecimenCollection();
+				Collection<RequirementSpecimen> specimenCollection = collectionProtocolEvent.getRequirementSpecimenCollection();
 				if(specimenCollection != null && !specimenCollection.isEmpty())
 				{
 					Iterator itSpecimenCollection = specimenCollection.iterator();
 					while(itSpecimenCollection.hasNext())
 					{
-						Specimen specimen = (Specimen)itSpecimenCollection.next();
-						if(specimen.getLineage().equalsIgnoreCase("new"))
+						RequirementSpecimen reqSpecimen = (RequirementSpecimen)itSpecimenCollection.next();
+						if(reqSpecimen.getLineage().equalsIgnoreCase("new"))
 						{
-							Specimen cloneSpecimen = getCloneSpecimen(specimenMap, specimen,null,specimenCollectionGroup,user);
+							Specimen cloneSpecimen = getCloneSpecimen(specimenMap, reqSpecimen,null,specimenCollectionGroup,user);
 							LabelGenerator specimenLableGenerator = LabelGeneratorFactory.getInstance("specimenLabelGeneratorClass");
 							specimenLableGenerator.setLabel(cloneSpecimen);
 							cloneSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
@@ -709,10 +680,20 @@ public class BaseTestCaseUtility {
 		return sprObj;
 	}
 	
-	private static Specimen getCloneSpecimen(Map<Specimen, List<Specimen>> specimenMap, Specimen specimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup, User user)
+	private static Specimen getCloneSpecimen(Map<Specimen, List<Specimen>> specimenMap, RequirementSpecimen reqSpecimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup, User user)
 	{
 		Collection childrenSpecimen = new LinkedHashSet<Specimen>(); 
-		Specimen newSpecimen = specimen.createClone();
+		Specimen newSpecimen = null;
+		try 
+		{
+			newSpecimen = (Specimen) new SpecimenObjectFactory()
+				.getDomainObject(reqSpecimen.getClassName(),reqSpecimen);
+		}
+		catch (AssignDataException e1) 
+		{
+			e1.printStackTrace();
+			return null;
+		}	
 		newSpecimen.setParentSpecimen(pSpecimen);
 		newSpecimen.setDefaultSpecimenEventCollection(user.getId());
 		newSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
@@ -726,20 +707,18 @@ public class BaseTestCaseUtility {
     		specimenMap.put(newSpecimen, null);
     	}
 		
-		Collection childrenSpecimenCollection = specimen.getChildrenSpecimen();
+		Collection childrenSpecimenCollection = reqSpecimen.getChildrenSpecimen();
     	if(childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
 		{
-	    	Iterator it = childrenSpecimenCollection.iterator();
+	    	Iterator<RequirementSpecimen> it = childrenSpecimenCollection.iterator();
 	    	while(it.hasNext())
 	    	{
-	    		Specimen childSpecimen = (Specimen)it.next();
-	    		Specimen newchildSpecimen = getCloneSpecimen(specimenMap, childSpecimen,newSpecimen, specimenCollectionGroup, user);
+	    		RequirementSpecimen childReqSpecimen = it.next();
+	    		Specimen newchildSpecimen = getCloneSpecimen(specimenMap, childReqSpecimen,newSpecimen, specimenCollectionGroup, user);
 	    		childrenSpecimen.add(newchildSpecimen);
 	    		newSpecimen.setChildrenSpecimen(childrenSpecimen);
 	    	}
 		}
-
-    	
     	return newSpecimen;
 	}
 	
@@ -1549,12 +1528,12 @@ public class BaseTestCaseUtility {
 	{
 		System.out.println("Inside tissuespecimen");
 		TissueSpecimen ts= new TissueSpecimen();
-
+		ts.setSpecimenClass("Tissue");
 		ts.setLabel("TissueSpecimen"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts.setActivityStatus("Active");
 		System.out.println("Inside Type");
 		ts.setBarcode("Barcode"+UniqueKeyGeneratorUtil.getUniqueKey());
-		ts.setType("Fixed Tissue Block");
+		ts.setSpecimenType("Fixed Tissue Block");
 		ts.setPathologicalStatus("Malignant");
 		
 		SpecimenCharacteristics specimenCharacteristics =  new SpecimenCharacteristics();
@@ -1564,28 +1543,16 @@ public class BaseTestCaseUtility {
 		ts.setSpecimenCharacteristics(specimenCharacteristics);
 		
 		System.out.println("setting Qunatity");
-		Quantity quantity = new Quantity();
-		quantity.setValue(new Double(10.0));
+		Double quantity = new Double(10.0);
 		ts.setInitialQuantity(quantity);
 		ts.setAvailableQuantity(quantity);
 		ts.setAvailable(new Boolean(true));
-				
-//		ts.setStorageContainer(null); 
-//		ts.setPositionDimensionOne(null);
-//		ts.setPositionDimensionTwo(null);
-//		
-//		Collection externalIdentifierCollection = new HashSet();
-//		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
-//		externalIdentifier.setName("");
-//		externalIdentifier.setValue("");
-//		externalIdentifierCollection.add(externalIdentifier);
-//		ts.setExternalIdentifierCollection(externalIdentifierCollection);
-		
+
 		System.out.println("Setting parameters");		
 		
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComment("");
-		collectionEventParameters.setSpecimen(ts);
+		collectionEventParameters.setAbstractSpecimen(ts);
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
 		user.setId(new Long(1));
@@ -1622,7 +1589,7 @@ public class BaseTestCaseUtility {
 		
 		receivedEventParameters.setReceivedQuality("Acceptable");
 		receivedEventParameters.setComment("fdfd");
-		receivedEventParameters.setSpecimen(ts);
+		receivedEventParameters.setAbstractSpecimen(ts);
 		
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
@@ -1643,9 +1610,10 @@ public class BaseTestCaseUtility {
 
 		molecularSpecimen.setLabel("Molecular Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
 		molecularSpecimen.setBarcode("MolSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
-		molecularSpecimen.setType("DNA");
+		molecularSpecimen.setSpecimenType("DNA");
 		molecularSpecimen.setAvailable(new Boolean(true));
 		molecularSpecimen.setActivityStatus("Active");
+		molecularSpecimen.setSpecimenClass("Molecular");
 
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 		specimenCharacteristics.setTissueSide("Left");
@@ -1653,9 +1621,8 @@ public class BaseTestCaseUtility {
 		molecularSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
 
 		molecularSpecimen.setPathologicalStatus("Malignant");
-
-		Quantity quantity = new Quantity();
-		quantity.setValue(new Double(10.0));
+		
+		Double quantity = new Double(10.0);
 		molecularSpecimen.setInitialQuantity(quantity);
 		molecularSpecimen.setAvailableQuantity(quantity);
 		// modified code here. chnged funcion name to setInitialQuantity(quantity) from setQuantity(quantity)
@@ -1681,7 +1648,7 @@ public class BaseTestCaseUtility {
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
 		user.setId(new Long(1));
-		collectionEventParameters.setSpecimen(molecularSpecimen);
+		collectionEventParameters.setAbstractSpecimen(molecularSpecimen);
 	//	collectionEventParameters.setId(new Long(0));
 		collectionEventParameters.setUser(user);
 		try
@@ -1698,7 +1665,7 @@ public class BaseTestCaseUtility {
 
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setUser(user);
-		receivedEventParameters.setSpecimen(molecularSpecimen);
+		receivedEventParameters.setAbstractSpecimen(molecularSpecimen);
 		//receivedEventParameters.setId(new Long(0));
 		try
 		{
@@ -1718,40 +1685,6 @@ public class BaseTestCaseUtility {
 		specimenEventCollection.add(receivedEventParameters);
 		molecularSpecimen.setSpecimenEventCollection(specimenEventCollection);
 
-//		Biohazard biohazard = new Biohazard();
-//		biohazard.setName("Biohazard1");
-//		biohazard.setType("Toxic");
-//		biohazard.setId(new Long(1));
-//		Collection biohazardCollection = new HashSet();
-//		biohazardCollection.add(biohazard);
-//		molecularSpecimen.setBiohazardCollection(biohazardCollection);
-
-		//Setting Consent Tier Response
-//		Collection consentTierStatusCollection = new HashSet();
-//		
-//		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();		
-//		ConsentTier consentTier = new ConsentTier();
-//		consentTier.setId(new Long(21));
-//		consentTierStatus.setConsentTier(consentTier);
-//		consentTierStatus.setStatus("No");
-//		consentTierStatusCollection.add(consentTierStatus);
-//		
-//		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();		
-//		ConsentTier consentTier1 = new ConsentTier();
-//		consentTier1.setId(new Long(22));
-//		consentTierStatus1.setConsentTier(consentTier1);
-//		consentTierStatus1.setStatus("No");
-//		consentTierStatusCollection.add(consentTierStatus1);
-//		
-//		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();		
-//		ConsentTier consentTier2 = new ConsentTier();
-//		consentTier2.setId(new Long(23));
-//		consentTierStatus2.setConsentTier(consentTier2);
-//		consentTierStatus2.setStatus("No");
-//		consentTierStatusCollection.add(consentTierStatus2);
-//		
-//		molecularSpecimen.setConsentTierStatusCollection(consentTierStatusCollection);
-		
 		return molecularSpecimen;
 }
 	
@@ -1762,10 +1695,10 @@ public class BaseTestCaseUtility {
 //		SpecimenCollectionGroup scg = (SpecimenCollectionGroup)TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 //		specimenCollectionGroup.setId(new Long(1));
 //		molecularSpecimen.setSpecimenCollectionGroup(scg);
-
+		cellSpecimen.setSpecimenClass("Cell");
 		cellSpecimen.setLabel("Cell Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
 		cellSpecimen.setBarcode("CellSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
-		cellSpecimen.setType("Fixed Cell Block");
+		cellSpecimen.setSpecimenType("Fixed Cell Block");
 		cellSpecimen.setAvailable(new Boolean(true));
 		cellSpecimen.setActivityStatus("Active");
 
@@ -1776,8 +1709,7 @@ public class BaseTestCaseUtility {
 
 		cellSpecimen.setPathologicalStatus("Malignant");
 
-		Quantity quantity = new Quantity();
-		quantity.setValue(new Double(10.0));
+		Double quantity = new Double(10.0);
 		cellSpecimen.setInitialQuantity(quantity);
 		cellSpecimen.setAvailableQuantity(quantity);
 		// modified code here. chnged funcion name to setInitialQuantity(quantity) from setQuantity(quantity)
@@ -1803,7 +1735,7 @@ public class BaseTestCaseUtility {
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
 		user.setId(new Long(1));
-		collectionEventParameters.setSpecimen(cellSpecimen);
+		collectionEventParameters.setAbstractSpecimen(cellSpecimen);
 	//	collectionEventParameters.setId(new Long(0));
 		collectionEventParameters.setUser(user);
 		try
@@ -1820,7 +1752,7 @@ public class BaseTestCaseUtility {
 
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setUser(user);
-		receivedEventParameters.setSpecimen(cellSpecimen);
+		receivedEventParameters.setAbstractSpecimen(cellSpecimen);
 		//receivedEventParameters.setId(new Long(0));
 		try
 		{
@@ -1840,40 +1772,6 @@ public class BaseTestCaseUtility {
 		specimenEventCollection.add(receivedEventParameters);
 		cellSpecimen.setSpecimenEventCollection(specimenEventCollection);
 
-//		Biohazard biohazard = new Biohazard();
-//		biohazard.setName("Biohazard1");
-//		biohazard.setType("Toxic");
-//		biohazard.setId(new Long(1));
-//		Collection biohazardCollection = new HashSet();
-//		biohazardCollection.add(biohazard);
-//		molecularSpecimen.setBiohazardCollection(biohazardCollection);
-
-		//Setting Consent Tier Response
-//		Collection consentTierStatusCollection = new HashSet();
-//		
-//		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();		
-//		ConsentTier consentTier = new ConsentTier();
-//		consentTier.setId(new Long(21));
-//		consentTierStatus.setConsentTier(consentTier);
-//		consentTierStatus.setStatus("No");
-//		consentTierStatusCollection.add(consentTierStatus);
-//		
-//		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();		
-//		ConsentTier consentTier1 = new ConsentTier();
-//		consentTier1.setId(new Long(22));
-//		consentTierStatus1.setConsentTier(consentTier1);
-//		consentTierStatus1.setStatus("No");
-//		consentTierStatusCollection.add(consentTierStatus1);
-//		
-//		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();		
-//		ConsentTier consentTier2 = new ConsentTier();
-//		consentTier2.setId(new Long(23));
-//		consentTierStatus2.setConsentTier(consentTier2);
-//		consentTierStatus2.setStatus("No");
-//		consentTierStatusCollection.add(consentTierStatus2);
-//		
-//		molecularSpecimen.setConsentTierStatusCollection(consentTierStatusCollection);
-		
 		return cellSpecimen;
 }
 	public static Specimen initFluidSpecimen()
@@ -1884,10 +1782,10 @@ public class BaseTestCaseUtility {
 //		
 //		//specimenCollectionGroup.setId(new Long(1));
 //		molecularSpecimen.setSpecimenCollectionGroup(scg);
-
+		cellSpecimen.setSpecimenClass("Fluid");
 		cellSpecimen.setLabel("Fluid Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
 		cellSpecimen.setBarcode("FluidSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
-		cellSpecimen.setType("Amniotic Fluid");
+		cellSpecimen.setSpecimenType("Amniotic Fluid");
 		cellSpecimen.setAvailable(new Boolean(true));
 		cellSpecimen.setActivityStatus("Active");
 
@@ -1898,8 +1796,7 @@ public class BaseTestCaseUtility {
 
 		cellSpecimen.setPathologicalStatus("Malignant");
 
-		Quantity quantity = new Quantity();
-		quantity.setValue(new Double(10.0));
+		Double quantity = new Double(10.0);
 		cellSpecimen.setInitialQuantity(quantity);
 		cellSpecimen.setAvailableQuantity(quantity);
 		// modified code here. chnged funcion name to setInitialQuantity(quantity) from setQuantity(quantity)
@@ -1925,7 +1822,7 @@ public class BaseTestCaseUtility {
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
 		user.setId(new Long(1));
-		collectionEventParameters.setSpecimen(cellSpecimen);
+		collectionEventParameters.setAbstractSpecimen(cellSpecimen);
 	//	collectionEventParameters.setId(new Long(0));
 		collectionEventParameters.setUser(user);
 		try
@@ -1942,7 +1839,7 @@ public class BaseTestCaseUtility {
 
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setUser(user);
-		receivedEventParameters.setSpecimen(cellSpecimen);
+		receivedEventParameters.setAbstractSpecimen(cellSpecimen);
 		//receivedEventParameters.setId(new Long(0));
 		try
 		{
@@ -1962,40 +1859,6 @@ public class BaseTestCaseUtility {
 		specimenEventCollection.add(receivedEventParameters);
 		cellSpecimen.setSpecimenEventCollection(specimenEventCollection);
 
-//		Biohazard biohazard = new Biohazard();
-//		biohazard.setName("Biohazard1");
-//		biohazard.setType("Toxic");
-//		biohazard.setId(new Long(1));
-//		Collection biohazardCollection = new HashSet();
-//		biohazardCollection.add(biohazard);
-//		molecularSpecimen.setBiohazardCollection(biohazardCollection);
-
-		//Setting Consent Tier Response
-//		Collection consentTierStatusCollection = new HashSet();
-//		
-//		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();		
-//		ConsentTier consentTier = new ConsentTier();
-//		consentTier.setId(new Long(21));
-//		consentTierStatus.setConsentTier(consentTier);
-//		consentTierStatus.setStatus("No");
-//		consentTierStatusCollection.add(consentTierStatus);
-//		
-//		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();		
-//		ConsentTier consentTier1 = new ConsentTier();
-//		consentTier1.setId(new Long(22));
-//		consentTierStatus1.setConsentTier(consentTier1);
-//		consentTierStatus1.setStatus("No");
-//		consentTierStatusCollection.add(consentTierStatus1);
-//		
-//		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();		
-//		ConsentTier consentTier2 = new ConsentTier();
-//		consentTier2.setId(new Long(23));
-//		consentTierStatus2.setConsentTier(consentTier2);
-//		consentTierStatus2.setStatus("No");
-//		consentTierStatusCollection.add(consentTierStatus2);
-//		
-//		molecularSpecimen.setConsentTierStatusCollection(consentTierStatusCollection);
-		
 		return cellSpecimen;
 }
 	

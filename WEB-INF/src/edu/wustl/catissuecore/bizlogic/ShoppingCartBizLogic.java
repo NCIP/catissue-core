@@ -115,8 +115,8 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 					rowList.add(String.valueOf(specimen.getId()));
 					rowList.add(specimen.getClassName());
 					
-					if(specimen.getType() != null)
-						rowList.add(specimen.getType());
+					if(specimen.getSpecimenType() != null)
+						rowList.add(specimen.getSpecimenType());
 					else
 						rowList.add("");
 					

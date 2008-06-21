@@ -309,17 +309,12 @@ INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAM
 INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (295,'edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction','edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction','edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction',NULL,NULL,1,to_date('2007-01-15','yyyy-mm-dd'));
 
 /* kalpana 11-27-2007 */
-INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (296,'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup','edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup',
-'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup',NULL,NULL,1,to_date('2007-11-27','yyyy-mm-dd'));
-
 /* changes for making Action a secureAction  :kalpana */
 INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (297,'edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction',NULL,NULL,1,to_date('2007-12-25','yyyy-mm-dd'));
 INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (298,'edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction','edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction','edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction',NULL,NULL,1,to_date('2007-12-25','yyyy-mm-dd'));
 INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (299,'edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction','edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction',NULL,NULL,1,to_date('2007-12-25','yyyy-mm-dd'));
 
 /* kalpana :end */
-
-
 
 /* done */
 --
@@ -1076,5 +1071,20 @@ INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTIO
 INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='SpecimenPosition'),to_date('2008-05-28','yyyy-mm-dd'));
 INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ContainerPosition'),to_date('2008-05-28','yyyy-mm-dd'));
 
+/* Suite 1.1 Specimen Related changes */
+INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'AbstractSpecimen','AbstractSpecimen Object','edu.wustl.catissuecore.domain.AbstractSpecimen',NULL,NULL,1,to_date('2008-05-28','yyyy-mm-dd'));
+INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'RequirementSpecimen','RequirementSpecimen Object','edu.wustl.catissuecore.domain.RequirementSpecimen',NULL,NULL,1,to_date('2008-05-28','yyyy-mm-dd'));
+INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'MolReqSpecimen','MolReqSpecimen Object','edu.wustl.catissuecore.domain.MolecularRequirementSpecimen',NULL,NULL,1,to_date('2008-05-28','yyyy-mm-dd'));
+INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'FluidReqSpecimen','FluidReqSpecimen Object','edu.wustl.catissuecore.domain.FluidRequirementSpecimen',NULL,NULL,1,to_date('2008-05-28','yyyy-mm-dd'));
+INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'CellReqSpecimen','CellReqSpecimen Object','edu.wustl.catissuecore.domain.CellRequirementSpecimen',NULL,NULL,1,to_date('2008-05-28','yyyy-mm-dd'));
+INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'TissueReqSpecimen','TissueReqSpecimen Object','edu.wustl.catissuecore.domain.TissueRequirementSpecimen',NULL,NULL,1,to_date('2008-05-28','yyyy-mm-dd'));
+
+
+INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='AbstractSpecimen'),to_date('2008-05-28','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='RequirementSpecimen'),to_date('2008-05-28','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='MolReqSpecimen'),to_date('2008-05-28','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='FluidReqSpecimen'),to_date('2008-05-28','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='CellReqSpecimen'),to_date('2008-05-28','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE VALUES (CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='TissueReqSpecimen'),to_date('2008-05-28','yyyy-mm-dd'));
 
 COMMIT;

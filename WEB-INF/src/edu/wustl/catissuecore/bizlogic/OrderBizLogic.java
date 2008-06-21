@@ -280,7 +280,7 @@ public class OrderBizLogic extends DefaultBizLogic
 									}
 									//						    		adding specimen to the collection
 									if (specimen.getClassName().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenClass())
-											&& specimen.getType().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenType()))
+											&& specimen.getSpecimenType().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenType()))
 									{
 										finalChildrenSpecimenCollection.add(specimen);
 									}

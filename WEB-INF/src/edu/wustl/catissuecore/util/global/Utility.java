@@ -40,6 +40,7 @@ import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -146,7 +147,7 @@ public class Utility extends edu.wustl.common.util.Utility {
 		return typeList;
 	}
 
-	public static String getSpecimenClassName(Specimen specimen) {
+	public static String getSpecimenClassName(AbstractSpecimen specimen) {
 		if (specimen instanceof CellSpecimen) {
 			return Constants.CELL;
 		} else if (specimen instanceof MolecularSpecimen) {

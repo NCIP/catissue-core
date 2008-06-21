@@ -102,7 +102,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				specimenEventParametersObject.setUser(user);
 			}
 //			Ashish - 6/6/07 - performance improvement
-			Object specimenObject = dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
+			Object specimenObject = dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getAbstractSpecimen().getId());
 			Specimen specimen = (Specimen) specimenObject;
 			//(Specimen) dao.retrieveAttribute(SpecimenEventParameters.class.getName(), specimenEventParametersObject.getSpecimen().getId(),"specimen");
 			//(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId(),Constants.SYSTEM_IDENTIFIER);
@@ -112,7 +112,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 			if (specimen != null)
 			{
-				specimenEventParametersObject.setSpecimen(specimen);
+				specimenEventParametersObject.setAbstractSpecimen(specimen);
 				if (specimenEventParametersObject instanceof TransferEventParameters)
 				{
 					TransferEventParameters transferEventParameters = (TransferEventParameters) specimenEventParametersObject;
@@ -361,7 +361,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 				DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
 				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-				if (disposalEventParameters.getSpecimen() != null)
+				if (disposalEventParameters.getAbstractSpecimen() != null)
 				{
 
 					Map disabledConts = getContForDisabledSpecimenFromCache();
@@ -619,7 +619,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
 				TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-				Specimen specimen = (Specimen)dao.retrieve(Specimen.class.getName(), parameter.getSpecimen().getId());
+				Specimen specimen = (Specimen)dao.retrieve(Specimen.class.getName(), parameter.getAbstractSpecimen().getId());
 //				Long fromContainerId = (Long) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition");
 //				Integer pos1 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition.positionDimensionOne");
 //				Integer pos2 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPositionpositionDimensionTwo");

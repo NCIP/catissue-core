@@ -95,13 +95,9 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				{
 					TaskTimeCalculater cpTask =TaskTimeCalculater.startTask
 					("Populate CP,Event & Specimen domain objects before calling insert" , SubmitSpecimenCPAction.class);
-					
 					CollectionProtocol collectionProtocol = CollectionProtocolUtil
 					.populateCollectionProtocolObjects(request);
-
 					insertCollectionProtocol(collectionProtocol,request.getSession());
-					
-				
 					collectionProtocolBean.setIdentifier(collectionProtocol.getId());
 					TaskTimeCalculater.endTask(cpTask);
 					cpTask =TaskTimeCalculater.startTask
@@ -237,14 +233,14 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				
 				if(specimenDataBean.getSpecimenCollectionGroup()== null)
 				{
-					Specimen parentSpeciemn = specimen.getParentSpecimen();
+					Specimen parentSpeciemn = (Specimen)specimen.getParentSpecimen();
 					
 					Long scgId =
 						parentSpeciemn.getSpecimenCollectionGroup().getId();
 					
 					IBizLogic iBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 					Object object = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), scgId);
-					specimen.setSpecimenCollectionGroup((AbstractSpecimenCollectionGroup) object);
+					specimen.setSpecimenCollectionGroup((SpecimenCollectionGroup) object);
 					
 
 				}
@@ -346,7 +342,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 		specimen.setPathologicalStatus(specimenDataBean.getPathologicalStatus());
 	
 		//specimen.setAvailable(Boolean.FALSE);
-		Quantity availableQuantity = new Quantity();
+		Double availableQuantity = new Double(0);
 		double value=0;
 		String s=specimenDataBean.getQuantity();
 		try{
@@ -355,13 +351,13 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			value=0;
 		}
 		
-		availableQuantity.setValue(value);
+		availableQuantity = value;
 		specimen.setAvailableQuantity(availableQuantity);
 		specimen.setInitialQuantity(availableQuantity);
 		specimen.setLineage(specimenDataBean.getLineage());
 		specimen.setPathologicalStatus(
 				specimenDataBean.getPathologicalStatus());		
-		specimen.setType(specimenDataBean.getType());
+		specimen.setSpecimenType(specimenDataBean.getType());
 		
 		specimen.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
@@ -378,7 +374,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 					(SpecimenEventParameters) iterator.next();
 				if(specimenEventParameters.getUser()!=null)
 				{
-					specimenEventParameters.setSpecimen(specimen);
+					specimenEventParameters.setAbstractSpecimen(specimen);
 					speEventParamSet.add(specimenEventParameters);
 				}
 			}

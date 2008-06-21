@@ -564,7 +564,7 @@ public class SpecimenForm extends AbstractActionForm
 	{
 		Specimen specimen = (Specimen) abstractDomain;
 		this.id = specimen.getId().longValue();
-		this.type = specimen.getType();
+		this.type = specimen.getSpecimenType();
 		this.concentration = "";
 		this.comments = specimen.getComment();
 		this.activityStatus = specimen.getActivityStatus();
@@ -669,7 +669,7 @@ public class SpecimenForm extends AbstractActionForm
 		
 		if(!Utility.isQuantityDouble(className,type))
 		{
-			Double doubleQuantity = specimen.getInitialQuantity().getValue();
+			Double doubleQuantity = specimen.getInitialQuantity();
 			if (doubleQuantity.toString().contains("E"))
 	    	{    		
 				this.quantity = doubleQuantity.toString();
@@ -680,7 +680,7 @@ public class SpecimenForm extends AbstractActionForm
 	    		this.quantity = new Long(longQuantity).toString();
 	    	}
 			
-			doubleQuantity = specimen.getAvailableQuantity().getValue();
+			doubleQuantity = specimen.getAvailableQuantity();
 			if (doubleQuantity.toString().contains("E"))
 	    	{    		
 				this.availableQuantity = doubleQuantity.toString();

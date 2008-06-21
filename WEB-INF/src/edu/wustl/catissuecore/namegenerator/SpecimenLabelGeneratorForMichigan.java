@@ -14,6 +14,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -176,7 +177,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	 * Format for derived specimen: parentSpecimenLabel_childCount+1
 	 */
 	
-	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject,Specimen specimenObject)
+	synchronized void setNextAvailableDeriveSpecimenlabel(AbstractSpecimen parentObject,Specimen specimenObject)
 	{
 						
 		String parentSpecimenLabel = (String) parentObject.getLabel();				
@@ -189,7 +190,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	/**
 	 * This function is overridden as per Michgam requirement. 
 	 */
-	synchronized void setNextAvailableAliquotSpecimenlabel(Specimen parentObject, Specimen specimenObject) 
+	synchronized void setNextAvailableAliquotSpecimenlabel(AbstractSpecimen parentObject, Specimen specimenObject) 
 	{
 		
 		String parentSpecimenLabel = (String) parentObject.getLabel();

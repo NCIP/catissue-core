@@ -108,7 +108,7 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 
 		specimen = new Specimen();
 		specimen.setId(new Long(specimenId));
-		eventParameters.setSpecimen(specimen);
+		eventParameters.setAbstractSpecimen(specimen);
 
 		Calendar calendar = Calendar.getInstance();
 		Date date = Utility.parseDate(dateOfEvent, Utility.datePattern(dateOfEvent));

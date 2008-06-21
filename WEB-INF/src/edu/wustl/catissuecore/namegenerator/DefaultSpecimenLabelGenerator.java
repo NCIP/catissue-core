@@ -155,9 +155,8 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	public synchronized void setLabel(Object obj) {
 		
 		Specimen objSpecimen = (Specimen)obj;
-		
-		if (objSpecimen.getLabel() != null || objSpecimen.getIsCollectionProtocolRequirement()!=null &&
-				objSpecimen.getIsCollectionProtocolRequirement())
+		Specimen parentSpecimen = (Specimen)objSpecimen.getParentSpecimen();
+		if (objSpecimen.getLabel() != null)
 		{
 			return;
 		}
@@ -170,11 +169,11 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		}
 		else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
 		{
-			this.setNextAvailableAliquotSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen);
+			this.setNextAvailableAliquotSpecimenlabel(parentSpecimen,objSpecimen);
 		}
 		else if(!labelCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
 		{
-			setNextAvailableDeriveSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen);
+			setNextAvailableDeriveSpecimenlabel(parentSpecimen,objSpecimen);
 		}
 		
 		if(objSpecimen.getChildrenSpecimen().size()>0)

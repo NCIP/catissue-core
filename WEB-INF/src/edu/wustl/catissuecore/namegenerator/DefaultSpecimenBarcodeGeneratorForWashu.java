@@ -158,13 +158,10 @@ public class DefaultSpecimenBarcodeGeneratorForWashu implements BarcodeGenerator
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.BarcodeGenerator#setBarcode(edu.wustl.common.domain.AbstractDomainObject)
 	 */
-	synchronized public void setBarcode(Object obj) {
-		
+	synchronized public void setBarcode(Object obj) 
+	{
 		Specimen objSpecimen = (Specimen)obj;
-		if (objSpecimen.getIsCollectionProtocolRequirement())
-		{
-			return;
-		}
+		Specimen parentSpecimen = (Specimen)objSpecimen.getParentSpecimen();
 		if(!Constants.COLLECTION_STATUS_COLLECTED.equals(objSpecimen.getCollectionStatus()))
 		{
 			return;
@@ -175,17 +172,17 @@ public class DefaultSpecimenBarcodeGeneratorForWashu implements BarcodeGenerator
 			objSpecimen.setBarcode(currentBarcode.toString());
 			barcodeCountTreeMap.put(objSpecimen.getBarcode(),0);
 		}
-	
-	
 		else if(!barcodeCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.ALIQUOT))				
 		{
-			setNextAvailableAliquotSpecimenBarcode(objSpecimen.getParentSpecimen(),objSpecimen);
+			
+			setNextAvailableAliquotSpecimenBarcode(parentSpecimen,objSpecimen);
 		}
 	
 	
 		else if(!barcodeCountTreeMap.containsKey(objSpecimen) && objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))				
 		{
-			setNextAvailableDeriveSpecimenBarcode(objSpecimen.getParentSpecimen(),objSpecimen);
+			
+			setNextAvailableDeriveSpecimenBarcode(parentSpecimen,objSpecimen);
 		}
 		
 		if(objSpecimen.getChildrenSpecimen().size()>0)

@@ -1218,7 +1218,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		if (specimenObj.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
 		{
 			specimenDetailList.add(specimenObj.getLabel());
-			specimenDetailList.add(specimenObj.getType());
+			specimenDetailList.add(specimenObj.getSpecimenType());
 			if (specimenObj.getSpecimenPosition() == null)
 			{
 				specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
