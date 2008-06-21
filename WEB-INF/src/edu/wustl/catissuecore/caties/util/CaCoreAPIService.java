@@ -61,7 +61,7 @@ public class CaCoreAPIService
 	}
 	
 	/**
-	 * Method to retriev object
+	 * Method to retrieve object
 	 * @param targertClass class name of object to retrieve
 	 * @param columnName column name
 	 * @param columnValue column value
@@ -86,7 +86,7 @@ public class CaCoreAPIService
 	/**
 	 * Method to retrieve list of objects
 	 * @param targertClass class name of object to retrieve
-	 * @param columnName coulmn value
+	 * @param columnName column value
 	 * @param columnValue column value
 	 * @return List resultList
 	 */
@@ -110,7 +110,7 @@ public class CaCoreAPIService
 	 * @param hqlQuery hqlQuery string
 	 * @param targetClassName class name of object to retrieve
 	 * @return result List
-	 * @throws Exception generic exception occured
+	 * @throws Exception generic exception occurred
 	 */
 	public static Collection executeQuery(String hqlQuery, String targetClassName) throws Exception
 	{
@@ -133,7 +133,7 @@ public class CaCoreAPIService
 	 * @param criteria object of DetachedCriteria
 	 * @param targetClassName class name of object to retrieve
 	 * @return result List
-	 * @throws Exception generic exception occured
+	 * @throws Exception generic exception occurred
 	 */
 	public static Collection executeQuery(DetachedCriteria criteria, String targetClassName) throws Exception
 	{
@@ -153,7 +153,7 @@ public class CaCoreAPIService
 	 * Method to save object
 	 * @param object object to be saved
 	 * @return saved object
-	 * @throws Exception generic exception occured
+	 * @throws Exception generic exception occurred
 	 */
 	public static Object createObject(Object object) throws Exception
 	{
@@ -172,7 +172,7 @@ public class CaCoreAPIService
 	 * Method to update object
 	 * @param object object to update
 	 * @return updated object
-	 * @throws Exception generic exception occured
+	 * @throws Exception generic exception occurred
 	 */
 	public static Object updateObject(Object object) throws Exception
 	{
@@ -190,7 +190,7 @@ public class CaCoreAPIService
 	/**
 	 * Method to delete object
 	 * @param object object to delete
-	 * @throws Exception generic exception occured
+	 * @throws Exception generic exception occurred
 	 */
 	public static void removeObject(Object object) throws Exception
 	{
@@ -208,7 +208,7 @@ public class CaCoreAPIService
 	 * Method to get SCG label for given SCG
 	 * @param scg object of SpecimenCollectionGroup
 	 * @return label of SCG
-	 * @throws Exception generic exception occured
+	 * @throws Exception generic exception occurred
 	 */
 	public static String getSpecimenCollectionGroupLabel(SpecimenCollectionGroup scg) throws Exception
 	{
@@ -223,10 +223,10 @@ public class CaCoreAPIService
 		}
 	}
 	/**
-	 * Method to retriev default value for given key
+	 * Method to retrieve default value for given key
 	 * @param key key
 	 * @return default value for given key
-	 * @throws Exception generic exception occured
+	 * @throws Exception generic exception occurred
 	 */
 	public static String getDefaultValue(String key) throws Exception
 	{
@@ -244,7 +244,7 @@ public class CaCoreAPIService
 	 * Method to get list of matching participant for given participant
 	 * @param participant object of Participant
 	 * @return list of matching participant objects
-	 * @throws Exception generic exception occured
+	 * @throws Exception generic exception occurred
 	 */
 	public static List getParticipantMatchingObects(Participant participant) throws Exception
 	{
