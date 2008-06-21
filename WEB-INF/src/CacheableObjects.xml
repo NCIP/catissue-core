@@ -22,7 +22,8 @@
 		<Class name="edu.wustl.catissuecore.domain.DisposalEventParameters"/>	
 		<Class name="edu.wustl.catissuecore.domain.DistributedItem"/>	
 		<Class name="edu.wustl.catissuecore.domain.Distribution"/>
-		<Class name="edu.wustl.catissuecore.domain.DistributionProtocol"/>	
+		<Class name="edu.wustl.catissuecore.domain.DistributionProtocol"/>
+		<Class name="edu.wustl.catissuecore.domain.DistributionSpecimenRequirement"/>	
 		<Class name="edu.wustl.catissuecore.domain.EmbeddedEventParameters"/>	
 		<Class name="edu.wustl.catissuecore.domain.EventParameters"/>
 		<Class name="edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem"/>	
