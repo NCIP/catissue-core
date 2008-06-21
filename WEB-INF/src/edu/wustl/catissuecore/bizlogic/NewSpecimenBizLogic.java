@@ -549,6 +549,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			checkStatus(dao, parentSpecimen, "Specimen");
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
+			specimen.getSpecimenCollectionGroup().getSpecimenCollection().add(specimen);
 			setParentSpecimenData(specimen);
 		}
 		checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
@@ -586,6 +587,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					.getConsentTierStatusCollection();
 			setConsentTierStatus(specimen, consentTierStatusCollection);
 		specimen.setSpecimenCollectionGroup(scg);
+		scg.getSpecimenCollection().add(specimen);
 	}
 
 	/**
@@ -2757,7 +2759,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			double newAvailQty = 0.0;
 			if (differenceQty == 0 || !specimenDO.getCollectionStatus().equals("Pending"))
 			{
-				if(differenceQty != 0)
+				if(differenceQty < 0)
 				{
 					newAvailQty = availableQuantity.doubleValue();
 				}

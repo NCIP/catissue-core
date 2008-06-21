@@ -45,6 +45,7 @@ import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.CollectionProtocolEventComparator;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
@@ -1135,125 +1136,239 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 	public String getSCGTreeForCPBasedView(Long cpId, Long participantId) throws DAOException, ClassNotFoundException
 	{
-		offsetForCPOrEvent = null;
-		Logger.out.debug("Start of getSCGTreeForCPBasedView");
-
-		Date regDate = null;
-		Integer offset = null;
-		String hql1 = "select cpr.registrationDate,cpr.offset from " + CollectionProtocolRegistration.class.getName()
-				+ " as cpr where cpr.collectionProtocol.id = " + cpId.toString() + " and cpr.participant.id = " + participantId.toString();
-		List list = executeQuery(hql1);
-		if (list != null && list.size() > 0)
+		
+		long startTime = System.currentTimeMillis();
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+    	try
+    	{
+    		dao.openSession(null);
+			Logger.out.debug("Start of getSCGTreeForCPBasedView");
+			CollectionProtocolRegistration collectionProtocolRegistration = null;
+						
+			Object object = dao.retrieve(CollectionProtocol.class.getName(), cpId);
+			CollectionProtocol collectionProtocol = (CollectionProtocol)object;
+			
+			
+			Iterator collectionProtCollectionItr = collectionProtocol.getCollectionProtocolRegistrationCollection().iterator();
+			
+			while(collectionProtCollectionItr.hasNext())
+			{
+				collectionProtocolRegistration = 
+					(CollectionProtocolRegistration)collectionProtCollectionItr.next();
+				if(collectionProtocolRegistration.getCollectionProtocol().getId().equals(cpId) && 
+						collectionProtocolRegistration.getParticipant().getId().equals(participantId))
+				{
+					break;
+				}
+				
+			}
+			StringBuffer xmlString = new StringBuffer();
+			xmlString.append("<node>");
+			childCPtree(xmlString,participantId, collectionProtocolRegistration,collectionProtocol);
+			xmlString.append("</node>");
+			
+			long endTime = System.currentTimeMillis();
+			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB (SpecimenCollectionGroupBizlogic)-  : "+ (endTime - startTime));
+			return xmlString.toString();
+    	}
+    	catch(DAOException e)
+    	{
+    		Logger.out.error(e.getMessage(), e);
+    		return null;
+    	}
+    	finally
 		{
-			Object[] obj = (Object[]) list.get(0);
-			regDate = (Date) obj[0];
-			offset = (Integer) obj[1];
-
-		}
-		offsetForCPOrEvent = offset;
-		// creating XML String rep of SCGs,specimens & child specimens ::Addded
-		// by baljeet
-		StringBuffer xmlString = new StringBuffer();
-
-		xmlString.append("<node>");
-
-		childCPtree(xmlString, cpId, participantId, regDate,offsetForCPOrEvent);
-		xmlString.append("</node>");
-		return xmlString.toString();
+			try
+			{
+				dao.closeSession();
+			}
+			catch(DAOException daoEx)
+			{
+				Logger.out.error(daoEx.getMessage(), daoEx);
+	    		return null;
+			}
+		}			
 	}
-
+	
+	
+	
 	/**
-	 * Creates a tree which consists of ChildCollectionProtocol under Parent
-	 * Collection Protocol if ChildCollectionProtocol is available The function
-	 * is called recursively and also SCG for Parent Collection Protocol and
-	 * Child COllection Protocol are created in tree structure
-	 * 
+	 * get all the associated scg and specimens to cp and participant
 	 * @param xmlString
-	 *            String buffer to generate XML code
-	 * @param cpId
-	 *            id of collection protocol
 	 * @param participantId
-	 *            id of participant
+	 * @param collectionProtocolRegistration
+	 * @param collectionProtocol
 	 * @throws DAOException
-	 *             daoException
 	 * @throws ClassNotFoundException
-	 *             classNotFoundException
 	 */
-
-	public void childCPtree(StringBuffer xmlString, Long cpId, Long participantId, Date regDate, Integer parentOffset) throws DAOException, ClassNotFoundException
+	public void childCPtree(StringBuffer xmlString, Long participantId,CollectionProtocolRegistration collectionProtocolRegistration,
+			CollectionProtocol collectionProtocol) throws DAOException, ClassNotFoundException
 	{
-
-		Date evtLastDate = SCGTreeForCPBasedView(xmlString, cpId, participantId, regDate,parentOffset);
-
-		String hql = "select  cp." + Constants.CHILD_COLLECTION_PROTOCOL_COLLECTION + " from " + CollectionProtocol.class.getName()
-				+ " as cp where cp.id= " + cpId.toString();
-		List cpchildList = executeQuery(hql);
+		//done
+		Date evtLastDate = SCGTreeFrCPBasedView(xmlString, collectionProtocol,
+				collectionProtocolRegistration);
+		
+		List cpchildList = new ArrayList();
+		cpchildList.addAll(collectionProtocol.getChildCollectionProtocolCollection());
 		CollectionProtocolSeqComprator comparator = new CollectionProtocolSeqComprator();
 		Collections.sort(cpchildList, comparator);
+		
 		if (cpchildList.size() != 0)
 		{
 			for (int count = 0; count < cpchildList.size(); count++)
 			{
-				CollectionProtocol cp = (CollectionProtocol) cpchildList.get(count);
+				CollectionProtocol colProt = (CollectionProtocol) cpchildList.get(count);
 				
-				String dispName = cp.getShortTitle();
-				Date participantRegDate = getRegDateForCP(cp, participantId, regDate, evtLastDate,parentOffset);
+				String dispName = colProt.getShortTitle();
+				Date participantRegDate = getPartRegDateForCP(colProt, participantId, collectionProtocolRegistration.getRegistrationDate()
+						, evtLastDate,collectionProtocolRegistration.getOffset());
 				String anticipatoryDate = "";
 				if (participantRegDate != null)
 				{
 					//bug no:6526 date format changed to mm-dd-yyyy
 					anticipatoryDate = Utility.parseDateToString(participantRegDate, "MM-dd-yyyy");
-					dispName = cp.getShortTitle() + ":" + anticipatoryDate;
+					dispName = colProt.getShortTitle() + ":" + anticipatoryDate;
 
 				}
-				CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, cp.getId(), cp.getType());
+				CollectionProtocolRegistration cpr = getCollectionProtocolReg(colProt, participantId);
 				String participantRegStatus = "Pending";
 				if (cpr != null)
 					participantRegStatus = "Registered";
 
-				xmlString.append("<node id= \"" + Constants.SUB_COLLECTION_PROTOCOL + "_" + cp.getId() + "\" " + "name=\"" + dispName + "\" "
-						+ "toolTip=\"" + cp.getTitle() + "\" " + "type=\"" + cp.getType() + "\" " + "cpType=\"" + cp.getType() + "\" " + "regDate=\""
+				xmlString.append("<node id= \"" + Constants.SUB_COLLECTION_PROTOCOL + "_" + colProt.getId() + "\" " + "name=\"" + dispName + "\" "
+						+ "toolTip=\"" + colProt.getTitle() + "\" " + "type=\"" + colProt.getType() + "\" " + "cpType=\"" + colProt.getType() + "\" " + "regDate=\""
 						+ anticipatoryDate + "\" " + "participantRegStatus=\"" + participantRegStatus + "\">");
 				if (cpr != null)
 				{
 					if(cpr.getOffset() != null)
 						addOffset(cpr.getOffset());
 				}
-				childCPtree(xmlString, cp.getId(), participantId, participantRegDate,offsetForCPOrEvent);
+				childCPtree(xmlString, participantId, collectionProtocolRegistration,colProt);
 				xmlString.append("</node>");
 			}
 
 		}
 
 	}
-
-	private void addOffset(Integer offsetToAdd)
+	
+	
+	/**
+	 * get CollectionProtocolEvents from the collection of SCG 
+	 * get all the SCG associated to CPR,get the list of CollectionProtocolEvents from SCG
+	 * Created a map having key as id of CollectionProtocolEvent and value as the list of scg 
+	 * assosiated to it.
+	 * @param xmlString
+	 * @param collectionProtocol
+	 * @param collectionProtocolRegistration
+	 * @return
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	public Date SCGTreeFrCPBasedView(StringBuffer xmlString, CollectionProtocol collectionProtocol,CollectionProtocolRegistration
+			collectionProtocolRegistration) throws DAOException,
+	ClassNotFoundException
 	{
-		Integer offset = null;
-		if(offsetForCPOrEvent != null)
+		
+		Iterator specimenCollectionGroupColItr = (Iterator)collectionProtocolRegistration.
+													getSpecimenCollectionGroupCollection().iterator();
+		List collectionProtocolEvents = new ArrayList();
+		Map collectionProtocolEventsIdAndSCGMap = new HashMap();
+		
+		while(specimenCollectionGroupColItr.hasNext())
 		{
-			offset = new Integer(offsetForCPOrEvent.intValue()+offsetToAdd.intValue());
-			offsetForCPOrEvent = offset;
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)specimenCollectionGroupColItr.next();
+			
+			if(!collectionProtocolEvents.contains(specimenCollectionGroup.getCollectionProtocolEvent()))
+			{	
+				collectionProtocolEvents.add(specimenCollectionGroup.getCollectionProtocolEvent());
+				
+			}
+			
+			if(collectionProtocolEventsIdAndSCGMap.containsKey(specimenCollectionGroup.getCollectionProtocolEvent().getId()))
+			  {
+					List specColGroupList = (List)collectionProtocolEventsIdAndSCGMap.get(
+							specimenCollectionGroup.getCollectionProtocolEvent().getId());
+					specColGroupList.add(specimenCollectionGroup);
+					
+									
+			  } else {
+					List specColGroupList = new ArrayList();
+					specColGroupList.add(specimenCollectionGroup);
+					collectionProtocolEventsIdAndSCGMap.put(specimenCollectionGroup.getCollectionProtocolEvent().getId(), 
+							specColGroupList);
+			 }
+					
 		}
-		else
+		
+		CollectionProtocolEventComparator comparator = new CollectionProtocolEventComparator();
+		Collections.sort(collectionProtocolEvents,comparator);
+		
+					
+		Iterator collectionProtocolEventsItr = collectionProtocolEvents.iterator();
+		
+		Date eventLastDate = new Date();
+		while(collectionProtocolEventsItr.hasNext())
 		{
-			offset = new Integer(offsetToAdd.intValue());
-			offsetForCPOrEvent = offset;
+			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) collectionProtocolEventsItr.next();
+			List scgList = (List)collectionProtocolEventsIdAndSCGMap.get(collectionProtocolEvent.getId());
+			if (scgList != null && !scgList.isEmpty())
+			{
+				eventLastDate = createTreeNodeForExistngSCG(xmlString, collectionProtocolEvent.getStudyCalendarEventPoint()
+						, collectionProtocolEvent.getCollectionPointLabel(), scgList, 
+						collectionProtocolRegistration.getRegistrationDate(),collectionProtocolRegistration.getOffset());
+			}
 		}
+		return eventLastDate;
 	}
-	private Date getRegDateForCP(CollectionProtocol cp, Long participantId, Date parentRegDate, Date eventLastDate,Integer parentOffset) throws DAOException,
-			ClassNotFoundException
+	
+	
+	/**
+	 * Get the CollectionProtocolRegistration associated to CP and participant. 
+	 * @param colProt
+	 * @param participantId
+	 * @return
+	 */
+	private CollectionProtocolRegistration getCollectionProtocolReg(CollectionProtocol colProt, Long participantId)
+	{
+		CollectionProtocolRegistration collectionProtocolRegistration = null;
+		
+		Iterator collectionProtocolRegistrationCollItr = colProt.getCollectionProtocolRegistrationCollection().iterator();
+		while(collectionProtocolRegistrationCollItr.hasNext())
+		{
+			collectionProtocolRegistration =(CollectionProtocolRegistration) collectionProtocolRegistrationCollItr.next();
+			if(collectionProtocolRegistration.getParticipant().getId().equals(participantId))
+			{
+				return collectionProtocolRegistration;
+			}
+		}
+		return collectionProtocolRegistration;
+		
+	}
+	
+	
+	/**
+	 * @param colProt
+	 * @param participantId
+	 * @param parentRegDate
+	 * @param eventLastDate
+	 * @param parentOffset
+	 * @return
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private Date getPartRegDateForCP(CollectionProtocol colProt, Long participantId, Date parentRegDate, Date eventLastDate,Integer parentOffset) throws DAOException,
+	ClassNotFoundException
 	{
 		Date participantRegDate = null;
 		//		bug 6560 fix
-
-		Long cpId = cp.getId();
-		Double eventPoint = cp.getStudyCalendarEventPoint();
-		CollectionProtocolRegistration cpr = chkParticipantRegisteredToCP(participantId, cpId, cp.getType());
-
+		
+		
+		Double eventPoint = colProt.getStudyCalendarEventPoint();
+		CollectionProtocolRegistration cpr = getCollectionProtocolReg(colProt, participantId);
+		
 		if (cpr == null)
 		{
-			if (cp.getSequenceNumber() != null)
+			if (colProt.getSequenceNumber() != null)
 			{
 				int noOfDaysToAdd = 0;
 				if (eventPoint != null)
@@ -1266,28 +1381,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 						//This check is beaause child cp take there anticipated dates according to there parent cp and if in parent date already offset is captured then no need ot take that offeet in child
 						if(parentOffset != null)
 							noOfDaysToAdd = noOfDaysToAdd - parentOffset.intValue();
-						// offset logic
-						/*
-						 * if there is offset given to the previous seq number protocols
-						 * then this shud apply here
-						 */
-						/*Integer offset = getOffsetFromPreviousSeqNoCP(cp, participantId);
-						 if (offset != null)
-						 noOfDaysToAdd = noOfDaysToAdd + offset.intValue();*/
-
-						/*if (Constants.ARM_CP_TYPE.equals(cp.getType()))
-						 noOfDaysToAdd = noOfDaysToAdd + getNoOfDaysAccordingToOffset(offset, offsetForArmCP);
-						 else
-						 noOfDaysToAdd = noOfDaysToAdd + getNoOfDaysAccordingToOffset(offset, offsetForCPOrEvent);*/
-
-						/*if (offsetForCPOrEvent != null && offset != null && offsetForCPOrEvent.intValue() > offset.intValue())
-						 noOfDaysToAdd = noOfDaysToAdd + offsetForCPOrEvent.intValue() - offset.intValue();
-
-						 if (offsetForCPOrEvent != null && offset == null)
-						 noOfDaysToAdd = noOfDaysToAdd + offsetForCPOrEvent.intValue();
-						 */
 						participantRegDate = Utility.getNewDateByAdditionOfDays(parentRegDate, noOfDaysToAdd);
-
+		
 					}
 					else if (eventLastDate != null)
 						participantRegDate = Utility.getNewDateByAdditionOfDays(eventLastDate, Constants.DAYS_TO_ADD_CP);
@@ -1300,388 +1395,169 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			participantRegDate = cpr.getRegistrationDate();
 		}
-
+		
 		return participantRegDate;
 	}
-
-	private int getNoOfDaysAccordingToOffset(Integer offset, Integer offsetForCPOrEvent)
-	{
-		int noOfDays = 0;
-		if (offsetForCPOrEvent != null && offset != null && offsetForCPOrEvent.intValue() > offset.intValue())
-			noOfDays = offsetForCPOrEvent.intValue() - offset.intValue();
-
-		if (offsetForCPOrEvent != null && offset == null)
-			noOfDays = offsetForCPOrEvent.intValue();
-
-		return noOfDays;
-	}
-
-	private Integer getOffsetFromPreviousSeqNoCP(CollectionProtocol cp, Long participantId) throws DAOException, ClassNotFoundException
-	{
-		if (cp != null && participantId != null)
-		{
-			Integer seqNo = cp.getSequenceNumber();
-			if (seqNo != null)
-			{
-				Long parentCpId = cp.getParentCollectionProtocol().getId();
-				if (parentCpId != null)
-				{
-					// get the previous cp's offset if present.
-					String hql = "select  cpr.offset from " + CollectionProtocolRegistration.class.getName()
-							+ " as cpr where cpr.collectionProtocol.parentCollectionProtocol.id = " + parentCpId.toString()
-							+ " and cpr.participant.id = " + participantId.toString() + " order by cpr.collectionProtocol.sequenceNumber desc";
-					List offsetList = executeQuery(hql);
-					if (offsetList != null)
-					{
-						for (int i = 0; i < offsetList.size(); i++)
-						{
-							Integer offset = (Integer) offsetList.get(i);
-							if (offset != null)
-								return offset;
-						}
-					}
-				}
-
-			}
-		}
-		return null;
-	}
-
-	public CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId, String type)
-			throws ClassNotFoundException, DAOException
-	{
-		//Date regDate = null;
-		CollectionProtocolRegistration cpr = null;
-		String cprHqlQuery = "select cpr.id,cpr.registrationDate,cpr.offset from " + CollectionProtocolRegistration.class.getName()
-				+ " as cpr where cpr.participant.id = " + participantId.toString() + " and cpr.collectionProtocol.id = "
-				+ collectionProtocolId.toString();
-		List cprList = executeQuery(cprHqlQuery);
-		if (cprList != null && !cprList.isEmpty())
-		{
-			cpr = new CollectionProtocolRegistration();
-			Object[] obj = (Object[]) cprList.get(0);
-			Date regDate = (Date) obj[1];
-			cpr.setRegistrationDate(regDate);
-			if (obj[2] != null)
-			{
-				Integer offset = (Integer) obj[2];
-				//offsetForCPOrEvent = offset;
-				/*if (!Constants.ARM_CP_TYPE.equals(type))
-				 offsetForArmCP = offsetForCPOrEvent;*/
-				cpr.setOffset(offset);
-			}
-
-			return cpr;
-		}
-		return null;
-	}
-
+	
 	/**
-	 * Creates tree which consists of SCG nodes and specimen nodes under each
-	 * SCG if available.This method generates tree hierarchy of specimen for
-	 * each Collection Protocol for Parent as well as Child Collection Protocol
-	 * 
+	 * @param specimenEventParaCol
+	 * @return
+	 */
+	private Collection getCollectionEventParameters(Collection specimenEventParaCol)
+	{
+		Collection collectionEventParameters = new ArrayList();
+		
+		Iterator specimenEventParaColItr = specimenEventParaCol.iterator();
+		while(specimenEventParaColItr.hasNext())
+		{
+			SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters)specimenEventParaColItr.next();
+			if(specimenEventParameters instanceof  CollectionEventParameters)
+			{
+				collectionEventParameters.add(specimenEventParameters);
+			}
+			
+		}
+		
+		return collectionEventParameters;
+	}
+	
+	
+	
+	/**
+	 * Create and add node for SCg
 	 * @param xmlString
-	 *            String buffer to generate XML code
-	 * @param cpId
-	 *            id of collection protocol
-	 * @param participantId
-	 *            id of participant
-	 * @throws DAOException
-	 *             daoException
-	 * @throws ClassNotFoundException
-	 *             classNotFoundException
-	 */
-	public Date SCGTreeForCPBasedView(StringBuffer xmlString, Long cpId, Long participantId, Date regDate,Integer parentOffset) throws DAOException,
-			ClassNotFoundException
-	{
-
-		Date eventLastDate = null;
-		String hql = "select  cpe.id, cpe.studyCalendarEventPoint,cpe.collectionPointLabel from " + CollectionProtocolEvent.class.getName()
-				+ " as cpe where cpe.collectionProtocol.id= " + cpId.toString() + " order by cpe.studyCalendarEventPoint";
-		List cpeList = executeQuery(hql);
-		Logger.out.debug("After executeQuery");
-		for (int count = 0; count < cpeList.size(); count++)
-		{
-			Object[] obj = (Object[]) cpeList.get(count);
-			Long eventId = (Long) obj[0];
-			Double eventPoint = (Double) obj[1];
-			String collectionPointLabel = (String) obj[2];
-			List scgList = getSCGsForCPRAndEventId(eventId, cpId, participantId);
-			if (scgList != null && !scgList.isEmpty())
-			{
-				eventLastDate = createTreeNodeForExistingSCG(xmlString, eventPoint, collectionPointLabel, scgList, regDate,parentOffset);
-			}
-
-		}
-		return eventLastDate;
-	}
-
-	/**
-	 * Name : Deepti Shelar Bug id : 4268 Patch id : 4268_1
-	 */
-	/*
-	 *//**
-	 * Gets all scgs under given cp for all participants.
-	 * 
-	 * @param eventId
-	 *            studycalendareventpoint
-	 * @param cpId
-	 *            collection protocol id
-	 * @return List of scgs
-	 * @throws DAOException
-	 *             DAOException
-	 * @throws ClassNotFoundException
-	 *             ClassNotFoundException
-	 */
-	/*
-	 * private List getSCGsForTechnicians(Long eventId, Long cpId) throws
-	 * DAOException, ClassNotFoundException { String hql = "select
-	 * scg.id,scg.name,scg.activityStatus from " +
-	 * SpecimenCollectionGroup.class.getName() + " as scg where
-	 * scg.collectionProtocolRegistration.id = (select cpr.id from " +
-	 * CollectionProtocolRegistration.class.getName() +" as cpr where
-	 * cpr.collectionProtocol.id = " + cpId + ") and
-	 * scg.collectionProtocolEvent.id = "+eventId ;
-	 * 
-	 * String hql = "select scg.id,scg.name,scg.activityStatus from " +
-	 * SpecimenCollectionGroup.class.getName() + " as scg where
-	 * scg.collectionProtocolEvent.id = "+eventId ; List list =
-	 * executeQuery(hql); return list; }
-	 */
-
-	/*
-	 * private StringBuffer createSCGAndSP(Long cpId, Long participantId,
-	 * StringBuffer xmlString) throws DAOException, ClassNotFoundException {
-	 * String hql = "select cpe.id,
-	 * cpe.studyCalendarEventPoint,cpe.collectionPointLabel from " +
-	 * CollectionProtocolEvent.class.getName() + " as cpe where
-	 * cpe.collectionProtocol.id= "+ cpId.toString() +" order by
-	 * cpe.studyCalendarEventPoint"; List cpeList = executeQuery(hql);
-	 * Logger.out.debug("After executeQuery"); for(int count = 0; count <
-	 * cpeList.size() ; count++) { Object[] obj = (Object[]) cpeList.get(count);
-	 * Long eventId = (Long)obj[0]; Double eventPoint = (Double) obj[1]; String
-	 * collectionPointLabel = (String)obj[2]; List scgList =
-	 * getSCGsForCPRAndEventId(eventId, cpId,participantId); if (scgList != null &&
-	 * !scgList.isEmpty()) { createTreeNodeForExistingSCG(xmlString, eventPoint,
-	 * collectionPointLabel, scgList); } } return xmlString; }
-	 */
-
-	/**
-	 * Patch Id : FutureSCG_9 Description : method to create TreeNode For
-	 * FutureSCG
-	 */
-	/**
-	 * Creates tree node for a SCG which does not exist in database, but user
-	 * can create it by clicking on this node.
-	 * 
-	 * @param treeData
-	 *            data structure for tree data
-	 * @param eventId
-	 *            id of studyCalendarEvent
 	 * @param eventPoint
-	 *            event point in no of days
 	 * @param collectionPointLabel
-	 *            String label of collection event point
-	 */
-	/*
-	 * private void createTreeNodeForFutureSCG(StringBuffer xmlString, Long
-	 * eventId, Double eventPoint, String collectionPointLabel) { Long
-	 * futureSCGId = new Long(0); String futureSCGName = "T"+eventPoint + ": "
-	 * +collectionPointLabel; String toolTipText =
-	 * futureSCGName;//getToolTipText(eventPoint.toString(),collectionPointLabel,null);
-	 * String nodeId =
-	 * futureSCGId.toString()+":"+eventId.toString()+":"+Constants.FUTURE_SCG;
-	 * 
-	 * xmlString.append("<node
-	 * id=\""+Constants.SPECIMEN_COLLECTION_GROUP+"_"+nodeId+"\"
-	 * "+"name=\""+futureSCGName+"\" "+"toolTip=\""+toolTipText+"\"
-	 * "+"type=\""+Constants.SPECIMEN_COLLECTION_GROUP+"\"></node>"); }
-	 */
-	/**
-	 * Patch Id : FutureSCG_10 Description : method to create TreeNode For
-	 * ExistingSCG
-	 */
-	/**
-	 * Creates a tree node for existing SCgs
-	 * 
-	 * @param xmlString
-	 *            data structure for storing tree data
-	 * @param eventPoint
-	 *            event point in no of days
-	 * @param collectionPointLabel
-	 *            String label of collection event point
 	 * @param scgList
-	 *            list of scgs
+	 * @param regDate
+	 * @param parentOffset
+	 * @return
 	 * @throws DAOException
-	 *             DAOException
 	 * @throws ClassNotFoundException
-	 *             ClassNotFoundException
 	 */
-	private Date createTreeNodeForExistingSCG(StringBuffer xmlString, Double eventPoint, String collectionPointLabel, List scgList, Date regDate, Integer parentOffset)
-			throws DAOException, ClassNotFoundException
+	private Date createTreeNodeForExistngSCG(StringBuffer xmlString, Double eventPoint, String collectionPointLabel, List scgList, Date regDate, Integer parentOffset)
+	throws DAOException, ClassNotFoundException
 	{
-		Date eventLastDate = null;
-		for (int i = 0; i < scgList.size(); i++)
+	Date eventLastDate = null;
+	for (int i = 0; i < scgList.size(); i++)
+	{
+		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)scgList.get(i);
+			
+		String scgNodeLabel = "";
+		// String scgActivityStatus = (String) obj1[2];
+	
+		/**
+		 * Name: Vijay Pande Reviewer Name: Aarti Sharma recievedEvent
+		 * related to scg is trieved from db and, proper receivedDate and
+		 * scgNodeLabel are set to set toolTip of the node
+		 */
+		if(specimenCollectionGroup.getOffset() !=null)
 		{
-			Object[] obj1 = (Object[]) scgList.get(i);
-			Long scgId = (Long) obj1[0];
-			String scgCollectionStatus = (String) obj1[3];
-			Integer offset = (Integer) obj1[4];
-			String scgNodeLabel = "";
-			// String scgActivityStatus = (String) obj1[2];
-
-			/**
-			 * Name: Vijay Pande Reviewer Name: Aarti Sharma recievedEvent
-			 * related to scg is trieved from db and, proper receivedDate and
-			 * scgNodeLabel are set to set toolTip of the node
-			 */
-			if(offset !=null)
-			{
-				addOffset(offset);
-			}
-			String receivedDate = "";
-			if (scgId != null && scgId > 0)
-			{
-				String sourceObjName = CollectionEventParameters.class.getName();
-				String columnName = Constants.COLUMN_NAME_SCG_ID;
-				Long ColumnValue = scgId;
-				Collection eventsColl = retrieve(sourceObjName, columnName, ColumnValue);
-
-				// Collection eventsColl =
-				// specimenCollectionGroup.getSpecimenEventParametersCollection();
-				if (eventsColl != null && !eventsColl.isEmpty())
-				{
-					receivedDate = "";
-					Iterator iter = eventsColl.iterator();
-					while (iter.hasNext())
-					{
-						CollectionEventParameters collectionEventParameters = (CollectionEventParameters) iter.next();
-						eventLastDate = collectionEventParameters.getTimestamp();
-						//bug no:6526 date format changed to mm-dd-yyyy
-						receivedDate = Utility.parseDateToString(collectionEventParameters.getTimestamp(), "MM-dd-yyyy");
-						scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
-						break;
-					}
-				}
-				if (scgNodeLabel.equalsIgnoreCase("") && receivedDate.equalsIgnoreCase(""))
-				{
-					int noOfDaysToAdd = 0;
-					if (eventPoint != null)
-						noOfDaysToAdd += eventPoint.intValue();
-					if (offsetForCPOrEvent != null)
-					{
-						noOfDaysToAdd += offsetForCPOrEvent.intValue();
-					}
-					// This check is beaause event take there anticipated dates according to there parent and if in parent date already offset is captured then no need ot take that offeet in child
-					if(parentOffset != null)
-					{
-						noOfDaysToAdd -= parentOffset.intValue();
-					}
-										
-					Date evtDate = Utility.getNewDateByAdditionOfDays(regDate, noOfDaysToAdd);
-					eventLastDate = evtDate;
-					//bug no:6526 date format changed to mm-dd-yyyy
-					receivedDate = Utility.parseDateToString(evtDate, "MM-dd-yyyy");
-					// String toolTipText = scgNodeLabel+ ": "+scgName;//
-					scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
-				}
-			}
-			String toolTipText = getToolTipText(eventPoint.toString(), collectionPointLabel, receivedDate);
-
-			// creating SCG node
-			xmlString.append("<node id= \"" + Constants.SPECIMEN_COLLECTION_GROUP + "_" + scgId.toString() + "\" " + "name=\"" + scgNodeLabel + "\" "
-					+ "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN_COLLECTION_GROUP + "\" " + "scgCollectionStatus=\""
-					+ scgCollectionStatus + "\" " + "evtDate=\"" + receivedDate + "\">");
-
-			// Adding specimen Nodes to SCG tree
-			addSpecimenNodesToSCGTree(xmlString, scgId);
-			xmlString.append("</node>");
-
+			addOffset(specimenCollectionGroup.getOffset());
 		}
-		return eventLastDate;
+		String receivedDate = "";
+		if (specimenCollectionGroup.getId() != null && specimenCollectionGroup.getId() > 0)
+		{
+			
+			Collection eventsColl = getCollectionEventParameters(specimenCollectionGroup.getSpecimenEventParametersCollection());
+			
+			if (eventsColl != null && !eventsColl.isEmpty())
+			{
+				receivedDate = "";
+				Iterator iter = eventsColl.iterator();
+				while (iter.hasNext())
+				{
+					CollectionEventParameters collectionEventParameters = (CollectionEventParameters) iter.next();
+					eventLastDate = collectionEventParameters.getTimestamp();
+					//bug no:6526 date format changed to mm-dd-yyyy
+					receivedDate = Utility.parseDateToString(collectionEventParameters.getTimestamp(), "MM-dd-yyyy");
+					scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
+					break;
+				}
+			}
+			if (scgNodeLabel.equalsIgnoreCase("") && receivedDate.equalsIgnoreCase(""))
+			{
+				int noOfDaysToAdd = 0;
+				if (eventPoint != null)
+					noOfDaysToAdd += eventPoint.intValue();
+				if (offsetForCPOrEvent != null)
+				{
+					noOfDaysToAdd += offsetForCPOrEvent.intValue();
+				}
+				// This check is beaause event take there anticipated dates according to there parent and if in parent date already offset is captured then no need ot take that offeet in child
+				if(parentOffset != null)
+				{
+					noOfDaysToAdd -= parentOffset.intValue();
+				}
+									
+				Date evtDate = Utility.getNewDateByAdditionOfDays(regDate, noOfDaysToAdd);
+				eventLastDate = evtDate;
+				//bug no:6526 date format changed to mm-dd-yyyy
+				receivedDate = Utility.parseDateToString(evtDate, "MM-dd-yyyy");
+				// String toolTipText = scgNodeLabel+ ": "+scgName;//
+				scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": " + receivedDate;
+			}
+		}
+		String toolTipText = getToolTipText(eventPoint.toString(), collectionPointLabel, receivedDate);
+	
+		// creating SCG node
+		xmlString.append("<node id= \"" + Constants.SPECIMEN_COLLECTION_GROUP + "_" + specimenCollectionGroup.getId().toString() + "\" " + "name=\"" + scgNodeLabel + "\" "
+				+ "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN_COLLECTION_GROUP + "\" " + "scgCollectionStatus=\""
+				+ specimenCollectionGroup.getCollectionStatus() + "\" " + "evtDate=\"" + receivedDate + "\">");
+	
+		// Adding specimen Nodes to SCG tree
+		addSpecNodesToSCGTree(xmlString, specimenCollectionGroup);
+		xmlString.append("</node>");
+	
 	}
-
-	/**
-	 * Patch Id : FutureSCG_11 Description : method to get SCGs For CPR And
-	 * EventId
-	 */
-	/**
-	 * Returns the list of SCGs present for given CPR and eventId.
-	 * 
-	 * @param eventId
-	 *            id of collection protocol event
-	 * @param cpId
-	 *            id of collection protocol
-	 * @param participantId
-	 *            id of participant
-	 * @return list of SCGs.
-	 * @throws DAOException
-	 *             daoException
-	 * @throws ClassNotFoundException
-	 *             classNotFoundException
-	 */
-	private List getSCGsForCPRAndEventId(Long eventId, Long cpId, Long participantId) throws DAOException, ClassNotFoundException
-	{
-		String hql = "select scg.id,scg.name,scg.activityStatus,scg.collectionStatus,scg.offset from " + SpecimenCollectionGroup.class.getName()
-				+ " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from " + CollectionProtocolRegistration.class.getName()
-				+ " as cpr where cpr.collectionProtocol.id = " + cpId + " and cpr.participant.id = " + participantId
-				+ ") and scg.collectionProtocolEvent.id = " + eventId + " and scg.activityStatus <> '" + Constants.ACTIVITY_STATUS_DISABLED + "'";
-		List list = executeQuery(hql);
-		return list;
+	return eventLastDate;
 	}
-
+	
+	
 	/**
-	 * Patch Id : FutureSCG_12 Description : method to add SpecimenNodes To
-	 * SCGTree
-	 */
-	/**
-	 * Adds specimen nodes to SCG node
-	 * 
+	 * Add specimens to xmlString
 	 * @param xmlString
-	 *            vector to store XML rep of tree data
-	 * @param scgId
-	 *            id of specimen collection group
+	 * @param specimenCollectionGroup
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
 	 */
-	private void addSpecimenNodesToSCGTree(StringBuffer xmlString, Long scgId) throws DAOException, ClassNotFoundException
+	private void addSpecNodesToSCGTree(StringBuffer xmlString,SpecimenCollectionGroup specimenCollectionGroup) throws DAOException, ClassNotFoundException
 	{
 		/**
 		 * kalpana Bug #5906 Reviewer : vaishali To display the children
 		 * specimens of the specimen in acending order. changed to order by
 		 * specimen label.
 		 */
-		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.collectionStatus from " + Specimen.class.getName()
-				+ " as sp where sp.specimenCollectionGroup.id = " + scgId + " and sp.activityStatus <> '" + Constants.ACTIVITY_STATUS_DISABLED
-				+ "' order by sp.label";
-		List specimenList = executeQuery(hql);
-
-		// here we have two Lists to separate out Specimens and child Specimens
-		List<Object[]> finalList = new ArrayList<Object[]>();
-		List<Object[]> childrenList = new ArrayList<Object[]>();
+		
+		Map childSpecimenMap = new HashMap();
+		
+		List specimenList = new ArrayList();
+		specimenList.addAll(specimenCollectionGroup.getSpecimenCollection());
+				
+		List finalList = new ArrayList();
+		List childrenList = new ArrayList();
 
 		// Stack
-		Stack<Object[]> spStack = new Stack<Object[]>();
+		Stack spStack = new Stack();
 
 		// Here iterate over specimenList to separate out Specimens and child
 		// Specimens
 		for (int i = 0; i < specimenList.size(); i++)
 		{
-			Object[] obj = (Object[]) specimenList.get(i);
-			Long spId = (Long) obj[0];
-			Long parentSpecimenId = (Long) obj[2];
-
+			Specimen specimen = (Specimen)specimenList.get(i);
+			
 			// Long peekSpecimenId = null;
-			if (spId != null)
+			if (specimen.getId() != null)
 			{
-				if (parentSpecimenId == null)
+				if (specimen.getParentSpecimen()==null)
 				{
 					// if parentSpecimenId is null then it's going to be parent
 					// specimen
-					finalList.add((Object[]) specimenList.get(i));
+					finalList.add(specimenList.get(i));
 				}
 				else
 				{
-					childrenList.add((Object[]) specimenList.get(i));
+					childrenList.add(specimenList.get(i));
 				}
 			}
 		}
@@ -1694,19 +1570,21 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		Map countOfChildSpecimenMap = new HashMap<Long, Integer>();
 		Integer countOfChildSpecimen = 1;
+		System.out.println("--");
 		for (int i = 0; i < childrenList.size(); i++)
 		{
-			Object[] obj = (Object[]) childrenList.get(i);
-			Long parentSpecimenId = (Long) obj[2];
+			Specimen specimen = (Specimen)childrenList.get(i);
+			
+			
 
 			/*
 			 * fetching the count of children specimen if it's parent specimen
 			 * Id is there in the Map else setting it to 1.
 			 */
 
-			if (countOfChildSpecimenMap.containsKey(parentSpecimenId))
+			if (countOfChildSpecimenMap.containsKey(specimen.getParentSpecimen().getId()))
 			{
-				countOfChildSpecimen = (Integer) countOfChildSpecimenMap.get(parentSpecimenId);
+				countOfChildSpecimen = (Integer) countOfChildSpecimenMap.get(specimen.getParentSpecimen().getId());
 			}
 			else
 			{
@@ -1715,24 +1593,23 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 			for (int j = 0; j < finalList.size(); j++)
 			{
-				Object[] obj1 = (Object[]) finalList.get(j);
-				Long spId = (Long) obj1[0];
-				Long parentOfParentspId = (Long) obj1[2];
+				Specimen specimenParent = (Specimen)finalList.get(j);
+				
 
 				// This if statement is not working.......convert Long objects
 				// to long values
-				if (parentSpecimenId.longValue() == spId.longValue())
+				if (specimen.getParentSpecimen().getId().longValue() == specimenParent.getId().longValue())
 				{
 
 					finalList.add(j + countOfChildSpecimen, childrenList.get(i));
 					countOfChildSpecimen++;
-					countOfChildSpecimenMap.put(parentSpecimenId, countOfChildSpecimen);
+					countOfChildSpecimenMap.put(specimen.getParentSpecimen().getId(), countOfChildSpecimen);
 
 					/*
 					 * kalpana Update the children specimen count of all the
 					 * parent specimens accept the immediate parent
 					 */
-					updateChildSpecimenCount(finalList, parentOfParentspId, countOfChildSpecimenMap, countOfChildSpecimen);
+					updateChildSpecimenCount(finalList, (Specimen)specimenParent.getParentSpecimen(), countOfChildSpecimenMap, countOfChildSpecimen);
 					break;
 					// Here break is important ....once parent is found
 				}
@@ -1743,24 +1620,31 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		// finalList
 		for (int i = 0; i < finalList.size(); i++)
 		{
-			Object[] specimens = (Object[]) finalList.get(i);
-			Long spId = (Long) specimens[0];
-			Long parentId = (Long) specimens[2];
-			String spLabel1 = (String) specimens[1];
+
+			Specimen specimen = (Specimen) finalList.get(i);
+			Long spId = specimen.getId();
+			Long parentId = null;
+			if(specimen.getParentSpecimen()!=null)
+			{
+				parentId = specimen.getParentSpecimen().getId();
+			}
+			String spLabel1 = specimen.getLabel();
 			// String spActivityStatus = (String) specimens[3];
-			String type = (String) specimens[4];
-			String spCollectionStatus = (String) specimens[5];
+			String type = specimen.getSpecimenType();
+			String spCollectionStatus = specimen.getCollectionStatus();
 
 			// Added later for toolTip text for specimens
 			String toolTipText = "Label : " + spLabel1 + " ; Type : " + type;
-
-			String hqlCon = "select colEveParam.container from " + CollectionEventParameters.class.getName()
-					+ " as colEveParam where colEveParam.abstractSpecimen.id = " + spId;
+			
+			List collectionEventPara = (List)getCollectionEventParameters(specimen.getSpecimenEventCollection());
+			/*String hqlCon = "select colEveParam.container from " + CollectionEventParameters.class.getName()
+					+ " as colEveParam where colEveParam.specimen.id = " + spId;
 
 			List container = executeQuery(hqlCon);
-			for (int k = 0; k < container.size(); k++)
+*/			for (int k = 0; k < collectionEventPara.size(); k++)
 			{
-				String con = (String) container.get(k);
+	            CollectionEventParameters collectionEventParameters = (CollectionEventParameters)collectionEventPara.get(k);
+	           	String con = (String) collectionEventParameters.getContainer();
 				toolTipText += " ; Container : " + con;
 			}
 
@@ -1786,14 +1670,14 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				{
 					xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" " + "toolTip=\""
 							+ toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\"" + spCollectionStatus + "\">");
-					spStack.push((Object[]) finalList.get(i));
+					spStack.push((Specimen) finalList.get(i));
 				}
 			}
 
 			else
 			{
-				Object[] previousSp = (Object[]) finalList.get(i - 1);
-				Long previousSpId = (Long) previousSp[0];
+				Specimen previousSp = (Specimen) finalList.get(i - 1);
+				Long previousSpId = previousSp.getId();
 
 				// If immediate prevoius node is parent of current node
 				if (parentId.longValue() == previousSpId.longValue())
@@ -1801,10 +1685,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					if (i != finalList.size() - 1) // if not the last element
 					// in specimen list
 					{
-						Object[] nextSp = (Object[]) finalList.get(i + 1); // Getting
+						Specimen nextSp = (Specimen) finalList.get(i + 1); // Getting
 						// next
 						// sp
-						Long nextSpPid = (Long) nextSp[2];
+						Long nextSpPid = null;
+						if(nextSp.getParentSpecimen() != null)
+							nextSpPid = nextSp.getParentSpecimen().getId();
 
 						if (nextSpPid != null)
 						{
@@ -1815,7 +1701,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 								xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" "
 										+ "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\""
 										+ spCollectionStatus + "\">");
-								spStack.push((Object[]) finalList.get(i));
+								spStack.push((Specimen) finalList.get(i));
 							}
 							else
 							// if current specimen doesn't have
@@ -1854,13 +1740,13 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					Long peekSpecimenId2 = null;
 					do
 					{
-						Object[] peekSp = (Object[]) spStack.peek(); // Retrieving
+						Specimen peekSp = (Specimen) spStack.peek(); // Retrieving
 						// the
 						// peek
 						// element
 						// at
 						// stack
-						Long peekSpId = (Long) peekSp[0];
+						Long peekSpId = (Long) peekSp.getId();
 						if (parentId.longValue() == peekSpId.longValue())// If
 						// current
 						// node
@@ -1876,8 +1762,11 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 							if (i != finalList.size() - 1) // if not the last
 							// element
 							{
-								Object[] nextSp = (Object[]) finalList.get(i + 1);
-								Long nextSpPid = (Long) nextSp[2];
+								Specimen nextSp = (Specimen) finalList.get(i + 1);
+								
+								Long nextSpPid = null;
+								if(nextSp.getParentSpecimen() != null)
+									nextSpPid = nextSp.getParentSpecimen().getId();
 
 								// Here nextSpPid may be null
 								if (nextSpPid != null)
@@ -1888,7 +1777,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 										xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1
 												+ "\" " + "toolTip=\"" + toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" "
 												+ "collectionStatus=\"" + spCollectionStatus + "\">");
-										spStack.push((Object[]) finalList.get(i));
+										spStack.push((Specimen) finalList.get(i));
 									}
 									else
 									// if it doesn't has children
@@ -1937,70 +1826,120 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 							Long peekSpecimenId1 = null;
 							do
 							{
-								spStack.pop();
-								xmlString.append("</node>");
+							
+								if (!spStack.isEmpty())
+								{	
+									spStack.pop();
+									xmlString.append("</node>");
 
-								Object[] peekSp1 = (Object[]) spStack.peek(); // Retrieving
-								// the
-								// peek
-								// element
-								// at
-								// stack
-								peekSpecimenId1 = (Long) peekSp1[0];
+									Specimen peekSp1=null;
+									if (!spStack.isEmpty())
+									{
+										peekSp1 = (Specimen) spStack.peek(); // Retrieving
+									}	
+									// the
+									// peek
+									// element
+									// at
+									// stack
+									if(peekSp1!=null)
+										peekSpecimenId1 = (Long) peekSp1.getId();
+								}	
 
 							}
-							while (parentId.longValue() != peekSpecimenId1.longValue() && !spStack.isEmpty());
+							while (peekSpecimenId1!=null && parentId.longValue() != peekSpecimenId1.longValue() && !spStack.isEmpty() );
 						}
 
 						if (!spStack.empty())
 						{
-							Object[] peekSp2 = (Object[]) spStack.peek(); // Retrieving
+							Specimen peekSp2 = (Specimen) spStack.peek(); // Retrieving
 							// the
 							// peek
 							// element
 							// at
 							// stack
-							peekSpecimenId2 = (Long) peekSp2[0];
+							peekSpecimenId2 = (Long) peekSp2.getId();
 						}
 					}
-					while (parentId.longValue() == peekSpecimenId2.longValue() && !spStack.empty());
+					while (peekSpecimenId2!=null && parentId.longValue() == peekSpecimenId2.longValue() && !spStack.empty());
 
 				}
 
 			}
+		
 		}
 	}
-
+	
+	
 	/**
 	 * kalpana Bug #5906 Reviewer : vaishali Update the children specimen count
 	 * of all the parent specimens accept the immediate parent
 	 */
 
-	private void updateChildSpecimenCount(List finalList, Long spId, Map countOfChildSpecimenMap, Integer countOfChildSpecimen)
+	private void updateChildSpecimenCount(List finalList, Specimen  parentSpecimen, Map countOfChildSpecimenMap, Integer countOfChildSpecimen)
 	{
 
 		for (int j = 0; j < finalList.size(); j++)
 		{
-			Object[] obj1 = (Object[]) finalList.get(j);
-			Long specimenId = (Long) obj1[0];
-			Long parentSpecimenId = (Long) obj1[2];
+			Specimen specimen = (Specimen) finalList.get(j);
+			Long specimenId = (Long) specimen.getId();
+			Long parentSpecimenId = null;
+			
+			if(specimen.getParentSpecimen() != null)
+			{	
+				parentSpecimenId = (Long) specimen.getParentSpecimen().getId();
 
-			if (specimenId != null && specimenId.equals(spId))
-			{
-				if (countOfChildSpecimenMap.containsKey(specimenId))
+				if (specimenId != null && parentSpecimen !=null && specimenId.equals(parentSpecimen.getId()))
 				{
-					Integer newChildCount = (Integer) countOfChildSpecimenMap.get(specimenId);
-					newChildCount = newChildCount + 1;
-					countOfChildSpecimenMap.put(specimenId, newChildCount);
-
-					updateChildSpecimenCount(finalList, parentSpecimenId, countOfChildSpecimenMap, countOfChildSpecimen);
-					return;
+					if (countOfChildSpecimenMap.containsKey(specimenId))
+					{
+						Integer newChildCount = (Integer) countOfChildSpecimenMap.get(specimenId);
+						newChildCount = newChildCount + 1;
+						countOfChildSpecimenMap.put(specimenId, newChildCount);
+	
+						updateChildSpecimenCount(finalList, (Specimen)specimen.getParentSpecimen(), countOfChildSpecimenMap, countOfChildSpecimen);
+						return;
+					}
 				}
-			}
+		  }	
 
 		}
 
 	}
+
+	
+
+	private void addOffset(Integer offsetToAdd)
+	{
+		Integer offset = null;
+		if(offsetForCPOrEvent != null)
+		{
+			offset = new Integer(offsetForCPOrEvent.intValue()+offsetToAdd.intValue());
+			offsetForCPOrEvent = offset;
+		}
+		else
+		{
+			offset = new Integer(offsetToAdd.intValue());
+			offsetForCPOrEvent = offset;
+		}
+	}
+	
+
+	private int getNoOfDaysAccordingToOffset(Integer offset, Integer offsetForCPOrEvent)
+	{
+		int noOfDays = 0;
+		if (offsetForCPOrEvent != null && offset != null && offsetForCPOrEvent.intValue() > offset.intValue())
+			noOfDays = offsetForCPOrEvent.intValue() - offset.intValue();
+
+		if (offsetForCPOrEvent != null && offset == null)
+			noOfDays = offsetForCPOrEvent.intValue();
+
+		return noOfDays;
+	}
+
+	
+	
+	
 
 	/**
 	 * Patch Id : FutureSCG_13 Description : method to executeQuery
@@ -2244,6 +2183,35 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			absScg = ((SpecimenCollectionGroup)(scgList.get(0)));
 		}
 		return absScg;
+	}
+
+	public CollectionProtocolRegistration chkParticipantRegisteredToCP(Long participantId, Long collectionProtocolId, String type)
+	throws ClassNotFoundException, DAOException
+	{
+		//Date regDate = null;
+		CollectionProtocolRegistration cpr = null;
+		String cprHqlQuery = "select cpr.id,cpr.registrationDate,cpr.offset from " + CollectionProtocolRegistration.class.getName()
+				+ " as cpr where cpr.participant.id = " + participantId.toString() + " and cpr.collectionProtocol.id = "
+				+ collectionProtocolId.toString();
+		List cprList = executeQuery(cprHqlQuery);
+		if (cprList != null && !cprList.isEmpty())
+		{
+			cpr = new CollectionProtocolRegistration();
+			Object[] obj = (Object[]) cprList.get(0);
+			Date regDate = (Date) obj[1];
+			cpr.setRegistrationDate(regDate);
+			if (obj[2] != null)
+			{
+				Integer offset = (Integer) obj[2];
+				//offsetForCPOrEvent = offset;
+				/*if (!Constants.ARM_CP_TYPE.equals(type))
+				 offsetForArmCP = offsetForCPOrEvent;*/
+				cpr.setOffset(offset);
+			}
+		
+			return cpr;
+		}
+		return null;
 	}
 	
 }
