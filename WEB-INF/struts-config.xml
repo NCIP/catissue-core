@@ -224,7 +224,7 @@ PUBLIC
 		type="edu.wustl.catissuecore.action.ShowAssignPrivilegePageAction"		
 		validate="false"
 		scope="request">
-		<forward name="success" path=".catissuecore.showAssignPriviledgeDef" />
+		<forward name="success" path="/pages/content/manageAdministrativeData/ShowAssignPriviledge.jsp" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		
 	</action>
