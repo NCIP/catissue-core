@@ -348,8 +348,8 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 		<%=messageKey%>
 	</html:messages>
-   <html:form action="<%=action%>">
-   
+   <html:form action="<%=action%>">   
+ 
                       <input type="hidden" id="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
 				       name="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
 				       value="<%=request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY)%>" />
@@ -709,7 +709,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						{
 					%>
 							<td class="formFieldNoBordersSimple" colspan="2">
-				     			<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="true"/>
+				     			<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="false"/>
 				     			&nbsp;<bean:message key="specimen.concentrationUnit"/>
 				    		</td>
 					<%
