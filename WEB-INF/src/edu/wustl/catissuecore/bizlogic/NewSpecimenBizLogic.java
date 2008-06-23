@@ -938,9 +938,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		calculateAvailableQunatity(specimen, persistentSpecimen);
 		try {
 				//To assign storage locations to anticipated specimen
-				if(specimenOld.getCollectionStatus().equals("Pending")&&specimen.getCollectionStatus().equals("Collected")&&
-						!(specimen.getSpecimenPosition().getStorageContainer().equals(null)&&specimen.getSpecimenPosition().getPositionDimensionOne().equals(null)
-								&&specimen.getSpecimenPosition().getPositionDimensionTwo().equals(null)))
+				if(specimenOld.getCollectionStatus().equals("Pending")&&specimen.getCollectionStatus().equals("Collected")&&specimen.getSpecimenPosition()!=null)
 				{
 					allocatePositionForSpecimen(specimen);
 					setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
@@ -1068,11 +1066,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if (isStoragePositionChanged(specimenOld, specimen))
 		{
 			if(specimenOld.getCollectionStatus().equals("Pending")&&specimen.getCollectionStatus().equals("Pending")&&
-				!( specimen.getSpecimenPosition().getStorageContainer().equals(null)&&specimen.getSpecimenPosition().getPositionDimensionOne().equals(null)
-					&&specimen.getSpecimenPosition().getPositionDimensionTwo().equals(null)))
+				 specimen.getSpecimenPosition()!=null)
 			{
 				throw new DAOException(
-				"Collection Status should be collected to allocat storage locations");
+				"Collection Status should be collected to allocate storage locations");
 			}
 			throw new DAOException(
 					"Storage Position should not be changed while updating the specimen");
@@ -2087,7 +2084,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if ((oldContainer == null && newContainer != null)
 				|| (oldContainer != null && newContainer == null))
 		{
-			if(oldSpecimen.getCollectionStatus().equals("Pending")&&newSpecimen.getCollectionStatus().equals("Collected")&&!(newSpecimen.getSpecimenPosition().getStorageContainer().equals(null)&&newSpecimen.getSpecimenPosition().getPositionDimensionOne().equals(null)&&newSpecimen.getSpecimenPosition().getPositionDimensionTwo().equals(null)))
+			if(oldSpecimen.getCollectionStatus().equals("Pending")&&newSpecimen.getCollectionStatus().equals("Collected")&&newSpecimen.getSpecimenPosition()!=null)
 			{
 				return false;
 			}
