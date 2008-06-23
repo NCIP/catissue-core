@@ -24,7 +24,6 @@
 		<put name="content" value="/pages/content/home/Home.jsp" />
 	</definition>
 	
-	
 	<definition name=".catissuecore.titliSearchResultPage" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/TitliResultUpdatable.jsp" />
 	</definition>
@@ -96,10 +95,7 @@
 	<!-- Home tab pages definitions end -->
 
 	<!-- Manage Administrative Data tab pages definitions start -->
-	<definition name=".catissuecore.showAssignPriviledgeDef" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/manageAdministrativeData/ShowAssignPriviledge.jsp" />
-	</definition>
-	
+
 	
 	<definition name=".catissuecore.manageAdminDataHomeDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/Home.jsp"/>
