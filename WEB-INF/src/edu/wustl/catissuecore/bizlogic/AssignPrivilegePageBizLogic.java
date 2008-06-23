@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.bizlogic;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -11,6 +12,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,8 +40,10 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
  * @author jitendra_agrawal
  * @author vipin_bansal
  */
+
 public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 {
+	
 	public List getRecordNames(Set recordIds, AssignPrivilegesForm privilegesForm) throws DAOException
 	{				
 		List recordNames = new ArrayList();
@@ -87,9 +92,10 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	}
 	/**
 	 * Gets the list of Site objects to be shown on UI for assign privileges.
-	 * 
-     */
-	
+	 * @param isToExcludeDisabled
+	 * @return List<NameValueBean> of sites.
+	 * @throws DAOException
+	 */	
 	public List<NameValueBean> getSiteList(boolean isToExcludeDisabled) throws DAOException
 	{
 		String sourceObjectName =Site.class.getName();
@@ -211,12 +217,12 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	public List<NameValueBean> getUsersList(int siteId) {	
 		List<NameValueBean> nameValuBeanList=new ArrayList<NameValueBean>();
 		NameValueBean valueBean=new NameValueBean();
-		valueBean.setValue("12");
+		valueBean.setValue("2");
 		valueBean.setName("vipin");
 		nameValuBeanList.add(valueBean);
 		valueBean=new NameValueBean();
-		valueBean.setValue("3");
-		valueBean.setName("jj");
+		valueBean.setValue("1");
+		valueBean.setName("admin");
 		nameValuBeanList.add(valueBean);
 		return nameValuBeanList;
 	}
@@ -408,7 +414,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @param actionIdsList
 	 * @return SiteUserRolePrivilegeBean  bean Object
 	 */
-	public SiteUserRolePrivilegeBean setUserPriviledgeSummary(User user,
+	public SiteUserRolePrivilegeBean setUserPrivilegeSummary(User user,
 			List<Site> userRelatedSites, String roleId, List actionIdsList) {
 		SiteUserRolePrivilegeBean surp = new SiteUserRolePrivilegeBean();
 		surp.setUser(user);
@@ -441,7 +447,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		//	sbForSitesIds.append(userRelatedSites.get(i).getName());
 			
 		}
-		sbForSitesIds.append("site1,site2,site3,site2");
+		sbForSitesIds.append("siteeeeeppppppppppppppssssssssssssssssssssssgg1,site2,site3,site2");
 		String sites = sbForSitesIds.toString();
 
 		JSONObject jsonobject = new JSONObject();
@@ -462,14 +468,68 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @param deletedRowsArray
 	 * @param rowIdObjectBeanMap
 	 */
-	public void deletePriviledge(String deletedRowsArray, Map<String, SiteUserRolePrivilegeBean> rowIdObjectBeanMap) {
+	public void deletePrivilege(HttpSession session,String deletedRowsArray) {
+		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
+		if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null) {
+			rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute("rowIdObjectBeanMap");
+		}
 		String deletedRowId = "";
 		List<String> deletedRowsList = new ArrayList<String>();
 		StringTokenizer tokenizer = new StringTokenizer(deletedRowsArray, ",");
 		while (tokenizer.hasMoreTokens()) {
 			deletedRowId = tokenizer.nextToken().intern();
 			deletedRowsList.add(deletedRowId);
-			rowIdObjectBeanMap.remove(deletedRowId);
+			rowIdBeanMap.remove(deletedRowId);
 		}
+	}
+	/**
+	 * Gives Map having rowId and UsersummaryBean Object and returns a list containing rowId and userSummaryBean Object,used to send response.  
+	 * @param session
+	 * @param userIds
+	 * @param siteIds
+	 * @param roleId
+	 * @param actionIds
+	 * @return List<JSONObject> of userSummaryBean Objects
+	 */	
+	public List<JSONObject> addPrivilege(HttpSession session, String userIds, String siteIds, String roleId, String actionIds) 
+	{
+		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
+		if (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null) {
+			rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute("rowIdObjectBeanMap");
+		}
+		List<JSONObject> listForUPSummary = new ArrayList<JSONObject>();
+		List<Integer> siteIdsList = new ArrayList<Integer>();
+		List<Long> userIdsList = new ArrayList<Long>();
+		List<String> actionIdsList = new ArrayList<String>();
+
+		siteIdsList = getSiteData(siteIds);
+		userIdsList =getUserData(userIds);
+		actionIdsList = getActionData(actionIds);
+
+		try 
+		{
+			for (int k = 0; k < userIdsList.size(); k++) 
+			{
+				 long userId = userIdsList.get(k);
+				 List<Site> userRelatedSites = getUserSiteRelation(userId, siteIdsList);
+				 List objectList = retrieve(User.class.getName(), Constants.ID, userId);
+				 User user = (User) objectList.get(0);
+				 
+				 SiteUserRolePrivilegeBean surpBean =setUserPrivilegeSummary(user, userRelatedSites, roleId, actionIdsList);
+				
+				 String rowId = "" + userId;
+				 rowIdBeanMap.put(rowId,surpBean);
+				 
+				 JSONObject jsonObject=getObjectForUPSummary(userRelatedSites,rowId,user,roleId);
+				 
+				 listForUPSummary.add(jsonObject);
+			}
+			 session.setAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP,	rowIdBeanMap);
+		} catch (JSONException e) {
+			Logger.out.error("JSONException in  sending JSON response in ShowAssignPrivilegePageAction..."+e);
+		} catch (DAOException e) {
+			Logger.out.error("DAOException in  getting objectList for AssignPrivilegePageBizLogic  in ShowAssignPrivilegePageAction..."+e);
+		}
+		return listForUPSummary;
 	}
 }
