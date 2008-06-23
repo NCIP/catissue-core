@@ -169,6 +169,13 @@ function openEventPage()
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
+function showAssignPrivilegePage()
+{
+    var action="ShowAssignPrivilegePage.do?operation=AssignPrivilegePage";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+
 
 </SCRIPT>
 
@@ -213,7 +220,7 @@ function openEventPage()
                       <td width="10%" valign="bottom" onclick="updateCPTree();consentPage()" id="consentTab">
 					       <img src="images/uIEnhancementImages/cp_consents1.gif" alt="Consents" width="94" height="20" border="0" /></td>
                       <td width="10%" valign="bottom"  id="consentTab"><a>
-					  <img src="images/uIEnhancementImages/cp_privileges1.gif" alt="Privileges" width="94" height="20" border="0"></a></td>
+					  <img src="images/uIEnhancementImages/cp_privileges1.gif" alt="Privileges" width="94" height="20" border="0" onclick="showAssignPrivilegePage()"></a></td>
 					  <td width="100%" valign="bottom" class="cp_tabbg">&nbsp;</td>
 					 </tr>
                   </table></td>
@@ -480,10 +487,10 @@ function openEventPage()
 		 <tr>
 			<td>&nbsp;&nbsp;</td>
 				  <td class="buttonbg">
-					<html:button styleClass="blue_ar_b" property="submitPage">
+					<!-- <html:button styleClass="blue_ar_b" property="submitPage">
 						<bean:message key="buttons.submit" />
 					</html:button>
-				 &nbsp;|
+				 &nbsp;| -->
 
 					 <html:button styleClass="blue_ar_b" property="forwardPage" onclick="updateCPTree();openEventPage()" >
 						Add Events >>
