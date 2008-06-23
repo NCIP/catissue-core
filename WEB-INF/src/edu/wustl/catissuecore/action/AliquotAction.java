@@ -167,7 +167,7 @@ public class AliquotAction extends SecureAction
 					continue;
 				}
 				Map xDimMap = (Map) containerMap.get(containerId[i]);
-				StorageContainerUtil.setAliquotMap(xDimMap, containerId, aliquotCount, counter, aliquotMap, i);
+				counter = StorageContainerUtil.setAliquotMap(xDimMap, containerId, aliquotCount, counter, aliquotMap, i);
 			}
 		}
 		aliquotForm.setAliquotMap(aliquotMap);
@@ -726,7 +726,6 @@ public class AliquotAction extends SecureAction
 	private String checkForSufficientAvailablePositions(HttpServletRequest request, Map containerMap, int aliquotCount)
 	{
 		int counter = 0;
-
 		if (containerMap.isEmpty())
 		{
 			ActionErrors errors = getActionErrors(request);
@@ -958,8 +957,44 @@ public class AliquotAction extends SecureAction
 	private void populateAliquotsStorageLocations(AliquotForm form, Map containerMap)
 	{
 		Map aliquotMap = form.getAliquotMap();
-		String noOfAliquots = form.getNoOfAliquots();
-		StorageContainerUtil.populateAliquotMap(containerMap, aliquotMap,noOfAliquots);
+		int counter = 1;
+		if (!containerMap.isEmpty())
+		{
+			Object[] containerId = containerMap.keySet().toArray();
+			for (int i = 0; i < containerId.length; i++)
+			{
+				Map xDimMap = (Map) containerMap.get(containerId[i]);
+				if (!xDimMap.isEmpty())
+				{
+					Object[] xDim = xDimMap.keySet().toArray();
+					for (int j = 0; j < xDim.length; j++)
+					{
+						List yDimList = (List) xDimMap.get(xDim[j]);
+						for (int k = 0; k < yDimList.size(); k++)
+						{
+							if (counter <= Integer.parseInt(form.getNoOfAliquots()))
+							{
+								String containerKey = "Specimen:" + counter + "_StorageContainer_id";
+								String pos1Key = "Specimen:" + counter + "_positionDimensionOne";
+								String pos2Key = "Specimen:" + counter + "_positionDimensionTwo";
+
+								aliquotMap.put(containerKey, ((NameValueBean) containerId[i]).getValue());
+								aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
+								aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k)).getValue());
+
+								counter++;
+							}
+							else
+							{
+								j = xDim.length;
+								i = containerId.length;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
 		form.setAliquotMap(aliquotMap);
 	}
 
