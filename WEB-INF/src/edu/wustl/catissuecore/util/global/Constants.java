@@ -826,7 +826,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ROW_ID_OBJECT_BEAN_MAP = "rowIdObjectBeanMap";
 	public static final String OPERATION_GET_USER_FORTHIS_SITES = "getUsersForThisSites";
 	public static final String OPERATION_GET_ACTION_FORTHIS_ROLE = "getActionsForThisRole";
-	public static final String OPERATION_ADD_PRIVILEDGE = "addPriviledge";
+	public static final String OPERATION_ADD_PRIVILEGE = "addPrivilege";
 	public static final String OPERATION_DELETE_ROW = "deleteRow";
 	public static final String SELECTED_ACTION_IDS = "selectedActionIds";
 	public static final String SELECTED_USER_IDS= "selectedUserIds";
