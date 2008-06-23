@@ -417,8 +417,15 @@ function validate(action,formField)
 				alert("Selecting All and Other Specimen Class is not allowed");
 			}
 			else
-			{	
-				checkNoOfContainers(action,formField);
+			{
+				if(validateAny(document.forms[0].holdsSpecimenArrTypeIds)==false)
+				{	
+					alert("Selecting All and Other Specimen Array Type is not allowed");
+				}
+				else
+				{	
+					checkNoOfContainers(action,formField);
+				}
 			}
 		}
 	}	
