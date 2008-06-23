@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+\<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
 <!-- ===================================================================== -->
@@ -7,7 +7,7 @@
 <!--                                                                       -->
 <!-- ===================================================================== -->
 
-<!-- $Id: log4j.xml,v 1.1.8.5 2008/04/25 13:16:05 abhijit_naik Exp $ -->
+<!-- $Id: log4j.xml,v 1.1.8.6 2008/06/23 07:19:54 abhijit_naik Exp $ -->
 
 <!--
    | For more configuration infromation and examples see the Jakarta Log4j
@@ -80,7 +80,7 @@
 		<param name="Threshold" value="WARN"/>
 		
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{dd MMM yyy HH:mm:ss}, %-6p %C:%M:%L %m %n" />
+			<param name="ConversionPattern" value="%d{dd MMM yyy HH:mm:ss}, %-5r %-5p [%c] (%t:%x) %m%n" />
 		</layout>
    </appender>
 
@@ -160,7 +160,7 @@
       <priority value="INFO"/>
    </category>
 	
-	<category name="catissuecore.logger">
+	<category name="edu.wustl">
 		<priority value="INFO" />
 		<appender-ref ref="CATISSUECORE_LOGGER" />
     </category>
