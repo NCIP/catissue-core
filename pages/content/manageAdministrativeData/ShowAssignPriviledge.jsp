@@ -6,10 +6,9 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-<script language="JavaScript" type="text/javascript"
-	src="jss/javaScript.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="jss/caTissueSuite.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script type="text/javascript" src="jss/ajax.js"></script> 
+<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 
 
 <%
@@ -131,7 +130,7 @@
 		<td width="66%" class="buttonbg">&nbsp;</td>
 		<td width="34%" class="buttonbg"><html:button
 			property="addKeyValue" styleClass="blue_ar_b"
-			onclick="getUserPriviledgeSummary()">
+			onclick="getUserPrivilegeSummary()">
 			<bean:message key="app.add" />
 		</html:button></td>
 	</tr>
