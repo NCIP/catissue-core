@@ -584,7 +584,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		setValuesinPersistentObject(persistentOldContainerForChange,container, dao);
 
 		dao.update(persistentOldContainerForChange, sessionDataBean, true, true, false);
-		//dao.update(container.getCapacity(), sessionDataBean, true, true, false);
+		dao.update(persistentOldContainerForChange.getCapacity(), sessionDataBean, true, true, false);
 		//Audit of update of storage container.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		dao.audit(container.getCapacity(), oldContainer.getCapacity(), sessionDataBean, true);
@@ -648,8 +648,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		persistentobject.setActivityStatus(newObject.getActivityStatus());
 		persistentobject.setBarcode(newObject.getBarcode());
-		persistentobject.setCapacity(newObject.getCapacity());
-		
+		Capacity persistCapacity = persistentobject.getCapacity();
+        Capacity newCapacity = newObject.getCapacity();
+        persistCapacity.setOneDimensionCapacity(newCapacity.getOneDimensionCapacity());
+        persistCapacity.setTwoDimensionCapacity(newCapacity.getTwoDimensionCapacity());
 		Collection children = StorageContainerUtil.getChildren(dao, newObject.getId());
 		StorageContainerUtil.setChildren(children, dao, persistentobject.getId());
 	//	persistentobject.setChildren(newObject.getChildren());
