@@ -625,6 +625,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 			chkForChildCP(collectionProtocolRegistration, dao, sessionDataBean);
 		}
+		collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolRegistrationCollection().
+		add(collectionProtocolRegistration);
 
 	}
 

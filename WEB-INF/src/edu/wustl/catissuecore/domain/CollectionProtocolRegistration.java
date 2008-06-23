@@ -71,7 +71,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 */
 	protected CollectionProtocol collectionProtocol;
 
-	protected Collection specimenCollectionGroupCollection;
+	protected Collection specimenCollectionGroupCollection = new HashSet();
 	
 	/**
 	 * Defines whether this CollectionProtocolRegistration record can be queried (Active) or not queried (Inactive) by any actor
@@ -207,7 +207,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		this.protocolParticipantIdentifier = cpr.getProtocolParticipantIdentifier();
 		this.registrationDate = cpr.getRegistrationDate();
 		this.signedConsentDocumentURL = cpr.getSignedConsentDocumentURL();
-		this.specimenCollectionGroupCollection = null;
+		this.specimenCollectionGroupCollection = new HashSet();
 		//no need to carry forward the offset.
 //		this.offset=cpr.getOffset();
 		

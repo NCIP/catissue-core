@@ -711,6 +711,8 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 		cpr =(CollectionProtocolRegistration)dao.retrieve(cpr.getClass().getName(), id);
 		specimenCollectionGroup.setCollectionProtocolRegistration(cpr);
+		specimenCollectionGroup.getCollectionProtocolRegistration().getSpecimenCollectionGroupCollection()
+		.add(specimenCollectionGroup);
 	}
 
 	/**
@@ -1140,6 +1142,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
     		dao.openSession(null);
 			Logger.out.debug("Start of getSCGTreeForCPBasedView");
 			CollectionProtocolRegistration collectionProtocolRegistration = null;
+			CollectionProtocolRegistration cpr = null;
 						
 			Object object = dao.retrieve(CollectionProtocol.class.getName(), cpId);
 			CollectionProtocol collectionProtocol = (CollectionProtocol)object;
@@ -1154,13 +1157,14 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				if(collectionProtocolRegistration.getCollectionProtocol().getId().equals(cpId) && 
 						collectionProtocolRegistration.getParticipant().getId().equals(participantId))
 				{
+					cpr = collectionProtocolRegistration;
 					break;
 				}
 				
 			}
 			StringBuffer xmlString = new StringBuffer();
 			xmlString.append("<node>");
-			childCPtree(xmlString,participantId, collectionProtocolRegistration,collectionProtocol);
+			childCPtree(xmlString,participantId, cpr,collectionProtocol);
 			xmlString.append("</node>");
 			
 			long endTime = System.currentTimeMillis();
