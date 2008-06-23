@@ -289,7 +289,7 @@ function openCRGWindow()
 		{
 			var row = document.getElementById(tableId).insertRow(noOfRows);
 			row.setAttribute("id",rowId);
-		    row.onclick=function(){editRow(rowId);} ;
+		 //   row.onclick=function(){editRow(rowId);} ;
 			if(noOfRows%2!=0){
 				row.setAttribute("class","tabletd1");
 			}
