@@ -156,12 +156,18 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			//Iterator itr = sprObj.getSpecimenCollection().iterator();
         	Iterator itr =specimenCollection.iterator();
 			Specimen sp = null;
+			boolean specimenAdded=false;
 			while(itr.hasNext())
 			{
 				sp = (Specimen)itr.next();
-				System.out.println("This is Specimen"+sp.getId());
+				if(sp.getLineage().equals("New")&&!specimenAdded)
+				{
+					TestCaseUtility.setObjectMap(sp, Specimen.class);
+					System.out.println("This is Specimen"+sp.getId());
+					specimenAdded=true;
+				}
 			}
-			TestCaseUtility.setObjectMap(sp, Specimen.class);
+			
 			if(sp==null)
 			{
 				assertFalse("No Specimens created under SCG", true);

@@ -1084,8 +1084,8 @@ public class BaseTestCaseUtility {
 		storageContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
 		Capacity capacity = new Capacity();
-		capacity.setOneDimensionCapacity(new Integer(1));
-		capacity.setTwoDimensionCapacity(new Integer(2));
+		capacity.setOneDimensionCapacity(new Integer(3));
+		capacity.setTwoDimensionCapacity(new Integer(3));
 		storageContainer.setCapacity(capacity);
 
 		CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class); 
@@ -1541,6 +1541,7 @@ public class BaseTestCaseUtility {
 		ts.setSpecimenClass("Tissue");
 		ts.setLabel("TissueSpecimen"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts.setActivityStatus("Active");
+		ts.setCollectionStatus("Pending");
 		System.out.println("Inside Type");
 		ts.setBarcode("Barcode"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts.setSpecimenType("Fixed Tissue Block");
@@ -1623,6 +1624,7 @@ public class BaseTestCaseUtility {
 		molecularSpecimen.setSpecimenType("DNA");
 		molecularSpecimen.setAvailable(new Boolean(true));
 		molecularSpecimen.setActivityStatus("Active");
+		molecularSpecimen.setCollectionStatus("Pending");
 		molecularSpecimen.setSpecimenClass("Molecular");
 
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();

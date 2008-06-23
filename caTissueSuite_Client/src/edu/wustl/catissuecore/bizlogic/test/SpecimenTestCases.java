@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
@@ -101,8 +102,9 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 	public void testAddTissueSpecimen()
 	{
 	   try {
-		   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();		
+		   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 		   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+		   System.out.println("SpecimenTestCases.testAddTissueSpecimen(): "+scg);
 		   specimenObj.setSpecimenCollectionGroup(scg);
 		   Logger.out.info("Inserting domain object------->"+specimenObj);
 		   System.out.println("Before Creating Tissue Specimen");
@@ -129,6 +131,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 	   try {
 		    MolecularSpecimen specimenObj = (MolecularSpecimen) BaseTestCaseUtility.initMolecularSpecimen();
 		    SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+		    System.out.println("SpecimenTestCases.testAddMolecularSpecimen(): "+scg);
 		    specimenObj.setSpecimenCollectionGroup(scg);
 			Logger.out.info("Inserting domain object------->"+specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
@@ -245,8 +248,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		catch(Exception e)
 		{
-			System.out.println("Exception thrown");
-			System.out.println(e);
+			System.out.println("SpecimenTestCases.testUpdateTissueSpecimen():"+e.getMessage());
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 			assertFalse("Failed to create Domain Object", true);
@@ -274,8 +276,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 		catch(Exception e)
 		{
-			System.out.println("Exception thrown");
-			System.out.println(e);
+			System.out
+					.println("SpecimenTestCases.testUpdateMolecularSpecimen(): "+e.getMessage());
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 			assertFalse("Failed to create Domain Object", true);

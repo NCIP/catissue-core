@@ -16,11 +16,13 @@ import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -46,7 +48,155 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			 assertFalse("could not add object", true);
 		 }
 	}
-	
+	/**
+	 * test case to add parent container 
+	 *
+	 */
+	public void testAddParentStorageContainer()
+	{
+		try{
+			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
+			/**
+			 * Set all collection protocol
+			 */
+			Collection collectionProtocolCollection = new HashSet();
+			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+			/**
+			 * Set hiolds all Storage Type
+			 */
+			Collection holdsStorageTypeCollection = new HashSet();
+			StorageType sttype = new StorageType();
+			sttype.setId(1L);
+			holdsStorageTypeCollection.add(sttype);
+			storageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+			
+			System.out.println(storageContainer);
+			
+			
+			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			TestCaseUtility.setNameObjectMap("ParentContainer", storageContainer);
+			System.out.println("Object created successfully");
+			assertTrue("Object added successfully", true);
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+			 System.out
+					.println("StorageContainerTestCases.testAddParentStorageContainer()");
+			 System.out.println(e.getMessage());
+			 assertFalse("could not add object", true);
+		 }
+	}
+	/**
+	 * Add child containers rin above container
+	 *
+	 */
+	public void testAddChildStorageContainer()
+	{
+		try
+		{
+			StorageContainer parent = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
+			
+			StorageContainer storageContainer1= BaseTestCaseUtility.initStorageContainer();
+			Collection collectionProtocolCollection = new HashSet();
+			storageContainer1.setCollectionProtocolCollection(collectionProtocolCollection);
+			ContainerPosition containerPosition1 = new ContainerPosition();
+			containerPosition1.setPositionDimensionOne(1);
+			containerPosition1.setPositionDimensionTwo(1);
+			containerPosition1.setParentContainer(parent);
+			storageContainer1.setLocatedAtPosition(containerPosition1);
+			System.out.println(storageContainer1);
+			storageContainer1 = (StorageContainer) appService.createObject(storageContainer1); 
+			System.out.println("ChildStorageContainer created successfully");
+			
+			StorageContainer storageContainer2= BaseTestCaseUtility.initStorageContainer();
+			Collection collectionProtocolCollection1 = new HashSet();
+			storageContainer2.setCollectionProtocolCollection(collectionProtocolCollection1);
+			ContainerPosition containerPosition2 = new ContainerPosition();
+			containerPosition2.setPositionDimensionOne(1);
+			containerPosition2.setPositionDimensionTwo(2);
+			containerPosition2.setParentContainer(parent);
+			storageContainer2.setLocatedAtPosition(containerPosition2);
+			System.out.println(storageContainer2);
+			storageContainer2 = (StorageContainer) appService.createObject(storageContainer2); 
+			System.out.println("ChildStorageContainer created successfully");
+			
+			assertTrue("Object added successfully", true);
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+			 System.out
+					.println("StorageContainerTestCases.testAddChildStorageContainer()");
+			 System.out.println(e.getMessage());
+			 assertFalse("could not add object", true);
+		 }
+	}
+	/**
+	 * negative Test case to ad container at occupied position 
+	 *
+	 */
+	public void testAddChildStorageContainerOnOccupiedPosition()
+	{
+		try
+		{
+			StorageContainer parent = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
+			
+			StorageContainer storageContainer1= BaseTestCaseUtility.initStorageContainer();
+			ContainerPosition containerPosition1 = new ContainerPosition();
+			containerPosition1.setPositionDimensionOne(1);
+			containerPosition1.setPositionDimensionTwo(1);
+			containerPosition1.setParentContainer(parent);
+			storageContainer1.setLocatedAtPosition(containerPosition1);
+			System.out.println(storageContainer1);
+			storageContainer1 = (StorageContainer) appService.createObject(storageContainer1); 
+			System.out.println("Object created successfully");
+
+			assertFalse("Object added successfully", true);
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+			 System.out
+					.println("StorageContainerTestCases.testAddChildStorageContainerOnOccupiedPosition()");
+			 System.out.println(e.getMessage());
+			 assertTrue("Negative test case could not add object: "+e.getMessage(), true);
+		 }
+	}
+	/**
+	 * Search Container which is located at given position of parent container
+	 *
+	 */
+	public void testSearchStorageContainerLocatedAtPosition()
+	{
+			try
+			{
+				StorageContainer storageContainer = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
+
+				
+				StorageContainer parent = new StorageContainer();
+				parent.setId(storageContainer.getId());
+				
+				ContainerPosition containerPosition = new ContainerPosition();
+				containerPosition.setPositionDimensionOne(1);
+				containerPosition.setPositionDimensionTwo(2);
+				containerPosition.setParentContainer(parent);
+
+				List result = appService.search(Container.class, containerPosition);
+				if(result.size()>1||result.size()<1)
+				{
+					assertFalse("Could not find Storage Container Object", true);
+				}
+				assertTrue("Storage Container successfully found. Size:" +result.size(), true);
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e.getMessage(),e);
+				System.out
+						.println("StorageContainerTestCases.testSearchStorageContainerLocatedAtPosition()");
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+				assertFalse("Could not find Storage Container Object", true);
+			}
+	}
+
 	public void testSearchStorageContainer()
 	{
 		StorageContainer storageContainer = new StorageContainer();
@@ -342,7 +492,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	
 	
 	}
-	
+
 	public void testAddSpecimenArrayType()
 	{
 		try
@@ -418,6 +568,9 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			catch(Exception e)
 			{
 				Logger.out.error(e.getMessage(),e);
+				System.out
+						.println("StorageContainerTestCases.testAddSpecimenArray()");
+				System.out.println(e.getMessage());
 				e.printStackTrace();
 				fail("Failed to add Domain Object");
 			}
@@ -464,5 +617,169 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				fail("Failed to add Domain Object");
 			}
 		}
-
+	 /**
+	  * Search Specimen array located at given position 
+	  *
+	  */
+	 public void testSearchSpecimenArrayLocatedAtPosition()
+		{
+		 try
+			{
+				StorageContainer storageContainer  = (StorageContainer)TestCaseUtility.getObjectMap(StorageContainer.class);
+				
+				StorageContainer parent = new StorageContainer();
+				parent.setId(storageContainer.getId());
+				
+				ContainerPosition containerPosition = new ContainerPosition();
+				containerPosition.setPositionDimensionOne(1);
+				containerPosition.setPositionDimensionTwo(2);
+				containerPosition.setParentContainer(parent);
+				List result = appService.search(SpecimenArray.class, containerPosition);
+				if(result.size()>1||result.size()<1)
+				{
+					assertFalse("testSpecimenLocatedAtPosition Could not find Storage Container Object", true);
+				}
+				assertTrue("Storage Container successfully found. Size:" +result.size(), true);
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e.getMessage(),e);
+				System.out
+						.println("StorageContainerTestCases.testSearchSpecimenArrayLocatedAtPosition()");
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+				assertFalse("Could not find Storage Container Object", true);
+			}
+		}
+	 /**
+	  * Add Tissue specimen at given container position 
+	  *
+	  */
+	 public void testAddTissueSpecimenAtContainerPosition()
+		{
+			   try {
+				   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();		
+				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+				   StorageContainer parent = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
+				   SpecimenPosition position = new SpecimenPosition();
+				   position.setPositionDimensionOne(1);
+				   position.setPositionDimensionTwo(3);
+				   position.setStorageContainer(parent);
+				   specimenObj.setSpecimenPosition(position);
+					
+				   specimenObj.setSpecimenCollectionGroup(scg);
+				   Logger.out.info("Inserting domain object------->"+specimenObj);
+				   System.out.println("Before Creating Tissue Specimen");
+				   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
+				   Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
+				   Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
+				   assertTrue(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);			
+				}
+				catch(Exception e)
+				{
+					System.out.println("Exception thrown testAddTissueSpecimenAtContainerPosition");
+					System.out.println(e);
+					Logger.out.error(e.getMessage(),e);
+					e.printStackTrace();
+					assertFalse("Failed to create Domain Object", true);
+				}
+				
+		}
+		/**
+		 * Negative Test add specimen at ocupied container position
+		 *
+		 */
+		public void testAddTissueSpecimenAtOccupiedPosition()
+		{
+			   try {
+				   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();		
+				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+				   StorageContainer parent = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
+				   SpecimenPosition position = new SpecimenPosition();
+				   position.setPositionDimensionOne(1);
+				   position.setPositionDimensionTwo(3);
+				   position.setStorageContainer(parent);
+				   specimenObj.setSpecimenPosition(position);
+					
+				   specimenObj.setSpecimenCollectionGroup(scg);
+				   Logger.out.info("Inserting domain object------->"+specimenObj);
+				   System.out.println("Before Creating Tissue Specimen");
+				   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
+				   Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
+				   Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
+				   assertFalse(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);			
+				}
+				catch(Exception e)
+				{
+					System.out.println("Exception thrown testAddTissueSpecimenAtOccupiedPosition");
+					System.out.println(e.getMessage());
+					Logger.out.error(e.getMessage(),e);
+					e.printStackTrace();
+					assertTrue("Position not free: "+e.getMessage(), true);
+				}
+				
+		}
+		 /**
+		  * Search Specimen located at given position 
+		  *
+		  */
+		public void testSpecimenLocatedAtPosition()
+		{
+				try
+				{
+					StorageContainer storageContainer = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
+					
+					StorageContainer parent = new StorageContainer();
+					parent.setId(storageContainer.getId());
+					
+					SpecimenPosition position = new SpecimenPosition();
+					position.setPositionDimensionOne(1);
+					position.setPositionDimensionTwo(3);
+					position.setStorageContainer(parent);
+					List result = appService.search(Specimen.class, position);
+					if(result.size()>1||result.size()<1)
+					{
+						assertFalse("testSpecimenLocatedAtPosition Could not find Specimen Object", true);
+					}
+					assertTrue("Specimen successfully found. Size:" +result.size(), true);
+				}
+				catch(Exception e)
+				{
+					Logger.out.error(e.getMessage(),e);
+					System.out
+							.println("SpecimenTestCases.testSpecimenLocatedAtPosition()");
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+					assertFalse("Could not find Specimen Object", true);
+				}
+		}
+		/**
+		 * Get all position of storage container occupied by specimen
+		 *
+		 */
+		public void testSearchOccupiedSpecimenPositions()
+		{
+				try
+				{
+					StorageContainer parent = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
+					StorageContainer storageContainer = new StorageContainer();
+					storageContainer.setId(parent.getId());
+					
+					List result = appService.search(SpecimenPosition.class, storageContainer);
+					if(result.size()>1||result.size()<1)
+					{
+						assertFalse("Could not find Specimen position ", true);
+					}
+					assertTrue("Specimen position  successfully found. Size:" +result.size(), true);
+				}
+				catch(Exception e)
+				{
+					Logger.out.error(e.getMessage(),e);
+					System.out
+							.println("SpecimenTestCases.testSearchOccupiedSpecimenPositions()");
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+					assertFalse("Could not find Specimen position ", true);
+				}
+		}
 }
