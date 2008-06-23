@@ -92,7 +92,7 @@ function openCRGWindow()
 	}
 
 
-	// for assignPriviledge
+	// for assignPrivilege
 		var request;
    function sendRequestsWithData(url,data,operation)
    {
@@ -103,6 +103,7 @@ function openCRGWindow()
             if(request.status == 200)
 			{   
 	            var response = request.responseText; 
+	            
 				var jsonResponse = eval('('+ response+')');
 	            var hasValue = false;
 				
@@ -146,8 +147,13 @@ function openCRGWindow()
 									}
 							}
 						}
-
-						else if(operation == "addPriviledge"){
+						else if(operation == "editRow"){
+						var eleOfActionSelBox = document.getElementById('actionIds');	
+							for(var opt=0; opt<eleOfActionSelBox.length; opt++){
+								eleOfActionSelBox.options[opt].selected=false;
+							}
+						}
+						else if(operation == "addPrivilege"){
 					
 							var tableId="summaryTableId";
 							var rowId=jsonResponse.locations[i].rowId; 
@@ -215,9 +221,9 @@ function openCRGWindow()
 			sendRequestsWithData(url,data,operation);
 				
 	}
-	function getUserPriviledgeSummary()
+	function getUserPrivilegeSummary()
 	{
-		var operation="addPriviledge";	
+		var operation="addPrivilege";	
 		siteListCtrl=document.getElementById("siteIds");
 		userListCtrl=document.getElementById("userIds");
 		roleListCtrl=document.getElementById("roleIds");
@@ -253,13 +259,12 @@ function openCRGWindow()
 				    selectedRoleIds.push(roleListCtrl.options[ i ].value);
 				}
 			}
-			if(((actionListCtrl.options[ 0 ].value)=="-1")&&(actionListCtrl.options[ 0 ].selected)){
-				
+			if(((actionListCtrl.options[ 0 ].value)=="-1")&&(actionListCtrl.options[ 0 ].selected))
+			{
 					for (var i = 1; i < actionListCtrl.options.length; i++)
 					{
 						 selectedActionIds.push(actionListCtrl.options[ i ].value);
 					}
-				
 			}
 			else{	
 				for (var i = 0; i < actionListCtrl.options.length; i++)
@@ -284,7 +289,7 @@ function openCRGWindow()
 		{
 			var row = document.getElementById(tableId).insertRow(noOfRows);
 			row.setAttribute("id",rowId);
-	//	    row.onclick=function(){editRow(rowId);} ;
+		    row.onclick=function(){editRow(rowId);} ;
 			if(noOfRows%2!=0){
 				row.setAttribute("class","tabletd1");
 			}
@@ -298,8 +303,10 @@ function openCRGWindow()
 				 row.removeChild(row.firstChild);
 			 } 
 			row.setAttribute("id",rowId);
+		//	 row.onclick=function(){editRow(rowId);} ;
 			
 		}
+	
 		  // first cell
 			var aprCheckb=row.insertCell(0);
 			aprCheckb.className="black_ar";			
@@ -308,18 +315,23 @@ function openCRGWindow()
 			aprCheckb.onclick=function(){enableDeleteButton(this.firstChild);} ;
 			aprCheckb.innerHTML=""+sname;
 
-				// Second Cell
+			// Second Cell
+			var str=""+sites;
+			if(str.length>35){
+				var newSites=str.substring(0,33)+"...";
+			}
 			var aprSites=row.insertCell(1);
 			aprSites.className="black_ar";
 			aprSites.width="24%";
-			aprSites.innerHTML="<label>"+sites+"</label>";
+			aprSites.innerHTML="<span>"+newSites+"</span>";
+			aprSites.onmouseover=function(){this.title=getTip(sites);} ;
 			
 
 					//third Cell
 			var aprUser=row.insertCell(2);
 			aprUser.className="black_ar";
 			aprUser.width="23%";
-			aprUser.innerHTML="<label>"+userName+"</label>";
+			aprUser.innerHTML="<span>"+userName+"</span>";
 
 			//fourth Cell
 			var aprRole=row.insertCell(3);
@@ -327,25 +339,27 @@ function openCRGWindow()
 			aprRole.width="20%";
 			ctrl=document.getElementById('roleIds');
 			sname=ctrl.options[ctrl.selectedIndex].text;
-			aprRole.innerHTML="<label>"+sname+"</label>";
+			aprRole.innerHTML="<span>"+sname+"</span>";
 
 			//Fifth Cell
 			var aprActions=row.insertCell(4);
 			aprActions.className="black_ar";
 			aprActions.width="20%";
-			aprActions.innerHTML="<label>action1,action2</label>";
+			aprActions.innerHTML="<span>action1,action2</span>";
 	}
-
-	
+function getTip(sites) {
+		return sites;
+}
+/*	
  function editRow(rowId){
 	
 	 var operation="editRow";
-//	 var url="ShowAssignPrivilegePage.do";
-//			var data="operation="+operation+"&selectedRow="+selectedRow;
+	 var url="ShowAssignPrivilegePage.do";
+			var data="operation="+operation+"&selectedRow="+rowId;
 		
-//			sendRequestsWithData(url,data,operation);
+			sendRequestsWithData(url,data,operation);
  }
-
+*/
 function enableDeleteButton(itemCheck){
 	deleteButton=document.apForm.deleteButton;
 	var chk = document.getElementById(itemCheck.id);
