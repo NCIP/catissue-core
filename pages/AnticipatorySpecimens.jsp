@@ -10,6 +10,7 @@
 <html>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
 <%
 String formAction = "SubmitSpecimenCollectionProtocol.do";
 
@@ -860,6 +861,10 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		</td>
 		</tr>
 		</table>
+		<div id="divForHiddenChild"></div>
 		</html:form>
 </body>
 </html>
+<script language="JavaScript" type="text/javascript">
+identifyDisabledCheckBox();
+</script>

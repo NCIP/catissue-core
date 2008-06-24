@@ -772,14 +772,14 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			 {
 				 if("getTextElement".equalsIgnoreCase(calledFrom))
 				 {
-					 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"true\" disabled=\"true\">");
+					 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"true\" disabled=\"true\" checked=\"checked\">");
 				 }
 				 else
 				 {
 					 if(Constants.TRUE.equalsIgnoreCase(nameValue[1]))
-						 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" checked=\"checked\">");
+						 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" checked=\"checked\" onclick=\"onClickCollected(this)\">");
 					 else
-						 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\">");					
+						 sb.append("<input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\" onclick=\"onClickCollected(this)\">");					
 				 }
 			 }
 			 else
