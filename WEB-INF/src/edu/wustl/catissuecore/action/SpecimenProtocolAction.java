@@ -55,7 +55,9 @@ public class SpecimenProtocolAction  extends SecureAction
     {
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
-        
+        if(operation==null){
+    		operation=(String)request.getAttribute(Constants.OPERATION);
+    	}
         //Sets the operation attribute to be used in the Add/Edit Collection / Distribution Page. 
         request.setAttribute(Constants.OPERATION, operation);
         

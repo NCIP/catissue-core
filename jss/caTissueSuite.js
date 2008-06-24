@@ -304,9 +304,7 @@ function openCRGWindow()
 			 } 
 			row.setAttribute("id",rowId);
 		//	 row.onclick=function(){editRow(rowId);} ;
-			
 		}
-	
 		  // first cell
 			var aprCheckb=row.insertCell(0);
 			aprCheckb.className="black_ar";			
@@ -323,10 +321,9 @@ function openCRGWindow()
 			var aprSites=row.insertCell(1);
 			aprSites.className="black_ar";
 			aprSites.width="24%";
+		//	aprSites.innerHTML="<div style='word-wrap:break-word;width=24%;'>"+sites+"</div>";
 			aprSites.innerHTML="<span>"+newSites+"</span>";
 			aprSites.onmouseover=function(){this.title=getTip(sites);} ;
-			
-
 					//third Cell
 			var aprUser=row.insertCell(2);
 			aprUser.className="black_ar";
@@ -423,3 +420,181 @@ function  deleteCheckedRows() {
 	var data="operation="+operation+"&deletedRowsArray="+deletedRowsArray;			
 	sendRequestsWithData(url,data,operation);
 }
+function collectionProtocolPageForPrivilege(cpOperation)
+{
+	var action="DefineEvents.do?pageOf=pageOfAssignPrivilegePage&invokeFunction=invokeFunction&cpOperation="+cpOperation;
+	document.apForm.action=action;
+	document.apForm.submit();
+}
+function consentPageForPrivilege(cpOperation)
+{
+	var action="DefineEvents.do?pageOf=pageOfAssignPrivilegePage&invokeFunction=invokeFunction&cpOperation="+cpOperation+"&tabSel=consentTab";
+	document.apForm.action=action;
+	document.apForm.submit();
+}
+// functions for collection protocol
+
+
+//Consent Tracking Module Virender Mehta(Start)
+	//This Function will add more consent Tier 
+	function addConsentTier()
+	{		
+		var val = parseInt(document.forms[0].consentTierCounter.value);
+		val = val + 1;
+		document.forms[0].consentTierCounter.value = val;
+		var rowCount = document.getElementById('innertable').rows.length;
+		var createRow = document.getElementById('innertable').insertRow(1);
+		if(rowCount % 2 ==0)
+			createRow.className="tabletd1";
+		
+	    var createCheckBox=createRow.insertCell(0);
+		var createTextArea=createRow.insertCell(1);
+		
+		
+		var iCount = rowCount-1;
+		var consentName="consentValue(ConsentBean:"+iCount+"_statement)";
+		var consentKey="consentValue(ConsentBean:"+iCount+"_consentTierID)";
+			
+		createCheckBox.className="black_ar";
+		createCheckBox.setAttribute('align','center');
+		createTextArea.className="link";
+				
+		var sname = "<input type='hidden' id='" + consentKey + "'>";				
+		createCheckBox.innerHTML="<input type='checkbox'class=black_ar name='consentcheckBoxs'id='check"+iCount+"'>";
+		createTextArea.innerHTML= sname+"<textarea rows='2'class='formFieldSized' style='width:90%;' name="+consentName+"></textarea>";
+	}
+	
+	//On selecting Select All CheckBox all the associted check box wiil be selected
+	function checkAll(chkInstance)
+	{
+		var chkCount= document.getElementsByName('consentcheckBoxs').length;
+		for (var i=0;i<chkCount;i++)
+		{
+			var elements = document.getElementsByName('consentcheckBoxs');
+			elements[i].checked = chkInstance.checked;
+		}
+	}
+
+	//This function will delete the selected consent Tier
+	function deleteSelected()
+	{
+		var rowIndex = 0;	
+		var rowCount=document.getElementById('innertable').rows.length;
+		var removeButton = document.getElementsByName('removeButton');
+		
+		/** creating checkbox name**/
+		var chkBox = document.getElementsByName('consentcheckBoxs');
+		var lengthChk=chkBox.length;
+		var j = 0;
+		for(var i=0;i<lengthChk;i++)
+		{
+			if(chkBox[j].checked==true)
+			{
+				var gettable = document.getElementById('innertable');
+				var currentRow = chkBox[j].parentNode.parentNode;
+				rowIndex = currentRow.rowIndex;
+				gettable.deleteRow(rowIndex);
+			}
+			else
+			{
+				j++;
+			}	
+		}
+		var j = chkBox.length;
+		for(var i=0;i<chkBox.length;i++)
+		{
+			var currentRow = chkBox[i].parentNode.parentNode;
+			
+		}		
+	}	
+	
+	//This function will the called while switching between Tabs
+	function switchToTab(selectedTab)
+	{
+		var displayKey="block";
+		
+		if(!document.all)
+			displayKey="table";
+			
+		var displayTable=displayKey;
+		var tabSelected="none";
+		
+		if(selectedTab=="collectionProtocolTab")
+		{
+			tabSelected=displayKey;
+			displayTable="none";
+		}	
+		
+		var display=document.getElementById('table1');
+		display.style.display=tabSelected;
+		
+			
+		var display4=document.getElementById('consentTierTable');
+		display4.style.display=displayTable;	
+        
+		var display5=document.getElementById('submittable');
+		display5.style.display=tabSelected;
+
+		var collectionTab=document.getElementById('collectionProtocolTab');
+		var consentTab=document.getElementById('consentTab');
+		
+		if(selectedTab=="collectionProtocolTab")
+		{
+		  collectionTab.innerHTML="<img src=images/uIEnhancementImages/cp_details.gif alt=Collection Protocol Details width=174 height=20 border=0 />"
+		  consentTab.innerHTML="<img src=images/uIEnhancementImages/cp_consents1.gif alt=Consents width=94 height=20 border=0 />"
+		  consentTab.className="";
+		}
+		else		
+		{  collectionTab.innerHTML="<img src=images/uIEnhancementImages/cp_details1.gif alt=Collection Protocol Details width=174 height=20 border=0 />"
+		   consentTab.innerHTML="<img src=images/uIEnhancementImages/cp_consents.gif alt=Consents width=94 height=20 border=0 />"
+		   collectionTab.className="";
+		}
+		
+	}
+
+	//On calling this function the tab will be switched to CollectionProtocol Page
+	function collectionProtocolPage()
+	{
+		switchToTab("collectionProtocolTab");
+	}
+
+	//On calling this function the tab will be switched to Consent Page	
+	
+//	Consent Tracking Module Virender Mehta (End)
+
+//Add Bulk Specimen Virender(Start)
+function defineEvents()
+{
+	var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+
+function viewSummary()
+{
+	var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=${requestScope.operation}";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+function updateCPTree()
+{	
+  window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
+}
+function openEventPage()
+{
+    var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+function showAssignPrivilegePage(cpOperation)
+{
+    var action="ShowAssignPrivilegePage.do?operation=AssignPrivilegePage&cpOperation="+cpOperation;
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+function consentPage(){
+	switchToTab("consentTab");
+}
+
+
+// end here

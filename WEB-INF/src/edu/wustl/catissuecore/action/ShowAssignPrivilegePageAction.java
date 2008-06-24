@@ -38,15 +38,20 @@ public class ShowAssignPrivilegePageAction extends BaseAction {
 	private static org.apache.log4j.Logger logger =Logger.getLogger(CatissueCoreServletContextListener.class);  
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
-	throws IOException, ServletException {
+	throws ServletException {
 		ActionForward findForward = null;
 		
 		final String operation = (String) request.getParameter(Constants.OPERATION);
-		
+		final String cpOperation = (String) request.getParameter("cpOperation");
+		request.setAttribute("cpOperation", cpOperation);
 		if (("AssignPrivilegePage".equals(operation))) {
 			findForward = onFirstTimeLoad(mapping, request);
 		} else {
-			setAJAXResponse(request, response, operation);
+			try {
+				setAJAXResponse(request, response, operation);
+			} catch (IOException e) {
+				Logger.out.error("IOException in  sending JSON response in ShowAssignPrivilegePageAction..."+e);
+			}
 		}
 		return findForward;
 	}
@@ -95,9 +100,10 @@ public class ShowAssignPrivilegePageAction extends BaseAction {
 	 * @param request
 	 * @param response
 	 * @param operation
+	 * @throws IOException 
 	 * @throws IOException
 	 */
-	private void setAJAXResponse(HttpServletRequest request, HttpServletResponse response, String operation) throws IOException {
+	private void setAJAXResponse(HttpServletRequest request, HttpServletResponse response, String operation) throws IOException  {
 		final HttpSession session = request.getSession();
 		try {
 			final AssignPrivilegePageBizLogic apBizLogic=getAssignPrivilegePageBizLogic();
