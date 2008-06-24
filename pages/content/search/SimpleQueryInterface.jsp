@@ -545,6 +545,25 @@ function showDatafield(element,txtFieldID)
 												<%=Operator.GREATER_THAN_OR_EQUALS%>
 											</html:option>
 											<%
+											}
+											else if (attributeType.equals("integer"))
+											{
+											%>
+												<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+											<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+											<html:option value="<%=Operator.LESS_THAN%>">
+												<%=Operator.LESS_THAN%>
+											</html:option>
+											<html:option value="<%=Operator.LESS_THAN_OR_EQUALS%>">
+												<%=Operator.LESS_THAN_OR_EQUALS%>
+											</html:option>
+											<html:option value="<%=Operator.GREATER_THAN%>">
+												<%=Operator.GREATER_THAN%>
+											</html:option>
+											<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>">
+												<%=Operator.GREATER_THAN_OR_EQUALS%>
+											</html:option>
+											<%
 											} else {
 											%>
 											<html:option value="<%=Operator.STARTS_WITH%>">
