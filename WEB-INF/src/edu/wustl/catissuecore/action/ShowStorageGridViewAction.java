@@ -234,8 +234,8 @@ public class ShowStorageGridViewAction  extends BaseAction
                                                    = specimenID.intValue();
                     childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
                                                                         = Constants.SPECIMEN_LABEL_CONTAINER_MAP + specimenLable;
+                    contentOfContainer=Constants.ALIAS_SPECIMEN;
                     
-                    request.setAttribute(Constants.CONTENT_OF_CONTAINNER, "Specimen");
                 }
             }
             
@@ -267,7 +267,7 @@ public class ShowStorageGridViewAction  extends BaseAction
                                                    = specimenID.intValue();
                     childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
                                                                         = Constants.SPECIMEN_ARRAY_LABEL_CONTAINER_MAP + specimenArrayLable;
-                  request.setAttribute(Constants.CONTENT_OF_CONTAINNER, "SpecimenArray");
+                    contentOfContainer=Constants.ALIAS_SPECIMEN_ARRAY;
                     
                 }
             }

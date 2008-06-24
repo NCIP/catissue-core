@@ -328,13 +328,23 @@ function refresh_tree(nodeId)
 								 <%=childContainerType[i][j]%><!-- : <%=childContainerIds[i][j]%> -->
 								</a>
  							</td>
-					   	   <%}
+					   	  <%}
 							else{%>
-							<td class="mapTdspe" noWrap="true">
-							<a href="QuerySpecimenSearch.do?<%=Constants.PAGEOF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>"><%=childContainerType[i][j]%><!--: <%=childContainerIds[i][j]%> -->
+							<td class="mapTdspe" noWrap="true"><%
+							String pageOfSpecimen=(String)request.getAttribute(Constants.CONTENT_OF_CONTAINNER);
+								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN))
+								{%>
+								<a href="QuerySpecimenSearch.do?<%=Constants.PAGEOF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>"><%=childContainerType[i][j]%><!--: <%=childContainerIds[i][j]%> -->
 								</a>
-							</td>
-							<%}%>
+								
+								<%}
+								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN_ARRAY))
+								{%>
+								<a href="QuerySpecimenArraySearch.do?<%=Constants.PAGEOF%>=pageOfSpecimenArray&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>"><%=childContainerType[i][j]%><!--: <%=childContainerIds[i][j]%> -->
+								</a>
+								</td>
+								<% }
+								}%>
 						<%}
 						else
 						{
