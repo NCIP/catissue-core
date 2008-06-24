@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="700" height="200"
+	 showCloseButton="true" close="removeMe();" borderColor="#0000FF" backgroundColor="white" left="0" right="0" borderThicknessLeft="2" borderThicknessRight="2" borderThicknessBottom="2" borderThicknessTop="5">
+	 
+	 <mx:Script>
+	 	<![CDATA[
+	 		import mx.formatters.DateFormatter;
+	 		import mx.controls.DateField;
+	 		import mx.collections.ArrayCollection;
+	 		import mx.controls.TextInput;
+            import mx.managers.PopUpManager;
+            import mx.controls.Alert;
+            import mx.core.ClassFactory;
+            import mx.controls.List;  
+            import Components.DAGNode;
+            import Components.CustomFormulaNode;  
+            
+           [Bindable]
+           public var myArray1 : ArrayCollection; 
+           
+           [Bindable]
+	 	   public var myArray2 : ArrayCollection;
+	 	   
+	 	   [Bindable]
+	 		public var myArray3 : ArrayCollection;
+	 		
+	 		[Bindable]
+	 		public var myArray4 : ArrayCollection;
+	 		
+	 		[Bindable]
+	 		public var myArray5:ArrayCollection;
+	 		
+	 		[Bindable]
+	 	    public var dataProvider : Object;
+	 	    
+	 	    [Bindable]
+	 	    public var firstNodeDp : Object;
+	 	    
+	 	    [Bindable]
+	 	    public var secondNodeDp : Object;
+	 	    
+	 	   	[Bindable]
+     		private var myDropdownFactory:ClassFactory;
+     		
+     		[Bindable]
+     		public var firstEntityName : String = null;
+     		
+     		[Bindable]
+     		public var secondEntityName : String = null;
+     		
+     		//Declaring all Headers varibles
+     		[Bindable] 
+	 	    public var firstEntityLabel : String = null;
+	 	    
+	 	    [Bindable] 
+	 	    public var secondEntityLabel : String = null;
+	 	    
+	 	    [Bindable]
+	 	    private var arithmeticLabel : String = "Arithmetic" + "\n" +"Operators"; 
+	 	    
+	 	    [Bindable]
+	 	    private var relationalLabel : String  = "Relational" + "\n" + "Operators";
+	 	    
+	 	    [Bindable]
+	 	    private var timeValueLabel : String = "Time" + "\n" + "Value";
+	 	    
+	 	    [Bindable]
+	 	    private var timeIntrvalLabel : String = "Time" + "\n" + "Interval" ;
+	 	     
+	 	    private var existingTextBox : TextInput = null;
+	 	    
+	 	    private var existingDatePicker : DateField = null;
+	 	    
+	 	    private var  arithmeticOperand : String = null;
+	 	    
+	 	    private var existingTimeIntervalCb : ComboBox = null;
+	 	    private var existingValueLabel : Label = null;
+	 	    private var existingIntervalLabel : Label = null; 
+	 	    private var valueLabel : Label = null;
+	 	    private var intervalLabel : Label = null;
+	 	    private var firstNodeList : ArrayCollection= null;
+	 	    private var secondNodeList : ArrayCollection = null; 
+	 	    private var existingPickerLabel : Label = null; 
+	 	    
+	 	    public var firstDAGNode : DAGNode =  null;
+	 	    public var secondDAGNode : DAGNode = null;
+	 	    
+	 	   public function removeMe():void 
+	 	   {
+                PopUpManager.removePopUp(this);
+           }
+           
+           private function submitData():void
+           {
+           	 
+           	  var timeValue : String = null;
+           	  var timeIntervalValue : String =  null;
+           	  var firstOperand : String = null;
+           	  var secondOperand : String = null;
+           	  var firstOperandType : String  = null; 
+           	  var secondOperandType : String = null;
+           	  
+           	  var firstNodeAttributeId :String = null;
+			  var secondNodeAttributeId :String = null;
+			  
+			  var queryString : String =  null;
+           	  var customFormulaString : String = null;
+           	  //Here based on the last control, the we get the selected value and pass as parameter
+           	  existingTextBox = myBox.getChildByName("txtInput") as TextInput;
+           	  
+           	  if(existingTextBox == null)
+           	  {
+           	  	  //means there exists the datePicker
+           	  	  existingDatePicker = myBox.getChildByName("datePicker") as DateField;
+           	 	  if((existingDatePicker != null) && (existingDatePicker.enabled == true ))
+           	 	  {
+           	 	    
+           	 	    timeValue = (existingDatePicker.selectedDate.getMonth()+1) + "/"+existingDatePicker.selectedDate.getDate()+"/"+existingDatePicker.selectedDate.getFullYear();
+           	 	  }
+           	  	
+           	  }
+           	  else
+           	  {
+           	  	   //Get the value of  text box and value of dropdown
+           	  	   
+           	  	   existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox;   
+           	  	   if((existingTextBox.enabled == true) && (existingTimeIntervalCb != null) && (existingTimeIntervalCb.enabled == true))
+           	  	   {
+					    timeValue = existingTextBox.text;
+           	  	   		timeIntervalValue = existingTimeIntervalCb.selectedItem.toString();
+           	  	   }
+           	  	   //if(existingTimeIntervalCb != null)
+           	  	   
+           	  }
+           	  
+           	//Getting the left and right operands
+           	 firstOperand= cb1.selectedItem.toString();
+		 	 secondOperand = cb3.selectedItem.toString();
+           	
+           	//Getting left and right entities property list containing <attributeId , attributeTyep>
+           	 firstNodeList = firstNodeDp[firstOperand];
+           	 secondNodeList = secondNodeDp[secondOperand];
+           	 	
+           	 firstOperandType = String(firstNodeList.getItemAt(1));
+           	 secondOperandType= String(secondNodeList.getItemAt(1));
+           	 	    
+           	 //Getting Id's of Attributes
+           	 firstNodeAttributeId = String(firstNodeList.getItemAt(0));
+           	 secondNodeAttributeId = String(secondNodeList.getItemAt(0));
+           	
+           	 //Invoking the java class method  
+             queryString = firstNodeAttributeId + "##" + firstOperandType + "##" +secondNodeAttributeId + "##"+ secondOperandType +"##"+ cb2.selectedItem +"##"+cb4.selectedItem + "##"+ timeValue +"##" + timeIntervalValue;
+            
+            // Alert.show("Query String is:"+queryString);
+             rpcService.formTemporalQuery(firstDAGNode, secondDAGNode, queryString);
+              
+             if(timeIntervalValue != null)
+             {
+             	customFormulaString = cb1.selectedItem + " "+ cb2.selectedItem + " " + cb3.selectedItem + "\n" + cb4.selectedItem + " " + timeValue + " " +  timeIntervalValue;
+             } 
+             else
+             {
+              	customFormulaString = cb1.selectedItem + " "+ cb2.selectedItem + " " + cb3.selectedItem + "\n" + cb4.selectedItem + " " + timeValue ;
+             }
+             
+             parentApplication.customFormulaString = customFormulaString;
+             parentApplication.addCustomFromulaNode();
+             
+           }   
+    
+           private function addInputControl() : void
+           {
+           	  			//IN case of subtraction of two dates, it should be something integer 
+           	 	        existingDatePicker = myBox.getChildByName("datePicker") as DateField;
+           	 	        if(existingDatePicker != null)
+           	 	        {
+           	 	        	myBox.removeChild(existingDatePicker);
+           	 	        }
+           	 	        
+           	 	        //Removing existing date Picker Label 
+           	 	        existingPickerLabel = labelHBox.getChildByName("datePickerLabel") as Label;
+           	 	        if(existingPickerLabel != null)
+           	 	        {
+           	 	        	labelHBox.removeChild(existingPickerLabel);
+           	 	        }
+
+           	 	        existingValueLabel = labelHBox.getChildByName("label5") as Label;
+           	 	        if(existingValueLabel == null)
+           	 	        {
+           	 	        	//Add New label
+           	 	        	valueLabel = new Label();
+           	 	        	valueLabel.id = "lb5";
+           	 	        	valueLabel.name = "label5";
+           	 	        	valueLabel.text = "Time Value";
+           	 	        	valueLabel.width = 100;
+           	 	        	valueLabel.buttonMode = true;
+           	 	        	labelHBox.addChild(valueLabel);
+           	 	        }
+           	 	        existingIntervalLabel = labelHBox.getChildByName("label6") as Label;
+           	 	        if(existingIntervalLabel == null)
+           	 	        {
+           	 	        	intervalLabel = new Label();
+           	 	        	intervalLabel.id = "lb6";
+           	 	        	intervalLabel.name ="label6";
+           	 	        	intervalLabel.text = "Time Interval";
+           	 	        	intervalLabel.width = 100;
+           	 	            intervalLabel.buttonMode = true;
+           	 	            
+           	 	            labelHBox.addChild(intervalLabel);
+           	 	        }
+           	 	        
+           	 	        existingTextBox = myBox.getChildByName("txtInput") as TextInput;
+           	 	        if(existingTextBox == null)
+           	 	        {
+           	 	        	//If no text input exists, create text input
+           	 	        	var textBox : TextInput = new TextInput();
+           	   				textBox.id = "txtInput";
+           	   				textBox.name = "txtInput"
+						    textBox.width = 100;
+           	   				myBox.addChild(textBox);
+           	 	        }
+           	 	        existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox;   
+                       if(existingTimeIntervalCb == null)
+                       {
+                       	   var comboBox : ComboBox = new ComboBox();
+                       	   comboBox.id = "cb5";
+                       	   comboBox.name = "timeIntervalCb";
+                       	    comboBox.width = 100;
+                           comboBox.dropdownFactory = myDropdownFactory;
+                       	   comboBox.dataProvider = myArray5;
+                       	   myBox.addChild(comboBox);
+                       	   
+                       }
+           	
+           } 
+           
+            private function initClassFactory():void
+			{
+				/**
+				  Creating the Drop down factory
+				*/
+						
+				myDropdownFactory = new ClassFactory(List);
+				myDropdownFactory.properties = {showDataTips:true, dataTipFunction:myDataTipFunction};
+			}
+           
+           private function myDataTipFunction(item:Object):String
+           { 
+           	    return String(item);
+           }
+           private function validateQueryData():void
+           {
+           	  	var firstOperandType : String  = null; 
+           	  	var secondOperandType : String = null;
+		 		var firstOperand : String = cb1.selectedItem.toString();
+		 		var secondOperand : String = cb3.selectedItem.toString();
+         
+			 	var firstNodeAttributeId : String = null;
+			 	var secondNodeAttributeId :String = null;
+			 	if(firstOperand != null && secondOperand != null)
+    	     	{
+           	 		firstNodeList = firstNodeDp[firstOperand];
+           	 		secondNodeList = secondNodeDp[secondOperand];
+           	 	
+           	 		firstOperandType = String(firstNodeList.getItemAt(1));
+           	 	 	secondOperandType= String(secondNodeList.getItemAt(1));
+           	 	    
+           	 	    if(firstOperandType.match("Date") && secondOperandType.match("Date"))
+           	 	    {
+           	 			arithmeticOperand= cb2.selectedItem.toString();
+           	 	    	if((arithmeticOperand == "+") || (arithmeticOperand == "/") || (arithmeticOperand == "*"))
+           	 	    	{
+           	 	    		Alert.show("Not a valid operation. Change the Operator");
+           	 	    	}
+           	 	    	else
+           	 	    	{
+           	 	    	  	addInputControl();         	 	    
+           	 	    	}
+           	 		}
+           	 		else if(firstOperandType.match("Integer") && secondOperandType.match("Integer"))
+           	 		{
+           	 			//IN case of subtraction of two dates, it should be something integer 
+           	 	    	addInputControl();
+           	 		}
+           	 		else if(firstOperandType.match("Integer") && secondOperandType.match("Date") && (cb2.selectedItem.toString()=="-"))
+           	 		{
+           	 			Alert.show("Not a valid Operand. Second Operand should be DateOffset");
+           	 		}
+           	 		else
+           	 		{
+           	 	    
+           	 	    	//here any of the operand is Date and another is Integer, we should use DatePicker
+           	 	    	arithmeticOperand= cb2.selectedItem.toString();
+           	 	   	 	if((arithmeticOperand == "/") || (arithmeticOperand == "*") )
+           	 	    	{
+           	 	    		Alert.show("Operation is not valid. Change Operator");
+           	 	    	}
+           	 	    	else
+           	 	    	{
+           	 	    		//Removing text Box
+           	 	    		existingTextBox = myBox.getChildByName("txtInput") as TextInput;
+           	   				var value : String =  null;
+           	   				if(existingTextBox != null)
+           	   				{
+           	   	 	    		value = existingTextBox.text;
+           	   	   				myBox.removeChild(existingTextBox);
+           	   	   				
+           	   	   				//Remove the Time Value Label
+	           	 	        	existingValueLabel = labelHBox.getChildByName("label5") as Label;
+	           	 	        	if(existingValueLabel != null)
+	           	 	        	{
+	           	 	        		labelHBox.removeChild(existingValueLabel);
+	           	 	        	}
+           	        		}
+           	        	
+           	        		//Removing time interval ComboBox
+           	        		existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox; 
+           	       			if(existingTimeIntervalCb != null)
+           	       			{
+           	       				myBox.removeChild(existingTimeIntervalCb);
+           	       				
+           	       				//Remove the Time Interval Label
+           	       				existingIntervalLabel = labelHBox.getChildByName("label6") as Label;
+           	       				if(existingIntervalLabel != null)
+           	       				{
+           	       				   labelHBox.removeChild(existingIntervalLabel);	
+           	       				}
+           	       			}
+           	       		
+           	       			//Creating the DatePicker
+           	       			existingDatePicker= myBox.getChildByName("datePicker") as DateField;
+           	 	        	if(existingDatePicker == null)
+           	 	        	{
+           	 	        		var datePicker : DateField =  new DateField();
+	           	       			datePicker.id = "datePicker";
+	           	       			datePicker.name = "datePicker";
+	           	       			datePicker.width = 200;
+	           	       			datePicker.focusEnabled = true;
+	           	       			datePicker.formatString = "MM/DD/YYYY";
+	           	            	datePicker.showToday = true;
+	           	              
+	           	       			//Adding datePicket as childs
+	           	 	   			myBox.addChild(datePicker); 
+	           	 	     	}
+	           	 	     	//Creating the DatePicker Label
+	           	 	     	existingPickerLabel = labelHBox.getChildByName("datePickerLabel") as Label;
+           	 	    	   if(existingPickerLabel == null)
+           	 	    	   {
+           	 	    	   	  var pickerLabel : Label = new Label();
+           	 	    	   	  pickerLabel.name = "datePickerLabel";
+           	 	    	   	  pickerLabel.text = "Select Date";
+           	 	    	   	  
+           	 	    	   	  labelHBox.addChild(pickerLabel);
+           	 	    	   }
+           	 	    	}
+           	 		}
+        	  	}
+	          	else
+    	      	{
+        	   	 	Alert.show("Please select the left Operand");
+           	  	}
+           	} 
+           	
+           	/*
+                This method will enable/Disable the right hand side controls based on the relational operator selected
+            */
+           	private function righthandSideHandler():void
+           	{ 
+           		
+           		//get the value text box and time Interval picker and datePicker
+           		existingTextBox = myBox.getChildByName("txtInput") as TextInput;
+           		existingTimeIntervalCb = myBox.getChildByName("timeIntervalCb") as ComboBox; 
+           		existingDatePicker= myBox.getChildByName("datePicker") as DateField;
+           		
+           		//If relational operator is "S NUll" or "Is Not Null", then deactivate the right hand side controls else activate them   
+           		if((cb4.selectedItem.toString()=="Is Null") || (cb4.selectedItem.toString()=="Is Not Null"))
+           		{
+           			if((existingTextBox != null) && (existingTimeIntervalCb != null))
+           			{
+           				//deactivate both of them
+           				existingTextBox.enabled = false;
+           				existingTimeIntervalCb.enabled = false;
+           			}
+           			else
+           			{
+           				//It's going to be datePicker, so disable date picker
+           			   	 if(existingDatePicker != null)
+           			   	 {
+           			   	 	existingDatePicker.enabled = false;
+           			   	 }
+           			}
+           		}
+           		else
+           		{
+           			//Activate controls if they are disabled 
+           			if((existingTextBox != null) && (existingTimeIntervalCb != null))
+           			{
+           				if((existingTextBox.enabled== false) && (existingTimeIntervalCb.enabled == false))
+           				{
+           					existingTextBox.enabled = true;
+           					existingTimeIntervalCb.enabled =  true; 
+           				}
+           			}
+           			else
+           			{
+           				if((existingDatePicker != null) && (existingDatePicker.enabled == false))
+           				{
+           					existingDatePicker.enabled =  true;
+           				}
+           			}
+           		}
+            }
+	 	]]>
+	 </mx:Script>
+      
+   <mx:RemoteObject id="rpcService" destination="cdeService"></mx:RemoteObject>
+     <mx:VBox x="20" y="20">
+      <mx:HBox x="20" y="20" id="labelHBox">
+        <mx:Label id="lb1" name="label1" width="100"  height="50" color="blue" text="{firstEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true" />
+      	<mx:Label id="lb2" name="label2" width="100"  height="50" color="blue" text="{arithmeticLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
+      	<mx:Label id="lb3" name="label3" width="100"  height="50" color="blue" text="{secondEntityLabel}" fontStyle="normal" fontWeight="bold" buttonMode="true"/>
+      	<mx:Label id="lb4" name="label4" width="100"  height="50" color="blue"  text="{relationalLabel}" fontStyle="normal" fontWeight="bold"/>
+      	<mx:Label id="lb5" name="label5" width="100"  height="50" color="blue" text="{timeValueLabel}" fontStyle="normal" fontWeight="bold"/>
+      	<mx:Label id="lb6" name="label6" width="100"  height="50" color="blue" text="{timeIntrvalLabel}" fontStyle="normal" fontWeight="bold"/>
+      	
+      </mx:HBox>
+      
+      <mx:HBox id ="myBox" x="20" y="60">
+      	
+      	<mx:ComboBox id="cb1" dataProvider="{myArray1}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="validateQueryData()"/>
+      	<mx:ComboBox id="cb2" dataProvider="{myArray2}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue"  textAlign="center" prompt="--Select--" change="validateQueryData()"/>
+      	<mx:ComboBox id="cb3" dataProvider="{myArray3}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue" change="validateQueryData()" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" />
+      	<mx:ComboBox id="cb4" dataProvider="{myArray4}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue"  prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="righthandSideHandler()"/>
+        <mx:TextInput id="txtInput" name="txtInput"  width="100"  borderColor="blue" /> 
+        <mx:ComboBox id="cb5" name="timeIntervalCb" dataProvider="{myArray5}" width="100" arrowButtonWidth="3" borderThickness="0" borderColor="blue" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
+       <!-- <mx:Panel  id="p1" height="20" width="100" /> -->
+      </mx:HBox> 	 
+	 
+	  <mx:HBox x="20" y="50">
+	      <mx:Button label="OK" click="submitData();"/>
+          <mx:Button label="Cancel" click="removeMe();"/>  
+	  </mx:HBox>
+	  
+	  </mx:VBox>
+
+</mx:TitleWindow>
