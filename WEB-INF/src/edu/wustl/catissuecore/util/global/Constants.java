@@ -2119,7 +2119,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String UNIQUE_IDENTIFIER_FOR_ALIQUOT = "_A";
 	public static final String UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN = "_S";
 	public static final String UNIQUE_IDENTIFIER_FOR_EVENTS = "E";
-
+	public static final String CLICKED_NODE="clickedNode";
 	/*
      * Conflict resolver constants
      * 
