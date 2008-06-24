@@ -67,10 +67,13 @@ import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.metadata.path.Path;
 import edu.wustl.common.querysuite.queryengine.impl.CommonPathFinder;
+import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IExpression;
+import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.querysuite.utils.ConstraintsObjectBuilder;
 
 public class FlexInterface
 {
@@ -1403,7 +1406,32 @@ public class FlexInterface
 		DAGNode dagNode = dagPanel.createQueryObject(strToCreateQueryObject, entityName, "Edit");
 		return dagNode;
 	}
-
+	
+	/**
+	 * Checks validity of nodes for query
+	 * @param linkedNodeList
+	 * @return True if both nodes have any of the attribute as Date, else False 
+	 */
+	public boolean checkIfNodesAreValid(List<DAGNode> linkedNodeList)
+	{
+		boolean areNodesValid =  false;
+		
+		areNodesValid =  dagPanel.checkForValidAttributes(linkedNodeList);
+		
+		return areNodesValid;
+	}
+	
+	public Map retrieveQueryData(List<DAGNode> linkedNodeList)
+	{
+		DAGNode sourceNode = linkedNodeList.get(0);
+		DAGNode destinationNode = linkedNodeList.get(1);
+		 
+		Map queryDataMap = dagPanel.getQueryData(sourceNode,destinationNode);
+		
+		return queryDataMap;
+	}
+	
+	
 	/**
 	 * Deletes node from output view
 	 * @param expId
@@ -1463,7 +1491,15 @@ public class FlexInterface
 		}
 		return pathsListStr;
 	}
-
+	/**
+	 * Gets association(path) between 2 nodes
+	 * @param linkedNodeList
+	 * @return
+	 */
+	public void formTemporalQuery(DAGNode sourceNode,DAGNode destinationNode,String tempQuery)
+	{
+		dagPanel.formTemporalQuery(sourceNode, destinationNode,tempQuery);
+	}
 	/**
 	 * Links 2 nodes
 	 * @param linkedNodeList
