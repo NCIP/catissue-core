@@ -112,7 +112,6 @@ public class GenerateHtmlForAddLimitsBizLogic
 				IExpressionOperand operand = expression.getOperand(i);
 				if (!operand.isSubExpressionOperand())
 				{ 
-					System.out.println();
 					if(operand instanceof IRule)
 					{
 						IRule ruleObject = (IRule) operand;
