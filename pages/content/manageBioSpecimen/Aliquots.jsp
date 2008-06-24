@@ -515,6 +515,9 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 	</td>
 	<td class="formRightSubTableTitleWithBorder">*
 		<bean:message key="aliquots.location"/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<b><bean:message key="requestdetails.tooltip.updateAllRequestStatus"/></b>
+	<input type="checkbox" name="option1" onclick="applyFirstToAll(this)"> 
 	</td>
 	
 </tr>
@@ -770,3 +773,78 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 <html:hidden property="nextForwardTo" />
 <html:hidden property="forwardTo" />
 </html:form>
+<script language="JavaScript" type="text/javascript">
+function applyFirstToAll(object)
+{
+	var type = 'Specimen';
+	//value(Specimen:1_StorageContainer_id
+	if(object.checked)
+		{
+				var fields = document.getElementsByTagName("select");
+				var i =0;
+				var text="";
+				var valueToSet = "";
+				var isFirstField = true;
+				var firstRadioButton= true;
+				var j=0;
+				var firstRadioValue = 0;
+				var updateFlag=false;
+				var firstRadioButton = document.getElementsByName("value(radio_1)");
+				for(var k = 0 ; k < firstRadioButton.length ; k++)
+				 {
+					if(firstRadioButton[k].checked == true)
+					{
+						firstRadioValue = firstRadioButton[k].value;
+						if(firstRadioValue == 2)
+						{
+							updateFlag=true;
+						}
+					}
+				 }
+				var radioButtons = document.getElementsByTagName("input");
+				for(j=0 ; j < radioButtons.length ; j++)
+				 {
+					if(radioButtons[j].type == 'radio' && radioButtons[j].value == firstRadioValue)
+					{
+						radioButtons[j].checked = true;
+					}
+				if((radioButtons[j].type == 'text' && radioButtons[j].name.indexOf("fromMap")>0) || (radioButtons[j].type == 'button' && radioButtons[j].name.indexOf("mapButton")>0))
+					{
+						if(firstRadioValue == 3)
+							{
+								radioButtons[j].disabled = false;
+							}
+						else
+							{
+								radioButtons[j].disabled = true;
+							}
+				
+					}
+					
+				 }
+				for (i=0; i<fields.length;i++)
+				 {
+					fields[i].disabled = true;
+					if(updateFlag)
+						{
+							text = fields[i].name;
+							fields[i].disabled = false;
+							if(text.indexOf(type)>=0 && text.indexOf("StorageContainer")>=0)
+							{
+								if(isFirstField)
+								{
+									valueToSet = fields[i].value;
+									isFirstField = false;
+								}
+								if(valueToSet != "")
+								{
+									fields[i].value = valueToSet;
+								}
+							}
+						}
+					}
+		}
+}
+</script>
+
+
