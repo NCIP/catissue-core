@@ -4613,6 +4613,7 @@ PUBLIC
 			input="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol&amp;menuSelected=9">
 			<forward name="pageOfDefineEvents" path="/ProtocolEventsDetails.do?&amp;operation=add&amp;pageOf=newEvent" />
 			<forward name="ViewSummary" path="/GenericSpecimenSummary.do?Event_Id=dummyId" />
+			<forward name="pageOfAssignPrivilegePage" path="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol" />
 		</action>
 		
 		<action path="/ProtocolEventsDetails" 
