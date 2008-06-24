@@ -1669,7 +1669,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		String sql = "SELECT site.IDENTIFIER, site.NAME, site.TYPE " + " from catissue_storage_container sc, catissue_site site "
 				+ " where sc.SITE_ID = site.IDENTIFIER AND sc.IDENTIFIER = " + identifier.longValue();
-
+		
 		Logger.out.debug("Site Query........................." + sql);
 
 		List resultList = executeSQL(sql);
@@ -1692,9 +1692,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 */
 	public Vector getSiteWithDummyContainer() throws DAOException
 	{
-		String sql ="select site.IDENTIFIER, site.NAME,count(site.NAME) from catissue_site site join catissue_storage_container sc"+
-					" on sc.site_id = site.identifier"+
-					" group by site.IDENTIFIER, site.NAME";
+		String sql ="SELECT site.IDENTIFIER, site.NAME,COUNT(site.NAME) FROM CATISSUE_SITE " +
+		" site join CATISSUE_STORAGE_CONTAINER sc ON sc.site_id = site.identifier join " +
+		"CATISSUE_CONTAINER con ON con.identifier = sc.identifier WHERE con.ACTIVITY_STATUS!='Disabled' " +
+		"GROUP BY site.IDENTIFIER, site.NAME";
+		
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List resultList = new ArrayList();
 		Long nodeIdentifier;
@@ -1814,24 +1816,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		String sql;
 		if(!Constants.ZERO_ID.equals(parentId))
 		{
-			
-			sql  = "SELECT cn.IDENTIFIER, cn.name, pos.PARENT_CONTAINER_ID,count(p2.IDENTIFIER) " +
-					"FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc ON sc.IDENTIFIER=cn.IDENTIFIER " +
-					"left outer join catissue_container_position pos on pos.CONTAINER_ID=cn.IDENTIFIER left outer join " +
-					"catissue_container_position p2 on p2.PARENT_CONTAINER_ID=cn.IDENTIFIER " +
-					"WHERE pos.PARENT_CONTAINER_ID="+identifier+" AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME,pos.PARENT_CONTAINER_ID";
-		
+			sql  = "SELECT cn.IDENTIFIER, cn.name, pos.PARENT_CONTAINER_ID,count(sc3.IDENTIFIER) " + 
+                    "FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc ON sc.IDENTIFIER=cn.IDENTIFIER "+ 
+                    "left outer join catissue_container_position pos on pos.CONTAINER_ID=cn.IDENTIFIER left outer join "+ 
+                    "catissue_container_position con_pos on con_pos.PARENT_CONTAINER_ID=cn.IDENTIFIER left outer join "+ 
+                    "CATISSUE_STORAGE_CONTAINER sc3 on con_pos.CONTAINER_ID=sc3.IDENTIFIER "+
+                    "WHERE pos.PARENT_CONTAINER_ID= " +identifier+ " AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME,pos.PARENT_CONTAINER_ID";
 		}
 		else
 		{
-			
-			sql = "SELECT cn.IDENTIFIER, cn.NAME,site.identifier,count(pos.IDENTIFIER) " +
-					"FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc " +
-					"ON sc.IDENTIFIER=cn.IDENTIFIER join catissue_site site " +
-					"on sc.site_id = site.identifier left outer join catissue_container_position pos " +
-					"on pos.PARENT_CONTAINER_ID=cn.IDENTIFIER WHERE site.identifier="+identifier+
-					" and cn.ACTIVITY_STATUS!='Disabled' and cn.IDENTIFIER not in (select p2.CONTAINER_ID from catissue_container_position p2) " +
-					"GROUP BY cn.IDENTIFIER, cn.NAME,site.identifier";
+			sql = "SELECT cn.IDENTIFIER, cn.NAME,site.identifier,COUNT(sc3.IDENTIFIER) " +
+			"FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc " +
+			"ON sc.IDENTIFIER=cn.IDENTIFIER join CATISSUE_SITE site " +
+			"ON sc.site_id = site.identifier left outer join CATISSUE_CONTAINER_POSITION pos " +
+			"ON pos.PARENT_CONTAINER_ID=cn.IDENTIFIER left outer join " +
+			"CATISSUE_STORAGE_CONTAINER sc3 ON pos.CONTAINER_ID=sc3.IDENTIFIER " +
+			"WHERE site.identifier=" + identifier+" AND cn.ACTIVITY_STATUS!='Disabled' AND cn.IDENTIFIER NOT IN (SELECT p2.CONTAINER_ID FROM CATISSUE_CONTAINER_POSITION p2) " +
+			"GROUP BY cn.IDENTIFIER, cn.NAME,site.identifier ";
 			
 			
 		}
