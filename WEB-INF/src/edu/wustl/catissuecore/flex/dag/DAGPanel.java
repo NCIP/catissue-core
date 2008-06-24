@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.flex.dag;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,24 +33,37 @@ import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.metadata.associations.IAssociation;
 import edu.wustl.common.querysuite.metadata.associations.IIntraModelAssociation;
 import edu.wustl.common.querysuite.metadata.path.IPath;
+import edu.wustl.common.querysuite.queryobject.IArithmeticOperand;
 import edu.wustl.common.querysuite.queryobject.ICondition;
+import edu.wustl.common.querysuite.queryobject.IConnector;
 import edu.wustl.common.querysuite.queryobject.IConstraints;
+import edu.wustl.common.querysuite.queryobject.ICustomFormula;
+import edu.wustl.common.querysuite.queryobject.IDateOffsetAttribute;
+import edu.wustl.common.querysuite.queryobject.IDateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
+import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IJoinGraph;
+import edu.wustl.common.querysuite.queryobject.ILiteral;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.IQueryEntity;
+import edu.wustl.common.querysuite.queryobject.ITerm;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
+import edu.wustl.common.querysuite.queryobject.TermType;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.ExpressionId;
 import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
 import edu.wustl.common.querysuite.queryobject.locator.Position;
 import edu.wustl.common.querysuite.queryobject.locator.QueryNodeLocator;
-import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
-
-
+import edu.wustl.common.querysuite.queryobject.RelationalOperator;
+import edu.wustl.common.querysuite.queryobject.ArithmeticOperator;
+import edu.wustl.common.querysuite.queryobject.DSInterval;
+import edu.wustl.common.querysuite.queryobject.YMInterval;
+import edu.wustl.common.querysuite.queryobject.ITimeIntervalEnum;
+import edu.wustl.common.querysuite.queryobject.ITerm;
 /**
  *The class is responsibel controlling all activities of Flex DAG
  *  
@@ -248,6 +262,428 @@ public class DAGPanel {
 			e.printStackTrace();
 		}
 		return map.get(ambiguityObject);
+	}
+	
+	private  AttributeInterface getAttributeIdentifier(IQuery query,DAGNode dagNode, String firstAttributeId)
+ 	{
+		Long identifier = new Long(firstAttributeId);
+		//IQuery query = m_queryObject.getQuery();
+		IConstraints constraints = query.getConstraints();
+		
+		IExpressionId expressionId = new ExpressionId(dagNode.getExpressionId());
+		IExpression expression = constraints.getExpression(expressionId);
+		IQueryEntity sourceEntity = expression.getQueryEntity();
+		
+		AttributeInterface srcAttributeByIdentifier = sourceEntity.getDynamicExtensionsEntity().getAttributeByIdentifier(identifier);
+		
+		return srcAttributeByIdentifier;
+	}
+	/**
+	 * Gets list of paths between two nodes
+	 * @param sourceNode
+	 * @param destNode
+	 * @param tempQuery 
+	 * @return
+	 */
+	public void formTemporalQuery(DAGNode sourceNode, DAGNode destNode, String tempQuery)
+	{
+			String[] tokens = tempQuery.split("##");
+			String firstAttributeId = tokens[0];
+			String firstAttributeDataType = tokens[1];
+			String secondAttributeId = tokens[2];		
+			String secondAttributeDataType = tokens[3];
+			String arithmeticOp = tokens[4];
+			String relationalOp = tokens[5];
+			String timeValue = tokens[6];
+			String timeIntervalValue = tokens[7];
+			IDateOffsetAttribute dateOffsetAttr1 = null;
+			IDateOffsetAttribute dateOffsetAttr2 = null;
+			IExpressionAttribute IExpression1 =  null;
+			IExpressionAttribute IExpression2 = null;
+			IDateOffsetLiteral dateOffSetLiteral =  null;
+			ILiteral dateLiteral = null;
+			ITerm lhsTerm = null;
+			ITerm rhsTerm = null;
+			IConnector iCon = null;
+			ICustomFormula customFormula = null;
+			IExpression srcIExpression = null;
+			IQuery query = m_queryObject.getQuery();
+			IConstraints constraints = query.getConstraints();
+			IExpressionId srcExpressionId = new ExpressionId(sourceNode.getExpressionId());
+			IExpression expression = constraints.getExpression(srcExpressionId);
+			srcIExpression = expression;
+			AttributeInterface srcAttributeByIdentifier = getAttributeIdentifier(query,sourceNode,firstAttributeId);
+			IExpressionId destExpressionId = new ExpressionId(destNode.getExpressionId());
+			AttributeInterface destAttributeByIdentifier = getAttributeIdentifier(query,destNode,secondAttributeId);
+			ArithmeticOperator arithOp = getArithmeticOperator(arithmeticOp);
+			RelationalOperator relOp = getRelationalOperator(relationalOp); 
+			
+			if(firstAttributeDataType.equals(secondAttributeDataType))
+			{
+				IExpression1 = QueryObjectFactory.createExpressionAttribute(srcExpressionId,srcAttributeByIdentifier);
+				IExpression2 = QueryObjectFactory.createExpressionAttribute(destExpressionId,destAttributeByIdentifier);
+			}
+			else
+			{
+			    if((firstAttributeDataType.equals(Constants.DATE_TYPE)))    
+			    {
+			    	IExpression1 = QueryObjectFactory.createExpressionAttribute(srcExpressionId,srcAttributeByIdentifier);
+			    	dateOffsetAttr2 = QueryObjectFactory.createDateOffsetAttribute(destExpressionId,destAttributeByIdentifier,DSInterval.Day);
+			    }
+			    else
+			    {
+			    	IExpression2 = QueryObjectFactory.createExpressionAttribute(destExpressionId,destAttributeByIdentifier);
+			    	dateOffsetAttr1 = QueryObjectFactory.createDateOffsetAttribute(destExpressionId,destAttributeByIdentifier,DSInterval.Day);
+			    }
+			}
+			
+			iCon = QueryObjectFactory.createArithmeticConnector(arithOp);
+			if((timeValue.equals("null")) && (timeIntervalValue.equals("null")))
+			{
+				lhsTerm = createOnlyLHS(dateOffsetAttr1, dateOffsetAttr2, IExpression1, IExpression2, iCon);
+			}
+			else
+			{	
+				//Creating IDateOffSetLiteral
+				ITimeIntervalEnum timeInterval = null;
+				if((!timeIntervalValue.equals("null")) && (timeValue != null))
+				{
+					timeInterval = getTimeInterval(timeIntervalValue, timeInterval);
+					dateOffSetLiteral = QueryObjectFactory.createDateOffsetLiteral(timeValue, timeInterval);
+				}
+				else
+				{
+					//It will be a date, We need to create a Literal
+					if(timeValue != null)
+					dateLiteral = QueryObjectFactory.createLiteral(timeValue,TermType.Date);
+				}
+				
+				//Creating left ITERM and Right ITERM 
+				lhsTerm = QueryObjectFactory.createTerm();
+			    rhsTerm = 	QueryObjectFactory.createTerm();
+			    //This is the case when both attributes are either Date or Integer
+				if(IExpression1 != null && IExpression2 != null)
+				{
+					lhsTerm.addOperand(IExpression1);
+				    lhsTerm.addOperand(iCon,dateOffSetLiteral);
+				    rhsTerm.addOperand(IExpression2);
+				}
+				else
+				{
+	                //This is the case when There is first attribute is of type Date and other is of type Integer
+					if(IExpression1 != null && dateOffsetAttr2 != null)
+					{
+						lhsTerm.addOperand(IExpression1);
+					    lhsTerm.addOperand(iCon,dateOffsetAttr2);
+					    if(dateLiteral != null)
+					    {
+					    	rhsTerm.addOperand(dateLiteral);
+					    }
+					}
+					else
+					{
+						//This is the case First node attribute is of type Integer and second node attribute is of Integer
+						lhsTerm.addOperand(dateOffsetAttr1);
+						lhsTerm.addOperand(iCon,IExpression2);
+						if(dateLiteral != null)
+						{
+							rhsTerm.addOperand(dateLiteral);
+						}
+					}
+				}
+			}
+			
+		    //Here we create the custom formula 
+			customFormula = getCustomFormula(lhsTerm, rhsTerm, relOp);
+			//Adding custom formula to src node
+			srcIExpression.addOperand(getAndConnector(),customFormula);
+			srcIExpression.setInView(true);
+		
+	}
+	/**
+	 * 
+	 * @param dateOffsetAttr1
+	 * @param dateOffsetAttr2
+	 * @param IExpression1
+	 * @param IExpression2
+	 * @param iCon
+	 * @return
+	 */
+	private ITerm createOnlyLHS(IDateOffsetAttribute dateOffsetAttr1, IDateOffsetAttribute dateOffsetAttr2, IExpressionAttribute IExpression1, IExpressionAttribute IExpression2, IConnector iCon)
+	{
+		ITerm lhsTerm;
+		//Then the custom formula will not have RHS
+		lhsTerm = QueryObjectFactory.createTerm();
+		if(IExpression1 != null && IExpression2 != null)
+		{
+			lhsTerm.addOperand(IExpression1);
+		    lhsTerm.addOperand(iCon,IExpression2);
+		}
+		else
+		{
+			if(IExpression1 != null && dateOffsetAttr2 != null)
+			{
+				 lhsTerm.addOperand(IExpression1);
+				 lhsTerm.addOperand(iCon,dateOffsetAttr2);
+			}
+			else
+			{
+		        lhsTerm.addOperand(IExpression2);
+		        lhsTerm.addOperand(iCon,dateOffsetAttr1);
+			}
+		}
+		return lhsTerm;
+	}
+	/**
+	 * 
+	 * @param lhsTerm
+	 * @param rhsTerm
+	 * @param relOp
+	 * @return
+	 */
+	private ICustomFormula getCustomFormula(ITerm lhsTerm, ITerm rhsTerm, RelationalOperator relOp)
+	{
+		ICustomFormula customFormula = QueryObjectFactory.createCustomFormula();
+		if(rhsTerm == null)
+		{ 
+			//Then custom formula will have only lhs and relational Operator
+			customFormula.setLhs(lhsTerm);
+			customFormula.setOperator(relOp);
+		}
+		else
+		{
+			customFormula.setLhs(lhsTerm);
+			customFormula.addRhs(rhsTerm);
+			customFormula.setOperator(relOp);
+		}
+		return customFormula;
+	}
+	private ITimeIntervalEnum getTimeInterval(String timeIntervalValue, ITimeIntervalEnum timeInterval)
+	{
+		for(DSInterval time: DSInterval.values())
+		{
+			if(timeIntervalValue.equals(time.name()))
+			{
+				timeInterval = time;
+				break;
+			}
+		}
+		
+		if(timeInterval == null)
+		{
+			for(YMInterval time : YMInterval.values())
+			{
+				if(timeIntervalValue.equals(time.name()))
+				{
+					timeInterval = time;
+					break;
+				}
+			}
+		}
+		return timeInterval;
+	}
+	private RelationalOperator getRelationalOperator(String relationalOp)
+	{
+		RelationalOperator relOp = null;
+		for(RelationalOperator operator : RelationalOperator.values())
+		{
+			if((operator.getStringRepresentation().equals(relationalOp)))
+			{
+				relOp = operator;
+				break;
+			}
+		}
+		return relOp;
+	}
+	private ArithmeticOperator getArithmeticOperator(String arithmeticOp)
+	{
+		ArithmeticOperator arithOp = null;
+		for(ArithmeticOperator operator :ArithmeticOperator.values())
+		{
+			if(operator.mathString().equals(arithmeticOp))
+			{
+				arithOp = operator;
+				break;
+			}
+		}
+		return arithOp;
+	}
+	
+	 private static IConnector<LogicalOperator> getAndConnector() {
+	        return QueryObjectFactory.createLogicalConnector(LogicalOperator.And);
+	    }
+	
+	public boolean checkForValidAttributes(List<DAGNode> linkedNodeList)
+	{
+		boolean areNodesValid = false;
+		DAGNode sourceNode = linkedNodeList.get(0);
+		DAGNode destinationNode = linkedNodeList.get(1);
+		boolean isSourceNodeValid = checkIfValidNode(sourceNode);
+		boolean isDestNodeValid = checkIfValidNode(destinationNode);
+		
+		if((isSourceNodeValid && isDestNodeValid))
+		{
+			areNodesValid = true;
+		}
+	    
+		return areNodesValid;
+		
+	}
+	private boolean checkIfValidNode(DAGNode sourceNode)
+	{
+		boolean isValid = false;
+		IQuery query = m_queryObject.getQuery();
+		IConstraints constraints = query.getConstraints();
+		IExpressionId expressionId = new ExpressionId(sourceNode.getExpressionId());
+		IExpression expression = constraints.getExpression(expressionId);
+		
+		/**
+		 * Checking if source node has a Date attribute
+		 */
+		IQueryEntity sourceEntity = expression.getQueryEntity();
+		Collection<AttributeInterface> sourceAttributeCollection = sourceEntity.getDynamicExtensionsEntity().getAttributeCollection();
+		
+		for(AttributeInterface attribute : sourceAttributeCollection)
+		{
+		   if(((attribute.getDataType().equals(Constants.DATE_TYPE) || 
+				   attribute.getDataType().equals(Constants.INTEGER_TYPE) || 
+				   attribute.getDataType().equals(Constants.DOUBLE_TYPE) || 
+				   attribute.getDataType().equals(Constants.LONG_TYPE) || 
+				   attribute.getDataType().equals(Constants.FLOAT_TYPE)) ||
+				   attribute.getDataType().equals(Constants.SHORT_TYPE)) && 
+				   (!attribute.getName().equals("id")))
+		   {
+			   isValid = true;
+		   }
+	    }
+		return isValid;
+	}
+	private Collection<AttributeInterface> getAttributeCollection(DAGNode node)
+	{
+		IQuery query = m_queryObject.getQuery();
+		IConstraints constraints = query.getConstraints();
+		IExpressionId expressionId = new ExpressionId(node.getExpressionId());
+		IExpression expression = constraints.getExpression(expressionId);
+		IQueryEntity sourceEntity = expression.getQueryEntity();
+		Collection<AttributeInterface> sourceAttributeCollection = sourceEntity.getDynamicExtensionsEntity().getAttributeCollection();
+		return sourceAttributeCollection;
+	
+	}
+	public Map getQueryData(DAGNode sourceNode, DAGNode destNode)
+	{ 
+		Map <String, Object> queryDataMap= new HashMap<String, Object>();
+		Map <String,List<String>>sourceNodeAttributesMap = new HashMap<String, List<String>>(); 
+	    Map <String,List<String >>destNodeAttributesMap = new HashMap<String,List<String>>(); 
+	    List<String> entityLabelsList = getEntityLabelsList(sourceNode, destNode);
+ 		Collection<AttributeInterface> sourceAttributeCollection = getAttributeCollection(sourceNode);
+		populateMap(sourceNodeAttributesMap, sourceAttributeCollection);
+		
+		Collection<AttributeInterface> destAttributeCollection = getAttributeCollection(destNode);
+		populateMap(destNodeAttributesMap, destAttributeCollection);
+		List<String> arithmeticOperaorsList = getArithmeticOperators();
+		List<String> relationalOperatorsList = getRelationalOperators();
+		List<String> timeIntervalList = getTimeIntervals();
+		
+		queryDataMap.put(Constants.FIRST_NODE_ATTRIBUTES,sourceNodeAttributesMap);
+		queryDataMap.put(Constants.ARITHMETIC_OPERATORS,arithmeticOperaorsList);
+		queryDataMap.put(Constants.SECOND_NODE_ATTRIBUTES,destNodeAttributesMap);
+		queryDataMap.put(Constants.RELATIONAL_OPERATORS,relationalOperatorsList);
+		queryDataMap.put("timeIntervals",timeIntervalList);
+		queryDataMap.put("entityList",entityLabelsList);
+		
+		return queryDataMap;
+	}
+	private List<String> getEntityLabelsList(DAGNode sourceNode, DAGNode destNode)
+	{
+		List <String> entityList = new ArrayList<String>();
+        
+	    String srcNodename = Utility.getDisplayLabel(sourceNode.getNodeName());
+ 		String destNodeName = Utility.getDisplayLabel(destNode.getNodeName());
+ 		
+ 		entityList.add(0,srcNodename);
+ 		entityList.add(1,destNodeName);
+		return entityList;
+	}
+	private void populateMap(Map<String, List<String>> destNodeAttributesMap, Collection<AttributeInterface> destAttributeCollection)
+	{
+		List<String> destNodeList;
+		/**
+		 * Storing all attributes of destination entity having DataType as Date
+		 */
+		for(AttributeInterface attribute : destAttributeCollection)
+        {
+        	String destDataType  = attribute.getDataType();
+			if(destDataType.equals(Constants.DATE_TYPE))
+			{
+        		destNodeList = new ArrayList<String>();
+				//Putting attribute name and attribute data type in Map
+        		destNodeList.add(0,attribute.getId().toString());
+        		destNodeList.add(1,attribute.getDataType());
+        		destNodeAttributesMap.put(attribute.getName(),destNodeList);
+			}
+			else
+			{
+				if((destDataType.equals(Constants.INTEGER_TYPE) || destDataType.equals(Constants.LONG_TYPE) || destDataType.equals(Constants.DOUBLE_TYPE)|| destDataType.equals(Constants.FLOAT_TYPE) || destDataType.equals(Constants.SHORT_TYPE)) && (!attribute.getName().equals("id")))
+				{
+					destNodeList = new ArrayList<String>();
+					destNodeList.add(0,attribute.getId().toString());
+					destNodeList.add(1,Constants.INTEGER_TYPE);
+					destNodeAttributesMap.put(attribute.getName(),destNodeList);
+				}
+			}
+        }
+	}
+	private List<String> getTimeIntervals()
+	{
+		List <String>timeIntervalList = new ArrayList<String>(); 
+		/**
+		 * Getting all days time Intervals
+		 */
+		for(DSInterval timeInterval : DSInterval.values())
+		{
+			timeIntervalList.add(timeInterval.name());
+		}
+		
+		for(YMInterval timeInterval1 : YMInterval.values())
+		{
+			timeIntervalList.add(timeInterval1.name());
+		}
+		return timeIntervalList;
+	}
+	private List<String> getRelationalOperators()
+	{
+		/**
+		 * Getting relational operators excluding those deals with Strings
+		 */
+		 List <String>relationalOperatorsList = new ArrayList<String>(); 
+		for(RelationalOperator operator : RelationalOperator.values())
+		{
+			if((!operator.getStringRepresentation().equals(Constants.Contains)) &&
+					(!operator.getStringRepresentation().equals(Constants.STRATS_WITH)) &&
+					(!operator.getStringRepresentation().equals(Constants.ENDS_WITH)) && 
+					(!operator.getStringRepresentation().equals(Constants.In)) &&
+					(!operator.getStringRepresentation().equals(Constants.Between)) &&
+					(!operator.getStringRepresentation().equals(Constants.Not_In)) )
+			{
+				relationalOperatorsList.add(operator.getStringRepresentation());	
+			}
+		}
+		return relationalOperatorsList;
+	}
+	private List<String> getArithmeticOperators()
+	{
+		List <String>arithmeticOperaorsList =  new ArrayList<String>();
+		/**
+		 * Getting all arithmetic operators
+		 */
+		for(ArithmeticOperator operator : ArithmeticOperator.values())
+		{
+			if((!operator.mathString().equals("")) && (!operator.mathString().equals("*")) && (!operator.mathString().equals("/")))
+			{
+				arithmeticOperaorsList.add(operator.mathString());
+			}
+		}
+		return arithmeticOperaorsList;
 	}
 	/**
 	 * Link 2 nodes
@@ -572,7 +1008,8 @@ public class DAGPanel {
 	 * 
 	 * @param expId
 	 */
-	public void addExpressionToView(int expId) {
+	public void addExpressionToView(int expId) 
+	{
 		IExpressionId expressionId = new ExpressionId(expId);
 		Expression expression = (Expression) m_queryObject.getQuery().getConstraints().getExpression(expressionId);
 		expression.setInView(true);
