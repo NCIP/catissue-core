@@ -63,13 +63,21 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     {
     	super.executeSecureAction(mapping, form, request, response);
     	//pageOf required for Advance Search Object View.
+    	
+    	String tabSel=(String)request.getParameter("tabSel");
+    	request.setAttribute("tabSel", tabSel);
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
     	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
     	String invokeFunction = (String)request.getParameter("invokeFunction");
+    	if(invokeFunction==null){
+    		invokeFunction=(String)request.getAttribute("invokeFunction");
+    	}
     	String operation = (String)request.getParameter(Constants.OPERATION);    	
+    	if(operation==null){
+    		operation=(String)request.getAttribute(Constants.OPERATION);
+    	}
     	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
         //Gets the value of the operation attribute.
-    	
 			
     	HttpSession newSession = request.getSession();
     	CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)newSession.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
