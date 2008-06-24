@@ -156,14 +156,14 @@ CREATE TABLE CATISSUE_FLUID_REQ_SPECIMEN
 CREATE TABLE CATISSUE_CELL_REQ_SPECIMEN
 (                                                                                                                 
      IDENTIFIER NUMBER(19,0) NOT NULL,       
-      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
-      CONSTRAINT FK_CELL_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN                
+     PRIMARY KEY  (IDENTIFIER),                                                                                                                     
+     CONSTRAINT FK_CELL_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN                
 );
 CREATE TABLE CATISSUE_TISSUE_REQ_SPECIMEN
 (                                                                                                                 
      IDENTIFIER NUMBER(19,0) NOT NULL,       
-      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
-      CONSTRAINT FK_TISSUE_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN               
+     PRIMARY KEY  (IDENTIFIER),                                                                                                                     
+     CONSTRAINT FK_TISSUE_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN               
 );
 
 CREATE TABLE CATISSUE_MOLECULAR_SPECIMEN
@@ -189,8 +189,8 @@ CREATE TABLE CATISSUE_CELL_SPECIMEN
 CREATE TABLE CATISSUE_TISSUE_SPECIMEN
 (                                                                                                                 
      IDENTIFIER NUMBER(19,0) NOT NULL ,       
-      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
-      CONSTRAINT FK_TISSUE_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN
+     PRIMARY KEY  (IDENTIFIER),                                                                                                                     
+     CONSTRAINT FK_TISSUE_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN
 );
 
 
@@ -288,7 +288,6 @@ ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP DROP COLUMN NAME;
 Delete from CSM_PROTECTION_ELEMENT where protection_element_name like
 'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup';
 
-create sequence CATISSUE_ABSTRACT_SPECIMEN_SEQ;
 INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE)
 values (CSM_PROTECTIO_PROTECTION_E_SEQ.NEXTVAL,'AbstractSpecimen','AbstractSpecimen Object','edu.wustl.catissuecore.domain.AbstractSpecimen',NULL,NULL,1,to_date('2008-05-28','yyyy-mm-dd'));
 INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE,APPLICATION_ID,UPDATE_DATE)
