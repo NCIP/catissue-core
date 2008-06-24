@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml"  borderThickness="2" width="200" height="50"  backgroundColor="#FFCC99" borderColor="#0000FF" borderStyle="solid">
+  <mx:Script>
+  	<![CDATA[
+  		[Bindable]
+  		public var customFormula : String = null;
+  		
+  		public function initializeNode(x:int,y:int,name :String) : void
+  		{
+  			this.x = x;
+  			this.y = y;
+  			this.name = name; 
+  		}
+  	]]>
+  </mx:Script>
+  
+  <mx:Label id="formulaLabel" height="100%" width="100%" text="{customFormula}">
+  </mx:Label>	
+	
+</mx:Box>
