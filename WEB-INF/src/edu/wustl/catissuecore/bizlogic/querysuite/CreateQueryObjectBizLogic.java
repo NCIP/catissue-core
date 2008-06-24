@@ -303,6 +303,8 @@ public class CreateQueryObjectBizLogic
 				IExpressionOperand operand = expression.getOperand(i);
 				if (!operand.isSubExpressionOperand())
 				{
+					if(operand instanceof IRule)
+					{
 					IRule ruleObject = (IRule) operand;
 					List<ICondition> conditions = ruleObject.getConditions();
 					for (int j = 0; j < conditions.size(); j++)
@@ -328,6 +330,10 @@ public class CreateQueryObjectBizLogic
 							iparameterizedCondition.setName(displayNamesMap.get(componentName));
 							conditions.set(j, iparameterizedCondition);
 						}
+					}
+					}else
+					{
+						errorMessage = "Could not save Temporal Query, as this feature is not yet Implemented";
 					}
 				}
 			}
