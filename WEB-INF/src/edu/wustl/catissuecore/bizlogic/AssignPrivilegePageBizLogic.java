@@ -302,14 +302,14 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @param selectedSitesList
 	 * @param assignPrivilegePageBizLogic
 	 * @return List<JSONObject> ,list of JSONObjects, having user NameValueBean assigned to selected sites
+	 * @throws JSONException 
 	 * @throws IOException
 	 */
-	public List<JSONObject> getUsersForThisSites(List<Integer> selectedSitesList)
-			throws IOException {
+	public List<JSONObject> getUsersForThisSites(List<Integer> selectedSitesList) throws JSONException
+			 {
 		List<JSONObject> arrayList = new ArrayList<JSONObject>();
 		List<NameValueBean> usersList = new ArrayList<NameValueBean>();
 		usersList = getUsersForSelectedSites(selectedSitesList);
-		try {
 			JSONObject jsonobject = null;
 			for (int j = 0; j < usersList.size(); j++) {
 				jsonobject = new JSONObject();
@@ -319,9 +319,6 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 						.get(j)).getValue());
 				arrayList.add(jsonobject);
 			}
-		} catch (JSONException e) {
-			Logger.out.error("JSONException in AssignPrivilegePageBizLogic..."+e);
-		}
 		return arrayList;
 	}
 	/**
@@ -330,12 +327,13 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @param assignPrivilegePageBizLogic
 	 * @return List<JSONObject> ,list of JSONObjects, having action NameValueBean assigned to selected role
 	 * @throws IOException
+	 * @throws JSONException 
 	 */
-	public List<JSONObject> getActionsForThisRole(String roleId)throws IOException {
+	public List<JSONObject> getActionsForThisRole(String roleId)throws IOException, JSONException {
 		List<NameValueBean> actionsList = getActionsList(roleId);
 		// request.setAttribute(Constants.ACTIONLIST, actionsList);
 		List<JSONObject> arrayList = new ArrayList<JSONObject>();
-		try {
+		
 			JSONObject jsonobject = null;
 			for (int i = 0; i < actionsList.size(); i++) {
 				jsonobject = new JSONObject();
@@ -345,9 +343,6 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 						.get(i)).getValue());
 				arrayList.add(jsonobject);
 			}
-		} catch (JSONException e) {
-			Logger.out.error("JSONException in AssignPrivilegePageBizLogic..."+e);
-		}
 		return arrayList;
 	}
 	/**
