@@ -47,12 +47,18 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			throws Exception
 	{
 		CreateSpecimenTemplateForm createSpecimenTemplateForm = (CreateSpecimenTemplateForm)form;
+		HttpSession session = request.getSession();
 		//Gets the value of the operation parameter.
 		String operation = (String) request.getParameter(Constants.OPERATION);
 		String pageOf = (String)request.getParameter("pageOf");
+		String selectedNode=(String)session.getAttribute(Constants.TREE_NODE_ID);
 		//This will give node id when flow is from Specimen Tree View.
 		String mapkey = (String)request.getParameter("key");
-		String nodeId = (String)request.getParameter("nodeId");
+		String nodeId = (String)request.getParameter(Constants.TREE_NODE_ID);
+		if(mapkey!=null && !selectedNode.contains(mapkey))
+		{
+			session.setAttribute(Constants.TREE_NODE_ID, nodeId);
+		}
 		if(pageOf!=null&&pageOf.equalsIgnoreCase("error"))
 		{
 			mapkey=null;
@@ -62,8 +68,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		request.setAttribute(Constants.OPERATION, operation);
 		
 		//This will give Event key, Under that event Specimens are collected when flow is from Define event Page.
-		//String key = (String)request.getAttribute("listKey");
-		HttpSession session = request.getSession();
+		
 		String key = (String)session.getAttribute("listKey");
 		
 		List specimenTypeList = Utility.getListFromCDE(Constants.CDE_NAME_SPECIMEN_TYPE);
@@ -159,8 +164,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		request.setAttribute("key",key);
 		//Node Key
 		request.setAttribute("mapkey",mapkey);
-		session.setAttribute("nodeId",nodeId);
-		
+		if(nodeId!=null)
+		{
+			session.setAttribute(Constants.TREE_NODE_ID,nodeId);
+		}
 		setUserInForm(request,operation,createSpecimenTemplateForm);
 		if(operation.equals(Constants.EDIT)&&!pageOf.equals("error"))
 		{

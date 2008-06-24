@@ -103,9 +103,9 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
 	<tr>
 		
 		<td height="20" width="9%" nowrap valign="bottom" id="eventTab" background="images/empty.GIF">
-			<img src="images/uIEnhancementImages/cp_event1.gif"	alt="Consents" width="95" height="22" />
+			<img src="images/uIEnhancementImages/cp_event.gif"	alt="Consents" width="95" height="22" />
 		</td>
-		<td height="20"  valign="bottom" width="10%"  onclick="defineEvents()" id="privilegesTab">
+		<td height="20"  valign="bottom" width="10%"  onclick="alert('This facility is not available in this release')" id="privilegesTab">
 	    	<img src="images/uIEnhancementImages/cp_privileges1.gif" name="Image2"	width="94" height="22"					id="Image2"/>
         </td>
 		<td width="600" class="cp_tabbg" colspan="1">&nbsp;</td>

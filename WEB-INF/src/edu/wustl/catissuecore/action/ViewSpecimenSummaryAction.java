@@ -43,7 +43,8 @@ public class ViewSpecimenSummaryAction extends Action {
 			
 			
 			String eventId = summaryForm.getEventId();
-
+			session.setAttribute(Constants.TREE_NODE_ID,(String)request.getParameter("nodeId"));
+			String event_id=(String)request.getParameter("Event_Id");
 			Object obj = request.getAttribute("SCGFORM");
 			request.setAttribute("SCGFORM", obj);
 			target =request.getParameter("target");

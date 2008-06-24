@@ -42,7 +42,8 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		String displayName=null;
 		String parentIdentifier=null;
 		String identifier=null;
-	
+		String nodeId=null;
+		String specimenDisplayName=null;
 		if(collectionProtocolBean != null )
 		 {
 			
@@ -80,7 +81,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 				parentIdentifier= collectionProtocolBean.getTitle();
 				identifier = collectionProtocolEventBean.getUniqueIdentifier();
 				addNode(objectName, displayName, parentIdentifier,identifier,cpName,treeData);
-				
+				nodeId=objectName+"_"+identifier;
 				Map SpecimenRequirementMap = collectionProtocolEventBean.getSpecimenRequirementbeanMap();
 				
 				if(SpecimenRequirementMap!=null)
@@ -90,16 +91,18 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 					while(specimenRequirementBeanCollectionItr.hasNext())
 					{ 
 						SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean)specimenRequirementBeanCollectionItr.next();
-						createSpecimenNode(objectName,identifier,specimenRequirementBean,treeData,operation);
+						specimenDisplayName=createSpecimenNode(objectName,identifier,specimenRequirementBean,treeData,operation);
 					}	
 				}
 				iEventCount++;
 			}
 		}
+		
+		String clickedNode=(String)session.getAttribute(Constants.TREE_NODE_ID);
 		request.setAttribute(Constants.OPERATION, operation);
 		request.setAttribute(Constants.TREE_DATA, treeData);
-		request.getSession().setAttribute("nodeId", identifier);
-		request.getSession().setAttribute("parentIdentifier", parentIdentifier);
+		request.getSession().setAttribute(Constants.TREE_NODE_ID, nodeId);
+		request.getSession().setAttribute(Constants.CLICKED_NODE, clickedNode);
 					    
 		return mapping.findForward(Constants.SUCCESS);
 	}
@@ -108,12 +111,12 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 	/**
 	 * This is a recursive method for getting node data.
 	 * @param parentObjectname
-	 * @param parentIdentifier
+	 * @param parentIdentifier	
 	 * @param specimenRequirementBean
 	 * @param treeData
 	 * @param operation
 	 */
-	private void createSpecimenNode(String parentObjectname,String parentIdentifier,SpecimenRequirementBean specimenRequirementBean,Vector treeData, String operation)
+	private String createSpecimenNode(String parentObjectname,String parentIdentifier,SpecimenRequirementBean specimenRequirementBean,Vector treeData, String operation)
 	{
 		String objectName = Constants.NEW_SPECIMEN;
 		if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
@@ -155,6 +158,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			
 			}
 		}
+		return "New_"+identifier;
 	}
 	
 	/**

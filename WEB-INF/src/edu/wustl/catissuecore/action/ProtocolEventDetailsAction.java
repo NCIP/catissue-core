@@ -32,8 +32,17 @@ public class ProtocolEventDetailsAction extends BaseAction
 		HttpSession session = request.getSession();
 		//Event Key when flow is form Specimen Requirement Page
 		String key = (String)request.getParameter(Constants.EVENT_KEY);
-		String nodeId = (String)request.getParameter(Constants.TREE_NODE_ID);
-		session.setAttribute(Constants.TREE_NODE_ID,nodeId);
+		String eventKey=null;
+		if(key==null)
+			eventKey=(String)session.getAttribute(Constants.NEW_EVENT_KEY);
+		else
+			eventKey=key;
+		String selectedNode=(String)session.getAttribute(Constants.TREE_NODE_ID);
+		if(key!=null && selectedNode!=null && !selectedNode.contains(eventKey))
+		{
+			String nodeId = (String)request.getParameter(Constants.TREE_NODE_ID);
+			session.setAttribute(Constants.TREE_NODE_ID,nodeId);
+		}
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		long collectionEventUserId = 0;
 		collectionEventUserId = Utility.setUserInForm(request,operation);

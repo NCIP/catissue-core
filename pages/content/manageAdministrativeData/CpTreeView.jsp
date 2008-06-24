@@ -141,20 +141,49 @@
 					}
 				}
 			%>
-			tree.closeAllItems("0");
 			
 			<%if( request.getSession().getAttribute("nodeId") != null)
 			{
-				String nodeId = (String)request.getSession().getAttribute("nodeId");
-			%>
-				
-			var parentId = tree.getParentId("<%=nodeId%>");
+				String nodeId =(String)request.getSession().getAttribute("nodeId");
+				if(request.getSession().getAttribute("clickedNode")!=null)//nodeIdToBeShownSelected
+				{
+				String clickedNode  = (String)request.getSession().getAttribute("clickedNode");
+				%>
 
-			tree.openItem(parentId);
-			tree.selectItem("<%=nodeId%>",false);
-			tree.openItem("<%=nodeId%>");
-			
-			<%}%>	
+				
+						var str="<%=clickedNode%>";
+						var i = str.indexOf('_');
+						var alias =str.substring(0,i);
+						if(alias == "New")
+					{
+						var str2="<%=nodeId%>";
+						var e1=str.substring(i+1,i+3);
+						if(str.indexOf(e1)>0 && str2.indexOf(e1)>0)
+						{
+							tree.selectItem("<%=nodeId%>",false);
+							tree.openItem("<%=nodeId%>");
+						}
+						else
+						{
+							var parentId =tree.getParentId("<%=clickedNode%>");
+							tree.selectItem(parentId);
+							tree.openItem(parentId);
+						}
+					}
+					else
+					{
+				
+						tree.selectItem("<%=clickedNode%>",false);
+						tree.openItem("<%=clickedNode%>");
+					}
+			<% } else 
+				{
+			%>
+					tree.selectItem("<%=nodeId%>",false);
+					tree.openItem("<%=nodeId%>");
+			<%	}
+			   }
+			%>	
 	</script>
 </body>
 </html>

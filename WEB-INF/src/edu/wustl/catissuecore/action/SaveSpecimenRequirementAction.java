@@ -34,6 +34,8 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		HttpSession session = request.getSession();
 		String operation = (String)request.getParameter(Constants.OPERATION);
 		String eventKey = (String)request.getParameter(Constants.EVENT_KEY);
+		String nodeId="New_"+eventKey;
+		session.setAttribute(Constants.TREE_NODE_ID,nodeId);
 		if(operation.equals(Constants.ADD))
 		{
 			Map collectionProtocolEventMap = (Map)session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
