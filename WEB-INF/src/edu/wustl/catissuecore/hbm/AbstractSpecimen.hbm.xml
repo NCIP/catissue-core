@@ -18,7 +18,7 @@
             unsaved-value="null"
         >
             <generator class="native">
-                <param name="sequence">CATISSUE_ABSTRACT_SPECIMEN_SEQ</param>
+                <param name="sequence">CATISSUE_SPECIMEN_SEQ</param>
             </generator>
         </id>
 		<many-to-one
