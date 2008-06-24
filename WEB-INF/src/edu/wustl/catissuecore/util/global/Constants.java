@@ -1645,6 +1645,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String Greater_Than = "Greater than";
 	public static final String Greater_Than_Or_Equals = "Greater than or Equal to";
 	public static final String Contains = "Contains";
+	public static final String STRATS_WITH = "Starts With";
+	public static final String ENDS_WITH = "Ends With";
 	
 	// Used in array action 
 	public static final String ARRAY_TYPE_ANY_VALUE = "2";
@@ -2319,5 +2321,33 @@ public class Constants extends edu.wustl.common.util.global.Constants
 // COnstants required for Collection Protocol Tree 
 	public static final String ROOTNODE_FOR_CPTREE="rootnode";
 	public static final String OBJECTNAME_FOR_CP="cpName";
+	
+//	Constants required for temporal query
+	public static final String DATE_TYPE = "Date";
+	public static final String INTEGER_TYPE = "Integer";
+	public static final String FLOAT_TYPE = "Float";
+	public static final String DOUBLE_TYPE = "Double";
+	public static final String LONG_TYPE = "Long";
+	public static final String SHORT_TYPE = "Short";
+	
+	public static final String FIRST_NODE_ATTRIBUTES = "firstDropDown";
+	public static final String ARITHMETIC_OPERATORS = "secondDropDown";
+	public static final String SECOND_NODE_ATTRIBUTES = "thirdDropDown";
+	public static final String RELATIONAL_OPERATORS = "fourthDropDown";
+	
+	public static final String LEFT_OPERAND = "leftTerm" ;
+	public static final String RIGHT_OPERAND = "rightTerm";
+	public static final String ARITHMETIC_OPERATOR  ="arithmaticOperator";
+	public static final String RELATIONAL_OPERATOR = "relationalOperator";
+	public static final String TIME_VALUE = "timeValue";
+	public static final String TIME_INTERVAL_VALUE = "timeIntervalValue"; 
+	public static final String LEFT_OPERAND_TYPE = "leftOperandType";
+	public static final String RIGHT_OPERAND_TYPE = "rightOperandType";
+	
+	public static final String PLUS = "plus";
+	public static final String MINUS = "Minus";
+	public static final String MULTIPLYBY  = "MultipliedBy";
+	public static final String DIVIDEBY = "DividedBy";
+
 }
 	
