@@ -66,6 +66,8 @@ public class SaveQueryAction extends BaseAction
 			
 			IParameterizedQuery parameterizedQuery = populateParameterizedQueryData(query,
 					actionForm, request);
+			if(parameterizedQuery != null)
+			{
 			try
 			{
 				IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
@@ -112,7 +114,12 @@ public class SaveQueryAction extends BaseAction
 				Logger.out.error(userNotAuthorizedException.getMessage(),
 						userNotAuthorizedException);
 			}
+		}else
+		{
+			String errorMessage = ApplicationProperties.getValue("save.query.tq.error");
+			setActionError(request,errorMessage);
 		}
+	}
 		else
 		{
 			// Handle null query 
