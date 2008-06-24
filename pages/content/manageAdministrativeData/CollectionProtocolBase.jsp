@@ -38,6 +38,7 @@
 				                  <tr>
 				                    <td width="4%" class="td_tab_bg" >&nbsp;
 									</td>
+				                    <logic:equal parameter="operation"	value='add'>
 				                    <td width="6%" valign="bottom" background="images/tab_bg.gif" >
 									<html:link
 									page="/OpenCollectionProtocol.do?pageOf=pageOfmainCP&operation=add">
@@ -50,6 +51,21 @@
 										<img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" />
 									  </html:link>
 									</td>
+									</logic:equal>
+									<logic:equal parameter="operation"	value='edit'>
+				                    <td width="6%" valign="bottom" background="images/tab_bg.gif" >
+									<html:link
+									page="/OpenCollectionProtocol.do?pageOf=pageOfmainCP&operation=add">
+										<img src="images/uIEnhancementImages/tab_add_user1.jpg" alt="Add" width="57" height="22" />
+									 </html:link>
+									</td>
+				                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">
+									<html:link
+									page="/SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol">
+										<img src="images/uIEnhancementImages/tab_edit_user1.jpg" alt="Edit" width="59" height="22" border="0" />
+									  </html:link>
+									</td>
+									</logic:equal>
 				                    <td valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">				&nbsp;
 									</td>
 				                    <td width="1%" align="left" valign="bottom" class="td_color_bfdcf3" >
@@ -68,7 +84,7 @@
 					<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
 						
 						 <tr>
-							<td colspan="2" align="left"><span class=" grey_ar_s"><img							src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /><bean:message key="commonRequiredField.message" />
+							<td colspan="2" align="left"><span class=" grey_ar_s"><img	src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /><bean:message key="commonRequiredField.message" />
 						 </span></td>
 						</tr>
 						<tr>
