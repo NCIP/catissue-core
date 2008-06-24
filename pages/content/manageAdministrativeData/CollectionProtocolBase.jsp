@@ -42,13 +42,13 @@
 				                    <td width="6%" valign="bottom" background="images/tab_bg.gif" >
 									<html:link
 									page="/OpenCollectionProtocol.do?pageOf=pageOfmainCP&operation=add">
-										<img src="images/uIEnhancementImages/tab_add_user.jpg" alt="Add" width="57" height="22" />
+										<img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" />
 									 </html:link>
 									</td>
 				                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">
 									<html:link
 									page="/SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol">
-										<img src="images/uIEnhancementImages/tab_edit_user.jpg" alt="Edit" width="59" height="22" border="0" />
+										<img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" />
 									  </html:link>
 									</td>
 									</logic:equal>
@@ -56,13 +56,13 @@
 				                    <td width="6%" valign="bottom" background="images/tab_bg.gif" >
 									<html:link
 									page="/OpenCollectionProtocol.do?pageOf=pageOfmainCP&operation=add">
-										<img src="images/uIEnhancementImages/tab_add_user1.jpg" alt="Add" width="57" height="22" />
+										<img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" />
 									 </html:link>
 									</td>
 				                    <td width="6%" valign="bottom" background="images/uIEnhancementImages/tab_bg.gif">
 									<html:link
 									page="/SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol">
-										<img src="images/uIEnhancementImages/tab_edit_user1.jpg" alt="Edit" width="59" height="22" border="0" />
+										<img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" />
 									  </html:link>
 									</td>
 									</logic:equal>
