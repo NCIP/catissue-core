@@ -111,14 +111,18 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				IExpressionOperand operand = expression.getOperand(i);
 				if (!operand.isSubExpressionOperand())
-				{
-					IRule ruleObject = (IRule) operand;
-					List<ICondition> conditions = ruleObject.getConditions();
-					EntityInterface entity = expression.getQueryEntity()
-							.getDynamicExtensionsEntity();
-					Map<EntityInterface, List<ICondition>> entityConditionMap = new HashMap<EntityInterface, List<ICondition>>();
-					entityConditionMap.put(entity, conditions);
-					expressionMap.put(expression.getExpressionId(), entityConditionMap);
+				{ 
+					System.out.println();
+					if(operand instanceof IRule)
+					{
+						IRule ruleObject = (IRule) operand;
+						List<ICondition> conditions = ruleObject.getConditions();
+						EntityInterface entity = expression.getQueryEntity()
+								.getDynamicExtensionsEntity();
+						Map<EntityInterface, List<ICondition>> entityConditionMap = new HashMap<EntityInterface, List<ICondition>>();
+						entityConditionMap.put(entity, conditions);
+						expressionMap.put(expression.getExpressionId(), entityConditionMap);
+					}
 				}
 			}
 
