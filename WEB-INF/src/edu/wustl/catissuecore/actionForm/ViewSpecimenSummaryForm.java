@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
+import edu.wustl.catissuecore.bean.SpecimenDetailsInfo;
 
 
 /**
@@ -20,7 +21,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimenVO;
  * @author abhijit_naik
  *
  */
-public class ViewSpecimenSummaryForm extends ActionForm {
+public class ViewSpecimenSummaryForm extends ActionForm implements SpecimenDetailsInfo {
 	
 	/**
 	 * Unique Serial verson uid.
@@ -113,6 +114,9 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	public void setRequestType(String requestType) {
 		this.requestType = requestType;
 	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.SpecimenDetailsInfo#getSelectedSpecimenId()
+	 */
 	public String getSelectedSpecimenId() {
 		return selectedSpecimenId;
 	}
@@ -120,6 +124,9 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 		this.selectedSpecimenId = selectedSpecimenId;
 	}
 	
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.SpecimenDetailsInfo#getSpecimenList()
+	 */
 	public List<GenericSpecimen> getSpecimenList() {
 		return specimenList;
 	}
@@ -130,6 +137,9 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.SpecimenDetailsInfo#getAliquotList()
+	 */
 	public List<GenericSpecimen> getAliquotList() {
 		return aliquotList;
 	}
@@ -138,6 +148,9 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 			this.aliquotList = aliquoteList;
 		}
 	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.SpecimenDetailsInfo#getDerivedList()
+	 */
 	public List<GenericSpecimen> getDerivedList() {
 		return derivedList;
 	}
@@ -233,18 +246,27 @@ public class ViewSpecimenSummaryForm extends ActionForm {
 	public static void setCollectionProtocolStatus(String collectionProtocolStatus) {
 		ViewSpecimenSummaryForm.collectionProtocolStatus = collectionProtocolStatus;
 	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.SpecimenDetailsInfo#getShowCheckBoxes()
+	 */
 	public boolean getShowCheckBoxes() {
 		return showCheckBoxes;
 	}
 	public void setShowCheckBoxes(boolean showCheckBoxes) {
 		this.showCheckBoxes = showCheckBoxes;
 	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.SpecimenDetailsInfo#getShowbarCode()
+	 */
 	public boolean getShowbarCode() {
 		return showbarCode;
 	}
 	public void setShowbarCode(boolean showbarCode) {
 		this.showbarCode = showbarCode;
 	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.SpecimenDetailsInfo#getShowLabel()
+	 */
 	public boolean getShowLabel() {
 		return showLabel;
 	}
