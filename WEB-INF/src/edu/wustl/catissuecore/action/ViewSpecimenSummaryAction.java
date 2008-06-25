@@ -148,7 +148,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			}
 			String pageOf = request.getParameter(Constants.PAGEOF);
 			//Mandar: 16May2008 : For specimenDetails customtag --- start ---
-			if(target.equalsIgnoreCase("anticipatory") || target.equalsIgnoreCase("pageOfMultipleSpWithMenu"))
+			if("anticipatory".equalsIgnoreCase(target) || "pageOfMultipleSpWithMenu".equalsIgnoreCase(target))
 			{
 				SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, summaryForm);
 			}
