@@ -33,6 +33,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
+import edu.wustl.catissuecore.bean.AliquotBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -43,6 +44,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -50,6 +52,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.tag.ScriptGenerator;
 
 /**
  * AliquotAction initializes all the fields of the page, Aliquots.jsp.
@@ -88,7 +91,6 @@ public class AliquotAction extends SecureAction
          {
              ((AliquotForm)form).setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
          }      
-        
 		return invokeMethod(methodName, mapping, form, request, response);
 
 	}
@@ -131,7 +133,7 @@ public class AliquotAction extends SecureAction
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute(Constants.PAGEOF, pageOf);
 		setParentSpecimenInRequest(request);
-
+		setPageData(request, pageOf,aliquotForm);
 		return mapping.findForward(pageOf);
 	}
 
@@ -391,6 +393,7 @@ public class AliquotAction extends SecureAction
 				request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 				request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_CREATE_ALIQUOT);
+				setPageData(request, pageOf,aliquotForm);
 				return mapping.findForward(Constants.PAGEOF_CREATE_ALIQUOT);
 
 			}
@@ -459,9 +462,11 @@ public class AliquotAction extends SecureAction
 					request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 					request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_CREATE_ALIQUOT);
+					setPageData(request, pageOf,aliquotForm);
 					return mapping.findForward(Constants.PAGEOF_CREATE_ALIQUOT);
 				}
 				aliquotForm.setButtonClicked("none");
+				setPageData(request, pageOf,aliquotForm);
 				return mapping.findForward(Constants.COMMON_ADD_EDIT);
 			}
 
@@ -495,6 +500,7 @@ public class AliquotAction extends SecureAction
 			}
 
 			setParentSpecimenInRequest(request);
+			setPageData(request, pageOf,aliquotForm);
 			return mapping.findForward(pageOf);
 
 		}
@@ -573,7 +579,7 @@ public class AliquotAction extends SecureAction
 		 List specimenIdList = bizLogic.getList(Specimen.class.getName(), displayNameField, Constants.SYSTEM_IDENTIFIER, true);
 		 request.setAttribute(Constants.SPECIMEN_ID_LIST,specimenIdList); */
 		setParentSpecimenInRequest(request);
-
+		setPageData(request, pageOf,aliquotForm);
 		return mapping.findForward(pageOf);
 	}
 
@@ -1110,6 +1116,7 @@ public class AliquotAction extends SecureAction
 	/**
 	 * @param request object of HttpServletRequest
 	 */
+	/*
 	private void setParentSpecimenInRequest(HttpServletRequest request)
 	{
 		Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
@@ -1134,4 +1141,173 @@ public class AliquotAction extends SecureAction
 			}
 		}
 	}
+	*/
+	//--- Mandar : 23June08 : For JSP Refactoring ------------------
+	/**
+	 * @param request object of HttpServletRequest
+	 */
+	private void setParentSpecimenInRequest(HttpServletRequest request)
+	{
+		Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
+		Object parentSPId = "-1";
+		if (forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
+		{   
+			if(forwardToHashMap.get("parentSpecimenId") instanceof Long)
+			{
+				parentSPId = forwardToHashMap.get("parentSpecimenId").toString();
+			}
+			else
+			{
+				parentSPId =  forwardToHashMap.get("parentSpecimenId");
+			}
+		}
+		else
+		{
+			if (request.getParameter(Constants.PARENT_SPECIMEN_ID) != null)
+			{
+				parentSPId = request.getParameter(Constants.PARENT_SPECIMEN_ID);
+			}
+		}
+		request.setAttribute(Constants.PARENT_SPECIMEN_ID,parentSPId);
+		request.setAttribute("parentSPId",parentSPId);
+	}
+	
+	private void setPageData(HttpServletRequest request, String pageOf, AliquotForm form)
+	{
+		request.setAttribute("pageOf", pageOf);
+		String buttonKey = "";
+		// To set
+		String CPQuery= (String)request.getAttribute(Constants.CP_QUERY);
+		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
+		if(exceedsMaxLimit == null)
+		{	exceedsMaxLimit = "";	}
+		request.setAttribute("exceedsMaxLimit",exceedsMaxLimit);
+		if(Constants.PAGEOF_ALIQUOT.equals(pageOf))
+		{	buttonKey = "buttons.submit";	}
+		else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
+		{	buttonKey = "buttons.resubmit";	}
+		request.setAttribute("buttonKey", buttonKey);
+		 
+		String nodeId="Specimen_";
+		String psid = (String) request.getAttribute("parentSPId");
+		if(psid!= null)
+		{	nodeId = nodeId+psid;	}
+		String refreshTree = "refreshTree('"+Constants.CP_AND_PARTICIPANT_VIEW+"','"+Constants.CP_TREE_VIEW+"','"+Constants.CP_SEARCH_CP_ID+"','"+Constants.CP_SEARCH_PARTICIPANT_ID+"','"+nodeId+"');";
+		request.setAttribute("refreshTree", refreshTree);
+
+		request.setAttribute("CREATE_ALIQUOT_ACTION", Constants.CREATE_ALIQUOT_ACTION);
+		request.setAttribute("PAGEOF_CREATE_ALIQUOT",Constants.PAGEOF_CREATE_ALIQUOT);
+		request.setAttribute("CP_QUERY_CREATE_ALIQUOT_ACTION",Constants.CP_QUERY_CREATE_ALIQUOT_ACTION);
+		request.setAttribute("ALIQUOT_ACTION",Constants.ALIQUOT_ACTION);
+		request.setAttribute("PAGEOF_ALIQUOT",Constants.PAGEOF_ALIQUOT);
+		
+		String action1 = "";
+		String action2 = "";
+		String action3 = "";
+		if(CPQuery !=null)
+		{
+			action1 =  Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			"&operation=add&menuSelected=15&buttonClicked=submit&" +Constants.PARENT_SPECIMEN_ID+"="+psid+"&"+Constants.CP_QUERY+"="+CPQuery;
+			
+			action2 = Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			"&operation=add&menuSelected=15&buttonClicked=create&"+Constants.PARENT_SPECIMEN_ID+"="+psid+"&"+Constants.CP_QUERY+"="+CPQuery;
+
+			action3 = Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf=" + Constants.PAGEOF_CREATE_ALIQUOT + 
+			"&operation=add&menuSelected=15&buttonClicked=checkbox&"+Constants.PARENT_SPECIMEN_ID+"="+psid+"&"+Constants.CP_QUERY+"="+CPQuery;
+		}
+		request.setAttribute("action1",action1);
+		request.setAttribute("action2",action2);
+		request.setAttribute("action3",action3);
+
+		String unit = "";
+		if(form != null)
+		{
+			unit = Utility.getUnit(form.getSpecimenClass(),form.getType());
+		}
+		//request.setAttribute("operation",Utility.toString(Constants.OPERATION));
+		request.setAttribute("unit",unit);
+		request.setAttribute("ADD",Constants.ADD);
+		
+		if(Variables.isSpecimenLabelGeneratorAvl)
+		{request.setAttribute("isSpecimenLabelGeneratorAvl","true");}
+		else
+		{request.setAttribute("isSpecimenLabelGeneratorAvl","false");}
+	
+		if(Variables.isSpecimenBarcodeGeneratorAvl)
+		{request.setAttribute("isSpecimenBarcodeGeneratorAvl","true");}
+		else
+		{request.setAttribute("isSpecimenBarcodeGeneratorAvl","false");}
+		
+		int colspanValue1 = 0;
+		
+        if((!Variables.isSpecimenLabelGeneratorAvl && Variables.isSpecimenBarcodeGeneratorAvl ) || (Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl) )
+		{   colspanValue1 =1;} 
+		else if(!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl )	
+		{   colspanValue1 =2;}
+        request.setAttribute("colspanValue1",colspanValue1);
+        
+        request.setAttribute("JSForOutermostDataTable",ScriptGenerator.getJSForOutermostDataTable());
+        
+        setAliquotData(request, form);
+        setAliquotBeans(request, form, psid, CPQuery);
+	}
+	
+	private void setAliquotData(HttpServletRequest request, AliquotForm form)
+	{
+		Map dataMap = new HashMap();
+		if(request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP) !=null)
+		{	dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);}
+		request.setAttribute("dataMap",dataMap);
+		
+		String[] labelNames = Constants.STORAGE_CONTAINER_LABEL;
+		request.setAttribute("labelNames",labelNames);
+		
+		String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
+		request.setAttribute("tdStyleClassArray",tdStyleClassArray);
+	}
+	
+	private void setAliquotBeans(HttpServletRequest request, AliquotForm form, String psid, String cpQuery)
+	{
+		Map aliquotMap = new HashMap();
+		Map dataMap = (Map)request.getAttribute("dataMap");
+		int counter=0;
+		if(form != null && form.getNoOfAliquots().trim().length() > 0)
+		{
+			counter = Integer.parseInt(form.getNoOfAliquots());
+			aliquotMap = form.getAliquotMap();
+		}
+		List aliquotBeanList = new ArrayList();
+		String sClass = (form.getSpecimenClass() == null ? "" : form.getSpecimenClass()) ;
+		String scp = (form.getSpCollectionGroupId() == 0 ? "" : ""+form.getSpCollectionGroupId());
+		
+		for(int i=1;i<=counter;i++)
+		{
+			AliquotBean aliquotBean = new AliquotBean(i,aliquotMap, dataMap);
+			aliquotBean.setAllData(psid, scp,sClass, cpQuery );
+			aliquotBeanList.add(aliquotBean);
+		}
+		request.setAttribute("aliquotBeanList", aliquotBeanList);
+	}
+	
+  public void setDateComponentData(HttpServletRequest request, String createdDate)
+	{
+//		String createdDate = Utility.toString(form.getCreatedDate());
+		String nameOfForm ="aliquotForm";
+		String dateFormName = "createdDate";
+		if(createdDate.trim().length() > 0)
+		{
+				Integer specimenYear = new Integer(Utility.getYear(createdDate ));
+				Integer specimenMonth = new Integer(Utility.getMonth(createdDate ));
+				Integer specimenDay = new Integer(Utility.getDay(createdDate ));
+
+				request.setAttribute("specimenYear",specimenYear);
+				request.setAttribute("specimenMonth",specimenMonth);
+				request.setAttribute("specimenDay",specimenDay);
+
+		}
+		request.setAttribute("createdDate",createdDate);
+		request.setAttribute("nameOfForm",nameOfForm);
+		request.setAttribute("dateFormName",dateFormName);
+	}
+
 }

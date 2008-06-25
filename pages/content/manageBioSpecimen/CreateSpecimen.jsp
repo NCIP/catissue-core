@@ -13,8 +13,24 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+
+<%@ page language="java" isELIgnored="false" %>
 <head>
+<% 
+		int exIdRows=1;
+		Map map = null;
+//		 For Gridpage
+		List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+		List columnList = (List) request.getAttribute("columnList");
+		Integer identifierFieldIndex = new Integer(4);
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+//		 For DateTimeComponent
+		CreateSpecimenForm form = (CreateSpecimenForm)request.getAttribute("createSpecimenForm");
+%>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/createSpecimen.js"></script>
+<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script language="JavaScript" >
 		//Set last refresh time
 		if(window.parent!=null)
@@ -24,125 +40,6 @@
 				window.parent.lastRefreshTime = new Date().getTime();
 			}
 		}	
-</script>
-<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
-
-<% 
-
-        String[] columnList1 = Constants.DERIVED_SPECIMEN_COLUMNS;
-		List columnList = new ArrayList();
-		for(int i=0;i<columnList1.length;i++)
-		{
-			columnList.add(columnList1[i]);
-		}
-
-		String operation = (String)request.getAttribute(Constants.OPERATION);
-		Integer identifierFieldIndex = new Integer(4);
-		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
-		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
-		boolean readOnlyValue=false,readOnlyForAll=false;
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-		String printAction="printDeriveSpecimen";
-		if(operation!=null && operation.equals(Constants.EDIT))
-		{
-			editViewButton="buttons."+Constants.VIEW;
-			formName = Constants.CREATE_SPECIMEN_EDIT_ACTION;
-			readOnlyValue=true;
-		}
-		else
-		{
-			formName = Constants.CREATE_SPECIMEN_ADD_ACTION;
-			if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
-			{
-				formName = Constants.CP_QUERY_CREATE_SPECIMEN_ADD_ACTION ;
-				printAction="CPQueryPrintDeriveSpecimen";
-			}
-			readOnlyValue=false;
-		}
-
-		if (operation!=null && operation.equals(Constants.VIEW))
-		{
-			readOnlyForAll=true;
-		}
-
-
-
-		Object obj = request.getAttribute("createSpecimenForm");
-		int exIdRows=1;
-		
-		CreateSpecimenForm form = null;
-		String unitSpecimen = "";
-		Map map = null;
-		String frdTo = "";
-		if(obj != null && obj instanceof CreateSpecimenForm)
-		{
-			form = (CreateSpecimenForm)obj;
-			map = form.getExternalIdentifier();
-			exIdRows = form.getExIdCounter();
-			frdTo = form.getForwardTo();
-
-			if(form.getUnit() != null)
-				unitSpecimen = form.getUnit();
-			
-			if(frdTo.equals("") || frdTo==null)
-			{
-				frdTo= "eventParameters";
-			}	
-			
-		}
-	
-	String multipleSpecimen = "0";
-	String action = Constants.CREATE_SPECIMEN_ADD_ACTION;
-	if(request.getAttribute("multipleSpecimen")!=null) 
-	{
-	   multipleSpecimen = "1";
-	   action = "DerivedMultipleSpecimenAdd.do?retainForm=true";
-	}
-	
-	String onCheckboxChange = "setVirtuallyLocated(this,"+multipleSpecimen+")" ;
-	//String onClassChangeFunctionName = "onTypeChange(this);" + onChangeFunctionName;
-	
-	
-%>
-
-
-
-
-	<script language="JavaScript">
-	
-		function onRadioButtonClick(element)
-		{
-     		if(element.value == 1)
-			{
-				document.forms[0].parentSpecimenLabel.disabled = false;
-				document.forms[0].parentSpecimenBarcode.disabled = true;
-			}
-			else
-			{
-				document.forms[0].parentSpecimenBarcode.disabled = false;
-				document.forms[0].parentSpecimenLabel.disabled = true;
-			}
-		}		 
-		function resetVirtualLocated()
-		{
-		    try
-			{
-			var radioArray = document.getElementsByName("stContSelection");	
-			radioArray[0].checked= true;
-			document.forms[0].selectedContainerName.disabled = true;
-			document.forms[0].pos1.disabled = true;
-			document.forms[0].pos2.disabled = true;
-			document.forms[0].containerMap.disabled = true;
-
-			document.forms[0].customListBox_1_0.disabled = true;
-			document.forms[0].customListBox_1_1.disabled = true;
-			document.forms[0].customListBox_1_2.disabled = true;
-			}
-			catch(e)
-			{
-			}
-		}
-		
 		function isLabelBarcodeOrClassChange()
 		{
 			var parentLabelElement = document.getElementById("parentSpecimenLabel");
@@ -151,33 +48,17 @@
 			
 			if((parentLabelElement.value != "-1" || parentBarcodeElement.value != "-1") && classNameElement.value != "-1")
 			{
-		
-				<% String actionToCall2 = null;
-					actionToCall2 = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=false";
-					if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY)){
-					actionToCall2 = Constants.CP_QUERY_CREATE_SPECIMEN_ACTION+"?pageOf="+Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY+"&operation=add&virtualLocated=false";
-				}%>
-				var action = "<%=actionToCall2%>";
+				var action = "${requestScope.actionToCall2}";
 				document.forms[0].action = action + "&isLabelBarcodeOrClassChange=true";
 				document.forms[0].submit();
 			}	
 		}
-		
-		function classChangeForMultipleSpecimen()
-		{
-		
-		 	var action ='NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&specimenAttributeKey=' + document.getElementById("specimenAttributeKey").value + '&derivedSpecimenCollectionGroup=' + document.getElementById("derivedSpecimenCollectionGroup").value + '&retainForm=true';
-			document.forms[0].action = action;
-			document.forms[0].submit();
-		}
-			
 	  	function onClassOrLabelOrBarcodeChange(multipleSpecimen,element)
 		{
 			if(multipleSpecimen == "1")
 				{
 				   classChangeForMultipleSpecimen();
 				}
-	
 		    var radioArray = document.getElementsByName("checkedButton");
 		 	var flag = "0";
  			if (radioArray[0].checked) 
@@ -197,12 +78,7 @@
  	    	var classNameElement = document.getElementById("className");
 			if(flag=="1" && classNameElement.value != "-1")
 			{
-				<% String actionToCall1 = null;
-					actionToCall1 = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=false";
-					if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY)){
-					actionToCall1 = Constants.CP_QUERY_CREATE_SPECIMEN_ACTION+"?operation=add";
-				}%>
-				document.forms[0].action = "<%=actionToCall1%>";
+				document.forms[0].action = "${requestScope.actionToCall1}";
 				document.forms[0].submit();
 			}	
 			else
@@ -212,176 +88,63 @@
 			}
 		}
 		
-		function setVirtuallyLocated(element,multipleSpecimen)
-		{
-			var containerName = document.getElementById("customListBox_1_0");
-			var pos1 = document.getElementById("customListBox_1_1");
-			var pos2 = document.getElementById("customListBox_1_2");
-			if(element.checked)
-			{
-				containerName.disabled = true;
-				pos1.disabled = true;
-				pos2.disabled = true;
-				document.forms[0].mapButton.disabled = true;
-			}
-			else
-			{
-				onClassOrLabelOrBarcodeChange(multipleSpecimen,element);
-//				containerName.disabled = false;
-//				pos1.disabled = false;;
-//				pos2.disabled = false;;
-//				document.forms[0].mapButton.disabled = false;
-				
-			}
-		} 
-		
-		function onAddNewButtonClicked()
-		{
-		    var action = "NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&rowSelected=-1&addNew=true&operation=add";
-			document.forms[0].action = action;
-			document.forms[0].submit();
-		}
-		
-		function closeWindow()
-		{
-		  window.close();
-		}
 		function deleteExternalIdentifiers()
 		{
-			<% if(multipleSpecimen.equals("1")){%>
-				deleteChecked('addExternalIdentifier','NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&status=true&retainForm=true',document.forms[0].exIdCounter,'chk_ex_',false);
-			<%}else {			
-				if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY)){%>
-					deleteChecked('addExternalIdentifier','CPQueryCreateSpecimen.do?pageOf=pageOfCreateSpecimenCPQuery&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
-				<%} else {%>
-					deleteChecked('addExternalIdentifier','CreateSpecimen.do?pageOf=pageOfCreateSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
-				<%}%>
-			<%}%>
-		}
-		
-		function onCheckboxButtonClick(chkBox)
-		{
-			if(chkBox.checked)
-			{				
-				document.forms[0].moreButton.disabled=true;
-				document.forms[0].noOfAliquots.disabled=false;
-				document.forms[0].quantityPerAliquot.disabled=false;
-				
-			}
-			else
-			{				
-				document.forms[0].moreButton.disabled=false;
-				document.forms[0].noOfAliquots.disabled=true;
-				document.forms[0].quantityPerAliquot.disabled=true;
-			}
+			${requestScope.deleteChecked}
 		}
 		function onNormalSubmit()
 		{
-			<% String actionToCall = null;
-				actionToCall = "AddSpecimen.do?isQuickEvent=true";
-				if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY)){
-				actionToCall = Constants.CP_QUERY_CREATE_SPECIMEN_ADD_ACTION+"?isQuickEvent=true";
-			}%>
 			var checked = document.forms[0].aliCheckedButton.checked;
 			if(checked)
 			{
-				setSubmitted('ForwardTo','<%=printAction%>','pageOfCreateAliquot');
-				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
-			
+				setSubmitted('ForwardTo','${requestScope.printAction}','pageOfCreateAliquot');
+				confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
 			}
 			else
 			{	
-				var temp = "<%=frdTo%>";				
+				var temp = "${requestScope.frdTo}";				
 				if(temp == "orderDetails")
 				{
-					setSubmitted('ForwardTo','<%=printAction%>','orderDetails');
+					setSubmitted('ForwardTo','${requestScope.printAction}','orderDetails');
 			     }
 			     else
 			    {
-				   setSubmitted('ForwardTo','<%=printAction%>','newSpecimenEdit');
+				   setSubmitted('ForwardTo','${requestScope.printAction}','newSpecimenEdit');
 			     }  
-				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
-			
+				confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
 			}
 		}
-		function setSubmitted(forwardTo,printaction,nextforwardTo)
-		{
-				
-			var printFlag = document.getElementById("printCheckbox");
-			
-			if(printFlag.checked)
-			{
-		
-			  setSubmittedForPrint(forwardTo,printaction,nextforwardTo);
-			}
-			else
-			{
-			  setSubmittedFor(forwardTo,nextforwardTo);
-			}
-		
-		}
-		
 	</script>
-	
-		<%if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
-		{
-			if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
-			{
-				Long parentSpecimenId = (Long) request.getAttribute(Constants.PARENT_SPECIMEN_ID);
-				String nodeId = "Specimen_"+parentSpecimenId.toString();	
-		%>
+	<logic:equal name="showRefreshTree" value="true">
 		<script language="javascript">
-			refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');					
+			${requestScope.refreshTree}
 		</script>
-		
-	<%}}%>
+	</logic:equal>
 </head>
-
-
-<%
-List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-%>
-
-
-
 	<html:errors />
 	<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-		<%=messageKey%>
+		${requestScope.messageKey}
 	</html:messages>
-   <html:form action="<%=action%>">   
- 
-                      <input type="hidden" id="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
-				       name="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
-				       value="<%=request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY)%>" />
+   <html:form action="${requestScope.action}">
+                      <input type="hidden" id="specimenAttributeKey"
+				       name="specimenAttributeKey"
+				       value="${requestScope.specimenAttributeKey}" />
 
 						<input type="hidden" id="derivedSpecimenCollectionGroup"
 				       name="derivedSpecimenCollectionGroup"
-				       value="<%=request.getParameter("derivedSpecimenCollectionGroup")%>" />
+				       value="${requestScope.derivedSpecimenCollectionGroup}" />
 					   
 					   	<input type="hidden" id="rowSelected"
 				       name="rowSelected"
-				       value="<%=request.getParameter("rowSelected")%>" />
-   
+				       value="${requestScope.rowSelected}" />
    <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="580">
 <tr>
-	<td>		
-		&nbsp;
-	</td>
+	<td>&nbsp;</td>
 </tr>
-
-                     
-
 <tr>
  <td>
     <table summary="" cellpadding="3" cellspacing="0" border="0" width="580" >
-
-<%
-	if(dataList!=null && dataList.size() != 0)
-	{
-	   
-		String title = "Derived Specimens For This Parent Specimen";
-
-%>
+    <logic:notEmpty name="dataList">
          <tr>
 		 <td width="100%" align="right">
 		 	    <html:button property="addNewDerived" styleClass="actionButton" onclick="onAddNewButtonClicked();">
@@ -391,22 +154,15 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 		 </tr>
    	 	<tr>
 			<td class="formTitle" height="20" >
-			
-				<%=title%>
+				Derived Specimens For This Parent Specimen
 			</td>
 		</tr>
-		
    	 	<tr>
 			<td>
 				<script>
 				    var specimenAttributeKey = document.getElementById("specimenAttributeKey");
 					if(specimenAttributeKey!=null)
 					{
-					/**
-					* Patch ID: Entered_Events_Need_To_Be_Visible_19
-					* See also: 1-5
-					* Description: Since the signature of the method is changed empty string is passed to finction setButtonCaption
-					*/
 			          parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey.value,"");
 					}
 					function derivedSpecimenGrid(id)
@@ -415,22 +171,13 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						var rowSelected = cl.getValue();
 						var c2 = mygrid.cells(id,0);
 						var eventId = c2.getValue();
-
-					//	alert("eventId : "+eventId + " , pageOf: "+pageOf);
 						var url = "NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&rowSelected=" + rowSelected +"&specimenAttributeKey="+document.getElementById("specimenAttributeKey").value;
-//						var url = "SearchObject.do?pageOf="+pageOf+"&operation=search&id="+eventId;
 						document.forms[0].action = url;
 				        document.forms[0].submit();
 					} 				
-
-					/* 
-						to be used when you want to specify another javascript function for row selection.
-						useDefaultRowClickHandler =1 | any value other than 1 indicates you want to use another row click handler.
-						useFunction = "";  Function to be used. 	
-					*/
 					var useDefaultRowClickHandler =2;
 					var useFunction = "derivedSpecimenGrid";	
-					var gridFor="<%=Constants.GRID_FOR_DERIVED_SPECIMEN%>";
+					var gridFor="derivedSpecimen";
 				</script>
 				<%@ include file="/pages/content/search/GridPage.jsp" %>
 			</td>
@@ -445,44 +192,24 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				</html:button>
 		 </td>
         </tr>
-	
 	</table>
-<% } 
-%>
-		
-	
-	                 
-	
-	<%
-	
-	if(request.getAttribute("showDerivedPage")==null)
-	{
-	%>
-
+	</logic:notEmpty>		<%-- datalist not empty. to check if this block is required any more --%>
+	<logic:empty name="showDerivedPage">
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="580">
-		   
-		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+		   <logic:equal name="pageOf" value="query">
 		   	<tr>
     		    <td>
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0">
 		   			<tr>
 				  	<td align="right" colspan="3">
-					<%
-						String changeAction = "setFormAction('MakeParticipantEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
-				 	%>
 					<!-- action buttons begins -->
 					<table cellpadding="4" cellspacing="0" border="0">
 						<tr>
 						   	<td>
-						   		<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
-						   			<bean:message key="<%=editViewButton%>"/>
+						   		<html:submit styleClass="actionButton" onclick="${requestScope.changeAction1}">
+						   			<bean:message key="${requestScope.editViewButton}"/>
 						   		</html:submit>
 						   	</td>
-							<%-- td>
-								<html:reset styleClass="actionButton">
-									<bean:message key="buttons.export"/>
-								</html:reset>
-							</td --%>
 						</tr>
 					</table>
 					<!-- action buttons end -->
@@ -492,17 +219,16 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 			   </td>
 			</tr>
 			</logic:equal>
-			
 			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
 	    	  <tr>
 			    <td>
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="580">
 				 <tr>
 					<td>
-						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
+						<html:hidden property="${requestScope.oper}" value="${requestScope.operation}"/>
 						<html:hidden property="submittedFor" value="ForwardTo"/>
-						<html:hidden property="forwardTo" value="<%=frdTo%>"/>
-						<html:hidden property="multipleSpecimen" value="<%=multipleSpecimen%>"/>
+						<html:hidden property="forwardTo" value="${requestScope.frdTo}"/>
+						<html:hidden property="multipleSpecimen" value="${requestScope.multipleSpecimen}"/>
 						<html:hidden property="containerId" styleId="containerId"/>
 						<html:hidden property="nextForwardTo" />
 						<td></td>
@@ -513,29 +239,20 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						<html:hidden property="positionInStorageContainer" />
 					</td>
 				  </tr>
-				 
-				<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+				<logic:equal name="pageOf" value="${requestScope.query}">
 				 <tr>
 					<td>
 						<html:hidden property="sysmtemIdentifier"/>
 					</td>
 				 </tr>
 				</logic:equal>
-
-				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.SEARCH%>">
-					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
-				 		
-				 	</logic:notEqual>
+				<logic:notEqual name="oper" value="${requestScope.search}">
 				 <tr>
 				     <td class="formTitle" height="20" colspan="6">
-				     <%String title = "createSpecimen.derived.title";%>
-				     	<bean:message key="<%=title%>"/>
+				     	<bean:message key="createSpecimen.derived.title"/>
 				     </td>
 				 </tr>
-				 
-				<%				if(!multipleSpecimen.equals("1"))
-					{
-        			 %>	
+				 <logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 1 -->
 				 <tr>
 			     	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
 				    <td class="formFieldNoBordersSimple" width="175">
@@ -547,18 +264,14 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						</label>
 					</td>
 					<td class="formFieldNoBordersSimple" colspan="2">
-						
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
 				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" />
 			        </logic:equal>
-			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
 			 	     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="true" />
 			        </logic:equal>
-					
 		        	</td>
-				 </tr>
-				 
+				 </tr>				 
 				 <tr>
 			     	<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
 				    <td class="formFieldNoBordersSimple" width="175">
@@ -570,7 +283,6 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						</label>
 					</td>
 					<td class="formFieldNoBordersSimple" colspan="2">
-					
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
 				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="true" />
 			        </logic:equal>
@@ -578,19 +290,14 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
 				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" />
 			        </logic:equal>
-										
 		        	</td>
 				 </tr>
-				<%}%> 
-				<!-- by Falguni -Hide label in case of auto generated label -->
-				<% if(!Variables.isSpecimenLabelGeneratorAvl)
-					{
-				%>
-				
+				</logic:notEqual>	<%-- if(!multipleSpecimen.equals("1")) case 1 --%>
+				<logic:equal name="isSpecimenLabelGeneratorAvl" value="false">
 				<tr>
 			     	<td class="formFieldNoBordersSimple" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*<b></logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				     	<logic:notEqual name="oper" value="${requestScope.view}"><b>*<b></logic:notEqual>
+				     	<logic:equal name="oper" value="${requestScope.view}">&nbsp;</logic:equal>
 				    </td>
 				    <td class="formFieldNoBordersSimple">
 						<label for="label">
@@ -598,12 +305,10 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						</label>
 					</td>
 				    <td class="formFieldNoBordersSimple" colspan="4">
-				     	<html:text styleClass="formFieldSized15" size="30" maxlength="50"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" maxlength="50"  styleId="label" property="label" readonly="${requestScope.readOnlyForAll}"/>
 				    </td>
 				 </tr>
-				 <%
-				 	}
-				 %>
+ 				</logic:equal>	<%-- if(!Variables.isSpecimenLabelGeneratorAvl) --%>
 				 <tr>
 				 	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
 				    <td class="formFieldNoBordersSimple">
@@ -612,17 +317,14 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				     	</label>
 				    </td>
 				    <td class="formFieldNoBordersSimple" colspan="2">
-					
 					 <autocomplete:AutoCompleteTag property="className"
-										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
-										  initialValue="<%=form.getClassName()%>"
+										  optionsList = "${requestScope.specClassList}"
+										  initialValue="${createSpecimenForm.className}"
 										  onChange="onTypeChange(this);resetVirtualLocated()"
-										  readOnly="<%=readOnlyForAll + ""%>"
+										  readOnly="${requestScope.readOnlyForAll}"
 									    />
-
 		        	</td>
 				 </tr>
-				 
 				 <tr>
 				    <td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
 				    <td class="formFieldNoBordersSimple">
@@ -631,43 +333,16 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				     	</label>
 				    </td>
 				    <td class="formFieldNoBordersSimple" colspan="2">
-				    <!-- --------------------------------------- -->
-				    <%
-								String classValue = (String)form.getClassName();
-								specimenTypeList = (List)specimenTypeMap.get(classValue);
-								
-								boolean subListEnabled = false;
-								
-								if(specimenTypeList == null)
-								{
-									specimenTypeList = new ArrayList();
-									specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-								}
-								pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-								String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')";
-					%>
-				    <!-- --------------------------------------- -->
-					
 					  <autocomplete:AutoCompleteTag property="type"
-										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
-										  initialValue="<%=form.getType()%>"
-										  onChange="<%=subTypeFunctionName%>"
-										  readOnly="<%=subListEnabled + ""%>"
-										  dependsOn="<%=form.getClassName()%>"
+										  optionsList = "${requestScope.specimenTypeMap}"
+										  initialValue="${createSpecimenForm.type}"
+										  onChange="onSubTypeChangeUnit('className',this,'unitSpan')"
+										  readOnly="false"
+										  dependsOn="${createSpecimenForm.className}"
 					        />
-					
-					
 		        	</td>
 				 </tr>
-				 
 				 <tr>
-				 
- 						   <!-- 
-							 * Patch ID: 3835_1_24
-							 * See also: 1_1 to 1_5
-							 * Description : Added <TR> for createdOn date field.				 
-							-->	 
-
 					<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
 					<td class="formFieldNoBordersSimple">							
 						<label for="createdDate">
@@ -680,12 +355,9 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						String nameOfForm ="createSpecimenForm";
 						String dateFormName = "createdDate";
 						%>
-
 							<%@ include file="/pages/content/common/CommonDateComponent.jsp" %>
 					</td>
 				</tr>
-				 
-				 
 				 <tr>
 			     	<td class="formFieldNoBordersSimple" width="5">
 				     	&nbsp;
@@ -695,31 +367,23 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 							<bean:message key="specimen.concentration"/>
 						</label>
 					</td>
-				    <%
-						if(unitSpecimen.equals(Constants.UNIT_MG))
-						{
-					%>
+					<logic:equal name="unitSpecimen" value="${requestScope.UNIT_MG}">
 				    		<td class="formFieldNoBordersSimple" colspan="2">
-				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="false"/>
+				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="${requestScope.readOnlyForAll}" disabled="false"/>
 								&nbsp;<bean:message key="specimen.concentrationUnit"/>
 				   			</td>
-				    <%
-						}
-						else
-						{
-					%>
+					</logic:equal>	<!-- if(unitSpecimen.equals(Constants.UNIT_MG)) -->
+					<logic:notEqual name="unitSpecimen" value="${requestScope.UNIT_MG}">
 							<td class="formFieldNoBordersSimple" colspan="2">
-				     			<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="false"/>
+				     			<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="concentration" property="concentration" readonly="${requestScope.readOnlyForAll}" disabled="false"/>
 				     			&nbsp;<bean:message key="specimen.concentrationUnit"/>
 				    		</td>
-					<%
-						}
-					%>
+					</logic:notEqual>
 				 </tr>
 				 <tr>
 			     	<td class="formFieldNoBordersSimple" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>"><b>*</b></logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				     	<logic:notEqual name="${requestScope.oper}" value="${requestScope.view}"><b>*</b></logic:notEqual>
+				     	<logic:equal name="${requestScope.oper}" value="${requestScope.view}">&nbsp;</logic:equal>
 				    </td>
 				    <td class="formFieldNoBordersSimple">
 						<label for="quantity">
@@ -727,17 +391,12 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						</label>
 					</td>
 				    <td class="formFieldNoBordersSimple" colspan="2">
-				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
-				     	<span id="unitSpan"><%=unitSpecimen%></span>
+				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="${requestScope.readOnlyForAll}"/>
+				     	<span id="unitSpan">${requestScope.unitSpecimen}</span>
 				     	<html:hidden property="unit"/>
 				    </td>
 				 </tr>
-				
-				<% // storage location should not be shown in case of multiple specimen
-				   if(!multipleSpecimen.equals("1"))
-				   {
-				%>
-				
+			 	<logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 2 -->
 				<tr>
 				 	<td class="formFieldNoBordersSimple" width="5"><b>*</b></td>
 					<td class="formFieldNoBordersSimple">
@@ -745,80 +404,12 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 					   		<b><bean:message key="specimen.positionInStorageContainer"/></b>
 					   </label>
 					</td>
-					
-					<%-- n-combo-box start --%>
-					<%
-						Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
-							
-						String[] labelNames = {"ID", "Pos1", "Pos2"};
-						labelNames = Constants.STORAGE_CONTAINER_LABEL;
-						String[] attrNames = {"storageContainer", "positionDimensionOne", "positionDimensionTwo"};
-						
-					//String[] initValues = new String[3];
-					//initValues[0] = form.getStorageContainer();
-					//initValues[1] = form.getPositionDimensionOne();
-					//initValues[2] = form.getPositionDimensionTwo();
-						String[] initValues = new String[3];
-							List initValuesList = (List)request.getAttribute("initValues");
-							String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
-							if(initValuesList != null)
-							{
-								initValues = (String[])initValuesList.get(0);
-							}
-					//System.out.println("NewSpecimen :: "+initValues[0]+"<>"+initValues[1]+"<>"+initValues[2]);			
-						String rowNumber = "1";
-						String styClass = "formFieldSized5";
-						String tdStyleClass = "customFormField";
-						String onChange = "onCustomListBoxChange(this)";
-					
-					String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME);
-					if (className==null)
-						className="";
-
-					String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
-					if (collectionProtocolId==null)
-						collectionProtocolId="";
-					
-					String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
-						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
-						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;				
-				  //  String buttonOnClicked  = "window.open('"+url+"','','scrollbars=yes,menubar=no,height=320,width=810,resizable=yes,toolbar=no,location=no,status=no');return false";
-    				String buttonOnClicked = "mapButtonClickedOnNewSpecimen('"+url+"','createSpecimen')";  
-					String noOfEmptyCombos = "3";
-					boolean disabled = false;
-					if(request.getAttribute("disabled") != null && request.getAttribute("disabled").equals("true"))
-					{
-						disabled = true;
-					}	
-					
-					int radioSelected = form.getStContSelection();
-					boolean dropDownDisable = false;
-					boolean textBoxDisable = false;					
-					if(radioSelected == 1)
-					{
-						dropDownDisable = true;
-						textBoxDisable = true;
-					}
-					else if(radioSelected == 2)
-					{									
-						textBoxDisable = true;
-					}
-					else if(radioSelected == 3)
-					{
-						dropDownDisable = true;									
-					}
-
-					%>
-				
-					<%=ScriptGenerator.getJSForOutermostDataTable()%>
-					<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
-					
+					${requestScope.jsForOutermostDataTable}
+					${requestScope.jsEquivalentFor}
 					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-									
 				<td class="formFieldNoBordersSimple" colSpan="4">
-						
 						<table border="0">
-						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+						<logic:equal name="${requestScope.oper}" value="${requestScope.ADD}">
 						<tr>
 							<td ><html:radio value="1" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
 							<td class="formFieldNoBorders">																			
@@ -828,18 +419,18 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						<tr>
 							<td ><html:radio value="2" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
 							<td>
-								<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
-									attributeNames="<%=attrNames%>" 
-									initialValues="<%=initValues%>"  
-									styleClass = "<%=styClass%>" 
-									tdStyleClass = "<%=tdStyleClass%>" 
-									labelNames="<%=labelNames%>" 
-									rowNumber="<%=rowNumber%>" 
-									onChange = "<%=onChange%>"
+								<ncombo:nlevelcombo dataMap="${requestScope.dataMap}" 
+									attributeNames="${requestScope.attrNames}" 
+									initialValues="${requestScope.initValues}"  
+									styleClass = "formFieldSized5" 
+									tdStyleClass = "customFormField" 
+									labelNames="${requestScope.labelNames}" 
+									rowNumber="1" 
+									onChange = "onCustomListBoxChange(this)"
 									formLabelStyle="formLabelBorderless"
-									tdStyleClassArray="<%=tdStyleClassArray%>"
-									disabled = "<%=dropDownDisable%>"
-									noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+									tdStyleClassArray="${requestScope.tdStyleClassArray}"
+									disabled = "${requestScope.dropDownDisable}"
+									noOfEmptyCombos = "3"/>
 									</tr>
 									</table>
 							</td>
@@ -847,47 +438,19 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						<tr>
 							<td ><html:radio value="3" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
 							<td class="formFieldNoBordersSimple">
-								<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
-								<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
-								<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
-								<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+								<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "${requestScope.textBoxDisable}"/>
+								<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "${requestScope.textBoxDisable}"/>
+								<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "${requestScope.textBoxDisable}"/>
+								<html:button styleClass="actionButton" property="containerMap" onclick="${requestScope.buttonOnClicked}" disabled= "${requestScope.textBoxDisable}">
 									<bean:message key="buttons.map"/>
 								</html:button>
 							</td>
 						</tr>
 						</logic:equal>								
-						
-						<!--
-						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">								
-
-						<%
-							if(form.getStContSelection() == 1)
-							{%>Specimen is virtually Located <%}									
-							else
-							{
-							%>
-								<tr>											
-									<td class="formFieldNoBordersSimple">
-										<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "true"/>
-										<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true"/>
-										<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true"/>
-										<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
-											<bean:message key="buttons.map"/>
-										</html:button>
-									</td>
-								</tr>
-							<%
-							}
-							
-						%>
-						</logic:notEqual>	
-						-->
 						</table>					
 				</td>	
-				<%-- n-combo-box end --%>
-				
 				 </tr>
-				 <%}%>
+				 </logic:notEqual>	<%-- if(!multipleSpecimen.equals("1")) case 2 --%>
 					<logic:equal name="exceedsMaxLimit" value="true">
 					<tr>
 						<td>
@@ -895,10 +458,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						</td>
 					</tr>
 					</logic:equal>
-				<!-- by Falguni -Hide label in case of auto generated barcode -->
-				<% if(!Variables.isSpecimenBarcodeGeneratorAvl )
-					{
-				%>
+				<logic:notEqual name="isSpecimenBarcodeGeneratorAvl" value="true">
 				 <tr>
 			     	<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
 				    <td class="formFieldNoBordersSimple">
@@ -907,10 +467,10 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						</label>
 					</td>
 				    <td class="formFieldNoBordersSimple" colspan="2">
-						<html:text styleClass="formFieldSized"  maxlength="50" size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
+						<html:text styleClass="formFieldSized"  maxlength="50" size="30" styleId="barcode" property="barcode" readonly="${requestScope.readOnlyForAll}" />
 		        	</td>
 				 </tr>
-				 <%}%>
+				 </logic:notEqual> <!-- if(!Variables.isSpecimenBarcodeGeneratorAvl ) -->
 				 <tr>
 			     	<td class="formFieldNoBordersSimple" width="5">&nbsp;</td>
 				    <td class="formFieldNoBordersSimple">
@@ -919,51 +479,102 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						</label>
 					</td>
 				    <td class="formFieldNoBordersSimple" colspan="2">
-				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
+				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="${requestScope.readOnlyForAll}"/>
 				    </td>
 				 </tr>
-				  				<%@ include file="ExternalIdentifiers.jsp" %>
+ 				<!-- Mandar : 16June08 External Identifiers start -->
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" id="externalIdentifiersTable">
+		<tr>
+			<td class="formFieldAllBorders" align="right" width="1%">
+				<a id="imageEI" style="text-decoration:none" href="javascript:switchStyle('imageEI','eiDispType','externalIdentifiers','addExId');">  
+				<img src="images/nolines_minus.gif" border="0" width="18" height="18"/>
+				</a>
+				<input type="hidden" name="eiDispType" value="${requestScope.eiDispType1}" id="eiDispType" />
+			</td> 
+			<!-- Patch ends here -->
+		     <td class="formTitle" width="200" height="20" colspan="2">
+		     	<bean:message key="specimen.externalIdentifier"/>
+		     </td>
+		     <td class="formButtonField" width="300" colspan="2">
+		     	<html:button property="addExId" styleClass="actionButton" styleId="addExId" onclick="insExIdRow('addExternalIdentifier')">
+		     		<bean:message key="buttons.addMore"/>
+		     	</html:button>
+		    </td>
+		    <td class="formTitle" align="Right">
+					<html:button property="deleteExId" styleClass="actionButton" onclick='${requestScope.delExtIds}' disabled="true">
+						<bean:message key="buttons.delete"/>
+					</html:button>
+			</td>
+			<!-- Patch ends here -->
+		 </tr>
+		 <tr>
+			 <td colspan="6" width="100%">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="externalIdentifiers">
+			<!-- Patch ends here -->
+		 	<tr>
+			 	<td class="formSerialNumberLabel" width="5">
+			     	#
+			    </td>
+			    <td class="formLeftSubTableTitle" width="350">
+					<bean:message key="externalIdentifier.name"/>
+				</td>
+			    <td class="formRightSubTableTitle" colspan="2" width="350">
+					<bean:message key="externalIdentifier.value"/>
+				</td>
+				<td class="formRightSubTableTitle" width="50">
+					<label for="delete" align="center">
+						<bean:message key="addMore.delete" />
+					</label>
+				</td>
+			 </tr>
+		 	 <tbody id="addExternalIdentifier">
+		 	 <html:hidden property="exIdCounter"/>
+		 	 <logic:iterate id="xi" name="exIdList">
+				<tr>
+				 	<td class="formSerialNumberField" width="5">${xi.xtrnId}.
+					 	<html:hidden property="${xi.exIdentifier}" />
+			 		</td>
+				    <td class="formField" width="365" >
+			     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="${xi.exName}" property="${xi.exName}" />
+			    	</td>
+			    	<td class="formField" colspan="2">
+			     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="${xi.exValue}" property="${xi.exValue}" />
+			    	</td>
+					<td class="formField" width="5">
+						<input type=checkbox name="${xi.check}" id="${xi.check}" ${xi.exCondition} onClick="enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')">		
+					</td>
+				 </tr>
+			  </logic:iterate>
+		 </tbody>
+		 </table>
+	 	</td>
+	 </tr>
+</table>				  				
+  				<!-- Mandar : 16June08 External Identifiers end -->
 				 </table>
-				 
-			 <!-- Bio-hazards End here -->
-			 	<%				if(!multipleSpecimen.equals("1"))
-					{
-      			 %>	
-				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
+				 <logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 3 -->
+				 <logic:notEqual name="pageOf" value="${requestScope.query}">				 			
 				<table cellpadding="4" cellspacing="0">
 					<tr>					
 						<td class="formFieldNoBordersBold" height="20" colspan="5">
-						
-						<%--<html:checkbox property="aliCheckedButton" onclick="onCheckboxButtonClick(this)">
-						&nbsp; <bean:message key="specimen.aliquot.message"/>
-						</html:checkbox>--%>
 						<input type="checkbox" name="aliCheckedButton" onclick="onCheckboxButtonClick(this)" /> &nbsp; <bean:message key="specimen.aliquot.message"/>
 							&nbsp;&nbsp;&nbsp;
 		                <bean:message key="aliquots.noOfAliquots"/>
 	                    &nbsp;
-                        <input type="text" id="noOfAliquots"
-				        name="noOfAliquots" class = "formFieldSized5" disabled="true"
-				         />						
+                        <input type="text" id="noOfAliquots" name="noOfAliquots" class = "formFieldSized5" disabled="true" />
 						&nbsp;&nbsp;&nbsp;
 		                <bean:message key="aliquots.qtyPerAliquot"/>
 	                    &nbsp;
-                        <input type="text" id="quantityPerAliquot"
-				        name="quantityPerAliquot" class = "formFieldSized5" disabled="true"
-				         />
+                        <input type="text" id="quantityPerAliquot" name="quantityPerAliquot" class = "formFieldSized5" disabled="true" />
 	    				</td>
 					</tr>	
-					<!-- 
-						bug no. 4265
-						adding the dispose parent specimen check box
-					 -->
 					<tr>
-						<td colspan="3" class="formLabelNoBackGround" width="40%"><html:checkbox
-							property="disposeParentSpecimen">
+						<td colspan="3" class="formLabelNoBackGround" width="40%">
+							<html:checkbox property="disposeParentSpecimen">
 							<bean:message key="aliquots.disposeParentSpecimen" />
 							</html:checkbox>
 						</td>
 					</tr>
-												
 					<tr>					
 						<td class="formFieldNoBorders" colspan="5"  height="20" >
 							<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
@@ -971,27 +582,14 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 							</html:checkbox>
 						</td>
 					</tr>
-					
 				</table>
 				</logic:notEqual>
-				<%}%>
+				</logic:notEqual><!-- to verify for valid case 3 -->
 								
- 			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
+ 			   	 <logic:notEqual name="${requestScope.oper}" value="${requestScope.view}">		
 				 	<tr>
 				  		<td align="right" colspan="4">
-							<%
-								String changeAction = "setFormAction('"+formName+"')";
-								String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-								String submitAndDistribute = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
-								String addMoreSubmitFunctionName = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
-								String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;		
-
-				 			%>
-							<!-- action buttons begins -->
-				<%				if(!multipleSpecimen.equals("1"))
-					{
-        			 %>			
-							
+				  		<logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 4 -->
 							<table cellpadding="4" cellspacing="0">
 								<tr>
 						   			<td>
@@ -999,69 +597,34 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						   					<bean:message key="buttons.submit"/>
 						   				</html:button>
 						   			</td>
-									
-						
-
 									<td class="formFieldNoBorders" nowrap>
 										<html:button
 											styleClass="actionButton" property="moreButton"
-											title="<%=Constants.SPECIMEN_BUTTON_TIPS[3]%>"
-											value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>"
-											onclick="<%=addMoreSubmit%>"
-			>
-			</html:button>
-		</td>
-					<%
-					}
-					else
-					{
-					%>
-								<table cellpadding="4" cellspacing="0" width="100%">
-								<tr>
-						   			<td align="right">
-						   			<!-- 
-										 * Name: Vijay_PAnde
-										 * Reviewer Name: Sachin_Lale
-										 * Bug ID: 4218
-										 * Patch ID: 4218_1
-										 * See also: -
-										 * Description : Submit on Multiple specimen page was appearing with main application frames.
-									-->	 
-						   				<html:submit styleClass="actionButton" onclick="javaScript:<%=changeAction%>">
-						   					<bean:message key="buttons.submit"/>
-						   				</html:submit>
-						   			</td>
-									<td width="2%">
-						   				&nbsp;
-						   			</td>
-
-              <%
-			  }
-			  %>								
-									<%-- <td colspan="3">
-										<html:reset styleClass="actionButton">
-											<bean:message key="buttons.reset"/>
-										</html:reset>
-									</td> --%> 
-									<%--td>
-										<html:reset styleClass="actionButton">
-											<bean:message key="buttons.moreSpecimen"/>
-										</html:reset>
-									</td--%>
-								</tr>
+											title="${requestScope.SPECIMEN_BUTTON_TIPS}"
+											value="${requestScope.SPECIMEN_FORWARD_TO_LIST}"
+											onclick="${requestScope.addMoreSubmit}" >
+										</html:button>
+									</td>
+				  		</logic:notEqual> <!-- to verify for valid case 4 -->
+				  		<logic:equal name="multipleSpecimen" value="1">
+							<table cellpadding="4" cellspacing="0" width="100%">
+							<tr>
+					   			<td align="right">
+					   				<html:submit styleClass="actionButton" onclick="javaScript:${requestScope.changeAction3}">
+					   					<bean:message key="buttons.submit"/>
+					   				</html:submit>
+					   			</td>
+								<td width="2%">
+					   				&nbsp;
+					   			</td>
+							</tr>
 							</table>
-							<!-- action buttons end -->
+						</logic:equal>	
 				  		</td>
 				 	</tr>
 				 </logic:notEqual>
-				 
 				</logic:notEqual>				
-			 
 			 <!-- NEW SPECIMEN REGISTRATION ends-->
 	</table>
-	<%
-	}
-	%>
-
-	
+	</logic:empty> <%-- if(request.getAttribute("showDerivedPage")==null) --%>
  </html:form>

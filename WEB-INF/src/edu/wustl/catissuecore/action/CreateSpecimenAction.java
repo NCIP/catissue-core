@@ -10,12 +10,11 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +28,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
+import edu.wustl.catissuecore.bean.ExternalIdentifierBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -37,18 +37,18 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.tag.ScriptGenerator;
 
 /**
  * CreateSpecimenAction initializes the fields in the Create Specimen page.
@@ -382,7 +382,7 @@ public class CreateSpecimenAction extends SecureAction
 		{
 			request.setAttribute("disabled", "true");
 		}
-		
+		setPageData(request, createForm);		
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
@@ -424,5 +424,295 @@ public class CreateSpecimenAction extends SecureAction
 			cpId = (Long)cpList.get(0);
 		}
 		return cpId;
+	}
+	
+	//Mandar : 23June08 : For JSP Refractoring --------
+	// Mandar : 16June08 For JSP refactoring
+	
+	private void setPageData(HttpServletRequest request, CreateSpecimenForm form)
+	{
+		
+		setConstantValues(request);
+		
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+		setPageData1(request,  form);
+		setPageData2(request, form, pageOf);
+		setPageData3(request, form, pageOf);
+		
+		setNComboData(request, form);
+		setXterIdData(request, form);
+	}
+	
+	private void setPageData1(HttpServletRequest request, CreateSpecimenForm form)
+	{
+		List columnList = new ArrayList();
+		columnList.addAll(Arrays.asList(Constants.DERIVED_SPECIMEN_COLUMNS));
+		request.setAttribute("columnList",columnList);
+		
+		String operation = (String)request.getAttribute(Constants.OPERATION);
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+		//TODO to check where are these used
+//			String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
+//			Integer identifierFieldIndex = new Integer(4);
+//			String pageView=operation;
+//			boolean readOnlyValue=false;
+		
+		String formName=operation;
+		String editViewButton="buttons."+Constants.EDIT;
+		boolean readOnlyForAll=false;
+		String printAction="printDeriveSpecimen";
+
+		if(operation!=null && operation.equals(Constants.EDIT))
+		{
+			editViewButton="buttons."+Constants.VIEW;
+			formName = Constants.CREATE_SPECIMEN_EDIT_ACTION;
+//			readOnlyValue=true;
+		}
+		else
+		{
+			formName = Constants.CREATE_SPECIMEN_ADD_ACTION;
+			if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_CREATE_SPECIMEN_ADD_ACTION ;
+				printAction="CPQueryPrintDeriveSpecimen";
+			}
+//			readOnlyValue=false;
+		}
+
+		if (operation!=null && operation.equals(Constants.VIEW))
+		{
+			readOnlyForAll=true;
+		}
+
+		//-------------
+		
+		String changeAction3 = "setFormAction('"+formName+"')";
+		String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+		String submitAndDistribute = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
+		String addMoreSubmitFunctionName = "setSubmitted('ForwardTo','"+printAction+"','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
+		String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;	
+
+		request.setAttribute("changeAction3",changeAction3);
+		request.setAttribute("addMoreSubmit",addMoreSubmit);
+		// -----------------
+		
+		request.setAttribute("pageOf",pageOf);
+		request.setAttribute("operation",operation);
+
+		request.setAttribute("formName",formName);
+		request.setAttribute("editViewButton",editViewButton);
+		request.setAttribute("readOnlyForAll",readOnlyForAll);
+		request.setAttribute("printAction",printAction);
+
+		String unitSpecimen = "";
+		String frdTo = "";
+		
+		int exIdRows=1;		 
+		Map map = null;		
+		if(form != null)
+		{
+			map = form.getExternalIdentifier();
+			exIdRows = form.getExIdCounter();
+			frdTo = form.getForwardTo();
+			if(form.getUnit() != null)
+			{	unitSpecimen = form.getUnit();	}
+			if(frdTo.equals("") || frdTo==null)
+			{	frdTo= "eventParameters";	}	
+		}
+		List exIdList = new ArrayList();
+		for(int i=exIdRows;i>=1;i--)
+	  	{
+			ExternalIdentifierBean exd = new ExternalIdentifierBean(i,map);
+			exIdList.add(exd);
+	  	}	
+		request.setAttribute("exIdList",exIdList);
+		
+		request.setAttribute("unitSpecimen",unitSpecimen);
+		request.setAttribute("frdTo",frdTo);
+		
+		String multipleSpecimen = "0";
+		String action = Constants.CREATE_SPECIMEN_ADD_ACTION;
+		if(request.getAttribute("multipleSpecimen")!=null) 
+		{
+		   multipleSpecimen = "1";
+		   action = "DerivedMultipleSpecimenAdd.do?retainForm=true";
+		}
+		request.setAttribute("multipleSpecimen",multipleSpecimen);
+		request.setAttribute("action",action);
+		
+//		String onCheckboxChange = "setVirtuallyLocated(this,"+multipleSpecimen+")" ;		Not used anywhere
+	}
+	
+	private void setPageData2(HttpServletRequest request, CreateSpecimenForm form, String pageOf)
+	{
+		String actionToCall2 = null;
+		actionToCall2 = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=false";
+		if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
+		{
+			actionToCall2 = Constants.CP_QUERY_CREATE_SPECIMEN_ACTION+"?pageOf="+Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY+"&operation=add&virtualLocated=false";
+		}
+		request.setAttribute("actionToCall2",actionToCall2);
+		
+		String actionToCall1 = null;
+		actionToCall1 = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=false";
+		if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
+		{
+			actionToCall1 = Constants.CP_QUERY_CREATE_SPECIMEN_ACTION+"?operation=add";
+		}
+		request.setAttribute("actionToCall1",actionToCall1);
+		
+		String deleteChecked = "";
+		String multipleSpecimen = (String)request.getAttribute("multipleSpecimen");
+		if(multipleSpecimen.equals("1"))
+		{
+			deleteChecked = "deleteChecked(\'addExternalIdentifier\',\'NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&status=true&retainForm=true\',document.forms[0].exIdCounter,\'chk_ex_\',false);";
+		}
+		else
+		{			
+			if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
+			{
+				deleteChecked = "deleteChecked(\'addExternalIdentifier\',\'CPQueryCreateSpecimen.do?pageOf=pageOfCreateSpecimenCPQuery&status=true&button=deleteExId\',document.forms[0].exIdCounter,\'chk_ex_\',false);";
+			}
+			else
+			{
+				deleteChecked = "deleteChecked(\'addExternalIdentifier\',\'CreateSpecimen.do?pageOf=pageOfCreateSpecimen&status=true&button=deleteExId\',document.forms[0].exIdCounter,\'chk_ex_\',false);";
+			}
+		}
+		request.setAttribute("deleteChecked",deleteChecked);
+		
+		String actionToCall = "AddSpecimen.do?isQuickEvent=true";
+		if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
+		{
+			actionToCall = Constants.CP_QUERY_CREATE_SPECIMEN_ADD_ACTION+"?isQuickEvent=true";
+		}
+		request.setAttribute("actionToCall",actionToCall);
+		
+		String showRefreshTree ="false";
+		if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
+		{
+			if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
+			{
+				Long parentSpecimenId = (Long) request.getAttribute(Constants.PARENT_SPECIMEN_ID);
+				String nodeId = "Specimen_"+parentSpecimenId.toString();	
+				showRefreshTree ="true";
+			String refreshTree = "refreshTree('"+Constants.CP_AND_PARTICIPANT_VIEW+"','"+Constants.CP_TREE_VIEW+"','"+Constants.CP_SEARCH_CP_ID+"','"+Constants.CP_SEARCH_PARTICIPANT_ID+"','"+nodeId+"');";
+			request.setAttribute("refreshTree",refreshTree);
+			}
+		}
+		request.setAttribute("showRefreshTree",showRefreshTree);
+
+		List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+		request.setAttribute("dataList",dataList);
+	}
+
+	private void setPageData3(HttpServletRequest request, CreateSpecimenForm form, String pageOf)
+	{
+		boolean readOnlyForAll = ((Boolean)request.getAttribute("readOnlyForAll")).booleanValue();
+		String changeAction1 = "setFormAction('MakeParticipantEditable.do?"+Constants.EDITABLE+"="+!readOnlyForAll+"')";
+		request.setAttribute("changeAction1",changeAction1);
+		List specClassList = (List)request.getAttribute(Constants.SPECIMEN_CLASS_LIST);
+		request.setAttribute("specClassList",specClassList);
+
+		List specimenTypeList = (List) request.getAttribute(Constants.SPECIMEN_TYPE_LIST);
+		HashMap specimenTypeMap = (HashMap) request.getAttribute(Constants.SPECIMEN_TYPE_MAP);
+		String classValue = (String)form.getClassName();
+
+		specimenTypeList = (List)specimenTypeMap.get(classValue);
+		if(specimenTypeList == null)
+		{
+			specimenTypeList = new ArrayList();
+			specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+		}
+		request.setAttribute("specimenTypeList", specimenTypeList);
+		request.setAttribute("specimenTypeMap",specimenTypeMap);
+
+	}
+	
+	private void setConstantValues(HttpServletRequest request)
+	{
+		request.setAttribute("oper",Constants.OPERATION);
+		request.setAttribute("query",Constants.QUERY);
+		request.setAttribute("search",Constants.SEARCH);
+		request.setAttribute("view",Constants.VIEW);
+		request.setAttribute("isSpecimenLabelGeneratorAvl",Variables.isSpecimenLabelGeneratorAvl);
+		request.setAttribute("UNIT_MG",Constants.UNIT_MG);
+		request.setAttribute("labelNames",Constants.STORAGE_CONTAINER_LABEL);
+		request.setAttribute("ADD",Constants.ADD);
+		request.setAttribute("isSpecimenBarcodeGeneratorAvl",Variables.isSpecimenBarcodeGeneratorAvl);
+		request.setAttribute("SPECIMEN_BUTTON_TIPS",Constants.SPECIMEN_BUTTON_TIPS[3]);
+		request.setAttribute("SPECIMEN_FORWARD_TO_LIST",Constants.SPECIMEN_FORWARD_TO_LIST[3][0]);
+	}
+	
+	private void setNComboData(HttpServletRequest request, CreateSpecimenForm form)
+	{
+			String[] attrNames = {"storageContainer", "positionDimensionOne", "positionDimensionTwo"};
+			String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
+			
+			request.setAttribute("attrNames",attrNames);
+			request.setAttribute("tdStyleClassArray",tdStyleClassArray);
+			
+			String[] initValues = new String[3];
+			List initValuesList = (List)request.getAttribute("initValues");
+			if(initValuesList != null)
+			{
+				initValues = (String[])initValuesList.get(0);
+			}
+			request.setAttribute("initValues",initValues);
+			
+			String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME);
+			if (className==null)
+				className="";
+			
+			String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
+			if (collectionProtocolId==null)
+				collectionProtocolId="";
+			
+			String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
+			+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
+			+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;				
+			String buttonOnClicked = "mapButtonClickedOnNewSpecimen('"+url+"','createSpecimen')";
+
+			request.setAttribute("buttonOnClicked",buttonOnClicked);
+			
+			int radioSelected = form.getStContSelection();
+			boolean dropDownDisable = false;
+			boolean textBoxDisable = false;					
+			if(radioSelected == 1)
+			{
+				dropDownDisable = true;
+				textBoxDisable = true;
+			}
+			else if(radioSelected == 2)
+			{									
+				textBoxDisable = true;
+			}
+			else if(radioSelected == 3)
+			{
+				dropDownDisable = true;									
+			}
+			request.setAttribute("dropDownDisable",dropDownDisable);
+			request.setAttribute("textBoxDisable",textBoxDisable);
+			
+			Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+			String jsForOutermostDataTable = ScriptGenerator.getJSForOutermostDataTable();
+			String jsEquivalentFor = ScriptGenerator.getJSEquivalentFor(dataMap,"1");
+			
+			request.setAttribute("dataMap",dataMap);
+			request.setAttribute("jsEquivalentFor",jsEquivalentFor);
+			request.setAttribute("jsForOutermostDataTable",jsForOutermostDataTable);
+	}
+	
+	private void setXterIdData(HttpServletRequest request, CreateSpecimenForm form)
+	{
+		String eiDispType1=request.getParameter("eiDispType");
+		request.setAttribute("eiDispType1",eiDispType1);
+		
+		String delExtIds="deleteExternalIdentifiers('pageOfMultipleSpecimen')";
+		if((String)request.getAttribute(Constants.PAGEOF)!=null)
+		{
+			delExtIds="deleteExternalIdentifiers('"+(String)request.getAttribute(Constants.PAGEOF)+"');";
+		}
+		request.setAttribute("delExtIds",delExtIds);
 	}
 }
