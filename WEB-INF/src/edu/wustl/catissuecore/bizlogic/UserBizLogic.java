@@ -812,11 +812,30 @@ public class UserBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
+		//Bug #4349
 		if (validator.isEmpty(user.getAddress().getPhoneNumber()))
 		{
 			message = ApplicationProperties.getValue("user.phoneNumber");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
+		else 
+		{
+			if (!validator.isValidPhoneNumber(user.getAddress().getPhoneNumber()))
+			{
+				message = ApplicationProperties.getValue("user.phoneNumber");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+			}
+		}
+		
+		if (!validator.isEmpty(user.getAddress().getFaxNumber()))
+		{
+			if (!validator.isValidPhoneNumber(user.getAddress().getFaxNumber()))
+			{
+				message = ApplicationProperties.getValue("user.faxNumber");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+			}
+		}
+		//Bug #4349 ends
 		
 		if (user.getInstitution().getId()==null || user.getInstitution().getId().longValue()<=0)
 		{
