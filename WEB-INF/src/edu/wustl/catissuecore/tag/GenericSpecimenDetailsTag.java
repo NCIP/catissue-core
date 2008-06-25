@@ -17,8 +17,8 @@ import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
-import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
+import edu.wustl.catissuecore.bean.SpecimenDetailsInfo;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.ApplicationProperties;
 
@@ -91,7 +91,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 	private boolean showParentId = false;
 	private String elementPrefixPart1="";
 	
-	ViewSpecimenSummaryForm specimenSummaryForm = null;
+	SpecimenDetailsInfo specimenSummaryForm = null;
 //	--------------- Attribute Section end ------------
 
 
@@ -146,7 +146,6 @@ public class GenericSpecimenDetailsTag extends TagSupport
 	public void setColumnListName(String columnListName) {
 		this.columnListName = columnListName;
 	}
-
 	// ------------------Getter - Setter Section end ---------
 
 	/**
@@ -203,7 +202,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		showParentId = false;
 		elementPrefixPart1="";
 		specimenSummaryForm = null;
-
+		
 		return EVAL_PAGE;
 	}
 	
@@ -267,7 +266,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 	{
 		ServletRequest request = pageContext.getRequest();
 		
-		specimenSummaryForm = (ViewSpecimenSummaryForm)request.getAttribute(formName);
+		specimenSummaryForm = (SpecimenDetailsInfo)request.getAttribute(formName);
 		columnHeaderList = (List)request.getAttribute(columnHeaderListName);
 		dataList = (List)request.getAttribute(dataListName);
 		displayColumnList = (List)request.getAttribute(displayColumnListName);
@@ -348,11 +347,11 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			str = "";
 		}
 		else
-			str = obj.toString();
+			{str = obj.toString();}
 		return str;
 	}
 
-	private String getFormattedValue(Object obj, int space)
+	private String getHTMLFormattedValue(Object obj)
 	{
 		String str = getFormattedValue(obj);
 		return (str.trim().length()>0 ? str : "&nbsp;");
@@ -480,6 +479,8 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			}
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[1].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
+				//	3June08 to uncomment after vaishali changes are commited
+//				if(specimenSummaryForm.getShowLabel() == true && specimen.getShowLabel() == true)
 				 if(specimenSummaryForm.getShowLabel() == true)
 				 {
 					 createTextComponent(sb, nameValue, "formFieldSized10");
@@ -489,7 +490,9 @@ public class GenericSpecimenDetailsTag extends TagSupport
 			}
 			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[2].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
-				 if(specimenSummaryForm.getShowbarCode() == true)
+				//	3June08 to uncomment after vaishali changes are commited
+//				 if(specimenSummaryForm.getShowbarCode() == true && specimen.getShowBarcode() == true)
+				if(specimenSummaryForm.getShowbarCode() == true)
 				 {
 					 createTextComponent(sb, nameValue, "formFieldSized10");
 				 }
@@ -611,7 +614,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		{
 
 			 sb.append("<td class=\"dataCellText\" >");
-			 sb.append(getFormattedValue(specimen.getStorageContainerForSpecimen(),1));
+			 sb.append(getHTMLFormattedValue(specimen.getStorageContainerForSpecimen()));
 
 			 String specimenId = getFormattedValue(specimen.getUniqueIdentifier());
 			 String specimenClass = getFormattedValue(specimen.getClassName());
@@ -656,7 +659,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		private void createVirtualStorageComponent(StringBuffer sb, String[] nameValue)
 		{
 			 sb.append("<td class=\"dataCellText\" >");
-			 sb.append(getFormattedValue(nameValue[1],1));
+			 sb.append(getHTMLFormattedValue(nameValue[1]));
 			 sb.append("<input type=\"hidden\" name=\""+nameValue[0]+"\" value=\""+nameValue[1]+"\">");
 			 sb.append("</td>");
 		}
@@ -704,7 +707,19 @@ public class GenericSpecimenDetailsTag extends TagSupport
 		{
 			String nameValue[] = getElementAt( counter,  specimen, elementNamePrefix);
 			StringBuffer sb = new StringBuffer() ;
-			if(GenericSpecimenDetailsTag.COLUMN_NAMES[0].equalsIgnoreCase(columnList.get(counter).toString()))
+			if(GenericSpecimenDetailsTag.COLUMN_NAMES[1].equalsIgnoreCase(columnList.get(counter).toString()))
+			{
+					//3June08 to uncomment after vaishali changes are commited
+//					 if(specimenSummaryForm.getShowLabel() == true && specimen.getShowLabel() == true)
+					if(specimenSummaryForm.getShowLabel() == true)
+					 {
+							sb.append("<td class=\"dataCellText\" >");
+							sb.append(getHTMLFormattedValue(nameValue[1]));	
+							sb.append("</td>");
+					 }
+					 else{createEmptyCell(sb);}
+			}
+			else if(GenericSpecimenDetailsTag.COLUMN_NAMES[0].equalsIgnoreCase(columnList.get(counter).toString()))
 			{
 				if(showParentId == false)
 				{
@@ -714,7 +729,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				else
 				{
 					sb.append("<td class=\"dataCellText\" >");
-						sb.append(getFormattedValue(nameValue[1],1));
+						sb.append(getHTMLFormattedValue(nameValue[1]));
 					sb.append("</td>");
 				}
 			}
@@ -733,11 +748,13 @@ public class GenericSpecimenDetailsTag extends TagSupport
 					}
 					else
 					{
-						sb.append(getFormattedValue(specimen.getStorageContainerForSpecimen(),1));
+						sb.append(getHTMLFormattedValue(specimen.getStorageContainerForSpecimen()));
 					}
 				}
 				else
-					sb.append(getFormattedValue(nameValue[1],1));
+				{
+					sb.append(getHTMLFormattedValue(nameValue[1]));
+				}
 				sb.append("</td>");
 			}
 			return sb.toString();
@@ -783,7 +800,7 @@ public class GenericSpecimenDetailsTag extends TagSupport
 				 }
 			 }
 			 else
-	 			 sb.append(getFormattedValue("",1));
+	 			 sb.append(getHTMLFormattedValue(""));
  			 sb.append("</td>");
 		}
 
