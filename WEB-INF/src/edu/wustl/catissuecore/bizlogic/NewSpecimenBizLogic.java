@@ -2751,7 +2751,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if (specimenVO.getInitialQuantity() != null)
 		{
 			Double quantity = specimenVO.getInitialQuantity();
-			Double availableQuantity = specimenVO.getAvailableQuantity();
+			Double availableQuantity = specimenDO.getAvailableQuantity();
 			if (availableQuantity == null)
 			{
 				availableQuantity = new Double(0);
