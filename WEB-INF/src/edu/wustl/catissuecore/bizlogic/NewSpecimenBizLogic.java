@@ -1041,10 +1041,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimen.setAvailable(new Boolean(true));
 		}
-		else
+	   /*else
 		{
 			specimen.setAvailable(new Boolean(true));
-		}
+		} */
 	   //bug #7594	
 		if (Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase(specimen.getCollectionStatus()) &&
 				(Constants.COLLECTION_STATUS_PENDING).equals(specimenOld.getCollectionStatus()))
@@ -1082,13 +1082,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			throw new DAOException("Class should not be changed while updating the specimen");
 		}
-		// bug # 7594
+		/*// bug # 7594
 		if (((Constants.COLLECTION_STATUS_COLLECTED).equals(specimen.getCollectionStatus()) && 
 				   (Constants.COLLECTION_STATUS_COLLECTED).equals(specimenOld.getCollectionStatus()) &&
 					 (!(specimen.getAvailable().booleanValue()) || new Double(0.0).equals(Double.parseDouble(specimen.getAvailableQuantity().toString())))))
 		{
 			throw new DAOException(ApplicationProperties.getValue("specimen.available.operation"));
-		}
+		}*/
 	   if (specimen.isParentChanged())
 		{
 			//Check whether container is moved to one of its sub container.
@@ -1120,7 +1120,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		persistentSpecimen.setLabel(specimen.getLabel());
 		persistentSpecimen.setBarcode(specimen.getBarcode());
 		persistentSpecimen.setCreatedOn(specimen.getCreatedOn());
-		persistentSpecimen.setAvailable(specimen.getAvailable());
+		//bug #8039
+	    if (((Constants.COLLECTION_STATUS_COLLECTED).equals(persistentSpecimen.getCollectionStatus()) && 
+			   (Constants.COLLECTION_STATUS_COLLECTED).equals(specimen.getCollectionStatus()) &&
+				 (new Double(0.0).equals(persistentSpecimen.getAvailableQuantity()))))
+		{
+			throw new DAOException(ApplicationProperties.getValue("specimen.available.operation"));
+	    }
+	    persistentSpecimen.setAvailable(specimen.getAvailable());
 		persistentSpecimen.setBiohazardCollection(specimen.getBiohazardCollection());
 		persistentSpecimen.setNoOfAliquots(specimen.getNoOfAliquots());
 		persistentSpecimen.setActivityStatus(specimen.getActivityStatus());
@@ -2789,10 +2796,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				availableQuantity = newAvailQty;
 			}
-			if ((specimenDO.getAvailableQuantity() != null && specimenDO.getAvailableQuantity() > 0))
+			/* if ((specimenDO.getAvailableQuantity() != null && specimenDO.getAvailableQuantity() > 0))
 			{
 				specimenDO.setAvailable(Boolean.TRUE);
-			}
+			}*/
 			Double oldInitialQty = null;
 			if (specimenDO.getInitialQuantity() == null)
 			{
