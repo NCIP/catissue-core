@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
-import edu.wustl.catissuecore.tag.GenericSpecimenDetailsTag;
 
 /**
  * This class is to support the GenericSpecimenDetails tag.
@@ -16,7 +15,29 @@ import edu.wustl.catissuecore.tag.GenericSpecimenDetailsTag;
  */
 public class SpecimenDetailsTagUtil
 {
-
+	private static final String PARENT = "Parent";
+	private static final String LABEL = "Label";
+	private static final String BARCODE = "Barcode";
+	private static final String TYPE = "Type";
+	private static final String QTY = "Quantity";
+	private static final String CONCENTRATION = "Concentration";
+	private static final String LOCATION = "Location";
+	private static final String COLLECTED = "Collected";
+	private static final String CLASS = "Class";
+//	private static final String  = ;
+	private static final String TSITE = "Tissue Site";
+	private static final String TSIDE = "Tissue Side";
+	private static final String PATH_STAT = "Pathological Status";
+	
+	private static final String CH_LABEL = "specimen.label";
+	private static final String CH_CLASS = "specimen.type";
+	private static final String CH_BARCODE = "specimen.barcode";
+	private static final String CH_TYPE = "specimen.subType";
+	private static final String CH_QTY = "anticipatorySpecimen.Quantity";
+	private static final String CH_LOC = "anticipatorySpecimen.Location";
+	private static final String CH_CONC = "anticipatorySpecimen.Concentration";
+	
+	
 	public SpecimenDetailsTagUtil()
 	{
 		super();
@@ -30,18 +51,35 @@ public class SpecimenDetailsTagUtil
 	 */
 	public static void setAnticipatorySpecimenDetails(HttpServletRequest request, ViewSpecimenSummaryForm summaryForm)
 	{
-		List colHeaderList = new ArrayList();
-		List subSpecimenColHeaderList = new ArrayList();
-		List dispColumnsList = new ArrayList();
-		List displayColumnList = new ArrayList();
+		List <String>colHeaderList = new ArrayList<String>();
+		List <String>subSpecimenColHeaderList = new ArrayList<String>();
+		List <String>dispColumnsList = new ArrayList<String>();
 		
-		colHeaderList.add("");	colHeaderList.add("specimen.label");	colHeaderList.add("specimen.barcode");
-		colHeaderList.add("specimen.subType");	colHeaderList.add("anticipatorySpecimen.Quantity");
-		colHeaderList.add("anticipatorySpecimen.Concentration"); colHeaderList.add("anticipatorySpecimen.Location");
-		colHeaderList.add("anticipatorySpecimen.Collected");
+//		colHeaderList.add("");	colHeaderList.add("specimen.label");	colHeaderList.add("specimen.barcode");
+//		colHeaderList.add("specimen.subType");	colHeaderList.add("anticipatorySpecimen.Quantity");
+//		colHeaderList.add("anticipatorySpecimen.Concentration"); colHeaderList.add("anticipatorySpecimen.Location");
+//		colHeaderList.add("anticipatorySpecimen.Collected");
 
-		for(int i=0; i<8; i++)
-		{	dispColumnsList.add(GenericSpecimenDetailsTag.COLUMN_NAMES[i]);}
+//		for(int i=0; i<8; i++)
+//		{	dispColumnsList.add(GenericSpecimenDetailsTag.COLUMN_NAMES[i]);}
+		
+		//columnHeaderList											DisplayColumn List
+		colHeaderList.add("");									dispColumnsList.add(PARENT);	
+		
+		if(summaryForm.getShowLabel())
+		{
+		colHeaderList.add(CH_LABEL);							dispColumnsList.add(LABEL);	
+		}
+		if(summaryForm.getShowbarCode())
+		{
+		colHeaderList.add(CH_BARCODE);							dispColumnsList.add(BARCODE);	
+		}	
+
+		colHeaderList.add(CH_TYPE);								dispColumnsList.add(TYPE);
+		colHeaderList.add(CH_QTY);								dispColumnsList.add(QTY);
+		colHeaderList.add(CH_CONC);								dispColumnsList.add(CONCENTRATION);
+		colHeaderList.add(CH_LOC);								dispColumnsList.add(LOCATION);
+		colHeaderList.add("anticipatorySpecimen.Collected");	dispColumnsList.add(COLLECTED);
 		
 		subSpecimenColHeaderList.addAll(colHeaderList);
 		subSpecimenColHeaderList.set(0,"anticipatorySpecimen.Parent");
@@ -64,25 +102,25 @@ public class SpecimenDetailsTagUtil
 	
 	private static void setSpecimenSummaryParentDetails(HttpServletRequest request, ViewSpecimenSummaryForm summaryForm)
 	{
-		List colHeaderListP = new ArrayList();
-		List displayColumnListP = new ArrayList();
-		List colOrderListP = new ArrayList();
+		List <String>colHeaderListP = new ArrayList<String>();
+		List <String>displayColumnListP = new ArrayList<String>();
+		List <String>colOrderListP = new ArrayList<String>();
 		
-		colHeaderListP.add("");	colHeaderListP.add("specimen.label");	//colHeaderListP.add("specimen.received");
-		colHeaderListP.add("specimen.type");	colHeaderListP.add("specimen.subType");
+		colHeaderListP.add("");	colHeaderListP.add(CH_LABEL);	//colHeaderListP.add("specimen.received");
+		colHeaderListP.add(CH_CLASS);	colHeaderListP.add(CH_TYPE);
 		colHeaderListP.add("specimen.tissueSite");	colHeaderListP.add("specimen.tissueSide");
-		colHeaderListP.add("specimen.pathologicalStatus");	colHeaderListP.add("anticipatorySpecimen.Location");
-		colHeaderListP.add("anticipatorySpecimen.Quantity");
+		colHeaderListP.add("specimen.pathologicalStatus");	colHeaderListP.add(CH_LOC);
+		colHeaderListP.add(CH_QTY);
 
-		colOrderListP.add("Parent");				displayColumnListP.add("Parent");
-		colOrderListP.add("Label");					displayColumnListP.add("Label");
-		colOrderListP.add("Class");					displayColumnListP.add("Class");
-		colOrderListP.add("Type");					displayColumnListP.add("Type");
-		colOrderListP.add("Tissue Site");			displayColumnListP.add("Tissue Site");
-		colOrderListP.add("Tissue Side");			displayColumnListP.add("Tissue Side");
-		colOrderListP.add("Pathological Status");	displayColumnListP.add("Pathological Status");
-		colOrderListP.add("Location");				displayColumnListP.add("Location");
-		colOrderListP.add("Quantity");				displayColumnListP.add("Quantity");
+		colOrderListP.add(PARENT);			displayColumnListP.add(PARENT);
+		colOrderListP.add(LABEL);			displayColumnListP.add(LABEL);
+		colOrderListP.add(CLASS);			displayColumnListP.add(CLASS);
+		colOrderListP.add(TYPE);			displayColumnListP.add(TYPE);
+		colOrderListP.add(TSITE);			displayColumnListP.add(TSITE);
+		colOrderListP.add(TSIDE);			displayColumnListP.add(TSIDE);
+		colOrderListP.add(PATH_STAT);		displayColumnListP.add(PATH_STAT);
+		colOrderListP.add(LOCATION);		displayColumnListP.add(LOCATION);
+		colOrderListP.add(QTY);				displayColumnListP.add(QTY);
 		
 		request.setAttribute("specimenList",summaryForm.getSpecimenList());
 		request.setAttribute("colHeaderListP",colHeaderListP);
@@ -92,19 +130,19 @@ public class SpecimenDetailsTagUtil
 	
 	private static void setSpecimenSummaryAliquotDetails(HttpServletRequest request, ViewSpecimenSummaryForm summaryForm)
 	{
-		List colHeaderListA = new ArrayList();
-		List displayColumnListA = new ArrayList();
-		List colOrderListA = new ArrayList();
+		List <String>colHeaderListA = new ArrayList<String>();
+		List <String>displayColumnListA = new ArrayList<String>();
+		List <String>colOrderListA = new ArrayList<String>();
 		
 		colHeaderListA.add("anticipatorySpecimen.Parent");
-		colHeaderListA.add("specimen.label");	
-		colHeaderListA.add("anticipatorySpecimen.Location");
-		colHeaderListA.add("anticipatorySpecimen.Quantity");
+		colHeaderListA.add(CH_LABEL);	
+		colHeaderListA.add(CH_LOC);
+		colHeaderListA.add(CH_QTY);
 	
-		colOrderListA.add("Parent");	displayColumnListA.add("Parent");
-		colOrderListA.add("Label");		displayColumnListA.add("Label");
-		colOrderListA.add("Location");	displayColumnListA.add("Location");
-		colOrderListA.add("Quantity");	displayColumnListA.add("Quantity");
+		colOrderListA.add(PARENT);		displayColumnListA.add(PARENT);
+		colOrderListA.add(LABEL);		displayColumnListA.add(LABEL);
+		colOrderListA.add(LOCATION);	displayColumnListA.add(LOCATION);
+		colOrderListA.add(QTY);			displayColumnListA.add(QTY);
 		
 		request.setAttribute("aliquotList",summaryForm.getAliquotList());
 		request.setAttribute("colHeaderListA",colHeaderListA);
@@ -113,22 +151,22 @@ public class SpecimenDetailsTagUtil
 	}
 	private static void setSpecimenSummaryDerivedDetails(HttpServletRequest request, ViewSpecimenSummaryForm summaryForm)
 	{
-		List colHeaderListD = new ArrayList();
-		List displayColumnListD = new ArrayList();
-		List colOrderListD = new ArrayList();
+		List <String>colHeaderListD = new ArrayList<String>();
+		List <String>displayColumnListD = new ArrayList<String>();
+		List <String>colOrderListD = new ArrayList<String>();
 		
-		colHeaderListD.add("anticipatorySpecimen.Parent");	colHeaderListD.add("specimen.label");	
-		colHeaderListD.add("specimen.type");	colHeaderListD.add("specimen.subType");
-		colHeaderListD.add("anticipatorySpecimen.Quantity");	colHeaderListD.add("anticipatorySpecimen.Location");
-		colHeaderListD.add("anticipatorySpecimen.Concentration");
+		colHeaderListD.add("anticipatorySpecimen.Parent");	colHeaderListD.add(CH_LABEL);	
+		colHeaderListD.add(CH_CLASS);	colHeaderListD.add(CH_TYPE);
+		colHeaderListD.add(CH_QTY);	colHeaderListD.add(CH_LOC);
+		colHeaderListD.add(CH_CONC);
 	
-		colOrderListD.add("Parent");			displayColumnListD.add("Parent");
-		colOrderListD.add("Label");				displayColumnListD.add("Label");
-		colOrderListD.add("Class");				displayColumnListD.add("Class");
-		colOrderListD.add("Type");				displayColumnListD.add("Type");
-		colOrderListD.add("Quantity");			displayColumnListD.add("Quantity");
-		colOrderListD.add("Location");			displayColumnListD.add("Location");
-		colOrderListD.add("Concentration");		displayColumnListD.add("Concentration");
+		colOrderListD.add(PARENT);				displayColumnListD.add(PARENT);
+		colOrderListD.add(LABEL);				displayColumnListD.add(LABEL);
+		colOrderListD.add(CLASS);				displayColumnListD.add(CLASS);
+		colOrderListD.add(TYPE);				displayColumnListD.add(TYPE);
+		colOrderListD.add(QTY);					displayColumnListD.add(QTY);
+		colOrderListD.add(LOCATION);			displayColumnListD.add(LOCATION);
+		colOrderListD.add(CONCENTRATION);		displayColumnListD.add(CONCENTRATION);
 		
 		request.setAttribute("derivedList",summaryForm.getDerivedList());
 		request.setAttribute("colHeaderListD",colHeaderListD);
