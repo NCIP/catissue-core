@@ -1615,16 +1615,16 @@ INSERT INTO CATISSUE_RELATED_TABLES_MAP values ( 92 , 35 , 'IDENTIFIER','IDENTIF
 /*Changes due to model change (Virender Mehta  12th Oct 2007)*/ 
 
 INSERT INTO CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID,FOR_SQI)
-VALUES ( 93, 'catissue_tissue_specimen', 'Tissue Specimen', 'Tissue Specimen',2,1);
+VALUES ( 96, 'catissue_tissue_specimen', 'Tissue Specimen', 'Tissue Specimen',2,1);
 
 INSERT INTO CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID,FOR_SQI)
-VALUES ( 94, 'catissue_cell_specimen', 'Cell Specimen', 'Cell Specimen',2,1);
+VALUES ( 97, 'catissue_cell_specimen', 'Cell Specimen', 'Cell Specimen',2,1);
 
 INSERT INTO CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID,FOR_SQI)
-VALUES ( 95, 'catissue_fluid_specimen', 'Fluid Specimen', 'Fluid Specimen',2,1);
+VALUES ( 98, 'catissue_fluid_specimen', 'Fluid Specimen', 'Fluid Specimen',2,1);
 
 INSERT INTO CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID,FOR_SQI)
-VALUES ( 96, 'catissue_molecular_specimen', 'Molecular Specimen', 'Molecular Specimen',2,1);
+VALUES ( 99, 'catissue_molecular_specimen', 'Molecular Specimen', 'Molecular Specimen',2,1);
 
 commit;
 
