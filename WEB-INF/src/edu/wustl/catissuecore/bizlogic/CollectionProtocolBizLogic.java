@@ -325,12 +325,16 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		checkForChangedStatus(collectionProtocol, collectionProtocolOld);
 
 /*		
- *      Right Now we are not suporting EDIT Collection protocol thus commenting event and specimen update
+ *      Right Now we are not supporting EDIT Collection protocol thus commenting event and specimen update
  *      Collection oldCollectionProtocolEventCollection = collectionProtocolOld
 				.getCollectionProtocolEventCollection();
 		updateCollectionProtocolEvents(dao, sessionDataBean, collectionProtocol,
 				oldCollectionProtocolEventCollection);
 */
+		// Temporary setting collection protocol event collection to null, 
+		// need to handle when user able to edit CP
+		
+		collectionProtocol.setCollectionProtocolEventCollection(null);
 		dao.update(collectionProtocol, sessionDataBean, true, true, false);
 
 		//Audit of Collection Protocol.
