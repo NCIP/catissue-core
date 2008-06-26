@@ -123,6 +123,14 @@
 						{
 							img = "Specimen.GIF";
 						}
+						else if(name.startsWith("A"))
+						{
+							img = "aliquot_specimen.gif";
+						}
+						else if(name.startsWith("D"))
+						{
+							img = "derived_specimen.gif";
+						}
 						else
 						{
 							img = "cp_event.gif";
