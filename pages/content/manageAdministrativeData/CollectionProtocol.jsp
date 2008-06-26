@@ -21,6 +21,31 @@ if('${requestScope.tabSel}'=="consentTab"){
 else {
 	window.onload=consentPage();
 }
+
+function defineEvents()
+{
+	var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+
+function viewSummary()
+{
+	var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=${requestScope.operation}";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+function updateCPTree()
+{	
+  window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
+}
+function openEventPage()
+{
+    var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+
 </script>
 
 <style>
@@ -56,7 +81,7 @@ else {
 					    <a>
 					      <img src="images/uIEnhancementImages/cp_details.gif" alt="Collection Protocol Details" width="174" height="20" border="0" /></a>
 					 </td>
-                      <td width="10%" valign="bottom" onclick="updateCPTree();consentPage()" id="consentTab">
+                      <td width="10%" valign="bottom" onclick="consentPage()" id="consentTab">
 					       <img src="images/uIEnhancementImages/cp_consents1.gif" alt="Consents" width="94" height="20" border="0" /></td>
                       <td width="10%" valign="bottom" ><a>
 					  <img src="images/uIEnhancementImages/cp_privileges1.gif" alt="Privileges" width="94" height="20" border="0" onclick="showAssignPrivilegePage('${requestScope.operation}')"/></a></td>

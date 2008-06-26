@@ -563,29 +563,6 @@ function consentPageForPrivilege(cpOperation)
 //	Consent Tracking Module Virender Mehta (End)
 
 //Add Bulk Specimen Virender(Start)
-function defineEvents()
-{
-	var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}";
-	document.forms[0].action=action;
-	document.forms[0].submit();
-}
-
-function viewSummary()
-{
-	var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=${requestScope.operation}";
-	document.forms[0].action=action;
-	document.forms[0].submit();
-}
-function updateCPTree()
-{	
-  window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
-}
-function openEventPage()
-{
-    var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}";
-	document.forms[0].action=action;
-	document.forms[0].submit();
-}
 function showAssignPrivilegePage(cpOperation)
 {
     var action="ShowAssignPrivilegePage.do?operation=AssignPrivilegePage&cpOperation="+cpOperation;
