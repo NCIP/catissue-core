@@ -72,11 +72,10 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			{
 				CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventBeanCollectionItr.next();
 				String objectName = collectionProtocolEventBean.getCollectionPointLabel()+Constants.CLASS;
-				if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
-				{
-					objectName=Constants.VIEW_SUMMARY;
-				}
-				
+				//if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
+				//{
+					//objectName=Constants.VIEW_SUMMARY
+				//}				
 				displayName = collectionProtocolEventBean.getStudyCalenderEventPoint().toString()+" "+ collectionProtocolEventBean.getCollectionPointLabel();
 				parentIdentifier= collectionProtocolBean.getTitle();
 				identifier = collectionProtocolEventBean.getUniqueIdentifier();
@@ -119,10 +118,10 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 	private String createSpecimenNode(String parentObjectname,String parentIdentifier,SpecimenRequirementBean specimenRequirementBean,Vector treeData, String operation)
 	{
 		String objectName = Constants.NEW_SPECIMEN;
-		if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
-		{
-			objectName=Constants.VIEW_SUMMARY;
-		}
+		//if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
+		//{
+			//objectName=Constants.VIEW_SUMMARY;
+		//}
 		String identifier = specimenRequirementBean.getUniqueIdentifier();
 			
 		String displayName= Constants.SPECIMEN+"_"+specimenRequirementBean.getUniqueIdentifier();
