@@ -97,12 +97,15 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			
 			ContainerPosition cntPos = aliquotSpecimenArray.getLocatedAtPosition();
 			if(cntPos == null)
+			{
 				cntPos = new ContainerPosition();
+			}	
 			if (parentSpecimenArray != null)
 			{
 				//check for closed ParentSpecimenArray
 				checkStatus(dao, parentSpecimenArray, "Parent SpecimenArray");
-				cntPos.setParentContainer(parentSpecimenArray);
+		//		cntPos.setOccupiedContainer(aliquotSpecimenArray);
+				
 		//		aliquotSpecimenArray.setParent(parentSpecimenArray);
 				aliquotSpecimenArray.setSpecimenArrayType(parentSpecimenArray.getSpecimenArrayType());				
 				aliquotSpecimenArray.setCreatedBy(parentSpecimenArray.getCreatedBy());
@@ -144,7 +147,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,
 								sessionDataBean,false);
 
-						aliquotSpecimenArray.getLocatedAtPosition().setParentContainer(storageContainerObj);
+						
 						String sourceObjectName = StorageContainer.class.getName();
 						String[] selectColumnName = {"name"};
 						String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
@@ -179,7 +182,8 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			{				
 				cntPos.setPositionDimensionOne(new Integer(posDim1));
 				cntPos.setPositionDimensionTwo(new Integer(posDim2));
-				cntPos.setOccupiedContainer(storageContainerObj);
+				cntPos.setOccupiedContainer(aliquotSpecimenArray);
+				cntPos.setParentContainer(storageContainerObj);
 			}
 			else
 			{
