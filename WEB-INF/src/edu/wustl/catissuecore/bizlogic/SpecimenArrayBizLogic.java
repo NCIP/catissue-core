@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.QuantityInMicrogram;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -38,7 +39,9 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -885,6 +888,42 @@ catch (Exception e)
 			}
 		}
 		return msg;
+	}
+	
+	/*
+	* T
+	*/
+	public NewSpecimenArrayOrderItem getNewSpecimenArrayOrderItem(Long orderItemId)
+	{
+		
+		
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+
+		NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = null; 
+		
+		try
+		{
+			dao.openSession(null);
+			newSpecimenArrayOrderItem  =(NewSpecimenArrayOrderItem) dao.retrieve(NewSpecimenArrayOrderItem.class.getName(),orderItemId);
+			
+		}
+		catch (DAOException daoExp)
+		{
+			daoExp.printStackTrace();
+		}
+		finally
+		{
+			try {
+				dao.closeSession();
+			} catch (DAOException e) {
+			
+				e.printStackTrace();
+			}
+		}
+
+		return newSpecimenArrayOrderItem;
+		
+		
 	}
 	//END
 }

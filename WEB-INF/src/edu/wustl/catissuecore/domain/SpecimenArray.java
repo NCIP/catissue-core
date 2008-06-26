@@ -8,7 +8,10 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.util.SearchUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -260,11 +263,14 @@ public class SpecimenArray extends Container
 	    	//Ordering System
 	    	if(specimenArrayForm.getIsDefinedArray().equalsIgnoreCase("True"))
 	    	{
-	    		  NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = new NewSpecimenArrayOrderItem();
-	    		  newSpecimenArrayOrderItem.setId(new Long(specimenArrayForm.getNewArrayOrderItemId()));
+	    		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) BizLogicFactory
+	    		.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+	    		  NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = specimenArrayBizLogic.getNewSpecimenArrayOrderItem
+	    		  (new Long(specimenArrayForm.getNewArrayOrderItemId()));
 	    		  Collection tempColl = new HashSet(); 
 	    		  tempColl.add(newSpecimenArrayOrderItem);
 	    		  this.newSpecimenArrayOrderItemCollection = tempColl;
+	    		  newSpecimenArrayOrderItem.setSpecimenArray(this);
 	    	}
     	}
     }
