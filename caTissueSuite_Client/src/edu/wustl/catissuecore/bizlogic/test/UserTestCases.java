@@ -50,8 +50,8 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			address.setState("Alabama");
 			address.setZipCode("12345");
 			address.setCountry("United States");
-			address.setPhoneNumber("21222324");
-			address.setFaxNumber("21222324");	 
+			address.setPhoneNumber("212-223-2424");
+			address.setFaxNumber("212-223-2424");	 
 			
 			
 			userObj.setAddress(address);
@@ -104,8 +104,8 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			address.setState("Alabama");
 			address.setZipCode("12345");
 			address.setCountry("United States");
-			address.setPhoneNumber("21222324");
-			address.setFaxNumber("21222324");	 
+			address.setPhoneNumber("212-223-2424");
+			address.setFaxNumber("212-223-2424");	 
 			
 			
 			userObj.setAddress(address);
@@ -158,8 +158,8 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			address.setState("Alabama");
 			address.setZipCode("12345");
 			address.setCountry("United States");
-			address.setPhoneNumber("21222324");
-			address.setFaxNumber("21222324");	 
+			address.setPhoneNumber("212-223-2424");
+			address.setFaxNumber("212-223-2424");	 
 			
 			
 			userObj.setAddress(address);

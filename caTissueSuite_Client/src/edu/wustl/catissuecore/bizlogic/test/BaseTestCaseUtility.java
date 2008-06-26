@@ -306,8 +306,8 @@ public class BaseTestCaseUtility {
 		address.setState("Alabama");
 		address.setZipCode("12345");
 		address.setCountry("United States");
-		address.setPhoneNumber("21222324");
-		address.setFaxNumber("21222324");	 
+		address.setPhoneNumber("212-223-2424");
+		address.setFaxNumber("212-223-2424");	 
 		
 		
 		userObj.setAddress(address);
@@ -344,8 +344,8 @@ public class BaseTestCaseUtility {
 		address.setState("Alabama");
 		address.setZipCode("12345");
 		address.setCountry("United States");
-		address.setPhoneNumber("21222324");
-		address.setFaxNumber("21222324");	 
+		address.setPhoneNumber("212-223-3434");
+		address.setFaxNumber("212-223-3434");	 
 		
 		
 		userObj.setAddress(address);
@@ -901,8 +901,8 @@ public class BaseTestCaseUtility {
 		Address addressObj = new Address();
 		addressObj.setCity("Saint Louis");
 		addressObj.setCountry("United States");
-		addressObj.setFaxNumber("555-55-5555");
-		addressObj.setPhoneNumber("123678");
+		addressObj.setFaxNumber("555-555-5555");
+		addressObj.setPhoneNumber("212-223-2424");
 		addressObj.setState("Missouri");
 		addressObj.setStreet("4939 Children's Place");
 		addressObj.setZipCode("63110");
@@ -918,8 +918,8 @@ public class BaseTestCaseUtility {
 		siteObj.setActivityStatus("Active");		
 		siteObj.getAddress().setCity("Saint Louis1"); 
 		siteObj.getAddress().setCountry("United States");
-		siteObj.getAddress().setFaxNumber("777-77-77771");
-		siteObj.getAddress().setPhoneNumber("1236781");
+		siteObj.getAddress().setFaxNumber("777-777-7777");
+		siteObj.getAddress().setPhoneNumber("212-223-2424");
 		siteObj.getAddress().setState("Missouri");
 		siteObj.getAddress().setStreet("4939 Children's Place1");
 		siteObj.getAddress().setZipCode("63111");		
