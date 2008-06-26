@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ page import="java.util.List,java.util.ListIterator"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -16,6 +17,10 @@
 
 <%@ page language="java" isELIgnored="false" %>
 <head>
+<script src="jss/script.js"></script>
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <% 
 		int exIdRows=1;
 		Map map = null;
@@ -24,9 +29,6 @@
 		List columnList = (List) request.getAttribute("columnList");
 		Integer identifierFieldIndex = new Integer(4);
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-
-//		 For DateTimeComponent
-		CreateSpecimenForm form = (CreateSpecimenForm)request.getAttribute("createSpecimenForm");
 %>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/createSpecimen.js"></script>
@@ -350,12 +352,18 @@
 						</label>								
 					</td>
 					<td class="formFieldNoBordersSimple" colspan="2" >
-						<%
-						String createdDate = form.getCreatedDate();
-						String nameOfForm ="createSpecimenForm";
-						String dateFormName = "createdDate";
-						%>
-							<%@ include file="/pages/content/common/CommonDateComponent.jsp" %>
+						<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
+							<tr>				
+								<td class="message" >
+									<ncombo:DateTimeComponent name="createdDate"
+							  			id="createdDate"
+							  			formName="createSpecimenForm"
+							  			value='${requestScope.createdDate}'
+							  			styleClass="formDateSized10"/>
+								<bean:message key="page.dateFormat" />&nbsp;
+								</td>
+							</tr>
+						</table>
 					</td>
 				</tr>
 				 <tr>

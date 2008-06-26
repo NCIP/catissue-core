@@ -691,6 +691,8 @@ public class NewSpecimenAction extends SecureAction
 		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 		//Logger.out.debug("End of specimen action");
 
+		
+		request.setAttribute("createdDate", specimenForm.getCreatedDate());
 		return mapping.findForward(pageOf);
 	}
 	

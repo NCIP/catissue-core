@@ -1,6 +1,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
@@ -10,14 +12,12 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-
 <%@ page language="java" isELIgnored="false" %>
-
-<%
-AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");
-%>
-
 <head>
+<script src="jss/script.js"></script>
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <script src="jss/Hashtable.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -375,12 +375,18 @@ ${requestScope.messageKey}
 	  </label>								
 	 </td>
 	<td class="formField" colspan="3" >
-		<%		// TODO Mandar: need changes in included file
-		String createdDate = form.getCreatedDate();
-		String nameOfForm ="aliquotForm";
-		String dateFormName = "createdDate";
-		%>
-			<%@ include file="/pages/content/common/CommonDateComponent.jsp" %>
+	<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
+		<tr>				
+			<td class="message" >
+				<ncombo:DateTimeComponent name="createdDate"
+		  			id="createdDate"
+		  			formName="aliquotForm"
+		  			value='${requestScope.createdDate}'
+		  			styleClass="formDateSized10"/>
+				<bean:message key="page.dateFormat" />&nbsp;
+			</td>
+		</tr>
+	</table>
 	</td>
 </tr>
 </table>

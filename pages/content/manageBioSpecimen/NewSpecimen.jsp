@@ -2,6 +2,8 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.Map,java.util.List,java.util.ListIterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -1249,12 +1251,18 @@
 											</label>								
 										</td>
 									   <td class="formFieldNoBordersSimple" >
-										<%								
-											String createdDate = form.getCreatedDate();
-											String nameOfForm ="newSpecimenForm";
-											String dateFormName = "createdDate";
-										%>
-											<%@ include file="/pages/content/common/CommonDateComponent.jsp" %>
+										<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
+											<tr>				
+												<td class="message" >
+													<ncombo:DateTimeComponent name="createdDate"
+							  							id="createdDate"
+							  							formName="newSpecimenForm"
+							  							value='${requestScope.createdDate}'
+							  							styleClass="formDateSized10"/>
+													<bean:message key="page.dateFormat" />&nbsp;
+												</td>
+											</tr>
+										</table>
 			        				   </td>
 									</logic:equal>
 								</tr>
