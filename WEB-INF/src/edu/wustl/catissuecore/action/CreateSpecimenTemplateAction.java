@@ -55,7 +55,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		//This will give node id when flow is from Specimen Tree View.
 		String mapkey = (String)request.getParameter("key");
 		String nodeId = (String)request.getParameter(Constants.TREE_NODE_ID);
-		if(mapkey!=null && !selectedNode.contains(mapkey))
+		if(mapkey!=null && selectedNode!=null && !selectedNode.contains(mapkey))
 		{
 			session.setAttribute(Constants.TREE_NODE_ID, nodeId);
 		}
