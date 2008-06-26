@@ -18,7 +18,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 
 %>
 	<script language="JavaScript">
-		window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
+		//window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
 		function saveCollectionProtocol()
 		{
 				var action ="SubmitSpecimenCollectionProtocol.do?action=collectionprotocol";
