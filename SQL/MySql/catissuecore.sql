@@ -362,9 +362,12 @@ create table CATISSUE_RECEIVED_EVENT_PARAM (
    RECEIVED_QUALITY varchar(255),
    primary key (IDENTIFIER)
 );
+
 create table CATISSUE_RACE (
-   PARTICIPANT_ID bigint not null,
-   RACE_NAME varchar(50)
+   IDENTIFIER bigint not null auto_increment,
+   RACE_NAME varchar(50),
+   PARTICIPANT_ID bigint,
+   primary key (IDENTIFIER)
 );
 
 create table CATISSUE_SPECI_ARRAY_CONTENT (

@@ -245,8 +245,10 @@ create table CATISSUE_RECEIVED_EVENT_PARAM (
    primary key (IDENTIFIER)
 );
 create table CATISSUE_RACE (
+   IDENTIFIER number(19,0) not null,
    PARTICIPANT_ID number(19,0) not null,
-   RACE_NAME varchar(50)
+   RACE_NAME varchar(50),
+   primary key (IDENTIFIER)
 );
 /*create table CATISSUE_COLL_SPECIMEN_REQ (
    COLLECTION_PROTOCOL_EVENT_ID number(19,0) not null,
@@ -744,6 +746,7 @@ create sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
 create sequence CATISSUE_DISTRIBUTION_SEQ;
 create sequence CATISSUE_AUDIT_EVENT_QUERY_SEQ;
 create sequence CATISSUE_DIST_SPECIMEN_REQ_SEQ;
+create sequence CATISSUE_RACE_SEQ;
 
 /* Consent Tracking related drop, create and add foreign key scripts. */
 

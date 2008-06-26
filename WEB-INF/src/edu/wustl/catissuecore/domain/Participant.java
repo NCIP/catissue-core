@@ -576,7 +576,12 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	        	for (int i = 0; i < raceTypes.length; i++)
 				{
 	        		if(!raceTypes[i].equals("-1"))
-	        			raceCollection.add(raceTypes[i]);
+	        		{
+	        			Race race = new Race();
+	        			race.setRaceName(raceTypes[i]);
+	        			race.setParticipant(this);
+	        			raceCollection.add(race);
+	        		}
 	        		
 				}
         	}

@@ -52,22 +52,23 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/Biohazard.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Capacity.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/CancerResearchGroup.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/CollectionProtocolEvent.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/CollectionProtocolRegistration.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Department.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/DistributedItem.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ExternalIdentifier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Institution.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Participant.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Race.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ParticipantMedicalIdentifier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ReportedProblem.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Site.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Specimen.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/AbstractSpecimen.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCharacteristics.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractSpecimenCollectionGroup.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenEventParameters.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenProtocol.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenRequirement.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/DistributionSpecimenRequirement.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Container.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Password.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
@@ -84,9 +85,9 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />	
 		
 		<!--List of classes required for Query module-->
-		<mapping resource="edu/wustl/common/hbm/CategorialAttribute.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/CategorialClass.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/Category.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/AbstractCategorialAttribute.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/AbstractCategorialClass.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/AbstractCategory.hbm.xml"/>
 		
 		<mapping resource="edu/wustl/common/hbm/Expression.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/ExpressionOperand.hbm.xml"/>
@@ -105,7 +106,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyEvent.hbm.xml"/>		
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyEventEntry.hbm.xml"/>	
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>		
-
+	
     </session-factory>
     
 </hibernate-configuration>

@@ -59,6 +59,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ExternalIdentifier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Institution.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Participant.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/Race.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ParticipantMedicalIdentifier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ReportedProblem.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Site.hbm.xml"/>

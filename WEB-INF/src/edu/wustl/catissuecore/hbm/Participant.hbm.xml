@@ -78,13 +78,12 @@
             column="GENOTYPE"
             length="50"
         />
-
         <set
             name="raceCollection"
             table="CATISSUE_RACE"
             fetch="subselect" lazy="false" 
-            inverse="false"
-            cascade="save-update"
+            inverse="true"
+            cascade="save-update,all-delete-orphan"
             sort="unsorted"
         >
         
@@ -93,8 +92,10 @@
               <key
                   column="PARTICIPANT_ID"
               />
-		
-			<element column="RACE_NAME" type="string" length="50"/>
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.Race"
+              />
         </set>
 
         <property

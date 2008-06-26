@@ -45,6 +45,7 @@ import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.RequirementSpecimen;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
@@ -1009,8 +1010,18 @@ public class BaseTestCaseUtility {
 		
 
 		Collection raceCollection = new HashSet();
-		raceCollection.add("White");
-		raceCollection.add("Asian");
+		Race race = new Race();
+		race.setRaceName("White");
+		race.setParticipant(participant);
+		raceCollection.add(race);
+		
+		race = new Race();
+		race.setRaceName("Asian");
+		race.setParticipant(participant);
+		raceCollection.add(race);
+		
+		/*raceCollection.add("White");
+		raceCollection.add("Asian");*/
 		participant.setRaceCollection(raceCollection);
 		participant.setActivityStatus("Active");
 		participant.setEthnicity("Hispanic or Latino");
@@ -1027,8 +1038,15 @@ public class BaseTestCaseUtility {
 		participant.setSexGenotype("XX");
 
 		Collection raceCollection = new HashSet();
-		raceCollection.add("White");
-		raceCollection.add("Asian");
+		Race race = new Race();
+		race.setRaceName("White");
+		race.setParticipant(participant);
+		raceCollection.add(race);
+		race = new Race();
+		race.setRaceName("Asian");
+		race.setParticipant(participant);
+		raceCollection.add(race);
+		
 		participant.setRaceCollection(raceCollection);
 		participant.setActivityStatus("Active");
 		participant.setEthnicity("Hispanic or Latino");
@@ -1051,8 +1069,18 @@ public class BaseTestCaseUtility {
 		participant.setSexGenotype(""); //XX
 
 		Collection raceCollection = new HashSet();
-		raceCollection.add("Black or African American"); //White
-		raceCollection.add("Unknown"); //Asian
+		Race race = new Race();
+		race.setRaceName("Black or African American");
+		race.setParticipant(participant);
+		raceCollection.add(race);
+		race = new Race();
+		race.setRaceName("Unknown");
+		race.setParticipant(participant);
+		raceCollection.add(race);
+		
+		
+		//raceCollection.add("Black or African American"); //White
+		//raceCollection.add("Unknown"); //Asian
 		participant.setRaceCollection(raceCollection);
 		participant.setActivityStatus("Active"); //Active
 		participant.setEthnicity("Unknown"); //Hispanic or Latino

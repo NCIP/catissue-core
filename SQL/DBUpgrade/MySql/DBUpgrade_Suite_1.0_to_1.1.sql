@@ -446,3 +446,11 @@ INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME,
 values(144,247,'Parent Container Id',1,3);
 INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME, DEFAULT_VIEW_ATTRIBUTE,ATTRIBUTE_ORDER)
 values(143,333,'Parent Container Id',1,3);
+
+
+
+/* race changes */
+alter table CATISSUE_RACE add column IDENTIFIER bigint(20) auto_increment,add primary key(IDENTIFIER);
+/* race changes finish */
+
+
