@@ -1284,7 +1284,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				
 			}
 			
-			if(Constants.ACTIVITY_STATUS_ACTIVE.equals(specimenCollectionGroup.getActivityStatus()))
+			if(!Constants.ACTIVITY_STATUS_DISABLED.equals(specimenCollectionGroup.getActivityStatus()))
 			{	
 				if(collectionProtocolEventsIdAndSCGMap.containsKey(specimenCollectionGroup.getCollectionProtocolEvent().getId()))
 				  {
@@ -1550,7 +1550,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			Specimen specimen = (Specimen)specimenList.get(i);
 			
-			if(Constants.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
+			if(!Constants.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
 			{	
 			
 				// Long peekSpecimenId = null;
