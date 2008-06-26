@@ -203,6 +203,7 @@ public class AliquotAction extends SecureAction
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
 		String specimenLabel = aliquotForm.getSpecimenLabel();
+		request.setAttribute("createdDate", aliquotForm.getCreatedDate());
 		//For Storing Label/Barcode, Aliquot Count, Quantity per Aliquot
 		Map tempAliquotMap = new HashMap();
 		//Extracting the values of the operation & pageOf parameters.
