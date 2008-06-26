@@ -1284,19 +1284,23 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				
 			}
 			
-			if(collectionProtocolEventsIdAndSCGMap.containsKey(specimenCollectionGroup.getCollectionProtocolEvent().getId()))
-			  {
-					List specColGroupList = (List)collectionProtocolEventsIdAndSCGMap.get(
-							specimenCollectionGroup.getCollectionProtocolEvent().getId());
-					specColGroupList.add(specimenCollectionGroup);
-					
-									
-			  } else {
-					List specColGroupList = new ArrayList();
-					specColGroupList.add(specimenCollectionGroup);
-					collectionProtocolEventsIdAndSCGMap.put(specimenCollectionGroup.getCollectionProtocolEvent().getId(), 
-							specColGroupList);
-			 }
+			if(Constants.ACTIVITY_STATUS_ACTIVE.equals(specimenCollectionGroup.getActivityStatus()))
+			{	
+				if(collectionProtocolEventsIdAndSCGMap.containsKey(specimenCollectionGroup.getCollectionProtocolEvent().getId()))
+				  {
+						List specColGroupList = (List)collectionProtocolEventsIdAndSCGMap.get(
+								specimenCollectionGroup.getCollectionProtocolEvent().getId());
+						specColGroupList.add(specimenCollectionGroup);
+						
+										
+				  } else {
+						List specColGroupList = new ArrayList();
+						specColGroupList.add(specimenCollectionGroup);
+						collectionProtocolEventsIdAndSCGMap.put(specimenCollectionGroup.getCollectionProtocolEvent().getId(), 
+								specColGroupList);
+						
+				 }
+			}
 					
 		}
 		
@@ -1546,18 +1550,22 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		{
 			Specimen specimen = (Specimen)specimenList.get(i);
 			
-			// Long peekSpecimenId = null;
-			if (specimen.getId() != null)
-			{
-				if (specimen.getParentSpecimen()==null)
+			if(Constants.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
+			{	
+			
+				// Long peekSpecimenId = null;
+				if (specimen.getId() != null)
 				{
-					// if parentSpecimenId is null then it's going to be parent
-					// specimen
-					finalList.add(specimenList.get(i));
-				}
-				else
-				{
-					childrenList.add(specimenList.get(i));
+					if (specimen.getParentSpecimen()==null)
+					{
+						// if parentSpecimenId is null then it's going to be parent
+						// specimen
+						finalList.add(specimenList.get(i));
+					}
+					else
+					{
+						childrenList.add(specimenList.get(i));
+					}
 				}
 			}
 		}
