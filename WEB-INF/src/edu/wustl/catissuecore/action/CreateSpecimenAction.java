@@ -382,7 +382,8 @@ public class CreateSpecimenAction extends SecureAction
 		{
 			request.setAttribute("disabled", "true");
 		}
-		setPageData(request, createForm);		
+		setPageData(request, createForm);	
+		request.setAttribute("createdDate", createForm.getCreatedDate());
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
