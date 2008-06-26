@@ -32,17 +32,26 @@
 		
 	</script>
 </head>
-<html:errors />
-<title>caTissue Suite v 1.0. RC1</title>
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 
+
+
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <body >
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
-<html:form action="<%=Constants.UPDATE_PASSWORD_ACTION%>">
+<!--<table width="100%" border="0" class="whitetable_bg">
+<tr>
+<td class="bigError"><b><html:errors /></b></td></tr></table>-->
+
+
+
+
+
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="newMaintable">
+  <tr class="whitetable_bg">
+<td class="bigError" ><html:errors /></td></tr>
+  <html:form action="<%=Constants.UPDATE_PASSWORD_ACTION%>">
   	<html:hidden property="operation" value="<%=operation%>" />				
 	<html:hidden property="pageOf" value="<%=pageOf%>" />
 	<html:hidden property="id" value="<%=userId%>" />
-
   <tr>
     <td class="td_color_bfdcf3"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
       <tr>
@@ -56,8 +65,10 @@
       </tr>
       <tr>
         <td colspan="2" valign="top" class="td_color_bfdcf3" style="padding-left:10px; padding-right:10px; padding-bottom:10px;"><table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
-		<tr>
-		  <tr>
+            <tr>
+              <td height="15" colspan="3" align="left" class="td_tab_bg">&nbsp;</td>
+            </tr>
+            <tr>
               <td height="15" colspan="3" align="left"><span class=" grey_ar_s"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /> indicates a required field</span></td>
               </tr>
             <tr>
