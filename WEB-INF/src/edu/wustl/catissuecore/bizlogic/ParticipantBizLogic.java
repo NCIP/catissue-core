@@ -68,7 +68,6 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	{
 		Participant participant = (Participant) obj;
 		
-		dao.insert(participant, sessionDataBean, true, true);
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 		
 		
@@ -93,7 +92,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			pmIdentifier.setParticipant(participant);
 			//dao.insert(pmIdentifier, sessionDataBean, true, true);
 		}
-
+		dao.insert(participant, sessionDataBean, true, true);
 		//Inserting collection Protocol Registration info in the database after setting the participant associated.
 		//Abhishek Mehta
 		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
