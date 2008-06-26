@@ -311,4 +311,22 @@ public class DistributionProtocolTestCases extends CaTissueBaseTestCase{
 	 		assertFalse("Failed to disable Distribution Protocol object", true);
 	    }
 	}
+	
+	public void testDistributionProtocolWithNoDistributionSpecimenRequirement()
+	{
+	    try 
+	  	{
+	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
+	    	distributionprotocol.setDistributionSpecimenRequirementCollection(new HashSet<DistributionSpecimenRequirement>());
+	    	Logger.out.info("creating domain object------->"+distributionprotocol);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
+	    	Logger.out.info("DistributionProtocol object with no Distribution Specimen Requirement ---->"+distributionprotocol);
+	       	assertTrue("DistributionProtocol successfully created  ---->"+distributionprotocol, true);
+	    } 
+	    catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("Failed to create Distribution Protocol object", true);
+	    }
+	}
 }
