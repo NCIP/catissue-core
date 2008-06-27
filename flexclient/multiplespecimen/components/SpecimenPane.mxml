@@ -182,11 +182,8 @@
 				spBarcodeBox.height = 0;
 			}
 		}
-		private function switchSpType(event:Event):void
+		public function switchSpType(event:Event):void
 		{
-			
-//			spData.specimenTypePVList = MetadataModel.getInstance().getSpecimenTypeCollection(spData.specimenClass);
-				
 			specimenTypeList = new ArrayCollection(MetadataModel.getInstance().getSpecimenTypeCollection(spData.specimenClass).toArray());
 			prevSpecimenClassValue = spData.specimenClass; 
 			spData.calcUnit();

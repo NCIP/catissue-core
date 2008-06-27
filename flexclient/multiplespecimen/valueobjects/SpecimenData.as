@@ -100,17 +100,13 @@ package valueobjects
 		
 		public function copy(spData:SpecimenData):void
 		{
-
-			//Alert.show("Here in Copy1");
 			this.specimenTypePVList = spData.specimenTypePVList;
 			this.parentType = spData.parentType;
 			this.parentName = spData.parentName;
-			//this.scgName = spData.scgName;
-			//this.parentSpecimenName = spData.parentSpecimenName;
-			
 			this.specimenLabel = spData.specimenLabel;
 			this.specimenBarcode = spData.specimenBarcode;
 			this.specimenClass = spData.specimenClass;
+	
 			this.specimenType = spData.specimenType;
 			
 			this.tissueSite = spData.tissueSite;

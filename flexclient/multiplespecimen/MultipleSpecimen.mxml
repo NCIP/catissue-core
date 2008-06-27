@@ -227,7 +227,7 @@
 			for(var i:int;i<specimenColl.length;i++)
 			{
 				var spData:SpecimenData = SpecimenData(specimenColl.getItemAt(i));
-				if(spData.isSelected)
+ 			    if(spData.isSelected)
 				{
 					copyFromIndex = i;
 					spData.isSelected = false;
@@ -350,6 +350,11 @@
 					if(spData.isSelected)
 					{
 						spData.copy(spDataCopyFrom);
+						if(A[i] != null)
+						{
+							A[i].switchSpType(null);
+							spData.specimenType = spDataCopyFrom.specimenType;
+						}
 						spData.isSelected = false;
 					}
 				}
@@ -367,6 +372,14 @@
 							if(spDataTo.isSelected)
 							{
 								spDataTo.copyAttributes(spDataFrom,attributeList);
+								if(attributeList.contains(Constants.CLASS))
+								{
+									if(A[j] != null)
+									{
+										A[j].switchSpType(null);
+										spDataTo.specimenType = spDataFrom.specimenType;
+									}
+								}
 								spDataTo.isSelected = false;
 							}
 						}
