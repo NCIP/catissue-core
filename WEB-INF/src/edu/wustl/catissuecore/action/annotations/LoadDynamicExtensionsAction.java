@@ -40,6 +40,8 @@ public class LoadDynamicExtensionsAction extends BaseAction
         String staticEntityId = annotationForm.getSelectedStaticEntityId();
         String[] conditions = annotationForm.getConditionVal();
         
+        if(staticEntityId ==  null )
+        	staticEntityId = request.getParameter("staticEntityId");
         HttpSession session = request.getSession();
         session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID, staticEntityId);
         session.setAttribute(AnnotationConstants.SELECTED_STATIC_RECORDID, conditions);          

@@ -736,7 +736,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					EntityMap entityMapObj = entityMapIterator.next();
 					String editDynExtCondnURL = getDynamicExtentionsEditCondnURL(new Long(container
 							.getValue()), entityMapObj.getStaticEntityId());
-
+					editDynExtEntityURL = editDynExtEntityURL+"&staticEntityId="+entityMapObj.getStaticEntityId();
 					entityXML
 							.append(getXMLForEntityMap(container.getName(), entityMapObj,
 									entityIndex + index, editDynExtEntityURL, editDynExtCondnURL,
