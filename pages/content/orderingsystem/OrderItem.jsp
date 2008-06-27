@@ -519,7 +519,7 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 								<td class="dataCellText" width="18%">
 									<%=obj.getAvailableQuantity()%>&nbsp;
 									<script>
-										var v= getUnit('<%=obj.getClassName() %>','<%=obj.getType() %>');
+										var v= getUnit('<%=obj.getClassName() %>','<%=obj.getSpecimenType() %>');
 										document.write(v);
 									</script>
 
@@ -530,7 +530,7 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 									<td class="dataCellText" width="20%">
 										<html:text styleClass="formFieldSized3" maxlength="8"  size="5"  styleId="requestedQuantity" property="<%=requestedQuantity%>"/>&nbsp;
 									<script>
-										var v= getUnit('<%=obj.getClassName() %>','<%=obj.getType() %>');
+										var v= getUnit('<%=obj.getClassName() %>','<%=obj.getSpecimenType() %>');
 										document.write(v);
 									</script>
 										<span id="requnitSpan"></span>		
@@ -538,7 +538,7 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 										<html:hidden property="<%=isDerived%>" styleId="isDerived" value=""/>
 										
 										<html:hidden property="<%=specimenClass%>" styleId="specimenClass" value="<%=obj.getClassName()%>"/>
-										<html:hidden property="<%=specimenType%>" styleId="specimenType" value="<%=obj.getType()%>"/>
+										<html:hidden property="<%=specimenType%>" styleId="specimenType" value="<%=obj.getSpecimenType()%>"/>
 
 									</td>
 
