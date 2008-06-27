@@ -10,6 +10,7 @@
         table="CATISSUE_ABSTRACT_SPECIMEN"
 		lazy="true"
     >
+        <cache usage="read-write" />
         <id
             name="id"
             column="IDENTIFIER"
@@ -39,7 +40,7 @@
             cascade="save-update"
             sort="unsorted"
         >
-
+			 <cache usage="read-write" /> 
             <key
                 column="PARENT_SPECIMEN_ID"
             >
@@ -107,12 +108,12 @@
         <set
             name="specimenEventCollection"
             table="CATISSUE_SPECIMEN_EVENT"
-            lazy="false"
+            fetch="subselect" lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
         >
-
+		 <cache usage="read-write" />
             <key
                 column="SPECIMEN_ID"
             >
@@ -136,6 +137,7 @@
             cascade="save-update"
             sort="unsorted"
         >
+         <cache usage="read-write" />
               <key
                   column="SPECIMEN_ID"
               />
@@ -147,12 +149,12 @@
 	    <set
             name="biohazardCollection"
             table="CATISSUE_SPECIMEN_BIOHZ_REL"
-            lazy="false"
+            fetch="subselect" lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
-
+			 <cache usage="read-write" />
             <key
                 column="SPECIMEN_ID"
             >
@@ -168,11 +170,12 @@
           <set
             name="externalIdentifierCollection"
             table="CATISSUE_EXTERNAL_IDENTIFIER"
-            lazy="false"
+            fetch="subselect" lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
         >
+         	<cache usage="read-write" />
             <key
                 column="SPECIMEN_ID"
             >
