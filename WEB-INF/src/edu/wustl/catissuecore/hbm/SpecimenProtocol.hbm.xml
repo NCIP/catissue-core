@@ -336,7 +336,7 @@
             name="distributionSpecimenRequirementCollection"
             table="CATISSUE_DISTRIBUTION_SPEC_REQ"
             inverse="true"
-            cascade="none"
+            cascade="save-update"
             sort="unsorted"
             fetch="subselect"
             lazy="false"
