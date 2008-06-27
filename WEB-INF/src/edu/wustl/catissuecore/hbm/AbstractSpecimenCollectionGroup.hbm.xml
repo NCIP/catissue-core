@@ -117,6 +117,7 @@
 	            cascade="save-update"
 	            sort="unsorted"
 	        >
+	         <cache usage="read-write" />
 	              <key
 	                  column="COLLECTION_PROTOCOL_EVENT_ID"
 	              />
