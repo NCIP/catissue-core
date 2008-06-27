@@ -1181,11 +1181,9 @@ function submitForm()
 		var form =  document.getElementById('annotationForm');	
 	    var selectBox = document.getElementById('optionSelect');	
 	    var destination = selectBox.options[selectBox.selectedIndex].value;			
-		if(destination != "-1")
-		{
-			form.action="/catissuecore/BuildDynamicEntity.do";
-			form.submit();
-		}
+		form.action="/catissuecore/BuildDynamicEntity.do";
+		form.submit();
+	
 }
 
 function viewAnnotations(specimenEntityId,ID,consentTierCounter,staticEntityName,pageOf)
