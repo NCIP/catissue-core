@@ -618,40 +618,6 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			}
 		}
 	 /**
-	  * Search Specimen array located at given position 
-	  *
-	  */
-	 public void testSearchSpecimenArrayLocatedAtPosition()
-		{
-		 try
-			{
-				StorageContainer storageContainer  = (StorageContainer)TestCaseUtility.getObjectMap(StorageContainer.class);
-				
-				StorageContainer parent = new StorageContainer();
-				parent.setId(storageContainer.getId());
-				
-				ContainerPosition containerPosition = new ContainerPosition();
-				containerPosition.setPositionDimensionOne(1);
-				containerPosition.setPositionDimensionTwo(2);
-				containerPosition.setParentContainer(parent);
-				List result = appService.search(SpecimenArray.class, containerPosition);
-				if(result.size()>1||result.size()<1)
-				{
-					assertFalse("testSpecimenLocatedAtPosition Could not find Storage Container Object", true);
-				}
-				assertTrue("Storage Container successfully found. Size:" +result.size(), true);
-			}
-			catch(Exception e)
-			{
-				Logger.out.error(e.getMessage(),e);
-				System.out
-						.println("StorageContainerTestCases.testSearchSpecimenArrayLocatedAtPosition()");
-				System.out.println(e.getMessage());
-				e.printStackTrace();
-				assertFalse("Could not find Storage Container Object", true);
-			}
-		}
-	 /**
 	  * Add Tissue specimen at given container position 
 	  *
 	  */
