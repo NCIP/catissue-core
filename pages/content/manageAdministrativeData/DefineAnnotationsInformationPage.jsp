@@ -1,5 +1,9 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%
+			String operation = request.getParameter("operation");
+			session.setAttribute("deoperation",operation);
 
+%>
 <form id="thisform" name="thisform">
 	<p>&nbsp;</p>
 	<p><table summary="" cellpadding="5" cellspacing="0" border="0" width="620" height="160">

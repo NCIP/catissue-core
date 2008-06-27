@@ -29,6 +29,7 @@
 String link = request.getParameter("link");
 String containerId = request.getParameter("containerId");
 String selectedStaticEntityId=request.getParameter("selectedStaticEntityId");
+String strDEOperation = (String) session.getAttribute("deoperation");
 
 List groupList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_GROUP);
 
@@ -79,12 +80,16 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 		<script>
 			function initializeAnnotationsForm()
 			{
+				
+				if(document.getElementById('optionSelect')!=null)
 				document.getElementById('optionSelect').disabled=false;
+				
 				if(top.location!=location)
 				{
 					top.location.href = location.href;
 				}
 				<%  if(link!=null && link.equals("editCondn"))   {%>
+					if(document.getElementById('optionSelect')!=null)
 					document.getElementById('optionSelect').disabled=true;
 					<%}else{%>
 				initializeGridForGroups("<%=groupsXML%>");
@@ -107,7 +112,6 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 			}
 			function editAnno()
 			{
-				//alert('EditAnno');
 				document.forms[0].action="/catissuecore/DefineAnnotations.do?link=edit";
 				document.forms[0].submit();
 			}
@@ -121,6 +125,7 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 			
 		function initializeGridForGroups(groupsXML)
         {	
+
 			gridForGroups= new dhtmlXGridObject('divForGroups');
 			gridForGroups.setImagePath("dhtml_comp/imgs/");
 			//		gridForGroups.enableAutoHeigth(false);  //on safari
@@ -154,13 +159,18 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 
 		</script>
 	</head>
+	<html:errors />
+	<html:messages id="messageKey" message="true" header="messages.header" 	footer="messages.footer">
+		<%=messageKey%>
+	</html:messages>
 
 	<html:form styleId='annotationForm' action='/DefineAnnotations'>
 	
 	<body onload = "initializeAnnotationsForm()">
-
-
-
+	 <html:hidden property="deoperation" value="<%=strDEOperation%>"/>
+ 	<%if (strDEOperation.equals("add") || ( link!=null && link.equals("editCondn") ))
+		{ 		
+	%>
 <table id="tableID" width="600" cellspacing="0" cellpadding="0">
       <tr height = 10>
       	   <td></td>
@@ -253,9 +263,12 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
       </tr>
   </table>
 
+	<%}%>
    <table valign="top" border="0" height="80%" width = "600" cellspacing="0" cellpadding="3">
+	
+   	<%if (link==null && strDEOperation.equals("edit")){ 
 
-   	<%if (link==null){ %>
+	%>
 
 	<tr valign="top" height = "80%">
 	 <td  width="2%"></td>	
