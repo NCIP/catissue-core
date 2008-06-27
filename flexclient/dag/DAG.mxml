@@ -1118,7 +1118,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		 dagPathUIMap.clear();
 	}
 
-       public function openPopUp():void
+       public function openTQPopUp():void
        {
 		 var dagNode1:DAGNode = DAGNode(mainPanel.getChildByName(node1));
 		 var dagNode2:DAGNode = DAGNode(mainPanel.getChildByName(node2));
@@ -1151,7 +1151,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	private function splitEntityName(entityName : String) : String
 	{
 		var str : String = "";
-		
+		//Alert.show("entityName is:"+entityName);
 		//splitting the entity name on space 
 		var words : Array = entityName.split(" ");
 		
@@ -1218,8 +1218,8 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	   
 	    popUp.firstEntityLabel = splitEntityName(entitiesNameList.getItemAt(0) as String);
 	    popUp.secondEntityLabel = splitEntityName(entitiesNameList.getItemAt(1) as String ); 
-	  // popUp.firstEntityName = firstDAGNode.nodeName; 
-	  // popUp.secondEntityName = secondDAGNode.nodeName;
+	    popUp.firstEntityName = firstDAGNode.nodeName; 
+	  popUp.secondEntityName = secondDAGNode.nodeName;
 	   popUp.dataProvider = queryDataMap;
 	   popUp.firstNodeDp = firstNodeDataObject;
 	   popUp.secondNodeDp =  secondNodeDataObject; 
@@ -1309,6 +1309,33 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
       {
       		//Alert.show("In drag Drop");	
       }
+      
+      /*
+  	       This method is invoked from CustomFormulaNode file to delete the Custom Node on click of delete menu  
+  	   */
+
+      public function deleteCustomNode(customNodeName : String ,line1 : String,line2 :String) : void
+      {
+           var customNode : CustomFormulaNode = mainPanel.getChildByName(customNodeName) as CustomFormulaNode;
+           var line : UIComponent= null; 
+           if(customNode != null)
+           {
+           	  mainPanel.removeChild(customNode);
+           }
+           
+           line = mainPanel.getChildByName(line1)as UIComponent;
+           if(line != null)
+           {
+				mainPanel.removeChild(line);           	
+           }
+           line = mainPanel.getChildByName(line2)as UIComponent;
+           if(line != null)
+           {
+              	mainPanel.removeChild(line);  
+           }
+           
+          // rpcService.removeCustomFormula();
+      }
 	/*private function geAssociationHandler(event: ResultEvent)
 	{
 		var pathList:ArrayCollection = event.result as ArrayCollection;
@@ -1335,7 +1362,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 		<mx:HBox  borderStyle="none" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="320" height="39" x="0" y="0">
 			<mx:Button label="Add Link" click="drawLine()" fontSize="9"/>
 			<mx:Button label="Clear All Paths" click="clearPaths()" fontSize="9"/>
-			<mx:Button label="Temporal Query" click="openPopUp()" fontSize="9"/> 
+			<mx:Button label="Temporal Query" click="openTQPopUp()" fontSize="9"/> 
 		</mx:HBox>
 	</mx:Panel>
 	<mx:Label id="currentExp" fontFamily="Courier New" fontSize="11" fontWeight="bold"/>
