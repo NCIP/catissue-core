@@ -417,14 +417,14 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			System.out.println(user);
 			user = (User) appService.createObject(user);
 			Logger.out.info("For null CRG, it should throw exception");
-			fail("For null CRG, it should throw exception");
-			
+			fail("For null CRG, it should throw exception");	
+					
 		 }
 		 catch(Exception e)
 		 {
 			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertTrue("For empty last name, it throws exception", true);
+			 assertTrue("For empty last name, it throws exception", true);			 
 			 
 		 }
 	 }
@@ -439,15 +439,97 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			user = (User) appService.createObject(user);
 			Logger.out.info("For invalid role id, it should throw exception");
 			fail("For invalid role id, it should throw exception");
+						
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("For invalid role id, it throws exception", true);			 
+			 
+		 }
+	 }  
+	
+	public void testAddUserWithInvalidPhoneNumber()
+	{
+		try
+		 {
+			User user = (User) BaseTestCaseUtility.initUser();		
+			Address address = new Address();
+			address.setStreet("Main street");
+			address.setCity("New hampshier");
+			address.setState("Alabama");
+			address.setZipCode("12345");
+			address.setCountry("United States");
+			address.setPhoneNumber("21222324");
+			address.setFaxNumber("212-223-2224");
+			user.setAddress(address);
+			System.out.println(user);
+			user = (User) appService.createObject(user);
+			Logger.out.info("Invalid phone number entered, it should throw exception");
+			fail("Invalid phone number entered, it should throw exception");
 			
 		 }
 		 catch(Exception e)
 		 {
 			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertTrue("For invalid role id, it throws exception", true);
-			 
-		 }
-	 }  
+			 assertTrue("Invalid phone number entered, correct format is xxx-xxx-xxxx", true);			 
+		 }		
+	}	
 	
+	public void testAddUserWithInvalidFaxNumber()
+	{
+		try
+		 {
+			User user = (User) BaseTestCaseUtility.initUser();		
+			Address address = new Address();
+			address.setStreet("Main street");
+			address.setCity("New hampshier");
+			address.setState("Alabama");
+			address.setZipCode("12345");
+			address.setCountry("United States");
+			address.setPhoneNumber("212-223-2224");
+			address.setFaxNumber("2122232224");
+			user.setAddress(address);
+			System.out.println(user);
+			user = (User) appService.createObject(user);
+			Logger.out.info("For invalid fax number, it should throw exception");
+			fail("Invalid fax number entered, it should throw exception");			
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("Invalid fax number entered, correct format is xxx-xxx-xxxx", true);			 
+		 }		
+	}
+	
+	public void testAddUserWithEmptyPhoneNumber()
+	{
+		try
+		 {
+			User user = (User) BaseTestCaseUtility.initUser();		
+			Address address = new Address();
+			address.setStreet("Main street");
+			address.setCity("New hampshier");
+			address.setState("Alabama");
+			address.setZipCode("12345");
+			address.setCountry("United States");
+			address.setPhoneNumber("");
+			address.setFaxNumber("2122232224");
+			user.setAddress(address);
+			System.out.println(user);
+			user = (User) appService.createObject(user);
+			Logger.out.info("Phone number not entered, it should throw exception");
+			fail("Phone number not entered, it should throw exception");
+			
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertTrue("Phone number is Empty", true);			 
+		 }		
+	}	
 }
