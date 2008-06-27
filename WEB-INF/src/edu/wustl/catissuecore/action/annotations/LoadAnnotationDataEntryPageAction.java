@@ -605,6 +605,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         List<NameValueBean> annotationsList = new ArrayList<NameValueBean>();
         AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
         List dynEntitiesList = null;
+        List allEntitiesList = new ArrayList();
         List cpIdList = new ArrayList();
         if(staticEntityName != null && staticEntityRecordId != null )
         {
@@ -618,12 +619,14 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         {
             dynEntitiesList = annotationBizLogic.getListOfDynamicEntities(Utility.toLong(entityId));
             dynEntitiesList = annotationBizLogic.getAnnotationIdsBasedOnCondition(dynEntitiesList,cpIdList);
-           dynEntitiesList = checkForAbstractEntity(dynEntitiesList);
+            allEntitiesList = checkForAbstractEntity(dynEntitiesList);
+            allEntitiesList.addAll(checkForAbstractCategoryEntity(dynEntitiesList));
+           
         }
       //  getConditionalDEId(dynEntitiesList,cpIdList);
-        if (dynEntitiesList != null)
+        if (allEntitiesList != null)
         {
-            Iterator<Long> dynEntitiesIterator = dynEntitiesList.iterator();
+            Iterator<Long> dynEntitiesIterator = allEntitiesList.iterator();
            NameValueBean annotationBean = null;
             while (dynEntitiesIterator.hasNext())
             {
@@ -648,6 +651,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException
     {
+	   
         List entitesList = new ArrayList();
         if (dynEntitiesList != null)
         {
@@ -663,6 +667,32 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         }
         return entitesList;
     }
+	/**
+	 * @param dynEntitiesList
+	 * @return
+	 * @throws DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException
+	 */
+   	private List checkForAbstractCategoryEntity(List dynEntitiesList)
+   			throws DynamicExtensionsSystemException,
+   			DynamicExtensionsApplicationException
+   	{
+	   	List entitesList = new ArrayList();
+	   	if (dynEntitiesList != null)
+	   	{
+	   		Iterator<Long> dynEntitiesIterator = dynEntitiesList.iterator();
+	   		EntityManagerInterface entityManager = EntityManager.getInstance();
+	   		while (dynEntitiesIterator.hasNext())
+	   		{
+	   			Long deContainerId=dynEntitiesIterator.next();
+	   			deContainerId =entityManager.checkContainerForAbstractCategoryEntity(deContainerId);
+	   			if(deContainerId != null)
+	   				entitesList.add(deContainerId);
+	   		}
+	   	}
+	   	return entitesList;
+   	}
+
 
     /**
      * @param long1
