@@ -1045,13 +1045,13 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			specimen.setAvailable(new Boolean(true));
 		} */
-	   //bug #7594	
+	 /*  //bug #7594	
 		if (Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase(specimen.getCollectionStatus()) &&
 				(Constants.COLLECTION_STATUS_PENDING).equals(specimenOld.getCollectionStatus()))
 		{
 		    specimen.setAvailable(true);
 			specimen.setAvailableQuantity(specimenOld.getInitialQuantity());
-        }
+        } */
 	}
 
 	/**
@@ -2751,8 +2751,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		if (specimenVO.getInitialQuantity() != null)
 		{
 			Double quantity = specimenVO.getInitialQuantity();
-			Double availableQuantity = specimenDO.getAvailableQuantity();
-			if (availableQuantity == null)
+			Double availableQuantity = null;
+			if(specimenVO.getAvailableQuantity() != specimenDO.getAvailableQuantity() && 
+					specimenVO.getAvailableQuantity() < specimenDO.getInitialQuantity() ) {
+				availableQuantity = specimenVO.getAvailableQuantity();
+			} else {
+				availableQuantity = specimenDO.getAvailableQuantity();
+			}
+	    	if (availableQuantity == null)
 			{
 				availableQuantity = new Double(0);
 				specimenDO.setAvailableQuantity(availableQuantity);
@@ -2761,11 +2767,17 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			double oldInitQty = specimenDO.getInitialQuantity().doubleValue();
 			double differenceQty = modifiedInitQty - oldInitQty;
 			double newAvailQty = 0.0;
-			if (differenceQty == 0 || !specimenDO.getCollectionStatus().equals("Pending"))
+			
+			if(differenceQty == 0 && !Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase(specimenDO.getCollectionStatus()) && 
+					Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase(specimenVO.getCollectionStatus())) {
+				
+				newAvailQty = modifiedInitQty;
+			}
+			else if (differenceQty == 0 || !specimenDO.getCollectionStatus().equals("Pending"))
 			{
 				if(differenceQty < 0)
 				{
-					newAvailQty = availableQuantity.doubleValue();
+					 newAvailQty = availableQuantity.doubleValue();
 				}
 				else
 				{
