@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.UserForm;
+import edu.wustl.catissuecore.bizlogic.AssignPrivilegePageBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
@@ -63,6 +64,13 @@ public class UserAction extends SecureAction
         String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
         String openInCPFrame=(String)request.getParameter(Constants.OPEN_PAGE_IN_CPFRAME);
         UserForm userForm=(UserForm)form;
+        
+        
+        ShowAssignPrivilegePageAction showAssignPrivilegePageAction = new ShowAssignPrivilegePageAction();
+        final AssignPrivilegePageBizLogic apBizLogic= showAssignPrivilegePageAction.getAssignPrivilegePageBizLogic();
+		final List<NameValueBean> siteList = apBizLogic.getSiteList(false);
+		request.setAttribute(Constants.SITELIST, siteList);
+        
         
         String formName,prevPage=null,nextPage=null;
         boolean roleStatus=false;

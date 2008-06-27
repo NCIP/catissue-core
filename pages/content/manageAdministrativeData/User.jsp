@@ -2,6 +2,9 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head>
@@ -15,6 +18,22 @@
 	src="jss/caTissueSuite.js"></script>
 
 <script type="text/javascript">
+
+
+function checkSiteSelectedAllOption()
+{
+	siteListCtrl=document.getElementById("siteIds");
+
+	if (siteListCtrl.options[ 0 ].selected)
+	{
+			for (var i = 0; i < siteListCtrl.options.length; i++)
+			{
+				siteListCtrl.options[ 0 ].selected = false;
+				siteListCtrl.options[ i+1 ].selected = true;
+			}
+	}
+}
+
 
 function handleStatus(status)
 {
@@ -488,32 +507,66 @@ function handleStatus(status)
 												</logic:equal>
 												<tr>
 													<td width="1%" height="25" align="left" class="black_ar">
+													</td>
+													<td width="16%" align="left" class="black_ar"><label
+														for="site"><bean:message key="user.adminUser" /> </label></td>
+																
+												<td width="67%" align="left">
+									<html:radio styleClass="black_ar" styleId="adminuser" property="adminuser" value="true" >
+								<label for="siteId">
+									<bean:message key="user.yes"/>
+								</label> &nbsp  &nbsp &nbsp &nbsp  
+							</html:radio>
+									<html:radio styleClass="black_ar" styleId="adminuser1" property="adminuser" value="false">
+								<label for="siteId">
+									<bean:message key="user.no"/>
+								</label>
+							</html:radio>
+							
+												</td>
+													
+																				
+												</tr> <tr> <td> </td> </tr> <tr> <td> </td> </tr> 
+												<tr>
+													<td width="1%" height="25" align="left" class="black_ar">
 													<span class="blue_ar_b"><img
 														src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 														width="6" height="6" hspace="0" vspace="0" /></span></td>
 													<td width="16%" align="left" class="black_ar"><label
-														for="role"><bean:message key="user.role" /> </label></td>
-													<td width="83%" colspan="4" align="left" valign="top"
-														class="black_new"><autocomplete:AutoCompleteTag
-														property="role" optionsList='${requestScope.roleList}'
-														initialValue='${userForm.role}'
-														styleClass="formFieldSized12" staticField="false"
-														readOnly='${requestScope.roleStatus}' /></td>
-												</tr>
+														for="site"><bean:message key="user.site" /> </label></td>
+																
+								
+												<%
+													List siteList = (List) request.getAttribute(Constants.SITELIST);
+												%>	
+											
+																					
+												<td align="left">
+												<html:select
+													property="siteIds" styleClass="formFieldSizedNew"
+													styleId="siteIds" size="5" multiple="true"
+													onmouseover="showTip(this.id)"
+													onmouseout="hideTip(this.id)">
+													<html:options collection="<%=Constants.SITELIST%>"
+														labelProperty="name" property="value" />
+												</html:select></td>
+													
+																				
+												</tr> <tr> <td> </td> </tr> <tr> <td> </td> </tr> 
 												<tr>
 													<td height="25" align="left" class="black_ar">&nbsp;</td>
 													<td align="left" class="black_ar"><label
 														for="comments"> <bean:message key="user.comments" />
 													</label></td>
 													<td colspan="4" align="left" valign="top"><label>
-													<html:textarea styleClass="black_ar_s" cols="34" rows="3"
+													<html:textarea styleClass="formFieldSizedNew" cols="34" rows="3"
 														styleId="comments" property="comments" /> </label></td>
-												</tr>
+												</tr> <tr> <td> </td> </tr> <tr> <td> </td> </tr> 
 												<logic:equal name="pageOf"
 													value='${requestScope.pageOfUserAdmin}'>
 													<logic:equal name="operation"
 														value='${requestScope.editforJSP}'>
-														<tr>
+														<tr> 
 															<td width="1%" height="25" align="left" class="black_ar"><span
 																class="blue_ar_b"><img
 																src="images/uIEnhancementImages/star.gif"
@@ -543,7 +596,7 @@ function handleStatus(status)
 								</tr>
 								<tr class="td_color_F7F7F7">
 									<td colspan="3" class="buttonbg"><html:submit
-										styleClass="blue_ar_b">
+										styleClass="blue_ar_b" onclick="checkSiteSelectedAllOption()">
 										<bean:message key="buttons.submit" />
 									</html:submit> &nbsp;| <span class="cancellink"> <logic:notEqual
 										name="pageOf" value='${requestScope.pageOfSignUp}'>

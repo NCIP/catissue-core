@@ -92,6 +92,14 @@
             insert="true"
             column="FIRST_TIME_LOGIN"
         />
+        
+        		  <property
+            name="adminuser"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="IS_ADMIN"
+        />
 	
         <many-to-one
             name="department"
@@ -220,7 +228,52 @@
              />
 
         </set>
- -->
+
+-->
+         <set
+            name="siteCollection"
+            table="CATISSUE_SITE_USERS"
+            lazy="true"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+            <key
+                column="USER_ID"
+            >
+            </key>
+
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.Site"
+                column="SITE_ID"
+                outer-join="auto"
+             />
+
+        </set>
+        
+         <set
+            name="userCollectionProtocolCollection"
+            table="CATISSUE_USER_COLLECTION_PROTOCOLS"
+            lazy="true"
+            inverse="true"
+            cascade="none"
+            sort="unsorted"
+        >
+
+            <key
+                column="USER_ID"
+            >
+            </key>
+
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.CollectionProtocol"
+                column="COLLECTION_PROTOCOL_ID"
+                outer-join="auto"
+             />
+
+        </set>
+
 
            <!--
             To add non XDoclet property mappings, create a file named

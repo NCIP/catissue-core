@@ -228,6 +228,54 @@
              />
 
         </set>
+        
+        <set
+            name="userCollection"
+            table="CATISSUE_USER_COLLECTION_PROTOCOLS"
+            fetch="subselect" lazy="false" 
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+        
+        <cache usage="read-write" />
+
+            <key
+                column="COLLECTION_PROTOCOL_ID"
+            >
+            </key>
+
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.User"
+                column="USER_ID"
+                 
+             />
+
+        </set>
+        
+        <set
+            name="sitecollection"
+            table="CATISSUE_SITE_COLLECTION_PROTOCOLS"
+            lazy="false" 
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+        
+        <cache usage="read-write" />
+
+            <key
+                column="COLLECTION_PROTOCOL_ID"
+            >
+            </key>
+
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.Site"
+                column="SITE_ID"
+                 
+             />
+
+        </set>
 
         <set
             name="collectionProtocolEventCollection"

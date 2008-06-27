@@ -119,12 +119,17 @@ public class UserBizLogic extends DefaultBizLogic
 				csmUser.setStartDate(user.getStartDate());
 				csmUser.setPassword(generatedPassword);
 
-				SecurityManager.getInstance(UserBizLogic.class).createUser(csmUser);
+				SecurityManager securityManager = SecurityManager.getInstance(UserBizLogic.class);
+				securityManager.createUser(csmUser);
 
-				if (user.getRoleId() != null)
-				{
-					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
-				}
+				 if (user.getAdminuser())
+				 {
+					 securityManager.assignRoleToUser(csmUser.getUserId().toString(),"1");
+				 }
+//				if (user.getRoleId() != null)
+//				{
+//					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+//				}
 
 				user.setCsmUserId(csmUser.getUserId());
 				//					                 user.setPassword(csmUser.getPassword());
@@ -383,11 +388,11 @@ public class UserBizLogic extends DefaultBizLogic
 				csmUser.setEmailId(user.getEmailAddress());
 
 				// Assign Role only if the page is of Administrative user edit.
-				if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
-						&& (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
-				{
-					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
-				}
+//				if ((Constants.PAGEOF_USER_PROFILE.equals(user.getPageOf()) == false)
+//						&& (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false))
+//				{
+//					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+//				}
 			
 				dao.update(user.getAddress(), sessionDataBean, true, false, false);
 
@@ -541,8 +546,8 @@ public class UserBizLogic extends DefaultBizLogic
 	{
 		List userList = null;
 		Logger.out.debug("In user biz logic retrieve........................");
-		try
-		{
+//		try
+//		{
 			// Get the caTISSUE user.
 			userList = super.retrieve(className, colName, colValue);
 
@@ -554,20 +559,20 @@ public class UserBizLogic extends DefaultBizLogic
 				if (appUser.getCsmUserId() != null)
 				{
 					//Get the role of the user.
-					Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(appUser.getCsmUserId().longValue());
+//					Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(appUser.getCsmUserId().longValue());
 					//Logger.out.debug("In USer biz logic.............role........id......." + role.getId().toString());
 
-					if (role != null)
-					{
-						appUser.setRoleId(role.getId().toString());
-					}
+//					if (role != null)
+//					{
+//						appUser.setRoleId(role.getId().toString());
+//					}
 				}
 			}
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
+//		}
+//		catch (SMException e)
+//		{
+//			throw handleSMException(e);
+//		}
 
 		return userList;
 	}
@@ -682,17 +687,17 @@ public class UserBizLogic extends DefaultBizLogic
 
 			if (Constants.PAGEOF_USER_ADMIN.equals(user.getPageOf()))
 			{
-				try
-				{
-					if (!Validator.isEnumeratedValue(getRoles(), user.getRoleId()))
-					{
-						throw new DAOException(ApplicationProperties.getValue("user.role.errMsg"));
-					}
-				}
-				catch (SMException e)
-				{
-					throw handleSMException(e);
-				}
+//				try
+//				{
+//					if (!Validator.isEnumeratedValue(getRoles(), user.getRoleId()))
+//					{
+//						throw new DAOException(ApplicationProperties.getValue("user.role.errMsg"));
+//					}
+//				}
+//				catch (SMException e)
+//				{
+//					throw handleSMException(e);
+//				}
 
 				if (operation.equals(Constants.ADD))
 				{
@@ -855,14 +860,14 @@ public class UserBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		
-		if (user.getRoleId() != null)
-		{
-			if (!validator.isValidOption(user.getRoleId()) || validator.isEmpty(String.valueOf(user.getRoleId())))
-			{
-				message = ApplicationProperties.getValue("user.role");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
-			}
-		}
+//		if (user.getRoleId() != null)
+//		{
+//			if (!validator.isValidOption(user.getRoleId()) || validator.isEmpty(String.valueOf(user.getRoleId())))
+//			{
+//				message = ApplicationProperties.getValue("user.role");
+//				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+//			}
+//		}
 		return validate;
 	}
 	
@@ -1186,4 +1191,6 @@ public class UserBizLogic extends DefaultBizLogic
 	//					     	return retStr;
 	//					     }
 	//					     
+	
+		
 }

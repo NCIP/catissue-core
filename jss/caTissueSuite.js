@@ -162,6 +162,7 @@ function openCRGWindow()
 							var userId=jsonResponse.locations[i].userId;
 							var roleId=jsonResponse.locations[i].roleId; 
 							var sites=jsonResponse.locations[i].sites;
+							var actions = jsonResponse.locations[i].actionName;
 							// for update table after response
 				
 							var selectedRowId=document.getElementById(rowId);
@@ -174,7 +175,7 @@ function openCRGWindow()
 									// add row to table
 									var opt="addRow";
 								}
-								addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites);
+								addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites,actions);
 						}
 					}
 				}
@@ -279,8 +280,10 @@ function openCRGWindow()
 			sendRequestsWithData(url,data,operation);	
 	}
 
-	function addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites)
+	function addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites, actions)
 	{
+		//alert(sites);
+
 		var tb = document.getElementById(tableId);
 		var rows = new Array(); 
 		rows = tb.rows;
@@ -315,8 +318,12 @@ function openCRGWindow()
 
 			// Second Cell
 			var str=""+sites;
+			var newSites = "" ;
 			if(str.length>35){
-				var newSites=str.substring(0,33)+"...";
+				newSites=str.substring(0,33)+"...";
+			}
+			else{
+				newSites=str;;
 			}
 			var aprSites=row.insertCell(1);
 			aprSites.className="black_ar";
@@ -337,12 +344,21 @@ function openCRGWindow()
 			ctrl=document.getElementById('roleIds');
 			sname=ctrl.options[ctrl.selectedIndex].text;
 			aprRole.innerHTML="<span>"+sname+"</span>";
-
+			
+			
+			var actionString = "" + actions;
+			var newActionsString="";
+			if(actionString.length>35){
+				newActionsString=actionString.substring(0,33)+"...";
+			}
+			else{
+				newActionsString=actionString;;
+			}
 			//Fifth Cell
 			var aprActions=row.insertCell(4);
 			aprActions.className="black_ar";
 			aprActions.width="20%";
-			aprActions.innerHTML="<span>action1,action2</span>";
+			aprActions.innerHTML="<span>"+newActionsString+"</span>";
 	}
 function getTip(sites) {
 		return sites;

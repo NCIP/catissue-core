@@ -14,6 +14,8 @@ import org.apache.struts.action.ActionMapping;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bizlogic.AssignPrivilegePageBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
@@ -25,6 +27,8 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
+import gate.security.Session;
+import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * Sets data for site,user,action and role on page loading and handles the ajax requests.
@@ -40,7 +44,12 @@ public class ShowAssignPrivilegePageAction extends BaseAction {
 			HttpServletRequest request, HttpServletResponse response)
 	throws ServletException {
 		ActionForward findForward = null;
-		
+		CollectionProtocolForm  cpForm = (CollectionProtocolForm)form;
+		if(cpForm!=null)
+		{
+			CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) request.getSession().getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+			collectionProtocolBean.setSiteIds(cpForm.getSiteIds());
+		}
 		final String operation = (String) request.getParameter(Constants.OPERATION);
 		final String cpOperation = (String) request.getParameter("cpOperation");
 		request.setAttribute("cpOperation", cpOperation);
@@ -59,7 +68,7 @@ public class ShowAssignPrivilegePageAction extends BaseAction {
 	 * Gives Bizlogic for AssignPrivilege
 	 * @return AssignPrivilegePageBizLogic
 	 */
-	private AssignPrivilegePageBizLogic getAssignPrivilegePageBizLogic() {
+	public AssignPrivilegePageBizLogic getAssignPrivilegePageBizLogic() {
 		AssignPrivilegePageBizLogic apBizLogic = null;
 		try {
 			apBizLogic = (AssignPrivilegePageBizLogic) AbstractBizLogicFactory
@@ -92,6 +101,9 @@ public class ShowAssignPrivilegePageAction extends BaseAction {
 			logger.error("DAOException in  getting objectList for AssignPrivilegePageBizLogic  in ShowAssignPrivilegePageAction..."+exe);
 		} catch (SMException e) {
 			logger.error("SMException in  getting objectList for AssignPrivilegePageBizLogic  in ShowAssignPrivilegePageAction..."+e);
+		}catch (CSException e)
+		{
+			logger.error("CSException in  getting objectList for AssignPrivilegePageBizLogic  in ShowAssignPrivilegePageAction..."+e);
 		}
 		return mapping.findForward(Constants.SUCCESS);
 	}
@@ -124,7 +136,7 @@ public class ShowAssignPrivilegePageAction extends BaseAction {
 				final String siteIds = (String) request.getParameter(Constants.SELECTED_SITE_IDS);
 				final String actionIds = (String) request.getParameter(Constants.SELECTED_ACTION_IDS);
 				final String userIds = (String) request.getParameter(Constants.SELECTED_USER_IDS);
-				final String roleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
+	 			final String roleId = (String) request.getParameter(Constants.SELECTED_ROLE_IDS);
 				final List<JSONObject> listForUPSummary =apBizLogic.addPrivilege(session,userIds,siteIds,roleId,actionIds );
 				setResponse(response, listForUPSummary);
 			} else if (Constants.OPERATION_DELETE_ROW.equals(operation)) {

@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.24 $
+ * $Name: 1.41.2.25 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -90,6 +90,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	    	LabelAndBarcodeGeneratorInitializer.init();
 	        initCatissueCache();
 			initEntityCache();
+			
+			edu.wustl.common.querysuite.security.utility.Utility.initializeMap();
 //			initTitliIndex();
 			edu.wustl.common.querysuite.security.utility.Utility.setReadDeniedAndEntitySqlMap();
 			logger.info("Initialization complete");

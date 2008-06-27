@@ -40,6 +40,9 @@ public class Variables extends edu.wustl.common.util.global.Variables
     
     public static List<String> queryReadDeniedObjectList = new ArrayList<String>();
     
+    public static Map<String,List<String>> roleEntityMap = new HashMap<String, List<String>>(); 
+    
+       
     public static String prepareColTypes(List dataColl)
     {
     	return prepareColTypes(dataColl, false);

@@ -18,8 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.Vector;
+import java.util.Map;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -31,25 +30,22 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.RequirementSpecimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
+import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
-import edu.wustl.common.security.PrivilegeManager;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -57,6 +53,7 @@ import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.util.CollectionProtocolAuthorization;
 
 /**
  * CollectionProtocolBizLogic is used to add CollectionProtocol information into the database using Hibernate.
@@ -75,40 +72,35 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
-		TaskTimeCalculater cpInsert = TaskTimeCalculater.startTask(
-				"Complete Collection Protocol Insert", CollectionProtocolBizLogic.class);
-
-		CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
+		CollectionProtocol collectionProtocol = null;
+		Map<String,SiteUserRolePrivilegeBean> rowIdMap =null;
+		if (obj instanceof CollectionProtocolDTO)
+		{
+			CollectionProtocolDTO CpDto = (CollectionProtocolDTO) obj;
+			collectionProtocol = CpDto.getCollectionProtocol();
+			rowIdMap = CpDto.getRowIdBeanMap();
+		}
+		else
+		    collectionProtocol = (CollectionProtocol) obj;
+		
 		checkStatus(dao, collectionProtocol.getPrincipalInvestigator(), "Principal Investigator");
 		validateCollectionProtocol(dao, collectionProtocol, "Principal Investigator");
-		insertCollectionProtocol(dao, sessionDataBean, collectionProtocol);
-		TaskTimeCalculater.endTask(cpInsert);
+		insertCollectionProtocol(dao, sessionDataBean, collectionProtocol,rowIdMap);
 	}
 
 	private void insertCollectionProtocol(DAO dao, SessionDataBean sessionDataBean,
-			CollectionProtocol collectionProtocol) throws DAOException, UserNotAuthorizedException
+			CollectionProtocol collectionProtocol,Map<String,SiteUserRolePrivilegeBean> rowIdMap) throws DAOException, UserNotAuthorizedException
 	{
-
 		setPrincipalInvestigator(dao, collectionProtocol);
 		setCoordinatorCollection(dao, collectionProtocol);
-		/**
-		 * Patch Id : FutureSCG_6
-		 * Description : Calling method to validate the CPE against uniqueness
-		 */
-		//isCollectionProtocolLabelUnique(collectionProtocol);
-		System.out.println("ID = " + collectionProtocol.getId());
 		dao.insert(collectionProtocol, sessionDataBean, true, true);
-
-		TaskTimeCalculater eventInsert = TaskTimeCalculater.startTask("Insert all events in CP",
-				CollectionProtocolBizLogic.class);
 		insertCPEvents(dao, sessionDataBean, collectionProtocol);
-		//This method will insert Child CP Associated with parent CP.
-		insertchildCollectionProtocol(dao, sessionDataBean, collectionProtocol);
-		TaskTimeCalculater.endTask(eventInsert);
+		insertchildCollectionProtocol(dao, sessionDataBean, collectionProtocol,rowIdMap);
 		HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
 		protectionObjects.add(collectionProtocol);
 
-		authenticate(collectionProtocol, protectionObjects);
+		CollectionProtocolAuthorization collectionProtocolAuthorization = new CollectionProtocolAuthorization();
+		collectionProtocolAuthorization.authenticate(collectionProtocol, protectionObjects, rowIdMap);
 	}
 
 	private void validateCollectionProtocol(DAO dao, CollectionProtocol collectionProtocol,
@@ -164,7 +156,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @throws UserNotAuthorizedException
 	 */
 	private void insertchildCollectionProtocol(DAO dao, SessionDataBean sessionDataBean,
-			CollectionProtocol collectionProtocol) throws DAOException, UserNotAuthorizedException
+			CollectionProtocol collectionProtocol,Map<String,SiteUserRolePrivilegeBean> rowIdMap) throws DAOException, UserNotAuthorizedException
 	{
 
 		Collection childCPCollection = collectionProtocol.getChildCollectionProtocolCollection();
@@ -173,21 +165,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			CollectionProtocol cp = (CollectionProtocol) cpIterator.next();
 			cp.setParentCollectionProtocol(collectionProtocol);
-			insertCollectionProtocol(dao, sessionDataBean, cp);
+			insertCollectionProtocol(dao, sessionDataBean, cp,rowIdMap);
 		}
 
 	}
 
-	private Set getProtectionObjects(AbstractDomainObject obj)
-	{
-		Set protectionObjects = new HashSet();
-
-		SpecimenCollectionRequirementGroup specimenCollectionGroup = (SpecimenCollectionRequirementGroup) obj;
-		protectionObjects.add(specimenCollectionGroup);
-
-		Logger.out.debug(protectionObjects.toString());
-		return protectionObjects;
-	}
 
 	/**
 	 * 
@@ -247,40 +229,22 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 	}
 
-	private void authenticate(CollectionProtocol collectionProtocol, HashSet protectionObjects)
-			throws DAOException
-	{
-
-		TaskTimeCalculater cpAuth = TaskTimeCalculater.startTask("CP insert Authenticatge",
-				CollectionProtocolBizLogic.class);
-		try
-		{
-
-			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-
-			privilegeManager.insertAuthorizationData(getAuthorizationData(collectionProtocol),
-					protectionObjects, getDynamicGroups(collectionProtocol), collectionProtocol
-							.getObjectId());
-			//			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
-			//			getAuthorizationData(collectionProtocol), protectionObjects,
-			//			getDynamicGroups(collectionProtocol));
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}
-		finally
-		{
-			TaskTimeCalculater.endTask(cpAuth);
-		}
-
-	}
+	
 
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
 		System.out.println("PostInsert called");
-		CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
+		CollectionProtocol collectionProtocol = null;
+		if (obj instanceof CollectionProtocolDTO)
+		{
+			CollectionProtocolDTO CpDto = (CollectionProtocolDTO) obj;
+			collectionProtocol = CpDto.getCollectionProtocol();
+		}
+		else
+		{
+		  collectionProtocol = (CollectionProtocol) obj;
+		}
 		ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
 		participantRegistrationCacheManager.addNewCP(collectionProtocol.getId(), collectionProtocol
 				.getTitle(), collectionProtocol.getShortTitle());
@@ -296,7 +260,20 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
-		CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
+		CollectionProtocol collectionProtocol =null;
+		if (obj instanceof CollectionProtocolDTO)
+		{
+			CollectionProtocolAuthorization cpAuthorization = new CollectionProtocolAuthorization();
+			CollectionProtocolDTO cpDto = (CollectionProtocolDTO) obj;
+			collectionProtocol = cpDto.getCollectionProtocol();
+			HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
+			protectionObjects.add(collectionProtocol);
+			//cpAuthorization.authenticate(collectionProtocol, protectionObjects, cpDto.getRowIdBeanMap());
+		}
+		else
+		{
+			collectionProtocol = (CollectionProtocol)obj;
+		}
 		/**
 		 * Patch Id : FutureSCG_7
 		 * Description : Calling method to validate the CPE against uniqueness
@@ -342,17 +319,30 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		disableRelatedObjects(dao, collectionProtocol);
 
+		updatePIAndCoordinatorGroup(dao, collectionProtocol, collectionProtocolOld);
+	}
+
+	/**
+	 * @param dao
+	 * @param collectionProtocol
+	 * @param collectionProtocolOld
+	 * @throws DAOException
+	 */
+	private void updatePIAndCoordinatorGroup(DAO dao, CollectionProtocol collectionProtocol,
+			CollectionProtocol collectionProtocolOld) throws DAOException
+	{
 		try
 		{
-			updatePIAndCoordinatorGroup(dao, collectionProtocolOld, true);
+			CollectionProtocolAuthorization collectionProtocolAuthorization= new CollectionProtocolAuthorization();
+			collectionProtocolAuthorization.updatePIAndCoordinatorGroup(dao, collectionProtocolOld, true);
 
-			Long csmUserId = getCSMUserId(dao, collectionProtocol.getPrincipalInvestigator());
+			Long csmUserId = collectionProtocolAuthorization.getCSMUserId(dao, collectionProtocol.getPrincipalInvestigator());
 			if (csmUserId != null)
 			{
 				collectionProtocol.getPrincipalInvestigator().setCsmUserId(csmUserId);
 				Logger.out.debug("PI ....."
 						+ collectionProtocol.getPrincipalInvestigator().getCsmUserId());
-				updatePIAndCoordinatorGroup(dao, collectionProtocol, false);
+				collectionProtocolAuthorization.updatePIAndCoordinatorGroup(dao, collectionProtocol, false);
 			}
 		}
 		catch (SMException smExp)
@@ -398,7 +388,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			User coordinator = (User) it.next();
 			if (!coordinator.getId().equals(collectionProtocol.getPrincipalInvestigator().getId()))
 			{
-				if (!hasCoordinator(coordinator, collectionProtocolOld))
+				CollectionProtocolAuthorization collectionProtocolAuthorization = new CollectionProtocolAuthorization();
+				if (!collectionProtocolAuthorization.hasCoordinator(coordinator, collectionProtocolOld)) 
 					checkStatus(dao, coordinator, "Coordinator");
 			}
 			else
@@ -530,179 +521,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 	}
 
-	private void updatePIAndCoordinatorGroup(DAO dao, CollectionProtocol collectionProtocol,
-			boolean operation) throws SMException, DAOException
-	{
-		Long principalInvestigatorId = collectionProtocol.getPrincipalInvestigator().getCsmUserId();
-		Logger.out.debug("principalInvestigatorId.........................."
-				+ principalInvestigatorId);
-		String userGroupName = Constants.getCollectionProtocolPIGroupName(collectionProtocol
-				.getId());
-		Logger.out.debug("userGroupName.........................." + userGroupName);
-		if (operation)
-		{
-			SecurityManager.getInstance(CollectionProtocolBizLogic.class).removeUserFromGroup(
-					userGroupName, principalInvestigatorId.toString());
-		}
-		else
-		{
-			SecurityManager.getInstance(CollectionProtocolBizLogic.class).assignUserToGroup(
-					userGroupName, principalInvestigatorId.toString());
-		}
-
-		userGroupName = Constants.getCollectionProtocolCoordinatorGroupName(collectionProtocol
-				.getId());
-
-		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(
-				Constants.USER_FORM_ID);
-		Iterator iterator = collectionProtocol.getCoordinatorCollection().iterator();
-		while (iterator.hasNext())
-		{
-			User user = (User) iterator.next();
-			if (operation)
-			{
-				SecurityManager.getInstance(CollectionProtocolBizLogic.class).removeUserFromGroup(
-						userGroupName, user.getCsmUserId().toString());
-			}
-			else
-			{
-				Long csmUserId = getCSMUserId(dao, user);
-				if (csmUserId != null)
-				{
-					Logger.out.debug("Co-ord ....." + csmUserId);
-					SecurityManager.getInstance(CollectionProtocolBizLogic.class)
-							.assignUserToGroup(userGroupName, csmUserId.toString());
-				}
-			}
-		}
-	}
-
-	/**
-	 * @param collectionProtocol
-	 * @return
-	 * @throws DAOException
-	 */
-	private Long getCSMUserId(DAO dao, User user) throws DAOException
-	{
-		String[] selectColumnNames = {Constants.CSM_USER_ID};
-		String[] whereColumnNames = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnCondition = {"="};
-		String[] whereColumnValues = {user.getId().toString()};
-		List csmUserIdList = dao.retrieve(User.class.getName(), selectColumnNames,
-				whereColumnNames, whereColumnCondition, whereColumnValues,
-				Constants.AND_JOIN_CONDITION);
-		Logger.out.debug("csmUserIdList##########################Size........."
-				+ csmUserIdList.size());
-
-		if (csmUserIdList.isEmpty() == false)
-		{
-			Long csmUserId = (Long) csmUserIdList.get(0);
-
-			return csmUserId;
-		}
-
-		return null;
-	}
-
-	/**
-	 * This method returns collection of UserGroupRoleProtectionGroup objects that speciefies the 
-	 * user group protection group linkage through a role. It also specifies the groups the protection  
-	 * elements returned by this class should be added to.
-	 * @return
-	 */
-	private Vector getAuthorizationData(AbstractDomainObject obj) throws SMException
-	{
-		Logger.out.debug("--------------- In here ---------------");
-
-		Vector authorizationData = new Vector();
-		Set group = new HashSet();
-
-		CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
-
-		String userId = String
-				.valueOf(collectionProtocol.getPrincipalInvestigator().getCsmUserId());
-		Logger.out.debug(" PI ID: " + userId);
-		gov.nih.nci.security.authorization.domainobjects.User user = SecurityManager.getInstance(
-				this.getClass()).getUserById(userId);
-		Logger.out.debug(" PI: " + user.getLoginName());
-		group.add(user);
-
-		// Protection group of PI
-		String protectionGroupName = new String(Constants
-				.getCollectionProtocolPGName(collectionProtocol.getId()));
-		SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
-		userGroupRoleProtectionGroupBean.setUser(userId);
-		userGroupRoleProtectionGroupBean.setRoleName(PI);
-		userGroupRoleProtectionGroupBean.setGroupName(Constants
-				.getCollectionProtocolPIGroupName(collectionProtocol.getId()));
-		userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
-		userGroupRoleProtectionGroupBean.setGroup(group);
-		authorizationData.add(userGroupRoleProtectionGroupBean);
-
-		// Protection group of coordinators
-		Collection coordinators = collectionProtocol.getCoordinatorCollection();
-		group = new HashSet();
-		for (Iterator it = coordinators.iterator(); it.hasNext();)
-		{
-			User aUser = (User) it.next();
-			userId = String.valueOf(aUser.getCsmUserId());
-			Logger.out.debug(" COORDINATOR ID: " + userId);
-			user = SecurityManager.getInstance(this.getClass()).getUserById(userId);
-			Logger.out.debug(" COORDINATOR: " + user.getLoginName());
-			group.add(user);
-		}
-
-		protectionGroupName = new String(Constants.getCollectionProtocolPGName(collectionProtocol
-				.getId()));
-		userGroupRoleProtectionGroupBean = new SecurityDataBean();
-		userGroupRoleProtectionGroupBean.setUser(userId);
-		userGroupRoleProtectionGroupBean.setRoleName(COORDINATOR);
-		userGroupRoleProtectionGroupBean.setGroupName(Constants
-				.getCollectionProtocolCoordinatorGroupName(collectionProtocol.getId()));
-		userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
-		userGroupRoleProtectionGroupBean.setGroup(group);
-		authorizationData.add(userGroupRoleProtectionGroupBean);
-
-		Logger.out.debug(authorizationData.toString());
-		return authorizationData;
-	}
-
-	//    public Set getProtectionObjects(AbstractDomainObject obj)
-	//    {
-	//        Set protectionObjects = new HashSet();
-	//        CollectionProtocolEvent collectionProtocolEvent;
-	//        SpecimenRequirement specimenRequirement;
-	//        
-	//        CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
-	//        protectionObjects.add(collectionProtocol);
-	//        Collection collectionProtocolEventCollection = collectionProtocol.getCollectionProtocolEventCollection();
-	//        if(collectionProtocolEventCollection != null)
-	//        {
-	//           for(Iterator it = collectionProtocolEventCollection.iterator(); it.hasNext();)
-	//           {
-	//               collectionProtocolEvent = (CollectionProtocolEvent) it.next();
-	//               if(collectionProtocolEvent !=null)
-	//               {
-	//                   protectionObjects.add(collectionProtocolEvent);
-	//                   for(Iterator it2=collectionProtocolEvent.getSpecimenRequirementCollection().iterator();it2.hasNext();)
-	//                   {
-	//                       protectionObjects.add(it2.next());
-	//                   }
-	//               }
-	//               
-	//           }
-	//        }
-	//        Logger.out.debug(protectionObjects.toString());
-	//        return protectionObjects;
-	//    }
-
-	private String[] getDynamicGroups(AbstractDomainObject obj)
-	{
-		String[] dynamicGroups = null;
-		return dynamicGroups;
-	}
-
-	//This method sets the Principal Investigator.
+		
+//This method sets the Principal Investigator.
 	private void setPrincipalInvestigator(DAO dao, CollectionProtocol collectionProtocol)
 			throws DAOException
 	{
@@ -766,19 +586,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		//		bizLogic.assignPrivilegeToRelatedObjectsForCP(dao,privilegeName,objectIds,userId, roleId, assignToUser);
 	}
 
-	private boolean hasCoordinator(User coordinator, CollectionProtocol collectionProtocol)
-	{
-		Iterator it = collectionProtocol.getCoordinatorCollection().iterator();
-		while (it.hasNext())
-		{
-			User coordinatorOld = (User) it.next();
-			if (coordinator.getId().equals(coordinatorOld.getId()))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
 
 	/**
 	 * Executes hql Query and returns the results.
@@ -818,124 +625,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 	}
 
-	//Added by Ashish
-	/*	Map values = null;
-	Map innerLoopValues = null;
-	int outerCounter = 1;
-	long protocolCoordinatorIds[];
-	boolean aliqoutInSameContainer = false;
-
-	public void setAllValues(Object obj)
-	{
-
-		CollectionProtocol cProtocol = (CollectionProtocol) obj;
-		Collection protocolEventCollection = cProtocol.getCollectionProtocolEventCollection();
-
-		if (protocolEventCollection != null)
-		{
-			List eventList = new ArrayList(protocolEventCollection);
-			Collections.sort(eventList);
-			protocolEventCollection = eventList;
-
-			values = new HashMap();
-			innerLoopValues = new HashMap();
-
-			int i = 1;
-			Iterator it = protocolEventCollection.iterator();
-			while (it.hasNext())
-			{
-				CollectionProtocolEvent cpEvent = (CollectionProtocolEvent) it.next();
-
-				String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
-				String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i
-						+ "_studyCalendarEventPoint";
-				String keyCPEId = "CollectionProtocolEvent:" + i + "_id";
-
-				values.put(keyClinicalStatus, Utility.toString(cpEvent.getClinicalStatus()));
-				values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent
-						.getStudyCalendarEventPoint()));
-				values.put(keyCPEId, Utility.toString(cpEvent.getId()));
-				Logger.out.debug("In Form keyCPEId..............." + values.get(keyCPEId));
-				Collection specimenRequirementCollection = cpEvent
-						.getSpecimenRequirementCollection();
-
-				populateSpecimenRequirement(specimenRequirementCollection, i);
-
-				i++;
-			}
-
-			outerCounter = protocolEventCollection.size();
-		}
-
-		//At least one outer row should be displayed in ADD MORE therefore
-		if (outerCounter == 0)
-			outerCounter = 1;
-
-		//Populating the user-id array
-		Collection userCollection = cProtocol.getUserCollection();
-
-		if (userCollection != null)
-		{
-			protocolCoordinatorIds = new long[userCollection.size()];
-			int i = 0;
-
-			Iterator it = userCollection.iterator();
-			while (it.hasNext())
-			{
-				User user = (User) it.next();
-				protocolCoordinatorIds[i] = user.getId().longValue();
-				i++;
-			}
-		}
-		if (cProtocol.getAliqoutInSameContainer() != null)
-		{
-			aliqoutInSameContainer = cProtocol.getAliqoutInSameContainer().booleanValue();
-		}
-	}
-
-	private void populateSpecimenRequirement(Collection specimenRequirementCollection, int counter)
-	{
-		int innerCounter = 0;
-		if (specimenRequirementCollection != null)
-		{
-			int i = 1;
-
-			Iterator iterator = specimenRequirementCollection.iterator();
-			while (iterator.hasNext())
-			{
-				SpecimenRequirement specimenRequirement = (SpecimenRequirement) iterator.next();
-				String key[] = {
-						"CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i
-								+ "_specimenClass",
-						"CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i
-								+ "_unitspan",
-						"CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i
-								+ "_specimenType",
-						"CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i
-								+ "_tissueSite",
-						"CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i
-								+ "_pathologyStatus",
-						"CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i
-								+ "_quantity_value",
-						"CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i + "_id"};
-				this.values = setSpecimenRequirement(key, specimenRequirement);
-				i++;
-			}
-			innerCounter = specimenRequirementCollection.size();
-		}
-
-		//At least one inner row should be displayed in ADD MORE therefore
-		if (innerCounter == 0)
-			innerCounter = 1;
-
-		String innerCounterKey = String.valueOf(counter);
-		innerLoopValues.put(innerCounterKey, String.valueOf(innerCounter));
-	}
-
-	//END
-
-
-
+	
 
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
@@ -947,7 +637,16 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		//setAllValues(obj);
 		//END
 
-		CollectionProtocol protocol = (CollectionProtocol) obj;
+		CollectionProtocol protocol =null;
+		if (obj instanceof CollectionProtocolDTO)
+		{
+			CollectionProtocolDTO CpDto = (CollectionProtocolDTO) obj;
+			protocol = CpDto.getCollectionProtocol();
+		}
+		else
+		{
+		    protocol = (CollectionProtocol) obj;
+		}
 		Collection eventCollection = protocol.getCollectionProtocolEventCollection();
 
 		/**
@@ -1208,7 +907,16 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	public void postUpdate(DAO dao, Object currentObj, Object oldObj,
 			SessionDataBean sessionDataBean) throws BizLogicException, UserNotAuthorizedException
 	{
-		CollectionProtocol collectionProtocol = (CollectionProtocol) currentObj;
+		CollectionProtocol collectionProtocol =null;
+		if (currentObj instanceof CollectionProtocolDTO)
+		{
+			CollectionProtocolDTO cpDto = (CollectionProtocolDTO)currentObj;
+			collectionProtocol = cpDto.getCollectionProtocol();
+		}
+		else
+		{
+			collectionProtocol = (CollectionProtocol)currentObj;
+		}
 		CollectionProtocol collectionProtocolOld = (CollectionProtocol) oldObj;
 		ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
 		if (!collectionProtocol.getTitle().equals(collectionProtocolOld.getTitle()))

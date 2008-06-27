@@ -81,6 +81,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	private boolean consentWaived = false;
 	//Consent tracking(Virender Mehta)
+	
+	protected long[] siteIds;
 	/**
 	 * No argument constructor for CollectionProtocolForm class.
 	 */
@@ -473,4 +475,20 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		this.consentWaived = consentWaived;
 	}
 	//	For Consent Tracking End
+
+	
+	public long[] getSiteIds()
+	{
+		return siteIds;
+	}
+
+	
+	public void setSiteIds(long[] siteIds)
+	{
+		this.siteIds = siteIds;
+	}
+
+	
+	
+	
 }

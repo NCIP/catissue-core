@@ -4,6 +4,7 @@
 package edu.wustl.catissuecore.multiRepository.bean;
 
 import java.util.List;
+import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
@@ -21,7 +22,7 @@ public class SiteUserRolePrivilegeBean
 	private List<Integer> cpList;
 	private User user ;
     private String role;
-    private List<Permissions> privileges;
+    private Set<String> privileges;
 	
 	public List<Integer> getSiteList()
 	{
@@ -43,12 +44,12 @@ public class SiteUserRolePrivilegeBean
 		this.role = role;
 	}
 	
-	public List<Permissions> getPrivileges()
+	public Set<String> getPrivileges()
 	{
 		return privileges;
 	}
 	
-	public void setPrivileges(List<Permissions> privileges)
+	public void setPrivileges(Set<String> privileges)
 	{
 		this.privileges = privileges;
 	}

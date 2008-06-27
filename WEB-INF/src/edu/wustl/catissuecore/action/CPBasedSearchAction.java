@@ -27,7 +27,7 @@ public class CPBasedSearchAction extends SecureAction
 	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
-    {
+    { 
 
 		SessionDataBean sessionDataBean = super.getSessionData(request);
 		
@@ -40,15 +40,16 @@ public class CPBasedSearchAction extends SecureAction
 		 * so that he/she is not able to view the Participant list in CP based view
 		 */
 		long csmUserId = new Long(sessionDataBean.getCsmUserId()).longValue();		
-		boolean hasIdentifiedDataAccess = SecurityManager.getInstance(this.getClass()).hasIdentifiedDataAccess(csmUserId);
-		if(!hasIdentifiedDataAccess)
-		{
-			request.getSession().setAttribute("Access", "Denied");
-		}
-		else
-		{
-			request.removeAttribute("Access");
-		}
+		boolean hasIdentifiedDataAccess = true;
+//		//SecurityManager.getInstance(this.getClass()).hasIdentifiedDataAccess(csmUserId);
+//		if(!hasIdentifiedDataAccess)
+//		{
+//			request.getSession().setAttribute("Access", "Denied");
+//		}
+//		else
+//		{
+//			request.removeAttribute("Access");
+//		}
 		return mapping.findForward("success");
 		
     }

@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -60,6 +61,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -1262,5 +1264,36 @@ public class NewSpecimenAction extends SecureAction
 			return ((Long)reportIDList.get(0));
 		}
 		return null;
+	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
+	 */
+	@Override
+	protected String getObjectId(AbstractActionForm form)
+	{
+		NewSpecimenForm specimenForm = (NewSpecimenForm)form;
+		SpecimenCollectionGroup specimenCollectionGroup = null;
+		if(specimenForm.getSpecimenCollectionGroupId() != null || specimenForm.getSpecimenCollectionGroupId() != "")
+		{
+			try
+			{
+				specimenCollectionGroup= Utility.getSCGObj(specimenForm.getSpecimenCollectionGroupId());
+				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
+				if (cpr!= null)
+				{
+					CollectionProtocol cp = cpr.getCollectionProtocol();
+					return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+cp.getId();
+				}
+			}
+			catch (DAOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		   
+		}
+		return null;
+		 
 	}
 }

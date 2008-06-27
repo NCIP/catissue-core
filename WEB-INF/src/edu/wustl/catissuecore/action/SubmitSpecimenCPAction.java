@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,19 +21,22 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
+import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -43,7 +47,7 @@ import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.logger.Logger;
-
+ 
 public class SubmitSpecimenCPAction extends BaseAction {
 
 	private ViewSpecimenSummaryForm specimenSummaryForm;
@@ -78,24 +82,20 @@ public class SubmitSpecimenCPAction extends BaseAction {
 				}
 				else
 				{
-					TaskTimeCalculater cpTask =TaskTimeCalculater.startTask
-					("Populate CP,Event & Specimen domain objects before calling insert" , SubmitSpecimenCPAction.class);
+					
 					CollectionProtocol collectionProtocol = CollectionProtocolUtil
-					.populateCollectionProtocolObjects(request);
-					insertCollectionProtocol(collectionProtocol,request.getSession());
+							.populateCollectionProtocolObjects(request);
+
+					CollectionProtocolDTO collectionProtocolDTO = getCoolectionProtocolDTO(collectionProtocol,session);
+					insertCollectionProtocol(collectionProtocolDTO, request.getSession());
+
 					collectionProtocolBean.setIdentifier(collectionProtocol.getId());
-					TaskTimeCalculater.endTask(cpTask);
-					cpTask =TaskTimeCalculater.startTask
-					("Retrieve CP,Event & Specimen domain objects after insert for update.",SubmitSpecimenCPAction.class);
-					CollectionProtocolUtil.updateSession(request,collectionProtocol.getId());
-					TaskTimeCalculater.endTask(cpTask);
+					CollectionProtocolUtil.updateSession(request, collectionProtocol.getId());
 				}
 				ActionMessages actionMessages = new ActionMessages();
 				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-						"object.add.successOnly","Collection Protocol"));
+						"object.add.successOnly", "Collection Protocol"));
 				saveMessages(request, actionMessages);
-
-				
 			}
 			
 			if (ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(
@@ -155,6 +155,20 @@ public class SubmitSpecimenCPAction extends BaseAction {
 	}
 
 	/**
+	 * @param collectionProtocol
+	 * @param session 
+	 * @return
+	 */
+	private CollectionProtocolDTO getCoolectionProtocolDTO(CollectionProtocol collectionProtocol, HttpSession session)
+	{
+		CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
+		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap  = (Map<String, SiteUserRolePrivilegeBean>)session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
+		collectionProtocolDTO.setCollectionProtocol(collectionProtocol);
+		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
+		return collectionProtocolDTO;
+	}
+
+	/**
 	 * @param cpEventMap
 	 * @throws BizLogicException
 	 * @throws UserNotAuthorizedException
@@ -173,11 +187,11 @@ public class SubmitSpecimenCPAction extends BaseAction {
 	 * @throws BizLogicException
 	 * @throws UserNotAuthorizedException
 	 */
-	private void insertCollectionProtocol(CollectionProtocol collectionProtocol, HttpSession session)
+	private void insertCollectionProtocol(CollectionProtocolDTO collectionProtocolDTO, HttpSession session)
 			throws BizLogicException, UserNotAuthorizedException {
 		IBizLogic bizLogic =BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 				SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);		
-		bizLogic.insert(collectionProtocol, sessionDataBean, Constants.HIBERNATE_DAO);
+		bizLogic.insert(collectionProtocolDTO, sessionDataBean, Constants.HIBERNATE_DAO);
 	}
 
 	/**
@@ -212,7 +226,6 @@ public class SubmitSpecimenCPAction extends BaseAction {
 			}
 			else
 			{
-				
 				specimen.setLineage(Constants.DERIVED_SPECIMEN);
 				specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
 				

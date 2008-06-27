@@ -109,6 +109,10 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
      * */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
 	
+	protected Collection<User> userCollection = new HashSet<User>();
+	
+	protected Collection<Site> sitecollection = new HashSet<Site>();
+	
 	/**
 	 * @return the unsignedConsentDocumentURL
 	 * @hibernate.property name="unsignedConsentDocumentURL" type="string" length="1000" column="UNSIGNED_CONSENT_DOC_URL"
@@ -288,6 +292,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	final CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
         	
         	coordinatorCollection.clear();
+        	sitecollection.clear();
         	this.collectionProtocolEventCollection.clear();
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
         	if(coordinatorsArr!=null)
@@ -299,6 +304,20 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		        		User coordinator = new User();
 		        		coordinator.setId(new Long(coordinatorsArr[i]));
 		        		coordinatorCollection.add(coordinator);
+	        		}
+				}
+        	}
+        	
+        	long [] siteArr = cpForm.getSiteIds();
+        	if(siteArr!=null)
+        	{
+	        	for (int i = 0; i < siteArr.length; i++)
+				{
+	        		if(siteArr[i]!=-1)
+	        		{
+		        		Site site = new Site();
+		        		site.setId(new Long(siteArr[i]));
+		        		sitecollection.add(site);
 	        		}
 				}
         	}
@@ -561,6 +580,46 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 */
 	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint) {
 		this.studyCalendarEventPoint = studyCalendarEventPoint;
+	}
+
+
+	/**
+	 * Returns the collection of Users(ProtocolCoordinators) for this Protocol.
+	 * @hibernate.set name="coordinatorCollection" table="CATISSUE_USER_COLLECTION_PROTOCOLS" 
+	 * cascade="none" inverse="false" lazy="false"
+	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
+	 * @return The collection of Users(ProtocolCoordinators) for this Protocol.
+	 */
+	public Collection<User> getUserCollection()
+	{
+		return userCollection;
+	}
+	
+	public void setUserCollection(Collection<User> userCollection)
+	{
+		this.userCollection = userCollection;
+	}
+
+
+	/**
+	 * Returns the collection of Users(ProtocolCoordinators) for this Protocol.
+	 * @hibernate.set name="coordinatorCollection" table="CATISSUE_SITE_COLLECTION_PROTOCOLS" 
+	 * cascade="none" inverse="false" lazy="false"
+	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Site" column="SITE_ID"
+	 * @return The collection of sites for this Protocol.
+	 */
+	public Collection<Site> getSitecollection()
+	{
+		return sitecollection;
+	}
+
+
+	
+	public void setSitecollection(Collection<Site> sitecollection)
+	{
+		this.sitecollection = sitecollection;
 	}
 
 }

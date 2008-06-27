@@ -148,11 +148,11 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 
 		SecurityManager.getInstance(ApproveUserBizLogic.class).createUser(csmUser);
 
-		if (user.getRoleId() != null)
-		{
-			SecurityManager.getInstance(ApproveUserBizLogic.class)
-			.assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
-		}
+//		if (user.getRoleId() != null)
+//		{
+//			SecurityManager.getInstance(ApproveUserBizLogic.class)
+//			.assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
+//		}
 
 		user.setCsmUserId(csmUser.getUserId());
 
@@ -216,8 +216,8 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 	public List retrieve(String className, String colName, Object colValue) throws DAOException
 	{
 		List userList = null;
-		try
-		{
+//		try
+//		{
 			// Get the caTISSUE user.
 			userList = super.retrieve(className, colName, colValue);
 
@@ -226,22 +226,22 @@ public class ApproveUserBizLogic extends DefaultBizLogic
 			{
 				appUser = (edu.wustl.catissuecore.domain.User) userList.get(0);
 
-				if (appUser.getCsmUserId() != null)
-				{
-					//Get the role of the user.
-					Role role = SecurityManager.getInstance(ApproveUserBizLogic.class)
-					.getUserRole(appUser.getCsmUserId().longValue());
-					if (role != null)
-					{
-						appUser.setRoleId(role.getId().toString());
-					}
-				}
+//				if (appUser.getCsmUserId() != null)
+//				{
+//					//Get the role of the user.
+//					Role role = SecurityManager.getInstance(ApproveUserBizLogic.class)
+//					.getUserRole(appUser.getCsmUserId().longValue());
+//					if (role != null)
+//					{
+//						appUser.setRoleId(role.getId().toString());
+//					}
+//				}
 			}
-		}
-		catch (SMException smExp)
-		{
-			throw handleSMException(smExp);
-		}
+//		}
+//		catch (SMException smExp)
+//		{
+//			throw handleSMException(smExp);
+//		}
 
 		return userList; 
 	}

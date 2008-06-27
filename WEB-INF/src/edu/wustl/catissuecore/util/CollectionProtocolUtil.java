@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.domain.FluidRequirementSpecimen;
 import edu.wustl.catissuecore.domain.MolecularRequirementSpecimen;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.RequirementSpecimen;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -590,6 +591,7 @@ public class CollectionProtocolUtil {
 		collectionProtocol.setAliquotInSameContainer(cpBean.isAliqoutInSameContainer());
 		collectionProtocol.setConsentTierCollection(collectionProtocol.prepareConsentTierCollection(cpBean.getConsentValues()));
 		Collection coordinatorCollection = new LinkedHashSet();
+		Collection<Site> siteCollection = new LinkedHashSet<Site>();
 		long[] coordinatorsArr = cpBean.getProtocolCoordinatorIds();
 
 		if (coordinatorsArr != null) {
@@ -601,6 +603,18 @@ public class CollectionProtocolUtil {
 				}
 			}
 			collectionProtocol.setCoordinatorCollection(coordinatorCollection);
+		}
+		
+		long[] siteArr = cpBean.getSiteIds();
+		if (siteArr != null) {
+			for (int i = 0; i < siteArr.length; i++) {
+				if (siteArr[i] != -1) {
+					Site site = new Site();
+					site.setId(new Long(siteArr[i]));
+					siteCollection.add(site);
+				}
+			}
+			collectionProtocol.setSitecollection(siteCollection);
 		}
 
 		collectionProtocol.setDescriptionURL(cpBean.getDescriptionURL());

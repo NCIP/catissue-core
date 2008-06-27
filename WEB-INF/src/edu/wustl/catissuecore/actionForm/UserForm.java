@@ -17,9 +17,9 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
@@ -140,6 +140,8 @@ public class UserForm extends AbstractActionForm
 	private String status;
 	
 	private Long csmUserId;
+	
+	private String adminuser="false";
 
 	//Mandar 24-Apr-06 Bug 972 : Confirm email address
 	/**
@@ -147,6 +149,19 @@ public class UserForm extends AbstractActionForm
 	 */
 	private String confirmEmailAddress;
 
+	protected String[] siteIds = new String[]{"-1"};
+	
+	public String[] getSiteIds()
+	{
+		return this.siteIds;
+	}
+
+	
+	public void setSiteIds(String[] siteIds)
+	{
+		this.siteIds = siteIds;
+	}
+	
 	/**
 	 * No argument constructor for UserForm class. 
 	 */
@@ -608,7 +623,16 @@ public class UserForm extends AbstractActionForm
 			this.id = user.getId().longValue();
 			this.lastName = user.getLastName();
 			this.firstName = user.getFirstName();
-
+			if (user.getSiteCollection() != null && !user.getSiteCollection().isEmpty())
+			{ 
+				siteIds = new String [user.getSiteCollection().size()];
+				int i = 0;
+				for (Site site : user.getSiteCollection())
+				{
+					siteIds[i] = site.getId().toString();
+					i++;
+				}
+			}
 			// Check for null entries (for admin)
 			if (!edu.wustl.common.util.Utility.isNull(user.getInstitution()))
 			{
@@ -616,6 +640,7 @@ public class UserForm extends AbstractActionForm
 			}
 
 			this.emailAddress = user.getEmailAddress();
+			this.adminuser = user.getAdminuser().toString();
 
 			//Mandar : 24-Apr-06 : bug id 972 : confirmEmailAddress
 			confirmEmailAddress = this.emailAddress;
@@ -783,7 +808,19 @@ public class UserForm extends AbstractActionForm
 					{
 						// Mandar 10-apr-06 : bugid :353 
 						// Error messages should be in the same sequence as the sequence of fields on the page.
-
+						
+						if(!pageOf.equalsIgnoreCase("pageOfSignUp"))
+						{
+							if (siteIds[0].equalsIgnoreCase("-1"))
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+										ApplicationProperties
+												.getValue("user.site")));
+							}
+							
+						}
+						
+						
 						if (validator.isEmpty(emailAddress))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
@@ -1000,6 +1037,16 @@ public class UserForm extends AbstractActionForm
 		{
 			setCancerResearchGroupId(addObjectIdentifier.longValue());
 		}
+	}
+
+
+	public String getAdminuser() {
+		return adminuser;
+	}
+
+
+	public void setAdminuser(String adminuser) {
+		this.adminuser = adminuser;
 	}
 	
 }

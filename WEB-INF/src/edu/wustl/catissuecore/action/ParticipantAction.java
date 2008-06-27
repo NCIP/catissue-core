@@ -44,6 +44,7 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
@@ -593,5 +594,25 @@ public class ParticipantAction extends SecureAction
 			return((Long)obj[2]);
 		}
 		return null;
+	}
+	
+	public String getObjectId()
+	{
+		String objectId = "";
+		return objectId;
+	}
+	
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
+	 */
+	@Override
+	protected String getObjectId(AbstractActionForm form)
+	{
+		ParticipantForm participantForm = (ParticipantForm)form;
+		if(participantForm.getCpId()!=0L && participantForm.getCpId()!= -1L) 
+		   return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+participantForm.getCpId();
+		else
+		   return null;
+		 
 	}
 }

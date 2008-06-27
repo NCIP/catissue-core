@@ -1,0 +1,39 @@
+<?xml version = "1.0" ?>
+<MapNameAndValues>	
+	<Map key="edu.wustl.catissuecore.action.ParticipantAction" value="REGISTRATION"/>
+	<Map key="edu.wustl.catissuecore.action.CollectionProtocolRegistrationAction" value="REGISTRATION"/>	
+	<Map key="edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction" value="REGISTRATION"/>
+	<Map key="edu.wustl.catissuecore.action.SpecimenCollectionGroupAction" value="SPECIMEN_ACCESSION"/>
+	<Map key="edu.wustl.catissuecore.action.NewSpecimenAction" value="SPECIMEN_ACCESSION"/>
+	<Map key="edu.wustl.catissuecore.action.CreateSpecimenAction" value="SPECIMEN_ACCESSION"/>	
+	<Map key="edu.wustl.catissuecore.action.FrozenEventParametersAction" value="SPECIMEN_PROCESSING"/>
+	<Map key="edu.wustl.catissuecore.action.CheckInCheckOutEventParametersAction" value="SPECIMEN_PROCESSING"/>
+	<Map key="edu.wustl.catissuecore.action.ReceivedEventParametersAction" value="SPECIMEN_PROCESSING"/>	
+	<Map key="edu.wustl.catissuecore.action.SpecimenEventParametersAction" value="SPECIMEN_PROCESSING"/>	
+	<Map key="edu.wustl.catissuecore.action.TissueSpecimenReviewEventParametersAction" value="SPECIMEN_PROCESSING"/>
+	<Map key="edu.wustl.catissuecore.action.TransferEventParametersAction" value="SPECIMEN_PROCESSING"/>	
+	<Map key="edu.wustl.catissuecore.action.EmbeddedEventParametersAction" value="SPECIMEN_PROCESSING"/>	
+	<Map key="edu.wustl.catissuecore.action.FixedEventParametersAction" value="SPECIMEN_PROCESSING"/>	
+	<Map key="edu.wustl.catissuecore.action.CollectionEventParametersAction" value="SPECIMEN_PROCESSING"/>	
+	<Map key="edu.wustl.catissuecore.action.ListSpecimenEventParametersAction" value="SPECIMEN_PROCESSING"/>	
+	<Map key="edu.wustl.catissuecore.action.MolecularSpecimenReviewParametersAction" value="SPECIMEN_PROCESSING"/>
+	<Map key="edu.wustl.catissuecore.action.SpecimenArrayTypeAction" value="SPECIMEN_ACCESSION"/>
+	<Map key="edu.wustl.catissuecore.action.SpecimenArrayAction" value="SPECIMEN_ACCESSION"/>	
+	<Map key="edu.wustl.catissuecore.action.AliquotAction" value="SPECIMEN_PROCESSING"/>	
+	<Map key="edu.wustl.catissuecore.action.SpecimenArrayAppletAction" value="SPECIMEN_ACCESSION"/>	
+	<Map key="edu.wustl.catissuecore.action.DerivedMultipleSpecimenAddAction" value="SPECIMEN_PROCESSING"/>	
+	<Map key="edu.wustl.catissuecore.action.AddSpecimenAction" value="SPECIMEN_ACCESSION"/>	
+	<Map key="edu.wustl.catissuecore.action.SpecimenArrayAliquotAction" value="SPECIMEN_PROCESSING"/>
+	<Map key="edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction" value="SPECIMEN_PROCESSING"/>
+	<Map key="edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction" value="SPECIMEN_ACCESSION"/>	
+	<Map key="edu.wustl.catissuecore.action.bulkOperations.BulkDisposalEventsAction" value="SPECIMEN_PROCESSING"/>
+	<Map key="edu.wustl.catissuecore.action.DepartmentAction" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.catissuecore.action.CancerResearchGroupAction" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.catissuecore.action.BiohazardAction" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.catissuecore.action.InstitutionAction" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.catissuecore.action.UserAction" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.catissuecore.action.CollectionProtocolAction" value="PROTOCOL_ADMINISTRATION"/>
+	<Map key="edu.wustl.catissuecore.action.SiteAction" value="REPOSITORY_ADMINISTRATION"/>
+	
+</MapNameAndValues>
+

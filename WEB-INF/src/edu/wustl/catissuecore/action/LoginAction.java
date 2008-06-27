@@ -91,6 +91,7 @@ public class LoginAction extends Action
 	                String ipAddress = request.getRemoteAddr();
 	                
 	                SessionDataBean sessionData = new SessionDataBean();
+	                sessionData.setAdmin(validUser.getAdminuser());
 	                sessionData.setUserName(loginName);
 	                sessionData.setIpAddress(ipAddress);
 	                sessionData.setUserId(userId);
@@ -189,8 +190,14 @@ public class LoginAction extends Action
     {
     	SecurityManager securityManager = SecurityManager.getInstance(LoginAction.class);
         String roleName = securityManager.getUserGroup(loginId);
-     	String modifiedRolename = roleName.substring(0,1).toUpperCase()+roleName.substring(1,roleName.length()).toLowerCase();
-		return (Constants.PAGEOF+modifiedRolename);
+        String modifiedRolename="";
+        if(roleName==null || roleName.equals(""))
+        	
+        modifiedRolename ="pageOfScientist";
+        else 
+        	modifiedRolename =	"pageOfAdministrator";
+     	//String modifiedRolename = roleName.substring(0,1).toUpperCase()+roleName.substring(1,roleName.length()).toLowerCase();
+		return (modifiedRolename);
     }
     
     private void handleError(HttpServletRequest request, String errorKey)

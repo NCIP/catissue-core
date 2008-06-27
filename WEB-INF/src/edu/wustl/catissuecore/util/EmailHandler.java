@@ -189,12 +189,12 @@ public class EmailHandler
 //			List pwdList = new ArrayList(user.getPasswordCollection());
 //			Collections.sort(pwdList);
 //			Password password = (Password) pwdList.get(0);
-			String roleOfUser = SecurityManager.getInstance(EmailHandler.class)
-							.getUserRole(user.getCsmUserId().longValue()).getName();
+//			String roleOfUser = SecurityManager.getInstance(EmailHandler.class)
+//							.getUserRole(user.getCsmUserId().longValue()).getName();
 			body = body + "\n\n" + ApplicationProperties.getValue("forgotPassword.email.body.start")
 				+ "\n\t "+ ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getLoginName()
     		    + "\n\t "+ ApplicationProperties.getValue("user.password")+ Constants.SEPARATOR + csmUser.getPassword()
-			    + "\n\t "+ ApplicationProperties.getValue("user.role")+ Constants.SEPARATOR + roleOfUser
+			    + "\n\t "+ ApplicationProperties.getValue("user.role")// +  Constants.SEPARATOR + roleOfUser
 			    + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
 			
 			emailStatus = sendEmailToUser(user.getEmailAddress(), subject, body);

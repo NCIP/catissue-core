@@ -109,6 +109,27 @@
               />
 
         </set>
+        
+         <set
+            name="userCollection"
+            table="CATISSUE_SITE_USERS"
+            lazy="true"
+            inverse="true"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SITE_ID"
+              >
+              </key>
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.User"
+                  column="USER_ID"
+              />
+
+        </set>
 
         <!--
             To add non XDoclet property mappings, create a file named

@@ -29,6 +29,8 @@ public class CollectionProtocolBean implements Serializable
 	
 	private String enrollment;
 	
+	private long[] siteIds;
+	
 	/**
 	 * whether Aliquote in same container
 	 */
@@ -234,5 +236,19 @@ public class CollectionProtocolBean implements Serializable
 	{
 		this.aliqoutInSameContainer = aliqoutInSameContainer;
 	}
+
+	
+	public long[] getSiteIds()
+	{
+		return siteIds;
+	}
+
+	
+	public void setSiteIds(long[] siteIds)
+	{
+		this.siteIds = siteIds;
+	}
+	
+	
 
 }

@@ -139,6 +139,15 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 * whether user is logging for the first time
 	 */
 	protected Boolean firstTimeLogin;
+	
+	protected Boolean adminuser;
+	
+	  /**
+     * Set of collection protocol.
+     */
+      protected Collection<CollectionProtocol> userCollectionProtocolCollection = new HashSet<CollectionProtocol>();
+    
+    protected Collection<Site> siteCollection = new HashSet<Site>();
 
     /**
      * Initialize a new User instance.
@@ -623,11 +632,28 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
             }
             else
             {
+            	
+            	if(!pageOf.equalsIgnoreCase("pageOfSignUp"))
+            	{
+	            	String[] siteIds = uform.getSiteIds();
+	            	
+	            	Collection newSiteCollection = new HashSet();
+	            	for(String siteId : siteIds)
+	            	{
+	            		Site site = new Site();
+	            		site.setId(Long.valueOf(siteId)); 
+	            		newSiteCollection.add(site);
+	            	}
+	            	
+	            	this.getSiteCollection().clear();
+	            	this.getSiteCollection().addAll(newSiteCollection);
+            	}
                 this.id = new Long(uform.getId());
                 this.setLoginName(uform.getEmailAddress());
                 this.setLastName(uform.getLastName());
                 this.setFirstName(uform.getFirstName());
                 this.setEmailAddress(uform.getEmailAddress());
+                this.setAdminuser(Boolean.valueOf(uform.getAdminuser()));
                 this.institution.setId(new Long(uform
                         .getInstitutionId()));
 
@@ -766,4 +792,50 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
     {
         this.clinicalStudyCollection = clinicalStudyCollection;
     }
+    
+    /**
+     * @return Returns the userCollectionProtocolCollection.
+     * @hibernate.set name="userCollectionProtocolCollection" table="CATISSUE_USER_COLLECTION_PROTOCOLS" 
+     * cascade="none" inverse="true" lazy="true"
+     * @hibernate.collection-key column="USER_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"
+     */
+	public Collection<CollectionProtocol> getUserCollectionProtocolCollection()
+	{
+		return userCollectionProtocolCollection;
+	}
+
+	
+	public void setUserCollectionProtocolCollection(
+			Collection<CollectionProtocol> userCollectionProtocolCollection)
+	{
+		this.userCollectionProtocolCollection = userCollectionProtocolCollection;
+	}
+
+	/**
+     * @return Returns the siteCollection.
+     * @hibernate.set name="siteCollection" table="CATISSUE_SITE_USERS" 
+     * cascade="none" inverse="true" lazy="true"
+     * @hibernate.collection-key column="USER_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Site" column="SITE_ID"
+     */
+	public Collection<Site> getSiteCollection()
+	{
+		return siteCollection;
+	}
+
+	
+	public void setSiteCollection(Collection<Site> siteCollection)
+	{
+		this.siteCollection = siteCollection;
+	}
+
+	public Boolean getAdminuser() {
+		return adminuser;
+	}
+
+	public void setAdminuser(Boolean adminuser) {
+		this.adminuser = adminuser;
+	}
+
 }

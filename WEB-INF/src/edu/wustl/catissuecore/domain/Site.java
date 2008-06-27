@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.util.SearchUtil;
@@ -66,9 +67,12 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 
 	private Collection<AbstractSpecimenCollectionGroup> abstractSpecimenCollectionGroupCollection;
 	
+	private Collection<CollectionProtocol> collectionProtocolCollection = new HashSet<CollectionProtocol>();
+	
+	private Collection<User> userCollection = new HashSet<User>();
+	//Default Constructor Required by hibernate
 	public Site()
 	{
-		// Default Constructor, Required by hibernate 
 	}
 	
 	//Parameterized constructor
@@ -250,7 +254,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
         		address = new Address();
         	}        	 
         	
-            final SiteForm form 	= (SiteForm) abstractForm;
+            SiteForm form 	= (SiteForm) abstractForm;
             this.id = new Long(form.getId());
             this.name 		= form.getName().trim() ;
             this.type 		= form.getType();
@@ -291,4 +295,43 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 			Collection<AbstractSpecimenCollectionGroup> abstractSpecimenCollectionGroupCollection) {
 		this.abstractSpecimenCollectionGroupCollection = abstractSpecimenCollectionGroupCollection;
 	}
+
+	 /**
+     * @return Returns the collectionProtocolCollection.
+     * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_SITE_COLLECTION_PROTOCOLS" 
+     * cascade="none" inverse="true" lazy="true"
+     * @hibernate.collection-key column="SITE_ID"
+     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"
+     */
+	public Collection<CollectionProtocol> getCollectionProtocolCollection()
+	{
+		return collectionProtocolCollection;
+	}
+
+	
+	public void setCollectionProtocolCollection(
+			Collection<CollectionProtocol> collectionProtocolCollection)
+	{
+		this.collectionProtocolCollection = collectionProtocolCollection;
+	}
+
+	/**
+	 * Returns the collection of Users(Authorized users) registered for this Site.
+	 * @hibernate.set name="userCollection" table="CATISSUE_SITE_USERS" 
+	 * cascade="none" inverse="false" lazy="false"
+	 * @hibernate.collection-key column="SITE_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
+	 * @return The collection of Users(Authorized users) registered for this Site.
+	 */
+	public Collection<User> getUserCollection()
+	{
+		return userCollection;
+	}
+
+	
+	public void setUserCollection(Collection<User> userCollection)
+	{
+		this.userCollection = userCollection;
+	}
+	
 }
