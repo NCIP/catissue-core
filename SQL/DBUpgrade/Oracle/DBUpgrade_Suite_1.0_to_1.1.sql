@@ -421,7 +421,7 @@ drop sequence CATISSUE_RACE_SEQ;
 create sequence CATISSUE_RACE_SEQ start with 1 increment by 1;
 alter table CATISSUE_RACE add  IDENTIFIER number(19,0);
 update  CATISSUE_RACE set IDENTIFIER=CATISSUE_RACE_SEQ.nextval;
-alter table CATISSUE_RACE add primary key (IDENTIFER);
+alter table CATISSUE_RACE add primary key (IDENTIFIER);
 
 /*Metadata for Specimen due to model changes*/
 
