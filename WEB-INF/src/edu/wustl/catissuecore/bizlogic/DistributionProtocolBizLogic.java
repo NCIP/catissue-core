@@ -94,7 +94,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		
 		Collection<DistributionSpecimenRequirement> oldDistributionSpecimenRequirementCollection = distributionProtocolOld.getDistributionSpecimenRequirementCollection();
 		
-		for(DistributionSpecimenRequirement distributionSpecimenRequirement : oldDistributionSpecimenRequirementCollection)
+		for(DistributionSpecimenRequirement distributionSpecimenRequirement : distributionProtocol.getDistributionSpecimenRequirementCollection())
 		{
 			Logger.out.debug("DistributionSpecimenRequirement Id ............... : "+distributionSpecimenRequirement.getId());
 			distributionSpecimenRequirement.setDistributionProtocol(distributionProtocol);
