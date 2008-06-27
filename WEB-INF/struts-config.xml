@@ -4545,7 +4545,7 @@ PUBLIC
 		<action path="/BuildDynamicEntity"
 			type="edu.wustl.catissuecore.action.annotations.LoadDynamicExtensionsAction"
 			name="annotationForm"
-			validate="false"
+			input="/DefineAnnotations.do"
 			scope="request">
 			<forward name="success" redirect="true" path=".catissuecore.dynamicFormDef"></forward>		
 		</action>
