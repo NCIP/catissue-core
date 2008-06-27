@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -1510,13 +1511,88 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				+ specimenCollectionGroup.getCollectionStatus() + "\" " + "evtDate=\"" + receivedDate + "\">");
 	
 		// Adding specimen Nodes to SCG tree
-		addSpecNodesToSCGTree(xmlString, specimenCollectionGroup);
+		addSpecimenNodesToSCGTree(xmlString, specimenCollectionGroup);
 		xmlString.append("</node>");
 	
 	}
 	return eventLastDate;
 	}
 	
+	private void addSpecimenNodesToSCGTree(StringBuffer xmlString,SpecimenCollectionGroup specimenCollectionGroup) throws DAOException, ClassNotFoundException
+	{
+	
+		
+		List specimenList = new ArrayList();
+		specimenList.addAll(specimenCollectionGroup.getSpecimenCollection());
+				
+		List finalList = new ArrayList();
+		
+
+		// Stack
+		Stack spStack = new Stack();
+
+		// Here iterate over specimenList to separate out Specimens and child
+		// Specimens
+		for (int i = 0; i < specimenList.size(); i++)
+		{
+			Specimen specimen = (Specimen)specimenList.get(i);
+			
+			if(!Constants.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
+			{	
+			
+				// Long peekSpecimenId = null;
+				if (specimen.getId() != null)
+				{
+					if (specimen.getParentSpecimen()==null)
+					{
+						// if parentSpecimenId is null then it's going to be parent
+						// specimen
+						finalList.add(specimenList.get(i));
+					}
+				}
+			}
+		}
+		for (int i = 0; i < finalList.size(); i++)
+		{
+			Specimen specimen = (Specimen)finalList.get(i);
+			createSpecimenXML(xmlString,specimen);
+			
+		}
+		
+	}
+	
+	private void createSpecimenXML(StringBuffer xmlString,Specimen specimen)
+	{
+		Long spId = specimen.getId();
+		String spLabel1 = specimen.getLabel();
+		// String spActivityStatus = (String) specimens[3];
+		String type = specimen.getSpecimenType();
+		String spCollectionStatus = specimen.getCollectionStatus();
+
+		// Added later for toolTip text for specimens
+		String toolTipText = "Label : " + spLabel1 + " ; Type : " + type;
+		
+		List collectionEventPara = (List)getCollectionEventParameters(specimen.getSpecimenEventCollection());
+		/*String hqlCon = "select colEveParam.container from " + CollectionEventParameters.class.getName()
+				+ " as colEveParam where colEveParam.specimen.id = " + spId;
+
+		List container = executeQuery(hqlCon);
+*/			for (int k = 0; k < collectionEventPara.size(); k++)
+		{
+            CollectionEventParameters collectionEventParameters = (CollectionEventParameters)collectionEventPara.get(k);
+           	String con = (String) collectionEventParameters.getContainer();
+			toolTipText += " ; Container : " + con;
+		}
+		xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" " + "toolTip=\""
+				+ toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\"" + spCollectionStatus + "\">");
+		Collection<AbstractSpecimen>childrenSpecimen = specimen.getChildrenSpecimen();
+		Iterator<AbstractSpecimen> childSpecimenIterator = childrenSpecimen.iterator();
+		while(childSpecimenIterator.hasNext())
+		{
+			createSpecimenXML(xmlString,(Specimen)childSpecimenIterator.next());
+		}
+		xmlString.append("</node>");
+	}
 	
 	/**
 	 * Add specimens to xmlString
