@@ -14,7 +14,7 @@
             import mx.controls.List;  
             import Components.DAGNode;
             import Components.CustomFormulaNode;  
-            
+            import mx.rpc.events.ResultEvent;
            [Bindable]
            public var myArray1 : ArrayCollection; 
            
@@ -114,7 +114,7 @@
            	  	  existingDatePicker = myBox.getChildByName("datePicker") as DateField;
            	 	  if((existingDatePicker != null) && (existingDatePicker.enabled == true ))
            	 	  {
-           	 	    
+           	 	    Alert.show("Existing date picker is enabled");
            	 	    timeValue = (existingDatePicker.selectedDate.getMonth()+1) + "/"+existingDatePicker.selectedDate.getDate()+"/"+existingDatePicker.selectedDate.getFullYear();
            	 	  }
            	  	
@@ -129,8 +129,6 @@
 					    timeValue = existingTextBox.text;
            	  	   		timeIntervalValue = existingTimeIntervalCb.selectedItem.toString();
            	  	   }
-           	  	   //if(existingTimeIntervalCb != null)
-           	  	   
            	  }
            	  
            	//Getting the left and right operands
@@ -149,24 +147,28 @@
            	 secondNodeAttributeId = String(secondNodeList.getItemAt(0));
            	
            	 //Invoking the java class method  
-             queryString = firstNodeAttributeId + "##" + firstOperandType + "##" +secondNodeAttributeId + "##"+ secondOperandType +"##"+ cb2.selectedItem +"##"+cb4.selectedItem + "##"+ timeValue +"##" + timeIntervalValue;
+                queryString = firstNodeAttributeId + "##" + firstOperandType + "##" +secondNodeAttributeId + "##"+ secondOperandType +"##"+ cb2.selectedItem +"##"+cb4.selectedItem + "##"+ timeValue +"##" + timeIntervalValue;
             
-            // Alert.show("Query String is:"+queryString);
-             rpcService.formTemporalQuery(firstDAGNode, secondDAGNode, queryString);
-              
-             if(timeIntervalValue != null)
+              if(timeIntervalValue != null)
              {
-             	customFormulaString = cb1.selectedItem + " "+ cb2.selectedItem + " " + cb3.selectedItem + "\n" + cb4.selectedItem + " " + timeValue + " " +  timeIntervalValue;
+             	customFormulaString = firstEntityName+"."+cb1.selectedItem + "\n "+ cb2.selectedItem + " \n" +secondEntityName+"."+cb3.selectedItem + "\n" + cb4.selectedItem + " " + timeValue + " " +  timeIntervalValue;
              } 
              else
              {
-              	customFormulaString = cb1.selectedItem + " "+ cb2.selectedItem + " " + cb3.selectedItem + "\n" + cb4.selectedItem + " " + timeValue ;
+              	customFormulaString =  firstEntityName+"."+cb1.selectedItem+ " \n"+ cb2.selectedItem + "\n " + secondEntityName+"."+cb3.selectedItem  + "\n" + cb4.selectedItem + " " + timeValue ;
              }
              
              parentApplication.customFormulaString = customFormulaString;
-             parentApplication.addCustomFromulaNode();
-             
-           }   
+	     rpcService.formTemporalQuery(firstDAGNode, secondDAGNode, queryString);
+             rpcService.addEventListener(ResultEvent.RESULT, resultHandler)
+            
+	   }   
+
+	   private function  resultHandler(event : ResultEvent):void
+           {
+                parentApplication.addCustomFromulaNode();
+           }
+    
     
            private function addInputControl() : void
            {
@@ -225,7 +227,7 @@
                        	   var comboBox : ComboBox = new ComboBox();
                        	   comboBox.id = "cb5";
                        	   comboBox.name = "timeIntervalCb";
-                       	    comboBox.width = 100;
+                       	   comboBox.width = 100;
                            comboBox.dropdownFactory = myDropdownFactory;
                        	   comboBox.dataProvider = myArray5;
                        	   myBox.addChild(comboBox);
@@ -265,7 +267,7 @@
            	 		firstOperandType = String(firstNodeList.getItemAt(1));
            	 	 	secondOperandType= String(secondNodeList.getItemAt(1));
            	 	    
-           	 	    if(firstOperandType.match("Date") && secondOperandType.match("Date"))
+           	 	    if((firstOperandType == "Date") && (secondOperandType == "Date"))
            	 	    {
            	 			arithmeticOperand= cb2.selectedItem.toString();
            	 	    	if((arithmeticOperand == "+") || (arithmeticOperand == "/") || (arithmeticOperand == "*"))
@@ -277,7 +279,7 @@
            	 	    	  	addInputControl();         	 	    
            	 	    	}
            	 		}
-           	 		else if(firstOperandType.match("Integer") && secondOperandType.match("Integer"))
+           	 		else if((firstOperandType == "Integer") && (secondOperandType == "Integer"))
            	 		{
            	 			//IN case of subtraction of two dates, it should be something integer 
            	 	    	addInputControl();
@@ -431,7 +433,7 @@
       	<mx:ComboBox id="cb2" dataProvider="{myArray2}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue"  textAlign="center" prompt="--Select--" change="validateQueryData()"/>
       	<mx:ComboBox id="cb3" dataProvider="{myArray3}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue" change="validateQueryData()" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" />
       	<mx:ComboBox id="cb4" dataProvider="{myArray4}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue"  prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="righthandSideHandler()"/>
-        <mx:TextInput id="txtInput" name="txtInput"  width="100"  borderColor="blue" /> 
+        <mx:TextInput id="txtInput" name="txtInput"  width="100" restrict="0-9" borderColor="blue" /> 
         <mx:ComboBox id="cb5" name="timeIntervalCb" dataProvider="{myArray5}" width="100" arrowButtonWidth="3" borderThickness="0" borderColor="blue" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
        <!-- <mx:Panel  id="p1" height="20" width="100" /> -->
       </mx:HBox> 	 
