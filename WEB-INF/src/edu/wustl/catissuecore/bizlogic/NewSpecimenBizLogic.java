@@ -1466,25 +1466,31 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	}
 
 	/**
-	 * @param specimenCollection Collection of specimen object
-	 * @param dao DAO object
-	 * @param sessionDataBean Session details
-	 * @param partOfMultipleSpecimen boolean true or false
-	 * @throws DAOException Database related exception
-	 * @throws SMException Security related exception
+	 * 
+	 * @param newSpecimen
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param partOfMultipleSpecimen
+	 * @throws DAOException
+	 * @throws SMException
 	 */
-	private void setChildrenSpecimenStorage(Collection<AbstractSpecimen> specimenCollection, DAO dao,
+	private void setSpecimenStorageRecursively(Specimen newSpecimen, DAO dao,
 			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen) throws DAOException,
 			SMException
 	{
-		Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
-		while (iterator.hasNext())
+		setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true);
+		if (newSpecimen.getChildrenSpecimen() != null)
 		{
-			Specimen specimen = (Specimen) iterator.next();
-			Specimen parentSpecimen = (Specimen)specimen.getParentSpecimen();
-			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
-			setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, partOfMultipleSpecimen);
+			Collection<AbstractSpecimen> specimenCollection = newSpecimen.getChildrenSpecimen();
+			Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
+			while (iterator.hasNext())
+			{
+				Specimen specimen = (Specimen) iterator.next();
+				specimen.setSpecimenCollectionGroup(newSpecimen.getSpecimenCollectionGroup());
+				setSpecimenStorageRecursively(specimen,dao, sessionDataBean, true);
+			}
 		}
+
 	}
 
 	/**
@@ -2387,6 +2393,23 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		return childSpecimenCtr;
 	}
 
+	
+	private void allocateSpecimenPostionsRecursively(Specimen newSpecimen) throws DAOException
+	{
+		allocatePositionForSpecimen(newSpecimen);
+		if (newSpecimen.getChildrenSpecimen() != null)
+		{
+			Iterator<AbstractSpecimen> childrenIterator = newSpecimen.getChildrenSpecimen()
+					.iterator();
+			while (childrenIterator.hasNext())
+			{
+				Specimen childSpecimen = (Specimen) childrenIterator.next();
+				childSpecimen.setParentSpecimen(newSpecimen);
+				allocateSpecimenPostionsRecursively(childSpecimen);
+			}
+		}
+	}
+	
 	/**
 	 * @param dao DAO object
 	 * @param newSpecimenCollection Specimen Collection
@@ -2410,30 +2433,14 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 							.getName(), newSpecimen.getId(), "specimenCollectionGroup");
 				}
 				newSpecimen.setSpecimenCollectionGroup(scg);
-				allocatePositionForSpecimen(newSpecimen);
-				if (newSpecimen.getChildrenSpecimen() != null)
-				{
-					Iterator<AbstractSpecimen> childrenIterator = newSpecimen.getChildrenSpecimen()
-							.iterator();
-					while (childrenIterator.hasNext())
-					{
-						Specimen childSpecimen = (Specimen) childrenIterator.next();
-						childSpecimen.setParentSpecimen(newSpecimen);
-						allocatePositionForSpecimen(childSpecimen);
-					}
-				}
+				allocateSpecimenPostionsRecursively(newSpecimen);
 
 			}
 			iterator = newSpecimenCollection.iterator();
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
-				setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true);
-				if (newSpecimen.getChildrenSpecimen() != null)
-				{
-					setChildrenSpecimenStorage(newSpecimen.getChildrenSpecimen(), dao,
-							sessionDataBean, true);
-				}
+				setSpecimenStorageRecursively(newSpecimen, dao,sessionDataBean, true);
 			}
 
 			iterator = newSpecimenCollection.iterator();
