@@ -69,7 +69,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Participant participant = (Participant) obj;
-		
+		dao.insert(participant, sessionDataBean, true, true);
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 
 
@@ -92,9 +92,9 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it.next();
 			pmIdentifier.setParticipant(participant);
-			//dao.insert(pmIdentifier, sessionDataBean, true, true);
+			dao.insert(pmIdentifier, sessionDataBean, true, true);
 		}
-		dao.insert(participant, sessionDataBean, true, true);
+		
 		//Inserting collection Protocol Registration info in the database after setting the participant associated.
 		//Abhishek Mehta
 		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();

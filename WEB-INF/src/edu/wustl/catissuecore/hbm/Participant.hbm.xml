@@ -148,7 +148,7 @@
             table="CATISSUE_PART_MEDICAL_ID"
             fetch="subselect" lazy="false" 
             inverse="true"
-            cascade="all"
+            cascade="none"
             sort="unsorted"
         >
         
