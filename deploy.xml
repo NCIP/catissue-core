@@ -1467,7 +1467,7 @@ Thanking You,
 				<include name="**/*" />					
 			</fileset>
 		</delete>
-				
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />				
 		<unwar src="${base.dir}/dynamicExtensions.war" dest="${temp.dir}/catissuecore"/>		
 			<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 			<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
@@ -1500,7 +1500,7 @@ Thanking You,
 			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}"/>
 		</replace>
 				
-		<java classname="edu.common.dynamicextensions.util.CategoryCreator" fork="true" maxmemory="1024M">		
+		<java classname="edu.wustl.catissuecore.annotations.xmi.CategoryIntegration" fork="true" maxmemory="1024M">		
 			<arg value="${categoryDefinitionFilePath}"/>
 				<classpath>
 					<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes"/> 
