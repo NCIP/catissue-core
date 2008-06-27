@@ -188,7 +188,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						</logic:notEqual>
 		        	</td>
 				 </tr>
-				<tr>
+				<%if((!Variables.isSpecimenCollGroupLabelGeneratorAvl) || operation.equals(Constants.EDIT))
+				{%>
 				<tr>
 					<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
 					<td class="formFieldNoBordersSimple" >
@@ -196,10 +197,12 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 							<b><bean:message key="specimenCollectionGroup.groupName" /></b>
 						</label>
 					</td>
+					
 					<td class="formFieldNoBordersSimple">
 						<html:text styleClass="formFieldSized" size="30"  maxlength="255" styleId="name" property="name" />						
 					</td>
 				</tr>
+				<%}%>
 				 <tr>
 				 	<td class="formFieldNoBordersSimple" colspan="2" width="5"><b>*</b></td>
 				    

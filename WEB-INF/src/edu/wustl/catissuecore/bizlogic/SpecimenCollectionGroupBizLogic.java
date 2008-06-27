@@ -988,10 +988,13 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		//				
 		// }
 
-		if (validator.isEmpty(group.getName()))
+		if(validator.isEmpty(group.getName()))
 		{
-			message = ApplicationProperties.getValue("specimenCollectionGroup.groupName");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			if ((Constants.ADD.equals(operation) && !edu.wustl.catissuecore.util.global.Variables.isSpecimenCollGroupLabelGeneratorAvl) || Constants.EDIT.equals(operation))
+			{
+				message = ApplicationProperties.getValue("specimenCollectionGroup.groupName");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			}
 		}
 
 		// Mandatory Field : Study Calendar event point

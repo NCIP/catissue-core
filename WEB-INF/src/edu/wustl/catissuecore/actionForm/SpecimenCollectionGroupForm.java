@@ -750,7 +750,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber")));	
 				}
 			}
-			if(this.name.equals(""))
+			if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenCollGroupLabelGeneratorAvl && this.name.equals(""))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 								ApplicationProperties.getValue("specimenCollectionGroup.groupName")));
