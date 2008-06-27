@@ -251,7 +251,19 @@ Ext.onReady(function(){
 			{
                 text: 'Local Extensions',
 				tooltip:'Shows Local Extensions',
-                href:'DefineAnnotationsInformationPage.do'
+                href:'DefineAnnotationsInformationPage.do?operation=add',
+                menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                        {
+                            text: 'Add',
+                            href:'DefineAnnotationsInformationPage.do?operation=add'
+                        }, {
+                            text: 'Edit',
+                            href:'DefineAnnotationsInformationPage.do?operation=edit'
+                        }
+                    ]
+                }
             },
 			{
                 text: 'Conflicting Reports',
