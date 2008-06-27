@@ -14,15 +14,20 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.ehcache.CacheException;
-
+import edu.common.dynamicextensions.DEIntegration.DEIntegration;
+import edu.common.dynamicextensions.DEIntegration.DEIntegration;
+import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.entitymanager.CategoryManager;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
+import edu.wustl.cab2b.server.util.DynamicExtensionUtility;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.common.dynamicextensions.domain.CategoryEntity;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
@@ -210,8 +215,22 @@ public class AnnotationBizLogic extends DefaultBizLogic
             {
                 EntityMap entityMap = (EntityMap) object;
                 Long dynamicEntityId = entityManager.getEntityIdByContainerId(entityMap.getContainerId());
+                Long rootContainerId = entityMap.getContainerId();
+                Long  containerId = entityManager.isCategory(rootContainerId);
+                if (containerId != null)
+                {
+                  	DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
+    				List<CategoryEntity> entityList = defaultBizLogic.retrieve(CategoryEntity.class.getName(),"id",dynamicEntityId);
+    				if(entityList!=null && entityList.size()>0)
+                	dynamicEntityId = entityList.get(0).getEntity().getId();
+    				
+                
+                } 
+                //root category entity id .take that entity from cache
+                
                 EntityInterface dynamicEntity = EntityCache.getInstance().getEntityById(dynamicEntityId);
                 EntityInterface staticEntity = EntityCache.getInstance().getEntityById(entityMap.getStaticEntityId());
+                
                 Collection<AssociationInterface> associationCollection = staticEntity.getAssociationCollection();
                 AssociationInterface associationInterface = null;
                 for (AssociationInterface association : associationCollection)
