@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleError;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.querysuite.exceptions.CyclicException;
+import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
 import edu.wustl.common.querysuite.factory.QueryObjectFactory;
 import edu.wustl.common.querysuite.metadata.associations.IAssociation;
 import edu.wustl.common.querysuite.metadata.associations.IIntraModelAssociation;
@@ -43,6 +44,7 @@ import edu.wustl.common.querysuite.queryobject.IDateOffsetLiteral;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionAttribute;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
+import edu.wustl.common.querysuite.queryobject.IExpressionOperand;
 import edu.wustl.common.querysuite.queryobject.IJoinGraph;
 import edu.wustl.common.querysuite.queryobject.ILiteral;
 import edu.wustl.common.querysuite.queryobject.IQuery;
@@ -50,6 +52,7 @@ import edu.wustl.common.querysuite.queryobject.IQueryEntity;
 import edu.wustl.common.querysuite.queryobject.ITerm;
 import edu.wustl.common.querysuite.queryobject.LogicalOperator;
 import edu.wustl.common.querysuite.queryobject.TermType;
+import edu.wustl.common.querysuite.queryobject.impl.CustomFormula;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.ExpressionId;
 import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
@@ -612,7 +615,7 @@ public class DAGPanel {
 		 */
 		for(AttributeInterface attribute : destAttributeCollection)
         {
-        	String destDataType  = attribute.getDataType();
+        	 String destDataType  = attribute.getDataType();
 			if(destDataType.equals(Constants.DATE_TYPE))
 			{
         		destNodeList = new ArrayList<String>();
@@ -632,6 +635,13 @@ public class DAGPanel {
 				}
 			}
         }
+		
+		//Adding "Today" as default attribute and id is null and type is Date
+		/*destNodeList = new ArrayList<String>();
+		destNodeList.add(0,null);
+		destNodeList.add(1,"Date");
+		destNodeAttributesMap.put("today",destNodeList);
+	       */  	
 	}
 	private List<String> getTimeIntervals()
 	{
@@ -684,6 +694,32 @@ public class DAGPanel {
 			}
 		}
 		return arithmeticOperaorsList;
+	}
+	
+	/**
+	 * This method removes the Custom formula from query on delete of custom Node 
+	 * @throws MultipleRootsException
+	 */
+	public void removeCustomFormula()	
+	{
+		IQuery query = m_queryObject.getQuery();
+		IConstraints c = query.getConstraints();
+		Enumeration<IExpressionId> expressionIds = c.getExpressionIds();
+		while(expressionIds.hasMoreElements())
+		{
+			IExpressionId nextElement = expressionIds.nextElement();
+			IExpression expression2 = c.getExpression(nextElement);
+			int numberOfOperands = expression2.numberOfOperands();
+			for(int i=0;i<numberOfOperands;i++)
+			{
+				IExpressionOperand operand = expression2.getOperand(i);
+				if(operand instanceof CustomFormula)
+				{
+					expression2.removeOperand(i);
+					break;
+				}
+			}
+		}
 	}
 	/**
 	 * Link 2 nodes

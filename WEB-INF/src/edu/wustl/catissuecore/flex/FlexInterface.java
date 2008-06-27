@@ -1431,7 +1431,11 @@ public class FlexInterface
 		return queryDataMap;
 	}
 	
-	
+	public void removeCustomFormula()
+	{
+		//System.out.println("In remove custom formula");
+		dagPanel.removeCustomFormula();
+	}
 	/**
 	 * Deletes node from output view
 	 * @param expId
