@@ -1,12 +1,16 @@
+
 package edu.wustl.catissuecore.util;
 
 import java.util.Comparator;
-
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.Specimen;
 
 
 
+/**
+ * @author kalpana_thakur
+ * Used to compare collection protocol Event ,Order by StudyCalendarEventPoint
+ *
+ */
 public class CollectionProtocolEventComparator implements Comparator{
 
 	public int compare(Object arg0, Object arg1) {
@@ -36,5 +40,6 @@ public class CollectionProtocolEventComparator implements Comparator{
 		
 		return 0;
 	}
-
+	
+	
 }

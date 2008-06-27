@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,6 +46,7 @@ import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolEventComparator;
+import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
@@ -1308,6 +1310,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 					
 		}
 		
+		
 		CollectionProtocolEventComparator comparator = new CollectionProtocolEventComparator();
 		Collections.sort(collectionProtocolEvents,comparator);
 		
@@ -1588,8 +1591,14 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 		xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" " + "toolTip=\""
 				+ toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\"" + spCollectionStatus + "\">");
-		Collection<AbstractSpecimen>childrenSpecimen = specimen.getChildrenSpecimen();
-		Iterator<AbstractSpecimen> childSpecimenIterator = childrenSpecimen.iterator();
+		Collection childrenSpecimen = specimen.getChildrenSpecimen();
+		
+		SpecimenComparator comparator = new SpecimenComparator();
+		List childSpecimen = new ArrayList();
+		childSpecimen.addAll(childrenSpecimen);
+		Collections.sort(childSpecimen,comparator);
+		
+		Iterator<AbstractSpecimen> childSpecimenIterator = childSpecimen.iterator();
 		while(childSpecimenIterator.hasNext())
 		{
 			createSpecimenXML(xmlString,(Specimen)childSpecimenIterator.next());
