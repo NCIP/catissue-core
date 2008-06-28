@@ -254,7 +254,7 @@
         
          <set
             name="userCollectionProtocolCollection"
-            table="CATISSUE_USER_COLLECTION_PROTOCOLS"
+            table="CATISSUE_USER_CP"
             lazy="true"
             inverse="true"
             cascade="none"

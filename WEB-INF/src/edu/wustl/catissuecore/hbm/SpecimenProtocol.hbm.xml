@@ -231,7 +231,7 @@
         
         <set
             name="userCollection"
-            table="CATISSUE_USER_COLLECTION_PROTOCOLS"
+            table="CATISSUE_USER_CP"
             fetch="subselect" lazy="false" 
             inverse="false"
             cascade="none"
@@ -255,7 +255,7 @@
         
         <set
             name="sitecollection"
-            table="CATISSUE_SITE_COLLECTION_PROTOCOLS"
+            table="CATISSUE_SITE_CP"
             lazy="false" 
             inverse="false"
             cascade="none"
