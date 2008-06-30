@@ -6,6 +6,8 @@
 <%@ taglib uri="/WEB-INF/specimenDetails.tld" prefix="md" %>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<%@ page language="java" isELIgnored="false" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -18,7 +20,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 
 %>
 	<script language="JavaScript">
-		//window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
+		//window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=${requestScope.operation1}";
+		
 		function saveCollectionProtocol()
 		{
 				var action ="SubmitSpecimenCollectionProtocol.do?action=collectionprotocol";
@@ -54,7 +57,10 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			}
 							
 		}
-		
+		function refreshTreeOnCPSubmit()
+		{
+			window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=edit";
+		}
 		function confirmDisableTop()
 		{		
 			
@@ -333,7 +339,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 					</tr>
 					<tr>
 						<td>
-							<html:submit  value="Save Collection Protocol" />
+							<html:submit  value="Save Collection Protocol" onclick="refreshTreeOnCPSubmit()"/>
 						</td>
 					</tr>
 				</logic:notEqual>
