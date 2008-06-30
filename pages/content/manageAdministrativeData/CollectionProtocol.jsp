@@ -18,9 +18,6 @@
 if('${requestScope.tabSel}'=="consentTab"){
 	window.onload=consentPage;
 }
-else {
-	window.onload=consentPage();
-}
 
 function defineEvents()
 {
