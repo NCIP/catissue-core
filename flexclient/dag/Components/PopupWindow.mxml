@@ -429,9 +429,9 @@
       
       <mx:HBox id ="myBox" x="20" y="60">
       	
-      	<mx:ComboBox id="cb1" dataProvider="{myArray1}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="validateQueryData()"/>
+      	<mx:ComboBox id="cb1" dataProvider="{myArray1}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="validateQueryData()"/>
       	<mx:ComboBox id="cb2" dataProvider="{myArray2}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue"  textAlign="center" prompt="--Select--" change="validateQueryData()"/>
-      	<mx:ComboBox id="cb3" dataProvider="{myArray3}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue" change="validateQueryData()" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" />
+      	<mx:ComboBox id="cb3" dataProvider="{myArray3}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue" change="validateQueryData()" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" />
       	<mx:ComboBox id="cb4" dataProvider="{myArray4}" width="100" arrowButtonWidth="3"  borderThickness="0" borderColor="blue"  prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()" change="righthandSideHandler()"/>
         <mx:TextInput id="txtInput" name="txtInput"  width="100" restrict="0-9" borderColor="blue" /> 
         <mx:ComboBox id="cb5" name="timeIntervalCb" dataProvider="{myArray5}" width="100" arrowButtonWidth="3" borderThickness="0" borderColor="blue" prompt="--Select--" dropdownFactory="{myDropdownFactory}" creationComplete="initClassFactory()"/>
