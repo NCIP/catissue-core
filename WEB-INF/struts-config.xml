@@ -223,9 +223,11 @@ PUBLIC
 	<action path="/ShowAssignPrivilegePage"
 		type="edu.wustl.catissuecore.action.ShowAssignPrivilegePageAction"		
 		validate="false"
+		input="/ShowAssignPrivilegePage.do"
 		scope="request">
 		<forward name="success" path="/pages/content/manageAdministrativeData/ShowAssignPriviledge.jsp" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="failure" path="/ShowAssignPrivilegePage.do" />
 		
 	</action>
 	<action path="/RequestListView"
@@ -4640,9 +4642,10 @@ PUBLIC
 			scope="request"
 			validate="true"
 			input="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol&amp;menuSelected=9">
-			<forward name="pageOfDefineEvents" path="/ProtocolEventsDetails.do?&amp;operation=add&amp;pageOf=newEvent" />
+			<forward name="pageOfDefineEvents" path="/ProtocolEventsDetails.do?pageOf=newEvent" />
 			<forward name="ViewSummary" path="/GenericSpecimenSummary.do?Event_Id=dummyId" />
-			<forward name="pageOfAssignPrivilegePage" path="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol" />
+			<forward name="pageOfAssignPrivilegePage" path="/ShowAssignPrivilegePage.do?cpOperation=AssignPrivilegePage"/>
+			<forward name="pageOfCollectionProtocolPage" path="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol" />
 		</action>
 		
 		<action path="/ProtocolEventsDetails" 
