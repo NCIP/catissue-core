@@ -846,7 +846,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	*/
 	public function updateNodeSelection(event:MouseEvent):void {
 	selectedNode=null;
-		if(event.ctrlKey)
+		if(event.shiftKey)
 		{
 			var dagNode:DAGNode = DAGNode(mainPanel.getChildByName(event.currentTarget.name));
 			if(dagNode != null)
