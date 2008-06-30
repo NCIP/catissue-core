@@ -296,12 +296,14 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	 * @return List<NameValueBean> list of user NameValueBeanObjects .
 	 */
 	public List<NameValueBean> getUsersForSelectedSites(List<Integer> selectedSitesList) {
-		List<NameValueBean> usersList = new ArrayList<NameValueBean>();
+		Set<NameValueBean> userSet = new HashSet<NameValueBean>();
 		for(int i=0;i<selectedSitesList.size();i++){
 			int siteId=selectedSitesList.get(i);
-			 usersList.addAll(getUsersList(siteId));
+			 userSet.addAll(getUsersList(siteId));
 		}
-		return usersList;
+		List<NameValueBean> list = new ArrayList<NameValueBean>();
+		list.addAll(userSet);
+ 		return list;
 	}
 	
 	/**
