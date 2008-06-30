@@ -70,6 +70,7 @@ public class CreateAliquotAction extends BaseAction
 		//Convert Specimen HashSet to List
 		specimenList= new LinkedList<AbstractDomainObject>();
 		specimenList.addAll(specimenCollection);
+		
 		Specimen specimen = (Specimen)specimenList.get(0);
 		
 		request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimen.getId().toString());
@@ -79,6 +80,7 @@ public class CreateAliquotAction extends BaseAction
 			aliquotForm.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
 			aliquotForm.setScgName(specimen.getSpecimenCollectionGroup().getGroupName());
 		}
+		calculateAvailableQuantityForParent(specimenList,aliquotForm);
 		aliquotForm.setSpecimenList(specimenList);
 		//mapping.findforward
 		return getFindForward(mapping, request, aliquotForm, fromPrintAction,
@@ -296,5 +298,28 @@ public class CreateAliquotAction extends BaseAction
 		}
 
 		return specimenCollection;
+	}
+	private void calculateAvailableQuantityForParent(List specimenList,AliquotForm aliquotForm)
+	{
+		Double totalAliquotQty = 0.0;
+		
+		if(specimenList != null && specimenList.size()>0)
+		{
+			Iterator itr = specimenList.iterator();
+			while(itr.hasNext())
+			{
+				Specimen specimen =  (Specimen) itr.next();
+				if(specimen.getInitialQuantity() != null)
+				{
+					totalAliquotQty = totalAliquotQty + specimen.getInitialQuantity();
+				}
+				
+			}
+			if(aliquotForm.getInitialAvailableQuantity() != null)
+			{
+				Double availableQuantity = Double.parseDouble(aliquotForm.getInitialAvailableQuantity()) - totalAliquotQty;
+				aliquotForm.setAvailableQuantity(availableQuantity.toString());
+			}
+		}
 	}
 }
