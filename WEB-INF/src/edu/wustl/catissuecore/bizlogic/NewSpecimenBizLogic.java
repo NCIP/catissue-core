@@ -101,7 +101,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	protected void preInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
-		isAuthorise(sessionDataBean.getUserName());
+		// isAuthorise(sessionDataBean.getUserName());
 		storageContainerIds = new HashSet<String>();
 	}
 
