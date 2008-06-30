@@ -644,9 +644,7 @@ function participantRegRow(subdivtag)
 									<bean:message key="buttons.addMore" />
 								</html:button></td>
 								<td class="black_ar"><html:button
-									property="deleteMedicalIdentifierValue" styleClass="blue_ar_b"
-									onclick="deleteCheckedNoSubmit('addMore','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true',document.forms[0].valueCounter,'chk_',false)"
-									disabled="true">
+									property="deleteMedicalIdentifierValue" styleClass="blue_ar_b" onclick="deleteChecked('addMore','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true',document.forms[0].valueCounter,'chk_',false)"  disabled="true">
 									<bean:message key="buttons.delete" />
 								</html:button></td>
 								<td class="black_ar">&nbsp;</td>
@@ -841,8 +839,7 @@ function participantRegRow(subdivtag)
 								<td class="black_ar"><html:button
 									property="deleteParticipantRegistrationValue"
 									styleClass="blue_ar_b"
-									onclick="deleteCheckedNoSubmit('addMoreParticipantRegistration','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true&deleteRegistration=true',document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_',false)"
-									disabled="true">
+								onclick="deleteChecked('addMoreParticipantRegistration','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true&deleteRegistration=true',document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_',false)"  disabled="true">
 									<bean:message key="buttons.delete" />
 								</html:button></td>
 								<td class="black_ar">&nbsp;</td>
