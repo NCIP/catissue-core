@@ -846,7 +846,7 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	*/
 	public function updateNodeSelection(event:MouseEvent):void {
 	selectedNode=null;
-		if(event.shiftKey)
+		if(event.ctrlKey)
 		{
 			var dagNode:DAGNode = DAGNode(mainPanel.getChildByName(event.currentTarget.name));
 			if(dagNode != null)
@@ -1201,6 +1201,15 @@ creationComplete="initApp()"  width="100%" height="100%" paddingTop="0" paddingB
 	    popUp = PopupWindow(PopUpManager.createPopUp(this, PopupWindow, true));
 	    popUp.title ="Define Condition";
 	    popUp.showCloseButton = true; 
+	    
+	    if(firstNodeAttributesList.length > 1)
+	    {
+	    	popUp.cb1.prompt = "--Select--";
+	    }
+	    if(secondNodeAttributeList.length > 1)
+	    {
+	    	popUp.cb3.prompt = "--Select--";
+	    }
 	    
 	    //Setting the values to variables  
 	   popUp.myArray1 = firstNodeAttributesList;
