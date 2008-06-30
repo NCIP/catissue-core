@@ -502,7 +502,7 @@ tr#hiddenCombo
 		function showAnnotations()
 		{
 			var fwdPage="<%=pageOf%>";				
-			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=id%>&staticEntityName=<%=staticEntityName%>&pageOf="+fwdPage+"&operation=viewAnnotations";		
+			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=participantId%>&staticEntityName=<%=staticEntityName%>&pageOf="+fwdPage+"&operation=viewAnnotations";		
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
