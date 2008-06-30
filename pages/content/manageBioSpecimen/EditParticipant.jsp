@@ -669,7 +669,7 @@ function participantRegRow(subdivtag)
 					</tr>
 					<tr class="td_color_F7F7F7">
 						<td colspan="2" style="padding-top:10px;">
-						<div id="add_participant_registeration" style="display:none">
+						<div id="add_participant_registeration" style="display:block">
 						<table width="100%" border="0" cellspacing="0" cellpadding="3">
 							<tr class="tableheading">
 								<td width="9%" align="left" class="black_ar_b">Select</td>

@@ -316,7 +316,7 @@
 				              </tr>
 							  <tr>
 				                <td colspan="3" style="padding-top:10px;">
-									<div id="add_default_capacity" style="display:none" >
+									<div id="add_default_capacity" style="display:block" >
 					                  <table width="100%" border="0" cellpadding="2" cellspacing="0">
 										<tr>
 					                      <td width="1%" align="left" valign="top" class="tdPartition">

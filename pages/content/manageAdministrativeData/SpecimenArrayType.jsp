@@ -299,7 +299,7 @@
 									</tr>
             <tr>
               <td colspan="3" valign="top" style="padding-top:10px;">
-				<div id="add_id" style="display:none" >
+				<div id="add_id" style="display:block" >
                     <table width="100%" border="0" cellpadding="2" cellspacing="0">
                       <tr>
                         <td width="1%" height="25" align="left" class="black_ar">
