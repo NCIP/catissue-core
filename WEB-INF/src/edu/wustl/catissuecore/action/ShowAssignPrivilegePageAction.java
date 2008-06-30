@@ -27,7 +27,6 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
-import gate.security.Session;
 import gov.nih.nci.security.exceptions.CSException;
 
 /**
@@ -44,7 +43,7 @@ public class ShowAssignPrivilegePageAction extends BaseAction {
 			HttpServletRequest request, HttpServletResponse response)
 	throws ServletException {
 		ActionForward findForward = null;
-		CollectionProtocolForm  cpForm = (CollectionProtocolForm)form;
+		final CollectionProtocolForm  cpForm = (CollectionProtocolForm)form;
 		if(cpForm!=null)
 		{
 			CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) request.getSession().getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
@@ -53,13 +52,13 @@ public class ShowAssignPrivilegePageAction extends BaseAction {
 		final String operation = (String) request.getParameter(Constants.OPERATION);
 		final String cpOperation = (String) request.getParameter("cpOperation");
 		request.setAttribute("cpOperation", cpOperation);
-		if (("AssignPrivilegePage".equals(operation))) {
+		if (("AssignPrivilegePage".equals(cpOperation))) {
 			findForward = onFirstTimeLoad(mapping, request);
 		} else {
 			try {
-				setAJAXResponse(request, response, operation);
+				setAJAXResponse(request, response, cpOperation);
 			} catch (IOException e) {
-				Logger.out.error("IOException in  sending JSON response in ShowAssignPrivilegePageAction..."+e);
+				logger.error("IOException in  sending JSON response in ShowAssignPrivilegePageAction..."+e);
 			}
 		}
 		return findForward;
