@@ -1670,6 +1670,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CREATE_PARTICIPANT_REGISTRATION = "createParticipantRegistration";
 	public static final String CREATE_PARTICIPANT_REGISTRATION_ADD = "createParticipantRegistrationAdd";
 	public static final String CREATE_PARTICIPANT_REGISTRATION_EDIT= "createParticipantRegistrationEdit";
+	public static final String VIEW_ANNOTATION = "viewAnnotations";
 	
 	public static final String CAN_HOLD_CONTAINER_TYPE = "holdContainerType";
 	public static final String CAN_HOLD_SPECIMEN_CLASS = "holdSpecimenClass";
