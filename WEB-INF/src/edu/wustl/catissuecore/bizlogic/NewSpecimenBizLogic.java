@@ -2308,10 +2308,10 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException If DAO fails to update one or more specimens
 	 * this function will throw DAOException.
 	 */
-	public void bulkUpdateSpecimens(Collection<Specimen> newSpecimenCollection,
+	public void bulkUpdateSpecimens(Collection<AbstractDomainObject> newSpecimenCollection,
 			SessionDataBean sessionDataBean) throws DAOException
 	{
-		Iterator<Specimen> iterator = newSpecimenCollection.iterator();
+		Iterator iterator = newSpecimenCollection.iterator();
 		DAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		int specimenCtr = Constants.FIRST_COUNT_1;
 		int childSpecimenCtr = 0;
