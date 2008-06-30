@@ -220,7 +220,7 @@ public class SiteBizLogic extends DefaultBizLogic
 			if (!validator.isValidPhoneNumber(site.getAddress().getPhoneNumber()))
 			{
 				message = ApplicationProperties.getValue("site.phoneNumber");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+				throw new DAOException(ApplicationProperties.getValue("error.phonenumber.format",message));	
 			}				
 		}
 				
@@ -229,7 +229,7 @@ public class SiteBizLogic extends DefaultBizLogic
 			if (!validator.isValidPhoneNumber(site.getAddress().getFaxNumber()))
 			{
 				message = ApplicationProperties.getValue("site.faxNumber");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+				throw new DAOException(ApplicationProperties.getValue("error.faxnumber.format",message));	
 			}
 		}
 		//bug #4349 ends

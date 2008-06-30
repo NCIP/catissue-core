@@ -828,7 +828,7 @@ public class UserBizLogic extends DefaultBizLogic
 			if (!validator.isValidPhoneNumber(user.getAddress().getPhoneNumber()))
 			{
 				message = ApplicationProperties.getValue("user.phoneNumber");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+				throw new DAOException(ApplicationProperties.getValue("error.phonenumber.format",message));	
 			}
 		}
 		
@@ -837,7 +837,7 @@ public class UserBizLogic extends DefaultBizLogic
 			if (!validator.isValidPhoneNumber(user.getAddress().getFaxNumber()))
 			{
 				message = ApplicationProperties.getValue("user.faxNumber");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+				throw new DAOException(ApplicationProperties.getValue("error.faxnumber.format",message));	
 			}
 		}
 		//Bug #4349 ends
