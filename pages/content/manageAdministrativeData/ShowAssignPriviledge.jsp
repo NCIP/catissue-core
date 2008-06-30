@@ -23,7 +23,18 @@
 	List roleList = (List) request.getAttribute(Constants.ROLELIST);
 	List actionList = (List) request.getAttribute(Constants.ACTIONLIST);
 %>
-
+<script>
+function viewSummary()
+{
+	var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=${requestScope.operation}";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+function updateCPTree()
+{	
+  window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
+}
+</script>
 <form name="apForm" method="POST">
 <table width="100%" border="0" cellpadding="3" cellspacing="0"
 	bgcolor="#FFFFFF" summary="">
