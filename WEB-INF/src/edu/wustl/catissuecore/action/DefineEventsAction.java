@@ -22,9 +22,9 @@ public class DefineEventsAction extends BaseAction
 		CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form;
 		CollectionProtocolBean collectionProtocolBean=null;
 		String pageOf=request.getParameter(Constants.PAGEOF);
-		String cpOperation=request.getParameter("cpOperation");
+		String operation=request.getParameter("operation");
+		request.setAttribute("operation", operation);
 		String invokeFunction=request.getParameter("invokeFunction");
-		request.setAttribute("operation", cpOperation);
 		request.setAttribute("invokeFunction", invokeFunction);
 		HttpSession session = request.getSession();
 		if(session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN)!=null)
