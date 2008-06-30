@@ -35,14 +35,14 @@
 												<param name="movie" value="flexclient/dag/DAG.swf?view=Result"/>
 												<param name="quality" value="high" />
 												<param name="bgcolor" value="#869ca7" />
-												<param name="wmode" value="transparent" />
+												
 												<param name="allowScriptAccess" value="sameDomain"/>
 												<embed src="flexclient/dag/DAG.swf?view=Result" quality="high" bgcolor="#869ca7"
 													width="100%" height="100%" name="DAG" align="middle"
 													play="true"
 													loop="false"
 													quality="high"
-													wmode="transparent"
+												
 													allowScriptAccess="sameDomain"
 													type="application/x-shockwave-flash"
 													pluginspage="http://www.adobe.com/go/getflashplayer">
