@@ -359,9 +359,10 @@ function openCRGWindow()
 			aprActions.className="black_ar";
 			aprActions.width="20%";
 			aprActions.innerHTML="<span>"+newActionsString+"</span>";
+			aprActions.onmouseover=function(){this.title=getTip(actions);} ;
 	}
-function getTip(sites) {
-		return sites;
+function getTip(contents) {
+		return contents;
 }
 /*	
  function editRow(rowId){
