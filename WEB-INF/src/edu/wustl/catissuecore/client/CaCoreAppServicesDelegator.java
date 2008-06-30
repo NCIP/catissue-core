@@ -218,7 +218,11 @@ public class CaCoreAppServicesDelegator
         try
         {
               Role role=securityManager.getUserRole(validUser.getCsmUserId());
-              reviewerRole=role.getName();
+              if (validUser.getAdminuser())
+              {
+            	  reviewerRole = Constants.ADMINISTRATOR;
+              }
+             // reviewerRole=role.getName();
         }
         catch(SMException ex)
         {
