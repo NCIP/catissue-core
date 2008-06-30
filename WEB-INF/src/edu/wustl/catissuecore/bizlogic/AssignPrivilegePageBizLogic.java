@@ -22,7 +22,6 @@ import org.json.JSONObject;
 
 import edu.wustl.catissuecore.action.UserAction;
 import edu.wustl.catissuecore.actionForm.AssignPrivilegesForm;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
@@ -34,7 +33,6 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.security.PrivilegeUtility;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
@@ -244,7 +242,6 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		}
 		catch (DAOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally
@@ -255,7 +252,6 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			}
 			catch (DAOException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -285,12 +281,10 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		}
 		catch (CSObjectNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch (CSException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    
