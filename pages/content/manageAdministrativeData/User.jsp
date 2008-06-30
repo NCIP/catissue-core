@@ -511,7 +511,7 @@ function handleStatus(status)
 													<td width="16%" align="left" class="black_ar"><label
 														for="site"><bean:message key="user.adminUser" /> </label></td>
 																
-												<td width="67%" align="left">
+												<td width="67%" align="left" class="black_ar">
 									<html:radio styleClass="black_ar" styleId="adminuser" property="adminuser" value="true" >
 								<label for="siteId">
 									<bean:message key="user.yes"/>
