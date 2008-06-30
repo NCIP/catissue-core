@@ -95,7 +95,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		int noOfUsers = rowIdMap.size();
 		Set<Site> siteCollection = new HashSet<Site>();
 		String roleName = "";
-		HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
+		
 		for (Iterator<String> mapItr = rowIdMap.keySet().iterator(); mapItr.hasNext(); )
 		{
 			String key = mapItr.next();
@@ -110,13 +110,14 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 					siteUserRolePrivilegeBean.getPrivileges());
 			String userId = String.valueOf(user.getCsmUserId());
 			gov.nih.nci.security.authorization.domainobjects.User csmUser = getUserByID(userId);
-			group.add(csmUser);
+			HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
+			group.add(csmUser); 
 			String protectionGroupName = new String(Constants
 					.getCollectionProtocolPGName(collectionProtocol.getId()));
 			SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
 			userGroupRoleProtectionGroupBean.setUser("");
 			userGroupRoleProtectionGroupBean.setRoleName(roleName);
-			userGroupRoleProtectionGroupBean.setGroupName(("CP_"+collectionProtocol.getId()));
+			userGroupRoleProtectionGroupBean.setGroupName(("CP_"+collectionProtocol.getId()+ "_"+user.getId().toString()));
 			userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
 			userGroupRoleProtectionGroupBean.setGroup(group);
 			authorizationData.add(userGroupRoleProtectionGroupBean);
