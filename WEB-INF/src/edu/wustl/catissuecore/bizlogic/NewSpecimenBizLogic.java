@@ -94,7 +94,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 	private Map<Long, Collection<String>> containerHoldsSpecimenClasses = new HashMap<Long, Collection<String>>();
 	private Map<Long, Collection<CollectionProtocol>> containerHoldsCPs = new HashMap<Long, Collection<CollectionProtocol>>();
-	private HashSet<String> storageContainerIds;
+	private HashSet<String> storageContainerIds = new HashSet<String>();
 	private SecurityManager securityManager = new SecurityManager(this.getClass());
 	private boolean cpbased = false;
 
