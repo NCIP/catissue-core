@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
+import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -57,6 +58,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -1261,5 +1263,20 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			return (new Long(nvBean.getValue()));
 		}
 		return null;
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
+	 */
+	@Override
+	protected String getObjectId(AbstractActionForm form)
+	{
+		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
+		if(specimenCollectionGroupForm.getCollectionProtocolId()!=0L && specimenCollectionGroupForm.getCollectionProtocolId()!= -1L) 
+		   return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+specimenCollectionGroupForm.getCollectionProtocolId();
+		else
+		   return null;
+		 
 	}
 }
