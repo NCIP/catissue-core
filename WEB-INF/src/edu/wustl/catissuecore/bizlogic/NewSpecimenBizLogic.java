@@ -94,7 +94,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 
 	private Map<Long, Collection<String>> containerHoldsSpecimenClasses = new HashMap<Long, Collection<String>>();
 	private Map<Long, Collection<CollectionProtocol>> containerHoldsCPs = new HashMap<Long, Collection<CollectionProtocol>>();
-	private HashSet<String> storageContainerIds = new HashSet<String>();
+	private HashSet<String> storageContainerIds;
 	private SecurityManager securityManager = new SecurityManager(this.getClass());
 	private boolean cpbased = false;
 
@@ -142,10 +142,6 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		catch (SMException e)
 		{
 			throw handleSMException(e);
-		}
-		finally
-		{
-			storageContainerIds.clear();
 		}
 	}
 	/**
@@ -692,6 +688,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				postInsert(childSpecimens, dao, sessionDataBean);
 			}
 		}
+		storageContainerIds.clear();
 	}
 
 	/**
@@ -1507,7 +1504,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				String storageValue = specimen.getSpecimenPosition().getStorageContainer().getName()+":"+specimen.getSpecimenPosition().getPositionDimensionOne()+" ,"+
 				specimen.getSpecimenPosition().getPositionDimensionTwo();
-				 if (!storageContainerIds.contains(storageValue))
+				if (!storageContainerIds.contains(storageValue))
 				{
 					storageContainerIds.add(storageValue);
 				}
