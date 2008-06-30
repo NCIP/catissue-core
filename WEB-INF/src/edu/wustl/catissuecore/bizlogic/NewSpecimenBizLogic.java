@@ -548,6 +548,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			checkStatus(dao, parentSpecimen, "Specimen");
 			specimen.setParentSpecimen(parentSpecimen);
+			parentSpecimen.getChildrenSpecimen().add(specimen);
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
 			specimen.getSpecimenCollectionGroup().getSpecimenCollection().add(specimen);
 			setParentSpecimenData(specimen);
@@ -2387,6 +2388,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			childSpecimenCtr++;
 			Specimen childSpecimen = (Specimen) childIterator.next();
 			childSpecimen.setParentSpecimen(specimenDO);
+			specimenDO.getChildrenSpecimen().add(childSpecimen);
 			insert(childSpecimen, dao, sessionDataBean);
 		}
 		childSpecimenCtr = 0;
@@ -2405,6 +2407,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				Specimen childSpecimen = (Specimen) childrenIterator.next();
 				childSpecimen.setParentSpecimen(newSpecimen);
+				newSpecimen.getChildrenSpecimen().add(childSpecimen);
 				allocateSpecimenPostionsRecursively(childSpecimen);
 			}
 		}
