@@ -706,4 +706,8 @@ a.pagenumbers:hover{
 	font-weight:bold;
 	color:#323232;
 }
+.dividerline{ 
+    border-top:1px solid #ebebeb;
+}
+
 
