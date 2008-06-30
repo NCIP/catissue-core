@@ -299,6 +299,11 @@ public class CreateAliquotAction extends BaseAction
 
 		return specimenCollection;
 	}
+	/**
+	 * This function calculates the avialble qty of parent after creating aliquots.
+	 * @param specimenList - list of aliquots
+	 * @param aliquotForm
+	 */
 	private void calculateAvailableQuantityForParent(List specimenList,AliquotForm aliquotForm)
 	{
 		Double totalAliquotQty = 0.0;
