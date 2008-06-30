@@ -130,6 +130,15 @@ public class ParticipantAction extends SecureAction
 				session.setAttribute(Constants.CONSENT_RESPONSE, consentResponseHashTable);
 			}
 		}
+		/* Falguni Sachde
+		 * bug id :8150
+		 * Set participantId as request attribute as Its required in case of viewannotations view of Edit participant
+		 */ 
+		if (participantForm.getOperation().equals(Constants.VIEW_ANNOTATION))
+		{
+			request.setAttribute("participantId", new Long(participantForm.getId()).toString());			
+			
+		}
 		//Bug- setting the default Gender
 //		if (participantForm.getGender() == null)
 //		{
