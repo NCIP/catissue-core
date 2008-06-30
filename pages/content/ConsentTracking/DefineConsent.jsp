@@ -57,8 +57,9 @@
 								<c:set var="readonly" value="false" scope="page"/>
         <tr>
           <td align="center" class="black_ar">
-						 <logic:equal name='${requestScope.operationforJSP}' value='${requestScope.edit}'>
+						 <logic:equal name="operation" value='${requestScope.edit}'>
 									<c:set var="readonly" value="true" scope="page"/>
+									
 									<input type="checkbox" name="consentcheckBoxs" Id="check1" disabled="disabled"/>
 									</logic:equal>
 									<logic:notEqual name="operation" value='${requestScope.edit}'>
