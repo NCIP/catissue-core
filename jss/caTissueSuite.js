@@ -1,4 +1,4 @@
-// function to set focus on first element
+					// function to set focus on first element
 function setFocusOnFirstElement()
 	{
 		frm = document.forms[0];
@@ -94,7 +94,7 @@ function openCRGWindow()
 
 	// for assignPrivilege
 		var request;
-   function sendRequestsWithData(url,data,operation)
+   function sendRequestsWithData(url,data,cpOperation)
    {
      	request=newXMLHTTPReq();
 		request.onreadystatechange = function requestHandler(){
@@ -111,7 +111,7 @@ function openCRGWindow()
 				{
 					var num = jsonResponse.locations.length; 
 				
-					if(operation == "getUsersForThisSites"){	
+					if(cpOperation == "getUsersForThisSites"){	
 						var eleOfUserSelBox = document.getElementById('userIds');
 						while(eleOfUserSelBox.length > 0){
 							eleOfUserSelBox.remove(eleOfUserSelBox.length - 1);
@@ -119,7 +119,7 @@ function openCRGWindow()
 						var myNewOption = new Option("--All--","-1");	
 						document.getElementById('userIds').options[0] = myNewOption;
 					}	
-					else if(operation == "getActionsForThisRole"){
+					else if(cpOperation == "getActionsForThisRole"){
 						var eleOfActionSelBox = document.getElementById('actionIds');	
 						for(var opt=0; opt<eleOfActionSelBox.length; opt++){
 							eleOfActionSelBox.options[opt].selected=false;
@@ -127,7 +127,7 @@ function openCRGWindow()
 					}	
 					for(i=0;i<num;i++)
 					{						
-						if(operation == "getUsersForThisSites"){	
+						if(cpOperation == "getUsersForThisSites"){	
 							theValue  = jsonResponse.locations[i].locationId;
 							theText = jsonResponse.locations[i].locationName;
 						
@@ -135,7 +135,7 @@ function openCRGWindow()
 							
 							document.getElementById('userIds').options[i+1] = myNewOption;
 						}
-						else if(operation == "getActionsForThisRole"){	
+						else if(cpOperation == "getActionsForThisRole"){	
 							theValue = jsonResponse.locations[i].locationId;
 							theText  = jsonResponse.locations[i].locationName;
 						
@@ -147,13 +147,13 @@ function openCRGWindow()
 									}
 							}
 						}
-						else if(operation == "editRow"){
+						else if(cpOperation == "editRow"){
 						var eleOfActionSelBox = document.getElementById('actionIds');	
 							for(var opt=0; opt<eleOfActionSelBox.length; opt++){
 								eleOfActionSelBox.options[opt].selected=false;
 							}
 						}
-						else if(operation == "addPrivilege"){
+						else if(cpOperation == "addPrivilege"){
 					
 							var tableId="summaryTableId";
 							var rowId=jsonResponse.locations[i].rowId; 
@@ -190,7 +190,7 @@ function openCRGWindow()
    
 	function getUsersForThisSites(siteObject)
 	{	
-			var operation="getUsersForThisSites";
+			var cpOperation="getUsersForThisSites";
 		//	var operation= form.operation.value;
 		//	alert(operation);
 		    var selectedSiteIds = new Array();
@@ -206,25 +206,25 @@ function openCRGWindow()
 				}
 			}
 			var url="ShowAssignPrivilegePage.do";
-			var data="operation="+operation+"&selectedSiteIds="+selectedSiteIds;
+			var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds;
 		
-			sendRequestsWithData(url,data,operation);
+			sendRequestsWithData(url,data,cpOperation);
 	}
 	function getActionsForThisRole(roleObject)
 	{		
 			var form=roleObject.form;
-			var operation="getActionsForThisRole";				 
+			var cpOperation="getActionsForThisRole";				 
 			var selectedRoleType = roleObject.options[roleObject.selectedIndex].text;			 		
 			var selectedRoleIds = roleObject.options[roleObject.selectedIndex].value;
 		
 			var url="ShowAssignPrivilegePage.do";
-			var data="operation="+operation+"&selectedRoleIds="+selectedRoleIds;			
-			sendRequestsWithData(url,data,operation);
+			var data="cpOperation="+cpOperation+"&selectedRoleIds="+selectedRoleIds;			
+			sendRequestsWithData(url,data,cpOperation);
 				
 	}
 	function getUserPrivilegeSummary()
 	{
-		var operation="addPrivilege";	
+		var cpOperation="addPrivilege";	
 		siteListCtrl=document.getElementById("siteIds");
 		userListCtrl=document.getElementById("userIds");
 		roleListCtrl=document.getElementById("roleIds");
@@ -233,13 +233,23 @@ function openCRGWindow()
 		 var selectedSiteIds = new Array();
 		 var selectedUserIds = new Array();
 		 var selectedRoleIds = new Array();
-		 var selectedActionIds = new Array();
-			for (var i = 0; i < siteListCtrl.options.length; i++)
-			{
-				if (siteListCtrl.options[ i ].selected){
-				    selectedSiteIds.push(siteListCtrl.options[ i ].value);
+		 var selectedActionIds = new Array();  
+
+			if(((siteListCtrl.options[ 0 ].value)=="-1")&&(siteListCtrl.options[ 0 ].selected)){
+				for (var i = 1; i < siteListCtrl.options.length; i++)
+				{
+					 selectedSiteIds.push(siteListCtrl.options[ i ].value);
 				}
 			}
+			else {
+				for (var i = 0; i < siteListCtrl.options.length; i++)
+				{
+					if (siteListCtrl.options[ i ].selected){
+					    selectedSiteIds.push(siteListCtrl.options[ i ].value);
+					}
+				}
+			}
+			
 			if(((userListCtrl.options[ 0 ].value)=="-1")&&(userListCtrl.options[ 0 ].selected)){
 				for (var i = 1; i < userListCtrl.options.length; i++)
 				{
@@ -254,12 +264,14 @@ function openCRGWindow()
 					}
 				}
 			}	
+
 			for (var i = 0; i < roleListCtrl.options.length; i++)
 			{
 				if (roleListCtrl.options[ i ].selected){
 				    selectedRoleIds.push(roleListCtrl.options[ i ].value);
 				}
-			}
+			}  
+
 			if(((actionListCtrl.options[ 0 ].value)=="-1")&&(actionListCtrl.options[ 0 ].selected))
 			{
 					for (var i = 1; i < actionListCtrl.options.length; i++)
@@ -275,9 +287,34 @@ function openCRGWindow()
 					}
 				}	
 			}
-			var url="ShowAssignPrivilegePage.do";
-			var data="operation="+operation+"&selectedSiteIds="+selectedSiteIds+"&selectedUserIds="+selectedUserIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds;			
-			sendRequestsWithData(url,data,operation);	
+			var errorFlagForSite=false;
+			var errorFlagForUser=false;
+			var errorFlagForAction=false;
+		
+			if(selectedSiteIds.length=='0'){
+				errorFlagForSite=true;
+			}
+			if(selectedUserIds.length=='0'){
+				errorFlagForUser=true;
+			}
+			if(selectedActionIds.length=='0'){
+				errorFlagForAction=true;
+			}
+			var divIdForSite=document.getElementById("errorMessageForSiteDiv");
+			var divIdForUser=document.getElementById("errorMessageForUserDiv");
+			var divIdForAction=document.getElementById("errorMessageForActionDiv");
+			divIdForSite.style.display="none";
+			divIdForUser.style.display="none";
+			divIdForAction.style.display="none";
+
+			if(errorFlagForSite==true||errorFlagForUser==true||errorFlagForAction==true){
+				validateMethod(errorFlagForSite,errorFlagForUser,errorFlagForAction);
+			}
+			else{
+				var url="ShowAssignPrivilegePage.do";
+				var data="cpOperation="+cpOperation+"&selectedSiteIds="+selectedSiteIds+"&selectedUserIds="+selectedUserIds+"&selectedRoleIds="+selectedRoleIds+"&selectedActionIds="+selectedActionIds;			
+				sendRequestsWithData(url,data,cpOperation);
+			}
 	}
 
 	function addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites, actions)
@@ -319,8 +356,8 @@ function openCRGWindow()
 			// Second Cell
 			var str=""+sites;
 			var newSites = "" ;
-			if(str.length>35){
-				newSites=str.substring(0,33)+"...";
+			if(str.length>20){
+				newSites=str.substring(0,17)+"...";
 			}
 			else{
 				newSites=str;;
@@ -348,8 +385,8 @@ function openCRGWindow()
 			
 			var actionString = "" + actions;
 			var newActionsString="";
-			if(actionString.length>35){
-				newActionsString=actionString.substring(0,33)+"...";
+			if(actionString.length>20){
+				newActionsString=actionString.substring(0,17)+"...";
 			}
 			else{
 				newActionsString=actionString;;
@@ -382,6 +419,22 @@ function enableDeleteButton(itemCheck){
 	        	deleteButton.disabled = false;
 	        }
 }
+
+function validateMethod(errorFlagForSite,errorFlagForUser,errorFlagForAction){
+	var divIdForSite=document.getElementById("errorMessageForSiteDiv");
+			var divIdForUser=document.getElementById("errorMessageForUserDiv");
+			var divIdForAction=document.getElementById("errorMessageForActionDiv");
+	if(errorFlagForSite){
+		divIdForSite.style.display="block";
+	}
+	if(errorFlagForUser){
+		divIdForUser.style.display="block";
+	}
+	if(errorFlagForAction){
+		divIdForAction.style.display="block";
+	}
+}
+
 function  deleteCheckedRows() {
 	/** element of tbody    **/
 	var tbodyElement = document.getElementById('summaryTableId');
@@ -389,7 +442,7 @@ function  deleteCheckedRows() {
 	var counts = tbodyElement.rows.length;
 	var deletedRowsArray=new  Array();
 	var arrayCounter=0;
-	var operation="deleteRow";
+	var cpOperation="deleteRow";
 	
 	for(var i=0;i < counts;i++)
 	{
@@ -434,21 +487,23 @@ function  deleteCheckedRows() {
 		}
 	}
 	var url="ShowAssignPrivilegePage.do";
-	var data="operation="+operation+"&deletedRowsArray="+deletedRowsArray;			
-	sendRequestsWithData(url,data,operation);
+	var data="cpOperation="+cpOperation+"&deletedRowsArray="+deletedRowsArray;			
+	sendRequestsWithData(url,data,cpOperation);
 }
-function collectionProtocolPageForPrivilege(cpOperation)
+/*
+function collectionProtocolPageForPrivilege(operation)
 {
-	var action="DefineEvents.do?pageOf=pageOfAssignPrivilegePage&invokeFunction=invokeFunction&cpOperation="+cpOperation;
+	var action="DefineEvents.do?pageOf=pageOfCollectionProtocolPage&invokeFunction=invokeFunction&operation="+operation;
 	document.apForm.action=action;
 	document.apForm.submit();
 }
-function consentPageForPrivilege(cpOperation)
+function consentPageForPrivilege(operation)
 {
-	var action="DefineEvents.do?pageOf=pageOfAssignPrivilegePage&invokeFunction=invokeFunction&cpOperation="+cpOperation+"&tabSel=consentTab";
+	var action="DefineEvents.do?pageOf=pageOfCollectionProtocolPage&invokeFunction=invokeFunction&operation="+operation+"&tabSel=consentTab";
 	document.apForm.action=action;
 	document.apForm.submit();
 }
+*/
 // functions for collection protocol
 
 
@@ -542,8 +597,8 @@ function consentPageForPrivilege(cpOperation)
 			displayTable="none";
 		}	
 		
-		var display=document.getElementById('table1');
-		display.style.display=tabSelected;
+		var display3=document.getElementById('table1');
+		display3.style.display=tabSelected;
 		
 			
 		var display4=document.getElementById('consentTierTable');
@@ -580,9 +635,9 @@ function consentPageForPrivilege(cpOperation)
 //	Consent Tracking Module Virender Mehta (End)
 
 //Add Bulk Specimen Virender(Start)
-function showAssignPrivilegePage(cpOperation)
+function showAssignPrivilegePage(operation)
 {
-    var action="ShowAssignPrivilegePage.do?operation=AssignPrivilegePage&cpOperation="+cpOperation;
+    var action="DefineEvents.do?pageOf=pageOfAssignPrivilegePage&operation="+operation;
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
