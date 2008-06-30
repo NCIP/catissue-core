@@ -90,6 +90,15 @@
 		>
 		</html:button>
 		</td>
+		
+		<td>
+		<html:button
+				styleClass="actionButton" property="addToCart"
+				title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
+				onclick="onAddToCart()">
+				<bean:message key="buttons.addToCart"/>
+		</html:button>
+		</td>
 	</tr>
 </table>
 <!-- action buttons end -->

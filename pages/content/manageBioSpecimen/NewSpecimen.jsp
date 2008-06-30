@@ -168,7 +168,7 @@
 
 	}
 	
-		function onCheckboxButtonClick(chkBox)
+	function onCheckboxButtonClick(chkBox)
 		{
 			var aliquotCountTextBox  = document.getElementById("noOfAliquots");
 			var qtyPerAliquotTextBox = document.getElementById("quantityPerAliquot");
@@ -181,6 +181,8 @@
 				document.forms[0].moreButton.disabled=true;				
 				document.forms[0].noOfAliquots.disabled=false;
 				document.forms[0].quantityPerAliquot.disabled=false;
+				document.forms[0].addToCart.disabled=true;
+				
 								
 			}
 			else
@@ -191,9 +193,25 @@
 				document.forms[0].moreButton.disabled=false;				
 				document.forms[0].noOfAliquots.disabled=true;
 				document.forms[0].quantityPerAliquot.disabled=true;
+				document.forms[0].addToCart.disabled=false;
 			}
 		}
 		
+		function onAddToCart()
+		{
+			document.forms[0].forwardTo.value="addSpecimenToCart";
+			//document.forms[0].submit();
+			//var checked = false;
+				
+				<% String actionToCall4 = "NewSpecimenAdd.do";
+				
+				  	actionToCall4 = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
+				%>
+				
+				confirmDisable('<%=actionToCall4%>',document.forms[0].activityStatus);
+				setSubmittedFor("ForwardTo",'addSpecimenToCart');
+			
+		}
 		function onNormalSubmit()
 		{
 			

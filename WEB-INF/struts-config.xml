@@ -673,6 +673,31 @@ PUBLIC
 			
 			
 		</action>
+		
+		<action path="/AddSpecimenToCart"
+			type="edu.wustl.catissuecore.action.NewShopingCartAction"
+			name="newSpecimenForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfNewSpecimen" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
+		</action>
+		
+		<action path="/AddDeriveSpecimenToCart"
+			type="edu.wustl.catissuecore.action.NewShopingCartAction"
+			name="createSpecimenForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfNewSpecimen" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
+		</action>
+		
+		<action path="/AddAliquotSpecimenToCart"
+			type="edu.wustl.catissuecore.action.NewShopingCartAction"
+			name="aliquotForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfNewSpecimen" path=".catissuecore.aliquotSummaryCpQueryDef" />
+		</action>
+		
 		<action path="/QueryMessageAction"
 			type="edu.wustl.catissuecore.action.querysuite.QueryMessageAction"
 			name="categorySearchForm"
@@ -1848,7 +1873,7 @@ PUBLIC
 			<forward name="success" path="/CreateSpecimenAdd.do" />
 			<forward name="pageOfCreateSpecimenCPQuery" path="/CPQueryCreateSpecimenAdd.do" />
 			<forward name="failure" path="/CreateSpecimen.do" />
-
+			
 		</action>
 
 		<action path="/CreateSpecimenAdd"
@@ -4069,6 +4094,7 @@ PUBLIC
 		<forward name="sameCollectionGroup" path="/QuerySpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
 		<forward name="printDeriveSpecimen" path="/printDeriveSpecimen.do" />
 		<forward name="newSpecimenEdit" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
+		<forward name="addSpecimenToCart" path="/AddDeriveSpecimenToCart.do?pageOf=pageOfNewSpecimen" />
 	</action>
 
 	<action path="/CPQueryAddSpecimen"
@@ -4252,6 +4278,7 @@ PUBLIC
 		<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 		<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
+		<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimen" />
 	</action>
 		
 			
@@ -4272,7 +4299,7 @@ PUBLIC
 		<forward name="pageOfCreateAliquot" path="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit&amp;parentSpecimenId=-1&amp;CPQuery=CPQuery" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 		<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithoutMenu&amp;parentType=Derived_Specimen"/>
-		
+		<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimen" />	
 	</action>
 
 	<action path="/CPQuerySpecimenCollectionGroupAddNew"
@@ -4322,6 +4349,7 @@ PUBLIC
 		<forward name="failure" path=".catissuecore.aliquotDef" />
 		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
+	<!-- add to cart aliquot -->
 	<action path="/CPQueryAliquotAdd"
 		type="edu.wustl.catissuecore.action.CreateAliquotAction"
 		name="aliquotForm"
@@ -4330,6 +4358,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path=".catissuecore.aliquotSummaryCpQueryDef" />
 		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfCreateAliquot&amp;CPQuery=true&amp;menuSelected=15" />
+		<forward name="addSpecimenToCart" path="/AddAliquotSpecimenToCart.do?pageOf=pageOfNewSpecimen" />		
 	</action>
 			
 	<action path="/CPQueryAliquotSummary"

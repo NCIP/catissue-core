@@ -1171,10 +1171,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//bug#4981 :kalpana
 	public static final String SELECTED_COLUMNS[] = {"Specimen.LABEL.Label : Specimen",
-												    "Specimen.TYPE.Type : Specimen",
+												    "AbstractSpecimen.SPECIMEN_TYPE.Type : Specimen",
 													"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",
 													"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side : Specimen",
-													"Specimen.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
+													"AbstractSpecimen.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
 													"DistributedItem.QUANTITY.Quantity : Distribution"};
 													//"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
 													
@@ -2349,6 +2349,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MINUS = "Minus";
 	public static final String MULTIPLYBY  = "MultipliedBy";
 	public static final String DIVIDEBY = "DividedBy";
-
+	public static final String CART_COLUMN_LIST = "cartColumnList";
+	public static final String CART_ATTRIBUTE_LIST = "cartAttributeList";
+	public static final String ADD_SPECIMEN_TO_CART="addSpecimenToCart";
+													
 }
 	

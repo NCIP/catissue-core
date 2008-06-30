@@ -108,7 +108,11 @@ public class CreateAliquotAction extends BaseAction
 			SessionDataBean objBean = (SessionDataBean) request.getSession().getAttribute("sessionData");
 			printActionObj.printAliquotLabel(aliquotForm, request,null,objBean);
 		}
-		if(insertAliquotSpecimen)
+		if(Constants.ADD_SPECIMEN_TO_CART .equals(aliquotForm.getForwardTo())&&insertAliquotSpecimen)
+		{
+			return mapping.findForward(Constants.ADD_SPECIMEN_TO_CART);
+		}
+		 else if(insertAliquotSpecimen)
 		{
 			return mapping.findForward(Constants.SUCCESS);
 		}

@@ -116,6 +116,12 @@
 				confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
 			}
 		}
+		
+		function onAddToCart()
+		{
+			confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
+			setSubmittedFor("ForwardTo","addSpecimenToCart");
+		}
 	</script>
 	<logic:equal name="showRefreshTree" value="true">
 		<script language="javascript">
@@ -613,6 +619,12 @@
 											onclick="${requestScope.addMoreSubmit}" >
 										</html:button>
 									</td>
+									<td class="formFieldNoBorders" nowrap>
+										<html:submit styleClass="actionButton" onclick="onAddToCart()">
+											<bean:message key="buttons.addToCart"/>
+										</html:submit>
+									</td>
+	
 				  		</logic:notEqual> <!-- to verify for valid case 4 -->
 				  		<logic:equal name="multipleSpecimen" value="1">
 							<table cellpadding="4" cellspacing="0" width="100%">
@@ -633,6 +645,7 @@
 				 </logic:notEqual>
 				</logic:notEqual>				
 			 <!-- NEW SPECIMEN REGISTRATION ends-->
+		
 	</table>
 	</logic:empty> <%-- if(request.getAttribute("showDerivedPage")==null) --%>
  </html:form>

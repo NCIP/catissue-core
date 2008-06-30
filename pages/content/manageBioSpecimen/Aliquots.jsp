@@ -186,6 +186,17 @@
 		frameUrl+="&storageContainerName="+storageContainer;
 		NewWindow(frameUrl,'name','800','600','no');
     }
+    
+    function onAddToCart()
+	 {	
+		var action = '${requestScope.CREATE_ALIQUOT_ACTION}';
+	
+		document.forms[0].forwardTo.value    ="addSpecimenToCart";
+		document.forms[0].action ='${requestScope.action2}';
+		document.forms[0].nextForwardTo.value = "success";
+		document.forms[0].submit();
+	}
+			
 </script>
 </head>
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
@@ -524,6 +535,10 @@ ${aliquotBean.jsScript}
 	<td colspan="5" align="right">
 		<html:button styleClass="actionButton" property="submitButton" onclick="onCreate()">
 			<bean:message key="buttons.submit"/>
+		</html:button>
+		
+		<html:button styleClass="actionButton" property="submitPage" onclick="onAddToCart()">
+				<bean:message key="buttons.addToCart"/>
 		</html:button>
 	</td>
 </tr>	

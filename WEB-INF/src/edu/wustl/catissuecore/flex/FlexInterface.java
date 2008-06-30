@@ -1222,7 +1222,7 @@ public class FlexInterface
 	{
 
 		String sourceObjName = Specimen.class.getName();
-		String[] selectColName = {"storageContainer"};
+		String[] selectColName = {"specimenPosition.storageContainer"};
 		String[] whereColName = {"id"};
 		String[] whereColCond = {"="};
 		Object[] whereColVal = {specimen.getId()};
