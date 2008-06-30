@@ -3090,15 +3090,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		String cpRestrictionCountQuery = "(select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER)";
 		String specimenClassRestrictionQuery = "(select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER)";
-		// Vijay main query is updated according to bug id#8076
+		// Vijay main query and default restriction query is updated according to bug id#8076
 		String mainQuery = " SELECT count(*) co, t6.STORAGE_CONTAINER_ID, t1.NAME FROM CATISSUE_CONTAINER t1 , CATISSUE_STOR_CONT_SPEC_CLASS t6 , CATISSUE_STORAGE_CONTAINER t7 " + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
 				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')" + " AND t1.ACTIVITY_STATUS='Active'"
 				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
 				+ specimenClass + "')" + " AND t1.ACTIVITY_STATUS='Active' AND t1.IDENTIFIER=t7.IDENTIFIER	AND t7.SITE_ID NOT IN (SELECT IDENTIFIER FROM CATISSUE_SITE WHERE ACTIVITY_STATUS='Closed')";
-		String defaultRestrictionQuery = " SELECT  count(*) co, t6.STORAGE_CONTAINER_ID, t1.NAME FROM CATISSUE_CONTAINER t1 , CATISSUE_STOR_CONT_SPEC_CLASS t6 "
+		String defaultRestrictionQuery = " SELECT  count(*) co, t6.STORAGE_CONTAINER_ID, t1.NAME FROM CATISSUE_CONTAINER t1 , CATISSUE_STOR_CONT_SPEC_CLASS t6 , CATISSUE_STORAGE_CONTAINER t7 "
 				+ " WHERE t1.IDENTIFIER NOT IN (SELECT t2.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t2)"
 				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
-				+ specimenClass + "') " + " AND t1.ACTIVITY_STATUS='Active'";
+				+ specimenClass + "') " + " AND t1.ACTIVITY_STATUS='Active' AND t7.SITE_ID NOT IN (SELECT IDENTIFIER FROM CATISSUE_SITE WHERE ACTIVITY_STATUS='Closed')";
 
 		String queryStr1 = mainQuery + " and " + cpRestrictionCountQuery + equalToOne + " and " + specimenClassRestrictionQuery + equalToOne + endQry ;
 		//		 category # 2
