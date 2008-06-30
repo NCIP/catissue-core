@@ -101,13 +101,14 @@
 												codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
 												<param name="movie" value="flexclient/dag/DAG.swf?view=AddLimit&isQuery=<%=isQuery%>"/>
 												<param name="quality" value="high" />
+												<param name="wmode" value="transparent" />	
 												<param name="bgcolor" value="#869ca7" />
 												<param name="allowScriptAccess" value="sameDomain"/>
 												<embed src="flexclient/dag/DAG.swf?view=AddLimit&isQuery=<%=isQuery%>" quality="high" bgcolor="#869ca7"
 													width="100%" height="100%" name="DAG" align="middle"
 													play="true"
 													loop="false" 
-													
+													wmode="transparent"
 													quality="high"
 													allowScriptAccess="sameDomain"
 													type="application/x-shockwave-flash"
