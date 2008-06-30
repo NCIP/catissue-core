@@ -4,7 +4,11 @@
 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="javascript">
- refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','');	
+ if(top.frames["cpAndParticipantView"] != undefined)
+ {
+	top.frames["cpAndParticipantView"].refreshCpParticipants(null);
+
+ }
 </script>
 
 <script language="javascript">

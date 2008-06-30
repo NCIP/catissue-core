@@ -358,12 +358,16 @@
 	    var bean : NameValueBean = null;
 		tempCollection = pevent.result as ArrayCollection;
 		var isRefresTree:Boolean = false;
-	    if(tempCollection.length != 0)
+		if(tempCollection.length != 0)
 		{
 			if(previouslySelectedParticipantId==null)
 			{
 				// Sachin : this case occurs if user selects the particpant on UI ie. onPartcipantClick()
-				bean = tempCollection[selectedParticipantIndex] as NameValueBean;
+				var len:int = tempCollection.length;
+				if((len-1)>=selectedParticipantIndex)
+					bean = tempCollection[selectedParticipantIndex] as NameValueBean;
+				else
+					bean = null;
 		    }
 		    else
 		    {
@@ -379,8 +383,6 @@
 	 				}
 	 			}
 		    }
-		    pCombo.dataProvider = tempCollection;
-		    pCombo.validateNow();
 		    if(bean!=null)
 		    {
 				// Sachin : select particpant in the list and scorl the list position
@@ -394,8 +396,10 @@
 					refreshTree(nodeIdToSelect);
 				}	
 			}	
-			pCombo.validateNow();
+			
 		}
+		pCombo.dataProvider = tempCollection;
+		pCombo.validateNow();
 			
 	}
     /*
@@ -534,6 +538,12 @@
     	// treeNodeId will be "" when user submit particpant OR click on register New Participant
     	// treeNodeId will conatind nodeid to select when user submit on SCG page 
     	nodeIdToSelect=treeNodeId;
+    	
+    	if(selectedParticipantId==null)
+		{
+			specimenTree.dataProvider = null;
+			spDetailsLabel.text = title;
+		}
     	
     	var selectedCp : NameValueBean = new NameValueBean();
  		selectedCp =  cpCombo.selectedItem as NameValueBean;

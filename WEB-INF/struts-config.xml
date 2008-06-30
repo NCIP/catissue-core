@@ -4190,7 +4190,7 @@ PUBLIC
 		<forward name="query" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12" />
 		<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12&amp;fromSubmitAction=true" />			
 		<forward name="specimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=13" />
-		<forward name="blankPage" path="/blankScreenAction.do?pageOf=pageOfParticipantCPQuery" />
+		<forward name="blankPage" path="/QueryManageBioSpecimen.do"/>
 		<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 	</action>
 
@@ -4213,7 +4213,7 @@ PUBLIC
 		<forward name="success" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12&amp;fromSubmitAction=true" />			
 		<forward name="specimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=13" />
 		<forward name="pageOfParticipantCPQuery" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12&amp;fromSubmitAction=true" />
-		<forward name="blankPage" path="/blankScreenAction.do?pageOf=pageOfParticipantCPQuery" />
+		<forward name="blankPage" path="/QueryManageBioSpecimen.do" />
 		<forward name="failure" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
 	</action>
 	
