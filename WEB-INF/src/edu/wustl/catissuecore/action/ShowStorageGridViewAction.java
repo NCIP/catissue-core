@@ -77,14 +77,16 @@ public class ShowStorageGridViewAction  extends BaseAction
 		
 		// Call to SecurityManager.isAuthorized bypassed &
 		// instead, call redirected to privilegeCache.hasPrivilege		
-		if(!privilegeCache.hasPrivilege(StorageContainer.class.getName()+"_"+id,Permissions.USE))
-		{
-        	ActionErrors errors = new ActionErrors();
-         	ActionError error = new ActionError("access.use.object.denied");
-         	errors.add(ActionErrors.GLOBAL_ERROR,error);
-         	saveErrors(request,errors);
-        	return mapping.findForward(Constants.FAILURE);
-		}
+	//Commented by Ravindra and vishvesh because this is not how it will work in MSR
+	
+//		if(!privilegeCache.hasPrivilege(StorageContainer.class.getName()+"_"+id,Permissions.USE))
+//		{
+//        	ActionErrors errors = new ActionErrors();
+//         	ActionError error = new ActionError("access.use.object.denied");
+//         	errors.add(ActionErrors.GLOBAL_ERROR,error);
+//         	saveErrors(request,errors);
+//        	return mapping.findForward(Constants.FAILURE);
+//		}
         
         String pageOf = request.getParameter(Constants.PAGEOF);
         

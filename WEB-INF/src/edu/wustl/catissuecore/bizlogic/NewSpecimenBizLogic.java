@@ -1413,8 +1413,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		Object o = HibernateMetaData.getProxyObjectImpl(storageContainerObj);
 		String storageContainerSecObj = o.getClass().getName() + "_" + storageContainerObj.getId();
-		boolean userAuthorize = privilegeCache
-				.hasPrivilege(storageContainerSecObj, Permissions.USE);
+		boolean userAuthorize = true;
+		// Commented by Vishvesh & Ravindra for MSR for C1
+		//privilegeCache.hasPrivilege(storageContainerSecObj, Permissions.USE);
 
 		if (!userAuthorize)
 		{

@@ -1086,7 +1086,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				// Call to SecurityManager.checkPermission bypassed &
 				// instead, call redirected to privilegeCache.hasPrivilege				
-				permission = privilegeCache.hasPrivilege(className+"_"+containerObject.toString(), privilegeName);
+				
+				permission = true; 
+				//	Commented by Vishvesh & Ravindra for MSR for C1
+				// privilegeCache.hasPrivilege(className+"_"+containerObject.toString(), privilegeName);
 				
 //				permission = SecurityManager.getInstance(StorageContainerBizLogic.class).checkPermission(userName, className,
 //						containerObject.toString(), privilegeName);
@@ -2058,12 +2061,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		
 		// Call to SecurityManager.isAuthorized bypassed &
 		// instead, call redirected to privilegeCache.hasPrivilege		
-		if (!privilegeCache.hasPrivilege(StorageContainer.class.getName() + "_" + container.getId(), Permissions.USE))	
-		{
-			return false;
-		}
+		
+	//Commented by Ravindra and Vishvesh because this is not how 
+//		if (!privilegeCache.hasPrivilege(StorageContainer.class.getName() + "_" + container.getId(), Permissions.USE))	
+//		{
+//			return false;
+//		}
 
-		else
+		// else
 			return true;
 	}
 
