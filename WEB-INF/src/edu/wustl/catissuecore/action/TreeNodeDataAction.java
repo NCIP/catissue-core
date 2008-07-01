@@ -63,6 +63,7 @@ public class TreeNodeDataAction extends BaseAction
         try
         {	
         	reload =request.getParameter(Constants.RELOAD);
+        	SessionDataBean sessionData = getSessionData(request);
          	if(reload!=null && reload.equals("true"))
          	{
          		String treeNodeIDToBeReloaded=request.getParameter(Constants.TREE_NODE_ID);
@@ -84,15 +85,14 @@ public class TreeNodeDataAction extends BaseAction
             	bizLogic = new AdvanceQueryBizlogic();
                 HttpSession session = request.getSession();
                 columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
-                SessionDataBean sessionData = getSessionData(request);
+                
             	dataList = bizLogic.getTreeViewData(sessionData,columnIdsMap, disableSpecimenIdsList);
             }
-					            else
-            if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN) || pageOf.equals(Constants.PAGEOF_SPECIMEN) ||
+            else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN) || pageOf.equals(Constants.PAGEOF_SPECIMEN) ||
             		pageOf.equals(Constants.PAGEOF_ALIQUOT))
             {
             	StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-            	dataList = scBizLogic.getSiteWithDummyContainer();
+            	dataList = scBizLogic.getSiteWithDummyContainer(sessionData.getUserId());
             }
             
             if(dataList!=null)

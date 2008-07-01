@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -254,7 +255,10 @@ public class StorageContainerAction extends SecureAction
 		 * Description: get the list of site with activity status "Active"  
 	    */
 		String[] activityStatusArray = {Constants.ACTIVITY_STATUS_DISABLED,Constants.ACTIVITY_STATUS_CLOSED};
-		List list = bizLogic.getSiteList(Site.class.getName(), siteDisplayField, valueField,activityStatusArray, false);
+		SessionDataBean sessionDataBean = getSessionData(request);
+		
+		//List list = bizLogic.getSiteList(Site.class.getName(), siteDisplayField, valueField,activityStatusArray, false);
+		List list = bizLogic.getSiteList(siteDisplayField,valueField,activityStatusArray,sessionDataBean.getUserId());
 		request.setAttribute(Constants.SITELIST, list);
 		//get the Specimen class and type from the cde
 		List specimenClassTypeList = Utility.getSpecimenClassTypeListWithAny();

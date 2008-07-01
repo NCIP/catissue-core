@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
@@ -50,6 +51,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
@@ -300,7 +302,66 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						separatorBetweenFields,isToExcludeDisabled);
 		
 	}
-	
+	public List getSiteList( String[] displayNameFields, String valueField,String activityStatusArr[], Long userId) throws DAOException
+	{
+		List siteResultList = getSiteList(Site.class.getName(), displayNameFields, valueField,activityStatusArr ,false);
+		Set<String> idSet = getIdSet(userId);
+		List userList = new ArrayList();
+		Iterator siteListIterator = siteResultList.iterator();
+		while(siteListIterator.hasNext())
+		{
+			NameValueBean nameValBean =(NameValueBean) siteListIterator.next();
+			String siteId = nameValBean.getValue();
+			if (hasPrivilegeonSite(idSet,siteId))
+			{
+				userList.add(nameValBean);
+			}
+		}
+		return userList;
+	}
+	private boolean hasPrivilegeonSite(Set<String> siteidSet, String siteId)
+	{
+		boolean hasPrivilege = true;
+		if (siteidSet != null)
+		{
+			if (!siteidSet.contains(siteId))
+			{
+				hasPrivilege = false;
+			}
+		}
+		return hasPrivilege;
+	}
+	private Set<String> getIdSet(Long userId) throws DAOException
+	{
+		HibernateDAO dao = null;
+		try
+		{
+			dao = (HibernateDAO)DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+			dao.openSession(null);
+			User user=(User) dao.retrieve(User.class.getName(), userId);
+			HashSet<String> idSet = null;
+			if (!user.getAdminuser())
+			{
+				Collection siteCollection = user.getSiteCollection();
+		
+				idSet = new HashSet<String>();
+				Iterator siteIterator = siteCollection.iterator();
+				while(siteIterator.hasNext())
+				{
+					Site site=(Site)siteIterator.next();
+					idSet.add(site.getId().toString());
+				}
+			}
+			return idSet;
+		}
+		catch(DAOException e)
+		{
+		 throw e;
+		} finally
+		{
+			dao.closeSession();
+		}
+	}
 	/**
 	 * this function checks weather parent of the container is valid or not 
 	 * according to restriction provided for the containers
@@ -1690,7 +1751,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * This method will add all the node into the vector that contains any container node and add a dummy container 
 	 * node to show [+] sign on the UI, so that on clicking expand sign ajax call will retrieve child container node under the site node. 
 	 */
-	public Vector getSiteWithDummyContainer() throws DAOException
+	public Vector getSiteWithDummyContainer(Long userId) throws DAOException
 	{
 		String sql ="SELECT site.IDENTIFIER, site.NAME,COUNT(site.NAME) FROM CATISSUE_SITE " +
 		" site join CATISSUE_STORAGE_CONTAINER sc ON sc.site_id = site.identifier join " +
@@ -1716,21 +1777,27 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 
 		Iterator iterator = resultList.iterator();
+		Set<String> siteIdSet = getIdSet(userId);
+		
 		while (iterator.hasNext())
 		{
 			List rowList = (List) iterator.next();
 			
 			nodeIdentifier = Long.valueOf((String) rowList.get(0));
-			nodeName = (String) rowList.get(1);
-			dummyNodeName=Constants.DUMMY_NODE_NAME;
-			
-			StorageContainerTreeNode siteNode = new StorageContainerTreeNode(nodeIdentifier,nodeName,
-					nodeName);
-			StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(nodeIdentifier,dummyNodeName,
-					dummyNodeName);
-			dummyContainerNode.setParentNode(siteNode);
-			siteNode.getChildNodes().add(dummyContainerNode);
-			containerNodeVector.add(siteNode);
+
+			if (hasPrivilegeonSite(siteIdSet,nodeIdentifier.toString()))
+			{
+				nodeName = (String) rowList.get(1);
+				dummyNodeName=Constants.DUMMY_NODE_NAME;
+				
+				StorageContainerTreeNode siteNode = new StorageContainerTreeNode(nodeIdentifier,nodeName,
+						nodeName);
+				StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(nodeIdentifier,dummyNodeName,
+						dummyNodeName);
+				dummyContainerNode.setParentNode(siteNode);
+				siteNode.getChildNodes().add(dummyContainerNode);
+				containerNodeVector.add(siteNode);
+			}
 		}
 
 		return containerNodeVector;
