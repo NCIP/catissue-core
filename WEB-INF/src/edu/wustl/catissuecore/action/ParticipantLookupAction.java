@@ -89,18 +89,23 @@ public class ParticipantLookupAction extends BaseAction
 			
 			
 			List<ParticipantEmpi> empiList = new ArrayList<ParticipantEmpi>();
-			
-			for (int i = 0; i < matchingParticipantList.size(); i++) 
+			try
 			{
-				Object obj = matchingParticipantList.get(i);
-				if(obj instanceof ParticipantEmpi)
+				for (int i = 0; i < matchingParticipantList.size(); i++) 
 				{
-					ParticipantEmpi empi = (ParticipantEmpi)obj;
-					empiList.add(empi);
-					System.out.println(empi.getId()+" EMPI "+empi.getEmpi_id());
-					matchingParticipantList.remove(i);
-					i--;
+					Object obj = matchingParticipantList.get(i);
+					if(obj instanceof ParticipantEmpi)
+					{
+						ParticipantEmpi empi = (ParticipantEmpi)obj;
+						empiList.add(empi);
+						System.out.println(empi.getId()+" EMPI "+empi.getEmpi_id());
+						matchingParticipantList.remove(i);
+						i--;
+					}
 				}
+			}catch(Exception e)
+			{
+				
 			}
 			
 			
