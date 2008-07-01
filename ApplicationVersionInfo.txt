@@ -1,6 +1,9 @@
 /*
- * $Name: S3_1
+ * $Name: C1
  * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.2.8.14  2008/07/01 04:13:30  sachin_lale
+ * Changed tag to C1
+ *
  * Revision 1.2.8.13  2008/06/24 13:11:50  sachin_lale
  * S3_1
  *
