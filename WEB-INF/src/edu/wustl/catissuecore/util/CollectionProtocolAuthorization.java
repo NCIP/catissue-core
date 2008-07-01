@@ -94,6 +94,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 	{
 		int noOfUsers = rowIdMap.size();
 		Set<Site> siteCollection = new HashSet<Site>();
+		Set<User> userCollection = new HashSet<User>();
 		String roleName = "";
 		
 		for (Iterator<String> mapItr = rowIdMap.keySet().iterator(); mapItr.hasNext(); )
@@ -104,6 +105,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			siteCollection =getSiteCollection(siteList);
 			
 			User user = siteUserRolePrivilegeBean.getUser();
+			userCollection.add(user);
 			String defaultRole = siteUserRolePrivilegeBean.getRole();
 			roleName = getRoleName(collectionProtocol.getId(), user.getId(), defaultRole);
 			PrivilegeManager.getInstance().createRole(roleName,
@@ -123,7 +125,9 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			authorizationData.add(userGroupRoleProtectionGroupBean);
 		}
 		collectionProtocol.getSitecollection().clear();
-		collectionProtocol.setSitecollection(siteCollection);
+		collectionProtocol.getSitecollection().addAll(siteCollection);
+		collectionProtocol.getUserCollection().addAll(userCollection);
+		
 	}
 
 	/**

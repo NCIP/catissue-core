@@ -34,6 +34,8 @@
 	<Map key="edu.wustl.catissuecore.action.UserAction" value="GENERAL_ADMINISTRATION"/>
 	<Map key="edu.wustl.catissuecore.action.CollectionProtocolAction" value="PROTOCOL_ADMINISTRATION"/>
 	<Map key="edu.wustl.catissuecore.action.SiteAction" value="REPOSITORY_ADMINISTRATION"/>
-	
+	<Map key="edu.wustl.catissuecore.action.StorageTypeAction" value="REPOSITORY_ADMINISTRATION"/>
+	<Map key="edu.wustl.catissuecore.action.SpecimenArrayTypeAction" value="REPOSITORY_ADMINISTRATION"/>
+	<Map key="edu.wustl.catissuecore.action.DistributionProtocolAction" value="REPOSITORY_ADMINISTRATION"/>
 </MapNameAndValues>
 

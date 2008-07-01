@@ -534,6 +534,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			User pi = (User) obj;//list.get(0);
 			collectionProtocol.setPrincipalInvestigator(pi);
+			collectionProtocol.getUserCollection().add(pi);
+			System.out.println();
 		}
 	}
 
@@ -569,6 +571,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 					coordinatorColl.add(coordinator);
 					coordinator.getCollectionProtocolCollection().add(collectionProtocol);
+					collectionProtocol.getUserCollection().add(coordinator);
 				}
 			}
 		}

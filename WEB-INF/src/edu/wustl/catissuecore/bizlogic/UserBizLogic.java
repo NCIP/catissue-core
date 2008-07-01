@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -20,12 +21,14 @@ import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
+import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.IValueObject;
@@ -1192,5 +1195,64 @@ public class UserBizLogic extends DefaultBizLogic
 	//					     }
 	//					     
 	
-		
+	
+	/**
+	 * To Sort CP's in CP based view according to the 
+	 * Privilges of User on CP
+	 * Done for MSR functionality change
+	 * @author ravindra_jain 
+	 */
+	
+		public Set<Long> getCPForUser(SessionDataBean sessionDataBean)
+		{
+			AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+			Collection<CollectionProtocol> userCpCollection = new HashSet<CollectionProtocol>();
+			Collection<CollectionProtocol> userColl ;
+			Set<Long> cpIds = new HashSet<Long>();
+			Long userId = sessionDataBean.getUserId();
+			
+			try 
+			{
+				dao.openSession(sessionDataBean);
+				
+				User user = (User) dao.retrieve(User.class.getName(), userId);
+				userColl = user.getCollectionProtocolCollection();
+				userCpCollection = user.getUserCollectionProtocolCollection();
+					
+				if(user.getAdminuser())
+				{
+					cpIds = null;
+				}
+				else
+				{	
+					for(CollectionProtocol collectionProtocol : userCpCollection)
+					{
+						cpIds.add(collectionProtocol.getId());
+					}
+					
+					for(CollectionProtocol collectionProtocol : userColl)
+					{
+						cpIds.add(collectionProtocol.getId());
+					}	
+				}
+				
+			} 
+			catch (DAOException e) 
+			{
+				Logger.out.error(e.getMessage(), e);
+			}
+			finally
+			{
+				try 
+				{
+					dao.closeSession();
+				} 
+				catch (DAOException e) 
+				{
+					Logger.out.error(e.getMessage(), e);
+				}
+			}
+				
+			return cpIds;	
+		}
 }

@@ -1,15 +1,28 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
+import javax.servlet.http.HttpSession;
+
 import net.sf.ehcache.CacheException;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -265,15 +278,42 @@ class ParticipantRegistrationCache
 	 * This method returns a list of CP ids and CP short titles 
 	 * from the participantRegistrationInfoList
 	 * @return
+	 * @throws DAOException 
 	 */
 	public List getCPDetailCollection()
 	{
-		//This method returns a list of CP ids and CP titles from the participantRegistrationInfoList
+		HttpSession session = null;
+		session = flex.messaging.FlexContext.getHttpRequest().getSession();
+		SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
+		List newList = new Vector();
 		List cpDetailsList = new ArrayList();
-		Iterator itr = participantRegistrationInfoList.iterator();
-		while (itr.hasNext())
+		
+		UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+		Set cpIds = userBizLogic.getCPForUser(sessionDataBean);
+			
+			
+			if(cpIds == null)
+			{
+				newList.addAll(participantRegistrationInfoList);
+			}
+			else
+			{	
+				for(int counter=0; counter<participantRegistrationInfoList.size(); counter++)
+				{
+					ParticipantRegistrationInfo participantRegistrationInfo = (ParticipantRegistrationInfo) participantRegistrationInfoList.get(counter);
+					Long cpId = participantRegistrationInfo.getCpId();
+					
+					if(cpIds.contains(cpId))
+					{
+						newList.add(participantRegistrationInfo);
+					}
+				}
+			}
+		
+		Iterator iter = newList.iterator();
+		while (iter.hasNext())
 		{
-			ParticipantRegistrationInfo participantRegInfo = (ParticipantRegistrationInfo) itr.next();
+			ParticipantRegistrationInfo participantRegInfo = (ParticipantRegistrationInfo) iter.next();
 			NameValueBean cpDetails = new NameValueBean(participantRegInfo.getCpShortTitle(), participantRegInfo.getCpId());
 			cpDetailsList.add(cpDetails);
 		}
