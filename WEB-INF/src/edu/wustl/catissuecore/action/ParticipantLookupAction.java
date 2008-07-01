@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -26,6 +27,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantEmpi;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -82,7 +84,26 @@ public class ParticipantLookupAction extends BaseAction
 		if(isCallToLookupLogicNeeded)
 		{
 			ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
+			
 			List matchingParticipantList = bizlogic.getListOfMatchingParticipants(participant);
+			
+			
+			List<ParticipantEmpi> empiList = new ArrayList<ParticipantEmpi>();
+			
+			for (int i = 0; i < matchingParticipantList.size(); i++) 
+			{
+				Object obj = matchingParticipantList.get(i);
+				if(obj instanceof ParticipantEmpi)
+				{
+					ParticipantEmpi empi = (ParticipantEmpi)obj;
+					empiList.add(empi);
+					System.out.println(empi.getId()+" EMPI "+empi.getEmpi_id());
+					matchingParticipantList.remove(i);
+					i--;
+				}
+			}
+			
+			
 			if (matchingParticipantList!=null && matchingParticipantList.size() > 0)
 			{
 				messages=new ActionMessages();
@@ -93,10 +114,20 @@ public class ParticipantLookupAction extends BaseAction
 				
 				//Getitng the Participant List in Data Grid Format
 				List participantDisplayList=getParticipantDisplayList(matchingParticipantList);
+				//added satish
+				request.setAttribute("MatchedParticpant", matchingParticipantList);
 				request.setAttribute(Constants.SPREADSHEET_DATA_LIST, participantDisplayList);
+				
+				Logger.out.info("######### matching"+matchingParticipantList.size()+"-"+matchingParticipantList.toString());
+				//added satish
+				HttpSession session = request.getSession();
+				//added satish
+				session.setAttribute("MatchedParticpant", matchingParticipantList);
+				session.setAttribute("MatchedEmpiList", empiList);
 				
 				target=Constants.PARTICIPANT_LOOKUP_SUCCESS;
 			}
+			
 			//	if no participant match found then add the participant in system
 			else
 			{
