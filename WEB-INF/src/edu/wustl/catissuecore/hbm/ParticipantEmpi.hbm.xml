@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.domain.ParticipantEmpi"
+        table="CATISSUE_PARTICIPANT_EMPI"
+        dynamic-update="false"
+        dynamic-insert="false"
+		lazy="true"
+    >
+
+        <id
+            name="id"
+            column="ID"
+            type="long"
+            length="11"
+            unsaved-value="null"
+        />
+           
+       
+
+        <property
+            name="empi_id"
+            type="long"
+            update="true"
+            insert="true"
+            column="EMPI_ID"
+            length="11"
+        />
+	 </class>
+
+</hibernate-mapping>
