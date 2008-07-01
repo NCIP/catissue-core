@@ -198,14 +198,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		Participant participant = (Participant) abstractDomain;
-		//added try/catch by satish
-    	try{
-        	this.id = participant.getId().longValue();
-        }catch(Exception e)
-        {
-        	System.out.println("Error in getting ID");
-        	//e.printStackTrace();
-        }
+		this.id = participant.getId().longValue();
 		this.lastName = Utility.toString(participant.getLastName());
 		this.firstName = Utility.toString(participant.getFirstName());
 		this.middleName = Utility.toString(participant.getMiddleName());

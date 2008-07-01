@@ -16,7 +16,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -26,16 +25,13 @@ import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ParticipantEmpi;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.dao.HibernateDAOImpl;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
-import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -57,215 +53,55 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 	
 			String objectName = abstractDomainObjectFactory.getDomainObjectName(participantForm.getFormId());
 		  	
-			Logger.out.info("Participant Id-------------------"+objectName);
-			Logger.out.info("Participant Id-------------------"+participantForm.getFormId());
 			Logger.out.info("Participant Id-------------------"+request.getParameter("participantId"));
 			
-			String selected = request.getParameter("participantId")== null ? "DANA":request.getParameter("participantId");
+			Object object = bizLogic.retrieve(objectName, new Long(request.getParameter("participantId")));
+			abstractDomain = (AbstractDomainObject) object;
+			Participant participant=(Participant)abstractDomain;
 			
-			long participant_identifier = 0l;
-			try{
-				 participant_identifier = Long.parseLong(selected);
-			}catch(Exception e)
+			Logger.out.info("Last name in ParticipantSelectAction:"+participant.getLastName());
+			
+			// To append the cpr to already existing cprs
+			//Gets the collection Protocol Registration map from ActionForm
+			Map mapCollectionProtocolRegistration = participantForm.getCollectionProtocolRegistrationValues();
+			int cprCount = participantForm.getCollectionProtocolRegistrationValueCounter();
+			Collection consentResponseBeanCollection = participantForm.getConsentResponseBeanCollection();
+			Hashtable consentResponseHashTable = participantForm.getConsentResponseHashTable();
+			Map mapParticipantMedicalIdentifier = participantMedicalIdentifierMap(participantForm.getValues());
+			
+			//Gets the collection Protocol Registration map from Database
+			DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+			defaultBizLogic.populateUIBean(Participant.class.getName(),participant.getId(), participantForm);
+			 
+			Map mapCollectionProtocolRegistrationOld = participantForm.getCollectionProtocolRegistrationValues();
+			int cprCountOld = participantForm.getCollectionProtocolRegistrationValueCounter();
+			Collection consentResponseBeanCollectionOld = participantForm.getConsentResponseBeanCollection();
+			Hashtable consentResponseHashTableOld = participantForm.getConsentResponseHashTable();
+			
+			Map mapCollectionProtocolRegistrationAppended = appendCollectionProtocolRegistrations(mapCollectionProtocolRegistration ,cprCount ,mapCollectionProtocolRegistrationOld ,cprCountOld);
+			Map mapParticipantMedicalIdentifierOld = participantMedicalIdentifierMap(participantForm.getValues());
+			
+			if(consentResponseBeanCollection != null)
 			{
-				Logger.out.info("Error in participant_identifier");
-				//e.printStackTrace();
+				updateConsentResponse(consentResponseBeanCollection,consentResponseBeanCollectionOld,consentResponseHashTableOld);
 			}
 			
-			
-			//Object object = bizLogic.retrieve(objectName, new Long(request.getParameter("participantId")));
-			//abstractDomain = (AbstractDomainObject) object;
-			Participant participant=null;
-			
-			//Participant participant = null;
-			Map mapCollectionProtocolRegistration = null;
-			int cprCount = 0;
-			Map mapParticipantMedicalIdentifier = null;
-			Collection consentResponseBeanCollection = null;
-			Hashtable consentResponseHashTable = null;
-			Logger.out.info("Participant Id#######--"+selected);
-			
-			
-			
-			if(participant_identifier == 0l)
-			{
-				String parti_ID = request.getParameter("clicked_Row_selected");
-		        Logger.out.info("#########Participant Id"+parti_ID);
-	        
-	        
-				
-	        	Logger.out.info("$$$$$$$$$List");
-				HttpSession session = request.getSession();
-				List part = (List)session.getAttribute("MatchedParticpant");
-				
-				Logger.out.info("$$$$$$$$$List"+part.size());
-				//DefaultLookupResult result = new DefaultLookupResult();
-				//Participant participant = new Participant();
-				
-				DefaultLookupResult df = (DefaultLookupResult)part.get(Integer.parseInt(parti_ID)-1);
-				participant = (Participant)df.getObject();
-				//participant.setId(0l);
-				abstractDomain = (AbstractDomainObject)participant;
-				
-				participantForm.setAllValues(abstractDomain);
-				participantForm.setOperation(Constants.ADD);
-			
-			}else
-			{
-				//put it in Else loop for dana farber by satish
-				HttpSession session = request.getSession();
-				List empiList = (List)session.getAttribute("MatchedEmpiList");
-				
-				if(empiList != null )
-				{
-					boolean isUpdate = false;
-					for (int i = 0; i < empiList.size(); i++) 
-					{
-						ParticipantEmpi empi = (ParticipantEmpi)empiList.get(i);
-						if(empi.getId() != null)
-						{
-							if(participant_identifier == empi.getId().longValue());
-							{
-								isUpdate = true;
-								break;
-							}
-						}
-					}
-					
-					if(isUpdate)
-					{
-						String parti_ID = request.getParameter("clicked_Row_selected");
-				        Logger.out.info("#########Participant Id"+parti_ID);
-			        
-			        
-						
-			        	Logger.out.info("$$$$$$$$$List");
-						HttpSession session1 = request.getSession();
-						List part = (List)session1.getAttribute("MatchedParticpant");
-						
-						Logger.out.info("$$$$$$$$$List"+part.size());
-						//DefaultLookupResult result = new DefaultLookupResult();
-						//Participant participant = new Participant();
-						
-						DefaultLookupResult df = (DefaultLookupResult)part.get(Integer.parseInt(parti_ID)-1);
-						participant = (Participant)df.getObject();
-						//participant.setId(0l);
-						abstractDomain = (AbstractDomainObject)participant;
-						
-						participantForm.setAllValues(abstractDomain);
-						participantForm.setOperation(Constants.EDIT);
-					}else
-					{
-						Logger.out.info("$$$$$Came in else part");
-						
-						Object object = bizLogic.retrieve(objectName, new Long(request.getParameter("participantId")));
-						abstractDomain = (AbstractDomainObject) object;
-						//List participants = bizLogic.retrieve(objectName,Constants.SYSTEM_IDENTIFIER,new Long(request.getParameter("participantId")));
-						//abstractDomain = (AbstractDomainObject)participants.get(0);
-						participant=(Participant)abstractDomain;
-					
-					
-						Logger.out.info("Last name in ParticipantSelectAction:"+participant.getLastName());
-						
-						// To append the cpr to already existing cprs
-						//Gets the collection Protocol Registration map from ActionForm
-						/*satish*/mapCollectionProtocolRegistration = participantForm.getCollectionProtocolRegistrationValues();
-						/*satish*/cprCount = participantForm.getCollectionProtocolRegistrationValueCounter();
-						/*satish*/consentResponseBeanCollection = participantForm.getConsentResponseBeanCollection();
-						/*satish*/consentResponseHashTable = participantForm.getConsentResponseHashTable();
-						/*satish*/mapParticipantMedicalIdentifier = participantMedicalIdentifierMap(participantForm.getValues());
-						
-						//Gets the collection Protocol Registration map from Database
-						DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-						defaultBizLogic.populateUIBean(Participant.class.getName(),participant.getId(), participantForm);
-						 
-						Map mapCollectionProtocolRegistrationOld = participantForm.getCollectionProtocolRegistrationValues();
-						int cprCountOld = participantForm.getCollectionProtocolRegistrationValueCounter();
-						Collection consentResponseBeanCollectionOld = participantForm.getConsentResponseBeanCollection();
-						Hashtable consentResponseHashTableOld = participantForm.getConsentResponseHashTable();
-						
-						Map mapCollectionProtocolRegistrationAppended = appendCollectionProtocolRegistrations(mapCollectionProtocolRegistration ,cprCount ,mapCollectionProtocolRegistrationOld ,cprCountOld);
-						Map mapParticipantMedicalIdentifierOld = participantMedicalIdentifierMap(participantForm.getValues());
-						
-						if(consentResponseBeanCollection != null)
-						{
-							updateConsentResponse(consentResponseBeanCollection,consentResponseBeanCollectionOld,consentResponseHashTableOld);
-						}
-						
-						participantForm.setCollectionProtocolRegistrationValues(mapCollectionProtocolRegistrationAppended);
-						participantForm.setCollectionProtocolRegistrationValueCounter((cprCountOld+cprCount));
-						participantForm.setValues(mapParticipantMedicalIdentifierOld);
-						participantForm.setConsentResponseBeanCollection(consentResponseBeanCollectionOld);
-						participantForm.setConsentResponseHashTable(consentResponseHashTableOld);
-						//added by satish to end if loop
-					}
-				}
-				
-				
-			}
-			
+			participantForm.setCollectionProtocolRegistrationValues(mapCollectionProtocolRegistrationAppended);
+			participantForm.setCollectionProtocolRegistrationValueCounter((cprCountOld+cprCount));
+			participantForm.setValues(mapParticipantMedicalIdentifierOld);
+			participantForm.setConsentResponseBeanCollection(consentResponseBeanCollectionOld);
+			participantForm.setConsentResponseHashTable(consentResponseHashTableOld);
 			
 			forward = super.execute(mapping, participantForm, request, response);
 			
-			//added by satish to get participant id if participant is added from web services ,
-			//It is new participant added into participant table
-			
-			/*
-			if(participant_identifier == 0l)
-			{
-				System.out.println("EMPI ID");
-				System.out.println("EMPI ID-"+participantForm.getId());
-				System.out.println("EMPI ID 1-"+request.getAttribute(Constants.SYSTEM_IDENTIFIER));
-			}
-			*/
-			//end of if by satish
-			
 			if(!forward.getName().equals("failure"))
 			{
-				
-				//added by satish to get participant id if participant is added from web services ,
-				//It is new participant added into participant table
-				
-				if(participant_identifier == 0l)
-				{
-					String parti_ID = request.getParameter("clicked_Row_selected");
-					HttpSession session = request.getSession();
-					List empiList = (List)session.getAttribute("MatchedEmpiList");
-					System.out.println(empiList.size()+"+++++++++"+parti_ID);
-					
-					for (int i = 0; i < empiList.size(); i++) 
-					{
-						ParticipantEmpi empi = (ParticipantEmpi)empiList.get(i);
-						
-							System.out.println(empi.getId()+"**********"+empi.getEmpi_id());
-						
-					}
-					ParticipantEmpi empi = (ParticipantEmpi)empiList.get(Integer.parseInt(parti_ID)-1);
-					
-					
-					
-					System.out.println("EMPI ID");
-					System.out.println("EMPI ID-"+participantForm.getId());
-					System.out.println("EMPI ID 1-"+request.getAttribute(Constants.SYSTEM_IDENTIFIER));
-					HibernateDAOImpl impl = new HibernateDAOImpl();
-					//ParticipantEmpi empi = new ParticipantEmpi();
-					empi.setId(participantForm.getId());
-					//empi.setEmpi_id(2l);
-					impl.openSession(getSessionData(request));
-					impl.insert(empi, getSessionData(request), true, true);
-					impl.commit();
-					impl.closeSession();
-				}
-				
-				 
-				//end of if by satish
 				request.removeAttribute("participantForm");
 				request.setAttribute("participantForm1",participantForm);
 				request.setAttribute("participantSelect","yes");
 			}
 			else
 			{
-	
 				participantForm.setCollectionProtocolRegistrationValues(mapCollectionProtocolRegistration);
 				participantForm.setCollectionProtocolRegistrationValueCounter(cprCount);
 				participantForm.setValues(mapParticipantMedicalIdentifier);
@@ -274,10 +110,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction{
 				request.setAttribute("continueLookup","yes");
 			}
 		}
-		catch(Exception e)
-		{
-			Logger.out.info("Error--------");
-			e.printStackTrace();
+		catch(Exception e){
 			Logger.out.info(e.getMessage());
 		}
 		

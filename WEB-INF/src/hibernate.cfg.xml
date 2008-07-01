@@ -107,9 +107,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyEvent.hbm.xml"/>		
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalStudyEventEntry.hbm.xml"/>	
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>		
-				<!--Added by satish for new table added for EMPI ID   -->
-		<mapping resource="edu/wustl/catissuecore/hbm/ParticipantEmpi.hbm.xml"/>	
-		
+
     </session-factory>
     
 </hibernate-configuration>

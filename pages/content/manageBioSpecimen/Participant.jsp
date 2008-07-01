@@ -374,34 +374,19 @@ tr#hiddenCombo
 			//mandar for grid
 			var cl = mygrid.cells(participant_id,mygrid.getColumnCount()-1);
 			var pid = cl.getValue();
-			
-			//Added by satish
-			var clicked_Row = participant_id;
-			
-			//alert("Clicked - "+clicked_Row);
+			//alert(pid);
 			//participant_id = pid;
 			//------------
-			
-			//Commented by satish
 			//document.forms[0].participantId.value=participant_id;
-			
-			document.forms[0].participantId.value = pid; //removed comment satish
-			
-			//Added by satish
-			document.forms[0].clicked_Row_selected.value=clicked_Row;
-			//Bellow line was commented  by satish
+			document.forms[0].participantId.value=pid;
 			document.forms[0].id.value=pid;
-			
 			document.forms[0].forwardTo.value="pageOfParticipant";
 			document.forms[0].action="ParticipantRegistrationSelect.do?operation=edit&pageOf=pageOfParticipant";
-			//Added by satish for changing action
-			//document.forms[0].action="ParticipantAddDF.do";
-			//alert(pid);
+			
 			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 			{%>
 					document.forms[0].forwardTo.value="pageOfParticipantCPQuery";
 					document.forms[0].action="CPQueryParticipantRegistrationSelect.do?operation=edit&pageOf=pageOfParticipantCPQuery";
-					alert(pid);
 			<%
 			}
 			%>
