@@ -13,9 +13,6 @@
 <script type="text/javascript" src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>
-	<script language="JavaScript" type="text/javascript"
-	src="jss/wz_tooltip.js"></script>
-
 <%
 	//Object obj=  request.getAttribute(Constants.ACTIONLIST);
 	//String pageOf = (String) request.getAttribute(Constants.PAGEOF);
