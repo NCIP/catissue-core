@@ -378,7 +378,7 @@ tr#hiddenCombo
 			//Added by satish
 			var clicked_Row = participant_id;
 			
-			alert("Clicked - "+clicked_Row);
+			//alert("Clicked - "+clicked_Row);
 			//participant_id = pid;
 			//------------
 			
