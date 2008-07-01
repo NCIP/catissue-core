@@ -262,7 +262,7 @@ function participantRegRow(subdivtag)
 <table width="100%" border="0" cellpadding="0" cellspacing="0"
 	class="newMaintable">
 	<tr>
-		<td><input type="hidden" name="participantId"
+	<td><input type="hidden" name="clicked_Row_selected" value=""/><input type="hidden" name="participantId"
 			value="<%=participantId%>" /> <input type="hidden" name="cpId"
 			id="cpId" /> <input type="hidden" name="radioValue" /> <html:hidden
 			property="<%=Constants.OPERATION%>" value="<%=operation%>" /> <html:hidden
