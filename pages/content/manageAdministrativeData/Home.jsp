@@ -24,7 +24,7 @@
 	</tr>
 	<tr>
 		<td colspan="2">
-			<font color="#000000" size="3" face="Verdana">
+			<font color="#000000" size="2" face="Verdana">
 				[This page is under construction, will be available in next release]
 			</font>
 		</td>
