@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.bizlogic.test;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -171,4 +172,45 @@ public class SiteTestCases extends CaTissueBaseTestCase {
 		 }
 	}
 	
+	public void testAddSiteWithInvalidPhoneNumber()
+	{
+		try{
+			Site site = BaseTestCaseUtility.initSite();		
+			site = (Site) appService.createObject(site);
+			Address address = new Address();
+			address.setPhoneNumber("2242241111");
+			site.setAddress(address);
+			System.out.println(site);
+			Site updatedSite = (Site) appService.updateObject(site);
+			Logger.out.info("Invalid phone number entered, it should throw exception");
+			fail("Invalid phone number entered, it should throw exception");
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			assertTrue("Invalid phone number entered, correct format is xxx-xxx-xxxx", true);
+		}		
+	}
+	
+	public void testAddSiteWithInvalidFaxNumber()
+	{
+		try{
+			Site site = BaseTestCaseUtility.initSite();		
+			site = (Site) appService.createObject(site);
+			Address address = new Address();
+			address.setFaxNumber("2242241111");
+			site.setAddress(address);
+			System.out.println(site);
+			Site updatedSite = (Site) appService.updateObject(site);
+			Logger.out.info("Invalid fax number entered, it should throw exception");
+			fail("Invalid fax number entered, it should throw exception");
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			assertTrue("Invalid fax number entered, correct format is xxx-xxx-xxxx", true);
+		}		
+	}
 }
