@@ -1,16 +1,6 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <html:errors/>
-
-<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-<script language="javascript">
- if(top.frames["cpAndParticipantView"] != undefined)
- {
-	top.frames["cpAndParticipantView"].refreshCpParticipants(null);
-
- }
-</script>
-
 <script language="javascript">
 var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
 var participantId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("participantId").value;
