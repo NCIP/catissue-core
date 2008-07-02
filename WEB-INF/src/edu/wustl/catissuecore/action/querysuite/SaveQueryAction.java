@@ -192,7 +192,7 @@ public class SaveQueryAction extends BaseAction
 		CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
 		String conditionList = request.getParameter(Constants.CONDITIONLIST);
 		Map<String, String> displayNameMap = getDisplayNamesForConditions(saveActionForm, request);
-		error = bizLogic.setInputDataToQuery(conditionList, parameterizedQuery,
+		error = bizLogic.setInputDataToQuery(conditionList, parameterizedQuery.getConstraints(),
 				displayNameMap);
 		if (error != null && error.trim().length() > 0)
 		{

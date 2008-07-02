@@ -47,7 +47,7 @@ public class ExecuteQueryAction extends BaseAction
 		if (conditionstr != null) 
 		{
 			CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
-			String errorMessage = bizLogic.setInputDataToQuery(conditionstr, parameterizedQuery,null);
+			String errorMessage = bizLogic.setInputDataToQuery(conditionstr, parameterizedQuery.getConstraints(), null);
 			if (errorMessage.trim().length()>0)
 			{
 				ActionErrors errors = new ActionErrors();

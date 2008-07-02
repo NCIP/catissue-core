@@ -56,7 +56,7 @@ public class AddToLimitSetAction extends BaseAppletAction
 			CreateQueryObjectBizLogic queryBizLogic = new CreateQueryObjectBizLogic();
 			if (!strToCreateQueryObject.equalsIgnoreCase(""))
 			{
-				Map ruleDetailsMap = queryBizLogic.getRuleDetailsMap(strToCreateQueryObject, entity);
+				Map ruleDetailsMap = queryBizLogic.getRuleDetailsMap(strToCreateQueryObject, entity.getAttributeCollection());
 				writeMapToResponse(response, ruleDetailsMap);
 			}
 		}
