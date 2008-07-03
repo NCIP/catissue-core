@@ -80,27 +80,26 @@
 		     </tr>
 			
 		     <tr>
-				<td colspan="2" class="td_color_bfdcf3" style="padding-left:10px; padding-right:10px;padding-bottom:10px; ">
-					<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
-						
+				<td colspan="2" class="td_color_bfdcf3" style="padding-left:10px; padding-right:10px;">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="padding-left:10px;padding-bottom:10px;">						
 						 <tr>
-							<td colspan="2" align="left"><span class=" grey_ar_s"><img	src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /><bean:message key="commonRequiredField.message" />
+							<td colspan="2" align="left"><span class=" grey_ar_s" ><img	src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /><bean:message key="commonRequiredField.message" />
 						 </span></td>
 						</tr>
 						<tr>
-							<td width="25%"  valign="top" height="100%">
-								<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="410" >
+							<td width="20%"  valign="top" height="400">
+								<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="400" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 							 </td>
-							 <td width="75%" colspan="3" valign="top" height="100%">
+							 <td width="80%" colspan="3" valign="top" height="400">
 							 <logic:equal name="operation" value="add">
-								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" scrolling="auto" frameborder="0" width="100%" height="410" >
+								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" scrolling="auto" frameborder="0" width="100%" height="400" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 							</logic:equal>
 							 <logic:equal name="operation" value="edit">
-								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" frameborder="0" width="100%" height="410" >
+								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" frameborder="0" width="100%" height="400" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 							 </logic:equal>	

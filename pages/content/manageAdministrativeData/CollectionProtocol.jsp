@@ -27,7 +27,7 @@ function defineEvents()
 }
 
 function viewSummary()
-{
+{	
 	var action="DefineEvents.do?Event_Id=dummyId&pageOf=ViewSummary&operation=${requestScope.operation}";
 	document.forms[0].action=action;
 	document.forms[0].submit();
@@ -68,9 +68,9 @@ function openEventPage()
 
 <html:form action='${requestScope.formName}'>
 
- <table summary="" cellpadding="0" cellspacing="0" border="0"  style="padding-left:0;padding-right:0;" width="720">
+ <table summary="" cellpadding="0" cellspacing="0" border="0"  style="padding-left:0;padding-right:0;" width="720" height="384">
   
-	<tr>
+	<tr height="2%">
  		
 	<td><table width="100%" border="0" cellspacing="0" cellpadding="0" >
                     <tr>
@@ -97,7 +97,7 @@ function openEventPage()
    </tr>
 
 
-   <tr>
+   <tr height="98%">
    <td class="cp_tabtable" colspan="6"/>
 <!-- table 1 -->
 <table summary="" cellpadding="0" cellspacing="0" border="0" id="table1" class="contentPage" width="100%">
@@ -335,14 +335,12 @@ function openEventPage()
 			
 		<tr>
 			<td align="left" class="black_ar">&nbsp;</td>
-				<td colspan="2" align="left" class="black_ar">
+				<td  align="left" class="black_ar">
 				  <label>
-					    <br>
-								<html:checkbox property="aliqoutInSameContainer">
+					   	<html:checkbox property="aliqoutInSameContainer">
 									<bean:message key="aliquots.storeAllAliquotes" />
 								</html:checkbox>
-						</br>
-					</label>
+				</label>
 				</td>
 			 </tr>
 		 <tr>
@@ -353,7 +351,7 @@ function openEventPage()
 					</html:button>
 				 &nbsp;| -->
 
-					 <html:button styleClass="blue_ar_b" property="forwardPage" onclick="updateCPTree();openEventPage()" >
+					 <html:button styleClass="blue_ar_b" property="forwardPage" onclick="openEventPage()" >
 						Add Events >>
 					</html:button>
 				<!-- &nbsp;|
@@ -363,7 +361,7 @@ function openEventPage()
 					</html:button> -->
 			  </td>
 			</tr>
-			<tr width="5">&nbsp;</tr>
+			
 		</table>
 
 <!-- Define Consent Page start  Virender Mehta-->

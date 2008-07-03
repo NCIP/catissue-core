@@ -54,15 +54,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		    addNode(cpName, displayName, parentIdentifier,identifier,"",treeData);			
 		     			
 		 }
-		else
-		 {   
-			cpName=Constants.OBJECTNAME_FOR_CP;
-			displayName=Constants.ROOTNODE_FOR_CPTREE;
-			parentIdentifier= Constants.ZERO_ID;
-			identifier=Constants.ROOTNODE_FOR_CPTREE; 
-	
-			addNode(cpName, displayName, parentIdentifier,identifier,"",treeData);
-		 }
+		
 		if(collectionProtocolEventMap!=null && collectionProtocolBean != null)
 		{			 
 			Integer iEventCount = new Integer(1);

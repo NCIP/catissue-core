@@ -35,17 +35,24 @@
 	src="dhtml_comp/js/dhtmlXTree.js"></script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
+<script src="jss/caTissueSuite.js" language="JavaScript" type="text/javascript"></script>
 </head>
 
 <body>
 <table border="0" cellpadding="0" cellspacing="0">
 
 
-
-	<tr>
+	<tr>	
+		 <td class="formLabelAllBorder"  style="background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;border-right:1px solid #61a1e3;border-top:1px solid #61a1e3;" colspan="2" width="170">
+			<b>Collection Protocol Details :</b>
+		</td>
 		<td align="left" colspan="2">
-		<div id="treeboxbox_tree"
-			style="width: 230px; height: 392px; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;" />
+		  <tr>
+			<td align="left" colspan="2">
+			<div id="treeboxbox_tree"
+				style="width: 180px; height: 366px; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;" />
+			</td>
+		  </tr>
 		</td>
 	</tr>
 </table>
@@ -67,7 +74,7 @@
 				
 			   if(alias == "New")
 				{
-					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=edit&pageOf=specimenRequirement&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
+					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=${requestScope.operation}&pageOf=specimenRequirement&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
 				}
 				else if(alias == "ViewSummary")
 				{
@@ -81,7 +88,7 @@
 				
 				else
 				{
-					window.parent.frames['SpecimenRequirementView'].location="ProtocolEventsDetails.do?operation=edit&pageOf=defineEvents&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
+					window.parent.frames['SpecimenRequirementView'].location="ProtocolEventsDetails.do?operation=${requestScope.operation}&pageOf=defineEvents&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
 				}
 			}; 
 									
