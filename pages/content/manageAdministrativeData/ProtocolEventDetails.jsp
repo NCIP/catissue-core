@@ -89,7 +89,7 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
 
 <html:form action="SaveProtocolEvents.do?pageOf=defineEvents&operation=add">
 
-<table summary="" cellpadding="0" cellspacing="0" height="20"   width="700">
+<table summary="" cellpadding="0" cellspacing="0" height="20"   width="85%" border="0">
   
     <tr >
       <td colspan="4" align="right">
@@ -102,17 +102,13 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
    </tr>
 	<tr>
 		
-		<td height="20" width="9%" nowrap valign="bottom" id="eventTab" background="images/empty.GIF">
-			<img src="images/uIEnhancementImages/cp_event.gif"	alt="Consents" width="95" height="22" />
-		</td>
-		<td height="20"  valign="bottom" width="10%"  onclick="alert('This facility is not available in this release')" id="privilegesTab">
-	    	<img src="images/uIEnhancementImages/cp_privileges1.gif" name="Image2"	width="94" height="22"					id="Image2"/>
-        </td>
-		<td width="600" class="cp_tabbg" colspan="1">&nbsp;</td>
+		<td height="20" width="9%" nowrap valign="bottom" id="eventTab" background="images/empty.GIF"><img src="images/uIEnhancementImages/cp_event.gif"	alt="Consents" width="95" height="22" /></td>
+		<td height="20"  valign="bottom" width="10%"  onclick="alert('This facility is not available in this release')" id="privilegesTab"><img src="images/uIEnhancementImages/cp_privileges1.gif" name="Image2"	width="94" height="22" id="Image2"/></td>
+		<td width="81%" class="cp_tabbg" colspan="1">&nbsp;</td>
 	</tr>
 	<tr>
-	 <td class="cp_tabtable" colspan="3">
-		<table summary="" cellpadding="3" cellspacing="0" border="0" width="700" >
+	 <td class="cp_tabtable" colspan="4">
+		<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" >
 		   <tr><td width="700" class="buttonbg" colspan="3">&nbsp;</td></tr>
 			<tr>
 			   <td width="1%" align="left" valign="top" class="black_ar">

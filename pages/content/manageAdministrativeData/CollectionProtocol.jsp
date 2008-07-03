@@ -68,26 +68,21 @@ function openEventPage()
 
 <html:form action='${requestScope.formName}'>
 
- <table summary="" cellpadding="0" cellspacing="0" border="0"  style="padding-left:0;padding-right:0;" width="720" height="384">
+ <table summary="" cellpadding="0" cellspacing="0" border="0"  style="padding-left:0;padding-right:0;" width="100%" >
   
 	<tr>
  		
 	<td><table width="100%" border="0" cellspacing="0" cellpadding="0" >
                     <tr>
-                      <td width="10%" valign="bottom" id="collectionProtocolTab" onclick="collectionProtocolPage()">
-					    <a>
-					      <img src="images/uIEnhancementImages/cp_details.gif" alt="Collection Protocol Details" width="174" height="20" border="0" /></a>
-					 </td>
-                      <td width="10%" valign="bottom" onclick="consentPage()" id="consentTab">
-					       <img src="images/uIEnhancementImages/cp_consents1.gif" alt="Consents" width="94" height="20" border="0" /></td>
-                      <td width="10%" valign="bottom" ><a>
-					  <img src="images/uIEnhancementImages/cp_privileges1.gif" alt="Privileges" width="94" height="20" border="0" onclick="showAssignPrivilegePage('${requestScope.operation}')"/></a></td>
-					  <td width="100%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+                      <td width="10%" valign="bottom" id="collectionProtocolTab" onclick="collectionProtocolPage()"> <img src="images/uIEnhancementImages/cp_details.gif" alt="Collection Protocol Details" width="174" height="20" border="0" /></td>
+                      <td width="10%" valign="bottom" onclick="consentPage()" id="consentTab"><img src="images/uIEnhancementImages/cp_consents1.gif" alt="Consents" width="94" height="20" border="0" /></td>
+                      <td width="10%" valign="bottom" ><a href="#"><img src="images/uIEnhancementImages/cp_privileges1.gif" alt="Privileges" width="94" height="20" border="0" onclick="showAssignPrivilegePage('${requestScope.operation}')"/></a></td>
+					  <td width="70%" valign="bottom" class="cp_tabbg">&nbsp;</td>
 					 </tr>
                   </table></td>
 				    
 					<td width="70%" valign="bottom" class="cp_tabbg">&nbsp;</td>
-						 <td align="right" valign="top" class="cp_tabbg" border="1">
+						 <td align="right" valign="top" class="cp_tabbg">
 							<span class="smalllink">
 									<html:link href="#"  styleId="newUser" onclick="updateCPTree();viewSummary()">
 										<bean:message key="cpbasedentry.viewsummary" /> 
@@ -95,8 +90,6 @@ function openEventPage()
 							</span>
 						 </td>  
    </tr>
-
-
    <tr>
    <td class="cp_tabtable" colspan="6"/>
 <!-- table 1 -->
@@ -343,6 +336,7 @@ function openEventPage()
 				</label>
 				</td>
 			 </tr>
+			 </br>
 		 <tr>
 			<td>&nbsp;&nbsp;</td>
 				  <td class="buttonbg">
