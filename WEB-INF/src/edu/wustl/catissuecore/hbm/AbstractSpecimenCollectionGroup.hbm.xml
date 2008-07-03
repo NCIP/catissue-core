@@ -30,14 +30,6 @@
               --> 
             </generator>
         </id>
- 		<property
-	            name="name"
-	            type="string"
-	            update="true"
-	            insert="true"
-	            column="NAME"
-	            length="255"
-	    />
         <property
             name="clinicalDiagnosis"
             type="string"
@@ -219,7 +211,14 @@
 	                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 	              />
 	        </set>
-	
+			<property
+	            name="name"
+	            type="string"
+	            update="true"
+	            insert="true"
+	            column="NAME"
+	            length="255"
+	    />
 	        <property
 	            name="collectionStatus"
 	            type="string"

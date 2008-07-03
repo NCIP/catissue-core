@@ -478,13 +478,11 @@ create table CATISSUE_COLL_PROT_REG (
 CREATE TABLE `catissue_abs_speci_coll_group` 
 (                                               
 	 `IDENTIFIER` bigint(20) NOT NULL auto_increment,   
-	 `NAME` varchar(255) default NULL,         
 	 `CLINICAL_DIAGNOSIS` varchar(150) default NULL,                                                    
 	 `CLINICAL_STATUS` varchar(50) default NULL,                                                        
 	 `ACTIVITY_STATUS` varchar(50) default NULL,                                                        
 	 `SITE_ID` bigint(20) default NULL,                                                                 
 	 PRIMARY KEY  (`IDENTIFIER`),
-     UNIQUE KEY `NAME` (`NAME`),
 	 KEY `FKDEBAF167A7F77D13` (`SITE_ID`),                                                              
 	 CONSTRAINT `FKDEBAF167A7F77D13` FOREIGN KEY (`SITE_ID`) REFERENCES `catissue_site` (`IDENTIFIER`)  
 );
@@ -505,7 +503,8 @@ CREATE TABLE `catissue_coll_prot_event`
 
 CREATE TABLE `catissue_specimen_coll_group` 
 (                                                                                                         
-	`IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                                                    
+	`IDENTIFIER` bigint(20) NOT NULL auto_increment,        
+	`NAME` varchar(255) default NULL, 
 	`COMMENTS` text,                                                                                                                                    
 	`COLLECTION_PROTOCOL_REG_ID` bigint(20) default NULL,                                                                                               
 	`SURGICAL_PATHOLOGY_NUMBER` varchar(50) default NULL,                                                                                               
@@ -513,6 +512,7 @@ CREATE TABLE `catissue_specimen_coll_group`
 	`COLLECTION_STATUS` varchar(50),
     `DATE_OFFSET` integer,                                                                                           
 	PRIMARY KEY  (`IDENTIFIER`),
+    UNIQUE KEY `NAME` (`NAME`),
 	KEY `FKDEBAF1677E07C4AC` (`COLLECTION_PROTOCOL_REG_ID`),                                                                                            
 	KEY `FK_COLL_PROT_EVENT_SPEC_COLL_GROUP` (`COLLECTION_PROTOCOL_EVENT_ID`),                                                                          
 	CONSTRAINT `FK_COLL_PROT_EVENT_SPEC_COLL_GROUP` FOREIGN KEY (`COLLECTION_PROTOCOL_EVENT_ID`) REFERENCES `catissue_coll_prot_event` (`IDENTIFIER`),  

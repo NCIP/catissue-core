@@ -263,16 +263,6 @@ Alter table CATISSUE_SPECIMEN_COLL_GROUP add constraint FK_CATISSUE_COLL_PROT_EV
 FOREIGN KEY(Collection_Protocol_Event_Id) references CATISSUE_COLL_PROT_EVENT(Identifier);
 
 DROP TABLE CATISSUE_SPECI_COLL_REQ_GROUP;
-ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP  ADD( NAME  varchar(255) DEFAULT NULL);
-ALTER TABLE CATISSUE_ABS_SPECI_COLL_GROUP  ADD Constraint name_unique UNIQUE (NAME);
-
-Update CATISSUE_ABS_SPECI_COLL_GROUP ascg 
-Set NAME =(
-Select name from CATISSUE_SPECIMEN_COLL_GROUP scg
-where ascg.identifier = scg.identifier );
-
-ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP DROP COLUMN NAME;
-
 
 Delete from CSM_PROTECTION_ELEMENT where protection_element_name like
 'edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup';

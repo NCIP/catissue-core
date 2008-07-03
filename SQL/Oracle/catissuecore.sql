@@ -476,7 +476,6 @@ create table CATISSUE_ST_CONT_COLL_PROT_REL (
 
 create table CATISSUE_ABS_SPECI_COLL_GROUP (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(255) unique,  
    CLINICAL_DIAGNOSIS varchar(150),
    CLINICAL_STATUS varchar(50),
    ACTIVITY_STATUS varchar(50),
@@ -498,6 +497,7 @@ create table CATISSUE_COLL_PROT_EVENT (
 
 create table CATISSUE_SPECIMEN_COLL_GROUP (
    IDENTIFIER number(19,0) not null ,
+   NAME varchar(255) unique,  
    COMMENTS varchar2(2000),
    COLLECTION_PROTOCOL_REG_ID number(19,0),
    SURGICAL_PATHOLOGY_NUMBER varchar(50),

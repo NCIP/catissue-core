@@ -35,12 +35,6 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
      */
     protected Long id;
     
-    
-    /**
-     * name assigned to Specimen Collection Group
-     */
-    protected String name;
-    
     /**
      * Participant's clinical diagnosis at 
      * this collection event (e.g. Prostate Adenocarcinoma).
@@ -107,23 +101,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	{
 		this.id = id;
 	}
-	/**
-	 * Returns the system generated unique Specimen Collection Group name.
-	 * @hibernate.property name="name" column="NAME" type="string" length="255"
-	 * @return the system generated unique name.
-	 * @see #setName(String)
-	 */
-	public String getName()
-	{
-		return name;
-	}
-	/**
-	 * @param name The name to set.
-	 */
-	public void setName(String name) 
-	{
-		this.name = name;
-	}
+	
     /**
      * Returns the participant's clinical diagnosis at 
      * this collection event (e.g. Prostate Adenocarcinoma).

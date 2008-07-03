@@ -294,15 +294,6 @@ rename table catissue_coll_prot_event_tmp to catissue_coll_prot_event;
 
 DROP TABLE CATISSUE_SPECI_COLL_REQ_GROUP;
 
-ALTER TABLE  `CATISSUE_ABS_SPECI_COLL_GROUP`  ADD( NAME  varchar(255) DEFAULT NULL);
-ALTER TABLE  `CATISSUE_ABS_SPECI_COLL_GROUP`  ADD INDEX (NAME) ,ADD UNIQUE (NAME);
-
-Update CATISSUE_ABS_SPECI_COLL_GROUP ascg,CATISSUE_SPECIMEN_COLL_GROUP scg Set ascg.NAME = scg.NAME 
-where scg.identifier = ascg.identifier;
-
-ALTER TABLE  `CATISSUE_SPECIMEN_COLL_GROUP` DROP COLUMN NAME;
-
-
 INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'AbstractSpecimen','AbstractSpecimen Object','edu.wustl.catissuecore.domain.AbstractSpecimen',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
 INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'RequirementSpecimen','RequirementSpecimen Object','edu.wustl.catissuecore.domain.RequirementSpecimen',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
 INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'MolReqSpecimen','MolReqSpecimen Object','edu.wustl.catissuecore.domain.MolecularRequirementSpecimen',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;

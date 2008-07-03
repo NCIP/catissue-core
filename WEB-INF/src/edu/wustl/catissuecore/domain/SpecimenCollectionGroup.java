@@ -43,6 +43,10 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 * 
 	 */
 	private static final long serialVersionUID = 8543074529678284997L;
+	 /**
+     * name assigned to Specimen Collection Group
+     */
+    protected String name;
 	
 	  /**
      * The Specimens in this SpecimenCollectionGroup.
@@ -722,5 +726,23 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
     {
         this.specimenCollection = specimenCollection;
     }
+    
+    /**
+	 * Returns the system generated unique Specimen Collection Group name.
+	 * @hibernate.property name="name" column="NAME" type="string" length="255"
+	 * @return the system generated unique name.
+	 * @see #setName(String)
+	 */
+	public String getName()
+	{
+		return name;
+	}
+	/**
+	 * @param name The name to set.
+	 */
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
 
 }
