@@ -970,23 +970,38 @@ function participantRegRow(subdivtag)
 
 								<!-- PUT YOUR COMMENT HERE -->
 
-
 								<logic:equal name="<%=Constants.PAGEOF%>"
 									value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 									<td nowrap><html:button styleClass="blue_ar_b"
 										property="registratioPage" title="Register Participant"
 										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>"
 										onclick="<%=forwardToSubmit%>">
-									</html:button>&nbsp;&nbsp;</td>
+									</html:button>&nbsp;</td>
 								</logic:equal>
 
 								<logic:notEqual name="<%=Constants.PAGEOF%>"
 									value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-									<td nowrap><html:button styleClass="blue_ar_b"
+									<td ><html:button styleClass="blue_ar_b"
 										property="registratioPage" title="Submit Only"
 										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>"
 										onclick="<%=normalSubmit%>">
-									</html:button>&nbsp;&nbsp;|&nbsp; <span class="cancellink"> <html:link
+									</html:button>&nbsp;
+								<!-- delete button added for deleting the objects -->
+				<logic:equal name="operation" value="edit" >
+										|&nbsp;
+										
+									<% 	
+										String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
+									%>
+									<html:button styleClass="blue_ar_b"
+											property="disableRecord"
+											title="Delete"
+											value="Delete"
+											onclick="<%=deleteAction%>">
+									</html:button>&nbsp;
+								
+				</logic:equal>
+										|&nbsp; <span class="cancellink"> <html:link
 										page="/ManageAdministrativeData.do" styleClass="blue_ar_s_b">
 										<bean:message key="buttons.cancel" />
 									</html:link> </span></td>
@@ -994,12 +1009,27 @@ function participantRegRow(subdivtag)
 
 								<logic:equal name="<%=Constants.PAGEOF%>"
 									value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-									<td nowrap><html:button styleClass="blue_ar_b"
+									<td nowrap>|&nbsp;&nbsp;<html:button styleClass="blue_ar_b"
 										property="registratioPage"
 										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>"
 										onclick="<%=forwardToSCG%>"
 										onmouseover="showMessage('Create additional Specimen Collection Group to collect specimens which were  not anticipated as per protocol')">
-									</html:button>&nbsp;&nbsp;</td>
+									</html:button>&nbsp;
+					<logic:equal name="operation" value="edit" >
+										|&nbsp;
+										
+									<% 	
+										String deleteAction="deleteObject('" + formName +"','" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
+									%>
+									<html:button styleClass="blue_ar_b"
+											property="disableRecord"
+											title="Delete"
+											value="Delete"
+											onclick="<%=deleteAction%>">
+									</html:button>&nbsp;
+								
+				</logic:equal>
+									</td>
 								</logic:equal>
 							</tr>
 						</table>
