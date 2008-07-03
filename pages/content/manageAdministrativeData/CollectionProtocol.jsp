@@ -70,7 +70,7 @@ function openEventPage()
 
  <table summary="" cellpadding="0" cellspacing="0" border="0"  style="padding-left:0;padding-right:0;" width="720" height="384">
   
-	<tr height="2%">
+	<tr>
  		
 	<td><table width="100%" border="0" cellspacing="0" cellpadding="0" >
                     <tr>
@@ -97,7 +97,7 @@ function openEventPage()
    </tr>
 
 
-   <tr height="98%">
+   <tr>
    <td class="cp_tabtable" colspan="6"/>
 <!-- table 1 -->
 <table summary="" cellpadding="0" cellspacing="0" border="0" id="table1" class="contentPage" width="100%">
