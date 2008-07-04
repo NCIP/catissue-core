@@ -721,8 +721,17 @@ public class CollectionProtocolUtil {
 			{
 				reqSpecimen.setSpecimenCharacteristics(
 						parentSpecimen.getSpecimenCharacteristics());
-				reqSpecimen.setSpecimenEventCollection(
-						parentSpecimen.getSpecimenEventCollection());
+				//bug no. 7489
+				//Collected and received events
+				if(specimenRequirementBean.getCollectionEventContainer()!=null && specimenRequirementBean.getReceivedEventReceivedQuality()!=null)
+				{
+					setSpecimenEvents(reqSpecimen, specimenRequirementBean);
+				}
+				else
+				{
+					reqSpecimen.setSpecimenEventCollection(
+							parentSpecimen.getSpecimenEventCollection());
+				}
 			}
 			reqSpecimen.setLineage(specimenRequirementBean.getLineage());
 			reqSpecimenCollection.add(reqSpecimen);
