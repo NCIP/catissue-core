@@ -214,11 +214,11 @@ public class UserAction extends SecureAction
         }
         
         //Populate the role dropdown if the page is of approve user or (Add/Edit) user page of adminitraive tab. 
-        if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN) ||pageOf.equals(Constants.PAGEOF_USER_PROFILE ))
-        {
-            List roleNameValueBeanList = getRoles();
-            request.setAttribute("roleList", roleNameValueBeanList);
-        }
+//        if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN) ||pageOf.equals(Constants.PAGEOF_USER_PROFILE ))
+//        {
+//            List roleNameValueBeanList = getRoles();
+//            request.setAttribute("roleList", roleNameValueBeanList);
+//        }
         
         //Populate the status dropdown for approve user page.(Approve,Reject,Pending)
         if (pageOf.equals(Constants.PAGEOF_APPROVE_USER))
@@ -260,35 +260,7 @@ public class UserAction extends SecureAction
         return mapping.findForward(target);
     }
     
-    /**
-     * Returns a list of all roles that can be assigned to a user.
-     * @return a list of all roles that can be assigned to a user.
-     * @throws SMException
-     */
-    private List getRoles() throws SMException
-    {
-        //Sets the roleList attribute to be used in the Add/Edit User Page.
-        Vector roleList = SecurityManager.getInstance(UserAction.class).getRoles();
-        
-        ListIterator iterator = roleList.listIterator();
-        
-        List roleNameValueBeanList = new ArrayList();
-        NameValueBean nameValueBean = new NameValueBean();
-        nameValueBean.setName(Constants.SELECT_OPTION);
-        nameValueBean.setValue(String.valueOf(Constants.SELECT_OPTION_VALUE));
-        roleNameValueBeanList.add(nameValueBean);
-        
-        while (iterator.hasNext())
-        {
-            Role role = (Role) iterator.next();
-            nameValueBean = new NameValueBean();
-            nameValueBean.setName(role.getName());
-            nameValueBean.setValue(String.valueOf(role.getId()));
-            roleNameValueBeanList.add(nameValueBean);
-        }
-        return roleNameValueBeanList;
-    }
-
+  
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.action.SecureAction#isAuthorizedToExecute(javax.servlet.http.HttpServletRequest)
      */
