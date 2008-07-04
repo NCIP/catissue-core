@@ -186,7 +186,7 @@ public class CreateAliquotAction extends BaseAction
 	 */
 	private Specimen createParentSpecimen(AliquotForm aliquotForm) throws AssignDataException
 	{
-		Specimen parentSpecimen = (Specimen) new SpecimenObjectFactory().getDomainObject(aliquotForm.getSpecimenClass());
+		Specimen parentSpecimen = (Specimen) new SpecimenObjectFactory().getDomainObject(aliquotForm.getClassName());
 		parentSpecimen.setId(new Long(aliquotForm.getSpecimenID()));
 		parentSpecimen.setLabel(aliquotForm.getSpecimenLabel());
 		return parentSpecimen;
@@ -250,7 +250,7 @@ public class CreateAliquotAction extends BaseAction
 			String posDim1  = (String) aliquotMap.get(posDim1Key);
 			String posDim2  = (String) aliquotMap.get(posDim2Key);
 
-			aliquotSpecimen.setSpecimenClass(aliquotForm.getSpecimenClass());
+			aliquotSpecimen.setSpecimenClass(aliquotForm.getClassName());
 			aliquotSpecimen.setSpecimenType(aliquotForm.getType());
 			aliquotSpecimen.setPathologicalStatus(aliquotForm.getPathologicalStatus());
 			aliquotSpecimen.setInitialQuantity(new Double(quantity));

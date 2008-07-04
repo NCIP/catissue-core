@@ -304,8 +304,8 @@ ${requestScope.messageKey}
 		<b>	<bean:message key="specimen.type"/> </b>
 		</label>
 	</td>
-	<td class="formField"> ${aliquotForm.specimenClass}
-		<html:hidden property="specimenClass" />
+	<td class="formField"> ${aliquotForm.className}
+		<html:hidden property="className" />
 	</td>
 	<td class="formRequiredLabelWithLeftBottomBorder">
 		<label for="subType">

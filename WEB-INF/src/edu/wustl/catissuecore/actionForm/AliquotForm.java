@@ -65,7 +65,7 @@ public class AliquotForm extends AbstractActionForm
     /**
      * A class of the specimen. e.g. Tissue, Molecular, Cell, Fluid
      */
-    private String specimenClass;
+    private String className;
     
     /**
      * A type of the specimen.
@@ -322,21 +322,21 @@ public class AliquotForm extends AbstractActionForm
 	/**
 	 * Returns the specimen class of parent specimen.
 	 * @return The specimen class of parent specimen.
-	 * @see #setSpecimenClass(String)
+	 * @see #setClassName(String)
 	 */
-	public String getSpecimenClass()
+	public String getClassName()
 	{
-		return specimenClass;
+		return className;
 	}
 	
 	/**
      * Sets the specimen class of parent specimen.
-     * @param specimenClass The specimen class of parent specimen.
-     * @see #getSpecimenClass()
+     * @param className The specimen class of parent specimen.
+     * @see #getClassName()
      */
-	public void setSpecimenClass(String specimenClass)
+	public void setClassName(String className)
 	{
-		this.specimenClass = specimenClass;
+		this.className = className;
 	}
 	
 	/**
@@ -486,7 +486,7 @@ public class AliquotForm extends AbstractActionForm
 					{
 	         			value = new BigDecimal(value).toPlainString();
 	         			
-	         			if(Utility.isQuantityDouble(specimenClass,type))
+	         			if(Utility.isQuantityDouble(className,type))
 	        			{
 	        		        if(!validator.isDouble(value,true))
 	        		        {

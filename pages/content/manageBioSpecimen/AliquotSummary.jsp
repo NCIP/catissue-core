@@ -83,7 +83,7 @@
 
 	if(form != null)
 	{
-		unit = Utility.getUnit(form.getSpecimenClass(),form.getType());
+		unit = Utility.getUnit(form.getClassName(),form.getType());
 	}
 %>
 
@@ -124,8 +124,8 @@
 			</label>
 		</td>
 
-		<td class="formField"> <%=form.getSpecimenClass()%>
-			<html:hidden styleId="specimenClass" property="specimenClass" />
+		<td class="formField"> <%=form.getClassName()%>
+			<html:hidden styleId="className" property="className" />
 		</td>
 	</tr>
 	

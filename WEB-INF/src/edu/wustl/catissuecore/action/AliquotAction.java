@@ -124,7 +124,7 @@ public class AliquotAction extends SecureAction
 			aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
 		}
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-		containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
+		containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getClassName(),
 				aliquotCount, exceedingMaxLimit, sessionData, true);
 
 		populateStorageLocationsOnContainerChange(aliquotForm, containerMap, request);
@@ -360,12 +360,12 @@ public class AliquotAction extends SecureAction
 				if (aliquotForm.isAliqoutInSameContainer())
 				{
 
-					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
+					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getClassName(),
 							Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
 				}
 				else
 				{
-					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
+					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getClassName(),
 							0, exceedingMaxLimit, sessionData, true);
 				}
 				populateAliquotsStorageLocations(aliquotForm, containerMap);
@@ -451,12 +451,12 @@ public class AliquotAction extends SecureAction
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
+								.getClassName(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), 0, exceedingMaxLimit, sessionData, true);
+								.getClassName(), 0, exceedingMaxLimit, sessionData, true);
 					}
 
 					populateAliquotsStorageLocations(aliquotForm, containerMap);
@@ -480,7 +480,7 @@ public class AliquotAction extends SecureAction
 
 			if (map != null)
 			{
-				aliquotForm.setSpecimenClass(Utility.toString(map.get(Constants.CDE_NAME_SPECIMEN_CLASS)));
+				aliquotForm.setClassName(Utility.toString(map.get(Constants.CDE_NAME_SPECIMEN_CLASS)));
 				aliquotForm.setType(Utility.toString(map.get(Constants.CDE_NAME_SPECIMEN_TYPE)));
 				aliquotForm.setTissueSite(Utility.toString(map.get(Constants.CDE_NAME_TISSUE_SITE)));
 				aliquotForm.setTissueSide(Utility.toString(map.get(Constants.CDE_NAME_TISSUE_SIDE)));
@@ -553,12 +553,12 @@ public class AliquotAction extends SecureAction
 					{
 
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
+								.getClassName(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), 0, exceedingMaxLimit, sessionData, true);
+								.getClassName(), 0, exceedingMaxLimit, sessionData, true);
 					}
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
 
@@ -700,7 +700,7 @@ public class AliquotAction extends SecureAction
 			
 			if (Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 			{
-				boolean isDouble = Utility.isQuantityDouble(form.getSpecimenClass(), form.getType());
+				boolean isDouble = Utility.isQuantityDouble(form.getClassName(), form.getType());
 
 				if (!distributeAvailableQuantity(form, isDouble))
 				{
@@ -771,7 +771,7 @@ public class AliquotAction extends SecureAction
 	{
 		//SpecimenCharacteristics chars= null;
 		Long cpID=null;
-		form.setSpecimenClass(specimen.getClassName());
+		form.setClassName(specimen.getClassName());
 		form.setType(specimen.getSpecimenType());
 		SpecimenCharacteristics chars = specimen.getSpecimenCharacteristics();
 		form.setTissueSite(chars.getTissueSite());
@@ -1023,7 +1023,7 @@ public class AliquotAction extends SecureAction
 			try
 			{
 				quantityPerAliquot = new BigDecimal(quantityPerAliquot).toPlainString();
-				if (Utility.isQuantityDouble(form.getSpecimenClass(), form.getType()))
+				if (Utility.isQuantityDouble(form.getClassName(), form.getType()))
 				{
 					if (!validator.isDouble(quantityPerAliquot.trim()))
 					{
@@ -1223,7 +1223,7 @@ public class AliquotAction extends SecureAction
 		String unit = "";
 		if(form != null)
 		{
-			unit = Utility.getUnit(form.getSpecimenClass(),form.getType());
+			unit = Utility.getUnit(form.getClassName(),form.getType());
 		}
 		//request.setAttribute("operation",Utility.toString(Constants.OPERATION));
 		request.setAttribute("unit",unit);
@@ -1278,7 +1278,7 @@ public class AliquotAction extends SecureAction
 			aliquotMap = form.getAliquotMap();
 		}
 		List aliquotBeanList = new ArrayList();
-		String sClass = (form.getSpecimenClass() == null ? "" : form.getSpecimenClass()) ;
+		String sClass = (form.getClassName() == null ? "" : form.getClassName()) ;
 		String scp = (form.getSpCollectionGroupId() == 0 ? "" : ""+form.getSpCollectionGroupId());
 		
 		for(int i=1;i<=counter;i++)
