@@ -232,25 +232,27 @@ public class AnnotationUtil
 	 * @param isEntityFromXmi
 	 * @throws BizLogicException
 	 */
-	private static void addQueryPathsForAllAssociatedEntities(EntityInterface dynamicEntity,
+	public static void addQueryPathsForAllAssociatedEntities(EntityInterface dynamicEntity,
 			EntityInterface staticEntity, Long associationId, Long staticEntityId, Set<PathObject> processedPathList) throws BizLogicException
 	{
-		PathObject pathObject = new PathObject();
-		pathObject.setSourceEntity(staticEntity);
-		pathObject.setTargetEntity(dynamicEntity);
-
-		if (processedPathList.contains(pathObject))
-		{
-			return;
-		}
-		else
-		{
-			processedPathList.add(pathObject);
-		}
-
 		Long start = new Long(System.currentTimeMillis());
-
-		AnnotationUtil.addPathsForQuery(staticEntity.getId(), dynamicEntity.getId(),staticEntityId, associationId);
+		if(staticEntity != null)
+		{
+			PathObject pathObject = new PathObject();
+			pathObject.setSourceEntity(staticEntity);
+			pathObject.setTargetEntity(dynamicEntity);
+	
+			if (processedPathList.contains(pathObject))
+			{
+				return;
+			}
+			else
+			{
+				processedPathList.add(pathObject);
+			}
+	
+			AnnotationUtil.addPathsForQuery(staticEntity.getId(), dynamicEntity.getId(),staticEntityId, associationId);
+		}
 
 		Collection<AssociationInterface> associationCollection = dynamicEntity
 				.getAssociationCollection();
@@ -398,7 +400,7 @@ public class AnnotationUtil
 		Long maxPathId = getMaxId("path_id", "path");
 		maxPathId += 1;
 		insertNewPaths(maxPathId, staticEntityId, dynamicEntityId, deAssociationID);
-		if (staticEntityId != hookEntityId)
+		if (hookEntityId != null && staticEntityId != hookEntityId)
 		{
 			maxPathId += 1;
 			addPathFromStaticEntity(maxPathId, hookEntityId, staticEntityId, dynamicEntityId,

@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.jmi.model.ModelPackage;
@@ -37,6 +38,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.xmi.XMIUtilities;
 import edu.common.dynamicextensions.xmi.importer.XMIImportProcessor;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
+import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -72,51 +74,35 @@ public class ImportXmi
 		FileInputStream in  = null;
 		try
 		{
-			if(args.length == 0)
-			{
-				throw new Exception("Please Specify the file name to be imported");
-			}
-			if(args.length < 2)
-			{
-				throw new Exception("Please Specify the hook entity name");
-			}
-			if(args.length < 3)
-			{
-				throw new Exception("Please Specify the main container csv file name");
-			}
-			if(args.length < 4)
-			{
-				throw new Exception("Please Specify the name of the Package to be imported");
-			}
+			validate(args);
 			
 			//Ist parameter is fileName
 	//		Fully qualified Name of the xmi file to be imported
 			String fileName = args[0]; 
 			String hookEntity = args[1];
-
 			
 				//"C://Documents and Settings//ashish_gupta//Desktop//XMLs//caTissueCore_1.4_Edited.xmi";	
 			
-			fileName = fileName.replaceAll("\\\\", "//");	
+			File file = new File(fileName);
+
 			System.out.println("--------------------------------------------------\n");
-			System.out.println("Filename = " +fileName);
+			System.out.println("Filename = " +file.getName());
 			System.out.println("Hook Entity = " +hookEntity);
 			
 			String packageName = "";			
 			String conditionRecordObjectCsvFileName = "";
 			String pathCsvFileName = "";
 							
-			int beginIndex = fileName.lastIndexOf("//");
-			int endIndex = fileName.lastIndexOf(".");
+			int indexOfExtension = file.getName().lastIndexOf(".");
 			String domainModelName = "";
-			//System.out.println("beginIndex = " + beginIndex);
-			if(beginIndex == -1)
+
+			if(indexOfExtension == -1)
 			{
-				domainModelName = fileName.substring(beginIndex+1, endIndex);
+				domainModelName = file.getName();
 			}
 			else
 			{
-				domainModelName = fileName.substring(beginIndex+2, endIndex);
+				domainModelName = file.getName().substring(0,indexOfExtension);
 			}
 			
 			System.out.println("Name of the file = " +domainModelName);
@@ -128,7 +114,7 @@ public class ImportXmi
 			
 			init();
 	
-			in = new FileInputStream(fileName);
+			in = new FileInputStream(file);
 	
 			// start a read-only transaction
 			rep.beginTrans(true);
@@ -169,17 +155,27 @@ public class ImportXmi
 				}
 			}
 			
-			DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-			List staticEntityList = defaultBizLogic.retrieve(AbstractMetadata.class.getName(), Constants.NAME, hookEntity);			
-			if(staticEntityList == null || staticEntityList.size() == 0)
+			EntityInterface staticEntity = null;
+			if(!hookEntity.equalsIgnoreCase(AnnotationConstants.NONE))
 			{
-				throw new DynamicExtensionsSystemException("Please enter correct Hook Entity name.");
+				DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
+				List staticEntityList = defaultBizLogic.retrieve(AbstractMetadata.class.getName(), Constants.NAME, hookEntity);			
+				if(staticEntityList == null || staticEntityList.size() == 0)
+				{
+					throw new DynamicExtensionsSystemException("Please enter correct Hook Entity name.");
+				}
+				staticEntity = (EntityInterface) staticEntityList.get(0);
 			}
-			EntityInterface staticEntity = (EntityInterface) staticEntityList.get(0);
 			
-			 List<String> containerNames = readFile(pathCsvFileName);
+			boolean isEntityGroupSystemGenerated = false;
+			if(hookEntity.equalsIgnoreCase(AnnotationConstants.NONE))
+			{
+				isEntityGroupSystemGenerated = true;
+			}
+			
+			List<String> containerNames = readFile(pathCsvFileName);
 			XMIImportProcessor xmiImportProcessor = new XMIImportProcessor();
-			List<ContainerInterface> mainContainerList = xmiImportProcessor.processXmi(uml, domainModelName,packageName, containerNames);
+			List<ContainerInterface> mainContainerList = xmiImportProcessor.processXmi(uml, domainModelName,packageName, containerNames, isEntityGroupSystemGenerated);
 			
 			boolean isEditedXmi = xmiImportProcessor.isEditedXmi;
 			System.out.println("\n--------------------------------------------------\n");
@@ -189,8 +185,18 @@ public class ImportXmi
 			System.out.println("Associating with hook entity.");
 			System.out.println("\n--------------------------------------------------\n");
 			//List<ContainerInterface> mainContainerList = getMainContainerList(pathCsvFileName,entityNameVsContainers);
-			//Integrating with hook entity
-			associateHookEntity(mainContainerList,conditionObjectIds,staticEntity,isEditedXmi);
+			if(!hookEntity.equalsIgnoreCase(AnnotationConstants.NONE))
+			{//Integrating with hook entity
+				associateHookEntity(mainContainerList,conditionObjectIds,staticEntity,isEditedXmi);
+			}
+			else
+			{				
+				Set<PathObject> processedPathList = new HashSet<PathObject>();				
+				for(ContainerInterface mainContainer : mainContainerList)
+				{		
+					AnnotationUtil.addQueryPathsForAllAssociatedEntities(((EntityInterface)mainContainer.getAbstractEntity()), null, null,null, processedPathList);
+				}
+			}
 			System.out.println("--------------- Done ------------");
 		
 		}
@@ -198,7 +204,7 @@ public class ImportXmi
 		{
 			System.out.println("Fatal error reading XMI.");
 			System.out.println("------------------------ERROR:--------------------------------\n");
-			System.out.println(e.getMessage());
+			System.out.println(e.getMessage());		
 			System.out.println("\n--------------------------------------------------------------");
 		}
 		finally
@@ -217,6 +223,29 @@ public class ImportXmi
 			XMIUtilities.cleanUpRepository();
 		
 		}
+	}
+	/**
+	 * @param args
+	 * @throws Exception
+	 */
+	private static void validate(String[] args) throws Exception
+	{
+		if(args.length == 0)
+		{
+			throw new Exception("Please Specify the file name to be imported");
+		}
+		if(args.length < 2)
+		{
+			throw new Exception("Please Specify the hook entity name");
+		}
+		if(args.length < 3)
+		{
+			throw new Exception("Please Specify the main container csv file name");
+		}
+		if(args.length < 4)
+		{
+			throw new Exception("Please Specify the name of the Package to be imported");
+		}	
 	}
 	/**
 	 * @param path
