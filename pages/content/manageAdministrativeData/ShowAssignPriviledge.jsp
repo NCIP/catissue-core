@@ -1,18 +1,32 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
+
 <%@ page language="java" isELIgnored="false"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
+
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-<script language="JavaScript" type="text/javascript"
-	src="jss/javaScript.js"></script>
+<script type="text/javascript" src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="jss/caTissueSuite.js"></script>
+<script type="text/javascript" src="jss/caTissueSuite.js"></script>
+<script>
+function viewSummary()
+{
+	var action="GenericSpecimenSummary.do?Event_Id=dummyId";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+function updateCPTree()
+{ 			  window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
+}
+</script>
+
+
 <%
 	//Object obj=  request.getAttribute(Constants.ACTIONLIST);
 	//String pageOf = (String) request.getAttribute(Constants.PAGEOF);
@@ -22,29 +36,13 @@
 	List roleList = (List) request.getAttribute(Constants.ROLELIST);
 	List actionList = (List) request.getAttribute(Constants.ACTIONLIST);
 %>
-<script>
-function viewSummary()
-{
-	var action="GenericSpecimenSummary.do?Event_Id=dummyId";
-	document.forms[0].action=action;
-	document.forms[0].submit();
-}
-function updateCPTree()
-{	
-  window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
-}
-</script>
-	<div id="errorMessageForSiteDiv" style="display:none">
-<li><font color="red">Site is required</font></li>
-</div>
 
-<div id="errorMessageForUserDiv" style="display:none">
-<li><font color="red">User is required</font></li>
-</div>
+<body>
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
+<script type="text/javascript" src="jss/queryModule.js"></script>
 
-<div id="errorMessageForActionDiv" style="display:none">
-<li><font color="red">Action is required</font></li>
-</div>
+<div id="errorMess" style="display:none"></div>
+
 <form name="apForm" method="POST">
 <table summary="" cellpadding="0" cellspacing="0" border="0"
 	style="padding-left:0;padding-right:0;" width="710">
@@ -52,8 +50,7 @@ function updateCPTree()
 		<td valign="bottom">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
-				<td width="10%" valign="bottom" id="collectionProtocolTab">
-				<a
+				<td width="10%" valign="bottom" id="collectionProtocolTab"><a
 					href="CollectionProtocol.do?pageOf=pageOfCollectionProtocol&invokeFunction=invokeFunction&operation=${requestScope.operation}">
 				<img src="images/uIEnhancementImages/cp_details1.gif"
 					alt="Collection Protocol Details" width="174" height="20"
@@ -85,11 +82,7 @@ function updateCPTree()
 					style="padding-top:5px; padding-bottom:10px;">
 				<table width="100%" border="0" cellpadding="3" cellspacing="0"
 					style="background-color:#FFFFFF">
-					<tr>
-						<td height="15" colspan="6" align="left"><strong
-							class="blue_ar_b">&nbsp;<bean:message
-							key="assignPrivileges.bloodCancerProtocol" /></strong></td>
-					</tr>
+
 					<tr>
 						<td width="6%" align="right" valign="top" class="black_ar"><img
 							src="images/uIEnhancementImages/star.gif" alt="Mandatory"
@@ -98,9 +91,9 @@ function updateCPTree()
 							width="18" height="18" align="absmiddle"></td>
 						<td width="12%" align="left" valign="top" class="black_ar"><bean:message
 							key="Site.header" /></td>
-						<td width="36%" align="left"><select class="formFieldSized12"
+						<td width="36%" align="left"><select class="formFieldSized18"
 							id="siteIds" size="4" multiple="multiple"
-							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"
+							
 							onchange="getUsersForThisSites(this)">
 							<%
 									for (int i = 0; i < siteList.size(); i++) {
@@ -109,7 +102,7 @@ function updateCPTree()
 									String siteValue = ""
 									+ ((NameValueBean) siteList.get(i)).getValue();
 							%>
-							<option value="<%=siteValue%>"><%=siteName%></option>
+							<option value="<%=siteValue%>" onmouseover="Tip('<%=siteName%>',WIDTH,200)"><%=siteName%></option>
 							<%
 							}
 							%>
@@ -120,9 +113,8 @@ function updateCPTree()
 
 						<td width="7%" align="left" valign="top" class="black_ar"><bean:message
 							key="User.header" /></td>
-						<td width="34%"><select class="formFieldSized12" id="userIds"
-							size="4" multiple="multiple" onmouseover="showTip(this.id)"
-							onmouseout="hideTip(this.id)">
+						<td width="34%"><select class="formFieldSized18" id="userIds"
+							size="4" multiple="multiple" >
 							<%
 									for (int i = 0; i < userList.size(); i++) {
 									String userName = ""
@@ -130,7 +122,7 @@ function updateCPTree()
 									String userValue = ""
 									+ ((NameValueBean) userList.get(i)).getValue();
 							%>
-							<option value="<%=userValue%>"><%=userName%></option>
+							<option value="<%=userValue%>" onmouseover="Tip('<%=userName%>',WIDTH,200)"><%=userName%></option>
 							<%
 							}
 							%>
@@ -145,7 +137,7 @@ function updateCPTree()
 							for="protocolCoordinatorIds"><bean:message
 							key="collectionprotocol.protocolcoordinator" /></label></td>
 						<td align="left" valign="top" class="black_ar"><select
-							class="formFieldSized12" id="roleIds"
+							class="formFieldSized18" id="roleIds"
 							onchange="getActionsForThisRole(this)"
 							onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<%
@@ -159,7 +151,7 @@ function updateCPTree()
 										selected = "SELECTED";
 									}
 							%>
-							<option value="<%=roleValue%>" <%=selected%>><%=roleName%></option>
+							<option value="<%=roleValue%>" <%=selected%> ><%=roleName%></option>
 							<%
 							}
 							%>
@@ -169,9 +161,8 @@ function updateCPTree()
 							width="18" height="18" align="absmiddle"></td>
 						<td align="left" valign="top" class="black_ar"><bean:message
 							key="Action.header" /></td>
-						<td><select class="formFieldSized12" id="actionIds" size="4"
-							multiple="multiple" onmouseover="showTip(this.id)"
-							onmouseout="hideTip(this.id)">
+						<td><select class="formFieldSized18" id="actionIds" size="4"
+							multiple="multiple">
 							<%
 									for (int i = 0; i < actionList.size(); i++) {
 									String actionName = ""
@@ -179,7 +170,7 @@ function updateCPTree()
 									String actionValue = ""
 									+ ((NameValueBean) actionList.get(i)).getValue();
 							%>
-							<option value="<%=actionValue%>"><%=actionName%></option>
+							<option value="<%=actionValue%>" onmouseover="Tip('<%=actionName%>',WIDTH,200)"><%=actionName%></option>
 							<%
 							}
 							%>
@@ -233,6 +224,44 @@ function updateCPTree()
 							style="height: 80px; background-color: #ffffff;overflow: auto;">
 						<table border="0" width="100%" cellspacing="0" cellpadding="0">
 							<tbody id="summaryTableId">
+								<%
+							List list=(List)request.getAttribute("listOnLoad");
+							if(list!=null){
+							int valueCounter=list.size();
+							for(int i=0;i<valueCounter;i++){
+								String chkName="chk_"+i;
+								String[] arr =(String [])(list.get(i));
+							%>
+								<tr id="<%=arr[4]%>">
+									<td width="13%" class="black_ar">
+									<input type='checkbox'
+										name='<%=chkName %>' id='<%=chkName %>'
+										onclick="enableDeleteButton(this)" /></td>
+									<td width="24%" class="black_ar" onmouseover="Tip('<%=arr[1]%>',WIDTH,200)">
+									<% if(arr[1].length() >20){
+									arr[1]=arr[1].substring(0,17)+"...";
+									}
+								%><span><%=arr[1]%></span>
+									</td>
+
+									<td width="23%" class="black_ar" >
+									<span><%=arr[0]%></span></td>
+									<td width="20%" class="black_ar"><span><%=arr[2]%></span>
+									</td>
+									
+									<td width="20%" class="black_ar" onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
+									<% if(arr[3].length() >20){
+									arr[3]=arr[3].substring(0,17)+"...";
+									}
+								%>
+									<span><%=arr[3]%></span></td>
+								</tr>
+
+								<%
+							}
+							}
+							%>
+
 							</tbody>
 						</table>
 						</div>
@@ -257,4 +286,5 @@ function updateCPTree()
 	</tr>
 </table>
 </form>
+</body>
 
