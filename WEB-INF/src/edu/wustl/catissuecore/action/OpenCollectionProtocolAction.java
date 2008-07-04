@@ -29,6 +29,7 @@ public class OpenCollectionProtocolAction extends BaseAction{
 		if("pageOfmainCP".equalsIgnoreCase(pageOf))
 		{
 			session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+			session.removeAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 		}
 
 		request.setAttribute(Constants.OPERATION, operation);
