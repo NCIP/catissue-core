@@ -111,13 +111,12 @@ function openCRGWindow()
 				{
 					var num = jsonResponse.locations.length; 
 				
-					if(cpOperation == "getUsersForThisSites"){	
+					if(cpOperation == "getUsersForThisSites"){
+						
 						var eleOfUserSelBox = document.getElementById('userIds');
 						while(eleOfUserSelBox.length > 0){
 							eleOfUserSelBox.remove(eleOfUserSelBox.length - 1);
 						}
-						var myNewOption = new Option("--All--","-1");	
-						document.getElementById('userIds').options[0] = myNewOption;
 					}	
 					else if(cpOperation == "getActionsForThisRole"){
 						var eleOfActionSelBox = document.getElementById('actionIds');	
@@ -133,7 +132,7 @@ function openCRGWindow()
 						
 							var myNewOption = new Option(theText,theValue);	
 							
-							document.getElementById('userIds').options[i+1] = myNewOption;
+							document.getElementById('userIds').options[i] = myNewOption;
 						}
 						else if(cpOperation == "getActionsForThisRole"){	
 							theValue = jsonResponse.locations[i].locationId;
@@ -191,8 +190,6 @@ function openCRGWindow()
 	function getUsersForThisSites(siteObject)
 	{	
 			var cpOperation="getUsersForThisSites";
-		//	var operation= form.operation.value;
-		//	alert(operation);
 		    var selectedSiteIds = new Array();
 			var count=0;
 			for (var i = 0; i < siteObject.options.length; i++)
@@ -200,9 +197,6 @@ function openCRGWindow()
 				if (siteObject.options[ i ].selected){
 				    selectedSiteIds[count]=(siteObject.options[i].value);
 					count=count+1;
-					//	var pcrType = ctrl.options[ctrl.selectedIndex].text;					
-					//	var pcrTypeId = ctrl.options[ctrl.selectedIndex].value;	
-					
 				}
 			}
 			var url="ShowAssignPrivilegePage.do";
@@ -234,14 +228,7 @@ function openCRGWindow()
 		 var selectedUserIds = new Array();
 		 var selectedRoleIds = new Array();
 		 var selectedActionIds = new Array();  
-
-			if(((siteListCtrl.options[ 0 ].value)=="-1")&&(siteListCtrl.options[ 0 ].selected)){
-				for (var i = 1; i < siteListCtrl.options.length; i++)
-				{
-					 selectedSiteIds.push(siteListCtrl.options[ i ].value);
-				}
-			}
-			else {
+			if(siteListCtrl.options.length>0){
 				for (var i = 0; i < siteListCtrl.options.length; i++)
 				{
 					if (siteListCtrl.options[ i ].selected){
@@ -249,37 +236,25 @@ function openCRGWindow()
 					}
 				}
 			}
-			
-			if(((userListCtrl.options[ 0 ].value)=="-1")&&(userListCtrl.options[ 0 ].selected)){
-				for (var i = 1; i < userListCtrl.options.length; i++)
-				{
-					 selectedUserIds.push(userListCtrl.options[ i ].value);
-				}
-			}
-			else {
+			if(userListCtrl.options.length>0){
+		
 				for (var i = 0; i < userListCtrl.options.length; i++)
 				{
 					if (userListCtrl.options[ i ].selected){
 					    selectedUserIds.push(userListCtrl.options[ i ].value);
 					}
 				}
-			}	
-
+			}
+			if(roleListCtrl.options.length>0){
 			for (var i = 0; i < roleListCtrl.options.length; i++)
 			{
 				if (roleListCtrl.options[ i ].selected){
 				    selectedRoleIds.push(roleListCtrl.options[ i ].value);
 				}
 			}  
-
-			if(((actionListCtrl.options[ 0 ].value)=="-1")&&(actionListCtrl.options[ 0 ].selected))
-			{
-					for (var i = 1; i < actionListCtrl.options.length; i++)
-					{
-						 selectedActionIds.push(actionListCtrl.options[ i ].value);
-					}
 			}
-			else{	
+			if(actionListCtrl.options.length>0){
+		
 				for (var i = 0; i < actionListCtrl.options.length; i++)
 				{
 					if (actionListCtrl.options[ i ].selected){
@@ -300,15 +275,11 @@ function openCRGWindow()
 			if(selectedActionIds.length=='0'){
 				errorFlagForAction=true;
 			}
-			var divIdForSite=document.getElementById("errorMessageForSiteDiv");
-			var divIdForUser=document.getElementById("errorMessageForUserDiv");
-			var divIdForAction=document.getElementById("errorMessageForActionDiv");
-			divIdForSite.style.display="none";
-			divIdForUser.style.display="none";
-			divIdForAction.style.display="none";
-
+			
+			var divId=document.getElementById("errorMess");
+			divId.style.display="none";
 			if(errorFlagForSite==true||errorFlagForUser==true||errorFlagForAction==true){
-				validateMethod(errorFlagForSite,errorFlagForUser,errorFlagForAction);
+				validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForAction);
 			}
 			else{
 				var url="ShowAssignPrivilegePage.do";
@@ -319,8 +290,6 @@ function openCRGWindow()
 
 	function addOrUpdateRowToTable(opt,tableId,rowId,userName,userId,sites, actions)
 	{
-		//alert(sites);
-
 		var tb = document.getElementById(tableId);
 		var rows = new Array(); 
 		rows = tb.rows;
@@ -338,12 +307,19 @@ function openCRGWindow()
 		else if(opt=="updateRow")
 		{
 			var row = document.getElementById(rowId);
-			chkName=row.firstChild.firstChild.id;
-			 while (row.childNodes.length > 0) {
-				 row.removeChild(row.firstChild);
-			 } 
+			for(counter=0;counter<row.cells.length;)
+			{
+				if(row.cells[counter].getElementsByTagName("input")!=null){
+					if(row.cells[counter].getElementsByTagName("input")[0]!=null){
+						if(row.cells[counter].getElementsByTagName("INPUT")[0].nodeName=="INPUT"){
+							chkName=row.cells[counter].getElementsByTagName("INPUT")[0].id;
+						}
+					}
+				}
+				 row.removeChild(row.cells[counter]);
+			}
+
 			row.setAttribute("id",rowId);
-		//	 row.onclick=function(){editRow(rowId);} ;
 		}
 		  // first cell
 			var aprCheckb=row.insertCell(0);
@@ -367,7 +343,7 @@ function openCRGWindow()
 			aprSites.width="24%";
 		//	aprSites.innerHTML="<div style='word-wrap:break-word;width=24%;'>"+sites+"</div>";
 			aprSites.innerHTML="<span>"+newSites+"</span>";
-			aprSites.onmouseover=function(){this.title=getTip(sites);} ;
+			aprSites.onmouseover=function(){Tip(sites,WIDTH,200);} ;
 					//third Cell
 			var aprUser=row.insertCell(2);
 			aprUser.className="black_ar";
@@ -396,11 +372,9 @@ function openCRGWindow()
 			aprActions.className="black_ar";
 			aprActions.width="20%";
 			aprActions.innerHTML="<span>"+newActionsString+"</span>";
-			aprActions.onmouseover=function(){this.title=getTip(actions);} ;
+			aprActions.onmouseover=function(){Tip(actions,WIDTH,200);} ;
 	}
-function getTip(contents) {
-		return contents;
-}
+
 /*	
  function editRow(rowId){
 	
@@ -414,24 +388,27 @@ function getTip(contents) {
 function enableDeleteButton(itemCheck){
 	deleteButton=document.apForm.deleteButton;
 	var chk = document.getElementById(itemCheck.id);
-	        if (chk.checked == true)
-	        {
-	        	deleteButton.disabled = false;
-	        }
+	   if (chk.checked == true)
+	   {
+	     	deleteButton.disabled = false;
+	   }
 }
 
-function validateMethod(errorFlagForSite,errorFlagForUser,errorFlagForAction){
-	var divIdForSite=document.getElementById("errorMessageForSiteDiv");
-			var divIdForUser=document.getElementById("errorMessageForUserDiv");
-			var divIdForAction=document.getElementById("errorMessageForActionDiv");
+function validateMethod(divId,errorFlagForSite,errorFlagForUser,errorFlagForAction){
+	var message="";
 	if(errorFlagForSite){
-		divIdForSite.style.display="block";
+		message = 	"<li> <font color='red'>Site is required.</font> </li>";
 	}
 	if(errorFlagForUser){
-		divIdForUser.style.display="block";
+		message = message+"<li> <font color='red'>User is required.</font> </li>";
 	}
 	if(errorFlagForAction){
-		divIdForAction.style.display="block";
+		message = message+"<li> <font color='red'>Action is required.</font> </li>";
+	}
+	
+	if(message!=null){
+		divId.style.display = 'block';
+		divId.innerHTML=message;
 	}
 }
 
@@ -490,23 +467,6 @@ function  deleteCheckedRows() {
 	var data="cpOperation="+cpOperation+"&deletedRowsArray="+deletedRowsArray;			
 	sendRequestsWithData(url,data,cpOperation);
 }
-/*
-function collectionProtocolPageForPrivilege(operation)
-{
-	var action="DefineEvents.do?pageOf=pageOfCollectionProtocolPage&invokeFunction=invokeFunction&operation="+operation;
-	document.apForm.action=action;
-	document.apForm.submit();
-}
-function consentPageForPrivilege(operation)
-{
-	var action="DefineEvents.do?pageOf=pageOfCollectionProtocolPage&invokeFunction=invokeFunction&operation="+operation+"&tabSel=consentTab";
-	document.apForm.action=action;
-	document.apForm.submit();
-}
-*/
-// functions for collection protocol
-
-
 //Consent Tracking Module Virender Mehta(Start)
 	//This Function will add more consent Tier 
 	function addConsentTier()
@@ -637,7 +597,7 @@ function consentPageForPrivilege(operation)
 //Add Bulk Specimen Virender(Start)
 function showAssignPrivilegePage(operation)
 {
-    var action="DefineEvents.do?pageOf=pageOfAssignPrivilegePage&operation="+operation;
+    var action="DefineEvents.do?pageOf=pageOfAssignPrivilegePage&cpOperation=AssignPrivilegePage&operation="+operation;
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
