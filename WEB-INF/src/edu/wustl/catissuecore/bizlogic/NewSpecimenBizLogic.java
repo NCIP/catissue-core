@@ -2138,7 +2138,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		SpecimenEventParameters deriveSpecimenEventParameters = null;
 		try
 		{
-			if (parentSpecimeneventCollection != null)
+			if (parentSpecimeneventCollection != null && deriveSpecimen.getSpecimenEventCollection() == null)
 			{
 				for (Iterator<SpecimenEventParameters> iter = parentSpecimeneventCollection
 						.iterator(); iter.hasNext();)

@@ -119,5 +119,13 @@ public class CollectionEventParameters extends SpecimenEventParameters
             Logger.out.error(excp.getMessage());
         }
     }
+    
+    public CollectionEventParameters(CollectionEventParameters obj)
+    {
+    	this.collectionProcedure = obj.collectionProcedure;
+    	this.container = obj.container;
+    	this.comment = obj.comment; 
+    	
+    }
    
 }

@@ -195,6 +195,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 			return null;
 		}	
 		newSpecimen.setParentSpecimen(pSpecimen);
+		//bug no. 7690
+		if(!reqSpecimen.getSpecimenEventCollection().isEmpty() && reqSpecimen.getSpecimenEventCollection() != null)
+        {
+        newSpecimen.setPropogatingSpecimenEventCollection(reqSpecimen.getSpecimenEventCollection(),userId);
+        }
+
 		newSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		newSpecimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
 

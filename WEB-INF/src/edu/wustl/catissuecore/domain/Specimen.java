@@ -1234,4 +1234,43 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	{
 		this.requirementSpecimen = requirementSpecimen;
 	}
+	//bug no. 7690
+	public void setPropogatingSpecimenEventCollection(Collection specimenEventColl, Long userId)
+	{
+		Collection specimenEventCollection = new HashSet();
+		Iterator itr = specimenEventColl.iterator();
+		while(itr.hasNext())
+		{
+			SpecimenEventParameters eventParam = (SpecimenEventParameters)itr.next();
+			User user = new User();
+			user.setId(userId);
+			if(eventParam instanceof CollectionEventParameters)
+			{
+				CollectionEventParameters collEventParam = (CollectionEventParameters) eventParam;
+				if(collEventParam != null)
+				{
+				CollectionEventParameters collectionEventParameters = new CollectionEventParameters(collEventParam);
+				collectionEventParameters.setAbstractSpecimen(this);
+				collectionEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+				collectionEventParameters.setUser(user);
+				specimenEventCollection.add(collectionEventParameters);
+				}
+				
+			}
+			if(eventParam instanceof ReceivedEventParameters)
+			{
+				ReceivedEventParameters recEventParam = (ReceivedEventParameters) eventParam;
+				if(recEventParam != null)
+				{
+					ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters(recEventParam);
+					receivedEventParameters.setAbstractSpecimen(this);
+					receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+					receivedEventParameters.setUser(user);
+					specimenEventCollection.add(receivedEventParameters);
+				}
+				
+			}
+		}
+		this.setSpecimenEventCollection(specimenEventCollection);
+	}
 }

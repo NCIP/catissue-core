@@ -79,5 +79,10 @@ public class ReceivedEventParameters extends SpecimenEventParameters
             Logger.out.error(excp.getMessage());
         }
     }
+    public ReceivedEventParameters(ReceivedEventParameters obj)
+    {
+    	this.receivedQuality = obj.receivedQuality;
+    	this.comment = obj.comment;
+    }
     
 }
