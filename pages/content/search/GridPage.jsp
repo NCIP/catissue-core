@@ -5,47 +5,11 @@
 <script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>	
 <script  src="dhtml_comp/js/dhtmlXGrid_mcol.js"></script>	
 <script>
-	var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
-	<%
-		List row = (List)dataList.get(i);
-	  	int j;
-	%>
-	<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormat(row.get(j))%>,<%}%><%=Utility.toNewGridFormat(row.get(j))%><%="\""%>,<%}%>
-	<%
-		List row = (List)dataList.get(i);
-	  	int j;
-	%>
-	<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormat(row.get(j))%>,<%}%><%=Utility.toNewGridFormat(row.get(j))%><%="\""%>
-	];
-		
-	var columns = <%="\""%><%int col;%><%for(col=0;col<(columnList.size()-1);col++){%><%=columnList.get(col)%>,<%}%><%=columnList.get(col)%><%="\""%>;
-	
-	var colWidth = <%="\""%><%for(col=0;col<(columnList.size()-1);col++){%><%=100%>,<%}%><%=100%><%="\""%>;
-	
-	var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList)%><%="\""%>;
+	var myData =${requestScope.myData};
+	var columns =${requestScope.columns};
+	var colWidth =${requestScope.colWidth};
+	var colTypes =${requestScope.colTypes};
 </script>
-
-<%
-	/**
-	 * Name: Chetan Patil
-	 * Reviewer: Sachin Lale
-	 * Bug ID: SpecimenEventSpaceUtilization
-	 * Patch ID: SpecimenEventSpaceUtilization_1
-	 * See also: SpecimenEventSpaceUtilization_2
-	 * Description: The height of each row and column of grid is 20 pixel. Hence to make the height of grid dynamic, the (number of rows + 2) is multiplied 
-	 				by (number of pixels for height).
-	 */
-	int noOfRows = dataList.size();
-	int heightOfGrid = (noOfRows + 2) * 20;
-
-	// If the height of grid is more than the height required to display the grid with 12 rows then 
-	// make the heightOfGrid constant so that only 11 rows including the header row will be displayed.
-	if(heightOfGrid > 240)
-	{
-		heightOfGrid = 230; // 230px is the exact height to display 11 rows, including the header.
-	}
-%>
-
 <table width="100%">
 	<tr>
 		<td>
@@ -58,7 +22,7 @@
 				// Patch ID: SpecimenEventSpaceUtilization_2
 				else if(useFunction == "eventParametersGrid") 
 				{
-					document.write("<div id='gridbox' width='100%' height='<%=heightOfGrid%>px' style='background-color:white;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='${requestScope.heightOfGrid}px' style='background-color:white;overflow:hidden'></div>");
 				}
 				else
 				{
@@ -70,48 +34,22 @@
 </table>
 
 <script>
-	/*	
-	function rowClick(id)
-	{
-		var colid = <%=identifierFieldIndex.intValue()%>;
-		var cl = mygrid.cells(id,colid);
-		var searchId = cl.getValue();
-		var url = "SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+searchId;
-		window.location.href = url;
-	}
-	*/
-
 	// function modified to display distribution array.
 	// problem in query data.
 	function rowClick(id)
 	{
-		var colid = <%=identifierFieldIndex.intValue()%>;
-		/*
-		var x=document.getElementsByName("pageOf");
-		//alert(x);
-		if(x[0].value == "pageOfArrayDistribution")
-		{
-			colid=0;
-		}
-		//alert(colid);
-		*/
+		var colid ='${requestScope.identifierFieldIndex}';
 		var cl = mygrid.cells(id,colid);
 		var searchId = cl.getValue();
-		var url = "SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+searchId;
-		if(<%=pageOf.equals("pageOfCollectionProtocol")%>)
+		var url = "SearchObject.do?pageOf=${requestScope.pageOf}&operation=search&id="+searchId;
+		var pageOf="${requestScope.pageOf}";
+		if(pageOf=="pageOfCollectionProtocol")
 		{
 			url = "RetrieveCollectionProtocol.do?&id="+searchId;
 		}
-		
 		window.location.href = url;
 	}
-	/**
-	 * Name : Vijay_Pande
-	 * Bug ID: Sachin_Lale
-	 * Patch ID: 4060_1 
-	 * See also: --
-	 * Description: Grid was appearindg disordered since it was not refreshed/resized.
-	 */
+	
 function init_grid()
 {			
 	var funcName = "rowClick";
@@ -174,20 +112,7 @@ function init_grid()
 	function getIDColumns()
 		{
 			var hiddenColumnNumbers = new Array();
-			var i=0;
-			<%
-				int cols = 0;
-				
-				for(col=0;col<columnList.size();col++)
-				{
-					if (columnList.get(col).toString().trim().equals("ID") || columnList.get(col).toString().trim().equals("Status")
-					 || columnList.get(col).toString().trim().equals("Site Name")|| columnList.get(col).toString().trim().equals("Report Collection Date"))
-					{%>
-						hiddenColumnNumbers[i] = <%=col%>;
-						i++;
-					<%}
-				}
-			%>
+			${requestScope.hiddenColumnNumbers}
 			return hiddenColumnNumbers;
 		}
 	
