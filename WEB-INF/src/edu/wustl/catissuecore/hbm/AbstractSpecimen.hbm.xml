@@ -107,7 +107,7 @@
         
         <set
             name="specimenEventCollection"
-            table="CATISSUE_SPECIMEN_EVENT"
+            table="CATISSUE_SPECIMEN_EVENT_PARAM"
             fetch="subselect" lazy="false"
             inverse="true"
             cascade="save-update"
