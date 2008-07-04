@@ -10,8 +10,10 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -143,9 +145,9 @@ public class SpecimenEventParametersAction  extends BaseAction
 		request.setAttribute("editForJSP", Constants.EDIT);
 		request.setAttribute("currentEventParametersDate", currentEventParametersDate);
 		request.setAttribute("userListforJSP", Constants.USERLIST);
+		request.setAttribute("pageOf", pageOf);
 		// This method will be overridden by the sub classes
 		setRequestParameters(request, eventParametersForm);
-		
     	return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
     

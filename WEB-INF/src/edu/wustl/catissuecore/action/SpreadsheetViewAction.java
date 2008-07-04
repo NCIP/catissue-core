@@ -94,6 +94,7 @@ public class SpreadsheetViewAction extends BaseAction
 		{
 			List list = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 			List columnNames = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+//			edu.wustl.catissuecore.util.global.Utility.setGridData( list,columnNames, request);
 			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
 			request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
 		}
@@ -110,6 +111,7 @@ public class SpreadsheetViewAction extends BaseAction
 			//and based on current page no, it will calculate paginationDataList to be displayed by grid control.
 			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
 			request.setAttribute(Constants.PAGINATION_DATA_LIST, list);
+			Utility.setGridData( list,columnNames, request);
 			session.setAttribute(Constants.TOTAL_RESULTS, querySessionData
 					.getTotalNumberOfRecords());
 			AdvanceSearchForm advanceSearchForm = (AdvanceSearchForm) request
@@ -148,13 +150,15 @@ public class SpreadsheetViewAction extends BaseAction
 		if (pagination != null && pagination.equalsIgnoreCase("true"))
 		{
 			paginationDataList = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
-			request.setAttribute(Constants.PAGINATION_DATA_LIST, paginationDataList);
+			request.setAttribute(Constants.PAGINATION_DATA_LIST,paginationDataList);
+			Utility.setGridData(paginationDataList,columnList, request);
 		}
 
 		/* if(pagination != null && pagination.equalsIgnoreCase("true"))
 		 {
 		 request.setAttribute(Constants.PAGINATION_DATA_LIST,paginationDataList);
 		 }*/
+		
 		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
 		request.setAttribute(Constants.PAGE_NUMBER, Integer.toString(pageNum));
 

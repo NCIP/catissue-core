@@ -234,11 +234,9 @@ public class DataViewAction extends BaseAction {
 						}
 					}
 				}
-				request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,
-						filteredColumnDisplayNames);
+				request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,filteredColumnDisplayNames);
 				request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
-				request.setAttribute(Constants.PAGEOF,
-						Constants.PAGEOF_QUERY_RESULTS);
+				request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
 				session.setAttribute(Constants.SELECT_COLUMN_LIST, columnList);
 				session.setAttribute(Constants.SELECTED_NODE, nodeName);
 			}
@@ -300,6 +298,9 @@ public class DataViewAction extends BaseAction {
 					.getRequestDispatcher(url);
 			requestDispatcher.forward(request, response);
 		}
+		Integer identifierFieldIndex = new Integer((Integer)request.getAttribute(Constants.IDENTIFIER_FIELD_INDEX));
+		request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
+		request.setAttribute("pageOf", Constants.PAGEOF_QUERY_RESULTS);
 		return mapping.findForward(target);
 	}
 

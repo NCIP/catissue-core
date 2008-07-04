@@ -384,6 +384,12 @@ public class CreateSpecimenAction extends SecureAction
 		}
 		setPageData(request, createForm);	
 		request.setAttribute("createdDate", createForm.getCreatedDate());
+		List dataList =(List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+		List columnList = new ArrayList();
+		columnList.addAll(Arrays.asList(Constants.DERIVED_SPECIMEN_COLUMNS));
+		Utility.setGridData( dataList,columnList, request);
+		Integer identifierFieldIndex = new Integer(4);
+		request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
@@ -446,10 +452,6 @@ public class CreateSpecimenAction extends SecureAction
 	
 	private void setPageData1(HttpServletRequest request, CreateSpecimenForm form)
 	{
-		List columnList = new ArrayList();
-		columnList.addAll(Arrays.asList(Constants.DERIVED_SPECIMEN_COLUMNS));
-		request.setAttribute("columnList",columnList);
-		
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
@@ -602,9 +604,6 @@ public class CreateSpecimenAction extends SecureAction
 			}
 		}
 		request.setAttribute("showRefreshTree",showRefreshTree);
-
-		List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-		request.setAttribute("dataList",dataList);
 	}
 
 	private void setPageData3(HttpServletRequest request, CreateSpecimenForm form, String pageOf)

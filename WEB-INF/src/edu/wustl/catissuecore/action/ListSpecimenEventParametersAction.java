@@ -217,7 +217,16 @@ public class ListSpecimenEventParametersAction extends SecureAction
 					}
 					
 					List<List<String>> gridDataList = getSortedGridDataList(gridData);
+					String[] columnList1 = Constants.EVENT_PARAMETERS_COLUMNS;
+					List columnList = new ArrayList();
+					for(int i=0;i<columnList1.length;i++)
+					{
+						columnList.add(columnList1[i]);
+					}
+					Utility.setGridData( gridDataList,columnList, request);
 					request.setAttribute(Constants.SPREADSHEET_DATA_LIST, gridDataList);
+					Integer identifierFieldIndex = new Integer(0);
+					request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
 				}
 			}
 			if(request.getAttribute(Constants.SPECIMEN_LABEL)==null)

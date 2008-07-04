@@ -4,6 +4,8 @@
 <%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom" %>
 <%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
 <head>
@@ -30,10 +32,10 @@
   	int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
   	int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
 
-	List columnList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+  	List columnList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.PAGINATION_DATA_LIST);
-		
-	String pageOf = "pageOfConflictResolver";
+  		
+  	String pageOf = "pageOfConflictResolver";
 	String pageName = "SpreadsheetView.do";		
 	
 	
@@ -125,7 +127,7 @@
 		
 	}
 </script>
-<%if(dataList.size() > 0)
+<%if(dataList!=null && dataList.size() > 0)
 	{ %>
 		<%@ include file="/pages/content/search/GridPage.jsp" %>
   <%}

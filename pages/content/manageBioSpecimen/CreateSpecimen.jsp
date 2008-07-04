@@ -21,15 +21,6 @@
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-<% 
-		int exIdRows=1;
-		Map map = null;
-//		 For Gridpage
-		List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-		List columnList = (List) request.getAttribute("columnList");
-		Integer identifierFieldIndex = new Integer(4);
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-%>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/createSpecimen.js"></script>
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>

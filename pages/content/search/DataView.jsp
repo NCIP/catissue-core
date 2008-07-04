@@ -3,6 +3,8 @@
 <%@ taglib uri="/WEB-INF/PagenationTag.tld" prefix="custom" %>
 <%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%
 	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);

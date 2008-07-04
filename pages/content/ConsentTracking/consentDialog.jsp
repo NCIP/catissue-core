@@ -5,6 +5,9 @@
 <%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="java.util.ArrayList"%>
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 
 <!-- 
 	 @author Virender Mehta 
@@ -20,7 +23,9 @@
 	String withdrawAll = request.getParameter(Constants.WITHDRAW_ALL);
 	String getConsentResponse = request.getParameter(Constants.RESPONSE);
 	String pageOf = request.getParameter("pageOf");
+	request.setAttribute("pageOf",pageOf);
 	Integer identifierFieldIndex = new Integer(4);
+	request.setAttribute("identifierFieldIndex",identifierFieldIndex);
 %>
 <script language="JavaScript">
 
@@ -148,6 +153,7 @@ var useFunction = "derivedSpecimenGrid";
 		<%
 			List dataList = (List)session.getAttribute(Constants.SPECIMEN_LIST);
 			List columnList = (List)session.getAttribute(Constants.COLUMNLIST);
+			Utility.setGridData(dataList,columnList,request);//JSP refactoring...to be removed after refacoring of this JSP(consent).
 			if(dataList!=null&&dataList.size()>0)
 			{
 			%>

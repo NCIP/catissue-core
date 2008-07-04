@@ -144,9 +144,13 @@ public class ConflictViewAction extends SecureAction
         session.setAttribute(Constants.RESULTS_PER_PAGE,recordsPerPage+"");
 		
 		List dataList = makeGridData(list);
+		Utility.setGridData( dataList,columnList, request);
+		Integer identifierFieldIndex = new Integer(1);
+		request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
+		request.setAttribute("pageOf", "pageOfConflictResolver");
+		request.getSession().setAttribute(Constants.SELECTED_FILTER, Integer.toString(selectedFilter));
 		request.setAttribute(Constants.PAGINATION_DATA_LIST, dataList);
 		request.getSession().setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
-		request.getSession().setAttribute(Constants.SELECTED_FILTER, Integer.toString(selectedFilter));
 		return mapping.findForward(Constants.SUCCESS);
 	}
 	

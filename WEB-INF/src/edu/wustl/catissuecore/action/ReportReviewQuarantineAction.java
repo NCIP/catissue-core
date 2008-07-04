@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -114,8 +115,8 @@ public class ReportReviewQuarantineAction extends BaseAction
 		}
 		List columnList=columnNames();
 		request.setAttribute(Constants.REPORT_STATUS_LIST,finalDataList);
-		request.setAttribute(Constants.COLUMN_LIST,columnList);
-		request.setAttribute(Constants.PAGEOF,pageOf);
+		//request.setAttribute(Constants.COLUMN_LIST,columnList);
+		request.setAttribute("pageOf",pageOf);
 		//For Pagenation	
 		//Gets the session of this request.
 		List list = null,showList = null;
@@ -178,8 +179,10 @@ public class ReportReviewQuarantineAction extends BaseAction
         showList = list.subList(startIndex,endIndex);
         
         //Saves the list of users to be shown on the page in the request.
-        request.setAttribute(Constants.SHOW_DOMAIN_OBJECT_LIST,showList);
-        
+        //request.setAttribute(Constants.SHOW_DOMAIN_OBJECT_LIST,showList);
+        Utility.setGridData( showList,columnList, request);
+        Integer identifierFieldIndex = new Integer(4);
+        request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
         //Saves the page number in the request.
         request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
         
