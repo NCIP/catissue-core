@@ -1058,6 +1058,12 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
 			}
 		}
+		
+		//Bug #7808
+		if (!Validator.isEnumeratedValue(Constants.SCG_COLLECTION_STATUS_VALUES, group.getCollectionStatus()))
+		{
+			throw new DAOException(ApplicationProperties.getValue("specimencollectiongroup.collectionStatus.errMsg"));
+		}
 
 		// check the activity status of all the specimens associated to the
 		// Specimen Collection Group
