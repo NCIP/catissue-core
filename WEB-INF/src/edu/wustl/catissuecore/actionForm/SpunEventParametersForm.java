@@ -13,12 +13,15 @@ package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.SpunEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -32,12 +35,12 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	/**
      * Rotational force applied to specimen.
      */
-	protected double gravityForce;
+	protected String gravityForce;
 	
 	/**
      * Duration for which specimen is spun.
      */
-	protected int durationInMinutes;
+	protected String durationInMinutes;
 
 //	/**
 //     * Returns the rotational force applied to specimen. 
@@ -64,7 +67,7 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
      * @return Duration for which specimen is spun.
      * @see #setDurationInMinutes(int)
      */
-	public int getDurationInMinutes()
+	public String getDurationInMinutes()
 	{
 		return durationInMinutes;
 	}
@@ -74,7 +77,7 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
      * @param durationInMinutes duration for which specimen is spun.
      * @see #getDurationInMinutes()
      */
-	public void setDurationInMinutes(int durationInMinutes)
+	public void setDurationInMinutes(String durationInMinutes)
 	{
 		this.durationInMinutes = durationInMinutes;
 	}
@@ -100,8 +103,8 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
        {
 			super.setAllValues(abstractDomain);
 			SpunEventParameters spunEventParametersObject = (SpunEventParameters)abstractDomain ;
-			this.gravityForce = spunEventParametersObject.getGravityForce().doubleValue() ;
-			this.durationInMinutes = spunEventParametersObject.getDurationInMinutes().intValue() ; 
+			this.gravityForce = Utility.toString(spunEventParametersObject.getGravityForce());
+			this.durationInMinutes = Utility.toString(spunEventParametersObject.getDurationInMinutes()); 
 	    }
 	    catch(Exception excp)
 	    {
@@ -122,20 +125,24 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
         
         try
         {
+        	if (!gravityForce.equals(""))
+     		{
+        		if (!validator.isNumeric(gravityForce, -1))
+        		{
+        			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.number",
+        					ApplicationProperties.getValue("fixedeventparameters.gforce")));          		
+        		}	
+     		}
         	
-           //	 checks the gForce
-//        	if (!validator.isDouble(""+gravityForce ))
-//           {
-//          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("spuneventparameters.gforce")));
-//           }
-        	
-        	Logger.out.info("durationInMinutes: "+ durationInMinutes);
-            //	 checks the durationInMinutes
-//         	if (!validator.isNumeric(String.valueOf(durationInMinutes),1) )
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
-//            }
-        	
+        	if (!durationInMinutes.equals(""))
+     		{
+        		if (!validator.isNumeric(durationInMinutes, -1))
+        		{
+        			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.number",
+        					ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));          		
+        		}   
+     		}
+        	Logger.out.info("durationInMinutes: "+ durationInMinutes);        	
         }
         catch(Exception excp)
         {
@@ -160,14 +167,14 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * @return Returns the gravityForce.
 	 */
-	public double getGravityForce()
+	public String getGravityForce()
 	{
 		return gravityForce;
 	}
 	/**
 	 * @param gravityForce The gravityForce to set.
 	 */
-	public void setGravityForce(double gravityForce)
+	public void setGravityForce(String gravityForce)
 	{
 		this.gravityForce = gravityForce;
 	}

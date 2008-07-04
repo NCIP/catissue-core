@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -49,7 +50,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * Duration, measured in minutes, for which fixation is performed on specimen.
 	 */
-	protected int durationInMinutes;
+	protected String durationInMinutes;
 
 	/**
 	 * Returns the Type of the fixation.
@@ -73,7 +74,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	 * Returns the  duration In Minutes.
 	 * @return durationInMinutes.
 	 */
-	public int getDurationInMinutes()
+	public String getDurationInMinutes()
 	{
 		return durationInMinutes;
 	}
@@ -82,7 +83,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	 * Sets the durationInMinutes. 
 	 * @param durationInMinutes durationInMinutes required for fixation.
 	 */
-	public void setDurationInMinutes(int durationInMinutes)
+	public void setDurationInMinutes(String durationInMinutes)
 	{
 		this.durationInMinutes = durationInMinutes;
 	}
@@ -106,7 +107,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 			super.setAllValues(abstractDomain);
 			FixedEventParameters fixedEventParametersObject = (FixedEventParameters)abstractDomain ;
 			this.fixationType = Utility.toString(fixedEventParametersObject.getFixationType());
-			this.durationInMinutes = fixedEventParametersObject.getDurationInMinutes().intValue();  
+			this.durationInMinutes = Utility.toString(fixedEventParametersObject.getDurationInMinutes());  
 	    }
 	    catch(Exception excp)
 	    {
@@ -127,24 +128,14 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
          
          try
          {
-
-         //	 checks the fixationType
-          	if (!validator.isValidOption(fixationType))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("fixedeventparameters.fixationtype")));
-            }
-          	
-//       	 checks the durationInMinutes
-//         	if (!validator.isNumeric(String.valueOf(durationInMinutes)))
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
-//            }
-//          	           //	 checks the durationInMinutes
-//         	else if (durationInMinutes <= 0 )
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
-//            }
-         	
+        	 if (!durationInMinutes.equals(""))
+     		{
+        		if (!validator.isNumeric(durationInMinutes, -1))
+        		{
+        			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.number",
+        					ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));          		
+        		}         	
+     		}
          }
          catch(Exception excp)
          {
@@ -164,6 +155,4 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 //         this.fixationType = null;
 //         this.durationInMinutes = 0;
      }
-    
-	
 }
