@@ -1443,6 +1443,115 @@ public class Utility extends edu.wustl.common.util.Utility {
 		}
 		 return specimen;
 	}
-
 	
+	
+	public static String getmyData(List dataList)
+	{
+		String myData =	"[";
+		int i=0;
+		if(dataList !=null && dataList.size()!=0)
+		{
+			for (i=0;i<(dataList.size()-1);i++)
+			{
+				List row = (List)dataList.get(i);
+				int j;
+				myData=myData+"\"";
+				for (j=0;j < (row.size()-1);j++)
+				{
+					myData=myData+Utility.toNewGridFormat(row.get(j)).toString();
+					myData=myData+",";
+				}
+				myData=myData+Utility.toNewGridFormat(row.get(j)).toString();
+				myData=myData+"\"";
+				myData=myData+",";
+			}
+		
+			List row = (List)dataList.get(i);
+			int j;
+			myData=myData+"\"";
+			for (j=0;j < (row.size()-1);j++)
+			{
+				myData=myData+Utility.toNewGridFormat(row.get(j)).toString();
+				myData=myData+",";
+			}
+			myData=myData+Utility.toNewGridFormat(row.get(j)).toString();
+			myData=myData+"\"";
+		}
+		myData=myData+"]";
+		return myData;
+	}
+	public static String getcolumns(List columnList) 
+	{
+		String columns="\"";
+		int col;
+		if(columnList!=null)
+		{
+			for(col=0;col<(columnList.size()-1);col++)
+			{
+				columns=columns+columnList.get(col);
+				columns=columns+",";
+			}
+			columns=columns+columnList.get(col);
+		}
+		columns=columns+"\"";
+		return columns;
+	}
+	public static String getcolWidth(List columnList)
+	{
+		String colWidth="\"";
+		int col;
+		if(columnList!=null)
+		{
+			for(col=0;col<(columnList.size()-1);col++)
+			{
+				colWidth=colWidth+"100";
+				colWidth=colWidth+",";
+			}
+			colWidth=colWidth+"100";
+		}
+		colWidth=colWidth+"\"";
+		return colWidth;
+	}
+	public static String getcolTypes(List dataList)
+	{
+		String colTypes="\"";
+		Variables.prepareColTypes(dataList);
+		colTypes=colTypes+"\"";
+		return colTypes;
+	}
+	
+	public static void setGridData(List dataList, List columnList, HttpServletRequest request)
+	{
+		request.setAttribute("myData",getmyData(dataList));
+		request.setAttribute("columns", getcolumns(columnList));
+		request.setAttribute("colWidth",getcolWidth(columnList));
+		request.setAttribute("colTypes",getcolTypes(dataList));
+		int heightOfGrid = 100;
+		if(dataList!=null)
+		{
+			int noOfRows = dataList.size();
+			heightOfGrid = (noOfRows + 2) * 20;
+			if(heightOfGrid > 240)
+			{
+				heightOfGrid = 230;
+			}
+		}
+		request.setAttribute("heightOfGrid", heightOfGrid);
+		int col = 0;
+		int i=0;
+		String hiddenColumnNumbers="";
+		if(columnList!=null)
+		{
+			for(col=0;col<columnList.size();col++)
+			{
+				if (columnList.get(col).toString().trim().equals("ID") || columnList.get(col).toString().trim().equals("Status")
+						|| columnList.get(col).toString().trim().equals("Site Name")|| columnList.get(col).toString().trim().equals("Report Collection Date"))
+				{
+					hiddenColumnNumbers=hiddenColumnNumbers+"hiddenColumnNumbers["+i+"] = "+col+";";
+					i++;
+				}
+			}
+		}
+		request.setAttribute("hiddenColumnNumbers", hiddenColumnNumbers);
+	}
 }
