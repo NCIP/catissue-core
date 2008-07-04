@@ -74,7 +74,7 @@
 				
 			   if(alias == "New")
 				{
-					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=${requestScope.operation}&pageOf=specimenRequirement&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
+					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=edit&pageOf=specimenRequirement&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
 				}
 				else if(alias == "ViewSummary")
 				{
