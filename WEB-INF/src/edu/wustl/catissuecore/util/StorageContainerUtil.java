@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,16 +13,13 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
-
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.domain.Container;
-import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -40,7 +36,7 @@ public class StorageContainerUtil
 	 * @param x - x position which is updated
 	 * @param y - y position which is updated
 	 */
-	public static synchronized void insertSinglePositionInContainerMap(StorageContainer storageContainer, Map containerMap, int x, int y)
+	public static synchronized void insertSinglePositionInContainerMap(Container storageContainer, Map containerMap, int x, int y)
 	{
 		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), (storageContainer.getId()));
 		TreeMap storageContainerMap = (TreeMap) containerMap.get(storageContainerId);
@@ -90,7 +86,7 @@ public class StorageContainerUtil
 	 * @param x - x position which is updated
 	 * @param y - y position which is updated
 	 */
-	public static synchronized void deleteSinglePositionInContainerMap(StorageContainer storageContainer, Map continersMap, int x, int y)
+	public static synchronized void deleteSinglePositionInContainerMap(Container storageContainer, Map continersMap, int x, int y)
 	{
 		NameValueBean storageContainerId = new NameValueBean(storageContainer.getName(), storageContainer.getId());
 		TreeMap storageContainerMap = (TreeMap) continersMap.get(storageContainerId);
@@ -773,23 +769,23 @@ public class StorageContainerUtil
 		 * @param containerMap
 		 * @param aliquotMap
 		 */
-		
-		public static void populateAliquotMap(Map containerMap, Map aliquotMap, String noOfAliquots)
+	
+		public static void populateAliquotMap(String objectKey, Map containerMap, Map aliquotMap, String noOfAliquots)
 		{
-			int counter = 1;
+			Integer counter = 1;
 			if (!containerMap.isEmpty())
 			{
 				Object[] containerId = containerMap.keySet().toArray();
 				for (int i = 0; i < containerId.length; i++)
 				{
 					Map xDimMap = (Map) containerMap.get(containerId[i]);
-					counter = setAliquotMap(xDimMap,containerId, noOfAliquots,counter,aliquotMap, i);
+					i = setAliquotMap(objectKey, xDimMap,containerId, noOfAliquots,counter,aliquotMap, i);
 				}
 			}
 		}
-		
-		public static int setAliquotMap(Map xDimMap, Object[] containerId, String noOfAliquots, int counter, Map aliquotMap, int i)
+		public static int setAliquotMap(String objectKey,Map xDimMap, Object[] containerId, String noOfAliquots, Integer counter, Map aliquotMap, int i)
 		{
+			objectKey = objectKey + ":";
 			if (!xDimMap.isEmpty())
 			{
 			   Object[] xDim = xDimMap.keySet().toArray();
@@ -800,9 +796,9 @@ public class StorageContainerUtil
 					{
 						if (counter <= Integer.parseInt(noOfAliquots))
 						{
-							String containerKey = "Specimen:" + counter + "_StorageContainer_id";
-							String pos1Key = "Specimen:" + counter + "_positionDimensionOne";
-							String pos2Key = "Specimen:" + counter + "_positionDimensionTwo";
+							String containerKey = objectKey + counter + "_StorageContainer_id";
+							String pos1Key = objectKey + counter + "_positionDimensionOne";
+							String pos2Key = objectKey + counter + "_positionDimensionTwo";
 
 							aliquotMap.put(containerKey, ((NameValueBean) containerId[i]).getValue());
 							aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
@@ -819,7 +815,7 @@ public class StorageContainerUtil
 					}
 				}
 			}
-			return counter;
+			return i;
 		}
 	
 		/**

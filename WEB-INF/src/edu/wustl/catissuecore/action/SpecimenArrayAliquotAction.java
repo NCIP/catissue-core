@@ -340,7 +340,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	{
 		Map aliquotMap = form.getSpecimenArrayAliquotMap();
 		String noOfAliquots = form.getAliquotCount();
-		StorageContainerUtil.populateAliquotMap(containerMap, aliquotMap,noOfAliquots);
+		StorageContainerUtil.populateAliquotMap("SpecimenArray",containerMap, aliquotMap,noOfAliquots);
 		form.setSpecimenArrayAliquotMap(aliquotMap);
 
 	}

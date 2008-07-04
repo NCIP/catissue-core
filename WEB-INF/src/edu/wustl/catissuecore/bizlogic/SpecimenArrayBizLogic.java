@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.hibernate.proxy.HibernateProxyHelper;
+
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.Container;
@@ -116,18 +118,12 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	
 	public void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException,
 	UserNotAuthorizedException
-{
-try
-{
-	Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-	SpecimenArray specimenArrayCurrentObject = (SpecimenArray) currentObj;
-	SpecimenArray specimenArrayOldObject = (SpecimenArray) oldObj;
-
-	
- //   if(specimenArrayOldObject != null && specimenArrayOldObject.getLocatedAtPosition() != null
- //   && specimenArrayCurrentObject != null && specimenArrayCurrentObject.getLocatedAtPosition() != null)
- //   {
-		//If capacity of container gets increased then insert all the new positions in map ..........
+	{
+	try
+	{
+		Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+		SpecimenArray specimenArrayCurrentObject = (SpecimenArray) currentObj;
+		SpecimenArray specimenArrayOldObject = (SpecimenArray) oldObj;
 		int xOld = specimenArrayOldObject.getLocatedAtPosition().getPositionDimensionOne().intValue();
 		int xNew = specimenArrayCurrentObject.getLocatedAtPosition().getPositionDimensionOne().intValue();
 		int yOld = specimenArrayOldObject.getLocatedAtPosition().getPositionDimensionTwo().intValue();
@@ -136,19 +132,22 @@ try
 		long containerIdNew = specimenArrayOldObject.getLocatedAtPosition().getParentContainer().getId().longValue();
 		if (xNew != xOld || yNew != yOld || containerIdOld!=containerIdNew)
 		{
-			StorageContainerUtil.insertSinglePositionInContainerMap((StorageContainer)specimenArrayOldObject.getLocatedAtPosition().getParentContainer(), containerMap, xOld,yOld);
-			StorageContainerUtil.deleteSinglePositionInContainerMap((StorageContainer)specimenArrayCurrentObject.getLocatedAtPosition().getParentContainer(), containerMap, xNew,yNew);
+			Container container = (Container)specimenArrayOldObject.getLocatedAtPosition().getParentContainer();
+			container = (Container)HibernateMetaData.getProxyObjectImpl(container);
+			StorageContainerUtil.insertSinglePositionInContainerMap(container, containerMap, xOld,yOld);
+			StorageContainerUtil.deleteSinglePositionInContainerMap(container, containerMap, xNew,yNew);
 		}
-//    }
-}
-catch (Exception e)
-{
-}
+	}
+	catch (Exception e)
+	{
+		throw new BizLogicException("Failed to Update Storage Container Positions"); 
+	}
 }
 
 	/**
 	 * @see edu.wustl.common.bizlogic.AbstractBizLogic#update(edu.wustl.common.dao.DAO, java.lang.Object, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
+	
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		SpecimenArray specimenArray = (SpecimenArray) obj;
