@@ -2294,6 +2294,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		Logger.out.debug("validateContainerAccess..................");
 		String userName = sessionDataBean.getUserName();
 
+		if(sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+		
 		// To get privilegeCache through
 		// Singleton instance of PrivilegeManager, requires User LoginName
 		// PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
