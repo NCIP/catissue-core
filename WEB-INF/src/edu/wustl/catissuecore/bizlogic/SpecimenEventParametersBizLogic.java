@@ -871,10 +871,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	
 	public List getSpecimenDataForBulkTransfers(List specimenIds, SessionDataBean sessionDataBean) throws ClassNotFoundException, DAOException
 	{
-		String sql = "Select specimen.IDENTIFIER, specimen.LABEL, specimen.SPECIMEN_CLASS, Container.NAME , specimen.POSITION_DIMENSION_ONE, specimen.POSITION_DIMENSION_TWO, Container.IDENTIFIER " 
-			+"from catissue_specimen specimen left join catissue_storage_container StorageContainer on (specimen.STORAGE_CONTAINER_IDENTIFIER = StorageContainer.IDENTIFIER) "
-			+"left join catissue_container Container on (StorageContainer.IDENTIFIER=Container.IDENTIFIER) "
-			+"where specimen.IDENTIFIER in ";
+		
+		String sql ="Select specimen.IDENTIFIER, specimen.LABEL, abstractSpecimen.SPECIMEN_CLASS, Container.NAME , abstractposition.POSITION_DIMENSION_ONE, abstractposition.POSITION_DIMENSION_TWO, Container.IDENTIFIER " 
+			+" from catissue_specimen specimen left join catissue_abstract_specimen abstractSpecimen on (abstractSpecimen.identifier=specimen.identifier )  "
+			+ "left join catissue_specimen_position specimenPosition on (specimen.identifier = specimenPosition.specimen_id) "
+			+" left join catissue_container Container on (specimenPosition.Container_id=Container.IDENTIFIER) "
+			+" left join catissue_abstract_position  abstractposition  on (abstractposition.Identifier=specimenPosition.IDENTIFIER )"
+			+" where specimen.IDENTIFIER in ";
 		return getSpecimenDataForBulkOperations(specimenIds, sessionDataBean, sql);
 	}
 	
