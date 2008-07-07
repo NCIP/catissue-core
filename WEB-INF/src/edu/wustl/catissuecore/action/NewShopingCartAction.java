@@ -71,9 +71,9 @@ public class NewShopingCartAction extends BaseAction {
 			
 		}
 
-		if(session.getAttribute(Constants.QUERY_SHOPPING_CART)!=null)
+		queryShoppingCart =(QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
+		if(queryShoppingCart.getCartAttributeList()!=null)
 		{
-			queryShoppingCart =(QueryShoppingCart)session.getAttribute(Constants.QUERY_SHOPPING_CART);
 			oldAttributeList = queryShoppingCart.getCartAttributeList();
 			oldCartSize=queryShoppingCart.getCart().size();
 		}
