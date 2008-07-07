@@ -1284,7 +1284,7 @@ Update dyextn_attribute set ENTIY_ID = 1866 where IDENTIFIER = 13;
 Update dyextn_attribute set ENTIY_ID = 1866 where IDENTIFIER = 1005;
 
 Update dyextn_entity set PARENT_ENTITY_ID = 373 where IDENTIFIER = 717;
-update dyextn_entity set PARENT_ENTITY_ID=(select identifier from dyextn_abstract_metadata where name like 'edu.wustl.catissuecore.domain.AbstractSpecimen') where identifier=(select identifier from dyextn_abstract_metadata where name like 'edu.wustl.catissuecore.domain.Specimen')
+update dyextn_entity set PARENT_ENTITY_ID=(select identifier from dyextn_abstract_metadata where name like 'edu.wustl.catissuecore.domain.AbstractSpecimen') where identifier=(select identifier from dyextn_abstract_metadata where name like 'edu.wustl.catissuecore.domain.Specimen');
 
 update dyextn_database_properties set NAME='CATISSUE_DISTRIBUTION_SPEC_REQ' where NAME = 'CATISSUE_SPECIMEN_REQUIREMENT';
 
