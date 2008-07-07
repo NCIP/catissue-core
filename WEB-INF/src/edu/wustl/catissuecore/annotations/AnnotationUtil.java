@@ -28,13 +28,18 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.globus.util.http.HTTPRequestParser;
 
+import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.exception.DataTypeFactoryInitializationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.FormContext;
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
@@ -52,6 +57,23 @@ public class AnnotationUtil
      */
     public static Map map = new HashMap();
 
+    /**
+     * This is workaround of using DE PAI to add specimen in MyList from specimen page
+     */
+    private static Collection<AttributeInterface> specimenAttributeCollection;
+    
+    public final static Collection<AttributeInterface> getSpecimenAttributeCollection() throws DynamicExtensionsSystemException
+    {
+		if(specimenAttributeCollection==null)
+		{
+			EntityManager entityManager=(EntityManager) EntityManager.getInstance();
+			EntityInterface entity=(EntityInterface) entityManager.getEntityByName(new Specimen().getClass().getName());
+			specimenAttributeCollection=((Entity) entity).getAttributeCollection();
+		}
+		return specimenAttributeCollection;
+
+    }
+    
     public final List<NameValueBean> populateStaticEntityList(
             String xmlFileName, String displayNam)
             throws DataTypeFactoryInitializationException

@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
+import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -58,10 +59,8 @@ public class NewShopingCartAction extends BaseAction {
 		List<String> columnList=new ArrayList<String>();
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		
-		EntityManager entityManager=(EntityManager) EntityManager.getInstance();
-		EntityInterface entity=(EntityInterface) entityManager.getEntityByName(new Specimen().getClass().getName());
-		Collection<AttributeInterface> attributeCollection=((Entity) entity).getAttributeCollection();
-	
+		
+		Collection<AttributeInterface> attributeCollection=AnnotationUtil.getSpecimenAttributeCollection();
 		Iterator<AttributeInterface> attributreItr=attributeCollection.iterator();
 	
 		while (attributreItr.hasNext()) {
