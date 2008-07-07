@@ -37,6 +37,7 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
@@ -1444,6 +1445,31 @@ public class Utility extends edu.wustl.common.util.Utility {
 		 return specimen;
 	}
 	
+	
+	/**
+	 *
+	 */
+	
+	public static Specimen getSpecimen(String specimenId)
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		Specimen specimen = null;
+		try 
+		{
+			dao.openSession(null);
+			NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+			specimen = newSpecimenBizLogic.getSpecimenObj(specimenId, dao);
+			dao.closeSession();
+		} 
+		catch (DAOException e) 
+		{
+			// TODO Auto-generated catch block
+			Logger.out.debug(e.getMessage(), e);
+			return null;
+		}
+		return specimen;
+	}
+
 	
 	public static String getmyData(List dataList)
 	{

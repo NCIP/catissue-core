@@ -3043,7 +3043,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	 * @return
 	 * @throws DAOException
 	 */
-	private Specimen getSpecimenObj(String specimenID, DAO dao) throws DAOException
+	public Specimen getSpecimenObj(String specimenID, DAO dao) throws DAOException
 	{
 
 		Object object = dao.retrieve(Specimen.class.getName(), new Long(specimenID));
