@@ -498,7 +498,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		values.put(description, orderItem.getDescription());
 		if (orderItem.getRequestedQuantity() != null)
 		{//condition is for define array
-			values.put(requestedQty, orderItem.getRequestedQuantity().getValue().toString());
+			values.put(requestedQty, orderItem.getRequestedQuantity().toString());
 		}
 		values.put(orderItemId, orderItem.getId());
 		if (orderItem.getDistributedItem() != null)
@@ -511,7 +511,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			values.put(distributedItemId, "");
 			if (orderItem.getRequestedQuantity() != null)
 			{
-				values.put(assignQty, orderItem.getRequestedQuantity().getValue().toString());
+				values.put(assignQty, orderItem.getRequestedQuantity().toString());
 			}
 		}
 	}

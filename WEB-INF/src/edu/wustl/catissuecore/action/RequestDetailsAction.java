@@ -437,7 +437,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		existingArrayDetailsBean.setDescription(existingSpecimenArrayOrderItem.getDescription());
 		existingArrayDetailsBean.setAssignedStatus(existingSpecimenArrayOrderItem.getStatus());
 		existingArrayDetailsBean.setArrayId(existingSpecimenArrayOrderItem.getSpecimenArray().getId().toString());
-		existingArrayDetailsBean.setRequestedQuantity(existingSpecimenArrayOrderItem.getRequestedQuantity().getValue().toString());
+		existingArrayDetailsBean.setRequestedQuantity(existingSpecimenArrayOrderItem.getRequestedQuantity().toString());
 
 		return existingArrayDetailsBean;
 	}
@@ -535,7 +535,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		//Add empty list since it is the case of existing speicmen
 		arrayDetailsBean.setSpecimenList(new ArrayList());
 		arrayDetailsBean.setSpecimenId((existingSpecimenOrderItem.getSpecimen().getId()).toString());
-		arrayDetailsBean.setRequestedQuantity(existingSpecimenOrderItem.getRequestedQuantity().getValue().toString());
+		arrayDetailsBean.setRequestedQuantity(existingSpecimenOrderItem.getRequestedQuantity().toString());
 		arrayDetailsBean.setAvailableQuantity(existingSpecimenOrderItem.getSpecimen().getAvailableQuantity().toString());
 		arrayDetailsBean.setAssignedStatus(existingSpecimenOrderItem.getStatus());
 		arrayDetailsBean.setClassName(existingSpecimenOrderItem.getSpecimen().getClassName());
@@ -567,7 +567,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(finalChildrenSpecimenList);
 		arrayDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 
-		arrayDetailsBean.setRequestedQuantity(derivedSpecimenOrderItem.getRequestedQuantity().getValue().toString());
+		arrayDetailsBean.setRequestedQuantity(derivedSpecimenOrderItem.getRequestedQuantity().toString());
 		arrayDetailsBean.setAvailableQuantity(derivedSpecimenOrderItem.getParentSpecimen().getAvailableQuantity().toString());
 		arrayDetailsBean.setAssignedStatus(derivedSpecimenOrderItem.getStatus());
 		arrayDetailsBean.setClassName(derivedSpecimenOrderItem.getSpecimenClass());
@@ -641,7 +641,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		{
 			arrayDetailsBean.setInstanceOf("Pathological");
 		}
-		arrayDetailsBean.setRequestedQuantity(pathologicalCaseOrderItem.getRequestedQuantity().getValue().toString());
+		arrayDetailsBean.setRequestedQuantity(pathologicalCaseOrderItem.getRequestedQuantity().toString());
 		//Displaying the quantity of the first specimen in the request for drop down.
 		if (childrenSpecimenListToDisplay.size() != 0)
 		{
@@ -774,7 +774,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		//@FIX ME
 	
 		if (existingSpecimenorderItem.getRequestedQuantity() != null)
-			requestDetailsBean.setRequestedQty(existingSpecimenorderItem.getRequestedQuantity().getValue().toString());
+			requestDetailsBean.setRequestedQty(existingSpecimenorderItem.getRequestedQuantity().toString());
 		requestDetailsBean.setAvailableQty(existingSpecimenorderItem.getSpecimen().getAvailableQuantity().toString());
 
 		requestDetailsBean.setAssignedStatus(existingSpecimenorderItem.getStatus());
@@ -821,7 +821,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		requestDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 		requestDetailsBean.setSpecimenId(specimenId.toString());
 		requestDetailsBean.setInstanceOf("Derived");
-		requestDetailsBean.setRequestedQty(derivedSpecimenorderItem.getRequestedQuantity().getValue().toString());
+		requestDetailsBean.setRequestedQty(derivedSpecimenorderItem.getRequestedQuantity().toString());
 		//Displaying the quantity of the first specimen in the request for drop down.
 		if (childrenSpecimenListToDisplay.size() != 0)
 		{
@@ -914,7 +914,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		{
 			requestDetailsBean.setInstanceOf("Pathological");
 		}
-		requestDetailsBean.setRequestedQty(pathologicalCaseOrderItem.getRequestedQuantity().getValue().toString());
+		requestDetailsBean.setRequestedQty(pathologicalCaseOrderItem.getRequestedQuantity().toString());
 		//Displaying the quantity of the first specimen in the request for drop down.
 		if (childrenSpecimenListToDisplay.size() != 0)
 		{

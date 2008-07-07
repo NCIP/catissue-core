@@ -53,25 +53,17 @@
             column="STATUS"
             length="50"
         />
-		
-		<component
+        
+         <property
             name="requestedQuantity"
-            class="edu.wustl.catissuecore.domain.Quantity"
-        >
-        <property
-            name="value"
             type="double"
             update="true"
             insert="true"
             column="REQUESTED_QUANTITY"
             length="50"
         />
-
-        </component>
-        
-        
 		
-        <many-to-one
+		<many-to-one
             name="orderDetails"
             class="edu.wustl.catissuecore.domain.OrderDetails"
             cascade="none"

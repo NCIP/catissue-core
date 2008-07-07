@@ -50,7 +50,6 @@ import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
@@ -419,11 +418,6 @@ public class NewSpecimenAction extends SecureAction
 		List<NameValueBean> pathologicalStatusList = new ArrayList<NameValueBean>();
 		Map<String, List<NameValueBean>> subTypeMap = new HashMap<String, List<NameValueBean>>();
 		
-		String restrictSCGCheckbox = specimenForm.getRestrictSCGCheckbox();
-		if(restrictSCGCheckbox == null) 
-		{//If not form the form, get the value form request. Case of Technician accessing SCG to add specimen.
-			restrictSCGCheckbox = (String)request.getParameter(Constants.RESTRICT_SCG_CHECKBOX);
-		}
 		
 		String specimenCollectionGroupId = specimenForm.getSpecimenCollectionGroupId();
 		if (specimenCollectionGroupId != null && !specimenCollectionGroupId.equals("")) 
@@ -433,34 +427,17 @@ public class NewSpecimenAction extends SecureAction
 			{
 				populateListBoxes(specimenForm, request);
 			}
-			else if(restrictSCGCheckbox != null && restrictSCGCheckbox.equals(Constants.TRUE))
-            {
-				//Patch ID: Bug#3184_25
-				//Populate restricted values into the lists to be displayed. Also set the values selected in the list, if there is only
-				//one specimen requirement associated with the Collection Protocol Event; otherwise do not set any value as selected.
-				int numberOfSpecimens = populateAllRestrictedLists(request, specimenForm, specimenCollectionGroupId,specimenClassList, 
-						specimenTypeList, tissueSiteList, tissueSideList, pathologicalStatusList, subTypeMap);
-				//TODO create constants and importantly test for all cases
-				String onCollOrClassChange = request.getParameter(Constants.ON_COLL_OR_CLASSCHANGE);
-				if(((onCollOrClassChange == null) || !(onCollOrClassChange.equalsIgnoreCase(Constants.TRUE))) && (numberOfSpecimens > 1))
-				{
-					specimenForm.setClassName("");
-					specimenForm.setType("");
-					specimenForm.setTissueSite("");
-					specimenForm.setPathologicalStatus("");
-				}
-            }
-			else
-			{
-				populateAllLists(specimenForm, specimenClassList, specimenTypeList, tissueSiteList, tissueSideList,	
+			
+			populateAllLists(specimenForm, specimenClassList, specimenTypeList, tissueSiteList, tissueSideList,	
 						pathologicalStatusList, subTypeMap);
-			}
+			
 		}
 		else
 		{	// On adding a new specimen independently.
 			populateAllLists(specimenForm, specimenClassList, specimenTypeList, tissueSiteList, tissueSideList,	
 					pathologicalStatusList, subTypeMap);
 		}
+		
 		
 		/**
          * Name : Virender Mehta
@@ -1096,122 +1073,6 @@ public class NewSpecimenAction extends SecureAction
 		}
 	}
 	
-	/**
-	 * This method populates the values for the lists form Specimen Requirements.
-	 * @param request HttpServletRequest to set some attribute values
-	 * @param specimenForm NewSpecimenForm to check the value of SpecimenClass
-	 * @param specimenCollectionGroupId Identifier of SpecimenCollectionGroup
-	 * @param specimenClassList List of Specimen Class
-	 * @param specimenTypeList List of Specimen Type
-	 * @param tissueSiteList List of Tissue Site
-	 * @param tissueSideList List of Tissue Side
-	 * @param pathologicalStatusList List of Pathological Status
-	 * @param subTypeMap Map of the Class and their corresponding Types
-	 * @throws DAOException on failure to populate values from the system
-	 */
-	 private int populateAllRestrictedLists(HttpServletRequest request, NewSpecimenForm specimenForm, String specimenCollectionGroupId, 
-			List<NameValueBean> specimenClassList, List<NameValueBean> specimenTypeList, List<NameValueBean> tissueSiteList, 
-			List<NameValueBean> tissueSideList,	List<NameValueBean> pathologicalStatusList, Map<String, List<NameValueBean>> subTypeMap) 
-			throws DAOException
-	{
-		// Get SpecimenCollectionGroup given a SpecimenCollectionGroupId
-		SpecimenCollectionGroup scg = Utility.getSpecimenCollectionGroup(specimenCollectionGroupId);
-		request.setAttribute("SpecimenCollectionGroupId", specimenCollectionGroupId);
-		/**For Migration Start**/
-		int numberOfSpecimen=0; 
-		if(scg!=null)
-		{
-			
-			request.setAttribute("SpecimenCollectionGroupName", scg.getName());
-		
-		String operation = (String) request.getParameter(Constants.OPERATION);
-		if (operation.equals(Constants.EDIT)) 
-		{
-			request.setAttribute("scgName", scg.getName());
-		}
-		
-		String specimenClass = null;
-		String specimenType = null;
-		String tissueSite = null;
-		String pathologicalStatus = null;
-		Double quantity = null;
-		
-		Map<String,String> tempMap = new HashMap<String,String>();
-		CollectionProtocolEvent collectionProtocolEvent = scg.getCollectionProtocolEvent();
-		
-		/**
-		 * Name: Vijay Pande
-		 * Reviewer Name: Aarti Sharma
-		 * specimenRequirementCollection is explicitly retrived from DB since its lazy load property is true
-		 */
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		Collection<SpecimenRequirement> specimenRequirementCollection=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocolEvent.class.getName(), collectionProtocolEvent.getId(), Constants.COLUMN_NAME_SPECIEMEN_REQUIREMENT_COLLECTION);
-		for(SpecimenRequirement specimenRequirement : specimenRequirementCollection)
-		{
-			specimenClass = specimenRequirement.getSpecimenClass();
-			if (tempMap.get(specimenClass + Constants.SPECIMEN_CLASS) == null) 
-			{
-				specimenClassList.add(new NameValueBean(specimenClass, specimenClass));
-				tempMap.put(specimenClass + Constants.SPECIMEN_CLASS, specimenClass);
-			}
-
-			specimenType = specimenRequirement.getSpecimenType();
-			if (tempMap.get(specimenClass + specimenType + Constants.SPECIMEN_TYPE) == null) 
-			{
-				populateSpecimenTypeLists(tempMap, subTypeMap, specimenClass, specimenType);
-			}
-
-			tissueSite = specimenRequirement.getTissueSite();
-			if (tempMap.get(tissueSite + Constants.TISSUE_SITE) == null) 
-			{
-				tissueSiteList.add(new NameValueBean(tissueSite, tissueSite));
-				tempMap.put(tissueSite + Constants.TISSUE_SITE, tissueSite);
-			}
-
-			pathologicalStatus = specimenRequirement.getPathologyStatus();
-			if (tempMap.get(pathologicalStatus + Constants.CDE_NAME_PATHOLOGICAL_STATUS) == null) 
-			{
-				pathologicalStatusList.add(new NameValueBean(pathologicalStatus, pathologicalStatus));
-				tempMap.put(pathologicalStatus + Constants.CDE_NAME_PATHOLOGICAL_STATUS, pathologicalStatus);
-			}
-			
-			/**
-			 * Patch ID: Bug#4245_3
-			 * Description: Pre-population of quantity value in case of a single specimen and single specimen requirement.
-			 */
-			quantity = specimenRequirement.getQuantity().getValue();
-		}
-
-		//Patch ID: Bug#3184_26
-		// Setting tissue side list
-		tissueSideList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
-		
-		//Set the values as selected only if one specimen requirement is present
-		numberOfSpecimen = specimenRequirementCollection.size();
-		if(numberOfSpecimen == 1)
-		{
-			specimenForm.setClassName(specimenClass);
-			specimenForm.setType(specimenType);
-			specimenForm.setTissueSite(tissueSite);
-			specimenForm.setPathologicalStatus(pathologicalStatus);
-			//Patch ID: Bug#4245_4
-			if(Utility.isQuantityDouble(specimenClass, specimenType))
-			{						
-				specimenForm.setQuantity(quantity.toString());
-			}
-			else
-			{        				
-				int qty = quantity.intValue();
-				specimenForm.setQuantity(Integer.toString(qty));
-			}
-		}
-		}
-		else
-		{
-			populateAllLists(specimenForm, specimenClassList, specimenTypeList, tissueSiteList, tissueSideList, pathologicalStatusList, subTypeMap);
-		}
-		return numberOfSpecimen;
-	}
 	 /**
 		 * Name : Ashish Gupta
 		 * Reviewer Name : Sachin Lale 

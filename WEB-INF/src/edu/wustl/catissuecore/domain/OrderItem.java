@@ -38,7 +38,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	/**
 	 * Integer containing the amount of requested quantity of ordered specimens
 	 */
-	protected Quantity requestedQuantity;
+	protected Double requestedQuantity;
 	/**
 	 * String containing the status of order.
 	 */
@@ -111,10 +111,9 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	
 	/**
 	 * Returns the amount/quantity of requested specimens
-	 * @hibernate.component class="edu.wustl.catissuecore.domain.Quantity"
 	 * @return quantity of the requested specimens
 	 */
-	public Quantity getRequestedQuantity()
+	public Double getRequestedQuantity()
 	{
 		return requestedQuantity;
 	}
@@ -123,7 +122,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 * Sets the amount/quantity of requested specimens
 	 * @param requestedQuantity Quantity
 	 */
-	public void setRequestedQuantity(Quantity requestedQuantity)
+	public void setRequestedQuantity(Double requestedQuantity)
 	{
 		this.requestedQuantity = requestedQuantity;
 	}	

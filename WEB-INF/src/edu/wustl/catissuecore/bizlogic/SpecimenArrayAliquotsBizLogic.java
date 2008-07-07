@@ -12,7 +12,6 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
@@ -303,7 +302,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			// Object is explicitly retrieved from DB
 			Specimen specimen=(Specimen)dao.retrieve(Specimen.class.getName(), parentSpecimenArrayContent.getSpecimen().getId());
 			
-			Quantity quantity = null;
+			Double quantity = new Double(0);
 			if (specimen instanceof MolecularSpecimen) 
 			{
 				if(aliquotCount > 0)

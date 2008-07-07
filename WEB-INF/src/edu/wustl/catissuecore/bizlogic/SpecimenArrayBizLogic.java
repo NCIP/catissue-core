@@ -25,8 +25,6 @@ import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
-import edu.wustl.catissuecore.domain.Quantity;
-import edu.wustl.catissuecore.domain.QuantityInMicrogram;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;

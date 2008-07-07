@@ -342,7 +342,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		while(orderItemsCollectionItr.hasNext())
 		{
 			OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItemsCollectionItr.next();
-			Quantity reqQty = new Quantity();
+			Double reqQty = new Double(0);
 			if(orderSpecimenBean.getTypeOfItem().equals("specimen"))
 			{
 				specimenOrderItem = (SpecimenOrderItem)setBioSpecimen(orderSpecimenBean);
@@ -418,11 +418,11 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				orderItem=getOrderArrayItem(orderSpecimenBean,orderItem);
 				if((orderSpecimenBean.getTypeOfItem().equals("specimenArray"))&&(orderSpecimenBean.getSpecimenClass().equals("Tissue"))&& (orderSpecimenBean.getSpecimenType().equals("unblock")))
 				{
-					reqQty.setValue(new Double("1"));
+					reqQty = new Double(1);
 				}
 				else
 				{
-					reqQty.setValue(new Double(orderSpecimenBean.getRequestedQuantity()));
+					reqQty = new Double(orderSpecimenBean.getRequestedQuantity());
 				}
 				orderItem.setRequestedQuantity(reqQty);
 				orderItem.setDescription(orderSpecimenBean.getDescription());
@@ -453,12 +453,12 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	private SpecimenOrderItem setBioSpecimen(OrderSpecimenBean orderSpecimenBean)
 	{
 		SpecimenOrderItem  specimenOrderItem = null;
-		Quantity reqQty = new Quantity();
+		Double reqQty = new Double(0);
 		
 		if (orderSpecimenBean.getIsDerived().equals("false")) // Existing specimen.
 		{
 			specimenOrderItem = setExistingSpecimenOrderItem(orderSpecimenBean);
-			reqQty.setValue(new Double(orderSpecimenBean.getRequestedQuantity()));
+			reqQty = new Double(orderSpecimenBean.getRequestedQuantity());
 			specimenOrderItem.setRequestedQuantity(reqQty);
 			specimenOrderItem.setDescription(orderSpecimenBean.getDescription());
 			specimenOrderItem.setStatus("New");
@@ -466,7 +466,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		else //Derived specimen.
 		{
 			specimenOrderItem = setDerivedSpecimenOrderItem(orderSpecimenBean);
-			reqQty.setValue(new Double(orderSpecimenBean.getRequestedQuantity()));
+			reqQty = new Double(orderSpecimenBean.getRequestedQuantity());
 			specimenOrderItem.setRequestedQuantity(reqQty);
 			specimenOrderItem.setDescription(orderSpecimenBean.getDescription());
 			specimenOrderItem.setStatus("New");
@@ -482,12 +482,12 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	private SpecimenOrderItem setPathologyCase(OrderSpecimenBean orderSpecimenBean)
 	{
 		SpecimenOrderItem  specimenOrderItem=null;
-		Quantity reqQty = new Quantity();
+		Double reqQty = new Double(0);
 		
 		if (orderSpecimenBean.getIsDerived().equals("false")) // Existing specimen.
 		{
 			specimenOrderItem = setExistingOrderItemForPathology(orderSpecimenBean);
-			reqQty.setValue(new Double(orderSpecimenBean.getRequestedQuantity()));
+			reqQty = new Double(orderSpecimenBean.getRequestedQuantity());
 			specimenOrderItem.setRequestedQuantity(reqQty);
 			specimenOrderItem.setDescription(orderSpecimenBean.getDescription());
 			specimenOrderItem.setStatus("New");
@@ -495,7 +495,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		else 
 		{
 			specimenOrderItem = setDerivedOrderItemForPathology(orderSpecimenBean);
-			reqQty.setValue(new Double(orderSpecimenBean.getRequestedQuantity()));
+			reqQty = new Double(orderSpecimenBean.getRequestedQuantity());
 			specimenOrderItem.setRequestedQuantity(reqQty);
 			specimenOrderItem.setDescription(orderSpecimenBean.getDescription());
 			specimenOrderItem.setStatus("New");

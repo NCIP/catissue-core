@@ -898,7 +898,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	/**
 	 * Returns the available quantity of a specimen.
 	 * @return The available quantity of a specimen.
-	 * @hibernate.component class="edu.wustl.catissuecore.domain.Quantity"
 	 * @see #setAvailableQuantity(Quantity)
 	 */
 	public Double getAvailableQuantity()
@@ -919,7 +918,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	/**
 	 * Returns the quantity of a specimen.
 	 * @return The quantity of a specimen.
-	 * @hibernate.component class="edu.wustl.catissuecore.domain.Quantity"
 	 * @see #setinitialQuantity(Quantity)
 	 */
 	public Double getInitialQuantity()
