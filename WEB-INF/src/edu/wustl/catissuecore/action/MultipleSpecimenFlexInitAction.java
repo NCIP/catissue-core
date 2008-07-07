@@ -11,8 +11,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.actionForm.AbstractActionForm;
 
 //import edu.wustl.common.action.SecureAction;
 
@@ -118,5 +125,28 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 			numberOfSpecimens = "1";
 		}
 		return numberOfSpecimens;
+	}
+	
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
+	 */
+	@Override
+	protected String getObjectId(AbstractActionForm form)
+	{ 
+		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
+		SpecimenCollectionGroup specimenCollectionGroup = null;
+		if(createSpecimenForm.getParentSpecimenId() != null && createSpecimenForm.getParentSpecimenId() != "")
+		{
+				Specimen specimen = Utility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+				specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
+				if (cpr!= null)
+				{
+					CollectionProtocol cp = cpr.getCollectionProtocol();
+					return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+cp.getId();
+				}
+		}
+		return null;
+		 
 	}
 }

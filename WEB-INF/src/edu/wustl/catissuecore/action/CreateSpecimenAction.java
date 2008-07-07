@@ -31,6 +31,8 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bean.ExternalIdentifierBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -39,6 +41,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -714,5 +717,29 @@ public class CreateSpecimenAction extends SecureAction
 			delExtIds="deleteExternalIdentifiers('"+(String)request.getAttribute(Constants.PAGEOF)+"');";
 		}
 		request.setAttribute("delExtIds",delExtIds);
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
+	 */
+	@Override
+	protected String getObjectId(AbstractActionForm form)
+	{ 
+		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
+		SpecimenCollectionGroup specimenCollectionGroup = null;
+		if(createSpecimenForm.getParentSpecimenId() != null && createSpecimenForm.getParentSpecimenId() != "")
+		{
+				Specimen specimen = Utility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+				specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
+				if (cpr!= null)
+				{
+					CollectionProtocol cp = cpr.getCollectionProtocol();
+					return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+cp.getId();
+				}
+		}
+		return null;
+		 
 	}
 }

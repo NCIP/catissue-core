@@ -33,19 +33,23 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
+import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.AliquotBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -1309,6 +1313,21 @@ public class AliquotAction extends SecureAction
 		request.setAttribute("createdDate",createdDate);
 		request.setAttribute("nameOfForm",nameOfForm);
 		request.setAttribute("dateFormName",dateFormName);
+	}
+  
+  /* (non-Javadoc)
+	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
+	 */
+	@Override
+	protected String getObjectId(AbstractActionForm form)
+	{
+		AliquotForm aliquotForm = (AliquotForm) form;
+		if(aliquotForm.getSpCollectionGroupId()!=0L && aliquotForm.getSpCollectionGroupId()!= -1L)
+		{
+			SpecimenCollectionGroup specimenCollectionGroup = null;
+			return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+aliquotForm.getSpCollectionGroupId();
+		}
+		return null; 
 	}
 
 }

@@ -5,7 +5,7 @@
 	<Map key="edu.wustl.catissuecore.action.SubCollectionProtocolRegistrationAction" value="REGISTRATION"/>
 	<Map key="edu.wustl.catissuecore.action.SpecimenCollectionGroupAction" value="SPECIMEN_ACCESSION"/>
 	<Map key="edu.wustl.catissuecore.action.NewSpecimenAction" value="SPECIMEN_ACCESSION"/>
-	<Map key="edu.wustl.catissuecore.action.CreateSpecimenAction" value="SPECIMEN_ACCESSION"/>	
+	<Map key="edu.wustl.catissuecore.action.CreateSpecimenAction" value="SPECIMEN_PROCESSING"/>	
 	<Map key="edu.wustl.catissuecore.action.FrozenEventParametersAction" value="SPECIMEN_PROCESSING"/>
 	<Map key="edu.wustl.catissuecore.action.CheckInCheckOutEventParametersAction" value="SPECIMEN_PROCESSING"/>
 	<Map key="edu.wustl.catissuecore.action.ReceivedEventParametersAction" value="SPECIMEN_PROCESSING"/>	
@@ -22,7 +22,7 @@
 	<Map key="edu.wustl.catissuecore.action.AliquotAction" value="SPECIMEN_PROCESSING"/>	
 	<Map key="edu.wustl.catissuecore.action.SpecimenArrayAppletAction" value="SPECIMEN_ACCESSION"/>	
 	<Map key="edu.wustl.catissuecore.action.DerivedMultipleSpecimenAddAction" value="SPECIMEN_PROCESSING"/>	
-	<Map key="edu.wustl.catissuecore.action.AddSpecimenAction" value="SPECIMEN_ACCESSION"/>	
+	<Map key="edu.wustl.catissuecore.action.AddSpecimenAction" value="SPECIMEN_PROCESSING"/>	
 	<Map key="edu.wustl.catissuecore.action.SpecimenArrayAliquotAction" value="SPECIMEN_PROCESSING"/>
 	<Map key="edu.wustl.catissuecore.action.bulkOperations.BulkTransferEventsAction" value="SPECIMEN_PROCESSING"/>
 	<Map key="edu.wustl.catissuecore.action.MultipleSpecimenFlexInitAction" value="SPECIMEN_ACCESSION"/>	
