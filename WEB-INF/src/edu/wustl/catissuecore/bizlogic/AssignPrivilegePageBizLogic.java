@@ -211,21 +211,31 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 	public List<NameValueBean> getActionList(boolean isToExcludeDisabled) throws BizLogicException
 	{     
 		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
-		List<Privilege> prvilegeList=new ArrayList<Privilege>();
+		List<Privilege> privilegeList=new ArrayList<Privilege>();
 		try {
-			prvilegeList = privilegeUtility.getPrivilegeList();
+			privilegeList = privilegeUtility.getPrivilegeList();
 		} catch (CSException e) {
 			throw new BizLogicException("Could not get List of Privilege", e);
 		}
 		List<NameValueBean> privilegeNameValueBeanList  = new ArrayList<NameValueBean>();
-		for (Privilege privilege2 : prvilegeList)
+		
+		String[] CP_Privileges = Constants.CP_Privileges;
+		List list = new ArrayList();
+		
+		for(String privilege : CP_Privileges)
 		{
-			NameValueBean privilegeNameValueBean = new NameValueBean();
-			
-			privilegeNameValueBean.setName(Utility.getDisplayLabelForUnderscore(privilege2.getName()));
-			privilegeNameValueBean.setValue(String.valueOf(privilege2.getId()));
-			privilegeNameValueBeanList.add(privilegeNameValueBean);
+			list.add(privilege);		
 		}
+		
+		for (Privilege privilege2 : privilegeList)
+		{
+			if(list.contains(privilege2.getName()))
+			{
+				NameValueBean privilegeNameValueBean = new NameValueBean(privilege2.getName(), privilege2.getId());
+				privilegeNameValueBeanList.add(privilegeNameValueBean);
+			}
+		}
+	
 		return privilegeNameValueBeanList;
 	}
 	/**
