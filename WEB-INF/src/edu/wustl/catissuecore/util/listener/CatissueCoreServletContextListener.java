@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.25 $
+ * $Name: 1.41.2.26 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -159,6 +159,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
             logger.debug("Entity Cache is initialised");
             //Stores the list of system entities into the cache.-- Vishvesh.
             AnnotationUtil.getSystemEntityList();
+            AnnotationUtil.getSpecimenAttributeCollection();
             //Stores the ids in the cache
             Long participantId = edu.wustl.catissuecore.bizlogic.AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
             catissueCoreCacheManager.addObjectToCache("participantEntityId",participantId);
