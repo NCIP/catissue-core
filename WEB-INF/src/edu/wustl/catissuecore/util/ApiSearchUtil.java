@@ -23,7 +23,6 @@ import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Password;
-import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.RequirementSpecimen;
 import edu.wustl.catissuecore.domain.Site;
