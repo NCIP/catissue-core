@@ -1274,7 +1274,6 @@ Update dyextn_abstract_metadata set NAME = 'specimenType' where IDENTIFIER = 23;
 Update path set FIRST_ENTITY_ID =1866 where PATH_ID = 27441;
 update dyextn_attribute set ENTIY_ID=1866 where IDENTIFIER=14;
 
-
 Update path set LAST_ENTITY_ID = 1866 where PATH_ID in (985265,985266);
 Update path set FIRST_ENTITY_ID = 1866 where PATH_ID in (985265,985266);
 
@@ -1286,3 +1285,27 @@ Update dyextn_attribute set ENTIY_ID = 1866 where IDENTIFIER = 1005;
 
 Update dyextn_entity set PARENT_ENTITY_ID = 373 where IDENTIFIER = 717;
 update dyextn_entity set PARENT_ENTITY_ID=(select identifier from dyextn_abstract_metadata where name like 'edu.wustl.catissuecore.domain.AbstractSpecimen') where identifier=(select identifier from dyextn_abstract_metadata where name like 'edu.wustl.catissuecore.domain.Specimen')
+
+update dyextn_database_properties set NAME='CATISSUE_DISTRIBUTION_SPEC_REQ' where NAME = 'CATISSUE_SPECIMEN_REQUIREMENT';
+
+update dyextn_role set Name='distributionSpecimenRequirementCollection', MIN_CARDINALITY=0 where identifier=831;
+
+update dyextn_role set Name='distributionProtocol', MIN_CARDINALITY=0, MAX_CARDINALITY=1 where identifier=832;
+
+update dyextn_abstract_metadata set NAME='edu.wustl.catissuecore.domain.DistributionSpecimenRequirement' where NAME='edu.wustl.catissuecore.domain.SpecimenRequirement';
+
+delete from path where FIRST_ENTITY_ID in (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.DistributionSpecimenRequirement') 
+and LAST_ENTITY_ID= (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.QuantityInMicrogram');
+
+delete from path where FIRST_ENTITY_ID in (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.DistributionSpecimenRequirement') 
+and LAST_ENTITY_ID= (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.QuantityInGram');
+
+delete from path where FIRST_ENTITY_ID in (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.DistributionSpecimenRequirement') 
+and LAST_ENTITY_ID= (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.QuantityInMilliliter');
+
+delete from path where FIRST_ENTITY_ID in (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.DistributionSpecimenRequirement') 
+and LAST_ENTITY_ID= (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.QuantityInCount');
+
+update dyextn_constraint_properties set SOURCE_ENTITY_KEY='DISTRIBUTION_PROTOCOL_ID', TARGET_ENTITY_KEY=NULL where ASSOCIATION_ID=933;
+
+update dyextn_constraint_properties set SOURCE_ENTITY_KEY=NULL, TARGET_ENTITY_KEY='DISTRIBUTION_PROTOCOL_ID' where ASSOCIATION_ID=1032;
