@@ -19,22 +19,6 @@
 
 <script type="text/javascript">
 
-
-function checkSiteSelectedAllOption()
-{
-	siteListCtrl=document.getElementById("siteIds");
-
-	if (siteListCtrl.options[ 0 ].selected)
-	{
-			for (var i = 0; i < siteListCtrl.options.length; i++)
-			{
-				siteListCtrl.options[ 0 ].selected = false;
-				siteListCtrl.options[ i+1 ].selected = true;
-			}
-	}
-}
-
-
 function handleStatus(status)
 {
 	document.forms[0].role.value='${requestScope.SELECT_OPTION_VALUE}';
@@ -596,7 +580,7 @@ function handleStatus(status)
 								</tr>
 								<tr class="td_color_F7F7F7">
 									<td colspan="3" class="buttonbg"><html:submit
-										styleClass="blue_ar_b" onclick="checkSiteSelectedAllOption()">
+										styleClass="blue_ar_b">
 										<bean:message key="buttons.submit" />
 									</html:submit> &nbsp;| <span class="cancellink"> <logic:notEqual
 										name="pageOf" value='${requestScope.pageOfSignUp}'>
