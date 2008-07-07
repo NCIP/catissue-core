@@ -664,8 +664,14 @@
 		<antcall target="CAModel_import_data" />
 		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 		<antcall target="upgrade_db_demodel_mysql" />
-		<antcall target="temp_update_metadata_for_race_mysql" />
-		
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+			<transaction src="${common.sql.dir}/modelChangesMetadata.sql" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
 	</target>
 	<target name="temp_update_metadata_for_clob_support_mysql">
 		<echo message="Upgrading MySQL Database for supporting query on clob type attributes..." />
@@ -680,19 +686,6 @@
 		</sql>
 	</target>
 	
-	<target name="temp_update_metadata_for_race_mysql">
-			<echo message="Upgrading MySQL Database for supporting query on clob type attributes..." />
-			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-				<transaction src="${mysql.sql.dir}/query/temp_update_metadata_for_race.sql" />
-				<transaction>commit;</transaction>
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-			</sql>
-		</target>
-	
 	<target name="temp_update_metadata_for_clob_support_oracle">
 		<echo message="Upgrading Oracle Database for supporting query on clob type attributes..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
@@ -705,18 +698,7 @@
 			</classpath>
 		</sql>
 		</target>
-	<target name="temp_update_metadata_for_race_oracle">
-		<echo message="Upgrading Oracle Database for supporting query on clob type attributes..." />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
-			<transaction src="${oracle.sql.dir}/query/temp_update_metadata_for_race.sql" />
-			<transaction>commit;</transaction>
-			<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-			</classpath>
-		</sql>
-		</target>
+
 	<!--Oracle Database Creation -->
 	<target name="deploy_db_oracle">
 		<echo message="Initializing Oracle Database for caTISSUECore Application..." />
@@ -764,7 +746,14 @@
 		</sql>
 		<antcall target="temp_update_metadata_for_clob_support_oracle" />
 		<antcall target="upgrade_db_demodel_oracle" />
-		<antcall target="temp_update_metadata_for_race_oracle" />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${common.sql.dir}/modelChangesMetadata.sql" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/query/dropDESequence.SQL" />
 			<transaction>commit;</transaction>
@@ -916,7 +905,6 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_db_demodel_oracle" />
-		<antcall target="temp_update_metadata_for_race_oracle" />
 	</target>
 
 	<!--Data import for CAModel -->
