@@ -41,7 +41,6 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.RequirementSpecimen;
 import edu.wustl.catissuecore.domain.Site;
@@ -53,7 +52,6 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -270,20 +268,6 @@ public class BaseTestCaseUtility {
 		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();		
 		collectionProtocolEvent.setClinicalStatus("New Diagnosis");
 		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));		
-	 
-
-		Collection specimenRequirementCollection = new HashSet();
-		SpecimenRequirement specimenRequirement = new SpecimenRequirement();
-		specimenRequirement.setSpecimenClass("Molecular");
-		specimenRequirement.setSpecimenType("DNA");
-		specimenRequirement.setTissueSite("Placenta");
-		specimenRequirement.setPathologyStatus("Malignant");
-		Quantity quantity = new Quantity();
-		quantity.setValue(new Double(10));
-		specimenRequirement.setQuantity(quantity);
-		specimenRequirementCollection.add(specimenRequirement);
-		
-//		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value"+UniqueKeyGeneratorUtil.getUniqueKey());
@@ -830,19 +814,7 @@ public class BaseTestCaseUtility {
 		return distributionSpecimenRequirement;
 	}
 	
-	public static SpecimenRequirement initSpecimenRequirement()
-	{
-		SpecimenRequirement specimenRequirement = new SpecimenRequirement();
-		specimenRequirement.setSpecimenClass("Molecular");
-		specimenRequirement.setSpecimenType("DNA");
-		specimenRequirement.setTissueSite("Placenta");
-		specimenRequirement.setPathologyStatus("Malignant");
-		Quantity quantity = new Quantity();
-		quantity.setValue(new Double(10));
-		specimenRequirement.setQuantity(quantity);
-		return specimenRequirement;
-	}
-	
+		
 	public static void updateDistributionProtocol(DistributionProtocol distributionProtocol)
 	{
 		User principalInvestigator = new User();
@@ -1292,8 +1264,7 @@ public class BaseTestCaseUtility {
           exSpOrderItem.setDescription("OrderDetails Item 1 of Order_Id ");
           exSpOrderItem.setStatus("New");           
           
-          Quantity quantity = new Quantity();
-          quantity.setValue(new Double(1));
+          Double quantity =new Double(1);
           exSpOrderItem.setRequestedQuantity(quantity);
           exSpOrderItem.setSpecimen(specimen);
                

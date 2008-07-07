@@ -10,7 +10,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.Institution;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
@@ -189,12 +188,7 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 		Collection collectionProtocolEventCollectionSet = new HashSet();
 		CollectionProtocolEvent collectionProtocolEvent = BaseTestCaseUtility.initCollectionProtocolEvent();		
 		Collection specimenRequirementCollection = new HashSet();
-		SpecimenRequirement specimenRequirement = BaseTestCaseUtility.initSpecimenRequirement();
-		specimenRequirement.setSpecimenClass("Invalid class");
-		specimenRequirementCollection.add(specimenRequirement);
-		
-	//	collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
-
+	
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
 		
@@ -223,15 +217,6 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	 
 		CollectionProtocolEvent collectionProtocolEvent = BaseTestCaseUtility.initCollectionProtocolEvent();		
 			 
-
-		Collection specimenRequirementCollection = new HashSet();
-		SpecimenRequirement specimenRequirement = BaseTestCaseUtility.initSpecimenRequirement();
-		specimenRequirement.setSpecimenClass("Molecular");
-		specimenRequirement.setSpecimenType("Invalid Type");
-		specimenRequirementCollection.add(specimenRequirement);
-		
-	///	collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
-
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
 		
@@ -262,15 +247,6 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	 
 		CollectionProtocolEvent collectionProtocolEvent = BaseTestCaseUtility.initCollectionProtocolEvent();		
 			 
-
-		Collection specimenRequirementCollection = new HashSet();
-		SpecimenRequirement specimenRequirement = BaseTestCaseUtility.initSpecimenRequirement();
-		specimenRequirement.setTissueSite("Invalid Tissue site");
-		
-		specimenRequirementCollection.add(specimenRequirement);
-		
-	//	collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
-
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
 		
@@ -300,15 +276,6 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	 
 		CollectionProtocolEvent collectionProtocolEvent = BaseTestCaseUtility.initCollectionProtocolEvent();		
 			 
-
-		Collection specimenRequirementCollection = new HashSet();
-		SpecimenRequirement specimenRequirement = BaseTestCaseUtility.initSpecimenRequirement();
-		specimenRequirement.setPathologyStatus("Invalid Pathelogical Status");
-		
-		specimenRequirementCollection.add(specimenRequirement);
-		
-	//	collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
-
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value");
 		
