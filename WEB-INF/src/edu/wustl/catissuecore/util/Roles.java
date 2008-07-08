@@ -15,4 +15,5 @@ public interface Roles extends edu.wustl.common.util.Roles
     public static final String USE_ONLY = "USE_ONLY";
     public static final String UPDATE_ONLY = "UPDATE_ONLY";
     public static final String COORDINATOR = "Coordinator";
+    public static final String SUPERVISOR = "Supervisor";
 }

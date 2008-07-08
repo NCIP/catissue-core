@@ -43,6 +43,7 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
+import edu.wustl.common.security.PrivilegeCache;
 import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.PasswordEncryptionException;
@@ -1224,16 +1225,23 @@ public class UserBizLogic extends DefaultBizLogic
 					cpIds = null;
 				}
 				else
-				{	
+				{
+					PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+					PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionDataBean.getUserName());
+					
 					for(CollectionProtocol collectionProtocol : userCpCollection)
 					{
-						cpIds.add(collectionProtocol.getId());
+						if(privilegeCache.hasPrivilege(collectionProtocol.getObjectId(), "PHI") || 
+								collectionProtocol.getPrincipalInvestigator().getLoginName().equals(sessionDataBean.getUserName()))
+						{
+							cpIds.add(collectionProtocol.getId());
+						}
 					}
-					
-					for(CollectionProtocol collectionProtocol : userColl)
+							
+					for(CollectionProtocol cp : userColl)
 					{
-						cpIds.add(collectionProtocol.getId());
-					}	
+						cpIds.add(cp.getId());
+					}
 				}
 				
 			} 
