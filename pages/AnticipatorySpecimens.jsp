@@ -5,41 +5,17 @@
 <%@ taglib uri="/WEB-INF/specimenDetails.tld" prefix="md" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.bean.GenericSpecimen"%>
-
+<%@ page language="java" isELIgnored="false" %>
 <script src="jss/script.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <html>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
-<%
-String formAction = "SubmitSpecimenCollectionProtocol.do";
-
-  String containerId;
-  String selectedContainerName ;
-  String positionDimensionOne;
-  String positionDimensionTwo;
-  String specimenClassName;
-  String cpId;
-  String functionCall;
-  
-
-if(request.getAttribute(Constants.PAGEOF) != null)
-{
-	formAction = formAction + "?pageOf="+request.getAttribute(Constants.PAGEOF);
-}
-
-%>
-	<script language="JavaScript">
-		window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
-
-		
-		//kalpana bug#6001:Reviewer-Vaishali
-		//Apply storage container name at first location to all.
-		
-		function ApplyToAll(object,type)
+<script language="JavaScript">
+	window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
+	function ApplyToAll(object,type)
 		{
-			
 			if(object.checked )
 			{
 				var fields = document.getElementsByTagName("input");
@@ -62,10 +38,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 						{
 							fields[i].value = valueToSet;
 						}
-				
 					}
 				}
-				
 			}
 		}
 
@@ -83,8 +57,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				"&pos1=" + positionDimensionOne + 
 				"&pos2=" + positionDimensionTwo +
 				"&containerId=" +containerId +
-				"&<%=Constants.CAN_HOLD_SPECIMEN_CLASS %>="+specimenClassName +
-				"&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + cpId;
+				"&${requestScope.CAN_HOLD_SPECIMEN_CLASS}="+specimenClassName +
+				"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=" + cpId;
 			
 			var storageContainer = document.getElementById(selectedContainerName).value;
 			frameUrl+="&storageContainerName="+storageContainer;
@@ -103,8 +77,6 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				var elementName = elementType + ctr + checkedSpecimen;
 
 				var chkCount= document.getElementsByName(elementName).length;
-				//alert(chkCount);
-				//alert(document.getElementsByName(elementName));
 				if (chkCount >0)
 				{
 					var element = document.getElementsByName(elementName)[0];
@@ -114,9 +86,7 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 					}
 					ctr++;
 				}
-			}
-			while(chkCount>0);
-
+			}while(chkCount>0);
 		}
 		
 		function UpdateCheckBoxStatus()
@@ -185,15 +155,15 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 </head>
 <body onload="UpdateCheckBoxStatus()">
 <script language="javascript">
-	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');	
+	${requestScope.refreshTree}
 </script>
 
 		<html:errors />
 		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-			<%=messageKey%>
+			${requestScope.messageKey}
 		</html:messages>
 		
-		<html:form action="<%=formAction%>">		
+		<html:form action="${requestScope.formAction}">		
 		<table>
 		<tr>
 				<td> &nbsp; </td>
@@ -219,49 +189,39 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			</td>
 		</tr>
 				<tr>
-
 					<td class="dataTablePrimaryLabel" height="20">
 						<bean:write name="viewSpecimenSummaryForm" property="title" />
 					</td>				
 				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
 					<script language="javascript">
-						refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');	
+						${requestScope.refreshTree}
 					</script>
 				</logic:equal>
 				</tr>
 		<logic:empty name="viewSpecimenSummaryForm" property="specimenList" >
 			<tr>
 				<td class="dataTableWhiteCenterHeader" colspan="6">  
-									No specimens to display for current action!!
-								</td>
+					No specimens to display for current action!!
+				</td>
 			</tr>		
 		</logic:empty>
 		</table>
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="specimenList" >	
-				<table summary="" cellpadding="3"
-								cellspacing="0" border="0" class="dataTable" >
-<%-- 					<md:specimenDetailsTag columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" displayOnly="false" displayStatusListName="dispStatusList" />
- --%>
+				<table summary="" cellpadding="3" cellspacing="0" border="0" 
+				class="dataTable" >
 			<md:genericSpecimenDetails columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
 			<%-- custom tag for specimen list by mandar ---  --%>					
-				  
 				</table>
 		</logic:notEmpty>
-		
-		
-			<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
-				<html:hidden property="eventId"  />
-				<html:hidden property="lastSelectedSpecimenId"  />
-				<html:hidden property="selectedSpecimenId"  />
-			</logic:notEmpty>
-				<html:hidden property="userAction" />
-				<html:hidden property="requestType" />
-				
-				
-				
-			<logic:empty name="viewSpecimenSummaryForm" property="aliquotList" >
-				
-				<logic:empty name="viewSpecimenSummaryForm" property="derivedList" >
+		<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
+			<html:hidden property="eventId"  />
+			<html:hidden property="lastSelectedSpecimenId"  />
+			<html:hidden property="selectedSpecimenId"  />
+		</logic:notEmpty>
+			<html:hidden property="userAction" />
+			<html:hidden property="requestType" />
+		<logic:empty name="viewSpecimenSummaryForm" property="aliquotList" >
+			<logic:empty name="viewSpecimenSummaryForm" property="derivedList" >
 				<table>
 				<tr> <td> <br> </td> </tr>
 					<tr>
@@ -272,11 +232,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 					<tr> <td> <br> </td> </tr>
 				</table>	
 				</logic:empty>				
-				
 			</logic:empty>
-			
 			<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
-			
 			&nbsp;
 			<table>
 				<tr>
@@ -285,13 +242,12 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 					</td>
 				</tr>
 			</table>
-			<table summary="" cellpadding="3"
-							cellspacing="0" border="0" class="dataTable" >
+			<table summary="" cellpadding="3" cellspacing="0" border="0" 
+			class="dataTable" >
 			<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
 			<%-- custom tag for specimen list by mandar --- Aliquot  --%>						
 				</table>				
 			</logic:notEmpty>
-		
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >
 		&nbsp;
 		<table>
@@ -301,11 +257,8 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 		 </td>
 		 </tr>
 		 </table>
-		    <table summary="" cellpadding="3"
-						cellspacing="0" border="0" class="dataTable" >
-		<%--
-		 	<md:specimenDetailsTag columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" displayOnly="false" displayStatusListName="dispStatusList" />
-		--%>
+		    <table summary="" cellpadding="3" cellspacing="0" border="0" 
+		    class="dataTable" >
 		<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
 			<%-- custom tag for specimen list by mandar --- Derived --%>					
 		    </table>
@@ -319,7 +272,6 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 				</td>
 				</tr>
 			</logic:equal>
-			
 			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">		
 			<tr>
 				<td>
@@ -341,7 +293,6 @@ if(request.getAttribute(Constants.PAGEOF) != null)
 			</td>
 		 </tr>
 		</logic:equal>
-		
 		</table>
 		</td>
 		</tr>

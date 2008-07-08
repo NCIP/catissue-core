@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
+import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * This class is to support the GenericSpecimenDetails tag.
@@ -55,14 +56,6 @@ public class SpecimenDetailsTagUtil
 		List <String>subSpecimenColHeaderList = new ArrayList<String>();
 		List <String>dispColumnsList = new ArrayList<String>();
 		
-//		colHeaderList.add("");	colHeaderList.add("specimen.label");	colHeaderList.add("specimen.barcode");
-//		colHeaderList.add("specimen.subType");	colHeaderList.add("anticipatorySpecimen.Quantity");
-//		colHeaderList.add("anticipatorySpecimen.Concentration"); colHeaderList.add("anticipatorySpecimen.Location");
-//		colHeaderList.add("anticipatorySpecimen.Collected");
-
-//		for(int i=0; i<8; i++)
-//		{	dispColumnsList.add(GenericSpecimenDetailsTag.COLUMN_NAMES[i]);}
-		
 		//columnHeaderList											DisplayColumn List
 		colHeaderList.add("");									dispColumnsList.add(PARENT);	
 		
@@ -91,6 +84,8 @@ public class SpecimenDetailsTagUtil
 		request.setAttribute("columnHeaderList",colHeaderList);
 		request.setAttribute("subSpecimenColHeaderList",subSpecimenColHeaderList);
 		request.setAttribute("dispColumnsList",dispColumnsList);
+		
+		setPageData(request);
 	}
  
 	public static void setSpecimenSummaryDetails(HttpServletRequest request, ViewSpecimenSummaryForm summaryForm)
@@ -174,5 +169,26 @@ public class SpecimenDetailsTagUtil
 		request.setAttribute("displayColumnListD",displayColumnListD);
 	}
 
+	private static void setPageData(HttpServletRequest request)
+	{
+		String formAction = "SubmitSpecimenCollectionProtocol.do";
+		if(request.getAttribute(Constants.PAGEOF) != null)
+		{
+			formAction = formAction + "?pageOf="+request.getAttribute(Constants.PAGEOF);
+		}
+		request.setAttribute("formAction",formAction);
+		String refreshTree = "refreshTree(\'"+Constants.CP_AND_PARTICIPANT_VIEW+"\',\'"+Constants.CP_TREE_VIEW+"\',\'"+Constants.CP_SEARCH_CP_ID+"\',\'"+Constants.CP_SEARCH_PARTICIPANT_ID+"\',\'1\');";
+		request.setAttribute("refreshTree",refreshTree);
+		request.setAttribute("CAN_HOLD_SPECIMEN_CLASS",Constants.CAN_HOLD_SPECIMEN_CLASS);
+		request.setAttribute("CAN_HOLD_COLLECTION_PROTOCOL",Constants.CAN_HOLD_COLLECTION_PROTOCOL);
 
+		//Not in use to be deleted after verification
+//		  String containerId;
+//		  String selectedContainerName ;
+//		  String positionDimensionOne;
+//		  String positionDimensionTwo;
+//		  String specimenClassName;
+//		  String cpId;
+//		  String functionCall;
+	}	
 }
