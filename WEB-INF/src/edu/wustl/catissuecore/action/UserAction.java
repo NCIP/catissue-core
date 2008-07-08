@@ -70,6 +70,7 @@ public class UserAction extends SecureAction
         final AssignPrivilegePageBizLogic apBizLogic= showAssignPrivilegePageAction.getAssignPrivilegePageBizLogic();
 		final List<NameValueBean> siteList = apBizLogic.getSiteList(false);
 		request.setAttribute(Constants.SITELIST, siteList);
+		request.setAttribute("siteListforJSP", Constants.SITELIST);
         
         
         String formName,prevPage=null,nextPage=null;

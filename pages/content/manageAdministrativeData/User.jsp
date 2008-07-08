@@ -519,11 +519,6 @@ function handleStatus(status)
 													<td width="16%" align="left" class="black_ar"><label
 														for="site"><bean:message key="user.site" /> </label></td>
 																
-								
-												<%
-													List siteList = (List) request.getAttribute(Constants.SITELIST);
-												%>	
-											
 																					
 												<td align="left">
 												<html:select
@@ -531,7 +526,7 @@ function handleStatus(status)
 													styleId="siteIds" size="5" multiple="true"
 													onmouseover="showTip(this.id)"
 													onmouseout="hideTip(this.id)">
-													<html:options collection="<%=Constants.SITELIST%>"
+													<html:options collection='${requestScope.siteListforJSP}'
 														labelProperty="name" property="value" />
 												</html:select></td>
 													
