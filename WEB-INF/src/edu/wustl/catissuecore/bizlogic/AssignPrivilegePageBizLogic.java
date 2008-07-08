@@ -231,7 +231,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 		{
 			if(list.contains(privilege2.getName()))
 			{
-				NameValueBean privilegeNameValueBean = new NameValueBean(privilege2.getName(), privilege2.getId());
+				NameValueBean privilegeNameValueBean = new NameValueBean(Utility.getDisplayLabelForUnderscore(privilege2.getName()), privilege2.getId());
 				privilegeNameValueBeanList.add(privilegeNameValueBean);
 			}
 		}
