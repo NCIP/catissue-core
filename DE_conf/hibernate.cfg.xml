@@ -61,13 +61,11 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractSpecimenCollectionGroup.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenEventParameters.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenProtocol.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenRequirement.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/DistributionSpecimenRequirement.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Container.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Password.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Distribution.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/Quantity.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenArrayContent.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ContainerType.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/CDEImpl.hbm.xml"/>
