@@ -143,7 +143,7 @@ public class DAGPanel {
 
 			CreateQueryObjectBizLogic queryBizLogic = new CreateQueryObjectBizLogic();
 			if (!strToCreateQueryObject.equalsIgnoreCase("")) {
-				ruleDetailsMap = queryBizLogic.getRuleDetailsMap(strToCreateQueryObject, entity.getAttributeCollection());
+				ruleDetailsMap = queryBizLogic.getRuleDetailsMap(strToCreateQueryObject, entity.getEntityAttributesForQuery());
 				List<AttributeInterface> attributes = (List<AttributeInterface>) ruleDetailsMap.get(AppletConstants.ATTRIBUTES);
 				List<String> attributeOperators = (List<String>) ruleDetailsMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
 				List<List<String>> conditionValues = (List<List<String>>) ruleDetailsMap.get(AppletConstants.ATTR_VALUES);
@@ -544,7 +544,7 @@ public class DAGPanel {
 		 * Checking if source node has a Date attribute
 		 */
 		IQueryEntity sourceEntity = expression.getQueryEntity();
-		Collection<AttributeInterface> sourceAttributeCollection = sourceEntity.getDynamicExtensionsEntity().getAttributeCollection();
+		Collection<AttributeInterface> sourceAttributeCollection = sourceEntity.getDynamicExtensionsEntity().getEntityAttributesForQuery();
 		
 		for(AttributeInterface attribute : sourceAttributeCollection)
 		{
