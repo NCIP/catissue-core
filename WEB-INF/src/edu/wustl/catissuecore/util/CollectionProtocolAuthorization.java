@@ -126,7 +126,22 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		}
 		collectionProtocol.getSitecollection().clear();
 		collectionProtocol.getSitecollection().addAll(siteCollection);
-		collectionProtocol.getUserCollection().addAll(userCollection);
+		for (User user : userCollection)
+		{
+			boolean isPresent = false;
+			for (User setUser : collectionProtocol.getUserCollection())
+			{
+				if (user.getId().equals(setUser.getId()))
+				{
+					isPresent = true;
+				}
+			}
+			if (!isPresent)
+			{
+				collectionProtocol.getUserCollection().add(user);
+			}
+		} 
+		  
 		
 	}
 
