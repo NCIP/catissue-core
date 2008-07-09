@@ -1135,10 +1135,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 
 		String[] colCondition = {"=", "="};
-		String[] val = new String[2];
-		val[0] = idOfSelectedRadioButton;
-		val[1] = cp_id;
-		List collProtRegObj = collectionProtocolRegistrationBizLogic.retrieve(CollectionProtocolRegistration.class.getName(), colName, colCondition,
+		Long[] val = {Long.valueOf(idOfSelectedRadioButton),Long.valueOf(cp_id)};
+
+		List collProtRegObj = collectionProtocolRegistrationBizLogic
+		.retrieve( CollectionProtocolRegistration.class.getName(), colName, colCondition,
 				val, null);
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) collProtRegObj.get(0);
 		return collectionProtocolRegistration;

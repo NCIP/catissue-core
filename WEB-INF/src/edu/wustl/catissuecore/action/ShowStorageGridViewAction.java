@@ -64,6 +64,10 @@ public class ShowStorageGridViewAction  extends BaseAction
             throws Exception
     {
         String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+        if (id==null)
+        {
+        	id="0";
+        }
         String contentOfContainer = null;
         // To get privilegeCache through 
 		// Singleton instance of PrivilegeManager, requires User LoginName
@@ -209,7 +213,7 @@ public class ShowStorageGridViewAction  extends BaseAction
 			String[] selectColumnName = {"id","specimenPosition.positionDimensionOne", "specimenPosition.positionDimensionTwo","label"};
 			String[] whereColumnName = {"specimenPosition.storageContainer.id"};
             String[] whereColumnCondition = {"="};
-			Object[] whereColumnValue = {id};
+			Object[] whereColumnValue = {Long.valueOf(id)};
             String joinCondition = Constants.AND_JOIN_CONDITION;
 			
             List list = null;
