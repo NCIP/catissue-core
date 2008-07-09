@@ -467,7 +467,7 @@ UPDATE CATISSUE_SEARCH_DISPLAY_DATA set RELATIONSHIP_ID = 137 where RELATIONSHIP
 /** MSR changes : Start **/
 
 ALTER TABLE CATISSUE_USER ADD IS_ADMIN NUMBER(1,0) DEFAULT 0;
-UPDATE CATISSUE_USER SET IS_ADMIN=1 WHERE IDENTIFIER=1;
+update catissue_user set Is_admin = 1 where identifier in ( select Identifier from Catissue_user where csm_user_id in (select USER_ID from CSM_USER_GROUP where GROUP_ID = 1));
 
 DELETE FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID LIKE '%ACTION%';
 
