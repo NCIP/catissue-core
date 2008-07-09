@@ -135,7 +135,7 @@ function updateCPTree()
 							width="18" height="18" align="absmiddle"></td>
 						<td align="left" valign="top" class="black_ar"><label
 							for="protocolCoordinatorIds"><bean:message
-							key="collectionprotocol.protocolcoordinator" /></label></td>
+							key="user.role" /></label></td>
 						<td align="left" valign="top" class="black_ar"><select
 							class="formFieldSized18" id="roleIds"
 							onchange="getActionsForThisRole(this)"
@@ -160,7 +160,7 @@ function updateCPTree()
 							src="images/uIEnhancementImages/number_4.gif" alt="Number 4"
 							width="18" height="18" align="absmiddle"></td>
 						<td align="left" valign="top" class="black_ar"><bean:message
-							key="Action.header" /></td>
+							key="app.Privileges" /></td>
 						<td><select class="formFieldSized18" id="actionIds" size="4"
 							multiple="multiple">
 							<%
