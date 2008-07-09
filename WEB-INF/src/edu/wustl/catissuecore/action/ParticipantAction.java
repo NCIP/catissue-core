@@ -48,6 +48,8 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.AbstractDAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -618,9 +620,48 @@ public class ParticipantAction extends SecureAction
 	protected String getObjectId(AbstractActionForm form)
 	{
 		ParticipantForm participantForm = (ParticipantForm)form;
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		
 		if(participantForm.getCpId()!=0L && participantForm.getCpId()!= -1L) 
 		   return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+participantForm.getCpId();
-		else
+		
+		else if (participantForm.getCpId() == -1L && participantForm.getId() != 0L)
+		{
+			try
+			{
+				StringBuffer sb = new StringBuffer();
+				Participant participant;
+				dao.openSession(null);
+			
+				participant = (Participant) dao.retrieve(Participant.class.getName(), participantForm.getId());
+				 
+				Collection<CollectionProtocolRegistration> collection = participant.getCollectionProtocolRegistrationCollection();
+				
+				if (collection != null && !collection.isEmpty())
+				{
+					sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
+					for (CollectionProtocolRegistration cpr : collection)
+					{
+						sb.append("_").append(cpr.getCollectionProtocol().getId());
+					}
+				}
+
+				return sb.toString();
+			}
+			catch (Exception e) {
+				return null;
+			}
+			finally
+			{
+				try {
+					dao.closeSession();
+				} catch (DAOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		else 
 		   return null;
 		 
 	}
