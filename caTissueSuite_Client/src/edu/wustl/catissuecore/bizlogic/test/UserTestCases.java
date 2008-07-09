@@ -35,6 +35,8 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			 assertFalse("could not add object", true);
 		 }
 	 }
+	
+	/*
 	 public void testAddSupervisor()
 	 {
 		 try{
@@ -196,7 +198,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			 assertFalse("could not add object", true);
 		 }
 	 } 
-		
+	*/	
 	
 	public void testSearchUser()
     {
@@ -428,7 +430,8 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			 
 		 }
 	 }
-	
+
+	/*
 	public void testAddUserWithNullRoleId()
 	 {
 		 try
@@ -449,6 +452,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 			 
 		 }
 	 }  
+	*/
 	
 	public void testAddUserWithInvalidPhoneNumber()
 	{
