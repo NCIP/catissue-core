@@ -1423,7 +1423,8 @@ PUBLIC
 			<forward name="pageOfCollectionProtocol" path="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
 			<forward name="pageOfCollectionProtocolQuery" path=".catissuecore.collectionProtocolEditDef" />
 			<forward name="failure" path=".catissuecore.collectionProtocolDef" />
-			<forward name="access_denied" path="/ManageAdministrativeData.do" />
+			<!-- forward name="access_denied" path="/ManageAdministrativeData.do" /> -->
+			<forward name="access_denied" path="/ManageBioSpecimenAccessDeniedCPBased.do" />
 		</action>
         
         <action path="/OpenCollectionProtocol"
