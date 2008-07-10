@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
@@ -348,19 +349,28 @@ public class ParticipantAction extends SecureAction
 		//		.getBizLogic(Constants.PARTICIPANT_FORM_ID);
 
 		//Sets the Site list of corresponding type.
+		SessionDataBean sessionDataBean = getSessionData(request);
+		List siteList = new ArrayList();
 		String sourceObjectName = Site.class.getName();
 		String[] displayNameFields = {"name"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
-		List siteList = participantBizlogic.getList(sourceObjectName, displayNameFields, valueField, true);
+		siteList = participantBizlogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.SITELIST, siteList);
 		
+		List list = new ArrayList();
+		if (sessionDataBean.isAdmin())
+		{
 		//Set the collection protocol title list
 		String cpSourceObjectName = CollectionProtocol.class.getName();
 		String[] cpDisplayNameFields = {"shortTitle"};
 		String cpValueField = Constants.SYSTEM_IDENTIFIER;
-		List list = participantBizlogic.getList(cpSourceObjectName, cpDisplayNameFields, cpValueField, true);
+		list = participantBizlogic.getList(cpSourceObjectName, cpDisplayNameFields, cpValueField, true);
+		}
+		else 
+		{
+			list = participantBizlogic.getCPForUserWithRegistrationAcess(sessionDataBean.getUserId());
+		}
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
-		
 		//report id from session
 		Long reportIdFormSession=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);
 		// set associated identified report id

@@ -22,29 +22,35 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.ehcache.CacheException;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.UserNotAuthenticatedException;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.LookupLogic;
+import edu.wustl.common.security.PrivilegeCache;
+import edu.wustl.common.security.PrivilegeManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -1084,5 +1090,45 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	{
 		List list = dao.executeQuery(hql, null, false, null);
 		return list;
+	}
+	
+	public List getCPForUserWithRegistrationAcess(long userId) throws BizLogicException
+	{
+		List<NameValueBean> cpList = new ArrayList<NameValueBean>(); 
+		cpList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		try {
+			dao.openSession(null);
+			User user = (User) dao.retrieve(User.class.getName(),userId);
+			Collection <CollectionProtocol> cpCollection = user.getUserCollectionProtocolCollection();
+			if (cpCollection != null && !cpCollection.isEmpty())
+			{
+				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+				PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
+				for (CollectionProtocol cp : cpCollection)
+				{
+					StringBuffer sb = new StringBuffer();
+					sb.append(CollectionProtocol.class.getName()).append("_").append(cp.getId());
+					boolean hasPrivilege = privilegeCache.hasPrivilege(sb.toString(), Permissions.REGISTRATION);
+					if (hasPrivilege)
+					{
+						cpList.add(new NameValueBean(cp.getShortTitle(),cp.getId()));
+					}
+					
+				}
+			}
+		} catch (DAOException e) {
+			throw new BizLogicException("Couldn't get CP for user", e);
+		}
+		finally
+		{
+			try {
+				dao.closeSession();
+			} catch (DAOException e) {
+				throw new BizLogicException("Couldn't get CP for user", e);
+			}
+		}
+		
+		return cpList;
 	}
 }
