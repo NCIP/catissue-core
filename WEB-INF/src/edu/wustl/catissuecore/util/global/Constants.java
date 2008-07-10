@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
+import edu.wustl.common.util.Permissions;
 
  
 /**
@@ -2353,6 +2354,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CART_ATTRIBUTE_LIST = "cartAttributeList";
 	public static final String ADD_SPECIMEN_TO_CART="addSpecimenToCart";
 	
-	public static final String[] CP_Privileges ={"REGISTRATION","SPECIMEN_ACCESSION","SPECIMEN_PROCESSING","PHI"}; 												
+	public static final String[] CP_Privileges ={Permissions.REGISTRATION,Permissions.SPECIMEN_ACCESSION,Permissions.SPECIMEN_PROCESSING,Permissions.PHI}; 												
 }
 	

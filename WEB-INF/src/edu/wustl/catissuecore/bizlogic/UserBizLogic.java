@@ -49,6 +49,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.PasswordEncryptionException;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -1231,7 +1232,7 @@ public class UserBizLogic extends DefaultBizLogic
 					
 					for(CollectionProtocol collectionProtocol : userCpCollection)
 					{
-						if(privilegeCache.hasPrivilege(collectionProtocol.getObjectId(), "PHI") || 
+						if(privilegeCache.hasPrivilege(collectionProtocol.getObjectId(), Permissions.PHI) || 
 								collectionProtocol.getPrincipalInvestigator().getLoginName().equals(sessionDataBean.getUserName()))
 						{
 							cpIds.add(collectionProtocol.getId());
