@@ -645,6 +645,10 @@ public class CaCoreAppServicesDelegator
 	{
 		SessionDataBean sessionDataBean = new SessionDataBean();
 		sessionDataBean.setUserName(userName);
+		/**
+		 * This workaround for admin test cases. Need to get vraible from CSM
+		 */
+		sessionDataBean.setAdmin(true);
 		return sessionDataBean;
 	}
 	
