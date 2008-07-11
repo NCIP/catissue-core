@@ -1,22 +1,25 @@
 /*
- * $Name: 1.41.2.27 $
- * 
+ * $Name: 1.41.2.28 $
+ *
  * */
 package edu.wustl.catissuecore.util.listener;
 
 import java.io.File;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.sql.DataSource;
 
 import net.sf.ehcache.CacheException;
-import edu.wustl.cab2b.server.cache.EntityCache;
+import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -57,15 +60,20 @@ import edu.wustl.common.util.logger.Logger;
 
 
 /**
- * 
+ *
  * @author aarti_sharma
- * 
+ *
  * */
 public class CatissueCoreServletContextListener implements ServletContextListener
 {
-    
-	private static org.apache.log4j.Logger logger =Logger.getLogger(CatissueCoreServletContextListener.class);  
-    
+
+	private static org.apache.log4j.Logger logger =Logger.getLogger(CatissueCoreServletContextListener.class);
+
+	/**
+	 * DATASOURCE_JNDI_NAME.
+	 */
+	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
+
 	/* (non-Javadoc)
 	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
 	 */
@@ -90,7 +98,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	    	LabelAndBarcodeGeneratorInitializer.init();
 	        initCatissueCache();
 			initEntityCache();
-			
+
 			edu.wustl.common.querysuite.security.utility.Utility.initializeMap();
 //			initTitliIndex();
 			edu.wustl.common.querysuite.security.utility.Utility.setReadDeniedAndEntitySqlMap();
@@ -100,7 +108,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
     	{
     		logger.error("Application failed to initialize");
     		throw new RuntimeException( e.getLocalizedMessage(), e);
-    		
+
     	}
     }
 
@@ -113,7 +121,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
     	XMLPropertyHandler.init(path);
     	File propetiesDirPath = new File(path);
     	Variables.propertiesDirPath = propetiesDirPath.getParent();
-    	
+
         Variables.applicationName = ApplicationProperties.getValue("app.name");
         Variables.applicationVersion = ApplicationProperties.getValue("app.version");
 		int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
@@ -121,23 +129,23 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void initTitliIndex()
 	{
 //		try
 //		{
 //			TitliInterface titli = Titli.getInstance();
-//			
+//
 //			String dbName = titli.getDatabases().keySet().toArray(new String[0])[0];
-//			
+//
 //			File dbIndexLocation = IndexUtility.getIndexDirectoryForDatabase(dbName);
-//			
+//
 //			if(!dbIndexLocation.exists())
 //			{
 //				titli.index();
 //			}
-//				
+//
 //		}
 //		catch (TitliException e)
 //		{
@@ -147,13 +155,18 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void initEntityCache()
 	{
 		try
 		{
-            EntityCache entityCache = EntityCache.getInstance();
+            //Added for initializing PathFinder and EntityCache
+			InitialContext ctx = new InitialContext();
+	        DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
+	        Connection conn = ds.getConnection();
+			PathFinder.getInstance(conn);
+
             logger.debug("Entity Cache is initialised");
             CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
             logger.debug("Entity Cache is initialised");
@@ -312,7 +325,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
                 new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
         protectionGroupsForObjectTypes.put(SpecimenCharacteristics.class.getName(),
                 new String[] {ProtectionGroups.PUBLIC_DATA_GROUP});
-        
+
         Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
 		.putAll(protectionGroupsForObjectTypes);
 
