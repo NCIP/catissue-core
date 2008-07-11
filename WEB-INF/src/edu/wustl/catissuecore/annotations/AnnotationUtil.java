@@ -56,23 +56,6 @@ public class AnnotationUtil
      * @throws DataTypeFactoryInitializationException on Exception
      */
     public static Map map = new HashMap();
-
-    /**
-     * This is workaround of using DE PAI to add specimen in MyList from specimen page
-     */
-    private static Collection<AttributeInterface> specimenAttributeCollection;
-    
-    public final static Collection<AttributeInterface> getSpecimenAttributeCollection() throws DynamicExtensionsSystemException
-    {
-		if(specimenAttributeCollection==null)
-		{
-			EntityManager entityManager=(EntityManager) EntityManager.getInstance();
-			EntityInterface entity=(EntityInterface) entityManager.getEntityByName(new Specimen().getClass().getName());
-			specimenAttributeCollection=((Entity) entity).getAttributeCollection();
-		}
-		return specimenAttributeCollection;
-
-    }
     
     public final List<NameValueBean> populateStaticEntityList(
             String xmlFileName, String displayNam)
