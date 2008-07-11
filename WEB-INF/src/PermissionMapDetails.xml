@@ -41,5 +41,17 @@
 	<Map key="edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction" value="GENERAL_ADMINISTRATION"/>
 	<Map key="edu.wustl.catissuecore.action.ConflictViewAction" value="GENERAL_ADMINISTRATION"/>
 	<Map key="edu.wustl.catissuecore.action.DomainObjectListAction" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_Participant" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_User" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_Institution" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_Department" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_CancerResearchGroup" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_Site" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_StorageContainer" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_SpecimenArrayType" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_Biohazard" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_CollectionProtocol" value="GENERAL_ADMINISTRATION"/>
+	<Map key="edu.wustl.common.action.SimpleQueryInterfaceAction_DistributionProtocol" value="GENERAL_ADMINISTRATION"/>
 </MapNameAndValues>
 
