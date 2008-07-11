@@ -79,10 +79,6 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			
 			//19May08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
-			
-			//19May08 : Mandar : For GenericSpecimen
-			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
-			
 			if(request.getAttribute("printflag")!=null && request.getAttribute("printflag").equals("1"))
 			{
 				HashMap forwardToPrintMap = new HashMap();
@@ -100,6 +96,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		}
 		catch(Exception exception)
 		{
+			//11July08 : Mandar : For GenericSpecimen
+			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
+
 			exception.printStackTrace();
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(

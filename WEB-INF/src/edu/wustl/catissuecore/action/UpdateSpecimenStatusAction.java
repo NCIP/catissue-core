@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
+import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -42,9 +43,9 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		try{
-			ViewSpecimenSummaryForm specimenSummaryForm =
+		ViewSpecimenSummaryForm specimenSummaryForm =
 			(ViewSpecimenSummaryForm)form;
+		try{
 			String eventId = specimenSummaryForm.getEventId();
 			
 			HttpSession session = request.getSession();
@@ -58,7 +59,10 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			
 			//bizLogic.updaupdateAnticipatorySpecimens(specimenDomainCollection, sessionDataBean);
 			bizLogic.update(specimenDomainCollection,specimenDomainCollection,Constants.HIBERNATE_DAO,sessionDataBean);
-			Object obj = session.getAttribute("SCGFORM");			
+			Object obj = session.getAttribute("SCGFORM");		
+
+			//11July08 : Mandar : For GenericSpecimen
+			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
 			if(specimenSummaryForm.getPrintCheckbox()!=null && specimenSummaryForm.getPrintCheckbox().equals("true") )
 			{
 				//By Falguni Sachde
@@ -78,14 +82,15 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 					request.setAttribute("AntiSpecimen","1");
 					return mapping.findForward("printAnticipatorySpecimens");
 				}
-				
-				
 			}
 			
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch(Exception exception)
 		{
+			//11July08 : Mandar : For GenericSpecimen
+			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm);
+
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 					"errors.item",exception.getMessage()));
