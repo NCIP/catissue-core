@@ -148,7 +148,7 @@ public class ReportLoader
 		Logger.out.info("Creating New Specimen Collection Group");
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		scg.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
+		scg.setCollectionStatus(Constants.COMPLETE);
 		scg.setClinicalDiagnosis(Constants.NOT_SPECIFIED);
 		scg.setClinicalStatus(Constants.NOT_SPECIFIED);
 		scg.setSpecimenCollectionSite(site); 
