@@ -221,7 +221,7 @@ public class AnnotationUtil
 		{
 			return true;
 		}
-	
+
 		return false;
 	}
 
@@ -241,7 +241,7 @@ public class AnnotationUtil
 			PathObject pathObject = new PathObject();
 			pathObject.setSourceEntity(staticEntity);
 			pathObject.setTargetEntity(dynamicEntity);
-	
+
 			if (processedPathList.contains(pathObject))
 			{
 				return;
@@ -250,7 +250,7 @@ public class AnnotationUtil
 			{
 				processedPathList.add(pathObject);
 			}
-	
+
 			AnnotationUtil.addPathsForQuery(staticEntity.getId(), dynamicEntity.getId(),staticEntityId, associationId);
 		}
 
@@ -281,16 +281,21 @@ public class AnnotationUtil
 			EntityInterface staticEntity) throws BizLogicException
 	{
 		Long start = new Long(System.currentTimeMillis());
-		Set<EntityInterface> entitySet = new HashSet<EntityInterface>();
-		entitySet.add(dynamicEntity);
-		entitySet.add(staticEntity);
-		DynamicExtensionsUtility.getAssociatedEntities(dynamicEntity, entitySet);
+
+//      Commented the code as this is not required since cache is refreshed using refreshCache.
+
+//		Set<EntityInterface> entitySet = new HashSet<EntityInterface>();
+//		entitySet.add(dynamicEntity);
+//		entitySet.add(staticEntity);
+//		DynamicExtensionsUtility.getAssociatedEntities(dynamicEntity, entitySet);
 		if (!isEntityFromXmi)
 		{
-			for (EntityInterface entity : entitySet)
-			{
-				EntityCache.getInstance().addEntityToCache(entity);
-			}
+//			Commented the code as this is not required since cache is refreshed using refreshCache.
+
+//			for (EntityInterface entity : entitySet)
+//			{
+//				EntityCache.getInstance().addEntityToCache(entity);
+//			}
 			//EntityInterface cachedStaticEntityInterfaceEntityCache.getInstance().getEntityById(staticEntityId);
 			Connection conn = null;
 			try
@@ -299,7 +304,7 @@ public class AnnotationUtil
 				String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 		        DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
 		        conn = ds.getConnection();
-				PathFinder.getInstance(conn).refreshCache(conn,true);
+				PathFinder.getInstance().refreshCache(conn,true);
 			}
 			catch (Exception e)
 			{
@@ -319,7 +324,7 @@ public class AnnotationUtil
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} 
+				}
 				catch (SQLException e)
 				{
 					// TODO Auto-generated catch block
@@ -346,7 +351,7 @@ public class AnnotationUtil
 		cp.setName(dynamicEntity.getTableProperties().getName());
 		cp.setTargetEntityKey("DYEXTN_AS_" + staticEntity.getId().toString() + "_"
 		+ dynamicEntity.getId().toString());
-		cp.setSourceEntityKey(null);		
+		cp.setSourceEntityKey(null);
 		return cp;
 	}
 
