@@ -135,7 +135,6 @@
 		<!--Kapil V 1.0.1 Changes-->
 		<copy file="login-config.xml" todir="${temp.dir}" overwrite="true" />
 		<copy file="properties-service.xml" todir="${temp.dir}" overwrite="true" />
-		<copy file="log4j.xml" todir="${temp.dir}" overwrite="true" />
 	</target>
 
 	<!--Modify Configuration such as Session Timeout, Admin details and JBoss server port-->
