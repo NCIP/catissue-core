@@ -160,11 +160,11 @@
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
-				<pathelement location="C:\apache-ant-1.6.5\lib\ant.jar"/>
+				<pathelement location="${ant.home}\lib\ant.jar"/>
 			</classpath>
 		</javac>
-		<copy todir="${target.dir}">
-			<fileset dir="${src.dir}">
+		<copy todir="${target.dir}" overwrite="true">
+			<fileset dir="${src.dir}" >
 				<include name="**/*.properties" />
 				<include name="**/*.xml" />
 				<include name="**/*.hbm.xml" />
@@ -273,8 +273,14 @@
 	     	<attribute name="caCore-Version" value="${cacore.version}"/>
 	     	<attribute name="Build-on" value="${TODAY}"/>
 	    </manifest>
+		<replace dir="${base.dir}/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+			<include name ="log4j.properties"/>
+			<replacefilter token="@@jbosshome@@" value="${jboss.server.url}"/>
+		</replace>
+
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml" 
 			duplicate="preserve" manifest="${base.dir}/MANIFEST.MF" >
+			
 			<fileset dir="${base.dir}">
 				<!--include name="Applet/**" / -->
 				<include name="css/**" />
@@ -298,6 +304,7 @@
 				<exclude name="**/WEB-INF/lib/*.zip" />
 				<exclude name="**/WEB-INF/lib/ant*.jar" />
 				<exclude name="**/WEB-INF/lib/junit*.jar" />
+				<exclude name="**/WEB-INF/lib/dom4*.jar" />
 				<exclude name="**/*servlet.jar*" />
 				
 				<exclude name="**/*hibernate2.jar*" />
@@ -326,6 +333,7 @@
 				<exclude name="**/WEB-INF/web.xml" />
 				<exclude name="**/WEB-INF/classes/edu/wustl/catissuecore/domain/**" />
 				<exclude name="**/WEB-INF/lib/csmapi.jar" />
+				<exclude name="**/WEB-INF/lib/dom4*.jar" />
 				<exclude name="**/META-INF/**" />
 				<exclude name="Happy.jsp" />
 				<exclude name="Criteria.jsp" />
