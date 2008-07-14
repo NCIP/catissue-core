@@ -61,7 +61,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author vijay_pande
  *
  */
-public abstract class QueryModuleUtil
+public  class QueryModuleUtil
 {
 
 	/**
@@ -160,7 +160,7 @@ public abstract class QueryModuleUtil
 		int index = -1;
 		if (indexStr!= null && !indexStr.equalsIgnoreCase("null"))
 		{
-			index = new Integer(indexStr);
+			index = Integer.parseInt(indexStr);
 		}
 		String idColumnName = columnNames;
 		if (columnNames.indexOf(",") != -1)
@@ -300,12 +300,16 @@ public abstract class QueryModuleUtil
 	public static OutputTreeDataNode getRootNodeOfTree(
 			List<OutputTreeDataNode> rootOutputTreeNodeList, String treeNo)
 	{
+		OutputTreeDataNode treeNode = null;
 		for (OutputTreeDataNode node : rootOutputTreeNodeList)
 		{
-			if (node.getTreeNo() == new Integer(treeNo).intValue())
-				return node;
+			if (node.getTreeNo() == Integer.valueOf(treeNo))
+			{
+				treeNode = node;
+				break;
+			}
 		}
-		return null;
+		return treeNode;
 	}
 
 	/**
@@ -476,7 +480,6 @@ public abstract class QueryModuleUtil
 				}
 				int recordsPerPage = 0;
 				String recordsPerPageSessionValue = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
-				System.out.println(recordsPerPageSessionValue);
 				if (recordsPerPageSessionValue == null)
 				{
 					recordsPerPage = Integer.parseInt(XMLPropertyHandler
@@ -484,10 +487,10 @@ public abstract class QueryModuleUtil
 					session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage + "");
 				}
 				else
-					recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
+					recordsPerPage = Integer.valueOf(recordsPerPageSessionValue);
 				session.setAttribute(Constants.TREE_ROOTS, rootOutputTreeNodeList);
 				
-				Long noOfTrees = new Long(rootOutputTreeNodeList.size());
+				Long noOfTrees = Long.valueOf(rootOutputTreeNodeList.size());
 				session.setAttribute(Constants.NO_OF_TREES, noOfTrees);
 				
 				OutputTreeDataNode node = rootOutputTreeNodeList.get(0);
@@ -600,7 +603,8 @@ public abstract class QueryModuleUtil
 	 * @param isQueryChanged
 	 * @return
 	 */
-	private static SelectedColumnsMetadata getAppropriateSelectedColumnMetadata(IQuery query, SelectedColumnsMetadata selectedColumnsMetadata)
+	private static SelectedColumnsMetadata getAppropriateSelectedColumnMetadata
+	(IQuery query, SelectedColumnsMetadata selectedColumnsMetadata)
 	{
 		boolean isQueryChanged = false;
 		if(query != null && selectedColumnsMetadata != null)
@@ -624,7 +628,9 @@ public abstract class QueryModuleUtil
 					break;
 				}
 			}
+			
 		}
+		
 		if(isQueryChanged || selectedColumnsMetadata == null)
 		{
 			selectedColumnsMetadata = new SelectedColumnsMetadata();
@@ -702,9 +708,9 @@ public abstract class QueryModuleUtil
 	  */
 	 public static String executeQuery(HttpServletRequest request, IQuery parameterizedQuery)
 	 {
-		 String errorMessage = null;
+		 String errorMessage;
 		 boolean isRulePresentInDag = checkIfRulePresentInDag(parameterizedQuery) ;
-		 QueryModuleError errorCode = null;
+		 QueryModuleError errorCode;
 		 if (isRulePresentInDag)
 		 {
 			 errorCode = searchQuery(request , parameterizedQuery,null);
@@ -729,8 +735,12 @@ public abstract class QueryModuleUtil
 			 case DAO_EXCEPTION :
 			 case CLASS_NOT_FOUND :
 				 errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+				 break;
 			 case RESULTS_MORE_THAN_LIMIT :
 				 errorMessage = Constants.TREE_NODE_LIMIT_EXCEEDED_RECORDS;
+				 break;
+			default:
+				 errorMessage= null;
 		 }
 		 return errorMessage;
 	 }

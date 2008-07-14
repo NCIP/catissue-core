@@ -16,44 +16,58 @@ import edu.wustl.common.action.BaseAction;
 
 public class DefineEventsAction extends BaseAction
 {
+	/** (non-Javadoc)
+	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
-		CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form;
-		CollectionProtocolBean collectionProtocolBean=null;
+		CollectionProtocolForm cpForm = (CollectionProtocolForm)form;
+
 		String pageOf=request.getParameter(Constants.PAGEOF);
 		String operation=request.getParameter("operation");
 		request.setAttribute("operation", operation);
 		String invokeFunction=request.getParameter("invokeFunction");
 		request.setAttribute("invokeFunction", invokeFunction);
 		HttpSession session = request.getSession();
-		if(session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN)!=null)
+		
+		CollectionProtocolBean cpBean = (CollectionProtocolBean)
+				session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+
+		if(cpBean == null)
 		{
-			collectionProtocolBean = (CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+			cpBean = new CollectionProtocolBean();
 		}
-		else
-		{	
-			collectionProtocolBean = new CollectionProtocolBean();
-		}
-		if(collectionProtocolForm.getShortTitle()!=null)
+		if(cpForm.getShortTitle()!=null)
 		{
-			collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocolForm.getPrincipalInvestigatorId());
-			collectionProtocolBean.setProtocolCoordinatorIds(collectionProtocolForm.getProtocolCoordinatorIds());
-			collectionProtocolBean.setTitle(collectionProtocolForm.getTitle());
-			collectionProtocolBean.setShortTitle(collectionProtocolForm.getShortTitle());
-			collectionProtocolBean.setStartDate(collectionProtocolForm.getStartDate());
-			collectionProtocolBean.setConsentWaived(collectionProtocolForm.isConsentWaived());
-			collectionProtocolBean.setEnrollment(collectionProtocolForm.getEnrollment());
-			collectionProtocolBean.setDescriptionURL(collectionProtocolForm.getDescriptionURL());
-			collectionProtocolBean.setIrbID(collectionProtocolForm.getIrbID());
-			collectionProtocolBean.setActivityStatus(collectionProtocolForm.getActivityStatus());
-			collectionProtocolBean.setAliqoutInSameContainer(collectionProtocolForm.isAliqoutInSameContainer());
-			//For Consent Tab
-			collectionProtocolBean.setConsentTierCounter(collectionProtocolForm.getConsentTierCounter());
-			collectionProtocolBean.setConsentValues(collectionProtocolForm.getConsentValues());
-			collectionProtocolBean.setUnsignedConsentURLName(collectionProtocolForm.getUnsignedConsentURLName());
+			populateCollectionProtocolBean(cpForm, cpBean);
 		}
-		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN, collectionProtocolBean);
-		return (mapping.findForward(pageOf));
+		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN, cpBean);
+		return mapping.findForward(pageOf);
+	}
+
+	/**
+	 * @param cpForm a collection protocol form to be used to
+	 * populate collection protocol bean.
+	 * @param cpBean collection protocol bean to be populated.
+	 */
+	private void populateCollectionProtocolBean(final CollectionProtocolForm cpForm,
+			CollectionProtocolBean cpBean)
+	{
+		cpBean.setPrincipalInvestigatorId(cpForm.getPrincipalInvestigatorId());
+		cpBean.setProtocolCoordinatorIds(cpForm.getProtocolCoordinatorIds());
+		cpBean.setTitle(cpForm.getTitle());
+		cpBean.setShortTitle(cpForm.getShortTitle());
+		cpBean.setStartDate(cpForm.getStartDate());
+		cpBean.setConsentWaived(cpForm.isConsentWaived());
+		cpBean.setEnrollment(cpForm.getEnrollment());
+		cpBean.setDescriptionURL(cpForm.getDescriptionURL());
+		cpBean.setIrbID(cpForm.getIrbID());
+		cpBean.setActivityStatus(cpForm.getActivityStatus());
+		cpBean.setAliqoutInSameContainer(cpForm.isAliqoutInSameContainer());
+		//For Consent Tab
+		cpBean.setConsentTierCounter(cpForm.getConsentTierCounter());
+		cpBean.setConsentValues(cpForm.getConsentValues());
+		cpBean.setUnsignedConsentURLName(cpForm.getUnsignedConsentURLName());
 	}
 }
