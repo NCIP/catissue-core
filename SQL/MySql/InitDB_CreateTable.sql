@@ -17,7 +17,7 @@ CREATE TABLE CATISSUE_QUERY_TABLE_DATA
       DISPLAY_NAME varchar(50),
       ALIAS_NAME varchar(50),
       PRIVILEGE_ID int(1),
-      FOR_SQI bit,                                                                        
+      FOR_SQI tinyint(1) default NULL,                                                                 
       primary key (TABLE_ID)
 );
 

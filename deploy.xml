@@ -29,7 +29,7 @@
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
 
-	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar" />
+	<property name="mysql.lib" value="mysql-connector-java-5.0.8-bin.jar" />
 	<property name="oracle.lib" value="oracleDriver.jar" />
 
 	<!-- Check for required properties -->
@@ -438,7 +438,7 @@
 			<include name="jboss-client.jar" /> 
 			<include name="junit-3.8.1.jar" /> 
 			<include name="mockobjects-core-0.09.jar" /> 
-			<include name="mysql-connector-java-3.0.16-ga-bin.jar" /> 
+			<include name="mysql-connector-java-5.0.8-bin.jar" /> 
 			<include name="openide-util.jar" /> 
 			<include name="acrobat-core.jar" />
 		</fileset>		

@@ -129,7 +129,7 @@ create table DYEXTN_BOOLEAN_TYPE_INFO (
 );
 create table DYEXTN_BOOLEAN_CONCEPT_VALUE (
    IDENTIFIER bigint not null,
-   VALUE bit,
+   VALUE tinyint(1) default NULL,
    primary key (IDENTIFIER)
 );
 create table DE_FILE_ATTR_RECORD_VALUES (
@@ -175,7 +175,7 @@ create table DYEXTN_BARR_CONCEPT_VALUE (
 create table DYEXTN_ENTITY (
    IDENTIFIER bigint not null,
    DATA_TABLE_STATE integer,
-   IS_ABSTRACT bit,
+   IS_ABSTRACT tinyint(1) default NULL,
    PARENT_ENTITY_ID bigint,
    INHERITANCE_STRATEGY integer,
    DISCRIMINATOR_COLUMN_NAME varchar(255),
@@ -214,10 +214,10 @@ create table DYEXTN_CADSR_VALUE_DOMAIN_INFO (
 );
 create table DYEXTN_PRIMITIVE_ATTRIBUTE (
    IDENTIFIER bigint not null,
-   IS_COLLECTION bit,
-   IS_IDENTIFIED bit,
-   IS_PRIMARY_KEY bit,
-   IS_NULLABLE bit,
+   IS_COLLECTION tinyint(1) default NULL,
+   IS_IDENTIFIED tinyint(1) default NULL,
+   IS_PRIMARY_KEY tinyint(1) default NULL,
+   IS_NULLABLE tinyint(1) default NULL,
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ASSOCIATION (
@@ -226,7 +226,7 @@ create table DYEXTN_ASSOCIATION (
    TARGET_ENTITY_ID bigint,
    SOURCE_ROLE_ID bigint,
    TARGET_ROLE_ID bigint,
-   IS_SYSTEM_GENERATED bit,
+   IS_SYSTEM_GENERATED tinyint(1) default NULL,
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ENTITY_MAP (
@@ -285,8 +285,8 @@ create table DYEXTN_FLOAT_CONCEPT_VALUE (
 create table DYEXTN_TEXTFIELD (
    IDENTIFIER bigint not null,
    NO_OF_COLUMNS integer,
-   IS_PASSWORD bit,
-   IS_URL bit,
+   IS_PASSWORD tinyint(1) default NULL,
+   IS_URL tinyint(1) default NULL,
    primary key (IDENTIFIER)
 );
 create table DYEXTN_ROLE (
@@ -342,7 +342,7 @@ create table DYEXTN_ENTITY_GROUP (
    LONG_NAME varchar(255),
    SHORT_NAME varchar(255),
    VERSION varchar(255),
-   IS_SYSTEM_GENERATED bit,
+   IS_SYSTEM_GENERATED tinyint(1) default NULL,
    primary key (IDENTIFIER)
 );
 create table DYEXTN_DATA_ELEMENT (
@@ -357,7 +357,7 @@ create table DYEXTN_DOUBLE_CONCEPT_VALUE (
 );
 create table DYEXTN_LIST_BOX (
    IDENTIFIER bigint not null,
-   MULTISELECT bit,
+   MULTISELECT tinyint(1) default NULL,
    primary key (IDENTIFIER)
 );
 create table DYEXTN_CONTAINMENT_CONTROL (
@@ -369,7 +369,7 @@ create table DYEXTN_CONTROL (
    IDENTIFIER bigint not null auto_increment,
    CAPTION varchar(255),
    CSS_CLASS varchar(255),
-   HIDDEN bit,
+   HIDDEN tinyint(1) default NULL,
    NAME varchar(255),
    SEQUENCE_NUMBER integer,
    TOOLTIP varchar(255),
@@ -384,7 +384,7 @@ create table DYEXTN_LONG_CONCEPT_VALUE (
 );
 create table DYEXTN_FORM_CONTEXT (
    IDENTIFIER bigint not null auto_increment,
-   IS_INFINITE_ENTRY bit,
+   IS_INFINITE_ENTRY tinyint(1) default NULL,
    ENTITY_MAP_ID bigint,
    STUDY_FORM_LABEL varchar(255),
    NO_OF_ENTRIES integer,
