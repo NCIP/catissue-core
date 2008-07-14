@@ -404,7 +404,7 @@
 			<include name="commons-fileupload.jar" /> 
 			<include name="commons-lang-2.1.jar" /> 
 			<include name="commons-logging-1.0.4.jar" /> 
-			<include name="dom4j-1.6.jar" /> 
+			<include name="dom4*.jar" /> 
 			<include name="ehcache-1.1.jar" />
 			<include name="ehcache-1.2.2.jar" /> 
 			<include name="freemarker.jar" /> 
@@ -596,7 +596,6 @@
 		<copy todir="${jboss.server.url}/conf" overwrite="true">
 			<fileset dir="${temp.dir}">
 				<include name="login-config.xml" />
-				<include name="log4j.xml" />
 			</fileset>
 		</copy>
 
