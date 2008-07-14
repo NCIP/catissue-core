@@ -29,6 +29,16 @@ import edu.wustl.common.beans.NameValueBean;
 
 public class OrderingSystemUtil
 {
+	
+	public static void getPossibleStatusForDistribution(List possibleStatusList)
+	{
+		possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION,Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION));
+		possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST));
+		possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE,Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE));
+		possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE,Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE));
+		possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,Constants.ORDER_REQUEST_STATUS_DISTRIBUTED));
+
+	}
 
 	/**
 	 * @param initialStatus The initial status from Db.
@@ -42,40 +52,23 @@ public class OrderingSystemUtil
 			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_NEW,Constants.ORDER_REQUEST_STATUS_NEW));
 			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW,Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW));
 			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION,Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION,Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE,Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE,Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,Constants.ORDER_REQUEST_STATUS_DISTRIBUTED));
-			
+			getPossibleStatusForDistribution(possibleStatusList);
 		}
 		if(initialStatus.trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW))
 		{
 			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW,Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW));
 			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION,Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION,Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE,Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE,Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,Constants.ORDER_REQUEST_STATUS_DISTRIBUTED));
-			
+			getPossibleStatusForDistribution(possibleStatusList);
 		}
 		else if(initialStatus.trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION))
 		{
 			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION,Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION,Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE,Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE,Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,Constants.ORDER_REQUEST_STATUS_DISTRIBUTED));
+			getPossibleStatusForDistribution(possibleStatusList);
+			
 		}
 		else if(initialStatus.trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION))
 		{
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION,Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST,Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE,Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE,Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE));
-			possibleStatusList.add(new NameValueBean(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED,Constants.ORDER_REQUEST_STATUS_DISTRIBUTED));
+			getPossibleStatusForDistribution(possibleStatusList);
 		}
 		else if(initialStatus.trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 		{
