@@ -352,13 +352,13 @@
 				<exclude name="**/*build*" />
 				<exclude name="**/*WEB-INF*" />
 				<exclude name="**/*servlet.jar*" />
+				<exclude name="**/*jta.jar*" />
 				<exclude name="**/WEB-INF/lib/log4j-1.2.9.jar*" />
 				<exclude name="**/*hibernate2.jar*" />
-				<exclude name="**/*jta.jar*" />
 				<exclude name="**/.*" />
 				<exclude name="**/*.sql" />
 				<exclude name="**/CVS*" />
-			
+				<exclude name="**/jta.jar" />			
 			</fileset>
 		</war>
 

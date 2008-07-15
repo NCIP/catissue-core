@@ -310,6 +310,7 @@
 				<exclude name="**/*hibernate2.jar*" />
 				<exclude name="**/*jta.jar*" />
 				<exclude name="**/CVS*" />
+				<exclude name="**/jta.jar" />
 				<!--exclude name="**/*build*"/>
 				<exclude name="**/*log4j-1.2.9.jar*" />
 				<exclude name="**/*WEB-INF*"/>
