@@ -13,7 +13,6 @@ import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -785,7 +784,7 @@ public class ComplexCollectionProtocolUtility
 					specimenMap.values()
 					,null, collectionProtocolEvent);	
 		}
-		collectionProtocolEvent.setRequirementSpecimenCollection(specimenCollection);
+		collectionProtocolEvent.setSpecimenRequirementCollection(specimenCollection);
 	}
 	
 	private static SpecimenRequirementBean createSpecimenBean()

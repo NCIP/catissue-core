@@ -1431,11 +1431,11 @@ INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID fro
 
 /* Suite 1.1 Model changes- Abstract Specimen, Requirement Specimen*/
 INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'AbstractSpecimen','AbstractSpecimen Object','edu.wustl.catissuecore.domain.AbstractSpecimen',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
-INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'RequirementSpecimen','RequirementSpecimen Object','edu.wustl.catissuecore.domain.RequirementSpecimen',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
-INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'MolReqSpecimen','MolReqSpecimen Object','edu.wustl.catissuecore.domain.MolecularRequirementSpecimen',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
-INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'FluidReqSpecimen','FluidReqSpecimen Object','edu.wustl.catissuecore.domain.FluidRequirementSpecimen',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
-INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'CellReqSpecimen','CellReqSpecimen Object','edu.wustl.catissuecore.domain.CellRequirementSpecimen',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
-INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'TissueReqSpecimen','TissueReqSpecimen Object','edu.wustl.catissuecore.domain.TissueRequirementSpecimen',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'RequirementSpecimen','RequirementSpecimen Object','edu.wustl.catissuecore.domain.SpecimenRequirement',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'MolReqSpecimen','MolReqSpecimen Object','edu.wustl.catissuecore.domain.MolecularSpecimenRequirement',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'FluidReqSpecimen','FluidReqSpecimen Object','edu.wustl.catissuecore.domain.FluidSpecimenRequirement',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'CellReqSpecimen','CellReqSpecimen Object','edu.wustl.catissuecore.domain.CellSpecimenRequirement',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'TissueReqSpecimen','TissueReqSpecimen Object','edu.wustl.catissuecore.domain.TissueSpecimenRequirement',NULL,NULL,1,'2008-5-28' from CSM_PROTECTION_ELEMENT;
 
 
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='AbstractSpecimen'),'2008-05-28' from CSM_PG_PE;

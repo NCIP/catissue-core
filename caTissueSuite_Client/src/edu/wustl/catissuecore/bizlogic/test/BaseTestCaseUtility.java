@@ -42,7 +42,7 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
-import edu.wustl.catissuecore.domain.RequirementSpecimen;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -156,7 +156,7 @@ public class BaseTestCaseUtility {
 					specimenMap.values()
 					,null, collectionProtocolEvent);	
 		}
-		collectionProtocolEvent.setRequirementSpecimenCollection(specimenCollection);
+		collectionProtocolEvent.setSpecimenRequirementCollection(specimenCollection);
 	}
 	
 	private static SpecimenRequirementBean createSpecimenBean()
@@ -572,13 +572,13 @@ public class BaseTestCaseUtility {
 				specimenCollectionGroupLableGenerator.setLabel(specimenCollectionGroup);
 				
 				Collection cloneSpecimenCollection = new LinkedHashSet();
-				Collection<RequirementSpecimen> specimenCollection = collectionProtocolEvent.getRequirementSpecimenCollection();
+				Collection<SpecimenRequirement> specimenCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
 				if(specimenCollection != null && !specimenCollection.isEmpty())
 				{
 					Iterator itSpecimenCollection = specimenCollection.iterator();
 					while(itSpecimenCollection.hasNext())
 					{
-						RequirementSpecimen reqSpecimen = (RequirementSpecimen)itSpecimenCollection.next();
+						SpecimenRequirement reqSpecimen = (SpecimenRequirement)itSpecimenCollection.next();
 						if(reqSpecimen.getLineage().equalsIgnoreCase("new"))
 						{
 							Specimen cloneSpecimen = getCloneSpecimen(specimenMap, reqSpecimen,null,specimenCollectionGroup,user);
@@ -666,7 +666,7 @@ public class BaseTestCaseUtility {
 		return sprObj;
 	}
 	
-	private static Specimen getCloneSpecimen(Map<Specimen, List<Specimen>> specimenMap, RequirementSpecimen reqSpecimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup, User user)
+	private static Specimen getCloneSpecimen(Map<Specimen, List<Specimen>> specimenMap, SpecimenRequirement reqSpecimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup, User user)
 	{
 		Collection childrenSpecimen = new LinkedHashSet<Specimen>(); 
 		Specimen newSpecimen = null;
@@ -693,16 +693,16 @@ public class BaseTestCaseUtility {
     		specimenMap.put(newSpecimen, null);
     	}
 		
-		Collection childrenSpecimenCollection = reqSpecimen.getChildrenSpecimen();
+		Collection childrenSpecimenCollection = reqSpecimen.getChildSpecimenCollection();
     	if(childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
 		{
-	    	Iterator<RequirementSpecimen> it = childrenSpecimenCollection.iterator();
+	    	Iterator<SpecimenRequirement> it = childrenSpecimenCollection.iterator();
 	    	while(it.hasNext())
 	    	{
-	    		RequirementSpecimen childReqSpecimen = it.next();
+	    		SpecimenRequirement childReqSpecimen = it.next();
 	    		Specimen newchildSpecimen = getCloneSpecimen(specimenMap, childReqSpecimen,newSpecimen, specimenCollectionGroup, user);
 	    		childrenSpecimen.add(newchildSpecimen);
-	    		newSpecimen.setChildrenSpecimen(childrenSpecimen);
+	    		newSpecimen.setChildSpecimenCollection(childrenSpecimen);
 	    	}
 		}
     	return newSpecimen;
@@ -1556,13 +1556,13 @@ public class BaseTestCaseUtility {
 		Double quantity = new Double(10.0);
 		ts.setInitialQuantity(quantity);
 		ts.setAvailableQuantity(quantity);
-		ts.setAvailable(new Boolean(true));
+		ts.setIsAvailable(new Boolean(true));
 
 		System.out.println("Setting parameters");		
 		
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComment("");
-		collectionEventParameters.setAbstractSpecimen(ts);
+		collectionEventParameters.setSpecimen(ts);
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
 		user.setId(new Long(1));
@@ -1599,7 +1599,7 @@ public class BaseTestCaseUtility {
 		
 		receivedEventParameters.setReceivedQuality("Acceptable");
 		receivedEventParameters.setComment("fdfd");
-		receivedEventParameters.setAbstractSpecimen(ts);
+		receivedEventParameters.setSpecimen(ts);
 		
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
@@ -1621,7 +1621,7 @@ public class BaseTestCaseUtility {
 		molecularSpecimen.setLabel("Molecular Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
 		molecularSpecimen.setBarcode("MolSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
 		molecularSpecimen.setSpecimenType("DNA");
-		molecularSpecimen.setAvailable(new Boolean(true));
+		molecularSpecimen.setIsAvailable(new Boolean(true));
 		molecularSpecimen.setActivityStatus("Active");
 		molecularSpecimen.setCollectionStatus("Pending");
 		molecularSpecimen.setSpecimenClass("Molecular");
@@ -1659,7 +1659,7 @@ public class BaseTestCaseUtility {
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
 		user.setId(new Long(1));
-		collectionEventParameters.setAbstractSpecimen(molecularSpecimen);
+		collectionEventParameters.setSpecimen(molecularSpecimen);
 	//	collectionEventParameters.setId(new Long(0));
 		collectionEventParameters.setUser(user);
 		try
@@ -1676,7 +1676,7 @@ public class BaseTestCaseUtility {
 
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setUser(user);
-		receivedEventParameters.setAbstractSpecimen(molecularSpecimen);
+		receivedEventParameters.setSpecimen(molecularSpecimen);
 		//receivedEventParameters.setId(new Long(0));
 		try
 		{
@@ -1710,7 +1710,7 @@ public class BaseTestCaseUtility {
 		cellSpecimen.setLabel("Cell Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
 		cellSpecimen.setBarcode("CellSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
 		cellSpecimen.setSpecimenType("Fixed Cell Block");
-		cellSpecimen.setAvailable(new Boolean(true));
+		cellSpecimen.setIsAvailable(new Boolean(true));
 		cellSpecimen.setActivityStatus("Active");
 
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
@@ -1746,7 +1746,7 @@ public class BaseTestCaseUtility {
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
 		user.setId(new Long(1));
-		collectionEventParameters.setAbstractSpecimen(cellSpecimen);
+		collectionEventParameters.setSpecimen(cellSpecimen);
 	//	collectionEventParameters.setId(new Long(0));
 		collectionEventParameters.setUser(user);
 		try
@@ -1763,7 +1763,7 @@ public class BaseTestCaseUtility {
 
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setUser(user);
-		receivedEventParameters.setAbstractSpecimen(cellSpecimen);
+		receivedEventParameters.setSpecimen(cellSpecimen);
 		//receivedEventParameters.setId(new Long(0));
 		try
 		{
@@ -1797,7 +1797,7 @@ public class BaseTestCaseUtility {
 		cellSpecimen.setLabel("Fluid Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
 		cellSpecimen.setBarcode("FluidSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
 		cellSpecimen.setSpecimenType("Amniotic Fluid");
-		cellSpecimen.setAvailable(new Boolean(true));
+		cellSpecimen.setIsAvailable(new Boolean(true));
 		cellSpecimen.setActivityStatus("Active");
 
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
@@ -1833,7 +1833,7 @@ public class BaseTestCaseUtility {
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
 		user.setId(new Long(1));
-		collectionEventParameters.setAbstractSpecimen(cellSpecimen);
+		collectionEventParameters.setSpecimen(cellSpecimen);
 	//	collectionEventParameters.setId(new Long(0));
 		collectionEventParameters.setUser(user);
 		try
@@ -1850,7 +1850,7 @@ public class BaseTestCaseUtility {
 
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setUser(user);
-		receivedEventParameters.setAbstractSpecimen(cellSpecimen);
+		receivedEventParameters.setSpecimen(cellSpecimen);
 		//receivedEventParameters.setId(new Long(0));
 		try
 		{

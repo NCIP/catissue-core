@@ -1066,7 +1066,7 @@ insert into dyextn_long_type_info (IDENTIFIER) values (1143);
 insert into dyextn_database_properties (IDENTIFIER,NAME) values (1862,'IDENTIFIER');
 insert into dyextn_column_properties (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values (1862,1867);
 
-INSERT INTO dyextn_abstract_metadata values(1868,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.RequirementSpecimen',null);
+INSERT INTO dyextn_abstract_metadata values(1868,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.SpecimenRequirement',null);
 INSERT INTO dyextn_abstract_entity values(1868);
 INSERT INTO dyextn_entity values(1868,3,0,1866,3,NULL,NULL,1);
 INSERT INTO dyextn_database_properties values(1863,'CATISSUE_CP_REQ_SPECIMEN');
@@ -1182,25 +1182,25 @@ insert into association values(824,2);
 insert into intra_model_association values(824,1879);
 insert into path values (985598,415,824,1866);
 
-INSERT INTO dyextn_abstract_metadata values(1880,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.CellRequirementSpecimen',null);
+INSERT INTO dyextn_abstract_metadata values(1880,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.CellSpecimenRequirement',null);
 INSERT INTO dyextn_abstract_entity values(1880);
 INSERT INTO dyextn_entity values(1880,3,0,1868,3,NULL,NULL,1);
 INSERT INTO dyextn_database_properties values(1875,'CATISSUE_CELL_REQ_SPECIMEN');
 INSERT INTO dyextn_table_properties (IDENTIFIER,ABSTRACT_ENTITY_ID) values(1875,1880);
 
-INSERT INTO dyextn_abstract_metadata values(1881,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.FluidRequirementSpecimen',null);
+INSERT INTO dyextn_abstract_metadata values(1881,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.FluidSpecimenRequirement',null);
 INSERT INTO dyextn_abstract_entity values(1881);
 INSERT INTO dyextn_entity values(1881,3,0,1868,3,NULL,NULL,1);
 INSERT INTO dyextn_database_properties values(1876,'CATISSUE_FLUID_REQ_SPECIMEN');
 INSERT INTO dyextn_table_properties (IDENTIFIER,ABSTRACT_ENTITY_ID) values(1876,1881);
 
-INSERT INTO dyextn_abstract_metadata values(1882,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.MolecularRequirementSpecimen',null);
+INSERT INTO dyextn_abstract_metadata values(1882,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.MolecularSpecimenRequirement',null);
 INSERT INTO dyextn_abstract_entity values(1882);
 INSERT INTO dyextn_entity values(1882,3,0,1868,3,NULL,NULL,1);
 INSERT INTO dyextn_database_properties values(1877,'CATISSUE_MOL_REQ_SPECIMEN');
 INSERT INTO dyextn_table_properties (IDENTIFIER,ABSTRACT_ENTITY_ID) values(1877,1882);
 
-INSERT INTO dyextn_abstract_metadata values(1883,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.TissueRequirementSpecimen',null);
+INSERT INTO dyextn_abstract_metadata values(1883,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.TissueSpecimenRequirement',null);
 INSERT INTO dyextn_abstract_entity values(1883);
 INSERT INTO dyextn_entity values(1883,3,0,1868,3,NULL,NULL,1);
 INSERT INTO dyextn_database_properties values(1878,'CATISSUE_TISSUE_REQ_SPECIMEN');

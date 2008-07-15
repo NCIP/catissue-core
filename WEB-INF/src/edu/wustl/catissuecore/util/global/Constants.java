@@ -1901,7 +1901,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String BLANK_SCREEN_ACTION="blankScreenAction.do";
 	
 	
-	public static final String COLUMN_NAME_SPECIMEN_ID = "abstractSpecimen.id";
+	public static final String COLUMN_NAME_SPECIMEN_ID = "specimen.id";
 	public static final String PARTICIPANT_MEDICAL_IDENTIFIER="ParticipantMedicalIdentifier:";
 	public static final String PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID="_Site_id";
 	public static final String PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER="_medicalRecordNumber";

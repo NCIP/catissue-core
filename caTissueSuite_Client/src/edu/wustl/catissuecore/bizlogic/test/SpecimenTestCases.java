@@ -43,7 +43,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 			sp = (Specimen)spCollection.get(0);
 			System.out.println("Get Object Sp");
 			sp.setCollectionStatus("Collected");
-			sp.setAvailable(true);
+			sp.setIsAvailable(true);
 			sp.setExternalIdentifierCollection(null);
 			System.out.println(sp+": sp");
 			sp =  (Specimen) appService.updateObject(sp);
@@ -68,7 +68,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 			List spCollection = appService.getObjects(sp);
 			sp = (Specimen)spCollection.get(0);
 			sp.setCollectionStatus("Collected");
-			sp.setAvailable(true);
+			sp.setIsAvailable(true);
 			sp.setExternalIdentifierCollection(null);
 			
 			Collection consentTierStatusCollection = new HashSet();
@@ -233,7 +233,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		   TissueSpecimen ts = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
 		   System.out.println("Specimen from map"+ts.getLabel());
 		   ts.setLabel("upadated TS"+UniqueKeyGeneratorUtil.getUniqueKey());
-		   ts.setAvailable(new Boolean(true));
+		   ts.setIsAvailable(new Boolean(true));
 		   ts.setCollectionStatus("Collected");
 		   Collection externalIdentifierCollection = new HashSet();
 		   ExternalIdentifier externalIdentifier = new ExternalIdentifier();
@@ -261,7 +261,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		   MolecularSpecimen ts = (MolecularSpecimen) TestCaseUtility.getObjectMap(MolecularSpecimen.class);
 		   System.out.println("Specimen from map"+ts.getLabel());
 		   ts.setLabel("upadated TS"+UniqueKeyGeneratorUtil.getUniqueKey());
-		   ts.setAvailable(new Boolean(true));
+		   ts.setIsAvailable(new Boolean(true));
 		   ts.setCollectionStatus("Collected");
 		   Collection externalIdentifierCollection = new HashSet();
 		   ExternalIdentifier externalIdentifier = new ExternalIdentifier();
@@ -336,7 +336,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 //		ts.setStorageContainer(null);
 		ts.setSpecimenCollectionGroup(scg);
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
-		ts.setAvailable(new Boolean("true"));
+		ts.setIsAvailable(new Boolean("true"));
 		System.out.println("Befor creating Tissue Specimen");		
 		try{
 			ts = (TissueSpecimen) appService.createObject(ts);
@@ -369,7 +369,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 //		ts.setStorageContainer(null);
 		ts.setSpecimenCollectionGroup(scg);
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
-		ts.setAvailable(new Boolean("true"));
+		ts.setIsAvailable(new Boolean("true"));
 		System.out.println("Befor creating Tissue Specimen");
 		
 		try{
@@ -390,7 +390,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 //		ts1.setStorageContainer(null);
 		ts1.setSpecimenCollectionGroup(newSCG);
 		ts1.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
-		ts1.setAvailable(new Boolean("true"));
+		ts1.setIsAvailable(new Boolean("true"));
 		System.out.println("Befor creating Tissue Specimen");
 		
 		try{

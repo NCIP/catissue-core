@@ -105,7 +105,7 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 			ts.setSpecimenPosition(cpos);
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
-			ts.setAvailable(new Boolean("true"));
+			ts.setIsAvailable(new Boolean("true"));
 			ts = (TissueSpecimen) appService.createObject(ts);
 			System.out.println("Tissue Specimen:"+ts.getLabel());
 			assertFalse("Successfully created specimen using disabled storage Container", true);
@@ -252,7 +252,7 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 			ts.setSpecimenPosition(spPos);
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
-			ts.setAvailable(new Boolean("true"));
+			ts.setIsAvailable(new Boolean("true"));
 			ts = (TissueSpecimen) appService.createObject(ts);
 			
 		}catch(Exception e){
@@ -292,7 +292,7 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 			ts.setSpecimenPosition(spPos);
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
-			ts.setAvailable(new Boolean("true"));
+			ts.setIsAvailable(new Boolean("true"));
 			ts = (TissueSpecimen) appService.createObject(ts);
 			
 			cp.setActivityStatus("Disabled");
@@ -551,7 +551,7 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 //		ts.setStorageContainer(null);
 		ts.setSpecimenCollectionGroup(scg);
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
-		ts.setAvailable(new Boolean("true"));
+		ts.setIsAvailable(new Boolean("true"));
 		try{
 			ts = (TissueSpecimen) appService.createObject(ts);
 		}
