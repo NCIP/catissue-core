@@ -426,8 +426,8 @@
 	</target>
 	
 	<target name="create_zip" depends="createJavaDoc,installable_build_war">
-		<property name="zip.dir" value="${base.dir}/caTISSUE_Suite_Installable_v${application.version}" />
-		<property name="zip.file" value="${base.dir}/caTissue_Suite_Installable_v${application.version}.zip" />
+		<property name="zip.dir" value="${base.dir}/caTISSUE_Suite_v${application.version}_Installable" />
+		<property name="zip.file" value="${base.dir}/caTissue_Suite_v${application.version}_Installable.zip" />
 
 		<delete file="${zip.file}" />
 		<delete dir="${zip.dir}" />
