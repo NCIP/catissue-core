@@ -1518,8 +1518,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		String[] selectColumnName = { "max(IDENTIFIER) as MAX_NAME" };
 		String[] whereColumnName = { "STORAGE_TYPE_ID", "PARENT_CONTAINER_ID" };
 		String[] whereColumnCondition = { "=", "=" };
-		Object[] whereColumnValue = { Long.toString(typeID),
-				Long.toString(parentID) };
+		Object[] whereColumnValue = { Long.valueOf(typeID),
+				Long.valueOf(parentID) };
 
 		if (isInSite) {
 			whereColumnName = new String[3];
@@ -1528,8 +1528,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			whereColumnName[2] = "PARENT_CONTAINER_ID";
 
 			whereColumnValue = new Object[3];
-			whereColumnValue[0] = Long.toString(typeID);
-			whereColumnValue[1] = Long.toString(parentID);
+			whereColumnValue[0] = Long.valueOf(typeID);
+			whereColumnValue[1] = Long.valueOf(parentID);
 			whereColumnValue[2] = "null";
 
 			whereColumnCondition = new String[3];
@@ -2632,7 +2632,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 					"specimenPosition.positionDimensionTwo",
 					"specimenPosition.storageContainer.id" }; // "storageContainer."+Constants.SYSTEM_IDENTIFIER
 			String[] whereColumnCondition = { "=", "=", "=" };
-			Object[] whereColumnValue = { posOne, posTwo,
+			Object[] whereColumnValue = { Integer.valueOf(posOne), Integer.valueOf(posTwo),
 					storageContainer.getId() };
 			String joinCondition = Constants.AND_JOIN_CONDITION;
 
@@ -2660,7 +2660,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 						"locatedAtPosition.positionDimensionTwo",
 						"locatedAtPosition.parentContainer.id" }; // "storageContainer."+Constants.SYSTEM_IDENTIFIER
 				String[] whereColumnCondition1 = { "=", "=", "=" };
-				Object[] whereColumnValue1 = { posOne, posTwo,
+				Object[] whereColumnValue1 = { Integer.valueOf(posOne), Integer.valueOf(posTwo),
 						storageContainer.getId() };
 
 				list = dao.retrieve(sourceObjectName, selectColumnName,
@@ -2683,7 +2683,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 							"locatedAtPosition.positionDimensionTwo",
 							"locatedAtPosition.parentContainer.id" };
 					String[] whereColumnCondition2 = { "=", "=", "=" };
-					Object[] whereColumnValue2 = { posOne, posTwo,
+					Object[] whereColumnValue2 = { Integer.valueOf(posOne), Integer.valueOf(posTwo),
 							storageContainer.getId() };
 
 					list = dao.retrieve(sourceObjectName, selectColumnName,
@@ -2723,7 +2723,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 				"capacity.twoDimensionCapacity", "name" };
 		String[] whereColumnName = { Constants.SYSTEM_IDENTIFIER };
 		String[] whereColumnCondition = { "=" };
-		Object[] whereColumnValue = { storageContainerID };
+		Object[] whereColumnValue = { Long.valueOf(storageContainerID) };
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 
 		List list = dao.retrieve(sourceObjectName, selectColumnName,
