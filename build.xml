@@ -310,7 +310,7 @@
 				<exclude name="**/*hibernate2.jar*" />
 				<exclude name="**/*jta.jar*" />
 				<exclude name="**/CVS*" />
-				<exclude name="**/jta.jar" />
+				<exclude name="**/WEB-INF/lib/jta.jar" />
 				<!--exclude name="**/*build*"/>
 				<exclude name="**/*log4j-1.2.9.jar*" />
 				<exclude name="**/*WEB-INF*"/>
@@ -335,6 +335,7 @@
 				<exclude name="**/WEB-INF/classes/edu/wustl/catissuecore/domain/**" />
 				<exclude name="**/WEB-INF/lib/csmapi.jar" />
 				<exclude name="**/WEB-INF/lib/dom4*.jar" />
+				<exclude name="**/WEB-INF/lib/jta.jar" />
 				<exclude name="**/META-INF/**" />
 				<exclude name="Happy.jsp" />
 				<exclude name="Criteria.jsp" />
