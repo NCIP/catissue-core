@@ -9,10 +9,19 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
+
+import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -21,11 +30,33 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class table="CATISSUE_SPECIMEN_EVENT_PARAM"
  * @author aniruddha_phadnis
  */
-public abstract class SpecimenEventParameters extends EventParameters implements java.io.Serializable
+public abstract class SpecimenEventParameters extends AbstractDomainObject implements java.io.Serializable,Cloneable
 {
 	private static final long serialVersionUID = 1234567890L;
+	/**
+     * System generated unique id.
+     */
+	protected Long id;
 	
-	protected AbstractSpecimen abstractSpecimen;
+	/**
+     * Date and time of the event.
+     */
+	protected Date timestamp;
+	
+	/**
+     * User who performs the event.
+     */
+	protected User user;
+	
+	/**
+     * Text comment on event.
+     */
+	protected String comment;
+	
+	/**
+	 * Object of AbstractSpecimen
+	 */
+	protected AbstractSpecimen specimen;
 	/**
 	 * Name : Ashish Gupta
 	 * Reviewer Name : Sachin Lale 
@@ -35,6 +66,48 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 	*/
 	protected SpecimenCollectionGroup specimenCollectionGroup;
 	
+	
+	public Date getTimestamp()
+	{
+		return timestamp;
+	}
+
+	
+	public void setTimestamp(Date timestamp)
+	{
+		this.timestamp = timestamp;
+	}
+
+	
+	public User getUser()
+	{
+		return user;
+	}
+
+	
+	public void setUser(User user)
+	{
+		this.user = user;
+	}
+
+	
+	public String getComment()
+	{
+		return comment;
+	}
+
+	
+	public void setComment(String comment)
+	{
+		this.comment = comment;
+	}
+
+	
+	public void setId(Long id)
+	{
+		this.id = id;
+	}
+
 	/**
      * Returns System generated unique id.
      * @return System generated unique id.
@@ -68,17 +141,17 @@ public abstract class SpecimenEventParameters extends EventParameters implements
      * @hibernate.many-to-one column="SPECIMEN_ID"  class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
 	 * @see #setParticipant(Site)
      */
-	public AbstractSpecimen getAbstractSpecimen() 
+	public AbstractSpecimen getSpecimen() 
 	{
-		return abstractSpecimen;
+		return specimen;
 	}
 	
 	/**
 	 * @param specimen The specimen to set.
 	 */
-	public void setAbstractSpecimen(AbstractSpecimen absSpecimen) 
+	public void setSpecimen(AbstractSpecimen specimen) 
 	{
-		this.abstractSpecimen = absSpecimen;
+		this.specimen = specimen;
 	}
 	
 	
@@ -88,23 +161,48 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
 		AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
-		super.setAllValues(abstractForm);
-			
-		// TODO need to discuss why CellSpecimen is created -- Santosh
-		//Temporary fix.
+		EventParametersForm form = (EventParametersForm)abstractForm ;
+        if (SearchUtil.isNullobject(user))
+    	{
+    		user = new User();
+    	}
+        if (SearchUtil.isNullobject(timestamp))
+    	{
+    		timestamp = Calendar.getInstance().getTime();
+    	}
+		this.comment = form.getComments();
+		user.setId(new Long(form.getUserId()));
+		if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length()!=0  )
+		{
+			Calendar calendar = Calendar.getInstance();
+			Date date;
+			try
+			{
+				date = Utility.parseDate(form.getDateOfEvent(),Utility.datePattern(form.getDateOfEvent()));
+			}
+			catch (ParseException e)
+			{
+		    	throw new AssignDataException();
+			}
+			calendar.setTime(date);
+			this.timestamp = calendar.getTime();  
+			calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(form.getTimeInHours()));
+			calendar.set(Calendar.MINUTE,Integer.parseInt(form.getTimeInMinutes()));
+			this.timestamp = calendar.getTime();  
+		}
 		if(abstractForm.isAddOperation())
 		{
-			abstractSpecimen = new Specimen();
+			specimen = new Specimen();
 		}
 		SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
 		Logger.out.debug("specimenEventParametersForm.getSpecimenId()............................."+specimenEventParametersForm.getSpecimenId());
-		if(abstractSpecimen!=null)
-			abstractSpecimen.setId(new Long(specimenEventParametersForm.getSpecimenId()));
+		if(specimen!=null)
+			specimen.setId(new Long(specimenEventParametersForm.getSpecimenId()));
 	}
 	
 	public Object clone() throws CloneNotSupportedException
 	{
-		return super.clone();
+		return clone();
 	}
 	
 	 /**
@@ -113,7 +211,7 @@ public abstract class SpecimenEventParameters extends EventParameters implements
      */
 	public String getMessageLabel() 
 	{
-		return "specimen with label '"+getAbstractSpecimen().getLabel()+"'";
+		return "specimen with label '"+getSpecimen().getLabel()+"'";
 	}
  	
 }

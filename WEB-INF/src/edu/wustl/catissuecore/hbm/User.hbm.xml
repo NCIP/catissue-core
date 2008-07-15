@@ -253,7 +253,7 @@
         </set>
         
          <set
-            name="userCollectionProtocolCollection"
+            name="assignedProtocolCollection"
             table="CATISSUE_USER_CP"
             lazy="true"
             inverse="true"

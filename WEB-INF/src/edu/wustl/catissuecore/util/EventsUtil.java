@@ -26,7 +26,7 @@ import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
-import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
@@ -136,7 +136,7 @@ public class EventsUtil
 		if (eventObject instanceof CollectionEventParameters)
 		{
 			CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
-			AbstractSpecimen specimen = collectionEventParameters.getAbstractSpecimen();
+			AbstractSpecimen specimen = collectionEventParameters.getSpecimen();
 			collectionEventParameters.getUser();
 			/* Bug id: 4179
 			patch id: 4179_3*/  
@@ -184,7 +184,7 @@ public class EventsUtil
 		else if (eventObject instanceof ReceivedEventParameters)
 		{
 			ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
-			AbstractSpecimen specimen = receivedEventParameters.getAbstractSpecimen();
+			AbstractSpecimen specimen = receivedEventParameters.getSpecimen();
 			/* Bug id: 4179
 			patch id: 4179_4*/  
 			if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null || receivedEventParameters.getUser().getId() == 0)
@@ -281,7 +281,7 @@ public class EventsUtil
 		return receivedEventParameters;
 	}
 	
-	public static String[] getEvent(EventParameters eventParameters)
+	public static String[] getEvent(SpecimenEventParameters eventParameters)
 	{
 			String [] events = new String[2];
 					

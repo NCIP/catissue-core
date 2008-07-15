@@ -69,9 +69,9 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 		 
 	     SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters)abstractDomain;
 		 
-		 if(specimenEventParameters.getAbstractSpecimen()!=null)
+		 if(specimenEventParameters.getSpecimen()!=null)
 		 {
-		     specimenId = specimenEventParameters.getAbstractSpecimen().getId().longValue();
+		     specimenId = specimenEventParameters.getSpecimen().getId().longValue();
 		 }
  	 }
 	 

@@ -37,7 +37,7 @@ public class SpecimenObjectFactory {
 		return abstractDomain;
     }
 	
-	public AbstractDomainObject getDomainObject(String specimenType,RequirementSpecimen reqSpecimen) throws AssignDataException
+	public AbstractDomainObject getDomainObject(String specimenType,SpecimenRequirement reqSpecimen) throws AssignDataException
     {
 		AbstractDomainObject abstractDomain = null;
 		if(specimenType.equals("Tissue"))

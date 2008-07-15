@@ -19,12 +19,11 @@ import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.ReportedProblem;
-import edu.wustl.catissuecore.domain.RequirementSpecimen;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -32,8 +31,9 @@ import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
-import edu.wustl.catissuecore.domain.DistributionSpecimenRequirement;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -153,7 +153,7 @@ public class ApiSearchUtil
     	}
 	}
 	
-	public static void setReqSpecimenDefault(RequirementSpecimen requirementSpecimen)
+	public static void setReqSpecimenDefault(SpecimenRequirement requirementSpecimen)
 	{			
     	if (SearchUtil.isNullobject(requirementSpecimen.getCollectionProtocolEvent()))
     	{
@@ -206,7 +206,7 @@ public class ApiSearchUtil
     	}
 	}	
 	
-	public static void setEventParametersDefault(EventParameters eventParameters)
+	public static void setEventParametersDefault(SpecimenEventParameters eventParameters)
 	{		
     	if (SearchUtil.isNullobject(eventParameters.getUser()))
     	{

@@ -73,7 +73,7 @@ public final class MultipleSpecimenValidationUtil
 				throw daoException;
 			}
 
-			Collection derivedSpecimens = specimen.getChildrenSpecimen();
+			Collection derivedSpecimens = specimen.getChildSpecimenCollection();
 
 			if (derivedSpecimens == null)
 			{
@@ -338,7 +338,7 @@ public final class MultipleSpecimenValidationUtil
 		
 		if (operation.equals(Constants.ADD))
 		{
-			if (!specimen.getAvailable().booleanValue())
+			if (!specimen.getIsAvailable().booleanValue())
 			{
 				throw new DAOException(ApplicationProperties.getValue("specimen.available.errMsg"));
 			}

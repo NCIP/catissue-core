@@ -8,6 +8,7 @@ import java.io.Serializable;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 
+
 /**
  * @author ashish_gupta
  *@hibernate.class table="CATISSUE_ABSTRACT_POSITION"

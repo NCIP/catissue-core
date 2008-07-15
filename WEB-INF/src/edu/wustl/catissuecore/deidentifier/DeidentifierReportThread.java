@@ -76,7 +76,7 @@ public class DeidentifierReportThread extends Thread
 			// set default values for deidentified report
 			deidentifiedReport.setActivityStatus(identifiedReport.getActivityStatus()); 
 			deidentifiedReport.setReportStatus(CaTIESConstants.PENDING_FOR_XML);
-			deidentifiedReport.setIsQuanrantined(Constants.ACTIVITY_STATUS_ACTIVE);
+			deidentifiedReport.setIsQuarantined(Constants.ACTIVITY_STATUS_ACTIVE);
 			deidentifiedReport.setSpecimenCollectionGroup(identifiedReport.getSpecimenCollectionGroup());
 	        
     		Logger.out.info("Saving deidentified report for identified report id="+identifiedReport.getId().toString());

@@ -158,9 +158,9 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 			setNextAvailableDeriveSpecimenlabel(objSpecimen.getParentSpecimen(),objSpecimen);
 		}
 		
-		if(objSpecimen.getChildrenSpecimen().size()>0)
+		if(objSpecimen.getChildSpecimenCollection().size()>0)
 		{
-			Collection specimenCollection = objSpecimen.getChildrenSpecimen();
+			Collection specimenCollection = objSpecimen.getChildSpecimenCollection();
 			Iterator it = specimenCollection.iterator();
 			while(it.hasNext())
 			{
@@ -180,9 +180,9 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	synchronized void setNextAvailableDeriveSpecimenlabel(AbstractSpecimen parentObject,Specimen specimenObject)
 	{
 						
-		String parentSpecimenLabel = (String) parentObject.getLabel();				
+		String parentSpecimenLabel = (String) ((Specimen) parentObject).getLabel();				
 
-		long aliquotCount = parentObject.getChildrenSpecimen().size();
+		long aliquotCount = parentObject.getChildSpecimenCollection().size();
 		specimenObject.setLabel(parentSpecimenLabel + "_" + (format((aliquotCount + 1), "00")));
 		labelCountTreeMap.put(specimenObject,0);
 	}
@@ -193,7 +193,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	synchronized void setNextAvailableAliquotSpecimenlabel(AbstractSpecimen parentObject, Specimen specimenObject) 
 	{
 		
-		String parentSpecimenLabel = (String) parentObject.getLabel();
+		String parentSpecimenLabel = (String) ((Specimen) parentObject).getLabel();
 		long aliquotChildCount = 0;
 		if(labelCountTreeMap.containsKey(parentObject))
 		{
@@ -202,7 +202,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		else
 		{
 			// biz logic 
-			aliquotChildCount = parentObject.getChildrenSpecimen().size();	
+			aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
 			
 		}
 		specimenObject.setLabel( parentSpecimenLabel + "_"+ format((++aliquotChildCount), "00"));

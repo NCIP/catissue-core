@@ -34,7 +34,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
-import edu.wustl.catissuecore.domain.RequirementSpecimen;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -140,19 +140,19 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		Collection<AbstractDomainObject> cloneSpecimenCollection = null;
         try
         {
-       	Collection<RequirementSpecimen> reqSpecimenCollection = cpe.getRequirementSpecimenCollection();
-		List<RequirementSpecimen> reqSpecimenList = new LinkedList<RequirementSpecimen>(reqSpecimenCollection);
+       	Collection<SpecimenRequirement> reqSpecimenCollection = cpe.getSpecimenRequirementCollection();
+		List<SpecimenRequirement> reqSpecimenList = new LinkedList<SpecimenRequirement>(reqSpecimenCollection);
 		CollectionProtocolUtil.getSortedCPEventList(reqSpecimenList);
 		if (reqSpecimenList != null && !reqSpecimenList.isEmpty())
 		{
 			cloneSpecimenCollection = new LinkedHashSet<AbstractDomainObject>();
-			Iterator<RequirementSpecimen> itReqSpecimenCollection = reqSpecimenList.iterator();
+			Iterator<SpecimenRequirement> itReqSpecimenCollection = reqSpecimenList.iterator();
 			while (itReqSpecimenCollection.hasNext())
 			{
-				RequirementSpecimen requirementSpecimen = itReqSpecimenCollection.next();
-				if (Constants.NEW_SPECIMEN.equals(requirementSpecimen.getLineage()))
+				SpecimenRequirement SpecimenRequirement = itReqSpecimenCollection.next();
+				if (Constants.NEW_SPECIMEN.equals(SpecimenRequirement.getLineage()))
 				{
-					Specimen cloneSpecimen = getCloneSpecimen(requirementSpecimen, null, specimenCollectionGroup, userId);
+					Specimen cloneSpecimen = getCloneSpecimen(SpecimenRequirement, null, specimenCollectionGroup, userId);
 					//kalpana : bug #6224
 					if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 					{
@@ -181,7 +181,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 	 * @param userId
 	 * @return
 	 */
-	private Specimen getCloneSpecimen(RequirementSpecimen reqSpecimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup, Long userId)
+	private Specimen getCloneSpecimen(SpecimenRequirement reqSpecimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup, Long userId)
 	{
 		Specimen newSpecimen;
 		try 
@@ -204,18 +204,18 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		newSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		newSpecimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
 
-		Collection childrenSpecimenCollection = reqSpecimen.getChildrenSpecimen();
+		Collection childrenSpecimenCollection = reqSpecimen.getChildSpecimenCollection();
 		if (childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
 		{
 			Collection childrenSpecimen = new LinkedHashSet();
-			Iterator<RequirementSpecimen> it = childrenSpecimenCollection.iterator();
+			Iterator<SpecimenRequirement> it = childrenSpecimenCollection.iterator();
 			while (it.hasNext())
 			{
-				RequirementSpecimen childSpecimen = it.next();
+				SpecimenRequirement childSpecimen = it.next();
 				Specimen newchildSpecimen = getCloneSpecimen(childSpecimen, newSpecimen, specimenCollectionGroup, userId);
 				childrenSpecimen.add(newchildSpecimen);
 			}
-			newSpecimen.setChildrenSpecimen(childrenSpecimen);
+			newSpecimen.setChildSpecimenCollection(childrenSpecimen);
 		}
 
 		return newSpecimen;
@@ -328,7 +328,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		while (specIterator.hasNext())
 		{
 			Specimen specimen = specIterator.next();
-			Collection childSpecimenCollection = specimen.getChildrenSpecimen();
+			Collection childSpecimenCollection = specimen.getChildSpecimenCollection();
 			retrieveSpecimens(childSpecimenCollection);
 		}
 	}
@@ -664,7 +664,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		newcollectionEventParameters.setUser(scgCollectionEventParameters.getUser());
 
 		newcollectionEventParameters.setComment(scgCollectionEventParameters.getComment());
-		newcollectionEventParameters.setAbstractSpecimen(collectionEventParameters.getAbstractSpecimen());
+		newcollectionEventParameters.setSpecimen(collectionEventParameters.getSpecimen());
 		newcollectionEventParameters.setSpecimenCollectionGroup(collectionEventParameters.getSpecimenCollectionGroup());
 		newcollectionEventParameters.setId(collectionEventParameters.getId());
 
@@ -688,7 +688,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 
 		newReceivedEventParameters.setId(receivedEventParameters.getId());
 		newReceivedEventParameters.setComment(scgReceivedEventParameters.getComment());
-		newReceivedEventParameters.setAbstractSpecimen(receivedEventParameters.getAbstractSpecimen());
+		newReceivedEventParameters.setSpecimen(receivedEventParameters.getSpecimen());
 		newReceivedEventParameters.setSpecimenCollectionGroup(receivedEventParameters.getSpecimenCollectionGroup());
 		return newReceivedEventParameters;
 	}
@@ -1603,7 +1603,7 @@ public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 		}
 		xmlString.append("<node id=\"" + Constants.SPECIMEN + "_" + spId.toString() + "\" " + "name=\"" + spLabel1 + "\" " + "toolTip=\""
 				+ toolTipText + "\" " + "type=\"" + Constants.SPECIMEN + "\" " + "collectionStatus=\"" + spCollectionStatus + "\">");
-		Collection childrenSpecimen = specimen.getChildrenSpecimen();
+		Collection childrenSpecimen = specimen.getChildSpecimenCollection();
 		
 		SpecimenComparator comparator = new SpecimenComparator();
 		List childSpecimen = new ArrayList();

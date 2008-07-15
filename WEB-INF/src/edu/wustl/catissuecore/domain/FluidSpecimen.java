@@ -49,7 +49,7 @@ public class FluidSpecimen extends Specimen implements Serializable
         }
     }
     
-    public FluidSpecimen(RequirementSpecimen fluidReqSpecimen)
+    public FluidSpecimen(SpecimenRequirement fluidReqSpecimen)
     {
     	super(fluidReqSpecimen);
     }

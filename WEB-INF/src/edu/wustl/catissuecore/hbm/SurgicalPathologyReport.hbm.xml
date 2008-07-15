@@ -158,7 +158,7 @@
         </set>
 
         <property
-            name="isQuanrantined"
+            name="isQuarantined"
             type="string"
             update="true"
             insert="true"

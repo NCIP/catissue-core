@@ -1163,7 +1163,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		try {
 			dao.openSession(null);
 			User user = (User) dao.retrieve(User.class.getName(),userId);
-			Collection <CollectionProtocol> cpCollection = user.getUserCollectionProtocolCollection();
+			Collection <CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
 			if (cpCollection != null && !cpCollection.isEmpty())
 			{
 				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();

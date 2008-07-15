@@ -33,11 +33,6 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup imp
 	protected Long id;
 
 	/**
-	 * Defines the required clinical status of the participant at the time of specimen collection. e.g. Pre-Op, Post-op, Pre-RX etc.
-	 */
-	protected String clinicalStatus;
-
-	/**
 	 * Patch Id : FutureSCG_13
 	 * Description : collectionPointLabel attribute added
 	 */
@@ -57,7 +52,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup imp
 	 */
 	protected CollectionProtocol collectionProtocol;
 	
-	protected Collection<RequirementSpecimen> requirementSpecimenCollection  = new LinkedHashSet<RequirementSpecimen>();
+	protected Collection<SpecimenRequirement> specimenRequirementCollection  = new LinkedHashSet<SpecimenRequirement>();
 	
 	protected Collection specimenCollectionGroupCollection;
 	
@@ -81,25 +76,6 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup imp
 		this.id = id;
 	}
 	
-	/**
-	 * Returns the clinicalStatus.
-	 * @hibernate.property name="clinicalStatus" type="string"
-	 * column="CLINICAL_STATUS" length="50"
-	 * @return Returns the clinicalStatus.
-	 */
-	public String getClinicalStatus()
-	{
-		return clinicalStatus;
-	}
-
-	/**
-	 * @param clinicalStatus The clinicalStatus to set.
-	 */
-	public void setClinicalStatus(String clinicalStatus)
-	{
-		this.clinicalStatus = clinicalStatus;
-	}
-
 	/**
 	 * Returns the studyCalendarEventPoint.
 	 * @hibernate.property name="studyCalendarEventPoint" type="double"
@@ -201,15 +177,15 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup imp
 	}
 
 	
-	public Collection<RequirementSpecimen> getRequirementSpecimenCollection()
+	public Collection<SpecimenRequirement> getSpecimenRequirementCollection()
 	{
-		return requirementSpecimenCollection;
+		return specimenRequirementCollection;
 	}
 
 	
-	public void setRequirementSpecimenCollection(Collection<RequirementSpecimen> requirementSpecimenCollection)
+	public void setSpecimenRequirementCollection(Collection<SpecimenRequirement> requirementSpecimenCollection)
 	{
-		this.requirementSpecimenCollection = requirementSpecimenCollection;
+		this.specimenRequirementCollection = requirementSpecimenCollection;
 	}
 
 	@Override

@@ -145,7 +145,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	  /**
      * Set of collection protocol.
      */
-      protected Collection<CollectionProtocol> userCollectionProtocolCollection = new HashSet<CollectionProtocol>();
+      protected Collection<CollectionProtocol> assignedProtocolCollection = new HashSet<CollectionProtocol>();
     
     protected Collection<Site> siteCollection = new HashSet<Site>();
 
@@ -800,16 +800,16 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
      * @hibernate.collection-key column="USER_ID"
      * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"
      */
-	public Collection<CollectionProtocol> getUserCollectionProtocolCollection()
+	public Collection<CollectionProtocol> getAssignedProtocolCollection()
 	{
-		return userCollectionProtocolCollection;
+		return assignedProtocolCollection;
 	}
 
 	
-	public void setUserCollectionProtocolCollection(
+	public void setAssignedProtocolCollection(
 			Collection<CollectionProtocol> userCollectionProtocolCollection)
 	{
-		this.userCollectionProtocolCollection = userCollectionProtocolCollection;
+		this.assignedProtocolCollection = userCollectionProtocolCollection;
 	}
 
 	/**

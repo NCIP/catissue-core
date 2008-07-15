@@ -251,7 +251,7 @@ public class AssignPrivilegePageBizLogic extends DefaultBizLogic
 			dao.openSession(null);
 			Object obj = dao.retrieve(Site.class.getName(),siteId);
 			Site site = (Site)obj;
-			Collection<User> userCollection = site.getUserCollection();
+			Collection<User> userCollection = site.getAssignedSiteUserCollection();
 			for (User user : userCollection)
 			{ 
 				NameValueBean valueBean=new NameValueBean();

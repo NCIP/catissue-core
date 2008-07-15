@@ -16,8 +16,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import com.sun.tools.xjc.reader.dtd.bindinfo.BIInterface;
-
 import edu.emory.mathcs.backport.java.util.Collections;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
@@ -36,7 +34,6 @@ import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -66,13 +63,10 @@ import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.querysuite.metadata.path.Path;
 import edu.wustl.common.querysuite.queryengine.impl.CommonPathFinder;
-import edu.wustl.common.querysuite.queryobject.ICustomFormula;
 import edu.wustl.common.querysuite.queryobject.IExpression;
-import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.common.querysuite.utils.ConstraintsObjectBuilder;
 
 public class FlexInterface
 {
@@ -134,7 +128,7 @@ public class FlexInterface
 								String[] whereColCond = {"="};
 								Object[] whereColVal = {event.getId()};
 
-								List list = bizLogic.retrieve(EventParameters.class.getName(), selectColName, whereColName, whereColCond,
+								List list = bizLogic.retrieve(SpecimenEventParameters.class.getName(), selectColName, whereColName, whereColCond,
 										whereColVal, Constants.AND_JOIN_CONDITION);
 
 								Logger.out.info("List:" + list);
@@ -1070,7 +1064,7 @@ public class FlexInterface
 				i++;
 			}
 			specimen.setLineage(edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN);
-			specimen.setChildrenSpecimen(derivedSpecimenSet);
+			specimen.setChildSpecimenCollection(derivedSpecimenSet);
 		}
 		System.out.println("Returning complete specimen");
 		return specimen;

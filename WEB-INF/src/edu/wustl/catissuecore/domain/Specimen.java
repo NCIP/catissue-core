@@ -63,7 +63,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	/**
 	 * Is this specimen still physically available in the tissue bank?
 	 */
-	private Boolean available;
+	private Boolean isAvailable;
 	
 	/**
 	 * Barcode assigned to the specimen.
@@ -106,7 +106,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	private SpecimenCollectionGroup specimenCollectionGroup;
 	
 	
-	private RequirementSpecimen requirementSpecimen;
+	private SpecimenRequirement specimenRequirement;
 	/**
 	 * Parent is changed or not
 	 */
@@ -181,9 +181,9 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	 * in the tissue bank else returns false.
 	 * @see #setAvailable(Boolean)
 	 */
-	public Boolean getAvailable()
+	public Boolean getIsAvailable()
 	{
-		return available;
+		return isAvailable;
 	}
 
 	/**
@@ -192,9 +192,10 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	 * @param available true if this specimen still physically available else false.
 	 * @see #getAvailable()
 	 */
-	public void setAvailable(Boolean available)
+
+	public void setIsAvailable(Boolean isAvailable)
 	{
-		this.available = available;
+		this.isAvailable = isAvailable;
 	}
 
 	/**
@@ -382,7 +383,27 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	{
 		this.isParentChanged = isParentChanged;
 	}
+	/**
+	 * Returns the label name of specimen.
+	 * @hibernate.property name="label" type="string" 
+	 * column="LABEL" length="255"
+	 * @return the label name of specimen.
+	 * @see #setLabel(String)
+	 */
+	public String getLabel()
+	{
+		return label;
+	}
 
+	/**
+	 * Sets the label name of specimen.
+	 * @param label The label name of specimen.
+	 * @see #getLabel()
+	 */
+	public void setLabel(String label)
+	{
+		this.label = label;
+	}
 	/**
 	 * This function Copies the data from an NewSpecimenForm object to a Specimen object.
 	 * @param specimenForm A formbean object containing the information about the Specimen.  
@@ -445,7 +466,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 				if (!validator.isEmpty(form.getSpecimenLabel())) // TODO
 				{
-					parentSpecimen.setLabel(form.getSpecimenLabel());
+					((Specimen) parentSpecimen).setLabel(form.getSpecimenLabel());
 					parentSpecimen.setId(new Long(form.getSpecimenID()));
 				}
 				else if (!validator.isEmpty(form.getBarcode()))
@@ -498,11 +519,11 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 					if (form.isAddOperation())
 					{
-						this.available = new Boolean(true);
+						this.isAvailable = new Boolean(true);
 					}
 					else
 					{
-						this.available = new Boolean(form.isAvailable());
+						this.isAvailable = new Boolean(form.isAvailable());
 					}
 
 					//in case of edit
@@ -521,7 +542,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						else
 						//specimen created from another specimen
 						{
-							if (!parentSpecimen.getLabel().equalsIgnoreCase(form.getParentSpecimenName()))
+							if (!((Specimen) parentSpecimen).getLabel().equalsIgnoreCase(form.getParentSpecimenName()))
 							{
 								isParentChanged = true;
 							}
@@ -582,7 +603,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 						collectionEventParameters.setAllValues(collectionEvent);
 
-						collectionEventParameters.setAbstractSpecimen(this);
+						collectionEventParameters.setSpecimen(this);
 						Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 						specimenEventCollection.add(collectionEventParameters);
 						Logger.out.debug("After specimenEventCollection.size(): " + specimenEventCollection.size());
@@ -602,7 +623,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 						ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 						receivedEventParameters.setAllValues(receivedEvent);
-						receivedEventParameters.setAbstractSpecimen(this);
+						receivedEventParameters.setSpecimen(this);
 
 						/**                         
 						 * Patch ID: 3835_1_4
@@ -755,18 +776,18 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 					if (form.isAddOperation())
 					{
-						this.available = new Boolean(true);
+						this.isAvailable = new Boolean(true);
 					}
 					else
 					{
-						this.available = new Boolean(form.isAvailable());
+						this.isAvailable = new Boolean(form.isAvailable());
 					}
 
 					//this.storageContainer.setId(new Long(form.getStorageContainer()));
 					this.parentSpecimen = new CellSpecimen();
 
 					//this.parentSpecimen.setId(new Long(form.getParentSpecimenId()));
-					this.parentSpecimen.setLabel(form.getParentSpecimenLabel());
+					((Specimen) this.parentSpecimen).setLabel(form.getParentSpecimenLabel());
 					((Specimen)this.parentSpecimen).setBarcode(form.getParentSpecimenBarcode());
 					//Getting the Map of External Identifiers
 					Map extMap = form.getExternalIdentifier();
@@ -998,29 +1019,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	{
 		this.noOfAliquots = noOfAliquots;
 	}
-
-	/**
-	 * Returns the label name of specimen.
-	 * @hibernate.property name="label" type="string" 
-	 * column="LABEL" length="255"
-	 * @return the label name of specimen.
-	 * @see #setLabel(String)
-	 */
-	public String getLabel()
-	{
-		return label;
-	}
-
-	/**
-	 * Sets the label name of specimen.
-	 * @param label The label name of specimen.
-	 * @see #getLabel()
-	 */
-	public void setLabel(String label)
-	{
-		this.label = label;
-	}
-
 	/**
 	 * Returns the historical information about the specimen.
 	 * @hibernate.property name="lineage" type="string" 
@@ -1128,7 +1126,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		this.collectionStatus = collectionStatus;
 	}
 
-	public Specimen(RequirementSpecimen reqSpecimen)
+	public Specimen(SpecimenRequirement reqSpecimen)
 	{
 		this.activityStatus  = Constants.ACTIVITY_STATUS_ACTIVE;
 		this.initialQuantity = new Double(reqSpecimen.getInitialQuantity());
@@ -1142,8 +1140,8 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		}
 		this.specimenType = reqSpecimen.getSpecimenType();
 		this.specimenClass = reqSpecimen.getClassName();
-		this.available = new Boolean(false);
-		this.requirementSpecimen = reqSpecimen;
+		this.isAvailable = new Boolean(false);
+		this.specimenRequirement = reqSpecimen;
 	}
 
 	public void setDefaultSpecimenEventCollection(Long userID)
@@ -1152,11 +1150,11 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		User user = new User();
 		user.setId(userID);
 		CollectionEventParameters collectionEventParameters = EventsUtil.populateCollectionEventParameters(user);
-		collectionEventParameters.setAbstractSpecimen(this);
+		collectionEventParameters.setSpecimen(this);
 		specimenEventCollection.add(collectionEventParameters);
 
 		ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);
-		receivedEventParameters.setAbstractSpecimen(this);
+		receivedEventParameters.setSpecimen(this);
 		specimenEventCollection.add(receivedEventParameters);
 		setSpecimenEventCollection(specimenEventCollection);
 	}
@@ -1222,15 +1220,15 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	}
 
 	
-	public RequirementSpecimen getRequirementSpecimen()
+	public SpecimenRequirement getSpecimenRequirement()
 	{
-		return requirementSpecimen;
+		return specimenRequirement;
 	}
 
 	
-	public void setRequirementSpecimen(RequirementSpecimen requirementSpecimen)
+	public void setSpecimenRequirement(SpecimenRequirement requirementSpecimen)
 	{
-		this.requirementSpecimen = requirementSpecimen;
+		this.specimenRequirement = requirementSpecimen;
 	}
 	//bug no. 7690
 	public void setPropogatingSpecimenEventCollection(Collection specimenEventColl, Long userId)
@@ -1248,7 +1246,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				if(collEventParam != null)
 				{
 				CollectionEventParameters collectionEventParameters = new CollectionEventParameters(collEventParam);
-				collectionEventParameters.setAbstractSpecimen(this);
+				collectionEventParameters.setSpecimen(this);
 				collectionEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
 				collectionEventParameters.setUser(user);
 				specimenEventCollection.add(collectionEventParameters);
@@ -1261,7 +1259,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				if(recEventParam != null)
 				{
 					ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters(recEventParam);
-					receivedEventParameters.setAbstractSpecimen(this);
+					receivedEventParameters.setSpecimen(this);
 					receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
 					receivedEventParameters.setUser(user);
 					specimenEventCollection.add(receivedEventParameters);

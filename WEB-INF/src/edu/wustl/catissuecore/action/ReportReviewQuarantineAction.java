@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +13,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -71,21 +72,23 @@ public class ReportReviewQuarantineAction extends BaseAction
 		{
 			String witnessFullName=null;
 			List dataList=new ArrayList();
-			EventParameters reportObject;
+			AbstractDomainObject reportObject = null;
 			SurgicalPathologyReport surgicalPathologyReport=null;
 			String scgName=null;
 			Long reportId=null;
 			User user=null;
+			Date timestamp = new Date();
 			if(reportAction.equalsIgnoreCase(Constants.REVIEW))
 			{
 				reportObject = (PathologyReportReviewParameter)reportStatusList.get(iCount);
+				timestamp = ((PathologyReportReviewParameter)reportObject).getTimestamp();
 				surgicalPathologyReport = (SurgicalPathologyReport)defaultBizLogic.retrieveAttribute(PathologyReportReviewParameter.class.getName(), reportObject.getId(), "surgicalPathologyReport");
-//				surgicalPathologyReport =(SurgicalPathologyReport)((PathologyReportReviewParameter)reportObject).getSurgicalPathologyReport();
 				user = (User)defaultBizLogic.retrieveAttribute(PathologyReportReviewParameter.class.getName(), reportObject.getId(), "user");
 			}
 			else
 			{
 				reportObject = (QuarantineEventParameter)reportStatusList.get(iCount);
+				timestamp = ((QuarantineEventParameter)reportObject).getTimestamp();
 				surgicalPathologyReport =(SurgicalPathologyReport)((QuarantineEventParameter)reportObject).getDeIdentifiedSurgicalPathologyReport();
 				user = (User)defaultBizLogic.retrieveAttribute(QuarantineEventParameter.class.getName(), reportObject.getId(), "user");
 			}
@@ -104,7 +107,7 @@ public class ReportReviewQuarantineAction extends BaseAction
 			
 			witnessFullName = user.getLastName()+", "+user.getFirstName();
 			dataList.add(iCount+1);
-			dataList.add(reportObject.getTimestamp());
+			dataList.add(timestamp);
 			dataList.add(witnessFullName);
 			dataList.add(scgName);
 			dataList.add(reportObject.getId());

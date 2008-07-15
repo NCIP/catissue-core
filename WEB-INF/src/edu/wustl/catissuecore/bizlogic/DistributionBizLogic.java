@@ -192,7 +192,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			{
 				if (((Specimen) specimenObj).getAvailableQuantity().doubleValue() == 0)
 				{
-					((Specimen) specimenObj).setAvailable(new Boolean(false));
+					((Specimen) specimenObj).setIsAvailable(new Boolean(false));
 				}
 				dao.update(specimenObj, sessionDataBean, Constants.IS_AUDITABLE_TRUE, Constants.IS_SECURE_UPDATE_TRUE,
 						Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
@@ -281,7 +281,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		}
 		if (specimen.getAvailableQuantity().doubleValue() == 0)
 		{
-			specimen.setAvailable(new Boolean(false));
+			specimen.setIsAvailable(new Boolean(false));
 		}
 		return true;
 	}

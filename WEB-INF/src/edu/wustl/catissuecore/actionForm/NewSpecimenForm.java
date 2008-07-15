@@ -430,7 +430,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
     	{
     		Logger.out.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
     		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
-    		this.parentSpecimenName = Utility.toString(specimen.getParentSpecimen().getLabel());  
+    		this.parentSpecimenName = Utility.toString(((Specimen) specimen.getParentSpecimen()).getLabel());  
     		this.parentPresent = true;
     	}
     	

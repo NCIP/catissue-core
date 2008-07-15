@@ -573,7 +573,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
 			values.put(requestedItem, derivedSpecimenOrderItem.getParentSpecimen().getLabel());
 			Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen(),
-					derivedSpecimenOrderItem.getParentSpecimen().getChildrenSpecimen());
+					derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
 			List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList, derivedSpecimenOrderItem
 					.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());
 			Iterator i = finalChildrenSpecimenList.iterator();

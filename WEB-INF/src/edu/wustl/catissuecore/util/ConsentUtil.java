@@ -162,7 +162,7 @@ public class ConsentUtil
 		if(!consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RESET) && !consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION) )
 		{
 			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
-			specimen.setAvailable(new Boolean(false) );
+			specimen.setIsAvailable(new Boolean(false) );
 
 			if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() !=null)		// locations cleared
 			{
@@ -194,7 +194,7 @@ public class ConsentUtil
 			if(!isEventAdded(eventCollection, "ReturnEventParameters"))
 			{
 				ReturnEventParameters returnEvent = new ReturnEventParameters();
-				returnEvent.setAbstractSpecimen(specimen );
+				returnEvent.setSpecimen(specimen );
 				dao.insert(returnEvent,sessionDataBean,true,true) ;
 				
 				eventCollection.add(returnEvent);
@@ -247,7 +247,7 @@ public class ConsentUtil
 		if(specimen!=null)
 		{
 			updateSpecimenStatus(specimen,  consentWithdrawalOption, consentTierID, dao, sessionDataBean);
-			Collection childSpecimens = specimen.getChildrenSpecimen();
+			Collection childSpecimens = specimen.getChildSpecimenCollection();
 			Iterator itr = childSpecimens.iterator();  
 			while(itr.hasNext() )
 			{
@@ -378,7 +378,7 @@ public class ConsentUtil
 		specimen.setConsentTierStatusCollection(updatedSpecimenStatusCollection);
 		
 		//to update child specimens
-		Collection childSpecimens = specimen.getChildrenSpecimen();
+		Collection childSpecimens = specimen.getChildSpecimenCollection();
 		Iterator childItr = childSpecimens.iterator();  
 		while(childItr.hasNext() )
 		{
@@ -392,7 +392,7 @@ public class ConsentUtil
 		if(specimen!=null)
 		{
 			updateSpecimenConsentStatus(specimen, consentTierID, statusValue, applyChangesTo, dao);
-			Collection childSpecimens = specimen.getChildrenSpecimen();
+			Collection childSpecimens = specimen.getChildSpecimenCollection();
 			Iterator itr = childSpecimens.iterator();  
 			while(itr.hasNext() )
 			{
@@ -442,7 +442,7 @@ public class ConsentUtil
 		}
 
 		//to update child specimens
-		Collection childSpecimens = specimen.getChildrenSpecimen();
+		Collection childSpecimens = specimen.getChildSpecimenCollection();
 		Iterator childItr = childSpecimens.iterator();  
 		while(childItr.hasNext() )
 		{
@@ -456,7 +456,7 @@ public class ConsentUtil
 		if(specimen!=null)
 		{
 			checkConflictingConsents(newConsentCollection, oldConsentCollection, specimen, dao);
-			Collection childSpecimens = specimen.getChildrenSpecimen();
+			Collection childSpecimens = specimen.getChildSpecimenCollection();
 			Iterator itr = childSpecimens.iterator();  
 			while(itr.hasNext() )
 			{

@@ -109,7 +109,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		}
 		catch (Exception e)
 		{
-
+			throw new DAOException("Failed to delete Position from Storage Container cache");
 		}
 
 	}

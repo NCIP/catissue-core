@@ -2,10 +2,11 @@ package edu.wustl.catissuecore.domain.pathology;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
-import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -14,7 +15,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class
  * table="CATISSUE_QUARANTINE_PARAMS"
  */
-public class QuarantineEventParameter extends EventParameters
+public class QuarantineEventParameter extends AbstractDomainObject implements java.io.Serializable
 {
 
 	/**
@@ -23,6 +24,26 @@ public class QuarantineEventParameter extends EventParameters
 	private static final long serialVersionUID = 1L;
 
 	/**
+     * System generated unique id.
+     */
+	protected Long id;
+	
+	/**
+     * Date and time of the event.
+     */
+	protected Date timestamp;
+	
+	/**
+     * User who performs the event.
+     */
+	protected User user;
+	
+	/**
+     * Text comment on event.
+     */
+	protected String comment;
+	
+	/**
 	 * quarantine status of the associated deidentified report. 
 	 */
 	protected Boolean quarantineStatus;
@@ -30,7 +51,7 @@ public class QuarantineEventParameter extends EventParameters
 	/**
 	 * de-identified surgical pthology report.
 	 */
-	protected DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport;
+	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 	
 	/**
 	 * Quarantine comment status of de-identified surgical pthology report.
@@ -67,23 +88,66 @@ public class QuarantineEventParameter extends EventParameters
 	 */
 	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
-		return deidentifiedSurgicalPathologyReport;
+		return deIdentifiedSurgicalPathologyReport;
 	}
-
 	/**
 	 * @param deidentifiedSurgicalPathologyReport sets deidentified pathology report.
 	 */
+	
 	public void setDeIdentifiedSurgicalPathologyReport(
-			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
+			DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport)
 	{
-		this.deidentifiedSurgicalPathologyReport = deidentifiedSurgicalPathologyReport;
+		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
+	}
+	
+	 
+	public Date getTimestamp()
+	{
+		return timestamp;
 	}
 
-	 /**
+	
+	public void setTimestamp(Date timestamp)
+	{
+		this.timestamp = timestamp;
+	}
+
+	
+	public User getUser()
+	{
+		return user;
+	}
+
+	
+	public void setUser(User user)
+	{
+		this.user = user;
+	}
+
+	
+	public String getComment()
+	{
+		return comment;
+	}
+
+	
+	public void setComment(String comment)
+	{
+		this.comment = comment;
+	}
+
+	
+	public void setId(Long id)
+	{
+		this.id = id;
+	}
+
+	/**
 	  *  @return quarantine status of the deidentified pathology report
 	  *  @hibernate.property  name="quarantineStatus"
 	  *  type="boolean" column="IS_QUARANTINED"
 	  */
+	
 	public Boolean getQuarantineStatus()
 	{
 		return quarantineStatus;

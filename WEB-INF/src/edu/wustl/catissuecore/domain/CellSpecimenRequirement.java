@@ -18,16 +18,16 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * A biospecimen composed of purified single cells not in the 
  * context of a tissue or other biospecimen fluid.
- * @hibernate.subclass name="CellRequirementSpecimen" discriminator-value = "Cell"
+ * @hibernate.subclass name="CellSpecimenRequirement" discriminator-value = "Cell"
  */
-public class CellRequirementSpecimen extends RequirementSpecimen implements Serializable
+public class CellSpecimenRequirement extends SpecimenRequirement implements Serializable
 {
 	private static final long serialVersionUID = 1232228923230L;
-	public CellRequirementSpecimen()
+	public CellSpecimenRequirement()
 	{
 		
 	}
-	public CellRequirementSpecimen(AbstractActionForm form)
+	public CellSpecimenRequirement(AbstractActionForm form)
     {
     	setAllValues(form);
     }
@@ -48,14 +48,14 @@ public class CellRequirementSpecimen extends RequirementSpecimen implements Seri
     }
     
     
-    public CellRequirementSpecimen(CellRequirementSpecimen cellRequirementSpecimen)
+    public CellSpecimenRequirement(CellSpecimenRequirement cellRequirementSpecimen)
     {
     	//super(cellRequirementSpecimen);
     }
     
-    public CellRequirementSpecimen createClone()
+    public CellSpecimenRequirement createClone()
     {
-    	CellRequirementSpecimen cloneCellRequirementSpecimen = new CellRequirementSpecimen(this);
+    	CellSpecimenRequirement cloneCellRequirementSpecimen = new CellSpecimenRequirement(this);
     	return cloneCellRequirementSpecimen;
     }
 }

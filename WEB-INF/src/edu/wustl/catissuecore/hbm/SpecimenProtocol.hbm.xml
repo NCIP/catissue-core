@@ -230,7 +230,7 @@
         </set>
         
         <set
-            name="userCollection"
+            name="assignedProtocolUserCollection"
             table="CATISSUE_USER_CP"
             fetch="subselect" lazy="false" 
             inverse="false"
@@ -254,7 +254,7 @@
         </set>
         
         <set
-            name="sitecollection"
+            name="siteCollection"
             table="CATISSUE_SITE_CP"
             lazy="false" 
             inverse="false"

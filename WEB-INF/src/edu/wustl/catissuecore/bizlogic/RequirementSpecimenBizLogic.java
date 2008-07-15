@@ -3,7 +3,7 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.Iterator;
 
-import edu.wustl.catissuecore.domain.RequirementSpecimen;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
@@ -29,7 +29,7 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		RequirementSpecimen reqSpecimen  = (RequirementSpecimen) obj;
+		SpecimenRequirement reqSpecimen  = (SpecimenRequirement) obj;
 		if (reqSpecimen.getSpecimenCharacteristics() != null)
 		{
 			dao.insert(reqSpecimen.getSpecimenCharacteristics(), sessionDataBean, false, false);
@@ -52,14 +52,14 @@ public class RequirementSpecimenBizLogic extends DefaultBizLogic
 	 * @throws DAOException Database related exception
 	 * @throws SMException Security related exception
 	 */
-	private void insertChildSpecimens(RequirementSpecimen reqSpecimen, DAO dao, SessionDataBean sessionDataBean)
+	private void insertChildSpecimens(SpecimenRequirement reqSpecimen, DAO dao, SessionDataBean sessionDataBean)
 			throws SMException, DAOException
 	{
-		Collection childReqSpecimenCollection = reqSpecimen.getChildrenSpecimen();
-		Iterator<RequirementSpecimen> it = childReqSpecimenCollection.iterator();
+		Collection childReqSpecimenCollection = reqSpecimen.getChildSpecimenCollection();
+		Iterator<SpecimenRequirement> it = childReqSpecimenCollection.iterator();
 		while (it.hasNext())
 		{
-			RequirementSpecimen childReqSpecimen = it.next();
+			SpecimenRequirement childReqSpecimen = it.next();
 			insert(childReqSpecimen, dao, sessionDataBean);
 		}
 	}

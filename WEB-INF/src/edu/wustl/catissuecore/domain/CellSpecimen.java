@@ -51,7 +51,7 @@ public class CellSpecimen extends Specimen implements Serializable
         }
     }
     
-    public CellSpecimen(RequirementSpecimen cellReqSpecimen)
+    public CellSpecimen(SpecimenRequirement cellReqSpecimen)
     {
     	super(cellReqSpecimen);
     }

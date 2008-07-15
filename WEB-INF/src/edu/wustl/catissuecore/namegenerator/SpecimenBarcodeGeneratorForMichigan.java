@@ -161,9 +161,9 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 			setNextAvailableDeriveSpecimenBarcode(objSpecimen.getParentSpecimen(),objSpecimen);
 		}
 		
-		if(objSpecimen.getChildrenSpecimen().size()>0)
+		if(objSpecimen.getChildSpecimenCollection().size()>0)
 		{
-			Collection specimenCollection = objSpecimen.getChildrenSpecimen();
+			Collection specimenCollection = objSpecimen.getChildSpecimenCollection();
 			Iterator it = specimenCollection.iterator();
 			while(it.hasNext())
 			{
@@ -183,7 +183,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	{
 					
 		String parentSpecimenBarcode = (String) parentObject.getBarcode();				
-		long aliquotCount = parentObject.getChildrenSpecimen().size();
+		long aliquotCount = parentObject.getChildSpecimenCollection().size();
 		specimenObject.setBarcode(parentSpecimenBarcode + "_" + (format((aliquotCount + 1), "00")));
 		barcodeCountTreeMap.put(specimenObject,0);
 	}
@@ -203,7 +203,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 		else
 		{
 			// biz logic 
-			aliquotCount = parentObject.getChildrenSpecimen().size();	
+			aliquotCount = parentObject.getChildSpecimenCollection().size();	
 			
 		}		
 		specimenObject.setBarcode( parentSpecimenBarcode + "_"+ format((++aliquotCount), "00"));

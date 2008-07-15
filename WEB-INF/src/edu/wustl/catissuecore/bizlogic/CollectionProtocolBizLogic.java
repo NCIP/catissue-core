@@ -29,7 +29,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.RequirementSpecimen;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
@@ -137,8 +137,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) it.next();
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
-			Collection<RequirementSpecimen> reqSpecimenCollection = collectionProtocolEvent
-					.getRequirementSpecimenCollection();
+			Collection<SpecimenRequirement> reqSpecimenCollection = collectionProtocolEvent
+					.getSpecimenRequirementCollection();
 
 			insertCollectionProtocolEvent(dao, sessionDataBean, collectionProtocolEvent);
 
@@ -183,25 +183,25 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @throws UserNotAuthorizedException
 	 */
 	private void insertSpecimens(RequirementSpecimenBizLogic bizLogic, DAO dao,
-			Collection<RequirementSpecimen> reqSpecimenCollection, SessionDataBean sessionDataBean,
+			Collection<SpecimenRequirement> reqSpecimenCollection, SessionDataBean sessionDataBean,
 			CollectionProtocolEvent collectionProtocolEvent) throws DAOException,
 			UserNotAuthorizedException
 	{
 		TaskTimeCalculater specimenInsert = TaskTimeCalculater.startTask("Insert specimen for CP",
 				CollectionProtocolBizLogic.class);
-		Iterator<RequirementSpecimen> specIter = reqSpecimenCollection.iterator();
+		Iterator<SpecimenRequirement> specIter = reqSpecimenCollection.iterator();
 		Collection specimenMap = new LinkedHashSet();
 		while (specIter.hasNext())
 		{
-			RequirementSpecimen requirementSpecimen = specIter.next();
-			requirementSpecimen.setCollectionProtocolEvent(collectionProtocolEvent);
-			if (requirementSpecimen.getParentSpecimen() != null)
+			SpecimenRequirement SpecimenRequirement = specIter.next();
+			SpecimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
+			if (SpecimenRequirement.getParentSpecimen() != null)
 			{
-				addToParentSpecimen(requirementSpecimen);
+				addToParentSpecimen(SpecimenRequirement);
 			}
 			else
 			{
-				specimenMap.add(requirementSpecimen);
+				specimenMap.add(SpecimenRequirement);
 			}
 		}
 		//bizLogic.setCpbased(true);
@@ -213,19 +213,19 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * This function adds specimen object to its parent's childrenCollection
 	 * if not already added.
 	 * 
-	 * @param requirementSpecimen The object to be added to it's parent childrenCollection
+	 * @param SpecimenRequirement The object to be added to it's parent childrenCollection
 	 */
-	private void addToParentSpecimen(RequirementSpecimen requirementSpecimen)
+	private void addToParentSpecimen(SpecimenRequirement SpecimenRequirement)
 	{
-		Collection<AbstractSpecimen> childrenCollection = requirementSpecimen.getParentSpecimen()
-				.getChildrenSpecimen();
+		Collection<AbstractSpecimen> childrenCollection = SpecimenRequirement.getParentSpecimen()
+				.getChildSpecimenCollection();
 		if (childrenCollection == null)
 		{
 			childrenCollection = new HashSet<AbstractSpecimen>();
 		}
-		if (!childrenCollection.contains(requirementSpecimen))
+		if (!childrenCollection.contains(SpecimenRequirement))
 		{
-			childrenCollection.add(requirementSpecimen);
+			childrenCollection.add(SpecimenRequirement);
 		}
 	}
 
@@ -489,33 +489,33 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			CollectionProtocolEvent collectionProtocolEvent) throws DAOException,
 			UserNotAuthorizedException
 	{
-		Iterator<RequirementSpecimen> srIt = oldCollectionProtocolEvent
-				.getRequirementSpecimenCollection().iterator();
+		Iterator<SpecimenRequirement> srIt = oldCollectionProtocolEvent
+				.getSpecimenRequirementCollection().iterator();
 		RequirementSpecimenBizLogic reqSpecimenBizLogic = new RequirementSpecimenBizLogic();
-		Collection<RequirementSpecimen> oldReqspecimenCollection = null;
+		Collection<SpecimenRequirement> oldReqspecimenCollection = null;
 		if (oldCollectionProtocolEvent != null)
 		{
 			oldReqspecimenCollection = oldCollectionProtocolEvent
-					.getRequirementSpecimenCollection();
+					.getSpecimenRequirementCollection();
 		}
 		while (srIt.hasNext())
 		{
-			RequirementSpecimen requirementSpecimen = srIt.next();
-			if (requirementSpecimen.getCollectionProtocolEvent() == null)
+			SpecimenRequirement SpecimenRequirement = srIt.next();
+			if (SpecimenRequirement.getCollectionProtocolEvent() == null)
 			{
-				requirementSpecimen.setCollectionProtocolEvent(collectionProtocolEvent);
+				SpecimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
 			}
-			requirementSpecimen.setCollectionProtocolEvent(collectionProtocolEvent);
-			if (requirementSpecimen.getId() == null || requirementSpecimen.getId() <= 0)
+			SpecimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
+			if (SpecimenRequirement.getId() == null || SpecimenRequirement.getId() <= 0)
 			{
-				reqSpecimenBizLogic.insert(requirementSpecimen, dao, sessionDataBean);
+				reqSpecimenBizLogic.insert(SpecimenRequirement, dao, sessionDataBean);
 			}
 			else
 			{
-				RequirementSpecimen oldRequirementSpecimen = (RequirementSpecimen) getCorrespondingOldObject(
-						oldReqspecimenCollection, requirementSpecimen.getId());
-				dao.update(requirementSpecimen, sessionDataBean, true, false, false);
-				dao.audit(requirementSpecimen, oldRequirementSpecimen, sessionDataBean, true);
+				SpecimenRequirement oldRequirementSpecimen = (SpecimenRequirement) getCorrespondingOldObject(
+						oldReqspecimenCollection, SpecimenRequirement.getId());
+				dao.update(SpecimenRequirement, sessionDataBean, true, false, false);
+				dao.audit(SpecimenRequirement, oldRequirementSpecimen, sessionDataBean, true);
 
 			}
 		}
@@ -534,7 +534,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			User pi = (User) obj;//list.get(0);
 			collectionProtocol.setPrincipalInvestigator(pi);
-			collectionProtocol.getUserCollection().add(pi);
+			collectionProtocol.getAssignedProtocolUserCollection().add(pi);
 			System.out.println();
 		}
 	}
@@ -571,7 +571,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 					coordinatorColl.add(coordinator);
 					coordinator.getCollectionProtocolCollection().add(collectionProtocol);
-					collectionProtocol.getUserCollection().add(coordinator);
+					collectionProtocol.getAssignedProtocolUserCollection().add(coordinator);
 				}
 			}
 		}
@@ -800,31 +800,31 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 								"errors.item.required", message));
 					}
 
-					Collection<RequirementSpecimen> reqCollection = event
-							.getRequirementSpecimenCollection();
+					Collection<SpecimenRequirement> reqCollection = event
+							.getSpecimenRequirementCollection();
 
 					if (reqCollection != null && reqCollection.size() != 0)
 					{
-						Iterator<RequirementSpecimen> reqIterator = reqCollection.iterator();
+						Iterator<SpecimenRequirement> reqIterator = reqCollection.iterator();
 
 						while (reqIterator.hasNext())
 						{
 
-							RequirementSpecimen requirementSpecimen = reqIterator.next();
-							if (requirementSpecimen == null)
+							SpecimenRequirement SpecimenRequirement = reqIterator.next();
+							if (SpecimenRequirement == null)
 							{
 								throw new DAOException(ApplicationProperties
 										.getValue("protocol.spReqEmpty.errMsg"));
 							}
-							ApiSearchUtil.setReqSpecimenDefault(requirementSpecimen);
-							String specimenClass = requirementSpecimen.getClassName();
+							ApiSearchUtil.setReqSpecimenDefault(SpecimenRequirement);
+							String specimenClass = SpecimenRequirement.getClassName();
 							if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
 							{
 								throw new DAOException(ApplicationProperties
 										.getValue("protocol.class.errMsg"));
 							}
 							if (!Validator.isEnumeratedValue(Utility
-									.getSpecimenTypes(specimenClass), requirementSpecimen
+									.getSpecimenTypes(specimenClass), SpecimenRequirement
 									.getSpecimenType()))
 							{
 								throw new DAOException(ApplicationProperties
@@ -1208,8 +1208,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			CollectionProtocolEvent collectionProtocolEvent = cpIterator.next();
 			
-			Collection specimenCollection = collectionProtocolEvent.getRequirementSpecimenCollection();
-			Iterator<RequirementSpecimen> specimenIterator = specimenCollection.iterator();
+			Collection specimenCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+			Iterator<SpecimenRequirement> specimenIterator = specimenCollection.iterator();
 			while (specimenIterator.hasNext())
 			{
 				specimenIterator.next();

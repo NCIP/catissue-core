@@ -128,7 +128,7 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			if(!specimenVO.getReadOnly())
 			{
 				specimen = createSpecimenDomainObject(specimenVO);
-				specimen.setChildrenSpecimen(getChildrenSpecimens(specimenVO,specimen));
+				specimen.setChildSpecimenCollection(getChildrenSpecimens(specimenVO,specimen));
 				specimenDomainCollection.add(specimen);
 			}
 			else
@@ -157,7 +157,7 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 				{
 					specimen = createSpecimenDomainObject(aliquotSpecimen);
 					specimen.setParentSpecimen(parentSpecimen);
-					specimen.setChildrenSpecimen(
+					specimen.setChildSpecimenCollection(
 						getChildrenSpecimens(aliquotSpecimen,specimen));
 					childrenSpecimens.add(specimen);
 				}
@@ -182,7 +182,7 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 				{
 					specimen = createSpecimenDomainObject(derivedSpecimen);
 					specimen.setParentSpecimen(parentSpecimen);
-					specimen.setChildrenSpecimen(
+					specimen.setChildSpecimenCollection(
 							getChildrenSpecimens(derivedSpecimen,specimen));
 					childrenSpecimens.add(specimen);
 				}
@@ -248,7 +248,7 @@ public class UpdateSpecimenStatusAction extends BaseAction {
 			specimen.setAvailableQuantity(new Double(initialQuantity));
 			if((specimen.getAvailableQuantity()!=null && specimen.getAvailableQuantity().doubleValue() > 0))
 			{
-				specimen.setAvailable(Boolean.TRUE);
+				specimen.setIsAvailable(Boolean.TRUE);
 			}
 		}
 		else

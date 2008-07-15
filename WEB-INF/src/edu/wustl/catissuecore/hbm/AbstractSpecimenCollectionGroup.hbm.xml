@@ -102,7 +102,7 @@
         />
         
          <set
-	            name="requirementSpecimenCollection"
+	            name="specimenRequirementCollection"
 	            table="CATISSUE_CP_REQ_SPECIMEN"
 	            lazy="true"
 	            inverse="true"
@@ -114,7 +114,7 @@
 	                  column="COLLECTION_PROTOCOL_EVENT_ID"
 	              />
 	              <one-to-many
-	                  class="edu.wustl.catissuecore.domain.RequirementSpecimen"
+	                  class="edu.wustl.catissuecore.domain.SpecimenRequirement"
 	              />
 	    </set>
 
@@ -273,7 +273,7 @@
 	        />
 	        
 	        <one-to-one
-	            name="deidentifiedSurgicalPathologyReport"
+	            name="deIdentifiedSurgicalPathologyReport"
 	            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
 	            cascade="none"
 	         

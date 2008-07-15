@@ -1219,7 +1219,7 @@ public class UserBizLogic extends DefaultBizLogic
 				
 				User user = (User) dao.retrieve(User.class.getName(), userId);
 				userColl = user.getCollectionProtocolCollection();
-				userCpCollection = user.getUserCollectionProtocolCollection();
+				userCpCollection = user.getAssignedProtocolCollection();
 					
 				if(user.getAdminuser())
 				{

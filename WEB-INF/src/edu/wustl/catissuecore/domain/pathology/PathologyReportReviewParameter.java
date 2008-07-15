@@ -3,10 +3,11 @@ package edu.wustl.catissuecore.domain.pathology;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
-import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -15,7 +16,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class
  * table="CATISSUE_REVIEW_PARAMS"
  */
-public class PathologyReportReviewParameter extends EventParameters
+public class PathologyReportReviewParameter extends AbstractDomainObject implements java.io.Serializable
 {
 
 	/**
@@ -24,10 +25,79 @@ public class PathologyReportReviewParameter extends EventParameters
 	private static final long serialVersionUID = 1L;
 
 	/**
+     * System generated unique id.
+     */
+	protected Long id;
+	
+	/**
+     * Date and time of the event.
+     */
+	protected Date timestamp;
+	
+	/**
+     * User who performs the event.
+     */
+	protected User user;
+	
+	/**
+     * Text comment on event.
+     */
+	protected String comment;
+
+	/**
 	 * Reviewer role 
 	 */
 	protected String reviewerRole;
 	
+	
+	public Date getTimestamp()
+	{
+		return timestamp;
+	}
+
+
+	
+	public void setTimestamp(Date timestamp)
+	{
+		this.timestamp = timestamp;
+	}
+
+
+	
+	public User getUser()
+	{
+		return user;
+	}
+
+
+	
+	public void setUser(User user)
+	{
+		this.user = user;
+	}
+
+
+	
+	public String getComment()
+	{
+		return comment;
+	}
+
+
+	
+	public void setComment(String comment)
+	{
+		this.comment = comment;
+	}
+
+
+	
+	public void setId(Long id)
+	{
+		this.id = id;
+	}
+
+
 	/**
 	 * Surgical pathology report associated with current review parameter set.  
 	 */
@@ -45,8 +115,6 @@ public class PathologyReportReviewParameter extends EventParameters
 	{
 
 	}
-
-	
 	/**
 	 * 
 	 * @return System generated unique id.

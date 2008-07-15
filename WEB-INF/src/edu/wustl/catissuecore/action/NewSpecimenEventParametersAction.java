@@ -25,8 +25,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -83,7 +83,7 @@ public class NewSpecimenEventParametersAction  extends SecureAction
 	            	while(it.hasNext())
 	            	{
 	            		List rowData = new ArrayList();
-	            		EventParameters eventParameters = (EventParameters)it.next();
+	            		SpecimenEventParameters eventParameters = (SpecimenEventParameters)it.next();
 	            		            		
 	            		if(eventParameters != null)
 	            		{

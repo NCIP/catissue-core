@@ -90,9 +90,9 @@ public class MolecularSpecimen extends Specimen implements Serializable
             Logger.out.error(excp.getMessage());
         }
     }
-    public MolecularSpecimen(RequirementSpecimen molecularReqSpecimen)
+    public MolecularSpecimen(SpecimenRequirement molecularReqSpecimen)
     {
     	super(molecularReqSpecimen);
-    	this.concentrationInMicrogramPerMicroliter = ((MolecularRequirementSpecimen)molecularReqSpecimen).concentrationInMicrogramPerMicroliter;
+    	this.concentrationInMicrogramPerMicroliter = ((MolecularSpecimenRequirement)molecularReqSpecimen).concentrationInMicrogramPerMicroliter;
     }
 }

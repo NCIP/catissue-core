@@ -79,7 +79,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		{
 					
 			Specimen objSpecimen = (Specimen)abstractDomainObject;			
-			Collection specimenCollection  = objSpecimen.getChildrenSpecimen();
+			Collection specimenCollection  = objSpecimen.getChildSpecimenCollection();
 			Iterator itr = specimenCollection.iterator();
 			ArrayList specimenList = new ArrayList();
 			specimenList.add(objSpecimen);
@@ -107,7 +107,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 	void getAllSpecimenList(Specimen objSpecimen,List specimenList)
 	{
 		
-		Collection childSpecimen = objSpecimen.getChildrenSpecimen();
+		Collection childSpecimen = objSpecimen.getChildSpecimenCollection();
 		if(childSpecimen!= null && childSpecimen.size() >0)
 		{
 			

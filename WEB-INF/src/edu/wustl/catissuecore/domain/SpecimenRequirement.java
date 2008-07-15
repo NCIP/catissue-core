@@ -2,7 +2,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 
-public class RequirementSpecimen extends AbstractSpecimen
+public class SpecimenRequirement extends AbstractSpecimen
 {
 	private static final long serialVersionUID = -34444448799655L;
 	

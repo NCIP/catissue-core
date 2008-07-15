@@ -33,7 +33,7 @@
             lazy="false"
         />
         <set
-            name="childrenSpecimen"
+            name="childSpecimenCollection"
             table="CATISSUE_ABSTRACT_SPECIMEN"
             lazy="true"
             inverse="true"
@@ -206,7 +206,7 @@
         />
 
         <property
-            name="available"
+            name="isAvailable"
             type="boolean"
             update="true"
             insert="true"
@@ -276,8 +276,8 @@
             lazy="false"
         />
         <many-to-one
-            name="requirementSpecimen"
-            class="edu.wustl.catissuecore.domain.RequirementSpecimen"
+            name="specimenRequirement"
+            class="edu.wustl.catissuecore.domain.SpecimenRequirement"
             cascade="none"
             outer-join="auto"
             update="true"
@@ -327,7 +327,7 @@
 	   </joined-subclass>
 	 </joined-subclass>
 	 
-	 <joined-subclass name="edu.wustl.catissuecore.domain.RequirementSpecimen" table="CATISSUE_CP_REQ_SPECIMEN">
+	 <joined-subclass name="edu.wustl.catissuecore.domain.SpecimenRequirement" table="CATISSUE_CP_REQ_SPECIMEN">
 
 	 	 <key column="IDENTIFIER"/>
 	 	 <set
@@ -366,7 +366,7 @@
 	        />
 	     
 	   <joined-subclass
-            name="edu.wustl.catissuecore.domain.FluidRequirementSpecimen"
+            name="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"
             table="catissue_fluid_req_specimen"
 			lazy="true"
        >
@@ -374,7 +374,7 @@
        </joined-subclass>
 
        <joined-subclass
-            name="edu.wustl.catissuecore.domain.CellRequirementSpecimen"
+            name="edu.wustl.catissuecore.domain.CellSpecimenRequirement"
             table="catissue_cell_req_specimen"
 			lazy="true"
        >
@@ -382,7 +382,7 @@
         </joined-subclass>
 
         <joined-subclass
-            name="edu.wustl.catissuecore.domain.MolecularRequirementSpecimen"
+            name="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement"
             table="catissue_mol_req_specimen"
 			lazy="true"
         >
@@ -400,7 +400,7 @@
 
        <joined-subclass
             
-            name="edu.wustl.catissuecore.domain.TissueRequirementSpecimen"
+            name="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"
             table="catissue_tissue_req_specimen"
 			lazy="true"
         >

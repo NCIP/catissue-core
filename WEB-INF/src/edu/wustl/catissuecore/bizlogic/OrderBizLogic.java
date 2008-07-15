@@ -263,7 +263,7 @@ public class OrderBizLogic extends DefaultBizLogic
 								{
 									Specimen specimen = (Specimen) specimenCollIter.next();
 									List childSpecimenCollection = OrderingSystemUtil
-											.getAllChildrenSpecimen(specimen, specimen.getChildrenSpecimen());
+											.getAllChildrenSpecimen(specimen, specimen.getChildSpecimenCollection());
 									List finalChildrenSpecimenCollection = null;
 									if (pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null
 											&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")

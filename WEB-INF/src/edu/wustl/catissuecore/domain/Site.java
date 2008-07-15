@@ -69,7 +69,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	
 	private Collection<CollectionProtocol> collectionProtocolCollection = new HashSet<CollectionProtocol>();
 	
-	private Collection<User> userCollection = new HashSet<User>();
+	private Collection<User> assignedSiteUserCollection = new HashSet<User>();
 	//Default Constructor Required by hibernate
 	public Site()
 	{
@@ -323,15 +323,15 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
 	 * @return The collection of Users(Authorized users) registered for this Site.
 	 */
-	public Collection<User> getUserCollection()
+	public Collection<User> getAssignedSiteUserCollection()
 	{
-		return userCollection;
+		return assignedSiteUserCollection;
 	}
 
 	
-	public void setUserCollection(Collection<User> userCollection)
+	public void setAssignedSiteUserCollection(Collection<User> userCollection)
 	{
-		this.userCollection = userCollection;
+		this.assignedSiteUserCollection = userCollection;
 	}
 	
 }

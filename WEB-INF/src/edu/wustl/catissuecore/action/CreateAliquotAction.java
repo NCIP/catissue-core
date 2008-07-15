@@ -290,7 +290,7 @@ public class CreateAliquotAction extends BaseAction
 			aliquotSpecimen.setParentSpecimen(parentSpecimen);
 			aliquotSpecimen.setSpecimenCollectionGroup(scg);
 			aliquotSpecimen.setLineage(Constants.ALIQUOT);
-			aliquotSpecimen.setAvailable(Boolean.TRUE);
+			aliquotSpecimen.setIsAvailable(Boolean.TRUE);
 			aliquotSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			aliquotSpecimen.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
 			aliquotSpecimen.setDisposeParentSpecimen(disposeParentSpecimen);

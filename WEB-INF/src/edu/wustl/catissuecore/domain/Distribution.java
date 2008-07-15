@@ -63,18 +63,10 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 * Defines whether this SpecimenProtocol record can be queried (Active) or not queried (Inactive) by any actor.
 	 */
 	protected String activityStatus;
-
-	/**
-	 * Collection of specimen Array in this distribution.
-	 * @see SpecimenArray
-	 */
-	protected Collection specimenArrayCollection = new HashSet();
-
 	/**
 	 * OrderDetails associated with the order_item.
 	 */
 	protected OrderDetails orderDetails;
-	protected Specimen specimen;
 	/**
 	 * User who performs the event.
 	 */
@@ -242,22 +234,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	}
 
 	
-	/**
-	 * @return Returns the specimen.
-	 */
-	public Specimen getSpecimen()
-	{
-		return specimen;
-	}
-
-	/**
-	 * @param specimen The specimen to set.
-	 */
-	public void setSpecimen(Specimen specimen)
-	{
-		this.specimen = specimen;
-	}
-
+	
 	/**
 	 * @return Returns the user.
 	 */
@@ -311,7 +288,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 		try
 		{
 			//super.setAllValues(abstractForm);
-			this.specimen = null;
+			//this.specimen = null;
 			// Change for API Search   --- Ashwin 04/10/2006
 			final DistributionForm form = (DistributionForm) abstractForm;
 			try
@@ -414,29 +391,6 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 		}
 		return newMap;
 
-	}
-
-	/**
-	 * Returns a collection of specimen array.
-	 * @hibernate.set name="specimenArrayCollection"
-	 *                table="CATISSUE_SPECIMEN_ARRAY" cascade="none"
-	 *                inverse="false" lazy="false"
-	 * @hibernate.collection-key column="DISTRIBUTION_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenArray"
-	 * @return specimenArrayCollection a collection of specimen array.
-	 */
-	public Collection getSpecimenArrayCollection()
-	{
-		return specimenArrayCollection;
-	}
-
-	/**
-	 * Sets the collection of specimen Array.
-	 * @param specimenArrayCollection set of specimen array
-	 */
-	public void setSpecimenArrayCollection(Collection specimenArrayCollection)
-	{
-		this.specimenArrayCollection = specimenArrayCollection;
 	}
 
 	/**

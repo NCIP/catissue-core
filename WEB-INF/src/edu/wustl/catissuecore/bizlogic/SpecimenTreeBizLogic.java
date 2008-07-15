@@ -83,7 +83,7 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 			//The list consists of only one element that is:- specimen instance
 			Specimen specimenObj = (Specimen) object;
 			Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(Specimen.class.getName(),id,"elements(childrenSpecimen)");
-			specimenObj.setChildrenSpecimen(childColl);
+			specimenObj.setChildSpecimenCollection(childColl);
 			allNodes = formTreeNode(specimenObj);
 		}
 		else //If specimenCollectiongroupId is sent(Incase of pathological case)
@@ -176,8 +176,8 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 			
 			specimenTreeVector.add(treeNode);
 			Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"elements(childrenSpecimen)");
-			specimen.setChildrenSpecimen(childColl);
-			Vector subChildNodesVector = formSpecimenTree(specimenTreeVector,treeNode,specimen.getChildrenSpecimen());
+			specimen.setChildSpecimenCollection(childColl);
+			Vector subChildNodesVector = formSpecimenTree(specimenTreeVector,treeNode,specimen.getChildSpecimenCollection());
 			
 			if(subChildNodesVector != null)
 				treeNode.setChildNodes(subChildNodesVector);

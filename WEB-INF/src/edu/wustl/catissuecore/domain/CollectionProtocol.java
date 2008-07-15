@@ -109,9 +109,9 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
      * */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
 	
-	protected Collection<User> userCollection = new HashSet<User>();
+	protected Collection<User> assignedProtocolUserCollection = new HashSet<User>();
 	
-	protected Collection<Site> sitecollection = new HashSet<Site>();
+	protected Collection<Site> siteCollection = new HashSet<Site>();
 	
 	/**
 	 * @return the unsignedConsentDocumentURL
@@ -292,7 +292,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	final CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
         	
         	coordinatorCollection.clear();
-        	sitecollection.clear();
+        	siteCollection.clear();
         	this.collectionProtocolEventCollection.clear();
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
         	if(coordinatorsArr!=null)
@@ -317,7 +317,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        		{
 		        		Site site = new Site();
 		        		site.setId(new Long(siteArr[i]));
-		        		sitecollection.add(site);
+		        		siteCollection.add(site);
 	        		}
 				}
         	}
@@ -591,14 +591,14 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
 	 * @return The collection of Users(ProtocolCoordinators) for this Protocol.
 	 */
-	public Collection<User> getUserCollection()
+	public Collection<User> getAssignedProtocolUserCollection()
 	{
-		return userCollection;
+		return assignedProtocolUserCollection;
 	}
 	
-	public void setUserCollection(Collection<User> userCollection)
+	public void setAssignedProtocolUserCollection(Collection<User> assignedProtocolUserCollection)
 	{
-		this.userCollection = userCollection;
+		this.assignedProtocolUserCollection = assignedProtocolUserCollection;
 	}
 
 
@@ -610,16 +610,16 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Site" column="SITE_ID"
 	 * @return The collection of sites for this Protocol.
 	 */
-	public Collection<Site> getSitecollection()
+	public Collection<Site> getSiteCollection()
 	{
-		return sitecollection;
+		return siteCollection;
 	}
 
 
 	
-	public void setSitecollection(Collection<Site> sitecollection)
+	public void setSiteCollection(Collection<Site> siteCollection)
 	{
-		this.sitecollection = sitecollection;
+		this.siteCollection = siteCollection;
 	}
 
 }

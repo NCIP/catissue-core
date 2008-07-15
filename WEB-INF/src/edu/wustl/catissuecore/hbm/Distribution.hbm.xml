@@ -82,38 +82,6 @@
             length="50"
         />
 
-        <set
-            name="specimenArrayCollection"
-            table="CATISSUE_SPECIMEN_ARRAY"
-            fetch="subselect" lazy="false" 
-            inverse="false"
-            cascade="none"
-            sort="unsorted"
-        >
-        
-        <cache usage="read-write" />
-
-            <key
-                column="DISTRIBUTION_ID"
-            >
-            </key>
-
-            <one-to-many
-                  class="edu.wustl.catissuecore.domain.SpecimenArray"
-            />
-
-        </set>
-
-        <many-to-one
-            name="specimen"
-            class="edu.wustl.catissuecore.domain.Specimen"
-            cascade="none"
-             
-            update="true"
-            insert="true"
-            column="SPECIMEN_ID"
-        />
-
         <property
             name="timestamp"
             type="timestamp"

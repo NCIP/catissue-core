@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.List;
-
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
@@ -32,7 +30,7 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 	{
 		QuarantineEventParameter quarantineParam = (QuarantineEventParameter) obj;
 		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)dao.retrieve(DeidentifiedSurgicalPathologyReport.class.getName(), quarantineParam.getDeIdentifiedSurgicalPathologyReport().getId()); 
-		deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE_REQUEST);
+		deidentifiedSurgicalPathologyReport.setIsQuarantined(Constants.QUARANTINE_REQUEST);
 		deidentifiedSurgicalPathologyReport.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
 		dao.update(deidentifiedSurgicalPathologyReport, sessionDataBean, true, false, false);
 		String className;
@@ -71,12 +69,12 @@ public class QuarantineEventParameterBizLogic extends DefaultBizLogic
 			oldquarantineParam.setStatus(newquarantineParam.getStatus());
 			if(oldquarantineParam.getStatus().equalsIgnoreCase(Constants.COMMENT_STATUS_QUARANTINED))
 			{
-				deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE);
-				deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.ACTIVITY_STATUS_DISABLED);
+				deidentifiedSurgicalPathologyReport.setIsQuarantined(Constants.QUARANTINE);
+				deidentifiedSurgicalPathologyReport.setIsQuarantined(Constants.ACTIVITY_STATUS_DISABLED);
 			}
 			else
 			{
-				deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.ACTIVITY_STATUS_ACTIVE);
+				deidentifiedSurgicalPathologyReport.setIsQuarantined(Constants.ACTIVITY_STATUS_ACTIVE);
 			}
 			newquarantineParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
 			dao.update(deidentifiedSurgicalPathologyReport, sessionDataBean, true, false, false);

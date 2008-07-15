@@ -92,7 +92,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 		super.setAllValues(abstractDomain);
 		DisposalEventParameters disposalEventParametersObject = (DisposalEventParameters)abstractDomain ;
 		this.reason = Utility.toString(disposalEventParametersObject.getReason());
-		this.activityStatus = disposalEventParametersObject.getAbstractSpecimen().getActivityStatus(); 
+		this.activityStatus = disposalEventParametersObject.getSpecimen().getActivityStatus(); 
 	}
 	
 	/**

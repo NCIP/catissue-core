@@ -102,7 +102,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				specimenEventParametersObject.setUser(user);
 			}
 //			Ashish - 6/6/07 - performance improvement
-			Object specimenObject = dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getAbstractSpecimen().getId());
+			Object specimenObject = dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
 			Specimen specimen = (Specimen) specimenObject;
 			//(Specimen) dao.retrieveAttribute(SpecimenEventParameters.class.getName(), specimenEventParametersObject.getSpecimen().getId(),"specimen");
 			//(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId(),Constants.SYSTEM_IDENTIFIER);
@@ -112,7 +112,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 			if (specimen != null)
 			{
-				specimenEventParametersObject.setAbstractSpecimen(specimen);
+				specimenEventParametersObject.setSpecimen(specimen);
 				if (specimenEventParametersObject instanceof TransferEventParameters)
 				{
 					TransferEventParameters transferEventParameters = (TransferEventParameters) specimenEventParametersObject;
@@ -249,7 +249,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 //					specimen.setPositionDimensionTwo(null);
 //					specimen.setStorageContainer(null);
 
-					specimen.setAvailable(new Boolean(false));
+					specimen.setIsAvailable(new Boolean(false));
 					specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
 					/**
 					 * Name : Virender
@@ -361,7 +361,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 				DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
 				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-				if (disposalEventParameters.getAbstractSpecimen() != null)
+				if (disposalEventParameters.getSpecimen() != null)
 				{
 
 					Map disabledConts = getContForDisabledSpecimenFromCache();
@@ -619,7 +619,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
 				TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-				Specimen specimen = (Specimen)dao.retrieve(Specimen.class.getName(), parameter.getAbstractSpecimen().getId());
+				Specimen specimen = (Specimen)dao.retrieve(Specimen.class.getName(), parameter.getSpecimen().getId());
 //				Long fromContainerId = (Long) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition");
 //				Integer pos1 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition.positionDimensionOne");
 //				Integer pos2 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPositionpositionDimensionTwo");
@@ -774,7 +774,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	{
 		if (specimen != null)
 		{
-			Iterator iterator = specimen.getChildrenSpecimen().iterator();
+			Iterator iterator = specimen.getChildSpecimenCollection().iterator();
 			while (iterator.hasNext())
 			{
 				Specimen childSpecimen = (Specimen) iterator.next();

@@ -8,8 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.util.global.Utility;
 
 
@@ -41,7 +41,7 @@ public class EventParamtersBean implements Externalizable
 		this.eventHour = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
 		this.eventMinute = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
 	}
-	public void copy(EventParameters event)
+	public void copy(SpecimenEventParameters event)
 	{
 		if(event instanceof CollectionEventParameters)
 		{

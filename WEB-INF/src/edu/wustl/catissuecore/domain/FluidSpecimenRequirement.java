@@ -20,14 +20,14 @@ import edu.wustl.common.util.logger.Logger;
  * A single unit of body fluid specimen that is collected or created from a Participant.
  * @hibernate.subclass name="FluidRequirementSpecimen" discriminator-value="Fluid" 
  */
-public class FluidRequirementSpecimen extends RequirementSpecimen implements Serializable
+public class FluidSpecimenRequirement extends SpecimenRequirement implements Serializable
 {
     private static final long serialVersionUID = 12345678923230L;
-    public FluidRequirementSpecimen()
+    public FluidSpecimenRequirement()
     {
     	
     }
-    public FluidRequirementSpecimen(AbstractActionForm form)
+    public FluidSpecimenRequirement(AbstractActionForm form)
     {
     	setAllValues(form);
     }
@@ -46,14 +46,14 @@ public class FluidRequirementSpecimen extends RequirementSpecimen implements Ser
             Logger.out.error(excp.getMessage());
         }
     }
-    public FluidRequirementSpecimen(FluidRequirementSpecimen fluidRequirementSpecimen)
+    public FluidSpecimenRequirement(FluidSpecimenRequirement fluidRequirementSpecimen)
     {
     	//super(fluidRequirementSpecimen);
     }
     
-    public FluidRequirementSpecimen createClone()
+    public FluidSpecimenRequirement createClone()
     {
-    	FluidRequirementSpecimen cloneFluidRequirementSpecimen = new FluidRequirementSpecimen(this);
+    	FluidSpecimenRequirement cloneFluidRequirementSpecimen = new FluidSpecimenRequirement(this);
     	return cloneFluidRequirementSpecimen;
     }
 }

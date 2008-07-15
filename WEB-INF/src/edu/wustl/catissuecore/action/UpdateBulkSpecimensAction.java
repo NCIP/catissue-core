@@ -148,7 +148,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			{
 				SpecimenEventParameters specimenEventParameters =
 					(SpecimenEventParameters) iterator.next();
-				specimenEventParameters.setAbstractSpecimen(specimen);
+				specimenEventParameters.setSpecimen(specimen);
 				
 			}
 		} 
@@ -164,7 +164,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
 		specimen.setSpecimenCharacteristics(specimenCharacteristics);		
 		specimen.setLineage(specimenDataBean.getLineage());
-		specimen.setAvailable(Boolean.TRUE);
+		specimen.setIsAvailable(Boolean.TRUE);
 		specimen.setPathologicalStatus(
 				specimenDataBean.getPathologicalStatus());
 		specimen.setSpecimenType(specimenDataBean.getType());

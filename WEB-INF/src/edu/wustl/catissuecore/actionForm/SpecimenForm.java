@@ -577,9 +577,9 @@ public class SpecimenForm extends AbstractActionForm
         this.createdDate = Utility.parseDateToString(specimen.getCreatedOn(),Constants.DATE_PATTERN_MM_DD_YYYY);       
         
 
-		if (specimen.getAvailable() != null)
+		if (specimen.getIsAvailable() != null)
 		{
-			this.available = specimen.getAvailable().booleanValue();
+			this.available = specimen.getIsAvailable().booleanValue();
 		}
 
 		

@@ -111,7 +111,7 @@
         </set>
         
          <set
-            name="userCollection"
+            name="assignedSiteUserCollection"
             table="CATISSUE_SITE_USERS"
             lazy="true"
             inverse="true"

@@ -33,7 +33,6 @@ import edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
-import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
@@ -151,10 +150,10 @@ public class ListSpecimenEventParametersAction extends SecureAction
 						SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) object;
 	
 						//getting SpecimenId of SpecimenEventParameters
-						AbstractSpecimen specimen = specimenEventParameters.getAbstractSpecimen();
+						AbstractSpecimen specimen = specimenEventParameters.getSpecimen();
 						specimenId = specimen.getId().toString();
 					//	specimenLabel = specimen.getLabel();
-						Logger.out.debug("Specimen of Event Added====>" + (specimenEventParameters.getAbstractSpecimen()).getId());
+						Logger.out.debug("Specimen of Event Added====>" + (specimenEventParameters.getSpecimen()).getId());
 					}
 				}
 			}
@@ -180,7 +179,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				//Setting Specimen Event Parameters' Grid   
 				
 				//Ashish - 4/6/07 --- Since lazy=true, retriving the events collection. 
-				Collection<EventParameters> specimenEventCollection = getSpecimenEventParametersColl(specimenId,bizLogic);
+				Collection<SpecimenEventParameters> specimenEventCollection = getSpecimenEventParametersColl(specimenId,bizLogic);
 				/**
 				 * Name: Chetan Patil
 				 * Reviewer: Sachin Lale
@@ -194,7 +193,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				{
 					List<Map<String, Object>> gridData = new ArrayList<Map<String, Object>>();
 					
-					for(EventParameters eventParameters : specimenEventCollection)
+					for(SpecimenEventParameters eventParameters : specimenEventCollection)
 					{
 						Map<String, Object> rowDataMap = new HashMap<String, Object>();
 						if (eventParameters != null)
@@ -381,7 +380,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		String className = SpecimenEventParameters.class.getName();
 		String columnName =Constants.COLUMN_NAME_SPECIMEN_ID;
 		Object columnValue = specimenId;
-		Collection<EventParameters> specimenEventCollection = bizLogic.retrieve(className,columnName, columnValue);
+		Collection<SpecimenEventParameters> specimenEventCollection = bizLogic.retrieve(className,columnName, columnValue);
 		
 		return specimenEventCollection;
 	}

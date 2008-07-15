@@ -50,7 +50,7 @@ public class TissueSpecimen extends Specimen implements Serializable
             Logger.out.error(excp.getMessage());
         }
     }
-    public TissueSpecimen(RequirementSpecimen tissueReqSpecimen)
+    public TissueSpecimen(SpecimenRequirement tissueReqSpecimen)
     {
     	super(tissueReqSpecimen);
     }

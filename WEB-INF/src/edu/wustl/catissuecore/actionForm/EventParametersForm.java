@@ -15,17 +15,15 @@ import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.domain.EventParameters;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -192,7 +190,7 @@ public abstract class EventParametersForm extends AbstractActionForm
  	 */
  	public void setAllValues(AbstractDomainObject abstractDomain)
  	{
- 	   EventParameters eventParametersObject = (EventParameters)abstractDomain;
+ 	   SpecimenEventParameters eventParametersObject = (SpecimenEventParameters)abstractDomain;
  	   this.comments  = Utility.toString(eventParametersObject.getComment());
  	   this.id = eventParametersObject.getId().longValue() ;
 		

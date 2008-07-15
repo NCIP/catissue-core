@@ -18,7 +18,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	/**
 	 * Quarantine report flag. 
 	 */
-	protected String isQuanrantined;
+	protected String isQuarantined;
 	
 	/**
 	 * Collection of the quarantine event parameters of the current report.
@@ -72,17 +72,17 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	 * @hibernate.property  name="isQuanrantined"
 	 * type="string" column="STATUS"
 	 */
-	public String getIsQuanrantined() 
+	public String getIsQuarantined() 
 	{
-		return isQuanrantined;
+		return isQuarantined;
 	}
 
 	/**
 	 * @param isQuanrantined sets quarantine status of the report.
 	 */
-	public void setIsQuanrantined(String isQuanrantined)
+	public void setIsQuarantined(String isQuarantined)
 	{
-		this.isQuanrantined = isQuanrantined;
+		this.isQuarantined = isQuarantined;
 	}
 	
 	/**

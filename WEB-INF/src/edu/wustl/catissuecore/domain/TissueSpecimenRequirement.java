@@ -21,14 +21,14 @@ import edu.wustl.common.util.logger.Logger;
  * that is collected or created from a Participant.
  * @hibernate.subclass name="TissueRequirementSpecimen" discriminator-value="Tissue"
  */
-public class TissueRequirementSpecimen extends RequirementSpecimen implements Serializable
+public class TissueSpecimenRequirement extends SpecimenRequirement implements Serializable
 {
 	private static final long serialVersionUID = 12345673333230L;
-	public TissueRequirementSpecimen()
+	public TissueSpecimenRequirement()
 	{
 		
 	}
-	public TissueRequirementSpecimen(AbstractActionForm form)
+	public TissueSpecimenRequirement(AbstractActionForm form)
     {
     	setAllValues(form);
     }
@@ -47,14 +47,14 @@ public class TissueRequirementSpecimen extends RequirementSpecimen implements Se
             Logger.out.error(excp.getMessage());
         }
     }
-    public TissueRequirementSpecimen(TissueRequirementSpecimen tissueRequirementSpecimen)
+    public TissueSpecimenRequirement(TissueSpecimenRequirement tissueRequirementSpecimen)
     {
     	//super(tissueRequirementSpecimen);
     }
     
-    public TissueRequirementSpecimen createClone()
+    public TissueSpecimenRequirement createClone()
     {
-    	TissueRequirementSpecimen cloneTissueRequirementSpecimen = new TissueRequirementSpecimen(this);
+    	TissueSpecimenRequirement cloneTissueRequirementSpecimen = new TissueSpecimenRequirement(this);
     	return cloneTissueRequirementSpecimen;
     }
 }

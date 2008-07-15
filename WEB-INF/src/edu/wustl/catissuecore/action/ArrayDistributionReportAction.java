@@ -133,7 +133,9 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	{
 		//Get the list of data for Distributed items data for the report.
 		List listOfData = new ArrayList();
-		Collection specimenArrayCollection = dist.getSpecimenArrayCollection();
+		Collection specimenArrayCollection =listOfData;
+		//For Code model sync
+		//dist.getSpecimenArrayCollection();
 		//Specimen Ids which are getting distributed.
 		String[] specimenArrayIds = new String[specimenArrayCollection.size()];
 		int i = 0;

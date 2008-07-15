@@ -150,10 +150,10 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 		}
 		this.userId = distributionObject.getDistributedBy().getId().longValue();
 
-		if (distributionObject.getSpecimen() != null)
+		/*if (distributionObject.getSpecimen() != null)
 		{
 			specimenId = distributionObject.getSpecimen().getId().longValue();
-		}
+		}*/
 
 		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getId());
 		this.toSite = String.valueOf(distributionObject.getToSite().getId());
@@ -174,7 +174,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 				else
 				{
 					this.distributionType = new Integer(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE);
-					populateMapForArray(distributionObject.getSpecimenArrayCollection());
+					//populateMapForArray(distributionObject.getSpecimenArrayCollection());
 
 				}
 			}

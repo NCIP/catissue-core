@@ -134,7 +134,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 		else
 		{
 			// biz logic 
-			aliquotChildCount = parentObject.getChildrenSpecimen().size();	
+			aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
 			
 		}
 		
@@ -181,9 +181,9 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 			setNextAvailableDeriveSpecimenBarcode(objSpecimen.getParentSpecimen(),objSpecimen);
 		}
 		
-		if(objSpecimen.getChildrenSpecimen().size()>0)
+		if(objSpecimen.getChildSpecimenCollection().size()>0)
 		{
-			Collection specimenCollection = objSpecimen.getChildrenSpecimen();
+			Collection specimenCollection = objSpecimen.getChildSpecimenCollection();
 			Iterator it = specimenCollection.iterator();
 			while(it.hasNext())
 			{

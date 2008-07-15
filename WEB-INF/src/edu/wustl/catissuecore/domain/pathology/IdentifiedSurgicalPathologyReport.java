@@ -15,7 +15,7 @@ public class IdentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	/**
 	 * Deidentified surgical pathology report.
 	 */
-	protected DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport;
+	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 	
 	/**
 	 * Specimen collection group of the report 
@@ -40,16 +40,16 @@ public class IdentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	
 	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport() 
 	{
-		return deidentifiedSurgicalPathologyReport;
+		return deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**
 	 * @param deidentifiedSurgicalPathologyReport sets deidentified report.
 	 */
 	public void setDeIdentifiedSurgicalPathologyReport(
-			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
+			DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport)
 	{
-		this.deidentifiedSurgicalPathologyReport = deidentifiedSurgicalPathologyReport;
+		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**	

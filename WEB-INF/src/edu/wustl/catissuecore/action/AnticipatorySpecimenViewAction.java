@@ -20,12 +20,11 @@ import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.RequirementSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -167,7 +166,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	protected void setChildren(Specimen specimen, GenericSpecimen parentSpecimenVO) 
 	throws DAOException
 	{
-		Collection<AbstractSpecimen> specimenChildren = specimen.getChildrenSpecimen();
+		Collection<AbstractSpecimen> specimenChildren = specimen.getChildSpecimenCollection();
 		
 		if(specimenChildren == null ||specimenChildren.isEmpty())
 		{
@@ -283,7 +282,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	private String getStorageType(Specimen specimen)
 	{
 		String storageType;
-		RequirementSpecimen reqSpecimen = specimen.getRequirementSpecimen();
+		SpecimenRequirement reqSpecimen = specimen.getSpecimenRequirement();
 		if(reqSpecimen==null)
 		{
 			storageType = "Virtual";

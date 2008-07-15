@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
@@ -79,7 +78,7 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 				collectionProtocolEvent = specimenCollectionGroup.getCollectionProtocolEvent();
 				//SpecimenCollectionRequirementGroup collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
 				
-				specimenRequirementCollection =collectionProtocolEvent.getRequirementSpecimenCollection();
+				specimenRequirementCollection =collectionProtocolEvent.getSpecimenRequirementCollection();
 					//collectionRequirementGroup.getSpecimenCollection(); 
 
 				

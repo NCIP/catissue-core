@@ -323,7 +323,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 					if (orderItem instanceof DerivedSpecimenOrderItem)
 					{
 						DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
-						Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen(), derivedSpecimenOrderItem.getParentSpecimen().getChildrenSpecimen());
+						Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen(), derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
 
 						finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,
 								derivedSpecimenOrderItem.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());
@@ -560,7 +560,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		arrayDetailsBean.setSpecimenId(derivedSpecimenOrderItem.getParentSpecimen().getId().toString());
 		//Obtain all children specimens
 		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen(),
-				derivedSpecimenOrderItem.getParentSpecimen().getChildrenSpecimen());
+				derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
 		//Obtain only those specimens of this class and type from the above list
 		List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList, derivedSpecimenOrderItem
 				.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());
@@ -603,7 +603,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		while (childrenSpecimenListIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) childrenSpecimenListIterator.next();
-			List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen, specimen.getChildrenSpecimen());
+			List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen, specimen.getChildSpecimenCollection());
 			List finalChildrenSpecimenCollection = null;
 			if (pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null
 					&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
@@ -805,7 +805,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		requestDetailsBean.setRequestedItem(derivedSpecimenorderItem.getParentSpecimen().getLabel());
 		Long specimenId = derivedSpecimenorderItem.getParentSpecimen().getId();
 		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenorderItem.getParentSpecimen(),
-				derivedSpecimenorderItem.getParentSpecimen().getChildrenSpecimen());
+				derivedSpecimenorderItem.getParentSpecimen().getChildSpecimenCollection());
 		List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList, derivedSpecimenorderItem
 				.getSpecimenClass(), derivedSpecimenorderItem.getSpecimenType());
 		//	  removing final specimen List from session
@@ -872,7 +872,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 		while (childrenSpecimenListIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) childrenSpecimenListIterator.next();
-			List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen, specimen.getChildrenSpecimen());
+			List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen, specimen.getChildSpecimenCollection());
 			List finalChildrenSpecimenCollection = null;
 			if (pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null
 					&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
@@ -1016,7 +1016,7 @@ private OrderItem getOrderItem(OrderDetails orderDetails , Long orderItemId )
 					"elements(childrenSpecimen)");
 			if (childrenSpecimenCollection != null)
 			{
-				specimen.setChildrenSpecimen(childrenSpecimenCollection);
+				specimen.setChildSpecimenCollection(childrenSpecimenCollection);
 				Iterator iterator = childrenSpecimenCollection.iterator();
 				while (iterator.hasNext())
 				{

@@ -9,7 +9,6 @@
  */
 package edu.wustl.catissuecore.domain.pathology;
 
-import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -60,7 +59,7 @@ public class ConceptReferent extends AbstractDomainObject
 	/**
 	 * Deidentified report of the current concept referent.
 	 */
-	protected DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport;
+	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 
 	/**
 	 * Constructor
@@ -114,16 +113,16 @@ public class ConceptReferent extends AbstractDomainObject
 	 */
 	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
-		return deidentifiedSurgicalPathologyReport;
+		return deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**
 	 * @param deidentifiedSurgicalPathologyReport sets the deidentified report.
 	 */
 	public void setDeIdentifiedSurgicalPathologyReport(
-			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
+			DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport)
 	{
-		this.deidentifiedSurgicalPathologyReport = deidentifiedSurgicalPathologyReport;
+		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**

@@ -94,7 +94,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
     * current specimen collection group  
     */
    
-	protected DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport;
+	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 
     /**
      * The consent tier status by multiple participants for a particular specimen collection group.
@@ -324,18 +324,18 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 * class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
 	 * property-ref="specimenCollectionGroup" not-null="false" cascade="save-update"
 	 */
-    public DeidentifiedSurgicalPathologyReport getDeidentifiedSurgicalPathologyReport() 
+    public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport() 
     {
-		return deidentifiedSurgicalPathologyReport;
+		return deIdentifiedSurgicalPathologyReport;
 	}
 
     /**
      * Sets the deidentified surgical pathology report associated with the specimen collection group
      * @param deidentifiedSurgicalPathologyReport deidentified report object
      */
-	public void setDeidentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport) 
+	public void setDeIdentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport) 
 	{
-		this.deidentifiedSurgicalPathologyReport = deidentifiedSurgicalPathologyReport;
+		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
 	}	
 	/**
 	 * Returns deidentified surgical pathology report of the current specimen collection group

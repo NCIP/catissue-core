@@ -35,7 +35,7 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 		else
 		{
 		 
-			aliquotChildCount = parentObject.getChildrenSpecimen().size();	
+			aliquotChildCount = parentObject.getChildSpecimenCollection().size();	
 			
 		}
 		

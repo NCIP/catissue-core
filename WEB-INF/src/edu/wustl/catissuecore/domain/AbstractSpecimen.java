@@ -40,7 +40,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	/**
 	 * Collection of children specimens derived from this specimen. 
 	 */
-	protected Collection<AbstractSpecimen> childrenSpecimen = new HashSet<AbstractSpecimen>();
+	protected Collection<AbstractSpecimen> childSpecimenCollection = new HashSet<AbstractSpecimen>();
 
 	/**
 	 * The combined anatomic state and pathological disease classification of a specimen.
@@ -64,12 +64,11 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	 * or a derived specimen or an aliquot
 	 */
 	protected String lineage;
-
+	
 	/**
 	 * A label name of this specimen.
 	 */
 	protected String label;
-
 	/**
 	 * The quantity of a specimen.
 	 */
@@ -160,20 +159,12 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	{
 		this.lineage = lineage;
 	}
-
 	
 	public String getLabel()
 	{
-		return label;
+		return "";
 	}
 
-	
-	public void setLabel(String label)
-	{
-		this.label = label;
-	}
-	
-	
 	public Double getInitialQuantity()
 	{
 		return initialQuantity;
@@ -228,9 +219,9 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	 * @return the collection of children specimens derived from this specimen.
 	 * @see #setChildrenSpecimen(Set)
 	 */
-	public Collection<AbstractSpecimen> getChildrenSpecimen()
+	public Collection<AbstractSpecimen> getChildSpecimenCollection()
 	{
-		return childrenSpecimen;
+		return childSpecimenCollection;
 	}
 
 	/**
@@ -239,9 +230,9 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	 * derived from this specimen.
 	 * @see #getChildrenSpecimen()
 	 */
-	public void setChildrenSpecimen(Collection<AbstractSpecimen> childrenSpecimen)
+	public void setChildSpecimenCollection(Collection<AbstractSpecimen> childrenSpecimen)
 	{
-		this.childrenSpecimen = childrenSpecimen;
+		this.childSpecimenCollection = childrenSpecimen;
 	}
 	/**
 	 * Returns the collection of Specimen Event Parameters associated with this specimen.  
@@ -276,19 +267,19 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	{
 		String className = null;
 
-		if (this instanceof CellSpecimen || this instanceof CellRequirementSpecimen)
+		if (this instanceof CellSpecimen || this instanceof CellSpecimenRequirement)
 		{
 			className = Constants.CELL;
 		}
-		else if (this instanceof MolecularSpecimen || this instanceof MolecularRequirementSpecimen)
+		else if (this instanceof MolecularSpecimen || this instanceof MolecularSpecimenRequirement)
 		{
 			className = Constants.MOLECULAR;
 		}
-		else if (this instanceof FluidSpecimen|| this instanceof FluidRequirementSpecimen)
+		else if (this instanceof FluidSpecimen|| this instanceof FluidSpecimenRequirement)
 		{
 			className = Constants.FLUID;
 		}
-		else if (this instanceof TissueSpecimen || this instanceof TissueRequirementSpecimen)
+		else if (this instanceof TissueSpecimen || this instanceof TissueSpecimenRequirement)
 		{
 			className = Constants.TISSUE;
 		}

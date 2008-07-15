@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
@@ -45,7 +46,6 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenCollectionRequirementGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -183,7 +183,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		parentSpecimen.setAvailableQuantity(availableQuantity);
 		if (availableQuantity <= 0)
 		{
-			parentSpecimen.setAvailable(new Boolean(false));
+			parentSpecimen.setIsAvailable(new Boolean(false));
 			parentSpecimen.setAvailableQuantity(new Double(0));
 		}
 	}
@@ -257,12 +257,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		user.setId(sessionDataBean.getUserId());
 		CollectionEventParameters collectionEventParameters = EventsUtil
 				.populateCollectionEventParameters(user);
-		collectionEventParameters.setAbstractSpecimen(specimen);
+		collectionEventParameters.setSpecimen(specimen);
 		specimenEventColl.add(collectionEventParameters);
 
 		ReceivedEventParameters receivedEventParameters = EventsUtil
 				.populateReceivedEventParameters(user);
-		receivedEventParameters.setAbstractSpecimen(specimen);
+		receivedEventParameters.setSpecimen(specimen);
 		specimenEventColl.add(receivedEventParameters);
 
 		specimen.setSpecimenEventCollection(specimenEventColl);
@@ -314,7 +314,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
           DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen);
           SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
           specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean,  Constants.HIBERNATE_DAO);
-          ((Specimen)specimen).setAvailable(new Boolean(false));
+          ((Specimen)specimen).setIsAvailable(new Boolean(false));
           specimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
     }
 
@@ -332,7 +332,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
           DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen);
           SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
           specimenEventParametersBizLogic.insert(disposalEvent, dao, sessionDataBean);
-          ((Specimen)specimen).setAvailable(new Boolean(false));
+          ((Specimen)specimen).setIsAvailable(new Boolean(false));
           specimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
     }
 
@@ -348,7 +348,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
                 AbstractSpecimen specimen)
     {
           DisposalEventParameters disposalEvent = new DisposalEventParameters();
-          disposalEvent.setAbstractSpecimen(specimen);
+          disposalEvent.setSpecimen(specimen);
           disposalEvent.setReason("Specimen is Aliquoted");
           disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
           User user = new User();
@@ -389,7 +389,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			if (Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))
 			{
 				specimen.setAvailableQuantity(specimen.getInitialQuantity());
-				specimen.setAvailable(new Boolean(true));
+				specimen.setIsAvailable(new Boolean(true));
 			}
 		}
 		if (Constants.ALIQUOT.equals(specimen.getLineage()))
@@ -433,7 +433,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void insertChildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
 			throws SMException, DAOException
 	{
-		Collection<AbstractSpecimen> childSpecimenCollection = specimen.getChildrenSpecimen();
+		Collection<AbstractSpecimen> childSpecimenCollection = specimen.getChildSpecimenCollection();
 		Iterator<AbstractSpecimen> it = childSpecimenCollection.iterator();
 		while (it.hasNext())
 		{
@@ -543,7 +543,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			checkStatus(dao, parentSpecimen, "Specimen");
 			specimen.setParentSpecimen(parentSpecimen);
-			parentSpecimen.getChildrenSpecimen().add(specimen);
+			parentSpecimen.getChildSpecimenCollection().add(specimen);
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
 			specimen.getSpecimenCollectionGroup().getSpecimenCollection().add(specimen);
 			setParentSpecimenData(specimen);
@@ -681,7 +681,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
 			postInsert(specimen, dao, sessionDataBean);
-			Collection childSpecimens = specimen.getChildrenSpecimen();
+			Collection childSpecimens = specimen.getChildSpecimenCollection();
 			if (childSpecimens != null)
 			{
 				postInsert(childSpecimens, dao, sessionDataBean);
@@ -1031,12 +1031,12 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				|| specimen.getCollectionStatus().equalsIgnoreCase(
 						Constants.COLLECTION_STATUS_PENDING))
 		{
-			specimen.setAvailable(new Boolean(false));
+			specimen.setIsAvailable(new Boolean(false));
 		}
 		else if (specimenOld.getAvailableQuantity() != null
 				&& specimenOld.getAvailableQuantity() == 0)
 		{
-			specimen.setAvailable(new Boolean(true));
+			specimen.setIsAvailable(new Boolean(true));
 		}
 	   /*else
 		{
@@ -1124,7 +1124,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			throw new DAOException(ApplicationProperties.getValue("specimen.available.operation"));
 	    }
-	    persistentSpecimen.setAvailable(specimen.getAvailable());
+	    persistentSpecimen.setIsAvailable(specimen.getIsAvailable());
 		persistentSpecimen.setBiohazardCollection(specimen.getBiohazardCollection());
 		persistentSpecimen.setNoOfAliquots(specimen.getNoOfAliquots());
 		persistentSpecimen.setActivityStatus(specimen.getActivityStatus());
@@ -1209,7 +1209,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		
 		if (specimen != null)
 		{
-			Iterator<AbstractSpecimen> iterator = specimen.getChildrenSpecimen().iterator();
+			Iterator<AbstractSpecimen> iterator = specimen.getChildSpecimenCollection().iterator();
 			while (iterator.hasNext())
 			{
 				Specimen childSpecimen = (Specimen) iterator.next();
@@ -1233,7 +1233,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	{
 		if (specimen != null)
 		{
-			Iterator<AbstractSpecimen> iterator = specimen.getChildrenSpecimen().iterator();
+			Iterator<AbstractSpecimen> iterator = specimen.getChildSpecimenCollection().iterator();
 			while (iterator.hasNext())
 			{
 				Specimen childSpecimen = (Specimen) iterator.next();
@@ -1477,9 +1477,9 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			SMException
 	{
 		setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true);
-		if (newSpecimen.getChildrenSpecimen() != null)
+		if (newSpecimen.getChildSpecimenCollection() != null)
 		{
-			Collection<AbstractSpecimen> specimenCollection = newSpecimen.getChildrenSpecimen();
+			Collection<AbstractSpecimen> specimenCollection = newSpecimen.getChildSpecimenCollection();
 			Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
 			while (iterator.hasNext())
 			{
@@ -1768,7 +1768,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}*/
 		if (operation.equals(Constants.ADD))
 		{
-			if (!specimen.getAvailable().booleanValue()
+			if (!specimen.getIsAvailable().booleanValue()
 					&& !"Pending".equals(specimen.getCollectionStatus()))
 			{
 				throw new DAOException(ApplicationProperties.getValue("specimen.available.errMsg"));
@@ -1817,7 +1817,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
-		if (specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getLabel() == null
+		if (specimen.getParentSpecimen() != null && ((Specimen) specimen.getParentSpecimen()).getLabel() == null
 				&& specimen.getParentSpecimen().getId() == null)
 		{
 			String message = ApplicationProperties.getValue("createSpecimen.parent");
@@ -2146,7 +2146,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 					deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters
 							.clone();
 					deriveSpecimenEventParameters.setId(null);
-					deriveSpecimenEventParameters.setAbstractSpecimen(deriveSpecimen);
+					deriveSpecimenEventParameters.setSpecimen(deriveSpecimen);
 					deriveEventCollection.add(deriveSpecimenEventParameters);
 				}
 			}
@@ -2332,7 +2332,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
 				Specimen specimenDO = updateSingleSpecimen(dao, newSpecimen, sessionDataBean, false);
-				Collection<AbstractSpecimen> childrenSpecimenCollection = newSpecimen.getChildrenSpecimen();
+				Collection<AbstractSpecimen> childrenSpecimenCollection = newSpecimen.getChildSpecimenCollection();
 				if (childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
 				{
 					childSpecimenCtr = updateChildSpecimen(sessionDataBean, dao, childSpecimenCtr,
@@ -2385,7 +2385,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			childSpecimenCtr++;
 			Specimen childSpecimen = (Specimen) childIterator.next();
 			childSpecimen.setParentSpecimen(specimenDO);
-			specimenDO.getChildrenSpecimen().add(childSpecimen);
+			specimenDO.getChildSpecimenCollection().add(childSpecimen);
 			insert(childSpecimen, dao, sessionDataBean);
 		}
 		childSpecimenCtr = 0;
@@ -2396,15 +2396,15 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void allocateSpecimenPostionsRecursively(Specimen newSpecimen) throws DAOException
 	{
 		allocatePositionForSpecimen(newSpecimen);
-		if (newSpecimen.getChildrenSpecimen() != null)
+		if (newSpecimen.getChildSpecimenCollection() != null)
 		{
-			Iterator<AbstractSpecimen> childrenIterator = newSpecimen.getChildrenSpecimen()
+			Iterator<AbstractSpecimen> childrenIterator = newSpecimen.getChildSpecimenCollection()
 					.iterator();
 			while (childrenIterator.hasNext())
 			{
 				Specimen childSpecimen = (Specimen) childrenIterator.next();
 				childSpecimen.setParentSpecimen(newSpecimen);
-				newSpecimen.getChildrenSpecimen().add(childSpecimen);
+				newSpecimen.getChildSpecimenCollection().add(childSpecimen);
 				allocateSpecimenPostionsRecursively(childSpecimen);
 			}
 		}
@@ -2514,7 +2514,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO, Specimen specimenDO,
 			SessionDataBean sessionDataBean) throws DAOException, SMException
 	{
-		Collection<AbstractSpecimen> childrenSpecimens = specimenDO.getChildrenSpecimen();
+		Collection<AbstractSpecimen> childrenSpecimens = specimenDO.getChildSpecimenCollection();
 		if (childrenSpecimens == null || childrenSpecimens.isEmpty())
 		{
 			return;
@@ -2524,7 +2524,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		{
 			Specimen specimen = (Specimen) iterator.next();
 			Specimen relatedSpecimen = getCorelatedSpecimen(specimen.getId(), specimenVO
-					.getChildrenSpecimen());
+					.getChildSpecimenCollection());
 			if (relatedSpecimen != null)
 			{
 				updateSpecimenDomainObject(dao, relatedSpecimen, specimen, sessionDataBean);
@@ -2612,7 +2612,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		checkDuplicateSpecimenFields(specimenVO, dao);
 		specimenDO.setLabel(specimenVO.getLabel());
 		specimenDO.setBarcode(specimenVO.getBarcode());
-		specimenDO.setAvailable(specimenVO.getAvailable());
+		specimenDO.setIsAvailable(specimenVO.getIsAvailable());
 		if (specimenVO.getSpecimenPosition()!= null && specimenVO.getSpecimenPosition().getStorageContainer() != null)
 		{
 			setStorageContainer(dao, specimenVO, specimenDO);
@@ -2810,8 +2810,8 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			{
 				calculateParentQuantity(specimenDO, differenceQty, newAvailQty);
 			}
-			if (specimenDO.getChildrenSpecimen() == null
-					|| specimenDO.getChildrenSpecimen().isEmpty())
+			if (specimenDO.getChildSpecimenCollection() == null
+					|| specimenDO.getChildSpecimenCollection().isEmpty())
 			{
 				availableQuantity = newAvailQty;
 			}
@@ -2957,7 +2957,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 				.getSpecimenCollectionGroup();
 		Object proxySpecimenCollectionGroup = HibernateMetaData
 				.getProxyObjectImpl(absspecimenCollectionGroup);
-		if ((proxySpecimenCollectionGroup instanceof SpecimenCollectionRequirementGroup))
+		if ((proxySpecimenCollectionGroup instanceof CollectionProtocolEvent))
 		{
 			NewSpecimenForm newSpecimenForm = (NewSpecimenForm) uiForm;
 			newSpecimenForm.setForwardTo(Constants.PAGEOF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP);
@@ -3026,7 +3026,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 		}
 		specimenDetailList.add(specimen.getClassName());
 		finalDataList.add(specimenDetailList);
-		Collection childrenSpecimen = specimen.getChildrenSpecimen();
+		Collection childrenSpecimen = specimen.getChildSpecimenCollection();
 		Iterator itr = childrenSpecimen.iterator();
 		while (itr.hasNext())
 		{

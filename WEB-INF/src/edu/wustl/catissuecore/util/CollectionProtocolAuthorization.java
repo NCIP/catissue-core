@@ -124,12 +124,12 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			userGroupRoleProtectionGroupBean.setGroup(group);
 			authorizationData.add(userGroupRoleProtectionGroupBean);
 		}
-		collectionProtocol.getSitecollection().clear();
-		collectionProtocol.getSitecollection().addAll(siteCollection);
+		collectionProtocol.getSiteCollection().clear();
+		collectionProtocol.getSiteCollection().addAll(siteCollection);
 		for (User user : userCollection)
 		{
 			boolean isPresent = false;
-			for (User setUser : collectionProtocol.getUserCollection())
+			for (User setUser : collectionProtocol.getAssignedProtocolUserCollection())
 			{
 				if (user.getId().equals(setUser.getId()))
 				{
@@ -138,7 +138,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 			}
 			if (!isPresent)
 			{
-				collectionProtocol.getUserCollection().add(user);
+				collectionProtocol.getAssignedProtocolUserCollection().add(user);
 			}
 		} 
 		  

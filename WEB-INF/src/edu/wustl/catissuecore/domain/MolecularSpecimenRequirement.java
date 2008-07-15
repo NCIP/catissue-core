@@ -21,7 +21,7 @@ import edu.wustl.common.util.logger.Logger;
  * A molecular derivative (I.e. RNA / DNA / Protein Lysate) obtained from a specimen.
  * @hibernate.subclass name="MolecularRequirementSpecimen" discriminator-value="Molecular"
  */
-public class MolecularRequirementSpecimen extends RequirementSpecimen implements Serializable
+public class MolecularSpecimenRequirement extends SpecimenRequirement implements Serializable
 {
     private static final long serialVersionUID = 123456789000L;
 
@@ -30,14 +30,14 @@ public class MolecularRequirementSpecimen extends RequirementSpecimen implements
      */
     protected Double concentrationInMicrogramPerMicroliter;
 
-    public MolecularRequirementSpecimen()
+    public MolecularSpecimenRequirement()
     {
     	
     }
     /**
      * Initial amount of specimen created from another specimen.
      */
-    public MolecularRequirementSpecimen(AbstractActionForm form)
+    public MolecularSpecimenRequirement(AbstractActionForm form)
     {
     	setAllValues(form);
     }
@@ -93,7 +93,7 @@ public class MolecularRequirementSpecimen extends RequirementSpecimen implements
             Logger.out.error(excp.getMessage());
         }
     }
-    public MolecularRequirementSpecimen(MolecularRequirementSpecimen molecularRequirementSpecimen)
+    public MolecularSpecimenRequirement(MolecularSpecimenRequirement molecularRequirementSpecimen)
     {
     	this.concentrationInMicrogramPerMicroliter = molecularRequirementSpecimen.concentrationInMicrogramPerMicroliter;
     }

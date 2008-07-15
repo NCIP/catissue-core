@@ -123,7 +123,7 @@ public class OrderingSystemUtil
 		while(specimenItr.hasNext())
 		{
 			Specimen specimen  = (Specimen)specimenItr.next();
-			List subChildNodesList = getAllChildrenSpecimen(specimen,specimen.getChildrenSpecimen());
+			List subChildNodesList = getAllChildrenSpecimen(specimen,specimen.getChildSpecimenCollection());
 			childrenSpecimenList.add(specimen);
 		}
 		
@@ -181,7 +181,7 @@ public class OrderingSystemUtil
     	while (childrenSpecimenListIterator.hasNext())
     	{
     		Specimen specimen = (Specimen)childrenSpecimenListIterator.next();
-    		List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen,specimen.getChildrenSpecimen());
+    		List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen,specimen.getChildSpecimenCollection());
     		List finalChildrenSpecimenCollection = null;
     		if(pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null && !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("") && !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
     	    {	//"Derived"	

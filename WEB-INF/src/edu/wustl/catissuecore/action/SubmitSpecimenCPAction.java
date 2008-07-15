@@ -371,7 +371,7 @@ public class SubmitSpecimenCPAction extends BaseAction {
 					(SpecimenEventParameters) iterator.next();
 				if(specimenEventParameters.getUser()!=null)
 				{
-					specimenEventParameters.setAbstractSpecimen(specimen);
+					specimenEventParameters.setSpecimen(specimen);
 					speEventParamSet.add(specimenEventParameters);
 				}
 			}
