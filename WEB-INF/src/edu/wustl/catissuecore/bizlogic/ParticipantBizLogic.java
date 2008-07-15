@@ -271,7 +271,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		Participant participant = (Participant) obj;
 		//getting instance of catissueCoreCacheManager and getting participantMap from cache
 		CatissueCoreCacheManager catissueCoreCacheManager = null;
-		Map mapOfParticipantMedicalIdentifierCollection = new HashMap();
+		//Map mapOfParticipantMedicalIdentifierCollection = new HashMap();
 		try
 		{
 			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
@@ -284,7 +284,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			{
 				//Added retrival of Participant Medical Identifier
 				//(Virender Mehta)
-				Collection participantMedicalIdentifier = participant.getParticipantMedicalIdentifierCollection();
+				/*Collection participantMedicalIdentifier = participant.getParticipantMedicalIdentifierCollection();
 				if (participantMedicalIdentifier != null)
 				{
 					Iterator participantMedicalIdentifierItr = participantMedicalIdentifier.iterator();
@@ -310,7 +310,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 									.get(participantId));
 						}
 					}
-				}
+				}*/
 				participantMap.put(participant.getId(), participant);
 			}
 		}
@@ -892,7 +892,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 	 * Participant objects are formed by retrieving only required data, making it time and space efficient 
 	 * @return - List of participants 
 	 */
-	public Map getAllParticipants() throws Exception
+	/*public Map getAllParticipants() throws Exception
 	{
 		// Initialising instance of IBizLogic
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
@@ -910,13 +910,13 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		dao.openSession(null);
 
-		String queryStr = "SELECT * FROM CATISSUE_RACE WHERE PARTICIPANT_ID IN (SELECT PARTICIPANT_ID FROM CATISSUE_PARTICIPANT WHERE ACTIVITY_STATUS!='DISABLED')";
+		//String queryStr = "SELECT * FROM CATISSUE_RACE WHERE PARTICIPANT_ID IN (SELECT PARTICIPANT_ID FROM CATISSUE_PARTICIPANT WHERE ACTIVITY_STATUS!='DISABLED')";
 		String participantMedicalIdentifierStr = "(SELECT * FROM catissue_part_medical_id WHERE (PARTICIPANT_ID IN (SELECT PARTICIPANT_ID FROM CATISSUE_PARTICIPANT WHERE ACTIVITY_STATUS!='DISABLED')) AND MEDICAL_RECORD_NUMBER!='NULL')";
-		List listOfRaceObjects = new ArrayList();
+		//List listOfRaceObjects = new ArrayList();
 		List listOfParticipantMedicalIdentifier = new ArrayList();
 		try
 		{
-			listOfRaceObjects = dao.executeQuery(queryStr, null, false, null);
+			//listOfRaceObjects = dao.executeQuery(queryStr, null, false, null);
 			listOfParticipantMedicalIdentifier = dao.executeQuery(participantMedicalIdentifierStr, null, false, null);
 		}
 		catch (Exception ex)
@@ -924,12 +924,38 @@ public class ParticipantBizLogic extends DefaultBizLogic
 			throw new DAOException(ex.getMessage());
 		}
 		dao.closeSession();
+		
+		
+		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		
+		hibernateDao.openSession(null);
+			
+			//String queryStr = "SELECT * FROM CATISSUE_RACE WHERE PARTICIPANT_ID IN (SELECT PARTICIPANT_ID FROM CATISSUE_PARTICIPANT WHERE ACTIVITY_STATUS!='DISABLED')";
+			String queryStr = "from Race R1 where R1.participant.id in (select P1.id from Participant P1 where P1.activityStatus != 'DISABLED')";
+			//String participantMedicalIdentifierStr = Medi"(SELECT * FROM catissue_part_medical_id WHERE (PARTICIPANT_ID IN (SELECT PARTICIPANT_ID FROM CATISSUE_PARTICIPANT WHERE ACTIVITY_STATUS!='DISABLED')) AND MEDICAL_RECORD_NUMBER!='NULL')";
+			//String participantMedicalIdentifierStr = "from ParticipantMedicalIdentifier";
+					// pmi where pmi.participant.id in (select P2.id from Particiant P2 where P2.activityStatus != 'DISABLED') AND pmi.medicalRecordNumber!='NULL'";
+			List listOfRaceObjects = new ArrayList();
+			//List listOfParticipantMedicalIdentifier = new ArrayList();
+			try
+			{
+				listOfRaceObjects = hibernateDao.executeQuery(queryStr, null, false, null);
+				//listOfParticipantMedicalIdentifier = dao.executeQuery(participantMedicalIdentifierStr, null, false, null);
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+				throw new DAOException(ex.getMessage());
+			}
+			hibernateDao.closeSession();
+		
+		
 		Map mapOfRaceCollection = new HashMap();
 		for (int i = 0; i < listOfRaceObjects.size(); i++)
 		{
-			List objectArray = (ArrayList) listOfRaceObjects.get(i);
-			Long participantId = (new Long(objectArray.get(0).toString()));
-			String race = (String) objectArray.get(1);
+			Race race = (Race) listOfRaceObjects.get(i);
+			Long participantId = race.getParticipant().getId();
+			//String race = (String) objectArray.get(1);
 			if (mapOfRaceCollection.get(participantId) == null)
 			{
 				mapOfRaceCollection.put(participantId, new HashSet());
@@ -977,6 +1003,43 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		}
 		return mapOfParticipants;
 
+	}*/
+	public Map<Long,Participant> getAllParticipants() throws Exception
+	{
+		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		hibernateDao.openSession(null);
+		Map<Long,Participant> mapOfParticipants = new HashMap<Long,Participant>();
+		String participantQueryStr = "from " + Participant.class.getName();
+		try
+		{
+			List<Participant> listOfParticipants = hibernateDao.executeQuery(participantQueryStr, null, false, null);
+			if(listOfParticipants != null)
+			{
+				Iterator<Participant> participantIterator = listOfParticipants.iterator();
+				while(participantIterator.hasNext())
+				{
+					Participant participant = (Participant)participantIterator.next();
+					Long participantId = participant.getId();
+					mapOfParticipants.put(participantId, participant);
+				}
+			}
+		}
+		catch (DAOException e) 
+		{
+			throw new BizLogicException("Couldn't get participant", e);
+		}
+		finally
+		{
+			try
+			{
+				hibernateDao.closeSession();
+			} 
+			catch (DAOException e) 
+			{
+				throw new BizLogicException("Couldn't get participant", e);
+			}
+		}
+		return mapOfParticipants;
 	}
 
 	/**

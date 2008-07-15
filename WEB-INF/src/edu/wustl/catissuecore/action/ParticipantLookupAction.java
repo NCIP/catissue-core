@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.DomainObjectFactory;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -196,8 +197,12 @@ public class ParticipantLookupAction extends BaseAction
 				Iterator participantMedicalIdentifierItr = participant.getParticipantMedicalIdentifierCollection().iterator();
 				while(participantMedicalIdentifierItr.hasNext())
 				{
-					medicalRecordNo = (String)participantMedicalIdentifierItr.next();
-					siteId = (String)participantMedicalIdentifierItr.next();
+					ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)participantMedicalIdentifierItr.next();
+					if(participantMedicalIdentifier.getSite() != null && participantMedicalIdentifier.getSite().getId() != null)
+					{
+					medicalRecordNo = participantMedicalIdentifier.getMedicalRecordNumber();
+					siteId = participantMedicalIdentifier.getSite().getId().toString();
+					}
 				}
 			}
 			participantInfo.add(Utility.toString(medicalRecordNo));
