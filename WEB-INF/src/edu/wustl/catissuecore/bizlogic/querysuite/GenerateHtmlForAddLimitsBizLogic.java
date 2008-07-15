@@ -689,7 +689,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				if (dataType.equalsIgnoreCase("long") || dataType.equalsIgnoreCase("double")
 						|| dataType.equalsIgnoreCase("short")
-						|| dataType.equalsIgnoreCase("integer"))
+						|| dataType.equalsIgnoreCase("integer") || dataType.equalsIgnoreCase("float"))
 				{
 					operatorsList = parseFile.getEnumConditionList("number");
 				}
@@ -710,7 +710,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				if (dataType.equalsIgnoreCase("long") || dataType.equalsIgnoreCase("double")
 						|| dataType.equalsIgnoreCase("short")
-						|| dataType.equalsIgnoreCase("integer"))
+						|| dataType.equalsIgnoreCase("integer")|| dataType.equalsIgnoreCase("float"))
 				{
 					operatorsList = parseFile.getNonEnumConditionList("number");
 				}
