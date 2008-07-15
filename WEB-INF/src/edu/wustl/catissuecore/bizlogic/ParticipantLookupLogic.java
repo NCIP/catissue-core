@@ -4,11 +4,13 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.DefaultLookupResult;
@@ -406,24 +408,15 @@ public class ParticipantLookupLogic implements LookupLogic
 		if (existingNumber.equals(userNumber))
 		{
 			isSSNOrPMI = true;
-			if (ssnOrPMI)
-			{
-				return pointsForSSNExact;
-			}
-			else
-			{
-				return pointsForPMIExact;
-			}
+			return pointsForSSNorPMI(ssnOrPMI);
 		}
 		else
 		// partial match
 		{
-
 			int count = 0; // to count total number of digits mismatched
 			int temp = -1; // temporary variable used for storing value of other variable
 			boolean areConsecutiveDigitsTransposed = false; // to check whether consecutive digits are transposed
 			boolean isDifferenceOne = false; // to check whether difference of two digits is one
-
 			if (userNumber.length() == existingNumber.length())
 			{
 				for (int i = 0; i < userNumber.length(); i++)
@@ -457,7 +450,6 @@ public class ParticipantLookupLogic implements LookupLogic
 				}
 
 			}
-
 			/** 
 			 * Mismatch of single digit with difference = 1 or any consecutive 
 			 * pair of digits are transposed it is considered a partial match.  
@@ -466,13 +458,16 @@ public class ParticipantLookupLogic implements LookupLogic
 			if (count == 1 && isDifferenceOne == true || areConsecutiveDigitsTransposed == true
 					&& count == 2)
 			{
-				if (ssnOrPMI)
+				return pointsForSSNorPMI(ssnOrPMI);
+			}
+			/*this else loop is for neglecting the special characters (-,_) from the MNR*/
+			else
+			{
+				String newUserNumber = modifyMNR(userNumber);
+				String newExistingNumber = modifyMNR(existingNumber);
+				if(!newUserNumber.equalsIgnoreCase(userNumber) || !newExistingNumber.equals(existingNumber))
 				{
-					return pointsForSSNPartial;
-				}
-				else
-				{
-					return pointsForPMIPartial;
+				return checkNumber(newUserNumber, newExistingNumber, false);
 				}
 			}
 
@@ -480,6 +475,29 @@ public class ParticipantLookupLogic implements LookupLogic
 		return 0;
 	}
 
+	private int pointsForSSNorPMI(boolean ssnOrPMI) {
+		if (ssnOrPMI)
+		{
+			return pointsForSSNExact;
+		}
+		else
+		{
+			return pointsForPMIExact;
+		}
+	}
+
+	public String modifyMNR(String userNumber)
+	{
+		String  specialCharacters[] = {"-","_"};
+			for(int j=0 ; j<specialCharacters.length ; j++)
+			{
+				if (userNumber.indexOf(specialCharacters[j])>=0)
+				{
+					userNumber = userNumber.replaceAll(specialCharacters[j],"");
+				}
+			}
+		return userNumber;
+	}
 	/**
 	 * This function compares the two Date Of Births.
 	 * The criteria used for partial match is --> If the year and month are equal or day and year are equal
@@ -620,16 +638,33 @@ public class ParticipantLookupLogic implements LookupLogic
 	 * @return int - points for complete, partial or no match
 	 */
 
-	private int checkRace(Collection userRace, Collection existingRace)
+	private int checkRace(Collection<Race> userRace, Collection<Race> existingRace)
 	{
-
 		// complete match
 		if (userRace != null && userRace.isEmpty() == false && existingRace != null
 				&& existingRace.isEmpty() == false)
 		{
-			if (userRace.equals(existingRace))
+			/*if (userRace.equals(existingRace))
 			{
 				return pointsForRaceExact;
+			}*/
+			if(userRace.size() == existingRace.size())
+			{
+				Iterator<Race> existingRaceIterator = existingRace.iterator();
+				Iterator<Race> raceIterator = userRace.iterator();
+				Collection<String> raceNameSet = new HashSet<String>();
+				Collection<String> existingRaceNameSet = new HashSet<String>();
+				while(existingRaceIterator.hasNext())
+				{
+					Race existingRaceTemp = existingRaceIterator.next();
+					Race race = raceIterator.next();
+					existingRaceNameSet.add(existingRaceTemp.getRaceName());
+					raceNameSet.add(race.getRaceName());
+				}
+				if(existingRaceNameSet.containsAll(raceNameSet))
+				{
+				return pointsForRaceExact;
+				}
 			}
 		}
 		/**
@@ -650,47 +685,51 @@ public class ParticipantLookupLogic implements LookupLogic
 	 * The criteria used for partial match is --> A partial is considered if one is missing and the other is there.
 	 *  (eg, missing from the input data but in the database or vice versa).
 	 * 
-	 * @param userParticipantMedicalIdentifier - Race of user
+	 * @param newMedIdentifier - Race of user
 	 * @param existingParticipantMedicalIdentifier - Race of Participant from database
 	 * @return int - points for complete, partial or no match
 	 */
-	private int checkParticipantMedicalIdentifier(Collection userParticipantMedicalIdentifier,
+	private int checkParticipantMedicalIdentifier(Collection newMedIdentifier,
 			Participant existingParticipant)
 	{
-		List pmiList = new ArrayList();
-		Collection existingParticipantMedicalIdentifier = existingParticipant
-				.getParticipantMedicalIdentifierCollection();
-		existingParticipant.setParticipantMedicalIdentifierCollection(null);
-		int participantMedicalIdentifierWeight = 0;
-		if (userParticipantMedicalIdentifier != null
-				&& existingParticipantMedicalIdentifier != null)
+		//List pmiList = new ArrayList();
+		Collection oldMedIdentifier = existingParticipant.getParticipantMedicalIdentifierCollection();
+		//existingParticipant.setParticipantMedicalIdentifierCollection(null);
+		int medIdWeight = 0;
+		if (newMedIdentifier != null && oldMedIdentifier != null)
 		{
-			Iterator existingParticipantMedicalIdentifierItr = existingParticipantMedicalIdentifier
-					.iterator();
-			while (existingParticipantMedicalIdentifierItr.hasNext())
+			Iterator oldMedIdentifierItr = oldMedIdentifier.iterator();
+			while (oldMedIdentifierItr.hasNext())
 			{
-				String existingmedicalRecordNo = (String) existingParticipantMedicalIdentifierItr
-						.next();
-				String existingSiteId = (String) existingParticipantMedicalIdentifierItr.next();
-				Iterator userParticipantMedicalIdentifierItr = userParticipantMedicalIdentifier
-						.iterator();
-				while (userParticipantMedicalIdentifierItr.hasNext())
+				ParticipantMedicalIdentifier participantMedicalIdentifier =(ParticipantMedicalIdentifier) oldMedIdentifierItr.next();
+				if(participantMedicalIdentifier.getSite() != null && participantMedicalIdentifier.getSite().getId() != null)
 				{
-					ParticipantMedicalIdentifier participantIdentifier = (ParticipantMedicalIdentifier) userParticipantMedicalIdentifierItr
-							.next();
-					String siteId = participantIdentifier.getSite().getId().toString();
-					String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();
-					if (existingSiteId != null && siteId.equals(existingSiteId))
+					String existingmedicalRecordNo = participantMedicalIdentifier.getMedicalRecordNumber();
+					String existingSiteId = participantMedicalIdentifier.getSite().getId().toString();
+					//String existingSiteId = (String) existingParticipantMedicalIdentifierItr.next();
+					Iterator newMedIdentifierItr = newMedIdentifier.iterator();
+					while (newMedIdentifierItr.hasNext())
 					{
-						participantMedicalIdentifierWeight = participantMedicalIdentifierWeight
+						ParticipantMedicalIdentifier participantIdentifier = (ParticipantMedicalIdentifier) newMedIdentifierItr
+						.next();
+						if(participantIdentifier.getSite() != null && participantIdentifier.getSite().getId()!= null)
+						{
+							String siteId = participantIdentifier.getSite().getId().toString();
+							String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();
+
+							if ( siteId.equals(existingSiteId) && existingmedicalRecordNo != null)
+							{
+								medIdWeight = medIdWeight
 								+ checkNumber(medicalRecordNo, existingmedicalRecordNo, false);
-						pmiList.add(existingmedicalRecordNo);
-						pmiList.add(existingSiteId);
-						existingParticipant.setParticipantMedicalIdentifierCollection(pmiList);
+								//pmiList.add(existingmedicalRecordNo);
+								//pmiList.add(existingSiteId);
+								//existingParticipant.setParticipantMedicalIdentifierCollection(pmiList);
+							}
+						}
 					}
 				}
 			}
-			return participantMedicalIdentifierWeight;
+			return medIdWeight;
 		}
 		return 0;
 	}
