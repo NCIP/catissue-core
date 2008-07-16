@@ -2,82 +2,152 @@ package edu.wustl.catissuecore;
 
 import org.apache.log4j.Logger;
 
-public class TaskTimeCalculater {
+/**
+ * This class provides functionality to log performance of a given task.
+ * @author abhijit_naik
+ *
+ */
+public final class TaskTimeCalculater
+{
 
-	private static final boolean logPerformance = false;
-	private static TaskTimeCalculater nullTaskTimeCalculater = new TaskTimeCalculater();
+	private static final int MILLIS_IN_A_SECOND = 1000;
+	private static final boolean IS_LOGGING_ON = false;
+	private static TaskTimeCalculater nullTaskCalculater = new TaskTimeCalculater();
 	private long startTime;
 	private long endTime;
 	private String taskName;
 	private transient Logger logger;
+
+	/**
+	 * Constructs new object for a given class object.
+	 * @param clazz class object for which task time calculator object to
+	 * be created.
+	 */
 	protected TaskTimeCalculater(Class clazz){
 		logger = Logger.getLogger(clazz);
 	}
+	/**
+	 * Default private constructor. Used for internal purpose only.
+	 */
 	private TaskTimeCalculater()
 	{
 
 	}
 
+	/**
+	 * @return name of the task whose performance is about to calculate.
+	 */
 	protected String getTaskName()
 	{
 		return taskName;
 	}
+	/**
+	 * @param task name of the task whose performance is about to calculate.
+	 */
 	protected void setTaskName(String task){
 		this.taskName = task;
 	}
+	/**
+	 * @return task start time
+	 */
 	protected long getStartTime()
 	{
 		return startTime;
 	}
+	/**
+	 * @param timeStamp task start time.
+	 */
 	protected void setStartTime(long timeStamp){
 		this.startTime = timeStamp;
 	}
+	/**
+	 * @return task end time
+	 */
 	protected long getEndTime()
 	{
 		return endTime;
 	}
+	/**
+	 * @param timeStamp task end time
+	 */
 	protected void setEndTime(long timeStamp){
 		this.endTime = timeStamp;
 	}
+	/**
+	 * @return formatted message with total time taken for the task.
+	 */
 	public String getTimeTaken(){
 		long timeTaken = getEndTime() - getStartTime();
 		String logString = getTaskName() +"," + timeTaken;
 		logger.info(logString);
 		return logString;
 	}
-	public String getTimeTakenInSecs(){
-		if (!logPerformance)
+	/**
+	 * @return formatted message with total time taken in milliseconds
+	 *  for the task.
+	 */
+	public String getTimeTakenInSecs()
+	{
+		String logString;
+		if (!IS_LOGGING_ON)
 		{
-			return "";
+			logString = "";
 		}
-		double timeTaken = ((double)getEndTime()) - ((double)getStartTime());
-		timeTaken/=1000;
-		String logString = getTaskName() +"," + timeTaken;
-		logger.info(logString);
+		else
+		{
+			double timeTaken = ((double)getEndTime()) - ((double)getStartTime());
+			timeTaken/=MILLIS_IN_A_SECOND;
+			logString= getTaskName() +"," + timeTaken;
+			logger.info(logString);
+		}
 		return logString;
 	}
 	
-	public static TaskTimeCalculater startTask(String taskName){
+	/**
+	 * A static function to be used for notifying beginning of the task.
+	 * @param taskName name of the task.
+	 * @return new object of TaskTimeCalculater for the given task.
+	 */
+	public static TaskTimeCalculater startTask(final String taskName)
+	{
 		return startTask(taskName, TaskTimeCalculater.class);
 	}
+	
+	/**
+	 * A static function to be used for notifying beginning of the task.
+	 * @param taskName name of the task.
+	 * @param clazz class object for which logger object to be created.
+	 * @return new object of TaskTimeCalculater for the given task.
+	 */
 	public static TaskTimeCalculater startTask(String taskName, Class clazz){
-		if (!logPerformance)
+		TaskTimeCalculater taskTimeCalculater = nullTaskCalculater;
+		if (IS_LOGGING_ON)
 		{
-			return nullTaskTimeCalculater;
+			taskTimeCalculater = new TaskTimeCalculater(clazz);
+			taskTimeCalculater.setTaskName(taskName);
+			taskTimeCalculater.setStartTime(System.currentTimeMillis());
 		}
-
-		TaskTimeCalculater taskTimeCalculater = new TaskTimeCalculater(clazz);
-		taskTimeCalculater.setTaskName(taskName);
-		taskTimeCalculater.setStartTime(System.currentTimeMillis());
 		return taskTimeCalculater;
 	}
-	public static String endTask(TaskTimeCalculater taskTimeCalculater){
-		if (!logPerformance)
+	/**
+	 * A static function used to notify the task is finish. This function then
+	 * calculates the total time taken and returns the formatted string.
+	 * @param taskCalculater taskTimeCalculater object representing a task
+	 * which is finished.
+	 * @return formatted string of total time taken by the task.
+	 */
+	public static String endTask(final TaskTimeCalculater taskCalculater)
+	{
+		String timeTaken;
+		if (IS_LOGGING_ON)
 		{
-			return "";
+			taskCalculater.setEndTime(System.currentTimeMillis());
+			timeTaken = taskCalculater.getTimeTaken();
 		}
-
-		taskTimeCalculater.setEndTime(System.currentTimeMillis());
-		return taskTimeCalculater.getTimeTaken();
+		else
+		{
+			timeTaken ="";
+		}
+		return timeTaken;
 	}
 }
