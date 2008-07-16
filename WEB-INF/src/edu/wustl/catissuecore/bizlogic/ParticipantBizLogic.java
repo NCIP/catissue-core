@@ -1009,7 +1009,7 @@ public class ParticipantBizLogic extends DefaultBizLogic
 		AbstractDAO hibernateDao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		hibernateDao.openSession(null);
 		Map<Long,Participant> mapOfParticipants = new HashMap<Long,Participant>();
-		String participantQueryStr = "from " + Participant.class.getName();
+		String participantQueryStr = "from " + Participant.class.getName() + " where activityStatus !='" + Constants.ACTIVITY_STATUS_DISABLED + "'";
 		try
 		{
 			List<Participant> listOfParticipants = hibernateDao.executeQuery(participantQueryStr, null, false, null);
