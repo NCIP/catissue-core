@@ -946,6 +946,7 @@ delete from dyextn_column_properties where identifier = 489;
  delete from DYEXTN_BASE_ABSTRACT_ATTRIBUTE where identifier = 321;
  delete from DYEXTN_TAGGED_VALUE where ABSTRACT_METADATA_ID = 321;
  delete from dyextn_abstract_metadata where identifier = 321;
+update dyextn_abstract_metadata set NAME='edu.wustl.catissuecore.domain.DistributionSpecimenRequirement' where NAME='edu.wustl.catissuecore.domain.SpecimenRequirement';
 
 INSERT INTO dyextn_abstract_metadata values(1854,NULL,NULL,NULL,'edu.wustl.catissuecore.domain.AbstractPosition',null);
 INSERT INTO dyextn_abstract_entity values(1854);
@@ -1291,8 +1292,6 @@ update dyextn_database_properties set NAME='CATISSUE_DISTRIBUTION_SPEC_REQ' wher
 update dyextn_role set Name='distributionSpecimenRequirementCollection', MIN_CARDINALITY=0 where identifier=831;
 
 update dyextn_role set Name='distributionProtocol', MIN_CARDINALITY=0, MAX_CARDINALITY=1 where identifier=832;
-
-update dyextn_abstract_metadata set NAME='edu.wustl.catissuecore.domain.DistributionSpecimenRequirement' where NAME='edu.wustl.catissuecore.domain.SpecimenRequirement';
 
 delete from path where FIRST_ENTITY_ID in (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.DistributionSpecimenRequirement') 
 and LAST_ENTITY_ID= (select identifier from dyextn_abstract_metadata where NAME='edu.wustl.catissuecore.domain.QuantityInMicrogram');
