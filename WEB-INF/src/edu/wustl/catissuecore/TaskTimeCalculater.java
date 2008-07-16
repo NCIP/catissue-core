@@ -4,20 +4,22 @@ import org.apache.log4j.Logger;
 
 public class TaskTimeCalculater {
 
-	private static boolean logPerformance = true;
+	private static final boolean logPerformance = false;
 	private static TaskTimeCalculater nullTaskTimeCalculater = new TaskTimeCalculater();
 	private long startTime;
 	private long endTime;
 	private String taskName;
-	Logger logger;
+	private transient Logger logger;
 	protected TaskTimeCalculater(Class clazz){
 		logger = Logger.getLogger(clazz);
 	}
-	private TaskTimeCalculater(){
+	private TaskTimeCalculater()
+	{
 
 	}
 
-	protected String getTaskName(){
+	protected String getTaskName()
+	{
 		return taskName;
 	}
 	protected void setTaskName(String task){
