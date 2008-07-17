@@ -2793,7 +2793,7 @@ public class NewSpecimenBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				newAvailQty = availableQuantity.doubleValue();
+				newAvailQty = modifiedInitQty;
 			}
 			if (newAvailQty < 0)
 			{
