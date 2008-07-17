@@ -432,10 +432,8 @@ if(form != null)
         <td width="10%" valign="bottom" >
 			<img src="images/uIEnhancementImages/cp_specimen.gif" alt="Specimen Requirements" width="158" height="20" />
 		</td>
-        <td width="10%" valign="bottom">
-			<img src="images/uIEnhancementImages/cp_privileges1.gif" alt="Privileges" onclick="alert('This facility is not available in this release')" width="94" height="20" border="0">
-		</td>
-        <td width="80%" valign="top" class="cp_tabbg" align="right">
+        
+        <td width="90%" valign="top" class="cp_tabbg" align="right">
 			<span class="smalllink">
 		  		<html:link href="#"  styleId="newUser" onclick="viewSummary()">
 					<bean:message key="cpbasedentry.viewsummary" /> 
