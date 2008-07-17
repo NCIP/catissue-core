@@ -386,10 +386,11 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 						* Integer.parseInt(defineArrayFormObj.getDimenmsionY());
 			}
 			if(!addToArray.equalsIgnoreCase("None"))
-			{
-				if(dataMap==null)
+			{ 
+				if(dataMap != null && dataMap.containsKey(addToArray))
 				{
-					if(selectedItems.length>capacity)
+					List orderItems=(List)dataMap.get(addToArray);
+					if(orderItems.size()+selectedItems.length>capacity)
 					{
 						errors.add("addToArray", new ActionError("errors.order.capacityless"));
 						values.clear();
@@ -397,22 +398,10 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 				}
 				else
 				{
-					if(dataMap.containsKey(addToArray))
+					if(selectedItems.length>capacity)
 					{
-						List orderItems=(List)dataMap.get(addToArray);
-						if(orderItems.size()+selectedItems.length>capacity)
-						{
-							errors.add("addToArray", new ActionError("errors.order.capacityless"));
-							values.clear();
-						}
-					}
-					else
-					{
-						if(selectedItems.length>capacity)
-						{
-							errors.add("addToArray", new ActionError("errors.order.capacityless"));
-							values.clear();
-						}
+						errors.add("addToArray", new ActionError("errors.order.capacityless"));
+						values.clear();
 					}
 				}
 			}
