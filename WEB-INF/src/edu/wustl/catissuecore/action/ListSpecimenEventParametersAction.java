@@ -379,7 +379,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	{
 		String className = SpecimenEventParameters.class.getName();
 		String columnName =Constants.COLUMN_NAME_SPECIMEN_ID;
-		Object columnValue = specimenId;
+		Long columnValue = new Long(specimenId);
 		Collection<SpecimenEventParameters> specimenEventCollection = bizLogic.retrieve(className,columnName, columnValue);
 		
 		return specimenEventCollection;
