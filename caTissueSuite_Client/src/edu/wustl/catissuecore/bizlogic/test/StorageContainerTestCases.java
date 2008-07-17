@@ -237,6 +237,8 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
+	 		System.out
+					.println("StorageContainerTestCases.testUpdateStorageContainer()"+e.getMessage() );
 	 		assertFalse("failed to update Object", true);
 	    }
 	}
@@ -263,6 +265,8 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
+	 		System.out
+					.println("StorageContainerTestCases.testUpdateStorageContainerWithParentChanged()"+e.getMessage());
 	 		assertFalse("failed to update Object", true);
 	    }
 	}
@@ -281,6 +285,8 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		 catch(Exception e){
 			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
+			 System.out
+					.println("StorageContainerTestCases.testUpdateStorageContainerToClosedActivityStatus()"+e.getMessage());
 			 assertFalse("Could notclose Storage Container", true);
 		 }
 	}
@@ -298,6 +304,8 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		 }
 		 catch(Exception e){
 			 Logger.out.error(e.getMessage(),e);
+			 System.out
+					.println("StorageContainerTestCases.testUpdateStorageContainerToDisabledActivityStatus()"+e.getMessage());
 			 e.printStackTrace();
 			 assertFalse("Could not disable Storage Container", true);
 		 }

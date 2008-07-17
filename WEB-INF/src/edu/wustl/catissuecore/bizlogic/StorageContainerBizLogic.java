@@ -1586,7 +1586,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		{
 			// Retrieving all the occupied positions by specimens
 			sourceObjectName = Specimen.class.getName();
-			whereColumnName[0] = "specimenPosition.storageContainer";
+			whereColumnName[0] = "specimenPosition.storageContainer.id";
 			selectColumnName[0] = "specimenPosition.positionDimensionOne";
 			selectColumnName[1] = "specimenPosition.positionDimensionTwo";
 			list = dao.retrieve(sourceObjectName, selectColumnName,
@@ -1601,7 +1601,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 			{
 				// Retrieving all the occupied positions by specimens array type
 				sourceObjectName = SpecimenArray.class.getName();
-				whereColumnName[0] = "locatedAtPosition.parentContainer";
+				whereColumnName[0] = "locatedAtPosition.parentContainer.id";
 				selectColumnName[0] = "locatedAtPosition.positionDimensionOne";
 				selectColumnName[1] = "locatedAtPosition.positionDimensionTwo";
 
