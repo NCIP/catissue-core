@@ -229,7 +229,7 @@ public class ConsentUtil
 	private static void updateChildSpecimens(Specimen specimen, String consentWithdrawalOption, long consentTierID, DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
 		Long specimenId = (Long)specimen.getId();	
-		Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class.getName(),specimenId,"elements(childrenSpecimen)");
+		Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class.getName(),specimenId,"elements(childSpecimenCollection)");
 		//Collection childSpecimens = specimen.getChildrenSpecimen();
 		if(childSpecimens!=null)
 		{	
