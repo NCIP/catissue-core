@@ -244,7 +244,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		String[] selectColumnNames = {Constants.CSM_USER_ID};
 		String[] whereColumnNames = {Constants.SYSTEM_IDENTIFIER};
 		String[] whereColumnCondition = {"="};
-		String[] whereColumnValues = {user.getId().toString()};
+		Long[] whereColumnValues = {user.getId()};
 		List csmUserIdList = dao.retrieve(User.class.getName(), selectColumnNames,
 				whereColumnNames, whereColumnCondition, whereColumnValues,
 				Constants.AND_JOIN_CONDITION);

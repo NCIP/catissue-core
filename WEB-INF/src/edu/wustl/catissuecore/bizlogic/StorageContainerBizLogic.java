@@ -1571,16 +1571,19 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 		String sourceObjectName = StorageContainer.class.getName();
 		String[] selectColumnName = { "locatedAtPosition.positionDimensionOne",
 				"locatedAtPosition.positionDimensionTwo" };
-		String[] whereColumnName = { "locatedAtPosition.parentContainer" };
+		String[] whereColumnName = { "locatedAtPosition.parentContainer.id" };
 		String[] whereColumnCondition = { "=" };
 		Object[] whereColumnValue = { container.getId() };
 
 		List list = dao.retrieve(sourceObjectName, selectColumnName,
 				whereColumnName, whereColumnCondition, whereColumnValue, null);
 
-		if (!list.isEmpty()) {
+		if (!list.isEmpty()) 
+		{
 			return false;
-		} else {
+		} 
+		else
+		{
 			// Retrieving all the occupied positions by specimens
 			sourceObjectName = Specimen.class.getName();
 			whereColumnName[0] = "specimenPosition.storageContainer";
@@ -1590,9 +1593,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 					whereColumnName, whereColumnCondition, whereColumnValue,
 					null);
 
-			if (!list.isEmpty()) {
+			if (!list.isEmpty()) 
+			{
 				return false;
-			} else {
+			}
+			else
+			{
 				// Retrieving all the occupied positions by specimens array type
 				sourceObjectName = SpecimenArray.class.getName();
 				whereColumnName[0] = "locatedAtPosition.parentContainer";
@@ -1603,7 +1609,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements
 						whereColumnName, whereColumnCondition,
 						whereColumnValue, null);
 
-				if (!list.isEmpty()) {
+				if (!list.isEmpty()) 
+				{
 					return false;
 				}
 
