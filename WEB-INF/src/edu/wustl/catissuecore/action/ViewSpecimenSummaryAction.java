@@ -34,13 +34,11 @@ public class ViewSpecimenSummaryAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-			String target = Constants.SUCCESS; 
-		try {
+			String target = Constants.SUCCESS;
 			ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
+		try {
 			HttpSession session = request.getSession();
 //			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
-
-			
 			
 			String eventId = summaryForm.getEventId();
 			session.setAttribute(Constants.TREE_NODE_ID,(String)request.getParameter("nodeId"));
@@ -172,7 +170,19 @@ public class ViewSpecimenSummaryAction extends Action {
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
 					"errors.item",exception.getMessage()));
-			saveErrors(request, actionErrors);			
+			saveErrors(request, actionErrors);		
+			//Mandar: 17JULY2008 : For specimenDetails customtag --- start ---
+			if("anticipatory".equalsIgnoreCase(target) || "pageOfMultipleSpWithMenu".equalsIgnoreCase(target))
+			{
+				SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, summaryForm);
+			}
+			else 
+			{
+				SpecimenDetailsTagUtil.setSpecimenSummaryDetails(request, summaryForm);
+			}
+			
+			//Mandar: 17JULY2008 : For specimenDetails customtag --- end ---
+
 			return mapping.findForward(target);
 		}
 

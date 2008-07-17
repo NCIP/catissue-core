@@ -8,6 +8,7 @@
 <%@ page language="java" isELIgnored="false" %>
 <script src="jss/script.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <html>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -157,73 +158,67 @@
 <script language="javascript">
 	${requestScope.refreshTree}
 </script>
+<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
+	<script language="javascript">
+		${requestScope.refreshTree}
+	</script>
+</logic:equal>
 
 		<html:errors />
+		<logic:notEmpty name="messageKey">
 		<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 			${requestScope.messageKey}
 		</html:messages>
-		
+		</logic:notEmpty>
 		<html:form action="${requestScope.formAction}">		
-		<table>
-		<tr>
-				<td> &nbsp; </td>
-		<td>
-		<table summary="" cellpadding="0" cellspacing="0" border="0">
-		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
-		<tr>					
-				<td class="formFieldNoBorders" colspan="5"  height="20" >
-				<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
-						<bean:message key="print.checkboxLabel"/>
-				</html:checkbox>
-		    	</td>
-		</tr>
-		<tr>
-		<td>
-		<input type="button" value="Submit" onclick="pageSubmit()" />
-		</td>
-		</tr>
-		</logic:equal>
-		<tr>
-			<td>
-				&nbsp;
-			</td>
-		</tr>
-				<tr>
-					<td class="dataTablePrimaryLabel" height="20">
-						<bean:write name="viewSpecimenSummaryForm" property="title" />
-					</td>				
-				<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Multiple Specimen">
-					<script language="javascript">
-						${requestScope.refreshTree}
-					</script>
-				</logic:equal>
-				</tr>
+		<!-- Mandar : New Table design starts -->
+		<TABLE>
+		<TR>
+			<TD colspan="2" align="left" class="tr_bg_blue1">
+			<span class="blue_ar_b">
+				<bean:write name="viewSpecimenSummaryForm" property="title" /></span>
+			</TD>
+		</TR>
 		<logic:empty name="viewSpecimenSummaryForm" property="specimenList" >
 			<tr>
-				<td class="dataTableWhiteCenterHeader" colspan="6">  
+				<td class="dataTableWhiteCenterHeader">  
 					No specimens to display for current action!!
 				</td>
 			</tr>		
 		</logic:empty>
-		</table>
-		<logic:notEmpty name="viewSpecimenSummaryForm" property="specimenList" >	
-				<table summary="" cellpadding="3" cellspacing="0" border="0" 
-				class="dataTable" >
-			<md:genericSpecimenDetails columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
-			<%-- custom tag for specimen list by mandar ---  --%>					
+		<TR>
+			<TD colspan="2" class="showhide">
+				<table border="0" cellpadding="3" cellspacing="0" width="100%">
+				<logic:notEmpty name="viewSpecimenSummaryForm" property="specimenList" >	
+                  <tr class="tableheading">
+                    <td width="4%" class="black_ar_b"><label for="delete" align="center"></label>                    </td>
+                    <td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
+                    <td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
+
+                    <td width="16%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
+                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
+                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
+                    <td width="27%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Location"/><BR><input id="chkSpecimen" type="checkbox" onClick="ApplyToAll(this,'specimen')"/> Apply First to All </td>
+                    <td width="11%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
+                  </tr>
+					<md:genericSpecimenDetails columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
+				<%-- custom tag for specimen list by mandar ---  --%>	</logic:notEmpty>
 				</table>
-		</logic:notEmpty>
-		<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
-			<html:hidden property="eventId"  />
-			<html:hidden property="lastSelectedSpecimenId"  />
-			<html:hidden property="selectedSpecimenId"  />
-		</logic:notEmpty>
-			<html:hidden property="userAction" />
-			<html:hidden property="requestType" />
+				<logic:notEmpty name="viewSpecimenSummaryForm" property="eventId">
+					<html:hidden property="eventId"  />
+					<html:hidden property="lastSelectedSpecimenId"  />
+					<html:hidden property="selectedSpecimenId"  />
+				</logic:notEmpty>
+					<html:hidden property="userAction" />
+					<html:hidden property="requestType" />
+			</TD>
+		</TR>
 		<logic:empty name="viewSpecimenSummaryForm" property="aliquotList" >
-			<logic:empty name="viewSpecimenSummaryForm" property="derivedList" >
+		<logic:empty name="viewSpecimenSummaryForm" property="derivedList" >
+		<TR>
+			<TD>
 				<table>
-				<tr> <td> <br> </td> </tr>
+					<tr> <td> <br> </td> </tr>
 					<tr>
 						<td class="dataTablePrimaryLabel" colspan="6" height="20">  
 							Child specimens not defined.
@@ -231,39 +226,66 @@
 					</tr>
 					<tr> <td> <br> </td> </tr>
 				</table>	
-				</logic:empty>				
-			</logic:empty>
-			<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
-			&nbsp;
-			<table>
-				<tr>
-					<td class="dataTablePrimaryLabel" height="20">	
-					<bean:message key="anticipatorySpecimen.AliquotDetails"/>
-					</td>
-				</tr>
-			</table>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" 
-			class="dataTable" >
-			<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
-			<%-- custom tag for specimen list by mandar --- Aliquot  --%>						
+			</TD>
+		</TR>
+		</logic:empty>				
+		</logic:empty>
+		<logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList" >
+		<TR>
+			<TD colspan="2" align="left" class="tr_bg_blue1">
+				<span class="blue_ar_b">	
+				<bean:message key="anticipatorySpecimen.AliquotDetails"/> 
+				</span>
+			</TD>
+		</TR>
+		<TR>
+			<TD colspan="2" class="showhide">
+				<table border="0" cellpadding="3" cellspacing="0" width="100%">
+                  <tr class="tableheading">
+                    <td width="11%" class="black_ar_b"><label for="delete" align="center"><bean:message key="anticipatorySpecimen.Parent"/></label></td>
+                    <td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
+                    <td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
+                    <td width="11%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
+                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
+                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
+                    <td width="27%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Location"/><BR><input id="chkAliquot" type="checkbox" onClick="ApplyToAll(this,'aliquot')"/> Apply First to All </td>
+                    <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
+                  </tr>
+					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
+				<%-- custom tag for specimen list by mandar --- Aliquot  --%>						
 				</table>				
-			</logic:notEmpty>
+			</TD>
+		</TR>
+		</logic:notEmpty>
 		<logic:notEmpty name="viewSpecimenSummaryForm" property="derivedList" >
-		&nbsp;
-		<table>
-		<tr>
-		<td class="dataTablePrimaryLabel" height="20">
-			<bean:message key="anticipatorySpecimen.DerivativeDetails"/>
-		 </td>
-		 </tr>
-		 </table>
-		    <table summary="" cellpadding="3" cellspacing="0" border="0" 
-		    class="dataTable" >
-		<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
-			<%-- custom tag for specimen list by mandar --- Derived --%>					
-		    </table>
-		</logic:notEmpty>		
-&nbsp;&nbsp;
+		<TR>
+			<TD colspan="2" align="left" class="tr_bg_blue1">
+				<span class="blue_ar_b">	
+				<bean:message key="anticipatorySpecimen.DerivativeDetails"/>
+				</span>
+			</TD>
+		</TR>
+		<TR>
+			<TD colspan="2" class="showhide">
+				<table border="0" cellpadding="3" cellspacing="0" width="100%">
+					<tr class="tableheading">
+						<td width="11%" class="black_ar_b"><label for="delete" align="center"><bean:message key="anticipatorySpecimen.Parent"/></label></td>
+						<td width="11%" class="black_ar_b"><bean:message key="specimen.label"/></td>
+						<td width="11%" class="black_ar_b"><bean:message key="specimen.barcode"/></td>
+						<td width="11%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
+						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
+						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
+						<td width="27%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Location"/><BR><input id="chkDrived" type="checkbox" onClick="ApplyToAll(this,'derived')"/> Apply First to All</td>
+						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
+					</tr>
+					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
+					<%-- custom tag for specimen list by mandar --- Derived --%>	
+				</table>
+			</TD>
+		</TR>
+		</logic:notEmpty>
+		</TABLE>
+		<!-- New Table design ends -->
 		<table align="bottom">
 			<logic:equal name="viewSpecimenSummaryForm" property="requestType" value="Collection Protocol">
 			<tr>
@@ -287,15 +309,17 @@
 		<html:hidden property="readOnly" />
 		<html:hidden property="showParentStorage" />
 		<logic:equal name="viewSpecimenSummaryForm" property="readOnly" value="false">
-		 <tr>
+		<tr>					
+			<td class="formFieldNoBorders" colspan="5"  height="20" >
+				<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="">
+				<bean:message key="print.checkboxLabel"/>
+				</html:checkbox>
+			</td>
 			<td>
 			<input type="button" value="Submit" onclick="pageSubmit()" />
 			</td>
 		 </tr>
 		</logic:equal>
-		</table>
-		</td>
-		</tr>
 		</table>
 		<div id="divForHiddenChild"></div>
 		</html:form>
