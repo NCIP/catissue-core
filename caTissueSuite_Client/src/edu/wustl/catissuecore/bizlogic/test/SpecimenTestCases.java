@@ -204,14 +204,14 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
 		}
 	}
 	
-	public void testSearchSpecimen()
+	public void testSearchTissueSpecimen()
     {
-    	Specimen specimen = new TissueSpecimen();
-    	Specimen cachedSpecimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
+    	TissueSpecimen specimen = new TissueSpecimen();
+    	TissueSpecimen cachedSpecimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
     	specimen.setId(cachedSpecimen.getId());
      	Logger.out.info(" searching domain object");
     	 try {
-        	 List resultList = appService.search(Specimen.class,specimen);
+        	 List resultList = appService.search(TissueSpecimen.class,specimen);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 Specimen returnedspecimen = (Specimen) resultsIterator.next();
         		 System.out.println("here-->" + returnedspecimen.getLabel() +"Id:"+returnedspecimen.getId());
@@ -226,7 +226,29 @@ public class SpecimenTestCases extends CaTissueBaseTestCase {
           }
 
     } 
-	
+	public void testSearchSpecimen()
+    {
+    	Specimen specimen = new Specimen();
+    	TissueSpecimen cachedSpecimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
+    	specimen.setId(cachedSpecimen.getId());
+     	Logger.out.info(" searching domain object");
+    	 try {
+        	 List resultList = appService.search(Specimen.class,specimen);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 Specimen returnedspecimen = (Specimen) resultsIterator.next();
+        		 System.out.println("here-->" + returnedspecimen.getLabel() +"Id:"+returnedspecimen.getId());
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedspecimen.getLabel());
+             }
+        	 assertTrue("Specimen found", true);
+          } 
+          catch (Exception e) {
+        	  System.out.println("SpecimenTestCases.testSearchSpecimen()"+ e.getMessage());
+        	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("Couldnot found Specimen", true);  
+          }
+
+    }
 	public void testUpdateTissueSpecimen()
 	{
 	   try {
