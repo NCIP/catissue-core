@@ -283,11 +283,11 @@ public class ReportedProblemForm extends AbstractActionForm
                     }
                     
                     //to fix bug:1678
-                    if (messageBody == null || messageBody.trim().length() >= Constants.messageLength)
+                    if (messageBody == null || messageBody.trim().length() >= Constants.MESSAGE_LENGTH)
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "reportedProblem.error.message",ApplicationProperties
-                                .getValue("fields.message"),new Integer(Constants.messageLength)));
+                                .getValue("fields.message"),new Integer(Constants.MESSAGE_LENGTH)));
                     }
                     
                 }

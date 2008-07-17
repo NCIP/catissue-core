@@ -47,6 +47,7 @@ public class OrderBiospecimenArrayAction extends BaseAction
 	{
 		OrderBiospecimenArrayForm arrayObject = (OrderBiospecimenArrayForm) form;
 		HttpSession session = request.getSession();
+		String target = null;
 
 		
 		if (session.getAttribute("OrderForm") != null)
@@ -66,13 +67,14 @@ public class OrderBiospecimenArrayAction extends BaseAction
 
 			request.setAttribute("typeOf", "specimenArray");
 			request.setAttribute("OrderBiospecimenArrayForm", arrayObject);
-
-			return mapping.findForward("success");
+			target = Constants.SUCCESS;
 		}
 		else
 		{
-			return mapping.findForward("failure");
+			target = Constants.FAILURE;
 		}
+		return mapping.findForward(target);
+		
 	}
 
 	/**
@@ -83,16 +85,10 @@ public class OrderBiospecimenArrayAction extends BaseAction
 	 */
 	private void getProtocolName(HttpServletRequest request, OrderBiospecimenArrayForm arrayObject, OrderForm orderForm) throws Exception
 	{
-		// to get the distribution protocol name
-		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
-
-		String sourceObjectName = DistributionProtocol.class.getName();
-		String[] displayName = {"title"};
-		String valueField = Constants.SYSTEM_IDENTIFIER;
-		List protocolList = dao.getList(sourceObjectName, displayName, valueField, true);
-
-		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
-
+		
+		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		List protocolList = orderBizLogic.getDistributionProtocol(request);
+	
 		for (int i = 0; i < protocolList.size(); i++)
 		{
 			NameValueBean obj = (NameValueBean) protocolList.get(i);

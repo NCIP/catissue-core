@@ -60,7 +60,8 @@ public class  OrderSpecimenInitAction  extends BaseAction
 		OrderSpecimenForm spec = (OrderSpecimenForm) form;
         HttpSession session = request.getSession();
         spec.setTypeOfSpecimen("existingSpecimen");
-	    
+        String target = null;
+        
         if(session.getAttribute("OrderForm")!=null)
         {
         	OrderForm orderForm=(OrderForm)session.getAttribute("OrderForm");
@@ -88,35 +89,10 @@ public class  OrderSpecimenInitAction  extends BaseAction
 				// Get the Specimen class and type from the cde
 				CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
 				Set setPV = specimenClassCDE.getPermissibleValues();
-				Iterator itr = setPV.iterator();
-	
-				specimenClassList = new ArrayList();
-				Map subTypeMap = new HashMap();
-				specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-	
 					
-				while (itr.hasNext())
-				{
-					List innerList = new ArrayList();
-					Object obj = itr.next();
-					PermissibleValue pv = (PermissibleValue) obj;
-					String tmpStr = pv.getValue();
-					specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
-	
-					Set list1 = pv.getSubPermissibleValues();
-					Iterator itr1 = list1.iterator();
-					innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-					while (itr1.hasNext())
-					{
-						Object obj1 = itr1.next();
-						PermissibleValue pv1 = (PermissibleValue) obj1;
-						// set specimen type
-						String tmpInnerStr = pv1.getValue();
-						innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
-					}
-					subTypeMap.put(pv.getValue(), innerList);
-				} // class and values set
-	
+				specimenClassList = new ArrayList();
+				Map subTypeMap = getSubTypeMap(setPV , specimenClassList);
+				
 				// sets the Class list
 				request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 	
@@ -152,15 +128,48 @@ public class  OrderSpecimenInitAction  extends BaseAction
 		    //Add the collection in request scope to be used in the OrderItem.jsp
 		    request.setAttribute(Constants.ORDERTO_LIST_ARRAY,orderToListArrayCollection);	
 		    
-			return mapping.findForward("success");
+		    target = Constants.SUCCESS;
         }
         else
         {
-        	return mapping.findForward("failure");
+        	target = Constants.FAILURE;
         }
+        return mapping.findForward(target);
    	}
 
 
+	private Map getSubTypeMap(Set setPV , List specimenClassList)
+	{
+		Iterator itr = setPV.iterator();
+		
+		Map subTypeMap = new HashMap();
+		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+
+			
+		while (itr.hasNext())
+		{
+			List innerList = new ArrayList();
+			Object obj = itr.next();
+			PermissibleValue pv = (PermissibleValue) obj;
+			String tmpStr = pv.getValue();
+			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
+
+			Set list1 = pv.getSubPermissibleValues();
+			Iterator itr1 = list1.iterator();
+			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+			while (itr1.hasNext())
+			{
+				Object obj1 = itr1.next();
+				PermissibleValue pv1 = (PermissibleValue) obj1;
+				// set specimen type
+				String tmpInnerStr = pv1.getValue();
+				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
+			}
+			subTypeMap.put(pv.getValue(), innerList);
+		} 
+		return  subTypeMap;
+	}
+	
 	
 	
 	
@@ -173,19 +182,9 @@ public class  OrderSpecimenInitAction  extends BaseAction
 	 */
 	private void getProtocolName(HttpServletRequest request,OrderSpecimenForm spec,OrderForm orderForm) throws Exception
 	{
-    	//to get the distribution protocol name
-		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance()
-        .getBizLogic(Constants.DISTRIBUTION_FORM_ID);
-		
-    	String sourceObjectName = DistributionProtocol.class.getName();
-		String[] displayName = { "title" };
-		String valueField = Constants.SYSTEM_IDENTIFIER;
-		List protocolList = dao.getList(sourceObjectName, displayName,
-		valueField, true);
-		
-		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
-
-		
+		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		List protocolList = orderBizLogic.getDistributionProtocol(request);
+			
 		for(int i=0;i<protocolList.size();i++)
 		{
 			NameValueBean obj=(NameValueBean)protocolList.get(i);
@@ -202,63 +201,7 @@ public class  OrderSpecimenInitAction  extends BaseAction
 	 * @return List of specimen objects
 	 * @throws BizLogicException 
 	 */
-	private List getDataFromDatabase(HttpServletRequest request)
-	{
-		//to get data from database when specimen id is given
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		HttpSession session = request.getSession(true);
-		
-		long startTime = System.currentTimeMillis();
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		
-		
-		
-		try
-    	{
-    					
-	    	String sourceObjectName = Specimen.class.getName();
-	    	String columnName="id";
-	    	
-			List valueField=(List)session.getAttribute("specimenId");
-	    	List specimen=new ArrayList();
-	    	dao.openSession(null);
-	    	if(valueField != null && valueField.size() >0)
-	    	{
-	    		
-				for(int i=0;i<valueField.size();i++)
-				{
-					//List specimenList = bizLogic.retrieve(sourceObjectName, columnName, (String)valueField.get(i));
-					
-					Object object = dao.retrieve(sourceObjectName, Long.parseLong((String)valueField.get(i)));
-					Specimen speclist=(Specimen)object;
-					specimen.add(speclist);
-				}
-				
-	    	}
-	    	long endTime = System.currentTimeMillis();
-			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			return specimen;
-    	}
-    	catch(DAOException e)
-    	{
-    		Logger.out.error(e.getMessage(), e);
-    		return null;
-    	}
-    	finally
-		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch(DAOException daoEx)
-			{
-				Logger.out.error(daoEx.getMessage(), daoEx);
-	    		return null;
-			}
-		}
-    	
-	}
+	
 }
     
 

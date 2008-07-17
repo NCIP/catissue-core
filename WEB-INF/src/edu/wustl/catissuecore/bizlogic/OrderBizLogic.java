@@ -165,7 +165,7 @@ public class OrderBizLogic extends DefaultBizLogic
 			while (distributionCollectionIterator.hasNext())
 			{
 				Distribution distribution = (Distribution) distributionCollectionIterator.next();
-				if (distribution.getToSite().getId().compareTo(new Long(-1)) == 0)
+				if (distribution.getToSite().getId().compareTo(Long.valueOf(-1)) == 0)
 				{
 					throw new DAOException(ApplicationProperties.getValue("orderdistribution.site.required.errmsg"));
 				}
@@ -212,23 +212,6 @@ public class OrderBizLogic extends DefaultBizLogic
 								throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
 							}
 
-							//							List childrenSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(orderItem.getDistributedItem().getSpecimen(),orderItem.getDistributedItem().getSpecimen().getChildrenSpecimen());
-							//							List finalChildrenSpecimenCollection = null;
-							//							if(childrenSpecimenCollection != null)
-							//							{
-							//								finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenCollection,derivedSpecimenOrderItem.getSpecimenClass(),derivedSpecimenOrderItem.getSpecimenType());
-							//							}
-							//							if(finalChildrenSpecimenCollection == null || finalChildrenSpecimenCollection.isEmpty())
-							//							{
-							//								if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
-							//								{
-							//									throw new DAOException(ApplicationProperties.getValue("orderdistribution.arrayPrep.notpossible.errmsg"));
-							//								}
-							//								else
-							//								{
-							//									throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
-							//								}
-							//							}
 						}
 						else if (oldorderItem instanceof NewSpecimenArrayOrderItem)
 						{
@@ -784,6 +767,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	{
 		long startTime = System.currentTimeMillis();
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		List specimenArrayList=new ArrayList();
     	try
     	{
    		
@@ -792,7 +776,7 @@ public class OrderBizLogic extends DefaultBizLogic
     		String sourceObjectName = SpecimenArray.class.getName();
         	List valueField=(List)session.getAttribute(Constants.SPECIMEN_ARRAY_ID);
         	
-        	List specimenArrayList=new ArrayList();
+        	
     		dao.openSession(null);
 	    	if(valueField != null && valueField.size() >0)
 	    	{
@@ -809,12 +793,12 @@ public class OrderBizLogic extends DefaultBizLogic
 	    	
 	    	long endTime = System.currentTimeMillis();
 			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-	    	return specimenArrayList;	
+	    	
     	}
     	catch(DAOException e)
     	{
     		Logger.out.error(e.getMessage(), e);
-    		return null;
+    		
     	}
     	finally
 		{
@@ -825,10 +809,10 @@ public class OrderBizLogic extends DefaultBizLogic
 			catch(DAOException daoEx)
 			{
 				Logger.out.error(daoEx.getMessage(), daoEx);
-	    		return null;
+	    	
 			}
-		}	
-    	
+		}
+    	return specimenArrayList;	
     	  
 		
 	}
@@ -846,14 +830,14 @@ public class OrderBizLogic extends DefaultBizLogic
 		
 		long startTime = System.currentTimeMillis();
 		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-				
+		List specimen=new ArrayList();
+		
 		try
     	{
     		
 	    	String sourceObjectName = Specimen.class.getName();
 	    	String columnName="id";
 	    	List valueField=(List)session.getAttribute("specimenId");
-	    	List specimen=new ArrayList();
 	    	dao.openSession(null);
 	    	if(valueField != null && valueField.size() >0)
 	    	{
@@ -868,13 +852,13 @@ public class OrderBizLogic extends DefaultBizLogic
 	    	}
 	    	long endTime = System.currentTimeMillis();
 			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			return specimen;
+			
+		
     	}
     	catch(DAOException e)
     	{
     		Logger.out.error(e.getMessage(), e);
-    		return null;
+    		
     	}
     	finally
 		{
@@ -885,9 +869,10 @@ public class OrderBizLogic extends DefaultBizLogic
 			catch(DAOException daoEx)
 			{
 				Logger.out.error(daoEx.getMessage(), daoEx);
-	    		return null;
+	    		
 			}
 		}
+    	return specimen;
     	
 	}
 	
@@ -926,13 +911,13 @@ public class OrderBizLogic extends DefaultBizLogic
 			
 			long endTime = System.currentTimeMillis();
 			Logger.out.info("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
-			return pathologicalCaseList;
+			
+		
     	}
     	catch(DAOException e)
     	{
     		Logger.out.error(e.getMessage(), e);
-    		return null;
+    		
     	}
     	finally
 		{
@@ -943,9 +928,10 @@ public class OrderBizLogic extends DefaultBizLogic
 			catch(DAOException daoEx)
 			{
 				Logger.out.error(daoEx.getMessage(), daoEx);
-	    		return null;
+	    		
 			}
-		}	
+		}
+    	return pathologicalCaseList;
 		
 	}
 	
@@ -963,6 +949,22 @@ public class OrderBizLogic extends DefaultBizLogic
 			pathologicalCaseList.add(surgicalPathologyReport);
 		}
 		
+	}
+	
+	public List getDistributionProtocol(HttpServletRequest request) throws Exception
+	{
+//		to get the distribution protocol name
+		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance()
+        .getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+		
+    	String sourceObjectName = DistributionProtocol.class.getName();
+		String[] displayName = { "title" };
+		String valueField = Constants.SYSTEM_IDENTIFIER;
+		List protocolList = dao.getList(sourceObjectName, displayName,
+		valueField, true);
+		
+		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
+		return protocolList;
 	}
 	
 	

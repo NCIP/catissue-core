@@ -55,6 +55,7 @@ public class OrderPathologyCaseAction extends BaseAction
 		OrderPathologyCaseForm pathology = (OrderPathologyCaseForm) form;
 		HttpSession session = request.getSession();
 		pathology.setTypeOfCase("derivative");
+		String target = null;
 
 		if (session.getAttribute("OrderForm") != null)
 		{
@@ -91,12 +92,13 @@ public class OrderPathologyCaseAction extends BaseAction
 
 			request.setAttribute("typeOf", "pathologyCase");
 			request.setAttribute("OrderPathologyCaseForm", pathology);
-			return mapping.findForward("success");
+			target = Constants.SUCCESS;
 		}
 		else
 		{
-			return mapping.findForward("failure");
+			target = Constants.FAILURE;
 		}
+		return mapping.findForward(target);
 	}
 
 	/**
@@ -182,15 +184,9 @@ public class OrderPathologyCaseAction extends BaseAction
 	private void getProtocolName(HttpServletRequest request, OrderPathologyCaseForm pathology, OrderForm orderForm) throws Exception
 	{
 		// to get the distribution protocol name
-		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
-
-		String sourceObjectName = DistributionProtocol.class.getName();
-		String[] displayName = {"title"};
-		String valueField = Constants.SYSTEM_IDENTIFIER;
-		List protocolList = dao.getList(sourceObjectName, displayName, valueField, true);
-
-		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
-
+		OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		List protocolList = orderBizLogic.getDistributionProtocol(request);
+		
 		for (int i = 0; i < protocolList.size(); i++)
 		{
 			NameValueBean obj = (NameValueBean) protocolList.get(i);

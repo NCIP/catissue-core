@@ -163,6 +163,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String QUERY_VALUES_DELIMITER = "&";
 	//public static final String SEARCHED_ENTITIES_MAP = "searchedEntitiesMap";
 	public static final String SUCCESS = "success";
+	public static final String FAILURE = "failure";
 	public static final String LIST_OF_ENTITIES_IN_QUERY = "ListOfEntitiesInQuery";
 	public static final String DYNAMIC_UI_XML = "dynamicUI.xml";
 	public static final String TREE_DATA = "treeData";
@@ -1464,8 +1465,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ALIQUOT = "Aliquot";
 	
 	//Constant for length of messageBody in Reported problem page  
-	public static final int messageLength= 500;
-	public static final String NEXT_NUMBER="nextNumber";
+	public static final int MESSAGE_LENGTH = 500;
+	public static final String NEXT_NUMBER = "nextNumber";
 	
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{

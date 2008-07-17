@@ -368,7 +368,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	{
 
 		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		
 
 		if (selectedItems != null) 
 		{
