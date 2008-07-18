@@ -172,7 +172,7 @@
 		</logic:notEmpty>
 		<html:form action="${requestScope.formAction}">		
 		<!-- Mandar : New Table design starts -->
-		<TABLE>
+		<TABLE width="100%">
 		<TR>
 			<TD colspan="2" align="left" class="tr_bg_blue1">
 			<span class="blue_ar_b">
@@ -198,7 +198,7 @@
                     <td width="16%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
                     <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
                     <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
-                    <td width="27%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Location"/><BR><input id="chkSpecimen" type="checkbox" onClick="ApplyToAll(this,'specimen')"/> Apply First to All </td>
+                    <td width="27%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkSpecimen" type="checkbox" onClick="ApplyToAll(this,'specimen')"/>Apply First to All</td>
                     <td width="11%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
                   </tr>
 					<md:genericSpecimenDetails columnHeaderListName="columnHeaderList" formName="viewSpecimenSummaryForm" dataListName="specimenList" dataListType="Parent" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
@@ -218,7 +218,6 @@
 		<TR>
 			<TD>
 				<table>
-					<tr> <td> <br> </td> </tr>
 					<tr>
 						<td class="dataTablePrimaryLabel" colspan="6" height="20">  
 							Child specimens not defined.
@@ -248,7 +247,7 @@
                     <td width="11%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
                     <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
                     <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
-                    <td width="27%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Location"/><BR><input id="chkAliquot" type="checkbox" onClick="ApplyToAll(this,'aliquot')"/> Apply First to All </td>
+                    <td width="27%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkAliquot" type="checkbox" onClick="ApplyToAll(this,'aliquot')"/>Apply First to All </td>
                     <td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
                   </tr>
 					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="aliquotList" dataListType="Aliquot" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
@@ -275,7 +274,7 @@
 						<td width="11%" class="black_ar_b"><bean:message key="specimen.subType"/></td>
 						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Quantity"/></td>
 						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Concentration"/></td>
-						<td width="27%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Location"/><BR><input id="chkDrived" type="checkbox" onClick="ApplyToAll(this,'derived')"/> Apply First to All</td>
+						<td width="27%" class="black_ar_b" nowrap><bean:message key="anticipatorySpecimen.Location"/><input id="chkDrived" type="checkbox" onClick="ApplyToAll(this,'derived')"/>Apply First to All</td>
 						<td width="10%" class="black_ar_b"><bean:message key="anticipatorySpecimen.Collected"/></td>
 					</tr>
 					<md:genericSpecimenDetails columnHeaderListName="subSpecimenColHeaderList" formName="viewSpecimenSummaryForm" dataListName="derivedList" dataListType="Derived" columnListName="columnListName" isReadOnly="false" displayColumnListName="dispColumnsList" />
