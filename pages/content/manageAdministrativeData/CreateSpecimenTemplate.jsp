@@ -645,7 +645,7 @@ if(form != null)
 					  </td>
                       <td width="3%" align="right" class="tr_bg_blue1">
 						<a href="#" id="imgArrow_derive_specimen">
-							<img src="images/uIEnhancementImages/dwn_arrow.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/>
+							<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/>
 						</a>
 					  </td>
                      </tr>
@@ -790,7 +790,7 @@ if(form != null)
                      <td align="left" class="tr_bg_blue1"><span class="blue_ar_b"><bean:message key="cpbasedentry.aliquots"/></span></td>
                     <td align="right" class="tr_bg_blue1">
 						<a href="#" id="imgArrow_aliquot">
-							<img src="images/uIEnhancementImages/dwn_arrow.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/>
+							<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details" border="0" width="80" height="9" hspace="10" vspace="0"/>
 						</a>
 					</td>
                  </tr>
