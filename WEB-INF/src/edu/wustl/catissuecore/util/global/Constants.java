@@ -346,6 +346,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_IDENTIFIER_IN_CPR = "participant";
 	public static final String APPROVE_USER_STATUS_LIST = "statusList";
 	public static final String EVENT_PARAMETERS_LIST = "eventParametersList";
+	public static final String PRIVILEGE_DATA_LIST_ONLOAD="listOfPrivilegeDataOnLoad";
 			
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
@@ -834,6 +835,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SELECTED_USER_IDS= "selectedUserIds";
 	public static final String SELECTED_SITE_IDS = "selectedSiteIds";
 	public static final String SELECTED_ROLE_IDS = "selectedRoleIds";
+	public static final String OPERATION_EDIT_ROW = "editRow";
 	
 	//Constants for default column names to be shown for query result.
 	public static final String[] DEFAULT_SPREADSHEET_COLUMNS = {
